@@ -36,20 +36,20 @@ public class Main {
     public static void main(String[] args) {
         
         // PAR - Set model to the model you want to use
-        String modelName = "Mux11Bit";
+        String modelName = "Mux6Bit";
         
         // PAR - Set your base directory
-        //File baseDir = new File("U:/home/JavaProjects/EpochX1_0");
-        //File baseDir = new File("D:/JavaProjects/EpochX1_0");
-        File baseDir = new File("/home/cug/lb212/EPOCHX");
+        File baseDir = new File("U:/home/JavaProjects/EpochX/EpochX");
+        //File baseDir = new File("D:/JavaProjects/EpochX");
+        //File baseDir = new File("/home/cug/lb212/EPOCHX");
         //File baseDir = new File("/home/lb212/EPOCHX10");
         
         // PAR - Set basic GP parameters - See parameters document on www.epochx.com for details
-        int runs = 100;
+        int runs = 1;
         int gens = 50;
-        int elites = 400;
-        int reprod = 400;
-        int popSize = 4000;
+        int elites = 50;
+        int reprod = 50;
+        int popSize = 500;
         double pCross = 0.9;
         double pMut = 0;
         
@@ -59,16 +59,16 @@ public class Main {
         // scoring method 1 = input/output / 2 = semantic
         int sMeth = 2;
         // 1 = total tournament / 2 = fitness proportionate / 3 = T7 tournament / 4  = ranked / 5 = T3 tournament
-        int sOMethod = 3;
+        int sOMethod = 4;
         
         // PAR - Choose staring population tyep
         // Full = full / Grow = grow / H+H = half and half / RH+H = ramped half and half
         // SDIB = state differential BOOLEAN / SDIA = state differential ANT
         // Random = random(ish)
-        String genType = "WASHED";
+        String genType = "SDIB";
         
         // PAR - Set to use semantic state checked crossover
-        boolean sChecker = false;      
+        boolean sChecker = true;      
         
         // delete old output files
         FileManip.deleteOld(baseDir, "GP-State-Monitor-Output.txt");
@@ -90,7 +90,7 @@ public class Main {
         model.setLineageDump(false);
         
         // PAR - Specify name of input file in EpochX directory
-        model.loadRawData(baseDir, "input11bit.txt");
+        model.loadRawData(baseDir, "input6bit.txt");
         
         // do GP Run
         model.doGPRun(modelName, runs, popSize, genType, gens, elites, reprod, pCross, pMut, sChecker, cOMethod, sOMethod, sMeth, baseDir);

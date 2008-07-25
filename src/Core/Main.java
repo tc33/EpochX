@@ -36,7 +36,7 @@ public class Main {
     public static void main(String[] args) {
         
         // PAR - Set model to the model you want to use
-        String modelName = "Mux6Bit";
+        String modelName = "ArtificialAnt";
         
         // PAR - Set your base directory
         File baseDir = new File("U:/home/JavaProjects/EpochX/EpochX");
@@ -50,25 +50,27 @@ public class Main {
         int elites = 50;
         int reprod = 50;
         int popSize = 500;
-        double pCross = 0.9;
-        double pMut = 0;
+        double pCross = 0;
+        double pMut = 1.0;
         
         // PAR - Choose crossover scoring and selection methods
         // 1 = single point / 2 = random point / 3 = koza standard
         int cOMethod = 3;
         // scoring method 1 = input/output / 2 = semantic
-        int sMeth = 2;
+        int sMeth = 1;
         // 1 = total tournament / 2 = fitness proportionate / 3 = T7 tournament / 4  = ranked / 5 = T3 tournament
-        int sOMethod = 4;
+        int sOMethod = 3;
         
         // PAR - Choose staring population tyep
         // Full = full / Grow = grow / H+H = half and half / RH+H = ramped half and half
         // SDIB = state differential BOOLEAN / SDIA = state differential ANT
-        // Random = random(ish)
-        String genType = "SDIB";
+        String genType = "RH+H";
         
         // PAR - Set to use semantic state checked crossover
-        boolean sChecker = true;      
+        boolean sChecker = true;
+        
+        // PAR - Set to use semantic state checked mutation
+        boolean mChecker = true;
         
         // delete old output files
         FileManip.deleteOld(baseDir, "GP-State-Monitor-Output.txt");
@@ -90,10 +92,10 @@ public class Main {
         model.setLineageDump(false);
         
         // PAR - Specify name of input file in EpochX directory
-        model.loadRawData(baseDir, "input6bit.txt");
+        model.loadRawData(baseDir, "inputsantafe.txt");
         
         // do GP Run
-        model.doGPRun(modelName, runs, popSize, genType, gens, elites, reprod, pCross, pMut, sChecker, cOMethod, sOMethod, sMeth, baseDir);
+        model.doGPRun(modelName, runs, popSize, genType, gens, elites, reprod, pCross, pMut, sChecker, mChecker, cOMethod, sOMethod, sMeth, baseDir);
         
         System.out.println("RUN COMPLETED");
         System.exit(0);        

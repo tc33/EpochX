@@ -121,7 +121,8 @@ public class GPController {
             view.setProgDir("");
             view.setCrossOverValue("");
             view.setMutationValue("");
-            view.setStateCheckerValue("False");
+            view.setCStateCheckerValue("False");
+            view.setMStateCheckerValue("False");
             view.setGenerationsValue("");
             view.setRunsValue("");
             view.setPopSizeValue("");
@@ -264,12 +265,19 @@ public class GPController {
             } else if(view.getSelectionMethodValue().equalsIgnoreCase("Tournament T3")) {
                 sOMethod = 5;
             }
-            // sort out state checker
-            boolean sChecker;
-            if(view.getStateCheckerValue().equalsIgnoreCase("True")) {
-                sChecker = true;
+            // sort out crossover state checker
+            boolean cChecker;
+            if(view.getCStateCheckerValue().equalsIgnoreCase("True")) {
+                cChecker = true;
             } else {
-                sChecker = false;
+                cChecker = false;
+            }
+            // sort out crossover state checker
+            boolean mChecker;
+            if(view.getMStateCheckerValue().equalsIgnoreCase("True")) {
+                mChecker = true;
+            } else {
+                mChecker = false;
             }
             
             // clear output panes
@@ -281,7 +289,7 @@ public class GPController {
             model.loadRawData(view.getFileDir(), view.getFName());           
             
             // do GP Run
-            model.doGPRun(modelName, runs, popSize, genType, gens, elites, reproduction, pCross, pMut, sChecker, cOMethod, sOMethod, scoreType, view.getFileDir());
+            model.doGPRun(modelName, runs, popSize, genType, gens, elites, reproduction, pCross, pMut, cChecker, mChecker, cOMethod, sOMethod, scoreType, view.getFileDir());
             
             // load values into output panes
             // stats pane

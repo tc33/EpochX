@@ -38,7 +38,7 @@ public class GPView extends JFrame implements ActionListener {
     private JMenuBar menuBar = new JMenuBar();
     private JTextField seas, fores, co, mu, gens, runs, progID, elites, pop, reproduction;
     private JTextArea statOutput, progOutput, stateOutput;
-    private JComboBox rsc, pS, el, cOM, sOM, sPop, modelID, sTypeBox;
+    private JComboBox rsc, msc, pS, el, cOM, sOM, sPop, modelID, sTypeBox;
     private JPanel statsO, stateO, progsO, input, startPop, gPParams, fileControl, aParams, startRun;
     private JButton cFile, mFile, startButton;
     private GPModel model;
@@ -258,20 +258,35 @@ public class GPView extends JFrame implements ActionListener {
         c.gridy = 2;
         aParams.add(sOM, c);
         
-        // state checker label
-        JLabel statechecker = new JLabel("Run State Checker:  ");
+        // crossover state checker label
+        JLabel cStateChecker = new JLabel("Run Crossover State Checker:  ");
         c.gridx = 0;
         c.gridy = 3;
-        aParams.add(statechecker, c);
+        aParams.add(cStateChecker, c);
         
-        // state checker combo box
-        String[] tF = new String[2];
-        tF[1] = "True";
-        tF[0] = "False";
-        rsc = new JComboBox(tF);
+        // crossover state checker combo box
+        String[] cTF = new String[2];
+        cTF[1] = "True";
+        cTF[0] = "False";
+        rsc = new JComboBox(cTF);
         c.gridx = 1;
         c.gridy = 3;
-        aParams.add(rsc, c);       
+        aParams.add(rsc, c);   
+        
+        // crossover state checker label
+        JLabel mStateChecker = new JLabel("Run Mutation State Checker:  ");
+        c.gridx = 0;
+        c.gridy = 4;
+        aParams.add(mStateChecker, c);
+        
+        // crossover state checker combo box
+        String[] mTF = new String[2];
+        mTF[1] = "True";
+        mTF[0] = "False";
+        msc = new JComboBox(mTF);
+        c.gridx = 1;
+        c.gridy = 4;
+        aParams.add(msc, c); 
         
         // ---------------------------------------------------------------------
         
@@ -492,10 +507,10 @@ public class GPView extends JFrame implements ActionListener {
     }
     
     /**
-     * Retursn state checker parameters
+     * Returns crossover state checker parameters
      * @return the statechecker value
      */
-    public String getStateCheckerValue() {
+    public String getCStateCheckerValue() {
         return (String) rsc.getSelectedItem();
     }
     
@@ -503,8 +518,24 @@ public class GPView extends JFrame implements ActionListener {
      * Sets the state checker value
      * @param newValue True to run the state checker value
      */
-    public void setStateCheckerValue(String newValue) {
+    public void setCStateCheckerValue(String newValue) {
         rsc.setSelectedItem(newValue);
+    }
+    
+    /**
+     * Returns mutation state checker parameters
+     * @return the statechecker value
+     */
+    public String getMStateCheckerValue() {
+        return (String) msc.getSelectedItem();
+    }
+    
+    /**
+     * Sets the mutation state checker value
+     * @param newValue True to run the state checker value
+     */
+    public void setMStateCheckerValue(String newValue) {
+        msc.setSelectedItem(newValue);
     }
     
     /**

@@ -66,7 +66,7 @@ public class GPModel {
         results = new ArrayList<ArrayList<String>>();
         // set up stats ArrayList
         stats.add("Run\tGeneration\tLowerCI95%\tMean\tUpperCI95%\tStDev\tMin\tMedian\tMax\tRange\n");
-        stateStats.add("Run\tGeneration\tReverted Crossover\tTotal Crossover\n");
+        stateStats.add("Run\tGeneration\tReverted Crossover\tTotal Crossover\tReverted Mutations\tTotal Mutations\n");
         pADepthStats.add("Run\tGeneration\tDepth Average\tDepth StDev\tDepth Max\tDepth Min\tDepth Range\n");
         pANodeStats.add("Run\tGeneration\tNode Average\tNode StDev\tNode Max\tNode Min\tNode Range\n");
         pATerminalStats.add("Run\tGeneration\tTerminal Average\tTerminal StDev\tTerminal Max\tTerminal Min\tTerminal Range\n");
@@ -132,7 +132,7 @@ public class GPModel {
      * @param elites The number of elites required
      * @param pCross The probability of crossover
      * @param pMut The probability of mutation
-     * @param sChecker Whether to run the state checker or not
+     * @param cChecker Whether to run the state checker or not
      * @param cOMethod The crossover emthod desired
      * 1 = Single Point crossover
      * 2 = Standard Crossover (uniform swap point distribution)
@@ -140,7 +140,7 @@ public class GPModel {
      * @param sMeth The type of scoring method 1 = input output 2 = semantic
      * @param baseDir The base directory where the input file is held and the outputs will be dumped to file
      */
-    public void doGPRun(String modelName, int epochs, int popSize, String genType, int gens, int elites, int reproduction, double pCross, double pMut, boolean sChecker, int cOMethod, int sOMethod, int sMeth, File baseDir) {
+    public void doGPRun(String modelName, int epochs, int popSize, String genType, int gens, int elites, int reproduction, double pCross, double pMut, boolean cChecker, boolean mChecker, int cOMethod, int sOMethod, int sMeth, File baseDir) {
         // cycle trhough diffferent epochs
         for(int i = 0; i<epochs; i++) {
             
@@ -174,7 +174,7 @@ public class GPModel {
             this.setEpoch(i);
             
             // do GP Run
-            this.doGPEpoch(gens, elites, reproduction, pCross, pMut, sChecker, cOMethod, sOMethod, sMeth, baseDir);
+            this.doGPEpoch(gens, elites, reproduction, pCross, pMut, cChecker, mChecker, cOMethod, sOMethod, sMeth, baseDir);
             
             // dump results to files
             this.dumpOutput(baseDir);
@@ -195,7 +195,8 @@ public class GPModel {
      * @param elites The number of programs being carried through to the next generation
      * @param pCross The probability of crossover (Range: 0 --- 1)
      * @param pMut The probability of mutation (Range: 0 --- 1)
-     * @param state Choose whether to run a state checker (true = yes / false = no) set to false if you don't have one
+     * @param cChecker Choose whether to run a crossover state checker (true = yes / false = no) set to false if you don't have one
+     * @param mChecker Choose whether to run a mutation state checker (true = yes / false = no) set to false if you don't have one
      * @param cO Choose the crossover method
      * 1 = Single point crossover
      * 2 = Standard crossover with uniform swap point distribution
@@ -203,7 +204,7 @@ public class GPModel {
      * @param sMeth The type of scoring method 1= input output 2 = semantic
      * @param dir A File object representing the desired output directory
      */
-    public void doGPEpoch(int gensX, int elites, int reproduction, double pCross, double pMut, boolean state, int cO, int sO, int sMeth, File dir) {
+    public void doGPEpoch(int gensX, int elites, int reproduction, double pCross, double pMut, boolean cChecker, boolean mChecker, int cO, int sO, int sMeth, File dir) {
         
         // set directory and file object
         cDir = dir;       
@@ -218,7 +219,7 @@ public class GPModel {
         scoreMeth = sMeth;
         
         // set GP parameters
-        genProg.setGPParams(0, dataIn, newPop, elites, reproduction, pCross, pMut, state);
+        genProg.setGPParams(0, dataIn, newPop, elites, reproduction, pCross, pMut, cChecker, mChecker);
         
         // sort out lineage dump
         FamilyStorage fStore = new FamilyStorage();
@@ -275,7 +276,7 @@ public class GPModel {
             stats.add(runs + "\t" + (gen+1) + "\t" + genProg.getLowerCI() + "\t" + genProg.getGenAve() + "\t" + genProg.getUpperCI() + "\t" + standardDev + "\t" + genProg.getMinScore() + "\t" + genProg.getMedian() + "\t" + genProg.getMaxScore() + "\t" + genProg.getRange() + "\n");
             
             // load info for revertion stats
-            stateStats.add(runs + "\t" + (gen+1) + "\t" + genProg.getRCross() + "\t" + genProg.getTCross() + "\n");
+            stateStats.add(runs + "\t" + (gen+1) + "\t" + genProg.getRCross() + "\t" + genProg.getTCross() + "\t" + genProg.getRMut() + "\t" + genProg.getTMut() + "\n");
             
             // load info for depth analysis stats
             pADepthStats.add(runs + "\t" + (gen+1) + "\t" + genProg.getProgramDepthAverage() + "\t" + genProg.getProgramDepthSD() + "\t" + genProg.getProgramDepthMax() + "\t" + genProg.getProgramDepthMin() + "\t" + genProg.getProgramDepthRange() + "\n");

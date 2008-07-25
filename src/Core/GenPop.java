@@ -44,13 +44,6 @@ public class GenPop {
     
     /**
      * Creates a new instance of GenPop
-     * @param genType A String representing the type of starting population to be generated:
-     * RH+H = ramped half and half
-     * H+H = half and half
-     * Full = full
-     * Grow = grow
-     * Random = random
-     * SDA = state differential
      * @param syntaxM An ArrayList<ArrayList<String>> representing the syntax basic structure to be used in 
      * population generation
      * @param terminalsM An ArrayList<ArrayList<String>> representing all the terminals to be used in the
@@ -58,15 +51,12 @@ public class GenPop {
      * @param semModM A SemanticModule Object to be used in the SDA creation method
      * @param popSize the size of the starting population required
      */
-    public GenPop(int popSize, String genType, ArrayList<ArrayList<String>> syntaxM, ArrayList<ArrayList<String>> terminalsM, SemanticModule semModM) {
-        
+    public GenPop(int popSize, ArrayList<ArrayList<String>> syntaxM, ArrayList<ArrayList<String>> terminalsM, SemanticModule semModM) {
         pop = popSize;
         syntax = syntaxM;
         terminals = terminalsM;
         noFuncs = syntax.size()-terminals.size();
-        semMod = semModM;
-        createPop(genType);
-        
+        semMod = semModM;        
     }
     
     /**
@@ -490,40 +480,61 @@ public class GenPop {
     }
     
     /**
-     * Uses and random method to create the starting programs.
+     * Combines syntax to form trees of depth 0-4 to be used in the mutation function
      * @return A random program
      */
     public ArrayList<String> makeRandom() {
-        
-        // make random program
+
+        // set max depth
+        maxDepth = 4;
+
+        // make full program
         program = new ArrayList<String>();
-        
+
         // fill basic program structure
-        ran = rGen.nextInt(noFuncs);
+        ran = rGen.nextInt(syntax.size());
         part = syntax.get(ran);
-        for(String p: part) {
+        for (String p : part) {
             program.add(p);
         }
-        
+
+        // first function in
+        depthCount = 1;
+
         // pass through replacing all the *'s with more functions + terminals
-        j = 0;
         progSize = program.size();
-        while(j<progSize) {
-            if(program.get(j).equalsIgnoreCase("*")) {
-                ran = rGen.nextInt(syntax.size());
-                part = syntax.get(ran);
-                k = j;
-                program.remove(k);
-                for(String p: part) {
-                    program.add(k, p);
-                    k++;
+        while (depthCount <= maxDepth) {
+
+            int zSize = program.size();
+            for (int z = 0; z < zSize; z++) {
+                if (program.get(z).equalsIgnoreCase("*")) {
+                    program.set(z, "!");
                 }
-                j = 0;
             }
-            j++;
-            progSize = program.size();
+
+            j = 0;
+            while (j < progSize) {
+                // fill it up with functions
+                if (program.get(j).equalsIgnoreCase("!")) {
+                    if (depthCount < maxDepth) {
+                        ran = rGen.nextInt(syntax.size());
+                        part = syntax.get(ran);
+                    } else {
+                        ran = rGen.nextInt(terminals.size());
+                        part = terminals.get(ran);
+                    }
+                    k = j;
+                    program.remove(k);
+                    for (String p : part) {
+                        program.add(k, p);
+                        k++;
+                    }
+                }
+                j++;
+                progSize = program.size();
+            }
+            depthCount++;
         }
-        
         return program;
     }
     

@@ -39,12 +39,13 @@ public class GPCoreCode implements GPRunBasic {
     private ArrayList<ArrayList<String>> thisGen = new ArrayList<ArrayList<String>>();
     private ArrayList<ArrayList<String>> winners = new ArrayList<ArrayList<String>>();      
     //private ArrayList<String> states;
-    private int pop, elites, gSize, count2, d, g, tCross, rCross;
+    private int pop, elites, gSize, count2, d, g, tCross, rCross, tMut, rMut;
     private int remEnd, remStart, eS, p1Len, p2Len, ran, z, k, progSize, sType;
     private int reproduction;
     private double pCross, pMut, genAve, genTot, standardDev, score1, score2;
     private double maxScore, minScore;
     private ArrayList<String> prog1, prog2, prog3, prog4;
+    private GenPop firstPop;
     /**
      * General ArrayList<ArrayList<String>> of all of the syntax available.  This is to be set
      * by a call from the sub class in the models directory
@@ -73,10 +74,10 @@ public class GPCoreCode implements GPRunBasic {
     protected ArrayList<String> functions = new ArrayList<String>();
     private Random rGen = new Random();    
     private double[] sDMem, depthMem, nodeMem, termMem, distinctTermMem, lengthMem;
-    private boolean stateMon, stateMon2, dSM, trip1, trip2;
+    private boolean stateMon, stateMon2, dSM, mSM, trip1, trip2;
     private double[] scores;
     private boolean lDump = false;
-    private FamilyStorage fStore;;
+    private FamilyStorage fStore;
     /**
      * A representation of the Scorer implementation.  This is to be set by a call from 
      * the subclass.
@@ -103,7 +104,8 @@ public class GPCoreCode implements GPRunBasic {
     public ArrayList<ArrayList<String>> buildFirstPop(int popSize, String genType) {
         // create first generation of programs & validate them
         output.add("\n\n1st Generation Programs\n\n");
-        GenPop firstPop = new GenPop(popSize, genType, syntax, synterms, semanticMod);
+        firstPop = new GenPop(popSize, syntax, synterms, semanticMod);
+        firstPop.createPop(genType);
         newPop = firstPop.getFirstGen();
         for(ArrayList<String> nP: newPop) {
             // print to output
@@ -133,9 +135,10 @@ public class GPCoreCode implements GPRunBasic {
      * @param elites1 The number of prorgams to be retained at the end fo each generation
      * @param pC The probability of crossover
      * @param pM The probability of mutation
-     * @param doSM State checker enables - true if yes
+     * @param mChecker Boolean TRUE to run mutation state checker
+     * @param cChecker Boolean TRUE to run crossover state checker
      */
-    public void setGPParams(int genX, ArrayList<String> testData, ArrayList<ArrayList<String>> firstGen, int elites1, int reproduction1, double pC, double pM, boolean doSM) {
+    public void setGPParams(int genX, ArrayList<String> testData, ArrayList<ArrayList<String>> firstGen, int elites1, int reproduction1, double pC, double pM, boolean cChecker, boolean mChecker) {
         
         // load in all parameters
         input = testData;
@@ -148,7 +151,8 @@ public class GPCoreCode implements GPRunBasic {
         }
         pCross = pC;
         pMut = pM;
-        dSM = doSM;
+        dSM = cChecker;
+        mSM = mChecker;
         g = genX;
         //states = new ArrayList();
 
@@ -1580,57 +1584,131 @@ public class GPCoreCode implements GPRunBasic {
      * The mutation method
      */
     public void doMutation() {
+        // reset counters
+        rMut = 0;
+        tMut = 0;
+        
         // go though every program and tinker with it slightly if P<pMut
         for(int i = elites; i<pop; i++) {
-            
-            prog1 = thisGen.get(i);
-            
-            int j = 0;
-            while(j<prog1.size()) {
-                if(eStart.contains(prog1.get(j))) {                    
-                    if(Math.random()<=pMut) {
-                        if(prog1.get(j).equalsIgnoreCase("(")) {
-                            // if function replace function
-                            int depth = 0;
-                            while(true) {
-                                if(prog1.get(j).equalsIgnoreCase("(")) {
-                                    depth++;
+           
+            // if check to see if prog is changed
+            if (rGen.nextDouble() <= pMut) {
+                // add one to total mutation count
+                tMut++;
+              
+                // set up to repeat until new mutation attained
+                int masterDrop = 0;
+                boolean changeMarker = false;
+                while (!changeMarker) {
+                    changeMarker = true;
+
+                    // get program
+                    prog1 = thisGen.get(i);
+
+                    // copy program
+                    ArrayList<String> copyProg = new ArrayList<String>();
+                    for (String s : prog1) {
+                        copyProg.add(s);
+                    }
+
+                    // find the expression to edit
+                    int s = this.countExprs(prog1);
+                    int toAlter = rGen.nextInt(s);
+
+                    //System.out.println("1 : " + prog1);
+
+                    // cycle through looking for the correct expression
+                    int j = 0;
+                    int e = 0;
+                    while (j < prog1.size()) {
+                        // update e if necessary
+                        if (eStart.contains(prog1.get(j))) {
+                            e++;
+                        }
+                        // if at the right expression
+                        if (e == toAlter) {
+                            if (prog1.get(j).equalsIgnoreCase("(")) {
+                                // if function replace function
+                                int depth = 0;
+                                while (true) {
+                                    if (prog1.get(j).equalsIgnoreCase("(")) {
+                                        depth++;
+                                    }
+                                    if (prog1.get(j).equalsIgnoreCase(")")) {
+                                        depth--;
+                                    }
+                                    if (prog1.get(j).equalsIgnoreCase(")") && depth == 0) {
+                                        prog1.set(j, "*");
+                                        break;
+                                    }
+                                    prog1.remove(j);
                                 }
-                                if(prog1.get(j).equalsIgnoreCase(")")) {
-                                    depth--;
-                                }
-                                if(prog1.get(j).equalsIgnoreCase(")") && depth==0) {
-                                    prog1.set(j, "*");
-                                    break;
-                                }
-                                prog1.remove(j);
+                            } else {
+                                // if terminal replace one for one
+                                prog1.set(j, "*");
                             }
-                        } else {
-                            // if terminal replace one for one
-                            prog1.set(j, "*");
+                            break;
+                        }
+                        j++;
+                    }
+
+                    //System.out.println("2 : " + prog1);
+
+                    // pass through replacing all the *'s with more statements            
+                    z = 0;
+                    progSize = prog1.size();
+                    while (z < progSize) {
+                        if (prog1.get(z).equalsIgnoreCase("*")) {
+                            prog2 = firstPop.makeRandom();
+                            k = z;
+                            prog1.remove(k);
+                            for (String p : prog2) {
+                                prog1.add(k, p);
+                                k++;
+                            }
+                            break;
+                        }
+                        z++;
+                    }
+
+                    //System.out.println("3 : " + prog1);
+
+                    // check if size is in valid range
+                    if (ProgramAnalyser.getDepthOfTree(prog1) > 17) {
+                        prog1 = new ArrayList<String>();
+                        for (String p : copyProg) {
+                            prog1.add(p);
                         }
                     }
-                }
-                j++;
-            }
-            
-            // pass through replacing all the *'s with more statements            
-            z = 0;
-            progSize = prog1.size();
-            while(z<progSize) {                
-                if(prog1.get(z).equalsIgnoreCase("*")) {                    
-                    ran = rGen.nextInt(syntax.size());
-                    prog2 = syntax.get(ran);
-                    k = z;
-                    prog1.remove(k);
-                    for(String p: prog2) {
-                        prog1.add(k, p);
-                        k++;
+
+                    // compare before and after semantically
+                    if (mSM) {
+                        changeMarker = ProgramAnalyser.testStateChange(prog1, copyProg, semanticMod);
+                        if (changeMarker==false) {
+                            // false if not change so increment counter and revert
+                            if(masterDrop==0) {
+                                rMut++;
+                            }
+                            prog1 = new ArrayList<String>();
+                            for (String p : copyProg) {
+                                prog1.add(p);
+                            }
+                            //System.out.println("REPEAT TRIP: " + i + " : " + rMut);
+                            masterDrop++;
+                        }
                     }
-                    z = 0;                    
-                }                
-                z++;                
-                progSize = prog1.size();                
+
+                    // set thisGen value to the new prog1
+                    thisGen.set(i, prog1);
+
+                    // clear copy prog
+                    copyProg = null;
+                    
+                    // set a master drop out @5 in case mutation cant change behaviour
+                    if(masterDrop>=5) {
+                        break;
+                    }
+                }
             }
         }        
     }
@@ -1985,11 +2063,27 @@ public class GPCoreCode implements GPRunBasic {
     }
     
     /**
-     * Retrun the reverted number of crossovers
+     * Return the reverted number of crossovers
      * @return The reverted number of crossovers
      */
     public int getRCross() {
         return rCross;
+    }
+    
+    /**
+     * Return the total number of mutations occuring
+     * @return the total number of mutations
+     */
+    public int getTMut() {
+        return tMut;
+    }
+    
+    /**
+     * Return the number of reverted mutations
+     * @return the reverted number of mutations
+     */
+    public int getRMut() {
+        return rMut;
     }
     
     // -------------------------------------------------------------------------

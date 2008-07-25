@@ -55,9 +55,10 @@ public interface GPRunBasic {
      * @param elites1 int - The number of elites retained after selection
      * @param pC double - probability of crossover
      * @param pM double - probability of mutation
-     * @param doSM boolean - run the state checker or not - if you dont use a state checker just leave it as "false"
+     * @param doSM boolean - run the crossover state checker or not - if you dont use a state checker just leave it as "false"
+     * @param mChecker boolean - run the mutation state checker or not - if you dont use a state checker just leave it as "false"
      */
-    public void setGPParams(int generations, ArrayList<String> testData, ArrayList<ArrayList<String>> firstGen, int elites1, int reporduction, double pC, double pM, boolean doSM);
+    public void setGPParams(int generations, ArrayList<String> testData, ArrayList<ArrayList<String>> firstGen, int elites1, int reporduction, double pC, double pM, boolean doSM, boolean mChecker);
     
     /**
      * Single Point Crossover
@@ -198,6 +199,18 @@ public interface GPRunBasic {
      * @return The total number of reverted crossovers
      */
     public int getRCross();
+    
+    /**
+     * Returns the number of reverted mutations
+     * @return The number of reverted mutations
+     */
+    public int getRMut();
+    
+    /**
+     * Returns the total number of mutations
+     * @return The total number of mutations
+     */
+    public int getTMut();
     
     // depth stats
     

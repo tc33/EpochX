@@ -151,7 +151,6 @@ public class GPController {
             // GP Control work in here
             
             // delete old output files
-            FileManip.deleteOld(view.getFileDir(), "GP-State-Monitor-Output.txt");
             FileManip.deleteOld(view.getFileDir(), "GP-Stats-Output.txt");
             FileManip.deleteOld(view.getFileDir(), "GP-State-Stats-Output.txt");
             FileManip.deleteOld(view.getFileDir(), "GP-PA-DEPTH-Stats-Output.txt");
@@ -176,7 +175,7 @@ public class GPController {
             } else if(view.getStartingPopType().equalsIgnoreCase("Random")) {
                 genType = "Random";
             } else if(view.getStartingPopType().equalsIgnoreCase("H&H (D6)")) {
-                genType = "H&H";
+                genType = "H+H";
             } else if(view.getStartingPopType().equalsIgnoreCase("State Differential Ant")) {
                 genType = "SDIA";
             }
@@ -351,6 +350,7 @@ public class GPController {
             contCheck = false;
         }
         
+        @SuppressWarnings("static-access")
         public void run() {            
             
             // timer control work here

@@ -46,12 +46,12 @@ public class Main {
         
         // PAR - Set basic GP parameters - See parameters document on www.epochx.com for details
         int runs = 1;
-        int gens = 50;
+        int gens = 10;
         int elites = 50;
         int reprod = 50;
         int popSize = 500;
-        double pCross = 0;
-        double pMut = 1.0;
+        double pCross = 0.5;
+        double pMut = 0.5;
         
         // PAR - Choose crossover scoring and selection methods
         // 1 = single point / 2 = random point / 3 = koza standard
@@ -67,7 +67,7 @@ public class Main {
         String genType = "RH+H";
         
         // PAR - Set to use semantic state checked crossover
-        boolean sChecker = true;
+        boolean cChecker = true;
         
         // PAR - Set to use semantic state checked mutation
         boolean mChecker = true;
@@ -95,7 +95,7 @@ public class Main {
         model.loadRawData(baseDir, "inputsantafe.txt");
         
         // do GP Run
-        model.doGPRun(modelName, runs, popSize, genType, gens, elites, reprod, pCross, pMut, sChecker, mChecker, cOMethod, sOMethod, sMeth, baseDir);
+        model.doGPRun(modelName, runs, popSize, genType, gens, elites, reprod, pCross, pMut, cChecker, mChecker, cOMethod, sOMethod, sMeth, baseDir);
         
         System.out.println("RUN COMPLETED");
         System.exit(0);        

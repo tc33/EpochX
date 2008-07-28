@@ -132,7 +132,8 @@ public class GPModel {
      * @param elites The number of elites required
      * @param pCross The probability of crossover
      * @param pMut The probability of mutation
-     * @param cChecker Whether to run the state checker or not
+     * @param mChecker Whether to run the mutation state checker
+     * @param cChecker Whether to run the crossover state checker or not
      * @param cOMethod The crossover emthod desired
      * 1 = Single Point crossover
      * 2 = Standard Crossover (uniform swap point distribution)

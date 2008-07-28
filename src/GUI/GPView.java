@@ -36,13 +36,13 @@ public class GPView extends JFrame implements ActionListener {
     private JMenuItem job1, job2, open, save, exit, basicOps;
     private JMenu tools;
     private JMenuBar menuBar = new JMenuBar();
-    private JTextField seas, fores, co, mu, gens, runs, progID, elites, pop, reproduction;
+    private JTextField co, mu, gens, runs, progID, elites, pop, reproduction;
     private JTextArea statOutput, progOutput, stateOutput;
-    private JComboBox rsc, msc, pS, el, cOM, sOM, sPop, modelID, sTypeBox;
+    private JComboBox rsc, msc, cOM, sOM, sPop, modelID, sTypeBox;
     private JPanel statsO, stateO, progsO, input, startPop, gPParams, fileControl, aParams, startRun;
-    private JButton cFile, mFile, startButton;
+    private JButton cFile, startButton;
     private GPModel model;
-    private File fileToLoad, modelToLoad;
+    private File fileToLoad;
     private String fName;
     private ProgressMonitor progBar;
     
@@ -427,6 +427,7 @@ public class GPView extends JFrame implements ActionListener {
         
         // Define close button on the window
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 System.exit(1);
             }

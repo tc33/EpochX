@@ -22,6 +22,7 @@ package Core;
 
 import java.io.*;
 import java.util.*;
+import java.net.InetAddress;
 
 /**
  * Creates a batch run system for executing multiple runs of a genetic program
@@ -36,12 +37,23 @@ public class Main {
     public static void main(String[] args) {
         
         // PAR - Set model to the model you want to use
-        String modelName = "ArtificialAnt";
+        String modelName = "Majority5";
+        
+        String thisHost = "";
+        try {
+        InetAddress chose = InetAddress.getLocalHost();
+        thisHost = chose.getHostName();
+        } catch(java.net.UnknownHostException e) {
+            System.out.println("UNKOWN HOST");
+            System.exit(666);
+        }
+        
+        System.out.println(thisHost);
         
         // PAR - Set your base directory
         File baseDir = new File("U:/home/JavaProjects/EpochX/EpochX");
         //File baseDir = new File("D:/JavaProjects/EpochX");
-        //File baseDir = new File("/home/cug/lb212/EPOCHX");
+        //File baseDir = new File("/pi/home/cug/lb212/" + thisHost + "/EPOCHX");
         //File baseDir = new File("/home/lb212/EPOCHX10");
         
         // PAR - Set basic GP parameters - See parameters document on www.epochx.com for details
@@ -50,8 +62,8 @@ public class Main {
         int elites = 50;
         int reprod = 50;
         int popSize = 500;
-        double pCross = 0.5;
-        double pMut = 0.5;
+        double pCross = 0.9;
+        double pMut = 0.0;
         
         // PAR - Choose crossover scoring and selection methods
         // 1 = single point / 2 = random point / 3 = koza standard
@@ -64,13 +76,13 @@ public class Main {
         // PAR - Choose staring population tyep
         // Full = full / Grow = grow / H+H = half and half / RH+H = ramped half and half
         // SDIB = state differential BOOLEAN / SDIA = state differential ANT
-        String genType = "RH+H";
+        String genType = "SDIB";
         
         // PAR - Set to use semantic state checked crossover
         boolean cChecker = true;
         
         // PAR - Set to use semantic state checked mutation
-        boolean mChecker = true;
+        boolean mChecker = false;
         
         // delete old output files
         FileManip.deleteOld(baseDir, "GP-State-Monitor-Output.txt");
@@ -89,10 +101,10 @@ public class Main {
         // set lineage dump boolean
         // WARNING - THIS IS EXPERIMENTAL AND TIME CONSUMING - LEAVE AS FALSE UNLESS
         // YOU KNOW WHAT YOU'RE DOING.
-        model.setLineageDump(false);
+        model.setLineageDump(true);
         
         // PAR - Specify name of input file in EpochX directory
-        model.loadRawData(baseDir, "inputsantafe.txt");
+        model.loadRawData(baseDir, "input5bit.txt");
         
         // do GP Run
         model.doGPRun(modelName, runs, popSize, genType, gens, elites, reprod, pCross, pMut, cChecker, mChecker, cOMethod, sOMethod, sMeth, baseDir);

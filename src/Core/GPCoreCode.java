@@ -1706,6 +1706,7 @@ public class GPCoreCode implements GPRunBasic {
                     
                     // set a master drop out @5 in case mutation cant change behaviour
                     if(masterDrop>=5) {
+                        rMut--;
                         break;
                     }
                 }

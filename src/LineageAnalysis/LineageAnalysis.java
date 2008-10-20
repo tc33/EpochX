@@ -70,7 +70,7 @@ public class LineageAnalysis {
         positiveSemantics = new ArrayList<String>();
         eveTrace = new ArrayList<String>();
         gens = generations;
-        cDir = cD;
+        cDir = new File(cD.getPath() + "/Results");
         dataIn = dIn;
         functions = funcs;
         terminals = terms;
@@ -90,13 +90,13 @@ public class LineageAnalysis {
     public void countCategories() {
         // add titles to output file
         output.add("Generation\tTrue-Neutral\tBehaviour-Neutral\tBoth-Increase\tFitness-Increase\tFitness-Increase-Behaviour-Decrease\tBehaviour-Increase\tBehaviour-Increase-Fitness-Decrease\tBoth-Decrease\tFitness-Same-Behaviour-Same\tUnclassified\n");
-        outputScores.add("G\tPF\tPB\tCF\tCB\n");
-        metrics.add("G\tPD\tPFs\tPTs\tPDTs\tPFit\tPBehav\tCD\tCFs\tCTs\tCDTs\tCFit\tCBehav\tMod_D\n");
-        positives.add("G\tPD\tPFs\tPTs\tPDTs\tPFit\tPBehav\tCD\tCFs\tCTs\tCDTs\tCFit\tCBehav\tMod_D\n");
-        negatives.add("G\tPD\tPFs\tPTs\tPDTs\tPFit\tPBehav\tCD\tCFs\tCTs\tCDTs\tCFit\tCBehav\tMod_D\n");
-        semantics.add("G\tPPT\tPSC\tPNC\tCPT\tCSC\tCNC\n");
-        positiveSemantics.add("G\tPPT\tPSC\tPNC\tCPT\tCSC\tCNC\n");
-        negativeSemantics.add("G\tPPT\tPSC\tPNC\tCPT\tCSC\tCNC\n");
+        outputScores.add("G\tP1F\tP1B\tP2F\tP2B\tCF\tCB\n");
+        metrics.add("G\tP1D\tP1L\tP1Fs\tP1Ts\tP1DTs\tP1Fit\tP1Behav\tP2D\tP2L\tP2Fs\tP2Ts\tP2DTs\tP2Fit\tP2Behav\tCD\tCL\tCFs\tCTs\tCDTs\tCFit\tCBehav\tMod_D\n");
+        positives.add("G\tP1D\tP1L\tP1Fs\tP1Ts\tP1DTs\tP1Fit\tP1Behav\tP2D\tP2L\tP2Fs\tP2Ts\tP2DTs\tP2Fit\tP2Behav\tCD\tCL\tCFs\tCTs\tCDTs\tCFit\tCBehav\tMod_D\n");
+        negatives.add("G\tP1D\tP1L\tP1Fs\tP1Ts\tP1DTs\tP1Fit\tP1Behav\tP2D\tP2L\tP2Fs\tP2Ts\tP2DTs\tP2Fit\tP2Behav\tCD\tCL\tCFs\tCTs\tCDTs\tCFit\tCBehav\tMod_D\n");
+        semantics.add("G\tP1PT\tP1SC\tP1NC\tP2PT\tP2SC\tP2NC\tCPT\tCSC\tCNC\n");
+        positiveSemantics.add("G\tP1PT\tP1SC\tP1NC\tP2PT\tP2SC\tP2NC\tCPT\tCSC\tCNC\n");
+        negativeSemantics.add("G\tP1PT\tP1SC\tP1NC\tP2PT\tP2SC\tP2NC\tCPT\tCSC\tCNC\n");
         // cycle through generations
         for(int i = 1; i<=gens; i++) {
             tn = 0;
@@ -127,31 +127,37 @@ public class LineageAnalysis {
                 double bScoreC1 = scorer.getScore(dataIn, c1);
                 double bScoreC2 = scorer.getScore(dataIn, c2);
                 // scores output
-                outputScores.add(i + "\t" + fScoreP1 + "\t" + bScoreP1 + "\t" + fScoreC1 + "\t" + bScoreC1 + "\n");
-                outputScores.add(i + "\t" + fScoreP2 + "\t" + bScoreP2 + "\t" + fScoreC2 + "\t" + bScoreC2 + "\n");
+                outputScores.add(i + "\t" + fScoreP1 + "\t" + bScoreP1 + "\t" + fScoreP2 + "\t" + bScoreP2 + "\t" + fScoreC1 + "\t" + bScoreC1 + "\n");
+                outputScores.add(i + "\t" + fScoreP1 + "\t" + bScoreP1 + "\t" + fScoreP2 + "\t" + bScoreP2 + "\t" + fScoreC2 + "\t" + bScoreC2 + "\n");
                 // metrics output
                 int p1D = ProgramAnalyser.getDepthOfTree(p1);
+                int p1L = ProgramAnalyser.getProgramLength(p1);
                 int p1Fs = ProgramAnalyser.getNoOfFunctions(p1, functions);
                 int p1Ts = ProgramAnalyser.getNoOfTerminals(p1, terminals);
                 int p1DTs = ProgramAnalyser.getDistinctTerminals(p1, terminals);
                 int p2D = ProgramAnalyser.getDepthOfTree(p2);
+                int p2L = ProgramAnalyser.getProgramLength(p2);
                 int p2Fs = ProgramAnalyser.getNoOfFunctions(p2, functions);
                 int p2Ts = ProgramAnalyser.getNoOfTerminals(p2, terminals);
                 int p2DTs = ProgramAnalyser.getDistinctTerminals(p2, terminals);
                 int cD1 = ProgramAnalyser.getDepthOfTree(c1);
+                int cL1 = ProgramAnalyser.getProgramLength(c1);
                 int cFs1 = ProgramAnalyser.getNoOfFunctions(c1, functions);
                 int cTs1 = ProgramAnalyser.getNoOfTerminals(c1, terminals);
                 int cDTs1 = ProgramAnalyser.getDistinctTerminals(c1, terminals);
                 int cD2 = ProgramAnalyser.getDepthOfTree(c2);
+                int cL2 = ProgramAnalyser.getProgramLength(c2);
                 int cFs2 = ProgramAnalyser.getNoOfFunctions(c2, functions);
                 int cTs2 = ProgramAnalyser.getNoOfTerminals(c2, terminals);
                 int cDTs2 = ProgramAnalyser.getDistinctTerminals(c2, terminals);
                 int modD1 = ProgramAnalyser.getModificationDepth(p1, c1);
                 int modD2 = ProgramAnalyser.getModificationDepth(p2, c2);
-                String met1 = i+"\t"+p1D+"\t"+p1Fs+"\t"+p1Ts+"\t"+p1DTs+"\t"+fScoreP1+"\t"+bScoreP1;
-                met1 = met1+"\t"+cD1+"\t"+cFs1+"\t"+cTs1+"\t"+cDTs1+"\t"+fScoreC1+"\t"+bScoreC1+"\t"+modD1+"\n";
-                String met2 = i+"\t"+p2D+"\t"+p2Fs+"\t"+p2Ts+"\t"+p2DTs+"\t"+fScoreP2+"\t"+bScoreP2;
-                met2 = met2+"\t"+cD2+"\t"+cFs2+"\t"+cTs2+"\t"+cDTs2+"\t"+fScoreC2+"\t"+bScoreC2+"\t"+modD2+"\n";
+                String met1 = i+"\t"+p1D+"\t"+p1L+"\t"+p1Fs+"\t"+p1Ts+"\t"+p1DTs+"\t"+fScoreP1+"\t"+bScoreP1;
+                met1 = met1 + "\t"+p2D+"\t"+p2L+"\t"+p2Fs+"\t"+p2Ts+"\t"+p2DTs+"\t"+fScoreP2+"\t"+bScoreP2;
+                met1 = met1 + "\t"+cD1+"\t"+cL1+"\t"+cFs1+"\t"+cTs1+"\t"+cDTs1+"\t"+fScoreC1+"\t"+bScoreC1+"\t"+modD1+"\n";
+                String met2 = i+"\t"+p1D+"\t"+p1L+"\t"+p1Fs+"\t"+p1Ts+"\t"+p1DTs+"\t"+fScoreP1+"\t"+bScoreP1;
+                met2 = met2 + "\t"+p2D+"\t"+p2L+"\t"+p2Fs+"\t"+p2Ts+"\t"+p2DTs+"\t"+fScoreP2+"\t"+bScoreP2;
+                met2 = met2 + "\t"+cD2+"\t"+cL2+"\t"+cFs2+"\t"+cTs2+"\t"+cDTs2+"\t"+fScoreC2+"\t"+bScoreC2+"\t"+modD2+"\n";
                 metrics.add(met1);
                 metrics.add(met2);
                 // semantic output
@@ -172,8 +178,8 @@ public class LineageAnalysis {
                 int nodesC2 = c2BDD.nodeCount();
                 double pTTC2 = c2BDD.pathCount();
                 double sCC2 = c2BDD.satCount();
-                String sem1 = i+"\t"+pTTP1+"\t"+sCP1+"\t"+nodesP1+"\t"+pTTC1+"\t"+sCC1+"\t"+nodesC1+"\n";
-                String sem2 = i+"\t"+pTTP2+"\t"+sCP2+"\t"+nodesP2+"\t"+pTTC2+"\t"+sCC2+"\t"+nodesC2+"\n";
+                String sem1 = i+"\t"+pTTP1+"\t"+sCP1+"\t"+nodesP1+"\t"+pTTP2+"\t"+sCP2+"\t"+nodesP2+"\t"+pTTC1+"\t"+sCC1+"\t"+nodesC1+"\n";
+                String sem2 = i+"\t"+pTTP1+"\t"+sCP1+"\t"+nodesP1+"\t"+pTTP2+"\t"+sCP2+"\t"+nodesP2+"\t"+pTTC2+"\t"+sCC2+"\t"+nodesC2+"\n";
                 semantics.add(sem1);
                 semantics.add(sem2);
                 semMod.finish();
@@ -281,7 +287,7 @@ public class LineageAnalysis {
      * Performs an eve Analysis of the GP crossovers
      */
     public void eveAnalysis() {
-        eveTrace.add("Generation\tProgID\tFitness\tBScore\tSatCount\tNodeCount\tSyntax%\tWaste%\tDepth\tLength\tFunctions\tTerminals\tDTerminals\tModD\n");
+        eveTrace.add("Generation\tProgID\tFitness\tBScore\tSatCount\tNodeCount\tSimilarity%\tWaste%\tDepth\tLength\tFunctions\tTerminals\tDTerminals\tModD\n");
         ArrayList<Geneology> finalProgs = fStore.getGeneologiesByGeneration(gens);
         for (Geneology thisG : finalProgs) {
             ArrayList<String> prog1 = fStore.getProgram(thisG.getC1());
@@ -309,7 +315,16 @@ public class LineageAnalysis {
         double satCount = pBDD.satCount();
         int nodes = pBDD.nodeCount();
         ArrayList<String> optimised = semMod.repToCode(new BehaviourRepresentation(pBDD));
-        int waste = ProgramAnalyser.getProgramLength(p) - ProgramAnalyser.getProgramLength(optimised);
+        int waste;
+        try {
+            waste = ProgramAnalyser.getProgramLength(optimised);
+        } catch(NullPointerException e) {
+            System.out.println("CATCHER = " + optimised);
+        }
+        waste = ProgramAnalyser.getProgramLength(p) - ProgramAnalyser.getProgramLength(optimised);
+        if(waste<0) {
+            waste = 0;
+        }
         double wastePerc = (((double) waste)/((double) ProgramAnalyser.getProgramLength(p))) * 100;
         semMod.finish();
         // pull out metrics
@@ -336,5 +351,4 @@ public class LineageAnalysis {
             traceParent(parent, base, (generation-1));
         }
     }
-
 }

@@ -28,7 +28,7 @@ import java.util.ArrayList;
  * 
  * @author Lawrence Beadle
  */
-public class Syntax20bit implements Core.Syntax {
+public class Syntax20bit implements CoreN.Syntax {
     
     private ArrayList<ArrayList<String>> syntax = new ArrayList<ArrayList<String>>();
     private ArrayList<String> part = new ArrayList<String>();

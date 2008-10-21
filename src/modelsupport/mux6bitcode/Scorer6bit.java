@@ -17,7 +17,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package Mux6bitCode;
+package modelsupport.mux6bitcode;
 
 import Core.*;
 import java.util.ArrayList;

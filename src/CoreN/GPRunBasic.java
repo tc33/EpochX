@@ -18,7 +18,7 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package Core;
+package CoreN;
 
 import LineageAnalysis.FamilyStorage;
 import java.util.ArrayList;

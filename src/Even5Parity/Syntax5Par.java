@@ -26,7 +26,7 @@ import java.util.ArrayList;
  * The Syntax5Par class conatins the basic syntax for the boolean programs
  * @author Lawrence Beadle
  */
-public class Syntax5Par implements Core.Syntax {
+public class Syntax5Par implements CoreN.Syntax {
     
     private ArrayList<ArrayList<String>> syntax = new ArrayList<ArrayList<String>>();
     private ArrayList<String> part = new ArrayList<String>();

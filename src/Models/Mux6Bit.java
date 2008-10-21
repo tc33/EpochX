@@ -20,8 +20,8 @@
 
 package Models;
 
-import Mux6bitCode.*;
-import Core.*;
+import modelsupport.mux6bitcode.*;
+import CoreN.*;
 
 /**
  * An implementation of the 6 bit multiplexer for GP

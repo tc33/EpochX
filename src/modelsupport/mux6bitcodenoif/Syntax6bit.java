@@ -18,7 +18,7 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package Mux6bitCodeNOIF;
+package modelsupport.mux6bitcodenoif;
 
 import java.util.ArrayList;
 

@@ -18,17 +18,17 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package Mux11bitCode;
+package modelsupport.mux11bitcode;
 
 import net.sf.javabdd.*;
 import java.util.*;
-import Core.*;
+import CoreN.*;
 
 /**
  * A SemanticModule specifi to the 11 bit multiplexer problem
  * @author Lawrence Beadle
  */
-public class GPEquivalence11bit implements Core.SemanticModule {
+public class GPEquivalence11bit implements CoreN.SemanticModule {
     
     private BDDFactory b;
     private BDD aZero, aOne, aTwo, dZero, dOne, dTwo, dThree, dFour, dFive, dSix, dSeven ;    

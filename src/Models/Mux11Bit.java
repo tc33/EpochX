@@ -20,8 +20,8 @@
 
 package Models;
 
-import Mux11bitCode.*;
-import Core.*;
+import modelsupport.mux11bitcode.*;
+import CoreN.*;
 
 /**
  * An implimentation of the 11 bit Multiplexer for GP

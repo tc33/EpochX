@@ -18,7 +18,7 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package Mux11bitCode;
+package modelsupport.mux11bitcode;
 
 import java.util.ArrayList;
 import Core.*;

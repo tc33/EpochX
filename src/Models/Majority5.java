@@ -21,7 +21,7 @@
 package Models;
 
 import Majority5.*;
-import Core.*;
+import CoreN.*;
 
 /**
  * An implimentation of the 11 bit Multiplexer for GP

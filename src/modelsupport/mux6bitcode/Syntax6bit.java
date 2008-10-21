@@ -18,16 +18,15 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package Mux11bitCode;
+package modelsupport.mux6bitcode;
 
 import java.util.ArrayList;
 
 /**
- * The Syntax11bit class conatins the basic syntax for the boolean programs
- * 
+ * The Syntax6bit class conatins the basic syntax for the boolean programs
  * @author Lawrence Beadle
  */
-public class Syntax11bit implements Core.Syntax {
+public class Syntax6bit implements Core.Syntax {
     
     private ArrayList<ArrayList<String>> syntax = new ArrayList<ArrayList<String>>();
     private ArrayList<String> part = new ArrayList<String>();
@@ -37,9 +36,9 @@ public class Syntax11bit implements Core.Syntax {
     private ArrayList<String> terms = new ArrayList<String>();
     
     /**
-     * The constructor defines all the syntax for the 11 bit multiplexer.
+     * The Syntax6bit constructor defines all the syntax for the 6 bit multiplexer problem
      */
-    public Syntax11bit() {
+    public Syntax6bit() {
         
         // load functions & structure ------------------------------------------
         
@@ -91,11 +90,6 @@ public class Syntax11bit implements Core.Syntax {
         terminals.add(part);
         
         part = new ArrayList<String>();
-        part.add("A2");
-        syntax.add(part);
-        terminals.add(part);
-        
-        part = new ArrayList<String>();
         part.add("D0");
         syntax.add(part);
         terminals.add(part);
@@ -115,38 +109,13 @@ public class Syntax11bit implements Core.Syntax {
         syntax.add(part);
         terminals.add(part);
         
-        part = new ArrayList<String>();
-        part.add("D4");
-        syntax.add(part);
-        terminals.add(part);
-        
-        part = new ArrayList<String>();
-        part.add("D5");
-        syntax.add(part);
-        terminals.add(part);
-        
-        part = new ArrayList<String>();
-        part.add("D6");
-        syntax.add(part);
-        terminals.add(part);
-        
-        part = new ArrayList<String>();
-        part.add("D7");
-        syntax.add(part);
-        terminals.add(part);
-        
         // sort out expression starting ----------------------------------------     
         eStart.add("A0");
         eStart.add("A1");
-        eStart.add("A2");
         eStart.add("D0");
         eStart.add("D1");
         eStart.add("D2");
         eStart.add("D3");
-        eStart.add("D4");
-        eStart.add("D5");
-        eStart.add("D6");
-        eStart.add("D7");
         eStart.add("(");
         
         // make a list of fucntions --------------------------------------------
@@ -158,15 +127,10 @@ public class Syntax11bit implements Core.Syntax {
         // make a list of terminals --------------------------------------------        
         terms.add("A0");
         terms.add("A1");
-        terms.add("A2");
         terms.add("D0");
         terms.add("D1");
         terms.add("D2");
         terms.add("D3");
-        terms.add("D4");
-        terms.add("D5");
-        terms.add("D6");
-        terms.add("D7");
         
     }
     

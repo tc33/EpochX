@@ -21,7 +21,7 @@
 package Models;
 
 import ArtificialAnt.*;
-import Core.*;
+import CoreN.*;
 
 /**
  * An implementation of the 4 Parity model in GP

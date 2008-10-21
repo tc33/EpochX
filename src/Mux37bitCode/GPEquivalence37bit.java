@@ -22,13 +22,13 @@ package Mux37bitCode;
 
 import net.sf.javabdd.*;
 import java.util.*;
-import Core.*;
+import CoreN.*;
 
 /**
  * A SemanticModule specifi to the 11 bit multiplexer problem
  * @author Lawrence Beadle
  */
-public class GPEquivalence37bit implements Core.SemanticModule {
+public class GPEquivalence37bit implements CoreN.SemanticModule {
     
     private BDDFactory b;
     private BDD aZero, aOne, aTwo, aThree, aFour;

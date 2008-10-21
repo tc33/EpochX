@@ -18,7 +18,7 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package Core;
+package CoreN;
 
 /**
  * XNode assist the semantic operations - more specifically back translation of ROBDDs

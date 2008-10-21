@@ -20,7 +20,7 @@
 
 package LineageAnalysis;
 
-import Core.*;
+import CoreN.*;
 import java.util.ArrayList;
 import java.io.File;
 import net.sf.javabdd.*;

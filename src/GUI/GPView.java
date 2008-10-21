@@ -23,7 +23,7 @@ package GUI;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import Core.*;
+import CoreN.*;
 import java.io.*;
 
 /**

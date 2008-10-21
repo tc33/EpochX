@@ -22,13 +22,13 @@ package Majority9;
 
 import net.sf.javabdd.*;
 import java.util.*;
-import Core.*;
+import CoreN.*;
 
 /**
  * A SemanticModule specifi to the 11 bit multiplexer problem
  * @author Lawrence Beadle
  */
-public class GPEquivalence9maj implements Core.SemanticModule {
+public class GPEquivalence9maj implements CoreN.SemanticModule {
     
     private BDDFactory b;
     private BDD dZero, dOne, dTwo, dThree, dFour, dFive, dSix, dSeven, dEight ;    

@@ -20,7 +20,7 @@
 
 package GUI;
 
-import Core.*;
+import CoreN.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import javax.swing.*;

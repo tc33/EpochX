@@ -5,7 +5,7 @@
 
 package ArtificialAnt;
 
-import Core.BehaviourRepresentation;
+import CoreN.BehaviourRepresentation;
 import java.util.ArrayList;
 import junit.framework.TestCase;
 

@@ -18,19 +18,18 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package Mux6bitCodeNOIF;
+package modelsupport.mux6bitcodenoif;
 
-import Mux6bitCode.*;
 import net.sf.javabdd.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import Core.*;
+import CoreN.*;
 
 /**
  * A SemanticModule specific to the 6 bit multiplexer problem
  * @author Lawrence Beadle
  */
-public class GPEquivalence6bit implements Core.SemanticModule {
+public class GPEquivalence6bit implements CoreN.SemanticModule {
     
     private BDDFactory b;
     private BDD aZero, aOne, dZero, dOne, dTwo, dThree;    

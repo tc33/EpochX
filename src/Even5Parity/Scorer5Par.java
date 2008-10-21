@@ -21,13 +21,13 @@
 package Even5Parity;
 
 import java.util.ArrayList;
-import Core.*;
+import CoreN.*;
 
 /**
  * The Scorer5Par class provides functionality to compare boolean programs scores to the ideal solution
  * @author Lawrence Beadle
  */
-public class Scorer5Par implements Core.Scorer {   
+public class Scorer5Par implements CoreN.Scorer {   
     
     private boolean d0, d1, d2, d3, d4, result;
     private boolean[] aa;

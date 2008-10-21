@@ -27,7 +27,7 @@ import java.util.ArrayList;
  * 
  * @author Lawrence Beadle
  */
-public class Syntax5maj implements Core.Syntax {
+public class Syntax5maj implements CoreN.Syntax {
     
     private ArrayList<ArrayList<String>> syntax = new ArrayList<ArrayList<String>>();
     private ArrayList<String> part = new ArrayList<String>();

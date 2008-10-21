@@ -21,7 +21,7 @@
 package Mux37bitCode;
 
 import java.util.ArrayList;
-import Core.*;
+import CoreN.*;
 
 /**
  * The Scorer37bit class provides functionality to compare boolean programs scores to the ideal solution
@@ -29,7 +29,7 @@ import Core.*;
  * 
  * @author Lawrence Beadle
  */
-public class Scorer37bit implements Core.Scorer {   
+public class Scorer37bit implements CoreN.Scorer {   
     
     private boolean a0, a1, a2, a3, a4, result;
     private boolean d0, d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, d13, d14, d15;

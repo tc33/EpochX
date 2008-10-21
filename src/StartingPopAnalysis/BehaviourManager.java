@@ -22,7 +22,7 @@ package StartingPopAnalysis;
 
 import net.sf.javabdd.*;
 import java.util.ArrayList;
-import Core.*;
+import CoreN.*;
 
 /**
  * The BDD manager aids analysis of starting populations

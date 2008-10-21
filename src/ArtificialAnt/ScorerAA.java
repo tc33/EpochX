@@ -21,13 +21,13 @@
 package ArtificialAnt;
 
 import java.util.ArrayList;
-import Core.*;
+import CoreN.*;
 
 /**
  * The ScorerAA class provides functionality to compare boolean programs scores to the ideal solution * 
  * @author Lawrence Beadle
  */
-public class ScorerAA implements Core.Scorer {   
+public class ScorerAA implements CoreN.Scorer {   
     
     private Ant myAnt;
     private int sType;

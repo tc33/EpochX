@@ -21,7 +21,7 @@
 package Models;
 
 import Even5Parity.*;
-import Core.*;
+import CoreN.*;
 
 /**
  * A model of the Even 5 Parity problem implemented for GP

@@ -21,13 +21,13 @@
 package ArtificialAnt;
 
 import java.util.ArrayList;
-import Core.*;
+import CoreN.*;
 
 /**
  * The SemanticModule specific to the Artificial Ant Package
  * @author Lawrence Beadle
  */
-public class GPEquivalenceAA implements Core.SemanticModule {
+public class GPEquivalenceAA implements CoreN.SemanticModule {
     
     private Ant myAnt;
     private ArrayList<String> antModel;

@@ -20,7 +20,7 @@
 
 package StartingPopAnalysis;
 
-import Core.*;
+import CoreN.*;
 import java.io.File;
 import java.util.ArrayList;
 

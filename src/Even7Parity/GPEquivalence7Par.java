@@ -23,13 +23,13 @@ package Even7Parity;
 import net.sf.javabdd.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import Core.*;
+import CoreN.*;
 
 /**
  * The SemanticModule for the 5 Parity problem
  * @author Lawrence Beadle
  */
-public class GPEquivalence7Par implements Core.SemanticModule {
+public class GPEquivalence7Par implements CoreN.SemanticModule {
     
     private BDDFactory b;
     private BDD dZero, dOne, dTwo, dThree, dFour, dFive, dSix;    

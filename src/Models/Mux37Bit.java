@@ -21,7 +21,7 @@
 package Models;
 
 import Mux37bitCode.*;
-import Core.*;
+import CoreN.*;
 
 /**
  * An implimentation of the 11 bit Multiplexer for GP

@@ -21,7 +21,7 @@
 package Models;
 
 import Even4Parity.*;
-import Core.*;
+import CoreN.*;
 
 /**
  * An implementation of the 4 Parity model in GP

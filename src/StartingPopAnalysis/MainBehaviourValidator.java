@@ -20,7 +20,7 @@
 
 package StartingPopAnalysis;
 
-import Core.*;
+import CoreN.*;
 import java.util.*;
 import net.sf.javabdd.*;
 import java.lang.reflect.*;

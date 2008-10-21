@@ -18,26 +18,29 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package Core;
-import GUI.*;
+package CoreN;
 
 /**
- * Loads a GUI to operate the genetic program
+ * This class provides functionality to translate input strings into boolean[] representations.
  * @author Lawrence Beadle
  */
-public class MainGUI {
+public class BoolTrans {
     
     /**
-     * Sets up the GUI
-     * @param args args
+     * Translates a String to a boolean[]
+     * @param input The input string of 1's and 0's
+     * @return A boolean[] representing the input String
      */
-    public static void main(String args[]) {
-        
-        GPModel model = new GPModel();
-        GPView view = new GPView(model);
-        GPController control = new GPController(view, model);
-        view.setVisible(true);
-        
-    }
-    
+    public static boolean[] doTrans(String input) {        
+        int len = input.length();
+        boolean[] transData = new boolean[len];
+        for(int i = 0; i<len; i++) {
+            if(input.charAt(i)=='1') {
+                transData[i] = true;
+            } else {
+                transData[i] = false;
+            }
+        }        
+        return transData;        
+    }    
 }

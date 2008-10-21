@@ -21,14 +21,14 @@
 package Majority9;
 
 import java.util.ArrayList;
-import Core.*;
+import CoreN.*;
 
 /**
  * The Scorer9maj class provides functionality to compare boolean programs scores to the ideal solution
  * 
  * @author Lawrence Beadle
  */
-public class Scorer9maj implements Core.Scorer {   
+public class Scorer9maj implements CoreN.Scorer {   
     
     private boolean d0, d1, d2, d3, d4, d5, d6, d7, d8, result;
     private boolean[] aa;

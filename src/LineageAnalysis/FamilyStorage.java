@@ -20,7 +20,7 @@
 
 package LineageAnalysis;
 
-import Core.*;
+import CoreN.*;
 import java.util.*;
 import java.io.*;
 

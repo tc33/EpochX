@@ -5,6 +5,7 @@
 
 package Core;
 
+import CoreN.ProgramAnalyser;
 import java.util.ArrayList;
 import junit.framework.TestCase;
 

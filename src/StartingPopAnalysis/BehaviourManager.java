@@ -18,11 +18,11 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package StartingPopAnalysis;
+package startingpopanalysis;
 
 import net.sf.javabdd.*;
 import java.util.ArrayList;
-import CoreN.*;
+import core.*;
 
 /**
  * The BDD manager aids analysis of starting populations

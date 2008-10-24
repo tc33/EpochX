@@ -18,7 +18,7 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package LineageAnalysis;
+package lineageanalysis;
 
 /**
  * The Geneology class represents the two parents and two children involved in a

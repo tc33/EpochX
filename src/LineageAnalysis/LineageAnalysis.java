@@ -18,9 +18,9 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package LineageAnalysis;
+package lineageanalysis;
 
-import CoreN.*;
+import core.*;
 import java.util.ArrayList;
 import java.io.File;
 import net.sf.javabdd.*;

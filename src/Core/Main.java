@@ -18,7 +18,7 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package CoreN;
+package core;
 
 import java.io.*;
 import java.util.*;
@@ -35,7 +35,7 @@ public class Main {
      * @param args args
      */
     public static void main(String[] args) {
-
+        
         // measure time in
         long timeIn = System.currentTimeMillis();
         
@@ -54,14 +54,14 @@ public class Main {
         System.out.println(thisHost);
         
         // PAR - Set your base directory
-        //File baseDir = new File("U:/home/JavaProjects/EpochX/EpochX");
+        File baseDir = new File("U:/home/JavaProjects/EpochX/trunk");
         //File baseDir = new File("D:/JavaProjects/EpochX");
-        File baseDir = new File("/pi/home/cug/lb212/" + thisHost + "/EPOCHX");
+        //File baseDir = new File("/pi/home/cug/lb212/" + thisHost + "/EPOCHX");
         //File baseDir = new File("/home/lb212/EPOCHX10");
         
         // PAR - Set basic GP parameters - See parameters document on www.epochx.com for details
-        int runs = 100;
-        int gens = 50;
+        int runs = 1;
+        int gens = 10;
         int elites = 50;
         int reprod = 50;
         int popSize = 500;

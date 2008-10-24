@@ -18,7 +18,7 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package StartingPopAnalysis;
+package startingpopanalysis;
 
 import core.*;
 import java.util.*;

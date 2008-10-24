@@ -18,10 +18,10 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package Models;
+package models;
 
-import Majority9.*;
-import CoreN.*;
+import modelsupport.majority9.*;
+import core.*;
 
 /**
  * An implimentation of the 11 bit Multiplexer for GP

@@ -18,10 +18,10 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package Models;
+package models;
 
 import modelsupport.mux6bitcodenoif.*;
-import CoreN.*;
+import core.*;
 
 /**
  * An implementation of the 6 bit multiplexer for GP

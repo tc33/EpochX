@@ -18,10 +18,10 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package Models;
+package models;
 
-import Even7Parity.*;
-import CoreN.*;
+import modelsupport.even7parity.*;
+import core.*;
 
 /**
  * A model of the Even 5 Parity problem implemented for GP

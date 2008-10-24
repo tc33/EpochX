@@ -18,10 +18,10 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package Models;
+package models;
 
-import Mux20bitCode.*;
-import CoreN.*;
+import modelsupport.mux20bitcode.*;
+import core.*;
 
 /**
  * An implimentation of the 11 bit Multiplexer for GP

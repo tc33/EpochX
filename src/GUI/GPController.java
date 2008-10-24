@@ -18,9 +18,9 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package GUI;
+package gui;
 
-import CoreN.*;
+import core.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import javax.swing.*;

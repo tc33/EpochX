@@ -18,12 +18,12 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package GUI;
+package gui;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import CoreN.*;
+import core.*;
 import java.io.*;
 
 /**

@@ -20,9 +20,10 @@
 
 package core;
 
-import lineageanalysis.*;
 import java.util.ArrayList;
 import java.io.*;
+
+import lineageanalysis.*;
 
 /**
  * This interface provides the template method that are requried in each Genetic Programming Run

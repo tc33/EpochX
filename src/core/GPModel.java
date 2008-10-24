@@ -20,11 +20,12 @@
 
 package core;
 
-import lineageanalysis.*;
-import models.*;
 import java.util.*;
 import java.io.*;
 import java.lang.reflect.*;
+
+import lineageanalysis.*;
+import models.*;
 
 /**
  * The GPModel class controls the high level operations of a genetic programming run

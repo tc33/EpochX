@@ -20,9 +20,10 @@
 
 package core;
 
-import lineageanalysis.*;
 import java.util.*;
 import java.io.*;
+
+import lineageanalysis.*;
 import net.sf.javabdd.*;
 
 /**

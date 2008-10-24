@@ -18,7 +18,7 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package startingpopanalysis;
+package StartingPopAnalysis;
 
 import net.sf.javabdd.*;
 import java.util.ArrayList;

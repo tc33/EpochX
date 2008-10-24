@@ -20,9 +20,10 @@
 
 package lineageanalysis;
 
-import core.*;
 import java.util.*;
 import java.io.*;
+
+import core.*;
 
 /**
  * This class stores the crossover parent and child information for later lineage 

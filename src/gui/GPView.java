@@ -21,9 +21,11 @@
 package gui;
 
 import javax.swing.*;
+
+import core.*;
+
 import java.awt.*;
 import java.awt.event.*;
-import core.*;
 import java.io.*;
 
 /**

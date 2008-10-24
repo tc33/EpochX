@@ -20,8 +20,8 @@
 
 package models;
 
-import modelsupport.artificialantsf.*;
 import core.*;
+import modelsupport.artificialantsf.*;
 
 /**
  * An implementation of the 4 Parity model in GP

@@ -20,10 +20,11 @@
 
 package gui;
 
-import core.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import javax.swing.*;
+
+import core.*;
 
 /**
  * Provides the control mechanism for the GUI

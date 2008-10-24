@@ -20,8 +20,8 @@
 
 package models;
 
-import modelsupport.even4parity.*;
 import core.*;
+import modelsupport.even4parity.*;
 
 /**
  * An implementation of the 4 Parity model in GP

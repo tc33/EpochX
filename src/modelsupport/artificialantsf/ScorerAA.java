@@ -21,6 +21,7 @@
 package modelsupport.artificialantsf;
 
 import java.util.ArrayList;
+
 import core.*;
 
 /**

@@ -20,9 +20,10 @@
 
 package lineageanalysis;
 
-import core.*;
 import java.util.ArrayList;
 import java.io.File;
+
+import core.*;
 import net.sf.javabdd.*;
 
 /**

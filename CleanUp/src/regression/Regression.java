@@ -18,26 +18,34 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package core;
+package regression;
 
-import gui.*;
+import core.*;
 
 /**
- * Loads a GUI to operate the genetic program
+ * An implementation of the 6 bit multiplexer for GP
  * @author Lawrence Beadle
  */
-public class MainGUI {
+public class Regression extends GPCoreCode {
     
     /**
-     * Sets up the GUI
-     * @param args args
+     * Creates a new instance of Mux6Bit
      */
-    public static void main(String args[]) {
+    public Regression() {
         
-        GPModel model = new GPModel();
-        GPView view = new GPView(model);
-        new GPController(view, model);
-        view.setVisible(true);
+        // instantiate scorer object
+        super.scorer = new ScorerReg();
+        
+        // instantiate syntax objects
+        SyntaxReg syn = new SyntaxReg();
+        super.eStart = syn.getEStart();
+        super.syntax = syn.getSyntax();
+        super.synterms = syn.getTerms();
+        super.functions = syn.getFunctions();
+        super.terminals = syn.getTerminals();
+        
+        // instantiate translater object
+        super.semanticMod = new GPEquivalenceReg();
         
     }
     

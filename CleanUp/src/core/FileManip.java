@@ -65,7 +65,6 @@ public class FileManip {
     public static ArrayList<String> loadInput(File cDir, String fName) {
         
         ArrayList<String> data = new ArrayList<String>();
-        String sL, nF;
         
         try {
             File fileToLoad = new File(cDir, fName);

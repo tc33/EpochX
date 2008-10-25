@@ -133,7 +133,7 @@ public class ProgramAnalyser {
      */
     public static int getDistinctTerminals(ArrayList<String> prog, ArrayList<String> terms) {
         int noOfTerms = 0;
-        ArrayList<String> passed = new ArrayList();
+        ArrayList<String> passed = new ArrayList<String>();
         for(String p: prog) {
             if(terms.contains(p) && !passed.contains(p)) {
                 noOfTerms++;

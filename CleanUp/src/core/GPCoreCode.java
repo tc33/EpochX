@@ -21,10 +21,8 @@
 package core;
 
 import java.util.*;
-import java.io.*;
 
 import lineageanalysis.*;
-import net.sf.javabdd.*;
 
 /**
  * Provides the core functionality for the basic processes of the genetic programming 
@@ -41,7 +39,7 @@ public class GPCoreCode implements GPRunBasic {
     private ArrayList<ArrayList<String>> winners = new ArrayList<ArrayList<String>>();      
     //private ArrayList<String> states;
     private int pop, elites, gSize, count2, d, g, tCross, rCross, tMut, rMut;
-    private int remEnd, remStart, eS, p1Len, p2Len, ran, z, k, progSize, sType;
+    private int remEnd, remStart, eS, p1Len, p2Len, z, k, progSize, sType;
     private int reproduction;
     private double pCross, pMut, genAve, genTot, standardDev, score1, score2;
     private double maxScore, minScore;
@@ -147,7 +145,7 @@ public class GPCoreCode implements GPRunBasic {
         pop = firstGen.size();
         elites = elites1;
         reproduction = reproduction1;
-        for(ArrayList f: fGen) {
+        for(ArrayList<String> f: fGen) {
             thisGen.add(f);
         }
         pCross = pC;
@@ -227,7 +225,7 @@ public class GPCoreCode implements GPRunBasic {
                         eS++;
                     }
                     if(eS==swapTake) {
-                        subtree1 = new ArrayList();
+                        subtree1 = new ArrayList<String>();
                         // pull out whole expression to swap
                         if(!swap.equalsIgnoreCase("(")) {
                             subtree1.add(prog3.get(count));
@@ -266,7 +264,7 @@ public class GPCoreCode implements GPRunBasic {
                         eS++;
                     }
                     if(eS==swapTake) {
-                        subtree2 = new ArrayList();
+                        subtree2 = new ArrayList<String>();
                         // pull out whole expression to swap
                         if(!swap.equalsIgnoreCase("(")) {
                             subtree2.add(prog4.get(count));
@@ -531,7 +529,7 @@ public class GPCoreCode implements GPRunBasic {
                         eS++;
                     }
                     if(eS==swapTake) {
-                        subtree1 = new ArrayList();
+                        subtree1 = new ArrayList<String>();
                         // pull out whole expression to swap
                         if(!swap.equalsIgnoreCase("(")) {
                             subtree1.add(prog3.get(count));
@@ -570,7 +568,7 @@ public class GPCoreCode implements GPRunBasic {
                         eS++;
                     }
                     if(eS==swapPut) {
-                        subtree2 = new ArrayList();
+                        subtree2 = new ArrayList<String>();
                         // pull out whole expression to swap
                         if(!swap.equalsIgnoreCase("(")) {
                             subtree2.add(prog4.get(count));
@@ -931,7 +929,7 @@ public class GPCoreCode implements GPRunBasic {
                         eS++;
                     }
                     if(eS==swapTake) {
-                        subtree1 = new ArrayList();
+                        subtree1 = new ArrayList<String>();
                         // pull out whole expression to swap
                         if(!swap.equalsIgnoreCase("(")) {
                             subtree1.add(prog3.get(count));
@@ -970,7 +968,7 @@ public class GPCoreCode implements GPRunBasic {
                         eS++;
                     }
                     if(eS==swapPut) {
-                        subtree2 = new ArrayList();
+                        subtree2 = new ArrayList<String>();
                         // pull out whole expression to swap
                         if(!swap.equalsIgnoreCase("(")) {
                             subtree2.add(prog4.get(count));
@@ -1340,7 +1338,7 @@ public class GPCoreCode implements GPRunBasic {
                         eS++;
                     }
                     if(eS==swapTake) {
-                        subtree1 = new ArrayList();
+                        subtree1 = new ArrayList<String>();
                         // pull out whole expression to swap
                         if(!swap.equalsIgnoreCase("(")) {
                             subtree1.add(prog3.get(count));
@@ -1379,7 +1377,7 @@ public class GPCoreCode implements GPRunBasic {
                         eS++;
                     }
                     if(eS==swapPut) {
-                        subtree2 = new ArrayList();
+                        subtree2 = new ArrayList<String>();
                         // pull out whole expression to swap
                         if(!swap.equalsIgnoreCase("(")) {
                             subtree2.add(prog4.get(count));

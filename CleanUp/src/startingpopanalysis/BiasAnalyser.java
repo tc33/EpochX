@@ -20,10 +20,10 @@
 
 package startingpopanalysis;
 
-import core.*;
-import java.util.*;
-import net.sf.javabdd.*;
 import java.lang.reflect.*;
+import java.util.*;
+
+import core.*;
 
 /**
  * Bias Analyser is used to analyse starting populations

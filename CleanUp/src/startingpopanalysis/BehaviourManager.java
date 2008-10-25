@@ -20,8 +20,8 @@
 
 package startingpopanalysis;
 
-import net.sf.javabdd.*;
-import java.util.ArrayList;
+import java.util.*;
+
 import core.*;
 
 /**

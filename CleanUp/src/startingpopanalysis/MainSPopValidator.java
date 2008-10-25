@@ -20,10 +20,10 @@
 
 package startingpopanalysis;
 
-import core.*;
-import java.util.*;
-import net.sf.javabdd.*;
 import java.lang.reflect.*;
+import java.util.*;
+
+import core.*;
 
 /**
  * Runs a full analysis of a starting population for a specific model for varying sizes

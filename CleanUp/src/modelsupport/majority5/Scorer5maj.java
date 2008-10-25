@@ -159,7 +159,7 @@ public class Scorer5maj implements core.Scorer {
         } else {
             if(expr.get(0).equalsIgnoreCase("(")) {
                 // bracket scenario - remove each end and resolve expr on inside of bracket
-                ArrayList<String> test = new ArrayList();
+                ArrayList<String> test = new ArrayList<String>();
                 int top = expr.size()-1;
                 for(int i = 1; i<top; i++) {
                     test.add(expr.get(i));
@@ -169,7 +169,7 @@ public class Scorer5maj implements core.Scorer {
                 // NOT scenario                
                 if(expr.size()==2) {
                     // if there is a terminal
-                    ArrayList<String> test = new ArrayList();
+                    ArrayList<String> test = new ArrayList<String>();
                     test.add(expr.get(1));
                     if(resolveExpr(test)) {
                         return false;
@@ -178,7 +178,7 @@ public class Scorer5maj implements core.Scorer {
                     }
                 } else {
                     // if there is a bracket expression
-                    ArrayList<String> test = new ArrayList();
+                    ArrayList<String> test = new ArrayList<String>();
                     for(String e: expr) {
                         test.add(e);
                     }
@@ -194,13 +194,13 @@ public class Scorer5maj implements core.Scorer {
                 // first expr
                 if(!expr.get(loc).equalsIgnoreCase("(")) {
                     // if it is terminal
-                    ArrayList<String> test = new ArrayList();
+                    ArrayList<String> test = new ArrayList<String>();
                     test.add(expr.get(loc));
                     var1 = resolveExpr(test);
                     loc++;
                 } else {
                     // if there is a bracket expression
-                    ArrayList<String> test = new ArrayList();
+                    ArrayList<String> test = new ArrayList<String>();
                     int d = 0;
                     while(true) {
                         if(expr.get(loc).equalsIgnoreCase("(")) {
@@ -220,13 +220,13 @@ public class Scorer5maj implements core.Scorer {
                 }
                 // second expr
                 if(!expr.get(loc).equalsIgnoreCase("(")) {
-                    ArrayList<String> test = new ArrayList();
+                    ArrayList<String> test = new ArrayList<String>();
                     test.add(expr.get(loc));
                     var2 = resolveExpr(test);
                     loc++;
                 } else {
                     // if there is a bracket expression
-                    ArrayList<String> test = new ArrayList();
+                    ArrayList<String> test = new ArrayList<String>();
                     int d = 0;
                     while(true) {
                         if(expr.get(loc).equalsIgnoreCase("(")) {
@@ -254,13 +254,13 @@ public class Scorer5maj implements core.Scorer {
                 int loc = 1;
                 // first expr
                 if(!expr.get(loc).equalsIgnoreCase("(")) {
-                    ArrayList<String> test = new ArrayList();
+                    ArrayList<String> test = new ArrayList<String>();
                     test.add(expr.get(loc));
                     var1 = resolveExpr(test);
                     loc++;
                 } else {
                     // if there is a bracket expression
-                    ArrayList<String> test = new ArrayList();
+                    ArrayList<String> test = new ArrayList<String>();
                     int d = 0;
                     while(true) {
                         if(expr.get(loc).equalsIgnoreCase("(")) {
@@ -280,13 +280,13 @@ public class Scorer5maj implements core.Scorer {
                 }
                 // second expr
                 if(!expr.get(loc).equalsIgnoreCase("(")) {
-                    ArrayList<String> test = new ArrayList();
+                    ArrayList<String> test = new ArrayList<String>();
                     test.add(expr.get(loc));
                     var2 = resolveExpr(test);
                     loc++;
                 } else {
                     // if there is a bracket expression
-                    ArrayList<String> test = new ArrayList();
+                    ArrayList<String> test = new ArrayList<String>();
                     int d = 0;
                     while(true) {
                         if(expr.get(loc).equalsIgnoreCase("(")) {
@@ -314,14 +314,14 @@ public class Scorer5maj implements core.Scorer {
                 int loc = 1;
                 // first expr
                 if(!expr.get(loc).equalsIgnoreCase("(")) {
-                    ArrayList<String> test = new ArrayList();
+                    ArrayList<String> test = new ArrayList<String>();
                     test.add(expr.get(loc));
                     var1 = resolveExpr(test);
                     //System.out.println("VAR 1 = " + var1);
                     loc++;
                 } else {
                     // if there is a bracket expression
-                    ArrayList<String> test = new ArrayList();
+                    ArrayList<String> test = new ArrayList<String>();
                     int d = 0;
                     while(true) {
                         if(expr.get(loc).equalsIgnoreCase("(")) {
@@ -341,13 +341,13 @@ public class Scorer5maj implements core.Scorer {
                 }
                 // second expr
                 if(!expr.get(loc).equalsIgnoreCase("(")) {
-                    ArrayList<String> test = new ArrayList();
+                    ArrayList<String> test = new ArrayList<String>();
                     test.add(expr.get(loc));
                     var2 = resolveExpr(test);
                     loc++;
                 } else {
                     // if there is a bracket expression
-                    ArrayList<String> test = new ArrayList();
+                    ArrayList<String> test = new ArrayList<String>();
                     int d = 0;
                     while(true) {
                         if(expr.get(loc).equalsIgnoreCase("(")) {
@@ -367,13 +367,13 @@ public class Scorer5maj implements core.Scorer {
                 }
                 // third expr
                 if(!expr.get(loc).equalsIgnoreCase("(")) {
-                    ArrayList<String> test = new ArrayList();
+                    ArrayList<String> test = new ArrayList<String>();
                     test.add(expr.get(loc));
                     var3 = resolveExpr(test);
                     loc++;
                 } else {
                     // if there is a bracket expression
-                    ArrayList<String> test = new ArrayList();
+                    ArrayList<String> test = new ArrayList<String>();
                     int d = 0;
                     while(true) {
                         if(expr.get(loc).equalsIgnoreCase("(")) {

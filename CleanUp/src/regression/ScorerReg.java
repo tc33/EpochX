@@ -17,26 +17,24 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
+package regression;
 
-package modelsupport.mux11bitcode;
+import java.util.*;
 
-import java.util.ArrayList;
 import core.*;
 
 /**
- * The Scorer11bit class provides functionality to compare boolean programs scores to the ideal solution
- * 
+ * The Scorer6bit class provides functionality to compare boolean programs scores to the ideal solution
  * @author Lawrence Beadle
  */
-public class Scorer11bit implements core.Scorer {   
+public class ScorerReg implements Scorer {   
     
-    private boolean a0, a1, a2, d0, d1, d2, d3, d4, d5, d6, d7, result;
-    private boolean[] aa;
+
     private int sType;
     private SemanticModule semMod;
     
     /**
-     * Sets the type of the scorer module used
+     * Sets the scorer type for the scorer module 1 = input/output 2 = semantic
      * @param type 1 for input-output, 2 for semantic
      * @param semModX The semantic module to be used
      */
@@ -52,16 +50,16 @@ public class Scorer11bit implements core.Scorer {
      * @return The score the candidate program produce with the defined input state
      */
     public double getScore(ArrayList<String> input, ArrayList<String> program) {
-        
+
         double score = 0;
-        if(sType==1) {
+        if (sType == 1) {
             for (String run : input) {
                 // decide whether to increment score
                 if (this.doActualScoreCalc(run, program) == this.doExpectedScoreCalc(run)) {
                     score++;
                 }
             }
-            return 2048 - score;
+            return 64 - score;
         } else {
             BDDScoreHelper BDDSH = new BDDScoreHelper();
             score = BDDSH.doScore(program, this.getBestProgram(), semMod);
@@ -74,45 +72,11 @@ public class Scorer11bit implements core.Scorer {
      * @param alpha The input state
      * @return the return value at this input state
      */
-    public boolean doExpectedScoreCalc(String alpha) {
-        aa = BoolTrans.doTrans(alpha);
-        // assign bit booleans
-        a0 = aa[0];
-        a1 = aa[1];
-        a2 = aa[2];
-        d0 = aa[3];
-        d1 = aa[4];
-        d2 = aa[5];
-        d3 = aa[6];
-        d4 = aa[7];
-        d5 = aa[8];
-        d6 = aa[9];
-        d7 = aa[10];
-        
-        return choseResult();
+    public double doExpectedScoreCalc(String alpha) {
+
+        return Math.pow(Double.parseDouble(alpha), 2) / 2;
     }
-    
-    private boolean choseResult() {
-        // scoring solution
-        if(a0 && a1 && a2) {
-            result = d0;
-        } else if(a0 && a1& !a2) {
-            result = d1;            
-        } else if(a0 && !a1 && a2) {
-            result = d2;
-        } else if(a0 && !a1 && !a2) {
-            result = d3;
-        } else if(!a0 && a1 && a2) {
-            result = d4;
-        } else if(!a0 && a1 && !a2) {
-            result = d5;
-        } else if(!a0 && !a1 && a2) {
-            result = d6;
-        } else if(!a0 && !a1 && !a2) {
-            result = d7;
-        }
-        return result;
-    }
+
     
 
     
@@ -123,19 +87,7 @@ public class Scorer11bit implements core.Scorer {
      * @return The boolean value at the input state
      */
     public boolean doActualScoreCalc(String alpha, ArrayList<String> program) {
-        aa = BoolTrans.doTrans(alpha);
-        // assign bit booleans
-        a0 = aa[0];
-        a1 = aa[1];
-        a2 = aa[2];
-        d0 = aa[3];
-        d1 = aa[4];
-        d2 = aa[5];
-        d3 = aa[6];
-        d4 = aa[7];
-        d5 = aa[8];
-        d6 = aa[9];
-        d7 = aa[10];
+    	
         
         return resolveExpr(program);
     }
@@ -161,8 +113,6 @@ public class Scorer11bit implements core.Scorer {
                 return a0;
             } else if(expr.get(0).equalsIgnoreCase("A1")) {
                 return a1;
-            } else if(expr.get(0).equalsIgnoreCase("A2")) {
-                return a2;
             } else if(expr.get(0).equalsIgnoreCase("D0")) {
                 return d0;
             } else if(expr.get(0).equalsIgnoreCase("D1")) {
@@ -171,14 +121,6 @@ public class Scorer11bit implements core.Scorer {
                 return d2;
             } else if(expr.get(0).equalsIgnoreCase("D3")) {
                 return d3;
-            } else if(expr.get(0).equalsIgnoreCase("D4")) {
-                return d4;
-            } else if(expr.get(0).equalsIgnoreCase("D5")) {
-                return d5;
-            } else if(expr.get(0).equalsIgnoreCase("D6")) {
-                return d6;
-            } else if(expr.get(0).equalsIgnoreCase("D7")) {
-                return d7;
             } else {
                 System.out.println("Resolution ERROR - INVALID EXPR DETECTED - " + expr);
                 return false;
@@ -440,40 +382,18 @@ public class Scorer11bit implements core.Scorer {
         
         prog.add("IF");
         prog.add("A0");
-        
         prog.add("(");
         prog.add("IF");
         prog.add("A1");
-        prog.add("(");
-        prog.add("IF");
-        prog.add("A2");
         prog.add("D0");
         prog.add("D1");
         prog.add(")");
         prog.add("(");
         prog.add("IF");
-        prog.add("A2");
+        prog.add("A1");
         prog.add("D2");
         prog.add("D3");
         prog.add(")");
-        prog.add(")");
-        
-        prog.add("(");
-        prog.add("IF");
-        prog.add("A1");
-        prog.add("(");
-        prog.add("IF");
-        prog.add("A2");
-        prog.add("D4");
-        prog.add("D5");
-        prog.add(")");
-        prog.add("(");
-        prog.add("IF");
-        prog.add("A2");
-        prog.add("D6");
-        prog.add("D7");
-        prog.add(")");
-        prog.add(")");        
         
         return prog;
     }

@@ -20,12 +20,11 @@
 
 package core;
 
-import java.util.*;
 import java.io.*;
 import java.lang.reflect.*;
+import java.util.*;
 
 import lineageanalysis.*;
-import models.*;
 
 /**
  * The GPModel class controls the high level operations of a genetic programming run
@@ -298,7 +297,7 @@ public class GPModel {
         
         // do lineage analysis
         if(lDump==true) {
-            LineageAnalysis lA = new LineageAnalysis(fStore, genProg.getScorerModel(), dataIn, genProg.getSemanticModel(), runs, gens, cDir, genProg.getFunctions(), genProg.getTerminals());        
+            new LineageAnalysis(fStore, genProg.getScorerModel(), dataIn, genProg.getSemanticModel(), runs, gens, cDir, genProg.getFunctions(), genProg.getTerminals());        
         }
         
         // pull out program results

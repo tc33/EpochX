@@ -21,25 +21,18 @@ package com.epochx.core.representation;
 
 public class IfFunction extends FunctionNode<Boolean> {
 	
-	private Node<Boolean> child1;
-	private Node<Boolean> child2;
-	private Node<Boolean> child3;
-	
 	public IfFunction(Node<Boolean> child1, Node<Boolean> child2, Node<Boolean> child3) {
-		this.child1 = child1;
-		this.child2 = child2;
-		this.child3 = child3;
+		super(child1, child2, child3);
 	}
 
 	@Override
 	public Boolean evaluate() {
-		Boolean c1 = child1.evaluate();
-		Boolean c2 = child2.evaluate();
-		Boolean c3 = child3.evaluate();
-		if(c1.booleanValue()) {
-			return c2.booleanValue();
+		boolean c1 = getChild(0).evaluate().booleanValue();
+
+		if(c1) {
+			return getChild(1).evaluate().booleanValue();
 		} else {
-			return c3.booleanValue();
+			return getChild(2).evaluate().booleanValue();
 		}
 	}
 

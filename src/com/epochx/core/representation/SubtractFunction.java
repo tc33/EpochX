@@ -21,20 +21,16 @@ package com.epochx.core.representation;
 
 public class SubtractFunction extends FunctionNode<Double> {
 	
-	private Node<Double> child1;
-	private Node<Double> child2;
-	
 	public SubtractFunction(Node<Double> child1, Node<Double> child2) {
-		this.child1 = child1;
-		this.child2 = child2;
+		super(child1, child2);
 	}
 
 	@Override
 	public Double evaluate() {
-		double c1 = child1.evaluate().doubleValue();
-		double c2 = child2.evaluate().doubleValue();
-		double ans = c1 - c2;
-		return new Double(ans);
+		double c1 = getChild(0).evaluate().doubleValue();
+		double c2 = getChild(1).evaluate().doubleValue();
+		
+		return c1 - c2;
 	}
 
 }

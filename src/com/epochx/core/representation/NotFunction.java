@@ -23,16 +23,14 @@ package com.epochx.core.representation;
  * 
  */
 public class NotFunction extends FunctionNode<Boolean> {
-
-	private Node<Boolean> child;
 	
 	public NotFunction(Node<Boolean> child) {
-		this.child = child;
+		super(child);
 	}
 	
 	@Override
 	public Boolean evaluate() {
-		return child.evaluate().booleanValue();
+		return !getChild(0).evaluate().booleanValue();
 	}
 
 }

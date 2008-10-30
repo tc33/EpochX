@@ -21,18 +21,15 @@ package com.epochx.core.representation;
 
 public class OrFunction extends FunctionNode<Boolean> {
 
-	private Node<Boolean> child1;
-	private Node<Boolean> child2;
-	
 	public OrFunction(Node<Boolean> child1, Node<Boolean> child2) {
-		this.child1 = child1;
-		this.child2 = child2;
+		super(child1, child2);
 	}
 	
 	@Override
 	public Boolean evaluate() {
-		Boolean c1 = child1.evaluate();
-		Boolean c2 = child2.evaluate();
-		return c1.booleanValue() || c2.booleanValue();
+		boolean c1 = getChild(0).evaluate().booleanValue();
+		boolean c2 = getChild(1).evaluate().booleanValue();
+		
+		return c1 || c2;
 	}
 }

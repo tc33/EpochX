@@ -22,17 +22,19 @@ package com.epochx.core.representation;
 /**
  * 
  */
-public class Seq2Function extends FunctionNode<Action> {
+public class IfFoodAheadFunction extends FunctionNode<Action> {
 
-	public Seq2Function(Node<Action> action1, Node<Action> action2) {
-		super(action1, action2);
+	
+	
+	public IfFoodAheadFunction() {
+		
 	}
 	
 	@Override
 	public Action evaluate() {
-		getChild(0).evaluate().execute();
-		getChild(1).evaluate().execute();
 		
-		return Action.DO_NOTHING;
+				
+		return null;
 	}
+
 }

@@ -21,21 +21,16 @@ package com.epochx.core.representation;
 
 public class Seq3Function extends FunctionNode<Action> {
 	
-	private Node<Action> action1;
-	private Node<Action> action2;
-	private Node<Action> action3;
-	
 	public Seq3Function(Node<Action> action1, Node<Action> action2, Node<Action> action3) {
-		this.action1 = action1;
-		this.action2 = action2;
-		this.action3 = action3;
+		super(action1, action2, action3);
 	}
 	
 	@Override
 	public Action evaluate() {
-		action1.evaluate().execute();
-		action2.evaluate().execute();
-		action3.evaluate().execute();		
+		getChild(0).evaluate().execute();
+		getChild(1).evaluate().execute();
+		getChild(2).evaluate().execute();
+		
 		return Action.DO_NOTHING;
 	}
 

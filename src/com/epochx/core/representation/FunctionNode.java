@@ -24,29 +24,10 @@ package com.epochx.core.representation;
  */
 public abstract class FunctionNode<TYPE> extends Node<TYPE> {
 
-	private Node<TYPE>[] children;
-	
+
 	public FunctionNode(Node<TYPE> ... children) {
-		this.children = children;
+		super(children);
 	}
 	
-	public Node<TYPE>[] getChildren() {
-		return children;
-	}
-	
-	public void setChildren(Node<TYPE>[] children) {
-		this.children = children;
-	}
-	
-	public Node<TYPE> getChild(int index) {
-		return children[index];
-	}
-	
-	public void setChild(Node<TYPE> child, int index) {
-		children[index] = child;
-	}
-	
-	public int getArity() {
-		return children.length;
-	}
+
 }

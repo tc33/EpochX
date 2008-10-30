@@ -27,6 +27,7 @@ public class TerminalNode<TYPE> extends Node<TYPE> {
 	private TYPE value;
 	
 	public TerminalNode(TYPE value) {
+		super();
 		this.value = value;
 	}
 

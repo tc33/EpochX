@@ -18,7 +18,7 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package modelsupport.artificialantsf;
+package com.epochx.aasf;
 
 /**
  * This class represents an ant as an object for the aritficial ant simulation

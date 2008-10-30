@@ -1,5 +1,5 @@
 /*  
- *  Copyright 2007-2008 Lawrence Beadle
+ *  Copyright 2007-2008 Lawrence Beadle & Tom Castle
  *  Licensed under GNU General Public License
  * 
  *  This file is part of Epoch X - (The Genetic Programming Analysis Software)
@@ -17,38 +17,21 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-package models;
+package com.epochx.core.functions;
 
 import com.epochx.aasf.*;
 
-import core.*;
-
 /**
- * An implementation of the 4 Parity model in GP
- * @author Lawrence Beadle
+ * 
  */
-public class ArtificialAnt extends GPCoreCode {
-    
-    /**
-     * Creates a new instance of the Even4Parity model
-     */
-    public ArtificialAnt() {
-        
-        // instantiate scorer object
-        super.scorer = new ScorerAA();
-        
-        // instantiate syntax objects
-        SyntaxAA syn = new SyntaxAA();
-        super.eStart = syn.getEStart();
-        super.syntax = syn.getSyntax();
-        super.synterms = syn.getTerms();
-        super.functions = syn.getFunctions();
-        super.terminals = syn.getTerminals();
-        
-        // instantiate translater object
-        super.semanticMod = new GPEquivalenceAA();
-        
-    }
-    
+public class AntTurnRightAction extends AntAction {
+
+	public AntTurnRightAction(Ant ant) {
+		super(ant);
+	}
+
+	@Override
+	public void execute() {
+		getAnt().turnRight();
+	}
 }

@@ -28,6 +28,6 @@ import core.SemanticModule;
  */
 public interface Initialiser {
 	
-	public ArrayList<CandidateProgram>  initialise(ArrayList<Node> syntax, ArrayList<Node> functions, ArrayList<Node> terminals, SemanticModule semMod, int popSize);
+	public ArrayList<CandidateProgram>  initialise(ArrayList<Node> syntax, ArrayList<Node> functions, ArrayList<Node> terminals, SemanticModule semMod, int popSize, int depth);
 
 }

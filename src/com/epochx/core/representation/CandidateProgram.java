@@ -17,24 +17,19 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.epochx.core.functions;
+package com.epochx.core.representation;
 
 /**
- * 
+ *  
  */
-public class AndFunction extends FunctionNode<Boolean> {
+public class CandidateProgram {
 	
-	private Node<Boolean> child1;
-	private Node<Boolean> child2;
+	private Node thisTree;
 	
-	public AndFunction(Node<Boolean> child1, Node<Boolean> child2) {
-		this.child1 = child1;
-		this.child2 = child2;
+	public CandidateProgram(Node newNodeTree) {
+		thisTree = newNodeTree;
 	}
 	
-	public Boolean evaluate() {
-		Boolean c1 = child1.evaluate();
-		Boolean c2 = child2.evaluate();
-		return c1.booleanValue() && c2.booleanValue();
-	}
+	// TODO Evaluation Code
+	
 }

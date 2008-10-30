@@ -17,36 +17,13 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.epochx.core.functions;
+package com.epochx.core.representation;
 
 /**
  * 
  */
-public class TerminalNode<TYPE> extends Node<TYPE> {
+public abstract class Node<TYPE> {
 	
-	private TYPE value;
-	
-	public TerminalNode(TYPE value) {
-		this.value = value;
-	}
-
-	/**
-	 * @return the type
-	 */
-	public TYPE getValue() {
-		return value;
-	}
-
-	/**
-	 * @param value the type to set
-	 */
-	public void setValue(TYPE value) {
-		this.value = value;
-	}
-
-	@Override
-	public TYPE evaluate() {
-		return value;
-	}
+	public abstract TYPE evaluate();
 
 }

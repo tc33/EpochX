@@ -17,21 +17,23 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.epochx.core.functions;
-
-import com.epochx.aasf.*;
+package com.epochx.core.representation;
 
 /**
  * 
  */
-public class AntMoveAction extends AntAction {
+public class AddFunction extends FunctionNode<Double> {
 	
-	public AntMoveAction(Ant ant) {
-		super(ant);
+	private Node<Double> child1;
+	private Node<Double> child2;
+	
+	public AddFunction(Node<Double> child1, Node<Double> child2) {
+		this.child1 = child1;
+		this.child2 = child2;
 	}
 
 	@Override
-	public void execute() {
-		getAnt().move();
+	public Double evaluate() {
+		return child1.evaluate().doubleValue() + child2.evaluate().doubleValue();
 	}
 }

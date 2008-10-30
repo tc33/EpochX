@@ -17,26 +17,22 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.epochx.core.functions;
+package com.epochx.core.representation;
+
+import com.epochx.aasf.*;
 
 /**
  * 
  */
-public class Seq2Function extends FunctionNode<Action> {
+public abstract class AntAction extends Action {
 
-	private Node<Action> action1;
-	private Node<Action> action2;
+	private Ant ant;
 	
-	public Seq2Function(Node<Action> action1, Node<Action> action2) {
-		this.action1 = action1;
-		this.action2 = action2;
+	public AntAction(Ant ant) {
+		this.ant = ant;
 	}
 	
-	@Override
-	public Action evaluate() {
-		action1.evaluate().execute();
-		action2.evaluate().execute();
-		
-		return Action.DO_NOTHING;
+	public Ant getAnt() {
+		return ant;
 	}
 }

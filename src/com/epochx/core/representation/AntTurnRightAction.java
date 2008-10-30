@@ -17,22 +17,21 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.epochx.core.functions;
+package com.epochx.core.representation;
 
 import com.epochx.aasf.*;
 
 /**
  * 
  */
-public class AntTurnLeftAction extends AntAction {
+public class AntTurnRightAction extends AntAction {
 
-	public AntTurnLeftAction(Ant ant) {
+	public AntTurnRightAction(Ant ant) {
 		super(ant);
 	}
 
 	@Override
 	public void execute() {
-		getAnt().turnLeft();
+		getAnt().turnRight();
 	}
-
 }

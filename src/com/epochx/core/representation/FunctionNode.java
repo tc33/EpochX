@@ -17,19 +17,14 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.epochx.core.functions;
+package com.epochx.core.representation;
 
 /**
- *  
+ * 
  */
-public class CandidateProgram {
-	
-	private Node thisTree;
-	
-	public CandidateProgram(Node newNodeTree) {
-		thisTree = newNodeTree;
-	}
-	
-	// TODO Evaluation Code
-	
+public abstract class FunctionNode<TYPE> extends Node<TYPE> {
+
+	@Override
+	public abstract TYPE evaluate();
+
 }

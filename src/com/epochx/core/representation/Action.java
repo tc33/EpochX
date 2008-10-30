@@ -17,22 +17,17 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.epochx.core.functions;
-
-import com.epochx.aasf.*;
+package com.epochx.core.representation;
 
 /**
  * 
  */
-public abstract class AntAction extends Action {
-
-	private Ant ant;
+public abstract class Action {
 	
-	public AntAction(Ant ant) {
-		this.ant = ant;
-	}
+	public static final Action DO_NOTHING = new Action() {
+		public void execute() {}
+	};
 	
-	public Ant getAnt() {
-		return ant;
-	}
+	public abstract void execute();
+	
 }

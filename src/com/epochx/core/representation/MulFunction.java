@@ -17,22 +17,23 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.epochx.core.functions;
+package com.epochx.core.representation;
 
 /**
  * 
  */
-public class NotFunction extends FunctionNode<Boolean> {
+public class MulFunction extends FunctionNode<Double> {
 
-	private Node<Boolean> child;
+	private Node<Double> child1;
+	private Node<Double> child2;
 	
-	public NotFunction(Node<Boolean> child) {
-		this.child = child;
+	public MulFunction(Node<Double> child1, Node<Double> child2) {
+		this.child1 = child1;
+		this.child2 = child2;
 	}
-	
+
 	@Override
-	public Boolean evaluate() {
-		return child.evaluate().booleanValue();
+	public Double evaluate() {
+		return child1.evaluate().doubleValue() * child2.evaluate().doubleValue();
 	}
-
 }

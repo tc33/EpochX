@@ -17,23 +17,22 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.epochx.core.functions;
+package com.epochx.core.representation;
+
+import com.epochx.aasf.*;
 
 /**
  * 
  */
-public class MulFunction extends FunctionNode<Double> {
+public class AntTurnLeftAction extends AntAction {
 
-	private Node<Double> child1;
-	private Node<Double> child2;
-	
-	public MulFunction(Node<Double> child1, Node<Double> child2) {
-		this.child1 = child1;
-		this.child2 = child2;
+	public AntTurnLeftAction(Ant ant) {
+		super(ant);
 	}
 
 	@Override
-	public Double evaluate() {
-		return child1.evaluate().doubleValue() * child2.evaluate().doubleValue();
+	public void execute() {
+		getAnt().turnLeft();
 	}
+
 }

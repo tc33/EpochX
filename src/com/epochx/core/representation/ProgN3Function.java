@@ -19,23 +19,14 @@
  */
 package com.epochx.core.representation;
 
-/**
- * 
- */
-public class AndFunction extends FunctionNode<Boolean> {
-	
-	private Node<Boolean> child1;
-	private Node<Boolean> child2;
-	
-	public AndFunction(Node<Boolean> child1, Node<Boolean> child2) {
-		this.child1 = child1;
-		this.child2 = child2;
-	}
+import modelsupport.artificialantsf.*;
+
+public class ProgN3Function extends FunctionNode<String> {
 	
 	@Override
-	public Boolean evaluate() {
-		Boolean c1 = child1.evaluate();
-		Boolean c2 = child2.evaluate();
-		return c1.booleanValue() && c2.booleanValue();
+	public String evaluate() {
+		// TODO Auto-generated method stub
+		return null;
 	}
+
 }

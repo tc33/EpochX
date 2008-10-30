@@ -19,23 +19,22 @@
  */
 package com.epochx.core.representation;
 
-/**
- * 
- */
-public class AndFunction extends FunctionNode<Boolean> {
+public class SubtractFunction extends FunctionNode<Double> {
 	
-	private Node<Boolean> child1;
-	private Node<Boolean> child2;
+	private Node<Double> child1;
+	private Node<Double> child2;
 	
-	public AndFunction(Node<Boolean> child1, Node<Boolean> child2) {
+	public SubtractFunction(Node<Double> child1, Node<Double> child2) {
 		this.child1 = child1;
 		this.child2 = child2;
 	}
-	
+
 	@Override
-	public Boolean evaluate() {
-		Boolean c1 = child1.evaluate();
-		Boolean c2 = child2.evaluate();
-		return c1.booleanValue() && c2.booleanValue();
+	public Double evaluate() {
+		double c1 = child1.evaluate().doubleValue();
+		double c2 = child2.evaluate().doubleValue();
+		double ans = c1 - c2;
+		return new Double(ans);
 	}
+
 }

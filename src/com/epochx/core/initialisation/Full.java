@@ -28,47 +28,24 @@ import core.SemanticModule;
 /**
  * 
  */
-public class Full implements Initialiser {
+public class Full extends Initialiser {
 	
-	private int depth;
-	private int popSize;
-	private SemanticModule semMod;
-	private ArrayList<Node> syntax;
-	private ArrayList<Node> terminals;
-	private ArrayList<Node> functions;
-	private Random rGen;
-	private int noFuncs;
-	private int noTerms;
-
-	/* (non-Javadoc)
-	 * @see com.epochx.core.initialisation.Initialiser#initialise(java.util.ArrayList, java.util.ArrayList, java.util.ArrayList, core.SemanticModule, int)
-	 */
-	@Override
-	public ArrayList<CandidateProgram> initialise(ArrayList<Node> syntax,
-			ArrayList<Node> functions, ArrayList<Node> terminals,
-			SemanticModule semMod, int popSize, int depth) {
-		
-		// calculate no of functions and terminals
-		noFuncs = functions.size();
-		noTerms = terminals.size();
-		
-		// set all private variables
-		this.depth = depth;
-		this.popSize = popSize;
-		this.syntax = syntax;
-		this.functions = functions;
-		this.terminals = terminals;
-		this.semMod = semMod;
-		rGen = new Random();
+	public Full(ArrayList<Node> syntax, ArrayList<Node> functions, 
+			ArrayList<Node> terminals, SemanticModule semMod, 
+			int popSize, int depth) {
+		super(syntax, functions, terminals, semMod, popSize, depth);
+	}
+	
+	public ArrayList<CandidateProgram> buildFirstGeneration() {
 		
 		// initialise population of candidate programs
-		ArrayList<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
+		ArrayList<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(super.getPopSize());
 		
 		// build population
-		for(int i=0; i<popSize; i++) {
-            CandidateProgram candidate = new CandidateProgram(buildFullNodeTree(depth));
+		for(int i=0; i<super.getPopSize(); i++) {
+            CandidateProgram candidate = new CandidateProgram(buildFullNodeTree(super.getDepth()));
             while(firstGen.contains(candidate)) {
-                candidate = new CandidateProgram(buildFullNodeTree(depth));
+                candidate = new CandidateProgram(buildFullNodeTree(super.getDepth()));
             }
             firstGen.add(candidate);
         }
@@ -81,14 +58,33 @@ public class Full implements Initialiser {
 		// make full node tree
 		
         // define top node form functions
-        int ran = rGen.nextInt(noFuncs);
-        Node top = functions.get(ran);
+        int ran = super.getRandom().nextInt(super.getNoFunctions());
+        Node top = super.getFunctions().get(ran);
         
         // TODO recurse down each branch to depth
-        
-        // TODO check for dead alleles?        
+        this.fillChildren(top, 1, super.getDepth());        
         
         // return top node
         return top;
+	}
+	
+	public void fillChildren(Node topNode, int currentDepth, int maxDepth) {
+		int arity = topNode.getArity();
+		if(currentDepth<maxDepth) {
+			// fill children with functions only
+			for(int i = 0; i<arity; i++) {
+				int ran = super.getRandom().nextInt(super.getNoFunctions());
+				Node child = super.getFunctions().get(ran);
+				topNode.setChild(child, i);
+				this.fillChildren(child, (currentDepth+1), maxDepth);
+			}
+		} else {
+			// fill children with terminals only
+			for(int i = 0; i<arity; i++) {
+				int ran = super.getRandom().nextInt(super.getNoTerminals());
+				Node child = super.getTerminals().get(ran);
+				topNode.setChild(child, i);
+			}
+		}
 	}
 }

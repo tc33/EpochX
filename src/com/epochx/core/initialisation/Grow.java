@@ -28,49 +28,24 @@ import core.SemanticModule;
 /**
  * 
  */
-public class Grow implements Initialiser {
+public class Grow extends Initialiser {
 	
-	private int depth;
-	private int popSize;
-	private SemanticModule semMod;
-	private ArrayList<Node> syntax;
-	private ArrayList<Node> terminals;
-	private ArrayList<Node> functions;
-	private Random rGen;
-	private int noFuncs;
-	private int noTerms;
-	private int noSyntax;
-
-	/* (non-Javadoc)
-	 * @see com.epochx.core.initialisation.Initialiser#initialise(java.util.ArrayList, java.util.ArrayList, java.util.ArrayList, core.SemanticModule, int, int)
-	 */
-	@Override
-	public ArrayList<CandidateProgram> initialise(ArrayList<Node> syntax,
-			ArrayList<Node> functions, ArrayList<Node> terminals,
-			SemanticModule semMod, int popSize, int depth) {
-		
-		// calculate no of functions and terminals
-		noFuncs = functions.size();
-		noTerms = terminals.size();
-		noSyntax = syntax.size();
-		
-		// set all private variables
-		this.depth = depth;
-		this.popSize = popSize;
-		this.syntax = syntax;
-		this.functions = functions;
-		this.terminals = terminals;
-		this.semMod = semMod;
-		rGen = new Random();
+	public Grow(ArrayList<Node> syntax, ArrayList<Node> functions, 
+			ArrayList<Node> terminals, SemanticModule semMod, 
+			int popSize, int depth) {
+		super(syntax, functions, terminals, semMod, popSize, depth);
+	}
+	
+	public ArrayList<CandidateProgram> buildFirstGeneration() {
 		
 		// initialise population of candidate programs
-		ArrayList<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
+		ArrayList<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(super.getPopSize());
 		
 		// build population
-		for(int i=0; i<popSize; i++) {
-            CandidateProgram candidate = new CandidateProgram(buildGrowNodeTree(depth));
+		for(int i=0; i<super.getPopSize(); i++) {
+            CandidateProgram candidate = new CandidateProgram(buildGrowNodeTree(super.getDepth()));
             while(firstGen.contains(candidate)) {
-                candidate = new CandidateProgram(buildGrowNodeTree(depth));
+                candidate = new CandidateProgram(buildGrowNodeTree(super.getDepth()));
             }
             firstGen.add(candidate);
         }
@@ -80,15 +55,13 @@ public class Grow implements Initialiser {
 	}
 	
 	public Node buildGrowNodeTree(int depth) {		
-		// make grow node tree
+		// make full node tree
 		
         // define top node form functions
-        int ran = rGen.nextInt(noFuncs);
-        Node top = syntax.get(ran);
+        int ran = super.getRandom().nextInt(super.getNoFunctions());
+        Node top = super.getFunctions().get(ran);
         
-        // TODO recurse down each branch to depth
-        
-        // TODO check for dead alleles?        
+        // TODO recurse down each branch to depth     
         
         // return top node
         return top;

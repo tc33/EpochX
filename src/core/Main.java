@@ -54,14 +54,14 @@ public class Main {
         System.out.println(thisHost);
         
         // PAR - Set your base directory
-        File baseDir = new File("U:/home/JavaProjects/EpochX/trunk");
+        File baseDir = new File("U:/home/JavaProjects/EpochX");
         //File baseDir = new File("D:/JavaProjects/EpochX");
         //File baseDir = new File("/pi/home/cug/lb212/" + thisHost + "/EPOCHX");
         //File baseDir = new File("/home/lb212/EPOCHX10");
         
         // PAR - Set basic GP parameters - See parameters document on www.epochx.com for details
         int runs = 1;
-        int gens = 10;
+        int gens = 50;
         int elites = 50;
         int reprod = 50;
         int popSize = 500;
@@ -76,7 +76,7 @@ public class Main {
         // 1 = total tournament / 2 = fitness proportionate / 3 = T7 tournament / 4  = ranked / 5 = T3 tournament
         int sOMethod = 3;
         
-        // PAR - Choose staring population tyep
+        // PAR - Choose staring population type
         // Full = full / Grow = grow / H+H = half and half / RH+H = ramped half and half
         // SDIB = state differential BOOLEAN / SDIA = state differential ANT
         String genType = "RH+H";
@@ -104,7 +104,7 @@ public class Main {
         // set lineage dump boolean
         // WARNING - THIS IS EXPERIMENTAL AND TIME CONSUMING - LEAVE AS FALSE UNLESS
         // YOU KNOW WHAT YOU'RE DOING.
-        model.setLineageDump(false);
+        model.setLineageDump(true);
         
         // PAR - Specify name of input file in EpochX directory
         model.loadRawData(baseDir, "input5bit.txt");

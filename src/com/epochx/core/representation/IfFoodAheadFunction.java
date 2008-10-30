@@ -19,22 +19,38 @@
  */
 package com.epochx.core.representation;
 
+import java.awt.*;
+
+import com.epochx.aasf.*;
+
 /**
  * 
  */
 public class IfFoodAheadFunction extends FunctionNode<Action> {
-
 	
+	private Ant ant;
+	private AntLandscape landscape;
 	
-	public IfFoodAheadFunction() {
+	public IfFoodAheadFunction(Ant ant, AntLandscape landscape, Node<Action> child1, Node<Action> child2) {
+		super(child1, child2);
 		
+		this.ant = ant;
+		this.landscape = landscape;
 	}
 	
 	@Override
 	public Action evaluate() {
+
+		// Find out the location we want to check.
+		Point ahead = landscape.getNextLocation(ant.getLocation(), ant.getOrientation());
 		
-				
-		return null;
+		if (landscape.isFoodLocation(ahead)) {
+			getChild(0).evaluate().execute();
+		} else {
+			getChild(1).evaluate().execute();
+		}
+		
+		return Action.DO_NOTHING;
 	}
 
 }

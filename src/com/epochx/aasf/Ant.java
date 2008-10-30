@@ -20,13 +20,17 @@
 
 package com.epochx.aasf;
 
+import static com.epochx.aasf.Orientation.*;
+
+import java.awt.*;
+
 /**
  * This class represents an ant as an object for the aritficial ant simulation
  * @author Lawrence Beadle
  */
 public class Ant {
     
-    private String orientation;
+    private Orientation orientation;
     private int moves;
     private int xLocation;
     private int yLocation;
@@ -38,7 +42,7 @@ public class Ant {
      * @param timeSteps The maximum number of timesteps the ant is allowed to move - both turns and moves count as one step
      */
     public Ant(int timeSteps) {
-        orientation = "E";
+        orientation = EAST;
         moves = 0;
         xLocation = 0;
         yLocation = 0;
@@ -53,14 +57,14 @@ public class Ant {
         if(moves>=maxMoves) {
             return;
         }
-        if(orientation.equalsIgnoreCase("E")) {
-            orientation = "N";
-        } else if(orientation.equalsIgnoreCase("N")) {
-            orientation = "W";
-        } else if(orientation.equalsIgnoreCase("W")) {
-            orientation = "S";
-        } else if(orientation.equalsIgnoreCase("S")) {
-            orientation = "E";
+        if(orientation == EAST) {
+            orientation = NORTH;
+        } else if(orientation == NORTH) {
+            orientation = WEST;
+        } else if(orientation == WEST) {
+            orientation = SOUTH;
+        } else if(orientation == SOUTH) {
+            orientation = EAST;
         }
         moves++;
     }
@@ -72,14 +76,14 @@ public class Ant {
         if(moves>=maxMoves) {
             return;
         }
-        if(orientation.equalsIgnoreCase("E")) {
-            orientation = "S";
-        } else if(orientation.equalsIgnoreCase("S")) {
-            orientation = "W";
-        } else if(orientation.equalsIgnoreCase("W")) {
-            orientation = "N";
-        } else if(orientation.equalsIgnoreCase("N")) {
-            orientation = "E";
+        if(orientation == EAST) {
+            orientation = SOUTH;
+        } else if(orientation == SOUTH) {
+            orientation = WEST;
+        } else if(orientation == WEST) {
+            orientation = NORTH;
+        } else if(orientation == NORTH) {
+            orientation = EAST;
         }
         moves++;
     }
@@ -91,25 +95,25 @@ public class Ant {
         if(moves>=maxMoves) {
             return;
         }
-        if(orientation.equalsIgnoreCase("E")) {
+        if(orientation == EAST) {
             if(xLocation<31) {
                 xLocation++;
             } else {
                 xLocation = 0;
             }
-        } else if(orientation.equalsIgnoreCase("N")) {
+        } else if(orientation == NORTH) {
             if(yLocation>0) {
                 yLocation--;
             } else {
                 yLocation = 31;
             }
-        } else if(orientation.equalsIgnoreCase("W")) {
+        } else if(orientation == WEST) {
             if(xLocation>0) {
                 xLocation--;
             } else {
                 xLocation = 31;
             }
-        } else if(orientation.equalsIgnoreCase("S")) {
+        } else if(orientation == SOUTH) {
             if(yLocation<31) {
                 yLocation++;
             } else {
@@ -145,6 +149,11 @@ public class Ant {
         return yLocation;
     }
     
+    public Point getLocation() {
+    	//TODO Change to use Points throughout.
+    	return new Point(xLocation, yLocation);
+    }
+    
     /**
      * Gets the number of moves completed
      * @return The number of moves completed
@@ -165,7 +174,7 @@ public class Ant {
      * Returns the direction the Ant is facing N S E W
      * @return N S E W
      */
-    public String getOrientation() {
+    public Orientation getOrientation() {
         return orientation;
     }
     
@@ -183,7 +192,7 @@ public class Ant {
      * Sets the orientation of the ant
      * @param o The orientation either N S E W
      */
-    public void setOrientation(String o) {
+    public void setOrientation(Orientation o) {
         orientation = o;
     }
     

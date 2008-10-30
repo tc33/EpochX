@@ -22,8 +22,8 @@ package com.epochx.aasf;
 /**
  * 
  */
-public enum AntAction {
-
-	TURN_LEFT, TURN_RIGHT, MOVE, DO_NOTHING
+public enum Orientation {
+	
+	NORTH, EAST, SOUTH, WEST
 	
 }

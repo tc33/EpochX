@@ -29,5 +29,5 @@ public abstract class FunctionNode<TYPE> extends Node<TYPE> {
 		super(children);
 	}
 	
-
+	
 }

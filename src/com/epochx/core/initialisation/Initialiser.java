@@ -17,16 +17,17 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.epochx.core.representation;
+package com.epochx.core.initialisation;
 
-import modelsupport.artificialantsf.*;
+import java.util.ArrayList;
+import com.epochx.core.representation.*;
+import core.SemanticModule;
 
-public class ProgN3Function extends FunctionNode<String> {
+/**
+ * 
+ */
+public interface Initialiser {
 	
-	@Override
-	public String evaluate() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public ArrayList<CandidateProgram>  initialise(ArrayList<Node> syntax, ArrayList<Node> functions, ArrayList<Node> terminals, SemanticModule semMod, int popSize);
 
 }

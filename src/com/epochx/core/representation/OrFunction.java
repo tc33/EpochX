@@ -27,8 +27,8 @@ public class OrFunction extends FunctionNode<Boolean> {
 	
 	@Override
 	public Boolean evaluate() {
-		boolean c1 = getChild(0).evaluate().booleanValue();
-		boolean c2 = getChild(1).evaluate().booleanValue();
+		boolean c1 = ((Boolean) getChild(0).evaluate()).booleanValue();
+		boolean c2 = ((Boolean) getChild(1).evaluate()).booleanValue();
 		
 		return c1 || c2;
 	}

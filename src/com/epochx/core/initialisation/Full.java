@@ -19,11 +19,11 @@
  */
 package com.epochx.core.initialisation;
 
-import java.util.ArrayList;
-import java.util.Random;
-import com.epochx.core.representation.CandidateProgram;
-import com.epochx.core.representation.Node;
-import core.SemanticModule;
+import java.util.*;
+
+import com.epochx.core.representation.*;
+
+import core.*;
 
 /**
  * 

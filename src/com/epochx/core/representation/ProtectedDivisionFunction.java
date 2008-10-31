@@ -27,8 +27,8 @@ public class ProtectedDivisionFunction extends FunctionNode<Double> {
 
 	@Override
 	public Double evaluate() {
-		double c1 = getChild(0).evaluate().doubleValue();
-		double c2 = getChild(1).evaluate().doubleValue();
+		double c1 = ((Double) getChild(0).evaluate()).doubleValue();
+		double c2 = ((Double) getChild(1).evaluate()).doubleValue();
 		
 		if(c2==0) {
 			return 0d;

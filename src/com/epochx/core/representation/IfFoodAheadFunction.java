@@ -45,9 +45,9 @@ public class IfFoodAheadFunction extends FunctionNode<Action> {
 		Point ahead = landscape.getNextLocation(ant.getLocation(), ant.getOrientation());
 		
 		if (landscape.isFoodLocation(ahead)) {
-			getChild(0).evaluate().execute();
+			((Action) getChild(0).evaluate()).execute();
 		} else {
-			getChild(1).evaluate().execute();
+			((Action) getChild(1).evaluate()).execute();
 		}
 		
 		return Action.DO_NOTHING;

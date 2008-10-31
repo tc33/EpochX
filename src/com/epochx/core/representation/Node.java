@@ -20,34 +20,78 @@
 package com.epochx.core.representation;
 
 /**
+ * Subclasses of <code>Node</code> should ensure they call the superclass 
+ * constructor with all child Nodes so information such as the arity of the
+ * Node can be maintained. Concrete subclasses must also implement evaluate().
  * 
+ * A Node is a vertex in a tree structure which represents a program. A Node 
+ * can be thought of as an expression in a computer programming language.
+ * Evaluating a Node will involve evaluating any children and potentially 
+ * performing some operation and/or returning a value. A program
+ * is maintained by the <code>CandidateProgram</code> class.
+ *  
+ * @see FunctionNode
+ * @see TerminalNode
  */
 public abstract class Node<TYPE> {
 	
-	private Node<TYPE>[] children;
+	private Node<?>[] children;
 	
-	public Node(Node<TYPE> ... children) {
+	/**
+	 * 
+	 * @param children
+	 */
+	public Node(Node<?> ... children) {
 		this.children = children;
 	}
 	
+	/**
+	 * Performs some operation and/or returns a value associated 
+	 * with this Node.
+	 * @return
+	 */
 	public abstract TYPE evaluate();
 	
-	public Node<TYPE>[] getChildren() {
+	/**
+	 * 
+	 * @return
+	 */
+	public Node<?>[] getChildren() {
 		return children;
 	}
-	
-	public void setChildren(Node<TYPE>[] children) {
+
+	/**
+	 * 
+	 * @param children
+	 */
+	public void setChildren(Node<?>[] children) {
 		this.children = children;
 	}
 	
-	public Node<TYPE> getChild(int index) {
+	/**
+	 * 
+	 * @param index
+	 * @return
+	 */
+	public Node<?> getChild(int index) {
 		return children[index];
 	}
 	
-	public void setChild(Node<TYPE> child, int index) {
+	/**
+	 * 
+	 * @param child
+	 * @param index
+	 */
+	public void setChild(Node<?> child, int index) {
 		children[index] = child;
 	}
 	
+	/**
+	 * Returns the number of children this Node has. Only immediate children 
+	 * of this Node are counted, not ALL children below this Node.
+	 * 
+	 * @return	the number of child Nodes.
+	 */
 	public int getArity() {
 		return children.length;
 	}

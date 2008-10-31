@@ -27,12 +27,12 @@ public class IfFunction extends FunctionNode<Boolean> {
 
 	@Override
 	public Boolean evaluate() {
-		boolean c1 = getChild(0).evaluate().booleanValue();
+		boolean c1 = ((Boolean) getChild(0).evaluate()).booleanValue();
 
 		if(c1) {
-			return getChild(1).evaluate().booleanValue();
+			return ((Boolean) getChild(1).evaluate()).booleanValue();
 		} else {
-			return getChild(2).evaluate().booleanValue();
+			return ((Boolean) getChild(2).evaluate()).booleanValue();
 		}
 	}
 

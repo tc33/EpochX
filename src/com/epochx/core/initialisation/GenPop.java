@@ -21,6 +21,8 @@
 package com.epochx.core.initialisation;
 
 import java.util.*;
+
+import core.*;
 import net.sf.javabdd.*;
 
 /**

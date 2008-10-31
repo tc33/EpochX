@@ -30,7 +30,7 @@ public class NotFunction extends FunctionNode<Boolean> {
 	
 	@Override
 	public Boolean evaluate() {
-		return !getChild(0).evaluate().booleanValue();
+		return !((Boolean) getChild(0).evaluate()).booleanValue();
 	}
 
 }

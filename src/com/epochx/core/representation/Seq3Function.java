@@ -27,9 +27,9 @@ public class Seq3Function extends FunctionNode<Action> {
 	
 	@Override
 	public Action evaluate() {
-		getChild(0).evaluate().execute();
-		getChild(1).evaluate().execute();
-		getChild(2).evaluate().execute();
+		((Action) getChild(0).evaluate()).execute();
+		((Action) getChild(1).evaluate()).execute();
+		((Action) getChild(2).evaluate()).execute();
 		
 		return Action.DO_NOTHING;
 	}

@@ -20,14 +20,29 @@
 package com.epochx.core.representation;
 
 /**
- *  
+ * A <code>CandidateProgram</code> encapsulates an individual program within a 
+ * generation of a GP run.
+ * 
+ * <p>Instances of CandidateProgram can be requested to evaluate themselves, 
+ * which will trigger an evaluation of each <code>Node</code> and their child 
+ * nodes recursively down the tree. As well as the program tree itself, each 
+ * CandidateProgram allows the retrieval of meta-data about the program.
+ * 
  */
-public class CandidateProgram {
+public class CandidateProgram<TYPE> {
 	
-	private Node thisTree;
+	private Node<TYPE> rootNode;
 	
-	public CandidateProgram(Node newNodeTree) {
-		thisTree = newNodeTree;
+	/**
+	 * Constructs a new program individual where <code>rootNode</code> is the 
+	 * top most node in the program, and which may have 0 or more child nodes.
+	 * 
+	 * @param rootNode	the Node of the program tree which is the parent to 
+	 * 					all other nodes. It may be either a FunctionNode or a 
+	 * 					TerminalNode
+	 */
+	public CandidateProgram(Node<TYPE> rootNode) {
+		this.rootNode = rootNode;
 	}
 	
 	// TODO Evaluation Code

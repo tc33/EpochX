@@ -90,4 +90,6 @@ public abstract class Initialiser {
 	public List<TerminalNode<?>> getTerminals() {
 		return terminals;
 	}
+	
+	public abstract ArrayList<CandidateProgram> buildFirstGeneration();
 }

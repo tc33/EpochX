@@ -28,9 +28,16 @@ import com.epochx.core.representation.*;
  */
 public class CrossoverControl {
 	
-	public CrossoverControl(ArrayList<CandidateProgram> programs, 
+	private ArrayList<CandidateProgram> population;
+	private SemanticModule semMod;
+	private double pCrossover;
+	private int maxDepth;
+	private boolean stateChecker;
+	private Crossover methodObject;
+	
+	public CrossoverControl(ArrayList<CandidateProgram> population, 
 			double pCrossover, SemanticModule semMod, int maxDepth,
-			boolean stateChecker, Crossover method) {
+			boolean stateChecker, Crossover methodObject) {
 		
 	}
 

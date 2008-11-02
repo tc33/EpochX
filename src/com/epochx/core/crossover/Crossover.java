@@ -48,5 +48,9 @@ public abstract class Crossover {
 	public SemanticModule getSemanticModule() {
 		return semMod;
 	}
+	
+	public abstract Node getChild1();
+	
+	public abstract Node getChild2();
 
 }

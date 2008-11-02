@@ -49,5 +49,8 @@ public class TerminalNode<TYPE> extends Node<TYPE> {
 	public TYPE evaluate() {
 		return value;
 	}
-
+	
+	public String toString() {
+		return (String) value;
+	}
 }

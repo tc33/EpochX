@@ -19,8 +19,7 @@
  */
 package com.epochx.core.initialisation;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 import com.epochx.core.representation.CandidateProgram;
 import com.epochx.core.representation.Node;
 import core.SemanticModule;
@@ -57,13 +56,36 @@ public class Grow extends Initialiser {
 	public Node buildGrowNodeTree(int depth) {		
 		// make full node tree
 		
-        // define top node form functions
+        // define top node
         int ran = super.getRandom().nextInt(super.getNoFunctions());
-        Node top = super.getFunctions().get(ran);
+        Node top = super.getSyntax().get(ran);
         
-        // TODO recurse down each branch to depth     
+        // recurse down each branch to depth using Grow mechanism
+        this.fillChildren(top, 1, super.getDepth());
         
         // return top node
         return top;
+	}
+	
+	public void fillChildren(Node topNode, int currentDepth, int maxDepth) {
+		int arity = topNode.getArity();
+		if(arity>0) {
+			if(currentDepth<maxDepth) {
+				// fill children with functions or terminals
+				for(int i = 0; i<arity; i++) {
+					int ran = super.getRandom().nextInt(super.getNoFunctions());
+					Node child = super.getSyntax().get(ran);
+					topNode.setChild(child, i);
+					this.fillChildren(child, (currentDepth+1), maxDepth);
+				}
+			} else {
+				// fill children with terminals only
+				for(int i = 0; i<arity; i++) {
+					int ran = super.getRandom().nextInt(super.getNoTerminals());
+					Node child = super.getTerminals().get(ran);
+					topNode.setChild(child, i);
+				}
+			}
+		}
 	}
 }

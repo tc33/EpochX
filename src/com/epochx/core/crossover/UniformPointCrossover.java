@@ -19,7 +19,10 @@
  */
 package com.epochx.core.crossover;
 
+import java.util.ArrayList;
+
 import com.epochx.core.representation.*;
+
 import core.SemanticModule;
 
 /**
@@ -27,17 +30,10 @@ import core.SemanticModule;
  */
 public class UniformPointCrossover extends Crossover {
 	
-	private Node child1;
-	private Node child2;
-
-	/**
-	 * @param parent1
-	 * @param parent2
-	 * @param semMod
-	 */
-	public UniformPointCrossover(Node parent1, Node parent2,
-			SemanticModule semMod) {
-		super(parent1, parent2, semMod);
+	public UniformPointCrossover(ArrayList<CandidateProgram> population, 
+			double pCrossover, SemanticModule semMod, int maxDepth,
+			boolean stateChecker, int populationSize, int elites) {
+		super(population, pCrossover, semMod, maxDepth, stateChecker, populationSize, elites);
 		this.doCrossover();
 	}
 	
@@ -54,13 +50,5 @@ public class UniformPointCrossover extends Crossover {
 		
 		// set children
 		
-	}
-	
-	public Node getChild1() {
-		return child1;
-	}
-	
-	public Node getChild2() {
-		return child2;
 	}
 }

@@ -19,6 +19,7 @@
  */
 package com.epochx.core.crossover;
 
+import java.util.*;
 import com.epochx.core.representation.*;
 import core.*;
 
@@ -27,21 +28,46 @@ import core.*;
  */
 public abstract class Crossover {
 	
-	private Node parent1;
-	private Node parent2;
+	private ArrayList<CandidateProgram> population;
 	private SemanticModule semMod;
+	private double pCrossover;
+	private int maxDepth, popSize, poolSize, elites;
+	private boolean stateChecker;
+	private CandidateProgram parent1;
+	private CandidateProgram parent2;
+	private Random rGen;
+	private ArrayList<CandidateProgram> newPopulation;
 	
-	public Crossover(Node parent1, Node parent2, SemanticModule semMod) {
-		this.parent1 = parent1;
-		this.parent2 = parent2;
+	public Crossover(ArrayList<CandidateProgram> population, 
+			double pCrossover, SemanticModule semMod, int maxDepth,
+			boolean stateChecker, int populationSize, int elites) {
+		this.population = population;
+		this.pCrossover = pCrossover;
 		this.semMod = semMod;
+		this.maxDepth = maxDepth;
+		this.stateChecker = stateChecker;
+		this.popSize = populationSize;
+		rGen = new Random();
+		newPopulation = new ArrayList<CandidateProgram>();
+		poolSize = population.size();
+		this.elites = elites;
+		// copy through elites
+		if(elites<=poolSize) {
+			for(int i = 0; i<elites; i++) {
+				newPopulation.add(population.get(i));
+			}
+		} else {
+			throw new IllegalArgumentException("ELITES ARE GREATER THAN SELECTED POPULATION!!!");
+		}
 	}
 	
-	public Node getParent1() {
+	public CandidateProgram getParent1() {
+		parent1 = population.get(rGen.nextInt(poolSize));
 		return parent1;
 	}
 	
-	public Node getParent2() {
+	public CandidateProgram getParent2() {
+		parent1 = population.get(rGen.nextInt(poolSize));
 		return parent2;
 	}
 	
@@ -49,8 +75,10 @@ public abstract class Crossover {
 		return semMod;
 	}
 	
-	public abstract Node getChild1();
+	public boolean getStateChecker() {
+		return stateChecker;
+	}
 	
-	public abstract Node getChild2();
+	public abstract void doCrossover();
 
 }

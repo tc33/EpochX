@@ -47,4 +47,13 @@ public class CandidateProgram<TYPE> {
 	
 	// TODO Evaluation Code
 	
+	
+	@Override
+	public String toString() {
+		return rootNode.toString();
+	}
+	
+	public Node<TYPE> getRootNode() {
+		return rootNode;
+	}
 }

@@ -32,5 +32,9 @@ public class NotFunction extends FunctionNode<Boolean> {
 	public Boolean evaluate() {
 		return !((Boolean) getChild(0).evaluate()).booleanValue();
 	}
+	
+	public String toString() {
+		return "NOT";
+	}
 
 }

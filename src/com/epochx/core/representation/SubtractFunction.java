@@ -32,5 +32,9 @@ public class SubtractFunction extends FunctionNode<Double> {
 		
 		return c1 - c2;
 	}
+	
+	public String toString() {
+		return "SUB";
+	}
 
 }

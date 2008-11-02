@@ -34,5 +34,8 @@ public class AntTurnLeftAction extends AntAction {
 	public void execute() {
 		getAnt().turnLeft();
 	}
-
+	
+	public String toString() {
+		return "TURN-LEFT";
+	}
 }

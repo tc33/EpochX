@@ -34,4 +34,8 @@ public class AntMoveAction extends AntAction {
 	public void execute() {
 		getAnt().move();
 	}
+	
+	public String toString() {
+		return "MOVE";
+	}
 }

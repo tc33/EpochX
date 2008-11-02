@@ -20,9 +20,7 @@
 package com.epochx.core.initialisation;
 
 import java.util.*;
-
 import com.epochx.core.representation.*;
-
 import core.*;
 
 /**
@@ -61,7 +59,7 @@ public class Full extends Initialiser {
         int ran = super.getRandom().nextInt(super.getNoFunctions());
         Node top = super.getFunctions().get(ran);
         
-        // TODO recurse down each branch to depth
+        // recurse down each branch to depth
         this.fillChildren(top, 1, super.getDepth());        
         
         // return top node

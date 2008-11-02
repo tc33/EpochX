@@ -52,5 +52,8 @@ public class IfFoodAheadFunction extends FunctionNode<Action> {
 		
 		return Action.DO_NOTHING;
 	}
-
+	
+	public String toString() {
+		return "IF-FOOD-AHEAD";
+	}
 }

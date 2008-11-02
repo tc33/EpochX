@@ -35,4 +35,8 @@ public class AndFunction extends FunctionNode<Boolean> {
 		
 		return c1 && c2;
 	}
+	
+	public String toString() {
+		return "AND";
+	}
 }

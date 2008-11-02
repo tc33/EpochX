@@ -36,5 +36,9 @@ public class ProtectedDivisionFunction extends FunctionNode<Double> {
 			return c1 / c2;
 		}
 	}
+	
+	public String toString() {
+		return "PDIV";
+	}
 
 }

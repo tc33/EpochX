@@ -35,5 +35,8 @@ public class IfFunction extends FunctionNode<Boolean> {
 			return ((Boolean) getChild(2).evaluate()).booleanValue();
 		}
 	}
-
+	
+	public String toString() {
+		return "IF";
+	}
 }

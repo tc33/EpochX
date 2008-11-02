@@ -20,6 +20,8 @@
 package com.epochx.core.initialisation;
 
 import java.util.*;
+
+import com.epochx.core.*;
 import com.epochx.core.representation.CandidateProgram;
 import com.epochx.core.representation.Node;
 import core.SemanticModule;
@@ -27,12 +29,10 @@ import core.SemanticModule;
 /**
  * 
  */
-public class Grow extends Initialiser {
+public class GrowInitialiser extends Initialiser {
 	
-	public Grow(ArrayList<Node> syntax, ArrayList<Node> functions, 
-			ArrayList<Node> terminals, SemanticModule semMod, 
-			int popSize, int depth) {
-		super(syntax, functions, terminals, semMod, popSize, depth);
+	public GrowInitialiser(GPConfig config, SemanticModule semMod) {
+		super(config, semMod);
 	}
 	
 	public ArrayList<CandidateProgram> buildFirstGeneration() {

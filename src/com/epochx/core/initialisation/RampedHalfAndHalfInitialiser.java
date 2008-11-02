@@ -21,6 +21,7 @@ package com.epochx.core.initialisation;
 
 import java.util.ArrayList;
 
+import com.epochx.core.*;
 import com.epochx.core.representation.CandidateProgram;
 import com.epochx.core.representation.Node;
 import core.SemanticModule;
@@ -28,10 +29,10 @@ import core.SemanticModule;
 /**
  * 
  */
-public class RampedHalfAndHalf extends Initialiser {
+public class RampedHalfAndHalfInitialiser extends Initialiser {
 	
-	private Grow grow;
-	private Full full;
+	private GrowInitialiser grow;
+	private FullInitialiser full;
 	private CandidateProgram candidate;
 	private int depth;
 
@@ -44,13 +45,11 @@ public class RampedHalfAndHalf extends Initialiser {
 	 * @param depth The max depth of the program tree on initialisation
 	 * @throws IllegalArgumentException for the max depth being too small to work RHH
 	 */
-	public RampedHalfAndHalf(ArrayList<Node> syntax, ArrayList<Node> functions, 
-			ArrayList<Node> terminals, SemanticModule semMod, 
-			int popSize, int depth) {
-		super(syntax, functions, terminals, semMod, popSize, depth);
+	public RampedHalfAndHalfInitialiser(GPConfig config, SemanticModule semMod) {
+		super(config, semMod);
 		// set up the grow and full parts
-		grow = new Grow(syntax, functions, terminals, semMod, popSize, depth);
-		full = new Full(syntax, functions, terminals, semMod, popSize, depth);
+		grow = new GrowInitialiser(config, semMod);
+		full = new FullInitialiser(config, semMod);
 		// modify depth for staged increase as per Koza
 		if(depth>=6) {
 			this.depth = depth - 4;

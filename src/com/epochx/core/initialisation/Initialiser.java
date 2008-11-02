@@ -19,9 +19,9 @@
  */
 package com.epochx.core.initialisation;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
+import com.epochx.core.*;
 import com.epochx.core.representation.*;
 
 import core.SemanticModule;
@@ -34,29 +34,17 @@ public abstract class Initialiser {
 	private int depth;
 	private int popSize;
 	private SemanticModule semMod;
-	private ArrayList<Node> syntax;
-	private ArrayList<Node> terminals;
-	private ArrayList<Node> functions;
+	private List<TerminalNode<?>> terminals;
+	private List<FunctionNode<?>> functions;
 	private Random rGen;
-	private int noFuncs;
-	private int noTerms;
-	private int noSyntax;
 	
-	public Initialiser(ArrayList<Node> syntax, ArrayList<Node> functions, 
-			ArrayList<Node> terminals, SemanticModule semMod, 
-			int popSize, int depth) {
-		
-		// calculate no of functions and terminals
-		noFuncs = functions.size();
-		noTerms = terminals.size();
-		noSyntax = syntax.size();
+	public Initialiser(GPConfig config, SemanticModule semMod) {
 		
 		// set all private variables
-		this.depth = depth;
-		this.popSize = popSize;
-		this.syntax = syntax;
-		this.functions = functions;
-		this.terminals = terminals;
+		this.depth = config.getDepth();
+		this.popSize = config.getPopulationSize();
+		this.functions = config.getFunctions();
+		this.terminals = config.getTerminals();
 		this.semMod = semMod;
 		rGen = new Random();		
 	}
@@ -70,15 +58,15 @@ public abstract class Initialiser {
 	}
 	
 	public int getNoFunctions() {
-		return noFuncs;
+		return functions.size();
 	}
 	
 	public int getNoTerminals() {
-		return noTerms;
+		return terminals.size();
 	}
 	
 	public int getNoSyntax() {
-		return noSyntax;
+		return functions.size() + terminals.size();
 	}
 	
 	public Random getRandom() {
@@ -90,14 +78,16 @@ public abstract class Initialiser {
 	}
 
 	public ArrayList<Node> getSyntax() {
-		return syntax;
+		ArrayList allNodes = new ArrayList<Node>(terminals);
+		allNodes.addAll(functions);
+		return allNodes;
 	}
 	
-	public ArrayList<Node> getFunctions() {
+	public List<FunctionNode<?>> getFunctions() {
 		return functions;
 	}
 	
-	public ArrayList<Node> getTerminals() {
+	public List<TerminalNode<?>> getTerminals() {
 		return terminals;
 	}
 }

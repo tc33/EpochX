@@ -20,18 +20,18 @@
 package com.epochx.core.initialisation;
 
 import java.util.*;
+
+import com.epochx.core.*;
 import com.epochx.core.representation.*;
 import core.*;
 
 /**
  * 
  */
-public class Full extends Initialiser {
+public class FullInitialiser extends Initialiser {
 	
-	public Full(ArrayList<Node> syntax, ArrayList<Node> functions, 
-			ArrayList<Node> terminals, SemanticModule semMod, 
-			int popSize, int depth) {
-		super(syntax, functions, terminals, semMod, popSize, depth);
+	public FullInitialiser(GPConfig config, SemanticModule semMod) {
+		super(config, semMod);
 	}
 	
 	public ArrayList<CandidateProgram> buildFirstGeneration() {

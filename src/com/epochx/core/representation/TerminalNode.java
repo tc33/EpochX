@@ -53,4 +53,13 @@ public class TerminalNode<TYPE> extends Node<TYPE> {
 	public String toString() {
 		return (String) value;
 	}
+	
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		TerminalNode<TYPE> clone = (TerminalNode) super.clone();
+		
+		clone.setValue(value);
+		
+		return clone;
+	}
 }

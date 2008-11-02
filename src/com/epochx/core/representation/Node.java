@@ -95,4 +95,14 @@ public abstract class Node<TYPE> {
 	public int getArity() {
 		return children.length;
 	}
+	
+
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		Node<TYPE> clone = (Node<TYPE>) super.clone();
+		
+		clone.setChildren(children.clone());
+		
+		return clone;
+	}
 }

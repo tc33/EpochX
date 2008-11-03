@@ -39,4 +39,9 @@ public class AddFunction extends FunctionNode<Double> {
 	public String toString() {		
 		return "ADD(" + getChild(0) + ' ' + getChild(1) + ')';
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return super.equals(obj) && (obj instanceof AddFunction);
+	}
 }

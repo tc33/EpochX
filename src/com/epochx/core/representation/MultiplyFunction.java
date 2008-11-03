@@ -22,9 +22,9 @@ package com.epochx.core.representation;
 /**
  * 
  */
-public class MulFunction extends FunctionNode<Double> {
+public class MultiplyFunction extends FunctionNode<Double> {
 	
-	public MulFunction(Node<Double> child1, Node<Double> child2) {
+	public MultiplyFunction(Node<Double> child1, Node<Double> child2) {
 		super(child1, child2);
 	}
 
@@ -38,5 +38,10 @@ public class MulFunction extends FunctionNode<Double> {
 	
 	public String toString() {
 		return "MUL(" + getChild(0) + ' ' + getChild(1) + ')';
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return super.equals(obj) && (obj instanceof MultiplyFunction);
 	}
 }

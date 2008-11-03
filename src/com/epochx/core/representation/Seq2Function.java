@@ -39,4 +39,9 @@ public class Seq2Function extends FunctionNode<Action> {
 	public String toString() {
 		return "SEQ2(" + getChild(0) + ' ' + getChild(1) + ')';
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return super.equals(obj) && (obj instanceof Seq2Function);
+	}
 }

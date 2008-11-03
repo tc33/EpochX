@@ -106,4 +106,19 @@ public abstract class Node<TYPE> implements Cloneable {
 		
 		return clone;
 	}
+	
+
+	@Override
+	public boolean equals(Object obj) {
+		boolean equal = true;
+		if (obj instanceof Node) {
+			Node<TYPE> n = (Node<TYPE>) obj;
+			for(int i=0; i<n.getArity() && equal; i++) {
+				equal = n.getChild(i).equals(this.getChild(i));
+			}
+		} else {
+			equal = false;
+		}
+		return equal;
+	}
 }

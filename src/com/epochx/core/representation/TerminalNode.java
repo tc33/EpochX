@@ -62,4 +62,10 @@ public class TerminalNode<TYPE> extends Node<TYPE> {
 		
 		return clone;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return (obj instanceof TerminalNode) 
+				&& ((TerminalNode) obj).value.equals(this.value);
+	}
 }

@@ -39,4 +39,9 @@ public class AndFunction extends FunctionNode<Boolean> {
 	public String toString() {
 		return "AND(" + getChild(0) + ' ' + getChild(1) + ')';
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return super.equals(obj) && (obj instanceof AndFunction);
+	}
 }

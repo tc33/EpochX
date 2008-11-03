@@ -37,4 +37,8 @@ public class SubtractFunction extends FunctionNode<Double> {
 		return "SUB(" + getChild(0) + ' ' + getChild(1) + ')';
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		return super.equals(obj) && (obj instanceof SubtractFunction);
+	}
 }

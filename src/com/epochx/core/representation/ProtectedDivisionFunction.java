@@ -40,5 +40,10 @@ public class ProtectedDivisionFunction extends FunctionNode<Double> {
 	public String toString() {
 		return "PDIV(" + getChild(0) + ' ' + getChild(1) + ')';
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return super.equals(obj) && (obj instanceof ProtectedDivisionFunction);
+	}
 
 }

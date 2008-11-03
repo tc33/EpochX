@@ -37,4 +37,8 @@ public class NotFunction extends FunctionNode<Boolean> {
 		return "NOT(" + getChild(0) + ')';
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		return super.equals(obj) && (obj instanceof NotFunction);
+	}
 }

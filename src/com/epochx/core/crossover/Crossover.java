@@ -21,6 +21,7 @@ package com.epochx.core.crossover;
 
 import java.util.*;
 import com.epochx.core.representation.*;
+import com.epochx.core.*;
 import core.*;
 
 /**
@@ -36,6 +37,7 @@ public abstract class Crossover {
 	private CandidateProgram parent1;
 	private CandidateProgram parent2;
 	private ArrayList<CandidateProgram> newPopulation;
+	private GPProgramAnalyser gPA;
 	
 	public Crossover(ArrayList<CandidateProgram> population, 
 			double pCrossover, SemanticModule semMod, int maxDepth,
@@ -46,8 +48,8 @@ public abstract class Crossover {
 		this.maxDepth = maxDepth;
 		this.stateChecker = stateChecker;
 		this.popSize = populationSize;
-		newPopulation = new ArrayList<CandidateProgram>();
-		poolSize = population.size();
+		this.newPopulation = new ArrayList<CandidateProgram>();
+		this.poolSize = population.size();
 		this.elites = elites;
 		// copy through elites
 		if(elites<=poolSize) {
@@ -57,6 +59,16 @@ public abstract class Crossover {
 		} else {
 			throw new IllegalArgumentException("ELITES ARE GREATER THAN SELECTED POPULATION!!!");
 		}
+	}
+	
+	public List<CandidateProgram> getCrossoverResult() {
+		// TODO probability of crossover
+		
+		// run scripts to oversee crossover
+		while(newPopulation.size()<popSize) {
+			this.doCrossover();
+		}
+		return newPopulation;
 	}
 	
 	public CandidateProgram getParent1() {
@@ -75,6 +87,20 @@ public abstract class Crossover {
 	
 	public boolean getStateChecker() {
 		return stateChecker;
+	}
+	
+	public GPProgramAnalyser getGPAnalyser() {
+		return gPA;
+	}
+	
+	public int getMaxDepth() {
+		return maxDepth;
+	}
+	
+	public void addProgToPop(CandidateProgram newProgram) {
+		if(newPopulation.size()<popSize) {
+			newPopulation.add(newProgram);
+		}
 	}
 	
 	public abstract void doCrossover();

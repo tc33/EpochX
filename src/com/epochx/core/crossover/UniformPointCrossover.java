@@ -20,9 +20,7 @@
 package com.epochx.core.crossover;
 
 import java.util.ArrayList;
-
 import com.epochx.core.representation.*;
-
 import core.SemanticModule;
 
 /**
@@ -34,7 +32,6 @@ public class UniformPointCrossover extends Crossover {
 			double pCrossover, SemanticModule semMod, int maxDepth,
 			boolean stateChecker, int populationSize, int elites) {
 		super(population, pCrossover, semMod, maxDepth, stateChecker, populationSize, elites);
-		this.doCrossover();
 	}
 	
 	public void doCrossover() {
@@ -52,14 +49,50 @@ public class UniformPointCrossover extends Crossover {
 		}		
 		
 		// select swap and put points
+		int swapPoint1 = (int) Math.floor(Math.random()*super.getGPAnalyser().getProgramLength(parent1));
+		int swapPoint2 = (int) Math.floor(Math.random()*super.getGPAnalyser().getProgramLength(parent2));
 		
 		// do swap
+		// get parts to swap
+		try {
+			// find Nth node
+			Node subTree1 = (Node) child1.getNthNode(child1, swapPoint1).clone();
+			Node subTree2 = (Node) child2.getNthNode(child2, swapPoint2).clone();
+			// set Nth node
+			child1.setNthNode(child1, subTree2, swapPoint1);
+			child2.setNthNode(child2, subTree1, swapPoint2);
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 		
-		// max depth 17
+		// max depth reversion section
+		int pDepth1 = super.getGPAnalyser().getProgramDepth(child1);
+		int pDepth2 = super.getGPAnalyser().getProgramDepth(child2);
+		// depth check on one
+		if(pDepth1>super.getMaxDepth()) {
+			try {
+				child1 = (Node) parent1.clone();
+			} catch (CloneNotSupportedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		// depth check on two
+		if(pDepth2>super.getMaxDepth()) {
+			try {
+				child2 = (Node) parent2.clone();
+			} catch (CloneNotSupportedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
-		// state change section
+		// TODO state change section
 		
 		// set children
+		super.addProgToPop(new CandidateProgram(child1));
+		super.addProgToPop(new CandidateProgram(child2));
 		
 	}
 }

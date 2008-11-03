@@ -19,6 +19,8 @@
  */
 package com.epochx.core.representation;
 
+import com.epochx.core.*;
+
 /**
  * Subclasses of <code>Node</code> should ensure they call the superclass 
  * constructor with all child Nodes so information such as the arity of the
@@ -36,6 +38,8 @@ package com.epochx.core.representation;
 public abstract class Node<TYPE> implements Cloneable {
 	
 	private Node<?>[] children;
+	private int nodeCounter;
+	private GPProgramAnalyser gPA;
 	
 	/**
 	 * 
@@ -77,6 +81,80 @@ public abstract class Node<TYPE> implements Cloneable {
 		return children[index];
 	}
 	
+	public Node<?> getNthNode(Node rootNode, int n) {
+		// check n is not greater than length
+		gPA = new GPProgramAnalyser();
+		if(n>gPA.getProgramLength(rootNode)) {
+			throw new IllegalArgumentException("Nth NODE IS GREATER THAN NUMBER OF NODES");
+		} else {
+			nodeCounter = 0;
+			int arity = rootNode.getArity();
+			if(arity>0) {
+				for(int i = 0; i<arity; i++) {
+					nodeCounter++;
+					if(nodeCounter==n) {
+						return this.getChild(i);
+					} else {
+						return this.findNthNode(rootNode.getChild(i), n);
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	private Node<?> findNthNode(Node rootNode, int n) {
+		int arity = rootNode.getArity();			
+		if(arity>0) {
+			for(int i = 0; i<arity; i++) {
+				nodeCounter++;
+				if(nodeCounter==n) {
+					return this.getChild(i);
+				} else {
+					return this.findNthNode(rootNode.getChild(i), n);
+				}
+			}
+		}
+		return null;
+	}
+	
+	public void setNthNode(Node rootNode, Node newNode, int n) {
+		// check n is not greater than length
+		gPA = new GPProgramAnalyser();
+		if(n>gPA.getProgramLength(rootNode)) {
+			throw new IllegalArgumentException("Nth NODE IS GREATER THAN NUMBER OF NODES");
+		} else {
+			nodeCounter = 0;
+			int arity = rootNode.getArity();
+			if(arity>0) {
+				for(int i = 0; i<arity; i++) {
+					nodeCounter++;
+					if(nodeCounter==n) {
+						this.setChild(newNode, i);
+					} else {
+						this.replaceNthNode(rootNode.getChild(i), newNode, n);
+					}
+				}
+			} else {
+				rootNode = newNode;
+			}
+		}
+	}
+	
+	private void replaceNthNode(Node rootNode, Node newNode, int n) {
+		int arity = rootNode.getArity();			
+		if(arity>0) {
+			for(int i = 0; i<arity; i++) {
+				nodeCounter++;
+				if(nodeCounter==n) {
+					this.setChild(newNode, i);
+				} else {
+					this.replaceNthNode(rootNode.getChild(i), newNode, n);
+				}
+			}
+		}
+	}
+	
 	/**
 	 * 
 	 * @param child
@@ -95,8 +173,6 @@ public abstract class Node<TYPE> implements Cloneable {
 	public int getArity() {
 		return children.length;
 	}
-	
-
 
 	@Override
 	public Object clone() throws CloneNotSupportedException {

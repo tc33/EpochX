@@ -102,7 +102,7 @@ public abstract class Node<TYPE> implements Cloneable {
 	public Object clone() throws CloneNotSupportedException {
 		Node<TYPE> clone = (Node<TYPE>) super.clone();
 		
-		clone.setChildren(children.clone());
+		clone.setChildren(this.children.clone());
 		
 		return clone;
 	}

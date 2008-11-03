@@ -44,6 +44,7 @@ public class FullInitialiser implements Initialiser {
 		List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
 		
 		// Build population.
+		
 		for(int i=0; i<popSize; i++) {
 			CandidateProgram candidate;
 			do {
@@ -61,10 +62,16 @@ public class FullInitialiser implements Initialiser {
 		
         // define top node form functions
         int randomIndex = (int) Math.floor(Math.random() * config.getFunctions().size());
-        Node top = config.getFunctions().get(randomIndex);
+        Node top = null;
+		try {
+			top = (Node) config.getFunctions().get(randomIndex).clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         
         // recurse down each branch to depth
-        fillChildren(top, 1, config.getDepth());        
+		fillChildren(top, 1, config.getDepth());      
         
         // return top node
         return top;

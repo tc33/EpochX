@@ -47,9 +47,11 @@ public class GPProgramAnalyser {
 		}
 		// get children and recurse
 		int arity = rootNode.getArity();
-		for(int i = 0; i<arity; i++) {
-			Node childNode = rootNode.getChild(i);
-			this.countDepth(rootNode, (currentDepth + 1));
+		if(arity>0) {
+			for(int i = 0; i<arity; i++) {
+				Node childNode = rootNode.getChild(i);
+				this.countDepth(childNode, (currentDepth + 1));
+			}
 		}
 	}
 	
@@ -61,12 +63,14 @@ public class GPProgramAnalyser {
 	
 	private void countLength(Node rootNode) {
 		// increment length and count through children
-		length++;
+		length = length + 1;
 		// get children and recurse
 		int arity = rootNode.getArity();
-		for(int i = 0; i<arity; i++) {
-			Node childNode = rootNode.getChild(i);
-			this.countDepth(rootNode, (currentDepth + 1));
+		if(arity>0) {
+			for(int i = 0; i<arity; i++) {
+				Node childNode = rootNode.getChild(i);
+				this.countLength(childNode);
+			}
 		}
 	}
 

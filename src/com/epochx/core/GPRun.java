@@ -31,9 +31,12 @@ public class GPRun {
 
 	public void run(GPConfig config) {
 		Initialiser init = config.getInitialiser();
+		GPProgramAnalyser progA = new GPProgramAnalyser();
 		List<CandidateProgram> pop = init.getInitialPopulation();
 		for (CandidateProgram prog: pop) {
 			System.out.println("Program: " + prog);
+			System.out.println("Depth = " + progA.getProgramDepth(prog.getRootNode()));
+			System.out.println("Length = " + progA.getProgramLength(prog.getRootNode()));
 		}
 	}
 }

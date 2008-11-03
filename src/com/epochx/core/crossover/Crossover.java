@@ -35,7 +35,6 @@ public abstract class Crossover {
 	private boolean stateChecker;
 	private CandidateProgram parent1;
 	private CandidateProgram parent2;
-	private Random rGen;
 	private ArrayList<CandidateProgram> newPopulation;
 	
 	public Crossover(ArrayList<CandidateProgram> population, 
@@ -47,7 +46,6 @@ public abstract class Crossover {
 		this.maxDepth = maxDepth;
 		this.stateChecker = stateChecker;
 		this.popSize = populationSize;
-		rGen = new Random();
 		newPopulation = new ArrayList<CandidateProgram>();
 		poolSize = population.size();
 		this.elites = elites;
@@ -62,12 +60,12 @@ public abstract class Crossover {
 	}
 	
 	public CandidateProgram getParent1() {
-		parent1 = population.get(rGen.nextInt(poolSize));
+		parent1 = population.get((int) Math.floor(Math.random()*poolSize));
 		return parent1;
 	}
 	
 	public CandidateProgram getParent2() {
-		parent1 = population.get(rGen.nextInt(poolSize));
+		parent1 = population.get((int) Math.floor(Math.random()*poolSize));
 		return parent2;
 	}
 	

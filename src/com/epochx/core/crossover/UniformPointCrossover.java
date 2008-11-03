@@ -39,6 +39,17 @@ public class UniformPointCrossover extends Crossover {
 	
 	public void doCrossover() {
 		// copy parents to children
+		Node parent1 = super.getParent1().getRootNode();
+		Node parent2 = super.getParent2().getRootNode();
+		Node child1 = null;
+		Node child2 = null;
+		try {
+			child1 = (Node) parent1.clone();
+			child2 = (Node) parent2.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 		
 		// select swap and put points
 		

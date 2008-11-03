@@ -35,7 +35,7 @@ public class Seq3Function extends FunctionNode<Action> {
 	}
 	
 	public String toString() {
-		return "SEQ3";
+		return "SEQ3(" + getChild(0) + ' ' + getChild(1) + ' ' + getChild(2) + ')';
 	}
 
 }

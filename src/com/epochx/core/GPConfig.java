@@ -129,6 +129,12 @@ public class GPConfig {
 		this.functions = functions;
 	}
 	
+	public List<Node<?>> getSyntax() {
+		List<Node<?>> syntax = new ArrayList<Node<?>>(terminals);
+		syntax.addAll(functions);
+		return syntax;
+	}
+	
 	/**
 	 * @return the depth
 	 */

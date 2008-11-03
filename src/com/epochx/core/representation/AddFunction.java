@@ -36,7 +36,7 @@ public class AddFunction extends FunctionNode<Double> {
 		return c1 + c2;
 	}
 	
-	public String toString() {
-		return "ADD";
+	public String toString() {		
+		return "ADD(" + getChild(0) + ' ' + getChild(1) + ')';
 	}
 }

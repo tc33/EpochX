@@ -37,6 +37,6 @@ public class Seq2Function extends FunctionNode<Action> {
 	}
 	
 	public String toString() {
-		return "SEQ2";
+		return "SEQ2(" + getChild(0) + ' ' + getChild(1) + ')';
 	}
 }

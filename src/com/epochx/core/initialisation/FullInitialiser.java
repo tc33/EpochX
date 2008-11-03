@@ -23,44 +23,48 @@ import java.util.*;
 
 import com.epochx.core.*;
 import com.epochx.core.representation.*;
+
 import core.*;
 
 /**
  * 
  */
-public class FullInitialiser extends Initialiser {
+public class FullInitialiser implements Initialiser {
+	
+	private GPConfig config;
 	
 	public FullInitialiser(GPConfig config, SemanticModule semMod) {
-		super(config, semMod);
+		this.config = config;
 	}
 	
-	public ArrayList<CandidateProgram> buildFirstGeneration() {
+	public List<CandidateProgram> getInitialPopulation() {
 		
-		// initialise population of candidate programs
-		ArrayList<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(super.getPopSize());
+		// Initialise population of candidate programs.
+		int popSize = config.getPopulationSize();
+		List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
 		
-		// build population
-		for(int i=0; i<super.getPopSize(); i++) {
-            CandidateProgram candidate = new CandidateProgram(buildFullNodeTree(super.getDepth()));
-            while(firstGen.contains(candidate)) {
-                candidate = new CandidateProgram(buildFullNodeTree(super.getDepth()));
-            }
-            firstGen.add(candidate);
+		// Build population.
+		for(int i=0; i<popSize; i++) {
+			CandidateProgram candidate;
+			do {
+            	candidate = new CandidateProgram(buildFullNodeTree(config.getDepth()));
+			} while (firstGen.contains(candidate));
+			firstGen.add(candidate);
         }
 		
-		// return starting population
+		// Return starting population.
 		return firstGen;
 	}
 	
-	public Node buildFullNodeTree(int depth) {		
+	public Node buildFullNodeTree(int depth) {
 		// make full node tree
 		
         // define top node form functions
-        int ran = super.getRandom().nextInt(super.getNoFunctions());
-        Node top = super.getFunctions().get(ran);
+        int randomIndex = (int) Math.floor(Math.random() * config.getFunctions().size());
+        Node top = config.getFunctions().get(randomIndex);
         
         // recurse down each branch to depth
-        this.fillChildren(top, 1, super.getDepth());        
+        fillChildren(top, 1, config.getDepth());        
         
         // return top node
         return top;
@@ -68,19 +72,31 @@ public class FullInitialiser extends Initialiser {
 	
 	public void fillChildren(Node topNode, int currentDepth, int maxDepth) {
 		int arity = topNode.getArity();
-		if(currentDepth<maxDepth) {
+		if(currentDepth<maxDepth-1) {
 			// fill children with functions only
 			for(int i = 0; i<arity; i++) {
-				int ran = super.getRandom().nextInt(super.getNoFunctions());
-				Node child = super.getFunctions().get(ran);
+				int randomIndex = (int) Math.floor(Math.random() * config.getFunctions().size());
+				Node child = null;
+				try {
+					child = (Node) config.getFunctions().get(randomIndex).clone();
+				} catch (CloneNotSupportedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				topNode.setChild(child, i);
 				this.fillChildren(child, (currentDepth+1), maxDepth);
 			}
 		} else {
 			// fill children with terminals only
 			for(int i = 0; i<arity; i++) {
-				int ran = super.getRandom().nextInt(super.getNoTerminals());
-				Node child = super.getTerminals().get(ran);
+				int randomIndex = (int) Math.floor(Math.random() * config.getTerminals().size());
+				Node child = null;
+				try {
+					child = (Node) config.getTerminals().get(randomIndex).clone();
+				} catch (CloneNotSupportedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				topNode.setChild(child, i);
 			}
 		}

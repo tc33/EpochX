@@ -34,6 +34,6 @@ public class OrFunction extends FunctionNode<Boolean> {
 	}
 	
 	public String toString() {
-		return "OR";
+		return "OR(" + getChild(0) + ' ' + getChild(1) + ')';
 	}
 }

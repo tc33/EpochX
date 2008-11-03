@@ -21,75 +21,13 @@ package com.epochx.core.initialisation;
 
 import java.util.*;
 
-import com.epochx.core.*;
 import com.epochx.core.representation.*;
-
-import core.SemanticModule;
 
 /**
  * 
  */
-public abstract class Initialiser {
-	
-	private int depth;
-	private int popSize;
-	private SemanticModule semMod;
-	private List<TerminalNode<?>> terminals;
-	private List<FunctionNode<?>> functions;
-	private Random rGen;
-	
-	public Initialiser(GPConfig config, SemanticModule semMod) {
-		
-		// set all private variables
-		this.depth = config.getDepth();
-		this.popSize = config.getPopulationSize();
-		this.functions = config.getFunctions();
-		this.terminals = config.getTerminals();
-		this.semMod = semMod;
-		rGen = new Random();		
-	}
-	
-	public int getDepth() {
-		return depth;
-	}
-	
-	public int getPopSize() {
-		return popSize;
-	}
-	
-	public int getNoFunctions() {
-		return functions.size();
-	}
-	
-	public int getNoTerminals() {
-		return terminals.size();
-	}
-	
-	public int getNoSyntax() {
-		return functions.size() + terminals.size();
-	}
-	
-	public Random getRandom() {
-		return rGen;
-	}
-	
-	public SemanticModule getSemMod() {
-		return semMod;
-	}
+public interface Initialiser {
 
-	public ArrayList<Node> getSyntax() {
-		ArrayList allNodes = new ArrayList<Node>(terminals);
-		allNodes.addAll(functions);
-		return allNodes;
-	}
+	public List<CandidateProgram> getInitialPopulation();
 	
-	public List<FunctionNode<?>> getFunctions() {
-		return functions;
-	}
-	
-	public List<TerminalNode<?>> getTerminals() {
-		return terminals;
-	}
-	
-	public abstract ArrayList<CandidateProgram> buildFirstGeneration();
 }

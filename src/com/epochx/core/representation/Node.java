@@ -33,7 +33,7 @@ package com.epochx.core.representation;
  * @see FunctionNode
  * @see TerminalNode
  */
-public abstract class Node<TYPE> {
+public abstract class Node<TYPE> implements Cloneable {
 	
 	private Node<?>[] children;
 	
@@ -97,8 +97,9 @@ public abstract class Node<TYPE> {
 	}
 	
 
+
 	@Override
-	protected Object clone() throws CloneNotSupportedException {
+	public Object clone() throws CloneNotSupportedException {
 		Node<TYPE> clone = (Node<TYPE>) super.clone();
 		
 		clone.setChildren(children.clone());

@@ -34,7 +34,7 @@ public class NotFunction extends FunctionNode<Boolean> {
 	}
 	
 	public String toString() {
-		return "NOT";
+		return "NOT(" + getChild(0) + ')';
 	}
 
 }

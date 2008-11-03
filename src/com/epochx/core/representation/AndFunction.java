@@ -37,6 +37,6 @@ public class AndFunction extends FunctionNode<Boolean> {
 	}
 	
 	public String toString() {
-		return "AND";
+		return "AND(" + getChild(0) + ' ' + getChild(1) + ')';
 	}
 }

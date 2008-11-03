@@ -37,6 +37,6 @@ public class IfFunction extends FunctionNode<Boolean> {
 	}
 	
 	public String toString() {
-		return "IF";
+		return "IF(" + getChild(0) + ' ' + getChild(1) + ' ' + getChild(2) + ')';
 	}
 }

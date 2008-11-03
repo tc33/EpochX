@@ -51,11 +51,11 @@ public class TerminalNode<TYPE> extends Node<TYPE> {
 	}
 	
 	public String toString() {
-		return (String) value;
+		return value.toString();
 	}
 	
 	@Override
-	protected Object clone() throws CloneNotSupportedException {
+	public Object clone() throws CloneNotSupportedException {
 		TerminalNode<TYPE> clone = (TerminalNode) super.clone();
 		
 		clone.setValue(value);

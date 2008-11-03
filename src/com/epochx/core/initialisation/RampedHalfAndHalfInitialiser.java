@@ -19,17 +19,19 @@
  */
 package com.epochx.core.initialisation;
 
-import java.util.ArrayList;
+import java.util.*;
 
 import com.epochx.core.*;
-import com.epochx.core.representation.CandidateProgram;
-import com.epochx.core.representation.Node;
-import core.SemanticModule;
+import com.epochx.core.representation.*;
+
+import core.*;
 
 /**
  * 
  */
-public class RampedHalfAndHalfInitialiser extends Initialiser {
+public class RampedHalfAndHalfInitialiser implements Initialiser {
+	
+	private GPConfig config;
 	
 	private GrowInitialiser grow;
 	private FullInitialiser full;
@@ -46,7 +48,8 @@ public class RampedHalfAndHalfInitialiser extends Initialiser {
 	 * @throws IllegalArgumentException for the max depth being too small to work RHH
 	 */
 	public RampedHalfAndHalfInitialiser(GPConfig config, SemanticModule semMod) {
-		super(config, semMod);
+		this.config = config;
+		
 		// set up the grow and full parts
 		grow = new GrowInitialiser(config, semMod);
 		full = new FullInitialiser(config, semMod);
@@ -58,15 +61,16 @@ public class RampedHalfAndHalfInitialiser extends Initialiser {
 		}
 	}
 	
-	public ArrayList<CandidateProgram> buildFirstGeneration() {
+	public List<CandidateProgram> getInitialPopulation() {
 		
 		// initialise population of candidate programs
-		ArrayList<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(super.getPopSize());
+		int popSize = config.getPopulationSize();
+		List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
 		
 		// build population
-		int split = super.getPopSize() / 5;
-		int marker = super.getPopSize() / 5;
-		for(int i=0; i<super.getPopSize(); i++) {
+		int split = popSize / 5;
+		int marker = popSize / 5;
+		for(int i=0; i<popSize; i++) {
 			if(i>split) {
 				depth++;
 				split = split + marker;

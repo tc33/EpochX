@@ -39,6 +39,7 @@ public class GPController {
 		GPRun[] runs = new GPRun[config.getNoRuns()];
 		
 		for (GPRun r: runs) {
+			r = new GPRun();
 			r.run(config);
 		}
 		
@@ -47,7 +48,7 @@ public class GPController {
 	
 	public static void main(String[] args) {
 		GPConfig config = new GPConfig();
-		config.setDepth(6);
+		config.setDepth(4);
 		config.setPopulationSize(10);
 		config.setNoRuns(1);
 		
@@ -60,9 +61,9 @@ public class GPController {
 		
 		// Define terminals.
 		List<TerminalNode<?>> terminals = new ArrayList<TerminalNode<?>>();
-		functions.add(new AndFunction(null, null));
-		functions.add(new OrFunction(null, null));
-		functions.add(new NotFunction(null));
+		terminals.add(new TerminalNode<Double>(3d));
+		terminals.add(new TerminalNode<Double>(2d));
+		terminals.add(new TerminalNode<Double>(1d));
 		config.setTerminals(terminals);
 		
 		// Define initialiser.

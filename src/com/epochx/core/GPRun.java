@@ -19,7 +19,10 @@
  */
 package com.epochx.core;
 
+import java.util.*;
+
 import com.epochx.core.initialisation.*;
+import com.epochx.core.representation.*;
 
 /**
  * 
@@ -28,7 +31,9 @@ public class GPRun {
 
 	public void run(GPConfig config) {
 		Initialiser init = config.getInitialiser();
-		
-		
+		List<CandidateProgram> pop = init.getInitialPopulation();
+		for (CandidateProgram prog: pop) {
+			System.out.println("Program: " + prog);
+		}
 	}
 }

@@ -37,6 +37,6 @@ public class MulFunction extends FunctionNode<Double> {
 	}
 	
 	public String toString() {
-		return "MUL";
+		return "MUL(" + getChild(0) + ' ' + getChild(1) + ')';
 	}
 }

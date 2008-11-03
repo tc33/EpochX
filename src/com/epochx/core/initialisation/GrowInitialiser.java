@@ -29,22 +29,25 @@ import core.SemanticModule;
 /**
  * 
  */
-public class GrowInitialiser extends Initialiser {
+public class GrowInitialiser implements Initialiser {
+	
+	private GPConfig config;
 	
 	public GrowInitialiser(GPConfig config, SemanticModule semMod) {
-		super(config, semMod);
+		this.config = config;
 	}
 	
-	public ArrayList<CandidateProgram> buildFirstGeneration() {
+	public List<CandidateProgram> getInitialPopulation() {
 		
 		// initialise population of candidate programs
-		ArrayList<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(super.getPopSize());
+		int popSize = config.getPopulationSize();
+		List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
 		
 		// build population
-		for(int i=0; i<super.getPopSize(); i++) {
-            CandidateProgram candidate = new CandidateProgram(buildGrowNodeTree(super.getDepth()));
+		for(int i=0; i<popSize; i++) {
+            CandidateProgram candidate = new CandidateProgram(buildGrowNodeTree(config.getDepth()));
             while(firstGen.contains(candidate)) {
-                candidate = new CandidateProgram(buildGrowNodeTree(super.getDepth()));
+                candidate = new CandidateProgram(buildGrowNodeTree(config.getDepth()));
             }
             firstGen.add(candidate);
         }
@@ -57,11 +60,11 @@ public class GrowInitialiser extends Initialiser {
 		// make full node tree
 		
         // define top node
-        int ran = super.getRandom().nextInt(super.getNoFunctions());
-        Node top = super.getSyntax().get(ran);
+		int randomIndex = (int) Math.floor(Math.random() * config.getSyntax().size());
+        Node top = config.getSyntax().get(randomIndex);
         
         // recurse down each branch to depth using Grow mechanism
-        this.fillChildren(top, 1, super.getDepth());
+        this.fillChildren(top, 1, config.getDepth());
         
         // return top node
         return top;
@@ -73,16 +76,16 @@ public class GrowInitialiser extends Initialiser {
 			if(currentDepth<maxDepth) {
 				// fill children with functions or terminals
 				for(int i = 0; i<arity; i++) {
-					int ran = super.getRandom().nextInt(super.getNoFunctions());
-					Node child = super.getSyntax().get(ran);
+					int randomIndex = (int) Math.floor(Math.random() * config.getSyntax().size());
+					Node child = config.getSyntax().get(randomIndex);
 					topNode.setChild(child, i);
 					this.fillChildren(child, (currentDepth+1), maxDepth);
 				}
 			} else {
 				// fill children with terminals only
 				for(int i = 0; i<arity; i++) {
-					int ran = super.getRandom().nextInt(super.getNoTerminals());
-					Node child = super.getTerminals().get(ran);
+					int randomIndex = (int) Math.floor(Math.random() * config.getTerminals().size());
+					Node child = config.getTerminals().get(randomIndex);
 					topNode.setChild(child, i);
 				}
 			}

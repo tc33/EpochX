@@ -71,14 +71,12 @@ public abstract class Crossover {
 		return newPopulation;
 	}
 	
-	public CandidateProgram getParent1() {
-		parent1 = population.get((int) Math.floor(Math.random()*poolSize));
-		return parent1;
+	public List<CandidateProgram> getPoulePrograms() {
+		return population;
 	}
 	
-	public CandidateProgram getParent2() {
-		parent1 = population.get((int) Math.floor(Math.random()*poolSize));
-		return parent2;
+	public int getPouleSize() {
+		return poolSize;
 	}
 	
 	public SemanticModule getSemanticModule() {
@@ -104,5 +102,9 @@ public abstract class Crossover {
 	}
 	
 	public abstract void doCrossover();
+	
+	public double getProbOfCrossover() {
+		return pCrossover;
+	}
 
 }

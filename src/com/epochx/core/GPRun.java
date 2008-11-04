@@ -30,13 +30,15 @@ import com.epochx.core.representation.*;
 public class GPRun {
 
 	public void run(GPConfig config) {
+		
+		// Initialisation		
 		Initialiser init = config.getInitialiser();
 		GPProgramAnalyser progA = new GPProgramAnalyser();
 		List<CandidateProgram> pop = init.getInitialPopulation();
 		for (CandidateProgram prog: pop) {
 			System.out.println("Program: " + prog);
-			System.out.println("Depth = " + progA.getProgramDepth(prog.getRootNode()));
-			System.out.println("Length = " + progA.getProgramLength(prog.getRootNode()));
+			System.out.print("D = " + progA.getProgramDepth(prog.getRootNode()) + "\t");
+			System.out.println("L = " + progA.getProgramLength(prog.getRootNode()));
 		}
 	}
 }

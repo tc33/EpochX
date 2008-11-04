@@ -26,21 +26,15 @@ import com.epochx.core.representation.*;
  */
 public class GPProgramAnalyser {
 	
-	private int depth, currentDepth, length;
-	
-	public GPProgramAnalyser() {
-		// save for initialisation work for other functionality
-	}
-	
-	public int getProgramDepth(Node rootNode) {
+	public static int getProgramDepth(Node rootNode) {
 		// set depth and current depth to zero
-		currentDepth = 0;
-		depth = 0;
-		this.countDepth(rootNode, (currentDepth + 1));
+		int currentDepth = 0;
+		int depth = 0;
+		depth = GPProgramAnalyser.countDepth(rootNode, (currentDepth + 1), depth);
 		return depth;
 	}
 	
-	private void countDepth(Node rootNode, int currentDepth) {
+	private static int countDepth(Node rootNode, int currentDepth, int depth) {
 		// set current depth to maximum if need be
 		if(currentDepth>depth) {
 			depth = currentDepth;
@@ -50,28 +44,30 @@ public class GPProgramAnalyser {
 		if(arity>0) {
 			for(int i = 0; i<arity; i++) {
 				Node childNode = rootNode.getChild(i);
-				this.countDepth(childNode, (currentDepth + 1));
+				depth = GPProgramAnalyser.countDepth(childNode, (currentDepth + 1), depth);
 			}
 		}
+		return depth;
 	}
 	
-	public int getProgramLength(Node rootNode) {
-		length = 0;
-		this.countLength(rootNode);
+	public static int getProgramLength(Node rootNode) {
+		int length = 0;
+		length = GPProgramAnalyser.countLength(rootNode, length);
 		return length;
 	}
 	
-	private void countLength(Node rootNode) {
+	private static int countLength(Node rootNode, int length) {
 		// increment length and count through children
-		length = length + 1;
+		length++;
 		// get children and recurse
 		int arity = rootNode.getArity();
 		if(arity>0) {
 			for(int i = 0; i<arity; i++) {
 				Node childNode = rootNode.getChild(i);
-				this.countLength(childNode);
+				length = GPProgramAnalyser.countLength(childNode, length);
 			}
 		}
+		return length;
 	}
 
 }

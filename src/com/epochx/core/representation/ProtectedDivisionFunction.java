@@ -37,8 +37,9 @@ public class ProtectedDivisionFunction extends FunctionNode<Double> {
 		}
 	}
 	
-	public String toString() {
-		return "PDIV(" + getChild(0) + ' ' + getChild(1) + ')';
+	@Override
+	public String getFunctionName() {
+		return "PDIV";
 	}
 	
 	@Override

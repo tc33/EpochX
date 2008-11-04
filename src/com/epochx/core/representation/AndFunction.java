@@ -35,11 +35,12 @@ public class AndFunction extends FunctionNode<Boolean> {
 		
 		return c1 && c2;
 	}
-	
-	public String toString() {
-		return "AND(" + getChild(0) + ' ' + getChild(1) + ')';
+
+	@Override
+	public String getFunctionName() {
+		return "AND";
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		return super.equals(obj) && (obj instanceof AndFunction);

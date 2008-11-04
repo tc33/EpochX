@@ -36,8 +36,9 @@ public class AddFunction extends FunctionNode<Double> {
 		return c1 + c2;
 	}
 	
-	public String toString() {		
-		return "ADD(" + getChild(0) + ' ' + getChild(1) + ')';
+	@Override
+	public String getFunctionName() {
+		return "ADD";
 	}
 
 	@Override

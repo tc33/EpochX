@@ -65,7 +65,17 @@ public class TerminalNode<TYPE> extends Node<TYPE> {
 
 	@Override
 	public boolean equals(Object obj) {
-		return (obj instanceof TerminalNode) 
-				&& ((TerminalNode) obj).value.equals(this.value);
+		System.out.println("TERMINAL");
+		boolean inst = (obj instanceof TerminalNode);
+		if (!inst)
+			return false;
+		TYPE objVal = ((TerminalNode<TYPE>) obj).value;
+		TYPE thisVal = this.value;
+		return thisVal.equals(objVal);
+	}
+	
+	@Override
+	public int hashCode() {
+		return super.hashCode();
 	}
 }

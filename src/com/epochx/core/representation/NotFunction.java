@@ -33,10 +33,11 @@ public class NotFunction extends FunctionNode<Boolean> {
 		return !((Boolean) getChild(0).evaluate()).booleanValue();
 	}
 	
-	public String toString() {
-		return "NOT(" + getChild(0) + ')';
+	@Override
+	public String getFunctionName() {
+		return "NOT";
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		return super.equals(obj) && (obj instanceof NotFunction);

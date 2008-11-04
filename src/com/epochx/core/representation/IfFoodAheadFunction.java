@@ -53,10 +53,11 @@ public class IfFoodAheadFunction extends FunctionNode<Action> {
 		return Action.DO_NOTHING;
 	}
 	
-	public String toString() {
-		return "IF-FOOD-AHEAD(" + getChild(0) + ' ' + getChild(1) + ')';
+	@Override
+	public String getFunctionName() {
+		return "IF-FOOD-AHEAD";
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		//TODO This should probably check it has the same ant and landscape too.

@@ -36,10 +36,11 @@ public class IfFunction extends FunctionNode<Boolean> {
 		}
 	}
 	
-	public String toString() {
-		return "IF(" + getChild(0) + ' ' + getChild(1) + ' ' + getChild(2) + ')';
+	@Override
+	public String getFunctionName() {
+		return "IF";
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		return super.equals(obj) && (obj instanceof IfFunction);

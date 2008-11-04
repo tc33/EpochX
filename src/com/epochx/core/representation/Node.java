@@ -186,14 +186,36 @@ public abstract class Node<TYPE> implements Cloneable {
 	@Override
 	public boolean equals(Object obj) {
 		boolean equal = true;
+		
 		if (obj instanceof Node) {
 			Node<TYPE> n = (Node<TYPE>) obj;
+			
+			if (n.getArity() != this.getArity()) {
+				equal = false;
+			}
+			
 			for(int i=0; i<n.getArity() && equal; i++) {
-				equal = n.getChild(i).equals(this.getChild(i));
+				Node thatChild = n.getChild(i);
+				Node thisChild = this.getChild(i);
+				
+				if ((thisChild != null) ^ (thatChild != null)) {
+					equal = false;
+				} else {
+					equal = ((thisChild == null) && (thatChild == null) || thisChild.equals(thatChild));
+				}
 			}
 		} else {
 			equal = false;
 		}
 		return equal;
+	}	
+	
+	@Override
+	public int hashCode() {
+		int result = 17;
+		for (Node<?> child: children) {
+			result = 37 * result + child.hashCode();
+		}
+		return result;
 	}
 }

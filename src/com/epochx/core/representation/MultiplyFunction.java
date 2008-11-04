@@ -36,10 +36,11 @@ public class MultiplyFunction extends FunctionNode<Double> {
 		return c1 * c2;
 	}
 	
-	public String toString() {
-		return "MUL(" + getChild(0) + ' ' + getChild(1) + ')';
+	@Override
+	public String getFunctionName() {
+		return "MUL";
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		return super.equals(obj) && (obj instanceof MultiplyFunction);

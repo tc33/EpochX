@@ -33,8 +33,9 @@ public class SubtractFunction extends FunctionNode<Double> {
 		return c1 - c2;
 	}
 	
-	public String toString() {
-		return "SUB(" + getChild(0) + ' ' + getChild(1) + ')';
+	@Override
+	public String getFunctionName() {
+		return "SUB";
 	}
 
 	@Override

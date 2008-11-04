@@ -28,4 +28,19 @@ public abstract class FunctionNode<TYPE> extends Node<TYPE> {
 		super(children);
 	}
 	
+	public abstract String getFunctionName();
+	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder(getFunctionName());
+		builder.append('(');
+		Node[] children = getChildren();
+		for (int i=0, n=children.length; i<n; i++) {
+			Node c = children[i];
+			if (i!=0) builder.append(' ');
+			builder.append(c.toString());
+		}
+		builder.append(')');
+		return builder.toString();
+	}
 }

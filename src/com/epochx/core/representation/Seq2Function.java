@@ -36,8 +36,9 @@ public class Seq2Function extends FunctionNode<Action> {
 		return Action.DO_NOTHING;
 	}
 	
-	public String toString() {
-		return "SEQ2(" + getChild(0) + ' ' + getChild(1) + ')';
+	@Override
+	public String getFunctionName() {
+		return "SEQ2";
 	}
 	
 	@Override

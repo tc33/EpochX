@@ -53,6 +53,12 @@ public class CandidateProgram<TYPE> {
 		return rootNode.toString();
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		System.out.println("CANDIDATE PROGRAM");
+		return rootNode.equals(((CandidateProgram<TYPE>) obj).rootNode);
+	}
+	
 	public Node<TYPE> getRootNode() {
 		return rootNode;
 	}

@@ -37,8 +37,8 @@ public class GPRun {
 		List<CandidateProgram> pop = init.getInitialPopulation();
 		for (CandidateProgram prog: pop) {
 			System.out.println("Program: " + prog);
-			System.out.print("D = " + progA.getProgramDepth(prog.getRootNode()) + "\t");
-			System.out.println("L = " + progA.getProgramLength(prog.getRootNode()));
+			System.out.print("D = " + progA.getProgramDepth(prog) + "\t");
+			System.out.println("L = " + progA.getProgramLength(prog));
 		}
 	}
 }

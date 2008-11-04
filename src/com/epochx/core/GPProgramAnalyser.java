@@ -26,7 +26,8 @@ import com.epochx.core.representation.*;
  */
 public class GPProgramAnalyser {
 	
-	public static int getProgramDepth(Node rootNode) {
+	public static int getProgramDepth(CandidateProgram program) {
+		Node rootNode = program.getRootNode();
 		// set depth and current depth to zero
 		int currentDepth = 0;
 		int depth = 0;
@@ -50,7 +51,8 @@ public class GPProgramAnalyser {
 		return depth;
 	}
 	
-	public static int getProgramLength(Node rootNode) {
+	public static int getProgramLength(CandidateProgram program) {
+		Node rootNode = program.getRootNode();
 		int length = 0;
 		length = GPProgramAnalyser.countLength(rootNode, length);
 		return length;

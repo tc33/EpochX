@@ -43,8 +43,7 @@ public class FullInitialiser implements Initialiser {
 		int popSize = config.getPopulationSize();
 		List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
 		
-		// Build population.
-		
+		// Build population		
 		for(int i=0; i<popSize; i++) {
 			CandidateProgram candidate;
 			do {
@@ -57,9 +56,7 @@ public class FullInitialiser implements Initialiser {
 		return firstGen;
 	}
 	
-	public Node buildFullNodeTree(int depth) {
-		// make full node tree
-		
+	public Node buildFullNodeTree(int depth) {		
         // define top node form functions
         int randomIndex = (int) Math.floor(Math.random() * config.getFunctions().size());
         Node top = null;

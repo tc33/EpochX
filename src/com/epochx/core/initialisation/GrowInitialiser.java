@@ -57,11 +57,15 @@ public class GrowInitialiser implements Initialiser {
 	}
 	
 	public Node buildGrowNodeTree(int depth) {		
-		// make full node tree
-		
         // define top node
 		int randomIndex = (int) Math.floor(Math.random() * config.getSyntax().size());
-        Node top = config.getSyntax().get(randomIndex);
+		Node top = null;
+		try {
+			top = (Node) config.getSyntax().get(randomIndex).clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         
         // recurse down each branch to depth using Grow mechanism
         this.fillChildren(top, 1, config.getDepth());
@@ -73,11 +77,17 @@ public class GrowInitialiser implements Initialiser {
 	public void fillChildren(Node topNode, int currentDepth, int maxDepth) {
 		int arity = topNode.getArity();
 		if(arity>0) {
-			if(currentDepth<maxDepth) {
+			if(currentDepth<maxDepth-1) {
 				// fill children with functions or terminals
 				for(int i = 0; i<arity; i++) {
 					int randomIndex = (int) Math.floor(Math.random() * config.getSyntax().size());
-					Node child = config.getSyntax().get(randomIndex);
+					Node child = null;
+					try {
+						child = (Node) config.getSyntax().get(randomIndex).clone();
+					} catch (CloneNotSupportedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					topNode.setChild(child, i);
 					this.fillChildren(child, (currentDepth+1), maxDepth);
 				}
@@ -85,7 +95,13 @@ public class GrowInitialiser implements Initialiser {
 				// fill children with terminals only
 				for(int i = 0; i<arity; i++) {
 					int randomIndex = (int) Math.floor(Math.random() * config.getTerminals().size());
-					Node child = config.getTerminals().get(randomIndex);
+					Node child = null;
+					try {
+						child = (Node) config.getTerminals().get(randomIndex).clone();
+					} catch (CloneNotSupportedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					topNode.setChild(child, i);
 				}
 			}

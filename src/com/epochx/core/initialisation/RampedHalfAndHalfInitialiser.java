@@ -54,8 +54,8 @@ public class RampedHalfAndHalfInitialiser implements Initialiser {
 		grow = new GrowInitialiser(config, semMod);
 		full = new FullInitialiser(config, semMod);
 		// modify depth for staged increase as per Koza
-		if(depth>=6) {
-			this.depth = depth - 4;
+		if(config.getDepth()>=6) {
+			this.depth = config.getDepth() - 4;
 		} else {
 			throw new IllegalArgumentException("MAX DEPTH TOO SMALL FOR RH+H");
 		}

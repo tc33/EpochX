@@ -48,12 +48,13 @@ public class GPController {
 	
 	public static void main(String[] args) {
 		GPConfig config = new GPConfig();
-		config.setDepth(4);
-		config.setPopulationSize(10);
+		config.setDepth(6);
+		config.setPopulationSize(25);
 		config.setNoRuns(1);
 		
 		// Define functions.
 		List<FunctionNode<?>> functions = new ArrayList<FunctionNode<?>>();
+		functions.add(new IfFunction(null, null, null));
 		functions.add(new AndFunction(null, null));
 		functions.add(new OrFunction(null, null));
 		functions.add(new NotFunction(null));
@@ -61,13 +62,16 @@ public class GPController {
 		
 		// Define terminals.
 		List<TerminalNode<?>> terminals = new ArrayList<TerminalNode<?>>();
-		terminals.add(new TerminalNode<Double>(3d));
-		terminals.add(new TerminalNode<Double>(2d));
-		terminals.add(new TerminalNode<Double>(1d));
+		terminals.add(new TerminalNode<String>("D3"));
+		terminals.add(new TerminalNode<String>("D2"));
+		terminals.add(new TerminalNode<String>("D1"));
+		terminals.add(new TerminalNode<String>("D0"));
+		terminals.add(new TerminalNode<String>("A1"));
+		terminals.add(new TerminalNode<String>("A0"));
 		config.setTerminals(terminals);
 		
 		// Define initialiser.
-		Initialiser init = new FullInitialiser(config, null);
+		Initialiser init = new GrowInitialiser(config, null);
 		config.setInitialiser(init);
 		
 		// Run.

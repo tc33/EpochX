@@ -181,8 +181,7 @@ public abstract class Node<TYPE> implements Cloneable {
 		clone.setChildren(this.children.clone());
 		
 		return clone;
-	}
-	
+	}	
 
 	@Override
 	public boolean equals(Object obj) {

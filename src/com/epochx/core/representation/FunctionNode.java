@@ -24,10 +24,8 @@ package com.epochx.core.representation;
  */
 public abstract class FunctionNode<TYPE> extends Node<TYPE> {
 
-
 	public FunctionNode(Node<TYPE> ... children) {
 		super(children);
 	}
-	
 	
 }

@@ -19,6 +19,8 @@
  */
 package com.epochx.core.representation;
 
+import com.epochx.core.GPProgramAnalyser;
+
 /**
  * A <code>CandidateProgram</code> encapsulates an individual program within a 
  * generation of a GP run.
@@ -32,6 +34,7 @@ package com.epochx.core.representation;
 public class CandidateProgram<TYPE> {
 	
 	private Node<TYPE> rootNode;
+	private int depth, length;
 	
 	/**
 	 * Constructs a new program individual where <code>rootNode</code> is the 
@@ -43,10 +46,11 @@ public class CandidateProgram<TYPE> {
 	 */
 	public CandidateProgram(Node<TYPE> rootNode) {
 		this.rootNode = rootNode;
+		this.depth = -1;
+		this.length = -1;
 	}
 	
-	// TODO Evaluation Code
-	
+	// TODO Evaluation Code	
 	
 	@Override
 	public String toString() {
@@ -61,5 +65,24 @@ public class CandidateProgram<TYPE> {
 	
 	public Node<TYPE> getRootNode() {
 		return rootNode;
+	}
+	
+	public int getProgramDepth() {
+		if(depth==-1) {
+			depth = GPProgramAnalyser.getProgramDepth(this);
+		}
+		return depth;
+	}
+	
+	public void clearMetrics() {
+		depth = -1;
+		length = -1;
+	}
+	
+	public int getProgramLength() {
+		if(length==-1) {
+			length = GPProgramAnalyser.getProgramLength(this);
+		}
+		return length;
 	}
 }

@@ -19,7 +19,7 @@
  */
 package com.epochx.core.representation;
 
-import com.epochx.core.GPProgramAnalyser;
+import com.epochx.core.*;
 
 /**
  * A <code>CandidateProgram</code> encapsulates an individual program within a 
@@ -31,10 +31,9 @@ import com.epochx.core.GPProgramAnalyser;
  * CandidateProgram allows the retrieval of meta-data about the program.
  * 
  */
-public class CandidateProgram<TYPE> {
+public class CandidateProgram<TYPE> implements Cloneable {
 	
 	private Node<TYPE> rootNode;
-	private int depth, length;
 	
 	/**
 	 * Constructs a new program individual where <code>rootNode</code> is the 
@@ -46,11 +45,10 @@ public class CandidateProgram<TYPE> {
 	 */
 	public CandidateProgram(Node<TYPE> rootNode) {
 		this.rootNode = rootNode;
-		this.depth = -1;
-		this.length = -1;
 	}
 	
-	// TODO Evaluation Code	
+	// TODO Evaluation Code
+	
 	
 	@Override
 	public String toString() {
@@ -59,7 +57,6 @@ public class CandidateProgram<TYPE> {
 	
 	@Override
 	public boolean equals(Object obj) {
-		System.out.println("CANDIDATE PROGRAM");
 		return rootNode.equals(((CandidateProgram<TYPE>) obj).rootNode);
 	}
 	
@@ -67,22 +64,32 @@ public class CandidateProgram<TYPE> {
 		return rootNode;
 	}
 	
-	public int getProgramDepth() {
-		if(depth==-1) {
-			depth = GPProgramAnalyser.getProgramDepth(this);
-		}
-		return depth;
+	public Node<?> getNthNode(int n) {
+		int size = GPProgramAnalyser.getProgramLength(this);
+		//if(n > size)
+		//	throw new IndexOutOfBoundsException("Index: "+n+", Size: "+size);
+			
+		return rootNode.getNthNode(n);
 	}
 	
-	public void clearMetrics() {
-		depth = -1;
-		length = -1;
+	public void setNthNode(Node newNode, int n) {
+		if (n == 0) {
+			rootNode = newNode;
+		}
+		
+		int size = GPProgramAnalyser.getProgramLength(this);
+		//if(n > size)
+		//	throw new IndexOutOfBoundsException("Index: "+n+", Size: "+size);
+		
+		rootNode.setNthNode(newNode, n);
 	}
 	
-	public int getProgramLength() {
-		if(length==-1) {
-			length = GPProgramAnalyser.getProgramLength(this);
-		}
-		return length;
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		CandidateProgram<TYPE> clone = (CandidateProgram<TYPE>) super.clone();
+		
+		clone.rootNode = (Node<TYPE>) this.rootNode.clone();
+		
+		return clone;
 	}
 }

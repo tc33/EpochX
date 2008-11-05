@@ -33,12 +33,24 @@ public class GPRun {
 		
 		// Initialisation		
 		Initialiser init = config.getInitialiser();
-		GPProgramAnalyser progA = new GPProgramAnalyser();
 		List<CandidateProgram> pop = init.getInitialPopulation();
+		
+		System.out.println("***********Initial Population:");
 		for (CandidateProgram prog: pop) {
-			System.out.println("Program: " + prog);
-			System.out.print("D = " + progA.getProgramDepth(prog) + "\t");
-			System.out.println("L = " + progA.getProgramLength(prog));
+			System.out.println("---------------------------------------");
+			System.out.println(prog);
+			System.out.println("    depth = " + GPProgramAnalyser.getProgramDepth(prog) + "\t");
+			System.out.println("    length = " + GPProgramAnalyser.getProgramLength(prog));
+		}
+		
+		pop = config.getCrossover().crossover(pop);
+		System.out.println();
+		System.out.println("***********Crossed Population:");
+		for (CandidateProgram prog: pop) {
+			System.out.println("---------------------------------------");
+			System.out.println(prog);
+			System.out.println("    depth = " + GPProgramAnalyser.getProgramDepth(prog) + "\t");
+			System.out.println("    length = " + GPProgramAnalyser.getProgramLength(prog));
 		}
 	}
 }

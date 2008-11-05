@@ -21,6 +21,7 @@ package com.epochx.core;
 
 import java.util.*;
 
+import com.epochx.core.crossover.*;
 import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
 
@@ -30,21 +31,24 @@ import com.epochx.core.representation.*;
 public class GPConfig {
 
 	private Initialiser initialiser;
-	//private Crossover crossover;
+	private Crossover crossover;
 	//private Mutator mutator;
 	
 	private int noRuns;
 	private int noGenerations;
 	private int populationSize;
-	private int depth;
+	private int maxDepth;
+	private double crossoverProbability;
+	private int reproductionProbability;
 	
 	private List<TerminalNode<?>> terminals;
 	private List<FunctionNode<?>> functions;
 	
 	public GPConfig() {
-		
+		// Set defaults.
+		crossoverProbability = 1;
 	}
-
+	
 	/**
 	 * @return the initialiser
 	 */
@@ -138,14 +142,58 @@ public class GPConfig {
 	/**
 	 * @return the depth
 	 */
-	public int getDepth() {
-		return depth;
+	public int getMaxDepth() {
+		return maxDepth;
 	}
 
 	/**
-	 * @param depth the depth to set
+	 * @param maxDepth the depth to set
 	 */
-	public void setDepth(int depth) {
-		this.depth = depth;
+	public void setMaxDepth(int maxDepth) {
+		this.maxDepth = maxDepth;
 	}
+	
+
+	/**
+	 * @return the crossover
+	 */
+	public Crossover getCrossover() {
+		return crossover;
+	}
+
+	/**
+	 * @param crossover the crossover to set
+	 */
+	public void setCrossover(Crossover crossover) {
+		this.crossover = crossover;
+	}
+
+	/**
+	 * @param crossoverProbability the crossoverProbability to set
+	 */
+	public void setCrossoverProbability(double crossoverProbability) {
+		this.crossoverProbability = crossoverProbability;
+	}
+
+	/**
+	 * @return the crossoverProbability
+	 */
+	public double getCrossoverProbability() {
+		return crossoverProbability;
+	}
+
+	/**
+	 * @param reproductionProbability the reproductionProbability to set
+	 */
+	public void setReproductionProbability(int reproductionProbability) {
+		this.reproductionProbability = reproductionProbability;
+	}
+
+	/**
+	 * @return the reproductionProbability
+	 */
+	public int getReproductionProbability() {
+		return reproductionProbability;
+	}
+
 }

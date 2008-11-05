@@ -47,7 +47,7 @@ public class FullInitialiser implements Initialiser {
 		for(int i=0; i<popSize; i++) {
 			CandidateProgram candidate;
 			do {
-            	candidate = new CandidateProgram(buildFullNodeTree(config.getDepth()));
+            	candidate = new CandidateProgram(buildFullNodeTree(config.getMaxDepth()));
 			} while (firstGen.contains(candidate));
 			firstGen.add(candidate);
         }
@@ -68,13 +68,13 @@ public class FullInitialiser implements Initialiser {
 		}
         
         // recurse down each branch to depth
-		fillChildren(top, 1, config.getDepth());      
+		fillChildren(top, 1, config.getMaxDepth());      
         
         // return top node
         return top;
 	}
 	
-	public void fillChildren(Node topNode, int currentDepth, int maxDepth) {
+	private void fillChildren(Node topNode, int currentDepth, int maxDepth) {
 		int arity = topNode.getArity();
 		if(currentDepth<maxDepth-1) {
 			// fill children with functions only

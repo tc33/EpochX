@@ -21,6 +21,7 @@ package com.epochx.core;
 
 import java.util.*;
 
+import com.epochx.core.crossover.*;
 import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
 
@@ -48,7 +49,7 @@ public class GPController {
 	
 	public static void main(String[] args) {
 		GPConfig config = new GPConfig();
-		config.setDepth(6);
+		config.setMaxDepth(6);
 		config.setPopulationSize(25);
 		config.setNoRuns(1);
 		
@@ -73,6 +74,10 @@ public class GPController {
 		// Define initialiser.
 		Initialiser init = new GrowInitialiser(config, null);
 		config.setInitialiser(init);
+		
+		// Define crossover.
+		Crossover crossover = new UniformPointCrossover(config);
+		config.setCrossover(crossover);
 		
 		// Run.
 		GPController controller = new GPController(config);

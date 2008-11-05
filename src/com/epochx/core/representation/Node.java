@@ -19,6 +19,8 @@
  */
 package com.epochx.core.representation;
 
+import java.util.*;
+
 import com.epochx.core.*;
 
 /**
@@ -39,7 +41,6 @@ public abstract class Node<TYPE> implements Cloneable {
 	
 	private Node<?>[] children;
 	private int nodeCounter;
-	private GPProgramAnalyser gPA;
 	
 	/**
 	 * 
@@ -81,80 +82,73 @@ public abstract class Node<TYPE> implements Cloneable {
 		return children[index];
 	}
 	
-	public Node<?> getNthNode(Node rootNode, int n) {
-		// check n is not greater than length
-		gPA = new GPProgramAnalyser();
-		if(n>gPA.getProgramLength(rootNode)) {
-			throw new IllegalArgumentException("Nth NODE IS GREATER THAN NUMBER OF NODES");
-		} else {
-			nodeCounter = 0;
-			int arity = rootNode.getArity();
-			if(arity>0) {
-				for(int i = 0; i<arity; i++) {
-					nodeCounter++;
-					if(nodeCounter==n) {
-						return this.getChild(i);
-					} else {
-						return this.findNthNode(rootNode.getChild(i), n);
-					}
-				}
-			}
-		}
-		return null;
+	/**
+	 * Retrieves the nth node from the tree when considering this node to be 
+	 * the root - that is the 0th node. The tree is traversed in pre-order.
+	 * @param n
+	 * @return
+	 */
+	public Node<?> getNthNode(int n) {
+		return getNthNode(n, 0);
 	}
 	
-	private Node<?> findNthNode(Node rootNode, int n) {
-		int arity = rootNode.getArity();			
-		if(arity>0) {
-			for(int i = 0; i<arity; i++) {
-				nodeCounter++;
-				if(nodeCounter==n) {
-					return this.getChild(i);
-				} else {
-					return this.findNthNode(rootNode.getChild(i), n);
-				}
+	/*
+	 * Recursive helper for the public getNthNode(int).
+	 */
+	private Node<?> getNthNode(int n, int current) {
+		if (n == current)
+			return this;
+		
+		Node node = null;
+		for (Node child: children) {
+			int childLength = GPProgramAnalyser.getProgramLength(child);
+			
+			// Only look at the subtree if it contains the right range of nodes.
+			if (n <= childLength + current) {
+				node = child.getNthNode(n, current+1);
+				if (node != null) break;
 			}
+			
+			current += childLength;
 		}
-		return null;
+		
+		return node;
 	}
 	
-	public void setNthNode(Node rootNode, Node newNode, int n) {
-		// check n is not greater than length
-		gPA = new GPProgramAnalyser();
-		if(n>gPA.getProgramLength(rootNode)) {
-			throw new IllegalArgumentException("Nth NODE IS GREATER THAN NUMBER OF NODES");
-		} else {
-			nodeCounter = 0;
-			int arity = rootNode.getArity();
-			if(arity>0) {
-				for(int i = 0; i<arity; i++) {
-					nodeCounter++;
-					if(nodeCounter==n) {
-						this.setChild(newNode, i);
-					} else {
-						this.replaceNthNode(rootNode.getChild(i), newNode, n);
-					}
-				}
-			} else {
-				rootNode = newNode;
-			}
-		}
+	/**
+	 * Set the nth node in the tree when considering this Node to be the root
+	 * node - that is, the 0th node. The tree is traversed in pre-order.
+	 * @param rootNode
+	 * @param newNode
+	 * @param n
+	 */
+	public void setNthNode(Node newNode, int n) {		
+		setNthNode(newNode, n, 0);
 	}
 	
-	private void replaceNthNode(Node rootNode, Node newNode, int n) {
-		int arity = rootNode.getArity();			
-		if(arity>0) {
-			for(int i = 0; i<arity; i++) {
-				nodeCounter++;
-				if(nodeCounter==n) {
-					this.setChild(newNode, i);
-				} else {
-					this.replaceNthNode(rootNode.getChild(i), newNode, n);
-				}
+	/*
+	 * Recursive helper for the public setNthNode(Node, int).
+	 */
+	private void setNthNode(Node newNode, int n, int current) {
+		int arity = getArity();
+		for (int i=0; i<arity; i++) {
+			if (current+1 == n) {
+				setChild(newNode, i);
+				break;
 			}
+			
+			Node child = getChild(i);
+			int childLength = GPProgramAnalyser.getProgramLength(child);
+			
+			// Only look at the subtree if it contains the right range of nodes.
+			if (n <= childLength + current) {
+				child.setNthNode(newNode, n, current+1);
+			}
+			
+			current += childLength;
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param child

@@ -17,7 +17,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.epochx.core.crossover;
+package com.epochx.core.selection.parent;
 
 import java.util.*;
 
@@ -26,10 +26,11 @@ import com.epochx.core.representation.*;
 /**
  * 
  */
-public interface Crossover {
+public class RandomParentSelector implements ParentSelector {
 
-	public List<CandidateProgram> crossover(List<CandidateProgram> pop);
-	
-	public CandidateProgram[] crossover(CandidateProgram parent1, CandidateProgram parent2);
-	
+	@Override
+	public CandidateProgram getParent(List<CandidateProgram> pop) {		
+		return pop.get((int) Math.floor(Math.random()*pop.size()));
+	}
+
 }

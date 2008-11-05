@@ -65,7 +65,6 @@ public class TerminalNode<TYPE> extends Node<TYPE> {
 
 	@Override
 	public boolean equals(Object obj) {
-		System.out.println("TERMINAL");
 		boolean inst = (obj instanceof TerminalNode);
 		if (!inst)
 			return false;

@@ -33,6 +33,10 @@ public class FullInitialiser implements Initialiser {
 	
 	private GPConfig config;
 	
+	public FullInitialiser(GPConfig config) {
+		this(config, null);
+	}
+	
 	public FullInitialiser(GPConfig config, SemanticModule semMod) {
 		this.config = config;
 	}

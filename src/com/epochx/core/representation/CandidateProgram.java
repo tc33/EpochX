@@ -47,8 +47,9 @@ public class CandidateProgram<TYPE> implements Cloneable {
 		this.rootNode = rootNode;
 	}
 	
-	// TODO Evaluation Code
-	
+	public TYPE evaluate() {
+		return rootNode.evaluate();
+	}
 	
 	@Override
 	public String toString() {

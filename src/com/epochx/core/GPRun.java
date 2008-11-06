@@ -29,28 +29,40 @@ import com.epochx.core.representation.*;
  */
 public class GPRun {
 
-	public void run(GPConfig config) {
-		
+	private GPModel model;
+	
+	public void run(GPModel model) {
+		this.model = model;
+		GPConfig config = model.getConfiguration();
+				
 		// Initialisation		
 		Initialiser init = config.getInitialiser();
 		List<CandidateProgram> pop = init.getInitialPopulation();
+		outputGeneration(0, pop);
 		
-		System.out.println("***********Initial Population:");
-		for (CandidateProgram prog: pop) {
-			System.out.println("---------------------------------------");
-			System.out.println(prog);
-			System.out.println("    depth = " + GPProgramAnalyser.getProgramDepth(prog) + "\t");
-			System.out.println("    length = " + GPProgramAnalyser.getProgramLength(prog));
+		for (int i=1; i<=config.getNoGenerations(); i++) {
+			pop = config.getCrossover().crossover(pop);
+			outputGeneration(i, pop);
 		}
+	}
+	
+	/*
+	 * TEMPORARY LOGGING - need to setup some proper logging soon.
+	 */
+	private void outputGeneration(int i, List<CandidateProgram> programs) {
+		System.out.println("######################################################");
+		System.out.println("Population #"+i+":");
 		
-		pop = config.getCrossover().crossover(pop);
-		System.out.println();
-		System.out.println("***********Crossed Population:");
-		for (CandidateProgram prog: pop) {
-			System.out.println("---------------------------------------");
-			System.out.println(prog);
-			System.out.println("    depth = " + GPProgramAnalyser.getProgramDepth(prog) + "\t");
-			System.out.println("    length = " + GPProgramAnalyser.getProgramLength(prog));
+		for (CandidateProgram p: programs) {
+			outputProgram(p);
 		}
+	}
+	
+	private void outputProgram(CandidateProgram program) {
+		System.out.println("------------------------------------------------------");
+		System.out.println(program);
+		System.out.println(model.getFitness(program));
+		System.out.println("    depth = " + GPProgramAnalyser.getProgramDepth(program));
+		System.out.println("    length = " + GPProgramAnalyser.getProgramLength(program));
 	}
 }

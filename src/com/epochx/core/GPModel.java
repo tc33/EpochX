@@ -19,26 +19,16 @@
  */
 package com.epochx.core;
 
+import com.epochx.core.representation.*;
+
 
 /**
  * 
  */
-public class GPController {
+public interface GPModel<TYPE> {
+
+	public GPConfig getConfiguration();
 	
-	private GPModel model;
+	public double getFitness(CandidateProgram<TYPE> program);	
 	
-	public GPController(GPModel model) {
-		this.model = model;
-	}
-	
-	public GPRun[] run() {
-		GPRun[] runs = new GPRun[model.getConfiguration().getNoRuns()];
-		
-		for (GPRun r: runs) {
-			r = new GPRun();
-			r.run(model);
-		}
-		
-		return runs;
-	}
 }

@@ -24,7 +24,13 @@ package com.epochx.core.representation;
  */
 public class TerminalNode<TYPE> extends Node<TYPE> {
 	
+	//private Variable<TYPE> variable;
 	private TYPE value;
+	
+	/*public TerminalNode(Variable<TYPE> variable) {
+		super();
+		this.variable = variable;
+	}*/
 	
 	public TerminalNode(TYPE value) {
 		super();
@@ -41,24 +47,41 @@ public class TerminalNode<TYPE> extends Node<TYPE> {
 	/**
 	 * @param value the type to set
 	 */
-	public void setValue(TYPE value) {
+	/*
+	 * THIS IS COMMENTED OUT BECAUSE I'M NOT SURE IT'S NEEDED. MAYBE TERMINALS 
+	 * SHOULD BE IMMUTABLE.
+	 * public void setValue(TYPE value) {
 		this.value = value;
-	}
+		this.variable = null;
+	}*/
+	
+	/*public Variable<TYPE> getVariable() {
+		return variable;
+	}*/
 
 	@Override
 	public TYPE evaluate() {
-		return value;
+		//if (variable != null) {
+		//	return variable.getValue();
+		//} else {
+			return value;
+		//}
 	}
 	
 	public String toString() {
-		return value.toString();
+		//if (variable != null) {
+		//	return variable.toString();
+		//} else {
+			return value.toString();
+		//}
 	}
 	
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		TerminalNode<TYPE> clone = (TerminalNode) super.clone();
 		
-		clone.setValue(value);
+		clone.value = this.value;
+		//clone.variable = this.variable;
 		
 		return clone;
 	}
@@ -70,7 +93,16 @@ public class TerminalNode<TYPE> extends Node<TYPE> {
 			return false;
 		TYPE objVal = ((TerminalNode<TYPE>) obj).value;
 		TYPE thisVal = this.value;
-		return thisVal.equals(objVal);
+		//Variable<TYPE> objVar = ((TerminalNode<TYPE>) obj).variable;
+		//Variable<TYPE> thisVar = this.variable;
+		
+		//if (((objVal == null) ^ (thisVal == null)) || ((objVar == null) ^ (thisVar == null))) {
+		//	return false;
+		//} else if (((thisVal == null) && (objVal == null)) || ((thisVar == null) && (objVar == null))) {
+		//	return true;
+		//} else {
+			return (thisVal == objVal) || thisVal.equals(objVal);// && objVar.equals(thisVar);
+		//}
 	}
 	
 	@Override

@@ -39,14 +39,25 @@ public class GPConfig {
 	private int populationSize;
 	private int maxDepth;
 	private double crossoverProbability;
-	private int reproductionProbability;
+	private double reproductionProbability;
 	
 	private List<TerminalNode<?>> terminals;
 	private List<FunctionNode<?>> functions;
 	
 	public GPConfig() {
 		// Set defaults.
+		noRuns = 1;
+		noGenerations = 1;
+		populationSize = 10;
+		maxDepth = 4;
 		crossoverProbability = 1;
+		reproductionProbability = 0;
+		
+		terminals = new ArrayList<TerminalNode<?>>();
+		functions = new ArrayList<FunctionNode<?>>();
+		
+		initialiser = new FullInitialiser(this);
+		crossover = new UniformPointCrossover(this);
 	}
 	
 	/**
@@ -185,14 +196,14 @@ public class GPConfig {
 	/**
 	 * @param reproductionProbability the reproductionProbability to set
 	 */
-	public void setReproductionProbability(int reproductionProbability) {
+	public void setReproductionProbability(double reproductionProbability) {
 		this.reproductionProbability = reproductionProbability;
 	}
 
 	/**
 	 * @return the reproductionProbability
 	 */
-	public int getReproductionProbability() {
+	public double getReproductionProbability() {
 		return reproductionProbability;
 	}
 

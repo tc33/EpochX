@@ -92,7 +92,7 @@ public class FullInitialiser implements Initialiser {
 					e.printStackTrace();
 				}
 				topNode.setChild(child, i);
-				this.fillChildren(child, (currentDepth+1), maxDepth);
+				fillChildren(child, (currentDepth+1), maxDepth);
 			}
 		} else {
 			// fill children with terminals only

@@ -51,9 +51,51 @@ public class GPProgramAnalyser {
 		return depth;
 	}
 	
+	/**
+	 * ALTERNATIVE IMPLEMENTATION
+	 * Determines the maximum depth of a program.
+	 * @param program
+	 * @return
+	 */
+	/*public static int getProgramDepth(CandidateProgram program) {
+        // Flatten the tree.
+		String flatProg = program.toString();
+		
+		int count = 0;
+        int maxDepth = 0;
+        // count by brackets
+        for(int i=0; i<flatProg.length(); i++) {
+            char c = flatProg.charAt(i);
+        	if(c == '(') {
+                count++;
+                if(count>maxDepth) {
+                    maxDepth = count;
+                }
+            }
+            if(c == ')') {
+                count--;
+            }
+        }
+        return maxDepth;
+	}*/
+	
 	public static int getProgramLength(CandidateProgram program) {
 		return getProgramLength(program.getRootNode());
 	}
+	
+    /**
+     * ALTERNATIVE IMPLEMENTATION
+     * Calculates the length - that is the number of nodes - of the program.
+     * @param prog The program to be measured
+     * @return The length of the program
+     */
+    /*public static int getProgramLength(Node rootNode) {
+        // Flatten tree and split at spaces or brackets.
+    	String[] flatTree = rootNode.toString().split("(\\s|\\(|\\))+");
+    	
+    	// Count how many tokens there are.
+    	return flatTree.length;
+    }*/
 	
 	public static int getProgramLength(Node rootNode) {
 		return GPProgramAnalyser.countLength(rootNode, 0);

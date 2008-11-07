@@ -57,7 +57,6 @@ public class UniformPointCrossover implements Crossover {
 		List<CandidateProgram> nextPop = new ArrayList<CandidateProgram>();
 		List<CandidateProgram> poule;
 		
-		// Copy parents to children.
 		if (poolSelector != null) {
 			poule = poolSelector.getPoule(pop);
 		} else {
@@ -95,10 +94,6 @@ public class UniformPointCrossover implements Crossover {
 			// select swap and put points
 			int swapPoint1 = (int) Math.floor(Math.random()*GPProgramAnalyser.getProgramLength(parent1));
 			int swapPoint2 = (int) Math.floor(Math.random()*GPProgramAnalyser.getProgramLength(parent2));
-
-			if (swapPoint1 == 0 || swapPoint2 == 0) {
-				System.out.println("0");
-			}
 			
 			// do swap
 			// get parts to swap

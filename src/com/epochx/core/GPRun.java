@@ -45,7 +45,7 @@ public class GPRun {
 			outputGeneration(i, pop);
 		}
 	}
-	
+		
 	/*
 	 * TEMPORARY LOGGING - need to setup some proper logging soon.
 	 */
@@ -61,7 +61,7 @@ public class GPRun {
 	private void outputProgram(CandidateProgram program) {
 		System.out.println("------------------------------------------------------");
 		System.out.println(program);
-		System.out.println(model.getFitness(program));
+		System.out.println("    fitness = " + model.getFitness(program));
 		System.out.println("    depth = " + GPProgramAnalyser.getProgramDepth(program));
 		System.out.println("    length = " + GPProgramAnalyser.getProgramLength(program));
 	}

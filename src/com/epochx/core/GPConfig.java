@@ -47,7 +47,7 @@ public class GPConfig {
 	public GPConfig() {
 		// Set defaults.
 		noRuns = 1;
-		noGenerations = 1;
+		noGenerations = 10;
 		populationSize = 10;
 		maxDepth = 4;
 		crossoverProbability = 1;

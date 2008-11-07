@@ -19,8 +19,6 @@
  */
 package com.epochx.core.representation;
 
-import java.util.*;
-
 import com.epochx.core.*;
 
 /**
@@ -40,7 +38,6 @@ import com.epochx.core.*;
 public abstract class Node<TYPE> implements Cloneable {
 	
 	private Node<?>[] children;
-	private int nodeCounter;
 	
 	/**
 	 * 
@@ -172,7 +169,12 @@ public abstract class Node<TYPE> implements Cloneable {
 	public Object clone() throws CloneNotSupportedException {
 		Node<TYPE> clone = (Node<TYPE>) super.clone();
 		
-		clone.setChildren(this.children.clone());
+		clone.children = this.children.clone();
+		for (int i=0; i<children.length; i++) {
+			clone.children[i] = this.children[i];
+			if (clone.children[i] != null)
+				clone.children[i] = (Node<?>) clone.children[i].clone();
+		}
 		
 		return clone;
 	}	

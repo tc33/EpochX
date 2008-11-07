@@ -67,21 +67,18 @@ public class CandidateProgram<TYPE> implements Cloneable {
 	
 	public Node<?> getNthNode(int n) {
 		int size = GPProgramAnalyser.getProgramLength(this);
-		//if(n > size)
-		//	throw new IndexOutOfBoundsException("Index: "+n+", Size: "+size);
-			
+		if(n > size)
+			throw new IndexOutOfBoundsException("Index: "+n+", Size: "+size);			
 		return rootNode.getNthNode(n);
 	}
 	
 	public void setNthNode(Node newNode, int n) {
 		if (n == 0) {
 			rootNode = newNode;
-		}
-		
+		}		
 		int size = GPProgramAnalyser.getProgramLength(this);
-		//if(n > size)
-		//	throw new IndexOutOfBoundsException("Index: "+n+", Size: "+size);
-		
+		if(n > size)
+			throw new IndexOutOfBoundsException("Index: "+n+", Size: "+size);		
 		rootNode.setNthNode(newNode, n);
 	}
 	

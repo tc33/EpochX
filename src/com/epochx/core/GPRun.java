@@ -33,15 +33,18 @@ public class GPRun {
 	
 	public void run(GPModel model) {
 		this.model = model;
+		
+		// Set things up.
 		GPConfig config = model.getConfiguration();
-				
+		GPCrossover crossover = new GPCrossover(config);
+		
 		// Initialisation		
 		Initialiser init = config.getInitialiser();
 		List<CandidateProgram> pop = init.getInitialPopulation();
 		outputGeneration(0, pop);
 		
 		for (int i=1; i<=config.getNoGenerations(); i++) {
-			pop = config.getCrossover().crossover(pop);
+			pop = crossover.crossover(pop);
 			outputGeneration(i, pop);
 		}
 	}

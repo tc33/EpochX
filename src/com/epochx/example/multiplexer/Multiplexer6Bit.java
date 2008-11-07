@@ -24,7 +24,9 @@ import java.util.*;
 
 import com.epochx.core.*;
 import com.epochx.core.GPModel;
+import com.epochx.core.crossover.*;
 import com.epochx.core.representation.*;
+import com.epochx.core.selection.parent.*;
 
 import core.*;
 
@@ -38,6 +40,11 @@ public class Multiplexer6Bit implements GPModel<Boolean> {
 	@Override
 	public GPConfig getConfiguration() {
 		GPConfig config = new GPConfig();
+		config.setPopulationSize(100);
+		config.setNoRuns(1);
+		config.setPouleSelector(new TournamentSelector(7, 5, this));
+		config.setParentSelector(new RandomParentSelector());
+		config.setCrossover(new UniformPointCrossover(config));
 		
 		// Define functions.
 		List<FunctionNode<?>> functions = new ArrayList<FunctionNode<?>>();

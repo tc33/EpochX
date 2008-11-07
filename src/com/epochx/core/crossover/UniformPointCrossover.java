@@ -19,62 +19,18 @@
  */
 package com.epochx.core.crossover;
 
-import java.util.*;
-
 import com.epochx.core.*;
 import com.epochx.core.representation.*;
-import com.epochx.core.selection.parent.*;
-import com.epochx.core.selection.poule.*;
 
 /**
  * 
  */
 public class UniformPointCrossover implements Crossover {
 	
-	private PouleSelector poolSelector;
-	private ParentSelector parentSelector;
-	
 	private GPConfig config;
 	
-	public UniformPointCrossover(GPConfig config, PouleSelector poolSelector, ParentSelector parentSelector) {
-		this.config = config;
-		this.poolSelector = poolSelector;
-		this.parentSelector = parentSelector;
-	}
-	
-	public UniformPointCrossover(GPConfig config, ParentSelector parentSelector) {
-		//TODO Don't use null, have a default.
-		this(config, null, parentSelector);
-	}
-	
 	public UniformPointCrossover(GPConfig config) {
-		//TODO Don't use null, have a default.
-		this(config, new RandomParentSelector());
-	}
-	
-	@Override
-	public List<CandidateProgram> crossover(List<CandidateProgram> pop) {
-		List<CandidateProgram> nextPop = new ArrayList<CandidateProgram>();
-		List<CandidateProgram> poule;
-		
-		if (poolSelector != null) {
-			poule = poolSelector.getPoule(pop);
-		} else {
-			poule = pop;
-		}
-		
-		while (nextPop.size() < config.getPopulationSize()) {
-			CandidateProgram parent1 = parentSelector.getParent(poule);
-			CandidateProgram parent2 = parentSelector.getParent(poule);
-			
-			CandidateProgram[] children = crossover(parent1, parent2);
-			
-			for (CandidateProgram c: children) {
-				nextPop.add(c);
-			}
-		}
-		
-		return nextPop;
+		this.config = config;
 	}
 
 	@Override
@@ -138,33 +94,5 @@ public class UniformPointCrossover implements Crossover {
 		}
 		
 		return new CandidateProgram[]{child1, child2};
-	}
-	
-	/**
-	 * @return the poolSelector
-	 */
-	public PouleSelector getPoolSelector() {
-		return poolSelector;
-	}
-
-	/**
-	 * @param poolSelector the poolSelector to set
-	 */
-	public void setPoolSelector(PouleSelector poolSelector) {
-		this.poolSelector = poolSelector;
-	}
-
-	/**
-	 * @return the parentSelector
-	 */
-	public ParentSelector getParentSelector() {
-		return parentSelector;
-	}
-
-	/**
-	 * @param parentSelector the parentSelector to set
-	 */
-	public void setParentSelector(ParentSelector parentSelector) {
-		this.parentSelector = parentSelector;
 	}
 }

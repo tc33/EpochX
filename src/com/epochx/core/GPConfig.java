@@ -24,6 +24,8 @@ import java.util.*;
 import com.epochx.core.crossover.*;
 import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
+import com.epochx.core.selection.parent.*;
+import com.epochx.core.selection.poule.*;
 
 /**
  * 
@@ -34,12 +36,16 @@ public class GPConfig {
 	private Crossover crossover;
 	//private Mutator mutator;
 	
+	private PouleSelector pouleSelector;
+	private ParentSelector parentSelector;
+	private int pouleSize;
+
 	private int noRuns;
 	private int noGenerations;
 	private int populationSize;
 	private int maxDepth;
 	private double crossoverProbability;
-	private double reproductionProbability;
+	private int reproductionSize;
 	
 	private List<TerminalNode<?>> terminals;
 	private List<FunctionNode<?>> functions;
@@ -51,7 +57,8 @@ public class GPConfig {
 		populationSize = 10;
 		maxDepth = 4;
 		crossoverProbability = 1;
-		reproductionProbability = 0;
+		reproductionSize = 0;
+		pouleSize = -1;
 		
 		terminals = new ArrayList<TerminalNode<?>>();
 		functions = new ArrayList<FunctionNode<?>>();
@@ -60,6 +67,20 @@ public class GPConfig {
 		crossover = new UniformPointCrossover(this);
 	}
 	
+	/**
+	 * @return the pouleSize
+	 */
+	public int getPouleSize() {
+		return pouleSize;
+	}
+
+	/**
+	 * @param pouleSize the pouleSize to set
+	 */
+	public void setPouleSize(int pouleSize) {
+		this.pouleSize = pouleSize;
+	}
+
 	/**
 	 * @return the initialiser
 	 */
@@ -196,15 +217,42 @@ public class GPConfig {
 	/**
 	 * @param reproductionProbability the reproductionProbability to set
 	 */
-	public void setReproductionProbability(double reproductionProbability) {
-		this.reproductionProbability = reproductionProbability;
+	public void setReproductionSize(int reproductionSize) {
+		this.reproductionSize = reproductionSize;
 	}
 
 	/**
 	 * @return the reproductionProbability
 	 */
-	public double getReproductionProbability() {
-		return reproductionProbability;
+	public int getReproductionSize() {
+		return reproductionSize;
 	}
 
+	/**
+	 * @return the pouleSelector
+	 */
+	public PouleSelector getPouleSelector() {
+		return pouleSelector;
+	}
+
+	/**
+	 * @param pouleSelector the pouleSelector to set
+	 */
+	public void setPouleSelector(PouleSelector pouleSelector) {
+		this.pouleSelector = pouleSelector;
+	}
+
+	/**
+	 * @return the parentSelector
+	 */
+	public ParentSelector getParentSelector() {
+		return parentSelector;
+	}
+
+	/**
+	 * @param parentSelector the parentSelector to set
+	 */
+	public void setParentSelector(ParentSelector parentSelector) {
+		this.parentSelector = parentSelector;
+	}	
 }

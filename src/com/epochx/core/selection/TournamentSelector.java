@@ -23,7 +23,6 @@ import java.util.*;
 
 import com.epochx.core.*;
 import com.epochx.core.representation.*;
-import com.epochx.core.selection.poule.*;
 
 /**
  * 

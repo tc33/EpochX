@@ -128,7 +128,7 @@ public class Multiplexer6Bit implements GPModel<Boolean> {
             result = input[4];
         } else if(!input[0] && !input[1]) {
             result = input[5];
-        }
+        }   
         return result;
     }
 	

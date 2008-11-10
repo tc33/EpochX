@@ -17,14 +17,19 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package core.epochx.semantics;
 
-/**
- * @author lb212
- *
- */
-public interface Behaviour {
+package com.epochx.semantics;
+
+import com.epochx.core.representation.*;
+
+public interface SemanticModule {
 	
-	public Behaviour getBehaviour();
+	public Behaviour codeToBehaviour(CandidateProgram program);
+	
+	public CandidateProgram behaviourToCode(Behaviour representation);
+	
+	public void start();
+	
+	public void stop();
 
 }

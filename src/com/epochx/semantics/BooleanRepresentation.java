@@ -17,15 +17,46 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.epochx.semantics;
 
-package core.epochx.semantics;
+import net.sf.javabdd.*;
 
-import com.epochx.core.representation.*;
-
-public interface SemanticModule {
+/**
+ * @author lb212
+ *
+ */
+public class BooleanRepresentation implements Behaviour {
 	
-	public Behaviour codeToBehaviour(CandidateProgram program);
+	BDD bdd;
 	
-	public CandidateProgram behaviourToCode(Behaviour representation);
+	public BooleanRepresentation(BDD bdd) {
+		this.bdd = bdd;
+	}
+	
+	public BDD getBDD() {
+		return this.bdd;
+	}
+
+	public boolean equals(BooleanRepresentation newBDD) {
+		if(this.bdd.equals(newBDD.getBDD())) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.epochx.semantics.Behaviour#isTautology()
+	 */
+	@Override
+	public boolean isTautology() {
+		if(this.bdd.satCount()==0 || this.bdd.satCount()==1) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+
 
 }

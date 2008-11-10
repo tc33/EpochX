@@ -17,23 +17,14 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package core.epochx.semantics;
+package com.epochx.semantics;
 
 /**
- * @author lb212
+ * @author 
  *
  */
-public class BooleanRepresentation implements Behaviour {
-	
-	
+public interface Behaviour {
 
-	/* (non-Javadoc)
-	 * @see core.epochx.semantics.Behaviour#getBehaviour()
-	 */
-	@Override
-	public Behaviour getBehaviour() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	public boolean isTautology();
+	
 }

@@ -17,7 +17,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.epochx.core.selection.parent;
+package com.epochx.core.selection;
 
 import java.util.*;
 
@@ -31,16 +31,10 @@ import com.epochx.core.selection.poule.*;
 public class TournamentSelector implements ParentSelector, PouleSelector {
 
 	private int tournamentSize;
-	private int pouleSize;
 	private GPModel model;
 	
 	public TournamentSelector(int tournamentSize, GPModel model) {
-		this(tournamentSize, -1, model);
-	}
-	
-	public TournamentSelector(int tournamentSize, int pouleSize, GPModel model) {
 		this.tournamentSize = tournamentSize;
-		this.pouleSize = pouleSize;
 		this.model = model;
 	}
 
@@ -70,7 +64,7 @@ public class TournamentSelector implements ParentSelector, PouleSelector {
 
 
 	@Override
-	public List<CandidateProgram> getPoule(List<CandidateProgram> pop) {
+	public List<CandidateProgram> getPoule(List<CandidateProgram> pop, int pouleSize) {
 		// If pouleSize is 0 or less then we use the whole population.
 		if (pouleSize <= 0) {
 			return pop;

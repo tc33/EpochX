@@ -17,7 +17,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.epochx.core.selection.poule;
+package com.epochx.core.selection;
 
 import java.util.*;
 
@@ -26,8 +26,27 @@ import com.epochx.core.representation.*;
 /**
  * 
  */
-public interface PouleSelector {
+public class RandomParentSelector implements ParentSelector, PouleSelector {
 
-	public List<CandidateProgram> getPoule(List<CandidateProgram> pop);
-	
+	@Override
+	public CandidateProgram getParent(List<CandidateProgram> pop) {		
+		return pop.get((int) Math.floor(Math.random()*pop.size()));
+	}
+
+	@Override
+	public List<CandidateProgram> getPoule(List<CandidateProgram> pop, int pouleSize) {
+		// If pouleSize is 0 or less then we use the whole population.
+		if (pouleSize <= 0) {
+			return pop;
+		}
+		
+		List<CandidateProgram> poule = new ArrayList<CandidateProgram>(pouleSize);
+		
+		for (int i=0; i<pouleSize; i++) {
+			poule.add(getParent(pop));
+		}
+		
+		return poule;
+	}
+
 }

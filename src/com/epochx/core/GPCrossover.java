@@ -23,7 +23,7 @@ import java.util.*;
 
 import com.epochx.core.crossover.*;
 import com.epochx.core.representation.*;
-import com.epochx.core.selection.parent.*;
+import com.epochx.core.selection.*;
 import com.epochx.core.selection.poule.*;
 
 /**
@@ -49,8 +49,8 @@ public class GPCrossover {
 		List<CandidateProgram> nextPop = new ArrayList<CandidateProgram>();
 		List<CandidateProgram> poule;
 		
-		if (pouleSelector != null) {
-			poule = pouleSelector.getPoule(pop);
+		if ((pouleSelector != null) && (config.getPouleSize() > 1)) {
+			poule = pouleSelector.getPoule(pop, config.getPouleSize());
 		} else {
 			poule = pop;
 		}

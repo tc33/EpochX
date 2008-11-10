@@ -24,8 +24,7 @@ import java.util.*;
 import com.epochx.core.crossover.*;
 import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
-import com.epochx.core.selection.parent.*;
-import com.epochx.core.selection.poule.*;
+import com.epochx.core.selection.*;
 
 /**
  * 

@@ -38,7 +38,7 @@ public class GPRun {
 		GPConfig config = model.getConfiguration();
 		GPCrossover crossover = new GPCrossover(config);
 		
-		// Initialisation		
+		// Initialisation
 		Initialiser init = config.getInitialiser();
 		List<CandidateProgram> pop = init.getInitialPopulation();
 		outputGeneration(0, pop);

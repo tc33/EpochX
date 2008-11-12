@@ -71,7 +71,8 @@ public class GPRun {
 					// Do crossover.
 					CandidateProgram[] children = crossover.crossover(poule);
 					for (CandidateProgram c: children) {
-						nextPop.add(c);
+						if (nextPop.size() < config.getPopulationSize())
+							nextPop.add(c);
 					}
 				} else {
 					// Do mutation.

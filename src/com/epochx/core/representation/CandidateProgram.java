@@ -31,7 +31,7 @@ import com.epochx.core.*;
  * CandidateProgram allows the retrieval of meta-data about the program.
  * 
  */
-public class CandidateProgram<TYPE> implements Comparable<CandidateProgram<TYPE>> {
+public class CandidateProgram<TYPE> implements Cloneable, Comparable<CandidateProgram<TYPE>> {
 	
 	private Node<TYPE> rootNode;
 	private GPModel model;
@@ -95,8 +95,12 @@ public class CandidateProgram<TYPE> implements Comparable<CandidateProgram<TYPE>
 		}
 		
 		// Deep copy node tree.
-		clone.rootNode = (Node<TYPE>) this.rootNode.clone();
-		
+		if (this.rootNode == null) {
+			clone.rootNode = null;
+		} else {
+			clone.rootNode = (Node<TYPE>) this.rootNode.clone();
+		}
+			
 		// Shallow copy the model.
 		clone.model = this.model;
 		

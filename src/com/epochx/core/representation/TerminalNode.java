@@ -48,7 +48,7 @@ public class TerminalNode<TYPE> extends Node<TYPE> {
 	}
 	
 	@Override
-	public Object clone() throws CloneNotSupportedException {
+	public Object clone() {
 		TerminalNode<TYPE> clone = (TerminalNode) super.clone();
 		
 		clone.value = this.value;

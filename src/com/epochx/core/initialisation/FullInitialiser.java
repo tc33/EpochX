@@ -63,14 +63,8 @@ public class FullInitialiser implements Initialiser {
 	public Node buildFullNodeTree(int depth) {		
         // define top node form functions
         int randomIndex = (int) Math.floor(Math.random() * config.getFunctions().size());
-        Node top = null;
-		try {
-			top = (Node) config.getFunctions().get(randomIndex).clone();
-		} catch (CloneNotSupportedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        
+        Node top = (Node) config.getFunctions().get(randomIndex).clone();
+
         // recurse down each branch to depth
 		fillChildren(top, 1, config.getMaxDepth());      
         
@@ -84,13 +78,8 @@ public class FullInitialiser implements Initialiser {
 			// fill children with functions only
 			for(int i = 0; i<arity; i++) {
 				int randomIndex = (int) Math.floor(Math.random() * config.getFunctions().size());
-				Node child = null;
-				try {
-					child = (Node) config.getFunctions().get(randomIndex).clone();
-				} catch (CloneNotSupportedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				Node child = (Node) config.getFunctions().get(randomIndex).clone();
+
 				topNode.setChild(child, i);
 				fillChildren(child, (currentDepth+1), maxDepth);
 			}
@@ -98,13 +87,8 @@ public class FullInitialiser implements Initialiser {
 			// fill children with terminals only
 			for(int i = 0; i<arity; i++) {
 				int randomIndex = (int) Math.floor(Math.random() * config.getTerminals().size());
-				Node child = null;
-				try {
-					child = (Node) config.getTerminals().get(randomIndex).clone();
-				} catch (CloneNotSupportedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				Node child = (Node) config.getTerminals().get(randomIndex).clone();
+
 				topNode.setChild(child, i);
 			}
 		}

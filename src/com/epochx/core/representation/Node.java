@@ -166,18 +166,24 @@ public abstract class Node<TYPE> implements Cloneable {
 	}
 
 	@Override
-	public Object clone() throws CloneNotSupportedException {
-		Node<TYPE> clone = (Node<TYPE>) super.clone();
-		
-		clone.children = this.children.clone();
-		for (int i=0; i<children.length; i++) {
-			clone.children[i] = this.children[i];
-			if (clone.children[i] != null)
-				clone.children[i] = (Node<?>) clone.children[i].clone();
+	public Object clone() {
+		try {
+			Node<TYPE> clone = (Node<TYPE>) super.clone();
+			
+			clone.children = this.children.clone();
+			for (int i=0; i<children.length; i++) {
+				clone.children[i] = this.children[i];
+				if (clone.children[i] != null)
+					clone.children[i] = (Node<?>) clone.children[i].clone();
+			}
+			
+			return clone;
+		} catch (CloneNotSupportedException e) {
+			// This shouldn't ever happen - if it does then everythings going to 
+			// blow up anyway.
 		}
-		
-		return clone;
-	}	
+		return null;
+	}
 
 	@Override
 	public boolean equals(Object obj) {

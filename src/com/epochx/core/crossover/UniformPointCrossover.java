@@ -35,15 +35,8 @@ public class UniformPointCrossover implements Crossover {
 
 	@Override
 	public CandidateProgram[] crossover(CandidateProgram parent1, CandidateProgram parent2) {
-		CandidateProgram child1 = null;
-		CandidateProgram child2 = null;
-		try {
-			child1 = (CandidateProgram) parent1.clone();
-			child2 = (CandidateProgram) parent2.clone();
-		} catch (CloneNotSupportedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		CandidateProgram child1 = (CandidateProgram) parent1.clone();
+		CandidateProgram child2 = (CandidateProgram) parent2.clone();
 
 		// select swap and put points
 		int swapPoint1 = (int) Math.floor(Math.random()*GPProgramAnalyser.getProgramLength(parent1));
@@ -51,39 +44,25 @@ public class UniformPointCrossover implements Crossover {
 		
 		// do swap
 		// get parts to swap
-		try {
-			// find Nth node
-			// Do we actually need to make a clone of this if its a direct swap?
-			Node subTree1 = (Node) child1.getNthNode(swapPoint1).clone();
-			Node subTree2 = (Node) child2.getNthNode(swapPoint2).clone();
-			// set Nth node
-			child1.setNthNode(subTree2, swapPoint1);
-			child2.setNthNode(subTree1, swapPoint2);
-		} catch (CloneNotSupportedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		// find Nth node
+		// Do we actually need to make a clone of this if its a direct swap?
+		Node subTree1 = (Node) child1.getNthNode(swapPoint1).clone();
+		Node subTree2 = (Node) child2.getNthNode(swapPoint2).clone();
+		// set Nth node
+		child1.setNthNode(subTree2, swapPoint1);
+		child2.setNthNode(subTree1, swapPoint2);
 
 		// max depth reversion section
 		int pDepth1 = GPProgramAnalyser.getProgramDepth(child1);
 		int pDepth2 = GPProgramAnalyser.getProgramDepth(child2);
 		// depth check on child one
 		if(pDepth1>config.getMaxDepth()) {
-			try {
-				child1 = (CandidateProgram) parent1.clone();
-			} catch (CloneNotSupportedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			child1 = (CandidateProgram) parent1.clone();
 		}
 		// depth check on child two
 		if(pDepth2>config.getMaxDepth()) {
-			try {
-				child2 = (CandidateProgram) parent2.clone();
-			} catch (CloneNotSupportedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			child2 = (CandidateProgram) parent2.clone();
 		}
 
 		// TODO state change section

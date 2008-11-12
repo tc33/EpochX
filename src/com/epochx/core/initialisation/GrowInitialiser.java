@@ -59,13 +59,7 @@ public class GrowInitialiser implements Initialiser {
 	public Node buildGrowNodeTree(int depth) {		
         // define top node
 		int randomIndex = (int) Math.floor(Math.random() * config.getSyntax().size());
-		Node top = null;
-		try {
-			top = (Node) config.getSyntax().get(randomIndex).clone();
-		} catch (CloneNotSupportedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Node top = (Node) config.getSyntax().get(randomIndex).clone();
         
         // recurse down each branch to depth using Grow mechanism
         this.fillChildren(top, 1, config.getMaxDepth());
@@ -81,13 +75,8 @@ public class GrowInitialiser implements Initialiser {
 				// fill children with functions or terminals
 				for(int i = 0; i<arity; i++) {
 					int randomIndex = (int) Math.floor(Math.random() * config.getSyntax().size());
-					Node child = null;
-					try {
-						child = (Node) config.getSyntax().get(randomIndex).clone();
-					} catch (CloneNotSupportedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					Node child = (Node) config.getSyntax().get(randomIndex).clone();
+
 					topNode.setChild(child, i);
 					this.fillChildren(child, (currentDepth+1), maxDepth);
 				}
@@ -95,13 +84,7 @@ public class GrowInitialiser implements Initialiser {
 				// fill children with terminals only
 				for(int i = 0; i<arity; i++) {
 					int randomIndex = (int) Math.floor(Math.random() * config.getTerminals().size());
-					Node child = null;
-					try {
-						child = (Node) config.getTerminals().get(randomIndex).clone();
-					} catch (CloneNotSupportedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					Node child = (Node) config.getTerminals().get(randomIndex).clone();
 					topNode.setChild(child, i);
 				}
 			}

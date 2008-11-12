@@ -77,7 +77,7 @@ public class Variable<TYPE> extends TerminalNode<TYPE> {
 	 * @see com.epochx.core.representation.TerminalNode#clone()
 	 */
 	@Override
-	public Object clone() throws CloneNotSupportedException {
+	public Object clone() {
 		return this;
 	}
 }

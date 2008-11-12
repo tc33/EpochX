@@ -75,14 +75,14 @@ public class RampedHalfAndHalfInitialiser implements Initialiser {
 				depth++;
 				split = split + marker;
 			}
-            candidate = new CandidateProgram(grow.buildGrowNodeTree(depth));
+            candidate = new CandidateProgram(grow.buildGrowNodeTree(depth), config.getModel());
             while(firstGen.contains(candidate)) {
-                candidate = new CandidateProgram(grow.buildGrowNodeTree(depth));
+                candidate = new CandidateProgram(grow.buildGrowNodeTree(depth), config.getModel());
             }
             firstGen.add(candidate);
-            candidate = new CandidateProgram(full.buildFullNodeTree(depth));
+            candidate = new CandidateProgram(full.buildFullNodeTree(depth), config.getModel());
             while(firstGen.contains(candidate)) {
-                candidate = new CandidateProgram(full.buildFullNodeTree(depth));
+                candidate = new CandidateProgram(full.buildFullNodeTree(depth), config.getModel());
             }
             firstGen.add(candidate);
 			

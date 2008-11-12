@@ -45,9 +45,9 @@ public class GrowInitialiser implements Initialiser {
 		
 		// build population
 		for(int i=0; i<popSize; i++) {
-            CandidateProgram candidate = new CandidateProgram(buildGrowNodeTree(config.getMaxDepth()));
+            CandidateProgram candidate = new CandidateProgram(buildGrowNodeTree(config.getMaxDepth()), config.getModel());
             while(firstGen.contains(candidate)) {
-                candidate = new CandidateProgram(buildGrowNodeTree(config.getMaxDepth()));
+                candidate = new CandidateProgram(buildGrowNodeTree(config.getMaxDepth()), config.getModel());
             }
             firstGen.add(candidate);
         }

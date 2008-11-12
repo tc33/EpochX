@@ -45,53 +45,49 @@ public class UniformPointCrossover implements Crossover {
 			e1.printStackTrace();
 		}
 
-		// check probability
-		if(Math.random() < config.getCrossoverProbability()) {
-			// select swap and put points
-			int swapPoint1 = (int) Math.floor(Math.random()*GPProgramAnalyser.getProgramLength(parent1));
-			int swapPoint2 = (int) Math.floor(Math.random()*GPProgramAnalyser.getProgramLength(parent2));
-			
-			// do swap
-			// get parts to swap
+		// select swap and put points
+		int swapPoint1 = (int) Math.floor(Math.random()*GPProgramAnalyser.getProgramLength(parent1));
+		int swapPoint2 = (int) Math.floor(Math.random()*GPProgramAnalyser.getProgramLength(parent2));
+		
+		// do swap
+		// get parts to swap
+		try {
+			// find Nth node
+			// Do we actually need to make a clone of this if its a direct swap?
+			Node subTree1 = (Node) child1.getNthNode(swapPoint1).clone();
+			Node subTree2 = (Node) child2.getNthNode(swapPoint2).clone();
+			// set Nth node
+			child1.setNthNode(subTree2, swapPoint1);
+			child2.setNthNode(subTree1, swapPoint2);
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// max depth reversion section
+		int pDepth1 = GPProgramAnalyser.getProgramDepth(child1);
+		int pDepth2 = GPProgramAnalyser.getProgramDepth(child2);
+		// depth check on child one
+		if(pDepth1>config.getMaxDepth()) {
 			try {
-				// find Nth node
-				// Do we actually need to make a clone of this if its a direct swap?
-				Node subTree1 = (Node) child1.getNthNode(swapPoint1).clone();
-				Node subTree2 = (Node) child2.getNthNode(swapPoint2).clone();
-				// set Nth node
-				child1.setNthNode(subTree2, swapPoint1);
-				child2.setNthNode(subTree1, swapPoint2);
+				child1 = (CandidateProgram) parent1.clone();
 			} catch (CloneNotSupportedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
-			// max depth reversion section
-			int pDepth1 = GPProgramAnalyser.getProgramDepth(child1);
-			int pDepth2 = GPProgramAnalyser.getProgramDepth(child2);
-			// depth check on child one
-			if(pDepth1>config.getMaxDepth()) {
-				try {
-					child1 = (CandidateProgram) parent1.clone();
-				} catch (CloneNotSupportedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			// depth check on child two
-			if(pDepth2>config.getMaxDepth()) {
-				try {
-					child2 = (CandidateProgram) parent2.clone();
-				} catch (CloneNotSupportedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
-			// TODO state change section
-
-			
 		}
+		// depth check on child two
+		if(pDepth2>config.getMaxDepth()) {
+			try {
+				child2 = (CandidateProgram) parent2.clone();
+			} catch (CloneNotSupportedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		// TODO state change section
+
 		
 		return new CandidateProgram[]{child1, child2};
 	}

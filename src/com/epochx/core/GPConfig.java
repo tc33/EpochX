@@ -31,6 +31,8 @@ import com.epochx.core.selection.*;
  */
 public class GPConfig {
 
+	private GPModel model;
+	
 	private Initialiser initialiser;
 	private Crossover crossover;
 	//private Mutator mutator;
@@ -42,22 +44,28 @@ public class GPConfig {
 	private int noRuns;
 	private int noGenerations;
 	private int populationSize;
+	private int noElites;
 	private int maxDepth;
+	
 	private double crossoverProbability;
-	private int reproductionSize;
+	private double reproductionProbability;
+	private double mutationProbability;
 	
 	private List<TerminalNode<?>> terminals;
 	private List<FunctionNode<?>> functions;
 	
-	public GPConfig() {
+	public GPConfig(GPModel model) {
+		this.model = model;
+		
 		// Set defaults.
 		noRuns = 1;
 		noGenerations = 10;
-		populationSize = 10;
-		maxDepth = 4;
+		populationSize = 100;
+		maxDepth = 6;
 		crossoverProbability = 1;
-		reproductionSize = 0;
+		reproductionProbability = 0;
 		pouleSize = -1;
+		noElites = 0;
 		
 		terminals = new ArrayList<TerminalNode<?>>();
 		functions = new ArrayList<FunctionNode<?>>();
@@ -66,6 +74,13 @@ public class GPConfig {
 		crossover = new UniformPointCrossover(this);
 	}
 	
+	/**
+	 * @return the model
+	 */
+	public GPModel getModel() {
+		return model;
+	}
+
 	/**
 	 * @return the pouleSize
 	 */
@@ -216,15 +231,15 @@ public class GPConfig {
 	/**
 	 * @param reproductionProbability the reproductionProbability to set
 	 */
-	public void setReproductionSize(int reproductionSize) {
-		this.reproductionSize = reproductionSize;
+	public void setReproductionProbability(double reproductionProbability) {
+		this.reproductionProbability = reproductionProbability;
 	}
 
 	/**
 	 * @return the reproductionProbability
 	 */
-	public int getReproductionSize() {
-		return reproductionSize;
+	public double getReproductionProbability() {
+		return reproductionProbability;
 	}
 
 	/**
@@ -253,5 +268,19 @@ public class GPConfig {
 	 */
 	public void setParentSelector(ParentSelector parentSelector) {
 		this.parentSelector = parentSelector;
+	}
+
+	/**
+	 * @return the noElites
+	 */
+	public int getNoElites() {
+		return noElites;
+	}
+
+	/**
+	 * @param noElites the noElites to set
+	 */
+	public void setNoElites(int noElites) {
+		this.noElites = noElites;
 	}	
 }

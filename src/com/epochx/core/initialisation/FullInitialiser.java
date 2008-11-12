@@ -51,7 +51,7 @@ public class FullInitialiser implements Initialiser {
 		for(int i=0; i<popSize; i++) {
 			CandidateProgram candidate;
 			do {
-            	candidate = new CandidateProgram(buildFullNodeTree(config.getMaxDepth()));
+            	candidate = new CandidateProgram(buildFullNodeTree(config.getMaxDepth()), config.getModel());
 			} while (firstGen.contains(candidate));
 			firstGen.add(candidate);
         }

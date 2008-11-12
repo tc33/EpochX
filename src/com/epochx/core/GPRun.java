@@ -41,13 +41,62 @@ public class GPRun {
 		// Initialisation
 		Initialiser init = config.getInitialiser();
 		List<CandidateProgram> pop = init.getInitialPopulation();
-		outputGeneration(0, pop);
+		//outputGeneration(0, pop);
+		
+		// TEMPORARY
+		double bestFitness = Double.POSITIVE_INFINITY;
+		CandidateProgram bestProgram = null;
 		
 		for (int i=1; i<=config.getNoGenerations(); i++) {
-			pop = crossover.crossover(pop);
+			List<CandidateProgram> nextPop = new ArrayList<CandidateProgram>();
+			
+			// Perform elitism.
+			/*Collections.sort(pop);
+			if (config.getNoElites() > 0)
+				nextPop.addAll(pop.subList(pop.size()-config.getNoElites(),pop.size()-1));*/
+			
+			// Construct a poule.
+			List<CandidateProgram> poule = config.getPouleSelector().getPoule(pop, config.getPouleSize());
+			
+			while(nextPop.size() < config.getPopulationSize()) {
+				// Pick a genetic operator using Pr, Pe and Pm.
+				double random = Math.random();
+				double pr = config.getReproductionProbability();
+				double pe = config.getCrossoverProbability();
+				
+				if (random < pr) {
+					// Do reproduction. - Should this use clone?
+					nextPop.add(poule.get((int) Math.floor(Math.random()*poule.size())));
+				} else if (random < pr+pe) {
+					// Do crossover.
+					CandidateProgram[] children = crossover.crossover(poule);
+					for (CandidateProgram c: children) {
+						nextPop.add(c);
+					}
+				} else {
+					// Do mutation.
+					//TODO Implement mutation.
+				}
+			}
+			
+			for (CandidateProgram p: pop) {
+				double fitness = model.getFitness(p);
+				if (fitness < bestFitness) {
+					bestFitness = fitness;
+					bestProgram = p;
+				}
+			}
 			outputGeneration(i, pop);
+			
+			pop = nextPop;
 		}
+		
+		System.out.println("BEST PROGRAM: " + bestProgram);
+		System.out.println("BEST FITNESS: " + bestFitness);
+		System.out.println();
 	}
+	
+	
 		
 	/*
 	 * TEMPORARY LOGGING - need to setup some proper logging soon.
@@ -55,10 +104,11 @@ public class GPRun {
 	private void outputGeneration(int i, List<CandidateProgram> programs) {
 		System.out.println("######################################################");
 		System.out.println("Population #"+i+":");
+		System.out.println("Size: " + programs.size());
 		
-		for (CandidateProgram p: programs) {
+		/*for (CandidateProgram p: programs) {
 			outputProgram(p);
-		}
+		}*/
 	}
 	
 	private void outputProgram(CandidateProgram program) {

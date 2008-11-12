@@ -30,7 +30,6 @@ import com.epochx.core.selection.*;
  */
 public class GPCrossover {
 
-	private PouleSelector pouleSelector;
 	private ParentSelector parentSelector;
 	private Crossover crossover;
 	
@@ -39,32 +38,14 @@ public class GPCrossover {
 	public GPCrossover(GPConfig config) {
 		this.config = config;
 		
-		this.pouleSelector = config.getPouleSelector();
 		this.parentSelector = config.getParentSelector();
 		this.crossover = config.getCrossover();
 	}
 	
-	public List<CandidateProgram> crossover(List<CandidateProgram> pop) {
-		List<CandidateProgram> nextPop = new ArrayList<CandidateProgram>();
-		List<CandidateProgram> poule;
+	public CandidateProgram[] crossover(List<CandidateProgram> pop) {
+		CandidateProgram parent1 = parentSelector.getParent(pop);
+		CandidateProgram parent2 = parentSelector.getParent(pop);
 		
-		if ((pouleSelector != null) && (config.getPouleSize() > 1)) {
-			poule = pouleSelector.getPoule(pop, config.getPouleSize());
-		} else {
-			poule = pop;
-		}
-		
-		while (nextPop.size() < config.getPopulationSize()) {
-			CandidateProgram parent1 = parentSelector.getParent(poule);
-			CandidateProgram parent2 = parentSelector.getParent(poule);
-			
-			CandidateProgram[] children = crossover.crossover(parent1, parent2);
-			
-			for (CandidateProgram c: children) {
-				nextPop.add(c);
-			}
-		}
-		
-		return nextPop;
+		return crossover.crossover(parent1, parent2);
 	}
 }

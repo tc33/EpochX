@@ -20,7 +20,7 @@
 
 package com.epochx.util;
 
-import java.util.ArrayList;
+import java.util.*;
 import java.io.*;
 
 /**
@@ -62,13 +62,12 @@ public class FileManip {
      * @return An ArrayList<String> represnting the input data.  Each element in the ArrayList represents a 
      * line of data from the input file
      */
-    public static ArrayList<String> loadInput(File cDir, String fName) {
+    public static List<String> loadInput(File fileToLoad) {
         
-        ArrayList<String> data = new ArrayList<String>();
+        List<String> data = new ArrayList<String>();
         String sL, nF;
         
         try {
-            File fileToLoad = new File(cDir, fName);
             FileReader readFile = new FileReader(fileToLoad);
             BufferedReader read = new BufferedReader(readFile);
             while(true) {                

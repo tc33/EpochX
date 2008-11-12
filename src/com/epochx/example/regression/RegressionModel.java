@@ -31,7 +31,7 @@ public class RegressionModel implements GPModel<Double> {
 
 	@Override
 	public GPConfig getConfiguration() {
-		GPConfig config = new GPConfig();		
+		GPConfig config = new GPConfig(this);		
 		
 		// Define terminal set.
 		List<TerminalNode<Double>> terminals = new ArrayList<TerminalNode<Double>>();

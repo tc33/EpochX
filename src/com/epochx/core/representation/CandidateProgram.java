@@ -31,9 +31,10 @@ import com.epochx.core.*;
  * CandidateProgram allows the retrieval of meta-data about the program.
  * 
  */
-public class CandidateProgram<TYPE> implements Cloneable {
+public class CandidateProgram<TYPE> implements Cloneable, Comparable<CandidateProgram<TYPE>> {
 	
 	private Node<TYPE> rootNode;
+	private GPModel model;
 	
 	/**
 	 * Constructs a new program individual where <code>rootNode</code> is the 
@@ -43,8 +44,14 @@ public class CandidateProgram<TYPE> implements Cloneable {
 	 * 					all other nodes. It may be either a FunctionNode or a 
 	 * 					TerminalNode
 	 */
-	public CandidateProgram(Node<TYPE> rootNode) {
+	public CandidateProgram(Node<TYPE> rootNode, GPModel model) {
+		this.model = model;
 		this.rootNode = rootNode;
+	}
+	
+	public CandidateProgram(CandidateProgram program) {
+		program.rootNode = rootNode;
+		
 	}
 	
 	public TYPE evaluate() {
@@ -89,5 +96,28 @@ public class CandidateProgram<TYPE> implements Cloneable {
 		clone.rootNode = (Node<TYPE>) this.rootNode.clone();
 		
 		return clone;
+	}
+	
+	public double getFitness() {
+		return model.getFitness(this);
+	}
+	
+	/*
+	 * This is super expensive if using to sort a list. Might be possible to 
+	 * improve performance if we can implement caching of fitness within a 
+	 * CandidateProgram.
+	 */
+	@Override
+	public int compareTo(CandidateProgram<TYPE> o) {
+		double thisFitness = this.getFitness();
+		double objFitness = o.getFitness();
+		
+		if (thisFitness > objFitness) {
+			return -1;
+		} else if (thisFitness == objFitness) {
+			return 0;
+		} else {
+			return 1;
+		}
 	}
 }

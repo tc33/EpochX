@@ -27,6 +27,7 @@ import com.epochx.core.GPModel;
 import com.epochx.core.crossover.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
+import com.epochx.util.FileManip;
 
 import core.*;
 
@@ -35,14 +36,25 @@ import core.*;
  */
 public class Multiplexer6Bit implements GPModel<Boolean> {
 
+	private List<String> inputs;
 	private HashMap<String, Variable<Boolean>> variables = new HashMap<String, Variable<Boolean>>();
+	
+	public Multiplexer6Bit() {
+		inputs = new ArrayList<String>();
+		inputs = FileManip.loadInput(new File("input6bit.txt"));
+	}
 	
 	@Override
 	public GPConfig getConfiguration() {
-		GPConfig config = new GPConfig();
-		config.setPopulationSize(100);
-		config.setNoRuns(1);
-		config.setPouleSize(30);
+		GPConfig config = new GPConfig(this);
+		config.setPopulationSize(500);
+		config.setNoGenerations(50);
+		config.setCrossoverProbability(0.9);
+		config.setReproductionProbability(0.1);
+		config.setNoRuns(10);
+		config.setPouleSize(50);
+		config.setNoElites(50);
+		config.setMaxDepth(4);
 		config.setPouleSelector(new TournamentSelector(7, this));
 		config.setParentSelector(new RandomParentSelector());
 		config.setCrossover(new UniformPointCrossover(config));
@@ -80,25 +92,8 @@ public class Multiplexer6Bit implements GPModel<Boolean> {
 	public double getFitness(CandidateProgram<Boolean> program) {
         double score = 0;
         
-        // Read some inputs.
-        List<String> input = new ArrayList<String>();
-        BufferedReader reader;
-		try {
-			reader = new BufferedReader(new FileReader("input6bit.txt"));
-	        String line;
-	        while ((line = reader.readLine()) != null) {
-	        	input.add(line);
-	        }
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        
         // Execute on all possible inputs.
-        for (String run : input) {
+        for (String run : inputs) {
         	boolean[] in = BoolTrans.doTrans(run);
         	
         	// Set the variables.
@@ -128,7 +123,7 @@ public class Multiplexer6Bit implements GPModel<Boolean> {
             result = input[4];
         } else if(!input[0] && !input[1]) {
             result = input[5];
-        }   
+        }
         return result;
     }
 	

@@ -28,23 +28,23 @@ import com.epochx.core.selection.*;
 /**
  * 
  */
-public class GPCrossover {
+public class GPCrossover<TYPE> {
 
-	private ParentSelector parentSelector;
-	private Crossover crossover;
+	private ParentSelector<TYPE> parentSelector;
+	private Crossover<TYPE> crossover;
 	
-	private GPConfig config;
+	//private GPModel<?> model;
 	
-	public GPCrossover(GPConfig config) {
-		this.config = config;
+	public GPCrossover(GPModel<TYPE> model) {
+		//this.model = model;
 		
-		this.parentSelector = config.getParentSelector();
-		this.crossover = config.getCrossover();
+		this.parentSelector = model.getParentSelector();
+		this.crossover = model.getCrossover();
 	}
 	
-	public CandidateProgram[] crossover(List<CandidateProgram> pop) {
-		CandidateProgram parent1 = parentSelector.getParent(pop);
-		CandidateProgram parent2 = parentSelector.getParent(pop);
+	public CandidateProgram<TYPE>[] crossover(List<CandidateProgram<TYPE>> pop) {
+		CandidateProgram<TYPE> parent1 = parentSelector.getParent(pop);
+		CandidateProgram<TYPE> parent2 = parentSelector.getParent(pop);
 		
 		return crossover.crossover(parent1, parent2);
 	}

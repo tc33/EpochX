@@ -27,21 +27,21 @@ import com.epochx.core.representation.*;
 /**
  * 
  */
-public class TournamentSelector implements ParentSelector, PouleSelector {
+public class TournamentSelector<TYPE> implements ParentSelector<TYPE>, PouleSelector<TYPE> {
 
 	private int tournamentSize;
-	private GPModel model;
+	private GPModel<TYPE> model;
 	
-	public TournamentSelector(int tournamentSize, GPModel model) {
+	public TournamentSelector(int tournamentSize, GPModel<TYPE> model) {
 		this.tournamentSize = tournamentSize;
 		this.model = model;
 	}
 
 	@Override
-	public CandidateProgram getParent(List<CandidateProgram> pop) {
+	public CandidateProgram<TYPE> getParent(List<CandidateProgram<TYPE>> pop) {
 		// Use a random selector to construct a tournament.
-		RandomParentSelector randomSelector = new RandomParentSelector();
-		CandidateProgram[] tournament = new CandidateProgram[tournamentSize];
+		RandomParentSelector<TYPE> randomSelector = new RandomParentSelector<TYPE>();
+		CandidateProgram<TYPE>[] tournament = new CandidateProgram[tournamentSize];
 		
 		for (int i=0; i<tournamentSize; i++) {
 			tournament[i] = randomSelector.getParent(pop);
@@ -49,8 +49,8 @@ public class TournamentSelector implements ParentSelector, PouleSelector {
 		
 		// Calculate fitness.
 		double bestFitness = Double.POSITIVE_INFINITY;
-		CandidateProgram bestProgram = null;
-		for (CandidateProgram p: tournament) {
+		CandidateProgram<TYPE> bestProgram = null;
+		for (CandidateProgram<TYPE> p: tournament) {
 			double fitness = model.getFitness(p);
 			if (fitness < bestFitness) {
 				bestFitness = fitness;
@@ -63,13 +63,13 @@ public class TournamentSelector implements ParentSelector, PouleSelector {
 
 
 	@Override
-	public List<CandidateProgram> getPoule(List<CandidateProgram> pop, int pouleSize) {
+	public List<CandidateProgram<TYPE>> getPoule(List<CandidateProgram<TYPE>> pop, int pouleSize) {
 		// If pouleSize is 0 or less then we use the whole population.
 		if (pouleSize <= 0) {
 			return pop;
 		}
 		
-		List<CandidateProgram> poule = new ArrayList<CandidateProgram>(pouleSize);
+		List<CandidateProgram<TYPE>> poule = new ArrayList<CandidateProgram<TYPE>>(pouleSize);
 		
 		for (int i=0; i<pouleSize; i++) {
 			poule.add(getParent(pop));

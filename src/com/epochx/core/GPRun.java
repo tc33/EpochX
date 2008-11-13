@@ -27,51 +27,50 @@ import com.epochx.core.representation.*;
 /**
  * 
  */
-public class GPRun {
+public class GPRun<TYPE> {
 
-	private GPModel model;
+	private GPModel<TYPE> model;
 	
-	public void run(GPModel model) {
+	public void run(GPModel<TYPE> model) {
 		this.model = model;
 		
 		// Set things up.
-		GPConfig config = model.getConfiguration();
-		GPCrossover crossover = new GPCrossover(config);
+		GPCrossover crossover = new GPCrossover(model);
 		
 		// Initialisation
-		Initialiser init = config.getInitialiser();
-		List<CandidateProgram> pop = init.getInitialPopulation();
+		Initialiser init = model.getInitialiser();
+		List<CandidateProgram<TYPE>> pop = init.getInitialPopulation();
 		//outputGeneration(0, pop);
 		
 		// TEMPORARY
 		double bestFitness = Double.POSITIVE_INFINITY;
-		CandidateProgram bestProgram = null;
+		CandidateProgram<?> bestProgram = null;
 		
-		for (int i=1; i<=config.getNoGenerations(); i++) {
-			List<CandidateProgram> nextPop = new ArrayList<CandidateProgram>();
+		for (int i=1; i<=model.getNoGenerations(); i++) {
+			List<CandidateProgram<TYPE>> nextPop = new ArrayList<CandidateProgram<TYPE>>();
 			
 			// Perform elitism.
 			/*Collections.sort(pop);
-			if (config.getNoElites() > 0)
+			if (GPModel.getNoElites() > 0)
 				nextPop.addAll(pop.subList(pop.size()-config.getNoElites(),pop.size()-1));*/
 			
 			// Construct a poule.
-			List<CandidateProgram> poule = config.getPouleSelector().getPoule(pop, config.getPouleSize());
+			List<CandidateProgram<TYPE>> poule = model.getPouleSelector().getPoule(pop, model.getPouleSize());
 			
-			while(nextPop.size() < config.getPopulationSize()) {
+			while(nextPop.size() < model.getPopulationSize()) {
 				// Pick a genetic operator using Pr, Pe and Pm.
 				double random = Math.random();
-				double pr = config.getReproductionProbability();
-				double pe = config.getCrossoverProbability();
+				double pr = model.getReproductionProbability();
+				double pe = model.getCrossoverProbability();
 				
 				if (random < pr) {
 					// Do reproduction. - Should this use clone?
 					nextPop.add(poule.get((int) Math.floor(Math.random()*poule.size())));
 				} else if (random < pr+pe) {
 					// Do crossover.
-					CandidateProgram[] children = crossover.crossover(poule);
-					for (CandidateProgram c: children) {
-						if (nextPop.size() < config.getPopulationSize())
+					CandidateProgram<TYPE>[] children = crossover.crossover(poule);
+					for (CandidateProgram<TYPE> c: children) {
+						if (nextPop.size() < model.getPopulationSize())
 							nextPop.add(c);
 					}
 				} else {
@@ -80,14 +79,14 @@ public class GPRun {
 				}
 			}
 			
-			for (CandidateProgram p: pop) {
+			for (CandidateProgram<TYPE> p: pop) {
 				double fitness = model.getFitness(p);
 				if (fitness < bestFitness) {
 					bestFitness = fitness;
 					bestProgram = p;
 				}
 			}
-			outputGeneration(i, pop);
+			//outputGeneration(i, pop);
 			
 			pop = nextPop;
 		}
@@ -102,7 +101,7 @@ public class GPRun {
 	/*
 	 * TEMPORARY LOGGING - need to setup some proper logging soon.
 	 */
-	private void outputGeneration(int i, List<CandidateProgram> programs) {
+	private void outputGeneration(int i, List<CandidateProgram<TYPE>> programs) {
 		System.out.println("######################################################");
 		System.out.println("Population #"+i+":");
 		System.out.println("Size: " + programs.size());
@@ -112,7 +111,7 @@ public class GPRun {
 		}*/
 	}
 	
-	private void outputProgram(CandidateProgram program) {
+	private void outputProgram(CandidateProgram<TYPE> program) {
 		System.out.println("------------------------------------------------------");
 		System.out.println(program);
 		System.out.println("    fitness = " + model.getFitness(program));

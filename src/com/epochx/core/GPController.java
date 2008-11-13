@@ -25,18 +25,12 @@ package com.epochx.core;
  */
 public class GPController {
 	
-	private GPModel model;
-	
-	public GPController(GPModel model) {
-		this.model = model;
-	}
-	
-	public GPRun[] run() {
-		GPRun[] runs = new GPRun[model.getConfiguration().getNoRuns()];
+	public static <TYPE> GPRun<TYPE>[] run(GPModel<TYPE> model) {
+		GPRun<TYPE>[] runs = new GPRun[model.getNoRuns()];
 		
-		for (GPRun r: runs) {
-			r = new GPRun();
-			r.run(model);
+		for (int i=0; i<model.getNoRuns(); i++) {
+			runs[i] = new GPRun<TYPE>();
+			runs[i].run(model);
 		}
 		
 		return runs;

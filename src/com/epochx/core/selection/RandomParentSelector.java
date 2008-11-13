@@ -26,21 +26,21 @@ import com.epochx.core.representation.*;
 /**
  * 
  */
-public class RandomParentSelector implements ParentSelector, PouleSelector {
+public class RandomParentSelector<TYPE> implements ParentSelector<TYPE>, PouleSelector<TYPE> {
 
 	@Override
-	public CandidateProgram getParent(List<CandidateProgram> pop) {		
+	public CandidateProgram<TYPE> getParent(List<CandidateProgram<TYPE>> pop) {		
 		return pop.get((int) Math.floor(Math.random()*pop.size()));
 	}
 
 	@Override
-	public List<CandidateProgram> getPoule(List<CandidateProgram> pop, int pouleSize) {
+	public List<CandidateProgram<TYPE>> getPoule(List<CandidateProgram<TYPE>> pop, int pouleSize) {
 		// If pouleSize is 0 or less then we use the whole population.
 		if (pouleSize <= 0) {
 			return pop;
 		}
 		
-		List<CandidateProgram> poule = new ArrayList<CandidateProgram>(pouleSize);
+		List<CandidateProgram<TYPE>> poule = new ArrayList<CandidateProgram<TYPE>>(pouleSize);
 		
 		for (int i=0; i<pouleSize; i++) {
 			poule.add(getParent(pop));

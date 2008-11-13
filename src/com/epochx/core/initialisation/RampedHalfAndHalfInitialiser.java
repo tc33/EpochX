@@ -22,6 +22,7 @@ package com.epochx.core.initialisation;
 import java.util.*;
 
 import com.epochx.core.*;
+import com.epochx.core.GPModel;
 import com.epochx.core.representation.*;
 
 import core.*;
@@ -29,13 +30,13 @@ import core.*;
 /**
  * 
  */
-public class RampedHalfAndHalfInitialiser implements Initialiser {
+public class RampedHalfAndHalfInitialiser<TYPE> implements Initialiser<TYPE> {
 	
-	private GPConfig config;
+	private GPModel<TYPE> model;
 	
-	private GrowInitialiser grow;
-	private FullInitialiser full;
-	private CandidateProgram candidate;
+	private GrowInitialiser<TYPE> grow;
+	private FullInitialiser<TYPE> full;
+	private CandidateProgram<TYPE> candidate;
 	private int depth;
 
 	/**
@@ -47,25 +48,25 @@ public class RampedHalfAndHalfInitialiser implements Initialiser {
 	 * @param depth The max depth of the program tree on initialisation
 	 * @throws IllegalArgumentException for the max depth being too small to work RHH
 	 */
-	public RampedHalfAndHalfInitialiser(GPConfig config, SemanticModule semMod) {
-		this.config = config;
+	public RampedHalfAndHalfInitialiser(GPModel<TYPE> model, SemanticModule semMod) {
+		this.model = model;
 		
 		// set up the grow and full parts
-		grow = new GrowInitialiser(config, semMod);
-		full = new FullInitialiser(config, semMod);
+		grow = new GrowInitialiser<TYPE>(model, semMod);
+		full = new FullInitialiser<TYPE>(model, semMod);
 		// modify depth for staged increase as per Koza
-		if(config.getMaxDepth()>=6) {
-			this.depth = config.getMaxDepth() - 4;
+		if(model.getMaxDepth()>=6) {
+			this.depth = model.getMaxDepth() - 4;
 		} else {
 			throw new IllegalArgumentException("MAX DEPTH TOO SMALL FOR RH+H");
 		}
 	}
 	
-	public List<CandidateProgram> getInitialPopulation() {
+	public List<CandidateProgram<TYPE>> getInitialPopulation() {
 		
 		// initialise population of candidate programs
-		int popSize = config.getPopulationSize();
-		List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
+		int popSize = model.getPopulationSize();
+		List<CandidateProgram<TYPE>> firstGen = new ArrayList<CandidateProgram<TYPE>>(popSize);
 		
 		// build population
 		int split = popSize / 5;
@@ -75,14 +76,14 @@ public class RampedHalfAndHalfInitialiser implements Initialiser {
 				depth++;
 				split = split + marker;
 			}
-            candidate = new CandidateProgram(grow.buildGrowNodeTree(depth), config.getModel());
+            candidate = new CandidateProgram<TYPE>(grow.buildGrowNodeTree(depth), model);
             while(firstGen.contains(candidate)) {
-                candidate = new CandidateProgram(grow.buildGrowNodeTree(depth), config.getModel());
+                candidate = new CandidateProgram<TYPE>(grow.buildGrowNodeTree(depth), model);
             }
             firstGen.add(candidate);
-            candidate = new CandidateProgram(full.buildFullNodeTree(depth), config.getModel());
+            candidate = new CandidateProgram<TYPE>(full.buildFullNodeTree(depth), model);
             while(firstGen.contains(candidate)) {
-                candidate = new CandidateProgram(full.buildFullNodeTree(depth), config.getModel());
+                candidate = new CandidateProgram<TYPE>(full.buildFullNodeTree(depth), model);
             }
             firstGen.add(candidate);
 			

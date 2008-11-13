@@ -96,8 +96,8 @@ public abstract class Node<TYPE> implements Cloneable {
 		if (n == current)
 			return this;
 		
-		Node node = null;
-		for (Node child: children) {
+		Node<?> node = null;
+		for (Node<?> child: children) {
 			int childLength = GPProgramAnalyser.getProgramLength(child);
 			
 			// Only look at the subtree if it contains the right range of nodes.
@@ -119,14 +119,14 @@ public abstract class Node<TYPE> implements Cloneable {
 	 * @param newNode
 	 * @param n
 	 */
-	public void setNthNode(Node newNode, int n) {		
+	public void setNthNode(Node<?> newNode, int n) {		
 		setNthNode(newNode, n, 0);
 	}
 	
 	/*
 	 * Recursive helper for the public setNthNode(Node, int).
 	 */
-	private void setNthNode(Node newNode, int n, int current) {
+	private void setNthNode(Node<?> newNode, int n, int current) {
 		int arity = getArity();
 		for (int i=0; i<arity; i++) {
 			if (current+1 == n) {
@@ -134,7 +134,7 @@ public abstract class Node<TYPE> implements Cloneable {
 				break;
 			}
 			
-			Node child = getChild(i);
+			Node<?> child = getChild(i);
 			int childLength = GPProgramAnalyser.getProgramLength(child);
 			
 			// Only look at the subtree if it contains the right range of nodes.
@@ -197,8 +197,8 @@ public abstract class Node<TYPE> implements Cloneable {
 			}
 			
 			for(int i=0; i<n.getArity() && equal; i++) {
-				Node thatChild = n.getChild(i);
-				Node thisChild = this.getChild(i);
+				Node<?> thatChild = n.getChild(i);
+				Node<?> thisChild = this.getChild(i);
 				
 				if ((thisChild != null) ^ (thatChild != null)) {
 					equal = false;

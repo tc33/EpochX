@@ -25,18 +25,18 @@ import com.epochx.core.representation.*;
 /**
  * 
  */
-public class UniformPointCrossover implements Crossover {
+public class UniformPointCrossover<TYPE> implements Crossover<TYPE> {
 	
-	private GPConfig config;
+	private GPModel<TYPE> model;
 	
-	public UniformPointCrossover(GPConfig config) {
-		this.config = config;
+	public UniformPointCrossover(GPModel<TYPE> model) {
+		this.model = model;
 	}
 
 	@Override
-	public CandidateProgram[] crossover(CandidateProgram parent1, CandidateProgram parent2) {
-		CandidateProgram child1 = (CandidateProgram) parent1.clone();
-		CandidateProgram child2 = (CandidateProgram) parent2.clone();
+	public CandidateProgram<TYPE>[] crossover(CandidateProgram<TYPE> parent1, CandidateProgram<TYPE> parent2) {
+		CandidateProgram<TYPE> child1 = (CandidateProgram<TYPE>) parent1.clone();
+		CandidateProgram<TYPE> child2 = (CandidateProgram<TYPE>) parent2.clone();
 
 		// select swap and put points
 		int swapPoint1 = (int) Math.floor(Math.random()*GPProgramAnalyser.getProgramLength(parent1));
@@ -47,8 +47,8 @@ public class UniformPointCrossover implements Crossover {
 
 		// find Nth node
 		// Do we actually need to make a clone of this if its a direct swap?
-		Node subTree1 = (Node) child1.getNthNode(swapPoint1).clone();
-		Node subTree2 = (Node) child2.getNthNode(swapPoint2).clone();
+		Node<?> subTree1 = (Node<?>) child1.getNthNode(swapPoint1).clone();
+		Node<?> subTree2 = (Node<?>) child2.getNthNode(swapPoint2).clone();
 		// set Nth node
 		child1.setNthNode(subTree2, swapPoint1);
 		child2.setNthNode(subTree1, swapPoint2);
@@ -57,12 +57,12 @@ public class UniformPointCrossover implements Crossover {
 		int pDepth1 = GPProgramAnalyser.getProgramDepth(child1);
 		int pDepth2 = GPProgramAnalyser.getProgramDepth(child2);
 		// depth check on child one
-		if(pDepth1>config.getMaxDepth()) {
-			child1 = (CandidateProgram) parent1.clone();
+		if(pDepth1>model.getMaxDepth()) {
+			child1 = (CandidateProgram<TYPE>) parent1.clone();
 		}
 		// depth check on child two
-		if(pDepth2>config.getMaxDepth()) {
-			child2 = (CandidateProgram) parent2.clone();
+		if(pDepth2>model.getMaxDepth()) {
+			child2 = (CandidateProgram<TYPE>) parent2.clone();
 		}
 
 		// TODO state change section

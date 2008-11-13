@@ -26,8 +26,8 @@ import com.epochx.core.representation.*;
 /**
  * 
  */
-public interface ParentSelector {
+public interface ParentSelector<TYPE> {
 
-	public CandidateProgram getParent(List<CandidateProgram> pop);
+	public CandidateProgram<TYPE> getParent(List<CandidateProgram<TYPE>> pop);
 	
 }

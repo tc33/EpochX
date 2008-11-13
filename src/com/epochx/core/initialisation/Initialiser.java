@@ -26,8 +26,8 @@ import com.epochx.core.representation.*;
 /**
  * 
  */
-public interface Initialiser {
+public interface Initialiser<TYPE> {
 
-	public List<CandidateProgram> getInitialPopulation();
+	public List<CandidateProgram<TYPE>> getInitialPopulation();
 	
 }

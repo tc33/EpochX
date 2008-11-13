@@ -34,7 +34,7 @@ import core.*;
 /**
  * 
  */
-public class Multiplexer6Bit implements GPModel<Boolean> {
+public class Multiplexer6Bit extends GPModel<Boolean> {
 
 	private List<String> inputs;
 	private HashMap<String, Variable<Boolean>> variables = new HashMap<String, Variable<Boolean>>();
@@ -42,22 +42,22 @@ public class Multiplexer6Bit implements GPModel<Boolean> {
 	public Multiplexer6Bit() {
 		inputs = new ArrayList<String>();
 		inputs = FileManip.loadInput(new File("input6bit.txt"));
+		
+		configure();
 	}
 	
-	@Override
-	public GPConfig getConfiguration() {
-		GPConfig config = new GPConfig(this);
-		config.setPopulationSize(500);
-		config.setNoGenerations(50);
-		config.setCrossoverProbability(0.9);
-		config.setReproductionProbability(0.1);
-		config.setNoRuns(10);
-		config.setPouleSize(50);
-		config.setNoElites(50);
-		config.setMaxDepth(4);
-		config.setPouleSelector(new TournamentSelector(7, this));
-		config.setParentSelector(new RandomParentSelector());
-		config.setCrossover(new UniformPointCrossover(config));
+	public void configure() {
+		setPopulationSize(500);
+		setNoGenerations(50);
+		setCrossoverProbability(0.9);
+		setReproductionProbability(0.1);
+		setNoRuns(10);
+		setPouleSize(50);
+		setNoElites(50);
+		setMaxDepth(4);
+		setPouleSelector(new TournamentSelector<Boolean>(7, this));
+		setParentSelector(new RandomParentSelector<Boolean>());
+		setCrossover(new UniformPointCrossover<Boolean>(this));
 		
 		// Define functions.
 		List<FunctionNode<?>> functions = new ArrayList<FunctionNode<?>>();
@@ -65,7 +65,7 @@ public class Multiplexer6Bit implements GPModel<Boolean> {
 		functions.add(new AndFunction(null, null));
 		functions.add(new OrFunction(null, null));
 		functions.add(new NotFunction(null));
-		config.setFunctions(functions);
+		setFunctions(functions);
 
 		// Define variables.
 		variables.put("D3", new Variable<Boolean>("D3"));
@@ -83,9 +83,7 @@ public class Multiplexer6Bit implements GPModel<Boolean> {
 		terminals.add(variables.get("D0"));
 		terminals.add(variables.get("A1"));
 		terminals.add(variables.get("A0"));
-		config.setTerminals(terminals);
-		
-		return config;
+		setTerminals(terminals);
 	}
 
 	@Override
@@ -128,6 +126,6 @@ public class Multiplexer6Bit implements GPModel<Boolean> {
     }
 	
 	public static void main(String[] args) {
-		new GPController(new Multiplexer6Bit()).run();
+		GPController.run(new Multiplexer6Bit());
 	}
 }

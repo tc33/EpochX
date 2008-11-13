@@ -27,12 +27,13 @@ import com.epochx.core.representation.*;
 /**
  * 
  */
-public class RegressionModel implements GPModel<Double> {
+public class RegressionModel extends GPModel<Double> {
 
-	@Override
-	public GPConfig getConfiguration() {
-		GPConfig config = new GPConfig(this);		
-		
+	public RegressionModel() {
+		configure();
+	}
+	
+	public void configure() {
 		// Define terminal set.
 		List<TerminalNode<Double>> terminals = new ArrayList<TerminalNode<Double>>();
 		terminals.add(new TerminalNode<Double>(5d));
@@ -53,8 +54,6 @@ public class RegressionModel implements GPModel<Double> {
 		functions.add(new SubtractFunction(null, null));
 		functions.add(new MultiplyFunction(null, null));
 		functions.add(new ProtectedDivisionFunction(null, null));
-		
-		return config;
 	}
 
 	@Override

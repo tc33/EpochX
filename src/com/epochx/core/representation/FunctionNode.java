@@ -34,9 +34,9 @@ public abstract class FunctionNode<TYPE> extends Node<TYPE> {
 	public String toString() {
 		StringBuilder builder = new StringBuilder(getFunctionName());
 		builder.append('(');
-		Node[] children = getChildren();
+		Node<?>[] children = getChildren();
 		for (int i=0, n=children.length; i<n; i++) {
-			Node c = children[i];
+			Node<?> c = children[i];
 			if (i!=0) builder.append(' ');
 			builder.append(c.toString());
 		}

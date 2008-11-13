@@ -26,8 +26,8 @@ import com.epochx.core.representation.*;
 /**
  * 
  */
-public interface PouleSelector {
+public interface PouleSelector<TYPE> {
 
-	public List<CandidateProgram> getPoule(List<CandidateProgram> pop, int pouleSize);
+	public List<CandidateProgram<TYPE>> getPoule(List<CandidateProgram<TYPE>> pop, int pouleSize);
 	
 }

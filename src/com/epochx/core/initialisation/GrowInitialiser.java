@@ -29,25 +29,26 @@ import core.SemanticModule;
 /**
  * 
  */
-public class GrowInitialiser implements Initialiser {
+public class GrowInitialiser<TYPE> implements Initialiser<TYPE> {
 	
-	private GPConfig config;
+	private GPModel<TYPE> model;
 	
-	public GrowInitialiser(GPConfig config, SemanticModule semMod) {
-		this.config = config;
+	public GrowInitialiser(GPModel<TYPE> model, SemanticModule semMod) {
+		this.model = model;
 	}
 	
-	public List<CandidateProgram> getInitialPopulation() {
+	@Override
+	public List<CandidateProgram<TYPE>> getInitialPopulation() {
 		
 		// initialise population of candidate programs
-		int popSize = config.getPopulationSize();
-		List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
+		int popSize = model.getPopulationSize();
+		List<CandidateProgram<TYPE>> firstGen = new ArrayList<CandidateProgram<TYPE>>(popSize);
 		
 		// build population
 		for(int i=0; i<popSize; i++) {
-            CandidateProgram candidate = new CandidateProgram(buildGrowNodeTree(config.getMaxDepth()), config.getModel());
+            CandidateProgram<TYPE> candidate = new CandidateProgram<TYPE>(buildGrowNodeTree(model.getMaxDepth()), model);
             while(firstGen.contains(candidate)) {
-                candidate = new CandidateProgram(buildGrowNodeTree(config.getMaxDepth()), config.getModel());
+                candidate = new CandidateProgram<TYPE>(buildGrowNodeTree(model.getMaxDepth()), model);
             }
             firstGen.add(candidate);
         }
@@ -56,26 +57,26 @@ public class GrowInitialiser implements Initialiser {
 		return firstGen;
 	}
 	
-	public Node buildGrowNodeTree(int depth) {		
+	public Node<TYPE> buildGrowNodeTree(int depth) {		
         // define top node
-		int randomIndex = (int) Math.floor(Math.random() * config.getSyntax().size());
-		Node top = (Node) config.getSyntax().get(randomIndex).clone();
+		int randomIndex = (int) Math.floor(Math.random() * model.getSyntax().size());
+		Node<TYPE> top = (Node<TYPE>) model.getSyntax().get(randomIndex).clone();
         
         // recurse down each branch to depth using Grow mechanism
-        this.fillChildren(top, 1, config.getMaxDepth());
+        this.fillChildren(top, 1, model.getMaxDepth());
         
         // return top node
         return top;
 	}
 	
-	public void fillChildren(Node topNode, int currentDepth, int maxDepth) {
+	public void fillChildren(Node<?> topNode, int currentDepth, int maxDepth) {
 		int arity = topNode.getArity();
 		if(arity>0) {
 			if(currentDepth<maxDepth-1) {
 				// fill children with functions or terminals
 				for(int i = 0; i<arity; i++) {
-					int randomIndex = (int) Math.floor(Math.random() * config.getSyntax().size());
-					Node child = (Node) config.getSyntax().get(randomIndex).clone();
+					int randomIndex = (int) Math.floor(Math.random() * model.getSyntax().size());
+					Node<?> child = (Node<?>) model.getSyntax().get(randomIndex).clone();
 
 					topNode.setChild(child, i);
 					this.fillChildren(child, (currentDepth+1), maxDepth);
@@ -83,8 +84,8 @@ public class GrowInitialiser implements Initialiser {
 			} else {
 				// fill children with terminals only
 				for(int i = 0; i<arity; i++) {
-					int randomIndex = (int) Math.floor(Math.random() * config.getTerminals().size());
-					Node child = (Node) config.getTerminals().get(randomIndex).clone();
+					int randomIndex = (int) Math.floor(Math.random() * model.getTerminals().size());
+					Node<?> child = (Node<?>) model.getTerminals().get(randomIndex).clone();
 					topNode.setChild(child, i);
 				}
 			}

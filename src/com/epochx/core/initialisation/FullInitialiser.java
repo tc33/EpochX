@@ -21,7 +21,7 @@ package com.epochx.core.initialisation;
 
 import java.util.*;
 
-import com.epochx.core.*;
+import com.epochx.core.GPModel;
 import com.epochx.core.representation.*;
 
 import core.*;
@@ -29,29 +29,30 @@ import core.*;
 /**
  * 
  */
-public class FullInitialiser implements Initialiser {
+public class FullInitialiser<TYPE> implements Initialiser<TYPE> {
 	
-	private GPConfig config;
+	private GPModel<TYPE> model;
 	
-	public FullInitialiser(GPConfig config) {
-		this(config, null);
+	public FullInitialiser(GPModel<TYPE> model) {
+		this(model, null);
 	}
 	
-	public FullInitialiser(GPConfig config, SemanticModule semMod) {
-		this.config = config;
+	public FullInitialiser(GPModel<TYPE> model, SemanticModule semMod) {
+		this.model = model;
 	}
 	
-	public List<CandidateProgram> getInitialPopulation() {
+	@Override
+	public List<CandidateProgram<TYPE>> getInitialPopulation() {
 		
 		// Initialise population of candidate programs.
-		int popSize = config.getPopulationSize();
-		List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
+		int popSize = model.getPopulationSize();
+		List<CandidateProgram<TYPE>> firstGen = new ArrayList<CandidateProgram<TYPE>>(popSize);
 		
 		// Build population		
 		for(int i=0; i<popSize; i++) {
-			CandidateProgram candidate;
+			CandidateProgram<TYPE> candidate;
 			do {
-            	candidate = new CandidateProgram(buildFullNodeTree(config.getMaxDepth()), config.getModel());
+            	candidate = new CandidateProgram<TYPE>(buildFullNodeTree(model.getMaxDepth()), model);
 			} while (firstGen.contains(candidate));
 			firstGen.add(candidate);
         }
@@ -60,25 +61,25 @@ public class FullInitialiser implements Initialiser {
 		return firstGen;
 	}
 	
-	public Node buildFullNodeTree(int depth) {		
+	public Node<TYPE> buildFullNodeTree(int depth) {		
         // define top node form functions
-        int randomIndex = (int) Math.floor(Math.random() * config.getFunctions().size());
-        Node top = (Node) config.getFunctions().get(randomIndex).clone();
+        int randomIndex = (int) Math.floor(Math.random() * model.getFunctions().size());
+        Node<TYPE> top = (Node<TYPE>) model.getFunctions().get(randomIndex).clone();
 
         // recurse down each branch to depth
-		fillChildren(top, 1, config.getMaxDepth());      
+		fillChildren(top, 1, model.getMaxDepth());      
         
         // return top node
         return top;
 	}
 	
-	private void fillChildren(Node topNode, int currentDepth, int maxDepth) {
+	private void fillChildren(Node<?> topNode, int currentDepth, int maxDepth) {
 		int arity = topNode.getArity();
 		if(currentDepth<maxDepth-1) {
 			// fill children with functions only
 			for(int i = 0; i<arity; i++) {
-				int randomIndex = (int) Math.floor(Math.random() * config.getFunctions().size());
-				Node child = (Node) config.getFunctions().get(randomIndex).clone();
+				int randomIndex = (int) Math.floor(Math.random() * model.getFunctions().size());
+				Node<?> child = (Node<?>) model.getFunctions().get(randomIndex).clone();
 
 				topNode.setChild(child, i);
 				fillChildren(child, (currentDepth+1), maxDepth);
@@ -86,8 +87,8 @@ public class FullInitialiser implements Initialiser {
 		} else {
 			// fill children with terminals only
 			for(int i = 0; i<arity; i++) {
-				int randomIndex = (int) Math.floor(Math.random() * config.getTerminals().size());
-				Node child = (Node) config.getTerminals().get(randomIndex).clone();
+				int randomIndex = (int) Math.floor(Math.random() * model.getTerminals().size());
+				Node<?> child = (Node<?>) model.getTerminals().get(randomIndex).clone();
 
 				topNode.setChild(child, i);
 			}

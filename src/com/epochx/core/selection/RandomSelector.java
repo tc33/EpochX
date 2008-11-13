@@ -26,7 +26,7 @@ import com.epochx.core.representation.*;
 /**
  * 
  */
-public class RandomParentSelector<TYPE> implements ParentSelector<TYPE>, PouleSelector<TYPE> {
+public class RandomSelector<TYPE> implements ParentSelector<TYPE>, PouleSelector<TYPE> {
 
 	@Override
 	public CandidateProgram<TYPE> getParent(List<CandidateProgram<TYPE>> pop) {		

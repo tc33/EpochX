@@ -40,7 +40,7 @@ public class TournamentSelector<TYPE> implements ParentSelector<TYPE>, PouleSele
 	@Override
 	public CandidateProgram<TYPE> getParent(List<CandidateProgram<TYPE>> pop) {
 		// Use a random selector to construct a tournament.
-		RandomParentSelector<TYPE> randomSelector = new RandomParentSelector<TYPE>();
+		RandomSelector<TYPE> randomSelector = new RandomSelector<TYPE>();
 		CandidateProgram<TYPE>[] tournament = new CandidateProgram[tournamentSize];
 		
 		for (int i=0; i<tournamentSize; i++) {

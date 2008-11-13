@@ -22,20 +22,57 @@ package com.epochx.example.regression;
 import java.util.*;
 
 import com.epochx.core.*;
+import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
+import com.epochx.core.selection.*;
 
 /**
  * 
  */
 public class RegressionModel extends GPAbstractModel<Double> {
 
+	private Variable<Double> x;
+	
 	public RegressionModel() {
 		configure();
 	}
 	
 	public void configure() {
+		// Create variables.
+		this.x = new Variable<Double>("X");
+		
+		// Setup run.
+		setPopulationSize(600);
+		setCrossoverProbability(0.9);
+		setMutationProbability(0.0);
+		setReproductionProbability(0.1);
+		setInitialiser(new GrowInitialiser<Double>(this, null));
+		setPouleSelector(new TournamentSelector<Double>(4, this));
+		setPouleSize(50);
+		setNoGenerations(100);
+		setMaxDepth(10);
+		setNoRuns(10);
+	}
+
+	@Override
+	public List<FunctionNode<?>> getFunctions() {
+		// Define function set.
+		List<FunctionNode<?>> functions = new ArrayList<FunctionNode<?>>();
+		functions.add(new AddFunction(null, null));
+		functions.add(new SubtractFunction(null, null));
+		functions.add(new MultiplyFunction(null, null));
+		functions.add(new ProtectedDivisionFunction(null, null));
+		
+		return functions;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.epochx.core.GPModel#getTerminals()
+	 */
+	@Override
+	public List<TerminalNode<?>> getTerminals() {
 		// Define terminal set.
-		List<TerminalNode<Double>> terminals = new ArrayList<TerminalNode<Double>>();
+		List<TerminalNode<?>> terminals = new ArrayList<TerminalNode<?>>();
 		terminals.add(new TerminalNode<Double>(5d));
 		terminals.add(new TerminalNode<Double>(4d));
 		terminals.add(new TerminalNode<Double>(3d));
@@ -48,37 +85,33 @@ public class RegressionModel extends GPAbstractModel<Double> {
 		terminals.add(new TerminalNode<Double>(-2d));
 		terminals.add(new TerminalNode<Double>(-1d));
 		
-		// Define function set.
-		List<FunctionNode<Double>> functions = new ArrayList<FunctionNode<Double>>();
-		functions.add(new AddFunction(null, null));
-		functions.add(new SubtractFunction(null, null));
-		functions.add(new MultiplyFunction(null, null));
-		functions.add(new ProtectedDivisionFunction(null, null));
+		// Define variables;
+		terminals.add(x);
+		
+		return terminals;
 	}
-
+	
 	@Override
 	public double getFitness(CandidateProgram<Double> program) {
-		Double result = program.evaluate();
+		double[] inputs = new double[]{0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9};
+		int noWrong = 0;
+		
+		for (double in: inputs) {
+			x.setValue(in);
+			if (program.evaluate() != getCorrectResult(in)) {
+				noWrong++;
+			}
+		}
 		
 		// How good is this result?
-		return 0;
+		return noWrong;
 	}
-
-	/* (non-Javadoc)
-	 * @see com.epochx.core.GPModel#getFunctions()
-	 */
-	@Override
-	public List<FunctionNode<?>> getFunctions() {
-		// TODO Auto-generated method stub
-		return null;
+	
+	private double getCorrectResult(double x) {
+		return Math.pow(x, 2) / 2;
 	}
-
-	/* (non-Javadoc)
-	 * @see com.epochx.core.GPModel#getTerminals()
-	 */
-	@Override
-	public List<TerminalNode<?>> getTerminals() {
-		// TODO Auto-generated method stub
-		return null;
+	
+	public static void main(String[] args) {
+		GPController.run(new RegressionModel());
 	}
 }

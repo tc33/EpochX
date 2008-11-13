@@ -62,6 +62,9 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE> {
 		pouleSize = -1;
 		noElites = 0;
 		
+		parentSelector = new RandomSelector<TYPE>();
+		pouleSelector = new RandomSelector<TYPE>();
+		
 		initialiser = new FullInitialiser<TYPE>(this);
 		crossover = new UniformPointCrossover<TYPE>(this);
 	}

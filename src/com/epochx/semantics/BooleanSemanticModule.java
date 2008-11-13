@@ -23,6 +23,7 @@ import net.sf.javabdd.BDD;
 import net.sf.javabdd.BDDFactory;
 import java.util.*;
 
+import com.epochx.core.*;
 import com.epochx.core.representation.*;
 
 /**
@@ -34,9 +35,11 @@ public class BooleanSemanticModule implements SemanticModule {
 	private BDDFactory bddLink;
 	private HashMap<Node, BDD> bddList;
 	private List<Node> terminals;
-
-	public BooleanSemanticModule(List<Node> terminals) {
+	private GPModel model;
+	
+	public BooleanSemanticModule(List<Node> terminals, GPModel model) {
 		this.terminals = terminals;
+		this.model = model;
 	}
 
 	/* (non-Javadoc)
@@ -76,15 +79,15 @@ public class BooleanSemanticModule implements SemanticModule {
 		} else if(rootNode instanceof NotFunction) {
 			// NOT
 			// resolve child behaviour
-			BooleanRepresentation childBehaviour = this.codeToBehaviour(new CandidateProgram(rootNode.getChild(0)));
+			BooleanRepresentation childBehaviour = this.codeToBehaviour(new CandidateProgram(rootNode.getChild(0), model));
 			BDD childBDD = childBehaviour.getBDD();
 			BDD result = childBDD.not();
 			return new BooleanRepresentation(result);
 		} else if(rootNode instanceof AndFunction) {            	
 			// AND
 			// resolve child behaviour
-			BooleanRepresentation childBehaviour1 = this.codeToBehaviour(new CandidateProgram(rootNode.getChild(0)));
-			BooleanRepresentation childBehaviour2 = this.codeToBehaviour(new CandidateProgram(rootNode.getChild(1)));
+			BooleanRepresentation childBehaviour1 = this.codeToBehaviour(new CandidateProgram(rootNode.getChild(0), model));
+			BooleanRepresentation childBehaviour2 = this.codeToBehaviour(new CandidateProgram(rootNode.getChild(1), model));
 			BDD childBDD1 = childBehaviour1.getBDD();
 			BDD childBDD2 = childBehaviour2.getBDD();
 			BDD result = childBDD1.and(childBDD2);
@@ -92,8 +95,8 @@ public class BooleanSemanticModule implements SemanticModule {
 		} else if(rootNode instanceof OrFunction) {
 			// OR
 			// resolve child behaviour
-			BooleanRepresentation childBehaviour1 = this.codeToBehaviour(new CandidateProgram(rootNode.getChild(0)));
-			BooleanRepresentation childBehaviour2 = this.codeToBehaviour(new CandidateProgram(rootNode.getChild(1)));
+			BooleanRepresentation childBehaviour1 = this.codeToBehaviour(new CandidateProgram(rootNode.getChild(0), model));
+			BooleanRepresentation childBehaviour2 = this.codeToBehaviour(new CandidateProgram(rootNode.getChild(1), model));
 			BDD childBDD1 = childBehaviour1.getBDD();
 			BDD childBDD2 = childBehaviour2.getBDD();
 			BDD result = childBDD1.or(childBDD2);
@@ -101,9 +104,9 @@ public class BooleanSemanticModule implements SemanticModule {
 		} else if(rootNode instanceof IfFunction) {
 			// IF
 			// resolve child behaviour
-			BooleanRepresentation childBehaviour1 = this.codeToBehaviour(new CandidateProgram(rootNode.getChild(0)));
-			BooleanRepresentation childBehaviour2 = this.codeToBehaviour(new CandidateProgram(rootNode.getChild(1)));
-			BooleanRepresentation childBehaviour3 = this.codeToBehaviour(new CandidateProgram(rootNode.getChild(2)));
+			BooleanRepresentation childBehaviour1 = this.codeToBehaviour(new CandidateProgram(rootNode.getChild(0), model));
+			BooleanRepresentation childBehaviour2 = this.codeToBehaviour(new CandidateProgram(rootNode.getChild(1), model));
+			BooleanRepresentation childBehaviour3 = this.codeToBehaviour(new CandidateProgram(rootNode.getChild(2), model));
 			BDD childBDD1 = childBehaviour1.getBDD();
 			BDD childBDD2 = childBehaviour2.getBDD();
 			BDD childBDD3 = childBehaviour3.getBDD();
@@ -127,7 +130,7 @@ public class BooleanSemanticModule implements SemanticModule {
 		
 		
 		
-		CandidateProgram result = new CandidateProgram(rootNode);	
+		CandidateProgram result = new CandidateProgram(rootNode, model);	
 		return result;
 	}
 	

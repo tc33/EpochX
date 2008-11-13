@@ -68,6 +68,10 @@ public class TerminalNode<TYPE> extends Node<TYPE> {
 		TYPE objVal = ((TerminalNode<TYPE>) obj).value;
 		TYPE thisVal = this.value;
 		
+		if ((objVal == null) ^ (thisVal == null)) {
+			return false;
+		}
+		
 		return (thisVal == objVal) || thisVal.equals(objVal);
 	}
 	

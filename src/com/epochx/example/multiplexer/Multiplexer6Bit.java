@@ -55,7 +55,7 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
 		setNoElites(50);
 		setMaxDepth(6);
 		setPouleSelector(new TournamentSelector<Boolean>(7, this));
-		setParentSelector(new RandomParentSelector<Boolean>());
+		setParentSelector(new RandomSelector<Boolean>());
 		setCrossover(new UniformPointCrossover<Boolean>(this));
 		
 		// Define variables.

@@ -64,13 +64,11 @@ public class Variable<TYPE> extends TerminalNode<TYPE> {
 		//}
 	}
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
-		// TODO Auto-generated method stub
-		return super.equals(obj);
+		return (obj instanceof Variable) 
+					&& super.equals(obj) 
+					&& this.label.equals(((Variable) obj).label);
 	}
 	
 	/* (non-Javadoc)

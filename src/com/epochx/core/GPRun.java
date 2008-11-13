@@ -29,9 +29,9 @@ import com.epochx.core.representation.*;
  */
 public class GPRun<TYPE> {
 
-	private GPModel<TYPE> model;
+	private GPModeld<TYPE> model;
 	
-	public void run(GPModel<TYPE> model) {
+	public void run(GPModeld<TYPE> model) {
 		this.model = model;
 		
 		// Set things up.

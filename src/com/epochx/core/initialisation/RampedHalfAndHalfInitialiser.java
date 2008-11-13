@@ -22,7 +22,7 @@ package com.epochx.core.initialisation;
 import java.util.*;
 
 import com.epochx.core.*;
-import com.epochx.core.GPModel;
+import com.epochx.core.GPModeld;
 import com.epochx.core.representation.*;
 
 import core.*;
@@ -32,7 +32,7 @@ import core.*;
  */
 public class RampedHalfAndHalfInitialiser<TYPE> implements Initialiser<TYPE> {
 	
-	private GPModel<TYPE> model;
+	private GPModeld<TYPE> model;
 	
 	private GrowInitialiser<TYPE> grow;
 	private FullInitialiser<TYPE> full;
@@ -48,7 +48,7 @@ public class RampedHalfAndHalfInitialiser<TYPE> implements Initialiser<TYPE> {
 	 * @param depth The max depth of the program tree on initialisation
 	 * @throws IllegalArgumentException for the max depth being too small to work RHH
 	 */
-	public RampedHalfAndHalfInitialiser(GPModel<TYPE> model, SemanticModule semMod) {
+	public RampedHalfAndHalfInitialiser(GPModeld<TYPE> model, SemanticModule semMod) {
 		this.model = model;
 		
 		// set up the grow and full parts

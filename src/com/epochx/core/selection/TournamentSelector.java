@@ -30,9 +30,9 @@ import com.epochx.core.representation.*;
 public class TournamentSelector<TYPE> implements ParentSelector<TYPE>, PouleSelector<TYPE> {
 
 	private int tournamentSize;
-	private GPModel<TYPE> model;
+	private GPModeld<TYPE> model;
 	
-	public TournamentSelector(int tournamentSize, GPModel<TYPE> model) {
+	public TournamentSelector(int tournamentSize, GPModeld<TYPE> model) {
 		this.tournamentSize = tournamentSize;
 		this.model = model;
 	}

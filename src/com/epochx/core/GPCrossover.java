@@ -35,7 +35,7 @@ public class GPCrossover<TYPE> {
 	
 	//private GPModel<?> model;
 	
-	public GPCrossover(GPModel<TYPE> model) {
+	public GPCrossover(GPModeld<TYPE> model) {
 		//this.model = model;
 		
 		this.parentSelector = model.getParentSelector();

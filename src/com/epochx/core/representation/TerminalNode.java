@@ -37,6 +37,10 @@ public class TerminalNode<TYPE> extends Node<TYPE> {
 	public TYPE getValue() {
 		return value;
 	}
+	
+	public void setValue(TYPE value) {
+		this.value = value;
+	}
 
 	@Override
 	public TYPE evaluate() {

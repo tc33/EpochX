@@ -27,7 +27,7 @@ package com.epochx.core.representation;
 public class Variable<TYPE> extends TerminalNode<TYPE> {
 
 	private String label;
-	private TYPE value = null;
+	//private TYPE value = null;
 	
 	public Variable(String label) {
 		super(null);
@@ -42,17 +42,17 @@ public class Variable<TYPE> extends TerminalNode<TYPE> {
 		this.label = label;
 	}
 	
-	public TYPE getValue() {
+	/*public TYPE getValue() {
 		return value;
 	}
 	
 	public void setValue(TYPE value) {
 		this.value = value;
-	}
+	}*/
 	
 	@Override
 	public TYPE evaluate() {
-		return value;
+		return getValue();
 	}
 
 	@Override

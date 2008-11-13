@@ -53,10 +53,18 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
 		setNoRuns(10);
 		setPouleSize(50);
 		setNoElites(50);
-		setMaxDepth(4);
+		setMaxDepth(6);
 		setPouleSelector(new TournamentSelector<Boolean>(7, this));
 		setParentSelector(new RandomParentSelector<Boolean>());
 		setCrossover(new UniformPointCrossover<Boolean>(this));
+		
+		// Define variables.
+		variables.put("D3", new Variable<Boolean>("D3"));
+		variables.put("D2", new Variable<Boolean>("D2"));
+		variables.put("D1", new Variable<Boolean>("D1"));
+		variables.put("D0", new Variable<Boolean>("D0"));
+		variables.put("A1", new Variable<Boolean>("A1"));
+		variables.put("A0", new Variable<Boolean>("A0"));
 	}
 	
 	@Override
@@ -71,15 +79,7 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
 	}
 
 	@Override
-	public List<TerminalNode<?>> getTerminals() {
-		// Define variables.
-		variables.put("D3", new Variable<Boolean>("D3"));
-		variables.put("D2", new Variable<Boolean>("D2"));
-		variables.put("D1", new Variable<Boolean>("D1"));
-		variables.put("D0", new Variable<Boolean>("D0"));
-		variables.put("A1", new Variable<Boolean>("A1"));
-		variables.put("A0", new Variable<Boolean>("A0"));
-		
+	public List<TerminalNode<?>> getTerminals() {		
 		// Define terminals.
 		List<TerminalNode<?>> terminals = new ArrayList<TerminalNode<?>>();
 		terminals.add(variables.get("D3"));

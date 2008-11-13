@@ -35,10 +35,10 @@ public class GPRun<TYPE> {
 		this.model = model;
 		
 		// Set things up.
-		GPCrossover crossover = new GPCrossover(model);
+		GPCrossover<TYPE> crossover = new GPCrossover<TYPE>(model);
 		
 		// Initialisation
-		Initialiser init = model.getInitialiser();
+		Initialiser<TYPE> init = model.getInitialiser();
 		List<CandidateProgram<TYPE>> pop = init.getInitialPopulation();
 		//outputGeneration(0, pop);
 		

@@ -31,9 +31,9 @@ import core.SemanticModule;
  */
 public class GrowInitialiser<TYPE> implements Initialiser<TYPE> {
 	
-	private GPModeld<TYPE> model;
+	private GPModel<TYPE> model;
 	
-	public GrowInitialiser(GPModeld<TYPE> model, SemanticModule semMod) {
+	public GrowInitialiser(GPModel<TYPE> model, SemanticModule semMod) {
 		this.model = model;
 	}
 	

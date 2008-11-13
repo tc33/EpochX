@@ -30,7 +30,7 @@ import com.epochx.core.selection.*;
 /**
  * 
  */
-public abstract class GPAbstractModel<TYPE> implements GPModeld<TYPE> {
+public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE> {
 
 	private Initialiser<TYPE> initialiser;
 	private Crossover<TYPE> crossover;

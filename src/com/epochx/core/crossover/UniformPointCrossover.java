@@ -27,9 +27,9 @@ import com.epochx.core.representation.*;
  */
 public class UniformPointCrossover<TYPE> implements Crossover<TYPE> {
 	
-	private GPModeld<TYPE> model;
+	private GPModel<TYPE> model;
 	
-	public UniformPointCrossover(GPModeld<TYPE> model) {
+	public UniformPointCrossover(GPModel<TYPE> model) {
 		this.model = model;
 	}
 

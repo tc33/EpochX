@@ -34,7 +34,7 @@ import com.epochx.core.*;
 public class CandidateProgram<TYPE> implements Cloneable, Comparable<CandidateProgram<TYPE>> {
 	
 	private Node<TYPE> rootNode;
-	private GPModeld<TYPE> model;
+	private GPModel<TYPE> model;
 	
 	/**
 	 * Constructs a new program individual where <code>rootNode</code> is the 
@@ -44,7 +44,7 @@ public class CandidateProgram<TYPE> implements Cloneable, Comparable<CandidatePr
 	 * 					all other nodes. It may be either a FunctionNode or a 
 	 * 					TerminalNode
 	 */
-	public CandidateProgram(Node<TYPE> rootNode, GPModeld<TYPE> model) {
+	public CandidateProgram(Node<TYPE> rootNode, GPModel<TYPE> model) {
 		this.model = model;
 		this.rootNode = rootNode;
 	}

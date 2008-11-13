@@ -21,7 +21,7 @@ package com.epochx.core.initialisation;
 
 import java.util.*;
 
-import com.epochx.core.GPModeld;
+import com.epochx.core.GPModel;
 import com.epochx.core.representation.*;
 
 import core.*;
@@ -31,13 +31,13 @@ import core.*;
  */
 public class FullInitialiser<TYPE> implements Initialiser<TYPE> {
 	
-	private GPModeld<TYPE> model;
+	private GPModel<TYPE> model;
 	
-	public FullInitialiser(GPModeld<TYPE> model) {
+	public FullInitialiser(GPModel<TYPE> model) {
 		this(model, null);
 	}
 	
-	public FullInitialiser(GPModeld<TYPE> model, SemanticModule semMod) {
+	public FullInitialiser(GPModel<TYPE> model, SemanticModule semMod) {
 		this.model = model;
 	}
 	

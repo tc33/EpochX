@@ -26,7 +26,7 @@ import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 
-public interface GPModeld<TYPE> {
+public interface GPModel<TYPE> {
 	
 	/**
 	 * @return the pouleSize

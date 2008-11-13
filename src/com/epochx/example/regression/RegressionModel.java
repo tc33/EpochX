@@ -27,7 +27,7 @@ import com.epochx.core.representation.*;
 /**
  * 
  */
-public class RegressionModel extends GPModel<Double> {
+public class RegressionModel extends GPAbstractModel<Double> {
 
 	public RegressionModel() {
 		configure();
@@ -62,5 +62,23 @@ public class RegressionModel extends GPModel<Double> {
 		
 		// How good is this result?
 		return 0;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.epochx.core.GPModel#getFunctions()
+	 */
+	@Override
+	public List<FunctionNode<?>> getFunctions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.epochx.core.GPModel#getTerminals()
+	 */
+	@Override
+	public List<TerminalNode<?>> getTerminals() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

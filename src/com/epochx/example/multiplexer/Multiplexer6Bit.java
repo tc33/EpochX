@@ -23,18 +23,17 @@ import java.io.*;
 import java.util.*;
 
 import com.epochx.core.*;
-import com.epochx.core.GPModel;
 import com.epochx.core.crossover.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.util.FileManip;
 
-import core.*;
+import core.BoolTrans;
 
 /**
  * 
  */
-public class Multiplexer6Bit extends GPModel<Boolean> {
+public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
 
 	private List<String> inputs;
 	private HashMap<String, Variable<Boolean>> variables = new HashMap<String, Variable<Boolean>>();
@@ -58,15 +57,21 @@ public class Multiplexer6Bit extends GPModel<Boolean> {
 		setPouleSelector(new TournamentSelector<Boolean>(7, this));
 		setParentSelector(new RandomParentSelector<Boolean>());
 		setCrossover(new UniformPointCrossover<Boolean>(this));
-		
+	}
+	
+	@Override
+	public List<FunctionNode<?>> getFunctions() {
 		// Define functions.
 		List<FunctionNode<?>> functions = new ArrayList<FunctionNode<?>>();
 		functions.add(new IfFunction(null, null, null));
 		functions.add(new AndFunction(null, null));
 		functions.add(new OrFunction(null, null));
 		functions.add(new NotFunction(null));
-		setFunctions(functions);
+		return functions;
+	}
 
+	@Override
+	public List<TerminalNode<?>> getTerminals() {
 		// Define variables.
 		variables.put("D3", new Variable<Boolean>("D3"));
 		variables.put("D2", new Variable<Boolean>("D2"));
@@ -83,9 +88,10 @@ public class Multiplexer6Bit extends GPModel<Boolean> {
 		terminals.add(variables.get("D0"));
 		terminals.add(variables.get("A1"));
 		terminals.add(variables.get("A0"));
-		setTerminals(terminals);
+		
+		return terminals;
 	}
-
+	
 	@Override
 	public double getFitness(CandidateProgram<Boolean> program) {
         double score = 0;

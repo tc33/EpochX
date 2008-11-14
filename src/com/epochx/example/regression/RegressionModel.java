@@ -22,6 +22,7 @@ package com.epochx.example.regression;
 import java.util.*;
 
 import com.epochx.core.*;
+import com.epochx.core.crossover.*;
 import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
@@ -48,6 +49,7 @@ public class RegressionModel extends GPAbstractModel<Double> {
 		setReproductionProbability(0.1);
 		setInitialiser(new GrowInitialiser<Double>(this, null));
 		setPouleSelector(new TournamentSelector<Double>(4, this));
+		setCrossover(new KozaCrossover<Double>());
 		setPouleSize(50);
 		setNoGenerations(100);
 		setMaxDepth(10);

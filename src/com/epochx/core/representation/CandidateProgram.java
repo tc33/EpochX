@@ -78,7 +78,7 @@ public class CandidateProgram<TYPE> implements Cloneable, Comparable<CandidatePr
 		if (n == 0) {
 			// Need to test is of type <TYPE> somehow really.
 			rootNode = (Node<TYPE>) newNode;
-		}		
+		}
 		int size = GPProgramAnalyser.getProgramLength(this);
 		if(n > size)
 			throw new IndexOutOfBoundsException("Index: "+n+", Size: "+size);		

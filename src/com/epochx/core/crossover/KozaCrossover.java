@@ -54,41 +54,80 @@ public class KozaCrossover<TYPE> implements Crossover<TYPE> {
 		return new CandidateProgram[]{child1, child2};
 	}
 	
-	private int getCrossoverPoint(CandidateProgram program) {
+	private int getCrossoverPoint(CandidateProgram<?> program) {
 		int length = GPProgramAnalyser.getProgramLength(program);
 		int noTerminals = GPProgramAnalyser.getNoTerminals(program);
 		int noFunctions = length - noTerminals;
 		
 		if ((noFunctions > 0) && (Math.random() < internalProbability)) {
-			
-			
+
 			int f = (int) Math.floor(Math.random()*noFunctions);
 			
-			int functionCount = -1;
-			for (int i=0; i<length; i++) {
-				// Definitely should NOT be using getNthNode - WAY too slow for this.
-				Node nth = program.getNthNode(i);
-				if (nth instanceof FunctionNode) {
-					if (++functionCount == f) {
-						return i;
-					}
-				}
-			}
+			int nthFunctionNode = getNthFunctionNode(f, program);
+			
+			return nthFunctionNode;
 		} else {
 			int t = (int) Math.floor(Math.random()*noTerminals);
 			
-			int terminalCount = -1;
-			for (int i=0; i<length; i++) {
-				Node nth = program.getNthNode(i);
-				if (nth instanceof TerminalNode) {
-					if (++terminalCount == t) {
-						return i;
-					}
-				}
-			}	
+			int nthTerminalNode = getNthTerminalNode(t, program);
+			
+			return nthTerminalNode;
+		}
+	}
+
+	private int getNthFunctionNode(int n, CandidateProgram<?> program) {
+		return getNthFunctionNode(n, 0, 0, program.getRootNode());
+	}
+	
+	private int getNthFunctionNode(int n, int fc, int nc, Node<?> current) {
+		if ((current instanceof FunctionNode) && (n == fc))
+			return nc;
+		
+		int result = -1;
+		for (Node<?> child: current.getChildren()) {
+			int noNodes = GPProgramAnalyser.getProgramLength(child);
+			int noFunctions = GPProgramAnalyser.getNoFunctions(child);
+			
+			// Only look at the subtree if it contains the right range of nodes.
+			if (n <= noFunctions + fc) {
+				int childResult = getNthFunctionNode(n, fc+1, nc+1, child);
+				if (childResult != -1) 
+					return childResult;
+			}
+			
+			fc += noFunctions;
+			nc += noNodes;
 		}
 		
-		// If we get to here then something has broken - need to do something more sensible (exception?).
-		return -1;
+		return result;
+	}
+	
+	private int getNthTerminalNode(int n, CandidateProgram<?> program) {
+		return getNthTerminalNode(n, 0, 0, program.getRootNode());
+	}
+	
+	private int getNthTerminalNode(int n, int tc, int nc, Node<?> current) {
+		if (current instanceof TerminalNode) {
+			if (n == tc++)
+				return nc;
+		}
+		
+		int result = -1;
+		for (Node<?> child: current.getChildren()) {
+			int noNodes = GPProgramAnalyser.getProgramLength(child);
+			int noTerminals = GPProgramAnalyser.getNoTerminals(child);
+			
+			// Only look at the subtree if it contains the right range of nodes.
+			if (n <= noTerminals + tc) {
+				int childResult = getNthTerminalNode(n, tc, nc+1, child);
+				if (childResult != -1) 
+					return childResult;
+			}
+			
+			tc += noTerminals;
+			nc += noNodes;
+		}
+		
+		return result;
 	}
 }

@@ -27,16 +27,32 @@ import com.epochx.core.representation.*;
 public class GPProgramAnalyser {
 	
 	public static int getNoTerminals(CandidateProgram program) {
-		return countTerminals(program.getRootNode());
+		return getNoTerminals(program.getRootNode());
 	}
 	
-	private static int countTerminals(Node<?> n) {
+	public static int getNoTerminals(Node<?> n) {
 		if (n instanceof TerminalNode) {
 			return 1;
 		} else {
 			int result = 0;
 			for (int i=0; i<n.getArity(); i++) {
-				result += countTerminals(n.getChild(i));
+				result += getNoTerminals(n.getChild(i));
+			}
+			return result;
+		}
+	}
+	
+	public static int getNoFunctions(CandidateProgram program) {
+		return getNoFunctions(program.getRootNode());
+	}
+	
+	public static int getNoFunctions(Node<?> n) {
+		if (n instanceof TerminalNode) {
+			return 0;
+		} else {
+			int result = 1;
+			for (int i=0; i<n.getArity(); i++) {
+				result += getNoFunctions(n.getChild(i));
 			}
 			return result;
 		}

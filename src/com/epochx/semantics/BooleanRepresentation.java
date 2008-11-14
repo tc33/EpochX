@@ -27,7 +27,7 @@ import net.sf.javabdd.*;
  */
 public class BooleanRepresentation implements Behaviour {
 	
-	BDD bdd;
+	private BDD bdd;
 	
 	public BooleanRepresentation(BDD bdd) {
 		this.bdd = bdd;
@@ -35,14 +35,6 @@ public class BooleanRepresentation implements Behaviour {
 	
 	public BDD getBDD() {
 		return this.bdd;
-	}
-
-	public boolean equals(BooleanRepresentation newBDD) {
-		if(this.bdd.equals(newBDD.getBDD())) {
-			return true;
-		} else {
-			return false;
-		}
 	}
 
 	/* (non-Javadoc)
@@ -56,7 +48,22 @@ public class BooleanRepresentation implements Behaviour {
 			return false;
 		}
 	}
-	
 
+	/* (non-Javadoc)
+	 * @see com.epochx.semantics.Behaviour#equal(com.epochx.semantics.Behaviour)
+	 */
+	@Override
+	public boolean equals(Behaviour anotherBehaviour) {
+		if(anotherBehaviour instanceof BooleanRepresentation) {
+			BooleanRepresentation boolRep = (BooleanRepresentation) anotherBehaviour;
+			if(this.bdd.equals(boolRep.getBDD())) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}		
+	}
 
 }

@@ -33,7 +33,7 @@ import com.epochx.core.representation.*;
 public class BooleanSemanticModule implements SemanticModule {
 
 	private BDDFactory bddLink;
-	private HashMap<Node, BDD> bddList;
+	private List<BDD> bddList;
 	private List<Node> terminals;
 	private GPModel model;
 	
@@ -50,9 +50,9 @@ public class BooleanSemanticModule implements SemanticModule {
 		// set up BDD analyser
 		this.bddLink = BDDFactory.init("cudd", (terminals.size()*500), (terminals.size()*500));
 		// create all possible base variables
-		this.bddList = new HashMap<Node, BDD>();
+		this.bddList = new ArrayList<BDD>();
 		for(int i = 0; i<terminals.size(); i++) {
-			bddList.put(terminals.get(i), bddLink.ithVar(i));
+			bddList.add(bddLink.ithVar(i));
 		}
 	}
 
@@ -73,9 +73,10 @@ public class BooleanSemanticModule implements SemanticModule {
 		// pull root node out of candidate program
 		Node rootNode = program.getRootNode();
 		// break up nodes and call respective bits recursively
-		if(rootNode instanceof Variable) {
+		if(rootNode instanceof TerminalNode) {
 			// A TERMINAL
-			return new BooleanRepresentation(bddList.get(rootNode));
+			int index = terminals.indexOf(rootNode);
+			return new BooleanRepresentation(bddList.get(index));
 		} else if(rootNode instanceof NotFunction) {
 			// NOT
 			// resolve child behaviour
@@ -125,11 +126,7 @@ public class BooleanSemanticModule implements SemanticModule {
 		// convert to boolean representation
 		BooleanRepresentation booleanRep = (BooleanRepresentation) representation;
 		BDD bddRep = booleanRep.getBDD();
-		Node rootNode = this.resolveTranslation(bddRep);
-		// TODO variable labels!!!
-		
-		
-		
+		Node rootNode = this.resolveTranslation(bddRep);		
 		CandidateProgram result = new CandidateProgram(rootNode, model);	
 		return result;
 	}
@@ -145,36 +142,43 @@ public class BooleanSemanticModule implements SemanticModule {
 		// work out what's what and return node structure
 		if((!highChild.isOne() && !highChild.isZero()) && (!lowChild.isOne() && !lowChild.isZero())) {
 			// IF statement
-			IfFunction thisIF = new IfFunction(new TerminalNode(topBDD.var()), this.resolveTranslation(highChild), this.resolveTranslation(lowChild));
+			TerminalNode tNode = (TerminalNode) terminals.get(topBDD.var()).clone();
+			IfFunction thisIF = new IfFunction(tNode, this.resolveTranslation(highChild), this.resolveTranslation(lowChild));
 			return thisIF;
 		} else if((!highChild.isOne() && !highChild.isZero()) && lowChild.isZero()) {
 			// AND statement
-			AndFunction thisAND = new AndFunction(new TerminalNode(topBDD.var()), this.resolveTranslation(highChild));
+			TerminalNode tNode = (TerminalNode) terminals.get(topBDD.var()).clone();
+			AndFunction thisAND = new AndFunction(tNode, this.resolveTranslation(highChild));
 			return thisAND;
 		} else if(highChild.isOne() && (!lowChild.isOne() && !lowChild.isZero())) {
 			// OR statement
-			OrFunction thisOR = new OrFunction(new TerminalNode(topBDD.var()), this.resolveTranslation(lowChild));
+			TerminalNode tNode = (TerminalNode) terminals.get(topBDD.var()).clone();
+			OrFunction thisOR = new OrFunction(tNode, this.resolveTranslation(lowChild));
 			return thisOR;
 		} else if(highChild.isZero() && lowChild.isOne()) {
 			// NOT statement
-			NotFunction thisNOT = new NotFunction(new TerminalNode(topBDD.var()));
+			TerminalNode tNode = (TerminalNode) terminals.get(topBDD.var()).clone();
+			NotFunction thisNOT = new NotFunction(tNode);
 			return thisNOT;
 		} else if(highChild.isOne() && lowChild.isZero()) {
 			// Variable
-			TerminalNode thisVar = new TerminalNode(topBDD.var());
+			TerminalNode tNode = (TerminalNode) terminals.get(topBDD.var()).clone();
+			TerminalNode thisVar = tNode;
 			return thisVar;
 		} else if(highChild.isZero() && (!lowChild.isOne() && !lowChild.isZero())) {
 			// AND ( NOT...
-			NotFunction thisNOT = new NotFunction(new TerminalNode(topBDD.var()));
+			TerminalNode tNode = (TerminalNode) terminals.get(topBDD.var()).clone();
+			NotFunction thisNOT = new NotFunction(tNode);
 			AndFunction thisAND = new AndFunction(thisNOT, this.resolveTranslation(lowChild));
 			return thisAND;
 		} else if((!highChild.isOne() && !highChild.isZero()) && lowChild.isOne()) {
 			// OR ( NOT...
-			NotFunction thisNOT = new NotFunction(new TerminalNode(topBDD.var()));
+			TerminalNode tNode = (TerminalNode) terminals.get(topBDD.var()).clone();
+			NotFunction thisNOT = new NotFunction(tNode);
 			OrFunction thisOR = new OrFunction(thisNOT, this.resolveTranslation(highChild));
 			return thisOR;
 		}
-		// throw eception if it made it to here without returning
+		// throw exception if it made it to here without returning
 		throw new IllegalArgumentException("Unidentified Syntax in Reverse Translation");
 	}			
 }

@@ -27,4 +27,6 @@ public interface Behaviour {
 
 	public boolean isTautology();
 	
+	public boolean equals(Behaviour anotherBehaviour);
+	
 }

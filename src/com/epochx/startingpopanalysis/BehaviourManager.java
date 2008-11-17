@@ -22,7 +22,7 @@ package com.epochx.startingpopanalysis;
 
 import net.sf.javabdd.*;
 import java.util.ArrayList;
-import core.*;
+import com.epochx.semantics.*;
 
 /**
  * The BDD manager aids analysis of starting populations
@@ -30,13 +30,13 @@ import core.*;
  */
 public class BehaviourManager {
     
-    private BehaviourRepresentation model;
+    private Behaviour model;
     private ArrayList<ArrayList<String>> programs;
     
     /** Creates a new instance of BehaviourManager
      * @param mod The BDD model
      */
-    public BehaviourManager(BehaviourRepresentation mod) {
+    public BehaviourManager(Behaviour mod) {
         model = mod;
         programs = new ArrayList<ArrayList<String>>();
     }
@@ -45,7 +45,7 @@ public class BehaviourManager {
      * Returns the BDD model
      * @return The BDD model
      */
-    public BehaviourRepresentation getBehaviour() {
+    public Behaviour getBehaviour() {
         return model;
     }
     

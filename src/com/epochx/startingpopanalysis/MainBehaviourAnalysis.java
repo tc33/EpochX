@@ -20,7 +20,8 @@
 
 package com.epochx.startingpopanalysis;
 
-import core.*;
+import com.epochx.semantics.*;
+import com.epochx.util.*;
 import java.util.ArrayList;
 import java.io.File;
 import net.sf.javabdd.*;
@@ -87,11 +88,11 @@ public class MainBehaviourAnalysis {
          * **/
         
         // set up equivalence storage        
-        ArrayList<BehaviourRepresentation> behaviours;
+        ArrayList<Behaviour> behaviours;
         ArrayList<ArrayList<String>> progs, newPop;
         ArrayList<String> dump;
         int syntaxSame, semanticSame;
-        BehaviourRepresentation specimin;
+        Behaviour specimin;
         
         // file loaction
         //File place = new File("C:/JavaProjects/EpochX1_0/Results");
@@ -144,7 +145,7 @@ public class MainBehaviourAnalysis {
                     newPop = genProg.buildFirstPop(size.intValue(), genType);
                     
                     // start equivalence module
-                    behaviours = new ArrayList<BehaviourRepresentation>();
+                    behaviours = new ArrayList<Behaviour>();
                     progs = new ArrayList<ArrayList<String>>();                    
                     semMod.start();
                     syntaxSame = 0;
@@ -160,9 +161,9 @@ public class MainBehaviourAnalysis {
                         }                      
                         
                         // check for semantic equivalence
-                        specimin = semMod.createRep(testProg);
+                        specimin = semMod.codeToBehaviour(testProg);
                         boolean marker = false;
-                        for(BehaviourRepresentation b: behaviours) {
+                        for(Behaviour b: behaviours) {
                             if(b.equals(specimin)) {
                                 semanticSame++;
                                 marker = true;
@@ -179,7 +180,7 @@ public class MainBehaviourAnalysis {
                     dump.add(i + "\t" + syntaxSame + "\t" + progs.size() + "\t" + semanticSame + "\t" + behaviours.size() + "\t" + size.toString() + "\n");
                     
                     // close equivalence module
-                    semMod.finish();
+                    semMod.stop();
                     
                     // dump everything and force GC
                     newPop = null;

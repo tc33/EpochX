@@ -22,8 +22,8 @@ package com.epochx.lineageanalysis;
 
 import java.util.ArrayList;
 import java.io.File;
-
-import core.*;
+import com.epochx.semantics.*;
+import com.epochx.core.*;
 import net.sf.javabdd.*;
 
 /**
@@ -131,28 +131,28 @@ public class LineageAnalysis {
                 outputScores.add(i + "\t" + fScoreP1 + "\t" + bScoreP1 + "\t" + fScoreP2 + "\t" + bScoreP2 + "\t" + fScoreC1 + "\t" + bScoreC1 + "\n");
                 outputScores.add(i + "\t" + fScoreP1 + "\t" + bScoreP1 + "\t" + fScoreP2 + "\t" + bScoreP2 + "\t" + fScoreC2 + "\t" + bScoreC2 + "\n");
                 // metrics output
-                int p1D = ProgramAnalyser.getDepthOfTree(p1);
-                int p1L = ProgramAnalyser.getProgramLength(p1);
-                int p1Fs = ProgramAnalyser.getNoOfFunctions(p1, functions);
-                int p1Ts = ProgramAnalyser.getNoOfTerminals(p1, terminals);
-                int p1DTs = ProgramAnalyser.getDistinctTerminals(p1, terminals);
-                int p2D = ProgramAnalyser.getDepthOfTree(p2);
-                int p2L = ProgramAnalyser.getProgramLength(p2);
-                int p2Fs = ProgramAnalyser.getNoOfFunctions(p2, functions);
-                int p2Ts = ProgramAnalyser.getNoOfTerminals(p2, terminals);
-                int p2DTs = ProgramAnalyser.getDistinctTerminals(p2, terminals);
-                int cD1 = ProgramAnalyser.getDepthOfTree(c1);
-                int cL1 = ProgramAnalyser.getProgramLength(c1);
-                int cFs1 = ProgramAnalyser.getNoOfFunctions(c1, functions);
-                int cTs1 = ProgramAnalyser.getNoOfTerminals(c1, terminals);
-                int cDTs1 = ProgramAnalyser.getDistinctTerminals(c1, terminals);
-                int cD2 = ProgramAnalyser.getDepthOfTree(c2);
-                int cL2 = ProgramAnalyser.getProgramLength(c2);
-                int cFs2 = ProgramAnalyser.getNoOfFunctions(c2, functions);
-                int cTs2 = ProgramAnalyser.getNoOfTerminals(c2, terminals);
-                int cDTs2 = ProgramAnalyser.getDistinctTerminals(c2, terminals);
-                int modD1 = ProgramAnalyser.getModificationDepth(p1, c1);
-                int modD2 = ProgramAnalyser.getModificationDepth(p2, c2);
+                int p1D = GPProgramAnalyser.getDepthOfTree(p1);
+                int p1L = GPProgramAnalyser.getProgramLength(p1);
+                int p1Fs = GPProgramAnalyser.getNoOfFunctions(p1, functions);
+                int p1Ts = GPProgramAnalyser.getNoOfTerminals(p1, terminals);
+                int p1DTs = GPProgramAnalyser.getDistinctTerminals(p1, terminals);
+                int p2D = GPProgramAnalyser.getDepthOfTree(p2);
+                int p2L = GPProgramAnalyser.getProgramLength(p2);
+                int p2Fs = GPProgramAnalyser.getNoOfFunctions(p2, functions);
+                int p2Ts = GPProgramAnalyser.getNoOfTerminals(p2, terminals);
+                int p2DTs = GPProgramAnalyser.getDistinctTerminals(p2, terminals);
+                int cD1 = GPProgramAnalyser.getDepthOfTree(c1);
+                int cL1 = GPProgramAnalyser.getProgramLength(c1);
+                int cFs1 = GPProgramAnalyser.getNoOfFunctions(c1, functions);
+                int cTs1 = GPProgramAnalyser.getNoOfTerminals(c1, terminals);
+                int cDTs1 = GPProgramAnalyser.getDistinctTerminals(c1, terminals);
+                int cD2 = GPProgramAnalyser.getDepthOfTree(c2);
+                int cL2 = GPProgramAnalyser.getProgramLength(c2);
+                int cFs2 = GPProgramAnalyser.getNoOfFunctions(c2, functions);
+                int cTs2 = GPProgramAnalyser.getNoOfTerminals(c2, terminals);
+                int cDTs2 = GPProgramAnalyser.getDistinctTerminals(c2, terminals);
+                int modD1 = GPProgramAnalyser.getModificationDepth(p1, c1);
+                int modD2 = GPProgramAnalyser.getModificationDepth(p2, c2);
                 String met1 = i+"\t"+p1D+"\t"+p1L+"\t"+p1Fs+"\t"+p1Ts+"\t"+p1DTs+"\t"+fScoreP1+"\t"+bScoreP1;
                 met1 = met1 + "\t"+p2D+"\t"+p2L+"\t"+p2Fs+"\t"+p2Ts+"\t"+p2DTs+"\t"+fScoreP2+"\t"+bScoreP2;
                 met1 = met1 + "\t"+cD1+"\t"+cL1+"\t"+cFs1+"\t"+cTs1+"\t"+cDTs1+"\t"+fScoreC1+"\t"+bScoreC1+"\t"+modD1+"\n";
@@ -190,7 +190,7 @@ public class LineageAnalysis {
                 if (c1.equals(p1)) {
                     tn++;
                     // test for behavioural neutrality
-                } else if(!ProgramAnalyser.testStateChange(p1, c1, semMod)) {
+                } else if(!GPProgramAnalyser.testStateChange(p1, c1, semMod)) {
                     bn++;
                 } else {
                     // test for all other combinations
@@ -221,7 +221,7 @@ public class LineageAnalysis {
                 if (c2.equals(p2)) {
                     tn++;
                     // test for behavioural neutrality
-                } else if(!ProgramAnalyser.testStateChange(p2, c2, semMod)) {
+                } else if(!GPProgramAnalyser.testStateChange(p2, c2, semMod)) {
                     bn++;
                 } else {
                     // test for all other combinations
@@ -318,29 +318,29 @@ public class LineageAnalysis {
         ArrayList<String> optimised = semMod.repToCode(new BehaviourRepresentation(pBDD));
         int waste;
         try {
-            waste = ProgramAnalyser.getProgramLength(optimised);
+            waste = GPProgramAnalyser.getProgramLength(optimised);
         } catch(NullPointerException e) {
             System.out.println("CATCHER = " + optimised);
         }
-        waste = ProgramAnalyser.getProgramLength(p) - ProgramAnalyser.getProgramLength(optimised);
+        waste = GPProgramAnalyser.getProgramLength(p) - GPProgramAnalyser.getProgramLength(optimised);
         if(waste<0) {
             waste = 0;
         }
-        double wastePerc = (((double) waste)/((double) ProgramAnalyser.getProgramLength(p))) * 100;
+        double wastePerc = (((double) waste)/((double) GPProgramAnalyser.getProgramLength(p))) * 100;
         semMod.finish();
         // pull out metrics
-        double simPerc = ProgramAnalyser.getSyntaxPercentageSimilarity(p, base);
-        int d = ProgramAnalyser.getDepthOfTree(p);
-        int l = ProgramAnalyser.getProgramLength(p);
-        int f = ProgramAnalyser.getNoOfFunctions(p, functions);
-        int t = ProgramAnalyser.getNoOfTerminals(p, terminals);
-        int dt = ProgramAnalyser.getDistinctTerminals(p, terminals);
+        double simPerc = GPProgramAnalyser.getSyntaxPercentageSimilarity(p, base);
+        int d = GPProgramAnalyser.getDepthOfTree(p);
+        int l = GPProgramAnalyser.getProgramLength(p);
+        int f = GPProgramAnalyser.getNoOfFunctions(p, functions);
+        int t = GPProgramAnalyser.getNoOfTerminals(p, terminals);
+        int dt = GPProgramAnalyser.getDistinctTerminals(p, terminals);
         // pull out parent for modification depth
         int parID = fStore.findParent(hashID);
         int modD;
         if (parID > 0) {
             ArrayList<String> par = fStore.getProgram(parID);
-            modD = ProgramAnalyser.getModificationDepth(p, par);
+            modD = GPProgramAnalyser.getModificationDepth(p, par);
         } else {
             modD = 20;
         }

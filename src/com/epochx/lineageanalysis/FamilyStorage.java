@@ -22,8 +22,7 @@ package com.epochx.lineageanalysis;
 
 import java.util.*;
 import java.io.*;
-
-import core.*;
+import com.epochx.util.*;
 
 /**
  * This class stores the crossover parent and child information for later lineage 

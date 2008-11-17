@@ -24,7 +24,7 @@ import java.util.*;
 import com.epochx.core.*;
 import com.epochx.core.representation.CandidateProgram;
 import com.epochx.core.representation.Node;
-import core.SemanticModule;
+import com.epochx.semantics.*;
 
 /**
  * 

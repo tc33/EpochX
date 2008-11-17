@@ -24,8 +24,7 @@ import java.util.*;
 import com.epochx.core.*;
 import com.epochx.core.GPModel;
 import com.epochx.core.representation.*;
-
-import core.*;
+import com.epochx.semantics.*;
 
 /**
  * 

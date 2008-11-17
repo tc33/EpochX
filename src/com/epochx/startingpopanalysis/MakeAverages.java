@@ -20,7 +20,7 @@
 
 package com.epochx.startingpopanalysis;
 
-import core.*;
+import com.epochx.util.*;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -58,7 +58,7 @@ public class MakeAverages {
         
         // read in all files with matching front marker
         for(String name: filteredFiles) {
-            ArrayList<String> dataIn = FileManip.loadInput(dir, name);
+            ArrayList<String> dataIn = FileManip.loadInput(new File(name));
             int[] popID = new int[100];
             int[] syntaxSame = new int[100];
             int[] syntaxUnique = new int[100];

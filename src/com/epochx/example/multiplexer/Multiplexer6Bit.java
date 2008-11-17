@@ -21,14 +21,13 @@ package com.epochx.example.multiplexer;
 
 import java.io.*;
 import java.util.*;
-
 import com.epochx.core.*;
 import com.epochx.core.crossover.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.util.FileManip;
-
-import core.BoolTrans;
+import com.epochx.semantics.*;
+import com.epochx.util.*;
 
 /**
  * 

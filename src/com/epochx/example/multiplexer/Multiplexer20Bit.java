@@ -34,14 +34,14 @@ import com.epochx.util.*;
  * 
  *
  */
-public class Multiplexer11Bit extends GPAbstractModel<Boolean> {
+public class Multiplexer20Bit extends GPAbstractModel<Boolean> {
 
 	private List<String> inputs;
 	private HashMap<String, Variable<Boolean>> variables = new HashMap<String, Variable<Boolean>>();
 	
-	public Multiplexer11Bit() {
+	public Multiplexer20Bit() {
 		inputs = new ArrayList<String>();
-		inputs = FileManip.loadInput(new File("input11bit.txt"));
+		inputs = FileManip.loadInput(new File("input20bit.txt"));
 		
 		configure();
 	}
@@ -60,6 +60,14 @@ public class Multiplexer11Bit extends GPAbstractModel<Boolean> {
 		setCrossover(new UniformPointCrossover<Boolean>(this));
 		
 		// Define variables.
+		variables.put("D15", new Variable<Boolean>("D15"));
+		variables.put("D14", new Variable<Boolean>("D14"));
+		variables.put("D13", new Variable<Boolean>("D13"));
+		variables.put("D12", new Variable<Boolean>("D12"));
+		variables.put("D11", new Variable<Boolean>("D11"));
+		variables.put("D10", new Variable<Boolean>("D10"));
+		variables.put("D9", new Variable<Boolean>("D9"));
+		variables.put("D8", new Variable<Boolean>("D8"));
 		variables.put("D7", new Variable<Boolean>("D7"));
 		variables.put("D6", new Variable<Boolean>("D6"));
 		variables.put("D5", new Variable<Boolean>("D5"));
@@ -68,6 +76,7 @@ public class Multiplexer11Bit extends GPAbstractModel<Boolean> {
 		variables.put("D2", new Variable<Boolean>("D2"));
 		variables.put("D1", new Variable<Boolean>("D1"));
 		variables.put("D0", new Variable<Boolean>("D0"));
+		variables.put("A3", new Variable<Boolean>("A3"));
 		variables.put("A2", new Variable<Boolean>("A2"));
 		variables.put("A1", new Variable<Boolean>("A1"));
 		variables.put("A0", new Variable<Boolean>("A0"));
@@ -88,6 +97,14 @@ public class Multiplexer11Bit extends GPAbstractModel<Boolean> {
 	public List<TerminalNode<?>> getTerminals() {		
 		// Define terminals.
 		List<TerminalNode<?>> terminals = new ArrayList<TerminalNode<?>>();
+		terminals.add(variables.get("D15"));
+		terminals.add(variables.get("D14"));
+		terminals.add(variables.get("D13"));
+		terminals.add(variables.get("D12"));
+		terminals.add(variables.get("D11"));
+		terminals.add(variables.get("D10"));
+		terminals.add(variables.get("D9"));
+		terminals.add(variables.get("D8"));
 		terminals.add(variables.get("D7"));
 		terminals.add(variables.get("D6"));
 		terminals.add(variables.get("D5"));
@@ -96,6 +113,7 @@ public class Multiplexer11Bit extends GPAbstractModel<Boolean> {
 		terminals.add(variables.get("D2"));
 		terminals.add(variables.get("D1"));
 		terminals.add(variables.get("D0"));
+		terminals.add(variables.get("A3"));
 		terminals.add(variables.get("A2"));
 		terminals.add(variables.get("A1"));
 		terminals.add(variables.get("A0"));
@@ -115,47 +133,62 @@ public class Multiplexer11Bit extends GPAbstractModel<Boolean> {
         	variables.get("A0").setValue(in[0]);
         	variables.get("A1").setValue(in[1]);
         	variables.get("A2").setValue(in[2]);
-        	variables.get("D0").setValue(in[3]);
-        	variables.get("D1").setValue(in[4]);
-        	variables.get("D2").setValue(in[5]);
-        	variables.get("D3").setValue(in[6]);
-        	variables.get("D4").setValue(in[7]);
-        	variables.get("D5").setValue(in[8]);
-        	variables.get("D6").setValue(in[9]);
-        	variables.get("D7").setValue(in[10]);
+        	variables.get("A3").setValue(in[3]);
+        	variables.get("D0").setValue(in[4]);
+        	variables.get("D1").setValue(in[5]);
+        	variables.get("D2").setValue(in[6]);
+        	variables.get("D3").setValue(in[7]);
+        	variables.get("D4").setValue(in[8]);
+        	variables.get("D5").setValue(in[9]);
+        	variables.get("D6").setValue(in[10]);
+        	variables.get("D7").setValue(in[11]);
+        	variables.get("D8").setValue(in[12]);
+        	variables.get("D9").setValue(in[13]);
+        	variables.get("D10").setValue(in[14]);
+        	variables.get("D11").setValue(in[15]);
+        	variables.get("D12").setValue(in[16]);
+        	variables.get("D13").setValue(in[17]);
+        	variables.get("D14").setValue(in[18]);
+        	variables.get("D15").setValue(in[19]);
         	
             if (program.evaluate() == chooseResult(in)) {
                 score++;
             }
         }
         
-        return 2048 - score;
+        return 1048576 - score;
 	}
 	
     private boolean chooseResult(boolean[] input) {
-    	boolean result = false;
     	// scoring solution
-        if(input[0] && input[1] && input[2]) {
-            result = input[3];
-        } else if(input[0] && input[1]& !input[2]) {
-            result = input[4];            
-        } else if(input[0] && !input[1] && input[2]) {
-            result = input[5];
-        } else if(input[0] && !input[1] && !input[2]) {
-            result = input[6];
-        } else if(!input[0] && input[1] && input[2]) {
-            result = input[7];
-        } else if(!input[0] && input[1] && !input[2]) {
-            result = input[8];
-        } else if(!input[0] && !input[1] && input[2]) {
-            result = input[9];
-        } else if(!input[0] && !input[1] && !input[2]) {
-            result = input[10];
+        String locator = "";
+        if(input[0]==true) {
+            locator = locator + "1";
+        } else {
+            locator = locator + "0";
         }
-        return result;
+        if(input[1]==true) {
+            locator = locator + "1";
+        } else {
+            locator = locator + "0";
+        }
+        if(input[2]==true) {
+            locator = locator + "1";
+        } else {
+            locator = locator + "0";
+        }
+        if(input[3]==true) {
+            locator = locator + "1";
+        } else {
+            locator = locator + "0";
+        }
+        
+        int location = (15 - Integer.parseInt(locator, 2)) + 4;        
+        return input[location];
     }
 	
 	public static void main(String[] args) {
-		GPController.run(new Multiplexer11Bit());
+		System.out.println("20 Bit MUX running...");
+		GPController.run(new Multiplexer20Bit());
 	}
 }

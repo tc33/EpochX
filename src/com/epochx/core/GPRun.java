@@ -23,7 +23,6 @@ import java.util.*;
 
 import org.apache.log4j.*;
 
-import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
 
 /**
@@ -55,10 +54,14 @@ public class GPRun<TYPE> {
 	}
 	
 	/**
-	 * Construct a new GPRun object and execute it.
-	 * @param <TYPE>
-	 * @param model
-	 * @return
+	 * Construct a new GPRun object and execute it. The GPModel passed in is
+	 * used to provide the control parameters for the run. 
+	 * @param <TYPE> the type of <code>CandidateProgram</code> to be evolved.
+	 * @param model  the model which will control the run with the parameters 
+	 * 				 and fitness function to use.
+	 * @return 		 The GPRun object that was executed, containing retrievable 
+	 * 				 details about the run.
+	 * @see GPModel
 	 */
 	public static <TYPE> GPRun<TYPE> run(GPModel<TYPE> model) {
 		GPRun<TYPE> runner = new GPRun<TYPE>(model);
@@ -78,8 +81,7 @@ public class GPRun<TYPE> {
 		GPCrossover<TYPE> crossover = new GPCrossover<TYPE>(model);
 		
 		// Initialisation
-		Initialiser<TYPE> init = model.getInitialiser();
-		List<CandidateProgram<TYPE>> pop = init.getInitialPopulation();
+		List<CandidateProgram<TYPE>> pop = model.getInitialiser().getInitialPopulation();
 		
 		for (int i=1; i<=model.getNoGenerations(); i++) {
 			List<CandidateProgram<TYPE>> nextPop = new ArrayList<CandidateProgram<TYPE>>();

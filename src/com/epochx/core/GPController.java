@@ -50,6 +50,8 @@ public class GPController {
 	 * 				 runs.
 	 * @return An array of the GPRun objects which were executed on the model.
 	 * 		   The details of each run can be retrieved from this object.
+	 * @see GPRun
+	 * @see GPModel
 	 */
 	public static <TYPE> GPRun<TYPE>[] run(GPModel<TYPE> model) {
 		// Setup logging for API.

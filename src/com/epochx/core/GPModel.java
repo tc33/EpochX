@@ -26,29 +26,64 @@ import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 
+/**
+ * A GPModel defines all those parameters needed to control a run by GPRun. 
+ * The first step - and for most problems the only step - to generate a GP  
+ * evolved solution with EpochX is to provide a concrete implementation of 
+ * this interface.
+ * 
+ * <p>For most situations, users should look to extend the abstract 
+ * <code>GPAbstractModel.</code>
+ *
+ * @param <TYPE> The return type of CandidatePrograms being evolved.
+ * @see GPAbstractModel
+ */
 public interface GPModel<TYPE> {
 	
 	/**
-	 * @return the pouleSize
+	 * Retrieve the size of the breeding pool to be used for parent selection 
+	 * when performing the genetic operators. If the pool size is equal to or 
+	 * less than zero, or if getPouleSelector() returns null, then no poule 
+	 * will be used and parent selection will take place directly from the 
+	 * previous population.
+	 * 
+	 * @return the size of the mating pool to build with the PouleSelector 
+	 * 		   returned by getPouleSelector() which will be used for parent 
+	 * 		   selection.
 	 */
 	public int getPouleSize();
 
 	/**
-	 * @return the initialiser
+	 * Retrieve the Initialiser which will generate the first generation 
+	 * population from which the evolution will proceed.
+	 * 
+	 * @return the Initialiser to create the first population.
 	 */
 	public Initialiser<TYPE> getInitialiser();
 
 	/**
-	 * @return the noRuns
+	 * Retrieve the number of runs that should be carried out using this model 
+	 * as the basis. Each call to GPRun.run() will be with the same model so 
+	 * this is useful when multiple runs are necessary with the same control 
+	 * parameters for research purposes or otherwise in order to attain 
+	 * reliable results drawn from means.
+	 * 
+	 * @return the number of times this model should be used to control GP runs.
 	 */
 	public int getNoRuns();
 
 	/**
-	 * @return the noGenerations
+	 * Retrieve the number of generations that each run should use before 
+	 * terminating, unless prior termination occurs due to one of the other 
+	 * termination criterion.
+	 * 
+	 * @return the number of generations that should be evolved in each run.
 	 */
 	public int getNoGenerations();
 	
 	/**
+	 * Retrieve the number of CandidatePrograms that 
+	 * 
 	 * @return the generationSize
 	 */
 	public int getPopulationSize();
@@ -63,6 +98,10 @@ public interface GPModel<TYPE> {
 	 */
 	public List<FunctionNode<?>> getFunctions();
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public List<Node<?>> getSyntax();
 	
 	/**
@@ -106,5 +145,10 @@ public interface GPModel<TYPE> {
 	public int getNoElites();
 
 
+	/**
+	 * 
+	 * @param program
+	 * @return
+	 */
 	public double getFitness(CandidateProgram<TYPE> program);
 }

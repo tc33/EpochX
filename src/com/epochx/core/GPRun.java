@@ -50,9 +50,11 @@ public class GPRun<TYPE> {
 			List<CandidateProgram<TYPE>> nextPop = new ArrayList<CandidateProgram<TYPE>>();
 			
 			// Perform elitism.
-			/*Collections.sort(pop);
-			if (GPModel.getNoElites() > 0)
-				nextPop.addAll(pop.subList(pop.size()-config.getNoElites(),pop.size()-1));*/
+			List<CandidateProgram<TYPE>> elites = GPElitism.getElites(pop, model.getNoElites());
+			for (CandidateProgram<TYPE> e: elites) {
+				if (nextPop.size() < model.getPopulationSize())
+					nextPop.add(e);
+			}
 			
 			// Construct a poule.
 			List<CandidateProgram<TYPE>> poule = model.getPouleSelector().getPoule(pop, model.getPouleSize());
@@ -86,7 +88,7 @@ public class GPRun<TYPE> {
 					bestProgram = p;
 				}
 			}
-			//outputGeneration(i, pop);
+			outputGeneration(i, pop);
 			
 			pop = nextPop;
 		}

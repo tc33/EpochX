@@ -29,12 +29,15 @@ public class KozaCrossover<TYPE> implements Crossover<TYPE> {
 
 	private double internalProbability;
 	
-	public KozaCrossover(double internalProbability) {
+	private GPModel<?> model;
+	
+	public KozaCrossover(GPModel<?> model, double internalProbability) {
+		this.model = model;
 		this.internalProbability = internalProbability;
 	}
 	
-	public KozaCrossover() {
-		this(0.9);
+	public KozaCrossover(GPModel<?> model) {
+		this(model, 0.9);
 	}
 	
 	@Override
@@ -50,6 +53,18 @@ public class KozaCrossover<TYPE> implements Crossover<TYPE> {
 		
 		child1.setNthNode(subtree2, c1);
 		child2.setNthNode(subtree1, c2);
+		
+		// max depth reversion section
+		int pDepth1 = GPProgramAnalyser.getProgramDepth(child1);
+		int pDepth2 = GPProgramAnalyser.getProgramDepth(child2);
+		// depth check on child one
+		if(pDepth1>model.getMaxDepth()) {
+			child1 = (CandidateProgram<TYPE>) parent1.clone();
+		}
+		// depth check on child two
+		if(pDepth2>model.getMaxDepth()) {
+			child2 = (CandidateProgram<TYPE>) parent2.clone();
+		}
 		
 		return new CandidateProgram[]{child1, child2};
 	}

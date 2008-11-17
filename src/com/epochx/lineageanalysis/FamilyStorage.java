@@ -18,7 +18,7 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package lineageanalysis;
+package com.epochx.lineageanalysis;
 
 import java.util.*;
 import java.io.*;

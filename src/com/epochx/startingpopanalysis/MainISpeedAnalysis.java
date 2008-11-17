@@ -18,7 +18,7 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package startingpopanalysis;
+package com.epochx.startingpopanalysis;
 
 import core.*;
 import java.util.ArrayList;

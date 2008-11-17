@@ -18,7 +18,7 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package startingpopanalysis;
+package com.epochx.startingpopanalysis;
 
 import core.*;
 import java.util.ArrayList;
@@ -30,31 +30,36 @@ import java.lang.reflect.*;
  * Runs a full analysis of a starting population for a specific model for varying sizes
  * @author Lawrence Beadle
  */
-public class MainBehaviourAnalysis {
-    
+public class MainSizeAndShapeAnalysis {
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         // CODE TO ANALYSE STARTING POPULATIONS
-        System.out.println("STARTING POP ANALYSIS - PROGRAM STARTED");
-        
+        System.out.println("STARTING SIZE AND SHAPE ANALYSIS - PROGRAM STARTED");
+
         // decide which model
-        String modelName = "ArtificialAnt";        
-        
+        String modelName = "ArtificialAnt";
+
         // set up the different starting populations to be analysed
         ArrayList<String> sPops = new ArrayList<String>();
-        sPops.add("RH+H");
+        //sPops.add("RH+H");
         //sPops.add("Grow");
         //sPops.add("Full");
         //sPops.add("H+H");
-        //sPops.add("SDAB");
-        
+        sPops.add("SDIA");
+        sPops.add("HSDIA");
+
+        // pull out the fucntions and terminals
+        ArrayList<String> funcs, terms;
+
         // set up the different sizes of population to be analysed
         ArrayList<Integer> sizes = new ArrayList<Integer>();
-        
-        sizes.add(new Integer(500));
+
+        //sizes.add(new Integer(500));
         sizes.add(new Integer(1000));
+        /**
         sizes.add(new Integer(1500));
         sizes.add(new Integer(2000));        
         sizes.add(new Integer(2500));
@@ -62,8 +67,7 @@ public class MainBehaviourAnalysis {
         sizes.add(new Integer(3500));
         sizes.add(new Integer(4000));
         sizes.add(new Integer(4500));
-        sizes.add(new Integer(5000));
-        /**
+        sizes.add(new Integer(5000));        
         sizes.add(new Integer(5500));
         sizes.add(new Integer(6000));
         sizes.add(new Integer(6500));
@@ -85,37 +89,35 @@ public class MainBehaviourAnalysis {
         sizes.add(new Integer(14500));
         sizes.add(new Integer(15000));
          * **/
-        
-        // set up equivalence storage        
-        ArrayList<BehaviourRepresentation> behaviours;
-        ArrayList<ArrayList<String>> progs, newPop;
+        // set up storage
         ArrayList<String> dump;
-        int syntaxSame, semanticSame;
-        BehaviourRepresentation specimin;
-        
+        ArrayList<ArrayList<String>> newPop;
+        double[] depths, lengths, functions, terminals, dTerminals;
+        String name;
+
         // file loaction
-        //File place = new File("C:/JavaProjects/EpochX1_0/Results");
+        //File place = new File("D:/JavaProjects/EpochX1_0/Results");
         //File place = new File("/home/cug/lb212/EPOCHX/Results");
         File place = new File("U:/home/JavaProjects/EpochX1_0/Results");
-        
+
         // start looping through types and pop sizes
-        for(String genType: sPops) {
-            
+        for (String genType : sPops) {
+
             // progress monitor
             System.out.println("Working on: " + genType);
-            
-            for(Integer size: sizes) {
-                
+
+            for (Integer size : sizes) {
+
                 // progress monitor
                 System.out.println("Working on: " + size.toString());
-                
+
                 dump = new ArrayList<String>();
-                dump.add("Experiment: " + genType + " - " + size.toString() + "-" + modelName + "\n\n");
-                dump.add("Pop_ID\tSyntax_Same\tSyntax_Unique\tSemantic_Same\tSemantic_Unique\tPopulation\n");
-                
+                dump.add("Experiment: " + genType + " - " + size.toString() + "\tModel = " + modelName + "\n\n");
+                dump.add("Pop_Size\tAve_Depth\tAve_Length\tAve_Functions\tAve_Terminals\tAve_D_Terminals\n");
+
                 // do 100 runs of each type and pop size
-                for(int i = 0; i<100; i++) {
-                    
+                for (int i = 0; i < 100; i++) {
+
                     // set up Genetic Program instance - USING REFLECTION
                     GPRunBasic genProg = null;
                     try {
@@ -136,72 +138,111 @@ public class MainBehaviourAnalysis {
 
                     if (genProg == null) {
                         System.out.println("REFLECT FAILED TO LOAD FILE: " + modelName);
-                    }                    
+                    }
                     
-                    SemanticModule semMod = genProg.getSemanticModel();
+                    funcs = genProg.getFunctions();
+                    terms = genProg.getTerminals();
+
+                    System.out.println("ITERATION= " + i);
+                    // set up arrays
+                    depths = new double[size.intValue()];
+                    lengths = new double[size.intValue()];
+                    functions = new double[size.intValue()];
+                    terminals = new double[size.intValue()];
+                    dTerminals = new double[size.intValue()];
 
                     // generate population                 
                     newPop = genProg.buildFirstPop(size.intValue(), genType);
-                    
-                    // start equivalence module
-                    behaviours = new ArrayList<BehaviourRepresentation>();
-                    progs = new ArrayList<ArrayList<String>>();                    
-                    semMod.start();
-                    syntaxSame = 0;
-                    semanticSame = 0;                   
-                    
-                    for(ArrayList<String> testProg: newPop) {
-                        
-                        // check for syntax equivalence
-                        if(progs.contains(testProg)) {
-                            syntaxSame++;
-                        } else {
-                            progs.add(testProg);
-                        }                      
-                        
-                        // check for semantic equivalence
-                        specimin = semMod.createRep(testProg);
-                        boolean marker = false;
-                        for(BehaviourRepresentation b: behaviours) {
-                            if(b.equals(specimin)) {
-                                semanticSame++;
-                                marker = true;
-                                break;
-                            }
-                        }
-                        // add if not found
-                        if(!marker) {
-                            behaviours.add(specimin);
-                        }                      
+
+                    int j = 0;
+                    for (ArrayList<String> testProg : newPop) {
+                        // count up size and shape details and store them
+                        depths[j] = ProgramAnalyser.getDepthOfTree(testProg);
+                        lengths[j] = ProgramAnalyser.getProgramLength(testProg);
+                        functions[j] = ProgramAnalyser.getNoOfFunctions(testProg, funcs);
+                        terminals[j] = ProgramAnalyser.getNoOfTerminals(testProg, terms);
+                        dTerminals[j] = ProgramAnalyser.getDistinctTerminals(testProg, terms);
+                        j++;
                     }
-                    
+
                     // store run details
-                    dump.add(i + "\t" + syntaxSame + "\t" + progs.size() + "\t" + semanticSame + "\t" + behaviours.size() + "\t" + size.toString() + "\n");
-                    
-                    // close equivalence module
-                    semMod.finish();
-                    
-                    // dump everything and force GC
+                    dump.add(size.intValue() + "\t" + getAverage(depths) + "\t" + getAverage(lengths) + "\t" + getAverage(functions) + "\t" + getAverage(terminals) + "\t" + getAverage(dTerminals) + "\n");
+
+                    // force a garbage collection
+                    depths = null;
+                    lengths = null;
+                    functions = null;
+                    terminals = null;
+                    dTerminals = null;
                     newPop = null;
-                    behaviours = null;
-                    progs = null;
-                    semMod = null;
                     genProg = null;
-                    System.gc();                    
-                    
+                    System.gc();
+
                 }
-                
+
                 // dump to file
-                String name = genType + "-B+S-" + size.toString() + "-" + modelName + ".txt";
+                name = genType + "-S+S-" + size.toString() + "-" + modelName + ".txt";
                 FileManip.doOutput(place, dump, name, false);
-                
-                // dump files and force gc
+
+                // clear overheads
                 dump = null;
                 System.gc();
-            }            
+            }
         }
-        
+
         // final output
-        System.out.println("STARTING POPS ANALYSIS COMPLETE!");
-    }    
+        System.out.println("STARTING POPS SIZE AND SHAPE ANALYSIS COMPLETE!");
+    }
+
+    /**
+     * Calculates and returns the average value of a collection of data
+     * @param rawData the raw data
+     * @return the average of the data
+     */
+    public static double getAverage(double[] rawData) {
+
+        double ave = 0;
+        double tot = 0;
+        int len = rawData.length;
+
+        for (int i = 0; i < len; i++) {
+            tot = tot + rawData[i];
+        }
+
+        ave = tot / len;
+        return ave;
+    }
+
+    /**
+     * Returns the maximum value from a collection of data
+     * @param rawData The collection of data
+     * @return the maximum value
+     */
+    public static double getMax(double[] rawData) {
+        double max = 0;
+        int len = rawData.length;
+        for (int i = 0; i < len; i++) {
+            if (rawData[i] > max) {
+                max = rawData[i];
+            }
+        }
+        return max;
+    }
+
+    /**
+     * Returns the minimum value from a collection of data
+     * @param rawData The collection of data
+     * @return The minimum value
+     */
+    public static double getMin(double[] rawData) {
+        double min = 1000000;
+        int len = rawData.length;
+        for (int i = 0; i < len; i++) {
+            if (rawData[i] < min) {
+                min = rawData[i];
+            }
+        }
+        return min;
+    }
 }
+

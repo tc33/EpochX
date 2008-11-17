@@ -21,6 +21,8 @@ package com.epochx.core;
 
 import java.util.*;
 
+import org.apache.log4j.*;
+
 import com.epochx.core.crossover.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
@@ -30,19 +32,19 @@ import com.epochx.core.selection.*;
  */
 public class GPCrossover<TYPE> {
 
+	static Logger logger = Logger.getLogger(GPCrossover.class);
+	
 	private ParentSelector<TYPE> parentSelector;
 	private Crossover<TYPE> crossover;
 	
-	//private GPModel<?> model;
-	
 	public GPCrossover(GPModel<TYPE> model) {
-		//this.model = model;
+		logger.debug("Setting up GPCrossover");
 		
 		this.parentSelector = model.getParentSelector();
 		this.crossover = model.getCrossover();
 	}
 	
-	public CandidateProgram<TYPE>[] crossover(List<CandidateProgram<TYPE>> pop) {
+	public CandidateProgram<TYPE>[] crossover(List<CandidateProgram<TYPE>> pop) {		
 		CandidateProgram<TYPE> parent1 = parentSelector.getParent(pop);
 		CandidateProgram<TYPE> parent2 = parentSelector.getParent(pop);
 		

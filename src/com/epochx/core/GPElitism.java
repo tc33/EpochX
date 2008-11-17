@@ -21,6 +21,8 @@ package com.epochx.core;
 
 import java.util.*;
 
+import org.apache.log4j.*;
+
 import com.epochx.core.representation.*;
 
 /**
@@ -28,6 +30,8 @@ import com.epochx.core.representation.*;
  */
 public class GPElitism {
 
+	static Logger logger = Logger.getLogger(GPElitism.class);
+	
 	public static <TYPE> List<CandidateProgram<TYPE>> getElites(List<CandidateProgram<TYPE>> pop, int noElites) {
 		List<CandidateProgram<TYPE>> elites = new ArrayList<CandidateProgram<TYPE>>(noElites);
 		

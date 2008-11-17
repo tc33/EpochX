@@ -21,30 +21,65 @@ package com.epochx.core;
 
 import java.util.*;
 
+import org.apache.log4j.*;
+
 import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
 
 /**
+ * A GPRun object has 2 responsibilities. Firstly - to execute a GP run based upon 
+ * control parameters provided. Secondly - after executing to provide basic details 
+ * of how that run went. 
  * 
+ * <p>Objects of this class should be immutable - however the 
+ * underlying objects, in particular GPModel may not be.
  */
 public class GPRun<TYPE> {
 
+	static Logger logger = Logger.getLogger(GPRun.class);
+	
 	private GPModel<TYPE> model;
 	
-	public void run(GPModel<TYPE> model) {
+	private CandidateProgram<TYPE> bestProgram;
+	private double bestFitness;
+	
+	/*
+	 * Private constructor. The static factory method run(GPModel) should be 
+	 * used to create objects of GPRun and simultaneously execute them.
+	 */
+	private GPRun(GPModel<TYPE> model) {
 		this.model = model;
+
+		bestProgram = null;
+		bestFitness = Double.POSITIVE_INFINITY;
+	}
+	
+	/**
+	 * Construct a new GPRun object and execute it.
+	 * @param <TYPE>
+	 * @param model
+	 * @return
+	 */
+	public static <TYPE> GPRun<TYPE> run(GPModel<TYPE> model) {
+		GPRun<TYPE> runner = new GPRun<TYPE>(model);
+		runner.run();
 		
+		return runner;
+	}
+	
+	/*
+	 * This is the private method which actually does the work in this class. 
+	 * It is also the workhorse of the whole API as it creates the initial 
+	 * population, initiates the genetic operators and performs any elitism 
+	 * or poule selection in use.
+	 */
+	private void run() {
 		// Set things up.
 		GPCrossover<TYPE> crossover = new GPCrossover<TYPE>(model);
 		
 		// Initialisation
 		Initialiser<TYPE> init = model.getInitialiser();
 		List<CandidateProgram<TYPE>> pop = init.getInitialPopulation();
-		//outputGeneration(0, pop);
-		
-		// TEMPORARY
-		double bestFitness = Double.POSITIVE_INFINITY;
-		CandidateProgram<?> bestProgram = null;
 		
 		for (int i=1; i<=model.getNoGenerations(); i++) {
 			List<CandidateProgram<TYPE>> nextPop = new ArrayList<CandidateProgram<TYPE>>();
@@ -88,36 +123,25 @@ public class GPRun<TYPE> {
 					bestProgram = p;
 				}
 			}
-			outputGeneration(i, pop);
 			
 			pop = nextPop;
 		}
 		
-		System.out.println("BEST PROGRAM: " + bestProgram);
-		System.out.println("BEST FITNESS: " + bestFitness);
-		System.out.println();
+		logger.info("Best program: " + bestProgram);
+		logger.info("Fitness: " + bestFitness);
 	}
-	
-	
-		
-	/*
-	 * TEMPORARY LOGGING - need to setup some proper logging soon.
+
+	/**
+	 * @return the bestProgram
 	 */
-	private void outputGeneration(int i, List<CandidateProgram<TYPE>> programs) {
-		System.out.println("######################################################");
-		System.out.println("Population #"+i+":");
-		System.out.println("Size: " + programs.size());
-		
-		/*for (CandidateProgram p: programs) {
-			outputProgram(p);
-		}*/
+	public CandidateProgram<TYPE> getBestProgram() {
+		return bestProgram;
 	}
-	
-	private void outputProgram(CandidateProgram<TYPE> program) {
-		System.out.println("------------------------------------------------------");
-		System.out.println(program);
-		System.out.println("    fitness = " + model.getFitness(program));
-		System.out.println("    depth = " + GPProgramAnalyser.getProgramDepth(program));
-		System.out.println("    length = " + GPProgramAnalyser.getProgramLength(program));
+
+	/**
+	 * @return the bestFitness
+	 */
+	public double getBestFitness() {
+		return bestFitness;
 	}
 }

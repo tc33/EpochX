@@ -38,7 +38,12 @@ public abstract class FunctionNode<TYPE> extends Node<TYPE> {
 		for (int i=0, n=children.length; i<n; i++) {
 			Node<?> c = children[i];
 			if (i!=0) builder.append(' ');
-			builder.append(c.toString());
+			
+			if (c == null) {
+				builder.append('X');
+			} else {
+				builder.append(c.toString());
+			}
 		}
 		builder.append(')');
 		return builder.toString();

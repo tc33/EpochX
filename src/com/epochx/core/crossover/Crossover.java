@@ -26,8 +26,6 @@ import com.epochx.core.representation.*;
  */
 public interface Crossover<TYPE> {
 
-	//public List<CandidateProgram> crossover(List<CandidateProgram> pop);
-	
 	public CandidateProgram<TYPE>[] crossover(CandidateProgram<TYPE> parent1, CandidateProgram<TYPE> parent2);
 	
 }

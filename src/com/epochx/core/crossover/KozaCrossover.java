@@ -28,45 +28,30 @@ import com.epochx.core.representation.*;
 public class KozaCrossover<TYPE> implements Crossover<TYPE> {
 
 	private double internalProbability;
-	
-	private GPModel<?> model;
-	
-	public KozaCrossover(GPModel<?> model, double internalProbability) {
-		this.model = model;
+
+	public KozaCrossover(double internalProbability) {
 		this.internalProbability = internalProbability;
 	}
 	
-	public KozaCrossover(GPModel<?> model) {
-		this(model, 0.9);
+	public KozaCrossover() {
+		this(0.9);
 	}
 	
 	@Override
-	public CandidateProgram<TYPE>[] crossover(CandidateProgram<TYPE> parent1, CandidateProgram<TYPE> parent2) {
-		int c1 = getCrossoverPoint(parent1);
-		int c2 = getCrossoverPoint(parent2);
+	public CandidateProgram<TYPE>[] crossover(CandidateProgram<TYPE> program1, CandidateProgram<TYPE> program2) {
+		// Get swap points.
+		int swapPoint1 = getCrossoverPoint(program1);
+		int swapPoint2 = getCrossoverPoint(program2);
 		
-		CandidateProgram<TYPE> child1 = (CandidateProgram<TYPE>) parent1.clone();
-		CandidateProgram<TYPE> child2 = (CandidateProgram<TYPE>) parent2.clone();
+		// Get copies of subtrees to swap.
+		Node<?> subtree1 = (Node<?>) program1.getNthNode(swapPoint1).clone();
+		Node<?> subtree2 = (Node<?>) program2.getNthNode(swapPoint2).clone();
 		
-		Node<?> subtree1 = child1.getNthNode(c1);
-		Node<?> subtree2 = child2.getNthNode(c2);
-		
-		child1.setNthNode(subtree2, c1);
-		child2.setNthNode(subtree1, c2);
-		
-		// max depth reversion section
-		int pDepth1 = GPProgramAnalyser.getProgramDepth(child1);
-		int pDepth2 = GPProgramAnalyser.getProgramDepth(child2);
-		// depth check on child one
-		if(pDepth1>model.getMaxDepth()) {
-			child1 = (CandidateProgram<TYPE>) parent1.clone();
-		}
-		// depth check on child two
-		if(pDepth2>model.getMaxDepth()) {
-			child2 = (CandidateProgram<TYPE>) parent2.clone();
-		}
-		
-		return new CandidateProgram[]{child1, child2};
+		// Perform swap.
+		program1.setNthNode(subtree2, swapPoint1);
+		program2.setNthNode(subtree1, swapPoint2);
+
+		return new CandidateProgram[]{program1, program2};
 	}
 	
 	private int getCrossoverPoint(CandidateProgram<?> program) {

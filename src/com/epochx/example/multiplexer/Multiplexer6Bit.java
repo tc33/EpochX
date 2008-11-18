@@ -21,12 +21,11 @@ package com.epochx.example.multiplexer;
 
 import java.io.*;
 import java.util.*;
+
 import com.epochx.core.*;
 import com.epochx.core.crossover.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
-import com.epochx.util.FileManip;
-import com.epochx.semantics.*;
 import com.epochx.util.*;
 
 /**
@@ -52,10 +51,11 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
 		setNoRuns(10);
 		setPouleSize(50);
 		setNoElites(50);
-		setMaxDepth(6);
+		setInitialMaxDepth(6);
+		setMaxDepth(17);
 		setPouleSelector(new TournamentSelector<Boolean>(7, this));
 		setParentSelector(new RandomSelector<Boolean>());
-		setCrossover(new UniformPointCrossover<Boolean>(this));
+		setCrossover(new UniformPointCrossover<Boolean>());
 		
 		// Define variables.
 		variables.put("D3", new Variable<Boolean>("D3"));

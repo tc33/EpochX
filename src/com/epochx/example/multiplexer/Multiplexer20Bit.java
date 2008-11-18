@@ -57,7 +57,7 @@ public class Multiplexer20Bit extends GPAbstractModel<Boolean> {
 		setMaxDepth(6);
 		setPouleSelector(new TournamentSelector<Boolean>(7, this));
 		setParentSelector(new RandomSelector<Boolean>());
-		setCrossover(new UniformPointCrossover<Boolean>(this));
+		setCrossover(new UniformPointCrossover<Boolean>());
 		
 		// Define variables.
 		variables.put("D15", new Variable<Boolean>("D15"));

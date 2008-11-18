@@ -116,15 +116,25 @@ public interface GPModel<TYPE> {
 	
 	/**
 	 * Retrieves the maximum depth of CandidatePrograms allowed in the 
-	 * population. The exact way in which CandidatePrograms deeper than this 
-	 * limit are dealt with may vary, but they will not be allowed to remain 
-	 * into the next generation unaltered.
+	 * population after initialisation. The exact way in which the 
+	 * implementation ensures this depth is kept to may vary.
 	 * 
 	 * @return the maximum depth of CandidatePrograms to be allowed in the 
-	 * 		   population.
+	 * 		   population after initialisation.
 	 */
-	public int getMaxDepth();	
-
+	public int getInitialMaxDepth();
+	
+	/**
+	 * Retrieves the maximum depth of CandidatePrograms allowed in the 
+	 * population after undergoing genetic operators. The exact way in which 
+	 * CandidatePrograms deeper than this limit are dealt with may vary, but 
+	 * they will not be allowed to remain into the next generation unaltered.
+	 * 
+	 * @return the maximum depth of CandidatePrograms to be allowed in the 
+	 * 		   population after genetic operators.
+	 */
+	public int getMaxDepth();
+	
 	/**
 	 * Retrieves the implementation of Crossover to use to perform the genetic 
 	 * operation of crossover between 2 parents. The 2 parents to be crossed 
@@ -154,9 +164,9 @@ public interface GPModel<TYPE> {
 	 * probability of selecting the crossover genetic operator, as opposed to 
 	 * mutation or reproduction. 
 	 * 
-	 * <p>Within one generation approximately Pe proportion of the 
+	 * <p>Within one generation approximately Pc proportion of the 
 	 * CandidatePrograms will have been created through crossover, Pm through 
-	 * mutation and Pr through reproduction. Where Pe, Pm, Pr are the values 
+	 * mutation and Pr through reproduction. Where Pc, Pm, Pr are the values 
 	 * returned by getCrossoverProbability(), getMutationProbability() and 
 	 * getReproductionProbability() respectively. The sum of the calls to 
 	 * getCrossoverProbability(), getReproductionProbability() and 
@@ -172,9 +182,9 @@ public interface GPModel<TYPE> {
 	 * probability of selecting the reproduction genetic operator, as opposed 
 	 * to crossover or mutation. 
 	 * 
-	 * <p>Within one generation approximately Pe proportion of the 
+	 * <p>Within one generation approximately Pc proportion of the 
 	 * CandidatePrograms will have been created through crossover, Pm through 
-	 * mutation and Pr through reproduction. Where Pe, Pm, Pr are the values 
+	 * mutation and Pr through reproduction. Where Pc, Pm, Pr are the values 
 	 * returned by getCrossoverProbability(), getMutationProbability() and 
 	 * getReproductionProbability() respectively. The sum of the calls to 
 	 * getCrossoverProbability(), getReproductionProbability() and 
@@ -190,9 +200,9 @@ public interface GPModel<TYPE> {
 	 * probability of selecting the mutation genetic operator, as opposed to 
 	 * crossover or reproduction. 
 	 * 
-	 * <p>Within one generation approximately Pe proportion of the 
+	 * <p>Within one generation approximately Pc proportion of the 
 	 * CandidatePrograms will have been created through crossover, Pm through 
-	 * mutation and Pr through reproduction. Where Pe, Pm, Pr are the values 
+	 * mutation and Pr through reproduction. Where Pc, Pm, Pr are the values 
 	 * returned by getCrossoverProbability(), getMutationProbability() and 
 	 * getReproductionProbability() respectively. The sum of the calls to 
 	 * getCrossoverProbability(), getReproductionProbability() and 

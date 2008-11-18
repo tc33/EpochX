@@ -26,48 +26,24 @@ import com.epochx.core.representation.*;
  * 
  */
 public class UniformPointCrossover<TYPE> implements Crossover<TYPE> {
-	
-	private GPModel<TYPE> model;
-	
-	public UniformPointCrossover(GPModel<TYPE> model) {
-		this.model = model;
-	}
 
 	@Override
-	public CandidateProgram<TYPE>[] crossover(CandidateProgram<TYPE> parent1, CandidateProgram<TYPE> parent2) {
-		CandidateProgram<TYPE> child1 = (CandidateProgram<TYPE>) parent1.clone();
-		CandidateProgram<TYPE> child2 = (CandidateProgram<TYPE>) parent2.clone();
+	public CandidateProgram<TYPE>[] crossover(CandidateProgram<TYPE> program1, CandidateProgram<TYPE> program2) {
+		// Select swap points.
+		int swapPoint1 = (int) Math.floor(Math.random()*GPProgramAnalyser.getProgramLength(program1));
+		int swapPoint2 = (int) Math.floor(Math.random()*GPProgramAnalyser.getProgramLength(program2));
 
-		// select swap and put points
-		int swapPoint1 = (int) Math.floor(Math.random()*GPProgramAnalyser.getProgramLength(parent1));
-		int swapPoint2 = (int) Math.floor(Math.random()*GPProgramAnalyser.getProgramLength(parent2));
+		// Get copies of subtrees to swap.
+		Node<?> subTree1 = (Node<?>) program1.getNthNode(swapPoint1).clone();
+		Node<?> subTree2 = (Node<?>) program2.getNthNode(swapPoint2).clone();
 		
-		// do swap
-		// get parts to swap
-
-		// find Nth node
-		// Do we actually need to make a clone of this if its a direct swap?
-		Node<?> subTree1 = (Node<?>) child1.getNthNode(swapPoint1).clone();
-		Node<?> subTree2 = (Node<?>) child2.getNthNode(swapPoint2).clone();
-		// set Nth node
-		child1.setNthNode(subTree2, swapPoint1);
-		child2.setNthNode(subTree1, swapPoint2);
-
-		// max depth reversion section
-		int pDepth1 = GPProgramAnalyser.getProgramDepth(child1);
-		int pDepth2 = GPProgramAnalyser.getProgramDepth(child2);
-		// depth check on child one
-		if(pDepth1>model.getMaxDepth()) {
-			child1 = (CandidateProgram<TYPE>) parent1.clone();
-		}
-		// depth check on child two
-		if(pDepth2>model.getMaxDepth()) {
-			child2 = (CandidateProgram<TYPE>) parent2.clone();
-		}
+		// Perform swap.
+		program1.setNthNode(subTree2, swapPoint1);
+		program2.setNthNode(subTree1, swapPoint2);
 
 		// TODO state change section
-
 		
-		return new CandidateProgram[]{child1, child2};
+		
+		return new CandidateProgram[]{program1, program2};
 	}
 }

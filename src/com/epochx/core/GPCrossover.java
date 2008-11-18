@@ -42,6 +42,8 @@ public class GPCrossover<TYPE> {
 
 	static Logger logger = Logger.getLogger(GPCrossover.class);
 	
+	private GPModel<TYPE> model;
+	
 	private ParentSelector<TYPE> parentSelector;
 	private Crossover<TYPE> crossover;
 	
@@ -55,7 +57,7 @@ public class GPCrossover<TYPE> {
 	 * 				a population.
 	 */
 	public GPCrossover(GPModel<TYPE> model) {
-		logger.debug("Setting up GPCrossover");
+		this.model = model;
 		
 		this.parentSelector = model.getParentSelector();
 		this.crossover = model.getCrossover();
@@ -77,6 +79,20 @@ public class GPCrossover<TYPE> {
 		CandidateProgram<TYPE> parent1 = parentSelector.getParent(pop);
 		CandidateProgram<TYPE> parent2 = parentSelector.getParent(pop);
 		
-		return crossover.crossover(parent1, parent2);
+		CandidateProgram<TYPE> clone1 = (CandidateProgram<TYPE>) parent1.clone();
+		CandidateProgram<TYPE> clone2 = (CandidateProgram<TYPE>) parent2.clone();
+		
+		CandidateProgram<TYPE>[] parents = new CandidateProgram[]{parent1, parent2};
+		CandidateProgram<TYPE>[] children = crossover.crossover(clone1, clone2);
+		
+		//TODO Need to be more careful here, potential for array out of bounds if crossover 
+		//returns an array with more than 2 elements.
+		for (int i=0; i<children.length; i++) {
+			if (GPProgramAnalyser.getProgramDepth(children[i]) > model.getMaxDepth()) {
+				children[i] = (CandidateProgram<TYPE>) parents[i].clone();
+			}
+		}
+		
+		return children;
 	}
 }

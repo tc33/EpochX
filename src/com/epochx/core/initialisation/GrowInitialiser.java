@@ -46,9 +46,9 @@ public class GrowInitialiser<TYPE> implements Initialiser<TYPE> {
 		
 		// build population
 		for(int i=0; i<popSize; i++) {
-            CandidateProgram<TYPE> candidate = new CandidateProgram<TYPE>(buildGrowNodeTree(model.getMaxDepth()), model);
+            CandidateProgram<TYPE> candidate = new CandidateProgram<TYPE>(buildGrowNodeTree(model.getInitialMaxDepth()), model);
             while(firstGen.contains(candidate)) {
-                candidate = new CandidateProgram<TYPE>(buildGrowNodeTree(model.getMaxDepth()), model);
+                candidate = new CandidateProgram<TYPE>(buildGrowNodeTree(model.getInitialMaxDepth()), model);
             }
             firstGen.add(candidate);
         }
@@ -63,7 +63,7 @@ public class GrowInitialiser<TYPE> implements Initialiser<TYPE> {
 		Node<TYPE> top = (Node<TYPE>) model.getSyntax().get(randomIndex).clone();
         
         // recurse down each branch to depth using Grow mechanism
-        this.fillChildren(top, 1, model.getMaxDepth());
+        this.fillChildren(top, 1, model.getInitialMaxDepth());
         
         // return top node
         return top;

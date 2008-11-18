@@ -49,7 +49,7 @@ public class RegressionModel extends GPAbstractModel<Double> {
 		setReproductionProbability(0.1);
 		setInitialiser(new GrowInitialiser<Double>(this, null));
 		setPouleSelector(new TournamentSelector<Double>(4, this));
-		setCrossover(new KozaCrossover<Double>(this));
+		setCrossover(new UniformPointCrossover<Double>());
 		setPouleSize(50);
 		setNoGenerations(100);
 		setMaxDepth(10);

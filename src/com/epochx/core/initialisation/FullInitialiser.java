@@ -51,7 +51,7 @@ public class FullInitialiser<TYPE> implements Initialiser<TYPE> {
 		for(int i=0; i<popSize; i++) {
 			CandidateProgram<TYPE> candidate;
 			do {
-            	candidate = new CandidateProgram<TYPE>(buildFullNodeTree(model.getMaxDepth()), model);
+            	candidate = new CandidateProgram<TYPE>(buildFullNodeTree(model.getInitialMaxDepth()), model);
 			} while (firstGen.contains(candidate));
 			firstGen.add(candidate);
         }
@@ -66,7 +66,7 @@ public class FullInitialiser<TYPE> implements Initialiser<TYPE> {
         Node<TYPE> top = (Node<TYPE>) model.getFunctions().get(randomIndex).clone();
 
         // recurse down each branch to depth
-		fillChildren(top, 1, model.getMaxDepth());      
+		fillChildren(top, 1, model.getInitialMaxDepth());      
         
         // return top node
         return top;

@@ -22,7 +22,6 @@ package com.epochx.core.initialisation;
 import java.util.*;
 
 import com.epochx.core.*;
-import com.epochx.core.GPModel;
 import com.epochx.core.representation.*;
 import com.epochx.semantics.*;
 
@@ -54,8 +53,8 @@ public class RampedHalfAndHalfInitialiser<TYPE> implements Initialiser<TYPE> {
 		grow = new GrowInitialiser<TYPE>(model, semMod);
 		full = new FullInitialiser<TYPE>(model, semMod);
 		// modify depth for staged increase as per Koza
-		if(model.getMaxDepth()>=6) {
-			this.depth = model.getMaxDepth() - 4;
+		if(model.getInitialMaxDepth()>=6) {
+			this.depth = model.getInitialMaxDepth() - 4;
 		} else {
 			throw new IllegalArgumentException("MAX DEPTH TOO SMALL FOR RH+H");
 		}

@@ -80,13 +80,17 @@ public class GPRun<TYPE> {
 	 */
 	private void run() {
 		// Set things up.
+		logger.info("Setting up GPCrossover");
 		GPCrossover<TYPE> crossover = new GPCrossover<TYPE>(model);
 		
 		// Initialisation
+		logger.info("Performing initialisation");
 		List<CandidateProgram<TYPE>> pop = model.getInitialiser().getInitialPopulation();
 		
 		// For each generation.
+		logger.info("Starting evolution");
 		for (int i=1; i<=model.getNoGenerations(); i++) {
+			//logger.debug("Working on generation " + i);
 			List<CandidateProgram<TYPE>> nextPop = new ArrayList<CandidateProgram<TYPE>>();
 			
 			// Perform elitism.
@@ -101,7 +105,7 @@ public class GPRun<TYPE> {
 			
 			// Fill the population by performing genetic operations.
 			while(nextPop.size() < model.getPopulationSize()) {
-				// Pick a genetic operator using Pr, Pe and Pm.
+				// Pick a genetic operator using Pr, Pc and Pm.
 				double random = Math.random();
 				double pm = model.getMutationProbability();
 				double pe = model.getCrossoverProbability();

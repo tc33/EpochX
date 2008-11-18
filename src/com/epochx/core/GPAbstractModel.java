@@ -56,6 +56,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE> {
 	private int populationSize;
 	private int pouleSize;
 	private int noElites;
+	private int maxInitialDepth;
 	private int maxDepth;
 	
 	private double crossoverProbability;
@@ -71,7 +72,8 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE> {
 		noRuns = 1;
 		noGenerations = 50;
 		populationSize = 500;
-		maxDepth = 6;
+		maxInitialDepth = 6;
+		maxDepth = 17;
 		crossoverProbability = 0.9;
 		reproductionProbability = 0.1;
 		mutationProbability = 0;
@@ -82,7 +84,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE> {
 		pouleSelector = new TournamentSelector<TYPE>(3, this);
 		
 		initialiser = new FullInitialiser<TYPE>(this);
-		crossover = new UniformPointCrossover<TYPE>(this);
+		crossover = new UniformPointCrossover<TYPE>();
 		mutator = null;
 	}
 
@@ -203,7 +205,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE> {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to 6 in GPAbstractModel.
+	 * <p>Defaults to 17 in GPAbstractModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -212,12 +214,34 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE> {
 	}
 
 	/**
-	 * Overwrites the default max program tree depth setting.
+	 * Overwrites the default max program tree depth allowed after genetic 
+	 * operators are performed.
 	 * 
 	 * @param maxDepth the new max program tree depth to use.
 	 */
 	public void setMaxDepth(int maxDepth) {
 		this.maxDepth = maxDepth;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to 6 in GPAbstractModel.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	public int getInitialMaxDepth() {
+		return maxInitialDepth;
+	}
+
+	/**
+	 * Overwrites the default max program tree depth allowed after 
+	 * initialisation is performed.
+	 * 
+	 * @param maxInitialDepth the new max program tree depth to use.
+	 */
+	public void setInitialMaxDepth(int maxInitialDepth) {
+		this.maxInitialDepth = maxInitialDepth;
 	}
 
 	/**

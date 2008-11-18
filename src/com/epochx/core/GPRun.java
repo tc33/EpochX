@@ -37,8 +37,10 @@ public class GPRun<TYPE> {
 
 	static Logger logger = Logger.getLogger(GPRun.class);
 	
+	// The model describing the problem to be evolved.
 	private GPModel<TYPE> model;
 	
+	// Information about how the run went.
 	private CandidateProgram<TYPE> bestProgram;
 	private double bestFitness;
 	
@@ -83,6 +85,7 @@ public class GPRun<TYPE> {
 		// Initialisation
 		List<CandidateProgram<TYPE>> pop = model.getInitialiser().getInitialPopulation();
 		
+		// For each generation.
 		for (int i=1; i<=model.getNoGenerations(); i++) {
 			List<CandidateProgram<TYPE>> nextPop = new ArrayList<CandidateProgram<TYPE>>();
 			
@@ -93,31 +96,33 @@ public class GPRun<TYPE> {
 					nextPop.add(e);
 			}
 			
-			// Construct a poule.
+			// Construct a breeding pool.
 			List<CandidateProgram<TYPE>> poule = model.getPouleSelector().getPoule(pop, model.getPouleSize());
 			
+			// Fill the population by performing genetic operations.
 			while(nextPop.size() < model.getPopulationSize()) {
 				// Pick a genetic operator using Pr, Pe and Pm.
 				double random = Math.random();
-				double pr = model.getReproductionProbability();
+				double pm = model.getMutationProbability();
 				double pe = model.getCrossoverProbability();
 				
-				if (random < pr) {
-					// Do reproduction. - Should this use clone?
-					nextPop.add(poule.get((int) Math.floor(Math.random()*poule.size())));
-				} else if (random < pr+pe) {
+				if (random < pe) {
 					// Do crossover.
 					CandidateProgram<TYPE>[] children = crossover.crossover(poule);
 					for (CandidateProgram<TYPE> c: children) {
 						if (nextPop.size() < model.getPopulationSize())
 							nextPop.add(c);
 					}
-				} else {
+				} else if (random < pe+pm) {
 					// Do mutation.
 					//TODO Implement mutation.
+				} else {
+					// Do reproduction. - Should this use clone?
+					nextPop.add(poule.get((int) Math.floor(Math.random()*poule.size())));
 				}
 			}
 			
+			// Update new best program.
 			for (CandidateProgram<TYPE> p: pop) {
 				double fitness = model.getFitness(p);
 				if (fitness < bestFitness) {
@@ -134,14 +139,22 @@ public class GPRun<TYPE> {
 	}
 
 	/**
-	 * @return the bestProgram
+	 * Retrieve the CandidateProgram with the best fitness found during the 
+	 * run. This CandidateProgram may have been found in any of the generations.
+	 * 
+	 * @return the CandidateProgram with the best fitness score found.
 	 */
 	public CandidateProgram<TYPE> getBestProgram() {
 		return bestProgram;
 	}
 
 	/**
-	 * @return the bestFitness
+	 * Retrieve the fitness score of the CandidateProgram returned by 
+	 * getBestProgram(). A lower fitness score is considered better than a 
+	 * higher fitness score.
+	 * 
+	 * @return the fitness score of the best CandidateProgram found during 
+	 * 		   execution.
 	 */
 	public double getBestFitness() {
 		return bestFitness;

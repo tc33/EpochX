@@ -28,7 +28,15 @@ import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 
 /**
+ * This class performs the very simple task of linking together parent 
+ * selection and crossover. The actual tasks of crossover and selection are 
+ * performed by Crossover and ParentSelector implementations respectively.
  * 
+ * @see Crossover
+ * @see UniformPointCrossover
+ * @see KozaCrossover
+ * @see ParentSelector
+ * @see TournamentSelector
  */
 public class GPCrossover<TYPE> {
 
@@ -37,13 +45,34 @@ public class GPCrossover<TYPE> {
 	private ParentSelector<TYPE> parentSelector;
 	private Crossover<TYPE> crossover;
 	
+	/**
+	 * Constructs an instance of GPCrossover which will be capable of 
+	 * performing crossover using the crossover operator and parent selector 
+	 * provided by the given GPModel.
+	 * 
+	 * @param model the GPModel which defines the Crossover operator and 
+	 * 				ParentSelector to use to perform one act of crossover on 
+	 * 				a population.
+	 */
 	public GPCrossover(GPModel<TYPE> model) {
 		logger.debug("Setting up GPCrossover");
 		
 		this.parentSelector = model.getParentSelector();
 		this.crossover = model.getCrossover();
 	}
-	
+
+	/**
+	 * Selects two parents and submits them to the Crossover operator which 
+	 * is obtained by calling getCrossover() on the instance of GPModel given 
+	 * at construction. The method of parent selection is also provided by this 
+	 * model with a call to getParentSelector().
+	 * 
+	 * @param pop the population of CandidatePrograms from which 2 parents 
+	 * 			  should be selected for crossover.
+	 * @return an array of CandidatePrograms generated through crossover. This 
+	 * 		   is most likely 2 child programs, but could in theory be any 
+	 * 		   number as returned by the Crossover operator in use.
+	 */
 	public CandidateProgram<TYPE>[] crossover(List<CandidateProgram<TYPE>> pop) {		
 		CandidateProgram<TYPE> parent1 = parentSelector.getParent(pop);
 		CandidateProgram<TYPE> parent2 = parentSelector.getParent(pop);

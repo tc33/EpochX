@@ -23,26 +23,38 @@ import java.util.*;
 
 import com.epochx.core.crossover.*;
 import com.epochx.core.initialisation.*;
+import com.epochx.core.mutation.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 
 
 /**
+ * GPAbstractModel is a partial implementation of GPModel which provides 
+ * sensible defaults for many of the necessary control parameters. It also 
+ * provides a simple way of setting many values so an extending class isn't 
+ * required to override all methods they wish to alter, and can instead use 
+ * a simple setter method call. 
  * 
+ * <p>Those methods that it isn't possible to provide a <em>sensible</em> 
+ * default for, for example getFitness(CandidateProgram), getTerminals() and
+ * getFunctions(), are not implemented to force the extending class to 
+ * consider their implementation.
+ * 
+ * @see GPModel
  */
 public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE> {
 
 	private Initialiser<TYPE> initialiser;
 	private Crossover<TYPE> crossover;
-	//private Mutator mutator;
+	private Mutator<TYPE> mutator;
 	
 	private PouleSelector<TYPE> pouleSelector;
 	private ParentSelector<TYPE> parentSelector;
-	private int pouleSize;
 
 	private int noRuns;
 	private int noGenerations;
 	private int populationSize;
+	private int pouleSize;
 	private int noElites;
 	private int maxDepth;
 	
@@ -50,124 +62,178 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE> {
 	private double reproductionProbability;
 	private double mutationProbability;
 	
+	/**
+	 * Construct a GPModel with a set of sensible defaults. See the appropriate
+	 * accessor method for information of each default value.
+	 */
 	public GPAbstractModel() {		
-		// Set defaults.
+		// Set default values.
 		noRuns = 1;
-		noGenerations = 10;
-		populationSize = 100;
+		noGenerations = 50;
+		populationSize = 500;
 		maxDepth = 6;
-		crossoverProbability = 1;
-		reproductionProbability = 0;
+		crossoverProbability = 0.9;
+		reproductionProbability = 0.1;
 		mutationProbability = 0;
-		pouleSize = -1;
+		pouleSize = 50;
 		noElites = 0;
 		
 		parentSelector = new RandomSelector<TYPE>();
-		pouleSelector = new RandomSelector<TYPE>();
+		pouleSelector = new TournamentSelector<TYPE>(3, this);
 		
 		initialiser = new FullInitialiser<TYPE>(this);
 		crossover = new UniformPointCrossover<TYPE>(this);
+		mutator = null;
 	}
 
 	/**
-	 * @return the pouleSize
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to 50 in GPAbstractModel.
+	 * 
+	 * @return {@inheritDoc}
 	 */
 	public int getPouleSize() {
 		return pouleSize;
 	}
 
 	/**
-	 * @param pouleSize the pouleSize to set
+	 * Overwrites the default poule size value.
+	 * 
+	 * @param pouleSize the new size of the mating pool to use.
 	 */
 	public void setPouleSize(int pouleSize) {
 		this.pouleSize = pouleSize;
 	}
 
 	/**
-	 * @return the initialiser
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to FullInitialiser in GPAbstractModel.
+	 * 
+	 * @return {@inheritDoc}
 	 */
 	public Initialiser<TYPE> getInitialiser() {
 		return initialiser;
 	}
 
 	/**
-	 * @param initialiser the initialiser to set
+	 * Overwrites the default initialiser.
+	 * 
+	 * @param initialiser the new Initialiser to use when generating the 
+	 * 		 			  initial population.
 	 */
 	public void setInitialiser(Initialiser<TYPE> initialiser) {
 		this.initialiser = initialiser;
 	}
 
 	/**
-	 * @return the noRuns
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to 1 in GPAbstractModel.
+	 * 
+	 * @return {@inheritDoc}
 	 */
 	public int getNoRuns() {
 		return noRuns;
 	}
 
 	/**
-	 * @param noRuns the noRuns to set
+	 * Overwrites the default number of runs.
+	 * 
+	 * @param noRuns the new number of runs to execute with this model.
 	 */
 	public void setNoRuns(int noRuns) {
 		this.noRuns = noRuns;
 	}
 
 	/**
-	 * @return the noGenerations
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to 50 in GPAbstractModel.
+	 * 
+	 * @return {@inheritDoc}
 	 */
 	public int getNoGenerations() {
 		return noGenerations;
 	}
 
 	/**
-	 * @param noGenerations the noGenerations to set
+	 * Overwrites the default number of generations.
+	 * 
+	 * @param noGenerations the new number of generations to use within a run.
 	 */
 	public void setNoGenerations(int noGenerations) {
 		this.noGenerations = noGenerations;
 	}
 	
 	/**
-	 * @return the generationSize
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to 500 in GPAbstractModel.
+	 * 
+	 * @return {@inheritDoc}
 	 */
 	public int getPopulationSize() {
 		return populationSize;
 	}
 
 	/**
-	 * @param populationSize the generationSize to set
+	 * Overwrites the default population size of CandidatePrograms.
+	 * 
+	 * @param populationSize the new number of CandidatePrograms each generation 
+	 * 						 should contain.
 	 */
 	public void setPopulationSize(int populationSize) {
 		this.populationSize = populationSize;
 	}
 	
+	/**
+	 * Returns the union of calls to getTerminals() and getFunctions.
+	 * 
+	 * @return {@inheritDoc}
+	 */
 	public List<Node<?>> getSyntax() {
 		List<Node<?>> syntax = new ArrayList<Node<?>>(getTerminals());
 		syntax.addAll(getFunctions());
+		
 		return syntax;
 	}
 	
 	/**
-	 * @return the depth
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to 6 in GPAbstractModel.
+	 * 
+	 * @return {@inheritDoc}
 	 */
 	public int getMaxDepth() {
 		return maxDepth;
 	}
 
 	/**
-	 * @param maxDepth the depth to set
+	 * Overwrites the default max program tree depth setting.
+	 * 
+	 * @param maxDepth the new max program tree depth to use.
 	 */
 	public void setMaxDepth(int maxDepth) {
 		this.maxDepth = maxDepth;
 	}
-	
 
 	/**
-	 * @return the crossover
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to {@link UniformPointCrossover} in GPAbstractModel.
+	 * 
+	 * @return {@inheritDoc}
 	 */
 	public Crossover<TYPE> getCrossover() {
 		return crossover;
 	}
 
 	/**
+	 * Overwrites the default crossover operator.
+	 * 
 	 * @param crossover the crossover to set
 	 */
 	public void setCrossover(Crossover<TYPE> crossover) {
@@ -175,84 +241,146 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE> {
 	}
 
 	/**
-	 * @param crossoverProbability the crossoverProbability to set
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to null in GPAbstractModel.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	public Mutator<TYPE> getMutator() {
+		return mutator;
+	}
+
+	/**
+	 * Overwrites the default mutator used to perform mutation.
+	 * 
+	 * @param mutator the mutator to set
+	 */
+	public void setMutator(Mutator<TYPE> mutator) {
+		this.mutator = mutator;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to 0.9 in GPAbstractModel to represent a 90% chance.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	public double getCrossoverProbability() {
+		return crossoverProbability;
+	}
+	
+	/**
+	 * Overwrites the default crossover probability.
+	 * 
+	 * @param crossoverProbability the new crossover probability to use.
 	 */
 	public void setCrossoverProbability(double crossoverProbability) {
 		this.crossoverProbability = crossoverProbability;
 	}
 
 	/**
-	 * @return the crossoverProbability
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to 0.1 in GPAbstractModel to represent a 10% chance.
+	 * 
+	 * @return {@inheritDoc}
 	 */
-	public double getCrossoverProbability() {
-		return crossoverProbability;
+	public double getReproductionProbability() {
+		return reproductionProbability;
 	}
-
+	
 	/**
-	 * @param reproductionProbability the reproductionProbability to set
+	 * Overwrites the default reproduction probability.
+	 * 
+	 * @param reproductionProbability the new reproduction probability to use.
 	 */
 	public void setReproductionProbability(double reproductionProbability) {
 		this.reproductionProbability = reproductionProbability;
 	}
 
 	/**
-	 * @return the reproductionProbability
-	 */
-	public double getReproductionProbability() {
-		return reproductionProbability;
-	}
-
-	/**
-	 * @return the mutationProbability
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to 0.0 in GPAbstractModel to represent a 0% chance.
+	 * 
+	 * @return {@inheritDoc}
 	 */
 	public double getMutationProbability() {
 		return mutationProbability;
 	}
 
 	/**
-	 * @param mutationProbability the mutationProbability to set
+	 * Overwrites the default mutation probability.
+	 * 
+	 * @param mutationProbability the new mutation probability to use.
 	 */
 	public void setMutationProbability(double mutationProbability) {
 		this.mutationProbability = mutationProbability;
 	}
 
 	/**
-	 * @return the pouleSelector
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to {@link TournamentSelector} with a tournament size of 3 
+	 * in GPAbstractModel.
+	 * 
+	 * @return {@inheritDoc}
 	 */
 	public PouleSelector<TYPE> getPouleSelector() {
 		return pouleSelector;
 	}
 
 	/**
-	 * @param pouleSelector the pouleSelector to set
+	 * Overwrites the default poule selector used to generate a mating pool.
+	 * 
+	 * @param pouleSelector the new PouleSelector to be used when building a 
+	 * 						breeding pool.
 	 */
 	public void setPouleSelector(PouleSelector<TYPE> pouleSelector) {
 		this.pouleSelector = pouleSelector;
 	}
 
 	/**
-	 * @return the parentSelector
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to {@link RandomSelector} in GPAbstractModel.
+	 * 
+	 * @return {@inheritDoc}
 	 */
 	public ParentSelector<TYPE> getParentSelector() {
 		return parentSelector;
 	}
 
 	/**
-	 * @param parentSelector the parentSelector to set
+	 * Overwrites the default parent selector used to select parents to undergo
+	 * a genetic operator from either a poule or the previous population.
+	 * 
+	 * @param parentSelector the new ParentSelector to be used when selecting 
+	 * 						 parents for a genetic operator.
 	 */
 	public void setParentSelector(ParentSelector<TYPE> parentSelector) {
 		this.parentSelector = parentSelector;
 	}
 
 	/**
-	 * @return the noElites
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to 0 in GPAbstractModel.
+	 * 
+	 * @return {@inheritDoc}
 	 */
 	public int getNoElites() {
 		return noElites;
 	}
 
 	/**
-	 * @param noElites the noElites to set
+	 * Overwrites the default number of elites to copy from one generation to
+	 * the next.
+	 * 
+	 * @param noElites the new number of elites to copy across from one 
+	 * 				   population to the next.
 	 */
 	public void setNoElites(int noElites) {
 		this.noElites = noElites;

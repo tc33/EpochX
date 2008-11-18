@@ -24,7 +24,7 @@ import com.epochx.core.representation.*;
 /**
  * 
  */
-public interface Mutation<TYPE> {
+public interface Mutator<TYPE> {
 
 	public CandidateProgram<TYPE> mutate(CandidateProgram<TYPE> program);
 	

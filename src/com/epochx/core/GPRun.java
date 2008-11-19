@@ -90,7 +90,7 @@ public class GPRun<TYPE> {
 		// For each generation.
 		logger.info("Starting evolution");
 		for (int i=1; i<=model.getNoGenerations(); i++) {
-			//logger.debug("Working on generation " + i);
+			logger.debug("Working on generation " + i);
 			List<CandidateProgram<TYPE>> nextPop = new ArrayList<CandidateProgram<TYPE>>();
 			
 			// Perform elitism.

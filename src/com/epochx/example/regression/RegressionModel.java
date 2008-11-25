@@ -48,7 +48,9 @@ public class RegressionModel extends GPAbstractModel<Double> {
 		setMutationProbability(0.0);
 		setReproductionProbability(0.1);
 		setInitialiser(new GrowInitialiser<Double>(this, null));
-		setPouleSelector(new TournamentSelector<Double>(4, this));
+		//setPouleSelector(new TournamentSelector<Double>(4, this));
+		setParentSelector(new LinearRankSelector<Double>(0.5));
+		setPouleSelector(new RandomSelector<Double>());
 		setCrossover(new UniformPointCrossover<Double>());
 		setPouleSize(50);
 		setNoGenerations(100);

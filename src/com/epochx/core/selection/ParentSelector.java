@@ -28,6 +28,12 @@ import com.epochx.core.representation.*;
  */
 public interface ParentSelector<TYPE> {
 
-	public CandidateProgram<TYPE> getParent(List<CandidateProgram<TYPE>> pop);
+	/**
+	 * Should be called at the start of each new generation.
+	 * @param pop
+	 */
+	public void onGenerationStart(List<CandidateProgram<TYPE>> pop);
+	
+	public CandidateProgram<TYPE> getParent();
 	
 }

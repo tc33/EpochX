@@ -75,9 +75,9 @@ public class GPCrossover<TYPE> {
 	 * 		   is most likely 2 child programs, but could in theory be any 
 	 * 		   number as returned by the Crossover operator in use.
 	 */
-	public CandidateProgram<TYPE>[] crossover(List<CandidateProgram<TYPE>> pop) {		
-		CandidateProgram<TYPE> parent1 = parentSelector.getParent(pop);
-		CandidateProgram<TYPE> parent2 = parentSelector.getParent(pop);
+	public CandidateProgram<TYPE>[] crossover() {		
+		CandidateProgram<TYPE> parent1 = parentSelector.getParent();
+		CandidateProgram<TYPE> parent2 = parentSelector.getParent();
 		
 		CandidateProgram<TYPE> clone1 = (CandidateProgram<TYPE>) parent1.clone();
 		CandidateProgram<TYPE> clone2 = (CandidateProgram<TYPE>) parent2.clone();

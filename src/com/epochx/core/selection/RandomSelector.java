@@ -28,8 +28,17 @@ import com.epochx.core.representation.*;
  */
 public class RandomSelector<TYPE> implements ParentSelector<TYPE>, PouleSelector<TYPE> {
 
+	private List<CandidateProgram<TYPE>> pop;
+	
+	public RandomSelector() {}
+	
 	@Override
-	public CandidateProgram<TYPE> getParent(List<CandidateProgram<TYPE>> pop) {		
+	public void onGenerationStart(List<CandidateProgram<TYPE>> pop) {
+		this.pop = pop;
+	}
+	
+	@Override
+	public CandidateProgram<TYPE> getParent() {		
 		return pop.get((int) Math.floor(Math.random()*pop.size()));
 	}
 
@@ -43,10 +52,9 @@ public class RandomSelector<TYPE> implements ParentSelector<TYPE>, PouleSelector
 		List<CandidateProgram<TYPE>> poule = new ArrayList<CandidateProgram<TYPE>>(pouleSize);
 		
 		for (int i=0; i<pouleSize; i++) {
-			poule.add(getParent(pop));
+			poule.add(pop.get((int) Math.floor(Math.random()*pop.size())));
 		}
 		
 		return poule;
 	}
-
 }

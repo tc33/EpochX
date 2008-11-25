@@ -32,19 +32,28 @@ public class TournamentSelector<TYPE> implements ParentSelector<TYPE>, PouleSele
 	private int tournamentSize;
 	private GPModel<TYPE> model;
 	
+	// We use a random selector to construct tournaments.
+	private RandomSelector<TYPE> randomSelector;
+	
 	public TournamentSelector(int tournamentSize, GPModel<TYPE> model) {
+		randomSelector = new RandomSelector<TYPE>();
+		
 		this.tournamentSize = tournamentSize;
 		this.model = model;
 	}
 
 	@Override
-	public CandidateProgram<TYPE> getParent(List<CandidateProgram<TYPE>> pop) {
-		// Use a random selector to construct a tournament.
-		RandomSelector<TYPE> randomSelector = new RandomSelector<TYPE>();
+	public void onGenerationStart(List<CandidateProgram<TYPE>> pop) {
+		// We'll be using a random selector to construct a tournament.
+		randomSelector.onGenerationStart(pop);
+	}
+	
+	@Override
+	public CandidateProgram<TYPE> getParent() {
 		CandidateProgram<TYPE>[] tournament = new CandidateProgram[tournamentSize];
 		
 		for (int i=0; i<tournamentSize; i++) {
-			tournament[i] = randomSelector.getParent(pop);
+			tournament[i] = randomSelector.getParent();
 		}
 		
 		// Calculate fitness.
@@ -71,8 +80,11 @@ public class TournamentSelector<TYPE> implements ParentSelector<TYPE>, PouleSele
 		
 		List<CandidateProgram<TYPE>> poule = new ArrayList<CandidateProgram<TYPE>>(pouleSize);
 		
+		ParentSelector<TYPE> parentSelector = new TournamentSelector<TYPE>(tournamentSize, model);
+		parentSelector.onGenerationStart(pop);
+		
 		for (int i=0; i<pouleSize; i++) {
-			poule.add(getParent(pop));
+			poule.add(parentSelector.getParent());
 		}
 		
 		return poule;

@@ -27,7 +27,7 @@ import com.epochx.core.representation.*;
 
 /**
  * A GPRun object has 2 responsibilities. Firstly - to execute a GP run based upon 
- * control parameters provided. Secondly - after executing to provide basic details 
+ * control parameters provided. Secondly - after executing, to provide basic details 
  * of how that run went. 
  * 
  * <p>Objects of this class should be immutable - however the 
@@ -103,6 +103,9 @@ public class GPRun<TYPE> {
 			// Construct a breeding pool.
 			List<CandidateProgram<TYPE>> poule = model.getPouleSelector().getPoule(pop, model.getPouleSize());
 			
+			// Tell the parent selector we're starting a new generation.
+			model.getParentSelector().onGenerationStart(poule);
+			
 			// Fill the population by performing genetic operations.
 			while(nextPop.size() < model.getPopulationSize()) {
 				// Pick a genetic operator using Pr, Pc and Pm.
@@ -112,7 +115,7 @@ public class GPRun<TYPE> {
 				
 				if (random < pe) {
 					// Do crossover.
-					CandidateProgram<TYPE>[] children = crossover.crossover(poule);
+					CandidateProgram<TYPE>[] children = crossover.crossover();
 					for (CandidateProgram<TYPE> c: children) {
 						if (nextPop.size() < model.getPopulationSize())
 							nextPop.add(c);

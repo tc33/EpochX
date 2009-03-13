@@ -58,8 +58,8 @@ public class GPProgramAnalyser {
 		}
 	}
 	
-	public static int getProgramDepth(CandidateProgram program) {
-		Node rootNode = program.getRootNode();
+	public static int getProgramDepth(CandidateProgram<?> program) {
+		Node<?> rootNode = program.getRootNode();
 		// set depth and current depth to zero
 		int currentDepth = 0;
 		int depth = 0;
@@ -67,7 +67,7 @@ public class GPProgramAnalyser {
 		return depth;
 	}
 		
-	private static int countDepth(Node rootNode, int currentDepth, int depth) {
+	private static int countDepth(Node<?> rootNode, int currentDepth, int depth) {
 		// set current depth to maximum if need be
 		if(currentDepth>depth) {
 			depth = currentDepth;
@@ -76,7 +76,7 @@ public class GPProgramAnalyser {
 		int arity = rootNode.getArity();
 		if(arity>0) {
 			for(int i = 0; i<arity; i++) {
-				Node childNode = rootNode.getChild(i);
+				Node<?> childNode = rootNode.getChild(i);
 				depth = GPProgramAnalyser.countDepth(childNode, (currentDepth + 1), depth);
 			}
 		}

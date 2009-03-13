@@ -24,6 +24,7 @@ import java.util.*;
 import org.apache.log4j.*;
 
 import com.epochx.core.representation.*;
+import com.epochx.stats.*;
 
 /**
  * A GPRun object has 2 responsibilities. Firstly - to execute a GP run based upon 
@@ -44,6 +45,8 @@ public class GPRun<TYPE> {
 	private CandidateProgram<TYPE> bestProgram;
 	private double bestFitness;
 	
+	private GenerationStats genStats;
+	
 	/*
 	 * Private constructor. The static factory method run(GPModel) should be 
 	 * used to create objects of GPRun and simultaneously execute them.
@@ -53,6 +56,14 @@ public class GPRun<TYPE> {
 
 		bestProgram = null;
 		bestFitness = Double.POSITIVE_INFINITY;
+		
+		genStats = new GenerationStats();
+		
+		// This provides a shortcut for the common convention of making a model the listener.
+		//TODO Actually might be better to allow models a way of giving their own listener for more flexibility.
+		if (model instanceof GenerationStatListener) {
+			genStats.addGenerationStatListener((GenerationStatListener) model);
+		}
 	}
 	
 	/**
@@ -87,6 +98,9 @@ public class GPRun<TYPE> {
 		logger.info("Performing initialisation");
 		List<CandidateProgram<TYPE>> pop = model.getInitialiser().getInitialPopulation();
 		
+		// Generate stats for the inital population.
+		genStats.addGen(pop);
+		
 		// For each generation.
 		logger.info("Starting evolution");
 		for (int i=1; i<=model.getNoGenerations(); i++) {
@@ -107,7 +121,7 @@ public class GPRun<TYPE> {
 			model.getParentSelector().onGenerationStart(poule);
 			
 			// Fill the population by performing genetic operations.
-			while(nextPop.size() < model.getPopulationSize()) {
+			while(nextPop.size() < model.getPopulationSize()) {				
 				// Pick a genetic operator using Pr, Pc and Pm.
 				double random = Math.random();
 				double pm = model.getMutationProbability();
@@ -137,6 +151,9 @@ public class GPRun<TYPE> {
 					bestProgram = p;
 				}
 			}
+			
+			// Generate stats for the current population.
+			genStats.addGen(pop);
 			
 			pop = nextPop;
 		}

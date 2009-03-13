@@ -20,7 +20,6 @@
 package com.epochx.core.initialisation;
 
 import java.util.*;
-
 import com.epochx.core.GPModel;
 import com.epochx.core.representation.*;
 import com.epochx.semantics.*;

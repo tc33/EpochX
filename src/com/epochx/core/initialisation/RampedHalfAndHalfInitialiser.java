@@ -20,7 +20,6 @@
 package com.epochx.core.initialisation;
 
 import java.util.*;
-
 import com.epochx.core.*;
 import com.epochx.core.representation.*;
 import com.epochx.semantics.*;
@@ -30,21 +29,15 @@ import com.epochx.semantics.*;
  */
 public class RampedHalfAndHalfInitialiser<TYPE> implements Initialiser<TYPE> {
 	
-	private GPModel<TYPE> model;
-	
+	private GPModel<TYPE> model;	
 	private GrowInitialiser<TYPE> grow;
 	private FullInitialiser<TYPE> full;
 	private CandidateProgram<TYPE> candidate;
 	private int depth;
 
 	/**
-	 * @param syntax A set of nodes containing all functions and terminals
-	 * @param functions A set of nodes containing all the functions
-	 * @param terminals A set of nodes containing all the terminals
+	 * @param model The model being assessed
 	 * @param semMod The semantic module for this model
-	 * @param popSize The population size
-	 * @param depth The max depth of the program tree on initialisation
-	 * @throws IllegalArgumentException for the max depth being too small to work RHH
 	 */
 	public RampedHalfAndHalfInitialiser(GPModel<TYPE> model, SemanticModule semMod) {
 		this.model = model;

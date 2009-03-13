@@ -21,12 +21,12 @@ package com.epochx.example.multiplexer;
 
 import java.io.*;
 import java.util.*;
-
 import com.epochx.core.*;
 import com.epochx.core.crossover.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.util.*;
+import com.epochx.semantics.*;
 
 /**
  * 
@@ -45,7 +45,7 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
 	
 	public void configure() {
 		setPopulationSize(500);
-		setNoGenerations(50);
+		setNoGenerations(20);
 		setCrossoverProbability(0.9);
 		setReproductionProbability(0.1);
 		setNoRuns(10);
@@ -56,6 +56,8 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
 		setPouleSelector(new TournamentSelector<Boolean>(7, this));
 		setParentSelector(new RandomSelector<Boolean>());
 		setCrossover(new UniformPointCrossover<Boolean>());
+		setStateCheckedCrossover(true);
+		
 		
 		// Define variables.
 		variables.put("D3", new Variable<Boolean>("D3"));
@@ -64,6 +66,8 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
 		variables.put("D0", new Variable<Boolean>("D0"));
 		variables.put("A1", new Variable<Boolean>("A1"));
 		variables.put("A0", new Variable<Boolean>("A0"));
+		
+		setSemanticModule(new BooleanSemanticModule(getTerminals(), this));
 	}
 	
 	@Override

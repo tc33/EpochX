@@ -30,13 +30,13 @@ import com.epochx.semantics.*;
  */
 public class BehaviourManager {
     
-    private Behaviour model;
+    private Representation model;
     private ArrayList<ArrayList<String>> programs;
     
     /** Creates a new instance of BehaviourManager
      * @param mod The BDD model
      */
-    public BehaviourManager(Behaviour mod) {
+    public BehaviourManager(Representation mod) {
         model = mod;
         programs = new ArrayList<ArrayList<String>>();
     }
@@ -45,7 +45,7 @@ public class BehaviourManager {
      * Returns the BDD model
      * @return The BDD model
      */
-    public Behaviour getBehaviour() {
+    public Representation getBehaviour() {
         return model;
     }
     

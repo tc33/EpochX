@@ -20,7 +20,7 @@
 package com.epochx.core;
 
 import java.util.*;
-
+import com.epochx.semantics.*;
 import com.epochx.core.crossover.*;
 import com.epochx.core.initialisation.*;
 import com.epochx.core.mutation.*;
@@ -268,4 +268,28 @@ public interface GPModel<TYPE> {
 	 * 		   value is considered better than a larger value.
 	 */
 	public double getFitness(CandidateProgram<TYPE> program);
+	
+	/**
+	 * Returns whether to run the crossover state checker
+	 * @return TRUE if the crossover state checker should be run
+	 */
+	public boolean getStateCheckedCrossover();
+	
+	/**
+	 * Sets whether to run the crossover state checker
+	 * @param runStateCheck TRUE if the crossover state checker should be run
+	 */
+	public void setStateCheckedCrossover(boolean runStateCheck);
+	
+	/**
+	 * Returns the semantic module associated with this problem
+	 * @return The associate Semantic module
+	 */
+	public SemanticModule getSemanticModule();
+	
+	/**
+	 * Sets the semantic module for this run
+	 * @param semMod The desired semantic module to use
+	 */
+	public void setSemanticModule(SemanticModule semMod);
 }

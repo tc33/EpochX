@@ -22,17 +22,25 @@ package com.epochx.semantics;
 import net.sf.javabdd.*;
 
 /**
- * @author lb212
- *
+ * Boolean Representation holds the behavioural representation of problems in the Boolean domain
+ * @author Lawrence Beadle & Tom Castle
  */
-public class BooleanRepresentation implements Behaviour {
+public class BooleanRepresentation implements Representation {
 	
 	private BDD bdd;
 	
+	/**
+	 * Constructor for Boolean Representation
+	 * @param bdd The ROBDD representing the representation
+	 */
 	public BooleanRepresentation(BDD bdd) {
 		this.bdd = bdd;
 	}
 	
+	/**
+	 * Returns the ROBDD associated with this representation
+	 * @return The ROBDD
+	 */
 	public BDD getBDD() {
 		return this.bdd;
 	}
@@ -53,7 +61,7 @@ public class BooleanRepresentation implements Behaviour {
 	 * @see com.epochx.semantics.Behaviour#equal(com.epochx.semantics.Behaviour)
 	 */
 	@Override
-	public boolean equals(Behaviour anotherBehaviour) {
+	public boolean equals(Representation anotherBehaviour) {
 		if(anotherBehaviour instanceof BooleanRepresentation) {
 			BooleanRepresentation boolRep = (BooleanRepresentation) anotherBehaviour;
 			if(this.bdd.equals(boolRep.getBDD())) {

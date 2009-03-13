@@ -22,14 +22,34 @@ package com.epochx.semantics;
 
 import com.epochx.core.representation.*;
 
+/**
+ * @author Lawrence Beadle & Tom Castle
+ * The semantic module interface sets out the basic methods required for all semantic modules.
+ */
 public interface SemanticModule {
 	
-	public Behaviour codeToBehaviour(CandidateProgram program);
+	/**
+	 * Converts a syntax tree into a canonical representation of behaviour
+	 * @param program The syntax tree to convert
+	 * @return The canonical behaviour
+	 */
+	public Representation codeToBehaviour(CandidateProgram program);
 	
-	public CandidateProgram behaviourToCode(Behaviour representation);
+	/**
+	 * Converts a given behaviour back to a syntax tree
+	 * @param representation The behaviour to convert to syntax
+	 * @return The syntax tree
+	 */
+	public CandidateProgram behaviourToCode(Representation representation);
 	
+	/**
+	 * Method to start actions in an external piece of software - for CUDD
+	 */
 	public void start();
 	
+	/**
+	 * Method to stop actions in an external piece of software - for CUDD
+	 */
 	public void stop();
 
 }

@@ -27,18 +27,23 @@ import com.epochx.core.*;
 import com.epochx.core.representation.*;
 
 /**
- * @author Lawrence Beadle
- *
+ * The Boolean Semantic Module provides semantic functionality for problems in the Boolean domain
+ * @author Lawrence Beadle & Tom Castle
  */
 public class BooleanSemanticModule implements SemanticModule {
 
 	private BDDFactory bddLink;
 	private List<BDD> bddList;
-	private List<Node> terminals;
+	private List<TerminalNode<?>> terminals;
 	private GPModel model;
 	
-	public BooleanSemanticModule(List<Node> terminals, GPModel model) {
-		this.terminals = terminals;
+	/**
+	 * Constructor for Boolean Semantic Module
+	 * @param list List of terminal nodes
+	 * @param model The GPModel object
+	 */
+	public BooleanSemanticModule(List<TerminalNode<?>> list, GPModel model) {
+		this.terminals = list;
 		this.model = model;
 	}
 
@@ -122,7 +127,7 @@ public class BooleanSemanticModule implements SemanticModule {
 	 * @see com.epochx.semantics.SemanticModule#behaviourToCode(com.epochx.semantics.Behaviour)
 	 */
 	@Override
-	public CandidateProgram behaviourToCode(Behaviour representation) {
+	public CandidateProgram behaviourToCode(Representation representation) {
 		// convert to boolean representation
 		BooleanRepresentation booleanRep = (BooleanRepresentation) representation;
 		BDD bddRep = booleanRep.getBDD();

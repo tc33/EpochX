@@ -20,13 +20,22 @@
 package com.epochx.semantics;
 
 /**
- * @author 
- *
+ * @author Lawrence Beadle
+ * The interface behaviour specifies two core methods required in all behaviours.
  */
-public interface Behaviour {
+public interface Representation {
 
+	/**
+	 * Tests whether behaviour is dependent on any of the terminals used in the GP program
+	 * @return true if the behaviour is not dependent on any of the terminals
+	 */
 	public boolean isTautology();
 	
-	public boolean equals(Behaviour anotherBehaviour);
+	/**
+	 * Compares two behaviours for equivalence
+	 * @param anotherBehaviour The behaviour to compare this this one
+	 * @return TRUE is the behaviours are equivalent
+	 */
+	public boolean equals(Representation anotherBehaviour);
 	
 }

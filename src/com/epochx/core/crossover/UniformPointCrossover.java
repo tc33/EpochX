@@ -23,7 +23,7 @@ import com.epochx.core.*;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * This class implements crossover with uniform swap points.
  */
 public class UniformPointCrossover<TYPE> implements Crossover<TYPE> {
 
@@ -34,15 +34,14 @@ public class UniformPointCrossover<TYPE> implements Crossover<TYPE> {
 		int swapPoint2 = (int) Math.floor(Math.random()*GPProgramAnalyser.getProgramLength(program2));
 
 		// Get copies of subtrees to swap.
+		// We NEED to clone these because otherwise you risk copying crossed over
+		// programs back into the breeding pool 
 		Node<?> subTree1 = (Node<?>) program1.getNthNode(swapPoint1).clone();
 		Node<?> subTree2 = (Node<?>) program2.getNthNode(swapPoint2).clone();
 		
 		// Perform swap.
 		program1.setNthNode(subTree2, swapPoint1);
-		program2.setNthNode(subTree1, swapPoint2);
-
-		// TODO state change section
-		
+		program2.setNthNode(subTree1, swapPoint2);		
 		
 		return new CandidateProgram[]{program1, program2};
 	}

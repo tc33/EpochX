@@ -88,11 +88,11 @@ public class MainBehaviourAnalysis {
          * **/
         
         // set up equivalence storage        
-        ArrayList<Behaviour> behaviours;
+        ArrayList<Representation> behaviours;
         ArrayList<ArrayList<String>> progs, newPop;
         ArrayList<String> dump;
         int syntaxSame, semanticSame;
-        Behaviour specimin;
+        Representation specimin;
         
         // file loaction
         //File place = new File("C:/JavaProjects/EpochX1_0/Results");
@@ -145,7 +145,7 @@ public class MainBehaviourAnalysis {
                     newPop = genProg.buildFirstPop(size.intValue(), genType);
                     
                     // start equivalence module
-                    behaviours = new ArrayList<Behaviour>();
+                    behaviours = new ArrayList<Representation>();
                     progs = new ArrayList<ArrayList<String>>();                    
                     semMod.start();
                     syntaxSame = 0;
@@ -163,7 +163,7 @@ public class MainBehaviourAnalysis {
                         // check for semantic equivalence
                         specimin = semMod.codeToBehaviour(testProg);
                         boolean marker = false;
-                        for(Behaviour b: behaviours) {
+                        for(Representation b: behaviours) {
                             if(b.equals(specimin)) {
                                 semanticSame++;
                                 marker = true;

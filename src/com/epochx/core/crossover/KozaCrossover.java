@@ -23,7 +23,8 @@ import com.epochx.core.*;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * This class implements Koza style crossover with 90% bias on
+ * function swap points and 10% on terminal swap points
  */
 public class KozaCrossover<TYPE> implements Crossover<TYPE> {
 

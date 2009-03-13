@@ -27,12 +27,14 @@ import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.util.FileManip;
 import com.epochx.semantics.*;
+import com.epochx.stats.*;
+import com.epochx.stats.GenerationStats.*;
 import com.epochx.util.*;
 
 /**
  * 
  */
-public class Even5Parity extends GPAbstractModel<Boolean> {
+public class Even5Parity extends GPAbstractModel<Boolean> implements GenerationStatListener {
 
 	private List<String> inputs;
 	private HashMap<String, Variable<Boolean>> variables = new HashMap<String, Variable<Boolean>>();
@@ -129,5 +131,28 @@ public class Even5Parity extends GPAbstractModel<Boolean> {
 	
 	public static void main(String[] args) {
 		GPController.run(new Even5Parity());
+	}
+
+	/* (non-Javadoc)
+	 * @see com.epochx.stats.GenerationStatListener#generationStats(java.lang.String[])
+	 */
+	@Override
+	public void generationStats(String[] stats) {
+		for (String s: stats) {
+			System.out.print(s);
+			System.out.print(" ");
+		}
+		System.out.println();
+	}
+
+	/* (non-Javadoc)
+	 * @see com.epochx.stats.GenerationStatListener#getStatFields()
+	 */
+	@Override
+	public GenStatField[] getStatFields() {
+		return new GenStatField[]{
+				GenStatField.DEPTH_AVE,
+				GenStatField.LENGTH_AVE
+		};
 	}
 }

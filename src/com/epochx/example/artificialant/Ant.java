@@ -18,9 +18,9 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.epochx.aasf;
+package com.epochx.example.artificialant;
 
-import static com.epochx.aasf.Orientation.*;
+import static com.epochx.example.artificialant.Orientation.*;
 
 import java.awt.*;
 
@@ -36,18 +36,20 @@ public class Ant {
     private int yLocation;
     private int foodEaten;
     private int maxMoves;
+    private AntLandscape antLandscape;
     
     /**
      * Contructor for the artifical ant model
      * @param timeSteps The maximum number of timesteps the ant is allowed to move - both turns and moves count as one step
      */
-    public Ant(int timeSteps) {
+    public Ant(int timeSteps, AntLandscape antLandscape) {
         orientation = EAST;
         moves = 0;
         xLocation = 0;
         yLocation = 0;
         foodEaten = 0;
-        maxMoves = timeSteps;
+        this.maxMoves = timeSteps;
+        this.antLandscape = antLandscape;
     }
     
     /**
@@ -121,6 +123,11 @@ public class Ant {
             }
         }
         moves++;
+        
+        // eat food
+        //if(antLandscape.isFoodLocation(getLocation())) {
+        //	this.eatFood();        	
+        //}
     }
     
     /**
@@ -134,23 +141,10 @@ public class Ant {
     }
     
     /**
-     * Returns the x location of the ant
-     * @return The X axis location of the ant
+     * Returns the current location of Ant
+     * @return Location of the ant
      */
-    public int getXLocation() {
-        return xLocation;
-    }
-    
-    /**
-     * Returns the Y axis location of the ant
-     * @return The Y axis location
-     */
-    public int getYLocation() {
-        return yLocation;
-    }
-    
     public Point getLocation() {
-    	//TODO Change to use Points throughout.
     	return new Point(xLocation, yLocation);
     }
     
@@ -201,5 +195,9 @@ public class Ant {
      */
     public void skip() {
         moves++;
+    }
+    
+    public int getMaxMoves() {
+    	return maxMoves;
     }
 }

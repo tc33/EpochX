@@ -61,7 +61,7 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> implements Generat
 		setNoGenerations(20);
 		setCrossoverProbability(0.9);
 		setReproductionProbability(0.1);
-		setNoRuns(5);
+		setNoRuns(2);
 		setPouleSize(50);
 		setNoElites(50);
 		setInitialMaxDepth(6);
@@ -71,7 +71,7 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> implements Generat
 		setCrossover(new UniformPointCrossover<Boolean>());
 		setStateCheckedCrossover(false);
 		setSemanticModule(new BooleanSemanticModule(getTerminals(), this));
-		setInitialiser(new RampedHalfAndHalfInitialiser<Boolean>(this, getSemanticModule()));
+		setInitialiser(new HybridBooleanSemanticallyDrivenInitialiser<Boolean>(this, getSemanticModule()));
 	}
 	
 	@Override
@@ -101,57 +101,57 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> implements Generat
 	
 	
 	
-	@Override
-	public double getFitness(CandidateProgram<Boolean> program) {
-		// set up ideal solution
-	    IfFunction part1 = new IfFunction(new Variable<Boolean>("A1"), new Variable<Boolean>("D0"), new Variable<Boolean>("D1"));
-	    IfFunction part2 = new IfFunction(new Variable<Boolean>("A1"), new Variable<Boolean>("D2"), new Variable<Boolean>("D3"));
-	    IfFunction part0 = new IfFunction(new Variable<Boolean>("A0"), part1, part2);
-	    CandidateProgram<Boolean> target = new CandidateProgram<Boolean>(part0, this);
-        // do semantic scoring part
-        BooleanSemanticScorer scorer = new BooleanSemanticScorer(getSemanticModule());
-        double score = scorer.doScore(program, target);
-        return score;
-	}
-	
 //	@Override
 //	public double getFitness(CandidateProgram<Boolean> program) {
-//        double score = 0;
-//        
-//        // Execute on all possible inputs.
-//        for (String run : inputs) {
-//        	boolean[] in = BoolTrans.doTrans(run);
-//        	
-//        	// Set the variables.
-//        	variables.get("A0").setValue(in[0]);
-//        	variables.get("A1").setValue(in[1]);
-//        	variables.get("D0").setValue(in[2]);
-//        	variables.get("D1").setValue(in[3]);
-//        	variables.get("D2").setValue(in[4]);
-//        	variables.get("D3").setValue(in[5]);
-//        	
-//            if (program.evaluate() == chooseResult(in)) {
-//                score++;
-//            }
-//        }
-//        
-//        return 64 - score;
+//		// set up ideal solution
+//	    IfFunction part1 = new IfFunction(new Variable<Boolean>("A1"), new Variable<Boolean>("D0"), new Variable<Boolean>("D1"));
+//	    IfFunction part2 = new IfFunction(new Variable<Boolean>("A1"), new Variable<Boolean>("D2"), new Variable<Boolean>("D3"));
+//	    IfFunction part0 = new IfFunction(new Variable<Boolean>("A0"), part1, part2);
+//	    CandidateProgram<Boolean> target = new CandidateProgram<Boolean>(part0, this);
+//        // do semantic scoring part
+//        BooleanSemanticScorer scorer = new BooleanSemanticScorer(getSemanticModule());
+//        double score = scorer.doScore(program, target);
+//        return score;
 //	}
-//	
-//    private boolean chooseResult(boolean[] input) {
-//        boolean result = false;
-//    	// scoring solution
-//        if(input[0] && input[1]) {
-//            result = input[2];
-//        } else if(input[0] && !input[1]) {
-//            result = input[3];
-//        } else if(!input[0] && input[1]) {
-//            result = input[4];
-//        } else if(!input[0] && !input[1]) {
-//            result = input[5];
-//        }
-//        return result;
-//    }
+	
+	@Override
+	public double getFitness(CandidateProgram<Boolean> program) {
+        double score = 0;
+        
+        // Execute on all possible inputs.
+        for (String run : inputs) {
+        	boolean[] in = BoolTrans.doTrans(run);
+        	
+        	// Set the variables.
+        	variables.get("A0").setValue(in[0]);
+        	variables.get("A1").setValue(in[1]);
+        	variables.get("D0").setValue(in[2]);
+        	variables.get("D1").setValue(in[3]);
+        	variables.get("D2").setValue(in[4]);
+        	variables.get("D3").setValue(in[5]);
+        	
+            if (program.evaluate() == chooseResult(in)) {
+                score++;
+            }
+        }
+        
+        return 64 - score;
+	}
+	
+    private boolean chooseResult(boolean[] input) {
+        boolean result = false;
+    	// scoring solution
+        if(input[0] && input[1]) {
+            result = input[2];
+        } else if(input[0] && !input[1]) {
+            result = input[3];
+        } else if(!input[0] && input[1]) {
+            result = input[4];
+        } else if(!input[0] && !input[1]) {
+            result = input[5];
+        }
+        return result;
+    }
 	
 	public static void main(String[] args) {
 		GPController.run(new Multiplexer6Bit());
@@ -159,15 +159,16 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> implements Generat
 
 	@Override
 	public void generationStats(String[] stats) {
-		for (String s: stats) {
-			System.out.print(s);
-			System.out.print(" ");
-		}
-		System.out.println();
+//		for (String s: stats) {
+//			System.out.print(s);
+//			System.out.print(" ");
+//		}
+//		System.out.println();
 	}
 
 	@Override
 	public GenStatField[] getStatFields() {
-		return new GenStatField[]{GenStatField.NO_TERMINALS_AVE, GenStatField.DEPTH_STDEV, GenStatField.DEPTH_MAX, GenStatField.DEPTH_MIN};
+		//return new GenStatField[]{GenStatField.NO_TERMINALS_AVE, GenStatField.DEPTH_STDEV, GenStatField.DEPTH_MAX, GenStatField.DEPTH_MIN};
+		return new GenStatField[]{};
 	}
 }

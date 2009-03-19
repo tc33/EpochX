@@ -18,9 +18,11 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.epochx.aasf;
+package com.epochx.semantics;
 
 import java.util.ArrayList;
+
+import com.epochx.example.artificialant.Ant;
 
 import core.*;
 

@@ -19,20 +19,9 @@
  */
 package com.epochx.stats;
 
-import com.epochx.stats.GenerationStats.*;
-
 /**
  * 
  */
-public interface GenerationStatListener {
+public class CrossoverStats {
 
-	/**
-	 * The implementing class must return an array of fields which the 
-	 * listening objects are interested in listening to. Changes to the 
-	 * set of fields during execution are unlikely to be honoured.
-	 */
-	public GenStatField[] getStatFields();
-	
-	public void generationStats(int generation, Object[] stats);
-	
 }

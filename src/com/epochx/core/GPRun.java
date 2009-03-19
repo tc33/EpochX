@@ -45,7 +45,7 @@ public class GPRun<TYPE> {
 	private CandidateProgram<TYPE> bestProgram;
 	private double bestFitness;
 	
-	private GenerationStats genStats;
+	private GenerationStats<TYPE> genStats;
 	
 	/*
 	 * Private constructor. The static factory method run(GPModel) should be 
@@ -57,7 +57,7 @@ public class GPRun<TYPE> {
 		bestProgram = null;
 		bestFitness = Double.POSITIVE_INFINITY;
 		
-		genStats = new GenerationStats();
+		genStats = new GenerationStats<TYPE>();
 		
 		// This provides a shortcut for the common convention of making a model the listener.
 		//TODO Actually might be better to allow models a way of giving their own listener for more flexibility.
@@ -99,7 +99,7 @@ public class GPRun<TYPE> {
 		List<CandidateProgram<TYPE>> pop = model.getInitialiser().getInitialPopulation();
 		
 		// Generate stats for the inital population.
-		genStats.addGen(pop);
+		genStats.addGen(pop, 0);
 		
 		// For each generation.
 		logger.info("Starting evolution");
@@ -153,7 +153,7 @@ public class GPRun<TYPE> {
 			}
 			
 			// Generate stats for the current population.
-			genStats.addGen(pop);
+			genStats.addGen(pop, i);
 			
 			pop = nextPop;
 		}

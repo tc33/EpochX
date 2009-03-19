@@ -137,8 +137,8 @@ public class Even5Parity extends GPAbstractModel<Boolean> implements GenerationS
 	 * @see com.epochx.stats.GenerationStatListener#generationStats(java.lang.String[])
 	 */
 	@Override
-	public void generationStats(String[] stats) {
-		for (String s: stats) {
+	public void generationStats(int gen, Object[] stats) {
+		for (Object s: stats) {
 			System.out.print(s);
 			System.out.print(" ");
 		}

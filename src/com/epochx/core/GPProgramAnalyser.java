@@ -19,6 +19,8 @@
  */
 package com.epochx.core;
 
+import java.util.*;
+
 import com.epochx.core.representation.*;
 
 /**
@@ -26,7 +28,7 @@ import com.epochx.core.representation.*;
  */
 public class GPProgramAnalyser {
 	
-	public static int getNoTerminals(CandidateProgram program) {
+	public static int getNoTerminals(CandidateProgram<?> program) {
 		return getNoTerminals(program.getRootNode());
 	}
 	
@@ -42,7 +44,36 @@ public class GPProgramAnalyser {
 		}
 	}
 	
-	public static int getNoFunctions(CandidateProgram program) {
+	public static int getNoDistinctTerminals(CandidateProgram<?> program) {
+		return getNoDistinctTerminals(program.getRootNode());
+	}
+	
+	public static int getNoDistinctTerminals(Node<?> n) {
+		// Get a list of terminals.
+		List<TerminalNode<?>> terminals = getTerminalNodes(n);
+		
+		// Remove duplicates.
+		HashSet terminalHash = new HashSet(terminals);
+		
+		// The number left is how many distinct terminals.
+		return terminalHash.size();
+	}
+	
+	public static List<TerminalNode<?>> getTerminalNodes(Node<?> n) {
+		// Alternatively we could use an array, which is quicker/more efficient in this situation?
+		List<TerminalNode<?>> terminals = new ArrayList<TerminalNode<?>>();
+		
+		if (n instanceof TerminalNode) {
+			terminals.add((TerminalNode<?>) n);
+		} else {
+			for (int i=0; i<n.getArity(); i++) {
+				terminals.addAll(getTerminalNodes(n.getChild(i)));
+			}
+		}
+		return terminals;
+	}
+	
+	public static int getNoFunctions(CandidateProgram<?> program) {
 		return getNoFunctions(program.getRootNode());
 	}
 	
@@ -56,6 +87,45 @@ public class GPProgramAnalyser {
 			}
 			return result;
 		}
+	}
+	
+	public static int getNoDistinctFunctions(CandidateProgram<?> program) {
+		return getNoDistinctFunctions(program.getRootNode());
+	}
+	
+	public static int getNoDistinctFunctions(Node<?> n) {
+		// Get a list of functions.
+		List<FunctionNode<?>> functions = getFunctionNodes(n);
+		
+		// Remove duplicates - where a duplicate is a function of the same type.
+		// We cannot use the FunctionNode's equals function because that will compare children too.
+		List<String> functionNames = new ArrayList<String>();
+		for (FunctionNode<?> f: functions) {
+			String name = f.getFunctionName();
+			if (!functionNames.contains(name)) {
+				functionNames.add(name);
+			}
+		}
+		
+		// The number left is how many distinct functions.
+		return functionNames.size();
+	}
+	
+	public static List<FunctionNode<?>> getFunctionNodes(Node<?> n) {
+		// Alternatively we could use an array, which is quicker/more efficient in this situation?
+		List<FunctionNode<?>> functions = new ArrayList<FunctionNode<?>>();
+		
+		if (n instanceof TerminalNode) {
+			// No more function nodes to count, return empty list.
+		} else {
+			if (n instanceof FunctionNode<?>) {
+				functions.add((FunctionNode<?>) n);
+			}
+			for (int i=0; i<n.getArity(); i++) {
+				functions.addAll(getFunctionNodes(n.getChild(i)));
+			}
+		}
+		return functions;
 	}
 	
 	public static int getProgramDepth(CandidateProgram<?> program) {

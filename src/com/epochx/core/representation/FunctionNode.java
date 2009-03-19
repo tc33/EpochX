@@ -28,6 +28,9 @@ public abstract class FunctionNode<TYPE> extends Node<TYPE> {
 		super(children);
 	}
 	
+	/**
+	 * The value returned from this function should be unique for a specific function type within a run.
+	 */
 	public abstract String getFunctionName();
 	
 	@Override

@@ -47,9 +47,9 @@ public class GenerationStats<TYPE> {
 		listeners.remove(listener);
 	}
 	
-	public void addGen(List<CandidateProgram<TYPE>> pop) {
+	public void addGen(List<CandidateProgram<TYPE>> pop, int gen) {
 		// Set of all the fields we need to calculate values for.
-		Map<GenStatField, String> stats = new HashMap<GenStatField, String>();
+		Map<GenStatField, Object> stats = new HashMap<GenStatField, Object>();
 		
 		Map<GenerationStatListener, GenStatField[]> requestedStats = 
 			new HashMap<GenerationStatListener, GenStatField[]>();
@@ -57,6 +57,11 @@ public class GenerationStats<TYPE> {
 		// Add each listener's requirements to the set.
 		for (GenerationStatListener l: listeners) {
 			GenStatField[] fields = l.getStatFields();
+			
+			// The user doesn't want any fields but still wants to be informed of generations.
+			if (fields == null) {
+				fields = new GenStatField[0];
+			}
 			
 			// Remember what stats fields this listener wanted.
 			requestedStats.put(l, fields);
@@ -76,12 +81,12 @@ public class GenerationStats<TYPE> {
 		for (GenerationStatListener l: ls) {
 			// Construct this listener's stats.
 			GenStatField[] statFields = requestedStats.get(l);
-			String[] statResults = new String[statFields.length];
+			Object[] statResults = new Object[statFields.length];
 			for (int i=0; i<statFields.length; i++) {
 				statResults[i] = stats.get(statFields[i]);
 			}
 			
-			l.generationStats(statResults);
+			l.generationStats(gen, statResults);
 		}
 	}
 	
@@ -90,11 +95,19 @@ public class GenerationStats<TYPE> {
 	 * @param stats
 	 * @param pop
 	 */
-	private void gatherStats(Map<GenStatField, String>  stats, 
+	private void gatherStats(Map<GenStatField, Object>  stats, 
 							 List<CandidateProgram<TYPE>> pop) {
 		gatherDepthStats(stats, pop);
 		gatherLengthStats(stats, pop);
 		gatherTerminalStats(stats, pop);
+		gatherDistinctTerminalStats(stats, pop);
+		gatherFunctionStats(stats, pop);
+		gatherDistinctFunctionStats(stats, pop);
+		gatherFitnessStats(stats, pop);
+		
+		if (stats.containsKey(GenStatField.POPULATION)) {
+			stats.put(GenStatField.POPULATION, pop);
+		}
 	}
 	
 	/*
@@ -105,13 +118,13 @@ public class GenerationStats<TYPE> {
 	 * TODO Am having to iterate over the depths a lot of times, theres room for 
 	 * performance improvements here.
 	 */
-	private void gatherDepthStats(Map<GenStatField, String> stats, List<CandidateProgram<TYPE>> pop) {
+	private void gatherDepthStats(Map<GenStatField, Object> stats, List<CandidateProgram<TYPE>> pop) {
 		if (stats.containsKey(GenStatField.DEPTH_AVE)
 				|| stats.containsKey(GenStatField.DEPTH_STDEV)
 				|| stats.containsKey(GenStatField.DEPTH_MAX)
 				|| stats.containsKey(GenStatField.DEPTH_MIN)) {
 			// If any stats about depth are needed it's more efficient to get them all at once.
-			int[] depths = new int[pop.size()];
+			double[] depths = new double[pop.size()];
 			for (int i=0; i<pop.size(); i++) {
 				depths[i] = GPProgramAnalyser.getProgramDepth(pop.get(i));
 			}
@@ -121,7 +134,7 @@ public class GenerationStats<TYPE> {
 				stats.put(GenStatField.DEPTH_AVE, Double.toString(ave(depths)));
 			}
 			
-			// Standard deviation.
+			// Standard deviation of depth.
 			if (stats.containsKey(GenStatField.DEPTH_STDEV)) {
 				stats.put(GenStatField.DEPTH_STDEV, Double.toString(stdev(depths)));
 			}
@@ -138,73 +151,211 @@ public class GenerationStats<TYPE> {
 		}
 	}
 	
-	private void gatherLengthStats(Map<GenStatField, String> stats, List<CandidateProgram<TYPE>> pop) {
+	private void gatherLengthStats(Map<GenStatField, Object> stats, List<CandidateProgram<TYPE>> pop) {
 		if (stats.containsKey(GenStatField.LENGTH_AVE)
 				|| stats.containsKey(GenStatField.LENGTH_STDEV)
 				|| stats.containsKey(GenStatField.LENGTH_MAX)
 				|| stats.containsKey(GenStatField.LENGTH_MIN)) {
 			// If any stats about length are needed it's more efficient to get them all at once.
-			int[] lengths = new int[pop.size()];
+			double[] lengths = new double[pop.size()];
 			for (int i=0; i<pop.size(); i++) {
 				lengths[i] = GPProgramAnalyser.getProgramLength(pop.get(i));
 			}
 			
-			// Average depth.
+			// Average length.
 			if (stats.containsKey(GenStatField.LENGTH_AVE)) {
 				stats.put(GenStatField.LENGTH_AVE, Double.toString(ave(lengths)));
 			}
 			
-			// Standard deviation.
+			// Standard deviation of length.
 			if (stats.containsKey(GenStatField.LENGTH_STDEV)) {
 				stats.put(GenStatField.LENGTH_STDEV, Double.toString(stdev(lengths)));
 			}
 			
-			// Maximum depth.
+			// Maximum length.
 			if (stats.containsKey(GenStatField.LENGTH_MAX)) {
-				stats.put(GenStatField.LENGTH_MAX, Integer.toString(max(lengths)));
+				stats.put(GenStatField.LENGTH_MAX, Double.toString(max(lengths)));
 			}
 			
-			// Minimum depth.
+			// Minimum length.
 			if (stats.containsKey(GenStatField.LENGTH_MIN)) {
-				stats.put(GenStatField.LENGTH_MIN, Integer.toString(min(lengths)));
+				stats.put(GenStatField.LENGTH_MIN, Double.toString(min(lengths)));
 			}
 		}
 	}
 	
-	private void gatherTerminalStats(Map<GenStatField, String> stats, List<CandidateProgram<TYPE>> pop) {
+	private void gatherTerminalStats(Map<GenStatField, Object> stats, List<CandidateProgram<TYPE>> pop) {
 		if (stats.containsKey(GenStatField.NO_TERMINALS_AVE)
 				|| stats.containsKey(GenStatField.NO_TERMINALS_STDEV)
 				|| stats.containsKey(GenStatField.NO_TERMINALS_MAX)
 				|| stats.containsKey(GenStatField.NO_TERMINALS_MIN)) {
 			// If any stats about length are needed it's more efficient to get them all at once.
-			int[] noTerminals = new int[pop.size()];
+			double[] noTerminals = new double[pop.size()];
 			for (int i=0; i<pop.size(); i++) {
 				noTerminals[i] = GPProgramAnalyser.getNoTerminals(pop.get(i));
 			}
 			
-			// Average depth.
+			// Average no terminals.
 			if (stats.containsKey(GenStatField.NO_TERMINALS_AVE)) {
 				stats.put(GenStatField.NO_TERMINALS_AVE, Double.toString(ave(noTerminals)));
 			}
 			
-			// Standard deviation.
+			// Standard deviation of no terminals.
 			if (stats.containsKey(GenStatField.NO_TERMINALS_STDEV)) {
 				stats.put(GenStatField.NO_TERMINALS_STDEV, Double.toString(stdev(noTerminals)));
 			}
 			
-			// Maximum depth.
+			// Maximum no terminals.
 			if (stats.containsKey(GenStatField.NO_TERMINALS_MAX)) {
-				stats.put(GenStatField.NO_TERMINALS_MAX, Integer.toString(max(noTerminals)));
+				stats.put(GenStatField.NO_TERMINALS_MAX, Double.toString(max(noTerminals)));
 			}
 			
-			// Minimum depth.
+			// Minimum no terminals.
 			if (stats.containsKey(GenStatField.NO_TERMINALS_MIN)) {
-				stats.put(GenStatField.NO_TERMINALS_MIN, Integer.toString(min(noTerminals)));
+				stats.put(GenStatField.NO_TERMINALS_MIN, Double.toString(min(noTerminals)));
 			}
 		}
 	}
 	
-	private double ave(int[] values) {
+	private void gatherDistinctTerminalStats(Map<GenStatField, Object> stats, List<CandidateProgram<TYPE>> pop) {
+		if (stats.containsKey(GenStatField.NO_DISTINCT_TERMINALS_AVE)
+				|| stats.containsKey(GenStatField.NO_DISTINCT_TERMINALS_STDEV)
+				|| stats.containsKey(GenStatField.NO_DISTINCT_TERMINALS_MAX)
+				|| stats.containsKey(GenStatField.NO_DISTINCT_TERMINALS_MIN)) {
+			// If any stats about length are needed it's more efficient to get them all at once.
+			double[] noDTerminals = new double[pop.size()];
+			for (int i=0; i<pop.size(); i++) {
+				noDTerminals[i] = GPProgramAnalyser.getNoDistinctTerminals(pop.get(i));
+			}
+			
+			// Average no distinct terminals.
+			if (stats.containsKey(GenStatField.NO_DISTINCT_TERMINALS_AVE)) {
+				stats.put(GenStatField.NO_DISTINCT_TERMINALS_AVE, Double.toString(ave(noDTerminals)));
+			}
+			
+			// Standard deviation of no distinct terminals.
+			if (stats.containsKey(GenStatField.NO_DISTINCT_TERMINALS_STDEV)) {
+				stats.put(GenStatField.NO_DISTINCT_TERMINALS_STDEV, Double.toString(stdev(noDTerminals)));
+			}
+			
+			// Maximum no distinct terminals.
+			if (stats.containsKey(GenStatField.NO_DISTINCT_TERMINALS_MAX)) {
+				stats.put(GenStatField.NO_DISTINCT_TERMINALS_MAX, Double.toString(max(noDTerminals)));
+			}
+			
+			// Minimum no distinct terminals.
+			if (stats.containsKey(GenStatField.NO_DISTINCT_TERMINALS_MIN)) {
+				stats.put(GenStatField.NO_DISTINCT_TERMINALS_MIN, Double.toString(min(noDTerminals)));
+			}
+		}
+	}
+	
+	private void gatherFunctionStats(Map<GenStatField, Object> stats, List<CandidateProgram<TYPE>> pop) {
+		if (stats.containsKey(GenStatField.NO_FUNCTIONS_AVE)
+				|| stats.containsKey(GenStatField.NO_FUNCTIONS_STDEV)
+				|| stats.containsKey(GenStatField.NO_FUNCTIONS_MAX)
+				|| stats.containsKey(GenStatField.NO_FUNCTIONS_MIN)) {
+			// If any stats about length are needed it's more efficient to get them all at once.
+			double[] noFunctions = new double[pop.size()];
+			for (int i=0; i<pop.size(); i++) {
+				noFunctions[i] = GPProgramAnalyser.getNoFunctions(pop.get(i));
+			}
+			
+			// Average no functions.
+			if (stats.containsKey(GenStatField.NO_FUNCTIONS_AVE)) {
+				stats.put(GenStatField.NO_FUNCTIONS_AVE, Double.toString(ave(noFunctions)));
+			}
+			
+			// Standard deviation of no functions.
+			if (stats.containsKey(GenStatField.NO_FUNCTIONS_STDEV)) {
+				stats.put(GenStatField.NO_FUNCTIONS_STDEV, Double.toString(stdev(noFunctions)));
+			}
+			
+			// Maximum no functions.
+			if (stats.containsKey(GenStatField.NO_FUNCTIONS_MAX)) {
+				stats.put(GenStatField.NO_FUNCTIONS_MAX, Double.toString(max(noFunctions)));
+			}
+			
+			// Minimum no functions.
+			if (stats.containsKey(GenStatField.NO_FUNCTIONS_MIN)) {
+				stats.put(GenStatField.NO_FUNCTIONS_MIN, Double.toString(min(noFunctions)));
+			}
+		}
+	}
+	
+	private void gatherDistinctFunctionStats(Map<GenStatField, Object> stats, List<CandidateProgram<TYPE>> pop) {
+		if (stats.containsKey(GenStatField.NO_DISTINCT_FUNCTIONS_AVE)
+				|| stats.containsKey(GenStatField.NO_DISTINCT_FUNCTIONS_STDEV)
+				|| stats.containsKey(GenStatField.NO_DISTINCT_FUNCTIONS_MAX)
+				|| stats.containsKey(GenStatField.NO_DISTINCT_FUNCTIONS_MIN)) {
+			// If any stats about length are needed it's more efficient to get them all at once.
+			double[] noDFunctions = new double[pop.size()];
+			for (int i=0; i<pop.size(); i++) {
+				noDFunctions[i] = GPProgramAnalyser.getNoDistinctFunctions(pop.get(i));
+			}
+			
+			// Average no distinct functions.
+			if (stats.containsKey(GenStatField.NO_DISTINCT_FUNCTIONS_AVE)) {
+				stats.put(GenStatField.NO_DISTINCT_FUNCTIONS_AVE, Double.toString(ave(noDFunctions)));
+			}
+			
+			// Standard deviation of no distinct functions.
+			if (stats.containsKey(GenStatField.NO_DISTINCT_FUNCTIONS_STDEV)) {
+				stats.put(GenStatField.NO_DISTINCT_FUNCTIONS_STDEV, Double.toString(stdev(noDFunctions)));
+			}
+			
+			// Maximum no distinct functions.
+			if (stats.containsKey(GenStatField.NO_DISTINCT_FUNCTIONS_MAX)) {
+				stats.put(GenStatField.NO_DISTINCT_FUNCTIONS_MAX, Double.toString(max(noDFunctions)));
+			}
+			
+			// Minimum no distinct functions.
+			if (stats.containsKey(GenStatField.NO_DISTINCT_FUNCTIONS_MIN)) {
+				stats.put(GenStatField.NO_DISTINCT_FUNCTIONS_MIN, Double.toString(min(noDFunctions)));
+			}
+		}
+	}
+	
+	private void gatherFitnessStats(Map<GenStatField, Object> stats, List<CandidateProgram<TYPE>> pop) {
+		if (stats.containsKey(GenStatField.FITNESS_AVE)
+				|| stats.containsKey(GenStatField.FITNESS_STDEV)
+				|| stats.containsKey(GenStatField.FITNESS_MAX)
+				|| stats.containsKey(GenStatField.FITNESS_MIN)
+				|| stats.containsKey(GenStatField.FITNESS_MEDIAN)) {
+			// If any stats about length are needed it's more efficient to get them all at once.
+			double[] fitnesses = new double[pop.size()];
+			for (int i=0; i<pop.size(); i++) {
+				fitnesses[i] = pop.get(i).getFitness();
+			}
+			
+			// Average fitness.
+			if (stats.containsKey(GenStatField.FITNESS_AVE)) {
+				stats.put(GenStatField.FITNESS_AVE, Double.toString(ave(fitnesses)));
+			}
+			
+			// Standard deviation of fitness.
+			if (stats.containsKey(GenStatField.FITNESS_STDEV)) {
+				stats.put(GenStatField.FITNESS_STDEV, Double.toString(stdev(fitnesses)));
+			}
+			
+			// Maximum fitness.
+			if (stats.containsKey(GenStatField.FITNESS_MAX)) {
+				stats.put(GenStatField.FITNESS_MAX, Double.toString(max(fitnesses)));
+			}
+			
+			// Minimum fitness.
+			if (stats.containsKey(GenStatField.FITNESS_MIN)) {
+				stats.put(GenStatField.FITNESS_MIN, Double.toString(min(fitnesses)));
+			}
+			
+			// Median fitness.
+			if (stats.containsKey(GenStatField.FITNESS_MEDIAN)) {
+				stats.put(GenStatField.FITNESS_MEDIAN, Double.toString(median(fitnesses)));
+			}
+		}
+	}
+	
+	private double ave(double[] values) {
 		double sum = 0;
 		for (int i=0; i<values.length; i++) {
 			sum += values[i];
@@ -212,11 +363,11 @@ public class GenerationStats<TYPE> {
 		return sum/values.length;
 	}
 	
-	private double stdev(int[] values) {
+	private double stdev(double[] values) {
 		return stdev(values, ave(values));
 	}
 	
-	private double stdev(int[] values, double ave) {
+	private double stdev(double[] values, double ave) {
 		// Sum the squared differences.
 		double sqDiff = 0;
 		for (int i=0; i<values.length; i++) {
@@ -227,20 +378,37 @@ public class GenerationStats<TYPE> {
 		return Math.sqrt(sqDiff / values.length);
 	}
 	
-	private int max(int[] values) {
-		int max = 0;
+	private double max(double[] values) {
+		double max = 0;
 		for (int i=0; i<values.length; i++) {
 			max = (values[i] > max) ? values[i] : max;
 		}
 		return max;
 	}
 	
-	private int min(int[] values) {
-		int min = 0;
+	private double min(double[] values) {
+		double min = Double.MAX_VALUE;
 		for (int i=0; i<values.length; i++) {
-			min = (values[i] > min) ? values[i] : min;
+			min = (values[i] < min) ? values[i] : min;
 		}
 		return min;
+	}
+	
+	private double median(double[] values) {
+		// Sort the array.
+		Arrays.sort(values);
+		
+		// Pick out the middle value.
+		int medianIndex = (int) Math.floor(values.length / 2);
+		double median = values[medianIndex-1];
+		
+		// There might have been an even number - use average of 2 medians.
+		if ((values.length % 2) == 0) {
+			median += values[medianIndex];
+			median = median/2;
+		}
+		
+		return median;
 	}
 	
 	public enum GenStatField {
@@ -255,6 +423,24 @@ public class GenerationStats<TYPE> {
 		NO_TERMINALS_AVE,
 		NO_TERMINALS_STDEV,
 		NO_TERMINALS_MAX,
-		NO_TERMINALS_MIN
+		NO_TERMINALS_MIN,
+		NO_DISTINCT_TERMINALS_AVE,
+		NO_DISTINCT_TERMINALS_STDEV,
+		NO_DISTINCT_TERMINALS_MAX,
+		NO_DISTINCT_TERMINALS_MIN,
+		NO_FUNCTIONS_AVE,
+		NO_FUNCTIONS_STDEV,
+		NO_FUNCTIONS_MAX,
+		NO_FUNCTIONS_MIN,
+		NO_DISTINCT_FUNCTIONS_AVE,
+		NO_DISTINCT_FUNCTIONS_STDEV,
+		NO_DISTINCT_FUNCTIONS_MAX,
+		NO_DISTINCT_FUNCTIONS_MIN,
+		FITNESS_AVE,
+		FITNESS_STDEV,
+		FITNESS_MAX,
+		FITNESS_MIN,
+		FITNESS_MEDIAN,
+		POPULATION
 	}
 }

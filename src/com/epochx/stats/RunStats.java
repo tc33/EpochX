@@ -19,9 +19,99 @@
  */
 package com.epochx.stats;
 
+import java.util.*;
+
+import com.epochx.core.*;
+
 /**
  * 
  */
-public class RunStats {
+public class RunStats<TYPE> {
 
+	// The objects listening for run stats.
+	public List<RunStatListener> listeners;
+	
+	/**
+	 * Constructor.
+	 */
+	public RunStats() {
+		listeners = new ArrayList<RunStatListener>();
+	}
+	
+	public void addRunStatListener(RunStatListener listener) {
+		listeners.add(listener);
+	}
+	
+	public void removeRunStatListener(RunStatListener listener) {
+		listeners.remove(listener);
+	}
+	
+	public void addRun(GPRun<TYPE> run, int runNo) {
+		// Set of all the fields we need to calculate values for.
+		Map<RunStatField, Object> stats = new HashMap<RunStatField, Object>();
+		
+		Map<RunStatListener, RunStatField[]> requestedStats = 
+			new HashMap<RunStatListener, RunStatField[]>();
+		
+		// Add each listener's requirements to the set.
+		for (RunStatListener l: listeners) {
+			RunStatField[] fields = l.getRunStatFields();
+			
+			// The user doesn't want any fields but still wants to be informed of runs.
+			if (fields == null) {
+				fields = new RunStatField[0];
+			}
+			
+			// Remember what stats fields this listener wanted.
+			requestedStats.put(l, fields);
+			
+			// Add to Set of all stats we need to calculate.
+			for (RunStatField sf: fields) {
+				if (!stats.containsKey(sf))
+					stats.put(sf, "");
+			}
+		}
+		
+		// Calculate all the stats that our listeners need.
+		gatherStats(stats, run);
+		
+		// Inform each listener of their stats.
+		Set<RunStatListener> ls = requestedStats.keySet();
+		for (RunStatListener l: ls) {
+			// Construct this listener's stats.
+			RunStatField[] statFields = requestedStats.get(l);
+			Object[] statResults = new Object[statFields.length];
+			for (int i=0; i<statFields.length; i++) {
+				statResults[i] = stats.get(statFields[i]);
+			}
+			
+			l.runStats(runNo, statResults);
+		}
+	}
+	
+	/*
+	 * Calculate, generate and gather any stats that have been requested.
+	 * @param stats
+	 * @param pop
+	 */
+	private void gatherStats(Map<RunStatField, Object>  stats, 
+							 GPRun<TYPE> run) {
+		if (stats.containsKey(RunStatField.BEST_PROGRAM)) {
+			stats.put(RunStatField.BEST_PROGRAM, run.getBestProgram());
+		}
+		
+		if (stats.containsKey(RunStatField.BEST_FITNESS)) {
+			stats.put(RunStatField.BEST_FITNESS, run.getBestFitness());
+		}
+		
+		if (stats.containsKey(RunStatField.RUN_TIME)) {
+			stats.put(RunStatField.RUN_TIME, run.getRunTime());
+		}
+	}
+	
+	public enum RunStatField {
+		BEST_PROGRAM,
+		BEST_FITNESS,
+		RUN_TIME
+	}
 }

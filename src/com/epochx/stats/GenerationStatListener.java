@@ -31,7 +31,7 @@ public interface GenerationStatListener {
 	 * listening objects are interested in listening to. Changes to the 
 	 * set of fields during execution are unlikely to be honoured.
 	 */
-	public GenStatField[] getStatFields();
+	public GenStatField[] getGenStatFields();
 	
 	public void generationStats(int generation, Object[] stats);
 	

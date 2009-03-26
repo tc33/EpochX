@@ -19,9 +19,104 @@
  */
 package com.epochx.stats;
 
+import java.util.*;
+
+import com.epochx.core.representation.*;
+
 /**
  * 
  */
-public class CrossoverStats {
-
+public class CrossoverStats<TYPE> {
+	
+	// The objects listening for run stats.
+	public List<CrossoverStatListener> listeners;
+	
+	/**
+	 * Constructor.
+	 */
+	public CrossoverStats() {
+		listeners = new ArrayList<CrossoverStatListener>();
+	}
+	
+	public void addCrossoverStatListener(CrossoverStatListener listener) {
+		listeners.add(listener);
+	}
+	
+	public void removeCrossoverStatListener(CrossoverStatListener listener) {
+		listeners.remove(listener);
+	}
+	
+	public void addCrossover(CandidateProgram<TYPE>[] parents, 
+							 CandidateProgram<TYPE>[] children, 
+							 long runtime) {
+		// Set of all the fields we need to calculate values for.
+		Map<CrossoverStatField, Object> stats = new HashMap<CrossoverStatField, Object>();
+		
+		Map<CrossoverStatListener, CrossoverStatField[]> requestedStats = 
+			new HashMap<CrossoverStatListener, CrossoverStatField[]>();
+		
+		// Add each listener's requirements to the set.
+		for (CrossoverStatListener l: listeners) {
+			CrossoverStatField[] fields = l.getCrossoverStatFields();
+			
+			// The user doesn't want any fields but still wants to be informed of runs.
+			if (fields == null) {
+				fields = new CrossoverStatField[0];
+			}
+			
+			// Remember what stats fields this listener wanted.
+			requestedStats.put(l, fields);
+			
+			// Add to Set of all stats we need to calculate.
+			for (CrossoverStatField sf: fields) {
+				if (!stats.containsKey(sf))
+					stats.put(sf, "");
+			}
+		}
+		
+		// Calculate all the stats that our listeners need.
+		gatherStats(stats, parents, children, runtime);
+		
+		// Inform each listener of their stats.
+		Set<CrossoverStatListener> ls = requestedStats.keySet();
+		for (CrossoverStatListener l: ls) {
+			// Construct this listener's stats.
+			CrossoverStatField[] statFields = requestedStats.get(l);
+			Object[] statResults = new Object[statFields.length];
+			for (int i=0; i<statFields.length; i++) {
+				statResults[i] = stats.get(statFields[i]);
+			}
+			
+			l.crossoverStats(statResults);
+		}
+	}
+	
+	/*
+	 * Calculate, generate and gather any stats that have been requested.
+	 * @param stats
+	 * @param pop
+	 */
+	private void gatherStats(Map<CrossoverStatField, Object>  stats, 
+							 CandidateProgram<TYPE>[] parents, 
+							 CandidateProgram<TYPE>[] children, 
+							 long runtime) {
+		if (stats.containsKey(CrossoverStatField.PARENTS)) {
+			stats.put(CrossoverStatField.PARENTS, parents);
+		}
+		
+		if (stats.containsKey(CrossoverStatField.CHILDREN)) {
+			stats.put(CrossoverStatField.CHILDREN, children);
+		}
+		
+		if (stats.containsKey(CrossoverStatField.RUN_TIME)) {
+			stats.put(CrossoverStatField.RUN_TIME, runtime);
+		}
+	}
+	
+	public enum CrossoverStatField {
+		PARENTS,
+		CHILDREN,
+		RUN_TIME
+	}
+	
 }

@@ -35,7 +35,7 @@ import com.epochx.core.scorer.*;
 /**
  * 
  */
-public class Multiplexer6Bit extends GPAbstractModel<Boolean> implements GenerationStatListener {
+public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
 
 	private List<String> inputs;
 	private HashMap<String, Variable<Boolean>> variables = new HashMap<String, Variable<Boolean>>();
@@ -158,7 +158,7 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> implements Generat
 	}
 
 	@Override
-	public void generationStats(String[] stats) {
+	public void generationStats(int generation, Object[] stats) {
 //		for (String s: stats) {
 //			System.out.print(s);
 //			System.out.print(" ");
@@ -167,7 +167,7 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> implements Generat
 	}
 
 	@Override
-	public GenStatField[] getStatFields() {
+	public GenStatField[] getGenStatFields() {
 		//return new GenStatField[]{GenStatField.NO_TERMINALS_AVE, GenStatField.DEPTH_STDEV, GenStatField.DEPTH_MAX, GenStatField.DEPTH_MIN};
 		return new GenStatField[]{};
 	}

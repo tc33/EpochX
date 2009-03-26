@@ -45,6 +45,9 @@ public class GPRun<TYPE> {
 	private CandidateProgram<TYPE> bestProgram;
 	private double bestFitness;
 	
+	private long runStartTime;
+	private long runEndTime;
+	
 	private GenerationStats<TYPE> genStats;
 	
 	/*
@@ -53,7 +56,9 @@ public class GPRun<TYPE> {
 	 */
 	private GPRun(GPModel<TYPE> model) {
 		this.model = model;
-
+		
+		runStartTime = System.nanoTime();
+		runEndTime = -1;
 		bestProgram = null;
 		bestFitness = Double.POSITIVE_INFINITY;
 		
@@ -99,11 +104,14 @@ public class GPRun<TYPE> {
 		List<CandidateProgram<TYPE>> pop = model.getInitialiser().getInitialPopulation();
 		
 		// Generate stats for the inital population.
-		genStats.addGen(pop, 0);
+		genStats.addGen(pop, 0, 0);
 		
 		// For each generation.
 		logger.info("Starting evolution");
 		for (int i=1; i<=model.getNoGenerations(); i++) {
+			// Record the time we start this generation.
+			long genStartTime = System.nanoTime();
+			
 			logger.debug("Working on generation " + i);
 			List<CandidateProgram<TYPE>> nextPop = new ArrayList<CandidateProgram<TYPE>>();
 			
@@ -153,10 +161,13 @@ public class GPRun<TYPE> {
 			}
 			
 			// Generate stats for the current population.
-			genStats.addGen(pop, i);
+			long runtime = System.nanoTime() - genStartTime;
+			genStats.addGen(nextPop, i, runtime);
 			
 			pop = nextPop;
 		}
+		
+		runEndTime = System.nanoTime();
 		
 		logger.info("Best program: " + bestProgram);
 		logger.info("Fitness: " + bestFitness);
@@ -182,5 +193,18 @@ public class GPRun<TYPE> {
 	 */
 	public double getBestFitness() {
 		return bestFitness;
+	}
+	
+	/**
+	 * Retrieve the time in milliseconds of the execution. Either the time of the 
+	 * whole run if it's finished or the time up until now if the run isn't finished.
+	 * @return The run time in milliseconds.
+	 */
+	public long getRunTime() {
+		if (runEndTime == -1) {
+			return System.nanoTime() - runStartTime;
+		} else {
+			return runEndTime - runStartTime;
+		}
 	}
 }

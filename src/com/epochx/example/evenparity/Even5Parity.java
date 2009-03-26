@@ -21,20 +21,20 @@ package com.epochx.example.evenparity;
 
 import java.io.*;
 import java.util.*;
+
 import com.epochx.core.*;
 import com.epochx.core.crossover.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
-import com.epochx.util.FileManip;
-import com.epochx.semantics.*;
-import com.epochx.stats.*;
+import com.epochx.stats.CrossoverStats.*;
 import com.epochx.stats.GenerationStats.*;
+import com.epochx.stats.RunStats.*;
 import com.epochx.util.*;
 
 /**
  * 
  */
-public class Even5Parity extends GPAbstractModel<Boolean> implements GenerationStatListener {
+public class Even5Parity extends GPAbstractModel<Boolean> {
 
 	private List<String> inputs;
 	private HashMap<String, Variable<Boolean>> variables = new HashMap<String, Variable<Boolean>>();
@@ -138,6 +138,8 @@ public class Even5Parity extends GPAbstractModel<Boolean> implements GenerationS
 	 */
 	@Override
 	public void generationStats(int gen, Object[] stats) {
+		System.out.print(gen);
+		System.out.print(" ");
 		for (Object s: stats) {
 			System.out.print(s);
 			System.out.print(" ");
@@ -149,10 +151,52 @@ public class Even5Parity extends GPAbstractModel<Boolean> implements GenerationS
 	 * @see com.epochx.stats.GenerationStatListener#getStatFields()
 	 */
 	@Override
-	public GenStatField[] getStatFields() {
+	public GenStatField[] getGenStatFields() {
 		return new GenStatField[]{
-				GenStatField.DEPTH_AVE,
+				GenStatField.RUN_TIME,
 				GenStatField.LENGTH_AVE
 		};
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.epochx.stats.GenerationStatListener#generationStats(java.lang.String[])
+	 */
+	@Override
+	public void runStats(int runNo, Object[] stats) {
+		System.out.println("Run finished...");
+		for (Object s: stats) {
+			System.out.print(s);
+			System.out.print(" ");
+		}
+		System.out.println();
+	}
+	
+	public RunStatField[] getRunStatFields() {
+		return new RunStatField[]{
+				RunStatField.RUN_TIME,
+				RunStatField.BEST_FITNESS,
+				RunStatField.BEST_PROGRAM
+		};
+	}
+	
+	
+	/*@Override
+	public void crossoverStats(Object[] stats) {
+		System.out.println("Crossover:");
+		for (Object s: stats) {
+			System.out.print(s);
+			System.out.print(" ");
+		}
+		System.out.println();
+	}*/
+	
+	/* (non-Javadoc)
+	 * @see com.epochx.core.GPAbstractModel#getCrossoverStatFields()
+	 */
+	/*@Override
+	public CrossoverStatField[] getCrossoverStatFields() {
+		return new CrossoverStatField[]{
+				CrossoverStatField.RUN_TIME
+		};
+	}*/
 }

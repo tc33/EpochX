@@ -47,7 +47,7 @@ public class GenerationStats<TYPE> {
 		listeners.remove(listener);
 	}
 	
-	public void addGen(List<CandidateProgram<TYPE>> pop, int gen) {
+	public void addGen(List<CandidateProgram<TYPE>> pop, int gen, long runtime) {
 		// Set of all the fields we need to calculate values for.
 		Map<GenStatField, Object> stats = new HashMap<GenStatField, Object>();
 		
@@ -56,7 +56,7 @@ public class GenerationStats<TYPE> {
 		
 		// Add each listener's requirements to the set.
 		for (GenerationStatListener l: listeners) {
-			GenStatField[] fields = l.getStatFields();
+			GenStatField[] fields = l.getGenStatFields();
 			
 			// The user doesn't want any fields but still wants to be informed of generations.
 			if (fields == null) {
@@ -74,7 +74,7 @@ public class GenerationStats<TYPE> {
 		}
 		
 		// Calculate all the stats that our listeners need.
-		gatherStats(stats, pop);
+		gatherStats(stats, pop, runtime);
 		
 		// Inform each listener of their stats.
 		Set<GenerationStatListener> ls = requestedStats.keySet();
@@ -96,7 +96,8 @@ public class GenerationStats<TYPE> {
 	 * @param pop
 	 */
 	private void gatherStats(Map<GenStatField, Object>  stats, 
-							 List<CandidateProgram<TYPE>> pop) {
+							 List<CandidateProgram<TYPE>> pop,
+							 long runtime) {
 		gatherDepthStats(stats, pop);
 		gatherLengthStats(stats, pop);
 		gatherTerminalStats(stats, pop);
@@ -107,6 +108,10 @@ public class GenerationStats<TYPE> {
 		
 		if (stats.containsKey(GenStatField.POPULATION)) {
 			stats.put(GenStatField.POPULATION, pop);
+		}
+		
+		if (stats.containsKey(GenStatField.RUN_TIME)) {
+			stats.put(GenStatField.RUN_TIME, runtime);
 		}
 	}
 	
@@ -441,6 +446,7 @@ public class GenerationStats<TYPE> {
 		FITNESS_MAX,
 		FITNESS_MIN,
 		FITNESS_MEDIAN,
-		POPULATION
+		POPULATION,
+		RUN_TIME
 	}
 }

@@ -21,6 +21,8 @@ package com.epochx.core;
 
 import org.apache.log4j.*;
 
+import com.epochx.stats.*;
+
 
 /**
  * The GPController class provides the method for executing multiple GP runs 
@@ -75,9 +77,21 @@ public class GPController {
 		// Execute multiple runs, stashing the GPRun object for retrieval of run details.
 		GPRun<TYPE>[] runs = new GPRun[model.getNoRuns()];
 		
+		// Keep track of the run stats.
+		RunStats<TYPE> runStats = new RunStats<TYPE>();
+		
+		// This provides a shortcut for the common convention of making a model the listener.
+		//TODO Actually might be better to allow models a way of giving their own listener for more flexibility.
+		if (model instanceof RunStatListener) {
+			runStats.addRunStatListener((RunStatListener) model);
+		}
+		
 		for (int i=0; i<model.getNoRuns(); i++) {
 			logger.info("Starting GP run " + i);
 			runs[i] = GPRun.run(model);
+			
+			// Generate stats for this run.
+			runStats.addRun(runs[i], i+1);
 		}
 		logger.info("Completed execution of EpochX controller");
 		

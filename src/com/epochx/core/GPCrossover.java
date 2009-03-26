@@ -19,17 +19,23 @@
  */
 package com.epochx.core;
 
-import java.util.*;
 import org.apache.log4j.*;
+
 import com.epochx.core.crossover.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.semantics.*;
+import com.epochx.stats.*;
 
 /**
  * This class performs the very simple task of linking together parent 
  * selection and crossover. The actual tasks of crossover and selection are 
  * performed by Crossover and ParentSelector implementations respectively.
+ * 
+ * TODO Either this class or another new class needs to encapsulate all the 
+ * details of a crossover event in the same way as GPRun exists after it has 
+ * been executed as a record of how it progressed. The same thing will be 
+ * needed for mutation too.
  * 
  * @see Crossover
  * @see UniformPointCrossover
@@ -45,6 +51,7 @@ public class GPCrossover<TYPE> {
 	private boolean doStateCheckedCrossover;
 	private ParentSelector<TYPE> parentSelector;
 	private Crossover<TYPE> crossover;
+	private CrossoverStats<TYPE> crossoverStats;
 	
 	/**
 	 * Constructs an instance of GPCrossover which will be capable of 
@@ -60,6 +67,14 @@ public class GPCrossover<TYPE> {
 		this.doStateCheckedCrossover = model.getStateCheckedCrossover();
 		this.parentSelector = model.getParentSelector();
 		this.crossover = model.getCrossover();
+		
+		crossoverStats = new CrossoverStats<TYPE>();
+		
+		// This provides a shortcut for the common convention of making a model the listener.
+		//TODO Actually might be better to allow models a way of giving their own listener for more flexibility.
+		if (model instanceof GenerationStatListener) {
+			crossoverStats.addCrossoverStatListener((CrossoverStatListener) model);
+		}
 	}
 
 	/**
@@ -75,6 +90,7 @@ public class GPCrossover<TYPE> {
 	 * 		   number as returned by the Crossover operator in use.
 	 */
 	public CandidateProgram<TYPE>[] crossover() {
+		long crossoverStartTime = System.nanoTime();
 		
 		// define variables required
 		CandidateProgram<TYPE> parent1;
@@ -138,6 +154,9 @@ public class GPCrossover<TYPE> {
 				children[i] = (CandidateProgram<TYPE>) parents[i].clone();
 			}
 		}
+		
+		long runtime = System.nanoTime() - crossoverStartTime;
+		crossoverStats.addCrossover(parents, children, runtime);
 		
 		return children;
 	}

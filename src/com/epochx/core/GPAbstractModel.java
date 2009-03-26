@@ -26,6 +26,10 @@ import com.epochx.core.mutation.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.semantics.*;
+import com.epochx.stats.*;
+import com.epochx.stats.CrossoverStats.*;
+import com.epochx.stats.GenerationStats.*;
+import com.epochx.stats.RunStats.*;
 
 
 /**
@@ -42,7 +46,11 @@ import com.epochx.semantics.*;
  * 
  * @see GPModel
  */
-public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE> {
+public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>, 
+													   GenerationStatListener, 
+													   RunStatListener, 
+													   CrossoverStatListener, 
+													   MutationStatListener {
 
 	private Initialiser<TYPE> initialiser;
 	private Crossover<TYPE> crossover;
@@ -416,6 +424,57 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE> {
 	public void setNoElites(int noElites) {
 		this.noElites = noElites;
 	}
+	
+	/**
+	 * Default implementation. No fields are requested, the overriding class 
+	 * is expected to override this method IF it wants to know about generations.
+	 * This is implemented here rather than being abstract to remove the need 
+	 * for the user to extend it if they're not interested in generational stats.
+	 */
+	public GenStatField[] getGenStatFields() {
+		return new GenStatField[0];
+	}
+	
+	/**
+	 * Default implementation. Does nothing. This is implemented here rather 
+	 * than being abstract to remove the need for the user to extend it if 
+	 * they're not interested in generational stats.
+	 */
+	public void generationStats(int generation, Object[] stats) {}
+	
+	/**
+	 * Default implementation. No fields are requested, the overriding class 
+	 * is expected to override this method IF it wants to know about runs.
+	 * This is implemented here rather than being abstract to remove the need 
+	 * for the user to extend it if they're not interested in run stats.
+	 */
+	public RunStatField[] getRunStatFields() {
+		return new RunStatField[0];
+	}
+	
+	/**
+	 * Default implementation. Does nothing. This is implemented here rather 
+	 * than being abstract to remove the need for the user to extend it if 
+	 * they're not interested in run stats.
+	 */
+	public void runStats(int runNo, Object[] stats) {}
+	
+	/**
+	 * Default implementation. No fields are requested, the overriding class 
+	 * is expected to override this method IF it wants to know about crossovers.
+	 * This is implemented here rather than being abstract to remove the need 
+	 * for the user to extend it if they're not interested in crossover stats.
+	 */
+	public CrossoverStatField[] getCrossoverStatFields() {
+		return new CrossoverStatField[0];
+	}
+	
+	/**
+	 * Default implementation. Does nothing. This is implemented here rather 
+	 * than being abstract to remove the need for the user to extend it if 
+	 * they're not interested in crossover stats.
+	 */
+	public void crossoverStats(Object[] stats) {}
 	
 	/**
 	 * Returns whether to run the crossover state checker

@@ -19,9 +19,20 @@
  */
 package com.epochx.stats;
 
+import com.epochx.stats.RunStats.*;
+
 /**
  * 
  */
 public interface RunStatListener {
 
+	/**
+	 * The implementing class must return an array of fields which the 
+	 * listening objects are interested in listening to. Changes to the 
+	 * set of fields during execution are unlikely to be honoured.
+	 */
+	public RunStatField[] getRunStatFields();
+	
+	public void runStats(int run, Object[] stats);
+	
 }

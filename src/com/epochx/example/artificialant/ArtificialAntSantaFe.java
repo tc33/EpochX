@@ -38,7 +38,7 @@ import com.epochx.core.scorer.*;
 /**
  * 
  */
-public class ArtificialAntSantaFe extends GPAbstractModel<AntAction> implements GenerationStatListener {
+public class ArtificialAntSantaFe extends GPAbstractModel<AntAction> {
 
 	private List<String> inputs;
 	private HashMap<String, TerminalNode<AntAction>> variables = new HashMap<String, TerminalNode<AntAction>>();
@@ -129,21 +129,6 @@ public class ArtificialAntSantaFe extends GPAbstractModel<AntAction> implements 
 	
 	public static void main(String[] args) {
 		GPController.run(new ArtificialAntSantaFe());
-	}
-
-	@Override
-	public void generationStats(String[] stats) {
-//		for (String s: stats) {
-//			System.out.print(s);
-//			System.out.print(" ");
-//		}
-//		System.out.println();
-	}
-
-	@Override
-	public GenStatField[] getStatFields() {
-		//return new GenStatField[]{GenStatField.NO_TERMINALS_AVE, GenStatField.DEPTH_STDEV, GenStatField.DEPTH_MAX, GenStatField.DEPTH_MIN};
-		return new GenStatField[]{};
 	}
 	
 	private void runAnt(CandidateProgram program) {

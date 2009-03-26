@@ -19,9 +19,20 @@
  */
 package com.epochx.stats;
 
+import com.epochx.stats.CrossoverStats.*;
+
 /**
  * 
  */
 public interface CrossoverStatListener {
-
+	
+	/**
+	 * The implementing class must return an array of fields which the 
+	 * listening objects are interested in listening to. Changes to the 
+	 * set of fields during execution are unlikely to be honoured.
+	 */
+	public CrossoverStatField[] getCrossoverStatFields();
+	
+	public void crossoverStats(Object[] stats);
+	
 }

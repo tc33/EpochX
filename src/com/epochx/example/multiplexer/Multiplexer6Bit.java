@@ -114,6 +114,19 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
 //        return score;
 //	}
 	
+	/*@Override
+	public double getFitness(CandidateProgram<Boolean> program) {
+		// set up ideal solution
+	    IfFunction part1 = new IfFunction(new Variable<Boolean>("A1"), new Variable<Boolean>("D0"), new Variable<Boolean>("D1"));
+	    IfFunction part2 = new IfFunction(new Variable<Boolean>("A1"), new Variable<Boolean>("D2"), new Variable<Boolean>("D3"));
+	    IfFunction part0 = new IfFunction(new Variable<Boolean>("A0"), part1, part2);
+	    CandidateProgram<Boolean> target = new CandidateProgram<Boolean>(part0, this);
+        // do semantic scoring part
+        BooleanSemanticScorer scorer = new BooleanSemanticScorer(getSemanticModule());
+        double score = scorer.doScore(program, target);
+        return score;
+	}*/
+	
 	@Override
 	public double getFitness(CandidateProgram<Boolean> program) {
         double score = 0;

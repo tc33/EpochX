@@ -29,7 +29,7 @@ public interface Representation {
 	 * Tests whether behaviour is dependent on any of the terminals used in the GP program
 	 * @return true if the behaviour is not dependent on any of the terminals
 	 */
-	public boolean isTautology();
+	public boolean isConstant();
 	
 	/**
 	 * Compares two behaviours for equivalence

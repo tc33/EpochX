@@ -49,7 +49,7 @@ public class BooleanRepresentation implements Representation {
 	 * @see com.epochx.semantics.Behaviour#isTautology()
 	 */
 	@Override
-	public boolean isTautology() {
+	public boolean isConstant() {
 		if(this.bdd.satCount()==0 || this.bdd.satCount()==1) {
 			return true;
 		} else {

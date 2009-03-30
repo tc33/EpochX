@@ -63,7 +63,7 @@ public class ModifiedFullInitialiser<TYPE> implements Initialiser<TYPE> {
 			do {
             	candidate = new CandidateProgram<TYPE>(full.buildFullNodeTree(model.getInitialMaxDepth()), model);
             	representation = semanticModule.codeToBehaviour(candidate);
-			} while (firstGen.contains(candidate) || representation.isTautology());
+			} while (firstGen.contains(candidate) || representation.isConstant());
 			firstGen.add(candidate);
         }
 		// stop the semantic module

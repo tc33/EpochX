@@ -139,7 +139,7 @@ public class BooleanSemanticModule implements SemanticModule {
 	private Node resolveTranslation(BDD topBDD) {
 		// check tautology
 		if(topBDD.isOne() || topBDD.isZero()) {
-			throw new IllegalArgumentException("CANNOT REVERSE TRANSLATE A TAUTOLOGY");
+			throw new IllegalArgumentException("CANNOT REVERSE TRANSLATE A CONSTANT");
 		}
 		// get the BDD children
 		BDD highChild = topBDD.high();

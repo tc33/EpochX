@@ -57,7 +57,7 @@ public class HybridBooleanSemanticallyDrivenInitialiser<TYPE> implements Initial
         // generate a full population to start with
         for(CandidateProgram c: firstPass) {
         	BooleanRepresentation b = semMod.codeToBehaviour(c);
-        	if(!b.isTautology()) {
+        	if(!b.isConstant()) {
         		storage.add(b.getBDD());
         	}
         }

@@ -29,6 +29,7 @@ import com.epochx.semantics.*;
 import com.epochx.stats.*;
 import com.epochx.stats.CrossoverStats.*;
 import com.epochx.stats.GenerationStats.*;
+import com.epochx.stats.MutationStats.*;
 import com.epochx.stats.RunStats.*;
 
 
@@ -475,6 +476,23 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * they're not interested in crossover stats.
 	 */
 	public void crossoverStats(Object[] stats) {}
+	
+	/**
+	 * Default implementation. No fields are requested, the overriding class 
+	 * is expected to override this method IF it wants to know about mutations.
+	 * This is implemented here rather than being abstract to remove the need 
+	 * for the user to extend it if they're not interested in mutation stats.
+	 */
+	public MutationStatField[] getMutationStatFields() {
+		return new MutationStatField[0];
+	}
+	
+	/**
+	 * Default implementation. Does nothing. This is implemented here rather 
+	 * than being abstract to remove the need for the user to extend it if 
+	 * they're not interested in mutation stats.
+	 */
+	public void mutationStats(Object[] stats) {}
 	
 	/**
 	 * Returns whether to run the crossover state checker

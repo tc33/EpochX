@@ -19,9 +19,19 @@
  */
 package com.epochx.stats;
 
+import com.epochx.stats.MutationStats.*;
+
 /**
  * 
  */
 public interface MutationStatListener {
-
+	/**
+	 * The implementing class must return an array of fields which the 
+	 * listening objects are interested in listening to. Changes to the 
+	 * set of fields during execution are unlikely to be honoured.
+	 */
+	public MutationStatField[] getMutationStatFields();
+	
+	public void mutationStats(Object[] stats);
+	
 }

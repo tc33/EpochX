@@ -326,12 +326,15 @@ public class GenerationStats<TYPE> {
 				|| stats.containsKey(GenStatField.FITNESS_STDEV)
 				|| stats.containsKey(GenStatField.FITNESS_MAX)
 				|| stats.containsKey(GenStatField.FITNESS_MIN)
-				|| stats.containsKey(GenStatField.FITNESS_MEDIAN)) {
+				|| stats.containsKey(GenStatField.FITNESS_MEDIAN)
+				|| stats.containsKey(GenStatField.BEST_PROGRAM)) {
 			// If any stats about length are needed it's more efficient to get them all at once.
 			double[] fitnesses = new double[pop.size()];
 			for (int i=0; i<pop.size(); i++) {
 				fitnesses[i] = pop.get(i).getFitness();
 			}
+			
+			int maxIndex = -1;
 			
 			// Average fitness.
 			if (stats.containsKey(GenStatField.FITNESS_AVE)) {
@@ -345,7 +348,8 @@ public class GenerationStats<TYPE> {
 			
 			// Maximum fitness.
 			if (stats.containsKey(GenStatField.FITNESS_MAX)) {
-				stats.put(GenStatField.FITNESS_MAX, Double.toString(max(fitnesses)));
+				maxIndex = maxIndex(fitnesses);
+				stats.put(GenStatField.FITNESS_MAX, Double.toString(fitnesses[maxIndex]));
 			}
 			
 			// Minimum fitness.
@@ -356,6 +360,15 @@ public class GenerationStats<TYPE> {
 			// Median fitness.
 			if (stats.containsKey(GenStatField.FITNESS_MEDIAN)) {
 				stats.put(GenStatField.FITNESS_MEDIAN, Double.toString(median(fitnesses)));
+			}
+			
+			// Best program.
+			if (stats.containsKey(GenStatField.BEST_PROGRAM)) {
+				// If we haven't already found maxIndex find it now.
+				if (maxIndex == -1) {
+					maxIndex = maxIndex(fitnesses);
+				}
+				stats.put(GenStatField.BEST_PROGRAM, pop.get(maxIndex));
 			}
 		}
 	}
@@ -389,6 +402,18 @@ public class GenerationStats<TYPE> {
 			max = (values[i] > max) ? values[i] : max;
 		}
 		return max;
+	}
+	
+	private int maxIndex(double[] values) {
+		double max = 0;
+		int maxIndex = -1;
+		for (int i=0; i<values.length; i++) {
+			if (values[i] > max) {
+				max = values[i];
+				maxIndex = i;
+			}
+		}
+		return maxIndex;
 	}
 	
 	private double min(double[] values) {
@@ -446,6 +471,7 @@ public class GenerationStats<TYPE> {
 		FITNESS_MAX,
 		FITNESS_MIN,
 		FITNESS_MEDIAN,
+		BEST_PROGRAM,
 		POPULATION,
 		RUN_TIME
 	}

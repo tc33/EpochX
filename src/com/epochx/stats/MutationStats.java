@@ -19,9 +19,40 @@
  */
 package com.epochx.stats;
 
+import java.util.*;
+
+import com.epochx.core.representation.*;
+
 /**
  * 
  */
-public class MutationStats {
+public class MutationStats<TYPE> {
 
+	// The objects listening for mutation stats.
+	public List<MutationStatListener> listeners;
+	
+	public MutationStats() {
+		listeners = new ArrayList<MutationStatListener>();
+	}
+	
+	public void addMutationStatListener(MutationStatListener listener) {
+		listeners.add(listener);
+	}
+	
+	public void removeMutationStatListener(MutationStatListener listener) {
+		listeners.remove(listener);
+	}
+	
+	public void addMutation(CandidateProgram<TYPE> parent, 
+							CandidateProgram<TYPE> child, 
+							long runtime) {
+		
+	}
+	
+	public enum MutationStatField {
+		PROGRAM_BEFORE,
+		PROGRAM_AFTER,
+		RUN_TIME
+	}
+	
 }

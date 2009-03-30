@@ -28,7 +28,7 @@ import com.epochx.core.representation.*;
  */
 public class CrossoverStats<TYPE> {
 	
-	// The objects listening for run stats.
+	// The objects listening for crossover stats.
 	public List<CrossoverStatListener> listeners;
 	
 	/**

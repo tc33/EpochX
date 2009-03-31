@@ -19,17 +19,13 @@
  */
 package com.epochx.semantics;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import net.sf.javabdd.BDD;
-import net.sf.javabdd.BDDFactory;
-
 import com.epochx.core.GPModel;
-import com.epochx.core.representation.CandidateProgram;
-import com.epochx.core.representation.TerminalNode;
+import com.epochx.core.representation.*;
 
 /**
- * @author lb212
+ * @author Lawrence Beadle & Tom Castle
  *
  */
 public class RegressionSemanticModule implements SemanticModule {
@@ -83,19 +79,181 @@ public class RegressionSemanticModule implements SemanticModule {
 	 */
 	@Override
 	public Representation codeToBehaviour(CandidateProgram program) {
-		// TODO Auto-generated method stub
+		// TODO
 		
 		// extract and simplify program
-		// 1 - resolve any invalidators eg *0
-		// 2 - resolve constant subtrees
-		// 3 - order remaining polynomial
+		Node<Double> rootNode = program.getRootNode();
 		
-		// extract coefficients and put into double array		
+		// resolve any multiply by zeros
+		this.removeMultiplyByZeros(rootNode);
+		
+		// resolve PDIVs with equal subtrees and PDIV by 0 to 0
+		this.removeAllPDivsWithSameSubtrees(rootNode);
+		
+		// resolve constant calculations
+		this.resolveConstantCalculations(rootNode);
+		
+		// collect up multiply and PDiv into powers
+		this.collectUpPowers(rootNode);
+		
+		// scan for largest power and smallest power
+		
+		// extract coefficients and put into double array
+		
 		// construct new RegressionBehaviour
 		
 		return null;
 	}
 
+	private void removeMultiplyByZeros(Node<Double> rootNode) {
+		// get the child nodes
+		int arity = rootNode.getArity();		
+		
+		// check if terminal
+		if(arity>0) {
+			// get children
+			Node[] children = rootNode.getChildren();
+			// check if multiply function
+			if(rootNode instanceof MultiplyFunction) {
+				// check for zeros
+				boolean zeroPresent = false;
+				TerminalNode<Double> zeroNode = new TerminalNode<Double>(0d);
+				for(int i = 0; i<arity; i++) {
+					if(children[i].equals(zeroNode)) {
+						zeroPresent = true;
+					}
+				}
+				if(zeroPresent) {
+					rootNode = zeroNode;
+				}
+			} else {
+				// recurse on other functions
+				for(int i = 0; i<arity; i++) {
+					this.removeMultiplyByZeros(children[i]);
+				}
+			}
+		}
+	}
 	
+	private void resolveConstantCalculations(Node<Double> rootNode) {
+		// get the child nodes
+		int arity = rootNode.getArity();		
+		
+		// check if terminal
+		if(arity>0) {
+			// get children
+			Node[] children = rootNode.getChildren();
+			// check if all child nodes are numbers
+			boolean allChildrenAreTerminalNodes = true;
+			for(int i = 0; i<arity; i++) {
+				if(!(children[i] instanceof TerminalNode)) {
+					allChildrenAreTerminalNodes = false;
+				}
+			}
+			// decide what to do - reduce or recurse
+			if(allChildrenAreTerminalNodes) {
+				// resolve root node to constant
+				Double result = rootNode.evaluate();
+				rootNode = new TerminalNode<Double>(result);
+			} else {
+				for(int i = 0; i<arity; i++) {
+					this.resolveConstantCalculations(children[i]);
+				}
+			}
+		}
+	}
+	
+	private void removeAllPDivsWithSameSubtrees(Node<Double> rootNode) {
+		// get the child nodes
+		int arity = rootNode.getArity();		
+		
+		// check if terminal
+		if(arity>0) {
+			// get children
+			Node[] children = rootNode.getChildren();			
+			// decide what to do - reduce or recurse
+			if(rootNode instanceof ProtectedDivisionFunction) {
+				// compare children and resolve root node to 1 if they are equal
+				if(children[0].equals(children[1])) {
+					TerminalNode<Double> oneNode = new TerminalNode<Double>(1d);
+					rootNode = oneNode;
+				}
+				// check for PDIV by 0
+				TerminalNode<Double> zeroNode = new TerminalNode<Double>(0d);
+				if(children[1].equals(zeroNode)) {					
+					rootNode = zeroNode;
+				}
+			} else {
+				for(int i = 0; i<arity; i++) {
+					this.removeAllPDivsWithSameSubtrees(children[i]);
+				}
+			}
+		}
+	}
+	
+	private void collectUpPowers(Node<Double> rootNode) {
+		// get the child nodes
+		int arity = rootNode.getArity();		
+		
+		// check if terminal
+		if(arity>0) {
+			// get children
+			Node[] children = rootNode.getChildren();			
+			// decide what to do - reduce or recurse
+			if(rootNode instanceof MultiplyFunction) {
+				Variable<Double> x = new Variable<Double>("X");
+				if((children[0] instanceof Variable) && (children[1] instanceof Variable)) {
+					Node<Double> powerNode = new PowerFunction(x, new TerminalNode<Double>(2d));
+					rootNode = powerNode;
+				} else if((children[0] instanceof PowerFunction) && (children[1] instanceof Variable)) {
+					// work out new power
+					Double power = (Double) children[0].getChild(1).evaluate() + 1;
+					Node<Double> powerNode = new PowerFunction(x, new TerminalNode<Double>(power));
+					rootNode = powerNode;
+				} else if((children[1] instanceof PowerFunction) && (children[0] instanceof Variable)) {
+					// work out new power
+					Double power = (Double) children[1].getChild(1).evaluate() + 1;
+					Node<Double> powerNode = new PowerFunction(x, new TerminalNode<Double>(power));
+					rootNode = powerNode;
+				} else if((children[0] instanceof PowerFunction) && (children[1] instanceof PowerFunction)) {
+					// work out new power
+					Double power = (Double) children[0].getChild(1).evaluate() + (Double) children[1].getChild(1).evaluate();
+					Node<Double> powerNode = new PowerFunction(x, new TerminalNode<Double>(power));
+					rootNode = powerNode;
+				} else {
+					for(int i = 0; i<arity; i++) {
+						this.collectUpPowers(children[i]);
+					}
+				}
+			} else if(rootNode instanceof ProtectedDivisionFunction) {
+				Variable<Double> x = new Variable<Double>("X");
+				if((children[0] instanceof PowerFunction) && (children[1] instanceof Variable)) {
+					// work out new power
+					Double power = (Double) children[0].getChild(1).evaluate() - 1;
+					Node<Double> powerNode = new PowerFunction(x, new TerminalNode<Double>(power));
+					rootNode = powerNode;
+				} else if((children[1] instanceof PowerFunction) && (children[0] instanceof Variable)) {
+					// work out new power
+					// need to negate this to make it accurate
+					Double power = ((Double) children[1].getChild(1).evaluate() - 1) * -1;
+					Node<Double> powerNode = new PowerFunction(x, new TerminalNode<Double>(power));
+					rootNode = powerNode;
+				} else if((children[0] instanceof PowerFunction) && (children[1] instanceof PowerFunction)) {
+					// work out new power
+					Double power = (Double) children[0].getChild(1).evaluate() - (Double) children[1].getChild(1).evaluate();
+					Node<Double> powerNode = new PowerFunction(x, new TerminalNode<Double>(power));
+					rootNode = powerNode;
+				} else {
+					for(int i = 0; i<arity; i++) {
+						this.collectUpPowers(children[i]);
+					}
+				}
+			} else {
+				for(int i = 0; i<arity; i++) {
+					this.collectUpPowers(children[i]);
+				}
+			}
+		}
+	}
 
 }

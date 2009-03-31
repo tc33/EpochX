@@ -21,12 +21,15 @@ package com.epochx.example.majority;
 
 import java.io.*;
 import java.util.*;
+
 import com.epochx.core.*;
 import com.epochx.core.crossover.*;
+import com.epochx.core.initialisation.RampedHalfAndHalfInitialiser;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.util.FileManip;
 import com.epochx.semantics.*;
+import com.epochx.stats.GenerationStats.GenStatField;
 import com.epochx.util.*;
 
 /**
@@ -36,6 +39,7 @@ public class Majority5 extends GPAbstractModel<Boolean> {
 
 	private List<String> inputs;
 	private HashMap<String, Variable<Boolean>> variables = new HashMap<String, Variable<Boolean>>();
+	private int run = 1;
 	
 	public Majority5() {
 		inputs = new ArrayList<String>();
@@ -45,17 +49,6 @@ public class Majority5 extends GPAbstractModel<Boolean> {
 	}
 	
 	public void configure() {
-		setPopulationSize(500);
-		setNoGenerations(50);
-		setCrossoverProbability(0.9);
-		setReproductionProbability(0.1);
-		setNoRuns(5);
-		setPouleSize(50);
-		setNoElites(50);
-		setMaxDepth(6);
-		setPouleSelector(new TournamentSelector<Boolean>(7, this));
-		setParentSelector(new RandomSelector<Boolean>());
-		setCrossover(new UniformPointCrossover<Boolean>());
 		
 		// Define variables.
 		variables.put("D4", new Variable<Boolean>("D4"));
@@ -63,6 +56,22 @@ public class Majority5 extends GPAbstractModel<Boolean> {
 		variables.put("D2", new Variable<Boolean>("D2"));
 		variables.put("D1", new Variable<Boolean>("D1"));
 		variables.put("D0", new Variable<Boolean>("D0"));
+		
+		setPopulationSize(500);
+		setNoGenerations(50);
+		setCrossoverProbability(0.9);
+		setReproductionProbability(0.1);
+		setNoRuns(100);
+		setPouleSize(50);
+		setNoElites(50);
+		setInitialMaxDepth(6);
+		setMaxDepth(17);
+		setPouleSelector(new TournamentSelector<Boolean>(7, this));
+		setParentSelector(new RandomSelector<Boolean>());
+		setCrossover(new UniformPointCrossover<Boolean>());
+		setStateCheckedCrossover(false);
+		setSemanticModule(new BooleanSemanticModule(getTerminals(), this));
+		setInitialiser(new RampedHalfAndHalfInitialiser<Boolean>(this, getSemanticModule()));
 	}
 	
 	@Override
@@ -131,5 +140,29 @@ public class Majority5 extends GPAbstractModel<Boolean> {
 	
 	public static void main(String[] args) {
 		GPController.run(new Majority5());
+	}
+	
+	@Override
+	public void runStats(int run, Object[] stats) {
+		this.run = run + 1;
+	}
+	
+	@Override
+	public void generationStats(int generation, Object[] stats) {
+		ArrayList<String> output = new ArrayList<String>();
+		System.out.println(run + "\t" + generation + "\t");
+		String part = run + "\t" + generation + "\t";
+		for (Object s: stats) {
+			part = part + s;
+			part = part + "\t";
+		}
+		part = part + "\n";
+		output.add(part);
+		FileManip.doOutput(null, output, "output.txt", true);
+	}
+
+	@Override
+	public GenStatField[] getGenStatFields() {
+		return new GenStatField[]{GenStatField.FITNESS_AVE, GenStatField.FITNESS_MIN, GenStatField.LENGTH_AVE};
 	}
 }

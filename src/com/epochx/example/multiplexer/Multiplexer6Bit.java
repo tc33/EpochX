@@ -39,12 +39,14 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
 
 	private List<String> inputs;
 	private HashMap<String, Variable<Boolean>> variables = new HashMap<String, Variable<Boolean>>();
+	private int run = 1;	
 	
 	public Multiplexer6Bit() {
 		inputs = new ArrayList<String>();
 		inputs = FileManip.loadInput(new File("input6bit.txt"));
 		
 		configure();
+		
 	}
 	
 	public void configure() {
@@ -58,10 +60,10 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
 		variables.put("A0", new Variable<Boolean>("A0"));
 		
 		setPopulationSize(500);
-		setNoGenerations(20);
+		setNoGenerations(50);
 		setCrossoverProbability(0.9);
 		setReproductionProbability(0.1);
-		setNoRuns(2);
+		setNoRuns(100);
 		setPouleSize(50);
 		setNoElites(50);
 		setInitialMaxDepth(6);
@@ -71,7 +73,7 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
 		setCrossover(new UniformPointCrossover<Boolean>());
 		setStateCheckedCrossover(false);
 		setSemanticModule(new BooleanSemanticModule(getTerminals(), this));
-		setInitialiser(new HybridBooleanSemanticallyDrivenInitialiser<Boolean>(this, getSemanticModule()));
+		setInitialiser(new RampedHalfAndHalfInitialiser<Boolean>(this, getSemanticModule()));
 	}
 	
 	@Override
@@ -98,21 +100,6 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
 		
 		return terminals;
 	}
-	
-	
-	
-//	@Override
-//	public double getFitness(CandidateProgram<Boolean> program) {
-//		// set up ideal solution
-//	    IfFunction part1 = new IfFunction(new Variable<Boolean>("A1"), new Variable<Boolean>("D0"), new Variable<Boolean>("D1"));
-//	    IfFunction part2 = new IfFunction(new Variable<Boolean>("A1"), new Variable<Boolean>("D2"), new Variable<Boolean>("D3"));
-//	    IfFunction part0 = new IfFunction(new Variable<Boolean>("A0"), part1, part2);
-//	    CandidateProgram<Boolean> target = new CandidateProgram<Boolean>(part0, this);
-//        // do semantic scoring part
-//        BooleanSemanticScorer scorer = new BooleanSemanticScorer(getSemanticModule());
-//        double score = scorer.doScore(program, target);
-//        return score;
-//	}
 	
 	/*@Override
 	public double getFitness(CandidateProgram<Boolean> program) {
@@ -171,17 +158,26 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
 	}
 
 	@Override
+	public void runStats(int run, Object[] stats) {
+		this.run = run + 1;
+	}
+	
+	@Override
 	public void generationStats(int generation, Object[] stats) {
-//		for (String s: stats) {
-//			System.out.print(s);
-//			System.out.print(" ");
-//		}
-//		System.out.println();
+		ArrayList<String> output = new ArrayList<String>();
+		System.out.println(run + "\t" + generation + "\t");
+		String part = run + "\t" + generation + "\t";
+		for (Object s: stats) {
+			part = part + s;
+			part = part + "\t";
+		}
+		part = part + "\n";
+		output.add(part);
+		FileManip.doOutput(null, output, "output.txt", true);
 	}
 
 	@Override
 	public GenStatField[] getGenStatFields() {
-		//return new GenStatField[]{GenStatField.NO_TERMINALS_AVE, GenStatField.DEPTH_STDEV, GenStatField.DEPTH_MAX, GenStatField.DEPTH_MIN};
-		return new GenStatField[]{};
+		return new GenStatField[]{GenStatField.FITNESS_AVE, GenStatField.FITNESS_MIN, GenStatField.LENGTH_AVE};
 	}
 }

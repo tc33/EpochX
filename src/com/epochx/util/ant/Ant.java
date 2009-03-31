@@ -18,9 +18,9 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.epochx.example.artificialant;
+package com.epochx.util.ant;
 
-import static com.epochx.example.artificialant.Orientation.*;
+import static com.epochx.util.ant.Orientation.*;
 
 import java.awt.*;
 

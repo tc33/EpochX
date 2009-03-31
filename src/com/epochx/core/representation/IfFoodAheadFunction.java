@@ -21,7 +21,7 @@ package com.epochx.core.representation;
 
 import java.awt.*;
 
-import com.epochx.example.artificialant.*;
+import com.epochx.util.ant.*;
 
 /**
  * 

@@ -22,7 +22,7 @@ package com.epochx.semantics;
 
 import java.util.ArrayList;
 
-import com.epochx.example.artificialant.Ant;
+import com.epochx.util.ant.Ant;
 
 import core.*;
 

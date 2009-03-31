@@ -17,7 +17,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.epochx.example.artificialant;
+package com.epochx.util.ant;
 
 import java.awt.Dimension;
 import java.awt.Point;

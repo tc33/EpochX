@@ -19,7 +19,7 @@
  */
 package com.epochx.core.representation;
 
-import com.epochx.example.artificialant.*;
+import com.epochx.util.ant.*;
 
 /**
  * 

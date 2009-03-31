@@ -17,7 +17,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.epochx.util.ant;
+package com.epochx.example.artificialant;
 
 import java.awt.Dimension;
 import java.awt.Point;
@@ -31,6 +31,8 @@ import com.epochx.core.selection.*;
 import com.epochx.stats.*;
 import com.epochx.stats.GenerationStats.*;
 import com.epochx.util.*;
+import com.epochx.util.ant.Ant;
+import com.epochx.util.ant.AntLandscape;
 import com.epochx.semantics.*;
 import com.epochx.core.initialisation.*;
 import com.epochx.core.scorer.*;

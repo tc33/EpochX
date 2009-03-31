@@ -19,6 +19,8 @@
  */
 package com.epochx.core.representation;
 
+import java.util.*;
+
 import com.epochx.core.*;
 
 /**
@@ -145,7 +147,30 @@ public abstract class Node<TYPE> implements Cloneable {
 			current += childLength;
 		}
 	}
-
+	
+	/**
+	 * Retrieves the nodes from the tree at depth d when considering this node to be 
+	 * the root - that is depth 0.
+	 * @param depth
+	 * @return
+	 */
+	public List<Node<?>> getNodesAtDepth(int d) {
+		List<Node<?>> nodes = new ArrayList<Node<?>>();
+		fillNodesAtDepth(nodes, d, 0);
+		return nodes;
+	}
+	
+	private void fillNodesAtDepth(List<Node<?>> nodes, int d, int current){
+		if (d == current) {
+			nodes.add(this);
+		} else {
+			for (Node<?> child: children) {
+				// Only look at the subtree if it contains the right range of nodes.
+				child.fillNodesAtDepth(nodes, d, current+1);
+			}
+		}
+	}
+	
 	/**
 	 * 
 	 * @param child

@@ -127,7 +127,8 @@ public class GenerationStats<TYPE> {
 		if (stats.containsKey(GenStatField.DEPTH_AVE)
 				|| stats.containsKey(GenStatField.DEPTH_STDEV)
 				|| stats.containsKey(GenStatField.DEPTH_MAX)
-				|| stats.containsKey(GenStatField.DEPTH_MIN)) {
+				|| stats.containsKey(GenStatField.DEPTH_MIN)
+				|| stats.containsKey(GenStatField.AVE_NODES_PER_DEPTH)) {
 			// If any stats about depth are needed it's more efficient to get them all at once.
 			double[] depths = new double[pop.size()];
 			for (int i=0; i<pop.size(); i++) {
@@ -153,7 +154,38 @@ public class GenerationStats<TYPE> {
 			if (stats.containsKey(GenStatField.DEPTH_MIN)) {
 				stats.put(GenStatField.DEPTH_MIN, Double.toString(min(depths)));
 			}
+			
+			// Average number of nodes per depth.
+			if (stats.containsKey(GenStatField.AVE_NODES_PER_DEPTH)) {
+				stats.put(GenStatField.AVE_NODES_PER_DEPTH, getAveNodesPerDepth(pop));
+			}
 		}
+	}
+	
+	private double[] getAveNodesPerDepth(List<CandidateProgram<TYPE>> pop) {
+		// Get maximum depth of the population.
+		int maxDepth = 0;
+		for (CandidateProgram<TYPE> program: pop) {
+			int depth = GPProgramAnalyser.getProgramDepth(program);
+			if (depth > maxDepth) {
+				maxDepth = depth;
+			}
+		}
+		
+		// Array to fill with average number of nodes at each depth.
+		double[] aveNodes = new double[maxDepth];
+		
+		// For each depth.
+		for (int d=0; d<maxDepth; d++) {
+			// Get number of nodes for each program.
+			double[] noNodes = new double[pop.size()];
+			for (int j=0; j<pop.size(); j++) {
+				noNodes[j] = pop.get(j).getNodesAtDepth(d).size();
+			}
+			aveNodes[d] = ave(noNodes);
+		}
+		
+		return aveNodes;
 	}
 	
 	private void gatherLengthStats(Map<GenStatField, Object> stats, List<CandidateProgram<TYPE>> pop) {
@@ -327,7 +359,8 @@ public class GenerationStats<TYPE> {
 				|| stats.containsKey(GenStatField.FITNESS_MAX)
 				|| stats.containsKey(GenStatField.FITNESS_MIN)
 				|| stats.containsKey(GenStatField.FITNESS_MEDIAN)
-				|| stats.containsKey(GenStatField.BEST_PROGRAM)) {
+				|| stats.containsKey(GenStatField.BEST_PROGRAM)
+				|| stats.containsKey(GenStatField.FITNESS_CI_95)) {
 			// If any stats about length are needed it's more efficient to get them all at once.
 			double[] fitnesses = new double[pop.size()];
 			for (int i=0; i<pop.size(); i++) {
@@ -335,6 +368,8 @@ public class GenerationStats<TYPE> {
 			}
 			
 			int maxIndex = -1;
+			int minIndex = -1;
+			double stdev = -1;
 			
 			// Average fitness.
 			if (stats.containsKey(GenStatField.FITNESS_AVE)) {
@@ -343,7 +378,8 @@ public class GenerationStats<TYPE> {
 			
 			// Standard deviation of fitness.
 			if (stats.containsKey(GenStatField.FITNESS_STDEV)) {
-				stats.put(GenStatField.FITNESS_STDEV, Double.toString(stdev(fitnesses)));
+				stdev = stdev(fitnesses);
+				stats.put(GenStatField.FITNESS_STDEV, Double.toString(stdev));
 			}
 			
 			// Maximum fitness.
@@ -365,10 +401,20 @@ public class GenerationStats<TYPE> {
 			// Best program.
 			if (stats.containsKey(GenStatField.BEST_PROGRAM)) {
 				// If we haven't already found maxIndex find it now.
-				if (maxIndex == -1) {
-					maxIndex = maxIndex(fitnesses);
+				if (minIndex == -1) {
+					minIndex = minIndex(fitnesses);
 				}
-				stats.put(GenStatField.BEST_PROGRAM, pop.get(maxIndex));
+				stats.put(GenStatField.BEST_PROGRAM, pop.get(minIndex));
+			}
+			
+			// Coincidence Interval at 95%
+			if (stats.containsKey(GenStatField.FITNESS_CI_95)) {
+				if (stdev == -1) {
+					stdev = stdev(fitnesses);
+				}
+				double ci = 1.96 * stdev;
+				
+				stats.put(GenStatField.FITNESS_CI_95, Double.toString(ci));
 			}
 		}
 	}
@@ -424,6 +470,18 @@ public class GenerationStats<TYPE> {
 		return min;
 	}
 	
+	private int minIndex(double[] values) {
+		double min = Double.MAX_VALUE;
+		int minIndex = -1;
+		for (int i=0; i<values.length; i++) {
+			if (values[i] < min) {
+				min = values[i];
+				minIndex = i;
+			}
+		}
+		return minIndex;
+	}
+	
 	private double median(double[] values) {
 		// Sort the array.
 		Arrays.sort(values);
@@ -446,6 +504,7 @@ public class GenerationStats<TYPE> {
 		DEPTH_STDEV,
 		DEPTH_MAX,
 		DEPTH_MIN,
+		AVE_NODES_PER_DEPTH,
 		LENGTH_AVE,
 		LENGTH_STDEV,
 		LENGTH_MAX,
@@ -471,6 +530,7 @@ public class GenerationStats<TYPE> {
 		FITNESS_MAX,
 		FITNESS_MIN,
 		FITNESS_MEDIAN,
+		FITNESS_CI_95,
 		BEST_PROGRAM,
 		POPULATION,
 		RUN_TIME

@@ -22,6 +22,7 @@ package com.epochx.semantics;
 import java.util.ArrayList;
 import java.util.List;
 import com.epochx.core.GPModel;
+import com.epochx.core.GPProgramAnalyser;
 import com.epochx.core.representation.*;
 
 /**
@@ -79,40 +80,70 @@ public class RegressionSemanticModule implements SemanticModule {
 	 */
 	@Override
 	public Representation codeToBehaviour(CandidateProgram program) {
-		// TODO
 		
+		// clone the program to prevent back modfication
+		CandidateProgram program1 = (CandidateProgram) program.clone();
 		// extract and simplify program
-		Node<Double> rootNode = program.getRootNode();
+		Node<Double> rootNode = program1.getRootNode();
 		
 		// resolve any multiply by zeros
-		this.removeMultiplyByZeros(rootNode);
+		if(GPProgramAnalyser.getProgramLength(rootNode)>1) {
+			rootNode = this.removeMultiplyByZeros(rootNode);
+		}
 		
 		// resolve PDIVs with equal subtrees and PDIV by 0 to 0
-		this.removeAllPDivsWithSameSubtrees(rootNode);
+		if(GPProgramAnalyser.getProgramLength(rootNode)>1) {
+			rootNode = this.removeAllPDivsWithSameSubtrees(rootNode);
+		}
 		
 		// resolve constant calculations
-		this.resolveConstantCalculations(rootNode);
+		if(GPProgramAnalyser.getProgramLength(rootNode)>1) {
+			rootNode = this.resolveConstantCalculations(rootNode);
+		}
+		
+		// resolve any multiply by zeros
+		if(GPProgramAnalyser.getProgramLength(rootNode)>1) {
+			rootNode = this.removeMultiplyByZeros(rootNode);
+		}
+		
+		// resolve PDIVs with equal subtrees and PDIV by 0 to 0
+		if(GPProgramAnalyser.getProgramLength(rootNode)>1) {
+			rootNode = this.removeAllPDivsWithSameSubtrees(rootNode);
+		}
 		
 		// collect up multiply and PDiv into powers
-		this.collectUpPowers(rootNode);
+		if(GPProgramAnalyser.getProgramLength(rootNode)>1) {
+			rootNode = this.collectUpPowers(rootNode);
+		}
 		
-		// scan for largest power and smallest power
+		// collect up coefficient functions
+		if(GPProgramAnalyser.getProgramLength(rootNode)>1) {
+			rootNode = this.reduceToCVPFormat(rootNode);
+		}
 		
-		// extract coefficients and put into double array
+		System.out.println(rootNode);
+		System.out.println("---------------");
+		
+		// put all coefficient functions into linear process and simplify
+		// TODO
 		
 		// construct new RegressionBehaviour
+		// TODO
 		
 		return null;
 	}
 
-	private void removeMultiplyByZeros(Node<Double> rootNode) {
+	private Node<Double> removeMultiplyByZeros(Node<Double> rootNode) {
 		// get the child nodes
 		int arity = rootNode.getArity();		
-		
 		// check if terminal
 		if(arity>0) {
 			// get children
 			Node[] children = rootNode.getChildren();
+			// recurse on other functions
+			for(int i = 0; i<arity; i++) {
+				rootNode.setChild(this.removeMultiplyByZeros(children[i]), i);
+			}
 			// check if multiply function
 			if(rootNode instanceof MultiplyFunction) {
 				// check for zeros
@@ -126,51 +157,22 @@ public class RegressionSemanticModule implements SemanticModule {
 				if(zeroPresent) {
 					rootNode = zeroNode;
 				}
-			} else {
-				// recurse on other functions
-				for(int i = 0; i<arity; i++) {
-					this.removeMultiplyByZeros(children[i]);
-				}
 			}
 		}
-	}
+		return rootNode;
+	}	
 	
-	private void resolveConstantCalculations(Node<Double> rootNode) {
+	private Node<Double> removeAllPDivsWithSameSubtrees(Node<Double> rootNode) {
 		// get the child nodes
 		int arity = rootNode.getArity();		
-		
 		// check if terminal
 		if(arity>0) {
 			// get children
 			Node[] children = rootNode.getChildren();
-			// check if all child nodes are numbers
-			boolean allChildrenAreTerminalNodes = true;
+			// recurse on children 1st
 			for(int i = 0; i<arity; i++) {
-				if(!(children[i] instanceof TerminalNode)) {
-					allChildrenAreTerminalNodes = false;
-				}
+				rootNode.setChild(this.removeAllPDivsWithSameSubtrees(children[i]), i);
 			}
-			// decide what to do - reduce or recurse
-			if(allChildrenAreTerminalNodes) {
-				// resolve root node to constant
-				Double result = rootNode.evaluate();
-				rootNode = new TerminalNode<Double>(result);
-			} else {
-				for(int i = 0; i<arity; i++) {
-					this.resolveConstantCalculations(children[i]);
-				}
-			}
-		}
-	}
-	
-	private void removeAllPDivsWithSameSubtrees(Node<Double> rootNode) {
-		// get the child nodes
-		int arity = rootNode.getArity();		
-		
-		// check if terminal
-		if(arity>0) {
-			// get children
-			Node[] children = rootNode.getChildren();			
 			// decide what to do - reduce or recurse
 			if(rootNode instanceof ProtectedDivisionFunction) {
 				// compare children and resolve root node to 1 if they are equal
@@ -183,22 +185,54 @@ public class RegressionSemanticModule implements SemanticModule {
 				if(children[1].equals(zeroNode)) {					
 					rootNode = zeroNode;
 				}
-			} else {
-				for(int i = 0; i<arity; i++) {
-					this.removeAllPDivsWithSameSubtrees(children[i]);
+				// check for 0 PDIV by anything = 0
+				if(children[0].equals(zeroNode)) {					
+					rootNode = zeroNode;
 				}
 			}
 		}
+		return rootNode;
 	}
 	
-	private void collectUpPowers(Node<Double> rootNode) {
+	private Node<Double> resolveConstantCalculations(Node<Double> rootNode) {
 		// get the child nodes
 		int arity = rootNode.getArity();		
-		
 		// check if terminal
 		if(arity>0) {
 			// get children
-			Node[] children = rootNode.getChildren();			
+			Node[] children = rootNode.getChildren();
+			// reduce all children 1st - bottom up process
+			for(int i = 0; i<arity; i++) {
+				rootNode.setChild(this.resolveConstantCalculations(children[i]), i);
+			}
+			// check if all child nodes are numbers
+			boolean allChildrenAreTerminalNodes = true;
+			for(int i = 0; i<arity; i++) {
+				if((children[i] instanceof Variable) || ((children[i] instanceof FunctionNode))) {
+					allChildrenAreTerminalNodes = false;
+				}
+			}
+			// decide what to do - reduce or recurse
+			if(allChildrenAreTerminalNodes) {
+				// resolve root node to constant
+				Double result = (Double) rootNode.evaluate();
+				rootNode = new TerminalNode<Double>(result);
+			}
+		}
+		return rootNode;
+	}
+	
+	private Node<Double> collectUpPowers(Node<Double> rootNode) {
+		// get the child nodes
+		int arity = rootNode.getArity();		
+		// check if terminal
+		if(arity>0) {
+			// get children
+			Node[] children = rootNode.getChildren();
+			// reduce all children 1st - bottom up process
+			for(int i = 0; i<arity; i++) {
+				rootNode.setChild(this.collectUpPowers(children[i]), i);
+			}
 			// decide what to do - reduce or recurse
 			if(rootNode instanceof MultiplyFunction) {
 				Variable<Double> x = new Variable<Double>("X");
@@ -220,10 +254,6 @@ public class RegressionSemanticModule implements SemanticModule {
 					Double power = (Double) children[0].getChild(1).evaluate() + (Double) children[1].getChild(1).evaluate();
 					Node<Double> powerNode = new PowerFunction(x, new TerminalNode<Double>(power));
 					rootNode = powerNode;
-				} else {
-					for(int i = 0; i<arity; i++) {
-						this.collectUpPowers(children[i]);
-					}
 				}
 			} else if(rootNode instanceof ProtectedDivisionFunction) {
 				Variable<Double> x = new Variable<Double>("X");
@@ -243,17 +273,83 @@ public class RegressionSemanticModule implements SemanticModule {
 					Double power = (Double) children[0].getChild(1).evaluate() - (Double) children[1].getChild(1).evaluate();
 					Node<Double> powerNode = new PowerFunction(x, new TerminalNode<Double>(power));
 					rootNode = powerNode;
-				} else {
-					for(int i = 0; i<arity; i++) {
-						this.collectUpPowers(children[i]);
-					}
-				}
-			} else {
-				for(int i = 0; i<arity; i++) {
-					this.collectUpPowers(children[i]);
 				}
 			}
 		}
+		return rootNode;
+	}
+	
+	private Node<Double> reduceToCVPFormat(Node<Double> rootNode) {
+		// get the child nodes
+		int arity = rootNode.getArity();		
+		// check if terminal
+		if(arity>0) {
+			// get children
+			Node[] children = rootNode.getChildren();
+			// reduce all children 1st - bottom up process
+			for(int i = 0; i<arity; i++) {
+				rootNode.setChild(this.reduceToCVPFormat(children[i]), i);
+			}
+			// scan for CVPs to build up
+			if(rootNode instanceof MultiplyFunction) {
+				if((children[0] instanceof Variable) && (children[1] instanceof TerminalNode)) {
+					rootNode = new CoefficientVariablePowerFunction(children[1], children[0], new TerminalNode<Double>(1d));
+				} else if((children[0] instanceof TerminalNode) && (children[1] instanceof Variable)) {
+					rootNode = new CoefficientVariablePowerFunction(children[0], children[1], new TerminalNode<Double>(1d));
+				} else if((children[0] instanceof PowerFunction) && (children[1] instanceof TerminalNode)) {
+					rootNode = new CoefficientVariablePowerFunction(children[1], children[0].getChild(0), children[0].getChild(1));
+				} else if((children[0] instanceof TerminalNode) && (children[1] instanceof PowerFunction)) {
+					rootNode = new CoefficientVariablePowerFunction(children[0], children[1].getChild(0), children[1].getChild(1));
+				} else if((children[0] instanceof CoefficientVariablePowerFunction) && (children[1] instanceof TerminalNode)) {
+					double coefficient = (Double) children[0].getChild(0).evaluate();
+					double terminal = (Double) children[1].evaluate();
+					double newCoefficient = coefficient * terminal;
+					rootNode = new CoefficientVariablePowerFunction(new TerminalNode<Double>(newCoefficient), children[0].getChild(1), children[0].getChild(2));
+				} else if((children[0] instanceof TerminalNode) && (children[1] instanceof CoefficientVariablePowerFunction)) {
+					double coefficient = (Double) children[1].getChild(0).evaluate();
+					double terminal = (Double) children[0].evaluate();
+					double newCoefficient = coefficient * terminal;
+					rootNode = new CoefficientVariablePowerFunction(new TerminalNode<Double>(newCoefficient), children[1].getChild(1), children[1].getChild(2));
+				}
+			} else if(rootNode instanceof ProtectedDivisionFunction) {
+				if((children[0] instanceof Variable) && (children[1] instanceof TerminalNode)) {
+					double terminal = (Double) children[1].evaluate();
+					double newCoefficient = 1 / terminal;
+					rootNode = new CoefficientVariablePowerFunction(new TerminalNode<Double>(newCoefficient), children[0], new TerminalNode<Double>(1d));
+				} else if((children[0] instanceof TerminalNode) && (children[1] instanceof Variable)) {
+					rootNode = new CoefficientVariablePowerFunction(children[0], children[1], new TerminalNode<Double>(-1d));
+				} else if((children[0] instanceof PowerFunction) && (children[1] instanceof TerminalNode)) {
+					double terminal = (Double) children[1].evaluate();
+					double newCoefficient = 1 / terminal;
+					rootNode = new CoefficientVariablePowerFunction(new TerminalNode<Double>(newCoefficient), children[0].getChild(0), children[0].getChild(1));
+				} else if((children[0] instanceof TerminalNode) && (children[1] instanceof PowerFunction)) {
+					double power = (Double) children[1].getChild(1).evaluate();
+					double newPower = power * -1;
+					rootNode = new CoefficientVariablePowerFunction(children[0], children[1].getChild(0), new TerminalNode<Double>(newPower));
+				} else if((children[0] instanceof CoefficientVariablePowerFunction) && (children[1] instanceof TerminalNode)) {
+					double coefficient = (Double) children[0].getChild(0).evaluate();
+					double terminal = (Double) children[1].evaluate();
+					double newCoefficient = coefficient / terminal;
+					rootNode = new CoefficientVariablePowerFunction(new TerminalNode<Double>(newCoefficient), children[0].getChild(1), children[0].getChild(2));
+				} else if((children[0] instanceof TerminalNode) && (children[1] instanceof CoefficientVariablePowerFunction)) {
+					double coefficient = (Double) children[1].getChild(0).evaluate();
+					double terminal = (Double) children[0].evaluate();
+					double newCoefficient = terminal / coefficient;
+					double power = (Double) children[1].getChild(2).evaluate();
+					double newPower = power * -1;
+					rootNode = new CoefficientVariablePowerFunction(new TerminalNode<Double>(newCoefficient), children[1].getChild(1), new TerminalNode<Double>(newPower));
+				}
+			}
+		}
+		return rootNode;
 	}
 
 }
+
+
+
+
+
+
+
+

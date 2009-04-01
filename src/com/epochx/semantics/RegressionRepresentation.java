@@ -24,13 +24,13 @@ package com.epochx.semantics;
  */
 public class RegressionRepresentation implements Representation {
 	
-	private double[] regressionRepresentation;
+	private double[][] regressionRepresentation;
 	
 	/**
 	 * Constructor for regression representation object
 	 * @param regressionRepresentation list of the coefficients
 	 */
-	public RegressionRepresentation(double[] regressionRepresentation) {
+	public RegressionRepresentation(double[][] regressionRepresentation) {
 		this.regressionRepresentation = regressionRepresentation;
 	}
 	
@@ -38,7 +38,7 @@ public class RegressionRepresentation implements Representation {
 	 * Returns the regression representation (the formula coefficients)
 	 * @return A list of the formula coefficients
 	 */
-	public double[] getRegressionRepresentation() {
+	public double[][] getRegressionRepresentation() {
 		return regressionRepresentation;
 	}
 

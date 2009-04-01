@@ -20,6 +20,8 @@
 package com.epochx.semantics;
 
 import com.epochx.core.representation.*;
+import com.epochx.func.dbl.*;
+
 import java.util.ArrayList;
 
 /**

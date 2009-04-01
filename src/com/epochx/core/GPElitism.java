@@ -52,8 +52,9 @@ public class GPElitism {
 		
 		// Sort the population and scoop off the best noElites.
 		if (noElites > 0) {
+			//Collections.sort(pop, Collections.reverseOrder());
 			Collections.sort(pop);
-			elites.addAll(pop.subList(pop.size()-noElites,pop.size()-1));
+			elites.addAll(pop.subList(pop.size()-noElites,pop.size()));
 		}
 		
 		return elites;

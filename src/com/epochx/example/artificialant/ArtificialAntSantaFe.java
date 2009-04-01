@@ -24,6 +24,8 @@ import java.awt.Point;
 import java.io.*;
 import java.util.*;
 
+import com.epochx.action.*;
+import com.epochx.ant.*;
 import com.epochx.core.*;
 import com.epochx.core.crossover.*;
 import com.epochx.core.representation.*;
@@ -31,11 +33,11 @@ import com.epochx.core.selection.*;
 import com.epochx.stats.*;
 import com.epochx.stats.GenerationStats.*;
 import com.epochx.util.*;
-import com.epochx.util.ant.Ant;
-import com.epochx.util.ant.AntLandscape;
 import com.epochx.semantics.*;
 import com.epochx.core.initialisation.*;
 import com.epochx.core.scorer.*;
+import com.epochx.func.*;
+import com.epochx.func.action.*;
 
 /**
  * 

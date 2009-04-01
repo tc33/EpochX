@@ -21,16 +21,18 @@ package com.epochx.example.multiplexer;
 
 import java.io.*;
 import java.util.*;
+
 import com.epochx.core.*;
 import com.epochx.core.crossover.*;
+import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
-import com.epochx.stats.*;
-import com.epochx.stats.GenerationStats.*;
-import com.epochx.util.*;
+import com.epochx.func.*;
+import com.epochx.func.bool.*;
 import com.epochx.semantics.*;
-import com.epochx.core.initialisation.*;
-import com.epochx.core.scorer.*;
+import com.epochx.stats.GenerationStats.*;
+import com.epochx.stats.RunStats.*;
+import com.epochx.util.*;
 
 /**
  * 
@@ -60,7 +62,7 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
 		variables.put("A0", new Variable<Boolean>("A0"));
 		
 		setPopulationSize(500);
-		setNoGenerations(50);
+		setNoGenerations(100);
 		setCrossoverProbability(0.9);
 		setReproductionProbability(0.1);
 		setNoRuns(100);
@@ -164,16 +166,11 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
 	
 	@Override
 	public void generationStats(int generation, Object[] stats) {
-		ArrayList<String> output = new ArrayList<String>();
-		System.out.println(run + "\t" + generation + "\t");
-		String part = run + "\t" + generation + "\t";
 		for (Object s: stats) {
-			part = part + s;
-			part = part + "\t";
+			System.out.print(s);
+			System.out.print(" ");
 		}
-		part = part + "\n";
-		output.add(part);
-		FileManip.doOutput(null, output, "output.txt", true);
+		System.out.println();
 	}
 
 	@Override

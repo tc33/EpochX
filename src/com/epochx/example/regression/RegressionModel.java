@@ -26,6 +26,10 @@ import com.epochx.core.crossover.*;
 import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
+import com.epochx.func.*;
+import com.epochx.func.dbl.*;
+import com.epochx.stats.GenerationStats.*;
+import com.epochx.stats.RunStats.*;
 
 /**
  * 
@@ -43,7 +47,7 @@ public class RegressionModel extends GPAbstractModel<Double> {
 		this.x = new Variable<Double>("X");
 		
 		// Setup run.
-		setPopulationSize(600);
+		setPopulationSize(1000);
 		setCrossoverProbability(0.9);
 		setMutationProbability(0.0);
 		setReproductionProbability(0.1);
@@ -53,9 +57,10 @@ public class RegressionModel extends GPAbstractModel<Double> {
 		setPouleSelector(new RandomSelector<Double>());
 		setCrossover(new UniformPointCrossover<Double>());
 		setPouleSize(50);
-		setNoGenerations(100);
+		setNoGenerations(1000);
+		setNoElites(3);
 		setMaxDepth(10);
-		setNoRuns(10);
+		setNoRuns(3);
 	}
 
 	@Override
@@ -66,6 +71,7 @@ public class RegressionModel extends GPAbstractModel<Double> {
 		functions.add(new SubtractFunction(null, null));
 		functions.add(new MultiplyFunction(null, null));
 		functions.add(new ProtectedDivisionFunction(null, null));
+		functions.add(new ExponentFunction(null, null));
 		
 		return functions;
 	}
@@ -77,17 +83,17 @@ public class RegressionModel extends GPAbstractModel<Double> {
 	public List<TerminalNode<?>> getTerminals() {
 		// Define terminal set.
 		List<TerminalNode<?>> terminals = new ArrayList<TerminalNode<?>>();
-		terminals.add(new TerminalNode<Double>(5d));
-		terminals.add(new TerminalNode<Double>(4d));
-		terminals.add(new TerminalNode<Double>(3d));
-		terminals.add(new TerminalNode<Double>(2d));
+//		terminals.add(new TerminalNode<Double>(5d));
+//		terminals.add(new TerminalNode<Double>(4d));
+//		terminals.add(new TerminalNode<Double>(3d));
+//		terminals.add(new TerminalNode<Double>(2d));
 		terminals.add(new TerminalNode<Double>(1d));
-		terminals.add(new TerminalNode<Double>(0d));
-		terminals.add(new TerminalNode<Double>(-5d));
-		terminals.add(new TerminalNode<Double>(-4d));
-		terminals.add(new TerminalNode<Double>(-3d));
-		terminals.add(new TerminalNode<Double>(-2d));
-		terminals.add(new TerminalNode<Double>(-1d));
+//		terminals.add(new TerminalNode<Double>(0d));
+//		terminals.add(new TerminalNode<Double>(-5d));
+//		terminals.add(new TerminalNode<Double>(-4d));
+//		terminals.add(new TerminalNode<Double>(-3d));
+//		terminals.add(new TerminalNode<Double>(-2d));
+//		terminals.add(new TerminalNode<Double>(-1d));
 		
 		// Define variables;
 		terminals.add(x);
@@ -97,7 +103,7 @@ public class RegressionModel extends GPAbstractModel<Double> {
 	
 	@Override
 	public double getFitness(CandidateProgram<Double> program) {
-		double[] inputs = new double[]{0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9};
+		double[] inputs = new double[]{-1.0, -0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9};
 		int noWrong = 0;
 		
 		for (double in: inputs) {
@@ -112,7 +118,35 @@ public class RegressionModel extends GPAbstractModel<Double> {
 	}
 	
 	private double getCorrectResult(double x) {
-		return Math.pow(x, 2) / 2;
+		return x + (x*x) + (x*x*x) + (x*x*x*x);
+		//return Math.pow(x, 2) / 2;
+	}
+	
+	public void runStats(int runNo, Object[] stats) {
+		System.out.print("Run number " + runNo + " complete.");
+		for (Object s: stats) {
+			System.out.print(s);
+			System.out.print(" ");
+		}
+		System.out.println();
+	}
+
+	public RunStatField[] getRunStatFields() {
+		return new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM};
+	}
+	
+	public void generationStats(int genNo, Object[] stats) {
+		System.out.print(genNo + " ");
+		for (Object s: stats) {
+			System.out.print(s);
+			System.out.print(" ");
+		}
+		System.out.println();
+	}
+	
+	@Override
+	public GenStatField[] getGenStatFields() {
+		return new GenStatField[]{GenStatField.FITNESS_MIN, GenStatField.FITNESS_AVE};
 	}
 	
 	public static void main(String[] args) {

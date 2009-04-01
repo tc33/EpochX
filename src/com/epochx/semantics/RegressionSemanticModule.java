@@ -24,6 +24,8 @@ import java.util.List;
 import com.epochx.core.GPModel;
 import com.epochx.core.GPProgramAnalyser;
 import com.epochx.core.representation.*;
+import com.epochx.func.*;
+import com.epochx.func.dbl.*;
 
 /**
  * @author Lawrence Beadle & Tom Castle
@@ -237,41 +239,41 @@ public class RegressionSemanticModule implements SemanticModule {
 			if(rootNode instanceof MultiplyFunction) {
 				Variable<Double> x = new Variable<Double>("X");
 				if((children[0] instanceof Variable) && (children[1] instanceof Variable)) {
-					Node<Double> powerNode = new PowerFunction(x, new TerminalNode<Double>(2d));
+					Node<Double> powerNode = new ExponentFunction(x, new TerminalNode<Double>(2d));
 					rootNode = powerNode;
-				} else if((children[0] instanceof PowerFunction) && (children[1] instanceof Variable)) {
+				} else if((children[0] instanceof ExponentFunction) && (children[1] instanceof Variable)) {
 					// work out new power
 					Double power = (Double) children[0].getChild(1).evaluate() + 1;
-					Node<Double> powerNode = new PowerFunction(x, new TerminalNode<Double>(power));
+					Node<Double> powerNode = new ExponentFunction(x, new TerminalNode<Double>(power));
 					rootNode = powerNode;
-				} else if((children[1] instanceof PowerFunction) && (children[0] instanceof Variable)) {
+				} else if((children[1] instanceof ExponentFunction) && (children[0] instanceof Variable)) {
 					// work out new power
 					Double power = (Double) children[1].getChild(1).evaluate() + 1;
-					Node<Double> powerNode = new PowerFunction(x, new TerminalNode<Double>(power));
+					Node<Double> powerNode = new ExponentFunction(x, new TerminalNode<Double>(power));
 					rootNode = powerNode;
-				} else if((children[0] instanceof PowerFunction) && (children[1] instanceof PowerFunction)) {
+				} else if((children[0] instanceof ExponentFunction) && (children[1] instanceof ExponentFunction)) {
 					// work out new power
 					Double power = (Double) children[0].getChild(1).evaluate() + (Double) children[1].getChild(1).evaluate();
-					Node<Double> powerNode = new PowerFunction(x, new TerminalNode<Double>(power));
+					Node<Double> powerNode = new ExponentFunction(x, new TerminalNode<Double>(power));
 					rootNode = powerNode;
 				}
 			} else if(rootNode instanceof ProtectedDivisionFunction) {
 				Variable<Double> x = new Variable<Double>("X");
-				if((children[0] instanceof PowerFunction) && (children[1] instanceof Variable)) {
+				if((children[0] instanceof ExponentFunction) && (children[1] instanceof Variable)) {
 					// work out new power
 					Double power = (Double) children[0].getChild(1).evaluate() - 1;
-					Node<Double> powerNode = new PowerFunction(x, new TerminalNode<Double>(power));
+					Node<Double> powerNode = new ExponentFunction(x, new TerminalNode<Double>(power));
 					rootNode = powerNode;
-				} else if((children[1] instanceof PowerFunction) && (children[0] instanceof Variable)) {
+				} else if((children[1] instanceof ExponentFunction) && (children[0] instanceof Variable)) {
 					// work out new power
 					// need to negate this to make it accurate
 					Double power = ((Double) children[1].getChild(1).evaluate() - 1) * -1;
-					Node<Double> powerNode = new PowerFunction(x, new TerminalNode<Double>(power));
+					Node<Double> powerNode = new ExponentFunction(x, new TerminalNode<Double>(power));
 					rootNode = powerNode;
-				} else if((children[0] instanceof PowerFunction) && (children[1] instanceof PowerFunction)) {
+				} else if((children[0] instanceof ExponentFunction) && (children[1] instanceof ExponentFunction)) {
 					// work out new power
 					Double power = (Double) children[0].getChild(1).evaluate() - (Double) children[1].getChild(1).evaluate();
-					Node<Double> powerNode = new PowerFunction(x, new TerminalNode<Double>(power));
+					Node<Double> powerNode = new ExponentFunction(x, new TerminalNode<Double>(power));
 					rootNode = powerNode;
 				}
 			}

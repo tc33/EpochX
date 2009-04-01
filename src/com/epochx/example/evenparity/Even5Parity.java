@@ -26,6 +26,8 @@ import com.epochx.core.*;
 import com.epochx.core.crossover.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
+import com.epochx.func.*;
+import com.epochx.func.bool.*;
 import com.epochx.stats.CrossoverStats.*;
 import com.epochx.stats.GenerationStats.*;
 import com.epochx.stats.RunStats.*;
@@ -141,8 +143,16 @@ public class Even5Parity extends GPAbstractModel<Boolean> {
 		System.out.print(gen);
 		System.out.print(" ");
 		for (Object s: stats) {
-			System.out.print(s);
-			System.out.print(" ");
+			if (s instanceof double[]) {
+				double[] ds = (double[]) s;
+				for (double d: ds) {
+					System.out.print(d);
+					System.out.print(" ");
+				}
+			} else {
+				System.out.print(s);
+				System.out.print(" ");
+			}
 		}
 		System.out.println();
 	}
@@ -154,7 +164,8 @@ public class Even5Parity extends GPAbstractModel<Boolean> {
 	public GenStatField[] getGenStatFields() {
 		return new GenStatField[]{
 				GenStatField.RUN_TIME,
-				GenStatField.LENGTH_AVE
+				GenStatField.LENGTH_AVE,
+				GenStatField.AVE_NODES_PER_DEPTH
 		};
 	}
 	

@@ -27,6 +27,8 @@ import com.epochx.core.crossover.*;
 import com.epochx.core.initialisation.RampedHalfAndHalfInitialiser;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
+import com.epochx.func.*;
+import com.epochx.func.bool.*;
 import com.epochx.util.FileManip;
 import com.epochx.semantics.*;
 import com.epochx.stats.GenerationStats.GenStatField;

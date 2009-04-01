@@ -25,6 +25,8 @@ import java.util.*;
 
 import com.epochx.core.*;
 import com.epochx.core.representation.*;
+import com.epochx.func.*;
+import com.epochx.func.bool.*;
 
 /**
  * The Boolean Semantic Module provides semantic functionality for problems in the Boolean domain

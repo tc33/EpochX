@@ -27,11 +27,9 @@ import com.epochx.core.crossover.*;
 import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
-import com.epochx.func.*;
 import com.epochx.func.bool.*;
 import com.epochx.semantics.*;
 import com.epochx.stats.GenerationStats.*;
-import com.epochx.stats.RunStats.*;
 import com.epochx.util.*;
 
 /**
@@ -82,10 +80,10 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
 	public List<FunctionNode<?>> getFunctions() {
 		// Define functions.
 		List<FunctionNode<?>> functions = new ArrayList<FunctionNode<?>>();
-		functions.add(new IfFunction(null, null, null));
-		functions.add(new AndFunction(null, null));
-		functions.add(new OrFunction(null, null));
-		functions.add(new NotFunction(null));
+		functions.add(new IfFunction());
+		functions.add(new AndFunction());
+		functions.add(new OrFunction());
+		functions.add(new NotFunction());
 		return functions;
 	}
 

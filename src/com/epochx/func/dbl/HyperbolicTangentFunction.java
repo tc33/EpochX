@@ -26,6 +26,10 @@ import com.epochx.core.representation.*;
  */
 public class HyperbolicTangentFunction extends FunctionNode<Double> {
 
+	public HyperbolicTangentFunction() {
+		this(null);
+	}
+	
 	public HyperbolicTangentFunction(Node<Double> child) {
 		super(child);
 	}

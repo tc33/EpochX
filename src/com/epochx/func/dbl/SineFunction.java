@@ -26,6 +26,10 @@ import com.epochx.core.representation.*;
  */
 public class SineFunction extends FunctionNode<Double> {
 
+	public SineFunction() {
+		this(null);
+	}
+	
 	public SineFunction(Node<Double> child) {
 		super(child);
 	}

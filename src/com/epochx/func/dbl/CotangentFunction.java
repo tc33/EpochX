@@ -26,6 +26,10 @@ import com.epochx.core.representation.*;
  */
 public class CotangentFunction extends FunctionNode<Double> {
 
+	public CotangentFunction() {
+		this(null);
+	}
+	
 	public CotangentFunction(Node<Double> child) {
 		super(child);
 	}

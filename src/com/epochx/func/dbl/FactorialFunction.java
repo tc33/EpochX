@@ -26,6 +26,10 @@ import com.epochx.core.representation.*;
  */
 public class FactorialFunction extends FunctionNode<Double> {
 
+	public FactorialFunction() {
+		this(null);
+	}
+	
 	public FactorialFunction(Node<Double> child) {
 		super(child);
 	}

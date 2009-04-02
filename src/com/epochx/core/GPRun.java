@@ -50,6 +50,9 @@ public class GPRun<TYPE> {
 	
 	private GenerationStats<TYPE> genStats;
 	
+	private GPCrossover<TYPE> crossover;
+	private GPMutation<TYPE> mutation;
+	
 	/*
 	 * Private constructor. The static factory method run(GPModel) should be 
 	 * used to create objects of GPRun and simultaneously execute them.
@@ -61,6 +64,10 @@ public class GPRun<TYPE> {
 		runEndTime = -1;
 		bestProgram = null;
 		bestFitness = Double.POSITIVE_INFINITY;
+		
+		// Setup crossover and mutation.
+		crossover = new GPCrossover<TYPE>(model);
+		mutation = new GPMutation<TYPE>(model);
 		
 		genStats = new GenerationStats<TYPE>();
 		
@@ -95,12 +102,6 @@ public class GPRun<TYPE> {
 	 * or poule selection in use.
 	 */
 	private void run() {
-		// Set things up.
-		logger.info("Setting up GPCrossover");
-		GPCrossover<TYPE> crossover = new GPCrossover<TYPE>(model);
-		
-		GPMutation<TYPE> mutation = new GPMutation<TYPE>(model);
-		
 		// Initialisation
 		logger.info("Performing initialisation");
 		List<CandidateProgram<TYPE>> pop = model.getInitialiser().getInitialPopulation();

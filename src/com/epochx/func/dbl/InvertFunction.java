@@ -26,6 +26,10 @@ import com.epochx.core.representation.*;
  */
 public class InvertFunction extends FunctionNode<Double> {
 
+	public InvertFunction() {
+		this(null);
+	}
+	
 	public InvertFunction(Node<Double> child) {
 		super(child);
 	}

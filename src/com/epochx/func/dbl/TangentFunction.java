@@ -26,6 +26,10 @@ import com.epochx.core.representation.*;
  */
 public class TangentFunction extends FunctionNode<Double> {
 
+	public TangentFunction() {
+		this(null);
+	}
+	
 	public TangentFunction(Node<Double> child) {
 		super(child);
 	}

@@ -26,6 +26,10 @@ import com.epochx.core.representation.*;
  */
 public class NotFunction extends FunctionNode<Boolean> {
 	
+	public NotFunction() {
+		this(null);
+	}
+	
 	public NotFunction(Node<Boolean> child) {
 		super(child);
 	}

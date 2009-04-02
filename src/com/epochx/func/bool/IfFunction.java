@@ -23,6 +23,10 @@ import com.epochx.core.representation.*;
 
 public class IfFunction extends FunctionNode<Boolean> {
 	
+	public IfFunction() {
+		this(null, null, null);
+	}
+	
 	public IfFunction(Node<Boolean> child1, Node<Boolean> child2, Node<Boolean> child3) {
 		super(child1, child2, child3);
 	}

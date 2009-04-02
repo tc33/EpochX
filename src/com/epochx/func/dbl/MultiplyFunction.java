@@ -26,6 +26,10 @@ import com.epochx.core.representation.*;
  */
 public class MultiplyFunction extends FunctionNode<Double> {
 	
+	public MultiplyFunction() {
+		this(null, null);
+	}
+	
 	public MultiplyFunction(Node<Double> child1, Node<Double> child2) {
 		super(child1, child2);
 	}

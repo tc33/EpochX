@@ -26,6 +26,10 @@ import com.epochx.core.representation.*;
  */
 public class CosineFunction extends FunctionNode<Double> {
 
+	public CosineFunction() {
+		this(null);
+	}
+	
 	public CosineFunction(Node<Double> child) {
 		super(child);
 	}

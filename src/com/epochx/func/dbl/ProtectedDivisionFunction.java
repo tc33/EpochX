@@ -23,6 +23,10 @@ import com.epochx.core.representation.*;
 
 public class ProtectedDivisionFunction extends FunctionNode<Double> {
 	
+	public ProtectedDivisionFunction() {
+		this(null, null);
+	}
+	
 	public ProtectedDivisionFunction(Node<Double> child1, Node<Double> child2) {
 		super(child1, child2);
 	}

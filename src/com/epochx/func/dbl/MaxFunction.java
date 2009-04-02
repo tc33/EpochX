@@ -26,6 +26,10 @@ import com.epochx.core.representation.*;
  */
 public class MaxFunction extends FunctionNode<Double> {
 	
+	public MaxFunction() {
+		this(null, null);
+	}
+	
 	public MaxFunction(Node<Double> child1, Node<Double> child2) {
 		super(child1, child2);
 	}

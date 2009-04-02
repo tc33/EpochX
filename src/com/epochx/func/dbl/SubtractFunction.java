@@ -23,6 +23,10 @@ import com.epochx.core.representation.*;
 
 public class SubtractFunction extends FunctionNode<Double> {
 	
+	public SubtractFunction() {
+		this(null, null);
+	}
+	
 	public SubtractFunction(Node<Double> child1, Node<Double> child2) {
 		super(child1, child2);
 	}

@@ -26,6 +26,10 @@ import com.epochx.core.representation.*;
  */
 public class ArcSineFunction extends FunctionNode<Double> {
 	
+	public ArcSineFunction() {
+		this(null);
+	}
+	
 	public ArcSineFunction(Node<Double> child) {
 		super(child);
 	}

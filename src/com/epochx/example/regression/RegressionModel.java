@@ -26,7 +26,6 @@ import com.epochx.core.crossover.*;
 import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
-import com.epochx.func.*;
 import com.epochx.func.dbl.*;
 import com.epochx.stats.GenerationStats.*;
 import com.epochx.stats.RunStats.*;
@@ -48,17 +47,17 @@ public class RegressionModel extends GPAbstractModel<Double> {
 		
 		// Setup run.
 		setPopulationSize(1000);
-		setCrossoverProbability(0.9);
-		setMutationProbability(0.0);
-		setReproductionProbability(0.1);
-		setInitialiser(new GrowInitialiser<Double>(this, null));
+		setCrossoverProbability(0.85);
+		setMutationProbability(0.1);
+		setReproductionProbability(0.05);
+		setInitialiser(new GrowInitialiser<Double>(this));
 		//setPouleSelector(new TournamentSelector<Double>(4, this));
 		setParentSelector(new LinearRankSelector<Double>(0.5));
 		setPouleSelector(new RandomSelector<Double>());
 		setCrossover(new UniformPointCrossover<Double>());
-		setPouleSize(50);
+		setPouleSize(10);
 		setNoGenerations(1000);
-		setNoElites(3);
+		setNoElites(10);
 		setMaxDepth(10);
 		setNoRuns(3);
 	}
@@ -67,11 +66,15 @@ public class RegressionModel extends GPAbstractModel<Double> {
 	public List<FunctionNode<?>> getFunctions() {
 		// Define function set.
 		List<FunctionNode<?>> functions = new ArrayList<FunctionNode<?>>();
-		functions.add(new AddFunction(null, null));
-		functions.add(new SubtractFunction(null, null));
-		functions.add(new MultiplyFunction(null, null));
-		functions.add(new ProtectedDivisionFunction(null, null));
-		functions.add(new ExponentFunction(null, null));
+		functions.add(new AddFunction());
+		functions.add(new SubtractFunction());
+		functions.add(new MultiplyFunction());
+		functions.add(new ProtectedDivisionFunction());
+		functions.add(new ExponentFunction());
+		functions.add(new InvertFunction());
+		functions.add(new LogFunction());
+		functions.add(new SineFunction());
+		functions.add(new CosineFunction());
 		
 		return functions;
 	}
@@ -146,7 +149,7 @@ public class RegressionModel extends GPAbstractModel<Double> {
 	
 	@Override
 	public GenStatField[] getGenStatFields() {
-		return new GenStatField[]{GenStatField.FITNESS_MIN, GenStatField.FITNESS_AVE};
+		return new GenStatField[]{GenStatField.FITNESS_MIN, GenStatField.FITNESS_AVE, GenStatField.DEPTH_AVE, GenStatField.LENGTH_AVE, GenStatField.RUN_TIME};
 	}
 	
 	public static void main(String[] args) {

@@ -26,6 +26,10 @@ import com.epochx.core.representation.*;
  */
 public class ModuloFunction extends FunctionNode<Double> {
 
+	public ModuloFunction() {
+		this(null, null);
+	}
+	
 	public ModuloFunction(Node<Double> child1, Node<Double> child2) {
 		super(child1, child2);
 	}

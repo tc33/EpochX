@@ -33,6 +33,10 @@ public class IfFoodAheadFunction extends FunctionNode<Action> {
 	private Ant ant;
 	private AntLandscape landscape;
 	
+	public IfFoodAheadFunction(Ant ant, AntLandscape landscape) {
+		this(ant, landscape, null, null);
+	}
+	
 	public IfFoodAheadFunction(Ant ant, AntLandscape landscape, Node<Action> child1, Node<Action> child2) {
 		super(child1, child2);
 		

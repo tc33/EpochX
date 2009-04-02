@@ -26,6 +26,10 @@ import com.epochx.core.representation.*;
  */
 public class SecantFunction extends FunctionNode<Double> {
 
+	public SecantFunction() {
+		this(null);
+	}
+	
 	public SecantFunction(Node<Double> child) {
 		super(child);
 	}

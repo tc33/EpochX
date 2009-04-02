@@ -26,6 +26,10 @@ import com.epochx.core.representation.*;
  */
 public class SignumFunction extends FunctionNode<Double> {
 
+	public SignumFunction() {
+		this(null);
+	}
+	
 	public SignumFunction(Node<Double> child) {
 		super(child);
 	}

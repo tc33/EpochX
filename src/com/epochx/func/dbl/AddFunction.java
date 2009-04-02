@@ -26,6 +26,10 @@ import com.epochx.core.representation.*;
  */
 public class AddFunction extends FunctionNode<Double> {
 	
+	public AddFunction() {
+		this(null, null);
+	}
+	
 	public AddFunction(Node<Double> child1, Node<Double> child2) {
 		super(child1, child2);
 	}

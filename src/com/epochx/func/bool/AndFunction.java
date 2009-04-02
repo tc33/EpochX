@@ -26,6 +26,10 @@ import com.epochx.core.representation.*;
  */
 public class AndFunction extends FunctionNode<Boolean> {
 	
+	public AndFunction() {
+		this(null, null);
+	}
+	
 	public AndFunction(Node<Boolean> child1, Node<Boolean> child2) {
 		super(child1, child2);
 	}

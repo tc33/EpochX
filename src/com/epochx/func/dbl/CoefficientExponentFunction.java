@@ -26,6 +26,10 @@ import com.epochx.core.representation.*;
  */
 public class CoefficientExponentFunction extends FunctionNode<Double> {
 
+	public CoefficientExponentFunction() {
+		this(null, null, null);
+	}
+	
 	/**
 	 * Constructor for coefficient, variable, power set up
 	 * @param coefficient the relevant coefficient

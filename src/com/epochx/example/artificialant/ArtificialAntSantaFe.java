@@ -19,25 +19,20 @@
  */
 package com.epochx.example.artificialant;
 
-import java.awt.Dimension;
-import java.awt.Point;
+import java.awt.*;
 import java.io.*;
 import java.util.*;
+import java.util.List;
 
 import com.epochx.action.*;
 import com.epochx.ant.*;
 import com.epochx.core.*;
 import com.epochx.core.crossover.*;
+import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
-import com.epochx.stats.*;
-import com.epochx.stats.GenerationStats.*;
-import com.epochx.util.*;
-import com.epochx.semantics.*;
-import com.epochx.core.initialisation.*;
-import com.epochx.core.scorer.*;
-import com.epochx.func.*;
 import com.epochx.func.action.*;
+import com.epochx.util.*;
 
 /**
  * 
@@ -105,9 +100,9 @@ public class ArtificialAntSantaFe extends GPAbstractModel<AntAction> {
 	public List<FunctionNode<?>> getFunctions() {
 		// Define functions.
 		List<FunctionNode<?>> functions = new ArrayList<FunctionNode<?>>();
-		functions.add(new IfFoodAheadFunction(ant, antLandscape, null, null));
-		functions.add(new Seq2Function(null, null));
-		functions.add(new Seq3Function(null, null, null));
+		functions.add(new IfFoodAheadFunction(ant, antLandscape));
+		functions.add(new Seq2Function());
+		functions.add(new Seq3Function());
 		return functions;
 	}
 
@@ -135,7 +130,7 @@ public class ArtificialAntSantaFe extends GPAbstractModel<AntAction> {
 		GPController.run(new ArtificialAntSantaFe());
 	}
 	
-	private void runAnt(CandidateProgram program) {
+	private void runAnt(CandidateProgram<AntAction> program) {
 		// refresh food list before evaluation
 		// hard copy foodLocations
 		ArrayList<Point> fl = new ArrayList<Point>();

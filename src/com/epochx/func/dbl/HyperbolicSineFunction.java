@@ -26,6 +26,10 @@ import com.epochx.core.representation.*;
  */
 public class HyperbolicSineFunction extends FunctionNode<Double> {
 
+	public HyperbolicSineFunction() {
+		this(null);
+	}
+	
 	public HyperbolicSineFunction(Node<Double> child) {
 		super(child);
 	}

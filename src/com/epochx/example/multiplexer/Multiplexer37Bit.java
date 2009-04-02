@@ -19,16 +19,13 @@
  */
 package com.epochx.example.multiplexer;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 import com.epochx.core.*;
 import com.epochx.core.crossover.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
-import com.epochx.func.*;
 import com.epochx.func.bool.*;
 import com.epochx.util.*;
 
@@ -105,10 +102,10 @@ public class Multiplexer37Bit extends GPAbstractModel<Boolean> {
 	public List<FunctionNode<?>> getFunctions() {
 		// Define functions.
 		List<FunctionNode<?>> functions = new ArrayList<FunctionNode<?>>();
-		functions.add(new IfFunction(null, null, null));
-		functions.add(new AndFunction(null, null));
-		functions.add(new OrFunction(null, null));
-		functions.add(new NotFunction(null));
+		functions.add(new IfFunction());
+		functions.add(new AndFunction());
+		functions.add(new OrFunction());
+		functions.add(new NotFunction());
 		return functions;
 	}
 

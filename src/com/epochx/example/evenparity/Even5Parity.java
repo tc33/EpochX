@@ -26,9 +26,7 @@ import com.epochx.core.*;
 import com.epochx.core.crossover.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
-import com.epochx.func.*;
 import com.epochx.func.bool.*;
-import com.epochx.stats.CrossoverStats.*;
 import com.epochx.stats.GenerationStats.*;
 import com.epochx.stats.RunStats.*;
 import com.epochx.util.*;
@@ -50,8 +48,9 @@ public class Even5Parity extends GPAbstractModel<Boolean> {
 	
 	public void configure() {
 		setPopulationSize(500);
-		setNoGenerations(50);
-		setCrossoverProbability(0.9);
+		setNoGenerations(100);
+		setMutationProbability(0.1);
+		setCrossoverProbability(0.85);
 		setReproductionProbability(0.1);
 		setNoRuns(5);
 		setPouleSize(50);
@@ -73,10 +72,10 @@ public class Even5Parity extends GPAbstractModel<Boolean> {
 	public List<FunctionNode<?>> getFunctions() {
 		// Define functions.
 		List<FunctionNode<?>> functions = new ArrayList<FunctionNode<?>>();
-		functions.add(new IfFunction(null, null, null));
-		functions.add(new AndFunction(null, null));
-		functions.add(new OrFunction(null, null));
-		functions.add(new NotFunction(null));
+		functions.add(new IfFunction());
+		functions.add(new AndFunction());
+		functions.add(new OrFunction());
+		functions.add(new NotFunction());
 		return functions;
 	}
 
@@ -165,7 +164,7 @@ public class Even5Parity extends GPAbstractModel<Boolean> {
 		return new GenStatField[]{
 				GenStatField.RUN_TIME,
 				GenStatField.LENGTH_AVE,
-				GenStatField.AVE_NODES_PER_DEPTH
+				GenStatField.FITNESS_MIN
 		};
 	}
 	

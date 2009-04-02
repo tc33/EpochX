@@ -26,6 +26,10 @@ import com.epochx.core.representation.*;
  */
 public class LogFunction extends FunctionNode<Double> {
 	
+	public LogFunction() {
+		this(null);
+	}
+	
 	public LogFunction(Node<Double> child) {
 		super(child);
 	}

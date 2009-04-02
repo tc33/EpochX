@@ -27,6 +27,10 @@ import com.epochx.core.representation.*;
  */
 public class ExponentFunction extends FunctionNode<Double> {
 
+	public ExponentFunction() {
+		this(null, null);
+	}
+	
 	public ExponentFunction(Node<Double> child1, Node<Double> child2) {
 		super(child1, child2);
 	}

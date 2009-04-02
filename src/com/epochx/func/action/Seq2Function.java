@@ -27,6 +27,10 @@ import com.epochx.core.representation.*;
  */
 public class Seq2Function extends FunctionNode<Action> {
 
+	public Seq2Function() {
+		this(null, null);
+	}
+	
 	public Seq2Function(Node<Action> action1, Node<Action> action2) {
 		super(action1, action2);
 	}

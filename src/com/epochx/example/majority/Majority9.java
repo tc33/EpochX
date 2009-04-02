@@ -21,14 +21,12 @@ package com.epochx.example.majority;
 
 import java.io.*;
 import java.util.*;
+
 import com.epochx.core.*;
 import com.epochx.core.crossover.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
-import com.epochx.func.*;
 import com.epochx.func.bool.*;
-import com.epochx.util.FileManip;
-import com.epochx.semantics.*;
 import com.epochx.util.*;
 
 /**

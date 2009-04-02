@@ -26,6 +26,10 @@ import com.epochx.core.representation.*;
  */
 public class MinFunction extends FunctionNode<Double> {
 
+	public MinFunction() {
+		this(null, null);
+	}
+	
 	public MinFunction(Node<Double> child1, Node<Double> child2) {
 		super(child1, child2);
 	}

@@ -26,6 +26,10 @@ import com.epochx.core.representation.*;
  */
 public class ArcCosineFunction extends FunctionNode<Double> {
 	
+	public ArcCosineFunction() {
+		this(null);
+	}
+	
 	public ArcCosineFunction(Node<Double> child) {
 		super(child);
 	}

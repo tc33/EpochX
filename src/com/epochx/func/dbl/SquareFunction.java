@@ -26,6 +26,10 @@ import com.epochx.core.representation.*;
  */
 public class SquareFunction extends FunctionNode<Double> {
 
+	public SquareFunction() {
+		this(null);
+	}
+	
 	public SquareFunction(Node<Double> child) {
 		super(child);
 	}

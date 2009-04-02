@@ -26,6 +26,10 @@ import com.epochx.core.representation.*;
  */
 public class CosecantFunction extends FunctionNode<Double> {
 
+	public CosecantFunction() {
+		this(null);
+	}
+	
 	public CosecantFunction(Node<Double> child) {
 		super(child);
 	}

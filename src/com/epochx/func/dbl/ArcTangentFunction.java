@@ -26,6 +26,10 @@ import com.epochx.core.representation.*;
  */
 public class ArcTangentFunction extends FunctionNode<Double> {
 
+	public ArcTangentFunction() {
+		this(null);
+	}
+	
 	public ArcTangentFunction(Node<Double> child) {
 		super(child);
 	}

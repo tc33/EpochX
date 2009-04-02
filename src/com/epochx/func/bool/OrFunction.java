@@ -23,6 +23,10 @@ import com.epochx.core.representation.*;
 
 public class OrFunction extends FunctionNode<Boolean> {
 
+	public OrFunction() {
+		this(null, null);
+	}
+	
 	public OrFunction(Node<Boolean> child1, Node<Boolean> child2) {
 		super(child1, child2);
 	}

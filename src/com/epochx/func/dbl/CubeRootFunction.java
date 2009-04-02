@@ -26,6 +26,10 @@ import com.epochx.core.representation.*;
  */
 public class CubeRootFunction extends FunctionNode<Double> {
 
+	public CubeRootFunction() {
+		this(null);
+	}
+	
 	public CubeRootFunction(Node<Double> child) {
 		super(child);
 	}

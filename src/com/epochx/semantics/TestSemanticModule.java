@@ -38,7 +38,7 @@ public class TestSemanticModule {
 		List<CandidateProgram> firstGen = rhh.getInitialPopulation();
 
 		for(CandidateProgram c: firstGen) {
-			System.out.println(c.getRootNode());
+			System.out.println("S - " + c.getRootNode());
 			semMod.codeToBehaviour(c);
 		}
 

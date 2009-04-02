@@ -19,27 +19,93 @@
  */
 package com.epochx.semantics;
 
+import java.util.ArrayList;
+
+import com.epochx.core.representation.Node;
+import com.epochx.core.representation.TerminalNode;
+import com.epochx.func.dbl.CoefficientExponentFunction;
+
 /**
  * @author Lawrence Beadle & Tom Castle
  */
 public class RegressionRepresentation implements Representation {
 	
-	private double[][] regressionRepresentation;
+	private ArrayList<CoefficientExponentFunction> regressionRepresentation;
 	
 	/**
 	 * Constructor for regression representation object
 	 * @param regressionRepresentation list of the coefficients
 	 */
-	public RegressionRepresentation(double[][] regressionRepresentation) {
+	public RegressionRepresentation(ArrayList<CoefficientExponentFunction> regressionRepresentation) {
 		this.regressionRepresentation = regressionRepresentation;
+	}
+	
+	/**
+	 * Constructor for repression representation object - will create blank representation
+	 */
+	public RegressionRepresentation() {
+		this.regressionRepresentation = new ArrayList<CoefficientExponentFunction>();
 	}
 	
 	/**
 	 * Returns the regression representation (the formula coefficients)
 	 * @return A list of the formula coefficients
 	 */
-	public double[][] getRegressionRepresentation() {
+	public ArrayList<CoefficientExponentFunction> getRegressionRepresentation() {
 		return regressionRepresentation;
+	}
+	
+	/**
+	 * Simplifies any CVPs with same variable and power
+	 */
+	public void simplify() {
+		for(int i = 0; i<regressionRepresentation.size()-1; i++) {
+			CoefficientExponentFunction a = regressionRepresentation.get(i);
+			for(int j = i+1; j<regressionRepresentation.size(); j++) {
+				CoefficientExponentFunction b = regressionRepresentation.get(j);
+				if(a.getChild(1).equals(b.getChild(1)) && a.getChild(2).equals(b.getChild(2))) {
+					double coefficient1 = (Double) a.getChild(0).evaluate();
+					double coefficient2 = (Double) b.getChild(0).evaluate();
+					double newCoefficient = coefficient1 + coefficient2;
+					a = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient),(Node<Double>) a.getChild(1),(Node<Double>) a.getChild(2));
+					regressionRepresentation.remove(j);
+				}
+			}
+		}
+	}
+	
+	public void order() {
+		ArrayList<CoefficientExponentFunction> ordered = new ArrayList<CoefficientExponentFunction>();
+		// find lowest power
+		int size = regressionRepresentation.size();
+		double lowestPower = new Double(Double.POSITIVE_INFINITY);
+		for(CoefficientExponentFunction c: regressionRepresentation) {
+			double power = (Double) c.getChild(2).evaluate();
+			if(power<lowestPower) {
+				lowestPower = power;
+			}
+		}
+		// re-jig into ordered array
+		while(ordered.size()<size) {
+			for(CoefficientExponentFunction c: regressionRepresentation) {
+				double power = (Double) c.getChild(2).evaluate();
+				if(power==lowestPower) {
+					ordered.add(c);
+					break;
+				}
+			}
+			lowestPower++;
+		}
+		// set rep to ordered
+		regressionRepresentation = ordered;
+	}
+	
+	public String toString() {
+		String output = "";
+		for(CoefficientExponentFunction c: regressionRepresentation) {
+			output = output + c.toString() + " ";
+		}
+		return output;
 	}
 
 	/* (non-Javadoc)
@@ -62,8 +128,14 @@ public class RegressionRepresentation implements Representation {
 	@Override
 	public boolean isConstant() {
 		// if length = 1 there is only a constant in the x side of f(x)
-		if(regressionRepresentation.length==1) {
-			return true;
+		if(regressionRepresentation.size()==1) {
+			if(regressionRepresentation.get(0).getChild(2).equals(new TerminalNode<Double>(0d))) {
+				return true;
+			}
+			if(regressionRepresentation.get(0).getChild(2).equals(new TerminalNode<Double>(-0d))) {
+				return true;
+			}
+			
 		}
 		return false;
 	}

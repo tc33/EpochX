@@ -67,14 +67,19 @@ public class RegressionSemanticModule implements SemanticModule {
 	 */
 	@Override
 	public CandidateProgram behaviourToCode(Representation representation) {
-		// TODO Auto-generated method stub
+		// check representation is right type
+		RegressionRepresentation regRep;
+		if(representation instanceof RegressionRepresentation) {
+			regRep = (RegressionRepresentation) representation;
+		} else {
+			throw new IllegalArgumentException("WRONG INPUT IN BEHAVIOUR TO CODE - REGRESSION SEMANTIC MODULE");
+		}
 		
-		// do reverse translation
-		// 1 - get length of array and create right number of polynomials
-		// 2 - assign correct coefficients to correct variable and build node tree
-		// 3 - assemble candidate program and return
+		Node<Double> rootNode = this.buildCVPTree(regRep);
 		
-		return null;
+		rootNode = this.expandCVPTree(rootNode);
+		
+		return new CandidateProgram(rootNode, model);
 	}
 
 	/* (non-Javadoc)
@@ -83,7 +88,7 @@ public class RegressionSemanticModule implements SemanticModule {
 	@Override
 	public Representation codeToBehaviour(CandidateProgram program) {
 		
-		// clone the program to prevent back modfication
+		// clone the program to prevent back modification
 		CandidateProgram program1 = (CandidateProgram) program.clone();
 		// extract and simplify program
 		Node<Double> rootNode = program1.getRootNode();
@@ -98,34 +103,45 @@ public class RegressionSemanticModule implements SemanticModule {
 			rootNode = this.removeAllPDivsWithSameSubtrees(rootNode);
 		}
 		
+		System.out.println("1 - " + rootNode);
+		
 		// resolve constant calculations
 		if(GPProgramAnalyser.getProgramLength(rootNode)>1) {
 			rootNode = this.resolveConstantCalculations(rootNode);
 		}
+		
+		System.out.println("2 - " + rootNode);
 		
 		// resolve any multiply by zeros
 		if(GPProgramAnalyser.getProgramLength(rootNode)>1) {
 			rootNode = this.removeMultiplyByZeros(rootNode);
 		}
 		
+		System.out.println("3 - " + rootNode);
+		
 		// resolve PDIVs with equal subtrees and PDIV by 0 to 0
 		if(GPProgramAnalyser.getProgramLength(rootNode)>1) {
 			rootNode = this.removeAllPDivsWithSameSubtrees(rootNode);
 		}
 		
+		System.out.println("4 - " + rootNode);
+		
 		// collect up coefficient functions
 		rootNode = this.reduceToCVPFormat(rootNode);
 		
-		System.out.println(rootNode);
+		System.out.println("5 - " + rootNode);
+		
+		RegressionRepresentation regRep = new RegressionRepresentation(this.isolateCVPs(rootNode));
+		
+		System.out.println("R1 - " + regRep.toString());
+		
+		regRep.simplify();
+		//regRep.order();
+		
+		System.out.println("R2 - " + regRep.toString());
 		System.out.println("---------------");
 		
-		// put all coefficient functions into linear process and simplify
-		// TODO
-		
-		// construct new RegressionBehaviour
-		// TODO
-		
-		return null;
+		return regRep;
 	}
 
 	private Node<Double> removeMultiplyByZeros(Node<Double> rootNode) {
@@ -220,8 +236,9 @@ public class RegressionSemanticModule implements SemanticModule {
 	}
 	
 	/**
-	 * @param rootNode
-	 * @return
+	 * Reduces the node tree to CVP format
+	 * @param rootNode The node to be reduced
+	 * @return The reduced form of the nodes
 	 */
 	private Node<Double> reduceToCVPFormat(Node<Double> rootNode) {
 		// get the child nodes
@@ -242,33 +259,54 @@ public class RegressionSemanticModule implements SemanticModule {
 			}
 			// scan for CVPs to build up
 			if(rootNode instanceof MultiplyFunction) {
-				// TODO
-				// need to do this to recursively clear each child tree
-				if((children[0] instanceof CoefficientExponentFunction) && (children[1] instanceof CoefficientExponentFunction)) {
-					double coefficient1 = (Double) children[0].getChild(0).evaluate();
-					double coefficient2 = (Double) children[1].getChild(0).evaluate();
-					double newCoefficient = coefficient1 * coefficient2;					
-					double power1 = (Double) children[0].getChild(2).evaluate();
-					double power2 = (Double) children[1].getChild(2).evaluate();
-					double newPower = power1 + power2;
-					rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), children[0].getChild(1), new TerminalNode<Double>(newPower));
-				}
-			} else if(rootNode instanceof ProtectedDivisionFunction) {
-				// TODO
-				// need to do this to recursively clear each child tree
-				if((children[0] instanceof CoefficientExponentFunction) && (children[1] instanceof CoefficientExponentFunction)) {
-					double coefficient1 = (Double) children[0].getChild(0).evaluate();
-					double coefficient2 = (Double) children[1].getChild(0).evaluate();
-					double newCoefficient = 0;
-					if(coefficient2!=0) { 
-						newCoefficient = coefficient1 / coefficient2;
+				// Get CVP list from each side
+				ArrayList<CoefficientExponentFunction> cVPLeft = this.isolateCVPs((Node<Double>) rootNode.getChild(0));
+				ArrayList<CoefficientExponentFunction> cVPRight = this.isolateCVPs((Node<Double>) rootNode.getChild(1));
+				ArrayList<CoefficientExponentFunction> cVPTotal = new ArrayList<CoefficientExponentFunction>();
+				int cPVLeftSize = cVPLeft.size();
+				int cPVRightSize = cVPRight.size();
+				for(int i = 0; i<cPVLeftSize; i++) {
+					for(int j = 0; j<cPVRightSize; j++) {
+						double coefficient1 = (Double) cVPLeft.get(i).getChild(0).evaluate();
+						double coefficient2 = (Double) cVPRight.get(j).getChild(0).evaluate();
+						double newCoefficient = coefficient1 * coefficient2;					
+						double power1 = (Double) cVPLeft.get(i).getChild(2).evaluate();
+						double power2 = (Double) cVPRight.get(j).getChild(2).evaluate();
+						double newPower = power1 + power2;
+						CoefficientExponentFunction c = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), children[0].getChild(1), new TerminalNode<Double>(newPower));
+						cVPTotal.add(c);						
 					}
-					double power1 = (Double) children[0].getChild(2).evaluate();
-					double power2 = (Double) children[1].getChild(2).evaluate();
-					double newPower = power1 - power2;
-					rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), children[0].getChild(1), new TerminalNode<Double>(newPower));
 				}
-			} else if(rootNode instanceof SubtractFunction) {
+				RegressionRepresentation regRep = new RegressionRepresentation(cVPTotal);
+				regRep.simplify();
+				rootNode = this.buildCVPTree(regRep);
+			} else if(rootNode instanceof ProtectedDivisionFunction) {
+				// Get CVP list from each side
+				ArrayList<CoefficientExponentFunction> cVPLeft = this.isolateCVPs((Node<Double>) rootNode.getChild(0));
+				ArrayList<CoefficientExponentFunction> cVPRight = this.isolateCVPs((Node<Double>) rootNode.getChild(1));
+				ArrayList<CoefficientExponentFunction> cVPTotal = new ArrayList<CoefficientExponentFunction>();
+				int cPVLeftSize = cVPLeft.size();
+				int cPVRightSize = cVPRight.size();
+				for(int i = 0; i<cPVLeftSize; i++) {
+					for(int j = 0; j<cPVRightSize; j++) {
+						double coefficient1 = (Double) cVPLeft.get(i).getChild(0).evaluate();
+						double coefficient2 = (Double) cVPRight.get(j).getChild(0).evaluate();
+						double newCoefficient = 0;
+						if(coefficient2!=0) { 
+							newCoefficient = coefficient1 / coefficient2;
+						}					
+						double power1 = (Double) cVPLeft.get(i).getChild(2).evaluate();
+						double power2 = (Double) cVPRight.get(j).getChild(2).evaluate();
+						double newPower = power1 - power2;
+						CoefficientExponentFunction c = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), children[0].getChild(1), new TerminalNode<Double>(newPower));
+						cVPTotal.add(c);						
+					}
+				}
+				RegressionRepresentation regRep = new RegressionRepresentation(cVPTotal);
+				regRep.simplify();
+				rootNode = this.buildCVPTree(regRep);
+			} 
+			/*else if(rootNode instanceof SubtractFunction) {
 				if((children[0] instanceof CoefficientExponentFunction) && (children[1] instanceof CoefficientExponentFunction)) {
 					// check power and variable match
 					if(children[0].getChild(1).equals(children[1].getChild(1)) && children[0].getChild(2).equals(children[1].getChild(2))) {
@@ -288,6 +326,99 @@ public class RegressionSemanticModule implements SemanticModule {
 					rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), children[0].getChild(1), children[0].getChild(2));
 					}
 				}
+			}*/
+		}
+		return rootNode;
+	}
+	
+	public ArrayList<CoefficientExponentFunction> isolateCVPs(Node<Double> rootNode) {
+		ArrayList<CoefficientExponentFunction> cVPList = new ArrayList<CoefficientExponentFunction>();		
+		// check if terminal
+		if(rootNode instanceof CoefficientExponentFunction) {
+			cVPList.add((CoefficientExponentFunction) rootNode);		
+		} else if(rootNode instanceof AddFunction) {
+			ArrayList<CoefficientExponentFunction> cVPs = this.isolateCVPs((Node<Double>) rootNode.getChild(0));
+			// add the retrieved CVP nodes
+			for(CoefficientExponentFunction c: cVPs) {
+				cVPList.add(c);
+			}
+			cVPs = this.isolateCVPs((Node<Double>) rootNode.getChild(1));
+			// add the retrieved CVP nodes
+			for(CoefficientExponentFunction c: cVPs) {
+				cVPList.add(c);
+			}
+		} else if(rootNode instanceof SubtractFunction) {
+			ArrayList<CoefficientExponentFunction> cVPs = this.isolateCVPs((Node<Double>) rootNode.getChild(0));
+			// add the retrieved CVP nodes
+			for(CoefficientExponentFunction c: cVPs) {
+				cVPList.add(c);
+			}
+			cVPs = this.isolateCVPs((Node<Double>) rootNode.getChild(1));
+			// add the retrieved CVP nodes AFTER * the coefficients by -1
+			for(CoefficientExponentFunction c: cVPs) {
+				// * coefficients by -1 before adding them
+				double coefficient = (Double) c.getChild(0).evaluate();
+				double newCoefficient = coefficient * -1;
+				c.setChild(new TerminalNode<Double>(newCoefficient), 0);
+				cVPList.add(c);
+			}
+		}		
+		return cVPList;
+	}
+	
+	private Node<Double> buildCVPTree(RegressionRepresentation rep) {
+		ArrayList<CoefficientExponentFunction> regRep = rep.getRegressionRepresentation();
+		int regRepSize = regRep.size();
+		Node<Double> rootNode = null;
+		if(regRepSize>1) {
+			rootNode = regRep.get(0);
+			for(int i = 1; i<regRepSize; i++) {
+				// check if second coefficient <0
+				if(((Double) regRep.get(i).getChild(0).evaluate()) < 0) {
+					// modify sign on second CVP node
+					double coefficient = (Double) regRep.get(i).getChild(0).evaluate();
+					double newCoefficient = coefficient * -1;
+					regRep.get(i).setChild(new TerminalNode<Double>(newCoefficient), 0);
+					// if it is generate subtract function
+					rootNode = new SubtractFunction(rootNode, regRep.get(i));
+				} else {
+					// else generate add function
+					rootNode = new AddFunction(rootNode, regRep.get(i));
+				}
+			}
+		} else {
+			rootNode = new TerminalNode<Double>(0d);
+		}
+		return rootNode;
+	}
+	
+	private Node<Double> expandCVPTree(Node<Double> rootNode) {
+		// expand if it is CVP
+		if(rootNode instanceof CoefficientExponentFunction) {
+			double coefficient = (Double) rootNode.getChild(0).evaluate();
+			double power = (Double) rootNode.getChild(2).evaluate();
+			if(coefficient==0 && power==0) {
+				rootNode = new TerminalNode<Double>(0d);
+			} else if(power==0) {
+				rootNode = new TerminalNode<Double>(coefficient);
+			} else if(coefficient==1 && power==1) {
+				rootNode = new Variable<Double>("X");
+			} else if(coefficient==1 && power ==-1) {
+				rootNode = new ProtectedDivisionFunction(new TerminalNode<Double>(coefficient), new Variable<Double>("X"));
+			} else if(power <-1) {
+				rootNode = new ProtectedDivisionFunction(new TerminalNode<Double>(coefficient), new CoefficientExponentFunction(new TerminalNode<Double>(1d), new Variable<Double>("X"), new TerminalNode<Double>((power*-1))));
+			} else if(power>1) {
+				rootNode = new MultiplyFunction(new Variable<Double>("X"), new CoefficientExponentFunction(new TerminalNode<Double>(coefficient), new Variable<Double>("X"), new TerminalNode<Double>((power-1))));
+			} else if(coefficient>1 && power==1) {
+				rootNode = new MultiplyFunction(new TerminalNode<Double>(coefficient), new Variable<Double>("X"));
+			}
+		}
+		// expand children
+		int arity = rootNode.getArity();
+		Node<Double>[] children = (Node<Double>[]) rootNode.getChildren();
+		if(arity>0) {
+			for(int i = 0; i < arity; i++) {
+				children[i] = this.expandCVPTree(children[i]);
 			}
 		}
 		return rootNode;

@@ -33,7 +33,7 @@ public class GrowInitialiser<TYPE> implements Initialiser<TYPE> {
 	
 	private GPModel<TYPE> model;
 	
-	public GrowInitialiser(GPModel<TYPE> model, SemanticModule semMod) {
+	public GrowInitialiser(GPModel<TYPE> model) {
 		this.model = model;
 	}
 	
@@ -63,13 +63,13 @@ public class GrowInitialiser<TYPE> implements Initialiser<TYPE> {
 		Node<TYPE> top = (Node<TYPE>) model.getSyntax().get(randomIndex).clone();
         
         // recurse down each branch to depth using Grow mechanism
-        this.fillChildren(top, 1, model.getInitialMaxDepth());
+        this.fillChildren(top, 1, depth);
         
         // return top node
         return top;
 	}
 	
-	public void fillChildren(Node<?> topNode, int currentDepth, int maxDepth) {
+	private void fillChildren(Node<?> topNode, int currentDepth, int maxDepth) {
 		int arity = topNode.getArity();
 		if(arity>0) {
 			if(currentDepth<maxDepth-1) {

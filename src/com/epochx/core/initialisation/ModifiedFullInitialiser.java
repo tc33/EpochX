@@ -32,7 +32,7 @@ import com.epochx.semantics.*;
 public class ModifiedFullInitialiser<TYPE> implements Initialiser<TYPE> {
 	
 	private GPModel<TYPE> model;
-	private FullInitialiser full;
+	private FullInitialiser<TYPE> full;
 	private SemanticModule semanticModule;
 	
 	/**
@@ -42,7 +42,7 @@ public class ModifiedFullInitialiser<TYPE> implements Initialiser<TYPE> {
 	 */
 	public ModifiedFullInitialiser(GPModel<TYPE> model, SemanticModule semMod) {
 		this.model = model;
-		this.full = new FullInitialiser(model, semMod);
+		this.full = new FullInitialiser<TYPE>(model);
 		this.semanticModule = semMod;
 	}
 

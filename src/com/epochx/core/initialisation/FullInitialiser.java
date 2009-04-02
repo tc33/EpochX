@@ -30,12 +30,8 @@ import com.epochx.semantics.*;
 public class FullInitialiser<TYPE> implements Initialiser<TYPE> {
 	
 	private GPModel<TYPE> model;
-	
+
 	public FullInitialiser(GPModel<TYPE> model) {
-		this(model, null);
-	}
-	
-	public FullInitialiser(GPModel<TYPE> model, SemanticModule semMod) {
 		this.model = model;
 	}
 	

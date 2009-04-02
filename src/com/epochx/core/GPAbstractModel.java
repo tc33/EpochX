@@ -75,6 +75,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	private double mutationProbability;
 	
 	private boolean doStateCheckedCrossover;
+	private boolean doStateCheckedMutation;
 	
 	/**
 	 * Construct a GPModel with a set of sensible defaults. See the appropriate
@@ -93,13 +94,14 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 		pouleSize = 50;
 		noElites = 0;
 		doStateCheckedCrossover = false;
+		doStateCheckedMutation = false;
 		
 		parentSelector = new RandomSelector<TYPE>();
 		pouleSelector = new TournamentSelector<TYPE>(3, this);
 		
 		initialiser = new FullInitialiser<TYPE>(this);
 		crossover = new UniformPointCrossover<TYPE>();
-		mutator = null;
+		mutator = new SubtreeMutation<TYPE>(this);
 		
 		semanticModule = null;
 	}
@@ -283,7 +285,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to null in GPAbstractModel.
+	 * <p>Defaults to {@link SubtreeMutation} in GPAbstractModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -508,6 +510,14 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 */
 	public void setStateCheckedCrossover(boolean runStateCheck) {
 		this.doStateCheckedCrossover = runStateCheck;
+	}
+	
+	public boolean getStateCheckedMutation() {
+		return doStateCheckedMutation;
+	}
+	
+	public void setStateCheckedMutation(boolean doStateCheckedMutation) {
+		this.doStateCheckedMutation = doStateCheckedMutation;
 	}
 	
 	/**

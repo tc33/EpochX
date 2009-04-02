@@ -99,6 +99,8 @@ public class GPRun<TYPE> {
 		logger.info("Setting up GPCrossover");
 		GPCrossover<TYPE> crossover = new GPCrossover<TYPE>(model);
 		
+		GPMutation<TYPE> mutation = new GPMutation<TYPE>(model);
+		
 		// Initialisation
 		logger.info("Performing initialisation");
 		List<CandidateProgram<TYPE>> pop = model.getInitialiser().getInitialPopulation();
@@ -129,7 +131,7 @@ public class GPRun<TYPE> {
 			model.getParentSelector().onGenerationStart(poule);
 			
 			// Fill the population by performing genetic operations.
-			while(nextPop.size() < model.getPopulationSize()) {				
+			while(nextPop.size() < model.getPopulationSize()) {
 				// Pick a genetic operator using Pr, Pc and Pm.
 				double random = Math.random();
 				double pm = model.getMutationProbability();
@@ -144,7 +146,7 @@ public class GPRun<TYPE> {
 					}
 				} else if (random < pe+pm) {
 					// Do mutation.
-					//TODO Implement mutation.
+					nextPop.add(mutation.mutate());
 				} else {
 					// Do reproduction. - Should this use clone?
 					nextPop.add(poule.get((int) Math.floor(Math.random()*poule.size())));

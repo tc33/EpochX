@@ -22,6 +22,7 @@ package com.epochx.core;
 import com.epochx.core.mutation.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
+import com.epochx.semantics.*;
 import com.epochx.stats.*;
 
 /**
@@ -53,12 +54,53 @@ public class GPMutation<TYPE> {
 	public CandidateProgram<TYPE> mutate() {
 		long crossoverStartTime = System.nanoTime();
 		
-		CandidateProgram<TYPE> parent = parentSelector.getParent();
-		CandidateProgram<TYPE> clone = (CandidateProgram<TYPE>) parent.clone();
+		CandidateProgram<TYPE> parent = null;
+		CandidateProgram<TYPE> child = null;
 		
-		CandidateProgram<TYPE> child = mutator.mutate(clone);
-		
-		//TODO What to do if mutation made the individual deeper than the max depth?
+		if (model.getStateCheckedMutation()) {
+			boolean equal = true;
+			while(equal) {
+				// pull out semantic module and check its not null
+				SemanticModule semMod = model.getSemanticModule();
+				if(semMod==null) {
+					throw new IllegalArgumentException("SEMANTIC MODULE UNDEFINED FOR SEMANTICALLY DRIVEN MUTATION");
+				}
+				
+				//start semantic module
+				semMod.start();
+	
+				parent = parentSelector.getParent();
+				CandidateProgram<TYPE> clone = (CandidateProgram<TYPE>) parent.clone();
+				
+				child = mutator.mutate(clone);
+				
+				// If the new program is too deep, replace it with the original.
+				if (GPProgramAnalyser.getProgramDepth(child) > model.getMaxDepth()) {
+					child = (CandidateProgram<TYPE>) parent.clone();
+				}
+				
+				// check behaviours
+				Representation p1Rep = semMod.codeToBehaviour(parent);
+				Representation c1Rep = semMod.codeToBehaviour(child);
+				
+				if(!c1Rep.equals(p1Rep)) {
+					equal = false;
+				}
+				
+				// stop semantic module
+				semMod.stop();
+			}
+		} else {
+			parent = parentSelector.getParent();
+			CandidateProgram<TYPE> clone = (CandidateProgram<TYPE>) parent.clone();
+			
+			child = mutator.mutate(clone);
+			
+			// If the new program is too deep, replace it with the original.
+			if (GPProgramAnalyser.getProgramDepth(child) > model.getMaxDepth()) {
+				child = (CandidateProgram<TYPE>) parent.clone();
+			}
+		}
 		
 		long runtime = System.nanoTime() - crossoverStartTime;
 		mutationStats.addMutation(parent, child, runtime);

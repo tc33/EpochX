@@ -51,11 +51,11 @@ public class HybridBooleanSemanticallyDrivenInitialiser<TYPE> implements Initial
 		// initialise BDD stuff
         semMod.start();
         List<BDD> storage = new ArrayList<BDD>();
-        FullInitialiser f = new FullInitialiser(model, semMod);
-        List<CandidateProgram> firstPass = f.getInitialPopulation();
+        FullInitialiser<TYPE> f = new FullInitialiser<TYPE>(model);
+        List<CandidateProgram<TYPE>> firstPass = f.getInitialPopulation();
         
         // generate a full population to start with
-        for(CandidateProgram c: firstPass) {
+        for(CandidateProgram<TYPE> c: firstPass) {
         	BooleanRepresentation b = semMod.codeToBehaviour(c);
         	if(!b.isConstant()) {
         		storage.add(b.getBDD());

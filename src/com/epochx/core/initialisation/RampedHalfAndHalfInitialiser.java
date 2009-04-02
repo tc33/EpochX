@@ -43,8 +43,8 @@ public class RampedHalfAndHalfInitialiser<TYPE> implements Initialiser<TYPE> {
 		this.model = model;
 		
 		// set up the grow and full parts
-		grow = new GrowInitialiser<TYPE>(model, semMod);
-		full = new FullInitialiser<TYPE>(model, semMod);
+		grow = new GrowInitialiser<TYPE>(model);
+		full = new FullInitialiser<TYPE>(model);
 		// modify depth for staged increase as per Koza
 		if(model.getInitialMaxDepth()>=6) {
 			this.depth = model.getInitialMaxDepth() - 4;

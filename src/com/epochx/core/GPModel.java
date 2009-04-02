@@ -281,6 +281,10 @@ public interface GPModel<TYPE> {
 	 */
 	public void setStateCheckedCrossover(boolean runStateCheck);
 	
+	public boolean getStateCheckedMutation();
+	
+	public void setStateCheckedMutation(boolean doStateCheckedMutation);
+	
 	/**
 	 * Returns the semantic module associated with this problem
 	 * @return The associate Semantic module

@@ -242,6 +242,8 @@ public class RegressionSemanticModule implements SemanticModule {
 			}
 			// scan for CVPs to build up
 			if(rootNode instanceof MultiplyFunction) {
+				// TODO
+				// need to do this to recursively clear each child tree
 				if((children[0] instanceof CoefficientExponentFunction) && (children[1] instanceof CoefficientExponentFunction)) {
 					double coefficient1 = (Double) children[0].getChild(0).evaluate();
 					double coefficient2 = (Double) children[1].getChild(0).evaluate();
@@ -252,14 +254,39 @@ public class RegressionSemanticModule implements SemanticModule {
 					rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), children[0].getChild(1), new TerminalNode<Double>(newPower));
 				}
 			} else if(rootNode instanceof ProtectedDivisionFunction) {
+				// TODO
+				// need to do this to recursively clear each child tree
 				if((children[0] instanceof CoefficientExponentFunction) && (children[1] instanceof CoefficientExponentFunction)) {
 					double coefficient1 = (Double) children[0].getChild(0).evaluate();
 					double coefficient2 = (Double) children[1].getChild(0).evaluate();
-					double newCoefficient = coefficient1 / coefficient2;					
+					double newCoefficient = 0;
+					if(coefficient2!=0) { 
+						newCoefficient = coefficient1 / coefficient2;
+					}
 					double power1 = (Double) children[0].getChild(2).evaluate();
 					double power2 = (Double) children[1].getChild(2).evaluate();
 					double newPower = power1 - power2;
 					rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), children[0].getChild(1), new TerminalNode<Double>(newPower));
+				}
+			} else if(rootNode instanceof SubtractFunction) {
+				if((children[0] instanceof CoefficientExponentFunction) && (children[1] instanceof CoefficientExponentFunction)) {
+					// check power and variable match
+					if(children[0].getChild(1).equals(children[1].getChild(1)) && children[0].getChild(2).equals(children[1].getChild(2))) {
+					double coefficient1 = (Double) children[0].getChild(0).evaluate();
+					double coefficient2 = (Double) children[1].getChild(0).evaluate();
+					double newCoefficient = coefficient1 - coefficient2;
+					rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), children[0].getChild(1), children[0].getChild(2));
+					}
+				}
+			} else if(rootNode instanceof AddFunction) {
+				if((children[0] instanceof CoefficientExponentFunction) && (children[1] instanceof CoefficientExponentFunction)) {
+					// check power and variable match
+					if(children[0].getChild(1).equals(children[1].getChild(1)) && children[0].getChild(2).equals(children[1].getChild(2))) {
+					double coefficient1 = (Double) children[0].getChild(0).evaluate();
+					double coefficient2 = (Double) children[1].getChild(0).evaluate();
+					double newCoefficient = coefficient1 + coefficient2;
+					rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), children[0].getChild(1), children[0].getChild(2));
+					}
 				}
 			}
 		}

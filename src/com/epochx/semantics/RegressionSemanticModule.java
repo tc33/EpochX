@@ -295,51 +295,51 @@ public class RegressionSemanticModule implements SemanticModule {
 			// scan for CVPs to build up
 			if(rootNode instanceof MultiplyFunction) {
 				if((children[0] instanceof Variable) && (children[1] instanceof TerminalNode)) {
-					rootNode = new CoefficientVariablePowerFunction(children[1], children[0], new TerminalNode<Double>(1d));
+					rootNode = new CoefficientExponentFunction(children[1], children[0], new TerminalNode<Double>(1d));
 				} else if((children[0] instanceof TerminalNode) && (children[1] instanceof Variable)) {
-					rootNode = new CoefficientVariablePowerFunction(children[0], children[1], new TerminalNode<Double>(1d));
+					rootNode = new CoefficientExponentFunction(children[0], children[1], new TerminalNode<Double>(1d));
 				} else if((children[0] instanceof PowerFunction) && (children[1] instanceof TerminalNode)) {
-					rootNode = new CoefficientVariablePowerFunction(children[1], children[0].getChild(0), children[0].getChild(1));
+					rootNode = new CoefficientExponentFunction(children[1], children[0].getChild(0), children[0].getChild(1));
 				} else if((children[0] instanceof TerminalNode) && (children[1] instanceof PowerFunction)) {
-					rootNode = new CoefficientVariablePowerFunction(children[0], children[1].getChild(0), children[1].getChild(1));
-				} else if((children[0] instanceof CoefficientVariablePowerFunction) && (children[1] instanceof TerminalNode)) {
+					rootNode = new CoefficientExponentFunction(children[0], children[1].getChild(0), children[1].getChild(1));
+				} else if((children[0] instanceof CoefficientExponentFunction) && (children[1] instanceof TerminalNode)) {
 					double coefficient = (Double) children[0].getChild(0).evaluate();
 					double terminal = (Double) children[1].evaluate();
 					double newCoefficient = coefficient * terminal;
-					rootNode = new CoefficientVariablePowerFunction(new TerminalNode<Double>(newCoefficient), children[0].getChild(1), children[0].getChild(2));
-				} else if((children[0] instanceof TerminalNode) && (children[1] instanceof CoefficientVariablePowerFunction)) {
+					rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), children[0].getChild(1), children[0].getChild(2));
+				} else if((children[0] instanceof TerminalNode) && (children[1] instanceof CoefficientExponentFunction)) {
 					double coefficient = (Double) children[1].getChild(0).evaluate();
 					double terminal = (Double) children[0].evaluate();
 					double newCoefficient = coefficient * terminal;
-					rootNode = new CoefficientVariablePowerFunction(new TerminalNode<Double>(newCoefficient), children[1].getChild(1), children[1].getChild(2));
+					rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), children[1].getChild(1), children[1].getChild(2));
 				}
 			} else if(rootNode instanceof ProtectedDivisionFunction) {
 				if((children[0] instanceof Variable) && (children[1] instanceof TerminalNode)) {
 					double terminal = (Double) children[1].evaluate();
 					double newCoefficient = 1 / terminal;
-					rootNode = new CoefficientVariablePowerFunction(new TerminalNode<Double>(newCoefficient), children[0], new TerminalNode<Double>(1d));
+					rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), children[0], new TerminalNode<Double>(1d));
 				} else if((children[0] instanceof TerminalNode) && (children[1] instanceof Variable)) {
-					rootNode = new CoefficientVariablePowerFunction(children[0], children[1], new TerminalNode<Double>(-1d));
+					rootNode = new CoefficientExponentFunction(children[0], children[1], new TerminalNode<Double>(-1d));
 				} else if((children[0] instanceof PowerFunction) && (children[1] instanceof TerminalNode)) {
 					double terminal = (Double) children[1].evaluate();
 					double newCoefficient = 1 / terminal;
-					rootNode = new CoefficientVariablePowerFunction(new TerminalNode<Double>(newCoefficient), children[0].getChild(0), children[0].getChild(1));
+					rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), children[0].getChild(0), children[0].getChild(1));
 				} else if((children[0] instanceof TerminalNode) && (children[1] instanceof PowerFunction)) {
 					double power = (Double) children[1].getChild(1).evaluate();
 					double newPower = power * -1;
-					rootNode = new CoefficientVariablePowerFunction(children[0], children[1].getChild(0), new TerminalNode<Double>(newPower));
-				} else if((children[0] instanceof CoefficientVariablePowerFunction) && (children[1] instanceof TerminalNode)) {
+					rootNode = new CoefficientExponentFunction(children[0], children[1].getChild(0), new TerminalNode<Double>(newPower));
+				} else if((children[0] instanceof CoefficientExponentFunction) && (children[1] instanceof TerminalNode)) {
 					double coefficient = (Double) children[0].getChild(0).evaluate();
 					double terminal = (Double) children[1].evaluate();
 					double newCoefficient = coefficient / terminal;
-					rootNode = new CoefficientVariablePowerFunction(new TerminalNode<Double>(newCoefficient), children[0].getChild(1), children[0].getChild(2));
-				} else if((children[0] instanceof TerminalNode) && (children[1] instanceof CoefficientVariablePowerFunction)) {
+					rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), children[0].getChild(1), children[0].getChild(2));
+				} else if((children[0] instanceof TerminalNode) && (children[1] instanceof CoefficientExponentFunction)) {
 					double coefficient = (Double) children[1].getChild(0).evaluate();
 					double terminal = (Double) children[0].evaluate();
 					double newCoefficient = terminal / coefficient;
 					double power = (Double) children[1].getChild(2).evaluate();
 					double newPower = power * -1;
-					rootNode = new CoefficientVariablePowerFunction(new TerminalNode<Double>(newCoefficient), children[1].getChild(1), new TerminalNode<Double>(newPower));
+					rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), children[1].getChild(1), new TerminalNode<Double>(newPower));
 				}
 			}
 		}

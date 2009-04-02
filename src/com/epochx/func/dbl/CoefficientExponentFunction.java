@@ -24,34 +24,34 @@ import com.epochx.core.representation.*;
 /**
  * @author Lawrence Beadle & Tom Castle 
  */
-public class CoefficientVariablePowerFunction extends FunctionNode<Double> {
+public class CoefficientExponentFunction extends FunctionNode<Double> {
 
 	/**
 	 * Constructor for coefficient, variable, power set up
 	 * @param coefficient the relevant coefficient
-	 * @param variable the relevant variable
-	 * @param power the relevant power
+	 * @param term the relevant variable, constant or other expression
+	 * @param exponent the relevant power
 	 */
-	public CoefficientVariablePowerFunction(Node<Double> coefficient, Node<Double> variable, Node<Double> power) {
-		super(coefficient, variable, power);
+	public CoefficientExponentFunction(Node<Double> coefficient, Node<Double> term, Node<Double> exponent) {
+		super(coefficient, term, exponent);
 	}
 
 	@Override
 	public Double evaluate() {
 		double c1 = ((Double) getChild(0).evaluate()).doubleValue();
 		double c2 = ((Double) getChild(1).evaluate()).doubleValue();
-		double c3 = ((Double) getChild(1).evaluate()).doubleValue();
+		double c3 = ((Double) getChild(2).evaluate()).doubleValue();
 		
 		return c1 * (Math.pow(c2, c3));
 	}
 	
 	@Override
 	public String getFunctionName() {
-		return "CVP";
+		return "CO-EXP";
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		return super.equals(obj) && (obj instanceof CoefficientVariablePowerFunction);
+		return super.equals(obj) && (obj instanceof CoefficientExponentFunction);
 	}
 }

@@ -19,10 +19,9 @@
  */
 package com.epochx.semantics;
 
-import com.epochx.core.representation.*;
-import com.epochx.func.dbl.*;
+import java.util.*;
 
-import java.util.ArrayList;
+import com.epochx.func.dbl.*;
 
 /**
  * @author Lawrence Beadle & Tom Castle
@@ -30,20 +29,20 @@ import java.util.ArrayList;
  */
 public class RegressionCVPSimplificationTool {
 	
-	private ArrayList<CoefficientVariablePowerFunction> listOfPolynomials;
+	private ArrayList<CoefficientExponentFunction> listOfPolynomials;
 	
 	/**
 	 * Constructor for RegressionCVPSimplificationTool
 	 */
 	public RegressionCVPSimplificationTool() {
-		listOfPolynomials = new ArrayList<CoefficientVariablePowerFunction>();
+		listOfPolynomials = new ArrayList<CoefficientExponentFunction>();
 	}
 	
 	/**
 	 * Adds to signed polynomials to the simplification tool
 	 * @param polynomialToAdd
 	 */
-	public void addPolynomial(CoefficientVariablePowerFunction polynomialToAdd) {
+	public void addPolynomial(CoefficientExponentFunction polynomialToAdd) {
 		listOfPolynomials.add(polynomialToAdd);
 	}
 	

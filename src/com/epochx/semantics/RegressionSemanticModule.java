@@ -113,15 +113,8 @@ public class RegressionSemanticModule implements SemanticModule {
 			rootNode = this.removeAllPDivsWithSameSubtrees(rootNode);
 		}
 		
-		// collect up multiply and PDiv into powers
-		if(GPProgramAnalyser.getProgramLength(rootNode)>1) {
-			rootNode = this.collectUpPowers(rootNode);
-		}
-		
 		// collect up coefficient functions
-		if(GPProgramAnalyser.getProgramLength(rootNode)>1) {
-			rootNode = this.reduceToCVPFormat(rootNode);
-		}
+		rootNode = this.reduceToCVPFormat(rootNode);
 		
 		System.out.println(rootNode);
 		System.out.println("---------------");
@@ -151,8 +144,9 @@ public class RegressionSemanticModule implements SemanticModule {
 				// check for zeros
 				boolean zeroPresent = false;
 				TerminalNode<Double> zeroNode = new TerminalNode<Double>(0d);
+				TerminalNode<Double> minusZeroNode = new TerminalNode<Double>(-0d);
 				for(int i = 0; i<arity; i++) {
-					if(children[i].equals(zeroNode)) {
+					if(children[i].equals(zeroNode) || children[i].equals(minusZeroNode)) {
 						zeroPresent = true;
 					}
 				}
@@ -184,11 +178,12 @@ public class RegressionSemanticModule implements SemanticModule {
 				}
 				// check for PDIV by 0
 				TerminalNode<Double> zeroNode = new TerminalNode<Double>(0d);
-				if(children[1].equals(zeroNode)) {					
+				TerminalNode<Double> minusZeroNode = new TerminalNode<Double>(-0d);
+				if(children[1].equals(zeroNode) || children[1].equals(minusZeroNode)) {					
 					rootNode = zeroNode;
 				}
 				// check for 0 PDIV by anything = 0
-				if(children[0].equals(zeroNode)) {					
+				if(children[0].equals(zeroNode) || children[0].equals(minusZeroNode)) {					
 					rootNode = zeroNode;
 				}
 			}
@@ -224,68 +219,21 @@ public class RegressionSemanticModule implements SemanticModule {
 		return rootNode;
 	}
 	
-	private Node<Double> collectUpPowers(Node<Double> rootNode) {
-		// get the child nodes
-		int arity = rootNode.getArity();		
-		// check if terminal
-		if(arity>0) {
-			// get children
-			Node[] children = rootNode.getChildren();
-			// reduce all children 1st - bottom up process
-			for(int i = 0; i<arity; i++) {
-				rootNode.setChild(this.collectUpPowers(children[i]), i);
-			}
-			// decide what to do - reduce or recurse
-			if(rootNode instanceof MultiplyFunction) {
-				Variable<Double> x = new Variable<Double>("X");
-				if((children[0] instanceof Variable) && (children[1] instanceof Variable)) {
-					Node<Double> powerNode = new ExponentFunction(x, new TerminalNode<Double>(2d));
-					rootNode = powerNode;
-				} else if((children[0] instanceof ExponentFunction) && (children[1] instanceof Variable)) {
-					// work out new power
-					Double power = (Double) children[0].getChild(1).evaluate() + 1;
-					Node<Double> powerNode = new ExponentFunction(x, new TerminalNode<Double>(power));
-					rootNode = powerNode;
-				} else if((children[1] instanceof ExponentFunction) && (children[0] instanceof Variable)) {
-					// work out new power
-					Double power = (Double) children[1].getChild(1).evaluate() + 1;
-					Node<Double> powerNode = new ExponentFunction(x, new TerminalNode<Double>(power));
-					rootNode = powerNode;
-				} else if((children[0] instanceof ExponentFunction) && (children[1] instanceof ExponentFunction)) {
-					// work out new power
-					Double power = (Double) children[0].getChild(1).evaluate() + (Double) children[1].getChild(1).evaluate();
-					Node<Double> powerNode = new ExponentFunction(x, new TerminalNode<Double>(power));
-					rootNode = powerNode;
-				}
-			} else if(rootNode instanceof ProtectedDivisionFunction) {
-				Variable<Double> x = new Variable<Double>("X");
-				if((children[0] instanceof ExponentFunction) && (children[1] instanceof Variable)) {
-					// work out new power
-					Double power = (Double) children[0].getChild(1).evaluate() - 1;
-					Node<Double> powerNode = new ExponentFunction(x, new TerminalNode<Double>(power));
-					rootNode = powerNode;
-				} else if((children[1] instanceof ExponentFunction) && (children[0] instanceof Variable)) {
-					// work out new power
-					// need to negate this to make it accurate
-					Double power = ((Double) children[1].getChild(1).evaluate() - 1) * -1;
-					Node<Double> powerNode = new ExponentFunction(x, new TerminalNode<Double>(power));
-					rootNode = powerNode;
-				} else if((children[0] instanceof ExponentFunction) && (children[1] instanceof ExponentFunction)) {
-					// work out new power
-					Double power = (Double) children[0].getChild(1).evaluate() - (Double) children[1].getChild(1).evaluate();
-					Node<Double> powerNode = new ExponentFunction(x, new TerminalNode<Double>(power));
-					rootNode = powerNode;
-				}
-			}
-		}
-		return rootNode;
-	}
-	
+	/**
+	 * @param rootNode
+	 * @return
+	 */
 	private Node<Double> reduceToCVPFormat(Node<Double> rootNode) {
 		// get the child nodes
 		int arity = rootNode.getArity();		
 		// check if terminal
-		if(arity>0) {
+		if(arity==0) {
+			if(rootNode instanceof Variable) {
+				rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(1d), rootNode, new TerminalNode<Double>(1d));
+			} else {
+				rootNode = new CoefficientExponentFunction(rootNode, new Variable<Double>("X"), new TerminalNode<Double>(0d));
+			}
+		} else if(arity>0) {
 			// get children
 			Node[] children = rootNode.getChildren();
 			// reduce all children 1st - bottom up process
@@ -294,52 +242,24 @@ public class RegressionSemanticModule implements SemanticModule {
 			}
 			// scan for CVPs to build up
 			if(rootNode instanceof MultiplyFunction) {
-				if((children[0] instanceof Variable) && (children[1] instanceof TerminalNode)) {
-					rootNode = new CoefficientExponentFunction(children[1], children[0], new TerminalNode<Double>(1d));
-				} else if((children[0] instanceof TerminalNode) && (children[1] instanceof Variable)) {
-					rootNode = new CoefficientExponentFunction(children[0], children[1], new TerminalNode<Double>(1d));
-				} else if((children[0] instanceof PowerFunction) && (children[1] instanceof TerminalNode)) {
-					rootNode = new CoefficientExponentFunction(children[1], children[0].getChild(0), children[0].getChild(1));
-				} else if((children[0] instanceof TerminalNode) && (children[1] instanceof PowerFunction)) {
-					rootNode = new CoefficientExponentFunction(children[0], children[1].getChild(0), children[1].getChild(1));
-				} else if((children[0] instanceof CoefficientExponentFunction) && (children[1] instanceof TerminalNode)) {
-					double coefficient = (Double) children[0].getChild(0).evaluate();
-					double terminal = (Double) children[1].evaluate();
-					double newCoefficient = coefficient * terminal;
-					rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), children[0].getChild(1), children[0].getChild(2));
-				} else if((children[0] instanceof TerminalNode) && (children[1] instanceof CoefficientExponentFunction)) {
-					double coefficient = (Double) children[1].getChild(0).evaluate();
-					double terminal = (Double) children[0].evaluate();
-					double newCoefficient = coefficient * terminal;
-					rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), children[1].getChild(1), children[1].getChild(2));
+				if((children[0] instanceof CoefficientExponentFunction) && (children[1] instanceof CoefficientExponentFunction)) {
+					double coefficient1 = (Double) children[0].getChild(0).evaluate();
+					double coefficient2 = (Double) children[1].getChild(0).evaluate();
+					double newCoefficient = coefficient1 * coefficient2;					
+					double power1 = (Double) children[0].getChild(2).evaluate();
+					double power2 = (Double) children[1].getChild(2).evaluate();
+					double newPower = power1 + power2;
+					rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), children[0].getChild(1), new TerminalNode<Double>(newPower));
 				}
 			} else if(rootNode instanceof ProtectedDivisionFunction) {
-				if((children[0] instanceof Variable) && (children[1] instanceof TerminalNode)) {
-					double terminal = (Double) children[1].evaluate();
-					double newCoefficient = 1 / terminal;
-					rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), children[0], new TerminalNode<Double>(1d));
-				} else if((children[0] instanceof TerminalNode) && (children[1] instanceof Variable)) {
-					rootNode = new CoefficientExponentFunction(children[0], children[1], new TerminalNode<Double>(-1d));
-				} else if((children[0] instanceof PowerFunction) && (children[1] instanceof TerminalNode)) {
-					double terminal = (Double) children[1].evaluate();
-					double newCoefficient = 1 / terminal;
-					rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), children[0].getChild(0), children[0].getChild(1));
-				} else if((children[0] instanceof TerminalNode) && (children[1] instanceof PowerFunction)) {
-					double power = (Double) children[1].getChild(1).evaluate();
-					double newPower = power * -1;
-					rootNode = new CoefficientExponentFunction(children[0], children[1].getChild(0), new TerminalNode<Double>(newPower));
-				} else if((children[0] instanceof CoefficientExponentFunction) && (children[1] instanceof TerminalNode)) {
-					double coefficient = (Double) children[0].getChild(0).evaluate();
-					double terminal = (Double) children[1].evaluate();
-					double newCoefficient = coefficient / terminal;
-					rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), children[0].getChild(1), children[0].getChild(2));
-				} else if((children[0] instanceof TerminalNode) && (children[1] instanceof CoefficientExponentFunction)) {
-					double coefficient = (Double) children[1].getChild(0).evaluate();
-					double terminal = (Double) children[0].evaluate();
-					double newCoefficient = terminal / coefficient;
-					double power = (Double) children[1].getChild(2).evaluate();
-					double newPower = power * -1;
-					rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), children[1].getChild(1), new TerminalNode<Double>(newPower));
+				if((children[0] instanceof CoefficientExponentFunction) && (children[1] instanceof CoefficientExponentFunction)) {
+					double coefficient1 = (Double) children[0].getChild(0).evaluate();
+					double coefficient2 = (Double) children[1].getChild(0).evaluate();
+					double newCoefficient = coefficient1 / coefficient2;					
+					double power1 = (Double) children[0].getChild(2).evaluate();
+					double power2 = (Double) children[1].getChild(2).evaluate();
+					double newPower = power1 - power2;
+					rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), children[0].getChild(1), new TerminalNode<Double>(newPower));
 				}
 			}
 		}

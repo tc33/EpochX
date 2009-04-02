@@ -20,14 +20,15 @@
 package com.epochx.semantics;
 import com.epochx.core.initialisation.RampedHalfAndHalfInitialiser;
 import com.epochx.core.representation.*;
-import com.epochx.example.regression.RegressionModel;
+import com.epochx.example.regression.RegressionModelTomDoNotTouch;
+
 import java.util.*;
 
 public class TestSemanticModule {
 
 	public static void main(String[] args) {
 		
-		RegressionModel model = new RegressionModel();
+		RegressionModelTomDoNotTouch model = new RegressionModelTomDoNotTouch();
 		RegressionSemanticModule semMod = new RegressionSemanticModule(model.getTerminals(), model);
 		RampedHalfAndHalfInitialiser rhh = new RampedHalfAndHalfInitialiser(model, semMod);
 		

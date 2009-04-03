@@ -75,8 +75,10 @@ public class RegressionSemanticModule implements SemanticModule {
 			throw new IllegalArgumentException("WRONG INPUT IN BEHAVIOUR TO CODE - REGRESSION SEMANTIC MODULE");
 		}
 		
+		// build CVP tree
 		Node<Double> rootNode = this.buildCVPTree(regRep);
 		
+		// expand the CVPS to normal functions
 		rootNode = this.expandCVPTree(rootNode);
 		
 		return new CandidateProgram(rootNode, model);
@@ -103,43 +105,43 @@ public class RegressionSemanticModule implements SemanticModule {
 			rootNode = this.removeAllPDivsWithSameSubtrees(rootNode);
 		}
 		
-		System.out.println("1 - " + rootNode);
+		//System.out.println("1 - " + rootNode);
 		
 		// resolve constant calculations
 		if(GPProgramAnalyser.getProgramLength(rootNode)>1) {
 			rootNode = this.resolveConstantCalculations(rootNode);
 		}
 		
-		System.out.println("2 - " + rootNode);
+		//System.out.println("2 - " + rootNode);
 		
 		// resolve any multiply by zeros
 		if(GPProgramAnalyser.getProgramLength(rootNode)>1) {
 			rootNode = this.removeMultiplyByZeros(rootNode);
 		}
 		
-		System.out.println("3 - " + rootNode);
+		//System.out.println("3 - " + rootNode);
 		
 		// resolve PDIVs with equal subtrees and PDIV by 0 to 0
 		if(GPProgramAnalyser.getProgramLength(rootNode)>1) {
 			rootNode = this.removeAllPDivsWithSameSubtrees(rootNode);
 		}
 		
-		System.out.println("4 - " + rootNode);
+		//System.out.println("4 - " + rootNode);
 		
 		// collect up coefficient functions
 		rootNode = this.reduceToCVPFormat(rootNode);
 		
-		System.out.println("5 - " + rootNode);
+		//System.out.println("5 - " + rootNode);
 		
 		RegressionRepresentation regRep = new RegressionRepresentation(this.isolateCVPs(rootNode));
 		
-		System.out.println("R1 - " + regRep.toString());
+		//System.out.println("R1 - " + regRep.toString());
 		
-		regRep.simplify();
+		//regRep.simplify();
 		//regRep.order();
 		
-		System.out.println("R2 - " + regRep.toString());
-		System.out.println("---------------");
+		//System.out.println("R2 - " + regRep.toString());
+		//System.out.println("---------------");
 		
 		return regRep;
 	}
@@ -246,9 +248,10 @@ public class RegressionSemanticModule implements SemanticModule {
 		// check if terminal
 		if(arity==0) {
 			if(rootNode instanceof Variable) {
-				rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(1d), rootNode, new TerminalNode<Double>(1d));
+				rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(1d), new Variable<Double>("X"), new TerminalNode<Double>(1d));
 			} else {
-				rootNode = new CoefficientExponentFunction(rootNode, new Variable<Double>("X"), new TerminalNode<Double>(0d));
+				double newCoefficient = (Double) rootNode.evaluate();
+				rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), new Variable<Double>("X"), new TerminalNode<Double>(0d));
 			}
 		} else if(arity>0) {
 			// get children
@@ -273,12 +276,12 @@ public class RegressionSemanticModule implements SemanticModule {
 						double power1 = (Double) cVPLeft.get(i).getChild(2).evaluate();
 						double power2 = (Double) cVPRight.get(j).getChild(2).evaluate();
 						double newPower = power1 + power2;
-						CoefficientExponentFunction c = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), children[0].getChild(1), new TerminalNode<Double>(newPower));
+						CoefficientExponentFunction c = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), new Variable<Double>("X"), new TerminalNode<Double>(newPower));
 						cVPTotal.add(c);						
 					}
 				}
 				RegressionRepresentation regRep = new RegressionRepresentation(cVPTotal);
-				regRep.simplify();
+				//regRep.simplify();
 				rootNode = this.buildCVPTree(regRep);
 			} else if(rootNode instanceof ProtectedDivisionFunction) {
 				// Get CVP list from each side
@@ -298,35 +301,14 @@ public class RegressionSemanticModule implements SemanticModule {
 						double power1 = (Double) cVPLeft.get(i).getChild(2).evaluate();
 						double power2 = (Double) cVPRight.get(j).getChild(2).evaluate();
 						double newPower = power1 - power2;
-						CoefficientExponentFunction c = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), children[0].getChild(1), new TerminalNode<Double>(newPower));
+						CoefficientExponentFunction c = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), new Variable<Double>("X"), new TerminalNode<Double>(newPower));
 						cVPTotal.add(c);						
 					}
 				}
 				RegressionRepresentation regRep = new RegressionRepresentation(cVPTotal);
-				regRep.simplify();
+				//regRep.simplify();
 				rootNode = this.buildCVPTree(regRep);
-			} 
-			/*else if(rootNode instanceof SubtractFunction) {
-				if((children[0] instanceof CoefficientExponentFunction) && (children[1] instanceof CoefficientExponentFunction)) {
-					// check power and variable match
-					if(children[0].getChild(1).equals(children[1].getChild(1)) && children[0].getChild(2).equals(children[1].getChild(2))) {
-					double coefficient1 = (Double) children[0].getChild(0).evaluate();
-					double coefficient2 = (Double) children[1].getChild(0).evaluate();
-					double newCoefficient = coefficient1 - coefficient2;
-					rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), children[0].getChild(1), children[0].getChild(2));
-					}
-				}
-			} else if(rootNode instanceof AddFunction) {
-				if((children[0] instanceof CoefficientExponentFunction) && (children[1] instanceof CoefficientExponentFunction)) {
-					// check power and variable match
-					if(children[0].getChild(1).equals(children[1].getChild(1)) && children[0].getChild(2).equals(children[1].getChild(2))) {
-					double coefficient1 = (Double) children[0].getChild(0).evaluate();
-					double coefficient2 = (Double) children[1].getChild(0).evaluate();
-					double newCoefficient = coefficient1 + coefficient2;
-					rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), children[0].getChild(1), children[0].getChild(2));
-					}
-				}
-			}*/
+			}
 		}
 		return rootNode;
 	}
@@ -377,7 +359,7 @@ public class RegressionSemanticModule implements SemanticModule {
 				if(((Double) regRep.get(i).getChild(0).evaluate()) < 0) {
 					// modify sign on second CVP node
 					double coefficient = (Double) regRep.get(i).getChild(0).evaluate();
-					double newCoefficient = coefficient * -1;
+					double newCoefficient = Math.abs(coefficient);
 					regRep.get(i).setChild(new TerminalNode<Double>(newCoefficient), 0);
 					// if it is generate subtract function
 					rootNode = new SubtractFunction(rootNode, regRep.get(i));
@@ -386,8 +368,10 @@ public class RegressionSemanticModule implements SemanticModule {
 					rootNode = new AddFunction(rootNode, regRep.get(i));
 				}
 			}
+		} else if(regRepSize==1){
+			rootNode = regRep.get(0);
 		} else {
-			rootNode = new TerminalNode<Double>(0d);
+			rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(0d), new Variable<Double>("X"), new TerminalNode<Double>(0d));
 		}
 		return rootNode;
 	}

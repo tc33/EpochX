@@ -137,7 +137,7 @@ public class RegressionSemanticModule implements SemanticModule {
 		
 		//System.out.println("R1 - " + regRep.toString());
 		
-		//regRep.simplify();
+		regRep.simplify();
 		//regRep.order();
 		
 		//System.out.println("R2 - " + regRep.toString());

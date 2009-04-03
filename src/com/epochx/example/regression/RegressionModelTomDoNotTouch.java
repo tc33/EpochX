@@ -51,7 +51,7 @@ public class RegressionModelTomDoNotTouch extends GPAbstractModel<Double> {
 		setCrossoverProbability(0.9);
 		setMutationProbability(0.0);
 		setReproductionProbability(0.1);
-		setInitialiser(new GrowInitialiser<Double>(this, null));
+		setInitialiser(new GrowInitialiser<Double>(this));
 		//setPouleSelector(new TournamentSelector<Double>(4, this));
 		setParentSelector(new LinearRankSelector<Double>(0.5));
 		setPouleSelector(new RandomSelector<Double>());
@@ -82,17 +82,17 @@ public class RegressionModelTomDoNotTouch extends GPAbstractModel<Double> {
 	public List<TerminalNode<?>> getTerminals() {
 		// Define terminal set.
 		List<TerminalNode<?>> terminals = new ArrayList<TerminalNode<?>>();
-//		terminals.add(new TerminalNode<Double>(5d));
-//		terminals.add(new TerminalNode<Double>(4d));
-//		terminals.add(new TerminalNode<Double>(3d));
-//		terminals.add(new TerminalNode<Double>(2d));
+		terminals.add(new TerminalNode<Double>(5d));
+		terminals.add(new TerminalNode<Double>(4d));
+		terminals.add(new TerminalNode<Double>(3d));
+		terminals.add(new TerminalNode<Double>(2d));
 		terminals.add(new TerminalNode<Double>(1d));
-//		terminals.add(new TerminalNode<Double>(0d));
-//		terminals.add(new TerminalNode<Double>(-5d));
-//		terminals.add(new TerminalNode<Double>(-4d));
-//		terminals.add(new TerminalNode<Double>(-3d));
-//		terminals.add(new TerminalNode<Double>(-2d));
-//		terminals.add(new TerminalNode<Double>(-1d));
+		terminals.add(new TerminalNode<Double>(0d));
+		terminals.add(new TerminalNode<Double>(-5d));
+		terminals.add(new TerminalNode<Double>(-4d));
+		terminals.add(new TerminalNode<Double>(-3d));
+		terminals.add(new TerminalNode<Double>(-2d));
+		terminals.add(new TerminalNode<Double>(-1d));
 		
 		// Define variables;
 		terminals.add(x);

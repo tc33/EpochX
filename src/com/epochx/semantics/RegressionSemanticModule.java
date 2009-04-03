@@ -94,7 +94,7 @@ public class RegressionSemanticModule implements SemanticModule {
 		CandidateProgram program1 = (CandidateProgram) program.clone();
 		// extract and simplify program
 		Node<Double> rootNode = program1.getRootNode();
-		
+
 		// resolve any multiply by zeros
 		if(GPProgramAnalyser.getProgramLength(rootNode)>1) {
 			rootNode = this.removeMultiplyByZeros(rootNode);
@@ -138,7 +138,7 @@ public class RegressionSemanticModule implements SemanticModule {
 		//System.out.println("R1 - " + regRep.toString());
 		
 		regRep.simplify();
-		//regRep.order();
+		regRep.order();
 		
 		//System.out.println("R2 - " + regRep.toString());
 		//System.out.println("---------------");

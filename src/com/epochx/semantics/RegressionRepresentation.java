@@ -19,7 +19,7 @@
  */
 package com.epochx.semantics;
 
-import java.util.ArrayList;
+import java.util.*;
 
 import com.epochx.core.representation.Node;
 import com.epochx.core.representation.TerminalNode;
@@ -58,7 +58,7 @@ public class RegressionRepresentation implements Representation {
 	/**
 	 * Simplifies any CVPs with same variable and power
 	 */
-	public void simplify() {
+	/*public void simplify() {
 		for(int i = 0; i<regressionRepresentation.size()-1; i++) {
 			CoefficientExponentFunction a = regressionRepresentation.get(i);
 			for(int j = i+1; j<regressionRepresentation.size(); j++) {
@@ -72,32 +72,63 @@ public class RegressionRepresentation implements Representation {
 				}
 			}
 		}
+	}*/
+	
+	public void simplify() {
+		outer: for (int i=0; i<regressionRepresentation.size(); i++) {
+			CoefficientExponentFunction cvp1 = regressionRepresentation.get(i);
+			Node<Double> coefficient1 = (Node<Double>) cvp1.getChild(0);
+			Node<Double> term1 = (Node<Double>) cvp1.getChild(1);
+			Node<Double> exponent1 = (Node<Double>) cvp1.getChild(2);
+
+			// Compare against every one AFTER it in the list.
+			for (int j=i+1; j<regressionRepresentation.size(); j++) {
+				CoefficientExponentFunction cvp2 = regressionRepresentation.get(j);
+				Node<Double> coefficient2 = (Node<Double>) cvp2.getChild(0);
+				Node<Double> term2 = (Node<Double>) cvp2.getChild(1);
+				Node<Double> exponent2 = (Node<Double>) cvp2.getChild(2);
+				
+				if (term1.equals(term2) && exponent1.equals(exponent2)) {
+					double newCoefficient = coefficient1.evaluate() + coefficient2.evaluate();
+					
+					// Update the second element with the new coefficient.
+					cvp2.setChild(new TerminalNode<Double>(newCoefficient), 0);
+					
+					// Nullify the current one and then we'll skip to the next...
+					regressionRepresentation.set(i, null);
+					
+					// Once we've done one merge go onto the next element - others will be caught later.
+					continue outer;
+				}
+			}
+		}
+		
+		// Add non-nulls to this new list.
+		List<CoefficientExponentFunction> combinedCVPs = new ArrayList<CoefficientExponentFunction>();
+		for (CoefficientExponentFunction cvp: regressionRepresentation) {
+			if (cvp != null) {
+				combinedCVPs.add(cvp);
+			}
+		}
+		
+		// Clear the old list.
+		regressionRepresentation.clear();
+		
+		// Then throw the new ones back in to the old list.
+		regressionRepresentation.addAll(combinedCVPs);
 	}
 	
 	public void order() {
-		ArrayList<CoefficientExponentFunction> ordered = new ArrayList<CoefficientExponentFunction>();
-		// find lowest power
-		int size = regressionRepresentation.size();
-		double lowestPower = new Double(Double.POSITIVE_INFINITY);
-		for(CoefficientExponentFunction c: regressionRepresentation) {
-			double power = (Double) c.getChild(2).evaluate();
-			if(power<lowestPower) {
-				lowestPower = power;
+		Collections.sort(regressionRepresentation, new Comparator<CoefficientExponentFunction>(){
+			@Override
+			public int compare(CoefficientExponentFunction cvp1,
+							   CoefficientExponentFunction cvp2) {
+				double power1 = ((Node<Double>) cvp1.getChild(2)).evaluate();
+				double power2 = ((Node<Double>) cvp2.getChild(2)).evaluate();
+				
+				return Double.compare(power1, power2);
 			}
-		}
-		// re-jig into ordered array
-		while(ordered.size()<size) {
-			for(CoefficientExponentFunction c: regressionRepresentation) {
-				double power = (Double) c.getChild(2).evaluate();
-				if(power==lowestPower) {
-					ordered.add(c);
-					break;
-				}
-			}
-			lowestPower++;
-		}
-		// set rep to ordered
-		regressionRepresentation = ordered;
+		});
 	}
 	
 	public String toString() {

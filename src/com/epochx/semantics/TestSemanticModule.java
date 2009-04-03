@@ -46,24 +46,24 @@ public class TestSemanticModule {
 			RegressionRepresentation regRep1 = (RegressionRepresentation) semMod.codeToBehaviour(c);
 			firstRep.add(regRep1);
 			System.out.println("2 - " + regRep1);			
-			//CandidateProgram cp = semMod.behaviourToCode(regRep1);			
-			//secondGen.add(cp);
-			//System.out.println("3 - " + cp.getRootNode());
-			//RegressionRepresentation regRep2 = (RegressionRepresentation) semMod.codeToBehaviour(cp);
-			//secondRep.add(regRep2);
-			//System.out.println("4 - " + regRep2);
+			CandidateProgram cp = semMod.behaviourToCode(regRep1);			
+			secondGen.add(cp);
+			System.out.println("3 - " + cp.getRootNode());
+			RegressionRepresentation regRep2 = (RegressionRepresentation) semMod.codeToBehaviour(cp);
+			secondRep.add(regRep2);
+			System.out.println("4 - " + regRep2);
 		}
 		
 		// test for equality
-		//int size = firstRep.size();
-		//for(int i = 0; i<size; i++) {
-		//	if(!firstRep.get(i).equals(secondRep.get(i))) {
-		//		System.out.println("1 - " + firstGen.get(i).getRootNode());
-		//		System.out.println("2 - " + firstRep.get(i));
-		//		System.out.println("3 - " + secondGen.get(i).getRootNode());
-		//		System.out.println("4 - " + secondRep.get(i));
-		//	}
-		//}
+//		int size = firstRep.size();
+//		for(int i = 0; i<size; i++) {
+//			if(!firstRep.get(i).equals(secondRep.get(i))) {
+//				System.out.println("1 - " + firstGen.get(i).getRootNode());
+//				System.out.println("2 - " + firstRep.get(i));
+//				System.out.println("3 - " + secondGen.get(i).getRootNode());
+//				System.out.println("4 - " + secondRep.get(i));
+//			}
+//		}
 
 		semMod.stop();
 		System.exit(777);

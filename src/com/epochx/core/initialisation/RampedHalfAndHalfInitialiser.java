@@ -39,7 +39,7 @@ public class RampedHalfAndHalfInitialiser<TYPE> implements Initialiser<TYPE> {
 	 * @param model The model being assessed
 	 * @param semMod The semantic module for this model
 	 */
-	public RampedHalfAndHalfInitialiser(GPModel<TYPE> model, SemanticModule semMod) {
+	public RampedHalfAndHalfInitialiser(GPModel<TYPE> model) {
 		this.model = model;
 		
 		// set up the grow and full parts
@@ -53,6 +53,11 @@ public class RampedHalfAndHalfInitialiser<TYPE> implements Initialiser<TYPE> {
 		}
 	}
 	
+	/**
+	 * Will use grow initialisation on half the population and full on the other half. If 
+	 * the population size is an odd number then the extra individual will be initialised with
+	 * grow.
+	 */
 	public List<CandidateProgram<TYPE>> getInitialPopulation() {
 		
 		// initialise population of candidate programs
@@ -67,20 +72,23 @@ public class RampedHalfAndHalfInitialiser<TYPE> implements Initialiser<TYPE> {
 				depth++;
 				split = split + marker;
 			}
-            candidate = new CandidateProgram<TYPE>(grow.buildGrowNodeTree(depth), model);
-            while(firstGen.contains(candidate)) {
-                candidate = new CandidateProgram<TYPE>(grow.buildGrowNodeTree(depth), model);
-            }
-            firstGen.add(candidate);
-            candidate = new CandidateProgram<TYPE>(full.buildFullNodeTree(depth), model);
-            while(firstGen.contains(candidate)) {
-                candidate = new CandidateProgram<TYPE>(full.buildFullNodeTree(depth), model);
-            }
+			// Grow on even numbers, full on odd.
+			if (((i % 2) == 0)) {
+	            candidate = new CandidateProgram<TYPE>(grow.buildGrowNodeTree(depth), model);
+	            while(firstGen.contains(candidate)) {
+	                candidate = new CandidateProgram<TYPE>(grow.buildGrowNodeTree(depth), model);
+	            }
+			} else {
+	            candidate = new CandidateProgram<TYPE>(full.buildFullNodeTree(depth), model);
+	            while(firstGen.contains(candidate)) {
+	                candidate = new CandidateProgram<TYPE>(full.buildFullNodeTree(depth), model);
+	            }
+			}
             firstGen.add(candidate);
 			
         }
 		
-		// return starting population
+		// Return starting population.
 		return firstGen;
 	}
 

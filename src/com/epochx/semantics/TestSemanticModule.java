@@ -30,7 +30,7 @@ public class TestSemanticModule {
 		
 		RegressionModelTomDoNotTouch model = new RegressionModelTomDoNotTouch();
 		RegressionSemanticModule semMod = new RegressionSemanticModule(model.getTerminals(), model);
-		RampedHalfAndHalfInitialiser rhh = new RampedHalfAndHalfInitialiser(model, semMod);
+		RampedHalfAndHalfInitialiser rhh = new RampedHalfAndHalfInitialiser(model);
 		
 		semMod.start();
 		

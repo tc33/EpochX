@@ -71,7 +71,7 @@ public class Majority5 extends GPAbstractModel<Boolean> {
 		setCrossover(new UniformPointCrossover<Boolean>());
 		setStateCheckedCrossover(false);
 		setSemanticModule(new BooleanSemanticModule(getTerminals(), this));
-		setInitialiser(new RampedHalfAndHalfInitialiser<Boolean>(this, getSemanticModule()));
+		setInitialiser(new RampedHalfAndHalfInitialiser<Boolean>(this));
 	}
 	
 	@Override

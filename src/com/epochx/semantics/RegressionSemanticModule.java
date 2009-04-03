@@ -356,10 +356,10 @@ public class RegressionSemanticModule implements SemanticModule {
 			rootNode = regRep.get(0);
 			for(int i = 1; i<regRepSize; i++) {
 				// check if second coefficient <0
-				if(((Double) regRep.get(i).getChild(0).evaluate()) < 0) {
+				double coefficient = (Double) regRep.get(i).getChild(0).evaluate();
+				if(coefficient < 0) {
 					// modify sign on second CVP node
-					double coefficient = (Double) regRep.get(i).getChild(0).evaluate();
-					double newCoefficient = Math.abs(coefficient);
+					double newCoefficient = coefficient * -1;
 					regRep.get(i).setChild(new TerminalNode<Double>(newCoefficient), 0);
 					// if it is generate subtract function
 					rootNode = new SubtractFunction(rootNode, regRep.get(i));
@@ -381,20 +381,26 @@ public class RegressionSemanticModule implements SemanticModule {
 		if(rootNode instanceof CoefficientExponentFunction) {
 			double coefficient = (Double) rootNode.getChild(0).evaluate();
 			double power = (Double) rootNode.getChild(2).evaluate();
-			if(coefficient==0 && power==0) {
+			if(coefficient==0) {
 				rootNode = new TerminalNode<Double>(0d);
 			} else if(power==0) {
 				rootNode = new TerminalNode<Double>(coefficient);
 			} else if(coefficient==1 && power==1) {
 				rootNode = new Variable<Double>("X");
 			} else if(coefficient==1 && power ==-1) {
+				rootNode = new ProtectedDivisionFunction(new TerminalNode<Double>(1d), new Variable<Double>("X"));
+			} else if(coefficient!=1 && power ==-1) {
 				rootNode = new ProtectedDivisionFunction(new TerminalNode<Double>(coefficient), new Variable<Double>("X"));
-			} else if(power <-1) {
+			} else if(power<-1) {
 				rootNode = new ProtectedDivisionFunction(new TerminalNode<Double>(coefficient), new CoefficientExponentFunction(new TerminalNode<Double>(1d), new Variable<Double>("X"), new TerminalNode<Double>((power*-1))));
-			} else if(power>1) {
+			} else if(coefficient==1 && power>1) {
 				rootNode = new MultiplyFunction(new Variable<Double>("X"), new CoefficientExponentFunction(new TerminalNode<Double>(coefficient), new Variable<Double>("X"), new TerminalNode<Double>((power-1))));
-			} else if(coefficient>1 && power==1) {
+			} else if(coefficient!=1 && power>1) {
+				rootNode = new MultiplyFunction(new TerminalNode<Double>(coefficient), new CoefficientExponentFunction(new TerminalNode<Double>(1d), new Variable<Double>("X"), new TerminalNode<Double>((power))));
+			} else if(coefficient!=1 && power==1) {
 				rootNode = new MultiplyFunction(new TerminalNode<Double>(coefficient), new Variable<Double>("X"));
+			} else {
+				System.out.println("CATCH = " + rootNode);
 			}
 		}
 		// expand children

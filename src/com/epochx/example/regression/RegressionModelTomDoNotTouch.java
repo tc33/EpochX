@@ -47,7 +47,7 @@ public class RegressionModelTomDoNotTouch extends GPAbstractModel<Double> {
 		this.x = new Variable<Double>("X");
 		
 		// Setup run.
-		setPopulationSize(100);
+		setPopulationSize(200);
 		setCrossoverProbability(0.9);
 		setMutationProbability(0.0);
 		setReproductionProbability(0.1);

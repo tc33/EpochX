@@ -58,22 +58,6 @@ public class RegressionRepresentation implements Representation {
 	/**
 	 * Simplifies any CVPs with same variable and power
 	 */
-	/*public void simplify() {
-		for(int i = 0; i<regressionRepresentation.size()-1; i++) {
-			CoefficientExponentFunction a = regressionRepresentation.get(i);
-			for(int j = i+1; j<regressionRepresentation.size(); j++) {
-				CoefficientExponentFunction b = regressionRepresentation.get(j);
-				if(a.getChild(1).equals(b.getChild(1)) && a.getChild(2).equals(b.getChild(2))) {
-					double coefficient1 = (Double) a.getChild(0).evaluate();
-					double coefficient2 = (Double) b.getChild(0).evaluate();
-					double newCoefficient = coefficient1 + coefficient2;
-					a = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient),(Node<Double>) a.getChild(1),(Node<Double>) a.getChild(2));
-					regressionRepresentation.remove(j);
-				}
-			}
-		}
-	}*/
-	
 	public void simplify() {
 		outer: for (int i=0; i<regressionRepresentation.size(); i++) {
 			CoefficientExponentFunction cvp1 = regressionRepresentation.get(i);
@@ -99,6 +83,16 @@ public class RegressionRepresentation implements Representation {
 					
 					// Once we've done one merge go onto the next element - others will be caught later.
 					continue outer;
+				}
+			}
+		}
+	
+		// kill any 0 or -0 coefficients
+		for(int i = 0; i<regressionRepresentation.size(); i++) {
+			if(regressionRepresentation.get(i) instanceof CoefficientExponentFunction) {
+				double coefficient = (Double) regressionRepresentation.get(i).getChild(0).evaluate();
+				if(coefficient==0 || coefficient==-0) {
+					regressionRepresentation.set(i, null);
 				}
 			}
 		}
@@ -144,13 +138,14 @@ public class RegressionRepresentation implements Representation {
 	 */
 	@Override
 	public boolean equals(Representation anotherBehaviour) {
+		boolean marker = false;
 		if(anotherBehaviour instanceof RegressionRepresentation) {
 			RegressionRepresentation regRep = (RegressionRepresentation) anotherBehaviour;
-			if(regRep.getRegressionRepresentation()==this.regressionRepresentation) {
-				return true;
+			if(regRep.getRegressionRepresentation().equals(this.regressionRepresentation)) {
+				marker = true;
 			}			
 		}
-		return false;
+		return marker;
 	}
 
 	/* (non-Javadoc)

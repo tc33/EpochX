@@ -31,6 +31,7 @@ public class SubtreeMutation<TYPE> implements Mutator<TYPE> {
 	private GPModel<TYPE> model;
 	private int subtreeDepth;
 	
+	//TODO Consider removing use of the model inside these things.
 	public SubtreeMutation(GPModel<TYPE> model) {
 		// 4 is a slightly arbitrary choice but we had to choose something.
 		this(model, 4);

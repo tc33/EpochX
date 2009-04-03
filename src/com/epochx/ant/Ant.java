@@ -25,7 +25,7 @@ import static com.epochx.ant.Orientation.*;
 import java.awt.*;
 
 /**
- * This class represents an ant as an object for the aritficial ant simulation
+ * This class represents an ant as an object for the artificial ant simulation
  * @author Lawrence Beadle
  */
 public class Ant {
@@ -39,8 +39,8 @@ public class Ant {
     private AntLandscape antLandscape;
     
     /**
-     * Contructor for the artifical ant model
-     * @param timeSteps The maximum number of timesteps the ant is allowed to move - both turns and moves count as one step
+     * Constructor for the artificial ant model
+     * @param timeSteps The maximum number of time steps the ant is allowed to move - both turns and moves count as one step
      */
     public Ant(int timeSteps, AntLandscape antLandscape) {
         orientation = EAST;
@@ -124,10 +124,11 @@ public class Ant {
         }
         moves++;
         
-        // eat food
-        //if(antLandscape.isFoodLocation(getLocation())) {
-        //	this.eatFood();        	
-        //}
+        // f food pellet present - eat food
+        if(antLandscape.isFoodLocation(getLocation())) {
+        	this.eatFood();
+        	antLandscape.removeFoodLocation(getLocation());
+        }
     }
     
     /**
@@ -191,7 +192,7 @@ public class Ant {
     }
     
     /**
-     * increments moves for skip algorithm required to prevent ant falling into deadends
+     * increments moves for skip algorithm required to prevent ant falling into dead ends
      */
     public void skip() {
         moves++;
@@ -199,5 +200,15 @@ public class Ant {
     
     public int getMaxMoves() {
     	return maxMoves;
+    }
+    
+    public void resetAnt(int timeSteps, AntLandscape antLandscape) {
+        orientation = EAST;
+        moves = 0;
+        xLocation = 0;
+        yLocation = 0;
+        foodEaten = 0;
+        this.maxMoves = timeSteps;
+        this.antLandscape = antLandscape;
     }
 }

@@ -40,7 +40,7 @@ public class AntLandscape {
 	}
 	
 	public void removeFoodLocation(Point location) {
-		foodLocations.add(location);
+		foodLocations.remove(location);
 	}
 	
 	public boolean isFoodLocation(Point location) {

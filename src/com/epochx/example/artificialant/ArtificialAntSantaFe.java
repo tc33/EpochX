@@ -32,6 +32,9 @@ import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.func.action.*;
+import com.epochx.semantics.AntSemanticModule;
+import com.epochx.stats.GenerationStats.GenStatField;
+import com.epochx.stats.RunStats.RunStatField;
 import com.epochx.util.*;
 
 /**
@@ -42,10 +45,11 @@ public class ArtificialAntSantaFe extends GPAbstractModel<AntAction> {
 	private List<String> inputs;
 	private HashMap<String, TerminalNode<AntAction>> variables = new HashMap<String, TerminalNode<AntAction>>();
 	private Dimension dimension = new Dimension(32, 32);
-	private AntLandscape antLandscape;
-	private Ant ant = new Ant(600, antLandscape);
+	private AntLandscape antLandscape = new AntLandscape(dimension, null);
+	private Ant ant = new Ant(600, antLandscape);;
 	private ArrayList<Point> foodLocations;
 	private int noOfFoodPellets;
+	private int run = 1;
 	
 	public ArtificialAntSantaFe() {
 		inputs = new ArrayList<String>();
@@ -66,7 +70,7 @@ public class ArtificialAntSantaFe extends GPAbstractModel<AntAction> {
 		
 		// initialisation of ant landscape
 		// insert null food locations because you need to refresh it
-		// before each fitness evaluations
+		// before each fitness evaluation
 		antLandscape = new AntLandscape(dimension, null);
 		
 		configure();
@@ -79,21 +83,21 @@ public class ArtificialAntSantaFe extends GPAbstractModel<AntAction> {
 		variables.put("TURN-LEFT", new TerminalNode<AntAction>(new AntTurnLeftAction(ant)));
 		variables.put("TURN-RIGHT", new TerminalNode<AntAction>(new AntTurnRightAction(ant)));
 		
-		setPopulationSize(500);
-		setNoGenerations(20);
+		setPopulationSize(50);
+		setNoGenerations(10);
 		setCrossoverProbability(0.9);
 		setReproductionProbability(0.1);
-		setNoRuns(2);
-		setPouleSize(50);
-		setNoElites(50);
-		setInitialMaxDepth(6);
+		setNoRuns(1);
+		setPouleSize(5);
+		setNoElites(5);
+		setInitialMaxDepth(4);
 		setMaxDepth(17);
-		setPouleSelector(new TournamentSelector<AntAction>(7, this));
+		setPouleSelector(new TournamentSelector<AntAction>(5, this));
 		setParentSelector(new RandomSelector<AntAction>());
 		setCrossover(new UniformPointCrossover<AntAction>());
 		setStateCheckedCrossover(false);
-		//setSemanticModule(new SemanticModule(getTerminals(), this));
-		setInitialiser(new RampedHalfAndHalfInitialiser<AntAction>(this, getSemanticModule()));
+		setSemanticModule(new AntSemanticModule(getTerminals(), this));
+		setInitialiser(new FullInitialiser<AntAction>(this));
 	}
 	
 	@Override
@@ -138,8 +142,40 @@ public class ArtificialAntSantaFe extends GPAbstractModel<AntAction> {
 			fl.add(p);
 		}
 		antLandscape.setFoodLocations(fl);
+		ant.resetAnt(600, antLandscape);
+		
 		while(ant.getMoves()<ant.getMaxMoves()) {
 			program.evaluate();
 		}
+	}
+	
+	@Override
+	public void runStats(int runNo, Object[] stats) {
+		this.run = run + 1;
+		System.out.print("Run number " + run + " complete.");		
+		for (Object s: stats) {
+			System.out.print(s);
+			System.out.print(" ");
+		}
+		System.out.println();
+	}
+	
+	@Override
+	public RunStatField[] getRunStatFields() {
+		return new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM};
+	}
+	
+	@Override
+	public void generationStats(int generation, Object[] stats) {
+		for (Object s: stats) {
+			System.out.print(s);
+			System.out.print(" ");
+		}
+		System.out.println();
+	}
+
+	@Override
+	public GenStatField[] getGenStatFields() {
+		return new GenStatField[]{GenStatField.FITNESS_AVE, GenStatField.FITNESS_MIN, GenStatField.LENGTH_AVE};
 	}
 }

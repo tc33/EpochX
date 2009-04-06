@@ -28,7 +28,7 @@ import com.epochx.func.dbl.CoefficientExponentFunction;
 /**
  * @author Lawrence Beadle & Tom Castle
  */
-public class RegressionRepresentation implements Representation {
+public class RegressionRepresentation implements Representation, Cloneable {
 	
 	private ArrayList<CoefficientExponentFunction> regressionRepresentation;
 	
@@ -164,6 +164,19 @@ public class RegressionRepresentation implements Representation {
 			
 		}
 		return false;
+	}
+
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		RegressionRepresentation newRep = (RegressionRepresentation) super.clone();
+		newRep.regressionRepresentation = (ArrayList<CoefficientExponentFunction>) this.regressionRepresentation.clone();
+		
+		// Clone each cvp element.
+		for (int i=0; i<newRep.regressionRepresentation.size(); i++) {
+			CoefficientExponentFunction cvp = newRep.regressionRepresentation.get(i);
+			newRep.regressionRepresentation.set(i, (CoefficientExponentFunction) cvp.clone());
+		}
+		return newRep;
 	}
 
 }

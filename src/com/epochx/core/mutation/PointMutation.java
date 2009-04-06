@@ -29,7 +29,7 @@ import com.epochx.core.representation.*;
  */
 public class PointMutation<TYPE> implements Mutator<TYPE> {
 
-	private List<Node<TYPE>> syntax;
+	private List<Node<?>> syntax;
 	
 	private double pointProbability;
 	
@@ -37,11 +37,11 @@ public class PointMutation<TYPE> implements Mutator<TYPE> {
 	 * Creates a point mutation with a point probability of 0.01. It's generally 
 	 * recommended that the PointMutation(double) constructor is used.
 	 */
-	public PointMutation(List<Node<TYPE>> syntax) {
+	public PointMutation(List<Node<?>> syntax) {
 		this(syntax, 0.01);
 	}
 	
-	public PointMutation(List<Node<TYPE>> syntax, double pointProbability) {
+	public PointMutation(List<Node<?>> syntax, double pointProbability) {
 		this.syntax = syntax;
 		this.pointProbability = pointProbability;
 	}
@@ -63,9 +63,12 @@ public class PointMutation<TYPE> implements Mutator<TYPE> {
 				for (int j=0; j<syntax.size(); j++) {
 					int index = (j + rand) % syntax.size();
 					
-					Node<TYPE> n = (Node<TYPE>) syntax.get(index).clone();
+					Node<?> n = syntax.get(index);
 					
+					//TODO Need to check we're not replacing with the same thing.
 					if (n.getArity() == arity) {
+						n = (Node<TYPE>) n.clone();
+						
 						// Attach the old node's children.
 						for (int k=0; k<arity; k++) {
 							n.setChild(node.getChild(k), k);

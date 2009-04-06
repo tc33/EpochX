@@ -21,12 +21,13 @@ package com.epochx.semantics;
 import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
 import com.epochx.example.regression.RegressionModelTomDoNotTouch;
+import com.epochx.func.dbl.*;
 
 import java.util.*;
 
 public class TestSemanticModule {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws CloneNotSupportedException {
 		
 		RegressionModelTomDoNotTouch model = new RegressionModelTomDoNotTouch();
 		RegressionSemanticModule semMod = new RegressionSemanticModule(model.getTerminals(), model);
@@ -44,7 +45,7 @@ public class TestSemanticModule {
 		for(CandidateProgram c: firstGen) {
 			//System.out.println("1 - " + c.getRootNode());
 			RegressionRepresentation regRep1 = (RegressionRepresentation) semMod.codeToBehaviour(c);
-			firstRep.add(regRep1);
+			firstRep.add((RegressionRepresentation) regRep1.clone());
 			//System.out.println("2 - " + regRep1);			
 			CandidateProgram cp = semMod.behaviourToCode(regRep1);			
 			secondGen.add(cp);

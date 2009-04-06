@@ -24,6 +24,7 @@ import java.util.*;
 
 import com.epochx.core.*;
 import com.epochx.core.crossover.*;
+import com.epochx.core.mutation.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.func.bool.*;
@@ -47,6 +48,13 @@ public class Even5Parity extends GPAbstractModel<Boolean> {
 	}
 	
 	public void configure() {
+		// Define variables.
+		variables.put("D4", new Variable<Boolean>("D4"));
+		variables.put("D3", new Variable<Boolean>("D3"));
+		variables.put("D2", new Variable<Boolean>("D2"));
+		variables.put("D1", new Variable<Boolean>("D1"));
+		variables.put("D0", new Variable<Boolean>("D0"));
+		
 		setPopulationSize(500);
 		setNoGenerations(100);
 		setMutationProbability(0.1);
@@ -59,13 +67,7 @@ public class Even5Parity extends GPAbstractModel<Boolean> {
 		setPouleSelector(new TournamentSelector<Boolean>(7, this));
 		setParentSelector(new RandomSelector<Boolean>());
 		setCrossover(new UniformPointCrossover<Boolean>());
-		
-		// Define variables.
-		variables.put("D4", new Variable<Boolean>("D4"));
-		variables.put("D3", new Variable<Boolean>("D3"));
-		variables.put("D2", new Variable<Boolean>("D2"));
-		variables.put("D1", new Variable<Boolean>("D1"));
-		variables.put("D0", new Variable<Boolean>("D0"));
+		setMutator(new PointMutation<Boolean>(this.getSyntax(), 0.1));
 	}
 	
 	@Override

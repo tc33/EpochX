@@ -31,7 +31,7 @@ public class TestSemanticModule {
 		
 		RegressionModelTomDoNotTouch model = new RegressionModelTomDoNotTouch();
 		RegressionSemanticModule semMod = new RegressionSemanticModule(model.getTerminals(), model);
-		GrowInitialiser rhh = new GrowInitialiser(model);
+		FullInitialiser rhh = new FullInitialiser(model);
 		
 		semMod.start();
 		

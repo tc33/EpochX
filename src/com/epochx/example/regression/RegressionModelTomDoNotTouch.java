@@ -26,10 +26,12 @@ import com.epochx.core.crossover.*;
 import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
-import com.epochx.func.*;
+import com.epochx.example.evenparity.Even4Parity;
 import com.epochx.func.dbl.*;
+import com.epochx.semantics.RegressionSemanticModule;
 import com.epochx.stats.GenerationStats.*;
 import com.epochx.stats.RunStats.*;
+import com.epochx.util.FileManip;
 
 /**
  * 
@@ -37,6 +39,7 @@ import com.epochx.stats.RunStats.*;
 public class RegressionModelTomDoNotTouch extends GPAbstractModel<Double> {
 
 	private Variable<Double> x;
+	private int run = 1;
 	
 	public RegressionModelTomDoNotTouch() {
 		configure();
@@ -47,20 +50,21 @@ public class RegressionModelTomDoNotTouch extends GPAbstractModel<Double> {
 		this.x = new Variable<Double>("X");
 		
 		// Setup run.
-		setPopulationSize(200);
+		setPopulationSize(500);
+		setNoGenerations(50);
 		setCrossoverProbability(0.9);
-		setMutationProbability(0.0);
 		setReproductionProbability(0.1);
-		setInitialiser(new GrowInitialiser<Double>(this));
-		//setPouleSelector(new TournamentSelector<Double>(4, this));
-		setParentSelector(new LinearRankSelector<Double>(0.5));
-		setPouleSelector(new RandomSelector<Double>());
-		setCrossover(new UniformPointCrossover<Double>());
+		setNoRuns(1);
 		setPouleSize(50);
-		setNoGenerations(100);
-		setNoElites(3);
-		setMaxDepth(10);
-		setNoRuns(3);
+		setNoElites(50);
+		setInitialMaxDepth(6);
+		setMaxDepth(17);
+		setPouleSelector(new TournamentSelector<Double>(7, this));
+		setParentSelector(new RandomSelector<Double>());
+		setCrossover(new UniformPointCrossover<Double>());
+		setStateCheckedCrossover(true);
+		setSemanticModule(new RegressionSemanticModule(getTerminals(), this));
+		setInitialiser(new RampedHalfAndHalfInitialiser<Double>(this));
 	}
 
 	@Override
@@ -122,6 +126,7 @@ public class RegressionModelTomDoNotTouch extends GPAbstractModel<Double> {
 	}
 	
 	public void runStats(int runNo, Object[] stats) {
+		this.run = runNo;
 		System.out.print("Run number " + runNo + " complete.");
 		for (Object s: stats) {
 			System.out.print(s);
@@ -134,18 +139,23 @@ public class RegressionModelTomDoNotTouch extends GPAbstractModel<Double> {
 		return new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM};
 	}
 	
-	public void generationStats(int genNo, Object[] stats) {
-		System.out.print(genNo + " ");
+	@Override
+	public void generationStats(int generation, Object[] stats) {
+		ArrayList<String> output = new ArrayList<String>();
+		System.out.println(run + "\t" + generation + "\t");
+		String part = run + "\t" + generation + "\t";
 		for (Object s: stats) {
-			System.out.print(s);
-			System.out.print(" ");
+			part = part + s;
+			part = part + "\t";
 		}
-		System.out.println();
+		part = part + "\n";
+		output.add(part);
+		FileManip.doOutput(null, output, "output.txt", true);
 	}
-	
+
 	@Override
 	public GenStatField[] getGenStatFields() {
-		return new GenStatField[]{GenStatField.FITNESS_MIN, GenStatField.FITNESS_AVE};
+		return new GenStatField[]{GenStatField.FITNESS_AVE, GenStatField.FITNESS_MIN, GenStatField.LENGTH_AVE};
 	}
 	
 	public static void main(String[] args) {

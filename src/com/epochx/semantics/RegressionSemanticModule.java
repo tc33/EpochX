@@ -105,43 +105,28 @@ public class RegressionSemanticModule implements SemanticModule {
 			rootNode = this.removeAllPDivsWithSameSubtrees(rootNode);
 		}
 		
-		//System.out.println("1 - " + rootNode);
-		
 		// resolve constant calculations
 		if(GPProgramAnalyser.getProgramLength(rootNode)>1) {
 			rootNode = this.resolveConstantCalculations(rootNode);
 		}
-		
-		//System.out.println("2 - " + rootNode);
 		
 		// resolve any multiply by zeros
 		if(GPProgramAnalyser.getProgramLength(rootNode)>1) {
 			rootNode = this.removeMultiplyByZeros(rootNode);
 		}
 		
-		//System.out.println("3 - " + rootNode);
-		
 		// resolve PDIVs with equal subtrees and PDIV by 0 to 0
 		if(GPProgramAnalyser.getProgramLength(rootNode)>1) {
 			rootNode = this.removeAllPDivsWithSameSubtrees(rootNode);
 		}
 		
-		//System.out.println("4 - " + rootNode);
-		
 		// collect up coefficient functions
 		rootNode = this.reduceToCVPFormat(rootNode);
 		
-		//System.out.println("5 - " + rootNode);
-		
 		RegressionRepresentation regRep = new RegressionRepresentation(this.isolateCVPs(rootNode, 0));
-		
-		//System.out.println("R1 - " + regRep.toString());
 		
 		regRep.simplify();
 		regRep.order();
-		
-		//System.out.println("R2 - " + regRep.toString());
-		//System.out.println("---------------");
 		
 		return regRep;
 	}
@@ -281,7 +266,7 @@ public class RegressionSemanticModule implements SemanticModule {
 					}
 				}
 				RegressionRepresentation regRep = new RegressionRepresentation(cVPTotal);
-				//regRep.simplify();
+				regRep.simplify();
 				rootNode = this.buildCVPTree(regRep);
 			} else if(rootNode instanceof ProtectedDivisionFunction) {
 				// Get CVP list from each side
@@ -306,14 +291,14 @@ public class RegressionSemanticModule implements SemanticModule {
 					}
 				}
 				RegressionRepresentation regRep = new RegressionRepresentation(cVPTotal);
-				//regRep.simplify();
+				regRep.simplify();
 				rootNode = this.buildCVPTree(regRep);
 			}
 		}
 		return rootNode;
 	}
 	
-	public ArrayList<CoefficientExponentFunction> isolateCVPs(Node<Double> rootNode, int depth) {
+	private ArrayList<CoefficientExponentFunction> isolateCVPs(Node<Double> rootNode, int depth) {
 		ArrayList<CoefficientExponentFunction> cVPList = new ArrayList<CoefficientExponentFunction>();		
 		// check if terminal
 		if(rootNode instanceof CoefficientExponentFunction) {

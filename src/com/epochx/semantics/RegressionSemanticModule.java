@@ -123,7 +123,7 @@ public class RegressionSemanticModule implements SemanticModule {
 		// collect up coefficient functions
 		rootNode = this.reduceToCVPFormat(rootNode);
 		
-		RegressionRepresentation regRep = new RegressionRepresentation(this.isolateCVPs(rootNode, 0));
+		RegressionRepresentation regRep = new RegressionRepresentation(this.isolateCVPs(rootNode));
 		
 		regRep.simplify();
 		regRep.order();
@@ -248,8 +248,8 @@ public class RegressionSemanticModule implements SemanticModule {
 			// scan for CVPs to build up
 			if(rootNode instanceof MultiplyFunction) {
 				// Get CVP list from each side
-				ArrayList<CoefficientExponentFunction> cVPLeft = this.isolateCVPs((Node<Double>) rootNode.getChild(0), 0);
-				ArrayList<CoefficientExponentFunction> cVPRight = this.isolateCVPs((Node<Double>) rootNode.getChild(1), 0);
+				ArrayList<CoefficientExponentFunction> cVPLeft = this.isolateCVPs((Node<Double>) rootNode.getChild(0));
+				ArrayList<CoefficientExponentFunction> cVPRight = this.isolateCVPs((Node<Double>) rootNode.getChild(1));
 				ArrayList<CoefficientExponentFunction> cVPTotal = new ArrayList<CoefficientExponentFunction>();
 				int cPVLeftSize = cVPLeft.size();
 				int cPVRightSize = cVPRight.size();
@@ -270,8 +270,8 @@ public class RegressionSemanticModule implements SemanticModule {
 				rootNode = this.buildCVPTree(regRep);
 			} else if(rootNode instanceof ProtectedDivisionFunction) {
 				// Get CVP list from each side
-				ArrayList<CoefficientExponentFunction> cVPLeft = this.isolateCVPs((Node<Double>) rootNode.getChild(0), 0);
-				ArrayList<CoefficientExponentFunction> cVPRight = this.isolateCVPs((Node<Double>) rootNode.getChild(1), 0);
+				ArrayList<CoefficientExponentFunction> cVPLeft = this.isolateCVPs((Node<Double>) rootNode.getChild(0));
+				ArrayList<CoefficientExponentFunction> cVPRight = this.isolateCVPs((Node<Double>) rootNode.getChild(1));
 				ArrayList<CoefficientExponentFunction> cVPTotal = new ArrayList<CoefficientExponentFunction>();
 				int cPVLeftSize = cVPLeft.size();
 				int cPVRightSize = cVPRight.size();
@@ -298,46 +298,31 @@ public class RegressionSemanticModule implements SemanticModule {
 		return rootNode;
 	}
 	
-	private ArrayList<CoefficientExponentFunction> isolateCVPs(Node<Double> rootNode, int depth) {
+	private ArrayList<CoefficientExponentFunction> isolateCVPs(Node<Double> rootNode) {
 		ArrayList<CoefficientExponentFunction> cVPList = new ArrayList<CoefficientExponentFunction>();		
 		// check if terminal
 		if(rootNode instanceof CoefficientExponentFunction) {
 			cVPList.add((CoefficientExponentFunction) rootNode);		
 		} else if(rootNode instanceof AddFunction) {
 			ArrayList<CoefficientExponentFunction> cVPs = new ArrayList<CoefficientExponentFunction>();
-			try {
-				cVPs = this.isolateCVPs((Node<Double>) rootNode.getChild(0), depth+1);
-			} catch(StackOverflowError e) {
-				System.out.println("D = " + depth + " ND = " + GPProgramAnalyser.getProgramDepth(new CandidateProgram(rootNode, model)));
-			}
+			cVPs = this.isolateCVPs((Node<Double>) rootNode.getChild(0));
 			// add the retrieved CVP nodes
 			for(CoefficientExponentFunction c: cVPs) {
 				cVPList.add(c);
-			} try {
-				cVPs = this.isolateCVPs((Node<Double>) rootNode.getChild(1), depth+1);
-			} catch(StackOverflowError e) {
-				System.out.println("D = " + depth + " ND = " + GPProgramAnalyser.getProgramDepth(new CandidateProgram(rootNode, model)));
 			}
+			cVPs = this.isolateCVPs((Node<Double>) rootNode.getChild(1));
 			// add the retrieved CVP nodes
 			for(CoefficientExponentFunction c: cVPs) {
 				cVPList.add(c);
 			}
 		} else if(rootNode instanceof SubtractFunction) {
 			ArrayList<CoefficientExponentFunction> cVPs = new ArrayList<CoefficientExponentFunction>();
-			try {
-				cVPs = this.isolateCVPs((Node<Double>) rootNode.getChild(0), depth+1);
-			} catch(StackOverflowError e) {
-				System.out.println("D = " + depth + " ND = " + GPProgramAnalyser.getProgramDepth(new CandidateProgram(rootNode, model)));
-			}
+			cVPs = this.isolateCVPs((Node<Double>) rootNode.getChild(0));
 			// add the retrieved CVP nodes
 			for(CoefficientExponentFunction c: cVPs) {
 				cVPList.add(c);
 			}
-			try {
-				cVPs = this.isolateCVPs((Node<Double>) rootNode.getChild(1), depth+1);
-			} catch(StackOverflowError e) {
-				System.out.println("D = " + depth + " ND = " + GPProgramAnalyser.getProgramDepth(new CandidateProgram(rootNode, model)));
-			}
+			cVPs = this.isolateCVPs((Node<Double>) rootNode.getChild(1));
 			// add the retrieved CVP nodes AFTER * the coefficients by -1
 			for(CoefficientExponentFunction c: cVPs) {
 				// * coefficients by -1 before adding them

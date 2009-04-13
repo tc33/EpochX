@@ -46,7 +46,7 @@ public class ArtificialAntSantaFe extends GPAbstractModel<AntAction> {
 	private HashMap<String, TerminalNode<AntAction>> variables = new HashMap<String, TerminalNode<AntAction>>();
 	private Dimension dimension = new Dimension(32, 32);
 	private AntLandscape antLandscape = new AntLandscape(dimension, null);
-	private Ant ant = new Ant(600, antLandscape);;
+	private Ant ant = new Ant(600, antLandscape);
 	private ArrayList<Point> foodLocations;
 	private int noOfFoodPellets;
 	private int run = 1;
@@ -83,21 +83,21 @@ public class ArtificialAntSantaFe extends GPAbstractModel<AntAction> {
 		variables.put("TURN-LEFT", new TerminalNode<AntAction>(new AntTurnLeftAction(ant)));
 		variables.put("TURN-RIGHT", new TerminalNode<AntAction>(new AntTurnRightAction(ant)));
 		
-		setPopulationSize(50);
-		setNoGenerations(10);
+		setPopulationSize(500);
+		setNoGenerations(50);
 		setCrossoverProbability(0.9);
 		setReproductionProbability(0.1);
 		setNoRuns(1);
-		setPouleSize(5);
-		setNoElites(5);
-		setInitialMaxDepth(4);
-		setMaxDepth(17);
-		setPouleSelector(new TournamentSelector<AntAction>(5, this));
+		setPouleSize(50);
+		setNoElites(50);
+		setInitialMaxDepth(6);
+		setMaxDepth(10);
+		setPouleSelector(new TournamentSelector<AntAction>(7, this));
 		setParentSelector(new RandomSelector<AntAction>());
 		setCrossover(new UniformPointCrossover<AntAction>());
-		setStateCheckedCrossover(false);
-		setSemanticModule(new AntSemanticModule(getTerminals(), this));
-		setInitialiser(new FullInitialiser<AntAction>(this));
+		//setStateCheckedCrossover(false);
+		//setSemanticModule(new AntSemanticModule(getTerminals(), this));
+		setInitialiser(new RampedHalfAndHalfInitialiser<AntAction>(this));
 	}
 	
 	@Override
@@ -149,29 +149,32 @@ public class ArtificialAntSantaFe extends GPAbstractModel<AntAction> {
 		}
 	}
 	
-	@Override
 	public void runStats(int runNo, Object[] stats) {
-		this.run = run + 1;
-		System.out.print("Run number " + run + " complete.");		
+		this.run = runNo;
+		System.out.print("Run number " + runNo + " complete.");
 		for (Object s: stats) {
 			System.out.print(s);
 			System.out.print(" ");
 		}
 		System.out.println();
 	}
-	
-	@Override
+
 	public RunStatField[] getRunStatFields() {
 		return new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM};
 	}
 	
 	@Override
 	public void generationStats(int generation, Object[] stats) {
+		ArrayList<String> output = new ArrayList<String>();
+		System.out.println(run + "\t" + generation + "\t");
+		String part = run + "\t" + generation + "\t";
 		for (Object s: stats) {
-			System.out.print(s);
-			System.out.print(" ");
+			part = part + s;
+			part = part + "\t";
 		}
-		System.out.println();
+		part = part + "\n";
+		output.add(part);
+		FileManip.doOutput(null, output, "output.txt", true);
 	}
 
 	@Override

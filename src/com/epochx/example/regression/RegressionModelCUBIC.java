@@ -36,12 +36,12 @@ import com.epochx.util.FileManip;
 /**
  * 
  */
-public class RegressionModelTomDoNotTouch extends GPAbstractModel<Double> {
+public class RegressionModelCUBIC extends GPAbstractModel<Double> {
 
 	private Variable<Double> x;
 	private int run = 1;
 	
-	public RegressionModelTomDoNotTouch() {
+	public RegressionModelCUBIC() {
 		configure();
 	}
 	
@@ -54,15 +54,15 @@ public class RegressionModelTomDoNotTouch extends GPAbstractModel<Double> {
 		setNoGenerations(50);
 		setCrossoverProbability(0.9);
 		setReproductionProbability(0.1);
-		setNoRuns(1);
+		setNoRuns(100);
 		setPouleSize(50);
 		setNoElites(50);
 		setInitialMaxDepth(6);
 		setMaxDepth(17);
 		setPouleSelector(new TournamentSelector<Double>(7, this));
 		setParentSelector(new RandomSelector<Double>());
-		setCrossover(new UniformPointCrossover<Double>());
-		setStateCheckedCrossover(true);
+		setCrossover(new KozaCrossover<Double>());
+		setStateCheckedCrossover(false);
 		setSemanticModule(new RegressionSemanticModule(getTerminals(), this));
 		setInitialiser(new RampedHalfAndHalfInitialiser<Double>(this));
 	}
@@ -106,23 +106,32 @@ public class RegressionModelTomDoNotTouch extends GPAbstractModel<Double> {
 	
 	@Override
 	public double getFitness(CandidateProgram<Double> program) {
-		double[] inputs = new double[]{-1.0, -0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9};
-		int noWrong = 0;
+		double[] inputs = new double[21];
+		double[] absError = new double[21];
+		double startValue = -5;
 		
-		for (double in: inputs) {
-			x.setValue(in);
-			if (program.evaluate() != getCorrectResult(in)) {
-				noWrong++;
-			}
+		for(int i = 0; i<=20; i++) {
+			inputs[i] = startValue;
+			startValue = startValue + 0.5;
+		}
+		
+		for(int i = 0; i<=20; i++) {
+			double v = i;
+			x.setValue(v);
+			absError[i] = Math.abs(this.getCorrectResult(inputs[i]) - program.evaluate());
+		}
+		
+		double totalAbsError = 0;
+		for(int i = 0; i<=20; i++) {
+			totalAbsError = totalAbsError + absError[i];
 		}
 		
 		// How good is this result?
-		return noWrong;
+		return totalAbsError;
 	}
 	
 	private double getCorrectResult(double x) {
-		return x + (x*x) + (x*x*x) + (x*x*x*x);
-		//return Math.pow(x, 2) / 2;
+		return x + (2*x*x) + (3*x*x*x);
 	}
 	
 	public void runStats(int runNo, Object[] stats) {
@@ -159,6 +168,6 @@ public class RegressionModelTomDoNotTouch extends GPAbstractModel<Double> {
 	}
 	
 	public static void main(String[] args) {
-		GPController.run(new RegressionModelTomDoNotTouch());
+		GPController.run(new RegressionModelCUBIC());
 	}
 }

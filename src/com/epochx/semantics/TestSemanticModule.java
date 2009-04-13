@@ -20,7 +20,7 @@
 package com.epochx.semantics;
 import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
-import com.epochx.example.regression.RegressionModelTomDoNotTouch;
+import com.epochx.example.regression.RegressionModelCUBIC;
 import com.epochx.func.dbl.*;
 
 import java.util.*;
@@ -29,7 +29,7 @@ public class TestSemanticModule {
 
 	public static void main(String[] args) throws CloneNotSupportedException {
 		
-		RegressionModelTomDoNotTouch model = new RegressionModelTomDoNotTouch();
+		RegressionModelCUBIC model = new RegressionModelCUBIC();
 		RegressionSemanticModule semMod = new RegressionSemanticModule(model.getTerminals(), model);
 		FullInitialiser rhh = new FullInitialiser(model);
 		

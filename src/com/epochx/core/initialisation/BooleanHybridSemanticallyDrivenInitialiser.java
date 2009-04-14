@@ -29,12 +29,12 @@ import net.sf.javabdd.*;
  * @author lb212
  *
  */
-public class HybridBooleanSemanticallyDrivenInitialiser<TYPE> implements Initialiser<TYPE> {
+public class BooleanHybridSemanticallyDrivenInitialiser<TYPE> implements Initialiser<TYPE> {
 
 	private GPModel<TYPE> model;
 	private BooleanSemanticModule semMod;
 	
-	public HybridBooleanSemanticallyDrivenInitialiser(GPModel<TYPE> model, SemanticModule semMod) {
+	public BooleanHybridSemanticallyDrivenInitialiser(GPModel<TYPE> model, SemanticModule semMod) {
 		this.model = model;
 		this.semMod = (BooleanSemanticModule) semMod;
 	}

@@ -50,19 +50,19 @@ public class RegressionModelQUART extends GPAbstractModel<Double> {
 		this.x = new Variable<Double>("X");
 		
 		// Setup run.
-		setPopulationSize(500);
+		setPopulationSize(4000);
 		setNoGenerations(50);
 		setCrossoverProbability(0.9);
 		setReproductionProbability(0.1);
-		setNoRuns(1);
-		setPouleSize(50);
-		setNoElites(50);
+		setNoRuns(100);
+		setPouleSize(400);
+		setNoElites(400);
 		setInitialMaxDepth(6);
 		setMaxDepth(17);
 		setPouleSelector(new TournamentSelector<Double>(7, this));
 		setParentSelector(new RandomSelector<Double>());
-		setCrossover(new KozaCrossover<Double>());
-		setStateCheckedCrossover(true);
+		setCrossover(new UniformPointCrossover<Double>());
+		setStateCheckedCrossover(false);
 		setSemanticModule(new RegressionSemanticModule(getTerminals(), this));
 		setInitialiser(new RampedHalfAndHalfInitialiser<Double>(this));
 	}
@@ -151,7 +151,7 @@ public class RegressionModelQUART extends GPAbstractModel<Double> {
 	@Override
 	public void generationStats(int generation, Object[] stats) {
 		ArrayList<String> output = new ArrayList<String>();
-		System.out.println(run + "\t" + generation + "\t");
+		System.out.println(this.run + "\t" + generation + "\t");
 		String part = run + "\t" + generation + "\t";
 		for (Object s: stats) {
 			part = part + s;

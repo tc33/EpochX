@@ -61,8 +61,8 @@ public class RegressionModelCUBIC extends GPAbstractModel<Double> {
 		setMaxDepth(17);
 		setPouleSelector(new TournamentSelector<Double>(7, this));
 		setParentSelector(new RandomSelector<Double>());
-		setCrossover(new KozaCrossover<Double>());
-		setStateCheckedCrossover(false);
+		setCrossover(new UniformPointCrossover<Double>());
+		setStateCheckedCrossover(true);
 		setSemanticModule(new RegressionSemanticModule(getTerminals(), this));
 		setInitialiser(new RampedHalfAndHalfInitialiser<Double>(this));
 	}

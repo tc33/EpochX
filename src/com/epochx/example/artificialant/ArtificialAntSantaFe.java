@@ -23,7 +23,6 @@ import java.awt.*;
 import java.io.*;
 import java.util.*;
 import java.util.List;
-
 import com.epochx.action.*;
 import com.epochx.ant.*;
 import com.epochx.core.*;
@@ -42,17 +41,17 @@ import com.epochx.util.*;
  */
 public class ArtificialAntSantaFe extends GPAbstractModel<AntAction> {
 
-	private List<String> inputs;
+	private List<String> inputs = new ArrayList<String>();;
 	private HashMap<String, TerminalNode<AntAction>> variables = new HashMap<String, TerminalNode<AntAction>>();
-	private Dimension dimension = new Dimension(32, 32);
+	private Dimension dimension = new Dimension(32, 32);	
+	private ArrayList<Point> foodLocations = new ArrayList<Point>();
 	private AntLandscape antLandscape = new AntLandscape(dimension, null);
 	private Ant ant = new Ant(600, antLandscape);
-	private ArrayList<Point> foodLocations;
 	private int noOfFoodPellets;
 	private int run = 1;
+	private int fitAssessed = 0;
 	
-	public ArtificialAntSantaFe() {
-		inputs = new ArrayList<String>();
+	public ArtificialAntSantaFe() {		
 		inputs = FileManip.loadInput(new File("inputsantafe.txt"));
 		// create list of food locations
 		foodLocations = new ArrayList<Point>();
@@ -68,11 +67,6 @@ public class ArtificialAntSantaFe extends GPAbstractModel<AntAction> {
 		
 		noOfFoodPellets = foodLocations.size();
 		
-		// initialisation of ant landscape
-		// insert null food locations because you need to refresh it
-		// before each fitness evaluation
-		antLandscape = new AntLandscape(dimension, null);
-		
 		configure();
 	}
 	
@@ -83,20 +77,20 @@ public class ArtificialAntSantaFe extends GPAbstractModel<AntAction> {
 		variables.put("TURN-LEFT", new TerminalNode<AntAction>(new AntTurnLeftAction(ant)));
 		variables.put("TURN-RIGHT", new TerminalNode<AntAction>(new AntTurnRightAction(ant)));
 		
-		setPopulationSize(500);
-		setNoGenerations(50);
+		setPopulationSize(50);
+		setNoGenerations(10);
 		setCrossoverProbability(0.9);
 		setReproductionProbability(0.1);
 		setNoRuns(1);
-		setPouleSize(50);
-		setNoElites(50);
+		setPouleSize(10);
+		setNoElites(10);
 		setInitialMaxDepth(6);
 		setMaxDepth(10);
 		setPouleSelector(new TournamentSelector<AntAction>(7, this));
 		setParentSelector(new RandomSelector<AntAction>());
 		setCrossover(new UniformPointCrossover<AntAction>());
-		//setStateCheckedCrossover(false);
-		//setSemanticModule(new AntSemanticModule(getTerminals(), this));
+		setStateCheckedCrossover(false);
+		setSemanticModule(new AntSemanticModule(getTerminals(), this));
 		setInitialiser(new RampedHalfAndHalfInitialiser<AntAction>(this));
 	}
 	
@@ -125,28 +119,32 @@ public class ArtificialAntSantaFe extends GPAbstractModel<AntAction> {
 	 */
 	@Override
 	public double getFitness(CandidateProgram<AntAction> program) {
-		this.runAnt(program);
-		double score = (double) (noOfFoodPellets - ant.getFoodEaten());
-		return score;
-	}
-	
-	public static void main(String[] args) {
-		GPController.run(new ArtificialAntSantaFe());
-	}
-	
-	private void runAnt(CandidateProgram<AntAction> program) {
+		fitAssessed++;
+		System.out.println(program.getRootNode());
+		System.out.println(fitAssessed);
 		// refresh food list before evaluation
 		// hard copy foodLocations
 		ArrayList<Point> fl = new ArrayList<Point>();
 		for(Point p: foodLocations) {
 			fl.add(p);
 		}
+		System.out.println(fl);
 		antLandscape.setFoodLocations(fl);
 		ant.resetAnt(600, antLandscape);
-		
+		System.out.println("A1 = " + ant);
+		// run the ant
 		while(ant.getMoves()<ant.getMaxMoves()) {
 			program.evaluate();
 		}
+		System.out.println("A2 = " + ant);
+		// calculate score
+		double score = (double) (noOfFoodPellets - ant.getFoodEaten());
+		System.out.println(score);
+		return score;
+	}
+	
+	public static void main(String[] args) {
+		GPController.run(new ArtificialAntSantaFe());
 	}
 	
 	public void runStats(int runNo, Object[] stats) {

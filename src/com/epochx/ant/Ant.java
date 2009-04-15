@@ -211,4 +211,8 @@ public class Ant {
         this.maxMoves = timeSteps;
         this.antLandscape = antLandscape;
     }
+    
+    public String toString() {
+    	return xLocation + ":" + yLocation + " Facing " + orientation + " --- moves = " + moves;
+    }
 }

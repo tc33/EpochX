@@ -77,21 +77,21 @@ public class ArtificialAntSantaFe extends GPAbstractModel<AntAction> {
 		variables.put("TURN-LEFT", new TerminalNode<AntAction>(new AntTurnLeftAction(ant)));
 		variables.put("TURN-RIGHT", new TerminalNode<AntAction>(new AntTurnRightAction(ant)));
 		
-		setPopulationSize(50);
+		setPopulationSize(500);
 		setNoGenerations(10);
 		setCrossoverProbability(0.9);
 		setReproductionProbability(0.1);
 		setNoRuns(1);
-		setPouleSize(10);
-		setNoElites(10);
+		setPouleSize(50);
+		setNoElites(50);
 		setInitialMaxDepth(6);
 		setMaxDepth(10);
 		setPouleSelector(new TournamentSelector<AntAction>(7, this));
 		setParentSelector(new RandomSelector<AntAction>());
 		setCrossover(new UniformPointCrossover<AntAction>());
-		setStateCheckedCrossover(false);
-		setSemanticModule(new AntSemanticModule(getTerminals(), this));
-		setInitialiser(new RampedHalfAndHalfInitialiser<AntAction>(this));
+		setStateCheckedCrossover(true);
+		setSemanticModule(new AntSemanticModule(getTerminals(), this, ant));
+		setInitialiser(new GrowInitialiser<AntAction>(this));
 	}
 	
 	@Override
@@ -120,26 +120,26 @@ public class ArtificialAntSantaFe extends GPAbstractModel<AntAction> {
 	@Override
 	public double getFitness(CandidateProgram<AntAction> program) {
 		fitAssessed++;
-		System.out.println(program.getRootNode());
-		System.out.println(fitAssessed);
+		//System.out.println(program.getRootNode());
+		//System.out.println(fitAssessed);
 		// refresh food list before evaluation
 		// hard copy foodLocations
 		ArrayList<Point> fl = new ArrayList<Point>();
 		for(Point p: foodLocations) {
 			fl.add(p);
 		}
-		System.out.println(fl);
+		//System.out.println(fl);
 		antLandscape.setFoodLocations(fl);
 		ant.resetAnt(600, antLandscape);
-		System.out.println("A1 = " + ant);
+		//System.out.println("A1 = " + ant);
 		// run the ant
 		while(ant.getMoves()<ant.getMaxMoves()) {
 			program.evaluate();
 		}
-		System.out.println("A2 = " + ant);
+		//System.out.println("A2 = " + ant);
 		// calculate score
 		double score = (double) (noOfFoodPellets - ant.getFoodEaten());
-		System.out.println(score);
+		//System.out.println(score);
 		return score;
 	}
 	
@@ -178,5 +178,9 @@ public class ArtificialAntSantaFe extends GPAbstractModel<AntAction> {
 	@Override
 	public GenStatField[] getGenStatFields() {
 		return new GenStatField[]{GenStatField.FITNESS_AVE, GenStatField.FITNESS_MIN, GenStatField.LENGTH_AVE};
+	}
+	
+	public Ant getAnt() {
+		return ant;
 	}
 }

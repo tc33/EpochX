@@ -20,12 +20,14 @@
 package com.epochx.semantics;
 
 import java.util.ArrayList;
+import com.epochx.core.representation.*;
+import com.epochx.func.dbl.CoefficientExponentFunction;
 
 /**
  * @author lb212
  *
  */
-public class AntRepresentation implements Representation {
+public class AntRepresentation implements Representation, Cloneable {
 	
 	private ArrayList<String> antRepresentation;
 	
@@ -70,5 +72,21 @@ public class AntRepresentation implements Representation {
 			return false;
 		}
 	}
-
+	
+	public String toString() {
+		return antRepresentation.toString();
+	}
+	
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		AntRepresentation newRep = (AntRepresentation) super.clone();
+		newRep.antRepresentation = (ArrayList<String>) this.antRepresentation.clone();
+		
+		// Clone each element.
+		for (int i=0; i<newRep.antRepresentation.size(); i++) {
+			String part = newRep.antRepresentation.get(i);
+			newRep.antRepresentation.set(i, (String) part);
+		}
+		return newRep;
+	}
 }

@@ -20,8 +20,7 @@
 package com.epochx.semantics;
 import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
-import com.epochx.example.regression.RegressionModelCUBIC;
-import com.epochx.func.dbl.*;
+import com.epochx.example.artificialant.ArtificialAntSantaFe;
 
 import java.util.*;
 
@@ -29,28 +28,28 @@ public class TestSemanticModule {
 
 	public static void main(String[] args) throws CloneNotSupportedException {
 		
-		RegressionModelCUBIC model = new RegressionModelCUBIC();
-		RegressionSemanticModule semMod = new RegressionSemanticModule(model.getTerminals(), model);
+		ArtificialAntSantaFe model = new ArtificialAntSantaFe();
+		AntSemanticModule semMod = new AntSemanticModule(model.getTerminals(), model, model.getAnt());
 		FullInitialiser rhh = new FullInitialiser(model);
 		
 		semMod.start();
 		
 		// pull out first population
 		List<CandidateProgram> firstGen = rhh.getInitialPopulation();
-		List<RegressionRepresentation> firstRep = new ArrayList<RegressionRepresentation>();
+		List<AntRepresentation> firstRep = new ArrayList<AntRepresentation>();
 		List<CandidateProgram> secondGen = new ArrayList<CandidateProgram>();
-		List<RegressionRepresentation> secondRep = new ArrayList<RegressionRepresentation>();
+		List<AntRepresentation> secondRep = new ArrayList<AntRepresentation>();
 
 		// generate 1st behaviours
 		for(CandidateProgram c: firstGen) {
 			//System.out.println("1 - " + c.getRootNode());
-			RegressionRepresentation regRep1 = (RegressionRepresentation) semMod.codeToBehaviour(c);
-			firstRep.add((RegressionRepresentation) regRep1.clone());
+			AntRepresentation regRep1 = (AntRepresentation) semMod.codeToBehaviour(c);
+			firstRep.add((AntRepresentation) regRep1.clone());
 			//System.out.println("2 - " + regRep1);			
 			CandidateProgram cp = semMod.behaviourToCode(regRep1);			
 			secondGen.add(cp);
 			//System.out.println("3 - " + cp.getRootNode());
-			RegressionRepresentation regRep2 = (RegressionRepresentation) semMod.codeToBehaviour(cp);
+			AntRepresentation regRep2 = (AntRepresentation) semMod.codeToBehaviour(cp);
 			secondRep.add(regRep2);
 			//System.out.println("4 - " + regRep2);
 		}

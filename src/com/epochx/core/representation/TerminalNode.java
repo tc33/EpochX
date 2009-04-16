@@ -19,6 +19,8 @@
  */
 package com.epochx.core.representation;
 
+import com.epochx.action.Action;
+
 /**
  * 
  */
@@ -44,7 +46,12 @@ public class TerminalNode<TYPE> extends Node<TYPE> {
 
 	@Override
 	public TYPE evaluate() {
-		return value;
+		if(value instanceof Action) {
+			((Action) value).execute();
+			return (TYPE) Action.DO_NOTHING;
+		} else {
+			return value;
+		}
 	}
 	
 	public String toString() {

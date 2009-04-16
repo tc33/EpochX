@@ -22,10 +22,12 @@ package com.epochx.semantics;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.epochx.action.*;
 import com.epochx.ant.Ant;
 import com.epochx.core.GPModel;
-import com.epochx.core.representation.CandidateProgram;
-import com.epochx.core.representation.TerminalNode;
+import com.epochx.core.representation.*;
+import com.epochx.func.action.*;
+
 
 /**
  * @author lb212
@@ -35,15 +37,19 @@ public class AntSemanticModule implements SemanticModule {
 	
 	private List<TerminalNode<?>> terminals;
 	private GPModel model;
+	private ArrayList<String> antModel;
+	private String orientation;
+	private Ant ant;
 	
 	/**
 	 * Constructor for Ant Semantic Module
 	 * @param list List of terminal nodes
 	 * @param model The GPModel object
 	 */
-	public AntSemanticModule(List<TerminalNode<?>> list, GPModel model) {
+	public AntSemanticModule(List<TerminalNode<?>> list, GPModel model, Ant ant) {
 		this.terminals = list;
 		this.model = model;
+		this.ant = ant;
 	}
 
 	/* (non-Javadoc)
@@ -67,8 +73,9 @@ public class AntSemanticModule implements SemanticModule {
 	 */
 	@Override
 	public CandidateProgram behaviourToCode(Representation representation) {
-		// TODO Auto-generated method stub		
-		return this.repToCode1(representation, "E");
+		// TODO Auto-generated method stub
+		Node rootNode = this.repToCode1(representation, "E");
+		return new CandidateProgram(rootNode, model);
 	}
 
 	/* (non-Javadoc)
@@ -79,11 +86,12 @@ public class AntSemanticModule implements SemanticModule {
 		// TODO Auto-generated method stub
 		
 		// develop ant monitoring model
-        ArrayList<String>antModel = new ArrayList<String>();
+        antModel = new ArrayList<String>();
 
         // initialise a new ant
-        Ant myAnt = new Ant(600, null);
-        this.runAnt(program);
+        orientation = "E";
+        Node rootNode = program.getRootNode();
+        this.runAnt(rootNode);
         
         // work out depth of if statements
         int depth = 0;
@@ -100,7 +108,7 @@ public class AntSemanticModule implements SemanticModule {
             }
         }
         
-        for (int i = 0; i < (maxDepth + 1); i++) {
+        for (int i = 0; i < (maxDepth + 2); i++) {
             if (antModel.size() > 0) {
                 antModel = this.condenseAntRep(antModel);
             }
@@ -109,241 +117,67 @@ public class AntSemanticModule implements SemanticModule {
         return new AntRepresentation(antModel);
 	}
 	
-	private void runAnt(ArrayList<String> expr) {
-        
-        int eSize = expr.size();
-        
-        if(eSize<1) {
-            System.out.println("Resolution ERROR - invalid expression - " + expr);
-        } else if(eSize==1) {
-            if(expr.get(0).equalsIgnoreCase("MOVE")) {
-                myAnt.move();
-                antModel.add("M");
-            } else if(expr.get(0).equalsIgnoreCase("TURN-LEFT")) {
-                myAnt.turnLeft();
-                antModel.add(myAnt.getOrientation());
-            } else if(expr.get(0).equalsIgnoreCase("TURN-RIGHT")) {
-                myAnt.turnRight();
-                antModel.add(myAnt.getOrientation());
-            } else if(expr.get(0).equalsIgnoreCase("SKIP")) {
-                // do nothing - skip is escape charachter for if statement branches
-            } else {
-                System.out.println("Resolution ERROR - INVALID TERMINAL DETECTED - " + expr);
-            }
-        } else {
-            if(expr.get(0).equalsIgnoreCase("(")) {
-                // bracket scenario - remove each end and resolve expr on inside of bracket
-                ArrayList<String> test = new ArrayList<String>();
-                int top = expr.size() - 1;
-                for (int i = 1; i < top; i++) {
-                    test.add(expr.get(i));
-                }
-                this.runAnt(test);
-            } else if (expr.get(0).equalsIgnoreCase("IF-FOOD-AHEAD")) {
-                antModel.add("{");
-                // execute both and plot positions
-                String oldOrientation = myAnt.getOrientation();
-                int loc = 1;
-                // first expr
-                if (!expr.get(loc).equalsIgnoreCase("(")) {
-                    // if it is terminal
-                    ArrayList<String> test = new ArrayList<String>();
-                    test.add(expr.get(loc));
-                    this.runAnt(test);
-                    loc++;
-                } else {
-                    // if there is a bracket expression
-                    ArrayList<String> test = new ArrayList<String>();
-                    int d = 0;
-                    while (true) {
-                        if (expr.get(loc).equalsIgnoreCase("(")) {
-                            d++;
-                        }
-                        if (expr.get(loc).equalsIgnoreCase(")")) {
-                            d--;
-                        }
-                        test.add(expr.get(loc));
-                        if (d == 0) {
-                            break;
-                        }
-                        loc++;
-                    }
-                    this.runAnt(test);
-                    loc++;
-                }
-                //reset position in ant for call if food ahead is false
-                antModel.add(myAnt.getOrientation());
-                antModel.add("}");
-                antModel.add("{");
-                myAnt.setOrientation(oldOrientation);
-                // second expr
-                if (!expr.get(loc).equalsIgnoreCase("(")) {
-                    ArrayList<String> test = new ArrayList<String>();
-                    test.add(expr.get(loc));
-                    this.runAnt(test);
-                    loc++;
-                } else {
-                    // if there is a bracket expression
-                    ArrayList<String> test = new ArrayList<String>();
-                    int d = 0;
-                    while (true) {
-                        if (expr.get(loc).equalsIgnoreCase("(")) {
-                            d++;
-                        }
-                        if (expr.get(loc).equalsIgnoreCase(")")) {
-                            d--;
-                        }
-                        test.add(expr.get(loc));
-                        if (d == 0) {
-                            break;
-                        }
-                        loc++;
-                    }
-                    this.runAnt(test);
-                    loc++;
-                }
-                //reset position in ant for next set of calls
-                antModel.add(myAnt.getOrientation());
-                antModel.add("}");
-                myAnt.setOrientation(oldOrientation);                
-            } else if (expr.get(0).equalsIgnoreCase("PROGN2")) {
-                int loc = 1;
-                // first expr
-                if(!expr.get(loc).equalsIgnoreCase("(")) {
-                    ArrayList<String> test = new ArrayList<String>();
-                    test.add(expr.get(loc));
-                    this.runAnt(test);
-                    loc++;
-                } else {
-                    // if there is a bracket expression
-                    ArrayList<String> test = new ArrayList<String>();
-                    int d = 0;
-                    while(true) {
-                        if(expr.get(loc).equalsIgnoreCase("(")) {
-                            d++;
-                        }
-                        if(expr.get(loc).equalsIgnoreCase(")")) {
-                            d--;
-                        }
-                        test.add(expr.get(loc));
-                        if(d==0) {
-                            break;
-                        }                        
-                        loc++;
-                    }
-                    this.runAnt(test);
-                    loc++;
-                }
-                // second expr
-                if(!expr.get(loc).equalsIgnoreCase("(")) {
-                    ArrayList<String> test = new ArrayList<String>();
-                    test.add(expr.get(loc));
-                    this.runAnt(test);
-                    loc++;
-                } else {
-                    // if there is a bracket expression
-                    ArrayList<String> test = new ArrayList<String>();
-                    int d = 0;
-                    while(true) {
-                        if(expr.get(loc).equalsIgnoreCase("(")) {
-                            d++;
-                        }
-                        if(expr.get(loc).equalsIgnoreCase(")")) {
-                            d--;
-                        }
-                        test.add(expr.get(loc));
-                        if(d==0) {
-                            break;
-                        }                        
-                        loc++;
-                    }
-                    this.runAnt(test);
-                    loc++;
-                }               
-            } else if(expr.get(0).equalsIgnoreCase("PROGN3")) {
-                int loc = 1;
-                // first expr
-                if(!expr.get(loc).equalsIgnoreCase("(")) {
-                    ArrayList<String> test = new ArrayList<String>();
-                    test.add(expr.get(loc));
-                    this.runAnt(test);
-                    loc++;
-                } else {
-                    // if there is a bracket expression
-                    ArrayList<String> test = new ArrayList<String>();
-                    int d = 0;
-                    while(true) {
-                        if(expr.get(loc).equalsIgnoreCase("(")) {
-                            d++;
-                        }
-                        if(expr.get(loc).equalsIgnoreCase(")")) {
-                            d--;
-                        }
-                        test.add(expr.get(loc));
-                        if(d==0) {
-                            break;
-                        }                        
-                        loc++;
-                    }                    
-                    this.runAnt(test);
-                    loc++;
-                }
-                // second expr
-                if(!expr.get(loc).equalsIgnoreCase("(")) {
-                    ArrayList<String> test = new ArrayList<String>();
-                    test.add(expr.get(loc));
-                    this.runAnt(test);
-                    loc++;
-                } else {
-                    // if there is a bracket expression
-                    ArrayList<String> test = new ArrayList<String>();
-                    int d = 0;
-                    while(true) {
-                        if(expr.get(loc).equalsIgnoreCase("(")) {
-                            d++;
-                        }
-                        if(expr.get(loc).equalsIgnoreCase(")")) {
-                            d--;
-                        }
-                        test.add(expr.get(loc));
-                        if(d==0) {
-                            break;
-                        }                        
-                        loc++;
-                    }
-                    this.runAnt(test);
-                    loc++;
-                }
-                // third expr
-                if(!expr.get(loc).equalsIgnoreCase("(")) {
-                    ArrayList<String> test = new ArrayList<String>();
-                    test.add(expr.get(loc));
-                    this.runAnt(test);
-                    loc++;
-                } else {
-                    // if there is a bracket expression
-                    ArrayList<String> test = new ArrayList<String>();
-                    int d = 0;
-                    while(true) {
-                        if(expr.get(loc).equalsIgnoreCase("(")) {
-                            d++;
-                        }
-                        if(expr.get(loc).equalsIgnoreCase(")")) {
-                            d--;
-                        }
-                        test.add(expr.get(loc));
-                        if(d==0) {
-                            break;
-                        }                        
-                        loc++;
-                    }
-                    this.runAnt(test);
-                    loc++;
-                }           
-            } else {
-                System.out.println("SYNTAX FUNCTION EXCEPTION --- resolution error");
-            }
-        }
+	private void runAnt(Node rootNode) {		
+		
+		if(rootNode instanceof TerminalNode) {
+			// terminals
+			Object value = ((TerminalNode) rootNode).getValue();
+			if(value instanceof AntMoveAction) {
+				antModel.add("M");
+			} else if(value instanceof AntTurnLeftAction) {
+				if(orientation.equalsIgnoreCase("E")) {
+					antModel.add("N");
+					orientation = "N";
+				} else if(orientation.equalsIgnoreCase("N")) {
+					antModel.add("W");
+					orientation = "W";
+				} else if(orientation.equalsIgnoreCase("W")) {
+					antModel.add("S");
+					orientation = "S";
+				} else if(orientation.equalsIgnoreCase("S")) {
+					antModel.add("E");
+					orientation = "E";
+				}
+			} else if(value instanceof AntTurnRightAction) {
+				if(orientation.equalsIgnoreCase("E")) {
+					antModel.add("S");
+					orientation = "S";
+				} else if(orientation.equalsIgnoreCase("S")) {
+					antModel.add("W");
+					orientation = "W";
+				} else if(orientation.equalsIgnoreCase("W")) {
+					antModel.add("N");
+					orientation = "N";
+				} else if(orientation.equalsIgnoreCase("N")) {
+					antModel.add("E");
+					orientation = "E";
+				}
+			}			
+		} else if(rootNode instanceof Seq2Function) {
+			// PROGN2
+			int arity = rootNode.getArity();
+			for(int i = 0; i<arity; i++) {
+				this.runAnt(rootNode.getChild(i));
+			}			
+		} else if(rootNode instanceof Seq3Function) {
+			// PROGN3
+			int arity = rootNode.getArity();
+			for(int i = 0; i<arity; i++) {
+				this.runAnt(rootNode.getChild(i));
+			}
+		} else if(rootNode instanceof IfFoodAheadFunction) {
+			// IF-FOOD-AHEAD
+			int arity = rootNode.getArity();
+			String oBeforeIf = orientation;
+			for(int i = 0; i<arity; i++) {
+				orientation = oBeforeIf;
+				antModel.add("{");
+				this.runAnt(rootNode.getChild(i));
+				antModel.add("}");
+			}
+			// reset orientation for after if statement
+			orientation = oBeforeIf;
+		} 
     }
 	
 	public ArrayList<String> condenseAntRep(ArrayList<String> result) {
@@ -507,9 +341,9 @@ public class AntSemanticModule implements SemanticModule {
         return result;
     }
 	
-	private ArrayList<String> repToCode1(BehaviourRepresentation thisRep, String lastO) {
-        ArrayList<String> representation = thisRep.getArrayList();
-        ArrayList<String> sequence = new ArrayList<String>();
+	private Node repToCode1(Representation thisRep, String lastO) {
+        ArrayList<String> representation = ((AntRepresentation) thisRep).getAntRepresentation();
+        ArrayList<Node> sequence = new ArrayList<Node>();
 
         // create a linear move list
         String oBeforeIf = "E";
@@ -520,73 +354,73 @@ public class AntSemanticModule implements SemanticModule {
             // SCENARIOS
             // interpret instruction
             if (instruction.equals("M")) {
-                sequence.add(m);
+                sequence.add(new TerminalNode(new AntMoveAction(ant)));
             } else if (instruction.equals("E")) {
                 if (lastOrientation.equalsIgnoreCase("N")) {
-                    sequence.add(tr);
+                    sequence.add(new TerminalNode(new AntTurnRightAction(ant)));
                 }
                 if (lastOrientation.equalsIgnoreCase("W")) {
                     if (Math.random() < 0.5) {
-                        sequence.add(tr);
-                        sequence.add(tr);
+                        sequence.add(new TerminalNode(new AntTurnRightAction(ant)));
+                        sequence.add(new TerminalNode(new AntTurnRightAction(ant)));
                     } else {
-                        sequence.add(tl);
-                        sequence.add(tl);
+                        sequence.add(new TerminalNode(new AntTurnLeftAction(ant)));
+                        sequence.add(new TerminalNode(new AntTurnLeftAction(ant)));
                     }
                 }
                 if (lastOrientation.equalsIgnoreCase("S")) {
-                    sequence.add(tl);
+                    sequence.add(new TerminalNode(new AntTurnLeftAction(ant)));
                 }
                 lastOrientation = new String(instruction);
             } else if (instruction.equals("S")) {
                 if (lastOrientation.equalsIgnoreCase("E")) {
-                    sequence.add(tr);
+                    sequence.add(new TerminalNode(new AntTurnRightAction(ant)));
                 }
                 if (lastOrientation.equalsIgnoreCase("N")) {
                     if (Math.random() < 0.5) {
-                        sequence.add(tr);
-                        sequence.add(tr);
+                        sequence.add(new TerminalNode(new AntTurnRightAction(ant)));
+                        sequence.add(new TerminalNode(new AntTurnRightAction(ant)));
                     } else {
-                        sequence.add(tl);
-                        sequence.add(tl);
+                        sequence.add(new TerminalNode(new AntTurnLeftAction(ant)));
+                        sequence.add(new TerminalNode(new AntTurnLeftAction(ant)));
                     }
                 }
                 if (lastOrientation.equalsIgnoreCase("W")) {
-                    sequence.add(tl);
+                    sequence.add(new TerminalNode(new AntTurnLeftAction(ant)));
                 }
                 lastOrientation = new String(instruction);
             } else if (instruction.equals("W")) {
                 if (lastOrientation.equalsIgnoreCase("S")) {
-                    sequence.add(tr);
+                    sequence.add(new TerminalNode(new AntTurnRightAction(ant)));
                 }
                 if (lastOrientation.equalsIgnoreCase("E")) {
                     if (Math.random() < 0.5) {
-                        sequence.add(tr);
-                        sequence.add(tr);
+                        sequence.add(new TerminalNode(new AntTurnRightAction(ant)));
+                        sequence.add(new TerminalNode(new AntTurnRightAction(ant)));
                     } else {
-                        sequence.add(tl);
-                        sequence.add(tl);
+                        sequence.add(new TerminalNode(new AntTurnLeftAction(ant)));
+                        sequence.add(new TerminalNode(new AntTurnLeftAction(ant)));
                     }
                 }
                 if (lastOrientation.equalsIgnoreCase("N")) {
-                    sequence.add(tl);
+                    sequence.add(new TerminalNode(new AntTurnLeftAction(ant)));
                 }
                 lastOrientation = new String(instruction);
             } else if (instruction.equals("N")) {
                 if (lastOrientation.equalsIgnoreCase("W")) {
-                    sequence.add(tr);
+                    sequence.add(new TerminalNode(new AntTurnRightAction(ant)));
                 }
                 if (lastOrientation.equalsIgnoreCase("S")) {
                     if (Math.random() < 0.5) {
-                        sequence.add(tr);
-                        sequence.add(tr);
+                        sequence.add(new TerminalNode(new AntTurnRightAction(ant)));
+                        sequence.add(new TerminalNode(new AntTurnRightAction(ant)));
                     } else {
-                        sequence.add(tl);
-                        sequence.add(tl);
+                        sequence.add(new TerminalNode(new AntTurnLeftAction(ant)));
+                        sequence.add(new TerminalNode(new AntTurnLeftAction(ant)));
                     }
                 }
                 if (lastOrientation.equalsIgnoreCase("E")) {
-                    sequence.add(tl);
+                    sequence.add(new TerminalNode(new AntTurnLeftAction(ant)));
                 }
                 lastOrientation = new String(instruction);
             } else if (instruction.equalsIgnoreCase("{")) {
@@ -595,8 +429,6 @@ public class AntSemanticModule implements SemanticModule {
                 // IF-FOOD-AHEAD recursive call
                 int depth = 1;
                 ArrayList<String> part = new ArrayList<String>();
-                sequence.add(oB);
-                sequence.add(iFA);
                 // pull out first section of if and submit to recursive call
                 while (i < representation.size()) {
                     i++;
@@ -612,14 +444,10 @@ public class AntSemanticModule implements SemanticModule {
                     part.add(representation.get(i));
                 }
                 // pull part back from recursive call
-                part = this.repToCode1(new BehaviourRepresentation(part), oBeforeIf);
+                Node child1 = this.repToCode1(new AntRepresentation(part), oBeforeIf);
                 // add part to sequence if no part then add skip
-                if (part.size() == 0) {
-                    sequence.add(skip);
-                } else {
-                    for (String s : part) {
-                        sequence.add(s);
-                    }
+                if (child1 == null) {
+                    child1 = new TerminalNode(new AntSkipAction(ant));
                 }
                 // reset lastX and last Y to before if branch
                 lastOrientation = oBeforeIf;
@@ -641,17 +469,16 @@ public class AntSemanticModule implements SemanticModule {
                     i++;
                 }
                 // pull part back from recursive call
-                part = this.repToCode1(new BehaviourRepresentation(part), oBeforeIf);
+                Node child2 = this.repToCode1(new AntRepresentation(part), oBeforeIf);
                 // add part to sequence if no part then add skip
-                if (part.size() == 0) {
-                    sequence.add(skip);
-                } else {
-                    for (String s : part) {
-                        sequence.add(s);
-                    }
+                if (child2 == null) {
+                    child2 = new TerminalNode(new AntSkipAction(ant));
                 }
                 // end close brakct
-                sequence.add(cB);
+                Node iFANode = new IfFoodAheadFunction(ant, null);
+                iFANode.setChild(child1, 0);
+                iFANode.setChild(child2, 1);
+                sequence.add(iFANode);
                 // move i along one to get out of final if bracket
                 lastOrientation = oBeforeIf;
             } else if (instruction.equalsIgnoreCase("}")) {
@@ -660,104 +487,149 @@ public class AntSemanticModule implements SemanticModule {
                 System.out.println("REP TO CODE ERROR - GPEQUIVALENCE AA");
             }
         }
-
-        // combine using PROGN2 and PROGN3
-        // count expressions
-        int count = 2;        
-        while (count > 1) {
-            //System.out.println(sequence);
-            // count number of loose function in sequence
-            count = 0;
-            int depth = 0;
-            for (String s : sequence) {
-                if (depth == 0) {
-                    count++;
-                }
-                if (s.equalsIgnoreCase("(")) {
-                    depth++;
-                }
-                if (s.equalsIgnoreCase(")")) {
-                    depth--;
-                }
-            }
-
-            // sort out composing function tree
-            if (count == 1) {
-                // do nothing is resolved ready to return
-            } else if (count == 2) {
-                // function up PROGN2
-                sequence.add(0, oB);
-                sequence.add(1, p2);
-                sequence.add(cB);
-            } else if (count == 3) {
-                // function up PROGN3
-                sequence.add(0, oB);
-                sequence.add(1, p3);
-                sequence.add(cB);
-            } else if (count > 3) {
-                int p3s = count / 3;
-                int p2s = 0;
-                if(count%3==2) {
-                    p2s = 1;
-                }
-                // process p3s
-                int counter;
-                int pSDone = 0;
-                int endIndex = 0;
-                for (int i = 0; i<sequence.size(); i++) {                    
-                    // process PROGN3s
-                    if (pSDone < p3s) {
-                        counter = 0;
-                        sequence.add(i, oB);
-                        // move i along one to add function at next point
-                        i++;
-                        sequence.add(i, p3);
-                        // move i along one so PROGN3 does not get included in count through
-                        i++;
-                        depth = 0;
-                        while (counter < 3) {
-                            if (sequence.get(i).equalsIgnoreCase("(")) {
-                                depth++;
-                            }
-                            if (sequence.get(i).equalsIgnoreCase(")")) {
-                                depth--;
-                            }
-                            if (depth == 0) {
-                                counter++;
-                            }
-                            // manage index through
-                            i++;
-                        }
-                        sequence.add(i, cB);                        
-                        pSDone++;
-                    } else {
-                        endIndex = i;
-                        break;
-                    }
-                }
-                // do final for modulus and process PROGN2s if necessary
-                if (p2s == 1) {
-                    //System.out.println(sequence);                    
-                    sequence.add(endIndex, oB);
-                    // move i along one
-                    endIndex++;
-                    sequence.add(endIndex, p2);
-                    // add bracket at end
-                    //System.out.println(sequence);
-                    sequence.add(cB);
-                    //System.out.println(sequence);
-                }
-            } else if (count == 0) {
-                // do nothing
-                //System.out.println("COUNT IS ZERO ERROR");
-            } else {
-                System.out.println("REP TO CODE RESOLUTION ERROR IN GPEQUIVALENCEAA");
-                System.out.println("EXPR COUNT = " + count);
-                System.out.println(representation);
-                System.out.println(sequence);
+        
+        // run reduce sequence once to add skip node if needed
+        sequence = this.reduceSequence(sequence);
+        // then run repeatedly if need be
+        while(sequence.size()>1) {
+        	sequence = this.reduceSequence(sequence);
+        }
+		// System.out.println(sequence);
+		return sequence.get(0);
+    }
+	
+	private ArrayList<Node> reduceSequence(ArrayList<Node> sequence) {
+		int count = sequence.size();
+		if (count == 0) {
+			sequence.add(new TerminalNode(new AntSkipAction(ant)));
+		} else if (count == 1) {
+			// do nothing is resolved ready to return
+		} else if (count == 2) {
+			// function up PROGN2
+			Node p1 = sequence.get(0);
+			Node p2 = sequence.get(1);
+			sequence.set(0, new Seq2Function(p1, p2));
+			sequence.remove(1);
+		} else if (count == 3) {
+			// function up PROGN3
+			Node p1 = sequence.get(0);
+			Node p2 = sequence.get(1);
+			Node p3 = sequence.get(2);
+			sequence.set(0, new Seq3Function(p1, p2, p3));
+			sequence.remove(2);
+			sequence.remove(1);
+		} else if (count > 3) {
+			//crunch 1st three into progn3
+			Node p1 = sequence.get(0);
+			Node p2 = sequence.get(1);
+			Node p3 = sequence.get(2);
+			sequence.set(0, new Seq3Function(p1, p2, p3));
+			sequence.remove(2);
+			sequence.remove(1);
+		}
+		// pass through and remove nulls
+		return sequence;
+	}
+	
+	/**
+     * Helper method for Semantic Artificial Ant Initialisation
+     * @param path1 The first path
+     * @param path2 The second path
+     * @param p2SO The inital direction of the second path if not E
+     * @return The combined path with with the second path positions updated relative to the 1st path
+     */
+    public static ArrayList<String> joinPaths(ArrayList<String> path1, ArrayList<String> path2, String p2SO) {
+        ArrayList<String> result = new ArrayList<String>();
+        ArrayList<String> part1 = new ArrayList<String>();
+        ArrayList<String> part2 = new ArrayList<String>();
+        for (String p : path1) {
+            part1.add(p);
+        }
+        for (String p : path2) {
+            part2.add(p);
+        }
+        // pull off last direction
+        String lastOrientation = "E";
+        for(int i = (part1.size()-1); i>=0; i--) {
+            if(part1.get(i).equalsIgnoreCase("N") || part1.get(i).equalsIgnoreCase("S") || part1.get(i).equalsIgnoreCase("E") || part1.get(i).equalsIgnoreCase("W")) {
+                lastOrientation = part1.get(i);
             }
         }
-        //System.out.println(sequence);
-        return sequence;
+        
+        // update all orientations
+        // work out turning
+        if(lastOrientation.equalsIgnoreCase("N")) {
+            if(p2SO.equalsIgnoreCase("S")) {
+                part2 = turnL(part2);
+                part2 = turnL(part2);
+            } else if(p2SO.equalsIgnoreCase("E")) {
+                part2 = turnL(part2);
+                part2 = turnL(part2);
+                part2 = turnL(part2);
+            } else if(p2SO.equalsIgnoreCase("W")) {
+                part2 = turnL(part2);                
+            }
+        } else if(lastOrientation.equalsIgnoreCase("S")) {
+            if(p2SO.equalsIgnoreCase("N")) {
+                part2 = turnL(part2);
+                part2 = turnL(part2);
+            } else if(p2SO.equalsIgnoreCase("E")) {
+                part2 = turnL(part2);                
+            } else if(p2SO.equalsIgnoreCase("W")) {
+                part2 = turnL(part2); 
+                part2 = turnL(part2);
+                part2 = turnL(part2);
+            }
+        } else if(lastOrientation.equalsIgnoreCase("E")) {
+            if(p2SO.equalsIgnoreCase("S")) {
+                part2 = turnL(part2);
+                part2 = turnL(part2);
+                part2 = turnL(part2);
+            } else if(p2SO.equalsIgnoreCase("N")) {
+                part2 = turnL(part2);
+            } else if(p2SO.equalsIgnoreCase("W")) {
+                part2 = turnL(part2);
+                part2 = turnL(part2);
+            }
+        } else if(lastOrientation.equalsIgnoreCase("W")) {
+            if(p2SO.equalsIgnoreCase("S")) {
+                part2 = turnL(part2);
+            } else if(p2SO.equalsIgnoreCase("E")) {
+                part2 = turnL(part2);
+                part2 = turnL(part2);
+            } else if(p2SO.equalsIgnoreCase("N")) {
+                part2 = turnL(part2);
+                part2 = turnL(part2);
+                part2 = turnL(part2);
+            }
+        }
+        
+        // add all together
+        for (String p : part1) {
+            result.add(p);
+        }
+        for (String p : part2) {
+            result.add(p);
+        }
+        part1 = null;
+        part2 = null;
+        return result;
+    }
+    
+    private static ArrayList<String> turnL(ArrayList<String> toTurn) {
+        for(int i = 0; i<toTurn.size(); i++) {
+            if(toTurn.get(i).equalsIgnoreCase("N")) {
+                toTurn.set(i, "W");
+            } else if(toTurn.get(i).equalsIgnoreCase("W")) {
+                toTurn.set(i, "S");
+            } else if(toTurn.get(i).equalsIgnoreCase("S")) {
+                toTurn.set(i, "E");
+            } else if(toTurn.get(i).equalsIgnoreCase("E")) {
+                toTurn.set(i, "N");
+            }
+        }
+        return toTurn;
     }
 }
+
+

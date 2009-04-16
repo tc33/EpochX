@@ -20,9 +20,7 @@
 package com.epochx.semantics;
 
 import java.util.*;
-
-import com.epochx.core.representation.Node;
-import com.epochx.core.representation.TerminalNode;
+import com.epochx.core.representation.*;
 import com.epochx.func.dbl.CoefficientExponentFunction;
 
 /**

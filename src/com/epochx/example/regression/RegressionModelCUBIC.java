@@ -54,7 +54,7 @@ public class RegressionModelCUBIC extends GPAbstractModel<Double> {
 		setNoGenerations(50);
 		setCrossoverProbability(0.9);
 		setReproductionProbability(0.1);
-		setNoRuns(100);
+		setNoRuns(1);
 		setPouleSize(50);
 		setNoElites(50);
 		setInitialMaxDepth(6);
@@ -63,8 +63,9 @@ public class RegressionModelCUBIC extends GPAbstractModel<Double> {
 		setParentSelector(new RandomSelector<Double>());
 		setCrossover(new UniformPointCrossover<Double>());
 		setStateCheckedCrossover(true);
-		setSemanticModule(new RegressionSemanticModule(getTerminals(), this));
-		setInitialiser(new RampedHalfAndHalfInitialiser<Double>(this));
+		RegressionSemanticModule semMod = new RegressionSemanticModule(getTerminals(), this);
+		setSemanticModule(semMod);
+		setInitialiser(new RegressionSemanticallyDrivenInitialiser<Double>(this, semMod));
 	}
 
 	@Override
@@ -118,6 +119,11 @@ public class RegressionModelCUBIC extends GPAbstractModel<Double> {
 		for(int i = 0; i<=20; i++) {
 			double v = i;
 			x.setValue(v);
+			try {
+				double cat = program.evaluate();
+			} catch(NullPointerException e) {
+				System.out.println("Program = " + program);
+			}			
 			absError[i] = Math.abs(this.getCorrectResult(inputs[i]) - program.evaluate());
 		}
 		

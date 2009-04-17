@@ -28,6 +28,7 @@ import java.lang.reflect.*;
 import com.epochx.core.initialisation.RampedHalfAndHalfInitialiser;
 import com.epochx.core.representation.CandidateProgram;
 import com.epochx.example.artificialant.ArtificialAntSantaFe;
+import com.epochx.example.regression.RegressionModelCUBIC;
 import com.epochx.semantics.Representation;
 import com.epochx.semantics.SemanticModule;
 import com.epochx.util.FileManip;
@@ -41,19 +42,18 @@ import com.epochx.util.FileManip;
 public class MainBehaviourAnalysis {
 
 	/**
-	 * @param args
-	 *            the command line arguments
+	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) {
 		// CODE TO ANALYSE STARTING POPULATIONS
 		System.out.println("STARTING POP ANALYSIS - PROGRAM STARTED");
 
 		// set up model and initialiser -- configure up here
-		ArtificialAntSantaFe model = new ArtificialAntSantaFe();
-		String modelName = "Artificial Ant Santa Fe";
+		RegressionModelCUBIC model = new RegressionModelCUBIC();
+		String modelName = "Regression Model CUBIC";
 		RampedHalfAndHalfInitialiser initialiser = new RampedHalfAndHalfInitialiser(model);
 		String genType = "RHH";
-		File place = new File("U:/home/JavaProjects/EpochX1_0/Results");
+		File place = new File("Results");
 
 		// set up the different sizes of population to be analysed
 		ArrayList<Integer> sizes = new ArrayList<Integer>();
@@ -157,8 +157,7 @@ public class MainBehaviourAnalysis {
 			}
 
 			// dump to file
-			String name = genType + "-B+S-" + size.toString() + "-" + modelName
-					+ ".txt";
+			String name = genType + "-B+S-" + size.toString() + "-" + modelName + ".txt";
 			FileManip.doOutput(place, dump, name, false);
 
 			// dump files and force gc

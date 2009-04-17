@@ -105,7 +105,8 @@ public class RegressionHybridSemanticallyDrivenInitialiser<TYPE> implements Init
         // translate back and add to first generation
         List<CandidateProgram<TYPE>> firstGen = new ArrayList<CandidateProgram<TYPE>>();
         for(RegressionRepresentation toProg: storage) {
-            firstGen.add(semMod.behaviourToCode(toProg));
+        	CandidateProgram cp = semMod.behaviourToCode(toProg);
+            firstGen.add(cp);
         }
         
         return firstGen;

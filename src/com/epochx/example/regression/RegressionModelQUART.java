@@ -61,8 +61,8 @@ public class RegressionModelQUART extends GPAbstractModel<Double> {
 		setMaxDepth(17);
 		setPouleSelector(new TournamentSelector<Double>(7, this));
 		setParentSelector(new RandomSelector<Double>());
-		setCrossover(new UniformPointCrossover<Double>());
-		setStateCheckedCrossover(true);
+		setCrossover(new KozaCrossover<Double>());
+		setStateCheckedCrossover(false);
 		setSemanticModule(new RegressionSemanticModule(getTerminals(), this));
 		setInitialiser(new RampedHalfAndHalfInitialiser<Double>(this));
 	}

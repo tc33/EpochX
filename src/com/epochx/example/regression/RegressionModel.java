@@ -27,6 +27,7 @@ import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.func.dbl.*;
+import com.epochx.semantics.RegressionSemanticModule;
 import com.epochx.stats.GenerationStats.*;
 import com.epochx.stats.RunStats.*;
 
@@ -46,20 +47,20 @@ public class RegressionModel extends GPAbstractModel<Double> {
 		this.x = new Variable<Double>("X");
 		
 		// Setup run.
-		setPopulationSize(1000);
-		setCrossoverProbability(0.85);
-		setMutationProbability(0.1);
-		setReproductionProbability(0.05);
-		setInitialiser(new GrowInitialiser<Double>(this));
-		//setPouleSelector(new TournamentSelector<Double>(4, this));
+		setPopulationSize(500);
+		setCrossoverProbability(0.9);
+		setReproductionProbability(0.1);
+		setSemanticModule(new RegressionSemanticModule(getTerminals(), this));
+		setInitialiser(new RegressionSemanticallyDrivenInitialiser<Double>(this, getSemanticModule()));
+		setPouleSelector(new TournamentSelector<Double>(7, this));
 		setParentSelector(new LinearRankSelector<Double>(0.5));
-		setPouleSelector(new RandomSelector<Double>());
+		//setPouleSelector(new RandomSelector<Double>());
 		setCrossover(new UniformPointCrossover<Double>());
-		setPouleSize(10);
-		setNoGenerations(1000);
-		setNoElites(10);
-		setMaxDepth(10);
-		setNoRuns(3);
+		setPouleSize(50);
+		setNoGenerations(50);
+		setNoElites(50);
+		setMaxDepth(17);
+		setNoRuns(1);
 	}
 
 	@Override
@@ -70,11 +71,6 @@ public class RegressionModel extends GPAbstractModel<Double> {
 		functions.add(new SubtractFunction());
 		functions.add(new MultiplyFunction());
 		functions.add(new ProtectedDivisionFunction());
-		functions.add(new ExponentFunction());
-		functions.add(new InvertFunction());
-		functions.add(new LogFunction());
-		functions.add(new SineFunction());
-		functions.add(new CosineFunction());
 		
 		return functions;
 	}
@@ -86,17 +82,17 @@ public class RegressionModel extends GPAbstractModel<Double> {
 	public List<TerminalNode<?>> getTerminals() {
 		// Define terminal set.
 		List<TerminalNode<?>> terminals = new ArrayList<TerminalNode<?>>();
-//		terminals.add(new TerminalNode<Double>(5d));
-//		terminals.add(new TerminalNode<Double>(4d));
-//		terminals.add(new TerminalNode<Double>(3d));
-//		terminals.add(new TerminalNode<Double>(2d));
+		terminals.add(new TerminalNode<Double>(5d));
+		terminals.add(new TerminalNode<Double>(4d));
+		terminals.add(new TerminalNode<Double>(3d));
+		terminals.add(new TerminalNode<Double>(2d));
 		terminals.add(new TerminalNode<Double>(1d));
-//		terminals.add(new TerminalNode<Double>(0d));
-//		terminals.add(new TerminalNode<Double>(-5d));
-//		terminals.add(new TerminalNode<Double>(-4d));
-//		terminals.add(new TerminalNode<Double>(-3d));
-//		terminals.add(new TerminalNode<Double>(-2d));
-//		terminals.add(new TerminalNode<Double>(-1d));
+		terminals.add(new TerminalNode<Double>(0d));
+		terminals.add(new TerminalNode<Double>(-5d));
+		terminals.add(new TerminalNode<Double>(-4d));
+		terminals.add(new TerminalNode<Double>(-3d));
+		terminals.add(new TerminalNode<Double>(-2d));
+		terminals.add(new TerminalNode<Double>(-1d));
 		
 		// Define variables;
 		terminals.add(x);

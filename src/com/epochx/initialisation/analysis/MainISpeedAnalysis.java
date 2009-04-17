@@ -25,10 +25,10 @@ import java.util.List;
 
 import net.sf.javabdd.*;
 import java.lang.reflect.*;
-
-import com.epochx.core.initialisation.RampedHalfAndHalfInitialiser;
+import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.CandidateProgram;
-import com.epochx.example.artificialant.ArtificialAntSantaFe;
+import com.epochx.example.regression.*;
+import com.epochx.semantics.SemanticModule;
 
 /**
  * Runs a full analysis of a starting population for a specific model for varying sizes
@@ -44,8 +44,9 @@ public class MainISpeedAnalysis {
         System.out.println("STARTING INITIALISATION ANALYSIS - PROGRAM STARTED");
         
         // decide which model
-        ArtificialAntSantaFe model = new ArtificialAntSantaFe();
+        RegressionModelCUBIC model = new RegressionModelCUBIC();
         model.setPopulationSize(500);
+        SemanticModule semMod = model.getSemanticModule();
 
         ArrayList<CandidateProgram> newPop;
         
@@ -59,8 +60,8 @@ public class MainISpeedAnalysis {
         for (int i = 0; i < 100; i++) {
 
             // generate population              
-        	RampedHalfAndHalfInitialiser rhh = new RampedHalfAndHalfInitialiser(model);
-            List<CandidateProgram> testPop = rhh.getInitialPopulation();
+        	RegressionHybridSemanticallyDrivenInitialiser initialiser = new RegressionHybridSemanticallyDrivenInitialiser(model, semMod);
+            List<CandidateProgram> testPop = initialiser.getInitialPopulation();
 
         }
         

@@ -36,17 +36,17 @@ public class MakeAverages {
         
         // create file control stuff
         //File dir = new File("D:/JavaProjects/StartingPops6bit/Results");
-        File dir = new File("U:/home/JavaProjects/EpochX1_0/Results");
+        File dir = new File("Results");
         String[] files = dir.list();
         System.out.println("NO OF FILES = " + files.length);
         ArrayList<String> filteredFiles = new ArrayList<String>();
                 
         // filter the files to desired starting pop generation method
-        String testFor = "RH+H";
+        String testFor = "RHH";
         int noOfFiles = files.length;
         for(int i = 0; i<noOfFiles; i++) {
             String tester = files[i];            
-            String part = tester.substring(0, 4);
+            String part = tester.substring(0, 3);
             if(part.equalsIgnoreCase(testFor)) {
                 filteredFiles.add(tester);
                 //System.out.println(tester);

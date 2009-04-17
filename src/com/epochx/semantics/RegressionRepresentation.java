@@ -158,8 +158,9 @@ public class RegressionRepresentation implements Representation, Cloneable {
 			}
 			if(regressionRepresentation.get(0).getChild(2).equals(new TerminalNode<Double>(-0d))) {
 				return true;
-			}
-			
+			}			
+		} else if(regressionRepresentation.size()==0) {
+			return true;			
 		}
 		return false;
 	}

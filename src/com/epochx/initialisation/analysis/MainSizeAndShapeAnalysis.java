@@ -21,15 +21,13 @@
 package com.epochx.initialisation.analysis;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.io.File;
-import net.sf.javabdd.*;
-import java.lang.reflect.*;
 
 import com.epochx.core.GPProgramAnalyser;
-import com.epochx.core.initialisation.RampedHalfAndHalfInitialiser;
+import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
 import com.epochx.example.artificialant.ArtificialAntSantaFe;
+import com.epochx.example.regression.RegressionModelCUBIC;
 import com.epochx.util.FileManip;
 
 /**
@@ -41,19 +39,18 @@ import com.epochx.util.FileManip;
 public class MainSizeAndShapeAnalysis {
 
 	/**
-	 * @param args
-	 *            the command line arguments
+	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) {
 		// CODE TO ANALYSE STARTING POPULATIONS
 		System.out.println("STARTING SIZE AND SHAPE ANALYSIS - PROGRAM STARTED");
 
 		// set up model and initialiser -- configure up here
-		ArtificialAntSantaFe model = new ArtificialAntSantaFe();
-		String modelName = "Artificial Ant Santa Fe";
-		RampedHalfAndHalfInitialiser initialiser = new RampedHalfAndHalfInitialiser(model);
-		String genType = "RHH";
-		File place = new File("U:/home/JavaProjects/EpochX1_0/Results");
+		RegressionModelCUBIC model = new RegressionModelCUBIC();
+		String modelName = "RegressionModelCUBIC";
+		RegressionSemanticallyDrivenInitialiser initialiser = new RegressionSemanticallyDrivenInitialiser(model, model.getSemanticModule());
+		String genType = "SDIR";
+		File place = new File("Results");
 
 		// set up the different sizes of population to be analysed
 		ArrayList<Integer> sizes = new ArrayList<Integer>();

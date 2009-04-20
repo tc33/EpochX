@@ -20,16 +20,15 @@
 
 package com.epochx.initialisation.analysis;
 
+import java.io.File;
 import java.util.*;
 import net.sf.javabdd.*;
-import java.lang.reflect.*;
 
 import com.epochx.core.initialisation.RampedHalfAndHalfInitialiser;
 import com.epochx.core.representation.CandidateProgram;
-import com.epochx.example.artificialant.ArtificialAntSantaFe;
-import com.epochx.semantics.AntRepresentation;
-import com.epochx.semantics.Representation;
-import com.epochx.semantics.SemanticModule;
+import com.epochx.example.regression.RegressionModelCUBIC;
+import com.epochx.semantics.*;
+import com.epochx.util.FileManip;
 
 /**
  * Bias Analyser is used to analyse starting populations
@@ -44,7 +43,7 @@ public class BiasAnalyser {
     public static void main(String[] args) {
 
         // decide which model
-        ArtificialAntSantaFe model = new ArtificialAntSantaFe();
+    	RegressionModelCUBIC model = new RegressionModelCUBIC();
 
         // set up BDD stuff
         SemanticModule semMod = model.getSemanticModule();
@@ -52,11 +51,12 @@ public class BiasAnalyser {
 
         // create storage
         ArrayList<BehaviourManager> storage = new ArrayList<BehaviourManager>();
-
+        
         for (int i = 0; i < 100; i++) {
 
             // create a new pop
         	RampedHalfAndHalfInitialiser rhh = new RampedHalfAndHalfInitialiser(model);
+        	model.setPopulationSize(1000);
             List<CandidateProgram> testPop = rhh.getInitialPopulation();
 
             // cycle through programs and add stuff to HashMap
@@ -85,35 +85,37 @@ public class BiasAnalyser {
         System.out.println("BIAS ANALYSER RESULTS");
         System.out.println("Unique Behaviours = " + storage.size());
         
-        // TODO
-        // USE instanceof to sort out specific output sections----------------------------------------------
-
-        // print score distribution
-        System.out.println("Representation\tFrequency\tNode_Count\tSat_Count");
-        //System.out.println("Representation\tFrequency\tMove_Count\tFinal_Orientation");
-        for (int i = 0; i < storage.size(); i++) {
-            BehaviourManager thisOne = storage.get(i);
-            System.out.println(i + "\t" + ((double) thisOne.getFrequency() / 100) + "\t" + countMoves(((AntRepresentation) thisOne.getBehaviour()).getAntRepresentation()) + "\t" + getLastO(((AntRepresentation) thisOne.getBehaviour()).getAntRepresentation()));
-            //System.out.println(i + "\t" + ((double) thisOne.getFrequency() / 100) + "\t" + thisOne.getBehaviour().getBDD().nodeCount() + "\t" + thisOne.getBehaviour().getBDD().satCount());
+        ArrayList<String> output = new ArrayList<String>();
         
-//        if(thisOne.getFrequency()>1) {
-//        ArrayList<ArrayList<String>> progs = thisOne.getPrograms();
-//        for(ArrayList<String> part: progs) {
-//        System.out.println(part);
-//        }
-//        thisOne.getBDD().printDot();
-//        System.out.println(gPE.bddToBooleanCode(thisOne.getBDD()));
-//        System.out.println("---------");
-//        }
+        // print score distribution
+        BehaviourManager example = storage.get(0);
+        if(example.getBehaviour() instanceof BooleanRepresentation) {
+        	output.add("Representation\tFrequency\tNode_Count\tSat_Count" + "\n");
+        } else if(example.getBehaviour() instanceof AntRepresentation) {
+        	output.add("Representation\tFrequency\tMove_Count\tFinal_Orientation" + "\n");
+        } else if(example.getBehaviour() instanceof RegressionRepresentation) {
+        	output.add("Representation\tFrequency\tNo_Terms\tIs_Constant?" + "\n");
         }
+        for (int i = 0; i < storage.size(); i++) {
+            BehaviourManager thisOne = storage.get(i);            
+            if(thisOne.getBehaviour() instanceof BooleanRepresentation) {
+            	output.add(i + "\t" + ((double) thisOne.getFrequency() / 100) + "\t" + ((BooleanRepresentation) thisOne.getBehaviour()).getBDD().nodeCount() + "\t" + ((BooleanRepresentation) thisOne.getBehaviour()).getBDD().satCount() + "\n");
+            } else if(thisOne.getBehaviour() instanceof AntRepresentation) {
+            	output.add(i + "\t" + ((double) thisOne.getFrequency() / 100) + "\t" + countMoves(((AntRepresentation) thisOne.getBehaviour()).getAntRepresentation()) + "\t" + getLastO(((AntRepresentation) thisOne.getBehaviour()).getAntRepresentation()) + "\n");
+            } else if(thisOne.getBehaviour() instanceof RegressionRepresentation) {
+            	output.add(i + "\t" + ((double) thisOne.getFrequency() / 100) + "\t" + ((RegressionRepresentation) thisOne.getBehaviour()).getRegressionRepresentation().size() + "\t" + ((RegressionRepresentation) thisOne.getBehaviour()).isConstant() + "\n");
+            }
+        }
+        
+        FileManip.doOutput(new File("Results"), output, "biasoutput-REGRESSION.txt", false);
 
-        // close BDD thingy
+        // close BDD link
         semMod.stop();
     }
     
     /**
-     * Helper method for artifical ant analysis
-     * @param toProcess The behavioural representaiton of the ants moves
+     * Helper method for artificial ant analysis
+     * @param toProcess The behavioural representation of the ants moves
      * @return The number of positions covered
      */
     public static int countMoves(ArrayList<String> toProcess) {

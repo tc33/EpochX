@@ -108,6 +108,12 @@ public class RegressionRepresentation implements Representation, Cloneable {
 		
 		// Then throw the new ones back in to the old list.
 		regressionRepresentation.addAll(combinedCVPs);
+		
+		// if representation is zero
+		if(regressionRepresentation.size()==0) {
+			CoefficientExponentFunction cvp = new CoefficientExponentFunction(new TerminalNode(0d), new TerminalNode(new Variable("X")), new TerminalNode(0d));
+			regressionRepresentation.add(cvp);
+		}
 	}
 	
 	public void order() {

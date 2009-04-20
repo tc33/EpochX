@@ -59,7 +59,8 @@ public class MakeAverages {
         
         // read in all files with matching front marker
         for(String name: filteredFiles) {
-            ArrayList<String> dataIn = (ArrayList<String>) FileManip.loadInput(dir);
+        	File toLoad = new File("Results/" + name);
+            ArrayList<String> dataIn = (ArrayList<String>) FileManip.loadInput(toLoad);
             int[] popID = new int[100];
             int[] syntaxSame = new int[100];
             int[] syntaxUnique = new int[100];

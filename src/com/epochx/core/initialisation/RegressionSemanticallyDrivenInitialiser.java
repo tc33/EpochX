@@ -54,9 +54,12 @@ public class RegressionSemanticallyDrivenInitialiser<TYPE> implements Initialise
         List<RegressionRepresentation> storage = new ArrayList<RegressionRepresentation>();
         
         // load terminals only
-        Node var = new Variable("X");
-        storage.add((RegressionRepresentation) semMod.codeToBehaviour(new CandidateProgram(var, model)));
-
+        for(TerminalNode<?> t: model.getTerminals()) {
+        	CandidateProgram c = new CandidateProgram(t, model);
+            RegressionRepresentation rep = (RegressionRepresentation) semMod.codeToBehaviour(c);
+            storage.add(rep);
+        }
+        
         // create random number generator
         Random random = new Random();
         int noOfFunctions = model.getFunctions().size();

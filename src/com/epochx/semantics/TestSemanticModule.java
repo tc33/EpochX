@@ -21,6 +21,7 @@ package com.epochx.semantics;
 import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
 import com.epochx.example.artificialant.ArtificialAntSantaFe;
+import com.epochx.example.regression.RegressionModelCUBIC;
 
 import java.util.*;
 
@@ -28,28 +29,29 @@ public class TestSemanticModule {
 
 	public static void main(String[] args) throws CloneNotSupportedException {
 		
-		ArtificialAntSantaFe model = new ArtificialAntSantaFe();
-		AntSemanticModule semMod = new AntSemanticModule(model.getTerminals(), model, model.getAnt());
+		RegressionModelCUBIC model = new RegressionModelCUBIC();
+		RegressionSemanticModule semMod = new RegressionSemanticModule(model.getTerminals(), model);
 		FullInitialiser rhh = new FullInitialiser(model);
+		model.setPopulationSize(5000);
 		
 		semMod.start();
 		
 		// pull out first population
 		List<CandidateProgram> firstGen = rhh.getInitialPopulation();
-		List<AntRepresentation> firstRep = new ArrayList<AntRepresentation>();
+		List<RegressionRepresentation> firstRep = new ArrayList<RegressionRepresentation>();
 		List<CandidateProgram> secondGen = new ArrayList<CandidateProgram>();
-		List<AntRepresentation> secondRep = new ArrayList<AntRepresentation>();
+		List<RegressionRepresentation> secondRep = new ArrayList<RegressionRepresentation>();
 
 		// generate 1st behaviours
 		for(CandidateProgram c: firstGen) {
 			//System.out.println("1 - " + c.getRootNode());
-			AntRepresentation regRep1 = (AntRepresentation) semMod.codeToBehaviour(c);
-			firstRep.add((AntRepresentation) regRep1.clone());
+			RegressionRepresentation regRep1 = (RegressionRepresentation) semMod.codeToBehaviour(c);
+			firstRep.add((RegressionRepresentation) regRep1.clone());
 			//System.out.println("2 - " + regRep1);			
 			CandidateProgram cp = semMod.behaviourToCode(regRep1);			
 			secondGen.add(cp);
 			//System.out.println("3 - " + cp.getRootNode());
-			AntRepresentation regRep2 = (AntRepresentation) semMod.codeToBehaviour(cp);
+			RegressionRepresentation regRep2 = (RegressionRepresentation) semMod.codeToBehaviour(cp);
 			secondRep.add(regRep2);
 			//System.out.println("4 - " + regRep2);
 		}

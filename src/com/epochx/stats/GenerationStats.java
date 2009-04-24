@@ -407,12 +407,12 @@ public class GenerationStats<TYPE> {
 				stats.put(GenStatField.BEST_PROGRAM, pop.get(minIndex));
 			}
 			
-			// Coincidence Interval at 95%
+			// Confidence Interval at 95%
 			if (stats.containsKey(GenStatField.FITNESS_CI_95)) {
 				if (stdev == -1) {
 					stdev = stdev(fitnesses);
 				}
-				double ci = 1.96 * stdev;
+				double ci = 1.96 * (stdev/Math.sqrt((double) pop.size()));
 				
 				stats.put(GenStatField.FITNESS_CI_95, Double.toString(ci));
 			}

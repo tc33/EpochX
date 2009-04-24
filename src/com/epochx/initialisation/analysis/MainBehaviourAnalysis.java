@@ -25,12 +25,11 @@ import java.io.File;
 import net.sf.javabdd.*;
 import java.lang.reflect.*;
 
-import com.epochx.core.initialisation.RampedHalfAndHalfInitialiser;
+import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.CandidateProgram;
 import com.epochx.example.artificialant.ArtificialAntSantaFe;
 import com.epochx.example.regression.RegressionModelCUBIC;
-import com.epochx.semantics.Representation;
-import com.epochx.semantics.SemanticModule;
+import com.epochx.semantics.*;
 import com.epochx.util.FileManip;
 
 /**
@@ -49,10 +48,11 @@ public class MainBehaviourAnalysis {
 		System.out.println("STARTING POP ANALYSIS - PROGRAM STARTED");
 
 		// set up model and initialiser -- configure up here
-		RegressionModelCUBIC model = new RegressionModelCUBIC();
-		String modelName = "Regression Model CUBIC";
-		RampedHalfAndHalfInitialiser initialiser = new RampedHalfAndHalfInitialiser(model);
-		String genType = "RHH";
+		ArtificialAntSantaFe model = new ArtificialAntSantaFe();
+		String modelName = "AASF";
+		model.setInitialMaxDepth(4);
+		FullInitialiser initialiser = new FullInitialiser(model);
+		String genType = "FULL";
 		File place = new File("Results");
 
 		// set up the different sizes of population to be analysed

@@ -26,7 +26,6 @@ import com.epochx.core.crossover.*;
 import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
-import com.epochx.example.evenparity.Even4Parity;
 import com.epochx.func.dbl.*;
 import com.epochx.semantics.RegressionSemanticModule;
 import com.epochx.stats.GenerationStats.*;
@@ -57,14 +56,14 @@ public class RegressionModelQUART extends GPAbstractModel<Double> {
 		setNoRuns(100);
 		setPouleSize(400);
 		setNoElites(400);
-		setInitialMaxDepth(6);
+		setInitialMaxDepth(4);
 		setMaxDepth(17);
 		setPouleSelector(new TournamentSelector<Double>(7, this));
 		setParentSelector(new RandomSelector<Double>());
 		setCrossover(new KozaCrossover<Double>());
-		setStateCheckedCrossover(true);
+		setStateCheckedCrossover(false);
 		setSemanticModule(new RegressionSemanticModule(getTerminals(), this));
-		setInitialiser(new RampedHalfAndHalfInitialiser<Double>(this));
+		setInitialiser(new WashedInitialiser<Double>(this, getSemanticModule()));
 	}
 
 	@Override

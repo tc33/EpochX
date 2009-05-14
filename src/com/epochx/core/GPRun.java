@@ -21,8 +21,6 @@ package com.epochx.core;
 
 import java.util.*;
 
-import org.apache.log4j.*;
-
 import com.epochx.core.representation.*;
 import com.epochx.stats.*;
 
@@ -36,8 +34,6 @@ import com.epochx.stats.*;
  */
 public class GPRun<TYPE> {
 
-	static Logger logger = Logger.getLogger(GPRun.class);
-	
 	// The model describing the problem to be evolved.
 	private GPModel<TYPE> model;
 	
@@ -103,19 +99,16 @@ public class GPRun<TYPE> {
 	 */
 	private void run() {
 		// Initialisation
-		logger.info("Performing initialisation");
 		List<CandidateProgram<TYPE>> pop = model.getInitialiser().getInitialPopulation();
 		
 		// Generate stats for the inital population.
 		genStats.addGen(pop, 0, 0);
 		
 		// For each generation.
-		logger.info("Starting evolution");
 		for (int i=1; i<=model.getNoGenerations(); i++) {
 			// Record the time we start this generation.
 			long genStartTime = System.nanoTime();
 			
-			logger.debug("Working on generation " + i);
 			List<CandidateProgram<TYPE>> nextPop = new ArrayList<CandidateProgram<TYPE>>();
 			
 			// Perform elitism.
@@ -171,9 +164,6 @@ public class GPRun<TYPE> {
 		}
 		
 		runEndTime = System.nanoTime();
-		
-		logger.info("Best program: " + bestProgram);
-		logger.info("Fitness: " + bestFitness);
 	}
 
 	/**

@@ -19,8 +19,6 @@
  */
 package com.epochx.core;
 
-import org.apache.log4j.*;
-
 import com.epochx.stats.*;
 
 
@@ -35,8 +33,6 @@ import com.epochx.stats.*;
  * parameters.
  */
 public class GPController {
-	
-	static Logger logger = Logger.getLogger(GPController.class);
 
 	/**
 	 * Executes one or more GP runs. The number of runs is set within the model 
@@ -56,24 +52,6 @@ public class GPController {
 	 * @see GPModel
 	 */
 	public static <TYPE> GPRun<TYPE>[] run(GPModel<TYPE> model) {
-		// Setup logging for API.
-		PropertyConfigurator.configure("logger_config");
-		
-		logger.info("Starting execution of EpochX controller");
-		
-		// Log details of the control parameters.
-		logger.debug("Terminals = " + model.getTerminals());
-		logger.debug("Functions = " + model.getFunctions());
-		logger.debug("No runs = " + model.getNoRuns());
-		logger.debug("No generations = " + model.getNoGenerations());
-		logger.debug("Crossover probability = " + model.getCrossoverProbability());
-		logger.debug("Reproduction probability = " + model.getReproductionProbability());
-		logger.debug("Mutation probability = " + model.getMutationProbability());
-		logger.debug("Population size = " + model.getPopulationSize());
-		logger.debug("Poule size = " + model.getPouleSize());
-		logger.debug("Max depth = " + model.getMaxDepth());
-		logger.debug("No elites = " + model.getNoElites());
-
 		// Execute multiple runs, stashing the GPRun object for retrieval of run details.
 		GPRun<TYPE>[] runs = new GPRun[model.getNoRuns()];
 		
@@ -87,14 +65,12 @@ public class GPController {
 		}
 		
 		for (int i=0; i<model.getNoRuns(); i++) {
-			logger.info("Starting GP run " + i);
 			runs[i] = GPRun.run(model);
 			
 			// Generate stats for this run.
 			runStats.addRun(runs[i], i+1);
 		}
-		logger.info("Completed execution of EpochX controller");
-		
+
 		return runs;
 	}
 }

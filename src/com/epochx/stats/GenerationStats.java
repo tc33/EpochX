@@ -412,7 +412,7 @@ public class GenerationStats<TYPE> {
 				if (stdev == -1) {
 					stdev = stdev(fitnesses);
 				}
-				double ci = 1.96 * (stdev/Math.sqrt((double) pop.size()));
+				double ci = 1.96 * (stdev/Math.sqrt(fitnesses.length));
 				
 				stats.put(GenStatField.FITNESS_CI_95, Double.toString(ci));
 			}

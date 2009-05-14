@@ -19,8 +19,6 @@
  */
 package com.epochx.core;
 
-import org.apache.log4j.*;
-
 import com.epochx.core.crossover.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
@@ -45,8 +43,6 @@ import com.epochx.stats.*;
  */
 public class GPCrossover<TYPE> {
 
-	static Logger logger = Logger.getLogger(GPCrossover.class);
-	
 	private GPModel<TYPE> model;
 	private boolean doStateCheckedCrossover;
 	private ParentSelector<TYPE> parentSelector;

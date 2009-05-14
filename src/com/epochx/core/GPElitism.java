@@ -21,8 +21,6 @@ package com.epochx.core;
 
 import java.util.*;
 
-import org.apache.log4j.*;
-
 import com.epochx.core.representation.*;
 
 /**
@@ -31,8 +29,6 @@ import com.epochx.core.representation.*;
  */
 public class GPElitism {
 
-	static Logger logger = Logger.getLogger(GPElitism.class);
-	
 	/**
 	 * Gets the best CandidatePrograms from the given population and returns 
 	 * them. The number of programs returned will be either noElites or pop.size()

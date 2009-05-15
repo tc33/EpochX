@@ -57,7 +57,7 @@ public class RegressionModelCUBIC extends GPAbstractModel<Double> {
 		setNoRuns(100);
 		setPouleSize(50);
 		setNoElites(50);
-		setInitialMaxDepth(4);
+		setInitialMaxDepth(6);
 		setMaxDepth(17);
 		setPouleSelector(new TournamentSelector<Double>(7, this));
 		setParentSelector(new RandomSelector<Double>());
@@ -65,7 +65,7 @@ public class RegressionModelCUBIC extends GPAbstractModel<Double> {
 		setStateCheckedCrossover(false);
 		RegressionSemanticModule semMod = new RegressionSemanticModule(getTerminals(), this);
 		setSemanticModule(semMod);
-		setInitialiser(new ModifiedFullInitialiser<Double>(this, semMod));
+		setInitialiser(new RegressionHybridSemanticallyDrivenInitialiser<Double>(this, semMod));
 	}
 
 	@Override

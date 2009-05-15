@@ -69,7 +69,7 @@ public class FullInitialiser<TYPE> implements Initialiser<TYPE> {
 	
 	private void fillChildren(Node<?> topNode, int currentDepth, int maxDepth) {
 		int arity = topNode.getArity();
-		if(currentDepth<maxDepth-1) {
+		if(currentDepth<maxDepth) {
 			// fill children with functions only
 			for(int i = 0; i<arity; i++) {
 				int randomIndex = (int) Math.floor(Math.random() * model.getFunctions().size());

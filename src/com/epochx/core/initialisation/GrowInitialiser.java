@@ -72,7 +72,7 @@ public class GrowInitialiser<TYPE> implements Initialiser<TYPE> {
 	private void fillChildren(Node<?> topNode, int currentDepth, int maxDepth) {
 		int arity = topNode.getArity();
 		if(arity>0) {
-			if(currentDepth<maxDepth-1) {
+			if(currentDepth<maxDepth) {
 				// fill children with functions or terminals
 				for(int i = 0; i<arity; i++) {
 					int randomIndex = (int) Math.floor(Math.random() * model.getSyntax().size());

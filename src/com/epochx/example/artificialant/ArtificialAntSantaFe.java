@@ -85,13 +85,14 @@ public class ArtificialAntSantaFe extends GPAbstractModel<AntAction> {
 		setPouleSize(50);
 		setNoElites(50);
 		setInitialMaxDepth(6);
-		setMaxDepth(10);
+		setMaxDepth(5);
 		setPouleSelector(new TournamentSelector<AntAction>(7, this));
 		setParentSelector(new RandomSelector<AntAction>());
 		setCrossover(new UniformPointCrossover<AntAction>());
 		setStateCheckedCrossover(true);
-		setSemanticModule(new AntSemanticModule(getTerminals(), this, ant));
-		setInitialiser(new GrowInitialiser<AntAction>(this));
+		setSemanticModule(new AntSemanticModule(getTerminals(), this, ant, antLandscape));
+		setInitialiser(new RampedHalfAndHalfInitialiser<AntAction>(this));
+		//setInitialiser(new AntHybridSemanticallyDrivenInitialiser<AntAction>(this, this.getSemanticModule()));
 	}
 	
 	@Override

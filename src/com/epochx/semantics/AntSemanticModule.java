@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.epochx.action.*;
-import com.epochx.ant.Ant;
+import com.epochx.ant.*;
 import com.epochx.core.GPModel;
 import com.epochx.core.representation.*;
 import com.epochx.func.action.*;
@@ -40,16 +40,18 @@ public class AntSemanticModule implements SemanticModule {
 	private ArrayList<String> antModel;
 	private String orientation;
 	private Ant ant;
+	private AntLandscape landscape;
 	
 	/**
 	 * Constructor for Ant Semantic Module
 	 * @param list List of terminal nodes
 	 * @param model The GPModel object
 	 */
-	public AntSemanticModule(List<TerminalNode<?>> list, GPModel model, Ant ant) {
+	public AntSemanticModule(List<TerminalNode<?>> list, GPModel model, Ant ant, AntLandscape landscape) {
 		this.terminals = list;
 		this.model = model;
 		this.ant = ant;
+		this.landscape = landscape;
 	}
 
 	/* (non-Javadoc)
@@ -475,7 +477,7 @@ public class AntSemanticModule implements SemanticModule {
                     child2 = new TerminalNode(new AntSkipAction(ant));
                 }
                 // end close brakct
-                Node iFANode = new IfFoodAheadFunction(ant, null);
+                Node iFANode = new IfFoodAheadFunction(ant, landscape);
                 iFANode.setChild(child1, 0);
                 iFANode.setChild(child2, 1);
                 sequence.add(iFANode);

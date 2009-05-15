@@ -75,23 +75,23 @@ public class AntLandscape {
 	}
 	
 	public Point getNextLocation(Point currentLocation, Orientation orientation) {
-		Point newLocation = new Point(currentLocation);
+		Point newLocation = new Point(currentLocation.x, currentLocation.y);
 		
 		switch (orientation) {
 			case NORTH:
-				newLocation.y = (currentLocation.y > 0) ? (currentLocation.y-1) : (size.height-1);
+				newLocation.y = (newLocation.y > 0) ? (newLocation.y-1) : (size.height-1);
 				break;
 				
 			case EAST:
-				newLocation.x = (currentLocation.x < size.width-1) ? (currentLocation.x+1) : 0;
+				newLocation.x = (newLocation.x < size.width-1) ? (newLocation.x+1) : 0;
 				break;
 				
 			case SOUTH:
-				newLocation.y = (currentLocation.y < size.height-1) ? (currentLocation.y+1) : 0;
+				newLocation.y = (newLocation.y < size.height-1) ? (newLocation.y+1) : 0;
 				break;
 				
 			case WEST:
-				newLocation.x = (currentLocation.x > 0) ? (currentLocation.y-1) : (size.width-1);
+				newLocation.x = (newLocation.x > 0) ? (newLocation.y-1) : (size.width-1);
 				break;
 	
 			default:

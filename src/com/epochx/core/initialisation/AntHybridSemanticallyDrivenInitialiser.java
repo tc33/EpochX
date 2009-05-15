@@ -29,12 +29,12 @@ import com.epochx.semantics.*;
  * @author lb212
  *
  */
-public class AntSemanticallyDrivenInitialiser<TYPE> implements Initialiser<TYPE> {
+public class AntHybridSemanticallyDrivenInitialiser<TYPE> implements Initialiser<TYPE> {
 
 	private GPModel<TYPE> model;
 	private AntSemanticModule semMod;
 	
-	public AntSemanticallyDrivenInitialiser(GPModel<TYPE> model, SemanticModule semMod) {
+	public AntHybridSemanticallyDrivenInitialiser(GPModel<TYPE> model, SemanticModule semMod) {
 		this.model = model;
 		this.semMod = (AntSemanticModule) semMod;
 	}
@@ -51,13 +51,16 @@ public class AntSemanticallyDrivenInitialiser<TYPE> implements Initialiser<TYPE>
 		// make a random object
 		Random rGen = new Random();
 		ArrayList<ArrayList<String>> storage = new ArrayList<ArrayList<String>>();
-        // seed the basic representations
-        ArrayList<ArrayList<String>> seed = makeAntBaseMoves();
-        for(ArrayList<String> s: seed) {
-            storage.add(s);
+        FullInitialiser<TYPE> f = new FullInitialiser<TYPE>(model);
+        List<CandidateProgram<TYPE>> firstPass = f.getInitialPopulation();
+        
+        // generate a full population to start with
+        for(CandidateProgram<TYPE> c: firstPass) {
+        	AntRepresentation b = (AntRepresentation) semMod.codeToBehaviour(c);
+        	if(!b.isConstant()) {
+        		storage.add(b.getAntRepresentation());
+        	}
         }
-        // clear seed
-        seed = null;
         
         ArrayList<String> result;
         String oB = ("{");
@@ -142,38 +145,6 @@ public class AntSemanticallyDrivenInitialiser<TYPE> implements Initialiser<TYPE>
         
         return firstGen;
 	}
-	
-	/**
-     * Constructs the 4 basic manoeuvres in behaviour form for semantic ant initialisation
-     * @return An ArrayList containing the 4 basic moves
-     */
-    public ArrayList<ArrayList<String>> makeAntBaseMoves() {
-        // make master
-        ArrayList<ArrayList<String>> master = new ArrayList<ArrayList<String>>();
-        // make behaviours
-        ArrayList<String> beh = new ArrayList<String>();
-        // move east
-        beh.add("E");
-        beh.add("M");
-        master.add(beh);
-        beh = new ArrayList<String>();
-        // move south
-        beh.add("S");
-        beh.add("M");
-        master.add(beh);
-        beh = new ArrayList<String>();
-        // move west
-        beh.add("W");
-        beh.add("M");
-        master.add(beh);
-        beh = new ArrayList<String>();
-        // move north
-        beh.add("N");
-        beh.add("M");
-        master.add(beh);
-        beh = null;
-        return master;        
-    }
     
     private int getMoves(ArrayList<String> part) {
         int count = 0;

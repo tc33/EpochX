@@ -63,7 +63,7 @@ public class RegressionModelQUART extends GPAbstractModel<Double> {
 		setCrossover(new KozaCrossover<Double>());
 		setStateCheckedCrossover(false);
 		setSemanticModule(new RegressionSemanticModule(getTerminals(), this));
-		setInitialiser(new WashedInitialiser<Double>(this, getSemanticModule()));
+		setInitialiser(new ModifiedFullInitialiser<Double>(this, getSemanticModule()));
 	}
 
 	@Override

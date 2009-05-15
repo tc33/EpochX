@@ -22,40 +22,33 @@ package com.epochx.func.dbl;
 import com.epochx.core.representation.*;
 
 /**
- * @author Lawrence Beadle & Tom Castle 
+ * 
  */
-public class CoefficientExponentFunction extends FunctionNode<Double> {
+public class PowerFunction extends FunctionNode<Double> {
 
-	public CoefficientExponentFunction() {
-		this(null, null, null);
+	public PowerFunction() {
+		this(null, null);
 	}
 	
-	/**
-	 * Constructor for coefficient, variable, power set up
-	 * @param coefficient the relevant coefficient
-	 * @param term the relevant variable, constant or other expression
-	 * @param exponent the relevant power
-	 */
-	public CoefficientExponentFunction(Node<Double> coefficient, Node<Double> term, Node<Double> exponent) {
-		super(coefficient, term, exponent);
+	public PowerFunction(Node<Double> child1, Node<Double> child2) {
+		super(child1, child2);
 	}
 
 	@Override
 	public Double evaluate() {
 		double c1 = ((Double) getChild(0).evaluate()).doubleValue();
 		double c2 = ((Double) getChild(1).evaluate()).doubleValue();
-		double c3 = ((Double) getChild(2).evaluate()).doubleValue();
 		
-		return c1 * (Math.pow(c2, c3));
+		return Math.pow(c1, c2);
 	}
 	
 	@Override
 	public String getFunctionName() {
-		return "CO-EXP";
+		return "POW";
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		return super.equals(obj) && (obj instanceof CoefficientExponentFunction);
+		return super.equals(obj) && (obj instanceof PowerFunction);
 	}
 }

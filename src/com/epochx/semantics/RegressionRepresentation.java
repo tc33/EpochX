@@ -21,7 +21,7 @@ package com.epochx.semantics;
 
 import java.util.*;
 import com.epochx.core.representation.*;
-import com.epochx.func.dbl.CoefficientExponentFunction;
+import com.epochx.func.dbl.CoefficientPowerFunction;
 
 /**
  * Regression representation is for canonically modelling the behaviour of 
@@ -29,13 +29,13 @@ import com.epochx.func.dbl.CoefficientExponentFunction;
  */
 public class RegressionRepresentation implements Representation, Cloneable {
 	
-	private ArrayList<CoefficientExponentFunction> regressionRepresentation;
+	private ArrayList<CoefficientPowerFunction> regressionRepresentation;
 	
 	/**
 	 * Constructor for regression representation object
 	 * @param regressionRepresentation list of the coefficients
 	 */
-	public RegressionRepresentation(ArrayList<CoefficientExponentFunction> regressionRepresentation) {
+	public RegressionRepresentation(ArrayList<CoefficientPowerFunction> regressionRepresentation) {
 		this.regressionRepresentation = regressionRepresentation;
 	}
 	
@@ -43,14 +43,14 @@ public class RegressionRepresentation implements Representation, Cloneable {
 	 * Constructor for repression representation object - will create blank representation
 	 */
 	public RegressionRepresentation() {
-		this.regressionRepresentation = new ArrayList<CoefficientExponentFunction>();
+		this.regressionRepresentation = new ArrayList<CoefficientPowerFunction>();
 	}
 	
 	/**
 	 * Returns the regression representation (the formula coefficients)
 	 * @return A list of the formula coefficients
 	 */
-	public ArrayList<CoefficientExponentFunction> getRegressionRepresentation() {
+	public ArrayList<CoefficientPowerFunction> getRegressionRepresentation() {
 		return regressionRepresentation;
 	}
 	
@@ -59,14 +59,14 @@ public class RegressionRepresentation implements Representation, Cloneable {
 	 */
 	public void simplify() {
 		outer: for (int i=0; i<regressionRepresentation.size(); i++) {
-			CoefficientExponentFunction cvp1 = regressionRepresentation.get(i);
+			CoefficientPowerFunction cvp1 = regressionRepresentation.get(i);
 			Node<Double> coefficient1 = (Node<Double>) cvp1.getChild(0);
 			Node<Double> term1 = (Node<Double>) cvp1.getChild(1);
 			Node<Double> exponent1 = (Node<Double>) cvp1.getChild(2);
 
 			// Compare against every one AFTER it in the list.
 			for (int j=i+1; j<regressionRepresentation.size(); j++) {
-				CoefficientExponentFunction cvp2 = regressionRepresentation.get(j);
+				CoefficientPowerFunction cvp2 = regressionRepresentation.get(j);
 				Node<Double> coefficient2 = (Node<Double>) cvp2.getChild(0);
 				Node<Double> term2 = (Node<Double>) cvp2.getChild(1);
 				Node<Double> exponent2 = (Node<Double>) cvp2.getChild(2);
@@ -88,7 +88,7 @@ public class RegressionRepresentation implements Representation, Cloneable {
 	
 		// kill any 0 or -0 coefficients
 		for(int i = 0; i<regressionRepresentation.size(); i++) {
-			if(regressionRepresentation.get(i) instanceof CoefficientExponentFunction) {
+			if(regressionRepresentation.get(i) instanceof CoefficientPowerFunction) {
 				double coefficient = (Double) regressionRepresentation.get(i).getChild(0).evaluate();
 				if(coefficient==0 || coefficient==-0) {
 					regressionRepresentation.set(i, null);
@@ -97,8 +97,8 @@ public class RegressionRepresentation implements Representation, Cloneable {
 		}
 		
 		// Add non-nulls to this new list.
-		List<CoefficientExponentFunction> combinedCVPs = new ArrayList<CoefficientExponentFunction>();
-		for (CoefficientExponentFunction cvp: regressionRepresentation) {
+		List<CoefficientPowerFunction> combinedCVPs = new ArrayList<CoefficientPowerFunction>();
+		for (CoefficientPowerFunction cvp: regressionRepresentation) {
 			if (cvp != null) {
 				combinedCVPs.add(cvp);
 			}
@@ -112,7 +112,7 @@ public class RegressionRepresentation implements Representation, Cloneable {
 		
 		// if representation is zero
 		if(regressionRepresentation.size()==0) {
-			CoefficientExponentFunction cvp = new CoefficientExponentFunction(new TerminalNode(0d), new TerminalNode(new Variable("X")), new TerminalNode(0d));
+			CoefficientPowerFunction cvp = new CoefficientPowerFunction(new TerminalNode(0d), new TerminalNode(new Variable("X")), new TerminalNode(0d));
 			regressionRepresentation.add(cvp);
 		}
 	}
@@ -121,10 +121,10 @@ public class RegressionRepresentation implements Representation, Cloneable {
 	 * Orders the CVP clauses - starting with the lowest power.
 	 */
 	public void order() {
-		Collections.sort(regressionRepresentation, new Comparator<CoefficientExponentFunction>(){
+		Collections.sort(regressionRepresentation, new Comparator<CoefficientPowerFunction>(){
 			@Override
-			public int compare(CoefficientExponentFunction cvp1,
-							   CoefficientExponentFunction cvp2) {
+			public int compare(CoefficientPowerFunction cvp1,
+							   CoefficientPowerFunction cvp2) {
 				double power1 = ((Node<Double>) cvp1.getChild(2)).evaluate();
 				double power2 = ((Node<Double>) cvp2.getChild(2)).evaluate();
 				
@@ -136,7 +136,7 @@ public class RegressionRepresentation implements Representation, Cloneable {
 	@Override
 	public String toString() {
 		String output = "";
-		for(CoefficientExponentFunction c: regressionRepresentation) {
+		for(CoefficientPowerFunction c: regressionRepresentation) {
 			output = output + c.toString() + " ";
 		}
 		return output;
@@ -179,12 +179,12 @@ public class RegressionRepresentation implements Representation, Cloneable {
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		RegressionRepresentation newRep = (RegressionRepresentation) super.clone();
-		newRep.regressionRepresentation = (ArrayList<CoefficientExponentFunction>) this.regressionRepresentation.clone();
+		newRep.regressionRepresentation = (ArrayList<CoefficientPowerFunction>) this.regressionRepresentation.clone();
 		
 		// Clone each cvp element.
 		for (int i=0; i<newRep.regressionRepresentation.size(); i++) {
-			CoefficientExponentFunction cvp = newRep.regressionRepresentation.get(i);
-			newRep.regressionRepresentation.set(i, (CoefficientExponentFunction) cvp.clone());
+			CoefficientPowerFunction cvp = newRep.regressionRepresentation.get(i);
+			newRep.regressionRepresentation.set(i, (CoefficientPowerFunction) cvp.clone());
 		}
 		return newRep;
 	}

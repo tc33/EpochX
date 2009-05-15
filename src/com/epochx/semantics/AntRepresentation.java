@@ -21,10 +21,9 @@ package com.epochx.semantics;
 
 import java.util.ArrayList;
 import com.epochx.core.representation.*;
-import com.epochx.func.dbl.CoefficientExponentFunction;
+import com.epochx.func.dbl.CoefficientPowerFunction;
 
 /**
- * @author Lawrence Beadle & Tom Castle
  * The ant representation class is used to represent the behaviour of an ant canonically
  */
 public class AntRepresentation implements Representation, Cloneable {

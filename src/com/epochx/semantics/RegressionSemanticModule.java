@@ -241,10 +241,10 @@ public class RegressionSemanticModule implements SemanticModule {
 		// check if terminal
 		if(arity==0) {
 			if(rootNode instanceof Variable) {
-				rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(1d), new Variable<Double>("X"), new TerminalNode<Double>(1d));
+				rootNode = new CoefficientPowerFunction(new TerminalNode<Double>(1d), new Variable<Double>("X"), new TerminalNode<Double>(1d));
 			} else {
 				double newCoefficient = (Double) rootNode.evaluate();
-				rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), new Variable<Double>("X"), new TerminalNode<Double>(0d));
+				rootNode = new CoefficientPowerFunction(new TerminalNode<Double>(newCoefficient), new Variable<Double>("X"), new TerminalNode<Double>(0d));
 			}
 		} else if(arity>0) {
 			// get children
@@ -256,9 +256,9 @@ public class RegressionSemanticModule implements SemanticModule {
 			// scan for CVPs to build up
 			if(rootNode instanceof MultiplyFunction) {
 				// Get CVP list from each side
-				ArrayList<CoefficientExponentFunction> cVPLeft = this.isolateCVPs((Node<Double>) rootNode.getChild(0));
-				ArrayList<CoefficientExponentFunction> cVPRight = this.isolateCVPs((Node<Double>) rootNode.getChild(1));
-				ArrayList<CoefficientExponentFunction> cVPTotal = new ArrayList<CoefficientExponentFunction>();
+				ArrayList<CoefficientPowerFunction> cVPLeft = this.isolateCVPs((Node<Double>) rootNode.getChild(0));
+				ArrayList<CoefficientPowerFunction> cVPRight = this.isolateCVPs((Node<Double>) rootNode.getChild(1));
+				ArrayList<CoefficientPowerFunction> cVPTotal = new ArrayList<CoefficientPowerFunction>();
 				int cPVLeftSize = cVPLeft.size();
 				int cPVRightSize = cVPRight.size();
 				for(int i = 0; i<cPVLeftSize; i++) {
@@ -269,7 +269,7 @@ public class RegressionSemanticModule implements SemanticModule {
 						double power1 = (Double) cVPLeft.get(i).getChild(2).evaluate();
 						double power2 = (Double) cVPRight.get(j).getChild(2).evaluate();
 						double newPower = power1 + power2;
-						CoefficientExponentFunction c = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), new Variable<Double>("X"), new TerminalNode<Double>(newPower));
+						CoefficientPowerFunction c = new CoefficientPowerFunction(new TerminalNode<Double>(newCoefficient), new Variable<Double>("X"), new TerminalNode<Double>(newPower));
 						cVPTotal.add(c);						
 					}
 				}
@@ -278,9 +278,9 @@ public class RegressionSemanticModule implements SemanticModule {
 				rootNode = this.buildCVPTree(regRep);
 			} else if(rootNode instanceof ProtectedDivisionFunction) {
 				// Get CVP list from each side
-				ArrayList<CoefficientExponentFunction> cVPLeft = this.isolateCVPs((Node<Double>) rootNode.getChild(0));
-				ArrayList<CoefficientExponentFunction> cVPRight = this.isolateCVPs((Node<Double>) rootNode.getChild(1));
-				ArrayList<CoefficientExponentFunction> cVPTotal = new ArrayList<CoefficientExponentFunction>();
+				ArrayList<CoefficientPowerFunction> cVPLeft = this.isolateCVPs((Node<Double>) rootNode.getChild(0));
+				ArrayList<CoefficientPowerFunction> cVPRight = this.isolateCVPs((Node<Double>) rootNode.getChild(1));
+				ArrayList<CoefficientPowerFunction> cVPTotal = new ArrayList<CoefficientPowerFunction>();
 				int cPVLeftSize = cVPLeft.size();
 				int cPVRightSize = cVPRight.size();
 				for(int i = 0; i<cPVLeftSize; i++) {
@@ -294,7 +294,7 @@ public class RegressionSemanticModule implements SemanticModule {
 						double power1 = (Double) cVPLeft.get(i).getChild(2).evaluate();
 						double power2 = (Double) cVPRight.get(j).getChild(2).evaluate();
 						double newPower = power1 - power2;
-						CoefficientExponentFunction c = new CoefficientExponentFunction(new TerminalNode<Double>(newCoefficient), new Variable<Double>("X"), new TerminalNode<Double>(newPower));
+						CoefficientPowerFunction c = new CoefficientPowerFunction(new TerminalNode<Double>(newCoefficient), new Variable<Double>("X"), new TerminalNode<Double>(newPower));
 						cVPTotal.add(c);						
 					}
 				}
@@ -306,33 +306,33 @@ public class RegressionSemanticModule implements SemanticModule {
 		return rootNode;
 	}
 	
-	private ArrayList<CoefficientExponentFunction> isolateCVPs(Node<Double> rootNode) {
-		ArrayList<CoefficientExponentFunction> cVPList = new ArrayList<CoefficientExponentFunction>();		
+	private ArrayList<CoefficientPowerFunction> isolateCVPs(Node<Double> rootNode) {
+		ArrayList<CoefficientPowerFunction> cVPList = new ArrayList<CoefficientPowerFunction>();		
 		// check if terminal
-		if(rootNode instanceof CoefficientExponentFunction) {
-			cVPList.add((CoefficientExponentFunction) rootNode);		
+		if(rootNode instanceof CoefficientPowerFunction) {
+			cVPList.add((CoefficientPowerFunction) rootNode);		
 		} else if(rootNode instanceof AddFunction) {
-			ArrayList<CoefficientExponentFunction> cVPs = new ArrayList<CoefficientExponentFunction>();
+			ArrayList<CoefficientPowerFunction> cVPs = new ArrayList<CoefficientPowerFunction>();
 			cVPs = this.isolateCVPs((Node<Double>) rootNode.getChild(0));
 			// add the retrieved CVP nodes
-			for(CoefficientExponentFunction c: cVPs) {
+			for(CoefficientPowerFunction c: cVPs) {
 				cVPList.add(c);
 			}
 			cVPs = this.isolateCVPs((Node<Double>) rootNode.getChild(1));
 			// add the retrieved CVP nodes
-			for(CoefficientExponentFunction c: cVPs) {
+			for(CoefficientPowerFunction c: cVPs) {
 				cVPList.add(c);
 			}
 		} else if(rootNode instanceof SubtractFunction) {
-			ArrayList<CoefficientExponentFunction> cVPs = new ArrayList<CoefficientExponentFunction>();
+			ArrayList<CoefficientPowerFunction> cVPs = new ArrayList<CoefficientPowerFunction>();
 			cVPs = this.isolateCVPs((Node<Double>) rootNode.getChild(0));
 			// add the retrieved CVP nodes
-			for(CoefficientExponentFunction c: cVPs) {
+			for(CoefficientPowerFunction c: cVPs) {
 				cVPList.add(c);
 			}
 			cVPs = this.isolateCVPs((Node<Double>) rootNode.getChild(1));
 			// add the retrieved CVP nodes AFTER * the coefficients by -1
-			for(CoefficientExponentFunction c: cVPs) {
+			for(CoefficientPowerFunction c: cVPs) {
 				// * coefficients by -1 before adding them
 				double coefficient = (Double) c.getChild(0).evaluate();
 				double newCoefficient = coefficient * -1;
@@ -344,7 +344,7 @@ public class RegressionSemanticModule implements SemanticModule {
 	}
 	
 	private Node<Double> buildCVPTree(RegressionRepresentation rep) {
-		ArrayList<CoefficientExponentFunction> regRep = rep.getRegressionRepresentation();
+		ArrayList<CoefficientPowerFunction> regRep = rep.getRegressionRepresentation();
 		int regRepSize = regRep.size();
 		Node<Double> rootNode = null;
 		if(regRepSize>1) {
@@ -366,14 +366,14 @@ public class RegressionSemanticModule implements SemanticModule {
 		} else if(regRepSize==1){
 			rootNode = regRep.get(0);
 		} else {
-			rootNode = new CoefficientExponentFunction(new TerminalNode<Double>(0d), new Variable<Double>("X"), new TerminalNode<Double>(0d));
+			rootNode = new CoefficientPowerFunction(new TerminalNode<Double>(0d), new Variable<Double>("X"), new TerminalNode<Double>(0d));
 		}
 		return rootNode;
 	}
 	
 	private Node<Double> expandCVPTree(Node<Double> rootNode) {
 		// expand if it is CVP
-		if(rootNode instanceof CoefficientExponentFunction) {
+		if(rootNode instanceof CoefficientPowerFunction) {
 			double coefficient = (Double) rootNode.getChild(0).evaluate();
 			double power = (Double) rootNode.getChild(2).evaluate();
 			if(coefficient==0) {
@@ -387,11 +387,11 @@ public class RegressionSemanticModule implements SemanticModule {
 			} else if(coefficient!=1 && power ==-1) {
 				rootNode = new ProtectedDivisionFunction(new TerminalNode<Double>(coefficient), var);
 			} else if(power<-1) {
-				rootNode = new ProtectedDivisionFunction(new TerminalNode<Double>(coefficient), new CoefficientExponentFunction(new TerminalNode<Double>(1d), new Variable<Double>("X"), new TerminalNode<Double>((power*-1))));
+				rootNode = new ProtectedDivisionFunction(new TerminalNode<Double>(coefficient), new CoefficientPowerFunction(new TerminalNode<Double>(1d), new Variable<Double>("X"), new TerminalNode<Double>((power*-1))));
 			} else if(coefficient==1 && power>1) {
-				rootNode = new MultiplyFunction(var, new CoefficientExponentFunction(new TerminalNode<Double>(coefficient), new Variable<Double>("X"), new TerminalNode<Double>((power-1))));
+				rootNode = new MultiplyFunction(var, new CoefficientPowerFunction(new TerminalNode<Double>(coefficient), new Variable<Double>("X"), new TerminalNode<Double>((power-1))));
 			} else if(coefficient!=1 && power>1) {
-				rootNode = new MultiplyFunction(new TerminalNode<Double>(coefficient), new CoefficientExponentFunction(new TerminalNode<Double>(1d), new Variable<Double>("X"), new TerminalNode<Double>((power))));
+				rootNode = new MultiplyFunction(new TerminalNode<Double>(coefficient), new CoefficientPowerFunction(new TerminalNode<Double>(1d), new Variable<Double>("X"), new TerminalNode<Double>((power))));
 			} else if(coefficient!=1 && power==1) {
 				rootNode = new MultiplyFunction(new TerminalNode<Double>(coefficient), var);
 			} else {

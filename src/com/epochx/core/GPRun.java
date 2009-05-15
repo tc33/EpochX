@@ -102,7 +102,7 @@ public class GPRun<TYPE> {
 		List<CandidateProgram<TYPE>> pop = model.getInitialiser().getInitialPopulation();
 		
 		// Generate stats for the inital population.
-		genStats.addGen(pop, 0, 0);
+		genStats.addGen(pop, 0, 0, 0, 0);
 		
 		// For each generation.
 		for (int i=1; i<=model.getNoGenerations(); i++) {
@@ -158,7 +158,7 @@ public class GPRun<TYPE> {
 			
 			// Generate stats for the current population.
 			long runtime = System.nanoTime() - genStartTime;
-			genStats.addGen(nextPop, i, runtime);
+			genStats.addGen(nextPop, i, runtime, crossover.getRevertedCount(), mutation.getRevertedCount());
 			
 			pop = nextPop;
 		}

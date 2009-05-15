@@ -35,6 +35,7 @@ public class GPMutation<TYPE> {
 	private ParentSelector<TYPE> parentSelector;
 	private Mutator<TYPE> mutator;
 	private MutationStats<TYPE> mutationStats;
+	private int reversions;
 	
 	public GPMutation(GPModel<TYPE> model) {
 		this.model = model;
@@ -56,6 +57,8 @@ public class GPMutation<TYPE> {
 		
 		CandidateProgram<TYPE> parent = null;
 		CandidateProgram<TYPE> child = null;
+		
+		reversions = 0;
 		
 		if (model.getStateCheckedMutation()) {
 			boolean equal = true;
@@ -87,6 +90,11 @@ public class GPMutation<TYPE> {
 					equal = false;
 				}
 				
+				if (equal) {
+					// We're going to have to revert.
+					reversions++;
+				}
+				
 				// stop semantic module
 				semMod.stop();
 			}
@@ -106,6 +114,10 @@ public class GPMutation<TYPE> {
 		mutationStats.addMutation(parent, child, runtime);
 		
 		return child;
+	}
+	
+	public int getRevertedCount() {
+		return reversions;
 	}
 	
 }

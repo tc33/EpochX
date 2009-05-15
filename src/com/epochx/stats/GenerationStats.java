@@ -47,7 +47,11 @@ public class GenerationStats<TYPE> {
 		listeners.remove(listener);
 	}
 	
-	public void addGen(List<CandidateProgram<TYPE>> pop, int gen, long runtime) {
+	public void addGen(List<CandidateProgram<TYPE>> pop, 
+						int gen, 
+						long runtime, 
+						int revertedCrossovers, 
+						int revertedMutations) {
 		// Set of all the fields we need to calculate values for.
 		Map<GenStatField, Object> stats = new HashMap<GenStatField, Object>();
 		
@@ -74,7 +78,7 @@ public class GenerationStats<TYPE> {
 		}
 		
 		// Calculate all the stats that our listeners need.
-		gatherStats(stats, pop, runtime);
+		gatherStats(stats, pop, runtime, revertedCrossovers, revertedMutations);
 		
 		// Inform each listener of their stats.
 		Set<GenerationStatListener> ls = requestedStats.keySet();
@@ -97,7 +101,9 @@ public class GenerationStats<TYPE> {
 	 */
 	private void gatherStats(Map<GenStatField, Object>  stats, 
 							 List<CandidateProgram<TYPE>> pop,
-							 long runtime) {
+							 long runtime,
+							 int revertedCrossovers,
+							 int revertedMutations) {
 		gatherDepthStats(stats, pop);
 		gatherLengthStats(stats, pop);
 		gatherTerminalStats(stats, pop);
@@ -112,6 +118,14 @@ public class GenerationStats<TYPE> {
 		
 		if (stats.containsKey(GenStatField.RUN_TIME)) {
 			stats.put(GenStatField.RUN_TIME, runtime);
+		}
+		
+		if (stats.containsKey(GenStatField.REVERTED_CROSSOVERS)) {
+			stats.put(GenStatField.REVERTED_CROSSOVERS, revertedCrossovers);
+		}
+		
+		if (stats.containsKey(GenStatField.REVERTED_MUTATIONS)) {
+			stats.put(GenStatField.REVERTED_MUTATIONS, revertedMutations);
 		}
 	}
 	
@@ -533,6 +547,8 @@ public class GenerationStats<TYPE> {
 		FITNESS_CI_95,
 		BEST_PROGRAM,
 		POPULATION,
-		RUN_TIME
+		RUN_TIME,
+		REVERTED_CROSSOVERS,
+		REVERTED_MUTATIONS
 	}
 }

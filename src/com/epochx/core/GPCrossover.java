@@ -48,6 +48,7 @@ public class GPCrossover<TYPE> {
 	private ParentSelector<TYPE> parentSelector;
 	private Crossover<TYPE> crossover;
 	private CrossoverStats<TYPE> crossoverStats;
+	private int reversions;
 	
 	/**
 	 * Constructs an instance of GPCrossover which will be capable of 
@@ -98,6 +99,8 @@ public class GPCrossover<TYPE> {
 		CandidateProgram<TYPE>[] parents = null;
 		CandidateProgram<TYPE>[] children = null;
 		
+		reversions = 0;
+		
 		if(!doStateCheckedCrossover) {
 			// do normal crossover
 			parent1 = parentSelector.getParent();
@@ -138,6 +141,11 @@ public class GPCrossover<TYPE> {
 					equal = true;
 				}
 				
+				if (equal) {
+					// We're going to have to revert.
+					reversions++;
+				}
+				
 				// stop semantic module
 				semMod.stop();
 			}
@@ -155,5 +163,9 @@ public class GPCrossover<TYPE> {
 		crossoverStats.addCrossover(parents, children, runtime);
 		
 		return children;
+	}
+	
+	public int getRevertedCount() {
+		return reversions;
 	}
 }

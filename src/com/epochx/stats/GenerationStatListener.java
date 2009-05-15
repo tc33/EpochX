@@ -22,17 +22,41 @@ package com.epochx.stats;
 import com.epochx.stats.GenerationStats.*;
 
 /**
+ * GenerationStatsListener uses the listener pattern to provide a flexible way 
+ * of accessing statistics about each generation.
  * 
+ * Models which require statistics about generations throughout a run 
+ * would typically implement this interface. GPAbstractModel already provides 
+ * an implementation. There are 2 steps to using this interface to gain access 
+ * to generation statistics.
+ * <ul>
+ * <li>Implement <b>getGenStatFields()</b> to return an array of the 
+ * GenStatFields required, in the order desired.</li>
+ * <li>Implement <b>generationStats(Object[])</b> which will receive these 
+ * statistics in that order to use them however required - print to screen, 
+ * file, etc.</li>
+ * </ul>
  */
 public interface GenerationStatListener {
 
 	/**
 	 * The implementing class must return an array of fields which the 
-	 * listening objects are interested in listening to. Changes to the 
-	 * set of fields during execution are unlikely to be honoured.
+	 * listening objects are interested in listening to. The values for 
+	 * each of the fields this method returns will be given as part of the 
+	 * stats array passed to the generationStats(Object[]) array.
 	 */
 	public GenStatField[] getGenStatFields();
 	
+	/**
+	 * This method will be called after every generation completes with an array 
+	 * containing the statistics requested with getGenStatFields().
+	 * @param stats An array of statistics relating to the last generation  
+	 * completed. The order of the array will match the order that the 
+	 * fields were requested in the return of getGenStatFields() method. 
+	 * The array is of type Object[] but the dynamic type of each element will 
+	 * vary depending on the field. For information of types view the comments 
+	 * on the stats fields.
+	 */
 	public void generationStats(int generation, Object[] stats);
 	
 }

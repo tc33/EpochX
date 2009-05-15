@@ -22,17 +22,41 @@ package com.epochx.stats;
 import com.epochx.stats.RunStats.*;
 
 /**
+ * RunStatsListener uses the listener pattern to provide a flexible way 
+ * of accessing statistics about each run.
  * 
+ * Models which require statistics about runs at the end of each run 
+ * would typically implement this interface. GPAbstractModel already provides 
+ * an implementation. There are 2 steps to using this interface to gain access 
+ * to run statistics.
+ * <ul>
+ * <li>Implement <b>getRunStatFields()</b> to return an array of the 
+ * RunStatFields required, in the order desired.</li>
+ * <li>Implement <b>runStats(Object[])</b> which will receive these 
+ * statistics in that order to use them however required - print to screen, 
+ * file, etc.</li>
+ * </ul>
  */
 public interface RunStatListener {
 
 	/**
 	 * The implementing class must return an array of fields which the 
-	 * listening objects are interested in listening to. Changes to the 
-	 * set of fields during execution are unlikely to be honoured.
+	 * listening objects are interested in listening to. The values for 
+	 * each of the fields this method returns will be given as part of the 
+	 * stats array passed to the runStats(Object[]) array.
 	 */
 	public RunStatField[] getRunStatFields();
 	
+	/**
+	 * This method will be called after every run completes with an array 
+	 * containing the statistics requested with getRunStatFields().
+	 * @param stats An array of statistics relating to the last run 
+	 * completed. The order of the array will match the order that the 
+	 * fields were requested in the return of getRunStatFields() method. 
+	 * The array is of type Object[] but the dynamic type of each element will 
+	 * vary depending on the field. For information of types view the comments 
+	 * on the stats fields.
+	 */
 	public void runStats(int run, Object[] stats);
 	
 }

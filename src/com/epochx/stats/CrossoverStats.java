@@ -113,9 +113,33 @@ public class CrossoverStats<TYPE> {
 		}
 	}
 	
+	/**
+	 * This enum gives all the available crossover statistics that can be 
+	 * requested. Crossover statistics are those statistics that are generated 
+	 * per crossover operation. Each CrossoverStatField has a datatype related 
+	 * to it which is the type which the data will be returned in.
+	 * @see com.epochx.stats.CrossoverStatListener
+	 * @see com.epochx.stats.GenerationStats.GenStatField
+	 * @see com.epochx.stats.MutationStats.MutationStatField
+	 * @see com.epochx.stats.RunStats.RunStatField
+	 */
 	public enum CrossoverStatField {
+		/** 
+		 * Requests a CandidateProgram[] (typically with 2 elements) which are 
+		 * the parents that were crossed-over to give the children.
+		 **/
 		PARENTS,
+		
+		/**
+		 * Requests a CandidateProgram[] (typically with 2 elements) which are 
+		 * the children that resulted from crossing over the parents.
+		 **/
 		CHILDREN,
+		
+		/**
+		 * Requests a Long which is the length of time in nanoseconds that the 
+		 * crossover operation took to complete.
+		 */
 		RUN_TIME
 	}
 	

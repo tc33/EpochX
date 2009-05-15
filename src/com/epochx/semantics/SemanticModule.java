@@ -23,7 +23,6 @@ package com.epochx.semantics;
 import com.epochx.core.representation.*;
 
 /**
- * @author Lawrence Beadle & Tom Castle
  * The semantic module interface sets out the basic methods required for all semantic modules.
  */
 public interface SemanticModule {

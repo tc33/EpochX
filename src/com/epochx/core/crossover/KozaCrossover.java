@@ -30,10 +30,17 @@ public class KozaCrossover<TYPE> implements Crossover<TYPE> {
 
 	private double internalProbability;
 
+	/**
+	 * Constructor for Koza standard crossover object
+	 * @param internalProbability The probability of crossover
+	 */
 	public KozaCrossover(double internalProbability) {
 		this.internalProbability = internalProbability;
 	}
 	
+	/**
+	 * Default constructor for Koza standard crossover
+	 */
 	public KozaCrossover() {
 		this(0.9);
 	}

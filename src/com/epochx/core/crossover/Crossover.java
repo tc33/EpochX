@@ -22,7 +22,7 @@ package com.epochx.core.crossover;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * Defines crossover functionality
  */
 public interface Crossover<TYPE> {
 

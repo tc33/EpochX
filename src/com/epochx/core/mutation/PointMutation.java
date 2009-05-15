@@ -25,22 +25,27 @@ import com.epochx.core.*;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * Point mutation method
  */
 public class PointMutation<TYPE> implements Mutator<TYPE> {
 
-	private List<Node<?>> syntax;
-	
+	private List<Node<?>> syntax;	
 	private double pointProbability;
 	
 	/**
 	 * Creates a point mutation with a point probability of 0.01. It's generally 
 	 * recommended that the PointMutation(double) constructor is used.
+	 * @param syntax The syntax to be used in the mutation
 	 */
 	public PointMutation(List<Node<?>> syntax) {
 		this(syntax, 0.01);
 	}
 	
+	/**
+	 * Contains a point mutation with user specified probability
+	 * @param syntax The syntax to be used
+	 * @param pointProbability The probability of mutation
+	 */
 	public PointMutation(List<Node<?>> syntax, double pointProbability) {
 		this.syntax = syntax;
 		this.pointProbability = pointProbability;
@@ -86,5 +91,4 @@ public class PointMutation<TYPE> implements Mutator<TYPE> {
 		
 		return program;
 	}
-
 }

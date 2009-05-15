@@ -24,8 +24,8 @@ import com.epochx.core.representation.*;
 import com.epochx.func.dbl.CoefficientExponentFunction;
 
 /**
- * @author lb212
- *
+ * @author Lawrence Beadle & Tom Castle
+ * The ant representation class is used to represent the behaviour of an ant canonically
  */
 public class AntRepresentation implements Representation, Cloneable {
 	
@@ -73,6 +73,7 @@ public class AntRepresentation implements Representation, Cloneable {
 		}
 	}
 	
+	@Override
 	public String toString() {
 		return antRepresentation.toString();
 	}

@@ -26,14 +26,18 @@ import com.epochx.core.representation.*;
 import com.epochx.semantics.*;
 
 /**
- * @author lb212
- *
+ * Artificial Ant hybrid semantically driven initialisation
  */
 public class AntHybridSemanticallyDrivenInitialiser<TYPE> implements Initialiser<TYPE> {
 
 	private GPModel<TYPE> model;
 	private AntSemanticModule semMod;
 	
+	/**
+	 * Construcor for AA hybrid SDI method
+	 * @param model The GP model in use
+	 * @param semMod The relevant semantic module
+	 */
 	public AntHybridSemanticallyDrivenInitialiser(GPModel<TYPE> model, SemanticModule semMod) {
 		this.model = model;
 		this.semMod = (AntSemanticModule) semMod;
@@ -155,5 +159,4 @@ public class AntHybridSemanticallyDrivenInitialiser<TYPE> implements Initialiser
         }
         return count;
     }
-
 }

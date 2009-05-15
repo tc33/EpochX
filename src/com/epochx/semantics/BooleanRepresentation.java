@@ -22,8 +22,8 @@ package com.epochx.semantics;
 import net.sf.javabdd.*;
 
 /**
- * Boolean Representation holds the behavioural representation of problems in the Boolean domain
- * @author Lawrence Beadle & Tom Castle
+ * Boolean Representation holds the behavioural representation of 
+ * problems in the Boolean domain
  */
 public class BooleanRepresentation implements Representation {
 	
@@ -73,5 +73,4 @@ public class BooleanRepresentation implements Representation {
 			return false;
 		}		
 	}
-
 }

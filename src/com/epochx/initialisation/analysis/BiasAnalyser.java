@@ -31,8 +31,8 @@ import com.epochx.semantics.*;
 import com.epochx.util.FileManip;
 
 /**
- * Bias Analyser is used to analyse starting populations
- * @author Lawrence Beadle
+ * Bias Analyser is used to analyse starting populations by checking 
+ * how many programs are associated with a particular behaviour
  */
 public class BiasAnalyser {
 
@@ -128,6 +128,11 @@ public class BiasAnalyser {
         return i;
     }
     
+    /**
+     * Helper method for artificial ant analysis
+     * @param toProcess - the behaviour to process
+     * @return the final orientation of the behaviour
+     */
     public static String getLastO(ArrayList<String> toProcess) {
         for(int i = (toProcess.size()-1); i>=0; i--) {
             if(toProcess.get(i).equalsIgnoreCase("N") || toProcess.get(i).equalsIgnoreCase("S") || toProcess.get(i).equalsIgnoreCase("E") || toProcess.get(i).equalsIgnoreCase("W")) {

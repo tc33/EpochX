@@ -33,8 +33,6 @@ import com.epochx.util.FileManip;
 /**
  * Runs a full analysis of a starting population for a specific model for
  * varying sizes
- * 
- * @author Lawrence Beadle
  */
 public class MainSizeAndShapeAnalysis {
 
@@ -148,10 +146,8 @@ public class MainSizeAndShapeAnalysis {
 	}
 
 	/**
-	 * Calculates and returns the average value of a collection of data
-	 * 
-	 * @param rawData
-	 *            the raw data
+	 * Calculates and returns the average value of a collection of data 
+	 * @param rawData the raw data
 	 * @return the average of the data
 	 */
 	public static double getAverage(double[] rawData) {
@@ -166,10 +162,8 @@ public class MainSizeAndShapeAnalysis {
 	}
 
 	/**
-	 * Returns the maximum value from a collection of data
-	 * 
-	 * @param rawData
-	 *            The collection of data
+	 * Returns the maximum value from a collection of data 
+	 * @param rawData The collection of data
 	 * @return the maximum value
 	 */
 	public static double getMax(double[] rawData) {
@@ -184,10 +178,8 @@ public class MainSizeAndShapeAnalysis {
 	}
 
 	/**
-	 * Returns the minimum value from a collection of data
-	 * 
-	 * @param rawData
-	 *            The collection of data
+	 * Returns the minimum value from a collection of data 
+	 * @param rawData The collection of data
 	 * @return The minimum value
 	 */
 	public static double getMin(double[] rawData) {

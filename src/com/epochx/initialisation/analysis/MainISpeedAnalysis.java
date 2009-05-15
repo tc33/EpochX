@@ -32,7 +32,6 @@ import com.epochx.semantics.SemanticModule;
 
 /**
  * Runs a full analysis of a starting population for a specific model for varying sizes
- * @author Lawrence Beadle
  */
 public class MainISpeedAnalysis {
     

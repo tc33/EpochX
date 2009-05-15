@@ -21,7 +21,7 @@ package com.epochx.core.representation;
 
 /**
  * A variable is a data type which can be used for a <code>TerminalNode</code>
- * inplace of a predefined constant. Variables can thus have their values 
+ * in place of a predefined constant. Variables can thus have their values 
  * changed which will change the result of evaluation.
  */
 public class Variable<TYPE> extends TerminalNode<TYPE> {
@@ -29,26 +29,30 @@ public class Variable<TYPE> extends TerminalNode<TYPE> {
 	private String label;
 	//private TYPE value = null;
 	
+	/**
+	 * COnstructor for a new variable
+	 * @param label The variable label
+	 */
 	public Variable(String label) {
 		super(null);
 		this.label = label;
 	}
 	
+	/**
+	 * Returns the label of the variable
+	 * @return The label of the variable
+	 */
 	public String getLabel() {
 		return label;
 	}
 	
+	/**
+	 * Sets the label of a variable
+	 * @param label The new label of the variable
+	 */
 	public void setLabel(String label) {
 		this.label = label;
 	}
-	
-	/*public TYPE getValue() {
-		return value;
-	}
-	
-	public void setValue(TYPE value) {
-		this.value = value;
-	}*/
 	
 	@Override
 	public TYPE evaluate() {
@@ -57,11 +61,7 @@ public class Variable<TYPE> extends TerminalNode<TYPE> {
 
 	@Override
 	public String toString() {
-		//if (value != null) {
-		//	return value.toString();
-		//} else {
-			return label;
-		//}
+		return label;
 	}
 	
 	@Override

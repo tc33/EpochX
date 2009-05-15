@@ -60,10 +60,10 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
 		variables.put("A0", new Variable<Boolean>("A0"));
 		
 		setPopulationSize(500);
-		setNoGenerations(100);
+		setNoGenerations(10);
 		setCrossoverProbability(0.9);
 		setReproductionProbability(0.1);
-		setNoRuns(100);
+		setNoRuns(1);
 		setPouleSize(50);
 		setNoElites(50);
 		setInitialMaxDepth(6);
@@ -73,7 +73,7 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
 		setCrossover(new UniformPointCrossover<Boolean>());
 		setStateCheckedCrossover(false);
 		setSemanticModule(new BooleanSemanticModule(getTerminals(), this));
-		setInitialiser(new RampedHalfAndHalfInitialiser<Boolean>(this));
+		setInitialiser(new BooleanHybridSemanticallyDrivenInitialiser<Boolean>(this, this.getSemanticModule()));
 	}
 	
 	@Override

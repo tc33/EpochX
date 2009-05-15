@@ -25,12 +25,16 @@ import com.epochx.core.representation.*;
 import com.epochx.semantics.*;
 
 /**
- * 
+ * Full initialisation method
  */
 public class FullInitialiser<TYPE> implements Initialiser<TYPE> {
 	
 	private GPModel<TYPE> model;
 
+	/**
+	 * Constructor for full initialisation method
+	 * @param model The GP model in use
+	 */
 	public FullInitialiser(GPModel<TYPE> model) {
 		this.model = model;
 	}
@@ -55,6 +59,11 @@ public class FullInitialiser<TYPE> implements Initialiser<TYPE> {
 		return firstGen;
 	}
 	
+	/**
+	 * Build a FULL node tree
+	 * @param depth The maximum depth of the node tree
+	 * @return The FULL node tree
+	 */
 	public Node<TYPE> buildFullNodeTree(int depth) {		
         // define top node form functions
         int randomIndex = (int) Math.floor(Math.random() * model.getFunctions().size());

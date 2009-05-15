@@ -51,6 +51,10 @@ public class CandidateProgram<TYPE> implements Cloneable, Comparable<CandidatePr
 		this.rootNode = rootNode;
 	}
 	
+	/**
+	 * Evaluates the candidate program
+	 * @return The result of the evaluation of the program
+	 */
 	public TYPE evaluate() {
 		return rootNode.evaluate();
 	}
@@ -65,10 +69,19 @@ public class CandidateProgram<TYPE> implements Cloneable, Comparable<CandidatePr
 		return rootNode.equals(((CandidateProgram<TYPE>) obj).rootNode);
 	}
 	
+	/**
+	 * Returns the root node of the node tree held by the candidate program
+	 * @return The root node of the node tree
+	 */
 	public Node<TYPE> getRootNode() {
 		return rootNode;
 	}
 	
+	/**
+	 * Returns the n th node defined by the user
+	 * @param n The index of the nod required
+	 * @return The node at the specified index
+	 */
 	public Node<?> getNthNode(int n) {
 		int size = GPProgramAnalyser.getProgramLength(this);
 		if(n > size)
@@ -76,6 +89,11 @@ public class CandidateProgram<TYPE> implements Cloneable, Comparable<CandidatePr
 		return rootNode.getNthNode(n);
 	}
 	
+	/**
+	 * Sets the n th node defined by the user
+	 * @param newNode The new node to be put into position
+	 * @param n The index of the position to be set to the new node
+	 */
 	public void setNthNode(Node<?> newNode, int n) {
 		if (n == 0) {
 			// Need to test is of type <TYPE> somehow really.
@@ -87,6 +105,11 @@ public class CandidateProgram<TYPE> implements Cloneable, Comparable<CandidatePr
 		rootNode.setNthNode(newNode, n);
 	}
 	
+	/**
+	 * Returns the number of nodes at a user specified depth
+	 * @param d The user specified depth of the nodes
+	 * @return The number of nodes at the specified depth
+	 */
 	public List<Node<?>> getNodesAtDepth(int d) {
 		return rootNode.getNodesAtDepth(d);
 	}
@@ -114,6 +137,10 @@ public class CandidateProgram<TYPE> implements Cloneable, Comparable<CandidatePr
 		return clone;
 	}
 	
+	/**
+	 * Returns the fitness of the candidate program
+	 * @return The fitness of the candidate program
+	 */
 	public double getFitness() {
 		return model.getFitness(this);
 	}

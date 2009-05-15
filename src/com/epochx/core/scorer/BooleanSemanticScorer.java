@@ -24,7 +24,6 @@ import com.epochx.semantics.*;
 import net.sf.javabdd.*;
 
 /**
- * @author Lawrence Beadle & Tom Castle
  * The Boolean Semantic Scorer allows users to compare to representations of 
  * Boolean programs and return a value denoting relative difference. Zero would 
  * be the best score possible, i.e. denoting equivalence.
@@ -33,10 +32,20 @@ public class BooleanSemanticScorer {
 	
 	private SemanticModule semanticModule;
 
+	/**
+	 * Constructor for the Boolean semantic scorer
+	 * @param semanticModule The semantic module to be used
+	 */
 	public BooleanSemanticScorer(SemanticModule semanticModule) {
 		this.semanticModule = semanticModule;
 	}
 	
+	/**
+	 * Calculates the percentage different between to Boolean representations
+	 * @param program Program being considered
+	 * @param target The target program (to set up target behaviour)
+	 * @return Percentage difference 0% is best score
+	 */
 	public double doScore(CandidateProgram program, CandidateProgram target) {
 		semanticModule.start();
         double score;

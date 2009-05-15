@@ -26,14 +26,18 @@ import com.epochx.core.representation.*;
 import com.epochx.semantics.*;
 
 /**
- * @author lb212
- *
+ * Artificial Ant Semantically Driven Initialisation
  */
 public class AntSemanticallyDrivenInitialiser<TYPE> implements Initialiser<TYPE> {
 
 	private GPModel<TYPE> model;
 	private AntSemanticModule semMod;
 	
+	/**
+	 * Constructor for semantically driven initialisation for artificial ant
+	 * @param model The GP model in use
+	 * @param semMod The semantic module on use
+	 */
 	public AntSemanticallyDrivenInitialiser(GPModel<TYPE> model, SemanticModule semMod) {
 		this.model = model;
 		this.semMod = (AntSemanticModule) semMod;
@@ -184,5 +188,4 @@ public class AntSemanticallyDrivenInitialiser<TYPE> implements Initialiser<TYPE>
         }
         return count;
     }
-
 }

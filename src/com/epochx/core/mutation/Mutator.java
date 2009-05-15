@@ -22,10 +22,15 @@ package com.epochx.core.mutation;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * Interface to define mutation object structure
  */
 public interface Mutator<TYPE> {
 
+	/**
+	 * abstract mutation method
+	 * @param program The program to mutate
+	 * @return The program produced by the mutation
+	 */
 	public CandidateProgram<TYPE> mutate(CandidateProgram<TYPE> program);
 	
 }

@@ -20,7 +20,7 @@
 package com.epochx.ant;
 
 /**
- * 
+ * Enumerates the orientations of the ant
  */
 public enum Orientation {
 	

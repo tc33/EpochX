@@ -29,14 +29,18 @@ import com.epochx.func.dbl.*;
 import com.epochx.semantics.*;
 
 /**
- * @author Lawrence Beadle & Tom Castle
- *
+ * Regression semantically driven initialisation
  */
 public class RegressionSemanticallyDrivenInitialiser<TYPE> implements Initialiser<TYPE> {
 
 	private GPModel<TYPE> model;
 	private RegressionSemanticModule semMod;
 	
+	/**
+	 * Constructor for regression based semantically driven initialisation
+	 * @param model The GP model in use
+	 * @param semMod The semantic module in use
+	 */
 	public RegressionSemanticallyDrivenInitialiser(GPModel<TYPE> model, SemanticModule semMod) {
 		this.model = model;
 		this.semMod = (RegressionSemanticModule) semMod;

@@ -24,10 +24,14 @@ import java.util.*;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * Abstract description of an initisaliser
  */
 public interface Initialiser<TYPE> {
 
+	/**
+	 * abstract call to return initial population
+	 * @return
+	 */
 	public List<CandidateProgram<TYPE>> getInitialPopulation();
 	
 }

@@ -25,6 +25,11 @@ import com.epochx.example.regression.RegressionModelCUBIC;
 
 import java.util.*;
 
+/**
+ * Class written to formally test semantic modules by converting
+ * code to behaviour, behaviour to code and code to behaviour again.
+ * The 2 behaviours are then compared for equivalence
+ */
 public class TestSemanticModule {
 
 	public static void main(String[] args) throws CloneNotSupportedException {
@@ -75,7 +80,5 @@ public class TestSemanticModule {
 
 		semMod.stop();
 		System.exit(777);
-
 	}
-
 }

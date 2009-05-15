@@ -22,10 +22,14 @@ package com.epochx.action;
 import com.epochx.ant.*;
 
 /**
- * 
+ * Defines an ant move action
  */
 public class AntMoveAction extends AntAction {
 	
+	/**
+	 * constructs ant move action
+	 * @param ant the ant object
+	 */
 	public AntMoveAction(Ant ant) {
 		super(ant);
 	}
@@ -35,6 +39,7 @@ public class AntMoveAction extends AntAction {
 		getAnt().move();
 	}
 	
+	@Override
 	public String toString() {
 		return "MOVE";
 	}

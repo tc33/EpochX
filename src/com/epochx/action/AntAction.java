@@ -22,16 +22,24 @@ package com.epochx.action;
 import com.epochx.ant.*;
 
 /**
- * 
+ * Defines the concept of an ant action
  */
 public abstract class AntAction extends Action {
 
 	private Ant ant;
 	
+	/**
+	 * Supplies an ant for the action to be performed on
+	 * @param ant the ant object
+	 */
 	public AntAction(Ant ant) {
 		this.ant = ant;
 	}
 	
+	/**
+	 * Returns the ant object
+	 * @return the ant object
+	 */
 	public Ant getAnt() {
 		return ant;
 	}

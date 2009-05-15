@@ -20,14 +20,20 @@
 package com.epochx.action;
 
 /**
- * 
+ * Defines an abstract action
  */
 public abstract class Action {
 	
+	/**
+	 * defines a do nothing clause to return on the call to evaluate
+	 */
 	public static final Action DO_NOTHING = new Action() {
 		public void execute() {}
 	};
 	
+	/**
+	 * defines abstract execute method for each of the actions.
+	 */
 	public abstract void execute();
 	
 }

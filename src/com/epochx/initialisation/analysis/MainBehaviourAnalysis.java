@@ -34,9 +34,7 @@ import com.epochx.util.FileManip;
 
 /**
  * Runs a full analysis of a starting population for a specific model for
- * varying sizes
- * 
- * @author Lawrence Beadle
+ * varying sizes.
  */
 public class MainBehaviourAnalysis {
 

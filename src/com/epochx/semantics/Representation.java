@@ -20,7 +20,6 @@
 package com.epochx.semantics;
 
 /**
- * @author Lawrence Beadle
  * The interface behaviour specifies two core methods required in all behaviours.
  */
 public interface Representation {

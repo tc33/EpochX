@@ -20,10 +20,15 @@
 package com.epochx.core.representation;
 
 /**
- * 
+ * Represents a function node within a candidate program
  */
 public abstract class FunctionNode<TYPE> extends Node<TYPE> {
 
+	/**
+	 * Constructor for function node with dynamic number of children 
+	 * depending on arity of function
+	 * @param children The child nodes
+	 */
 	public FunctionNode(Node<TYPE> ... children) {
 		super(children);
 	}

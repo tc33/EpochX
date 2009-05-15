@@ -42,8 +42,8 @@ public abstract class Node<TYPE> implements Cloneable {
 	private Node<?>[] children;
 	
 	/**
-	 * 
-	 * @param children
+	 * Node constructor
+	 * @param children children of this node
 	 */
 	public Node(Node<?> ... children) {
 		this.children = children;
@@ -52,30 +52,30 @@ public abstract class Node<TYPE> implements Cloneable {
 	/**
 	 * Performs some operation and/or returns a value associated 
 	 * with this Node.
-	 * @return
+	 * @return The result of evaluating the candidate program
 	 */
 	public abstract TYPE evaluate();
 	
 	/**
-	 * 
-	 * @return
+	 * Returns the children of the node
+	 * @return The children of the node
 	 */
 	public Node<?>[] getChildren() {
 		return children;
 	}
 
 	/**
-	 * 
-	 * @param children
+	 * Sets the children of the node
+	 * @param children The new children to be set
 	 */
 	public void setChildren(Node<?>[] children) {
 		this.children = children;
 	}
 	
 	/**
-	 * 
-	 * @param index
-	 * @return
+	 * Returns a specific child by index
+	 * @param index The index (representing arity) of the child to be returned
+	 * @return The desired child node
 	 */
 	public Node<?> getChild(int index) {
 		return children[index];
@@ -84,8 +84,8 @@ public abstract class Node<TYPE> implements Cloneable {
 	/**
 	 * Retrieves the nth node from the tree when considering this node to be 
 	 * the root - that is the 0th node. The tree is traversed in pre-order.
-	 * @param n
-	 * @return
+	 * @param n The index of the node to be returned
+	 * @return The desired node
 	 */
 	public Node<?> getNthNode(int n) {
 		return getNthNode(n, 0);
@@ -117,9 +117,8 @@ public abstract class Node<TYPE> implements Cloneable {
 	/**
 	 * Set the nth node in the tree when considering this Node to be the root
 	 * node - that is, the 0th node. The tree is traversed in pre-order.
-	 * @param rootNode
-	 * @param newNode
-	 * @param n
+	 * @param newNode The new node to be inserted
+	 * @param n The index at which to place the new node
 	 */
 	public void setNthNode(Node<?> newNode, int n) {		
 		setNthNode(newNode, n, 0);
@@ -151,8 +150,8 @@ public abstract class Node<TYPE> implements Cloneable {
 	/**
 	 * Retrieves the nodes from the tree at depth d when considering this node to be 
 	 * the root - that is depth 0.
-	 * @param depth
-	 * @return
+	 * @param depth The depth to retrieve nodes at
+	 * @return The nodes at the desired depth
 	 */
 	public List<Node<?>> getNodesAtDepth(int d) {
 		List<Node<?>> nodes = new ArrayList<Node<?>>();
@@ -172,9 +171,9 @@ public abstract class Node<TYPE> implements Cloneable {
 	}
 	
 	/**
-	 * 
-	 * @param child
-	 * @param index
+	 * Sets a child node
+	 * @param child The new child node
+	 * @param index The index (representing arity) to set
 	 */
 	public void setChild(Node<?> child, int index) {
 		children[index] = child;

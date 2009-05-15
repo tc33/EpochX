@@ -24,19 +24,27 @@ import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * Subtree mutation method
  */
 public class SubtreeMutation<TYPE> implements Mutator<TYPE> {
 
 	private GPModel<TYPE> model;
 	private int subtreeDepth;
 	
-	//TODO Consider removing use of the model inside these things.
+	/**
+	 * Simple constructor for subtree mutation using depth 4 for new subtrees
+	 * @param model The GP model in use
+	 */
 	public SubtreeMutation(GPModel<TYPE> model) {
 		// 4 is a slightly arbitrary choice but we had to choose something.
 		this(model, 4);
 	}
 	
+	/**
+	 * Subtree mutation constructor with new subtree depth control
+	 * @param model The GP model in use
+	 * @param subtreeDepth The maximum depth of the inserted subtree
+	 */
 	public SubtreeMutation(GPModel<TYPE> model, int subtreeDepth) {
 		this.model = model;
 		this.subtreeDepth = subtreeDepth;

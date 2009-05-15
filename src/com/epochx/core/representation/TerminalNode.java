@@ -22,24 +22,32 @@ package com.epochx.core.representation;
 import com.epochx.action.Action;
 
 /**
- * 
+ * Defines a terminal node
  */
 public class TerminalNode<TYPE> extends Node<TYPE> {
 
 	private TYPE value;
 	
+	/**
+	 * COnstructor for a new terminal node
+	 * @param value The value of the terminal node
+	 */
 	public TerminalNode(TYPE value) {
 		super();
 		this.value = value;
 	}
 
 	/**
-	 * @return the type
+	 * @return the value of the terminal node
 	 */
 	public TYPE getValue() {
 		return value;
 	}
 	
+	/**
+	 * Sets the value of the terminal node
+	 * @param value The new value
+	 */
 	public void setValue(TYPE value) {
 		this.value = value;
 	}
@@ -54,6 +62,7 @@ public class TerminalNode<TYPE> extends Node<TYPE> {
 		}
 	}
 	
+	@Override
 	public String toString() {
 		return value.toString();
 	}

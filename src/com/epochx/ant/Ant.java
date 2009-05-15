@@ -26,7 +26,10 @@ import java.awt.*;
 
 /**
  * This class represents an ant as an object for the artificial ant simulation
- * @author Lawrence Beadle
+ */
+/**
+ * @author lb212
+ *
  */
 public class Ant {
     
@@ -41,6 +44,7 @@ public class Ant {
     /**
      * Constructor for the artificial ant model
      * @param timeSteps The maximum number of time steps the ant is allowed to move - both turns and moves count as one step
+     * @param antLandscape This represents the landscape the ant is moving through
      */
     public Ant(int timeSteps, AntLandscape antLandscape) {
         orientation = EAST;
@@ -198,10 +202,19 @@ public class Ant {
         moves++;
     }
     
+    /**
+     * Returns the maximum number of moves
+     * @return The maximum number of moves
+     */
     public int getMaxMoves() {
     	return maxMoves;
     }
     
+    /**
+     * Resets the ant object
+     * @param timeSteps Time steps available for the new ant run
+     * @param antLandscape The new landscape for the new ant run
+     */
     public void resetAnt(int timeSteps, AntLandscape antLandscape) {
         orientation = EAST;
         moves = 0;
@@ -212,6 +225,7 @@ public class Ant {
         this.antLandscape = antLandscape;
     }
     
+    @Override
     public String toString() {
     	return xLocation + ":" + yLocation + " Facing " + orientation + " --- moves = " + moves;
     }

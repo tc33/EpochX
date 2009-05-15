@@ -22,11 +22,14 @@ package com.epochx.action;
 import com.epochx.ant.*;
 
 /**
- * @author lb212
- *
+ * Defines and ant skip action (effectively does nothing apart from increment time steps)
  */
 public class AntSkipAction extends AntAction {
 
+	/**
+	 * constructs ant skip action
+	 * @param ant the ant object
+	 */
 	public AntSkipAction(Ant ant) {
 		super(ant);
 	}
@@ -39,6 +42,7 @@ public class AntSkipAction extends AntAction {
 		getAnt().skip();
 	}	
 	
+	@Override
 	public String toString() {
 		return "SKIP";
 	}

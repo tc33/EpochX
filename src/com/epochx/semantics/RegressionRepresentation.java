@@ -24,7 +24,8 @@ import com.epochx.core.representation.*;
 import com.epochx.func.dbl.CoefficientExponentFunction;
 
 /**
- * @author Lawrence Beadle & Tom Castle
+ * Regression representation is for canonically modelling the behaviour of 
+ * symbolic regression domains.
  */
 public class RegressionRepresentation implements Representation, Cloneable {
 	
@@ -116,6 +117,9 @@ public class RegressionRepresentation implements Representation, Cloneable {
 		}
 	}
 	
+	/**
+	 * Orders the CVP clauses - starting with the lowest power.
+	 */
 	public void order() {
 		Collections.sort(regressionRepresentation, new Comparator<CoefficientExponentFunction>(){
 			@Override
@@ -129,6 +133,7 @@ public class RegressionRepresentation implements Representation, Cloneable {
 		});
 	}
 	
+	@Override
 	public String toString() {
 		String output = "";
 		for(CoefficientExponentFunction c: regressionRepresentation) {

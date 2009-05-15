@@ -23,7 +23,7 @@ import com.epochx.core.*;
 import com.epochx.core.representation.*;
 
 /**
- * This class implements crossover with uniform swap points.
+ * This class implements standard crossover with uniform swap points.
  */
 public class UniformPointCrossover<TYPE> implements Crossover<TYPE> {
 

@@ -22,15 +22,14 @@ package com.epochx.semantics;
 import net.sf.javabdd.BDD;
 import net.sf.javabdd.BDDFactory;
 import java.util.*;
-
 import com.epochx.core.*;
 import com.epochx.core.representation.*;
-import com.epochx.func.*;
 import com.epochx.func.bool.*;
 
 /**
- * The Boolean Semantic Module provides semantic functionality for problems in the Boolean domain
- * @author Lawrence Beadle & Tom Castle
+ * The Boolean Semantic Module provides semantic functionality 
+ * for problems in the Boolean domain including reduction to 
+ * canonical representations of behaviour
  */
 public class BooleanSemanticModule implements SemanticModule {
 

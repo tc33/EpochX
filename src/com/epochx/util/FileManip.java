@@ -33,7 +33,7 @@ public class FileManip {
      * This method controls sending information files
      * @param cDir A file object representing the directory to send the output files to.
      * @param infoToSave An ArrayList<String> of the information to be saved to the file.  Each element in the 
-     * ArrayList represnts a new line in the output file.
+     * ArrayList represents a new line in the output file.
      * @param fileName A String which will be the name of the output file.
      * @param append True if you want information to be added to the file and false if you want the 
      * file to be overwritten
@@ -58,8 +58,8 @@ public class FileManip {
     /**
      * Loads an input file
      * @param cDir A File object that represents the directory where the file to be loaded is held.
-     * @param fName The anme of the input file
-     * @return An ArrayList<String> represnting the input data.  Each element in the ArrayList represents a 
+     * @param fName The name of the input file
+     * @return An ArrayList<String> representing the input data.  Each element in the ArrayList represents a 
      * line of data from the input file
      */
     public static List<String> loadInput(File fileToLoad) {

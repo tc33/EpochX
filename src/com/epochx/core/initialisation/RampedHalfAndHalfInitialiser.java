@@ -25,7 +25,7 @@ import com.epochx.core.representation.*;
 import com.epochx.semantics.*;
 
 /**
- * 
+ * Ramped Half and Half initialisation technique
  */
 public class RampedHalfAndHalfInitialiser<TYPE> implements Initialiser<TYPE> {
 	
@@ -91,5 +91,4 @@ public class RampedHalfAndHalfInitialiser<TYPE> implements Initialiser<TYPE> {
 		// Return starting population.
 		return firstGen;
 	}
-
 }

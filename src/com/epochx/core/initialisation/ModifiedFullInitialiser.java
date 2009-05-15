@@ -25,7 +25,6 @@ import com.epochx.core.representation.*;
 import com.epochx.semantics.*;
 
 /**
- * @author Lawrence Beadle & Tom Castle
  * The modified FULL initialiser creates a starting population similar to full
  * which will not produce any programs which are not dependent on any of the terminals.
  */
@@ -72,5 +71,4 @@ public class ModifiedFullInitialiser<TYPE> implements Initialiser<TYPE> {
 		// Return starting population.
 		return firstGen;
 	}
-
 }

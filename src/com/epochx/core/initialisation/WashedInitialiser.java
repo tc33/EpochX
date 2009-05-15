@@ -28,7 +28,6 @@ import com.epochx.semantics.Representation;
 import com.epochx.semantics.SemanticModule;
 
 /**
- * @author Lawrence Beadle & Tom Castle
  * The washed initialised creates programs using the modified full method and then reduces
  * the programs by translating them to a representation and back again. This produces 
  * smaller more effective node trees.

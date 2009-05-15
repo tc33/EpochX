@@ -23,50 +23,100 @@ import java.awt.*;
 import java.util.*;
 
 /**
- * 
+ * Object represents the landscape in which the ant is operating
+ * including storing food locations
+ */
+/**
+ * @author lb212
+ *
  */
 public class AntLandscape {
 
 	private Dimension size;
 	private ArrayList<Point> foodLocations;
 	
+	/**
+	 * AntLandscape Constructor
+	 * @param size The size of the landscape
+	 * @param foodLocations The food locations upon the landscape
+	 */
 	public AntLandscape(Dimension size, ArrayList<Point> foodLocations) {
 		this.size = size;
 		this.foodLocations = foodLocations;
 	}
 	
+	/**
+	 * Adds a food location to the landscape
+	 * @param location the location of the new item of food
+	 */
 	public void addFoodLocation(Point location) {
 		foodLocations.add(location);
 	}
 	
+	/**
+	 * Removes a food location from the ant landscape
+	 * @param location The location of the item of food to remove
+	 */
 	public void removeFoodLocation(Point location) {
 		foodLocations.remove(location);
 	}
 	
+	/**
+	 * Test whether a location has food on it
+	 * @param location The location to test
+	 * @return TRUE if food is present
+	 */
 	public boolean isFoodLocation(Point location) {
 		return foodLocations.contains(location);
 	}
 	
+	/**
+	 * Sets multiple food locations
+	 * @param foodLocations A list of food locations
+	 */
 	public void setFoodLocations(ArrayList<Point> foodLocations) {
 		this.foodLocations = foodLocations;
 	}
 	
+	/**
+	 * Clears all food locations
+	 */
 	public void clearFoodLocations() {
 		foodLocations.clear();
 	}
 	
+	/**
+	 * Returns the size of the ant landscape
+	 * @return the dimensions of the ant landscape
+	 */
 	public Dimension getSize() {
 		return size;
 	}
 	
+	/**
+	 * Returns the width of the ant landscape
+	 * @return The width of the ant landscape
+	 */
 	public int getWidth() {
 		return size.width;
 	}
 	
+	/**
+	 * Returns the height of the ant landscape
+	 * @return The height of the ant landscape
+	 */
+	/**
+	 * @return
+	 */
 	public int getHeight() {
 		return size.height;
 	}
 	
+	/**
+	 * Tests if a location is valid
+	 * @param location The location to test
+	 * @return TRUE if location is valid
+	 */
 	public boolean isValidLocation(Point location) {
 		return (location.x >= 0) 
 			&& (location.x < size.width) 
@@ -74,6 +124,12 @@ public class AntLandscape {
 			&& (location.y < size.height);
 	}
 	
+	/**
+	 * Returns the location directly in front of the ant
+	 * @param currentLocation The current location
+	 * @param orientation The current orientation
+	 * @return new location in front of the ant
+	 */
 	public Point getNextLocation(Point currentLocation, Orientation orientation) {
 		Point newLocation = new Point(currentLocation.x, currentLocation.y);
 		

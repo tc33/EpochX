@@ -25,8 +25,8 @@ import com.epochx.core.representation.CandidateProgram;
 import com.epochx.semantics.Representation;
 
 /**
- * The BDD manager aids analysis of starting populations
- * @author Lawrence Beadle
+ * The behaviour manager aids analysis of starting populations by recording
+ * how many programs are associated with a particular behaviour.
  */
 public class BehaviourManager {
     

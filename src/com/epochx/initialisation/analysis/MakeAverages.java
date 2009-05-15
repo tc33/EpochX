@@ -26,9 +26,8 @@ import java.util.ArrayList;
 import com.epochx.util.FileManip;
 
 /**
- * Helper file to combine and make avergaes of the output statistics from the 
+ * Helper file to combine and make averages of the output statistics from the 
  * starting populations Analyser
- * @author Lawrence Beadle
  */
 public class MakeAverages {
     

@@ -22,10 +22,14 @@ package com.epochx.action;
 import com.epochx.ant.*;
 
 /**
- * 
+ * Defines ant turn right action
  */
 public class AntTurnRightAction extends AntAction {
 
+	/**
+	 * Constructor for turn right action
+	 * @param ant the ant object
+	 */
 	public AntTurnRightAction(Ant ant) {
 		super(ant);
 	}
@@ -35,6 +39,7 @@ public class AntTurnRightAction extends AntAction {
 		getAnt().turnRight();
 	}
 	
+	@Override
 	public String toString() {
 		return "TURN-RIGHT";
 	}

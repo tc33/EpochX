@@ -28,8 +28,8 @@ import com.epochx.func.*;
 import com.epochx.func.dbl.*;
 
 /**
- * @author Lawrence Beadle & Tom Castle
- *
+ * The regression semantic module controls all aspects of the modelling of
+ * the behaviour of symbolic regression problems
  */
 public class RegressionSemanticModule implements SemanticModule {
 	

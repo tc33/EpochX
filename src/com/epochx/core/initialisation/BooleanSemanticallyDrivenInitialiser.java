@@ -26,14 +26,18 @@ import com.epochx.semantics.*;
 import net.sf.javabdd.*;
 
 /**
- * @author lb212
- *
+ * Boolean Semantically Driven Initialisation
  */
 public class BooleanSemanticallyDrivenInitialiser<TYPE> implements Initialiser<TYPE> {
 
 	private GPModel<TYPE> model;
 	private BooleanSemanticModule semMod;
 	
+	/**
+	 * Constructor for Boolean semantically driven initialisation
+	 * @param model The GP model in use
+	 * @param semMod The semantic module in use
+	 */
 	public BooleanSemanticallyDrivenInitialiser(GPModel<TYPE> model, SemanticModule semMod) {
 		this.model = model;
 		this.semMod = (BooleanSemanticModule) semMod;

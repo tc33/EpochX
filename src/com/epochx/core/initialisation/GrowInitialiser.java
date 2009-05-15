@@ -27,12 +27,16 @@ import com.epochx.core.representation.Node;
 import com.epochx.semantics.*;
 
 /**
- * 
+ * Grow initialisation method
  */
 public class GrowInitialiser<TYPE> implements Initialiser<TYPE> {
 	
 	private GPModel<TYPE> model;
 	
+	/**
+	 * Constructor for the GROW initialisation method
+	 * @param model The GP model in use
+	 */
 	public GrowInitialiser(GPModel<TYPE> model) {
 		this.model = model;
 	}
@@ -57,6 +61,11 @@ public class GrowInitialiser<TYPE> implements Initialiser<TYPE> {
 		return firstGen;
 	}
 	
+	/**
+	 * Builds a GROW generated node tree
+	 * @param depth The maximum depth of the node tree
+	 * @return The node tree
+	 */
 	public Node<TYPE> buildGrowNodeTree(int depth) {		
         // define top node
 		int randomIndex = (int) Math.floor(Math.random() * model.getSyntax().size());

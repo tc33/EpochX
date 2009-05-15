@@ -30,8 +30,8 @@ import com.epochx.func.action.*;
 
 
 /**
- * @author lb212
- *
+ * The ant semantic module controls the translation of code
+ * to the ant behaviour and back again
  */
 public class AntSemanticModule implements SemanticModule {
 	
@@ -46,6 +46,8 @@ public class AntSemanticModule implements SemanticModule {
 	 * Constructor for Ant Semantic Module
 	 * @param list List of terminal nodes
 	 * @param model The GPModel object
+	 * @param ant The Ant object
+	 * @param antLandscape The AntLanscape object
 	 */
 	public AntSemanticModule(List<TerminalNode<?>> list, GPModel model, Ant ant, AntLandscape landscape) {
 		this.terminals = list;
@@ -182,6 +184,12 @@ public class AntSemanticModule implements SemanticModule {
 		} 
     }
 	
+	/**
+	 * The condense ant representation applies reduction rules to representation of 
+	 * behaviour in order to return a canonical representation of behaviour
+	 * @param result the representation of behaviour to condense
+	 * @return the canonical behavioural representation
+	 */
 	public ArrayList<String> condenseAntRep(ArrayList<String> result) {
         
         // cycle through removing duplicate subsets
@@ -537,7 +545,7 @@ public class AntSemanticModule implements SemanticModule {
      * Helper method for Semantic Artificial Ant Initialisation
      * @param path1 The first path
      * @param path2 The second path
-     * @param p2SO The inital direction of the second path if not E
+     * @param p2SO The initial direction of the second path if not E
      * @return The combined path with with the second path positions updated relative to the 1st path
      */
     public static ArrayList<String> joinPaths(ArrayList<String> path1, ArrayList<String> path2, String p2SO) {

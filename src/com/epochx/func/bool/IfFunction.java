@@ -21,16 +21,36 @@ package com.epochx.func.bool;
 
 import com.epochx.core.representation.*;
 
+/**
+ * A <code>FunctionNode</code> which represents the conditional if-then-else 
+ * statement.
+ */
 public class IfFunction extends FunctionNode<Boolean> {
 	
+	/**
+	 * Construct an IfFunction with no children.
+	 */
 	public IfFunction() {
 		this(null, null, null);
 	}
 	
-	public IfFunction(Node<Boolean> child1, Node<Boolean> child2, Node<Boolean> child3) {
-		super(child1, child2, child3);
+	/**
+	 * Construct an IfFunction with three children. When evaluated, if the first 
+	 * child evaluates to true then the second child is evaluated and return, 
+	 * otherwise the third child is evaluated and returned.
+	 * @param condition The first child node.
+	 * @param ifStatement The second child node.
+	 * @param elseStatement The third child node.
+	 */
+	public IfFunction(Node<Boolean> condition, Node<Boolean> ifStatement, Node<Boolean> elseStatement) {
+		super(condition, ifStatement, elseStatement);
 	}
 
+	/**
+	 * Evaluating an <code>IfFunction</code> involves evaluating the first child, 
+	 * if it evaluates to true then the second child is evaluated as the result. 
+	 * Otherwise the third child is evaluated and returned.
+	 */
 	@Override
 	public Boolean evaluate() {
 		boolean c1 = ((Boolean) getChild(0).evaluate()).booleanValue();
@@ -42,6 +62,10 @@ public class IfFunction extends FunctionNode<Boolean> {
 		}
 	}
 	
+	/**
+	 * Get the unique name that identifies this function.
+	 * @return the unique name for the IfFunction which is IF.
+	 */
 	@Override
 	public String getFunctionName() {
 		return "IF";

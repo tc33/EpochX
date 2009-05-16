@@ -22,18 +22,31 @@ package com.epochx.func.dbl;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * A <code>FunctionNode</code> which performs the hyperbolic trigonometric 
+ * function of hyperbolic tangent.
  */
 public class HyperbolicTangentFunction extends FunctionNode<Double> {
 
+	/**
+	 * Construct a HyperbolicTangentFunction with no children.
+	 */
 	public HyperbolicTangentFunction() {
 		this(null);
 	}
 	
+	/**
+	 * Construct a HyperbolicTangentFunction with one child. When evaluated, the 
+	 * child will first be evaluated with hyperbolic tangent performed on the result.
+	 * @param child The child which hyperbolic tangent will be performed on.
+	 */
 	public HyperbolicTangentFunction(Node<Double> child) {
 		super(child);
 	}
 
+	/**
+	 * Evaluating an <code>HyperbolicTangentFunction</code> involves calculating the 
+	 * hyperbolic tangent of the child once it has also been evaluated.
+	 */
 	@Override
 	public Double evaluate() {
 		double c = ((Double) getChild(0).evaluate()).doubleValue();
@@ -41,6 +54,10 @@ public class HyperbolicTangentFunction extends FunctionNode<Double> {
 		return Math.tanh(c);
 	}
 	
+	/**
+	 * Get the unique name that identifies this function.
+	 * @return the unique name for the HyperbolicTangentFunction which is TANH.
+	 */
 	@Override
 	public String getFunctionName() {
 		return "TANH";

@@ -22,18 +22,36 @@ package com.epochx.func.dbl;
 import com.epochx.core.representation.*;
 
 /**
+ * A <code>FunctionNode</code> which performs the mathematical function of 
+ * factorial, which is normally expressed with an exclamation mark !
  * 
+ * For example:
+ *    5! = 5 x 4 x 3 x 2 x 1 = FACTORIAL 5
+ *    
  */
 public class FactorialFunction extends FunctionNode<Double> {
 
+	/**
+	 * Construct a FactorialFunction with no children.
+	 */
 	public FactorialFunction() {
 		this(null);
 	}
 	
+	/**
+	 * Construct a FactorialFunction with one child. When evaluated, the child will 
+	 * be first evaluated, with the result undergoing the factorial function.
+	 * @param child The child which factorial will be performed on.
+	 */
 	public FactorialFunction(Node<Double> child) {
 		super(child);
 	}
 
+	/**
+	 * Evaluating a <code>FactorialFunction</code> involves evaluating the child 
+	 * first then performing factorial on the result. Factorial requires a natural  
+	 * number, in order to achieve this the evaluated child may undergo rounding. 
+	 */
 	@Override
 	public Double evaluate() {
 		double c = ((Double) getChild(0).evaluate()).doubleValue();
@@ -41,12 +59,16 @@ public class FactorialFunction extends FunctionNode<Double> {
 		int cint = (int) Math.abs(c);
 		double factorial = 1;
 		for (int i=1; i<=cint; i++) {
-			factorial = factorial * cint;
+			factorial = factorial * i;
 		}
 		
 		return factorial;
 	}
 	
+	/**
+	 * Get the unique name that identifies this function.
+	 * @return the unique name for the FactorialFunction which is FACTORIAL.
+	 */
 	@Override
 	public String getFunctionName() {
 		return "FACTORIAL";

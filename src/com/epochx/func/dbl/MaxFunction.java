@@ -22,18 +22,34 @@ package com.epochx.func.dbl;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * A <code>FunctionNode</code> which performs the simple comparison function 
+ * of determining which of 2 numbers is larger, as per the boolean greater-than
+ * function.
  */
 public class MaxFunction extends FunctionNode<Double> {
 	
+	/**
+	 * Construct a MaxFunction with no children.
+	 */
 	public MaxFunction() {
 		this(null, null);
 	}
 	
+	/**
+	 * Construct a MaxFunction with two child. When evaluated, the children will 
+	 * both be evaluated with the larger of the two returned as the result.
+	 * @param child1 The first child node for comparison.
+	 * @param child2 The second child node for comparison.
+	 */
 	public MaxFunction(Node<Double> child1, Node<Double> child2) {
 		super(child1, child2);
 	}
 
+	/**
+	 * Evaluating a <code>MaxFunction</code> involves evaluating the children  
+	 * then comparing and returning which ever is the larger of the 2 evaluated 
+	 * children.
+	 */
 	@Override
 	public Double evaluate() {
 		double c1 = ((Double) getChild(0).evaluate()).doubleValue();
@@ -46,6 +62,10 @@ public class MaxFunction extends FunctionNode<Double> {
 		}
 	}
 	
+	/**
+	 * Get the unique name that identifies this function.
+	 * @return the unique name for the MaxFunction which is MAX.
+	 */
 	@Override
 	public String getFunctionName() {
 		return "MAX";

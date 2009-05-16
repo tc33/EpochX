@@ -22,18 +22,31 @@ package com.epochx.func.dbl;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * A <code>FunctionNode</code> which performs the hyperbolic trigonometric 
+ * function of hyperbolic sine.
  */
 public class HyperbolicSineFunction extends FunctionNode<Double> {
 
+	/**
+	 * Construct a HyperbolicSineFunction with no children.
+	 */
 	public HyperbolicSineFunction() {
 		this(null);
 	}
 	
+	/**
+	 * Construct a HyperbolicSineFunction with one child. When evaluated, the 
+	 * child will first be evaluated with hyperbolic sine performed on the result.
+	 * @param child The child which hyperbolic sine will be performed on.
+	 */
 	public HyperbolicSineFunction(Node<Double> child) {
 		super(child);
 	}
 
+	/**
+	 * Evaluating an <code>HyperbolicSineFunction</code> involves calculating the 
+	 * hyperbolic sine of the child once it has also been evaluated.
+	 */
 	@Override
 	public Double evaluate() {
 		double c = ((Double) getChild(0).evaluate()).doubleValue();
@@ -41,6 +54,10 @@ public class HyperbolicSineFunction extends FunctionNode<Double> {
 		return Math.sinh(c);
 	}
 	
+	/**
+	 * Get the unique name that identifies this function.
+	 * @return the unique name for the HyperbolicSineFunction which is SINH.
+	 */
 	@Override
 	public String getFunctionName() {
 		return "SINH";

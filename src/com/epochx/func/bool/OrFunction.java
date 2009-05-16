@@ -21,16 +21,35 @@ package com.epochx.func.bool;
 
 import com.epochx.core.representation.*;
 
+/**
+ * A <code>FunctionNode</code> which performs logical disjunction.
+ */
 public class OrFunction extends FunctionNode<Boolean> {
 
+	/**
+	 * Construct an OrFunction with no children.
+	 */
 	public OrFunction() {
 		this(null, null);
 	}
 	
+	/**
+	 * Construct an OrFunction with two children. When evaluated, if both 
+	 * children evaluate to false then the result will be false. All other 
+	 * combinations will return a result of true.
+	 * @param child1 The first child node.
+	 * @param child2 The second child node.
+	 */
 	public OrFunction(Node<Boolean> child1, Node<Boolean> child2) {
 		super(child1, child2);
 	}
 	
+	/**
+	 * Evaluating an <code>OrFunction</code> involves combining the evaluation 
+	 * of the children according to the rules of OR where if both children 
+	 * evaluate to false then the result will be false. All other combinations 
+	 * will return a result of true.
+	 */
 	@Override
 	public Boolean evaluate() {
 		boolean c1 = ((Boolean) getChild(0).evaluate()).booleanValue();
@@ -39,6 +58,10 @@ public class OrFunction extends FunctionNode<Boolean> {
 		return c1 || c2;
 	}
 	
+	/**
+	 * Get the unique name that identifies this function.
+	 * @return the unique name for the OrFunction which is OR.
+	 */
 	@Override
 	public String getFunctionName() {
 		return "OR";

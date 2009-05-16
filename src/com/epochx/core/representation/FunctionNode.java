@@ -34,7 +34,8 @@ public abstract class FunctionNode<TYPE> extends Node<TYPE> {
 	}
 	
 	/**
-	 * The value returned from this function should be unique for a specific function type within a run.
+	 * The value returned from this function should be unique for a specific 
+	 * function type within a run.
 	 */
 	public abstract String getFunctionName();
 	

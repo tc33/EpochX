@@ -22,18 +22,32 @@ package com.epochx.func.dbl;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * A <code>FunctionNode</code> which performs the mathematical operation of 
+ * exponentiation.
  */
 public class PowerFunction extends FunctionNode<Double> {
 
+	/**
+	 * Construct a PowerFunction with no children.
+	 */
 	public PowerFunction() {
 		this(null, null);
 	}
 	
-	public PowerFunction(Node<Double> child1, Node<Double> child2) {
-		super(child1, child2);
+	/**
+	 * Construct a PowerFunction with 2 children. When evaluated, the evaluation 
+	 * of the first child is raised to the power of the evaluation of the second.
+	 * @param base The first child node - the base.
+	 * @param exponent The second child node - the exponent.
+	 */
+	public PowerFunction(Node<Double> base, Node<Double> exponent) {
+		super(base, exponent);
 	}
 
+	/**
+	 * Evaluating a <code>PowerFunction</code> involves raising the first child 
+	 * to the power of the second, after both children are evaluated.
+	 */
 	@Override
 	public Double evaluate() {
 		double c1 = ((Double) getChild(0).evaluate()).doubleValue();
@@ -42,6 +56,10 @@ public class PowerFunction extends FunctionNode<Double> {
 		return Math.pow(c1, c2);
 	}
 	
+	/**
+	 * Get the unique name that identifies this function.
+	 * @return the unique name for the PowerFunction which is POW.
+	 */
 	@Override
 	public String getFunctionName() {
 		return "POW";

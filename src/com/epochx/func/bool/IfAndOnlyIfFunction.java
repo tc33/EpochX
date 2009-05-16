@@ -22,18 +22,35 @@ package com.epochx.func.bool;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * A <code>FunctionNode</code> which performs the biconditional logical 
+ * connective of IFF (if and only if).
  */
 public class IfAndOnlyIfFunction extends FunctionNode<Boolean> {
 	
+	/**
+	 * Construct an IfAndOnlyIfFunction with no children.
+	 */
 	public IfAndOnlyIfFunction() {
 		this(null, null);
 	}
 	
+	/**
+	 * Construct an IfAndOnlyIfFunction with two children. When evaluated, if 
+	 * both children evaluate to true, or both evaluate to false then the result 
+	 * will be true. All other combinations will return a result of false.
+	 * @param child1 The first child node.
+	 * @param child2 The second child node.
+	 */
 	public IfAndOnlyIfFunction(Node<Boolean> child1, Node<Boolean> child2) {
 		super(child1, child2);
 	}
 	
+	/**
+	 * Evaluating an <code>IfAndOnlyIfFunction</code> involves combining the 
+	 * evaluation of the children according to the rules of IFF where if both 
+	 * children evaluate to true or both evaluate to false, then the result 
+	 * will be true. All other combinations will return a result of false.
+	 */
 	@Override
 	public Boolean evaluate() {
 		boolean c1 = ((Boolean) getChild(0).evaluate()).booleanValue();
@@ -42,6 +59,10 @@ public class IfAndOnlyIfFunction extends FunctionNode<Boolean> {
 		return (c1 && c2) || (!c1 && !c2);
 	}
 	
+	/**
+	 * Get the unique name that identifies this function.
+	 * @return the unique name for the IfAndOnlyIfFunction which is IFF.
+	 */
 	@Override
 	public String getFunctionName() {
 		return "IFF";

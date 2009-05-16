@@ -22,19 +22,36 @@ package com.epochx.func.bool;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * A <code>FunctionNode</code> which performs logical implication.
  */
 public class ImpliesFunction extends FunctionNode<Boolean> {
 
-
+	/**
+	 * Construct an ImpliesFunction with no children.
+	 */
 	public ImpliesFunction() {
 		this(null, null);
 	}
 	
+	/**
+	 * Construct an ImpliesFunction with two children. When evaluated, if the  
+	 * first child evaluates to true and the second child evaluates to false 
+	 * then the result will be false. All other combinations give a result of 
+	 * true.
+	 * @param child1 The first child node.
+	 * @param child2 The second child node.
+	 */
 	public ImpliesFunction(Node<Boolean> child1, Node<Boolean> child2) {
 		super(child1, child2);
 	}
 	
+	/**
+	 * Evaluating an <code>ImpliesFunction</code> involves combining the 
+	 * evaluation of the children according to the rules of IMPLIES where if the  
+	 * first child evaluates to true and the second child evaluates to false 
+	 * then the result will be false. All other combinations give a result of 
+	 * true.
+	 */
 	@Override
 	public Boolean evaluate() {
 		boolean c1 = ((Boolean) getChild(0).evaluate()).booleanValue();
@@ -43,6 +60,10 @@ public class ImpliesFunction extends FunctionNode<Boolean> {
 		return (!c1 || (c1 && c2));
 	}
 	
+	/**
+	 * Get the unique name that identifies this function.
+	 * @return the unique name for the ImpliesFunction which is IMPLIES.
+	 */
 	@Override
 	public String getFunctionName() {
 		return "IMPLIES";

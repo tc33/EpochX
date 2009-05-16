@@ -22,18 +22,32 @@ package com.epochx.func.dbl;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * A <code>FunctionNode</code> which performs the modulo operation, that is 
+ * it finds the remainder of division.
  */
 public class ModuloFunction extends FunctionNode<Double> {
 
+	/**
+	 * Construct a ModuloFunction with no children.
+	 */
 	public ModuloFunction() {
 		this(null, null);
 	}
 	
+	/**
+	 * Construct a ModuloFunction with two children. When evaluated, the modulo 
+	 * of the evaluated children will be calculated.
+	 * @param child1 The first child node - the dividend.
+	 * @param child2 The second child node - the divisor.
+	 */
 	public ModuloFunction(Node<Double> child1, Node<Double> child2) {
 		super(child1, child2);
 	}
 
+	/**
+	 * Evaluating a <code>ModuloFunction</code> involves dividing the evaluated 
+	 * first child, by the second child with the result being the remainder.
+	 */
 	@Override
 	public Double evaluate() {
 		double c1 = ((Double) getChild(0).evaluate()).doubleValue();
@@ -42,6 +56,10 @@ public class ModuloFunction extends FunctionNode<Double> {
 		return c1 % c2;
 	}
 	
+	/**
+	 * Get the unique name that identifies this function.
+	 * @return the unique name for the ModuloFunction which is MOD.
+	 */
 	@Override
 	public String getFunctionName() {
 		return "MOD";

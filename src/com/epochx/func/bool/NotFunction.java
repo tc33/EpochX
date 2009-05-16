@@ -22,23 +22,41 @@ package com.epochx.func.bool;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * A <code>FunctionNode</code> which performs logical negation.
  */
 public class NotFunction extends FunctionNode<Boolean> {
 	
+	/**
+	 * Construct a NotFunction with no children.
+	 */
 	public NotFunction() {
 		this(null);
 	}
 	
+	/**
+	 * Construct a NotFunction with one children. When evaluated, if the child 
+	 * evaluates to true, the result will be false. If false, the result will be
+	 * true.
+	 * @param child The child node which will be evaluated and negated.
+	 */
 	public NotFunction(Node<Boolean> child) {
 		super(child);
 	}
 	
+	/**
+	 * Evaluating a <code>NotFunction</code> involves evaluating the child, then 
+	 * negating the result. If the child evaluates to true, the result will be false, 
+	 * otherwise it will be true.
+	 */
 	@Override
 	public Boolean evaluate() {
 		return !((Boolean) getChild(0).evaluate()).booleanValue();
 	}
 	
+	/**
+	 * Get the unique name that identifies this function.
+	 * @return the unique name for the NotFunction which is NOT.
+	 */
 	@Override
 	public String getFunctionName() {
 		return "NOT";

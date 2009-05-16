@@ -22,18 +22,31 @@ package com.epochx.func.dbl;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * A <code>FunctionNode</code> which performs the mathematical function of square 
+ * root.
  */
 public class SquareRootFunction extends FunctionNode<Double> {
 
+	/**
+	 * Construct a SquareRootFunction with no children.
+	 */
 	public SquareRootFunction() {
 		this(null);
 	}
 	
+	/**
+	 * Construct a SquareRootFunction with one child. When evaluated, the child will 
+	 * be first evaluated, with the result square-rooted.
+	 * @param child The child which cube root will be performed on.
+	 */
 	public SquareRootFunction(Node<Double> child) {
 		super(child);
 	}
 
+	/**
+	 * Evaluating a <code>SquareRootFunction</code> involves evaluating the child 
+	 * first then performing square root on the result.
+	 */
 	@Override
 	public Double evaluate() {
 		double c = ((Double) getChild(0).evaluate()).doubleValue();
@@ -41,6 +54,10 @@ public class SquareRootFunction extends FunctionNode<Double> {
 		return Math.sqrt(c);
 	}
 	
+	/**
+	 * Get the unique name that identifies this function.
+	 * @return the unique name for the SquareRootFunction which is SQRT.
+	 */
 	@Override
 	public String getFunctionName() {
 		return "SQRT";

@@ -22,18 +22,32 @@ package com.epochx.func.dbl;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * A <code>FunctionNode</code> which performs the arithmetic function of squaring, 
+ * that is - raising to the second power. It is equivalent to the 
+ * <code>PowerFunction</code> where the second child is the double literal 2.0.
  */
 public class SquareFunction extends FunctionNode<Double> {
 
+	/**
+	 * Construct a SquareFunction with no children.
+	 */
 	public SquareFunction() {
 		this(null);
 	}
 	
+	/**
+	 * Construct a SquareFunction with one child. When evaluated, the child will 
+	 * be evaluated with the result then raised to the power of 2.
+	 * @param child The child which will be squared.
+	 */
 	public SquareFunction(Node<Double> child) {
 		super(child);
 	}
 
+	/**
+	 * Evaluating a <code>SquareFunction</code> involves evaluating the child 
+	 * then raising the result to the power of 2.
+	 */
 	@Override
 	public Double evaluate() {
 		double c = ((Double) getChild(0).evaluate()).doubleValue();
@@ -41,6 +55,10 @@ public class SquareFunction extends FunctionNode<Double> {
 		return Math.pow(c,2);
 	}
 	
+	/**
+	 * Get the unique name that identifies this function.
+	 * @return the unique name for the SquareFunction which is SQUARE.
+	 */
 	@Override
 	public String getFunctionName() {
 		return "SQUARE";

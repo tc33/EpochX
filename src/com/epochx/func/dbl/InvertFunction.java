@@ -22,18 +22,33 @@ package com.epochx.func.dbl;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * A <code>FunctionNode</code> which performs the multiplicative inverse (or 
+ * reciprocal), that is the inverse of x is 1/x.
  */
 public class InvertFunction extends FunctionNode<Double> {
 
+	/**
+	 * Construct an InvertFunction with no children.
+	 */
 	public InvertFunction() {
 		this(null);
 	}
 	
+	/**
+	 * Construct an InvertFunction with one child. When evaluated, the child
+	 * will be evaluated before the inversion operation is performed.
+	 * @param child The child which the reciprocal will be found for.
+	 */
 	public InvertFunction(Node<Double> child) {
 		super(child);
 	}
 
+	/**
+	 * Evaluating an <code>InvertFunction</code> involves calculating the 
+	 * result of 1 divided by the result of evaluating the child. The 
+	 * exception to this is where the child evaluates to 0.0. In this case 
+	 * there is no finite reciprocal and the result will be 1.0.
+	 */
 	@Override
 	public Double evaluate() {
 		double c = ((Double) getChild(0).evaluate()).doubleValue();
@@ -45,6 +60,10 @@ public class InvertFunction extends FunctionNode<Double> {
 		}
 	}
 	
+	/**
+	 * Get the unique name that identifies this function.
+	 * @return the unique name for the InvertFunction which is INV.
+	 */
 	@Override
 	public String getFunctionName() {
 		return "INV";

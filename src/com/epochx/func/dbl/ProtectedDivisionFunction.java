@@ -21,28 +21,54 @@ package com.epochx.func.dbl;
 
 import com.epochx.core.representation.*;
 
+/**
+ * A <code>FunctionNode</code> which performs the arithmetic function of 
+ * division. The division is protected to avoid the scenario where division 
+ * by zero is attempted - which is undefined. Division by zero evaluates to 
+ * zero.
+ */
 public class ProtectedDivisionFunction extends FunctionNode<Double> {
 	
+	/**
+	 * Construct a ProtectedDivisionFunction with no children.
+	 */
 	public ProtectedDivisionFunction() {
 		this(null, null);
 	}
 	
-	public ProtectedDivisionFunction(Node<Double> child1, Node<Double> child2) {
-		super(child1, child2);
+	/**
+	 * Construct a ProtectedDivisionFunction with 2 children. When evaluated, 
+	 * the evaluation of the first child will be divided by the evaluation of 
+	 * the second.
+	 * @param dividend The first child node - the dividend.
+	 * @param divisor The second child node - the divisor.
+	 */
+	public ProtectedDivisionFunction(Node<Double> dividend, Node<Double> divisor) {
+		super(dividend, divisor);
 	}
 
+	/**
+	 * Evaluating a <code>ProtectedDivisionFunction</code> involves dividing 
+	 * the result of evaluating both children. If the divisor resolves to zero 
+	 * then the result returned will be zero to avoid the divide by zero issue.
+	 */
 	@Override
 	public Double evaluate() {
 		double c1 = ((Double) getChild(0).evaluate()).doubleValue();
 		double c2 = ((Double) getChild(1).evaluate()).doubleValue();
 		
 		if(c2==0) {
+			//TODO It might be useful to have a version of the constructor which takes a value to return for divide by zeros.
 			return 0d;
 		} else {
 			return c1 / c2;
 		}
 	}
 	
+	/**
+	 * Get the unique name that identifies this function.
+	 * @return the unique name for the ProtectedDivisionFunction which is PDIV.
+	 */
 	@Override
 	public String getFunctionName() {
 		return "PDIV";

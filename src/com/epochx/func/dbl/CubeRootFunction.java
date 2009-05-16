@@ -22,18 +22,31 @@ package com.epochx.func.dbl;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * A <code>FunctionNode</code> which performs the mathematical function of cube 
+ * root.
  */
 public class CubeRootFunction extends FunctionNode<Double> {
 
+	/**
+	 * Construct a CubeRootFunction with no children.
+	 */
 	public CubeRootFunction() {
 		this(null);
 	}
 	
+	/**
+	 * Construct a CubeRootFunction with one child. When evaluated, the child will 
+	 * be first evaluated, with the result cube-rooted.
+	 * @param child The child which cube root will be performed on.
+	 */
 	public CubeRootFunction(Node<Double> child) {
 		super(child);
 	}
 
+	/**
+	 * Evaluating a <code>CubeRootFunction</code> involves evaluating the child 
+	 * first then performing cube root on the result.
+	 */
 	@Override
 	public Double evaluate() {
 		double c = ((Double) getChild(0).evaluate()).doubleValue();
@@ -41,6 +54,10 @@ public class CubeRootFunction extends FunctionNode<Double> {
 		return Math.cbrt(c);
 	}
 	
+	/**
+	 * Get the unique name that identifies this function.
+	 * @return the unique name for the CubeRootFunction which is CBRT.
+	 */
 	@Override
 	public String getFunctionName() {
 		return "CBRT";

@@ -22,18 +22,32 @@ package com.epochx.func.dbl;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * A <code>FunctionNode</code> which performs the mathematical function of 
+ * addition.
  */
 public class AddFunction extends FunctionNode<Double> {
-	
+
+	/**
+	 * Construct an AddFunction with no children.
+	 */
 	public AddFunction() {
 		this(null, null);
 	}
 	
+	/**
+	 * Construct an AddFunction with 2 children. When evaluated, both children will 
+	 * be evaluated and added together.
+	 * @param child1 The first child node.
+	 * @param child2 The second child node.
+	 */
 	public AddFunction(Node<Double> child1, Node<Double> child2) {
 		super(child1, child2);
 	}
 
+	/**
+	 * Evaluating an <code>AddFunction</code> involves summing the result of 
+	 * evaluating both children.
+	 */
 	@Override
 	public Double evaluate() {
 		double c1 = ((Double) getChild(0).evaluate()).doubleValue();
@@ -42,6 +56,10 @@ public class AddFunction extends FunctionNode<Double> {
 		return c1 + c2;
 	}
 	
+	/**
+	 * Get the unique name that identifies this function.
+	 * @return the unique name for the AddFunction which is ADD.
+	 */
 	@Override
 	public String getFunctionName() {
 		return "ADD";

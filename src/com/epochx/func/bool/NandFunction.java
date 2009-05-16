@@ -22,18 +22,35 @@ package com.epochx.func.bool;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * A <code>FunctionNode</code> which performs the logical operation of NAND 
+ * that is equivalent to the negation of the conjunction or NOT AND. 
  */
 public class NandFunction extends FunctionNode<Boolean> {
 
+	/**
+	 * Construct a NandFunction with no children.
+	 */
 	public NandFunction() {
 		this(null, null);
 	}
 	
+	/**
+	 * Construct a NandFunction with two children. When evaluated, if both 
+	 * children evaluate to true then the result will be false. All other 
+	 * combinations will return a result of true.
+	 * @param child1 The first child node.
+	 * @param child2 The second child node.
+	 */
 	public NandFunction(Node<Boolean> child1, Node<Boolean> child2) {
 		super(child1, child2);
 	}
 	
+	/**
+	 * Evaluating a <code>NandFunction</code> involves combining the evaluation 
+	 * of the children according to the rules of NAND where if both children 
+	 * evaluate to true then the result will be false. All other combinations 
+	 * will return a result of true.
+	 */
 	@Override
 	public Boolean evaluate() {
 		boolean c1 = ((Boolean) getChild(0).evaluate()).booleanValue();
@@ -42,6 +59,10 @@ public class NandFunction extends FunctionNode<Boolean> {
 		return !(c1 && c2);
 	}
 	
+	/**
+	 * Get the unique name that identifies this function.
+	 * @return the unique name for the NandFunction which is NAND.
+	 */
 	@Override
 	public String getFunctionName() {
 		return "NAND";

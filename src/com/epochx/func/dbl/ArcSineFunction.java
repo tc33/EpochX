@@ -22,18 +22,31 @@ package com.epochx.func.dbl;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * A <code>FunctionNode</code> which performs the inverse trigonometric function of 
+ * arcsine.
  */
 public class ArcSineFunction extends FunctionNode<Double> {
 	
+	/**
+	 * Construct an ArcSineFunction with no children.
+	 */
 	public ArcSineFunction() {
 		this(null);
 	}
 	
+	/**
+	 * Construct an ArcSineFunction with one child. When evaluated, the child
+	 * will be evaluated with arcsine performed on the result.
+	 * @param child The child which arcsine will be performed on.
+	 */
 	public ArcSineFunction(Node<Double> child) {
 		super(child);
 	}
 
+	/**
+	 * Evaluating an <code>ArcSineFunction</code> involves calculating the 
+	 * arcsine of the child once it's been evaluated.
+	 */
 	@Override
 	public Double evaluate() {
 		double c = ((Double) getChild(0).evaluate()).doubleValue();
@@ -41,6 +54,10 @@ public class ArcSineFunction extends FunctionNode<Double> {
 		return Math.asin(c);
 	}
 	
+	/**
+	 * Get the unique name that identifies this function.
+	 * @return the unique name for the ArcSineFunction which is ASIN.
+	 */
 	@Override
 	public String getFunctionName() {
 		return "ASIN";

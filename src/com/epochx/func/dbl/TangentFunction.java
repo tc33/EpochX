@@ -22,18 +22,31 @@ package com.epochx.func.dbl;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * A <code>FunctionNode</code> which performs the trigonometric function of 
+ * tangent.
  */
 public class TangentFunction extends FunctionNode<Double> {
 
+	/**
+	 * Construct a TangentFunction with no children.
+	 */
 	public TangentFunction() {
 		this(null);
 	}
 	
+	/**
+	 * Construct a TangentFunction with one child. When evaluated, the child
+	 * will be evaluated with tangent performed on the result.
+	 * @param child The child which tangent will be performed on.
+	 */
 	public TangentFunction(Node<Double> child) {
 		super(child);
 	}
 
+	/**
+	 * Evaluating a <code>TangentFunction</code> involves evaluating the child 
+	 * then calculating the tangent of the result.
+	 */
 	@Override
 	public Double evaluate() {
 		double c = ((Double) getChild(0).evaluate()).doubleValue();
@@ -41,6 +54,10 @@ public class TangentFunction extends FunctionNode<Double> {
 		return Math.tan(c);
 	}
 	
+	/**
+	 * Get the unique name that identifies this function.
+	 * @return the unique name for the TangentFunction which is TAN.
+	 */
 	@Override
 	public String getFunctionName() {
 		return "TAN";

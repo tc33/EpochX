@@ -22,18 +22,32 @@ package com.epochx.func.dbl;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * A <code>FunctionNode</code> which performs the mathematical sign function  
+ * that extracts the sign of a number.
  */
 public class SignumFunction extends FunctionNode<Double> {
 
+	/**
+	 * Construct a SignumFunction with no children.
+	 */
 	public SignumFunction() {
 		this(null);
 	}
 	
+	/**
+	 * Construct a SignumFunction with one child. When evaluated, the child
+	 * will be evaluated with signum performed on the result.
+	 * @param child The child which signum will be performed on.
+	 */
 	public SignumFunction(Node<Double> child) {
 		super(child);
 	}
 
+	/**
+	 * Evaluating a <code>SignumFunction</code> involves evaluating the child  
+	 * then the result will be zero if it resolves to zero, 1.0 if greater than
+	 * zero and -1.0 if less than zero.
+	 */
 	@Override
 	public Double evaluate() {
 		double c = ((Double) getChild(0).evaluate()).doubleValue();
@@ -41,6 +55,10 @@ public class SignumFunction extends FunctionNode<Double> {
 		return Math.signum(c);
 	}
 	
+	/**
+	 * Get the unique name that identifies this function.
+	 * @return the unique name for the SignumFunction which is SGN.
+	 */
 	@Override
 	public String getFunctionName() {
 		return "SGN";

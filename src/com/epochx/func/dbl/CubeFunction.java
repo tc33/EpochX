@@ -22,18 +22,32 @@ package com.epochx.func.dbl;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * A <code>FunctionNode</code> which performs the arithmetic function of cube, 
+ * that is - raising to the third power. It is equivalent to the 
+ * <code>PowerFunction</code> where the second child is the double literal 3.0.
  */
 public class CubeFunction extends FunctionNode<Double> {
 
+	/**
+	 * Construct a CubeFunction with no children.
+	 */
 	public CubeFunction() {
 		this(null);
 	}
 	
+	/**
+	 * Construct a CubeFunction with one child. When evaluated, the child will 
+	 * be evaluated with the result then raised to the power of 3.
+	 * @param child The child which will be cubed.
+	 */
 	public CubeFunction(Node<Double> child) {
 		super(child);
 	}
 
+	/**
+	 * Evaluating a <code>CubeFunction</code> involves evaluating the child 
+	 * then raising the result to the power of 3.
+	 */
 	@Override
 	public Double evaluate() {
 		double c = ((Double) getChild(0).evaluate()).doubleValue();
@@ -41,6 +55,10 @@ public class CubeFunction extends FunctionNode<Double> {
 		return Math.pow(c,3);
 	}
 	
+	/**
+	 * Get the unique name that identifies this function.
+	 * @return the unique name for the CubeFunction which is CUBE.
+	 */
 	@Override
 	public String getFunctionName() {
 		return "CUBE";

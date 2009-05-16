@@ -22,18 +22,35 @@ package com.epochx.func.bool;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * A <code>FunctionNode</code> which performs logical conjunction or the 
+ * boolean function of AND.
  */
 public class AndFunction extends FunctionNode<Boolean> {
 	
+	/**
+	 * Construct an AndFunction with no children.
+	 */
 	public AndFunction() {
 		this(null, null);
 	}
 	
+	/**
+	 * Construct an AndFunction with two children. When evaluated, if both 
+	 * children evaluate to true then the result will be true. All other 
+	 * combinations will return a result of false.
+	 * @param child1 The first child node.
+	 * @param child2 The second child node.
+	 */
 	public AndFunction(Node<Boolean> child1, Node<Boolean> child2) {
 		super(child1, child2);
 	}
 	
+	/**
+	 * Evaluating an <code>AndFunction</code> involves combining the evaluation 
+	 * of the children according to the rules of AND where if both children 
+	 * evaluate to true then the result will be true. All other combinations 
+	 * will return a result of false.
+	 */
 	@Override
 	public Boolean evaluate() {
 		boolean c1 = ((Boolean) getChild(0).evaluate()).booleanValue();
@@ -42,6 +59,10 @@ public class AndFunction extends FunctionNode<Boolean> {
 		return c1 && c2;
 	}
 
+	/**
+	 * Get the unique name that identifies this function.
+	 * @return the unique name for the AndFunction which is AND.
+	 */
 	@Override
 	public String getFunctionName() {
 		return "AND";

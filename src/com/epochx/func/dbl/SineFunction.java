@@ -22,18 +22,31 @@ package com.epochx.func.dbl;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * A <code>FunctionNode</code> which performs the trigonometric function of 
+ * sine.
  */
 public class SineFunction extends FunctionNode<Double> {
 
+	/**
+	 * Construct a SineFunction with no children.
+	 */
 	public SineFunction() {
 		this(null);
 	}
 	
+	/**
+	 * Construct a SineFunction with one child. When evaluated, the child
+	 * will be evaluated with sine performed on the result.
+	 * @param child The child which sine will be performed on.
+	 */
 	public SineFunction(Node<Double> child) {
 		super(child);
 	}
 
+	/**
+	 * Evaluating a <code>SineFunction</code> involves evaluating the child 
+	 * then calculating the sine of the result.
+	 */
 	@Override
 	public Double evaluate() {
 		double c = ((Double) getChild(0).evaluate()).doubleValue();
@@ -41,6 +54,10 @@ public class SineFunction extends FunctionNode<Double> {
 		return Math.sin(c);
 	}
 	
+	/**
+	 * Get the unique name that identifies this function.
+	 * @return the unique name for the SineFunction which is SIN.
+	 */
 	@Override
 	public String getFunctionName() {
 		return "SIN";

@@ -22,18 +22,32 @@ package com.epochx.func.dbl;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * A <code>FunctionNode</code> which performs the mathematical function of 
+ * multiplication.
  */
 public class MultiplyFunction extends FunctionNode<Double> {
 	
+	/**
+	 * Construct a MultiplyFunction with no children.
+	 */
 	public MultiplyFunction() {
 		this(null, null);
 	}
 	
+	/**
+	 * Construct a MultiplyFunction with 2 children. When evaluated, both children will 
+	 * be evaluated and then multiplied together.
+	 * @param child1 The first child node.
+	 * @param child2 The second child node.
+	 */
 	public MultiplyFunction(Node<Double> child1, Node<Double> child2) {
 		super(child1, child2);
 	}
 
+	/**
+	 * Evaluating a <code>MultiplyFunction</code> involves multiplying the result of 
+	 * evaluating both children.
+	 */
 	@Override
 	public Double evaluate() {
 		double c1 = ((Double) getChild(0).evaluate()).doubleValue();
@@ -42,6 +56,10 @@ public class MultiplyFunction extends FunctionNode<Double> {
 		return c1 * c2;
 	}
 	
+	/**
+	 * Get the unique name that identifies this function.
+	 * @return the unique name for the MultiplyFunction which is MUL.
+	 */
 	@Override
 	public String getFunctionName() {
 		return "MUL";

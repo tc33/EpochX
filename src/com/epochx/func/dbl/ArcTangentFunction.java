@@ -22,18 +22,31 @@ package com.epochx.func.dbl;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * A <code>FunctionNode</code> which performs the inverse trigonometric function of 
+ * arctangent.
  */
 public class ArcTangentFunction extends FunctionNode<Double> {
 
+	/**
+	 * Construct an ArcTangentFunction with no children.
+	 */
 	public ArcTangentFunction() {
 		this(null);
 	}
 	
+	/**
+	 * Construct an ArcTangentFunction with one child. When evaluated, the child
+	 * will be evaluated with arctangent performed on the result.
+	 * @param child The child which arctangent will be performed on.
+	 */
 	public ArcTangentFunction(Node<Double> child) {
 		super(child);
 	}
-
+	
+	/**
+	 * Evaluating an <code>ArcTangentFunction</code> involves calculating the 
+	 * arctangent of the child once it's been evaluated.
+	 */
 	@Override
 	public Double evaluate() {
 		double c = ((Double) getChild(0).evaluate()).doubleValue();
@@ -41,6 +54,10 @@ public class ArcTangentFunction extends FunctionNode<Double> {
 		return Math.atan(c);
 	}
 	
+	/**
+	 * Get the unique name that identifies this function.
+	 * @return the unique name for the ArcTangentFunction which is ATAN.
+	 */
 	@Override
 	public String getFunctionName() {
 		return "ATAN";

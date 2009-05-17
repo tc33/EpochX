@@ -20,10 +20,20 @@
 package com.epochx.ant;
 
 /**
- * Enumerates the orientations of the ant
+ * Enumerates the possible orientations of an ant within its landscape.
  */
 public enum Orientation {
 	
-	NORTH, EAST, SOUTH, WEST
+	/** North compass direction. **/
+	NORTH, 
+	
+	/** East compass direction. **/
+	EAST, 
+	
+	/** South compass direction. **/
+	SOUTH, 
+	
+	/** West compass direction. **/
+	WEST
 	
 }

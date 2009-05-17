@@ -22,23 +22,34 @@ package com.epochx.action;
 import com.epochx.ant.*;
 
 /**
- * Defines ant turn right action
+ * This class defines an action which when executed will trigger the ant 
+ * to turn right from its current orientation in its ant landscape.
  */
 public class AntTurnRightAction extends AntAction {
 
 	/**
-	 * Constructor for turn right action
-	 * @param ant the ant object
+	 * Constructs an AntTurnRightAction, supplying an ant that the action can be 
+	 * performed on.
+	 * @param ant the Ant that will be turned right upon execution.
 	 */
 	public AntTurnRightAction(Ant ant) {
 		super(ant);
 	}
 
+	/**
+	 * Execute this action, which will trigger the ant to turn right from its 
+	 * current orientation in its ant landscape.
+	 */
 	@Override
 	public void execute() {
 		getAnt().turnRight();
 	}
 	
+	/**
+	 * String representation of this action which identifies the action type.
+	 * @return string representation of this action which identifies the action 
+	 * type.
+	 */
 	@Override
 	public String toString() {
 		return "TURN-RIGHT";

@@ -22,23 +22,34 @@ package com.epochx.action;
 import com.epochx.ant.*;
 
 /**
- * Defines an ant move action
+ * This class defines an action which when executed will trigger the ant 
+ * to move one position in its ant landscape.
  */
 public class AntMoveAction extends AntAction {
 	
 	/**
-	 * constructs ant move action
-	 * @param ant the ant object
+	 * Constructs an AntMoveAction, supplying an ant that the action can be 
+	 * performed on.
+	 * @param ant the Ant that will be moved upon execution.
 	 */
 	public AntMoveAction(Ant ant) {
 		super(ant);
 	}
 
+	/**
+	 * Execute this action, which will trigger the ant to move one position in
+	 * its ant landscape.
+	 */
 	@Override
 	public void execute() {
 		getAnt().move();
 	}
 	
+	/**
+	 * String representation of this action which identifies the action type. 
+	 * @return string representation of this action which identifies the action 
+	 * type.
+	 */
 	@Override
 	public String toString() {
 		return "MOVE";

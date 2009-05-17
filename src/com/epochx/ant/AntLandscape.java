@@ -19,103 +19,115 @@
  */
 package com.epochx.ant;
 
-import java.awt.*;
+
+import java.awt.Dimension;
+import java.awt.Point;
 import java.util.*;
 
 /**
- * Object represents the landscape in which the ant is operating
- * including storing food locations
- */
-/**
- * @author lb212
- *
+ * An <code>AntLandscape</code> provides the environment an artificial ant 
+ * operates in. The landscape is essentially a torus with a given width/height, 
+ * over which the positions wrap back around. The landscape also incorporates a 
+ * set of food locations which define the location of food pellets within 
+ * that co-ordinate system.
  */
 public class AntLandscape {
 
+	// The width/height dimensions of the landscape.
 	private Dimension size;
-	private ArrayList<Point> foodLocations;
+	
+	// The locations of food pellets.
+	private List<Point> foodLocations;
 	
 	/**
-	 * AntLandscape Constructor
-	 * @param size The size of the landscape
-	 * @param foodLocations The food locations upon the landscape
+	 * Constructs an AntLandscape with the given dimensions and food locations.
+	 * To be reachable, foodLocations should refer to points inside the size 
+	 * dimensions where co-ordinate points are indexed from 0.
+	 * @param size the width/height dimensions of the landscape.
+	 * @param foodLocations the location of food pellets upon the landscape.
 	 */
-	public AntLandscape(Dimension size, ArrayList<Point> foodLocations) {
+	public AntLandscape(Dimension size, List<Point> foodLocations) {
 		this.size = size;
 		this.foodLocations = foodLocations;
 	}
 	
 	/**
-	 * Adds a food location to the landscape
-	 * @param location the location of the new item of food
+	 * Adds a new food location to the landscape. The new point may <b>not</b>
+	 * be tested to check it is a valid location within the landscape 
+	 * dimensions so care should be taken to provide valid locations.
+	 * @param location the x/y co-ordinates of the new item of food.
 	 */
 	public void addFoodLocation(Point location) {
 		foodLocations.add(location);
 	}
 	
 	/**
-	 * Removes a food location from the ant landscape
-	 * @param location The location of the item of food to remove
+	 * Removes a food location from the ant landscape. If there are multiple 
+	 * food pellets at the same <code>Point</code> location then only one will
+	 * be removed. If no food pellet exists at the given location then this 
+	 * method will do nothing.
+	 * @param location the location of a current food item to be removed.
 	 */
 	public void removeFoodLocation(Point location) {
 		foodLocations.remove(location);
 	}
 	
 	/**
-	 * Test whether a location has food on it
-	 * @param location The location to test
-	 * @return TRUE if food is present
+	 * Tests whether a location contains an item of food.
+	 * @param location The location in the landscape to test.
+	 * @return true if food is present at the given location, false otherwise.
 	 */
 	public boolean isFoodLocation(Point location) {
 		return foodLocations.contains(location);
 	}
 	
 	/**
-	 * Sets multiple food locations
-	 * @param foodLocations A list of food locations
+	 * Replaces the current set of food locations with a new set. To be 
+	 * reachable, foodLocations should refer to points inside the size 
+	 * dimensions of the landscape where co-ordinate points are indexed 
+	 * from 0.
+	 * @param foodLocations the location of food pellets upon the landscape.
 	 */
-	public void setFoodLocations(ArrayList<Point> foodLocations) {
+	public void setFoodLocations(List<Point> foodLocations) {
 		this.foodLocations = foodLocations;
 	}
 	
 	/**
-	 * Clears all food locations
+	 * Clears all food locations on the landscape.
 	 */
 	public void clearFoodLocations() {
 		foodLocations.clear();
 	}
 	
 	/**
-	 * Returns the size of the ant landscape
-	 * @return the dimensions of the ant landscape
+	 * Returns the size of the ant landscape.
+	 * @return the dimensions of the ant landscape.
 	 */
 	public Dimension getSize() {
 		return size;
 	}
 	
 	/**
-	 * Returns the width of the ant landscape
-	 * @return The width of the ant landscape
+	 * Returns the width of the ant landscape.
+	 * @return the width of the ant landscape.
 	 */
 	public int getWidth() {
 		return size.width;
 	}
 	
 	/**
-	 * Returns the height of the ant landscape
-	 * @return The height of the ant landscape
-	 */
-	/**
-	 * @return
+	 * Returns the height of the ant landscape.
+	 * @return the height of the ant landscape.
 	 */
 	public int getHeight() {
 		return size.height;
 	}
 	
 	/**
-	 * Tests if a location is valid
-	 * @param location The location to test
-	 * @return TRUE if location is valid
+	 * Tests if a location is a valid position within the landscape's 
+	 * dimensions. Locations are indexed from 0.
+	 * @param location the location to test.
+	 * @return true if the location is a valid position on the landscape.
 	 */
 	public boolean isValidLocation(Point location) {
 		return (location.x >= 0) 
@@ -125,29 +137,32 @@ public class AntLandscape {
 	}
 	
 	/**
-	 * Returns the location directly in front of the ant
-	 * @param currentLocation The current location
-	 * @param orientation The current orientation
-	 * @return new location in front of the ant
+	 * Returns the location of one move on from the given location in the 
+	 * direction of the provided orientation. The landscape is a torus so this 
+	 * method is required to calculate the necessary wrapping.
+	 * @param location the current location to calculate the next move from.
+	 * @param orientation the direction of the move.
+	 * @return the next location one move on from the given location in the 
+	 * direction of the provided orientation.
 	 */
-	public Point getNextLocation(Point currentLocation, Orientation orientation) {
-		Point newLocation = new Point(currentLocation.x, currentLocation.y);
+	public Point getNextLocation(Point location, Orientation orientation) {
+		Point newLocation = new Point(location);
 		
 		switch (orientation) {
 			case NORTH:
-				newLocation.y = (newLocation.y > 0) ? (newLocation.y-1) : (size.height-1);
+				newLocation.y = (location.y > 0) ? (location.y-1) : (size.height-1);
 				break;
 				
 			case EAST:
-				newLocation.x = (newLocation.x < size.width-1) ? (newLocation.x+1) : 0;
+				newLocation.x = (location.x < size.width-1) ? (location.x+1) : 0;
 				break;
 				
 			case SOUTH:
-				newLocation.y = (newLocation.y < size.height-1) ? (newLocation.y+1) : 0;
+				newLocation.y = (location.y < size.height-1) ? (location.y+1) : 0;
 				break;
 				
 			case WEST:
-				newLocation.x = (newLocation.x > 0) ? (newLocation.y-1) : (size.width-1);
+				newLocation.x = (location.x > 0) ? (location.y-1) : (size.width-1);
 				break;
 	
 			default:

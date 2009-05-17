@@ -131,7 +131,7 @@ public class ArtificialAntSantaFe extends GPAbstractModel<AntAction> {
 		}
 		//System.out.println(fl);
 		antLandscape.setFoodLocations(fl);
-		ant.resetAnt(600, antLandscape);
+		ant.reset(600, antLandscape);
 		//System.out.println("A1 = " + ant);
 		// run the ant
 		while(ant.getMoves()<ant.getMaxMoves()) {

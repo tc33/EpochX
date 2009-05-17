@@ -22,26 +22,32 @@ package com.epochx.action;
 import com.epochx.ant.*;
 
 /**
- * Defines and ant skip action (effectively does nothing apart from increment time steps)
+ * This class defines an action which when executed will trigger the ant 
+ * to do nothing for one timestep.
  */
 public class AntSkipAction extends AntAction {
 
 	/**
-	 * constructs ant skip action
-	 * @param ant the ant object
+	 * Constructs an AntSkipAction, supplying an ant that the action can be 
+	 * performed on.
+	 * @param ant the Ant that will skip a timestep upon execution.
 	 */
 	public AntSkipAction(Ant ant) {
 		super(ant);
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.epochx.core.representation.Action#execute()
+	/**
+	 * Execute this action, which will trigger the ant to fill one timestep 
+	 * without moving in its ant landscape.
 	 */
 	@Override
 	public void execute() {
 		getAnt().skip();
 	}	
 	
+	/**
+	 * String representation of this action which identifies the action type.
+	 */
 	@Override
 	public String toString() {
 		return "SKIP";

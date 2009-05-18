@@ -22,7 +22,6 @@ package com.epochx.util;
 
 /**
  * This class provides functionality to translate input strings into boolean[] representations.
- * @author Lawrence Beadle
  */
 public class BoolTrans {
     

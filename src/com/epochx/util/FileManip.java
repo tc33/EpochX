@@ -25,7 +25,6 @@ import java.io.*;
 
 /**
  * The File Manip class controls all text output and input file requirements
- * @author Lawrence Beadle
  */
 public class FileManip {
     

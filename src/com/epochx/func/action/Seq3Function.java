@@ -22,16 +22,42 @@ package com.epochx.func.action;
 import com.epochx.action.*;
 import com.epochx.core.representation.*;
 
+/**
+ * A <code>FunctionNode</code> which provides the facility to sequence three 
+ * instructions - which may be other functions or terminal nodes with actions.
+ */
 public class Seq3Function extends FunctionNode<Action> {
 	
+	/**
+	 * Construct a Seq3Function with no children.
+	 */
 	public Seq3Function() {
 		this(null, null, null);
 	}
 	
-	public Seq3Function(Node<Action> action1, Node<Action> action2, Node<Action> action3) {
-		super(action1, action2, action3);
+	/**
+	 * Construct a Seq3Function with two children. When evaluated, the three 
+	 * children will be evaluated in order. As such they will have been
+	 * executed in sequence.
+	 * @param child1 The first child node to be executed first in sequence.
+	 * @param child2 The second child node to be executed second in sequence.
+	 * @param child3 The third child node to be executed third in sequence.
+	 */
+	public Seq3Function(Node<Action> child1, Node<Action> child2, Node<Action> child3) {
+		super(child1, child2, child3);
 	}
 	
+	/**
+	 * Evaluating a <code>Seq3Function</code> involves evaluating each of the
+	 * children in sequence - the first child node, followed by the second 
+	 * child node, followed by the third child node.
+	 * 
+	 * <p>Each of the children will thus have been evaluated (triggering 
+	 * execution of actions at the <code>TerminalNodes</code>) and then this 
+	 * method which must return an Action, returns Action.DO_NOTHING which any  
+	 * functions higher up in the program tree will execute, but with no 
+	 * effect.</p>
+	 */
 	@Override
 	public Action evaluate() {
 		((Action) getChild(0).evaluate()).execute();
@@ -41,6 +67,10 @@ public class Seq3Function extends FunctionNode<Action> {
 		return Action.DO_NOTHING;
 	}
 	
+	/**
+	 * Get the unique name that identifies this function.
+	 * @return the unique name for the Seq3Function which is SEQ3.
+	 */
 	@Override
 	public String getFunctionName() {
 		return "SEQ3";

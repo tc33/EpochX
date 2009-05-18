@@ -23,18 +23,41 @@ import com.epochx.action.*;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * A <code>FunctionNode</code> which provides the facility to sequence two 
+ * instructions - which may be other functions or terminal nodes with actions.
  */
 public class Seq2Function extends FunctionNode<Action> {
 
+	/**
+	 * Construct a Seq2Function with no children.
+	 */
 	public Seq2Function() {
 		this(null, null);
 	}
 	
-	public Seq2Function(Node<Action> action1, Node<Action> action2) {
-		super(action1, action2);
+	/**
+	 * Construct a Seq2Function with two children. When evaluated, the first 
+	 * child node will be taken first and evaluated, then the second child node
+	 * will be taken and evaluated. As such they will have been executed in 
+	 * sequence.
+	 * @param child1 The first child node to be executed first in sequence.
+	 * @param child2 The second child node to be executed second in sequence.
+	 */
+	public Seq2Function(Node<Action> child1, Node<Action> child2) {
+		super(child1, child2);
 	}
 	
+	/**
+	 * Evaluating a <code>Seq2Function</code> involves evaluating each of the
+	 * children in sequence - the first child node, followed by the second 
+	 * child node.
+	 * 
+	 * <p>Each of the children will thus have been evaluated (triggering 
+	 * execution of actions at the <code>TerminalNodes</code>) and then this 
+	 * method which must return an Action, returns Action.DO_NOTHING which any  
+	 * functions higher up in the program tree will execute, but with no 
+	 * effect.</p>
+	 */
 	@Override
 	public Action evaluate() {
 		((Action) getChild(0).evaluate()).execute();
@@ -43,6 +66,10 @@ public class Seq2Function extends FunctionNode<Action> {
 		return Action.DO_NOTHING;
 	}
 	
+	/**
+	 * Get the unique name that identifies this function.
+	 * @return the unique name for the Seq2Function which is SEQ2.
+	 */
 	@Override
 	public String getFunctionName() {
 		return "SEQ2";

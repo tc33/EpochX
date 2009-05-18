@@ -26,17 +26,40 @@ import com.epochx.ant.*;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * A <code>FunctionNode</code> which represents the conditional if-then-else 
+ * statement typically used in the artificial ant domain. This version of the 
+ * if statement has the condition predefined as a check for whether the next 
+ * move in the landscape contains a food item.
  */
 public class IfFoodAheadFunction extends FunctionNode<Action> {
 	
+	// The artificial ant the Actions will be controlling.
 	private Ant ant;
+	
+	// The landscape the ant is roaming.
 	private AntLandscape landscape;
 	
+	/**
+	 * Construct an IfFoodAheadFunction with no children.
+	 * @param ant the ant which this function will be controlling.
+	 * @param landscape the landscape upon which the ant is roaming which will
+	 * be used to check for food locations.
+	 */
 	public IfFoodAheadFunction(Ant ant, AntLandscape landscape) {
 		this(ant, landscape, null, null);
 	}
 	
+	/**
+	 * Construct an IfFoodAheadFunction with two children. When evaluated, 
+	 * if given ant's next location on the provided landscape is a food 
+	 * location then the first child node will be evaluated and executed, 
+	 * otherwise the second child node is evaluated and executed.
+	 * @param ant the ant which this function will be controlling.
+	 * @param landscape the landscape upon which the ant is roaming which will
+	 * be used to check for food locations.
+	 * @param ifStatement The first child node.
+	 * @param elseStatement The second child node.
+	 */
 	public IfFoodAheadFunction(Ant ant, AntLandscape landscape, Node<Action> child1, Node<Action> child2) {
 		super(child1, child2);
 		
@@ -44,9 +67,20 @@ public class IfFoodAheadFunction extends FunctionNode<Action> {
 		this.landscape = landscape;
 	}
 	
+	/**
+	 * Evaluating an <code>IfFoodAheadFunction</code> involves identifying the 
+	 * next location the ant would move to on the landscape were it to be moved. 
+	 * If this position contains a food item then the first child is evaluated 
+	 * and executed, else the second child is evaluated and executed.
+	 * 
+	 * <p>One of the children will thus have been evaluated (triggering 
+	 * execution of actions at the <code>TerminalNodes</code>) and then this 
+	 * method which must return an Action, returns Action.DO_NOTHING which any  
+	 * functions higher up in the program tree will execute, but with no 
+	 * effect.</p>
+	 */
 	@Override
 	public Action evaluate() {
-
 		// Find out the location we want to check.
 		Point ahead = landscape.getNextLocation(ant.getLocation(), ant.getOrientation());
 		
@@ -59,6 +93,11 @@ public class IfFoodAheadFunction extends FunctionNode<Action> {
 		return Action.DO_NOTHING;
 	}
 	
+	/**
+	 * Get the unique name that identifies this function.
+	 * @return the unique name for the IfFoodAheadFunction which is 
+	 * IF-FOOD-AHEAD.
+	 */
 	@Override
 	public String getFunctionName() {
 		return "IF-FOOD-AHEAD";

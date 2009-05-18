@@ -31,9 +31,10 @@ public class GPElitism {
 
 	/**
 	 * Gets the best CandidatePrograms from the given population and returns 
-	 * them. The number of programs returned will be either noElites or pop.size()
-	 * if the size of the given population is smaller than noElites. Elites in 
-	 * are defined as the very best programs in a population.
+	 * them. The number of programs returned will be either noElites or 
+	 * pop.size()if the number of programs in the current population is smaller 
+	 * than noElites. Elites in EpochX are defined as the very best programs in 
+	 * a population.
 	 * 
 	 * @param <TYPE> 	the return type of the CandidatePrograms being used.
 	 * @param pop	 	the population from which elites need to be retrieved.
@@ -48,7 +49,6 @@ public class GPElitism {
 		
 		// Sort the population and scoop off the best noElites.
 		if (noElites > 0) {
-			//Collections.sort(pop, Collections.reverseOrder());
 			Collections.sort(pop);
 			elites.addAll(pop.subList(pop.size()-noElites,pop.size()));
 		}

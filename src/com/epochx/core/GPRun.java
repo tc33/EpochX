@@ -25,9 +25,9 @@ import com.epochx.core.representation.*;
 import com.epochx.stats.*;
 
 /**
- * A GPRun object has 2 responsibilities. Firstly - to execute a GP run based upon 
- * control parameters provided. Secondly - after executing, to provide basic details 
- * of how that run went. 
+ * A GPRun object has 2 responsibilities. Firstly, to execute a GP run based 
+ * upon the control parameters provided. Secondly, after executing to 
+ * provide basic details of how that run went. 
  * 
  * <p>Objects of this class should be immutable - however the 
  * underlying objects, in particular GPModel may not be.
@@ -37,16 +37,25 @@ public class GPRun<TYPE> {
 	// The model describing the problem to be evolved.
 	private GPModel<TYPE> model;
 	
-	// Information about how the run went.
+	// The best program found so far during the run.
 	private CandidateProgram<TYPE> bestProgram;
+	
+	// The fitness of the best program found so far during the run.
 	private double bestFitness;
 	
+	// The run start time in nano-seconds for measuring program length.
 	private long runStartTime;
+	
+	// The run end time in nano-seconds for measuring program length.
 	private long runEndTime;
 	
+	// Gather generation statistics.
 	private GenerationStats<TYPE> genStats;
 	
+	// Crossover module.
 	private GPCrossover<TYPE> crossover;
+	
+	// Mutation module.
 	private GPMutation<TYPE> mutation;
 	
 	/*
@@ -56,6 +65,7 @@ public class GPRun<TYPE> {
 	private GPRun(GPModel<TYPE> model) {
 		this.model = model;
 		
+		// Initialise the run.
 		runStartTime = System.nanoTime();
 		runEndTime = -1;
 		bestProgram = null;
@@ -65,6 +75,7 @@ public class GPRun<TYPE> {
 		crossover = new GPCrossover<TYPE>(model);
 		mutation = new GPMutation<TYPE>(model);
 		
+		// Create the statistics monitor.
 		genStats = new GenerationStats<TYPE>();
 		
 		// Setup the listener for generation statistics.
@@ -73,7 +84,7 @@ public class GPRun<TYPE> {
 	
 	/**
 	 * Construct a new GPRun object and execute it. The GPModel passed in is
-	 * used to provide the control parameters for the run. 
+	 * used to provide the control parameters for the run.
 	 * @param <TYPE> the type of <code>CandidateProgram</code> to be evolved.
 	 * @param model  the model which will control the run with the parameters 
 	 * 				 and fitness function to use.
@@ -82,7 +93,10 @@ public class GPRun<TYPE> {
 	 * @see GPModel
 	 */
 	public static <TYPE> GPRun<TYPE> run(GPModel<TYPE> model) {
+		// Create the GPRun object.
 		GPRun<TYPE> runner = new GPRun<TYPE>(model);
+		
+		// Run it.
 		runner.run();
 		
 		return runner;
@@ -95,31 +109,31 @@ public class GPRun<TYPE> {
 	 * or poule selection in use.
 	 */
 	private void run() {
-		// Initialisation
+		// Perform initialisation.
 		List<CandidateProgram<TYPE>> pop = model.getInitialiser().getInitialPopulation();
 		
-		// Generate stats for the inital population.
+		// Generate generation stats for the inital population.
 		genStats.addGen(pop, 0, 0, 0, 0);
 		
-		// For each generation.
+		// Execute each generation.
 		for (int i=1; i<=model.getNoGenerations(); i++) {
 			// Record the time we start this generation.
 			long genStartTime = System.nanoTime();
 			
-			List<CandidateProgram<TYPE>> nextPop = new ArrayList<CandidateProgram<TYPE>>();
+			// Create next population to fill.
+			int popSize = model.getPopulationSize();
+			List<CandidateProgram<TYPE>> nextPop = new ArrayList<CandidateProgram<TYPE>>(popSize);
 			
 			// Perform elitism.
-			List<CandidateProgram<TYPE>> elites = GPElitism.getElites(pop, model.getNoElites());
-			for (CandidateProgram<TYPE> e: elites) {
-				if (nextPop.size() < model.getPopulationSize())
-					nextPop.add(e);
-			}
+			int noElites = model.getNoElites();
+			noElites = (noElites < popSize) ? noElites : popSize;
+			nextPop.addAll(GPElitism.getElites(pop, noElites));
 			
 			// Construct a breeding pool.
-			List<CandidateProgram<TYPE>> poule = model.getPouleSelector().getPoule(pop, model.getPouleSize());
+			List<CandidateProgram<TYPE>> pool = model.getPouleSelector().getPoule(pop, model.getPouleSize());
 			
 			// Tell the parent selector we're starting a new generation.
-			model.getParentSelector().onGenerationStart(poule);
+			model.getParentSelector().onGenerationStart(pool);
 			
 			// Fill the population by performing genetic operations.
 			while(nextPop.size() < model.getPopulationSize()) {
@@ -129,18 +143,18 @@ public class GPRun<TYPE> {
 				double pe = model.getCrossoverProbability();
 				
 				if (random < pe) {
-					// Do crossover.
+					// Perform crossover.
 					CandidateProgram<TYPE>[] children = crossover.crossover();
 					for (CandidateProgram<TYPE> c: children) {
 						if (nextPop.size() < model.getPopulationSize())
 							nextPop.add(c);
 					}
 				} else if (random < pe+pm) {
-					// Do mutation.
+					// Perform mutation.
 					nextPop.add(mutation.mutate());
 				} else {
-					// Do reproduction. - Should this use clone?
-					nextPop.add(poule.get((int) Math.floor(Math.random()*poule.size())));
+					// Perform reproduction - Should this use clone?
+					nextPop.add(pool.get((int) Math.floor(Math.random()*pool.size())));
 				}
 			}
 			
@@ -186,9 +200,10 @@ public class GPRun<TYPE> {
 	}
 	
 	/**
-	 * Retrieve the time in milliseconds of the execution. Either the time of the 
-	 * whole run if it's finished or the time up until now if the run isn't finished.
-	 * @return The run time in milliseconds.
+	 * Retrieve the time in nano-seconds of the run. This will be either the 
+	 * length of the whole run if it's finished or the time up until now if 
+	 * the run is not finished.
+	 * @return The run time in nano-seconds.
 	 */
 	public long getRunTime() {
 		if (runEndTime == -1) {

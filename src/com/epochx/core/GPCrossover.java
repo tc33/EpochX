@@ -98,6 +98,7 @@ public class GPCrossover<TYPE> {
 		
 		reversions = 0;
 		
+		//TODO Introduce an acceptCrossover() method in the model which allows the model to reject a crossover.
 		if(!doStateCheckedCrossover) {
 			// do normal crossover
 			parent1 = parentSelector.getParent();

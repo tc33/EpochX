@@ -81,7 +81,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * Construct a GPModel with a set of sensible defaults. See the appropriate
 	 * accessor method for information of each default value.
 	 */
-	public GPAbstractModel() {		
+	public GPAbstractModel() {
 		// Set default values.
 		noRuns = 1;
 		noGenerations = 50;

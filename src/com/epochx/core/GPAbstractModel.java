@@ -428,6 +428,22 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 		this.noElites = noElites;
 	}
 	
+	public RunStatListener getRunStatListener() {
+		return this;
+	}
+	
+	public GenerationStatListener getGenerationStatListener() {
+		return this;
+	}
+	
+	public CrossoverStatListener getCrossoverStatListener() {
+		return this;
+	}
+	
+	public MutationStatListener getMutationStatListener() {
+		return this;
+	}
+	
 	/**
 	 * Default implementation. No fields are requested, the overriding class 
 	 * is expected to override this method IF it wants to know about generations.

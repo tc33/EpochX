@@ -67,11 +67,8 @@ public class GPRun<TYPE> {
 		
 		genStats = new GenerationStats<TYPE>();
 		
-		// This provides a shortcut for the common convention of making a model the listener.
-		//TODO Actually might be better to allow models a way of giving their own listener for more flexibility.
-		if (model instanceof GenerationStatListener) {
-			genStats.addGenerationStatListener((GenerationStatListener) model);
-		}
+		// Setup the listener for generation statistics.
+		genStats.addGenerationStatListener(model.getGenerationStatListener());
 	}
 	
 	/**

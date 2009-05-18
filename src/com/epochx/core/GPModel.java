@@ -21,6 +21,10 @@ package com.epochx.core;
 
 import java.util.*;
 import com.epochx.semantics.*;
+import com.epochx.stats.CrossoverStatListener;
+import com.epochx.stats.GenerationStatListener;
+import com.epochx.stats.MutationStatListener;
+import com.epochx.stats.RunStatListener;
 import com.epochx.core.crossover.*;
 import com.epochx.core.initialisation.*;
 import com.epochx.core.mutation.*;
@@ -268,6 +272,11 @@ public interface GPModel<TYPE> {
 	 * 		   value is considered better than a larger value.
 	 */
 	public double getFitness(CandidateProgram<TYPE> program);
+	
+	public RunStatListener getRunStatListener();
+	public GenerationStatListener getGenerationStatListener();
+	public CrossoverStatListener getCrossoverStatListener();
+	public MutationStatListener getMutationStatListener();
 	
 	/**
 	 * Returns whether to run the crossover state checker

@@ -67,11 +67,8 @@ public class GPCrossover<TYPE> {
 		
 		crossoverStats = new CrossoverStats<TYPE>();
 		
-		// This provides a shortcut for the common convention of making a model the listener.
-		//TODO Actually might be better to allow models a way of giving their own listener for more flexibility.
-		if (model instanceof GenerationStatListener) {
-			crossoverStats.addCrossoverStatListener((CrossoverStatListener) model);
-		}
+		// Setup the listener for crossover statistics.
+		crossoverStats.addCrossoverStatListener(model.getCrossoverStatListener());
 	}
 
 	/**

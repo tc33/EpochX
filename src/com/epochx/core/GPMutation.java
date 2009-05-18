@@ -45,11 +45,8 @@ public class GPMutation<TYPE> {
 		
 		mutationStats = new MutationStats<TYPE>();
 		
-		// This provides a shortcut for the common convention of making a model the listener.
-		//TODO Actually might be better to allow models a way of giving their own listener for more flexibility.
-		if (model instanceof GenerationStatListener) {
-			mutationStats.addMutationStatListener((MutationStatListener) model);
-		}
+		// Setup the listener for mutation statistics.
+		mutationStats.addMutationStatListener(model.getMutationStatListener());
 	}
 	
 	public CandidateProgram<TYPE> mutate() {

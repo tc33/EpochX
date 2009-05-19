@@ -97,14 +97,14 @@ public interface GPModel<TYPE> {
 	 * 
 	 * @return the terminal nodes to be used during evolution.
 	 */
-	public List<TerminalNode<?>> getTerminals();
+	public List<TerminalNode<TYPE>> getTerminals();
 
 	/**
 	 * Retrieves the set of function nodes.
 	 * 
 	 * @return the function nodes to be used during evolution.
 	 */
-	public List<FunctionNode<?>> getFunctions();
+	public List<FunctionNode<TYPE>> getFunctions();
 	
 	/**
 	 * Retrieves the full set of syntax, that is terminals AND function nodes.
@@ -113,7 +113,7 @@ public interface GPModel<TYPE> {
 	 * 
 	 * @return the full syntax for use in building node trees.
 	 */
-	public List<Node<?>> getSyntax();
+	public List<Node<TYPE>> getSyntax();
 	
 	/**
 	 * Retrieves the maximum depth of CandidatePrograms allowed in the 

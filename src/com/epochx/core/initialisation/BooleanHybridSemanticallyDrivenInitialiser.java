@@ -28,9 +28,9 @@ import net.sf.javabdd.*;
 /**
  * Boolean domian hybrid semantically driven initalisation
  */
-public class BooleanHybridSemanticallyDrivenInitialiser<TYPE> implements Initialiser<TYPE> {
+public class BooleanHybridSemanticallyDrivenInitialiser implements Initialiser<Boolean> {
 
-	private GPModel<TYPE> model;
+	private GPModel<Boolean> model;
 	private BooleanSemanticModule semMod;
 	
 	/**
@@ -38,7 +38,7 @@ public class BooleanHybridSemanticallyDrivenInitialiser<TYPE> implements Initial
 	 * @param model The GP model in use
 	 * @param semMod The semantic module in use
 	 */
-	public BooleanHybridSemanticallyDrivenInitialiser(GPModel<TYPE> model, SemanticModule semMod) {
+	public BooleanHybridSemanticallyDrivenInitialiser(GPModel<Boolean> model, SemanticModule<Boolean> semMod) {
 		this.model = model;
 		this.semMod = (BooleanSemanticModule) semMod;
 	}
@@ -47,19 +47,19 @@ public class BooleanHybridSemanticallyDrivenInitialiser<TYPE> implements Initial
 	 * @see com.epochx.core.initialisation.Initialiser#getInitialPopulation()
 	 */
 	@Override
-	public List<CandidateProgram<TYPE>> getInitialPopulation() {
+	public List<CandidateProgram<Boolean>> getInitialPopulation() {
 		return generatePopulation();
 	}
 	
-	private List<CandidateProgram<TYPE>> generatePopulation() {
+	private List<CandidateProgram<Boolean>> generatePopulation() {
 		// initialise BDD stuff
         semMod.start();
         List<BDD> storage = new ArrayList<BDD>();
-        FullInitialiser<TYPE> f = new FullInitialiser<TYPE>(model);
-        List<CandidateProgram<TYPE>> firstPass = f.getInitialPopulation();
+        FullInitialiser<Boolean> f = new FullInitialiser<Boolean>(model);
+        List<CandidateProgram<Boolean>> firstPass = f.getInitialPopulation();
         
         // generate a full population to start with
-        for(CandidateProgram<TYPE> c: firstPass) {
+        for(CandidateProgram<Boolean> c: firstPass) {
         	BooleanRepresentation b = semMod.codeToBehaviour(c);
         	if(!b.isConstant()) {
         		storage.add(b.getBDD());
@@ -89,7 +89,7 @@ public class BooleanHybridSemanticallyDrivenInitialiser<TYPE> implements Initial
         }
         
         // translate back and add to first gen
-        List<CandidateProgram<TYPE>> firstGen = new ArrayList<CandidateProgram<TYPE>>();
+        List<CandidateProgram<Boolean>> firstGen = new ArrayList<CandidateProgram<Boolean>>();
         for(BDD toProg: storage) {
             firstGen.add(semMod.behaviourToCode(new BooleanRepresentation(toProg)));
         }

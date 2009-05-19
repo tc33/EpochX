@@ -45,9 +45,9 @@ public class MainISpeedAnalysis {
         // decide which model
         RegressionModelCUBIC model = new RegressionModelCUBIC();
         model.setPopulationSize(500);
-        SemanticModule semMod = model.getSemanticModule();
+        SemanticModule<Double> semMod = model.getSemanticModule();
 
-        ArrayList<CandidateProgram> newPop;
+        ArrayList<CandidateProgram<Double>> newPop;
         
         // SET FIRST COUNT
         long fC = System.currentTimeMillis();
@@ -60,7 +60,7 @@ public class MainISpeedAnalysis {
 
             // generate population              
         	RegressionHybridSemanticallyDrivenInitialiser initialiser = new RegressionHybridSemanticallyDrivenInitialiser(model, semMod);
-            List<CandidateProgram> testPop = initialiser.getInitialPopulation();
+            List<CandidateProgram<Double>> testPop = initialiser.getInitialPopulation();
 
         }
         

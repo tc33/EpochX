@@ -30,7 +30,7 @@ public abstract class SemanticModel<TYPE> extends GPAbstractModel<TYPE> {
 	private boolean doStateCheckedCrossover;
 	private boolean doStateCheckedMutation;
 	
-	private SemanticModule semanticModule;
+	private SemanticModule<TYPE> semanticModule;
 	
 	public SemanticModel() {
 		doStateCheckedCrossover = false;
@@ -67,7 +67,7 @@ public abstract class SemanticModel<TYPE> extends GPAbstractModel<TYPE> {
 	 * Returns the semantic module associated with this problem
 	 * @return The associate Semantic module
 	 */
-	public SemanticModule getSemanticModule() {
+	public SemanticModule<TYPE> getSemanticModule() {
 		return this.semanticModule;
 	}
 	
@@ -75,7 +75,7 @@ public abstract class SemanticModel<TYPE> extends GPAbstractModel<TYPE> {
 	 * Sets the semantic module for this run
 	 * @param semMod The desired semantic module to use
 	 */
-	public void setSemanticModule(SemanticModule semMod) {
+	public void setSemanticModule(SemanticModule<TYPE> semMod) {
 		this.semanticModule = semMod;
 	}
 	
@@ -88,7 +88,7 @@ public abstract class SemanticModel<TYPE> extends GPAbstractModel<TYPE> {
 		boolean equal = false;
 		if (doStateCheckedCrossover) {
 			// pull out semantic module and check its not null
-			SemanticModule semMod = getSemanticModule();
+			SemanticModule<TYPE> semMod = getSemanticModule();
 			if(semMod==null) {
 				throw new IllegalArgumentException("Semantic module undefined for semantically driven crossover.");
 			}
@@ -124,7 +124,7 @@ public abstract class SemanticModel<TYPE> extends GPAbstractModel<TYPE> {
 		boolean equal = false;
 		if (doStateCheckedMutation) {
 			// pull out semantic module and check its not null
-			SemanticModule semMod = getSemanticModule();
+			SemanticModule<TYPE> semMod = getSemanticModule();
 			if(semMod==null) {
 				throw new IllegalArgumentException("Semantic module undefine for semantically driven mutation.");
 			}

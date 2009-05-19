@@ -21,6 +21,7 @@ package com.epochx.core.initialisation;
 
 import java.util.*;
 
+import com.epochx.action.Action;
 import com.epochx.core.GPModel;
 import com.epochx.core.representation.*;
 import com.epochx.semantics.*;
@@ -28,9 +29,9 @@ import com.epochx.semantics.*;
 /**
  * Artificial Ant hybrid semantically driven initialisation
  */
-public class AntHybridSemanticallyDrivenInitialiser<TYPE> implements Initialiser<TYPE> {
+public class AntHybridSemanticallyDrivenInitialiser implements Initialiser<Action> {
 
-	private GPModel<TYPE> model;
+	private GPModel<Action> model;
 	private AntSemanticModule semMod;
 	
 	/**
@@ -38,7 +39,7 @@ public class AntHybridSemanticallyDrivenInitialiser<TYPE> implements Initialiser
 	 * @param model The GP model in use
 	 * @param semMod The relevant semantic module
 	 */
-	public AntHybridSemanticallyDrivenInitialiser(GPModel<TYPE> model, SemanticModule semMod) {
+	public AntHybridSemanticallyDrivenInitialiser(GPModel<Action> model, SemanticModule<Action> semMod) {
 		this.model = model;
 		this.semMod = (AntSemanticModule) semMod;
 	}
@@ -47,19 +48,19 @@ public class AntHybridSemanticallyDrivenInitialiser<TYPE> implements Initialiser
 	 * @see com.epochx.core.initialisation.Initialiser#getInitialPopulation()
 	 */
 	@Override
-	public List<CandidateProgram<TYPE>> getInitialPopulation() {
+	public List<CandidateProgram<Action>> getInitialPopulation() {
 		return generatePopulation();
 	}
 	
-	private List<CandidateProgram<TYPE>> generatePopulation() {
+	private List<CandidateProgram<Action>> generatePopulation() {
 		// make a random object
 		Random rGen = new Random();
 		ArrayList<ArrayList<String>> storage = new ArrayList<ArrayList<String>>();
-        FullInitialiser<TYPE> f = new FullInitialiser<TYPE>(model);
-        List<CandidateProgram<TYPE>> firstPass = f.getInitialPopulation();
+        FullInitialiser<Action> f = new FullInitialiser<Action>(model);
+        List<CandidateProgram<Action>> firstPass = f.getInitialPopulation();
         
         // generate a full population to start with
-        for(CandidateProgram<TYPE> c: firstPass) {
+        for(CandidateProgram<Action> c: firstPass) {
         	AntRepresentation b = (AntRepresentation) semMod.codeToBehaviour(c);
         	if(!b.isConstant()) {
         		storage.add(b.getAntRepresentation());
@@ -135,10 +136,10 @@ public class AntHybridSemanticallyDrivenInitialiser<TYPE> implements Initialiser
         }
         
         // backwards translate
-        List<CandidateProgram<TYPE>> firstGen = new ArrayList<CandidateProgram<TYPE>>();
+        List<CandidateProgram<Action>> firstGen = new ArrayList<CandidateProgram<Action>>();
         int i = 1;
         for(ArrayList<String> toProg: storage) {                
-            CandidateProgram<TYPE> holder = semMod.behaviourToCode(new AntRepresentation(toProg));
+            CandidateProgram<Action> holder = semMod.behaviourToCode(new AntRepresentation(toProg));
             firstGen.add(holder);
             //System.out.println(holder);
             //System.out.println("Reverse Translation at: " + i);

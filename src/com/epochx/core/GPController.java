@@ -33,6 +33,11 @@ import com.epochx.stats.*;
  */
 public class GPController {
 
+	/*
+	 * Private constructor. The only method is the static run().
+	 */
+	private GPController() {}
+	
 	/**
 	 * Executes one or more GP runs. The number of runs is set within the model 
 	 * provided as an argument. This GPModel also supplies all the other 

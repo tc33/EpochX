@@ -199,8 +199,8 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * 
 	 * @return {@inheritDoc}
 	 */
-	public List<Node<?>> getSyntax() {
-		List<Node<?>> syntax = new ArrayList<Node<?>>(getTerminals());
+	public List<Node<TYPE>> getSyntax() {
+		List<Node<TYPE>> syntax = new ArrayList<Node<TYPE>>(getTerminals());
 		syntax.addAll(getFunctions());
 		
 		return syntax;

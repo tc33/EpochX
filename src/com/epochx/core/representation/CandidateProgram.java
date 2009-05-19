@@ -94,7 +94,7 @@ public class CandidateProgram<TYPE> implements Cloneable, Comparable<CandidatePr
 	 * @param newNode The new node to be put into position
 	 * @param n The index of the position to be set to the new node
 	 */
-	public void setNthNode(Node<?> newNode, int n) {
+	public void setNthNode(Node<TYPE> newNode, int n) {
 		if (n == 0) {
 			// Need to test is of type <TYPE> somehow really.
 			rootNode = (Node<TYPE>) newNode;
@@ -162,5 +162,13 @@ public class CandidateProgram<TYPE> implements Cloneable, Comparable<CandidatePr
 		} else {
 			return 1;
 		}
+	}
+	
+	public int getNoTerminals() {
+		return getRootNode().getNoTerminals();
+	}
+	
+	public int getNoDistinctTerminals() {
+		return getRootNode().getNoDistinctTerminals();
 	}
 }

@@ -50,7 +50,7 @@ public class RegressionModel extends SemanticModel<Double> {
 		setCrossoverProbability(0.9);
 		setReproductionProbability(0.1);
 		setSemanticModule(new RegressionSemanticModule(getTerminals(), this));
-		setInitialiser(new RegressionSemanticallyDrivenInitialiser<Double>(this, getSemanticModule()));
+		setInitialiser(new RegressionSemanticallyDrivenInitialiser(this, getSemanticModule()));
 		setPouleSelector(new TournamentSelector<Double>(7, this));
 		setParentSelector(new LinearRankSelector<Double>(0.5));
 		//setPouleSelector(new RandomSelector<Double>());
@@ -63,9 +63,9 @@ public class RegressionModel extends SemanticModel<Double> {
 	}
 
 	@Override
-	public List<FunctionNode<?>> getFunctions() {
+	public List<FunctionNode<Double>> getFunctions() {
 		// Define function set.
-		List<FunctionNode<?>> functions = new ArrayList<FunctionNode<?>>();
+		List<FunctionNode<Double>> functions = new ArrayList<FunctionNode<Double>>();
 		functions.add(new AddFunction());
 		functions.add(new SubtractFunction());
 		functions.add(new MultiplyFunction());
@@ -78,9 +78,9 @@ public class RegressionModel extends SemanticModel<Double> {
 	 * @see com.epochx.core.GPModel#getTerminals()
 	 */
 	@Override
-	public List<TerminalNode<?>> getTerminals() {
+	public List<TerminalNode<Double>> getTerminals() {
 		// Define terminal set.
-		List<TerminalNode<?>> terminals = new ArrayList<TerminalNode<?>>();
+		List<TerminalNode<Double>> terminals = new ArrayList<TerminalNode<Double>>();
 		terminals.add(new TerminalNode<Double>(5d));
 		terminals.add(new TerminalNode<Double>(4d));
 		terminals.add(new TerminalNode<Double>(3d));

@@ -75,9 +75,9 @@ public class Majority5 extends SemanticModel<Boolean> {
 	}
 	
 	@Override
-	public List<FunctionNode<?>> getFunctions() {
+	public List<FunctionNode<Boolean>> getFunctions() {
 		// Define functions.
-		List<FunctionNode<?>> functions = new ArrayList<FunctionNode<?>>();
+		List<FunctionNode<Boolean>> functions = new ArrayList<FunctionNode<Boolean>>();
 		functions.add(new IfFunction());
 		functions.add(new AndFunction());
 		functions.add(new OrFunction());
@@ -86,9 +86,9 @@ public class Majority5 extends SemanticModel<Boolean> {
 	}
 
 	@Override
-	public List<TerminalNode<?>> getTerminals() {		
+	public List<TerminalNode<Boolean>> getTerminals() {		
 		// Define terminals.
-		List<TerminalNode<?>> terminals = new ArrayList<TerminalNode<?>>();
+		List<TerminalNode<Boolean>> terminals = new ArrayList<TerminalNode<Boolean>>();
 		terminals.add(variables.get("D4"));
 		terminals.add(variables.get("D3"));
 		terminals.add(variables.get("D2"));

@@ -39,13 +39,13 @@ import com.epochx.core.*;
  */
 public abstract class Node<TYPE> implements Cloneable {
 	
-	private Node<?>[] children;
+	private Node<TYPE>[] children;
 	
 	/**
 	 * Node constructor
 	 * @param children children of this node
 	 */
-	public Node(Node<?> ... children) {
+	public Node(Node<TYPE> ... children) {
 		this.children = children;
 	}
 	
@@ -60,7 +60,7 @@ public abstract class Node<TYPE> implements Cloneable {
 	 * Returns the children of the node
 	 * @return The children of the node
 	 */
-	public Node<?>[] getChildren() {
+	public Node<TYPE>[] getChildren() {
 		return children;
 	}
 
@@ -68,7 +68,7 @@ public abstract class Node<TYPE> implements Cloneable {
 	 * Sets the children of the node
 	 * @param children The new children to be set
 	 */
-	public void setChildren(Node<?>[] children) {
+	public void setChildren(Node<TYPE>[] children) {
 		this.children = children;
 	}
 	
@@ -77,7 +77,7 @@ public abstract class Node<TYPE> implements Cloneable {
 	 * @param index The index (representing arity) of the child to be returned
 	 * @return The desired child node
 	 */
-	public Node<?> getChild(int index) {
+	public Node<TYPE> getChild(int index) {
 		return children[index];
 	}
 	
@@ -120,14 +120,14 @@ public abstract class Node<TYPE> implements Cloneable {
 	 * @param newNode The new node to be inserted
 	 * @param n The index at which to place the new node
 	 */
-	public void setNthNode(Node<?> newNode, int n) {		
+	public void setNthNode(Node<TYPE> newNode, int n) {		
 		setNthNode(newNode, n, 0);
 	}
 	
 	/*
 	 * Recursive helper for the public setNthNode(Node, int).
 	 */
-	private void setNthNode(Node<?> newNode, int n, int current) {
+	private void setNthNode(Node<TYPE> newNode, int n, int current) {
 		int arity = getArity();
 		for (int i=0; i<arity; i++) {
 			if (current+1 == n) {
@@ -135,7 +135,7 @@ public abstract class Node<TYPE> implements Cloneable {
 				break;
 			}
 			
-			Node<?> child = getChild(i);
+			Node<TYPE> child = getChild(i);
 			int childLength = GPProgramAnalyser.getProgramLength(child);
 			
 			// Only look at the subtree if it contains the right range of nodes.
@@ -175,7 +175,7 @@ public abstract class Node<TYPE> implements Cloneable {
 	 * @param child The new child node
 	 * @param index The index (representing arity) to set
 	 */
-	public void setChild(Node<?> child, int index) {
+	public void setChild(Node<TYPE> child, int index) {
 		children[index] = child;
 	}
 	
@@ -198,7 +198,7 @@ public abstract class Node<TYPE> implements Cloneable {
 			for (int i=0; i<children.length; i++) {
 				clone.children[i] = this.children[i];
 				if (clone.children[i] != null)
-					clone.children[i] = (Node<?>) clone.children[i].clone();
+					clone.children[i] = (Node<TYPE>) clone.children[i].clone();
 			}
 			
 			return clone;
@@ -243,5 +243,42 @@ public abstract class Node<TYPE> implements Cloneable {
 			result = 37 * result + child.hashCode();
 		}
 		return result;
+	}
+	
+	public int getNoTerminals() {
+		if (this instanceof TerminalNode) {
+			return 1;
+		} else {
+			int result = 0;
+			for (int i=0; i<getArity(); i++) {
+				result += getChild(i).getNoTerminals();
+			}
+			return result;
+		}
+	}
+	
+	public int getNoDistinctTerminals() {
+		// Get a list of terminals.
+		List<TerminalNode<TYPE>> terminals = getTerminalNodes();
+		
+		// Remove duplicates.
+		HashSet terminalHash = new HashSet(terminals);
+		
+		// The number left is how many distinct terminals.
+		return terminalHash.size();
+	}
+	
+	public List<TerminalNode<TYPE>> getTerminalNodes() {
+		// Alternatively we could use an array, which is quicker/more efficient in this situation?
+		List<TerminalNode<TYPE>> terminals = new ArrayList<TerminalNode<TYPE>>();
+		
+		if (this instanceof TerminalNode) {
+			terminals.add((TerminalNode<TYPE>) this);
+		} else {
+			for (int i=0; i<getArity(); i++) {
+				terminals.addAll(getChild(i).getTerminalNodes());
+			}
+		}
+		return terminals;
 	}
 }

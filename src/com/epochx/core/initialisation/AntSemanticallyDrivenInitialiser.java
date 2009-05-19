@@ -21,6 +21,7 @@ package com.epochx.core.initialisation;
 
 import java.util.*;
 
+import com.epochx.action.Action;
 import com.epochx.core.GPModel;
 import com.epochx.core.representation.*;
 import com.epochx.semantics.*;
@@ -28,9 +29,9 @@ import com.epochx.semantics.*;
 /**
  * Artificial Ant Semantically Driven Initialisation
  */
-public class AntSemanticallyDrivenInitialiser<TYPE> implements Initialiser<TYPE> {
+public class AntSemanticallyDrivenInitialiser implements Initialiser<Action> {
 
-	private GPModel<TYPE> model;
+	private GPModel<Action> model;
 	private AntSemanticModule semMod;
 	
 	/**
@@ -38,7 +39,7 @@ public class AntSemanticallyDrivenInitialiser<TYPE> implements Initialiser<TYPE>
 	 * @param model The GP model in use
 	 * @param semMod The semantic module on use
 	 */
-	public AntSemanticallyDrivenInitialiser(GPModel<TYPE> model, SemanticModule semMod) {
+	public AntSemanticallyDrivenInitialiser(GPModel<Action> model, SemanticModule<Action> semMod) {
 		this.model = model;
 		this.semMod = (AntSemanticModule) semMod;
 	}
@@ -47,11 +48,11 @@ public class AntSemanticallyDrivenInitialiser<TYPE> implements Initialiser<TYPE>
 	 * @see com.epochx.core.initialisation.Initialiser#getInitialPopulation()
 	 */
 	@Override
-	public List<CandidateProgram<TYPE>> getInitialPopulation() {
+	public List<CandidateProgram<Action>> getInitialPopulation() {
 		return generatePopulation();
 	}
 	
-	private List<CandidateProgram<TYPE>> generatePopulation() {
+	private List<CandidateProgram<Action>> generatePopulation() {
 		// make a random object
 		Random rGen = new Random();
 		ArrayList<ArrayList<String>> storage = new ArrayList<ArrayList<String>>();
@@ -132,10 +133,10 @@ public class AntSemanticallyDrivenInitialiser<TYPE> implements Initialiser<TYPE>
         }
         
         // backwards translate
-        List<CandidateProgram<TYPE>> firstGen = new ArrayList<CandidateProgram<TYPE>>();
+        List<CandidateProgram<Action>> firstGen = new ArrayList<CandidateProgram<Action>>();
         int i = 1;
         for(ArrayList<String> toProg: storage) {                
-            CandidateProgram<TYPE> holder = semMod.behaviourToCode(new AntRepresentation(toProg));
+            CandidateProgram<Action> holder = semMod.behaviourToCode(new AntRepresentation(toProg));
             firstGen.add(holder);
             //System.out.println(holder);
             //System.out.println("Reverse Translation at: " + i);

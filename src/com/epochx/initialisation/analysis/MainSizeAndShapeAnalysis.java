@@ -20,13 +20,12 @@
 
 package com.epochx.initialisation.analysis;
 
-import java.util.ArrayList;
 import java.io.File;
+import java.util.ArrayList;
 
 import com.epochx.core.GPProgramAnalyser;
-import com.epochx.core.initialisation.*;
-import com.epochx.core.representation.*;
-import com.epochx.example.artificialant.ArtificialAntSantaFe;
+import com.epochx.core.initialisation.RegressionSemanticallyDrivenInitialiser;
+import com.epochx.core.representation.CandidateProgram;
 import com.epochx.example.regression.RegressionModelCUBIC;
 import com.epochx.util.FileManip;
 
@@ -73,7 +72,7 @@ public class MainSizeAndShapeAnalysis {
 		 * **/
 		// set up storage
 		ArrayList<String> dump;
-		ArrayList<CandidateProgram> newPop;
+		ArrayList<CandidateProgram<Double>> newPop;
 		double[] depths, lengths, functions, terminals, dTerminals;
 		String name;
 
@@ -102,10 +101,10 @@ public class MainSizeAndShapeAnalysis {
 				dTerminals = new double[size.intValue()];
 
 				// generate population
-				newPop = (ArrayList<CandidateProgram>) initialiser.getInitialPopulation();
+				newPop = (ArrayList<CandidateProgram<Double>>) initialiser.getInitialPopulation();
 
 				int j = 0;
-				for (CandidateProgram testProg : newPop) {
+				for (CandidateProgram<Double> testProg : newPop) {
 					// count up size and shape details and store them
 					depths[j] = GPProgramAnalyser.getProgramDepth(testProg);
 					lengths[j] = GPProgramAnalyser.getProgramLength(testProg);

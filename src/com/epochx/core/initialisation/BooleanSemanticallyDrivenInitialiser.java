@@ -28,9 +28,9 @@ import net.sf.javabdd.*;
 /**
  * Boolean Semantically Driven Initialisation
  */
-public class BooleanSemanticallyDrivenInitialiser<TYPE> implements Initialiser<TYPE> {
+public class BooleanSemanticallyDrivenInitialiser implements Initialiser<Boolean> {
 
-	private GPModel<TYPE> model;
+	private GPModel<Boolean> model;
 	private BooleanSemanticModule semMod;
 	
 	/**
@@ -38,7 +38,7 @@ public class BooleanSemanticallyDrivenInitialiser<TYPE> implements Initialiser<T
 	 * @param model The GP model in use
 	 * @param semMod The semantic module in use
 	 */
-	public BooleanSemanticallyDrivenInitialiser(GPModel<TYPE> model, SemanticModule semMod) {
+	public BooleanSemanticallyDrivenInitialiser(GPModel<Boolean> model, SemanticModule<Boolean> semMod) {
 		this.model = model;
 		this.semMod = (BooleanSemanticModule) semMod;
 	}
@@ -47,18 +47,18 @@ public class BooleanSemanticallyDrivenInitialiser<TYPE> implements Initialiser<T
 	 * @see com.epochx.core.initialisation.Initialiser#getInitialPopulation()
 	 */
 	@Override
-	public List<CandidateProgram<TYPE>> getInitialPopulation() {
+	public List<CandidateProgram<Boolean>> getInitialPopulation() {
 		return generatePopulation();
 	}
 	
-	private List<CandidateProgram<TYPE>> generatePopulation() {
+	private List<CandidateProgram<Boolean>> generatePopulation() {
 		// initialise BDD stuff
         semMod.start();
         List<BDD> storage = new ArrayList<BDD>();
         
         // load terminals only
-        for(TerminalNode<?> t: model.getTerminals()) {
-        	CandidateProgram c = new CandidateProgram(t, model);
+        for(TerminalNode<Boolean> t: model.getTerminals()) {
+        	CandidateProgram<Boolean> c = new CandidateProgram<Boolean>(t, model);
             BDD rep = semMod.codeToBehaviour(c).getBDD();
             storage.add(rep);
         }
@@ -86,7 +86,7 @@ public class BooleanSemanticallyDrivenInitialiser<TYPE> implements Initialiser<T
         }
         
         // translate back and add to first gen
-        List<CandidateProgram<TYPE>> firstGen = new ArrayList<CandidateProgram<TYPE>>();
+        List<CandidateProgram<Boolean>> firstGen = new ArrayList<CandidateProgram<Boolean>>();
         for(BDD toProg: storage) {
             firstGen.add(semMod.behaviourToCode(new BooleanRepresentation(toProg)));
         }

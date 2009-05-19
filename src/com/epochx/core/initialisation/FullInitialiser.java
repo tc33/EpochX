@@ -20,9 +20,9 @@
 package com.epochx.core.initialisation;
 
 import java.util.*;
+
 import com.epochx.core.GPModel;
 import com.epochx.core.representation.*;
-import com.epochx.semantics.*;
 
 /**
  * Full initialisation method
@@ -76,13 +76,13 @@ public class FullInitialiser<TYPE> implements Initialiser<TYPE> {
         return top;
 	}
 	
-	private void fillChildren(Node<?> topNode, int currentDepth, int maxDepth) {
+	private void fillChildren(Node<TYPE> topNode, int currentDepth, int maxDepth) {
 		int arity = topNode.getArity();
 		if(currentDepth<maxDepth) {
 			// fill children with functions only
 			for(int i = 0; i<arity; i++) {
 				int randomIndex = (int) Math.floor(Math.random() * model.getFunctions().size());
-				Node<?> child = (Node<?>) model.getFunctions().get(randomIndex).clone();
+				Node<TYPE> child = (Node<TYPE>) model.getFunctions().get(randomIndex).clone();
 
 				topNode.setChild(child, i);
 				fillChildren(child, (currentDepth+1), maxDepth);
@@ -91,7 +91,7 @@ public class FullInitialiser<TYPE> implements Initialiser<TYPE> {
 			// fill children with terminals only
 			for(int i = 0; i<arity; i++) {
 				int randomIndex = (int) Math.floor(Math.random() * model.getTerminals().size());
-				Node<?> child = (Node<?>) model.getTerminals().get(randomIndex).clone();
+				Node<TYPE> child = (Node<TYPE>) model.getTerminals().get(randomIndex).clone();
 
 				topNode.setChild(child, i);
 			}

@@ -29,7 +29,7 @@ import com.epochx.core.representation.*;
  */
 public class PointMutation<TYPE> implements Mutation<TYPE> {
 
-	private List<Node<?>> syntax;	
+	private List<Node<TYPE>> syntax;	
 	private double pointProbability;
 	
 	/**
@@ -37,7 +37,7 @@ public class PointMutation<TYPE> implements Mutation<TYPE> {
 	 * recommended that the PointMutation(double) constructor is used.
 	 * @param syntax The syntax to be used in the mutation
 	 */
-	public PointMutation(List<Node<?>> syntax) {
+	public PointMutation(List<Node<TYPE>> syntax) {
 		this(syntax, 0.01);
 	}
 	
@@ -46,7 +46,7 @@ public class PointMutation<TYPE> implements Mutation<TYPE> {
 	 * @param syntax The syntax to be used
 	 * @param pointProbability The probability of mutation
 	 */
-	public PointMutation(List<Node<?>> syntax, double pointProbability) {
+	public PointMutation(List<Node<TYPE>> syntax, double pointProbability) {
 		this.syntax = syntax;
 		this.pointProbability = pointProbability;
 	}
@@ -68,7 +68,7 @@ public class PointMutation<TYPE> implements Mutation<TYPE> {
 				for (int j=0; j<syntax.size(); j++) {
 					int index = (j + rand) % syntax.size();
 					
-					Node<?> n = syntax.get(index);
+					Node<TYPE> n = syntax.get(index);
 					
 					//TODO Need to check we're not replacing with the same thing.
 					if (n.getArity() == arity) {

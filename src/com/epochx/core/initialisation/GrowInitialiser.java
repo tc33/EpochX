@@ -21,10 +21,8 @@ package com.epochx.core.initialisation;
 
 import java.util.*;
 
-import com.epochx.core.*;
-import com.epochx.core.representation.CandidateProgram;
-import com.epochx.core.representation.Node;
-import com.epochx.semantics.*;
+import com.epochx.core.GPModel;
+import com.epochx.core.representation.*;
 
 /**
  * Grow initialisation method
@@ -78,14 +76,14 @@ public class GrowInitialiser<TYPE> implements Initialiser<TYPE> {
         return top;
 	}
 	
-	private void fillChildren(Node<?> topNode, int currentDepth, int maxDepth) {
+	private void fillChildren(Node<TYPE> topNode, int currentDepth, int maxDepth) {
 		int arity = topNode.getArity();
 		if(arity>0) {
 			if(currentDepth<maxDepth) {
 				// fill children with functions or terminals
 				for(int i = 0; i<arity; i++) {
 					int randomIndex = (int) Math.floor(Math.random() * model.getSyntax().size());
-					Node<?> child = (Node<?>) model.getSyntax().get(randomIndex).clone();
+					Node<TYPE> child = (Node<TYPE>) model.getSyntax().get(randomIndex).clone();
 
 					topNode.setChild(child, i);
 					this.fillChildren(child, (currentDepth+1), maxDepth);
@@ -94,7 +92,7 @@ public class GrowInitialiser<TYPE> implements Initialiser<TYPE> {
 				// fill children with terminals only
 				for(int i = 0; i<arity; i++) {
 					int randomIndex = (int) Math.floor(Math.random() * model.getTerminals().size());
-					Node<?> child = (Node<?>) model.getTerminals().get(randomIndex).clone();
+					Node<TYPE> child = (Node<TYPE>) model.getTerminals().get(randomIndex).clone();
 					topNode.setChild(child, i);
 				}
 			}

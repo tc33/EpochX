@@ -38,10 +38,10 @@ import com.epochx.util.*;
 /**
  * 
  */
-public class ArtificialAntSantaFe extends SemanticModel<AntAction> {
+public class ArtificialAntSantaFe extends SemanticModel<Action> {
 
 	private List<String> inputs = new ArrayList<String>();;
-	private HashMap<String, TerminalNode<AntAction>> variables = new HashMap<String, TerminalNode<AntAction>>();
+	private HashMap<String, TerminalNode<Action>> variables = new HashMap<String, TerminalNode<Action>>();
 	private Dimension dimension = new Dimension(32, 32);	
 	private ArrayList<Point> foodLocations = new ArrayList<Point>();
 	private AntLandscape antLandscape = new AntLandscape(dimension, null);
@@ -72,9 +72,9 @@ public class ArtificialAntSantaFe extends SemanticModel<AntAction> {
 	public void configure() {
 		
 		// Define variables.
-		variables.put("MOVE", new TerminalNode<AntAction>(new AntMoveAction(ant)));
-		variables.put("TURN-LEFT", new TerminalNode<AntAction>(new AntTurnLeftAction(ant)));
-		variables.put("TURN-RIGHT", new TerminalNode<AntAction>(new AntTurnRightAction(ant)));
+		variables.put("MOVE", new TerminalNode<Action>(new AntMoveAction(ant)));
+		variables.put("TURN-LEFT", new TerminalNode<Action>(new AntTurnLeftAction(ant)));
+		variables.put("TURN-RIGHT", new TerminalNode<Action>(new AntTurnRightAction(ant)));
 		
 		setPopulationSize(500);
 		setNoGenerations(10);
@@ -85,19 +85,19 @@ public class ArtificialAntSantaFe extends SemanticModel<AntAction> {
 		setNoElites(50);
 		setInitialMaxDepth(6);
 		setMaxDepth(5);
-		setPouleSelector(new TournamentSelector<AntAction>(7, this));
-		setParentSelector(new RandomSelector<AntAction>());
-		setCrossover(new UniformPointCrossover<AntAction>());
+		setPouleSelector(new TournamentSelector<Action>(7, this));
+		setParentSelector(new RandomSelector<Action>());
+		setCrossover(new UniformPointCrossover<Action>());
 		setStateCheckedCrossover(true);
 		setSemanticModule(new AntSemanticModule(getTerminals(), this, ant, antLandscape));
-		setInitialiser(new RampedHalfAndHalfInitialiser<AntAction>(this));
-		//setInitialiser(new AntHybridSemanticallyDrivenInitialiser<AntAction>(this, this.getSemanticModule()));
+		setInitialiser(new RampedHalfAndHalfInitialiser<Action>(this));
+		//setInitialiser(new AntHybridSemanticallyDrivenInitialiser<Action>(this, this.getSemanticModule()));
 	}
 	
 	@Override
-	public List<FunctionNode<?>> getFunctions() {
+	public List<FunctionNode<Action>> getFunctions() {
 		// Define functions.
-		List<FunctionNode<?>> functions = new ArrayList<FunctionNode<?>>();
+		List<FunctionNode<Action>> functions = new ArrayList<FunctionNode<Action>>();
 		functions.add(new IfFoodAheadFunction(ant, antLandscape));
 		functions.add(new Seq2Function());
 		functions.add(new Seq3Function());
@@ -105,9 +105,9 @@ public class ArtificialAntSantaFe extends SemanticModel<AntAction> {
 	}
 
 	@Override
-	public List<TerminalNode<?>> getTerminals() {		
+	public List<TerminalNode<Action>> getTerminals() {		
 		// Define terminals.
-		List<TerminalNode<?>> terminals = new ArrayList<TerminalNode<?>>();
+		List<TerminalNode<Action>> terminals = new ArrayList<TerminalNode<Action>>();
 		terminals.add(variables.get("MOVE"));
 		terminals.add(variables.get("TURN-LEFT"));
 		terminals.add(variables.get("TURN-RIGHT"));		
@@ -118,7 +118,7 @@ public class ArtificialAntSantaFe extends SemanticModel<AntAction> {
 	 * @see com.epochx.core.GPModel#getFitness(com.epochx.core.representation.CandidateProgram)
 	 */
 	@Override
-	public double getFitness(CandidateProgram<AntAction> program) {
+	public double getFitness(CandidateProgram<Action> program) {
 		fitAssessed++;
 		//System.out.println(program.getRootNode());
 		//System.out.println(fitAssessed);

@@ -19,30 +19,28 @@
  */
 package com.epochx.semantics;
 
-import java.util.ArrayList;
-import java.util.List;
-import com.epochx.core.GPModel;
-import com.epochx.core.GPProgramAnalyser;
+import java.util.*;
+
+import com.epochx.core.*;
 import com.epochx.core.representation.*;
-import com.epochx.func.*;
 import com.epochx.func.dbl.*;
 
 /**
  * The regression semantic module controls all aspects of the modelling of
  * the behaviour of symbolic regression problems
  */
-public class RegressionSemanticModule implements SemanticModule {
+public class RegressionSemanticModule implements SemanticModule<Double> {
 	
-	private List<TerminalNode<?>> terminals;
-	private GPModel model;
-	private Variable var;
+	private List<TerminalNode<Double>> terminals;
+	private GPModel<Double> model;
+	private Variable<Double> var;
 	
 	/**
 	 * Constructor for Regression Semantic Module
 	 * @param list List of terminal nodes
 	 * @param model The GPModel object
 	 */
-	public RegressionSemanticModule(List<TerminalNode<?>> list, GPModel model) {
+	public RegressionSemanticModule(List<TerminalNode<Double>> list, GPModel<Double> model) {
 		this.terminals = list;
 		this.model = model;
 	}
@@ -67,7 +65,7 @@ public class RegressionSemanticModule implements SemanticModule {
 	 * @see com.epochx.semantics.SemanticModule#behaviourToCode(com.epochx.semantics.Representation)
 	 */
 	@Override
-	public CandidateProgram behaviourToCode(Representation representation) {
+	public CandidateProgram<Double> behaviourToCode(Representation representation) {
 		// check representation is right type
 		RegressionRepresentation regRep;
 		if(representation instanceof RegressionRepresentation) {
@@ -79,7 +77,7 @@ public class RegressionSemanticModule implements SemanticModule {
 		// capture variable
 		for(int i = 0; i<terminals.size(); i++) {
 			if(terminals.get(i) instanceof Variable) {
-				var = (Variable) terminals.get(i);
+				var = (Variable<Double>) terminals.get(i);
 			}
 		}
 		
@@ -89,17 +87,17 @@ public class RegressionSemanticModule implements SemanticModule {
 		// expand the CVPS to normal functions
 		rootNode = this.expandCVPTree(rootNode);
 		
-		return new CandidateProgram(rootNode, model);
+		return new CandidateProgram<Double>(rootNode, model);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.epochx.semantics.SemanticModule#codeToBehaviour(com.epochx.core.representation.CandidateProgram)
 	 */
 	@Override
-	public Representation codeToBehaviour(CandidateProgram program) {
+	public Representation codeToBehaviour(CandidateProgram<Double> program) {
 		
 		// clone the program to prevent back modification
-		CandidateProgram program1 = (CandidateProgram) program.clone();
+		CandidateProgram<Double> program1 = (CandidateProgram<Double>) program.clone();
 		// extract and simplify program
 		Node<Double> rootNode = program1.getRootNode();
 
@@ -145,7 +143,7 @@ public class RegressionSemanticModule implements SemanticModule {
 		// check if terminal
 		if(arity>0) {
 			// get children
-			Node[] children = rootNode.getChildren();
+			Node<Double>[] children = rootNode.getChildren();
 			// recurse on other functions
 			for(int i = 0; i<arity; i++) {
 				rootNode.setChild(this.removeMultiplyByZeros(children[i]), i);
@@ -175,7 +173,7 @@ public class RegressionSemanticModule implements SemanticModule {
 		// check if terminal
 		if(arity>0) {
 			// get children
-			Node[] children = rootNode.getChildren();
+			Node<Double>[] children = rootNode.getChildren();
 			// recurse on children 1st
 			for(int i = 0; i<arity; i++) {
 				rootNode.setChild(this.removeAllPDivsWithSameSubtrees(children[i]), i);
@@ -208,7 +206,7 @@ public class RegressionSemanticModule implements SemanticModule {
 		// check if terminal
 		if(arity>0) {
 			// get children
-			Node[] children = rootNode.getChildren();
+			Node<Double>[] children = rootNode.getChildren();
 			// reduce all children 1st - bottom up process
 			for(int i = 0; i<arity; i++) {
 				rootNode.setChild(this.resolveConstantCalculations(children[i]), i);
@@ -248,7 +246,7 @@ public class RegressionSemanticModule implements SemanticModule {
 			}
 		} else if(arity>0) {
 			// get children
-			Node[] children = rootNode.getChildren();
+			Node<Double>[] children = rootNode.getChildren();
 			// reduce all children 1st - bottom up process
 			for(int i = 0; i<arity; i++) {
 				rootNode.setChild(this.reduceToCVPFormat(children[i]), i);

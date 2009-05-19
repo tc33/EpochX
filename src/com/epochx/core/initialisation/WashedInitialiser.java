@@ -36,14 +36,14 @@ public class WashedInitialiser<TYPE> implements Initialiser<TYPE> {
 	
 	private GPModel<TYPE> model;
 	private FullInitialiser<TYPE> full;
-	private SemanticModule semanticModule;
+	private SemanticModule<TYPE> semanticModule;
 	
 	/**
 	 * Constructor for Washed Initialiser
 	 * @param model The current model
 	 * @param semMod The associated semantic module
 	 */
-	public WashedInitialiser(GPModel<TYPE> model, SemanticModule semMod) {
+	public WashedInitialiser(GPModel<TYPE> model, SemanticModule<TYPE> semMod) {
 		this.model = model;
 		this.full = new FullInitialiser<TYPE>(model);
 		this.semanticModule = semMod;

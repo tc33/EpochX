@@ -36,8 +36,8 @@ public class UniformPointCrossover<TYPE> implements Crossover<TYPE> {
 		// Get copies of subtrees to swap.
 		// We NEED to clone these because otherwise you risk copying crossed over
 		// programs back into the breeding pool 
-		Node<?> subTree1 = (Node<?>) program1.getNthNode(swapPoint1).clone();
-		Node<?> subTree2 = (Node<?>) program2.getNthNode(swapPoint2).clone();
+		Node<TYPE> subTree1 = (Node<TYPE>) program1.getNthNode(swapPoint1).clone();
+		Node<TYPE> subTree2 = (Node<TYPE>) program2.getNthNode(swapPoint2).clone();
 		
 		// Perform swap.
 		program1.setNthNode(subTree2, swapPoint1);

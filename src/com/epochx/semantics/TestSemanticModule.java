@@ -18,12 +18,11 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.epochx.semantics;
-import com.epochx.core.initialisation.*;
-import com.epochx.core.representation.*;
-import com.epochx.example.artificialant.ArtificialAntSantaFe;
-import com.epochx.example.regression.RegressionModelCUBIC;
-
 import java.util.*;
+
+import com.epochx.core.initialisation.FullInitialiser;
+import com.epochx.core.representation.CandidateProgram;
+import com.epochx.example.regression.RegressionModelCUBIC;
 
 /**
  * Class written to formally test semantic modules by converting
@@ -36,24 +35,24 @@ public class TestSemanticModule {
 		
 		RegressionModelCUBIC model = new RegressionModelCUBIC();
 		RegressionSemanticModule semMod = new RegressionSemanticModule(model.getTerminals(), model);
-		FullInitialiser rhh = new FullInitialiser(model);
+		FullInitialiser<Double> rhh = new FullInitialiser<Double>(model);
 		model.setPopulationSize(5000);
 		
 		semMod.start();
 		
 		// pull out first population
-		List<CandidateProgram> firstGen = rhh.getInitialPopulation();
+		List<CandidateProgram<Double>> firstGen = rhh.getInitialPopulation();
 		List<RegressionRepresentation> firstRep = new ArrayList<RegressionRepresentation>();
-		List<CandidateProgram> secondGen = new ArrayList<CandidateProgram>();
+		List<CandidateProgram<Double>> secondGen = new ArrayList<CandidateProgram<Double>>();
 		List<RegressionRepresentation> secondRep = new ArrayList<RegressionRepresentation>();
 
 		// generate 1st behaviours
-		for(CandidateProgram c: firstGen) {
+		for(CandidateProgram<Double> c: firstGen) {
 			//System.out.println("1 - " + c.getRootNode());
 			RegressionRepresentation regRep1 = (RegressionRepresentation) semMod.codeToBehaviour(c);
 			firstRep.add((RegressionRepresentation) regRep1.clone());
 			//System.out.println("2 - " + regRep1);			
-			CandidateProgram cp = semMod.behaviourToCode(regRep1);			
+			CandidateProgram<Double> cp = semMod.behaviourToCode(regRep1);			
 			secondGen.add(cp);
 			//System.out.println("3 - " + cp.getRootNode());
 			RegressionRepresentation regRep2 = (RegressionRepresentation) semMod.codeToBehaviour(cp);

@@ -66,9 +66,9 @@ public class RegressionModelQUART extends SemanticModel<Double> {
 	}
 
 	@Override
-	public List<FunctionNode<?>> getFunctions() {
+	public List<FunctionNode<Double>> getFunctions() {
 		// Define function set.
-		List<FunctionNode<?>> functions = new ArrayList<FunctionNode<?>>();
+		List<FunctionNode<Double>> functions = new ArrayList<FunctionNode<Double>>();
 		functions.add(new AddFunction(null, null));
 		functions.add(new SubtractFunction(null, null));
 		functions.add(new MultiplyFunction(null, null));
@@ -81,9 +81,9 @@ public class RegressionModelQUART extends SemanticModel<Double> {
 	 * @see com.epochx.core.GPModel#getTerminals()
 	 */
 	@Override
-	public List<TerminalNode<?>> getTerminals() {
+	public List<TerminalNode<Double>> getTerminals() {
 		// Define terminal set.
-		List<TerminalNode<?>> terminals = new ArrayList<TerminalNode<?>>();
+		List<TerminalNode<Double>> terminals = new ArrayList<TerminalNode<Double>>();
 		terminals.add(new TerminalNode<Double>(5d));
 		terminals.add(new TerminalNode<Double>(4d));
 		terminals.add(new TerminalNode<Double>(3d));

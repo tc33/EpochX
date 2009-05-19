@@ -25,21 +25,21 @@ import com.epochx.core.representation.*;
 /**
  * The semantic module interface sets out the basic methods required for all semantic modules.
  */
-public interface SemanticModule {
+public interface SemanticModule<TYPE> {
 	
 	/**
 	 * Converts a syntax tree into a canonical representation of behaviour
 	 * @param program The syntax tree to convert
 	 * @return The canonical behaviour
 	 */
-	public Representation codeToBehaviour(CandidateProgram program);
+	public Representation codeToBehaviour(CandidateProgram<TYPE> program);
 	
 	/**
 	 * Converts a given behaviour back to a syntax tree
 	 * @param representation The behaviour to convert to syntax
 	 * @return The syntax tree
 	 */
-	public CandidateProgram behaviourToCode(Representation representation);
+	public CandidateProgram<TYPE> behaviourToCode(Representation representation);
 	
 	/**
 	 * Method to start actions in an external piece of software - for CUDD

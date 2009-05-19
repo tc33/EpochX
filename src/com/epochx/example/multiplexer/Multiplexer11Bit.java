@@ -73,9 +73,9 @@ public class Multiplexer11Bit extends GPAbstractModel<Boolean> {
 	}
 	
 	@Override
-	public List<FunctionNode<?>> getFunctions() {
+	public List<FunctionNode<Boolean>> getFunctions() {
 		// Define functions.
-		List<FunctionNode<?>> functions = new ArrayList<FunctionNode<?>>();
+		List<FunctionNode<Boolean>> functions = new ArrayList<FunctionNode<Boolean>>();
 		functions.add(new IfFunction());
 		functions.add(new AndFunction());
 		functions.add(new OrFunction());
@@ -84,9 +84,9 @@ public class Multiplexer11Bit extends GPAbstractModel<Boolean> {
 	}
 
 	@Override
-	public List<TerminalNode<?>> getTerminals() {		
+	public List<TerminalNode<Boolean>> getTerminals() {		
 		// Define terminals.
-		List<TerminalNode<?>> terminals = new ArrayList<TerminalNode<?>>();
+		List<TerminalNode<Boolean>> terminals = new ArrayList<TerminalNode<Boolean>>();
 		terminals.add(variables.get("D7"));
 		terminals.add(variables.get("D6"));
 		terminals.add(variables.get("D5"));

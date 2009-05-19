@@ -35,7 +35,7 @@ import com.epochx.util.*;
 /**
  * 
  */
-public class Majority5 extends GPAbstractModel<Boolean> {
+public class Majority5 extends SemanticModel<Boolean> {
 
 	private List<String> inputs;
 	private HashMap<String, Variable<Boolean>> variables = new HashMap<String, Variable<Boolean>>();

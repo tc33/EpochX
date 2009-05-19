@@ -19,17 +19,14 @@
  */
 package com.epochx.core;
 
-import java.util.*;
-import com.epochx.semantics.*;
-import com.epochx.stats.CrossoverStatListener;
-import com.epochx.stats.GenerationStatListener;
-import com.epochx.stats.MutationStatListener;
-import com.epochx.stats.RunStatListener;
+import java.util.List;
+
 import com.epochx.core.crossover.*;
-import com.epochx.core.initialisation.*;
-import com.epochx.core.mutation.*;
+import com.epochx.core.initialisation.Initialiser;
+import com.epochx.core.mutation.Mutator;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
+import com.epochx.stats.*;
 
 /**
  * A GPModel defines all those parameters needed to control a run by GPRun. 
@@ -278,31 +275,9 @@ public interface GPModel<TYPE> {
 	public CrossoverStatListener getCrossoverStatListener();
 	public MutationStatListener getMutationStatListener();
 	
-	/**
-	 * Returns whether to run the crossover state checker
-	 * @return TRUE if the crossover state checker should be run
-	 */
-	public boolean getStateCheckedCrossover();
+	public boolean acceptCrossover(CandidateProgram<TYPE>[] parents, 
+								   CandidateProgram<TYPE>[] children);
 	
-	/**
-	 * Sets whether to run the crossover state checker
-	 * @param runStateCheck TRUE if the crossover state checker should be run
-	 */
-	public void setStateCheckedCrossover(boolean runStateCheck);
-	
-	public boolean getStateCheckedMutation();
-	
-	public void setStateCheckedMutation(boolean doStateCheckedMutation);
-	
-	/**
-	 * Returns the semantic module associated with this problem
-	 * @return The associate Semantic module
-	 */
-	public SemanticModule getSemanticModule();
-	
-	/**
-	 * Sets the semantic module for this run
-	 * @param semMod The desired semantic module to use
-	 */
-	public void setSemanticModule(SemanticModule semMod);
+	public boolean acceptMutation(CandidateProgram<TYPE> parents, 
+			   					  CandidateProgram<TYPE> children);
 }

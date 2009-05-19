@@ -19,11 +19,10 @@
  */
 package com.epochx.core;
 
-import com.epochx.core.mutation.*;
-import com.epochx.core.representation.*;
-import com.epochx.core.selection.*;
-import com.epochx.semantics.*;
-import com.epochx.stats.*;
+import com.epochx.core.mutation.Mutator;
+import com.epochx.core.representation.CandidateProgram;
+import com.epochx.core.selection.ParentSelector;
+import com.epochx.stats.MutationStats;
 
 /**
  *
@@ -54,57 +53,24 @@ public class GPMutation<TYPE> {
 		
 		CandidateProgram<TYPE> parent = null;
 		CandidateProgram<TYPE> child = null;
-		
-		reversions = 0;
-		
-		if (model.getStateCheckedMutation()) {
-			boolean equal = true;
-			while(equal) {
-				// pull out semantic module and check its not null
-				SemanticModule semMod = model.getSemanticModule();
-				if(semMod==null) {
-					throw new IllegalArgumentException("SEMANTIC MODULE UNDEFINED FOR SEMANTICALLY DRIVEN MUTATION");
-				}
-				
-				//start semantic module
-				semMod.start();
-	
-				parent = parentSelector.getParent();
-				CandidateProgram<TYPE> clone = (CandidateProgram<TYPE>) parent.clone();
-				
-				child = mutator.mutate(clone);
-				
-				// If the new program is too deep, replace it with the original.
-				if (GPProgramAnalyser.getProgramDepth(child) > model.getMaxDepth()) {
-					child = (CandidateProgram<TYPE>) parent.clone();
-				}
-				
-				// check behaviours
-				Representation p1Rep = semMod.codeToBehaviour(parent);
-				Representation c1Rep = semMod.codeToBehaviour(child);
-				
-				if(!c1Rep.equals(p1Rep)) {
-					equal = false;
-				}
-				
-				if (equal) {
-					// We're going to have to revert.
-					reversions++;
-				}
-				
-				// stop semantic module
-				semMod.stop();
-			}
-		} else {
+
+		reversions = -1;
+		boolean accepted = true;
+		do {
+			// Attempt mutation.
 			parent = parentSelector.getParent();
 			CandidateProgram<TYPE> clone = (CandidateProgram<TYPE>) parent.clone();
 			
 			child = mutator.mutate(clone);
 			
-			// If the new program is too deep, replace it with the original.
-			if (GPProgramAnalyser.getProgramDepth(child) > model.getMaxDepth()) {
-				child = (CandidateProgram<TYPE>) parent.clone();
-			}
+			// Ask model whether it accepts this crossover.
+			accepted = model.acceptMutation(parent, child);
+			reversions++;
+		} while(!accepted);
+		
+		// If the new program is too deep, replace it with the original.
+		if (GPProgramAnalyser.getProgramDepth(child) > model.getMaxDepth()) {
+			child = (CandidateProgram<TYPE>) parent.clone();
 		}
 		
 		long runtime = System.nanoTime() - crossoverStartTime;

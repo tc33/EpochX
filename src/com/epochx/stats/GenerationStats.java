@@ -735,13 +735,13 @@ public class GenerationStats<TYPE> {
 		
 		/**
 		 * Requests an Integer which is the number of crossovers that were 
-		 * reverted due to semantic equivalence.
+		 * reverted due to model rejection.
 		 */
 		REVERTED_CROSSOVERS,
 		
 		/**
 		 * Requests an Integer which is the number of mutations that were 
-		 * reverted due to semantic equivalence.
+		 * reverted due to model rejection.
 		 */
 		REVERTED_MUTATIONS
 	}

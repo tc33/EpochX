@@ -20,17 +20,17 @@
 package com.epochx.core;
 
 import java.util.*;
+
 import com.epochx.core.crossover.*;
 import com.epochx.core.initialisation.*;
 import com.epochx.core.mutation.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
-import com.epochx.semantics.*;
 import com.epochx.stats.*;
-import com.epochx.stats.CrossoverStats.*;
-import com.epochx.stats.GenerationStats.*;
-import com.epochx.stats.MutationStats.*;
-import com.epochx.stats.RunStats.*;
+import com.epochx.stats.CrossoverStats.CrossoverStatField;
+import com.epochx.stats.GenerationStats.GenStatField;
+import com.epochx.stats.MutationStats.MutationStatField;
+import com.epochx.stats.RunStats.RunStatField;
 
 
 /**
@@ -59,8 +59,6 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	
 	private PouleSelector<TYPE> pouleSelector;
 	private ParentSelector<TYPE> parentSelector;
-	
-	private SemanticModule semanticModule;
 
 	private int noRuns;
 	private int noGenerations;
@@ -73,9 +71,6 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	private double crossoverProbability;
 	private double reproductionProbability;
 	private double mutationProbability;
-	
-	private boolean doStateCheckedCrossover;
-	private boolean doStateCheckedMutation;
 	
 	/**
 	 * Construct a GPModel with a set of sensible defaults. See the appropriate
@@ -93,8 +88,6 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 		mutationProbability = 0;
 		pouleSize = 50;
 		noElites = 0;
-		doStateCheckedCrossover = false;
-		doStateCheckedMutation = false;
 		
 		parentSelector = new RandomSelector<TYPE>();
 		pouleSelector = new TournamentSelector<TYPE>(3, this);
@@ -102,8 +95,6 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 		initialiser = new FullInitialiser<TYPE>(this);
 		crossover = new UniformPointCrossover<TYPE>();
 		mutator = new SubtreeMutation<TYPE>(this);
-		
-		semanticModule = null;
 	}
 
 	/**
@@ -513,42 +504,18 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	public void mutationStats(Object[] stats) {}
 	
 	/**
-	 * Returns whether to run the crossover state checker
-	 * @return TRUE if the crossover state checker should be run
+	 * Default implementation which accepts all crossovers.
 	 */
-	public boolean getStateCheckedCrossover() {
-		return doStateCheckedCrossover;
+	public boolean acceptCrossover(CandidateProgram<TYPE>[] parents, 
+								   CandidateProgram<TYPE>[] children) {
+		return true;
 	}
 	
 	/**
-	 * Sets whether to run the crossover state checker
-	 * @param runStateCheck TRUE if the crossover state checker should be run
+	 * Default implementation which accepts all mutations.
 	 */
-	public void setStateCheckedCrossover(boolean runStateCheck) {
-		this.doStateCheckedCrossover = runStateCheck;
-	}
-	
-	public boolean getStateCheckedMutation() {
-		return doStateCheckedMutation;
-	}
-	
-	public void setStateCheckedMutation(boolean doStateCheckedMutation) {
-		this.doStateCheckedMutation = doStateCheckedMutation;
-	}
-	
-	/**
-	 * Returns the semantic module associated with this problem
-	 * @return The associate Semantic module
-	 */
-	public SemanticModule getSemanticModule() {
-		return this.semanticModule;
-	}
-	
-	/**
-	 * Sets the semantic module for this run
-	 * @param semMod The desired semantic module to use
-	 */
-	public void setSemanticModule(SemanticModule semMod) {
-		this.semanticModule = semMod;
+	public boolean acceptMutation(CandidateProgram<TYPE> parent, 
+								  CandidateProgram<TYPE> child) {
+		return true;
 	}
 }

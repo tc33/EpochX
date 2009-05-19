@@ -27,14 +27,14 @@ import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.func.dbl.*;
-import com.epochx.semantics.RegressionSemanticModule;
+import com.epochx.semantics.*;
 import com.epochx.stats.GenerationStats.*;
 import com.epochx.stats.RunStats.*;
 
 /**
  * 
  */
-public class RegressionModel extends GPAbstractModel<Double> {
+public class RegressionModel extends SemanticModel<Double> {
 
 	private Variable<Double> x;
 	

@@ -35,7 +35,7 @@ import com.epochx.util.*;
 /**
  * 
  */
-public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
+public class Multiplexer6Bit extends SemanticModel<Boolean> {
 
 	private List<String> inputs;
 	private HashMap<String, Variable<Boolean>> variables = new HashMap<String, Variable<Boolean>>();
@@ -46,7 +46,6 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
 		inputs = FileManip.loadInput(new File("input6bit.txt"));
 		
 		configure();
-		
 	}
 	
 	public void configure() {
@@ -71,7 +70,7 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
 		setPouleSelector(new TournamentSelector<Boolean>(7, this));
 		setParentSelector(new RandomSelector<Boolean>());
 		setCrossover(new UniformPointCrossover<Boolean>());
-		setStateCheckedCrossover(false);
+		setStateCheckedCrossover(true);
 		setSemanticModule(new BooleanSemanticModule(getTerminals(), this));
 		setInitialiser(new BooleanHybridSemanticallyDrivenInitialiser<Boolean>(this, this.getSemanticModule()));
 	}

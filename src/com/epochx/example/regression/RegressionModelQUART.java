@@ -27,7 +27,7 @@ import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.func.dbl.*;
-import com.epochx.semantics.RegressionSemanticModule;
+import com.epochx.semantics.*;
 import com.epochx.stats.GenerationStats.*;
 import com.epochx.stats.RunStats.*;
 import com.epochx.util.FileManip;
@@ -35,7 +35,7 @@ import com.epochx.util.FileManip;
 /**
  * 
  */
-public class RegressionModelQUART extends GPAbstractModel<Double> {
+public class RegressionModelQUART extends SemanticModel<Double> {
 
 	private Variable<Double> x;
 	private int run = 1;

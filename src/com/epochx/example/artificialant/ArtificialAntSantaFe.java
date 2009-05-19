@@ -31,7 +31,7 @@ import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.func.action.*;
-import com.epochx.semantics.AntSemanticModule;
+import com.epochx.semantics.*;
 import com.epochx.stats.GenerationStats.GenStatField;
 import com.epochx.stats.RunStats.RunStatField;
 import com.epochx.util.*;
@@ -39,7 +39,7 @@ import com.epochx.util.*;
 /**
  * 
  */
-public class ArtificialAntSantaFe extends GPAbstractModel<AntAction> {
+public class ArtificialAntSantaFe extends SemanticModel<AntAction> {
 
 	private List<String> inputs = new ArrayList<String>();;
 	private HashMap<String, TerminalNode<AntAction>> variables = new HashMap<String, TerminalNode<AntAction>>();

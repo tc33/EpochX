@@ -21,22 +21,21 @@ package com.epochx.example.regression;
 
 import java.util.*;
 
-import com.epochx.core.*;
-import com.epochx.core.crossover.*;
-import com.epochx.core.initialisation.*;
+import com.epochx.core.GPController;
+import com.epochx.core.crossover.KozaCrossover;
+import com.epochx.core.initialisation.RegressionHybridSemanticallyDrivenInitialiser;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
-import com.epochx.example.evenparity.Even4Parity;
 import com.epochx.func.dbl.*;
-import com.epochx.semantics.RegressionSemanticModule;
-import com.epochx.stats.GenerationStats.*;
-import com.epochx.stats.RunStats.*;
+import com.epochx.semantics.*;
+import com.epochx.stats.GenerationStats.GenStatField;
+import com.epochx.stats.RunStats.RunStatField;
 import com.epochx.util.FileManip;
 
 /**
  * 
  */
-public class RegressionModelCUBIC extends GPAbstractModel<Double> {
+public class RegressionModelCUBIC extends SemanticModel<Double> {
 
 	private Variable<Double> x;
 	private int run = 1;

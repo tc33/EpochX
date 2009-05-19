@@ -20,15 +20,12 @@
 package com.epochx.example.multiplexer;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import com.epochx.core.*;
-import com.epochx.core.crossover.*;
+import com.epochx.core.crossover.UniformPointCrossover;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
-import com.epochx.func.*;
 import com.epochx.func.bool.*;
 import com.epochx.util.*;
 

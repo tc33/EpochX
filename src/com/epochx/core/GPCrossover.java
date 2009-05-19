@@ -20,10 +20,9 @@
 package com.epochx.core;
 
 import com.epochx.core.crossover.*;
-import com.epochx.core.representation.*;
+import com.epochx.core.representation.CandidateProgram;
 import com.epochx.core.selection.*;
-import com.epochx.semantics.*;
-import com.epochx.stats.*;
+import com.epochx.stats.CrossoverStats;
 
 /**
  * This class performs the very simple task of linking together parent 
@@ -44,7 +43,6 @@ import com.epochx.stats.*;
 public class GPCrossover<TYPE> {
 
 	private GPModel<TYPE> model;
-	private boolean doStateCheckedCrossover;
 	private ParentSelector<TYPE> parentSelector;
 	private Crossover<TYPE> crossover;
 	private CrossoverStats<TYPE> crossoverStats;
@@ -61,7 +59,6 @@ public class GPCrossover<TYPE> {
 	 */
 	public GPCrossover(GPModel<TYPE> model) {
 		this.model = model;
-		this.doStateCheckedCrossover = model.getStateCheckedCrossover();
 		this.parentSelector = model.getParentSelector();
 		this.crossover = model.getCrossover();
 		
@@ -96,58 +93,21 @@ public class GPCrossover<TYPE> {
 		CandidateProgram<TYPE>[] parents = null;
 		CandidateProgram<TYPE>[] children = null;
 		
-		reversions = 0;
-		
-		//TODO Introduce an acceptCrossover() method in the model which allows the model to reject a crossover.
-		if(!doStateCheckedCrossover) {
-			// do normal crossover
+		reversions = -1;
+		boolean accepted = true;
+		do {
+			// Attempt crossover.
 			parent1 = parentSelector.getParent();
 			parent2 = parentSelector.getParent();
 			clone1 = (CandidateProgram<TYPE>) parent1.clone();
 			clone2 = (CandidateProgram<TYPE>) parent2.clone();
 			parents = new CandidateProgram[]{parent1, parent2};
 			children = crossover.crossover(clone1, clone2);
-		} else {
-			boolean equal = true;
-			while(equal) {
-				equal = false;
-				// pull out semantic module and check its not null
-				SemanticModule semMod = model.getSemanticModule();
-				if(semMod==null) {
-					throw new IllegalArgumentException("SEMANTIC MODULE UNDEFINED FOR SEMANTICALLY DRIVEN CROSSOVER");
-				}
-				//start semantic module
-				semMod.start();
-				
-				// do crossover
-				parent1 = parentSelector.getParent();
-				parent2 = parentSelector.getParent();
-				clone1 = (CandidateProgram<TYPE>) parent1.clone();
-				clone2 = (CandidateProgram<TYPE>) parent2.clone();
-				parents = new CandidateProgram[]{parent1, parent2};
-				children = crossover.crossover(clone1, clone2);
-				
-				// check behaviours
-				Representation p1Rep = semMod.codeToBehaviour(parents[0]);
-				Representation p2Rep = semMod.codeToBehaviour(parents[1]);
-				Representation c1Rep = semMod.codeToBehaviour(children[0]);
-				Representation c2Rep = semMod.codeToBehaviour(children[1]);
-				if(c1Rep.equals(p1Rep) || c1Rep.equals(p2Rep)) {
-					equal = true;
-				}
-				if(c2Rep.equals(p1Rep) || c2Rep.equals(p2Rep)) {
-					equal = true;
-				}
-				
-				if (equal) {
-					// We're going to have to revert.
-					reversions++;
-				}
-				
-				// stop semantic module
-				semMod.stop();
-			}
-		}
+			
+			// Ask model whether it accepts this crossover.
+			accepted = model.acceptCrossover(parents, children);
+			reversions++;
+		} while(!accepted);
 		
 		//TODO Need to be more careful here, potential for array out of bounds if crossover 
 		//returns an array with more than 2 elements.

@@ -19,17 +19,15 @@
  */
 package com.epochx.example.evenparity;
 
-import java.io.*;
+import java.io.File;
 import java.util.*;
 
 import com.epochx.core.*;
-import com.epochx.core.crossover.*;
+import com.epochx.core.crossover.UniformPointCrossover;
 import com.epochx.core.initialisation.RampedHalfAndHalfInitialiser;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.func.bool.*;
-import com.epochx.util.FileManip;
-import com.epochx.semantics.*;
 import com.epochx.stats.GenerationStats.GenStatField;
 import com.epochx.util.*;
 
@@ -69,8 +67,6 @@ public class Even4Parity extends GPAbstractModel<Boolean> {
 		setPouleSelector(new TournamentSelector<Boolean>(7, this));
 		setParentSelector(new RandomSelector<Boolean>());
 		setCrossover(new UniformPointCrossover<Boolean>());
-		setStateCheckedCrossover(false);
-		setSemanticModule(new BooleanSemanticModule(getTerminals(), this));
 		setInitialiser(new RampedHalfAndHalfInitialiser<Boolean>(this));
 	}
 	

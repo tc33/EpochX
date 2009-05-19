@@ -25,9 +25,9 @@ package com.epochx.stats;
  * per mtuation operation. Each MutationStatField has a datatype related 
  * to it which is the type which the data will be returned in.
  * @see com.epochx.stats.MutationStatListener
- * @see com.epochx.stats.GenerationStats.GenerationStatField
- * @see com.epochx.stats.CrossoverStats.CrossoverStatField
- * @see com.epochx.stats.RunStats.RunStatField
+ * @see com.epochx.stats.GenerationStatField
+ * @see com.epochx.stats.CrossoverStatField
+ * @see com.epochx.stats.RunStatField
  */
 public enum MutationStatField {
 	

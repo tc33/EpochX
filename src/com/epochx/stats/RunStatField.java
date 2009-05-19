@@ -25,9 +25,9 @@ package com.epochx.stats;
  * at the end of each run. Each RunStatField has a datatype related 
  * to it which is the type which the data will be returned in.
  * @see com.epochx.stats.RunStatListener
- * @see com.epochx.stats.CrossoverStats.CrossoverStatField
- * @see com.epochx.stats.MutationStats.MutationStatField
- * @see com.epochx.stats.GenerationStats.GenerationStatField
+ * @see com.epochx.stats.CrossoverStatField
+ * @see com.epochx.stats.MutationStatField
+ * @see com.epochx.stats.GenerationStatField
  */
 public enum RunStatField {
 	/**

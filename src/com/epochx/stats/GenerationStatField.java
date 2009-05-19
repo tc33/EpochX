@@ -25,9 +25,9 @@ package com.epochx.stats;
  * at the end of each generation. Each GenStatField has a datatype related 
  * to it which is the type which the data will be returned in.
  * @see com.epochx.stats.GenerationStatListener
- * @see com.epochx.stats.CrossoverStats.CrossoverStatField
- * @see com.epochx.stats.MutationStats.MutationStatField
- * @see com.epochx.stats.RunStats.RunStatField
+ * @see com.epochx.stats.CrossoverStatField
+ * @see com.epochx.stats.MutationStatField
+ * @see com.epochx.stats.RunStatField
  */
 public enum GenerationStatField {
 	/**

@@ -23,7 +23,6 @@ package com.epochx.initialisation.analysis;
 import java.io.File;
 import java.util.ArrayList;
 
-import com.epochx.core.GPProgramAnalyser;
 import com.epochx.core.initialisation.RegressionSemanticallyDrivenInitialiser;
 import com.epochx.core.representation.CandidateProgram;
 import com.epochx.example.regression.RegressionModelCUBIC;
@@ -106,11 +105,11 @@ public class MainSizeAndShapeAnalysis {
 				int j = 0;
 				for (CandidateProgram<Double> testProg : newPop) {
 					// count up size and shape details and store them
-					depths[j] = GPProgramAnalyser.getProgramDepth(testProg);
-					lengths[j] = GPProgramAnalyser.getProgramLength(testProg);
-					functions[j] = GPProgramAnalyser.getNoFunctions(testProg);
-					terminals[j] = GPProgramAnalyser.getNoTerminals(testProg);
-					dTerminals[j] = GPProgramAnalyser.getNoDistinctTerminals(testProg);
+					depths[j] = testProg.getProgramDepth();
+					lengths[j] = testProg.getProgramLength();
+					functions[j] = testProg.getNoFunctions();
+					terminals[j] = testProg.getNoTerminals();
+					dTerminals[j] = testProg.getNoDistinctTerminals();
 					j++;
 				}
 

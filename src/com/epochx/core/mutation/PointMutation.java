@@ -19,9 +19,8 @@
  */
 package com.epochx.core.mutation;
 
-import java.util.*;
+import java.util.List;
 
-import com.epochx.core.*;
 import com.epochx.core.representation.*;
 
 /**
@@ -53,7 +52,7 @@ public class PointMutation<TYPE> implements Mutation<TYPE> {
 	
 	@Override
 	public CandidateProgram<TYPE> mutate(CandidateProgram<TYPE> program) {
-		int length = GPProgramAnalyser.getProgramLength(program);
+		int length = program.getProgramLength();
 	
 		for (int i=0; i<length; i++) { 
 			// Perform a point mutation at the ith node, pointProbability% of time.

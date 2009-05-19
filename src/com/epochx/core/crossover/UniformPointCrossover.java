@@ -19,7 +19,6 @@
  */
 package com.epochx.core.crossover;
 
-import com.epochx.core.*;
 import com.epochx.core.representation.*;
 
 /**
@@ -30,8 +29,8 @@ public class UniformPointCrossover<TYPE> implements Crossover<TYPE> {
 	@Override
 	public CandidateProgram<TYPE>[] crossover(CandidateProgram<TYPE> program1, CandidateProgram<TYPE> program2) {
 		// Select swap points.
-		int swapPoint1 = (int) Math.floor(Math.random()*GPProgramAnalyser.getProgramLength(program1));
-		int swapPoint2 = (int) Math.floor(Math.random()*GPProgramAnalyser.getProgramLength(program2));
+		int swapPoint1 = (int) Math.floor(Math.random()*program1.getProgramLength());
+		int swapPoint2 = (int) Math.floor(Math.random()*program2.getProgramLength());
 
 		// Get copies of subtrees to swap.
 		// We NEED to clone these because otherwise you risk copying crossed over

@@ -52,7 +52,7 @@ public class SubtreeMutation<TYPE> implements Mutation<TYPE> {
 	
 	@Override
 	public CandidateProgram<TYPE> mutate(CandidateProgram<TYPE> program) {
-		int length = GPProgramAnalyser.getProgramLength(program);
+		int length = program.getProgramLength();
 		int mutationPoint = (int) Math.floor(Math.random() * length);
 		
 		// Randomly generate the new subtree.

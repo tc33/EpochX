@@ -135,7 +135,7 @@ public class GPCrossover<TYPE> {
 		//TODO Need to be more careful here, potential for array out of bounds if crossover returns an array with more than 2 elements.
 		//TODO This is actually horrible - it's so unflexible, theres no way for a user to control whether/how this happens.
 		for (int i=0; i<children.length; i++) {
-			if (GPProgramAnalyser.getProgramDepth(children[i]) > model.getMaxDepth()) {
+			if (children[i].getProgramDepth() > model.getMaxDepth()) {
 				children[i] = (CandidateProgram<TYPE>) parents[i].clone();
 			}
 		}

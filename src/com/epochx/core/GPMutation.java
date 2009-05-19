@@ -126,7 +126,7 @@ public class GPMutation<TYPE> {
 		} while(!accepted);
 		
 		// If the new program is too deep, replace it with the original.
-		if (GPProgramAnalyser.getProgramDepth(child) > model.getMaxDepth()) {
+		if (child.getProgramDepth() > model.getMaxDepth()) {
 			child = (CandidateProgram<TYPE>) parent.clone();
 		}
 		

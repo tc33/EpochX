@@ -68,7 +68,7 @@ public class Variable<TYPE> extends TerminalNode<TYPE> {
 	public boolean equals(Object obj) {
 		return (obj instanceof Variable) 
 					&& super.equals(obj) 
-					&& this.label.equals(((Variable<?>) obj).label);
+					&& this.label.equals(((Variable<TYPE>) obj).label);
 	}
 	
 	/* (non-Javadoc)

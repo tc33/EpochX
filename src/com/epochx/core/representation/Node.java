@@ -21,8 +21,6 @@ package com.epochx.core.representation;
 
 import java.util.*;
 
-import com.epochx.core.*;
-
 /**
  * Subclasses of <code>Node</code> should ensure they call the superclass 
  * constructor with all child Nodes so information such as the arity of the
@@ -87,20 +85,20 @@ public abstract class Node<TYPE> implements Cloneable {
 	 * @param n The index of the node to be returned
 	 * @return The desired node
 	 */
-	public Node<?> getNthNode(int n) {
+	public Node<TYPE> getNthNode(int n) {
 		return getNthNode(n, 0);
 	}
 	
 	/*
 	 * Recursive helper for the public getNthNode(int).
 	 */
-	private Node<?> getNthNode(int n, int current) {
+	private Node<TYPE> getNthNode(int n, int current) {
 		if (n == current)
 			return this;
 		
-		Node<?> node = null;
-		for (Node<?> child: children) {
-			int childLength = GPProgramAnalyser.getProgramLength(child);
+		Node<TYPE> node = null;
+		for (Node<TYPE> child: children) {
+			int childLength = child.getProgramLength();
 			
 			// Only look at the subtree if it contains the right range of nodes.
 			if (n <= childLength + current) {
@@ -136,7 +134,7 @@ public abstract class Node<TYPE> implements Cloneable {
 			}
 			
 			Node<TYPE> child = getChild(i);
-			int childLength = GPProgramAnalyser.getProgramLength(child);
+			int childLength = child.getProgramLength();
 			
 			// Only look at the subtree if it contains the right range of nodes.
 			if (n <= childLength + current) {
@@ -153,17 +151,17 @@ public abstract class Node<TYPE> implements Cloneable {
 	 * @param depth The depth to retrieve nodes at
 	 * @return The nodes at the desired depth
 	 */
-	public List<Node<?>> getNodesAtDepth(int d) {
-		List<Node<?>> nodes = new ArrayList<Node<?>>();
+	public List<Node<TYPE>> getNodesAtDepth(int d) {
+		List<Node<TYPE>> nodes = new ArrayList<Node<TYPE>>();
 		fillNodesAtDepth(nodes, d, 0);
 		return nodes;
 	}
 	
-	private void fillNodesAtDepth(List<Node<?>> nodes, int d, int current){
+	private void fillNodesAtDepth(List<Node<TYPE>> nodes, int d, int current){
 		if (d == current) {
 			nodes.add(this);
 		} else {
-			for (Node<?> child: children) {
+			for (Node<TYPE> child: children) {
 				// Only look at the subtree if it contains the right range of nodes.
 				child.fillNodesAtDepth(nodes, d, current+1);
 			}
@@ -221,8 +219,8 @@ public abstract class Node<TYPE> implements Cloneable {
 			}
 			
 			for(int i=0; i<n.getArity() && equal; i++) {
-				Node<?> thatChild = n.getChild(i);
-				Node<?> thisChild = this.getChild(i);
+				Node<TYPE> thatChild = n.getChild(i);
+				Node<TYPE> thisChild = this.getChild(i);
 				
 				if ((thisChild != null) ^ (thatChild != null)) {
 					equal = false;
@@ -239,7 +237,7 @@ public abstract class Node<TYPE> implements Cloneable {
 	@Override
 	public int hashCode() {
 		int result = 17;
-		for (Node<?> child: children) {
+		for (Node<TYPE> child: children) {
 			result = 37 * result + child.hashCode();
 		}
 		return result;
@@ -262,7 +260,7 @@ public abstract class Node<TYPE> implements Cloneable {
 		List<TerminalNode<TYPE>> terminals = getTerminalNodes();
 		
 		// Remove duplicates.
-		HashSet terminalHash = new HashSet(terminals);
+		Set<TerminalNode<TYPE>> terminalHash = new HashSet<TerminalNode<TYPE>>(terminals);
 		
 		// The number left is how many distinct terminals.
 		return terminalHash.size();
@@ -280,5 +278,90 @@ public abstract class Node<TYPE> implements Cloneable {
 			}
 		}
 		return terminals;
+	}
+	
+	public int getNoFunctions() {
+		if (this instanceof TerminalNode) {
+			return 0;
+		} else {
+			int result = 1;
+			for (int i=0; i<getArity(); i++) {
+				result += getChild(i).getNoFunctions();
+			}
+			return result;
+		}
+	}
+	
+	public int getNoDistinctFunctions() {
+		// Get a list of functions.
+		List<FunctionNode<TYPE>> functions = getFunctionNodes();
+		
+		// Remove duplicates - where a duplicate is a function of the same type.
+		// We cannot use the FunctionNode's equals function because that will compare children too.
+		List<String> functionNames = new ArrayList<String>();
+		for (FunctionNode<TYPE> f: functions) {
+			String name = f.getFunctionName();
+			if (!functionNames.contains(name)) {
+				functionNames.add(name);
+			}
+		}
+		
+		// The number left is how many distinct functions.
+		return functionNames.size();
+	}
+	
+	public List<FunctionNode<TYPE>> getFunctionNodes() {
+		// Alternatively we could use an array, which is quicker/more efficient in this situation?
+		List<FunctionNode<TYPE>> functions = new ArrayList<FunctionNode<TYPE>>();
+		
+		if (this instanceof TerminalNode) {
+			// No more function nodes to count, return empty list.
+		} else {
+			if (this instanceof FunctionNode) {
+				functions.add((FunctionNode<TYPE>) this);
+			}
+			for (int i=0; i<getArity(); i++) {
+				functions.addAll(getChild(i).getFunctionNodes());
+			}
+		}
+		return functions;
+	}
+	
+	public int getDepth() {
+		return countDepth(this, 1, 0);
+	}
+	
+	private int countDepth(Node<TYPE> rootNode, int currentDepth, int depth) {
+		// set current depth to maximum if need be
+		if(currentDepth>depth) {
+			depth = currentDepth;
+		}
+		// get children and recurse
+		int arity = rootNode.getArity();
+		if(arity>0) {
+			for(int i = 0; i<arity; i++) {
+				Node<TYPE> childNode = rootNode.getChild(i);
+				depth = countDepth(childNode, (currentDepth + 1), depth);
+			}
+		}
+		return depth;
+	}
+	
+	public int getProgramLength() {
+		return countLength(this, 0);
+	}
+	
+	private int countLength(Node<TYPE> rootNode, int length) {
+		// increment length and count through children
+		length++;
+		// get children and recurse
+		int arity = rootNode.getArity();
+		if(arity>0) {
+			for(int i = 0; i<arity; i++) {
+				Node<TYPE> childNode = rootNode.getChild(i);
+				length = countLength(childNode, length);
+			}
+		}
+		return length;
 	}
 }

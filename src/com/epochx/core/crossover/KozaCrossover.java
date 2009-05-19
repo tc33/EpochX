@@ -19,7 +19,6 @@
  */
 package com.epochx.core.crossover;
 
-import com.epochx.core.*;
 import com.epochx.core.representation.*;
 
 /**
@@ -62,9 +61,9 @@ public class KozaCrossover<TYPE> implements Crossover<TYPE> {
 		return new CandidateProgram[]{program1, program2};
 	}
 	
-	private int getCrossoverPoint(CandidateProgram<?> program) {
-		int length = GPProgramAnalyser.getProgramLength(program);
-		int noTerminals = GPProgramAnalyser.getNoTerminals(program);
+	private int getCrossoverPoint(CandidateProgram<TYPE> program) {
+		int length = program.getProgramLength();
+		int noTerminals = program.getNoTerminals();
 		int noFunctions = length - noTerminals;
 		
 		if ((noFunctions > 0) && (Math.random() < internalProbability)) {
@@ -83,18 +82,18 @@ public class KozaCrossover<TYPE> implements Crossover<TYPE> {
 		}
 	}
 
-	private int getNthFunctionNode(int n, CandidateProgram<?> program) {
+	private int getNthFunctionNode(int n, CandidateProgram<TYPE> program) {
 		return getNthFunctionNode(n, 0, 0, program.getRootNode());
 	}
 	
-	private int getNthFunctionNode(int n, int fc, int nc, Node<?> current) {
+	private int getNthFunctionNode(int n, int fc, int nc, Node<TYPE> current) {
 		if ((current instanceof FunctionNode) && (n == fc))
 			return nc;
 		
 		int result = -1;
-		for (Node<?> child: current.getChildren()) {
-			int noNodes = GPProgramAnalyser.getProgramLength(child);
-			int noFunctions = GPProgramAnalyser.getNoFunctions(child);
+		for (Node<TYPE> child: current.getChildren()) {
+			int noNodes = child.getProgramLength();
+			int noFunctions = child.getNoFunctions();
 			
 			// Only look at the subtree if it contains the right range of nodes.
 			if (n <= noFunctions + fc) {
@@ -110,20 +109,20 @@ public class KozaCrossover<TYPE> implements Crossover<TYPE> {
 		return result;
 	}
 	
-	private int getNthTerminalNode(int n, CandidateProgram<?> program) {
+	private int getNthTerminalNode(int n, CandidateProgram<TYPE> program) {
 		return getNthTerminalNode(n, 0, 0, program.getRootNode());
 	}
 	
-	private int getNthTerminalNode(int n, int tc, int nc, Node<?> current) {
+	private int getNthTerminalNode(int n, int tc, int nc, Node<TYPE> current) {
 		if (current instanceof TerminalNode) {
 			if (n == tc++)
 				return nc;
 		}
 		
 		int result = -1;
-		for (Node<?> child: current.getChildren()) {
-			int noNodes = GPProgramAnalyser.getProgramLength(child);
-			int noTerminals = GPProgramAnalyser.getNoTerminals(child);
+		for (Node<TYPE> child: current.getChildren()) {
+			int noNodes = child.getProgramLength();
+			int noTerminals = child.getNoTerminals();
 			
 			// Only look at the subtree if it contains the right range of nodes.
 			if (n <= noTerminals + tc) {

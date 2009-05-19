@@ -82,8 +82,8 @@ public class CandidateProgram<TYPE> implements Cloneable, Comparable<CandidatePr
 	 * @param n The index of the nod required
 	 * @return The node at the specified index
 	 */
-	public Node<?> getNthNode(int n) {
-		int size = GPProgramAnalyser.getProgramLength(this);
+	public Node<TYPE> getNthNode(int n) {
+		int size = getProgramLength();
 		if(n > size)
 			throw new IndexOutOfBoundsException("Index: "+n+", Size: "+size);			
 		return rootNode.getNthNode(n);
@@ -99,7 +99,7 @@ public class CandidateProgram<TYPE> implements Cloneable, Comparable<CandidatePr
 			// Need to test is of type <TYPE> somehow really.
 			rootNode = (Node<TYPE>) newNode;
 		}
-		int size = GPProgramAnalyser.getProgramLength(this);
+		int size = getProgramLength();
 		if(n > size)
 			throw new IndexOutOfBoundsException("Index: "+n+", Size: "+size);		
 		rootNode.setNthNode(newNode, n);
@@ -110,7 +110,7 @@ public class CandidateProgram<TYPE> implements Cloneable, Comparable<CandidatePr
 	 * @param d The user specified depth of the nodes
 	 * @return The number of nodes at the specified depth
 	 */
-	public List<Node<?>> getNodesAtDepth(int d) {
+	public List<Node<TYPE>> getNodesAtDepth(int d) {
 		return rootNode.getNodesAtDepth(d);
 	}
 	
@@ -171,4 +171,62 @@ public class CandidateProgram<TYPE> implements Cloneable, Comparable<CandidatePr
 	public int getNoDistinctTerminals() {
 		return getRootNode().getNoDistinctTerminals();
 	}
+	
+	public int getNoFunctions() {
+		return getRootNode().getNoFunctions();
+	}
+	
+	public int getNoDistinctFunctions() {
+		return getRootNode().getNoDistinctFunctions();
+	}
+	
+	public int getProgramDepth() {
+		return getRootNode().getDepth();
+	}
+
+	/**
+	 * ALTERNATIVE IMPLEMENTATION
+	 * Determines the maximum depth of a program.
+	 * @param program
+	 * @return
+	 */
+	/*public static int getProgramDepth(CandidateProgram program) {
+        // Flatten the tree.
+		String flatProg = program.toString();
+		
+		int count = 0;
+        int maxDepth = 0;
+        // count by brackets
+        for(int i=0; i<flatProg.length(); i++) {
+            char c = flatProg.charAt(i);
+        	if(c == '(') {
+                count++;
+                if(count>maxDepth) {
+                    maxDepth = count;
+                }
+            }
+            if(c == ')') {
+                count--;
+            }
+        }
+        return maxDepth;
+	}*/
+	
+	public int getProgramLength() {
+		return getRootNode().getProgramLength();
+	}
+	
+    /**
+     * ALTERNATIVE IMPLEMENTATION
+     * Calculates the length - that is the number of nodes - of the program.
+     * @param prog The program to be measured
+     * @return The length of the program
+     */
+    /*public static int getProgramLength(Node rootNode) {
+        // Flatten tree and split at spaces or brackets.
+    	String[] flatTree = rootNode.toString().split("(\\s|\\(|\\))+");
+    	
+    	// Count how many tokens there are.
+    	return flatTree.length;
+    }*/
 }

@@ -21,8 +21,7 @@ package com.epochx.stats;
 
 import java.util.*;
 
-import com.epochx.core.*;
-import com.epochx.core.representation.*;
+import com.epochx.core.representation.CandidateProgram;
 
 /**
  * 
@@ -146,7 +145,7 @@ public class GenerationStats<TYPE> {
 			// If any stats about depth are needed it's more efficient to get them all at once.
 			double[] depths = new double[pop.size()];
 			for (int i=0; i<pop.size(); i++) {
-				depths[i] = GPProgramAnalyser.getProgramDepth(pop.get(i));
+				depths[i] = pop.get(i).getProgramDepth();
 			}
 			
 			// Average depth. StDev needs the average so calc it here to avoid duplication.
@@ -180,7 +179,7 @@ public class GenerationStats<TYPE> {
 		// Get maximum depth of the population.
 		int maxDepth = 0;
 		for (CandidateProgram<TYPE> program: pop) {
-			int depth = GPProgramAnalyser.getProgramDepth(program);
+			int depth = program.getProgramDepth();
 			if (depth > maxDepth) {
 				maxDepth = depth;
 			}
@@ -210,7 +209,7 @@ public class GenerationStats<TYPE> {
 			// If any stats about length are needed it's more efficient to get them all at once.
 			double[] lengths = new double[pop.size()];
 			for (int i=0; i<pop.size(); i++) {
-				lengths[i] = GPProgramAnalyser.getProgramLength(pop.get(i));
+				lengths[i] = pop.get(i).getProgramLength();
 			}
 			
 			// Average length.
@@ -243,7 +242,7 @@ public class GenerationStats<TYPE> {
 			// If any stats about length are needed it's more efficient to get them all at once.
 			double[] noTerminals = new double[pop.size()];
 			for (int i=0; i<pop.size(); i++) {
-				noTerminals[i] = GPProgramAnalyser.getNoTerminals(pop.get(i));
+				noTerminals[i] = pop.get(i).getNoTerminals();
 			}
 			
 			// Average no terminals.
@@ -276,7 +275,7 @@ public class GenerationStats<TYPE> {
 			// If any stats about length are needed it's more efficient to get them all at once.
 			double[] noDTerminals = new double[pop.size()];
 			for (int i=0; i<pop.size(); i++) {
-				noDTerminals[i] = GPProgramAnalyser.getNoDistinctTerminals(pop.get(i));
+				noDTerminals[i] = pop.get(i).getNoDistinctTerminals();
 			}
 			
 			// Average no distinct terminals.
@@ -309,7 +308,7 @@ public class GenerationStats<TYPE> {
 			// If any stats about length are needed it's more efficient to get them all at once.
 			double[] noFunctions = new double[pop.size()];
 			for (int i=0; i<pop.size(); i++) {
-				noFunctions[i] = GPProgramAnalyser.getNoFunctions(pop.get(i));
+				noFunctions[i] = pop.get(i).getNoFunctions();
 			}
 			
 			// Average no functions.
@@ -342,7 +341,7 @@ public class GenerationStats<TYPE> {
 			// If any stats about length are needed it's more efficient to get them all at once.
 			double[] noDFunctions = new double[pop.size()];
 			for (int i=0; i<pop.size(); i++) {
-				noDFunctions[i] = GPProgramAnalyser.getNoDistinctFunctions(pop.get(i));
+				noDFunctions[i] = pop.get(i).getNoDistinctFunctions();
 			}
 			
 			// Average no distinct functions.

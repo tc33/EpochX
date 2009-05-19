@@ -26,7 +26,7 @@ import com.epochx.core.representation.*;
 /**
  * Subtree mutation method
  */
-public class SubtreeMutation<TYPE> implements Mutator<TYPE> {
+public class SubtreeMutation<TYPE> implements Mutation<TYPE> {
 
 	private GPModel<TYPE> model;
 	private int subtreeDepth;

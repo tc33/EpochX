@@ -24,7 +24,7 @@ import com.epochx.core.representation.*;
 /**
  * Interface to define mutation object structure
  */
-public interface Mutator<TYPE> {
+public interface Mutation<TYPE> {
 
 	/**
 	 * abstract mutation method

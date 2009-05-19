@@ -27,7 +27,7 @@ import com.epochx.core.representation.*;
 /**
  * Point mutation method
  */
-public class PointMutation<TYPE> implements Mutator<TYPE> {
+public class PointMutation<TYPE> implements Mutation<TYPE> {
 
 	private List<Node<?>> syntax;	
 	private double pointProbability;

@@ -50,7 +50,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 
 	private Initialiser<TYPE> initialiser;
 	private Crossover<TYPE> crossover;
-	private Mutator<TYPE> mutator;
+	private Mutation<TYPE> mutator;
 	
 	private PouleSelector<TYPE> pouleSelector;
 	private ParentSelector<TYPE> parentSelector;
@@ -275,7 +275,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * 
 	 * @return {@inheritDoc}
 	 */
-	public Mutator<TYPE> getMutator() {
+	public Mutation<TYPE> getMutator() {
 		return mutator;
 	}
 
@@ -284,7 +284,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * 
 	 * @param mutator the mutator to set
 	 */
-	public void setMutator(Mutator<TYPE> mutator) {
+	public void setMutator(Mutation<TYPE> mutator) {
 		this.mutator = mutator;
 	}
 

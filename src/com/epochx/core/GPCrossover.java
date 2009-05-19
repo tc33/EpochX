@@ -42,20 +42,31 @@ import com.epochx.stats.CrossoverStats;
  */
 public class GPCrossover<TYPE> {
 
+	// The controlling model.
 	private GPModel<TYPE> model;
+	
+	// The selector for choosing parents.
 	private ParentSelector<TYPE> parentSelector;
+	
+	// The crossover operator that will perform the actual operation.
 	private Crossover<TYPE> crossover;
+	
+	// Gather crossover statistics.
 	private CrossoverStats<TYPE> crossoverStats;
+	
+	// The number of times the crossover was rejected by the model.
 	private int reversions;
 	
 	/**
-	 * Constructs an instance of GPCrossover which will be capable of 
-	 * performing crossover using the crossover operator and parent selector 
-	 * provided by the given GPModel.
+	 * Constructs an instance of GPCrossover which will setup the crossover 
+	 * operation. Note that the actual crossover operation will be performed by 
+	 * the subclass of <code>Crossover</code> returned by the models 
+	 * getCrossover() method.
 	 * 
 	 * @param model the GPModel which defines the Crossover operator and 
 	 * 				ParentSelector to use to perform one act of crossover on 
 	 * 				a population.
+	 * @see Crossover
 	 */
 	public GPCrossover(GPModel<TYPE> model) {
 		this.model = model;
@@ -69,21 +80,33 @@ public class GPCrossover<TYPE> {
 	}
 
 	/**
-	 * Selects two parents and submits them to the Crossover operator which 
-	 * is obtained by calling getCrossover() on the instance of GPModel given 
-	 * at construction. The method of parent selection is also provided by this 
-	 * model with a call to getParentSelector().
+	 * Selects two parents by calling <code>getParentSelector()</code> on the 
+	 * instance of <code>GPModel</code> given at construction and submits them 
+	 * to the <code>Crossover</code> operator which is obtained by calling 
+	 * <code>getCrossover()</code> on the model. 
 	 * 
-	 * @param pop the population of CandidatePrograms from which 2 parents 
-	 * 			  should be selected for crossover.
+	 * <p>After a crossover is made, the controlling model is requested to 
+	 * confirm the crossover by a call to <code>acceptCrossover()</code>. This 
+	 * gives the model total control over whether a crossover is allowed to 
+	 * proceed. If <code>acceptCrossover()</code> returns <code>false</code> 
+	 * then the children are discarded and two new parents are selected and 
+	 * attempted for crossover. The number of times the crossover was reverted 
+	 * before being accepted is available through a call to 
+	 * <code>getRevertedCount()</code>.
+	 * 
+	 * <p>Even after a crossover has been accepted by the model, it may still 
+	 * be prevented from proceeding if the program depth of either of the 
+	 * children exceeds the max depth that the model defines. In the case that 
+	 * the children do exceed the limit then the parents are returned as the 
+	 * result. This does not count towards the number of reversions.
+	 * 
 	 * @return an array of CandidatePrograms generated through crossover. This 
-	 * 		   is most likely 2 child programs, but could in theory be any 
-	 * 		   number as returned by the Crossover operator in use.
+	 * 		   is typically 2 child programs, but could in theory be any number 
+	 * 	 	   as returned by the Crossover operator in use.
 	 */
 	public CandidateProgram<TYPE>[] crossover() {
 		long crossoverStartTime = System.nanoTime();
-		
-		// define variables required
+
 		CandidateProgram<TYPE> parent1;
 		CandidateProgram<TYPE> parent2;
 
@@ -109,8 +132,8 @@ public class GPCrossover<TYPE> {
 			reversions++;
 		} while(!accepted);
 		
-		//TODO Need to be more careful here, potential for array out of bounds if crossover 
-		//returns an array with more than 2 elements.
+		//TODO Need to be more careful here, potential for array out of bounds if crossover returns an array with more than 2 elements.
+		//TODO This is actually horrible - it's so unflexible, theres no way for a user to control whether/how this happens.
 		for (int i=0; i<children.length; i++) {
 			if (GPProgramAnalyser.getProgramDepth(children[i]) > model.getMaxDepth()) {
 				children[i] = (CandidateProgram<TYPE>) parents[i].clone();
@@ -123,6 +146,17 @@ public class GPCrossover<TYPE> {
 		return children;
 	}
 	
+	/**
+	 * <p>After a crossover is made, the controlling model is requested to 
+	 * confirm the crossover by a call to <code>acceptCrossover()</code>. This 
+	 * gives the model total control over whether a crossover is allowed to 
+	 * proceed. If <code>acceptCrossover()</code> returns <code>false</code> 
+	 * then the children are discarded and two new parents are selected and 
+	 * attempted for crossover. The number of times the crossover was reverted 
+	 * before being accepted is available through a call to this method.
+	 * 
+	 * @return the number of times the crossover was rejected by the model.
+	 */
 	public int getRevertedCount() {
 		return reversions;
 	}

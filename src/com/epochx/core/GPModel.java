@@ -23,7 +23,7 @@ import java.util.List;
 
 import com.epochx.core.crossover.*;
 import com.epochx.core.initialisation.Initialiser;
-import com.epochx.core.mutation.Mutator;
+import com.epochx.core.mutation.Mutation;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.stats.*;
@@ -158,7 +158,7 @@ public interface GPModel<TYPE> {
 	 * @return the implementation of Mutator that will perform the genetic 
 	 * 		   operation of mutation.
 	 */
-	public Mutator<TYPE> getMutator();
+	public Mutation<TYPE> getMutator();
 	
 	/**
 	 * Retrieves a numerical value between 0 and 1 which represents the 

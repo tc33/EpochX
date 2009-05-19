@@ -19,17 +19,17 @@
  */
 package com.epochx.example.multiplexer;
 
-import java.io.*;
+import java.io.File;
 import java.util.*;
 
-import com.epochx.core.*;
-import com.epochx.core.crossover.*;
-import com.epochx.core.initialisation.*;
+import com.epochx.core.GPController;
+import com.epochx.core.crossover.UniformPointCrossover;
+import com.epochx.core.initialisation.BooleanHybridSemanticallyDrivenInitialiser;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.func.bool.*;
 import com.epochx.semantics.*;
-import com.epochx.stats.GenerationStats.*;
+import com.epochx.stats.GenerationStatField;
 import com.epochx.util.*;
 
 /**
@@ -171,7 +171,7 @@ public class Multiplexer6Bit extends SemanticModel<Boolean> {
 	}
 
 	@Override
-	public GenStatField[] getGenStatFields() {
-		return new GenStatField[]{GenStatField.FITNESS_AVE, GenStatField.FITNESS_MIN, GenStatField.LENGTH_AVE};
+	public GenerationStatField[] getGenStatFields() {
+		return new GenerationStatField[]{GenerationStatField.FITNESS_AVE, GenerationStatField.FITNESS_MIN, GenerationStatField.LENGTH_AVE};
 	}
 }

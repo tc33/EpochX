@@ -28,7 +28,7 @@ import com.epochx.core.initialisation.RampedHalfAndHalfInitialiser;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.func.bool.*;
-import com.epochx.stats.GenerationStats.GenStatField;
+import com.epochx.stats.GenerationStatField;
 import com.epochx.util.*;
 
 /**
@@ -154,7 +154,7 @@ public class Even4Parity extends GPAbstractModel<Boolean> {
 	}
 
 	@Override
-	public GenStatField[] getGenStatFields() {
-		return new GenStatField[]{GenStatField.FITNESS_AVE, GenStatField.FITNESS_MIN, GenStatField.LENGTH_AVE};
+	public GenerationStatField[] getGenStatFields() {
+		return new GenerationStatField[]{GenerationStatField.FITNESS_AVE, GenerationStatField.FITNESS_MIN, GenerationStatField.LENGTH_AVE};
 	}
 }

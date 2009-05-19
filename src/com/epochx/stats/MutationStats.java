@@ -109,36 +109,4 @@ public class MutationStats<TYPE> {
 			stats.put(MutationStatField.RUN_TIME, runtime);
 		}
 	}
-	
-	/**
-	 * This enum gives all the available mutation statistics that can be 
-	 * requested. Mutation statistics are those statistics that are generated 
-	 * per mtuation operation. Each MutationStatField has a datatype related 
-	 * to it which is the type which the data will be returned in.
-	 * @see com.epochx.stats.MutationStatListener
-	 * @see com.epochx.stats.GenerationStats.GenStatField
-	 * @see com.epochx.stats.CrossoverStats.CrossoverStatField
-	 * @see com.epochx.stats.RunStats.RunStatField
-	 */
-	public enum MutationStatField {
-		
-		/**
-		 * Requests a CandidateProgram which is a clone of the program as it 
-		 * was <b>before</b> the mutation operation was applied.
-		 */
-		PROGRAM_BEFORE,
-		
-		/**
-		 * Requests a CandidateProgram which is the program as it exists 
-		 * <b>after</b> the mutation operation was applied.
-		 */
-		PROGRAM_AFTER,
-		
-		/**
-		 * Requests a Long which is the length of time in nanoseconds that the 
-		 * mutation operation took to complete.
-		 */
-		RUN_TIME
-	}
-	
 }

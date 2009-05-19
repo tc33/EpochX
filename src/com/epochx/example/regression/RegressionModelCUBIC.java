@@ -28,8 +28,7 @@ import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.func.dbl.*;
 import com.epochx.semantics.*;
-import com.epochx.stats.GenerationStats.GenStatField;
-import com.epochx.stats.RunStats.RunStatField;
+import com.epochx.stats.*;
 import com.epochx.util.FileManip;
 
 /**
@@ -168,8 +167,8 @@ public class RegressionModelCUBIC extends SemanticModel<Double> {
 	}
 
 	@Override
-	public GenStatField[] getGenStatFields() {
-		return new GenStatField[]{GenStatField.FITNESS_AVE, GenStatField.FITNESS_MIN, GenStatField.LENGTH_AVE};
+	public GenerationStatField[] getGenStatFields() {
+		return new GenerationStatField[]{GenerationStatField.FITNESS_AVE, GenerationStatField.FITNESS_MIN, GenerationStatField.LENGTH_AVE};
 	}
 	
 	public static void main(String[] args) {

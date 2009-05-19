@@ -108,35 +108,4 @@ public class RunStats<TYPE> {
 			stats.put(RunStatField.RUN_TIME, run.getRunTime());
 		}
 	}
-	
-	/**
-	 * This enum gives all the available run statistics that can be 
-	 * requested. Run statistics are those statistics that are generated 
-	 * at the end of each run. Each RunStatField has a datatype related 
-	 * to it which is the type which the data will be returned in.
-	 * @see com.epochx.stats.RunStatListener
-	 * @see com.epochx.stats.CrossoverStats.CrossoverStatField
-	 * @see com.epochx.stats.MutationStats.MutationStatField
-	 * @see com.epochx.stats.GenerationStats.GenStatField
-	 */
-	public enum RunStatField {
-		/**
-		 * Requests a CandidateProgram which has the 'best' fitness over a whole 
-		 * run. This usually means the program with the lowest fitness score. 
-		 * If elitism is not being used, the BEST_PROGRAM may not be in the final 
-		 * generation. 
-		 */
-		BEST_PROGRAM,
-		
-		/**
-		 * Requests a Double which is the fitness of the BEST_PROGRAM.
-		 */
-		BEST_FITNESS,
-		
-		/**
-		 * Requests a Long which is the length of time in nanoseconds that the 
-		 * run took to complete.
-		 */
-		RUN_TIME
-	}
 }

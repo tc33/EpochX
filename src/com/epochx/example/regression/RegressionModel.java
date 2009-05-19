@@ -21,15 +21,14 @@ package com.epochx.example.regression;
 
 import java.util.*;
 
-import com.epochx.core.*;
-import com.epochx.core.crossover.*;
-import com.epochx.core.initialisation.*;
+import com.epochx.core.GPController;
+import com.epochx.core.crossover.UniformPointCrossover;
+import com.epochx.core.initialisation.RegressionSemanticallyDrivenInitialiser;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.func.dbl.*;
 import com.epochx.semantics.*;
-import com.epochx.stats.GenerationStats.*;
-import com.epochx.stats.RunStats.*;
+import com.epochx.stats.*;
 
 /**
  * 
@@ -144,8 +143,8 @@ public class RegressionModel extends SemanticModel<Double> {
 	}
 	
 	@Override
-	public GenStatField[] getGenStatFields() {
-		return new GenStatField[]{GenStatField.FITNESS_MIN, GenStatField.FITNESS_AVE, GenStatField.DEPTH_AVE, GenStatField.LENGTH_AVE, GenStatField.RUN_TIME};
+	public GenerationStatField[] getGenStatFields() {
+		return new GenerationStatField[]{GenerationStatField.FITNESS_MIN, GenerationStatField.FITNESS_AVE, GenerationStatField.DEPTH_AVE, GenerationStatField.LENGTH_AVE, GenerationStatField.RUN_TIME};
 	}
 	
 	public static void main(String[] args) {

@@ -19,7 +19,6 @@
  */
 package com.epochx.stats;
 
-import com.epochx.stats.RunStats.*;
 
 /**
  * RunStatsListener uses the listener pattern to provide a flexible way 

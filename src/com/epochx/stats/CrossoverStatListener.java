@@ -19,7 +19,6 @@
  */
 package com.epochx.stats;
 
-import com.epochx.stats.CrossoverStats.*;
 
 /**
  * CrossoverStatsListener uses the listener pattern to provide a flexible way 

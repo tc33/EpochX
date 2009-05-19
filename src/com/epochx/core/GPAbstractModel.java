@@ -27,11 +27,6 @@ import com.epochx.core.mutation.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.stats.*;
-import com.epochx.stats.CrossoverStats.CrossoverStatField;
-import com.epochx.stats.GenerationStats.GenStatField;
-import com.epochx.stats.MutationStats.MutationStatField;
-import com.epochx.stats.RunStats.RunStatField;
-
 
 /**
  * GPAbstractModel is a partial implementation of GPModel which provides 
@@ -441,8 +436,8 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * This is implemented here rather than being abstract to remove the need 
 	 * for the user to extend it if they're not interested in generational stats.
 	 */
-	public GenStatField[] getGenStatFields() {
-		return new GenStatField[0];
+	public GenerationStatField[] getGenStatFields() {
+		return new GenerationStatField[0];
 	}
 	
 	/**

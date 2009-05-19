@@ -19,7 +19,6 @@
  */
 package com.epochx.stats;
 
-import com.epochx.stats.GenerationStats.*;
 
 /**
  * GenerationStatsListener uses the listener pattern to provide a flexible way 
@@ -45,7 +44,7 @@ public interface GenerationStatListener {
 	 * each of the fields this method returns will be given as part of the 
 	 * stats array passed to the generationStats(Object[]) array.
 	 */
-	public GenStatField[] getGenStatFields();
+	public GenerationStatField[] getGenStatFields();
 	
 	/**
 	 * This method will be called after every generation completes with an array 

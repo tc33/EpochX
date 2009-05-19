@@ -19,17 +19,16 @@
  */
 package com.epochx.example.evenparity;
 
-import java.io.*;
+import java.io.File;
 import java.util.*;
 
 import com.epochx.core.*;
-import com.epochx.core.crossover.*;
-import com.epochx.core.mutation.*;
+import com.epochx.core.crossover.UniformPointCrossover;
+import com.epochx.core.mutation.PointMutation;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.func.bool.*;
-import com.epochx.stats.GenerationStats.*;
-import com.epochx.stats.RunStats.*;
+import com.epochx.stats.*;
 import com.epochx.util.*;
 
 /**
@@ -162,11 +161,11 @@ public class Even5Parity extends GPAbstractModel<Boolean> {
 	 * @see com.epochx.stats.GenerationStatListener#getStatFields()
 	 */
 	@Override
-	public GenStatField[] getGenStatFields() {
-		return new GenStatField[]{
-				GenStatField.RUN_TIME,
-				GenStatField.LENGTH_AVE,
-				GenStatField.FITNESS_MIN
+	public GenerationStatField[] getGenStatFields() {
+		return new GenerationStatField[]{
+				GenerationStatField.RUN_TIME,
+				GenerationStatField.LENGTH_AVE,
+				GenerationStatField.FITNESS_MIN
 		};
 	}
 	

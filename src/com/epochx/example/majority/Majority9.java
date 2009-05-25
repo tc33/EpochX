@@ -24,15 +24,19 @@ import java.util.*;
 
 import com.epochx.core.*;
 import com.epochx.core.crossover.*;
+import com.epochx.core.initialisation.BooleanHybridSemanticallyDrivenInitialiser;
 import com.epochx.core.representation.*;
+import com.epochx.core.scorer.BooleanSemanticScorer;
 import com.epochx.core.selection.*;
 import com.epochx.func.bool.*;
+import com.epochx.semantics.BooleanSemanticModule;
+import com.epochx.semantics.SemanticModel;
 import com.epochx.util.*;
 
 /**
  * 
  */
-public class Majority9 extends GPAbstractModel<Boolean> {
+public class Majority9 extends SemanticModel<Boolean> {
 
 	private List<String> inputs;
 	private HashMap<String, Variable<Boolean>> variables = new HashMap<String, Variable<Boolean>>();
@@ -45,18 +49,6 @@ public class Majority9 extends GPAbstractModel<Boolean> {
 	}
 	
 	public void configure() {
-		setPopulationSize(500);
-		setNoGenerations(50);
-		setCrossoverProbability(0.9);
-		setReproductionProbability(0.1);
-		setNoRuns(5);
-		setPouleSize(50);
-		setNoElites(50);
-		setMaxDepth(6);
-		setPouleSelector(new TournamentSelector<Boolean>(7, this));
-		setParentSelector(new RandomSelector<Boolean>());
-		setCrossover(new UniformPointCrossover<Boolean>());
-		
 		// Define variables.
 		variables.put("D8", new Variable<Boolean>("D8"));
 		variables.put("D7", new Variable<Boolean>("D7"));
@@ -67,6 +59,22 @@ public class Majority9 extends GPAbstractModel<Boolean> {
 		variables.put("D2", new Variable<Boolean>("D2"));
 		variables.put("D1", new Variable<Boolean>("D1"));
 		variables.put("D0", new Variable<Boolean>("D0"));
+		
+		setPopulationSize(500);
+		setNoGenerations(10);
+		setCrossoverProbability(0.9);
+		setReproductionProbability(0.1);
+		setNoRuns(1);
+		setPouleSize(50);
+		setNoElites(50);
+		setInitialMaxDepth(6);
+		setMaxDepth(17);
+		setPouleSelector(new TournamentSelector<Boolean>(7, this));
+		setParentSelector(new RandomSelector<Boolean>());
+		setCrossover(new UniformPointCrossover<Boolean>());
+		setStateCheckedCrossover(true);
+		setSemanticModule(new BooleanSemanticModule(getTerminals(), this));
+		setInitialiser(new BooleanHybridSemanticallyDrivenInitialiser(this, this.getSemanticModule()));		
 	}
 	
 	@Override
@@ -97,6 +105,20 @@ public class Majority9 extends GPAbstractModel<Boolean> {
 		return terminals;
 	}
 	
+	
+	public double getFitness(CandidateProgram<Boolean> program) {
+		// set up ideal solution
+	    IfFunction part1 = new IfFunction(new Variable<Boolean>("A1"), new Variable<Boolean>("D0"), new Variable<Boolean>("D1"));
+	    IfFunction part2 = new IfFunction(new Variable<Boolean>("A1"), new Variable<Boolean>("D2"), new Variable<Boolean>("D3"));
+	    IfFunction part0 = new IfFunction(new Variable<Boolean>("A0"), part1, part2);
+	    CandidateProgram<Boolean> target = new CandidateProgram<Boolean>(part0, this);
+        // do semantic scoring part
+        BooleanSemanticScorer scorer = new BooleanSemanticScorer(getSemanticModule());
+        double score = scorer.doScore(program, target);
+        return score;
+	}
+	
+	/**
 	@Override
 	public double getFitness(CandidateProgram<Boolean> program) {
         double score = 0;
@@ -122,7 +144,7 @@ public class Majority9 extends GPAbstractModel<Boolean> {
         }
         
         return 512 - score;
-	}
+	} */
 	
     private boolean chooseResult(boolean[] input) {
     	// scoring solution

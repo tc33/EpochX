@@ -22,8 +22,9 @@ package com.epochx.example.regression;
 import java.util.*;
 
 import com.epochx.core.GPController;
-import com.epochx.core.crossover.KozaCrossover;
-import com.epochx.core.initialisation.RegressionHybridSemanticallyDrivenInitialiser;
+import com.epochx.core.crossover.*;
+import com.epochx.core.initialisation.*;
+import com.epochx.core.mutation.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.func.dbl.*;
@@ -51,6 +52,7 @@ public class RegressionModelCUBIC extends SemanticModel<Double> {
 		setPopulationSize(500);
 		setNoGenerations(50);
 		setCrossoverProbability(0.9);
+		setMutationProbability(0);
 		setReproductionProbability(0.1);
 		setNoRuns(100);
 		setPouleSize(50);
@@ -60,10 +62,12 @@ public class RegressionModelCUBIC extends SemanticModel<Double> {
 		setPouleSelector(new TournamentSelector<Double>(7, this));
 		setParentSelector(new RandomSelector<Double>());
 		setCrossover(new KozaCrossover<Double>());
-		setStateCheckedCrossover(false);
+		setStateCheckedCrossover(true);
+		setMutator(new SubtreeMutation<Double>(this));
+		setStateCheckedMutation(false);
 		RegressionSemanticModule semMod = new RegressionSemanticModule(getTerminals(), this);
 		setSemanticModule(semMod);
-		setInitialiser(new RegressionHybridSemanticallyDrivenInitialiser(this, semMod));
+		setInitialiser(new RampedHalfAndHalfInitialiser(this));
 	}
 
 	@Override
@@ -141,15 +145,19 @@ public class RegressionModelCUBIC extends SemanticModel<Double> {
 	public void runStats(int runNo, Object[] stats) {
 		this.run = runNo;
 		System.out.print("Run number " + runNo + " complete.");
+		ArrayList<String> output = new ArrayList<String>();
+		String part = run + "\t";
 		for (Object s: stats) {
-			System.out.print(s);
-			System.out.print(" ");
+			part = part + s;
+			part = part + "\t";
 		}
-		System.out.println();
+		part = part + "\n";
+		output.add(part);		
+		FileManip.doOutput(null, output, "RunStats.txt", true);		
 	}
 
 	public RunStatField[] getRunStatFields() {
-		return new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM};
+		return new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.RUN_TIME, RunStatField.BEST_PROGRAM};
 	}
 	
 	@Override
@@ -163,12 +171,12 @@ public class RegressionModelCUBIC extends SemanticModel<Double> {
 		}
 		part = part + "\n";
 		output.add(part);
-		FileManip.doOutput(null, output, "output.txt", true);
+		FileManip.doOutput(null, output, "GenerationStats.txt", true);
 	}
 
 	@Override
 	public GenerationStatField[] getGenStatFields() {
-		return new GenerationStatField[]{GenerationStatField.FITNESS_AVE, GenerationStatField.FITNESS_MIN, GenerationStatField.LENGTH_AVE};
+		return new GenerationStatField[]{GenerationStatField.FITNESS_AVE, GenerationStatField.FITNESS_MIN, GenerationStatField.LENGTH_AVE, GenerationStatField.REVERTED_CROSSOVERS, GenerationStatField.REVERTED_MUTATIONS};
 	}
 	
 	public static void main(String[] args) {

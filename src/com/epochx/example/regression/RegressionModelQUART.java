@@ -22,8 +22,9 @@ package com.epochx.example.regression;
 import java.util.*;
 
 import com.epochx.core.GPController;
-import com.epochx.core.crossover.KozaCrossover;
-import com.epochx.core.initialisation.ModifiedFullInitialiser;
+import com.epochx.core.crossover.*;
+import com.epochx.core.initialisation.*;
+import com.epochx.core.mutation.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.func.dbl.*;
@@ -51,18 +52,22 @@ public class RegressionModelQUART extends SemanticModel<Double> {
 		setPopulationSize(4000);
 		setNoGenerations(50);
 		setCrossoverProbability(0.9);
+		setMutationProbability(0);
 		setReproductionProbability(0.1);
 		setNoRuns(100);
 		setPouleSize(400);
 		setNoElites(400);
-		setInitialMaxDepth(4);
+		setInitialMaxDepth(6);
 		setMaxDepth(17);
 		setPouleSelector(new TournamentSelector<Double>(7, this));
 		setParentSelector(new RandomSelector<Double>());
-		setCrossover(new KozaCrossover<Double>());
+		setCrossover(new UniformPointCrossover<Double>());
 		setStateCheckedCrossover(false);
-		setSemanticModule(new RegressionSemanticModule(getTerminals(), this));
-		setInitialiser(new ModifiedFullInitialiser<Double>(this, getSemanticModule()));
+		setMutator(new SubtreeMutation<Double>(this));
+		setStateCheckedMutation(false);
+		RegressionSemanticModule semMod = new RegressionSemanticModule(getTerminals(), this);
+		setSemanticModule(semMod);
+		setInitialiser(new RampedHalfAndHalfInitialiser(this));
 	}
 
 	@Override
@@ -135,11 +140,15 @@ public class RegressionModelQUART extends SemanticModel<Double> {
 	public void runStats(int runNo, Object[] stats) {
 		this.run = runNo;
 		System.out.print("Run number " + runNo + " complete.");
+		ArrayList<String> output = new ArrayList<String>();
+		String part = run + "\t";
 		for (Object s: stats) {
-			System.out.print(s);
-			System.out.print(" ");
+			part = part + s;
+			part = part + "\t";
 		}
-		System.out.println();
+		part = part + "\n";
+		output.add(part);		
+		FileManip.doOutput(null, output, "RunStats.txt", true);	
 	}
 
 	public RunStatField[] getRunStatFields() {
@@ -149,7 +158,7 @@ public class RegressionModelQUART extends SemanticModel<Double> {
 	@Override
 	public void generationStats(int generation, Object[] stats) {
 		ArrayList<String> output = new ArrayList<String>();
-		System.out.println(this.run + "\t" + generation + "\t");
+		System.out.println(run + "\t" + generation + "\t");
 		String part = run + "\t" + generation + "\t";
 		for (Object s: stats) {
 			part = part + s;
@@ -157,7 +166,7 @@ public class RegressionModelQUART extends SemanticModel<Double> {
 		}
 		part = part + "\n";
 		output.add(part);
-		FileManip.doOutput(null, output, "output.txt", true);
+		FileManip.doOutput(null, output, "GenerationStats.txt", true);
 	}
 
 	@Override

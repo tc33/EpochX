@@ -120,12 +120,7 @@ public class RegressionModelCUBIC extends SemanticModel<Double> {
 		
 		for(int i = 0; i<=20; i++) {
 			double v = i;
-			x.setValue(v);
-			try {
-				double cat = program.evaluate();
-			} catch(NullPointerException e) {
-				System.out.println("Program = " + program);
-			}			
+			x.setValue(v);			
 			absError[i] = Math.abs(this.getCorrectResult(inputs[i]) - program.evaluate());
 		}
 		

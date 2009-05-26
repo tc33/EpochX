@@ -67,7 +67,7 @@ public class RegressionModelQUART extends SemanticModel<Double> {
 		setStateCheckedMutation(false);
 		RegressionSemanticModule semMod = new RegressionSemanticModule(getTerminals(), this);
 		setSemanticModule(semMod);
-		setInitialiser(new RampedHalfAndHalfInitialiser(this));
+		setInitialiser(new RampedHalfAndHalfInitialiser<Double>(this));
 	}
 
 	@Override

@@ -132,6 +132,10 @@ public class GPRun<TYPE> {
 			// Construct a breeding pool.
 			List<CandidateProgram<TYPE>> pool = model.getPouleSelector().getPoule(pop, model.getPouleSize());
 			
+			// Count number of crossovers and mutations rejected by the model this gen.
+			int crossoverReversions = 0;
+			int mutationReversions = 0;
+			
 			// Tell the parent selector we're starting a new generation.
 			model.getParentSelector().onGenerationStart(pool);
 			
@@ -149,9 +153,13 @@ public class GPRun<TYPE> {
 						if (nextPop.size() < model.getPopulationSize())
 							nextPop.add(c);
 					}
+					// Add number of rejected crossovers.
+					crossoverReversions += crossover.getRevertedCount();
 				} else if (random < pe+pm) {
 					// Perform mutation.
 					nextPop.add(mutation.mutate());
+					// Add number of rejected mutations.
+					mutationReversions += mutation.getRevertedCount();
 				} else {
 					// Perform reproduction - Should this use clone?
 					nextPop.add(pool.get((int) Math.floor(Math.random()*pool.size())));
@@ -169,7 +177,7 @@ public class GPRun<TYPE> {
 			
 			// Generate stats for the current population.
 			long runtime = System.nanoTime() - genStartTime;
-			genStats.addGen(nextPop, i, runtime, crossover.getRevertedCount(), mutation.getRevertedCount());
+			genStats.addGen(nextPop, i, runtime, crossoverReversions, mutationReversions);
 			
 			pop = nextPop;
 		}

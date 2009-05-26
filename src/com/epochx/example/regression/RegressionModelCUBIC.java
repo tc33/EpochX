@@ -67,7 +67,7 @@ public class RegressionModelCUBIC extends SemanticModel<Double> {
 		setStateCheckedMutation(false);
 		RegressionSemanticModule semMod = new RegressionSemanticModule(getTerminals(), this);
 		setSemanticModule(semMod);
-		setInitialiser(new RampedHalfAndHalfInitialiser(this));
+		setInitialiser(new RampedHalfAndHalfInitialiser<Double>(this));
 	}
 
 	@Override
@@ -144,7 +144,7 @@ public class RegressionModelCUBIC extends SemanticModel<Double> {
 	
 	public void runStats(int runNo, Object[] stats) {
 		this.run = runNo;
-		System.out.print("Run number " + runNo + " complete.");
+		/*System.out.print("Run number " + runNo + " complete.");
 		ArrayList<String> output = new ArrayList<String>();
 		String part = run + "\t";
 		for (Object s: stats) {
@@ -153,7 +153,7 @@ public class RegressionModelCUBIC extends SemanticModel<Double> {
 		}
 		part = part + "\n";
 		output.add(part);		
-		FileManip.doOutput(null, output, "RunStats.txt", true);		
+		FileManip.doOutput(null, output, "RunStats.txt", true);		*/
 	}
 
 	public RunStatField[] getRunStatFields() {
@@ -163,13 +163,14 @@ public class RegressionModelCUBIC extends SemanticModel<Double> {
 	@Override
 	public void generationStats(int generation, Object[] stats) {
 		ArrayList<String> output = new ArrayList<String>();
-		System.out.println(run + "\t" + generation + "\t");
+		//System.out.println(run + "\t" + generation + "\t");
 		String part = run + "\t" + generation + "\t";
 		for (Object s: stats) {
 			part = part + s;
 			part = part + "\t";
 		}
 		part = part + "\n";
+		System.out.println(part);
 		output.add(part);
 		FileManip.doOutput(null, output, "GenerationStats.txt", true);
 	}

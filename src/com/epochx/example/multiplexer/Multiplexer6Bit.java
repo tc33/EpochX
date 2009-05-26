@@ -163,15 +163,21 @@ public class Multiplexer6Bit extends SemanticModel<Boolean> {
 	
 	@Override
 	public void generationStats(int generation, Object[] stats) {
+		ArrayList<String> output = new ArrayList<String>();
+		//System.out.println(run + "\t" + generation + "\t");
+		String part = run + "\t" + generation + "\t";
 		for (Object s: stats) {
-			System.out.print(s);
-			System.out.print(" ");
+			part = part + s;
+			part = part + "\t";
 		}
-		System.out.println();
+		part = part + "\n";
+		System.out.println(part);
+		output.add(part);
+		FileManip.doOutput(null, output, "GenerationStats.txt", true);
 	}
 
 	@Override
 	public GenerationStatField[] getGenStatFields() {
-		return new GenerationStatField[]{GenerationStatField.FITNESS_AVE, GenerationStatField.FITNESS_MIN, GenerationStatField.LENGTH_AVE};
+		return new GenerationStatField[]{GenerationStatField.FITNESS_AVE, GenerationStatField.FITNESS_MIN, GenerationStatField.LENGTH_AVE, GenerationStatField.REVERTED_CROSSOVERS, GenerationStatField.REVERTED_MUTATIONS};
 	}
 }

@@ -23,13 +23,18 @@ import java.io.File;
 import java.util.*;
 
 import com.epochx.core.GPController;
+import com.epochx.core.crossover.KozaCrossover;
 import com.epochx.core.crossover.UniformPointCrossover;
 import com.epochx.core.initialisation.BooleanHybridSemanticallyDrivenInitialiser;
+import com.epochx.core.initialisation.RampedHalfAndHalfInitialiser;
+import com.epochx.core.mutation.SubtreeMutation;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.func.bool.*;
+import com.epochx.pruning.SemanticPruner;
 import com.epochx.semantics.*;
 import com.epochx.stats.GenerationStatField;
+import com.epochx.stats.RunStatField;
 import com.epochx.util.*;
 
 /**
@@ -59,20 +64,26 @@ public class Multiplexer6Bit extends SemanticModel<Boolean> {
 		variables.put("A0", new Variable<Boolean>("A0"));
 		
 		setPopulationSize(500);
-		setNoGenerations(10);
-		setCrossoverProbability(0.9);
+		setNoGenerations(50);
+		setCrossoverProbability(0.45);
+		setMutationProbability(0.45);
 		setReproductionProbability(0.1);
-		setNoRuns(1);
+		setNoRuns(100);
 		setPouleSize(50);
 		setNoElites(50);
-		setInitialMaxDepth(6);
+		setInitialMaxDepth(4);
 		setMaxDepth(17);
 		setPouleSelector(new TournamentSelector<Boolean>(7, this));
 		setParentSelector(new RandomSelector<Boolean>());
-		setCrossover(new UniformPointCrossover<Boolean>());
+		setCrossover(new KozaCrossover<Boolean>());
 		setStateCheckedCrossover(true);
-		setSemanticModule(new BooleanSemanticModule(getTerminals(), this));
-		setInitialiser(new BooleanHybridSemanticallyDrivenInitialiser(this, this.getSemanticModule()));
+		setMutator(new SubtreeMutation<Boolean>(this));
+		setStateCheckedMutation(true);
+		BooleanSemanticModule semMod = new BooleanSemanticModule(getTerminals(), this);
+		setSemanticModule(semMod);
+		setPruner(new SemanticPruner<Boolean>(this, semMod));
+		setActivatePruning(true);
+		setInitialiser(new BooleanHybridSemanticallyDrivenInitialiser(this, semMod));
 	}
 	
 	@Override
@@ -156,9 +167,22 @@ public class Multiplexer6Bit extends SemanticModel<Boolean> {
 		GPController.run(new Multiplexer6Bit());
 	}
 
-	@Override
-	public void runStats(int run, Object[] stats) {
-		this.run = run + 1;
+	public void runStats(int runNo, Object[] stats) {
+		this.run = runNo;
+		System.out.print("Run number " + runNo + " complete.");
+		ArrayList<String> output = new ArrayList<String>();
+		String part = run + "\t";
+		for (Object s: stats) {
+			part = part + s;
+			part = part + "\t";
+		}
+		part = part + "\n";
+		output.add(part);		
+		FileManip.doOutput(null, output, "RunStats.txt", true);
+	}
+
+	public RunStatField[] getRunStatFields() {
+		return new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.RUN_TIME, RunStatField.BEST_PROGRAM};
 	}
 	
 	@Override

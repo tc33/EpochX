@@ -28,6 +28,7 @@ import com.epochx.core.mutation.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.func.dbl.*;
+import com.epochx.pruning.*;
 import com.epochx.semantics.*;
 import com.epochx.stats.*;
 import com.epochx.util.FileManip;
@@ -51,23 +52,25 @@ public class RegressionModelCUBIC extends SemanticModel<Double> {
 		// Setup run.
 		setPopulationSize(500);
 		setNoGenerations(50);
-		setCrossoverProbability(0.9);
-		setMutationProbability(0);
+		setCrossoverProbability(0.45);
+		setMutationProbability(0.45);
 		setReproductionProbability(0.1);
 		setNoRuns(100);
 		setPouleSize(50);
 		setNoElites(50);
-		setInitialMaxDepth(6);
+		setInitialMaxDepth(4);
 		setMaxDepth(17);
 		setPouleSelector(new TournamentSelector<Double>(7, this));
 		setParentSelector(new RandomSelector<Double>());
 		setCrossover(new KozaCrossover<Double>());
 		setStateCheckedCrossover(true);
 		setMutator(new SubtreeMutation<Double>(this));
-		setStateCheckedMutation(false);
+		setStateCheckedMutation(true);
 		RegressionSemanticModule semMod = new RegressionSemanticModule(getTerminals(), this);
 		setSemanticModule(semMod);
-		setInitialiser(new RampedHalfAndHalfInitialiser<Double>(this));
+		setPruner(new SemanticPruner<Double>(this, semMod));
+		setActivatePruning(true);
+		setInitialiser(new RegressionHybridSemanticallyDrivenInitialiser(this, semMod));
 	}
 
 	@Override

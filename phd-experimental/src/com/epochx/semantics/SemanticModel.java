@@ -35,7 +35,6 @@ public abstract class SemanticModel<TYPE> extends GPAbstractModel<TYPE> {
 	public SemanticModel() {
 		doStateCheckedCrossover = false;
 		doStateCheckedMutation = false;
-		
 		semanticModule = null;
 	}
 	

@@ -23,18 +23,23 @@ import java.io.File;
 import java.util.*;
 
 import com.epochx.core.*;
-import com.epochx.core.crossover.UniformPointCrossover;
-import com.epochx.core.initialisation.RampedHalfAndHalfInitialiser;
+import com.epochx.core.crossover.*;
+import com.epochx.core.initialisation.*;
+import com.epochx.core.mutation.SubtreeMutation;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.func.bool.*;
+import com.epochx.pruning.SemanticPruner;
+import com.epochx.semantics.BooleanSemanticModule;
+import com.epochx.semantics.SemanticModel;
 import com.epochx.stats.GenerationStatField;
+import com.epochx.stats.RunStatField;
 import com.epochx.util.*;
 
 /**
  * 
  */
-public class Even4Parity extends GPAbstractModel<Boolean> {
+public class Even4Parity extends SemanticModel<Boolean> {
 
 	private List<String> inputs;
 	private HashMap<String, Variable<Boolean>> variables = new HashMap<String, Variable<Boolean>>();
@@ -57,17 +62,25 @@ public class Even4Parity extends GPAbstractModel<Boolean> {
 		
 		setPopulationSize(500);
 		setNoGenerations(50);
-		setCrossoverProbability(0.9);
+		setCrossoverProbability(0.45);
+		setMutationProbability(0.45);
 		setReproductionProbability(0.1);
 		setNoRuns(100);
 		setPouleSize(50);
 		setNoElites(50);
-		setInitialMaxDepth(6);
+		setInitialMaxDepth(4);
 		setMaxDepth(17);
 		setPouleSelector(new TournamentSelector<Boolean>(7, this));
 		setParentSelector(new RandomSelector<Boolean>());
-		setCrossover(new UniformPointCrossover<Boolean>());
-		setInitialiser(new RampedHalfAndHalfInitialiser<Boolean>(this));
+		setCrossover(new KozaCrossover<Boolean>());
+		setStateCheckedCrossover(true);
+		setMutator(new SubtreeMutation<Boolean>(this));
+		setStateCheckedMutation(true);
+		BooleanSemanticModule semMod = new BooleanSemanticModule(getTerminals(), this);
+		setSemanticModule(semMod);
+		setPruner(new SemanticPruner<Boolean>(this, semMod));
+		setActivatePruning(true);
+		setInitialiser(new BooleanHybridSemanticallyDrivenInitialiser(this, semMod));
 	}
 	
 	@Override
@@ -135,26 +148,42 @@ public class Even4Parity extends GPAbstractModel<Boolean> {
 	}
 	
 	@Override
-	public void runStats(int run, Object[] stats) {
-		this.run = run + 1;
+	public void runStats(int runNo, Object[] stats) {
+		this.run = runNo;
+		System.out.print("Run number " + runNo + " complete.");
+		ArrayList<String> output = new ArrayList<String>();
+		String part = run + "\t";
+		for (Object s: stats) {
+			part = part + s;
+			part = part + "\t";
+		}
+		part = part + "\n";
+		output.add(part);		
+		FileManip.doOutput(null, output, "RunStats.txt", true);
+	}
+
+	@Override
+	public RunStatField[] getRunStatFields() {
+		return new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.RUN_TIME, RunStatField.BEST_PROGRAM};
 	}
 	
 	@Override
 	public void generationStats(int generation, Object[] stats) {
 		ArrayList<String> output = new ArrayList<String>();
-		System.out.println(run + "\t" + generation + "\t");
+		//System.out.println(run + "\t" + generation + "\t");
 		String part = run + "\t" + generation + "\t";
 		for (Object s: stats) {
 			part = part + s;
 			part = part + "\t";
 		}
 		part = part + "\n";
+		System.out.println(part);
 		output.add(part);
-		FileManip.doOutput(null, output, "output.txt", true);
+		FileManip.doOutput(null, output, "GenerationStats.txt", true);
 	}
 
 	@Override
 	public GenerationStatField[] getGenStatFields() {
-		return new GenerationStatField[]{GenerationStatField.FITNESS_AVE, GenerationStatField.FITNESS_MIN, GenerationStatField.LENGTH_AVE};
+		return new GenerationStatField[]{GenerationStatField.FITNESS_AVE, GenerationStatField.FITNESS_MIN, GenerationStatField.LENGTH_AVE, GenerationStatField.REVERTED_CROSSOVERS, GenerationStatField.REVERTED_MUTATIONS};
 	}
 }

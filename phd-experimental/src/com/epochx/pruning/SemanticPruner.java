@@ -1,5 +1,5 @@
 /*  
- *  Copyright 2007-2008 Lawrence Beadle & Tom Castle
+ *  Copyright 2007-2009 Lawrence Beadle & Tom Castle
  *  Licensed under GNU General Public License
  * 
  *  This file is part of Epoch X - (The Genetic Programming Analysis Software)
@@ -28,15 +28,27 @@ import com.epochx.semantics.*;
  * The semantic pruner class provides a method to reconstruct code in a reduced from which contains
  * no introns
  */
-public class SemanticPruner {
+public class SemanticPruner<TYPE> implements Pruner<TYPE> {
+	
+	private GPModel model;
+	private SemanticModule semMod;
 	
 	/**
 	 * SemanticPruner constructor which provides all the functionality for this class
-	 * @param population The GP population of candidate programs
 	 * @param model The GP model in use
 	 * @param semMod The semantic module in use
 	 */
-	public SemanticPruner(List<CandidateProgram> population, GPModel model, SemanticModule semMod) {
+	public SemanticPruner(GPModel model, SemanticModule semMod) {
+		this.model = model;
+		this.semMod = semMod;		
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.epochx.pruning.Pruner#doPruning(java.util.List)
+	 */
+	public void doPruning(List<CandidateProgram<TYPE>> population) {
+		
+		semMod.start();
 		
 		// reduce to behaviour
 		List<Representation> behaviours = new ArrayList<Representation>(model.getPopulationSize());
@@ -57,6 +69,8 @@ public class SemanticPruner {
 				// return to syntax
 				population.set(i, semMod.behaviourToCode(behaviours.get(i)));
 			}
-		}		
+		}
+		
+		semMod.stop();
 	}
 }

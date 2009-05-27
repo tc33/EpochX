@@ -24,19 +24,28 @@ import java.util.*;
 
 import com.epochx.core.*;
 import com.epochx.core.crossover.*;
+import com.epochx.core.initialisation.BooleanHybridSemanticallyDrivenInitialiser;
+import com.epochx.core.mutation.SubtreeMutation;
 import com.epochx.core.representation.*;
+import com.epochx.core.scorer.BooleanSemanticScorer;
 import com.epochx.core.selection.*;
 import com.epochx.func.bool.*;
+import com.epochx.pruning.SemanticPruner;
+import com.epochx.semantics.BooleanSemanticModule;
+import com.epochx.semantics.SemanticModel;
+import com.epochx.stats.GenerationStatField;
+import com.epochx.stats.RunStatField;
 import com.epochx.util.*;
 
 /**
  * 
  *
  */
-public class Multiplexer11Bit extends GPAbstractModel<Boolean> {
+public class Multiplexer11Bit extends SemanticModel<Boolean> {
 
 	private List<String> inputs;
 	private HashMap<String, Variable<Boolean>> variables = new HashMap<String, Variable<Boolean>>();
+	private int run = 1;
 	
 	public Multiplexer11Bit() {
 		inputs = new ArrayList<String>();
@@ -45,19 +54,7 @@ public class Multiplexer11Bit extends GPAbstractModel<Boolean> {
 		configure();
 	}
 	
-	public void configure() {
-		setPopulationSize(500);
-		setNoGenerations(50);
-		setCrossoverProbability(0.9);
-		setReproductionProbability(0.1);
-		setNoRuns(1);
-		setPouleSize(50);
-		setNoElites(50);
-		setMaxDepth(6);
-		setPouleSelector(new TournamentSelector<Boolean>(7, this));
-		setParentSelector(new RandomSelector<Boolean>());
-		setCrossover(new UniformPointCrossover<Boolean>());
-		
+	public void configure() {	
 		// Define variables.
 		variables.put("D7", new Variable<Boolean>("D7"));
 		variables.put("D6", new Variable<Boolean>("D6"));
@@ -70,6 +67,28 @@ public class Multiplexer11Bit extends GPAbstractModel<Boolean> {
 		variables.put("A2", new Variable<Boolean>("A2"));
 		variables.put("A1", new Variable<Boolean>("A1"));
 		variables.put("A0", new Variable<Boolean>("A0"));
+		
+		setPopulationSize(4000);
+		setNoGenerations(50);
+		setCrossoverProbability(0.45);
+		setMutationProbability(0.45);
+		setReproductionProbability(0.1);
+		setNoRuns(100);
+		setPouleSize(400);
+		setNoElites(400);
+		setInitialMaxDepth(4);
+		setMaxDepth(17);
+		setPouleSelector(new TournamentSelector<Boolean>(7, this));
+		setParentSelector(new RandomSelector<Boolean>());
+		setCrossover(new KozaCrossover<Boolean>());
+		setStateCheckedCrossover(true);
+		setMutator(new SubtreeMutation<Boolean>(this));
+		setStateCheckedMutation(true);
+		BooleanSemanticModule semMod = new BooleanSemanticModule(getTerminals(), this);
+		setSemanticModule(semMod);
+		setPruner(new SemanticPruner<Boolean>(this, semMod));
+		setActivatePruning(true);
+		setInitialiser(new BooleanHybridSemanticallyDrivenInitialiser(this, semMod));
 	}
 	
 	@Override
@@ -104,6 +123,23 @@ public class Multiplexer11Bit extends GPAbstractModel<Boolean> {
 	
 	@Override
 	public double getFitness(CandidateProgram<Boolean> program) {
+		// set up ideal solution
+	    IfFunction part1 = new IfFunction(new Variable<Boolean>("A2"), new Variable<Boolean>("D0"), new Variable<Boolean>("D1"));
+	    IfFunction part2 = new IfFunction(new Variable<Boolean>("A2"), new Variable<Boolean>("D2"), new Variable<Boolean>("D3"));
+	    IfFunction part3 = new IfFunction(new Variable<Boolean>("A2"), new Variable<Boolean>("D4"), new Variable<Boolean>("D5"));
+	    IfFunction part4 = new IfFunction(new Variable<Boolean>("A2"), new Variable<Boolean>("D6"), new Variable<Boolean>("D7"));
+	    IfFunction part5 = new IfFunction(new Variable<Boolean>("A1"), part1, part2);
+	    IfFunction part6 = new IfFunction(new Variable<Boolean>("A1"), part3, part4);
+	    IfFunction part0 = new IfFunction(new Variable<Boolean>("A0"), part5, part6);
+	    CandidateProgram<Boolean> target = new CandidateProgram<Boolean>(part0, this);
+        // do semantic scoring part
+        BooleanSemanticScorer scorer = new BooleanSemanticScorer(getSemanticModule());
+        double score = scorer.doScore(program, target);
+        return score;
+	}
+	
+	/*@Override
+	public double getFitness(CandidateProgram<Boolean> program) {
         double score = 0;
         
         // Execute on all possible inputs.
@@ -129,7 +165,7 @@ public class Multiplexer11Bit extends GPAbstractModel<Boolean> {
         }
         
         return 2048 - score;
-	}
+	}*/
 	
     private boolean chooseResult(boolean[] input) {
     	boolean result = false;
@@ -156,5 +192,43 @@ public class Multiplexer11Bit extends GPAbstractModel<Boolean> {
 	
 	public static void main(String[] args) {
 		GPController.run(new Multiplexer11Bit());
+	}
+	
+	public void runStats(int runNo, Object[] stats) {
+		this.run = runNo;
+		System.out.print("Run number " + runNo + " complete.");
+		ArrayList<String> output = new ArrayList<String>();
+		String part = run + "\t";
+		for (Object s: stats) {
+			part = part + s;
+			part = part + "\t";
+		}
+		part = part + "\n";
+		output.add(part);		
+		FileManip.doOutput(null, output, "RunStats.txt", true);
+	}
+
+	public RunStatField[] getRunStatFields() {
+		return new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.RUN_TIME, RunStatField.BEST_PROGRAM};
+	}
+	
+	@Override
+	public void generationStats(int generation, Object[] stats) {
+		ArrayList<String> output = new ArrayList<String>();
+		//System.out.println(run + "\t" + generation + "\t");
+		String part = run + "\t" + generation + "\t";
+		for (Object s: stats) {
+			part = part + s;
+			part = part + "\t";
+		}
+		part = part + "\n";
+		System.out.println(part);
+		output.add(part);
+		FileManip.doOutput(null, output, "GenerationStats.txt", true);
+	}
+
+	@Override
+	public GenerationStatField[] getGenStatFields() {
+		return new GenerationStatField[]{GenerationStatField.FITNESS_AVE, GenerationStatField.FITNESS_MIN, GenerationStatField.LENGTH_AVE, GenerationStatField.REVERTED_CROSSOVERS, GenerationStatField.REVERTED_MUTATIONS};
 	}
 }

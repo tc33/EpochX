@@ -24,18 +24,27 @@ import java.util.*;
 
 import com.epochx.core.*;
 import com.epochx.core.crossover.*;
+import com.epochx.core.initialisation.BooleanHybridSemanticallyDrivenInitialiser;
+import com.epochx.core.initialisation.RampedHalfAndHalfInitialiser;
+import com.epochx.core.mutation.SubtreeMutation;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.func.bool.*;
+import com.epochx.pruning.SemanticPruner;
+import com.epochx.semantics.BooleanSemanticModule;
+import com.epochx.semantics.SemanticModel;
+import com.epochx.stats.GenerationStatField;
+import com.epochx.stats.RunStatField;
 import com.epochx.util.*;
 
 /**
  * 
  */
-public class Even7Parity extends GPAbstractModel<Boolean> {
+public class Even7Parity extends SemanticModel<Boolean> {
 
 	private List<String> inputs;
 	private HashMap<String, Variable<Boolean>> variables = new HashMap<String, Variable<Boolean>>();
+	private int run = 1;	
 	
 	public Even7Parity() {
 		inputs = new ArrayList<String>();
@@ -44,19 +53,7 @@ public class Even7Parity extends GPAbstractModel<Boolean> {
 		configure();
 	}
 	
-	public void configure() {
-		setPopulationSize(500);
-		setNoGenerations(50);
-		setCrossoverProbability(0.9);
-		setReproductionProbability(0.1);
-		setNoRuns(5);
-		setPouleSize(50);
-		setNoElites(50);
-		setMaxDepth(6);
-		setPouleSelector(new TournamentSelector<Boolean>(7, this));
-		setParentSelector(new RandomSelector<Boolean>());
-		setCrossover(new UniformPointCrossover<Boolean>());
-		
+	public void configure() {		
 		// Define variables.
 		variables.put("D6", new Variable<Boolean>("D6"));
 		variables.put("D5", new Variable<Boolean>("D5"));
@@ -65,6 +62,28 @@ public class Even7Parity extends GPAbstractModel<Boolean> {
 		variables.put("D2", new Variable<Boolean>("D2"));
 		variables.put("D1", new Variable<Boolean>("D1"));
 		variables.put("D0", new Variable<Boolean>("D0"));
+		
+		setPopulationSize(4000);
+		setNoGenerations(50);
+		setCrossoverProbability(0.9);
+		setMutationProbability(0);
+		setReproductionProbability(0.1);
+		setNoRuns(100);
+		setPouleSize(400);
+		setNoElites(400);
+		setInitialMaxDepth(6);
+		setMaxDepth(17);
+		setPouleSelector(new TournamentSelector<Boolean>(7, this));
+		setParentSelector(new RandomSelector<Boolean>());
+		setCrossover(new KozaCrossover<Boolean>());
+		setStateCheckedCrossover(false);
+		setMutator(new SubtreeMutation<Boolean>(this));
+		setStateCheckedMutation(false);
+		BooleanSemanticModule semMod = new BooleanSemanticModule(getTerminals(), this);
+		setSemanticModule(semMod);
+		setPruner(new SemanticPruner<Boolean>(this, semMod));
+		setActivatePruning(true);
+		setInitialiser(new RampedHalfAndHalfInitialiser<Boolean>(this));
 	}
 	
 	@Override
@@ -135,5 +154,43 @@ public class Even7Parity extends GPAbstractModel<Boolean> {
 	
 	public static void main(String[] args) {
 		GPController.run(new Even7Parity());
+	}
+	
+	public void runStats(int runNo, Object[] stats) {
+		this.run = runNo;
+		System.out.print("Run number " + runNo + " complete.");
+		ArrayList<String> output = new ArrayList<String>();
+		String part = run + "\t";
+		for (Object s: stats) {
+			part = part + s;
+			part = part + "\t";
+		}
+		part = part + "\n";
+		output.add(part);		
+		FileManip.doOutput(null, output, "RunStats.txt", true);
+	}
+
+	public RunStatField[] getRunStatFields() {
+		return new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.RUN_TIME, RunStatField.BEST_PROGRAM};
+	}
+	
+	@Override
+	public void generationStats(int generation, Object[] stats) {
+		ArrayList<String> output = new ArrayList<String>();
+		//System.out.println(run + "\t" + generation + "\t");
+		String part = run + "\t" + generation + "\t";
+		for (Object s: stats) {
+			part = part + s;
+			part = part + "\t";
+		}
+		part = part + "\n";
+		System.out.println(part);
+		output.add(part);
+		FileManip.doOutput(null, output, "GenerationStats.txt", true);
+	}
+
+	@Override
+	public GenerationStatField[] getGenStatFields() {
+		return new GenerationStatField[]{GenerationStatField.FITNESS_AVE, GenerationStatField.FITNESS_MIN, GenerationStatField.LENGTH_AVE, GenerationStatField.DEPTH_AVE, GenerationStatField.REVERTED_CROSSOVERS, GenerationStatField.REVERTED_MUTATIONS};
 	}
 }

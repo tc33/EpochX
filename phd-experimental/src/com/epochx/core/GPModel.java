@@ -26,6 +26,7 @@ import com.epochx.core.initialisation.Initialiser;
 import com.epochx.core.mutation.Mutation;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
+import com.epochx.pruning.Pruner;
 import com.epochx.stats.*;
 
 /**
@@ -159,6 +160,18 @@ public interface GPModel<TYPE> {
 	 * 		   operation of mutation.
 	 */
 	public Mutation<TYPE> getMutator();
+	
+	/**
+	 * Retrieves the pruner model to be used for this problem
+	 * @return the implementation of the the pruner model to be used
+	 */
+	public Pruner<TYPE> getPruner();
+	
+	/**
+	 * Tells the GP run whether to prune or not
+	 * @return TRUE if model is to prune programs
+	 */
+	public boolean getPruningStatus();
 	
 	/**
 	 * Retrieves a numerical value between 0 and 1 which represents the 

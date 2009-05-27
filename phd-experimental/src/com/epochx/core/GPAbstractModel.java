@@ -26,6 +26,7 @@ import com.epochx.core.initialisation.*;
 import com.epochx.core.mutation.*;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
+import com.epochx.pruning.*;
 import com.epochx.stats.*;
 
 /**
@@ -51,6 +52,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	private Initialiser<TYPE> initialiser;
 	private Crossover<TYPE> crossover;
 	private Mutation<TYPE> mutator;
+	private Pruner<TYPE> pruner;
 	
 	private PouleSelector<TYPE> pouleSelector;
 	private ParentSelector<TYPE> parentSelector;
@@ -66,6 +68,8 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	private double crossoverProbability;
 	private double reproductionProbability;
 	private double mutationProbability;
+	
+	private boolean doPruning;
 	
 	/**
 	 * Construct a GPModel with a set of sensible defaults. See the appropriate
@@ -286,6 +290,42 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 */
 	public void setMutator(Mutation<TYPE> mutator) {
 		this.mutator = mutator;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to {@link Pruner} in GPAbstractModel.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	public Pruner<TYPE> getPruner() {
+		return pruner;
+	}
+
+	/**
+	 * Overwrites the default pruner used to perform pruning.
+	 * 
+	 * @param pruner the pruner to set
+	 */
+	public void setPruner(Pruner<TYPE> pruner) {
+		this.pruner = pruner;
+	}
+	
+	/**
+	 * Set value to decide whether to do pruning or not
+	 * @param doPruning True to activate pruning
+	 */
+	public void setActivatePruning(boolean doPruning) {
+		this.doPruning = doPruning;
+	}
+	
+	/**
+	 * Returns value as to whether to do pruning or not - TRUE to do pruning
+	 * @return True to do pruning
+	 */
+	public boolean getPruningStatus() {
+		return this.doPruning;
 	}
 
 	/**

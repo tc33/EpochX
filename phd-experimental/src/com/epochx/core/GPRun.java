@@ -22,6 +22,7 @@ package com.epochx.core;
 import java.util.*;
 
 import com.epochx.core.representation.*;
+import com.epochx.pruning.Pruner;
 import com.epochx.stats.*;
 
 /**
@@ -58,6 +59,9 @@ public class GPRun<TYPE> {
 	// Mutation module.
 	private GPMutation<TYPE> mutation;
 	
+	// Pruner module.
+	private Pruner<TYPE> pruner;
+	
 	/*
 	 * Private constructor. The static factory method run(GPModel) should be 
 	 * used to create objects of GPRun and simultaneously execute them.
@@ -74,6 +78,7 @@ public class GPRun<TYPE> {
 		// Setup crossover and mutation.
 		crossover = new GPCrossover<TYPE>(model);
 		mutation = new GPMutation<TYPE>(model);
+		pruner = model.getPruner();
 		
 		// Create the statistics monitor.
 		genStats = new GenerationStats<TYPE>();
@@ -165,6 +170,12 @@ public class GPRun<TYPE> {
 					nextPop.add(pool.get((int) Math.floor(Math.random()*pool.size())));
 				}
 			}
+			
+			// do pruning here if is going to happen -----------------------------------------
+			if(model.getPruningStatus()) {
+				pruner.doPruning(nextPop);
+			}
+			// -------------------------------------------------------------------------------
 			
 			// Update new best program.
 			for (CandidateProgram<TYPE> p: pop) {

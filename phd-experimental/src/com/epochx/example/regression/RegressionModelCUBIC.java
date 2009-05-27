@@ -139,7 +139,7 @@ public class RegressionModelCUBIC extends SemanticModel<Double> {
 	
 	public void runStats(int runNo, Object[] stats) {
 		this.run = runNo;
-		/*System.out.print("Run number " + runNo + " complete.");
+		System.out.print("Run number " + runNo + " complete.");
 		ArrayList<String> output = new ArrayList<String>();
 		String part = run + "\t";
 		for (Object s: stats) {
@@ -148,7 +148,7 @@ public class RegressionModelCUBIC extends SemanticModel<Double> {
 		}
 		part = part + "\n";
 		output.add(part);		
-		FileManip.doOutput(null, output, "RunStats.txt", true);		*/
+		FileManip.doOutput(null, output, "RunStats.txt", true);
 	}
 
 	public RunStatField[] getRunStatFields() {

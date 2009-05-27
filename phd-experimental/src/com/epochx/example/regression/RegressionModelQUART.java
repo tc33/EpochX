@@ -51,8 +51,8 @@ public class RegressionModelQUART extends SemanticModel<Double> {
 		// Setup run.
 		setPopulationSize(4000);
 		setNoGenerations(50);
-		setCrossoverProbability(0.9);
-		setMutationProbability(0);
+		setCrossoverProbability(0);
+		setMutationProbability(0.9);
 		setReproductionProbability(0.1);
 		setNoRuns(100);
 		setPouleSize(400);
@@ -64,7 +64,7 @@ public class RegressionModelQUART extends SemanticModel<Double> {
 		setCrossover(new UniformPointCrossover<Double>());
 		setStateCheckedCrossover(false);
 		setMutator(new SubtreeMutation<Double>(this));
-		setStateCheckedMutation(false);
+		setStateCheckedMutation(true);
 		RegressionSemanticModule semMod = new RegressionSemanticModule(getTerminals(), this);
 		setSemanticModule(semMod);
 		setInitialiser(new RampedHalfAndHalfInitialiser<Double>(this));
@@ -152,7 +152,7 @@ public class RegressionModelQUART extends SemanticModel<Double> {
 	}
 
 	public RunStatField[] getRunStatFields() {
-		return new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM};
+		return new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.RUN_TIME, RunStatField.BEST_PROGRAM};
 	}
 	
 	@Override
@@ -171,7 +171,7 @@ public class RegressionModelQUART extends SemanticModel<Double> {
 
 	@Override
 	public GenerationStatField[] getGenStatFields() {
-		return new GenerationStatField[]{GenerationStatField.FITNESS_AVE, GenerationStatField.FITNESS_MIN, GenerationStatField.LENGTH_AVE};
+		return new GenerationStatField[]{GenerationStatField.FITNESS_AVE, GenerationStatField.FITNESS_MIN, GenerationStatField.LENGTH_AVE, GenerationStatField.REVERTED_CROSSOVERS, GenerationStatField.REVERTED_MUTATIONS};
 	}
 	
 	public static void main(String[] args) {

@@ -58,19 +58,19 @@ public class RegressionModelCUBIC extends SemanticModel<Double> {
 		setNoRuns(100);
 		setPouleSize(50);
 		setNoElites(50);
-		setInitialMaxDepth(4);
+		setInitialMaxDepth(6);
 		setMaxDepth(17);
 		setPouleSelector(new TournamentSelector<Double>(7, this));
 		setParentSelector(new RandomSelector<Double>());
 		setCrossover(new KozaCrossover<Double>());
-		setStateCheckedCrossover(true);
+		setStateCheckedCrossover(false);
 		setMutator(new SubtreeMutation<Double>(this));
-		setStateCheckedMutation(true);
+		setStateCheckedMutation(false);
 		RegressionSemanticModule semMod = new RegressionSemanticModule(getTerminals(), this);
 		setSemanticModule(semMod);
 		setPruner(new SemanticPruner<Double>(this, semMod));
-		setActivatePruning(true);
-		setInitialiser(new RegressionHybridSemanticallyDrivenInitialiser(this, semMod));
+		setActivatePruning(false);
+		setInitialiser(new RampedHalfAndHalfInitialiser<Double>(this));
 	}
 
 	@Override

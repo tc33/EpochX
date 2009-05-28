@@ -86,19 +86,19 @@ public class ArtificialAntSantaFe extends SemanticModel<Action> {
 		setNoRuns(100);
 		setPouleSize(50);
 		setNoElites(50);
-		setInitialMaxDepth(4);
+		setInitialMaxDepth(6);
 		setMaxDepth(17);
 		setPouleSelector(new TournamentSelector<Action>(7, this));
 		setParentSelector(new RandomSelector<Action>());
 		setCrossover(new KozaCrossover<Action>());
-		setStateCheckedCrossover(true);
+		setStateCheckedCrossover(false);
 		setMutator(new SubtreeMutation<Action>(this));
-		setStateCheckedMutation(true);
+		setStateCheckedMutation(false);
 		AntSemanticModule semMod = new AntSemanticModule(getTerminals(), this, ant, antLandscape);
 		setSemanticModule(semMod);
 		setPruner(new SemanticPruner<Action>(this, semMod));
-		setActivatePruning(true);
-		setInitialiser(new AntHybridSemanticallyDrivenInitialiser(this, semMod));
+		setActivatePruning(false);
+		setInitialiser(new RampedHalfAndHalfInitialiser<Action>(this));
 	}
 	
 	@Override

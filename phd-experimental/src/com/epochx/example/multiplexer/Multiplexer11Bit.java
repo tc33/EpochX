@@ -25,6 +25,7 @@ import java.util.*;
 import com.epochx.core.*;
 import com.epochx.core.crossover.*;
 import com.epochx.core.initialisation.BooleanHybridSemanticallyDrivenInitialiser;
+import com.epochx.core.initialisation.RampedHalfAndHalfInitialiser;
 import com.epochx.core.mutation.SubtreeMutation;
 import com.epochx.core.representation.*;
 import com.epochx.core.scorer.BooleanSemanticScorer;
@@ -76,19 +77,19 @@ public class Multiplexer11Bit extends SemanticModel<Boolean> {
 		setNoRuns(100);
 		setPouleSize(400);
 		setNoElites(400);
-		setInitialMaxDepth(4);
+		setInitialMaxDepth(6);
 		setMaxDepth(17);
 		setPouleSelector(new TournamentSelector<Boolean>(7, this));
 		setParentSelector(new RandomSelector<Boolean>());
 		setCrossover(new KozaCrossover<Boolean>());
-		setStateCheckedCrossover(true);
+		setStateCheckedCrossover(false);
 		setMutator(new SubtreeMutation<Boolean>(this));
-		setStateCheckedMutation(true);
+		setStateCheckedMutation(false);
 		BooleanSemanticModule semMod = new BooleanSemanticModule(getTerminals(), this);
 		setSemanticModule(semMod);
 		setPruner(new SemanticPruner<Boolean>(this, semMod));
-		setActivatePruning(true);
-		setInitialiser(new BooleanHybridSemanticallyDrivenInitialiser(this, semMod));
+		setActivatePruning(false);
+		setInitialiser(new RampedHalfAndHalfInitialiser<Boolean>(this));
 	}
 	
 	@Override
@@ -121,6 +122,7 @@ public class Multiplexer11Bit extends SemanticModel<Boolean> {
 		return terminals;
 	}
 	
+	/*
 	@Override
 	public double getFitness(CandidateProgram<Boolean> program) {
 		// set up ideal solution
@@ -136,9 +138,9 @@ public class Multiplexer11Bit extends SemanticModel<Boolean> {
         BooleanSemanticScorer scorer = new BooleanSemanticScorer(getSemanticModule());
         double score = scorer.doScore(program, target);
         return score;
-	}
+	}**/
 	
-	/*@Override
+	@Override
 	public double getFitness(CandidateProgram<Boolean> program) {
         double score = 0;
         
@@ -165,7 +167,7 @@ public class Multiplexer11Bit extends SemanticModel<Boolean> {
         }
         
         return 2048 - score;
-	}*/
+	}
 	
     private boolean chooseResult(boolean[] input) {
     	boolean result = false;

@@ -70,19 +70,19 @@ public class Majority5 extends SemanticModel<Boolean> {
 		setNoRuns(100);
 		setPouleSize(50);
 		setNoElites(50);
-		setInitialMaxDepth(4);
+		setInitialMaxDepth(6);
 		setMaxDepth(17);
 		setPouleSelector(new TournamentSelector<Boolean>(7, this));
 		setParentSelector(new RandomSelector<Boolean>());
 		setCrossover(new KozaCrossover<Boolean>());
-		setStateCheckedCrossover(true);
+		setStateCheckedCrossover(false);
 		setMutator(new SubtreeMutation<Boolean>(this));
-		setStateCheckedMutation(true);
+		setStateCheckedMutation(false);
 		BooleanSemanticModule semMod = new BooleanSemanticModule(getTerminals(), this);
 		setSemanticModule(semMod);
 		setPruner(new SemanticPruner<Boolean>(this, semMod));
-		setActivatePruning(true);
-		setInitialiser(new BooleanHybridSemanticallyDrivenInitialiser(this, semMod));
+		setActivatePruning(false);
+		setInitialiser(new RampedHalfAndHalfInitialiser<Boolean>(this));
 	}
 	
 	@Override

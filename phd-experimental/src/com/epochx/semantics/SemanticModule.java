@@ -40,15 +40,4 @@ public interface SemanticModule<TYPE> {
 	 * @return The syntax tree
 	 */
 	public CandidateProgram<TYPE> behaviourToCode(Representation representation);
-	
-	/**
-	 * Method to start actions in an external piece of software - for CUDD
-	 */
-	public void start();
-	
-	/**
-	 * Method to stop actions in an external piece of software - for CUDD
-	 */
-	public void stop();
-
 }

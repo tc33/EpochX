@@ -47,6 +47,7 @@ public class Multiplexer11Bit extends SemanticModel<Boolean> {
 	private List<String> inputs;
 	private HashMap<String, Variable<Boolean>> variables = new HashMap<String, Variable<Boolean>>();
 	private int run = 1;
+	private BooleanSemanticScorer scorer;
 	
 	public Multiplexer11Bit() {
 		inputs = new ArrayList<String>();
@@ -70,11 +71,11 @@ public class Multiplexer11Bit extends SemanticModel<Boolean> {
 		variables.put("A0", new Variable<Boolean>("A0"));
 		
 		setPopulationSize(4000);
-		setNoGenerations(50);
+		setNoGenerations(10);
 		setCrossoverProbability(0.45);
 		setMutationProbability(0.45);
 		setReproductionProbability(0.1);
-		setNoRuns(100);
+		setNoRuns(1);
 		setPouleSize(400);
 		setNoElites(400);
 		setInitialMaxDepth(6);
@@ -88,8 +89,10 @@ public class Multiplexer11Bit extends SemanticModel<Boolean> {
 		BooleanSemanticModule semMod = new BooleanSemanticModule(getTerminals(), this);
 		setSemanticModule(semMod);
 		setPruner(new SemanticPruner<Boolean>(this, semMod));
-		setActivatePruning(false);
+		setActivatePruning(true);
 		setInitialiser(new RampedHalfAndHalfInitialiser<Boolean>(this));
+		
+		scorer = new BooleanSemanticScorer(getSemanticModule());
 	}
 	
 	@Override
@@ -107,22 +110,21 @@ public class Multiplexer11Bit extends SemanticModel<Boolean> {
 	public List<TerminalNode<Boolean>> getTerminals() {		
 		// Define terminals.
 		List<TerminalNode<Boolean>> terminals = new ArrayList<TerminalNode<Boolean>>();
-		terminals.add(variables.get("D7"));
-		terminals.add(variables.get("D6"));
-		terminals.add(variables.get("D5"));
-		terminals.add(variables.get("D4"));
-		terminals.add(variables.get("D3"));
-		terminals.add(variables.get("D2"));
-		terminals.add(variables.get("D1"));
-		terminals.add(variables.get("D0"));
-		terminals.add(variables.get("A2"));
-		terminals.add(variables.get("A1"));
 		terminals.add(variables.get("A0"));
+		terminals.add(variables.get("A1"));
+		terminals.add(variables.get("A2"));
+		terminals.add(variables.get("D0"));
+		terminals.add(variables.get("D1"));
+		terminals.add(variables.get("D2"));
+		terminals.add(variables.get("D3"));
+		terminals.add(variables.get("D4"));
+		terminals.add(variables.get("D5"));
+		terminals.add(variables.get("D6"));
+		terminals.add(variables.get("D7"));
 		
 		return terminals;
-	}
+	}	
 	
-	/*
 	@Override
 	public double getFitness(CandidateProgram<Boolean> program) {
 		// set up ideal solution
@@ -135,11 +137,12 @@ public class Multiplexer11Bit extends SemanticModel<Boolean> {
 	    IfFunction part0 = new IfFunction(new Variable<Boolean>("A0"), part5, part6);
 	    CandidateProgram<Boolean> target = new CandidateProgram<Boolean>(part0, this);
         // do semantic scoring part
-        BooleanSemanticScorer scorer = new BooleanSemanticScorer(getSemanticModule());
+        
         double score = scorer.doScore(program, target);
         return score;
-	}**/
+	}
 	
+	/**
 	@Override
 	public double getFitness(CandidateProgram<Boolean> program) {
         double score = 0;
@@ -167,7 +170,7 @@ public class Multiplexer11Bit extends SemanticModel<Boolean> {
         }
         
         return 2048 - score;
-	}
+	} **/
 	
     private boolean chooseResult(boolean[] input) {
     	boolean result = false;

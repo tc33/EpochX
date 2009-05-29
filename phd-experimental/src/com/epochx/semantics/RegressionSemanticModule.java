@@ -46,22 +46,6 @@ public class RegressionSemanticModule implements SemanticModule<Double> {
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.epochx.semantics.SemanticModule#start()
-	 */
-	@Override
-	public void start() {
-		// Not required as not accessing external software for this model
-	}
-
-	/* (non-Javadoc)
-	 * @see com.epochx.semantics.SemanticModule#stop()
-	 */
-	@Override
-	public void stop() {
-		// Not required as not accessing external software for this model
-	}
-	
-	/* (non-Javadoc)
 	 * @see com.epochx.semantics.SemanticModule#behaviourToCode(com.epochx.semantics.Representation)
 	 */
 	@Override

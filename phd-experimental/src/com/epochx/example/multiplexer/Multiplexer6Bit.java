@@ -55,20 +55,20 @@ public class Multiplexer6Bit extends SemanticModel<Boolean> {
 	
 	public void configure() {
 		
-		// Define variables.
-		variables.put("D3", new Variable<Boolean>("D3"));
-		variables.put("D2", new Variable<Boolean>("D2"));
-		variables.put("D1", new Variable<Boolean>("D1"));
-		variables.put("D0", new Variable<Boolean>("D0"));
-		variables.put("A1", new Variable<Boolean>("A1"));
+		// Define variables.		
 		variables.put("A0", new Variable<Boolean>("A0"));
+		variables.put("A1", new Variable<Boolean>("A1"));
+		variables.put("D0", new Variable<Boolean>("D0"));
+		variables.put("D1", new Variable<Boolean>("D1"));
+		variables.put("D2", new Variable<Boolean>("D2"));
+		variables.put("D3", new Variable<Boolean>("D3"));
 		
 		setPopulationSize(500);
-		setNoGenerations(50);
+		setNoGenerations(10);
 		setCrossoverProbability(0.45);
 		setMutationProbability(0.45);
 		setReproductionProbability(0.1);
-		setNoRuns(100);
+		setNoRuns(1);
 		setPouleSize(50);
 		setNoElites(50);
 		setInitialMaxDepth(6);
@@ -82,7 +82,7 @@ public class Multiplexer6Bit extends SemanticModel<Boolean> {
 		BooleanSemanticModule semMod = new BooleanSemanticModule(getTerminals(), this);
 		setSemanticModule(semMod);
 		setPruner(new SemanticPruner<Boolean>(this, semMod));
-		setActivatePruning(false);
+		setActivatePruning(true);
 		setInitialiser(new RampedHalfAndHalfInitialiser<Boolean>(this));
 	}
 	
@@ -100,13 +100,13 @@ public class Multiplexer6Bit extends SemanticModel<Boolean> {
 	@Override
 	public List<TerminalNode<Boolean>> getTerminals() {		
 		// Define terminals.
-		List<TerminalNode<Boolean>> terminals = new ArrayList<TerminalNode<Boolean>>();
-		terminals.add(variables.get("D3"));
-		terminals.add(variables.get("D2"));
-		terminals.add(variables.get("D1"));
-		terminals.add(variables.get("D0"));
-		terminals.add(variables.get("A1"));
+		List<TerminalNode<Boolean>> terminals = new ArrayList<TerminalNode<Boolean>>();		
 		terminals.add(variables.get("A0"));
+		terminals.add(variables.get("A1"));
+		terminals.add(variables.get("D0"));
+		terminals.add(variables.get("D1"));
+		terminals.add(variables.get("D2"));
+		terminals.add(variables.get("D3"));
 		
 		return terminals;
 	}

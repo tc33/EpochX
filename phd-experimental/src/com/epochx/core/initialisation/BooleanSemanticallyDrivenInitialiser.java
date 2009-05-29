@@ -52,8 +52,6 @@ public class BooleanSemanticallyDrivenInitialiser implements Initialiser<Boolean
 	}
 	
 	private List<CandidateProgram<Boolean>> generatePopulation() {
-		// initialise BDD stuff
-        semMod.start();
         List<BDD> storage = new ArrayList<BDD>();
         
         // load terminals only
@@ -90,9 +88,6 @@ public class BooleanSemanticallyDrivenInitialiser implements Initialiser<Boolean
         for(BDD toProg: storage) {
             firstGen.add(semMod.behaviourToCode(new BooleanRepresentation(toProg)));
         }
-        
-        // clear up BDD stuff
-        semMod.stop();
         
         return firstGen;
 	}

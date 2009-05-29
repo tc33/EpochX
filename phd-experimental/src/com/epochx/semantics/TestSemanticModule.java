@@ -38,8 +38,6 @@ public class TestSemanticModule {
 		FullInitialiser<Double> rhh = new FullInitialiser<Double>(model);
 		model.setPopulationSize(5000);
 		
-		semMod.start();
-		
 		// pull out first population
 		List<CandidateProgram<Double>> firstGen = rhh.getInitialPopulation();
 		List<RegressionRepresentation> firstRep = new ArrayList<RegressionRepresentation>();
@@ -77,7 +75,6 @@ public class TestSemanticModule {
 		
 		System.out.println((firstGen.size()-inequalities) + " CORRECT OUT OF " + firstGen.size());
 
-		semMod.stop();
 		System.exit(777);
 	}
 }

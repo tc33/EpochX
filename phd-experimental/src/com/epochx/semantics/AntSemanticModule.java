@@ -55,22 +55,6 @@ public class AntSemanticModule implements SemanticModule<Action> {
 		this.ant = ant;
 		this.landscape = landscape;
 	}
-
-	/* (non-Javadoc)
-	 * @see com.epochx.semantics.SemanticModule#start()
-	 */
-	@Override
-	public void start() {
-		// Not required as we do not need to activate external software to study behaviour
-	}
-
-	/* (non-Javadoc)
-	 * @see com.epochx.semantics.SemanticModule#stop()
-	 */
-	@Override
-	public void stop() {
-		// Not required as we do not need to activate external software to study behaviour
-	}
 	
 	/* (non-Javadoc)
 	 * @see com.epochx.semantics.SemanticModule#behaviourToCode(com.epochx.semantics.Representation)

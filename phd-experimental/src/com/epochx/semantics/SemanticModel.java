@@ -92,9 +92,6 @@ public abstract class SemanticModel<TYPE> extends GPAbstractModel<TYPE> {
 				throw new IllegalArgumentException("Semantic module undefined for semantically driven crossover.");
 			}
 			
-			//start semantic module
-			semMod.start();
-			
 			// check behaviours
 			Representation p1Rep = semMod.codeToBehaviour(parents[0]);
 			Representation p2Rep = semMod.codeToBehaviour(parents[1]);
@@ -106,9 +103,6 @@ public abstract class SemanticModel<TYPE> extends GPAbstractModel<TYPE> {
 			if(c2Rep.equals(p1Rep) || c2Rep.equals(p2Rep)) {
 				equal = true;
 			}
-			
-			// stop semantic module
-			semMod.stop();
 		}
 			
 		return !equal;
@@ -128,9 +122,6 @@ public abstract class SemanticModel<TYPE> extends GPAbstractModel<TYPE> {
 				throw new IllegalArgumentException("Semantic module undefine for semantically driven mutation.");
 			}
 			
-			//start semantic module
-			semMod.start();
-			
 			// check behaviours
 			Representation p1Rep = semMod.codeToBehaviour(parent);
 			Representation c1Rep = semMod.codeToBehaviour(child);
@@ -138,9 +129,6 @@ public abstract class SemanticModel<TYPE> extends GPAbstractModel<TYPE> {
 			if(c1Rep.equals(p1Rep)) {
 				equal = true;
 			}
-			
-			// stop semantic module
-			semMod.stop();
 		}
 		return !equal;
 	}

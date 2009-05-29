@@ -53,8 +53,6 @@ public class ModifiedFullInitialiser<TYPE> implements Initialiser<TYPE> {
 		// Initialise population of candidate programs.
 		int popSize = model.getPopulationSize();
 		List<CandidateProgram<TYPE>> firstGen = new ArrayList<CandidateProgram<TYPE>>(popSize);
-		// start the semantic module
-		this.semanticModule.start();
 		// Build population		
 		for(int i=0; i<popSize; i++) {
 			CandidateProgram<TYPE> candidate;
@@ -65,8 +63,6 @@ public class ModifiedFullInitialiser<TYPE> implements Initialiser<TYPE> {
 			} while (firstGen.contains(candidate) || representation.isConstant());
 			firstGen.add(candidate);
         }
-		// stop the semantic module
-		this.semanticModule.stop();
 		
 		// Return starting population.
 		return firstGen;

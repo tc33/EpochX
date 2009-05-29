@@ -47,7 +47,6 @@ public class BiasAnalyser {
 
         // set up BDD stuff
         SemanticModule semMod = model.getSemanticModule();
-        semMod.start();
 
         // create storage
         ArrayList<BehaviourManager> storage = new ArrayList<BehaviourManager>();
@@ -108,9 +107,6 @@ public class BiasAnalyser {
         }
         
         FileManip.doOutput(new File("Results"), output, "biasoutput-REGRESSION.txt", false);
-
-        // close BDD link
-        semMod.stop();
     }
     
     /**

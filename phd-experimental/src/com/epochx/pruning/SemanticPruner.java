@@ -48,8 +48,6 @@ public class SemanticPruner<TYPE> implements Pruner<TYPE> {
 	 */
 	public void doPruning(List<CandidateProgram<TYPE>> population) {
 		
-		semMod.start();
-		
 		// reduce to behaviour
 		List<Representation> behaviours = new ArrayList<Representation>(model.getPopulationSize());
 		for(CandidateProgram c: population) {
@@ -70,7 +68,5 @@ public class SemanticPruner<TYPE> implements Pruner<TYPE> {
 				population.set(i, semMod.behaviourToCode(behaviours.get(i)));
 			}
 		}
-		
-		semMod.stop();
 	}
 }

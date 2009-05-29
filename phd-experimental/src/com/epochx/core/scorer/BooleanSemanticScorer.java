@@ -47,7 +47,6 @@ public class BooleanSemanticScorer {
 	 * @return Percentage difference 0% is best score
 	 */
 	public double doScore(CandidateProgram program, CandidateProgram target) {
-		semanticModule.start();
         double score;
         BooleanRepresentation programRepresentation = (BooleanRepresentation) semanticModule.codeToBehaviour(program);
         BooleanRepresentation targetRepresentation = (BooleanRepresentation) semanticModule.codeToBehaviour(target);
@@ -57,7 +56,6 @@ public class BooleanSemanticScorer {
         BDD diffRep2 = idealRep.and(thisRep.not());
         BDD finalDiff = diffRep1.or(diffRep2);
         score = finalDiff.satCount() * 100;
-        semanticModule.stop();
         return score;
 	}
 }

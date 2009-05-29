@@ -68,8 +68,8 @@ public class Majority9 extends SemanticModel<Boolean> {
 		
 		setPopulationSize(4000);
 		setNoGenerations(50);
-		setCrossoverProbability(0.45);
-		setMutationProbability(0.45);
+		setCrossoverProbability(0.9);
+		setMutationProbability(0);
 		setReproductionProbability(0.1);
 		setNoRuns(100);
 		setPouleSize(400);

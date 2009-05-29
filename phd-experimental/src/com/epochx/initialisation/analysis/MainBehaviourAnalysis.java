@@ -108,7 +108,6 @@ public class MainBehaviourAnalysis {
 				// start equivalence module
 				behaviours = new ArrayList<Representation>();
 				progs = new ArrayList<CandidateProgram>();
-				semMod.start();
 				syntaxSame = 0;
 				semanticSame = 0;
 
@@ -141,9 +140,6 @@ public class MainBehaviourAnalysis {
 				dump.add(i + "\t" + syntaxSame + "\t" + progs.size() + "\t"
 						+ semanticSame + "\t" + behaviours.size() + "\t"
 						+ size.toString() + "\n");
-
-				// close equivalence module
-				semMod.stop();
 
 				// dump everything and force GC
 				newPop = null;

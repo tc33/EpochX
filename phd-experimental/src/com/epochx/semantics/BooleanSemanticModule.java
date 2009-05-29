@@ -46,12 +46,12 @@ public class BooleanSemanticModule implements SemanticModule<Boolean> {
 	public BooleanSemanticModule(List<TerminalNode<Boolean>> list, GPModel<Boolean> model) {
 		this.terminals = list;
 		this.model = model;
+		this.start();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.epochx.semantics.SemanticModule#start()
+	/*
+	 * Starts the CUDD factory
 	 */
-	@Override
 	public void start() {
 		// set up BDD analyser
 		this.bddLink = BDDFactory.init("cudd", (terminals.size()*500), (terminals.size()*500));
@@ -62,10 +62,9 @@ public class BooleanSemanticModule implements SemanticModule<Boolean> {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.epochx.semantics.SemanticModule#stop()
+	/*
+	 * Stops the CUDD factory 
 	 */
-	@Override
 	public void stop() {
 		// close down bdd link
 		bddLink.done();		

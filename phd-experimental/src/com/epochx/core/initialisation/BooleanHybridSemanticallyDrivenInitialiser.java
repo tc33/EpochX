@@ -52,8 +52,6 @@ public class BooleanHybridSemanticallyDrivenInitialiser implements Initialiser<B
 	}
 	
 	private List<CandidateProgram<Boolean>> generatePopulation() {
-		// initialise BDD stuff
-        semMod.start();
         List<BDD> storage = new ArrayList<BDD>();
         FullInitialiser<Boolean> f = new FullInitialiser<Boolean>(model);
         List<CandidateProgram<Boolean>> firstPass = f.getInitialPopulation();
@@ -93,9 +91,6 @@ public class BooleanHybridSemanticallyDrivenInitialiser implements Initialiser<B
         for(BDD toProg: storage) {
             firstGen.add(semMod.behaviourToCode(new BooleanRepresentation(toProg)));
         }
-        
-        // clear up BDD stuff
-        semMod.stop();
         
         return firstGen;
 	}	

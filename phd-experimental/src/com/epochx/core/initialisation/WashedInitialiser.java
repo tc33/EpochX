@@ -57,8 +57,6 @@ public class WashedInitialiser<TYPE> implements Initialiser<TYPE> {
 		// Initialise population of candidate programs.
 		int popSize = model.getPopulationSize();
 		List<CandidateProgram<TYPE>> firstGen = new ArrayList<CandidateProgram<TYPE>>(popSize);
-		// start the semantic module
-		this.semanticModule.start();
 		// Build population		
 		for(int i=0; i<popSize; i++) {
 			CandidateProgram<TYPE> candidate;
@@ -79,9 +77,6 @@ public class WashedInitialiser<TYPE> implements Initialiser<TYPE> {
 			reducedCandidate = semanticModule.behaviourToCode(representation);
 			firstGen.set(i, reducedCandidate);
         }
-		
-		// stop the semantic module
-		this.semanticModule.stop();
 		
 		// Return starting population.
 		return firstGen;

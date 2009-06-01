@@ -46,11 +46,14 @@ public class MainBehaviourAnalysis {
 		System.out.println("STARTING POP ANALYSIS - PROGRAM STARTED");
 
 		// set up model and initialiser -- configure up here
-		ArtificialAntSantaFe model = new ArtificialAntSantaFe();
-		String modelName = "AASF";
-		model.setInitialMaxDepth(4);
-		FullInitialiser initialiser = new FullInitialiser(model);
-		String genType = "FULL";
+		//ArtificialAntSantaFe model = new ArtificialAntSantaFe();
+		//String modelName = "AASF";
+		RegressionModelCUBIC model = new RegressionModelCUBIC();
+		String modelName = "SYMREG";
+		model.setInitialMaxDepth(6);
+		//FullInitialiser initialiser = new FullInitialiser(model);
+		RampedHalfAndHalfInitialiser initialiser = new RampedHalfAndHalfInitialiser(model);
+		String genType = "RHH";
 		File place = new File("Results");
 
 		// set up the different sizes of population to be analysed

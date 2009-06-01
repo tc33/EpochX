@@ -41,7 +41,7 @@ public class MakeAverages {
         ArrayList<String> filteredFiles = new ArrayList<String>();
                 
         // filter the files to desired starting pop generation method
-        String testFor = "FULL";
+        String testFor = "RHH-";
         int noOfFiles = files.length;
         for(int i = 0; i<noOfFiles; i++) {
             String tester = files[i];            

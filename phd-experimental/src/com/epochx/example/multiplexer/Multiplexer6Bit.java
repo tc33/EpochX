@@ -64,26 +64,26 @@ public class Multiplexer6Bit extends SemanticModel<Boolean> {
 		variables.put("D3", new Variable<Boolean>("D3"));
 		
 		setPopulationSize(500);
-		setNoGenerations(10);
+		setNoGenerations(50);
 		setCrossoverProbability(0.45);
 		setMutationProbability(0.45);
 		setReproductionProbability(0.1);
-		setNoRuns(1);
+		setNoRuns(100);
 		setPouleSize(50);
 		setNoElites(50);
-		setInitialMaxDepth(6);
+		setInitialMaxDepth(4);
 		setMaxDepth(17);
 		setPouleSelector(new TournamentSelector<Boolean>(7, this));
 		setParentSelector(new RandomSelector<Boolean>());
 		setCrossover(new KozaCrossover<Boolean>());
-		setStateCheckedCrossover(false);
+		setStateCheckedCrossover(true);
 		setMutator(new SubtreeMutation<Boolean>(this));
-		setStateCheckedMutation(false);
+		setStateCheckedMutation(true);
 		BooleanSemanticModule semMod = new BooleanSemanticModule(getTerminals(), this);
 		setSemanticModule(semMod);
 		setPruner(new SemanticPruner<Boolean>(this, semMod));
 		setActivatePruning(true);
-		setInitialiser(new RampedHalfAndHalfInitialiser<Boolean>(this));
+		setInitialiser(new BooleanHybridSemanticallyDrivenInitialiser(this, semMod));
 	}
 	
 	@Override

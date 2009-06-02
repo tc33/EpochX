@@ -70,7 +70,7 @@ public class GrowInitialiser<TYPE> implements Initialiser<TYPE> {
 		Node<TYPE> top = (Node<TYPE>) model.getSyntax().get(randomIndex).clone();
         
         // recurse down each branch to depth using Grow mechanism
-        this.fillChildren(top, 1, depth);
+        this.fillChildren(top, 0, depth);
         
         // return top node
         return top;

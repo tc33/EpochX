@@ -45,12 +45,6 @@ public class RampedHalfAndHalfInitialiser<TYPE> implements Initialiser<TYPE> {
 		// set up the grow and full parts
 		grow = new GrowInitialiser<TYPE>(model);
 		full = new FullInitialiser<TYPE>(model);
-		// modify depth for staged increase as per Koza
-		if(model.getInitialMaxDepth()>=6) {
-			this.depth = model.getInitialMaxDepth() - 4;
-		} else {
-			throw new IllegalArgumentException("MAX DEPTH TOO SMALL FOR RH+H");
-		}
 	}
 	
 	/**
@@ -59,6 +53,12 @@ public class RampedHalfAndHalfInitialiser<TYPE> implements Initialiser<TYPE> {
 	 * grow.
 	 */
 	public List<CandidateProgram<TYPE>> getInitialPopulation() {
+		// modify depth for staged increase as per Koza
+		if(model.getInitialMaxDepth()>=6) {
+			this.depth = model.getInitialMaxDepth() - 4;
+		} else {
+			throw new IllegalArgumentException("Max depth too small for RH+H.");
+		}	
 		
 		// initialise population of candidate programs
 		int popSize = model.getPopulationSize();

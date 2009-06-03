@@ -328,7 +328,7 @@ public abstract class Node<TYPE> implements Cloneable {
 	}
 	
 	public int getDepth() {
-		return countDepth(this, 1, 0);
+		return countDepth(this, 0, 0);
 	}
 	
 	private int countDepth(Node<TYPE> rootNode, int currentDepth, int depth) {

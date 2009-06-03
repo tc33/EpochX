@@ -70,7 +70,7 @@ public class GrowInitialiser<TYPE> implements Initialiser<TYPE> {
 		Node<TYPE> top = (Node<TYPE>) model.getSyntax().get(randomIndex).clone();
         
         // recurse down each branch to depth using Grow mechanism
-        this.fillChildren(top, 1, depth);
+        this.fillChildren(top, 0, depth);
         
         // return top node
         return top;
@@ -79,7 +79,7 @@ public class GrowInitialiser<TYPE> implements Initialiser<TYPE> {
 	private void fillChildren(Node<TYPE> topNode, int currentDepth, int maxDepth) {
 		int arity = topNode.getArity();
 		if(arity>0) {
-			if(currentDepth<maxDepth) {
+			if(currentDepth<maxDepth-1) {
 				// fill children with functions or terminals
 				for(int i = 0; i<arity; i++) {
 					int randomIndex = (int) Math.floor(Math.random() * model.getSyntax().size());

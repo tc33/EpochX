@@ -70,7 +70,7 @@ public class FullInitialiser<TYPE> implements Initialiser<TYPE> {
         Node<TYPE> top = (Node<TYPE>) model.getFunctions().get(randomIndex).clone();
 
         // recurse down each branch to depth
-		fillChildren(top, 0, model.getInitialMaxDepth());
+		fillChildren(top, 0, depth);
         
         // return top node
         return top;

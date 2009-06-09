@@ -68,8 +68,8 @@ public class Majority9 extends SemanticModel<Boolean> {
 		
 		setPopulationSize(4000);
 		setNoGenerations(50);
-		setCrossoverProbability(0.9);
-		setMutationProbability(0);
+		setCrossoverProbability(0.45);
+		setMutationProbability(0.45);
 		setReproductionProbability(0.1);
 		setNoRuns(100);
 		setPouleSize(400);
@@ -87,6 +87,7 @@ public class Majority9 extends SemanticModel<Boolean> {
 		setPruner(new SemanticPruner<Boolean>(this, semMod));
 		setActivatePruning(false);
 		setInitialiser(new RampedHalfAndHalfInitialiser<Boolean>(this));
+		//setInitialiser(new BooleanHybridSemanticallyDrivenInitialiser(this, semMod));
 	}
 	
 	@Override

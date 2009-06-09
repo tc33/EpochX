@@ -99,6 +99,7 @@ public class ArtificialAntSantaFe extends SemanticModel<Action> {
 		setPruner(new SemanticPruner<Action>(this, semMod));
 		setActivatePruning(false);
 		setInitialiser(new RampedHalfAndHalfInitialiser<Action>(this));
+		//setInitialiser(new AntHybridSemanticallyDrivenInitialiser(this, semMod));
 	}
 	
 	@Override

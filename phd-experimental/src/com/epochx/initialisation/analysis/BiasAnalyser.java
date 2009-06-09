@@ -54,9 +54,10 @@ public class BiasAnalyser {
         for (int i = 0; i < 100; i++) {
 
             // create a new pop
-        	RampedHalfAndHalfInitialiser rhh = new RampedHalfAndHalfInitialiser(model);
         	model.setPopulationSize(1000);
-            List<CandidateProgram> testPop = rhh.getInitialPopulation();
+        	model.setInitialMaxDepth(6);
+        	RampedHalfAndHalfInitialiser rhh = new RampedHalfAndHalfInitialiser(model);
+        	List<CandidateProgram> testPop = rhh.getInitialPopulation();
 
             // cycle through programs and add stuff to HashMap
             for (CandidateProgram prog : testPop) {

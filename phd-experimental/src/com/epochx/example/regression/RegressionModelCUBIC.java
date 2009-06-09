@@ -52,8 +52,8 @@ public class RegressionModelCUBIC extends SemanticModel<Double> {
 		// Setup run.
 		setPopulationSize(500);
 		setNoGenerations(50);
-		setCrossoverProbability(0.45);
-		setMutationProbability(0.45);
+		setCrossoverProbability(0.9);
+		setMutationProbability(0);
 		setReproductionProbability(0.1);
 		setNoRuns(100);
 		setPouleSize(50);
@@ -163,10 +163,26 @@ public class RegressionModelCUBIC extends SemanticModel<Double> {
 		ArrayList<String> output = new ArrayList<String>();
 		//System.out.println(run + "\t" + generation + "\t");
 		String part = run + "\t" + generation + "\t";
-		for (Object s: stats) {
-			part = part + s;
-			part = part + "\t";
-		}
+		for(int i = 0; i<stats.length; i++) {
+			if(i==4) {
+				double[] depthProfile = (double[]) stats[i];
+				for(int j = 0; j<this.getMaxDepth(); j++) {
+					if(j<depthProfile.length) {
+						part = part + depthProfile[j];
+						part = part + "\t";
+					} else {
+						part = part + "0\t";
+					}
+				}
+			} else {
+				part = part + stats[i];
+				part = part + "\t";
+			}
+		}		
+		//for (Object s: stats) {
+		//	part = part + s;
+		//	part = part + "\t";
+		//}
 		part = part + "\n";
 		System.out.println(part);
 		output.add(part);
@@ -175,7 +191,8 @@ public class RegressionModelCUBIC extends SemanticModel<Double> {
 
 	@Override
 	public GenerationStatField[] getGenStatFields() {
-		return new GenerationStatField[]{GenerationStatField.FITNESS_AVE, GenerationStatField.FITNESS_MIN, GenerationStatField.LENGTH_AVE, GenerationStatField.REVERTED_CROSSOVERS, GenerationStatField.REVERTED_MUTATIONS};
+		//return new GenerationStatField[]{GenerationStatField.FITNESS_AVE, GenerationStatField.FITNESS_MIN, GenerationStatField.LENGTH_AVE, GenerationStatField.DEPTH_AVE, GenerationStatField.REVERTED_CROSSOVERS, GenerationStatField.REVERTED_MUTATIONS};
+		return new GenerationStatField[]{GenerationStatField.FITNESS_AVE, GenerationStatField.FITNESS_MIN, GenerationStatField.LENGTH_AVE, GenerationStatField.DEPTH_AVE, GenerationStatField.AVE_NODES_PER_DEPTH};
 	}
 	
 	public static void main(String[] args) {

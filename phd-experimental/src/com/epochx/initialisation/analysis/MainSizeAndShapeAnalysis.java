@@ -24,10 +24,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import com.epochx.action.Action;
-import com.epochx.core.initialisation.FullInitialiser;
-import com.epochx.core.initialisation.GrowInitialiser;
-import com.epochx.core.initialisation.RampedHalfAndHalfInitialiser;
-import com.epochx.core.initialisation.RegressionSemanticallyDrivenInitialiser;
+import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.CandidateProgram;
 import com.epochx.example.artificialant.ArtificialAntSantaFe;
 import com.epochx.example.regression.RegressionModelCUBIC;
@@ -47,19 +44,19 @@ public class MainSizeAndShapeAnalysis {
 		System.out.println("STARTING SIZE AND SHAPE ANALYSIS - PROGRAM STARTED");
 
 		// set up model and initialiser -- configure up here
-		ArtificialAntSantaFe model = new ArtificialAntSantaFe();
-		model.setInitialMaxDepth(2);
-		String modelName = "AASF";
-		//RampedHalfAndHalfInitialiser<Action> initialiser = new RampedHalfAndHalfInitialiser<Action>(model);
-		GrowInitialiser<Action> initialiser = new GrowInitialiser<Action>(model);
+		RegressionModelCUBIC model = new RegressionModelCUBIC();
+		//model.setInitialMaxDepth(2);
+		String modelName = "SYMREG";
+		//RegressionHybridSemanticallyDrivenInitialiser initialiser = new RegressionHybridSemanticallyDrivenInitialiser(model, model.getSemanticModule());
+		RampedHalfAndHalfInitialiser<Double> initialiser = new RampedHalfAndHalfInitialiser<Double>(model);
 		String genType = "RHH";
 		File place = new File("Results");
 
 		// set up the different sizes of population to be analysed
 		ArrayList<Integer> sizes = new ArrayList<Integer>();
 
-		sizes.add(new Integer(50));
-		//sizes.add(new Integer(1000));
+		//sizes.add(new Integer(500));
+		sizes.add(new Integer(1000));
 		/**
 		 * sizes.add(new Integer(1500)); sizes.add(new Integer(2000));
 		 * sizes.add(new Integer(2500)); sizes.add(new Integer(3000));
@@ -78,7 +75,7 @@ public class MainSizeAndShapeAnalysis {
 		 * **/
 		// set up storage
 		ArrayList<String> dump;
-		ArrayList<CandidateProgram<Action>> newPop;
+		ArrayList<CandidateProgram<Double>> newPop;
 		double[] depths, lengths, functions, terminals, dTerminals;
 		String name;
 
@@ -90,13 +87,14 @@ public class MainSizeAndShapeAnalysis {
 			// progress monitor
 			System.out.println("Working on: " + size.toString());
 			model.setPopulationSize(size);
+			model.setInitialMaxDepth(6);
 
 			dump = new ArrayList<String>();
 			dump.add("Experiment: " + genType + " - " + size.toString()	+ "\tModel = " + modelName + "\n\n");
 			dump.add("Pop_Size\tAve_Depth\tAve_Length\tAve_Functions\tAve_Terminals\tAve_D_Terminals\n");
 
 			// do 100 runs of each type and pop size
-			for (int i = 0; i < 10; i++) {
+			for (int i = 0; i < 100; i++) {
 
 				System.out.println("ITERATION= " + i);
 				// set up arrays
@@ -107,10 +105,10 @@ public class MainSizeAndShapeAnalysis {
 				dTerminals = new double[size.intValue()];
 
 				// generate population
-				newPop = (ArrayList<CandidateProgram<Action>>) initialiser.getInitialPopulation();
+				newPop = (ArrayList<CandidateProgram<Double>>) initialiser.getInitialPopulation();
 
 				int j = 0;
-				for (CandidateProgram<Action> testProg : newPop) {
+				for (CandidateProgram<Double> testProg : newPop) {
 					// count up size and shape details and store them
 					depths[j] = testProg.getProgramDepth();
 					lengths[j] = testProg.getProgramLength();

@@ -50,10 +50,10 @@ public class MainBehaviourAnalysis {
 		//String modelName = "AASF";
 		RegressionModelCUBIC model = new RegressionModelCUBIC();
 		String modelName = "SYMREG";
-		model.setInitialMaxDepth(6);
+		model.setInitialMaxDepth(4);
 		//FullInitialiser initialiser = new FullInitialiser(model);
-		RampedHalfAndHalfInitialiser initialiser = new RampedHalfAndHalfInitialiser(model);
-		String genType = "RHH";
+		FullInitialiser initialiser = new FullInitialiser(model);
+		String genType = "FULL";
 		File place = new File("Results");
 
 		// set up the different sizes of population to be analysed

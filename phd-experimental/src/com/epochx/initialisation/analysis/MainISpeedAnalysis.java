@@ -45,6 +45,7 @@ public class MainISpeedAnalysis {
         // decide which model
         RegressionModelCUBIC model = new RegressionModelCUBIC();
         model.setPopulationSize(500);
+        model.setInitialMaxDepth(6);
         SemanticModule<Double> semMod = model.getSemanticModule();
 
         ArrayList<CandidateProgram<Double>> newPop;
@@ -59,8 +60,9 @@ public class MainISpeedAnalysis {
         for (int i = 0; i < 100; i++) {
 
             // generate population              
-        	RegressionHybridSemanticallyDrivenInitialiser initialiser = new RegressionHybridSemanticallyDrivenInitialiser(model, semMod);
-            List<CandidateProgram<Double>> testPop = initialiser.getInitialPopulation();
+        	//RegressionSemanticallyDrivenInitialiser initialiser = new RegressionSemanticallyDrivenInitialiser(model, semMod);
+        	RampedHalfAndHalfInitialiser<Double> initialiser = new RampedHalfAndHalfInitialiser<Double>(model);
+        	List<CandidateProgram<Double>> testPop = initialiser.getInitialPopulation();
 
         }
         

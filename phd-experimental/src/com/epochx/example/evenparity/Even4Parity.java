@@ -81,6 +81,7 @@ public class Even4Parity extends SemanticModel<Boolean> {
 		setPruner(new SemanticPruner<Boolean>(this, semMod));
 		setActivatePruning(false);
 		setInitialiser(new RampedHalfAndHalfInitialiser<Boolean>(this));
+		//setInitialiser(new BooleanHybridSemanticallyDrivenInitialiser(this, semMod));
 	}
 	
 	@Override
@@ -184,6 +185,6 @@ public class Even4Parity extends SemanticModel<Boolean> {
 
 	@Override
 	public GenerationStatField[] getGenStatFields() {
-		return new GenerationStatField[]{GenerationStatField.FITNESS_AVE, GenerationStatField.FITNESS_MIN, GenerationStatField.LENGTH_AVE, GenerationStatField.REVERTED_CROSSOVERS, GenerationStatField.REVERTED_MUTATIONS};
+		return new GenerationStatField[]{GenerationStatField.FITNESS_AVE, GenerationStatField.FITNESS_MIN, GenerationStatField.LENGTH_AVE, GenerationStatField.DEPTH_AVE, GenerationStatField.REVERTED_CROSSOVERS, GenerationStatField.REVERTED_MUTATIONS};
 	}
 }

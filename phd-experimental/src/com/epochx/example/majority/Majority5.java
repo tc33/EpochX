@@ -83,6 +83,7 @@ public class Majority5 extends SemanticModel<Boolean> {
 		setPruner(new SemanticPruner<Boolean>(this, semMod));
 		setActivatePruning(false);
 		setInitialiser(new RampedHalfAndHalfInitialiser<Boolean>(this));
+		//setInitialiser(new BooleanHybridSemanticallyDrivenInitialiser(this, semMod));
 	}
 	
 	@Override

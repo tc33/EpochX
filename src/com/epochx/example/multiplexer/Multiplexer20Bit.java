@@ -19,7 +19,6 @@
  */
 package com.epochx.example.multiplexer;
 
-import java.io.File;
 import java.util.*;
 
 import com.epochx.core.*;
@@ -27,7 +26,8 @@ import com.epochx.core.crossover.UniformPointCrossover;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.func.bool.*;
-import com.epochx.util.*;
+import com.epochx.stats.*;
+import com.epochx.util.BoolUtils;
 
 /**
  * 
@@ -35,29 +35,17 @@ import com.epochx.util.*;
  */
 public class Multiplexer20Bit extends GPAbstractModel<Boolean> {
 
-	private List<String> inputs;
+	private boolean[][] inputs;
+	
 	private HashMap<String, Variable<Boolean>> variables = new HashMap<String, Variable<Boolean>>();
 	
 	public Multiplexer20Bit() {
-		inputs = new ArrayList<String>();
-		inputs = FileManip.loadInput(new File("input20bit.txt"));
+		inputs = BoolUtils.generateBoolSequences(20);
 		
 		configure();
 	}
 	
 	public void configure() {
-		setPopulationSize(500);
-		setNoGenerations(50);
-		setCrossoverProbability(0.9);
-		setReproductionProbability(0.1);
-		setNoRuns(1);
-		setPouleSize(50);
-		setNoElites(50);
-		setMaxDepth(6);
-		setPouleSelector(new TournamentSelector<Boolean>(7, this));
-		setParentSelector(new RandomSelector<Boolean>());
-		setCrossover(new UniformPointCrossover<Boolean>());
-		
 		// Define variables.
 		variables.put("D15", new Variable<Boolean>("D15"));
 		variables.put("D14", new Variable<Boolean>("D14"));
@@ -79,6 +67,21 @@ public class Multiplexer20Bit extends GPAbstractModel<Boolean> {
 		variables.put("A2", new Variable<Boolean>("A2"));
 		variables.put("A1", new Variable<Boolean>("A1"));
 		variables.put("A0", new Variable<Boolean>("A0"));
+		
+		setGenStatFields(new GenerationStatField[]{GenerationStatField.FITNESS_MIN, GenerationStatField.FITNESS_AVE, GenerationStatField.LENGTH_AVE, GenerationStatField.RUN_TIME});
+		setRunStatFields(new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM, RunStatField.RUN_TIME});
+		
+		setPopulationSize(500);
+		setNoGenerations(50);
+		setCrossoverProbability(0.9);
+		setReproductionProbability(0.1);
+		setNoRuns(1);
+		setPouleSize(50);
+		setNoElites(50);
+		setMaxDepth(6);
+		setPouleSelector(new TournamentSelector<Boolean>(7, this));
+		setParentSelector(new RandomSelector<Boolean>());
+		setCrossover(new UniformPointCrossover<Boolean>());
 	}
 	
 	@Override
@@ -125,9 +128,7 @@ public class Multiplexer20Bit extends GPAbstractModel<Boolean> {
         double score = 0;
         
         // Execute on all possible inputs.
-        for (String run : inputs) {
-        	boolean[] in = BoolTrans.doTrans(run);
-        	
+        for (boolean[] in: inputs) {        	
         	// Set the variables.
         	variables.get("A0").setValue(in[0]);
         	variables.get("A1").setValue(in[1]);
@@ -187,7 +188,6 @@ public class Multiplexer20Bit extends GPAbstractModel<Boolean> {
     }
 	
 	public static void main(String[] args) {
-		System.out.println("20 Bit MUX running...");
 		GPController.run(new Multiplexer20Bit());
 	}
 }

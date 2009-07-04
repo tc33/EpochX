@@ -17,29 +17,34 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.epochx.core.initialisation;
+package com.epochx.initialisation;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.epochx.core.GPModel;
-import com.epochx.core.representation.*;
-import com.epochx.semantics.*;
+import com.epochx.core.initialisation.*;
+import com.epochx.core.representation.CandidateProgram;
+import com.epochx.semantics.Representation;
+import com.epochx.semantics.SemanticModule;
 
 /**
- * The modified FULL initialiser creates a starting population similar to full
- * which will not produce any programs which are not dependent on any of the terminals.
+ * The washed initialised creates programs using the modified full method and then reduces
+ * the programs by translating them to a representation and back again. This produces 
+ * smaller more effective node trees.
  */
-public class ModifiedFullInitialiser<TYPE> implements Initialiser<TYPE> {
+public class WashedInitialiser<TYPE> implements Initialiser<TYPE> {
 	
 	private GPModel<TYPE> model;
 	private FullInitialiser<TYPE> full;
 	private SemanticModule<TYPE> semanticModule;
 	
 	/**
-	 * Constructor for Modified Full Initialiser
+	 * Constructor for Washed Initialiser
 	 * @param model The current model
 	 * @param semMod The associated semantic module
 	 */
-	public ModifiedFullInitialiser(GPModel<TYPE> model, SemanticModule<TYPE> semMod) {
+	public WashedInitialiser(GPModel<TYPE> model, SemanticModule<TYPE> semMod) {
 		this.model = model;
 		this.full = new FullInitialiser<TYPE>(model);
 		this.semanticModule = semMod;
@@ -65,10 +70,22 @@ public class ModifiedFullInitialiser<TYPE> implements Initialiser<TYPE> {
 			} while (firstGen.contains(candidate) || representation.isConstant());
 			firstGen.add(candidate);
         }
+		// reduce population
+		for(int i=0; i<popSize; i++) {
+			CandidateProgram<TYPE> candidate;
+			Representation representation;
+			CandidateProgram<TYPE> reducedCandidate;
+			candidate = firstGen.get(i);
+			representation = semanticModule.codeToBehaviour(candidate);
+			reducedCandidate = semanticModule.behaviourToCode(representation);
+			firstGen.set(i, reducedCandidate);
+        }
+		
 		// stop the semantic module
 		this.semanticModule.stop();
 		
 		// Return starting population.
 		return firstGen;
 	}
+
 }

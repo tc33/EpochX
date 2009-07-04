@@ -21,36 +21,35 @@ package com.epochx.example.regression;
 
 import java.util.*;
 
-import com.epochx.core.GPController;
+import com.epochx.core.*;
 import com.epochx.core.crossover.UniformPointCrossover;
-import com.epochx.core.initialisation.RegressionSemanticallyDrivenInitialiser;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.func.dbl.*;
-import com.epochx.semantics.*;
 import com.epochx.stats.*;
 
 /**
  * 
  */
-public class RegressionModel extends SemanticModel<Double> {
+public class CubicRegression extends GPAbstractModel<Double> {
 
 	private Variable<Double> x;
 	
-	public RegressionModel() {
+	public CubicRegression() {
 		configure();
 	}
 	
 	public void configure() {
 		// Create variables.
-		this.x = new Variable<Double>("X");
+		x = new Variable<Double>("X");
+		
+		setGenStatFields(new GenerationStatField[]{GenerationStatField.FITNESS_MIN, GenerationStatField.FITNESS_AVE, GenerationStatField.LENGTH_AVE, GenerationStatField.RUN_TIME});
+		setRunStatFields(new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM, RunStatField.RUN_TIME});
 		
 		// Setup run.
 		setPopulationSize(500);
 		setCrossoverProbability(0.9);
 		setReproductionProbability(0.1);
-		setSemanticModule(new RegressionSemanticModule(getTerminals(), this));
-		setInitialiser(new RegressionSemanticallyDrivenInitialiser(this, getSemanticModule()));
 		setPouleSelector(new TournamentSelector<Double>(7, this));
 		setParentSelector(new LinearRankSelector<Double>(0.5));
 		//setPouleSelector(new RandomSelector<Double>());
@@ -116,38 +115,10 @@ public class RegressionModel extends SemanticModel<Double> {
 	}
 	
 	private double getCorrectResult(double x) {
-		return x + (x*x) + (x*x*x) + (x*x*x*x);
-		//return Math.pow(x, 2) / 2;
-	}
-	
-	public void runStats(int runNo, Object[] stats) {
-		System.out.print("Run number " + runNo + " complete.");
-		for (Object s: stats) {
-			System.out.print(s);
-			System.out.print(" ");
-		}
-		System.out.println();
-	}
-
-	public RunStatField[] getRunStatFields() {
-		return new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM};
-	}
-	
-	public void generationStats(int genNo, Object[] stats) {
-		System.out.print(genNo + " ");
-		for (Object s: stats) {
-			System.out.print(s);
-			System.out.print(" ");
-		}
-		System.out.println();
-	}
-	
-	@Override
-	public GenerationStatField[] getGenStatFields() {
-		return new GenerationStatField[]{GenerationStatField.FITNESS_MIN, GenerationStatField.FITNESS_AVE, GenerationStatField.DEPTH_AVE, GenerationStatField.LENGTH_AVE, GenerationStatField.RUN_TIME};
+		return x + (x*x) + (x*x*x);
 	}
 	
 	public static void main(String[] args) {
-		GPController.run(new RegressionModel());
+		GPController.run(new CubicRegression());
 	}
 }

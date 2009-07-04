@@ -19,31 +19,26 @@
  */
 package com.epochx.example.majority;
 
-import java.io.*;
 import java.util.*;
 
 import com.epochx.core.*;
-import com.epochx.core.crossover.*;
-import com.epochx.core.initialisation.BooleanHybridSemanticallyDrivenInitialiser;
+import com.epochx.core.crossover.UniformPointCrossover;
 import com.epochx.core.representation.*;
-import com.epochx.core.scorer.BooleanSemanticScorer;
 import com.epochx.core.selection.*;
 import com.epochx.func.bool.*;
-import com.epochx.semantics.BooleanSemanticModule;
-import com.epochx.semantics.SemanticModel;
-import com.epochx.util.*;
+import com.epochx.stats.*;
+import com.epochx.util.BoolUtils;
 
 /**
  * 
  */
-public class Majority9 extends SemanticModel<Boolean> {
+public class Majority9 extends GPAbstractModel<Boolean> {
 
-	private List<String> inputs;
+	private boolean[][] inputs;
 	private HashMap<String, Variable<Boolean>> variables = new HashMap<String, Variable<Boolean>>();
 	
 	public Majority9() {
-		inputs = new ArrayList<String>();
-		inputs = FileManip.loadInput(new File("input9bit.txt"));
+		inputs = BoolUtils.generateBoolSequences(9);
 		
 		configure();
 	}
@@ -60,6 +55,9 @@ public class Majority9 extends SemanticModel<Boolean> {
 		variables.put("D1", new Variable<Boolean>("D1"));
 		variables.put("D0", new Variable<Boolean>("D0"));
 		
+		setGenStatFields(new GenerationStatField[]{GenerationStatField.FITNESS_MIN, GenerationStatField.FITNESS_AVE, GenerationStatField.LENGTH_AVE, GenerationStatField.RUN_TIME});
+		setRunStatFields(new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM, RunStatField.RUN_TIME});
+		
 		setPopulationSize(500);
 		setNoGenerations(10);
 		setCrossoverProbability(0.9);
@@ -72,19 +70,16 @@ public class Majority9 extends SemanticModel<Boolean> {
 		setPouleSelector(new TournamentSelector<Boolean>(7, this));
 		setParentSelector(new RandomSelector<Boolean>());
 		setCrossover(new UniformPointCrossover<Boolean>());
-		setStateCheckedCrossover(true);
-		setSemanticModule(new BooleanSemanticModule(getTerminals(), this));
-		setInitialiser(new BooleanHybridSemanticallyDrivenInitialiser(this, this.getSemanticModule()));		
 	}
 	
 	@Override
 	public List<FunctionNode<Boolean>> getFunctions() {
 		// Define functions.
 		List<FunctionNode<Boolean>> functions = new ArrayList<FunctionNode<Boolean>>();
-		functions.add(new IfFunction(null, null, null));
-		functions.add(new AndFunction(null, null));
-		functions.add(new OrFunction(null, null));
-		functions.add(new NotFunction(null));
+		functions.add(new IfFunction());
+		functions.add(new AndFunction());
+		functions.add(new OrFunction());
+		functions.add(new NotFunction());
 		return functions;
 	}
 
@@ -105,28 +100,12 @@ public class Majority9 extends SemanticModel<Boolean> {
 		return terminals;
 	}
 	
-	
-	public double getFitness(CandidateProgram<Boolean> program) {
-		// set up ideal solution
-	    IfFunction part1 = new IfFunction(new Variable<Boolean>("A1"), new Variable<Boolean>("D0"), new Variable<Boolean>("D1"));
-	    IfFunction part2 = new IfFunction(new Variable<Boolean>("A1"), new Variable<Boolean>("D2"), new Variable<Boolean>("D3"));
-	    IfFunction part0 = new IfFunction(new Variable<Boolean>("A0"), part1, part2);
-	    CandidateProgram<Boolean> target = new CandidateProgram<Boolean>(part0, this);
-        // do semantic scoring part
-        BooleanSemanticScorer scorer = new BooleanSemanticScorer(getSemanticModule());
-        double score = scorer.doScore(program, target);
-        return score;
-	}
-	
-	/**
 	@Override
 	public double getFitness(CandidateProgram<Boolean> program) {
         double score = 0;
         
         // Execute on all possible inputs.
-        for (String run : inputs) {
-        	boolean[] in = BoolTrans.doTrans(run);
-        	
+        for (boolean[] in: inputs) {
         	// Set the variables.
         	variables.get("D0").setValue(in[0]);
         	variables.get("D1").setValue(in[1]);
@@ -144,7 +123,7 @@ public class Majority9 extends SemanticModel<Boolean> {
         }
         
         return 512 - score;
-	} */
+	}
 	
     private boolean chooseResult(boolean[] input) {
     	// scoring solution

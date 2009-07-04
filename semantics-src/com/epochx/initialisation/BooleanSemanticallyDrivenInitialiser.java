@@ -17,28 +17,29 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.epochx.core.initialisation;
+package com.epochx.initialisation;
 
 import java.util.*;
 import com.epochx.core.GPModel;
+import com.epochx.core.initialisation.Initialiser;
 import com.epochx.core.representation.*;
 import com.epochx.semantics.*;
 import net.sf.javabdd.*;
 
 /**
- * Boolean domian hybrid semantically driven initalisation
+ * Boolean Semantically Driven Initialisation
  */
-public class BooleanHybridSemanticallyDrivenInitialiser implements Initialiser<Boolean> {
+public class BooleanSemanticallyDrivenInitialiser implements Initialiser<Boolean> {
 
 	private GPModel<Boolean> model;
 	private BooleanSemanticModule semMod;
 	
 	/**
-	 * Constructor for Boolean hybrid semantically driven initialisation
+	 * Constructor for Boolean semantically driven initialisation
 	 * @param model The GP model in use
 	 * @param semMod The semantic module in use
 	 */
-	public BooleanHybridSemanticallyDrivenInitialiser(GPModel<Boolean> model, SemanticModule<Boolean> semMod) {
+	public BooleanSemanticallyDrivenInitialiser(GPModel<Boolean> model, SemanticModule<Boolean> semMod) {
 		this.model = model;
 		this.semMod = (BooleanSemanticModule) semMod;
 	}
@@ -55,15 +56,12 @@ public class BooleanHybridSemanticallyDrivenInitialiser implements Initialiser<B
 		// initialise BDD stuff
         semMod.start();
         List<BDD> storage = new ArrayList<BDD>();
-        FullInitialiser<Boolean> f = new FullInitialiser<Boolean>(model);
-        List<CandidateProgram<Boolean>> firstPass = f.getInitialPopulation();
         
-        // generate a full population to start with
-        for(CandidateProgram<Boolean> c: firstPass) {
-        	BooleanRepresentation b = semMod.codeToBehaviour(c);
-        	if(!b.isConstant()) {
-        		storage.add(b.getBDD());
-        	}
+        // load terminals only
+        for(TerminalNode<Boolean> t: model.getTerminals()) {
+        	CandidateProgram<Boolean> c = new CandidateProgram<Boolean>(t, model);
+            BDD rep = semMod.codeToBehaviour(c).getBDD();
+            storage.add(rep);
         }
 
         // create random number generator
@@ -98,5 +96,6 @@ public class BooleanHybridSemanticallyDrivenInitialiser implements Initialiser<B
         semMod.stop();
         
         return firstGen;
-	}	
+	}
+
 }

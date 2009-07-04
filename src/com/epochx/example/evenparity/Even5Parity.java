@@ -19,7 +19,6 @@
  */
 package com.epochx.example.evenparity;
 
-import java.io.File;
 import java.util.*;
 
 import com.epochx.core.*;
@@ -29,19 +28,19 @@ import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.func.bool.*;
 import com.epochx.stats.*;
-import com.epochx.util.*;
+import com.epochx.util.BoolUtils;
 
 /**
  * 
  */
 public class Even5Parity extends GPAbstractModel<Boolean> {
 
-	private List<String> inputs;
+	private boolean[][] inputs;
+	
 	private HashMap<String, Variable<Boolean>> variables = new HashMap<String, Variable<Boolean>>();
 	
 	public Even5Parity() {
-		inputs = new ArrayList<String>();
-		inputs = FileManip.loadInput(new File("input5bit.txt"));
+		inputs = BoolUtils.generateBoolSequences(5);
 		
 		configure();
 	}
@@ -53,6 +52,9 @@ public class Even5Parity extends GPAbstractModel<Boolean> {
 		variables.put("D2", new Variable<Boolean>("D2"));
 		variables.put("D1", new Variable<Boolean>("D1"));
 		variables.put("D0", new Variable<Boolean>("D0"));
+		
+		setGenStatFields(new GenerationStatField[]{GenerationStatField.FITNESS_MIN, GenerationStatField.FITNESS_AVE, GenerationStatField.LENGTH_AVE, GenerationStatField.RUN_TIME});
+		setRunStatFields(new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM, RunStatField.RUN_TIME});
 		
 		setPopulationSize(500);
 		setNoGenerations(100);
@@ -98,9 +100,7 @@ public class Even5Parity extends GPAbstractModel<Boolean> {
         double score = 0;
         
         // Execute on all possible inputs.
-        for (String run : inputs) {
-        	boolean[] in = BoolTrans.doTrans(run);
-        	
+        for (boolean[] in: inputs) {        	
         	// Set the variables.
         	variables.get("D0").setValue(in[0]);
         	variables.get("D1").setValue(in[1]);
@@ -134,80 +134,4 @@ public class Even5Parity extends GPAbstractModel<Boolean> {
 	public static void main(String[] args) {
 		GPController.run(new Even5Parity());
 	}
-
-	/* (non-Javadoc)
-	 * @see com.epochx.stats.GenerationStatListener#generationStats(java.lang.String[])
-	 */
-	@Override
-	public void generationStats(int gen, Object[] stats) {
-		System.out.print(gen);
-		System.out.print(" ");
-		for (Object s: stats) {
-			if (s instanceof double[]) {
-				double[] ds = (double[]) s;
-				for (double d: ds) {
-					System.out.print(d);
-					System.out.print(" ");
-				}
-			} else {
-				System.out.print(s);
-				System.out.print(" ");
-			}
-		}
-		System.out.println();
-	}
-
-	/* (non-Javadoc)
-	 * @see com.epochx.stats.GenerationStatListener#getStatFields()
-	 */
-	@Override
-	public GenerationStatField[] getGenStatFields() {
-		return new GenerationStatField[]{
-				GenerationStatField.RUN_TIME,
-				GenerationStatField.LENGTH_AVE,
-				GenerationStatField.FITNESS_MIN
-		};
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.epochx.stats.GenerationStatListener#generationStats(java.lang.String[])
-	 */
-	@Override
-	public void runStats(int runNo, Object[] stats) {
-		System.out.println("Run finished...");
-		for (Object s: stats) {
-			System.out.print(s);
-			System.out.print(" ");
-		}
-		System.out.println();
-	}
-	
-	public RunStatField[] getRunStatFields() {
-		return new RunStatField[]{
-				RunStatField.RUN_TIME,
-				RunStatField.BEST_FITNESS,
-				RunStatField.BEST_PROGRAM
-		};
-	}
-	
-	
-	/*@Override
-	public void crossoverStats(Object[] stats) {
-		System.out.println("Crossover:");
-		for (Object s: stats) {
-			System.out.print(s);
-			System.out.print(" ");
-		}
-		System.out.println();
-	}*/
-	
-	/* (non-Javadoc)
-	 * @see com.epochx.core.GPAbstractModel#getCrossoverStatFields()
-	 */
-	/*@Override
-	public CrossoverStatField[] getCrossoverStatFields() {
-		return new CrossoverStatField[]{
-				CrossoverStatField.RUN_TIME
-		};
-	}*/
 }

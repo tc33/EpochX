@@ -17,12 +17,13 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.epochx.core.initialisation;
+package com.epochx.initialisation;
 
 import java.util.*;
 
 import com.epochx.action.Action;
 import com.epochx.core.GPModel;
+import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
 import com.epochx.semantics.*;
 

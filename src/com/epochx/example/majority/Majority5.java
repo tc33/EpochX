@@ -19,43 +19,42 @@
  */
 package com.epochx.example.majority;
 
-import java.io.File;
 import java.util.*;
 
-import com.epochx.core.GPController;
+import com.epochx.core.*;
 import com.epochx.core.crossover.UniformPointCrossover;
 import com.epochx.core.initialisation.RampedHalfAndHalfInitialiser;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.func.bool.*;
-import com.epochx.semantics.*;
-import com.epochx.stats.GenerationStatField;
-import com.epochx.util.*;
+import com.epochx.stats.*;
+import com.epochx.util.BoolUtils;
 
 /**
  * 
  */
-public class Majority5 extends SemanticModel<Boolean> {
+public class Majority5 extends GPAbstractModel<Boolean> {
 
-	private List<String> inputs;
+	private boolean[][] inputs;
+	
 	private HashMap<String, Variable<Boolean>> variables = new HashMap<String, Variable<Boolean>>();
-	private int run = 1;
 	
 	public Majority5() {
-		inputs = new ArrayList<String>();
-		inputs = FileManip.loadInput(new File("input5bit.txt"));
+		inputs = BoolUtils.generateBoolSequences(5);
 		
 		configure();
 	}
 	
 	public void configure() {
-		
 		// Define variables.
 		variables.put("D4", new Variable<Boolean>("D4"));
 		variables.put("D3", new Variable<Boolean>("D3"));
 		variables.put("D2", new Variable<Boolean>("D2"));
 		variables.put("D1", new Variable<Boolean>("D1"));
 		variables.put("D0", new Variable<Boolean>("D0"));
+		
+		setGenStatFields(new GenerationStatField[]{GenerationStatField.FITNESS_MIN, GenerationStatField.FITNESS_AVE, GenerationStatField.LENGTH_AVE, GenerationStatField.RUN_TIME});
+		setRunStatFields(new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM, RunStatField.RUN_TIME});
 		
 		setPopulationSize(500);
 		setNoGenerations(50);
@@ -69,8 +68,6 @@ public class Majority5 extends SemanticModel<Boolean> {
 		setPouleSelector(new TournamentSelector<Boolean>(7, this));
 		setParentSelector(new RandomSelector<Boolean>());
 		setCrossover(new UniformPointCrossover<Boolean>());
-		setStateCheckedCrossover(false);
-		setSemanticModule(new BooleanSemanticModule(getTerminals(), this));
 		setInitialiser(new RampedHalfAndHalfInitialiser<Boolean>(this));
 	}
 	
@@ -103,9 +100,7 @@ public class Majority5 extends SemanticModel<Boolean> {
         double score = 0;
         
         // Execute on all possible inputs.
-        for (String run : inputs) {
-        	boolean[] in = BoolTrans.doTrans(run);
-        	
+        for (boolean[] in: inputs) {        	
         	// Set the variables.
         	variables.get("D0").setValue(in[0]);
         	variables.get("D1").setValue(in[1]);
@@ -140,29 +135,5 @@ public class Majority5 extends SemanticModel<Boolean> {
 	
 	public static void main(String[] args) {
 		GPController.run(new Majority5());
-	}
-	
-	@Override
-	public void runStats(int run, Object[] stats) {
-		this.run = run + 1;
-	}
-	
-	@Override
-	public void generationStats(int generation, Object[] stats) {
-		ArrayList<String> output = new ArrayList<String>();
-		System.out.println(run + "\t" + generation + "\t");
-		String part = run + "\t" + generation + "\t";
-		for (Object s: stats) {
-			part = part + s;
-			part = part + "\t";
-		}
-		part = part + "\n";
-		output.add(part);
-		FileManip.doOutput(null, output, "output.txt", true);
-	}
-
-	@Override
-	public GenerationStatField[] getGenStatFields() {
-		return new GenerationStatField[]{GenerationStatField.FITNESS_AVE, GenerationStatField.FITNESS_MIN, GenerationStatField.LENGTH_AVE};
 	}
 }

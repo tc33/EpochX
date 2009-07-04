@@ -17,28 +17,30 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.epochx.core.initialisation;
+package com.epochx.initialisation;
 
 import java.util.*;
+
 import com.epochx.core.GPModel;
+import com.epochx.core.initialisation.Initialiser;
 import com.epochx.core.representation.*;
 import com.epochx.func.dbl.*;
 import com.epochx.semantics.*;
 
 /**
- * Regression hybrid semantically driven initialisation
+ * Regression semantically driven initialisation
  */
-public class RegressionHybridSemanticallyDrivenInitialiser implements Initialiser<Double> {
+public class RegressionSemanticallyDrivenInitialiser implements Initialiser<Double> {
 
 	private GPModel<Double> model;
 	private RegressionSemanticModule semMod;
 	
 	/**
-	 * Constructor for the regression hybrid semantically driven initialisation
+	 * Constructor for regression based semantically driven initialisation
 	 * @param model The GP model in use
 	 * @param semMod The semantic module in use
 	 */
-	public RegressionHybridSemanticallyDrivenInitialiser(GPModel<Double> model, SemanticModule<Double> semMod) {
+	public RegressionSemanticallyDrivenInitialiser(GPModel<Double> model, SemanticModule<Double> semMod) {
 		this.model = model;
 		this.semMod = (RegressionSemanticModule) semMod;
 	}
@@ -53,17 +55,14 @@ public class RegressionHybridSemanticallyDrivenInitialiser implements Initialise
 	
 	private List<CandidateProgram<Double>> generatePopulation() {
         List<RegressionRepresentation> storage = new ArrayList<RegressionRepresentation>();
-        FullInitialiser<Double> f = new FullInitialiser<Double>(model);
-        List<CandidateProgram<Double>> firstPass = f.getInitialPopulation();
         
-        // generate a full population to start with
-        for(CandidateProgram<Double> c: firstPass) {
-        	RegressionRepresentation b = (RegressionRepresentation) semMod.codeToBehaviour(c);
-        	if(!b.isConstant()) {
-        		storage.add(b);
-        	}
+        // load terminals only
+        for(TerminalNode<Double> t: model.getTerminals()) {
+        	CandidateProgram<Double> c = new CandidateProgram<Double>(t, model);
+            RegressionRepresentation rep = (RegressionRepresentation) semMod.codeToBehaviour(c);
+            storage.add(rep);
         }
-
+        
         // create random number generator
         Random random = new Random();
         int noOfFunctions = model.getFunctions().size();
@@ -74,29 +73,29 @@ public class RegressionHybridSemanticallyDrivenInitialiser implements Initialise
             if(cFunc==0) {
             	RegressionRepresentation rep1 = storage.get(random.nextInt(storage.size()));
             	RegressionRepresentation rep2 = storage.get(random.nextInt(storage.size()));
-            	Node<Double> node1 = semMod.behaviourToCode(rep1).getRootNode();
-            	Node<Double> node2 = semMod.behaviourToCode(rep1).getRootNode();
+            	Node<Double> node1 = (Node<Double>) semMod.behaviourToCode(rep1).getRootNode().clone();
+            	Node<Double> node2 = (Node<Double>) semMod.behaviourToCode(rep2).getRootNode().clone();
             	Node<Double> newTree = new AddFunction(node1, node2);
                 result = (RegressionRepresentation) semMod.codeToBehaviour(new CandidateProgram<Double>(newTree, model));
             } else if(cFunc==1) {
             	RegressionRepresentation rep1 = storage.get(random.nextInt(storage.size()));
             	RegressionRepresentation rep2 = storage.get(random.nextInt(storage.size()));
-            	Node<Double> node1 = semMod.behaviourToCode(rep1).getRootNode();
-            	Node<Double> node2 = semMod.behaviourToCode(rep1).getRootNode();
+            	Node<Double> node1 = (Node<Double>) semMod.behaviourToCode(rep1).getRootNode().clone();
+            	Node<Double> node2 = (Node<Double>) semMod.behaviourToCode(rep2).getRootNode().clone();
             	Node<Double> newTree = new SubtractFunction(node1, node2);
                 result = (RegressionRepresentation) semMod.codeToBehaviour(new CandidateProgram<Double>(newTree, model));
             } else if(cFunc==2) {
             	RegressionRepresentation rep1 = storage.get(random.nextInt(storage.size()));
             	RegressionRepresentation rep2 = storage.get(random.nextInt(storage.size()));
-            	Node<Double> node1 = semMod.behaviourToCode(rep1).getRootNode();
-            	Node<Double> node2 = semMod.behaviourToCode(rep1).getRootNode();
+            	Node<Double> node1 = (Node<Double>) semMod.behaviourToCode(rep1).getRootNode().clone();
+            	Node<Double> node2 = (Node<Double>) semMod.behaviourToCode(rep2).getRootNode().clone();
             	Node<Double> newTree = new MultiplyFunction(node1, node2);
                 result = (RegressionRepresentation) semMod.codeToBehaviour(new CandidateProgram<Double>(newTree, model));
             } else if(cFunc==3) {
             	RegressionRepresentation rep1 = storage.get(random.nextInt(storage.size()));
             	RegressionRepresentation rep2 = storage.get(random.nextInt(storage.size()));
-            	Node<Double> node1 = semMod.behaviourToCode(rep1).getRootNode();
-            	Node<Double> node2 = semMod.behaviourToCode(rep1).getRootNode();
+            	Node<Double> node1 = (Node<Double>) semMod.behaviourToCode(rep1).getRootNode().clone();
+            	Node<Double> node2 = (Node<Double>) semMod.behaviourToCode(rep2).getRootNode().clone();
             	Node<Double> newTree = new ProtectedDivisionFunction(node1, node2);
                 result = (RegressionRepresentation) semMod.codeToBehaviour(new CandidateProgram<Double>(newTree, model));
             }

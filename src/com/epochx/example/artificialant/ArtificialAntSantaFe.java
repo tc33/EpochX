@@ -20,25 +20,25 @@
 package com.epochx.example.artificialant;
 
 import java.awt.*;
-import java.io.*;
+import java.io.File;
 import java.util.*;
 import java.util.List;
+
 import com.epochx.action.*;
 import com.epochx.ant.*;
 import com.epochx.core.*;
-import com.epochx.core.crossover.*;
-import com.epochx.core.initialisation.*;
+import com.epochx.core.crossover.UniformPointCrossover;
+import com.epochx.core.initialisation.RampedHalfAndHalfInitialiser;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.func.action.*;
-import com.epochx.semantics.*;
 import com.epochx.stats.*;
-import com.epochx.util.*;
+import com.epochx.util.FileManip;
 
 /**
  * 
  */
-public class ArtificialAntSantaFe extends SemanticModel<Action> {
+public class ArtificialAntSantaFe extends GPAbstractModel<Action> {
 
 	private List<String> inputs = new ArrayList<String>();;
 	private HashMap<String, TerminalNode<Action>> variables = new HashMap<String, TerminalNode<Action>>();
@@ -47,7 +47,6 @@ public class ArtificialAntSantaFe extends SemanticModel<Action> {
 	private AntLandscape antLandscape = new AntLandscape(dimension, null);
 	private Ant ant = new Ant(600, antLandscape);
 	private int noOfFoodPellets;
-	private int run = 1;
 	private int fitAssessed = 0;
 	
 	public ArtificialAntSantaFe() {		
@@ -70,11 +69,13 @@ public class ArtificialAntSantaFe extends SemanticModel<Action> {
 	}
 	
 	public void configure() {
-		
 		// Define variables.
 		variables.put("MOVE", new TerminalNode<Action>(new AntMoveAction(ant)));
 		variables.put("TURN-LEFT", new TerminalNode<Action>(new AntTurnLeftAction(ant)));
 		variables.put("TURN-RIGHT", new TerminalNode<Action>(new AntTurnRightAction(ant)));
+		
+		setGenStatFields(new GenerationStatField[]{GenerationStatField.FITNESS_MIN, GenerationStatField.FITNESS_AVE, GenerationStatField.LENGTH_AVE, GenerationStatField.RUN_TIME});
+		setRunStatFields(new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM, RunStatField.RUN_TIME});
 		
 		setPopulationSize(500);
 		setNoGenerations(10);
@@ -88,10 +89,7 @@ public class ArtificialAntSantaFe extends SemanticModel<Action> {
 		setPouleSelector(new TournamentSelector<Action>(7, this));
 		setParentSelector(new RandomSelector<Action>());
 		setCrossover(new UniformPointCrossover<Action>());
-		setStateCheckedCrossover(true);
-		setSemanticModule(new AntSemanticModule(getTerminals(), this, ant, antLandscape));
 		setInitialiser(new RampedHalfAndHalfInitialiser<Action>(this));
-		//setInitialiser(new AntHybridSemanticallyDrivenInitialiser<Action>(this, this.getSemanticModule()));
 	}
 	
 	@Override
@@ -143,44 +141,11 @@ public class ArtificialAntSantaFe extends SemanticModel<Action> {
 		return score;
 	}
 	
-	public static void main(String[] args) {
-		GPController.run(new ArtificialAntSantaFe());
-	}
-	
-	public void runStats(int runNo, Object[] stats) {
-		this.run = runNo;
-		System.out.print("Run number " + runNo + " complete.");
-		for (Object s: stats) {
-			System.out.print(s);
-			System.out.print(" ");
-		}
-		System.out.println();
-	}
-
-	public RunStatField[] getRunStatFields() {
-		return new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM};
-	}
-	
-	@Override
-	public void generationStats(int generation, Object[] stats) {
-		ArrayList<String> output = new ArrayList<String>();
-		System.out.println(run + "\t" + generation + "\t");
-		String part = run + "\t" + generation + "\t";
-		for (Object s: stats) {
-			part = part + s;
-			part = part + "\t";
-		}
-		part = part + "\n";
-		output.add(part);
-		FileManip.doOutput(null, output, "output.txt", true);
-	}
-
-	@Override
-	public GenerationStatField[] getGenStatFields() {
-		return new GenerationStatField[]{GenerationStatField.FITNESS_AVE, GenerationStatField.FITNESS_MIN, GenerationStatField.LENGTH_AVE};
-	}
-	
 	public Ant getAnt() {
 		return ant;
+	}
+	
+	public static void main(String[] args) {
+		GPController.run(new ArtificialAntSantaFe());
 	}
 }

@@ -19,37 +19,32 @@
  */
 package com.epochx.example.multiplexer;
 
-import java.io.File;
 import java.util.*;
 
-import com.epochx.core.GPController;
+import com.epochx.core.*;
 import com.epochx.core.crossover.UniformPointCrossover;
-import com.epochx.core.initialisation.BooleanHybridSemanticallyDrivenInitialiser;
 import com.epochx.core.representation.*;
 import com.epochx.core.selection.*;
 import com.epochx.func.bool.*;
-import com.epochx.semantics.*;
-import com.epochx.stats.GenerationStatField;
-import com.epochx.util.*;
+import com.epochx.stats.*;
+import com.epochx.util.BoolUtils;
 
 /**
  * 
  */
-public class Multiplexer6Bit extends SemanticModel<Boolean> {
+public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
 
-	private List<String> inputs;
-	private HashMap<String, Variable<Boolean>> variables = new HashMap<String, Variable<Boolean>>();
-	private int run = 1;	
+	private boolean[][] inputs;
+	
+	private HashMap<String, Variable<Boolean>> variables = new HashMap<String, Variable<Boolean>>();	
 	
 	public Multiplexer6Bit() {
-		inputs = new ArrayList<String>();
-		inputs = FileManip.loadInput(new File("input6bit.txt"));
+		inputs = BoolUtils.generateBoolSequences(6);
 		
 		configure();
 	}
 	
 	public void configure() {
-		
 		// Define variables.
 		variables.put("D3", new Variable<Boolean>("D3"));
 		variables.put("D2", new Variable<Boolean>("D2"));
@@ -57,6 +52,9 @@ public class Multiplexer6Bit extends SemanticModel<Boolean> {
 		variables.put("D0", new Variable<Boolean>("D0"));
 		variables.put("A1", new Variable<Boolean>("A1"));
 		variables.put("A0", new Variable<Boolean>("A0"));
+		
+		setGenStatFields(new GenerationStatField[]{GenerationStatField.FITNESS_MIN, GenerationStatField.FITNESS_AVE, GenerationStatField.LENGTH_AVE, GenerationStatField.RUN_TIME});
+		setRunStatFields(new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM, RunStatField.RUN_TIME});
 		
 		setPopulationSize(500);
 		setNoGenerations(10);
@@ -70,9 +68,6 @@ public class Multiplexer6Bit extends SemanticModel<Boolean> {
 		setPouleSelector(new TournamentSelector<Boolean>(7, this));
 		setParentSelector(new RandomSelector<Boolean>());
 		setCrossover(new UniformPointCrossover<Boolean>());
-		setStateCheckedCrossover(true);
-		setSemanticModule(new BooleanSemanticModule(getTerminals(), this));
-		setInitialiser(new BooleanHybridSemanticallyDrivenInitialiser(this, this.getSemanticModule()));
 	}
 	
 	@Override
@@ -100,27 +95,12 @@ public class Multiplexer6Bit extends SemanticModel<Boolean> {
 		return terminals;
 	}
 	
-	/*@Override
-	public double getFitness(CandidateProgram<Boolean> program) {
-		// set up ideal solution
-	    IfFunction part1 = new IfFunction(new Variable<Boolean>("A1"), new Variable<Boolean>("D0"), new Variable<Boolean>("D1"));
-	    IfFunction part2 = new IfFunction(new Variable<Boolean>("A1"), new Variable<Boolean>("D2"), new Variable<Boolean>("D3"));
-	    IfFunction part0 = new IfFunction(new Variable<Boolean>("A0"), part1, part2);
-	    CandidateProgram<Boolean> target = new CandidateProgram<Boolean>(part0, this);
-        // do semantic scoring part
-        BooleanSemanticScorer scorer = new BooleanSemanticScorer(getSemanticModule());
-        double score = scorer.doScore(program, target);
-        return score;
-	}*/
-	
 	@Override
 	public double getFitness(CandidateProgram<Boolean> program) {
         double score = 0;
         
         // Execute on all possible inputs.
-        for (String run : inputs) {
-        	boolean[] in = BoolTrans.doTrans(run);
-        	
+        for (boolean[] in: inputs) {        	
         	// Set the variables.
         	variables.get("A0").setValue(in[0]);
         	variables.get("A1").setValue(in[1]);
@@ -154,30 +134,5 @@ public class Multiplexer6Bit extends SemanticModel<Boolean> {
 	
 	public static void main(String[] args) {
 		GPController.run(new Multiplexer6Bit());
-	}
-
-	@Override
-	public void runStats(int run, Object[] stats) {
-		this.run = run + 1;
-	}
-	
-	@Override
-	public void generationStats(int generation, Object[] stats) {
-		ArrayList<String> output = new ArrayList<String>();
-		//System.out.println(run + "\t" + generation + "\t");
-		String part = run + "\t" + generation + "\t";
-		for (Object s: stats) {
-			part = part + s;
-			part = part + "\t";
-		}
-		part = part + "\n";
-		System.out.println(part);
-		output.add(part);
-		FileManip.doOutput(null, output, "GenerationStats.txt", true);
-	}
-
-	@Override
-	public GenerationStatField[] getGenStatFields() {
-		return new GenerationStatField[]{GenerationStatField.FITNESS_AVE, GenerationStatField.FITNESS_MIN, GenerationStatField.LENGTH_AVE, GenerationStatField.REVERTED_CROSSOVERS, GenerationStatField.REVERTED_MUTATIONS};
 	}
 }

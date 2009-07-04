@@ -67,6 +67,11 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	private double reproductionProbability;
 	private double mutationProbability;
 	
+	private MutationStatField[] mutationStatFields;
+	private CrossoverStatField[] crossoverStatFields;
+	private GenerationStatField[] generationStatFields;
+	private RunStatField[] runStatFields;
+	
 	/**
 	 * Construct a GPModel with a set of sensible defaults. See the appropriate
 	 * accessor method for information of each default value.
@@ -437,7 +442,11 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * for the user to extend it if they're not interested in generational stats.
 	 */
 	public GenerationStatField[] getGenStatFields() {
-		return new GenerationStatField[0];
+		return generationStatFields;
+	}
+	
+	public void setGenStatFields(GenerationStatField[] generationStatFields) {
+		this.generationStatFields = generationStatFields;
 	}
 	
 	/**
@@ -445,7 +454,15 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * than being abstract to remove the need for the user to extend it if 
 	 * they're not interested in generational stats.
 	 */
-	public void generationStats(int generation, Object[] stats) {}
+	public void generationStats(int generation, Object[] stats) {
+    	if (stats.length > 0) {
+			System.out.print(generation + "\t");
+	    	for (Object o: stats) {
+	    		System.out.print(o + "\t");
+	    	}
+	    	System.out.println();
+    	}
+	}
 	
 	/**
 	 * Default implementation. No fields are requested, the overriding class 
@@ -454,7 +471,11 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * for the user to extend it if they're not interested in run stats.
 	 */
 	public RunStatField[] getRunStatFields() {
-		return new RunStatField[0];
+		return runStatFields;
+	}
+	
+	public void setRunStatFields(RunStatField[] runStatFields) {
+		this.runStatFields = runStatFields;
 	}
 	
 	/**
@@ -462,8 +483,16 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * than being abstract to remove the need for the user to extend it if 
 	 * they're not interested in run stats.
 	 */
-	public void runStats(int runNo, Object[] stats) {}
-	
+	public void runStats(int runNo, Object[] stats) {
+    	if (stats.length > 0) {
+			System.out.print(runNo + "\t");
+	    	for (Object o: stats) {
+	    		System.out.print(o + "\t");
+	    	}
+	    	System.out.println();
+    	}
+	}
+
 	/**
 	 * Default implementation. No fields are requested, the overriding class 
 	 * is expected to override this method IF it wants to know about crossovers.
@@ -471,7 +500,11 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * for the user to extend it if they're not interested in crossover stats.
 	 */
 	public CrossoverStatField[] getCrossoverStatFields() {
-		return new CrossoverStatField[0];
+		return crossoverStatFields;
+	}
+	
+	public void setCrossoverStatFields(CrossoverStatField[] crossoverStatFields) {
+		this.crossoverStatFields = crossoverStatFields;
 	}
 	
 	/**
@@ -488,7 +521,11 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * for the user to extend it if they're not interested in mutation stats.
 	 */
 	public MutationStatField[] getMutationStatFields() {
-		return new MutationStatField[0];
+		return mutationStatFields;
+	}
+	
+	public void setMutationStatFields(MutationStatField[] mutationStatFields) {
+		this.mutationStatFields = mutationStatFields;
 	}
 	
 	/**

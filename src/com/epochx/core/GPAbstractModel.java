@@ -62,6 +62,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	private int noElites;
 	private int maxInitialDepth;
 	private int maxDepth;
+	private double terminationFitness;
 	
 	private double crossoverProbability;
 	private double reproductionProbability;
@@ -88,6 +89,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 		mutationProbability = 0;
 		pouleSize = 50;
 		noElites = 0;
+		terminationFitness = 0.0;
 		
 		parentSelector = new RandomSelector<TYPE>();
 		pouleSelector = new TournamentSelector<TYPE>(3, this);
@@ -417,6 +419,15 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 */
 	public void setNoElites(int noElites) {
 		this.noElites = noElites;
+	}
+	
+	@Override
+	public double getTerminationFitness() {
+		return terminationFitness;
+	}
+	
+	public void setTerminationFitness(double terminationFitness) {
+		this.terminationFitness = terminationFitness;
 	}
 	
 	public RunStatListener getRunStatListener() {

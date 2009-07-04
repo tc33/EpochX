@@ -251,6 +251,15 @@ public interface GPModel<TYPE> {
 	public int getNoElites();
 
 	/**
+	 * The fitness score at which a run should be stopped. Returning a negative 
+	 * value will result in no termination based upon fitness.
+	 * 
+	 * @return the fitness score at which a run should be terminated. A fitness 
+	 * of this or less will result in termination.
+	 */
+	public double getTerminationFitness();
+	
+	/**
 	 * Calculates and returns the fitness score of the given program. The score 
 	 * returned by this method provides the underlying way in which Candidate 
 	 * Programs are selected. The GP system will attempt to improve the value 

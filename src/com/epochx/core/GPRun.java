@@ -116,7 +116,7 @@ public class GPRun<TYPE> {
 		genStats.addGen(pop, 0, 0, 0, 0);
 		
 		// Execute each generation.
-		for (int i=1; i<=model.getNoGenerations(); i++) {
+		genloop: for (int i=1; i<=model.getNoGenerations(); i++) {
 			// Record the time we start this generation.
 			long genStartTime = System.nanoTime();
 			
@@ -172,6 +172,9 @@ public class GPRun<TYPE> {
 				if (fitness < bestFitness) {
 					bestFitness = fitness;
 					bestProgram = p;
+					if (bestFitness <= model.getTerminationFitness()) {
+						break genloop;
+					}
 				}
 			}
 			

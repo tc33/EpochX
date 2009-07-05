@@ -74,12 +74,12 @@ public class Multiplexer20Bit extends GPAbstractModel<Boolean> {
 		setPopulationSize(500);
 		setNoGenerations(50);
 		setCrossoverProbability(0.9);
-		setReproductionProbability(0.1);
+		setMutationProbability(0.0);
 		setNoRuns(1);
-		setPouleSize(50);
+		setPoolSize(50);
 		setNoElites(50);
 		setMaxDepth(6);
-		setPouleSelector(new TournamentSelector<Boolean>(7, this));
+		setPoolSelector(new TournamentSelector<Boolean>(7, this));
 		setParentSelector(new RandomSelector<Boolean>());
 		setCrossover(new UniformPointCrossover<Boolean>());
 	}

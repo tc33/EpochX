@@ -26,7 +26,7 @@ import com.epochx.core.representation.*;
 /**
  * 
  */
-public class LinearRankSelector<TYPE> implements ParentSelector<TYPE>, PouleSelector<TYPE> {
+public class LinearRankSelector<TYPE> implements ParentSelector<TYPE>, PoolSelector<TYPE> {
 	
 	private List<CandidateProgram<TYPE>> pop;
 	
@@ -78,7 +78,7 @@ public class LinearRankSelector<TYPE> implements ParentSelector<TYPE>, PouleSele
 	 * @see com.epochx.core.selection.PouleSelector#getPoule(java.util.List, int)
 	 */
 	@Override
-	public List<CandidateProgram<TYPE>> getPoule(
+	public List<CandidateProgram<TYPE>> getPool(
 			List<CandidateProgram<TYPE>> pop, int pouleSize) {
 		
 		ParentSelector<TYPE> parentSelector = new LinearRankSelector<TYPE>(gradient);

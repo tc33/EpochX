@@ -26,6 +26,17 @@ import com.epochx.core.representation.*;
  */
 public class UniformPointCrossover<TYPE> implements Crossover<TYPE> {
 
+	/**
+	 * Crossover the two <code>CandidatePrograms</code> provided as arguments 
+	 * using uniform swap points. Random crossover points are chosen at random 
+	 * in both programs, the genetic material at the points are then exchanged.
+	 * The resulting programs are returned as new CandidateProgram objects.
+	 * 
+	 * @param program1 The first CandidateProgram selected to undergo uniform  
+	 * 			       point crossover.
+	 * @param program2 The second CandidateProgram selected to undergo uniform  
+	 * 				   point crossover.
+	 */
 	@Override
 	public CandidateProgram<TYPE>[] crossover(CandidateProgram<TYPE> program1, CandidateProgram<TYPE> program2) {
 		// Select swap points.

@@ -130,7 +130,7 @@ public class GPRun<TYPE> {
 			nextPop.addAll(GPElitism.getElites(pop, noElites));
 			
 			// Construct a breeding pool.
-			List<CandidateProgram<TYPE>> pool = model.getPouleSelector().getPoule(pop, model.getPouleSize());
+			List<CandidateProgram<TYPE>> pool = model.getPoolSelector().getPool(pop, model.getPoolSize());
 			
 			// Count number of crossovers and mutations rejected by the model this gen.
 			int crossoverReversions = 0;

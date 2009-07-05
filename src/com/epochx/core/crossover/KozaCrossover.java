@@ -22,28 +22,49 @@ package com.epochx.core.crossover;
 import com.epochx.core.representation.*;
 
 /**
- * This class implements Koza style crossover with 90% bias on
- * function swap points and 10% on terminal swap points
+ * This class implements a Koza style crossover operation on two 
+ * <code>CandidatePrograms</code>.
+ * 
+ * <p>Koza crossover performs a one point exchange with the choice of a swap 
+ * point being either a function or terminal node with assigned probabilities.
+ * This class provides a constructor for specifying a probability of selecting 
+ * a function swap point. The default constructor uses the typical rates of 90% 
+ * function node swap point and 10% terminal node swap points.
  */
 public class KozaCrossover<TYPE> implements Crossover<TYPE> {
 
-	private double internalProbability;
+	// The probability of choosing a function node as the swap point.
+	private double functionSwapProbability;
 
 	/**
-	 * Constructor for Koza standard crossover object
-	 * @param internalProbability The probability of crossover
+	 * Construct an instance of Koza crossover.
+	 * 
+	 * @param functionSwapProbability The probability of crossover operations 
+	 * 								  choosing a function node as the swap point.
 	 */
-	public KozaCrossover(double internalProbability) {
-		this.internalProbability = internalProbability;
+	public KozaCrossover(double functionSwapProbability) {
+		this.functionSwapProbability = functionSwapProbability;
 	}
 	
 	/**
-	 * Default constructor for Koza standard crossover
+	 * Default constructor for Koza standard crossover. The probability of a 
+	 * function node being selected as the swap point will default to 90%.
 	 */
 	public KozaCrossover() {
 		this(0.9);
 	}
 	
+	/**
+	 * Crossover the two <code>CandidatePrograms</code> provided as arguments 
+	 * using Koza crossover. The crossover points will be chosen from the 
+	 * function or terminal sets with the probability assigned at construction 
+	 * or the default value of 90% function node.
+	 * 
+	 * @param program1 The first CandidateProgram selected to undergo Koza 
+	 * 				   crossover.
+	 * @param program2 The second CandidateProgram selected to undergo Koza 
+	 * 				   crossover.
+	 */
 	@Override
 	public CandidateProgram<TYPE>[] crossover(CandidateProgram<TYPE> program1, CandidateProgram<TYPE> program2) {
 		// Get swap points.
@@ -61,34 +82,50 @@ public class KozaCrossover<TYPE> implements Crossover<TYPE> {
 		return new CandidateProgram[]{program1, program2};
 	}
 	
+	/*
+	 * Choose the crossover point for the given CandidateProgram with respect 
+	 * to the probabilities assigned for function and terminal node points.
+	 */
 	private int getCrossoverPoint(CandidateProgram<TYPE> program) {
+		// Calculate numbers of terminal and function nodes.
 		int length = program.getProgramLength();
 		int noTerminals = program.getNoTerminals();
 		int noFunctions = length - noTerminals;
 		
-		if ((noFunctions > 0) && (Math.random() < internalProbability)) {
-
+		// Randomly decide whether to use a function or terminal node point.
+		if ((noFunctions > 0) && (Math.random() < functionSwapProbability)) {
+			// Randomly select a function node from the function set.
 			int f = (int) Math.floor(Math.random()*noFunctions);
-			
 			int nthFunctionNode = getNthFunctionNode(f, program);
 			
 			return nthFunctionNode;
 		} else {
+			// Randomly select a terminal node from the terminal set.
 			int t = (int) Math.floor(Math.random()*noTerminals);
-			
 			int nthTerminalNode = getNthTerminalNode(t, program);
 			
 			return nthTerminalNode;
 		}
 	}
 
+	/*
+	 * Recurse through the given CandidateProgram to find the nth function 
+	 * node and return its node index.
+	 * 
+	 * TODO Consider moving all these functions to the CandidateProgram class 
+	 * as first class citizens in some form - they might be useful for others.
+	 */
 	private int getNthFunctionNode(int n, CandidateProgram<TYPE> program) {
 		return getNthFunctionNode(n, 0, 0, program.getRootNode());
 	}
 	
-	private int getNthFunctionNode(int n, int fc, int nc, Node<TYPE> current) {
-		if ((current instanceof FunctionNode) && (n == fc))
-			return nc;
+	/*
+	 * Recursive helper function.
+	 */
+	private int getNthFunctionNode(int n, int functionCount, int nodeCount, Node<TYPE> current) {
+		// Found the nth function node.
+		if ((current instanceof FunctionNode) && (n == functionCount))
+			return nodeCount;
 		
 		int result = -1;
 		for (Node<TYPE> child: current.getChildren()) {
@@ -96,27 +133,37 @@ public class KozaCrossover<TYPE> implements Crossover<TYPE> {
 			int noFunctions = child.getNoFunctions();
 			
 			// Only look at the subtree if it contains the right range of nodes.
-			if (n <= noFunctions + fc) {
-				int childResult = getNthFunctionNode(n, fc+1, nc+1, child);
+			if (n <= noFunctions + functionCount) {
+				int childResult = getNthFunctionNode(n, functionCount+1, nodeCount+1, child);
 				if (childResult != -1) 
 					return childResult;
 			}
 			
-			fc += noFunctions;
-			nc += noNodes;
+			// Skip the correct number of nodes from the subtree.
+			functionCount += noFunctions;
+			nodeCount += noNodes;
 		}
 		
 		return result;
 	}
 	
+	/*
+	 * Recurse through the given CandidateProgram to find the nth terminal 
+	 * node and return its node index.
+	 */
 	private int getNthTerminalNode(int n, CandidateProgram<TYPE> program) {
 		return getNthTerminalNode(n, 0, 0, program.getRootNode());
 	}
 	
-	private int getNthTerminalNode(int n, int tc, int nc, Node<TYPE> current) {
+	/*
+	 * Recursive helper function.
+	 */
+	private int getNthTerminalNode(int n, int terminalCount, int nodeCount, Node<TYPE> current) {
+		// Found the nth terminal node.
 		if (current instanceof TerminalNode) {
-			if (n == tc++)
-				return nc;
+			//TODO Check this - not sure we should be ++ing here.
+			if (n == terminalCount++)
+				return nodeCount;
 		}
 		
 		int result = -1;
@@ -125,14 +172,15 @@ public class KozaCrossover<TYPE> implements Crossover<TYPE> {
 			int noTerminals = child.getNoTerminals();
 			
 			// Only look at the subtree if it contains the right range of nodes.
-			if (n <= noTerminals + tc) {
-				int childResult = getNthTerminalNode(n, tc, nc+1, child);
+			if (n <= noTerminals + terminalCount) {
+				int childResult = getNthTerminalNode(n, terminalCount, nodeCount+1, child);
 				if (childResult != -1) 
 					return childResult;
 			}
 			
-			tc += noTerminals;
-			nc += noNodes;
+			// Skip the correct number of nodes from the subtree.
+			terminalCount += noTerminals;
+			nodeCount += noNodes;
 		}
 		
 		return result;

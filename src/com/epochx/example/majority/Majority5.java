@@ -59,13 +59,13 @@ public class Majority5 extends GPAbstractModel<Boolean> {
 		setPopulationSize(500);
 		setNoGenerations(50);
 		setCrossoverProbability(0.9);
-		setReproductionProbability(0.1);
+		setMutationProbability(0.0);
 		setNoRuns(100);
-		setPouleSize(50);
+		setPoolSize(50);
 		setNoElites(50);
 		setInitialMaxDepth(6);
 		setMaxDepth(17);
-		setPouleSelector(new TournamentSelector<Boolean>(7, this));
+		setPoolSelector(new TournamentSelector<Boolean>(7, this));
 		setParentSelector(new RandomSelector<Boolean>());
 		setCrossover(new UniformPointCrossover<Boolean>());
 		setInitialiser(new RampedHalfAndHalfInitialiser<Boolean>(this));

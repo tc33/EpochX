@@ -52,20 +52,19 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	private Crossover<TYPE> crossover;
 	private Mutation<TYPE> mutator;
 	
-	private PouleSelector<TYPE> pouleSelector;
+	private PoolSelector<TYPE> poolSelector;
 	private ParentSelector<TYPE> parentSelector;
 
 	private int noRuns;
 	private int noGenerations;
 	private int populationSize;
-	private int pouleSize;
+	private int poolSize;
 	private int noElites;
 	private int maxInitialDepth;
 	private int maxDepth;
 	private double terminationFitness;
 	
 	private double crossoverProbability;
-	private double reproductionProbability;
 	private double mutationProbability;
 	
 	private MutationStatField[] mutationStatFields;
@@ -73,71 +72,48 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	private GenerationStatField[] generationStatFields;
 	private RunStatField[] runStatFields;
 	
+	private RunStatListener runStatListener;
+	private GenerationStatListener generationStatListener;
+	private CrossoverStatListener crossoverStatListener;
+	private MutationStatListener mutationStatListener;
+	
 	/**
 	 * Construct a GPModel with a set of sensible defaults. See the appropriate
 	 * accessor method for information of each default value.
 	 */
 	public GPAbstractModel() {
-		// Set default values.
+		// Set default parameter values.
 		noRuns = 1;
 		noGenerations = 50;
 		populationSize = 500;
 		maxInitialDepth = 6;
 		maxDepth = 17;
-		crossoverProbability = 0.9;
-		reproductionProbability = 0.1;
-		mutationProbability = 0;
-		pouleSize = 50;
-		noElites = 0;
+		poolSize = 50;
+		noElites = 10;
 		terminationFitness = 0.0;
 		
-		parentSelector = new RandomSelector<TYPE>();
-		pouleSelector = new TournamentSelector<TYPE>(3, this);
+		// Statistics fields.
+		mutationStatFields = null;
+		crossoverStatFields = null;
+		generationStatFields = null;
+		runStatFields = null;
 		
+		// Statistics listeners.
+		runStatListener = this;
+		generationStatListener = this;
+		crossoverStatListener = this;
+		mutationStatListener = this;
+		
+		// Operator probabilities.
+		crossoverProbability = 0.9;
+		mutationProbability = 0;
+		
+		// GP components.
+		parentSelector = new RandomSelector<TYPE>();
+		poolSelector = new TournamentSelector<TYPE>(3, this);
 		initialiser = new FullInitialiser<TYPE>(this);
 		crossover = new UniformPointCrossover<TYPE>();
 		mutator = new SubtreeMutation<TYPE>(this);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Defaults to 50 in GPAbstractModel.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	public int getPouleSize() {
-		return pouleSize;
-	}
-
-	/**
-	 * Overwrites the default poule size value.
-	 * 
-	 * @param pouleSize the new size of the mating pool to use.
-	 */
-	public void setPouleSize(int pouleSize) {
-		this.pouleSize = pouleSize;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Defaults to FullInitialiser in GPAbstractModel.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	public Initialiser<TYPE> getInitialiser() {
-		return initialiser;
-	}
-
-	/**
-	 * Overwrites the default initialiser.
-	 * 
-	 * @param initialiser the new Initialiser to use when generating the 
-	 * 		 			  initial population.
-	 */
-	public void setInitialiser(Initialiser<TYPE> initialiser) {
-		this.initialiser = initialiser;
 	}
 
 	/**
@@ -147,6 +123,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * 
 	 * @return {@inheritDoc}
 	 */
+	@Override
 	public int getNoRuns() {
 		return noRuns;
 	}
@@ -167,6 +144,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * 
 	 * @return {@inheritDoc}
 	 */
+	@Override
 	public int getNoGenerations() {
 		return noGenerations;
 	}
@@ -187,6 +165,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * 
 	 * @return {@inheritDoc}
 	 */
+	@Override
 	public int getPopulationSize() {
 		return populationSize;
 	}
@@ -200,12 +179,34 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	public void setPopulationSize(int populationSize) {
 		this.populationSize = populationSize;
 	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to 50 in GPAbstractModel.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public int getPoolSize() {
+		return poolSize;
+	}
+
+	/**
+	 * Overwrites the default pool size value.
+	 * 
+	 * @param poolSize the new size of the mating pool to use.
+	 */
+	public void setPoolSize(int poolSize) {
+		this.poolSize = poolSize;
+	}
 	
 	/**
 	 * Returns the union of calls to getTerminals() and getFunctions.
 	 * 
 	 * @return {@inheritDoc}
 	 */
+	@Override
 	public List<Node<TYPE>> getSyntax() {
 		List<Node<TYPE>> syntax = new ArrayList<Node<TYPE>>(getTerminals());
 		syntax.addAll(getFunctions());
@@ -220,6 +221,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * 
 	 * @return {@inheritDoc}
 	 */
+	@Override
 	public int getMaxDepth() {
 		return maxDepth;
 	}
@@ -241,6 +243,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * 
 	 * @return {@inheritDoc}
 	 */
+	@Override
 	public int getInitialMaxDepth() {
 		return maxInitialDepth;
 	}
@@ -258,10 +261,180 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	/**
 	 * {@inheritDoc}
 	 * 
+	 * <p>Defaults to 10 in GPAbstractModel.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public int getNoElites() {
+		return noElites;
+	}
+
+	/**
+	 * Overwrites the default number of elites to copy from one generation to
+	 * the next.
+	 * 
+	 * @param noElites the new number of elites to copy across from one 
+	 * 				   population to the next.
+	 */
+	public void setNoElites(int noElites) {
+		this.noElites = noElites;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to 0.0 in GPAbstractModel.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public double getTerminationFitness() {
+		return terminationFitness;
+	}
+	
+	/**
+	 * Overwrites the default fitness for run termination.
+	 * 
+	 * @param terminationFitness the new fitness below which a run will be 
+	 * 							 terminated.
+	 */
+	public void setTerminationFitness(double terminationFitness) {
+		this.terminationFitness = terminationFitness;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to 0.9 in GPAbstractModel to represent a 90% chance.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public double getCrossoverProbability() {
+		return crossoverProbability;
+	}
+	
+	/**
+	 * Overwrites the default crossover probability.
+	 * 
+	 * @param crossoverProbability the new crossover probability to use.
+	 */
+	public void setCrossoverProbability(double crossoverProbability) {
+		this.crossoverProbability = crossoverProbability;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Automatically calculates the reproduction probability based upon the 
+	 * crossover and mutation probabilities as all three together must add up 
+	 * to 100%.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public double getReproductionProbability() {
+		return 1.0 - (getCrossoverProbability() + getMutationProbability());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to 0.0 in GPAbstractModel to represent a 0% chance.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public double getMutationProbability() {
+		return mutationProbability;
+	}
+
+	/**
+	 * Overwrites the default mutation probability.
+	 * 
+	 * @param mutationProbability the new mutation probability to use.
+	 */
+	public void setMutationProbability(double mutationProbability) {
+		this.mutationProbability = mutationProbability;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to {@link TournamentSelector} with a tournament size of 3 
+	 * in GPAbstractModel.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public PoolSelector<TYPE> getPoolSelector() {
+		return poolSelector;
+	}
+
+	/**
+	 * Overwrites the default pool selector used to generate a mating pool.
+	 * 
+	 * @param poolSelector the new PoolSelector to be used when building a 
+	 * 						breeding pool.
+	 */
+	public void setPoolSelector(PoolSelector<TYPE> poolSelector) {
+		this.poolSelector = poolSelector;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to {@link RandomSelector} in GPAbstractModel.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public ParentSelector<TYPE> getParentSelector() {
+		return parentSelector;
+	}
+
+	/**
+	 * Overwrites the default parent selector used to select parents to undergo
+	 * a genetic operator from either a poule or the previous population.
+	 * 
+	 * @param parentSelector the new ParentSelector to be used when selecting 
+	 * 						 parents for a genetic operator.
+	 */
+	public void setParentSelector(ParentSelector<TYPE> parentSelector) {
+		this.parentSelector = parentSelector;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to FullInitialiser in GPAbstractModel.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public Initialiser<TYPE> getInitialiser() {
+		return initialiser;
+	}
+
+	/**
+	 * Overwrites the default initialiser.
+	 * 
+	 * @param initialiser the new Initialiser to use when generating the 
+	 * 		 			  initial population.
+	 */
+	public void setInitialiser(Initialiser<TYPE> initialiser) {
+		this.initialiser = initialiser;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * 
 	 * <p>Defaults to {@link UniformPointCrossover} in GPAbstractModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
+	@Override
 	public Crossover<TYPE> getCrossover() {
 		return crossover;
 	}
@@ -282,6 +455,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * 
 	 * @return {@inheritDoc}
 	 */
+	@Override
 	public Mutation<TYPE> getMutator() {
 		return mutator;
 	}
@@ -289,210 +463,102 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	/**
 	 * Overwrites the default mutator used to perform mutation.
 	 * 
-	 * @param mutator the mutator to set
+	 * @param mutator the mutator to set.
 	 */
 	public void setMutator(Mutation<TYPE> mutator) {
 		this.mutator = mutator;
 	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Defaults to 0.9 in GPAbstractModel to represent a 90% chance.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	public double getCrossoverProbability() {
-		return crossoverProbability;
-	}
 	
 	/**
-	 * Overwrites the default crossover probability.
-	 * 
-	 * @param crossoverProbability the new crossover probability to use.
-	 */
-	public void setCrossoverProbability(double crossoverProbability) {
-		this.crossoverProbability = crossoverProbability;
-	}
-
-	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to 0.1 in GPAbstractModel to represent a 10% chance.
+	 * <p>Defaults to this model object.
 	 * 
 	 * @return {@inheritDoc}
 	 */
-	public double getReproductionProbability() {
-		return reproductionProbability;
-	}
-	
-	/**
-	 * Overwrites the default reproduction probability.
-	 * 
-	 * @param reproductionProbability the new reproduction probability to use.
-	 */
-	public void setReproductionProbability(double reproductionProbability) {
-		this.reproductionProbability = reproductionProbability;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Defaults to 0.0 in GPAbstractModel to represent a 0% chance.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	public double getMutationProbability() {
-		return mutationProbability;
-	}
-
-	/**
-	 * Overwrites the default mutation probability.
-	 * 
-	 * @param mutationProbability the new mutation probability to use.
-	 */
-	public void setMutationProbability(double mutationProbability) {
-		this.mutationProbability = mutationProbability;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Defaults to {@link TournamentSelector} with a tournament size of 3 
-	 * in GPAbstractModel.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	public PouleSelector<TYPE> getPouleSelector() {
-		return pouleSelector;
-	}
-
-	/**
-	 * Overwrites the default poule selector used to generate a mating pool.
-	 * 
-	 * @param pouleSelector the new PouleSelector to be used when building a 
-	 * 						breeding pool.
-	 */
-	public void setPouleSelector(PouleSelector<TYPE> pouleSelector) {
-		this.pouleSelector = pouleSelector;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Defaults to {@link RandomSelector} in GPAbstractModel.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	public ParentSelector<TYPE> getParentSelector() {
-		return parentSelector;
-	}
-
-	/**
-	 * Overwrites the default parent selector used to select parents to undergo
-	 * a genetic operator from either a poule or the previous population.
-	 * 
-	 * @param parentSelector the new ParentSelector to be used when selecting 
-	 * 						 parents for a genetic operator.
-	 */
-	public void setParentSelector(ParentSelector<TYPE> parentSelector) {
-		this.parentSelector = parentSelector;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Defaults to 0 in GPAbstractModel.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	public int getNoElites() {
-		return noElites;
-	}
-
-	/**
-	 * Overwrites the default number of elites to copy from one generation to
-	 * the next.
-	 * 
-	 * @param noElites the new number of elites to copy across from one 
-	 * 				   population to the next.
-	 */
-	public void setNoElites(int noElites) {
-		this.noElites = noElites;
-	}
-	
 	@Override
-	public double getTerminationFitness() {
-		return terminationFitness;
-	}
-	
-	public void setTerminationFitness(double terminationFitness) {
-		this.terminationFitness = terminationFitness;
-	}
-	
 	public RunStatListener getRunStatListener() {
-		return this;
+		return runStatListener;
 	}
 	
+	public void setRunStatListener(RunStatListener runStatListener) {
+		this.runStatListener = runStatListener;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to this model object.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
 	public GenerationStatListener getGenerationStatListener() {
 		return this;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to this model object.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
 	public CrossoverStatListener getCrossoverStatListener() {
 		return this;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to this model object.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
 	public MutationStatListener getMutationStatListener() {
 		return this;
 	}
-	
+
 	/**
 	 * Default implementation. No fields are requested, the overriding class 
-	 * is expected to override this method IF it wants to know about generations.
-	 * This is implemented here rather than being abstract to remove the need 
-	 * for the user to extend it if they're not interested in generational stats.
-	 */
-	public GenerationStatField[] getGenStatFields() {
-		return generationStatFields;
-	}
-	
-	public void setGenStatFields(GenerationStatField[] generationStatFields) {
-		this.generationStatFields = generationStatFields;
-	}
-	
-	/**
-	 * Default implementation. Does nothing. This is implemented here rather 
-	 * than being abstract to remove the need for the user to extend it if 
-	 * they're not interested in generational stats.
-	 */
-	public void generationStats(int generation, Object[] stats) {
-    	if (stats.length > 0) {
-			System.out.print(generation + "\t");
-	    	for (Object o: stats) {
-	    		System.out.print(o + "\t");
-	    	}
-	    	System.out.println();
-    	}
-	}
-	
-	/**
-	 * Default implementation. No fields are requested, the overriding class 
-	 * is expected to override this method IF it wants to know about runs.
-	 * This is implemented here rather than being abstract to remove the need 
-	 * for the user to extend it if they're not interested in run stats.
+	 * is expected to override this method or call the setter method IF it 
+	 * wants to receive information about the runs. 
+	 * 
+	 * <p>Typically it is the model that receives the statistics but this can
+	 * be overridden by returning a different RunStatListener in the 
+	 * getRunStatListener() method. The runStats method of this object will 
+	 * then be called at the end of each run with these requested statistics.
 	 */
 	public RunStatField[] getRunStatFields() {
 		return runStatFields;
 	}
 	
+	/**
+	 * Set the run statistics that the given RunStatListener will receive at 
+	 * the end of each run.
+	 * 
+	 * @param runStatFields an array of RunStatFields that indicate the 
+	 * 						statistics fields that the RunStatListener will 
+	 * 						receive. The fields will be delivered in the same 
+	 * 						order as given here.
+	 */
 	public void setRunStatFields(RunStatField[] runStatFields) {
 		this.runStatFields = runStatFields;
 	}
 	
 	/**
-	 * Default implementation. Does nothing. This is implemented here rather 
-	 * than being abstract to remove the need for the user to extend it if 
-	 * they're not interested in run stats.
+	 * Default implementation. If any run stats fields have been requested then 
+	 * they are printed to the console separated by tabs. In addition to the 
+	 * statistics, the first column will contain the run number.
+	 * 
+	 * @param runNo the run number of the current run. Runs are indexed from
+	 * 				zero (0).
+	 * @param stats an array of the statistics that were requested, given in 
+	 * 				the order that they were requested. The data type of each 
+	 * 				of the stats fields varies according to the field and is 
+	 * 				specified in the JavaDoc of the RunStatField enum.
 	 */
 	public void runStats(int runNo, Object[] stats) {
     	if (stats.length > 0) {
@@ -503,17 +569,87 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	    	System.out.println();
     	}
 	}
+	
+	/**
+	 * Default implementation. No fields are requested, the overriding class 
+	 * is expected to override this method or call the setter method IF it 
+	 * wants to receive information about generations. 
+	 * 
+	 * <p>Typically it is the model that receives the statistics but this can
+	 * be overridden by returning a different GenerationStatListener in the 
+	 * getGenerationStatListener() method. The genenerationStats method of this 
+	 * object will then be called at the end of each generation with these 
+	 * requested statistics. 
+	 */
+	@Override
+	public GenerationStatField[] getGenStatFields() {
+		return generationStatFields;
+	}
+	
+	/**
+	 * Set the generation statistics that the given GenerationStatListener will
+	 * receive at the end of each generation.
+	 * 
+	 * @param generationStatFields an array of GenerationStatFields that 
+	 * 							   indicate the statistics fields that the 
+	 * 							   GenerationStatListener will receive. The 
+	 * 							   fields will be delivered in the same order 
+	 * 							   as given here.
+	 */
+	public void setGenStatFields(GenerationStatField[] generationStatFields) {
+		this.generationStatFields = generationStatFields;
+	}
+	
+	/**
+	 * Default implementation. If any generation stats fields have been 
+	 * requested then they are printed to the console separated by tabs. In 
+	 * addition to the statistics, the first column will contain the 
+	 * generation number.
+	 * 
+	 * @param generation the generation number of the current run. The first 
+	 * 					 generation in a run will be zero (0), which references 
+	 * 					 the population immediately after initialisation.
+	 * @param stats an array of the statistics that were requested, given in 
+	 * 				the order that they were requested. The data type of each 
+	 * 				of the stats fields varies according to the field and is 
+	 * 				specified in the JavaDoc of the GenerationStatField enum.
+	 */
+	@Override
+	public void generationStats(int generation, Object[] stats) {
+    	if (stats.length > 0) {
+			System.out.print(generation + "\t");
+	    	for (Object o: stats) {
+	    		System.out.print(o + "\t");
+	    	}
+	    	System.out.println();
+    	}
+	}
 
 	/**
 	 * Default implementation. No fields are requested, the overriding class 
-	 * is expected to override this method IF it wants to know about crossovers.
-	 * This is implemented here rather than being abstract to remove the need 
-	 * for the user to extend it if they're not interested in crossover stats.
+	 * is expected to override this method or call the setter method IF it 
+	 * wants to receive information about each crossover operation. 
+	 * 
+	 * <p>Typically it is the model that receives the statistics but this can
+	 * be overridden by returning a different CrossoverStatListener in the 
+	 * getCrossoverStatListener() method. The crossoverStats method of this 
+	 * object will then be called at the end of each run with these requested 
+	 * statistics. 
 	 */
 	public CrossoverStatField[] getCrossoverStatFields() {
 		return crossoverStatFields;
 	}
 	
+	/**
+	 * Set the crossover statistics that the given CrossoverStatListener will
+	 * receive after each crossover operation.
+	 * 
+	 * @param crossoverStatFields an array of CrossoverStatFields that indicate 
+	 * 							  the statistics fields that the 
+	 * 							  CrossoverStatListener will receive. The fields 
+	 * 							  will be delivered in the same order as given 
+	 * 							  here.
+	 */
 	public void setCrossoverStatFields(CrossoverStatField[] crossoverStatFields) {
 		this.crossoverStatFields = crossoverStatFields;
 	}
@@ -521,20 +657,40 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	/**
 	 * Default implementation. Does nothing. This is implemented here rather 
 	 * than being abstract to remove the need for the user to extend it if 
-	 * they're not interested in crossover stats.
+	 * they are not interested in crossover stats.
+	 * 
+	 * @param stats an array of the statistics that were requested, given in 
+	 * 				the order that they were requested. The data type of each 
+	 * 				of the stats fields varies according to the field and is 
+	 * 				specified in the JavaDoc of the CrossoverStatField enum.
 	 */
 	public void crossoverStats(Object[] stats) {}
 	
 	/**
 	 * Default implementation. No fields are requested, the overriding class 
-	 * is expected to override this method IF it wants to know about mutations.
-	 * This is implemented here rather than being abstract to remove the need 
-	 * for the user to extend it if they're not interested in mutation stats.
+	 * is expected to override this method or call the setter method IF it 
+	 * wants to receive information about each mutation operation. 
+	 * 
+	 * <p>Typically it is the model that receives the statistics but this can
+	 * be overridden by returning a different MutationStatListener in the 
+	 * getMutationStatListener() method. The mutationStats method of this 
+	 * object will then be called at the end of each run with these requested 
+	 * statistics.
 	 */
 	public MutationStatField[] getMutationStatFields() {
 		return mutationStatFields;
 	}
 	
+	/**
+	 * Set the mutation statistics that the given MutationStatListener will
+	 * receive after each mutation operation.
+	 * 
+	 * @param mutationStatFields an array of MutationStatFields that indicate 
+	 * 							  the statistics fields that the 
+	 * 							  MutationStatListener will receive. The fields 
+	 * 							  will be delivered in the same order as given 
+	 * 							  here.
+	 */
 	public void setMutationStatFields(MutationStatField[] mutationStatFields) {
 		this.mutationStatFields = mutationStatFields;
 	}
@@ -543,11 +699,23 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * Default implementation. Does nothing. This is implemented here rather 
 	 * than being abstract to remove the need for the user to extend it if 
 	 * they're not interested in mutation stats.
+	 * 
+	 * @param stats an array of the statistics that were requested, given in 
+	 * 				the order that they were requested. The data type of each 
+	 * 				of the stats fields varies according to the field and is 
+	 * 				specified in the JavaDoc of the MutationStatField enum.
 	 */
 	public void mutationStats(Object[] stats) {}
 	
 	/**
 	 * Default implementation which accepts all crossovers.
+	 * 
+	 * @param parents The programs that were crossed over to create the given 
+	 * 				  children.
+	 * @param children The children that resulted from the parents being 
+	 * 				   crossed over.
+	 * @return True if the crossover operation should proceed, false if it is 
+	 * 		   rejected and should be retried with new parents.
 	 */
 	public boolean acceptCrossover(CandidateProgram<TYPE>[] parents, 
 								   CandidateProgram<TYPE>[] children) {
@@ -556,6 +724,12 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	
 	/**
 	 * Default implementation which accepts all mutations.
+	 * 
+	 * @param parent The program before the mutation operation.
+	 * @param child  The program after the mutation operation has been carried 
+	 * 				 out.
+	 * @return True if the mutation operation should proceed, false if it is 
+	 * rejected and should be retried with a new parent.
 	 */
 	public boolean acceptMutation(CandidateProgram<TYPE> parent, 
 								  CandidateProgram<TYPE> child) {

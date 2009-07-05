@@ -26,7 +26,7 @@ import com.epochx.core.representation.*;
 /**
  * 
  */
-public class RandomSelector<TYPE> implements ParentSelector<TYPE>, PouleSelector<TYPE> {
+public class RandomSelector<TYPE> implements ParentSelector<TYPE>, PoolSelector<TYPE> {
 
 	private List<CandidateProgram<TYPE>> pop;
 	
@@ -43,7 +43,7 @@ public class RandomSelector<TYPE> implements ParentSelector<TYPE>, PouleSelector
 	}
 
 	@Override
-	public List<CandidateProgram<TYPE>> getPoule(List<CandidateProgram<TYPE>> pop, int pouleSize) {
+	public List<CandidateProgram<TYPE>> getPool(List<CandidateProgram<TYPE>> pop, int pouleSize) {
 		// If pouleSize is 0 or less then we use the whole population.
 		if (pouleSize <= 0) {
 			return pop;

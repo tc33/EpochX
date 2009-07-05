@@ -52,14 +52,13 @@ public class RegressionModelQUART extends SemanticModel<Double> {
 		setPopulationSize(4000);
 		setNoGenerations(50);
 		setCrossoverProbability(0.9);
-		setMutationProbability(0);
-		setReproductionProbability(0.1);
+		setMutationProbability(0.0);
 		setNoRuns(100);
-		setPouleSize(400);
+		setPoolSize(400);
 		setNoElites(400);
 		setInitialMaxDepth(6);
 		setMaxDepth(17);
-		setPouleSelector(new TournamentSelector<Double>(7, this));
+		setPoolSelector(new TournamentSelector<Double>(7, this));
 		setParentSelector(new RandomSelector<Double>());
 		setCrossover(new UniformPointCrossover<Double>());
 		setStateCheckedCrossover(false);

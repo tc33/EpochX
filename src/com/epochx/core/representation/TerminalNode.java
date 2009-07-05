@@ -69,7 +69,7 @@ public class TerminalNode<TYPE> extends Node<TYPE> {
 	
 	@Override
 	public Object clone() {
-		TerminalNode<TYPE> clone = (TerminalNode) super.clone();
+		TerminalNode<TYPE> clone = (TerminalNode<TYPE>) super.clone();
 		
 		clone.value = this.value;
 

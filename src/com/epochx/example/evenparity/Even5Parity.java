@@ -60,12 +60,11 @@ public class Even5Parity extends GPAbstractModel<Boolean> {
 		setNoGenerations(100);
 		setMutationProbability(0.1);
 		setCrossoverProbability(0.85);
-		setReproductionProbability(0.1);
 		setNoRuns(5);
-		setPouleSize(50);
+		setPoolSize(50);
 		setNoElites(50);
 		setMaxDepth(6);
-		setPouleSelector(new TournamentSelector<Boolean>(7, this));
+		setPoolSelector(new TournamentSelector<Boolean>(7, this));
 		setParentSelector(new RandomSelector<Boolean>());
 		setCrossover(new UniformPointCrossover<Boolean>());
 		setMutator(new PointMutation<Boolean>(this.getSyntax(), 0.1));

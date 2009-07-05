@@ -49,12 +49,12 @@ public class QuarticRegression extends GPAbstractModel<Double> {
 		// Setup run.
 		setPopulationSize(500);
 		setCrossoverProbability(0.9);
-		setReproductionProbability(0.1);
-		setPouleSelector(new TournamentSelector<Double>(7, this));
+		setMutationProbability(0.0);
+		setPoolSelector(new TournamentSelector<Double>(7, this));
 		setParentSelector(new LinearRankSelector<Double>(0.5));
 		//setPouleSelector(new RandomSelector<Double>());
 		setCrossover(new UniformPointCrossover<Double>());
-		setPouleSize(50);
+		setPoolSize(50);
 		setNoGenerations(50);
 		setNoElites(50);
 		setMaxDepth(17);

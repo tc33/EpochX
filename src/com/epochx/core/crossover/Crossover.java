@@ -22,10 +22,26 @@ package com.epochx.core.crossover;
 import com.epochx.core.representation.*;
 
 /**
- * Defines crossover functionality
+ * This interface defines the structure which specific crossover operations can
+ * implement to provide different methods of crossing over two 
+ * <code>CandidatePrograms</code>. Crossover instances are used by the core 
+ * GPCrossover class to perform a single crossover operation.
+ * 
+ * @see GPCrossover
  */
 public interface Crossover<TYPE> {
 
-	public CandidateProgram<TYPE>[] crossover(CandidateProgram<TYPE> parent1, CandidateProgram<TYPE> parent2);
+	/**
+	 * Implementations should perform some form of exchange of material between 
+	 * the two children, returning the resultant children.
+	 * @param parent1 The first CandidateProgram selected to undergo this 
+	 * 				  crossover operation.
+	 * @param parent2 The second CandidateProgram selected to undergo this 
+	 * 				  crossover operation.
+	 * @return An array of the child CandidatePrograms that were the result of 
+	 * an exchange of genetic material between the two parents.
+	 */
+	public CandidateProgram<TYPE>[] crossover(CandidateProgram<TYPE> parent1, 
+											  CandidateProgram<TYPE> parent2);
 	
 }

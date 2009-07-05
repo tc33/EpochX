@@ -53,7 +53,7 @@ public interface GPModel<TYPE> {
 	 * 		   returned by getPouleSelector() which will be used for parent 
 	 * 		   selection.
 	 */
-	public int getPouleSize();
+	public int getPoolSize();
 
 	/**
 	 * Retrieves the Initialiser which will generate the first generation 
@@ -224,7 +224,7 @@ public interface GPModel<TYPE> {
 	 * 		   should be picked straight from the previous population.
 	 * @see TournamentSelector
 	 */
-	public PouleSelector<TYPE> getPouleSelector();
+	public PoolSelector<TYPE> getPoolSelector();
 
 	/**
 	 * Retrieves the selector to use to pick parents from either a pre-selected 
@@ -279,14 +279,76 @@ public interface GPModel<TYPE> {
 	 */
 	public double getFitness(CandidateProgram<TYPE> program);
 	
+	/**
+	 * Get a listener which will be informed of statistics about runs. The 
+	 * listener will be queried for what fields are of interest, with those 
+	 * statistics passed to the runStats method in the same order at the end 
+	 * of each run. 
+	 * 
+	 * @return A RunStatListener to handle run statistics.
+	 */
 	public RunStatListener getRunStatListener();
+	
+	/**
+	 * Get a listener which will be informed of statistics about generations. 
+	 * The listener will be queried for what fields are of interest, with those 
+	 * statistics passed to the generationStats method in the same order after 
+	 * each generation. 
+	 * 
+	 * @return A GenerationStatListener to handle generation statistics.
+	 */
 	public GenerationStatListener getGenerationStatListener();
+	
+	/**
+	 * Get a listener which will be informed of statistics about crossovers. 
+	 * The listener will be queried for what fields are of interest, with those 
+	 * statistics passed to the crossoverStats method in the same order after 
+	 * each crossover operation. 
+	 * 
+	 * @return A CrossoverStatListener to handle crossover statistics.
+	 */
 	public CrossoverStatListener getCrossoverStatListener();
+	
+	/**
+	 * Get a listener which will be informed of statistics about mutations. 
+	 * The listener will be queried for what fields are of interest, with those 
+	 * statistics passed to the mutationStats method in the same order after 
+	 * each mutation operation. 
+	 * 
+	 * @return A MutationStatListener to handle mutation statistics.
+	 */
 	public MutationStatListener getMutationStatListener();
 	
+	/**
+	 * This method will be called during each crossover operation before the 
+	 * crossover is accepted, giving the model the opportunity to reject the 
+	 * operation, in which case the operation will be attempted again until it
+	 * is accepted. The number of times crossovers are rejected is retrievable 
+	 * using the REVERTED_CROSSOVERS stats field. 
+	 * 
+	 * @param parents The programs which have been crossed over to create the 
+	 * given children.
+	 * @param children The children which are the result of the crossover 
+	 * operation having been performed on the given parents.
+	 * @return True if the crossover operation should proceed, false if it is 
+	 * rejected and should be retried with new parents.
+	 */
 	public boolean acceptCrossover(CandidateProgram<TYPE>[] parents, 
 								   CandidateProgram<TYPE>[] children);
 	
-	public boolean acceptMutation(CandidateProgram<TYPE> parents, 
-			   					  CandidateProgram<TYPE> children);
+	/**
+	 * This method will be called during each mutation operation before the 
+	 * mutation is accepted, giving the model the opportunity to reject the 
+	 * operation, in which case the operation will be attempted again until it
+	 * is accepted. The number of times mutations are rejected is retrievable 
+	 * using the REVERTED_MUTATIONS stats field.
+	 * 
+	 * @param parent The program before the mutation operation.
+	 * @param child  The program after the mutation operation has been carried 
+	 * 				 out.
+	 * @return True if the mutation operation should proceed, false if it is 
+	 * rejected and should be retried with a new parent.
+	 */
+	public boolean acceptMutation(CandidateProgram<TYPE> parent, 
+			   					  CandidateProgram<TYPE> child);
 }

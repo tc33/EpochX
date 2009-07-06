@@ -67,7 +67,7 @@ public class Even5Parity extends GPAbstractModel<Boolean> {
 		setPoolSelector(new TournamentSelector<Boolean>(7, this));
 		setParentSelector(new RandomSelector<Boolean>());
 		setCrossover(new UniformPointCrossover<Boolean>());
-		setMutator(new PointMutation<Boolean>(this.getSyntax(), 0.1));
+		setMutator(new PointMutation<Boolean>(this, 0.1));
 	}
 	
 	@Override

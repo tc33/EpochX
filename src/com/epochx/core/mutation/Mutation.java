@@ -19,17 +19,27 @@
  */
 package com.epochx.core.mutation;
 
+import com.epochx.core.*;
 import com.epochx.core.representation.*;
 
 /**
- * Interface to define mutation object structure
+ * This interface defines the structure which specific mutation operators can
+ * implement to provide different methods of mutating a <code>CandidateProgram</code>. 
+ * Mutation instances are used by the core GPMutation class to perform a single 
+ * mutation operation.
+ * 
+ * @see GPMutation
  */
 public interface Mutation<TYPE> {
 
 	/**
-	 * abstract mutation method
-	 * @param program The program to mutate
-	 * @return The program produced by the mutation
+	 * Implementations should perform some form of alteration to the genetic 
+	 * material of the given CandidateProgram, returning the resultant program.
+	 * 
+	 * @param program The CandidateProgram selected to undergo this mutation 
+	 * 				  operation.
+	 * @return A CandidateProgram that was the result of altering the provided 
+	 * CandidateProgram.
 	 */
 	public CandidateProgram<TYPE> mutate(CandidateProgram<TYPE> program);
 	

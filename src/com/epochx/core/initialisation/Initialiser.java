@@ -24,13 +24,20 @@ import java.util.*;
 import com.epochx.core.representation.*;
 
 /**
- * Abstract description of an initisaliser
+ * Implementations of this interface should be capable of generating an initial 
+ * population of <code>CandidatePrograms</code>. The getInitialPopulation() 
+ * method is called towards the start of execution of a run to get the first 
+ * population which will then be evolved.
  */
 public interface Initialiser<TYPE> {
 
 	/**
-	 * abstract call to return initial population
-	 * @return
+	 * Construct and return an initial population of CandidatePrograms.
+	 * Implementations will typically wish to return a population with a size 
+	 * as given by calling getPopulationSize() on the controlling model.
+	 * 
+	 * @return A List of newly generated CandidatePrograms which will form the 
+	 * initial population for a GP run.
 	 */
 	public List<CandidateProgram<TYPE>> getInitialPopulation();
 	

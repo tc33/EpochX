@@ -24,16 +24,26 @@ import com.epochx.core.initialisation.*;
 import com.epochx.core.representation.*;
 
 /**
- * Subtree mutation method
+ * This class performs a subtree mutation on a <code>CandidateProgram</code>.
+ * 
+ * <p>A mutation point is randomly selected anywhere in the program tree. Then 
+ * the node at that point is replaced with a newly generated program tree, 
+ * which is created using a grow strategy.
  */
 public class SubtreeMutation<TYPE> implements Mutation<TYPE> {
 
+	// The current controlling model.
 	private GPModel<TYPE> model;
-	private int subtreeDepth;
+	
+	// The maximum depth of the new subtree.
+	private int maxSubtreeDepth;
 	
 	/**
-	 * Simple constructor for subtree mutation using depth 4 for new subtrees
-	 * @param model The GP model in use
+	 * Simple constructor for subtree mutation using a default maximum depth 
+	 * of 4 for new subtrees.
+	 * 
+	 * @param model The controlling model which provides any configuration 
+	 * parameters for the run.
 	 */
 	public SubtreeMutation(GPModel<TYPE> model) {
 		// 4 is a slightly arbitrary choice but we had to choose something.
@@ -41,23 +51,38 @@ public class SubtreeMutation<TYPE> implements Mutation<TYPE> {
 	}
 	
 	/**
-	 * Subtree mutation constructor with new subtree depth control
-	 * @param model The GP model in use
-	 * @param subtreeDepth The maximum depth of the inserted subtree
+	 * Subtree mutation constructor with control for the maximum depth of new
+	 * subtrees.
+	 * 
+	 * @param model The controlling model which provides any configuration 
+	 * parameters for the run.
+	 * @param maxSubtreeDepth The maximum depth of the inserted subtree.
 	 */
-	public SubtreeMutation(GPModel<TYPE> model, int subtreeDepth) {
+	public SubtreeMutation(GPModel<TYPE> model, int maxSubtreeDepth) {
 		this.model = model;
-		this.subtreeDepth = subtreeDepth;
+		this.maxSubtreeDepth = maxSubtreeDepth;
 	}
 	
+	/**
+	 * Perform subtree mutation on the given CandidateProgram. A mutation point 
+	 * is randomly selected anywhere in the program tree. Then the node at that 
+	 * point is replaced with a newly generated program tree, which is created 
+	 * using a grow strategy.
+	 * 
+	 * @param program The CandidateProgram selected to undergo this mutation 
+	 * 				  operation.
+	 * @return A CandidateProgram that was the result of a point mutation on 
+	 * the provided CandidateProgram.
+	 */
 	@Override
 	public CandidateProgram<TYPE> mutate(CandidateProgram<TYPE> program) {
+		// Randonly choose a mutation point.
 		int length = program.getProgramLength();
 		int mutationPoint = (int) Math.floor(Math.random() * length);
 		
-		// Randomly generate the new subtree.
+		// Grow a new subtree using the GrowInitialiser.
 		GrowInitialiser<TYPE> init = new GrowInitialiser<TYPE>(model);
-		Node<TYPE> subtree = init.buildGrowNodeTree(subtreeDepth);
+		Node<TYPE> subtree = init.buildGrowNodeTree(maxSubtreeDepth);
 		
 		// Set the new subtree.
 		program.setNthNode(subtree, mutationPoint);

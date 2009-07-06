@@ -119,12 +119,15 @@ public class GPCrossover<TYPE> {
 		reversions = -1;
 		boolean accepted = true;
 		do {
-			// Attempt crossover.
+			// Select the parents for crossover.
 			parent1 = parentSelector.getParent();
 			parent2 = parentSelector.getParent();
+			
 			clone1 = (CandidateProgram<TYPE>) parent1.clone();
 			clone2 = (CandidateProgram<TYPE>) parent2.clone();
 			parents = new CandidateProgram[]{parent1, parent2};
+			
+			// Attempt crossover.
 			children = crossover.crossover(clone1, clone2);
 			
 			// Ask model whether it accepts this crossover.

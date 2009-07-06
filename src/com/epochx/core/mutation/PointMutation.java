@@ -21,52 +21,83 @@ package com.epochx.core.mutation;
 
 import java.util.List;
 
+import com.epochx.core.*;
 import com.epochx.core.representation.*;
 
 /**
- * Point mutation method
+ * This class performs a simple point mutation on a <code>CandidateProgram</code>.
+ * 
+ * <p>Each node in the program tree is considered for mutation, with the 
+ * probability of that node being mutated given as an argument to the 
+ * PointMutation constructor. If the node does undergo mutation then a 
+ * replacement node is selected from the full syntax (function and terminal 
+ * sets), at random.
  */
 public class PointMutation<TYPE> implements Mutation<TYPE> {
 
-	private List<Node<TYPE>> syntax;	
+	// The current controlling model.
+	private GPModel<TYPE> model;
+	
+	// The probability that each node has of being mutated.
 	private double pointProbability;
 	
 	/**
-	 * Creates a point mutation with a point probability of 0.01. It's generally 
-	 * recommended that the PointMutation(double) constructor is used.
-	 * @param syntax The syntax to be used in the mutation
+	 * Construct a point mutation with a default point probability of 0.01. It is
+	 * generally recommended that the PointMutation(GPModel, double) constructor 
+	 * is used instead.
+	 * 
+	 * @param model The current controlling model. Parameters such as full 
+	 * syntax will be obtained from this.
 	 */
-	public PointMutation(List<Node<TYPE>> syntax) {
-		this(syntax, 0.01);
+	public PointMutation(GPModel<TYPE> model) {
+		this(model, 0.01);
 	}
 	
 	/**
-	 * Contains a point mutation with user specified probability
-	 * @param syntax The syntax to be used
-	 * @param pointProbability The probability of mutation
+	 * Construct a point mutation with user specified point probability.
+	 * 
+	 * @param model The current controlling model. Parameters such as full 
+	 * syntax will be obtained from this.
+	 * @param pointProbability The probability each node in a selected program 
+	 * has of undergoing a mutation. 1.0 would result in all nodes being 
+	 * changed, and 0.0 would mean no nodes were changed. A typical value 
+	 * would be 0.01.
 	 */
-	public PointMutation(List<Node<TYPE>> syntax, double pointProbability) {
-		this.syntax = syntax;
+	public PointMutation(GPModel<TYPE> model, double pointProbability) {
+		this.model = model;
 		this.pointProbability = pointProbability;
 	}
 	
+	/**
+	 * Perform point mutation on the given CandidateProgram. Each node in the 
+	 * program tree is considered in turn, with each having the given 
+	 * probability of actually being exchanged. Given that a node is chosen 
+	 * then a new function or terminal node of the same arity is used to 
+	 * replace it.
+	 * 
+	 * @param program The CandidateProgram selected to undergo this mutation 
+	 * 				  operation.
+	 * @return A CandidateProgram that was the result of a point mutation on 
+	 * the provided CandidateProgram.
+	 */
 	@Override
 	public CandidateProgram<TYPE> mutate(CandidateProgram<TYPE> program) {
+		// Get the syntax from which new nodes will be chosen.
+		List<Node<TYPE>> syntax = model.getSyntax();
+		
+		// Iterate over each node in the program tree.
 		int length = program.getProgramLength();
-	
 		for (int i=0; i<length; i++) { 
-			// Perform a point mutation at the ith node, pointProbability% of time.
+			// Only change pointProbability of the time.
 			if (Math.random() < pointProbability) {
-				// Get the ith node.
+				// Get the arity of the ith node of the program.
 				Node<TYPE> node = (Node<TYPE>) program.getNthNode(i);
-
 				int arity = node.getArity();
 				
 				// Find a different function/terminal with same arity - start from random position.
 				int rand = (int) Math.floor(Math.random() * syntax.size());
 				for (int j=0; j<syntax.size(); j++) {
 					int index = (j + rand) % syntax.size();
-					
 					Node<TYPE> n = syntax.get(index);
 					
 					//TODO Need to check we're not replacing with the same thing.

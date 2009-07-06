@@ -146,7 +146,7 @@ public class RegressionSemanticModule implements SemanticModule<Double> {
 			Node<Double>[] children = rootNode.getChildren();
 			// recurse on other functions
 			for(int i = 0; i<arity; i++) {
-				rootNode.setChild(this.removeMultiplyByZeros(children[i]), i);
+				rootNode.setChild(i, this.removeMultiplyByZeros(children[i]));
 			}
 			// check if multiply function
 			if(rootNode instanceof MultiplyFunction) {
@@ -176,7 +176,7 @@ public class RegressionSemanticModule implements SemanticModule<Double> {
 			Node<Double>[] children = rootNode.getChildren();
 			// recurse on children 1st
 			for(int i = 0; i<arity; i++) {
-				rootNode.setChild(this.removeAllPDivsWithSameSubtrees(children[i]), i);
+				rootNode.setChild(i, this.removeAllPDivsWithSameSubtrees(children[i]));
 			}
 			// decide what to do - reduce or recurse
 			if(rootNode instanceof ProtectedDivisionFunction) {
@@ -209,7 +209,7 @@ public class RegressionSemanticModule implements SemanticModule<Double> {
 			Node<Double>[] children = rootNode.getChildren();
 			// reduce all children 1st - bottom up process
 			for(int i = 0; i<arity; i++) {
-				rootNode.setChild(this.resolveConstantCalculations(children[i]), i);
+				rootNode.setChild(i, this.resolveConstantCalculations(children[i]));
 			}
 			// check if all child nodes are numbers
 			boolean allChildrenAreTerminalNodes = true;
@@ -249,7 +249,7 @@ public class RegressionSemanticModule implements SemanticModule<Double> {
 			Node<Double>[] children = rootNode.getChildren();
 			// reduce all children 1st - bottom up process
 			for(int i = 0; i<arity; i++) {
-				rootNode.setChild(this.reduceToCVPFormat(children[i]), i);
+				rootNode.setChild(i, this.reduceToCVPFormat(children[i]));
 			}
 			// scan for CVPs to build up
 			if(rootNode instanceof MultiplyFunction) {
@@ -334,7 +334,7 @@ public class RegressionSemanticModule implements SemanticModule<Double> {
 				// * coefficients by -1 before adding them
 				double coefficient = (Double) c.getChild(0).evaluate();
 				double newCoefficient = coefficient * -1;
-				c.setChild(new TerminalNode<Double>(newCoefficient), 0);
+				c.setChild(0, new TerminalNode<Double>(newCoefficient));
 				cVPList.add(c);
 			}
 		}		
@@ -353,7 +353,7 @@ public class RegressionSemanticModule implements SemanticModule<Double> {
 				if(coefficient < 0) {
 					// modify sign on second CVP node
 					double newCoefficient = coefficient * -1;
-					regRep.get(i).setChild(new TerminalNode<Double>(newCoefficient), 0);
+					regRep.get(i).setChild(0, new TerminalNode<Double>(newCoefficient));
 					// if it is generate subtract function
 					rootNode = new SubtractFunction(rootNode, regRep.get(i));
 				} else {

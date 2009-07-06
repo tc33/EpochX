@@ -483,8 +483,8 @@ public class AntSemanticModule implements SemanticModule<Action> {
                 }
                 // end close brakct
                 Node<Action> iFANode = new IfFoodAheadFunction(ant, landscape);
-                iFANode.setChild(child1, 0);
-                iFANode.setChild(child2, 1);
+                iFANode.setChild(0, child1);
+                iFANode.setChild(1, child2);
                 sequence.add(iFANode);
                 // move i along one to get out of final if bracket
                 lastOrientation = oBeforeIf;

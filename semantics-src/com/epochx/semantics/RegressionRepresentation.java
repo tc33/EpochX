@@ -75,7 +75,7 @@ public class RegressionRepresentation implements Representation, Cloneable {
 					double newCoefficient = coefficient1.evaluate() + coefficient2.evaluate();
 					
 					// Update the second element with the new coefficient.
-					cvp2.setChild(new TerminalNode<Double>(newCoefficient), 0);
+					cvp2.setChild(0, new TerminalNode<Double>(newCoefficient));
 					
 					// Nullify the current one and then we'll skip to the next...
 					regressionRepresentation.set(i, null);

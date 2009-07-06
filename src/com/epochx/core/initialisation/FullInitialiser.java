@@ -114,7 +114,7 @@ public class FullInitialiser<TYPE> implements Initialiser<TYPE> {
 				int randomIndex = (int) Math.floor(Math.random() * model.getFunctions().size());
 				Node<TYPE> child = (Node<TYPE>) model.getFunctions().get(randomIndex).clone();
 
-				currentNode.setChild(child, i);
+				currentNode.setChild(i, child);
 				fillChildren(child, (currentDepth+1), maxDepth);
 			}
 		} else {
@@ -123,7 +123,7 @@ public class FullInitialiser<TYPE> implements Initialiser<TYPE> {
 				int randomIndex = (int) Math.floor(Math.random() * model.getTerminals().size());
 				Node<TYPE> child = (Node<TYPE>) model.getTerminals().get(randomIndex).clone();
 
-				currentNode.setChild(child, i);
+				currentNode.setChild(i, child);
 			}
 		}
 	}

@@ -22,15 +22,16 @@ package com.epochx.core.representation;
 import com.epochx.action.Action;
 
 /**
- * Defines a terminal node
+ * Defines a terminal node.
  */
 public class TerminalNode<TYPE> extends Node<TYPE> {
 
 	private TYPE value;
 	
 	/**
-	 * COnstructor for a new terminal node
-	 * @param value The value of the terminal node
+	 * Constructor for a new terminal node.
+	 * 
+	 * @param value the value of the terminal node.
 	 */
 	public TerminalNode(TYPE value) {
 		super();
@@ -38,20 +39,30 @@ public class TerminalNode<TYPE> extends Node<TYPE> {
 	}
 
 	/**
-	 * @return the value of the terminal node
+	 * Returns the value of the terminal node.
+	 * 
+	 * @return the value of the terminal node.
 	 */
 	public TYPE getValue() {
 		return value;
 	}
 	
 	/**
-	 * Sets the value of the terminal node
-	 * @param value The new value
+	 * Replaces the value of the terminal node.
+	 * 
+	 * @param value the new value to store.
 	 */
 	public void setValue(TYPE value) {
 		this.value = value;
 	}
 
+	/**
+	 * Evaluation of a terminal node depends on if it is an action or not. If 
+	 * the value is an Action, then the action is first executed, then a 
+	 * DO_NOTHING Action value is returned, indicating that no further action 
+	 * is required from this node. Alternatively, for all other terminal nodes, 
+	 * the value is simply returned.
+	 */
 	@Override
 	public TYPE evaluate() {
 		if(value instanceof Action) {
@@ -62,11 +73,22 @@ public class TerminalNode<TYPE> extends Node<TYPE> {
 		}
 	}
 	
+	/**
+	 * Returns a string representation of this TerminalNode.
+	 * 
+	 * @return a string representation of this terminal node.
+	 */
 	@Override
 	public String toString() {
 		return value.toString();
 	}
 	
+	/**
+	 * Creates a copy of this terminal node. Values are shallow copied and so 
+	 * the cloned value will point to the same reference.
+	 * 
+	 * @return a copy of this TerminalNode.
+	 */
 	@Override
 	public Object clone() {
 		TerminalNode<TYPE> clone = (TerminalNode<TYPE>) super.clone();
@@ -76,6 +98,13 @@ public class TerminalNode<TYPE> extends Node<TYPE> {
 		return clone;
 	}
 
+	/**
+	 * Compares an object for equivalence to this terminal node. Another 
+	 * terminal node is equal to this one if they share equal values.
+	 * 
+	 * @param obj an object to compare for equivalence.
+	 * @return true if the objects are equal, false otherwise.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		boolean inst = (obj instanceof TerminalNode);

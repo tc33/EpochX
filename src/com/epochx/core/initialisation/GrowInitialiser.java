@@ -112,7 +112,7 @@ public class GrowInitialiser<TYPE> implements Initialiser<TYPE> {
 					int randomIndex = (int) Math.floor(Math.random() * model.getSyntax().size());
 					Node<TYPE> child = (Node<TYPE>) model.getSyntax().get(randomIndex).clone();
 
-					currentNode.setChild(child, i);
+					currentNode.setChild(i, child);
 					this.fillChildren(child, (currentDepth+1), maxDepth);
 				}
 			} else {
@@ -121,7 +121,7 @@ public class GrowInitialiser<TYPE> implements Initialiser<TYPE> {
 					int randomIndex = (int) Math.floor(Math.random() * model.getTerminals().size());
 					Node<TYPE> child = (Node<TYPE>) model.getTerminals().get(randomIndex).clone();
 					
-					currentNode.setChild(child, i);
+					currentNode.setChild(i, child);
 				}
 			}
 		}

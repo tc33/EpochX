@@ -20,18 +20,19 @@
 package com.epochx.core.representation;
 
 /**
- * A variable is a data type which can be used for a <code>TerminalNode</code>
+ * A variable is a data type which can be used as a <code>TerminalNode</code>
  * in place of a predefined constant. Variables can thus have their values 
  * changed which will change the result of evaluation.
  */
 public class Variable<TYPE> extends TerminalNode<TYPE> {
 
+	// The name of the variable.
 	private String label;
-	//private TYPE value = null;
 	
 	/**
-	 * COnstructor for a new variable
-	 * @param label The variable label
+	 * Constructor for a new variable instance.
+	 * 
+	 * @param label the variable's name.
 	 */
 	public Variable(String label) {
 		super(null);
@@ -39,31 +40,47 @@ public class Variable<TYPE> extends TerminalNode<TYPE> {
 	}
 	
 	/**
-	 * Returns the label of the variable
-	 * @return The label of the variable
+	 * Returns the label of the variable.
+	 * 
+	 * @return the label of the variable.
 	 */
 	public String getLabel() {
 		return label;
 	}
 	
 	/**
-	 * Sets the label of a variable
-	 * @param label The new label of the variable
+	 * Replaces the variable's label with a new name.
+	 * 
+	 * @param label the new label to assign to the variable.
 	 */
 	public void setLabel(String label) {
 		this.label = label;
 	}
 	
+	/* This shouldn't be needed, because it extends from TerminalNode.
 	@Override
 	public TYPE evaluate() {
 		return getValue();
 	}
+	*/
 
+	/**
+	 * Return a string representation of the variable.
+	 * 
+	 * @return a string representation of this variable.
+	 */
 	@Override
 	public String toString() {
 		return label;
 	}
 	
+	/**
+	 * Compares an object for equivalence to this instance of Variable. Two 
+	 * variables are equal if they have equal labels and equal values.
+	 * 
+	 * @return true if the object is a variable equal to this one, false 
+	 * otherwise.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		return (obj instanceof Variable) 
@@ -71,8 +88,13 @@ public class Variable<TYPE> extends TerminalNode<TYPE> {
 					&& this.label.equals(((Variable<TYPE>) obj).label);
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.epochx.core.representation.TerminalNode#clone()
+	/**
+	 * Variables cannot be cloned. Calling this method returns the same 
+	 * instance of Variable as this allows a variable to be treated in the same 
+	 * way as other nodes without preventing variable values being updateable 
+	 * throughout a program tree.
+	 * 
+	 * @return this instance of Variable.
 	 */
 	@Override
 	public Object clone() {

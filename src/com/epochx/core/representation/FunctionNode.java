@@ -20,14 +20,17 @@
 package com.epochx.core.representation;
 
 /**
- * Represents a function node within a candidate program
+ * Represents a function node within a candidate program.
+ * 
+ * @see Node
+ * @see TerminalNode
  */
 public abstract class FunctionNode<TYPE> extends Node<TYPE> {
 
 	/**
 	 * Constructor for function node with dynamic number of children 
-	 * depending on arity of function
-	 * @param children The child nodes
+	 * depending on arity of function.
+	 * @param children the child nodes.
 	 */
 	public FunctionNode(Node<TYPE> ... children) {
 		super(children);
@@ -36,9 +39,18 @@ public abstract class FunctionNode<TYPE> extends Node<TYPE> {
 	/**
 	 * The value returned from this function should be unique for a specific 
 	 * function type within a run.
+	 * 
+	 * @return a unique function name.
 	 */
 	public abstract String getFunctionName();
 	
+	/**
+	 * Returns a string representation of the function node. Since the function 
+	 * node is dependent upon its children, their string representations will 
+	 * form part of this.
+	 * 
+	 * @return a string representation of this function node.
+	 */
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder(getFunctionName());

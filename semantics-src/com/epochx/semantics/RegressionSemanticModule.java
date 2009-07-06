@@ -102,27 +102,27 @@ public class RegressionSemanticModule implements SemanticModule<Double> {
 		Node<Double> rootNode = program1.getRootNode();
 
 		// resolve any multiply by zeros
-		if(rootNode.getProgramLength()>1) {
+		if(rootNode.getLength()>1) {
 			rootNode = this.removeMultiplyByZeros(rootNode);
 		}
 		
 		// resolve PDIVs with equal subtrees and PDIV by 0 to 0
-		if(rootNode.getProgramLength()>1) {
+		if(rootNode.getLength()>1) {
 			rootNode = this.removeAllPDivsWithSameSubtrees(rootNode);
 		}
 		
 		// resolve constant calculations
-		if(rootNode.getProgramLength()>1) {
+		if(rootNode.getLength()>1) {
 			rootNode = this.resolveConstantCalculations(rootNode);
 		}
 		
 		// resolve any multiply by zeros
-		if(rootNode.getProgramLength()>1) {
+		if(rootNode.getLength()>1) {
 			rootNode = this.removeMultiplyByZeros(rootNode);
 		}
 		
 		// resolve PDIVs with equal subtrees and PDIV by 0 to 0
-		if(rootNode.getProgramLength()>1) {
+		if(rootNode.getLength()>1) {
 			rootNode = this.removeAllPDivsWithSameSubtrees(rootNode);
 		}
 		

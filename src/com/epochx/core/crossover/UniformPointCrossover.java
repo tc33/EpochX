@@ -51,8 +51,8 @@ public class UniformPointCrossover<TYPE> implements Crossover<TYPE> {
 		Node<TYPE> subTree2 = (Node<TYPE>) program2.getNthNode(swapPoint2).clone();
 		
 		// Perform swap.
-		program1.setNthNode(subTree2, swapPoint1);
-		program2.setNthNode(subTree1, swapPoint2);		
+		program1.setNthNode(swapPoint1, subTree2);
+		program2.setNthNode(swapPoint2, subTree1);		
 		
 		return new CandidateProgram[]{program1, program2};
 	}

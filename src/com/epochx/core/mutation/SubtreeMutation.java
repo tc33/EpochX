@@ -85,7 +85,7 @@ public class SubtreeMutation<TYPE> implements Mutation<TYPE> {
 		Node<TYPE> subtree = init.buildGrowNodeTree(maxSubtreeDepth);
 		
 		// Set the new subtree.
-		program.setNthNode(subtree, mutationPoint);
+		program.setNthNode(mutationPoint, subtree);
 		
 		return program;
 	}

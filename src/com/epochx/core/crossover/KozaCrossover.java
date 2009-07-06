@@ -76,8 +76,8 @@ public class KozaCrossover<TYPE> implements Crossover<TYPE> {
 		Node<TYPE> subtree2 = (Node<TYPE>) program2.getNthNode(swapPoint2).clone();
 		
 		// Perform swap.
-		program1.setNthNode(subtree2, swapPoint1);
-		program2.setNthNode(subtree1, swapPoint2);
+		program1.setNthNode(swapPoint1, subtree2);
+		program2.setNthNode(swapPoint2, subtree1);
 
 		return new CandidateProgram[]{program1, program2};
 	}
@@ -129,7 +129,7 @@ public class KozaCrossover<TYPE> implements Crossover<TYPE> {
 		
 		int result = -1;
 		for (Node<TYPE> child: current.getChildren()) {
-			int noNodes = child.getProgramLength();
+			int noNodes = child.getLength();
 			int noFunctions = child.getNoFunctions();
 			
 			// Only look at the subtree if it contains the right range of nodes.
@@ -168,7 +168,7 @@ public class KozaCrossover<TYPE> implements Crossover<TYPE> {
 		
 		int result = -1;
 		for (Node<TYPE> child: current.getChildren()) {
-			int noNodes = child.getProgramLength();
+			int noNodes = child.getLength();
 			int noTerminals = child.getNoTerminals();
 			
 			// Only look at the subtree if it contains the right range of nodes.

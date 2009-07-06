@@ -106,10 +106,10 @@ public class PointMutation<TYPE> implements Mutation<TYPE> {
 						
 						// Attach the old node's children.
 						for (int k=0; k<arity; k++) {
-							n.setChild(node.getChild(k), k);
+							n.setChild(k, node.getChild(k));
 						}
 						// Then set the new node back into the program.
-						program.setNthNode(n, i);
+						program.setNthNode(i, n);
 						
 						// No need to keep looking.
 						break;

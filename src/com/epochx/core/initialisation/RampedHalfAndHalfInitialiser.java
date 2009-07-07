@@ -28,12 +28,15 @@ import com.epochx.core.representation.*;
  * Initialisation implementation which uses a combination of full and grow 
  * initialisers to create an initial population of <code>CandidatePrograms</code>.
  * 
- * <p>A variety of depths are used from 2 up to the maximum depth, with 50% of 
- * the individuals created with full and 50% with grow initialisers.
+ * <p>Depths are equally split between depths of 2 up to the maximum initial 
+ * depth as specified by the model. Initialisation of individuals at each of 
+ * these depths is then alternated between full and grow initialisers.
  * 
- * TODO I'm not sure this works correctly. Koza's RH+H description is a little 
- * vague about some details but I think this implementation has misunderstood 
- * the intention.
+ * <p>There will not always be an equal number of programs created to each 
+ * depth, this will depend on if the population size is exactly divisible by 
+ * the range of depths (initial maximum depth - 2). If the range of depths is 
+ * greater than the population size then some depths will not occur at all in 
+ * order to ensure as wide a spread of depths up to the maximum as possible.
  */
 public class RampedHalfAndHalfInitialiser<TYPE> implements Initialiser<TYPE> {
 	
@@ -62,26 +65,25 @@ public class RampedHalfAndHalfInitialiser<TYPE> implements Initialiser<TYPE> {
 	 * grow.
 	 */
 	public List<CandidateProgram<TYPE>> getInitialPopulation() {
-		// modify depth for staged increase as per Koza
-		int depth = -1;
-		if(model.getInitialMaxDepth()>=6) {
-			depth = model.getInitialMaxDepth() - 4;
-		} else {
-			throw new IllegalArgumentException("Max depth too small for RH+H initialisation.");
-		}	
-		
-		// initialise population of candidate programs
+		// Create population list to populate.
 		int popSize = model.getPopulationSize();
 		List<CandidateProgram<TYPE>> firstGen = new ArrayList<CandidateProgram<TYPE>>(popSize);
 		
-		// Build population.
-		int split = popSize / 5;
-		int marker = popSize / 5;
-		for(int i=0; i<popSize; i++) {
-			if(i>split) {
-				depth++;
-				split = split + marker;
-			}
+		int startDepth = 2;
+		int endDepth = model.getInitialMaxDepth();
+		
+		if (endDepth < 2) {
+			throw new IllegalArgumentException("Initial maximum depth must be greater than 1 for RH+H.");
+		}
+		
+		// Number of programs each depth SHOULD have. But won't unless remainder is 0.
+		double programsPerDepth = (double) popSize / (endDepth - startDepth + 1);
+		
+		for (int i=0; i<popSize; i++) {			
+			// Calculate depth
+			int depth = (int) Math.floor((firstGen.size() / programsPerDepth) + startDepth);
+			System.out.println(depth);
+			
 			// Grow on even numbers, full on odd.
 			CandidateProgram<TYPE> program;
 			
@@ -96,8 +98,7 @@ public class RampedHalfAndHalfInitialiser<TYPE> implements Initialiser<TYPE> {
 			} while(firstGen.contains(program));
 			
             firstGen.add(program);
-			
-        }
+		}
 		
 		return firstGen;
 	}

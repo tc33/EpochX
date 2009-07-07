@@ -29,22 +29,58 @@ import com.epochx.core.representation.*;
  */
 public class ProtectedDivisionFunction extends FunctionNode<Double> {
 	
+	private Double protectionValue;
+	
 	/**
-	 * Construct a ProtectedDivisionFunction with no children.
+	 * Construct a ProtectedDivisionFunction with no children. A default 
+	 * protection value that is returned in the case of divide-by-zero is set 
+	 * as 0.0.
 	 */
 	public ProtectedDivisionFunction() {
 		this(null, null);
 	}
 	
 	/**
+	 * Construct a ProtectedDivisionFunction with a protection value to assign 
+	 * during divide-by-zero. This overrides the default protection value of 
+	 * 0.0.
+	 * 
+	 * @param protectionValue a double value to return in the case of 
+	 * 					      divide-by-zeros.
+	 */
+	public ProtectedDivisionFunction(Double protectionValue) {
+		this(null, null, protectionValue);
+	}
+	
+	/**
 	 * Construct a ProtectedDivisionFunction with 2 children. When evaluated, 
 	 * the evaluation of the first child will be divided by the evaluation of 
-	 * the second.
+	 * the second. A default protection value that is returned in the case of 
+	 * divide-by-zero is set as 0.0.
+	 * 
 	 * @param dividend The first child node - the dividend.
 	 * @param divisor The second child node - the divisor.
 	 */
 	public ProtectedDivisionFunction(Node<Double> dividend, Node<Double> divisor) {
+		this(dividend, divisor, 0.0);
+	}
+	
+	/**
+	 * Construct a ProtectedDivisionFunction with 2 children and a 
+	 * divide-by-zero protection value. When evaluated, the evaluation of the 
+	 * first child will be divided by the evaluation of the second. If the 
+	 * second (divisor) child evaluates to zero, then no division takes place 
+	 * and the specified protectionValue is returned.
+	 * 
+	 * @param dividend The first child node - the dividend.
+	 * @param divisor The second child node - the divisor.
+	 * @param protectionValue a double value to return in the case of 
+	 * 					      divide-by-zeros.
+	 */
+	public ProtectedDivisionFunction(Node<Double> dividend, Node<Double> divisor, Double protectionValue) {
 		super(dividend, divisor);
+		
+		this.protectionValue = protectionValue;
 	}
 
 	/**
@@ -57,9 +93,8 @@ public class ProtectedDivisionFunction extends FunctionNode<Double> {
 		double c1 = ((Double) getChild(0).evaluate()).doubleValue();
 		double c2 = ((Double) getChild(1).evaluate()).doubleValue();
 		
-		if(c2==0) {
-			//TODO It might be useful to have a version of the constructor which takes a value to return for divide by zeros.
-			return 0d;
+		if(c2 == 0) {
+			return protectionValue;
 		} else {
 			return c1 / c2;
 		}

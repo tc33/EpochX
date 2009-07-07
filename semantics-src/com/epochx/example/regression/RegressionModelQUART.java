@@ -58,15 +58,15 @@ public class RegressionModelQUART extends SemanticModel<Double> {
 		setNoElites(400);
 		setInitialMaxDepth(6);
 		setMaxDepth(17);
-		setPoolSelector(new TournamentSelector<Double>(7, this));
-		setParentSelector(new RandomSelector<Double>());
+		setPoolSelector(new TournamentSelector<Double>(7));
+		setProgramSelector(new RandomSelector<Double>());
 		setCrossover(new UniformPointCrossover<Double>());
 		setStateCheckedCrossover(false);
 		setMutator(new SubtreeMutation<Double>(this));
 		setStateCheckedMutation(false);
 		RegressionSemanticModule semMod = new RegressionSemanticModule(getTerminals(), this);
 		setSemanticModule(semMod);
-		setInitialiser(new RampedHalfAndHalfInitialiser(this));
+		setInitialiser(new RampedHalfAndHalfInitialiser<Double>(this));
 	}
 
 	@Override

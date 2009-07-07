@@ -27,7 +27,7 @@ import com.epochx.stats.MutationStats;
 /**
  * This class performs the very simple task of linking together individual  
  * selection and mutation. The actual tasks of crossover and selection are 
- * performed by <code>Mutation</code> and <code>ParentSelector</code> 
+ * performed by <code>Mutation</code> and <code>ProgramSelector</code> 
  * implementations respectively.
  * 
  * TODO Either this class or another new class needs to encapsulate all the 
@@ -38,7 +38,7 @@ import com.epochx.stats.MutationStats;
  * @see Mutation
  * @see PointMutation
  * @see SubtreeMutation
- * @see ParentSelector
+ * @see ProgramSelector
  * @see TournamentSelector
  */
 public class GPMutation<TYPE> {
@@ -47,7 +47,7 @@ public class GPMutation<TYPE> {
 	private GPModel<TYPE> model;
 	
 	// The selector for choosing the individual to mutate.
-	private ParentSelector<TYPE> parentSelector;
+	private ProgramSelector<TYPE> programSelector;
 	
 	// The mutation operator that will perform the actual operation.
 	private Mutation<TYPE> mutator;
@@ -65,13 +65,13 @@ public class GPMutation<TYPE> {
 	 * <code>getMutation()</code> method.
 	 * 
 	 * @param model the GPModel which defines the Mutation operator and 
-	 * 				ParentSelector to use to perform one act of mutation on 
+	 * 				ProgramSelector to use to perform one act of mutation on 
 	 * 				an individual in the population.
 	 * @see Mutation
 	 */
 	public GPMutation(GPModel<TYPE> model) {
 		this.model = model;
-		this.parentSelector = model.getParentSelector();
+		this.programSelector = model.getProgramSelector();
 		this.mutator = model.getMutator();
 		
 		mutationStats = new MutationStats<TYPE>();
@@ -82,8 +82,8 @@ public class GPMutation<TYPE> {
 	
 	/**
 	 * Selects a <code>CandidateProgram</code> from the population using the
-	 * <code>ParentSelector</code> returned by a call to 
-	 * <code>getParentSelector()</code> on the model given at construction and 
+	 * <code>ProgramSelector</code> returned by a call to 
+	 * <code>getProgramSelector()</code> on the model given at construction and 
 	 * submits it to the <code>Mutation</code> operator which is obtained by 
 	 * calling <code>getMutation()</code> on the model. 
 	 * 
@@ -116,7 +116,7 @@ public class GPMutation<TYPE> {
 		boolean accepted = true;
 		do {
 			// Attempt mutation.
-			parent = parentSelector.getParent();
+			parent = programSelector.getProgram();
 			CandidateProgram<TYPE> clone = (CandidateProgram<TYPE>) parent.clone();
 			child = mutator.mutate(clone);
 			

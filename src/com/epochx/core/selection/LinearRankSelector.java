@@ -24,16 +24,22 @@ import java.util.*;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * Linear rank selection chooses programs by fitness rank. All the programs in 
+ * the population are ranked according to their fitness from lowest to highest.
+ * Each program is then assigned a probability according to their rank in a 
+ * linear fashion with a gradient as given at construction.
  */
-public class LinearRankSelector<TYPE> implements ParentSelector<TYPE>, PoolSelector<TYPE> {
+public class LinearRankSelector<TYPE> implements ProgramSelector<TYPE>, PoolSelector<TYPE> {
 	
+	// The current population from which programs should be chosen.
 	private List<CandidateProgram<TYPE>> pop;
 	
+	// An array of size pop.size() giving probabilities for each program.
 	private double probabilities[];
 	private double nPlus;
 	private double nMinus;
 	
+	// The gradient of the linear probabilities.
 	private double gradient;
 	
 	public LinearRankSelector(double gradient) {
@@ -43,6 +49,14 @@ public class LinearRankSelector<TYPE> implements ParentSelector<TYPE>, PoolSelec
 		nPlus = (2*gradient)/(gradient+1);
 	}
 	
+	/**
+	 * Sets the population from which programs will be selected. The 
+	 * probabilities are calculated once at this point based upon the linear 
+	 * fitness rank.
+	 * 
+	 * @param pop the population of candidate programs from which programs 
+	 * 			  should be selected.
+	 */
 	@Override
 	public void onGenerationStart(List<CandidateProgram<TYPE>> pop) {
 		Collections.sort(pop);
@@ -60,8 +74,15 @@ public class LinearRankSelector<TYPE> implements ParentSelector<TYPE>, PoolSelec
 		}
 	}
 
+	/**
+	 * Selects a candidate program from the population using the probabilities 
+	 * which were assigned based on fitness rank.
+	 * 
+	 * @return a program selected from the current population based on fitness 
+	 * rank.
+	 */
 	@Override
-	public CandidateProgram<TYPE> getParent() {
+	public CandidateProgram<TYPE> getProgram() {
 		double ran = Math.random();
 		
 		for (int i=0; i<probabilities.length; i++) {
@@ -74,21 +95,38 @@ public class LinearRankSelector<TYPE> implements ParentSelector<TYPE>, PoolSelec
 		return null;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.epochx.core.selection.PouleSelector#getPoule(java.util.List, int)
+	/**
+	 * Constructs a pool of programs from the population, choosing each one 
+	 * with the program selection element of LinearRankSelector. The size of 
+	 * the pool created will be equal to the poolSize argument. The generated 
+	 * pool may contain duplicate programs, and as such the pool size may be 
+	 * greater than the population size.
+	 * 
+	 * @param pop the population of CandidatePrograms from which the programs 
+	 * 			  in the pool should be chosen.
+	 * @param poolSize the number of programs that should be selected from the 
+	 * 			 	   population to form the pool. If poolSize is zero or less  
+	 * 				   then no selection takes place and the given population 
+	 * 				   is returned unaltered.
+	 * @return the pool of candidate programs selected according to fitness 
+	 * rank.
 	 */
 	@Override
 	public List<CandidateProgram<TYPE>> getPool(
-			List<CandidateProgram<TYPE>> pop, int pouleSize) {
-		
-		ParentSelector<TYPE> parentSelector = new LinearRankSelector<TYPE>(gradient);
-		parentSelector.onGenerationStart(pop);
-		List<CandidateProgram<TYPE>> poule = new ArrayList<CandidateProgram<TYPE>>();
-		
-		for (int i=0; i<pouleSize; i++) {
-			poule.add(parentSelector.getParent());
+			List<CandidateProgram<TYPE>> pop, int poolSize) {
+		// If poolSize is 0 or less then we use the whole population.
+		if (poolSize <= 0) {
+			return pop;
 		}
 		
-		return poule;
+		ProgramSelector<TYPE> programSelector = new LinearRankSelector<TYPE>(gradient);
+		programSelector.onGenerationStart(pop);
+		List<CandidateProgram<TYPE>> pool = new ArrayList<CandidateProgram<TYPE>>();
+		
+		for (int i=0; i<poolSize; i++) {
+			pool.add(programSelector.getProgram());
+		}
+		
+		return pool;
 	}
 }

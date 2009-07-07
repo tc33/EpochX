@@ -37,7 +37,8 @@ package com.epochx.stats;
  * </ul>
  */
 public interface RunStatListener {
-
+	//TODO Consider changing these to RunListener etc, and have methods that are called at different stages of a run etc.
+	
 	/**
 	 * The implementing class must return an array of fields which the 
 	 * listening objects are interested in listening to. The values for 

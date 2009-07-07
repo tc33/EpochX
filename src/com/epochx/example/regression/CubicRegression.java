@@ -50,8 +50,8 @@ public class CubicRegression extends GPAbstractModel<Double> {
 		setPopulationSize(500);
 		setCrossoverProbability(0.9);
 		setMutationProbability(0.0);
-		setPoolSelector(new TournamentSelector<Double>(7, this));
-		setParentSelector(new LinearRankSelector<Double>(0.5));
+		setPoolSelector(new TournamentSelector<Double>(7));
+		setProgramSelector(new LinearRankSelector<Double>(0.5));
 		//setPouleSelector(new RandomSelector<Double>());
 		setCrossover(new UniformPointCrossover<Double>());
 		setPoolSize(50);

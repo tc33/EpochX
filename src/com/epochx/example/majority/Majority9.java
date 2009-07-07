@@ -67,8 +67,8 @@ public class Majority9 extends GPAbstractModel<Boolean> {
 		setNoElites(50);
 		setInitialMaxDepth(6);
 		setMaxDepth(17);
-		setPoolSelector(new TournamentSelector<Boolean>(7, this));
-		setParentSelector(new RandomSelector<Boolean>());
+		setPoolSelector(new TournamentSelector<Boolean>(7));
+		setProgramSelector(new RandomSelector<Boolean>());
 		setCrossover(new UniformPointCrossover<Boolean>());
 	}
 	

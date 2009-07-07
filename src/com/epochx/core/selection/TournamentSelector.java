@@ -21,46 +21,63 @@ package com.epochx.core.selection;
 
 import java.util.*;
 
-import com.epochx.core.*;
-import com.epochx.core.representation.*;
+import com.epochx.core.representation.CandidateProgram;
 
 /**
- * 
+ * Tournament selection provides both program and pool selection. In tournament 
+ * selection, x programs are randomly selected from the population to enter a 
+ * 'tournament'. The program with the best fitness in the tournament then 
+ * becomes the selected program. x, the tournament size is given as an argument 
+ * to the constructor.
  */
-public class TournamentSelector<TYPE> implements ParentSelector<TYPE>, PoolSelector<TYPE> {
+public class TournamentSelector<TYPE> implements ProgramSelector<TYPE>, PoolSelector<TYPE> {
 
+	// The size of the tournment from which the best program will be taken.
 	private int tournamentSize;
-	private GPModel<TYPE> model;
 	
 	// We use a random selector to construct tournaments.
 	private RandomSelector<TYPE> randomSelector;
 	
-	public TournamentSelector(int tournamentSize, GPModel<TYPE> model) {
-		randomSelector = new RandomSelector<TYPE>();
-		
+	/**
+	 * Construct a tournament selector with the specified tournament size.
+	 * 
+	 * @param tournamentSize the number of programs in each tournament.
+	 */
+	public TournamentSelector(int tournamentSize) {
 		this.tournamentSize = tournamentSize;
-		this.model = model;
+		
+		randomSelector = new RandomSelector<TYPE>();
 	}
 
+	/**
+	 * Store the population for creating tournaments from.
+	 */
 	@Override
 	public void onGenerationStart(List<CandidateProgram<TYPE>> pop) {
 		// We'll be using a random selector to construct a tournament.
 		randomSelector.onGenerationStart(pop);
 	}
 	
+	/**
+	 * Randomly creates a tournament, then selects the candidate program with 
+	 * the best fitness from that tournament. The size of the tournament is 
+	 * given at instantiation.
+	 * 
+	 * @return the best program from a randomly generated tournament.
+	 */
 	@Override
-	public CandidateProgram<TYPE> getParent() {
+	public CandidateProgram<TYPE> getProgram() {
+		// Use random selector to create tournament.
 		CandidateProgram<TYPE>[] tournament = new CandidateProgram[tournamentSize];
-		
 		for (int i=0; i<tournamentSize; i++) {
-			tournament[i] = randomSelector.getParent();
+			tournament[i] = randomSelector.getProgram();
 		}
 		
-		// Calculate fitness.
+		// Check the fitness of each program, stashing the best.
 		double bestFitness = Double.POSITIVE_INFINITY;
 		CandidateProgram<TYPE> bestProgram = null;
 		for (CandidateProgram<TYPE> p: tournament) {
-			double fitness = model.getFitness(p);
+			double fitness = p.getFitness();
 			if (fitness < bestFitness) {
 				bestFitness = fitness;
 				bestProgram = p;
@@ -70,7 +87,22 @@ public class TournamentSelector<TYPE> implements ParentSelector<TYPE>, PoolSelec
 		return bestProgram;
 	}
 
-
+	/**
+	 * Constructs a pool of programs from the population, choosing each one 
+	 * with the program selection element of TournamentSelector. The size of 
+	 * the pool created will be equal to the poolSize argument. The generated 
+	 * pool may contain duplicate programs, and as such the pool size may be 
+	 * greater than the population size.
+	 * 
+	 * @param pop the population of CandidatePrograms from which the programs 
+	 * 			  in the pool should be chosen.
+	 * @param poolSize the number of programs that should be selected from the 
+	 * 			 	   population to form the pool. If poolSize is zero or less  
+	 * 				   then no selection takes place and the given population 
+	 * 				   is returned unaltered.
+	 * @return the pool of candidate programs selected using tournament 
+	 * selection.
+	 */
 	@Override
 	public List<CandidateProgram<TYPE>> getPool(List<CandidateProgram<TYPE>> pop, int pouleSize) {
 		// If pouleSize is 0 or less then we use the whole population.
@@ -80,11 +112,11 @@ public class TournamentSelector<TYPE> implements ParentSelector<TYPE>, PoolSelec
 		
 		List<CandidateProgram<TYPE>> poule = new ArrayList<CandidateProgram<TYPE>>(pouleSize);
 		
-		ParentSelector<TYPE> parentSelector = new TournamentSelector<TYPE>(tournamentSize, model);
-		parentSelector.onGenerationStart(pop);
+		ProgramSelector<TYPE> programSelector = new TournamentSelector<TYPE>(tournamentSize);
+		programSelector.onGenerationStart(pop);
 		
 		for (int i=0; i<pouleSize; i++) {
-			poule.add(parentSelector.getParent());
+			poule.add(programSelector.getProgram());
 		}
 		
 		return poule;

@@ -64,8 +64,8 @@ public class Even5Parity extends GPAbstractModel<Boolean> {
 		setPoolSize(50);
 		setNoElites(50);
 		setMaxDepth(6);
-		setPoolSelector(new TournamentSelector<Boolean>(7, this));
-		setParentSelector(new RandomSelector<Boolean>());
+		setPoolSelector(new TournamentSelector<Boolean>(7));
+		setProgramSelector(new RandomSelector<Boolean>());
 		setCrossover(new UniformPointCrossover<Boolean>());
 		setMutator(new PointMutation<Boolean>(this, 0.1));
 	}

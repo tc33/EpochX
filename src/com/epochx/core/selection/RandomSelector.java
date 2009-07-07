@@ -24,37 +24,62 @@ import java.util.*;
 import com.epochx.core.representation.*;
 
 /**
- * 
+ * A random selector is a program and pool selector which provides no selection 
+ * pressure. No reference is made to the programs' fitness scores.
  */
-public class RandomSelector<TYPE> implements ParentSelector<TYPE>, PoolSelector<TYPE> {
+public class RandomSelector<TYPE> implements ProgramSelector<TYPE>, PoolSelector<TYPE> {
 
+	// The current population from which programs should be chosen.
 	private List<CandidateProgram<TYPE>> pop;
 	
-	public RandomSelector() {}
-	
+	/**
+	 * This method should only be called by the GP system. It is used to 
+	 * provide the population for the current generation.
+	 * 
+	 * @param pop the current population for this generation.
+	 */
 	@Override
 	public void onGenerationStart(List<CandidateProgram<TYPE>> pop) {
 		this.pop = pop;
 	}
 	
+	/**
+	 * Randomly chooses and returns a program from the population with no bias.
+	 * 
+	 * @return a randomly selected program.
+	 */
 	@Override
-	public CandidateProgram<TYPE> getParent() {		
+	public CandidateProgram<TYPE> getProgram() {		
 		return pop.get((int) Math.floor(Math.random()*pop.size()));
 	}
 
+	/**
+	 * Randomly chooses programs from the given population up to a total of 
+	 * <code>poolSize</code> and returns them as a list. The generated pool may 
+	 * contain duplicate programs, and as such the pool size can be greater 
+	 * than the population size.
+	 * 
+	 * @param pop the population of CandidatePrograms from which the programs 
+	 * 			  in the pool should be chosen.
+	 * @param poolSize the number of programs that should be selected from the 
+	 * 			 	   population to form the pool. If poolSize is less than 
+	 * 				   zero then no selection takes place and the given  
+	 * 				   population is returned unaltered.
+	 * @return the randomly selected pool of candidate programs.
+	 */
 	@Override
-	public List<CandidateProgram<TYPE>> getPool(List<CandidateProgram<TYPE>> pop, int pouleSize) {
-		// If pouleSize is 0 or less then we use the whole population.
-		if (pouleSize <= 0) {
+	public List<CandidateProgram<TYPE>> getPool(List<CandidateProgram<TYPE>> pop, int poolSize) {
+		// If poolSize is 0 or less then we use the whole population.
+		if (poolSize <= 0) {
 			return pop;
 		}
 		
-		List<CandidateProgram<TYPE>> poule = new ArrayList<CandidateProgram<TYPE>>(pouleSize);
-		
-		for (int i=0; i<pouleSize; i++) {
-			poule.add(pop.get((int) Math.floor(Math.random()*pop.size())));
+		// Construct our pool.
+		List<CandidateProgram<TYPE>> pool = new ArrayList<CandidateProgram<TYPE>>(poolSize);
+		for (int i=0; i<poolSize; i++) {
+			pool.add(pop.get((int) Math.floor(Math.random()*pop.size())));
 		}
 		
-		return poule;
+		return pool;
 	}
 }

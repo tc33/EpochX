@@ -137,7 +137,7 @@ public class GPRun<TYPE> {
 			int mutationReversions = 0;
 			
 			// Tell the parent selector we're starting a new generation.
-			model.getParentSelector().onGenerationStart(pool);
+			model.getProgramSelector().onGenerationStart(pool);
 			
 			// Fill the population by performing genetic operations.
 			while(nextPop.size() < model.getPopulationSize()) {

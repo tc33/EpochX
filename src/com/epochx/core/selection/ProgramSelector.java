@@ -24,16 +24,33 @@ import java.util.*;
 import com.epochx.core.representation.*;
 
 /**
+ * ProgramSelectors are for selecting an individual from a population of 
+ * programs. Most selectors will choose an individual based in some way upon 
+ * the fitness of the programs.
  * 
+ * @see PoolSelector
  */
-public interface ParentSelector<TYPE> {
+public interface ProgramSelector<TYPE> {
 
 	/**
-	 * Should be called at the start of each new generation.
-	 * @param pop
+	 * The GP system will call this method at the start of every generation to 
+	 * provide the selector with the population from which selections should be 
+	 * made. Users code would not usually call this method.
+	 * 
+	 * @param pop the current population for this generation.
 	 */
+	//TODO This is a little bit nasty, would be better if we can plug it into a standard listener system.
 	public void onGenerationStart(List<CandidateProgram<TYPE>> pop);
 	
-	public CandidateProgram<TYPE> getParent();
+	/**
+	 * Select a <code>CandidateProgram</code> from the current population of 
+	 * programs. The method of selection would normally be based upon the 
+	 * fitness of the program but there is no need for it to be, and there are 
+	 * exceptions.
+	 * 
+	 * @return a CandidateProgram selected from the current population of 
+	 * programs.
+	 */
+	public CandidateProgram<TYPE> getProgram();
 	
 }

@@ -27,7 +27,7 @@ import com.epochx.stats.CrossoverStats;
 /**
  * This class performs the very simple task of linking together parent 
  * selection and crossover. The actual tasks of crossover and selection are 
- * performed by Crossover and ParentSelector implementations respectively.
+ * performed by Crossover and ProgramSelector implementations respectively.
  * 
  * TODO Either this class or another new class needs to encapsulate all the 
  * details of a crossover event in the same way as GPRun exists after it has 
@@ -37,7 +37,7 @@ import com.epochx.stats.CrossoverStats;
  * @see Crossover
  * @see UniformPointCrossover
  * @see KozaCrossover
- * @see ParentSelector
+ * @see ProgramSelector
  * @see TournamentSelector
  */
 public class GPCrossover<TYPE> {
@@ -46,7 +46,7 @@ public class GPCrossover<TYPE> {
 	private GPModel<TYPE> model;
 	
 	// The selector for choosing parents.
-	private ParentSelector<TYPE> parentSelector;
+	private ProgramSelector<TYPE> programSelector;
 	
 	// The crossover operator that will perform the actual operation.
 	private Crossover<TYPE> crossover;
@@ -64,13 +64,13 @@ public class GPCrossover<TYPE> {
 	 * getCrossover() method.
 	 * 
 	 * @param model the GPModel which defines the Crossover operator and 
-	 * 				ParentSelector to use to perform one act of crossover on 
+	 * 				ProgramSelector to use to perform one act of crossover on 
 	 * 				a population.
 	 * @see Crossover
 	 */
 	public GPCrossover(GPModel<TYPE> model) {
 		this.model = model;
-		this.parentSelector = model.getParentSelector();
+		this.programSelector = model.getProgramSelector();
 		this.crossover = model.getCrossover();
 		
 		crossoverStats = new CrossoverStats<TYPE>();
@@ -80,7 +80,7 @@ public class GPCrossover<TYPE> {
 	}
 
 	/**
-	 * Selects two parents by calling <code>getParentSelector()</code> on the 
+	 * Selects two parents by calling <code>getProgramSelector()</code> on the 
 	 * instance of <code>GPModel</code> given at construction and submits them 
 	 * to the <code>Crossover</code> operator which is obtained by calling 
 	 * <code>getCrossover()</code> on the model. 
@@ -120,8 +120,8 @@ public class GPCrossover<TYPE> {
 		boolean accepted = true;
 		do {
 			// Select the parents for crossover.
-			parent1 = parentSelector.getParent();
-			parent2 = parentSelector.getParent();
+			parent1 = programSelector.getProgram();
+			parent2 = programSelector.getProgram();
 			
 			clone1 = (CandidateProgram<TYPE>) parent1.clone();
 			clone2 = (CandidateProgram<TYPE>) parent2.clone();

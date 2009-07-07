@@ -140,7 +140,7 @@ public interface GPModel<TYPE> {
 	 * Retrieves the implementation of Crossover to use to perform the genetic 
 	 * operation of crossover between 2 parents. The 2 parents to be crossed 
 	 * over will be selected using the parent selector returned by 
-	 * getParentSelector().
+	 * getProgramSelector().
 	 * 
 	 * @return the implementation of Crossover that will perform the genetic 
 	 * 		   operation of crossover.
@@ -153,7 +153,7 @@ public interface GPModel<TYPE> {
 	 * Retrieves the implementation of Mutator to use to perform the genetic 
 	 * operation of mutation on a CandidateProgram. The individual to be 
 	 * mutated will be selected using the parent selector returned by 
-	 * getParentSelector().
+	 * getProgramSelector().
 	 * 
 	 * @return the implementation of Mutator that will perform the genetic 
 	 * 		   operation of mutation.
@@ -217,7 +217,7 @@ public interface GPModel<TYPE> {
 	/**
 	 * Retrieves the selector to use to construct a breeding pool from which 
 	 * parents can be selected using the parent selector return by 
-	 * getParentSelector() to undergo the genetic operators.
+	 * getProgramSelector() to undergo the genetic operators.
 	 * 
 	 * @return a PouleSelector which can be used to construct a breeding pool, 
 	 * 		   or null if a breeding pool shouldn't be used and instead parents 
@@ -232,11 +232,11 @@ public interface GPModel<TYPE> {
 	 * getPouleSelector()) or the previous population for use as input to the 
 	 * genetic operators.
 	 * 
-	 * @return the ParentSelector which should be used to pick parents for input 
+	 * @return the ProgramSelector which should be used to pick parents for input 
 	 * 		   to the genetic operators.
 	 * @see TournamentSelector
 	 */
-	public ParentSelector<TYPE> getParentSelector();
+	public ProgramSelector<TYPE> getProgramSelector();
 
 	/**
 	 * Retrieves the number of elites that should be copied straight to the next 

@@ -58,8 +58,8 @@ public class RegressionModelCUBIC extends SemanticModel<Double> {
 		setNoElites(50);
 		setInitialMaxDepth(6);
 		setMaxDepth(17);
-		setPoolSelector(new TournamentSelector<Double>(7, this));
-		setParentSelector(new RandomSelector<Double>());
+		setPoolSelector(new TournamentSelector<Double>(7));
+		setProgramSelector(new RandomSelector<Double>());
 		setCrossover(new KozaCrossover<Double>());
 		setStateCheckedCrossover(true);
 		setMutator(new SubtreeMutation<Double>(this));

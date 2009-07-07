@@ -53,7 +53,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	private Mutation<TYPE> mutator;
 	
 	private PoolSelector<TYPE> poolSelector;
-	private ParentSelector<TYPE> parentSelector;
+	private ProgramSelector<TYPE> programSelector;
 
 	private int noRuns;
 	private int noGenerations;
@@ -109,8 +109,8 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 		mutationProbability = 0;
 		
 		// GP components.
-		parentSelector = new RandomSelector<TYPE>();
-		poolSelector = new TournamentSelector<TYPE>(3, this);
+		programSelector = new RandomSelector<TYPE>();
+		poolSelector = new TournamentSelector<TYPE>(3);
 		initialiser = new FullInitialiser<TYPE>(this);
 		crossover = new UniformPointCrossover<TYPE>();
 		mutator = new SubtreeMutation<TYPE>(this);
@@ -390,19 +390,19 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public ParentSelector<TYPE> getParentSelector() {
-		return parentSelector;
+	public ProgramSelector<TYPE> getProgramSelector() {
+		return programSelector;
 	}
 
 	/**
 	 * Overwrites the default parent selector used to select parents to undergo
 	 * a genetic operator from either a poule or the previous population.
 	 * 
-	 * @param parentSelector the new ParentSelector to be used when selecting 
+	 * @param programSelector the new ProgramSelector to be used when selecting 
 	 * 						 parents for a genetic operator.
 	 */
-	public void setParentSelector(ParentSelector<TYPE> parentSelector) {
-		this.parentSelector = parentSelector;
+	public void setProgramSelector(ProgramSelector<TYPE> programSelector) {
+		this.programSelector = programSelector;
 	}
 	
 	/**
@@ -481,6 +481,11 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 		return runStatListener;
 	}
 	
+	/**
+	 * Overwrites the default listener for run statistics.
+	 * 
+	 * @param runStatListener the run stat listener to set.
+	 */
 	public void setRunStatListener(RunStatListener runStatListener) {
 		this.runStatListener = runStatListener;
 	}
@@ -494,7 +499,16 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 */
 	@Override
 	public GenerationStatListener getGenerationStatListener() {
-		return this;
+		return this.generationStatListener;
+	}
+	
+	/**
+	 * Overwrites the default listener for generation statistics.
+	 * 
+	 * @param generationStatListener the generation stat listener to set.
+	 */
+	public void setGenerationStatListener(GenerationStatListener generationStatListener) {
+		this.generationStatListener = generationStatListener;
 	}
 	
 	/**
@@ -506,7 +520,16 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 */
 	@Override
 	public CrossoverStatListener getCrossoverStatListener() {
-		return this;
+		return this.crossoverStatListener;
+	}
+	
+	/**
+	 * Overwrites the default listener for crossover statistics.
+	 * 
+	 * @param crossoverStatListener the crossover stat listener to set.
+	 */
+	public void setCrossoverStatListener(CrossoverStatListener crossoverStatListener) {
+		this.crossoverStatListener = crossoverStatListener;
 	}
 	
 	/**
@@ -518,9 +541,18 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 */
 	@Override
 	public MutationStatListener getMutationStatListener() {
-		return this;
+		return this.mutationStatListener;
 	}
 
+	/**
+	 * Overwrites the default listener for mutation statistics.
+	 * 
+	 * @param mutationStatListener the mutation stat listener to set.
+	 */
+	public void setMutationStatListener(MutationStatListener mutationStatListener) {
+		this.mutationStatListener = mutationStatListener;
+	}
+	
 	/**
 	 * Default implementation. No fields are requested, the overriding class 
 	 * is expected to override this method or call the setter method IF it 

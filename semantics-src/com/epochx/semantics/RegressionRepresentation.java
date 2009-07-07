@@ -20,8 +20,8 @@
 package com.epochx.semantics;
 
 import java.util.*;
-import com.epochx.core.representation.*;
-import com.epochx.func.dbl.CoefficientPowerFunction;
+import com.epochx.representation.*;
+import com.epochx.representation.dbl.*;
 
 /**
  * Regression representation is for canonically modelling the behaviour of 

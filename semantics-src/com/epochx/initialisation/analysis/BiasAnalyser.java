@@ -24,9 +24,9 @@ import java.io.File;
 import java.util.*;
 import net.sf.javabdd.*;
 
-import com.epochx.core.initialisation.RampedHalfAndHalfInitialiser;
-import com.epochx.core.representation.CandidateProgram;
 import com.epochx.example.regression.RegressionModelCUBIC;
+import com.epochx.op.initialisation.*;
+import com.epochx.representation.*;
 import com.epochx.semantics.*;
 import com.epochx.util.FileManip;
 

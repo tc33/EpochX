@@ -19,9 +19,9 @@
  */
 package com.epochx.core;
 
-import com.epochx.core.crossover.*;
-import com.epochx.core.representation.CandidateProgram;
-import com.epochx.core.selection.*;
+import com.epochx.op.crossover.*;
+import com.epochx.op.selection.*;
+import com.epochx.representation.*;
 import com.epochx.stats.CrossoverStats;
 
 /* 

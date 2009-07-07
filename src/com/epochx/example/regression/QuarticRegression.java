@@ -22,10 +22,10 @@ package com.epochx.example.regression;
 import java.util.*;
 
 import com.epochx.core.*;
-import com.epochx.core.crossover.UniformPointCrossover;
-import com.epochx.core.representation.*;
-import com.epochx.core.selection.*;
-import com.epochx.func.dbl.*;
+import com.epochx.op.crossover.*;
+import com.epochx.op.selection.*;
+import com.epochx.representation.*;
+import com.epochx.representation.dbl.*;
 import com.epochx.stats.*;
 
 /**

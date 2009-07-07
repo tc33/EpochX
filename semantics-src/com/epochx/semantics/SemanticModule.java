@@ -20,7 +20,7 @@
 
 package com.epochx.semantics;
 
-import com.epochx.core.representation.*;
+import com.epochx.representation.*;
 
 /**
  * The semantic module interface sets out the basic methods required for all semantic modules.

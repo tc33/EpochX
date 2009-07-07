@@ -21,7 +21,7 @@ package com.epochx.stats;
 
 import java.util.*;
 
-import com.epochx.core.representation.CandidateProgram;
+import com.epochx.representation.*;
 
 /**
  * 

@@ -27,11 +27,11 @@ import java.util.List;
 import com.epochx.action.*;
 import com.epochx.ant.*;
 import com.epochx.core.*;
-import com.epochx.core.crossover.UniformPointCrossover;
-import com.epochx.core.initialisation.RampedHalfAndHalfInitialiser;
-import com.epochx.core.representation.*;
-import com.epochx.core.selection.*;
-import com.epochx.func.action.*;
+import com.epochx.op.crossover.*;
+import com.epochx.op.initialisation.*;
+import com.epochx.op.selection.*;
+import com.epochx.representation.*;
+import com.epochx.representation.action.*;
 import com.epochx.stats.*;
 import com.epochx.util.FileManip;
 

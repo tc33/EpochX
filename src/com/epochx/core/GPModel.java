@@ -21,11 +21,11 @@ package com.epochx.core;
 
 import java.util.List;
 
-import com.epochx.core.crossover.*;
-import com.epochx.core.initialisation.Initialiser;
-import com.epochx.core.mutation.Mutation;
-import com.epochx.core.representation.*;
-import com.epochx.core.selection.*;
+import com.epochx.op.crossover.*;
+import com.epochx.op.initialisation.*;
+import com.epochx.op.mutation.*;
+import com.epochx.op.selection.*;
+import com.epochx.representation.*;
 import com.epochx.stats.*;
 
 /**

@@ -20,9 +20,9 @@
 package com.epochx.semantics;
 import java.util.*;
 
-import com.epochx.core.initialisation.FullInitialiser;
-import com.epochx.core.representation.CandidateProgram;
 import com.epochx.example.regression.RegressionModelCUBIC;
+import com.epochx.op.initialisation.*;
+import com.epochx.representation.*;
 
 /**
  * Class written to formally test semantic modules by converting

@@ -22,8 +22,8 @@ package com.epochx.semantics;
 import java.util.*;
 
 import com.epochx.core.*;
-import com.epochx.core.representation.*;
-import com.epochx.func.dbl.*;
+import com.epochx.representation.*;
+import com.epochx.representation.dbl.*;
 
 /**
  * The regression semantic module controls all aspects of the modelling of

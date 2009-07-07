@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.epochx.core.GPModel;
-import com.epochx.core.initialisation.*;
-import com.epochx.core.representation.CandidateProgram;
+import com.epochx.op.initialisation.*;
+import com.epochx.representation.*;
 import com.epochx.semantics.Representation;
 import com.epochx.semantics.SemanticModule;
 

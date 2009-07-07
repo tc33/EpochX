@@ -23,8 +23,8 @@ import net.sf.javabdd.BDD;
 import net.sf.javabdd.BDDFactory;
 import java.util.*;
 import com.epochx.core.*;
-import com.epochx.core.representation.*;
-import com.epochx.func.bool.*;
+import com.epochx.representation.*;
+import com.epochx.representation.bool.*;
 
 /**
  * The Boolean Semantic Module provides semantic functionality 

@@ -21,7 +21,7 @@ package com.epochx.core;
 
 import java.util.*;
 
-import com.epochx.core.representation.*;
+import com.epochx.representation.*;
 
 /**
  * This class has the task of retrieving and maintaining elites within a 

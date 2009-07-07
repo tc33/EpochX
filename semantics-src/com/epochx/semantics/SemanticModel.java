@@ -20,7 +20,7 @@
 package com.epochx.semantics;
 
 import com.epochx.core.GPAbstractModel;
-import com.epochx.core.representation.CandidateProgram;
+import com.epochx.representation.*;
 
 /**
  *

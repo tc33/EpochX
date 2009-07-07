@@ -19,7 +19,7 @@
  */
 package com.epochx.core.scorer;
 
-import com.epochx.core.representation.*;
+import com.epochx.representation.*;
 import com.epochx.semantics.*;
 import net.sf.javabdd.*;
 

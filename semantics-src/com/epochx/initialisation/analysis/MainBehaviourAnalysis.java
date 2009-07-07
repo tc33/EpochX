@@ -25,10 +25,10 @@ import java.io.File;
 import net.sf.javabdd.*;
 import java.lang.reflect.*;
 
-import com.epochx.core.initialisation.*;
-import com.epochx.core.representation.CandidateProgram;
 import com.epochx.example.artificialant.ArtificialAntSantaFe;
 import com.epochx.example.regression.RegressionModelCUBIC;
+import com.epochx.op.initialisation.*;
+import com.epochx.representation.*;
 import com.epochx.semantics.*;
 import com.epochx.util.FileManip;
 

@@ -21,7 +21,7 @@ package com.epochx.pruning;
 
 import java.util.*;
 import com.epochx.core.GPModel;
-import com.epochx.core.representation.*;
+import com.epochx.representation.*;
 import com.epochx.semantics.*;
 
 /**

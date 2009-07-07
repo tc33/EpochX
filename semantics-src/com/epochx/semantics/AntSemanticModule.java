@@ -25,8 +25,8 @@ import java.util.List;
 import com.epochx.action.*;
 import com.epochx.ant.*;
 import com.epochx.core.GPModel;
-import com.epochx.core.representation.*;
-import com.epochx.func.action.*;
+import com.epochx.representation.*;
+import com.epochx.representation.action.*;
 
 
 /**

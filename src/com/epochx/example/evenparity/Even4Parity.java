@@ -22,11 +22,11 @@ package com.epochx.example.evenparity;
 import java.util.*;
 
 import com.epochx.core.*;
-import com.epochx.core.crossover.UniformPointCrossover;
-import com.epochx.core.initialisation.RampedHalfAndHalfInitialiser;
-import com.epochx.core.representation.*;
-import com.epochx.core.selection.*;
-import com.epochx.func.bool.*;
+import com.epochx.op.crossover.*;
+import com.epochx.op.initialisation.*;
+import com.epochx.op.selection.*;
+import com.epochx.representation.*;
+import com.epochx.representation.bool.*;
 import com.epochx.stats.RunStatField;
 import com.epochx.stats.GenerationStatField;
 import com.epochx.util.*;

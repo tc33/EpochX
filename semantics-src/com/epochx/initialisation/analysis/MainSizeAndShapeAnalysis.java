@@ -23,9 +23,9 @@ package com.epochx.initialisation.analysis;
 import java.io.File;
 import java.util.ArrayList;
 
-import com.epochx.core.representation.CandidateProgram;
 import com.epochx.example.regression.RegressionModelCUBIC;
 import com.epochx.initialisation.RegressionSemanticallyDrivenInitialiser;
+import com.epochx.representation.*;
 import com.epochx.util.FileManip;
 
 /**

@@ -22,12 +22,12 @@ package com.epochx.example.regression;
 import java.util.*;
 
 import com.epochx.core.GPController;
-import com.epochx.core.crossover.*;
-import com.epochx.core.initialisation.*;
-import com.epochx.core.mutation.*;
-import com.epochx.core.representation.*;
-import com.epochx.core.selection.*;
-import com.epochx.func.dbl.*;
+import com.epochx.op.crossover.*;
+import com.epochx.op.initialisation.*;
+import com.epochx.op.mutation.*;
+import com.epochx.op.selection.*;
+import com.epochx.representation.*;
+import com.epochx.representation.dbl.*;
 import com.epochx.semantics.*;
 import com.epochx.stats.*;
 import com.epochx.util.FileManip;

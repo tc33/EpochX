@@ -21,7 +21,8 @@
 package com.epochx.initialisation.analysis;
 
 import java.util.ArrayList;
-import com.epochx.core.representation.CandidateProgram;
+
+import com.epochx.representation.*;
 import com.epochx.semantics.Representation;
 
 /**

@@ -24,22 +24,23 @@ import com.epochx.core.representation.CandidateProgram;
 import com.epochx.core.selection.*;
 import com.epochx.stats.CrossoverStats;
 
-/**
- * This class performs the very simple task of linking together parent 
- * selection and crossover. The actual tasks of crossover and selection are 
- * performed by Crossover and ProgramSelector implementations respectively.
- * 
+/* 
  * TODO Either this class or another new class needs to encapsulate all the 
  * details of a crossover event in the same way as GPRun exists after it has 
  * been executed as a record of how it progressed. The same thing will be 
  * needed for mutation too.
- * 
+ */
+/**
+ * This class performs the very simple task of linking together parent 
+ * selection and crossover. The actual tasks of crossover and selection are 
+ * performed by Crossover and ProgramSelector implementations respectively.
+
  * @see Crossover
  * @see UniformPointCrossover
  * @see KozaCrossover
  * @see ProgramSelector
  * @see TournamentSelector
- */
+ */ 
 public class GPCrossover<TYPE> {
 
 	// The controlling model.
@@ -135,11 +136,17 @@ public class GPCrossover<TYPE> {
 			reversions++;
 		} while(!accepted);
 		
-		//TODO Need to be more careful here, potential for array out of bounds if crossover returns an array with more than 2 elements.
-		//TODO This is actually horrible - it's so unflexible, theres no way for a user to control whether/how this happens.
+		//TODO This is actually horrible - it's so unflexible, theres no way 
+		//for a user to control whether/how this happens. Also, it doesn't even
+		//seem like the right thing to be doing. Why use the parents?!
+		int replacement = 0;
 		for (int i=0; i<children.length; i++) {
 			if (children[i].getProgramDepth() > model.getMaxDepth()) {
-				children[i] = (CandidateProgram<TYPE>) parents[i].clone();
+				if (replacement >= parents.length) {
+					replacement = 0;
+				}
+				children[i] = (CandidateProgram<TYPE>) parents[replacement].clone();
+				replacement++;
 			}
 		}
 		

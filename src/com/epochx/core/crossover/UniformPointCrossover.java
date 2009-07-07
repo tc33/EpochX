@@ -44,11 +44,8 @@ public class UniformPointCrossover<TYPE> implements Crossover<TYPE> {
 		int swapPoint2 = (int) Math.floor(Math.random()*program2.getProgramLength());
 
 		// Get copies of subtrees to swap.
-		// We NEED to clone these because otherwise you risk copying crossed over
-		// programs back into the breeding pool 
-		//TODO Actually, since GPCrossover clones, I'm not sure this is needed - DOUBLE CHECK!
-		Node<TYPE> subTree1 = (Node<TYPE>) program1.getNthNode(swapPoint1).clone();
-		Node<TYPE> subTree2 = (Node<TYPE>) program2.getNthNode(swapPoint2).clone();
+		Node<TYPE> subTree1 = (Node<TYPE>) program1.getNthNode(swapPoint1);//.clone();
+		Node<TYPE> subTree2 = (Node<TYPE>) program2.getNthNode(swapPoint2);//.clone();
 		
 		// Perform swap.
 		program1.setNthNode(swapPoint1, subTree2);

@@ -82,7 +82,6 @@ public class RampedHalfAndHalfInitialiser<TYPE> implements Initialiser<TYPE> {
 		for (int i=0; i<popSize; i++) {			
 			// Calculate depth
 			int depth = (int) Math.floor((firstGen.size() / programsPerDepth) + startDepth);
-			System.out.println(depth);
 			
 			// Grow on even numbers, full on odd.
 			CandidateProgram<TYPE> program;

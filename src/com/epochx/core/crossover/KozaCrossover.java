@@ -72,8 +72,8 @@ public class KozaCrossover<TYPE> implements Crossover<TYPE> {
 		int swapPoint2 = getCrossoverPoint(program2);
 		
 		// Get copies of subtrees to swap.
-		Node<TYPE> subtree1 = (Node<TYPE>) program1.getNthNode(swapPoint1).clone();
-		Node<TYPE> subtree2 = (Node<TYPE>) program2.getNthNode(swapPoint2).clone();
+		Node<TYPE> subtree1 = (Node<TYPE>) program1.getNthNode(swapPoint1);//.clone();
+		Node<TYPE> subtree2 = (Node<TYPE>) program2.getNthNode(swapPoint2);//.clone();
 		
 		// Perform swap.
 		program1.setNthNode(swapPoint1, subtree2);
@@ -161,7 +161,6 @@ public class KozaCrossover<TYPE> implements Crossover<TYPE> {
 	private int getNthTerminalNode(int n, int terminalCount, int nodeCount, Node<TYPE> current) {
 		// Found the nth terminal node.
 		if (current instanceof TerminalNode) {
-			//TODO Check this - not sure we should be ++ing here.
 			if (n == terminalCount++)
 				return nodeCount;
 		}

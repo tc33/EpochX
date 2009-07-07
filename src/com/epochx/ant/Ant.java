@@ -34,12 +34,10 @@ public class Ant {
     private Orientation orientation;
     
     // How many time steps have passed for the ant.
-    //TODO This should be renamed because it's not number of moves it's number of timesteps.
-    private int moves;
+    private int timesteps;
     
     // The maximum number of time steps that this ant is allowed to make.
-    //TODO This should probably be renamed at the same time as the 'moves' field.
-    private int maxMoves;
+    private int maxTimesteps;
     
     // Location of the ant within its landscape.
     private int xLocation;
@@ -70,7 +68,7 @@ public class Ant {
      * @param landscape the landscape the ant will move through.
      */
     public void reset(int timeSteps, AntLandscape landscape) {
-        this.maxMoves = timeSteps;
+        this.maxTimesteps = timeSteps;
         this.landscape = landscape;
     	
         // Initialise the ant.
@@ -83,7 +81,7 @@ public class Ant {
      */
     public void reset() {
     	orientation = EAST;
-        moves = 0;
+        timesteps = 0;
         xLocation = 0;
         yLocation = 0;
         foodEaten = 0;
@@ -98,7 +96,7 @@ public class Ant {
      */
     public void turnLeft() {
         // Don't allow the turn it the ant has reached its maximum.
-    	if(moves >= maxMoves) {
+    	if(timesteps >= maxTimesteps) {
             return;
         }
         
@@ -113,7 +111,7 @@ public class Ant {
             orientation = EAST;
         }
         
-        moves++;
+        timesteps++;
     }
     
     /**
@@ -125,7 +123,7 @@ public class Ant {
      */
     public void turnRight() {
     	// Don't allow the turn it the ant has reached its maximum.
-    	if(moves >= maxMoves) {
+    	if(timesteps >= maxTimesteps) {
             return;
         }
     	
@@ -140,7 +138,7 @@ public class Ant {
             orientation = EAST;
         }
         
-        moves++;
+        timesteps++;
     }
     
     /**
@@ -152,7 +150,7 @@ public class Ant {
      */
     public void move() {
     	// Don't allow the move it the ant has reached its maximum.
-        if(moves>=maxMoves) {
+        if(timesteps>=maxTimesteps) {
             return;
         }
         
@@ -182,8 +180,13 @@ public class Ant {
                 yLocation = 0;
             }
         }
-        //TODO If we update the number of moves BEFORE eating then we might reach the limit here and not beable to eat. Is that right? Because eating doesn't take a move. I'm not sure eatFood should test for max moves at all.
-        moves++;
+        /*
+         * TODO If we update the number of timesteps BEFORE eating then we might 
+         * reach the limit here and not beable to eat. Is that right? Because 
+         * eating doesn't take a timestep. I'm not sure eatFood should test for
+         * max timesteps at all.
+         */
+        timesteps++;
         
         // If the new location has food then eat it.
         if(landscape.isFoodLocation(getLocation())) {
@@ -197,7 +200,7 @@ public class Ant {
      */
     public void eatFood() {
     	// Don't allow the ant to eat if it has reached its maximum moves.
-    	if(moves>=maxMoves) {
+    	if(timesteps>=maxTimesteps) {
             return;
         }
     	
@@ -230,7 +233,7 @@ public class Ant {
      * @return The number of time steps the ant has gone through.
      */
     public int getMoves() {
-        return moves;
+        return timesteps;
     }
     
     /**
@@ -265,7 +268,7 @@ public class Ant {
      * ant falling into dead ends.
      */
     public void skip() {
-        moves++;
+        timesteps++;
     }
     
     /**
@@ -275,11 +278,11 @@ public class Ant {
      * move
      */
     public int getMaxMoves() {
-    	return maxMoves;
+    	return maxTimesteps;
     }
     
     @Override
     public String toString() {
-    	return xLocation + ":" + yLocation + " Facing " + orientation + " --- moves = " + moves;
+    	return xLocation + ":" + yLocation + " Facing " + orientation + " --- moves = " + timesteps;
     }
 }

@@ -100,8 +100,7 @@ public class PointMutation<TYPE> implements Mutation<TYPE> {
 					int index = (j + rand) % syntax.size();
 					Node<TYPE> n = syntax.get(index);
 					
-					//TODO Need to check we're not replacing with the same thing.
-					if (n.getArity() == arity) {
+					if ((n.getArity() == arity) && !nodesEqual(node, n)) {						
 						n = (Node<TYPE>) n.clone();
 						
 						// Attach the old node's children.
@@ -120,5 +119,28 @@ public class PointMutation<TYPE> implements Mutation<TYPE> {
 		}
 		
 		return program;
+	}
+	
+	/*
+	 * Helper function to check node equivalence. We cannot just use Node's 
+	 * equals() method because we don't want to compare children if it's a 
+	 * function node.
+	 */
+	private boolean nodesEqual(Node<TYPE> nodeA, Node<TYPE> nodeB) {
+		boolean equal = false;
+		
+		// Check they're the same type first.
+		if (nodeA.getClass().equals(nodeB.getClass())) {
+			if (nodeA instanceof FunctionNode) {
+				// They're both the same function type.
+				equal = true;
+			} else if (nodeA instanceof TerminalNode) {
+				equal = ((TerminalNode<TYPE>) nodeA).equals(nodeB);
+			} else {
+				// Unknown node type - somethings gone wrong.
+			}
+		}
+		
+		return equal;
 	}
 }

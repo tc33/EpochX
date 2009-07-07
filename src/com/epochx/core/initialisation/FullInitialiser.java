@@ -89,14 +89,20 @@ public class FullInitialiser<TYPE> implements Initialiser<TYPE> {
 	 * @return The root node of a randomly generated full node tree of the 
 	 * requested depth.
 	 */
-	public Node<TYPE> buildFullNodeTree(int depth) {		
-		//TODO Choosing a function as root assumes depth > 1.
-		// Randomly choose a root function node.
-        int randomIndex = (int) Math.floor(Math.random() * model.getFunctions().size());
-        Node<TYPE> root = (Node<TYPE>) model.getFunctions().get(randomIndex).clone();
-
-        // Populate the root node with full children of depth-1.
-		fillChildren(root, 0, depth);
+	public Node<TYPE> buildFullNodeTree(int depth) {
+		Node<TYPE> root;
+		if (depth == 0) {
+			// Randomly choose a terminal node as our root.
+			int randomIndex = (int) Math.floor(Math.random() * model.getTerminals().size());
+			root = (Node<TYPE>) model.getTerminals().get(randomIndex).clone();
+		} else {
+			// Randomly choose a root function node.
+	        int randomIndex = (int) Math.floor(Math.random() * model.getFunctions().size());
+	        root = (Node<TYPE>) model.getFunctions().get(randomIndex).clone();
+	        
+	        // Populate the root node with full children of depth-1.
+			fillChildren(root, 0, depth);
+		}
         
         return root;
 	}

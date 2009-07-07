@@ -64,9 +64,4 @@ public class MultiplyFunction extends FunctionNode<Double> {
 	public String getFunctionName() {
 		return "MUL";
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj) && (obj instanceof MultiplyFunction);
-	}
 }

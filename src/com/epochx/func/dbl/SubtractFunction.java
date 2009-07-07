@@ -64,9 +64,4 @@ public class SubtractFunction extends FunctionNode<Double> {
 	public String getFunctionName() {
 		return "SUB";
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj) && (obj instanceof SubtractFunction);
-	}
 }

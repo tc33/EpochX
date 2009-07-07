@@ -66,9 +66,4 @@ public class OrFunction extends FunctionNode<Boolean> {
 	public String getFunctionName() {
 		return "OR";
 	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj) && (obj instanceof OrFunction);
-	}
 }

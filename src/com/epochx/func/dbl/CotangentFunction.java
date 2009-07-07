@@ -62,10 +62,4 @@ public class CotangentFunction extends FunctionNode<Double> {
 	public String getFunctionName() {
 		return "COT";
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj) && (obj instanceof CotangentFunction);
-	}
-
 }

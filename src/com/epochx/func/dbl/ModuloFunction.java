@@ -64,10 +64,4 @@ public class ModuloFunction extends FunctionNode<Double> {
 	public String getFunctionName() {
 		return "MOD";
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj) && (obj instanceof ModuloFunction);
-	}
-
 }

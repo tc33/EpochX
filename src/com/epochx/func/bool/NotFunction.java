@@ -61,9 +61,4 @@ public class NotFunction extends FunctionNode<Boolean> {
 	public String getFunctionName() {
 		return "NOT";
 	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj) && (obj instanceof NotFunction);
-	}
 }

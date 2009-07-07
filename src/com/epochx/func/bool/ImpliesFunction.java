@@ -68,9 +68,4 @@ public class ImpliesFunction extends FunctionNode<Boolean> {
 	public String getFunctionName() {
 		return "IMPLIES";
 	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj) && (obj instanceof ImpliesFunction);
-	}
 }

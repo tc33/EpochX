@@ -74,9 +74,4 @@ public class Seq2Function extends FunctionNode<Action> {
 	public String getFunctionName() {
 		return "SEQ2";
 	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj) && (obj instanceof Seq2Function);
-	}
 }

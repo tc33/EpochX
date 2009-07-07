@@ -62,10 +62,4 @@ public class ArcTangentFunction extends FunctionNode<Double> {
 	public String getFunctionName() {
 		return "ATAN";
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj) && (obj instanceof ArcTangentFunction);
-	}
-
 }

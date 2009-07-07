@@ -73,10 +73,4 @@ public class ProtectedDivisionFunction extends FunctionNode<Double> {
 	public String getFunctionName() {
 		return "PDIV";
 	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj) && (obj instanceof ProtectedDivisionFunction);
-	}
-
 }

@@ -106,6 +106,6 @@ public class IfFoodAheadFunction extends FunctionNode<Action> {
 	@Override
 	public boolean equals(Object obj) {
 		//TODO This should probably check it has the same ant and landscape too.
-		return super.equals(obj) && (obj instanceof IfFoodAheadFunction);
+		return super.equals(obj);
 	}
 }

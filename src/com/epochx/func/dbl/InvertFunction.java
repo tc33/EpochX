@@ -68,10 +68,4 @@ public class InvertFunction extends FunctionNode<Double> {
 	public String getFunctionName() {
 		return "INV";
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj) && (obj instanceof InvertFunction);
-	}
-
 }

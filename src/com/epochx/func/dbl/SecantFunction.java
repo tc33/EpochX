@@ -62,10 +62,4 @@ public class SecantFunction extends FunctionNode<Double> {
 	public String getFunctionName() {
 		return "SEC";
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj) && (obj instanceof SecantFunction);
-	}
-
 }

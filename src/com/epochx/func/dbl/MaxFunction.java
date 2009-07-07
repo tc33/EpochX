@@ -70,10 +70,4 @@ public class MaxFunction extends FunctionNode<Double> {
 	public String getFunctionName() {
 		return "MAX";
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj) && (obj instanceof MaxFunction);
-	}
-	
 }

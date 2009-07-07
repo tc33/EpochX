@@ -62,10 +62,4 @@ public class TangentFunction extends FunctionNode<Double> {
 	public String getFunctionName() {
 		return "TAN";
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj) && (obj instanceof TangentFunction);
-	}
-
 }

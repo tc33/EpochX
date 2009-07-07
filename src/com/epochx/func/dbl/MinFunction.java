@@ -70,10 +70,4 @@ public class MinFunction extends FunctionNode<Double> {
 	public String getFunctionName() {
 		return "MIN";
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj) && (obj instanceof MinFunction);
-	}
-
 }

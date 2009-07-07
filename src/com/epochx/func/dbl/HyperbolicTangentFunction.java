@@ -62,9 +62,4 @@ public class HyperbolicTangentFunction extends FunctionNode<Double> {
 	public String getFunctionName() {
 		return "TANH";
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj) && (obj instanceof HyperbolicTangentFunction);
-	}
 }

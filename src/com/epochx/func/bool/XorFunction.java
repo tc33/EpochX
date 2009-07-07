@@ -66,9 +66,4 @@ public class XorFunction extends FunctionNode<Boolean> {
 	public String getFunctionName() {
 		return "XOR";
 	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj) && (obj instanceof XorFunction);
-	}
 }

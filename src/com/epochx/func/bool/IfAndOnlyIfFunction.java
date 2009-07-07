@@ -67,9 +67,4 @@ public class IfAndOnlyIfFunction extends FunctionNode<Boolean> {
 	public String getFunctionName() {
 		return "IFF";
 	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj) && (obj instanceof IfAndOnlyIfFunction);
-	}
 }

@@ -63,10 +63,4 @@ public class SignumFunction extends FunctionNode<Double> {
 	public String getFunctionName() {
 		return "SGN";
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj) && (obj instanceof SignumFunction);
-	}
-
 }

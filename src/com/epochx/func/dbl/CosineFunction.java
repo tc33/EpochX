@@ -62,10 +62,4 @@ public class CosineFunction extends FunctionNode<Double> {
 	public String getFunctionName() {
 		return "COS";
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj) && (obj instanceof CosineFunction);
-	}
-
 }

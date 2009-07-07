@@ -67,9 +67,4 @@ public class NorFunction extends FunctionNode<Boolean> {
 	public String getFunctionName() {
 		return "NOR";
 	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj) && (obj instanceof NorFunction);
-	}
 }

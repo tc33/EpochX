@@ -62,10 +62,4 @@ public class ArcCosineFunction extends FunctionNode<Double> {
 	public String getFunctionName() {
 		return "ACOS";
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj) && (obj instanceof ArcCosineFunction);
-	}
-	
 }

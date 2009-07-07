@@ -69,4 +69,9 @@ public abstract class FunctionNode<TYPE> extends Node<TYPE> {
 		builder.append(')');
 		return builder.toString();
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return super.equals(obj) && (obj.getClass().equals(this.getClass()));
+	}
 }

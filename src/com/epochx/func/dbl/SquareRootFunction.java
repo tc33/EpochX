@@ -62,10 +62,4 @@ public class SquareRootFunction extends FunctionNode<Double> {
 	public String getFunctionName() {
 		return "SQRT";
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj) && (obj instanceof SquareRootFunction);
-	}
-
 }

@@ -67,10 +67,4 @@ public class NandFunction extends FunctionNode<Boolean> {
 	public String getFunctionName() {
 		return "NAND";
 	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj) && (obj instanceof NandFunction);
-	}
-	
 }

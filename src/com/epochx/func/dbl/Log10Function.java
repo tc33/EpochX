@@ -49,10 +49,8 @@ public class Log10Function extends FunctionNode<Double> {
 	 */
 	@Override
 	public Double evaluate() {
-		// TODO Could this bit not be done in superclass somehow, with a call to super.evaluate() required here?
 		double c = ((Double) getChild(0).evaluate()).doubleValue();
 		
-		// TODO Need to check that this and others don't throw up any nasty divide by 0 like issues to protect against.
 		return Math.log10(c);
 	}
 	
@@ -63,11 +61,5 @@ public class Log10Function extends FunctionNode<Double> {
 	@Override
 	public String getFunctionName() {
 		return "LOG-10";
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		// TODO Could this instanceof business not be done higher up too? i.e. are they of the same type?
-		return super.equals(obj) && (obj instanceof Log10Function);
 	}
 }

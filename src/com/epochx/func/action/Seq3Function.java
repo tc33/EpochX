@@ -75,10 +75,4 @@ public class Seq3Function extends FunctionNode<Action> {
 	public String getFunctionName() {
 		return "SEQ3";
 	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj) && (obj instanceof Seq3Function);
-	}
-
 }

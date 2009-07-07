@@ -76,9 +76,4 @@ public class CoefficientPowerFunction extends FunctionNode<Double> {
 	public String getFunctionName() {
 		return "CVP";
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj) && (obj instanceof CoefficientPowerFunction);
-	}
 }

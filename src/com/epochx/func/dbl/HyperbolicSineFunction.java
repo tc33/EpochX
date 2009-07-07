@@ -62,10 +62,4 @@ public class HyperbolicSineFunction extends FunctionNode<Double> {
 	public String getFunctionName() {
 		return "SINH";
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj) && (obj instanceof HyperbolicSineFunction);
-	}
-
 }

@@ -43,25 +43,83 @@ import com.epochx.stats.*;
 public interface GPModel<TYPE> {
 	
 	/**
-	 * Retrieves the size of the breeding pool to be used for parent selection 
-	 * when performing the genetic operators. If the pool size is equal to or 
-	 * less than zero, or if getPouleSelector() returns null, then no poule 
-	 * will be used and parent selection will take place directly from the 
-	 * previous population.
-	 * 
-	 * @return the size of the mating pool to build with the PouleSelector 
-	 * 		   returned by getPouleSelector() which will be used for parent 
-	 * 		   selection.
-	 */
-	public int getPoolSize();
-
-	/**
 	 * Retrieves the Initialiser which will generate the first generation 
 	 * population from which the evolution will proceed.
 	 * 
 	 * @return the Initialiser to create the first population.
 	 */
 	public Initialiser<TYPE> getInitialiser();
+
+	/**
+	 * Retrieves the implementation of Crossover to use to perform the genetic 
+	 * operation of crossover between 2 parents. The 2 parents to be crossed 
+	 * over will be selected using the parent selector returned by 
+	 * getProgramSelector().
+	 * 
+	 * @return the implementation of Crossover that will perform the genetic 
+	 * 		   operation of crossover.
+	 * @see UniformPointCrossover
+	 * @see KozaCrossover
+	 */
+	public Crossover<TYPE> getCrossover();
+
+	/**
+	 * Retrieves the implementation of Mutator to use to perform the genetic 
+	 * operation of mutation on a CandidateProgram. The individual to be 
+	 * mutated will be selected using the program selector returned by 
+	 * getProgramSelector().
+	 * 
+	 * @return the implementation of Mutator that will perform the genetic 
+	 * 		   operation of mutation.
+	 */
+	public Mutation<TYPE> getMutator();
+
+	/**
+	 * Retrieves the selector to use to pick parents from either a pre-selected 
+	 * breeding pool (selected by the PoolSelector returned by 
+	 * getPoolSelector()) or the previous population for use as input to the 
+	 * genetic operators.
+	 * 
+	 * @return the ProgramSelector which should be used to pick parents for input 
+	 * 		   to the genetic operators.
+	 * @see TournamentSelector
+	 */
+	public ProgramSelector<TYPE> getProgramSelector();
+
+	/**
+	 * Retrieves the selector to use to construct a breeding pool from which 
+	 * parents can be selected using the parent selector returned by 
+	 * getProgramSelector() to undergo the genetic operators.
+	 * 
+	 * @return a PoolSelector which can be used to construct a breeding pool, 
+	 * 		   or null if a breeding pool shouldn't be used and instead parents 
+	 * 		   should be picked straight from the previous population.
+	 * @see TournamentSelector
+	 */
+	public PoolSelector<TYPE> getPoolSelector();
+
+	/**
+	 * Retrieves the set of terminal nodes. 
+	 * 
+	 * @return the terminal nodes to be used during evolution.
+	 */
+	public List<TerminalNode<TYPE>> getTerminals();
+
+	/**
+	 * Retrieves the set of function nodes.
+	 * 
+	 * @return the function nodes to be used during evolution.
+	 */
+	public List<FunctionNode<TYPE>> getFunctions();
+
+	/**
+	 * Retrieves the full set of syntax, that is terminals AND function nodes.
+	 * This is usually a combination of the calls from getTerminals() and 
+	 * getFunctions().
+	 * 
+	 * @return the full syntax for use in building node trees.
+	 */
+	public List<Node<TYPE>> getSyntax();
 
 	/**
 	 * Retrieves the number of runs that should be carried out using this model 
@@ -82,7 +140,7 @@ public interface GPModel<TYPE> {
 	 * @return the number of generations that should be evolved in each run.
 	 */
 	public int getNoGenerations();
-	
+
 	/**
 	 * Retrieves the number of CandidatePrograms that should make up each 
 	 * generation. The population at the start and end of each generation 
@@ -93,28 +151,30 @@ public interface GPModel<TYPE> {
 	public int getPopulationSize();
 
 	/**
-	 * Retrieves the set of terminal nodes. 
+	 * Retrieves the size of the breeding pool to be used for parent selection 
+	 * when performing the genetic operators. If the pool size is equal to or 
+	 * less than zero, or if getPoolSelector() returns null, then no pool 
+	 * will be used and parent selection will take place directly from the 
+	 * previous population.
 	 * 
-	 * @return the terminal nodes to be used during evolution.
+	 * @return the size of the mating pool to build with the PoolSelector 
+	 * 		   returned by getPoolSelector() which will be used for parent 
+	 * 		   selection.
 	 */
-	public List<TerminalNode<TYPE>> getTerminals();
+	public int getPoolSize();
 
 	/**
-	 * Retrieves the set of function nodes.
+	 * Retrieves the number of elites that should be copied straight to the next 
+	 * population. This number is distinct from the reproduction operator. 
+	 * Elites are generally picked as the very best programs in a generation, 
+	 * thus a number of elites of 1 or more will always retain the best program 
+	 * found so far, through to the last generation.
 	 * 
-	 * @return the function nodes to be used during evolution.
+	 * @return the number of elites that should be copied through from one 
+	 * 		   generation to the next.
 	 */
-	public List<FunctionNode<TYPE>> getFunctions();
-	
-	/**
-	 * Retrieves the full set of syntax, that is terminals AND function nodes.
-	 * This is usually a combination of the calls from getTerminals() and 
-	 * getFunctions().
-	 * 
-	 * @return the full syntax for use in building node trees.
-	 */
-	public List<Node<TYPE>> getSyntax();
-	
+	public int getNoElites();
+
 	/**
 	 * Retrieves the maximum depth of CandidatePrograms allowed in the 
 	 * population after initialisation. The exact way in which the 
@@ -137,31 +197,7 @@ public interface GPModel<TYPE> {
 	public int getMaxDepth();
 	
 	/**
-	 * Retrieves the implementation of Crossover to use to perform the genetic 
-	 * operation of crossover between 2 parents. The 2 parents to be crossed 
-	 * over will be selected using the parent selector returned by 
-	 * getProgramSelector().
-	 * 
-	 * @return the implementation of Crossover that will perform the genetic 
-	 * 		   operation of crossover.
-	 * @see UniformPointCrossover
-	 * @see KozaCrossover
-	 */
-	public Crossover<TYPE> getCrossover();
-
-	/**
-	 * Retrieves the implementation of Mutator to use to perform the genetic 
-	 * operation of mutation on a CandidateProgram. The individual to be 
-	 * mutated will be selected using the parent selector returned by 
-	 * getProgramSelector().
-	 * 
-	 * @return the implementation of Mutator that will perform the genetic 
-	 * 		   operation of mutation.
-	 */
-	public Mutation<TYPE> getMutator();
-	
-	/**
-	 * Retrieves a numerical value between 0 and 1 which represents the 
+	 * Retrieves a numerical value between 0.0 and 1.0 which represents the 
 	 * probability of selecting the crossover genetic operator, as opposed to 
 	 * mutation or reproduction. 
 	 * 
@@ -179,7 +215,25 @@ public interface GPModel<TYPE> {
 	public double getCrossoverProbability();
 
 	/**
-	 * Retrieves a numerical value between 0 and 1 which represents the 
+	 * Retrieves a numerical value between 0.0 and 1.0 which represents the 
+	 * probability of selecting the mutation genetic operator, as opposed to 
+	 * crossover or reproduction. 
+	 * 
+	 * <p>Within one generation approximately Pc proportion of the 
+	 * CandidatePrograms will have been created through crossover, Pm through 
+	 * mutation and Pr through reproduction. Where Pc, Pm, Pr are the values 
+	 * returned by getCrossoverProbability(), getMutationProbability() and 
+	 * getReproductionProbability() respectively. The sum of the calls to 
+	 * getCrossoverProbability(), getReproductionProbability() and 
+	 * getMutationProbability() should total 1.0.
+	 * 
+	 * @return the probability of choosing the mutation genetic operator at 
+	 * 		   each iteration when constructing the next population.
+	 */
+	public double getMutationProbability();
+
+	/**
+	 * Retrieves a numerical value between 0.0 and 1.0 which represents the 
 	 * probability of selecting the reproduction genetic operator, as opposed 
 	 * to crossover or mutation. 
 	 * 
@@ -196,69 +250,6 @@ public interface GPModel<TYPE> {
 	 */
 	public double getReproductionProbability();
 
-	/**
-	 * Retrieves a numerical value between 0 and 1 which represents the 
-	 * probability of selecting the mutation genetic operator, as opposed to 
-	 * crossover or reproduction. 
-	 * 
-	 * <p>Within one generation approximately Pc proportion of the 
-	 * CandidatePrograms will have been created through crossover, Pm through 
-	 * mutation and Pr through reproduction. Where Pc, Pm, Pr are the values 
-	 * returned by getCrossoverProbability(), getMutationProbability() and 
-	 * getReproductionProbability() respectively. The sum of the calls to 
-	 * getCrossoverProbability(), getReproductionProbability() and 
-	 * getMutationProbability() should total 1.0.
-	 * 
-	 * @return the probability of choosing the mutation genetic operator at 
-	 * 		   each iteration when constructing the next population.
-	 */
-	public double getMutationProbability();
-	
-	/**
-	 * Retrieves the selector to use to construct a breeding pool from which 
-	 * parents can be selected using the parent selector return by 
-	 * getProgramSelector() to undergo the genetic operators.
-	 * 
-	 * @return a PouleSelector which can be used to construct a breeding pool, 
-	 * 		   or null if a breeding pool shouldn't be used and instead parents 
-	 * 		   should be picked straight from the previous population.
-	 * @see TournamentSelector
-	 */
-	public PoolSelector<TYPE> getPoolSelector();
-
-	/**
-	 * Retrieves the selector to use to pick parents from either a pre-selected 
-	 * breeding pool (selected by the PouleSelector returned by 
-	 * getPouleSelector()) or the previous population for use as input to the 
-	 * genetic operators.
-	 * 
-	 * @return the ProgramSelector which should be used to pick parents for input 
-	 * 		   to the genetic operators.
-	 * @see TournamentSelector
-	 */
-	public ProgramSelector<TYPE> getProgramSelector();
-
-	/**
-	 * Retrieves the number of elites that should be copied straight to the next 
-	 * population. This number is distinct from the reproduction operator. 
-	 * Elites are generally picked as the very best programs in a generation, 
-	 * thus a number of elites of 1 or more will always retain the best program 
-	 * found so far, through to the last generation.
-	 * 
-	 * @return the number of elites that should be copied through from one 
-	 * 		   generation to the next.
-	 */
-	public int getNoElites();
-
-	/**
-	 * The fitness score at which a run should be stopped. Returning a negative 
-	 * value will result in no termination based upon fitness.
-	 * 
-	 * @return the fitness score at which a run should be terminated. A fitness 
-	 * of this or less will result in termination.
-	 */
-	public double getTerminationFitness();
-	
 	/**
 	 * Calculates and returns the fitness score of the given program. The score 
 	 * returned by this method provides the underlying way in which Candidate 
@@ -279,6 +270,48 @@ public interface GPModel<TYPE> {
 	 */
 	public double getFitness(CandidateProgram<TYPE> program);
 	
+	/**
+	 * The fitness score at which a run should be stopped. Returning a negative 
+	 * value will result in no termination based upon fitness.
+	 * 
+	 * @return the fitness score at which a run should be terminated. A fitness 
+	 * of this or less will result in termination.
+	 */
+	public double getTerminationFitness();
+
+	/**
+	 * This method will be called during each crossover operation before the 
+	 * crossover is accepted, giving the model the opportunity to reject the 
+	 * operation, in which case the operation will be attempted again until it
+	 * is accepted. The number of times crossovers are rejected is retrievable 
+	 * using the REVERTED_CROSSOVERS stats field. 
+	 * 
+	 * @param parents The programs which have been crossed over to create the 
+	 * given children.
+	 * @param children The children which are the result of the crossover 
+	 * operation having been performed on the given parents.
+	 * @return True if the crossover operation should proceed, false if it is 
+	 * rejected and should be retried with new parents.
+	 */
+	public boolean acceptCrossover(CandidateProgram<TYPE>[] parents, 
+								   CandidateProgram<TYPE>[] children);
+
+	/**
+	 * This method will be called during each mutation operation before the 
+	 * mutation is accepted, giving the model the opportunity to reject the 
+	 * operation, in which case the operation will be attempted again until it
+	 * is accepted. The number of times mutations are rejected is retrievable 
+	 * using the REVERTED_MUTATIONS stats field.
+	 * 
+	 * @param parent The program before the mutation operation.
+	 * @param child  The program after the mutation operation has been carried 
+	 * 				 out.
+	 * @return True if the mutation operation should proceed, false if it is 
+	 * rejected and should be retried with a new parent.
+	 */
+	public boolean acceptMutation(CandidateProgram<TYPE> parent, 
+			   					  CandidateProgram<TYPE> child);
+
 	/**
 	 * Get a listener which will be informed of statistics about runs. The 
 	 * listener will be queried for what fields are of interest, with those 
@@ -318,37 +351,4 @@ public interface GPModel<TYPE> {
 	 * @return A MutationStatListener to handle mutation statistics.
 	 */
 	public MutationStatListener getMutationStatListener();
-	
-	/**
-	 * This method will be called during each crossover operation before the 
-	 * crossover is accepted, giving the model the opportunity to reject the 
-	 * operation, in which case the operation will be attempted again until it
-	 * is accepted. The number of times crossovers are rejected is retrievable 
-	 * using the REVERTED_CROSSOVERS stats field. 
-	 * 
-	 * @param parents The programs which have been crossed over to create the 
-	 * given children.
-	 * @param children The children which are the result of the crossover 
-	 * operation having been performed on the given parents.
-	 * @return True if the crossover operation should proceed, false if it is 
-	 * rejected and should be retried with new parents.
-	 */
-	public boolean acceptCrossover(CandidateProgram<TYPE>[] parents, 
-								   CandidateProgram<TYPE>[] children);
-	
-	/**
-	 * This method will be called during each mutation operation before the 
-	 * mutation is accepted, giving the model the opportunity to reject the 
-	 * operation, in which case the operation will be attempted again until it
-	 * is accepted. The number of times mutations are rejected is retrievable 
-	 * using the REVERTED_MUTATIONS stats field.
-	 * 
-	 * @param parent The program before the mutation operation.
-	 * @param child  The program after the mutation operation has been carried 
-	 * 				 out.
-	 * @return True if the mutation operation should proceed, false if it is 
-	 * rejected and should be retried with a new parent.
-	 */
-	public boolean acceptMutation(CandidateProgram<TYPE> parent, 
-			   					  CandidateProgram<TYPE> child);
 }

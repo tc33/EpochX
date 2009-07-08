@@ -37,6 +37,12 @@ public class GPRun<TYPE> {
 	// The model describing the problem to be evolved.
 	private GPModel<TYPE> model;
 	
+	// Crossover module.
+	private GPCrossover<TYPE> crossover;
+	
+	// Mutation module.
+	private GPMutation<TYPE> mutation;
+	
 	// The best program found so far during the run.
 	private CandidateProgram<TYPE> bestProgram;
 	
@@ -51,12 +57,6 @@ public class GPRun<TYPE> {
 	
 	// Gather generation statistics.
 	private GenerationStats<TYPE> genStats;
-	
-	// Crossover module.
-	private GPCrossover<TYPE> crossover;
-	
-	// Mutation module.
-	private GPMutation<TYPE> mutation;
 	
 	/*
 	 * Private constructor. The static factory method run(GPModel) should be 
@@ -106,7 +106,7 @@ public class GPRun<TYPE> {
 	 * This is the private method which actually does the work in this class. 
 	 * It is also the workhorse of the whole API as it creates the initial 
 	 * population, initiates the genetic operators and performs any elitism 
-	 * or poule selection in use.
+	 * or pool selection in use.
 	 */
 	private void run() {
 		// Perform initialisation.

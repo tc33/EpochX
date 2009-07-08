@@ -104,21 +104,21 @@ public class TournamentSelector<TYPE> implements ProgramSelector<TYPE>, PoolSele
 	 * selection.
 	 */
 	@Override
-	public List<CandidateProgram<TYPE>> getPool(List<CandidateProgram<TYPE>> pop, int pouleSize) {
+	public List<CandidateProgram<TYPE>> getPool(List<CandidateProgram<TYPE>> pop, int poolSize) {
 		// If pouleSize is 0 or less then we use the whole population.
-		if (pouleSize <= 0) {
+		if (poolSize <= 0) {
 			return pop;
 		}
 		
-		List<CandidateProgram<TYPE>> poule = new ArrayList<CandidateProgram<TYPE>>(pouleSize);
+		List<CandidateProgram<TYPE>> pool = new ArrayList<CandidateProgram<TYPE>>(poolSize);
 		
 		ProgramSelector<TYPE> programSelector = new TournamentSelector<TYPE>(tournamentSize);
 		programSelector.onGenerationStart(pop);
 		
-		for (int i=0; i<pouleSize; i++) {
-			poule.add(programSelector.getProgram());
+		for (int i=0; i<poolSize; i++) {
+			pool.add(programSelector.getProgram());
 		}
 		
-		return poule;
+		return pool;
 	}
 }

@@ -396,7 +396,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 
 	/**
 	 * Overwrites the default parent selector used to select parents to undergo
-	 * a genetic operator from either a poule or the previous population.
+	 * a genetic operator from either a pool or the previous population.
 	 * 
 	 * @param programSelector the new ProgramSelector to be used when selecting 
 	 * 						 parents for a genetic operator.

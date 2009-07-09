@@ -24,12 +24,6 @@ import com.epochx.op.selection.*;
 import com.epochx.representation.*;
 import com.epochx.stats.CrossoverStats;
 
-/* 
- * TODO Either this class or another new class needs to encapsulate all the 
- * details of a crossover event in the same way as GPRun exists after it has 
- * been executed as a record of how it progressed. The same thing will be 
- * needed for mutation too.
- */
 /**
  * This class performs the very simple task of linking together parent 
  * selection and crossover. The actual tasks of crossover and selection are 
@@ -39,10 +33,15 @@ import com.epochx.stats.CrossoverStats;
  * @see UniformPointCrossover
  * @see KozaCrossover
  * @see ProgramSelector
- * @see TournamentSelector
  */ 
 public class GPCrossover<TYPE> {
-
+	/* 
+	 * TODO Either this class or another new class needs to encapsulate all the 
+	 * details of a crossover event in the same way as GPRun exists after it has 
+	 * been executed as a record of how it progressed. The same thing will be 
+	 * needed for mutation too.
+	 */
+	
 	// The controlling model.
 	private GPModel<TYPE> model;
 	

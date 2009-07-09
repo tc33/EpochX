@@ -91,6 +91,8 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 		poolSize = 50;
 		noElites = 10;
 		terminationFitness = 0.0;
+		crossoverProbability = 0.9;
+		mutationProbability = 0;
 		
 		// Statistics fields.
 		mutationStatFields = null;
@@ -104,16 +106,135 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 		crossoverStatListener = this;
 		mutationStatListener = this;
 		
-		// Operator probabilities.
-		crossoverProbability = 0.9;
-		mutationProbability = 0;
-		
 		// GP components.
 		programSelector = new RandomSelector<TYPE>();
 		poolSelector = new TournamentSelector<TYPE>(3);
 		initialiser = new FullInitialiser<TYPE>(this);
 		crossover = new UniformPointCrossover<TYPE>();
 		mutator = new SubtreeMutation<TYPE>(this);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to FullInitialiser in GPAbstractModel.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public Initialiser<TYPE> getInitialiser() {
+		return initialiser;
+	}
+
+	/**
+	 * Overwrites the default initialiser.
+	 * 
+	 * @param initialiser the new Initialiser to use when generating the 
+	 * 		 			  starting population.
+	 */
+	public void setInitialiser(Initialiser<TYPE> initialiser) {
+		this.initialiser = initialiser;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to {@link UniformPointCrossover} in GPAbstractModel.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public Crossover<TYPE> getCrossover() {
+		return crossover;
+	}
+
+	/**
+	 * Overwrites the default crossover operator.
+	 * 
+	 * @param crossover the crossover to set
+	 */
+	public void setCrossover(Crossover<TYPE> crossover) {
+		this.crossover = crossover;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to {@link SubtreeMutation} in GPAbstractModel.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public Mutation<TYPE> getMutator() {
+		return mutator;
+	}
+
+	/**
+	 * Overwrites the default mutator used to perform mutation.
+	 * 
+	 * @param mutator the mutator to set.
+	 */
+	public void setMutator(Mutation<TYPE> mutator) {
+		this.mutator = mutator;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to {@link RandomSelector} in GPAbstractModel.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public ProgramSelector<TYPE> getProgramSelector() {
+		return programSelector;
+	}
+
+	/**
+	 * Overwrites the default parent selector used to select parents to undergo
+	 * a genetic operator from either a pool or the previous population.
+	 * 
+	 * @param programSelector the new ProgramSelector to be used when selecting 
+	 * 						 parents for a genetic operator.
+	 */
+	public void setProgramSelector(ProgramSelector<TYPE> programSelector) {
+		this.programSelector = programSelector;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to {@link TournamentSelector} with a tournament size of 3 
+	 * in GPAbstractModel.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public PoolSelector<TYPE> getPoolSelector() {
+		return poolSelector;
+	}
+
+	/**
+	 * Overwrites the default pool selector used to generate a mating pool.
+	 * 
+	 * @param poolSelector the new PoolSelector to be used when building a 
+	 * 						breeding pool.
+	 */
+	public void setPoolSelector(PoolSelector<TYPE> poolSelector) {
+		this.poolSelector = poolSelector;
+	}
+
+	/**
+	 * Returns the union of calls to getTerminals() and getFunctions.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public List<Node<TYPE>> getSyntax() {
+		List<Node<TYPE>> syntax = new ArrayList<Node<TYPE>>(getTerminals());
+		syntax.addAll(getFunctions());
+		
+		return syntax;
 	}
 
 	/**
@@ -202,63 +323,6 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	}
 	
 	/**
-	 * Returns the union of calls to getTerminals() and getFunctions.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public List<Node<TYPE>> getSyntax() {
-		List<Node<TYPE>> syntax = new ArrayList<Node<TYPE>>(getTerminals());
-		syntax.addAll(getFunctions());
-		
-		return syntax;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Defaults to 17 in GPAbstractModel.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public int getMaxDepth() {
-		return maxDepth;
-	}
-
-	/**
-	 * Overwrites the default max program tree depth allowed after genetic 
-	 * operators are performed.
-	 * 
-	 * @param maxDepth the new max program tree depth to use.
-	 */
-	public void setMaxDepth(int maxDepth) {
-		this.maxDepth = maxDepth;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Defaults to 6 in GPAbstractModel.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public int getInitialMaxDepth() {
-		return maxInitialDepth;
-	}
-
-	/**
-	 * Overwrites the default max program tree depth allowed after 
-	 * initialisation is performed.
-	 * 
-	 * @param maxInitialDepth the new max program tree depth to use.
-	 */
-	public void setInitialMaxDepth(int maxInitialDepth) {
-		this.maxInitialDepth = maxInitialDepth;
-	}
-
-	/**
 	 * {@inheritDoc}
 	 * 
 	 * <p>Defaults to 10 in GPAbstractModel.
@@ -284,23 +348,45 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to 0.0 in GPAbstractModel.
+	 * <p>Defaults to 6 in GPAbstractModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public double getTerminationFitness() {
-		return terminationFitness;
+	public int getInitialMaxDepth() {
+		return maxInitialDepth;
 	}
-	
+
 	/**
-	 * Overwrites the default fitness for run termination.
+	 * Overwrites the default max program tree depth allowed after 
+	 * initialisation is performed.
 	 * 
-	 * @param terminationFitness the new fitness below which a run will be 
-	 * 							 terminated.
+	 * @param maxInitialDepth the new max program tree depth to use.
 	 */
-	public void setTerminationFitness(double terminationFitness) {
-		this.terminationFitness = terminationFitness;
+	public void setInitialMaxDepth(int maxInitialDepth) {
+		this.maxInitialDepth = maxInitialDepth;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to 17 in GPAbstractModel.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public int getMaxDepth() {
+		return maxDepth;
+	}
+
+	/**
+	 * Overwrites the default max program tree depth allowed after genetic 
+	 * operators are performed.
+	 * 
+	 * @param maxDepth the new max program tree depth to use.
+	 */
+	public void setMaxDepth(int maxDepth) {
+		this.maxDepth = maxDepth;
 	}
 	
 	/**
@@ -314,7 +400,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	public double getCrossoverProbability() {
 		return crossoverProbability;
 	}
-	
+
 	/**
 	 * Overwrites the default crossover probability.
 	 * 
@@ -322,20 +408,6 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 */
 	public void setCrossoverProbability(double crossoverProbability) {
 		this.crossoverProbability = crossoverProbability;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Automatically calculates the reproduction probability based upon the 
-	 * crossover and mutation probabilities as all three together must add up 
-	 * to 100%.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public double getReproductionProbability() {
-		return 1.0 - (getCrossoverProbability() + getMutationProbability());
 	}
 
 	/**
@@ -358,117 +430,72 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	public void setMutationProbability(double mutationProbability) {
 		this.mutationProbability = mutationProbability;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to {@link TournamentSelector} with a tournament size of 3 
-	 * in GPAbstractModel.
+	 * <p>Automatically calculates the reproduction probability based upon the 
+	 * crossover and mutation probabilities as all three together must add up 
+	 * to 100%.
 	 * 
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public PoolSelector<TYPE> getPoolSelector() {
-		return poolSelector;
-	}
-
-	/**
-	 * Overwrites the default pool selector used to generate a mating pool.
-	 * 
-	 * @param poolSelector the new PoolSelector to be used when building a 
-	 * 						breeding pool.
-	 */
-	public void setPoolSelector(PoolSelector<TYPE> poolSelector) {
-		this.poolSelector = poolSelector;
+	public double getReproductionProbability() {
+		return 1.0 - (getCrossoverProbability() + getMutationProbability());
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to {@link RandomSelector} in GPAbstractModel.
+	 * <p>Defaults to 0.0 in GPAbstractModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public ProgramSelector<TYPE> getProgramSelector() {
-		return programSelector;
-	}
-
-	/**
-	 * Overwrites the default parent selector used to select parents to undergo
-	 * a genetic operator from either a pool or the previous population.
-	 * 
-	 * @param programSelector the new ProgramSelector to be used when selecting 
-	 * 						 parents for a genetic operator.
-	 */
-	public void setProgramSelector(ProgramSelector<TYPE> programSelector) {
-		this.programSelector = programSelector;
+	public double getTerminationFitness() {
+		return terminationFitness;
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * Overwrites the default fitness for run termination.
 	 * 
-	 * <p>Defaults to FullInitialiser in GPAbstractModel.
-	 * 
-	 * @return {@inheritDoc}
+	 * @param terminationFitness the new fitness below which a run will be 
+	 * 							 terminated.
 	 */
-	@Override
-	public Initialiser<TYPE> getInitialiser() {
-		return initialiser;
-	}
-
-	/**
-	 * Overwrites the default initialiser.
-	 * 
-	 * @param initialiser the new Initialiser to use when generating the 
-	 * 		 			  initial population.
-	 */
-	public void setInitialiser(Initialiser<TYPE> initialiser) {
-		this.initialiser = initialiser;
+	public void setTerminationFitness(double terminationFitness) {
+		this.terminationFitness = terminationFitness;
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * Default implementation which accepts all crossovers.
 	 * 
-	 * <p>Defaults to {@link UniformPointCrossover} in GPAbstractModel.
-	 * 
-	 * @return {@inheritDoc}
+	 * @param parents The programs that were crossed over to create the given 
+	 * 				  children.
+	 * @param children The children that resulted from the parents being 
+	 * 				   crossed over.
+	 * @return True if the crossover operation should proceed, false if it is 
+	 * 		   rejected and should be retried with new parents.
 	 */
-	@Override
-	public Crossover<TYPE> getCrossover() {
-		return crossover;
+	public boolean acceptCrossover(CandidateProgram<TYPE>[] parents, 
+								   CandidateProgram<TYPE>[] children) {
+		return true;
 	}
 
 	/**
-	 * Overwrites the default crossover operator.
+	 * Default implementation which accepts all mutations.
 	 * 
-	 * @param crossover the crossover to set
+	 * @param parent The program before the mutation operation.
+	 * @param child  The program after the mutation operation has been carried 
+	 * 				 out.
+	 * @return True if the mutation operation should proceed, false if it is 
+	 * rejected and should be retried with a new parent.
 	 */
-	public void setCrossover(Crossover<TYPE> crossover) {
-		this.crossover = crossover;
+	public boolean acceptMutation(CandidateProgram<TYPE> parent, 
+								  CandidateProgram<TYPE> child) {
+		return true;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Defaults to {@link SubtreeMutation} in GPAbstractModel.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public Mutation<TYPE> getMutator() {
-		return mutator;
-	}
-
-	/**
-	 * Overwrites the default mutator used to perform mutation.
-	 * 
-	 * @param mutator the mutator to set.
-	 */
-	public void setMutator(Mutation<TYPE> mutator) {
-		this.mutator = mutator;
-	}
-	
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -738,33 +765,4 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * 				specified in the JavaDoc of the MutationStatField enum.
 	 */
 	public void mutationStats(Object[] stats) {}
-	
-	/**
-	 * Default implementation which accepts all crossovers.
-	 * 
-	 * @param parents The programs that were crossed over to create the given 
-	 * 				  children.
-	 * @param children The children that resulted from the parents being 
-	 * 				   crossed over.
-	 * @return True if the crossover operation should proceed, false if it is 
-	 * 		   rejected and should be retried with new parents.
-	 */
-	public boolean acceptCrossover(CandidateProgram<TYPE>[] parents, 
-								   CandidateProgram<TYPE>[] children) {
-		return true;
-	}
-	
-	/**
-	 * Default implementation which accepts all mutations.
-	 * 
-	 * @param parent The program before the mutation operation.
-	 * @param child  The program after the mutation operation has been carried 
-	 * 				 out.
-	 * @return True if the mutation operation should proceed, false if it is 
-	 * rejected and should be retried with a new parent.
-	 */
-	public boolean acceptMutation(CandidateProgram<TYPE> parent, 
-								  CandidateProgram<TYPE> child) {
-		return true;
-	}
 }

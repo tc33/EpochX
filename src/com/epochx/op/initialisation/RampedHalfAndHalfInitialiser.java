@@ -48,8 +48,9 @@ public class RampedHalfAndHalfInitialiser<TYPE> implements Initialiser<TYPE> {
 	private FullInitialiser<TYPE> full;
 
 	/**
+	 * Construct a RampedHalfAndHalfInitialiser.
+	 * 
 	 * @param model The model being assessed
-	 * @param semMod The semantic module for this model
 	 */
 	public RampedHalfAndHalfInitialiser(GPModel<TYPE> model) {
 		this.model = model;

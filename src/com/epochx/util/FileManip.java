@@ -56,8 +56,7 @@ public class FileManip {
     
     /**
      * Loads an input file
-     * @param cDir A File object that represents the directory where the file to be loaded is held.
-     * @param fName The name of the input file
+     * @param fileToLoad the input file to load.
      * @return An ArrayList<String> representing the input data.  Each element in the ArrayList represents a 
      * line of data from the input file
      */

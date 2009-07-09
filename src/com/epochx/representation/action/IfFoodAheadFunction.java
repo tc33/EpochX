@@ -57,8 +57,8 @@ public class IfFoodAheadFunction extends FunctionNode<Action> {
 	 * @param ant the ant which this function will be controlling.
 	 * @param landscape the landscape upon which the ant is roaming which will
 	 * be used to check for food locations.
-	 * @param ifStatement The first child node.
-	 * @param elseStatement The second child node.
+	 * @param child1 The first child node.
+	 * @param child2 The second child node.
 	 */
 	public IfFoodAheadFunction(Ant ant, AntLandscape landscape, Node<Action> child1, Node<Action> child2) {
 		super(child1, child2);

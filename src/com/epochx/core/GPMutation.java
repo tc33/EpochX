@@ -24,12 +24,6 @@ import com.epochx.op.selection.*;
 import com.epochx.representation.*;
 import com.epochx.stats.MutationStats;
 
-/* 
- * TODO Either this class or another new class needs to encapsulate all the 
- * details of a mutation event in the same way as GPRun exists after it has 
- * been executed as a record of how it progressed. The same thing will be 
- * needed for crossover too.
- */
 /**
  * This class performs the very simple task of linking together individual  
  * selection and mutation. The actual tasks of crossover and selection are 
@@ -40,10 +34,15 @@ import com.epochx.stats.MutationStats;
  * @see PointMutation
  * @see SubtreeMutation
  * @see ProgramSelector
- * @see TournamentSelector
  */
 public class GPMutation<TYPE> {
-
+	/* 
+	 * TODO Either this class or another new class needs to encapsulate all the 
+	 * details of a mutation event in the same way as GPRun exists after it has 
+	 * been executed as a record of how it progressed. The same thing will be 
+	 * needed for crossover too.
+	 */
+	
 	// The controlling model.
 	private GPModel<TYPE> model;
 	

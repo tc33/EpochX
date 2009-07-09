@@ -27,7 +27,7 @@ import com.epochx.representation.*;
  * <code>CandidatePrograms</code>. Crossover instances are used by the core 
  * GPCrossover class to perform a single crossover operation.
  * 
- * @see GPCrossover
+ * @see com.epochx.core.GPCrossover
  */
 public interface Crossover<TYPE> {
 

@@ -241,7 +241,7 @@ public class CandidateProgram<TYPE> implements Cloneable, Comparable<CandidatePr
 	 * improve performance if we can implement caching of fitness within a 
 	 * CandidateProgram.
 	 * 
-	 * @param the CandidateProgram to be compared.
+	 * @param o the CandidateProgram to be compared.
 	 * @return a negative integer, zero, or a positive integer if this program 
 	 * has a worse, equal or better fitness respectively. 
 	 */

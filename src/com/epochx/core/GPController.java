@@ -24,8 +24,8 @@ import com.epochx.stats.*;
 /**
  * The GPController class provides the method for executing multiple GP runs 
  * and so can be considered the key class for starting using EpochX. Even when 
- * only executing one GP run, this method should be used rather than directly 
- * calling <code>GPRun.run(GPModel)</code>.
+ * only executing one GP run, this method should be used rather than working  
+ * with <code>GPRun</code> directly.
  * 
  * <p>To evolve a solution with EpochX the <code>GPController.run(GPModel)</code> 
  * method should be called, passing in a GPModel which defines the control 

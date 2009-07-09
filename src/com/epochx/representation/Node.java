@@ -164,9 +164,9 @@ public abstract class Node<TYPE> implements Cloneable {
 	 * @param depth the specified depth of the nodes.
 	 * @return a List of all the nodes at the specified depth.
 	 */
-	public List<Node<TYPE>> getNodesAtDepth(int d) {
+	public List<Node<TYPE>> getNodesAtDepth(int depth) {
 		List<Node<TYPE>> nodes = new ArrayList<Node<TYPE>>();
-		fillNodesAtDepth(nodes, d, 0);
+		fillNodesAtDepth(nodes, depth, 0);
 		
 		return nodes;
 	}

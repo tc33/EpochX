@@ -19,6 +19,7 @@
  */
 package com.epochx.core.scorer;
 
+import com.epochx.core.scorer.SemanticScorer;
 import com.epochx.representation.*;
 import com.epochx.semantics.*;
 import net.sf.javabdd.*;
@@ -28,7 +29,7 @@ import net.sf.javabdd.*;
  * Boolean programs and return a value denoting relative difference. Zero would 
  * be the best score possible, i.e. denoting equivalence.
  */
-public class BooleanSemanticScorer {
+public class BooleanSemanticScorer extends SemanticScorer {
 	
 	private SemanticModule semanticModule;
 
@@ -37,27 +38,24 @@ public class BooleanSemanticScorer {
 	 * @param semanticModule The semantic module to be used
 	 */
 	public BooleanSemanticScorer(SemanticModule semanticModule) {
-		this.semanticModule = semanticModule;
+		super(semanticModule);
 	}
-	
-	/**
-	 * Calculates the percentage different between to Boolean representations
-	 * @param program Program being considered
-	 * @param target The target program (to set up target behaviour)
-	 * @return Percentage difference 0% is best score
+
+	/* (non-Javadoc)
+	 * @see com.epochx.core.scorer.SemanticScorer#doScore(com.epochx.representation.CandidateProgram, com.epochx.representation.CandidateProgram)
 	 */
-	public double doScore(CandidateProgram program, CandidateProgram target) {
-		semanticModule.start();
+	public double doScore(CandidateProgram program1, CandidateProgram program2) {
         double score;
-        BooleanRepresentation programRepresentation = (BooleanRepresentation) semanticModule.codeToBehaviour(program);
-        BooleanRepresentation targetRepresentation = (BooleanRepresentation) semanticModule.codeToBehaviour(target);
-        BDD thisRep = programRepresentation.getBDD();
-        BDD idealRep = targetRepresentation.getBDD();
-        BDD diffRep1 = thisRep.and(idealRep.not());
-        BDD diffRep2 = idealRep.and(thisRep.not());
+        getSemanticModule().start();
+        BooleanRepresentation program1Representation = (BooleanRepresentation) getSemanticModule().codeToBehaviour(program1);
+        BooleanRepresentation program2Representation = (BooleanRepresentation) getSemanticModule().codeToBehaviour(program2);
+        BDD rep1 = program1Representation.getBDD();
+        BDD rep2 = program2Representation.getBDD();
+        BDD diffRep1 = rep1.and(rep2.not());
+        BDD diffRep2 = rep2.and(rep1.not());
         BDD finalDiff = diffRep1.or(diffRep2);
         score = finalDiff.satCount() * 100;
-        semanticModule.stop();
+        getSemanticModule().stop();
         return score;
 	}
 }

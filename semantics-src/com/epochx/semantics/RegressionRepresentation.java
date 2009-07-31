@@ -112,8 +112,7 @@ public class RegressionRepresentation implements Representation, Cloneable {
 		
 		// if representation is zero
 		if(regressionRepresentation.size()==0) {
-			//TODO LAWRENCE - this code is wrong, a Variable IS a TerminalNode, it doesn't make sense to pass one to a TN's constructor. The compiler had to accept it because you didn't use generics.
-			CoefficientPowerFunction cvp = new CoefficientPowerFunction(new TerminalNode(0d), new TerminalNode(new Variable("X")), new TerminalNode(0d));
+			CoefficientPowerFunction cvp = new CoefficientPowerFunction(new TerminalNode<Double>(0d), new Variable<Double>("X"), new TerminalNode<Double>(0d));
 			regressionRepresentation.add(cvp);
 		}
 	}

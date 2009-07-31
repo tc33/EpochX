@@ -19,7 +19,13 @@
 
 package com.epochx.core.scorer;
 
+import java.util.ArrayList;
+
 import com.epochx.representation.CandidateProgram;
+import com.epochx.representation.TerminalNode;
+import com.epochx.representation.Variable;
+import com.epochx.representation.dbl.CoefficientPowerFunction;
+import com.epochx.semantics.RegressionRepresentation;
 import com.epochx.semantics.SemanticModule;
 
 public class RegressionSemanticScorer extends SemanticScorer {
@@ -30,8 +36,43 @@ public class RegressionSemanticScorer extends SemanticScorer {
 
 	@Override
 	public double doScore(CandidateProgram program1, CandidateProgram program2) {
-		// TODO Auto-generated method stub
-		return 0;
+		// generate representations
+		RegressionRepresentation rep1 = (RegressionRepresentation) getSemanticModule().codeToBehaviour(program1);
+		RegressionRepresentation rep2 = (RegressionRepresentation) getSemanticModule().codeToBehaviour(program2);
+		// pull out the CVP strings
+		ArrayList<CoefficientPowerFunction> cvps1 = rep1.getRegressionRepresentation();
+		ArrayList<CoefficientPowerFunction> cvps2 = rep2.getRegressionRepresentation();		
+		// work out which is longer
+		int length = 0;
+		if(cvps1.size()>=cvps2.size()) {
+			length = cvps1.size();
+		} else {
+			length = cvps2.size();
+		}		
+		// do difference calculation
+		double score = 0;
+		CoefficientPowerFunction blank = new CoefficientPowerFunction(new TerminalNode<Double>(0d), new Variable<Double>("X"), new TerminalNode<Double>(0d));
+		for(int i = 0; i<length; i++) {
+			CoefficientPowerFunction p1;
+			CoefficientPowerFunction p2;
+			// pull i th cvp from cvps1
+			if(i<cvps1.size()) {
+				p1 = cvps1.get(i);
+			} else {
+				p1 = blank;
+			}
+			// pull i th cvp from cvps2
+			if(i<cvps2.size()) {
+				p2 = cvps2.get(i);
+			} else {
+				p2 = blank;
+			}
+			double coefDiff = Math.abs(p1.getChild(0).evaluate() - p2.getChild(0).evaluate());
+			double powerDiff = Math.abs(p1.getChild(2).evaluate() - p2.getChild(2).evaluate());
+			score = score + coefDiff + powerDiff;
+		}
+		
+		return score;
 	}
 
 }

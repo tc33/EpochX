@@ -49,9 +49,11 @@ public class MainBehaviourAnalysis {
 		ArtificialAntSantaFe model = new ArtificialAntSantaFe();
 		String modelName = "AASF";
 		model.setInitialMaxDepth(4);
+		SemanticModule semMod = new AntSemanticModule(model.getTerminals(), model, model.getAnt(), model.getAntLandScape());
 		FullInitialiser initialiser = new FullInitialiser(model);
 		String genType = "FULL";
 		File place = new File("Results");
+		
 
 		// set up the different sizes of population to be analysed
 		ArrayList<Integer> sizes = new ArrayList<Integer>();
@@ -99,8 +101,6 @@ public class MainBehaviourAnalysis {
 
 			// do 100 runs of each type and pop size
 			for (int i = 0; i < 100; i++) {
-
-				SemanticModule semMod = model.getSemanticModule();
 
 				// generate population
 				newPop = (ArrayList<CandidateProgram>) initialiser.getInitialPopulation();

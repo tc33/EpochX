@@ -145,6 +145,10 @@ public class ArtificialAntSantaFe extends GPAbstractModel<Action> {
 		return ant;
 	}
 	
+	public AntLandscape getAntLandScape() {
+		return antLandscape;
+	}
+	
 	public static void main(String[] args) {
 		GPController.run(new ArtificialAntSantaFe());
 	}

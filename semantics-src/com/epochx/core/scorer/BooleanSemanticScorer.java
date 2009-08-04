@@ -17,11 +17,12 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.epochx.core.scorer;
+package com.epochxge.core.scorer;
 
-import com.epochx.core.scorer.SemanticScorer;
+import com.epochxge.core.scorer.SemanticScorer;
 import com.epochxge.representation.*;
-import com.epochx.semantics.*;
+import com.epochxge.semantics.*;
+
 import net.sf.javabdd.*;
 
 /**

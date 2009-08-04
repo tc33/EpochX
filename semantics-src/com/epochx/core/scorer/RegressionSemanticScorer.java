@@ -17,15 +17,15 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.epochx.core.scorer;
+package com.epochxge.core.scorer;
 
 import java.util.ArrayList;
 
 import com.epochxge.grammar.TerminalSymbol;
 import com.epochxge.representation.CandidateProgram;
-import com.epochx.semantics.CoefficientPowerFunction;
-import com.epochx.semantics.RegressionRepresentation;
-import com.epochx.semantics.SemanticModule;
+import com.epochxge.semantics.CoefficientPowerFunction;
+import com.epochxge.semantics.RegressionRepresentation;
+import com.epochxge.semantics.SemanticModule;
 
 public class RegressionSemanticScorer extends SemanticScorer {
 

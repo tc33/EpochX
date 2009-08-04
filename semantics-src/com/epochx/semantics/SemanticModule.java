@@ -18,7 +18,7 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.epochx.semantics;
+package com.epochxge.semantics;
 
 import com.epochxge.representation.*;
 

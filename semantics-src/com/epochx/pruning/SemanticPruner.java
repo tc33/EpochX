@@ -17,12 +17,12 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.epochx.pruning;
+package com.epochxge.pruning;
 
 import java.util.*;
 import com.epochxge.core.GEModel;
 import com.epochxge.representation.*;
-import com.epochx.semantics.*;
+import com.epochxge.semantics.*;
 
 /**
  * The semantic pruner class provides a method to reconstruct code in a reduced from which contains

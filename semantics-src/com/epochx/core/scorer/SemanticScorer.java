@@ -17,10 +17,10 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.epochxge.core.scorer;
+package com.epochx.core.scorer;
 
-import com.epochxge.representation.CandidateProgram;
-import com.epochxge.semantics.SemanticModule;
+import com.epochx.representation.CandidateProgram;
+import com.epochx.semantics.SemanticModule;
 
 /**
  * The Semantic Scorer allows users to compare to representations of 

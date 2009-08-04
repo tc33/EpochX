@@ -17,15 +17,16 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.epochxge.core.scorer;
+package com.epochx.core.scorer;
 
 import java.util.ArrayList;
 
-import com.epochxge.grammar.TerminalSymbol;
-import com.epochxge.representation.CandidateProgram;
-import com.epochxge.semantics.CoefficientPowerFunction;
-import com.epochxge.semantics.RegressionRepresentation;
-import com.epochxge.semantics.SemanticModule;
+import com.epochx.representation.CandidateProgram;
+import com.epochx.representation.TerminalNode;
+import com.epochx.representation.Variable;
+import com.epochx.representation.dbl.CoefficientPowerFunction;
+import com.epochx.semantics.RegressionRepresentation;
+import com.epochx.semantics.SemanticModule;
 
 public class RegressionSemanticScorer extends SemanticScorer {
 
@@ -50,7 +51,7 @@ public class RegressionSemanticScorer extends SemanticScorer {
 		}		
 		// do difference calculation
 		double score = 0;
-		CoefficientPowerFunction blank = new CoefficientPowerFunction();
+		CoefficientPowerFunction blank = new CoefficientPowerFunction(new TerminalNode<Double>(0d), new Variable<Double>("X"), new TerminalNode<Double>(0d));
 		for(int i = 0; i<length; i++) {
 			CoefficientPowerFunction p1;
 			CoefficientPowerFunction p2;
@@ -66,8 +67,8 @@ public class RegressionSemanticScorer extends SemanticScorer {
 			} else {
 				p2 = blank;
 			}
-			double coefDiff = Math.abs(Double.parseDouble(p1.getCoefficient().toString()) - Double.parseDouble(p2.getCoefficient().toString()));
-			double powerDiff = Math.abs(Double.parseDouble(p1.getPower().toString()) - Double.parseDouble(p2.getPower().toString()));
+			double coefDiff = Math.abs(p1.getChild(0).evaluate() - p2.getChild(0).evaluate());
+			double powerDiff = Math.abs(p1.getChild(2).evaluate() - p2.getChild(2).evaluate());
 			score = score + coefDiff + powerDiff;
 		}
 		

@@ -17,34 +17,34 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.epochxge.semantics;
+package com.epochx.semantics;
 
 import net.sf.javabdd.BDD;
 import net.sf.javabdd.BDDFactory;
 import java.util.*;
-import com.epochxge.core.*;
-import com.epochxge.grammar.Grammar;
-import com.epochxge.representation.*;
+import com.epochx.core.*;
+import com.epochx.representation.*;
+import com.epochx.representation.bool.*;
 
 /**
  * The Boolean Semantic Module provides semantic functionality 
  * for problems in the Boolean domain including reduction to 
  * canonical representations of behaviour
  */
-public class BooleanSemanticModule implements SemanticModule {
+public class BooleanSemanticModule implements SemanticModule<Boolean> {
 
 	private BDDFactory bddLink;
 	private List<BDD> bddList;
-	private Grammar grammar;
-	private GEModel model;
+	private List<TerminalNode<Boolean>> terminals;
+	private GPModel<Boolean> model;
 	
 	/**
 	 * Constructor for Boolean Semantic Module
 	 * @param list List of terminal nodes
 	 * @param model The GPModel object
 	 */
-	public BooleanSemanticModule(Grammar grammar, GEModel model) {
-		this.grammar = grammar;
+	public BooleanSemanticModule(List<TerminalNode<Boolean>> list, GPModel<Boolean> model) {
+		this.terminals = list;
 		this.model = model;
 	}
 
@@ -53,13 +53,11 @@ public class BooleanSemanticModule implements SemanticModule {
 	 */
 	@Override
 	public void start() {
-		// TODO pull out terminals and spawn size according to terminals
-		// TODO spawn bdds against grammar
 		// set up BDD analyser
-		this.bddLink = BDDFactory.init("cudd", 500, 500);
+		this.bddLink = BDDFactory.init("cudd", (terminals.size()*500), (terminals.size()*500));
 		// create all possible base variables
 		this.bddList = new ArrayList<BDD>();
-		for(int i = 0; i<grammar.size(); i++) {
+		for(int i = 0; i<terminals.size(); i++) {
 			bddList.add(bddLink.ithVar(i));
 		}
 	}
@@ -77,26 +75,26 @@ public class BooleanSemanticModule implements SemanticModule {
 	 * @see com.epochx.semantics.SemanticModule#codeToBehaviour(com.epochx.core.representation.CandidateProgram)
 	 */
 	@Override
-	public BooleanRepresentation codeToBehaviour(CandidateProgram program) {
+	public BooleanRepresentation codeToBehaviour(CandidateProgram<Boolean> program) {
 		// pull root node out of candidate program
 		Node<Boolean> rootNode = program.getRootNode();
 		// break up nodes and call respective bits recursively
 		if(rootNode instanceof TerminalNode) {
 			// A TERMINAL
-			int index = grammar.indexOf(rootNode);
+			int index = terminals.indexOf(rootNode);
 			return new BooleanRepresentation(bddList.get(index));
 		} else if(rootNode instanceof NotFunction) {
 			// NOT
 			// resolve child behaviour
-			BooleanRepresentation childBehaviour = this.codeToBehaviour(new CandidateProgram(rootNode.getChild(0), model));
+			BooleanRepresentation childBehaviour = this.codeToBehaviour(new CandidateProgram<Boolean>(rootNode.getChild(0), model));
 			BDD childBDD = childBehaviour.getBDD();
 			BDD result = childBDD.not();
 			return new BooleanRepresentation(result);
 		} else if(rootNode instanceof AndFunction) {            	
 			// AND
 			// resolve child behaviour
-			BooleanRepresentation childBehaviour1 = this.codeToBehaviour(new CandidateProgram(rootNode.getChild(0), model));
-			BooleanRepresentation childBehaviour2 = this.codeToBehaviour(new CandidateProgram(rootNode.getChild(1), model));
+			BooleanRepresentation childBehaviour1 = this.codeToBehaviour(new CandidateProgram<Boolean>(rootNode.getChild(0), model));
+			BooleanRepresentation childBehaviour2 = this.codeToBehaviour(new CandidateProgram<Boolean>(rootNode.getChild(1), model));
 			BDD childBDD1 = childBehaviour1.getBDD();
 			BDD childBDD2 = childBehaviour2.getBDD();
 			BDD result = childBDD1.and(childBDD2);
@@ -104,8 +102,8 @@ public class BooleanSemanticModule implements SemanticModule {
 		} else if(rootNode instanceof OrFunction) {
 			// OR
 			// resolve child behaviour
-			BooleanRepresentation childBehaviour1 = this.codeToBehaviour(new CandidateProgram(rootNode.getChild(0), model));
-			BooleanRepresentation childBehaviour2 = this.codeToBehaviour(new CandidateProgram(rootNode.getChild(1), model));
+			BooleanRepresentation childBehaviour1 = this.codeToBehaviour(new CandidateProgram<Boolean>(rootNode.getChild(0), model));
+			BooleanRepresentation childBehaviour2 = this.codeToBehaviour(new CandidateProgram<Boolean>(rootNode.getChild(1), model));
 			BDD childBDD1 = childBehaviour1.getBDD();
 			BDD childBDD2 = childBehaviour2.getBDD();
 			BDD result = childBDD1.or(childBDD2);
@@ -113,9 +111,9 @@ public class BooleanSemanticModule implements SemanticModule {
 		} else if(rootNode instanceof IfFunction) {
 			// IF
 			// resolve child behaviour
-			BooleanRepresentation childBehaviour1 = this.codeToBehaviour(new CandidateProgram(rootNode.getChild(0), model));
-			BooleanRepresentation childBehaviour2 = this.codeToBehaviour(new CandidateProgram(rootNode.getChild(1), model));
-			BooleanRepresentation childBehaviour3 = this.codeToBehaviour(new CandidateProgram(rootNode.getChild(2), model));
+			BooleanRepresentation childBehaviour1 = this.codeToBehaviour(new CandidateProgram<Boolean>(rootNode.getChild(0), model));
+			BooleanRepresentation childBehaviour2 = this.codeToBehaviour(new CandidateProgram<Boolean>(rootNode.getChild(1), model));
+			BooleanRepresentation childBehaviour3 = this.codeToBehaviour(new CandidateProgram<Boolean>(rootNode.getChild(2), model));
 			BDD childBDD1 = childBehaviour1.getBDD();
 			BDD childBDD2 = childBehaviour2.getBDD();
 			BDD childBDD3 = childBehaviour3.getBDD();
@@ -130,16 +128,16 @@ public class BooleanSemanticModule implements SemanticModule {
 	 * @see com.epochx.semantics.SemanticModule#behaviourToCode(com.epochx.semantics.Behaviour)
 	 */
 	@Override
-	public CandidateProgram behaviourToCode(Representation representation) {
+	public CandidateProgram<Boolean> behaviourToCode(Representation representation) {
 		// convert to boolean representation
 		BooleanRepresentation booleanRep = (BooleanRepresentation) representation;
 		BDD bddRep = booleanRep.getBDD();
-		Node rootNode = this.resolveTranslation(bddRep);		
-		CandidateProgram result = new CandidateProgram(rootNode, model);	
+		Node<Boolean> rootNode = this.resolveTranslation(bddRep);		
+		CandidateProgram<Boolean> result = new CandidateProgram<Boolean>(rootNode, model);	
 		return result;
 	}
 	
-	private Node resolveTranslation(BDD topBDD) {
+	private Node<Boolean> resolveTranslation(BDD topBDD) {
 		// check tautology
 		if(topBDD.isOne() || topBDD.isZero()) {
 			throw new IllegalArgumentException("CANNOT REVERSE TRANSLATE A CONSTANT");
@@ -150,38 +148,38 @@ public class BooleanSemanticModule implements SemanticModule {
 		// work out what's what and return node structure
 		if((!highChild.isOne() && !highChild.isZero()) && (!lowChild.isOne() && !lowChild.isZero())) {
 			// IF statement
-			TerminalNode<Boolean> tNode = (TerminalNode<Boolean>) grammar.get(topBDD.var()).clone();
+			TerminalNode<Boolean> tNode = (TerminalNode<Boolean>) terminals.get(topBDD.var()).clone();
 			IfFunction thisIF = new IfFunction(tNode, this.resolveTranslation(highChild), this.resolveTranslation(lowChild));
 			return thisIF;
 		} else if((!highChild.isOne() && !highChild.isZero()) && lowChild.isZero()) {
 			// AND statement
-			TerminalNode<Boolean> tNode = (TerminalNode<Boolean>) grammar.get(topBDD.var()).clone();
+			TerminalNode<Boolean> tNode = (TerminalNode<Boolean>) terminals.get(topBDD.var()).clone();
 			AndFunction thisAND = new AndFunction(tNode, this.resolveTranslation(highChild));
 			return thisAND;
 		} else if(highChild.isOne() && (!lowChild.isOne() && !lowChild.isZero())) {
 			// OR statement
-			TerminalNode<Boolean> tNode = (TerminalNode<Boolean>) grammar.get(topBDD.var()).clone();
+			TerminalNode<Boolean> tNode = (TerminalNode<Boolean>) terminals.get(topBDD.var()).clone();
 			OrFunction thisOR = new OrFunction(tNode, this.resolveTranslation(lowChild));
 			return thisOR;
 		} else if(highChild.isZero() && lowChild.isOne()) {
 			// NOT statement
-			TerminalNode<Boolean> tNode = (TerminalNode<Boolean>) grammar.get(topBDD.var()).clone();
+			TerminalNode<Boolean> tNode = (TerminalNode<Boolean>) terminals.get(topBDD.var()).clone();
 			NotFunction thisNOT = new NotFunction(tNode);
 			return thisNOT;
 		} else if(highChild.isOne() && lowChild.isZero()) {
 			// Variable
-			TerminalNode<Boolean> tNode = (TerminalNode<Boolean>) grammar.get(topBDD.var()).clone();
+			TerminalNode<Boolean> tNode = (TerminalNode<Boolean>) terminals.get(topBDD.var()).clone();
 			TerminalNode<Boolean> thisVar = tNode;
 			return thisVar;
 		} else if(highChild.isZero() && (!lowChild.isOne() && !lowChild.isZero())) {
 			// AND ( NOT...
-			TerminalNode<Boolean> tNode = (TerminalNode<Boolean>) grammar.get(topBDD.var()).clone();
+			TerminalNode<Boolean> tNode = (TerminalNode<Boolean>) terminals.get(topBDD.var()).clone();
 			NotFunction thisNOT = new NotFunction(tNode);
 			AndFunction thisAND = new AndFunction(thisNOT, this.resolveTranslation(lowChild));
 			return thisAND;
 		} else if((!highChild.isOne() && !highChild.isZero()) && lowChild.isOne()) {
 			// OR ( NOT...
-			TerminalNode<Boolean> tNode = (TerminalNode<Boolean>) grammar.get(topBDD.var()).clone();
+			TerminalNode<Boolean> tNode = (TerminalNode<Boolean>) terminals.get(topBDD.var()).clone();
 			NotFunction thisNOT = new NotFunction(tNode);
 			OrFunction thisOR = new OrFunction(thisNOT, this.resolveTranslation(highChild));
 			return thisOR;

@@ -17,7 +17,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.epochxge.semantics;
+package com.epochx.semantics;
 
 /**
  * The interface behaviour specifies two core methods required in all behaviours.

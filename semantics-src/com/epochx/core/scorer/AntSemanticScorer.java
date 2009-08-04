@@ -17,13 +17,13 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.epochxge.core.scorer;
+package com.epochx.core.scorer;
 
 import java.util.ArrayList;
 
-import com.epochxge.representation.CandidateProgram;
-import com.epochxge.semantics.AntRepresentation;
-import com.epochxge.semantics.SemanticModule;
+import com.epochx.representation.CandidateProgram;
+import com.epochx.semantics.AntRepresentation;
+import com.epochx.semantics.SemanticModule;
 
 /**
  * The Ant Semantic Scorer allows users to compare to representations of 

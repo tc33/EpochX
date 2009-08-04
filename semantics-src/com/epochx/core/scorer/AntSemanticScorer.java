@@ -21,7 +21,7 @@ package com.epochx.core.scorer;
 
 import java.util.ArrayList;
 
-import com.epochx.representation.CandidateProgram;
+import com.epochxge.representation.CandidateProgram;
 import com.epochx.semantics.AntRepresentation;
 import com.epochx.semantics.SemanticModule;
 

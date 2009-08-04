@@ -19,18 +19,18 @@
  */
 package com.epochx.semantics;
 
-import com.epochx.core.GPAbstractModel;
-import com.epochx.representation.*;
+import com.epochxge.core.GEAbstractModel;
+import com.epochxge.representation.*;
 
 /**
  *
  */
-public abstract class SemanticModel<TYPE> extends GPAbstractModel<TYPE> {
+public abstract class SemanticModel extends GEAbstractModel {
 
 	private boolean doStateCheckedCrossover;
 	private boolean doStateCheckedMutation;
 	
-	private SemanticModule<TYPE> semanticModule;
+	private SemanticModule semanticModule;
 	
 	public SemanticModel() {
 		doStateCheckedCrossover = false;
@@ -67,7 +67,7 @@ public abstract class SemanticModel<TYPE> extends GPAbstractModel<TYPE> {
 	 * Returns the semantic module associated with this problem
 	 * @return The associate Semantic module
 	 */
-	public SemanticModule<TYPE> getSemanticModule() {
+	public SemanticModule getSemanticModule() {
 		return this.semanticModule;
 	}
 	
@@ -75,7 +75,7 @@ public abstract class SemanticModel<TYPE> extends GPAbstractModel<TYPE> {
 	 * Sets the semantic module for this run
 	 * @param semMod The desired semantic module to use
 	 */
-	public void setSemanticModule(SemanticModule<TYPE> semMod) {
+	public void setSemanticModule(SemanticModule semMod) {
 		this.semanticModule = semMod;
 	}
 	
@@ -83,12 +83,12 @@ public abstract class SemanticModel<TYPE> extends GPAbstractModel<TYPE> {
 	 * Performs semantic equivalence check to determine whether the crossover 
 	 * should be accepted or not.
 	 */
-	public boolean acceptCrossover(CandidateProgram<TYPE>[] parents, 
-								   CandidateProgram<TYPE>[] children) {
+	public boolean acceptCrossover(CandidateProgram[] parents, 
+								   CandidateProgram[] children) {
 		boolean equal = false;
 		if (doStateCheckedCrossover) {
 			// pull out semantic module and check its not null
-			SemanticModule<TYPE> semMod = getSemanticModule();
+			SemanticModule semMod = getSemanticModule();
 			if(semMod==null) {
 				throw new IllegalArgumentException("Semantic module undefined for semantically driven crossover.");
 			}
@@ -119,12 +119,12 @@ public abstract class SemanticModel<TYPE> extends GPAbstractModel<TYPE> {
 	 * Performs semantic equivalence check to determine whether the mutation 
 	 * should be accepted or not.
 	 */
-	public boolean acceptMutation(CandidateProgram<TYPE> parent, 
-								  CandidateProgram<TYPE> child) {
+	public boolean acceptMutation(CandidateProgram parent, 
+								  CandidateProgram child) {
 		boolean equal = false;
 		if (doStateCheckedMutation) {
 			// pull out semantic module and check its not null
-			SemanticModule<TYPE> semMod = getSemanticModule();
+			SemanticModule semMod = getSemanticModule();
 			if(semMod==null) {
 				throw new IllegalArgumentException("Semantic module undefine for semantically driven mutation.");
 			}

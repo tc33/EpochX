@@ -20,7 +20,7 @@
 package com.epochx.core.scorer;
 
 import com.epochx.core.scorer.SemanticScorer;
-import com.epochx.representation.*;
+import com.epochxge.representation.*;
 import com.epochx.semantics.*;
 import net.sf.javabdd.*;
 

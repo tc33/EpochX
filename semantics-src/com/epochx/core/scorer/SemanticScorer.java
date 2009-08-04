@@ -19,7 +19,7 @@
 
 package com.epochx.core.scorer;
 
-import com.epochx.representation.CandidateProgram;
+import com.epochxge.representation.CandidateProgram;
 import com.epochx.semantics.SemanticModule;
 
 /**

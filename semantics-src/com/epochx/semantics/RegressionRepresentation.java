@@ -20,8 +20,7 @@
 package com.epochx.semantics;
 
 import java.util.*;
-import com.epochx.representation.*;
-import com.epochx.representation.dbl.*;
+import com.epochxge.representation.*;
 
 /**
  * Regression representation is for canonically modelling the behaviour of 

@@ -20,8 +20,8 @@
 package com.epochx.pruning;
 
 import java.util.*;
-import com.epochx.core.GPModel;
-import com.epochx.representation.*;
+import com.epochxge.core.GEModel;
+import com.epochxge.representation.*;
 import com.epochx.semantics.*;
 
 /**
@@ -36,7 +36,7 @@ public class SemanticPruner {
 	 * @param model The GP model in use
 	 * @param semMod The semantic module in use
 	 */
-	public SemanticPruner(List<CandidateProgram> population, GPModel model, SemanticModule semMod) {
+	public SemanticPruner(List<CandidateProgram> population, GEModel model, SemanticModule semMod) {
 		
 		// reduce to behaviour
 		List<Representation> behaviours = new ArrayList<Representation>(model.getPopulationSize());
@@ -48,11 +48,7 @@ public class SemanticPruner {
 		for(int i = 0; i<model.getPopulationSize(); i++) {
 			if(behaviours.get(i).isConstant()) {
 				// replace with random terminal
-				Random rGen = new Random();
-				int n = model.getTerminals().size();
-				Node terminal = (Node) model.getTerminals().get(rGen.nextInt(n));
-				CandidateProgram newProg = new CandidateProgram(terminal, model);
-				population.set(i, newProg);
+				// TODO generate random program (preferably terminal) 
 			} else {
 				// return to syntax
 				population.set(i, semMod.behaviourToCode(behaviours.get(i)));

@@ -63,7 +63,6 @@ public class FileManip {
     public static List<String> loadInput(File fileToLoad) {
         
         List<String> data = new ArrayList<String>();
-        String sL, nF;
         
         try {
             FileReader readFile = new FileReader(fileToLoad);

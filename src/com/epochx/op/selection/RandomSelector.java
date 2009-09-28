@@ -21,6 +21,7 @@ package com.epochx.op.selection;
 
 import java.util.*;
 
+import com.epochx.core.GPModel;
 import com.epochx.representation.*;
 
 /**
@@ -29,8 +30,15 @@ import com.epochx.representation.*;
  */
 public class RandomSelector<TYPE> implements ProgramSelector<TYPE>, PoolSelector<TYPE> {
 
+	// The current controlling model.
+	private GPModel<TYPE> model;
+	
 	// The current population from which programs should be chosen.
 	private List<CandidateProgram<TYPE>> pop;
+	
+	public RandomSelector(GPModel<TYPE> model) {
+		this.model = model;
+	}
 	
 	/**
 	 * This method should only be called by the GP system. It is used to 
@@ -50,7 +58,7 @@ public class RandomSelector<TYPE> implements ProgramSelector<TYPE>, PoolSelector
 	 */
 	@Override
 	public CandidateProgram<TYPE> getProgram() {		
-		return pop.get((int) Math.floor(Math.random()*pop.size()));
+		return pop.get(model.getRNG().nextInt(pop.size()));
 	}
 
 	/**
@@ -77,7 +85,7 @@ public class RandomSelector<TYPE> implements ProgramSelector<TYPE>, PoolSelector
 		// Construct our pool.
 		List<CandidateProgram<TYPE>> pool = new ArrayList<CandidateProgram<TYPE>>(poolSize);
 		for (int i=0; i<poolSize; i++) {
-			pool.add(pop.get((int) Math.floor(Math.random()*pop.size())));
+			pool.add(pop.get(model.getRNG().nextInt(pop.size())));
 		}
 		
 		return pool;

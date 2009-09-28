@@ -21,6 +21,7 @@ package com.epochx.op.selection;
 
 import java.util.*;
 
+import com.epochx.core.GPModel;
 import com.epochx.representation.*;
 
 /**
@@ -32,6 +33,9 @@ import com.epochx.representation.*;
  */
 public class TournamentSelector<TYPE> implements ProgramSelector<TYPE>, PoolSelector<TYPE> {
 
+	// The current controlling model.
+	private GPModel<TYPE> model;
+	
 	// The size of the tournment from which the best program will be taken.
 	private int tournamentSize;
 	
@@ -43,10 +47,11 @@ public class TournamentSelector<TYPE> implements ProgramSelector<TYPE>, PoolSele
 	 * 
 	 * @param tournamentSize the number of programs in each tournament.
 	 */
-	public TournamentSelector(int tournamentSize) {
+	public TournamentSelector(GPModel<TYPE> model, int tournamentSize) {
+		this.model = model;
 		this.tournamentSize = tournamentSize;
 		
-		randomSelector = new RandomSelector<TYPE>();
+		randomSelector = new RandomSelector<TYPE>(model);
 	}
 
 	/**
@@ -112,7 +117,7 @@ public class TournamentSelector<TYPE> implements ProgramSelector<TYPE>, PoolSele
 		
 		List<CandidateProgram<TYPE>> pool = new ArrayList<CandidateProgram<TYPE>>(poolSize);
 		
-		ProgramSelector<TYPE> programSelector = new TournamentSelector<TYPE>(tournamentSize);
+		ProgramSelector<TYPE> programSelector = new TournamentSelector<TYPE>(model, tournamentSize);
 		programSelector.onGenerationStart(pop);
 		
 		for (int i=0; i<poolSize; i++) {

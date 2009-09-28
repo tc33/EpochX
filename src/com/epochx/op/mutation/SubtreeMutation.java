@@ -78,7 +78,7 @@ public class SubtreeMutation<TYPE> implements Mutation<TYPE> {
 	public CandidateProgram<TYPE> mutate(CandidateProgram<TYPE> program) {
 		// Randonly choose a mutation point.
 		int length = program.getProgramLength();
-		int mutationPoint = (int) Math.floor(Math.random() * length);
+		int mutationPoint = model.getRNG().nextInt(length);
 		
 		// Grow a new subtree using the GrowInitialiser.
 		GrowInitialiser<TYPE> init = new GrowInitialiser<TYPE>(model);

@@ -21,6 +21,7 @@ package com.epochx.op.selection;
 
 import java.util.*;
 
+import com.epochx.core.GPModel;
 import com.epochx.representation.*;
 
 /**
@@ -30,6 +31,9 @@ import com.epochx.representation.*;
  * linear fashion with a gradient as given at construction.
  */
 public class LinearRankSelector<TYPE> implements ProgramSelector<TYPE>, PoolSelector<TYPE> {
+	
+	// The current controlling model.
+	private GPModel<TYPE> model;
 	
 	// The current population from which programs should be chosen.
 	private List<CandidateProgram<TYPE>> pop;
@@ -42,7 +46,8 @@ public class LinearRankSelector<TYPE> implements ProgramSelector<TYPE>, PoolSele
 	// The gradient of the linear probabilities.
 	private double gradient;
 	
-	public LinearRankSelector(double gradient) {
+	public LinearRankSelector(GPModel<TYPE> model, double gradient) {
+		this.model = model;
 		this.gradient = gradient;
 		
 		nMinus = 2/(gradient+1);
@@ -83,7 +88,7 @@ public class LinearRankSelector<TYPE> implements ProgramSelector<TYPE>, PoolSele
 	 */
 	@Override
 	public CandidateProgram<TYPE> getProgram() {
-		double ran = Math.random();
+		double ran = model.getRNG().nextDouble();
 		
 		for (int i=0; i<probabilities.length; i++) {
 			if (ran < probabilities[i]) {
@@ -119,7 +124,7 @@ public class LinearRankSelector<TYPE> implements ProgramSelector<TYPE>, PoolSele
 			return pop;
 		}
 		
-		ProgramSelector<TYPE> programSelector = new LinearRankSelector<TYPE>(gradient);
+		ProgramSelector<TYPE> programSelector = new LinearRankSelector<TYPE>(model, gradient);
 		programSelector.onGenerationStart(pop);
 		List<CandidateProgram<TYPE>> pool = new ArrayList<CandidateProgram<TYPE>>();
 		

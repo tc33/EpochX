@@ -86,9 +86,9 @@ public class ArtificialAntSantaFe extends GPAbstractModel<Action> {
 		setNoElites(50);
 		setInitialMaxDepth(6);
 		setMaxDepth(5);
-		setPoolSelector(new TournamentSelector<Action>(7));
-		setProgramSelector(new RandomSelector<Action>());
-		setCrossover(new UniformPointCrossover<Action>());
+		setPoolSelector(new TournamentSelector<Action>(this, 7));
+		setProgramSelector(new RandomSelector<Action>(this));
+		setCrossover(new UniformPointCrossover<Action>(this));
 		setInitialiser(new RampedHalfAndHalfInitialiser<Action>(this));
 	}
 	

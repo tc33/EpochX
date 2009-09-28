@@ -27,6 +27,7 @@ import com.epochx.op.mutation.*;
 import com.epochx.op.selection.*;
 import com.epochx.representation.*;
 import com.epochx.stats.*;
+import com.epochx.random.RandomNumberGenerator;
 
 /**
  * A GPModel defines all those parameters needed to control a run by GPRun. 
@@ -121,6 +122,14 @@ public interface GPModel<TYPE> {
 	 */
 	public List<Node<TYPE>> getSyntax();
 
+	/**
+	 * Returns the RandomNumberGenerator instance that should be used for the 
+	 * generation of random numbers throughout execution.
+	 *  
+	 * @return the RandomNumberGenerator to use for generating randomness.
+	 */
+	public RandomNumberGenerator getRNG();
+	
 	/**
 	 * Retrieves the number of runs that should be carried out using this model 
 	 * as the basis. Each call to GPRun.run() will be with the same model so 

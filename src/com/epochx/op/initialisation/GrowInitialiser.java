@@ -90,7 +90,7 @@ public class GrowInitialiser<TYPE> implements Initialiser<TYPE> {
 	 */
 	public Node<TYPE> buildGrowNodeTree(int maxDepth) {		
 		// Randomly choose a root node.
-		int randomIndex = (int) Math.floor(Math.random() * model.getSyntax().size());
+		int randomIndex = model.getRNG().nextInt(model.getSyntax().size());
 		Node<TYPE> root = (Node<TYPE>) model.getSyntax().get(randomIndex).clone();
         
 		// Populate the root node with grown children with maximum depth-1.
@@ -109,7 +109,7 @@ public class GrowInitialiser<TYPE> implements Initialiser<TYPE> {
 			if(currentDepth < maxDepth-1) {
 				// Not near the maximum depth yet, use functions OR terminals.
 				for(int i=0; i<arity; i++) {
-					int randomIndex = (int) Math.floor(Math.random() * model.getSyntax().size());
+					int randomIndex = model.getRNG().nextInt(model.getSyntax().size());
 					Node<TYPE> child = (Node<TYPE>) model.getSyntax().get(randomIndex).clone();
 
 					currentNode.setChild(i, child);
@@ -118,7 +118,7 @@ public class GrowInitialiser<TYPE> implements Initialiser<TYPE> {
 			} else {
 				// At maximum depth-1, fill children with terminals.
 				for(int i=0; i<arity; i++) {
-					int randomIndex = (int) Math.floor(Math.random() * model.getTerminals().size());
+					int randomIndex = model.getRNG().nextInt(model.getTerminals().size());
 					Node<TYPE> child = (Node<TYPE>) model.getTerminals().get(randomIndex).clone();
 					
 					currentNode.setChild(i, child);

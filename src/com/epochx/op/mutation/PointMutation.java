@@ -89,13 +89,13 @@ public class PointMutation<TYPE> implements Mutation<TYPE> {
 		int length = program.getProgramLength();
 		for (int i=0; i<length; i++) { 
 			// Only change pointProbability of the time.
-			if (Math.random() < pointProbability) {
+			if (model.getRNG().nextDouble() < pointProbability) {
 				// Get the arity of the ith node of the program.
 				Node<TYPE> node = (Node<TYPE>) program.getNthNode(i);
 				int arity = node.getArity();
 				
 				// Find a different function/terminal with same arity - start from random position.
-				int rand = (int) Math.floor(Math.random() * syntax.size());
+				int rand = model.getRNG().nextInt(syntax.size());
 				for (int j=0; j<syntax.size(); j++) {
 					int index = (j + rand) % syntax.size();
 					Node<TYPE> n = syntax.get(index);

@@ -93,11 +93,11 @@ public class FullInitialiser<TYPE> implements Initialiser<TYPE> {
 		Node<TYPE> root;
 		if (depth == 0) {
 			// Randomly choose a terminal node as our root.
-			int randomIndex = (int) Math.floor(Math.random() * model.getTerminals().size());
+			int randomIndex = model.getRNG().nextInt(model.getTerminals().size());
 			root = (Node<TYPE>) model.getTerminals().get(randomIndex).clone();
 		} else {
 			// Randomly choose a root function node.
-	        int randomIndex = (int) Math.floor(Math.random() * model.getFunctions().size());
+	        int randomIndex = model.getRNG().nextInt(model.getFunctions().size());
 	        root = (Node<TYPE>) model.getFunctions().get(randomIndex).clone();
 	        
 	        // Populate the root node with full children of depth-1.
@@ -117,7 +117,7 @@ public class FullInitialiser<TYPE> implements Initialiser<TYPE> {
 		if(currentDepth<maxDepth-1) {
 			// Not near the maximum depth yet, fill children with functions only.
 			for(int i = 0; i<arity; i++) {
-				int randomIndex = (int) Math.floor(Math.random() * model.getFunctions().size());
+				int randomIndex = model.getRNG().nextInt(model.getFunctions().size());
 				Node<TYPE> child = (Node<TYPE>) model.getFunctions().get(randomIndex).clone();
 
 				currentNode.setChild(i, child);
@@ -126,7 +126,7 @@ public class FullInitialiser<TYPE> implements Initialiser<TYPE> {
 		} else {
 			// At maximum depth-1, fill children with terminals.
 			for(int i = 0; i<arity; i++) {
-				int randomIndex = (int) Math.floor(Math.random() * model.getTerminals().size());
+				int randomIndex = model.getRNG().nextInt(model.getTerminals().size());
 				Node<TYPE> child = (Node<TYPE>) model.getTerminals().get(randomIndex).clone();
 
 				currentNode.setChild(i, child);

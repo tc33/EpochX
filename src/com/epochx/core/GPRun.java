@@ -142,7 +142,7 @@ public class GPRun<TYPE> {
 			// Fill the population by performing genetic operations.
 			while(nextPop.size() < model.getPopulationSize()) {
 				// Pick a genetic operator using Pr, Pc and Pm.
-				double random = Math.random();
+				double random = model.getRNG().nextDouble();
 				double pm = model.getMutationProbability();
 				double pe = model.getCrossoverProbability();
 				
@@ -162,7 +162,8 @@ public class GPRun<TYPE> {
 					mutationReversions += mutation.getRevertedCount();
 				} else {
 					// Perform reproduction - Should this use clone?
-					nextPop.add(pool.get((int) Math.floor(Math.random()*pool.size())));
+					
+					nextPop.add(pool.get(model.getRNG().nextInt(pool.size())));
 				}
 			}
 			

@@ -19,6 +19,7 @@
  */
 package com.epochx.op.crossover;
 
+import com.epochx.core.GPModel;
 import com.epochx.representation.*;
 
 /**
@@ -33,16 +34,20 @@ import com.epochx.representation.*;
  */
 public class KozaCrossover<TYPE> implements Crossover<TYPE> {
 
+	// The current controlling model.
+	private GPModel<TYPE> model;
+	
 	// The probability of choosing a function node as the swap point.
 	private double functionSwapProbability;
-
+	
 	/**
 	 * Construct an instance of Koza crossover.
 	 * 
 	 * @param functionSwapProbability The probability of crossover operations 
 	 * 								  choosing a function node as the swap point.
 	 */
-	public KozaCrossover(double functionSwapProbability) {
+	public KozaCrossover(GPModel<TYPE> model, double functionSwapProbability) {
+		this.model = model;
 		this.functionSwapProbability = functionSwapProbability;
 	}
 	
@@ -50,8 +55,8 @@ public class KozaCrossover<TYPE> implements Crossover<TYPE> {
 	 * Default constructor for Koza standard crossover. The probability of a 
 	 * function node being selected as the swap point will default to 90%.
 	 */
-	public KozaCrossover() {
-		this(0.9);
+	public KozaCrossover(GPModel<TYPE> model) {
+		this(model, 0.9);
 	}
 	
 	/**
@@ -93,15 +98,15 @@ public class KozaCrossover<TYPE> implements Crossover<TYPE> {
 		int noFunctions = length - noTerminals;
 		
 		// Randomly decide whether to use a function or terminal node point.
-		if ((noFunctions > 0) && (Math.random() < functionSwapProbability)) {
+		if ((noFunctions > 0) && (model.getRNG().nextDouble() < functionSwapProbability)) {
 			// Randomly select a function node from the function set.
-			int f = (int) Math.floor(Math.random()*noFunctions);
+			int f = model.getRNG().nextInt(noFunctions);
 			int nthFunctionNode = getNthFunctionNode(f, program);
 			
 			return nthFunctionNode;
 		} else {
 			// Randomly select a terminal node from the terminal set.
-			int t = (int) Math.floor(Math.random()*noTerminals);
+			int t =  model.getRNG().nextInt(noTerminals);
 			int nthTerminalNode = getNthTerminalNode(t, program);
 			
 			return nthTerminalNode;

@@ -27,6 +27,8 @@ import com.epochx.op.mutation.*;
 import com.epochx.op.selection.*;
 import com.epochx.representation.*;
 import com.epochx.stats.*;
+import com.epochx.random.RandomNumberGenerator;
+import com.epochx.random.MersenneTwisterFast;
 
 /**
  * GPAbstractModel is a partial implementation of GPModel which provides 
@@ -51,9 +53,9 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	private Initialiser<TYPE> initialiser;
 	private Crossover<TYPE> crossover;
 	private Mutation<TYPE> mutator;
-	
 	private PoolSelector<TYPE> poolSelector;
 	private ProgramSelector<TYPE> programSelector;
+	private RandomNumberGenerator randomNumberGenerator;
 
 	private int noRuns;
 	private int noGenerations;
@@ -107,11 +109,12 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 		mutationStatListener = this;
 		
 		// GP components.
-		programSelector = new RandomSelector<TYPE>();
-		poolSelector = new TournamentSelector<TYPE>(3);
+		programSelector = new RandomSelector<TYPE>(this);
+		poolSelector = new TournamentSelector<TYPE>(this, 3);
 		initialiser = new FullInitialiser<TYPE>(this);
-		crossover = new UniformPointCrossover<TYPE>();
+		crossover = new UniformPointCrossover<TYPE>(this);
 		mutator = new SubtreeMutation<TYPE>(this);
+		randomNumberGenerator = new MersenneTwisterFast();
 	}
 
 	/**
@@ -237,6 +240,29 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 		return syntax;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to JavaRandom in GEAbstractModel.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public RandomNumberGenerator getRNG() {
+		return randomNumberGenerator;
+	}
+	
+	/**
+	 * Overwrites the default random number generator used to generate random 
+	 * numbers to control behaviour throughout a run.
+	 * 
+	 * @param rng the random number generator to be used any time random 
+	 * 				behaviour is required.
+	 */
+	public void setRNG(RandomNumberGenerator rng) {
+		this.randomNumberGenerator = rng;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 * 

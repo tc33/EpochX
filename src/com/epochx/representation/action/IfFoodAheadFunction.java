@@ -19,8 +19,6 @@
  */
 package com.epochx.representation.action;
 
-import java.awt.*;
-
 import com.epochx.action.*;
 import com.epochx.ant.*;
 import com.epochx.representation.*;
@@ -81,10 +79,7 @@ public class IfFoodAheadFunction extends FunctionNode<Action> {
 	 */
 	@Override
 	public Action evaluate() {
-		// Find out the location we want to check.
-		Point ahead = landscape.getNextLocation(ant.getLocation(), ant.getOrientation());
-		
-		if (landscape.isFoodLocation(ahead)) {
+		if (ant.isFoodAhead()) {
 			((Action) getChild(0).evaluate()).execute();
 		} else {
 			((Action) getChild(1).evaluate()).execute();

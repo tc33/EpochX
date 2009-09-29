@@ -47,7 +47,7 @@ public class PointMutation<TYPE> implements Mutation<TYPE> {
 	 * is used instead.
 	 * 
 	 * @param model The current controlling model. Parameters such as full 
-	 * syntax will be obtained from this.
+	 * 				syntax will be obtained from this.
 	 */
 	public PointMutation(GPModel<TYPE> model) {
 		this(model, 0.01);

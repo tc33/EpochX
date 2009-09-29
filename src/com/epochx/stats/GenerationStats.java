@@ -150,22 +150,22 @@ public class GenerationStats<TYPE> {
 			
 			// Average depth. StDev needs the average so calc it here to avoid duplication.
 			if (stats.containsKey(GenerationStatField.DEPTH_AVE)) {
-				stats.put(GenerationStatField.DEPTH_AVE, Double.toString(ave(depths)));
+				stats.put(GenerationStatField.DEPTH_AVE, new Double(ave(depths)));
 			}
 			
 			// Standard deviation of depth.
 			if (stats.containsKey(GenerationStatField.DEPTH_STDEV)) {
-				stats.put(GenerationStatField.DEPTH_STDEV, Double.toString(stdev(depths)));
+				stats.put(GenerationStatField.DEPTH_STDEV, new Double(stdev(depths)));
 			}
 			
 			// Maximum depth.
 			if (stats.containsKey(GenerationStatField.DEPTH_MAX)) {
-				stats.put(GenerationStatField.DEPTH_MAX, Double.toString(max(depths)));
+				stats.put(GenerationStatField.DEPTH_MAX, new Double(max(depths)));
 			}
 			
 			// Minimum depth.
 			if (stats.containsKey(GenerationStatField.DEPTH_MIN)) {
-				stats.put(GenerationStatField.DEPTH_MIN, Double.toString(min(depths)));
+				stats.put(GenerationStatField.DEPTH_MIN, new Double(min(depths)));
 			}
 			
 			// Average number of nodes per depth.
@@ -214,22 +214,22 @@ public class GenerationStats<TYPE> {
 			
 			// Average length.
 			if (stats.containsKey(GenerationStatField.LENGTH_AVE)) {
-				stats.put(GenerationStatField.LENGTH_AVE, Double.toString(ave(lengths)));
+				stats.put(GenerationStatField.LENGTH_AVE, new Double(ave(lengths)));
 			}
 			
 			// Standard deviation of length.
 			if (stats.containsKey(GenerationStatField.LENGTH_STDEV)) {
-				stats.put(GenerationStatField.LENGTH_STDEV, Double.toString(stdev(lengths)));
+				stats.put(GenerationStatField.LENGTH_STDEV, new Double(stdev(lengths)));
 			}
 			
 			// Maximum length.
 			if (stats.containsKey(GenerationStatField.LENGTH_MAX)) {
-				stats.put(GenerationStatField.LENGTH_MAX, Double.toString(max(lengths)));
+				stats.put(GenerationStatField.LENGTH_MAX, new Double(max(lengths)));
 			}
 			
 			// Minimum length.
 			if (stats.containsKey(GenerationStatField.LENGTH_MIN)) {
-				stats.put(GenerationStatField.LENGTH_MIN, Double.toString(min(lengths)));
+				stats.put(GenerationStatField.LENGTH_MIN, new Double(min(lengths)));
 			}
 		}
 	}
@@ -247,22 +247,22 @@ public class GenerationStats<TYPE> {
 			
 			// Average no terminals.
 			if (stats.containsKey(GenerationStatField.NO_TERMINALS_AVE)) {
-				stats.put(GenerationStatField.NO_TERMINALS_AVE, Double.toString(ave(noTerminals)));
+				stats.put(GenerationStatField.NO_TERMINALS_AVE, new Double(ave(noTerminals)));
 			}
 			
 			// Standard deviation of no terminals.
 			if (stats.containsKey(GenerationStatField.NO_TERMINALS_STDEV)) {
-				stats.put(GenerationStatField.NO_TERMINALS_STDEV, Double.toString(stdev(noTerminals)));
+				stats.put(GenerationStatField.NO_TERMINALS_STDEV, new Double(stdev(noTerminals)));
 			}
 			
 			// Maximum no terminals.
 			if (stats.containsKey(GenerationStatField.NO_TERMINALS_MAX)) {
-				stats.put(GenerationStatField.NO_TERMINALS_MAX, Double.toString(max(noTerminals)));
+				stats.put(GenerationStatField.NO_TERMINALS_MAX, new Double(max(noTerminals)));
 			}
 			
 			// Minimum no terminals.
 			if (stats.containsKey(GenerationStatField.NO_TERMINALS_MIN)) {
-				stats.put(GenerationStatField.NO_TERMINALS_MIN, Double.toString(min(noTerminals)));
+				stats.put(GenerationStatField.NO_TERMINALS_MIN, new Double(min(noTerminals)));
 			}
 		}
 	}
@@ -280,22 +280,22 @@ public class GenerationStats<TYPE> {
 			
 			// Average no distinct terminals.
 			if (stats.containsKey(GenerationStatField.NO_DISTINCT_TERMINALS_AVE)) {
-				stats.put(GenerationStatField.NO_DISTINCT_TERMINALS_AVE, Double.toString(ave(noDTerminals)));
+				stats.put(GenerationStatField.NO_DISTINCT_TERMINALS_AVE, new Double(ave(noDTerminals)));
 			}
 			
 			// Standard deviation of no distinct terminals.
 			if (stats.containsKey(GenerationStatField.NO_DISTINCT_TERMINALS_STDEV)) {
-				stats.put(GenerationStatField.NO_DISTINCT_TERMINALS_STDEV, Double.toString(stdev(noDTerminals)));
+				stats.put(GenerationStatField.NO_DISTINCT_TERMINALS_STDEV, new Double(stdev(noDTerminals)));
 			}
 			
 			// Maximum no distinct terminals.
 			if (stats.containsKey(GenerationStatField.NO_DISTINCT_TERMINALS_MAX)) {
-				stats.put(GenerationStatField.NO_DISTINCT_TERMINALS_MAX, Double.toString(max(noDTerminals)));
+				stats.put(GenerationStatField.NO_DISTINCT_TERMINALS_MAX, new Double(max(noDTerminals)));
 			}
 			
 			// Minimum no distinct terminals.
 			if (stats.containsKey(GenerationStatField.NO_DISTINCT_TERMINALS_MIN)) {
-				stats.put(GenerationStatField.NO_DISTINCT_TERMINALS_MIN, Double.toString(min(noDTerminals)));
+				stats.put(GenerationStatField.NO_DISTINCT_TERMINALS_MIN, new Double(min(noDTerminals)));
 			}
 		}
 	}
@@ -313,22 +313,22 @@ public class GenerationStats<TYPE> {
 			
 			// Average no functions.
 			if (stats.containsKey(GenerationStatField.NO_FUNCTIONS_AVE)) {
-				stats.put(GenerationStatField.NO_FUNCTIONS_AVE, Double.toString(ave(noFunctions)));
+				stats.put(GenerationStatField.NO_FUNCTIONS_AVE, new Double(ave(noFunctions)));
 			}
 			
 			// Standard deviation of no functions.
 			if (stats.containsKey(GenerationStatField.NO_FUNCTIONS_STDEV)) {
-				stats.put(GenerationStatField.NO_FUNCTIONS_STDEV, Double.toString(stdev(noFunctions)));
+				stats.put(GenerationStatField.NO_FUNCTIONS_STDEV, new Double(stdev(noFunctions)));
 			}
 			
 			// Maximum no functions.
 			if (stats.containsKey(GenerationStatField.NO_FUNCTIONS_MAX)) {
-				stats.put(GenerationStatField.NO_FUNCTIONS_MAX, Double.toString(max(noFunctions)));
+				stats.put(GenerationStatField.NO_FUNCTIONS_MAX, new Double(max(noFunctions)));
 			}
 			
 			// Minimum no functions.
 			if (stats.containsKey(GenerationStatField.NO_FUNCTIONS_MIN)) {
-				stats.put(GenerationStatField.NO_FUNCTIONS_MIN, Double.toString(min(noFunctions)));
+				stats.put(GenerationStatField.NO_FUNCTIONS_MIN, new Double(min(noFunctions)));
 			}
 		}
 	}
@@ -346,22 +346,22 @@ public class GenerationStats<TYPE> {
 			
 			// Average no distinct functions.
 			if (stats.containsKey(GenerationStatField.NO_DISTINCT_FUNCTIONS_AVE)) {
-				stats.put(GenerationStatField.NO_DISTINCT_FUNCTIONS_AVE, Double.toString(ave(noDFunctions)));
+				stats.put(GenerationStatField.NO_DISTINCT_FUNCTIONS_AVE, new Double(ave(noDFunctions)));
 			}
 			
 			// Standard deviation of no distinct functions.
 			if (stats.containsKey(GenerationStatField.NO_DISTINCT_FUNCTIONS_STDEV)) {
-				stats.put(GenerationStatField.NO_DISTINCT_FUNCTIONS_STDEV, Double.toString(stdev(noDFunctions)));
+				stats.put(GenerationStatField.NO_DISTINCT_FUNCTIONS_STDEV, new Double(stdev(noDFunctions)));
 			}
 			
 			// Maximum no distinct functions.
 			if (stats.containsKey(GenerationStatField.NO_DISTINCT_FUNCTIONS_MAX)) {
-				stats.put(GenerationStatField.NO_DISTINCT_FUNCTIONS_MAX, Double.toString(max(noDFunctions)));
+				stats.put(GenerationStatField.NO_DISTINCT_FUNCTIONS_MAX, new Double(max(noDFunctions)));
 			}
 			
 			// Minimum no distinct functions.
 			if (stats.containsKey(GenerationStatField.NO_DISTINCT_FUNCTIONS_MIN)) {
-				stats.put(GenerationStatField.NO_DISTINCT_FUNCTIONS_MIN, Double.toString(min(noDFunctions)));
+				stats.put(GenerationStatField.NO_DISTINCT_FUNCTIONS_MIN, new Double(min(noDFunctions)));
 			}
 		}
 	}
@@ -386,29 +386,29 @@ public class GenerationStats<TYPE> {
 			
 			// Average fitness.
 			if (stats.containsKey(GenerationStatField.FITNESS_AVE)) {
-				stats.put(GenerationStatField.FITNESS_AVE, Double.toString(ave(fitnesses)));
+				stats.put(GenerationStatField.FITNESS_AVE, new Double(ave(fitnesses)));
 			}
 			
 			// Standard deviation of fitness.
 			if (stats.containsKey(GenerationStatField.FITNESS_STDEV)) {
 				stdev = stdev(fitnesses);
-				stats.put(GenerationStatField.FITNESS_STDEV, Double.toString(stdev));
+				stats.put(GenerationStatField.FITNESS_STDEV, new Double(stdev));
 			}
 			
 			// Maximum fitness.
 			if (stats.containsKey(GenerationStatField.FITNESS_MAX)) {
 				maxIndex = maxIndex(fitnesses);
-				stats.put(GenerationStatField.FITNESS_MAX, Double.toString(fitnesses[maxIndex]));
+				stats.put(GenerationStatField.FITNESS_MAX, new Double(fitnesses[maxIndex]));
 			}
 			
 			// Minimum fitness.
 			if (stats.containsKey(GenerationStatField.FITNESS_MIN)) {
-				stats.put(GenerationStatField.FITNESS_MIN, Double.toString(min(fitnesses)));
+				stats.put(GenerationStatField.FITNESS_MIN, new Double(min(fitnesses)));
 			}
 			
 			// Median fitness.
 			if (stats.containsKey(GenerationStatField.FITNESS_MEDIAN)) {
-				stats.put(GenerationStatField.FITNESS_MEDIAN, Double.toString(median(fitnesses)));
+				stats.put(GenerationStatField.FITNESS_MEDIAN, new Double(median(fitnesses)));
 			}
 			
 			// Best program.
@@ -427,7 +427,7 @@ public class GenerationStats<TYPE> {
 				}
 				double ci = 1.96 * (stdev/Math.sqrt(fitnesses.length));
 				
-				stats.put(GenerationStatField.FITNESS_CI_95, Double.toString(ci));
+				stats.put(GenerationStatField.FITNESS_CI_95, new Double(ci));
 			}
 		}
 	}

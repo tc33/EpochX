@@ -263,6 +263,19 @@ public class Ant {
     }
     
     /**
+     * Tests whether the next location for the ant, in its current orientation 
+     * on its current landscape, contains a food pellet or not.
+     * 
+     * @return true if the position in front of the ant contains a food pellet 
+     * and false otherwise.
+     */
+    public boolean isFoodAhead() {
+		Point ahead = landscape.getNextLocation(getLocation(), getOrientation());
+		
+		return landscape.isFoodLocation(ahead);
+    }
+    
+    /**
      * Skipping will cause the ant to fill one timestep without moving in its 
      * ant landscape. This is required for the skip algorithm to prevent the 
      * ant falling into dead ends.

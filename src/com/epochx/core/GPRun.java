@@ -168,7 +168,7 @@ public class GPRun<TYPE> {
 			}
 			
 			// Update new best program.
-			for (CandidateProgram<TYPE> p: pop) {
+			for (CandidateProgram<TYPE> p: nextPop) {
 				double fitness = model.getFitness(p);
 				if (fitness < bestFitness) {
 					bestFitness = fitness;

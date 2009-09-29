@@ -45,10 +45,6 @@ public class BoolUtils {
         return bools;
     }
     
-    public static void main(String[] args) {
-		generateBoolSequences(31);
-	}
-    
     /**
      * Generates an array of boolean arrays of all possible combinations of 
      * true/false values for the given number of elements. 

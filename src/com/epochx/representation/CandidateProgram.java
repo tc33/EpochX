@@ -31,7 +31,6 @@ import com.epochx.core.*;
  * which will trigger an evaluation of each <code>Node</code> and their child 
  * nodes recursively down the tree. As well as the program tree itself, each 
  * CandidateProgram allows the retrieval of meta-data about the program.
- * 
  */
 public class CandidateProgram<TYPE> implements Cloneable, Comparable<CandidateProgram<TYPE>> {
 	

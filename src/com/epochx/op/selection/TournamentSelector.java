@@ -28,7 +28,7 @@ import com.epochx.representation.*;
  * Tournament selection provides both program and pool selection. In tournament 
  * selection, x programs are randomly selected from the population to enter a 
  * 'tournament'. The program with the best fitness in the tournament then 
- * becomes the selected program. x, the tournament size is given as an argument 
+ * becomes the selected program. The tournament size, x, is given as an argument 
  * to the constructor.
  */
 public class TournamentSelector<TYPE> implements ProgramSelector<TYPE>, PoolSelector<TYPE> {

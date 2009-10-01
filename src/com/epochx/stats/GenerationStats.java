@@ -31,11 +31,17 @@ public class GenerationStats<TYPE> {
 	// The objects listening for generation stats.
 	public List<GenerationStatListener> listeners;
 	
+	private long previousGenTime;
+	
 	/**
 	 * Constructor.
 	 */
 	public GenerationStats() {
 		listeners = new ArrayList<GenerationStatListener>();
+	}
+	
+	public void setStartTime() {
+		previousGenTime = System.nanoTime();
 	}
 	
 	public void addGenerationStatListener(GenerationStatListener listener) {
@@ -48,7 +54,6 @@ public class GenerationStats<TYPE> {
 	
 	public void addGen(List<CandidateProgram<TYPE>> pop, 
 						int gen, 
-						long runtime, 
 						int revertedCrossovers, 
 						int revertedMutations) {
 		// Set of all the fields we need to calculate values for.
@@ -75,6 +80,14 @@ public class GenerationStats<TYPE> {
 					stats.put(sf, "");
 			}
 		}
+		
+		// Calculate the time that has lapsed since the last generation.
+		long runtime = 0;
+		long currentTime = System.nanoTime();
+		if (previousGenTime != -1) {
+			runtime = currentTime - previousGenTime;
+		}
+		previousGenTime = currentTime;
 		
 		// Calculate all the stats that our listeners need.
 		gatherStats(stats, pop, runtime, revertedCrossovers, revertedMutations);

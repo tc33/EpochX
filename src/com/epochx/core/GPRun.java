@@ -109,17 +109,17 @@ public class GPRun<TYPE> {
 	 * or pool selection in use.
 	 */
 	private void run() {
+		// Tell our generation stats to record the start time.
+		genStats.setStartTime();
+		
 		// Perform initialisation.
 		List<CandidateProgram<TYPE>> pop = model.getInitialiser().getInitialPopulation();
 		
 		// Generate generation stats for the inital population.
-		genStats.addGen(pop, 0, 0, 0, 0);
+		genStats.addGen(pop, 0, 0, 0);
 		
 		// Execute each generation.
-		genloop: for (int i=1; i<=model.getNoGenerations(); i++) {
-			// Record the time we start this generation.
-			long genStartTime = System.nanoTime();
-			
+		genloop: for (int i=1; i<=model.getNoGenerations(); i++) {			
 			// Create next population to fill.
 			int popSize = model.getPopulationSize();
 			List<CandidateProgram<TYPE>> nextPop = new ArrayList<CandidateProgram<TYPE>>(popSize);
@@ -173,15 +173,15 @@ public class GPRun<TYPE> {
 				if (fitness < bestFitness) {
 					bestFitness = fitness;
 					bestProgram = p;
-					if (bestFitness <= model.getTerminationFitness()) {
-						break genloop;
-					}
 				}
 			}
 			
 			// Generate stats for the current population.
-			long runtime = System.nanoTime() - genStartTime;
-			genStats.addGen(nextPop, i, runtime, crossoverReversions, mutationReversions);
+			genStats.addGen(nextPop, i, crossoverReversions, mutationReversions);
+			
+			if (bestFitness <= model.getTerminationFitness()) {
+				break genloop;
+			}
 			
 			pop = nextPop;
 		}

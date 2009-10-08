@@ -360,4 +360,13 @@ public interface GPModel<TYPE> {
 	 * @return A MutationStatListener to handle mutation statistics.
 	 */
 	public MutationStatListener getMutationStatListener();
+	
+	/**
+	 * Get a listener which will be informed of each stage of a GP run's life 
+	 * cycle, and given the facility to confirm or modify each step.
+	 * 
+	 * @return A LifeCycleListener to confirm or modify each stage of the run's
+	 * life cycle.
+	 */
+	public LifeCycleListener<TYPE> getLifeCycleListener();
 }

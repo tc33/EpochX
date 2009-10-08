@@ -48,7 +48,8 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 													   GenerationStatListener, 
 													   RunStatListener, 
 													   CrossoverStatListener, 
-													   MutationStatListener {
+													   MutationStatListener,
+													   LifeCycleListener<TYPE> {
 
 	private Initialiser<TYPE> initialiser;
 	private Crossover<TYPE> crossover;
@@ -79,6 +80,8 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	private CrossoverStatListener crossoverStatListener;
 	private MutationStatListener mutationStatListener;
 	
+	private LifeCycleListener<TYPE> lifeCycleListener;
+	
 	/**
 	 * Construct a GPModel with a set of sensible defaults. See the appropriate
 	 * accessor method for information of each default value.
@@ -107,6 +110,9 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 		generationStatListener = this;
 		crossoverStatListener = this;
 		mutationStatListener = this;
+		
+		// Life cycle listener.
+		lifeCycleListener = this;
 		
 		// GP components.
 		programSelector = new RandomSelector<TYPE>(this);
@@ -791,4 +797,119 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * 				specified in the JavaDoc of the MutationStatField enum.
 	 */
 	public void mutationStats(Object[] stats) {}
+
+	/**
+	 * Default implementation returns this model as the life cycle listener. By
+	 * default all the listener methods will confirm the events though. 
+	 * Override the individual life cycle methods to add extra functionality in 
+	 * the model, or override this method to return a different life cycle 
+	 * listener.
+	 * 
+	 * @return the LifeCycleListener to inform of all events during the GP life 
+	 * cycle.
+	 */
+	@Override
+	public LifeCycleListener<TYPE> getLifeCycleListener() {
+		return lifeCycleListener;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Default implementation confirms the initialised population by 
+	 * returning the given population argument.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public List<CandidateProgram<TYPE>> onInitialisation(List<CandidateProgram<TYPE>> pop) {
+		return pop;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Default implementation confirms the selected elites by returning the
+	 * given list of elites.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public List<CandidateProgram<TYPE>> onElitism(List<CandidateProgram<TYPE>> elites) {
+		return elites;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Default implementation confirms the selected breeding pool by 
+	 * returning the given list of programs.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public List<CandidateProgram<TYPE>> onPoolSelection(List<CandidateProgram<TYPE>> pool) {
+		return pool;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Default implementation confirms the crossover operation by returning
+	 * the given array of children.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public CandidateProgram<TYPE>[] onCrossover(CandidateProgram<TYPE>[] parents,
+			CandidateProgram<TYPE>[] children) {
+		return children;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Default implementation confirms the mutation operation by returning 
+	 * the given child program.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public CandidateProgram<TYPE> onMutation(CandidateProgram<TYPE> parent,
+			CandidateProgram<TYPE> child) {
+		return child;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Default implementation confirms the reproduction operation by 
+	 * returning the given selected program.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public CandidateProgram<TYPE> onReproduction(CandidateProgram<TYPE> child) {
+		return child;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Default implementation does nothing.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public void onFitnessTermination() {}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Default implementation does nothing.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public void onGenerationTermination() {}
 }

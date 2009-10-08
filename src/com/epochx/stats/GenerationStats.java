@@ -53,9 +53,7 @@ public class GenerationStats<TYPE> {
 	}
 	
 	public void addGen(List<CandidateProgram<TYPE>> pop, 
-						int gen, 
-						int revertedCrossovers, 
-						int revertedMutations) {
+						int gen) {
 		// Set of all the fields we need to calculate values for.
 		Map<GenerationStatField, Object> stats = new HashMap<GenerationStatField, Object>();
 		
@@ -90,7 +88,7 @@ public class GenerationStats<TYPE> {
 		previousGenTime = currentTime;
 		
 		// Calculate all the stats that our listeners need.
-		gatherStats(stats, pop, runtime, revertedCrossovers, revertedMutations);
+		gatherStats(stats, pop, runtime);
 		
 		// Inform each listener of their stats.
 		Set<GenerationStatListener> ls = requestedStats.keySet();
@@ -113,9 +111,7 @@ public class GenerationStats<TYPE> {
 	 */
 	private void gatherStats(Map<GenerationStatField, Object>  stats, 
 							 List<CandidateProgram<TYPE>> pop,
-							 long runtime,
-							 int revertedCrossovers,
-							 int revertedMutations) {
+							 long runtime) {
 		gatherDepthStats(stats, pop);
 		gatherLengthStats(stats, pop);
 		gatherTerminalStats(stats, pop);
@@ -130,14 +126,6 @@ public class GenerationStats<TYPE> {
 		
 		if (stats.containsKey(GenerationStatField.RUN_TIME)) {
 			stats.put(GenerationStatField.RUN_TIME, runtime);
-		}
-		
-		if (stats.containsKey(GenerationStatField.REVERTED_CROSSOVERS)) {
-			stats.put(GenerationStatField.REVERTED_CROSSOVERS, revertedCrossovers);
-		}
-		
-		if (stats.containsKey(GenerationStatField.REVERTED_MUTATIONS)) {
-			stats.put(GenerationStatField.REVERTED_MUTATIONS, revertedMutations);
 		}
 	}
 	

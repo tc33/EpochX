@@ -117,12 +117,11 @@ public class GPCrossover<TYPE> {
 		CandidateProgram<TYPE>[] children = null;
 		
 		reversions = -1;
-		boolean accepted = true;
 		do {
 			// Select the parents for crossover.
 			parent1 = programSelector.getProgram();
 			parent2 = programSelector.getProgram();
-			
+
 			clone1 = (CandidateProgram<TYPE>) parent1.clone();
 			clone2 = (CandidateProgram<TYPE>) parent2.clone();
 			parents = new CandidateProgram[]{parent1, parent2};
@@ -130,10 +129,10 @@ public class GPCrossover<TYPE> {
 			// Attempt crossover.
 			children = crossover.crossover(clone1, clone2);
 			
-			// Ask model whether it accepts this crossover.
-			accepted = model.acceptCrossover(parents, children);
+			// Ask life cycle listener to confirm the crossover.
+			children = model.getLifeCycleListener().onCrossover(parents, children);
 			reversions++;
-		} while(!accepted);
+		} while(children == null);
 		
 		//TODO This is actually horrible - it's so unflexible, theres no way 
 		//for a user to control whether/how this happens. Also, it doesn't even
@@ -150,7 +149,7 @@ public class GPCrossover<TYPE> {
 		}
 		
 		long runtime = System.nanoTime() - crossoverStartTime;
-		crossoverStats.addCrossover(parents, children, runtime);
+		crossoverStats.addCrossover(parents, children, runtime, reversions);
 		
 		return children;
 	}

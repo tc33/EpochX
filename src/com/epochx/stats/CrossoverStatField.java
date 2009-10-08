@@ -46,5 +46,11 @@ public enum CrossoverStatField {
 	 * Requests a Long which is the length of time in nanoseconds that the 
 	 * crossover operation took to complete.
 	 */
-	RUN_TIME
+	RUN_TIME,
+	
+	/**
+	 * Requests an Integer which is the number of crossovers that were 
+	 * reverted due to model rejection.
+	 */
+	REVERTED_CROSSOVERS
 }

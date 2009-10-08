@@ -45,7 +45,8 @@ public class MutationStats<TYPE> {
 	
 	public void addMutation(CandidateProgram<TYPE> parent, 
 							CandidateProgram<TYPE> child, 
-							long runtime) {
+							long runtime,
+							int reversions) {
 		// Set of all the fields we need to calculate values for.
 		Map<MutationStatField, Object> stats = new HashMap<MutationStatField, Object>();
 		
@@ -72,7 +73,7 @@ public class MutationStats<TYPE> {
 		}
 		
 		// Calculate all the stats that our listeners need.
-		gatherStats(stats, parent, child, runtime);
+		gatherStats(stats, parent, child, runtime, reversions);
 		
 		// Inform each listener of their stats.
 		Set<MutationStatListener> ls = requestedStats.keySet();
@@ -96,7 +97,8 @@ public class MutationStats<TYPE> {
 	private void gatherStats(Map<MutationStatField, Object>  stats, 
 							 CandidateProgram<TYPE> parent, 
 							 CandidateProgram<TYPE> child, 
-							 long runtime) {
+							 long runtime,
+							 int reversions) {
 		if (stats.containsKey(MutationStatField.PROGRAM_BEFORE)) {
 			stats.put(MutationStatField.PROGRAM_BEFORE, parent);
 		}
@@ -107,6 +109,10 @@ public class MutationStats<TYPE> {
 		
 		if (stats.containsKey(MutationStatField.RUN_TIME)) {
 			stats.put(MutationStatField.RUN_TIME, runtime);
+		}
+		
+		if (stats.containsKey(MutationStatField.REVERTED_MUTATIONS)) {
+			stats.put(MutationStatField.REVERTED_MUTATIONS, reversions);
 		}
 	}
 }

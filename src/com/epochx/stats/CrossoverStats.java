@@ -48,7 +48,8 @@ public class CrossoverStats<TYPE> {
 	
 	public void addCrossover(CandidateProgram<TYPE>[] parents, 
 							 CandidateProgram<TYPE>[] children, 
-							 long runtime) {
+							 long runtime,
+							 int reversions) {
 		// Set of all the fields we need to calculate values for.
 		Map<CrossoverStatField, Object> stats = new HashMap<CrossoverStatField, Object>();
 		
@@ -75,7 +76,7 @@ public class CrossoverStats<TYPE> {
 		}
 		
 		// Calculate all the stats that our listeners need.
-		gatherStats(stats, parents, children, runtime);
+		gatherStats(stats, parents, children, runtime, reversions);
 		
 		// Inform each listener of their stats.
 		Set<CrossoverStatListener> ls = requestedStats.keySet();
@@ -99,7 +100,8 @@ public class CrossoverStats<TYPE> {
 	private void gatherStats(Map<CrossoverStatField, Object>  stats, 
 							 CandidateProgram<TYPE>[] parents, 
 							 CandidateProgram<TYPE>[] children, 
-							 long runtime) {
+							 long runtime,
+							 int reversions) {
 		if (stats.containsKey(CrossoverStatField.PARENTS)) {
 			stats.put(CrossoverStatField.PARENTS, parents);
 		}
@@ -110,6 +112,10 @@ public class CrossoverStats<TYPE> {
 		
 		if (stats.containsKey(CrossoverStatField.RUN_TIME)) {
 			stats.put(CrossoverStatField.RUN_TIME, runtime);
+		}
+		
+		if (stats.containsKey(CrossoverStatField.REVERTED_CROSSOVERS)) {
+			stats.put(CrossoverStatField.REVERTED_CROSSOVERS, reversions);
 		}
 	}
 }

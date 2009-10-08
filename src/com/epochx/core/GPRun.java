@@ -37,11 +37,13 @@ public class GPRun<TYPE> {
 	// The model describing the problem to be evolved.
 	private GPModel<TYPE> model;
 	
-	// Crossover module.
+	// Core components.
+	private GPInitialisation<TYPE> initialisation;
+	private GPElitism<TYPE> elitism;
+	private GPPoolSelection<TYPE> poolSelection;
 	private GPCrossover<TYPE> crossover;
-	
-	// Mutation module.
 	private GPMutation<TYPE> mutation;
+	private GPReproduction<TYPE> reproduction;
 	
 	// The best program found so far during the run.
 	private CandidateProgram<TYPE> bestProgram;
@@ -71,9 +73,13 @@ public class GPRun<TYPE> {
 		bestProgram = null;
 		bestFitness = Double.POSITIVE_INFINITY;
 		
-		// Setup crossover and mutation.
+		// Setup core components.
+		initialisation = new GPInitialisation<TYPE>(model);
+		elitism = new GPElitism<TYPE>(model);
+		poolSelection = new GPPoolSelection<TYPE>(model);
 		crossover = new GPCrossover<TYPE>(model);
 		mutation = new GPMutation<TYPE>(model);
+		reproduction = new GPReproduction<TYPE>(model);
 		
 		// Create the statistics monitor.
 		genStats = new GenerationStats<TYPE>();
@@ -113,28 +119,25 @@ public class GPRun<TYPE> {
 		genStats.setStartTime();
 		
 		// Perform initialisation.
-		List<CandidateProgram<TYPE>> pop = model.getInitialiser().getInitialPopulation();
+		List<CandidateProgram<TYPE>> pop = initialisation.initialise();
 		
 		// Generate generation stats for the inital population.
-		genStats.addGen(pop, 0, 0, 0);
+		genStats.addGen(pop, 0);
+		
+		// Will be set to true when program of termination fitness achieved.
+		boolean fitnessSuccess = false;
 		
 		// Execute each generation.
-		genloop: for (int i=1; i<=model.getNoGenerations(); i++) {			
+		for (int gen=1; gen<=model.getNoGenerations(); gen++) {			
 			// Create next population to fill.
 			int popSize = model.getPopulationSize();
 			List<CandidateProgram<TYPE>> nextPop = new ArrayList<CandidateProgram<TYPE>>(popSize);
 			
 			// Perform elitism.
-			int noElites = model.getNoElites();
-			noElites = (noElites < popSize) ? noElites : popSize;
-			nextPop.addAll(GPElitism.getElites(pop, noElites));
+			nextPop.addAll(elitism.getElites(pop));
 			
 			// Construct a breeding pool.
-			List<CandidateProgram<TYPE>> pool = model.getPoolSelector().getPool(pop, model.getPoolSize());
-			
-			// Count number of crossovers and mutations rejected by the model this gen.
-			int crossoverReversions = 0;
-			int mutationReversions = 0;
+			List<CandidateProgram<TYPE>> pool = poolSelection.getPool(pop);
 			
 			// Tell the parent selector we're starting a new generation.
 			model.getProgramSelector().onGenerationStart(pool);
@@ -153,21 +156,20 @@ public class GPRun<TYPE> {
 						if (nextPop.size() < model.getPopulationSize())
 							nextPop.add(c);
 					}
-					// Add number of rejected crossovers.
-					crossoverReversions += crossover.getRevertedCount();
 				} else if (random < pe+pm) {
 					// Perform mutation.
 					nextPop.add(mutation.mutate());
-					// Add number of rejected mutations.
-					mutationReversions += mutation.getRevertedCount();
 				} else {
-					// Perform reproduction - Should this use clone?
-					
-					nextPop.add(pool.get(model.getRNG().nextInt(pool.size())));
+					// Perform reproduction.
+					nextPop.add(reproduction.reproduce());
 				}
 			}
 			
-			// Update new best program.
+			/* 
+			 * Update new best program.
+			 * Note this forces us to evaluate all programs, which we might
+			 * not have done if using TournamentSelection. 
+			 */
 			for (CandidateProgram<TYPE> p: nextPop) {
 				double fitness = model.getFitness(p);
 				if (fitness < bestFitness) {
@@ -177,13 +179,22 @@ public class GPRun<TYPE> {
 			}
 			
 			// Generate stats for the current population.
-			genStats.addGen(nextPop, i, crossoverReversions, mutationReversions);
+			// This will be slow if requesting fitness info and programs haven't been evaluated already.
+			genStats.addGen(nextPop, gen);
 			
+			// We might be finished?
 			if (bestFitness <= model.getTerminationFitness()) {
-				break genloop;
+				fitnessSuccess = true;
+				break;
 			}
 			
 			pop = nextPop;
+		}
+		
+		if (fitnessSuccess) {
+			model.getLifeCycleListener().onFitnessTermination();
+		} else {
+			model.getLifeCycleListener().onGenerationTermination();
 		}
 		
 		runEndTime = System.nanoTime();

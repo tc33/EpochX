@@ -237,17 +237,5 @@ public enum GenerationStatField {
 	 * Requests a Long which is the length of time in nanoseconds that the
 	 * generation lasted.
 	 */
-	RUN_TIME,
-	
-	/**
-	 * Requests an Integer which is the number of crossovers that were 
-	 * reverted due to model rejection.
-	 */
-	REVERTED_CROSSOVERS,
-	
-	/**
-	 * Requests an Integer which is the number of mutations that were 
-	 * reverted due to model rejection.
-	 */
-	REVERTED_MUTATIONS
+	RUN_TIME
 }

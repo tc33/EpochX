@@ -22,7 +22,7 @@ package com.epochx.core;
 import com.epochx.op.mutation.*;
 import com.epochx.op.selection.*;
 import com.epochx.representation.*;
-import com.epochx.stats.MutationStats;
+import com.epochx.stats.*;
 
 /**
  * This class performs the very simple task of linking together individual  
@@ -113,25 +113,29 @@ public class GPMutation<TYPE> {
 		CandidateProgram<TYPE> child = null;
 
 		reversions = -1;
-		boolean accepted = true;
 		do {
 			// Attempt mutation.
 			parent = programSelector.getProgram();
-			CandidateProgram<TYPE> clone = (CandidateProgram<TYPE>) parent.clone();
-			child = mutator.mutate(clone);
 			
-			// Ask model whether it accepts this crossover.
-			accepted = model.acceptMutation(parent, child);
+			// Create child as a clone of parent.
+			child = (CandidateProgram<TYPE>) parent.clone();
+			
+			// Mutate the child.
+			child = mutator.mutate(child);
+			
+			// Allow the life cycle listener to confirm or modify.
+			child = model.getLifeCycleListener().onMutation(parent, child);
 			reversions++;
-		} while(!accepted);
+		} while(child == null);
 		
 		// If the new program is too deep, replace it with the original.
+		//TODO As with crossover - is this really the right thing to be doing?
 		if (child.getProgramDepth() > model.getMaxDepth()) {
 			child = (CandidateProgram<TYPE>) parent.clone();
 		}
 		
 		long runtime = System.nanoTime() - crossoverStartTime;
-		mutationStats.addMutation(parent, child, runtime);
+		mutationStats.addMutation(parent, child, runtime, reversions);
 		
 		return child;
 	}

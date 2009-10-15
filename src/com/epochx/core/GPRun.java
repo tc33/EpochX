@@ -178,6 +178,9 @@ public class GPRun<TYPE> {
 				}
 			}
 			
+			// Allow life cycle listener to confirm or modify generation.
+			pop = model.getLifeCycleListener().onGeneration(pop);
+			
 			// Generate stats for the current population.
 			// This will be slow if requesting fitness info and programs haven't been evaluated already.
 			genStats.addGen(nextPop, gen);

@@ -25,10 +25,9 @@ import com.epochx.op.crossover.*;
 import com.epochx.op.initialisation.*;
 import com.epochx.op.mutation.*;
 import com.epochx.op.selection.*;
+import com.epochx.random.*;
 import com.epochx.representation.*;
 import com.epochx.stats.*;
-import com.epochx.random.RandomNumberGenerator;
-import com.epochx.random.MersenneTwisterFast;
 
 /**
  * GPAbstractModel is a partial implementation of GPModel which provides 
@@ -891,6 +890,19 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	@Override
 	public CandidateProgram<TYPE> onReproduction(CandidateProgram<TYPE> child) {
 		return child;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Default implementation confirms the generation by returning the given 
+	 * population.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public List<CandidateProgram<TYPE>> onGeneration(List<CandidateProgram<TYPE>> pop) {
+		return pop;
 	}
 	
 	/**

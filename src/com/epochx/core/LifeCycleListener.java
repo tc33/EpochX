@@ -114,6 +114,20 @@ public interface LifeCycleListener<TYPE> {
 	public CandidateProgram<TYPE> onReproduction(CandidateProgram<TYPE> child);
 	
 	/**
+	 * Called at the end of each generation.
+	 * 
+	 * Note that this method is called <b>before</b> the generation statistics
+	 * are generated so any generation statistics will be created based upon 
+	 * the population returned here.
+	 * 
+	 * @param pop the population as it stands after the previous generation.
+	 * @return a List of CandidatePrograms that should be used as the 
+	 * population resulting from this generation.
+	 */
+	public List<CandidateProgram<TYPE>> onGeneration(List<CandidateProgram<TYPE>> pop);
+	//TODO This method should allow null to revert a generation.
+	
+	/**
 	 * Called on termination of the GE run where execution ended because of the 
 	 * successful identification of a CandidateProgram with a fitness equal to 
 	 * or lower than the models termination fitness parameter.

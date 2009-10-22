@@ -58,8 +58,8 @@ public class Even4Parity extends GPAbstractModel<Boolean> {
 		
 		setPopulationSize(500);
 		setNoGenerations(50);
-		setCrossoverProbability(0.9);
-		setMutationProbability(0.0);
+		setCrossoverProbability(0.8);
+		setMutationProbability(0.1);
 		setNoRuns(100);
 		setPoolSize(50);
 		setNoElites(50);

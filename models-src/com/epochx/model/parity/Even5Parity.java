@@ -17,62 +17,45 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.epochx.example.multiplexer;
+package com.epochx.model.parity;
 
 import java.util.*;
 
 import com.epochx.core.*;
-import com.epochx.op.crossover.*;
-import com.epochx.op.selection.*;
 import com.epochx.representation.*;
 import com.epochx.representation.bool.*;
-import com.epochx.stats.*;
-import com.epochx.util.BoolUtils;
+import com.epochx.util.*;
 
 /**
  * 
  */
-public class Multiplexer6BitNOIF extends GPAbstractModel<Boolean> {
+public class Even5Parity extends GPAbstractModel<Boolean> {
 
 	private boolean[][] inputs;
 	
-	private HashMap<String, Variable<Boolean>> variables = new HashMap<String, Variable<Boolean>>();
+	private HashMap<String, Variable<Boolean>> variables;
 	
-	public Multiplexer6BitNOIF() {
-		inputs = BoolUtils.generateBoolSequences(6);
+	public Even5Parity() {
+		inputs = BoolUtils.generateBoolSequences(5);
+		variables = new HashMap<String, Variable<Boolean>>();
 		
 		configure();
 	}
 	
 	public void configure() {
 		// Define variables.
+		variables.put("D4", new Variable<Boolean>("D4"));
 		variables.put("D3", new Variable<Boolean>("D3"));
 		variables.put("D2", new Variable<Boolean>("D2"));
 		variables.put("D1", new Variable<Boolean>("D1"));
 		variables.put("D0", new Variable<Boolean>("D0"));
-		variables.put("A1", new Variable<Boolean>("A1"));
-		variables.put("A0", new Variable<Boolean>("A0"));
-		
-		setGenStatFields(new GenerationStatField[]{GenerationStatField.FITNESS_MIN, GenerationStatField.FITNESS_AVE, GenerationStatField.LENGTH_AVE, GenerationStatField.RUN_TIME});
-		setRunStatFields(new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM, RunStatField.RUN_TIME});
-		
-		setPopulationSize(500);
-		setNoGenerations(50);
-		setCrossoverProbability(0.9);
-		setMutationProbability(0.0);
-		setNoRuns(10);
-		setPoolSize(50);
-		setNoElites(50);
-		setMaxProgramDepth(6);
-		setPoolSelector(new TournamentSelector<Boolean>(this, 7));
-		setProgramSelector(new RandomSelector<Boolean>(this));
-		setCrossover(new UniformPointCrossover<Boolean>(this));
 	}
 	
 	@Override
 	public List<FunctionNode<Boolean>> getFunctions() {
 		// Define functions.
 		List<FunctionNode<Boolean>> functions = new ArrayList<FunctionNode<Boolean>>();
+		functions.add(new IfFunction());
 		functions.add(new AndFunction());
 		functions.add(new OrFunction());
 		functions.add(new NotFunction());
@@ -83,12 +66,11 @@ public class Multiplexer6BitNOIF extends GPAbstractModel<Boolean> {
 	public List<TerminalNode<Boolean>> getTerminals() {		
 		// Define terminals.
 		List<TerminalNode<Boolean>> terminals = new ArrayList<TerminalNode<Boolean>>();
+		terminals.add(variables.get("D4"));
 		terminals.add(variables.get("D3"));
 		terminals.add(variables.get("D2"));
 		terminals.add(variables.get("D1"));
 		terminals.add(variables.get("D0"));
-		terminals.add(variables.get("A1"));
-		terminals.add(variables.get("A0"));
 		
 		return terminals;
 	}
@@ -100,37 +82,32 @@ public class Multiplexer6BitNOIF extends GPAbstractModel<Boolean> {
         // Execute on all possible inputs.
         for (boolean[] in: inputs) {        	
         	// Set the variables.
-        	variables.get("A0").setValue(in[0]);
-        	variables.get("A1").setValue(in[1]);
-        	variables.get("D0").setValue(in[2]);
-        	variables.get("D1").setValue(in[3]);
-        	variables.get("D2").setValue(in[4]);
-        	variables.get("D3").setValue(in[5]);
+        	variables.get("D0").setValue(in[0]);
+        	variables.get("D1").setValue(in[1]);
+        	variables.get("D2").setValue(in[2]);
+        	variables.get("D3").setValue(in[3]);
+        	variables.get("D4").setValue(in[4]);
         	
             if (program.evaluate() == chooseResult(in)) {
                 score++;
             }
         }
         
-        return 64 - score;
+        return 32 - score;
 	}
 	
     private boolean chooseResult(boolean[] input) {
-        boolean result = false;
-    	// scoring solution
-        if(input[0] && input[1]) {
-            result = input[2];
-        } else if(input[0] && !input[1]) {
-            result = input[3];
-        } else if(!input[0] && input[1]) {
-            result = input[4];
-        } else if(!input[0] && !input[1]) {
-            result = input[5];
+        // scoring solution
+        int eCount = 0;
+        for(int i = 0; i<input.length; i++) {
+            if(input[i]==true) {
+                eCount++;
+            }
         }
-        return result;
+        if(eCount%2==0) {
+            return true;
+        } else {
+            return false;
+        }
     }
-	
-	public static void main(String[] args) {
-		GPController.run(new Multiplexer6BitNOIF());
-	}
 }

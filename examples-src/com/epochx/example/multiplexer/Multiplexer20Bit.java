@@ -78,7 +78,7 @@ public class Multiplexer20Bit extends GPAbstractModel<Boolean> {
 		setNoRuns(1);
 		setPoolSize(50);
 		setNoElites(50);
-		setMaxDepth(6);
+		setMaxProgramDepth(6);
 		setPoolSelector(new TournamentSelector<Boolean>(this, 7));
 		setProgramSelector(new RandomSelector<Boolean>(this));
 		setCrossover(new UniformPointCrossover<Boolean>(this));

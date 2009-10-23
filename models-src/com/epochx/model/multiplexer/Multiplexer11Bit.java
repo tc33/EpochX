@@ -17,17 +17,14 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.epochx.example.multiplexer;
+package com.epochx.model.multiplexer;
 
 import java.util.*;
 
 import com.epochx.core.*;
-import com.epochx.op.crossover.*;
-import com.epochx.op.selection.*;
 import com.epochx.representation.*;
 import com.epochx.representation.bool.*;
-import com.epochx.stats.*;
-import com.epochx.util.BoolUtils;
+import com.epochx.util.*;
 
 /**
  * 
@@ -37,10 +34,11 @@ public class Multiplexer11Bit extends GPAbstractModel<Boolean> {
 
 	private boolean[][] inputs;
 	
-	private HashMap<String, Variable<Boolean>> variables = new HashMap<String, Variable<Boolean>>();
+	private HashMap<String, Variable<Boolean>> variables;
 	
 	public Multiplexer11Bit() {
 		inputs = BoolUtils.generateBoolSequences(11);
+		variables = new HashMap<String, Variable<Boolean>>();
 		
 		configure();
 	}
@@ -58,21 +56,6 @@ public class Multiplexer11Bit extends GPAbstractModel<Boolean> {
 		variables.put("A2", new Variable<Boolean>("A2"));
 		variables.put("A1", new Variable<Boolean>("A1"));
 		variables.put("A0", new Variable<Boolean>("A0"));
-		
-		setGenStatFields(new GenerationStatField[]{GenerationStatField.FITNESS_MIN, GenerationStatField.FITNESS_AVE, GenerationStatField.LENGTH_AVE, GenerationStatField.RUN_TIME});
-		setRunStatFields(new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM, RunStatField.RUN_TIME});
-		
-		setPopulationSize(500);
-		setNoGenerations(50);
-		setCrossoverProbability(0.9);
-		setMutationProbability(0.0);
-		setNoRuns(1);
-		setPoolSize(50);
-		setNoElites(50);
-		setMaxProgramDepth(6);
-		setPoolSelector(new TournamentSelector<Boolean>(this, 7));
-		setProgramSelector(new RandomSelector<Boolean>(this));
-		setCrossover(new UniformPointCrossover<Boolean>(this));
 	}
 	
 	@Override
@@ -154,8 +137,4 @@ public class Multiplexer11Bit extends GPAbstractModel<Boolean> {
         }
         return result;
     }
-	
-	public static void main(String[] args) {
-		GPController.run(new Multiplexer11Bit());
-	}
 }

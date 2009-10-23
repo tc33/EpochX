@@ -139,7 +139,7 @@ public class GPCrossover<TYPE> {
 		//seem like the right thing to be doing. Why use the parents?!
 		int replacement = 0;
 		for (int i=0; i<children.length; i++) {
-			if (children[i].getProgramDepth() > model.getMaxDepth()) {
+			if (children[i].getProgramDepth() > model.getMaxProgramDepth()) {
 				if (replacement >= parents.length) {
 					replacement = 0;
 				}

@@ -64,7 +64,7 @@ public class Even4Parity extends GPAbstractModel<Boolean> {
 		setPoolSize(50);
 		setNoElites(50);
 		setInitialMaxDepth(6);
-		setMaxDepth(17);
+		setMaxProgramDepth(17);
 		setPoolSelector(new TournamentSelector<Boolean>(this, 7));
 		setProgramSelector(new RandomSelector<Boolean>(this));
 		setCrossover(new UniformPointCrossover<Boolean>(this));

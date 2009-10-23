@@ -130,7 +130,7 @@ public class GPMutation<TYPE> {
 		
 		// If the new program is too deep, replace it with the original.
 		//TODO As with crossover - is this really the right thing to be doing?
-		if (child.getProgramDepth() > model.getMaxDepth()) {
+		if (child.getProgramDepth() > model.getMaxProgramDepth()) {
 			child = (CandidateProgram<TYPE>) parent.clone();
 		}
 		

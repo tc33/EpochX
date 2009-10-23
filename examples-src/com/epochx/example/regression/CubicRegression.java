@@ -56,7 +56,7 @@ public class CubicRegression extends GPAbstractModel<Double> {
 		setPoolSize(50);
 		setNoGenerations(50);
 		setNoElites(50);
-		setMaxDepth(17);
+		setMaxProgramDepth(17);
 		setNoRuns(1);
 	}
 

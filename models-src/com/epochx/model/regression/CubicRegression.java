@@ -17,47 +17,28 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.epochx.example.regression;
+package com.epochx.model.regression;
 
 import java.util.*;
 
 import com.epochx.core.*;
-import com.epochx.op.crossover.*;
-import com.epochx.op.selection.*;
 import com.epochx.representation.*;
 import com.epochx.representation.dbl.*;
-import com.epochx.stats.*;
 
 /**
  * 
  */
-public class QuarticRegression extends GPAbstractModel<Double> {
+public class CubicRegression extends GPAbstractModel<Double> {
 
 	private Variable<Double> x;
 	
-	public QuarticRegression() {
+	public CubicRegression() {
 		configure();
 	}
 	
 	public void configure() {
 		// Create variables.
 		x = new Variable<Double>("X");
-		
-		setGenStatFields(new GenerationStatField[]{GenerationStatField.FITNESS_MIN, GenerationStatField.FITNESS_AVE, GenerationStatField.LENGTH_AVE, GenerationStatField.RUN_TIME});
-		setRunStatFields(new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM, RunStatField.RUN_TIME});
-		
-		// Setup run.
-		setPopulationSize(500);
-		setCrossoverProbability(0.9);
-		setMutationProbability(0.0);
-		setPoolSelector(new TournamentSelector<Double>(this, 7));
-		setProgramSelector(new LinearRankSelector<Double>(this, 0.5));
-		setCrossover(new UniformPointCrossover<Double>(this));
-		setPoolSize(50);
-		setNoGenerations(50);
-		setNoElites(50);
-		setMaxProgramDepth(17);
-		setNoRuns(1);
 	}
 
 	@Override
@@ -114,10 +95,6 @@ public class QuarticRegression extends GPAbstractModel<Double> {
 	}
 	
 	private double getCorrectResult(double x) {
-		return x + (x*x) + (x*x*x) + (x*x*x*x);
-	}
-	
-	public static void main(String[] args) {
-		GPController.run(new QuarticRegression());
+		return x + (x*x) + (x*x*x);
 	}
 }

@@ -203,7 +203,7 @@ public interface GPModel<TYPE> {
 	 * @return the maximum depth of CandidatePrograms to be allowed in the 
 	 * 		   population after genetic operators.
 	 */
-	public int getMaxDepth();
+	public int getMaxProgramDepth();
 	
 	/**
 	 * Retrieves a numerical value between 0.0 and 1.0 which represents the 

@@ -63,7 +63,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	private int poolSize;
 	private int noElites;
 	private int maxInitialDepth;
-	private int maxDepth;
+	private int maxProgramDepth;
 	private double terminationFitness;
 	
 	private double crossoverProbability;
@@ -91,7 +91,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 		noGenerations = 50;
 		populationSize = 500;
 		maxInitialDepth = 6;
-		maxDepth = 17;
+		maxProgramDepth = 17;
 		poolSize = 50;
 		noElites = 10;
 		terminationFitness = 0.0;
@@ -406,8 +406,8 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public int getMaxDepth() {
-		return maxDepth;
+	public int getMaxProgramDepth() {
+		return maxProgramDepth;
 	}
 
 	/**
@@ -416,8 +416,8 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * 
 	 * @param maxDepth the new max program tree depth to use.
 	 */
-	public void setMaxDepth(int maxDepth) {
-		this.maxDepth = maxDepth;
+	public void setMaxProgramDepth(int maxDepth) {
+		this.maxProgramDepth = maxDepth;
 	}
 	
 	/**

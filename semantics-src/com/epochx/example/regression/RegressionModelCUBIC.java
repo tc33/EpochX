@@ -57,10 +57,10 @@ public class RegressionModelCUBIC extends SemanticModel<Double> {
 		setPoolSize(50);
 		setNoElites(50);
 		setInitialMaxDepth(6);
-		setMaxDepth(17);
-		setPoolSelector(new TournamentSelector<Double>(7));
-		setProgramSelector(new RandomSelector<Double>());
-		setCrossover(new KozaCrossover<Double>());
+		setMaxProgramDepth(17);
+		setPoolSelector(new TournamentSelector<Double>(this, 7));
+		setProgramSelector(new RandomSelector<Double>(this));
+		setCrossover(new KozaCrossover<Double>(this));
 		setStateCheckedCrossover(true);
 		setMutator(new SubtreeMutation<Double>(this));
 		setStateCheckedMutation(false);
@@ -176,7 +176,7 @@ public class RegressionModelCUBIC extends SemanticModel<Double> {
 
 	@Override
 	public GenerationStatField[] getGenStatFields() {
-		return new GenerationStatField[]{GenerationStatField.FITNESS_AVE, GenerationStatField.FITNESS_MIN, GenerationStatField.LENGTH_AVE, GenerationStatField.REVERTED_CROSSOVERS, GenerationStatField.REVERTED_MUTATIONS};
+		return new GenerationStatField[]{GenerationStatField.FITNESS_AVE, GenerationStatField.FITNESS_MIN, GenerationStatField.LENGTH_AVE};
 	}
 	
 	public static void main(String[] args) {

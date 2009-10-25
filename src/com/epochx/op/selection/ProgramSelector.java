@@ -40,7 +40,7 @@ public interface ProgramSelector<TYPE> {
 	 * @param pop the current population for this generation.
 	 */
 	//TODO This is a little bit nasty, would be better if we can plug it into a standard listener system.
-	public void onGenerationStart(List<CandidateProgram<TYPE>> pop);
+	public void setSelectionPool(List<CandidateProgram<TYPE>> pop);
 	
 	/**
 	 * Select a <code>CandidateProgram</code> from the current population of 

@@ -19,7 +19,9 @@
  */
 package com.epochx.op.crossover;
 
-import com.epochx.core.GPModel;
+import com.epochx.core.*;
+import com.epochx.life.GenerationListener;
+import com.epochx.random.RandomNumberGenerator;
 import com.epochx.representation.*;
 
 /**
@@ -32,13 +34,16 @@ import com.epochx.representation.*;
  * a function swap point. The default constructor uses the typical rates of 90% 
  * function node swap point and 10% terminal node swap points.
  */
-public class KozaCrossover<TYPE> implements Crossover<TYPE> {
+public class KozaCrossover<TYPE> implements Crossover<TYPE>, GenerationListener {
 
 	// The current controlling model.
 	private GPModel<TYPE> model;
 	
 	// The probability of choosing a function node as the swap point.
 	private double functionSwapProbability;
+	
+	// The random number generator for controlling random behaviour.
+	private RandomNumberGenerator rng;
 	
 	/**
 	 * Construct an instance of Koza crossover.
@@ -49,6 +54,8 @@ public class KozaCrossover<TYPE> implements Crossover<TYPE> {
 	public KozaCrossover(GPModel<TYPE> model, double functionSwapProbability) {
 		this.model = model;
 		this.functionSwapProbability = functionSwapProbability;
+		
+		GPController.getLifeCycleManager().addGenerationListener(this);
 	}
 	
 	/**
@@ -98,15 +105,15 @@ public class KozaCrossover<TYPE> implements Crossover<TYPE> {
 		int noFunctions = length - noTerminals;
 		
 		// Randomly decide whether to use a function or terminal node point.
-		if ((noFunctions > 0) && (model.getRNG().nextDouble() < functionSwapProbability)) {
+		if ((noFunctions > 0) && (rng.nextDouble() < functionSwapProbability)) {
 			// Randomly select a function node from the function set.
-			int f = model.getRNG().nextInt(noFunctions);
+			int f = rng.nextInt(noFunctions);
 			int nthFunctionNode = getNthFunctionNode(f, program);
 			
 			return nthFunctionNode;
 		} else {
 			// Randomly select a terminal node from the terminal set.
-			int t =  model.getRNG().nextInt(noTerminals);
+			int t = rng.nextInt(noTerminals);
 			int nthTerminalNode = getNthTerminalNode(t, program);
 			
 			return nthTerminalNode;
@@ -188,5 +195,10 @@ public class KozaCrossover<TYPE> implements Crossover<TYPE> {
 		}
 		
 		return result;
+	}
+
+	@Override
+	public void onGenerationStart() {
+		rng = model.getRNG();
 	}
 }

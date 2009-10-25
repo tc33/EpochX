@@ -21,6 +21,7 @@ package com.epochx.core;
 
 import java.util.List;
 
+import com.epochx.life.LifeCycleListener;
 import com.epochx.op.crossover.*;
 import com.epochx.op.initialisation.*;
 import com.epochx.op.mutation.*;

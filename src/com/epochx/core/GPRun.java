@@ -21,6 +21,7 @@ package com.epochx.core;
 
 import java.util.*;
 
+import com.epochx.life.LifeCycleManager;
 import com.epochx.representation.*;
 import com.epochx.stats.*;
 
@@ -37,13 +38,12 @@ public class GPRun<TYPE> {
 	// The model describing the problem to be evolved.
 	private GPModel<TYPE> model;
 	
+	// The manager that keeps track of life cycle events and their listeners.
+	private LifeCycleManager<TYPE> lifeCycle;
+	
 	// Core components.
+	private GPGeneration<TYPE> generation;
 	private GPInitialisation<TYPE> initialisation;
-	private GPElitism<TYPE> elitism;
-	private GPPoolSelection<TYPE> poolSelection;
-	private GPCrossover<TYPE> crossover;
-	private GPMutation<TYPE> mutation;
-	private GPReproduction<TYPE> reproduction;
 	
 	// The best program found so far during the run.
 	private CandidateProgram<TYPE> bestProgram;
@@ -67,6 +67,9 @@ public class GPRun<TYPE> {
 	private GPRun(GPModel<TYPE> model) {
 		this.model = model;
 		
+		// Setup life cycle manager.
+		lifeCycle = GPController.getLifeCycleManager();
+		
 		// Initialise the run.
 		runStartTime = System.nanoTime();
 		runEndTime = -1;
@@ -74,12 +77,8 @@ public class GPRun<TYPE> {
 		bestFitness = Double.POSITIVE_INFINITY;
 		
 		// Setup core components.
+		generation = new GPGeneration<TYPE>(model);
 		initialisation = new GPInitialisation<TYPE>(model);
-		elitism = new GPElitism<TYPE>(model);
-		poolSelection = new GPPoolSelection<TYPE>(model);
-		crossover = new GPCrossover<TYPE>(model);
-		mutation = new GPMutation<TYPE>(model);
-		reproduction = new GPReproduction<TYPE>(model);
 		
 		// Create the statistics monitor.
 		genStats = new GenerationStats<TYPE>();
@@ -118,80 +117,36 @@ public class GPRun<TYPE> {
 		// Tell our generation stats to record the start time.
 		genStats.setStartTime();
 		
+		// Tell life cycle listener that a run is starting.
+		lifeCycle.onRunStart();
+		
 		// Perform initialisation.
 		List<CandidateProgram<TYPE>> pop = initialisation.initialise();
 		
 		// Generate generation stats for the inital population.
 		genStats.addGen(pop, 0);
 		
+		// Keep track of the best program and fitness.
+		updateBestProgram(pop);
+		
 		// Will be set to true when program of termination fitness achieved.
 		boolean fitnessSuccess = false;
 		
 		// Execute each generation.
 		for (int gen=1; gen<=model.getNoGenerations(); gen++) {			
-			// Create next population to fill.
-			int popSize = model.getPopulationSize();
-			List<CandidateProgram<TYPE>> nextPop = new ArrayList<CandidateProgram<TYPE>>(popSize);
-			
-			// Perform elitism.
-			nextPop.addAll(elitism.getElites(pop));
-			
-			// Construct a breeding pool.
-			List<CandidateProgram<TYPE>> pool = poolSelection.getPool(pop);
-			
-			// Tell the parent selector we're starting a new generation.
-			model.getProgramSelector().onGenerationStart(pool);
-			
-			// Fill the population by performing genetic operations.
-			while(nextPop.size() < model.getPopulationSize()) {
-				// Pick a genetic operator using Pr, Pc and Pm.
-				double random = model.getRNG().nextDouble();
-				double pm = model.getMutationProbability();
-				double pe = model.getCrossoverProbability();
-				
-				if (random < pe) {
-					// Perform crossover.
-					CandidateProgram<TYPE>[] children = crossover.crossover();
-					for (CandidateProgram<TYPE> c: children) {
-						if (nextPop.size() < model.getPopulationSize())
-							nextPop.add(c);
-					}
-				} else if (random < pe+pm) {
-					// Perform mutation.
-					nextPop.add(mutation.mutate());
-				} else {
-					// Perform reproduction.
-					nextPop.add(reproduction.reproduce());
-				}
-			}
-			
-			/* 
-			 * Update new best program.
-			 * Note this forces us to evaluate all programs, which we might
-			 * not have done if using TournamentSelection. 
-			 */
-			for (CandidateProgram<TYPE> p: nextPop) {
-				double fitness = model.getFitness(p);
-				if (fitness < bestFitness) {
-					bestFitness = fitness;
-					bestProgram = p;
-				}
-			}
-			
-			// Allow life cycle listener to confirm or modify generation.
-			pop = model.getLifeCycleListener().onGeneration(pop);
+			pop = generation.generation(pop);
 			
 			// Generate stats for the current population.
-			// This will be slow if requesting fitness info and programs haven't been evaluated already.
-			genStats.addGen(nextPop, gen);
+			genStats.addGen(pop, gen);
+			
+			// Keep track of the best program and fitness.
+			updateBestProgram(pop);
 			
 			// We might be finished?
 			if (bestFitness <= model.getTerminationFitness()) {
 				fitnessSuccess = true;
 				break;
 			}
-			
-			pop = nextPop;
 		}
 		
 		if (fitnessSuccess) {
@@ -203,6 +158,21 @@ public class GPRun<TYPE> {
 		runEndTime = System.nanoTime();
 	}
 
+	/* 
+	 * Update new best program.
+	 * Note this forces us to evaluate all programs, which we might
+	 * not have done if using TournamentSelection. 
+	 */
+	private void updateBestProgram(List<CandidateProgram<TYPE>> pop) {
+		for (CandidateProgram<TYPE> program: pop) {
+			double fitness = program.getFitness();
+			if (fitness < bestFitness) {
+				bestFitness = fitness;
+				bestProgram = program;
+			}
+		}
+	}
+	
 	/**
 	 * Retrieve the CandidateProgram with the best fitness found during the 
 	 * run. This CandidateProgram may have been found in any of the generations.

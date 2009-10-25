@@ -19,6 +19,7 @@
  */
 package com.epochx.core;
 
+import com.epochx.life.*;
 import com.epochx.op.crossover.*;
 import com.epochx.op.selection.*;
 import com.epochx.representation.*;
@@ -34,7 +35,7 @@ import com.epochx.stats.CrossoverStats;
  * @see KozaCrossover
  * @see ProgramSelector
  */ 
-public class GPCrossover<TYPE> {
+public class GPCrossover<TYPE> implements GenerationListener {
 	/* 
 	 * TODO Either this class or another new class needs to encapsulate all the 
 	 * details of a crossover event in the same way as GPRun exists after it has 
@@ -45,6 +46,9 @@ public class GPCrossover<TYPE> {
 	// The controlling model.
 	private GPModel<TYPE> model;
 	
+	// Manager of life cycle events.
+	private LifeCycleManager<TYPE> lifeCycle;
+	
 	// The selector for choosing parents.
 	private ProgramSelector<TYPE> programSelector;
 	
@@ -53,6 +57,9 @@ public class GPCrossover<TYPE> {
 	
 	// Gather crossover statistics.
 	private CrossoverStats<TYPE> crossoverStats;
+	
+	// The maximum allowable program depth after crossover.
+	private int maxProgramDepth;
 	
 	// The number of times the crossover was rejected by the model.
 	private int reversions;
@@ -70,13 +77,27 @@ public class GPCrossover<TYPE> {
 	 */
 	public GPCrossover(GPModel<TYPE> model) {
 		this.model = model;
-		this.programSelector = model.getProgramSelector();
-		this.crossover = model.getCrossover();
+		
+		// Register interest in generation events so we can reset.
+		lifeCycle = GPController.getLifeCycleManager();
+		lifeCycle.addGenerationListener(this);
 		
 		crossoverStats = new CrossoverStats<TYPE>();
 		
 		// Setup the listener for crossover statistics.
 		crossoverStats.addCrossoverStatListener(model.getCrossoverStatListener());
+		
+		initialise();
+	}
+	
+	/*
+	 * Initialises GPCrossover, in particular all parameters from the model should
+	 * be refreshed incase they've changed since the last call.
+	 */
+	private void initialise() {
+		maxProgramDepth = model.getMaxProgramDepth();
+		programSelector = model.getProgramSelector();
+		crossover = model.getCrossover();
 	}
 
 	/**
@@ -130,7 +151,7 @@ public class GPCrossover<TYPE> {
 			children = crossover.crossover(clone1, clone2);
 			
 			// Ask life cycle listener to confirm the crossover.
-			children = model.getLifeCycleListener().onCrossover(parents, children);
+			children = lifeCycle.onCrossover(parents, children);
 			reversions++;
 		} while(children == null);
 		
@@ -139,7 +160,7 @@ public class GPCrossover<TYPE> {
 		//seem like the right thing to be doing. Why use the parents?!
 		int replacement = 0;
 		for (int i=0; i<children.length; i++) {
-			if (children[i].getProgramDepth() > model.getMaxProgramDepth()) {
+			if (children[i].getProgramDepth() > maxProgramDepth) {
 				if (replacement >= parents.length) {
 					replacement = 0;
 				}
@@ -167,5 +188,16 @@ public class GPCrossover<TYPE> {
 	 */
 	public int getRevertedCount() {
 		return reversions;
+	}
+	
+	/**
+	 * Called after each generation. For each generation we should reset all 
+	 * parameters taken from the model incase they've changed. The generation
+	 * event is then CONFIRMed.
+	 */
+	@Override
+	public void onGenerationStart() {
+		// Reset GPCrossover.
+		initialise();
 	}
 }

@@ -110,6 +110,7 @@ public class FullInitialiser<TYPE> implements Initialiser<TYPE> {
 	/*
 	 * Recursively fill the children of a node, to construct a full tree down
 	 * to a depth of maxDepth.
+	 * TODO These model calls should not be being made multiple times.
 	 */
 	private void fillChildren(Node<TYPE> currentNode, int currentDepth, int maxDepth) {
 		int arity = currentNode.getArity();

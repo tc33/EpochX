@@ -21,6 +21,7 @@ package com.epochx.core;
 
 import java.util.*;
 
+import com.epochx.life.LifeCycleManager;
 import com.epochx.representation.*;
 
 /**
@@ -39,6 +40,9 @@ public class GPInitialisation<TYPE> {
 	// The controlling model.
 	private GPModel<TYPE> model;
 	
+	// Manager of life cycle events.
+	private LifeCycleManager<TYPE> lifeCycle;
+	
 	// The number of times the initialisation was rejected.
 	private int reversions;
 	
@@ -54,6 +58,8 @@ public class GPInitialisation<TYPE> {
 	 */
 	public GPInitialisation(GPModel<TYPE> model) {
 		this.model = model;
+		
+		lifeCycle = GPController.getLifeCycleManager();
 	}
 	
 	/**
@@ -81,8 +87,8 @@ public class GPInitialisation<TYPE> {
 			// Perform initialisation.
 			pop = model.getInitialiser().getInitialPopulation();
 			
-			// Allow life cycle listener to confirm or modify.
-			pop = model.getLifeCycleListener().onInitialisation(pop);
+			// Allow life cycle manager to confirm or modify.
+			pop = lifeCycle.onInitialisation(pop);
 			
 			// Increment reversions - starts at -1 to cover first increment.
 			reversions++;

@@ -47,7 +47,7 @@ public class RandomSelector<TYPE> implements ProgramSelector<TYPE>, PoolSelector
 	 * @param pop the current population for this generation.
 	 */
 	@Override
-	public void onGenerationStart(List<CandidateProgram<TYPE>> pop) {
+	public void setSelectionPool(List<CandidateProgram<TYPE>> pop) {
 		this.pop = pop;
 	}
 	

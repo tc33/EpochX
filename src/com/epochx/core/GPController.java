@@ -20,6 +20,8 @@
 package com.epochx.core;
 
 import com.epochx.stats.*;
+import com.epochx.life.LifeCycleManager;
+import com.epochx.core.GPController;
 
 /**
  * The GPController class provides the method for executing multiple GP runs 
@@ -31,12 +33,21 @@ import com.epochx.stats.*;
  * method should be called, passing in a GPModel which defines the control 
  * parameters.
  */
-public class GPController {
+public class GPController<TYPE> {
 
+	// Singleton controller.
+	private static GPController<?> controller;
+	
+	// The manager that keeps track of life cycle events and their listeners.
+	private LifeCycleManager<TYPE> lifeCycle;
+	
 	/*
 	 * Private constructor. The only method is the static run().
 	 */
-	private GPController() {}
+	private GPController() {
+		// Setup life cycle manager.
+		lifeCycle = new LifeCycleManager<TYPE>();
+	}
 	
 	/**
 	 * Executes one or more GP runs. The number of runs is set within the model 
@@ -56,6 +67,10 @@ public class GPController {
 	 * @see GPModel
 	 */
 	public static <TYPE> GPRun<TYPE>[] run(GPModel<TYPE> model) {
+		if (controller == null) {
+			controller = new GPController<TYPE>();
+		}
+		
 		// Stash each GPRun object for retrieval of run details.
 		GPRun<TYPE>[] runs = new GPRun[model.getNoRuns()];
 		
@@ -73,5 +88,13 @@ public class GPController {
 		}
 
 		return runs;
+	}
+	
+	public static <TYPE> LifeCycleManager<TYPE> getLifeCycleManager() {
+		if (controller == null) {
+			controller = new GPController<TYPE>();
+		}
+		
+		return (LifeCycleManager<TYPE>) controller.lifeCycle;
 	}
 }

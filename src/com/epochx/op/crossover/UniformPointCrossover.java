@@ -19,19 +19,26 @@
  */
 package com.epochx.op.crossover;
 
-import com.epochx.core.GPModel;
+import com.epochx.core.*;
+import com.epochx.life.GenerationListener;
+import com.epochx.random.RandomNumberGenerator;
 import com.epochx.representation.*;
 
 /**
  * This class implements standard crossover with uniform swap points.
  */
-public class UniformPointCrossover<TYPE> implements Crossover<TYPE> {
+public class UniformPointCrossover<TYPE> implements Crossover<TYPE>, GenerationListener {
 
 	// The current controlling model.
 	private GPModel<TYPE> model;
 	
+	// The random number generator for controlling random behaviour.
+	private RandomNumberGenerator rng;
+	
 	public UniformPointCrossover(GPModel<TYPE> model) {
 		this.model = model;
+		
+		GPController.getLifeCycleManager().addGenerationListener(this);
 	}
 	
 	/**
@@ -48,8 +55,8 @@ public class UniformPointCrossover<TYPE> implements Crossover<TYPE> {
 	@Override
 	public CandidateProgram<TYPE>[] crossover(CandidateProgram<TYPE> program1, CandidateProgram<TYPE> program2) {
 		// Select swap points.
-		int swapPoint1 = model.getRNG().nextInt(program1.getProgramLength());
-		int swapPoint2 = model.getRNG().nextInt(program2.getProgramLength());
+		int swapPoint1 = rng.nextInt(program1.getProgramLength());
+		int swapPoint2 = rng.nextInt(program2.getProgramLength());
 
 		// Get copies of subtrees to swap.
 		Node<TYPE> subTree1 = (Node<TYPE>) program1.getNthNode(swapPoint1);//.clone();
@@ -61,4 +68,10 @@ public class UniformPointCrossover<TYPE> implements Crossover<TYPE> {
 		
 		return new CandidateProgram[]{program1, program2};
 	}
+
+	@Override
+	public void onGenerationStart() {
+		rng = model.getRNG();
+	}
+	
 }

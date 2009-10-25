@@ -21,6 +21,8 @@ package com.epochx.core;
 
 import java.util.*;
 
+import com.epochx.life.*;
+import com.epochx.op.selection.PoolSelector;
 import com.epochx.representation.*;
 
 /**
@@ -33,10 +35,19 @@ import com.epochx.representation.*;
  * @see PoolSelector
  * @see TournamentSelector
  */
-public class GPPoolSelection<TYPE> {
+public class GPPoolSelection<TYPE> implements GenerationListener {
 	
 	// The controlling model.
 	private GPModel<TYPE> model;
+	
+	// Manager of life cycle events.
+	private LifeCycleManager<TYPE> lifeCycle;
+	
+	// The pool selector to use to generate the breeding pool.
+	private PoolSelector<TYPE> poolSelector;
+	
+	// The number of programs that make up a breeding pool.
+	private int poolSize;
 	
 	// The number of times the pool selection was rejected.
 	//TODO Perhaps should use a long here, just incase.
@@ -54,6 +65,20 @@ public class GPPoolSelection<TYPE> {
 	 */
 	public GPPoolSelection(GPModel<TYPE> model) {
 		this.model = model;
+		
+		lifeCycle = GPController.getLifeCycleManager();
+		lifeCycle.addGenerationListener(this);
+		
+		initialise();
+	}
+	
+	/*
+	 * Initialises GEPoolSelection, in particular all parameters from the model should
+	 * be refreshed incase they've changed since the last call.
+	 */
+	private void initialise() {
+		poolSize = model.getPoolSize();
+		poolSelector = model.getPoolSelector();
 	}
 	
 	/**
@@ -61,18 +86,16 @@ public class GPPoolSelection<TYPE> {
 	 * @param pop
 	 * @return
 	 */
-	public List<CandidateProgram<TYPE>> getPool(List<CandidateProgram<TYPE>> pop) {
-		int poolSize = model.getPoolSize();
-		
+	public List<CandidateProgram<TYPE>> getPool(List<CandidateProgram<TYPE>> pop) {		
 		List<CandidateProgram<TYPE>> pool = null;
 		
 		reversions = -1;
 		do {
 			// Perform pool selection.
-			pool = model.getPoolSelector().getPool(pop, poolSize);
+			pool = poolSelector.getPool(pop, poolSize);
 			
 			// Allow life cycle listener to confirm or modify.
-			pool = model.getLifeCycleListener().onPoolSelection(pool);
+			pool = lifeCycle.onPoolSelection(pool);
 			
 			// Increment reversions - starts at -1 to cover first increment.
 			reversions++;
@@ -98,5 +121,16 @@ public class GPPoolSelection<TYPE> {
 	 */
 	public int getReversions() {
 		return reversions;
+	}
+	
+	/**
+	 * Called after each generation. For each generation we should reset all 
+	 * parameters taken from the model incase they've changed. The generation
+	 * event is then CONFIRMed.
+	 */
+	@Override
+	public void onGenerationStart() {
+		// Reset.
+		initialise();
 	}
 }

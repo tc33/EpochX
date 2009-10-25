@@ -19,6 +19,8 @@
  */
 package com.epochx.core;
 
+import com.epochx.life.*;
+import com.epochx.op.selection.ProgramSelector;
 import com.epochx.representation.*;
 
 /**
@@ -26,10 +28,16 @@ import com.epochx.representation.*;
  * 
  * @see ProgramSelector
  */
-public class GPReproduction<TYPE> {
+public class GPReproduction<TYPE> implements GenerationListener {
 
+	// Manager of life cycle events.
+	private LifeCycleManager<TYPE> lifeCycle;
+	
 	// The controlling model.
 	private GPModel<TYPE> model;
+	
+	// The selector to use to choose the program to reproduce.
+	private ProgramSelector<TYPE> programSelector;
 	
 	// The number of times the selected reproduction was rejected.
 	private int reversions;
@@ -45,6 +53,20 @@ public class GPReproduction<TYPE> {
 	 */
 	public GPReproduction(GPModel<TYPE> model) {
 		this.model = model;
+		
+		lifeCycle = GPController.getLifeCycleManager();
+		lifeCycle.addGenerationListener(this);
+		
+		// Initialise parameters.
+		initialise();
+	}
+	
+	/*
+	 * Initialises GPReproduction, in particular all parameters from the model should
+	 * be refreshed incase they've changed since the last call.
+	 */
+	private void initialise() {
+		programSelector = model.getProgramSelector();
 	}
 	
 	/**
@@ -71,10 +93,10 @@ public class GPReproduction<TYPE> {
 		
 		do {
 			// Choose a parent.
-			parent = model.getProgramSelector().getProgram();
+			parent = programSelector.getProgram();
 			
 			// Allow the life cycle listener to confirm or modify.
-			parent = model.getLifeCycleListener().onReproduction(parent);
+			parent = lifeCycle.onReproduction(parent);
 			reversions++;
 		} while(parent == null);
 		
@@ -98,5 +120,16 @@ public class GPReproduction<TYPE> {
 	 */
 	public int getReversions() {
 		return reversions;
+	}
+	
+	/**
+	 * Called after each generation. For each generation we should reset all 
+	 * parameters taken from the model incase they've changed. The generation
+	 * event is then CONFIRMed.
+	 */
+	@Override
+	public void onGenerationStart() {
+		// Reset.
+		initialise();
 	}
 }

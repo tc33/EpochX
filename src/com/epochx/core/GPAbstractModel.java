@@ -21,6 +21,7 @@ package com.epochx.core;
 
 import java.util.*;
 
+import com.epochx.life.LifeCycleListener;
 import com.epochx.op.crossover.*;
 import com.epochx.op.initialisation.*;
 import com.epochx.op.mutation.*;
@@ -813,6 +814,16 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	}
 	
 	/**
+	 * Overwrites the default life cycle listener.
+	 * 
+	 * @param lifeCycleListener the object that should be informed about life 
+	 * cycle events as they happen.
+	 */
+	public void setLifeCycleListener(LifeCycleListener<TYPE> lifeCycleListener) {
+		this.lifeCycleListener = lifeCycleListener;
+	}
+	
+	/**
 	 * {@inheritDoc}
 	 * 
 	 * <p>Default implementation confirms the initialised population by 
@@ -895,15 +906,12 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Default implementation confirms the generation by returning the given 
-	 * population.
+	 * <p>Default implementation does nothing.
 	 * 
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public List<CandidateProgram<TYPE>> onGeneration(List<CandidateProgram<TYPE>> pop) {
-		return pop;
-	}
+	public void onGenerationStart() {}
 	
 	/**
 	 * {@inheritDoc}

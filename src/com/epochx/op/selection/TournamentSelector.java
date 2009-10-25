@@ -58,9 +58,9 @@ public class TournamentSelector<TYPE> implements ProgramSelector<TYPE>, PoolSele
 	 * Store the population for creating tournaments from.
 	 */
 	@Override
-	public void onGenerationStart(List<CandidateProgram<TYPE>> pop) {
+	public void setSelectionPool(List<CandidateProgram<TYPE>> pop) {
 		// We'll be using a random selector to construct a tournament.
-		randomSelector.onGenerationStart(pop);
+		randomSelector.setSelectionPool(pop);
 	}
 	
 	/**
@@ -118,7 +118,7 @@ public class TournamentSelector<TYPE> implements ProgramSelector<TYPE>, PoolSele
 		List<CandidateProgram<TYPE>> pool = new ArrayList<CandidateProgram<TYPE>>(poolSize);
 		
 		ProgramSelector<TYPE> programSelector = new TournamentSelector<TYPE>(model, tournamentSize);
-		programSelector.onGenerationStart(pop);
+		programSelector.setSelectionPool(pop);
 		
 		for (int i=0; i<poolSize; i++) {
 			pool.add(programSelector.getProgram());

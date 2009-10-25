@@ -21,15 +21,22 @@ package com.epochx.core;
 
 import java.util.*;
 
+import com.epochx.life.*;
 import com.epochx.representation.*;
 
 /**
  * This class has the task of retrieving the set of elites from a population.
  */
-public class GPElitism<TYPE> {
+public class GPElitism<TYPE> implements GenerationListener {
 
 	// The controlling model.
 	private GPModel<TYPE> model;
+	
+	// Manager of life cycle events.
+	private LifeCycleManager<TYPE> lifeCycle;
+
+	// The number of elites to be used.
+	private int noElites;
 	
 	/**
 	 * Constructs an instance of GPElitism which will perform the elitism 
@@ -40,6 +47,24 @@ public class GPElitism<TYPE> {
 	 */
 	public GPElitism(GPModel<TYPE> model) {
 		this.model = model;
+		
+		// Register interest in generation events so we can reset.
+		lifeCycle = GPController.getLifeCycleManager();
+		lifeCycle.addGenerationListener(this);
+		
+		// Initialise parameters.
+		initialise();
+	}
+	
+	/*
+	 * Initialises GPElitism, in particular all parameters from the model should
+	 * be refreshed incase they've changed since the last call.
+	 */
+	private void initialise() {
+		// Discover how many elites we need.
+		noElites = model.getNoElites();
+		int popSize = model.getPopulationSize();
+		noElites = (noElites < popSize) ? noElites : popSize;
 	}
 	
 	/**
@@ -63,12 +88,7 @@ public class GPElitism<TYPE> {
 	 * 		   greater than the population size then the returned list will 
 	 * 		   contain all CandidatePrograms from the population sorted.
 	 */
-	public List<CandidateProgram<TYPE>> getElites(List<CandidateProgram<TYPE>> pop) {
-		// Discover how many elites we need.
-		int noElites = model.getNoElites();
-		int popSize = model.getPopulationSize();
-		noElites = (noElites < popSize) ? noElites : popSize;
-		
+	public List<CandidateProgram<TYPE>> getElites(List<CandidateProgram<TYPE>> pop) {		
 		// Construct an array for elites.
 		List<CandidateProgram<TYPE>> elites;
 		
@@ -81,9 +101,20 @@ public class GPElitism<TYPE> {
 		}
 		
 		// Allow life cycle listener to confirm or modify.
-		elites = model.getLifeCycleListener().onElitism(elites);
+		elites = lifeCycle.onElitism(elites);
 		
 		return elites;
+	}
+	
+	/**
+	 * Called after each generation. For each generation we should reset all 
+	 * parameters taken from the model incase they've changed. The generation
+	 * event is then CONFIRMed.
+	 */
+	@Override
+	public void onGenerationStart() {
+		// Reset.
+		initialise();
 	}
 	
 }

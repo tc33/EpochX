@@ -63,7 +63,7 @@ public class LinearRankSelector<TYPE> implements ProgramSelector<TYPE>, PoolSele
 	 * 			  should be selected.
 	 */
 	@Override
-	public void onGenerationStart(List<CandidateProgram<TYPE>> pop) {
+	public void setSelectionPool(List<CandidateProgram<TYPE>> pop) {
 		Collections.sort(pop);
 		this.pop = pop;
 		
@@ -125,7 +125,7 @@ public class LinearRankSelector<TYPE> implements ProgramSelector<TYPE>, PoolSele
 		}
 		
 		ProgramSelector<TYPE> programSelector = new LinearRankSelector<TYPE>(model, gradient);
-		programSelector.onGenerationStart(pop);
+		programSelector.setSelectionPool(pop);
 		List<CandidateProgram<TYPE>> pool = new ArrayList<CandidateProgram<TYPE>>();
 		
 		for (int i=0; i<poolSize; i++) {

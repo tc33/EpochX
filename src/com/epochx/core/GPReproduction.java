@@ -2,20 +2,20 @@
  *  Copyright 2007-2008 Lawrence Beadle & Tom Castle
  *  Licensed under GNU General Public License
  * 
- *  This file is part of Epoch X - (The Genetic Programming Analysis Software)
+ *  This file is part of EpochX: genetic programming for research
  *
- *  Epoch X is free software: you can redistribute it and/or modify
+ *  EpochX is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  Epoch X is distributed in the hope that it will be useful,
+ *  EpochX is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  * 
  *  You should have received a copy of the GNU General Public License
- *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with EpochX.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.epochx.core;
 
@@ -43,12 +43,12 @@ public class GPReproduction<TYPE> implements GenerationListener {
 	private int reversions;
 	
 	/**
-	 * Constructs an instance of GEReproduction which will setup the 
+	 * Constructs an instance of GPReproduction which will setup the 
 	 * reproduction operation. Since the actual reproduction operation requires 
 	 * little more than selection of a program, the actual operation is also 
 	 * performed here.
 	 * 
-	 * @param model the GEModel which defines the ProgramSelector to use to 
+	 * @param model the GPModel which defines the ProgramSelector to use to 
 	 * 				select the program to be reproduced.
 	 */
 	public GPReproduction(GPModel<TYPE> model) {

@@ -25,14 +25,15 @@ import org.epochx.life.LifeCycleManager;
 import org.epochx.random.RandomNumberGenerator;
 import org.epochx.representation.CandidateProgram;
 
-
 /**
- * 
+ * This class is responsible for performing a generation in a GP run.
  */
 public class GPGeneration<TYPE> {
 
+	// The controlling model.
 	private GPModel<TYPE> model;
 	
+	// Manager of life cycle events.
 	private LifeCycleManager<TYPE> lifeCycle;
 	
 	// Core components.
@@ -41,16 +42,21 @@ public class GPGeneration<TYPE> {
 	private GPCrossover<TYPE> crossover;
 	private GPMutation<TYPE> mutation;
 	private GPReproduction<TYPE> reproduction;
-	
-	private List<CandidateProgram<TYPE>> pop;
-	
 	private RandomNumberGenerator rng;
+
+	// Operator probabilities.
 	private double mutationProbability;
 	private double crossoverProbability;
 	
+	/**
+	 * Constructs a generation component for performing each generation.
+	 * 
+	 * @param model 
+	 */
 	public GPGeneration(GPModel<TYPE> model) {
 		this.model = model;
 		
+		// Get a reference to the life cycle manager.
 		lifeCycle = GPController.getLifeCycleManager();
 		
 		// Setup core components.
@@ -61,21 +67,52 @@ public class GPGeneration<TYPE> {
 		reproduction = new GPReproduction<TYPE>(model);
 	}
 	
-	private void initialise() {
+	/*
+	 * Reset the component with parameters from the model which might have 
+	 * changed since the last generation.
+	 */
+	private void reset() {
 		rng = model.getRNG();
 		mutationProbability = model.getMutationProbability();
 		crossoverProbability = model.getCrossoverProbability();
 	}
 	
+	/**
+	 * Performs one generation of a GP run. The method receives the previous 
+	 * population and then performs one generation and returns the resultant
+	 * population. 
+	 * 
+	 * <p>A generation consists of the following sequence of events:
+	 * 
+	 * <ol>
+	 *   <li>Select the elites and put them into the next population.</li>
+	 *   <li>Select a breeding pool of programs.</li>
+	 *   <li>Randomly choose an operator based upon probablities from the model:
+	 *   	<ul>
+	 *   		<li>Crossover - pass control to crossover component.</li>
+	 *   		<li>Mutation - pass control to mutation component.</li>
+	 *   		<li>Reproduction - pass control to reproduction component.</li>
+	 *   	</ul>
+	 *   </li>
+	 *   <li>Insert the result of the operator into the next population.</li>
+	 *   <li>Start back at 3. until the next population is full.</li>
+	 *   <li>Return the new population.</li>
+	 * </ol>
+	 * 
+	 * <p>The necessary events trigger life cycle events.
+	 * 
+	 * @param previousPop
+	 * @return
+	 */
 	public List<CandidateProgram<TYPE>> generation(List<CandidateProgram<TYPE>> previousPop) {
-		initialise();
+		reset();
 		
 		// Tell life cycle manager we're starting a new generation.
 		lifeCycle.onGenerationStart();
 		
 		// Create next population to fill.
 		int popSize = model.getPopulationSize();
-		pop = new ArrayList<CandidateProgram<TYPE>>(popSize);
+		List<CandidateProgram<TYPE>> pop = new ArrayList<CandidateProgram<TYPE>>(popSize);
 		
 		// Perform elitism.
 		pop.addAll(elitism.getElites(previousPop));

@@ -30,6 +30,7 @@ public class AntMoveAction extends AntAction {
 	/**
 	 * Constructs an AntMoveAction, supplying an ant that the action can be 
 	 * performed on.
+	 * 
 	 * @param ant the Ant that will be moved upon execution.
 	 */
 	public AntMoveAction(Ant ant) {
@@ -46,7 +47,8 @@ public class AntMoveAction extends AntAction {
 	}
 	
 	/**
-	 * String representation of this action which identifies the action type. 
+	 * String representation of this action which identifies the action type.
+	 *  
 	 * @return string representation of this action which identifies the action 
 	 * type.
 	 */

@@ -52,6 +52,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 													   MutationStatListener,
 													   LifeCycleListener<TYPE> {
 
+	// Run components.
 	private Initialiser<TYPE> initialiser;
 	private Crossover<TYPE> crossover;
 	private Mutation<TYPE> mutator;
@@ -59,6 +60,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	private ProgramSelector<TYPE> programSelector;
 	private RandomNumberGenerator randomNumberGenerator;
 
+	// Run parameters.
 	private int noRuns;
 	private int noGenerations;
 	private int populationSize;
@@ -67,20 +69,22 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	private int maxInitialDepth;
 	private int maxProgramDepth;
 	private double terminationFitness;
-	
 	private double crossoverProbability;
 	private double mutationProbability;
 	
+	// Requested stats fields.
 	private MutationStatField[] mutationStatFields;
 	private CrossoverStatField[] crossoverStatFields;
 	private GenerationStatField[] generationStatFields;
 	private RunStatField[] runStatFields;
 	
+	// Stats listeners.
 	private RunStatListener runStatListener;
 	private GenerationStatListener generationStatListener;
 	private CrossoverStatListener crossoverStatListener;
 	private MutationStatListener mutationStatListener;
 	
+	// Life cycle listeners.
 	private LifeCycleListener<TYPE> lifeCycleListener;
 	
 	/**
@@ -88,7 +92,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * accessor method for information of each default value.
 	 */
 	public GPAbstractModel() {
-		// Set default parameter values.
+		// Initialise default parameter values.
 		noRuns = 1;
 		noGenerations = 50;
 		populationSize = 500;
@@ -115,7 +119,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 		// Life cycle listener.
 		lifeCycleListener = this;
 		
-		// GP components.
+		// Initialise components.
 		programSelector = new RandomSelector<TYPE>(this);
 		poolSelector = new TournamentSelector<TYPE>(this, 3);
 		initialiser = new FullInitialiser<TYPE>(this);

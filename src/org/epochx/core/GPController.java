@@ -42,7 +42,8 @@ public class GPController<TYPE> {
 	private LifeCycleManager<TYPE> lifeCycle;
 	
 	/*
-	 * Private constructor. The only method is the static run().
+	 * Private constructor. The only methods are the static run() and 
+	 * getLifeCycleManager().
 	 */
 	private GPController() {
 		// Setup life cycle manager.
@@ -57,6 +58,7 @@ public class GPController<TYPE> {
 	 * changed during execution, for example, in another thread. (Although note 
 	 * that unless stated elsewhere, this version of EpochX is not considered 
 	 * thread safe).
+	 * 
 	 * @param <TYPE> The return type of the <code>CandidatePrograms</code> 
 	 * 				 generated.
 	 * @param model  The GPModel which defines the control parameters for the 
@@ -90,6 +92,15 @@ public class GPController<TYPE> {
 		return runs;
 	}
 	
+	/**
+	 * Returns the controller's life cycle manager. Only one life cycle manager
+	 * is available in a GPController. The life cycle manager handles all life 
+	 * cycle events that occur during a call to run() and informs the necessary 
+	 * listeners.
+	 * 
+	 * @param <TYPE> the data-type of the program's being evolved.
+	 * @return the life cycle manager for the controller.
+	 */
 	public static <TYPE> LifeCycleManager<TYPE> getLifeCycleManager() {
 		if (controller == null) {
 			controller = new GPController<TYPE>();

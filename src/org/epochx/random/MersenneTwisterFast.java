@@ -176,6 +176,11 @@ import java.util.Random;
 // -- Sean
 
 public class MersenneTwisterFast implements Serializable, Cloneable, RandomNumberGenerator {
+	/*
+	 * TODO This class contains lots of unused methods etc, and needs to be 
+	 * tidied for our purposes.
+	 */
+	
     // Period parameters
     private static final int N = 624;
     private static final int M = 397;

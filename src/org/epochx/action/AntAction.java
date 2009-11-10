@@ -24,6 +24,7 @@ import org.epochx.ant.*;
 /**
  * An AntAction is the superclass for all actions in the artificial ant domain.
  * It provides a mechanism for accessing the Ant object to be acted upon.
+ * 
  * @see Ant
  */
 public abstract class AntAction extends Action {
@@ -34,6 +35,7 @@ public abstract class AntAction extends Action {
 	/**
 	 * Constructs an AntAction, supplying an ant that the action can be 
 	 * performed on.
+	 * 
 	 * @param ant the Ant that can be acted upon.
 	 */
 	public AntAction(Ant ant) {
@@ -42,6 +44,7 @@ public abstract class AntAction extends Action {
 	
 	/**
 	 * Returns the Ant object that this Action acts upon.
+	 * 
 	 * @return the Ant object that this Action acts upon.
 	 */
 	public Ant getAnt() {

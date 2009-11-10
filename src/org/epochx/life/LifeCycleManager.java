@@ -46,8 +46,6 @@ import org.epochx.representation.*;
  */
 public class LifeCycleManager<TYPE> {
 	/*
-	 * 
-	 * 
 	 * TODO Introduce an ordering of the listeners.
 	 */
 	

@@ -200,6 +200,7 @@ public class GPRun<TYPE> {
 	 * Retrieve the time in nano-seconds of the run. This will be either the 
 	 * length of the whole run if it's finished or the time up until now if 
 	 * the run is not finished.
+	 * 
 	 * @return The run time in nano-seconds.
 	 */
 	public long getRunTime() {

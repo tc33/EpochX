@@ -31,7 +31,7 @@ import org.epochx.op.crossover.*;
 import org.epochx.op.initialisation.*;
 import org.epochx.op.selection.*;
 import org.epochx.representation.*;
-import org.epochx.representation.action.*;
+import org.epochx.representation.ant.*;
 import org.epochx.stats.*;
 import org.epochx.util.FileManip;
 

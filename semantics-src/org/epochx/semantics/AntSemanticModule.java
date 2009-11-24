@@ -26,7 +26,7 @@ import org.epochx.action.*;
 import org.epochx.ant.*;
 import org.epochx.core.GPModel;
 import org.epochx.representation.*;
-import org.epochx.representation.action.*;
+import org.epochx.representation.ant.*;
 
 
 

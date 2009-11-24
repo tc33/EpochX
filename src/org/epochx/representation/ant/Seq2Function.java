@@ -17,16 +17,15 @@
  *  You should have received a copy of the GNU General Public License
  *  along with EpochX.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.representation.action;
+package org.epochx.representation.ant;
 
-import org.epochx.action.*;
 import org.epochx.representation.*;
 
 /**
  * A <code>FunctionNode</code> which provides the facility to sequence two 
  * instructions - which may be other functions or terminal nodes with actions.
  */
-public class Seq2Function extends FunctionNode<Action> {
+public class Seq2Function extends FunctionNode<Object> {
 
 	/**
 	 * Construct a Seq2Function with no children.
@@ -43,7 +42,7 @@ public class Seq2Function extends FunctionNode<Action> {
 	 * @param child1 The first child node to be executed first in sequence.
 	 * @param child2 The second child node to be executed second in sequence.
 	 */
-	public Seq2Function(Node<Action> child1, Node<Action> child2) {
+	public Seq2Function(Node<Object> child1, Node<Object> child2) {
 		super(child1, child2);
 	}
 	
@@ -59,11 +58,11 @@ public class Seq2Function extends FunctionNode<Action> {
 	 * effect.</p>
 	 */
 	@Override
-	public Action evaluate() {
-		((Action) getChild(0).evaluate()).execute();
-		((Action) getChild(1).evaluate()).execute();
+	public Object evaluate() {
+		getChild(0).evaluate();
+		getChild(1).evaluate();
 		
-		return Action.DO_NOTHING;
+		return null;
 	}
 	
 	/**

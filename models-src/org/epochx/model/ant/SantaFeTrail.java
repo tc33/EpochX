@@ -23,20 +23,19 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-import org.epochx.action.*;
 import org.epochx.ant.*;
 import org.epochx.core.*;
 import org.epochx.representation.*;
-import org.epochx.representation.action.*;
+import org.epochx.representation.ant.*;
 import org.epochx.stats.GenerationStatField;
 
 
 /**
  * 
  */
-public class SantaFeTrail extends GPAbstractModel<Action> {
+public class SantaFeTrail extends GPAbstractModel<Object> {
 
-	private HashMap<String, TerminalNode<Action>> variables = new HashMap<String, TerminalNode<Action>>();	
+	private HashMap<String, TerminalNode<Object>> variables = new HashMap<String, TerminalNode<Object>>();	
 	private AntLandscape landscape;
 	private Ant ant;
 	
@@ -69,39 +68,31 @@ public class SantaFeTrail extends GPAbstractModel<Action> {
 	public SantaFeTrail() {
 		landscape = new AntLandscape(new Dimension(32, 32), null);
 		ant = new Ant(600, landscape);
-		
-		configure();
-	}
-	
-	public void configure() {
-		// Define variables.
-		variables.put("MOVE", new TerminalNode<Action>(new AntMoveAction(ant)));
-		variables.put("TURN-LEFT", new TerminalNode<Action>(new AntTurnLeftAction(ant)));
-		variables.put("TURN-RIGHT", new TerminalNode<Action>(new AntTurnRightAction(ant)));
 	}
 	
 	@Override
-	public List<FunctionNode<Action>> getFunctions() {
+	public List<FunctionNode<Object>> getFunctions() {
 		// Define functions.
-		List<FunctionNode<Action>> functions = new ArrayList<FunctionNode<Action>>();
-		functions.add(new IfFoodAheadFunction(ant, landscape));
+		List<FunctionNode<Object>> functions = new ArrayList<FunctionNode<Object>>();
+		functions.add(new IfFoodAheadFunction(ant));
 		functions.add(new Seq2Function());
 		functions.add(new Seq3Function());
 		return functions;
 	}
 
 	@Override
-	public List<TerminalNode<Action>> getTerminals() {		
+	public List<TerminalNode<Object>> getTerminals() {		
 		// Define terminals.
-		List<TerminalNode<Action>> terminals = new ArrayList<TerminalNode<Action>>();
-		terminals.add(variables.get("MOVE"));
-		terminals.add(variables.get("TURN-LEFT"));
-		terminals.add(variables.get("TURN-RIGHT"));		
+		List<TerminalNode<Object>> terminals = new ArrayList<TerminalNode<Object>>();
+		terminals.add(new AntMoveAction(ant));
+		terminals.add(new AntTurnLeftAction(ant));
+		terminals.add(new AntTurnRightAction(ant));
+		
 		return terminals;
 	}
 	
 	@Override
-	public double getFitness(CandidateProgram<Action> program) {		
+	public double getFitness(CandidateProgram<Object> program) {		
 		landscape.setFoodLocations(new ArrayList<Point>(Arrays.asList(foodLocations)));
 		ant.reset(600, landscape);
 
@@ -125,7 +116,7 @@ public class SantaFeTrail extends GPAbstractModel<Action> {
 	}
 	
 	public static void main(String[] args) {
-		GPAbstractModel<Action> model = new SantaFeTrail();
+		GPAbstractModel<Object> model = new SantaFeTrail();
 		model.setGenStatFields(new GenerationStatField[]{GenerationStatField.FITNESS_MIN});
 		GPController.run(model);
 	}

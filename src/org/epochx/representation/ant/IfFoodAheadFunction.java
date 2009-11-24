@@ -17,9 +17,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with EpochX.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.representation.action;
+package org.epochx.representation.ant;
 
-import org.epochx.action.*;
 import org.epochx.ant.*;
 import org.epochx.representation.*;
 
@@ -29,13 +28,10 @@ import org.epochx.representation.*;
  * if statement has the condition predefined as a check for whether the next 
  * move in the landscape contains a food item.
  */
-public class IfFoodAheadFunction extends FunctionNode<Action> {
+public class IfFoodAheadFunction extends FunctionNode<Object> {
 	
 	// The artificial ant the Actions will be controlling.
 	private Ant ant;
-	
-	// The landscape the ant is roaming.
-	private AntLandscape landscape;
 	
 	/**
 	 * Construct an IfFoodAheadFunction with no children.
@@ -43,8 +39,8 @@ public class IfFoodAheadFunction extends FunctionNode<Action> {
 	 * @param landscape the landscape upon which the ant is roaming which will
 	 * be used to check for food locations.
 	 */
-	public IfFoodAheadFunction(Ant ant, AntLandscape landscape) {
-		this(ant, landscape, null, null);
+	public IfFoodAheadFunction(Ant ant) {
+		this(ant, null, null);
 	}
 	
 	/**
@@ -58,11 +54,10 @@ public class IfFoodAheadFunction extends FunctionNode<Action> {
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
 	 */
-	public IfFoodAheadFunction(Ant ant, AntLandscape landscape, Node<Action> child1, Node<Action> child2) {
+	public IfFoodAheadFunction(Ant ant, Node<Object> child1, Node<Object> child2) {
 		super(child1, child2);
 		
 		this.ant = ant;
-		this.landscape = landscape;
 	}
 	
 	/**
@@ -78,14 +73,14 @@ public class IfFoodAheadFunction extends FunctionNode<Action> {
 	 * effect.</p>
 	 */
 	@Override
-	public Action evaluate() {
+	public Object evaluate() {
 		if (ant.isFoodAhead()) {
-			((Action) getChild(0).evaluate()).execute();
+			getChild(0).evaluate();
 		} else {
-			((Action) getChild(1).evaluate()).execute();
+			getChild(1).evaluate();
 		}
 		
-		return Action.DO_NOTHING;
+		return null;
 	}
 	
 	/**

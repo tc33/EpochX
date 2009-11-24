@@ -23,7 +23,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 import org.epochx.action.*;
-import org.epochx.representation.action.*;
+import org.epochx.representation.ant.*;
 import org.epochx.representation.bool.*;
 import org.epochx.representation.dbl.*;
 

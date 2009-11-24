@@ -17,7 +17,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with EpochX.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.representation.action;
+package org.epochx.representation.ant;
 
 import org.epochx.action.*;
 import org.epochx.representation.*;
@@ -26,7 +26,7 @@ import org.epochx.representation.*;
  * A <code>FunctionNode</code> which provides the facility to sequence three 
  * instructions - which may be other functions or terminal nodes with actions.
  */
-public class Seq3Function extends FunctionNode<Action> {
+public class Seq3Function extends FunctionNode<Object> {
 	
 	/**
 	 * Construct a Seq3Function with no children.
@@ -43,7 +43,7 @@ public class Seq3Function extends FunctionNode<Action> {
 	 * @param child2 The second child node to be executed second in sequence.
 	 * @param child3 The third child node to be executed third in sequence.
 	 */
-	public Seq3Function(Node<Action> child1, Node<Action> child2, Node<Action> child3) {
+	public Seq3Function(Node<Object> child1, Node<Object> child2, Node<Object> child3) {
 		super(child1, child2, child3);
 	}
 	
@@ -59,12 +59,12 @@ public class Seq3Function extends FunctionNode<Action> {
 	 * effect.</p>
 	 */
 	@Override
-	public Action evaluate() {
-		((Action) getChild(0).evaluate()).execute();
-		((Action) getChild(1).evaluate()).execute();
-		((Action) getChild(2).evaluate()).execute();
+	public Object evaluate() {
+		getChild(0).evaluate();
+		getChild(1).evaluate();
+		getChild(2).evaluate();
 		
-		return Action.DO_NOTHING;
+		return null;
 	}
 	
 	/**

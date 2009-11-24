@@ -17,7 +17,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with EpochX.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.example.multiplexer;
+package org.epochx.example.mux;
 
 import java.util.*;
 
@@ -33,13 +33,13 @@ import org.epochx.util.BoolUtils;
 /**
  * 
  */
-public class Multiplexer6BitNOIF extends GPAbstractModel<Boolean> {
+public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
 
 	private boolean[][] inputs;
 	
-	private HashMap<String, Variable<Boolean>> variables = new HashMap<String, Variable<Boolean>>();
+	private HashMap<String, Variable<Boolean>> variables = new HashMap<String, Variable<Boolean>>();	
 	
-	public Multiplexer6BitNOIF() {
+	public Multiplexer6Bit() {
 		inputs = BoolUtils.generateBoolSequences(6);
 		
 		configure();
@@ -58,13 +58,14 @@ public class Multiplexer6BitNOIF extends GPAbstractModel<Boolean> {
 		setRunStatFields(new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM, RunStatField.RUN_TIME});
 		
 		setPopulationSize(500);
-		setNoGenerations(50);
+		setNoGenerations(10);
 		setCrossoverProbability(0.9);
 		setMutationProbability(0.0);
-		setNoRuns(10);
+		setNoRuns(1);
 		setPoolSize(50);
 		setNoElites(50);
-		setMaxProgramDepth(6);
+		setInitialMaxDepth(6);
+		setMaxProgramDepth(17);
 		setPoolSelector(new TournamentSelector<Boolean>(this, 7));
 		setProgramSelector(new RandomSelector<Boolean>(this));
 		setCrossover(new UniformPointCrossover<Boolean>(this));
@@ -74,6 +75,7 @@ public class Multiplexer6BitNOIF extends GPAbstractModel<Boolean> {
 	public List<FunctionNode<Boolean>> getFunctions() {
 		// Define functions.
 		List<FunctionNode<Boolean>> functions = new ArrayList<FunctionNode<Boolean>>();
+		functions.add(new IfFunction());
 		functions.add(new AndFunction());
 		functions.add(new OrFunction());
 		functions.add(new NotFunction());
@@ -132,6 +134,6 @@ public class Multiplexer6BitNOIF extends GPAbstractModel<Boolean> {
     }
 	
 	public static void main(String[] args) {
-		GPController.run(new Multiplexer6BitNOIF());
+		GPController.run(new Multiplexer6Bit());
 	}
 }

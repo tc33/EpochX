@@ -17,7 +17,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with EpochX.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.example.multiplexer;
+package org.epochx.example.mux;
 
 import java.util.*;
 

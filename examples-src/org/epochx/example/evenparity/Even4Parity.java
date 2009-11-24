@@ -53,7 +53,7 @@ public class Even4Parity extends GPAbstractModel<Boolean> {
 		variables.put("D1", new Variable<Boolean>("D1"));
 		variables.put("D0", new Variable<Boolean>("D0"));
 		
-		setGenStatFields(new GenerationStatField[]{GenerationStatField.FITNESS_MIN, GenerationStatField.FITNESS_AVE, GenerationStatField.LENGTH_AVE, GenerationStatField.RUN_TIME});
+		//setGenStatFields(new GenerationStatField[]{GenerationStatField.FITNESS_MIN, GenerationStatField.FITNESS_AVE, GenerationStatField.LENGTH_AVE, GenerationStatField.RUN_TIME});
 		setRunStatFields(new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM, RunStatField.RUN_TIME});
 		
 		setPopulationSize(500);
@@ -75,7 +75,7 @@ public class Even4Parity extends GPAbstractModel<Boolean> {
 	public List<FunctionNode<Boolean>> getFunctions() {
 		// Define functions.
 		List<FunctionNode<Boolean>> functions = new ArrayList<FunctionNode<Boolean>>();
-		functions.add(new IfFunction());
+		functions.add(new XorFunction());
 		functions.add(new AndFunction());
 		functions.add(new OrFunction());
 		functions.add(new NotFunction());

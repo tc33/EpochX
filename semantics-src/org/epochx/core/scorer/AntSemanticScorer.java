@@ -21,7 +21,7 @@ package org.epochx.core.scorer;
 
 import java.util.ArrayList;
 
-import org.epochx.representation.CandidateProgram;
+import org.epochx.representation.*;
 import org.epochx.semantics.*;
 
 
@@ -43,7 +43,7 @@ public class AntSemanticScorer extends SemanticScorer {
 	/* (non-Javadoc)
 	 * @see org.epochx.core.scorer.SemanticScorer#doScore(org.epochx.representation.CandidateProgram, org.epochx.representation.CandidateProgram)
 	 */
-	public double doScore(CandidateProgram program1, CandidateProgram program2) {
+	public double doScore(Node program1, Node program2) {
 		// generate 2 behaviours
 		AntRepresentation rep1 = (AntRepresentation) getSemanticModule().codeToBehaviour(program1);
 		AntRepresentation rep2 = (AntRepresentation) getSemanticModule().codeToBehaviour(program2);

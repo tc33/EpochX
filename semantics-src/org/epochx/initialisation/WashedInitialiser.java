@@ -74,11 +74,11 @@ public class WashedInitialiser<TYPE> implements Initialiser<TYPE> {
 		for(int i=0; i<popSize; i++) {
 			CandidateProgram<TYPE> candidate;
 			Representation representation;
-			CandidateProgram<TYPE> reducedCandidate;
+			Node<TYPE> reducedCandidate;
 			candidate = firstGen.get(i);
 			representation = semanticModule.codeToBehaviour(candidate);
 			reducedCandidate = semanticModule.behaviourToCode(representation);
-			firstGen.set(i, reducedCandidate);
+			firstGen.set(i, new CandidateProgram<TYPE>(reducedCandidate, model));
         }
 		
 		// stop the semantic module

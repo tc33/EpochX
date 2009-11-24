@@ -97,10 +97,10 @@ public abstract class SemanticModel<TYPE> extends GPAbstractModel<TYPE> {
 			semMod.start();
 			
 			// check behaviours
-			Representation p1Rep = semMod.codeToBehaviour(parents[0]);
-			Representation p2Rep = semMod.codeToBehaviour(parents[1]);
-			Representation c1Rep = semMod.codeToBehaviour(children[0]);
-			Representation c2Rep = semMod.codeToBehaviour(children[1]);
+			Representation p1Rep = semMod.codeToBehaviour(parents[0].getRootNode());
+			Representation p2Rep = semMod.codeToBehaviour(parents[1].getRootNode());
+			Representation c1Rep = semMod.codeToBehaviour(children[0].getRootNode());
+			Representation c2Rep = semMod.codeToBehaviour(children[1].getRootNode());
 			if(c1Rep.equals(p1Rep) || c1Rep.equals(p2Rep)) {
 				equal = true;
 			}
@@ -133,8 +133,8 @@ public abstract class SemanticModel<TYPE> extends GPAbstractModel<TYPE> {
 			semMod.start();
 			
 			// check behaviours
-			Representation p1Rep = semMod.codeToBehaviour(parent);
-			Representation c1Rep = semMod.codeToBehaviour(child);
+			Representation p1Rep = semMod.codeToBehaviour(parent.getRootNode());
+			Representation c1Rep = semMod.codeToBehaviour(child.getRootNode());
 			
 			if(c1Rep.equals(p1Rep)) {
 				equal = true;

@@ -19,7 +19,7 @@
 
 package org.epochx.core.scorer;
 
-import org.epochx.representation.CandidateProgram;
+import org.epochx.representation.*;
 import org.epochx.semantics.SemanticModule;
 
 
@@ -55,6 +55,6 @@ public abstract class SemanticScorer {
 	 * @param program2 The 1st program being considered
 	 * @return The difference between the two behaviours - a difference of 0 indicates equivalence
 	 */
-	public abstract double doScore(CandidateProgram program1, CandidateProgram program2);
+	public abstract double doScore(Node program1, Node program2);
 
 }

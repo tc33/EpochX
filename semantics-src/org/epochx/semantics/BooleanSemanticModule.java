@@ -19,11 +19,10 @@
  */
 package org.epochx.semantics;
 
-import net.sf.javabdd.BDD;
-import net.sf.javabdd.BDDFactory;
 import java.util.*;
 
-import org.epochx.core.*;
+import net.sf.javabdd.*;
+
 import org.epochx.representation.*;
 import org.epochx.representation.bool.*;
 
@@ -37,16 +36,14 @@ public class BooleanSemanticModule implements SemanticModule<Boolean> {
 	private BDDFactory bddLink;
 	private List<BDD> bddList;
 	private List<TerminalNode<Boolean>> terminals;
-	private GPModel<Boolean> model;
 	
 	/**
 	 * Constructor for Boolean Semantic Module
 	 * @param list List of terminal nodes
 	 * @param model The GPModel object
 	 */
-	public BooleanSemanticModule(List<TerminalNode<Boolean>> list, GPModel<Boolean> model) {
+	public BooleanSemanticModule(List<TerminalNode<Boolean>> list) {
 		this.terminals = list;
-		this.model = model;
 	}
 
 	/* (non-Javadoc)
@@ -72,30 +69,32 @@ public class BooleanSemanticModule implements SemanticModule<Boolean> {
 		bddLink.done();		
 	}
 
+	public BooleanRepresentation codeToBehaviour(CandidateProgram<Boolean> program) {
+		return codeToBehaviour(program.getRootNode());
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.epochx.semantics.SemanticModule#codeToBehaviour(org.epochx.core.representation.CandidateProgram)
 	 */
 	@Override
-	public BooleanRepresentation codeToBehaviour(CandidateProgram<Boolean> program) {
-		// pull root node out of candidate program
-		Node<Boolean> rootNode = program.getRootNode();
+	public BooleanRepresentation codeToBehaviour(Node<Boolean> rootNode) {
 		// break up nodes and call respective bits recursively
-		if(rootNode instanceof TerminalNode) {
+		if(rootNode instanceof TerminalNode<?>) {
 			// A TERMINAL
 			int index = terminals.indexOf(rootNode);
 			return new BooleanRepresentation(bddList.get(index));
 		} else if(rootNode instanceof NotFunction) {
 			// NOT
 			// resolve child behaviour
-			BooleanRepresentation childBehaviour = this.codeToBehaviour(new CandidateProgram<Boolean>(rootNode.getChild(0), model));
+			BooleanRepresentation childBehaviour = this.codeToBehaviour(rootNode.getChild(0));
 			BDD childBDD = childBehaviour.getBDD();
 			BDD result = childBDD.not();
 			return new BooleanRepresentation(result);
 		} else if(rootNode instanceof AndFunction) {            	
 			// AND
 			// resolve child behaviour
-			BooleanRepresentation childBehaviour1 = this.codeToBehaviour(new CandidateProgram<Boolean>(rootNode.getChild(0), model));
-			BooleanRepresentation childBehaviour2 = this.codeToBehaviour(new CandidateProgram<Boolean>(rootNode.getChild(1), model));
+			BooleanRepresentation childBehaviour1 = this.codeToBehaviour(rootNode.getChild(0));
+			BooleanRepresentation childBehaviour2 = this.codeToBehaviour(rootNode.getChild(1));
 			BDD childBDD1 = childBehaviour1.getBDD();
 			BDD childBDD2 = childBehaviour2.getBDD();
 			BDD result = childBDD1.and(childBDD2);
@@ -103,8 +102,8 @@ public class BooleanSemanticModule implements SemanticModule<Boolean> {
 		} else if(rootNode instanceof OrFunction) {
 			// OR
 			// resolve child behaviour
-			BooleanRepresentation childBehaviour1 = this.codeToBehaviour(new CandidateProgram<Boolean>(rootNode.getChild(0), model));
-			BooleanRepresentation childBehaviour2 = this.codeToBehaviour(new CandidateProgram<Boolean>(rootNode.getChild(1), model));
+			BooleanRepresentation childBehaviour1 = this.codeToBehaviour(rootNode.getChild(0));
+			BooleanRepresentation childBehaviour2 = this.codeToBehaviour(rootNode.getChild(1));
 			BDD childBDD1 = childBehaviour1.getBDD();
 			BDD childBDD2 = childBehaviour2.getBDD();
 			BDD result = childBDD1.or(childBDD2);
@@ -112,9 +111,9 @@ public class BooleanSemanticModule implements SemanticModule<Boolean> {
 		} else if(rootNode instanceof IfFunction) {
 			// IF
 			// resolve child behaviour
-			BooleanRepresentation childBehaviour1 = this.codeToBehaviour(new CandidateProgram<Boolean>(rootNode.getChild(0), model));
-			BooleanRepresentation childBehaviour2 = this.codeToBehaviour(new CandidateProgram<Boolean>(rootNode.getChild(1), model));
-			BooleanRepresentation childBehaviour3 = this.codeToBehaviour(new CandidateProgram<Boolean>(rootNode.getChild(2), model));
+			BooleanRepresentation childBehaviour1 = this.codeToBehaviour(rootNode.getChild(0));
+			BooleanRepresentation childBehaviour2 = this.codeToBehaviour(rootNode.getChild(1));
+			BooleanRepresentation childBehaviour3 = this.codeToBehaviour(rootNode.getChild(2));
 			BDD childBDD1 = childBehaviour1.getBDD();
 			BDD childBDD2 = childBehaviour2.getBDD();
 			BDD childBDD3 = childBehaviour3.getBDD();
@@ -129,13 +128,12 @@ public class BooleanSemanticModule implements SemanticModule<Boolean> {
 	 * @see org.epochx.semantics.SemanticModule#behaviourToCode(org.epochx.semantics.Behaviour)
 	 */
 	@Override
-	public CandidateProgram<Boolean> behaviourToCode(Representation representation) {
+	public Node<Boolean> behaviourToCode(Representation representation) {
 		// convert to boolean representation
 		BooleanRepresentation booleanRep = (BooleanRepresentation) representation;
 		BDD bddRep = booleanRep.getBDD();
 		Node<Boolean> rootNode = this.resolveTranslation(bddRep);		
-		CandidateProgram<Boolean> result = new CandidateProgram<Boolean>(rootNode, model);	
-		return result;
+		return rootNode;
 	}
 	
 	private Node<Boolean> resolveTranslation(BDD topBDD) {

@@ -141,8 +141,8 @@ public class AntHybridSemanticallyDrivenInitialiser implements Initialiser<Actio
         List<CandidateProgram<Action>> firstGen = new ArrayList<CandidateProgram<Action>>();
         int i = 1;
         for(ArrayList<String> toProg: storage) {                
-            CandidateProgram<Action> holder = semMod.behaviourToCode(new AntRepresentation(toProg));
-            firstGen.add(holder);
+            Node<Action> holder = semMod.behaviourToCode(new AntRepresentation(toProg));
+            firstGen.add(new CandidateProgram<Action>(holder, model));
             //System.out.println(holder);
             //System.out.println("Reverse Translation at: " + i);
             i++;

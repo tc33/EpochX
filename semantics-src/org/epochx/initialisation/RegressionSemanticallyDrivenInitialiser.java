@@ -74,29 +74,29 @@ public class RegressionSemanticallyDrivenInitialiser implements Initialiser<Doub
             if(cFunc==0) {
             	RegressionRepresentation rep1 = storage.get(random.nextInt(storage.size()));
             	RegressionRepresentation rep2 = storage.get(random.nextInt(storage.size()));
-            	Node<Double> node1 = (Node<Double>) semMod.behaviourToCode(rep1).getRootNode().clone();
-            	Node<Double> node2 = (Node<Double>) semMod.behaviourToCode(rep2).getRootNode().clone();
+            	Node<Double> node1 = (Node<Double>) semMod.behaviourToCode(rep1).clone();
+            	Node<Double> node2 = (Node<Double>) semMod.behaviourToCode(rep2).clone();
             	Node<Double> newTree = new AddFunction(node1, node2);
                 result = (RegressionRepresentation) semMod.codeToBehaviour(new CandidateProgram<Double>(newTree, model));
             } else if(cFunc==1) {
             	RegressionRepresentation rep1 = storage.get(random.nextInt(storage.size()));
             	RegressionRepresentation rep2 = storage.get(random.nextInt(storage.size()));
-            	Node<Double> node1 = (Node<Double>) semMod.behaviourToCode(rep1).getRootNode().clone();
-            	Node<Double> node2 = (Node<Double>) semMod.behaviourToCode(rep2).getRootNode().clone();
+            	Node<Double> node1 = (Node<Double>) semMod.behaviourToCode(rep1).clone();
+            	Node<Double> node2 = (Node<Double>) semMod.behaviourToCode(rep2).clone();
             	Node<Double> newTree = new SubtractFunction(node1, node2);
                 result = (RegressionRepresentation) semMod.codeToBehaviour(new CandidateProgram<Double>(newTree, model));
             } else if(cFunc==2) {
             	RegressionRepresentation rep1 = storage.get(random.nextInt(storage.size()));
             	RegressionRepresentation rep2 = storage.get(random.nextInt(storage.size()));
-            	Node<Double> node1 = (Node<Double>) semMod.behaviourToCode(rep1).getRootNode().clone();
-            	Node<Double> node2 = (Node<Double>) semMod.behaviourToCode(rep2).getRootNode().clone();
+            	Node<Double> node1 = (Node<Double>) semMod.behaviourToCode(rep1).clone();
+            	Node<Double> node2 = (Node<Double>) semMod.behaviourToCode(rep2).clone();
             	Node<Double> newTree = new MultiplyFunction(node1, node2);
                 result = (RegressionRepresentation) semMod.codeToBehaviour(new CandidateProgram<Double>(newTree, model));
             } else if(cFunc==3) {
             	RegressionRepresentation rep1 = storage.get(random.nextInt(storage.size()));
             	RegressionRepresentation rep2 = storage.get(random.nextInt(storage.size()));
-            	Node<Double> node1 = (Node<Double>) semMod.behaviourToCode(rep1).getRootNode().clone();
-            	Node<Double> node2 = (Node<Double>) semMod.behaviourToCode(rep2).getRootNode().clone();
+            	Node<Double> node1 = (Node<Double>) semMod.behaviourToCode(rep1).clone();
+            	Node<Double> node2 = (Node<Double>) semMod.behaviourToCode(rep2).clone();
             	Node<Double> newTree = new ProtectedDivisionFunction(node1, node2);
                 result = (RegressionRepresentation) semMod.codeToBehaviour(new CandidateProgram<Double>(newTree, model));
             }
@@ -109,8 +109,8 @@ public class RegressionSemanticallyDrivenInitialiser implements Initialiser<Doub
         // translate back and add to first generation
         List<CandidateProgram<Double>> firstGen = new ArrayList<CandidateProgram<Double>>();
         for(RegressionRepresentation toProg: storage) {
-        	CandidateProgram<Double> cp = semMod.behaviourToCode(toProg);
-            firstGen.add(cp);
+        	Node<Double> cp = semMod.behaviourToCode(toProg);
+            firstGen.add(new CandidateProgram<Double>(cp, model));
         }
         
         return firstGen;

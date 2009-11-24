@@ -42,18 +42,23 @@ public class TestSemanticModule {
 		semMod.start();
 		
 		// pull out first population
-		List<CandidateProgram<Double>> firstGen = rhh.getInitialPopulation();
+		List<CandidateProgram<Double>> pop = rhh.getInitialPopulation();
+		List<Node<Double>> firstGen = new ArrayList<Node<Double>>();
+		for (CandidateProgram<Double> p: pop) {
+			firstGen.add(p.getRootNode());
+		}
+
 		List<RegressionRepresentation> firstRep = new ArrayList<RegressionRepresentation>();
-		List<CandidateProgram<Double>> secondGen = new ArrayList<CandidateProgram<Double>>();
+		List<Node<Double>> secondGen = new ArrayList<Node<Double>>();
 		List<RegressionRepresentation> secondRep = new ArrayList<RegressionRepresentation>();
 
 		// generate 1st behaviours
-		for(CandidateProgram<Double> c: firstGen) {
+		for(Node<Double> c: firstGen) {
 			//System.out.println("1 - " + c.getRootNode());
 			RegressionRepresentation regRep1 = (RegressionRepresentation) semMod.codeToBehaviour(c);
 			firstRep.add((RegressionRepresentation) regRep1.clone());
 			//System.out.println("2 - " + regRep1);			
-			CandidateProgram<Double> cp = semMod.behaviourToCode(regRep1);			
+			Node<Double> cp = semMod.behaviourToCode(regRep1);			
 			secondGen.add(cp);
 			//System.out.println("3 - " + cp.getRootNode());
 			RegressionRepresentation regRep2 = (RegressionRepresentation) semMod.codeToBehaviour(cp);
@@ -68,9 +73,9 @@ public class TestSemanticModule {
 			if(!firstRep.get(i).equals(secondRep.get(i))) {
 				inequalities++;
 				System.out.println("INEQUALITY " + inequalities + "--------------------------------");
-				System.out.println("1 - " + firstGen.get(i).getRootNode());
+				System.out.println("1 - " + firstGen.get(i));
 				System.out.println("2 - " + firstRep.get(i));
-				System.out.println("3 - " + secondGen.get(i).getRootNode());
+				System.out.println("3 - " + secondGen.get(i));
 				System.out.println("4 - " + secondRep.get(i));
 				System.out.println("--------------------------------------------");
 			}

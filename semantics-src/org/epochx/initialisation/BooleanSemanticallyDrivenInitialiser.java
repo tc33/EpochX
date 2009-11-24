@@ -21,6 +21,7 @@ package org.epochx.initialisation;
 
 import java.util.*;
 
+import org.epochx.action.*;
 import org.epochx.core.GPModel;
 import org.epochx.op.initialisation.*;
 import org.epochx.representation.*;
@@ -91,7 +92,8 @@ public class BooleanSemanticallyDrivenInitialiser implements Initialiser<Boolean
         // translate back and add to first gen
         List<CandidateProgram<Boolean>> firstGen = new ArrayList<CandidateProgram<Boolean>>();
         for(BDD toProg: storage) {
-            firstGen.add(semMod.behaviourToCode(new BooleanRepresentation(toProg)));
+            Node<Boolean> holder = semMod.behaviourToCode(new BooleanRepresentation(toProg));
+            firstGen.add(new CandidateProgram<Boolean>(holder, model));
         }
         
         // clear up BDD stuff

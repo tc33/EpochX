@@ -45,7 +45,7 @@ public class BooleanSemanticScorer extends SemanticScorer {
 	/* (non-Javadoc)
 	 * @see org.epochx.core.scorer.SemanticScorer#doScore(org.epochx.representation.CandidateProgram, org.epochx.representation.CandidateProgram)
 	 */
-	public double doScore(CandidateProgram program1, CandidateProgram program2) {
+	public double doScore(Node program1, Node program2) {
         double score;
         getSemanticModule().start();
         BooleanRepresentation program1Representation = (BooleanRepresentation) getSemanticModule().codeToBehaviour(program1);

@@ -77,22 +77,25 @@ public class AntSemanticModule implements SemanticModule<Action> {
 	 * @see org.epochx.semantics.SemanticModule#behaviourToCode(org.epochx.semantics.Representation)
 	 */
 	@Override
-	public CandidateProgram<Action> behaviourToCode(Representation representation) {
+	public Node<Action> behaviourToCode(Representation representation) {
 		Node<Action> rootNode = this.repToCode1(representation, "E");
-		return new CandidateProgram<Action>(rootNode, model);
+		return rootNode;
 	}
 
+	public AntRepresentation codeToBehaviour(CandidateProgram<Action> program) {
+		return codeToBehaviour(program.getRootNode());
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.epochx.semantics.SemanticModule#codeToBehaviour(org.epochx.core.representation.CandidateProgram)
 	 */
 	@Override
-	public Representation codeToBehaviour(CandidateProgram<Action> program) {
+	public AntRepresentation codeToBehaviour(Node<Action> rootNode) {
 		// develop ant monitoring model
         antModel = new ArrayList<String>();
 
         // initialise a new ant
         orientation = "E";
-        Node<Action> rootNode = program.getRootNode();
         this.runAnt(rootNode);
         
         // work out depth of if statements
@@ -121,7 +124,7 @@ public class AntSemanticModule implements SemanticModule<Action> {
 	
 	private void runAnt(Node<Action> rootNode) {		
 		
-		if(rootNode instanceof TerminalNode) {
+		if(rootNode instanceof TerminalNode<?>) {
 			// terminals
 			Object value = ((TerminalNode<Action>) rootNode).getValue();
 			if(value instanceof AntMoveAction) {

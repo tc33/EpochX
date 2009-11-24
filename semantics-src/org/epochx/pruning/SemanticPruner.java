@@ -38,11 +38,11 @@ public class SemanticPruner {
 	 * @param model The GP model in use
 	 * @param semMod The semantic module in use
 	 */
-	public SemanticPruner(List<CandidateProgram> population, GPModel model, SemanticModule semMod) {
+	public SemanticPruner(List<Node> population, GPModel model, SemanticModule semMod) {
 		
 		// reduce to behaviour
 		List<Representation> behaviours = new ArrayList<Representation>(model.getPopulationSize());
-		for(CandidateProgram c: population) {
+		for(Node c: population) {
 			behaviours.add(semMod.codeToBehaviour(c));
 		}
 		
@@ -53,8 +53,7 @@ public class SemanticPruner {
 				Random rGen = new Random();
 				int n = model.getTerminals().size();
 				Node terminal = (Node) model.getTerminals().get(rGen.nextInt(n));
-				CandidateProgram newProg = new CandidateProgram(terminal, model);
-				population.set(i, newProg);
+				population.set(i, terminal);
 			} else {
 				// return to syntax
 				population.set(i, semMod.behaviourToCode(behaviours.get(i)));

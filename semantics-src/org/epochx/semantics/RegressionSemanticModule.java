@@ -22,6 +22,7 @@ package org.epochx.semantics;
 import java.util.*;
 
 import org.epochx.core.*;
+import org.epochx.initialisation.analysis.*;
 import org.epochx.representation.*;
 import org.epochx.representation.dbl.*;
 
@@ -66,7 +67,7 @@ public class RegressionSemanticModule implements SemanticModule<Double> {
 	 * @see org.epochx.semantics.SemanticModule#behaviourToCode(org.epochx.semantics.Representation)
 	 */
 	@Override
-	public CandidateProgram<Double> behaviourToCode(Representation representation) {
+	public Node<Double> behaviourToCode(Representation representation) {
 		// check representation is right type
 		RegressionRepresentation regRep;
 		if(representation instanceof RegressionRepresentation) {
@@ -77,7 +78,7 @@ public class RegressionSemanticModule implements SemanticModule<Double> {
 		
 		// capture variable
 		for(int i = 0; i<terminals.size(); i++) {
-			if(terminals.get(i) instanceof Variable) {
+			if(terminals.get(i) instanceof Variable<?>) {
 				var = (Variable<Double>) terminals.get(i);
 			}
 		}
@@ -88,19 +89,22 @@ public class RegressionSemanticModule implements SemanticModule<Double> {
 		// expand the CVPS to normal functions
 		rootNode = this.expandCVPTree(rootNode);
 		
-		return new CandidateProgram<Double>(rootNode, model);
+		return rootNode;
 	}
 
+	public Representation codeToBehaviour(CandidateProgram<Double> program) {
+		return codeToBehaviour(program.getRootNode());
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.epochx.semantics.SemanticModule#codeToBehaviour(org.epochx.core.representation.CandidateProgram)
 	 */
 	@Override
-	public Representation codeToBehaviour(CandidateProgram<Double> program) {
+	public Representation codeToBehaviour(Node<Double> rootNode) {
 		
 		// clone the program to prevent back modification
-		CandidateProgram<Double> program1 = (CandidateProgram<Double>) program.clone();
 		// extract and simplify program
-		Node<Double> rootNode = program1.getRootNode();
+		rootNode = (Node<Double>) rootNode.clone();
 
 		// resolve any multiply by zeros
 		if(rootNode.getLength()>1) {
@@ -215,7 +219,7 @@ public class RegressionSemanticModule implements SemanticModule<Double> {
 			// check if all child nodes are numbers
 			boolean allChildrenAreTerminalNodes = true;
 			for(int i = 0; i<arity; i++) {
-				if((children[i] instanceof Variable) || ((children[i] instanceof FunctionNode))) {
+				if((children[i] instanceof Variable<?>) || ((children[i] instanceof FunctionNode<?>))) {
 					allChildrenAreTerminalNodes = false;
 				}
 			}
@@ -239,7 +243,7 @@ public class RegressionSemanticModule implements SemanticModule<Double> {
 		int arity = rootNode.getArity();		
 		// check if terminal
 		if(arity==0) {
-			if(rootNode instanceof Variable) {
+			if(rootNode instanceof Variable<?>) {
 				rootNode = new CoefficientPowerFunction(new TerminalNode<Double>(1d), new Variable<Double>("X"), new TerminalNode<Double>(1d));
 			} else {
 				double newCoefficient = (Double) rootNode.evaluate();

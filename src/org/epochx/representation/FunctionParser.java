@@ -117,7 +117,10 @@ public class FunctionParser<TYPE> {
 	}
 	
 	public Node<TYPE> parse(String source) {
-
+		if (source == null) {
+			return null;
+		}
+		
 		// Locate the first bracket (straight after function name).
 		int openingBracket = source.indexOf('(');
 		
@@ -189,7 +192,6 @@ public class FunctionParser<TYPE> {
 		Class<?> actionClass = actions.get(actionStr);
 		Action action = null;
 		try {
-			// This will blow up here if the data-type of the function does not match TYPE.
 			action = (Action) actionClass.newInstance();
 		} catch (InstantiationException e) {
 			//TODO Do something...

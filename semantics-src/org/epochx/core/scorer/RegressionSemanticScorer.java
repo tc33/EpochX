@@ -33,7 +33,7 @@ public class RegressionSemanticScorer extends SemanticScorer {
 	}
 
 	@Override
-	public double doScore(CandidateProgram program1, CandidateProgram program2) {
+	public double doScore(Node program1, Node program2) {
 		// generate representations
 		RegressionRepresentation rep1 = (RegressionRepresentation) getSemanticModule().codeToBehaviour(program1);
 		RegressionRepresentation rep2 = (RegressionRepresentation) getSemanticModule().codeToBehaviour(program2);

@@ -17,7 +17,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with EpochX.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.model.ant;
+package org.epochx.example.ant;
 
 import java.awt.*;
 import java.util.*;
@@ -34,7 +34,7 @@ import org.epochx.stats.GenerationStatField;
  * 
  */
 public class SantaFeTrail extends GPAbstractModel<Object> {
-
+	
 	private AntLandscape landscape;
 	private Ant ant;
 	

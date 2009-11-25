@@ -22,7 +22,7 @@ package org.epochx.representation;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import org.epochx.action.*;
+import org.epochx.ant.*;
 import org.epochx.representation.ant.*;
 import org.epochx.representation.bool.*;
 import org.epochx.representation.dbl.*;
@@ -33,9 +33,14 @@ import org.epochx.representation.dbl.*;
  */
 public class FunctionParser<TYPE> {
 	
-	private final Map<String, Class<?>> functions;
+	// This map is to contain only simple functions that require no additional info.
+	private final Map<String, Class<?>> simpleFunctions;
 	
-	private final Map<String, Class<?>> actions;
+	// This map is to contain only simple actions that require no additional info.
+	private final Map<String, Class<?>> simpleActions;
+	
+	// An ant which we may need to use in some function creations - lazily created.
+	private Ant ant;
 	
 	/*
 	 * These regexps come directly from JavaDoc for Double.valueOf(String) to 
@@ -59,61 +64,118 @@ public class FunctionParser<TYPE> {
 	             					  "[\\x00-\\x20]*");
 	
 	public FunctionParser() {
-		functions = new HashMap<String, Class<?>>();
+		simpleFunctions = new HashMap<String, Class<?>>();
+		simpleActions = new HashMap<String, Class<?>>();
+		
 		// Insert the Boolean functions.
-		functions.put("AND", AndFunction.class);
-		functions.put("IFF", IfAndOnlyIfFunction.class);
-		functions.put("IF", IfFunction.class);
-		functions.put("IMPLIES", ImpliesFunction.class);
-		functions.put("NAND", NandFunction.class);
-		functions.put("NOR", NorFunction.class);
-		functions.put("NOT", NotFunction.class);
-		functions.put("OR", OrFunction.class);
-		functions.put("XOR", XorFunction.class);
+		simpleFunctions.put("AND", AndFunction.class);
+		simpleFunctions.put("IFF", IfAndOnlyIfFunction.class);
+		simpleFunctions.put("IF", IfFunction.class);
+		simpleFunctions.put("IMPLIES", ImpliesFunction.class);
+		simpleFunctions.put("NAND", NandFunction.class);
+		simpleFunctions.put("NOR", NorFunction.class);
+		simpleFunctions.put("NOT", NotFunction.class);
+		simpleFunctions.put("OR", OrFunction.class);
+		simpleFunctions.put("XOR", XorFunction.class);
 		
 		// Insert the Double functions.
-		functions.put("ADD", AddFunction.class);
-		functions.put("ACOS", ArcCosineFunction.class);
-		functions.put("ASIN", ArcSineFunction.class);
-		functions.put("ATAN", ArcTangentFunction.class);
-		functions.put("CVP", CoefficientPowerFunction.class);
-		functions.put("COSEC", CosecantFunction.class);
-		functions.put("COS", CosineFunction.class);
-		functions.put("COT", CotangentFunction.class);
-		functions.put("CUBE", CubeFunction.class);
-		functions.put("FACTORIAL", FactorialFunction.class);
-		functions.put("COSH", HyperbolicCosineFunction.class);
-		functions.put("SINH", HyperbolicSineFunction.class);
-		functions.put("TANH", HyperbolicTangentFunction.class);
-		functions.put("INV", InvertFunction.class);
-		functions.put("LOG-10", Log10Function.class);
-		functions.put("LN", LogFunction.class);
-		functions.put("MAX", MaxFunction.class);
-		functions.put("MIN", MinFunction.class);
-		functions.put("MOD", ModuloFunction.class);
-		functions.put("MUL", MultiplyFunction.class);
-		functions.put("POW", PowerFunction.class);
-		functions.put("PDIV", ProtectedDivisionFunction.class);
-		functions.put("SEC", SecantFunction.class);
-		functions.put("SGN", SignumFunction.class);
-		functions.put("SIN", SineFunction.class);
-		functions.put("SQUARE", SquareFunction.class);
-		functions.put("SQRT", SquareRootFunction.class);
-		functions.put("SUB", SubtractFunction.class);
-		functions.put("TAN", TangentFunction.class);
+		simpleFunctions.put("ADD", AddFunction.class);
+		simpleFunctions.put("ACOS", ArcCosineFunction.class);
+		simpleFunctions.put("ASIN", ArcSineFunction.class);
+		simpleFunctions.put("ATAN", ArcTangentFunction.class);
+		simpleFunctions.put("CVP", CoefficientPowerFunction.class);
+		simpleFunctions.put("COSEC", CosecantFunction.class);
+		simpleFunctions.put("COS", CosineFunction.class);
+		simpleFunctions.put("COT", CotangentFunction.class);
+		simpleFunctions.put("CUBE", CubeFunction.class);
+		simpleFunctions.put("FACTORIAL", FactorialFunction.class);
+		simpleFunctions.put("COSH", HyperbolicCosineFunction.class);
+		simpleFunctions.put("SINH", HyperbolicSineFunction.class);
+		simpleFunctions.put("TANH", HyperbolicTangentFunction.class);
+		simpleFunctions.put("INV", InvertFunction.class);
+		simpleFunctions.put("LOG-10", Log10Function.class);
+		simpleFunctions.put("LN", LogFunction.class);
+		simpleFunctions.put("MAX", MaxFunction.class);
+		simpleFunctions.put("MIN", MinFunction.class);
+		simpleFunctions.put("MOD", ModuloFunction.class);
+		simpleFunctions.put("MUL", MultiplyFunction.class);
+		simpleFunctions.put("POW", PowerFunction.class);
+		simpleFunctions.put("PDIV", ProtectedDivisionFunction.class);
+		simpleFunctions.put("SEC", SecantFunction.class);
+		simpleFunctions.put("SGN", SignumFunction.class);
+		simpleFunctions.put("SIN", SineFunction.class);
+		simpleFunctions.put("SQUARE", SquareFunction.class);
+		simpleFunctions.put("SQRT", SquareRootFunction.class);
+		simpleFunctions.put("SUB", SubtractFunction.class);
+		simpleFunctions.put("TAN", TangentFunction.class);
 		
 		// Insert the Action functions.
-		functions.put("IF-FOOD-AHEAD", IfFoodAheadFunction.class);
-		functions.put("SEQ2", Seq2Function.class);
-		functions.put("SEQ3", Seq3Function.class);
+		simpleFunctions.put("SEQ2", Seq2Function.class);
+		simpleFunctions.put("SEQ3", Seq3Function.class);
+	}
+	
+	/*
+	 * We do lazy initialisation, so if the object hasn't been initialised yet,
+	 * we do it now.
+	 */
+	private FunctionNode<?> initialiseFunction(String name) {
+		// The function node we're going to create.
+		FunctionNode<?> node = null;
 		
+		// Attempt to find the function in the list of simple functions.
+		Class<?> functionClass = simpleFunctions.get(name);
 		
-		actions = new HashMap<String, Class<?>>();
-		// Insert the Ant actions.
-		actions.put("@MOVE", AntMoveAction.class);
-		actions.put("@SKIP", AntSkipAction.class);
-		actions.put("@TURN-LEFT", AntTurnLeftAction.class);
-		actions.put("@TURN-RIGHT", AntTurnRightAction.class);
+		if (functionClass != null) {
+			// Instantiate the function node.
+			try {
+				// This will blow up here if the data-type of the function does not match TYPE.
+				node = (FunctionNode<?>) functionClass.newInstance();
+			} catch (InstantiationException e) {
+				//TODO Do something...
+			} catch (IllegalAccessException e) {
+				//TODO Do something...
+			}
+		} else if (name.equals("IF-FOOD-AHEAD")) {
+			node = new IfFoodAheadFunction(ant);
+		} else {
+			// Function unknown - error.
+			//TODO Do something for error.
+		}
+		
+		return node;
+	}
+
+	private Action initialiseAction(String name) {
+		// The action node we're going to create.
+		Action node = null;
+		
+		// Attempt to find the action in the list of simple actions.
+		Class<?> actionClass = simpleActions.get(name);
+		
+		if (actionClass != null) {
+			// Instantiate the function node.
+			try {
+				// This will blow up here if the data-type of the function does not match TYPE.
+				node = (Action) actionClass.newInstance();
+			} catch (InstantiationException e) {
+				//TODO Do something...
+			} catch (IllegalAccessException e) {
+				//TODO Do something...
+			}
+		} else if (name.equals("MOVE")) {
+			node = new AntMoveAction(ant);
+		} else if (name.equals("TURN-LEFT")) {
+			node = new AntTurnLeftAction(ant);
+		} else if (name.equals("TURN-RIGHT")) {
+			node = new AntTurnRightAction(ant);
+		} else if (name.equals("SKIP")) {
+			node = new AntSkipAction(ant);
+		} else {
+			// Function unknown - error.
+			//TODO Do something for error.
+		}
+		
+		return node;
 	}
 	
 	public Node<TYPE> parse(String source) {
@@ -138,16 +200,11 @@ public class FunctionParser<TYPE> {
 			// Separate the arguments.
 			List<String> args = splitArguments(argumentStr);
 			
-			// Instantiate the function node.
-			Class<?> functionClass = functions.get(functionName);
-			FunctionNode<TYPE> node = null;
-			try {
-				// This will blow up here if the data-type of the function does not match TYPE.
-				node = (FunctionNode<TYPE>) functionClass.newInstance();
-			} catch (InstantiationException e) {
-				//TODO Do something...
-			} catch (IllegalAccessException e) {
-				//TODO Do something...
+			Node<TYPE> node = null;
+			if (args.size() == 0) {
+				node = (Node<TYPE>) initialiseAction(functionName);
+			} else {
+				node = (Node<TYPE>) initialiseFunction(functionName);
 			}
 			
 			// Check the arities match.
@@ -181,33 +238,36 @@ public class FunctionParser<TYPE> {
 		} else if (terminalStr.equalsIgnoreCase("true") 
 				 	|| terminalStr.equalsIgnoreCase("false")) {
 			return new TerminalNode<Boolean>(Boolean.valueOf(terminalStr));
-		} else if (terminalStr.startsWith("@")) {
-			return new TerminalNode<Action>(parseAction(terminalStr));
 		} else {
 			return new Variable<Boolean>(terminalStr);
 		}
 	}
 	
-	private Action parseAction(String actionStr) {
-		Class<?> actionClass = actions.get(actionStr);
-		Action action = null;
-		try {
-			action = (Action) actionClass.newInstance();
-		} catch (InstantiationException e) {
-			//TODO Do something...
-		} catch (IllegalAccessException e) {
-			//TODO Do something...
-		}
-		
-		return action;
+	public void addSimpleFunction(String name, Class<FunctionNode<?>> functionClass) {
+		simpleFunctions.put(name, functionClass);
 	}
 	
+	public void addSimpleAction(String name, Class<Action> actionClass) {
+		simpleActions.put(name, actionClass);
+	}
+	
+	/**
+	 * Before parsing an Ant program, the parser needs to have access to an ant
+	 * object.
+	 * 
+	 * @param ant
+	 */
+	public void setAnt(Ant ant) {
+		this.ant = ant;
+	}
 	
 	private List<String> splitArguments(String argStr) {
 		int depth = 0;
 		
 		List<String> args = new ArrayList<String>(5);
 		StringBuilder buffer = new StringBuilder();
+		
+		argStr = argStr.trim();
 		
 		for (int i=0; i<argStr.length(); i++) {
 			char c = argStr.charAt(i);
@@ -224,7 +284,10 @@ public class FunctionParser<TYPE> {
 				buffer.append(c);
 			}
 		}
-		args.add(buffer.toString());
+		
+		if (buffer.length() > 0) {
+			args.add(buffer.toString());
+		}
 		
 		return args;
 	}

@@ -56,12 +56,6 @@ public class CandidateProgram<TYPE> implements Cloneable, Comparable<CandidatePr
 		this.rootNode = rootNode;
 	}
 	
-	public CandidateProgram(String sourceString, GPModel<TYPE> model) {
-		this.model = model;
-		
-		this.rootNode = parseSource(sourceString);
-	}
-	
 	/**
 	 * Evaluates the candidate program by triggering a recursive evaluation of 
 	 * the node tree from the root.
@@ -236,18 +230,6 @@ public class CandidateProgram<TYPE> implements Cloneable, Comparable<CandidatePr
     	// Count how many tokens there are.
     	return flatTree.length;
     }*/
-	
-	/**
-	 * Converts a String in Lisp format to an EpochX node tree. If a function 
-	 * with the unique name and correct arity cannot be located in the function 
-	 * packages then an Exception will be thrown.
-	 * 
-	 * @param source The source string to be parsed.
-	 * @return The node tree that represents the source string that was parsed.
-	 */
-	public Node<TYPE> parseSource(String source) {
-		return null;
-	}
 	
 	/**
 	 * Compares this program to another based upon fitness. Returns a negative 

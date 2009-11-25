@@ -25,7 +25,7 @@ import java.io.File;
 import net.sf.javabdd.*;
 import java.lang.reflect.*;
 
-import org.epochx.example.artificialant.ArtificialAntSantaFe;
+import org.epochx.example.ant.SantaFeTrail;
 import org.epochx.example.regression.RegressionModelCUBIC;
 import org.epochx.op.initialisation.*;
 import org.epochx.representation.*;
@@ -47,7 +47,7 @@ public class MainBehaviourAnalysis {
 		System.out.println("STARTING POP ANALYSIS - PROGRAM STARTED");
 
 		// set up model and initialiser -- configure up here
-		ArtificialAntSantaFe model = new ArtificialAntSantaFe();
+		SantaFeTrail model = new SantaFeTrail();
 		String modelName = "AASF";
 		model.setInitialMaxDepth(4);
 		SemanticModule semMod = new AntSemanticModule(model.getTerminals(), model, model.getAnt(), model.getAntLandScape());

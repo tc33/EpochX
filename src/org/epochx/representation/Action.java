@@ -33,5 +33,16 @@ public abstract class Action extends TerminalNode<Object> {
 
 	@Override
 	public abstract Object evaluate();
-	
+
+	/**
+	 * Returns a string representation of the function node. Since the function 
+	 * node is dependent upon its children, their string representations will 
+	 * form part of this.
+	 * 
+	 * @return a string representation of this function node.
+	 */
+	@Override
+	public String toString() {
+		return getActionName() + "()";
+	}
 }

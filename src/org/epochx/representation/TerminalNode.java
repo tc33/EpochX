@@ -19,8 +19,6 @@
  */
 package org.epochx.representation;
 
-import org.epochx.action.Action;
-
 /**
  * Defines a terminal node.
  */
@@ -65,12 +63,7 @@ public class TerminalNode<TYPE> extends Node<TYPE> {
 	 */
 	@Override
 	public TYPE evaluate() {
-		if(value instanceof Action) {
-			((Action) value).execute();
-			return (TYPE) Action.DO_NOTHING;
-		} else {
-			return value;
-		}
+		return value;
 	}
 	
 	/**

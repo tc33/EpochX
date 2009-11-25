@@ -21,9 +21,8 @@ package org.epochx.initialisation;
 
 import java.util.*;
 
-import org.epochx.action.Action;
 import org.epochx.core.GPModel;
-import org.epochx.op.initialisation.*;
+import org.epochx.op.initialisation.Initialiser;
 import org.epochx.representation.*;
 import org.epochx.semantics.*;
 

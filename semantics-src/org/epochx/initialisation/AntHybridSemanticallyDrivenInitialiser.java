@@ -21,7 +21,6 @@ package org.epochx.initialisation;
 
 import java.util.*;
 
-import org.epochx.action.Action;
 import org.epochx.core.GPModel;
 import org.epochx.op.initialisation.*;
 import org.epochx.representation.*;
@@ -63,7 +62,7 @@ public class AntHybridSemanticallyDrivenInitialiser implements Initialiser<Actio
         
         // generate a full population to start with
         for(CandidateProgram<Action> c: firstPass) {
-        	AntRepresentation b = (AntRepresentation) semMod.codeToBehaviour(c);
+        	AntRepresentation b = (AntRepresentation) semMod.codeToBehaviour(c.getRootNode());
         	if(!b.isConstant()) {
         		storage.add(b.getAntRepresentation());
         	}

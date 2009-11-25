@@ -19,7 +19,6 @@
  */
 package org.epochx.representation.ant;
 
-import org.epochx.action.*;
 import org.epochx.representation.*;
 
 /**

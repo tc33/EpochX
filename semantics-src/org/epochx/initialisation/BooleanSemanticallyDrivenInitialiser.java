@@ -21,13 +21,12 @@ package org.epochx.initialisation;
 
 import java.util.*;
 
-import org.epochx.action.*;
+import net.sf.javabdd.BDD;
+
 import org.epochx.core.GPModel;
-import org.epochx.op.initialisation.*;
+import org.epochx.op.initialisation.Initialiser;
 import org.epochx.representation.*;
 import org.epochx.semantics.*;
-
-import net.sf.javabdd.*;
 
 /**
  * Boolean Semantically Driven Initialisation

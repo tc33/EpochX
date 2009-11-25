@@ -21,8 +21,7 @@ package org.epochx.semantics;
 
 import java.util.*;
 
-import org.epochx.ant.*;
-import org.epochx.core.GPModel;
+import org.epochx.ant.Ant;
 import org.epochx.representation.*;
 import org.epochx.representation.ant.*;
 
@@ -34,7 +33,6 @@ import org.epochx.representation.ant.*;
  */
 public class AntSemanticModule implements SemanticModule<Object> {
 	
-	//private List<TerminalNode<Action>> terminals;
 	private ArrayList<String> antModel;
 	private String orientation;
 	private Ant ant;
@@ -47,7 +45,6 @@ public class AntSemanticModule implements SemanticModule<Object> {
 	 * @param antLandscape The AntLanscape object
 	 */
 	public AntSemanticModule(List<TerminalNode<Object>> list, Ant ant) {
-		//this.terminals = list;
 		this.ant = ant;
 	}
 

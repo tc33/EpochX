@@ -64,7 +64,7 @@ public class ModifiedFullInitialiser<TYPE> implements Initialiser<TYPE> {
 			Representation representation;
 			do {
             	candidate = new CandidateProgram<TYPE>(full.buildFullNodeTree(model.getInitialMaxDepth()), model);
-            	representation = semanticModule.codeToBehaviour(candidate);
+            	representation = semanticModule.codeToBehaviour(candidate.getRootNode());
 			} while (firstGen.contains(candidate) || representation.isConstant());
 			firstGen.add(candidate);
         }

@@ -66,7 +66,7 @@ public class WashedInitialiser<TYPE> implements Initialiser<TYPE> {
 			Representation representation;
 			do {
             	candidate = new CandidateProgram<TYPE>(full.buildFullNodeTree(model.getInitialMaxDepth()), model);
-            	representation = semanticModule.codeToBehaviour(candidate);
+            	representation = semanticModule.codeToBehaviour(candidate.getRootNode());
 			} while (firstGen.contains(candidate) || representation.isConstant());
 			firstGen.add(candidate);
         }
@@ -76,7 +76,7 @@ public class WashedInitialiser<TYPE> implements Initialiser<TYPE> {
 			Representation representation;
 			Node<TYPE> reducedCandidate;
 			candidate = firstGen.get(i);
-			representation = semanticModule.codeToBehaviour(candidate);
+			representation = semanticModule.codeToBehaviour(candidate.getRootNode());
 			reducedCandidate = semanticModule.behaviourToCode(representation);
 			firstGen.set(i, new CandidateProgram<TYPE>(reducedCandidate, model));
         }

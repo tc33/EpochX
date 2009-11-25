@@ -30,9 +30,9 @@ import org.epochx.semantics.*;
 /**
  * Artificial Ant hybrid semantically driven initialisation
  */
-public class AntHybridSemanticallyDrivenInitialiser implements Initialiser<Action> {
+public class AntHybridSemanticallyDrivenInitialiser implements Initialiser<Object> {
 
-	private GPModel<Action> model;
+	private GPModel<Object> model;
 	private AntSemanticModule semMod;
 	
 	/**
@@ -40,7 +40,7 @@ public class AntHybridSemanticallyDrivenInitialiser implements Initialiser<Actio
 	 * @param model The GP model in use
 	 * @param semMod The relevant semantic module
 	 */
-	public AntHybridSemanticallyDrivenInitialiser(GPModel<Action> model, SemanticModule<Action> semMod) {
+	public AntHybridSemanticallyDrivenInitialiser(GPModel<Object> model, SemanticModule<Object> semMod) {
 		this.model = model;
 		this.semMod = (AntSemanticModule) semMod;
 	}
@@ -49,19 +49,19 @@ public class AntHybridSemanticallyDrivenInitialiser implements Initialiser<Actio
 	 * @see org.epochx.core.initialisation.Initialiser#getInitialPopulation()
 	 */
 	@Override
-	public List<CandidateProgram<Action>> getInitialPopulation() {
+	public List<CandidateProgram<Object>> getInitialPopulation() {
 		return generatePopulation();
 	}
 	
-	private List<CandidateProgram<Action>> generatePopulation() {
+	private List<CandidateProgram<Object>> generatePopulation() {
 		// make a random object
 		Random rGen = new Random();
 		ArrayList<ArrayList<String>> storage = new ArrayList<ArrayList<String>>();
-        FullInitialiser<Action> f = new FullInitialiser<Action>(model);
-        List<CandidateProgram<Action>> firstPass = f.getInitialPopulation();
+        FullInitialiser<Object> f = new FullInitialiser<Object>(model);
+        List<CandidateProgram<Object>> firstPass = f.getInitialPopulation();
         
         // generate a full population to start with
-        for(CandidateProgram<Action> c: firstPass) {
+        for(CandidateProgram<Object> c: firstPass) {
         	AntRepresentation b = (AntRepresentation) semMod.codeToBehaviour(c.getRootNode());
         	if(!b.isConstant()) {
         		storage.add(b.getAntRepresentation());
@@ -137,11 +137,11 @@ public class AntHybridSemanticallyDrivenInitialiser implements Initialiser<Actio
         }
         
         // backwards translate
-        List<CandidateProgram<Action>> firstGen = new ArrayList<CandidateProgram<Action>>();
+        List<CandidateProgram<Object>> firstGen = new ArrayList<CandidateProgram<Object>>();
         int i = 1;
         for(ArrayList<String> toProg: storage) {                
-            Node<Action> holder = semMod.behaviourToCode(new AntRepresentation(toProg));
-            firstGen.add(new CandidateProgram<Action>(holder, model));
+            Node<Object> holder = semMod.behaviourToCode(new AntRepresentation(toProg));
+            firstGen.add(new CandidateProgram<Object>(holder, model));
             //System.out.println(holder);
             //System.out.println("Reverse Translation at: " + i);
             i++;

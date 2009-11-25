@@ -27,7 +27,7 @@ import org.epochx.representation.*;
  */
 public interface SemanticModule<TYPE> {
 	
-	public Representation codeToBehaviour(CandidateProgram<TYPE> program);
+	//public Representation codeToBehaviour(CandidateProgram<TYPE> program);
 	
 	/**
 	 * Converts a syntax tree into a canonical representation of behaviour

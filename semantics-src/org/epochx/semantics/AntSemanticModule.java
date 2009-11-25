@@ -32,13 +32,12 @@ import org.epochx.representation.ant.*;
  * The ant semantic module controls the translation of code
  * to the ant behaviour and back again
  */
-public class AntSemanticModule implements SemanticModule<Action> {
+public class AntSemanticModule implements SemanticModule<Object> {
 	
 	//private List<TerminalNode<Action>> terminals;
 	private ArrayList<String> antModel;
 	private String orientation;
 	private Ant ant;
-	private AntLandscape landscape;
 	
 	/**
 	 * Constructor for Ant Semantic Module
@@ -47,46 +46,37 @@ public class AntSemanticModule implements SemanticModule<Action> {
 	 * @param ant The Ant object
 	 * @param antLandscape The AntLanscape object
 	 */
-	public AntSemanticModule(List<TerminalNode<Action>> list, Ant ant, AntLandscape landscape) {
+	public AntSemanticModule(List<TerminalNode<Object>> list, Ant ant) {
 		//this.terminals = list;
 		this.ant = ant;
-		this.landscape = landscape;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.epochx.semantics.SemanticModule#start()
+	/**
+	 * Not required as we do not need to activate external software to study behaviour.
 	 */
 	@Override
-	public void start() {
-		// Not required as we do not need to activate external software to study behaviour
-	}
+	public void start() {}
 
-	/* (non-Javadoc)
-	 * @see org.epochx.semantics.SemanticModule#stop()
+	/**
+	 * Not required as we do not need to activate external software to study behaviour.
 	 */
 	@Override
-	public void stop() {
-		// Not required as we do not need to activate external software to study behaviour
-	}
+	public void stop() {}
 	
 	/* (non-Javadoc)
 	 * @see org.epochx.semantics.SemanticModule#behaviourToCode(org.epochx.semantics.Representation)
 	 */
 	@Override
-	public Node<Action> behaviourToCode(Representation representation) {
-		Node<Action> rootNode = this.repToCode1(representation, "E");
+	public Node<Object> behaviourToCode(Representation representation) {
+		Node<Object> rootNode = this.repToCode1(representation, "E");
 		return rootNode;
-	}
-
-	public AntRepresentation codeToBehaviour(CandidateProgram<Action> program) {
-		return codeToBehaviour(program.getRootNode());
 	}
 	
 	/* (non-Javadoc)
 	 * @see org.epochx.semantics.SemanticModule#codeToBehaviour(org.epochx.core.representation.CandidateProgram)
 	 */
 	@Override
-	public AntRepresentation codeToBehaviour(Node<Action> rootNode) {
+	public AntRepresentation codeToBehaviour(Node<Object> rootNode) {
 		// develop ant monitoring model
         antModel = new ArrayList<String>();
 
@@ -118,14 +108,13 @@ public class AntSemanticModule implements SemanticModule<Action> {
         return new AntRepresentation(antModel);
 	}
 	
-	private void runAnt(Node<Action> rootNode) {		
+	private void runAnt(Node<Object> rootNode) {		
 		
 		if(rootNode instanceof TerminalNode<?>) {
 			// terminals
-			Object value = ((TerminalNode<Action>) rootNode).getValue();
-			if(value instanceof AntMoveAction) {
+			if(rootNode instanceof AntMoveAction) {
 				antModel.add("M");
-			} else if(value instanceof AntTurnLeftAction) {
+			} else if(rootNode instanceof AntTurnLeftAction) {
 				if(orientation.equalsIgnoreCase("E")) {
 					antModel.add("N");
 					orientation = "N";
@@ -139,7 +128,7 @@ public class AntSemanticModule implements SemanticModule<Action> {
 					antModel.add("E");
 					orientation = "E";
 				}
-			} else if(value instanceof AntTurnRightAction) {
+			} else if(rootNode instanceof AntTurnRightAction) {
 				if(orientation.equalsIgnoreCase("E")) {
 					antModel.add("S");
 					orientation = "S";
@@ -348,9 +337,9 @@ public class AntSemanticModule implements SemanticModule<Action> {
         return result;
     }
 	
-	private Node<Action> repToCode1(Representation thisRep, String lastO) {
-        ArrayList<String> representation = ((AntRepresentation) thisRep).getAntRepresentation();
-        ArrayList<Node<Action>> sequence = new ArrayList<Node<Action>>();
+	private Node<Object> repToCode1(Representation thisRep, String lastO) {
+        List<String> representation = ((AntRepresentation) thisRep).getAntRepresentation();
+        List<Node<Object>> sequence = new ArrayList<Node<Object>>();
 
         // create a linear move list
         String oBeforeIf = "E";
@@ -361,73 +350,73 @@ public class AntSemanticModule implements SemanticModule<Action> {
             // SCENARIOS
             // interpret instruction
             if (instruction.equals("M")) {
-                sequence.add(new TerminalNode<Action>(new AntMoveAction(ant)));
+                sequence.add(new AntMoveAction(ant));
             } else if (instruction.equals("E")) {
                 if (lastOrientation.equalsIgnoreCase("N")) {
-                    sequence.add(new TerminalNode<Action>(new AntTurnRightAction(ant)));
+                    sequence.add(new AntTurnRightAction(ant));
                 }
                 if (lastOrientation.equalsIgnoreCase("W")) {
                     if (Math.random() < 0.5) {
-                        sequence.add(new TerminalNode<Action>(new AntTurnRightAction(ant)));
-                        sequence.add(new TerminalNode<Action>(new AntTurnRightAction(ant)));
+                        sequence.add(new AntTurnRightAction(ant));
+                        sequence.add(new AntTurnRightAction(ant));
                     } else {
-                        sequence.add(new TerminalNode<Action>(new AntTurnLeftAction(ant)));
-                        sequence.add(new TerminalNode<Action>(new AntTurnLeftAction(ant)));
+                        sequence.add(new AntTurnLeftAction(ant));
+                        sequence.add(new AntTurnLeftAction(ant));
                     }
                 }
                 if (lastOrientation.equalsIgnoreCase("S")) {
-                    sequence.add(new TerminalNode<Action>(new AntTurnLeftAction(ant)));
+                    sequence.add(new AntTurnLeftAction(ant));
                 }
                 lastOrientation = new String(instruction);
             } else if (instruction.equals("S")) {
                 if (lastOrientation.equalsIgnoreCase("E")) {
-                    sequence.add(new TerminalNode<Action>(new AntTurnRightAction(ant)));
+                    sequence.add(new AntTurnRightAction(ant));
                 }
                 if (lastOrientation.equalsIgnoreCase("N")) {
                     if (Math.random() < 0.5) {
-                        sequence.add(new TerminalNode<Action>(new AntTurnRightAction(ant)));
-                        sequence.add(new TerminalNode<Action>(new AntTurnRightAction(ant)));
+                        sequence.add(new AntTurnRightAction(ant));
+                        sequence.add(new AntTurnRightAction(ant));
                     } else {
-                        sequence.add(new TerminalNode<Action>(new AntTurnLeftAction(ant)));
-                        sequence.add(new TerminalNode<Action>(new AntTurnLeftAction(ant)));
+                        sequence.add(new AntTurnLeftAction(ant));
+                        sequence.add(new AntTurnLeftAction(ant));
                     }
                 }
                 if (lastOrientation.equalsIgnoreCase("W")) {
-                    sequence.add(new TerminalNode<Action>(new AntTurnLeftAction(ant)));
+                    sequence.add(new AntTurnLeftAction(ant));
                 }
                 lastOrientation = new String(instruction);
             } else if (instruction.equals("W")) {
                 if (lastOrientation.equalsIgnoreCase("S")) {
-                    sequence.add(new TerminalNode<Action>(new AntTurnRightAction(ant)));
+                    sequence.add(new AntTurnRightAction(ant));
                 }
                 if (lastOrientation.equalsIgnoreCase("E")) {
                     if (Math.random() < 0.5) {
-                        sequence.add(new TerminalNode<Action>(new AntTurnRightAction(ant)));
-                        sequence.add(new TerminalNode<Action>(new AntTurnRightAction(ant)));
+                        sequence.add(new AntTurnRightAction(ant));
+                        sequence.add(new AntTurnRightAction(ant));
                     } else {
-                        sequence.add(new TerminalNode<Action>(new AntTurnLeftAction(ant)));
-                        sequence.add(new TerminalNode<Action>(new AntTurnLeftAction(ant)));
+                        sequence.add(new AntTurnLeftAction(ant));
+                        sequence.add(new AntTurnLeftAction(ant));
                     }
                 }
                 if (lastOrientation.equalsIgnoreCase("N")) {
-                    sequence.add(new TerminalNode<Action>(new AntTurnLeftAction(ant)));
+                    sequence.add(new AntTurnLeftAction(ant));
                 }
                 lastOrientation = new String(instruction);
             } else if (instruction.equals("N")) {
                 if (lastOrientation.equalsIgnoreCase("W")) {
-                    sequence.add(new TerminalNode<Action>(new AntTurnRightAction(ant)));
+                    sequence.add(new AntTurnRightAction(ant));
                 }
                 if (lastOrientation.equalsIgnoreCase("S")) {
                     if (Math.random() < 0.5) {
-                        sequence.add(new TerminalNode<Action>(new AntTurnRightAction(ant)));
-                        sequence.add(new TerminalNode<Action>(new AntTurnRightAction(ant)));
+                        sequence.add(new AntTurnRightAction(ant));
+                        sequence.add(new AntTurnRightAction(ant));
                     } else {
-                        sequence.add(new TerminalNode<Action>(new AntTurnLeftAction(ant)));
-                        sequence.add(new TerminalNode<Action>(new AntTurnLeftAction(ant)));
+                        sequence.add(new AntTurnLeftAction(ant));
+                        sequence.add(new AntTurnLeftAction(ant));
                     }
                 }
                 if (lastOrientation.equalsIgnoreCase("E")) {
-                    sequence.add(new TerminalNode<Action>(new AntTurnLeftAction(ant)));
+                    sequence.add(new AntTurnLeftAction(ant));
                 }
                 lastOrientation = new String(instruction);
             } else if (instruction.equalsIgnoreCase("{")) {
@@ -451,10 +440,10 @@ public class AntSemanticModule implements SemanticModule<Action> {
                     part.add(representation.get(i));
                 }
                 // pull part back from recursive call
-                Node<Action> child1 = this.repToCode1(new AntRepresentation(part), oBeforeIf);
+                Node<Object> child1 = this.repToCode1(new AntRepresentation(part), oBeforeIf);
                 // add part to sequence if no part then add skip
                 if (child1 == null) {
-                    child1 = new TerminalNode<Action>(new AntSkipAction(ant));
+                    child1 = new AntSkipAction(ant);
                 }
                 // reset lastX and last Y to before if branch
                 lastOrientation = oBeforeIf;
@@ -476,13 +465,13 @@ public class AntSemanticModule implements SemanticModule<Action> {
                     i++;
                 }
                 // pull part back from recursive call
-                Node<Action> child2 = this.repToCode1(new AntRepresentation(part), oBeforeIf);
+                Node<Object> child2 = this.repToCode1(new AntRepresentation(part), oBeforeIf);
                 // add part to sequence if no part then add skip
                 if (child2 == null) {
-                    child2 = new TerminalNode<Action>(new AntSkipAction(ant));
+                    child2 = new AntSkipAction(ant);
                 }
                 // end close brakct
-                Node<Action> iFANode = new IfFoodAheadFunction(ant, landscape);
+                Node<Object> iFANode = new IfFoodAheadFunction(ant);
                 iFANode.setChild(0, child1);
                 iFANode.setChild(1, child2);
                 sequence.add(iFANode);
@@ -505,31 +494,31 @@ public class AntSemanticModule implements SemanticModule<Action> {
 		return sequence.get(0);
     }
 	
-	private ArrayList<Node<Action>> reduceSequence(ArrayList<Node<Action>> sequence) {
+	private List<Node<Object>> reduceSequence(List<Node<Object>> sequence) {
 		int count = sequence.size();
 		if (count == 0) {
-			sequence.add(new TerminalNode<Action>(new AntSkipAction(ant)));
+			sequence.add(new AntSkipAction(ant));
 		} else if (count == 1) {
 			// do nothing is resolved ready to return
 		} else if (count == 2) {
 			// function up PROGN2
-			Node<Action> p1 = sequence.get(0);
-			Node<Action> p2 = sequence.get(1);
+			Node<Object> p1 = sequence.get(0);
+			Node<Object> p2 = sequence.get(1);
 			sequence.set(0, new Seq2Function(p1, p2));
 			sequence.remove(1);
 		} else if (count == 3) {
 			// function up PROGN3
-			Node<Action> p1 = sequence.get(0);
-			Node<Action> p2 = sequence.get(1);
-			Node<Action> p3 = sequence.get(2);
+			Node<Object> p1 = sequence.get(0);
+			Node<Object> p2 = sequence.get(1);
+			Node<Object> p3 = sequence.get(2);
 			sequence.set(0, new Seq3Function(p1, p2, p3));
 			sequence.remove(2);
 			sequence.remove(1);
 		} else if (count > 3) {
 			//crunch 1st three into progn3
-			Node<Action> p1 = sequence.get(0);
-			Node<Action> p2 = sequence.get(1);
-			Node<Action> p3 = sequence.get(2);
+			Node<Object> p1 = sequence.get(0);
+			Node<Object> p2 = sequence.get(1);
+			Node<Object> p3 = sequence.get(2);
 			sequence.set(0, new Seq3Function(p1, p2, p3));
 			sequence.remove(2);
 			sequence.remove(1);

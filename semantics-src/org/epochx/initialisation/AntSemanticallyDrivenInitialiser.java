@@ -30,9 +30,9 @@ import org.epochx.semantics.*;
 /**
  * Artificial Ant Semantically Driven Initialisation
  */
-public class AntSemanticallyDrivenInitialiser implements Initialiser<Action> {
+public class AntSemanticallyDrivenInitialiser implements Initialiser<Object> {
 
-	private GPModel<Action> model;
+	private GPModel<Object> model;
 	private AntSemanticModule semMod;
 	
 	/**
@@ -40,7 +40,7 @@ public class AntSemanticallyDrivenInitialiser implements Initialiser<Action> {
 	 * @param model The GP model in use
 	 * @param semMod The semantic module on use
 	 */
-	public AntSemanticallyDrivenInitialiser(GPModel<Action> model, SemanticModule<Action> semMod) {
+	public AntSemanticallyDrivenInitialiser(GPModel<Object> model, SemanticModule<Object> semMod) {
 		this.model = model;
 		this.semMod = (AntSemanticModule) semMod;
 	}
@@ -49,11 +49,11 @@ public class AntSemanticallyDrivenInitialiser implements Initialiser<Action> {
 	 * @see org.epochx.core.initialisation.Initialiser#getInitialPopulation()
 	 */
 	@Override
-	public List<CandidateProgram<Action>> getInitialPopulation() {
+	public List<CandidateProgram<Object>> getInitialPopulation() {
 		return generatePopulation();
 	}
 	
-	private List<CandidateProgram<Action>> generatePopulation() {
+	private List<CandidateProgram<Object>> generatePopulation() {
 		// make a random object
 		Random rGen = new Random();
 		ArrayList<ArrayList<String>> storage = new ArrayList<ArrayList<String>>();
@@ -134,11 +134,11 @@ public class AntSemanticallyDrivenInitialiser implements Initialiser<Action> {
         }
         
         // backwards translate
-        List<CandidateProgram<Action>> firstGen = new ArrayList<CandidateProgram<Action>>();
+        List<CandidateProgram<Object>> firstGen = new ArrayList<CandidateProgram<Object>>();
         int i = 1;
         for(ArrayList<String> toProg: storage) {                
-            Node<Action> holder = semMod.behaviourToCode(new AntRepresentation(toProg));
-            firstGen.add(new CandidateProgram<Action>(holder, model));
+            Node<Object> holder = semMod.behaviourToCode(new AntRepresentation(toProg));
+            firstGen.add(new CandidateProgram<Object>(holder, model));
             //System.out.println(holder);
             //System.out.println("Reverse Translation at: " + i);
             i++;

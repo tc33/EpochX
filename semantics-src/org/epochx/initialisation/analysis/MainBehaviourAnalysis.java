@@ -50,7 +50,7 @@ public class MainBehaviourAnalysis {
 		SantaFeTrail model = new SantaFeTrail();
 		String modelName = "AASF";
 		model.setInitialMaxDepth(4);
-		SemanticModule semMod = new AntSemanticModule(model.getTerminals(), model, model.getAnt(), model.getAntLandScape());
+		SemanticModule semMod = new AntSemanticModule(model.getTerminals(), model.getAnt());
 		FullInitialiser initialiser = new FullInitialiser(model);
 		String genType = "FULL";
 		File place = new File("Results");
@@ -123,7 +123,7 @@ public class MainBehaviourAnalysis {
 					}
 
 					// check for semantic equivalence
-					specimin = semMod.codeToBehaviour(testProg);
+					specimin = semMod.codeToBehaviour(testProg.getRootNode());
 					boolean marker = false;
 					for (Representation b : behaviours) {
 						if (b.equals(specimin)) {

@@ -65,7 +65,7 @@ public class BiasAnalyser {
             for (CandidateProgram prog : testPop) {
 
                 // work out BDD
-                Representation progRep = semMod.codeToBehaviour(prog);
+                Representation progRep = semMod.codeToBehaviour(prog.getRootNode());
 
                 // cycle through storage and find match
                 boolean match = false;

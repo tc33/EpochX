@@ -102,7 +102,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 		noElites = 10;
 		terminationFitness = 0.0;
 		crossoverProbability = 0.9;
-		mutationProbability = 0;
+		mutationProbability = 0.1;
 		
 		// Statistics fields.
 		mutationStatFields = null;

@@ -65,7 +65,7 @@ public class RegressionModelQUART extends SemanticModel<Double> {
 		setStateCheckedCrossover(false);
 		setMutator(new SubtreeMutation<Double>(this));
 		setStateCheckedMutation(false);
-		RegressionSemanticModule semMod = new RegressionSemanticModule(getTerminals(), this);
+		RegressionSemanticModule semMod = new RegressionSemanticModule(getTerminals());
 		setSemanticModule(semMod);
 		setInitialiser(new RampedHalfAndHalfInitialiser<Double>(this));
 	}

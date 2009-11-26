@@ -22,7 +22,6 @@ package org.epochx.semantics;
 import java.util.*;
 
 import org.epochx.core.*;
-import org.epochx.initialisation.analysis.*;
 import org.epochx.representation.*;
 import org.epochx.representation.dbl.*;
 
@@ -34,7 +33,6 @@ import org.epochx.representation.dbl.*;
 public class RegressionSemanticModule implements SemanticModule<Double> {
 	
 	private List<TerminalNode<Double>> terminals;
-	private GPModel<Double> model;
 	private Variable<Double> var;
 	
 	/**
@@ -42,9 +40,8 @@ public class RegressionSemanticModule implements SemanticModule<Double> {
 	 * @param list List of terminal nodes
 	 * @param model The GPModel object
 	 */
-	public RegressionSemanticModule(List<TerminalNode<Double>> list, GPModel<Double> model) {
+	public RegressionSemanticModule(List<TerminalNode<Double>> list) {
 		this.terminals = list;
-		this.model = model;
 	}
 	
 	/* (non-Javadoc)

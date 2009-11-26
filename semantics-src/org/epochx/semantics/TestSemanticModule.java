@@ -35,7 +35,7 @@ public class TestSemanticModule {
 	public static void main(String[] args) throws CloneNotSupportedException {
 		
 		RegressionModelCUBIC model = new RegressionModelCUBIC();
-		RegressionSemanticModule semMod = new RegressionSemanticModule(model.getTerminals(), model);
+		RegressionSemanticModule semMod = new RegressionSemanticModule(model.getTerminals());
 		FullInitialiser<Double> rhh = new FullInitialiser<Double>(model);
 		model.setPopulationSize(5000);
 		

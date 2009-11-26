@@ -65,7 +65,7 @@ public class RegressionModelCUBIC extends SemanticModel<Double> {
 		setStateCheckedCrossover(true);
 		setMutator(new SubtreeMutation<Double>(this));
 		setStateCheckedMutation(false);
-		RegressionSemanticModule semMod = new RegressionSemanticModule(getTerminals(), this);
+		RegressionSemanticModule semMod = new RegressionSemanticModule(getTerminals());
 		setSemanticModule(semMod);
 		setInitialiser(new RampedHalfAndHalfInitialiser<Double>(this));
 	}

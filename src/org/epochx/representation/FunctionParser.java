@@ -39,6 +39,9 @@ public class FunctionParser<TYPE> {
 	// This map is to contain only simple actions that require no additional info.
 	private final Map<String, Class<?>> simpleActions;
 	
+	// List of variables to be used, any variables found, not provided will be created.
+	private List<Variable<TYPE>> variables;
+	
 	// An ant which we may need to use in some function creations - lazily created.
 	private Ant ant;
 	
@@ -64,6 +67,7 @@ public class FunctionParser<TYPE> {
 	             					  "[\\x00-\\x20]*");
 	
 	public FunctionParser() {
+		variables = new ArrayList<Variable<TYPE>>();
 		simpleFunctions = new HashMap<String, Class<?>>();
 		simpleActions = new HashMap<String, Class<?>>();
 		
@@ -79,6 +83,7 @@ public class FunctionParser<TYPE> {
 		simpleFunctions.put("XOR", XorFunction.class);
 		
 		// Insert the Double functions.
+		simpleFunctions.put("ABS", AbsoluteFunction.class);
 		simpleFunctions.put("ADD", AddFunction.class);
 		simpleFunctions.put("ACOS", ArcCosineFunction.class);
 		simpleFunctions.put("ASIN", ArcSineFunction.class);
@@ -89,12 +94,14 @@ public class FunctionParser<TYPE> {
 		simpleFunctions.put("COT", CotangentFunction.class);
 		simpleFunctions.put("CUBE", CubeFunction.class);
 		simpleFunctions.put("FACTORIAL", FactorialFunction.class);
+		simpleFunctions.put("GT", GreaterThanFunction.class);
 		simpleFunctions.put("COSH", HyperbolicCosineFunction.class);
 		simpleFunctions.put("SINH", HyperbolicSineFunction.class);
 		simpleFunctions.put("TANH", HyperbolicTangentFunction.class);
 		simpleFunctions.put("INV", InvertFunction.class);
 		simpleFunctions.put("LOG-10", Log10Function.class);
 		simpleFunctions.put("LN", LogFunction.class);
+		simpleFunctions.put("LT", LessThanFunction.class);
 		simpleFunctions.put("MAX", MaxFunction.class);
 		simpleFunctions.put("MIN", MinFunction.class);
 		simpleFunctions.put("MOD", ModuloFunction.class);
@@ -112,6 +119,7 @@ public class FunctionParser<TYPE> {
 		// Insert the Action functions.
 		simpleFunctions.put("SEQ2", Seq2Function.class);
 		simpleFunctions.put("SEQ3", Seq3Function.class);
+		simpleFunctions.put("SEQ4", Seq4Function.class);
 	}
 	
 	/*
@@ -239,6 +247,14 @@ public class FunctionParser<TYPE> {
 				 	|| terminalStr.equalsIgnoreCase("false")) {
 			return new TerminalNode<Boolean>(Boolean.valueOf(terminalStr));
 		} else {
+			// Must be a variable.
+			for (Variable<TYPE> v: variables) {
+				if (v.getLabel().equals(terminalStr)) {
+					return v;
+				}
+			}
+			
+			// If we didn't find one then just create one.
 			return new Variable<Boolean>(terminalStr);
 		}
 	}
@@ -249,6 +265,14 @@ public class FunctionParser<TYPE> {
 	
 	public void addSimpleAction(String name, Class<Action> actionClass) {
 		simpleActions.put(name, actionClass);
+	}
+	
+	public void setAvailableVariables(List<Variable<TYPE>> variables) {
+		this.variables = variables;
+	}
+	
+	public void addAvailableVariable(Variable<TYPE> variable) {
+		variables.add(variable);
 	}
 	
 	/**

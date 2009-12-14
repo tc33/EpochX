@@ -29,6 +29,7 @@ import org.epochx.op.selection.*;
 import org.epochx.random.*;
 import org.epochx.representation.*;
 import org.epochx.stats.*;
+import org.epochx.tools.random.*;
 
 
 /**
@@ -39,7 +40,7 @@ import org.epochx.stats.*;
  * a simple setter method call. 
  * 
  * <p>Those methods that it isn't possible to provide a <em>sensible</em> 
- * default for, for example getFitness(CandidateProgram), getTerminals() and
+ * default for, for example getFitness(GPCandidateProgram), getTerminals() and
  * getFunctions(), are not implemented to force the extending class to 
  * consider their implementation.
  * 
@@ -514,8 +515,8 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * @return True if the crossover operation should proceed, false if it is 
 	 * 		   rejected and should be retried with new parents.
 	 */
-	public boolean acceptCrossover(CandidateProgram<TYPE>[] parents, 
-								   CandidateProgram<TYPE>[] children) {
+	public boolean acceptCrossover(GPCandidateProgram<TYPE>[] parents, 
+								   GPCandidateProgram<TYPE>[] children) {
 		return true;
 	}
 
@@ -528,8 +529,8 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * @return True if the mutation operation should proceed, false if it is 
 	 * rejected and should be retried with a new parent.
 	 */
-	public boolean acceptMutation(CandidateProgram<TYPE> parent, 
-								  CandidateProgram<TYPE> child) {
+	public boolean acceptMutation(GPCandidateProgram<TYPE> parent, 
+								  GPCandidateProgram<TYPE> child) {
 		return true;
 	}
 
@@ -837,7 +838,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public List<CandidateProgram<TYPE>> onInitialisation(List<CandidateProgram<TYPE>> pop) {
+	public List<GPCandidateProgram<TYPE>> onInitialisation(List<GPCandidateProgram<TYPE>> pop) {
 		return pop;
 	}
 	
@@ -850,7 +851,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public List<CandidateProgram<TYPE>> onElitism(List<CandidateProgram<TYPE>> elites) {
+	public List<GPCandidateProgram<TYPE>> onElitism(List<GPCandidateProgram<TYPE>> elites) {
 		return elites;
 	}
 	
@@ -863,7 +864,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public List<CandidateProgram<TYPE>> onPoolSelection(List<CandidateProgram<TYPE>> pool) {
+	public List<GPCandidateProgram<TYPE>> onPoolSelection(List<GPCandidateProgram<TYPE>> pool) {
 		return pool;
 	}
 	
@@ -876,8 +877,8 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public CandidateProgram<TYPE>[] onCrossover(CandidateProgram<TYPE>[] parents,
-			CandidateProgram<TYPE>[] children) {
+	public GPCandidateProgram<TYPE>[] onCrossover(GPCandidateProgram<TYPE>[] parents,
+			GPCandidateProgram<TYPE>[] children) {
 		return children;
 	}
 
@@ -890,8 +891,8 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public CandidateProgram<TYPE> onMutation(CandidateProgram<TYPE> parent,
-			CandidateProgram<TYPE> child) {
+	public GPCandidateProgram<TYPE> onMutation(GPCandidateProgram<TYPE> parent,
+			GPCandidateProgram<TYPE> child) {
 		return child;
 	}
 
@@ -904,7 +905,7 @@ public abstract class GPAbstractModel<TYPE> implements GPModel<TYPE>,
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public CandidateProgram<TYPE> onReproduction(CandidateProgram<TYPE> child) {
+	public GPCandidateProgram<TYPE> onReproduction(GPCandidateProgram<TYPE> child) {
 		return child;
 	}
 	

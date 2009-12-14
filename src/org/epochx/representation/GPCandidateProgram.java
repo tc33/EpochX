@@ -25,15 +25,15 @@ import org.epochx.core.*;
 
 
 /**
- * A <code>CandidateProgram</code> encapsulates an individual program within a 
+ * A <code>GPCandidateProgram</code> encapsulates an individual program within a 
  * generation of a GP run.
  * 
- * <p>Instances of CandidateProgram can be requested to evaluate themselves, 
+ * <p>Instances of GPCandidateProgram can be requested to evaluate themselves, 
  * which will trigger an evaluation of each <code>Node</code> and their child 
  * nodes recursively down the tree. As well as the program tree itself, each 
- * CandidateProgram allows the retrieval of meta-data about the program.
+ * GPCandidateProgram allows the retrieval of meta-data about the program.
  */
-public class CandidateProgram<TYPE> implements Cloneable, Comparable<CandidateProgram<TYPE>> {
+public class GPCandidateProgram<TYPE> implements Cloneable, Comparable<GPCandidateProgram<TYPE>> {
 	
 	// The root node of the program tree.
 	private Node<TYPE> rootNode;
@@ -51,7 +51,7 @@ public class CandidateProgram<TYPE> implements Cloneable, Comparable<CandidatePr
 	 * @param model the controlling model which provides the configuration 
 	 * 				parameters for the run. 				
 	 */
-	public CandidateProgram(Node<TYPE> rootNode, GPModel<TYPE> model) {
+	public GPCandidateProgram(Node<TYPE> rootNode, GPModel<TYPE> model) {
 		this.model = model;
 		this.rootNode = rootNode;
 	}
@@ -76,7 +76,7 @@ public class CandidateProgram<TYPE> implements Cloneable, Comparable<CandidatePr
 	}
 	
 	/**
-	 * Returns the nth node in the <code>CandidateProgram</code>. The program 
+	 * Returns the nth node in the <code>GPCandidateProgram</code>. The program 
 	 * tree is traversed in pre-order (depth-first), indexed from 0 so that the 
 	 * root node is at node 0.
 	 * 
@@ -93,7 +93,7 @@ public class CandidateProgram<TYPE> implements Cloneable, Comparable<CandidatePr
 	}
 	
 	/**
-	 * Replaces the node at the specified position in the CandidateProgram with 
+	 * Replaces the node at the specified position in the GPCandidateProgram with 
 	 * the specified node.
 	 * 
 	 * @param n	index of the node to replace.
@@ -125,7 +125,7 @@ public class CandidateProgram<TYPE> implements Cloneable, Comparable<CandidatePr
 	
 	/**
 	 * Requests the controlling model to calculate the fitness of this 
-	 * <code>CandidateProgram</code>.
+	 * <code>GPCandidateProgram</code>.
 	 * 
 	 * @return the fitness of this candidate program according to the model.
 	 */
@@ -186,7 +186,7 @@ public class CandidateProgram<TYPE> implements Cloneable, Comparable<CandidatePr
 	 * @param program
 	 * @return
 	 */
-	/*public static int getProgramDepth(CandidateProgram program) {
+	/*public static int getProgramDepth(GPCandidateProgram program) {
         // Flatten the tree.
 		String flatProg = program.toString();
 		
@@ -239,14 +239,14 @@ public class CandidateProgram<TYPE> implements Cloneable, Comparable<CandidatePr
 	 * 
 	 * This is super expensive if using to sort a list. Might be possible to 
 	 * improve performance if we can implement caching of fitness within a 
-	 * CandidateProgram.
+	 * GPCandidateProgram.
 	 * 
-	 * @param o the CandidateProgram to be compared.
+	 * @param o the GPCandidateProgram to be compared.
 	 * @return a negative integer, zero, or a positive integer if this program 
 	 * has a worse, equal or better fitness respectively. 
 	 */
 	@Override
-	public int compareTo(CandidateProgram<TYPE> o) {
+	public int compareTo(GPCandidateProgram<TYPE> o) {
 		double thisFitness = this.getFitness();
 		double objFitness = o.getFitness();
 		
@@ -264,13 +264,13 @@ public class CandidateProgram<TYPE> implements Cloneable, Comparable<CandidatePr
 	 * copy of all the program nodes, so after calling this method none of the 
 	 * clones nodes will refer to the same instance.
 	 * 
-	 * @return a clone of this CandidateProgram instance.
+	 * @return a clone of this GPCandidateProgram instance.
 	 */
 	@Override
 	public Object clone() {
-		CandidateProgram<TYPE> clone = null;
+		GPCandidateProgram<TYPE> clone = null;
 		try {
-			clone = (CandidateProgram<TYPE>) super.clone();
+			clone = (GPCandidateProgram<TYPE>) super.clone();
 		} catch (CloneNotSupportedException e) {
 			// This shouldn't ever happen - if it does then everything is 
 			// going to blow up anyway.
@@ -300,18 +300,18 @@ public class CandidateProgram<TYPE> implements Cloneable, Comparable<CandidatePr
 	}
 	
 	/**
-	 * This equals method compares the given object to this CandidateProgram 
+	 * This equals method compares the given object to this GPCandidateProgram 
 	 * to determine if they are equal. Equivalence is defined by their both 
-	 * being instances of CandidateProgram and them having equal program node 
+	 * being instances of GPCandidateProgram and them having equal program node 
 	 * trees according to the equals methods of the root node.
 	 * 
 	 * @param obj an object to be compared for equivalence.
-	 * @return true if this CandidateProgram is the same as the obj argument; 
+	 * @return true if this GPCandidateProgram is the same as the obj argument; 
 	 * false otherwise.
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		return rootNode.equals(((CandidateProgram<TYPE>) obj).rootNode);
+		return rootNode.equals(((GPCandidateProgram<TYPE>) obj).rootNode);
 	}
 
 }

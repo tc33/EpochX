@@ -26,7 +26,7 @@ public interface TerminationListener {
 	
 	/**
 	 * Called on termination of the GP run where execution ended because of the 
-	 * successful identification of a CandidateProgram with a fitness equal to 
+	 * successful identification of a GPCandidateProgram with a fitness equal to 
 	 * or lower than the models termination fitness parameter.
 	 */
 	public void onFitnessTermination();
@@ -34,7 +34,7 @@ public interface TerminationListener {
 	/**
 	 * Called on termination of the GP run where execution ended because the 
 	 * requested number of generations was completed without identification of 
-	 * a CandidateProgram with a fitness equal to or lower than the models 
+	 * a GPCandidateProgram with a fitness equal to or lower than the models 
 	 * termination fitness parameter.
 	 */
 	public void onGenerationTermination();

@@ -35,7 +35,7 @@ public class RandomSelector<TYPE> implements ProgramSelector<TYPE>, PoolSelector
 	private GPModel<TYPE> model;
 	
 	// The current population from which programs should be chosen.
-	private List<CandidateProgram<TYPE>> pop;
+	private List<GPCandidateProgram<TYPE>> pop;
 	
 	public RandomSelector(GPModel<TYPE> model) {
 		this.model = model;
@@ -48,7 +48,7 @@ public class RandomSelector<TYPE> implements ProgramSelector<TYPE>, PoolSelector
 	 * @param pop the current population for this generation.
 	 */
 	@Override
-	public void setSelectionPool(List<CandidateProgram<TYPE>> pop) {
+	public void setSelectionPool(List<GPCandidateProgram<TYPE>> pop) {
 		this.pop = pop;
 	}
 	
@@ -58,7 +58,7 @@ public class RandomSelector<TYPE> implements ProgramSelector<TYPE>, PoolSelector
 	 * @return a randomly selected program.
 	 */
 	@Override
-	public CandidateProgram<TYPE> getProgram() {		
+	public GPCandidateProgram<TYPE> getProgram() {		
 		return pop.get(model.getRNG().nextInt(pop.size()));
 	}
 
@@ -77,14 +77,14 @@ public class RandomSelector<TYPE> implements ProgramSelector<TYPE>, PoolSelector
 	 * @return the randomly selected pool of candidate programs.
 	 */
 	@Override
-	public List<CandidateProgram<TYPE>> getPool(List<CandidateProgram<TYPE>> pop, int poolSize) {
+	public List<GPCandidateProgram<TYPE>> getPool(List<GPCandidateProgram<TYPE>> pop, int poolSize) {
 		// If poolSize is 0 or less then we use the whole population.
 		if (poolSize <= 0) {
 			return pop;
 		}
 		
 		// Construct our pool.
-		List<CandidateProgram<TYPE>> pool = new ArrayList<CandidateProgram<TYPE>>(poolSize);
+		List<GPCandidateProgram<TYPE>> pool = new ArrayList<GPCandidateProgram<TYPE>>(poolSize);
 		for (int i=0; i<poolSize; i++) {
 			pool.add(pop.get(model.getRNG().nextInt(pop.size())));
 		}

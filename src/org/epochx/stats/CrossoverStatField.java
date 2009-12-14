@@ -31,13 +31,13 @@ package org.epochx.stats;
  */
 public enum CrossoverStatField {
 	/** 
-	 * Requests a CandidateProgram[] (typically with 2 elements) which are 
+	 * Requests a GPCandidateProgram[] (typically with 2 elements) which are 
 	 * the parents that were crossed-over to give the children.
 	 **/
 	PARENTS,
 	
 	/**
-	 * Requests a CandidateProgram[] (typically with 2 elements) which are 
+	 * Requests a GPCandidateProgram[] (typically with 2 elements) which are 
 	 * the children that resulted from crossing over the parents.
 	 **/
 	CHILDREN,

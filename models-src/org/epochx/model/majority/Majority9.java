@@ -21,10 +21,10 @@ package org.epochx.model.majority;
 
 import java.util.*;
 
-import org.epochx.core.*;
+import org.epochx.core.GPAbstractModel;
 import org.epochx.representation.*;
 import org.epochx.representation.bool.*;
-import org.epochx.util.*;
+import org.epochx.tools.util.BoolUtils;
 
 
 /**
@@ -84,7 +84,7 @@ public class Majority9 extends GPAbstractModel<Boolean> {
 	}
 	
 	@Override
-	public double getFitness(CandidateProgram<Boolean> program) {
+	public double getFitness(GPCandidateProgram<Boolean> program) {
         double score = 0;
         
         // Execute on all possible inputs.

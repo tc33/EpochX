@@ -41,17 +41,17 @@ public interface ProgramSelector<TYPE> {
 	 * @param pop the current population for this generation.
 	 */
 	//TODO This is a little bit nasty, would be better if we can plug it into a standard listener system.
-	public void setSelectionPool(List<CandidateProgram<TYPE>> pop);
+	public void setSelectionPool(List<GPCandidateProgram<TYPE>> pop);
 	
 	/**
-	 * Select a <code>CandidateProgram</code> from the current population of 
+	 * Select a <code>GPCandidateProgram</code> from the current population of 
 	 * programs. The method of selection would normally be based upon the 
 	 * fitness of the program but there is no need for it to be, and there are 
 	 * exceptions.
 	 * 
-	 * @return a CandidateProgram selected from the current population of 
+	 * @return a GPCandidateProgram selected from the current population of 
 	 * programs.
 	 */
-	public CandidateProgram<TYPE> getProgram();
+	public GPCandidateProgram<TYPE> getProgram();
 	
 }

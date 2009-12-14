@@ -22,8 +22,8 @@ package org.epochx.core;
 import java.util.*;
 
 import org.epochx.life.LifeCycleManager;
-import org.epochx.random.RandomNumberGenerator;
-import org.epochx.representation.CandidateProgram;
+import org.epochx.representation.GPCandidateProgram;
+import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
  * This class is responsible for performing a generation in a GP run.
@@ -104,7 +104,7 @@ public class GPGeneration<TYPE> {
 	 * @param previousPop
 	 * @return
 	 */
-	public List<CandidateProgram<TYPE>> generation(List<CandidateProgram<TYPE>> previousPop) {
+	public List<GPCandidateProgram<TYPE>> generation(List<GPCandidateProgram<TYPE>> previousPop) {
 		reset();
 		
 		// Tell life cycle manager we're starting a new generation.
@@ -112,13 +112,13 @@ public class GPGeneration<TYPE> {
 		
 		// Create next population to fill.
 		int popSize = model.getPopulationSize();
-		List<CandidateProgram<TYPE>> pop = new ArrayList<CandidateProgram<TYPE>>(popSize);
+		List<GPCandidateProgram<TYPE>> pop = new ArrayList<GPCandidateProgram<TYPE>>(popSize);
 		
 		// Perform elitism.
 		pop.addAll(elitism.getElites(previousPop));
 		
 		// Construct a breeding pool.
-		List<CandidateProgram<TYPE>> pool = poolSelection.getPool(previousPop);
+		List<GPCandidateProgram<TYPE>> pool = poolSelection.getPool(previousPop);
 		
 		// Tell the parent selector what selection pool to use.
 		model.getProgramSelector().setSelectionPool(pool);
@@ -130,8 +130,8 @@ public class GPGeneration<TYPE> {
 			
 			if (random < crossoverProbability) {
 				// Perform crossover.
-				CandidateProgram<TYPE>[] children = crossover.crossover();
-				for (CandidateProgram<TYPE> c: children) {
+				GPCandidateProgram<TYPE>[] children = crossover.crossover();
+				for (GPCandidateProgram<TYPE> c: children) {
 					if (pop.size() < popSize)
 						pop.add(c);
 				}

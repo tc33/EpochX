@@ -47,8 +47,8 @@ public class CrossoverStats<TYPE> {
 		listeners.remove(listener);
 	}
 	
-	public void addCrossover(CandidateProgram<TYPE>[] parents, 
-							 CandidateProgram<TYPE>[] children, 
+	public void addCrossover(GPCandidateProgram<TYPE>[] parents, 
+							 GPCandidateProgram<TYPE>[] children, 
 							 long runtime,
 							 int reversions) {
 		// Set of all the fields we need to calculate values for.
@@ -99,8 +99,8 @@ public class CrossoverStats<TYPE> {
 	 * @param pop
 	 */
 	private void gatherStats(Map<CrossoverStatField, Object>  stats, 
-							 CandidateProgram<TYPE>[] parents, 
-							 CandidateProgram<TYPE>[] children, 
+							 GPCandidateProgram<TYPE>[] parents, 
+							 GPCandidateProgram<TYPE>[] children, 
 							 long runtime,
 							 int reversions) {
 		if (stats.containsKey(CrossoverStatField.PARENTS)) {

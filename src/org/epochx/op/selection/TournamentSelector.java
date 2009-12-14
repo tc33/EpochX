@@ -59,7 +59,7 @@ public class TournamentSelector<TYPE> implements ProgramSelector<TYPE>, PoolSele
 	 * Store the population for creating tournaments from.
 	 */
 	@Override
-	public void setSelectionPool(List<CandidateProgram<TYPE>> pop) {
+	public void setSelectionPool(List<GPCandidateProgram<TYPE>> pop) {
 		// We'll be using a random selector to construct a tournament.
 		randomSelector.setSelectionPool(pop);
 	}
@@ -72,17 +72,17 @@ public class TournamentSelector<TYPE> implements ProgramSelector<TYPE>, PoolSele
 	 * @return the best program from a randomly generated tournament.
 	 */
 	@Override
-	public CandidateProgram<TYPE> getProgram() {
+	public GPCandidateProgram<TYPE> getProgram() {
 		// Use random selector to create tournament.
-		CandidateProgram<TYPE>[] tournament = new CandidateProgram[tournamentSize];
+		GPCandidateProgram<TYPE>[] tournament = new GPCandidateProgram[tournamentSize];
 		for (int i=0; i<tournamentSize; i++) {
 			tournament[i] = randomSelector.getProgram();
 		}
 		
 		// Check the fitness of each program, stashing the best.
 		double bestFitness = Double.POSITIVE_INFINITY;
-		CandidateProgram<TYPE> bestProgram = null;
-		for (CandidateProgram<TYPE> p: tournament) {
+		GPCandidateProgram<TYPE> bestProgram = null;
+		for (GPCandidateProgram<TYPE> p: tournament) {
 			double fitness = p.getFitness();
 			if (fitness < bestFitness) {
 				bestFitness = fitness;
@@ -110,13 +110,13 @@ public class TournamentSelector<TYPE> implements ProgramSelector<TYPE>, PoolSele
 	 * selection.
 	 */
 	@Override
-	public List<CandidateProgram<TYPE>> getPool(List<CandidateProgram<TYPE>> pop, int poolSize) {
+	public List<GPCandidateProgram<TYPE>> getPool(List<GPCandidateProgram<TYPE>> pop, int poolSize) {
 		// If pouleSize is 0 or less then we use the whole population.
 		if (poolSize <= 0) {
 			return pop;
 		}
 		
-		List<CandidateProgram<TYPE>> pool = new ArrayList<CandidateProgram<TYPE>>(poolSize);
+		List<GPCandidateProgram<TYPE>> pool = new ArrayList<GPCandidateProgram<TYPE>>(poolSize);
 		
 		ProgramSelector<TYPE> programSelector = new TournamentSelector<TYPE>(model, tournamentSize);
 		programSelector.setSelectionPool(pop);

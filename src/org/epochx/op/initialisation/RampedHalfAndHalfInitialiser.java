@@ -66,10 +66,10 @@ public class RampedHalfAndHalfInitialiser<TYPE> implements Initialiser<TYPE> {
 	 * the population size is an odd number then the extra individual will be initialised with
 	 * grow.
 	 */
-	public List<CandidateProgram<TYPE>> getInitialPopulation() {
+	public List<GPCandidateProgram<TYPE>> getInitialPopulation() {
 		// Create population list to populate.
 		int popSize = model.getPopulationSize();
-		List<CandidateProgram<TYPE>> firstGen = new ArrayList<CandidateProgram<TYPE>>(popSize);
+		List<GPCandidateProgram<TYPE>> firstGen = new ArrayList<GPCandidateProgram<TYPE>>(popSize);
 		
 		int startDepth = 2;
 		int endDepth = model.getInitialMaxDepth();
@@ -86,7 +86,7 @@ public class RampedHalfAndHalfInitialiser<TYPE> implements Initialiser<TYPE> {
 			int depth = (int) Math.floor((firstGen.size() / programsPerDepth) + startDepth);
 			
 			// Grow on even numbers, full on odd.
-			CandidateProgram<TYPE> program;
+			GPCandidateProgram<TYPE> program;
 			
 			do {
 				Node<TYPE> rootNode;
@@ -95,7 +95,7 @@ public class RampedHalfAndHalfInitialiser<TYPE> implements Initialiser<TYPE> {
 				} else {
 					rootNode = full.buildFullNodeTree(depth);
 				}
-				program = new CandidateProgram<TYPE>(rootNode, model);
+				program = new GPCandidateProgram<TYPE>(rootNode, model);
 			} while(firstGen.contains(program));
 			
             firstGen.add(program);

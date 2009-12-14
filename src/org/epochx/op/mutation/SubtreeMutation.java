@@ -24,7 +24,7 @@ import org.epochx.op.initialisation.*;
 import org.epochx.representation.*;
 
 /**
- * This class performs a subtree mutation on a <code>CandidateProgram</code>.
+ * This class performs a subtree mutation on a <code>GPCandidateProgram</code>.
  * 
  * <p>A mutation point is randomly selected anywhere in the program tree. Then 
  * the node at that point is replaced with a newly generated program tree, 
@@ -64,18 +64,18 @@ public class SubtreeMutation<TYPE> implements Mutation<TYPE> {
 	}
 	
 	/**
-	 * Perform subtree mutation on the given CandidateProgram. A mutation point 
+	 * Perform subtree mutation on the given GPCandidateProgram. A mutation point 
 	 * is randomly selected anywhere in the program tree. Then the node at that 
 	 * point is replaced with a newly generated program tree, which is created 
 	 * using a grow strategy.
 	 * 
-	 * @param program The CandidateProgram selected to undergo this mutation 
+	 * @param program The GPCandidateProgram selected to undergo this mutation 
 	 * 				  operation.
-	 * @return A CandidateProgram that was the result of a point mutation on 
-	 * the provided CandidateProgram.
+	 * @return A GPCandidateProgram that was the result of a point mutation on 
+	 * the provided GPCandidateProgram.
 	 */
 	@Override
-	public CandidateProgram<TYPE> mutate(CandidateProgram<TYPE> program) {
+	public GPCandidateProgram<TYPE> mutate(GPCandidateProgram<TYPE> program) {
 		// Randonly choose a mutation point.
 		int length = program.getProgramLength();
 		int mutationPoint = model.getRNG().nextInt(length);

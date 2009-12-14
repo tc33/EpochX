@@ -22,13 +22,13 @@ package org.epochx.example.evenparity;
 import java.util.*;
 
 import org.epochx.core.*;
-import org.epochx.op.crossover.*;
-import org.epochx.op.initialisation.*;
+import org.epochx.op.crossover.UniformPointCrossover;
+import org.epochx.op.initialisation.RampedHalfAndHalfInitialiser;
 import org.epochx.op.selection.*;
 import org.epochx.representation.*;
 import org.epochx.representation.bool.*;
-import org.epochx.stats.*;
-import org.epochx.util.*;
+import org.epochx.stats.RunStatField;
+import org.epochx.tools.util.BoolUtils;
 
 
 /**
@@ -95,7 +95,7 @@ public class Even4Parity extends GPAbstractModel<Boolean> {
 	}
 	
 	@Override
-	public double getFitness(CandidateProgram<Boolean> program) {
+	public double getFitness(GPCandidateProgram<Boolean> program) {
         double score = 0;
         
         // Execute on all possible inputs.

@@ -22,12 +22,12 @@ package org.epochx.example.mux;
 import java.util.*;
 
 import org.epochx.core.*;
-import org.epochx.op.crossover.*;
+import org.epochx.op.crossover.UniformPointCrossover;
 import org.epochx.op.selection.*;
 import org.epochx.representation.*;
 import org.epochx.representation.bool.*;
 import org.epochx.stats.*;
-import org.epochx.util.BoolUtils;
+import org.epochx.tools.util.BoolUtils;
 
 
 /**
@@ -95,7 +95,7 @@ public class Multiplexer6BitNOIF extends GPAbstractModel<Boolean> {
 	}
 	
 	@Override
-	public double getFitness(CandidateProgram<Boolean> program) {
+	public double getFitness(GPCandidateProgram<Boolean> program) {
         double score = 0;
         
         // Execute on all possible inputs.

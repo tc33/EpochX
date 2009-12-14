@@ -21,8 +21,8 @@ package org.epochx.op.crossover;
 
 import org.epochx.core.*;
 import org.epochx.life.GenerationListener;
-import org.epochx.random.RandomNumberGenerator;
 import org.epochx.representation.*;
+import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
  * This class implements a Koza style crossover operation on two 
@@ -72,13 +72,13 @@ public class KozaCrossover<TYPE> implements Crossover<TYPE>, GenerationListener 
 	 * function or terminal sets with the probability assigned at construction 
 	 * or the default value of 90% function node.
 	 * 
-	 * @param program1 The first CandidateProgram selected to undergo Koza 
+	 * @param program1 The first GPCandidateProgram selected to undergo Koza 
 	 * 				   crossover.
-	 * @param program2 The second CandidateProgram selected to undergo Koza 
+	 * @param program2 The second GPCandidateProgram selected to undergo Koza 
 	 * 				   crossover.
 	 */
 	@Override
-	public CandidateProgram<TYPE>[] crossover(CandidateProgram<TYPE> program1, CandidateProgram<TYPE> program2) {
+	public GPCandidateProgram<TYPE>[] crossover(GPCandidateProgram<TYPE> program1, GPCandidateProgram<TYPE> program2) {
 		// Get swap points.
 		int swapPoint1 = getCrossoverPoint(program1);
 		int swapPoint2 = getCrossoverPoint(program2);
@@ -91,14 +91,14 @@ public class KozaCrossover<TYPE> implements Crossover<TYPE>, GenerationListener 
 		program1.setNthNode(swapPoint1, subtree2);
 		program2.setNthNode(swapPoint2, subtree1);
 
-		return new CandidateProgram[]{program1, program2};
+		return new GPCandidateProgram[]{program1, program2};
 	}
 	
 	/*
-	 * Choose the crossover point for the given CandidateProgram with respect 
+	 * Choose the crossover point for the given GPCandidateProgram with respect 
 	 * to the probabilities assigned for function and terminal node points.
 	 */
-	private int getCrossoverPoint(CandidateProgram<TYPE> program) {
+	private int getCrossoverPoint(GPCandidateProgram<TYPE> program) {
 		// Calculate numbers of terminal and function nodes.
 		int length = program.getProgramLength();
 		int noTerminals = program.getNoTerminals();
@@ -121,13 +121,13 @@ public class KozaCrossover<TYPE> implements Crossover<TYPE>, GenerationListener 
 	}
 
 	/*
-	 * Recurse through the given CandidateProgram to find the nth function 
+	 * Recurse through the given GPCandidateProgram to find the nth function 
 	 * node and return its node index.
 	 * 
-	 * TODO Consider moving all these functions to the CandidateProgram class 
+	 * TODO Consider moving all these functions to the GPCandidateProgram class 
 	 * as first class citizens in some form - they might be useful for others.
 	 */
-	private int getNthFunctionNode(int n, CandidateProgram<TYPE> program) {
+	private int getNthFunctionNode(int n, GPCandidateProgram<TYPE> program) {
 		return getNthFunctionNode(n, 0, 0, program.getRootNode());
 	}
 	
@@ -160,10 +160,10 @@ public class KozaCrossover<TYPE> implements Crossover<TYPE>, GenerationListener 
 	}
 	
 	/*
-	 * Recurse through the given CandidateProgram to find the nth terminal 
+	 * Recurse through the given GPCandidateProgram to find the nth terminal 
 	 * node and return its node index.
 	 */
-	private int getNthTerminalNode(int n, CandidateProgram<TYPE> program) {
+	private int getNthTerminalNode(int n, GPCandidateProgram<TYPE> program) {
 		return getNthTerminalNode(n, 0, 0, program.getRootNode());
 	}
 	

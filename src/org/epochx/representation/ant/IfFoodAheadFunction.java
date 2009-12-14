@@ -19,8 +19,8 @@
  */
 package org.epochx.representation.ant;
 
-import org.epochx.ant.*;
 import org.epochx.representation.*;
+import org.epochx.tools.ant.Ant;
 
 /**
  * A <code>FunctionNode</code> which represents the conditional if-then-else 

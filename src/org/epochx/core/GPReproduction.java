@@ -70,7 +70,7 @@ public class GPReproduction<TYPE> implements GenerationListener {
 	}
 	
 	/**
-	 * Selects a <code>CandidateProgram</code> from the population using the
+	 * Selects a <code>GPCandidateProgram</code> from the population using the
 	 * <code>ProgramSelector</code> returned by a call to 
 	 * <code>getProgramSelector()</code> on the model given at construction. 
 	 * 
@@ -84,10 +84,10 @@ public class GPReproduction<TYPE> implements GenerationListener {
 	 * times the reproduction was reverted before being accepted is available 
 	 * through a call to <code>getReversions()</code>.
 	 * 
-	 * @return a CandidateProgram selected for reproduction.
+	 * @return a GPCandidateProgram selected for reproduction.
 	 */
-	public CandidateProgram<TYPE> reproduce() {
-		CandidateProgram<TYPE> parent = null;
+	public GPCandidateProgram<TYPE> reproduce() {
+		GPCandidateProgram<TYPE> parent = null;
 		
 		reversions = -1;
 		

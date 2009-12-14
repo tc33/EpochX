@@ -21,10 +21,10 @@ package org.epochx.model.mux;
 
 import java.util.*;
 
-import org.epochx.core.*;
+import org.epochx.core.GPAbstractModel;
 import org.epochx.representation.*;
 import org.epochx.representation.bool.*;
-import org.epochx.util.*;
+import org.epochx.tools.util.BoolUtils;
 
 
 /**
@@ -139,7 +139,7 @@ public class Multiplexer37Bit extends GPAbstractModel<Boolean> {
 	}
 	
 	@Override
-	public double getFitness(CandidateProgram<Boolean> program) {
+	public double getFitness(GPCandidateProgram<Boolean> program) {
         double score = 0;
         
         long noInputs = (long) Math.pow(2, 37);

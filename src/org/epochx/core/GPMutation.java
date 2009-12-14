@@ -102,7 +102,7 @@ public class GPMutation<TYPE> implements GenerationListener {
 	}
 	
 	/**
-	 * Selects a <code>CandidateProgram</code> from the population using the
+	 * Selects a <code>GPCandidateProgram</code> from the population using the
 	 * <code>ProgramSelector</code> returned by a call to 
 	 * <code>getProgramSelector()</code> on the model given at construction and 
 	 * submits it to the <code>Mutation</code> operator which is obtained by 
@@ -112,7 +112,7 @@ public class GPMutation<TYPE> implements GenerationListener {
 	 * confirm the mutation by a call to <code>acceptMutation()</code>. This 
 	 * gives the model total control over whether a mutation is allowed to 
 	 * proceed. If <code>acceptMutation()</code> returns <code>false</code> 
-	 * then the new <code>CandidateProgram</code> is discarded and a new 
+	 * then the new <code>GPCandidateProgram</code> is discarded and a new 
 	 * individual is selected and attempted for mutation. The number of times 
 	 * the mutation was reverted before being accepted is available through 
 	 * a call to <code>getRevertedCount()</code>.
@@ -123,15 +123,15 @@ public class GPMutation<TYPE> implements GenerationListener {
 	 * exceed the limit then the original program is returned as the result. 
 	 * This does not count towards the number of reversions.
 	 * 
-	 * @return a CandidateProgram generated through mutation by the Mutation
+	 * @return a GPCandidateProgram generated through mutation by the Mutation
 	 *         operator in use, or if the max depth limit was exceeded then 
 	 *         the original selected program before mutation will be returned.
 	 */
-	public CandidateProgram<TYPE> mutate() {
+	public GPCandidateProgram<TYPE> mutate() {
 		long crossoverStartTime = System.nanoTime();
 		
-		CandidateProgram<TYPE> parent = null;
-		CandidateProgram<TYPE> child = null;
+		GPCandidateProgram<TYPE> parent = null;
+		GPCandidateProgram<TYPE> child = null;
 
 		reversions = -1;
 		do {
@@ -139,7 +139,7 @@ public class GPMutation<TYPE> implements GenerationListener {
 			parent = programSelector.getProgram();
 			
 			// Create child as a clone of parent.
-			child = (CandidateProgram<TYPE>) parent.clone();
+			child = (GPCandidateProgram<TYPE>) parent.clone();
 			
 			// Mutate the child.
 			child = mutator.mutate(child);
@@ -152,7 +152,7 @@ public class GPMutation<TYPE> implements GenerationListener {
 		// If the new program is too deep, replace it with the original.
 		//TODO As with crossover - is this really the right thing to be doing?
 		if (child.getProgramDepth() > maxProgramDepth) {
-			child = (CandidateProgram<TYPE>) parent.clone();
+			child = (GPCandidateProgram<TYPE>) parent.clone();
 		}
 		
 		long runtime = System.nanoTime() - crossoverStartTime;
@@ -167,7 +167,7 @@ public class GPMutation<TYPE> implements GenerationListener {
 	 * gives the model total control over whether a mutation is allowed to 
 	 * proceed. If <code>acceptMutation()</code> returns <code>false</code> 
 	 * then the mutated program is discarded and a new 
-	 * <code>CandidateProgram</code> selected to undergo mutation. The number 
+	 * <code>GPCandidateProgram</code> selected to undergo mutation. The number 
 	 * of times the mutation was reverted before being accepted is available 
 	 * through a call to this method.
 	 * 

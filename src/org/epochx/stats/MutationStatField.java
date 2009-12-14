@@ -32,13 +32,13 @@ package org.epochx.stats;
 public enum MutationStatField {
 	
 	/**
-	 * Requests a CandidateProgram which is a clone of the program as it 
+	 * Requests a GPCandidateProgram which is a clone of the program as it 
 	 * was <b>before</b> the mutation operation was applied.
 	 */
 	PROGRAM_BEFORE,
 	
 	/**
-	 * Requests a CandidateProgram which is the program as it exists 
+	 * Requests a GPCandidateProgram which is the program as it exists 
 	 * <b>after</b> the mutation operation was applied.
 	 */
 	PROGRAM_AFTER,

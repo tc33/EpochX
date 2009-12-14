@@ -21,8 +21,8 @@ package org.epochx.op.crossover;
 
 import org.epochx.core.*;
 import org.epochx.life.GenerationListener;
-import org.epochx.random.RandomNumberGenerator;
 import org.epochx.representation.*;
+import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
  * This class implements standard crossover with uniform swap points.
@@ -45,15 +45,15 @@ public class UniformPointCrossover<TYPE> implements Crossover<TYPE>, GenerationL
 	 * Crossover the two <code>CandidatePrograms</code> provided as arguments 
 	 * using uniform swap points. Random crossover points are chosen at random 
 	 * in both programs, the genetic material at the points are then exchanged.
-	 * The resulting programs are returned as new CandidateProgram objects.
+	 * The resulting programs are returned as new GPCandidateProgram objects.
 	 * 
-	 * @param program1 The first CandidateProgram selected to undergo uniform  
+	 * @param program1 The first GPCandidateProgram selected to undergo uniform  
 	 * 			       point crossover.
-	 * @param program2 The second CandidateProgram selected to undergo uniform  
+	 * @param program2 The second GPCandidateProgram selected to undergo uniform  
 	 * 				   point crossover.
 	 */
 	@Override
-	public CandidateProgram<TYPE>[] crossover(CandidateProgram<TYPE> program1, CandidateProgram<TYPE> program2) {
+	public GPCandidateProgram<TYPE>[] crossover(GPCandidateProgram<TYPE> program1, GPCandidateProgram<TYPE> program2) {
 		// Select swap points.
 		int swapPoint1 = rng.nextInt(program1.getProgramLength());
 		int swapPoint2 = rng.nextInt(program2.getProgramLength());
@@ -66,7 +66,7 @@ public class UniformPointCrossover<TYPE> implements Crossover<TYPE>, GenerationL
 		program1.setNthNode(swapPoint1, subTree2);
 		program2.setNthNode(swapPoint2, subTree1);		
 		
-		return new CandidateProgram[]{program1, program2};
+		return new GPCandidateProgram[]{program1, program2};
 	}
 
 	@Override

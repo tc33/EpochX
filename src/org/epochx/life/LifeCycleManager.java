@@ -150,7 +150,7 @@ public class LifeCycleManager<TYPE> {
 		}
 	}
 	
-	public List<CandidateProgram<TYPE>> onInitialisation(List<CandidateProgram<TYPE>> pop) {
+	public List<GPCandidateProgram<TYPE>> onInitialisation(List<GPCandidateProgram<TYPE>> pop) {
 		for (InitialisationListener<TYPE> listener: initialisationListeners) {
 			pop = listener.onInitialisation(pop);
 			
@@ -162,7 +162,7 @@ public class LifeCycleManager<TYPE> {
 		return pop;
 	}
 	
-	public List<CandidateProgram<TYPE>> onElitism(List<CandidateProgram<TYPE>> elites) {
+	public List<GPCandidateProgram<TYPE>> onElitism(List<GPCandidateProgram<TYPE>> elites) {
 		for (ElitismListener<TYPE> listener: elitismListeners) {
 			elites = listener.onElitism(elites);
 		}
@@ -170,7 +170,7 @@ public class LifeCycleManager<TYPE> {
 		return elites;
 	}
 
-	public List<CandidateProgram<TYPE>> onPoolSelection(List<CandidateProgram<TYPE>> pool) {
+	public List<GPCandidateProgram<TYPE>> onPoolSelection(List<GPCandidateProgram<TYPE>> pool) {
 		for (PoolSelectionListener<TYPE> listener: poolSelectionListeners) {
 			pool = listener.onPoolSelection(pool);
 			
@@ -182,8 +182,8 @@ public class LifeCycleManager<TYPE> {
 		return pool;
 	}
 	
-	public CandidateProgram<TYPE>[] onCrossover(CandidateProgram<TYPE>[] parents,
-			CandidateProgram<TYPE>[] children) {
+	public GPCandidateProgram<TYPE>[] onCrossover(GPCandidateProgram<TYPE>[] parents,
+			GPCandidateProgram<TYPE>[] children) {
 		for (CrossoverListener<TYPE> listener: crossoverListeners) {
 			children = listener.onCrossover(parents, children);
 			
@@ -195,8 +195,8 @@ public class LifeCycleManager<TYPE> {
 		return children;
 	}
 
-	public CandidateProgram<TYPE> onMutation(CandidateProgram<TYPE> parent,
-			CandidateProgram<TYPE> child) {
+	public GPCandidateProgram<TYPE> onMutation(GPCandidateProgram<TYPE> parent,
+			GPCandidateProgram<TYPE> child) {
 		for (MutationListener<TYPE> listener: mutationListeners) {
 			child = listener.onMutation(parent, child);
 			
@@ -208,7 +208,7 @@ public class LifeCycleManager<TYPE> {
 		return child;
 	}
 
-	public CandidateProgram<TYPE> onReproduction(CandidateProgram<TYPE> child) {
+	public GPCandidateProgram<TYPE> onReproduction(GPCandidateProgram<TYPE> child) {
 		for (ReproductionListener<TYPE> listener: reproductionListeners) {
 			child = listener.onReproduction(child);	
 			
@@ -226,7 +226,7 @@ public class LifeCycleManager<TYPE> {
 		}
 	}
 	
-	/*public List<CandidateProgram> onGeneration(List<CandidateProgram> pop) {
+	/*public List<GPCandidateProgram> onGeneration(List<GPCandidateProgram> pop) {
 		for (GenerationListener listener: generationListeners) {
 			pop = listener.onGenerationStart(pop);
 			

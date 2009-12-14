@@ -26,18 +26,18 @@ import org.epochx.representation.*;
  */
 public interface MutationListener<TYPE> {
 	
-	//public CandidateProgram onMutationSelection(List<CandidateProgram> pop, CandidateProgram parent);
+	//public GPCandidateProgram onMutationSelection(List<GPCandidateProgram> pop, GPCandidateProgram parent);
 	
 	/**
 	 * Called after selection and mutation of an individual program.
 	 * 
 	 * @param parent the program that was selected to undergo mutation.
 	 * @param child the resultant program from the parent undergoing mutation.
-	 * @return a CandidateProgram that should be considered the result of a 
+	 * @return a GPCandidateProgram that should be considered the result of a 
 	 * mutation operation, or null if the mutation should be reverted.
 	 */
-	public CandidateProgram<TYPE> onMutation(CandidateProgram<TYPE> parent, CandidateProgram<TYPE> child);
+	public GPCandidateProgram<TYPE> onMutation(GPCandidateProgram<TYPE> parent, GPCandidateProgram<TYPE> child);
 	
-	//public CandidateProgram onMutationAndSelection(CandidateProgram parent, CandidateProgram child);
+	//public GPCandidateProgram onMutationAndSelection(GPCandidateProgram parent, GPCandidateProgram child);
 	
 }

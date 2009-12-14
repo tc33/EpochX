@@ -56,21 +56,21 @@ public class GrowInitialiser<TYPE> implements Initialiser<TYPE> {
 	 * initial population for a GP run.
 	 */
 	@Override
-	public List<CandidateProgram<TYPE>> getInitialPopulation() {
+	public List<GPCandidateProgram<TYPE>> getInitialPopulation() {
 		// Create population list to be populated.
 		int popSize = model.getPopulationSize();
-		List<CandidateProgram<TYPE>> firstGen = new ArrayList<CandidateProgram<TYPE>>(popSize);
+		List<GPCandidateProgram<TYPE>> firstGen = new ArrayList<GPCandidateProgram<TYPE>>(popSize);
 		
 		// Create and add new programs to the population.
 		for(int i=0; i<popSize; i++) {
-			CandidateProgram<TYPE> candidate;
+			GPCandidateProgram<TYPE> candidate;
 			
 			do {
 				// Grow a new node tree.
 				Node<TYPE> nodeTree = buildGrowNodeTree(model.getInitialMaxDepth());
             	
 				// Create a program around the node tree.
-				candidate = new CandidateProgram<TYPE>(nodeTree, model);
+				candidate = new GPCandidateProgram<TYPE>(nodeTree, model);
 			} while (firstGen.contains(candidate));
             
 			// Must be unique - add to the new population.

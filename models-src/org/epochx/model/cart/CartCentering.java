@@ -100,7 +100,7 @@ public class CartCentering extends GPAbstractModel<Double> {
 	}
 	
 	@Override
-	public double getFitness(CandidateProgram<Double> program) {
+	public double getFitness(GPCandidateProgram<Double> program) {
 		// Total time taken for all fitness cases in ms.
 		int totalTime = 0;
 

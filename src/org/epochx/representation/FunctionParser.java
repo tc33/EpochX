@@ -26,6 +26,7 @@ import org.epochx.ant.*;
 import org.epochx.representation.ant.*;
 import org.epochx.representation.bool.*;
 import org.epochx.representation.dbl.*;
+import org.epochx.tools.ant.Ant;
 
 /**
  * The function parser can parse a nested function into a node tree. It can 

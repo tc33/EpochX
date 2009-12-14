@@ -31,7 +31,7 @@ package org.epochx.stats;
  */
 public enum RunStatField {
 	/**
-	 * Requests a CandidateProgram which has the 'best' fitness over a whole 
+	 * Requests a GPCandidateProgram which has the 'best' fitness over a whole 
 	 * run. This usually means the program with the lowest fitness score. 
 	 * If elitism is not being used, the BEST_PROGRAM may not be in the final 
 	 * generation. 

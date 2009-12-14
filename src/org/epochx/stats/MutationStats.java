@@ -44,8 +44,8 @@ public class MutationStats<TYPE> {
 		listeners.remove(listener);
 	}
 	
-	public void addMutation(CandidateProgram<TYPE> parent, 
-							CandidateProgram<TYPE> child, 
+	public void addMutation(GPCandidateProgram<TYPE> parent, 
+							GPCandidateProgram<TYPE> child, 
 							long runtime,
 							int reversions) {
 		// Set of all the fields we need to calculate values for.
@@ -96,8 +96,8 @@ public class MutationStats<TYPE> {
 	 * @param pop
 	 */
 	private void gatherStats(Map<MutationStatField, Object>  stats, 
-							 CandidateProgram<TYPE> parent, 
-							 CandidateProgram<TYPE> child, 
+							 GPCandidateProgram<TYPE> parent, 
+							 GPCandidateProgram<TYPE> child, 
 							 long runtime,
 							 int reversions) {
 		if (stats.containsKey(MutationStatField.PROGRAM_BEFORE)) {

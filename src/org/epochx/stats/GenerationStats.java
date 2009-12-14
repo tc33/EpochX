@@ -53,7 +53,7 @@ public class GenerationStats<TYPE> {
 		listeners.remove(listener);
 	}
 	
-	public void addGen(List<CandidateProgram<TYPE>> pop, 
+	public void addGen(List<GPCandidateProgram<TYPE>> pop, 
 						int gen) {
 		// Set of all the fields we need to calculate values for.
 		Map<GenerationStatField, Object> stats = new HashMap<GenerationStatField, Object>();
@@ -111,7 +111,7 @@ public class GenerationStats<TYPE> {
 	 * @param pop
 	 */
 	private void gatherStats(Map<GenerationStatField, Object>  stats, 
-							 List<CandidateProgram<TYPE>> pop,
+							 List<GPCandidateProgram<TYPE>> pop,
 							 long runtime) {
 		gatherDepthStats(stats, pop);
 		gatherLengthStats(stats, pop);
@@ -138,7 +138,7 @@ public class GenerationStats<TYPE> {
 	 * TODO Am having to iterate over the depths a lot of times, theres room for 
 	 * performance improvements here.
 	 */
-	private void gatherDepthStats(Map<GenerationStatField, Object> stats, List<CandidateProgram<TYPE>> pop) {
+	private void gatherDepthStats(Map<GenerationStatField, Object> stats, List<GPCandidateProgram<TYPE>> pop) {
 		if (stats.containsKey(GenerationStatField.DEPTH_AVE)
 				|| stats.containsKey(GenerationStatField.DEPTH_STDEV)
 				|| stats.containsKey(GenerationStatField.DEPTH_MAX)
@@ -177,10 +177,10 @@ public class GenerationStats<TYPE> {
 		}
 	}
 	
-	private double[] getAveNodesPerDepth(List<CandidateProgram<TYPE>> pop) {
+	private double[] getAveNodesPerDepth(List<GPCandidateProgram<TYPE>> pop) {
 		// Get maximum depth of the population.
 		int maxDepth = 0;
-		for (CandidateProgram<TYPE> program: pop) {
+		for (GPCandidateProgram<TYPE> program: pop) {
 			int depth = program.getProgramDepth();
 			if (depth > maxDepth) {
 				maxDepth = depth;
@@ -203,7 +203,7 @@ public class GenerationStats<TYPE> {
 		return aveNodes;
 	}
 	
-	private void gatherLengthStats(Map<GenerationStatField, Object> stats, List<CandidateProgram<TYPE>> pop) {
+	private void gatherLengthStats(Map<GenerationStatField, Object> stats, List<GPCandidateProgram<TYPE>> pop) {
 		if (stats.containsKey(GenerationStatField.LENGTH_AVE)
 				|| stats.containsKey(GenerationStatField.LENGTH_STDEV)
 				|| stats.containsKey(GenerationStatField.LENGTH_MAX)
@@ -236,7 +236,7 @@ public class GenerationStats<TYPE> {
 		}
 	}
 	
-	private void gatherTerminalStats(Map<GenerationStatField, Object> stats, List<CandidateProgram<TYPE>> pop) {
+	private void gatherTerminalStats(Map<GenerationStatField, Object> stats, List<GPCandidateProgram<TYPE>> pop) {
 		if (stats.containsKey(GenerationStatField.NO_TERMINALS_AVE)
 				|| stats.containsKey(GenerationStatField.NO_TERMINALS_STDEV)
 				|| stats.containsKey(GenerationStatField.NO_TERMINALS_MAX)
@@ -269,7 +269,7 @@ public class GenerationStats<TYPE> {
 		}
 	}
 	
-	private void gatherDistinctTerminalStats(Map<GenerationStatField, Object> stats, List<CandidateProgram<TYPE>> pop) {
+	private void gatherDistinctTerminalStats(Map<GenerationStatField, Object> stats, List<GPCandidateProgram<TYPE>> pop) {
 		if (stats.containsKey(GenerationStatField.NO_DISTINCT_TERMINALS_AVE)
 				|| stats.containsKey(GenerationStatField.NO_DISTINCT_TERMINALS_STDEV)
 				|| stats.containsKey(GenerationStatField.NO_DISTINCT_TERMINALS_MAX)
@@ -302,7 +302,7 @@ public class GenerationStats<TYPE> {
 		}
 	}
 	
-	private void gatherFunctionStats(Map<GenerationStatField, Object> stats, List<CandidateProgram<TYPE>> pop) {
+	private void gatherFunctionStats(Map<GenerationStatField, Object> stats, List<GPCandidateProgram<TYPE>> pop) {
 		if (stats.containsKey(GenerationStatField.NO_FUNCTIONS_AVE)
 				|| stats.containsKey(GenerationStatField.NO_FUNCTIONS_STDEV)
 				|| stats.containsKey(GenerationStatField.NO_FUNCTIONS_MAX)
@@ -335,7 +335,7 @@ public class GenerationStats<TYPE> {
 		}
 	}
 	
-	private void gatherDistinctFunctionStats(Map<GenerationStatField, Object> stats, List<CandidateProgram<TYPE>> pop) {
+	private void gatherDistinctFunctionStats(Map<GenerationStatField, Object> stats, List<GPCandidateProgram<TYPE>> pop) {
 		if (stats.containsKey(GenerationStatField.NO_DISTINCT_FUNCTIONS_AVE)
 				|| stats.containsKey(GenerationStatField.NO_DISTINCT_FUNCTIONS_STDEV)
 				|| stats.containsKey(GenerationStatField.NO_DISTINCT_FUNCTIONS_MAX)
@@ -368,7 +368,7 @@ public class GenerationStats<TYPE> {
 		}
 	}
 	
-	private void gatherFitnessStats(Map<GenerationStatField, Object> stats, List<CandidateProgram<TYPE>> pop) {
+	private void gatherFitnessStats(Map<GenerationStatField, Object> stats, List<GPCandidateProgram<TYPE>> pop) {
 		if (stats.containsKey(GenerationStatField.FITNESS_AVE)
 				|| stats.containsKey(GenerationStatField.FITNESS_STDEV)
 				|| stats.containsKey(GenerationStatField.FITNESS_MAX)

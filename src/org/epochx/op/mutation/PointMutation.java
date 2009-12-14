@@ -26,7 +26,7 @@ import org.epochx.representation.*;
 
 
 /**
- * This class performs a simple point mutation on a <code>CandidateProgram</code>.
+ * This class performs a simple point mutation on a <code>GPCandidateProgram</code>.
  * 
  * <p>Each node in the program tree is considered for mutation, with the 
  * probability of that node being mutated given as an argument to the 
@@ -70,19 +70,19 @@ public class PointMutation<TYPE> implements Mutation<TYPE> {
 	}
 	
 	/**
-	 * Perform point mutation on the given CandidateProgram. Each node in the 
+	 * Perform point mutation on the given GPCandidateProgram. Each node in the 
 	 * program tree is considered in turn, with each having the given 
 	 * probability of actually being exchanged. Given that a node is chosen 
 	 * then a new function or terminal node of the same arity is used to 
 	 * replace it.
 	 * 
-	 * @param program The CandidateProgram selected to undergo this mutation 
+	 * @param program The GPCandidateProgram selected to undergo this mutation 
 	 * 				  operation.
-	 * @return A CandidateProgram that was the result of a point mutation on 
-	 * the provided CandidateProgram.
+	 * @return A GPCandidateProgram that was the result of a point mutation on 
+	 * the provided GPCandidateProgram.
 	 */
 	@Override
-	public CandidateProgram<TYPE> mutate(CandidateProgram<TYPE> program) {
+	public GPCandidateProgram<TYPE> mutate(GPCandidateProgram<TYPE> program) {
 		// Get the syntax from which new nodes will be chosen.
 		List<Node<TYPE>> syntax = model.getSyntax();
 		

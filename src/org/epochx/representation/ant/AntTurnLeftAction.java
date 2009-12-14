@@ -19,8 +19,8 @@
  */
 package org.epochx.representation.ant;
 
-import org.epochx.ant.*;
-import org.epochx.representation.*;
+import org.epochx.representation.Action;
+import org.epochx.tools.ant.Ant;
 
 /**
  * This class defines an action which when executed will trigger the ant 

@@ -23,7 +23,7 @@ import org.epochx.representation.*;
 
 public interface CrossoverListener<TYPE> {
 
-	//public CandidateProgram[] onCrossoverSelection(List<CandidateProgram> pop, CandidateProgram[] parents);
+	//public GPCandidateProgram[] onCrossoverSelection(List<GPCandidateProgram> pop, GPCandidateProgram[] parents);
 	
 	/**
 	 * Called after selection and crossover of 2 individuals.
@@ -34,8 +34,8 @@ public interface CrossoverListener<TYPE> {
 	 * @return an array of CandidatePrograms to be used as the children of the 
 	 * crossover operation, or null if the crossover should be reverted.
 	 */
-	public CandidateProgram<TYPE>[] onCrossover(CandidateProgram<TYPE>[] parents, CandidateProgram<TYPE>[] children);
+	public GPCandidateProgram<TYPE>[] onCrossover(GPCandidateProgram<TYPE>[] parents, GPCandidateProgram<TYPE>[] children);
 	
-	//public CandidateProgram[] onCrossoverAndSelection(CandidateProgram[] parents, CandidateProgram[] children);
+	//public GPCandidateProgram[] onCrossoverAndSelection(GPCandidateProgram[] parents, GPCandidateProgram[] children);
 	
 }

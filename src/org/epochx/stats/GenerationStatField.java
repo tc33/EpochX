@@ -95,43 +95,43 @@ public enum GenerationStatField {
 	
 	/**
 	 * Requests a Double which is the standard deviation of the number of 
-	 * terminal nodes in each CandidateProgram in that generation.
+	 * terminal nodes in each GPCandidateProgram in that generation.
 	 */
 	NO_TERMINALS_STDEV,
 	
 	/**
 	 * Requests a Double which is the maximum number of terminal nodes in a 
-	 * CandidateProgram in that generation.
+	 * GPCandidateProgram in that generation.
 	 */
 	NO_TERMINALS_MAX,
 	
 	/**
 	 * Requests a Double which is the minimum number of terminal nodes in a 
-	 * CandidateProgram in that generation.
+	 * GPCandidateProgram in that generation.
 	 */
 	NO_TERMINALS_MIN,
 	
 	/**
 	 * Requests a Double which is the average number of unique terminal nodes
-	 * in a CandidateProgram in that generation.
+	 * in a GPCandidateProgram in that generation.
 	 */
 	NO_DISTINCT_TERMINALS_AVE,
 	
 	/**
 	 * Requests a Double which is the standard deviation of the number of 
-	 * unique terminal nodes in each CandidateProgram in that generation.
+	 * unique terminal nodes in each GPCandidateProgram in that generation.
 	 */
 	NO_DISTINCT_TERMINALS_STDEV,
 	
 	/**
 	 * Requests a Double which is the maximum number of unique terminal nodes
-	 * in a CandidateProgram in that generation.
+	 * in a GPCandidateProgram in that generation.
 	 */
 	NO_DISTINCT_TERMINALS_MAX,
 	
 	/**
 	 * Requests a Double which is the minimum number of unique terminal nodes
-	 * in a CandidateProgram in that generation.
+	 * in a GPCandidateProgram in that generation.
 	 */
 	NO_DISTINCT_TERMINALS_MIN,
 	
@@ -143,43 +143,43 @@ public enum GenerationStatField {
 	
 	/**
 	 * Requests a Double which is the standard deviation of the number of 
-	 * function nodes in each CandidateProgram in that generation.
+	 * function nodes in each GPCandidateProgram in that generation.
 	 */
 	NO_FUNCTIONS_STDEV,
 	
 	/**
 	 * Requests a Double which is the maximum number of function nodes in a 
-	 * CandidateProgram in that generation.
+	 * GPCandidateProgram in that generation.
 	 */
 	NO_FUNCTIONS_MAX,
 	
 	/**
 	 * Requests a Double which is the minimum number of function nodes in a 
-	 * CandidateProgram in that generation.
+	 * GPCandidateProgram in that generation.
 	 */
 	NO_FUNCTIONS_MIN,
 	
 	/**
 	 * Requests a Double which is the average number of unique function nodes
-	 * in a CandidateProgram in that generation.
+	 * in a GPCandidateProgram in that generation.
 	 */
 	NO_DISTINCT_FUNCTIONS_AVE,
 	
 	/**
 	 * Requests a Double which is the standard deviation of the number of 
-	 * unique function nodes in each CandidateProgram in that generation.
+	 * unique function nodes in each GPCandidateProgram in that generation.
 	 */
 	NO_DISTINCT_FUNCTIONS_STDEV,
 	
 	/**
 	 * Requests a Double which is the maximum number of unique function nodes
-	 * in a CandidateProgram in that generation.
+	 * in a GPCandidateProgram in that generation.
 	 */
 	NO_DISTINCT_FUNCTIONS_MAX,
 	
 	/**
 	 * Requests a Double which is the minimum number of unique function nodes
-	 * in a CandidateProgram in that generation.
+	 * in a GPCandidateProgram in that generation.
 	 */
 	NO_DISTINCT_FUNCTIONS_MIN,
 	
@@ -222,13 +222,13 @@ public enum GenerationStatField {
 	FITNESS_CI_95,
 	
 	/**
-	 * Requests a CandidateProgram which has the 'best' fitness in the 
+	 * Requests a GPCandidateProgram which has the 'best' fitness in the 
 	 * generation. This is usually the lowest fitness score.
 	 */
 	BEST_PROGRAM,
 	
 	/**
-	 * Requests a List<CandidateProgram> which is the population at the end 
+	 * Requests a List<GPCandidateProgram> which is the population at the end 
 	 * of this generation.
 	 */
 	POPULATION,

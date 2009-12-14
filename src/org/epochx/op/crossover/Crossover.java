@@ -35,14 +35,14 @@ public interface Crossover<TYPE> {
 	 * Implementations should perform some form of exchange of material between 
 	 * the two children, returning the resultant children.
 	 * 
-	 * @param parent1 The first CandidateProgram selected to undergo this 
+	 * @param parent1 The first GPCandidateProgram selected to undergo this 
 	 * 				  crossover operation.
-	 * @param parent2 The second CandidateProgram selected to undergo this 
+	 * @param parent2 The second GPCandidateProgram selected to undergo this 
 	 * 				  crossover operation.
 	 * @return An array of the child CandidatePrograms that were the result of 
 	 * an exchange of genetic material between the two parents.
 	 */
-	public CandidateProgram<TYPE>[] crossover(CandidateProgram<TYPE> parent1, 
-											  CandidateProgram<TYPE> parent2);
+	public GPCandidateProgram<TYPE>[] crossover(GPCandidateProgram<TYPE> parent1, 
+											  GPCandidateProgram<TYPE> parent2);
 	
 }

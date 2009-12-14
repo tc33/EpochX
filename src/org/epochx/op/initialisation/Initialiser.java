@@ -40,6 +40,6 @@ public interface Initialiser<TYPE> {
 	 * @return A List of newly generated CandidatePrograms which will form the 
 	 * initial population for a GP run.
 	 */
-	public List<CandidateProgram<TYPE>> getInitialPopulation();
+	public List<GPCandidateProgram<TYPE>> getInitialPopulation();
 	
 }

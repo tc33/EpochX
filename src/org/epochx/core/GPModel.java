@@ -26,9 +26,9 @@ import org.epochx.op.crossover.*;
 import org.epochx.op.initialisation.*;
 import org.epochx.op.mutation.*;
 import org.epochx.op.selection.*;
-import org.epochx.random.RandomNumberGenerator;
 import org.epochx.representation.*;
 import org.epochx.stats.*;
+import org.epochx.tools.random.RandomNumberGenerator;
 
 
 /**
@@ -68,7 +68,7 @@ public interface GPModel<TYPE> {
 
 	/**
 	 * Retrieves the implementation of Mutator to use to perform the genetic 
-	 * operation of mutation on a CandidateProgram. The individual to be 
+	 * operation of mutation on a GPCandidateProgram. The individual to be 
 	 * mutated will be selected using the program selector returned by 
 	 * getProgramSelector().
 	 * 
@@ -274,12 +274,12 @@ public interface GPModel<TYPE> {
 	 * For more information, the new user should read some of the genetic 
 	 * programming literature.
 	 * 
-	 * @param program	the CandidateProgram to evaluate and calculate a score
+	 * @param program	the GPCandidateProgram to evaluate and calculate a score
 	 * 					for.
 	 * @return a double representing the quality of the program where a small 
 	 * 		   value is considered better than a larger value.
 	 */
-	public double getFitness(CandidateProgram<TYPE> program);
+	public double getFitness(GPCandidateProgram<TYPE> program);
 	
 	/**
 	 * The fitness score at which a run should be stopped. Returning a negative 
@@ -304,8 +304,8 @@ public interface GPModel<TYPE> {
 	 * @return True if the crossover operation should proceed, false if it is 
 	 * rejected and should be retried with new parents.
 	 */
-	public boolean acceptCrossover(CandidateProgram<TYPE>[] parents, 
-								   CandidateProgram<TYPE>[] children);
+	public boolean acceptCrossover(GPCandidateProgram<TYPE>[] parents, 
+								   GPCandidateProgram<TYPE>[] children);
 
 	/**
 	 * This method will be called during each mutation operation before the 
@@ -320,8 +320,8 @@ public interface GPModel<TYPE> {
 	 * @return True if the mutation operation should proceed, false if it is 
 	 * rejected and should be retried with a new parent.
 	 */
-	public boolean acceptMutation(CandidateProgram<TYPE> parent, 
-			   					  CandidateProgram<TYPE> child);
+	public boolean acceptMutation(GPCandidateProgram<TYPE> parent, 
+			   					  GPCandidateProgram<TYPE> child);
 
 	/**
 	 * Get a listener which will be informed of statistics about runs. The 

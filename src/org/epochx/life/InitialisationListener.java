@@ -36,6 +36,6 @@ public interface InitialisationListener<TYPE> {
 	 * @return the population of CandidatePrograms to continue with as the 
 	 * newly initialised population, or null if initialisation should be rerun.
 	 */
-	public List<CandidateProgram<TYPE>> onInitialisation(List<CandidateProgram<TYPE>> pop);
+	public List<GPCandidateProgram<TYPE>> onInitialisation(List<GPCandidateProgram<TYPE>> pop);
 	
 }

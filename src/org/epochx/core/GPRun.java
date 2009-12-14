@@ -47,7 +47,7 @@ public class GPRun<TYPE> {
 	private GPInitialisation<TYPE> initialisation;
 	
 	// The best program found so far during the run.
-	private CandidateProgram<TYPE> bestProgram;
+	private GPCandidateProgram<TYPE> bestProgram;
 	
 	// The fitness of the best program found so far during the run.
 	private double bestFitness;
@@ -91,7 +91,7 @@ public class GPRun<TYPE> {
 	/**
 	 * Construct a new GPRun object and execute it. The GPModel passed in is
 	 * used to provide the control parameters for the run.
-	 * @param <TYPE> the type of <code>CandidateProgram</code> to be evolved.
+	 * @param <TYPE> the type of <code>GPCandidateProgram</code> to be evolved.
 	 * @param model  the model which will control the run with the parameters 
 	 * 				 and fitness function to use.
 	 * @return 		 The GPRun object that was executed, containing retrievable 
@@ -122,7 +122,7 @@ public class GPRun<TYPE> {
 		lifeCycle.onRunStart();
 		
 		// Perform initialisation.
-		List<CandidateProgram<TYPE>> pop = initialisation.initialise();
+		List<GPCandidateProgram<TYPE>> pop = initialisation.initialise();
 		
 		// Generate generation stats for the inital population.
 		genStats.addGen(pop, 0);
@@ -164,8 +164,8 @@ public class GPRun<TYPE> {
 	 * Note this forces us to evaluate all programs, which we might
 	 * not have done if using TournamentSelection. 
 	 */
-	private void updateBestProgram(List<CandidateProgram<TYPE>> pop) {
-		for (CandidateProgram<TYPE> program: pop) {
+	private void updateBestProgram(List<GPCandidateProgram<TYPE>> pop) {
+		for (GPCandidateProgram<TYPE> program: pop) {
 			double fitness = program.getFitness();
 			if (fitness < bestFitness) {
 				bestFitness = fitness;
@@ -175,21 +175,21 @@ public class GPRun<TYPE> {
 	}
 	
 	/**
-	 * Retrieve the CandidateProgram with the best fitness found during the 
-	 * run. This CandidateProgram may have been found in any of the generations.
+	 * Retrieve the GPCandidateProgram with the best fitness found during the 
+	 * run. This GPCandidateProgram may have been found in any of the generations.
 	 * 
-	 * @return the CandidateProgram with the best fitness score found.
+	 * @return the GPCandidateProgram with the best fitness score found.
 	 */
-	public CandidateProgram<TYPE> getBestProgram() {
+	public GPCandidateProgram<TYPE> getBestProgram() {
 		return bestProgram;
 	}
 
 	/**
-	 * Retrieve the fitness score of the CandidateProgram returned by 
+	 * Retrieve the fitness score of the GPCandidateProgram returned by 
 	 * getBestProgram(). A lower fitness score is considered better than a 
 	 * higher fitness score.
 	 * 
-	 * @return the fitness score of the best CandidateProgram found during 
+	 * @return the fitness score of the best GPCandidateProgram found during 
 	 * 		   execution.
 	 */
 	public double getBestFitness() {

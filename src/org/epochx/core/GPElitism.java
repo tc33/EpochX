@@ -89,16 +89,16 @@ public class GPElitism<TYPE> implements GenerationListener {
 	 * 		   greater than the population size then the returned list will 
 	 * 		   contain all CandidatePrograms from the population sorted.
 	 */
-	public List<CandidateProgram<TYPE>> getElites(List<CandidateProgram<TYPE>> pop) {		
+	public List<GPCandidateProgram<TYPE>> getElites(List<GPCandidateProgram<TYPE>> pop) {		
 		// Construct an array for elites.
-		List<CandidateProgram<TYPE>> elites;
+		List<GPCandidateProgram<TYPE>> elites;
 		
 		if (noElites > 0) {			
 			// Sort the population and scoop off the best noElites.
 			Collections.sort(pop);
-			elites = new ArrayList<CandidateProgram<TYPE>>(pop.subList(pop.size()-noElites, pop.size()));
+			elites = new ArrayList<GPCandidateProgram<TYPE>>(pop.subList(pop.size()-noElites, pop.size()));
 		} else {
-			elites = new ArrayList<CandidateProgram<TYPE>>();
+			elites = new ArrayList<GPCandidateProgram<TYPE>>();
 		}
 		
 		// Allow life cycle listener to confirm or modify.

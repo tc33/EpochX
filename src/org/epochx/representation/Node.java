@@ -30,7 +30,7 @@ import java.util.*;
  * can be thought of as an expression in a computer programming language.
  * Evaluating a Node will involve evaluating any children and potentially 
  * performing some operation and/or returning a value. A program
- * is maintained by the <code>CandidateProgram</code> class.
+ * is maintained by the <code>GPCandidateProgram</code> class.
  *  
  * @see FunctionNode
  * @see TerminalNode

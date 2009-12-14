@@ -34,7 +34,7 @@ public interface PoolSelector<TYPE> {
 
 	
 	/**
-	 * Select a <code>CandidateProgram</code> from the current population of 
+	 * Select a <code>GPCandidateProgram</code> from the current population of 
 	 * programs. The method of selection would normally be based upon the 
 	 * fitness of the program but there is no need for it to be, and there are 
 	 * exceptions.
@@ -45,6 +45,6 @@ public interface PoolSelector<TYPE> {
 	 * @return a List of CandidatePrograms selected from the current population 
 	 * of programs to form a program pool.
 	 */
-	public List<CandidateProgram<TYPE>> getPool(List<CandidateProgram<TYPE>> pop, int poolSize);
+	public List<GPCandidateProgram<TYPE>> getPool(List<GPCandidateProgram<TYPE>> pop, int poolSize);
 	
 }

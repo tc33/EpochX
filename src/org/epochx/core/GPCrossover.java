@@ -125,17 +125,17 @@ public class GPCrossover<TYPE> implements GenerationListener {
 	 * 		   is typically 2 child programs, but could in theory be any number 
 	 * 	 	   as returned by the Crossover operator in use.
 	 */
-	public CandidateProgram<TYPE>[] crossover() {
+	public GPCandidateProgram<TYPE>[] crossover() {
 		long crossoverStartTime = System.nanoTime();
 
-		CandidateProgram<TYPE> parent1;
-		CandidateProgram<TYPE> parent2;
+		GPCandidateProgram<TYPE> parent1;
+		GPCandidateProgram<TYPE> parent2;
 
-		CandidateProgram<TYPE> clone1;
-		CandidateProgram<TYPE> clone2;
+		GPCandidateProgram<TYPE> clone1;
+		GPCandidateProgram<TYPE> clone2;
 
-		CandidateProgram<TYPE>[] parents = null;
-		CandidateProgram<TYPE>[] children = null;
+		GPCandidateProgram<TYPE>[] parents = null;
+		GPCandidateProgram<TYPE>[] children = null;
 		
 		reversions = -1;
 		do {
@@ -143,9 +143,9 @@ public class GPCrossover<TYPE> implements GenerationListener {
 			parent1 = programSelector.getProgram();
 			parent2 = programSelector.getProgram();
 
-			clone1 = (CandidateProgram<TYPE>) parent1.clone();
-			clone2 = (CandidateProgram<TYPE>) parent2.clone();
-			parents = new CandidateProgram[]{parent1, parent2};
+			clone1 = (GPCandidateProgram<TYPE>) parent1.clone();
+			clone2 = (GPCandidateProgram<TYPE>) parent2.clone();
+			parents = new GPCandidateProgram[]{parent1, parent2};
 			
 			// Attempt crossover.
 			children = crossover.crossover(clone1, clone2);
@@ -164,7 +164,7 @@ public class GPCrossover<TYPE> implements GenerationListener {
 				if (replacement >= parents.length) {
 					replacement = 0;
 				}
-				children[i] = (CandidateProgram<TYPE>) parents[replacement].clone();
+				children[i] = (GPCandidateProgram<TYPE>) parents[replacement].clone();
 				replacement++;
 			}
 		}

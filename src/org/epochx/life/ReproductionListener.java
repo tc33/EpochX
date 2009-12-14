@@ -31,9 +31,9 @@ public interface ReproductionListener<TYPE> {
 	 * generation.
 	 * 
 	 * @param child the program that was selected to be reproduced.
-	 * @return a CandidateProgram that should be used as the reproduced program
+	 * @return a GPCandidateProgram that should be used as the reproduced program
 	 * and inserted into the next population.
 	 */
-	public CandidateProgram<TYPE> onReproduction(CandidateProgram<TYPE> child);
+	public GPCandidateProgram<TYPE> onReproduction(GPCandidateProgram<TYPE> child);
 	
 }

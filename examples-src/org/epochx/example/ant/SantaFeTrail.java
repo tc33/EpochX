@@ -23,11 +23,11 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-import org.epochx.ant.*;
 import org.epochx.core.*;
 import org.epochx.representation.*;
 import org.epochx.representation.ant.*;
 import org.epochx.stats.GenerationStatField;
+import org.epochx.tools.ant.*;
 
 
 /**
@@ -91,7 +91,7 @@ public class SantaFeTrail extends GPAbstractModel<Object> {
 	}
 	
 	@Override
-	public double getFitness(CandidateProgram<Object> program) {		
+	public double getFitness(GPCandidateProgram<Object> program) {		
 		landscape.setFoodLocations(new ArrayList<Point>(Arrays.asList(foodLocations)));
 		ant.reset(600, landscape);
 

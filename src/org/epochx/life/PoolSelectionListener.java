@@ -40,6 +40,6 @@ public interface PoolSelectionListener<TYPE> {
 	 * @return the breeding pool of CandidatePrograms that should actually be 
 	 * used, or null if breeding pool selection should be repeated.
 	 */
-	public List<CandidateProgram<TYPE>> onPoolSelection(List<CandidateProgram<TYPE>> pool);
+	public List<GPCandidateProgram<TYPE>> onPoolSelection(List<GPCandidateProgram<TYPE>> pool);
 	
 }

@@ -37,7 +37,7 @@ public class LinearRankSelector<TYPE> implements ProgramSelector<TYPE>, PoolSele
 	private GPModel<TYPE> model;
 	
 	// The current population from which programs should be chosen.
-	private List<CandidateProgram<TYPE>> pop;
+	private List<GPCandidateProgram<TYPE>> pop;
 	
 	// An array of size pop.size() giving probabilities for each program.
 	private double probabilities[];
@@ -64,7 +64,7 @@ public class LinearRankSelector<TYPE> implements ProgramSelector<TYPE>, PoolSele
 	 * 			  should be selected.
 	 */
 	@Override
-	public void setSelectionPool(List<CandidateProgram<TYPE>> pop) {
+	public void setSelectionPool(List<GPCandidateProgram<TYPE>> pop) {
 		Collections.sort(pop);
 		this.pop = pop;
 		
@@ -88,7 +88,7 @@ public class LinearRankSelector<TYPE> implements ProgramSelector<TYPE>, PoolSele
 	 * rank.
 	 */
 	@Override
-	public CandidateProgram<TYPE> getProgram() {
+	public GPCandidateProgram<TYPE> getProgram() {
 		double ran = model.getRNG().nextDouble();
 		
 		for (int i=0; i<probabilities.length; i++) {
@@ -118,8 +118,8 @@ public class LinearRankSelector<TYPE> implements ProgramSelector<TYPE>, PoolSele
 	 * rank.
 	 */
 	@Override
-	public List<CandidateProgram<TYPE>> getPool(
-			List<CandidateProgram<TYPE>> pop, int poolSize) {
+	public List<GPCandidateProgram<TYPE>> getPool(
+			List<GPCandidateProgram<TYPE>> pop, int poolSize) {
 		// If poolSize is 0 or less then we use the whole population.
 		if (poolSize <= 0) {
 			return pop;
@@ -127,7 +127,7 @@ public class LinearRankSelector<TYPE> implements ProgramSelector<TYPE>, PoolSele
 		
 		ProgramSelector<TYPE> programSelector = new LinearRankSelector<TYPE>(model, gradient);
 		programSelector.setSelectionPool(pop);
-		List<CandidateProgram<TYPE>> pool = new ArrayList<CandidateProgram<TYPE>>();
+		List<GPCandidateProgram<TYPE>> pool = new ArrayList<GPCandidateProgram<TYPE>>();
 		
 		for (int i=0; i<poolSize; i++) {
 			pool.add(programSelector.getProgram());

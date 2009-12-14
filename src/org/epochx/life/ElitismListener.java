@@ -39,6 +39,6 @@ public interface ElitismListener<TYPE> {
 	 * that it is not appropriate to return a value of null and this will cause 
 	 * undefined behaviour.
 	 */
-	public List<CandidateProgram<TYPE>> onElitism(List<CandidateProgram<TYPE>> elites);
+	public List<GPCandidateProgram<TYPE>> onElitism(List<GPCandidateProgram<TYPE>> elites);
 	
 }

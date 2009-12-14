@@ -87,8 +87,8 @@ public class GPPoolSelection<TYPE> implements GenerationListener {
 	 * @param pop
 	 * @return
 	 */
-	public List<CandidateProgram<TYPE>> getPool(List<CandidateProgram<TYPE>> pop) {		
-		List<CandidateProgram<TYPE>> pool = null;
+	public List<GPCandidateProgram<TYPE>> getPool(List<GPCandidateProgram<TYPE>> pop) {		
+		List<GPCandidateProgram<TYPE>> pool = null;
 		
 		reversions = -1;
 		do {

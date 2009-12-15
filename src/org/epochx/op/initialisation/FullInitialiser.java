@@ -28,7 +28,7 @@ import org.epochx.representation.*;
 /**
  * Initialisation implementation which produces full program trees.
  */
-public class FullInitialiser<TYPE> implements Initialiser<TYPE> {
+public class FullInitialiser<TYPE> implements GPInitialiser<TYPE> {
 	
 	// The current controlling model.
 	private GPModel<TYPE> model;

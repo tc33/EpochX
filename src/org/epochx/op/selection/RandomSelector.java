@@ -29,7 +29,7 @@ import org.epochx.representation.*;
  * A random selector is a program and pool selector which provides no selection 
  * pressure. No reference is made to the programs' fitness scores.
  */
-public class RandomSelector<TYPE> implements ProgramSelector<TYPE>, PoolSelector<TYPE> {
+public class RandomSelector<TYPE> implements GPProgramSelector<TYPE>, GPPoolSelector<TYPE> {
 
 	// The current controlling model.
 	private GPModel<TYPE> model;

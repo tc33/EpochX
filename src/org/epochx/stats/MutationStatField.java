@@ -21,7 +21,7 @@ package org.epochx.stats;
 
 /**
  * This enum gives all the available mutation statistics that can be 
- * requested. Mutation statistics are those statistics that are generated 
+ * requested. GPMutation statistics are those statistics that are generated 
  * per mtuation operation. Each MutationStatField has a datatype related 
  * to it which is the type which the data will be returned in.
  * @see org.epochx.stats.MutationStatListener

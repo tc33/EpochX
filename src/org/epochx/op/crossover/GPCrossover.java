@@ -19,17 +19,18 @@
  */
 package org.epochx.op.crossover;
 
+import org.epochx.op.Crossover;
 import org.epochx.representation.*;
 
 /**
  * This interface defines the structure which specific crossover operations can
  * implement to provide different methods of crossing over two 
- * <code>CandidatePrograms</code>. Crossover instances are used by the core 
+ * <code>CandidatePrograms</code>. GPCrossover instances are used by the core 
  * GPCrossover class to perform a single crossover operation.
  * 
  * @see org.epochx.core.GPCrossover
  */
-public interface Crossover<TYPE> {
+public abstract class GPCrossover<TYPE> implements Crossover {
 
 	/**
 	 * Implementations should perform some form of exchange of material between 
@@ -42,7 +43,18 @@ public interface Crossover<TYPE> {
 	 * @return An array of the child CandidatePrograms that were the result of 
 	 * an exchange of genetic material between the two parents.
 	 */
-	public GPCandidateProgram<TYPE>[] crossover(GPCandidateProgram<TYPE> parent1, 
-											  GPCandidateProgram<TYPE> parent2);
+	@Override
+	public final GPCandidateProgram<TYPE>[] crossover(CandidateProgram parent1, 
+											  CandidateProgram parent2) {
+		if ((parent1 instanceof GPCandidateProgram<?>)
+				&& (parent2 instanceof GPCandidateProgram<?>)) {
+			return crossover((GPCandidateProgram<?>) parent1, (GPCandidateProgram<?>) parent2);
+		} else {
+			throw new IllegalArgumentException("GPCrossover only works on GPCandidatePrograms.");
+		}
+	}
+	
+	public abstract GPCandidateProgram<TYPE>[] crossover(GPCandidateProgram<TYPE> parent1,
+												GPCandidateProgram<TYPE> parent2);
 	
 }

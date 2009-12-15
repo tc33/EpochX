@@ -22,7 +22,7 @@ package org.epochx.op;
 /**
  * Operators are those operations for which it is possible to provide pluggable
  * version in EpochX. Operators are not limited to the genetic operators of 
- * Crossover and Mutation.
+ * GPCrossover and GPMutation.
  */
 public interface Operator {
 

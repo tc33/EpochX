@@ -32,7 +32,7 @@ import org.epochx.representation.*;
  * becomes the selected program. The tournament size, x, is given as an argument 
  * to the constructor.
  */
-public class TournamentSelector<TYPE> implements ProgramSelector<TYPE>, PoolSelector<TYPE> {
+public class TournamentSelector<TYPE> implements GPProgramSelector<TYPE>, GPPoolSelector<TYPE> {
 
 	// The current controlling model.
 	private GPModel<TYPE> model;
@@ -118,7 +118,7 @@ public class TournamentSelector<TYPE> implements ProgramSelector<TYPE>, PoolSele
 		
 		List<GPCandidateProgram<TYPE>> pool = new ArrayList<GPCandidateProgram<TYPE>>(poolSize);
 		
-		ProgramSelector<TYPE> programSelector = new TournamentSelector<TYPE>(model, tournamentSize);
+		GPProgramSelector<TYPE> programSelector = new TournamentSelector<TYPE>(model, tournamentSize);
 		programSelector.setSelectionPool(pop);
 		
 		for (int i=0; i<poolSize; i++) {

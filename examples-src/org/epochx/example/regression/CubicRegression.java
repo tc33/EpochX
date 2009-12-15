@@ -119,6 +119,6 @@ public class CubicRegression extends GPAbstractModel<Double> {
 	}
 	
 	public static void main(String[] args) {
-		GPController.run(new CubicRegression());
+		Controller.run(new CubicRegression());
 	}
 }

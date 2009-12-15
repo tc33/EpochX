@@ -391,7 +391,7 @@ public abstract class Node<TYPE> implements Cloneable {
 	 * @return a copy of this Node.
 	 */
 	@Override
-	public Object clone() {
+	public Node<TYPE> clone() {
 		try {
 			Node<TYPE> clone = (Node<TYPE>) super.clone();
 			

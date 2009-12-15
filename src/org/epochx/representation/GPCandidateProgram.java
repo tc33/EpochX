@@ -33,7 +33,7 @@ import org.epochx.core.*;
  * nodes recursively down the tree. As well as the program tree itself, each 
  * GPCandidateProgram allows the retrieval of meta-data about the program.
  */
-public class GPCandidateProgram<TYPE> implements Cloneable, Comparable<GPCandidateProgram<TYPE>> {
+public class GPCandidateProgram<TYPE> extends CandidateProgram {
 	
 	// The root node of the program tree.
 	private Node<TYPE> rootNode;
@@ -232,34 +232,6 @@ public class GPCandidateProgram<TYPE> implements Cloneable, Comparable<GPCandida
     }*/
 	
 	/**
-	 * Compares this program to another based upon fitness. Returns a negative 
-	 * integer if this program has a larger (worse) fitness value, zero if they 
-	 * have equal fitnesses and a positive integer if this program has a 
-	 * smaller (better) fitness value.
-	 * 
-	 * This is super expensive if using to sort a list. Might be possible to 
-	 * improve performance if we can implement caching of fitness within a 
-	 * GPCandidateProgram.
-	 * 
-	 * @param o the GPCandidateProgram to be compared.
-	 * @return a negative integer, zero, or a positive integer if this program 
-	 * has a worse, equal or better fitness respectively. 
-	 */
-	@Override
-	public int compareTo(GPCandidateProgram<TYPE> o) {
-		double thisFitness = this.getFitness();
-		double objFitness = o.getFitness();
-		
-		if (thisFitness > objFitness) {
-			return -1;
-		} else if (thisFitness == objFitness) {
-			return 0;
-		} else {
-			return 1;
-		}
-	}
-	
-	/**
 	 * Creates and returns a copy of this program. The clone includes a deep 
 	 * copy of all the program nodes, so after calling this method none of the 
 	 * clones nodes will refer to the same instance.
@@ -267,14 +239,8 @@ public class GPCandidateProgram<TYPE> implements Cloneable, Comparable<GPCandida
 	 * @return a clone of this GPCandidateProgram instance.
 	 */
 	@Override
-	public Object clone() {
-		GPCandidateProgram<TYPE> clone = null;
-		try {
-			clone = (GPCandidateProgram<TYPE>) super.clone();
-		} catch (CloneNotSupportedException e) {
-			// This shouldn't ever happen - if it does then everything is 
-			// going to blow up anyway.
-		}
+	public GPCandidateProgram<TYPE> clone() {
+		GPCandidateProgram<TYPE> clone = (GPCandidateProgram<TYPE>) super.clone();
 		
 		// Deep copy node tree.
 		if (this.rootNode == null) {

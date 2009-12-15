@@ -19,18 +19,18 @@
  */
 package org.epochx.op.mutation;
 
-import org.epochx.core.*;
+import org.epochx.op.Mutation;
 import org.epochx.representation.*;
 
 /**
  * This interface defines the structure which specific mutation operators can
  * implement to provide different methods of mutating a <code>GPCandidateProgram</code>. 
- * Mutation instances are used by the core GPMutation class to perform a single 
+ * GPMutation instances are used by the core GPMutation class to perform a single 
  * mutation operation.
  * 
  * @see GPMutation
  */
-public interface Mutation<TYPE> {
+public abstract class GPMutation<TYPE> implements Mutation {
 
 	/**
 	 * Implementations should perform some form of alteration to the genetic 
@@ -41,6 +41,15 @@ public interface Mutation<TYPE> {
 	 * @return A GPCandidateProgram that was the result of altering the provided 
 	 * GPCandidateProgram.
 	 */
-	public GPCandidateProgram<TYPE> mutate(GPCandidateProgram<TYPE> program);
+	@Override
+	public final GPCandidateProgram<TYPE> mutate(CandidateProgram parent) {
+		if (parent instanceof GPCandidateProgram<?>) {
+			return mutate((GPCandidateProgram<?>) parent);
+		} else {
+			throw new IllegalArgumentException("GPMutation only works on GPCandidatePrograms.");
+		}
+	}
+
+	public abstract GPCandidateProgram<TYPE> mutate(GPCandidateProgram<TYPE> parent);
 	
 }

@@ -30,7 +30,7 @@ import org.epochx.representation.*;
  * the node at that point is replaced with a newly generated program tree, 
  * which is created using a grow strategy.
  */
-public class SubtreeMutation<TYPE> implements Mutation<TYPE> {
+public class SubtreeMutation<TYPE> extends GPMutation<TYPE> {
 
 	// The current controlling model.
 	private GPModel<TYPE> model;
@@ -88,6 +88,11 @@ public class SubtreeMutation<TYPE> implements Mutation<TYPE> {
 		program.setNthNode(mutationPoint, subtree);
 		
 		return program;
+	}
+
+	@Override
+	public Object[] getOperatorStats() {
+		return null;
 	}
 
 }

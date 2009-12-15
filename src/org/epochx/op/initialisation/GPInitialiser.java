@@ -17,23 +17,30 @@
  *  You should have received a copy of the GNU General Public License
  *  along with EpochX.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.life;
+package org.epochx.op.initialisation;
 
+import java.util.*;
+
+import org.epochx.op.Initialiser;
 import org.epochx.representation.*;
 
+
 /**
- *
+ * Implementations of this interface should be capable of generating an initial 
+ * population of <code>CandidatePrograms</code>. The getInitialPopulation() 
+ * method is called towards the start of execution of a run to get the first 
+ * population which will then be evolved.
  */
-public interface ReproductionListener<TYPE> {
-	
+public interface GPInitialiser<TYPE> extends Initialiser {
+
 	/**
-	 * Called after selection of an individual to be reproduced into the next 
-	 * generation.
+	 * Construct and return an initial population of CandidatePrograms.
+	 * Implementations will typically wish to return a population with a size 
+	 * as given by calling getPopulationSize() on the controlling model.
 	 * 
-	 * @param child the program that was selected to be reproduced.
-	 * @return a GPCandidateProgram that should be used as the reproduced program
-	 * and inserted into the next population.
+	 * @return A List of newly generated CandidatePrograms which will form the 
+	 * initial population for a GP run.
 	 */
-	public GPCandidateProgram<TYPE> onReproduction(GPCandidateProgram<TYPE> child);
+	public List<GPCandidateProgram<TYPE>> getInitialPopulation();
 	
 }

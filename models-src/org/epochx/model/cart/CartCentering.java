@@ -182,7 +182,7 @@ public class CartCentering extends GPAbstractModel<Double> {
 		model.setCrossover(new UniformPointCrossover<Double>(model));
 		model.setMutator(new PointMutation<Double>(model, 0.1));
 		
-		GPController.run(model);
+		Controller.run(model);
 	}
 	
 	private double solution(double x, double v) {

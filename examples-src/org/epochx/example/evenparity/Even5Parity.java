@@ -132,6 +132,6 @@ public class Even5Parity extends GPAbstractModel<Boolean> {
     }
 	
 	public static void main(String[] args) {
-		GPController.run(new Even5Parity());
+		Controller.run(new Even5Parity());
 	}
 }

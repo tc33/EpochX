@@ -31,7 +31,7 @@ import org.epochx.representation.*;
  * Each program is then assigned a probability according to their rank in a 
  * linear fashion with a gradient as given at construction.
  */
-public class LinearRankSelector<TYPE> implements ProgramSelector<TYPE>, PoolSelector<TYPE> {
+public class LinearRankSelector<TYPE> implements GPProgramSelector<TYPE>, GPPoolSelector<TYPE> {
 	
 	// The current controlling model.
 	private GPModel<TYPE> model;
@@ -125,7 +125,7 @@ public class LinearRankSelector<TYPE> implements ProgramSelector<TYPE>, PoolSele
 			return pop;
 		}
 		
-		ProgramSelector<TYPE> programSelector = new LinearRankSelector<TYPE>(model, gradient);
+		GPProgramSelector<TYPE> programSelector = new LinearRankSelector<TYPE>(model, gradient);
 		programSelector.setSelectionPool(pop);
 		List<GPCandidateProgram<TYPE>> pool = new ArrayList<GPCandidateProgram<TYPE>>();
 		

@@ -132,6 +132,6 @@ public class Multiplexer6BitNOIF extends GPAbstractModel<Boolean> {
     }
 	
 	public static void main(String[] args) {
-		GPController.run(new Multiplexer6BitNOIF());
+		Controller.run(new Multiplexer6BitNOIF());
 	}
 }

@@ -21,6 +21,7 @@ package org.epochx.op.selection;
 
 import java.util.*;
 
+import org.epochx.op.PoolSelector;
 import org.epochx.representation.*;
 
 
@@ -30,7 +31,7 @@ import org.epochx.representation.*;
  * the fitness of the programs. In many circumstances PoolSelectors will work 
  * in the same way as ProgramSelectors and often implemented by the same class.
  */
-public interface PoolSelector<TYPE> {
+public interface GPPoolSelector<TYPE> extends PoolSelector {
 
 	
 	/**

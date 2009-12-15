@@ -39,7 +39,7 @@ import org.epochx.representation.*;
  * greater than the population size then some depths will not occur at all in 
  * order to ensure as wide a spread of depths up to the maximum as possible.
  */
-public class RampedHalfAndHalfInitialiser<TYPE> implements Initialiser<TYPE> {
+public class RampedHalfAndHalfInitialiser<TYPE> implements GPInitialiser<TYPE> {
 	
 	// The current controlling model.
 	private GPModel<TYPE> model;	

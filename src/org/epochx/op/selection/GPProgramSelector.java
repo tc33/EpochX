@@ -21,6 +21,7 @@ package org.epochx.op.selection;
 
 import java.util.*;
 
+import org.epochx.op.ProgramSelector;
 import org.epochx.representation.*;
 
 
@@ -29,10 +30,12 @@ import org.epochx.representation.*;
  * programs. Most selectors will choose an individual based in some way upon 
  * the fitness of the programs.
  * 
- * @see PoolSelector
+ * @see GPPoolSelector
  */
-public interface ProgramSelector<TYPE> {
+public abstract class GPProgramSelector<TYPE> implements ProgramSelector {
 
+	protected List<CandidateProgram> population;
+	
 	/**
 	 * The GP system will call this method at the start of every generation to 
 	 * provide the selector with the population from which selections should be 
@@ -40,8 +43,9 @@ public interface ProgramSelector<TYPE> {
 	 * 
 	 * @param pop the current population for this generation.
 	 */
-	//TODO This is a little bit nasty, would be better if we can plug it into a standard listener system.
-	public void setSelectionPool(List<GPCandidateProgram<TYPE>> pop);
+	public void setSelectionPool(List<CandidateProgram> population) {
+		this.population = population;
+	}
 	
 	/**
 	 * Select a <code>GPCandidateProgram</code> from the current population of 
@@ -52,6 +56,6 @@ public interface ProgramSelector<TYPE> {
 	 * @return a GPCandidateProgram selected from the current population of 
 	 * programs.
 	 */
-	public GPCandidateProgram<TYPE> getProgram();
+	public abstract GPCandidateProgram<TYPE> getProgram();
 	
 }

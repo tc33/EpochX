@@ -22,7 +22,6 @@ package org.epochx.representation;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import org.epochx.ant.*;
 import org.epochx.representation.ant.*;
 import org.epochx.representation.bool.*;
 import org.epochx.representation.dbl.*;

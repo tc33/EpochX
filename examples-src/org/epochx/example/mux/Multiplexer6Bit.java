@@ -134,6 +134,6 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
     }
 	
 	public static void main(String[] args) {
-		GPController.run(new Multiplexer6Bit());
+		Controller.run(new Multiplexer6Bit());
 	}
 }

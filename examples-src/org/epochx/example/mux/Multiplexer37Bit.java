@@ -246,6 +246,6 @@ public class Multiplexer37Bit extends GPAbstractModel<Boolean> {
     }
 	
 	public static void main(String[] args) {
-		GPController.run(new Multiplexer37Bit());
+		Controller.run(new Multiplexer37Bit());
 	}
 }

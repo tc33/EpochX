@@ -29,7 +29,7 @@ import org.epochx.representation.*;
  * Initialisation implementation which randomly grows program trees down to a 
  * maximum depth.
  */
-public class GrowInitialiser<TYPE> implements Initialiser<TYPE> {
+public class GrowInitialiser<TYPE> implements GPInitialiser<TYPE> {
 	
 	// The current controlling model.
 	private GPModel<TYPE> model;

@@ -34,7 +34,7 @@ import org.epochx.representation.*;
  * replacement node is selected from the full syntax (function and terminal 
  * sets), at random.
  */
-public class PointMutation<TYPE> implements Mutation<TYPE> {
+public class PointMutation<TYPE> extends GPMutation<TYPE> {
 
 	// The current controlling model.
 	private GPModel<TYPE> model;
@@ -143,5 +143,10 @@ public class PointMutation<TYPE> implements Mutation<TYPE> {
 		}
 		
 		return equal;
+	}
+
+	@Override
+	public Object[] getOperatorStats() {
+		return null;
 	}
 }

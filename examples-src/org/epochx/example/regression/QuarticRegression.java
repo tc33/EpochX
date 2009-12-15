@@ -119,6 +119,6 @@ public class QuarticRegression extends GPAbstractModel<Double> {
 	}
 	
 	public static void main(String[] args) {
-		GPController.run(new QuarticRegression());
+		Controller.run(new QuarticRegression());
 	}
 }

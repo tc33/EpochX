@@ -21,14 +21,11 @@ package org.epochx.core;
 
 import java.util.List;
 
-import org.epochx.life.LifeCycleListener;
 import org.epochx.op.crossover.*;
-import org.epochx.op.initialisation.*;
-import org.epochx.op.mutation.*;
+import org.epochx.op.initialisation.GPInitialiser;
+import org.epochx.op.mutation.GPMutation;
 import org.epochx.op.selection.*;
 import org.epochx.representation.*;
-import org.epochx.stats.*;
-import org.epochx.tools.random.RandomNumberGenerator;
 
 
 /**
@@ -43,28 +40,30 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * @param <TYPE> The return type of CandidatePrograms being evolved.
  * @see GPAbstractModel
  */
-public interface GPModel<TYPE> {
+public interface GPModel<TYPE> extends Model {
 	
 	/**
-	 * Retrieves the Initialiser which will generate the first generation 
+	 * Retrieves the GPInitialiser which will generate the first generation 
 	 * population from which the evolution will proceed.
 	 * 
-	 * @return the Initialiser to create the first population.
+	 * @return the GPInitialiser to create the first population.
 	 */
-	public Initialiser<TYPE> getInitialiser();
+	@Override
+	public GPInitialiser<TYPE> getInitialiser();
 
 	/**
-	 * Retrieves the implementation of Crossover to use to perform the genetic 
+	 * Retrieves the implementation of GPCrossover to use to perform the genetic 
 	 * operation of crossover between 2 parents. The 2 parents to be crossed 
 	 * over will be selected using the parent selector returned by 
 	 * getProgramSelector().
 	 * 
-	 * @return the implementation of Crossover that will perform the genetic 
+	 * @return the implementation of GPCrossover that will perform the genetic 
 	 * 		   operation of crossover.
 	 * @see UniformPointCrossover
 	 * @see KozaCrossover
 	 */
-	public Crossover<TYPE> getCrossover();
+	@Override
+	public GPCrossover<TYPE> getCrossover();
 
 	/**
 	 * Retrieves the implementation of Mutator to use to perform the genetic 
@@ -75,31 +74,33 @@ public interface GPModel<TYPE> {
 	 * @return the implementation of Mutator that will perform the genetic 
 	 * 		   operation of mutation.
 	 */
-	public Mutation<TYPE> getMutator();
+	@Override
+	public GPMutation<TYPE> getMutation();
 
 	/**
 	 * Retrieves the selector to use to pick parents from either a pre-selected 
-	 * breeding pool (selected by the PoolSelector returned by 
+	 * breeding pool (selected by the GPPoolSelector returned by 
 	 * getPoolSelector()) or the previous population for use as input to the 
 	 * genetic operators.
 	 * 
-	 * @return the ProgramSelector which should be used to pick parents for input 
+	 * @return the GPProgramSelector which should be used to pick parents for input 
 	 * 		   to the genetic operators.
 	 * @see TournamentSelector
 	 */
-	public ProgramSelector<TYPE> getProgramSelector();
+	@Override
+	public GPProgramSelector<TYPE> getProgramSelector();
 
 	/**
 	 * Retrieves the selector to use to construct a breeding pool from which 
 	 * parents can be selected using the parent selector returned by 
 	 * getProgramSelector() to undergo the genetic operators.
 	 * 
-	 * @return a PoolSelector which can be used to construct a breeding pool, 
+	 * @return a GPPoolSelector which can be used to construct a breeding pool, 
 	 * 		   or null if a breeding pool shouldn't be used and instead parents 
 	 * 		   should be picked straight from the previous population.
 	 * @see TournamentSelector
 	 */
-	public PoolSelector<TYPE> getPoolSelector();
+	public GPPoolSelector<TYPE> getPoolSelector();
 
 	/**
 	 * Retrieves the set of terminal nodes. 
@@ -125,68 +126,6 @@ public interface GPModel<TYPE> {
 	public List<Node<TYPE>> getSyntax();
 
 	/**
-	 * Returns the RandomNumberGenerator instance that should be used for the 
-	 * generation of random numbers throughout execution.
-	 *  
-	 * @return the RandomNumberGenerator to use for generating randomness.
-	 */
-	public RandomNumberGenerator getRNG();
-	
-	/**
-	 * Retrieves the number of runs that should be carried out using this model 
-	 * as the basis. Each call to GPRun.run() will be with the same model so 
-	 * this is useful when multiple runs are necessary with the same control 
-	 * parameters for research purposes or otherwise in order to attain 
-	 * reliable results drawn from mean averages.
-	 * 
-	 * @return the number of times this model should be used to control GP runs.
-	 */
-	public int getNoRuns();
-
-	/**
-	 * Retrieves the number of generations that each run should use before 
-	 * terminating, unless prior termination occurs due to one of the other 
-	 * termination criterion.
-	 * 
-	 * @return the number of generations that should be evolved in each run.
-	 */
-	public int getNoGenerations();
-
-	/**
-	 * Retrieves the number of CandidatePrograms that should make up each 
-	 * generation. The population at the start and end of each generation 
-	 * should always equal exactly this number.
-	 * 
-	 * @return the number of CandidatePrograms per generation.
-	 */
-	public int getPopulationSize();
-
-	/**
-	 * Retrieves the size of the breeding pool to be used for parent selection 
-	 * when performing the genetic operators. If the pool size is equal to or 
-	 * less than zero, or if getPoolSelector() returns null, then no pool 
-	 * will be used and parent selection will take place directly from the 
-	 * previous population.
-	 * 
-	 * @return the size of the mating pool to build with the PoolSelector 
-	 * 		   returned by getPoolSelector() which will be used for parent 
-	 * 		   selection.
-	 */
-	public int getPoolSize();
-
-	/**
-	 * Retrieves the number of elites that should be copied straight to the next 
-	 * population. This number is distinct from the reproduction operator. 
-	 * Elites are generally picked as the very best programs in a generation, 
-	 * thus a number of elites of 1 or more will always retain the best program 
-	 * found so far, through to the last generation.
-	 * 
-	 * @return the number of elites that should be copied through from one 
-	 * 		   generation to the next.
-	 */
-	public int getNoElites();
-
-	/**
 	 * Retrieves the maximum depth of CandidatePrograms allowed in the 
 	 * population after initialisation. The exact way in which the 
 	 * implementation ensures this depth is kept to may vary.
@@ -206,60 +145,6 @@ public interface GPModel<TYPE> {
 	 * 		   population after genetic operators.
 	 */
 	public int getMaxProgramDepth();
-	
-	/**
-	 * Retrieves a numerical value between 0.0 and 1.0 which represents the 
-	 * probability of selecting the crossover genetic operator, as opposed to 
-	 * mutation or reproduction. 
-	 * 
-	 * <p>Within one generation approximately Pc proportion of the 
-	 * CandidatePrograms will have been created through crossover, Pm through 
-	 * mutation and Pr through reproduction. Where Pc, Pm, Pr are the values 
-	 * returned by getCrossoverProbability(), getMutationProbability() and 
-	 * getReproductionProbability() respectively. The sum of the calls to 
-	 * getCrossoverProbability(), getReproductionProbability() and 
-	 * getMutationProbability() should total 1.0.
-	 * 
-	 * @return the probability of choosing the crossover genetic operator at 
-	 * 		   each iteration when constructing the next population.
-	 */
-	public double getCrossoverProbability();
-
-	/**
-	 * Retrieves a numerical value between 0.0 and 1.0 which represents the 
-	 * probability of selecting the mutation genetic operator, as opposed to 
-	 * crossover or reproduction. 
-	 * 
-	 * <p>Within one generation approximately Pc proportion of the 
-	 * CandidatePrograms will have been created through crossover, Pm through 
-	 * mutation and Pr through reproduction. Where Pc, Pm, Pr are the values 
-	 * returned by getCrossoverProbability(), getMutationProbability() and 
-	 * getReproductionProbability() respectively. The sum of the calls to 
-	 * getCrossoverProbability(), getReproductionProbability() and 
-	 * getMutationProbability() should total 1.0.
-	 * 
-	 * @return the probability of choosing the mutation genetic operator at 
-	 * 		   each iteration when constructing the next population.
-	 */
-	public double getMutationProbability();
-
-	/**
-	 * Retrieves a numerical value between 0.0 and 1.0 which represents the 
-	 * probability of selecting the reproduction genetic operator, as opposed 
-	 * to crossover or mutation. 
-	 * 
-	 * <p>Within one generation approximately Pc proportion of the 
-	 * CandidatePrograms will have been created through crossover, Pm through 
-	 * mutation and Pr through reproduction. Where Pc, Pm, Pr are the values 
-	 * returned by getCrossoverProbability(), getMutationProbability() and 
-	 * getReproductionProbability() respectively. The sum of the calls to 
-	 * getCrossoverProbability(), getReproductionProbability() and 
-	 * getMutationProbability() should total 1.0.
-	 * 
-	 * @return the probability of choosing the reproduction genetic operator at 
-	 * 		   each iteration when constructing the next population.
-	 */
-	public double getReproductionProbability();
 
 	/**
 	 * Calculates and returns the fitness score of the given program. The score 
@@ -280,15 +165,6 @@ public interface GPModel<TYPE> {
 	 * 		   value is considered better than a larger value.
 	 */
 	public double getFitness(GPCandidateProgram<TYPE> program);
-	
-	/**
-	 * The fitness score at which a run should be stopped. Returning a negative 
-	 * value will result in no termination based upon fitness.
-	 * 
-	 * @return the fitness score at which a run should be terminated. A fitness 
-	 * of this or less will result in termination.
-	 */
-	public double getTerminationFitness();
 
 	/**
 	 * This method will be called during each crossover operation before the 
@@ -322,53 +198,4 @@ public interface GPModel<TYPE> {
 	 */
 	public boolean acceptMutation(GPCandidateProgram<TYPE> parent, 
 			   					  GPCandidateProgram<TYPE> child);
-
-	/**
-	 * Get a listener which will be informed of statistics about runs. The 
-	 * listener will be queried for what fields are of interest, with those 
-	 * statistics passed to the runStats method in the same order at the end 
-	 * of each run. 
-	 * 
-	 * @return A RunStatListener to handle run statistics.
-	 */
-	public RunStatListener getRunStatListener();
-	
-	/**
-	 * Get a listener which will be informed of statistics about generations. 
-	 * The listener will be queried for what fields are of interest, with those 
-	 * statistics passed to the generationStats method in the same order after 
-	 * each generation. 
-	 * 
-	 * @return A GenerationStatListener to handle generation statistics.
-	 */
-	public GenerationStatListener getGenerationStatListener();
-	
-	/**
-	 * Get a listener which will be informed of statistics about crossovers. 
-	 * The listener will be queried for what fields are of interest, with those 
-	 * statistics passed to the crossoverStats method in the same order after 
-	 * each crossover operation. 
-	 * 
-	 * @return A CrossoverStatListener to handle crossover statistics.
-	 */
-	public CrossoverStatListener getCrossoverStatListener();
-	
-	/**
-	 * Get a listener which will be informed of statistics about mutations. 
-	 * The listener will be queried for what fields are of interest, with those 
-	 * statistics passed to the mutationStats method in the same order after 
-	 * each mutation operation. 
-	 * 
-	 * @return A MutationStatListener to handle mutation statistics.
-	 */
-	public MutationStatListener getMutationStatListener();
-	
-	/**
-	 * Get a listener which will be informed of each stage of a GP run's life 
-	 * cycle, and given the facility to confirm or modify each step.
-	 * 
-	 * @return A LifeCycleListener to confirm or modify each stage of the run's
-	 * life cycle.
-	 */
-	public LifeCycleListener<TYPE> getLifeCycleListener();
 }

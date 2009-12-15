@@ -27,7 +27,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
 /**
  * This class implements standard crossover with uniform swap points.
  */
-public class UniformPointCrossover<TYPE> implements Crossover<TYPE>, GenerationListener {
+public class UniformPointCrossover<TYPE> extends GPCrossover<TYPE> implements GenerationListener {
 
 	// The current controlling model.
 	private GPModel<TYPE> model;
@@ -38,11 +38,11 @@ public class UniformPointCrossover<TYPE> implements Crossover<TYPE>, GenerationL
 	public UniformPointCrossover(GPModel<TYPE> model) {
 		this.model = model;
 		
-		GPController.getLifeCycleManager().addGenerationListener(this);
+		Controller.getLifeCycleManager().addGenerationListener(this);
 	}
 	
 	/**
-	 * Crossover the two <code>CandidatePrograms</code> provided as arguments 
+	 * GPCrossover the two <code>CandidatePrograms</code> provided as arguments 
 	 * using uniform swap points. Random crossover points are chosen at random 
 	 * in both programs, the genetic material at the points are then exchanged.
 	 * The resulting programs are returned as new GPCandidateProgram objects.
@@ -72,6 +72,11 @@ public class UniformPointCrossover<TYPE> implements Crossover<TYPE>, GenerationL
 	@Override
 	public void onGenerationStart() {
 		rng = model.getRNG();
+	}
+
+	@Override
+	public Object[] getOperatorStats() {
+		return null;
 	}
 	
 }

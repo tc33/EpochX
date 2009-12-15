@@ -135,6 +135,6 @@ public class Majority5 extends GPAbstractModel<Boolean> {
     }
 	
 	public static void main(String[] args) {
-		GPController.run(new Majority5());
+		Controller.run(new Majority5());
 	}
 }

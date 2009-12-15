@@ -34,10 +34,10 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * a function swap point. The default constructor uses the typical rates of 90% 
  * function node swap point and 10% terminal node swap points.
  */
-public class KozaCrossover<TYPE> extends GPCrossover<TYPE> implements GenerationListener {
+public class KozaCrossover implements GPCrossover, GenerationListener {
 
 	// The current controlling model.
-	private GPModel<TYPE> model;
+	private GPModel model;
 	
 	// The probability of choosing a function node as the swap point.
 	private double functionSwapProbability;
@@ -51,7 +51,7 @@ public class KozaCrossover<TYPE> extends GPCrossover<TYPE> implements Generation
 	 * @param functionSwapProbability The probability of crossover operations 
 	 * 								  choosing a function node as the swap point.
 	 */
-	public KozaCrossover(GPModel<TYPE> model, double functionSwapProbability) {
+	public KozaCrossover(GPModel model, double functionSwapProbability) {
 		this.model = model;
 		this.functionSwapProbability = functionSwapProbability;
 		
@@ -62,7 +62,7 @@ public class KozaCrossover<TYPE> extends GPCrossover<TYPE> implements Generation
 	 * Default constructor for Koza standard crossover. The probability of a 
 	 * function node being selected as the swap point will default to 90%.
 	 */
-	public KozaCrossover(GPModel<TYPE> model) {
+	public KozaCrossover(GPModel model) {
 		this(model, 0.9);
 	}
 	
@@ -78,14 +78,17 @@ public class KozaCrossover<TYPE> extends GPCrossover<TYPE> implements Generation
 	 * 				   crossover.
 	 */
 	@Override
-	public GPCandidateProgram<TYPE>[] crossover(GPCandidateProgram<TYPE> program1, GPCandidateProgram<TYPE> program2) {		
+	public GPCandidateProgram[] crossover(CandidateProgram p1, CandidateProgram p2) {		
+		GPCandidateProgram program1 = (GPCandidateProgram) p1;
+		GPCandidateProgram program2 = (GPCandidateProgram) p2;
+		
 		// Get swap points.
 		int swapPoint1 = getCrossoverPoint(program1);
 		int swapPoint2 = getCrossoverPoint(program2);
 		
 		// Get copies of subtrees to swap.
-		Node<TYPE> subtree1 = program1.getNthNode(swapPoint1);//.clone();
-		Node<TYPE> subtree2 = program2.getNthNode(swapPoint2);//.clone();
+		Node<?> subtree1 = program1.getNthNode(swapPoint1);//.clone();
+		Node<?> subtree2 = program2.getNthNode(swapPoint2);//.clone();
 		
 		// Perform swap.
 		program1.setNthNode(swapPoint1, subtree2);
@@ -98,7 +101,7 @@ public class KozaCrossover<TYPE> extends GPCrossover<TYPE> implements Generation
 	 * Choose the crossover point for the given GPCandidateProgram with respect 
 	 * to the probabilities assigned for function and terminal node points.
 	 */
-	private int getCrossoverPoint(GPCandidateProgram<TYPE> program) {
+	private int getCrossoverPoint(GPCandidateProgram program) {
 		// Calculate numbers of terminal and function nodes.
 		int length = program.getProgramLength();
 		int noTerminals = program.getNoTerminals();
@@ -127,20 +130,20 @@ public class KozaCrossover<TYPE> extends GPCrossover<TYPE> implements Generation
 	 * TODO Consider moving all these functions to the GPCandidateProgram class 
 	 * as first class citizens in some form - they might be useful for others.
 	 */
-	private int getNthFunctionNode(int n, GPCandidateProgram<TYPE> program) {
+	private int getNthFunctionNode(int n, GPCandidateProgram program) {
 		return getNthFunctionNode(n, 0, 0, program.getRootNode());
 	}
 	
 	/*
 	 * Recursive helper function.
 	 */
-	private int getNthFunctionNode(int n, int functionCount, int nodeCount, Node<TYPE> current) {
+	private int getNthFunctionNode(int n, int functionCount, int nodeCount, Node<?> current) {
 		// Found the nth function node.
 		if ((current instanceof FunctionNode) && (n == functionCount))
 			return nodeCount;
 		
 		int result = -1;
-		for (Node<TYPE> child: current.getChildren()) {
+		for (Node<?> child: current.getChildren()) {
 			int noNodes = child.getLength();
 			int noFunctions = child.getNoFunctions();
 			

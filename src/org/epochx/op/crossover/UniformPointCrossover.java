@@ -27,15 +27,15 @@ import org.epochx.tools.random.RandomNumberGenerator;
 /**
  * This class implements standard crossover with uniform swap points.
  */
-public class UniformPointCrossover<TYPE> extends GPCrossover<TYPE> implements GenerationListener {
+public class UniformPointCrossover implements GPCrossover, GenerationListener {
 
 	// The current controlling model.
-	private GPModel<TYPE> model;
+	private GPModel model;
 	
 	// The random number generator for controlling random behaviour.
 	private RandomNumberGenerator rng;
 	
-	public UniformPointCrossover(GPModel<TYPE> model) {
+	public UniformPointCrossover(GPModel model) {
 		this.model = model;
 		
 		Controller.getLifeCycleManager().addGenerationListener(this);
@@ -53,14 +53,17 @@ public class UniformPointCrossover<TYPE> extends GPCrossover<TYPE> implements Ge
 	 * 				   point crossover.
 	 */
 	@Override
-	public GPCandidateProgram<TYPE>[] crossover(GPCandidateProgram<TYPE> program1, GPCandidateProgram<TYPE> program2) {
+	public GPCandidateProgram[] crossover(CandidateProgram p1, CandidateProgram p2) {
+		GPCandidateProgram program1 = (GPCandidateProgram) p1;
+		GPCandidateProgram program2 = (GPCandidateProgram) p2;
+		
 		// Select swap points.
 		int swapPoint1 = rng.nextInt(program1.getProgramLength());
 		int swapPoint2 = rng.nextInt(program2.getProgramLength());
 
 		// Get copies of subtrees to swap.
-		Node<TYPE> subTree1 = (Node<TYPE>) program1.getNthNode(swapPoint1);//.clone();
-		Node<TYPE> subTree2 = (Node<TYPE>) program2.getNthNode(swapPoint2);//.clone();
+		Node<?> subTree1 = (Node<?>) program1.getNthNode(swapPoint1);//.clone();
+		Node<?> subTree2 = (Node<?>) program2.getNthNode(swapPoint2);//.clone();
 		
 		// Perform swap.
 		program1.setNthNode(swapPoint1, subTree2);

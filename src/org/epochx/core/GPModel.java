@@ -37,10 +37,10 @@ import org.epochx.representation.*;
  * <p>For most situations, users should look to extend the abstract 
  * <code>GPAbstractModel.</code>
  *
- * @param <TYPE> The return type of CandidatePrograms being evolved.
+ * @param  The return type of CandidatePrograms being evolved.
  * @see GPAbstractModel
  */
-public interface GPModel<TYPE> extends Model {
+public interface GPModel extends Model {
 	
 	/**
 	 * Retrieves the GPInitialiser which will generate the first generation 
@@ -49,7 +49,7 @@ public interface GPModel<TYPE> extends Model {
 	 * @return the GPInitialiser to create the first population.
 	 */
 	@Override
-	public GPInitialiser<TYPE> getInitialiser();
+	public GPInitialiser getInitialiser();
 
 	/**
 	 * Retrieves the implementation of GPCrossover to use to perform the genetic 
@@ -63,7 +63,7 @@ public interface GPModel<TYPE> extends Model {
 	 * @see KozaCrossover
 	 */
 	@Override
-	public GPCrossover<TYPE> getCrossover();
+	public GPCrossover getCrossover();
 
 	/**
 	 * Retrieves the implementation of Mutator to use to perform the genetic 
@@ -75,7 +75,7 @@ public interface GPModel<TYPE> extends Model {
 	 * 		   operation of mutation.
 	 */
 	@Override
-	public GPMutation<TYPE> getMutation();
+	public GPMutation getMutation();
 
 	/**
 	 * Retrieves the selector to use to pick parents from either a pre-selected 
@@ -88,7 +88,7 @@ public interface GPModel<TYPE> extends Model {
 	 * @see TournamentSelector
 	 */
 	@Override
-	public GPProgramSelector<TYPE> getProgramSelector();
+	public GPProgramSelector getProgramSelector();
 
 	/**
 	 * Retrieves the selector to use to construct a breeding pool from which 
@@ -100,21 +100,21 @@ public interface GPModel<TYPE> extends Model {
 	 * 		   should be picked straight from the previous population.
 	 * @see TournamentSelector
 	 */
-	public GPPoolSelector<TYPE> getPoolSelector();
+	public GPPoolSelector getPoolSelector();
 
 	/**
 	 * Retrieves the set of terminal nodes. 
 	 * 
 	 * @return the terminal nodes to be used during evolution.
 	 */
-	public List<TerminalNode<TYPE>> getTerminals();
+	public List<TerminalNode> getTerminals();
 
 	/**
 	 * Retrieves the set of function nodes.
 	 * 
 	 * @return the function nodes to be used during evolution.
 	 */
-	public List<FunctionNode<TYPE>> getFunctions();
+	public List<FunctionNode> getFunctions();
 
 	/**
 	 * Retrieves the full set of syntax, that is terminals AND function nodes.
@@ -123,7 +123,7 @@ public interface GPModel<TYPE> extends Model {
 	 * 
 	 * @return the full syntax for use in building node trees.
 	 */
-	public List<Node<TYPE>> getSyntax();
+	public List<Node> getSyntax();
 
 	/**
 	 * Retrieves the maximum depth of CandidatePrograms allowed in the 
@@ -164,7 +164,7 @@ public interface GPModel<TYPE> extends Model {
 	 * @return a double representing the quality of the program where a small 
 	 * 		   value is considered better than a larger value.
 	 */
-	public double getFitness(GPCandidateProgram<TYPE> program);
+	public double getFitness(GPCandidateProgram program);
 
 	/**
 	 * This method will be called during each crossover operation before the 
@@ -180,8 +180,8 @@ public interface GPModel<TYPE> extends Model {
 	 * @return True if the crossover operation should proceed, false if it is 
 	 * rejected and should be retried with new parents.
 	 */
-	public boolean acceptCrossover(GPCandidateProgram<TYPE>[] parents, 
-								   GPCandidateProgram<TYPE>[] children);
+	public boolean acceptCrossover(GPCandidateProgram[] parents, 
+								   GPCandidateProgram[] children);
 
 	/**
 	 * This method will be called during each mutation operation before the 
@@ -196,6 +196,6 @@ public interface GPModel<TYPE> extends Model {
 	 * @return True if the mutation operation should proceed, false if it is 
 	 * rejected and should be retried with a new parent.
 	 */
-	public boolean acceptMutation(GPCandidateProgram<TYPE> parent, 
-			   					  GPCandidateProgram<TYPE> child);
+	public boolean acceptMutation(GPCandidateProgram parent, 
+			   					  GPCandidateProgram child);
 }

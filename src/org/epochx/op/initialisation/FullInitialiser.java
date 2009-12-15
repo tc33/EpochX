@@ -28,10 +28,10 @@ import org.epochx.representation.*;
 /**
  * Initialisation implementation which produces full program trees.
  */
-public class FullInitialiser<TYPE> implements GPInitialiser<TYPE> {
+public class FullInitialiser implements GPInitialiser {
 	
 	// The current controlling model.
-	private GPModel<TYPE> model;
+	private GPModel model;
 
 	/**
 	 * Constructor for the full initialiser.
@@ -39,7 +39,7 @@ public class FullInitialiser<TYPE> implements GPInitialiser<TYPE> {
 	 * @param model The current controlling model. Run parameters such as the 
 	 * population size will be obtained from this.
 	 */
-	public FullInitialiser(GPModel<TYPE> model) {
+	public FullInitialiser(GPModel model) {
 		this.model = model;
 	}
 	
@@ -55,21 +55,21 @@ public class FullInitialiser<TYPE> implements GPInitialiser<TYPE> {
 	 * initial population for a GP run.
 	 */
 	@Override
-	public List<GPCandidateProgram<TYPE>> getInitialPopulation() {
+	public List<GPCandidateProgram> getInitialPopulation() {
 		// Create population list to be populated.
 		int popSize = model.getPopulationSize();
-		List<GPCandidateProgram<TYPE>> firstGen = new ArrayList<GPCandidateProgram<TYPE>>(popSize);
+		List<GPCandidateProgram> firstGen = new ArrayList<GPCandidateProgram>(popSize);
 		
 		// Create and add new programs to the population.
 		for(int i=0; i<popSize; i++) {
-			GPCandidateProgram<TYPE> candidate;
+			GPCandidateProgram candidate;
 			
 			do {
 				// Build a new full node tree.
-				Node<TYPE> nodeTree = buildFullNodeTree(model.getInitialMaxDepth());
+				Node<?> nodeTree = buildFullNodeTree(model.getInitialMaxDepth());
             	
 				// Create a program around the node tree.
-				candidate = new GPCandidateProgram<TYPE>(nodeTree, model);
+				candidate = new GPCandidateProgram(nodeTree, model);
 			} while (firstGen.contains(candidate));
 			
 			// Must be unique - add to the new population.
@@ -90,16 +90,16 @@ public class FullInitialiser<TYPE> implements GPInitialiser<TYPE> {
 	 * @return The root node of a randomly generated full node tree of the 
 	 * requested depth.
 	 */
-	public Node<TYPE> buildFullNodeTree(int depth) {
-		Node<TYPE> root;
+	public Node<?> buildFullNodeTree(int depth) {
+		Node<?> root;
 		if (depth == 0) {
 			// Randomly choose a terminal node as our root.
 			int randomIndex = model.getRNG().nextInt(model.getTerminals().size());
-			root = (Node<TYPE>) model.getTerminals().get(randomIndex).clone();
+			root = (Node<?>) model.getTerminals().get(randomIndex).clone();
 		} else {
 			// Randomly choose a root function node.
 	        int randomIndex = model.getRNG().nextInt(model.getFunctions().size());
-	        root = (Node<TYPE>) model.getFunctions().get(randomIndex).clone();
+	        root = (Node<?>) model.getFunctions().get(randomIndex).clone();
 	        
 	        // Populate the root node with full children of depth-1.
 			fillChildren(root, 0, depth);
@@ -113,14 +113,14 @@ public class FullInitialiser<TYPE> implements GPInitialiser<TYPE> {
 	 * to a depth of maxDepth.
 	 * TODO These model calls should not be being made multiple times.
 	 */
-	private void fillChildren(Node<TYPE> currentNode, int currentDepth, int maxDepth) {
+	private void fillChildren(Node currentNode, int currentDepth, int maxDepth) {
 		int arity = currentNode.getArity();
 		
 		if(currentDepth<maxDepth-1) {
 			// Not near the maximum depth yet, fill children with functions only.
 			for(int i = 0; i<arity; i++) {
 				int randomIndex = model.getRNG().nextInt(model.getFunctions().size());
-				Node<TYPE> child = (Node<TYPE>) model.getFunctions().get(randomIndex).clone();
+				Node child = (Node) model.getFunctions().get(randomIndex).clone();
 
 				currentNode.setChild(i, child);
 				fillChildren(child, (currentDepth+1), maxDepth);
@@ -129,7 +129,7 @@ public class FullInitialiser<TYPE> implements GPInitialiser<TYPE> {
 			// At maximum depth-1, fill children with terminals.
 			for(int i = 0; i<arity; i++) {
 				int randomIndex = model.getRNG().nextInt(model.getTerminals().size());
-				Node<TYPE> child = (Node<TYPE>) model.getTerminals().get(randomIndex).clone();
+				Node child = (Node) model.getTerminals().get(randomIndex).clone();
 
 				currentNode.setChild(i, child);
 			}

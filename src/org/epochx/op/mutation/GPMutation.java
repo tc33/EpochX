@@ -30,7 +30,7 @@ import org.epochx.representation.*;
  * 
  * @see GPMutation
  */
-public abstract class GPMutation<TYPE> implements Mutation {
+public interface GPMutation extends Mutation {
 
 	/**
 	 * Implementations should perform some form of alteration to the genetic 
@@ -42,14 +42,6 @@ public abstract class GPMutation<TYPE> implements Mutation {
 	 * GPCandidateProgram.
 	 */
 	@Override
-	public final GPCandidateProgram<TYPE> mutate(CandidateProgram parent) {
-		if (parent instanceof GPCandidateProgram<?>) {
-			return mutate((GPCandidateProgram<?>) parent);
-		} else {
-			throw new IllegalArgumentException("GPMutation only works on GPCandidatePrograms.");
-		}
-	}
-
-	public abstract GPCandidateProgram<TYPE> mutate(GPCandidateProgram<TYPE> parent);
+	public GPCandidateProgram mutate(CandidateProgram parent);
 	
 }

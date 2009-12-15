@@ -39,26 +39,26 @@ import org.epochx.representation.*;
  * greater than the population size then some depths will not occur at all in 
  * order to ensure as wide a spread of depths up to the maximum as possible.
  */
-public class RampedHalfAndHalfInitialiser<TYPE> implements GPInitialiser<TYPE> {
+public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 	
 	// The current controlling model.
-	private GPModel<TYPE> model;	
+	private GPModel model;	
 	
 	// The grow and full instances for doing their share of the work.
-	private GrowInitialiser<TYPE> grow;
-	private FullInitialiser<TYPE> full;
+	private GrowInitialiser grow;
+	private FullInitialiser full;
 
 	/**
 	 * Construct a RampedHalfAndHalfInitialiser.
 	 * 
 	 * @param model The model being assessed
 	 */
-	public RampedHalfAndHalfInitialiser(GPModel<TYPE> model) {
+	public RampedHalfAndHalfInitialiser(GPModel model) {
 		this.model = model;
 		
 		// set up the grow and full parts
-		grow = new GrowInitialiser<TYPE>(model);
-		full = new FullInitialiser<TYPE>(model);
+		grow = new GrowInitialiser(model);
+		full = new FullInitialiser(model);
 	}
 	
 	/**
@@ -66,10 +66,10 @@ public class RampedHalfAndHalfInitialiser<TYPE> implements GPInitialiser<TYPE> {
 	 * the population size is an odd number then the extra individual will be initialised with
 	 * grow.
 	 */
-	public List<GPCandidateProgram<TYPE>> getInitialPopulation() {
+	public List<GPCandidateProgram> getInitialPopulation() {
 		// Create population list to populate.
 		int popSize = model.getPopulationSize();
-		List<GPCandidateProgram<TYPE>> firstGen = new ArrayList<GPCandidateProgram<TYPE>>(popSize);
+		List<GPCandidateProgram> firstGen = new ArrayList<GPCandidateProgram>(popSize);
 		
 		int startDepth = 2;
 		int endDepth = model.getInitialMaxDepth();
@@ -86,16 +86,16 @@ public class RampedHalfAndHalfInitialiser<TYPE> implements GPInitialiser<TYPE> {
 			int depth = (int) Math.floor((firstGen.size() / programsPerDepth) + startDepth);
 			
 			// Grow on even numbers, full on odd.
-			GPCandidateProgram<TYPE> program;
+			GPCandidateProgram program;
 			
 			do {
-				Node<TYPE> rootNode;
+				Node rootNode;
 				if ((i % 2) == 0) {
 					rootNode = grow.buildGrowNodeTree(depth);
 				} else {
 					rootNode = full.buildFullNodeTree(depth);
 				}
-				program = new GPCandidateProgram<TYPE>(rootNode, model);
+				program = new GPCandidateProgram(rootNode, model);
 			} while(firstGen.contains(program));
 			
             firstGen.add(program);

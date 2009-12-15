@@ -30,7 +30,7 @@ import org.epochx.representation.*;
  * 
  * @see org.epochx.core.GPCrossover
  */
-public abstract class GPCrossover<TYPE> implements Crossover {
+public interface GPCrossover extends Crossover {
 
 	/**
 	 * Implementations should perform some form of exchange of material between 
@@ -44,17 +44,6 @@ public abstract class GPCrossover<TYPE> implements Crossover {
 	 * an exchange of genetic material between the two parents.
 	 */
 	@Override
-	public final GPCandidateProgram<TYPE>[] crossover(CandidateProgram parent1, 
-											  CandidateProgram parent2) {
-		if ((parent1 instanceof GPCandidateProgram<?>)
-				&& (parent2 instanceof GPCandidateProgram<?>)) {
-			return crossover((GPCandidateProgram<?>) parent1, (GPCandidateProgram<?>) parent2);
-		} else {
-			throw new IllegalArgumentException("GPCrossover only works on GPCandidatePrograms.");
-		}
-	}
-	
-	public abstract GPCandidateProgram<TYPE>[] crossover(GPCandidateProgram<TYPE> parent1,
-												GPCandidateProgram<TYPE> parent2);
+	public GPCandidateProgram[] crossover(CandidateProgram parent1, CandidateProgram parent2);
 	
 }

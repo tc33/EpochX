@@ -35,17 +35,17 @@ import java.util.*;
  * @see FunctionNode
  * @see TerminalNode
  */
-public abstract class Node<TYPE> implements Cloneable {
+public abstract class Node implements Cloneable {
 	
 	// For a terminal node this will be empty.
-	private Node<TYPE>[] children;
+	private Node[] children;
 	
 	/**
 	 * Node constructor.
 	 * 
 	 * @param children child nodes to this node.
 	 */
-	public Node(Node<TYPE> ... children) {
+	public Node(Node ... children) {
 		this.children = children;
 	}
 	
@@ -62,7 +62,7 @@ public abstract class Node<TYPE> implements Cloneable {
 	 * 
 	 * @return the children of this node.
 	 */
-	public Node<TYPE>[] getChildren() {
+	public Node[] getChildren() {
 		return children;
 	}
 
@@ -71,7 +71,7 @@ public abstract class Node<TYPE> implements Cloneable {
 	 * 
 	 * @param children the new children to be set.
 	 */
-	public void setChildren(Node<TYPE>[] children) {
+	public void setChildren(Node[] children) {
 		this.children = children;
 	}
 	
@@ -82,7 +82,7 @@ public abstract class Node<TYPE> implements Cloneable {
 	 * 				indexes are from zero.
 	 * @return the child node at the specified arity index.
 	 */
-	public Node<TYPE> getChild(int index) {
+	public Node getChild(int index) {
 		return children[index];
 	}
 	
@@ -94,20 +94,20 @@ public abstract class Node<TYPE> implements Cloneable {
 	 * @param n the index of the node to be returned.
 	 * @return the node at the specified position in this node tree.
 	 */
-	public Node<TYPE> getNthNode(int n) {
+	public Node getNthNode(int n) {
 		return getNthNode(n, 0);
 	}
 	
 	/*
 	 * Recursive helper for the public getNthNode(int).
 	 */
-	private Node<TYPE> getNthNode(int n, int current) {
+	private Node getNthNode(int n, int current) {
 		// Is this the nth node?
 		if (n == current)
 			return this;
 		
-		Node<TYPE> node = null;
-		for (Node<TYPE> child: children) {
+		Node node = null;
+		for (Node child: children) {
 			int childLength = child.getLength();
 			
 			// Only look at the subtree if it contains the right range of nodes.
@@ -130,14 +130,14 @@ public abstract class Node<TYPE> implements Cloneable {
 	 * @param n the index of the node to replace.
 	 * @param newNode the node to be stored at the specified position.
 	 */
-	public void setNthNode(int n, Node<TYPE> newNode) {		
+	public void setNthNode(int n, Node newNode) {		
 		setNthNode(n, newNode, 0);
 	}
 	
 	/*
 	 * Recursive helper for the public setNthNode(int, Node).
 	 */
-	private void setNthNode(int n, Node<TYPE> newNode, int current) {
+	private void setNthNode(int n, Node newNode, int current) {
 		int arity = getArity();
 		for (int i=0; i<arity; i++) {
 			if (current+1 == n) {
@@ -145,7 +145,7 @@ public abstract class Node<TYPE> implements Cloneable {
 				break;
 			}
 			
-			Node<TYPE> child = getChild(i);
+			Node child = getChild(i);
 			int childLength = child.getLength();
 			
 			// Only look at the subtree if it contains the right range of nodes.
@@ -164,8 +164,8 @@ public abstract class Node<TYPE> implements Cloneable {
 	 * @param depth the specified depth of the nodes.
 	 * @return a List of all the nodes at the specified depth.
 	 */
-	public List<Node<TYPE>> getNodesAtDepth(int depth) {
-		List<Node<TYPE>> nodes = new ArrayList<Node<TYPE>>();
+	public List<Node> getNodesAtDepth(int depth) {
+		List<Node> nodes = new ArrayList<Node>();
 		fillNodesAtDepth(nodes, depth, 0);
 		
 		return nodes;
@@ -175,11 +175,11 @@ public abstract class Node<TYPE> implements Cloneable {
 	 * A helper function for getNodesAtDepth(int), to recurse down the node 
 	 * tree and populate the nodes array when at the correct depth.
 	 */
-	private void fillNodesAtDepth(List<Node<TYPE>> nodes, int d, int current){
+	private void fillNodesAtDepth(List<Node> nodes, int d, int current){
 		if (d == current) {
 			nodes.add(this);
 		} else {
-			for (Node<TYPE> child: children) {
+			for (Node child: children) {
 				// Get the nodes at the right depth down each branch.
 				child.fillNodesAtDepth(nodes, d, current+1);
 			}
@@ -192,7 +192,7 @@ public abstract class Node<TYPE> implements Cloneable {
 	 * @param index the index of the child to replace within the nodes arity.
 	 * @param child the child node to be stored at the specified position.
 	 */
-	public void setChild(int index, Node<TYPE> child) {
+	public void setChild(int index, Node child) {
 		children[index] = child;
 	}
 	
@@ -229,10 +229,10 @@ public abstract class Node<TYPE> implements Cloneable {
 	 */
 	public int getNoDistinctTerminals() {
 		// Get a list of terminals.
-		List<TerminalNode<TYPE>> terminals = getTerminalNodes();
+		List<TerminalNode> terminals = getTerminalNodes();
 		
 		// Remove duplicates.
-		Set<TerminalNode<TYPE>> terminalHash = new HashSet<TerminalNode<TYPE>>(terminals);
+		Set<TerminalNode> terminalHash = new HashSet<TerminalNode>(terminals);
 		
 		// The number left is how many distinct terminals.
 		return terminalHash.size();
@@ -243,12 +243,12 @@ public abstract class Node<TYPE> implements Cloneable {
 	 * 
 	 * @return a List of all the terminal nodes in the node tree.
 	 */
-	public List<TerminalNode<TYPE>> getTerminalNodes() {
+	public List<TerminalNode> getTerminalNodes() {
 		// Alternatively we could use an array, which is quicker/more efficient in this situation?
-		List<TerminalNode<TYPE>> terminals = new ArrayList<TerminalNode<TYPE>>();
+		List<TerminalNode> terminals = new ArrayList<TerminalNode>();
 		
 		if (this instanceof TerminalNode) {
-			terminals.add((TerminalNode<TYPE>) this);
+			terminals.add((TerminalNode) this);
 		} else {
 			for (int i=0; i<getArity(); i++) {
 				terminals.addAll(getChild(i).getTerminalNodes());
@@ -281,12 +281,12 @@ public abstract class Node<TYPE> implements Cloneable {
 	 */
 	public int getNoDistinctFunctions() {
 		// Get a list of functions.
-		List<FunctionNode<TYPE>> functions = getFunctionNodes();
+		List<FunctionNode> functions = getFunctionNodes();
 		
 		// Remove duplicates - where a duplicate is a function of the same type.
 		// We cannot use the FunctionNode's equals function because that will compare children too.
 		List<String> functionNames = new ArrayList<String>();
-		for (FunctionNode<TYPE> f: functions) {
+		for (FunctionNode f: functions) {
 			String name = f.getFunctionName();
 			if (!functionNames.contains(name)) {
 				functionNames.add(name);
@@ -302,15 +302,15 @@ public abstract class Node<TYPE> implements Cloneable {
 	 * 
 	 * @return a List of all the function nodes in the node tree.
 	 */
-	public List<FunctionNode<TYPE>> getFunctionNodes() {
+	public List<FunctionNode> getFunctionNodes() {
 		// Alternatively we could use an array, which is quicker/more efficient in this situation?
-		List<FunctionNode<TYPE>> functions = new ArrayList<FunctionNode<TYPE>>();
+		List<FunctionNode> functions = new ArrayList<FunctionNode>();
 		
 		if (this instanceof TerminalNode) {
 			// No more function nodes to count, return empty list.
 		} else {
 			if (this instanceof FunctionNode) {
-				functions.add((FunctionNode<TYPE>) this);
+				functions.add((FunctionNode) this);
 			}
 			for (int i=0; i<getArity(); i++) {
 				functions.addAll(getChild(i).getFunctionNodes());
@@ -333,7 +333,7 @@ public abstract class Node<TYPE> implements Cloneable {
 	 * A private helper function for getDepth() which recurses down the node 
 	 * tree to determine the deepest node's depth.
 	 */
-	private int countDepth(Node<TYPE> rootNode, int currentDepth, int depth) {
+	private int countDepth(Node rootNode, int currentDepth, int depth) {
 		// set current depth to maximum if need be
 		if(currentDepth>depth) {
 			depth = currentDepth;
@@ -342,7 +342,7 @@ public abstract class Node<TYPE> implements Cloneable {
 		int arity = rootNode.getArity();
 		if(arity>0) {
 			for(int i = 0; i<arity; i++) {
-				Node<TYPE> childNode = rootNode.getChild(i);
+				Node childNode = rootNode.getChild(i);
 				depth = countDepth(childNode, (currentDepth + 1), depth);
 			}
 		}
@@ -362,14 +362,14 @@ public abstract class Node<TYPE> implements Cloneable {
 	 * A private recursive helper function for getLength() which traverses the 
 	 * the node tree counting the number of nodes.
 	 */
-	private int countLength(Node<TYPE> rootNode, int length) {
+	private int countLength(Node rootNode, int length) {
 		// increment length and count through children
 		length++;
 		// get children and recurse
 		int arity = rootNode.getArity();
 		if(arity>0) {
 			for(int i = 0; i<arity; i++) {
-				Node<TYPE> childNode = rootNode.getChild(i);
+				Node childNode = rootNode.getChild(i);
 				length = countLength(childNode, length);
 			}
 		}
@@ -379,7 +379,7 @@ public abstract class Node<TYPE> implements Cloneable {
 	@Override
 	public int hashCode() {
 		int result = 17;
-		for (Node<TYPE> child: children) {
+		for (Node child: children) {
 			result = 37 * result + child.hashCode();
 		}
 		return result;
@@ -391,15 +391,15 @@ public abstract class Node<TYPE> implements Cloneable {
 	 * @return a copy of this Node.
 	 */
 	@Override
-	public Node<TYPE> clone() {
+	public Node clone() {
 		try {
-			Node<TYPE> clone = (Node<TYPE>) super.clone();
+			Node clone = (Node) super.clone();
 			
 			clone.children = this.children.clone();
 			for (int i=0; i<children.length; i++) {
 				clone.children[i] = this.children[i];
 				if (clone.children[i] != null)
-					clone.children[i] = (Node<TYPE>) clone.children[i].clone();
+					clone.children[i] = (Node) clone.children[i].clone();
 			}
 			
 			return clone;
@@ -427,15 +427,15 @@ public abstract class Node<TYPE> implements Cloneable {
 		boolean equal = true;
 		
 		if (obj instanceof Node) {
-			Node<TYPE> n = (Node<TYPE>) obj;
+			Node n = (Node) obj;
 			
 			if (n.getArity() != this.getArity()) {
 				equal = false;
 			}
 			
 			for(int i=0; i<n.getArity() && equal; i++) {
-				Node<TYPE> thatChild = n.getChild(i);
-				Node<TYPE> thisChild = this.getChild(i);
+				Node thatChild = n.getChild(i);
+				Node thisChild = this.getChild(i);
 				
 				if ((thisChild != null) ^ (thatChild != null)) {
 					equal = false;

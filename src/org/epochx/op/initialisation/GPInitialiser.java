@@ -31,7 +31,7 @@ import org.epochx.representation.*;
  * method is called towards the start of execution of a run to get the first 
  * population which will then be evolved.
  */
-public interface GPInitialiser<TYPE> extends Initialiser {
+public interface GPInitialiser extends Initialiser {
 
 	/**
 	 * Construct and return an initial population of CandidatePrograms.
@@ -41,6 +41,6 @@ public interface GPInitialiser<TYPE> extends Initialiser {
 	 * @return A List of newly generated CandidatePrograms which will form the 
 	 * initial population for a GP run.
 	 */
-	public List<GPCandidateProgram<TYPE>> getInitialPopulation();
+	public List<GPCandidateProgram> getInitialPopulation();
 	
 }

@@ -29,10 +29,10 @@ import org.epochx.representation.*;
  * Initialisation implementation which randomly grows program trees down to a 
  * maximum depth.
  */
-public class GrowInitialiser<TYPE> implements GPInitialiser<TYPE> {
+public class GrowInitialiser implements GPInitialiser {
 	
 	// The current controlling model.
-	private GPModel<TYPE> model;
+	private GPModel model;
 	
 	/**
 	 * Constructor for the grow initialiser.
@@ -40,7 +40,7 @@ public class GrowInitialiser<TYPE> implements GPInitialiser<TYPE> {
 	 * @param model The current controlling model. Run parameters such as the 
 	 * population size will be obtained from this.
 	 */
-	public GrowInitialiser(GPModel<TYPE> model) {
+	public GrowInitialiser(GPModel model) {
 		this.model = model;
 	}
 	
@@ -56,21 +56,21 @@ public class GrowInitialiser<TYPE> implements GPInitialiser<TYPE> {
 	 * initial population for a GP run.
 	 */
 	@Override
-	public List<GPCandidateProgram<TYPE>> getInitialPopulation() {
+	public List<GPCandidateProgram> getInitialPopulation() {
 		// Create population list to be populated.
 		int popSize = model.getPopulationSize();
-		List<GPCandidateProgram<TYPE>> firstGen = new ArrayList<GPCandidateProgram<TYPE>>(popSize);
+		List<GPCandidateProgram> firstGen = new ArrayList<GPCandidateProgram>(popSize);
 		
 		// Create and add new programs to the population.
 		for(int i=0; i<popSize; i++) {
-			GPCandidateProgram<TYPE> candidate;
+			GPCandidateProgram candidate;
 			
 			do {
 				// Grow a new node tree.
-				Node<TYPE> nodeTree = buildGrowNodeTree(model.getInitialMaxDepth());
+				Node nodeTree = buildGrowNodeTree(model.getInitialMaxDepth());
             	
 				// Create a program around the node tree.
-				candidate = new GPCandidateProgram<TYPE>(nodeTree, model);
+				candidate = new GPCandidateProgram(nodeTree, model);
 			} while (firstGen.contains(candidate));
             
 			// Must be unique - add to the new population.
@@ -89,10 +89,10 @@ public class GrowInitialiser<TYPE> implements GPInitialiser<TYPE> {
 	 * the depth is the number of nodes from the root.
 	 * @return The root node of a randomly generated node tree.
 	 */
-	public Node<TYPE> buildGrowNodeTree(int maxDepth) {		
+	public Node buildGrowNodeTree(int maxDepth) {		
 		// Randomly choose a root node.
 		int randomIndex = model.getRNG().nextInt(model.getSyntax().size());
-		Node<TYPE> root = (Node<TYPE>) model.getSyntax().get(randomIndex).clone();
+		Node root = (Node) model.getSyntax().get(randomIndex).clone();
         
 		// Populate the root node with grown children with maximum depth-1.
         this.fillChildren(root, 0, maxDepth);
@@ -104,14 +104,14 @@ public class GrowInitialiser<TYPE> implements GPInitialiser<TYPE> {
 	 * Recursively fill the children of a node, to construct a grown tree down
 	 * to at most a depth of maxDepth.
 	 */
-	private void fillChildren(Node<TYPE> currentNode, int currentDepth, int maxDepth) {
+	private void fillChildren(Node currentNode, int currentDepth, int maxDepth) {
 		int arity = currentNode.getArity();
 		if(arity > 0) {
 			if(currentDepth < maxDepth-1) {
 				// Not near the maximum depth yet, use functions OR terminals.
 				for(int i=0; i<arity; i++) {
 					int randomIndex = model.getRNG().nextInt(model.getSyntax().size());
-					Node<TYPE> child = (Node<TYPE>) model.getSyntax().get(randomIndex).clone();
+					Node child = (Node) model.getSyntax().get(randomIndex).clone();
 
 					currentNode.setChild(i, child);
 					this.fillChildren(child, (currentDepth+1), maxDepth);
@@ -120,7 +120,7 @@ public class GrowInitialiser<TYPE> implements GPInitialiser<TYPE> {
 				// At maximum depth-1, fill children with terminals.
 				for(int i=0; i<arity; i++) {
 					int randomIndex = model.getRNG().nextInt(model.getTerminals().size());
-					Node<TYPE> child = (Node<TYPE>) model.getTerminals().get(randomIndex).clone();
+					Node child = (Node) model.getTerminals().get(randomIndex).clone();
 					
 					currentNode.setChild(i, child);
 				}

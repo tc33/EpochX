@@ -25,14 +25,14 @@ package org.epochx.representation;
  * @see Node
  * @see TerminalNode
  */
-public abstract class FunctionNode<TYPE> extends Node<TYPE> {
+public abstract class FunctionNode extends Node {
 
 	/**
 	 * Constructor for function node with dynamic number of children 
 	 * depending on arity of function.
 	 * @param children the child nodes.
 	 */
-	public FunctionNode(Node<TYPE> ... children) {
+	public FunctionNode(Node ... children) {
 		super(children);
 	}
 	
@@ -55,9 +55,9 @@ public abstract class FunctionNode<TYPE> extends Node<TYPE> {
 	public String toString() {
 		StringBuilder builder = new StringBuilder(getFunctionName());
 		builder.append('(');
-		Node<TYPE>[] children = getChildren();
+		Node[] children = getChildren();
 		for (int i=0, n=children.length; i<n; i++) {
-			Node<TYPE> c = children[i];
+			Node c = children[i];
 			if (i!=0) builder.append(' ');
 			
 			if (c == null) {

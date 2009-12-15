@@ -24,7 +24,7 @@ package org.epochx.representation;
  * in place of a predefined constant. Variables can thus have their values 
  * changed which will change the result of evaluation.
  */
-public class Variable<TYPE> extends TerminalNode<TYPE> {
+public class Variable extends TerminalNode {
 
 	// The name of the variable.
 	private String label;
@@ -85,7 +85,7 @@ public class Variable<TYPE> extends TerminalNode<TYPE> {
 	public boolean equals(Object obj) {
 		return (obj instanceof Variable) 
 					&& super.equals(obj) 
-					&& this.label.equals(((Variable<TYPE>) obj).label);
+					&& this.label.equals(((Variable) obj).label);
 	}
 	
 	/**
@@ -97,7 +97,7 @@ public class Variable<TYPE> extends TerminalNode<TYPE> {
 	 * @return this instance of Variable.
 	 */
 	@Override
-	public Object clone() {
+	public Variable clone() {
 		return this;
 	}
 }

@@ -43,18 +43,15 @@ import org.epochx.tools.random.*;
  * 
  * @see GPModel
  */
-public abstract class GPAbstractModel<TYPE> extends AbstractModel
-											implements GPModel<TYPE> {
+public abstract class GPAbstractModel extends AbstractModel implements GPModel {
 
 	private int maxInitialDepth;
 	private int maxProgramDepth;
 	
 	// Run components.
-	private GPInitialiser<TYPE> gPInitialiser;
-	private GPCrossover<TYPE> gPCrossover;
-	private GPMutation<TYPE> mutator;
-	private GPPoolSelector<TYPE> gPPoolSelector;
-	private GPProgramSelector<TYPE> gPProgramSelector;
+	private GPInitialiser initialiser;
+	private GPCrossover crossover;
+	private GPMutation mutator;
 	private RandomNumberGenerator randomNumberGenerator;
 	
 	/**
@@ -67,11 +64,9 @@ public abstract class GPAbstractModel<TYPE> extends AbstractModel
 		maxProgramDepth = 17;
 		
 		// Initialise components.
-		gPProgramSelector = new RandomSelector<TYPE>(this);
-		gPPoolSelector = new TournamentSelector<TYPE>(this, 3);
-		gPInitialiser = new FullInitialiser<TYPE>(this);
-		gPCrossover = new UniformPointCrossover<TYPE>(this);
-		mutator = new SubtreeMutation<TYPE>(this);
+		initialiser = new FullInitialiser(this);
+		crossover = new UniformPointCrossover(this);
+		mutator = new SubtreeMutation(this);
 		randomNumberGenerator = new MersenneTwisterFast();
 	}
 
@@ -83,18 +78,18 @@ public abstract class GPAbstractModel<TYPE> extends AbstractModel
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public GPInitialiser<TYPE> getInitialiser() {
-		return gPInitialiser;
+	public GPInitialiser getInitialiser() {
+		return initialiser;
 	}
 
 	/**
-	 * Overwrites the default gPInitialiser.
+	 * Overwrites the default initialiser.
 	 * 
-	 * @param gPInitialiser the new GPInitialiser to use when generating the 
+	 * @param initialiser the new GPInitialiser to use when generating the 
 	 * 		 			  starting population.
 	 */
-	public void setInitialiser(GPInitialiser<TYPE> initialiser) {
-		this.gPInitialiser = initialiser;
+	public void setInitialiser(GPInitialiser initialiser) {
+		this.initialiser = initialiser;
 	}
 
 	/**
@@ -105,17 +100,17 @@ public abstract class GPAbstractModel<TYPE> extends AbstractModel
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public GPCrossover<TYPE> getCrossover() {
-		return gPCrossover;
+	public GPCrossover getCrossover() {
+		return crossover;
 	}
 
 	/**
-	 * Overwrites the default gPCrossover operator.
+	 * Overwrites the default crossover operator.
 	 * 
-	 * @param gPCrossover the gPCrossover to set
+	 * @param crossover the crossover to set
 	 */
-	public void setCrossover(GPCrossover<TYPE> crossover) {
-		this.gPCrossover = crossover;
+	public void setCrossover(GPCrossover crossover) {
+		this.crossover = crossover;
 	}
 
 	/**
@@ -126,7 +121,7 @@ public abstract class GPAbstractModel<TYPE> extends AbstractModel
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public GPMutation<TYPE> getMutation() {
+	public GPMutation getMutation() {
 		return mutator;
 	}
 
@@ -135,7 +130,7 @@ public abstract class GPAbstractModel<TYPE> extends AbstractModel
 	 * 
 	 * @param mutator the mutator to set.
 	 */
-	public void setMutator(GPMutation<TYPE> mutator) {
+	public void setMutator(GPMutation mutator) {
 		this.mutator = mutator;
 	}
 
@@ -147,7 +142,7 @@ public abstract class GPAbstractModel<TYPE> extends AbstractModel
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public GPProgramSelector<TYPE> getProgramSelector() {
+	public GPProgramSelector getProgramSelector() {
 		return gPProgramSelector;
 	}
 
@@ -158,7 +153,7 @@ public abstract class GPAbstractModel<TYPE> extends AbstractModel
 	 * @param gPProgramSelector the new GPProgramSelector to be used when selecting 
 	 * 						 parents for a genetic operator.
 	 */
-	public void setProgramSelector(GPProgramSelector<TYPE> programSelector) {
+	public void setProgramSelector(GPProgramSelector programSelector) {
 		this.gPProgramSelector = programSelector;
 	}
 
@@ -171,7 +166,7 @@ public abstract class GPAbstractModel<TYPE> extends AbstractModel
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public GPPoolSelector<TYPE> getPoolSelector() {
+	public GPPoolSelector getPoolSelector() {
 		return gPPoolSelector;
 	}
 
@@ -181,7 +176,7 @@ public abstract class GPAbstractModel<TYPE> extends AbstractModel
 	 * @param gPPoolSelector the new GPPoolSelector to be used when building a 
 	 * 						breeding pool.
 	 */
-	public void setPoolSelector(GPPoolSelector<TYPE> poolSelector) {
+	public void setPoolSelector(GPPoolSelector poolSelector) {
 		this.gPPoolSelector = poolSelector;
 	}
 
@@ -191,8 +186,8 @@ public abstract class GPAbstractModel<TYPE> extends AbstractModel
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public List<Node<TYPE>> getSyntax() {
-		List<Node<TYPE>> syntax = new ArrayList<Node<TYPE>>(getTerminals());
+	public List<Node> getSyntax() {
+		List<Node> syntax = new ArrayList<Node>(getTerminals());
 		syntax.addAll(getFunctions());
 		
 		return syntax;
@@ -274,11 +269,11 @@ public abstract class GPAbstractModel<TYPE> extends AbstractModel
 	 * 				  children.
 	 * @param children The children that resulted from the parents being 
 	 * 				   crossed over.
-	 * @return True if the gPCrossover operation should proceed, false if it is 
+	 * @return True if the crossover operation should proceed, false if it is 
 	 * 		   rejected and should be retried with new parents.
 	 */
-	public boolean acceptCrossover(GPCandidateProgram<TYPE>[] parents, 
-								   GPCandidateProgram<TYPE>[] children) {
+	public boolean acceptCrossover(GPCandidateProgram[] parents, 
+								   GPCandidateProgram[] children) {
 		return true;
 	}
 
@@ -291,8 +286,8 @@ public abstract class GPAbstractModel<TYPE> extends AbstractModel
 	 * @return True if the mutation operation should proceed, false if it is 
 	 * rejected and should be retried with a new parent.
 	 */
-	public boolean acceptMutation(GPCandidateProgram<TYPE> parent, 
-								  GPCandidateProgram<TYPE> child) {
+	public boolean acceptMutation(GPCandidateProgram parent, 
+								  GPCandidateProgram child) {
 		return true;
 	}
 

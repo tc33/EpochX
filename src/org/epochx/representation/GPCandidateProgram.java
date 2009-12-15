@@ -33,13 +33,13 @@ import org.epochx.core.*;
  * nodes recursively down the tree. As well as the program tree itself, each 
  * GPCandidateProgram allows the retrieval of meta-data about the program.
  */
-public class GPCandidateProgram<TYPE> extends CandidateProgram {
+public class GPCandidateProgram extends CandidateProgram {
 	
 	// The root node of the program tree.
-	private Node<TYPE> rootNode;
+	private Node rootNode;
 	
 	// The controlling model.
-	private GPModel<TYPE> model;
+	private GPModel model;
 	
 	/**
 	 * Constructs a new program individual where <code>rootNode</code> is the 
@@ -51,7 +51,7 @@ public class GPCandidateProgram<TYPE> extends CandidateProgram {
 	 * @param model the controlling model which provides the configuration 
 	 * 				parameters for the run. 				
 	 */
-	public GPCandidateProgram(Node<TYPE> rootNode, GPModel<TYPE> model) {
+	public GPCandidateProgram(Node rootNode, GPModel model) {
 		this.model = model;
 		this.rootNode = rootNode;
 	}
@@ -71,7 +71,7 @@ public class GPCandidateProgram<TYPE> extends CandidateProgram {
 	 * 
 	 * @return The root node of the node tree.
 	 */
-	public Node<TYPE> getRootNode() {
+	public Node getRootNode() {
 		return rootNode;
 	}
 	
@@ -83,7 +83,7 @@ public class GPCandidateProgram<TYPE> extends CandidateProgram {
 	 * @param n The index of the node required. Indexes are from zero.
 	 * @return The node at the specified index.
 	 */
-	public Node<TYPE> getNthNode(int n) {
+	public Node getNthNode(int n) {
 		int size = getProgramLength();
 		
 		if(n >= size)
@@ -99,10 +99,10 @@ public class GPCandidateProgram<TYPE> extends CandidateProgram {
 	 * @param n	index of the node to replace.
 	 * @param newNode node to be set at the specified position.
 	 */
-	public void setNthNode(int n, Node<TYPE> newNode) {
+	public void setNthNode(int n, Node newNode) {
 		if (n == 0) {
-			// Need to test is of type <TYPE> somehow really.
-			rootNode = (Node<TYPE>) newNode;
+			// Need to test is of type  somehow really.
+			rootNode = (Node) newNode;
 		}
 		
 		// Check the index is within bounds.
@@ -119,7 +119,7 @@ public class GPCandidateProgram<TYPE> extends CandidateProgram {
 	 * @param depth the specified depth of the nodes.
 	 * @return a List of all the nodes at the specified depth.
 	 */
-	public List<Node<TYPE>> getNodesAtDepth(int depth) {
+	public List<Node> getNodesAtDepth(int depth) {
 		return rootNode.getNodesAtDepth(depth);
 	}
 	
@@ -239,14 +239,14 @@ public class GPCandidateProgram<TYPE> extends CandidateProgram {
 	 * @return a clone of this GPCandidateProgram instance.
 	 */
 	@Override
-	public GPCandidateProgram<TYPE> clone() {
-		GPCandidateProgram<TYPE> clone = (GPCandidateProgram<TYPE>) super.clone();
+	public GPCandidateProgram clone() {
+		GPCandidateProgram clone = (GPCandidateProgram) super.clone();
 		
 		// Deep copy node tree.
 		if (this.rootNode == null) {
 			clone.rootNode = null;
 		} else {
-			clone.rootNode = (Node<TYPE>) this.rootNode.clone();
+			clone.rootNode = (Node) this.rootNode.clone();
 		}
 			
 		// Shallow copy the model.
@@ -277,7 +277,7 @@ public class GPCandidateProgram<TYPE> extends CandidateProgram {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		return rootNode.equals(((GPCandidateProgram<TYPE>) obj).rootNode);
+		return rootNode.equals(((GPCandidateProgram) obj).rootNode);
 	}
 
 }

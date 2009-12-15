@@ -34,10 +34,10 @@ import org.epochx.representation.*;
  * replacement node is selected from the full syntax (function and terminal 
  * sets), at random.
  */
-public class PointMutation<TYPE> extends GPMutation<TYPE> {
+public class PointMutation extends GPMutation {
 
 	// The current controlling model.
-	private GPModel<TYPE> model;
+	private GPModel model;
 	
 	// The probability that each node has of being mutated.
 	private double pointProbability;
@@ -50,7 +50,7 @@ public class PointMutation<TYPE> extends GPMutation<TYPE> {
 	 * @param model The current controlling model. Parameters such as full 
 	 * 				syntax will be obtained from this.
 	 */
-	public PointMutation(GPModel<TYPE> model) {
+	public PointMutation(GPModel model) {
 		this(model, 0.01);
 	}
 	
@@ -64,7 +64,7 @@ public class PointMutation<TYPE> extends GPMutation<TYPE> {
 	 * changed, and 0.0 would mean no nodes were changed. A typical value 
 	 * would be 0.01.
 	 */
-	public PointMutation(GPModel<TYPE> model, double pointProbability) {
+	public PointMutation(GPModel model, double pointProbability) {
 		this.model = model;
 		this.pointProbability = pointProbability;
 	}
@@ -82,9 +82,9 @@ public class PointMutation<TYPE> extends GPMutation<TYPE> {
 	 * the provided GPCandidateProgram.
 	 */
 	@Override
-	public GPCandidateProgram<TYPE> mutate(GPCandidateProgram<TYPE> program) {
+	public GPCandidateProgram mutate(GPCandidateProgram program) {
 		// Get the syntax from which new nodes will be chosen.
-		List<Node<TYPE>> syntax = model.getSyntax();
+		List<Node> syntax = model.getSyntax();
 		
 		// Iterate over each node in the program tree.
 		int length = program.getProgramLength();
@@ -92,17 +92,17 @@ public class PointMutation<TYPE> extends GPMutation<TYPE> {
 			// Only change pointProbability of the time.
 			if (model.getRNG().nextDouble() < pointProbability) {
 				// Get the arity of the ith node of the program.
-				Node<TYPE> node = (Node<TYPE>) program.getNthNode(i);
+				Node node = (Node) program.getNthNode(i);
 				int arity = node.getArity();
 				
 				// Find a different function/terminal with same arity - start from random position.
 				int rand = model.getRNG().nextInt(syntax.size());
 				for (int j=0; j<syntax.size(); j++) {
 					int index = (j + rand) % syntax.size();
-					Node<TYPE> n = syntax.get(index);
+					Node n = syntax.get(index);
 					
 					if ((n.getArity() == arity) && !nodesEqual(node, n)) {						
-						n = (Node<TYPE>) n.clone();
+						n = (Node) n.clone();
 						
 						// Attach the old node's children.
 						for (int k=0; k<arity; k++) {
@@ -127,7 +127,7 @@ public class PointMutation<TYPE> extends GPMutation<TYPE> {
 	 * equals() method because we don't want to compare children if it's a 
 	 * function node.
 	 */
-	private boolean nodesEqual(Node<TYPE> nodeA, Node<TYPE> nodeB) {
+	private boolean nodesEqual(Node nodeA, Node nodeB) {
 		boolean equal = false;
 		
 		// Check they're the same type first.
@@ -136,7 +136,7 @@ public class PointMutation<TYPE> extends GPMutation<TYPE> {
 				// They're both the same function type.
 				equal = true;
 			} else if (nodeA instanceof TerminalNode) {
-				equal = ((TerminalNode<TYPE>) nodeA).equals(nodeB);
+				equal = ((TerminalNode) nodeA).equals(nodeB);
 			} else {
 				// Unknown node type - somethings gone wrong.
 			}

@@ -31,7 +31,7 @@ import org.epochx.tools.ant.Ant;
  * The function parser can parse a nested function into a node tree. It can 
  * only parse those functions that it knows about.
  */
-public class FunctionParser<TYPE> {
+public class FunctionParser {
 	
 	// This map is to contain only simple functions that require no additional info.
 	private final Map<String, Class<?>> simpleFunctions;
@@ -40,7 +40,7 @@ public class FunctionParser<TYPE> {
 	private final Map<String, Class<?>> simpleActions;
 	
 	// List of variables to be used, any variables found, not provided will be created.
-	private List<Variable<TYPE>> variables;
+	private List<Variable> variables;
 	
 	// An ant which we may need to use in some function creations - lazily created.
 	private Ant ant;
@@ -67,7 +67,7 @@ public class FunctionParser<TYPE> {
 	             					  "[\\x00-\\x20]*");
 	
 	public FunctionParser() {
-		variables = new ArrayList<Variable<TYPE>>();
+		variables = new ArrayList<Variable>();
 		simpleFunctions = new HashMap<String, Class<?>>();
 		simpleActions = new HashMap<String, Class<?>>();
 		
@@ -186,7 +186,7 @@ public class FunctionParser<TYPE> {
 		return node;
 	}
 	
-	public Node<TYPE> parse(String source) {
+	public Node parse(String source) {
 		if (source == null) {
 			return null;
 		}
@@ -197,7 +197,7 @@ public class FunctionParser<TYPE> {
 		// If there is no bracket then it must be a terminal.
 		if (openingBracket == -1) {
 			// This will blow up here if the data-type of the terminal did not match TYPE.
-			return (Node<TYPE>) parseTerminal(source);
+			return (Node) parseTerminal(source);
 		} else {
 			// Get the name of the function.
 			String functionName = source.substring(0, openingBracket);
@@ -208,11 +208,11 @@ public class FunctionParser<TYPE> {
 			// Separate the arguments.
 			List<String> args = splitArguments(argumentStr);
 			
-			Node<TYPE> node = null;
+			Node node = null;
 			if (args.size() == 0) {
-				node = (Node<TYPE>) initialiseAction(functionName);
+				node = (Node) initialiseAction(functionName);
 			} else {
-				node = (Node<TYPE>) initialiseFunction(functionName);
+				node = (Node) initialiseFunction(functionName);
 			}
 			
 			// Check the arities match.
@@ -248,7 +248,7 @@ public class FunctionParser<TYPE> {
 			return new TerminalNode<Boolean>(Boolean.valueOf(terminalStr));
 		} else {
 			// Must be a variable.
-			for (Variable<TYPE> v: variables) {
+			for (Variable v: variables) {
 				if (v.getLabel().equals(terminalStr)) {
 					return v;
 				}
@@ -267,11 +267,11 @@ public class FunctionParser<TYPE> {
 		simpleActions.put(name, actionClass);
 	}
 	
-	public void setAvailableVariables(List<Variable<TYPE>> variables) {
+	public void setAvailableVariables(List<Variable> variables) {
 		this.variables = variables;
 	}
 	
-	public void addAvailableVariable(Variable<TYPE> variable) {
+	public void addAvailableVariable(Variable variable) {
 		variables.add(variable);
 	}
 	

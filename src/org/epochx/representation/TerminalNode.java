@@ -22,7 +22,7 @@ package org.epochx.representation;
 /**
  * Defines a terminal node.
  */
-public class TerminalNode<TYPE> extends Node<TYPE> {
+public class TerminalNode extends Node {
 
 	private TYPE value;
 	
@@ -83,8 +83,8 @@ public class TerminalNode<TYPE> extends Node<TYPE> {
 	 * @return a copy of this TerminalNode.
 	 */
 	@Override
-	public Object clone() {
-		TerminalNode<TYPE> clone = (TerminalNode<TYPE>) super.clone();
+	public TerminalNode clone() {
+		TerminalNode clone = (TerminalNode) super.clone();
 		
 		clone.value = this.value;
 
@@ -103,7 +103,7 @@ public class TerminalNode<TYPE> extends Node<TYPE> {
 		boolean inst = (obj instanceof TerminalNode);
 		if (!inst)
 			return false;
-		TYPE objVal = ((TerminalNode<TYPE>) obj).value;
+		TYPE objVal = ((TerminalNode) obj).value;
 		TYPE thisVal = this.value;
 		
 		if ((objVal == null) ^ (thisVal == null)) {

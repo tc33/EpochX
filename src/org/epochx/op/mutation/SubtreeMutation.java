@@ -30,10 +30,10 @@ import org.epochx.representation.*;
  * the node at that point is replaced with a newly generated program tree, 
  * which is created using a grow strategy.
  */
-public class SubtreeMutation<TYPE> extends GPMutation<TYPE> {
+public class SubtreeMutation extends GPMutation {
 
 	// The current controlling model.
-	private GPModel<TYPE> model;
+	private GPModel model;
 	
 	// The maximum depth of the new subtree.
 	private int maxSubtreeDepth;
@@ -45,7 +45,7 @@ public class SubtreeMutation<TYPE> extends GPMutation<TYPE> {
 	 * @param model The controlling model which provides any configuration 
 	 * parameters for the run.
 	 */
-	public SubtreeMutation(GPModel<TYPE> model) {
+	public SubtreeMutation(GPModel model) {
 		// 4 is a slightly arbitrary choice but we had to choose something.
 		this(model, 4);
 	}
@@ -58,7 +58,7 @@ public class SubtreeMutation<TYPE> extends GPMutation<TYPE> {
 	 * parameters for the run.
 	 * @param maxSubtreeDepth The maximum depth of the inserted subtree.
 	 */
-	public SubtreeMutation(GPModel<TYPE> model, int maxSubtreeDepth) {
+	public SubtreeMutation(GPModel model, int maxSubtreeDepth) {
 		this.model = model;
 		this.maxSubtreeDepth = maxSubtreeDepth;
 	}
@@ -75,14 +75,14 @@ public class SubtreeMutation<TYPE> extends GPMutation<TYPE> {
 	 * the provided GPCandidateProgram.
 	 */
 	@Override
-	public GPCandidateProgram<TYPE> mutate(GPCandidateProgram<TYPE> program) {
+	public GPCandidateProgram mutate(GPCandidateProgram program) {
 		// Randonly choose a mutation point.
 		int length = program.getProgramLength();
 		int mutationPoint = model.getRNG().nextInt(length);
 		
 		// Grow a new subtree using the GrowInitialiser.
-		GrowInitialiser<TYPE> init = new GrowInitialiser<TYPE>(model);
-		Node<TYPE> subtree = init.buildGrowNodeTree(maxSubtreeDepth);
+		GrowInitialiser init = new GrowInitialiser(model);
+		Node subtree = init.buildGrowNodeTree(maxSubtreeDepth);
 		
 		// Set the new subtree.
 		program.setNthNode(mutationPoint, subtree);

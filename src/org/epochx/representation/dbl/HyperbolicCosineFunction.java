@@ -25,7 +25,7 @@ import org.epochx.representation.*;
  * A <code>FunctionNode</code> which performs the hyperbolic trigonometric 
  * function of hyperbolic cosine.
  */
-public class HyperbolicCosineFunction extends FunctionNode<Double> {
+public class HyperbolicCosineFunction extends DoubleNode {
 
 	/**
 	 * Construct a HyperbolicCosineFunction with no children.
@@ -39,7 +39,7 @@ public class HyperbolicCosineFunction extends FunctionNode<Double> {
 	 * child will first be evaluated with hyperbolic cosine performed on the result.
 	 * @param child The child which hyperbolic cosine will be performed on.
 	 */
-	public HyperbolicCosineFunction(Node<Double> child) {
+	public HyperbolicCosineFunction(DoubleNode child) {
 		super(child);
 	}
 
@@ -59,7 +59,7 @@ public class HyperbolicCosineFunction extends FunctionNode<Double> {
 	 * @return the unique name for the HyperbolicCosineFunction which is COSH.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "COSH";
 	}
 }

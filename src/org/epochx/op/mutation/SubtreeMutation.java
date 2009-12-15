@@ -30,7 +30,7 @@ import org.epochx.representation.*;
  * the node at that point is replaced with a newly generated program tree, 
  * which is created using a grow strategy.
  */
-public class SubtreeMutation extends GPMutation {
+public class SubtreeMutation implements GPMutation {
 
 	// The current controlling model.
 	private GPModel model;
@@ -75,7 +75,9 @@ public class SubtreeMutation extends GPMutation {
 	 * the provided GPCandidateProgram.
 	 */
 	@Override
-	public GPCandidateProgram mutate(GPCandidateProgram program) {
+	public GPCandidateProgram mutate(CandidateProgram p) {
+		GPCandidateProgram program = (GPCandidateProgram) p;
+		
 		// Randonly choose a mutation point.
 		int length = program.getProgramLength();
 		int mutationPoint = model.getRNG().nextInt(length);

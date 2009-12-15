@@ -62,8 +62,8 @@ public class UniformPointCrossover implements GPCrossover, GenerationListener {
 		int swapPoint2 = rng.nextInt(program2.getProgramLength());
 
 		// Get copies of subtrees to swap.
-		Node<?> subTree1 = (Node<?>) program1.getNthNode(swapPoint1);//.clone();
-		Node<?> subTree2 = (Node<?>) program2.getNthNode(swapPoint2);//.clone();
+		Node subTree1 = program1.getNthNode(swapPoint1);//.clone();
+		Node subTree2 = program2.getNthNode(swapPoint2);//.clone();
 		
 		// Perform swap.
 		program1.setNthNode(swapPoint1, subTree2);

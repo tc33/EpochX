@@ -28,7 +28,7 @@ import org.epochx.representation.*;
  * argument or not, respectively. However, to satisfy the closure principle 
  * this implementation returns +1 for true or -1 for false.
  */
-public class LessThanFunction extends FunctionNode<Double> {
+public class LessThanFunction extends DoubleNode {
 
 	/**
 	 * Construct a LessThanFunction with no children.
@@ -47,7 +47,7 @@ public class LessThanFunction extends FunctionNode<Double> {
 	 * @param child2 The second child which the first child is being tested 
 	 * against.
 	 */
-	public LessThanFunction(Node<Double> child1, Node<Double> child2) {
+	public LessThanFunction(DoubleNode child1, DoubleNode child2) {
 		super(child1, child2);
 	}
 
@@ -59,8 +59,8 @@ public class LessThanFunction extends FunctionNode<Double> {
 	 */
 	@Override
 	public Double evaluate() {
-		double value1 = getChild(0).evaluate();
-		double value2 = getChild(1).evaluate();
+		double value1 = (Double) getChild(0).evaluate();
+		double value2 = (Double) getChild(1).evaluate();
 
 		return (value1 > value2) ? +1.0 : -1.0;
 	}
@@ -70,7 +70,7 @@ public class LessThanFunction extends FunctionNode<Double> {
 	 * @return the unique name for the LessThanFunction which is LT.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "LT";
 	}
 

@@ -25,7 +25,7 @@ import org.epochx.representation.*;
  * 
  * 
  */
-public class AbsoluteFunction extends FunctionNode<Double> {
+public class AbsoluteFunction extends DoubleNode {
 
 	/**
 	 * Construct an AbsoluteFunction with no children.
@@ -37,7 +37,7 @@ public class AbsoluteFunction extends FunctionNode<Double> {
 	/**
 	 * 
 	 */
-	public AbsoluteFunction(Node<Double> child) {
+	public AbsoluteFunction(DoubleNode child) {
 		super(child);
 	}
 
@@ -46,7 +46,7 @@ public class AbsoluteFunction extends FunctionNode<Double> {
 	 */
 	@Override
 	public Double evaluate() {
-		double value = getChild(0).evaluate();
+		double value = (Double) getChild(0).evaluate();
 
 		return Math.abs(value);
 	}
@@ -56,7 +56,7 @@ public class AbsoluteFunction extends FunctionNode<Double> {
 	 * @return the unique name for the AbsoluteFunction which is ABS.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "ABS";
 	}
 

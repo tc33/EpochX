@@ -25,7 +25,7 @@ import org.epochx.representation.*;
  * A <code>FunctionNode</code> which performs the mathematical function of cube 
  * root.
  */
-public class CubeRootFunction extends FunctionNode<Double> {
+public class CubeRootFunction extends DoubleNode {
 
 	/**
 	 * Construct a CubeRootFunction with no children.
@@ -39,7 +39,7 @@ public class CubeRootFunction extends FunctionNode<Double> {
 	 * be first evaluated, with the result cube-rooted.
 	 * @param child The child which cube root will be performed on.
 	 */
-	public CubeRootFunction(Node<Double> child) {
+	public CubeRootFunction(DoubleNode child) {
 		super(child);
 	}
 
@@ -59,7 +59,7 @@ public class CubeRootFunction extends FunctionNode<Double> {
 	 * @return the unique name for the CubeRootFunction which is CBRT.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "CBRT";
 	}
 }

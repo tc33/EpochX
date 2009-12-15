@@ -19,14 +19,14 @@
  */
 package org.epochx.representation.ant;
 
-import org.epochx.representation.Action;
+import org.epochx.representation.*;
 import org.epochx.tools.ant.Ant;
 
 /**
  * This class defines an action which when executed will trigger the ant 
  * to turn right from its current orientation in its ant landscape.
  */
-public class AntTurnRightAction extends Action {
+public class AntTurnRightAction extends VoidNode {
 
 	private Ant ant;
 	
@@ -42,12 +42,12 @@ public class AntTurnRightAction extends Action {
 	}
 	
 	@Override
-	public String getActionName() {
+	public String getIdentifier() {
 		return "TURN-RIGHT";
 	}
 
 	@Override
-	public Object evaluate() {
+	public Void evaluate() {
 		ant.turnRight();
 		
 		return null;

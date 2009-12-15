@@ -25,7 +25,7 @@ import org.epochx.representation.*;
  * A <code>FunctionNode</code> which performs the trigonometric function of 
  * cosine.
  */
-public class CosineFunction extends FunctionNode<Double> {
+public class CosineFunction extends DoubleNode {
 
 	/**
 	 * Construct a CosineFunction with no children.
@@ -39,7 +39,7 @@ public class CosineFunction extends FunctionNode<Double> {
 	 * will be evaluated with cosine performed on the result.
 	 * @param child The child which cosine will be performed on.
 	 */
-	public CosineFunction(Node<Double> child) {
+	public CosineFunction(DoubleNode child) {
 		super(child);
 	}
 
@@ -59,7 +59,7 @@ public class CosineFunction extends FunctionNode<Double> {
 	 * @return the unique name for the CosineFunction which is COS.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "COS";
 	}
 }

@@ -27,7 +27,7 @@ import org.epochx.representation.*;
  * by zero is attempted - which is undefined. Division by zero evaluates to 
  * zero.
  */
-public class ProtectedDivisionFunction extends FunctionNode<Double> {
+public class ProtectedDivisionFunction extends DoubleNode {
 	
 	private Double protectionValue;
 	
@@ -61,7 +61,7 @@ public class ProtectedDivisionFunction extends FunctionNode<Double> {
 	 * @param dividend The first child node - the dividend.
 	 * @param divisor The second child node - the divisor.
 	 */
-	public ProtectedDivisionFunction(Node<Double> dividend, Node<Double> divisor) {
+	public ProtectedDivisionFunction(DoubleNode dividend, DoubleNode divisor) {
 		this(dividend, divisor, 0.0);
 	}
 	
@@ -77,7 +77,7 @@ public class ProtectedDivisionFunction extends FunctionNode<Double> {
 	 * @param protectionValue a double value to return in the case of 
 	 * 					      divide-by-zeros.
 	 */
-	public ProtectedDivisionFunction(Node<Double> dividend, Node<Double> divisor, Double protectionValue) {
+	public ProtectedDivisionFunction(DoubleNode dividend, DoubleNode divisor, Double protectionValue) {
 		super(dividend, divisor);
 		
 		this.protectionValue = protectionValue;
@@ -105,7 +105,7 @@ public class ProtectedDivisionFunction extends FunctionNode<Double> {
 	 * @return the unique name for the ProtectedDivisionFunction which is PDIV.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "PDIV";
 	}
 }

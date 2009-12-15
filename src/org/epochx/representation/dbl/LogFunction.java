@@ -25,7 +25,7 @@ import org.epochx.representation.*;
  * A <code>FunctionNode</code> which performs the natural (base e) logarithm.
  * @see Log10Function
  */
-public class LogFunction extends FunctionNode<Double> {
+public class LogFunction extends DoubleNode {
 	
 	/**
 	 * Construct a LogFunction with no children.
@@ -39,7 +39,7 @@ public class LogFunction extends FunctionNode<Double> {
 	 * of the evaluated child will be calculated.
 	 * @param child The child of which the base e logarithm will be calculated.
 	 */
-	public LogFunction(Node<Double> child) {
+	public LogFunction(DoubleNode child) {
 		super(child);
 	}
 
@@ -59,7 +59,7 @@ public class LogFunction extends FunctionNode<Double> {
 	 * @return the unique name for the LogFunction which is LN.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "LN";
 	}
 }

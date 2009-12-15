@@ -25,7 +25,7 @@ import org.epochx.representation.*;
  * A <code>FunctionNode</code> which performs logical conjunction or the 
  * boolean function of AND.
  */
-public class AndFunction extends FunctionNode<Boolean> {
+public class AndFunction extends BooleanNode {
 	
 	/**
 	 * Construct an AndFunction with no children.
@@ -41,7 +41,7 @@ public class AndFunction extends FunctionNode<Boolean> {
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
 	 */
-	public AndFunction(Node<Boolean> child1, Node<Boolean> child2) {
+	public AndFunction(BooleanNode child1, BooleanNode child2) {
 		super(child1, child2);
 	}
 	
@@ -64,7 +64,7 @@ public class AndFunction extends FunctionNode<Boolean> {
 	 * @return the unique name for the AndFunction which is AND.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "AND";
 	}
 }

@@ -42,7 +42,7 @@ public abstract class FunctionNode extends Node {
 	 * 
 	 * @return a unique function name.
 	 */
-	public abstract String getFunctionName();
+	public abstract String getIdentifier();
 	
 	/**
 	 * Returns a string representation of the function node. Since the function 
@@ -53,7 +53,7 @@ public abstract class FunctionNode extends Node {
 	 */
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder(getFunctionName());
+		StringBuilder builder = new StringBuilder(getIdentifier());
 		builder.append('(');
 		Node[] children = getChildren();
 		for (int i=0, n=children.length; i<n; i++) {

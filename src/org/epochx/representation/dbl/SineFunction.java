@@ -25,7 +25,7 @@ import org.epochx.representation.*;
  * A <code>FunctionNode</code> which performs the trigonometric function of 
  * sine.
  */
-public class SineFunction extends FunctionNode<Double> {
+public class SineFunction extends DoubleNode {
 
 	/**
 	 * Construct a SineFunction with no children.
@@ -39,7 +39,7 @@ public class SineFunction extends FunctionNode<Double> {
 	 * will be evaluated with sine performed on the result.
 	 * @param child The child which sine will be performed on.
 	 */
-	public SineFunction(Node<Double> child) {
+	public SineFunction(DoubleNode child) {
 		super(child);
 	}
 
@@ -59,7 +59,7 @@ public class SineFunction extends FunctionNode<Double> {
 	 * @return the unique name for the SineFunction which is SIN.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "SIN";
 	}
 }

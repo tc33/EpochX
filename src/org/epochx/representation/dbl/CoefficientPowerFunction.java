@@ -30,7 +30,7 @@ import org.epochx.representation.*;
  *    3x^2, which is equivalent to 3*(x^2)
  *    CVP 3 x 2, which is equivalent to MUL(POW x 2)
  */
-public class CoefficientPowerFunction extends FunctionNode<Double> {
+public class CoefficientPowerFunction extends DoubleNode {
 
 	/**
 	 * Construct an CoefficientPowerFunction with no children.
@@ -49,7 +49,7 @@ public class CoefficientPowerFunction extends FunctionNode<Double> {
 	 * the coefficient.
 	 * @param exponent the power the term will be raised to.
 	 */
-	public CoefficientPowerFunction(Node<Double> coefficient, Node<Double> term, Node<Double> exponent) {
+	public CoefficientPowerFunction(DoubleNode coefficient, DoubleNode term, DoubleNode exponent) {
 		super(coefficient, term, exponent);
 	}
 
@@ -73,7 +73,7 @@ public class CoefficientPowerFunction extends FunctionNode<Double> {
 	 * @return the unique name for the CoefficientPowerFunction which is CVP.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "CVP";
 	}
 }

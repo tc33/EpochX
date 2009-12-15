@@ -26,7 +26,7 @@ import org.epochx.representation.*;
  * that is - raising to the third power. It is equivalent to the 
  * <code>PowerFunction</code> where the second child is the double literal 3.0.
  */
-public class CubeFunction extends FunctionNode<Double> {
+public class CubeFunction extends DoubleNode {
 
 	/**
 	 * Construct a CubeFunction with no children.
@@ -40,7 +40,7 @@ public class CubeFunction extends FunctionNode<Double> {
 	 * be evaluated with the result then raised to the power of 3.
 	 * @param child The child which will be cubed.
 	 */
-	public CubeFunction(Node<Double> child) {
+	public CubeFunction(DoubleNode child) {
 		super(child);
 	}
 
@@ -60,7 +60,7 @@ public class CubeFunction extends FunctionNode<Double> {
 	 * @return the unique name for the CubeFunction which is CUBE.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "CUBE";
 	}
 }

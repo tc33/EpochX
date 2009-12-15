@@ -26,7 +26,7 @@ import org.epochx.representation.*;
  * of determining which of 2 numbers is larger, as per the boolean greater-than
  * function.
  */
-public class MaxFunction extends FunctionNode<Double> {
+public class MaxFunction extends DoubleNode {
 	
 	/**
 	 * Construct a MaxFunction with no children.
@@ -41,7 +41,7 @@ public class MaxFunction extends FunctionNode<Double> {
 	 * @param child1 The first child node for comparison.
 	 * @param child2 The second child node for comparison.
 	 */
-	public MaxFunction(Node<Double> child1, Node<Double> child2) {
+	public MaxFunction(DoubleNode child1, DoubleNode child2) {
 		super(child1, child2);
 	}
 
@@ -67,7 +67,7 @@ public class MaxFunction extends FunctionNode<Double> {
 	 * @return the unique name for the MaxFunction which is MAX.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "MAX";
 	}
 }

@@ -26,7 +26,7 @@ import org.epochx.representation.*;
  * of determining which of 2 numbers is smaller, as per the boolean less-than
  * function.
  */
-public class MinFunction extends FunctionNode<Double> {
+public class MinFunction extends DoubleNode {
 
 	/**
 	 * Construct a MinFunction with no children.
@@ -41,7 +41,7 @@ public class MinFunction extends FunctionNode<Double> {
 	 * @param child1 The first child node for comparison.
 	 * @param child2 The second child node for comparison.
 	 */
-	public MinFunction(Node<Double> child1, Node<Double> child2) {
+	public MinFunction(DoubleNode child1, DoubleNode child2) {
 		super(child1, child2);
 	}
 
@@ -67,7 +67,7 @@ public class MinFunction extends FunctionNode<Double> {
 	 * @return the unique name for the MinFunction which is MIN.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "MIN";
 	}
 }

@@ -24,7 +24,7 @@ import org.epochx.representation.*;
 /**
  * A <code>FunctionNode</code> which performs logical disjunction.
  */
-public class OrFunction extends FunctionNode<Boolean> {
+public class OrFunction extends BooleanNode {
 
 	/**
 	 * Construct an OrFunction with no children.
@@ -40,7 +40,7 @@ public class OrFunction extends FunctionNode<Boolean> {
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
 	 */
-	public OrFunction(Node<Boolean> child1, Node<Boolean> child2) {
+	public OrFunction(BooleanNode child1, BooleanNode child2) {
 		super(child1, child2);
 	}
 	
@@ -63,7 +63,7 @@ public class OrFunction extends FunctionNode<Boolean> {
 	 * @return the unique name for the OrFunction which is OR.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "OR";
 	}
 }

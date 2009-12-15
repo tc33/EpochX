@@ -25,7 +25,7 @@ import org.epochx.representation.*;
  * A <code>FunctionNode</code> which performs the mathematical function of 
  * addition.
  */
-public class AddFunction extends FunctionNode<Double> {
+public class AddFunction extends DoubleNode {
 
 	/**
 	 * Construct an AddFunction with no children.
@@ -40,7 +40,7 @@ public class AddFunction extends FunctionNode<Double> {
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
 	 */
-	public AddFunction(Node<Double> child1, Node<Double> child2) {
+	public AddFunction(DoubleNode child1, DoubleNode child2) {
 		super(child1, child2);
 	}
 
@@ -61,7 +61,7 @@ public class AddFunction extends FunctionNode<Double> {
 	 * @return the unique name for the AddFunction which is ADD.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "ADD";
 	}
 }

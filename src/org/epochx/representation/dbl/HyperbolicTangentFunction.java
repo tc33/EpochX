@@ -25,7 +25,7 @@ import org.epochx.representation.*;
  * A <code>FunctionNode</code> which performs the hyperbolic trigonometric 
  * function of hyperbolic tangent.
  */
-public class HyperbolicTangentFunction extends FunctionNode<Double> {
+public class HyperbolicTangentFunction extends DoubleNode {
 
 	/**
 	 * Construct a HyperbolicTangentFunction with no children.
@@ -39,7 +39,7 @@ public class HyperbolicTangentFunction extends FunctionNode<Double> {
 	 * child will first be evaluated with hyperbolic tangent performed on the result.
 	 * @param child The child which hyperbolic tangent will be performed on.
 	 */
-	public HyperbolicTangentFunction(Node<Double> child) {
+	public HyperbolicTangentFunction(DoubleNode child) {
 		super(child);
 	}
 
@@ -59,7 +59,7 @@ public class HyperbolicTangentFunction extends FunctionNode<Double> {
 	 * @return the unique name for the HyperbolicTangentFunction which is TANH.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "TANH";
 	}
 }

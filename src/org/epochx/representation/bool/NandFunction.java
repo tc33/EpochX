@@ -25,7 +25,7 @@ import org.epochx.representation.*;
  * A <code>FunctionNode</code> which performs the logical operation of NAND 
  * that is equivalent to the negation of the conjunction or NOT AND. 
  */
-public class NandFunction extends FunctionNode<Boolean> {
+public class NandFunction extends BooleanNode {
 
 	/**
 	 * Construct a NandFunction with no children.
@@ -41,7 +41,7 @@ public class NandFunction extends FunctionNode<Boolean> {
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
 	 */
-	public NandFunction(Node<Boolean> child1, Node<Boolean> child2) {
+	public NandFunction(BooleanNode child1, BooleanNode child2) {
 		super(child1, child2);
 	}
 	
@@ -64,7 +64,7 @@ public class NandFunction extends FunctionNode<Boolean> {
 	 * @return the unique name for the NandFunction which is NAND.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "NAND";
 	}
 }

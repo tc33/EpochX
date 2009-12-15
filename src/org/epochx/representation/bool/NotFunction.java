@@ -24,7 +24,7 @@ import org.epochx.representation.*;
 /**
  * A <code>FunctionNode</code> which performs logical negation.
  */
-public class NotFunction extends FunctionNode<Boolean> {
+public class NotFunction extends BooleanNode {
 	
 	/**
 	 * Construct a NotFunction with no children.
@@ -39,7 +39,7 @@ public class NotFunction extends FunctionNode<Boolean> {
 	 * true.
 	 * @param child The child node which will be evaluated and negated.
 	 */
-	public NotFunction(Node<Boolean> child) {
+	public NotFunction(BooleanNode child) {
 		super(child);
 	}
 	
@@ -58,7 +58,7 @@ public class NotFunction extends FunctionNode<Boolean> {
 	 * @return the unique name for the NotFunction which is NOT.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "NOT";
 	}
 }

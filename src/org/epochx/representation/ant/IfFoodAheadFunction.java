@@ -28,7 +28,7 @@ import org.epochx.tools.ant.Ant;
  * if statement has the condition predefined as a check for whether the next 
  * move in the landscape contains a food item.
  */
-public class IfFoodAheadFunction extends FunctionNode<Object> {
+public class IfFoodAheadFunction extends VoidNode {
 	
 	// The artificial ant the Actions will be controlling.
 	private Ant ant;
@@ -54,7 +54,7 @@ public class IfFoodAheadFunction extends FunctionNode<Object> {
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
 	 */
-	public IfFoodAheadFunction(Ant ant, Node<Object> child1, Node<Object> child2) {
+	public IfFoodAheadFunction(Ant ant, VoidNode child1, VoidNode child2) {
 		super(child1, child2);
 		
 		this.ant = ant;
@@ -73,7 +73,7 @@ public class IfFoodAheadFunction extends FunctionNode<Object> {
 	 * effect.</p>
 	 */
 	@Override
-	public Object evaluate() {
+	public Void evaluate() {
 		if (ant.isFoodAhead()) {
 			getChild(0).evaluate();
 		} else {
@@ -89,7 +89,7 @@ public class IfFoodAheadFunction extends FunctionNode<Object> {
 	 * IF-FOOD-AHEAD.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "IF-FOOD-AHEAD";
 	}
 

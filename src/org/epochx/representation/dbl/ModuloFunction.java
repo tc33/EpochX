@@ -25,7 +25,7 @@ import org.epochx.representation.*;
  * A <code>FunctionNode</code> which performs the modulo operation, that is 
  * it finds the remainder of division.
  */
-public class ModuloFunction extends FunctionNode<Double> {
+public class ModuloFunction extends DoubleNode {
 
 	/**
 	 * Construct a ModuloFunction with no children.
@@ -40,7 +40,7 @@ public class ModuloFunction extends FunctionNode<Double> {
 	 * @param child1 The first child node - the dividend.
 	 * @param child2 The second child node - the divisor.
 	 */
-	public ModuloFunction(Node<Double> child1, Node<Double> child2) {
+	public ModuloFunction(DoubleNode child1, DoubleNode child2) {
 		super(child1, child2);
 	}
 
@@ -61,7 +61,7 @@ public class ModuloFunction extends FunctionNode<Double> {
 	 * @return the unique name for the ModuloFunction which is MOD.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "MOD";
 	}
 }

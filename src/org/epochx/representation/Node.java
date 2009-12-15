@@ -55,7 +55,7 @@ public abstract class Node implements Cloneable {
 	 * 
 	 * @return The result of evaluating the candidate program.
 	 */
-	public abstract TYPE evaluate();
+	public abstract Object evaluate();
 	
 	/**
 	 * Returns an array of the children of this node.
@@ -287,7 +287,7 @@ public abstract class Node implements Cloneable {
 		// We cannot use the FunctionNode's equals function because that will compare children too.
 		List<String> functionNames = new ArrayList<String>();
 		for (FunctionNode f: functions) {
-			String name = f.getFunctionName();
+			String name = f.getIdentifier();
 			if (!functionNames.contains(name)) {
 				functionNames.add(name);
 			}
@@ -375,6 +375,8 @@ public abstract class Node implements Cloneable {
 		}
 		return length;
 	}
+	
+	public abstract String getIdentifier();
 
 	@Override
 	public int hashCode() {

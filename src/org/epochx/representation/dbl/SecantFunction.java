@@ -25,7 +25,7 @@ import org.epochx.representation.*;
  * A <code>FunctionNode</code> which performs the reciprocal trigonometric 
  * function of secant. Secant x is equal to 1/cos x.
  */
-public class SecantFunction extends FunctionNode<Double> {
+public class SecantFunction extends DoubleNode {
 
 	/**
 	 * Construct a SecantFunction with no children.
@@ -39,7 +39,7 @@ public class SecantFunction extends FunctionNode<Double> {
 	 * will be evaluated with secant performed on the result.
 	 * @param child The child which secant will be performed on.
 	 */
-	public SecantFunction(Node<Double> child) {
+	public SecantFunction(DoubleNode child) {
 		super(child);
 	}
 
@@ -59,7 +59,7 @@ public class SecantFunction extends FunctionNode<Double> {
 	 * @return the unique name for the SecantFunction which is SEC.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "SEC";
 	}
 }

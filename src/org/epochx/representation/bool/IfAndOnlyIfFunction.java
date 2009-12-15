@@ -25,7 +25,7 @@ import org.epochx.representation.*;
  * A <code>FunctionNode</code> which performs the biconditional logical 
  * connective of IFF (if and only if).
  */
-public class IfAndOnlyIfFunction extends FunctionNode<Boolean> {
+public class IfAndOnlyIfFunction extends BooleanNode {
 	
 	/**
 	 * Construct an IfAndOnlyIfFunction with no children.
@@ -41,7 +41,7 @@ public class IfAndOnlyIfFunction extends FunctionNode<Boolean> {
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
 	 */
-	public IfAndOnlyIfFunction(Node<Boolean> child1, Node<Boolean> child2) {
+	public IfAndOnlyIfFunction(BooleanNode child1, BooleanNode child2) {
 		super(child1, child2);
 	}
 	
@@ -64,7 +64,7 @@ public class IfAndOnlyIfFunction extends FunctionNode<Boolean> {
 	 * @return the unique name for the IfAndOnlyIfFunction which is IFF.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "IFF";
 	}
 }

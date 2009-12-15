@@ -19,14 +19,14 @@
  */
 package org.epochx.representation.ant;
 
-import org.epochx.representation.Action;
+import org.epochx.representation.*;
 import org.epochx.tools.ant.Ant;
 
 /**
  * This class defines an action which when executed will trigger the ant 
  * to do nothing for one timestep.
  */
-public class AntSkipAction extends Action {
+public class AntSkipAction extends VoidNode {
 
 	private Ant ant;
 	
@@ -41,12 +41,12 @@ public class AntSkipAction extends Action {
 	}
 
 	@Override
-	public String getActionName() {
+	public String getIdentifier() {
 		return "SKIP";
 	}
 
 	@Override
-	public Object evaluate() {
+	public Void evaluate() {
 		ant.skip();
 		
 		return null;

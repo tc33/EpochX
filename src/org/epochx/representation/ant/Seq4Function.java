@@ -25,7 +25,7 @@ import org.epochx.representation.*;
  * A <code>FunctionNode</code> which provides the facility to sequence four 
  * instructions - which may be other functions or actions.
  */
-public class Seq4Function extends FunctionNode<Object> {
+public class Seq4Function extends VoidNode {
 	
 	/**
 	 * Construct a Seq4Function with no children.
@@ -42,7 +42,7 @@ public class Seq4Function extends FunctionNode<Object> {
 	 * @param child2 The second child node to be executed second in sequence.
 	 * @param child3 The third child node to be executed third in sequence.
 	 */
-	public Seq4Function(Node<Object> child1, Node<Object> child2, Node<Object> child3, Node<Object> child4) {
+	public Seq4Function(VoidNode child1, VoidNode child2, VoidNode child3, VoidNode child4) {
 		super(child1, child2, child3, child4);
 	}
 	
@@ -58,7 +58,7 @@ public class Seq4Function extends FunctionNode<Object> {
 	 * effect.</p>
 	 */
 	@Override
-	public Object evaluate() {
+	public Void evaluate() {
 		getChild(0).evaluate();
 		getChild(1).evaluate();
 		getChild(2).evaluate();
@@ -72,7 +72,7 @@ public class Seq4Function extends FunctionNode<Object> {
 	 * @return the unique name for the Seq4Function which is SEQ4.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "SEQ4";
 	}
 }

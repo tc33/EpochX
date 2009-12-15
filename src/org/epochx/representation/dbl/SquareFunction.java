@@ -26,7 +26,7 @@ import org.epochx.representation.*;
  * that is - raising to the second power. It is equivalent to the 
  * <code>PowerFunction</code> where the second child is the double literal 2.0.
  */
-public class SquareFunction extends FunctionNode<Double> {
+public class SquareFunction extends DoubleNode {
 
 	/**
 	 * Construct a SquareFunction with no children.
@@ -40,7 +40,7 @@ public class SquareFunction extends FunctionNode<Double> {
 	 * be evaluated with the result then raised to the power of 2.
 	 * @param child The child which will be squared.
 	 */
-	public SquareFunction(Node<Double> child) {
+	public SquareFunction(DoubleNode child) {
 		super(child);
 	}
 
@@ -60,7 +60,7 @@ public class SquareFunction extends FunctionNode<Double> {
 	 * @return the unique name for the SquareFunction which is SQUARE.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "SQUARE";
 	}
 }

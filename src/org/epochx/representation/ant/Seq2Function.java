@@ -25,7 +25,7 @@ import org.epochx.representation.*;
  * A <code>FunctionNode</code> which provides the facility to sequence two 
  * instructions - which may be other functions or terminal nodes with actions.
  */
-public class Seq2Function extends FunctionNode<Object> {
+public class Seq2Function extends VoidNode {
 
 	/**
 	 * Construct a Seq2Function with no children.
@@ -42,7 +42,7 @@ public class Seq2Function extends FunctionNode<Object> {
 	 * @param child1 The first child node to be executed first in sequence.
 	 * @param child2 The second child node to be executed second in sequence.
 	 */
-	public Seq2Function(Node<Object> child1, Node<Object> child2) {
+	public Seq2Function(VoidNode child1, VoidNode child2) {
 		super(child1, child2);
 	}
 	
@@ -58,7 +58,7 @@ public class Seq2Function extends FunctionNode<Object> {
 	 * effect.</p>
 	 */
 	@Override
-	public Object evaluate() {
+	public Void evaluate() {
 		getChild(0).evaluate();
 		getChild(1).evaluate();
 		
@@ -70,7 +70,7 @@ public class Seq2Function extends FunctionNode<Object> {
 	 * @return the unique name for the Seq2Function which is SEQ2.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "SEQ2";
 	}
 }

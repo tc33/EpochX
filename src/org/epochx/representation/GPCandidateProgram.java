@@ -62,7 +62,7 @@ public class GPCandidateProgram extends CandidateProgram {
 	 * 
 	 * @return The result of the evaluation of the program.
 	 */
-	public TYPE evaluate() {
+	public Object evaluate() {
 		return rootNode.evaluate();
 	}
 	

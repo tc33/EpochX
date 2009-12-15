@@ -25,7 +25,7 @@ import org.epochx.representation.*;
  * A <code>FunctionNode</code> which performs the reciprocal trigonometric 
  * function of cosecant. Cosecant x is equal to 1/sin x.
  */
-public class CosecantFunction extends FunctionNode<Double> {
+public class CosecantFunction extends DoubleNode {
 
 	/**
 	 * Construct a CosecantFunction with no children.
@@ -39,7 +39,7 @@ public class CosecantFunction extends FunctionNode<Double> {
 	 * will be evaluated with cosecant performed on the result.
 	 * @param child The child which cosecant will be performed on.
 	 */
-	public CosecantFunction(Node<Double> child) {
+	public CosecantFunction(DoubleNode child) {
 		super(child);
 	}
 
@@ -59,7 +59,7 @@ public class CosecantFunction extends FunctionNode<Double> {
 	 * @return the unique name for the CosecantFunction which is COSEC.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "COSEC";
 	}
 }

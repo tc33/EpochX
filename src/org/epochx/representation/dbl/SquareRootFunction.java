@@ -25,7 +25,7 @@ import org.epochx.representation.*;
  * A <code>FunctionNode</code> which performs the mathematical function of square 
  * root.
  */
-public class SquareRootFunction extends FunctionNode<Double> {
+public class SquareRootFunction extends DoubleNode {
 
 	/**
 	 * Construct a SquareRootFunction with no children.
@@ -39,7 +39,7 @@ public class SquareRootFunction extends FunctionNode<Double> {
 	 * be first evaluated, with the result square-rooted.
 	 * @param child The child which cube root will be performed on.
 	 */
-	public SquareRootFunction(Node<Double> child) {
+	public SquareRootFunction(DoubleNode child) {
 		super(child);
 	}
 
@@ -59,7 +59,7 @@ public class SquareRootFunction extends FunctionNode<Double> {
 	 * @return the unique name for the SquareRootFunction which is SQRT.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "SQRT";
 	}
 }

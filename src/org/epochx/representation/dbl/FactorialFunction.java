@@ -29,7 +29,7 @@ import org.epochx.representation.*;
  *    5! = 5 x 4 x 3 x 2 x 1 = FACTORIAL 5
  *    
  */
-public class FactorialFunction extends FunctionNode<Double> {
+public class FactorialFunction extends DoubleNode {
 
 	/**
 	 * Construct a FactorialFunction with no children.
@@ -43,7 +43,7 @@ public class FactorialFunction extends FunctionNode<Double> {
 	 * be first evaluated, with the result undergoing the factorial function.
 	 * @param child The child which factorial will be performed on.
 	 */
-	public FactorialFunction(Node<Double> child) {
+	public FactorialFunction(DoubleNode child) {
 		super(child);
 	}
 
@@ -70,7 +70,7 @@ public class FactorialFunction extends FunctionNode<Double> {
 	 * @return the unique name for the FactorialFunction which is FACTORIAL.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "FACTORIAL";
 	}
 }

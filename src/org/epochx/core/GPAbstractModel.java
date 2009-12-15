@@ -24,7 +24,6 @@ import java.util.*;
 import org.epochx.op.crossover.*;
 import org.epochx.op.initialisation.*;
 import org.epochx.op.mutation.*;
-import org.epochx.op.selection.*;
 import org.epochx.representation.*;
 import org.epochx.tools.random.*;
 
@@ -132,52 +131,6 @@ public abstract class GPAbstractModel extends AbstractModel implements GPModel {
 	 */
 	public void setMutator(GPMutation mutator) {
 		this.mutator = mutator;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Defaults to {@link RandomSelector} in GPAbstractModel.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public GPProgramSelector getProgramSelector() {
-		return gPProgramSelector;
-	}
-
-	/**
-	 * Overwrites the default parent selector used to select parents to undergo
-	 * a genetic operator from either a pool or the previous population.
-	 * 
-	 * @param gPProgramSelector the new GPProgramSelector to be used when selecting 
-	 * 						 parents for a genetic operator.
-	 */
-	public void setProgramSelector(GPProgramSelector programSelector) {
-		this.gPProgramSelector = programSelector;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Defaults to {@link TournamentSelector} with a tournament size of 3 
-	 * in GPAbstractModel.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public GPPoolSelector getPoolSelector() {
-		return gPPoolSelector;
-	}
-
-	/**
-	 * Overwrites the default pool selector used to generate a mating pool.
-	 * 
-	 * @param gPPoolSelector the new GPPoolSelector to be used when building a 
-	 * 						breeding pool.
-	 */
-	public void setPoolSelector(GPPoolSelector poolSelector) {
-		this.gPPoolSelector = poolSelector;
 	}
 
 	/**

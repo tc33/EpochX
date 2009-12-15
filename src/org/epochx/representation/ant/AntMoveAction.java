@@ -19,14 +19,14 @@
  */
 package org.epochx.representation.ant;
 
-import org.epochx.representation.Action;
+import org.epochx.representation.*;
 import org.epochx.tools.ant.Ant;
 
 /**
  * This class defines an action which when executed will trigger the ant 
  * to move one position in its ant landscape.
  */
-public class AntMoveAction extends Action {
+public class AntMoveAction extends VoidNode {
 	
 	private Ant ant;
 	
@@ -41,14 +41,14 @@ public class AntMoveAction extends Action {
 	}
 
 	@Override
-	public String getActionName() {
-		return "MOVE";
-	}
-
-	@Override
-	public Object evaluate() {
+	public Void evaluate() {
 		ant.move();
 		
 		return null;
+	}
+
+	@Override
+	public String getIdentifier() {
+		return "MOVE";
 	}
 }

@@ -25,7 +25,7 @@ import org.epochx.representation.*;
  * A <code>FunctionNode</code> which performs the mathematical function of 
  * subtraction.
  */
-public class SubtractFunction extends FunctionNode<Double> {
+public class SubtractFunction extends DoubleNode {
 	
 	/**
 	 * Construct an SubtractFunction with no children.
@@ -40,7 +40,7 @@ public class SubtractFunction extends FunctionNode<Double> {
 	 * @param child1 The first child node.
 	 * @param child2 The second child node, to be subtracted from the first.
 	 */
-	public SubtractFunction(Node<Double> child1, Node<Double> child2) {
+	public SubtractFunction(DoubleNode child1, DoubleNode child2) {
 		super(child1, child2);
 	}
 	
@@ -61,7 +61,7 @@ public class SubtractFunction extends FunctionNode<Double> {
 	 * @return the unique name for the SubtractFunction which is SUB.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "SUB";
 	}
 }

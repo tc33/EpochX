@@ -25,7 +25,7 @@ import org.epochx.representation.*;
  * A <code>FunctionNode</code> which performs the trigonometric function of 
  * tangent.
  */
-public class TangentFunction extends FunctionNode<Double> {
+public class TangentFunction extends DoubleNode {
 
 	/**
 	 * Construct a TangentFunction with no children.
@@ -39,7 +39,7 @@ public class TangentFunction extends FunctionNode<Double> {
 	 * will be evaluated with tangent performed on the result.
 	 * @param child The child which tangent will be performed on.
 	 */
-	public TangentFunction(Node<Double> child) {
+	public TangentFunction(DoubleNode child) {
 		super(child);
 	}
 
@@ -59,7 +59,7 @@ public class TangentFunction extends FunctionNode<Double> {
 	 * @return the unique name for the TangentFunction which is TAN.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "TAN";
 	}
 }

@@ -25,7 +25,7 @@ import org.epochx.representation.*;
  * A <code>FunctionNode</code> which performs the mathematical sign function  
  * that extracts the sign of a number.
  */
-public class SignumFunction extends FunctionNode<Double> {
+public class SignumFunction extends DoubleNode {
 
 	/**
 	 * Construct a SignumFunction with no children.
@@ -39,7 +39,7 @@ public class SignumFunction extends FunctionNode<Double> {
 	 * will be evaluated with signum performed on the result.
 	 * @param child The child which signum will be performed on.
 	 */
-	public SignumFunction(Node<Double> child) {
+	public SignumFunction(DoubleNode child) {
 		super(child);
 	}
 
@@ -60,7 +60,7 @@ public class SignumFunction extends FunctionNode<Double> {
 	 * @return the unique name for the SignumFunction which is SGN.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "SGN";
 	}
 }

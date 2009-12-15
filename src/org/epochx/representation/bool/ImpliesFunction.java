@@ -24,7 +24,7 @@ import org.epochx.representation.*;
 /**
  * A <code>FunctionNode</code> which performs logical implication.
  */
-public class ImpliesFunction extends FunctionNode<Boolean> {
+public class ImpliesFunction extends BooleanNode {
 
 	/**
 	 * Construct an ImpliesFunction with no children.
@@ -41,7 +41,7 @@ public class ImpliesFunction extends FunctionNode<Boolean> {
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
 	 */
-	public ImpliesFunction(Node<Boolean> child1, Node<Boolean> child2) {
+	public ImpliesFunction(BooleanNode child1, BooleanNode child2) {
 		super(child1, child2);
 	}
 	
@@ -65,7 +65,7 @@ public class ImpliesFunction extends FunctionNode<Boolean> {
 	 * @return the unique name for the ImpliesFunction which is IMPLIES.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "IMPLIES";
 	}
 }

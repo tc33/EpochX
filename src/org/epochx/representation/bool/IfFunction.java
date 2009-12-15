@@ -25,7 +25,7 @@ import org.epochx.representation.*;
  * A <code>FunctionNode</code> which represents the conditional if-then-else 
  * statement.
  */
-public class IfFunction extends FunctionNode<Boolean> {
+public class IfFunction extends BooleanNode {
 	
 	/**
 	 * Construct an IfFunction with no children.
@@ -42,7 +42,7 @@ public class IfFunction extends FunctionNode<Boolean> {
 	 * @param ifStatement The second child node.
 	 * @param elseStatement The third child node.
 	 */
-	public IfFunction(Node<Boolean> condition, Node<Boolean> ifStatement, Node<Boolean> elseStatement) {
+	public IfFunction(BooleanNode condition, BooleanNode ifStatement, BooleanNode elseStatement) {
 		super(condition, ifStatement, elseStatement);
 	}
 
@@ -67,7 +67,7 @@ public class IfFunction extends FunctionNode<Boolean> {
 	 * @return the unique name for the IfFunction which is IF.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "IF";
 	}
 }

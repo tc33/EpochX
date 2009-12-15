@@ -25,7 +25,7 @@ import org.epochx.representation.*;
  * A <code>FunctionNode</code> which performs the inverse trigonometric function of 
  * arctangent.
  */
-public class ArcTangentFunction extends FunctionNode<Double> {
+public class ArcTangentFunction extends DoubleNode {
 
 	/**
 	 * Construct an ArcTangentFunction with no children.
@@ -39,7 +39,7 @@ public class ArcTangentFunction extends FunctionNode<Double> {
 	 * will be evaluated with arctangent performed on the result.
 	 * @param child The child which arctangent will be performed on.
 	 */
-	public ArcTangentFunction(Node<Double> child) {
+	public ArcTangentFunction(DoubleNode child) {
 		super(child);
 	}
 	
@@ -59,7 +59,7 @@ public class ArcTangentFunction extends FunctionNode<Double> {
 	 * @return the unique name for the ArcTangentFunction which is ATAN.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "ATAN";
 	}
 }

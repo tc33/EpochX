@@ -25,7 +25,7 @@ import org.epochx.representation.*;
  * A <code>FunctionNode</code> which performs the mathematical function of 
  * multiplication.
  */
-public class MultiplyFunction extends FunctionNode<Double> {
+public class MultiplyFunction extends DoubleNode {
 	
 	/**
 	 * Construct a MultiplyFunction with no children.
@@ -40,7 +40,7 @@ public class MultiplyFunction extends FunctionNode<Double> {
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
 	 */
-	public MultiplyFunction(Node<Double> child1, Node<Double> child2) {
+	public MultiplyFunction(DoubleNode child1, DoubleNode child2) {
 		super(child1, child2);
 	}
 
@@ -61,7 +61,7 @@ public class MultiplyFunction extends FunctionNode<Double> {
 	 * @return the unique name for the MultiplyFunction which is MUL.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "MUL";
 	}
 }

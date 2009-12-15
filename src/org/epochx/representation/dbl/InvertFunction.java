@@ -25,7 +25,7 @@ import org.epochx.representation.*;
  * A <code>FunctionNode</code> which performs the multiplicative inverse (or 
  * reciprocal), that is the inverse of x is 1/x.
  */
-public class InvertFunction extends FunctionNode<Double> {
+public class InvertFunction extends DoubleNode {
 
 	/**
 	 * Construct an InvertFunction with no children.
@@ -39,7 +39,7 @@ public class InvertFunction extends FunctionNode<Double> {
 	 * will be evaluated before the inversion operation is performed.
 	 * @param child The child which the reciprocal will be found for.
 	 */
-	public InvertFunction(Node<Double> child) {
+	public InvertFunction(DoubleNode child) {
 		super(child);
 	}
 
@@ -65,7 +65,7 @@ public class InvertFunction extends FunctionNode<Double> {
 	 * @return the unique name for the InvertFunction which is INV.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "INV";
 	}
 }

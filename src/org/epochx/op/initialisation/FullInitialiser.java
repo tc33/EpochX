@@ -66,7 +66,7 @@ public class FullInitialiser implements GPInitialiser {
 			
 			do {
 				// Build a new full node tree.
-				Node<?> nodeTree = buildFullNodeTree(model.getInitialMaxDepth());
+				Node nodeTree = buildFullNodeTree(model.getInitialMaxDepth());
             	
 				// Create a program around the node tree.
 				candidate = new GPCandidateProgram(nodeTree, model);
@@ -90,16 +90,16 @@ public class FullInitialiser implements GPInitialiser {
 	 * @return The root node of a randomly generated full node tree of the 
 	 * requested depth.
 	 */
-	public Node<?> buildFullNodeTree(int depth) {
-		Node<?> root;
+	public Node buildFullNodeTree(int depth) {
+		Node root;
 		if (depth == 0) {
 			// Randomly choose a terminal node as our root.
 			int randomIndex = model.getRNG().nextInt(model.getTerminals().size());
-			root = (Node<?>) model.getTerminals().get(randomIndex).clone();
+			root = model.getTerminals().get(randomIndex).clone();
 		} else {
 			// Randomly choose a root function node.
 	        int randomIndex = model.getRNG().nextInt(model.getFunctions().size());
-	        root = (Node<?>) model.getFunctions().get(randomIndex).clone();
+	        root = model.getFunctions().get(randomIndex).clone();
 	        
 	        // Populate the root node with full children of depth-1.
 			fillChildren(root, 0, depth);
@@ -120,7 +120,7 @@ public class FullInitialiser implements GPInitialiser {
 			// Not near the maximum depth yet, fill children with functions only.
 			for(int i = 0; i<arity; i++) {
 				int randomIndex = model.getRNG().nextInt(model.getFunctions().size());
-				Node child = (Node) model.getFunctions().get(randomIndex).clone();
+				Node child = model.getFunctions().get(randomIndex).clone();
 
 				currentNode.setChild(i, child);
 				fillChildren(child, (currentDepth+1), maxDepth);
@@ -129,7 +129,7 @@ public class FullInitialiser implements GPInitialiser {
 			// At maximum depth-1, fill children with terminals.
 			for(int i = 0; i<arity; i++) {
 				int randomIndex = model.getRNG().nextInt(model.getTerminals().size());
-				Node child = (Node) model.getTerminals().get(randomIndex).clone();
+				Node child = model.getTerminals().get(randomIndex).clone();
 
 				currentNode.setChild(i, child);
 			}

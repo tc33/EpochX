@@ -87,8 +87,8 @@ public class KozaCrossover implements GPCrossover, GenerationListener {
 		int swapPoint2 = getCrossoverPoint(program2);
 		
 		// Get copies of subtrees to swap.
-		Node<?> subtree1 = program1.getNthNode(swapPoint1);//.clone();
-		Node<?> subtree2 = program2.getNthNode(swapPoint2);//.clone();
+		Node subtree1 = program1.getNthNode(swapPoint1);//.clone();
+		Node subtree2 = program2.getNthNode(swapPoint2);//.clone();
 		
 		// Perform swap.
 		program1.setNthNode(swapPoint1, subtree2);
@@ -137,13 +137,13 @@ public class KozaCrossover implements GPCrossover, GenerationListener {
 	/*
 	 * Recursive helper function.
 	 */
-	private int getNthFunctionNode(int n, int functionCount, int nodeCount, Node<?> current) {
+	private int getNthFunctionNode(int n, int functionCount, int nodeCount, Node current) {
 		// Found the nth function node.
 		if ((current instanceof FunctionNode) && (n == functionCount))
 			return nodeCount;
 		
 		int result = -1;
-		for (Node<?> child: current.getChildren()) {
+		for (Node child: current.getChildren()) {
 			int noNodes = child.getLength();
 			int noFunctions = child.getNoFunctions();
 			
@@ -166,14 +166,14 @@ public class KozaCrossover implements GPCrossover, GenerationListener {
 	 * Recurse through the given GPCandidateProgram to find the nth terminal 
 	 * node and return its node index.
 	 */
-	private int getNthTerminalNode(int n, GPCandidateProgram<?> program) {
+	private int getNthTerminalNode(int n, GPCandidateProgram program) {
 		return getNthTerminalNode(n, 0, 0, program.getRootNode());
 	}
 	
 	/*
 	 * Recursive helper function.
 	 */
-	private int getNthTerminalNode(int n, int terminalCount, int nodeCount, Node<?> current) {
+	private int getNthTerminalNode(int n, int terminalCount, int nodeCount, Node current) {
 		// Found the nth terminal node.
 		if (current instanceof TerminalNode) {
 			if (n == terminalCount++)
@@ -181,7 +181,7 @@ public class KozaCrossover implements GPCrossover, GenerationListener {
 		}
 		
 		int result = -1;
-		for (Node<?> child: current.getChildren()) {
+		for (Node child: current.getChildren()) {
 			int noNodes = child.getLength();
 			int noTerminals = child.getNoTerminals();
 			

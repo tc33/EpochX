@@ -24,7 +24,6 @@ import java.util.List;
 import org.epochx.op.crossover.*;
 import org.epochx.op.initialisation.GPInitialiser;
 import org.epochx.op.mutation.GPMutation;
-import org.epochx.op.selection.*;
 import org.epochx.representation.*;
 
 
@@ -76,31 +75,6 @@ public interface GPModel extends Model {
 	 */
 	@Override
 	public GPMutation getMutation();
-
-	/**
-	 * Retrieves the selector to use to pick parents from either a pre-selected 
-	 * breeding pool (selected by the GPPoolSelector returned by 
-	 * getPoolSelector()) or the previous population for use as input to the 
-	 * genetic operators.
-	 * 
-	 * @return the GPProgramSelector which should be used to pick parents for input 
-	 * 		   to the genetic operators.
-	 * @see TournamentSelector
-	 */
-	@Override
-	public GPProgramSelector getProgramSelector();
-
-	/**
-	 * Retrieves the selector to use to construct a breeding pool from which 
-	 * parents can be selected using the parent selector returned by 
-	 * getProgramSelector() to undergo the genetic operators.
-	 * 
-	 * @return a GPPoolSelector which can be used to construct a breeding pool, 
-	 * 		   or null if a breeding pool shouldn't be used and instead parents 
-	 * 		   should be picked straight from the previous population.
-	 * @see TournamentSelector
-	 */
-	public GPPoolSelector getPoolSelector();
 
 	/**
 	 * Retrieves the set of terminal nodes. 

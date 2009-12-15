@@ -25,7 +25,7 @@ import org.epochx.representation.*;
  * A <code>FunctionNode</code> which performs the inverse trigonometric function of 
  * arccosine.
  */
-public class ArcCosineFunction extends FunctionNode<Double> {
+public class ArcCosineFunction extends DoubleNode {
 	
 	/**
 	 * Construct an ArcCosineFunction with no children.
@@ -39,7 +39,7 @@ public class ArcCosineFunction extends FunctionNode<Double> {
 	 * will be evaluated with arccosine performed on the result.
 	 * @param child The child which arccosine will be performed on.
 	 */
-	public ArcCosineFunction(Node<Double> child) {
+	public ArcCosineFunction(DoubleNode child) {
 		super(child);
 	}
 
@@ -59,7 +59,7 @@ public class ArcCosineFunction extends FunctionNode<Double> {
 	 * @return the unique name for the ArcCosineFunction which is ACOS.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "ACOS";
 	}
 }

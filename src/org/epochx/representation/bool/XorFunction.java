@@ -25,7 +25,7 @@ import org.epochx.representation.*;
  * A <code>FunctionNode</code> which performs exclusive disjunction, also known 
  * as exclusive OR.
  */
-public class XorFunction extends FunctionNode<Boolean> {
+public class XorFunction extends BooleanNode {
 
 	/**
 	 * Construct an XorFunction with no children.
@@ -41,7 +41,7 @@ public class XorFunction extends FunctionNode<Boolean> {
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
 	 */
-	public XorFunction(Node<Boolean> child1, Node<Boolean> child2) {
+	public XorFunction(BooleanNode child1, BooleanNode child2) {
 		super(child1, child2);
 	}
 	
@@ -63,7 +63,7 @@ public class XorFunction extends FunctionNode<Boolean> {
 	 * @return the unique name for the XorFunction which is XOR.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "XOR";
 	}
 }

@@ -25,7 +25,7 @@ import org.epochx.representation.*;
  * A <code>FunctionNode</code> which performs the inverse trigonometric function of 
  * arcsine.
  */
-public class ArcSineFunction extends FunctionNode<Double> {
+public class ArcSineFunction extends DoubleNode {
 	
 	/**
 	 * Construct an ArcSineFunction with no children.
@@ -39,7 +39,7 @@ public class ArcSineFunction extends FunctionNode<Double> {
 	 * will be evaluated with arcsine performed on the result.
 	 * @param child The child which arcsine will be performed on.
 	 */
-	public ArcSineFunction(Node<Double> child) {
+	public ArcSineFunction(DoubleNode child) {
 		super(child);
 	}
 
@@ -59,7 +59,7 @@ public class ArcSineFunction extends FunctionNode<Double> {
 	 * @return the unique name for the ArcSineFunction which is ASIN.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "ASIN";
 	}
 }

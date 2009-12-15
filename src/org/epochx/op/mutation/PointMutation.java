@@ -34,7 +34,7 @@ import org.epochx.representation.*;
  * replacement node is selected from the full syntax (function and terminal 
  * sets), at random.
  */
-public class PointMutation extends GPMutation {
+public class PointMutation implements GPMutation {
 
 	// The current controlling model.
 	private GPModel model;
@@ -82,7 +82,9 @@ public class PointMutation extends GPMutation {
 	 * the provided GPCandidateProgram.
 	 */
 	@Override
-	public GPCandidateProgram mutate(GPCandidateProgram program) {
+	public GPCandidateProgram mutate(CandidateProgram p) {
+		GPCandidateProgram program = (GPCandidateProgram) p;
+		
 		// Get the syntax from which new nodes will be chosen.
 		List<Node> syntax = model.getSyntax();
 		

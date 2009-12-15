@@ -25,7 +25,7 @@ import org.epochx.representation.*;
  * A <code>FunctionNode</code> which performs the mathematical operation of 
  * exponentiation.
  */
-public class PowerFunction extends FunctionNode<Double> {
+public class PowerFunction extends DoubleNode {
 
 	/**
 	 * Construct a PowerFunction with no children.
@@ -40,7 +40,7 @@ public class PowerFunction extends FunctionNode<Double> {
 	 * @param base The first child node - the base.
 	 * @param exponent The second child node - the exponent.
 	 */
-	public PowerFunction(Node<Double> base, Node<Double> exponent) {
+	public PowerFunction(DoubleNode base, DoubleNode exponent) {
 		super(base, exponent);
 	}
 
@@ -61,7 +61,7 @@ public class PowerFunction extends FunctionNode<Double> {
 	 * @return the unique name for the PowerFunction which is POW.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "POW";
 	}
 }

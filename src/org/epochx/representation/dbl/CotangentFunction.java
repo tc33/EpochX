@@ -25,7 +25,7 @@ import org.epochx.representation.*;
  * A <code>FunctionNode</code> which performs the reciprocal trigonometric 
  * function of cotangent. Cotangent x is equal to 1/tan x.
  */
-public class CotangentFunction extends FunctionNode<Double> {
+public class CotangentFunction extends DoubleNode {
 
 	/**
 	 * Construct a CotangentFunction with no children.
@@ -39,7 +39,7 @@ public class CotangentFunction extends FunctionNode<Double> {
 	 * will be evaluated with cotangent performed on the result.
 	 * @param child The child which cotangent will be performed on.
 	 */
-	public CotangentFunction(Node<Double> child) {
+	public CotangentFunction(DoubleNode child) {
 		super(child);
 	}
 
@@ -59,7 +59,7 @@ public class CotangentFunction extends FunctionNode<Double> {
 	 * @return the unique name for the CotangentFunction which is COT.
 	 */
 	@Override
-	public String getFunctionName() {
+	public String getIdentifier() {
 		return "COT";
 	}
 }

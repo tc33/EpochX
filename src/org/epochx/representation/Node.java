@@ -450,4 +450,23 @@ public abstract class Node implements Cloneable {
 		}
 		return equal;
 	}
+	
+	@Override
+	public String toString() {		
+		StringBuilder builder = new StringBuilder(getIdentifier());
+		builder.append('(');
+		Node[] children = getChildren();
+		for (int i=0, n=children.length; i<n; i++) {
+			Node c = children[i];
+			if (i!=0) builder.append(' ');
+			
+			if (c == null) {
+				builder.append('X');
+			} else {
+				builder.append(c.toString());
+			}
+		}
+		builder.append(')');
+		return builder.toString();
+	}
 }

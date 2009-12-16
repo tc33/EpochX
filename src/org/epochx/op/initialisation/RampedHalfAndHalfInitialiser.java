@@ -97,7 +97,7 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 				}
 				program = new GPCandidateProgram(rootNode, model);
 			} while(firstGen.contains(program));
-			
+
             firstGen.add(program);
 		}
 		

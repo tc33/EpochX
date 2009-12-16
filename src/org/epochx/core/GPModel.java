@@ -81,14 +81,14 @@ public interface GPModel extends Model {
 	 * 
 	 * @return the terminal nodes to be used during evolution.
 	 */
-	public List<TerminalNode> getTerminals();
+	public List<Node> getTerminals();
 
 	/**
 	 * Retrieves the set of function nodes.
 	 * 
 	 * @return the function nodes to be used during evolution.
 	 */
-	public List<FunctionNode> getFunctions();
+	public List<Node> getFunctions();
 
 	/**
 	 * Retrieves the full set of syntax, that is terminals AND function nodes.
@@ -138,7 +138,8 @@ public interface GPModel extends Model {
 	 * @return a double representing the quality of the program where a small 
 	 * 		   value is considered better than a larger value.
 	 */
-	public double getFitness(GPCandidateProgram program);
+	@Override
+	public double getFitness(CandidateProgram program);
 
 	/**
 	 * This method will be called during each crossover operation before the 

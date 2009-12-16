@@ -4,9 +4,13 @@ public class BooleanVariable extends BooleanNode {
 
 	private String identifier;
 	
-	private boolean value;
+	private Boolean value;
 	
-	public BooleanVariable(String identifier, boolean value) {
+	public BooleanVariable(String identifier) {
+		this(identifier, null);
+	}
+	
+	public BooleanVariable(String identifier, Boolean value) {
 		this.identifier = identifier;
 		this.value = value;
 	}
@@ -25,4 +29,18 @@ public class BooleanVariable extends BooleanNode {
 		return identifier;
 	}
 
+	@Override
+	public String toString() {
+		return identifier;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return (obj == this);
+	}
+	
+	@Override
+	public BooleanVariable clone() {
+		return this;
+	}
 }

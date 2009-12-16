@@ -134,13 +134,11 @@ public class PointMutation implements GPMutation {
 		
 		// Check they're the same type first.
 		if (nodeA.getClass().equals(nodeB.getClass())) {
-			if (nodeA instanceof FunctionNode) {
+			if (nodeA.getArity() > 0) {
 				// They're both the same function type.
 				equal = true;
-			} else if (nodeA instanceof TerminalNode) {
-				equal = ((TerminalNode) nodeA).equals(nodeB);
 			} else {
-				// Unknown node type - somethings gone wrong.
+				equal = nodeA.equals(nodeB);
 			}
 		}
 		

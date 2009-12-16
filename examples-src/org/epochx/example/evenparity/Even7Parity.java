@@ -33,11 +33,11 @@ import org.epochx.tools.util.BoolUtils;
 /**
  * 
  */
-public class Even7Parity extends GPAbstractModel<Boolean> {
+public class Even7Parity extends GPAbstractModel {
 
 	private boolean[][] inputs;
 	
-	private HashMap<String, Variable<Boolean>> variables = new HashMap<String, Variable<Boolean>>();
+	private HashMap<String, BooleanVariable> variables = new HashMap<String, BooleanVariable>();
 	
 	public Even7Parity() {
 		inputs = BoolUtils.generateBoolSequences(7);
@@ -47,13 +47,13 @@ public class Even7Parity extends GPAbstractModel<Boolean> {
 	
 	public void configure() {
 		// Define variables.
-		variables.put("D6", new Variable<Boolean>("D6"));
-		variables.put("D5", new Variable<Boolean>("D5"));
-		variables.put("D4", new Variable<Boolean>("D4"));
-		variables.put("D3", new Variable<Boolean>("D3"));
-		variables.put("D2", new Variable<Boolean>("D2"));
-		variables.put("D1", new Variable<Boolean>("D1"));
-		variables.put("D0", new Variable<Boolean>("D0"));
+		variables.put("D6", new BooleanVariable("D6"));
+		variables.put("D5", new BooleanVariable("D5"));
+		variables.put("D4", new BooleanVariable("D4"));
+		variables.put("D3", new BooleanVariable("D3"));
+		variables.put("D2", new BooleanVariable("D2"));
+		variables.put("D1", new BooleanVariable("D1"));
+		variables.put("D0", new BooleanVariable("D0"));
 		
 		setGenStatFields(new GenerationStatField[]{GenerationStatField.FITNESS_MIN, GenerationStatField.FITNESS_AVE, GenerationStatField.LENGTH_AVE, GenerationStatField.RUN_TIME});
 		setRunStatFields(new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM, RunStatField.RUN_TIME});
@@ -66,15 +66,15 @@ public class Even7Parity extends GPAbstractModel<Boolean> {
 		setPoolSize(50);
 		setNoElites(50);
 		setMaxProgramDepth(6);
-		setPoolSelector(new TournamentSelector<Boolean>(this, 7));
-		setProgramSelector(new RandomSelector<Boolean>(this));
-		setCrossover(new UniformPointCrossover<Boolean>(this));
+		setPoolSelector(new TournamentSelector(this, 7));
+		setProgramSelector(new RandomSelector(this));
+		setCrossover(new UniformPointCrossover(this));
 	}
 	
 	@Override
-	public List<FunctionNode<Boolean>> getFunctions() {
+	public List<Node> getFunctions() {
 		// Define functions.
-		List<FunctionNode<Boolean>> functions = new ArrayList<FunctionNode<Boolean>>();
+		List<Node> functions = new ArrayList<Node>();
 		functions.add(new IfFunction());
 		functions.add(new AndFunction());
 		functions.add(new OrFunction());
@@ -83,9 +83,9 @@ public class Even7Parity extends GPAbstractModel<Boolean> {
 	}
 
 	@Override
-	public List<TerminalNode<Boolean>> getTerminals() {		
+	public List<Node> getTerminals() {		
 		// Define terminals.
-		List<TerminalNode<Boolean>> terminals = new ArrayList<TerminalNode<Boolean>>();
+		List<Node> terminals = new ArrayList<Node>();
 		terminals.add(variables.get("D6"));
 		terminals.add(variables.get("D5"));
 		terminals.add(variables.get("D4"));
@@ -98,7 +98,9 @@ public class Even7Parity extends GPAbstractModel<Boolean> {
 	}
 	
 	@Override
-	public double getFitness(GPCandidateProgram<Boolean> program) {
+	public double getFitness(CandidateProgram p) {
+		GPCandidateProgram program = (GPCandidateProgram) p;
+		
         double score = 0;
         
         // Execute on all possible inputs.
@@ -112,7 +114,7 @@ public class Even7Parity extends GPAbstractModel<Boolean> {
         	variables.get("D5").setValue(in[5]);
         	variables.get("D6").setValue(in[6]);
         	
-            if (program.evaluate() == chooseResult(in)) {
+            if ((Boolean) program.evaluate() == chooseResult(in)) {
                 score++;
             }
         }

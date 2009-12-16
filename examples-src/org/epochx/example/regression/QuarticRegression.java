@@ -32,9 +32,9 @@ import org.epochx.stats.*;
 /**
  * 
  */
-public class QuarticRegression extends GPAbstractModel<Double> {
+public class QuarticRegression extends GPAbstractModel {
 
-	private Variable<Double> x;
+	private DoubleVariable x;
 	
 	public QuarticRegression() {
 		configure();
@@ -42,7 +42,7 @@ public class QuarticRegression extends GPAbstractModel<Double> {
 	
 	public void configure() {
 		// Create variables.
-		x = new Variable<Double>("X");
+		x = new DoubleVariable("X");
 		
 		setGenStatFields(new GenerationStatField[]{GenerationStatField.FITNESS_MIN, GenerationStatField.FITNESS_AVE, GenerationStatField.LENGTH_AVE, GenerationStatField.RUN_TIME});
 		setRunStatFields(new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM, RunStatField.RUN_TIME});
@@ -51,9 +51,9 @@ public class QuarticRegression extends GPAbstractModel<Double> {
 		setPopulationSize(500);
 		setCrossoverProbability(0.9);
 		setMutationProbability(0.0);
-		setPoolSelector(new TournamentSelector<Double>(this, 7));
-		setProgramSelector(new LinearRankSelector<Double>(this, 0.5));
-		setCrossover(new UniformPointCrossover<Double>(this));
+		setPoolSelector(new TournamentSelector(this, 7));
+		setProgramSelector(new LinearRankSelector(this, 0.5));
+		setCrossover(new UniformPointCrossover(this));
 		setPoolSize(50);
 		setNoGenerations(50);
 		setNoElites(50);
@@ -62,9 +62,9 @@ public class QuarticRegression extends GPAbstractModel<Double> {
 	}
 
 	@Override
-	public List<FunctionNode<Double>> getFunctions() {
+	public List<Node> getFunctions() {
 		// Define function set.
-		List<FunctionNode<Double>> functions = new ArrayList<FunctionNode<Double>>();
+		List<Node> functions = new ArrayList<Node>();
 		functions.add(new AddFunction());
 		functions.add(new SubtractFunction());
 		functions.add(new MultiplyFunction());
@@ -77,20 +77,20 @@ public class QuarticRegression extends GPAbstractModel<Double> {
 	 * @see org.epochx.core.GPModel#getTerminals()
 	 */
 	@Override
-	public List<TerminalNode<Double>> getTerminals() {
+	public List<Node> getTerminals() {
 		// Define terminal set.
-		List<TerminalNode<Double>> terminals = new ArrayList<TerminalNode<Double>>();
-		terminals.add(new TerminalNode<Double>(5d));
-		terminals.add(new TerminalNode<Double>(4d));
-		terminals.add(new TerminalNode<Double>(3d));
-		terminals.add(new TerminalNode<Double>(2d));
-		terminals.add(new TerminalNode<Double>(1d));
-		terminals.add(new TerminalNode<Double>(0d));
-		terminals.add(new TerminalNode<Double>(-5d));
-		terminals.add(new TerminalNode<Double>(-4d));
-		terminals.add(new TerminalNode<Double>(-3d));
-		terminals.add(new TerminalNode<Double>(-2d));
-		terminals.add(new TerminalNode<Double>(-1d));
+		List<Node> terminals = new ArrayList<Node>();
+		terminals.add(new DoubleLiteral(5d));
+		terminals.add(new DoubleLiteral(4d));
+		terminals.add(new DoubleLiteral(3d));
+		terminals.add(new DoubleLiteral(2d));
+		terminals.add(new DoubleLiteral(1d));
+		terminals.add(new DoubleLiteral(0d));
+		terminals.add(new DoubleLiteral(-5d));
+		terminals.add(new DoubleLiteral(-4d));
+		terminals.add(new DoubleLiteral(-3d));
+		terminals.add(new DoubleLiteral(-2d));
+		terminals.add(new DoubleLiteral(-1d));
 		
 		// Define variables;
 		terminals.add(x);
@@ -99,13 +99,15 @@ public class QuarticRegression extends GPAbstractModel<Double> {
 	}
 	
 	@Override
-	public double getFitness(GPCandidateProgram<Double> program) {
+	public double getFitness(CandidateProgram p) {
+		GPCandidateProgram program = (GPCandidateProgram) p;
+		
 		double[] inputs = new double[]{-1.0, -0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9};
 		int noWrong = 0;
 		
 		for (double in: inputs) {
 			x.setValue(in);
-			if (program.evaluate() != getCorrectResult(in)) {
+			if ((Double) program.evaluate() != getCorrectResult(in)) {
 				noWrong++;
 			}
 		}

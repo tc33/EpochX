@@ -248,7 +248,7 @@ public class GPCandidateProgram extends CandidateProgram {
 		} else {
 			clone.rootNode = (Node) this.rootNode.clone();
 		}
-			
+		
 		// Shallow copy the model.
 		clone.model = this.model;
 		

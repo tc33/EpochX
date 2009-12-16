@@ -211,11 +211,12 @@ public abstract class Node implements Cloneable {
 	 * @return the number of terminal nodes in this node tree.
 	 */
 	public int getNoTerminals() {
-		if (this instanceof TerminalNode) {
+		int arity = getArity();
+		if (arity == 0) {
 			return 1;
 		} else {
 			int result = 0;
-			for (int i=0; i<getArity(); i++) {
+			for (int i=0; i<arity; i++) {
 				result += getChild(i).getNoTerminals();
 			}
 			return result;
@@ -229,10 +230,10 @@ public abstract class Node implements Cloneable {
 	 */
 	public int getNoDistinctTerminals() {
 		// Get a list of terminals.
-		List<TerminalNode> terminals = getTerminalNodes();
+		List<Node> terminals = getTerminalNodes();
 		
 		// Remove duplicates.
-		Set<TerminalNode> terminalHash = new HashSet<TerminalNode>(terminals);
+		Set<Node> terminalHash = new HashSet<Node>(terminals);
 		
 		// The number left is how many distinct terminals.
 		return terminalHash.size();
@@ -243,14 +244,15 @@ public abstract class Node implements Cloneable {
 	 * 
 	 * @return a List of all the terminal nodes in the node tree.
 	 */
-	public List<TerminalNode> getTerminalNodes() {
+	public List<Node> getTerminalNodes() {
 		// Alternatively we could use an array, which is quicker/more efficient in this situation?
-		List<TerminalNode> terminals = new ArrayList<TerminalNode>();
+		List<Node> terminals = new ArrayList<Node>();
 		
-		if (this instanceof TerminalNode) {
-			terminals.add((TerminalNode) this);
+		int arity = getArity();		
+		if (arity == 0) {
+			terminals.add(this);
 		} else {
-			for (int i=0; i<getArity(); i++) {
+			for (int i=0; i<arity; i++) {
 				terminals.addAll(getChild(i).getTerminalNodes());
 			}
 		}
@@ -263,11 +265,12 @@ public abstract class Node implements Cloneable {
 	 * @return the number of function nodes in this node tree.
 	 */
 	public int getNoFunctions() {
-		if (this instanceof TerminalNode) {
+		int arity = getArity();
+		if (arity == 0) {
 			return 0;
 		} else {
 			int result = 1;
-			for (int i=0; i<getArity(); i++) {
+			for (int i=0; i<arity; i++) {
 				result += getChild(i).getNoFunctions();
 			}
 			return result;
@@ -306,13 +309,14 @@ public abstract class Node implements Cloneable {
 		// Alternatively we could use an array, which is quicker/more efficient in this situation?
 		List<FunctionNode> functions = new ArrayList<FunctionNode>();
 		
-		if (this instanceof TerminalNode) {
+		int arity = getArity();
+		if (arity == 0) {
 			// No more function nodes to count, return empty list.
 		} else {
 			if (this instanceof FunctionNode) {
 				functions.add((FunctionNode) this);
 			}
-			for (int i=0; i<getArity(); i++) {
+			for (int i=0; i<arity; i++) {
 				functions.addAll(getChild(i).getFunctionNodes());
 			}
 		}
@@ -469,4 +473,5 @@ public abstract class Node implements Cloneable {
 		builder.append(')');
 		return builder.toString();
 	}
+	
 }

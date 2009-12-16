@@ -15,8 +15,12 @@ public class DoubleVariable extends DoubleNode {
 		this.value = value;
 	}
 	
-	public void setValue(double value) {
+	public void setValue(Double value) {
 		this.value = value;
+	}
+	
+	public Double getValue() {
+		return value;
 	}
 	
 	@Override

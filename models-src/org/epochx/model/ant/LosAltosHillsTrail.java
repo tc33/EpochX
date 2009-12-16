@@ -32,7 +32,7 @@ import org.epochx.tools.ant.*;
 /**
  *
  */
-public class LosAltosHillsTrail extends GPAbstractModel<Object> {
+public class LosAltosHillsTrail extends GPAbstractModel {
 	
 	private AntLandscape landscape;
 	private Ant ant;
@@ -87,9 +87,9 @@ public class LosAltosHillsTrail extends GPAbstractModel<Object> {
 	}
 	
 	@Override
-	public List<FunctionNode<Object>> getFunctions() {
+	public List<Node> getFunctions() {
 		// Define functions.
-		List<FunctionNode<Object>> functions = new ArrayList<FunctionNode<Object>>();
+		List<Node> functions = new ArrayList<Node>();
 		functions.add(new IfFoodAheadFunction(ant));
 		functions.add(new Seq2Function());
 		functions.add(new Seq3Function());
@@ -98,9 +98,9 @@ public class LosAltosHillsTrail extends GPAbstractModel<Object> {
 	}
 
 	@Override
-	public List<TerminalNode<Object>> getTerminals() {		
+	public List<Node> getTerminals() {		
 		// Define terminals.
-		List<TerminalNode<Object>> terminals = new ArrayList<TerminalNode<Object>>();
+		List<Node> terminals = new ArrayList<Node>();
 		terminals.add(new AntMoveAction(ant));
 		terminals.add(new AntTurnLeftAction(ant));
 		terminals.add(new AntTurnRightAction(ant));
@@ -109,7 +109,9 @@ public class LosAltosHillsTrail extends GPAbstractModel<Object> {
 	}
 	
 	@Override
-	public double getFitness(GPCandidateProgram<Object> program) {		
+	public double getFitness(CandidateProgram p) {
+		GPCandidateProgram program = (GPCandidateProgram) p;
+		
 		landscape.setFoodLocations(new ArrayList<Point>(Arrays.asList(foodLocations)));
 		ant.reset(3000, landscape);
 
@@ -133,7 +135,7 @@ public class LosAltosHillsTrail extends GPAbstractModel<Object> {
 	}
 	
 	public static void main(String[] args) {		
-		GPAbstractModel<Object> model = new LosAltosHillsTrail();
+		GPAbstractModel model = new LosAltosHillsTrail();
 		model.setGenStatFields(new GenerationStatField[]{GenerationStatField.FITNESS_MIN});
 		model.setPopulationSize(2000);
 		Controller.run(model);

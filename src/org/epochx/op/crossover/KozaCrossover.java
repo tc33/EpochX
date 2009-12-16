@@ -175,7 +175,7 @@ public class KozaCrossover implements GPCrossover, GenerationListener {
 	 */
 	private int getNthTerminalNode(int n, int terminalCount, int nodeCount, Node current) {
 		// Found the nth terminal node.
-		if (current instanceof TerminalNode) {
+		if (current.getArity() == 0) {
 			if (n == terminalCount++)
 				return nodeCount;
 		}

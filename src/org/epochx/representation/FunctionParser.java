@@ -36,11 +36,8 @@ public class FunctionParser {
 	// This map is to contain only simple functions that require no additional info.
 	private final Map<String, Class<?>> simpleFunctions;
 	
-	// This map is to contain only simple actions that require no additional info.
-	private final Map<String, Class<?>> simpleActions;
-	
 	// List of variables to be used, any variables found, not provided will be created.
-	private List<Variable> variables;
+	private List<Node> variables;
 	
 	// An ant which we may need to use in some function creations - lazily created.
 	private Ant ant;
@@ -67,9 +64,8 @@ public class FunctionParser {
 	             					  "[\\x00-\\x20]*");
 	
 	public FunctionParser() {
-		variables = new ArrayList<Variable>();
+		variables = new ArrayList<Node>();
 		simpleFunctions = new HashMap<String, Class<?>>();
-		simpleActions = new HashMap<String, Class<?>>();
 		
 		// Insert the Boolean functions.
 		simpleFunctions.put("AND", AndFunction.class);
@@ -126,9 +122,9 @@ public class FunctionParser {
 	 * We do lazy initialisation, so if the object hasn't been initialised yet,
 	 * we do it now.
 	 */
-	private FunctionNode<?> initialiseFunction(String name) {
+	private Node initialiseFunction(String name) {
 		// The function node we're going to create.
-		FunctionNode<?> node = null;
+		Node node = null;
 		
 		// Attempt to find the function in the list of simple functions.
 		Class<?> functionClass = simpleFunctions.get(name);
@@ -136,8 +132,7 @@ public class FunctionParser {
 		if (functionClass != null) {
 			// Instantiate the function node.
 			try {
-				// This will blow up here if the data-type of the function does not match TYPE.
-				node = (FunctionNode<?>) functionClass.newInstance();
+				node = (Node) functionClass.newInstance();
 			} catch (InstantiationException e) {
 				//TODO Do something...
 			} catch (IllegalAccessException e) {
@@ -145,31 +140,6 @@ public class FunctionParser {
 			}
 		} else if (name.equals("IF-FOOD-AHEAD")) {
 			node = new IfFoodAheadFunction(ant);
-		} else {
-			// Function unknown - error.
-			//TODO Do something for error.
-		}
-		
-		return node;
-	}
-
-	private Action initialiseAction(String name) {
-		// The action node we're going to create.
-		Action node = null;
-		
-		// Attempt to find the action in the list of simple actions.
-		Class<?> actionClass = simpleActions.get(name);
-		
-		if (actionClass != null) {
-			// Instantiate the function node.
-			try {
-				// This will blow up here if the data-type of the function does not match TYPE.
-				node = (Action) actionClass.newInstance();
-			} catch (InstantiationException e) {
-				//TODO Do something...
-			} catch (IllegalAccessException e) {
-				//TODO Do something...
-			}
 		} else if (name.equals("MOVE")) {
 			node = new AntMoveAction(ant);
 		} else if (name.equals("TURN-LEFT")) {
@@ -194,38 +164,40 @@ public class FunctionParser {
 		// Locate the first bracket (straight after function name).
 		int openingBracket = source.indexOf('(');
 		
+		String identifier = null;
+		List<String> args = null;
+		
 		// If there is no bracket then it must be a terminal.
 		if (openingBracket == -1) {
-			// This will blow up here if the data-type of the terminal did not match TYPE.
-			return (Node) parseTerminal(source);
+			identifier = source;
+			args = new ArrayList<String>();
 		} else {
 			// Get the name of the function.
-			String functionName = source.substring(0, openingBracket);
+			identifier = source.substring(0, openingBracket);
 			
 			// Get the comma separated arguments - without the surrounding brackets.
 			String argumentStr = source.substring(openingBracket+1, source.length()-1);
 			
 			// Separate the arguments.
-			List<String> args = splitArguments(argumentStr);
-			
-			Node node = null;
-			if (args.size() == 0) {
-				node = (Node) initialiseAction(functionName);
-			} else {
-				node = (Node) initialiseFunction(functionName);
-			}
-			
-			// Check the arities match.
-			if (node == null || node.getArity() != args.size()) {
-				throw new MalformedProgramException();
-			} else {
-				for (int i=0; i<args.size(); i++) {
-					node.setChild(i, parse(args.get(i)));
-				}
-			}
-			
-			return node;
+			args = splitArguments(argumentStr);
 		}
+			
+		Node node = initialiseFunction(identifier);
+		
+		if (node == null) {
+			node = parseTerminal(identifier);
+		}
+		
+		// Check the arities match.
+		if (node == null || node.getArity() != args.size()) {
+			throw new MalformedProgramException();
+		} else {
+			for (int i=0; i<args.size(); i++) {
+				node.setChild(i, parse(args.get(i)));
+			}
+		}
+		
+		return node;
 	}
 	
 	/**
@@ -240,38 +212,33 @@ public class FunctionParser {
 	 * @param terminalStr
 	 * @return
 	 */
-	private TerminalNode<?> parseTerminal(String terminalStr) {
+	private Node parseTerminal(String terminalStr) {
 		if (Pattern.matches(fpRegex, terminalStr)) {
-			return new TerminalNode<Double>(Double.valueOf(terminalStr));
+			return new DoubleLiteral(Double.valueOf(terminalStr));
 		} else if (terminalStr.equalsIgnoreCase("true") 
 				 	|| terminalStr.equalsIgnoreCase("false")) {
-			return new TerminalNode<Boolean>(Boolean.valueOf(terminalStr));
+			return new BooleanLiteral(Boolean.valueOf(terminalStr));
 		} else {
 			// Must be a variable.
-			for (Variable v: variables) {
-				if (v.getLabel().equals(terminalStr)) {
+			for (Node v: variables) {
+				if (v.getIdentifier().equals(terminalStr)) {
 					return v;
 				}
 			}
 			
-			// If we didn't find one then just create one.
-			return new Variable<Boolean>(terminalStr);
+			return null;
 		}
 	}
 	
-	public void addSimpleFunction(String name, Class<FunctionNode<?>> functionClass) {
+	public void addSimpleFunction(String name, Class<Node> functionClass) {
 		simpleFunctions.put(name, functionClass);
 	}
 	
-	public void addSimpleAction(String name, Class<Action> actionClass) {
-		simpleActions.put(name, actionClass);
-	}
-	
-	public void setAvailableVariables(List<Variable> variables) {
+	public void setAvailableVariables(List<Node> variables) {
 		this.variables = variables;
 	}
 	
-	public void addAvailableVariable(Variable variable) {
+	public void addAvailableVariable(Node variable) {
 		variables.add(variable);
 	}
 	
@@ -320,10 +287,12 @@ public class FunctionParser {
 		FunctionParser parser = new FunctionParser();
 		
 		//System.out.println(parser.parse("IF(ADD(1,false),NOT(true),false)").toString());
-		Node<Boolean> programTree = parser.parse("XOR(D1 XOR(NOT(XOR(D0 D3)) D2))");
+		//Node programTree = parser.parse("XOR(D1 XOR(NOT(XOR(D0 D3)) D2))");
 		
+		parser.addAvailableVariable(new BooleanVariable("d0", false));
 		
-		
-		//System.out.println(parser.parse("XOR(OR(d0,d0),NOT(d0))").toString());
+		Node programTree = parser.parse("XOR(OR(d0,d0),NOT(d0))");
+		System.out.println(programTree.toString());
+		System.out.println(programTree.evaluate());
 	}
 }

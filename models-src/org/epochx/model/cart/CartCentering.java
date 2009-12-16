@@ -32,7 +32,7 @@ import org.epochx.stats.*;
 /**
  *
  */
-public class CartCentering extends GPAbstractModel<Double> {
+public class CartCentering extends GPAbstractModel {
 
 	// The rocket force in newtons.
 	private static final double F = 1.0;
@@ -46,8 +46,8 @@ public class CartCentering extends GPAbstractModel<Double> {
 	// The acceleration based upon a = F/m
 	private final double a;
 	
-	private Variable<Double> varX;
-	private Variable<Double> varV;
+	private DoubleVariable varX;
+	private DoubleVariable varV;
 	
 	private double[] testPositions;
 	private double[] testVelocities;
@@ -69,14 +69,14 @@ public class CartCentering extends GPAbstractModel<Double> {
 	
 	public void configure() {
 		// Create variables.
-		varX = new Variable<Double>("X");
-		varV = new Variable<Double>("V");
+		varX = new DoubleVariable("X");
+		varV = new DoubleVariable("V");
 	}
 
 	@Override
-	public List<FunctionNode<Double>> getFunctions() {
+	public List<Node> getFunctions() {
 		// Define function set.
-		List<FunctionNode<Double>> functions = new ArrayList<FunctionNode<Double>>();
+		List<Node> functions = new ArrayList<Node>();
 		functions.add(new AddFunction());
 		functions.add(new SubtractFunction());
 		functions.add(new MultiplyFunction());
@@ -88,9 +88,9 @@ public class CartCentering extends GPAbstractModel<Double> {
 	}
 
 	@Override
-	public List<TerminalNode<Double>> getTerminals() {
+	public List<Node> getTerminals() {
 		// Define terminal set.
-		List<TerminalNode<Double>> terminals = new ArrayList<TerminalNode<Double>>();
+		List<Node> terminals = new ArrayList<Node>();
 		
 		// Define variables;
 		terminals.add(varX);
@@ -100,7 +100,9 @@ public class CartCentering extends GPAbstractModel<Double> {
 	}
 	
 	@Override
-	public double getFitness(GPCandidateProgram<Double> program) {
+	public double getFitness(CandidateProgram p) {
+		GPCandidateProgram program = (GPCandidateProgram) p;
+		
 		// Total time taken for all fitness cases in ms.
 		int totalTime = 0;
 
@@ -138,7 +140,7 @@ public class CartCentering extends GPAbstractModel<Double> {
 				}
 				
 				// Execute with current position and velocity.
-				double u = program.evaluate();
+				double u = (Double) program.evaluate();
 				
 				// Make 'u' either +1.0 or -1.0 using sign value.
 				u = Math.signum(u);
@@ -165,7 +167,7 @@ public class CartCentering extends GPAbstractModel<Double> {
 	}
 	
 	public static void main(String[] args) {
-		GPAbstractModel<Double> model = new CartCentering();
+		GPAbstractModel model = new CartCentering();
 		model.setGenStatFields(new GenerationStatField[]{GenerationStatField.FITNESS_MIN, GenerationStatField.FITNESS_AVE, GenerationStatField.LENGTH_AVE, GenerationStatField.RUN_TIME});
 		model.setRunStatFields(new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM, RunStatField.RUN_TIME});
 		
@@ -177,10 +179,10 @@ public class CartCentering extends GPAbstractModel<Double> {
 		model.setPoolSize(50);
 		model.setNoElites(50);
 		model.setMaxProgramDepth(5);
-		model.setPoolSelector(new TournamentSelector<Double>(model, 7));
-		model.setProgramSelector(new RandomSelector<Double>(model));
-		model.setCrossover(new UniformPointCrossover<Double>(model));
-		model.setMutator(new PointMutation<Double>(model, 0.1));
+		model.setPoolSelector(new TournamentSelector(model, 7));
+		model.setProgramSelector(new RandomSelector(model));
+		model.setCrossover(new UniformPointCrossover(model));
+		model.setMutator(new PointMutation(model, 0.1));
 		
 		Controller.run(model);
 	}

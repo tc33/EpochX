@@ -30,35 +30,35 @@ import org.epochx.tools.util.BoolUtils;
 /**
  * 
  */
-public class Majority9 extends GPAbstractModel<Boolean> {
+public class Majority9 extends GPAbstractModel {
 
 	private boolean[][] inputs;
-	private HashMap<String, Variable<Boolean>> variables;
+	private HashMap<String, BooleanVariable> variables;
 	
 	public Majority9() {
 		inputs = BoolUtils.generateBoolSequences(9);
-		variables = new HashMap<String, Variable<Boolean>>();
+		variables = new HashMap<String, BooleanVariable>();
 		
 		configure();
 	}
 	
 	public void configure() {
 		// Define variables.
-		variables.put("D8", new Variable<Boolean>("D8"));
-		variables.put("D7", new Variable<Boolean>("D7"));
-		variables.put("D6", new Variable<Boolean>("D6"));
-		variables.put("D5", new Variable<Boolean>("D5"));
-		variables.put("D4", new Variable<Boolean>("D4"));
-		variables.put("D3", new Variable<Boolean>("D3"));
-		variables.put("D2", new Variable<Boolean>("D2"));
-		variables.put("D1", new Variable<Boolean>("D1"));
-		variables.put("D0", new Variable<Boolean>("D0"));
+		variables.put("D8", new BooleanVariable("D8"));
+		variables.put("D7", new BooleanVariable("D7"));
+		variables.put("D6", new BooleanVariable("D6"));
+		variables.put("D5", new BooleanVariable("D5"));
+		variables.put("D4", new BooleanVariable("D4"));
+		variables.put("D3", new BooleanVariable("D3"));
+		variables.put("D2", new BooleanVariable("D2"));
+		variables.put("D1", new BooleanVariable("D1"));
+		variables.put("D0", new BooleanVariable("D0"));
 	}
 	
 	@Override
-	public List<FunctionNode<Boolean>> getFunctions() {
+	public List<Node> getFunctions() {
 		// Define functions.
-		List<FunctionNode<Boolean>> functions = new ArrayList<FunctionNode<Boolean>>();
+		List<Node> functions = new ArrayList<Node>();
 		functions.add(new IfFunction());
 		functions.add(new AndFunction());
 		functions.add(new OrFunction());
@@ -67,9 +67,9 @@ public class Majority9 extends GPAbstractModel<Boolean> {
 	}
 
 	@Override
-	public List<TerminalNode<Boolean>> getTerminals() {		
+	public List<Node> getTerminals() {		
 		// Define terminals.
-		List<TerminalNode<Boolean>> terminals = new ArrayList<TerminalNode<Boolean>>();
+		List<Node> terminals = new ArrayList<Node>();
 		terminals.add(variables.get("D8"));
 		terminals.add(variables.get("D7"));
 		terminals.add(variables.get("D6"));
@@ -84,7 +84,9 @@ public class Majority9 extends GPAbstractModel<Boolean> {
 	}
 	
 	@Override
-	public double getFitness(GPCandidateProgram<Boolean> program) {
+	public double getFitness(CandidateProgram p) {
+		GPCandidateProgram program = (GPCandidateProgram) p;
+		
         double score = 0;
         
         // Execute on all possible inputs.
@@ -100,7 +102,7 @@ public class Majority9 extends GPAbstractModel<Boolean> {
         	variables.get("D7").setValue(in[7]);
         	variables.get("D8").setValue(in[8]);
         	
-            if (program.evaluate() == chooseResult(in)) {
+            if ((Boolean) program.evaluate() == chooseResult(in)) {
                 score++;
             }
         }

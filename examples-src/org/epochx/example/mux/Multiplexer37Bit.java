@@ -34,9 +34,9 @@ import org.epochx.tools.util.BoolUtils;
  * 
  *
  */
-public class Multiplexer37Bit extends GPAbstractModel<Boolean> {
+public class Multiplexer37Bit extends GPAbstractModel {
 	
-	private HashMap<String, Variable<Boolean>> variables = new HashMap<String, Variable<Boolean>>();
+	private HashMap<String, BooleanVariable> variables = new HashMap<String, BooleanVariable>();
 	
 	public Multiplexer37Bit() {
 		configure();
@@ -44,43 +44,43 @@ public class Multiplexer37Bit extends GPAbstractModel<Boolean> {
 	
 	public void configure() {
 		// Define variables.
-		variables.put("D31", new Variable<Boolean>("D31"));
-		variables.put("D30", new Variable<Boolean>("D30"));
-		variables.put("D29", new Variable<Boolean>("D29"));
-		variables.put("D28", new Variable<Boolean>("D28"));
-		variables.put("D27", new Variable<Boolean>("D27"));
-		variables.put("D26", new Variable<Boolean>("D26"));
-		variables.put("D25", new Variable<Boolean>("D25"));
-		variables.put("D24", new Variable<Boolean>("D24"));
-		variables.put("D23", new Variable<Boolean>("D23"));
-		variables.put("D22", new Variable<Boolean>("D22"));
-		variables.put("D21", new Variable<Boolean>("D21"));
-		variables.put("D20", new Variable<Boolean>("D20"));
-		variables.put("D19", new Variable<Boolean>("D19"));
-		variables.put("D18", new Variable<Boolean>("D18"));
-		variables.put("D17", new Variable<Boolean>("D17"));
-		variables.put("D16", new Variable<Boolean>("D16"));
-		variables.put("D15", new Variable<Boolean>("D15"));
-		variables.put("D14", new Variable<Boolean>("D14"));
-		variables.put("D13", new Variable<Boolean>("D13"));
-		variables.put("D12", new Variable<Boolean>("D12"));
-		variables.put("D11", new Variable<Boolean>("D11"));
-		variables.put("D10", new Variable<Boolean>("D10"));
-		variables.put("D9", new Variable<Boolean>("D9"));
-		variables.put("D8", new Variable<Boolean>("D8"));
-		variables.put("D7", new Variable<Boolean>("D7"));
-		variables.put("D6", new Variable<Boolean>("D6"));
-		variables.put("D5", new Variable<Boolean>("D5"));
-		variables.put("D4", new Variable<Boolean>("D4"));
-		variables.put("D3", new Variable<Boolean>("D3"));
-		variables.put("D2", new Variable<Boolean>("D2"));
-		variables.put("D1", new Variable<Boolean>("D1"));
-		variables.put("D0", new Variable<Boolean>("D0"));
-		variables.put("A4", new Variable<Boolean>("A4"));
-		variables.put("A3", new Variable<Boolean>("A3"));
-		variables.put("A2", new Variable<Boolean>("A2"));
-		variables.put("A1", new Variable<Boolean>("A1"));
-		variables.put("A0", new Variable<Boolean>("A0"));
+		variables.put("D31", new BooleanVariable("D31"));
+		variables.put("D30", new BooleanVariable("D30"));
+		variables.put("D29", new BooleanVariable("D29"));
+		variables.put("D28", new BooleanVariable("D28"));
+		variables.put("D27", new BooleanVariable("D27"));
+		variables.put("D26", new BooleanVariable("D26"));
+		variables.put("D25", new BooleanVariable("D25"));
+		variables.put("D24", new BooleanVariable("D24"));
+		variables.put("D23", new BooleanVariable("D23"));
+		variables.put("D22", new BooleanVariable("D22"));
+		variables.put("D21", new BooleanVariable("D21"));
+		variables.put("D20", new BooleanVariable("D20"));
+		variables.put("D19", new BooleanVariable("D19"));
+		variables.put("D18", new BooleanVariable("D18"));
+		variables.put("D17", new BooleanVariable("D17"));
+		variables.put("D16", new BooleanVariable("D16"));
+		variables.put("D15", new BooleanVariable("D15"));
+		variables.put("D14", new BooleanVariable("D14"));
+		variables.put("D13", new BooleanVariable("D13"));
+		variables.put("D12", new BooleanVariable("D12"));
+		variables.put("D11", new BooleanVariable("D11"));
+		variables.put("D10", new BooleanVariable("D10"));
+		variables.put("D9", new BooleanVariable("D9"));
+		variables.put("D8", new BooleanVariable("D8"));
+		variables.put("D7", new BooleanVariable("D7"));
+		variables.put("D6", new BooleanVariable("D6"));
+		variables.put("D5", new BooleanVariable("D5"));
+		variables.put("D4", new BooleanVariable("D4"));
+		variables.put("D3", new BooleanVariable("D3"));
+		variables.put("D2", new BooleanVariable("D2"));
+		variables.put("D1", new BooleanVariable("D1"));
+		variables.put("D0", new BooleanVariable("D0"));
+		variables.put("A4", new BooleanVariable("A4"));
+		variables.put("A3", new BooleanVariable("A3"));
+		variables.put("A2", new BooleanVariable("A2"));
+		variables.put("A1", new BooleanVariable("A1"));
+		variables.put("A0", new BooleanVariable("A0"));
 		
 		setGenStatFields(new GenerationStatField[]{GenerationStatField.FITNESS_MIN, GenerationStatField.FITNESS_AVE, GenerationStatField.LENGTH_AVE, GenerationStatField.RUN_TIME});
 		setRunStatFields(new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM, RunStatField.RUN_TIME});
@@ -93,15 +93,15 @@ public class Multiplexer37Bit extends GPAbstractModel<Boolean> {
 		setPoolSize(50);
 		setNoElites(50);
 		setMaxProgramDepth(6);
-		setPoolSelector(new TournamentSelector<Boolean>(this, 7));
-		setProgramSelector(new RandomSelector<Boolean>(this));
-		setCrossover(new UniformPointCrossover<Boolean>(this));
+		setPoolSelector(new TournamentSelector(this, 7));
+		setProgramSelector(new RandomSelector(this));
+		setCrossover(new UniformPointCrossover(this));
 	}
 	
 	@Override
-	public List<FunctionNode<Boolean>> getFunctions() {
+	public List<Node> getFunctions() {
 		// Define functions.
-		List<FunctionNode<Boolean>> functions = new ArrayList<FunctionNode<Boolean>>();
+		List<Node> functions = new ArrayList<Node>();
 		functions.add(new IfFunction());
 		functions.add(new AndFunction());
 		functions.add(new OrFunction());
@@ -110,9 +110,9 @@ public class Multiplexer37Bit extends GPAbstractModel<Boolean> {
 	}
 
 	@Override
-	public List<TerminalNode<Boolean>> getTerminals() {		
+	public List<Node> getTerminals() {		
 		// Define terminals.
-		List<TerminalNode<Boolean>> terminals = new ArrayList<TerminalNode<Boolean>>();
+		List<Node> terminals = new ArrayList<Node>();
 		terminals.add(variables.get("D31"));
 		terminals.add(variables.get("D30"));
 		terminals.add(variables.get("D29"));
@@ -155,7 +155,9 @@ public class Multiplexer37Bit extends GPAbstractModel<Boolean> {
 	}
 	
 	@Override
-	public double getFitness(GPCandidateProgram<Boolean> program) {
+	public double getFitness(CandidateProgram p) {
+		GPCandidateProgram program = (GPCandidateProgram) p;
+		
         double score = 0;
         
         long noInputs = (long) Math.pow(2, 37);
@@ -203,7 +205,7 @@ public class Multiplexer37Bit extends GPAbstractModel<Boolean> {
         	variables.get("D30").setValue(in[35]);
         	variables.get("D31").setValue(in[36]);
         	
-            if (program.evaluate() == chooseResult(in)) {
+            if ((Boolean) program.evaluate() == chooseResult(in)) {
                 score++;
             }
         }

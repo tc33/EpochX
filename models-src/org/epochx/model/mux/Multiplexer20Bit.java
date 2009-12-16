@@ -31,47 +31,47 @@ import org.epochx.tools.util.BoolUtils;
  * 
  *
  */
-public class Multiplexer20Bit extends GPAbstractModel<Boolean> {
+public class Multiplexer20Bit extends GPAbstractModel {
 
 	private boolean[][] inputs;
 	
-	private HashMap<String, Variable<Boolean>> variables;
+	private HashMap<String, BooleanVariable> variables;
 	
 	public Multiplexer20Bit() {
 		inputs = BoolUtils.generateBoolSequences(20);
-		variables = new HashMap<String, Variable<Boolean>>();
+		variables = new HashMap<String, BooleanVariable>();
 		
 		configure();
 	}
 	
 	public void configure() {
 		// Define variables.
-		variables.put("D15", new Variable<Boolean>("D15"));
-		variables.put("D14", new Variable<Boolean>("D14"));
-		variables.put("D13", new Variable<Boolean>("D13"));
-		variables.put("D12", new Variable<Boolean>("D12"));
-		variables.put("D11", new Variable<Boolean>("D11"));
-		variables.put("D10", new Variable<Boolean>("D10"));
-		variables.put("D9", new Variable<Boolean>("D9"));
-		variables.put("D8", new Variable<Boolean>("D8"));
-		variables.put("D7", new Variable<Boolean>("D7"));
-		variables.put("D6", new Variable<Boolean>("D6"));
-		variables.put("D5", new Variable<Boolean>("D5"));
-		variables.put("D4", new Variable<Boolean>("D4"));
-		variables.put("D3", new Variable<Boolean>("D3"));
-		variables.put("D2", new Variable<Boolean>("D2"));
-		variables.put("D1", new Variable<Boolean>("D1"));
-		variables.put("D0", new Variable<Boolean>("D0"));
-		variables.put("A3", new Variable<Boolean>("A3"));
-		variables.put("A2", new Variable<Boolean>("A2"));
-		variables.put("A1", new Variable<Boolean>("A1"));
-		variables.put("A0", new Variable<Boolean>("A0"));
+		variables.put("D15", new BooleanVariable("D15"));
+		variables.put("D14", new BooleanVariable("D14"));
+		variables.put("D13", new BooleanVariable("D13"));
+		variables.put("D12", new BooleanVariable("D12"));
+		variables.put("D11", new BooleanVariable("D11"));
+		variables.put("D10", new BooleanVariable("D10"));
+		variables.put("D9", new BooleanVariable("D9"));
+		variables.put("D8", new BooleanVariable("D8"));
+		variables.put("D7", new BooleanVariable("D7"));
+		variables.put("D6", new BooleanVariable("D6"));
+		variables.put("D5", new BooleanVariable("D5"));
+		variables.put("D4", new BooleanVariable("D4"));
+		variables.put("D3", new BooleanVariable("D3"));
+		variables.put("D2", new BooleanVariable("D2"));
+		variables.put("D1", new BooleanVariable("D1"));
+		variables.put("D0", new BooleanVariable("D0"));
+		variables.put("A3", new BooleanVariable("A3"));
+		variables.put("A2", new BooleanVariable("A2"));
+		variables.put("A1", new BooleanVariable("A1"));
+		variables.put("A0", new BooleanVariable("A0"));
 	}
 	
 	@Override
-	public List<FunctionNode<Boolean>> getFunctions() {
+	public List<Node> getFunctions() {
 		// Define functions.
-		List<FunctionNode<Boolean>> functions = new ArrayList<FunctionNode<Boolean>>();
+		List<Node> functions = new ArrayList<Node>();
 		functions.add(new IfFunction());
 		functions.add(new AndFunction());
 		functions.add(new OrFunction());
@@ -80,9 +80,9 @@ public class Multiplexer20Bit extends GPAbstractModel<Boolean> {
 	}
 
 	@Override
-	public List<TerminalNode<Boolean>> getTerminals() {		
+	public List<Node> getTerminals() {		
 		// Define terminals.
-		List<TerminalNode<Boolean>> terminals = new ArrayList<TerminalNode<Boolean>>();
+		List<Node> terminals = new ArrayList<Node>();
 		terminals.add(variables.get("D15"));
 		terminals.add(variables.get("D14"));
 		terminals.add(variables.get("D13"));
@@ -108,7 +108,9 @@ public class Multiplexer20Bit extends GPAbstractModel<Boolean> {
 	}
 	
 	@Override
-	public double getFitness(GPCandidateProgram<Boolean> program) {
+	public double getFitness(CandidateProgram p) {
+		GPCandidateProgram program = (GPCandidateProgram) p;
+		
         double score = 0;
         
         // Execute on all possible inputs.
@@ -135,7 +137,7 @@ public class Multiplexer20Bit extends GPAbstractModel<Boolean> {
         	variables.get("D14").setValue(in[18]);
         	variables.get("D15").setValue(in[19]);
         	
-            if (program.evaluate() == chooseResult(in)) {
+            if ((Boolean) program.evaluate() == chooseResult(in)) {
                 score++;
             }
         }

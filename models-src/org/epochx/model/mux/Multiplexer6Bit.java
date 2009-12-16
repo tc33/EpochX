@@ -30,33 +30,33 @@ import org.epochx.tools.util.BoolUtils;
 /**
  * 
  */
-public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
+public class Multiplexer6Bit extends GPAbstractModel {
 
 	private boolean[][] inputs;
 	
-	private HashMap<String, Variable<Boolean>> variables;	
+	private HashMap<String, BooleanVariable> variables;	
 	
 	public Multiplexer6Bit() {
 		inputs = BoolUtils.generateBoolSequences(6);
-		variables = new HashMap<String, Variable<Boolean>>();
+		variables = new HashMap<String, BooleanVariable>();
 		
 		configure();
 	}
 	
 	public void configure() {
 		// Define variables.
-		variables.put("D3", new Variable<Boolean>("D3"));
-		variables.put("D2", new Variable<Boolean>("D2"));
-		variables.put("D1", new Variable<Boolean>("D1"));
-		variables.put("D0", new Variable<Boolean>("D0"));
-		variables.put("A1", new Variable<Boolean>("A1"));
-		variables.put("A0", new Variable<Boolean>("A0"));
+		variables.put("D3", new BooleanVariable("D3"));
+		variables.put("D2", new BooleanVariable("D2"));
+		variables.put("D1", new BooleanVariable("D1"));
+		variables.put("D0", new BooleanVariable("D0"));
+		variables.put("A1", new BooleanVariable("A1"));
+		variables.put("A0", new BooleanVariable("A0"));
 	}
 	
 	@Override
-	public List<FunctionNode<Boolean>> getFunctions() {
+	public List<Node> getFunctions() {
 		// Define functions.
-		List<FunctionNode<Boolean>> functions = new ArrayList<FunctionNode<Boolean>>();
+		List<Node> functions = new ArrayList<Node>();
 		functions.add(new IfFunction());
 		functions.add(new AndFunction());
 		functions.add(new OrFunction());
@@ -65,9 +65,9 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
 	}
 
 	@Override
-	public List<TerminalNode<Boolean>> getTerminals() {		
+	public List<Node> getTerminals() {		
 		// Define terminals.
-		List<TerminalNode<Boolean>> terminals = new ArrayList<TerminalNode<Boolean>>();
+		List<Node> terminals = new ArrayList<Node>();
 		terminals.add(variables.get("D3"));
 		terminals.add(variables.get("D2"));
 		terminals.add(variables.get("D1"));
@@ -79,7 +79,9 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
 	}
 	
 	@Override
-	public double getFitness(GPCandidateProgram<Boolean> program) {
+	public double getFitness(CandidateProgram p) {
+		GPCandidateProgram program = (GPCandidateProgram) p;
+		
         double score = 0;
         
         // Execute on all possible inputs.
@@ -92,7 +94,7 @@ public class Multiplexer6Bit extends GPAbstractModel<Boolean> {
         	variables.get("D2").setValue(in[4]);
         	variables.get("D3").setValue(in[5]);
         	
-            if (program.evaluate() == chooseResult(in)) {
+            if ((Boolean) program.evaluate() == chooseResult(in)) {
                 score++;
             }
         }

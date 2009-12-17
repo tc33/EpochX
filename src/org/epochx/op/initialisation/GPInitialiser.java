@@ -41,6 +41,6 @@ public interface GPInitialiser extends Initialiser {
 	 * @return A List of newly generated CandidatePrograms which will form the 
 	 * initial population for a GP run.
 	 */
-	public List<GPCandidateProgram> getInitialPopulation();
+	public List<CandidateProgram> getInitialPopulation();
 	
 }

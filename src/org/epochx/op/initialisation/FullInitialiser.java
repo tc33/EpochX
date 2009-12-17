@@ -55,10 +55,10 @@ public class FullInitialiser implements GPInitialiser {
 	 * initial population for a GP run.
 	 */
 	@Override
-	public List<GPCandidateProgram> getInitialPopulation() {
+	public List<CandidateProgram> getInitialPopulation() {
 		// Create population list to be populated.
 		int popSize = model.getPopulationSize();
-		List<GPCandidateProgram> firstGen = new ArrayList<GPCandidateProgram>(popSize);
+		List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
 		
 		// Create and add new programs to the population.
 		for(int i=0; i<popSize; i++) {

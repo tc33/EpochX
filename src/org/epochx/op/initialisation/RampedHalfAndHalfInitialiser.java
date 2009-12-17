@@ -66,10 +66,10 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 	 * the population size is an odd number then the extra individual will be initialised with
 	 * grow.
 	 */
-	public List<GPCandidateProgram> getInitialPopulation() {
+	public List<CandidateProgram> getInitialPopulation() {
 		// Create population list to populate.
 		int popSize = model.getPopulationSize();
-		List<GPCandidateProgram> firstGen = new ArrayList<GPCandidateProgram>(popSize);
+		List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
 		
 		int startDepth = 2;
 		int endDepth = model.getInitialMaxDepth();

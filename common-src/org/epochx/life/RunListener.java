@@ -17,23 +17,13 @@
  *  You should have received a copy of the GNU General Public License
  *  along with EpochX.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.op;
+package org.epochx.life;
 
 /**
- * Operators are those operations for which it is possible to provide pluggable
- * version in EpochX. Operators are not limited to the genetic operators of 
- * GPCrossover and GPMutation.
+ *
  */
-public interface Operator {
+public interface RunListener {
 
-		/**
-		 * Operator statistics are those statistics which are unique to a specific 
-		 * operator. An operator may provide any statistics about its run that it 
-		 * wishes. Look at using the OPERATOR_STATS statistics fields for 
-		 * requesting these statistics for an operation.
-		 * 
-		 * @return An Object array of operator specific statistics.
-		 */
-		public Object[] getOperatorStats();
+	public void onRunStart();
 	
 }

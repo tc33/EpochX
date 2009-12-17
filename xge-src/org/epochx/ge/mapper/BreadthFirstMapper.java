@@ -167,7 +167,7 @@ public class BreadthFirstMapper implements Mapper {
 					int codon = codons.remove(0);
 					p = nt.getProduction(codon % noProductions);
 				}
-				for (GrammarNode nextS: p.getSymbols()) {
+				for (GrammarNode nextS: p.getGrammarNodes()) {
 					newSymbols.add(nextS);
 				}
 			} else {

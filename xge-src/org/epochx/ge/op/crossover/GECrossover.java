@@ -19,6 +19,7 @@
  */
 package org.epochx.ge.op.crossover;
 
+import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.op.Crossover;
 import org.epochx.representation.CandidateProgram;
 
@@ -26,9 +27,9 @@ import org.epochx.representation.CandidateProgram;
  * This interface defines the structure which specific crossover operations can
  * implement to provide different methods of crossing over two 
  * <code>CandidatePrograms</code>. GPCrossover instances are used by the core 
- * GECrossover class to perform a single crossover operation.
+ * GRCrossover class to perform a single crossover operation.
  * 
- * @see org.epochx.ge.core.GECrossover
+ * @see org.epochx.ge.core.GRCrossover
  */
 public interface GECrossover extends Crossover {
 
@@ -44,6 +45,6 @@ public interface GECrossover extends Crossover {
 	 * an exchange of genetic material between the two parents.
 	 */
 	@Override
-	public CandidateProgram[] crossover(CandidateProgram parent1, CandidateProgram parent2);
+	public GECandidateProgram[] crossover(CandidateProgram parent1, CandidateProgram parent2);
 	
 }

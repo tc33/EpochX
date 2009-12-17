@@ -20,6 +20,7 @@
 package org.epochx.ge.mapper;
 
 import org.epochx.ge.representation.*;
+import org.epochx.tools.grammar.Symbol;
 
 /**
  * A mapper's job is to convert a GECandidateProgram into a String sequence. 

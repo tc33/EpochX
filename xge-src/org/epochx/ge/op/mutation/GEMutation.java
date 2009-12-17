@@ -19,16 +19,17 @@
  */
 package org.epochx.ge.op.mutation;
 
+import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.op.Mutation;
 import org.epochx.representation.CandidateProgram;
 
 /**
  * This interface defines the structure which specific mutation operators can
  * implement to provide different methods of mutating a <code>GECandidateProgram</code>. 
- * GPMutation instances are used by the core GEMutation class to perform a single 
+ * GPMutation instances are used by the core GRMutation class to perform a single 
  * mutation operation.
  * 
- * @see org.epochx.ge.core.GEMutation
+ * @see org.epochx.ge.core.GRMutation
  */
 public interface GEMutation extends Mutation {
 
@@ -42,6 +43,6 @@ public interface GEMutation extends Mutation {
 	 * GECandidateProgram.
 	 */
 	@Override
-	public CandidateProgram mutate(CandidateProgram program);
+	public GECandidateProgram mutate(CandidateProgram program);
 		
 }

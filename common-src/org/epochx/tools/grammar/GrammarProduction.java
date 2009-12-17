@@ -28,27 +28,27 @@ import java.util.*;
  */
 public class GrammarProduction {
 
-	private List<GrammarNode> symbols;
+	private List<GrammarNode> grammarNodes;
 	
 	private double weight;
 	
-	public GrammarProduction(List<GrammarNode> symbols, double weight) {
-		this.symbols = symbols;
+	public GrammarProduction(List<GrammarNode> grammarNodes, double weight) {
+		this.grammarNodes = grammarNodes;
 		this.weight = weight;
 	}
 	
 	/**
-	 * Constructs a production around the specified sequence of symbols.
+	 * Constructs a production around the specified sequence of grammarNodes.
 	 * 
-	 * @param symbols a list of symbols that provides the mapping sequence for 
+	 * @param grammarNodes a list of grammarNodes that provides the mapping sequence for 
 	 * 				  this production.
 	 */
-	public GrammarProduction(List<GrammarNode> symbols) {
-		this(symbols, 1);
+	public GrammarProduction(List<GrammarNode> grammarNodes) {
+		this(grammarNodes, 1);
 	}
 	
 	/**
-	 * Constructs a production with no symbols. Symbols should be added to the 
+	 * Constructs a production with no grammarNodes. Symbols should be added to the 
 	 * production before use.
 	 */
 	public GrammarProduction() {
@@ -56,21 +56,21 @@ public class GrammarProduction {
 	}
 	
 	/**
-	 * Append the specified symbol to the list of symbols in the production.
+	 * Append the specified symbol to the list of grammarNodes in the production.
 	 * 
 	 * @param symbol the symbol to be appended to this production.
 	 */
-	public void addSymbol(GrammarNode symbol) {
-		symbols.add(symbol);
+	public void addGrammarNode(GrammarNode symbol) {
+		grammarNodes.add(symbol);
 	}
 	
 	/**
-	 * Returns a list of the symbols that make up this production.
+	 * Returns a list of the grammarNodes that make up this production.
 	 * 
-	 * @return the sequence of symbols that make up this production.
+	 * @return the sequence of grammarNodes that make up this production.
 	 */
-	public List<GrammarNode> getSymbols() {
-		return symbols;
+	public List<GrammarNode> getGrammarNodes() {
+		return grammarNodes;
 	}
 	
 	/**
@@ -78,17 +78,17 @@ public class GrammarProduction {
 	 * 
 	 * @return the symbol at the specified index in this production.
 	 */
-	public GrammarNode getSymbol(int index) {
-		return symbols.get(index);
+	public GrammarNode getGrammarNode(int index) {
+		return grammarNodes.get(index);
 	}
 	
 	/**
-	 * Returns the quantity of symbols in this production.
+	 * Returns the quantity of grammarNodes in this production.
 	 * 
-	 * @return the number of symbols in this production.
+	 * @return the number of grammarNodes in this production.
 	 */
-	public int getNoSymbols() {
-		return symbols.size();
+	public int getNoChildren() {
+		return grammarNodes.size();
 	}
 	
 	/**
@@ -117,14 +117,14 @@ public class GrammarProduction {
 	}
 	
 	/**
-	 * Gets the minimum depth required to lead to all terminal symbols.
+	 * Gets the minimum depth required to lead to all terminal grammarNodes.
 	 * 
-	 * @return the minimum depth required to lead to all terminal symbols.
+	 * @return the minimum depth required to lead to all terminal grammarNodes.
 	 */
 	public int getMinDepth() {
-		// We have to use the largest of all the production's symbols' minimum depths.
+		// We have to use the largest of all the production's grammarNodes' minimum depths.
 		int max = 0;
-		for (GrammarNode s: symbols) {
+		for (GrammarNode s: grammarNodes) {
 			int d = 0;
 			if (s instanceof GrammarRule) {
 				d = ((GrammarRule) s).getMinDepth();
@@ -139,14 +139,14 @@ public class GrammarProduction {
 	}
 	
 	/**
-	 * A production is recursive if any of its child symbols are recursive.
+	 * A production is recursive if any of its child grammarNodes are recursive.
 	 * 
 	 * @return true if this production is recursive and false otherwise.
 	 */
 	public boolean isRecursive() {
 		boolean recursive = false;
 		
-		for (GrammarNode s: symbols) {
+		for (GrammarNode s: grammarNodes) {
 			if (s instanceof GrammarRule) {
 				recursive = ((GrammarRule) s).isRecursive();
 			}
@@ -160,7 +160,7 @@ public class GrammarProduction {
 	}
 	
 	/**
-	 * Returns a string representation of this production and its symbols.
+	 * Returns a string representation of this production and its grammarNodes.
 	 * 
 	 * @return a string representation of this production.
 	 */
@@ -168,7 +168,7 @@ public class GrammarProduction {
 	public String toString() {
 		StringBuilder buffer = new StringBuilder();
 		
-		for (GrammarNode s: symbols) {
+		for (GrammarNode s: grammarNodes) {
 			if (s instanceof GrammarLiteral) {
 				//TODO Need to implement escaping.
 				buffer.append(((GrammarLiteral) s).toString());

@@ -95,7 +95,7 @@ public class FullInitialiser implements GEInitialiser, RunListener {
 			// Drop down the tree at this production.
 			GrammarProduction p = nt.getProduction(productionIndex);
 			
-			List<GrammarNode> symbols = p.getSymbols();
+			List<GrammarNode> symbols = p.getGrammarNodes();
 			for (GrammarNode s: symbols) {
 				buildDerivationTree(codons, s, depth+1, maxDepth);
 			}

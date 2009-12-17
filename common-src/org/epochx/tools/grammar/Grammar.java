@@ -292,7 +292,7 @@ public class Grammar {
 									newSymbol = new GrammarLiteral(symbolName);
 									terminals.put(symbolName, newSymbol);
 								}
-								grammarProduction.addSymbol(newSymbol);
+								grammarProduction.addGrammarNode(newSymbol);
 							} else {
 								/*GrammarNode newSymbol = nonTerminals.get(symbolName);
 								if (newSymbol == null) {
@@ -356,7 +356,7 @@ public class Grammar {
 								newSymbol = new GrammarRule(symbolName);
 								nonTerminals.put(symbolName, newSymbol);
 							}
-							grammarProduction.addSymbol(newSymbol);
+							grammarProduction.addGrammarNode(newSymbol);
 							terminal = true;
 							// Clear buffer.
 							buffer = new StringBuilder();
@@ -375,7 +375,7 @@ public class Grammar {
 								newSymbol = new GrammarLiteral(symbolName);
 								terminals.put(symbolName, newSymbol);
 							}
-							grammarProduction.addSymbol(newSymbol);
+							grammarProduction.addGrammarNode(newSymbol);
 							// Clear buffer.
 							buffer = new StringBuilder();
 						} else {
@@ -453,13 +453,13 @@ public class Grammar {
 			
 			for (int i=0; i<current.getNoProductions(); i++) {
 				GrammarProduction p = current.getProduction(i);
-				for (int j=0; j<p.getNoSymbols(); j++) {
+				for (int j=0; j<p.getNoChildren(); j++) {
 					// We only care about non-terminal symbols here.
-					if (!(p.getSymbol(j) instanceof GrammarRule)) {
+					if (!(p.getGrammarNode(j) instanceof GrammarRule)) {
 						continue;
 					}
 					
-					GrammarRule nt = (GrammarRule) p.getSymbol(j);
+					GrammarRule nt = (GrammarRule) p.getGrammarNode(j);
 					
 					setRecursiveness(new ArrayList<GrammarRule>(path), nt);
 				}
@@ -498,9 +498,9 @@ public class Grammar {
 			for (int i=0; i<current.getNoProductions(); i++) {
 				GrammarProduction p = current.getProduction(i);
 				int productionsMinDepth = -1;
-				for (int j=0; j<p.getNoSymbols(); j++) {
+				for (int j=0; j<p.getNoChildren(); j++) {
 					// The largest of production's symbols min depths, is productions min depth.
-					int d = getMinDepth(new ArrayList<GrammarRule>(path), p.getSymbol(j));
+					int d = getMinDepth(new ArrayList<GrammarRule>(path), p.getGrammarNode(j));
 					
 					if (d > productionsMinDepth) {
 						productionsMinDepth = d;

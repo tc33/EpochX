@@ -183,7 +183,7 @@ public class DepthFirstMapper implements Mapper, GenerationListener, RunListener
 		}
 		
 		// Map each symbol of the production and add to source.
-		for (GrammarNode s: next.getSymbols()) {
+		for (GrammarNode s: next.getGrammarNodes()) {
 			if (s instanceof GrammarLiteral) {
 				parseNode.addChild(new TerminalSymbol((GrammarLiteral) s));
 			} else {

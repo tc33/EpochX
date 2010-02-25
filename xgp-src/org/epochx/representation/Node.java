@@ -284,12 +284,12 @@ public abstract class Node implements Cloneable {
 	 */
 	public int getNoDistinctFunctions() {
 		// Get a list of functions.
-		List<FunctionNode> functions = getFunctionNodes();
+		List<Node> functions = getFunctionNodes();
 		
 		// Remove duplicates - where a duplicate is a function of the same type.
 		// We cannot use the FunctionNode's equals function because that will compare children too.
 		List<String> functionNames = new ArrayList<String>();
-		for (FunctionNode f: functions) {
+		for (Node f: functions) {
 			String name = f.getIdentifier();
 			if (!functionNames.contains(name)) {
 				functionNames.add(name);
@@ -305,21 +305,20 @@ public abstract class Node implements Cloneable {
 	 * 
 	 * @return a List of all the function nodes in the node tree.
 	 */
-	public List<FunctionNode> getFunctionNodes() {
+	public List<Node> getFunctionNodes() {
 		// Alternatively we could use an array, which is quicker/more efficient in this situation?
-		List<FunctionNode> functions = new ArrayList<FunctionNode>();
+		List<Node> functions = new ArrayList<Node>();
 		
 		int arity = getArity();
-		if (arity == 0) {
-			// No more function nodes to count, return empty list.
-		} else {
-			if (this instanceof FunctionNode) {
-				functions.add((FunctionNode) this);
-			}
+		if (arity > 0) {
+			// Add this node as a function and search its child nodes.
+			functions.add(this);
+			
 			for (int i=0; i<arity; i++) {
 				functions.addAll(getChild(i).getFunctionNodes());
 			}
 		}
+		
 		return functions;
 	}
 	

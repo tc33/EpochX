@@ -139,7 +139,7 @@ public class KozaCrossover implements GPCrossover, GenerationListener {
 	 */
 	private int getNthFunctionNode(int n, int functionCount, int nodeCount, Node current) {
 		// Found the nth function node.
-		if ((current instanceof FunctionNode) && (n == functionCount))
+		if ((current.getArity() > 0) && (n == functionCount))
 			return nodeCount;
 		
 		int result = -1;

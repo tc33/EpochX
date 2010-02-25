@@ -20,7 +20,7 @@
 package org.epochx.ge.mapper;
 
 import org.epochx.ge.representation.*;
-import org.epochx.tools.grammar.Symbol;
+import org.epochx.tools.grammar.*;
 
 /**
  * A mapper's job is to convert a GECandidateProgram into a String sequence. 
@@ -39,7 +39,7 @@ public interface Mapper {
 	 * @return a Symbol which is the root node of a valid parse tree, or null 
 	 * if no valid parse tree could be created from the GECandidateProgram.
 	 */
-	public Symbol map(GECandidateProgram program);
+	public NonTerminalSymbol map(GECandidateProgram program);
 	
 	/**
 	 * Should return the number of codons that were used in mapping the last 

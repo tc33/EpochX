@@ -2,20 +2,20 @@ package org.epochx.gr.representation;
 
 import org.epochx.gr.core.GRModel;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.grammar.Symbol;
+import org.epochx.tools.grammar.*;
 
 public class GRCandidateProgram extends CandidateProgram {
 
 	private GRModel model;
 	
 	// The phenotype.
-	private Symbol parseTree;
+	private NonTerminalSymbol parseTree;
 	
 	public GRCandidateProgram(GRModel model) {
 		this(null, model);
 	}
 	
-	public GRCandidateProgram(Symbol parseTree, GRModel model) {
+	public GRCandidateProgram(NonTerminalSymbol parseTree, GRModel model) {
 		this.model = model;
 		this.parseTree = parseTree;
 	}
@@ -30,7 +30,7 @@ public class GRCandidateProgram extends CandidateProgram {
 		return parseTree.toString();
 	}
 	
-	public Symbol getParseTree() {
+	public NonTerminalSymbol getParseTree() {
 		return parseTree;
 	}
 	
@@ -49,7 +49,7 @@ public class GRCandidateProgram extends CandidateProgram {
 		if (this.parseTree == null) {
 			clone.parseTree = null;
 		} else {
-			clone.parseTree = (Symbol) this.parseTree.clone();
+			clone.parseTree = (NonTerminalSymbol) this.parseTree.clone();
 		}
 		
 		// Shallow copy the model.

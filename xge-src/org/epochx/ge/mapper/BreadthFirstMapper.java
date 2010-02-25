@@ -277,7 +277,7 @@ public class BreadthFirstMapper implements Mapper {
 	 * @see com.epochxge.mapper.Mapper#map(com.epochxge.representation.CandidateProgram)
 	 */
 	@Override
-	public Symbol map(GECandidateProgram program) {
+	public NonTerminalSymbol map(GECandidateProgram program) {
 		// TODO Auto-generated method stub
 		return null;
 	}

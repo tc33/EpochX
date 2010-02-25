@@ -113,7 +113,7 @@ public class DepthFirstMapper implements Mapper, GenerationListener, RunListener
 	 * a valid string could not be generated.
 	 */
 	@Override
-	public Symbol map(GECandidateProgram program) {
+	public NonTerminalSymbol map(GECandidateProgram program) {
 		// The root node/symbol of the grammar tree.
 		GrammarRule grammarTree = grammar.getStartRule();
 		// The root node/symbol of the parse tree.

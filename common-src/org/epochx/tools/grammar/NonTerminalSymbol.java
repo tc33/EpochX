@@ -21,6 +21,8 @@ package org.epochx.tools.grammar;
 
 import java.util.*;
 
+import org.epochx.representation.*;
+
 
 
 /**
@@ -56,6 +58,69 @@ public class NonTerminalSymbol implements Symbol {
 		children.add(child);
 	}
 
+	/**
+	 * Returns a list of all non-terminal symbols in the parse tree below this 
+	 * symbol, including this symbol itself.
+	 * 
+	 * @return
+	 */
+	public List<NonTerminalSymbol> getNonTerminalSymbols() {
+		List<NonTerminalSymbol> nonTerminals = new ArrayList<NonTerminalSymbol>();
+		
+		// Start by adding self.
+		nonTerminals.add(this);
+		
+		// Add all the non-terminals below each child.
+		for (Symbol child: children) {
+			if (child instanceof NonTerminalSymbol) {
+				nonTerminals.addAll(((NonTerminalSymbol) child).getNonTerminalSymbols());
+			}
+		}
+		
+		return nonTerminals;
+	}
+	
+	/**
+	 * Returns a list of all terminal symbols in the parse tree below this 
+	 * symbol.
+	 * 
+	 * @return
+	 */
+	public List<TerminalSymbol> getTerminalSymbols() {
+		List<TerminalSymbol> terminals = new ArrayList<TerminalSymbol>();
+		
+		// Add all the non-terminals below each child.
+		for (Symbol child: children) {
+			if (child instanceof TerminalSymbol) {
+				terminals.add((TerminalSymbol) child);
+			} else if (child instanceof NonTerminalSymbol) {
+				terminals.addAll(((NonTerminalSymbol) child).getTerminalSymbols());
+			}
+		}
+		
+		return terminals;
+	}
+	
+	public List<Symbol> getAllSymbols() {
+		List<Symbol> symbols = new ArrayList<Symbol>();
+		
+		symbols.add(this);
+		
+		for (Symbol child: children) {
+			if (child instanceof TerminalSymbol) {
+				symbols.add(child);
+			} else if (child instanceof NonTerminalSymbol) {
+				symbols.addAll(((NonTerminalSymbol) child).getAllSymbols());
+			}
+		}
+		
+		return symbols;
+	}
+	
+	public int getNoChildren() {
+		return children.size();
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder buffer = new StringBuilder(children.size());

@@ -23,7 +23,7 @@ import java.util.*;
 
 import org.epochx.ge.core.*;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.grammar.Symbol;
+import org.epochx.tools.grammar.*;
 
 
 /**
@@ -50,7 +50,7 @@ public class GECandidateProgram extends CandidateProgram {
 	private List<Integer> codons;
 	
 	// The phenotype.
-	private Symbol parseTree;
+	private NonTerminalSymbol parseTree;
 	
 	// The fitness of the phenotype.
 	private double fitness;
@@ -394,7 +394,7 @@ public class GECandidateProgram extends CandidateProgram {
 		if (this.parseTree == null) {
 			clone.parseTree = null;
 		} else {
-			clone.parseTree = (Symbol) this.parseTree.clone();
+			clone.parseTree = (NonTerminalSymbol) this.parseTree.clone();
 		}
 		
 		clone.fitness = this.fitness;

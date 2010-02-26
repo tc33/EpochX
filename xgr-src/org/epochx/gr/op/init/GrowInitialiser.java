@@ -12,7 +12,6 @@ import org.epochx.tools.random.RandomNumberGenerator;
 
 
 /**
- * Note: Grow initialisation currently only works for depth first mapping.
  *
  */
 public class GrowInitialiser implements GRInitialiser, RunListener {
@@ -60,13 +59,17 @@ public class GrowInitialiser implements GRInitialiser, RunListener {
 	public GRCandidateProgram getInitialProgram(int depth) {
 		GrammarRule startRule = grammar.getStartRule();
 		
+		return new GRCandidateProgram(growParseTree(depth, startRule), model);
+	}
+	
+	public NonTerminalSymbol growParseTree(int depth, GrammarRule startRule) {
 		//TODO Check it is possible to create a program inside the max depth.
 		
 		NonTerminalSymbol parseTree = new NonTerminalSymbol(startRule);
 		
 		buildDerivationTree(parseTree, startRule, 0, depth);
-
-		return new GRCandidateProgram(parseTree, model);
+		
+		return parseTree;		
 	}
 	
 	private void buildDerivationTree(NonTerminalSymbol parseTree, GrammarRule rule, int depth, int maxDepth) {		

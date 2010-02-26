@@ -27,7 +27,7 @@ public class WhighamCrossover implements GRCrossover, GenerationListener {
 	}
 	
 	/*
-	 * Initialises OnePointCrossover, in particular all parameters from the 
+	 * Initialises WhighamCrossover, in particular all parameters from the 
 	 * model should be refreshed incase they've changed since the last call.
 	 */
 	private void initialise() {
@@ -41,10 +41,11 @@ public class WhighamCrossover implements GRCrossover, GenerationListener {
 		GRCandidateProgram program1 = (GRCandidateProgram) p1;
 		GRCandidateProgram program2 = (GRCandidateProgram) p2;
 		
-		//TODO Should we be cloning here?
+		GRCandidateProgram child1 = (GRCandidateProgram) program1.clone();
+		GRCandidateProgram child2 = (GRCandidateProgram) program2.clone();
 		
-		NonTerminalSymbol parseTree1 = program1.getParseTree();
-		NonTerminalSymbol parseTree2 = program2.getParseTree();
+		NonTerminalSymbol parseTree1 = child1.getParseTree();
+		NonTerminalSymbol parseTree2 = child2.getParseTree();
 		
 		//TODO Implement getNoNonTerminals(), getNthTerminal() etc methods in Grammar parse tree representation.
 		List<NonTerminalSymbol> nonTerminals1 = parseTree1.getNonTerminalSymbols();
@@ -71,6 +72,10 @@ public class WhighamCrossover implements GRCrossover, GenerationListener {
 			NonTerminalSymbol point2 = matchingNonTerminals.get(selection);
 			
 			// Swap the non-terminals' children.
+			if (point1.getNoChildren() != point2.getNoChildren()) {
+				System.out.println("Uneven no children");
+			}
+			
 			for (int i=0; i<point1.getNoChildren(); i++) {
 				Symbol child = point1.getChild(i);
 				point1.setChild(i, point2.getChild(i));
@@ -78,7 +83,7 @@ public class WhighamCrossover implements GRCrossover, GenerationListener {
 			}
 		}
 		
-		return new GRCandidateProgram[]{program1, program2};
+		return new GRCandidateProgram[]{child1, child2};
 	}
 
 	@Override

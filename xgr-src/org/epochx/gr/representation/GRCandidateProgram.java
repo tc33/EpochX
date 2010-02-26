@@ -22,8 +22,7 @@ public class GRCandidateProgram extends CandidateProgram {
 	
 	@Override
 	public double getFitness() {
-		// TODO Auto-generated method stub
-		return 0;
+		return model.getFitness(this);
 	}
 
 	public String getSourceCode() {

@@ -1,8 +1,8 @@
 package org.epochx.gr.model.epox.mux;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.gr.core.*;
+import org.epochx.gr.representation.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.eval.*;
 import org.epochx.tools.grammar.Grammar;
@@ -35,7 +35,7 @@ public class Multiplexer6Bit extends GRAbstractModel {
 
 	@Override
 	public double getFitness(CandidateProgram p) {
-		GECandidateProgram program = (GECandidateProgram) p;
+		GRCandidateProgram program = (GRCandidateProgram) p;
 		
         double score = 0;
         

@@ -30,7 +30,7 @@ import org.epochx.tools.grammar.Grammar;
 
 /**
  * A GEModel defines all those parameters needed to control a run by GERun. 
- * The first step - and for most problems the only step - to generate a GP  
+ * The first step - and for most problems the only step - to generate a GE  
  * evolved solution with XGE is to provide a concrete implementation of 
  * this interface.
  * 
@@ -42,20 +42,20 @@ import org.epochx.tools.grammar.Grammar;
 public interface GEModel extends Model {
 
 	/**
-	 * Retrieves the GPInitialiser which will generate the first generation 
+	 * Retrieves the GEInitialiser which will generate the first generation 
 	 * population from which the evolution will proceed.
 	 * 
-	 * @return the GPInitialiser to create the first population.
+	 * @return the GEInitialiser to create the first population.
 	 */
 	public GEInitialiser getInitialiser();
 
 	/**
-	 * Retrieves the implementation of GPCrossover to use to perform the genetic 
+	 * Retrieves the implementation of GECrossover to use to perform the genetic 
 	 * operation of crossover between 2 parents. The 2 parents to be crossed 
 	 * over will be selected using the parent selector returned by 
 	 * getProgramSelector().
 	 * 
-	 * @return the implementation of GPCrossover that will perform the genetic 
+	 * @return the implementation of GECrossover that will perform the genetic 
 	 * 		   operation of crossover.
 	 * @see FixedPointCrossover
 	 * @see OnePointCrossover

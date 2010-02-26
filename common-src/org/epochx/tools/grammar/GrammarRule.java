@@ -222,6 +222,5 @@ public class GrammarRule implements GrammarNode {
 			buffer.append(grammarProductions.get(i).toString());
 		}
 		return buffer.toString();
-	}
-	
+	}	
 }

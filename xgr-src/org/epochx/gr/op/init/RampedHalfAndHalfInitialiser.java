@@ -81,17 +81,25 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 		
 		for (int i=0; i<popSize; i++) {
 			// Calculate depth
-			int depth = (int) Math.floor((firstGen.size() / programsPerDepth) + startDepth);
+			int depth = (int) Math.floor((i / programsPerDepth) + startDepth);
 			
 			// Grow on even numbers, full on odd.
 			GRCandidateProgram program;
 			
+			int tries = 0;
 			do {
 				if ((i % 2) == 0) {
 					program = grow.getInitialProgram(depth);
 				} else {
 					program = full.getInitialProgram(depth);
 				}
+				
+				tries++;
+				if (tries == 10) {
+					// If we can't get a unique program after 10 tries, then just go with it.
+					break;
+				}
+				//TODO Need to look out for infinite loop here - where not enough different programs possible, should drop out and readjust depth sizes (with a warning).
 			} while(firstGen.contains(program));
 			
             firstGen.add(program);

@@ -57,6 +57,22 @@ public class NonTerminalSymbol implements Symbol {
 	public void addChild(Symbol child) {
 		children.add(child);
 	}
+	
+	public void removeChildren() {
+		children.clear();
+	}
+	
+	public void removeChild(int index) {
+		children.remove(index);
+	}
+	
+	public void setChildren(List<Symbol> children) {
+		this.children = children;
+	}
+	
+	public List<Symbol> getChildren() {
+		return children;
+	}
 
 	/**
 	 * Returns a list of all non-terminal symbols in the parse tree below this 
@@ -121,6 +137,14 @@ public class NonTerminalSymbol implements Symbol {
 		return children.size();
 	}
 	
+	public GrammarRule getGrammarRule() {
+		return grammarRule;
+	}
+	
+	public GrammarRule getParentGrammarRule() {
+		return parentGrammarRule;		
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder buffer = new StringBuilder(children.size());
@@ -159,7 +183,8 @@ public class NonTerminalSymbol implements Symbol {
 		if (obj != null && obj instanceof NonTerminalSymbol) {
 			NonTerminalSymbol otherSymbol = (NonTerminalSymbol) obj;
 			
-			return this.toString().equals(otherSymbol.toString());
+			//TODO Think carefully about whether this is correct.
+			return this.getGrammarRule() == otherSymbol.getGrammarRule();
 		} else {
 			return false;
 		}

@@ -17,9 +17,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with XGE.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.ge.model.epox.parity;
+package org.epochx.gr.model.epox.parity;
 
-import org.epochx.gr.model.epox.parity.*;
 import org.epochx.tools.grammar.Grammar;
 
 /**

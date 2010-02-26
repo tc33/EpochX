@@ -19,6 +19,7 @@
  */
 package org.epochx.ge.model.epox.parity;
 
+import org.epochx.gr.model.epox.parity.*;
 import org.epochx.tools.grammar.Grammar;
 
 /**

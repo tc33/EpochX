@@ -71,16 +71,10 @@ public class WhighamCrossover implements GRCrossover, GenerationListener {
 			selection = rng.nextInt(matchingNonTerminals.size());
 			NonTerminalSymbol point2 = matchingNonTerminals.get(selection);
 			
-			// Swap the non-terminals' children.
-			if (point1.getNoChildren() != point2.getNoChildren()) {
-				System.out.println("Uneven no children");
-			}
-			
-			for (int i=0; i<point1.getNoChildren(); i++) {
-				Symbol child = point1.getChild(i);
-				point1.setChild(i, point2.getChild(i));
-				point2.setChild(i, child);
-			}
+			// Swap the non-terminals' children.			
+			List<Symbol> temp = point1.getChildren();
+			point1.setChildren(point2.getChildren());
+			point2.setChildren(temp);
 		}
 		
 		return new GRCandidateProgram[]{child1, child2};

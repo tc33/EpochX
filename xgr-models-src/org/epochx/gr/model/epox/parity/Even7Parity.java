@@ -17,15 +17,14 @@
  *  You should have received a copy of the GNU General Public License
  *  along with XGE.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.ge.model.epox.parity;
+package org.epochx.gr.model.epox.parity;
 
-import org.epochx.gr.model.epox.parity.*;
 import org.epochx.tools.grammar.Grammar;
 
 /**
  *
  */
-public class Even5Parity extends EvenParity {
+public class Even7Parity extends EvenParity {
 	
 	public static final String GRAMMAR_STRING =
 		"<prog> ::= <node>\n" +
@@ -34,12 +33,12 @@ public class Even5Parity extends EvenParity {
 					"| OR( <node> , <node> ) " +
 					"| AND( <node> , <node> ) " +
 					"| XOR( <node> , <node> )\n" +
-		"<terminal> ::= d0 | d1 | d2 | d3 | d4\n";
+		"<terminal> ::= d0 | d1 | d2 | d3 | d4 | d5 | d6\n";
 	
 	private Grammar grammar;
 
-	public Even5Parity() {
-		super(5);
+	public Even7Parity() {
+		super(7);
 
 		grammar = new Grammar(GRAMMAR_STRING);
 	}

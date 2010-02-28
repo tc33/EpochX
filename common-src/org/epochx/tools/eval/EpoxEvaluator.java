@@ -50,6 +50,9 @@ public class EpoxEvaluator implements Evaluator {
 			return null;
 		}
 		
+		// Remove any of the old variables.
+		parser.clearAvailableVariables();
+		
 		for (int i=0; i<argNames.length; i++) {
 			if (argValues[i] instanceof Boolean) {
 				parser.addAvailableVariable(new BooleanVariable(argNames[i], (Boolean) argValues[i]));

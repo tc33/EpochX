@@ -242,6 +242,10 @@ public class FunctionParser {
 		variables.add(variable);
 	}
 	
+	public void clearAvailableVariables() {
+		variables.clear();		
+	}
+	
 	/**
 	 * Before parsing an Ant program, the parser needs to have access to an ant
 	 * object.

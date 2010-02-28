@@ -17,7 +17,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with EpochX.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.model.mux;
+package org.epochx.gp.model.parity;
 
 import java.util.*;
 
@@ -31,14 +31,14 @@ import org.epochx.tools.util.BoolUtils;
 /**
  * 
  */
-public class Multiplexer6Bit extends GPAbstractModel {
+public class Even4Parity extends GPAbstractModel {
 
 	private boolean[][] inputs;
 	
-	private HashMap<String, BooleanVariable> variables;	
+	private HashMap<String, BooleanVariable> variables;
 	
-	public Multiplexer6Bit() {
-		inputs = BoolUtils.generateBoolSequences(6);
+	public Even4Parity() {
+		inputs = BoolUtils.generateBoolSequences(4);
 		variables = new HashMap<String, BooleanVariable>();
 		
 		configure();
@@ -50,8 +50,6 @@ public class Multiplexer6Bit extends GPAbstractModel {
 		variables.put("D2", new BooleanVariable("D2"));
 		variables.put("D1", new BooleanVariable("D1"));
 		variables.put("D0", new BooleanVariable("D0"));
-		variables.put("A1", new BooleanVariable("A1"));
-		variables.put("A0", new BooleanVariable("A0"));
 	}
 	
 	@Override
@@ -73,8 +71,6 @@ public class Multiplexer6Bit extends GPAbstractModel {
 		terminals.add(variables.get("D2"));
 		terminals.add(variables.get("D1"));
 		terminals.add(variables.get("D0"));
-		terminals.add(variables.get("A1"));
-		terminals.add(variables.get("A0"));
 		
 		return terminals;
 	}
@@ -86,35 +82,34 @@ public class Multiplexer6Bit extends GPAbstractModel {
         double score = 0;
         
         // Execute on all possible inputs.
-        for (boolean[] in: inputs) {        	
+        for (boolean[] in: inputs) {
+        	
         	// Set the variables.
-        	variables.get("A0").setValue(in[0]);
-        	variables.get("A1").setValue(in[1]);
-        	variables.get("D0").setValue(in[2]);
-        	variables.get("D1").setValue(in[3]);
-        	variables.get("D2").setValue(in[4]);
-        	variables.get("D3").setValue(in[5]);
+        	variables.get("D0").setValue(in[0]);
+        	variables.get("D1").setValue(in[1]);
+        	variables.get("D2").setValue(in[2]);
+        	variables.get("D3").setValue(in[3]);
         	
             if ((Boolean) program.evaluate() == chooseResult(in)) {
                 score++;
             }
         }
         
-        return 64 - score;
+        return 16 - score;
 	}
 	
     private boolean chooseResult(boolean[] input) {
-        boolean result = false;
-    	// scoring solution
-        if(input[0] && input[1]) {
-            result = input[2];
-        } else if(input[0] && !input[1]) {
-            result = input[3];
-        } else if(!input[0] && input[1]) {
-            result = input[4];
-        } else if(!input[0] && !input[1]) {
-            result = input[5];
+        // scoring solution
+        int eCount = 0;
+        for(int i = 0; i<input.length; i++) {
+            if(input[i]==true) {
+                eCount++;
+            }
         }
-        return result;
+        if(eCount%2==0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -17,7 +17,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with EpochX.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.model.parity;
+package org.epochx.gp.model.parity;
 
 import java.util.*;
 
@@ -31,14 +31,14 @@ import org.epochx.tools.util.BoolUtils;
 /**
  * 
  */
-public class Even4Parity extends GPAbstractModel {
+public class Even5Parity extends GPAbstractModel {
 
 	private boolean[][] inputs;
 	
 	private HashMap<String, BooleanVariable> variables;
 	
-	public Even4Parity() {
-		inputs = BoolUtils.generateBoolSequences(4);
+	public Even5Parity() {
+		inputs = BoolUtils.generateBoolSequences(5);
 		variables = new HashMap<String, BooleanVariable>();
 		
 		configure();
@@ -46,6 +46,7 @@ public class Even4Parity extends GPAbstractModel {
 	
 	public void configure() {
 		// Define variables.
+		variables.put("D4", new BooleanVariable("D4"));
 		variables.put("D3", new BooleanVariable("D3"));
 		variables.put("D2", new BooleanVariable("D2"));
 		variables.put("D1", new BooleanVariable("D1"));
@@ -67,6 +68,7 @@ public class Even4Parity extends GPAbstractModel {
 	public List<Node> getTerminals() {		
 		// Define terminals.
 		List<Node> terminals = new ArrayList<Node>();
+		terminals.add(variables.get("D4"));
 		terminals.add(variables.get("D3"));
 		terminals.add(variables.get("D2"));
 		terminals.add(variables.get("D1"));
@@ -82,20 +84,20 @@ public class Even4Parity extends GPAbstractModel {
         double score = 0;
         
         // Execute on all possible inputs.
-        for (boolean[] in: inputs) {
-        	
+        for (boolean[] in: inputs) {        	
         	// Set the variables.
         	variables.get("D0").setValue(in[0]);
         	variables.get("D1").setValue(in[1]);
         	variables.get("D2").setValue(in[2]);
         	variables.get("D3").setValue(in[3]);
+        	variables.get("D4").setValue(in[4]);
         	
             if ((Boolean) program.evaluate() == chooseResult(in)) {
                 score++;
             }
         }
         
-        return 16 - score;
+        return 32 - score;
 	}
 	
     private boolean chooseResult(boolean[] input) {

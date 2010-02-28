@@ -17,7 +17,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with EpochX.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.model.majority;
+package org.epochx.gp.model.mux;
 
 import java.util.*;
 
@@ -31,13 +31,14 @@ import org.epochx.tools.util.BoolUtils;
 /**
  * 
  */
-public class Majority9 extends GPAbstractModel {
+public class Multiplexer6Bit extends GPAbstractModel {
 
 	private boolean[][] inputs;
-	private HashMap<String, BooleanVariable> variables;
 	
-	public Majority9() {
-		inputs = BoolUtils.generateBoolSequences(9);
+	private HashMap<String, BooleanVariable> variables;	
+	
+	public Multiplexer6Bit() {
+		inputs = BoolUtils.generateBoolSequences(6);
 		variables = new HashMap<String, BooleanVariable>();
 		
 		configure();
@@ -45,15 +46,12 @@ public class Majority9 extends GPAbstractModel {
 	
 	public void configure() {
 		// Define variables.
-		variables.put("D8", new BooleanVariable("D8"));
-		variables.put("D7", new BooleanVariable("D7"));
-		variables.put("D6", new BooleanVariable("D6"));
-		variables.put("D5", new BooleanVariable("D5"));
-		variables.put("D4", new BooleanVariable("D4"));
 		variables.put("D3", new BooleanVariable("D3"));
 		variables.put("D2", new BooleanVariable("D2"));
 		variables.put("D1", new BooleanVariable("D1"));
 		variables.put("D0", new BooleanVariable("D0"));
+		variables.put("A1", new BooleanVariable("A1"));
+		variables.put("A0", new BooleanVariable("A0"));
 	}
 	
 	@Override
@@ -71,15 +69,12 @@ public class Majority9 extends GPAbstractModel {
 	public List<Node> getTerminals() {		
 		// Define terminals.
 		List<Node> terminals = new ArrayList<Node>();
-		terminals.add(variables.get("D8"));
-		terminals.add(variables.get("D7"));
-		terminals.add(variables.get("D6"));
-		terminals.add(variables.get("D5"));
-		terminals.add(variables.get("D4"));
 		terminals.add(variables.get("D3"));
 		terminals.add(variables.get("D2"));
 		terminals.add(variables.get("D1"));
 		terminals.add(variables.get("D0"));
+		terminals.add(variables.get("A1"));
+		terminals.add(variables.get("A0"));
 		
 		return terminals;
 	}
@@ -91,40 +86,35 @@ public class Majority9 extends GPAbstractModel {
         double score = 0;
         
         // Execute on all possible inputs.
-        for (boolean[] in: inputs) {
+        for (boolean[] in: inputs) {        	
         	// Set the variables.
-        	variables.get("D0").setValue(in[0]);
-        	variables.get("D1").setValue(in[1]);
-        	variables.get("D2").setValue(in[2]);
-        	variables.get("D3").setValue(in[3]);
-        	variables.get("D4").setValue(in[4]);
-        	variables.get("D5").setValue(in[5]);
-        	variables.get("D6").setValue(in[6]);
-        	variables.get("D7").setValue(in[7]);
-        	variables.get("D8").setValue(in[8]);
+        	variables.get("A0").setValue(in[0]);
+        	variables.get("A1").setValue(in[1]);
+        	variables.get("D0").setValue(in[2]);
+        	variables.get("D1").setValue(in[3]);
+        	variables.get("D2").setValue(in[4]);
+        	variables.get("D3").setValue(in[5]);
         	
             if ((Boolean) program.evaluate() == chooseResult(in)) {
                 score++;
             }
         }
         
-        return 512 - score;
+        return 64 - score;
 	}
 	
     private boolean chooseResult(boolean[] input) {
+        boolean result = false;
     	// scoring solution
-        int len = input.length;
-        int trueCount = 0;
-        for(int i = 0; i<len; i++) {
-            if(input[i]) {
-                trueCount++;
-            }
+        if(input[0] && input[1]) {
+            result = input[2];
+        } else if(input[0] && !input[1]) {
+            result = input[3];
+        } else if(!input[0] && input[1]) {
+            result = input[4];
+        } else if(!input[0] && !input[1]) {
+            result = input[5];
         }
-        
-        if(trueCount>=(len/2)) {
-            return true;
-        } else {
-            return false;
-        }
+        return result;
     }
 }

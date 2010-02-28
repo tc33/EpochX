@@ -17,7 +17,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.model.ant;
+package org.epochx.gp.model.ant;
 
 import java.awt.*;
 import java.util.*;

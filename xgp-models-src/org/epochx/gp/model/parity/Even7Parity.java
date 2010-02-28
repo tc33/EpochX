@@ -17,7 +17,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with EpochX.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.model.parity;
+package org.epochx.gp.model.parity;
 
 import java.util.*;
 
@@ -31,14 +31,14 @@ import org.epochx.tools.util.BoolUtils;
 /**
  * 
  */
-public class Even5Parity extends GPAbstractModel {
+public class Even7Parity extends GPAbstractModel {
 
 	private boolean[][] inputs;
 	
 	private HashMap<String, BooleanVariable> variables;
 	
-	public Even5Parity() {
-		inputs = BoolUtils.generateBoolSequences(5);
+	public Even7Parity() {
+		inputs = BoolUtils.generateBoolSequences(7);
 		variables = new HashMap<String, BooleanVariable>();
 		
 		configure();
@@ -46,6 +46,8 @@ public class Even5Parity extends GPAbstractModel {
 	
 	public void configure() {
 		// Define variables.
+		variables.put("D6", new BooleanVariable("D6"));
+		variables.put("D5", new BooleanVariable("D5"));
 		variables.put("D4", new BooleanVariable("D4"));
 		variables.put("D3", new BooleanVariable("D3"));
 		variables.put("D2", new BooleanVariable("D2"));
@@ -68,6 +70,8 @@ public class Even5Parity extends GPAbstractModel {
 	public List<Node> getTerminals() {		
 		// Define terminals.
 		List<Node> terminals = new ArrayList<Node>();
+		terminals.add(variables.get("D6"));
+		terminals.add(variables.get("D5"));
 		terminals.add(variables.get("D4"));
 		terminals.add(variables.get("D3"));
 		terminals.add(variables.get("D2"));
@@ -91,13 +95,15 @@ public class Even5Parity extends GPAbstractModel {
         	variables.get("D2").setValue(in[2]);
         	variables.get("D3").setValue(in[3]);
         	variables.get("D4").setValue(in[4]);
+        	variables.get("D5").setValue(in[5]);
+        	variables.get("D6").setValue(in[6]);
         	
             if ((Boolean) program.evaluate() == chooseResult(in)) {
                 score++;
             }
         }
         
-        return 32 - score;
+        return 128 - score;
 	}
 	
     private boolean chooseResult(boolean[] input) {

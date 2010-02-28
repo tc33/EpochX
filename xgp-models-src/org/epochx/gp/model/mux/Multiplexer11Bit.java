@@ -17,7 +17,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with EpochX.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.model.mux;
+package org.epochx.gp.model.mux;
 
 import java.util.*;
 

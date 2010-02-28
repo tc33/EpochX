@@ -3,6 +3,7 @@ package org.epochx.core;
 import java.util.*;
 
 import org.epochx.life.*;
+import org.epochx.model.Model;
 import org.epochx.representation.CandidateProgram;
 
 public class ElitismManager implements GenerationListener {

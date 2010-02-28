@@ -17,31 +17,30 @@
  *  You should have received a copy of the GNU General Public License
  *  along with EpochX.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.gp.op.initialisation;
+package org.epochx.gp.op.init;
 
 import java.util.*;
 
-import org.epochx.gp.core.GPModel;
+import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
 import org.epochx.representation.*;
 
 
 /**
- * Initialisation implementation which randomly grows program trees down to a 
- * maximum depth.
+ * Initialisation implementation which produces full program trees.
  */
-public class GrowInitialiser implements GPInitialiser {
+public class FullInitialiser implements GPInitialiser {
 	
 	// The current controlling model.
 	private GPModel model;
-	
+
 	/**
-	 * Constructor for the grow initialiser.
+	 * Constructor for the full initialiser.
 	 * 
 	 * @param model The current controlling model. Run parameters such as the 
 	 * population size will be obtained from this.
 	 */
-	public GrowInitialiser(GPModel model) {
+	public FullInitialiser(GPModel model) {
 		this.model = model;
 	}
 	
@@ -50,8 +49,8 @@ public class GrowInitialiser implements GPInitialiser {
 	 * function and terminal sets defined by the model. The size of the 
 	 * population will be equal to the result of calling getPopulationSize() on
 	 * the controlling model. All programs in the population will be unique.
-	 * Each candidate program will have a node tree with a maximum depth as 
-	 * given by a call to getInitialMaxDepth() on the model.
+	 * Each candidate program will have a full node tree with a depth as given 
+	 * by a call to getInitialMaxDepth() on the model.
 	 * 
 	 * @return A List of newly generated CandidatePrograms which will form the 
 	 * initial population for a GP run.
@@ -67,13 +66,13 @@ public class GrowInitialiser implements GPInitialiser {
 			GPCandidateProgram candidate;
 			
 			do {
-				// Grow a new node tree.
-				Node nodeTree = buildGrowNodeTree(model.getInitialMaxDepth());
+				// Build a new full node tree.
+				Node nodeTree = buildFullNodeTree(model.getInitialMaxDepth());
             	
 				// Create a program around the node tree.
 				candidate = new GPCandidateProgram(nodeTree, model);
 			} while (firstGen.contains(candidate));
-            
+			
 			// Must be unique - add to the new population.
 			firstGen.add(candidate);
         }
@@ -82,49 +81,58 @@ public class GrowInitialiser implements GPInitialiser {
 	}
 	
 	/**
-	 * Build a grown node tree with a maximum depth as given. The internal 
-	 * nodes and leaf nodes will be selected from the function and 
-	 * terminal sets respectively, as provided by the model.
+	 * Build a full node tree with a given depth. As the node tree will be full 
+	 * the maximum and minimum depths of the returned node tree should be equal 
+	 * to the depth argument. The internal and leaf nodes will be selected from 
+	 * the function and terminal sets respectively, as provided by the model.
 	 * 
-	 * @param maxDepth The maximum depth of the node tree to be grown, where 
-	 * the depth is the number of nodes from the root.
-	 * @return The root node of a randomly generated node tree.
+	 * @param depth The depth of the full node tree, where the depth is the 
+	 * number of nodes from the root.
+	 * @return The root node of a randomly generated full node tree of the 
+	 * requested depth.
 	 */
-	public Node buildGrowNodeTree(int maxDepth) {		
-		// Randomly choose a root node.
-		int randomIndex = model.getRNG().nextInt(model.getSyntax().size());
-		Node root = (Node) model.getSyntax().get(randomIndex).clone();
-        
-		// Populate the root node with grown children with maximum depth-1.
-        this.fillChildren(root, 0, maxDepth);
+	public Node buildFullNodeTree(int depth) {
+		Node root;
+		if (depth == 0) {
+			// Randomly choose a terminal node as our root.
+			int randomIndex = model.getRNG().nextInt(model.getTerminals().size());
+			root = model.getTerminals().get(randomIndex).clone();
+		} else {
+			// Randomly choose a root function node.
+	        int randomIndex = model.getRNG().nextInt(model.getFunctions().size());
+	        root = model.getFunctions().get(randomIndex).clone();
+	        
+	        // Populate the root node with full children of depth-1.
+			fillChildren(root, 0, depth);
+		}
         
         return root;
 	}
 	
 	/*
-	 * Recursively fill the children of a node, to construct a grown tree down
-	 * to at most a depth of maxDepth.
+	 * Recursively fill the children of a node, to construct a full tree down
+	 * to a depth of maxDepth.
+	 * TODO These model calls should not be being made multiple times.
 	 */
 	private void fillChildren(Node currentNode, int currentDepth, int maxDepth) {
 		int arity = currentNode.getArity();
-		if(arity > 0) {
-			if(currentDepth < maxDepth-1) {
-				// Not near the maximum depth yet, use functions OR terminals.
-				for(int i=0; i<arity; i++) {
-					int randomIndex = model.getRNG().nextInt(model.getSyntax().size());
-					Node child = (Node) model.getSyntax().get(randomIndex).clone();
+		
+		if(currentDepth<maxDepth-1) {
+			// Not near the maximum depth yet, fill children with functions only.
+			for(int i = 0; i<arity; i++) {
+				int randomIndex = model.getRNG().nextInt(model.getFunctions().size());
+				Node child = model.getFunctions().get(randomIndex).clone();
 
-					currentNode.setChild(i, child);
-					this.fillChildren(child, (currentDepth+1), maxDepth);
-				}
-			} else {
-				// At maximum depth-1, fill children with terminals.
-				for(int i=0; i<arity; i++) {
-					int randomIndex = model.getRNG().nextInt(model.getTerminals().size());
-					Node child = (Node) model.getTerminals().get(randomIndex).clone();
-					
-					currentNode.setChild(i, child);
-				}
+				currentNode.setChild(i, child);
+				fillChildren(child, (currentDepth+1), maxDepth);
+			}
+		} else {
+			// At maximum depth-1, fill children with terminals.
+			for(int i = 0; i<arity; i++) {
+				int randomIndex = model.getRNG().nextInt(model.getTerminals().size());
+				Node child = model.getTerminals().get(randomIndex).clone();
+
+				currentNode.setChild(i, child);
 			}
 		}
 	}

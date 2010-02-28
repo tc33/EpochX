@@ -21,7 +21,7 @@ package org.epochx.gp.representation;
 
 import java.util.List;
 
-import org.epochx.gp.core.GPModel;
+import org.epochx.gp.model.GPModel;
 import org.epochx.representation.CandidateProgram;
 
 

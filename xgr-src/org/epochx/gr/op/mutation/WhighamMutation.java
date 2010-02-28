@@ -1,16 +1,15 @@
 package org.epochx.gr.op.mutation;
 
-import java.util.*;
+import java.util.List;
 
-import org.epochx.core.*;
-import org.epochx.gr.core.*;
-import org.epochx.gr.op.init.*;
-import org.epochx.gr.representation.*;
-import org.epochx.life.*;
-import org.epochx.op.*;
-import org.epochx.representation.*;
+import org.epochx.core.Controller;
+import org.epochx.gr.model.GRModel;
+import org.epochx.gr.op.init.GrowInitialiser;
+import org.epochx.gr.representation.GRCandidateProgram;
+import org.epochx.life.GenerationListener;
+import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.*;
-import org.epochx.tools.random.*;
+import org.epochx.tools.random.RandomNumberGenerator;
 
 public class WhighamMutation implements GRMutation, GenerationListener {
 

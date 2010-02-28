@@ -21,7 +21,7 @@ package org.epochx.op.selection;
 
 import java.util.*;
 
-import org.epochx.core.Model;
+import org.epochx.model.Model;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
 

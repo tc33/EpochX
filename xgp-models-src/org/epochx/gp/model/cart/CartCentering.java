@@ -22,7 +22,7 @@ package org.epochx.gp.model.cart;
 import java.util.*;
 
 import org.epochx.core.Controller;
-import org.epochx.gp.core.GPAbstractModel;
+import org.epochx.gp.model.GPAbstractModel;
 import org.epochx.gp.op.crossover.UniformPointCrossover;
 import org.epochx.gp.op.mutation.PointMutation;
 import org.epochx.gp.representation.*;

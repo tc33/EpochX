@@ -3,7 +3,7 @@ package org.epochx.ge.op.init;
 import java.util.*;
 
 import org.epochx.core.Controller;
-import org.epochx.ge.core.GEModel;
+import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.life.RunListener;
 import org.epochx.representation.CandidateProgram;

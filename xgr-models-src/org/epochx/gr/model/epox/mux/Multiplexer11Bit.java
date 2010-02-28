@@ -20,7 +20,7 @@
 package org.epochx.gr.model.epox.mux;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.epochx.ge.core.GEAbstractModel;
+import org.epochx.ge.model.GEAbstractModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.eval.*;

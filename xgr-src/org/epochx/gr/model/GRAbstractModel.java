@@ -1,9 +1,9 @@
-package org.epochx.gr.core;
+package org.epochx.gr.model;
 
-import org.epochx.core.AbstractModel;
 import org.epochx.gr.op.crossover.*;
 import org.epochx.gr.op.init.*;
 import org.epochx.gr.op.mutation.*;
+import org.epochx.model.AbstractModel;
 
 public abstract class GRAbstractModel extends AbstractModel implements GRModel {
 	
@@ -14,7 +14,6 @@ public abstract class GRAbstractModel extends AbstractModel implements GRModel {
 	private int maxDepth;
 	private int maxInitialDepth;
 	
-	private boolean cacheSource;
 	private boolean cacheFitness;
 	
 	/**
@@ -28,7 +27,6 @@ public abstract class GRAbstractModel extends AbstractModel implements GRModel {
 		
 		// Caching.
 		cacheFitness = true;
-		cacheSource = true;
 		
 		// GP Components.
 		initialiser = new RampedHalfAndHalfInitialiser(this);

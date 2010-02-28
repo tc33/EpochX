@@ -17,11 +17,11 @@
  *  You should have received a copy of the GNU General Public License
  *  along with EpochX.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.gp.op.initialisation;
+package org.epochx.gp.op.init;
 
 import java.util.*;
 
-import org.epochx.gp.core.GPModel;
+import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
 import org.epochx.representation.*;
 

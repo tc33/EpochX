@@ -3,6 +3,7 @@ package org.epochx.core;
 import java.util.List;
 
 import org.epochx.life.*;
+import org.epochx.model.Model;
 import org.epochx.op.PoolSelector;
 import org.epochx.representation.CandidateProgram;
 

@@ -29,7 +29,7 @@ import org.epochx.representation.CandidateProgram;
  * GPMutation instances are used by the core GRMutation class to perform a single 
  * mutation operation.
  * 
- * @see org.epochx.ge.core.GRMutation
+ * @see org.epochx.ge.model.GRMutation
  */
 public interface GEMutation extends Mutation {
 

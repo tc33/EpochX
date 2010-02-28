@@ -22,7 +22,7 @@ package org.epochx.ge.model.java.ant;
 import java.awt.*;
 import java.util.*;
 
-import org.epochx.ge.core.GEAbstractModel;
+import org.epochx.ge.model.GEAbstractModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.ant.*;

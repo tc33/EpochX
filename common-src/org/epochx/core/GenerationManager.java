@@ -3,6 +3,7 @@ package org.epochx.core;
 import java.util.*;
 
 import org.epochx.life.LifeCycleManager;
+import org.epochx.model.Model;
 import org.epochx.representation.*;
 import org.epochx.tools.random.RandomNumberGenerator;
 

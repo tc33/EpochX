@@ -17,14 +17,14 @@
  *  You should have received a copy of the GNU General Public License
  *  along with XGE.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.ge.core;
+package org.epochx.ge.model;
 
-import org.epochx.core.AbstractModel;
 import org.epochx.ge.codon.*;
 import org.epochx.ge.mapper.*;
 import org.epochx.ge.op.crossover.*;
 import org.epochx.ge.op.init.*;
 import org.epochx.ge.op.mutation.*;
+import org.epochx.model.AbstractModel;
 
 
 /**

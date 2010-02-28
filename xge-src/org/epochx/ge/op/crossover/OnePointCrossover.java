@@ -22,7 +22,7 @@ package org.epochx.ge.op.crossover;
 import java.util.List;
 
 import org.epochx.core.Controller;
-import org.epochx.ge.core.GEModel;
+import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.life.GenerationListener;
 import org.epochx.representation.CandidateProgram;

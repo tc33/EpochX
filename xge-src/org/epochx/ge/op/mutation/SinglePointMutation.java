@@ -21,7 +21,7 @@ package org.epochx.ge.op.mutation;
 
 import org.epochx.core.Controller;
 import org.epochx.ge.codon.CodonGenerator;
-import org.epochx.ge.core.GEModel;
+import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.life.GenerationListener;
 import org.epochx.representation.CandidateProgram;

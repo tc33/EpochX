@@ -1,7 +1,7 @@
 package org.epochx.gr.model.epox.mux;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.epochx.gr.core.*;
+import org.epochx.gr.model.*;
 import org.epochx.gr.representation.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.eval.*;

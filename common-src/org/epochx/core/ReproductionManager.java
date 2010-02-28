@@ -1,6 +1,7 @@
 package org.epochx.core;
 
 import org.epochx.life.*;
+import org.epochx.model.Model;
 import org.epochx.op.ProgramSelector;
 import org.epochx.representation.CandidateProgram;
 

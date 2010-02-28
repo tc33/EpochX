@@ -19,8 +19,8 @@
  */
 package org.epochx.gp.op.mutation;
 
-import org.epochx.gp.core.GPModel;
-import org.epochx.gp.op.initialisation.GrowInitialiser;
+import org.epochx.gp.model.GPModel;
+import org.epochx.gp.op.init.GrowInitialiser;
 import org.epochx.gp.representation.*;
 import org.epochx.representation.CandidateProgram;
 

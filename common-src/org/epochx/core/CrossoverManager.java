@@ -1,6 +1,7 @@
 package org.epochx.core;
 
 import org.epochx.life.*;
+import org.epochx.model.Model;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.CrossoverStats;

@@ -3,6 +3,7 @@ package org.epochx.core;
 import java.util.List;
 
 import org.epochx.life.LifeCycleManager;
+import org.epochx.model.Model;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.GenerationStats;
 

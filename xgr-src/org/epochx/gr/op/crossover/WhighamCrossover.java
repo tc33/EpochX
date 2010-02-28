@@ -3,7 +3,7 @@ package org.epochx.gr.op.crossover;
 import java.util.*;
 
 import org.epochx.core.*;
-import org.epochx.gr.core.*;
+import org.epochx.gr.model.*;
 import org.epochx.gr.representation.*;
 import org.epochx.life.*;
 import org.epochx.representation.*;

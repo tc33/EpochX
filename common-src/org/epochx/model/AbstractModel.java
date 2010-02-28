@@ -1,4 +1,4 @@
-package org.epochx.core;
+package org.epochx.model;
 
 import java.util.List;
 

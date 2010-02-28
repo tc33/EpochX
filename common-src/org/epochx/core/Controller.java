@@ -21,6 +21,7 @@ package org.epochx.core;
 
 import org.epochx.core.Controller;
 import org.epochx.life.LifeCycleManager;
+import org.epochx.model.Model;
 import org.epochx.stats.*;
 
 /**

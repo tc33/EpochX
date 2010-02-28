@@ -21,7 +21,7 @@ package org.epochx.ge.mapper;
 
 import org.epochx.core.Controller;
 import org.epochx.ge.codon.CodonGenerator;
-import org.epochx.ge.core.GEModel;
+import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.*;
 import org.epochx.life.*;
 import org.epochx.tools.grammar.*;

@@ -21,7 +21,7 @@ package org.epochx.ge.op.init;
 
 import java.util.*;
 
-import org.epochx.ge.core.*;
+import org.epochx.ge.model.*;
 import org.epochx.ge.representation.*;
 import org.epochx.representation.CandidateProgram;
 

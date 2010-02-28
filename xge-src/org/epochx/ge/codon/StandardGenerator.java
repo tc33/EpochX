@@ -19,7 +19,7 @@
  */
 package org.epochx.ge.codon;
 
-import org.epochx.ge.core.*;
+import org.epochx.ge.model.*;
 
 /**
  * Generates codon values randomly between zero and the maximum codon size as

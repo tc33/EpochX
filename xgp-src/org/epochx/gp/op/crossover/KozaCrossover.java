@@ -20,7 +20,7 @@
 package org.epochx.gp.op.crossover;
 
 import org.epochx.core.*;
-import org.epochx.gp.core.GPModel;
+import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
 import org.epochx.life.GenerationListener;
 import org.epochx.representation.*;

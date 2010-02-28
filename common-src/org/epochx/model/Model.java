@@ -1,4 +1,4 @@
-package org.epochx.core;
+package org.epochx.model;
 
 import org.epochx.life.LifeCycleListener;
 import org.epochx.op.*;

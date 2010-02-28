@@ -17,9 +17,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with EpochX.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.representation.bool;
+package org.epochx.gp.representation.bool;
 
-import org.epochx.representation.*;
+import org.epochx.gp.representation.BooleanNode;
 
 /**
  * A <code>FunctionNode</code> which performs the logical operation of NAND 

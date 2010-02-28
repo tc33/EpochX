@@ -23,9 +23,11 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-import org.epochx.core.*;
-import org.epochx.representation.*;
-import org.epochx.representation.ant.*;
+import org.epochx.core.Controller;
+import org.epochx.gp.core.GPAbstractModel;
+import org.epochx.gp.representation.*;
+import org.epochx.gp.representation.ant.*;
+import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.GenerationStatField;
 import org.epochx.tools.ant.*;
 

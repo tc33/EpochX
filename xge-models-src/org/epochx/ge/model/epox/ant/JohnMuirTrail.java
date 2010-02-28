@@ -26,6 +26,7 @@ import org.epochx.core.Controller;
 import org.epochx.ge.core.GEAbstractModel;
 import org.epochx.ge.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.ge.representation.GECandidateProgram;
+import org.epochx.gp.representation.FunctionParser;
 import org.epochx.op.selection.*;
 import org.epochx.representation.*;
 import org.epochx.stats.*;

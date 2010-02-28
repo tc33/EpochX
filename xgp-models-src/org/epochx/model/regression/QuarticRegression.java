@@ -21,9 +21,10 @@ package org.epochx.model.regression;
 
 import java.util.*;
 
-import org.epochx.core.*;
-import org.epochx.representation.*;
-import org.epochx.representation.dbl.*;
+import org.epochx.gp.core.GPAbstractModel;
+import org.epochx.gp.representation.*;
+import org.epochx.gp.representation.dbl.*;
+import org.epochx.representation.CandidateProgram;
 
 
 /**

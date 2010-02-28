@@ -19,7 +19,7 @@
  */
 package org.epochx.tools.eval;
 
-import org.epochx.representation.*;
+import org.epochx.gp.representation.*;
 
 /**
  * The EpochX evaluator is a special example of an evaluator in that the 

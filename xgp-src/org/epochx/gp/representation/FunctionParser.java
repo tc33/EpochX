@@ -17,14 +17,14 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.representation;
+package org.epochx.gp.representation;
 
 import java.util.*;
 import java.util.regex.Pattern;
 
-import org.epochx.representation.ant.*;
-import org.epochx.representation.bool.*;
-import org.epochx.representation.dbl.*;
+import org.epochx.gp.representation.ant.*;
+import org.epochx.gp.representation.bool.*;
+import org.epochx.gp.representation.dbl.*;
 import org.epochx.tools.ant.Ant;
 
 /**

@@ -17,9 +17,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with EpochX.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.representation.ant;
+package org.epochx.gp.representation.ant;
 
-import org.epochx.representation.*;
+import org.epochx.gp.representation.VoidNode;
 
 /**
  * A <code>FunctionNode</code> which provides the facility to sequence two 

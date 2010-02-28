@@ -21,9 +21,10 @@ package org.epochx.model.parity;
 
 import java.util.*;
 
-import org.epochx.core.GPAbstractModel;
-import org.epochx.representation.*;
-import org.epochx.representation.bool.*;
+import org.epochx.gp.core.GPAbstractModel;
+import org.epochx.gp.representation.*;
+import org.epochx.gp.representation.bool.*;
+import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.util.BoolUtils;
 
 

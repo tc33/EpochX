@@ -1,4 +1,4 @@
-package org.epochx.representation;
+package org.epochx.gp.representation;
 
 public abstract class BooleanNode extends Node {
 

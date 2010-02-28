@@ -17,11 +17,12 @@
  *  You should have received a copy of the GNU General Public License
  *  along with EpochX.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.op.mutation;
+package org.epochx.gp.op.mutation;
 
-import org.epochx.core.*;
-import org.epochx.op.initialisation.*;
-import org.epochx.representation.*;
+import org.epochx.gp.core.GPModel;
+import org.epochx.gp.op.initialisation.GrowInitialiser;
+import org.epochx.gp.representation.*;
+import org.epochx.representation.CandidateProgram;
 
 /**
  * This class performs a subtree mutation on a <code>GPCandidateProgram</code>.

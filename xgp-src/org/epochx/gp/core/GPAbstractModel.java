@@ -17,14 +17,15 @@
  *  You should have received a copy of the GNU General Public License
  *  along with EpochX.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.core;
+package org.epochx.gp.core;
 
 import java.util.*;
 
-import org.epochx.op.crossover.*;
-import org.epochx.op.initialisation.*;
-import org.epochx.op.mutation.*;
-import org.epochx.representation.*;
+import org.epochx.core.AbstractModel;
+import org.epochx.gp.op.crossover.*;
+import org.epochx.gp.op.initialisation.*;
+import org.epochx.gp.op.mutation.*;
+import org.epochx.gp.representation.*;
 import org.epochx.tools.random.*;
 
 

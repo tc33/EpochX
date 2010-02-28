@@ -17,10 +17,11 @@
  *  You should have received a copy of the GNU General Public License
  *  along with EpochX.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.op.mutation;
+package org.epochx.gp.op.mutation;
 
+import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.op.Mutation;
-import org.epochx.representation.*;
+import org.epochx.representation.CandidateProgram;
 
 /**
  * This interface defines the structure which specific mutation operators can

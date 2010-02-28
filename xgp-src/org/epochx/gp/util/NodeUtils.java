@@ -1,8 +1,8 @@
-package org.epochx.util;
+package org.epochx.gp.util;
 
 import java.util.*;
 
-import org.epochx.representation.*;
+import org.epochx.gp.representation.*;
 
 public final class NodeUtils {
 

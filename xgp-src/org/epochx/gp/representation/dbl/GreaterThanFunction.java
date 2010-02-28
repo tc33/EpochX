@@ -17,9 +17,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.representation.dbl;
+package org.epochx.gp.representation.dbl;
 
-import org.epochx.representation.*;
+import org.epochx.gp.representation.DoubleNode;
 
 /**
  * The greater than function is a numerically valued logical function. It 

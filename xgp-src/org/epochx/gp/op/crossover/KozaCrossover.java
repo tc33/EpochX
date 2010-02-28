@@ -17,9 +17,11 @@
  *  You should have received a copy of the GNU General Public License
  *  along with EpochX.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.op.crossover;
+package org.epochx.gp.op.crossover;
 
 import org.epochx.core.*;
+import org.epochx.gp.core.GPModel;
+import org.epochx.gp.representation.*;
 import org.epochx.life.GenerationListener;
 import org.epochx.representation.*;
 import org.epochx.tools.random.RandomNumberGenerator;

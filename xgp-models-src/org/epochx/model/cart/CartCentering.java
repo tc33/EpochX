@@ -21,12 +21,14 @@ package org.epochx.model.cart;
 
 import java.util.*;
 
-import org.epochx.core.*;
-import org.epochx.op.crossover.*;
-import org.epochx.op.mutation.*;
+import org.epochx.core.Controller;
+import org.epochx.gp.core.GPAbstractModel;
+import org.epochx.gp.op.crossover.UniformPointCrossover;
+import org.epochx.gp.op.mutation.PointMutation;
+import org.epochx.gp.representation.*;
+import org.epochx.gp.representation.dbl.*;
 import org.epochx.op.selection.*;
-import org.epochx.representation.*;
-import org.epochx.representation.dbl.*;
+import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
 
 /**

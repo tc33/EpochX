@@ -32,7 +32,7 @@ public class WhighamMutation implements GRMutation, GenerationListener {
 	@Override
 	public GRCandidateProgram mutate(CandidateProgram program) {
 		GRCandidateProgram mutatedProgram = (GRCandidateProgram) program.clone();
-		NonTerminalSymbol parseTree = mutatedProgram.getParseTree();
+		/*NonTerminalSymbol parseTree = mutatedProgram.getParseTree();
 		
 		List<NonTerminalSymbol> nonTerminals = parseTree.getNonTerminalSymbols();
 		
@@ -45,7 +45,7 @@ public class WhighamMutation implements GRMutation, GenerationListener {
 		NonTerminalSymbol replacement = init.growParseTree(5, rule);
 		
 		// Replace current children with our new children.
-		point.setChildren(replacement.getChildren());
+		point.setChildren(replacement.removeChildren());*/
 		
 		return mutatedProgram;
 	}

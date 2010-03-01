@@ -1,14 +1,12 @@
 package org.epochx.gr.op.crossover;
 
-import java.util.*;
-
-import org.epochx.core.*;
-import org.epochx.gr.model.*;
-import org.epochx.gr.representation.*;
-import org.epochx.life.*;
-import org.epochx.representation.*;
+import org.epochx.core.Controller;
+import org.epochx.gr.model.GRModel;
+import org.epochx.gr.representation.GRCandidateProgram;
+import org.epochx.life.GenerationListener;
+import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.*;
-import org.epochx.tools.random.*;
+import org.epochx.tools.random.RandomNumberGenerator;
 
 public class WhighamCrossover implements GRCrossover, GenerationListener {
 
@@ -37,44 +35,29 @@ public class WhighamCrossover implements GRCrossover, GenerationListener {
 	@Override
 	public GRCandidateProgram[] crossover(CandidateProgram p1,
 			CandidateProgram p2) {
-		
-		GRCandidateProgram program1 = (GRCandidateProgram) p1;
-		GRCandidateProgram program2 = (GRCandidateProgram) p2;
-		
-		GRCandidateProgram child1 = (GRCandidateProgram) program1.clone();
-		GRCandidateProgram child2 = (GRCandidateProgram) program2.clone();
+
+		GRCandidateProgram child1 = (GRCandidateProgram) p1;
+		GRCandidateProgram child2 = (GRCandidateProgram) p2;
 		
 		NonTerminalSymbol parseTree1 = child1.getParseTree();
 		NonTerminalSymbol parseTree2 = child2.getParseTree();
 		
-		//TODO Implement getNoNonTerminals(), getNthTerminal() etc methods in Grammar parse tree representation.
-		List<NonTerminalSymbol> nonTerminals1 = parseTree1.getNonTerminalSymbols();
-		List<NonTerminalSymbol> nonTerminals2 = parseTree2.getNonTerminalSymbols();
+		int noNonTerminals1 = parseTree1.getNoNonTerminalSymbols();
 		
-		int selection = rng.nextInt(nonTerminals1.size());
+		int point1 = parseTree1.getNonTerminalSymbolIndex(rng.nextInt(noNonTerminals1));
+		 
+		GrammarRule grammarRule = parseTree1.getGrammarRule(point1);
 		
-		NonTerminalSymbol point1 = nonTerminals1.get(selection);
+		// How many non-terminals in program 2 with the same rule.
+		int noMatches = parseTree2.getNoNonTerminalSymbols(grammarRule);		
 		
-		// Generate a list of matching non-terminals from the second program.
-		List<NonTerminalSymbol> matchingNonTerminals = new ArrayList<NonTerminalSymbol>();
-		for (NonTerminalSymbol nt: nonTerminals2) {
-			if (nt.equals(point1)) {
-				matchingNonTerminals.add(nt);
-			}
-		}
-		
-		if (matchingNonTerminals.isEmpty()) {
-			// No valid points in second program, cancel crossover.
+		if (noMatches == 0) {
 			return null;
 		} else {
 			// Randomly choose a second point out of the matching non-terminals.
-			selection = rng.nextInt(matchingNonTerminals.size());
-			NonTerminalSymbol point2 = matchingNonTerminals.get(selection);
+			int point2 = parseTree2.getNonTerminalSymbolIndex(rng.nextInt(noMatches), grammarRule);
 			
-			// Swap the non-terminals' children.			
-			List<Symbol> temp = point1.getChildren();
-			point1.setChildren(point2.getChildren());
-			point2.setChildren(temp);
+			parseTree1.swapSubtree(point1, parseTree2, point2);
 		}
 		
 		return new GRCandidateProgram[]{child1, child2};

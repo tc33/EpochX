@@ -11,13 +11,22 @@ import org.epochx.tools.util.BoolUtils;
 
 public class Multiplexer6Bit extends GRAbstractModel {
 	
-	public static final String GRAMMAR_STRING = 
+	/*public static final String GRAMMAR_STRING = 
 		"<prog> ::= <node>\n" +
 		"<node> ::= <function> | <terminal>\n" +
 		"<function> ::= NOT( <node> ) " +
 					"| OR( <node> , <node> ) " +
 					"| AND( <node> , <node> ) " +
 					"| IF( <node> , <node> , <node> )\n" +
+		"<terminal> ::= a0 | a1 | d0 | d1 | d2 | d3\n";*/
+	
+	public static final String GRAMMAR_STRING = 
+		"<prog> ::= <node>\n" +
+		"<node> ::= NOT( <node> ) " +
+					"| OR( <node> , <node> ) " +
+					"| AND( <node> , <node> ) " +
+					"| IF( <node> , <node> , <node> ) " +
+					"| <terminal>\n" +
 		"<terminal> ::= a0 | a1 | d0 | d1 | d2 | d3\n";
 	
 	private Grammar grammar;

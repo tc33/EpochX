@@ -1,15 +1,18 @@
 package org.epochx.gr.representation;
 
 import org.epochx.gr.model.GRModel;
-import org.epochx.representation.CandidateProgram;
+import org.epochx.representation.*;
 import org.epochx.tools.grammar.*;
 
-public class GRCandidateProgram extends CandidateProgram {
+public class GRCandidateProgram extends CandidateProgram implements TreeChangeListener {
 
 	private GRModel model;
 	
 	// The phenotype.
 	private NonTerminalSymbol parseTree;
+	
+	// The fitness of the phenotype.
+	private double fitness;
 	
 	public GRCandidateProgram(GRModel model) {
 		this(null, model);
@@ -18,11 +21,27 @@ public class GRCandidateProgram extends CandidateProgram {
 	public GRCandidateProgram(NonTerminalSymbol parseTree, GRModel model) {
 		this.model = model;
 		this.parseTree = parseTree;
+		
+		// Initialise the fitness to -1 until we are asked to calculate it.
+		fitness = -1;
+		
+		// Listen to changes to the parse tree so we can clear our caches.
+		//parseTree.addTreeChangeListener(this);
 	}
 	
 	@Override
 	public double getFitness() {
-		return model.getFitness(this);
+		if (!model.cacheFitness() || (fitness == -1)) {
+			fitness = model.getFitness(this);
+		}
+		
+		return fitness;
+	}
+	
+	@Override
+	public void treeChanged() {
+		// The parse tree has changed so we must clear our fitness cache.
+		fitness = -1;
 	}
 
 	public String getSourceCode() {
@@ -49,6 +68,7 @@ public class GRCandidateProgram extends CandidateProgram {
 			clone.parseTree = null;
 		} else {
 			clone.parseTree = (NonTerminalSymbol) this.parseTree.clone();
+			clone.parseTree.addTreeChangeListener(clone);
 		}
 		
 		// Shallow copy the model.

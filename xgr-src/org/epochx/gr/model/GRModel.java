@@ -1,13 +1,12 @@
 package org.epochx.gr.model;
 
-import org.epochx.core.*;
 import org.epochx.ge.op.crossover.*;
-import org.epochx.gr.op.crossover.*;
-import org.epochx.gr.op.init.*;
-import org.epochx.gr.op.mutation.*;
+import org.epochx.gr.op.crossover.GRCrossover;
+import org.epochx.gr.op.init.GRInitialiser;
+import org.epochx.gr.op.mutation.GRMutation;
 import org.epochx.model.Model;
-import org.epochx.representation.*;
-import org.epochx.tools.grammar.*;
+import org.epochx.representation.CandidateProgram;
+import org.epochx.tools.grammar.Grammar;
 
 /**
  * A GRModel defines all those parameters needed to control a run by GRRun. 

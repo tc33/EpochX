@@ -19,7 +19,6 @@
  */
 package org.epochx.tools.grammar;
 
-import java.util.*;
 
 /**
  *

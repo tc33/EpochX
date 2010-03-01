@@ -45,13 +45,29 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 	private GrowInitialiser grow;
 	private FullInitialiser full;
 	
+	// The smallest depth to be used.
+	private int minDepth;
+	
 	/**
 	 * Construct a RampedHalfAndHalfInitialiser.
 	 * 
 	 * @param model The model being assessed
 	 */
-	public RampedHalfAndHalfInitialiser(GRModel model) {
+	public RampedHalfAndHalfInitialiser(GRModel model) {		
+		this(model, -1);
+	}
+	
+	/**
+	 * Construct a RampedHalfAndHalfInitialiser.
+	 * 
+	 * @param model The model being assessed
+	 * @param minDepth The smallest depth to generate programs to before 
+	 * ramping up. If a value smaller than the smallest allowable by the 
+	 * grammar is given then this smallest possible value is used.
+	 */
+	public RampedHalfAndHalfInitialiser(GRModel model, int minDepth) {
 		this.model = model;
+		this.minDepth = minDepth;
 		
 		// set up the grow and full parts
 		grow = new GrowInitialiser(model);
@@ -68,8 +84,12 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 		int popSize = model.getPopulationSize();
 		List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
 		
-		// Our start depth can only be as small as the grammars minimum depth.
-		int startDepth = model.getGrammar().getMinimumDepth();
+		int minDepthPossible = model.getGrammar().getMinimumDepth();
+		if (minDepth < minDepthPossible) {
+			// Our start depth can only be as small as the grammars minimum depth.
+			minDepth = minDepthPossible;
+		}
+		
 		int endDepth = model.getMaxInitialProgramDepth();
 		
 		if (endDepth < 2) {
@@ -77,11 +97,11 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 		}
 		
 		// Number of programs each depth SHOULD have. But won't unless remainder is 0.
-		double programsPerDepth = (double) popSize / (endDepth - startDepth + 1);
+		double programsPerDepth = (double) popSize / (endDepth - minDepth + 1);
 		
 		for (int i=0; i<popSize; i++) {
 			// Calculate depth
-			int depth = (int) Math.floor((i / programsPerDepth) + startDepth);
+			int depth = (int) Math.floor((i / programsPerDepth) + minDepth);
 			
 			// Grow on even numbers, full on odd.
 			GRCandidateProgram program;

@@ -4,7 +4,7 @@ import org.epochx.gr.model.GRModel;
 import org.epochx.representation.*;
 import org.epochx.tools.grammar.*;
 
-public class GRCandidateProgram extends CandidateProgram implements TreeChangeListener {
+public class GRCandidateProgram extends CandidateProgram {
 
 	private GRModel model;
 	
@@ -14,6 +14,9 @@ public class GRCandidateProgram extends CandidateProgram implements TreeChangeLi
 	// The fitness of the phenotype.
 	private double fitness;
 	
+	// A stash of the source for testing if fitness cache is up to date.
+	private String sourceCache;
+	
 	public GRCandidateProgram(GRModel model) {
 		this(null, model);
 	}
@@ -22,26 +25,27 @@ public class GRCandidateProgram extends CandidateProgram implements TreeChangeLi
 		this.model = model;
 		this.parseTree = parseTree;
 		
+		sourceCache = null;
+		
 		// Initialise the fitness to -1 until we are asked to calculate it.
 		fitness = -1;
-		
-		// Listen to changes to the parse tree so we can clear our caches.
-		//parseTree.addTreeChangeListener(this);
 	}
 	
 	@Override
 	public double getFitness() {
-		if (!model.cacheFitness() || (fitness == -1)) {
+		// Only get the source code if caching to avoid overhead otherwise.
+		String source = null;
+		if (model.cacheFitness()) {
+			source = getSourceCode();
+		}
+		
+		// If we're not caching or the cache is out of date.
+		if (!model.cacheFitness() || !source.equals(sourceCache)) {
 			fitness = model.getFitness(this);
+			sourceCache = source;
 		}
 		
 		return fitness;
-	}
-	
-	@Override
-	public void treeChanged() {
-		// The parse tree has changed so we must clear our fitness cache.
-		fitness = -1;
 	}
 
 	public String getSourceCode() {
@@ -68,7 +72,6 @@ public class GRCandidateProgram extends CandidateProgram implements TreeChangeLi
 			clone.parseTree = null;
 		} else {
 			clone.parseTree = (NonTerminalSymbol) this.parseTree.clone();
-			clone.parseTree.addTreeChangeListener(clone);
 		}
 		
 		// Shallow copy the model.

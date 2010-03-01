@@ -21,23 +21,16 @@ package org.epochx.tools.grammar;
 
 import java.util.*;
 
-import org.epochx.gp.representation.Node;
-import org.epochx.representation.TreeChangeListener;
-
-
-
 /**
  *
  */
-public class NonTerminalSymbol implements Symbol, TreeChangeListener {
+public class NonTerminalSymbol implements Symbol {
 
-	private List<TreeChangeListener> changeListeners;
-	
 	private List<Symbol> children;
 	
 	// The associated grammar symbol.
 	private GrammarRule grammarRule;
-	
+
 	public NonTerminalSymbol(GrammarRule grammarRule) {
 		this(grammarRule, new ArrayList<Symbol>());
 	}
@@ -45,46 +38,20 @@ public class NonTerminalSymbol implements Symbol, TreeChangeListener {
 	public NonTerminalSymbol(GrammarRule grammarRule, List<Symbol> children) {
 		this.grammarRule = grammarRule;
 		this.children = children;
-		
-		changeListeners = new ArrayList<TreeChangeListener>();
-		
-		// Add our listener on the new children.
-		for (Symbol child: children) {
-			if (child instanceof NonTerminalSymbol) {
-				((NonTerminalSymbol) child).addTreeChangeListener(this);
-			}
-		}
 	}
 	
-	public void setChild(int index, Symbol child) {
-		// Remove our listener on the old child.
-		if (children.get(index) instanceof NonTerminalSymbol) {
-			((NonTerminalSymbol) children.get(index)).removeTreeChangeListener(this);
-		}
-		
-		// Add our listener on the new child.
-		if (child instanceof NonTerminalSymbol) {
-			((NonTerminalSymbol) child).addTreeChangeListener(this);
-		}
-		
+	public void setChild(int index, Symbol child) {		
 		// Make the change.
 		children.set(index, child);
-
-		// Inform our listeners that the tree has changed.
-		treeChanged();
+	}
+	
+	public Symbol getChild(int index) {
+		return children.get(index);
 	}
 	
 	public void addChild(Symbol child) {
-		// Add our listener on the new child.
-		if (child instanceof NonTerminalSymbol) {
-			((NonTerminalSymbol) child).addTreeChangeListener(this);
-		}
-		
 		// Make the change.
 		children.add(child);
-		
-		// Inform our listeners that the tree has changed.
-		treeChanged();
 	}
 	
 	/**
@@ -93,63 +60,26 @@ public class NonTerminalSymbol implements Symbol, TreeChangeListener {
 	 * @return The children that were removed.
 	 */
 	public List<Symbol> removeChildren() {
-		// Remove our listener on the children.
-		for (Symbol child: children) {
-			if (child instanceof NonTerminalSymbol) {
-				((NonTerminalSymbol) child).removeTreeChangeListener(this);
-			}
-		}
-		
-		// Store the children to return.
-		List<Symbol> oldChildren = children;
-		
 		// Make the change.
-		children = new ArrayList<Symbol>();
+		children.clear();
 		
-		// Inform our listeners that the tree has changed.
-		treeChanged();
-		
-		return oldChildren;
+		return children;
 	}
 	
-	public Symbol removeChild(int index) {
-		// Remove our listener on the child.
-		if (children.get(index) instanceof NonTerminalSymbol) {
-			((NonTerminalSymbol) children.get(index)).removeTreeChangeListener(this);
-		}
-		
-		// Make the change.
-		Symbol child = children.remove(index);
-		
-		// Inform our listeners that the tree has changed.
-		treeChanged();
-		
-		return child;
+	public Symbol removeChild(int index) {		
+		return children.remove(index);
 	}
 	
-	public void setChildren(List<Symbol> newChildren) {
-		// Remove our listener on the children.
-		for (Symbol child: children) {
-			if (child instanceof NonTerminalSymbol) {
-				((NonTerminalSymbol) child).removeTreeChangeListener(this);
-			}
-		}
-		
-		// Add our listener on the new children.
-		for (Symbol child: newChildren) {
-			if (child instanceof NonTerminalSymbol) {
-				((NonTerminalSymbol) child).addTreeChangeListener(this);
-			}
-		}
-		
+	public List<Symbol> getChildren() {
+		return children;
+	}
+	
+	public void setChildren(List<Symbol> newChildren) {		
 		// Make the change.
 		this.children = newChildren;
-		
-		// Inform our listeners that the tree has changed.
-		treeChanged();
 	}
 	
-	public int getNoNonTerminalSymbols() {
+	public int getNoNonTerminalSymbols() {		
 		// Start by adding self.
 		int noNonTerminals = 1;
 
@@ -270,16 +200,10 @@ public class NonTerminalSymbol implements Symbol, TreeChangeListener {
 		
 	}*/
 	
-	/*
-	 * This MUST stay private to preserve internal consistency.
-	 */
-	private NonTerminalSymbol getNthNonTerminal(int n) {
+	public NonTerminalSymbol getNthNonTerminal(int n) {
 		return getNthNonTerminal(n, 0);
 	}
 	
-	/*
-	 * This MUST stay private to preserve internal consistency.
-	 */
 	private NonTerminalSymbol getNthNonTerminal(int n, int current) {
 		// Is this the one we're looking for?
 		if (n == current) {
@@ -306,7 +230,7 @@ public class NonTerminalSymbol implements Symbol, TreeChangeListener {
 	/*
 	 * This MUST stay private to preserve internal consistency.
 	 */
-	private Symbol getNthSymbol(int n) {	
+	public Symbol getNthSymbol(int n) {	
 		return getNthSymbol(n, 0);
 	}
 	
@@ -376,148 +300,66 @@ public class NonTerminalSymbol implements Symbol, TreeChangeListener {
 	}
 	
 	/**
-	 * This method simplifies the common process of swapping subtrees between 
-	 * two parse trees below NonTerminalSymbols, by performing it internally 
-	 * where caches can be preserved.
+	 * Returns a list of all non-terminal symbols in the parse tree below this 
+	 * symbol, including this symbol itself.
 	 * 
-	 * This method must be used carefully to preserve grammatical validity. It 
-	 * is advised that a check is made that the two NonTerminalSymbols to be 
-	 * swapped have the same underlying GrammarRule to ensure this.
-	 * 
-	 * @param n1 the index of the node in this parse tree to swap.
-	 * @param nt the other non-terminal symbol root node.
-	 * @param n2 the index of the node in the other parse tree to swap.
-	 */
-	public void swapSubtree(int n1, NonTerminalSymbol nt, int n2) {
-		//TODO Need to deal with the situation that n1 or n2 is 0.
-		
-		// Stash the other tree's nth node temporarily.
-		Symbol temp = nt.getNthSymbol(n2);
-		
-		// Set the other tree's nth node to be our subtree.
-		nt.setNthSymbol(n2, this.getNthSymbol(n1));
-		
-		// Replace our subtree with the temp subtree from the other tree.
-		this.setNthSymbol(n1, temp);
-	}
-	
-	/**
-	 * Returns the symbol index of a non-terminal from it's non-terminal index.
-	 * @param n
 	 * @return
 	 */
-	public int getNonTerminalSymbolIndex(int n){
-		return getNonTerminalSymbolIndex(n, 0, 0);
-	}
-	
-	private int getNonTerminalSymbolIndex(int targetNTIndex, int currentNTIndex, int currentSymbolIndex) {
-		// Is this the one we're looking for?
-		if (targetNTIndex == currentNTIndex) {
-			return currentSymbolIndex;
-		}
+	public List<NonTerminalSymbol> getNonTerminalSymbols() {
+		List<NonTerminalSymbol> nonTerminals = new ArrayList<NonTerminalSymbol>();
 		
+		// Start by adding self.
+		nonTerminals.add(this);
+		
+		// Add all the non-terminals below each child.
 		for (Symbol child: children) {
 			if (child instanceof NonTerminalSymbol) {
-				NonTerminalSymbol nt = (NonTerminalSymbol) child;
-				
-				int symbolIndex = nt.getNonTerminalSymbolIndex(targetNTIndex, currentNTIndex+1, currentSymbolIndex+1);
-				
-				if (symbolIndex != -1) {
-					return symbolIndex;
-				}
-				
-				currentNTIndex += nt.getNoNonTerminalSymbols();
-				currentSymbolIndex += nt.getNoSymbols();
-			} else {
-				currentSymbolIndex++;
+				nonTerminals.addAll(((NonTerminalSymbol) child).getNonTerminalSymbols());
 			}
 		}
 		
-		return -1;
+		return nonTerminals;
 	}
 	
 	/**
-	 * Returns the symbol index of a non-terminal from it's non-terminal index.
-	 * @param n
+	 * Returns a list of all terminal symbols in the parse tree below this 
+	 * symbol.
+	 * 
 	 * @return
 	 */
-	public int getNonTerminalSymbolIndex(int n, GrammarRule rule){
-		return getNonTerminalSymbolIndex(n, rule, 0, 0);
-	}
-	
-	private int getNonTerminalSymbolIndex(int targetNTIndex, GrammarRule rule, int currentNTIndex, int currentSymbolIndex) {
-		if ((targetNTIndex == currentNTIndex) && rule.equals(this.getGrammarRule())) {
-			return currentSymbolIndex;
-		}
+	public List<TerminalSymbol> getTerminalSymbols() {
+		List<TerminalSymbol> terminals = new ArrayList<TerminalSymbol>();
 		
+		// Add all the non-terminals below each child.
 		for (Symbol child: children) {
-			if (child instanceof NonTerminalSymbol) {
-				NonTerminalSymbol nt = (NonTerminalSymbol) child;
-				
-				int nextNTIndex = currentNTIndex;
-				if (rule.equals(this.getGrammarRule())) {
-					nextNTIndex++;
-				}
-				
-				int symbolIndex = nt.getNonTerminalSymbolIndex(targetNTIndex, rule, nextNTIndex, currentSymbolIndex+1);
-				
-				if (symbolIndex != -1) {
-					return symbolIndex;
-				}
-				
-				currentNTIndex += nt.getNoNonTerminalSymbols(rule);
-				currentSymbolIndex += nt.getNoSymbols();
-			} else {
-				currentSymbolIndex++;
+			if (child instanceof TerminalSymbol) {
+				terminals.add((TerminalSymbol) child);
+			} else if (child instanceof NonTerminalSymbol) {
+				terminals.addAll(((NonTerminalSymbol) child).getTerminalSymbols());
 			}
 		}
 		
-		return -1;
+		return terminals;
 	}
 	
-	public int getTerminalSymbolIndex(int n) {
-		return 0;
+	public List<Symbol> getAllSymbols() {
+		List<Symbol> symbols = new ArrayList<Symbol>();
+		
+		symbols.add(this);
+		
+		for (Symbol child: children) {
+			if (child instanceof TerminalSymbol) {
+				symbols.add(child);
+			} else if (child instanceof NonTerminalSymbol) {
+				symbols.addAll(((NonTerminalSymbol) child).getAllSymbols());
+			}
+		}
+		
+		return symbols;
 	}
 	
 	public GrammarRule getGrammarRule() {
 		return grammarRule;
-	}
-	
-	/**
-	 * Get the grammar rule of the nth symbol. If the nth symbol is not a 
-	 * NonTerminalSymbol and so doesn't have a grammar rule, then null will be 
-	 * returned.
-	 */
-	public GrammarRule getGrammarRule(int n) {		
-		Symbol nth = getNthSymbol(n);
-		GrammarRule rule = null;
-		
-		if (nth instanceof NonTerminalSymbol) {
-			rule = ((NonTerminalSymbol) nth).getGrammarRule();
-		}
-		
-		return rule;
-	}
-	
-	public void addTreeChangeListener(TreeChangeListener listener) {
-		changeListeners.add(listener);
-	}
-	
-	public void removeTreeChangeListener(TreeChangeListener listener) {
-		changeListeners.remove(listener);
-	}
-	
-	@Override
-	public void treeChanged() {
-		/*
-		 * This method is called by the objects we're listening on, but it is 
-		 * also called by this object, since in both cases all we want to do is 
-		 * inform our listeners of a change.
-		 */
-		
-		for (TreeChangeListener listener: changeListeners) {
-			listener.treeChanged();
-		}
 	}
 	
 	@Override
@@ -542,14 +384,8 @@ public class NonTerminalSymbol implements Symbol, TreeChangeListener {
 		
 		// Copy cloned child symbols.
 		clone.children = new ArrayList<Symbol>();
-		clone.changeListeners = new ArrayList<TreeChangeListener>();
 		for (Symbol c: children) {
-			Symbol childClone = (Symbol) c.clone();
-			if (childClone instanceof NonTerminalSymbol) {
-				((NonTerminalSymbol) childClone).addTreeChangeListener(clone);
-			}
-			
-			clone.children.add(childClone);
+			clone.children.add((Symbol) c.clone());
 		}
 		
 		// Shallow copy the grammar rules.

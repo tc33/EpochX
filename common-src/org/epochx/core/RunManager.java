@@ -1,11 +1,13 @@
 package org.epochx.core;
 
-import java.util.List;
+import static org.epochx.stats.StatField.*;
 
-import org.epochx.life.LifeCycleManager;
-import org.epochx.model.Model;
-import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.GenerationStats;
+import java.util.*;
+
+import org.epochx.gp.model.*;
+import org.epochx.life.*;
+import org.epochx.model.*;
+import org.epochx.representation.*;
 
 public class RunManager {
 	
@@ -31,9 +33,6 @@ public class RunManager {
 	// The run end time in nano-seconds for measuring program length.
 	private long runEndTime;
 	
-	// Gather generation statistics.
-	private GenerationStats genStats;
-	
 	/*
 	 * Private constructor. The static factory method run(GPModel) should be 
 	 * used to create objects of GPRun and simultaneously execute them.
@@ -53,12 +52,6 @@ public class RunManager {
 		// Setup core components.
 		generation = new GenerationManager(model);
 		initialisation = new InitialisationManager(model);
-		
-		// Create the statistics monitor.
-		genStats = new GenerationStats();
-		
-		// Setup the listener for generation statistics.
-		genStats.addGenerationStatListener(model.getGenerationStatListener());
 	}
 	
 	/**
@@ -89,16 +82,13 @@ public class RunManager {
 	 */
 	private void run() {
 		// Tell our generation stats to record the start time.
-		genStats.setStartTime();
+		//genStats.setStartTime();
 		
 		// Tell life cycle listener that a run is starting.
 		lifeCycle.onRunStart();
 		
 		// Perform initialisation.
 		List<CandidateProgram> pop = initialisation.initialise();
-		
-		// Generate generation stats for the inital population.
-		genStats.addGen(pop, 0);
 		
 		// Keep track of the best program and fitness.
 		updateBestProgram(pop);
@@ -108,10 +98,7 @@ public class RunManager {
 		
 		// Execute each generation.
 		for (int gen=1; gen<=model.getNoGenerations(); gen++) {			
-			pop = generation.generation(pop);
-			
-			// Generate stats for the current population.
-			genStats.addGen(pop, gen);
+			pop = generation.generation(gen, pop);
 			
 			// Keep track of the best program and fitness.
 			updateBestProgram(pop);
@@ -130,6 +117,10 @@ public class RunManager {
 		}
 		
 		runEndTime = System.nanoTime();
+		
+		long runtime = runEndTime - runStartTime;
+		
+		Controller.getStatsManager().addRunData(RUN_TIME, runtime);
 	}
 
 	/* 
@@ -143,6 +134,10 @@ public class RunManager {
 			if (fitness < bestFitness) {
 				bestFitness = fitness;
 				bestProgram = program;
+				
+				// Update the stats.
+				Controller.getStatsManager().addRunData(RUN_FITNESS_MIN, bestFitness);
+				Controller.getStatsManager().addRunData(RUN_FITTEST_PROGRAM, bestProgram);
 			}
 		}
 	}

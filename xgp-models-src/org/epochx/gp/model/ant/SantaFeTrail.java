@@ -120,7 +120,7 @@ public class SantaFeTrail extends GPAbstractModel {
 	
 	public static void main(String[] args) {
 		GPAbstractModel model = new SantaFeTrail();
-		model.setGenStatFields(new GenerationStatField[]{GenerationStatField.FITNESS_MIN});
+		//model.setGenStatFields(new GenerationStatField[]{GenerationStatField.FITNESS_MIN});
 		Controller.run(model);
 	}
 }

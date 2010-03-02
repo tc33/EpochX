@@ -42,6 +42,8 @@ public class Controller {
 	// The manager that keeps track of life cycle events and their listeners.
 	private LifeCycleManager lifeCycle;
 	
+	private StatsManager stats;
+	
 	/*
 	 * Private constructor. The only methods are the static run() and 
 	 * getLifeCycleManager().
@@ -49,6 +51,8 @@ public class Controller {
 	private Controller() {
 		// Setup life cycle manager.
 		lifeCycle = new LifeCycleManager();
+		
+		stats = new StatsManager();
 	}
 	
 	/**
@@ -77,17 +81,11 @@ public class Controller {
 		// Stash each GPRun object for retrieval of run details.
 		RunManager[] runs = new RunManager[model.getNoRuns()];
 		
-		// Keep track of the run stats.
-		RunStats runStats = new RunStats();
-		
-		// Setup the listener for run statistics.
-		runStats.addRunStatListener(model.getRunStatListener());
-		
 		for (int i=0; i<model.getNoRuns(); i++) {
 			runs[i] = RunManager.run(model);
 			
 			// Generate stats for this run.
-			runStats.addRun(runs[i], i+1);
+			//runStats.addRun(runs[i], i+1);
 		}
 
 		return runs;
@@ -108,5 +106,13 @@ public class Controller {
 		}
 		
 		return controller.lifeCycle;
+	}
+	
+	public static StatsManager getStatsManager() {
+		if (controller == null) {
+			controller = new Controller();
+		}
+		
+		return controller.stats;
 	}
 }

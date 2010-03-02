@@ -2,13 +2,19 @@ package org.epochx.stats;
 
 import java.util.*;
 
+import org.epochx.life.*;
+import org.epochx.representation.*;
+
 /*
  * Listen for life cycle events and if they happen then clear appropriate old data out of the data maps.
  * 
  * When requesting a stat field check the hashmaps for it, if it exists then return it, if not then we ask 
  * each stat engine in turn if we can generate it. If so then we stash it in the hashmap for next time.
  */
-public class StatsManager {
+public class StatsManager implements RunListener,
+									 GenerationListener,
+									 CrossoverListener,
+									 MutationListener {
 	//TODO Statistics from the controller about the whole set of runs.
 	//TODO Initialisation statistics.
 
@@ -156,5 +162,27 @@ public class StatsManager {
 	
 	public void removeStatsEngine(StatsEngine statsEngine) {
 		statsEngines.remove(statsEngine);
+	}
+
+	@Override
+	public void onRunStart() {
+		runData.clear();
+	}
+
+	@Override
+	public void onGenerationStart() {
+		generationData.clear();
+	}
+
+	@Override
+	public CandidateProgram[] onCrossover(CandidateProgram[] parents,
+			CandidateProgram[] children) {
+		return null;
+	}
+
+	@Override
+	public CandidateProgram onMutation(CandidateProgram parent,
+			CandidateProgram child) {
+		return null;
 	}
 }

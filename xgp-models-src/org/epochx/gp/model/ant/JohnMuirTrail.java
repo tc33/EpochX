@@ -120,7 +120,7 @@ public class JohnMuirTrail extends GPAbstractModel {
 	
 	public static void main(String[] args) {
 		GPAbstractModel model = new JohnMuirTrail();
-		model.setGenStatFields(new GenerationStatField[]{GenerationStatField.FITNESS_MIN});
+		//model.setGenStatFields(new GenerationStatField[]{GenerationStatField.FITNESS_MIN});
 		Controller.run(model);
 	}
 }

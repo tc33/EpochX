@@ -1,10 +1,9 @@
 package org.epochx.core;
 
 import org.epochx.life.*;
-import org.epochx.model.Model;
+import org.epochx.model.*;
 import org.epochx.op.*;
-import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.MutationStats;
+import org.epochx.representation.*;
 
 public class MutationManager implements GenerationListener {
 	
@@ -19,9 +18,6 @@ public class MutationManager implements GenerationListener {
 	
 	// The mutation operator that will perform the actual operation.
 	private Mutation mutator;
-	
-	// Gather mutation statistics.
-	private MutationStats mutationStats;
 	
 	// The number of times the mutation was rejected by the model.
 	private int reversions;
@@ -43,12 +39,7 @@ public class MutationManager implements GenerationListener {
 		// Register interest in generation events so we can reset.
 		lifeCycle = Controller.getLifeCycleManager();
 		lifeCycle.addGenerationListener(this);
-		
-		mutationStats = new MutationStats();
-		
-		// Setup the listener for mutation statistics.
-		mutationStats.addMutationStatListener(model.getMutationStatListener());
-		
+
 		initialise();
 	}
 	
@@ -112,7 +103,7 @@ public class MutationManager implements GenerationListener {
 		//child = (CandidateProgram) parent.clone();
 		
 		long runtime = System.nanoTime() - crossoverStartTime;
-		mutationStats.addMutation(parent, child, runtime, reversions);
+		//mutationStats.addMutation(parent, child, runtime, reversions);
 		
 		return child;
 	}

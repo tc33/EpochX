@@ -1,10 +1,9 @@
 package org.epochx.model;
 
-import org.epochx.life.LifeCycleListener;
+import org.epochx.life.*;
 import org.epochx.op.*;
-import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.*;
-import org.epochx.tools.random.RandomNumberGenerator;
+import org.epochx.representation.*;
+import org.epochx.tools.random.*;
 
 
 public interface Model {
@@ -40,14 +39,6 @@ public interface Model {
 	public int getNoElites();
 	
 	public int getPoolSize();
-	
-	public RunStatListener getRunStatListener();
-	
-	public GenerationStatListener getGenerationStatListener();
-	
-	public CrossoverStatListener getCrossoverStatListener();
-	
-	public MutationStatListener getMutationStatListener();
 	
 	public LifeCycleListener getLifeCycleListener();
 	

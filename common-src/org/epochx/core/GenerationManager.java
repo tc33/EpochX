@@ -7,6 +7,8 @@ import org.epochx.model.Model;
 import org.epochx.representation.*;
 import org.epochx.tools.random.RandomNumberGenerator;
 
+import static org.epochx.stats.StatField.*;
+
 public class GenerationManager {
 	
 	// The controlling model.
@@ -84,8 +86,10 @@ public class GenerationManager {
 	 * @param previousPop
 	 * @return
 	 */
-	public List<CandidateProgram> generation(List<CandidateProgram> previousPop) {
+	public List<CandidateProgram> generation(int generationNumber, List<CandidateProgram> previousPop) {
 		reset();
+		
+		Controller.getStatsManager().addGenerationData(GEN_NUMBER, generationNumber);
 		
 		// Tell life cycle manager we're starting a new generation.
 		lifeCycle.onGenerationStart();
@@ -123,6 +127,8 @@ public class GenerationManager {
 				pop.add(reproduction.reproduce());
 			}
 		}
+		
+		Controller.getStatsManager().addGenerationData(GEN_POPULATION, pop);
 
 		return pop;
 	}

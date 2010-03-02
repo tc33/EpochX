@@ -1,10 +1,9 @@
 package org.epochx.core;
 
 import org.epochx.life.*;
-import org.epochx.model.Model;
+import org.epochx.model.*;
 import org.epochx.op.*;
-import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.CrossoverStats;
+import org.epochx.representation.*;
 
 
 public class CrossoverManager implements GenerationListener {
@@ -20,9 +19,6 @@ public class CrossoverManager implements GenerationListener {
 	
 	// The crossover operator that will perform the actual operation.
 	private Crossover crossover;
-	
-	// Gather crossover statistics.
-	private CrossoverStats crossoverStats;
 	
 	// The number of times the crossover was rejected by the model.
 	private int reversions;
@@ -44,11 +40,6 @@ public class CrossoverManager implements GenerationListener {
 		// Register interest in generation events so we can reset.
 		lifeCycle = Controller.getLifeCycleManager();
 		lifeCycle.addGenerationListener(this);
-		
-		crossoverStats = new CrossoverStats();
-		
-		// Setup the listener for crossover statistics.
-		crossoverStats.addCrossoverStatListener(model.getCrossoverStatListener());
 
 		initialise();
 	}
@@ -130,7 +121,7 @@ public class CrossoverManager implements GenerationListener {
 		}*/
 		
 		long runtime = System.nanoTime() - crossoverStartTime;
-		crossoverStats.addCrossover(parents, children, runtime, reversions);
+		//crossoverStats.addCrossover(parents, children, runtime, reversions);
 		
 		return children;
 	}

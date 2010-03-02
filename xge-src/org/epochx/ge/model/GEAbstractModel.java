@@ -55,7 +55,6 @@ public abstract class GEAbstractModel extends AbstractModel implements GEModel {
 	private int maxChromosomeLength;
 	
 	private boolean cacheSource;
-	private boolean cacheFitness;
 	
 	/**
 	 * Construct a GEModel with a set of sensible defaults. See the appropriate
@@ -69,7 +68,6 @@ public abstract class GEAbstractModel extends AbstractModel implements GEModel {
 		maxChromosomeLength = 100;
 		
 		// Caching.
-		cacheFitness = true;
 		cacheSource = true;
 		
 		// GP Components.
@@ -298,27 +296,5 @@ public abstract class GEAbstractModel extends AbstractModel implements GEModel {
 	 */
 	public void setCacheSource(boolean cacheSource) {
 		this.cacheSource = cacheSource;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Defaults to true in GEAbstractModel.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public boolean cacheFitness() {
-		return cacheFitness;
-	}
-	
-	/**
-	 * Overwrites the default setting of whether to cache the fitness of a 
-	 * program after evaluation, until the chromosome is changed again.
-	 * 
-	 * @param cacheFitness
-	 */
-	public void setCacheFitness(boolean cacheFitness) {
-		this.cacheFitness = cacheFitness;
 	}
 }

@@ -47,6 +47,9 @@ public abstract class AbstractModel implements Model,
 	// Life cycle listeners.
 	private LifeCycleListener lifeCycleListener;
 	
+	// Caching.
+	private boolean cacheFitness;
+	
 	public AbstractModel() {
 		noRuns = 1;
 		noGenerations = 50;
@@ -75,12 +78,36 @@ public abstract class AbstractModel implements Model,
 		
 		// Life cycle listener.
 		lifeCycleListener = this;
+		
+		// Caching.
+		cacheFitness = true;
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to 1 in GPAbstractModel.
+	 * <p>Defaults to true in AbstractModel.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public boolean cacheFitness() {
+		return cacheFitness;
+	}
+	
+	/**
+	 * Overwrites the default setting of whether to cache the fitness values.
+	 * 
+	 * @param cacheFitness whether fitnesses should be cached or not.
+	 */
+	public void setCacheFitness(boolean cacheFitness) {
+		this.cacheFitness = cacheFitness;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to 1 in AbstractModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -101,7 +128,7 @@ public abstract class AbstractModel implements Model,
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to 50 in GPAbstractModel.
+	 * <p>Defaults to 50 in AbstractModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -122,7 +149,7 @@ public abstract class AbstractModel implements Model,
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to 500 in GPAbstractModel.
+	 * <p>Defaults to 500 in AbstractModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -144,7 +171,7 @@ public abstract class AbstractModel implements Model,
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to 50 in GPAbstractModel.
+	 * <p>Defaults to 50 in AbstractModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -165,7 +192,7 @@ public abstract class AbstractModel implements Model,
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to 10 in GPAbstractModel.
+	 * <p>Defaults to 10 in AbstractModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -188,7 +215,7 @@ public abstract class AbstractModel implements Model,
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to 0.9 in GPAbstractModel to represent a 90% chance.
+	 * <p>Defaults to 0.9 in AbstractModel to represent a 90% chance.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -198,9 +225,9 @@ public abstract class AbstractModel implements Model,
 	}
 
 	/**
-	 * Overwrites the default gPCrossover probability.
+	 * Overwrites the default Crossover probability.
 	 * 
-	 * @param crossoverProbability the new gPCrossover probability to use.
+	 * @param crossoverProbability the new Crossover probability to use.
 	 */
 	public void setCrossoverProbability(double crossoverProbability) {
 		this.crossoverProbability = crossoverProbability;
@@ -209,7 +236,7 @@ public abstract class AbstractModel implements Model,
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to 0.0 in GPAbstractModel to represent a 0% chance.
+	 * <p>Defaults to 0.0 in AbstractModel to represent a 0% chance.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -231,7 +258,7 @@ public abstract class AbstractModel implements Model,
 	 * {@inheritDoc}
 	 * 
 	 * <p>Automatically calculates the reproduction probability based upon the 
-	 * gPCrossover and mutation probabilities as all three together must add up 
+	 * Crossover and mutation probabilities as all three together must add up 
 	 * to 100%.
 	 * 
 	 * @return {@inheritDoc}
@@ -244,7 +271,7 @@ public abstract class AbstractModel implements Model,
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to 0.0 in GPAbstractModel.
+	 * <p>Defaults to 0.0 in AbstractModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -266,7 +293,7 @@ public abstract class AbstractModel implements Model,
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to {@link RandomSelector} in GPAbstractModel.
+	 * <p>Defaults to {@link RandomSelector} in AbstractModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -279,7 +306,7 @@ public abstract class AbstractModel implements Model,
 	 * Overwrites the default parent selector used to select parents to undergo
 	 * a genetic operator from either a pool or the previous population.
 	 * 
-	 * @param gPProgramSelector the new GPProgramSelector to be used when selecting 
+	 * @param ProgramSelector the new ProgramSelector to be used when selecting 
 	 * 						 parents for a genetic operator.
 	 */
 	public void setProgramSelector(ProgramSelector programSelector) {
@@ -290,7 +317,7 @@ public abstract class AbstractModel implements Model,
 	 * {@inheritDoc}
 	 * 
 	 * <p>Defaults to {@link TournamentSelector} with a tournament size of 3 
-	 * in GPAbstractModel.
+	 * in AbstractModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -302,7 +329,7 @@ public abstract class AbstractModel implements Model,
 	/**
 	 * Overwrites the default pool selector used to generate a mating pool.
 	 * 
-	 * @param gPPoolSelector the new GPPoolSelector to be used when building a 
+	 * @param PoolSelector the new PoolSelector to be used when building a 
 	 * 						breeding pool.
 	 */
 	public void setPoolSelector(PoolSelector poolSelector) {
@@ -312,7 +339,7 @@ public abstract class AbstractModel implements Model,
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to MersenneTwisterFast in GPAbstractModel.
+	 * <p>Defaults to MersenneTwisterFast in AbstractModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -387,9 +414,9 @@ public abstract class AbstractModel implements Model,
 	}
 	
 	/**
-	 * Overwrites the default listener for gPCrossover statistics.
+	 * Overwrites the default listener for Crossover statistics.
 	 * 
-	 * @param crossoverStatListener the gPCrossover stat listener to set.
+	 * @param crossoverStatListener the Crossover stat listener to set.
 	 */
 	public void setCrossoverStatListener(CrossoverStatListener crossoverStatListener) {
 		this.crossoverStatListener = crossoverStatListener;
@@ -523,7 +550,7 @@ public abstract class AbstractModel implements Model,
 	/**
 	 * Default implementation. No fields are requested, the overriding class 
 	 * is expected to override this method or call the setter method IF it 
-	 * wants to receive information about each gPCrossover operation. 
+	 * wants to receive information about each Crossover operation. 
 	 * 
 	 * <p>Typically it is the model that receives the statistics but this can
 	 * be overridden by returning a different CrossoverStatListener in the 
@@ -536,8 +563,8 @@ public abstract class AbstractModel implements Model,
 	}
 	
 	/**
-	 * Set the gPCrossover statistics that the given CrossoverStatListener will
-	 * receive after each gPCrossover operation.
+	 * Set the Crossover statistics that the given CrossoverStatListener will
+	 * receive after each Crossover operation.
 	 * 
 	 * @param crossoverStatFields an array of CrossoverStatFields that indicate 
 	 * 							  the statistics fields that the 
@@ -552,7 +579,7 @@ public abstract class AbstractModel implements Model,
 	/**
 	 * Default implementation. Does nothing. This is implemented here rather 
 	 * than being abstract to remove the need for the user to extend it if 
-	 * they are not interested in gPCrossover stats.
+	 * they are not interested in Crossover stats.
 	 * 
 	 * @param stats an array of the statistics that were requested, given in 
 	 * 				the order that they were requested. The data type of each 
@@ -609,7 +636,7 @@ public abstract class AbstractModel implements Model,
 	 * the model, or override this method to return a different life cycle 
 	 * listener.
 	 * 
-	 * @return the LifeCycleListener to inform of all events during the GP life 
+	 * @return the LifeCycleListener to inform of all events during the  life 
 	 * cycle.
 	 */
 	@Override
@@ -669,7 +696,7 @@ public abstract class AbstractModel implements Model,
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Default implementation confirms the gPCrossover operation by returning
+	 * <p>Default implementation confirms the Crossover operation by returning
 	 * the given array of children.
 	 * 
 	 * @return {@inheritDoc}

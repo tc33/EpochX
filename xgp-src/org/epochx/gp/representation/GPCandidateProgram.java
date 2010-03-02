@@ -42,6 +42,12 @@ public class GPCandidateProgram extends CandidateProgram {
 	// The controlling model.
 	private GPModel model;
 	
+	// The cached program fitness.
+	private double fitness;
+	
+	// The source at last evaluation for testing fitness cache is still good.
+	private String sourceCache;
+	
 	/**
 	 * Constructs a new program individual where <code>rootNode</code> is the 
 	 * top most node in the program, and which may have 0 or more child nodes.
@@ -131,7 +137,19 @@ public class GPCandidateProgram extends CandidateProgram {
 	 * @return the fitness of this candidate program according to the model.
 	 */
 	public double getFitness() {
-		return model.getFitness(this);
+		// Only get the source code if caching to avoid overhead otherwise.
+		String source = null;
+		if (model.cacheFitness()) {
+			source = rootNode.toString();
+		}
+		
+		// If we're not caching or the cache is out of date.
+		if (!model.cacheFitness() || !source.equals(sourceCache)) {
+			fitness = model.getFitness(this);
+			sourceCache = source;
+		}
+		
+		return fitness;
 	}
 	
 	/**

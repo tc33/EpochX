@@ -142,7 +142,7 @@ public interface GPModel extends Model {
 	 */
 	@Override
 	public double getFitness(CandidateProgram program);
-
+	
 	/**
 	 * This method will be called during each crossover operation before the 
 	 * crossover is accepted, giving the model the opportunity to reject the 
@@ -157,6 +157,7 @@ public interface GPModel extends Model {
 	 * @return True if the crossover operation should proceed, false if it is 
 	 * rejected and should be retried with new parents.
 	 */
+	//TODO These methods should have been superceded by the life cycle methods.
 	public boolean acceptCrossover(GPCandidateProgram[] parents, 
 								   GPCandidateProgram[] children);
 

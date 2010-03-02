@@ -173,18 +173,4 @@ public interface GEModel extends Model {
 	 * otherwise.
 	 */
 	public boolean cacheSource();
-	
-	/**
-	 * Whether CandidatePrograms should cache the program fitness after 
-	 * evaluating to reduce the need for further evaluation when the codons 
-	 * are unchanged, and so the fitness should not have changed. Caching 
-	 * the fitness potentially gives a large performance improvement and is 
-	 * generally desirable but if it is possible for the fitness function 
-	 * to return different values for two programs with the same source then 
-	 * caching shouldn't be used.
-	 * 
-	 * @return true if the fitness should be cached after evaluation and false 
-	 * otherwise.
-	 */
-	public boolean cacheFitness();
 }

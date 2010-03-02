@@ -51,4 +51,5 @@ public interface Model {
 	
 	public LifeCycleListener getLifeCycleListener();
 	
+	public boolean cacheFitness();
 }

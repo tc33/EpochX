@@ -14,8 +14,6 @@ public abstract class GRAbstractModel extends AbstractModel implements GRModel {
 	private int maxDepth;
 	private int maxInitialDepth;
 	
-	private boolean cacheFitness;
-	
 	/**
 	 * Construct a GRModel with a set of sensible defaults. See the appropriate
 	 * accessor method for information of each default value.
@@ -24,9 +22,6 @@ public abstract class GRAbstractModel extends AbstractModel implements GRModel {
 		// Set default parameter values.
 		maxDepth = 20;
 		maxInitialDepth = 8;
-		
-		// Caching.
-		cacheFitness = true;
 		
 		// GP Components.
 		initialiser = new RampedHalfAndHalfInitialiser(this);
@@ -141,27 +136,5 @@ public abstract class GRAbstractModel extends AbstractModel implements GRModel {
 	 */
 	public void setMaxInitialProgramDepth(int maxInitialDepth) {
 		this.maxInitialDepth = maxInitialDepth;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Defaults to true in GRAbstractModel.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public boolean cacheFitness() {
-		return cacheFitness;
-	}
-	
-	/**
-	 * Overwrites the default setting of whether to cache the fitness of a 
-	 * program after evaluation, until the chromosome is changed again.
-	 * 
-	 * @param cacheFitness
-	 */
-	public void setCacheFitness(boolean cacheFitness) {
-		this.cacheFitness = cacheFitness;
 	}
 }

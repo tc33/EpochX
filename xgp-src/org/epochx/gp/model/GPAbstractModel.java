@@ -191,6 +191,7 @@ public abstract class GPAbstractModel extends AbstractModel implements GPModel {
 	 * @param maxInitialDepth the new max program tree depth to use.
 	 */
 	public void setInitialMaxDepth(int maxInitialDepth) {
+		//TODO The name of this needs to be made consistent with those from XGR and XGE.
 		this.maxInitialDepth = maxInitialDepth;
 	}
 

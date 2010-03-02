@@ -74,6 +74,10 @@ public class GRCandidateProgram extends CandidateProgram {
 			clone.parseTree = (NonTerminalSymbol) this.parseTree.clone();
 		}
 		
+		// Copy the caches.
+		clone.sourceCache = this.sourceCache;
+		clone.fitness = this.fitness;
+		
 		// Shallow copy the model.
 		clone.model = this.model;
 		

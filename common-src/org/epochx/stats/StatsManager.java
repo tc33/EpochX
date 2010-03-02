@@ -23,15 +23,19 @@ public class StatsManager implements RunListener,
 	private Map<String, Object> crossoverData;
 	private Map<String, Object> mutationData;
 	
-	private List<StatsEngine> statsEngines;
+	private StatsEngine statsEngine;
 	
 	public StatsManager() {
+		this(new CommonStatsEngine());
+	}
+	
+	public StatsManager(StatsEngine statsEngine) {
 		runData = new HashMap<String, Object>();
 		generationData = new HashMap<String, Object>();
 		crossoverData = new HashMap<String, Object>();
 		mutationData = new HashMap<String, Object>();
 		
-		statsEngines = new ArrayList<StatsEngine>();
+		this.statsEngine = statsEngine;
 	}
 	
 	public void addRunData(String field, Object value) {
@@ -128,72 +132,78 @@ public class StatsManager implements RunListener,
 		return stats;
 	}
 	
-	private Object generateRunStat(String field) {
-		Object stat = null;
+	public void printRunStats(String[] fields) {
+		printRunStats(fields, "\t");
+	}
+	
+	public void printRunStats(String[] fields, String separator) {
+		Object[] stats = getRunStats(fields);
 		
-		for (StatsEngine engine: statsEngines) {
-			stat = engine.getRunStat(field);
-			
-			// Stop if we've found a match.
-			if (stat != null) {
-				break;
+		printStats(stats, separator);
+	}
+	
+	public void printGenerationStats(String[] fields) {
+		printGenerationStats(fields, "\t");
+	}
+	
+	public void printGenerationStats(String[] fields, String separator) {
+		Object[] stats = getGenerationStats(fields);
+		
+		printStats(stats, separator);
+	}
+	
+	public void printCrossoverStats(String[] fields) {
+		printCrossoverStats(fields, "\t");
+	}
+	
+	public void printCrossoverStats(String[] fields, String separator) {
+		Object[] stats = getCrossoverStats(fields);
+		
+		printStats(stats, separator);
+	}
+	
+	public void printMutationStats(String[] fields) {
+		printMutationStats(fields, "\t");
+	}
+	
+	public void printMutationStats(String[] fields, String separator) {
+		Object[] stats = getMutationStats(fields);
+		
+		printStats(stats, separator);
+	}
+	
+	private void printStats(Object[] stats, String separator) {
+		for (int i=0; i<stats.length; i++) {
+			if (i != 0) {
+				System.out.print(separator);
 			}
+			System.out.print(stats[i]);
 		}
-		
-		return stat;
+		System.out.println();
+	}
+	
+	private Object generateRunStat(String field) {		
+		return statsEngine.getRunStat(field);
 	}
 	
 	private Object generateGenerationStat(String field) {
-		Object stat = null;
-		
-		for (StatsEngine engine: statsEngines) {
-			stat = engine.getGenerationStat(field);
-			
-			// Stop if we've found a match.
-			if (stat != null) {
-				break;
-			}
-		}
-		
-		return stat;
+		return statsEngine.getGenerationStat(field);
 	}
 	
 	private Object generateCrossoverStat(String field) {
-		Object stat = null;
-		
-		for (StatsEngine engine: statsEngines) {
-			stat = engine.getCrossoverStat(field);
-			
-			// Stop if we've found a match.
-			if (stat != null) {
-				break;
-			}
-		}
-		
-		return stat;
+		return statsEngine.getCrossoverStat(field);
 	}
 	
 	private Object generateMutationStat(String field) {
-		Object stat = null;
-		
-		for (StatsEngine engine: statsEngines) {
-			stat = engine.getMutationStat(field);
-			
-			// Stop if we've found a match.
-			if (stat != null) {
-				break;
-			}
+		return statsEngine.getMutationStat(field);
+	}
+	
+	public void setStatsEngine(StatsEngine statsEngine) {
+		if (statsEngine == null) {
+			statsEngine = new CommonStatsEngine();
 		}
 		
-		return stat;
-	}
-	
-	public void addStatsEngine(StatsEngine statsEngine) {
-		statsEngines.add(statsEngine);
-	}
-	
-	public void removeStatsEngine(StatsEngine statsEngine) {
-		statsEngines.remove(statsEngine);
+		this.statsEngine = statsEngine;
 	}
 
 	@Override
@@ -205,6 +215,9 @@ public class StatsManager implements RunListener,
 	public void onGenerationStart() {
 		generationData.clear();
 	}
+	
+	@Override
+	public void onGenerationEnd() {}
 
 	@Override
 	public CandidateProgram[] onCrossover(CandidateProgram[] parents,

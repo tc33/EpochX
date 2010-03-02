@@ -138,4 +138,7 @@ public class MutationManager implements GenerationListener {
 		// Reset GPMutation.
 		initialise();
 	}
+	
+	@Override
+	public void onGenerationEnd() {}
 }

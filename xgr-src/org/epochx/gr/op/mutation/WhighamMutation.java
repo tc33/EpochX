@@ -74,4 +74,6 @@ public class WhighamMutation implements GRMutation, GenerationListener {
 		initialise();
 	}
 
+	@Override
+	public void onGenerationEnd() {}
 }

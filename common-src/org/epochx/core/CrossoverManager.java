@@ -157,4 +157,7 @@ public class CrossoverManager implements GenerationListener {
 		// Reset GPCrossover.
 		initialise();
 	}
+	
+	@Override
+	public void onGenerationEnd() {}
 }

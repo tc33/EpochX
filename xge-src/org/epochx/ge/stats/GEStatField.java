@@ -1,6 +1,8 @@
 package org.epochx.ge.stats;
 
-public final class GEStatField {
+import org.epochx.stats.StatField;
+
+public final class GEStatField extends StatField {
 
 	/*
 	 * No need to ever create an object of GEStatField.

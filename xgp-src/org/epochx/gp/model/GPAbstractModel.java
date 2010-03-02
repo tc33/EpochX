@@ -25,6 +25,7 @@ import org.epochx.gp.op.crossover.*;
 import org.epochx.gp.op.init.*;
 import org.epochx.gp.op.mutation.*;
 import org.epochx.gp.representation.*;
+import org.epochx.gp.stats.GPStatsEngine;
 import org.epochx.model.AbstractModel;
 import org.epochx.tools.random.*;
 
@@ -68,6 +69,9 @@ public abstract class GPAbstractModel extends AbstractModel implements GPModel {
 		crossover = new UniformPointCrossover(this);
 		mutator = new SubtreeMutation(this);
 		randomNumberGenerator = new MersenneTwisterFast();
+		
+		// Stats - overwrite parent default.
+		setStatsEngine(new GPStatsEngine());
 	}
 
 	/**
@@ -169,8 +173,6 @@ public abstract class GPAbstractModel extends AbstractModel implements GPModel {
 	public void setRNG(RandomNumberGenerator rng) {
 		this.randomNumberGenerator = rng;
 	}
-	
-
 
 	/**
 	 * {@inheritDoc}
@@ -216,6 +218,8 @@ public abstract class GPAbstractModel extends AbstractModel implements GPModel {
 	public void setMaxProgramDepth(int maxDepth) {
 		this.maxProgramDepth = maxDepth;
 	}
+	
+	
 	
 	/**
 	 * Default implementation which accepts all crossovers.

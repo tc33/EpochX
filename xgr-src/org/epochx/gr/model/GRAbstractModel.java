@@ -3,6 +3,7 @@ package org.epochx.gr.model;
 import org.epochx.gr.op.crossover.*;
 import org.epochx.gr.op.init.*;
 import org.epochx.gr.op.mutation.*;
+import org.epochx.gr.stats.GRStatsEngine;
 import org.epochx.model.AbstractModel;
 
 public abstract class GRAbstractModel extends AbstractModel implements GRModel {
@@ -27,6 +28,9 @@ public abstract class GRAbstractModel extends AbstractModel implements GRModel {
 		initialiser = new RampedHalfAndHalfInitialiser(this);
 		crossover = new WhighamCrossover(this);
 		mutator = new WhighamMutation(this);
+		
+		// Stats - overwrite parent default.
+		setStatsEngine(new GRStatsEngine());
 	}
 	
 	/**

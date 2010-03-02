@@ -102,4 +102,6 @@ public class SinglePointMutation implements GEMutation, GenerationListener {
 		codonGenerator = model.getCodonGenerator();
 	}
 
+	@Override
+	public void onGenerationEnd() {}
 }

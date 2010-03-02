@@ -1,103 +1,87 @@
 package org.epochx.gp.stats;
 
 import static org.epochx.gp.stats.GPStatField.*;
-import static org.epochx.stats.StatField.*;
+import static org.epochx.stats.StatField.GEN_POPULATION;
 
-import java.util.*;
+import java.util.List;
 
-import org.epochx.core.*;
-import org.epochx.gp.representation.*;
+import org.epochx.core.Controller;
+import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.stats.*;
 
-public class GPStatsEngine implements StatsEngine {
-
-	@Override
-	public Object getCrossoverStat(String field) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+public class GPStatsEngine extends CommonStatsEngine {
 
 	@Override
 	public Object getGenerationStat(String field) {
-		Object value = null;
+		Object value = super.getGenerationStat(field);
 		
-		if (field.equals(GEN_DEPTHS)) {
-			value = getGenDepths();
-		} else if (field.equals(GEN_DEPTH_MIN)) {
-			value = getGenDepthMin();
-		} else if (field.equals(GEN_DEPTH_MAX)) {
-			value = getGenDepthMax();
-		} else if (field.equals(GEN_DEPTH_AVE)) {
-			value = getGenDepthAve();
-		} else if (field.equals(GEN_DEPTH_STDEV)) {
-			value = getGenDepthStdev();
-		} else if (field.equals(GEN_AVE_NODES_PER_DEPTH)) {
-			value = getGenAveNodesPerDepth();
-		} else if (field.equals(GEN_LENGTHS)) {
-			value = getGenLengths();
-		} else if (field.equals(GEN_LENGTH_MIN)) {
-			value = getGenLengthMin();
-		} else if (field.equals(GEN_LENGTH_MAX)) {
-			value = getGenLengthMax();
-		} else if (field.equals(GEN_LENGTH_AVE)) {
-			value = getGenLengthAve();
-		} else if (field.equals(GEN_LENGTH_STDEV)) {
-			value = getGenLengthStdev();
-		} else if (field.equals(GEN_NO_TERMINALS)) {
-			value = getGenNoTerminals();
-		} else if (field.equals(GEN_NO_TERMINALS_MIN)) {
-			value = getGenNoTerminalsMin();
-		} else if (field.equals(GEN_NO_TERMINALS_MAX)) {
-			value = getGenNoTerminalsMax();
-		} else if (field.equals(GEN_NO_TERMINALS_AVE)) {
-			value = getGenNoTerminalsAve();
-		} else if (field.equals(GEN_NO_TERMINALS_STDEV)) {
-			value = getGenNoTerminalsStdev();
-		} else if (field.equals(GEN_NO_DISTINCT_TERMINALS)) {
-			value = getGenNoDistinctTerminals();
-		} else if (field.equals(GEN_NO_DISTINCT_TERMINALS_MIN)) {
-			value = getGenNoDistinctTerminalsMin();
-		} else if (field.equals(GEN_NO_DISTINCT_TERMINALS_MAX)) {
-			value = getGenNoDistinctTerminalsMax();
-		} else if (field.equals(GEN_NO_DISTINCT_TERMINALS_AVE)) {
-			value = getGenNoDistinctTerminalsAve();
-		} else if (field.equals(GEN_NO_DISTINCT_TERMINALS_STDEV)) {
-			value = getGenNoDistinctTerminalsStdev();
-		} else if (field.equals(GEN_NO_FUNCTIONS)) {
-			value = getGenNoFunctions();
-		} else if (field.equals(GEN_NO_FUNCTIONS_MIN)) {
-			value = getGenNoFunctionsMin();
-		} else if (field.equals(GEN_NO_FUNCTIONS_MAX)) {
-			value = getGenNoFunctionsMax();
-		} else if (field.equals(GEN_NO_FUNCTIONS_AVE)) {
-			value = getGenNoFunctionsAve();
-		} else if (field.equals(GEN_NO_FUNCTIONS_STDEV)) {
-			value = getGenNoFunctionsStdev();
-		} else if (field.equals(GEN_NO_DISTINCT_FUNCTIONS)) {
-			value = getGenNoDistinctFunctions();
-		} else if (field.equals(GEN_NO_DISTINCT_FUNCTIONS_MIN)) {
-			value = getGenNoDistinctFunctionsMin();
-		} else if (field.equals(GEN_NO_DISTINCT_FUNCTIONS_MAX)) {
-			value = getGenNoDistinctFunctionsMax();
-		} else if (field.equals(GEN_NO_DISTINCT_FUNCTIONS_AVE)) {
-			value = getGenNoDistinctFunctionsAve();
-		} else if (field.equals(GEN_NO_DISTINCT_FUNCTIONS_STDEV)) {
-			value = getGenNoDistinctFunctionsStdev();
+		if (value == null) {
+			if (field.equals(GEN_DEPTHS)) {
+				value = getGenDepths();
+			} else if (field.equals(GEN_DEPTH_MIN)) {
+				value = getGenDepthMin();
+			} else if (field.equals(GEN_DEPTH_MAX)) {
+				value = getGenDepthMax();
+			} else if (field.equals(GEN_DEPTH_AVE)) {
+				value = getGenDepthAve();
+			} else if (field.equals(GEN_DEPTH_STDEV)) {
+				value = getGenDepthStdev();
+			} else if (field.equals(GEN_AVE_NODES_PER_DEPTH)) {
+				value = getGenAveNodesPerDepth();
+			} else if (field.equals(GEN_LENGTHS)) {
+				value = getGenLengths();
+			} else if (field.equals(GEN_LENGTH_MIN)) {
+				value = getGenLengthMin();
+			} else if (field.equals(GEN_LENGTH_MAX)) {
+				value = getGenLengthMax();
+			} else if (field.equals(GEN_LENGTH_AVE)) {
+				value = getGenLengthAve();
+			} else if (field.equals(GEN_LENGTH_STDEV)) {
+				value = getGenLengthStdev();
+			} else if (field.equals(GEN_NO_TERMINALS)) {
+				value = getGenNoTerminals();
+			} else if (field.equals(GEN_NO_TERMINALS_MIN)) {
+				value = getGenNoTerminalsMin();
+			} else if (field.equals(GEN_NO_TERMINALS_MAX)) {
+				value = getGenNoTerminalsMax();
+			} else if (field.equals(GEN_NO_TERMINALS_AVE)) {
+				value = getGenNoTerminalsAve();
+			} else if (field.equals(GEN_NO_TERMINALS_STDEV)) {
+				value = getGenNoTerminalsStdev();
+			} else if (field.equals(GEN_NO_DISTINCT_TERMINALS)) {
+				value = getGenNoDistinctTerminals();
+			} else if (field.equals(GEN_NO_DISTINCT_TERMINALS_MIN)) {
+				value = getGenNoDistinctTerminalsMin();
+			} else if (field.equals(GEN_NO_DISTINCT_TERMINALS_MAX)) {
+				value = getGenNoDistinctTerminalsMax();
+			} else if (field.equals(GEN_NO_DISTINCT_TERMINALS_AVE)) {
+				value = getGenNoDistinctTerminalsAve();
+			} else if (field.equals(GEN_NO_DISTINCT_TERMINALS_STDEV)) {
+				value = getGenNoDistinctTerminalsStdev();
+			} else if (field.equals(GEN_NO_FUNCTIONS)) {
+				value = getGenNoFunctions();
+			} else if (field.equals(GEN_NO_FUNCTIONS_MIN)) {
+				value = getGenNoFunctionsMin();
+			} else if (field.equals(GEN_NO_FUNCTIONS_MAX)) {
+				value = getGenNoFunctionsMax();
+			} else if (field.equals(GEN_NO_FUNCTIONS_AVE)) {
+				value = getGenNoFunctionsAve();
+			} else if (field.equals(GEN_NO_FUNCTIONS_STDEV)) {
+				value = getGenNoFunctionsStdev();
+			} else if (field.equals(GEN_NO_DISTINCT_FUNCTIONS)) {
+				value = getGenNoDistinctFunctions();
+			} else if (field.equals(GEN_NO_DISTINCT_FUNCTIONS_MIN)) {
+				value = getGenNoDistinctFunctionsMin();
+			} else if (field.equals(GEN_NO_DISTINCT_FUNCTIONS_MAX)) {
+				value = getGenNoDistinctFunctionsMax();
+			} else if (field.equals(GEN_NO_DISTINCT_FUNCTIONS_AVE)) {
+				value = getGenNoDistinctFunctionsAve();
+			} else if (field.equals(GEN_NO_DISTINCT_FUNCTIONS_STDEV)) {
+				value = getGenNoDistinctFunctionsStdev();
+			}
 		}
 		
 		return value;
-	}
-
-	@Override
-	public Object getMutationStat(String field) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Object getRunStat(String field) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	private Object getGenDepths() {

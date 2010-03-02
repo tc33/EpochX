@@ -78,6 +78,9 @@ public class UniformPointCrossover implements GPCrossover, GenerationListener {
 	public void onGenerationStart() {
 		rng = model.getRNG();
 	}
+	
+	@Override
+	public void onGenerationEnd(){}
 
 	@Override
 	public Object[] getOperatorStats() {

@@ -95,4 +95,7 @@ public class ElitismManager implements GenerationListener {
 		// Reset.
 		initialise();
 	}
+	
+	@Override
+	public void onGenerationEnd() {}
 }

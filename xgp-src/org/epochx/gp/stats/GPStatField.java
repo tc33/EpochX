@@ -1,11 +1,8 @@
 package org.epochx.gp.stats;
 
-public final class GPStatField {
+import org.epochx.stats.StatField;
 
-	/*
-	 * No need to ever create an object of GPStatField.
-	 */
-	private GPStatField() {}
+public class GPStatField extends StatField {
 
 	/**
 	 * 

@@ -3,6 +3,7 @@ package org.epochx.model;
 import org.epochx.life.*;
 import org.epochx.op.*;
 import org.epochx.representation.*;
+import org.epochx.stats.StatsEngine;
 import org.epochx.tools.random.*;
 
 
@@ -41,6 +42,8 @@ public interface Model {
 	public int getPoolSize();
 	
 	public LifeCycleListener getLifeCycleListener();
+	
+	public StatsEngine getStatsEngine();
 	
 	public boolean cacheFitness();
 }

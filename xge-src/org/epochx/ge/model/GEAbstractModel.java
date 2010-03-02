@@ -24,6 +24,7 @@ import org.epochx.ge.mapper.*;
 import org.epochx.ge.op.crossover.*;
 import org.epochx.ge.op.init.*;
 import org.epochx.ge.op.mutation.*;
+import org.epochx.ge.stats.GEStatsEngine;
 import org.epochx.model.AbstractModel;
 
 
@@ -76,6 +77,9 @@ public abstract class GEAbstractModel extends AbstractModel implements GEModel {
 		mutator = new PointMutation(this);
 		mapper = new DepthFirstMapper(this);
 		codonGenerator = new StandardGenerator(this);
+		
+		// Stats - overwrite parent default.
+		setStatsEngine(new GEStatsEngine());
 	}
 	
 	/**

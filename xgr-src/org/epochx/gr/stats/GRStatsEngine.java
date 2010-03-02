@@ -9,42 +9,29 @@ import org.epochx.core.Controller;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.stats.*;
 
-public class GRStatsEngine implements StatsEngine {
-
-	@Override
-	public Object getCrossoverStat(String field) {
-		return null;
-	}
+public class GRStatsEngine extends CommonStatsEngine {
 
 	@Override
 	public Object getGenerationStat(String field) {
-		Object value = null;
+		Object value = super.getGenerationStat(field);
 		
-		if (field.equals(GEN_DEPTHS)) {
-			value = getGenDepths();
-		} else if (field.equals(GEN_DEPTH_MIN)) {
-			value = getGenDepthMin();
-		} else if (field.equals(GEN_DEPTH_MAX)) {
-			value = getGenDepthMax();
-		} else if (field.equals(GEN_DEPTH_AVE)) {
-			value = getGenDepthAve();
-		} else if (field.equals(GEN_DEPTH_STDEV)) {
-			value = getGenDepthStdev();
+		if (value == null) {
+			if (field.equals(GEN_DEPTHS)) {
+				value = getGenDepths();
+			} else if (field.equals(GEN_DEPTH_MIN)) {
+				value = getGenDepthMin();
+			} else if (field.equals(GEN_DEPTH_MAX)) {
+				value = getGenDepthMax();
+			} else if (field.equals(GEN_DEPTH_AVE)) {
+				value = getGenDepthAve();
+			} else if (field.equals(GEN_DEPTH_STDEV)) {
+				value = getGenDepthStdev();
+			}
 		}
 		
 		return value;
 	}
 
-	@Override
-	public Object getMutationStat(String field) {
-		return null;
-	}
-
-	@Override
-	public Object getRunStat(String field) {
-		return null;
-	}
-	
 	private Object getGenDepths() {
 		int[] depths = null;
 		

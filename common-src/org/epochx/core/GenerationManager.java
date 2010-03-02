@@ -87,6 +87,8 @@ public class GenerationManager {
 	 * @return
 	 */
 	public List<CandidateProgram> generation(int generationNumber, List<CandidateProgram> previousPop) {
+		long startTime = System.nanoTime();
+		
 		reset();
 		
 		Controller.getStatsManager().addGenerationData(GEN_NUMBER, generationNumber);
@@ -129,7 +131,11 @@ public class GenerationManager {
 		}
 		
 		Controller.getStatsManager().addGenerationData(GEN_POPULATION, pop);
-
+		Controller.getStatsManager().addGenerationData(GEN_TIME, (System.nanoTime() - startTime));
+		
+		// Tell everyone the generation has ended.
+		Controller.getLifeCycleManager().onGenerationEnd();
+		
 		return pop;
 	}
 	

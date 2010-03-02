@@ -1,11 +1,8 @@
 package org.epochx.gr.stats;
 
-public final class GRStatField {
+import org.epochx.stats.StatField;
 
-	/*
-	 * No need to ever create an object of GEStatField.
-	 */
-	private GRStatField() {}
+public final class GRStatField extends StatField {
 	
 	/**
 	 * 

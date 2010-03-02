@@ -6,6 +6,7 @@ import org.epochx.life.LifeCycleListener;
 import org.epochx.op.*;
 import org.epochx.op.selection.*;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.stats.*;
 import org.epochx.tools.random.*;
 
 
@@ -32,6 +33,9 @@ public abstract class AbstractModel implements Model, LifeCycleListener {
 	// Caching.
 	private boolean cacheFitness;
 	
+	// Stats.
+	private StatsEngine statsEngine;
+	
 	public AbstractModel() {
 		noRuns = 1;
 		noGenerations = 50;
@@ -51,6 +55,9 @@ public abstract class AbstractModel implements Model, LifeCycleListener {
 		
 		// Caching.
 		cacheFitness = true;
+		
+		// Stats.
+		statsEngine = new CommonStatsEngine();
 	}
 	
 	/**
@@ -329,6 +336,15 @@ public abstract class AbstractModel implements Model, LifeCycleListener {
 		this.randomNumberGenerator = rng;
 	}
 	
+	@Override
+	public StatsEngine getStatsEngine() {
+		return statsEngine;
+	}
+	
+	public void setStatsEngine(StatsEngine statsEngine) {
+		this.statsEngine = statsEngine;
+	}
+	
 	/**
 	 * Default implementation returns this model as the life cycle listener. By
 	 * default all the listener methods will confirm the events though. 
@@ -443,6 +459,9 @@ public abstract class AbstractModel implements Model, LifeCycleListener {
 	 */
 	@Override
 	public void onGenerationStart() {}
+	
+	@Override
+	public void onGenerationEnd() {}
 	
 	/**
 	 * {@inheritDoc}

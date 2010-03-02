@@ -1,11 +1,6 @@
 package org.epochx.stats;
 
-public final class StatField {
-
-	/*
-	 * No need to ever create an object of StatField.
-	 */
-	private StatField() {}
+public class StatField {
 
 	/**
 	 * 

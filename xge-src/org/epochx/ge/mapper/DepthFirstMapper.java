@@ -334,4 +334,7 @@ public class DepthFirstMapper implements Mapper, GenerationListener, RunListener
 		// Reset.
 		initialise();
 	}
+	
+	@Override
+	public void onGenerationEnd() {}
 }

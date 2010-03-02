@@ -193,6 +193,12 @@ public class LifeCycleManager {
 		
 		return pop;
 	}*/
+	
+	public void onGenerationEnd() {
+		for (GenerationListener listener: generationListeners) {
+			listener.onGenerationEnd();
+		}
+	}
 
 	public void onFitnessTermination() {
 		for (TerminationListener listener: terminationListeners) {

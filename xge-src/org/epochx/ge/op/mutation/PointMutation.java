@@ -118,4 +118,6 @@ public class PointMutation implements GEMutation, GenerationListener {
 		codonGenerator = model.getCodonGenerator();
 	}
 
+	@Override
+	public void onGenerationEnd() {}
 }

@@ -78,6 +78,9 @@ public class Controller {
 			controller = new Controller();
 		}
 		
+		// Set the stats engine straight away so it can be used.
+		controller.stats.setStatsEngine(model.getStatsEngine());
+		
 		// Stash each GPRun object for retrieval of run details.
 		RunManager[] runs = new RunManager[model.getNoRuns()];
 		

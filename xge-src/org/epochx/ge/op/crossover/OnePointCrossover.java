@@ -131,4 +131,7 @@ public class OnePointCrossover implements GECrossover, GenerationListener {
 		// Reset.
 		initialise();
 	}
+	
+	@Override
+	public void onGenerationEnd() {}
 }

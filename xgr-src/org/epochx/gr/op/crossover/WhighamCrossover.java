@@ -92,4 +92,7 @@ public class WhighamCrossover implements GRCrossover, GenerationListener {
 		// Reset.
 		initialise();
 	}
+	
+	@Override
+	public void onGenerationEnd() {}
 }

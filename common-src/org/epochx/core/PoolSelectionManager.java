@@ -105,4 +105,7 @@ public class PoolSelectionManager implements GenerationListener {
 		// Reset.
 		initialise();
 	}
+	
+	@Override
+	public void onGenerationEnd() {}
 }

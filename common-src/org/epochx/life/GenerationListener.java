@@ -39,4 +39,6 @@ public interface GenerationListener {
 	public void onGenerationStart();
 	//TODO This method should allow null to revert a generation.
 	
+	public void onGenerationEnd();
+	
 }

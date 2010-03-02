@@ -34,7 +34,7 @@ public class CommonStatsEngine implements StatsEngine {
 			value = getGenFitnessCI95();
 		} else if (field.equals(GEN_FITTEST_PROGRAM)) {
 			value = getGenBestProgram();
-		} 
+		}
 		
 		return value;
 	}

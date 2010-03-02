@@ -6,12 +6,10 @@ import org.epochx.life.LifeCycleListener;
 import org.epochx.op.*;
 import org.epochx.op.selection.*;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.*;
 import org.epochx.tools.random.*;
 
 
-public abstract class AbstractModel implements Model,
-												LifeCycleListener {
+public abstract class AbstractModel implements Model, LifeCycleListener {
 
 	// Run parameters.
 	private int noRuns;
@@ -23,12 +21,6 @@ public abstract class AbstractModel implements Model,
 	private double terminationFitness;
 	private double crossoverProbability;
 	private double mutationProbability;
-	
-	// Requested stats fields.
-	private MutationStatField[] mutationStatFields;
-	private CrossoverStatField[] crossoverStatFields;
-	private GenerationStatField[] generationStatFields;
-	private RunStatField[] runStatFields;
 	
 	private PoolSelector poolSelector;
 	private ProgramSelector programSelector;
@@ -53,12 +45,6 @@ public abstract class AbstractModel implements Model,
 		programSelector = new RandomSelector(this);
 		poolSelector = new TournamentSelector(this, 3);
 		randomNumberGenerator = new MersenneTwisterFast();
-		
-		// Statistics fields.
-		mutationStatFields = null;
-		crossoverStatFields = null;
-		generationStatFields = null;
-		runStatFields = null;
 		
 		// Life cycle listener.
 		lifeCycleListener = this;

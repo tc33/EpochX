@@ -96,6 +96,38 @@ public class StatsManager implements RunListener,
 		return stat;
 	}
 	
+	public Object[] getRunStats(String[] fields) {
+		Object[] stats = new Object[fields.length];
+		for (int i=0; i<fields.length; i++) {
+			stats[i] = getRunStat(fields[i]);
+		}
+		return stats;
+	}
+	
+	public Object[] getGenerationStats(String[] fields) {
+		Object[] stats = new Object[fields.length];
+		for (int i=0; i<fields.length; i++) {
+			stats[i] = getGenerationStat(fields[i]);
+		}
+		return stats;
+	}
+	
+	public Object[] getCrossoverStats(String[] fields) {
+		Object[] stats = new Object[fields.length];
+		for (int i=0; i<fields.length; i++) {
+			stats[i] = getCrossoverStat(fields[i]);
+		}
+		return stats;
+	}
+	
+	public Object[] getMutationStats(String[] fields) {
+		Object[] stats = new Object[fields.length];
+		for (int i=0; i<fields.length; i++) {
+			stats[i] = getMutationStat(fields[i]);
+		}
+		return stats;
+	}
+	
 	private Object generateRunStat(String field) {
 		Object stat = null;
 		

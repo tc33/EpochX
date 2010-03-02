@@ -28,7 +28,6 @@ import org.epochx.gp.model.GPAbstractModel;
 import org.epochx.gp.representation.*;
 import org.epochx.gp.representation.ant.*;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.GenerationStatField;
 import org.epochx.tools.ant.*;
 
 

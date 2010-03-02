@@ -53,6 +53,36 @@ public class GPStatsEngine implements StatsEngine {
 			value = getGenNoTerminalsAve();
 		} else if (field.equals(GEN_NO_TERMINALS_STDEV)) {
 			value = getGenNoTerminalsStdev();
+		} else if (field.equals(GEN_NO_DISTINCT_TERMINALS)) {
+			value = getGenNoDistinctTerminals();
+		} else if (field.equals(GEN_NO_DISTINCT_TERMINALS_MIN)) {
+			value = getGenNoDistinctTerminalsMin();
+		} else if (field.equals(GEN_NO_DISTINCT_TERMINALS_MAX)) {
+			value = getGenNoDistinctTerminalsMax();
+		} else if (field.equals(GEN_NO_DISTINCT_TERMINALS_AVE)) {
+			value = getGenNoDistinctTerminalsAve();
+		} else if (field.equals(GEN_NO_DISTINCT_TERMINALS_STDEV)) {
+			value = getGenNoDistinctTerminalsStdev();
+		} else if (field.equals(GEN_NO_FUNCTIONS)) {
+			value = getGenNoFunctions();
+		} else if (field.equals(GEN_NO_FUNCTIONS_MIN)) {
+			value = getGenNoFunctionsMin();
+		} else if (field.equals(GEN_NO_FUNCTIONS_MAX)) {
+			value = getGenNoFunctionsMax();
+		} else if (field.equals(GEN_NO_FUNCTIONS_AVE)) {
+			value = getGenNoFunctionsAve();
+		} else if (field.equals(GEN_NO_FUNCTIONS_STDEV)) {
+			value = getGenNoFunctionsStdev();
+		} else if (field.equals(GEN_NO_DISTINCT_FUNCTIONS)) {
+			value = getGenNoDistinctFunctions();
+		} else if (field.equals(GEN_NO_DISTINCT_FUNCTIONS_MIN)) {
+			value = getGenNoDistinctFunctionsMin();
+		} else if (field.equals(GEN_NO_DISTINCT_FUNCTIONS_MAX)) {
+			value = getGenNoDistinctFunctionsMax();
+		} else if (field.equals(GEN_NO_DISTINCT_FUNCTIONS_AVE)) {
+			value = getGenNoDistinctFunctionsAve();
+		} else if (field.equals(GEN_NO_DISTINCT_FUNCTIONS_STDEV)) {
+			value = getGenNoDistinctFunctionsStdev();
 		}
 		
 		return value;
@@ -302,5 +332,211 @@ public class GPStatsEngine implements StatsEngine {
 		
 		return stdevNoTerminals;
 	}
+	
+	private Object getGenNoDistinctTerminals() {
+		int[] noDistinctTerminals = null;
+		
+		// Request the population from the stats manager.
+		List<GPCandidateProgram> pop = (List<GPCandidateProgram>) Controller.getStatsManager().getGenerationStat(GEN_POPULATION);
+		
+		if (pop != null) {
+			noDistinctTerminals = new int[pop.size()];
+			
+			for (int i=0; i<pop.size(); i++) {
+				noDistinctTerminals[i] = pop.get(i).getNoDistinctTerminals();
+			}
+		}
+		
+		return noDistinctTerminals;
+	}
 
+	private Object getGenNoDistinctTerminalsMin() {
+		Integer minNoDistinctTerminals = null;
+		
+		// Request the population from the stats manager.
+		int[] noTerminals = (int[]) Controller.getStatsManager().getGenerationStat(GEN_NO_DISTINCT_TERMINALS);
+		
+		if (noTerminals != null) {
+			minNoDistinctTerminals = StatsUtils.min(noTerminals);
+		}
+		
+		return minNoDistinctTerminals;
+	}
+	
+	private Object getGenNoDistinctTerminalsMax() {
+		Integer maxNoDistinctTerminals = null;
+		
+		// Request the population from the stats manager.
+		int[] noTerminals = (int[]) Controller.getStatsManager().getGenerationStat(GEN_NO_DISTINCT_TERMINALS);
+		
+		if (noTerminals != null) {
+			maxNoDistinctTerminals = StatsUtils.max(noTerminals);
+		}
+		
+		return maxNoDistinctTerminals;
+	}
+	
+	private Object getGenNoDistinctTerminalsAve() {
+		Double aveNoDistinctTerminals = null;
+		
+		// Request the population from the stats manager.
+		int[] noTerminals = (int[]) Controller.getStatsManager().getGenerationStat(GEN_NO_DISTINCT_TERMINALS);
+		
+		if (noTerminals != null) {
+			aveNoDistinctTerminals = StatsUtils.ave(noTerminals);
+		}
+		
+		return aveNoDistinctTerminals;
+	}
+	
+	private Object getGenNoDistinctTerminalsStdev() {
+		Double stdevNoDistinctTerminals = null;
+		
+		// Request the population from the stats manager.
+		int[] noTerminals = (int[]) Controller.getStatsManager().getGenerationStat(GEN_NO_DISTINCT_TERMINALS);
+		
+		if (noTerminals != null) {
+			stdevNoDistinctTerminals = StatsUtils.stdev(noTerminals);
+		}
+		
+		return stdevNoDistinctTerminals;
+	}
+	
+	private Object getGenNoFunctions() {
+		int[] noFunctions = null;
+		
+		// Request the population from the stats manager.
+		List<GPCandidateProgram> pop = (List<GPCandidateProgram>) Controller.getStatsManager().getGenerationStat(GEN_POPULATION);
+		
+		if (pop != null) {
+			noFunctions = new int[pop.size()];
+			
+			for (int i=0; i<pop.size(); i++) {
+				noFunctions[i] = pop.get(i).getNoFunctions();
+			}
+		}
+		
+		return noFunctions;
+	}
+	
+	private Object getGenNoFunctionsMin() {
+		Integer minNoFunctions = null;
+		
+		// Request the population from the stats manager.
+		int[] noFunctions = (int[]) Controller.getStatsManager().getGenerationStat(GEN_NO_FUNCTIONS);
+		
+		if (noFunctions != null) {
+			minNoFunctions = StatsUtils.min(noFunctions);
+		}
+		
+		return minNoFunctions;
+	}
+	
+	private Object getGenNoFunctionsMax() {
+		Integer maxNoFunctions = null;
+		
+		// Request the population from the stats manager.
+		int[] noFunctions = (int[]) Controller.getStatsManager().getGenerationStat(GEN_NO_FUNCTIONS);
+		
+		if (noFunctions != null) {
+			maxNoFunctions = StatsUtils.max(noFunctions);
+		}
+		
+		return maxNoFunctions;
+	}
+	
+	private Object getGenNoFunctionsAve() {
+		Double aveNoFunctions = null;
+		
+		// Request the population from the stats manager.
+		int[] noFunctions = (int[]) Controller.getStatsManager().getGenerationStat(GEN_NO_FUNCTIONS);
+		
+		if (noFunctions != null) {
+			aveNoFunctions = StatsUtils.ave(noFunctions);
+		}
+		
+		return aveNoFunctions;
+	}
+	
+	private Object getGenNoFunctionsStdev() {
+		Double stdevNoFunctions = null;
+		
+		// Request the population from the stats manager.
+		int[] noFunctions = (int[]) Controller.getStatsManager().getGenerationStat(GEN_NO_FUNCTIONS);
+		
+		if (noFunctions != null) {
+			stdevNoFunctions = StatsUtils.stdev(noFunctions);
+		}
+		
+		return stdevNoFunctions;
+	}
+	
+	private Object getGenNoDistinctFunctions() {
+		int[] noDistinctFunctions = null;
+		
+		// Request the population from the stats manager.
+		List<GPCandidateProgram> pop = (List<GPCandidateProgram>) Controller.getStatsManager().getGenerationStat(GEN_POPULATION);
+		
+		if (pop != null) {
+			noDistinctFunctions = new int[pop.size()];
+			
+			for (int i=0; i<pop.size(); i++) {
+				noDistinctFunctions[i] = pop.get(i).getNoDistinctFunctions();
+			}
+		}
+		
+		return noDistinctFunctions;
+	}
+
+	private Object getGenNoDistinctFunctionsMin() {
+		Integer minNoDistinctFunctions = null;
+		
+		// Request the population from the stats manager.
+		int[] noFunctions = (int[]) Controller.getStatsManager().getGenerationStat(GEN_NO_DISTINCT_FUNCTIONS);
+		
+		if (noFunctions != null) {
+			minNoDistinctFunctions = StatsUtils.min(noFunctions);
+		}
+		
+		return minNoDistinctFunctions;
+	}
+	
+	private Object getGenNoDistinctFunctionsMax() {
+		Integer maxNoDistinctFunctions = null;
+		
+		// Request the population from the stats manager.
+		int[] noFunctions = (int[]) Controller.getStatsManager().getGenerationStat(GEN_NO_DISTINCT_FUNCTIONS);
+		
+		if (noFunctions != null) {
+			maxNoDistinctFunctions = StatsUtils.max(noFunctions);
+		}
+		
+		return maxNoDistinctFunctions;
+	}
+	
+	private Object getGenNoDistinctFunctionsAve() {
+		Double aveNoDistinctFunctions = null;
+		
+		// Request the population from the stats manager.
+		int[] noFunctions = (int[]) Controller.getStatsManager().getGenerationStat(GEN_NO_DISTINCT_FUNCTIONS);
+		
+		if (noFunctions != null) {
+			aveNoDistinctFunctions = StatsUtils.ave(noFunctions);
+		}
+		
+		return aveNoDistinctFunctions;
+	}
+	
+	private Object getGenNoDistinctFunctionsStdev() {
+		Double stdevNoDistinctFunctions = null;
+		
+		// Request the population from the stats manager.
+		int[] noFunctions = (int[]) Controller.getStatsManager().getGenerationStat(GEN_NO_DISTINCT_FUNCTIONS);
+		
+		if (noFunctions != null) {
+			stdevNoDistinctFunctions = StatsUtils.stdev(noFunctions);
+		}
+		
+		return stdevNoDistinctFunctions;
+	}
 }

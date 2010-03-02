@@ -1,5 +1,7 @@
 package org.epochx.core;
 
+import static org.epochx.stats.StatField.*;
+
 import org.epochx.life.*;
 import org.epochx.model.*;
 import org.epochx.op.*;
@@ -121,7 +123,11 @@ public class CrossoverManager implements GenerationListener {
 		}*/
 		
 		long runtime = System.nanoTime() - crossoverStartTime;
-		//crossoverStats.addCrossover(parents, children, runtime, reversions);
+
+		Controller.getStatsManager().addMutationData(CROSSOVER_PARENTS, parents);
+		Controller.getStatsManager().addMutationData(CROSSOVER_CHILDREN, children);
+		Controller.getStatsManager().addMutationData(CROSSOVER_REVERTED, reversions);
+		Controller.getStatsManager().addMutationData(CROSSOVER_TIME, runtime);
 		
 		return children;
 	}

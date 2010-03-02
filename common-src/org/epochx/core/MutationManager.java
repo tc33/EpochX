@@ -5,6 +5,8 @@ import org.epochx.model.*;
 import org.epochx.op.*;
 import org.epochx.representation.*;
 
+import static org.epochx.stats.StatField.*;
+
 public class MutationManager implements GenerationListener {
 	
 	// The controlling model.
@@ -100,10 +102,12 @@ public class MutationManager implements GenerationListener {
 			reversions++;
 		} while(child == null);
 		
-		//child = (CandidateProgram) parent.clone();
-		
 		long runtime = System.nanoTime() - crossoverStartTime;
-		//mutationStats.addMutation(parent, child, runtime, reversions);
+		
+		Controller.getStatsManager().addMutationData(MUTATION_PROGRAM_BEFORE, parent);
+		Controller.getStatsManager().addMutationData(MUTATION_PROGRAM_AFTER, child);
+		Controller.getStatsManager().addMutationData(MUTATION_REVERTED, reversions);
+		Controller.getStatsManager().addMutationData(MUTATION_TIME, runtime);
 		
 		return child;
 	}

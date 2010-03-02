@@ -105,6 +105,11 @@ public final class GPStatField {
 	public static final String GEN_NO_TERMINALS_MIN = "xgp-gen-no-terminals-min";
 	
 	/**
+	 * 
+	 */
+	public static final String GEN_NO_DISTINCT_TERMINALS = "xgp-gen-no-distinct-terminals";
+	
+	/**
 	 * Requests a Double which is the average number of unique terminal nodes
 	 * in a GPCandidateProgram in that generation.
 	 */
@@ -129,6 +134,11 @@ public final class GPStatField {
 	public static final String GEN_NO_DISTINCT_TERMINALS_MIN = "xgp-gen-no-distinct-terminals-min";
 	
 	/**
+	 * 
+	 */
+	public static final String GEN_NO_FUNCTIONS = "xgp-gen-no-functions";	
+	
+	/**
 	 * Requests a Double which is the average number of function nodes in all 
 	 * the CandidatePrograms of that generation.
 	 */
@@ -151,6 +161,11 @@ public final class GPStatField {
 	 * GPCandidateProgram in that generation.
 	 */
 	public static final String GEN_NO_FUNCTIONS_MIN = "xgp-gen-no-functions-min";
+	
+	/**
+	 * 
+	 */
+	public static final String GEN_NO_DISTINCT_FUNCTIONS = "xgp-gen-no-distinct-functions";	
 	
 	/**
 	 * Requests a Double which is the average number of unique function nodes

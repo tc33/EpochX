@@ -82,10 +82,7 @@ public class Controller {
 		RunManager[] runs = new RunManager[model.getNoRuns()];
 		
 		for (int i=0; i<model.getNoRuns(); i++) {
-			runs[i] = RunManager.run(model);
-			
-			// Generate stats for this run.
-			//runStats.addRun(runs[i], i+1);
+			runs[i] = RunManager.run(i, model);
 		}
 
 		return runs;

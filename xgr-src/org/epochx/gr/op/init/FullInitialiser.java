@@ -16,10 +16,6 @@ import org.epochx.tools.random.RandomNumberGenerator;
  *
  */
 public class FullInitialiser implements GRInitialiser, RunListener {
-	/*
-	 * TODO This constructs the chromosome using depth first mapping - what about others?
-	 */
-	
 	// The current controlling model.
 	private GRModel model;
 	
@@ -37,6 +33,15 @@ public class FullInitialiser implements GRInitialiser, RunListener {
 		this.model = model;
 		
 		Controller.getLifeCycleManager().addRunListener(this);
+		
+		initialise();
+	}
+	
+	private void initialise() {
+		rng = model.getRNG();
+		grammar = model.getGrammar();
+		popSize = model.getPopulationSize();
+		maxInitialProgramDepth = model.getMaxInitialProgramDepth();
 	}
 	
 	@Override
@@ -125,9 +130,6 @@ public class FullInitialiser implements GRInitialiser, RunListener {
 	
 	@Override
 	public void onRunStart() {
-		rng = model.getRNG();
-		grammar = model.getGrammar();
-		popSize = model.getPopulationSize();
-		maxInitialProgramDepth = model.getMaxInitialProgramDepth();
+		initialise();
 	}
 }

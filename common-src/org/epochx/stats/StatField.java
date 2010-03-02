@@ -93,4 +93,51 @@ public final class StatField {
 	 */
 	public static final String GEN_TIME = "gen-time";
 	
+	/**
+	 * Requests a GPCandidateProgram which is a clone of the program as it 
+	 * was <b>before</b> the mutation operation was applied.
+	 */
+	public static final String MUTATION_PROGRAM_BEFORE = "mutation-program-before";
+	
+	/**
+	 * Requests a GPCandidateProgram which is the program as it exists 
+	 * <b>after</b> the mutation operation was applied.
+	 */
+	public static final String MUTATION_PROGRAM_AFTER = "mutation-program-after";
+	
+	/**
+	 * Requests a Long which is the length of time in nanoseconds that the 
+	 * mutation operation took to complete.
+	 */
+	public static final String MUTATION_TIME = "mutation-time";
+	
+	/**
+	 * Requests an Integer which is the number of mutations that were 
+	 * reverted due to model rejection.
+	 */
+	public static final String MUTATION_REVERTED = "mutation-reverted";
+	
+	/** 
+	 * Requests a GPCandidateProgram[] (typically with 2 elements) which are 
+	 * the parents that were crossed-over to give the children.
+	 **/
+	public static final String CROSSOVER_PARENTS = "crossover-parents";
+	
+	/**
+	 * Requests a GPCandidateProgram[] (typically with 2 elements) which are 
+	 * the children that resulted from crossing over the parents.
+	 **/
+	public static final String CROSSOVER_CHILDREN = "crossover-children";
+	
+	/**
+	 * Requests a Long which is the length of time in nanoseconds that the 
+	 * crossover operation took to complete.
+	 */
+	public static final String CROSSOVER_TIME = "crossover-time";
+	
+	/**
+	 * Requests an Integer which is the number of crossovers that were 
+	 * reverted due to model rejection.
+	 */
+	public static final String CROSSOVER_REVERTED = "crossover-reverted";
 }

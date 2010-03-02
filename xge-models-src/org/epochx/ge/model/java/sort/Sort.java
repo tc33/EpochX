@@ -7,7 +7,6 @@ import org.epochx.ge.model.GEAbstractModel;
 import org.epochx.ge.op.init.GrowInitialiser;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.GenerationStatField;
 import org.epochx.tools.eval.*;
 import org.epochx.tools.grammar.Grammar;
 

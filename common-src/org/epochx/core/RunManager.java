@@ -64,12 +64,12 @@ public class RunManager {
 	 * 				 details about the run.
 	 * @see GPModel
 	 */
-	public static RunManager run(Model model) {
+	public static RunManager run(int runNo, Model model) {
 		// Create the GPRun object.
 		RunManager runner = new RunManager(model);
 		
 		// Run it.
-		runner.run();
+		runner.run(runNo);
 		
 		return runner;
 	}
@@ -80,9 +80,10 @@ public class RunManager {
 	 * population, initiates the genetic operators and performs any elitism 
 	 * or pool selection in use.
 	 */
-	private void run() {
+	private void run(int runNo) {
 		// Tell our generation stats to record the start time.
 		//genStats.setStartTime();
+		Controller.getStatsManager().addRunData(RUN_NUMBER, runNo);
 		
 		// Tell life cycle listener that a run is starting.
 		lifeCycle.onRunStart();

@@ -56,6 +56,10 @@ public class GRCandidateProgram extends CandidateProgram {
 		return parseTree;
 	}
 	
+	public int getDepth() {
+		return parseTree.getDepth();
+	}
+	
 	/**
 	 * Create a clone of this GECandidateProgram. The list of codons are copied 
 	 * as are all caches.

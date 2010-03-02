@@ -289,6 +289,16 @@ public class GECandidateProgram extends CandidateProgram {
 	public int getNoCodons() {
 		return codons.size();
 	}
+	
+	public int getParseTreeDepth() {
+		int depth = 0;
+		
+		if (parseTree != null) {
+			depth = parseTree.getDepth();
+		}
+		
+		return depth;
+	}
 
 	/**
 	 * Returns the fitness of the candidate program. This method should be 

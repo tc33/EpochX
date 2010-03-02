@@ -362,6 +362,25 @@ public class NonTerminalSymbol implements Symbol {
 		return grammarRule;
 	}
 	
+	public int getDepth() {
+		int maxChildDepth = 0;
+		
+		for (Symbol child: children) {
+			int childDepth;
+			if (child instanceof NonTerminalSymbol) {
+				childDepth = ((NonTerminalSymbol) child).getDepth() + 1;
+			} else {
+				childDepth = 1;
+			}
+			
+			if (childDepth > maxChildDepth) {
+				maxChildDepth = childDepth;
+			}
+		}
+		
+		return maxChildDepth;
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder buffer = new StringBuilder(children.size());

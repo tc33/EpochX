@@ -23,13 +23,13 @@ public class StatsManager implements RunListener,
 	private Map<String, Object> crossoverData;
 	private Map<String, Object> mutationData;
 	
-	private CommonStatsEngine statsEngine;
+	private StatsEngine statsEngine;
 	
 	public StatsManager() {
-		this(new CommonStatsEngine());
+		this(new StatsEngine());
 	}
 	
-	public StatsManager(CommonStatsEngine statsEngine) {
+	public StatsManager(StatsEngine statsEngine) {
 		runData = new HashMap<String, Object>();
 		generationData = new HashMap<String, Object>();
 		crossoverData = new HashMap<String, Object>();
@@ -198,9 +198,9 @@ public class StatsManager implements RunListener,
 		return statsEngine.getMutationStat(field);
 	}
 	
-	public void setStatsEngine(CommonStatsEngine statsEngine) {
+	public void setStatsEngine(StatsEngine statsEngine) {
 		if (statsEngine == null) {
-			statsEngine = new CommonStatsEngine();
+			statsEngine = new StatsEngine();
 		}
 		
 		this.statsEngine = statsEngine;

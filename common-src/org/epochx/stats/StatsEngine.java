@@ -7,7 +7,7 @@ import java.util.*;
 import org.epochx.core.*;
 import org.epochx.representation.*;
 
-public class CommonStatsEngine {
+public class StatsEngine {
 
 	public Object getRunStat(String field) {
 		return null;

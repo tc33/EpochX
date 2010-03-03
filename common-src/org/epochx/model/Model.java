@@ -3,7 +3,7 @@ package org.epochx.model;
 import org.epochx.life.LifeCycleListener;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.CommonStatsEngine;
+import org.epochx.stats.StatsEngine;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 
@@ -43,7 +43,7 @@ public interface Model {
 	
 	public LifeCycleListener getLifeCycleListener();
 	
-	public CommonStatsEngine getStatsEngine();
+	public StatsEngine getStatsEngine();
 	
 	public boolean cacheFitness();
 }

@@ -9,7 +9,7 @@ import org.epochx.core.Controller;
 import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.stats.*;
 
-public class GPStatsEngine extends CommonStatsEngine {
+public class GPStatsEngine extends StatsEngine {
 
 	@Override
 	public Object getGenerationStat(String field) {

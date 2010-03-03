@@ -34,7 +34,7 @@ public abstract class AbstractModel implements Model, LifeCycleListener {
 	private boolean cacheFitness;
 	
 	// Stats.
-	private StatsEngine statsEngine;
+	private CommonStatsEngine statsEngine;
 	
 	public AbstractModel() {
 		noRuns = 1;
@@ -337,11 +337,11 @@ public abstract class AbstractModel implements Model, LifeCycleListener {
 	}
 	
 	@Override
-	public StatsEngine getStatsEngine() {
+	public CommonStatsEngine getStatsEngine() {
 		return statsEngine;
 	}
 	
-	public void setStatsEngine(StatsEngine statsEngine) {
+	public void setStatsEngine(CommonStatsEngine statsEngine) {
 		this.statsEngine = statsEngine;
 	}
 	

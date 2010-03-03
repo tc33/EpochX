@@ -7,14 +7,12 @@ import java.util.*;
 import org.epochx.core.*;
 import org.epochx.representation.*;
 
-public class CommonStatsEngine implements StatsEngine {
+public class CommonStatsEngine {
 
-	@Override
 	public Object getRunStat(String field) {
 		return null;
 	}
 	
-	@Override
 	public Object getGenerationStat(String field) {
 		Object value = null;
 		
@@ -39,13 +37,11 @@ public class CommonStatsEngine implements StatsEngine {
 		return value;
 	}
 	
-	@Override
 	public Object getCrossoverStat(String field) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public Object getMutationStat(String field) {
 		// TODO Auto-generated method stub
 		return null;

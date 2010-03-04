@@ -73,6 +73,8 @@ public class ReproductionManager {
 	 * @return a GPCandidateProgram selected for reproduction.
 	 */
 	public CandidateProgram reproduce() {
+		Controller.getLifeCycleManager().onReproductionStart();
+		
 		CandidateProgram parent = null;
 		
 		reversions = -1;
@@ -85,6 +87,8 @@ public class ReproductionManager {
 			parent = lifeCycle.onReproduction(parent);
 			reversions++;
 		} while(parent == null);
+		
+		Controller.getLifeCycleManager().onReproductionEnd();
 		
 		return parent;
 	}

@@ -14,9 +14,6 @@ public class RunManager {
 	// The model describing the problem to be evolved.
 	private Model model;
 	
-	// The manager that keeps track of life cycle events and their listeners.
-	private LifeCycleManager lifeCycle;
-	
 	// Core components.
 	private GenerationManager generation;
 	private InitialisationManager initialisation;
@@ -40,11 +37,7 @@ public class RunManager {
 	private RunManager(Model model) {
 		this.model = model;
 		
-		// Setup life cycle manager.
-		lifeCycle = Controller.getLifeCycleManager();
-		
 		// Initialise the run.
-		runStartTime = System.nanoTime();
 		runEndTime = -1;
 		bestProgram = null;
 		bestFitness = Double.POSITIVE_INFINITY;
@@ -81,12 +74,12 @@ public class RunManager {
 	 * or pool selection in use.
 	 */
 	private void run(int runNo) {
-		// Tell our generation stats to record the start time.
-		//genStats.setStartTime();
-		Controller.getStatsManager().addRunData(RUN_NUMBER, runNo);
-		
 		// Tell life cycle listener that a run is starting.
-		lifeCycle.onRunStart();
+		Controller.getLifeCycleManager().onRunStart();
+		
+		runStartTime = System.nanoTime();
+
+		Controller.getStatsManager().addRunData(RUN_NUMBER, runNo);
 		
 		// Perform initialisation.
 		List<CandidateProgram> pop = initialisation.initialise();
@@ -112,9 +105,9 @@ public class RunManager {
 		}
 		
 		if (fitnessSuccess) {
-			lifeCycle.onRunEnd();
+			Controller.getLifeCycleManager().onRunEnd();
 		} else {
-			lifeCycle.onRunEnd();
+			Controller.getLifeCycleManager().onRunEnd();
 		}
 		
 		runEndTime = System.nanoTime();

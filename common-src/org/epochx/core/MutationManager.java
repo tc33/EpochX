@@ -12,9 +12,6 @@ public class MutationManager {
 	// The controlling model.
 	private Model model;
 	
-	// Manager of life cycle events.
-	private LifeCycleManager lifeCycle;
-	
 	// The selector for choosing the individual to mutate.
 	private ProgramSelector programSelector;
 	
@@ -41,10 +38,7 @@ public class MutationManager {
 		// Initialise parameters.
 		initialise();
 		
-		// Register interest in generation events so we can reset.
-		lifeCycle = Controller.getLifeCycleManager();
-		
-		lifeCycle.addGenerationListener(new GenerationAdapter() {
+		Controller.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
 				initialise();
@@ -90,6 +84,8 @@ public class MutationManager {
 	 *         the original selected program before mutation will be returned.
 	 */
 	public CandidateProgram mutate() {
+		Controller.getLifeCycleManager().onMutationStart();
+		
 		long crossoverStartTime = System.nanoTime();
 		
 		CandidateProgram parent = null;
@@ -107,7 +103,7 @@ public class MutationManager {
 			child = mutator.mutate(child);
 
 			// Allow the life cycle listener to confirm or modify.
-			child = lifeCycle.onMutation(parent, child);
+			child = Controller.getLifeCycleManager().onMutation(parent, child);
 			reversions++;
 		} while(child == null);
 		
@@ -117,6 +113,8 @@ public class MutationManager {
 		Controller.getStatsManager().addMutationData(MUTATION_PROGRAM_AFTER, child);
 		Controller.getStatsManager().addMutationData(MUTATION_REVERTED, reversions);
 		Controller.getStatsManager().addMutationData(MUTATION_TIME, runtime);
+		
+		Controller.getLifeCycleManager().onMutationEnd();
 		
 		return child;
 	}
@@ -133,7 +131,7 @@ public class MutationManager {
 	 * 
 	 * @return the number of times the mutation was rejected by the model.
 	 */
-	public int getRevertedCount() {
+	public int getReversions() {
 		return reversions;
 	}
 }

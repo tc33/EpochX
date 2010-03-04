@@ -13,9 +13,6 @@ public class CrossoverManager {
 	// The controlling model.
 	private Model model;
 	
-	// Manager of life cycle events.
-	private LifeCycleManager lifeCycle;
-	
 	// The selector for choosing parents.
 	private ProgramSelector programSelector;
 	
@@ -42,10 +39,7 @@ public class CrossoverManager {
 		// Initialise parameters.
 		initialise();
 		
-		// Get a reference to the life cycle manager for convenience.
-		lifeCycle = Controller.getLifeCycleManager();
-		
-		lifeCycle.addGenerationListener(new GenerationAdapter() {
+		Controller.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
 				initialise();
@@ -88,6 +82,10 @@ public class CrossoverManager {
 	 * 	 	   as returned by the Crossover operator in use.
 	 */
 	public CandidateProgram[] crossover() {
+		// Inform everyone we're about to start crossover.
+		Controller.getLifeCycleManager().onCrossoverStart();
+		
+		// Record the start time.
 		long crossoverStartTime = System.nanoTime();
 
 		CandidateProgram parent1;
@@ -113,7 +111,7 @@ public class CrossoverManager {
 			children = crossover.crossover(clone1, clone2);
 			
 			// Ask life cycle listener to confirm the crossover.
-			children = lifeCycle.onCrossover(parents, children);
+			children = Controller.getLifeCycleManager().onCrossover(parents, children);
 			reversions++;
 		} while(children == null);
 		
@@ -136,6 +134,8 @@ public class CrossoverManager {
 		Controller.getStatsManager().addMutationData(CROSSOVER_REVERTED, reversions);
 		Controller.getStatsManager().addMutationData(CROSSOVER_TIME, runtime);
 		
+		Controller.getLifeCycleManager().onCrossoverEnd();
+		
 		return children;
 	}
 	
@@ -150,7 +150,7 @@ public class CrossoverManager {
 	 * 
 	 * @return the number of times the crossover was rejected by the model.
 	 */
-	public int getRevertedCount() {
+	public int getReversions() {
 		return reversions;
 	}
 	

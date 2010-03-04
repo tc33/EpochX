@@ -12,9 +12,6 @@ public class PoolSelectionManager {
 	// The controlling model.
 	private Model model;
 	
-	// Manager of life cycle events.
-	private LifeCycleManager lifeCycle;
-	
 	// The pool selector to use to generate the breeding pool.
 	private PoolSelector poolSelector;
 	
@@ -41,8 +38,7 @@ public class PoolSelectionManager {
 		// Initialise parameters.
 		initialise();
 		
-		lifeCycle = Controller.getLifeCycleManager();
-		lifeCycle.addGenerationListener(new GenerationAdapter() {
+		Controller.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
 				initialise();
@@ -64,7 +60,9 @@ public class PoolSelectionManager {
 	 * @param pop
 	 * @return
 	 */
-	public List<CandidateProgram> getPool(List<CandidateProgram> pop) {		
+	public List<CandidateProgram> getPool(List<CandidateProgram> pop) {	
+		Controller.getLifeCycleManager().onPoolSelectionStart();
+		
 		List<CandidateProgram> pool = null;
 		
 		reversions = -1;
@@ -73,11 +71,13 @@ public class PoolSelectionManager {
 			pool = poolSelector.getPool(pop, poolSize);
 			
 			// Allow life cycle listener to confirm or modify.
-			pool = lifeCycle.onPoolSelection(pool);
+			pool = Controller.getLifeCycleManager().onPoolSelection(pool);
 			
 			// Increment reversions - starts at -1 to cover first increment.
 			reversions++;
 		} while(pool == null);
+		
+		Controller.getLifeCycleManager().onPoolSelectionEnd();
 		
 		return pool;
 	}

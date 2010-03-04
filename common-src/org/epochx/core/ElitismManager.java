@@ -72,7 +72,9 @@ public class ElitismManager {
 	 * 		   greater than the population size then the returned list will 
 	 * 		   contain all CandidatePrograms from the population sorted.
 	 */
-	public List<CandidateProgram> getElites(List<CandidateProgram> pop) {		
+	public List<CandidateProgram> elitism(List<CandidateProgram> pop) {
+		Controller.getLifeCycleManager().onElitismStart();
+		
 		// Construct an array for elites.
 		List<CandidateProgram> elites;
 		
@@ -86,6 +88,8 @@ public class ElitismManager {
 		
 		// Allow life cycle listener to confirm or modify.
 		elites = lifeCycle.onElitism(elites);
+		
+		Controller.getLifeCycleManager().onElitismEnd();
 		
 		return elites;
 	}

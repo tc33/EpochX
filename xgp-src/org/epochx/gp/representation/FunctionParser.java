@@ -175,8 +175,11 @@ public class FunctionParser {
 			// Get the name of the function.
 			identifier = source.substring(0, openingBracket);
 			
+			// Locate the closing bracket.
+			int closingBracket = source.lastIndexOf(')');
+			
 			// Get the comma separated arguments - without the surrounding brackets.
-			String argumentStr = source.substring(openingBracket+1, source.length()-1);
+			String argumentStr = source.substring(openingBracket+1, closingBracket);
 			
 			// Separate the arguments.
 			args = splitArguments(argumentStr);

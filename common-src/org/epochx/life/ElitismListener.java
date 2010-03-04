@@ -29,6 +29,10 @@ import org.epochx.representation.*;
  */
 public interface ElitismListener {
 
+	public void onElitismStart();
+	
+	public void onElitismEnd();
+	
 	/**
 	 * Called after selection of elites. If the number of elites to use is set 
 	 * by the model to <=0, then this method will still be called at the 

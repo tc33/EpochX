@@ -1,6 +1,6 @@
 package org.epochx.life;
 
-public class GenerationAdaptor implements GenerationListener {
+public abstract class GenerationAdapter implements GenerationListener {
 
 	@Override
 	public void onGenerationEnd() {

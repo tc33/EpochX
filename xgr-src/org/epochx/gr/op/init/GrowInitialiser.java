@@ -5,7 +5,7 @@ import java.util.*;
 import org.epochx.core.Controller;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
-import org.epochx.life.RunListener;
+import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.*;
 import org.epochx.tools.random.RandomNumberGenerator;
@@ -14,7 +14,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
 /**
  *
  */
-public class GrowInitialiser implements GRInitialiser, RunListener {
+public class GrowInitialiser implements GRInitialiser {
 
 	// The current controlling model.
 	private GRModel model;
@@ -32,7 +32,23 @@ public class GrowInitialiser implements GRInitialiser, RunListener {
 	public GrowInitialiser(GRModel model) {
 		this.model = model;
 		
-		Controller.getLifeCycleManager().addRunListener(this);
+		// Initialise the object.
+		initialise();
+		
+		// Re-initialise at the start of every generation.
+		Controller.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationStart() {
+				initialise();
+			}
+		});
+	}
+	
+	private void initialise() {
+		rng = model.getRNG();
+		grammar = model.getGrammar();
+		popSize = model.getPopulationSize();
+		maxInitialProgramDepth = model.getMaxInitialProgramDepth();
 	}
 	
 	@Override
@@ -117,14 +133,6 @@ public class GrowInitialiser implements GRInitialiser, RunListener {
 		
 		// If there were any valid recursive productions, return them, otherwise use the others.
 		return valid;
-	}
-
-	@Override
-	public void onRunStart() {
-		rng = model.getRNG();
-		grammar = model.getGrammar();
-		popSize = model.getPopulationSize();
-		maxInitialProgramDepth = model.getMaxInitialProgramDepth();
 	}
 	
 }

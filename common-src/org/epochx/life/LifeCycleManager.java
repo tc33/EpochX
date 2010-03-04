@@ -13,7 +13,6 @@ public class LifeCycleManager {
 	private List<MutationListener> mutationListeners;
 	private List<ReproductionListener> reproductionListeners;
 	private List<GenerationListener> generationListeners;
-	private List<TerminationListener> terminationListeners;
 	
 	public LifeCycleManager() {
 		// Initialise listener lists.
@@ -25,7 +24,6 @@ public class LifeCycleManager {
 		mutationListeners = new ArrayList<MutationListener>();
 		reproductionListeners = new ArrayList<ReproductionListener>();
 		generationListeners = new ArrayList<GenerationListener>();
-		terminationListeners = new ArrayList<TerminationListener>();
 	}
 	
 	public void addRunListener(RunListener listener) {
@@ -91,18 +89,16 @@ public class LifeCycleManager {
 	public void removeGenerationListener(GenerationListener listener) {
 		generationListeners.remove(listener);
 	}
-	
-	public void addTerminationListener(TerminationListener listener) {
-		terminationListeners.add(listener);
-	}
-	
-	public void removeTerminationListener(TerminationListener listener) {
-		terminationListeners.remove(listener);
-	}
 
 	public void onRunStart() {
 		for (RunListener listener: runListeners) {
 			listener.onRunStart();
+		}
+	}
+	
+	public void onRunEnd() {
+		for (RunListener listener: runListeners) {
+			listener.onRunEnd();
 		}
 	}
 	
@@ -197,18 +193,6 @@ public class LifeCycleManager {
 	public void onGenerationEnd() {
 		for (GenerationListener listener: generationListeners) {
 			listener.onGenerationEnd();
-		}
-	}
-
-	public void onFitnessTermination() {
-		for (TerminationListener listener: terminationListeners) {
-			listener.onFitnessTermination();
-		}
-	}
-	
-	public void onGenerationTermination() {
-		for (TerminationListener listener: terminationListeners) {
-			listener.onGenerationTermination();
 		}
 	}
 }

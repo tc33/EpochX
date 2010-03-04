@@ -26,6 +26,10 @@ import org.epochx.representation.*;
  */
 public interface ReproductionListener {
 	
+	public void onReproductionStart();
+	
+	public void onReproductionEnd();
+	
 	/**
 	 * Called after selection of an individual to be reproduced into the next 
 	 * generation.

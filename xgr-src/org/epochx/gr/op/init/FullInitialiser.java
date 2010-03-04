@@ -5,7 +5,7 @@ import java.util.*;
 import org.epochx.core.Controller;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
-import org.epochx.life.RunListener;
+import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.*;
 import org.epochx.tools.random.RandomNumberGenerator;
@@ -15,7 +15,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * Note: full initialisation currently only works for depth first mapping.
  *
  */
-public class FullInitialiser implements GRInitialiser, RunListener {
+public class FullInitialiser implements GRInitialiser {
 	// The current controlling model.
 	private GRModel model;
 	
@@ -32,9 +32,16 @@ public class FullInitialiser implements GRInitialiser, RunListener {
 	public FullInitialiser(GRModel model) {
 		this.model = model;
 		
-		Controller.getLifeCycleManager().addRunListener(this);
-		
+		// Initialise the object.
 		initialise();
+		
+		// Re-initialise at the start of every generation.
+		Controller.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationStart() {
+				initialise();
+			}
+		});
 	}
 	
 	private void initialise() {
@@ -126,10 +133,5 @@ public class FullInitialiser implements GRInitialiser, RunListener {
 		
 		// If there were any valid recursive productions, return them, otherwise use the others.
 		return validRecursive.isEmpty() ? validAll : validRecursive;
-	}
-	
-	@Override
-	public void onRunStart() {
-		initialise();
 	}
 }

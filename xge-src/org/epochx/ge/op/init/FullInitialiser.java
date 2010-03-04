@@ -5,7 +5,7 @@ import java.util.*;
 import org.epochx.core.Controller;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.life.RunListener;
+import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.*;
 import org.epochx.tools.random.RandomNumberGenerator;
@@ -15,7 +15,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * Note: full initialisation currently only works for depth first mapping.
  *
  */
-public class FullInitialiser implements GEInitialiser, RunListener {
+public class FullInitialiser implements GEInitialiser {
 	/*
 	 * TODO This constructs the chromosome using depth first mapping - what about others?
 	 */
@@ -37,7 +37,16 @@ public class FullInitialiser implements GEInitialiser, RunListener {
 	public FullInitialiser(GEModel model) {
 		this.model = model;
 		
-		Controller.getLifeCycleManager().addRunListener(this);
+		// Initialise the object.
+		initialise();
+		
+		// Re-initialise at the start of every generation.
+		Controller.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationStart() {
+				initialise();
+			}
+		});
 	}
 	
 	@Override
@@ -144,8 +153,7 @@ public class FullInitialiser implements GEInitialiser, RunListener {
 		return codon;
 	}
 
-	@Override
-	public void onRunStart() {
+	private void initialise() {
 		rng = model.getRNG();
 		grammar = model.getGrammar();
 		popSize = model.getPopulationSize();

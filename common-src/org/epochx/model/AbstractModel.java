@@ -1,16 +1,12 @@
 package org.epochx.model;
 
-import java.util.List;
-
-import org.epochx.life.LifeCycleListener;
 import org.epochx.op.*;
 import org.epochx.op.selection.*;
-import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.*;
+import org.epochx.stats.StatsEngine;
 import org.epochx.tools.random.*;
 
 
-public abstract class AbstractModel implements Model, LifeCycleListener {
+public abstract class AbstractModel implements Model {
 
 	// Run parameters.
 	private int noRuns;
@@ -26,9 +22,6 @@ public abstract class AbstractModel implements Model, LifeCycleListener {
 	private PoolSelector poolSelector;
 	private ProgramSelector programSelector;
 	private RandomNumberGenerator randomNumberGenerator;
-	
-	// Life cycle listeners.
-	private LifeCycleListener lifeCycleListener;
 	
 	// Caching.
 	private boolean cacheFitness;
@@ -49,9 +42,6 @@ public abstract class AbstractModel implements Model, LifeCycleListener {
 		programSelector = new RandomSelector(this);
 		poolSelector = new TournamentSelector(this, 3);
 		randomNumberGenerator = new MersenneTwisterFast();
-		
-		// Life cycle listener.
-		lifeCycleListener = this;
 		
 		// Caching.
 		cacheFitness = true;
@@ -344,142 +334,4 @@ public abstract class AbstractModel implements Model, LifeCycleListener {
 	public void setStatsEngine(StatsEngine statsEngine) {
 		this.statsEngine = statsEngine;
 	}
-	
-	/**
-	 * Default implementation returns this model as the life cycle listener. By
-	 * default all the listener methods will confirm the events though. 
-	 * Override the individual life cycle methods to add extra functionality in 
-	 * the model, or override this method to return a different life cycle 
-	 * listener.
-	 * 
-	 * @return the LifeCycleListener to inform of all events during the  life 
-	 * cycle.
-	 */
-	@Override
-	public LifeCycleListener getLifeCycleListener() {
-		return lifeCycleListener;
-	}
-	
-	/**
-	 * Overwrites the default life cycle listener.
-	 * 
-	 * @param lifeCycleListener the object that should be informed about life 
-	 * cycle events as they happen.
-	 */
-	public void setLifeCycleListener(LifeCycleListener lifeCycleListener) {
-		this.lifeCycleListener = lifeCycleListener;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Default implementation confirms the initialised population by 
-	 * returning the given population argument.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public List<CandidateProgram> onInitialisation(List<CandidateProgram> pop) {
-		return pop;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Default implementation confirms the selected elites by returning the
-	 * given list of elites.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public List<CandidateProgram> onElitism(List<CandidateProgram> elites) {
-		return elites;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Default implementation confirms the selected breeding pool by 
-	 * returning the given list of programs.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public List<CandidateProgram> onPoolSelection(List<CandidateProgram> pool) {
-		return pool;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Default implementation confirms the Crossover operation by returning
-	 * the given array of children.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public CandidateProgram[] onCrossover(CandidateProgram[] parents,
-			CandidateProgram[] children) {
-		return children;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Default implementation confirms the mutation operation by returning 
-	 * the given child program.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public CandidateProgram onMutation(CandidateProgram parent,
-			CandidateProgram child) {
-		return child;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Default implementation confirms the reproduction operation by 
-	 * returning the given selected program.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public CandidateProgram onReproduction(CandidateProgram child) {
-		return child;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Default implementation does nothing.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public void onGenerationStart() {}
-	
-	@Override
-	public void onGenerationEnd() {}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Default implementation does nothing.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public void onFitnessTermination() {}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Default implementation does nothing.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public void onGenerationTermination() {}
 }

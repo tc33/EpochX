@@ -34,7 +34,7 @@ import org.epochx.tools.grammar.*;
  * 
  * <p>It provides facility for wrapping and extending of chromosomes.
  */
-public class DepthFirstMapper implements Mapper, GenerationListener, RunListener {
+public class DepthFirstMapper implements Mapper {
 	/*
 	 * TODO Write a non-recursive mapper like breadth first mapper and make a 
 	 * secondary contructor with a boolean option.
@@ -49,7 +49,6 @@ public class DepthFirstMapper implements Mapper, GenerationListener, RunListener
 	private boolean removingUnusedCodons;
 	
 	private int maxWraps;
-	
 	private int noMappedCodons;
 	private int noWraps;
 	
@@ -67,9 +66,16 @@ public class DepthFirstMapper implements Mapper, GenerationListener, RunListener
 	public DepthFirstMapper(GEModel model) {
 		this.model = model;
 		
-		// Request information about life cycle events.
-		Controller.getLifeCycleManager().addGenerationListener(this);
-		Controller.getLifeCycleManager().addRunListener(this);
+		// Initialise.
+		initialise();
+		
+		// Re-initialise on each generation.
+		Controller.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationStart() {
+				initialise();
+			}
+		});
 		
 		// Default to extending.
 		wrapping = true;
@@ -318,23 +324,5 @@ public class DepthFirstMapper implements Mapper, GenerationListener, RunListener
 	public int getNoMappedCodons() {
 		return noMappedCodons;
 	}
-	
-	@Override
-	public void onRunStart() {
-		initialise();
-	}
-	
-	/**
-	 * Called after each generation. For each generation we should reset all 
-	 * parameters taken from the model incase they've changed. The generation
-	 * event is then CONFIRMed.
-	 */
-	@Override
-	public void onGenerationStart() {
-		// Reset.
-		initialise();
-	}
-	
-	@Override
-	public void onGenerationEnd() {}
+
 }

@@ -112,9 +112,9 @@ public class RunManager {
 		}
 		
 		if (fitnessSuccess) {
-			lifeCycle.onFitnessTermination();
+			lifeCycle.onRunEnd();
 		} else {
-			lifeCycle.onGenerationTermination();
+			lifeCycle.onRunEnd();
 		}
 		
 		runEndTime = System.nanoTime();

@@ -29,6 +29,10 @@ import org.epochx.representation.*;
  */
 public interface PoolSelectionListener {
 
+	public void onPoolSelectionStart();
+	
+	public void onPoolSelectionEnd();
+	
 	/**
 	 * Called after selection of the breeding pool. If the size of the breeding
 	 * pool is set in the model to <=0, then this method will still be called 

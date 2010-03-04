@@ -23,7 +23,9 @@ import org.epochx.representation.*;
 
 public interface CrossoverListener {
 
-	//public GPCandidateProgram[] onCrossoverSelection(List<GPCandidateProgram> pop, GPCandidateProgram[] parents);
+	public void onCrossoverStart();
+	
+	public void onCrossoverEnd();
 	
 	/**
 	 * Called after selection and crossover of 2 individuals.
@@ -35,7 +37,5 @@ public interface CrossoverListener {
 	 * crossover operation, or null if the crossover should be reverted.
 	 */
 	public CandidateProgram[] onCrossover(CandidateProgram[] parents, CandidateProgram[] children);
-	
-	//public GPCandidateProgram[] onCrossoverAndSelection(GPCandidateProgram[] parents, GPCandidateProgram[] children);
 	
 }

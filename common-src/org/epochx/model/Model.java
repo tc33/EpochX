@@ -1,6 +1,5 @@
 package org.epochx.model;
 
-import org.epochx.life.LifeCycleListener;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.StatsEngine;
@@ -40,8 +39,6 @@ public interface Model {
 	public int getNoElites();
 	
 	public int getPoolSize();
-	
-	public LifeCycleListener getLifeCycleListener();
 	
 	public StatsEngine getStatsEngine();
 	

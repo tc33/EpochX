@@ -29,6 +29,10 @@ import org.epochx.representation.*;
  */
 public interface InitialisationListener {
 
+	public void onInitialisationStart();
+	
+	public void onInitialisationEnd();
+	
 	/**
 	 * Called after initialisation.
 	 * 

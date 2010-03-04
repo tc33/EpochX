@@ -26,7 +26,9 @@ import org.epochx.representation.*;
  */
 public interface MutationListener {
 	
-	//public GPCandidateProgram onMutationSelection(List<GPCandidateProgram> pop, GPCandidateProgram parent);
+	public void onMutationStart();
+	
+	public void onMutationEnd();
 	
 	/**
 	 * Called after selection and mutation of an individual program.
@@ -37,7 +39,5 @@ public interface MutationListener {
 	 * mutation operation, or null if the mutation should be reverted.
 	 */
 	public CandidateProgram onMutation(CandidateProgram parent, CandidateProgram child);
-	
-	//public GPCandidateProgram onMutationAndSelection(GPCandidateProgram parent, GPCandidateProgram child);
 	
 }

@@ -102,6 +102,12 @@ public class LifeCycleManager {
 		}
 	}
 	
+	public void onInitialisationStart() {
+		for (InitialisationListener listener: initialisationListeners) {
+			listener.onInitialisationStart();
+		}
+	}
+	
 	public List<CandidateProgram> onInitialisation(List<CandidateProgram> pop) {
 		for (InitialisationListener listener: initialisationListeners) {
 			pop = listener.onInitialisation(pop);
@@ -114,12 +120,36 @@ public class LifeCycleManager {
 		return pop;
 	}
 	
+	public void onInitialisationEnd() {
+		for (InitialisationListener listener: initialisationListeners) {
+			listener.onInitialisationEnd();
+		}
+	}
+	
+	public void onElitismStart() {
+		for (ElitismListener listener: elitismListeners) {
+			listener.onElitismStart();
+		}
+	}
+	
 	public List<CandidateProgram> onElitism(List<CandidateProgram> elites) {
 		for (ElitismListener listener: elitismListeners) {
 			elites = listener.onElitism(elites);
 		}
 		
 		return elites;
+	}
+	
+	public void onElitismEnd() {
+		for (ElitismListener listener: elitismListeners) {
+			listener.onElitismEnd();
+		}
+	}
+	
+	public void onPoolSelectionStart() {
+		for (PoolSelectionListener listener: poolSelectionListeners) {
+			listener.onPoolSelectionStart();
+		}
 	}
 
 	public List<CandidateProgram> onPoolSelection(List<CandidateProgram> pool) {
@@ -134,6 +164,18 @@ public class LifeCycleManager {
 		return pool;
 	}
 	
+	public void onPoolSelectionEnd() {
+		for (PoolSelectionListener listener: poolSelectionListeners) {
+			listener.onPoolSelectionEnd();
+		}
+	}
+	
+	public void onCrossoverStart() {
+		for (CrossoverListener listener: crossoverListeners) {
+			listener.onCrossoverStart();
+		}
+	}
+	
 	public CandidateProgram[] onCrossover(CandidateProgram[] parents,
 			CandidateProgram[] children) {
 		for (CrossoverListener listener: crossoverListeners) {
@@ -146,7 +188,19 @@ public class LifeCycleManager {
 		
 		return children;
 	}
+	
+	public void onCrossoverEnd() {
+		for (CrossoverListener listener: crossoverListeners) {
+			listener.onCrossoverEnd();
+		}
+	}
 
+	public void onMutationStart() {
+		for (MutationListener listener: mutationListeners) {
+			listener.onMutationStart();
+		}
+	}
+	
 	public CandidateProgram onMutation(CandidateProgram parent,
 			CandidateProgram child) {
 		for (MutationListener listener: mutationListeners) {
@@ -158,6 +212,18 @@ public class LifeCycleManager {
 		}
 		
 		return child;
+	}
+	
+	public void onMutationEnd() {
+		for (MutationListener listener: mutationListeners) {
+			listener.onMutationEnd();
+		}
+	}
+	
+	public void onReproductionStart() {
+		for (ReproductionListener listener: reproductionListeners) {
+			listener.onReproductionStart();
+		}
 	}
 
 	public CandidateProgram onReproduction(CandidateProgram child) {
@@ -172,15 +238,21 @@ public class LifeCycleManager {
 		return child;
 	}
 	
+	public void onReproductionEnd() {
+		for (ReproductionListener listener: reproductionListeners) {
+			listener.onReproductionEnd();
+		}
+	}
+	
 	public void onGenerationStart() {
 		for (GenerationListener listener: generationListeners) {
 			listener.onGenerationStart();
 		}
 	}
 	
-	/*public List<CandidateProgram> onGeneration(List<CandidateProgram> pop) {
+	public List<CandidateProgram> onGeneration(List<CandidateProgram> pop) {
 		for (GenerationListener listener: generationListeners) {
-			pop = listener.onGenerationStart(pop);
+			pop = listener.onGeneration(pop);
 			
 			if (pop == null) {
 				break;
@@ -188,7 +260,7 @@ public class LifeCycleManager {
 		}
 		
 		return pop;
-	}*/
+	}
 	
 	public void onGenerationEnd() {
 		for (GenerationListener listener: generationListeners) {

@@ -24,7 +24,7 @@ import java.util.List;
 import org.epochx.core.Controller;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.life.GenerationListener;
+import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
 
@@ -37,7 +37,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * position is chosen in both parent programs and all the codons from that 
  * point onwards are exchanged.
  */
-public class OnePointCrossover implements GECrossover, GenerationListener {
+public class OnePointCrossover implements GECrossover {
 	/*
 	 * TODO This seems ridiculous. Crossing over like this will completely 
 	 * remove all context so how can it crossover building blocks!?
@@ -56,9 +56,14 @@ public class OnePointCrossover implements GECrossover, GenerationListener {
 	public OnePointCrossover(GEModel model) {
 		this.model = model;
 		
-		Controller.getLifeCycleManager().addGenerationListener(this);
-		
 		initialise();
+		
+		Controller.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationStart() {
+				initialise();
+			}
+		});
 	}
 	
 	/*
@@ -105,33 +110,4 @@ public class OnePointCrossover implements GECrossover, GenerationListener {
 		return new GECandidateProgram[]{child1, child2};
 	}
 
-	/**
-	 * The order for the operator statistics returned for one point crossover 
-	 * are:
-	 * <ol>
-	 * 		<li>int - crossover point for the first parent</li>
-	 * 		<li>int - crossover point for the second parent</li>
-	 * </ol>
-	 * 
-	 * @return an object[] array containing the above statistics about the 
-	 * previous crossover operation.
-	 */
-	@Override
-	public Object[] getOperatorStats() {
-		return new Integer[]{crossoverPoint1, crossoverPoint2};
-	}
-
-	/**
-	 * Called at the start of each generation. For each generation we should 
-	 * reset all parameters taken from the model incase they've changed. The 
-	 * generation event is then CONFIRMed.
-	 */
-	@Override
-	public void onGenerationStart() {
-		// Reset.
-		initialise();
-	}
-	
-	@Override
-	public void onGenerationEnd() {}
 }

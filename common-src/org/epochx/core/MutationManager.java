@@ -7,7 +7,7 @@ import org.epochx.representation.*;
 
 import static org.epochx.stats.StatField.*;
 
-public class MutationManager implements GenerationListener {
+public class MutationManager {
 	
 	// The controlling model.
 	private Model model;
@@ -38,9 +38,18 @@ public class MutationManager implements GenerationListener {
 	public MutationManager(Model model) {
 		this.model = model;
 
+		// Initialise parameters.
+		initialise();
+		
 		// Register interest in generation events so we can reset.
 		lifeCycle = Controller.getLifeCycleManager();
-		lifeCycle.addGenerationListener(this);
+		
+		lifeCycle.addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationStart() {
+				initialise();
+			}
+		});
 
 		initialise();
 	}
@@ -127,18 +136,4 @@ public class MutationManager implements GenerationListener {
 	public int getRevertedCount() {
 		return reversions;
 	}
-	
-	/**
-	 * Called after each generation. For each generation we should reset all 
-	 * parameters taken from the model incase they've changed. The generation
-	 * event is then CONFIRMed.
-	 */
-	@Override
-	public void onGenerationStart() {
-		// Reset GPMutation.
-		initialise();
-	}
-	
-	@Override
-	public void onGenerationEnd() {}
 }

@@ -28,8 +28,6 @@ public interface MutationListener {
 	
 	public void onMutationStart();
 	
-	public void onMutationEnd();
-	
 	/**
 	 * Called after selection and mutation of an individual program.
 	 * 
@@ -40,4 +38,5 @@ public interface MutationListener {
 	 */
 	public CandidateProgram onMutation(CandidateProgram parent, CandidateProgram child);
 	
+	public void onMutationEnd();
 }

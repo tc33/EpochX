@@ -31,8 +31,6 @@ public interface InitialisationListener {
 
 	public void onInitialisationStart();
 	
-	public void onInitialisationEnd();
-	
 	/**
 	 * Called after initialisation.
 	 * 
@@ -42,4 +40,5 @@ public interface InitialisationListener {
 	 */
 	public List<CandidateProgram> onInitialisation(List<CandidateProgram> pop);
 	
+	public void onInitialisationEnd();
 }

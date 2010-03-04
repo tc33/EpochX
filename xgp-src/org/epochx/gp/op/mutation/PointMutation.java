@@ -146,8 +146,4 @@ public class PointMutation implements GPMutation {
 		return equal;
 	}
 
-	@Override
-	public Object[] getOperatorStats() {
-		return null;
-	}
 }

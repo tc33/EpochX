@@ -22,7 +22,7 @@ package org.epochx.gp.op.crossover;
 import org.epochx.core.*;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
-import org.epochx.life.GenerationListener;
+import org.epochx.life.*;
 import org.epochx.representation.*;
 import org.epochx.tools.random.RandomNumberGenerator;
 
@@ -36,7 +36,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * a function swap point. The default constructor uses the typical rates of 90% 
  * function node swap point and 10% terminal node swap points.
  */
-public class KozaCrossover implements GPCrossover, GenerationListener {
+public class KozaCrossover implements GPCrossover {
 
 	// The current controlling model.
 	private GPModel model;
@@ -57,7 +57,14 @@ public class KozaCrossover implements GPCrossover, GenerationListener {
 		this.model = model;
 		this.functionSwapProbability = functionSwapProbability;
 		
-		Controller.getLifeCycleManager().addGenerationListener(this);
+		initialise();
+		
+		Controller.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationStart() {
+				initialise();
+			}
+		});
 	}
 	
 	/**
@@ -202,16 +209,7 @@ public class KozaCrossover implements GPCrossover, GenerationListener {
 		return result;
 	}
 
-	@Override
-	public void onGenerationStart() {
+	public void initialise() {
 		rng = model.getRNG();
-	}
-	
-	@Override
-	public void onGenerationEnd() {}
-
-	@Override
-	public Object[] getOperatorStats() {
-		return null;
 	}
 }

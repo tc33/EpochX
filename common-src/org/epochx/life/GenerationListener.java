@@ -19,6 +19,10 @@
  */
 package org.epochx.life;
 
+import java.util.List;
+
+import org.epochx.representation.CandidateProgram;
+
 
 /**
  *
@@ -37,6 +41,8 @@ public interface GenerationListener {
 	 * population resulting from this generation.
 	 */
 	public void onGenerationStart();
+	
+	public List<CandidateProgram> onGeneration(List<CandidateProgram> pop);
 	
 	public void onGenerationEnd();
 	

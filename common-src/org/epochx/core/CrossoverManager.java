@@ -8,7 +8,7 @@ import org.epochx.op.*;
 import org.epochx.representation.*;
 
 
-public class CrossoverManager implements GenerationListener {
+public class CrossoverManager {
 
 	// The controlling model.
 	private Model model;
@@ -39,11 +39,18 @@ public class CrossoverManager implements GenerationListener {
 	public CrossoverManager(Model model) {
 		this.model = model;
 		
-		// Register interest in generation events so we can reset.
-		lifeCycle = Controller.getLifeCycleManager();
-		lifeCycle.addGenerationListener(this);
-
+		// Initialise parameters.
 		initialise();
+		
+		// Get a reference to the life cycle manager for convenience.
+		lifeCycle = Controller.getLifeCycleManager();
+		
+		lifeCycle.addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationStart() {
+				initialise();
+			}
+		});
 	}
 	
 	/*
@@ -147,17 +154,4 @@ public class CrossoverManager implements GenerationListener {
 		return reversions;
 	}
 	
-	/**
-	 * Called after each generation. For each generation we should reset all 
-	 * parameters taken from the model incase they've changed. The generation
-	 * event is then CONFIRMed.
-	 */
-	@Override
-	public void onGenerationStart() {
-		// Reset GPCrossover.
-		initialise();
-	}
-	
-	@Override
-	public void onGenerationEnd() {}
 }

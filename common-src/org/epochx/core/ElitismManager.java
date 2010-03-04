@@ -6,7 +6,7 @@ import org.epochx.life.*;
 import org.epochx.model.Model;
 import org.epochx.representation.CandidateProgram;
 
-public class ElitismManager implements GenerationListener {
+public class ElitismManager {
 	
 	// The controlling model.
 	private Model model;
@@ -27,12 +27,17 @@ public class ElitismManager implements GenerationListener {
 	public ElitismManager(Model model) {
 		this.model = model;
 		
-		// Register interest in generation events so we can reset.
-		lifeCycle = Controller.getLifeCycleManager();
-		lifeCycle.addGenerationListener(this);
-		
 		// Initialise parameters.
 		initialise();
+		
+		// Register interest in generation events so we can reset.
+		lifeCycle = Controller.getLifeCycleManager();
+		lifeCycle.addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationStart() {
+				initialise();
+			}
+		});
 	}
 	
 	/*
@@ -84,18 +89,5 @@ public class ElitismManager implements GenerationListener {
 		
 		return elites;
 	}
-	
-	/**
-	 * Called after each generation. For each generation we should reset all 
-	 * parameters taken from the model incase they've changed. The generation
-	 * event is then CONFIRMed.
-	 */
-	@Override
-	public void onGenerationStart() {
-		// Reset.
-		initialise();
-	}
-	
-	@Override
-	public void onGenerationEnd() {}
+
 }

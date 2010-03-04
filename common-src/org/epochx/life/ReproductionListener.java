@@ -28,8 +28,6 @@ public interface ReproductionListener {
 	
 	public void onReproductionStart();
 	
-	public void onReproductionEnd();
-	
 	/**
 	 * Called after selection of an individual to be reproduced into the next 
 	 * generation.
@@ -40,4 +38,5 @@ public interface ReproductionListener {
 	 */
 	public CandidateProgram onReproduction(CandidateProgram child);
 	
+	public void onReproductionEnd();
 }

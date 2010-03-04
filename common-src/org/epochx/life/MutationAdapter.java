@@ -5,6 +5,9 @@ import org.epochx.representation.CandidateProgram;
 public abstract class MutationAdapter implements MutationListener {
 
 	@Override
+	public void onMutationStart() {}
+	
+	@Override
 	public CandidateProgram onMutation(CandidateProgram parent,
 			CandidateProgram child) {
 		return child;
@@ -12,8 +15,5 @@ public abstract class MutationAdapter implements MutationListener {
 
 	@Override
 	public void onMutationEnd() {}
-
-	@Override
-	public void onMutationStart() {}
 
 }

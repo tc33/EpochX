@@ -5,12 +5,12 @@ import java.util.*;
 import org.epochx.core.Controller;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
-import org.epochx.life.GenerationListener;
+import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.*;
 import org.epochx.tools.random.RandomNumberGenerator;
 
-public class WhighamCrossover implements GRCrossover, GenerationListener {
+public class WhighamCrossover implements GRCrossover {
 
 	// The current controlling model.
 	private GRModel model;
@@ -21,9 +21,14 @@ public class WhighamCrossover implements GRCrossover, GenerationListener {
 	public WhighamCrossover(GRModel model) {
 		this.model = model;
 		
-		Controller.getLifeCycleManager().addGenerationListener(this);
-		
 		initialise();
+		
+		Controller.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationStart() {
+				initialise();
+			}
+		});
 	}
 	
 	/*
@@ -77,22 +82,4 @@ public class WhighamCrossover implements GRCrossover, GenerationListener {
 		return new GRCandidateProgram[]{child1, child2};
 	}
 
-	@Override
-	public Object[] getOperatorStats() {
-		return null;
-	}
-
-	/**
-	 * Called at the start of each generation. For each generation we should 
-	 * reset all parameters taken from the model incase they've changed. The 
-	 * generation event is then CONFIRMed.
-	 */
-	@Override
-	public void onGenerationStart() {
-		// Reset.
-		initialise();
-	}
-	
-	@Override
-	public void onGenerationEnd() {}
 }

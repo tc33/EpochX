@@ -5,7 +5,7 @@ import org.epochx.model.Model;
 import org.epochx.op.ProgramSelector;
 import org.epochx.representation.CandidateProgram;
 
-public class ReproductionManager implements GenerationListener {
+public class ReproductionManager {
 	
 	// The controlling model.
 	private Model model;
@@ -31,8 +31,17 @@ public class ReproductionManager implements GenerationListener {
 	public ReproductionManager(Model model) {
 		this.model = model;
 		
+		// Initialise parameters.
+		initialise();
+		
 		lifeCycle = Controller.getLifeCycleManager();
-		lifeCycle.addGenerationListener(this);
+		lifeCycle.addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationStart() {
+				// Initialise parameters.
+				initialise();
+			}
+		});
 		
 		// Initialise parameters.
 		initialise();
@@ -98,18 +107,4 @@ public class ReproductionManager implements GenerationListener {
 	public int getReversions() {
 		return reversions;
 	}
-	
-	/**
-	 * Called after each generation. For each generation we should reset all 
-	 * parameters taken from the model incase they've changed. The generation
-	 * event is then CONFIRMed.
-	 */
-	@Override
-	public void onGenerationStart() {
-		// Reset.
-		initialise();
-	}
-	
-	@Override
-	public void onGenerationEnd() {}
 }

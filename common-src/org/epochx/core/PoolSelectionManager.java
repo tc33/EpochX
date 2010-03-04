@@ -7,7 +7,7 @@ import org.epochx.model.Model;
 import org.epochx.op.PoolSelector;
 import org.epochx.representation.CandidateProgram;
 
-public class PoolSelectionManager implements GenerationListener {
+public class PoolSelectionManager {
 	
 	// The controlling model.
 	private Model model;
@@ -38,10 +38,16 @@ public class PoolSelectionManager implements GenerationListener {
 	public PoolSelectionManager(Model model) {
 		this.model = model;
 		
-		lifeCycle = Controller.getLifeCycleManager();
-		lifeCycle.addGenerationListener(this);
-		
+		// Initialise parameters.
 		initialise();
+		
+		lifeCycle = Controller.getLifeCycleManager();
+		lifeCycle.addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationStart() {
+				initialise();
+			}
+		});
 	}
 	
 	/*
@@ -94,18 +100,4 @@ public class PoolSelectionManager implements GenerationListener {
 	public int getReversions() {
 		return reversions;
 	}
-	
-	/**
-	 * Called after each generation. For each generation we should reset all 
-	 * parameters taken from the model incase they've changed. The generation
-	 * event is then CONFIRMed.
-	 */
-	@Override
-	public void onGenerationStart() {
-		// Reset.
-		initialise();
-	}
-	
-	@Override
-	public void onGenerationEnd() {}
 }

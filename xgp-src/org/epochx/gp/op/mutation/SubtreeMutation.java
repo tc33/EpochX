@@ -92,10 +92,5 @@ public class SubtreeMutation implements GPMutation {
 		
 		return program;
 	}
-
-	@Override
-	public Object[] getOperatorStats() {
-		return null;
-	}
-
+	
 }

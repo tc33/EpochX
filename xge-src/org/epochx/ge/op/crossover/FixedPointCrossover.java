@@ -24,7 +24,7 @@ import java.util.List;
 import org.epochx.core.Controller;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.life.GenerationListener;
+import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
 
@@ -46,7 +46,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * 
  * @see OnePointCrossover
  */
-public class FixedPointCrossover implements GECrossover, GenerationListener {
+public class FixedPointCrossover implements GECrossover {
 
 	// The controlling model.
 	private GEModel model;
@@ -65,9 +65,14 @@ public class FixedPointCrossover implements GECrossover, GenerationListener {
 	public FixedPointCrossover(GEModel model) {
 		this.model = model;
 		
-		Controller.getLifeCycleManager().addGenerationListener(this);
-		
 		initialise();
+		
+		Controller.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationStart() {
+				initialise();
+			}
+		});
 	}
 	
 	/*
@@ -120,33 +125,4 @@ public class FixedPointCrossover implements GECrossover, GenerationListener {
 
 		return new GECandidateProgram[]{child1, child2};
 	}
-
-	/**
-	 * The order for the operator statistics returned for fixed point crossover 
-	 * are:
-	 * <ol>
-	 * 		<li>int - crossover point</li>
-	 * </ol>
-	 * 
-	 * @return an object[] array containing the above statistics about the 
-	 * previous crossover operation.
-	 */
-	@Override
-	public Object[] getOperatorStats() {
-		return new Object[]{crossoverPoint};
-	}
-	
-	/**
-	 * Called after each generation. For each generation we should reset all 
-	 * parameters taken from the model incase they've changed. The generation
-	 * event is then CONFIRMed.
-	 */
-	@Override
-	public void onGenerationStart() {
-		// Reset.
-		initialise();
-	}
-	
-	@Override
-	public void onGenerationEnd() {}
 }

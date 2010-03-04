@@ -1,17 +1,20 @@
 package org.epochx.life;
 
+import java.util.List;
+
+import org.epochx.representation.CandidateProgram;
+
 public abstract class GenerationAdapter implements GenerationListener {
 
 	@Override
-	public void onGenerationEnd() {
-		// TODO Auto-generated method stub
-
-	}
-
+	public void onGenerationStart() {}
+	
 	@Override
-	public void onGenerationStart() {
-		// TODO Auto-generated method stub
-
+	public List<CandidateProgram> onGeneration(List<CandidateProgram> pop) {
+		return pop;
 	}
+	
+	@Override
+	public void onGenerationEnd() {}
 
 }

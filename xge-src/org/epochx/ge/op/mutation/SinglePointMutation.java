@@ -23,7 +23,7 @@ import org.epochx.core.Controller;
 import org.epochx.ge.codon.CodonGenerator;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.life.GenerationListener;
+import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
 
@@ -37,7 +37,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * mutation then a replacement codon is generated using the CodonGenerator 
  * specified in the model.
  */
-public class SinglePointMutation implements GEMutation, GenerationListener {
+public class SinglePointMutation implements GEMutation {
 
 	// The current controlling model.
 	private GEModel model;
@@ -57,7 +57,14 @@ public class SinglePointMutation implements GEMutation, GenerationListener {
 	public SinglePointMutation(GEModel model) {
 		this.model = model;
 		
-		Controller.getLifeCycleManager().addGenerationListener(this);
+		initialise();
+		
+		Controller.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationStart() {
+				initialise();
+			}
+		});
 	}
 	
 	/**
@@ -81,27 +88,9 @@ public class SinglePointMutation implements GEMutation, GenerationListener {
 		return program;
 	}
 
-	/**
-	 * The order for the operator statistics returned for single point mutation 
-	 * are:
-	 * <ol>
-	 * 		<li>int - selected point for the mutation</li>
-	 * </ol>
-	 * 
-	 * @return an object[] array containing the above statistics about the 
-	 * previous mutation operation.
-	 */
-	@Override
-	public Object[] getOperatorStats() {
-		return new Integer[]{mutationPoint};
-	}
-
-	@Override
-	public void onGenerationStart() {
+	public void initialise() {
 		rng = model.getRNG();
 		codonGenerator = model.getCodonGenerator();
 	}
 
-	@Override
-	public void onGenerationEnd() {}
 }

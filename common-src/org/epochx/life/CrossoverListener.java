@@ -25,8 +25,6 @@ public interface CrossoverListener {
 
 	public void onCrossoverStart();
 	
-	public void onCrossoverEnd();
-	
 	/**
 	 * Called after selection and crossover of 2 individuals.
 	 * 
@@ -37,5 +35,7 @@ public interface CrossoverListener {
 	 * crossover operation, or null if the crossover should be reverted.
 	 */
 	public CandidateProgram[] onCrossover(CandidateProgram[] parents, CandidateProgram[] children);
+	
+	public void onCrossoverEnd();
 	
 }

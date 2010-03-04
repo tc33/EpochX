@@ -23,7 +23,7 @@ import org.epochx.core.Controller;
 import org.epochx.ge.codon.CodonGenerator;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.life.GenerationListener;
+import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
 
@@ -35,7 +35,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * PointMutation constructor. If the codon does undergo mutation then a 
  * replacement codon is generated using the CodonGenerator specified in the model.
  */
-public class PointMutation implements GEMutation, GenerationListener {
+public class PointMutation implements GEMutation {
 
 	// The current controlling model.
 	private GEModel model;
@@ -72,9 +72,14 @@ public class PointMutation implements GEMutation, GenerationListener {
 		this.model = model;
 		this.pointProbability = pointProbability;
 		
-		Controller.getLifeCycleManager().addGenerationListener(this);
+		Controller.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationStart() {
+				initialise();
+			}
+		});
 	}
-	
+		
 	/**
 	 * Perform point mutation on the given GECandidateProgram. Each codon in the 
 	 * program's chromosome is considered in turn, with each having the given 
@@ -104,20 +109,9 @@ public class PointMutation implements GEMutation, GenerationListener {
 		return program;
 	}
 
-	/**
-	 * No operator statistics are available for point mutation.
-	 */
-	@Override
-	public Object[] getOperatorStats() {
-		return null;
-	}
-
-	@Override
-	public void onGenerationStart() {
+	public void initialise() {
 		rng = model.getRNG();
 		codonGenerator = model.getCodonGenerator();
 	}
 
-	@Override
-	public void onGenerationEnd() {}
 }

@@ -31,8 +31,6 @@ public interface PoolSelectionListener {
 
 	public void onPoolSelectionStart();
 	
-	public void onPoolSelectionEnd();
-	
 	/**
 	 * Called after selection of the breeding pool. If the size of the breeding
 	 * pool is set in the model to <=0, then this method will still be called 
@@ -46,4 +44,5 @@ public interface PoolSelectionListener {
 	 */
 	public List<CandidateProgram> onPoolSelection(List<CandidateProgram> pool);
 	
+	public void onPoolSelectionEnd();
 }

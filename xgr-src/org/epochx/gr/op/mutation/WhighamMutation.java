@@ -6,12 +6,12 @@ import org.epochx.core.Controller;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.op.init.GrowInitialiser;
 import org.epochx.gr.representation.GRCandidateProgram;
-import org.epochx.life.GenerationListener;
+import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.*;
 import org.epochx.tools.random.RandomNumberGenerator;
 
-public class WhighamMutation implements GRMutation, GenerationListener {
+public class WhighamMutation implements GRMutation {
 
 	private GRModel model;
 	
@@ -24,9 +24,14 @@ public class WhighamMutation implements GRMutation, GenerationListener {
 		
 		init = new GrowInitialiser(model);
 		
-		Controller.getLifeCycleManager().addGenerationListener(this);
-		
 		initialise();
+		
+		Controller.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationStart() {
+				initialise();
+			}
+		});
 	}
 	
 	@Override
@@ -50,11 +55,6 @@ public class WhighamMutation implements GRMutation, GenerationListener {
 		return mutatedProgram;
 	}
 
-	@Override
-	public Object[] getOperatorStats() {
-		return null;
-	}
-	
 	/*
 	 * Initialises WhighamMutation, in particular all parameters from the 
 	 * model should be refreshed incase they've changed since the last call.
@@ -62,18 +62,4 @@ public class WhighamMutation implements GRMutation, GenerationListener {
 	private void initialise() {
 		rng = model.getRNG();
 	}
-	
-	/**
-	 * Called at the start of each generation. For each generation we should 
-	 * reset all parameters taken from the model incase they've changed. The 
-	 * generation event is then CONFIRMed.
-	 */
-	@Override
-	public void onGenerationStart() {
-		// Reset.
-		initialise();
-	}
-
-	@Override
-	public void onGenerationEnd() {}
 }

@@ -22,14 +22,14 @@ package org.epochx.gp.op.crossover;
 import org.epochx.core.*;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
-import org.epochx.life.GenerationListener;
+import org.epochx.life.*;
 import org.epochx.representation.*;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
  * This class implements standard crossover with uniform swap points.
  */
-public class UniformPointCrossover implements GPCrossover, GenerationListener {
+public class UniformPointCrossover implements GPCrossover {
 
 	// The current controlling model.
 	private GPModel model;
@@ -40,7 +40,14 @@ public class UniformPointCrossover implements GPCrossover, GenerationListener {
 	public UniformPointCrossover(GPModel model) {
 		this.model = model;
 		
-		Controller.getLifeCycleManager().addGenerationListener(this);
+		initialise();
+		
+		Controller.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationStart() {
+				initialise();
+			}
+		});
 	}
 	
 	/**
@@ -74,17 +81,8 @@ public class UniformPointCrossover implements GPCrossover, GenerationListener {
 		return new GPCandidateProgram[]{program1, program2};
 	}
 
-	@Override
-	public void onGenerationStart() {
+	public void initialise() {
 		rng = model.getRNG();
-	}
-	
-	@Override
-	public void onGenerationEnd(){}
-
-	@Override
-	public Object[] getOperatorStats() {
-		return null;
 	}
 	
 }

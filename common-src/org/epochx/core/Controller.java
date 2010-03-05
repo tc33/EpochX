@@ -21,65 +21,83 @@
  */
 package org.epochx.core;
 
+import javax.swing.JFormattedTextField;
+
 import org.epochx.core.Controller;
-import org.epochx.life.LifeCycleManager;
+import org.epochx.life.*;
 import org.epochx.model.Model;
 import org.epochx.stats.*;
 
 /**
- * The Controller class provides the method for executing multiple GP runs 
- * and so can be considered the key class for starting using EpochX. Even when 
- * only executing one GP run, this method should be used rather than working  
- * with <code>GPRun</code> directly.
+ * The entry point for evolution in <a href="http://www.epochx.org" 
+ * target="_parent">EpochX</a>. This class provides a number of <code>static
+ * </code> methods to start execution of an evolutionary run (or multiple 
+ * runs) and to interact with a run while it proceeds.
  * 
- * <p>To evolve a solution with EpochX the <code>Controller.run(GPModel)</code> 
- * method should be called, passing in a GPModel which defines the control 
- * parameters.
+ * <p>
+ * An evolutionary run can be started with a call to the class's 
+ * <code>Controller.run(Model)</code> method. This will trigger a series of 
+ * executions which will proceed according to the parameters retrieved from the
+ * provided {@link Model}. Prior to calling the <code>run</code> method it is 
+ * typical to arrange for some form of output to be generated each generation, 
+ * each run or even each crossover or mutation. A wide range of statistics are 
+ * available from the {@link StatsManager}. An instance of <code>StatsManager
+ * </code> is retrievable through this class's <code>getStatsManager()</code>
+ * <code>static</code> method. A listener model is employed through the 
+ * {@link LifeCycleManager} to allow events such as a generation starting, or 
+ * crossover being carried out, to be handled and responded to. This is 
+ * commonly combined with the <code>StatsManager</code> to output statistics 
+ * each generation or run.
+ * 
+ * <p>
+ * Note that use of this class is not thread safe and use of threads with 
+ * EpochX in general is highly discouraged.
+ * 
+ * @see RunManager
  */
 public class Controller {
 
-	// Singleton controller.
+	// Singleton controller instance.
 	private static Controller controller;
+	
+	// The run controller.
+	private static RunManager run;
 	
 	// The manager that keeps track of life cycle events and their listeners.
 	private LifeCycleManager lifeCycle;
 	
+	// The manager that holds and processes run data.
 	private StatsManager stats;
 	
-	private static RunManager run;
-	
 	/*
-	 * Private constructor. The only methods are the static run() and 
-	 * getLifeCycleManager().
+	 * Private constructor. Execution should be through the static methods.
 	 */
 	private Controller() {
-		// Setup life cycle manager.
+		// Setup primary components.
 		lifeCycle = new LifeCycleManager();
-		
 		stats = new StatsManager();
-		
 		run = new RunManager();
 	}
 	
 	/**
-	 * Executes one or more GP runs. The number of runs is set within the model 
-	 * provided as an argument. This GPModel also supplies all the other 
-	 * control parameters for the runs - each run is executed using this same 
-	 * model object so will have identical parameters for comparison unless 
-	 * changed during execution, for example, in another thread. (Although note 
-	 * that unless stated elsewhere, this version of EpochX is not considered 
-	 * thread safe).
+	 * Executes one or more evolutionary runs configured according to the 
+	 * provided <code>Model</code>. The number of runs and other control 
+	 * parameters are loaded from the <code>Model</code> and so each run will
+	 * use the same parameters unless the model returns different values 
+	 * throughout execution. All parameters will be reloaded at the start of 
+	 * each generation allowing dynamic parameters to be used.
 	 * 
-	 * @param <TYPE> The return type of the <code>CandidatePrograms</code> 
-	 * 				 generated.
-	 * @param model  The GPModel which defines the control parameters for the 
-	 * 				 runs.
-	 * @return An array of the GPRun objects which were executed on the model.
-	 * 		   The details of each run can be retrieved from this object.
-	 * @see GPRun
-	 * @see GPModel
+	 * <p>
+	 * In order to interact with the progress of the evolution, use of the 
+	 * <code>StatsManager</code> and potentially the <code>LifeCycleManager
+	 * </code> will be required prior to calling this method.
+	 * 
+	 * @param model  the <code>model</code> which defines the control 
+	 * 				 parameters for all the runs.
+	 * @see RunManager
 	 */
 	public static void run(Model model) {
+		// Ensure our singleton instance has been constructed.
 		if (controller == null) {
 			controller = new Controller();
 		}
@@ -87,29 +105,69 @@ public class Controller {
 		// Set the stats engine straight away so it can be used.
 		controller.stats.setStatsEngine(model.getStatsEngine());
 		
+		// Execute all the runs.
 		for (int i=0; i<model.getNoRuns(); i++) {
 			run.run(model, i);
 		}
 	}
 	
 	/**
-	 * Returns the controller's life cycle manager. Only one life cycle manager
-	 * is available in a Controller. The life cycle manager handles all life 
-	 * cycle events that occur during a call to run() and informs the necessary 
-	 * listeners.
+	 * Returns the life cycle manager which handles all life cycle events 
+	 * throughout execution of the <code>run</code> method. The life cycle 
+	 * manager receives details of all events and then informs the necessary 
+	 * listeners. Most use is through the <code>addXXXListener</code> methods,
+	 * and typically with an anonymous class.
 	 * 
-	 * @param <TYPE> the data-type of the program's being evolved.
-	 * @return the life cycle manager for the controller.
+	 * <h4>Example use of <code>LifeCycleManager's</code> listener model:</h4>
+	 * 
+	 * <pre>
+     * Controller.getLifeCycleManager().addRunListener(new RunAdapter() {
+	 *     public void onRunStart() {
+	 *         //... do something ...
+	 *     }
+	 * });
+	 * </pre>
+	 * 
+	 * @return the life cycle manager instance that manages life cycle events 
+	 * throughout execution with this <code>Controller</code>.
 	 */
 	public static LifeCycleManager getLifeCycleManager() {
+		// Ensure our singleton instance has been constructed.
 		if (controller == null) {
 			controller = new Controller();
 		}
-		
+
 		return controller.lifeCycle;
 	}
 	
+	/**
+	 * Returns the stats manager which is responsible for generating and 
+	 * distributing data and statistics about runs as they progress. 
+	 * 
+	 * <p>
+	 * It would be very common to combine use of the stats manager with use of 
+	 * the life cycle manager in order to retrieve statistics each generation, 
+	 * each run or upon some other event.
+	 * 
+	 * <h4>Example use of statistics generation:</h4>
+	 * 
+	 * <pre>
+     * Controller.getLifeCycleManager().addRunListener(new RunAdapter() {
+	 *     public void onRunStart() {
+	 *         Controller.getStatsManager().printRunStats(new String[]{RUN_NUMBER});
+	 *     }
+	 * });
+	 * </pre>
+	 * 
+	 * <p>
+	 * The above code example will print the run number to the console at the 
+	 * start of each run.
+	 * 
+	 * @return the stats manager which handles data and statistics about runs 
+	 * performed with this <code>Controller</code>.
+	 */
 	public static StatsManager getStatsManager() {
+		// Ensure our singleton instance has been constructed.
 		if (controller == null) {
 			controller = new Controller();
 		}

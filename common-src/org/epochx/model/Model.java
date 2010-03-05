@@ -43,6 +43,13 @@ public interface Model {
 
 	public double getTerminationFitness();
 	
+	/**
+	 * Evolutionary algorithms are inherently non-deterministic, so the result of 
+	 * multiple calls to the <code>run</code> method with identical models will 
+	 * naturally produce different results if the random number generator in use by
+	 * the model is seeded differently.
+	 * @return
+	 */
 	public RandomNumberGenerator getRNG();
 	
 	public double getMutationProbability();

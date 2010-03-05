@@ -1,8 +1,8 @@
 /*  
- *  Copyright 2007-2008 Lawrence Beadle & Tom Castle
+ *  Copyright 2007-2010 Tom Castle & Lawrence Beadle
  *  Licensed under GNU General Public License
  * 
- *  This file is part of EpochX: genetic programming for research
+ *  This file is part of EpochX: genetic programming software for research
  *
  *  EpochX is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -11,11 +11,13 @@
  *
  *  EpochX is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
  * 
  *  You should have received a copy of the GNU General Public License
- *  along with EpochX.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with EpochX. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ *  The latest version is available from: http:/www.epochx.org
  */
 package org.epochx.core;
 
@@ -44,6 +46,8 @@ public class Controller {
 	
 	private StatsManager stats;
 	
+	private static RunManager run;
+	
 	/*
 	 * Private constructor. The only methods are the static run() and 
 	 * getLifeCycleManager().
@@ -53,6 +57,8 @@ public class Controller {
 		lifeCycle = new LifeCycleManager();
 		
 		stats = new StatsManager();
+		
+		run = new RunManager();
 	}
 	
 	/**
@@ -73,7 +79,7 @@ public class Controller {
 	 * @see GPRun
 	 * @see GPModel
 	 */
-	public static RunManager[] run(Model model) {
+	public static void run(Model model) {
 		if (controller == null) {
 			controller = new Controller();
 		}
@@ -81,14 +87,9 @@ public class Controller {
 		// Set the stats engine straight away so it can be used.
 		controller.stats.setStatsEngine(model.getStatsEngine());
 		
-		// Stash each GPRun object for retrieval of run details.
-		RunManager[] runs = new RunManager[model.getNoRuns()];
-		
 		for (int i=0; i<model.getNoRuns(); i++) {
-			runs[i] = RunManager.run(i, model);
+			run.run(model, i);
 		}
-
-		return runs;
 	}
 	
 	/**

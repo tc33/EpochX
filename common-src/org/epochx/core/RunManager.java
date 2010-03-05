@@ -1,13 +1,33 @@
+/*  
+ *  Copyright 2007-2010 Tom Castle & Lawrence Beadle
+ *  Licensed under GNU General Public License
+ * 
+ *  This file is part of EpochX: genetic programming software for research
+ *
+ *  EpochX is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  EpochX is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *  GNU General Public License for more details.
+ * 
+ *  You should have received a copy of the GNU General Public License
+ *  along with EpochX. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ *  The latest version is available from: http:/www.epochx.org
+ */
 package org.epochx.core;
 
 import static org.epochx.stats.StatField.*;
 
-import java.util.*;
+import java.util.List;
 
-import org.epochx.gp.model.*;
-import org.epochx.life.*;
-import org.epochx.model.*;
-import org.epochx.representation.*;
+import org.epochx.gp.model.GPModel;
+import org.epochx.model.Model;
+import org.epochx.representation.CandidateProgram;
 
 public class RunManager {
 	
@@ -24,21 +44,12 @@ public class RunManager {
 	// The fitness of the best program found so far during the run.
 	private double bestFitness;
 	
-	// The run start time in nano-seconds for measuring program length.
-	private long runStartTime;
-	
-	// The run end time in nano-seconds for measuring program length.
-	private long runEndTime;
-	
 	/*
 	 * Private constructor. The static factory method run(GPModel) should be 
 	 * used to create objects of GPRun and simultaneously execute them.
 	 */
-	private RunManager(Model model) {
-		this.model = model;
-		
+	public RunManager() {
 		// Initialise the run.
-		runEndTime = -1;
 		bestProgram = null;
 		bestFitness = Double.POSITIVE_INFINITY;
 		
@@ -57,27 +68,11 @@ public class RunManager {
 	 * 				 details about the run.
 	 * @see GPModel
 	 */
-	public static RunManager run(int runNo, Model model) {
-		// Create the GPRun object.
-		RunManager runner = new RunManager(model);
-		
-		// Run it.
-		runner.run(runNo);
-		
-		return runner;
-	}
-	
-	/*
-	 * This is the private method which actually does the work in this class. 
-	 * It is also the workhorse of the whole API as it creates the initial 
-	 * population, initiates the genetic operators and performs any elitism 
-	 * or pool selection in use.
-	 */
-	private void run(int runNo) {
+	public void run(Model model, int runNo) {
 		// Tell life cycle listener that a run is starting.
 		Controller.getLifeCycleManager().onRunStart();
 		
-		runStartTime = System.nanoTime();
+		long runStartTime = System.nanoTime();
 
 		Controller.getStatsManager().addRunData(RUN_NUMBER, runNo);
 		
@@ -110,9 +105,7 @@ public class RunManager {
 			Controller.getLifeCycleManager().onRunEnd();
 		}
 		
-		runEndTime = System.nanoTime();
-		
-		long runtime = runEndTime - runStartTime;
+		long runtime = System.nanoTime() - runStartTime;
 		
 		Controller.getStatsManager().addRunData(RUN_TIME, runtime);
 	}
@@ -133,43 +126,6 @@ public class RunManager {
 				Controller.getStatsManager().addRunData(RUN_FITNESS_MIN, bestFitness);
 				Controller.getStatsManager().addRunData(RUN_FITTEST_PROGRAM, bestProgram);
 			}
-		}
-	}
-	
-	/**
-	 * Retrieve the GPCandidateProgram with the best fitness found during the 
-	 * run. This GPCandidateProgram may have been found in any of the generations.
-	 * 
-	 * @return the GPCandidateProgram with the best fitness score found.
-	 */
-	public CandidateProgram getBestProgram() {
-		return bestProgram;
-	}
-
-	/**
-	 * Retrieve the fitness score of the GPCandidateProgram returned by 
-	 * getBestProgram(). A lower fitness score is considered better than a 
-	 * higher fitness score.
-	 * 
-	 * @return the fitness score of the best GPCandidateProgram found during 
-	 * 		   execution.
-	 */
-	public double getBestFitness() {
-		return bestFitness;
-	}
-	
-	/**
-	 * Retrieve the time in nano-seconds of the run. This will be either the 
-	 * length of the whole run if it's finished or the time up until now if 
-	 * the run is not finished.
-	 * 
-	 * @return The run time in nano-seconds.
-	 */
-	public long getRunTime() {
-		if (runEndTime == -1) {
-			return System.nanoTime() - runStartTime;
-		} else {
-			return runEndTime - runStartTime;
 		}
 	}
 }

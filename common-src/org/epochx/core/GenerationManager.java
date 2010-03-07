@@ -30,7 +30,15 @@ import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
+ * This component is responsible for carrying out single generations of an 
+ * evolutionary run. A generation receives a population of 
+ * <code>CandidatePrograms</code>, performs genetic operations (usually with 
+ * some selection pressure) on those programs and returns a new population of 
+ * <code>CandidatePrograms</code>.
  * 
+ * <p>
+ * An instance of <code>GenerationManager</code> is tied to a 
+ * <code>Model</code>.
  */
 public class GenerationManager {
 	
@@ -58,7 +66,8 @@ public class GenerationManager {
 	 * <code>Model</code> defines how the components will be configured for the
 	 * generation.
 	 * 
-	 * @param model 
+	 * @param model a model which will provide the control parameters for the 
+	 * generation.
 	 */
 	public GenerationManager(final Model model) {
 		this.model = model;
@@ -85,11 +94,12 @@ public class GenerationManager {
 	}
 	
 	/**
-	 * Performs one generation of a GP run. The method receives the previous 
-	 * population and then performs one generation and returns the resultant
-	 * population. 
+	 * Performs one generation of an evolutionary run. The method receives the 
+	 * previous population and then performs one generation and returns the 
+	 * resultant population. 
 	 * 
-	 * <p>A generation consists of the following sequence of events:
+	 * <p>
+	 * A generation consists of the following sequence of events:
 	 * 
 	 * <ol>
 	 *   <li>Select the elites and put them into the next population.</li>
@@ -106,12 +116,16 @@ public class GenerationManager {
 	 *   <li>Return the new population.</li>
 	 * </ol>
 	 * 
-	 * <p>The necessary events trigger life cycle events.
+	 * <p>
+	 * The necessary events trigger life cycle events.
 	 * 
-	 * @param previousPop
-	 * @return
+	 * @param previousPop the previous population which will undergo 
+	 * 				      manipulation to create the next population.
+	 * @return the population derived from performing genetic operations on the
+	 * 					  previous population.
 	 */
-	public List<CandidateProgram> generation(int generationNumber, List<CandidateProgram> previousPop) {
+	public List<CandidateProgram> generation(int generationNumber, 
+				List<CandidateProgram> previousPop) {
 		// Initialise all variables.
 		initialise();
 		

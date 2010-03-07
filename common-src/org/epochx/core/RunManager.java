@@ -93,7 +93,7 @@ public class RunManager {
 		Controller.getLifeCycleManager().onRunStart();
 		
 		// Record the start time.
-		long runStartTime = System.nanoTime();
+		final long runStartTime = System.nanoTime();
 
 		// Add the run number to the available stats data.
 		Controller.getStatsManager().addRunData(RUN_NUMBER, runNo);
@@ -103,10 +103,7 @@ public class RunManager {
 		
 		// Record best program so far and its fitness.
 		updateBestProgram(pop);
-		
-		// The fitness we're aiming for.
-		double terminationFitness = model.getTerminationFitness();
-		
+
 		// Execute each generation.
 		for (int gen=1; gen<=model.getNoGenerations(); gen++) {
 			// Perform the generation.
@@ -116,20 +113,19 @@ public class RunManager {
 			updateBestProgram(pop);
 			
 			// We might be finished?
-			terminationFitness = model.getTerminationFitness();
-			if (bestFitness <= terminationFitness) {
+			if (bestFitness <= model.getTerminationFitness()) {
+				Controller.getLifeCycleManager().onSuccess();
 				break;
 			}
 		}
+
+		// Inform everyone the run has ended.
+		Controller.getLifeCycleManager().onRunEnd();
 		
-		if (bestFitness <= terminationFitness) {
-			Controller.getLifeCycleManager().onRunEnd();
-		} else {
-			Controller.getLifeCycleManager().onRunEnd();
-		}
+		// Calculate how long the run took.
+		final long runtime = System.nanoTime() - runStartTime;
 		
-		long runtime = System.nanoTime() - runStartTime;
-		
+		// Add run time to stats data.
 		Controller.getStatsManager().addRunData(RUN_TIME, runtime);
 	}
 

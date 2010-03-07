@@ -27,6 +27,9 @@ public abstract class RunAdapter implements RunListener {
 	public void onRunStart() {}
 	
 	@Override
+	public void onSuccess() {}
+	
+	@Override
 	public void onRunEnd() {}
 	
 }

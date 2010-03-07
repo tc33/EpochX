@@ -117,6 +117,12 @@ public class LifeCycleManager {
 		}
 	}
 	
+	public void onSuccess() {
+		for (RunListener listener: runListeners) {
+			listener.onSuccess();
+		}
+	}
+	
 	public void onRunEnd() {
 		for (RunListener listener: runListeners) {
 			listener.onRunEnd();

@@ -27,8 +27,11 @@ package org.epochx.life;
 public interface RunListener {
 
 	public void onRunStart();
+
+	public void onSuccess();
 	
-	// This needs to contain information about whether the termination was due to fitness or generation expiry.
+	//public void onStagnate();
+	
 	public void onRunEnd();
 	
 }

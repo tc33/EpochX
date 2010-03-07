@@ -97,6 +97,8 @@ public class StatField {
 	 */
 	public static final String GEN_FITTEST_PROGRAM = "gen-fittest-program";
 	
+	public static final String GEN_REVERSIONS = "gen-reversions";
+	
 	/**
 	 * Requests a List<CandidateProgram> which is the population at the end 
 	 * of this generation.

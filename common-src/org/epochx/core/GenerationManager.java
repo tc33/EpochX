@@ -29,17 +29,20 @@ import org.epochx.model.Model;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
 
+/**
+ * 
+ */
 public class GenerationManager {
 	
 	// The controlling model.
-	private Model model;
+	private final Model model;
 	
 	// Core components.
-	private ElitismManager elitism;
-	private PoolSelectionManager poolSelection;
-	private CrossoverManager crossover;
-	private MutationManager mutation;
-	private ReproductionManager reproduction;
+	private final ElitismManager elitism;
+	private final PoolSelectionManager poolSelection;
+	private final CrossoverManager crossover;
+	private final MutationManager mutation;
+	private final ReproductionManager reproduction;
 	
 	private RandomNumberGenerator rng;
 
@@ -47,14 +50,17 @@ public class GenerationManager {
 	private double mutationProbability;
 	private double crossoverProbability;
 	
+	// Count of generation reversions.
 	private int reversions;
 	
 	/**
-	 * Constructs a generation component for performing each generation.
+	 * Constructs a generation manager for carrying out generations. The given 
+	 * <code>Model</code> defines how the components will be configured for the
+	 * generation.
 	 * 
 	 * @param model 
 	 */
-	public GenerationManager(Model model) {
+	public GenerationManager(final Model model) {
 		this.model = model;
 		
 		// Setup core components.
@@ -71,8 +77,9 @@ public class GenerationManager {
 	 * Reset the component with parameters from the model which might have 
 	 * changed since the last generation.
 	 */
-	private void reset() {
+	private void initialise() {
 		rng = model.getRNG();
+		reversions = 0;
 		mutationProbability = model.getMutationProbability();
 		crossoverProbability = model.getCrossoverProbability();
 	}
@@ -105,19 +112,22 @@ public class GenerationManager {
 	 * @return
 	 */
 	public List<CandidateProgram> generation(int generationNumber, List<CandidateProgram> previousPop) {
+		// Initialise all variables.
+		initialise();
+		
+		// Inform all listeners that a generation is starting.
 		Controller.getLifeCycleManager().onGenerationStart();
 		
-		reset();
+		// Record the generation start time.
+		final long startTime = System.nanoTime();
 		
-		long startTime = System.nanoTime();
-		
+		// Record the generation number in the stats data.
 		Controller.getStatsManager().addGenerationData(GEN_NUMBER, generationNumber);
 		
 		// Create next population to fill.
-		int popSize = model.getPopulationSize();
+		final int popSize = model.getPopulationSize();
 		List<CandidateProgram> pop = new ArrayList<CandidateProgram>(popSize);
-		
-		reversions = -1;
+
 		do {
 			// Perform elitism.
 			pop.addAll(elitism.elitism(previousPop));
@@ -125,20 +135,21 @@ public class GenerationManager {
 			// Construct a breeding pool.
 			List<CandidateProgram> pool = poolSelection.getPool(previousPop);
 			
-			// Tell the parent selector what selection pool to use.
+			// Give parent selector a pool of programs to choose from.
 			model.getProgramSelector().setSelectionPool(pool);
 			
 			// Fill the population by performing genetic operations.
 			while(pop.size() < popSize) {
-				// Pick a genetic operator using Pr, Pc and Pm.
+				// Randomly choose a genetic operator.
 				double random = rng.nextDouble();
 				
 				if (random < crossoverProbability) {
 					// Perform crossover.
 					CandidateProgram[] children = crossover.crossover();
 					for (CandidateProgram c: children) {
-						if (pop.size() < popSize)
+						if (pop.size() < popSize) {
 							pop.add(c);
+						}
 					}
 				} else if (random < crossoverProbability+mutationProbability) {
 					// Perform mutation.
@@ -149,11 +160,17 @@ public class GenerationManager {
 				}
 			}
 			
+			// Request confirmation of generation.
 			pop = Controller.getLifeCycleManager().onGeneration(pop);
 			
-			reversions++;
+			// If reverted, increment reversions count.
+			if (pop == null) {
+				reversions++;
+			}
 		} while(pop == null);
 		
+		// Store the stats data from the generation.
+		Controller.getStatsManager().addGenerationData(GEN_REVERSIONS, reversions);
 		Controller.getStatsManager().addGenerationData(GEN_POPULATION, pop);
 		Controller.getStatsManager().addGenerationData(GEN_TIME, (System.nanoTime() - startTime));
 		
@@ -162,8 +179,4 @@ public class GenerationManager {
 		
 		return pop;
 	}
-	
-	public int getReversions() {
-		return reversions;
-	}	
 }

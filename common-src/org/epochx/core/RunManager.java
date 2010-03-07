@@ -93,7 +93,7 @@ public class RunManager {
 		Controller.getLifeCycleManager().onRunStart();
 		
 		// Record the start time.
-		final long runStartTime = System.nanoTime();
+		final long startTime = System.nanoTime();
 
 		// Add the run number to the available stats data.
 		Controller.getStatsManager().addRunData(RUN_NUMBER, runNo);
@@ -123,7 +123,7 @@ public class RunManager {
 		Controller.getLifeCycleManager().onRunEnd();
 		
 		// Calculate how long the run took.
-		final long runtime = System.nanoTime() - runStartTime;
+		final long runtime = System.nanoTime() - startTime;
 		
 		// Add run time to stats data.
 		Controller.getStatsManager().addRunData(RUN_TIME, runtime);
@@ -134,7 +134,7 @@ public class RunManager {
 	 * Note this forces us to evaluate all programs, which we might
 	 * not have done if using TournamentSelection. 
 	 */
-	private void updateBestProgram(List<CandidateProgram> pop) {
+	private void updateBestProgram(final List<CandidateProgram> pop) {
 		for (CandidateProgram program: pop) {
 			double fitness = program.getFitness();
 			if (fitness < bestFitness) {

@@ -28,7 +28,10 @@ import org.epochx.model.*;
 import org.epochx.op.*;
 import org.epochx.representation.*;
 
-
+/**
+ * 
+ *
+ */
 public class CrossoverManager {
 
 	// The controlling model.

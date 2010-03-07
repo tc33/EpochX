@@ -49,7 +49,6 @@ import org.epochx.gp.representation.*;
 import org.epochx.gp.representation.dbl.*;
 import org.epochx.op.selection.*;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.*;
 
 /**
  *

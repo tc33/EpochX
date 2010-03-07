@@ -21,12 +21,9 @@
  */
 package org.epochx.core;
 
-import javax.swing.JFormattedTextField;
-
-import org.epochx.core.Controller;
-import org.epochx.life.*;
+import org.epochx.life.LifeCycleManager;
 import org.epochx.model.Model;
-import org.epochx.stats.*;
+import org.epochx.stats.StatsManager;
 
 /**
  * The entry point for evolution in <a href="http://www.epochx.org" 
@@ -60,14 +57,11 @@ public class Controller {
 	// Singleton controller instance.
 	private static Controller controller;
 	
-	// The run controller.
-	private static RunManager run;
-	
 	// The manager that keeps track of life cycle events and their listeners.
-	private LifeCycleManager lifeCycle;
+	private final LifeCycleManager lifeCycle;
 	
 	// The manager that holds and processes run data.
-	private StatsManager stats;
+	private final StatsManager stats;
 	
 	/*
 	 * Private constructor. Execution should be through the static methods.
@@ -76,7 +70,6 @@ public class Controller {
 		// Setup primary components.
 		lifeCycle = new LifeCycleManager();
 		stats = new StatsManager();
-		run = new RunManager();
 	}
 	
 	/**
@@ -96,18 +89,21 @@ public class Controller {
 	 * 				 parameters for all the runs.
 	 * @see RunManager
 	 */
-	public static void run(Model model) {
+	public static void run(final Model model) {
 		// Ensure our singleton instance has been constructed.
 		if (controller == null) {
 			controller = new Controller();
 		}
+		
+		// The run controller.
+		final RunManager run = new RunManager(model);
 		
 		// Set the stats engine straight away so it can be used.
 		controller.stats.setStatsEngine(model.getStatsEngine());
 		
 		// Execute all the runs.
 		for (int i=0; i<model.getNoRuns(); i++) {
-			run.run(model, i);
+			run.run(i);
 		}
 	}
 	

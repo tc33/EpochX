@@ -43,6 +43,8 @@ public class StatField {
 	 */
 	public static final String RUN_FITTEST_PROGRAM = "run-fittest-program";
 	
+	public static final String INIT_REVERSIONS = "init-reversions";
+	
 	/**
 	 * 
 	 */
@@ -158,4 +160,6 @@ public class StatField {
 	 * reverted due to model rejection.
 	 */
 	public static final String CROSSOVER_REVERTED = "crossover-reverted";
+	
+	public static final String POOL_REVERSIONS = "pool-reversions";
 }

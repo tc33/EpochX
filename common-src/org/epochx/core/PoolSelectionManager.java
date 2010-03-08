@@ -21,6 +21,8 @@
  */
 package org.epochx.core;
 
+import static org.epochx.stats.StatField.*;
+
 import java.util.List;
 
 import org.epochx.life.*;
@@ -28,10 +30,17 @@ import org.epochx.model.Model;
 import org.epochx.op.PoolSelector;
 import org.epochx.representation.CandidateProgram;
 
+/**
+ * The task of pool selection is the selection of a subset of programs from a 
+ * larger population based upon some preference (typically a fitness bias, 
+ * although sometimes merely randomly). In the EpochX algorithm, it is from a 
+ * pool such as this that programs will be selected to undergo the genetic 
+ * operators. 
+ */
 public class PoolSelectionManager {
 	
 	// The controlling model.
-	private Model model;
+	private final Model model;
 	
 	// The pool selector to use to generate the breeding pool.
 	private PoolSelector poolSelector;
@@ -40,25 +49,24 @@ public class PoolSelectionManager {
 	private int poolSize;
 	
 	// The number of times the pool selection was rejected.
-	//TODO Perhaps should use a long here, just incase.
 	private int reversions;
 	
 	/**
-	 * Constructs an instance of GPPoolSelection which will setup the breeding 
-	 * pool selection operation. Note that the actual construction of the pool  
-	 * will be performed by the subclass of <code>PoolSelector</code> returned 
-	 * by the models <code>getPoolSelector()</code> method.
+	 * Constructs an instance of PoolSelectionManager which will setup the 
+	 * breeding pool selection operation.
 	 * 
-	 * @param model the GPModel which defines the PoolSelector operator and 
-	 * 				life cycle listener.
+	 * @param model the Model which defines the PoolSelector operator and any
+	 * 				other control parameters.
+	 * 
 	 * @see PoolSelector
 	 */
-	public PoolSelectionManager(Model model) {
+	public PoolSelectionManager(final Model model) {
 		this.model = model;
 		
 		// Initialise parameters.
 		initialise();
 		
+		// Re-initialise each generation.
 		Controller.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
@@ -68,8 +76,8 @@ public class PoolSelectionManager {
 	}
 	
 	/*
-	 * Initialises GPPoolSelection, in particular all parameters from the model should
-	 * be refreshed incase they've changed since the last call.
+	 * Initialises PoolSelectionManager, in particular all parameters from the 
+	 * model should be refreshed in case they've changed since the last call.
 	 */
 	private void initialise() {
 		poolSize = model.getPoolSize();
@@ -77,16 +85,29 @@ public class PoolSelectionManager {
 	}
 	
 	/**
+	 * Selects a pool of <code>CandidatePrograms</code> by calling the 
+	 * <code>getPool</code> method on the PoolSelector retrieved from the model
+	 * given at construction. The size of the program pool requested from the 
+	 * pool selector will also be obtained from this model.
 	 * 
-	 * @param pop
-	 * @return
+	 * <p>
+	 * The returned breeding pool may be a subset of the given population, but
+	 * the size of the returned list may equally be larger than the given 
+	 * population, for example, if the pool contains duplicates.
+	 * 
+	 * @param pop the population of programs from which the pool will be 
+	 * 			  selected.
+	 * @return a list of <code>CandidatePrograms</code> to be used as a 
+	 * breeding pool.
 	 */
-	public List<CandidateProgram> getPool(List<CandidateProgram> pop) {	
+	public List<CandidateProgram> getPool(List<CandidateProgram> pop) {
+		// Inform all listeners that pool selection is starting.
 		Controller.getLifeCycleManager().onPoolSelectionStart();
 		
-		List<CandidateProgram> pool = null;
+		// Reset the number of reversions.
+		reversions = 0;
 		
-		reversions = -1;
+		List<CandidateProgram> pool = null;
 		do {
 			// Perform pool selection.
 			pool = poolSelector.getPool(pop, poolSize);
@@ -94,31 +115,19 @@ public class PoolSelectionManager {
 			// Allow life cycle listener to confirm or modify.
 			pool = Controller.getLifeCycleManager().onPoolSelection(pool);
 			
-			// Increment reversions - starts at -1 to cover first increment.
-			reversions++;
+			// If reverted then increment reversion counter.
+			if (pool == null) {
+				reversions++;
+			}
 		} while(pool == null);
 		
+		// Store the stats from the pool selection.
+		Controller.getStatsManager().addGenerationData(POOL_REVERSIONS, reversions);
+		
+		// Inform all listeners that pool selection has ended.
 		Controller.getLifeCycleManager().onPoolSelectionEnd();
 		
 		return pool;
 	}
-	
-	/**
-	 * Number of times the selected pool was rejected and re-selected.
-	 * 
-	 * <p>After a breeding pool is selected, the controlling model's life cycle 
-	 * listener is requested to confirm the pool by a call to 
-	 * <code>onPoolSelection()</code>. This gives the model total control over 
-	 * the breeding pool allowing manipulation of it's contents before 
-	 * proceeding. If <code>onPoolSelection()</code> returns <code>null</code> 
-	 * then the pool of programs is discarded and a new pool is formed. The 
-	 * number of times the pool is reverted before being accepted is available 
-	 * through a call to this method.
-	 * 
-	 * @return the number of times the selected breeding pool was rejected by 
-	 * the model.
-	 */
-	public int getReversions() {
-		return reversions;
-	}
+
 }

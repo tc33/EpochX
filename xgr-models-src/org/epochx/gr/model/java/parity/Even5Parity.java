@@ -19,13 +19,12 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.ge.model.java.parity;
+package org.epochx.gr.model.java.parity;
 
-import org.epochx.gr.model.java.parity.*;
 import org.epochx.tools.grammar.Grammar;
 
 
-public class Even4Parity extends EvenParity {
+public class Even5Parity extends EvenParity {
 	
 	public static final String GRAMMAR_STRING = 
 		"<prog> ::= <expr>\n" +
@@ -35,12 +34,12 @@ public class Even4Parity extends EvenParity {
 				"| <pre-op> ( <var> )\n" +
 		"<pre-op> ::= !\n" +
 		"<op> ::= \"||\" | && | !=\n" +
-		"<var> ::= d0 | d1 | d2 | d3 \n";
+		"<var> ::= d0 | d1 | d2 | d3 | d4 \n";
 	
 	private Grammar grammar;
 	
-	public Even4Parity() {
-		super(4);
+	public Even5Parity() {
+		super(5);
 		
 		grammar = new Grammar(GRAMMAR_STRING);
 	}

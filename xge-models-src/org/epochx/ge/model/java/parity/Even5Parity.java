@@ -21,6 +21,7 @@
  */
 package org.epochx.ge.model.java.parity;
 
+import org.epochx.gr.model.java.parity.*;
 import org.epochx.tools.grammar.Grammar;
 
 

@@ -19,9 +19,8 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.ge.model.java.parity;
+package org.epochx.gr.model.java.parity;
 
-import org.epochx.gr.model.java.parity.*;
 import org.epochx.tools.grammar.Grammar;
 
 

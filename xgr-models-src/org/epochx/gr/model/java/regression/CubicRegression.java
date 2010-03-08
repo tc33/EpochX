@@ -19,31 +19,48 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.ge.model.java.parity;
+package org.epochx.gr.model.java.regression;
 
-import org.epochx.gr.model.java.parity.*;
+import org.epochx.gr.model.*;
+import org.epochx.gr.representation.*;
+import org.epochx.representation.CandidateProgram;
+import org.epochx.tools.eval.JavaEvaluator;
 import org.epochx.tools.grammar.Grammar;
 
-
-public class Even4Parity extends EvenParity {
+public class CubicRegression extends GRAbstractModel {
 	
 	public static final String GRAMMAR_STRING = 
-		"<prog> ::= <expr>\n" +
-		"<expr> ::= <expr> <op> <expr> " +
-				"| ( <expr> <op> <expr> ) " +
-				"| <var> " +
-				"| <pre-op> ( <var> )\n" +
-		"<pre-op> ::= !\n" +
-		"<op> ::= \"||\" | && | !=\n" +
-		"<var> ::= d0 | d1 | d2 | d3 \n";
+		"<expr> ::= ( <expr> <op> <expr> ) | <var>\n" +
+		"<op>   ::= + | - | * \n" +
+		"<var>  ::= X | 1.0 \n";
 	
 	private Grammar grammar;
 	
-	public Even4Parity() {
-		super(4);
-		
+	private JavaEvaluator evaluator;
+	
+	public CubicRegression() {
 		grammar = new Grammar(GRAMMAR_STRING);
+		evaluator = new JavaEvaluator();
 	}
+
+	@Override
+	public double getFitness(CandidateProgram p) {
+		GRCandidateProgram program = (GRCandidateProgram) p;
+		
+        // Execute on all possible inputs.
+        double dd = 0;
+        for (double x = -1; x < 1; x+=0.1){
+        	Double result = (Double) evaluator.eval(program.getSourceCode(), new String[]{"X"}, new Double[]{x});
+        	if (result != null) {
+        		dd += Math.abs(result - fun(x));
+        	}
+        }
+        return dd;
+	}	
+
+    public double fun(double x){
+        return x + x*x + x*x*x;
+    }
     
 	@Override
 	public Grammar getGrammar() {

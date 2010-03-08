@@ -55,7 +55,7 @@ public class ReproductionManager {
 		// Initialise parameters.
 		initialise();
 		
-		lifeCycle = Controller.getLifeCycleManager();
+		lifeCycle = LifeCycleManager.getLifeCycleManager();
 		lifeCycle.addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
@@ -94,7 +94,7 @@ public class ReproductionManager {
 	 * @return a GPCandidateProgram selected for reproduction.
 	 */
 	public CandidateProgram reproduce() {
-		Controller.getLifeCycleManager().onReproductionStart();
+		LifeCycleManager.getLifeCycleManager().onReproductionStart();
 		
 		CandidateProgram parent = null;
 		
@@ -109,7 +109,7 @@ public class ReproductionManager {
 			reversions++;
 		} while(parent == null);
 		
-		Controller.getLifeCycleManager().onReproductionEnd();
+		LifeCycleManager.getLifeCycleManager().onReproductionEnd();
 		
 		return parent;
 	}

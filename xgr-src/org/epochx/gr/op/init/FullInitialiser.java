@@ -23,7 +23,6 @@ package org.epochx.gr.op.init;
 
 import java.util.*;
 
-import org.epochx.core.Controller;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.life.*;
@@ -57,7 +56,7 @@ public class FullInitialiser implements GRInitialiser {
 		initialise();
 		
 		// Re-initialise at the start of every generation.
-		Controller.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
 				initialise();

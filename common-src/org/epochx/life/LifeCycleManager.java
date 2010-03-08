@@ -26,6 +26,9 @@ import java.util.*;
 import org.epochx.representation.CandidateProgram;
 
 public class LifeCycleManager {
+	
+	private static LifeCycleManager lifeCycle;
+	
 	private List<RunListener> runListeners;
 	private List<InitialisationListener> initialisationListeners;
 	private List<ElitismListener> elitismListeners;
@@ -35,7 +38,7 @@ public class LifeCycleManager {
 	private List<ReproductionListener> reproductionListeners;
 	private List<GenerationListener> generationListeners;
 	
-	public LifeCycleManager() {
+	private LifeCycleManager() {
 		// Initialise listener lists.
 		runListeners = new ArrayList<RunListener>();
 		initialisationListeners = new ArrayList<InitialisationListener>();
@@ -293,5 +296,34 @@ public class LifeCycleManager {
 		for (GenerationListener listener: generationListeners) {
 			listener.onGenerationEnd();
 		}
+	}
+	
+	/**
+	 * Returns the life cycle manager which handles all life cycle events 
+	 * throughout execution of the <code>run</code> method. The life cycle 
+	 * manager receives details of all events and then informs the necessary 
+	 * listeners. Most use is through the <code>addXXXListener</code> methods,
+	 * and typically with an anonymous class.
+	 * 
+	 * <h4>Example use of <code>LifeCycleManager's</code> listener model:</h4>
+	 * 
+	 * <pre>
+     * Controller.getLifeCycleManager().addRunListener(new RunAdapter() {
+	 *     public void onRunStart() {
+	 *         //... do something ...
+	 *     }
+	 * });
+	 * </pre>
+	 * 
+	 * @return the life cycle manager instance that manages life cycle events 
+	 * throughout execution with this <code>Controller</code>.
+	 */
+	public static LifeCycleManager getLifeCycleManager() {
+		// Ensure our singleton instance has been constructed.
+		if (lifeCycle == null) {
+			lifeCycle = new LifeCycleManager();
+		}
+
+		return lifeCycle;
 	}
 }

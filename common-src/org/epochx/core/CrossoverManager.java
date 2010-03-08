@@ -24,9 +24,10 @@ package org.epochx.core;
 import static org.epochx.stats.StatField.*;
 
 import org.epochx.life.*;
-import org.epochx.model.*;
+import org.epochx.model.Model;
 import org.epochx.op.*;
-import org.epochx.representation.*;
+import org.epochx.representation.CandidateProgram;
+import org.epochx.stats.StatsManager;
 
 /**
  * 
@@ -63,7 +64,7 @@ public class CrossoverManager {
 		// Initialise parameters.
 		initialise();
 		
-		Controller.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
 				initialise();
@@ -107,7 +108,7 @@ public class CrossoverManager {
 	 */
 	public CandidateProgram[] crossover() {
 		// Inform everyone we're about to start crossover.
-		Controller.getLifeCycleManager().onCrossoverStart();
+		LifeCycleManager.getLifeCycleManager().onCrossoverStart();
 		
 		// Record the start time.
 		long crossoverStartTime = System.nanoTime();
@@ -135,7 +136,7 @@ public class CrossoverManager {
 			children = crossover.crossover(clone1, clone2);
 			
 			// Ask life cycle listener to confirm the crossover.
-			children = Controller.getLifeCycleManager().onCrossover(parents, children);
+			children = LifeCycleManager.getLifeCycleManager().onCrossover(parents, children);
 			reversions++;
 		} while(children == null);
 		
@@ -153,12 +154,12 @@ public class CrossoverManager {
 		
 		long runtime = System.nanoTime() - crossoverStartTime;
 
-		Controller.getStatsManager().addMutationData(CROSSOVER_PARENTS, parents);
-		Controller.getStatsManager().addMutationData(CROSSOVER_CHILDREN, children);
-		Controller.getStatsManager().addMutationData(CROSSOVER_REVERTED, reversions);
-		Controller.getStatsManager().addMutationData(CROSSOVER_TIME, runtime);
+		StatsManager.getStatsManager().addMutationData(CROSSOVER_PARENTS, parents);
+		StatsManager.getStatsManager().addMutationData(CROSSOVER_CHILDREN, children);
+		StatsManager.getStatsManager().addMutationData(CROSSOVER_REVERTED, reversions);
+		StatsManager.getStatsManager().addMutationData(CROSSOVER_TIME, runtime);
 		
-		Controller.getLifeCycleManager().onCrossoverEnd();
+		LifeCycleManager.getLifeCycleManager().onCrossoverEnd();
 		
 		return children;
 	}

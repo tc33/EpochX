@@ -42,7 +42,7 @@ package org.epochx.ge.mapper;
 import java.util.*;
 
 import org.epochx.ge.model.GEModel;
-import org.epochx.ge.representation.*;
+import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.tools.grammar.*;
 
 

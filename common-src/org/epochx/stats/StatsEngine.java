@@ -23,10 +23,9 @@ package org.epochx.stats;
 
 import static org.epochx.stats.StatField.*;
 
-import java.util.*;
+import java.util.List;
 
-import org.epochx.core.*;
-import org.epochx.representation.*;
+import org.epochx.representation.CandidateProgram;
 
 public class StatsEngine {
 
@@ -70,7 +69,7 @@ public class StatsEngine {
 		double[] fitnesses = null;
 		
 		// Request the population from the stats manager.
-		List<CandidateProgram> pop = (List<CandidateProgram>) Controller.getStatsManager().getGenerationStat(GEN_POPULATION);
+		List<CandidateProgram> pop = (List<CandidateProgram>) StatsManager.getStatsManager().getGenerationStat(GEN_POPULATION);
 		
 		if (pop != null) {
 			fitnesses = new double[pop.size()];
@@ -87,7 +86,7 @@ public class StatsEngine {
 		Double minFitness = null;
 		
 		// Request the population from the stats manager.
-		double[] fitnesses = (double[]) Controller.getStatsManager().getGenerationStat(GEN_FITNESSES);
+		double[] fitnesses = (double[]) StatsManager.getStatsManager().getGenerationStat(GEN_FITNESSES);
 		
 		// 
 		if (fitnesses != null) {
@@ -101,7 +100,7 @@ public class StatsEngine {
 		Double maxFitness = null;
 		
 		// Request the population from the stats manager.
-		double[] fitnesses = (double[]) Controller.getStatsManager().getGenerationStat(GEN_FITNESSES);
+		double[] fitnesses = (double[]) StatsManager.getStatsManager().getGenerationStat(GEN_FITNESSES);
 		
 		// 
 		if (fitnesses != null) {
@@ -115,7 +114,7 @@ public class StatsEngine {
 		Double aveFitness = null;
 		
 		// Request the population from the stats manager.
-		double[] fitnesses = (double[]) Controller.getStatsManager().getGenerationStat(GEN_FITNESSES);
+		double[] fitnesses = (double[]) StatsManager.getStatsManager().getGenerationStat(GEN_FITNESSES);
 		
 		// 
 		if (fitnesses != null) {
@@ -129,8 +128,8 @@ public class StatsEngine {
 		Double stdevFitness = null;
 		
 		// Request the population from the stats manager.
-		double[] fitnesses = (double[]) Controller.getStatsManager().getGenerationStat(GEN_FITNESSES);
-		double averageFitness = (Double) Controller.getStatsManager().getGenerationStat(GEN_FITNESS_AVE);
+		double[] fitnesses = (double[]) StatsManager.getStatsManager().getGenerationStat(GEN_FITNESSES);
+		double averageFitness = (Double) StatsManager.getStatsManager().getGenerationStat(GEN_FITNESS_AVE);
 		
 		// 
 		if (fitnesses != null) {
@@ -144,7 +143,7 @@ public class StatsEngine {
 		Double medianFitness = null;
 		
 		// Request the population from the stats manager.
-		double[] fitnesses = (double[]) Controller.getStatsManager().getGenerationStat(GEN_FITNESSES);
+		double[] fitnesses = (double[]) StatsManager.getStatsManager().getGenerationStat(GEN_FITNESSES);
 		
 		// 
 		if (fitnesses != null) {
@@ -158,8 +157,8 @@ public class StatsEngine {
 		Double ci95Fitness = null;
 		
 		// Request the population from the stats manager.
-		double[] fitnesses = (double[]) Controller.getStatsManager().getGenerationStat(GEN_FITNESSES);
-		double stdev = (Double) Controller.getStatsManager().getGenerationStat(GEN_FITNESS_STDEV);
+		double[] fitnesses = (double[]) StatsManager.getStatsManager().getGenerationStat(GEN_FITNESSES);
+		double stdev = (Double) StatsManager.getStatsManager().getGenerationStat(GEN_FITNESS_STDEV);
 		
 		// 
 		if (fitnesses != null) {
@@ -172,8 +171,8 @@ public class StatsEngine {
 	private Object getGenBestProgram() {
 		CandidateProgram bestProgram = null;
 		
-		double[] fitnesses = (double[]) Controller.getStatsManager().getGenerationStat(GEN_FITNESSES);
-		List<CandidateProgram> pop = (List<CandidateProgram>) Controller.getStatsManager().getGenerationStat(GEN_POPULATION);
+		double[] fitnesses = (double[]) StatsManager.getStatsManager().getGenerationStat(GEN_FITNESSES);
+		List<CandidateProgram> pop = (List<CandidateProgram>) StatsManager.getStatsManager().getGenerationStat(GEN_POPULATION);
 		
 		if (fitnesses != null) {
 			int bestProgramIndex = StatsUtils.minIndex(fitnesses);

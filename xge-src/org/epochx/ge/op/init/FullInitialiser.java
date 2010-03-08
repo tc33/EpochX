@@ -23,7 +23,6 @@ package org.epochx.ge.op.init;
 
 import java.util.*;
 
-import org.epochx.core.Controller;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.life.*;
@@ -62,7 +61,7 @@ public class FullInitialiser implements GEInitialiser {
 		initialise();
 		
 		// Re-initialise at the start of every generation.
-		Controller.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
 				initialise();

@@ -52,7 +52,7 @@ public class ElitismManager {
 		initialise();
 		
 		// Register interest in generation events so we can reset.
-		lifeCycle = Controller.getLifeCycleManager();
+		lifeCycle = LifeCycleManager.getLifeCycleManager();
 		lifeCycle.addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
@@ -94,7 +94,7 @@ public class ElitismManager {
 	 * 		   contain all CandidatePrograms from the population sorted.
 	 */
 	public List<CandidateProgram> elitism(List<CandidateProgram> pop) {
-		Controller.getLifeCycleManager().onElitismStart();
+		LifeCycleManager.getLifeCycleManager().onElitismStart();
 		
 		// Construct an array for elites.
 		List<CandidateProgram> elites;
@@ -110,7 +110,7 @@ public class ElitismManager {
 		// Allow life cycle listener to confirm or modify.
 		elites = lifeCycle.onElitism(elites);
 		
-		Controller.getLifeCycleManager().onElitismEnd();
+		LifeCycleManager.getLifeCycleManager().onElitismEnd();
 		
 		return elites;
 	}

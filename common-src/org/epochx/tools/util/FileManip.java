@@ -39,8 +39,8 @@
  */
 package org.epochx.tools.util;
 
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 /**
  * The File Manip class controls all text output and input file requirements

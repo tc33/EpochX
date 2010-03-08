@@ -41,7 +41,7 @@ package org.epochx.ge.representation;
 
 import java.util.*;
 
-import org.epochx.ge.codon.*;
+import org.epochx.ge.codon.CodonGenerator;
 
 
 /**

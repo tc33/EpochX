@@ -23,7 +23,6 @@ package org.epochx.stats;
 
 import java.util.*;
 
-import org.epochx.core.Controller;
 import org.epochx.life.*;
 
 /*
@@ -36,6 +35,8 @@ public class StatsManager {
 	//TODO Statistics from the controller about the whole set of runs.
 	//TODO Initialisation statistics.
 
+	private static StatsManager statsManager;
+	
 	private Map<String, Object> runData;
 	private Map<String, Object> generationData;
 	private Map<String, Object> crossoverData;
@@ -229,7 +230,7 @@ public class StatsManager {
 
 	private void setupListeners() {
 		// Clear the run data.
-		Controller.getLifeCycleManager().addRunListener(new RunAdapter(){
+		LifeCycleManager.getLifeCycleManager().addRunListener(new RunAdapter(){
 			@Override
 			public void onRunStart() {
 				runData.clear();
@@ -237,7 +238,7 @@ public class StatsManager {
 		});
 		
 		// Clear the run data.
-		Controller.getLifeCycleManager().addGenerationListener(new GenerationAdapter(){
+		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter(){
 			@Override
 			public void onGenerationStart() {
 				generationData.clear();
@@ -245,7 +246,7 @@ public class StatsManager {
 		});
 		
 		// Clear the run data.
-		Controller.getLifeCycleManager().addCrossoverListener(new CrossoverAdapter(){
+		LifeCycleManager.getLifeCycleManager().addCrossoverListener(new CrossoverAdapter(){
 			@Override
 			public void onCrossoverStart() {
 				crossoverData.clear();
@@ -253,12 +254,47 @@ public class StatsManager {
 		});
 		
 		// Clear the run data.
-		Controller.getLifeCycleManager().addMutationListener(new MutationAdapter(){
+		LifeCycleManager.getLifeCycleManager().addMutationListener(new MutationAdapter(){
 			@Override
 			public void onMutationStart() {
 				mutationData.clear();
 			}
 		});
+	}
+	
+	/**
+	 * Returns the stats manager which is responsible for generating and 
+	 * distributing data and statistics about runs as they progress. 
+	 * 
+	 * <p>
+	 * It would be very common to combine use of the stats manager with use of 
+	 * the life cycle manager in order to retrieve statistics each generation, 
+	 * each run or upon some other event.
+	 * 
+	 * <h4>Example use of statistics generation:</h4>
+	 * 
+	 * <pre>
+     * Controller.getLifeCycleManager().addRunListener(new RunAdapter() {
+	 *     public void onRunStart() {
+	 *         Controller.getStatsManager().printRunStats(new String[]{RUN_NUMBER});
+	 *     }
+	 * });
+	 * </pre>
+	 * 
+	 * <p>
+	 * The above code example will print the run number to the console at the 
+	 * start of each run.
+	 * 
+	 * @return the stats manager which handles data and statistics about runs 
+	 * performed with this <code>Controller</code>.
+	 */
+	public static StatsManager getStatsManager() {
+		// Ensure our singleton instance has been constructed.
+		if (statsManager == null) {
+			statsManager = new StatsManager();
+		}
+		
+		return statsManager;
 	}
 
 }

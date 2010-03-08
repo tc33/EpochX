@@ -21,9 +21,9 @@
  */
 package org.epochx.life;
 
-import java.util.*;
+import java.util.List;
 
-import org.epochx.representation.*;
+import org.epochx.representation.CandidateProgram;
 
 
 /**

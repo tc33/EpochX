@@ -23,7 +23,6 @@ package org.epochx.gr.op.crossover;
 
 import java.util.*;
 
-import org.epochx.core.Controller;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.life.*;
@@ -44,7 +43,7 @@ public class WhighamCrossover implements GRCrossover {
 		
 		initialise();
 		
-		Controller.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
 				initialise();

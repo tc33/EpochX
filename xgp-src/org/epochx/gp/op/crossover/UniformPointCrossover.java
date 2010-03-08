@@ -21,11 +21,10 @@
  */
 package org.epochx.gp.op.crossover;
 
-import org.epochx.core.*;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
 import org.epochx.life.*;
-import org.epochx.representation.*;
+import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
@@ -44,7 +43,7 @@ public class UniformPointCrossover implements GPCrossover {
 		
 		initialise();
 		
-		Controller.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
 				initialise();

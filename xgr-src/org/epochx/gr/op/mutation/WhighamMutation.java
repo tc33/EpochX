@@ -21,15 +21,11 @@
  */
 package org.epochx.gr.op.mutation;
 
-import java.util.List;
-
-import org.epochx.core.Controller;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.op.init.GrowInitialiser;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.grammar.*;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 public class WhighamMutation implements GRMutation {
@@ -47,7 +43,7 @@ public class WhighamMutation implements GRMutation {
 		
 		initialise();
 		
-		Controller.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
 				initialise();

@@ -153,7 +153,7 @@ public class Grammar {
 	 * This is based upon the grammar parser found in the 
 	 * Mapper.ContextFreeGrammar class of GEVA v.1.0.
 	 */
-	private void parseGrammar(String grammar) throws MalformedGrammarException {
+	protected void parseGrammar(String grammar) throws MalformedGrammarException {
 		State state = State.START;
 		StringBuilder buffer = new StringBuilder();
 		GrammarRule lhs = null;

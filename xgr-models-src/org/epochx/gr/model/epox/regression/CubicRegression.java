@@ -1,7 +1,7 @@
 package org.epochx.gr.model.epox.regression;
 
-import org.epochx.gr.model.*;
-import org.epochx.gr.representation.*;
+import org.epochx.gr.model.GRAbstractModel;
+import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.eval.*;
 import org.epochx.tools.grammar.Grammar;

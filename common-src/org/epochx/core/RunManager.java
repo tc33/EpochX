@@ -25,9 +25,10 @@ import static org.epochx.stats.StatField.*;
 
 import java.util.List;
 
+import org.epochx.life.LifeCycleManager;
 import org.epochx.model.Model;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.StatField;
+import org.epochx.stats.*;
 
 /**
  * This class is responsible for executing a single evolutionary run. Execution
@@ -90,13 +91,13 @@ public class RunManager {
 	 */
 	public void run(final int runNo) {
 		// Inform everyone we're starting a run.
-		Controller.getLifeCycleManager().onRunStart();
+		LifeCycleManager.getLifeCycleManager().onRunStart();
 		
 		// Record the start time.
 		final long startTime = System.nanoTime();
 
 		// Add the run number to the available stats data.
-		Controller.getStatsManager().addRunData(RUN_NUMBER, runNo);
+		StatsManager.getStatsManager().addRunData(RUN_NUMBER, runNo);
 		
 		// Perform initialisation.
 		List<CandidateProgram> pop = initialisation.initialise();
@@ -114,19 +115,19 @@ public class RunManager {
 			
 			// We might be finished?
 			if (bestFitness <= model.getTerminationFitness()) {
-				Controller.getLifeCycleManager().onSuccess();
+				LifeCycleManager.getLifeCycleManager().onSuccess();
 				break;
 			}
 		}
 
 		// Inform everyone the run has ended.
-		Controller.getLifeCycleManager().onRunEnd();
+		LifeCycleManager.getLifeCycleManager().onRunEnd();
 		
 		// Calculate how long the run took.
 		final long runtime = System.nanoTime() - startTime;
 		
 		// Add run time to stats data.
-		Controller.getStatsManager().addRunData(RUN_TIME, runtime);
+		StatsManager.getStatsManager().addRunData(RUN_TIME, runtime);
 	}
 
 	/* 
@@ -142,8 +143,8 @@ public class RunManager {
 				bestProgram = program;
 				
 				// Update the stats.
-				Controller.getStatsManager().addRunData(RUN_FITNESS_MIN, bestFitness);
-				Controller.getStatsManager().addRunData(RUN_FITTEST_PROGRAM, bestProgram);
+				StatsManager.getStatsManager().addRunData(RUN_FITNESS_MIN, bestFitness);
+				StatsManager.getStatsManager().addRunData(RUN_FITTEST_PROGRAM, bestProgram);
 			}
 		}
 	}

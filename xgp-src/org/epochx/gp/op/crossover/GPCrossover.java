@@ -23,7 +23,7 @@ package org.epochx.gp.op.crossover;
 
 import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.op.Crossover;
-import org.epochx.representation.*;
+import org.epochx.representation.CandidateProgram;
 
 /**
  * This interface defines the structure which specific crossover operations can

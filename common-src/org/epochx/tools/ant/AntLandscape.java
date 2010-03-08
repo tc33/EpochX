@@ -40,9 +40,8 @@
 package org.epochx.tools.ant;
 
 
-import java.awt.Dimension;
-import java.awt.Point;
-import java.util.*;
+import java.awt.*;
+import java.util.List;
 
 /**
  * An <code>AntLandscape</code> provides the environment an artificial ant 

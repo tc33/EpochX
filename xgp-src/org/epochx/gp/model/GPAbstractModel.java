@@ -29,7 +29,6 @@ import org.epochx.gp.op.mutation.*;
 import org.epochx.gp.representation.*;
 import org.epochx.gp.stats.GPStatsEngine;
 import org.epochx.model.AbstractModel;
-import org.epochx.tools.random.*;
 
 
 /**
@@ -55,7 +54,6 @@ public abstract class GPAbstractModel extends AbstractModel implements GPModel {
 	private GPInitialiser initialiser;
 	private GPCrossover crossover;
 	private GPMutation mutator;
-	private RandomNumberGenerator randomNumberGenerator;
 	
 	/**
 	 * Construct a GPModel with a set of sensible defaults. See the appropriate
@@ -70,7 +68,6 @@ public abstract class GPAbstractModel extends AbstractModel implements GPModel {
 		initialiser = new FullInitialiser(this);
 		crossover = new UniformPointCrossover(this);
 		mutator = new SubtreeMutation(this);
-		randomNumberGenerator = new MersenneTwisterFast();
 		
 		// Stats - overwrite parent default.
 		setStatsEngine(new GPStatsEngine());
@@ -152,30 +149,7 @@ public abstract class GPAbstractModel extends AbstractModel implements GPModel {
 		
 		return syntax;
 	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Defaults to MersenneTwisterFast in GPAbstractModel.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public RandomNumberGenerator getRNG() {
-		return randomNumberGenerator;
-	}
 	
-	/**
-	 * Overwrites the default random number generator used to generate random 
-	 * numbers to control behaviour throughout a run.
-	 * 
-	 * @param rng the random number generator to be used any time random 
-	 * 				behaviour is required.
-	 */
-	public void setRNG(RandomNumberGenerator rng) {
-		this.randomNumberGenerator = rng;
-	}
-
 	/**
 	 * {@inheritDoc}
 	 * 

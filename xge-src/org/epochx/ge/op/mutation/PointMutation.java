@@ -39,7 +39,6 @@
  */
 package org.epochx.ge.op.mutation;
 
-import org.epochx.core.Controller;
 import org.epochx.ge.codon.CodonGenerator;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
@@ -92,7 +91,7 @@ public class PointMutation implements GEMutation {
 		this.model = model;
 		this.pointProbability = pointProbability;
 		
-		Controller.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
 				initialise();

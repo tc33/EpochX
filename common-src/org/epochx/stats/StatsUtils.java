@@ -21,7 +21,7 @@
  */
 package org.epochx.stats;
 
-import java.util.*;
+import java.util.Arrays;
 
 public class StatsUtils {
 	

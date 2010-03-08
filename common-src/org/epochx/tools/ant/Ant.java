@@ -41,7 +41,7 @@ package org.epochx.tools.ant;
 
 import static org.epochx.tools.ant.Orientation.*;
 
-import java.awt.*;
+import java.awt.Point;
 
 /**
  * An Ant represents an artificial ant which exists within and can move about 

@@ -22,7 +22,7 @@
 package org.epochx.gr.representation;
 
 import org.epochx.gr.model.GRModel;
-import org.epochx.representation.*;
+import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.*;
 
 public class GRCandidateProgram extends CandidateProgram {

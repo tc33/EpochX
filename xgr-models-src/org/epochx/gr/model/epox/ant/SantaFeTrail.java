@@ -22,15 +22,13 @@ package org.epochx.gr.model.epox.ant;
 import java.awt.*;
 import java.util.*;
 
-import org.epochx.core.*;
-import org.epochx.gp.representation.*;
-import org.epochx.gr.model.*;
-import org.epochx.gr.representation.*;
-import org.epochx.op.selection.*;
-import org.epochx.representation.*;
+import org.epochx.gp.representation.FunctionParser;
+import org.epochx.gr.model.GRAbstractModel;
+import org.epochx.gr.representation.GRCandidateProgram;
+import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.ant.*;
-import org.epochx.tools.eval.*;
-import org.epochx.tools.grammar.*;
+import org.epochx.tools.eval.EpoxEvaluator;
+import org.epochx.tools.grammar.Grammar;
 
 /**
  *

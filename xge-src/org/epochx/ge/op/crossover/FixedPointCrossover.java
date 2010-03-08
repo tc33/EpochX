@@ -41,7 +41,6 @@ package org.epochx.ge.op.crossover;
 
 import java.util.List;
 
-import org.epochx.core.Controller;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.life.*;
@@ -87,7 +86,7 @@ public class FixedPointCrossover implements GECrossover {
 		
 		initialise();
 		
-		Controller.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
 				initialise();

@@ -21,10 +21,10 @@
  */
 package org.epochx.gp.op.init;
 
-import java.util.*;
+import java.util.List;
 
 import org.epochx.op.Initialiser;
-import org.epochx.representation.*;
+import org.epochx.representation.CandidateProgram;
 
 
 /**

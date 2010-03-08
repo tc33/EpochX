@@ -25,8 +25,10 @@ import static org.epochx.stats.StatField.*;
 
 import java.util.*;
 
+import org.epochx.life.LifeCycleManager;
 import org.epochx.model.Model;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.stats.StatsManager;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
@@ -130,13 +132,13 @@ public class GenerationManager {
 		initialise();
 		
 		// Inform all listeners that a generation is starting.
-		Controller.getLifeCycleManager().onGenerationStart();
+		LifeCycleManager.getLifeCycleManager().onGenerationStart();
 		
 		// Record the generation start time.
 		final long startTime = System.nanoTime();
 		
 		// Record the generation number in the stats data.
-		Controller.getStatsManager().addGenerationData(GEN_NUMBER, generationNumber);
+		StatsManager.getStatsManager().addGenerationData(GEN_NUMBER, generationNumber);
 		
 		// Create next population to fill.
 		final int popSize = model.getPopulationSize();
@@ -175,7 +177,7 @@ public class GenerationManager {
 			}
 			
 			// Request confirmation of generation.
-			pop = Controller.getLifeCycleManager().onGeneration(pop);
+			pop = LifeCycleManager.getLifeCycleManager().onGeneration(pop);
 			
 			// If reverted, increment reversions count.
 			if (pop == null) {
@@ -184,12 +186,12 @@ public class GenerationManager {
 		} while(pop == null);
 		
 		// Store the stats data from the generation.
-		Controller.getStatsManager().addGenerationData(GEN_REVERSIONS, reversions);
-		Controller.getStatsManager().addGenerationData(GEN_POPULATION, pop);
-		Controller.getStatsManager().addGenerationData(GEN_TIME, (System.nanoTime() - startTime));
+		StatsManager.getStatsManager().addGenerationData(GEN_REVERSIONS, reversions);
+		StatsManager.getStatsManager().addGenerationData(GEN_POPULATION, pop);
+		StatsManager.getStatsManager().addGenerationData(GEN_TIME, (System.nanoTime() - startTime));
 		
 		// Tell everyone the generation has ended.
-		Controller.getLifeCycleManager().onGenerationEnd();
+		LifeCycleManager.getLifeCycleManager().onGenerationEnd();
 		
 		return pop;
 	}

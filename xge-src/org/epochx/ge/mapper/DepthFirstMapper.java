@@ -39,10 +39,9 @@
  */
 package org.epochx.ge.mapper;
 
-import org.epochx.core.Controller;
 import org.epochx.ge.codon.CodonGenerator;
 import org.epochx.ge.model.GEModel;
-import org.epochx.ge.representation.*;
+import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.life.*;
 import org.epochx.tools.grammar.*;
 
@@ -90,7 +89,7 @@ public class DepthFirstMapper implements Mapper {
 		initialise();
 		
 		// Re-initialise on each generation.
-		Controller.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
 				initialise();

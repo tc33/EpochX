@@ -39,7 +39,7 @@
  */
 package org.epochx.tools.random;
 
-import java.util.*;
+import java.util.Random;
 
 /**
  *

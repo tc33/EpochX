@@ -21,12 +21,13 @@
  */
 package org.epochx.core;
 
-import org.epochx.life.*;
-import org.epochx.model.*;
-import org.epochx.op.*;
-import org.epochx.representation.*;
-
 import static org.epochx.stats.StatField.*;
+
+import org.epochx.life.*;
+import org.epochx.model.Model;
+import org.epochx.op.*;
+import org.epochx.representation.CandidateProgram;
+import org.epochx.stats.StatsManager;
 
 public class MutationManager {
 	
@@ -59,7 +60,7 @@ public class MutationManager {
 		// Initialise parameters.
 		initialise();
 		
-		Controller.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
 				initialise();
@@ -105,7 +106,7 @@ public class MutationManager {
 	 *         the original selected program before mutation will be returned.
 	 */
 	public CandidateProgram mutate() {
-		Controller.getLifeCycleManager().onMutationStart();
+		LifeCycleManager.getLifeCycleManager().onMutationStart();
 		
 		long crossoverStartTime = System.nanoTime();
 		
@@ -124,18 +125,18 @@ public class MutationManager {
 			child = mutator.mutate(child);
 
 			// Allow the life cycle listener to confirm or modify.
-			child = Controller.getLifeCycleManager().onMutation(parent, child);
+			child = LifeCycleManager.getLifeCycleManager().onMutation(parent, child);
 			reversions++;
 		} while(child == null);
 		
 		long runtime = System.nanoTime() - crossoverStartTime;
 		
-		Controller.getStatsManager().addMutationData(MUTATION_PROGRAM_BEFORE, parent);
-		Controller.getStatsManager().addMutationData(MUTATION_PROGRAM_AFTER, child);
-		Controller.getStatsManager().addMutationData(MUTATION_REVERTED, reversions);
-		Controller.getStatsManager().addMutationData(MUTATION_TIME, runtime);
+		StatsManager.getStatsManager().addMutationData(MUTATION_PROGRAM_BEFORE, parent);
+		StatsManager.getStatsManager().addMutationData(MUTATION_PROGRAM_AFTER, child);
+		StatsManager.getStatsManager().addMutationData(MUTATION_REVERTED, reversions);
+		StatsManager.getStatsManager().addMutationData(MUTATION_TIME, runtime);
 		
-		Controller.getLifeCycleManager().onMutationEnd();
+		LifeCycleManager.getLifeCycleManager().onMutationEnd();
 		
 		return child;
 	}

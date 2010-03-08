@@ -39,7 +39,6 @@
  */
 package org.epochx.ge.op.mutation;
 
-import org.epochx.core.Controller;
 import org.epochx.ge.codon.CodonGenerator;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
@@ -79,7 +78,7 @@ public class SinglePointMutation implements GEMutation {
 		
 		initialise();
 		
-		Controller.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
 				initialise();

@@ -28,7 +28,7 @@ import org.epochx.gp.op.init.GPInitialiser;
 import org.epochx.gp.op.mutation.GPMutation;
 import org.epochx.gp.representation.*;
 import org.epochx.model.Model;
-import org.epochx.representation.*;
+import org.epochx.representation.CandidateProgram;
 
 
 /**

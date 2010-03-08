@@ -25,7 +25,7 @@ import java.util.*;
 
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
-import org.epochx.representation.*;
+import org.epochx.representation.CandidateProgram;
 
 
 /**

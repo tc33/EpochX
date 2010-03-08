@@ -21,7 +21,7 @@
  */
 package org.epochx.life;
 
-import org.epochx.representation.*;
+import org.epochx.representation.CandidateProgram;
 
 /**
  *

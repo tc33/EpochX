@@ -39,8 +39,8 @@
  */
 package org.epochx.ge.mapper;
 
-import org.epochx.ge.representation.*;
-import org.epochx.tools.grammar.*;
+import org.epochx.ge.representation.GECandidateProgram;
+import org.epochx.tools.grammar.NonTerminalSymbol;
 
 /**
  * A mapper's job is to convert a GECandidateProgram into a String sequence. 

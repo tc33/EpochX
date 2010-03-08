@@ -22,8 +22,8 @@
 package org.epochx.gr.model.epox.parity;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.epochx.gr.model.*;
-import org.epochx.gr.representation.*;
+import org.epochx.gr.model.GRAbstractModel;
+import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.eval.EpoxEvaluator;
 import org.epochx.tools.util.BoolUtils;

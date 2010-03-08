@@ -21,7 +21,7 @@
  */
 package org.epochx.core;
 
-import static org.epochx.stats.StatField.*;
+import static org.epochx.stats.StatField.POOL_REVERSIONS;
 
 import java.util.List;
 
@@ -29,6 +29,7 @@ import org.epochx.life.*;
 import org.epochx.model.Model;
 import org.epochx.op.PoolSelector;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.stats.StatsManager;
 
 /**
  * The task of pool selection is the selection of a subset of programs from a 
@@ -67,7 +68,7 @@ public class PoolSelectionManager {
 		initialise();
 		
 		// Re-initialise each generation.
-		Controller.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
 				initialise();
@@ -102,7 +103,7 @@ public class PoolSelectionManager {
 	 */
 	public List<CandidateProgram> getPool(List<CandidateProgram> pop) {
 		// Inform all listeners that pool selection is starting.
-		Controller.getLifeCycleManager().onPoolSelectionStart();
+		LifeCycleManager.getLifeCycleManager().onPoolSelectionStart();
 		
 		// Reset the number of reversions.
 		reversions = 0;
@@ -113,7 +114,7 @@ public class PoolSelectionManager {
 			pool = poolSelector.getPool(pop, poolSize);
 			
 			// Allow life cycle listener to confirm or modify.
-			pool = Controller.getLifeCycleManager().onPoolSelection(pool);
+			pool = LifeCycleManager.getLifeCycleManager().onPoolSelection(pool);
 			
 			// If reverted then increment reversion counter.
 			if (pool == null) {
@@ -122,10 +123,10 @@ public class PoolSelectionManager {
 		} while(pool == null);
 		
 		// Store the stats from the pool selection.
-		Controller.getStatsManager().addGenerationData(POOL_REVERSIONS, reversions);
+		StatsManager.getStatsManager().addGenerationData(POOL_REVERSIONS, reversions);
 		
 		// Inform all listeners that pool selection has ended.
-		Controller.getLifeCycleManager().onPoolSelectionEnd();
+		LifeCycleManager.getLifeCycleManager().onPoolSelectionEnd();
 		
 		return pool;
 	}

@@ -57,20 +57,10 @@ public class Controller {
 	// Singleton controller instance.
 	private static Controller controller;
 	
-	// The manager that keeps track of life cycle events and their listeners.
-	private final LifeCycleManager lifeCycle;
-	
-	// The manager that holds and processes run data.
-	private final StatsManager stats;
-	
 	/*
 	 * Private constructor. Execution should be through the static methods.
 	 */
-	private Controller() {
-		// Setup primary components.
-		lifeCycle = new LifeCycleManager();
-		stats = new StatsManager();
-	}
+	private Controller() {}
 	
 	/**
 	 * Executes one or more evolutionary runs configured according to the 
@@ -99,7 +89,7 @@ public class Controller {
 		final RunManager run = new RunManager(model);
 		
 		// Set the stats engine straight away so it can be used.
-		controller.stats.setStatsEngine(model.getStatsEngine());
+		StatsManager.getStatsManager().setStatsEngine(model.getStatsEngine());
 		
 		// Execute all the runs.
 		for (int i=0; i<model.getNoRuns(); i++) {
@@ -107,67 +97,7 @@ public class Controller {
 		}
 	}
 	
-	/**
-	 * Returns the life cycle manager which handles all life cycle events 
-	 * throughout execution of the <code>run</code> method. The life cycle 
-	 * manager receives details of all events and then informs the necessary 
-	 * listeners. Most use is through the <code>addXXXListener</code> methods,
-	 * and typically with an anonymous class.
-	 * 
-	 * <h4>Example use of <code>LifeCycleManager's</code> listener model:</h4>
-	 * 
-	 * <pre>
-     * Controller.getLifeCycleManager().addRunListener(new RunAdapter() {
-	 *     public void onRunStart() {
-	 *         //... do something ...
-	 *     }
-	 * });
-	 * </pre>
-	 * 
-	 * @return the life cycle manager instance that manages life cycle events 
-	 * throughout execution with this <code>Controller</code>.
-	 */
-	public static LifeCycleManager getLifeCycleManager() {
-		// Ensure our singleton instance has been constructed.
-		if (controller == null) {
-			controller = new Controller();
-		}
 
-		return controller.lifeCycle;
-	}
 	
-	/**
-	 * Returns the stats manager which is responsible for generating and 
-	 * distributing data and statistics about runs as they progress. 
-	 * 
-	 * <p>
-	 * It would be very common to combine use of the stats manager with use of 
-	 * the life cycle manager in order to retrieve statistics each generation, 
-	 * each run or upon some other event.
-	 * 
-	 * <h4>Example use of statistics generation:</h4>
-	 * 
-	 * <pre>
-     * Controller.getLifeCycleManager().addRunListener(new RunAdapter() {
-	 *     public void onRunStart() {
-	 *         Controller.getStatsManager().printRunStats(new String[]{RUN_NUMBER});
-	 *     }
-	 * });
-	 * </pre>
-	 * 
-	 * <p>
-	 * The above code example will print the run number to the console at the 
-	 * start of each run.
-	 * 
-	 * @return the stats manager which handles data and statistics about runs 
-	 * performed with this <code>Controller</code>.
-	 */
-	public static StatsManager getStatsManager() {
-		// Ensure our singleton instance has been constructed.
-		if (controller == null) {
-			controller = new Controller();
-		}
-		
-		return controller.stats;
-	}
+
 }

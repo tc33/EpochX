@@ -41,8 +41,8 @@ package org.epochx.ge.op.init;
 
 import java.util.*;
 
-import org.epochx.ge.model.*;
-import org.epochx.ge.representation.*;
+import org.epochx.ge.model.GEModel;
+import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.representation.CandidateProgram;
 
 

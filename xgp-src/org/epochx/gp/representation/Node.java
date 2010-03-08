@@ -23,8 +23,6 @@ package org.epochx.gp.representation;
 
 import java.util.*;
 
-import sun.org.mozilla.javascript.internal.FunctionNode;
-
 /**
  * Subclasses of <code>Node</code> should ensure they call the superclass 
  * constructor with all child Nodes so information such as the arity of the

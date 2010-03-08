@@ -19,18 +19,18 @@
  */
 package org.epochx.gr.model.epox.mux;
 
-import org.apache.commons.lang.ArrayUtils;
-import org.epochx.ge.model.GEAbstractModel;
-import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.representation.CandidateProgram;
+import org.apache.commons.lang.*;
+import org.epochx.gr.model.*;
+import org.epochx.gr.representation.*;
+import org.epochx.representation.*;
 import org.epochx.tools.eval.*;
-import org.epochx.tools.grammar.Grammar;
-import org.epochx.tools.util.BoolUtils;
+import org.epochx.tools.grammar.*;
+import org.epochx.tools.util.*;
 
 /**
  *
  */
-public class Multiplexer20Bit extends GEAbstractModel {
+public class Multiplexer20Bit extends GRAbstractModel {
 	
 	public static final String GRAMMAR_STRING = 
 		"<prog> ::= <node>\n" +
@@ -58,7 +58,7 @@ public class Multiplexer20Bit extends GEAbstractModel {
 
 	@Override
 	public double getFitness(CandidateProgram p) {
-		GECandidateProgram program = (GECandidateProgram) p;
+		GRCandidateProgram program = (GRCandidateProgram) p;
 		
         double score = 0;
         

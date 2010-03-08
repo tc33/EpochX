@@ -17,27 +17,25 @@
  *  You should have received a copy of the GNU General Public License
  *  along with XGE.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.ge.model.epox.ant;
+package org.epochx.gr.model.epox.ant;
 
 import java.awt.*;
 import java.util.*;
 
-import org.epochx.core.Controller;
-import org.epochx.ge.model.GEAbstractModel;
-import org.epochx.ge.op.init.RampedHalfAndHalfInitialiser;
-import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.gp.representation.FunctionParser;
-import org.epochx.gr.model.epox.ant.*;
+import org.epochx.core.*;
+import org.epochx.gp.representation.*;
+import org.epochx.gr.model.*;
+import org.epochx.gr.representation.*;
 import org.epochx.op.selection.*;
-import org.epochx.representation.CandidateProgram;
+import org.epochx.representation.*;
 import org.epochx.tools.ant.*;
-import org.epochx.tools.eval.EpoxEvaluator;
-import org.epochx.tools.grammar.Grammar;
+import org.epochx.tools.eval.*;
+import org.epochx.tools.grammar.*;
 
 /**
  *
  */
-public class SantaFeTrail extends GEAbstractModel {
+public class SantaFeTrail extends GRAbstractModel {
 	
 	public static final String GRAMMAR_STRING = 
 		"<prog> ::= <node>\n" +
@@ -94,7 +92,7 @@ public class SantaFeTrail extends GEAbstractModel {
 		//setGenStatFields(new GenerationStatField[]{GenerationStatField.FITNESS_MIN, GenerationStatField.FITNESS_AVE, GenerationStatField.LENGTH_AVE, GenerationStatField.RUN_TIME});
 		//setRunStatFields(new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM, RunStatField.RUN_TIME});
 		
-		setNoRuns(100);
+		/*setNoRuns(100);
 		setNoElites(50);
 		setNoGenerations(100);
 		setPopulationSize(500);
@@ -105,12 +103,12 @@ public class SantaFeTrail extends GEAbstractModel {
 		setProgramSelector(new TournamentSelector(this, 7));
 		setPoolSelector(new RandomSelector(this));
 		setPoolSize(50);
-		setInitialiser(new RampedHalfAndHalfInitialiser(this));
+		setInitialiser(new RampedHalfAndHalfInitialiser(this));*/
 	}
 	
 	@Override
 	public double getFitness(CandidateProgram p) {
-		GECandidateProgram program = (GECandidateProgram) p;
+		GRCandidateProgram program = (GRCandidateProgram) p;
 		
 		// Reset the ant.
 		landscape.setFoodLocations(new ArrayList<Point>(Arrays.asList(foodLocations)));
@@ -119,11 +117,9 @@ public class SantaFeTrail extends GEAbstractModel {
 		//TODO Look at a better solution to the ant parameter problem using executors.
 		parser.setAnt(ant);
 		
-		if (program.isValid()) {
-			// Evaluate multiple times until all time moves used.
-			while(ant.getMoves() < ant.getMaxMoves()) {
-				evaluator.eval(program.getSourceCode(), new String[]{}, new Object[]{});
-			}
+		// Evaluate multiple times until all time moves used.
+		while(ant.getMoves() < ant.getMaxMoves()) {
+			evaluator.eval(program.getSourceCode(), new String[]{}, new Object[]{});
 		}
 
 		// Calculate score.
@@ -135,9 +131,5 @@ public class SantaFeTrail extends GEAbstractModel {
 	@Override
 	public Grammar getGrammar() {
 		return grammar;
-	}
-	
-	public static void main(String[] args) {
-		Controller.run(new SantaFeTrail());
 	}
 }

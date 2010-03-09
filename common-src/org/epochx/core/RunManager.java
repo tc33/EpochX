@@ -74,12 +74,18 @@ public class RunManager {
 	public RunManager(final Model model) {
 		// Initialise the run.
 		this.model = model;
-		bestProgram = null;
-		bestFitness = Double.POSITIVE_INFINITY;
-		
+
 		// Setup core components.
 		generation = new GenerationManager(model);
 		initialisation = new InitialisationManager(model);
+	}
+	
+	/*
+	 * Initialise the run manager for a new run.
+	 */
+	private void setup() {
+		bestProgram = null;
+		bestFitness = Double.POSITIVE_INFINITY;
 	}
 	
 	/**
@@ -90,6 +96,9 @@ public class RunManager {
 	 * 				set of runs being performed.
 	 */
 	public void run(final int runNo) {
+		// Setup the run manager for a new run
+		setup();
+		
 		// Inform everyone we're starting a run.
 		LifeCycleManager.getLifeCycleManager().onRunStart();
 		

@@ -42,7 +42,7 @@ public abstract class GRAbstractModel extends AbstractModel implements GRModel {
 	 */
 	public GRAbstractModel() {
 		// Set default parameter values.
-		maxDepth = 20;
+		maxDepth = 12;
 		maxInitialDepth = 8;
 		
 		// GP Components.

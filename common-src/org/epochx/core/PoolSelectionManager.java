@@ -36,7 +36,48 @@ import org.epochx.stats.StatsManager;
  * larger population based upon some preference (typically a fitness bias, 
  * although sometimes merely randomly). In the EpochX algorithm, it is from a 
  * pool such as this that programs will be selected to undergo the genetic 
- * operators. 
+ * operators.
+ * 
+ * <p>
+ * The actual operation of selecting a pool of programs will be performed by an
+ * implementation of <code>PoolSelector</code> which is obtained from the 
+ * <code>Model</code>.
+ * 
+ * <p>
+ * Use of the pool selection operation will generate the following events:
+ * 
+ * <table>
+ *     <tr>
+ *         <th>Event</th>
+ *         <th>Revert</th>
+ *         <th>Modify</th>
+ *         <th>Raised when?</th>
+ *     </tr>
+ *     <tr>
+ *         <td>onPoolSelectionStart</td>
+ *         <td>no</td>
+ *         <td>no</td>
+ *         <td>Before the selection operation is attempted for the first time.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>onPoolSelection</td>
+ *         <td><strong>yes</strong></td>
+ *         <td><strong>yes</strong></td>
+ *         <td>Immediately after a pool is selected, giving the listener the
+ *         opportunity to request a revert which will cause a re-selection of 
+ *         the pool and this event to be raised again.</td>
+ *     </tr>
+ *     <tr>
+ *         <td>onPoolSelectionEnd</td>
+ *         <td>no</td>
+ *         <td>no</td>
+ *         <td>After the selection operation has been completed and accepted.
+ *         </td>
+ *     </tr>
+ * </table>
+ * 
+ * @see PoolSelector
  */
 public class PoolSelectionManager {
 	

@@ -27,23 +27,60 @@ import org.epochx.life.*;
 import org.epochx.model.Model;
 import org.epochx.representation.CandidateProgram;
 
+/**
+ * The elitism operation is the automatic survival of the most fit programs in
+ * a generation of an evolutionary system. This class performs this task of 
+ * scooping off and returning the best programs from a population. The number 
+ * of programs taken is decided by a call to the model's <code>getNoElites
+ * </code> method.
+ * 
+ * <p>
+ * Use of the elitism operation will generate the following events:
+ * 
+ * <table>
+ *     <tr>
+ *         <th>Event</th>
+ *         <th>Revert</th>
+ *         <th>Modify</th>
+ *         <th>Raised when?</th>
+ *     </tr>
+ *     <tr>
+ *         <td>onElitismStart</td>
+ *         <td>no</td>
+ *         <td>no</td>
+ *         <td>Before the elitism operation is carried out.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>onElitism</td>
+ *         <td>no</td>
+ *         <td><strong>yes</strong></td>
+ *         <td>After the elitism operation is carried out.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>onElitismEnd</td>
+ *         <td>no</td>
+ *         <td>no</td>
+ *         <td>After the elitism operation has been completed.
+ *         </td>
+ *     </tr>
+ * </table>
+ */
 public class ElitismManager {
 	
 	// The controlling model.
-	private Model model;
-	
-	// Manager of life cycle events.
-	private LifeCycleManager lifeCycle;
+	private final Model model;
 
 	// The number of elites to be used.
 	private int noElites;
 	
 	/**
-	 * Constructs an instance of GPElitism which will perform the elitism 
-	 * operation. 
+	 * Constructs an instance of <code>Elitism</code> which will perform the 
+	 * evolutionary operation of elitism. 
 	 * 
-	 * @param model the GPModel which defines the run parameters and life
-	 * 				cycle listeners.
+	 * @param model the Model which defines the run parameters such as number
+	 * 				of elites to use.
 	 */
 	public ElitismManager(Model model) {
 		this.model = model;
@@ -52,8 +89,7 @@ public class ElitismManager {
 		initialise();
 		
 		// Register interest in generation events so we can reset.
-		lifeCycle = LifeCycleManager.getLifeCycleManager();
-		lifeCycle.addGenerationListener(new GenerationAdapter() {
+		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
 				initialise();
@@ -62,8 +98,8 @@ public class ElitismManager {
 	}
 	
 	/*
-	 * Initialises GPElitism, in particular all parameters from the model should
-	 * be refreshed incase they've changed since the last call.
+	 * Initialises Elitism, in particular all parameters from the model should
+	 * be refreshed in case they've changed since the last call.
 	 */
 	private void initialise() {
 		// Discover how many elites we need.
@@ -87,7 +123,7 @@ public class ElitismManager {
 	 * is because elitism is a deterministic operation, and so re-running would
 	 * lead to the same result.
 	 * 
-	 * @param pop	 	the population from which elites need to be retrieved.
+	 * @param pop the population from which elites are to be retrieved.
 	 * @return a list containing the best CandidatePrograms determined by 
 	 * 		   fitness. If the models required number of elites is equal to or 
 	 * 		   greater than the population size then the returned list will 
@@ -108,7 +144,7 @@ public class ElitismManager {
 		}
 		
 		// Allow life cycle listener to confirm or modify.
-		elites = lifeCycle.onElitism(elites);
+		elites = LifeCycleManager.getLifeCycleManager().onElitism(elites);
 		
 		LifeCycleManager.getLifeCycleManager().onElitismEnd();
 		

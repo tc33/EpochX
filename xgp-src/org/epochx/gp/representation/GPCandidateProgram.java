@@ -154,6 +154,11 @@ public class GPCandidateProgram extends CandidateProgram {
 		return fitness;
 	}
 	
+	@Override
+	public boolean isValid() {
+		return (getProgramDepth() <= model.getMaxProgramDepth());
+	}
+	
 	/**
 	 * Returns a count of how many terminal nodes are in the program tree.
 	 * 

@@ -25,6 +25,16 @@ public abstract class CandidateProgram implements Cloneable, Comparable<Candidat
 
 	public abstract double getFitness();
 	
+	/**
+	 * Tests whether this <code>CandidateProgram</code> is valid according to
+	 * any restrictions in the model, for example, that it does not exceed any 
+	 * maximum depth or length parameter.
+	 * 
+	 * @return true if this program abides by all restrictions and false 
+	 * otherwise.
+	 */
+	public abstract boolean isValid();
+	
 	@Override
 	public CandidateProgram clone() {
 		CandidateProgram clone = null;

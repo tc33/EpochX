@@ -172,6 +172,12 @@ public class CrossoverManager {
 			// Attempt crossover.
 			children = crossover.crossover(clone1, clone2);
 			
+			// Start the loop again if all the children are not valid.
+			if (children == null || !allValid(children)) {
+				children = null;
+				continue;
+			}
+			
 			// Ask life cycle listener to confirm the crossover.
 			children = LifeCycleManager.getLifeCycleManager().onCrossover(parents, children);
 			
@@ -180,8 +186,6 @@ public class CrossoverManager {
 				reversions++;
 			}
 		} while(children == null);
-		
-		//TODO Need to enforce the maximum program depth limit.
 		
 		final long runtime = System.nanoTime() - crossoverStartTime;
 
@@ -193,5 +197,20 @@ public class CrossoverManager {
 		LifeCycleManager.getLifeCycleManager().onCrossoverEnd();
 		
 		return children;
-	}	
+	}
+	
+	/*
+	 * Tests whether all of the given array of CandidatePrograms is valid. If
+	 * one or more are invalid then it returns false otherwise it returns true.
+	 */
+	private boolean allValid(CandidateProgram[] programs) {
+		boolean valid = true;
+		for (CandidateProgram p: programs) {
+			if (!p.isValid()) {
+				valid = false;
+				break;
+			}
+		}
+		return valid;
+	}
 }

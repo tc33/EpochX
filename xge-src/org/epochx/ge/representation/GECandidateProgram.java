@@ -365,6 +365,7 @@ public class GECandidateProgram extends CandidateProgram {
 	 * 
 	 * @return true if this program is valid, false otherwise.
 	 */
+	@Override
 	public boolean isValid() {
 		return (getSourceCode() != null) && (codons.size() <= model.getMaxChromosomeLength());
 	}

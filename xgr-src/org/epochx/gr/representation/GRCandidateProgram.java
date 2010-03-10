@@ -68,6 +68,11 @@ public class GRCandidateProgram extends CandidateProgram {
 		
 		return fitness;
 	}
+	
+	@Override
+	public boolean isValid() {
+		return (getDepth() <= model.getMaxProgramDepth());
+	}
 
 	public String getSourceCode() {
 		return parseTree.toString();

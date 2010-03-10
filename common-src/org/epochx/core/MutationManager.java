@@ -147,6 +147,12 @@ public class MutationManager {
 			
 			// Mutate the child.
 			child = mutator.mutate(child);
+			
+			// Start the loop again if the program is not valid.
+			if (child == null || !child.isValid()) {
+				child = null;
+				continue;
+			}
 
 			// Allow the life cycle listener to confirm or modify.
 			child = LifeCycleManager.getLifeCycleManager().onMutation(parent, child);
@@ -155,8 +161,6 @@ public class MutationManager {
 				reversions++;
 			}
 		} while(child == null);
-		
-		//TODO No check is made that the new program abides by depth restrictions.
 		
 		final long runtime = System.nanoTime() - crossoverStartTime;
 		

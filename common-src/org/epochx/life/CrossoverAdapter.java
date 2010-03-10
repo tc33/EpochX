@@ -23,17 +23,33 @@ package org.epochx.life;
 
 import org.epochx.representation.CandidateProgram;
 
+/**
+ * Provides neutral implementations of the crossover events which by default 
+ * will where necessary accept the operation. Creating an anonymous 
+ * implementation of this class is often preferable to implementing <code>
+ * CrossoverListener</code> since it avoids the need to implement methods which
+ * may be of no interest.
+ */
 public abstract class CrossoverAdapter implements CrossoverListener {
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onCrossoverStart() {}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public CandidateProgram[] onCrossover(CandidateProgram[] parents,
 			CandidateProgram[] children) {
 		return children;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onCrossoverEnd() {}
 

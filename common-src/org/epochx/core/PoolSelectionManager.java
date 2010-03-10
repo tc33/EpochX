@@ -32,9 +32,13 @@ import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.StatsManager;
 
 /**
+ * This component manages the selection of a breeding pool to undergo the 
+ * genetic operators.
+ * 
+ * <p>
  * The task of pool selection is the selection of a subset of programs from a 
  * larger population based upon some preference (typically a fitness bias, 
- * although sometimes merely randomly). In the EpochX algorithm, it is from a 
+ * although sometimes merely randomly). In the EpochX framework, it is from a 
  * pool such as this that programs will be selected to undergo the genetic 
  * operators.
  * 
@@ -44,9 +48,9 @@ import org.epochx.stats.StatsManager;
  * <code>Model</code>.
  * 
  * <p>
- * Use of the pool selection operation will generate the following events:
+ * Use of the pool selection operation may generate the following events:
  * 
- * <table>
+ * <table border="1">
  *     <tr>
  *         <th>Event</th>
  *         <th>Revert</th>

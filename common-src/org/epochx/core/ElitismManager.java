@@ -28,16 +28,16 @@ import org.epochx.model.Model;
 import org.epochx.representation.CandidateProgram;
 
 /**
- * The elitism operation is the automatic survival of the most fit programs in
- * a generation of an evolutionary system. This class performs this task of 
- * scooping off and returning the best programs from a population. The number 
- * of programs taken is decided by a call to the model's <code>getNoElites
- * </code> method.
+ * This component handles the elitism operation to ensure the survival of the 
+ * most fit programs in a generation of an evolutionary run. This class 
+ * performs this task of scooping off and returning the best programs from a 
+ * population. The number of programs taken is decided by a call to the 
+ * model's <code>getNoElites</code> method.
  * 
  * <p>
  * Use of the elitism operation will generate the following events:
  * 
- * <table>
+ * <table border="1">
  *     <tr>
  *         <th>Event</th>
  *         <th>Revert</th>
@@ -82,7 +82,7 @@ public class ElitismManager {
 	 * @param model the Model which defines the run parameters such as number
 	 * 				of elites to use.
 	 */
-	public ElitismManager(Model model) {
+	public ElitismManager(final Model model) {
 		this.model = model;
 		
 		// Initialise parameters.
@@ -129,7 +129,7 @@ public class ElitismManager {
 	 * 		   greater than the population size then the returned list will 
 	 * 		   contain all CandidatePrograms from the population sorted.
 	 */
-	public List<CandidateProgram> elitism(List<CandidateProgram> pop) {
+	public List<CandidateProgram> elitism(final List<CandidateProgram> pop) {
 		LifeCycleManager.getLifeCycleManager().onElitismStart();
 		
 		// Construct an array for elites.

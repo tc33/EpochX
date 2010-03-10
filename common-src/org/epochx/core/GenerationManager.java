@@ -41,6 +41,43 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * <p>
  * An instance of <code>GenerationManager</code> is tied to a 
  * <code>Model</code>.
+ * 
+ * <p>
+ * Use of a generation will generate the following events:
+ * 
+ * <p>
+ * <table border="1">
+ *     <tr>
+ *         <th>Event</th>
+ *         <th>Revert</th>
+ *         <th>Modify</th>
+ *         <th>Raised when?</th>
+ *     </tr>
+ *     <tr>
+ *         <td>onGenerationStart</td>
+ *         <td>no</td>
+ *         <td>no</td>
+ *         <td>Before the generation is started.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>onGeneration</td>
+ *         <td><strong>yes</strong></td>
+ *         <td><strong>yes</strong></td>
+ *         <td>Immediately after the generation is completed, giving the listener 
+ *         the opportunity to request a revert which will cause the generation 
+ *         to be performed again starting from the previous population. This 
+ *         will result in this event being raised again.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>onGenerationEnd</td>
+ *         <td>no</td>
+ *         <td>no</td>
+ *         <td>After the generation has been completed.
+ *         </td>
+ *     </tr>
+ * </table>
  */
 public class GenerationManager {
 	
@@ -126,8 +163,8 @@ public class GenerationManager {
 	 * @return the population derived from performing genetic operations on the
 	 * 					  previous population.
 	 */
-	public List<CandidateProgram> generation(int generationNumber, 
-				List<CandidateProgram> previousPop) {
+	public List<CandidateProgram> generation(final int generationNumber, 
+					final List<CandidateProgram> previousPop) {
 		// Initialise all variables.
 		initialise();
 		
@@ -149,7 +186,7 @@ public class GenerationManager {
 			pop.addAll(elitism.elitism(previousPop));
 			
 			// Construct a breeding pool.
-			List<CandidateProgram> pool = poolSelection.getPool(previousPop);
+			final List<CandidateProgram> pool = poolSelection.getPool(previousPop);
 			
 			// Give parent selector a pool of programs to choose from.
 			model.getProgramSelector().setSelectionPool(pool);
@@ -157,12 +194,12 @@ public class GenerationManager {
 			// Fill the population by performing genetic operations.
 			while(pop.size() < popSize) {
 				// Randomly choose a genetic operator.
-				double random = rng.nextDouble();
+				final double random = rng.nextDouble();
 				
 				if (random < crossoverProbability) {
 					// Perform crossover.
-					CandidateProgram[] children = crossover.crossover();
-					for (CandidateProgram c: children) {
+					final CandidateProgram[] children = crossover.crossover();
+					for (final CandidateProgram c: children) {
 						if (pop.size() < popSize) {
 							pop.add(c);
 						}

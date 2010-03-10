@@ -27,23 +27,29 @@ import org.epochx.representation.CandidateProgram;
 
 
 /**
- *
+ * Defines the elitism events which may be raised.
  */
 public interface ElitismListener {
 
+	/**
+	 * Event raised before the elitism operation starts.
+	 */
 	public void onElitismStart();
 	
 	/**
-	 * Called after selection of elites. If the number of elites to use is set 
-	 * by the model to <=0, then this method will still be called at the 
-	 * appropriate time, but with an empty list.
+	 * Event raised after the elitism operation has been carried out. 
+	 * The elites may be modified and returned to be used, but it is not 
+	 * possible to (not does it make sense to) revert elitism.
 	 * 
 	 * @param elites the selection of chosen elites.
-	 * @return a List of CandidatePrograms to use as the set of elites. Note 
-	 * that it is not appropriate to return a value of null and this will cause 
-	 * undefined behaviour.
+	 * @return a list of <code>CandidatePrograms</code> to use as the set of 
+	 * elites. Note that it is not appropriate to return a value of null and 
+	 * this will cause undefined behaviour.
 	 */
 	public List<CandidateProgram> onElitism(List<CandidateProgram> elites);
 	
+	/**
+	 * Event raised after the crossover operation has ended and been accepted.
+	 */
 	public void onElitismEnd();
 }

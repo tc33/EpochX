@@ -29,10 +29,51 @@ import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.StatsManager;
 
+/**
+ * This component is responsible for handling the mutation operation and for 
+ * raising mutation events.
+ * 
+ * <p>
+ * Use of the mutation operation will generate the following events:
+ * 
+ * <p>
+ * <table border="1">
+ *     <tr>
+ *         <th>Event</th>
+ *         <th>Revert</th>
+ *         <th>Modify</th>
+ *         <th>Raised when?</th>
+ *     </tr>
+ *     <tr>
+ *         <td>onMutationStart</td>
+ *         <td>no</td>
+ *         <td>no</td>
+ *         <td>Before the mutation operation is carried out.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>onMutation</td>
+ *         <td><strong>yes</strong></td>
+ *         <td><strong>yes</strong></td>
+ *         <td>Immediately after mutation is carried out, giving the listener 
+ *         the opportunity to request a revert which will cause a re-selection 
+ *         of a program and mutation of that program which will result in this 
+ *         event being raised again.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>onMutationEnd</td>
+ *         <td>no</td>
+ *         <td>no</td>
+ *         <td>After the mutation operation has been completed.
+ *         </td>
+ *     </tr>
+ * </table>
+ */
 public class MutationManager {
 	
 	// The controlling model.
-	private Model model;
+	private final Model model;
 	
 	// The selector for choosing the individual to mutate.
 	private ProgramSelector programSelector;
@@ -44,17 +85,17 @@ public class MutationManager {
 	private int reversions;
 	
 	/**
-	 * Constructs an instance of GPMutation which will setup the mutation 
+	 * Constructs an instance of MutationManager which will setup the mutation 
 	 * operation. Note that the actual mutation operation will be performed by 
-	 * the subclass of <code>Mutation</code> returned by the models 
+	 * the subclass of <code>Mutation</code> returned by the model's 
 	 * <code>getMutation()</code> method.
 	 * 
-	 * @param model the GPModel which defines the Mutation operator and 
+	 * @param model the Model which defines the Mutation operator and 
 	 * 				ProgramSelector to use to perform one act of mutation on 
 	 * 				an individual in the population.
 	 * @see Mutation
 	 */
-	public MutationManager(Model model) {
+	public MutationManager(final Model model) {
 		this.model = model;
 
 		// Initialise parameters.
@@ -66,12 +107,10 @@ public class MutationManager {
 				initialise();
 			}
 		});
-
-		initialise();
 	}
 	
 	/*
-	 * Initialises GPMutation, in particular all parameters from the model should
+	 * Initialises Mutation, in particular all parameters from the model should
 	 * be refreshed incase they've changed since the last call.
 	 */
 	private void initialise() {
@@ -80,26 +119,11 @@ public class MutationManager {
 	}
 	
 	/**
-	 * Selects a <code>GPCandidateProgram</code> from the population using the
+	 * Selects a <code>CandidateProgram</code> from the population using the
 	 * <code>ProgramSelector</code> returned by a call to 
 	 * <code>getProgramSelector()</code> on the model given at construction and 
 	 * submits it to the <code>Mutation</code> operator which is obtained by 
 	 * calling <code>getMutation()</code> on the model. 
-	 * 
-	 * <p>After a mutation is made, the controlling model is requested to 
-	 * confirm the mutation by a call to <code>acceptMutation()</code>. This 
-	 * gives the model total control over whether a mutation is allowed to 
-	 * proceed. If <code>acceptMutation()</code> returns <code>false</code> 
-	 * then the new <code>GPCandidateProgram</code> is discarded and a new 
-	 * individual is selected and attempted for mutation. The number of times 
-	 * the mutation was reverted before being accepted is available through 
-	 * a call to <code>getRevertedCount()</code>.
-	 * 
-	 * <p>Even after a mutation has been accepted by the model, it may still 
-	 * be prevented from proceeding if the program depth of the new program 
-	 * exceeds the max depth that the model defines. In the case that it does 
-	 * exceed the limit then the original program is returned as the result. 
-	 * This does not count towards the number of reversions.
 	 * 
 	 * @return a GPCandidateProgram generated through mutation by the Mutation
 	 *         operator in use, or if the max depth limit was exceeded then 
@@ -108,12 +132,12 @@ public class MutationManager {
 	public CandidateProgram mutate() {
 		LifeCycleManager.getLifeCycleManager().onMutationStart();
 		
-		long crossoverStartTime = System.nanoTime();
+		final long crossoverStartTime = System.nanoTime();
 		
 		CandidateProgram parent = null;
 		CandidateProgram child = null;
 
-		reversions = -1;
+		reversions = 0;
 		do {
 			// Attempt mutation.
 			parent = programSelector.getProgram();
@@ -126,34 +150,24 @@ public class MutationManager {
 
 			// Allow the life cycle listener to confirm or modify.
 			child = LifeCycleManager.getLifeCycleManager().onMutation(parent, child);
-			reversions++;
+			
+			if (child == null) {
+				reversions++;
+			}
 		} while(child == null);
 		
-		long runtime = System.nanoTime() - crossoverStartTime;
+		//TODO No check is made that the new program abides by depth restrictions.
 		
+		final long runtime = System.nanoTime() - crossoverStartTime;
+		
+		// Store the stats from the mutation.
 		StatsManager.getStatsManager().addMutationData(MUTATION_PROGRAM_BEFORE, parent);
 		StatsManager.getStatsManager().addMutationData(MUTATION_PROGRAM_AFTER, child);
-		StatsManager.getStatsManager().addMutationData(MUTATION_REVERTED, reversions);
 		StatsManager.getStatsManager().addMutationData(MUTATION_TIME, runtime);
+		StatsManager.getStatsManager().addGenerationData(MUTATION_REVERSIONS, reversions);
 		
 		LifeCycleManager.getLifeCycleManager().onMutationEnd();
 		
 		return child;
-	}
-	
-	/**
-	 * <p>After a mutation is made, the controlling model is requested to 
-	 * confirm the mutation by a call to <code>acceptMutation()</code>. This 
-	 * gives the model total control over whether a mutation is allowed to 
-	 * proceed. If <code>acceptMutation()</code> returns <code>false</code> 
-	 * then the mutated program is discarded and a new 
-	 * <code>GPCandidateProgram</code> selected to undergo mutation. The number 
-	 * of times the mutation was reverted before being accepted is available 
-	 * through a call to this method.
-	 * 
-	 * @return the number of times the mutation was rejected by the model.
-	 */
-	public int getReversions() {
-		return reversions;
 	}
 }

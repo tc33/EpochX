@@ -24,21 +24,31 @@ package org.epochx.life;
 import org.epochx.representation.CandidateProgram;
 
 /**
- *
+ * Defines the reproduction events which may be raised.
  */
 public interface ReproductionListener {
 	
+	/**
+	 * Event raised before the reproduction operation starts.
+	 */
 	public void onReproductionStart();
 	
 	/**
-	 * Called after selection of an individual to be reproduced into the next 
-	 * generation.
+	 * Event raised after the selection of a program to be reproduced. 
+	 * The selected program may be modified and returned. This event is 
+	 * revertable by returning null which will trigger the discarding of the 
+	 * program and the reselection of a new one. This event will then be raised
+	 * again. If the reproduction should be accepted then the program should be 
+	 * returned as it is.
 	 * 
 	 * @param child the program that was selected to be reproduced.
-	 * @return a GPCandidateProgram that should be used as the reproduced program
+	 * @return a CandidateProgram that should be used as the reproduced program
 	 * and inserted into the next population.
 	 */
-	public CandidateProgram onReproduction(CandidateProgram child);
+	public CandidateProgram onReproduction(CandidateProgram program);
 	
+	/**
+	 * Event raised after the reproduction operation has ended and been accepted.
+	 */
 	public void onReproductionEnd();
 }

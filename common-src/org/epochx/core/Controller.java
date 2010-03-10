@@ -26,25 +26,24 @@ import org.epochx.model.Model;
 import org.epochx.stats.StatsManager;
 
 /**
- * The entry point for evolution in <a href="http://www.epochx.org" 
- * target="_parent">EpochX</a>. This class provides a number of <code>static
- * </code> methods to start execution of an evolutionary run (or multiple 
- * runs) and to interact with a run while it proceeds.
+ * The entry point for evolution in the <a href="http://www.epochx.org" 
+ * target="_parent">EpochX</a> framework. 
  * 
  * <p>
- * An evolutionary run can be started with a call to the class's 
- * <code>Controller.run(Model)</code> method. This will trigger a series of 
- * executions which will proceed according to the parameters retrieved from the
- * provided {@link Model}. Prior to calling the <code>run</code> method it is 
- * typical to arrange for some form of output to be generated each generation, 
- * each run or even each crossover or mutation. A wide range of statistics are 
- * available from the {@link StatsManager}. An instance of <code>StatsManager
- * </code> is retrievable through this class's <code>getStatsManager()</code>
- * <code>static</code> method. A listener model is employed through the 
- * {@link LifeCycleManager} to allow events such as a generation starting, or 
- * crossover being carried out, to be handled and responded to. This is 
- * commonly combined with the <code>StatsManager</code> to output statistics 
- * each generation or run.
+ * This class simply provides a <code>static</code> method to start execution 
+ * of an evolutionary run (or multiple runs). An evolutionary run can be 
+ * started with a call to the class's <code>Controller.run(Model)</code> 
+ * method. This will trigger a series of executions which will proceed 
+ * according to the parameters retrieved from the provided {@link Model}. 
+ * 
+ * Prior to calling the <code>run</code> method it is typical to arrange for 
+ * some form of output to be generated each generation, each run or even each 
+ * crossover or mutation. A wide range of statistics are 
+ * available from the {@link StatsManager}. A listener model is employed 
+ * through the {@link LifeCycleManager} to allow events such as a generation 
+ * starting, or crossover being carried out, to be handled and responded to. 
+ * This is commonly combined with the <code>StatsManager</code> to output 
+ * statistics each generation or run.
  * 
  * <p>
  * Note that use of this class is not thread safe and use of threads with 

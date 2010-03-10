@@ -23,12 +23,23 @@ package org.epochx.life;
 
 import org.epochx.representation.CandidateProgram;
 
+/**
+ * Defines the crossover events which may be raised.
+ */
 public interface CrossoverListener {
 
+	/**
+	 * Event raised before the crossover operation starts.
+	 */
 	public void onCrossoverStart();
 	
 	/**
-	 * Called after selection and crossover of 2 individuals.
+	 * Event raised after the selection and crossover operation has occurred. 
+	 * The children may be modified and returned. This event is revertable by 
+	 * returning null which will trigger the discarding of the parents and 
+	 * children, the reselection of new parents, a new crossover attempt and 
+	 * this event being raised again. If the crossover should be accepted then
+	 * the children should be returned as they are.
 	 * 
 	 * @param parents the programs that were selected to undergo crossover.
 	 * @param children the programs that were generated as a result of the 
@@ -38,6 +49,9 @@ public interface CrossoverListener {
 	 */
 	public CandidateProgram[] onCrossover(CandidateProgram[] parents, CandidateProgram[] children);
 	
+	/**
+	 * Event raised after the crossover operation has ended and been accepted.
+	 */
 	public void onCrossoverEnd();
 	
 }

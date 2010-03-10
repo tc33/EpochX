@@ -25,20 +25,22 @@ import java.util.List;
 
 import org.epochx.representation.CandidateProgram;
 
-
 /**
- *
+ * Defines the pool selection events which may be raised.
  */
 public interface PoolSelectionListener {
 
+	/**
+	 * Event raised before the pool selection operation starts.
+	 */
 	public void onPoolSelectionStart();
 	
 	/**
-	 * Called after selection of the breeding pool. If the size of the breeding
-	 * pool is set in the model to <=0, then this method will still be called 
-	 * at the appropriate time, but with a list containing every program in the 
-	 * population. The population essentially becomes the breeding pool in this 
-	 * circumstance.
+	 * Event raised after the pool selection operation has occurred. The pool
+	 * may be modified and returned. This event is revertable by 
+	 * returning null which will trigger the discarding of the pool the 
+	 * reselection of a new pool. This event will then be raised again. If the 
+	 * selection should be accepted then the pool should be returned as it is.
 	 * 
 	 * @param pool the suggested breeding pool of programs.
 	 * @return the breeding pool of CandidatePrograms that should actually be 
@@ -46,5 +48,9 @@ public interface PoolSelectionListener {
 	 */
 	public List<CandidateProgram> onPoolSelection(List<CandidateProgram> pool);
 	
+	/**
+	 * Event raised after the pool selection operation has ended and been 
+	 * accepted.
+	 */
 	public void onPoolSelectionEnd();
 }

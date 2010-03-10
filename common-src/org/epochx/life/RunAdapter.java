@@ -21,14 +21,29 @@
  */
 package org.epochx.life;
 
+/**
+ * Provides neutral implementations of the run events. Creating an anonymous 
+ * implementation of this class is often preferable to implementing <code>
+ * RunListener</code> since it avoids the need to implement methods which
+ * may be of no interest.
+ */
 public abstract class RunAdapter implements RunListener {
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onRunStart() {}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onSuccess() {}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onRunEnd() {}
 	

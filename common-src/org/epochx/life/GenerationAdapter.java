@@ -25,16 +25,32 @@ import java.util.List;
 
 import org.epochx.representation.CandidateProgram;
 
+/**
+ * Provides neutral implementations of the generation events which by default 
+ * will where necessary accept the operation. Creating an anonymous 
+ * implementation of this class is often preferable to implementing <code>
+ * GenerationListener</code> since it avoids the need to implement methods 
+ * which may be of no interest.
+ */
 public abstract class GenerationAdapter implements GenerationListener {
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onGenerationStart() {}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<CandidateProgram> onGeneration(List<CandidateProgram> pop) {
 		return pop;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onGenerationEnd() {}
 

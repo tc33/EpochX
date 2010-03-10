@@ -25,16 +25,32 @@ import java.util.List;
 
 import org.epochx.representation.CandidateProgram;
 
+/**
+ * Provides neutral implementations of the elitism events which by default 
+ * will where necessary accept the operation. Creating an anonymous 
+ * implementation of this class is often preferable to implementing <code>
+ * ElitismListener</code> since it avoids the need to implement methods which
+ * may be of no interest.
+ */
 public class ElitismAdapter implements ElitismListener {
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onElitismStart() {}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<CandidateProgram> onElitism(List<CandidateProgram> elites) {
 		return elites;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onElitismEnd() {}
 

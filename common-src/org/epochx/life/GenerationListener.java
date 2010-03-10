@@ -25,27 +25,34 @@ import java.util.List;
 
 import org.epochx.representation.CandidateProgram;
 
-
 /**
- *
+ * Defines the generation events which may be raised.
  */
 public interface GenerationListener {
 
 	/**
-	 * Called at the start of each generation.
-	 * 
-	 * Note that this method is called <b>before</b> the generation statistics
-	 * are generated so any generation statistics will be created based upon 
-	 * the population returned here.
-	 * 
-	 * @param pop the population as it stands after the previous generation.
-	 * @return a List of CandidatePrograms that should be used as the 
-	 * population resulting from this generation.
+	 * Event raised before a generation starts.
 	 */
 	public void onGenerationStart();
 	
+	/**
+	 * Event raised after a generation has been carried out. The resultant 
+	 * population may be modified and returned. This event is revertable by 
+	 * returning null which will trigger the population to be discarded and for
+	 * the whole generation to be performed again from the previous population. 
+	 * This event will then be raised again. If the generation should be 
+	 * accepted then the population should be returned as it is.
+	 * 
+	 * @param pop the population that is the result of carrying out the 
+	 * 			  generation.
+	 * @return the list of programs that should become the next population, or
+	 * 		   null if the generation should be rerun.
+	 */
 	public List<CandidateProgram> onGeneration(List<CandidateProgram> pop);
 	
+	/**
+	 * Event raised once a generation has ended and been accepted.
+	 */
 	public void onGenerationEnd();
 	
 }

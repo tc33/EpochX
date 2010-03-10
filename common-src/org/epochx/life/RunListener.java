@@ -22,16 +22,26 @@
 package org.epochx.life;
 
 /**
- *
+ * Defines the run events which may be raised.
  */
 public interface RunListener {
 
+	/**
+	 * Event raised before the run starts.
+	 */
 	public void onRunStart();
 
+	/**
+	 * Event raised when a program with a fitness lower than the model's 
+	 * termination fitness is found.
+	 */
 	public void onSuccess();
 	
 	//public void onStagnate();
 	
+	/**
+	 * Event raised after the run has ended.
+	 */
 	public void onRunEnd();
 	
 }

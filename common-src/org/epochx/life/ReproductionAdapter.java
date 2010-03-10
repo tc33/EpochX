@@ -23,16 +23,32 @@ package org.epochx.life;
 
 import org.epochx.representation.CandidateProgram;
 
+/**
+ * Provides neutral implementations of the reproduction events which by default
+ * will where necessary accept the operation. Creating an anonymous 
+ * implementation of this class is often preferable to implementing <code>
+ * ReproductionListener</code> since it avoids the need to implement methods which
+ * may be of no interest.
+ */
 public abstract class ReproductionAdapter implements ReproductionListener {
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onReproductionStart() {}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public CandidateProgram onReproduction(CandidateProgram child) {
-		return child;
+	public CandidateProgram onReproduction(CandidateProgram program) {
+		return program;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onReproductionEnd() {}
 

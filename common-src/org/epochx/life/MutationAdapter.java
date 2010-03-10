@@ -23,17 +23,33 @@ package org.epochx.life;
 
 import org.epochx.representation.CandidateProgram;
 
+/**
+ * Provides neutral implementations of the mutation events which by default 
+ * will where necessary accept the operation. Creating an anonymous 
+ * implementation of this class is often preferable to implementing <code>
+ * MutationListener</code> since it avoids the need to implement methods which
+ * may be of no interest.
+ */
 public abstract class MutationAdapter implements MutationListener {
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onMutationStart() {}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public CandidateProgram onMutation(CandidateProgram parent,
 			CandidateProgram child) {
 		return child;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onMutationEnd() {}
 

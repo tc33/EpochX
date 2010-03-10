@@ -27,14 +27,22 @@ import org.epochx.representation.CandidateProgram;
 
 
 /**
- *
+ * Defines the initialisation events which may be raised.
  */
 public interface InitialisationListener {
 
+	/**
+	 * Event raised before the initialisation operation starts.
+	 */
 	public void onInitialisationStart();
 	
 	/**
-	 * Called after initialisation.
+	 * Event raised after a population has been initialised. The initial 
+	 * population may be modified and returned. This event is revertable by 
+	 * returning null which will trigger the discarding of the population and 
+	 * a reattempt at initialisation with this event being raised again after. 
+	 * If the initialisation should be accepted then the population should be 
+	 * returned as it is.
 	 * 
 	 * @param pop the newly initialised population.
 	 * @return the population of CandidatePrograms to continue with as the 
@@ -42,5 +50,8 @@ public interface InitialisationListener {
 	 */
 	public List<CandidateProgram> onInitialisation(List<CandidateProgram> pop);
 	
+	/**
+	 * Event raised after the initialisation operation has ended and been accepted.
+	 */
 	public void onInitialisationEnd();
 }

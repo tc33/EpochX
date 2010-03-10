@@ -24,14 +24,22 @@ package org.epochx.life;
 import org.epochx.representation.CandidateProgram;
 
 /**
- *
+ * Defines the mutation events which may be raised.
  */
 public interface MutationListener {
 	
+	/**
+	 * Event raised before the mutation operation starts.
+	 */
 	public void onMutationStart();
 	
 	/**
-	 * Called after selection and mutation of an individual program.
+	 * Event raised after the selection and mutation operation has occurred. 
+	 * The child may be modified and returned. This event is revertable by 
+	 * returning null which will trigger the discarding of the parent and 
+	 * mutant child, the reselection of a new parent, a new mutation attempt 
+	 * and this event being raised again. If the mutation should be accepted 
+	 * then the child should be returned as it is.
 	 * 
 	 * @param parent the program that was selected to undergo mutation.
 	 * @param child the resultant program from the parent undergoing mutation.
@@ -40,5 +48,8 @@ public interface MutationListener {
 	 */
 	public CandidateProgram onMutation(CandidateProgram parent, CandidateProgram child);
 	
+	/**
+	 * Event raised after the mutation operation has ended and been accepted.
+	 */
 	public void onMutationEnd();
 }

@@ -25,16 +25,32 @@ import java.util.List;
 
 import org.epochx.representation.CandidateProgram;
 
+/**
+ * Provides neutral implementations of the initialisation events which by 
+ * default will where necessary accept the operation. Creating an anonymous 
+ * implementation of this class is often preferable to implementing <code>
+ * InitialisationListener</code> since it avoids the need to implement methods 
+ * which may be of no interest.
+ */
 public abstract class InitialisationAdapter implements InitialisationListener {
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onInitialisationStart() {}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<CandidateProgram> onInitialisation(List<CandidateProgram> pop) {
 		return pop;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onInitialisationEnd() {}
 

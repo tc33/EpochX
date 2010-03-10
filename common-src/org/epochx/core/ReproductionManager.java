@@ -25,11 +25,53 @@ import org.epochx.life.*;
 import org.epochx.model.Model;
 import org.epochx.op.ProgramSelector;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.stats.StatsManager;
 
+import static org.epochx.stats.StatField.*;
+
+/**
+ * This component manages the reproduction operation of selecting a program to
+ * survive into the next generation.
+ * 
+ * <p>
+ * Use of the reproduction operation will generate the following events:
+ * 
+ * <table border="1">
+ *     <tr>
+ *         <th>Event</th>
+ *         <th>Revert</th>
+ *         <th>Modify</th>
+ *         <th>Raised when?</th>
+ *     </tr>
+ *     <tr>
+ *         <td>onReproductionStart</td>
+ *         <td>no</td>
+ *         <td>no</td>
+ *         <td>Before the reproduction operation is carried out.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>onReproduction</td>
+ *         <td><strong>yes</strong></td>
+ *         <td><strong>yes</strong></td>
+ *         <td>Immediately after a program is selected for reproduction, giving
+ *         the listener the opportunity to request a revert which will cause a 
+ *         re-selection of a program and this event to be raised again.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>onReproductionEnd</td>
+ *         <td>no</td>
+ *         <td>no</td>
+ *         <td>After the reproduction operation has been completed.
+ *         </td>
+ *     </tr>
+ * </table>
+ */
 public class ReproductionManager {
 	
 	// The controlling model.
-	private Model model;
+	private final Model model;
 	
 	// Manager of life cycle events.
 	private LifeCycleManager lifeCycle;
@@ -41,15 +83,15 @@ public class ReproductionManager {
 	private int reversions;
 	
 	/**
-	 * Constructs an instance of GPReproduction which will setup the 
-	 * reproduction operation. Since the actual reproduction operation requires 
-	 * little more than selection of a program, the actual operation is also 
-	 * performed here.
+	 * Constructs an instance of ReproductionManager which will setup the 
+	 * reproduction operation. The selection of the program to be reproduced is
+	 * performed by the parent selector obtained from a call to the model's 
+	 * <code>getParentSelector()</code> method.
 	 * 
-	 * @param model the GPModel which defines the ProgramSelector to use to 
+	 * @param model the model which defines the ProgramSelector to use to 
 	 * 				select the program to be reproduced.
 	 */
-	public ReproductionManager(Model model) {
+	public ReproductionManager(final Model model) {
 		this.model = model;
 		
 		// Initialise parameters.
@@ -63,42 +105,29 @@ public class ReproductionManager {
 				initialise();
 			}
 		});
-		
-		// Initialise parameters.
-		initialise();
 	}
 	
 	/*
-	 * Initialises GPReproduction, in particular all parameters from the model should
-	 * be refreshed incase they've changed since the last call.
+	 * Initialises ReproductionManager, in particular all parameters from the 
+	 * model should be refreshed incase they've changed since the last call.
 	 */
 	private void initialise() {
 		programSelector = model.getProgramSelector();
 	}
 	
 	/**
-	 * Selects a <code>GPCandidateProgram</code> from the population using the
+	 * Selects a <code>CandidateProgram</code> from the population using the
 	 * <code>ProgramSelector</code> returned by a call to 
 	 * <code>getProgramSelector()</code> on the model given at construction. 
 	 * 
-	 * <p>After a program is selected for reproduction, the model's life cycle 
-	 * listener is requested to confirm or modify the selection by a call to 
-	 * <code>onReproduction()</code>. This gives over total control to decide 
-	 * whether a reproduction is allowed to proceed, and gives an opportunity 
-	 * for manipulation of the reproduced child program. If 
-	 * <code>onReproduction()</code> returns <code>null</code> then the child 
-	 * is discarded and a new parent is selected and reproduced. The number of 
-	 * times the reproduction was reverted before being accepted is available 
-	 * through a call to <code>getReversions()</code>.
-	 * 
-	 * @return a GPCandidateProgram selected for reproduction.
+	 * @return a CandidateProgram selected for reproduction.
 	 */
 	public CandidateProgram reproduce() {
 		LifeCycleManager.getLifeCycleManager().onReproductionStart();
 		
 		CandidateProgram parent = null;
 		
-		reversions = -1;
+		reversions = 0;
 		
 		do {
 			// Choose a parent.
@@ -106,30 +135,18 @@ public class ReproductionManager {
 			
 			// Allow the life cycle listener to confirm or modify.
 			parent = lifeCycle.onReproduction(parent);
-			reversions++;
+			
+			if (parent == null) {
+				reversions++;
+			}
 		} while(parent == null);
+		
+		// Store the stats from the reproduction.
+		StatsManager.getStatsManager().addGenerationData(REP_REVERSIONS, reversions);
 		
 		LifeCycleManager.getLifeCycleManager().onReproductionEnd();
 		
 		return parent;
 	}
-	
-	/**
-	 * Number of times the reproduction was rejected and re-attempted.
-	 * 
-	 * <p>After a program is selected for reproduction, the model's life cycle 
-	 * listener is requested to confirm or modify the selection by a call to 
-	 * <code>onReproduction()</code>. This gives over total control to decide 
-	 * whether a reproduction is allowed to proceed, and gives an opportunity 
-	 * for manipulation of the reproduced child program. If 
-	 * <code>onReproduction()</code> returns <code>null</code> then the child 
-	 * is discarded and a new parent is selected and reproduced. The number of 
-	 * times the reproduction was reverted before being accepted is available 
-	 * through a call to this method.
-	 * 
-	 * @return the number of times the reproduction was rejected by the model.
-	 */
-	public int getReversions() {
-		return reversions;
-	}
+
 }

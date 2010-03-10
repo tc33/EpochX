@@ -31,13 +31,13 @@ import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
 
 /**
- * This class is responsible for executing a single evolutionary run. Execution
- * will be controlled by parameters retrieved from the <code>Model</code> 
- * provided to the constructor.
+ * Instances of this class are responsible for executing single evolutionary 
+ * runs. Execution will be controlled by parameters retrieved from the 
+ * <code>Model</code> provided to the constructor.
  * 
  * <p>
- * Users of the EpochX API would not typically create and use instances of this 
- * class directly, but rather would through use of the 
+ * Users of the EpochX framework would not typically create and use instances 
+ * of this class directly, but rather would through use of the 
  * <code>Controller's</code> <code>run</code> class method which will execute 
  * an instance of this class multiple times.
  * 
@@ -146,7 +146,7 @@ public class RunManager {
 	 */
 	private void updateBestProgram(final List<CandidateProgram> pop) {
 		for (CandidateProgram program: pop) {
-			double fitness = program.getFitness();
+			final double fitness = program.getFitness();
 			if (fitness < bestFitness) {
 				bestFitness = fitness;
 				bestProgram = program;

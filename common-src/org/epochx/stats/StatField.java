@@ -135,7 +135,7 @@ public class StatField {
 	 * Requests an Integer which is the number of mutations that were 
 	 * reverted due to model rejection.
 	 */
-	public static final String MUTATION_REVERTED = "mutation-reverted";
+	public static final String MUTATION_REVERSIONS = "mutation-reversions";
 	
 	/** 
 	 * Requests a GPCandidateProgram[] (typically with 2 elements) which are 
@@ -159,7 +159,9 @@ public class StatField {
 	 * Requests an Integer which is the number of crossovers that were 
 	 * reverted due to model rejection.
 	 */
-	public static final String CROSSOVER_REVERTED = "crossover-reverted";
+	public static final String CROSSOVER_REVERSIONS = "crossover-reversions";
 	
 	public static final String POOL_REVERSIONS = "pool-reversions";
+	
+	public static final String REP_REVERSIONS = "rep-reversions";
 }

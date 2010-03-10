@@ -32,10 +32,10 @@ import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.StatsManager;
 
 /**
- * Instances of this class manage the initialisation step of an evolutionary
- * run. The actual act of program generation and population initialisation is 
- * performed by the implementation of Initialiser that is obtained from the 
- * {@link Model} provided to the constructor.
+ * This component manages the initialisation step of an evolutionary run and
+ * raises initialisation events. The actual act of program generation and 
+ * population initialisation is performed by the implementation of Initialiser 
+ * that is obtained from the {@link Model} provided to the constructor.
  * 
  * <p>
  * With regards to life cycle, initialisation as performed by this class is  
@@ -53,6 +53,42 @@ import org.epochx.stats.StatsManager;
  * In the case of reversion the newly initialised population will be discarded 
  * and a new one generated. A reversion counter will be incremented, the value 
  * of which is retrievable from the <code>StatsManager</code>.
+ * 
+ * <p>
+ * Use of the initialisation operation will generate the following events:
+ * 
+ * <table border="1">
+ *     <tr>
+ *         <th>Event</th>
+ *         <th>Revert</th>
+ *         <th>Modify</th>
+ *         <th>Raised when?</th>
+ *     </tr>
+ *     <tr>
+ *         <td>onInitialisationStart</td>
+ *         <td>no</td>
+ *         <td>no</td>
+ *         <td>Before the initialisation operation is carried out.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>onInitialisation</td>
+ *         <td><strong>yes</strong></td>
+ *         <td><strong>yes</strong></td>
+ *         <td>Immediately after a population has been generated, giving
+ *         the listener the opportunity to request a revert which will cause 
+ *         the re-generation of an initial population and cause this event to 
+ *         be raised again.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>onInitialisationEnd</td>
+ *         <td>no</td>
+ *         <td>no</td>
+ *         <td>After the initialisation operation has been completed.
+ *         </td>
+ *     </tr>
+ * </table>
  * 
  * @see Initialiser
  */

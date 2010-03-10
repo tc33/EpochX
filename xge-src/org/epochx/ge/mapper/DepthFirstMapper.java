@@ -67,9 +67,6 @@ public class DepthFirstMapper implements Mapper {
 	public DepthFirstMapper(GEModel model) {
 		this.model = model;
 		
-		// Initialise.
-		initialise();
-		
 		// Re-initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override

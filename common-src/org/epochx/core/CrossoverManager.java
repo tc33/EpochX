@@ -30,13 +30,50 @@ import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.StatsManager;
 
 /**
+ * This component is responsible for handling the crossover operation and for 
+ * raising crossover events.
  * 
- *
+ * <p>
+ * Use of the crossover operation will generate the following events:
+ * 
+ * <p>
+ * <table border="1">
+ *     <tr>
+ *         <th>Event</th>
+ *         <th>Revert</th>
+ *         <th>Modify</th>
+ *         <th>Raised when?</th>
+ *     </tr>
+ *     <tr>
+ *         <td>onCrossoverStart</td>
+ *         <td>no</td>
+ *         <td>no</td>
+ *         <td>Before the crossover operation is carried out.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>onCrossover</td>
+ *         <td><strong>yes</strong></td>
+ *         <td><strong>yes</strong></td>
+ *         <td>Immediately after crossover is carried out, giving the listener 
+ *         the opportunity to request a revert which will cause a re-selection 
+ *         of the parent programs and crossing over of those programs which 
+ *         will result in this event being raised again.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>onCrossoverEnd</td>
+ *         <td>no</td>
+ *         <td>no</td>
+ *         <td>After the crossover operation has been completed.
+ *         </td>
+ *     </tr>
+ * </table>
  */
 public class CrossoverManager {
 
 	// The controlling model.
-	private Model model;
+	private final Model model;
 	
 	// The selector for choosing parents.
 	private ProgramSelector programSelector;
@@ -58,7 +95,7 @@ public class CrossoverManager {
 	 * 				a population.
 	 * @see Crossover
 	 */
-	public CrossoverManager(Model model) {
+	public CrossoverManager(final Model model) {
 		this.model = model;
 		
 		// Initialise parameters.
@@ -111,7 +148,7 @@ public class CrossoverManager {
 		LifeCycleManager.getLifeCycleManager().onCrossoverStart();
 		
 		// Record the start time.
-		long crossoverStartTime = System.nanoTime();
+		final long crossoverStartTime = System.nanoTime();
 
 		CandidateProgram parent1;
 		CandidateProgram parent2;
@@ -122,7 +159,7 @@ public class CrossoverManager {
 		CandidateProgram[] parents = null;
 		CandidateProgram[] children = null;
 		
-		reversions = -1;
+		reversions = 0;
 		do {
 			// Select the parents for crossover.
 			parent1 = programSelector.getProgram();
@@ -137,46 +174,24 @@ public class CrossoverManager {
 			
 			// Ask life cycle listener to confirm the crossover.
 			children = LifeCycleManager.getLifeCycleManager().onCrossover(parents, children);
-			reversions++;
+			
+			// If reverted then increment reversion counter.
+			if (children == null) {
+				reversions++;
+			}
 		} while(children == null);
 		
-		//TODO This is actually horrible - it's so unflexible, theres no way 
-		//for a user to control whether/how this happens. Also, it doesn't even
-		//seem like the right thing to be doing. Why use the parents?!
-		/*int replacement = 0;
-		for (int i=0; i<children.length; i++) {
-			if (replacement >= parents.length) {
-				replacement = 0;
-			}
-			children[i] = (CandidateProgram) parents[replacement].clone();
-			replacement++;
-		}*/
+		//TODO Need to enforce the maximum program depth limit.
 		
-		long runtime = System.nanoTime() - crossoverStartTime;
+		final long runtime = System.nanoTime() - crossoverStartTime;
 
 		StatsManager.getStatsManager().addMutationData(CROSSOVER_PARENTS, parents);
 		StatsManager.getStatsManager().addMutationData(CROSSOVER_CHILDREN, children);
-		StatsManager.getStatsManager().addMutationData(CROSSOVER_REVERTED, reversions);
+		StatsManager.getStatsManager().addMutationData(CROSSOVER_REVERSIONS, reversions);
 		StatsManager.getStatsManager().addMutationData(CROSSOVER_TIME, runtime);
 		
 		LifeCycleManager.getLifeCycleManager().onCrossoverEnd();
 		
 		return children;
-	}
-	
-	/**
-	 * <p>After a crossover is made, the controlling model is requested to 
-	 * confirm the crossover by a call to <code>acceptCrossover()</code>. This 
-	 * gives the model total control over whether a crossover is allowed to 
-	 * proceed. If <code>acceptCrossover()</code> returns <code>false</code> 
-	 * then the children are discarded and two new parents are selected and 
-	 * attempted for crossover. The number of times the crossover was reverted 
-	 * before being accepted is available through a call to this method.
-	 * 
-	 * @return the number of times the crossover was rejected by the model.
-	 */
-	public int getReversions() {
-		return reversions;
-	}
-	
+	}	
 }

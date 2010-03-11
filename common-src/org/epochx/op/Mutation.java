@@ -23,8 +23,20 @@ package org.epochx.op;
 
 import org.epochx.representation.CandidateProgram;
 
+/**
+ * Mutation operators perform the task of manipulating a program. The manner in
+ * which the mutation is made is up to each implementation.
+ */
 public interface Mutation extends Operator {
 
+	/**
+	 * Performs the mutation operation.
+	 * 
+	 * @param program the program to undergo mutation of its genetic material.
+	 * @return the result of performing a mutation operation. <code>null</code>
+	 * is a valid return value, which will result in a new program being 
+	 * selected to undergo a mutation (this does not count as a reversion).
+	 */
 	public CandidateProgram mutate(CandidateProgram program);
 	
 }

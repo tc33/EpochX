@@ -21,6 +21,9 @@
  */
 package org.epochx.op;
 
+/**
+ * All genetic operators implement this interface for convenience.
+ */
 public interface Operator {
 	
 }

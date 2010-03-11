@@ -25,8 +25,20 @@ import java.util.List;
 
 import org.epochx.representation.CandidateProgram;
 
+/**
+ * Initialiser implementations perform the task of generating an initial set of
+ * programs. The technique used to construct the programs is up to each 
+ * implementation. The number of programs to be generated would normally be 
+ * equal to the population size requested by the model's <code>
+ * getPopulationSize</code> method but it is not required to be.
+ */
 public interface Initialiser {
 
+	/**
+	 * Generates and returns a population of new programs.
+	 * 
+	 * @return a population of programs.
+	 */
 	public List<CandidateProgram> getInitialPopulation();
 	
 }

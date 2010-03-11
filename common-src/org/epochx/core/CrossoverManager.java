@@ -85,12 +85,12 @@ public class CrossoverManager {
 	private int reversions;
 	
 	/**
-	 * Constructs an instance of GPCrossover which will setup the crossover 
+	 * Constructs an instance of CrossoverManager which will setup the crossover 
 	 * operation. Note that the actual crossover operation will be performed by 
 	 * the subclass of <code>Crossover</code> returned by the models 
 	 * getCrossover() method.
 	 * 
-	 * @param model the GPModel which defines the Crossover operator and 
+	 * @param model the Model which defines the Crossover operator and 
 	 * 				ProgramSelector to use to perform one act of crossover on 
 	 * 				a population.
 	 * @see Crossover
@@ -110,7 +110,7 @@ public class CrossoverManager {
 	}
 	
 	/*
-	 * Initialises GPCrossover, in particular all parameters from the model should
+	 * Initialises Crossover, in particular all parameters from the model should
 	 * be refreshed incase they've changed since the last call.
 	 */
 	private void initialise() {

@@ -26,7 +26,13 @@ import org.epochx.op.selection.*;
 import org.epochx.stats.StatsEngine;
 import org.epochx.tools.random.*;
 
-
+/**
+ * Default implementation of a <code>Model</code>. This class provides sensible
+ * defaults where possible and provides convenient setter methods to allow 
+ * overwriting the defaults without having to override the accessor methods.
+ * It would be more typical to extend the abstract model specific to the 
+ * representation being used.
+ */
 public abstract class AbstractModel implements Model {
 
 	// Run parameters.
@@ -40,6 +46,7 @@ public abstract class AbstractModel implements Model {
 	private double crossoverProbability;
 	private double mutationProbability;
 	
+	// Components.
 	private PoolSelector poolSelector;
 	private ProgramSelector programSelector;
 	private RandomNumberGenerator randomNumberGenerator;
@@ -50,18 +57,23 @@ public abstract class AbstractModel implements Model {
 	// Stats.
 	private StatsEngine statsEngine;
 	
+	/**
+	 * Construct the model with defaults.
+	 */
 	public AbstractModel() {
+		// Control parameters.
 		noRuns = 1;
 		noGenerations = 50;
-		populationSize = 500;
+		populationSize = 100;
 		poolSize = 50;
 		noElites = 10;
 		terminationFitness = 0.0;
 		crossoverProbability = 0.9;
 		mutationProbability = 0.1;
 		
+		// Components.
 		programSelector = new RandomSelector(this);
-		poolSelector = new TournamentSelector(this, 3);
+		poolSelector = new TournamentSelector(this, 7);
 		randomNumberGenerator = new MersenneTwisterFast();
 		
 		// Caching.
@@ -137,7 +149,7 @@ public abstract class AbstractModel implements Model {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to 500 in AbstractModel.
+	 * <p>Defaults to 100 in AbstractModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -224,7 +236,7 @@ public abstract class AbstractModel implements Model {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to 0.0 in AbstractModel to represent a 0% chance.
+	 * <p>Defaults to 0.1 in AbstractModel to represent a 10% chance.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -247,7 +259,7 @@ public abstract class AbstractModel implements Model {
 	 * 
 	 * <p>Automatically calculates the reproduction probability based upon the 
 	 * Crossover and mutation probabilities as all three together must add up 
-	 * to 100%.
+	 * to 100%. Defaults to 0% in AbstractModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -304,7 +316,7 @@ public abstract class AbstractModel implements Model {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to {@link TournamentSelector} with a tournament size of 3 
+	 * <p>Defaults to {@link TournamentSelector} with a tournament size of 7 
 	 * in AbstractModel.
 	 * 
 	 * @return {@inheritDoc}
@@ -327,7 +339,7 @@ public abstract class AbstractModel implements Model {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to MersenneTwisterFast in AbstractModel.
+	 * <p>Defaults to {@link MersenneTwisterFast} in AbstractModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -347,11 +359,23 @@ public abstract class AbstractModel implements Model {
 		this.randomNumberGenerator = rng;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>Defaults to {@link StatsEngine} in AbstractModel.
+	 * 
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public StatsEngine getStatsEngine() {
 		return statsEngine;
 	}
 	
+	/**
+	 * Sets the stats engine to use.
+	 * 
+	 * @param statsEngine the stats engine to use in providing statistics.
+	 */
 	public void setStatsEngine(StatsEngine statsEngine) {
 		this.statsEngine = statsEngine;
 	}

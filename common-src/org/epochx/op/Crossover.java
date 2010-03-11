@@ -23,8 +23,26 @@ package org.epochx.op;
 
 import org.epochx.representation.CandidateProgram;
 
+/**
+ * Crossover operators perform the task of exchanging genetic material between
+ * two programs. The manner in which the exchange is made is up to each 
+ * implementation, and the number of resulting child programs is also flexible.
+ */
 public interface Crossover extends Operator {
 
+	/**
+	 * Performs the crossover operation.
+	 * 
+	 * @param parent1 the first parent that should have its genetic material 
+	 * 				  exchanged with the second parent.
+	 * @param parent2 the second parent that should have its genetic material
+	 * 				  exchanged with the first parent.
+	 * @return an array of the children resulting from performing the crossover
+	 * operation. Any number of children may be returned. <code>null</code> is 
+	 * also a valid return value, which will result in 2 new parents being 
+	 * selected and attempted for crossover (this does not count as a 
+	 * reversion).
+	 */
 	public CandidateProgram[] crossover(CandidateProgram parent1, CandidateProgram parent2);
 	
 }

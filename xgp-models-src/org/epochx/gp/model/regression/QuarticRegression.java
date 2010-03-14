@@ -46,40 +46,31 @@ public class QuarticRegression extends GPAbstractModel {
 	}
 
 	@Override
-	public List<Node> getFunctions() {
+	public List<Node> getSyntax() {
 		// Define function set.
-		List<Node> functions = new ArrayList<Node>();
-		functions.add(new AddFunction());
-		functions.add(new SubtractFunction());
-		functions.add(new MultiplyFunction());
-		functions.add(new ProtectedDivisionFunction());
+		List<Node> syntax = new ArrayList<Node>();
+		syntax.add(new AddFunction());
+		syntax.add(new SubtractFunction());
+		syntax.add(new MultiplyFunction());
+		syntax.add(new ProtectedDivisionFunction());
 		
-		return functions;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.epochx.core.GPModel#getTerminals()
-	 */
-	@Override
-	public List<Node> getTerminals() {
 		// Define terminal set.
-		List<Node> terminals = new ArrayList<Node>();
-		terminals.add(new DoubleLiteral(5d));
-		terminals.add(new DoubleLiteral(4d));
-		terminals.add(new DoubleLiteral(3d));
-		terminals.add(new DoubleLiteral(2d));
-		terminals.add(new DoubleLiteral(1d));
-		terminals.add(new DoubleLiteral(0d));
-		terminals.add(new DoubleLiteral(-5d));
-		terminals.add(new DoubleLiteral(-4d));
-		terminals.add(new DoubleLiteral(-3d));
-		terminals.add(new DoubleLiteral(-2d));
-		terminals.add(new DoubleLiteral(-1d));
+		syntax.add(new DoubleLiteral(5d));
+		syntax.add(new DoubleLiteral(4d));
+		syntax.add(new DoubleLiteral(3d));
+		syntax.add(new DoubleLiteral(2d));
+		syntax.add(new DoubleLiteral(1d));
+		syntax.add(new DoubleLiteral(0d));
+		syntax.add(new DoubleLiteral(-5d));
+		syntax.add(new DoubleLiteral(-4d));
+		syntax.add(new DoubleLiteral(-3d));
+		syntax.add(new DoubleLiteral(-2d));
+		syntax.add(new DoubleLiteral(-1d));
 		
 		// Define variables;
-		terminals.add(x);
+		syntax.add(x);
 		
-		return terminals;
+		return syntax;
 	}
 	
 	@Override

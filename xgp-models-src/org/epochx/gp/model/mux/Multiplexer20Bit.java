@@ -72,42 +72,37 @@ public class Multiplexer20Bit extends GPAbstractModel {
 	}
 	
 	@Override
-	public List<Node> getFunctions() {
+	public List<Node> getSyntax() {
 		// Define functions.
-		List<Node> functions = new ArrayList<Node>();
-		functions.add(new IfFunction());
-		functions.add(new AndFunction());
-		functions.add(new OrFunction());
-		functions.add(new NotFunction());
-		return functions;
-	}
-
-	@Override
-	public List<Node> getTerminals() {		
+		List<Node> syntax = new ArrayList<Node>();
+		syntax.add(new IfFunction());
+		syntax.add(new AndFunction());
+		syntax.add(new OrFunction());
+		syntax.add(new NotFunction());
+	
 		// Define terminals.
-		List<Node> terminals = new ArrayList<Node>();
-		terminals.add(variables.get("D15"));
-		terminals.add(variables.get("D14"));
-		terminals.add(variables.get("D13"));
-		terminals.add(variables.get("D12"));
-		terminals.add(variables.get("D11"));
-		terminals.add(variables.get("D10"));
-		terminals.add(variables.get("D9"));
-		terminals.add(variables.get("D8"));
-		terminals.add(variables.get("D7"));
-		terminals.add(variables.get("D6"));
-		terminals.add(variables.get("D5"));
-		terminals.add(variables.get("D4"));
-		terminals.add(variables.get("D3"));
-		terminals.add(variables.get("D2"));
-		terminals.add(variables.get("D1"));
-		terminals.add(variables.get("D0"));
-		terminals.add(variables.get("A3"));
-		terminals.add(variables.get("A2"));
-		terminals.add(variables.get("A1"));
-		terminals.add(variables.get("A0"));
+		syntax.add(variables.get("D15"));
+		syntax.add(variables.get("D14"));
+		syntax.add(variables.get("D13"));
+		syntax.add(variables.get("D12"));
+		syntax.add(variables.get("D11"));
+		syntax.add(variables.get("D10"));
+		syntax.add(variables.get("D9"));
+		syntax.add(variables.get("D8"));
+		syntax.add(variables.get("D7"));
+		syntax.add(variables.get("D6"));
+		syntax.add(variables.get("D5"));
+		syntax.add(variables.get("D4"));
+		syntax.add(variables.get("D3"));
+		syntax.add(variables.get("D2"));
+		syntax.add(variables.get("D1"));
+		syntax.add(variables.get("D0"));
+		syntax.add(variables.get("A3"));
+		syntax.add(variables.get("A2"));
+		syntax.add(variables.get("A1"));
+		syntax.add(variables.get("A0"));
 		
-		return terminals;
+		return syntax;
 	}
 	
 	@Override

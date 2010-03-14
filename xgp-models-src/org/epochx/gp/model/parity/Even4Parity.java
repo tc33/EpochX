@@ -55,26 +55,21 @@ public class Even4Parity extends GPAbstractModel {
 	}
 	
 	@Override
-	public List<Node> getFunctions() {
+	public List<Node> getSyntax() {
 		// Define functions.
-		List<Node> functions = new ArrayList<Node>();
-		functions.add(new IfFunction());
-		functions.add(new AndFunction());
-		functions.add(new OrFunction());
-		functions.add(new NotFunction());
-		return functions;
-	}
-
-	@Override
-	public List<Node> getTerminals() {		
-		// Define terminals.
-		List<Node> terminals = new ArrayList<Node>();
-		terminals.add(variables.get("D3"));
-		terminals.add(variables.get("D2"));
-		terminals.add(variables.get("D1"));
-		terminals.add(variables.get("D0"));
+		List<Node> syntax = new ArrayList<Node>();
+		syntax.add(new IfFunction());
+		syntax.add(new AndFunction());
+		syntax.add(new OrFunction());
+		syntax.add(new NotFunction());
 		
-		return terminals;
+		// Define terminals.
+		syntax.add(variables.get("D3"));
+		syntax.add(variables.get("D2"));
+		syntax.add(variables.get("D1"));
+		syntax.add(variables.get("D0"));
+		
+		return syntax;
 	}
 	
 	@Override

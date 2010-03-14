@@ -25,7 +25,10 @@ import java.util.*;
 
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
+import org.epochx.life.GenerationAdapter;
+import org.epochx.life.LifeCycleManager;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.tools.random.RandomNumberGenerator;
 
 
 /**
@@ -37,6 +40,15 @@ public class GrowInitialiser implements GPInitialiser {
 	// The current controlling model.
 	private GPModel model;
 	
+	private List<Node> syntax;
+	private List<Node> terminals;
+	private List<Node> functions;
+	
+	private RandomNumberGenerator rng;
+	
+	private int popSize;
+	private int maxInitialDepth;
+	
 	/**
 	 * Constructor for the grow initialiser.
 	 * 
@@ -45,6 +57,37 @@ public class GrowInitialiser implements GPInitialiser {
 	 */
 	public GrowInitialiser(GPModel model) {
 		this.model = model;
+		
+		terminals = new ArrayList<Node>();
+		functions = new ArrayList<Node>();
+		
+		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationStart() {
+				reset();
+			}
+		});
+	}
+	
+	/*
+	 * Update the initialisers parameters from the model.
+	 */
+	private void reset() {
+		rng = model.getRNG();
+		popSize = model.getPopulationSize();
+		maxInitialDepth = model.getInitialMaxDepth();
+		
+		terminals.clear();
+		functions.clear();
+		syntax = model.getSyntax();
+		
+		for (Node n: syntax) {
+			if (n.getArity() == 0) {
+				terminals.add(n);
+			} else {
+				functions.add(n);
+			}
+		}
 	}
 	
 	/**
@@ -61,7 +104,6 @@ public class GrowInitialiser implements GPInitialiser {
 	@Override
 	public List<CandidateProgram> getInitialPopulation() {
 		// Create population list to be populated.
-		int popSize = model.getPopulationSize();
 		List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
 		
 		// Create and add new programs to the population.
@@ -70,7 +112,7 @@ public class GrowInitialiser implements GPInitialiser {
 			
 			do {
 				// Grow a new node tree.
-				Node nodeTree = buildGrowNodeTree(model.getInitialMaxDepth());
+				Node nodeTree = buildGrowNodeTree(maxInitialDepth);
             	
 				// Create a program around the node tree.
 				candidate = new GPCandidateProgram(nodeTree, model);
@@ -94,8 +136,8 @@ public class GrowInitialiser implements GPInitialiser {
 	 */
 	public Node buildGrowNodeTree(int maxDepth) {		
 		// Randomly choose a root node.
-		int randomIndex = model.getRNG().nextInt(model.getSyntax().size());
-		Node root = (Node) model.getSyntax().get(randomIndex).clone();
+		int randomIndex = rng.nextInt(syntax.size());
+		Node root = (Node) syntax.get(randomIndex).clone();
         
 		// Populate the root node with grown children with maximum depth-1.
         this.fillChildren(root, 0, maxDepth);
@@ -113,8 +155,8 @@ public class GrowInitialiser implements GPInitialiser {
 			if(currentDepth < maxDepth-1) {
 				// Not near the maximum depth yet, use functions OR terminals.
 				for(int i=0; i<arity; i++) {
-					int randomIndex = model.getRNG().nextInt(model.getSyntax().size());
-					Node child = (Node) model.getSyntax().get(randomIndex).clone();
+					int randomIndex = rng.nextInt(syntax.size());
+					Node child = (Node) syntax.get(randomIndex).clone();
 
 					currentNode.setChild(i, child);
 					this.fillChildren(child, (currentDepth+1), maxDepth);
@@ -122,8 +164,8 @@ public class GrowInitialiser implements GPInitialiser {
 			} else {
 				// At maximum depth-1, fill children with terminals.
 				for(int i=0; i<arity; i++) {
-					int randomIndex = model.getRNG().nextInt(model.getTerminals().size());
-					Node child = (Node) model.getTerminals().get(randomIndex).clone();
+					int randomIndex = rng.nextInt(terminals.size());
+					Node child = (Node) terminals.get(randomIndex).clone();
 					
 					currentNode.setChild(i, child);
 				}

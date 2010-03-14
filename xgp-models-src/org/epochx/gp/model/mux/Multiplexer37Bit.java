@@ -86,59 +86,54 @@ public class Multiplexer37Bit extends GPAbstractModel {
 	}
 	
 	@Override
-	public List<Node> getFunctions() {
+	public List<Node> getSyntax() {
 		// Define functions.
-		List<Node> functions = new ArrayList<Node>();
-		functions.add(new IfFunction());
-		functions.add(new AndFunction());
-		functions.add(new OrFunction());
-		functions.add(new NotFunction());
-		return functions;
-	}
-
-	@Override
-	public List<Node> getTerminals() {		
+		List<Node> syntax = new ArrayList<Node>();
+		syntax.add(new IfFunction());
+		syntax.add(new AndFunction());
+		syntax.add(new OrFunction());
+		syntax.add(new NotFunction());
+	
 		// Define terminals.
-		List<Node> terminals = new ArrayList<Node>();
-		terminals.add(variables.get("D31"));
-		terminals.add(variables.get("D30"));
-		terminals.add(variables.get("D29"));
-		terminals.add(variables.get("D28"));
-		terminals.add(variables.get("D27"));
-		terminals.add(variables.get("D26"));
-		terminals.add(variables.get("D25"));
-		terminals.add(variables.get("D24"));
-		terminals.add(variables.get("D23"));
-		terminals.add(variables.get("D22"));
-		terminals.add(variables.get("D21"));
-		terminals.add(variables.get("D20"));
-		terminals.add(variables.get("D19"));
-		terminals.add(variables.get("D18"));
-		terminals.add(variables.get("D17"));
-		terminals.add(variables.get("D16"));
-		terminals.add(variables.get("D15"));
-		terminals.add(variables.get("D14"));
-		terminals.add(variables.get("D13"));
-		terminals.add(variables.get("D12"));
-		terminals.add(variables.get("D11"));
-		terminals.add(variables.get("D10"));
-		terminals.add(variables.get("D9"));
-		terminals.add(variables.get("D8"));
-		terminals.add(variables.get("D7"));
-		terminals.add(variables.get("D6"));
-		terminals.add(variables.get("D5"));
-		terminals.add(variables.get("D4"));
-		terminals.add(variables.get("D3"));
-		terminals.add(variables.get("D2"));
-		terminals.add(variables.get("D1"));
-		terminals.add(variables.get("D0"));
-		terminals.add(variables.get("A4"));
-		terminals.add(variables.get("A3"));
-		terminals.add(variables.get("A2"));
-		terminals.add(variables.get("A1"));
-		terminals.add(variables.get("A0"));
+		syntax.add(variables.get("D31"));
+		syntax.add(variables.get("D30"));
+		syntax.add(variables.get("D29"));
+		syntax.add(variables.get("D28"));
+		syntax.add(variables.get("D27"));
+		syntax.add(variables.get("D26"));
+		syntax.add(variables.get("D25"));
+		syntax.add(variables.get("D24"));
+		syntax.add(variables.get("D23"));
+		syntax.add(variables.get("D22"));
+		syntax.add(variables.get("D21"));
+		syntax.add(variables.get("D20"));
+		syntax.add(variables.get("D19"));
+		syntax.add(variables.get("D18"));
+		syntax.add(variables.get("D17"));
+		syntax.add(variables.get("D16"));
+		syntax.add(variables.get("D15"));
+		syntax.add(variables.get("D14"));
+		syntax.add(variables.get("D13"));
+		syntax.add(variables.get("D12"));
+		syntax.add(variables.get("D11"));
+		syntax.add(variables.get("D10"));
+		syntax.add(variables.get("D9"));
+		syntax.add(variables.get("D8"));
+		syntax.add(variables.get("D7"));
+		syntax.add(variables.get("D6"));
+		syntax.add(variables.get("D5"));
+		syntax.add(variables.get("D4"));
+		syntax.add(variables.get("D3"));
+		syntax.add(variables.get("D2"));
+		syntax.add(variables.get("D1"));
+		syntax.add(variables.get("D0"));
+		syntax.add(variables.get("A4"));
+		syntax.add(variables.get("A3"));
+		syntax.add(variables.get("A2"));
+		syntax.add(variables.get("A1"));
+		syntax.add(variables.get("A0"));
 		
-		return terminals;
+		return syntax;
 	}
 	
 	@Override

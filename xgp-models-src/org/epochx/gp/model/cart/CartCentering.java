@@ -95,29 +95,20 @@ public class CartCentering extends GPAbstractModel {
 	}
 
 	@Override
-	public List<Node> getFunctions() {
+	public List<Node> getSyntax() {
 		// Define function set.
-		List<Node> functions = new ArrayList<Node>();
-		functions.add(new AddFunction());
-		functions.add(new SubtractFunction());
-		functions.add(new MultiplyFunction());
-		functions.add(new ProtectedDivisionFunction());
-		functions.add(new GreaterThanFunction());
-		functions.add(new AbsoluteFunction());
-		
-		return functions;
-	}
-
-	@Override
-	public List<Node> getTerminals() {
-		// Define terminal set.
-		List<Node> terminals = new ArrayList<Node>();
+		List<Node> syntax = new ArrayList<Node>();
+		syntax.add(new AddFunction());
+		syntax.add(new SubtractFunction());
+		syntax.add(new MultiplyFunction());
+		syntax.add(new ProtectedDivisionFunction());
+		syntax.add(new GreaterThanFunction());
 		
 		// Define variables;
-		terminals.add(varX);
-		terminals.add(varV);
+		syntax.add(varX);
+		syntax.add(varV);
 		
-		return terminals;
+		return syntax;
 	}
 	
 	@Override

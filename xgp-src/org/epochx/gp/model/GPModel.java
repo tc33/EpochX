@@ -81,23 +81,7 @@ public interface GPModel extends Model {
 	public GPMutation getMutation();
 
 	/**
-	 * Retrieves the set of terminal nodes. 
-	 * 
-	 * @return the terminal nodes to be used during evolution.
-	 */
-	public List<Node> getTerminals();
-
-	/**
-	 * Retrieves the set of function nodes.
-	 * 
-	 * @return the function nodes to be used during evolution.
-	 */
-	public List<Node> getFunctions();
-
-	/**
 	 * Retrieves the full set of syntax, that is terminals AND function nodes.
-	 * This is usually a combination of the calls from getTerminals() and 
-	 * getFunctions().
 	 * 
 	 * @return the full syntax for use in building node trees.
 	 */

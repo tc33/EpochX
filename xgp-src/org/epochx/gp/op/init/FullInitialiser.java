@@ -25,7 +25,10 @@ import java.util.*;
 
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
+import org.epochx.life.GenerationAdapter;
+import org.epochx.life.LifeCycleManager;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.tools.random.RandomNumberGenerator;
 
 
 /**
@@ -35,7 +38,16 @@ public class FullInitialiser implements GPInitialiser {
 	
 	// The current controlling model.
 	private GPModel model;
-
+	
+	private List<Node> terminals;
+	private List<Node> functions;
+	private List<Node> syntax;
+	
+	private RandomNumberGenerator rng;
+	
+	private int popSize;
+	private int maxInitialDepth;
+	
 	/**
 	 * Constructor for the full initialiser.
 	 * 
@@ -44,6 +56,34 @@ public class FullInitialiser implements GPInitialiser {
 	 */
 	public FullInitialiser(GPModel model) {
 		this.model = model;
+		
+		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationStart() {
+				reset();
+			}
+		});
+	}
+	
+	/*
+	 * Update the initialisers parameters from the model.
+	 */
+	private void reset() {
+		rng = model.getRNG();
+		
+		terminals.clear();
+		functions.clear();		
+		syntax = model.getSyntax();
+		
+		maxInitialDepth = model.getInitialMaxDepth();
+		
+		for (Node n: syntax) {
+			if (n.getArity() == 0) {
+				terminals.add(n);
+			} else {
+				functions.add(n);
+			}
+		}
 	}
 	
 	/**
@@ -60,7 +100,6 @@ public class FullInitialiser implements GPInitialiser {
 	@Override
 	public List<CandidateProgram> getInitialPopulation() {
 		// Create population list to be populated.
-		int popSize = model.getPopulationSize();
 		List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
 		
 		// Create and add new programs to the population.
@@ -69,7 +108,7 @@ public class FullInitialiser implements GPInitialiser {
 			
 			do {
 				// Build a new full node tree.
-				Node nodeTree = buildFullNodeTree(model.getInitialMaxDepth());
+				Node nodeTree = buildFullNodeTree(maxInitialDepth);
             	
 				// Create a program around the node tree.
 				candidate = new GPCandidateProgram(nodeTree, model);
@@ -97,12 +136,12 @@ public class FullInitialiser implements GPInitialiser {
 		Node root;
 		if (depth == 0) {
 			// Randomly choose a terminal node as our root.
-			int randomIndex = model.getRNG().nextInt(model.getTerminals().size());
-			root = model.getTerminals().get(randomIndex).clone();
+			int randomIndex = rng.nextInt(terminals.size());
+			root = terminals.get(randomIndex).clone();
 		} else {
 			// Randomly choose a root function node.
-	        int randomIndex = model.getRNG().nextInt(model.getFunctions().size());
-	        root = model.getFunctions().get(randomIndex).clone();
+	        int randomIndex = rng.nextInt(functions.size());
+	        root = functions.get(randomIndex).clone();
 	        
 	        // Populate the root node with full children of depth-1.
 			fillChildren(root, 0, depth);
@@ -114,7 +153,6 @@ public class FullInitialiser implements GPInitialiser {
 	/*
 	 * Recursively fill the children of a node, to construct a full tree down
 	 * to a depth of maxDepth.
-	 * TODO These model calls should not be being made multiple times.
 	 */
 	private void fillChildren(Node currentNode, int currentDepth, int maxDepth) {
 		int arity = currentNode.getArity();
@@ -122,8 +160,8 @@ public class FullInitialiser implements GPInitialiser {
 		if(currentDepth<maxDepth-1) {
 			// Not near the maximum depth yet, fill children with functions only.
 			for(int i = 0; i<arity; i++) {
-				int randomIndex = model.getRNG().nextInt(model.getFunctions().size());
-				Node child = model.getFunctions().get(randomIndex).clone();
+				int randomIndex = rng.nextInt(functions.size());
+				Node child = functions.get(randomIndex).clone();
 
 				currentNode.setChild(i, child);
 				fillChildren(child, (currentDepth+1), maxDepth);
@@ -131,8 +169,8 @@ public class FullInitialiser implements GPInitialiser {
 		} else {
 			// At maximum depth-1, fill children with terminals.
 			for(int i = 0; i<arity; i++) {
-				int randomIndex = model.getRNG().nextInt(model.getTerminals().size());
-				Node child = model.getTerminals().get(randomIndex).clone();
+				int randomIndex = rng.nextInt(terminals.size());
+				Node child = terminals.get(randomIndex).clone();
 
 				currentNode.setChild(i, child);
 			}

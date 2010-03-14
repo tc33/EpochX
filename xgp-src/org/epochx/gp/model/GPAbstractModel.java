@@ -21,12 +21,13 @@
  */
 package org.epochx.gp.model;
 
-import java.util.*;
-
-import org.epochx.gp.op.crossover.*;
-import org.epochx.gp.op.init.*;
-import org.epochx.gp.op.mutation.*;
-import org.epochx.gp.representation.*;
+import org.epochx.gp.op.crossover.GPCrossover;
+import org.epochx.gp.op.crossover.UniformPointCrossover;
+import org.epochx.gp.op.init.FullInitialiser;
+import org.epochx.gp.op.init.GPInitialiser;
+import org.epochx.gp.op.mutation.GPMutation;
+import org.epochx.gp.op.mutation.SubtreeMutation;
+import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.gp.stats.GPStatsEngine;
 import org.epochx.model.AbstractModel;
 
@@ -135,19 +136,6 @@ public abstract class GPAbstractModel extends AbstractModel implements GPModel {
 	 */
 	public void setMutator(GPMutation mutator) {
 		this.mutator = mutator;
-	}
-
-	/**
-	 * Returns the union of calls to getTerminals() and getFunctions.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public List<Node> getSyntax() {
-		List<Node> syntax = new ArrayList<Node>(getTerminals());
-		syntax.addAll(getFunctions());
-		
-		return syntax;
 	}
 	
 	/**

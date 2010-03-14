@@ -73,24 +73,19 @@ public class SantaFeTrail extends GPAbstractModel {
 	}
 	
 	@Override
-	public List<Node> getFunctions() {
+	public List<Node> getSyntax() {
 		// Define functions.
-		List<Node> functions = new ArrayList<Node>();
-		functions.add(new IfFoodAheadFunction(ant));
-		functions.add(new Seq2Function());
-		functions.add(new Seq3Function());
-		return functions;
-	}
-
-	@Override
-	public List<Node> getTerminals() {		
+		List<Node> syntax = new ArrayList<Node>();
+		syntax.add(new IfFoodAheadFunction(ant));
+		syntax.add(new Seq2Function());
+		syntax.add(new Seq3Function());
+	
 		// Define terminals.
-		List<Node> terminals = new ArrayList<Node>();
-		terminals.add(new AntMoveAction(ant));
-		terminals.add(new AntTurnLeftAction(ant));
-		terminals.add(new AntTurnRightAction(ant));
+		syntax.add(new AntMoveAction(ant));
+		syntax.add(new AntTurnLeftAction(ant));
+		syntax.add(new AntTurnRightAction(ant));
 		
-		return terminals;
+		return syntax;
 	}
 	
 	@Override

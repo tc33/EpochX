@@ -56,10 +56,19 @@ public class Controller {
 	// Singleton controller instance.
 	private static Controller controller;
 	
+	// The current controlling model.
+	private Model model;
+	
+	// The run component.
+	private RunManager run;
+	
 	/*
 	 * Private constructor. Execution should be through the static methods.
 	 */
-	private Controller() {}
+	private Controller() {
+		// The run controller.
+		run = new RunManager();
+	}
 	
 	/**
 	 * Executes one or more evolutionary runs configured according to the 
@@ -84,19 +93,34 @@ public class Controller {
 			controller = new Controller();
 		}
 		
-		// The run controller.
-		final RunManager run = new RunManager(model);
+		// Set the model.
+		controller.setModel(model);
 		
 		// Set the stats engine straight away so it can be used.
 		StatsManager.getStatsManager().setStatsEngine(model.getStatsEngine());
 		
+		// Execute the runs.
+		controller.execute();
+	}
+	
+	public static Model getModel() {
+		return controller.model;
+	}
+	
+	/*
+	 * Set the controlling model.
+	 */
+	private void setModel(Model model) {
+		this.model = model;
+	}	
+
+	/*
+	 * Execute the runs.
+	 */
+	private void execute() {
 		// Execute all the runs.
 		for (int i=0; i<model.getNoRuns(); i++) {
 			run.run(i);
 		}
 	}
-	
-
-	
-
 }

@@ -25,8 +25,10 @@ import static org.epochx.stats.StatField.*;
 
 import java.util.*;
 
+import org.epochx.life.GenerationAdapter;
 import org.epochx.life.LifeCycleManager;
 import org.epochx.model.Model;
+import org.epochx.op.ProgramSelector;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.StatsManager;
 import org.epochx.tools.random.RandomNumberGenerator;
@@ -81,9 +83,6 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class GenerationManager {
 	
-	// The controlling model.
-	private final Model model;
-	
 	// Core components.
 	private final ElitismManager elitism;
 	private final PoolSelectionManager poolSelection;
@@ -93,9 +92,13 @@ public class GenerationManager {
 	
 	private RandomNumberGenerator rng;
 
+	private ProgramSelector programSelector;
+	
 	// Operator probabilities.
 	private double mutationProbability;
 	private double crossoverProbability;
+	
+	private int popSize;
 	
 	// Count of generation reversions.
 	private int reversions;
@@ -108,28 +111,36 @@ public class GenerationManager {
 	 * @param model a model which will provide the control parameters for the 
 	 * generation.
 	 */
-	public GenerationManager(final Model model) {
-		this.model = model;
-		
+	public GenerationManager() {		
 		// Setup core components.
-		elitism = new ElitismManager(model);
-		poolSelection = new PoolSelectionManager(model);
-		crossover = new CrossoverManager(model);
-		mutation = new MutationManager(model);
-		reproduction = new ReproductionManager(model);
+		elitism = new ElitismManager();
+		poolSelection = new PoolSelectionManager();
+		crossover = new CrossoverManager();
+		mutation = new MutationManager();
+		reproduction = new ReproductionManager();
 		
 		reversions = 0;
+		
+		// Update the model each generation.
+		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationStart() {
+				updateModel();
+			}
+		});
 	}
 	
 	/*
 	 * Reset the component with parameters from the model which might have 
 	 * changed since the last generation.
 	 */
-	private void initialise() {
-		rng = model.getRNG();
+	private void updateModel() {
 		reversions = 0;
-		mutationProbability = model.getMutationProbability();
-		crossoverProbability = model.getCrossoverProbability();
+		rng = Controller.getModel().getRNG();
+		mutationProbability = Controller.getModel().getMutationProbability();
+		crossoverProbability = Controller.getModel().getCrossoverProbability();
+		popSize = Controller.getModel().getPopulationSize();
+		programSelector = Controller.getModel().getProgramSelector();
 	}
 	
 	/**
@@ -166,7 +177,7 @@ public class GenerationManager {
 	public List<CandidateProgram> generation(final int generationNumber, 
 					final List<CandidateProgram> previousPop) {
 		// Initialise all variables.
-		initialise();
+		updateModel();
 		
 		// Inform all listeners that a generation is starting.
 		LifeCycleManager.getLifeCycleManager().onGenerationStart();
@@ -178,7 +189,6 @@ public class GenerationManager {
 		StatsManager.getStatsManager().addGenerationData(GEN_NUMBER, generationNumber);
 		
 		// Create next population to fill.
-		final int popSize = model.getPopulationSize();
 		List<CandidateProgram> pop = new ArrayList<CandidateProgram>(popSize);
 
 		do {
@@ -189,7 +199,7 @@ public class GenerationManager {
 			final List<CandidateProgram> pool = poolSelection.getPool(previousPop);
 			
 			// Give parent selector a pool of programs to choose from.
-			model.getProgramSelector().setSelectionPool(pool);
+			programSelector.setSelectionPool(pool);
 			
 			// Fill the population by performing genetic operations.
 			while(pop.size() < popSize) {

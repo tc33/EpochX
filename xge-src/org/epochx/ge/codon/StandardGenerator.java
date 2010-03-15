@@ -21,15 +21,21 @@
  */
 package org.epochx.ge.codon;
 
+import org.epochx.core.Controller;
 import org.epochx.ge.model.GEModel;
+import org.epochx.life.GenerationAdapter;
+import org.epochx.life.LifeCycleManager;
+import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
  * Generates codon values randomly between zero and the maximum codon size as
  * specified by the model given as an argument to the constructor.
  */
 public class StandardGenerator implements CodonGenerator {
-
-	private GEModel model;
+	
+	private RandomNumberGenerator rng;
+	
+	private int maxCodonSize;
 	
 	/**
 	 * Construct a StandardGenerator.
@@ -37,8 +43,27 @@ public class StandardGenerator implements CodonGenerator {
 	 * @param model the model that controls the run, providing the maximum 
 	 * 				codon size.
 	 */
-	public StandardGenerator(GEModel model) {
-		this.model = model;
+	public StandardGenerator() {
+		// Initialise the object.
+		updateModel();
+		
+		// Re-initialise at the start of every generation.
+		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationStart() {
+				updateModel();
+			}
+		});
+	}
+	
+	/*
+	 * Initialise parameters from model.
+	 */
+	private void updateModel() {
+		GEModel model = (GEModel) Controller.getModel();
+		
+		rng = model.getRNG();
+		maxCodonSize = model.getMaxCodonSize();
 	}
 	
 	/**
@@ -49,6 +74,6 @@ public class StandardGenerator implements CodonGenerator {
 	 */
 	@Override
 	public int getCodon() {
-		return model.getRNG().nextInt(model.getMaxCodonSize());
+		return rng.nextInt(maxCodonSize);
 	}
 }

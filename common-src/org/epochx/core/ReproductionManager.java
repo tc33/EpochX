@@ -21,13 +21,13 @@
  */
 package org.epochx.core;
 
-import org.epochx.life.*;
-import org.epochx.model.Model;
+import static org.epochx.stats.StatField.REP_REVERSIONS;
+
+import org.epochx.life.GenerationAdapter;
+import org.epochx.life.LifeCycleManager;
 import org.epochx.op.ProgramSelector;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.StatsManager;
-
-import static org.epochx.stats.StatField.*;
 
 /**
  * This component manages the reproduction operation of selecting a program to
@@ -70,12 +70,6 @@ import static org.epochx.stats.StatField.*;
  */
 public class ReproductionManager {
 	
-	// The controlling model.
-	private final Model model;
-	
-	// Manager of life cycle events.
-	private LifeCycleManager lifeCycle;
-	
 	// The selector to use to choose the program to reproduce.
 	private ProgramSelector programSelector;
 	
@@ -91,18 +85,17 @@ public class ReproductionManager {
 	 * @param model the model which defines the ProgramSelector to use to 
 	 * 				select the program to be reproduced.
 	 */
-	public ReproductionManager(final Model model) {
-		this.model = model;
+	public ReproductionManager() {
 		
 		// Initialise parameters.
-		initialise();
+		updateModel();
 		
-		lifeCycle = LifeCycleManager.getLifeCycleManager();
-		lifeCycle.addGenerationListener(new GenerationAdapter() {
+		// Initialise on each generation.
+		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
 				// Initialise parameters.
-				initialise();
+				updateModel();
 			}
 		});
 	}
@@ -111,8 +104,8 @@ public class ReproductionManager {
 	 * Initialises ReproductionManager, in particular all parameters from the 
 	 * model should be refreshed incase they've changed since the last call.
 	 */
-	private void initialise() {
-		programSelector = model.getProgramSelector();
+	private void updateModel() {
+		programSelector = Controller.getModel().getProgramSelector();
 	}
 	
 	/**
@@ -134,7 +127,7 @@ public class ReproductionManager {
 			parent = programSelector.getProgram();
 			
 			// Allow the life cycle listener to confirm or modify.
-			parent = lifeCycle.onReproduction(parent);
+			parent = LifeCycleManager.getLifeCycleManager().onReproduction(parent);
 			
 			if (parent == null) {
 				reversions++;

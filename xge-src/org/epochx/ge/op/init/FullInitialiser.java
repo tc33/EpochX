@@ -23,6 +23,7 @@ package org.epochx.ge.op.init;
 
 import java.util.*;
 
+import org.epochx.core.Controller;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.life.*;
@@ -40,9 +41,6 @@ public class FullInitialiser implements GEInitialiser {
 	 * TODO This constructs the chromosome using depth first mapping - what about others?
 	 */
 	
-	// The current controlling model.
-	private GEModel model;
-	
 	private RandomNumberGenerator rng;
 	private Grammar grammar;
 	private int popSize;
@@ -54,19 +52,30 @@ public class FullInitialiser implements GEInitialiser {
 	 * 
 	 * @param model
 	 */
-	public FullInitialiser(GEModel model) {
-		this.model = model;
-		
+	public FullInitialiser() {
 		// Initialise the object.
-		initialise();
+		updateModel();
 		
 		// Re-initialise at the start of every generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
-				initialise();
+				updateModel();
 			}
 		});
+	}
+	
+	/*
+	 * Initialise parameters from model.
+	 */
+	private void updateModel() {
+		GEModel model = (GEModel) Controller.getModel();
+		
+		rng = model.getRNG();
+		grammar = model.getGrammar();
+		popSize = model.getPopulationSize();
+		maxInitialProgramDepth = model.getMaxInitialProgramDepth();
+		maxCodonSize = model.getMaxCodonSize();
 	}
 	
 	@Override
@@ -97,7 +106,7 @@ public class FullInitialiser implements GEInitialiser {
 		
 		buildDerivationTree(codons, start, 0, depth);
 
-		return new GECandidateProgram(codons, model);
+		return new GECandidateProgram(codons);
 	}
 	
 	private void buildDerivationTree(List<Integer> codons, GrammarNode rule, int depth, int maxDepth) {
@@ -173,11 +182,4 @@ public class FullInitialiser implements GEInitialiser {
 		return codon;
 	}
 
-	private void initialise() {
-		rng = model.getRNG();
-		grammar = model.getGrammar();
-		popSize = model.getPopulationSize();
-		maxInitialProgramDepth = model.getMaxInitialProgramDepth();
-		maxCodonSize = model.getMaxCodonSize();
-	}
 }

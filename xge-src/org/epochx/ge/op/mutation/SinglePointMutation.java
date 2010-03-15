@@ -21,6 +21,7 @@
  */
 package org.epochx.ge.op.mutation;
 
+import org.epochx.core.Controller;
 import org.epochx.ge.codon.CodonGenerator;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
@@ -40,9 +41,6 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class SinglePointMutation implements GEMutation {
 
-	// The current controlling model.
-	private GEModel model;
-	
 	// Operator statistics store.
 	private int mutationPoint;
 	
@@ -55,17 +53,24 @@ public class SinglePointMutation implements GEMutation {
 	 * @param model The current controlling model. Parameters such as the codon
 	 * 				generator to use will come from here.
 	 */
-	public SinglePointMutation(GEModel model) {
-		this.model = model;
+	public SinglePointMutation() {
+		// Initialise parameters.
+		updateModel();
 		
-		initialise();
-		
+		// Re-initialise parameters on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
-				initialise();
+				updateModel();
 			}
 		});
+	}
+	
+	public void updateModel() {
+		GEModel model = (GEModel) Controller.getModel();
+		
+		rng = model.getRNG();
+		codonGenerator = model.getCodonGenerator();
 	}
 	
 	/**
@@ -87,11 +92,6 @@ public class SinglePointMutation implements GEMutation {
 		program.setCodon(mutationPoint, codon);
 
 		return program;
-	}
-
-	public void initialise() {
-		rng = model.getRNG();
-		codonGenerator = model.getCodonGenerator();
 	}
 
 }

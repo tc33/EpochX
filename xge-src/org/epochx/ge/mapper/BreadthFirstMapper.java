@@ -23,8 +23,12 @@ package org.epochx.ge.mapper;
 
 import java.util.*;
 
+import org.epochx.core.Controller;
+import org.epochx.ge.codon.CodonGenerator;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
+import org.epochx.life.GenerationAdapter;
+import org.epochx.life.LifeCycleManager;
 import org.epochx.tools.grammar.*;
 
 
@@ -38,7 +42,13 @@ import org.epochx.tools.grammar.*;
  */
 public class BreadthFirstMapper implements Mapper {
 
-	private GEModel model;
+	private Grammar grammar;
+	
+	private CodonGenerator codonGenerator;
+	
+	private int maxProgramDepth;
+	
+	private int maxChromosomeLength;
 	
 	private List<GrammarNode> symbols;
 	
@@ -60,9 +70,7 @@ public class BreadthFirstMapper implements Mapper {
 	 * @param model the controlling model providing configuration details such 
 	 * 				as the Grammar.
 	 */
-	public BreadthFirstMapper(GEModel model) {
-		this.model = model;
-		
+	public BreadthFirstMapper() {
 		// Default to extending.
 		wrapping = false;
 		extending = true;
@@ -71,6 +79,29 @@ public class BreadthFirstMapper implements Mapper {
 		removingUnusedCodons = true;
 		
 		noMappedCodons = -1;
+
+		// Initialises parameters.
+		updateModel();
+		
+		// Re-initialises parameters on each generation.
+		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationStart() {
+				updateModel();
+			}
+		});
+	}
+
+	/*
+	 * Initialises parameters from model.
+	 */
+	public void updateModel() {
+		GEModel model = (GEModel) Controller.getModel();
+		
+		grammar = model.getGrammar();
+		codonGenerator = model.getCodonGenerator();
+		maxProgramDepth = model.getMaxProgramDepth();
+		maxChromosomeLength = model.getMaxChromosomeLength();
 	}
 	
 	/**
@@ -83,7 +114,6 @@ public class BreadthFirstMapper implements Mapper {
 	 */
 	//@Override
 	public String mapToString(GECandidateProgram program) {
-		Grammar grammar = model.getGrammar();
 		symbols = new ArrayList<GrammarNode>();
 		List<Integer> codons = program.getCodonsCopy();
 		this.program = program;
@@ -92,7 +122,7 @@ public class BreadthFirstMapper implements Mapper {
 		
 		int i = 0;
 		while(containsNonTerminals(symbols)) {
-			if (i > model.getMaxProgramDepth() || program.getNoCodons() > model.getMaxChromosomeLength()) {
+			if (i > maxProgramDepth || program.getNoCodons() > maxChromosomeLength) {
 				return null;
 			} else {
 				if (!map(codons)) {
@@ -149,8 +179,8 @@ public class BreadthFirstMapper implements Mapper {
 					// If there are no more codons we simply add one.
 					if (codons.size() == 0) {
 						if (extending) {
-							if (program.getNoCodons() < model.getMaxChromosomeLength()) {
-								int newCodon = model.getCodonGenerator().getCodon();
+							if (program.getNoCodons() < maxChromosomeLength) {
+								int newCodon = codonGenerator.getCodon();
 								program.appendCodon(newCodon);
 								codons.add(newCodon);
 							} else {

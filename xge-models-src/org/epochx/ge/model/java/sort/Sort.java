@@ -59,7 +59,7 @@ public class Sort extends GEAbstractModel {
 				GenerationStatField.BEST_PROGRAM
 		});*/
 		setNoElites(30);
-		setInitialiser(new GrowInitialiser(this));
+		setInitialiser(new GrowInitialiser());
 		setMaxProgramDepth(15);
 		setMaxInitialProgramDepth(15);
 		setPoolSize(100);

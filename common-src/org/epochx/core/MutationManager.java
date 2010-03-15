@@ -72,9 +72,6 @@ import org.epochx.stats.StatsManager;
  */
 public class MutationManager {
 	
-	// The controlling model.
-	private final Model model;
-	
 	// The selector for choosing the individual to mutate.
 	private ProgramSelector programSelector;
 	
@@ -95,16 +92,14 @@ public class MutationManager {
 	 * 				an individual in the population.
 	 * @see Mutation
 	 */
-	public MutationManager(final Model model) {
-		this.model = model;
-
+	public MutationManager() {
 		// Initialise parameters.
-		initialise();
+		updateModel();
 		
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
-				initialise();
+				updateModel();
 			}
 		});
 	}
@@ -113,9 +108,9 @@ public class MutationManager {
 	 * Initialises Mutation, in particular all parameters from the model should
 	 * be refreshed incase they've changed since the last call.
 	 */
-	private void initialise() {
-		programSelector = model.getProgramSelector();
-		mutator = model.getMutation();
+	private void updateModel() {
+		programSelector = Controller.getModel().getProgramSelector();
+		mutator = Controller.getModel().getMutation();
 	}
 	
 	/**

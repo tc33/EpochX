@@ -21,13 +21,21 @@
  */
 package org.epochx.gr.representation;
 
+import org.epochx.core.Controller;
+import org.epochx.ge.model.GEModel;
 import org.epochx.gr.model.GRModel;
+import org.epochx.life.GenerationAdapter;
+import org.epochx.life.LifeCycleManager;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.*;
 
 public class GRCandidateProgram extends CandidateProgram {
 
 	private GRModel model;
+	
+	private boolean cacheFitness;
+	
+	private int maxProgramDepth;
 	
 	// The phenotype.
 	private NonTerminalSymbol parseTree;
@@ -38,30 +46,50 @@ public class GRCandidateProgram extends CandidateProgram {
 	// A stash of the source for testing if fitness cache is up to date.
 	private String sourceCache;
 	
-	public GRCandidateProgram(GRModel model) {
-		this(null, model);
+	public GRCandidateProgram() {
+		this(null);
 	}
 	
-	public GRCandidateProgram(NonTerminalSymbol parseTree, GRModel model) {
-		this.model = model;
+	public GRCandidateProgram(NonTerminalSymbol parseTree) {
 		this.parseTree = parseTree;
 		
 		sourceCache = null;
 		
 		// Initialise the fitness to -1 until we are asked to calculate it.
 		fitness = -1;
+		
+		// Initialise the object.
+		updateModel();
+		
+		// Re-initialise at the start of every generation.
+		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationStart() {
+				updateModel();
+			}
+		});
+	}
+	
+	/*
+	 * Initialise parameters from model.
+	 */
+	private void updateModel() {
+		model = (GRModel) Controller.getModel();
+		
+		cacheFitness = model.cacheFitness();
+		maxProgramDepth = model.getMaxProgramDepth();
 	}
 	
 	@Override
 	public double getFitness() {
 		// Only get the source code if caching to avoid overhead otherwise.
 		String source = null;
-		if (model.cacheFitness()) {
+		if (cacheFitness) {
 			source = getSourceCode();
 		}
 		
 		// If we're not caching or the cache is out of date.
-		if (!model.cacheFitness() || !source.equals(sourceCache)) {
+		if (!cacheFitness || !source.equals(sourceCache)) {
 			fitness = model.getFitness(this);
 			sourceCache = source;
 		}
@@ -71,7 +99,7 @@ public class GRCandidateProgram extends CandidateProgram {
 	
 	@Override
 	public boolean isValid() {
-		return (getDepth() <= model.getMaxProgramDepth());
+		return (getDepth() <= maxProgramDepth);
 	}
 
 	public String getSourceCode() {

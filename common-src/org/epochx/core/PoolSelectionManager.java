@@ -85,9 +85,6 @@ import org.epochx.stats.StatsManager;
  */
 public class PoolSelectionManager {
 	
-	// The controlling model.
-	private final Model model;
-	
 	// The pool selector to use to generate the breeding pool.
 	private PoolSelector poolSelector;
 	
@@ -106,17 +103,15 @@ public class PoolSelectionManager {
 	 * 
 	 * @see PoolSelector
 	 */
-	public PoolSelectionManager(final Model model) {
-		this.model = model;
-		
+	public PoolSelectionManager() {
 		// Initialise parameters.
-		initialise();
+		updateModel();
 		
 		// Re-initialise each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
-				initialise();
+				updateModel();
 			}
 		});
 	}
@@ -125,9 +120,9 @@ public class PoolSelectionManager {
 	 * Initialises PoolSelectionManager, in particular all parameters from the 
 	 * model should be refreshed in case they've changed since the last call.
 	 */
-	private void initialise() {
-		poolSize = model.getPoolSize();
-		poolSelector = model.getPoolSelector();
+	private void updateModel() {
+		poolSize = Controller.getModel().getPoolSize();
+		poolSelector = Controller.getModel().getPoolSelector();
 	}
 	
 	/**

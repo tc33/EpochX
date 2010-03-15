@@ -23,9 +23,14 @@ package org.epochx.gr.op.init;
 
 import java.util.*;
 
+import org.epochx.core.Controller;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
+import org.epochx.life.GenerationAdapter;
+import org.epochx.life.LifeCycleManager;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.tools.grammar.Grammar;
+import org.epochx.tools.random.RandomNumberGenerator;
 
 
 /**
@@ -40,8 +45,10 @@ import org.epochx.representation.CandidateProgram;
  */
 public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 
-	// The current controlling model.
-	private GRModel model;	
+	private RandomNumberGenerator rng;
+	private Grammar grammar;
+	private int popSize;
+	private int maxInitialProgramDepth;
 	
 	// The grow and full instances for doing their share of the work.
 	private GrowInitialiser grow;
@@ -55,8 +62,8 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 	 * 
 	 * @param model The model being assessed
 	 */
-	public RampedHalfAndHalfInitialiser(GRModel model) {		
-		this(model, -1);
+	public RampedHalfAndHalfInitialiser() {		
+		this(-1);
 	}
 	
 	/**
@@ -67,13 +74,32 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 	 * ramping up. If a value smaller than the smallest allowable by the 
 	 * grammar is given then this smallest possible value is used.
 	 */
-	public RampedHalfAndHalfInitialiser(GRModel model, int minDepth) {
-		this.model = model;
+	public RampedHalfAndHalfInitialiser(int minDepth) {
 		this.minDepth = minDepth;
 		
 		// set up the grow and full parts
-		grow = new GrowInitialiser(model);
-		full = new FullInitialiser(model);
+		grow = new GrowInitialiser();
+		full = new FullInitialiser();
+		
+		// Initialise the object.
+		updateModel();
+		
+		// Re-initialise at the start of every generation.
+		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationStart() {
+				updateModel();
+			}
+		});
+	}
+	
+	private void updateModel() {
+		GRModel model = (GRModel) Controller.getModel();
+		
+		rng = model.getRNG();
+		grammar = model.getGrammar();
+		popSize = model.getPopulationSize();
+		maxInitialProgramDepth = model.getMaxInitialProgramDepth();
 	}
 	
 	/**
@@ -83,16 +109,15 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 	 */
 	public List<CandidateProgram> getInitialPopulation() {
 		// Create population list to populate.
-		int popSize = model.getPopulationSize();
 		List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
 		
-		int minDepthPossible = model.getGrammar().getMinimumDepth();
+		int minDepthPossible = grammar.getMinimumDepth();
 		if (minDepth < minDepthPossible) {
 			// Our start depth can only be as small as the grammars minimum depth.
 			minDepth = minDepthPossible;
 		}
 		
-		int endDepth = model.getMaxInitialProgramDepth();
+		int endDepth = maxInitialProgramDepth;
 		
 		if (endDepth < 2) {
 			throw new IllegalArgumentException("Initial maximum depth must be greater than 1 for RH+H.");

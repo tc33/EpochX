@@ -23,7 +23,12 @@ package org.epochx.ge.representation;
 
 import java.util.*;
 
+import org.epochx.core.Controller;
+import org.epochx.ge.codon.CodonGenerator;
+import org.epochx.ge.mapper.Mapper;
 import org.epochx.ge.model.GEModel;
+import org.epochx.life.GenerationAdapter;
+import org.epochx.life.LifeCycleManager;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.*;
 
@@ -45,8 +50,18 @@ import org.epochx.tools.grammar.*;
  */
 public class GECandidateProgram extends CandidateProgram {
 
-	// The controlling model.
+	// We need to keep a reference to the model for getting fitness.
 	private GEModel model;
+	
+	private CodonGenerator codonGenerator;
+	
+	private Mapper mapper;
+	
+	private boolean cacheFitness;
+	
+	private boolean cacheSource;
+	
+	private int maxChromosomeLength;
 	
 	// The genotype. For caching to work, it must be impossible to gain direct access to this list.
 	private List<Integer> codons;
@@ -69,8 +84,8 @@ public class GECandidateProgram extends CandidateProgram {
 	 * @param model the controlling model which provides the configuration 
 	 * 				parameters for the run. 				
 	 */
-	public GECandidateProgram(GEModel model) {
-		this(new ArrayList<Integer>(), model);
+	public GECandidateProgram() {
+		this(new ArrayList<Integer>());
 	}
 	
 	/**
@@ -81,13 +96,36 @@ public class GECandidateProgram extends CandidateProgram {
 	 * @param model the controlling model which provides the configuration 
 	 * 				parameters for the run. 				
 	 */
-	public GECandidateProgram(List<Integer> codons, GEModel model) {
+	public GECandidateProgram(List<Integer> codons) {
 		this.codons = codons;
-		this.model = model;
 		
 		parseTree = null;
 		mapped = false;
 		fitness = -1;
+		
+		// Initialise the object.
+		updateModel();
+		
+		// Re-initialise at the start of every generation.
+		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationStart() {
+				updateModel();
+			}
+		});
+	}
+	
+	/*
+	 * Initialise parameters from model.
+	 */
+	private void updateModel() {
+		model = (GEModel) Controller.getModel();
+		
+		codonGenerator = model.getCodonGenerator();
+		cacheFitness = model.cacheFitness();
+		cacheSource = model.cacheSource();
+		mapper = model.getMapper();
+		maxChromosomeLength = model.getMaxChromosomeLength();
 	}
 	
 	/**
@@ -95,7 +133,7 @@ public class GECandidateProgram extends CandidateProgram {
 	 * the candidate program's chromosome. All caches will be cleared.
 	 */
 	public void appendNewCodon() {
-		appendCodon(model.getCodonGenerator().getCodon());
+		appendCodon(codonGenerator.getCodon());
 		
 		modified();
 	}
@@ -123,7 +161,7 @@ public class GECandidateProgram extends CandidateProgram {
 	 * @param index index at which the new codon should be inserted.
 	 */
 	public void insertNewCodon(int index) {
-		codons.add(index, model.getCodonGenerator().getCodon());
+		codons.add(index, codonGenerator.getCodon());
 		
 		modified();
 	}
@@ -206,7 +244,7 @@ public class GECandidateProgram extends CandidateProgram {
 	 * @param newCodon codon to be stored at the specified position.
 	 */
 	public void setCodon(int index, int newCodon) {
-		codons.set(index, model.getCodonGenerator().getCodon());
+		codons.set(index, codonGenerator.getCodon());
 		
 		modified();
 	}
@@ -312,7 +350,7 @@ public class GECandidateProgram extends CandidateProgram {
 	 * model's getFitness method.
 	 */
 	public double getFitness() {
-		if (!model.cacheFitness() || (fitness == -1)) {
+		if (!cacheFitness || (fitness == -1)) {
 			fitness = model.getFitness(this);
 		}
 		
@@ -333,11 +371,11 @@ public class GECandidateProgram extends CandidateProgram {
 	 */
 	public String getSourceCode() {
 		// If we have not already done the mapping then do it now and stash it.
-		if (!model.cacheSource() || (mapped == false)) {
+		if (!cacheSource || (mapped == false)) {
 			// May be null still after if the map was invalid.
-			parseTree = model.getMapper().map(this);
+			parseTree = mapper.map(this);
 			// Update the number of codons that were used in mapping.
-			noActiveCodons = model.getMapper().getNoMappedCodons();
+			noActiveCodons = mapper.getNoMappedCodons();
 			// Set flag to say the codons have been mapped.
 			mapped = true;
 		}
@@ -367,7 +405,7 @@ public class GECandidateProgram extends CandidateProgram {
 	 */
 	@Override
 	public boolean isValid() {
-		return (getSourceCode() != null) && (codons.size() <= model.getMaxChromosomeLength());
+		return (getSourceCode() != null) && (codons.size() <= maxChromosomeLength);
 	}
 	
 	/**

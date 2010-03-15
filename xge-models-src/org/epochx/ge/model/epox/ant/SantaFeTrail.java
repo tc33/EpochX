@@ -103,10 +103,10 @@ public class SantaFeTrail extends GEAbstractModel {
 		setMaxInitialProgramDepth(15);
 		setMutationProbability(0.1);
 		setCrossoverProbability(0.9);
-		setProgramSelector(new TournamentSelector(this, 7));
-		setPoolSelector(new RandomSelector(this));
+		setProgramSelector(new TournamentSelector(7));
+		setPoolSelector(new RandomSelector());
 		setPoolSize(50);
-		setInitialiser(new RampedHalfAndHalfInitialiser(this));
+		setInitialiser(new RampedHalfAndHalfInitialiser());
 	}
 	
 	@Override

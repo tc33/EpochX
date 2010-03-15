@@ -21,10 +21,14 @@
  */
 package org.epochx.gp.op.mutation;
 
+import org.epochx.core.Controller;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.op.init.GrowInitialiser;
 import org.epochx.gp.representation.*;
+import org.epochx.life.GenerationAdapter;
+import org.epochx.life.LifeCycleManager;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
  * This class performs a subtree mutation on a <code>GPCandidateProgram</code>.
@@ -35,8 +39,7 @@ import org.epochx.representation.CandidateProgram;
  */
 public class SubtreeMutation implements GPMutation {
 
-	// The current controlling model.
-	private GPModel model;
+	private RandomNumberGenerator rng;
 	
 	// The maximum depth of the new subtree.
 	private int maxSubtreeDepth;
@@ -48,9 +51,27 @@ public class SubtreeMutation implements GPMutation {
 	 * @param model The controlling model which provides any configuration 
 	 * parameters for the run.
 	 */
-	public SubtreeMutation(GPModel model) {
+	public SubtreeMutation() {
 		// 4 is a slightly arbitrary choice but we had to choose something.
-		this(model, 4);
+		this(4);
+		
+		// Initialise parameters.
+		updateModels();
+		
+		// Re-initialise parameters on each generation.
+		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationStart() {
+				updateModels();
+			}
+		});
+	}
+	
+	/*
+	 * Initialises parameters from the model.
+	 */
+	private void updateModels() {
+		rng = Controller.getModel().getRNG();
 	}
 	
 	/**
@@ -61,8 +82,7 @@ public class SubtreeMutation implements GPMutation {
 	 * parameters for the run.
 	 * @param maxSubtreeDepth The maximum depth of the inserted subtree.
 	 */
-	public SubtreeMutation(GPModel model, int maxSubtreeDepth) {
-		this.model = model;
+	public SubtreeMutation(int maxSubtreeDepth) {
 		this.maxSubtreeDepth = maxSubtreeDepth;
 	}
 	
@@ -83,10 +103,10 @@ public class SubtreeMutation implements GPMutation {
 		
 		// Randonly choose a mutation point.
 		int length = program.getProgramLength();
-		int mutationPoint = model.getRNG().nextInt(length);
+		int mutationPoint = rng.nextInt(length);
 		
 		// Grow a new subtree using the GrowInitialiser.
-		GrowInitialiser init = new GrowInitialiser(model);
+		GrowInitialiser init = new GrowInitialiser();
 		Node subtree = init.buildGrowNodeTree(maxSubtreeDepth);
 		
 		// Set the new subtree.

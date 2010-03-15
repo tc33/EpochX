@@ -66,9 +66,9 @@ public abstract class GPAbstractModel extends AbstractModel implements GPModel {
 		maxProgramDepth = 17;
 		
 		// Initialise components.
-		initialiser = new FullInitialiser(this);
-		crossover = new UniformPointCrossover(this);
-		mutator = new SubtreeMutation(this);
+		initialiser = new FullInitialiser();
+		crossover = new UniformPointCrossover();
+		mutator = new SubtreeMutation();
 		
 		// Stats - overwrite parent default.
 		setStatsEngine(new GPStatsEngine());

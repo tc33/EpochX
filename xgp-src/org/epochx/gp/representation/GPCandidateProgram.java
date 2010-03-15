@@ -23,7 +23,10 @@ package org.epochx.gp.representation;
 
 import java.util.List;
 
+import org.epochx.core.Controller;
 import org.epochx.gp.model.GPModel;
+import org.epochx.life.GenerationAdapter;
+import org.epochx.life.LifeCycleManager;
 import org.epochx.representation.CandidateProgram;
 
 
@@ -38,11 +41,14 @@ import org.epochx.representation.CandidateProgram;
  */
 public class GPCandidateProgram extends CandidateProgram {
 	
+	private GPModel model;
+	
+	private boolean cacheFitness;
+	
+	private int maxProgramDepth;
+	
 	// The root node of the program tree.
 	private Node rootNode;
-	
-	// The controlling model.
-	private GPModel model;
 	
 	// The cached program fitness.
 	private double fitness;
@@ -60,9 +66,26 @@ public class GPCandidateProgram extends CandidateProgram {
 	 * @param model the controlling model which provides the configuration 
 	 * 				parameters for the run. 				
 	 */
-	public GPCandidateProgram(Node rootNode, GPModel model) {
-		this.model = model;
+	public GPCandidateProgram(Node rootNode) {
 		this.rootNode = rootNode;
+		
+		// Initialise parameters.
+		updateModel();
+		
+		// Re-initialise on each generation.
+		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationStart() {
+				updateModel();
+			}
+		});
+	}
+
+	public void updateModel() {
+		model = (GPModel) Controller.getModel();
+		
+		cacheFitness = model.cacheFitness();
+		maxProgramDepth = model.getMaxProgramDepth();
 	}
 	
 	/**
@@ -141,12 +164,12 @@ public class GPCandidateProgram extends CandidateProgram {
 	public double getFitness() {
 		// Only get the source code if caching to avoid overhead otherwise.
 		String source = null;
-		if (model.cacheFitness()) {
+		if (cacheFitness) {
 			source = rootNode.toString();
 		}
 		
 		// If we're not caching or the cache is out of date.
-		if (!model.cacheFitness() || !source.equals(sourceCache)) {
+		if (!cacheFitness || !source.equals(sourceCache)) {
 			fitness = model.getFitness(this);
 			sourceCache = source;
 		}
@@ -156,7 +179,7 @@ public class GPCandidateProgram extends CandidateProgram {
 	
 	@Override
 	public boolean isValid() {
-		return (getProgramDepth() <= model.getMaxProgramDepth());
+		return (getProgramDepth() <= maxProgramDepth);
 	}
 	
 	/**

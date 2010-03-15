@@ -21,11 +21,14 @@
  */
 package org.epochx.gr.op.mutation;
 
+import java.util.*;
+
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.op.init.GrowInitialiser;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.tools.grammar.*;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 public class WhighamMutation implements GRMutation {
@@ -53,21 +56,30 @@ public class WhighamMutation implements GRMutation {
 	
 	@Override
 	public GRCandidateProgram mutate(CandidateProgram program) {
-		GRCandidateProgram mutatedProgram = (GRCandidateProgram) program.clone();
-		/*NonTerminalSymbol parseTree = mutatedProgram.getParseTree();
+		GRCandidateProgram mutatedProgram = (GRCandidateProgram) program;
+		
+		NonTerminalSymbol parseTree = mutatedProgram.getParseTree();
 		
 		List<NonTerminalSymbol> nonTerminals = parseTree.getNonTerminalSymbols();
 		
+		// Choose a node to change.
 		int selection = rng.nextInt(nonTerminals.size());
-		
 		NonTerminalSymbol point = nonTerminals.get(selection);
+		int originalDepth = point.getDepth();
 		
-		GrammarRule rule = point.getGrammarRule();
-			
-		NonTerminalSymbol replacement = init.growParseTree(5, rule);
+		/*
+		 * TODO At the mo we use a max depth of whatever the original had but 
+		 * would be better to use up to the maximum program depth. This is 
+		 * difficult though because we don't know how deep the node with chose 
+		 * is. 
+		 */
 		
-		// Replace current children with our new children.
-		point.setChildren(replacement.removeChildren());*/
+		// Construct a new subtree from that node's grammar rule.
+		GrammarRule rule = point.getGrammarRule();			
+		NonTerminalSymbol replacement = init.growParseTree(originalDepth, rule);
+		
+		// Replace node's children with the new children.
+		point.setChildren(replacement.removeChildren());
 		
 		return mutatedProgram;
 	}

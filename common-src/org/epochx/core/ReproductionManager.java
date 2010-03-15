@@ -86,10 +86,6 @@ public class ReproductionManager {
 	 * 				select the program to be reproduced.
 	 */
 	public ReproductionManager() {
-		
-		// Initialise parameters.
-		updateModel();
-		
 		// Initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override

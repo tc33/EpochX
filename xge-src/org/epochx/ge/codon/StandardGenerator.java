@@ -44,10 +44,7 @@ public class StandardGenerator implements CodonGenerator {
 	 * 				codon size.
 	 */
 	public StandardGenerator() {
-		// Initialise the object.
-		updateModel();
-		
-		// Re-initialise at the start of every generation.
+		// Initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {

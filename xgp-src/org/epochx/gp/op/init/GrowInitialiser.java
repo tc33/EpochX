@@ -38,6 +38,8 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class GrowInitialiser implements GPInitialiser {
 	
+	private GPModel model;
+	
 	private List<Node> syntax;
 	private List<Node> terminals;
 	private List<Node> functions;
@@ -57,10 +59,7 @@ public class GrowInitialiser implements GPInitialiser {
 		terminals = new ArrayList<Node>();
 		functions = new ArrayList<Node>();
 		
-		// Initialise parameters.
-		updateModel();
-		
-		// Initialise parameters on each generation.
+		// Initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
@@ -73,7 +72,7 @@ public class GrowInitialiser implements GPInitialiser {
 	 * Update the initialisers parameters from the model.
 	 */
 	private void updateModel() {
-		GPModel model = (GPModel) Controller.getModel();
+		model = (GPModel) Controller.getModel();
 		
 		rng = model.getRNG();
 		popSize = model.getPopulationSize();
@@ -117,7 +116,7 @@ public class GrowInitialiser implements GPInitialiser {
 				Node nodeTree = buildGrowNodeTree(maxInitialDepth);
             	
 				// Create a program around the node tree.
-				candidate = new GPCandidateProgram(nodeTree);
+				candidate = new GPCandidateProgram(model, nodeTree);
 			} while (firstGen.contains(candidate));
             
 			// Must be unique - add to the new population.

@@ -93,9 +93,7 @@ public class MutationManager {
 	 * @see Mutation
 	 */
 	public MutationManager() {
-		// Initialise parameters.
-		updateModel();
-		
+		// Initialise on each generation.		
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {

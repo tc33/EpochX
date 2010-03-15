@@ -77,10 +77,7 @@ public class DepthFirstMapper implements Mapper {
 		noMappedCodons = -1;
 		noWraps = 0;
 		
-		// Initialise.
-		updateModel();
-
-		// Re-initialise on each generation.
+		// Initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {

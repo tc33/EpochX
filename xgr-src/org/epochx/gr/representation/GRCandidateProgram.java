@@ -21,12 +21,9 @@
  */
 package org.epochx.gr.representation;
 
-import org.epochx.core.Controller;
-import org.epochx.ge.model.GEModel;
-import org.epochx.gr.model.GRModel;
-import org.epochx.life.GenerationAdapter;
-import org.epochx.life.LifeCycleManager;
-import org.epochx.representation.CandidateProgram;
+import org.epochx.gr.model.*;
+import org.epochx.life.*;
+import org.epochx.representation.*;
 import org.epochx.tools.grammar.*;
 
 public class GRCandidateProgram extends CandidateProgram {
@@ -46,22 +43,20 @@ public class GRCandidateProgram extends CandidateProgram {
 	// A stash of the source for testing if fitness cache is up to date.
 	private String sourceCache;
 	
-	public GRCandidateProgram() {
-		this(null);
+	public GRCandidateProgram(GRModel model) {
+		this(model, null);
 	}
 	
-	public GRCandidateProgram(NonTerminalSymbol parseTree) {
+	public GRCandidateProgram(GRModel model, NonTerminalSymbol parseTree) {
+		this.model = model;
 		this.parseTree = parseTree;
 		
 		sourceCache = null;
 		
 		// Initialise the fitness to -1 until we are asked to calculate it.
 		fitness = -1;
-		
-		// Initialise the object.
-		updateModel();
-		
-		// Re-initialise at the start of every generation.
+
+		// Initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
@@ -74,8 +69,6 @@ public class GRCandidateProgram extends CandidateProgram {
 	 * Initialise parameters from model.
 	 */
 	private void updateModel() {
-		model = (GRModel) Controller.getModel();
-		
 		cacheFitness = model.cacheFitness();
 		maxProgramDepth = model.getMaxProgramDepth();
 	}

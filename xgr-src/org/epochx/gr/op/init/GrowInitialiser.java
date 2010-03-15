@@ -37,6 +37,8 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class GrowInitialiser implements GRInitialiser {
 
+	private GRModel model;
+	
 	private RandomNumberGenerator rng;
 	private Grammar grammar;
 	private int popSize;
@@ -48,10 +50,7 @@ public class GrowInitialiser implements GRInitialiser {
 	 * @param model
 	 */
 	public GrowInitialiser() {
-		// Initialise the object.
-		updateModel();
-		
-		// Re-initialise at the start of every generation.
+		// Initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
@@ -61,7 +60,7 @@ public class GrowInitialiser implements GRInitialiser {
 	}
 	
 	private void updateModel() {
-		GRModel model = (GRModel) Controller.getModel();
+		model = (GRModel) Controller.getModel();
 		
 		rng = model.getRNG();
 		grammar = model.getGrammar();
@@ -93,7 +92,7 @@ public class GrowInitialiser implements GRInitialiser {
 	public GRCandidateProgram getInitialProgram(int depth) {
 		GrammarRule startRule = grammar.getStartRule();
 		
-		return new GRCandidateProgram(growParseTree(depth, startRule));
+		return new GRCandidateProgram(model, growParseTree(depth, startRule));
 	}
 	
 	public NonTerminalSymbol growParseTree(int depth, GrammarRule startRule) {

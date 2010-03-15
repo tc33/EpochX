@@ -38,10 +38,7 @@ public class UniformPointCrossover implements GPCrossover {
 	private RandomNumberGenerator rng;
 	
 	public UniformPointCrossover() {
-		// Initialise parameters.
-		updateModel();
-		
-		// Re-initialise on each generation.
+		// Initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {

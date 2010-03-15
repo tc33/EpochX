@@ -47,6 +47,8 @@ import org.epochx.representation.CandidateProgram;
  */
 public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 	
+	private GPModel model;
+	
 	// The grow and full instances for doing their share of the work.
 	private GrowInitialiser grow;
 	private FullInitialiser full;
@@ -63,11 +65,8 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 		// set up the grow and full parts
 		grow = new GrowInitialiser();
 		full = new FullInitialiser();
-		
-		// Initialise parameters.
-		updateModels();
-		
-		// Re-initialise parameters on each generation.
+
+		// Initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
@@ -80,7 +79,7 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 	 * Initialises parameters from model.
 	 */
 	private void updateModels() {
-		GPModel model = (GPModel) Controller.getModel();
+		model = (GPModel) Controller.getModel();
 		
 		popSize = model.getPopulationSize();
 		maxInitialDepth = model.getInitialMaxDepth();
@@ -119,7 +118,7 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 				} else {
 					rootNode = full.buildFullNodeTree(depth);
 				}
-				program = new GPCandidateProgram(rootNode);
+				program = new GPCandidateProgram(model, rootNode);
 			} while(firstGen.contains(program));
 
             firstGen.add(program);

@@ -62,10 +62,7 @@ public class FixedPointCrossover implements GECrossover {
 	 * @param model the current controlling model.
 	 */
 	public FixedPointCrossover() {
-		// Initialise parameters.
-		updateModel();
-		
-		// Re-initialise parameters on each generation.
+		// Initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {

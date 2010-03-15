@@ -176,9 +176,6 @@ public class GenerationManager {
 	 */
 	public List<CandidateProgram> generation(final int generationNumber, 
 					final List<CandidateProgram> previousPop) {
-		// Initialise all variables.
-		updateModel();
-		
 		// Inform all listeners that a generation is starting.
 		LifeCycleManager.getLifeCycleManager().onGenerationStart();
 		

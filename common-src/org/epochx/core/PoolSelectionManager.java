@@ -104,10 +104,7 @@ public class PoolSelectionManager {
 	 * @see PoolSelector
 	 */
 	public PoolSelectionManager() {
-		// Initialise parameters.
-		updateModel();
-		
-		// Re-initialise each generation.
+		// Initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {

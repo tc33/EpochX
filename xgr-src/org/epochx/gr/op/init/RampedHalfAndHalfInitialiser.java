@@ -80,11 +80,8 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 		// set up the grow and full parts
 		grow = new GrowInitialiser();
 		full = new FullInitialiser();
-		
-		// Initialise the object.
-		updateModel();
-		
-		// Re-initialise at the start of every generation.
+
+		// Initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {

@@ -56,10 +56,7 @@ public class KozaCrossover implements GPCrossover {
 	public KozaCrossover(double functionSwapProbability) {
 		this.functionSwapProbability = functionSwapProbability;
 		
-		// Initialises parameters.
-		updateModel();
-		
-		// Re-initialises parameters on each generation.
+		// Initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {

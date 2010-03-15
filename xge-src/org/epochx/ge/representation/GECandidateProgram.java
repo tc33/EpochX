@@ -84,8 +84,8 @@ public class GECandidateProgram extends CandidateProgram {
 	 * @param model the controlling model which provides the configuration 
 	 * 				parameters for the run. 				
 	 */
-	public GECandidateProgram() {
-		this(new ArrayList<Integer>());
+	public GECandidateProgram(GEModel model) {
+		this(model, new ArrayList<Integer>());
 	}
 	
 	/**
@@ -96,17 +96,15 @@ public class GECandidateProgram extends CandidateProgram {
 	 * @param model the controlling model which provides the configuration 
 	 * 				parameters for the run. 				
 	 */
-	public GECandidateProgram(List<Integer> codons) {
+	public GECandidateProgram(GEModel model, List<Integer> codons) {
+		this.model = model;
 		this.codons = codons;
 		
 		parseTree = null;
 		mapped = false;
 		fitness = -1;
 		
-		// Initialise the object.
-		updateModel();
-		
-		// Re-initialise at the start of every generation.
+		// Initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {

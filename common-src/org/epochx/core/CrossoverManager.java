@@ -93,9 +93,7 @@ public class CrossoverManager {
 	 * @see Crossover
 	 */
 	public CrossoverManager() {
-		// Initialise parameters.
-		updateModel();
-		
+		// Initialise parameters on each generation.		
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {

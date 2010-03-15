@@ -80,10 +80,7 @@ public class BreadthFirstMapper implements Mapper {
 		
 		noMappedCodons = -1;
 
-		// Initialises parameters.
-		updateModel();
-		
-		// Re-initialises parameters on each generation.
+		// Initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {

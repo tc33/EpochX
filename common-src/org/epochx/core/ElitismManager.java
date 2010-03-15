@@ -79,11 +79,8 @@ public class ElitismManager {
 	 * @param model the Model which defines the run parameters such as number
 	 * 				of elites to use.
 	 */
-	public ElitismManager() {
-		// Initialise parameters.
-		updateModel();
-		
-		// Register interest in generation events so we can reset.
+	public ElitismManager() {		
+		// Initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {

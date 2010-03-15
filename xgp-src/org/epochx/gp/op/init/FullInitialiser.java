@@ -37,6 +37,9 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class FullInitialiser implements GPInitialiser {
 	
+	// The model constructing programs for.
+	private GPModel model;
+	
 	private List<Node> terminals;
 	private List<Node> functions;
 	private List<Node> syntax;
@@ -53,10 +56,7 @@ public class FullInitialiser implements GPInitialiser {
 	 * population size will be obtained from this.
 	 */
 	public FullInitialiser() {
-		// Initialise parameters.
-		updateModel();
-		
-		// Re-initialise on each generation.
+		// Initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
@@ -69,7 +69,7 @@ public class FullInitialiser implements GPInitialiser {
 	 * Update the initialisers parameters from the model.
 	 */
 	private void updateModel() {
-		GPModel model = (GPModel) Controller.getModel();
+		model = (GPModel) Controller.getModel();
 		
 		rng = model.getRNG();
 		
@@ -113,7 +113,7 @@ public class FullInitialiser implements GPInitialiser {
 				Node nodeTree = buildFullNodeTree(maxInitialDepth);
             	
 				// Create a program around the node tree.
-				candidate = new GPCandidateProgram(nodeTree);
+				candidate = new GPCandidateProgram(model, nodeTree);
 			} while (firstGen.contains(candidate));
 			
 			// Must be unique - add to the new population.

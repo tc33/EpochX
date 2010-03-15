@@ -53,9 +53,6 @@ public class OnePointCrossover implements GECrossover {
 	private RandomNumberGenerator rng;
 	
 	public OnePointCrossover() {
-		// Initialise.
-		updateModel();
-		
 		// Initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override

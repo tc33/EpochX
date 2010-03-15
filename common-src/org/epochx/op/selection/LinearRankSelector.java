@@ -60,10 +60,7 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector {
 		
 		nMinus = 2/(gradient+1);
 		nPlus = (2*gradient)/(gradient+1);
-		
-		// Initialise.
-		updateModel();
-		
+
 		// Initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override

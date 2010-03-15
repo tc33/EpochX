@@ -39,10 +39,7 @@ public class WhighamCrossover implements GRCrossover {
 	private RandomNumberGenerator rng;
 	
 	public WhighamCrossover() {
-		// Initialise parameters.
-		updateModels();
-		
-		// Re-initialise parameters on each generation.
+		// Initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {

@@ -54,11 +54,8 @@ public class SubtreeMutation implements GPMutation {
 	public SubtreeMutation() {
 		// 4 is a slightly arbitrary choice but we had to choose something.
 		this(4);
-		
-		// Initialise parameters.
-		updateModels();
-		
-		// Re-initialise parameters on each generation.
+
+		// Initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {

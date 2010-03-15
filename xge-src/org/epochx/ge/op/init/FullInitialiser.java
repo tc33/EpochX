@@ -40,6 +40,7 @@ public class FullInitialiser implements GEInitialiser {
 	/*
 	 * TODO This constructs the chromosome using depth first mapping - what about others?
 	 */
+	private GEModel model;
 	
 	private RandomNumberGenerator rng;
 	private Grammar grammar;
@@ -53,10 +54,7 @@ public class FullInitialiser implements GEInitialiser {
 	 * @param model
 	 */
 	public FullInitialiser() {
-		// Initialise the object.
-		updateModel();
-		
-		// Re-initialise at the start of every generation.
+		// Initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
@@ -69,7 +67,7 @@ public class FullInitialiser implements GEInitialiser {
 	 * Initialise parameters from model.
 	 */
 	private void updateModel() {
-		GEModel model = (GEModel) Controller.getModel();
+		model = (GEModel) Controller.getModel();
 		
 		rng = model.getRNG();
 		grammar = model.getGrammar();
@@ -106,7 +104,7 @@ public class FullInitialiser implements GEInitialiser {
 		
 		buildDerivationTree(codons, start, 0, depth);
 
-		return new GECandidateProgram(codons);
+		return new GECandidateProgram(model, codons);
 	}
 	
 	private void buildDerivationTree(List<Integer> codons, GrammarNode rule, int depth, int maxDepth) {

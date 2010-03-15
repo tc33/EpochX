@@ -69,11 +69,8 @@ public class PointMutation implements GEMutation {
 	 */
 	public PointMutation(double pointProbability) {
 		this.pointProbability = pointProbability;
-		
-		// Initialise parameters.
-		updateModel();
-		
-		// Initialise parameters on each generation.
+
+		// Initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {

@@ -39,6 +39,7 @@ public class FixedLengthInitialiser implements GEInitialiser {
 	/*
 	 * TODO Implement a similar initialiser that uses variable lengths up to maximum.
 	 */
+	private GEModel model;
 	
 	private int popSize;
 	
@@ -54,11 +55,8 @@ public class FixedLengthInitialiser implements GEInitialiser {
 	 */
 	public FixedLengthInitialiser(int initialLength) {
 		this.initialLength = initialLength;
-		
-		// Initialise.
-		updateModel();
 
-		// Re-initialise on each generation.
+		// Initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
@@ -71,7 +69,9 @@ public class FixedLengthInitialiser implements GEInitialiser {
 	 * Initialises parameters from model.
 	 */
 	private void updateModel() {
-		popSize = ((GEModel) Controller.getModel()).getPopulationSize();
+		model = (GEModel) Controller.getModel();
+		
+		popSize = model.getPopulationSize();
 	}
 	
 	/**
@@ -95,7 +95,7 @@ public class FixedLengthInitialiser implements GEInitialiser {
 		// Build population.
 		int i=0;
 		while (i<popSize) {
-			GECandidateProgram candidate = new GECandidateProgram();
+			GECandidateProgram candidate = new GECandidateProgram(model);
 			
 			// Initialise the program.
 			candidate.appendNewCodons(initialLength);

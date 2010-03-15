@@ -49,9 +49,6 @@ public class RandomSelector implements ProgramSelector, PoolSelector {
 	 * 
 	 */
 	public RandomSelector() {
-		// Initialise.
-		updateModel();
-		
 		// Initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override

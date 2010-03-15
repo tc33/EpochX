@@ -110,9 +110,7 @@ public class InitialisationManager {
 	 * @see Initialiser
 	 */
 	public InitialisationManager() {
-		// Initialise parameters.
-		updateModel();
-		
+		// Initialise parameters on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {

@@ -54,10 +54,7 @@ public class SinglePointMutation implements GEMutation {
 	 * 				generator to use will come from here.
 	 */
 	public SinglePointMutation() {
-		// Initialise parameters.
-		updateModel();
-		
-		// Re-initialise parameters on each generation.
+		// Initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {

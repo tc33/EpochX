@@ -74,11 +74,8 @@ public class PointMutation implements GPMutation {
 	 */
 	public PointMutation(double pointProbability) {
 		this.pointProbability = pointProbability;
-		
-		// Initialise parameters.
-		updateModel();
-		
-		// Re-initialise on each generation.
+
+		// Initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {

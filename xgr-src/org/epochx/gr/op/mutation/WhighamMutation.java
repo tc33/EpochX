@@ -37,11 +37,8 @@ public class WhighamMutation implements GRMutation {
 	
 	public WhighamMutation() {
 		init = new GrowInitialiser();
-		
-		// Initialise parameters.
-		updateModel();
-		
-		// Re-initialise parameters on each generation.
+
+		// Initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {

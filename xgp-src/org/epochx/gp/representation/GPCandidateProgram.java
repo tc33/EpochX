@@ -66,13 +66,11 @@ public class GPCandidateProgram extends CandidateProgram {
 	 * @param model the controlling model which provides the configuration 
 	 * 				parameters for the run. 				
 	 */
-	public GPCandidateProgram(Node rootNode) {
+	public GPCandidateProgram(GPModel model, Node rootNode) {
+		this.model = model;
 		this.rootNode = rootNode;
-		
-		// Initialise parameters.
-		updateModel();
-		
-		// Re-initialise on each generation.
+
+		// Initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
@@ -82,8 +80,6 @@ public class GPCandidateProgram extends CandidateProgram {
 	}
 
 	public void updateModel() {
-		model = (GPModel) Controller.getModel();
-		
 		cacheFitness = model.cacheFitness();
 		maxProgramDepth = model.getMaxProgramDepth();
 	}

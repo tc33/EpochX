@@ -191,10 +191,10 @@ public class CartCentering extends GPAbstractModel {
 		model.setPoolSize(50);
 		model.setNoElites(50);
 		model.setMaxProgramDepth(5);
-		model.setPoolSelector(new TournamentSelector(7));
-		model.setProgramSelector(new RandomSelector());
-		model.setCrossover(new UniformPointCrossover());
-		model.setMutator(new PointMutation(0.1));
+		model.setPoolSelector(new TournamentSelector(model, 7));
+		model.setProgramSelector(new RandomSelector(model));
+		model.setCrossover(new UniformPointCrossover(model));
+		model.setMutator(new PointMutation(model, 0.1));
 		
 		Controller.run(model);
 	}

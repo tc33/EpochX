@@ -23,7 +23,6 @@ package org.epochx.gp.op.init;
 
 import java.util.*;
 
-import org.epochx.core.Controller;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
 import org.epochx.life.GenerationAdapter;
@@ -38,6 +37,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class GrowInitialiser implements GPInitialiser {
 	
+	// The current controlling model.
 	private GPModel model;
 	
 	private List<Node> syntax;
@@ -55,15 +55,16 @@ public class GrowInitialiser implements GPInitialiser {
 	 * @param model The current controlling model. Run parameters such as the 
 	 * population size will be obtained from this.
 	 */
-	public GrowInitialiser() {
+	public GrowInitialiser(GPModel model) {
+		this.model = model;
+		
 		terminals = new ArrayList<Node>();
 		functions = new ArrayList<Node>();
 		
-		// Initialise on each generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
-				updateModel();
+				reset();
 			}
 		});
 	}
@@ -71,9 +72,7 @@ public class GrowInitialiser implements GPInitialiser {
 	/*
 	 * Update the initialisers parameters from the model.
 	 */
-	private void updateModel() {
-		model = (GPModel) Controller.getModel();
-		
+	private void reset() {
 		rng = model.getRNG();
 		popSize = model.getPopulationSize();
 		maxInitialDepth = model.getInitialMaxDepth();
@@ -116,7 +115,7 @@ public class GrowInitialiser implements GPInitialiser {
 				Node nodeTree = buildGrowNodeTree(maxInitialDepth);
             	
 				// Create a program around the node tree.
-				candidate = new GPCandidateProgram(model, nodeTree);
+				candidate = new GPCandidateProgram(nodeTree, model);
 			} while (firstGen.contains(candidate));
             
 			// Must be unique - add to the new population.

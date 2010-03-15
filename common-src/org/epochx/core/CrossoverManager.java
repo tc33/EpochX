@@ -71,6 +71,9 @@ import org.epochx.stats.StatsManager;
  * </table>
  */
 public class CrossoverManager {
+
+	// The controlling model.
+	private final Model model;
 	
 	// The selector for choosing parents.
 	private ProgramSelector programSelector;
@@ -92,12 +95,16 @@ public class CrossoverManager {
 	 * 				a population.
 	 * @see Crossover
 	 */
-	public CrossoverManager() {
-		// Initialise parameters on each generation.		
+	public CrossoverManager(final Model model) {
+		this.model = model;
+		
+		// Initialise parameters.
+		initialise();
+		
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
-				updateModel();
+				initialise();
 			}
 		});
 	}
@@ -106,9 +113,9 @@ public class CrossoverManager {
 	 * Initialises Crossover, in particular all parameters from the model should
 	 * be refreshed incase they've changed since the last call.
 	 */
-	private void updateModel() {
-		programSelector = Controller.getModel().getProgramSelector();
-		crossover = Controller.getModel().getCrossover();
+	private void initialise() {
+		programSelector = model.getProgramSelector();
+		crossover = model.getCrossover();
 	}
 
 	/**

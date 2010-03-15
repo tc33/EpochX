@@ -21,11 +21,10 @@
  */
 package org.epochx.op.selection;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import org.epochx.op.PoolSelector;
-import org.epochx.op.ProgramSelector;
+import org.epochx.model.Model;
+import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
 
 
@@ -38,6 +37,9 @@ import org.epochx.representation.CandidateProgram;
  */
 public class TournamentSelector implements ProgramSelector, PoolSelector {
 
+	// The current controlling model.
+	private Model model;
+	
 	// The size of the tournment from which the best program will be taken.
 	private int tournamentSize;
 	
@@ -49,10 +51,11 @@ public class TournamentSelector implements ProgramSelector, PoolSelector {
 	 * 
 	 * @param tournamentSize the number of programs in each tournament.
 	 */
-	public TournamentSelector(int tournamentSize) {
+	public TournamentSelector(Model model, int tournamentSize) {
+		this.model = model;
 		this.tournamentSize = tournamentSize;
 		
-		randomSelector = new RandomSelector();
+		randomSelector = new RandomSelector(model);
 	}
 
 	/**
@@ -118,7 +121,7 @@ public class TournamentSelector implements ProgramSelector, PoolSelector {
 		
 		List<CandidateProgram> pool = new ArrayList<CandidateProgram>(poolSize);
 		
-		ProgramSelector programSelector = new TournamentSelector(tournamentSize);
+		ProgramSelector programSelector = new TournamentSelector(model, tournamentSize);
 		programSelector.setSelectionPool(pop);
 		
 		for (int i=0; i<poolSize; i++) {

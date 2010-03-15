@@ -21,11 +21,9 @@
  */
 package org.epochx.gp.op.crossover;
 
-import org.epochx.core.Controller;
-import org.epochx.gp.representation.GPCandidateProgram;
-import org.epochx.gp.representation.Node;
-import org.epochx.life.GenerationAdapter;
-import org.epochx.life.LifeCycleManager;
+import org.epochx.gp.model.GPModel;
+import org.epochx.gp.representation.*;
+import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
 
@@ -41,6 +39,9 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class KozaCrossover implements GPCrossover {
 
+	// The current controlling model.
+	private GPModel model;
+	
 	// The probability of choosing a function node as the swap point.
 	private double functionSwapProbability;
 	
@@ -53,31 +54,26 @@ public class KozaCrossover implements GPCrossover {
 	 * @param functionSwapProbability The probability of crossover operations 
 	 * 								  choosing a function node as the swap point.
 	 */
-	public KozaCrossover(double functionSwapProbability) {
+	public KozaCrossover(GPModel model, double functionSwapProbability) {
+		this.model = model;
 		this.functionSwapProbability = functionSwapProbability;
 		
-		// Initialise on each generation.
+		initialise();
+		
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
-				updateModel();
+				initialise();
 			}
 		});
-	}
-
-	/*
-	 * Initialises parameters from model.
-	 */
-	public void updateModel() {
-		rng = Controller.getModel().getRNG();
 	}
 	
 	/**
 	 * Default constructor for Koza standard crossover. The probability of a 
 	 * function node being selected as the swap point will default to 90%.
 	 */
-	public KozaCrossover() {
-		this(0.9);
+	public KozaCrossover(GPModel model) {
+		this(model, 0.9);
 	}
 	
 	/**
@@ -214,4 +210,7 @@ public class KozaCrossover implements GPCrossover {
 		return result;
 	}
 
+	public void initialise() {
+		rng = model.getRNG();
+	}
 }

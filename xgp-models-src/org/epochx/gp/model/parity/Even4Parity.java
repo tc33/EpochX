@@ -23,15 +23,10 @@ package org.epochx.gp.model.parity;
 
 import java.util.*;
 
-import org.epochx.core.Controller;
 import org.epochx.gp.model.GPAbstractModel;
 import org.epochx.gp.representation.*;
 import org.epochx.gp.representation.bool.*;
-import org.epochx.gp.stats.GPStatField;
-import org.epochx.life.GenerationAdapter;
-import org.epochx.life.LifeCycleManager;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.StatsManager;
 import org.epochx.tools.util.BoolUtils;
 
 
@@ -114,17 +109,4 @@ public class Even4Parity extends GPAbstractModel {
             return false;
         }
     }
-    
-    public static void main(String[] args) {
-    	LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
-    		@Override
-    		public void onGenerationEnd() {
-    			StatsManager.getStatsManager().printGenerationStats(new String[]{
-    					GPStatField.GEN_NUMBER,
-    					GPStatField.GEN_FITNESS_MIN	
-    			});
-    		}
-    	});
-		Controller.run(new Even4Parity());
-	}
 }

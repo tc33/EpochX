@@ -23,11 +23,8 @@ package org.epochx.gp.op.init;
 
 import java.util.*;
 
-import org.epochx.core.Controller;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
-import org.epochx.life.GenerationAdapter;
-import org.epochx.life.LifeCycleManager;
 import org.epochx.representation.CandidateProgram;
 
 
@@ -47,42 +44,24 @@ import org.epochx.representation.CandidateProgram;
  */
 public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 	
-	private GPModel model;
+	// The current controlling model.
+	private GPModel model;	
 	
 	// The grow and full instances for doing their share of the work.
 	private GrowInitialiser grow;
 	private FullInitialiser full;
-	
-	private int popSize;
-	private int maxInitialDepth;
 
 	/**
 	 * Construct a RampedHalfAndHalfInitialiser.
 	 * 
 	 * @param model The model being assessed
 	 */
-	public RampedHalfAndHalfInitialiser() {
-		// set up the grow and full parts
-		grow = new GrowInitialiser();
-		full = new FullInitialiser();
-
-		// Initialise on each generation.
-		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
-			@Override
-			public void onGenerationStart() {
-				updateModels();
-			}
-		});
-	}
-	
-	/*
-	 * Initialises parameters from model.
-	 */
-	private void updateModels() {
-		model = (GPModel) Controller.getModel();
+	public RampedHalfAndHalfInitialiser(GPModel model) {
+		this.model = model;
 		
-		popSize = model.getPopulationSize();
-		maxInitialDepth = model.getInitialMaxDepth();
+		// set up the grow and full parts
+		grow = new GrowInitialiser(model);
+		full = new FullInitialiser(model);
 	}
 	
 	/**
@@ -92,10 +71,11 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 	 */
 	public List<CandidateProgram> getInitialPopulation() {
 		// Create population list to populate.
+		int popSize = model.getPopulationSize();
 		List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
 		
 		int startDepth = 2;
-		int endDepth = maxInitialDepth;
+		int endDepth = model.getInitialMaxDepth();
 		
 		if (endDepth < 2) {
 			throw new IllegalArgumentException("Initial maximum depth must be greater than 1 for RH+H.");
@@ -118,7 +98,7 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 				} else {
 					rootNode = full.buildFullNodeTree(depth);
 				}
-				program = new GPCandidateProgram(model, rootNode);
+				program = new GPCandidateProgram(rootNode, model);
 			} while(firstGen.contains(program));
 
             firstGen.add(program);

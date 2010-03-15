@@ -23,11 +23,8 @@ package org.epochx.ge.op.init;
 
 import java.util.*;
 
-import org.epochx.core.Controller;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.life.GenerationAdapter;
-import org.epochx.life.LifeCycleManager;
 import org.epochx.representation.CandidateProgram;
 
 
@@ -39,9 +36,8 @@ public class FixedLengthInitialiser implements GEInitialiser {
 	/*
 	 * TODO Implement a similar initialiser that uses variable lengths up to maximum.
 	 */
-	private GEModel model;
 	
-	private int popSize;
+	private GEModel model;
 	
 	private int initialLength;
 	
@@ -53,25 +49,9 @@ public class FixedLengthInitialiser implements GEInitialiser {
 	 * @param initialLength The initial length that chromosomes should be 
 	 * 			  			generated to.
 	 */
-	public FixedLengthInitialiser(int initialLength) {
+	public FixedLengthInitialiser(GEModel model, int initialLength) {
+		this.model = model;
 		this.initialLength = initialLength;
-
-		// Initialise on each generation.
-		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
-			@Override
-			public void onGenerationStart() {
-				updateModel();
-			}
-		});
-	}
-	
-	/*
-	 * Initialises parameters from model.
-	 */
-	private void updateModel() {
-		model = (GEModel) Controller.getModel();
-		
-		popSize = model.getPopulationSize();
 	}
 	
 	/**
@@ -90,6 +70,7 @@ public class FixedLengthInitialiser implements GEInitialiser {
 		//TODO No check for program uniqueness is currently made.
 		
 		// Initialise population of candidate programs.
+		int popSize = model.getPopulationSize();
 		List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
 		
 		// Build population.

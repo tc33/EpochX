@@ -21,29 +21,32 @@
  */
 package org.epochx.gr.op.crossover;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import org.epochx.core.Controller;
+import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
-import org.epochx.life.GenerationAdapter;
-import org.epochx.life.LifeCycleManager;
+import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.grammar.NonTerminalSymbol;
-import org.epochx.tools.grammar.Symbol;
+import org.epochx.tools.grammar.*;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 public class WhighamCrossover implements GRCrossover {
 
+	// The current controlling model.
+	private GRModel model;
+	
 	// The random number generator in use.
 	private RandomNumberGenerator rng;
 	
-	public WhighamCrossover() {
-		// Initialise on each generation.
+	public WhighamCrossover(GRModel model) {
+		this.model = model;
+		
+		initialise();
+		
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
-				updateModels();
+				initialise();
 			}
 		});
 	}
@@ -52,8 +55,8 @@ public class WhighamCrossover implements GRCrossover {
 	 * Initialises WhighamCrossover, in particular all parameters from the 
 	 * model should be refreshed incase they've changed since the last call.
 	 */
-	private void updateModels() {
-		rng = Controller.getModel().getRNG();
+	private void initialise() {
+		rng = model.getRNG();
 	}
 	
 	@Override

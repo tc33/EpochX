@@ -23,7 +23,6 @@ package org.epochx.gr.op.init;
 
 import java.util.*;
 
-import org.epochx.core.Controller;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.life.*;
@@ -37,6 +36,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class GrowInitialiser implements GRInitialiser {
 
+	// The current controlling model.
 	private GRModel model;
 	
 	private RandomNumberGenerator rng;
@@ -49,19 +49,22 @@ public class GrowInitialiser implements GRInitialiser {
 	 * 
 	 * @param model
 	 */
-	public GrowInitialiser() {
-		// Initialise on each generation.
+	public GrowInitialiser(GRModel model) {
+		this.model = model;
+		
+		// Initialise the object.
+		initialise();
+		
+		// Re-initialise at the start of every generation.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
-				updateModel();
+				initialise();
 			}
 		});
 	}
 	
-	private void updateModel() {
-		model = (GRModel) Controller.getModel();
-		
+	private void initialise() {
 		rng = model.getRNG();
 		grammar = model.getGrammar();
 		popSize = model.getPopulationSize();
@@ -92,7 +95,7 @@ public class GrowInitialiser implements GRInitialiser {
 	public GRCandidateProgram getInitialProgram(int depth) {
 		GrammarRule startRule = grammar.getStartRule();
 		
-		return new GRCandidateProgram(model, growParseTree(depth, startRule));
+		return new GRCandidateProgram(growParseTree(depth, startRule), model);
 	}
 	
 	public NonTerminalSymbol growParseTree(int depth, GrammarRule startRule) {

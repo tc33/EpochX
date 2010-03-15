@@ -21,18 +21,13 @@
  */
 package org.epochx.gr.representation;
 
-import org.epochx.gr.model.*;
-import org.epochx.life.*;
-import org.epochx.representation.*;
+import org.epochx.gr.model.GRModel;
+import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.*;
 
 public class GRCandidateProgram extends CandidateProgram {
 
 	private GRModel model;
-	
-	private boolean cacheFitness;
-	
-	private int maxProgramDepth;
 	
 	// The phenotype.
 	private NonTerminalSymbol parseTree;
@@ -44,10 +39,10 @@ public class GRCandidateProgram extends CandidateProgram {
 	private String sourceCache;
 	
 	public GRCandidateProgram(GRModel model) {
-		this(model, null);
+		this(null, model);
 	}
 	
-	public GRCandidateProgram(GRModel model, NonTerminalSymbol parseTree) {
+	public GRCandidateProgram(NonTerminalSymbol parseTree, GRModel model) {
 		this.model = model;
 		this.parseTree = parseTree;
 		
@@ -55,34 +50,18 @@ public class GRCandidateProgram extends CandidateProgram {
 		
 		// Initialise the fitness to -1 until we are asked to calculate it.
 		fitness = -1;
-
-		// Initialise on each generation.
-		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
-			@Override
-			public void onGenerationStart() {
-				updateModel();
-			}
-		});
-	}
-	
-	/*
-	 * Initialise parameters from model.
-	 */
-	private void updateModel() {
-		cacheFitness = model.cacheFitness();
-		maxProgramDepth = model.getMaxProgramDepth();
 	}
 	
 	@Override
 	public double getFitness() {
 		// Only get the source code if caching to avoid overhead otherwise.
 		String source = null;
-		if (cacheFitness) {
+		if (model.cacheFitness()) {
 			source = getSourceCode();
 		}
 		
 		// If we're not caching or the cache is out of date.
-		if (!cacheFitness || !source.equals(sourceCache)) {
+		if (!model.cacheFitness() || !source.equals(sourceCache)) {
 			fitness = model.getFitness(this);
 			sourceCache = source;
 		}
@@ -92,7 +71,7 @@ public class GRCandidateProgram extends CandidateProgram {
 	
 	@Override
 	public boolean isValid() {
-		return (getDepth() <= maxProgramDepth);
+		return (getDepth() <= model.getMaxProgramDepth());
 	}
 
 	public String getSourceCode() {

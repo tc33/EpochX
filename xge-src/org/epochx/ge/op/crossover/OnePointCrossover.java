@@ -23,10 +23,9 @@ package org.epochx.ge.op.crossover;
 
 import java.util.List;
 
-import org.epochx.core.Controller;
+import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.life.GenerationAdapter;
-import org.epochx.life.LifeCycleManager;
+import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
 
@@ -45,6 +44,9 @@ public class OnePointCrossover implements GECrossover {
 	 * remove all context so how can it crossover building blocks!?
 	 */
 	
+	// The current controlling model.
+	private GEModel model;
+	
 	// Operator statistics store.
 	private int crossoverPoint1;
 	private int crossoverPoint2;
@@ -52,12 +54,15 @@ public class OnePointCrossover implements GECrossover {
 	// The random number generator in use.
 	private RandomNumberGenerator rng;
 	
-	public OnePointCrossover() {
-		// Initialise on each generation.
+	public OnePointCrossover(GEModel model) {
+		this.model = model;
+		
+		initialise();
+		
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
-				updateModel();
+				initialise();
 			}
 		});
 	}
@@ -66,8 +71,8 @@ public class OnePointCrossover implements GECrossover {
 	 * Initialises OnePointCrossover, in particular all parameters from the 
 	 * model should be refreshed incase they've changed since the last call.
 	 */
-	private void updateModel() {
-		rng = Controller.getModel().getRNG();
+	private void initialise() {
+		rng = model.getRNG();
 	}
 	
 	/**

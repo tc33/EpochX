@@ -72,8 +72,8 @@ public abstract class AbstractModel implements Model {
 		mutationProbability = 0.1;
 		
 		// Components.
-		programSelector = new RandomSelector();
-		poolSelector = new TournamentSelector(7);
+		programSelector = new RandomSelector(this);
+		poolSelector = new TournamentSelector(this, 7);
 		randomNumberGenerator = new MersenneTwisterFast();
 		
 		// Caching.

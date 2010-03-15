@@ -21,7 +21,6 @@
  */
 package org.epochx.gr.op.mutation;
 
-import org.epochx.core.Controller;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.op.init.GrowInitialiser;
 import org.epochx.gr.representation.GRCandidateProgram;
@@ -31,28 +30,25 @@ import org.epochx.tools.random.RandomNumberGenerator;
 
 public class WhighamMutation implements GRMutation {
 
+	private GRModel model;
+	
 	private RandomNumberGenerator rng;
 	
 	private GrowInitialiser init;
 	
-	public WhighamMutation() {
-		init = new GrowInitialiser();
-
-		// Initialise on each generation.
+	public WhighamMutation(GRModel model) {
+		this.model = model;
+		
+		init = new GrowInitialiser(model);
+		
+		initialise();
+		
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
-				updateModel();
+				initialise();
 			}
 		});
-	}
-	
-	/*
-	 * Initialises WhighamMutation, in particular all parameters from the 
-	 * model should be refreshed incase they've changed since the last call.
-	 */
-	private void updateModel() {
-		rng = Controller.getModel().getRNG();
 	}
 	
 	@Override
@@ -76,4 +72,11 @@ public class WhighamMutation implements GRMutation {
 		return mutatedProgram;
 	}
 
+	/*
+	 * Initialises WhighamMutation, in particular all parameters from the 
+	 * model should be refreshed incase they've changed since the last call.
+	 */
+	private void initialise() {
+		rng = model.getRNG();
+	}
 }

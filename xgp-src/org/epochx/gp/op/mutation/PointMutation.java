@@ -23,13 +23,9 @@ package org.epochx.gp.op.mutation;
 
 import java.util.List;
 
-import org.epochx.core.Controller;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
-import org.epochx.life.GenerationAdapter;
-import org.epochx.life.LifeCycleManager;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.random.RandomNumberGenerator;
 
 
 /**
@@ -42,10 +38,9 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * sets), at random.
  */
 public class PointMutation implements GPMutation {
-	
-	private RandomNumberGenerator rng;
-	
-	private List<Node> syntax;
+
+	// The current controlling model.
+	private GPModel model;
 	
 	// The probability that each node has of being mutated.
 	private double pointProbability;
@@ -58,8 +53,8 @@ public class PointMutation implements GPMutation {
 	 * @param model The current controlling model. Parameters such as full 
 	 * 				syntax will be obtained from this.
 	 */
-	public PointMutation() {
-		this(0.01);
+	public PointMutation(GPModel model) {
+		this(model, 0.01);
 	}
 	
 	/**
@@ -72,21 +67,9 @@ public class PointMutation implements GPMutation {
 	 * changed, and 0.0 would mean no nodes were changed. A typical value 
 	 * would be 0.01.
 	 */
-	public PointMutation(double pointProbability) {
+	public PointMutation(GPModel model, double pointProbability) {
+		this.model = model;
 		this.pointProbability = pointProbability;
-
-		// Initialise on each generation.
-		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
-			@Override
-			public void onGenerationStart() {
-				updateModel();
-			}
-		});
-	}
-
-	public void updateModel() {
-		rng = Controller.getModel().getRNG();
-		syntax = ((GPModel) Controller.getModel()).getSyntax();
 	}
 	
 	/**
@@ -105,17 +88,20 @@ public class PointMutation implements GPMutation {
 	public GPCandidateProgram mutate(CandidateProgram p) {
 		GPCandidateProgram program = (GPCandidateProgram) p;
 		
+		// Get the syntax from which new nodes will be chosen.
+		List<Node> syntax = model.getSyntax();
+		
 		// Iterate over each node in the program tree.
 		int length = program.getProgramLength();
 		for (int i=0; i<length; i++) { 
 			// Only change pointProbability of the time.
-			if (rng.nextDouble() < pointProbability) {
+			if (model.getRNG().nextDouble() < pointProbability) {
 				// Get the arity of the ith node of the program.
 				Node node = (Node) program.getNthNode(i);
 				int arity = node.getArity();
 				
 				// Find a different function/terminal with same arity - start from random position.
-				int rand = rng.nextInt(syntax.size());
+				int rand = model.getRNG().nextInt(syntax.size());
 				for (int j=0; j<syntax.size(); j++) {
 					int index = (j + rand) % syntax.size();
 					Node n = syntax.get(index);

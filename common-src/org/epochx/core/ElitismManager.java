@@ -68,6 +68,9 @@ import org.epochx.representation.CandidateProgram;
  * </table>
  */
 public class ElitismManager {
+	
+	// The controlling model.
+	private final Model model;
 
 	// The number of elites to be used.
 	private int noElites;
@@ -79,12 +82,17 @@ public class ElitismManager {
 	 * @param model the Model which defines the run parameters such as number
 	 * 				of elites to use.
 	 */
-	public ElitismManager() {		
-		// Initialise on each generation.
+	public ElitismManager(final Model model) {
+		this.model = model;
+		
+		// Initialise parameters.
+		initialise();
+		
+		// Register interest in generation events so we can reset.
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
-				updateModel();
+				initialise();
 			}
 		});
 	}
@@ -93,10 +101,10 @@ public class ElitismManager {
 	 * Initialises Elitism, in particular all parameters from the model should
 	 * be refreshed in case they've changed since the last call.
 	 */
-	private void updateModel() {
+	private void initialise() {
 		// Discover how many elites we need.
-		noElites = Controller.getModel().getNoElites();
-		int popSize = Controller.getModel().getPopulationSize();
+		noElites = model.getNoElites();
+		int popSize = model.getPopulationSize();
 		noElites = (noElites < popSize) ? noElites : popSize;
 	}
 	

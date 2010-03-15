@@ -21,7 +21,6 @@
  */
 package org.epochx.ge.op.mutation;
 
-import org.epochx.core.Controller;
 import org.epochx.ge.codon.CodonGenerator;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
@@ -39,6 +38,9 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class PointMutation implements GEMutation {
 
+	// The current controlling model.
+	private GEModel model;
+	
 	// The probability each codon has of being mutated in a selected program.
 	private double pointProbability;
 	
@@ -53,8 +55,8 @@ public class PointMutation implements GEMutation {
 	 * @param model The current controlling model. Parameters such as the codon
 	 * 				generator to use will come from here.
 	 */
-	public PointMutation() {
-		this(0.01);
+	public PointMutation(GEModel model) {
+		this(model, 0.01);
 	}
 	
 	/**
@@ -67,14 +69,14 @@ public class PointMutation implements GEMutation {
 	 * 				being changed, and 0.0 would mean no nodes were changed. A 
 	 * 				typical value would be 0.01.
 	 */
-	public PointMutation(double pointProbability) {
+	public PointMutation(GEModel model, double pointProbability) {
+		this.model = model;
 		this.pointProbability = pointProbability;
-
-		// Initialise on each generation.
+		
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
-				updateModel();
+				initialise();
 			}
 		});
 	}
@@ -108,9 +110,9 @@ public class PointMutation implements GEMutation {
 		return program;
 	}
 
-	public void updateModel() {
-		rng = Controller.getModel().getRNG();
-		codonGenerator = ((GEModel)Controller.getModel()).getCodonGenerator();
+	public void initialise() {
+		rng = model.getRNG();
+		codonGenerator = model.getCodonGenerator();
 	}
 
 }

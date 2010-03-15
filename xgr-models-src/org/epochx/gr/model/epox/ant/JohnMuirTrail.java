@@ -97,10 +97,10 @@ public class JohnMuirTrail extends GRAbstractModel {
 		setMaxInitialProgramDepth(15);
 		setMutationProbability(0.1);
 		setCrossoverProbability(0.9);
-		setProgramSelector(new TournamentSelector(7));
-		setPoolSelector(new RandomSelector());
+		setProgramSelector(new TournamentSelector(this, 7));
+		setPoolSelector(new RandomSelector(this));
 		setPoolSize(50);
-		setInitialiser(new RampedHalfAndHalfInitialiser());
+		setInitialiser(new RampedHalfAndHalfInitialiser(this));
 	}
 	
 	@Override

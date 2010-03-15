@@ -25,7 +25,6 @@ import static org.epochx.stats.StatField.*;
 
 import java.util.List;
 
-import org.epochx.life.GenerationAdapter;
 import org.epochx.life.LifeCycleManager;
 import org.epochx.model.Model;
 import org.epochx.representation.CandidateProgram;
@@ -50,7 +49,10 @@ import org.epochx.stats.*;
  * 
  */
 public class RunManager {
-		
+	
+	// The model describing the problem to be evolved.
+	private final Model model;
+	
 	// Core components.
 	private final GenerationManager generation;
 	private final InitialisationManager initialisation;
@@ -61,10 +63,6 @@ public class RunManager {
 	// The fitness of the best program found so far during the run.
 	private double bestFitness;
 	
-	private int noGenerations;
-	
-	private double terminationFitness;
-	
 	/**
 	 * Constructs an instance of RunManager to be controlled by parameters 
 	 * retrieved from the given <code>Model</code>. Fitness evaluation will 
@@ -73,18 +71,13 @@ public class RunManager {
 	 * @param model the model which will control the run with the parameters 
 	 * 				and fitness function to use.
 	 */
-	public RunManager() {
+	public RunManager(final Model model) {
+		// Initialise the run.
+		this.model = model;
+
 		// Setup core components.
-		generation = new GenerationManager();
-		initialisation = new InitialisationManager();
-		
-		// Update the model each generation.
-		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
-			@Override
-			public void onGenerationStart() {
-				updateModel();
-			}
-		});
+		generation = new GenerationManager(model);
+		initialisation = new InitialisationManager(model);
 	}
 	
 	/*
@@ -93,11 +86,6 @@ public class RunManager {
 	private void setup() {
 		bestProgram = null;
 		bestFitness = Double.POSITIVE_INFINITY;
-	}
-	
-	private void updateModel() {
-		noGenerations = Controller.getModel().getNoGenerations();
-		terminationFitness = Controller.getModel().getTerminationFitness();
 	}
 	
 	/**
@@ -127,7 +115,7 @@ public class RunManager {
 		updateBestProgram(pop);
 
 		// Execute each generation.
-		for (int gen=1; gen<=noGenerations; gen++) {
+		for (int gen=1; gen<=model.getNoGenerations(); gen++) {
 			// Perform the generation.
 			pop = generation.generation(gen, pop);
 			
@@ -135,7 +123,7 @@ public class RunManager {
 			updateBestProgram(pop);
 			
 			// We might be finished?
-			if (bestFitness <= terminationFitness) {
+			if (bestFitness <= model.getTerminationFitness()) {
 				LifeCycleManager.getLifeCycleManager().onSuccess();
 				break;
 			}

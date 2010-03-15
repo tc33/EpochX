@@ -46,9 +46,9 @@ public abstract class GRAbstractModel extends AbstractModel implements GRModel {
 		maxInitialDepth = 8;
 		
 		// GP Components.
-		initialiser = new RampedHalfAndHalfInitialiser();
-		crossover = new WhighamCrossover();
-		mutator = new WhighamMutation();
+		initialiser = new RampedHalfAndHalfInitialiser(this);
+		crossover = new WhighamCrossover(this);
+		mutator = new WhighamMutation(this);
 		
 		// Stats - overwrite parent default.
 		setStatsEngine(new GRStatsEngine());

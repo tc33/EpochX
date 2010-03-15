@@ -21,16 +21,11 @@
  */
 package org.epochx.op.selection;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import org.epochx.core.Controller;
-import org.epochx.life.GenerationAdapter;
-import org.epochx.life.LifeCycleManager;
-import org.epochx.op.PoolSelector;
-import org.epochx.op.ProgramSelector;
+import org.epochx.model.Model;
+import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.random.RandomNumberGenerator;
 
 
 /**
@@ -38,31 +33,15 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * pressure. No reference is made to the programs' fitness scores.
  */
 public class RandomSelector implements ProgramSelector, PoolSelector {
-	
-	// Model parameters.
-	private RandomNumberGenerator rng;
+
+	// The current controlling model.
+	private Model model;
 	
 	// The current population from which programs should be chosen.
 	private List<CandidateProgram> pop;
 	
-	/**
-	 * 
-	 */
-	public RandomSelector() {
-		// Initialise on each generation.
-		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
-			@Override
-			public void onGenerationStart() {
-				updateModel();
-			}
-		});
-	}
-	
-	/*
-	 * Initialise parameters from model.
-	 */
-	private void updateModel() {
-		rng = Controller.getModel().getRNG();
+	public RandomSelector(Model model) {
+		this.model = model;
 	}
 	
 	/**
@@ -83,7 +62,7 @@ public class RandomSelector implements ProgramSelector, PoolSelector {
 	 */
 	@Override
 	public CandidateProgram getProgram() {		
-		return pop.get(rng.nextInt(pop.size()));
+		return pop.get(model.getRNG().nextInt(pop.size()));
 	}
 
 	/**
@@ -110,7 +89,7 @@ public class RandomSelector implements ProgramSelector, PoolSelector {
 		// Construct our pool.
 		List<CandidateProgram> pool = new ArrayList<CandidateProgram>(poolSize);
 		for (int i=0; i<poolSize; i++) {
-			pool.add(pop.get(rng.nextInt(pop.size())));
+			pool.add(pop.get(model.getRNG().nextInt(pop.size())));
 		}
 		
 		return pool;

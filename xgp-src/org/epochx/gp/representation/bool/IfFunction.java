@@ -58,9 +58,9 @@ public class IfFunction extends BooleanNode {
 		boolean c1 = ((Boolean) getChild(0).evaluate()).booleanValue();
 
 		if(c1) {
-			return ((Boolean) getChild(1).evaluate()).booleanValue();
+			return (Boolean) getChild(1).evaluate();
 		} else {
-			return ((Boolean) getChild(2).evaluate()).booleanValue();
+			return (Boolean) getChild(2).evaluate();
 		}
 	}
 	

@@ -230,14 +230,14 @@ public class NonTerminalSymbol implements Symbol {
 	}
 	
 	/*
-	 * This MUST stay private to preserve internal consistency.
+	 * 
 	 */
 	public Symbol getNthSymbol(int n) {	
 		return getNthSymbol(n, 0);
 	}
 	
 	/*
-	 * This MUST stay private to preserve internal consistency.
+	 * 
 	 */
 	private Symbol getNthSymbol(int n, int current) {
 		// Is this the one we're looking for?
@@ -257,7 +257,7 @@ public class NonTerminalSymbol implements Symbol {
 				
 				current += nt.getNoSymbols();
 			} else {
-				if (n == current++) {
+				if (n == ++current) {
 					return child;
 				}
 			}
@@ -317,6 +317,30 @@ public class NonTerminalSymbol implements Symbol {
 		for (Symbol child: children) {
 			if (child instanceof NonTerminalSymbol) {
 				nonTerminals.addAll(((NonTerminalSymbol) child).getNonTerminalSymbols());
+			}
+		}
+		
+		return nonTerminals;
+	}
+	
+	public List<Integer> getNonTerminalIndexes() {
+		return getNonTerminalIndexes(0);
+	}
+	
+	private List<Integer> getNonTerminalIndexes(int index) {
+		List<Integer> nonTerminals = new ArrayList<Integer>();
+		
+		// Start by adding self.
+		nonTerminals.add(index);
+		
+		// Add all the non-terminals below each child.
+		for (Symbol child: children) {
+			if (child instanceof NonTerminalSymbol) {
+				NonTerminalSymbol nt = (NonTerminalSymbol) child;
+				nonTerminals.addAll(nt.getNonTerminalIndexes(index+1));
+				index += nt.getNoSymbols();
+			} else {
+				index++;
 			}
 		}
 		

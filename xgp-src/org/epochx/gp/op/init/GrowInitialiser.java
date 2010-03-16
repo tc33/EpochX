@@ -61,6 +61,8 @@ public class GrowInitialiser implements GPInitialiser {
 		terminals = new ArrayList<Node>();
 		functions = new ArrayList<Node>();
 		
+		reset();
+		
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {

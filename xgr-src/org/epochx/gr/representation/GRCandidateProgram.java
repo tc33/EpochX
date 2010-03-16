@@ -52,6 +52,10 @@ public class GRCandidateProgram extends CandidateProgram {
 		fitness = -1;
 	}
 	
+	public void setParseTree(NonTerminalSymbol parseTree) {
+		this.parseTree = parseTree;
+	}
+	
 	@Override
 	public double getFitness() {
 		// Only get the source code if caching to avoid overhead otherwise.

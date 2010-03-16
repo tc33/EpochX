@@ -57,6 +57,9 @@ public class FullInitialiser implements GPInitialiser {
 	public FullInitialiser(GPModel model) {
 		this.model = model;
 		
+		terminals = new ArrayList<Node>();
+		functions = new ArrayList<Node>();
+		
 		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
@@ -76,6 +79,7 @@ public class FullInitialiser implements GPInitialiser {
 		syntax = model.getSyntax();
 		
 		maxInitialDepth = model.getInitialMaxDepth();
+		popSize = model.getPopulationSize();
 		
 		for (Node n: syntax) {
 			if (n.getArity() == 0) {

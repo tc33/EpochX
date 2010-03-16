@@ -23,6 +23,7 @@ package org.epochx.gr.op.mutation;
 
 import java.util.*;
 
+import org.epochx.gp.representation.*;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.op.init.GrowInitialiser;
 import org.epochx.gr.representation.GRCandidateProgram;
@@ -56,15 +57,16 @@ public class WhighamMutation implements GRMutation {
 	
 	@Override
 	public GRCandidateProgram mutate(CandidateProgram program) {
-		GRCandidateProgram mutatedProgram = (GRCandidateProgram) program;
+		GRCandidateProgram mutatedProgram = (GRCandidateProgram) program.clone();
 		
 		NonTerminalSymbol parseTree = mutatedProgram.getParseTree();
 		
-		List<NonTerminalSymbol> nonTerminals = parseTree.getNonTerminalSymbols();
+		//TODO This is v.inefficient because we have to fly up and down the tree lots of times.
+		List<Integer> nonTerminals = parseTree.getNonTerminalIndexes();
 		
 		// Choose a node to change.
-		int selection = rng.nextInt(nonTerminals.size());
-		NonTerminalSymbol point = nonTerminals.get(selection);
+		int selection = nonTerminals.get(rng.nextInt(nonTerminals.size()));
+		NonTerminalSymbol point = (NonTerminalSymbol) parseTree.getNthSymbol(selection);
 		int originalDepth = point.getDepth();
 		
 		/*
@@ -75,11 +77,22 @@ public class WhighamMutation implements GRMutation {
 		 */
 		
 		// Construct a new subtree from that node's grammar rule.
-		GrammarRule rule = point.getGrammarRule();			
+		GrammarRule rule = point.getGrammarRule();
 		NonTerminalSymbol replacement = init.growParseTree(originalDepth, rule);
 		
-		// Replace node's children with the new children.
-		point.setChildren(replacement.removeChildren());
+		// Replace node.
+		if (selection == 0) {
+			mutatedProgram.setParseTree(replacement);
+		} else {
+			parseTree.setNthSymbol(selection, replacement);
+		}
+		
+		FunctionParser parser = new FunctionParser();
+		try {
+			parser.parse(parseTree.toString());
+		} catch (MalformedProgramException e) {
+			System.out.println("");			
+		}
 		
 		return mutatedProgram;
 	}

@@ -23,9 +23,13 @@ package org.epochx.ge.op.init;
 
 import java.util.*;
 
+import org.epochx.core.Controller;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
+import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.tools.grammar.Grammar;
+import org.epochx.tools.random.RandomNumberGenerator;
 
 
 /**
@@ -41,7 +45,11 @@ import org.epochx.representation.CandidateProgram;
 public class RampedHalfAndHalfInitialiser implements GEInitialiser {
 
 	// The current controlling model.
-	private GEModel model;	
+	private GEModel model;
+	
+	private Grammar grammar;
+	private int popSize;
+	private int maxInitialProgramDepth;
 	
 	// The grow and full instances for doing their share of the work.
 	private GrowInitialiser grow;
@@ -52,12 +60,29 @@ public class RampedHalfAndHalfInitialiser implements GEInitialiser {
 	 * 
 	 * @param model The model being assessed
 	 */
-	public RampedHalfAndHalfInitialiser(GEModel model) {
-		this.model = model;
-		
+	public RampedHalfAndHalfInitialiser() {
 		// set up the grow and full parts
-		grow = new GrowInitialiser(model);
-		full = new FullInitialiser(model);
+		grow = new GrowInitialiser();
+		full = new FullInitialiser();
+		
+		// Configure parameters from the model.
+		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+			@Override
+			public void onConfigure() {
+				configure();
+			}
+		});
+	}
+	
+	/*
+	 * Configure component with parameters from the model.
+	 */
+	private void configure() {
+		model = (GEModel) Controller.getModel();
+		
+		grammar = model.getGrammar();
+		popSize = model.getPopulationSize();
+		maxInitialProgramDepth = model.getMaxInitialProgramDepth();
 	}
 	
 	/**
@@ -67,19 +92,17 @@ public class RampedHalfAndHalfInitialiser implements GEInitialiser {
 	 */
 	public List<CandidateProgram> getInitialPopulation() {
 		// Create population list to populate.
-		int popSize = model.getPopulationSize();
 		List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
 		
 		// Our start depth can only be as small as the grammars minimum depth.
-		int startDepth = model.getGrammar().getMinimumDepth();
-		int endDepth = model.getMaxInitialProgramDepth();
+		int startDepth = grammar.getMinimumDepth();
 		
-		if (endDepth < 2) {
+		if (maxInitialProgramDepth < 2) {
 			throw new IllegalArgumentException("Initial maximum depth must be greater than 1 for RH+H.");
 		}
 		
 		// Number of programs each depth SHOULD have. But won't unless remainder is 0.
-		double programsPerDepth = (double) popSize / (endDepth - startDepth + 1);
+		double programsPerDepth = (double) popSize / (maxInitialProgramDepth - startDepth + 1);
 		
 		for (int i=0; i<popSize; i++) {
 			// Calculate depth

@@ -23,6 +23,7 @@ package org.epochx.ge.op.init;
 
 import java.util.*;
 
+import org.epochx.core.Controller;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.life.*;
@@ -54,19 +55,27 @@ public class FullInitialiser implements GEInitialiser {
 	 * 
 	 * @param model
 	 */
-	public FullInitialiser(GEModel model) {
-		this.model = model;
-		
-		// Initialise the object.
-		initialise();
-		
-		// Re-initialise at the start of every generation.
-		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+	public FullInitialiser() {
+		// Configure parameters from the model.
+		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
-			public void onGenerationStart() {
-				initialise();
+			public void onConfigure() {
+				configure();
 			}
 		});
+	}
+	
+	/*
+	 * Configure component with parameters from the model.
+	 */
+	private void configure() {
+		model = (GEModel) Controller.getModel();
+		
+		rng = model.getRNG();
+		grammar = model.getGrammar();
+		popSize = model.getPopulationSize();
+		maxInitialProgramDepth = model.getMaxInitialProgramDepth();
+		maxCodonSize = model.getMaxCodonSize();
 	}
 	
 	@Override
@@ -173,11 +182,4 @@ public class FullInitialiser implements GEInitialiser {
 		return codon;
 	}
 
-	private void initialise() {
-		rng = model.getRNG();
-		grammar = model.getGrammar();
-		popSize = model.getPopulationSize();
-		maxInitialProgramDepth = model.getMaxInitialProgramDepth();
-		maxCodonSize = model.getMaxCodonSize();
-	}
 }

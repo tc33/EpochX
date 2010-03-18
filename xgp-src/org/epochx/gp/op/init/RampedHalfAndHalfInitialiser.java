@@ -23,8 +23,10 @@ package org.epochx.gp.op.init;
 
 import java.util.*;
 
+import org.epochx.core.Controller;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
+import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
 
 
@@ -45,7 +47,10 @@ import org.epochx.representation.CandidateProgram;
 public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 	
 	// The current controlling model.
-	private GPModel model;	
+	private GPModel model;
+	
+	private int popSize;
+	private int initialMaxDepth;
 	
 	// The grow and full instances for doing their share of the work.
 	private GrowInitialiser grow;
@@ -56,12 +61,28 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 	 * 
 	 * @param model The model being assessed
 	 */
-	public RampedHalfAndHalfInitialiser(GPModel model) {
-		this.model = model;
-		
+	public RampedHalfAndHalfInitialiser() {
 		// set up the grow and full parts
-		grow = new GrowInitialiser(model);
-		full = new FullInitialiser(model);
+		grow = new GrowInitialiser();
+		full = new FullInitialiser();
+		
+		// Configure parameters from the model.
+		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+			@Override
+			public void onConfigure() {
+				configure();
+			}
+		});
+	}
+	
+	/*
+	 * Configure component with parameters from the model.
+	 */
+	private void configure() {
+		model = (GPModel) Controller.getModel();
+		
+		popSize = model.getPopulationSize();
+		initialMaxDepth = model.getInitialMaxDepth();
 	}
 	
 	/**
@@ -71,18 +92,16 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 	 */
 	public List<CandidateProgram> getInitialPopulation() {
 		// Create population list to populate.
-		int popSize = model.getPopulationSize();
 		List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
 		
 		int startDepth = 2;
-		int endDepth = model.getInitialMaxDepth();
 		
-		if (endDepth < 2) {
+		if (initialMaxDepth < 2) {
 			throw new IllegalArgumentException("Initial maximum depth must be greater than 1 for RH+H.");
 		}
 		
 		// Number of programs each depth SHOULD have. But won't unless remainder is 0.
-		double programsPerDepth = (double) popSize / (endDepth - startDepth + 1);
+		double programsPerDepth = (double) popSize / (initialMaxDepth - startDepth + 1);
 		
 		for (int i=0; i<popSize; i++) {			
 			// Calculate depth

@@ -21,6 +21,7 @@
  */
 package org.epochx.ge.op.mutation;
 
+import org.epochx.core.Controller;
 import org.epochx.ge.codon.CodonGenerator;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
@@ -38,9 +39,6 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class PointMutation implements GEMutation {
 
-	// The current controlling model.
-	private GEModel model;
-	
 	// The probability each codon has of being mutated in a selected program.
 	private double pointProbability;
 	
@@ -55,8 +53,8 @@ public class PointMutation implements GEMutation {
 	 * @param model The current controlling model. Parameters such as the codon
 	 * 				generator to use will come from here.
 	 */
-	public PointMutation(GEModel model) {
-		this(model, 0.01);
+	public PointMutation() {
+		this(0.01);
 	}
 	
 	/**
@@ -69,18 +67,28 @@ public class PointMutation implements GEMutation {
 	 * 				being changed, and 0.0 would mean no nodes were changed. A 
 	 * 				typical value would be 0.01.
 	 */
-	public PointMutation(GEModel model, double pointProbability) {
-		this.model = model;
+	public PointMutation(double pointProbability) {
 		this.pointProbability = pointProbability;
 		
-		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+		// Configure parameters from the model.
+		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
-			public void onGenerationStart() {
-				initialise();
+			public void onConfigure() {
+				configure();
 			}
 		});
 	}
 		
+	/*
+	 * Configure component with parameters from the model.
+	 */
+	private void configure() {
+		GEModel model = (GEModel) Controller.getModel();
+		
+		rng = model.getRNG();
+		codonGenerator = model.getCodonGenerator();
+	}
+	
 	/**
 	 * Perform point mutation on the given GECandidateProgram. Each codon in the 
 	 * program's chromosome is considered in turn, with each having the given 
@@ -109,10 +117,5 @@ public class PointMutation implements GEMutation {
 
 		return program;
 	}
-
-	public void initialise() {
-		rng = model.getRNG();
-		codonGenerator = model.getCodonGenerator();
-	}
-
+	
 }

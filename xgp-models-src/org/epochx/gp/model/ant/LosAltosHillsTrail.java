@@ -152,7 +152,6 @@ public class LosAltosHillsTrail extends GPAbstractModel {
 	
 	public static void main(String[] args) {		
 		GPAbstractModel model = new LosAltosHillsTrail();
-		//model.setGenStatFields(new GenerationStatField[]{GenerationStatField.FITNESS_MIN});
 		model.setPopulationSize(2000);
 		Controller.run(model);
 	}

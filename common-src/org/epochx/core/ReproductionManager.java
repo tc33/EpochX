@@ -69,10 +69,7 @@ import static org.epochx.stats.StatField.*;
  * </table>
  */
 public class ReproductionManager {
-	
-	// The controlling model.
-	private final Model model;
-	
+
 	// Manager of life cycle events.
 	private LifeCycleManager lifeCycle;
 	
@@ -91,27 +88,22 @@ public class ReproductionManager {
 	 * @param model the model which defines the ProgramSelector to use to 
 	 * 				select the program to be reproduced.
 	 */
-	public ReproductionManager(final Model model) {
-		this.model = model;
-		
-		// Initialise parameters.
-		initialise();
-		
-		lifeCycle = LifeCycleManager.getLifeCycleManager();
-		lifeCycle.addGenerationListener(new GenerationAdapter() {
+	public ReproductionManager() {
+		// Configure parameters from the model.
+		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
-			public void onGenerationStart() {
-				// Initialise parameters.
-				initialise();
+			public void onConfigure() {
+				configure();
 			}
 		});
 	}
 	
 	/*
-	 * Initialises ReproductionManager, in particular all parameters from the 
-	 * model should be refreshed incase they've changed since the last call.
+	 * Configure component with parameters from the model.
 	 */
-	private void initialise() {
+	private void configure() {
+		Model model = Controller.getModel();
+		
 		programSelector = model.getProgramSelector();
 	}
 	

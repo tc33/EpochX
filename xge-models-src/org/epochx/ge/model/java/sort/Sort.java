@@ -53,13 +53,8 @@ public class Sort extends GEAbstractModel {
 		// Set run parameters.
 		setPopulationSize(1000);
 		setNoGenerations(100);
-		/*setGenStatFields(new GenerationStatField[]{
-				GenerationStatField.FITNESS_MIN,
-				GenerationStatField.FITNESS_AVE,
-				GenerationStatField.BEST_PROGRAM
-		});*/
 		setNoElites(30);
-		setInitialiser(new GrowInitialiser(this));
+		setInitialiser(new GrowInitialiser());
 		setMaxProgramDepth(15);
 		setMaxInitialProgramDepth(15);
 		setPoolSize(100);

@@ -61,6 +61,7 @@ public class LifeCycleManager {
 	private static LifeCycleManager lifeCycle;
 	
 	// The life cycle listeners.
+	private List<ConfigListener> configListeners;
 	private List<RunListener> runListeners;
 	private List<InitialisationListener> initialisationListeners;
 	private List<ElitismListener> elitismListeners;
@@ -72,6 +73,7 @@ public class LifeCycleManager {
 	
 	private LifeCycleManager() {
 		// Initialise listener lists.
+		configListeners = new ArrayList<ConfigListener>();
 		runListeners = new ArrayList<RunListener>();
 		initialisationListeners = new ArrayList<InitialisationListener>();
 		elitismListeners = new ArrayList<ElitismListener>();
@@ -80,6 +82,14 @@ public class LifeCycleManager {
 		mutationListeners = new ArrayList<MutationListener>();
 		reproductionListeners = new ArrayList<ReproductionListener>();
 		generationListeners = new ArrayList<GenerationListener>();
+	}
+	
+	public void addConfigListener(ConfigListener listener) {
+		configListeners.add(listener);
+	}
+	
+	public void removeConfigListener(ConfigListener listener) {
+		configListeners.remove(listener);
 	}
 	
 	public void addRunListener(RunListener listener) {
@@ -144,6 +154,12 @@ public class LifeCycleManager {
 	
 	public void removeGenerationListener(GenerationListener listener) {
 		generationListeners.remove(listener);
+	}
+	
+	public void onConfigure() {
+		for (ConfigListener listener: configListeners) {
+			listener.onConfigure();
+		}
 	}
 
 	public void onRunStart() {
@@ -329,6 +345,7 @@ public class LifeCycleManager {
 			listener.onGenerationEnd();
 		}
 	}
+
 	
 	/**
 	 * Returns the life cycle manager which handles all life cycle events 

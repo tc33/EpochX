@@ -23,9 +23,12 @@ package org.epochx.gp.op.mutation;
 
 import java.util.List;
 
+import org.epochx.core.Controller;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
+import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.tools.random.RandomNumberGenerator;
 
 
 /**
@@ -38,9 +41,10 @@ import org.epochx.representation.CandidateProgram;
  * sets), at random.
  */
 public class PointMutation implements GPMutation {
-
-	// The current controlling model.
-	private GPModel model;
+	
+	private List<Node> syntax;
+	
+	private RandomNumberGenerator rng;
 	
 	// The probability that each node has of being mutated.
 	private double pointProbability;
@@ -53,23 +57,38 @@ public class PointMutation implements GPMutation {
 	 * @param model The current controlling model. Parameters such as full 
 	 * 				syntax will be obtained from this.
 	 */
-	public PointMutation(GPModel model) {
-		this(model, 0.01);
+	public PointMutation() {
+		this(0.01);
 	}
 	
 	/**
 	 * Construct a point mutation with user specified point probability.
 	 * 
-	 * @param model The current controlling model. Parameters such as full 
-	 * syntax will be obtained from this.
 	 * @param pointProbability The probability each node in a selected program 
 	 * has of undergoing a mutation. 1.0 would result in all nodes being 
 	 * changed, and 0.0 would mean no nodes were changed. A typical value 
 	 * would be 0.01.
 	 */
-	public PointMutation(GPModel model, double pointProbability) {
-		this.model = model;
+	public PointMutation(double pointProbability) {
 		this.pointProbability = pointProbability;
+		
+		// Configure parameters from the model.
+		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+			@Override
+			public void onConfigure() {
+				configure();
+			}
+		});
+	}
+	
+	/*
+	 * Configure component with parameters from the model.
+	 */
+	private void configure() {
+		GPModel model = (GPModel) Controller.getModel();
+		
+		syntax = model.getSyntax();
+		rng = model.getRNG();
 	}
 	
 	/**
@@ -88,20 +107,17 @@ public class PointMutation implements GPMutation {
 	public GPCandidateProgram mutate(CandidateProgram p) {
 		GPCandidateProgram program = (GPCandidateProgram) p;
 		
-		// Get the syntax from which new nodes will be chosen.
-		List<Node> syntax = model.getSyntax();
-		
 		// Iterate over each node in the program tree.
 		int length = program.getProgramLength();
 		for (int i=0; i<length; i++) { 
 			// Only change pointProbability of the time.
-			if (model.getRNG().nextDouble() < pointProbability) {
+			if (rng.nextDouble() < pointProbability) {
 				// Get the arity of the ith node of the program.
 				Node node = (Node) program.getNthNode(i);
 				int arity = node.getArity();
 				
 				// Find a different function/terminal with same arity - start from random position.
-				int rand = model.getRNG().nextInt(syntax.size());
+				int rand = rng.nextInt(syntax.size());
 				for (int j=0; j<syntax.size(); j++) {
 					int index = (j + rand) % syntax.size();
 					Node n = syntax.get(index);

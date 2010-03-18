@@ -23,6 +23,7 @@ package org.epochx.gr.op.init;
 
 import java.util.*;
 
+import org.epochx.core.Controller;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.life.*;
@@ -49,22 +50,22 @@ public class GrowInitialiser implements GRInitialiser {
 	 * 
 	 * @param model
 	 */
-	public GrowInitialiser(GRModel model) {
-		this.model = model;
-		
-		// Initialise the object.
-		initialise();
-		
-		// Re-initialise at the start of every generation.
-		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+	public GrowInitialiser() {
+		// Configure parameters from the model.
+		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
-			public void onGenerationStart() {
-				initialise();
+			public void onConfigure() {
+				configure();
 			}
 		});
 	}
 	
-	private void initialise() {
+	/*
+	 * Configure component with parameters from the model.
+	 */
+	private void configure() {
+		model = (GRModel) Controller.getModel();
+		
 		rng = model.getRNG();
 		grammar = model.getGrammar();
 		popSize = model.getPopulationSize();

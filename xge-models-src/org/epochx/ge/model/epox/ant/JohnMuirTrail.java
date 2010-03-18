@@ -26,10 +26,8 @@ import java.util.*;
 
 import org.epochx.core.Controller;
 import org.epochx.ge.model.GEAbstractModel;
-import org.epochx.ge.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.gp.representation.FunctionParser;
-import org.epochx.op.selection.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.ant.*;
 import org.epochx.tools.eval.EpoxEvaluator;
@@ -88,22 +86,6 @@ public class JohnMuirTrail extends GEAbstractModel {
 		// Construct the evaluator to use.
 		parser = new FunctionParser();
 		evaluator = new EpoxEvaluator(parser);
-		
-		//setGenStatFields(new GenerationStatField[]{GenerationStatField.FITNESS_MIN, GenerationStatField.FITNESS_AVE, GenerationStatField.LENGTH_AVE, GenerationStatField.RUN_TIME});
-		//setRunStatFields(new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM, RunStatField.RUN_TIME});
-		
-		setNoRuns(100);
-		setNoElites(50);
-		setNoGenerations(100);
-		setPopulationSize(1600);
-		setMaxProgramDepth(15);
-		setMaxInitialProgramDepth(15);
-		setMutationProbability(0.1);
-		setCrossoverProbability(0.9);
-		setProgramSelector(new TournamentSelector(this, 7));
-		setPoolSelector(new RandomSelector(this));
-		setPoolSize(50);
-		setInitialiser(new RampedHalfAndHalfInitialiser(this));
 	}
 	
 	@Override

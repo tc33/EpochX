@@ -25,7 +25,7 @@ import static org.epochx.stats.StatField.*;
 
 import java.util.List;
 
-import org.epochx.life.LifeCycleManager;
+import org.epochx.life.*;
 import org.epochx.model.Model;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
@@ -50,12 +50,13 @@ import org.epochx.stats.*;
  */
 public class RunManager {
 	
-	// The model describing the problem to be evolved.
-	private final Model model;
-	
 	// Core components.
 	private final GenerationManager generation;
 	private final InitialisationManager initialisation;
+	
+	private int noGenerations;
+	
+	private double terminationFitness;
 	
 	// The best program found so far during the run.
 	private CandidateProgram bestProgram;
@@ -71,13 +72,28 @@ public class RunManager {
 	 * @param model the model which will control the run with the parameters 
 	 * 				and fitness function to use.
 	 */
-	public RunManager(final Model model) {
-		// Initialise the run.
-		this.model = model;
-
+	public RunManager() {
 		// Setup core components.
-		generation = new GenerationManager(model);
-		initialisation = new InitialisationManager(model);
+		generation = new GenerationManager();
+		initialisation = new InitialisationManager();
+		
+		// Configure parameters from the model.
+		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+			@Override
+			public void onConfigure() {
+				configure();
+			}
+		});
+	}
+	
+	/*
+	 * Configure component with parameters from the model.
+	 */
+	private void configure() {
+		Model model = Controller.getModel();
+		
+		noGenerations = model.getNoGenerations();
+		terminationFitness = model.getTerminationFitness();
 	}
 	
 	/*
@@ -96,11 +112,12 @@ public class RunManager {
 	 * 				set of runs being performed.
 	 */
 	public void run(final int runNo) {
+		// Inform everyone we're starting a run.
+		LifeCycleManager.getLifeCycleManager().onConfigure();
+		LifeCycleManager.getLifeCycleManager().onRunStart();
+		
 		// Setup the run manager for a new run
 		setup();
-		
-		// Inform everyone we're starting a run.
-		LifeCycleManager.getLifeCycleManager().onRunStart();
 		
 		// Record the start time.
 		final long startTime = System.nanoTime();
@@ -115,7 +132,7 @@ public class RunManager {
 		updateBestProgram(pop);
 
 		// Execute each generation.
-		for (int gen=1; gen<=model.getNoGenerations(); gen++) {
+		for (int gen=1; gen<=noGenerations; gen++) {
 			// Perform the generation.
 			pop = generation.generation(gen, pop);
 			
@@ -123,7 +140,7 @@ public class RunManager {
 			updateBestProgram(pop);
 			
 			// We might be finished?
-			if (bestFitness <= model.getTerminationFitness()) {
+			if (bestFitness <= terminationFitness) {
 				LifeCycleManager.getLifeCycleManager().onSuccess();
 				break;
 			}

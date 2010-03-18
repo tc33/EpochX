@@ -23,10 +23,10 @@ package org.epochx.gp.op.init;
 
 import java.util.*;
 
+import org.epochx.core.Controller;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
-import org.epochx.life.GenerationAdapter;
-import org.epochx.life.LifeCycleManager;
+import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
 
@@ -54,26 +54,27 @@ public class FullInitialiser implements GPInitialiser {
 	 * @param model The current controlling model. Run parameters such as the 
 	 * population size will be obtained from this.
 	 */
-	public FullInitialiser(GPModel model) {
-		this.model = model;
-		
+	public FullInitialiser() {
 		terminals = new ArrayList<Node>();
 		functions = new ArrayList<Node>();
 		
-		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+		// Configure parameters from the model.
+		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
-			public void onGenerationStart() {
-				reset();
+			public void onConfigure() {
+				configure();
 			}
 		});
 	}
 	
 	/*
-	 * Update the initialisers parameters from the model.
+	 * Configure component with parameters from the model.
 	 */
-	private void reset() {
-		rng = model.getRNG();
+	private void configure() {
+		model = (GPModel) Controller.getModel();
 		
+		rng = model.getRNG();
+
 		terminals.clear();
 		functions.clear();		
 		syntax = model.getSyntax();

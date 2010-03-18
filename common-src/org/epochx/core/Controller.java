@@ -21,7 +21,7 @@
  */
 package org.epochx.core;
 
-import org.epochx.life.LifeCycleManager;
+import org.epochx.life.*;
 import org.epochx.model.Model;
 import org.epochx.stats.StatsManager;
 
@@ -56,6 +56,8 @@ public class Controller {
 	// Singleton controller instance.
 	private static Controller controller;
 	
+	private Model model;
+	
 	/*
 	 * Private constructor. Execution should be through the static methods.
 	 */
@@ -84,8 +86,13 @@ public class Controller {
 			controller = new Controller();
 		}
 		
+		controller.model = model;
+		
+		// Fire config event.
+		LifeCycleManager.getLifeCycleManager().onConfigure();
+		
 		// The run controller.
-		final RunManager run = new RunManager(model);
+		final RunManager run = new RunManager();
 		
 		// Set the stats engine straight away so it can be used.
 		StatsManager.getStatsManager().setStatsEngine(model.getStatsEngine());
@@ -96,7 +103,8 @@ public class Controller {
 		}
 	}
 	
-
-	
+	public static Model getModel() {
+		return controller.model;
+	}	
 
 }

@@ -21,9 +21,10 @@
  */
 package org.epochx.gp.op.crossover;
 
-import org.epochx.gp.model.GPModel;
+import org.epochx.core.Controller;
 import org.epochx.gp.representation.*;
 import org.epochx.life.*;
+import org.epochx.model.Model;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
 
@@ -38,9 +39,6 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * function node swap point and 10% terminal node swap points.
  */
 public class KozaCrossover implements GPCrossover {
-
-	// The current controlling model.
-	private GPModel model;
 	
 	// The probability of choosing a function node as the swap point.
 	private double functionSwapProbability;
@@ -49,31 +47,38 @@ public class KozaCrossover implements GPCrossover {
 	private RandomNumberGenerator rng;
 	
 	/**
+	 * Default constructor for Koza standard crossover. The probability of a 
+	 * function node being selected as the swap point will default to 90%.
+	 */
+	public KozaCrossover() {
+		this(0.9);
+	}
+	
+	/**
 	 * Construct an instance of Koza crossover.
 	 * 
 	 * @param functionSwapProbability The probability of crossover operations 
 	 * 								  choosing a function node as the swap point.
 	 */
-	public KozaCrossover(GPModel model, double functionSwapProbability) {
-		this.model = model;
+	public KozaCrossover(double functionSwapProbability) {
 		this.functionSwapProbability = functionSwapProbability;
-		
-		initialise();
-		
-		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+
+		// Configure parameters from the model.
+		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
-			public void onGenerationStart() {
-				initialise();
+			public void onConfigure() {
+				configure();
 			}
 		});
 	}
 	
-	/**
-	 * Default constructor for Koza standard crossover. The probability of a 
-	 * function node being selected as the swap point will default to 90%.
+	/*
+	 * Configure component with parameters from the model.
 	 */
-	public KozaCrossover(GPModel model) {
-		this(model, 0.9);
+	private void configure() {
+		Model model = Controller.getModel();
+		
+		rng = model.getRNG();
 	}
 	
 	/**
@@ -210,7 +215,4 @@ public class KozaCrossover implements GPCrossover {
 		return result;
 	}
 
-	public void initialise() {
-		rng = model.getRNG();
-	}
 }

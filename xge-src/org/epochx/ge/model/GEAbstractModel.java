@@ -74,11 +74,11 @@ public abstract class GEAbstractModel extends AbstractModel implements GEModel {
 		cacheSource = true;
 		
 		// GP Components.
-		initialiser = new RampedHalfAndHalfInitialiser(this);
-		crossover = new OnePointCrossover(this);
-		mutator = new PointMutation(this);
-		mapper = new DepthFirstMapper(this);
-		codonGenerator = new StandardGenerator(this);
+		initialiser = new RampedHalfAndHalfInitialiser();
+		crossover = new OnePointCrossover();
+		mutator = new PointMutation();
+		mapper = new DepthFirstMapper();
+		codonGenerator = new StandardGenerator();
 		
 		// Stats - overwrite parent default.
 		setStatsEngine(new GEStatsEngine());

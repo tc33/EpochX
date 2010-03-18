@@ -25,7 +25,7 @@ import static org.epochx.stats.StatField.*;
 
 import java.util.List;
 
-import org.epochx.life.LifeCycleManager;
+import org.epochx.life.*;
 import org.epochx.model.Model;
 import org.epochx.op.Initialiser;
 import org.epochx.representation.CandidateProgram;
@@ -94,8 +94,8 @@ import org.epochx.stats.StatsManager;
  */
 public class InitialisationManager {
 	
-	// The controlling model.
-	private final Model model;
+	// The initialisation operator.
+	private Initialiser initialiser;
 	
 	// The number of times the initialisation was rejected.
 	private int reversions;
@@ -108,8 +108,23 @@ public class InitialisationManager {
 	 * 				other control parameters.
 	 * @see Initialiser
 	 */
-	public InitialisationManager(final Model model) {
-		this.model = model;
+	public InitialisationManager() {
+		// Configure parameters from the model.
+		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+			@Override
+			public void onConfigure() {
+				configure();
+			}
+		});
+	}
+	
+	/*
+	 * Configure component with parameters from the model.
+	 */
+	private void configure() {
+		Model model = Controller.getModel();
+		
+		initialiser = model.getInitialiser();
 	}
 	
 	/**
@@ -126,6 +141,7 @@ public class InitialisationManager {
 	 */
 	public List<CandidateProgram> initialise() {
 		// Trigger life cycle events for both generation and initialisation.
+		LifeCycleManager.getLifeCycleManager().onConfigure();
 		LifeCycleManager.getLifeCycleManager().onGenerationStart();
 		LifeCycleManager.getLifeCycleManager().onInitialisationStart();
 		
@@ -141,7 +157,7 @@ public class InitialisationManager {
 		List<CandidateProgram> pop = null;
 		do {
 			// Perform initialisation.
-			pop = (List<CandidateProgram>) model.getInitialiser().getInitialPopulation();
+			pop = initialiser.getInitialPopulation();
 			
 			// Allow life cycle manager to confirm or modify. (init has final say).
 			pop = LifeCycleManager.getLifeCycleManager().onGeneration(pop);

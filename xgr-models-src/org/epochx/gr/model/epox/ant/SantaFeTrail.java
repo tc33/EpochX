@@ -86,22 +86,6 @@ public class SantaFeTrail extends GRAbstractModel {
 		// Construct the evaluator to use.
 		parser = new FunctionParser();
 		evaluator = new EpoxEvaluator(parser);
-		
-		//setGenStatFields(new GenerationStatField[]{GenerationStatField.FITNESS_MIN, GenerationStatField.FITNESS_AVE, GenerationStatField.LENGTH_AVE, GenerationStatField.RUN_TIME});
-		//setRunStatFields(new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM, RunStatField.RUN_TIME});
-		
-		/*setNoRuns(100);
-		setNoElites(50);
-		setNoGenerations(100);
-		setPopulationSize(500);
-		setMaxProgramDepth(15);
-		setMaxInitialProgramDepth(15);
-		setMutationProbability(0.1);
-		setCrossoverProbability(0.9);
-		setProgramSelector(new TournamentSelector(this, 7));
-		setPoolSelector(new RandomSelector(this));
-		setPoolSize(50);
-		setInitialiser(new RampedHalfAndHalfInitialiser(this));*/
 	}
 	
 	@Override

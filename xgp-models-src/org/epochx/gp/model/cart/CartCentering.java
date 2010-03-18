@@ -180,8 +180,6 @@ public class CartCentering extends GPAbstractModel {
 	
 	public static void main(String[] args) {
 		GPAbstractModel model = new CartCentering();
-		//model.setGenStatFields(new GenerationStatField[]{GenerationStatField.FITNESS_MIN, GenerationStatField.FITNESS_AVE, GenerationStatField.LENGTH_AVE, GenerationStatField.RUN_TIME});
-		//model.setRunStatFields(new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM, RunStatField.RUN_TIME});
 		
 		model.setPopulationSize(500);
 		model.setNoGenerations(100);
@@ -191,10 +189,10 @@ public class CartCentering extends GPAbstractModel {
 		model.setPoolSize(50);
 		model.setNoElites(50);
 		model.setMaxProgramDepth(5);
-		model.setPoolSelector(new TournamentSelector(model, 7));
-		model.setProgramSelector(new RandomSelector(model));
-		model.setCrossover(new UniformPointCrossover(model));
-		model.setMutator(new PointMutation(model, 0.1));
+		model.setPoolSelector(new TournamentSelector(7));
+		model.setProgramSelector(new RandomSelector());
+		model.setCrossover(new UniformPointCrossover());
+		model.setMutator(new PointMutation(0.1));
 		
 		Controller.run(model);
 	}

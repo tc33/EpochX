@@ -23,7 +23,6 @@ package org.epochx.op.selection;
 
 import java.util.*;
 
-import org.epochx.model.Model;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
 
@@ -37,34 +36,32 @@ import org.epochx.representation.CandidateProgram;
  */
 public class TournamentSelector implements ProgramSelector, PoolSelector {
 
-	// The current controlling model.
-	private Model model;
-	
 	// The size of the tournment from which the best program will be taken.
 	private int tournamentSize;
+
+	private ProgramTournamentSelector poolSelection;
 	
-	// We use a random selector to construct tournaments.
-	private RandomSelector randomSelector;
+	private ProgramTournamentSelector programSelection;
 	
 	/**
 	 * Construct a tournament selector with the specified tournament size.
 	 * 
 	 * @param tournamentSize the number of programs in each tournament.
 	 */
-	public TournamentSelector(Model model, int tournamentSize) {
-		this.model = model;
+	public TournamentSelector(int tournamentSize) {
 		this.tournamentSize = tournamentSize;
 		
-		randomSelector = new RandomSelector(model);
+		poolSelection = new ProgramTournamentSelector();
+		programSelection = new ProgramTournamentSelector();
 	}
-
+	
 	/**
 	 * Store the population for creating tournaments from.
 	 */
 	@Override
 	public void setSelectionPool(List<CandidateProgram> pop) {
 		// We'll be using a random selector to construct a tournament.
-		randomSelector.setSelectionPool(pop);
+		programSelection.setSelectionPool(pop);
 	}
 	
 	/**
@@ -76,24 +73,7 @@ public class TournamentSelector implements ProgramSelector, PoolSelector {
 	 */
 	@Override
 	public CandidateProgram getProgram() {
-		// Use random selector to create tournament.
-		CandidateProgram[] tournament = new CandidateProgram[tournamentSize];
-		for (int i=0; i<tournamentSize; i++) {
-			tournament[i] = randomSelector.getProgram();
-		}
-		
-		// Check the fitness of each program, stashing the best.
-		double bestFitness = Double.POSITIVE_INFINITY;
-		CandidateProgram bestProgram = null;
-		for (CandidateProgram p: tournament) {
-			double fitness = p.getFitness();
-			if (fitness < bestFitness) {
-				bestFitness = fitness;
-				bestProgram = p;
-			}
-		}
-				
-		return bestProgram;
+		return programSelection.getProgram();
 	}
 
 	/**
@@ -114,20 +94,65 @@ public class TournamentSelector implements ProgramSelector, PoolSelector {
 	 */
 	@Override
 	public List<CandidateProgram> getPool(List<CandidateProgram> pop, int poolSize) {
-		// If pouleSize is 0 or less then we use the whole population.
+		// If poolSize is 0 or less then we use the whole population.
 		if (poolSize <= 0) {
 			return pop;
 		}
 		
 		List<CandidateProgram> pool = new ArrayList<CandidateProgram>(poolSize);
 		
-		ProgramSelector programSelector = new TournamentSelector(model, tournamentSize);
-		programSelector.setSelectionPool(pop);
+		poolSelection.setSelectionPool(pop);
 		
 		for (int i=0; i<poolSize; i++) {
-			pool.add(programSelector.getProgram());
+			pool.add(poolSelection.getProgram());
 		}
 		
 		return pool;
+	}
+	
+	/*
+	 * This is a little strange, but we use an inner class here so we can 
+	 * create 2 separate instances of it internally for the 2 tasks of pool
+	 * selection and program selection which is necessary because they both 
+	 * select from different pools. The original implementation of getPool 
+	 * created an internal instance of TournamentSelector but it is not 
+	 * advisable to create components between model configurations.
+	 */
+	private class ProgramTournamentSelector implements ProgramSelector {
+
+		// We use a random selector to construct tournaments.
+		private RandomSelector randomSelector;
+		
+		public ProgramTournamentSelector() {
+			randomSelector = new RandomSelector();
+		}
+		
+		@Override
+		public void setSelectionPool(List<CandidateProgram> pop) {
+			// We'll be using a random selector to construct a tournament.
+			randomSelector.setSelectionPool(pop);
+		}
+
+		@Override
+		public CandidateProgram getProgram() {
+			// Use random selector to create tournament.
+			CandidateProgram[] tournament = new CandidateProgram[tournamentSize];
+			for (int i=0; i<tournamentSize; i++) {
+				tournament[i] = randomSelector.getProgram();
+			}
+			
+			// Check the fitness of each program, stashing the best.
+			double bestFitness = Double.POSITIVE_INFINITY;
+			CandidateProgram bestProgram = null;
+			for (CandidateProgram p: tournament) {
+				double fitness = p.getFitness();
+				if (fitness < bestFitness) {
+					bestFitness = fitness;
+					bestProgram = p;
+				}
+			}
+					
+			return bestProgram;
+		}
 	}
 }

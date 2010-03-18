@@ -23,9 +23,12 @@ package org.epochx.op.selection;
 
 import java.util.*;
 
+import org.epochx.core.Controller;
+import org.epochx.life.*;
 import org.epochx.model.Model;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
  * Linear rank selection chooses programs by fitness rank. All the programs in 
@@ -35,8 +38,7 @@ import org.epochx.representation.CandidateProgram;
  */
 public class LinearRankSelector implements ProgramSelector, PoolSelector {
 	
-	// The current controlling model.
-	private Model model;
+	private RandomNumberGenerator rng;
 	
 	// The current population from which programs should be chosen.
 	private List<CandidateProgram> pop;
@@ -49,8 +51,28 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector {
 	// The gradient of the linear probabilities.
 	private double gradient;
 	
-	public LinearRankSelector(Model model, double gradient) {
-		this.model = model;
+	public LinearRankSelector(double gradient) {
+		setGradient(gradient);
+		
+		// Configure parameters from the model.
+		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+			@Override
+			public void onConfigure() {
+				configure();
+			}
+		});
+	}
+	
+	/*
+	 * Configure component with parameters from the model.
+	 */
+	private void configure() {
+		Model model = Controller.getModel();
+		
+		rng = model.getRNG();
+	}
+	
+	public void setGradient(double gradient) {
 		this.gradient = gradient;
 		
 		nMinus = 2/(gradient+1);
@@ -91,7 +113,7 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector {
 	 */
 	@Override
 	public CandidateProgram getProgram() {
-		double ran = model.getRNG().nextDouble();
+		double ran = rng.nextDouble();
 		
 		for (int i=0; i<probabilities.length; i++) {
 			if (ran < probabilities[i]) {
@@ -127,7 +149,7 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector {
 			return pop;
 		}
 		
-		ProgramSelector programSelector = new LinearRankSelector(model, gradient);
+		ProgramSelector programSelector = new LinearRankSelector(gradient);
 		programSelector.setSelectionPool(pop);
 		List<CandidateProgram> pool = new ArrayList<CandidateProgram>();
 		

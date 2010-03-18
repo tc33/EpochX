@@ -72,9 +72,6 @@ import org.epochx.stats.StatsManager;
  */
 public class MutationManager {
 	
-	// The controlling model.
-	private final Model model;
-	
 	// The selector for choosing the individual to mutate.
 	private ProgramSelector programSelector;
 	
@@ -95,25 +92,22 @@ public class MutationManager {
 	 * 				an individual in the population.
 	 * @see Mutation
 	 */
-	public MutationManager(final Model model) {
-		this.model = model;
-
-		// Initialise parameters.
-		initialise();
-		
-		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+	public MutationManager() {
+		// Configure parameters from the model.
+		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
-			public void onGenerationStart() {
-				initialise();
+			public void onConfigure() {
+				configure();
 			}
 		});
 	}
 	
 	/*
-	 * Initialises Mutation, in particular all parameters from the model should
-	 * be refreshed incase they've changed since the last call.
+	 * Configure component with parameters from the model.
 	 */
-	private void initialise() {
+	private void configure() {
+		Model model = Controller.getModel();
+		
 		programSelector = model.getProgramSelector();
 		mutator = model.getMutation();
 	}
@@ -168,7 +162,7 @@ public class MutationManager {
 		StatsManager.getStatsManager().addMutationData(MUTATION_PROGRAM_BEFORE, parent);
 		StatsManager.getStatsManager().addMutationData(MUTATION_PROGRAM_AFTER, child);
 		StatsManager.getStatsManager().addMutationData(MUTATION_TIME, runtime);
-		StatsManager.getStatsManager().addGenerationData(MUTATION_REVERSIONS, reversions);
+		StatsManager.getStatsManager().addMutationData(MUTATION_REVERSIONS, reversions);
 		
 		LifeCycleManager.getLifeCycleManager().onMutationEnd();
 		

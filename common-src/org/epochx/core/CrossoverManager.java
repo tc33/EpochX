@@ -71,9 +71,6 @@ import org.epochx.stats.StatsManager;
  * </table>
  */
 public class CrossoverManager {
-
-	// The controlling model.
-	private final Model model;
 	
 	// The selector for choosing parents.
 	private ProgramSelector programSelector;
@@ -90,30 +87,24 @@ public class CrossoverManager {
 	 * the subclass of <code>Crossover</code> returned by the models 
 	 * getCrossover() method.
 	 * 
-	 * @param model the Model which defines the Crossover operator and 
-	 * 				ProgramSelector to use to perform one act of crossover on 
-	 * 				a population.
 	 * @see Crossover
 	 */
-	public CrossoverManager(final Model model) {
-		this.model = model;
-		
-		// Initialise parameters.
-		initialise();
-		
-		LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+	public CrossoverManager() {
+		// Configure parameters from the model.
+		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
-			public void onGenerationStart() {
-				initialise();
+			public void onConfigure() {
+				configure();
 			}
 		});
 	}
 	
 	/*
-	 * Initialises Crossover, in particular all parameters from the model should
-	 * be refreshed incase they've changed since the last call.
+	 * Configure component with parameters from the model.
 	 */
-	private void initialise() {
+	private void configure() {
+		Model model = Controller.getModel();
+		
 		programSelector = model.getProgramSelector();
 		crossover = model.getCrossover();
 	}
@@ -189,10 +180,10 @@ public class CrossoverManager {
 		
 		final long runtime = System.nanoTime() - crossoverStartTime;
 
-		StatsManager.getStatsManager().addMutationData(CROSSOVER_PARENTS, parents);
-		StatsManager.getStatsManager().addMutationData(CROSSOVER_CHILDREN, children);
-		StatsManager.getStatsManager().addMutationData(CROSSOVER_REVERSIONS, reversions);
-		StatsManager.getStatsManager().addMutationData(CROSSOVER_TIME, runtime);
+		StatsManager.getStatsManager().addCrossoverData(CROSSOVER_PARENTS, parents);
+		StatsManager.getStatsManager().addCrossoverData(CROSSOVER_CHILDREN, children);
+		StatsManager.getStatsManager().addCrossoverData(CROSSOVER_REVERSIONS, reversions);
+		StatsManager.getStatsManager().addCrossoverData(CROSSOVER_TIME, runtime);
 		
 		LifeCycleManager.getLifeCycleManager().onCrossoverEnd();
 		

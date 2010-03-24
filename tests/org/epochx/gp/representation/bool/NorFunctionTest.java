@@ -26,47 +26,47 @@ import org.epochx.gp.representation.*;
 /**
  * 
  */
-public class AndFunctionTest extends AbstractNodeTestCase {
+public class NorFunctionTest extends AbstractBooleanNodeTestCase {
 
 	@Override
 	public Node getNode() {
-		return new AndFunction();
+		return new NorFunction();
 	}
 	
 	public void testEvaluateTT() {
-		AndFunction node = (AndFunction) getNode();
+		NorFunction node = (NorFunction) getNode();
 		Node[] children = new Node[]{new BooleanLiteral(true), new BooleanLiteral(true)};
 		node.setChildren(children);
 		boolean result = node.evaluate();
 		
-		assertTrue("AND of true and true is not true", result);
+		assertFalse("NOR of true and true is not false", result);
 	}
 	
 	public void testEvaluateTF() {
-		AndFunction node = (AndFunction) getNode();
+		NorFunction node = (NorFunction) getNode();
 		Node[] children = new Node[]{new BooleanLiteral(true), new BooleanLiteral(false)};
 		node.setChildren(children);
 		boolean result = node.evaluate();
 		
-		assertFalse("AND of true and false is not false", result);
+		assertFalse("NOR of true and false is not false", result);
 	}
 	
 	public void testEvaluateFT() {
-		AndFunction node = (AndFunction) getNode();
+		NorFunction node = (NorFunction) getNode();
 		Node[] children = new Node[]{new BooleanLiteral(false), new BooleanLiteral(true)};
 		node.setChildren(children);
 		boolean result = node.evaluate();
 		
-		assertFalse("AND of false and true is not false", result);
+		assertFalse("NOR of false and true is not false", result);
 	}
 	
 	public void testEvaluateFF() {
-		AndFunction node = (AndFunction) getNode();
+		NorFunction node = (NorFunction) getNode();
 		Node[] children = new Node[]{new BooleanLiteral(false), new BooleanLiteral(false)};
 		node.setChildren(children);
 		boolean result = node.evaluate();
 		
-		assertFalse("AND of false and false is not false", result);
+		assertTrue("NOR of false and false is not true", result);
 	}
 
 }

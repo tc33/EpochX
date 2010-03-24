@@ -19,43 +19,42 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.gp.representation.bool;
+package org.epochx.gp.representation.dbl;
 
 import org.epochx.gp.representation.*;
 
 /**
  * 
  */
-public class IfFunctionTest extends AbstractBooleanNodeTestCase {
-
-	private IfFunction ifFunction;
+public class AbsoluteFunctionTest extends AbstractDoubleNodeTestCase {
 	
 	@Override
 	public Node getNode() {
-		return new IfFunction();
+		return new AbsoluteFunction();
 	}
 	
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
+	public void testEvaluateZero() {
+		AbsoluteFunction node = (AbsoluteFunction) getNode();
+		node.setChild(0, new DoubleLiteral(0.0));
+		double result = node.evaluate();
 		
-		ifFunction = (IfFunction) getNode();
-		Node[] children = new Node[]{null, new BooleanLiteral(true), new BooleanLiteral(false)};
-		ifFunction.setChildren(children);
+		assertEquals("ABS of 0.0 is not 0.0", 0.0, result);
 	}
 	
-	public void testEvaluateT() {
-		ifFunction.setChild(0, new BooleanLiteral(true));
-		boolean result = ifFunction.evaluate();
+	public void testEvaluateMinusOne() {
+		AbsoluteFunction node = (AbsoluteFunction) getNode();
+		node.setChild(0, new DoubleLiteral(-1.0));
+		double result = node.evaluate();
 		
-		assertTrue("IF did not evaluate 2nd child when 1st was true", result);
+		assertEquals("ABS of -1.0 is not 1.0", 1.0, result);
 	}
 	
-	public void testEvaluateF() {
-		ifFunction.setChild(0, new BooleanLiteral(false));
-		boolean result = ifFunction.evaluate();
+	public void testEvaluatePlusOne() {
+		AbsoluteFunction node = (AbsoluteFunction) getNode();
+		node.setChild(0, new DoubleLiteral(1.0));
+		double result = node.evaluate();
 		
-		assertFalse("IF did not evaluate 3rd child when 1st was false", result);
+		assertEquals("ABS of 1.0 is not 1.0", 1.0, result);
 	}
 
 }

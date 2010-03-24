@@ -26,47 +26,46 @@ import org.epochx.gp.representation.*;
 /**
  * 
  */
-public class AndFunctionTest extends AbstractNodeTestCase {
-
+public class ImpliesFunctionTest extends AbstractBooleanNodeTestCase {
+	
 	@Override
 	public Node getNode() {
-		return new AndFunction();
+		return new ImpliesFunction();
 	}
 	
 	public void testEvaluateTT() {
-		AndFunction node = (AndFunction) getNode();
+		ImpliesFunction node = (ImpliesFunction) getNode();
 		Node[] children = new Node[]{new BooleanLiteral(true), new BooleanLiteral(true)};
 		node.setChildren(children);
 		boolean result = node.evaluate();
 		
-		assertTrue("AND of true and true is not true", result);
+		assertTrue("IMPLIES of true and true is not true", result);
 	}
 	
 	public void testEvaluateTF() {
-		AndFunction node = (AndFunction) getNode();
+		ImpliesFunction node = (ImpliesFunction) getNode();
 		Node[] children = new Node[]{new BooleanLiteral(true), new BooleanLiteral(false)};
 		node.setChildren(children);
 		boolean result = node.evaluate();
 		
-		assertFalse("AND of true and false is not false", result);
+		assertFalse("IMPLIES of true and false is not false", result);
 	}
 	
 	public void testEvaluateFT() {
-		AndFunction node = (AndFunction) getNode();
+		ImpliesFunction node = (ImpliesFunction) getNode();
 		Node[] children = new Node[]{new BooleanLiteral(false), new BooleanLiteral(true)};
 		node.setChildren(children);
 		boolean result = node.evaluate();
 		
-		assertFalse("AND of false and true is not false", result);
+		assertTrue("IMPLIES of false and true is not true", result);
 	}
 	
 	public void testEvaluateFF() {
-		AndFunction node = (AndFunction) getNode();
+		ImpliesFunction node = (ImpliesFunction) getNode();
 		Node[] children = new Node[]{new BooleanLiteral(false), new BooleanLiteral(false)};
 		node.setChildren(children);
 		boolean result = node.evaluate();
 		
-		assertFalse("AND of false and false is not false", result);
+		assertTrue("IMPLIES of false and false is not true", result);
 	}
-
 }

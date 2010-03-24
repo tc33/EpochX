@@ -19,37 +19,36 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.gp.representation;
+package org.epochx.representation;
 
 import java.util.List;
 
-import junit.framework.TestCase;
+import org.epochx.gp.representation.*;
+import org.epochx.gp.representation.bool.AndFunction;
 
 /**
  * 
  */
-public abstract class AbstractNodeTestCase extends TestCase {
+public class GPCandidateProgramTest extends AbstractCandidateProgramTestCase {
+
+	private GPCandidateProgram program;
+	private Node node0;
+	private Node node1;
+	private Node node2;
 	
-	private Node node;
-	
-	public abstract Node getNode();
+	public CandidateProgram getCandidateProgram() {
+		return new GPCandidateProgram(null);
+	}
 	
 	@Override
 	protected void setUp() throws Exception {
-		node = getNode();
+		super.setUp();
 		
-		// Ensure children are filled.
-		int arity = node.getArity();
-		for (int i=0; i<arity; i++) {
-			node.setChild(i, new BooleanLiteral(true));
-		}
-	}
-	
-	/**
-	 * Test that getting an nth node of zero returns the node itself.
-	 */
-	public void testGetNthNodeZero() {
-		assertSame("node not its own 0th node", node, node.getNthNode(0));
+		program = (GPCandidateProgram) getCandidateProgram();
+		node1 = new BooleanLiteral(true);
+		node2 = new BooleanLiteral(true);
+		node0 = new AndFunction((BooleanNode) node1, (BooleanNode) node2);
+		program.setRootNode(node0);
 	}
 	
 	/**
@@ -58,20 +57,40 @@ public abstract class AbstractNodeTestCase extends TestCase {
 	 */
 	public void testGetNthNodeNegativeIndex() {
 		try {
-			node.getNthNode(-1);
+			program.getNthNode(-1);
 			fail("Exception not thrown for negative index");
 		} catch (IndexOutOfBoundsException e) {}
 	}
-
+	
 	/**
 	 * Test that an index out of bounds exception is thrown when trying to get
 	 * a node an index beyond the tree's length - 1. 
 	 */
 	public void testGetNthTooLarge() {
 		try {
-			node.getNthNode(node.getLength());
+			program.getNthNode(program.getProgramLength());
 			fail("Exception not thrown for index >= length");
 		} catch (IndexOutOfBoundsException e) {}
+	}
+	
+	/**
+	 * Test that the nth node is correctly returned when n is positive.
+	 */
+	public void testGetNthNodePositiveIndex() {
+		try {
+			Node node = program.getNthNode(2);
+			assertSame("2nd node not being returned at index 2", node2, node);
+		} catch (IndexOutOfBoundsException e) {
+			fail(e.getMessage());
+		}
+	}
+	
+	/**
+	 * Test that the root node is returned when retrieving nth node of 0.
+	 */
+	public void testGetNthNodeRoot() {
+		Node node = program.getNthNode(0);
+		assertSame("root node not being returned at index 0", node0, node);
 	}
 	
 	/**
@@ -80,31 +99,42 @@ public abstract class AbstractNodeTestCase extends TestCase {
 	 */
 	public void testSetNthNodeNegativeIndex() {
 		try {
-			node.setNthNode(-1, new BooleanLiteral(false));
+			program.setNthNode(-1, new BooleanLiteral(false));
 			fail("Exception not thrown for negative index");
 		} catch (IndexOutOfBoundsException e) {}
 	}
 	
 	/**
 	 * Test that an index out of bounds exception is thrown when trying to set
-	 * a node at an index beyond the tree's length - 1. 
+	 * a node an index beyond the tree's length - 1. 
 	 */
 	public void testSetNthNodeTooLarge() {
 		try {
-			node.setNthNode(node.getLength(), new BooleanLiteral(false));
+			program.setNthNode(3, new BooleanLiteral(false));
 			fail("Exception not thrown for index >= length");
 		} catch (IndexOutOfBoundsException e) {}
 	}
 	
 	/**
-	 * Test that an index out of bounds exception is thrown when trying to set
-	 * a node at an index of zero. A node cannot replace itself.
+	 * Test that the nth node is set correctly when it is positive.
 	 */
-	public void testSetNthNodeZero() {
+	public void testSetNthNodePositiveIndex() {
 		try {
-			node.setNthNode(0, new BooleanLiteral(false));
-			fail("Exception not thrown for index == 0, cannot replace self");
-		} catch (IndexOutOfBoundsException e) {}
+			Node node = new BooleanLiteral(false);
+			program.setNthNode(2, node);
+			assertSame("2nd node not being set at index 2", node, program.getNthNode(2));
+		} catch (IndexOutOfBoundsException e) {
+			fail(e.getMessage());
+		}
+	}
+	
+	/**
+	 * Test that the nth node is set correctly when n is 0.
+	 */
+	public void testSetNthNodeRoot() {
+		Node node = new BooleanLiteral(false);
+		program.setNthNode(0, node);
+		assertSame("root node not being returned at index 0", node, program.getRootNode());
 	}
 	
 	/**
@@ -113,7 +143,7 @@ public abstract class AbstractNodeTestCase extends TestCase {
 	 */
 	public void testGetNodesAtDepthNegative() {
 		try {
-			node.getNodesAtDepth(-1);
+			program.getNodesAtDepth(-1);
 			fail("Exception not thrown for negative depth");
 		} catch (IndexOutOfBoundsException e) {}
 	}
@@ -123,9 +153,18 @@ public abstract class AbstractNodeTestCase extends TestCase {
 	 * 0.
 	 */
 	public void testGetNodesAtDepthZero() {
-		List<Node> nodes = node.getNodesAtDepth(0);
+		List<Node> nodes = program.getNodesAtDepth(0);
 		assertEquals("more than one node at depth zero", 1, nodes.size());
-		assertSame("current node not returned for depth zero", node, nodes.get(0));
+		assertSame("root node not returned for depth zero", program.getRootNode(), nodes.get(0));
+	}
+	
+	/**
+	 * Test that only the two child nodes are returned from depth one.
+	 */
+	public void testGetNodesAtDepthPositive() {
+		List<Node> nodes = program.getNodesAtDepth(1);
+		assertEquals("more than two nodes found at depth one", 2, nodes.size());
+		assertTrue("nodes at depth one not returned", nodes.contains(node1) && nodes.contains(node2));
 	}
 	
 	/**
@@ -134,7 +173,7 @@ public abstract class AbstractNodeTestCase extends TestCase {
 	 */
 	public void testGetNodesAtDepthTooLarge() {
 		try {
-			List<Node> nodes = node.getNodesAtDepth(node.getDepth()+1);
+			List<Node> nodes = program.getNodesAtDepth(2);
 			assertEquals("empty list not returned for nodes greater than maximum depth in program", 0, nodes.size());
 		} catch (IndexOutOfBoundsException e) {
 			fail("Exception thrown for depth greater than the maximum depth");

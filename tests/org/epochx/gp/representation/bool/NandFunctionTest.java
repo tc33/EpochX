@@ -26,47 +26,47 @@ import org.epochx.gp.representation.*;
 /**
  * 
  */
-public class AndFunctionTest extends AbstractNodeTestCase {
-
+public class NandFunctionTest extends AbstractBooleanNodeTestCase {
+	
 	@Override
 	public Node getNode() {
-		return new AndFunction();
+		return new NandFunction();
 	}
 	
 	public void testEvaluateTT() {
-		AndFunction node = (AndFunction) getNode();
+		NandFunction node = (NandFunction) getNode();
 		Node[] children = new Node[]{new BooleanLiteral(true), new BooleanLiteral(true)};
 		node.setChildren(children);
 		boolean result = node.evaluate();
 		
-		assertTrue("AND of true and true is not true", result);
+		assertFalse("NAND of true and true is not false", result);
 	}
 	
 	public void testEvaluateTF() {
-		AndFunction node = (AndFunction) getNode();
+		NandFunction node = (NandFunction) getNode();
 		Node[] children = new Node[]{new BooleanLiteral(true), new BooleanLiteral(false)};
 		node.setChildren(children);
 		boolean result = node.evaluate();
 		
-		assertFalse("AND of true and false is not false", result);
+		assertTrue("NAND of true and false is not true", result);
 	}
 	
 	public void testEvaluateFT() {
-		AndFunction node = (AndFunction) getNode();
+		NandFunction node = (NandFunction) getNode();
 		Node[] children = new Node[]{new BooleanLiteral(false), new BooleanLiteral(true)};
 		node.setChildren(children);
 		boolean result = node.evaluate();
 		
-		assertFalse("AND of false and true is not false", result);
+		assertTrue("NAND of false and true is not true", result);
 	}
 	
 	public void testEvaluateFF() {
-		AndFunction node = (AndFunction) getNode();
+		NandFunction node = (NandFunction) getNode();
 		Node[] children = new Node[]{new BooleanLiteral(false), new BooleanLiteral(false)};
 		node.setChildren(children);
 		boolean result = node.evaluate();
 		
-		assertFalse("AND of false and false is not false", result);
+		assertTrue("NAND of false and false is not true", result);
 	}
 
 }

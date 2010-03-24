@@ -28,19 +28,27 @@ public class StatsUtils {
 	private StatsUtils() {}
 	
 	public static double ave(double[] values) {
-		double sum = 0;
-		for (int i=0; i<values.length; i++) {
-			sum += values[i];
-		}
-		return sum/values.length;
+		if ((values != null) && (values.length != 0)) {
+			double sum = 0;
+			for (int i=0; i<values.length; i++) {
+				sum += values[i];
+			}
+			return sum/values.length;
+		} else {
+			throw new IllegalArgumentException("cannot calculate average of null or empty array of values");
+		}		
 	}
 	
 	public static double ave(int[] values) {
-		int sum = 0;
-		for (int i=0; i<values.length; i++) {
-			sum += values[i];
+		if ((values != null) && (values.length != 0)) {
+			int sum = 0;
+			for (int i=0; i<values.length; i++) {
+				sum += values[i];
+			}
+			return ((double) sum)/values.length;
+		} else {
+			throw new IllegalArgumentException("cannot calculate average of null or empty array of values");
 		}
-		return ((double) sum)/values.length;
 	}
 	
 	public static double stdev(double[] values) {

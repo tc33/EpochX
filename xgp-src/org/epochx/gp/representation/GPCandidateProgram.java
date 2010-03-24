@@ -50,6 +50,10 @@ public class GPCandidateProgram extends CandidateProgram {
 	// The source at last evaluation for testing fitness cache is still good.
 	private String sourceCache;
 	
+	public GPCandidateProgram(GPModel model) {
+		this(null, model);
+	}
+	
 	/**
 	 * Constructs a new program individual where <code>rootNode</code> is the 
 	 * top most node in the program, and which may have 0 or more child nodes.
@@ -84,6 +88,10 @@ public class GPCandidateProgram extends CandidateProgram {
 		return rootNode;
 	}
 	
+	public void setRootNode(Node rootNode) {
+		this.rootNode = rootNode;
+	}
+	
 	/**
 	 * Returns the nth node in the <code>GPCandidateProgram</code>. The program 
 	 * tree is traversed in pre-order (depth-first), indexed from 0 so that the 
@@ -93,12 +101,11 @@ public class GPCandidateProgram extends CandidateProgram {
 	 * @return The node at the specified index.
 	 */
 	public Node getNthNode(int n) {
-		int size = getProgramLength();
-		
-		if(n >= size)
-			throw new IndexOutOfBoundsException("Index: "+n+", Size: "+size);			
-		
-		return rootNode.getNthNode(n);
+		if (n >= 0) {
+			return rootNode.getNthNode(n);
+		} else {
+			throw new IndexOutOfBoundsException("attempt to get node at negative index");
+		}
 	}
 	
 	/**
@@ -109,27 +116,31 @@ public class GPCandidateProgram extends CandidateProgram {
 	 * @param newNode node to be set at the specified position.
 	 */
 	public void setNthNode(int n, Node newNode) {
-		if (n == 0) {
-			// Need to test is of type  somehow really.
-			rootNode = (Node) newNode;
+		if (n > 0) {
+			rootNode.setNthNode(n, newNode);
+		} else if (n == 0) {
+			setRootNode(newNode);
+		} else {
+			throw new IndexOutOfBoundsException("attempt to set node at negative index");
 		}
-		
-		// Check the index is within bounds.
-		int size = getProgramLength();
-		if(n >= size)
-			throw new IndexOutOfBoundsException("Index: "+n+", Size: "+size);		
-		
-		rootNode.setNthNode(n, newNode);
 	}
 	
 	/**
-	 * Retrieves all the nodes in the program tree at a specified depth.
+	 * Retrieves all the nodes in the program tree at a specified depth. If a 
+	 * negative depth is supplied then an <code>IndexOutOfBoundsException
+	 * </code> will be thrown. However, no exception will be thrown if a depth
+	 * greater than the program's maximum depth is used. In this case an empty 
+	 * list will be returned.
 	 * 
 	 * @param depth the specified depth of the nodes.
 	 * @return a List of all the nodes at the specified depth.
 	 */
 	public List<Node> getNodesAtDepth(int depth) {
-		return rootNode.getNodesAtDepth(depth);
+		if (depth >= 0) {
+			return rootNode.getNodesAtDepth(depth);
+		} else {
+			throw new IndexOutOfBoundsException("attempt to get nodes at negative depth");
+		}
 	}
 	
 	/**

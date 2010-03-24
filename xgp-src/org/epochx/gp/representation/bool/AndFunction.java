@@ -55,6 +55,7 @@ public class AndFunction extends BooleanNode {
 	 */
 	@Override
 	public Boolean evaluate() {
+		//TODO Perhaps we should lazily evaluate the second child?
 		boolean c1 = ((Boolean) getChild(0).evaluate()).booleanValue();
 		boolean c2 = ((Boolean) getChild(1).evaluate()).booleanValue();
 		

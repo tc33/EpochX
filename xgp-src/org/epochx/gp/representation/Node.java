@@ -97,7 +97,11 @@ public abstract class Node implements Cloneable {
 	 * @return the node at the specified position in this node tree.
 	 */
 	public Node getNthNode(int n) {
-		return getNthNode(n, 0);
+		if (n >= 0) {
+			return getNthNode(n, 0);
+		} else {
+			throw new IndexOutOfBoundsException("attempt to get node at negative index");
+		}
 	}
 	
 	/*
@@ -105,8 +109,9 @@ public abstract class Node implements Cloneable {
 	 */
 	private Node getNthNode(int n, int current) {
 		// Is this the nth node?
-		if (n == current)
+		if (n == current) {
 			return this;
+		}
 		
 		Node node = null;
 		for (Node child: children) {
@@ -121,19 +126,32 @@ public abstract class Node implements Cloneable {
 			current += childLength;
 		}
 		
+		// If node is null now then the index did not exist within any children.
+		if (node == null) {
+			throw new IndexOutOfBoundsException("attempt to get node at index >= length");
+		}
+		
 		return node;
 	}
 	
 	/**
 	 * Replaces the node at the specified position in this node tree, where 
 	 * this node is considered to be the root node - that is, the 0th node. 
-	 * The tree is traversed in pre-order (depth first).
+	 * The tree is traversed in pre-order (depth first). It is not possible to
+	 * set the 0th node, since it does not make sense for an object to be able
+	 * to replace itself.
 	 * 
 	 * @param n the index of the node to replace.
 	 * @param newNode the node to be stored at the specified position.
 	 */
-	public void setNthNode(int n, Node newNode) {		
-		setNthNode(n, newNode, 0);
+	public void setNthNode(int n, Node newNode) {
+		if (n > 0) {
+			setNthNode(n, newNode, 0);
+		} else if (n == 0) {
+			throw new IndexOutOfBoundsException("attempt to set node at index 0, cannot replace self");
+		} else {
+			throw new IndexOutOfBoundsException("attempt to set node at negative index");
+		}
 	}
 	
 	/*
@@ -144,7 +162,7 @@ public abstract class Node implements Cloneable {
 		for (int i=0; i<arity; i++) {
 			if (current+1 == n) {
 				setChild(i, newNode);
-				break;
+				return;
 			}
 			
 			Node child = getChild(i);
@@ -157,6 +175,9 @@ public abstract class Node implements Cloneable {
 			
 			current += childLength;
 		}
+		
+		// If we get to here then the index was larger than was available.
+		throw new IndexOutOfBoundsException("attempt to set node at index >= length");
 	}
 	
 	/**
@@ -168,7 +189,11 @@ public abstract class Node implements Cloneable {
 	 */
 	public List<Node> getNodesAtDepth(int depth) {
 		List<Node> nodes = new ArrayList<Node>();
-		fillNodesAtDepth(nodes, depth, 0);
+		if (depth >= 0) {
+			getNodesAtDepth(nodes, depth, 0);
+		} else {
+			throw new IndexOutOfBoundsException("attempt to get nodes at negative depth");
+		}
 		
 		return nodes;
 	}
@@ -177,13 +202,13 @@ public abstract class Node implements Cloneable {
 	 * A helper function for getNodesAtDepth(int), to recurse down the node 
 	 * tree and populate the nodes array when at the correct depth.
 	 */
-	private void fillNodesAtDepth(List<Node> nodes, int d, int current){
+	private void getNodesAtDepth(List<Node> nodes, int d, int current){
 		if (d == current) {
 			nodes.add(this);
 		} else {
 			for (Node child: children) {
 				// Get the nodes at the right depth down each branch.
-				child.fillNodesAtDepth(nodes, d, current+1);
+				child.getNodesAtDepth(nodes, d, current+1);
 			}
 		}
 	}

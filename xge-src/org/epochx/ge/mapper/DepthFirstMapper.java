@@ -22,7 +22,7 @@
 package org.epochx.ge.mapper;
 
 import org.epochx.ge.codon.CodonGenerator;
-import org.epochx.ge.model.GEAbstractModel;
+import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.life.*;
 import org.epochx.tools.grammar.*;
@@ -41,7 +41,7 @@ public class DepthFirstMapper implements Mapper {
 	 * secondary contructor with a boolean option.
 	 */
 	// The controlling model.
-	private GEAbstractModel model;
+	private GEModel model;
 	
 	// Wrapping and extending are mutually exclusive, they cannot both be true.
 	private boolean wrapping;
@@ -64,7 +64,7 @@ public class DepthFirstMapper implements Mapper {
 	 * @param model the controlling model providing configuration details such 
 	 * 				as the Grammar.
 	 */
-	public DepthFirstMapper(GEAbstractModel model) {
+	public DepthFirstMapper(GEModel model) {
 		this.model = model;
 		
 		// Default to extending.

@@ -23,7 +23,7 @@ package org.epochx.ge.model.java.sort;
 
 import java.io.File;
 
-import org.epochx.ge.model.GEAbstractModel;
+import org.epochx.ge.model.GEModel;
 import org.epochx.ge.op.init.GrowInitialiser;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.representation.CandidateProgram;
@@ -33,7 +33,7 @@ import org.epochx.tools.grammar.Grammar;
 /**
  *
  */
-public class Sort extends GEAbstractModel {
+public class Sort extends GEModel {
 
 	private static final int NO_ELEMENTS = 5;
 	private static final int NO_TESTS = 10;

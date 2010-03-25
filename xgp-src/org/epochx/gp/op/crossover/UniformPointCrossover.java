@@ -22,7 +22,7 @@
 package org.epochx.gp.op.crossover;
 
 import org.epochx.core.Model;
-import org.epochx.gp.model.GPAbstractModel;
+import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
@@ -34,12 +34,12 @@ import org.epochx.tools.random.RandomNumberGenerator;
 public class UniformPointCrossover implements GPCrossover {
 
 	// The controlling model.
-	private GPAbstractModel model;
+	private GPModel model;
 	
 	// The random number generator for controlling random behaviour.
 	private RandomNumberGenerator rng;
 	
-	public UniformPointCrossover(GPAbstractModel model) {
+	public UniformPointCrossover(GPModel model) {
 		this.model = model;
 		
 		// Configure parameters from the model.

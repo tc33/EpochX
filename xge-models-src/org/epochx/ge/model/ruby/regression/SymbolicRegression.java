@@ -22,14 +22,14 @@
 package org.epochx.ge.model.ruby.regression;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.epochx.ge.model.GEAbstractModel;
+import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.eval.RubyEvaluator;
 import org.epochx.tools.grammar.Grammar;
 
 
-public class SymbolicRegression extends GEAbstractModel {
+public class SymbolicRegression extends GEModel {
 
 	public static final String GRAMMAR_STRING = 
 		"<expr> ::= ( <expr> <op> <expr> ) | <var>\n" +

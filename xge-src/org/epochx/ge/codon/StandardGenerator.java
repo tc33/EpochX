@@ -21,7 +21,7 @@
  */
 package org.epochx.ge.codon;
 
-import org.epochx.ge.model.GEAbstractModel;
+import org.epochx.ge.model.GEModel;
 import org.epochx.life.*;
 import org.epochx.tools.random.RandomNumberGenerator;
 
@@ -32,7 +32,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
 public class StandardGenerator implements CodonGenerator {
 
 	// The controlling model.
-	private GEAbstractModel model;
+	private GEModel model;
 	
 	private RandomNumberGenerator rng;
 	
@@ -44,7 +44,7 @@ public class StandardGenerator implements CodonGenerator {
 	 * @param model the model that controls the run, providing the maximum 
 	 * 				codon size.
 	 */
-	public StandardGenerator(GEAbstractModel model) {
+	public StandardGenerator(GEModel model) {
 		this.model = model;
 		
 		// Configure parameters from the model.

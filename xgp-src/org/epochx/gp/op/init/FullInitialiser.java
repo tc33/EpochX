@@ -23,7 +23,7 @@ package org.epochx.gp.op.init;
 
 import java.util.*;
 
-import org.epochx.gp.model.GPAbstractModel;
+import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
 import org.epochx.life.ConfigAdapter;
 import org.epochx.representation.CandidateProgram;
@@ -36,7 +36,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
 public class FullInitialiser implements GPInitialiser {
 	
 	// The controlling model.
-	private GPAbstractModel model;
+	private GPModel model;
 	
 	private List<Node> terminals;
 	private List<Node> functions;
@@ -53,7 +53,7 @@ public class FullInitialiser implements GPInitialiser {
 	 * @param model The current controlling model. Run parameters such as the 
 	 * population size will be obtained from this.
 	 */
-	public FullInitialiser(GPAbstractModel model) {
+	public FullInitialiser(GPModel model) {
 		this.model = model;
 		
 		terminals = new ArrayList<Node>();

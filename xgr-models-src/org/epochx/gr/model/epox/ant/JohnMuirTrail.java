@@ -23,14 +23,14 @@ import java.awt.*;
 import java.util.*;
 
 import org.epochx.gp.representation.FunctionParser;
-import org.epochx.gr.model.GRAbstractModel;
+import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.ant.*;
 import org.epochx.tools.eval.EpoxEvaluator;
 import org.epochx.tools.grammar.Grammar;
 
-public class JohnMuirTrail extends GRAbstractModel {
+public class JohnMuirTrail extends GRModel {
 
 	public static final String GRAMMAR_STRING = 
 		"<prog> ::= <node>\n" +

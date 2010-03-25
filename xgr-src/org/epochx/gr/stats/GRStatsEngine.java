@@ -27,19 +27,19 @@ import static org.epochx.stats.StatField.GEN_POPULATION;
 import java.util.List;
 
 import org.epochx.core.Model;
-import org.epochx.gr.model.GRAbstractModel;
+import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.stats.*;
 
 public class GRStatsEngine extends StatsEngine {
 
 	// The controlling model.
-	private GRAbstractModel model;
+	private GRModel model;
 	
 	/**
 	 * @param model
 	 */
-	public GRStatsEngine(GRAbstractModel model) {
+	public GRStatsEngine(GRModel model) {
 		super(model);
 		
 		this.model = model;

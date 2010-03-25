@@ -26,19 +26,19 @@ import static org.epochx.stats.StatField.GEN_POPULATION;
 
 import java.util.List;
 
-import org.epochx.gp.model.GPAbstractModel;
+import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.stats.*;
 
 public class GPStatsEngine extends StatsEngine {
 
 	// The controlling model.
-	private GPAbstractModel model;
+	private GPModel model;
 	
 	/**
 	 * @param model
 	 */
-	public GPStatsEngine(GPAbstractModel model) {
+	public GPStatsEngine(GPModel model) {
 		super(model);
 		
 		this.model = model;

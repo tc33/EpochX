@@ -30,7 +30,7 @@ import org.epochx.tools.grammar.Grammar;
 import org.epochx.tools.util.BoolUtils;
 
 
-public class Multiplexer11Bit extends GRAbstractModel {
+public class Multiplexer11Bit extends GRModel {
 	
 	public static final String GRAMMAR_STRING = 
 		"<prog> ::= <expr>\n" +

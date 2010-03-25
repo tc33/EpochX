@@ -29,7 +29,7 @@ import org.epochx.tools.eval.JavaEvaluator;
 import org.epochx.tools.util.BoolUtils;
 
 
-public abstract class EvenParity extends GRAbstractModel {
+public abstract class EvenParity extends GRModel {
 	
 	private boolean[][] inputs;
 	

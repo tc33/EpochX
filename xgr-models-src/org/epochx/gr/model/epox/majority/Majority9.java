@@ -20,7 +20,7 @@
 package org.epochx.gr.model.epox.majority;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.epochx.gr.model.GRAbstractModel;
+import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.eval.*;
@@ -30,7 +30,7 @@ import org.epochx.tools.util.BoolUtils;
 /**
  *
  */
-public class Majority9 extends GRAbstractModel {
+public class Majority9 extends GRModel {
 
 	public static final String GRAMMAR_STRING =
 		"<prog> ::= <node>\n" +

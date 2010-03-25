@@ -21,7 +21,7 @@
  */
 package org.epochx.gp.op.crossover;
 
-import org.epochx.gp.model.GPAbstractModel;
+import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
 import org.epochx.life.ConfigAdapter;
 import org.epochx.representation.CandidateProgram;
@@ -40,7 +40,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
 public class KozaCrossover implements GPCrossover {
 	
 	// The controlling model.
-	private GPAbstractModel model;
+	private GPModel model;
 	
 	// The probability of choosing a function node as the swap point.
 	private double functionSwapProbability;
@@ -52,7 +52,7 @@ public class KozaCrossover implements GPCrossover {
 	 * Default constructor for Koza standard crossover. The probability of a 
 	 * function node being selected as the swap point will default to 90%.
 	 */
-	public KozaCrossover(GPAbstractModel model) {
+	public KozaCrossover(GPModel model) {
 		this(model, 0.9);
 	}
 	
@@ -62,7 +62,7 @@ public class KozaCrossover implements GPCrossover {
 	 * @param functionSwapProbability The probability of crossover operations 
 	 * 								  choosing a function node as the swap point.
 	 */
-	public KozaCrossover(GPAbstractModel model, double functionSwapProbability) {
+	public KozaCrossover(GPModel model, double functionSwapProbability) {
 		this.model = model;
 		this.functionSwapProbability = functionSwapProbability;
 

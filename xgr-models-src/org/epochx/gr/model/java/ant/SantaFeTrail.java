@@ -32,7 +32,7 @@ import org.epochx.tools.eval.*;
 import org.epochx.tools.grammar.Grammar;
 
 
-public class SantaFeTrail extends GRAbstractModel {
+public class SantaFeTrail extends GRModel {
 
 	public static final String GRAMMAR_STRING = 
 		  "<code> ::= <line> | <code> <line>\n"

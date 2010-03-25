@@ -22,7 +22,7 @@
 package org.epochx.ge.op.mutation;
 
 import org.epochx.ge.codon.CodonGenerator;
-import org.epochx.ge.model.GEAbstractModel;
+import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
@@ -41,7 +41,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
 public class SinglePointMutation implements GEMutation {
 
 	// The controlling model.
-	private GEAbstractModel model;
+	private GEModel model;
 	
 	// Operator statistics store.
 	private int mutationPoint;
@@ -55,7 +55,7 @@ public class SinglePointMutation implements GEMutation {
 	 * @param model The current controlling model. Parameters such as the codon
 	 * 				generator to use will come from here.
 	 */
-	public SinglePointMutation(GEAbstractModel model) {
+	public SinglePointMutation(GEModel model) {
 		this.model = model;
 		
 		// Configure parameters from the model.

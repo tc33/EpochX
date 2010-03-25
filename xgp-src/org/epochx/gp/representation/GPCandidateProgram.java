@@ -42,7 +42,7 @@ public class GPCandidateProgram extends CandidateProgram {
 	private Node rootNode;
 	
 	// The controlling model.
-	private GPAbstractModel model;
+	private GPModel model;
 	
 	// The cached program fitness.
 	private double fitness;
@@ -50,7 +50,7 @@ public class GPCandidateProgram extends CandidateProgram {
 	// The source at last evaluation for testing fitness cache is still good.
 	private String sourceCache;
 	
-	public GPCandidateProgram(GPAbstractModel model) {
+	public GPCandidateProgram(GPModel model) {
 		this(null, model);
 	}
 	
@@ -64,7 +64,7 @@ public class GPCandidateProgram extends CandidateProgram {
 	 * @param model the controlling model which provides the configuration 
 	 * 				parameters for the run. 				
 	 */
-	public GPCandidateProgram(Node rootNode, GPAbstractModel model) {
+	public GPCandidateProgram(Node rootNode, GPModel model) {
 		this.model = model;
 		this.rootNode = rootNode;
 	}

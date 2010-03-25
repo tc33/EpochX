@@ -23,7 +23,7 @@ package org.epochx.gr.op.init;
 
 import java.util.*;
 
-import org.epochx.gr.model.GRAbstractModel;
+import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.life.ConfigAdapter;
 import org.epochx.representation.CandidateProgram;
@@ -38,7 +38,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
 public class FullInitialiser implements GRInitialiser {
 	
 	// The controlling model.
-	private GRAbstractModel model;
+	private GRModel model;
 	
 	private RandomNumberGenerator rng;
 	private Grammar grammar;
@@ -50,7 +50,7 @@ public class FullInitialiser implements GRInitialiser {
 	 * 
 	 * @param model
 	 */
-	public FullInitialiser(GRAbstractModel model) {
+	public FullInitialiser(GRModel model) {
 		this.model = model;
 		
 		// Configure parameters from the model.

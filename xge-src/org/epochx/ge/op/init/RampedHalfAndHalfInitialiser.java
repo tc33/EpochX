@@ -23,7 +23,7 @@ package org.epochx.ge.op.init;
 
 import java.util.*;
 
-import org.epochx.ge.model.GEAbstractModel;
+import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.life.ConfigAdapter;
 import org.epochx.representation.CandidateProgram;
@@ -43,7 +43,7 @@ import org.epochx.tools.grammar.Grammar;
 public class RampedHalfAndHalfInitialiser implements GEInitialiser {
 
 	// The controlling model.
-	private GEAbstractModel model;
+	private GEModel model;
 	
 	private Grammar grammar;
 	private int popSize;
@@ -58,7 +58,7 @@ public class RampedHalfAndHalfInitialiser implements GEInitialiser {
 	 * 
 	 * @param model The model being assessed
 	 */
-	public RampedHalfAndHalfInitialiser(GEAbstractModel model) {
+	public RampedHalfAndHalfInitialiser(GEModel model) {
 		this.model = model;
 		
 		// set up the grow and full parts

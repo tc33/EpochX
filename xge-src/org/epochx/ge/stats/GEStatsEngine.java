@@ -27,17 +27,17 @@ import static org.epochx.stats.StatField.GEN_POPULATION;
 import java.util.List;
 
 import org.epochx.core.Model;
-import org.epochx.ge.model.GEAbstractModel;
+import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.stats.*;
 
 public class GEStatsEngine extends StatsEngine {
 
 	// The controlling model.
-	private GEAbstractModel model;
+	private GEModel model;
 	
 	
-	public GEStatsEngine(GEAbstractModel model) {
+	public GEStatsEngine(GEModel model) {
 		super(model);
 		
 		this.model = model;

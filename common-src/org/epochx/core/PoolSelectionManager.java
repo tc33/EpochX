@@ -25,10 +25,9 @@ import static org.epochx.stats.StatField.POOL_REVERSIONS;
 
 import java.util.List;
 
-import org.epochx.life.*;
+import org.epochx.life.ConfigAdapter;
 import org.epochx.op.PoolSelector;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.StatsManager;
 
 /**
  * This component manages the selection of a breeding pool to undergo the 

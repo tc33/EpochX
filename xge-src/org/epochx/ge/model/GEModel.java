@@ -32,7 +32,7 @@ import org.epochx.tools.grammar.Grammar;
 
 
 /**
- * GEAbstractModel is a partial implementation of GEModel which provides 
+ * GEModel is a partial implementation of GEModel which provides 
  * sensible defaults for many of the necessary control parameters. It also 
  * provides a simple way of setting many values so an extending class isn't 
  * required to override all methods they wish to alter, and can instead use 
@@ -45,7 +45,7 @@ import org.epochx.tools.grammar.Grammar;
  * 
  * @see GEModel
  */
-public abstract class GEAbstractModel extends Model {
+public abstract class GEModel extends Model {
 	
 	private GEInitialiser initialiser;
 	private GECrossover crossover;
@@ -64,7 +64,7 @@ public abstract class GEAbstractModel extends Model {
 	 * Construct a GEModel with a set of sensible defaults. See the appropriate
 	 * accessor method for information of each default value.
 	 */
-	public GEAbstractModel() {
+	public GEModel() {
 		// Set default parameter values.
 		maxDepth = 20;
 		maxInitialDepth = 8;
@@ -98,7 +98,7 @@ public abstract class GEAbstractModel extends Model {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to RandomInitialiser in GEAbstractModel.
+	 * <p>Defaults to RandomInitialiser in GEModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -120,7 +120,7 @@ public abstract class GEAbstractModel extends Model {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to {@link OnePointCrossover} in GEAbstractModel.
+	 * <p>Defaults to {@link OnePointCrossover} in GEModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -141,7 +141,7 @@ public abstract class GEAbstractModel extends Model {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to {@link PointMutation} in GEAbstractModel.
+	 * <p>Defaults to {@link PointMutation} in GEModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -162,7 +162,7 @@ public abstract class GEAbstractModel extends Model {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to DepthFirstMapper in GEAbstractModel.
+	 * <p>Defaults to DepthFirstMapper in GEModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -182,7 +182,7 @@ public abstract class GEAbstractModel extends Model {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to StandardGenerator in GEAbstractModel.
+	 * <p>Defaults to StandardGenerator in GEModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -204,7 +204,7 @@ public abstract class GEAbstractModel extends Model {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to Integer.MAX_VALUE in GEAbstractModel.
+	 * <p>Defaults to Integer.MAX_VALUE in GEModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -225,7 +225,7 @@ public abstract class GEAbstractModel extends Model {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to 100 in GEAbstractModel.
+	 * <p>Defaults to 100 in GEModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -247,7 +247,7 @@ public abstract class GEAbstractModel extends Model {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to 20 in GEAbstractModel.
+	 * <p>Defaults to 20 in GEModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -268,7 +268,7 @@ public abstract class GEAbstractModel extends Model {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to 8 in GEAbstractModel.
+	 * <p>Defaults to 8 in GEModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -290,7 +290,7 @@ public abstract class GEAbstractModel extends Model {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to true in GEAbstractModel.
+	 * <p>Defaults to true in GEModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */

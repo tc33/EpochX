@@ -23,10 +23,9 @@ package org.epochx.core;
 
 import static org.epochx.stats.StatField.*;
 
-import org.epochx.life.*;
+import org.epochx.life.ConfigAdapter;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.StatsManager;
 
 /**
  * This component is responsible for handling the mutation operation and for 

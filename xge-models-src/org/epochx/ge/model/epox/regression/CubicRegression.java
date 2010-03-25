@@ -21,13 +21,13 @@
  */
 package org.epochx.ge.model.epox.regression;
 
-import org.epochx.ge.model.GEAbstractModel;
+import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.eval.*;
 import org.epochx.tools.grammar.Grammar;
 
-public class CubicRegression extends GEAbstractModel {
+public class CubicRegression extends GEModel {
 	
 	public static final String GRAMMAR_STRING = 
 		"<prog> ::= <node>\n" +

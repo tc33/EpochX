@@ -24,7 +24,7 @@ package org.epochx.ge.model.ruby.ant;
 import java.awt.*;
 import java.util.*;
 
-import org.epochx.ge.model.GEAbstractModel;
+import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.ant.*;
@@ -32,7 +32,7 @@ import org.epochx.tools.eval.*;
 import org.epochx.tools.grammar.Grammar;
 
 
-public class SantaFeTrail extends GEAbstractModel {
+public class SantaFeTrail extends GEModel {
 
 	public static final String GRAMMAR_STRING = 
 		  "<code> ::= <line> | <code> <line>\n" +

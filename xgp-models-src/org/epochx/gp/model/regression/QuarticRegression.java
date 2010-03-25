@@ -23,7 +23,7 @@ package org.epochx.gp.model.regression;
 
 import java.util.*;
 
-import org.epochx.gp.model.GPAbstractModel;
+import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
 import org.epochx.gp.representation.dbl.*;
 import org.epochx.representation.CandidateProgram;
@@ -32,7 +32,7 @@ import org.epochx.representation.CandidateProgram;
 /**
  * 
  */
-public class QuarticRegression extends GPAbstractModel {
+public class QuarticRegression extends GPModel {
 
 	private DoubleVariable x;
 	

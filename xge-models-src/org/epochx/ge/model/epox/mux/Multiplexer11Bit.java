@@ -22,7 +22,7 @@
 package org.epochx.ge.model.epox.mux;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.epochx.ge.model.GEAbstractModel;
+import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.eval.*;
@@ -30,7 +30,7 @@ import org.epochx.tools.grammar.Grammar;
 import org.epochx.tools.util.BoolUtils;
 
 
-public class Multiplexer11Bit extends GEAbstractModel {
+public class Multiplexer11Bit extends GEModel {
 	
 	public static final String GRAMMAR_STRING = 
 		"<prog> ::= <node>\n" +

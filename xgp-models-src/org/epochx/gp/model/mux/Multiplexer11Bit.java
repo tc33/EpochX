@@ -23,7 +23,7 @@ package org.epochx.gp.model.mux;
 
 import java.util.*;
 
-import org.epochx.gp.model.GPAbstractModel;
+import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
 import org.epochx.gp.representation.bool.*;
 import org.epochx.representation.CandidateProgram;
@@ -34,7 +34,7 @@ import org.epochx.tools.util.BoolUtils;
  * 
  *
  */
-public class Multiplexer11Bit extends GPAbstractModel {
+public class Multiplexer11Bit extends GPModel {
 
 	private boolean[][] inputs;
 	

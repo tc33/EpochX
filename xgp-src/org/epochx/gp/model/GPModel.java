@@ -32,7 +32,7 @@ import org.epochx.gp.stats.GPStatsEngine;
 
 
 /**
- * GPAbstractModel is a partial implementation of GPModel which provides 
+ * GPModel is a partial implementation of GPModel which provides 
  * sensible defaults for many of the necessary control parameters. It also 
  * provides a simple way of setting many values so an extending class isn't 
  * required to override all methods they wish to alter, and can instead use 
@@ -45,7 +45,7 @@ import org.epochx.gp.stats.GPStatsEngine;
  * 
  * @see GPModel
  */
-public abstract class GPAbstractModel extends Model {
+public abstract class GPModel extends Model {
 
 	private int maxInitialDepth;
 	private int maxProgramDepth;
@@ -61,7 +61,7 @@ public abstract class GPAbstractModel extends Model {
 	 * Construct a GPModel with a set of sensible defaults. See the appropriate
 	 * accessor method for information of each default value.
 	 */
-	public GPAbstractModel() {
+	public GPModel() {
 		// Initialise default parameter values.
 		maxInitialDepth = 6;
 		maxProgramDepth = 17;
@@ -78,7 +78,7 @@ public abstract class GPAbstractModel extends Model {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to FullInitialiser in GPAbstractModel.
+	 * <p>Defaults to FullInitialiser in GPModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -100,7 +100,7 @@ public abstract class GPAbstractModel extends Model {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to {@link UniformPointCrossover} in GPAbstractModel.
+	 * <p>Defaults to {@link UniformPointCrossover} in GPModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -121,7 +121,7 @@ public abstract class GPAbstractModel extends Model {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to {@link SubtreeMutation} in GPAbstractModel.
+	 * <p>Defaults to {@link SubtreeMutation} in GPModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -142,7 +142,7 @@ public abstract class GPAbstractModel extends Model {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to 6 in GPAbstractModel.
+	 * <p>Defaults to 6 in GPModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -164,7 +164,7 @@ public abstract class GPAbstractModel extends Model {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to 17 in GPAbstractModel.
+	 * <p>Defaults to 17 in GPModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */

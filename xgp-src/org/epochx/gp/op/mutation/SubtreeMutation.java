@@ -21,7 +21,7 @@
  */
 package org.epochx.gp.op.mutation;
 
-import org.epochx.gp.model.GPAbstractModel;
+import org.epochx.gp.model.GPModel;
 import org.epochx.gp.op.init.GrowInitialiser;
 import org.epochx.gp.representation.*;
 import org.epochx.life.*;
@@ -38,7 +38,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
 public class SubtreeMutation implements GPMutation {
 
 	// The controlling model.
-	private GPAbstractModel model;
+	private GPModel model;
 	
 	// The maximum depth of the new subtree.
 	private int maxSubtreeDepth;
@@ -55,7 +55,7 @@ public class SubtreeMutation implements GPMutation {
 	 * @param model The controlling model which provides any configuration 
 	 * parameters for the run.
 	 */
-	public SubtreeMutation(GPAbstractModel model) {
+	public SubtreeMutation(GPModel model) {
 		// 4 is a slightly arbitrary choice but we had to choose something.
 		this(model, 4);
 	}
@@ -68,7 +68,7 @@ public class SubtreeMutation implements GPMutation {
 	 * parameters for the run.
 	 * @param maxSubtreeDepth The maximum depth of the inserted subtree.
 	 */
-	public SubtreeMutation(GPAbstractModel model, int maxSubtreeDepth) {
+	public SubtreeMutation(GPModel model, int maxSubtreeDepth) {
 		this.model = model;
 		this.maxSubtreeDepth = maxSubtreeDepth;
 		

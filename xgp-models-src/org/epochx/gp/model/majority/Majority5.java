@@ -23,7 +23,7 @@ package org.epochx.gp.model.majority;
 
 import java.util.*;
 
-import org.epochx.gp.model.GPAbstractModel;
+import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
 import org.epochx.gp.representation.bool.*;
 import org.epochx.representation.CandidateProgram;
@@ -33,7 +33,7 @@ import org.epochx.tools.util.BoolUtils;
 /**
  * 
  */
-public class Majority5 extends GPAbstractModel {
+public class Majority5 extends GPModel {
 
 	private boolean[][] inputs;
 	

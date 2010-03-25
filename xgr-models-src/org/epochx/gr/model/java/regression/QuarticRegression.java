@@ -28,7 +28,7 @@ import org.epochx.tools.eval.JavaEvaluator;
 import org.epochx.tools.grammar.Grammar;
 
 
-public class QuarticRegression extends GRAbstractModel {
+public class QuarticRegression extends GRModel {
 
 	public static final String GRAMMAR_STRING = 
 		"<expr> ::= ( <expr> <op> <expr> ) | <var>\n" +

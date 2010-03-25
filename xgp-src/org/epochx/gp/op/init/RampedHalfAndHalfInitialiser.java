@@ -23,7 +23,7 @@ package org.epochx.gp.op.init;
 
 import java.util.*;
 
-import org.epochx.gp.model.GPAbstractModel;
+import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
@@ -46,7 +46,7 @@ import org.epochx.representation.CandidateProgram;
 public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 	
 	// The current controlling model.
-	private GPAbstractModel model;
+	private GPModel model;
 	
 	private int popSize;
 	private int initialMaxDepth;
@@ -60,7 +60,7 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 	 * 
 	 * @param model The model being assessed
 	 */
-	public RampedHalfAndHalfInitialiser(GPAbstractModel model) {
+	public RampedHalfAndHalfInitialiser(GPModel model) {
 		this.model = model;
 		
 		// set up the grow and full parts

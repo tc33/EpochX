@@ -25,7 +25,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-import org.epochx.gp.model.GPAbstractModel;
+import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
 import org.epochx.gp.representation.ant.*;
 import org.epochx.representation.CandidateProgram;
@@ -35,7 +35,7 @@ import org.epochx.tools.ant.*;
 /**
  * 
  */
-public class SantaFeTrail extends GPAbstractModel {
+public class SantaFeTrail extends GPModel {
 
 	private AntLandscape landscape;
 	private Ant ant;

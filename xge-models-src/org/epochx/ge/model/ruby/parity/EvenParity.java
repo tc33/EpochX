@@ -22,14 +22,14 @@
 package org.epochx.ge.model.ruby.parity;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.epochx.ge.model.GEAbstractModel;
+import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.eval.RubyEvaluator;
 import org.epochx.tools.util.BoolUtils;
 
 
-public abstract class EvenParity extends GEAbstractModel {
+public abstract class EvenParity extends GEModel {
 	
 	private boolean[][] inputs;
 	

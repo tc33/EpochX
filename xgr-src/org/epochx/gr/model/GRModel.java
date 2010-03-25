@@ -28,7 +28,7 @@ import org.epochx.gr.op.mutation.*;
 import org.epochx.gr.stats.GRStatsEngine;
 import org.epochx.tools.grammar.Grammar;
 
-public abstract class GRAbstractModel extends Model {
+public abstract class GRModel extends Model {
 	
 	private GRInitialiser initialiser;
 	private GRCrossover crossover;
@@ -41,7 +41,7 @@ public abstract class GRAbstractModel extends Model {
 	 * Construct a GRModel with a set of sensible defaults. See the appropriate
 	 * accessor method for information of each default value.
 	 */
-	public GRAbstractModel() {
+	public GRModel() {
 		// Set default parameter values.
 		maxDepth = 12;
 		maxInitialDepth = 8;
@@ -68,7 +68,7 @@ public abstract class GRAbstractModel extends Model {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to RandomInitialiser in GRAbstractModel.
+	 * <p>Defaults to RandomInitialiser in GRModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -90,7 +90,7 @@ public abstract class GRAbstractModel extends Model {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to {@link OnePointCrossover} in GRAbstractModel.
+	 * <p>Defaults to {@link OnePointCrossover} in GRModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -111,7 +111,7 @@ public abstract class GRAbstractModel extends Model {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to {@link PointMutation} in GRAbstractModel.
+	 * <p>Defaults to {@link PointMutation} in GRModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -132,7 +132,7 @@ public abstract class GRAbstractModel extends Model {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to 20 in GRAbstractModel.
+	 * <p>Defaults to 20 in GRModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -153,7 +153,7 @@ public abstract class GRAbstractModel extends Model {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to 8 in GRAbstractModel.
+	 * <p>Defaults to 8 in GRModel.
 	 * 
 	 * @return {@inheritDoc}
 	 */

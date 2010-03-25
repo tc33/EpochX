@@ -27,7 +27,7 @@ import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.eval.JavaEvaluator;
 import org.epochx.tools.grammar.Grammar;
 
-public class CubicRegression extends GRAbstractModel {
+public class CubicRegression extends GRModel {
 	
 	public static final String GRAMMAR_STRING = 
 		"<expr> ::= ( <expr> <op> <expr> ) | <var>\n" +

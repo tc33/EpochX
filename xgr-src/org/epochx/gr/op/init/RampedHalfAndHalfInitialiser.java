@@ -23,7 +23,7 @@ package org.epochx.gr.op.init;
 
 import java.util.*;
 
-import org.epochx.gr.model.GRAbstractModel;
+import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
@@ -43,7 +43,7 @@ import org.epochx.tools.grammar.Grammar;
 public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 
 	// The current controlling model.
-	private GRAbstractModel model;	
+	private GRModel model;	
 	
 	private Grammar grammar;
 	private int popSize;
@@ -61,7 +61,7 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 	 * 
 	 * @param model The model being assessed
 	 */
-	public RampedHalfAndHalfInitialiser(GRAbstractModel model) {		
+	public RampedHalfAndHalfInitialiser(GRModel model) {		
 		this(model, -1);
 	}
 	
@@ -73,7 +73,7 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 	 * ramping up. If a value smaller than the smallest allowable by the 
 	 * grammar is given then this smallest possible value is used.
 	 */
-	public RampedHalfAndHalfInitialiser(GRAbstractModel model, int minDepth) {
+	public RampedHalfAndHalfInitialiser(GRModel model, int minDepth) {
 		this.model = model;
 		this.minDepth = minDepth;
 		

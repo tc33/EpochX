@@ -23,7 +23,7 @@ package org.epochx.ge.op.init;
 
 import java.util.*;
 
-import org.epochx.ge.model.GEAbstractModel;
+import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
@@ -41,7 +41,7 @@ public class FullInitialiser implements GEInitialiser {
 	 */
 	
 	// The controlling model.
-	private GEAbstractModel model;
+	private GEModel model;
 	
 	private RandomNumberGenerator rng;
 	private Grammar grammar;
@@ -54,7 +54,7 @@ public class FullInitialiser implements GEInitialiser {
 	 * 
 	 * @param model
 	 */
-	public FullInitialiser(GEAbstractModel model) {
+	public FullInitialiser(GEModel model) {
 		this.model = model;
 		
 		// Configure parameters from the model.

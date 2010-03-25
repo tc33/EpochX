@@ -24,7 +24,7 @@ package org.epochx.gr.op.mutation;
 import java.util.List;
 
 import org.epochx.gp.representation.*;
-import org.epochx.gr.model.GRAbstractModel;
+import org.epochx.gr.model.GRModel;
 import org.epochx.gr.op.init.GrowInitialiser;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.life.*;
@@ -35,13 +35,13 @@ import org.epochx.tools.random.RandomNumberGenerator;
 public class WhighamMutation implements GRMutation {
 
 	// The controlling model.
-	private GRAbstractModel model;
+	private GRModel model;
 	
 	private RandomNumberGenerator rng;
 	
 	private GrowInitialiser init;
 	
-	public WhighamMutation(GRAbstractModel model) {
+	public WhighamMutation(GRModel model) {
 		this.model = model;
 		
 		init = new GrowInitialiser(model);

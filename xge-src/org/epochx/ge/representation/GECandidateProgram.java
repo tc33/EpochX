@@ -46,7 +46,7 @@ import org.epochx.tools.grammar.*;
 public class GECandidateProgram extends CandidateProgram {
 
 	// The controlling model.
-	private GEAbstractModel model;
+	private GEModel model;
 	
 	// The genotype. For caching to work, it must be impossible to gain direct access to this list.
 	private List<Integer> codons;
@@ -69,7 +69,7 @@ public class GECandidateProgram extends CandidateProgram {
 	 * @param model the controlling model which provides the configuration 
 	 * 				parameters for the run. 				
 	 */
-	public GECandidateProgram(GEAbstractModel model) {
+	public GECandidateProgram(GEModel model) {
 		this(new ArrayList<Integer>(), model);
 	}
 	
@@ -81,7 +81,7 @@ public class GECandidateProgram extends CandidateProgram {
 	 * @param model the controlling model which provides the configuration 
 	 * 				parameters for the run. 				
 	 */
-	public GECandidateProgram(List<Integer> codons, GEAbstractModel model) {
+	public GECandidateProgram(List<Integer> codons, GEModel model) {
 		this.codons = codons;
 		this.model = model;
 		

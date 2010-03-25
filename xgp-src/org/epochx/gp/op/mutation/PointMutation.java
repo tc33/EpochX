@@ -23,7 +23,7 @@ package org.epochx.gp.op.mutation;
 
 import java.util.List;
 
-import org.epochx.gp.model.GPAbstractModel;
+import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
@@ -42,7 +42,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
 public class PointMutation implements GPMutation {
 	
 	// The controlling model.
-	private GPAbstractModel model;
+	private GPModel model;
 	
 	private List<Node> syntax;
 	
@@ -59,7 +59,7 @@ public class PointMutation implements GPMutation {
 	 * @param model The current controlling model. Parameters such as full 
 	 * 				syntax will be obtained from this.
 	 */
-	public PointMutation(GPAbstractModel model) {
+	public PointMutation(GPModel model) {
 		this(model, 0.01);
 	}
 	
@@ -71,7 +71,7 @@ public class PointMutation implements GPMutation {
 	 * changed, and 0.0 would mean no nodes were changed. A typical value 
 	 * would be 0.01.
 	 */
-	public PointMutation(GPAbstractModel model, double pointProbability) {
+	public PointMutation(GPModel model, double pointProbability) {
 		this.model = model;
 		this.pointProbability = pointProbability;
 		

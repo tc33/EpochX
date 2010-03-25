@@ -24,7 +24,7 @@ package org.epochx.ge.model.epox.ant;
 import java.awt.*;
 import java.util.*;
 
-import org.epochx.ge.model.GEAbstractModel;
+import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.gp.representation.FunctionParser;
 import org.epochx.representation.CandidateProgram;
@@ -32,7 +32,7 @@ import org.epochx.tools.ant.*;
 import org.epochx.tools.eval.EpoxEvaluator;
 import org.epochx.tools.grammar.Grammar;
 
-public class JohnMuirTrail extends GEAbstractModel {
+public class JohnMuirTrail extends GEModel {
 
 	public static final String GRAMMAR_STRING = 
 		"<prog> ::= <node>\n" +

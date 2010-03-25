@@ -23,7 +23,7 @@ package org.epochx.ge.op.init;
 
 import java.util.*;
 
-import org.epochx.ge.model.GEAbstractModel;
+import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.life.ConfigAdapter;
 import org.epochx.representation.CandidateProgram;
@@ -39,7 +39,7 @@ public class FixedLengthInitialiser implements GEInitialiser {
 	 */
 	
 	// The controlling model.
-	private GEAbstractModel model;
+	private GEModel model;
 	
 	private int popSize;
 	
@@ -53,7 +53,7 @@ public class FixedLengthInitialiser implements GEInitialiser {
 	 * @param initialLength The initial length that chromosomes should be 
 	 * 			  			generated to.
 	 */
-	public FixedLengthInitialiser(GEAbstractModel model, int initialLength) {
+	public FixedLengthInitialiser(GEModel model, int initialLength) {
 		this.model = model;
 		this.initialLength = initialLength;
 		

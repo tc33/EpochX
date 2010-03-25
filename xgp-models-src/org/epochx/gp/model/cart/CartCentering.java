@@ -41,7 +41,7 @@ package org.epochx.gp.model.cart;
 
 import java.util.*;
 
-import org.epochx.gp.model.GPAbstractModel;
+import org.epochx.gp.model.GPModel;
 import org.epochx.gp.op.crossover.UniformPointCrossover;
 import org.epochx.gp.op.mutation.PointMutation;
 import org.epochx.gp.representation.*;
@@ -52,7 +52,7 @@ import org.epochx.representation.CandidateProgram;
 /**
  *
  */
-public class CartCentering extends GPAbstractModel {
+public class CartCentering extends GPModel {
 
 	// The rocket force in newtons.
 	private static final double F = 1.0;
@@ -178,7 +178,7 @@ public class CartCentering extends GPAbstractModel {
 	}
 	
 	/*public static void main(String[] args) {
-		GPAbstractModel model = new CartCentering();
+		GPModel model = new CartCentering();
 		
 		model.setPopulationSize(500);
 		model.setNoGenerations(100);

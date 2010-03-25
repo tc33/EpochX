@@ -21,13 +21,13 @@
  */
 package org.epochx.gr.representation;
 
-import org.epochx.gr.model.GRAbstractModel;
+import org.epochx.gr.model.GRModel;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.*;
 
 public class GRCandidateProgram extends CandidateProgram {
 
-	private GRAbstractModel model;
+	private GRModel model;
 	
 	// The phenotype.
 	private NonTerminalSymbol parseTree;
@@ -38,11 +38,11 @@ public class GRCandidateProgram extends CandidateProgram {
 	// A stash of the source for testing if fitness cache is up to date.
 	private String sourceCache;
 	
-	public GRCandidateProgram(GRAbstractModel model) {
+	public GRCandidateProgram(GRModel model) {
 		this(null, model);
 	}
 	
-	public GRCandidateProgram(NonTerminalSymbol parseTree, GRAbstractModel model) {
+	public GRCandidateProgram(NonTerminalSymbol parseTree, GRModel model) {
 		this.model = model;
 		this.parseTree = parseTree;
 		

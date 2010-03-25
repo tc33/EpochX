@@ -22,14 +22,14 @@
 package org.epochx.gr.model.epox.parity;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.epochx.gr.model.GRAbstractModel;
+import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.eval.EpoxEvaluator;
 import org.epochx.tools.util.BoolUtils;
 
 
-public abstract class EvenParity extends GRAbstractModel {
+public abstract class EvenParity extends GRModel {
 	
 	private boolean[][] inputs;
 	

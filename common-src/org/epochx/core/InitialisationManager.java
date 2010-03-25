@@ -25,10 +25,9 @@ import static org.epochx.stats.StatField.*;
 
 import java.util.List;
 
-import org.epochx.life.*;
+import org.epochx.life.ConfigAdapter;
 import org.epochx.op.Initialiser;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.StatsManager;
 
 /**
  * This component manages the initialisation step of an evolutionary run and

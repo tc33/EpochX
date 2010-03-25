@@ -23,7 +23,7 @@ package org.epochx.gr.op.crossover;
 
 import java.util.*;
 
-import org.epochx.gr.model.GRAbstractModel;
+import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
@@ -33,12 +33,12 @@ import org.epochx.tools.random.RandomNumberGenerator;
 public class WhighamCrossover implements GRCrossover {
 
 	// The controlling model.
-	private GRAbstractModel model;
+	private GRModel model;
 	
 	// The random number generator in use.
 	private RandomNumberGenerator rng;
 	
-	public WhighamCrossover(GRAbstractModel model) {
+	public WhighamCrossover(GRModel model) {
 		this.model = model;
 		
 		// Configure parameters from the model.

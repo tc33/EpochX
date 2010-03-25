@@ -22,7 +22,7 @@
 package org.epochx.ge.op.mutation;
 
 import org.epochx.ge.codon.CodonGenerator;
-import org.epochx.ge.model.GEAbstractModel;
+import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
@@ -39,7 +39,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
 public class PointMutation implements GEMutation {
 
 	// The controlling model.
-	private GEAbstractModel model;
+	private GEModel model;
 	
 	// The probability each codon has of being mutated in a selected program.
 	private double pointProbability;
@@ -55,7 +55,7 @@ public class PointMutation implements GEMutation {
 	 * @param model The current controlling model. Parameters such as the codon
 	 * 				generator to use will come from here.
 	 */
-	public PointMutation(GEAbstractModel model) {
+	public PointMutation(GEModel model) {
 		this(model, 0.01);
 	}
 	
@@ -69,7 +69,7 @@ public class PointMutation implements GEMutation {
 	 * 				being changed, and 0.0 would mean no nodes were changed. A 
 	 * 				typical value would be 0.01.
 	 */
-	public PointMutation(GEAbstractModel model, double pointProbability) {
+	public PointMutation(GEModel model, double pointProbability) {
 		this.model = model;
 		this.pointProbability = pointProbability;
 		

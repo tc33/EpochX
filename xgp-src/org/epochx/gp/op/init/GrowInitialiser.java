@@ -23,7 +23,7 @@ package org.epochx.gp.op.init;
 
 import java.util.*;
 
-import org.epochx.gp.model.GPAbstractModel;
+import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
@@ -37,7 +37,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
 public class GrowInitialiser implements GPInitialiser {
 	
 	// The controlling model.
-	private GPAbstractModel model;
+	private GPModel model;
 	
 	private List<Node> syntax;
 	private List<Node> terminals;
@@ -54,7 +54,7 @@ public class GrowInitialiser implements GPInitialiser {
 	 * @param model The current controlling model. Run parameters such as the 
 	 * population size will be obtained from this.
 	 */
-	public GrowInitialiser(GPAbstractModel model) {
+	public GrowInitialiser(GPModel model) {
 		this.model = model;
 		
 		terminals = new ArrayList<Node>();

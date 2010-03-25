@@ -137,7 +137,7 @@ public class CrossoverManager {
 	 */
 	public CandidateProgram[] crossover() {
 		// Inform everyone we're about to start crossover.
-		model.getLifeCycleManager().onCrossoverStart();
+		model.getLifeCycleManager().fireCrossoverStartEvent();
 		
 		// Record the start time.
 		final long crossoverStartTime = System.nanoTime();
@@ -171,7 +171,7 @@ public class CrossoverManager {
 			}
 			
 			// Ask life cycle listener to confirm the crossover.
-			children = model.getLifeCycleManager().onCrossover(parents, children);
+			children = model.getLifeCycleManager().fireCrossoverEvent(parents, children);
 			
 			// If reverted then increment reversion counter.
 			if (children == null) {
@@ -186,7 +186,7 @@ public class CrossoverManager {
 		model.getStatsManager().addCrossoverData(CROSSOVER_REVERSIONS, reversions);
 		model.getStatsManager().addCrossoverData(CROSSOVER_TIME, runtime);
 		
-		model.getLifeCycleManager().onCrossoverEnd();
+		model.getLifeCycleManager().fireCrossoverEndEvent();
 		
 		return children;
 	}

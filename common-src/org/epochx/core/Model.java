@@ -30,15 +30,12 @@ import org.epochx.tools.random.*;
 
 /**
  * Implementations of <code>Model</code> define a configuration for a set of 
- * evolutionary runs. Instances of model provide a set of components, control
- * parameters, settings for the framework and the fitness function against 
- * which all programs will be evaluated.
+ * evolutionary runs and provide the means to execute the runs. Instances of 
+ * model need to provide the components, control parameters and other settings 
+ * that the framework needs to evolve. The Model also provides the fitness 
+ * function against which all programs will be evaluated.
  * 
  * <p>
- * It is rarely necessary to implement this interface directly, it is normally 
- * more convenient to extend <code>AbstractModel</code> or more usually a 
- * representation specific abstract model.
- * 
  * Prior to calling the <code>run</code> method it is typical to arrange for 
  * some form of output to be generated each generation, each run or even each 
  * crossover or mutation. A wide range of statistics are 
@@ -46,9 +43,25 @@ import org.epochx.tools.random.*;
  * through the {@link LifeCycleManager} to allow events such as a generation 
  * starting, or crossover being carried out, to be handled and responded to. 
  * This is commonly combined with the <code>StatsManager</code> to output 
- * statistics each generation or run.
+ * statistics each generation or run. Instances of both these class are 
+ * obtainable from a model.
  * 
- * @see AbstractModel
+ * <p>
+ * The Model class implements <code>Runnable</code>. Because of this, it is 
+ * possible to run a model in its own thread simply by passing it to a thread 
+ * object which is then started. 
+ * 
+ * <blockquote>
+ * <code>new Thread(model).start();</code>
+ * </blockquote>
+ *
+ * <p>
+ * Despite this, the current version of the <code>Model</code> class is not
+ * threadsafe, so it is not advisable to start the same model multiple times 
+ * concurrently.
+ *
+ * @see StatsManager
+ * @see LifeCycleManager
  */
 public abstract class Model implements Runnable {
 
@@ -67,6 +80,7 @@ public abstract class Model implements Runnable {
 	private double terminationFitness;
 	private double crossoverProbability;
 	private double mutationProbability;
+	private double reproductionProbability;
 	
 	// Operators.
 	private PoolSelector poolSelector;
@@ -97,6 +111,7 @@ public abstract class Model implements Runnable {
 		terminationFitness = 0.0;
 		crossoverProbability = 0.9;
 		mutationProbability = 0.1;
+		reproductionProbability = 0.0;
 		
 		// Operators.
 		programSelector = new RandomSelector(this);
@@ -111,13 +126,16 @@ public abstract class Model implements Runnable {
 	}
 	
 	/**
-	 * Call this method directly to run this model sequentially, or pass into 
-	 * a new thread object and call the start() method to run this model in a 
-	 * new thread.
+	 * Executes this model.
+	 * 
+	 * <p>
+	 * Calling this method directly will run this model sequentially, or it can
+	 * be passed into a new thread object whose start() method is then called to
+	 * run this model in a new thread.
 	 */
 	public void run() {		
 		// Fire config event.
-		life.onConfigure();
+		life.fireConfigureEvent();
 		
 		// Set the stats engine straight away so it can be used.
 		stats.setStatsEngine(getStatsEngine());
@@ -354,7 +372,16 @@ public abstract class Model implements Runnable {
 	 * @return {@inheritDoc}
 	 */
 	public double getReproductionProbability() {
-		return 1.0 - (getCrossoverProbability() + getMutationProbability());
+		return reproductionProbability;
+	}
+	
+	/**
+	 * Overwrites the default mutation probability.
+	 * 
+	 * @param mutationProbability the new mutation probability to use.
+	 */
+	public void setReproductionProbability(double reproductionProbability) {
+		this.reproductionProbability = reproductionProbability;
 	}
 
 	/**

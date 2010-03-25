@@ -125,7 +125,7 @@ public class MutationManager {
 	 *         the original selected program before mutation will be returned.
 	 */
 	public CandidateProgram mutate() {
-		model.getLifeCycleManager().onMutationStart();
+		model.getLifeCycleManager().fireMutationStartEvent();
 		
 		final long crossoverStartTime = System.nanoTime();
 		
@@ -150,7 +150,7 @@ public class MutationManager {
 			}
 
 			// Allow the life cycle listener to confirm or modify.
-			child = model.getLifeCycleManager().onMutation(parent, child);
+			child = model.getLifeCycleManager().fireMutationEvent(parent, child);
 			
 			if (child == null) {
 				reversions++;
@@ -165,7 +165,7 @@ public class MutationManager {
 		model.getStatsManager().addMutationData(MUTATION_TIME, runtime);
 		model.getStatsManager().addMutationData(MUTATION_REVERSIONS, reversions);
 		
-		model.getLifeCycleManager().onMutationEnd();
+		model.getLifeCycleManager().fireMutationEndEvent();
 		
 		return child;
 	}

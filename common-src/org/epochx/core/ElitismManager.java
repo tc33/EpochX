@@ -125,7 +125,7 @@ public class ElitismManager {
 	 * 		   contain all CandidatePrograms from the population sorted.
 	 */
 	public List<CandidateProgram> elitism(final List<CandidateProgram> pop) {
-		model.getLifeCycleManager().onElitismStart();
+		model.getLifeCycleManager().fireElitismStartEvent();
 		
 		// Construct an array for elites.
 		List<CandidateProgram> elites;
@@ -139,9 +139,9 @@ public class ElitismManager {
 		}
 		
 		// Allow life cycle listener to confirm or modify.
-		elites = model.getLifeCycleManager().onElitism(elites);
+		elites = model.getLifeCycleManager().fireElitismEvent(elites);
 		
-		model.getLifeCycleManager().onElitismEnd();
+		model.getLifeCycleManager().fireElitismEndEvent();
 		
 		return elites;
 	}

@@ -115,8 +115,8 @@ public class RunManager {
 	 */
 	public void run(final int runNo) {
 		// Inform everyone we're starting a run.
-		model.getLifeCycleManager().onConfigure();
-		model.getLifeCycleManager().onRunStart();
+		model.getLifeCycleManager().fireConfigureEvent();
+		model.getLifeCycleManager().fireRunStartEvent();
 		
 		// Setup the run manager for a new run
 		setup();
@@ -143,13 +143,13 @@ public class RunManager {
 			
 			// We might be finished?
 			if (bestFitness <= terminationFitness) {
-				model.getLifeCycleManager().onSuccess();
+				model.getLifeCycleManager().fireSuccessEvent();
 				break;
 			}
 		}
 
 		// Inform everyone the run has ended.
-		model.getLifeCycleManager().onRunEnd();
+		model.getLifeCycleManager().fireRunEndEvent();
 		
 		// Calculate how long the run took.
 		final long runtime = System.nanoTime() - startTime;

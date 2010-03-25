@@ -153,37 +153,37 @@ public class LifeCycleManager {
 		generationListeners.remove(listener);
 	}
 	
-	public void onConfigure() {
+	public void fireConfigureEvent() {
 		for (ConfigListener listener: configListeners) {
 			listener.onConfigure();
 		}
 	}
 
-	public void onRunStart() {
+	public void fireRunStartEvent() {
 		for (RunListener listener: runListeners) {
 			listener.onRunStart();
 		}
 	}
 	
-	public void onSuccess() {
+	public void fireSuccessEvent() {
 		for (RunListener listener: runListeners) {
 			listener.onSuccess();
 		}
 	}
 	
-	public void onRunEnd() {
+	public void fireRunEndEvent() {
 		for (RunListener listener: runListeners) {
 			listener.onRunEnd();
 		}
 	}
 	
-	public void onInitialisationStart() {
+	public void fireInitialisationStartEvent() {
 		for (InitialisationListener listener: initialisationListeners) {
 			listener.onInitialisationStart();
 		}
 	}
 	
-	public List<CandidateProgram> onInitialisation(List<CandidateProgram> pop) {
+	public List<CandidateProgram> fireInitialisationEvent(List<CandidateProgram> pop) {
 		for (InitialisationListener listener: initialisationListeners) {
 			pop = listener.onInitialisation(pop);
 			
@@ -195,19 +195,19 @@ public class LifeCycleManager {
 		return pop;
 	}
 	
-	public void onInitialisationEnd() {
+	public void fireInitialisationEndEvent() {
 		for (InitialisationListener listener: initialisationListeners) {
 			listener.onInitialisationEnd();
 		}
 	}
 	
-	public void onElitismStart() {
+	public void fireElitismStartEvent() {
 		for (ElitismListener listener: elitismListeners) {
 			listener.onElitismStart();
 		}
 	}
 	
-	public List<CandidateProgram> onElitism(List<CandidateProgram> elites) {
+	public List<CandidateProgram> fireElitismEvent(List<CandidateProgram> elites) {
 		for (ElitismListener listener: elitismListeners) {
 			elites = listener.onElitism(elites);
 		}
@@ -215,19 +215,19 @@ public class LifeCycleManager {
 		return elites;
 	}
 	
-	public void onElitismEnd() {
+	public void fireElitismEndEvent() {
 		for (ElitismListener listener: elitismListeners) {
 			listener.onElitismEnd();
 		}
 	}
 	
-	public void onPoolSelectionStart() {
+	public void firePoolSelectionStartEvent() {
 		for (PoolSelectionListener listener: poolSelectionListeners) {
 			listener.onPoolSelectionStart();
 		}
 	}
 
-	public List<CandidateProgram> onPoolSelection(List<CandidateProgram> pool) {
+	public List<CandidateProgram> firePoolSelectionEvent(List<CandidateProgram> pool) {
 		for (PoolSelectionListener listener: poolSelectionListeners) {
 			pool = listener.onPoolSelection(pool);
 			
@@ -239,19 +239,19 @@ public class LifeCycleManager {
 		return pool;
 	}
 	
-	public void onPoolSelectionEnd() {
+	public void firePoolSelectionEndEvent() {
 		for (PoolSelectionListener listener: poolSelectionListeners) {
 			listener.onPoolSelectionEnd();
 		}
 	}
 	
-	public void onCrossoverStart() {
+	public void fireCrossoverStartEvent() {
 		for (CrossoverListener listener: crossoverListeners) {
 			listener.onCrossoverStart();
 		}
 	}
 	
-	public CandidateProgram[] onCrossover(CandidateProgram[] parents,
+	public CandidateProgram[] fireCrossoverEvent(CandidateProgram[] parents,
 			CandidateProgram[] children) {
 		for (CrossoverListener listener: crossoverListeners) {
 			children = listener.onCrossover(parents, children);
@@ -264,19 +264,19 @@ public class LifeCycleManager {
 		return children;
 	}
 	
-	public void onCrossoverEnd() {
+	public void fireCrossoverEndEvent() {
 		for (CrossoverListener listener: crossoverListeners) {
 			listener.onCrossoverEnd();
 		}
 	}
 
-	public void onMutationStart() {
+	public void fireMutationStartEvent() {
 		for (MutationListener listener: mutationListeners) {
 			listener.onMutationStart();
 		}
 	}
 	
-	public CandidateProgram onMutation(CandidateProgram parent,
+	public CandidateProgram fireMutationEvent(CandidateProgram parent,
 			CandidateProgram child) {
 		for (MutationListener listener: mutationListeners) {
 			child = listener.onMutation(parent, child);
@@ -289,19 +289,19 @@ public class LifeCycleManager {
 		return child;
 	}
 	
-	public void onMutationEnd() {
+	public void fireMutationEndEvent() {
 		for (MutationListener listener: mutationListeners) {
 			listener.onMutationEnd();
 		}
 	}
 	
-	public void onReproductionStart() {
+	public void fireReproductionStartEvent() {
 		for (ReproductionListener listener: reproductionListeners) {
 			listener.onReproductionStart();
 		}
 	}
 
-	public CandidateProgram onReproduction(CandidateProgram child) {
+	public CandidateProgram fireReproductionEvent(CandidateProgram child) {
 		for (ReproductionListener listener: reproductionListeners) {
 			child = listener.onReproduction(child);	
 			
@@ -313,19 +313,19 @@ public class LifeCycleManager {
 		return child;
 	}
 	
-	public void onReproductionEnd() {
+	public void fireReproductionEndEvent() {
 		for (ReproductionListener listener: reproductionListeners) {
 			listener.onReproductionEnd();
 		}
 	}
 	
-	public void onGenerationStart() {
+	public void fireGenerationStartEvent() {
 		for (GenerationListener listener: generationListeners) {
 			listener.onGenerationStart();
 		}
 	}
 	
-	public List<CandidateProgram> onGeneration(List<CandidateProgram> pop) {
+	public List<CandidateProgram> fireGenerationEvent(List<CandidateProgram> pop) {
 		for (GenerationListener listener: generationListeners) {
 			pop = listener.onGeneration(pop);
 			
@@ -337,7 +337,7 @@ public class LifeCycleManager {
 		return pop;
 	}
 	
-	public void onGenerationEnd() {
+	public void fireGenerationEndEvent() {
 		for (GenerationListener listener: generationListeners) {
 			listener.onGenerationEnd();
 		}

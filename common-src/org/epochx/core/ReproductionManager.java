@@ -116,7 +116,7 @@ public class ReproductionManager {
 	 * @return a CandidateProgram selected for reproduction.
 	 */
 	public CandidateProgram reproduce() {
-		model.getLifeCycleManager().onReproductionStart();
+		model.getLifeCycleManager().fireReproductionStartEvent();
 		
 		CandidateProgram parent = null;
 		
@@ -127,7 +127,7 @@ public class ReproductionManager {
 			parent = programSelector.getProgram();
 			
 			// Allow the life cycle listener to confirm or modify.
-			parent = lifeCycle.onReproduction(parent);
+			parent = lifeCycle.fireReproductionEvent(parent);
 			
 			if (parent == null) {
 				reversions++;
@@ -137,7 +137,7 @@ public class ReproductionManager {
 		// Store the stats from the reproduction.
 		model.getStatsManager().addGenerationData(REP_REVERSIONS, reversions);
 		
-		model.getLifeCycleManager().onReproductionEnd();
+		model.getLifeCycleManager().fireReproductionEndEvent();
 		
 		return parent;
 	}

@@ -179,8 +179,8 @@ public class GenerationManager {
 		reversions = 0;
 		
 		// Inform all listeners that a generation is starting.
-		model.getLifeCycleManager().onConfigure();
-		model.getLifeCycleManager().onGenerationStart();
+		model.getLifeCycleManager().fireConfigureEvent();
+		model.getLifeCycleManager().fireGenerationStartEvent();
 		
 		// Record the generation start time.
 		final long startTime = System.nanoTime();
@@ -224,7 +224,7 @@ public class GenerationManager {
 			}
 			
 			// Request confirmation of generation.
-			pop = model.getLifeCycleManager().onGeneration(pop);
+			pop = model.getLifeCycleManager().fireGenerationEvent(pop);
 			
 			// If reverted, increment reversions count.
 			if (pop == null) {
@@ -238,7 +238,7 @@ public class GenerationManager {
 		model.getStatsManager().addGenerationData(GEN_TIME, (System.nanoTime() - startTime));
 		
 		// Tell everyone the generation has ended.
-		model.getLifeCycleManager().onGenerationEnd();
+		model.getLifeCycleManager().fireGenerationEndEvent();
 		
 		return pop;
 	}

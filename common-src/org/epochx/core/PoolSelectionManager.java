@@ -142,7 +142,7 @@ public class PoolSelectionManager {
 	 */
 	public List<CandidateProgram> getPool(List<CandidateProgram> pop) {
 		// Inform all listeners that pool selection is starting.
-		model.getLifeCycleManager().onPoolSelectionStart();
+		model.getLifeCycleManager().firePoolSelectionStartEvent();
 		
 		// Reset the number of reversions.
 		reversions = 0;
@@ -153,7 +153,7 @@ public class PoolSelectionManager {
 			pool = poolSelector.getPool(pop, poolSize);
 			
 			// Allow life cycle listener to confirm or modify.
-			pool = model.getLifeCycleManager().onPoolSelection(pool);
+			pool = model.getLifeCycleManager().firePoolSelectionEvent(pool);
 			
 			// If reverted then increment reversion counter.
 			if (pool == null) {
@@ -165,7 +165,7 @@ public class PoolSelectionManager {
 		model.getStatsManager().addGenerationData(POOL_REVERSIONS, reversions);
 		
 		// Inform all listeners that pool selection has ended.
-		model.getLifeCycleManager().onPoolSelectionEnd();
+		model.getLifeCycleManager().firePoolSelectionEndEvent();
 		
 		return pool;
 	}

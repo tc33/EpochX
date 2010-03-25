@@ -142,9 +142,9 @@ public class InitialisationManager {
 	 */
 	public List<CandidateProgram> initialise() {
 		// Trigger life cycle events for both generation and initialisation.
-		model.getLifeCycleManager().onConfigure();
-		model.getLifeCycleManager().onGenerationStart();
-		model.getLifeCycleManager().onInitialisationStart();
+		model.getLifeCycleManager().fireConfigureEvent();
+		model.getLifeCycleManager().fireGenerationStartEvent();
+		model.getLifeCycleManager().fireInitialisationStartEvent();
 		
 		// Record the start time.
 		final long startTime = System.nanoTime();
@@ -161,8 +161,8 @@ public class InitialisationManager {
 			pop = initialiser.getInitialPopulation();
 			
 			// Allow life cycle manager to confirm or modify. (init has final say).
-			pop = model.getLifeCycleManager().onGeneration(pop);
-			pop = model.getLifeCycleManager().onInitialisation(pop);
+			pop = model.getLifeCycleManager().fireGenerationEvent(pop);
+			pop = model.getLifeCycleManager().fireInitialisationEvent(pop);
 			
 			// If reverted then increment reversion count.
 			if (pop == null) {
@@ -176,8 +176,8 @@ public class InitialisationManager {
 		model.getStatsManager().addGenerationData(GEN_TIME, (System.nanoTime() - startTime));
 		
 		// Trigger life cycle events for end of initialisation and generation 0.
-		model.getLifeCycleManager().onInitialisationEnd();
-		model.getLifeCycleManager().onGenerationEnd();
+		model.getLifeCycleManager().fireInitialisationEndEvent();
+		model.getLifeCycleManager().fireGenerationEndEvent();
 		
 		return pop;
 	}

@@ -23,13 +23,11 @@ package org.epochx.ge.op.init;
 
 import java.util.*;
 
-import org.epochx.core.Controller;
-import org.epochx.ge.model.GEModel;
+import org.epochx.ge.model.GEAbstractModel;
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.life.*;
+import org.epochx.life.ConfigAdapter;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.Grammar;
-import org.epochx.tools.random.RandomNumberGenerator;
 
 
 /**
@@ -44,8 +42,8 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class RampedHalfAndHalfInitialiser implements GEInitialiser {
 
-	// The current controlling model.
-	private GEModel model;
+	// The controlling model.
+	private GEAbstractModel model;
 	
 	private Grammar grammar;
 	private int popSize;
@@ -60,13 +58,15 @@ public class RampedHalfAndHalfInitialiser implements GEInitialiser {
 	 * 
 	 * @param model The model being assessed
 	 */
-	public RampedHalfAndHalfInitialiser() {
+	public RampedHalfAndHalfInitialiser(GEAbstractModel model) {
+		this.model = model;
+		
 		// set up the grow and full parts
-		grow = new GrowInitialiser();
-		full = new FullInitialiser();
+		grow = new GrowInitialiser(model);
+		full = new FullInitialiser(model);
 		
 		// Configure parameters from the model.
-		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
 			public void onConfigure() {
 				configure();
@@ -78,8 +78,6 @@ public class RampedHalfAndHalfInitialiser implements GEInitialiser {
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
-		model = (GEModel) Controller.getModel();
-		
 		grammar = model.getGrammar();
 		popSize = model.getPopulationSize();
 		maxInitialProgramDepth = model.getMaxInitialProgramDepth();

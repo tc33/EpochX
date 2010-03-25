@@ -21,13 +21,14 @@
  */
 package org.epochx.ge.model;
 
+import org.epochx.core.Model;
 import org.epochx.ge.codon.*;
 import org.epochx.ge.mapper.*;
 import org.epochx.ge.op.crossover.*;
 import org.epochx.ge.op.init.*;
 import org.epochx.ge.op.mutation.*;
 import org.epochx.ge.stats.GEStatsEngine;
-import org.epochx.model.AbstractModel;
+import org.epochx.tools.grammar.Grammar;
 
 
 /**
@@ -44,7 +45,7 @@ import org.epochx.model.AbstractModel;
  * 
  * @see GEModel
  */
-public abstract class GEAbstractModel extends AbstractModel implements GEModel {
+public abstract class GEAbstractModel extends Model {
 	
 	private GEInitialiser initialiser;
 	private GECrossover crossover;
@@ -74,15 +75,25 @@ public abstract class GEAbstractModel extends AbstractModel implements GEModel {
 		cacheSource = true;
 		
 		// GP Components.
-		initialiser = new RampedHalfAndHalfInitialiser();
-		crossover = new OnePointCrossover();
-		mutator = new PointMutation();
-		mapper = new DepthFirstMapper();
-		codonGenerator = new StandardGenerator();
+		initialiser = new RampedHalfAndHalfInitialiser(this);
+		crossover = new OnePointCrossover(this);
+		mutator = new PointMutation(this);
+		mapper = new DepthFirstMapper(this);
+		codonGenerator = new StandardGenerator(this);
 		
 		// Stats - overwrite parent default.
-		setStatsEngine(new GEStatsEngine());
+		setStatsEngine(new GEStatsEngine(this));
 	}
+	
+	/**
+	 * Returns the grammar instance that determines the structure of the 
+	 * programs to be evolved. As well as defining the syntax of solutions, the 
+	 * grammar also essentially determines the function and terminal sets which 
+	 * are features of tree GP. 
+	 * 
+	 * @return the language grammar that defines the syntax of solutions.
+	 */
+	public abstract Grammar getGrammar();
 	
 	/**
 	 * {@inheritDoc}
@@ -155,7 +166,6 @@ public abstract class GEAbstractModel extends AbstractModel implements GEModel {
 	 * 
 	 * @return {@inheritDoc}
 	 */
-	@Override
 	public Mapper getMapper() {
 		return mapper;
 	}
@@ -176,7 +186,6 @@ public abstract class GEAbstractModel extends AbstractModel implements GEModel {
 	 * 
 	 * @return {@inheritDoc}
 	 */
-	@Override
 	public CodonGenerator getCodonGenerator() {
 		return codonGenerator;
 	}
@@ -199,7 +208,6 @@ public abstract class GEAbstractModel extends AbstractModel implements GEModel {
 	 * 
 	 * @return {@inheritDoc}
 	 */
-	@Override
 	public int getMaxCodonSize() {
 		return maxCodonSize;
 	}
@@ -221,7 +229,6 @@ public abstract class GEAbstractModel extends AbstractModel implements GEModel {
 	 * 
 	 * @return {@inheritDoc}
 	 */
-	@Override
 	public int getMaxChromosomeLength() {
 		return maxChromosomeLength;
 	}
@@ -244,7 +251,6 @@ public abstract class GEAbstractModel extends AbstractModel implements GEModel {
 	 * 
 	 * @return {@inheritDoc}
 	 */
-	@Override
 	public int getMaxProgramDepth() {
 		return maxDepth;
 	}
@@ -266,7 +272,6 @@ public abstract class GEAbstractModel extends AbstractModel implements GEModel {
 	 * 
 	 * @return {@inheritDoc}
 	 */
-	@Override
 	public int getMaxInitialProgramDepth() {
 		return maxInitialDepth;
 	}
@@ -289,7 +294,6 @@ public abstract class GEAbstractModel extends AbstractModel implements GEModel {
 	 * 
 	 * @return {@inheritDoc}
 	 */
-	@Override
 	public boolean cacheSource() {
 		return cacheSource;
 	}

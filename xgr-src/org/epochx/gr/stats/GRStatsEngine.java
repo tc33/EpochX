@@ -26,10 +26,24 @@ import static org.epochx.stats.StatField.GEN_POPULATION;
 
 import java.util.List;
 
+import org.epochx.core.Model;
+import org.epochx.gr.model.GRAbstractModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.stats.*;
 
 public class GRStatsEngine extends StatsEngine {
+
+	// The controlling model.
+	private GRAbstractModel model;
+	
+	/**
+	 * @param model
+	 */
+	public GRStatsEngine(GRAbstractModel model) {
+		super(model);
+		
+		this.model = model;
+	}
 
 	@Override
 	public Object getGenerationStat(String field) {
@@ -56,7 +70,7 @@ public class GRStatsEngine extends StatsEngine {
 		int[] depths = null;
 		
 		// Request the population from the stats manager.
-		List<GRCandidateProgram> pop = (List<GRCandidateProgram>) StatsManager.getStatsManager().getGenerationStat(GEN_POPULATION);
+		List<GRCandidateProgram> pop = (List<GRCandidateProgram>) model.getStatsManager().getGenerationStat(GEN_POPULATION);
 		
 		if (pop != null) {
 			depths = new int[pop.size()];
@@ -73,7 +87,7 @@ public class GRStatsEngine extends StatsEngine {
 		Integer minDepth = null;
 		
 		// Request the population from the stats manager.
-		int[] depths = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_DEPTHS);
+		int[] depths = (int[]) model.getStatsManager().getGenerationStat(GEN_DEPTHS);
 		
 		if (depths != null) {
 			minDepth = StatsUtils.min(depths);
@@ -86,7 +100,7 @@ public class GRStatsEngine extends StatsEngine {
 		Integer maxDepth = null;
 		
 		// Request the population from the stats manager.
-		int[] depths = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_DEPTHS);
+		int[] depths = (int[]) model.getStatsManager().getGenerationStat(GEN_DEPTHS);
 		
 		if (depths != null) {
 			maxDepth = StatsUtils.max(depths);
@@ -99,7 +113,7 @@ public class GRStatsEngine extends StatsEngine {
 		Double aveDepth = null;
 		
 		// Request the population from the stats manager.
-		int[] depths = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_DEPTHS);
+		int[] depths = (int[]) model.getStatsManager().getGenerationStat(GEN_DEPTHS);
 		
 		if (depths != null) {
 			aveDepth = StatsUtils.ave(depths);
@@ -112,7 +126,7 @@ public class GRStatsEngine extends StatsEngine {
 		Double stdevDepth = null;
 		
 		// Request the population from the stats manager.
-		int[] depths = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_DEPTHS);
+		int[] depths = (int[]) model.getStatsManager().getGenerationStat(GEN_DEPTHS);
 		
 		if (depths != null) {
 			stdevDepth = StatsUtils.stdev(depths);

@@ -26,7 +26,6 @@ import static org.epochx.stats.StatField.*;
 import java.util.List;
 
 import org.epochx.life.*;
-import org.epochx.model.Model;
 import org.epochx.op.Initialiser;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.StatsManager;
@@ -94,6 +93,9 @@ import org.epochx.stats.StatsManager;
  */
 public class InitialisationManager {
 	
+	// The controlling model.
+	private Model model;
+	
 	// The initialisation operator.
 	private Initialiser initialiser;
 	
@@ -108,9 +110,11 @@ public class InitialisationManager {
 	 * 				other control parameters.
 	 * @see Initialiser
 	 */
-	public InitialisationManager() {
+	public InitialisationManager(Model model) {
+		this.model = model;
+		
 		// Configure parameters from the model.
-		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
 			public void onConfigure() {
 				configure();
@@ -122,8 +126,6 @@ public class InitialisationManager {
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
-		Model model = Controller.getModel();
-		
 		initialiser = model.getInitialiser();
 	}
 	
@@ -141,15 +143,15 @@ public class InitialisationManager {
 	 */
 	public List<CandidateProgram> initialise() {
 		// Trigger life cycle events for both generation and initialisation.
-		LifeCycleManager.getLifeCycleManager().onConfigure();
-		LifeCycleManager.getLifeCycleManager().onGenerationStart();
-		LifeCycleManager.getLifeCycleManager().onInitialisationStart();
+		model.getLifeCycleManager().onConfigure();
+		model.getLifeCycleManager().onGenerationStart();
+		model.getLifeCycleManager().onInitialisationStart();
 		
 		// Record the start time.
 		final long startTime = System.nanoTime();
 		
 		// Record the generation number as zero in the stats data.
-		StatsManager.getStatsManager().addGenerationData(GEN_NUMBER, 0);
+		model.getStatsManager().addGenerationData(GEN_NUMBER, 0);
 
 		// Reset the number of reversions.
 		reversions = 0;
@@ -160,8 +162,8 @@ public class InitialisationManager {
 			pop = initialiser.getInitialPopulation();
 			
 			// Allow life cycle manager to confirm or modify. (init has final say).
-			pop = LifeCycleManager.getLifeCycleManager().onGeneration(pop);
-			pop = LifeCycleManager.getLifeCycleManager().onInitialisation(pop);
+			pop = model.getLifeCycleManager().onGeneration(pop);
+			pop = model.getLifeCycleManager().onInitialisation(pop);
 			
 			// If reverted then increment reversion count.
 			if (pop == null) {
@@ -170,13 +172,13 @@ public class InitialisationManager {
 		} while(pop == null);
 		
 		// Store the stats data from the initialisation.
-		StatsManager.getStatsManager().addGenerationData(INIT_REVERSIONS, reversions);
-		StatsManager.getStatsManager().addGenerationData(GEN_POPULATION, pop);
-		StatsManager.getStatsManager().addGenerationData(GEN_TIME, (System.nanoTime() - startTime));
+		model.getStatsManager().addGenerationData(INIT_REVERSIONS, reversions);
+		model.getStatsManager().addGenerationData(GEN_POPULATION, pop);
+		model.getStatsManager().addGenerationData(GEN_TIME, (System.nanoTime() - startTime));
 		
 		// Trigger life cycle events for end of initialisation and generation 0.
-		LifeCycleManager.getLifeCycleManager().onInitialisationEnd();
-		LifeCycleManager.getLifeCycleManager().onGenerationEnd();
+		model.getLifeCycleManager().onInitialisationEnd();
+		model.getLifeCycleManager().onGenerationEnd();
 		
 		return pop;
 	}

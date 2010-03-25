@@ -21,8 +21,7 @@
  */
 package org.epochx.gp.op.mutation;
 
-import org.epochx.core.Controller;
-import org.epochx.gp.model.GPModel;
+import org.epochx.gp.model.GPAbstractModel;
 import org.epochx.gp.op.init.GrowInitialiser;
 import org.epochx.gp.representation.*;
 import org.epochx.life.*;
@@ -38,6 +37,9 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class SubtreeMutation implements GPMutation {
 
+	// The controlling model.
+	private GPAbstractModel model;
+	
 	// The maximum depth of the new subtree.
 	private int maxSubtreeDepth;
 	
@@ -53,9 +55,9 @@ public class SubtreeMutation implements GPMutation {
 	 * @param model The controlling model which provides any configuration 
 	 * parameters for the run.
 	 */
-	public SubtreeMutation() {
+	public SubtreeMutation(GPAbstractModel model) {
 		// 4 is a slightly arbitrary choice but we had to choose something.
-		this(4);
+		this(model, 4);
 	}
 	
 	/**
@@ -66,13 +68,14 @@ public class SubtreeMutation implements GPMutation {
 	 * parameters for the run.
 	 * @param maxSubtreeDepth The maximum depth of the inserted subtree.
 	 */
-	public SubtreeMutation(int maxSubtreeDepth) {
+	public SubtreeMutation(GPAbstractModel model, int maxSubtreeDepth) {
+		this.model = model;
 		this.maxSubtreeDepth = maxSubtreeDepth;
 		
-		grower = new GrowInitialiser();
+		grower = new GrowInitialiser(model);
 		
 		// Configure parameters from the model.
-		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
 			public void onConfigure() {
 				configure();
@@ -84,8 +87,6 @@ public class SubtreeMutation implements GPMutation {
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
-		GPModel model = (GPModel) Controller.getModel();
-		
 		rng = model.getRNG();
 	}
 	

@@ -21,9 +21,8 @@
  */
 package org.epochx.ge.op.mutation;
 
-import org.epochx.core.Controller;
 import org.epochx.ge.codon.CodonGenerator;
-import org.epochx.ge.model.GEModel;
+import org.epochx.ge.model.GEAbstractModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
@@ -39,6 +38,9 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class PointMutation implements GEMutation {
 
+	// The controlling model.
+	private GEAbstractModel model;
+	
 	// The probability each codon has of being mutated in a selected program.
 	private double pointProbability;
 	
@@ -53,8 +55,8 @@ public class PointMutation implements GEMutation {
 	 * @param model The current controlling model. Parameters such as the codon
 	 * 				generator to use will come from here.
 	 */
-	public PointMutation() {
-		this(0.01);
+	public PointMutation(GEAbstractModel model) {
+		this(model, 0.01);
 	}
 	
 	/**
@@ -67,11 +69,12 @@ public class PointMutation implements GEMutation {
 	 * 				being changed, and 0.0 would mean no nodes were changed. A 
 	 * 				typical value would be 0.01.
 	 */
-	public PointMutation(double pointProbability) {
+	public PointMutation(GEAbstractModel model, double pointProbability) {
+		this.model = model;
 		this.pointProbability = pointProbability;
 		
 		// Configure parameters from the model.
-		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
 			public void onConfigure() {
 				configure();
@@ -83,8 +86,6 @@ public class PointMutation implements GEMutation {
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
-		GEModel model = (GEModel) Controller.getModel();
-		
 		rng = model.getRNG();
 		codonGenerator = model.getCodonGenerator();
 	}

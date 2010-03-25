@@ -23,7 +23,7 @@ package org.epochx.ge.mapper;
 
 import java.util.*;
 
-import org.epochx.ge.model.GEModel;
+import org.epochx.ge.model.GEAbstractModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.tools.grammar.*;
 
@@ -38,7 +38,8 @@ import org.epochx.tools.grammar.*;
  */
 public class BreadthFirstMapper implements Mapper {
 
-	private GEModel model;
+	// The controlling model.
+	private GEAbstractModel model;
 	
 	private List<GrammarNode> symbols;
 	
@@ -60,7 +61,7 @@ public class BreadthFirstMapper implements Mapper {
 	 * @param model the controlling model providing configuration details such 
 	 * 				as the Grammar.
 	 */
-	public BreadthFirstMapper(GEModel model) {
+	public BreadthFirstMapper(GEAbstractModel model) {
 		this.model = model;
 		
 		// Default to extending.

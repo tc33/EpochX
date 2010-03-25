@@ -19,22 +19,44 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.model;
+package org.epochx.core;
 
+import org.epochx.life.LifeCycleManager;
 import org.epochx.op.*;
 import org.epochx.op.selection.*;
-import org.epochx.stats.StatsEngine;
+import org.epochx.representation.CandidateProgram;
+import org.epochx.stats.*;
 import org.epochx.tools.random.*;
 
 /**
- * Default implementation of a <code>Model</code>. This class provides sensible
- * defaults where possible and provides convenient setter methods to allow 
- * overwriting the defaults without having to override the accessor methods.
- * It would be more typical to extend the abstract model specific to the 
- * representation being used.
+ * Implementations of <code>Model</code> define a configuration for a set of 
+ * evolutionary runs. Instances of model provide a set of components, control
+ * parameters, settings for the framework and the fitness function against 
+ * which all programs will be evaluated.
+ * 
+ * <p>
+ * It is rarely necessary to implement this interface directly, it is normally 
+ * more convenient to extend <code>AbstractModel</code> or more usually a 
+ * representation specific abstract model.
+ * 
+ * Prior to calling the <code>run</code> method it is typical to arrange for 
+ * some form of output to be generated each generation, each run or even each 
+ * crossover or mutation. A wide range of statistics are 
+ * available from the {@link StatsManager}. A listener model is employed 
+ * through the {@link LifeCycleManager} to allow events such as a generation 
+ * starting, or crossover being carried out, to be handled and responded to. 
+ * This is commonly combined with the <code>StatsManager</code> to output 
+ * statistics each generation or run.
+ * 
+ * @see AbstractModel
  */
-public abstract class AbstractModel implements Model {
+public abstract class Model implements Runnable {
 
+	// Components.
+	private LifeCycleManager life;
+	private StatsManager stats;
+	private RunManager run;
+	
 	// Run parameters.
 	private int noRuns;
 	private int noGenerations;
@@ -46,7 +68,7 @@ public abstract class AbstractModel implements Model {
 	private double crossoverProbability;
 	private double mutationProbability;
 	
-	// Components.
+	// Operators.
 	private PoolSelector poolSelector;
 	private ProgramSelector programSelector;
 	private RandomNumberGenerator randomNumberGenerator;
@@ -60,7 +82,12 @@ public abstract class AbstractModel implements Model {
 	/**
 	 * Construct the model with defaults.
 	 */
-	public AbstractModel() {
+	public Model() {
+		// Components.
+		life = new LifeCycleManager();
+		stats = new StatsManager(this);
+		run = new RunManager(this);
+		
 		// Control parameters.
 		noRuns = 1;
 		noGenerations = 50;
@@ -71,26 +98,96 @@ public abstract class AbstractModel implements Model {
 		crossoverProbability = 0.9;
 		mutationProbability = 0.1;
 		
-		// Components.
-		programSelector = new RandomSelector();
-		poolSelector = new TournamentSelector(7);
+		// Operators.
+		programSelector = new RandomSelector(this);
+		poolSelector = new TournamentSelector(this, 7);
 		randomNumberGenerator = new MersenneTwisterFast();
 		
 		// Caching.
 		cacheFitness = true;
 		
 		// Stats.
-		statsEngine = new StatsEngine();
+		statsEngine = new StatsEngine(this);
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * Call this method directly to run this model sequentially, or pass into 
+	 * a new thread object and call the start() method to run this model in a 
+	 * new thread.
+	 */
+	public void run() {		
+		// Fire config event.
+		life.onConfigure();
+		
+		// Set the stats engine straight away so it can be used.
+		stats.setStatsEngine(getStatsEngine());
+		
+		// Execute all the runs.
+		for (int i=0; i<getNoRuns(); i++) {
+			run.run(i);
+		}
+	}
+	
+	
+
+	public LifeCycleManager getLifeCycleManager() {
+		return life;
+	}
+
+	public StatsManager getStatsManager() {
+		return stats;
+	}
+
+	public RunManager getRunManager() {
+		return run;
+	}
+	
+	/**
+	 * Specifies the component to be used to generate an initial population.
+	 * 
+	 * @return the <code>Initialiser</code> to be responsible for generating 
+	 * the initial population of the runs.
+	 */
+	public abstract Initialiser getInitialiser();
+	
+	/**
+	 * Specifies the component to perform the crossover operation.
+	 * 
+	 * @return the <code>Crossover</code> to perform the exchange of genetic 
+	 * material between two programs.
+	 */
+	public abstract Crossover getCrossover();
+	
+	/**
+	 * Specifies the component to perform the mutation operation.
+	 * 
+	 * @return the <code>Mutation</code> that will carry out
+	 * the mutation of a program.
+	 */
+	public abstract Mutation getMutation();
+	
+	/**
+	 * Calculates a fitness score of a program. In EpochX fitness is minimised 
+	 * so a fitness score of 0.1 is better than 0.2. It is essential that this 
+	 * method is implemented to provide a measure of how good the given program
+	 * solution is.
+	 * 
+	 * @param program the candidate program to be evaluated.
+	 * @return a fitness score for the program given as a parameter.
+	 */
+	public abstract double getFitness(CandidateProgram program);
+
+	/**
+	 * Specifies whether fitness caching should be used to increase 
+	 * performance. Fitness caching should be used for most problems but if the
+	 * same source code can be designated different fitness scores (due to the
+	 * fitness being dependent upon other properties) then fitness caching 
+	 * should be disabled.
 	 * 
 	 * <p>Defaults to true in AbstractModel.
 	 * 
-	 * @return {@inheritDoc}
+	 * @return true if fitness caching should be used, false otherwise.
 	 */
-	@Override
 	public boolean cacheFitness() {
 		return cacheFitness;
 	}
@@ -111,7 +208,6 @@ public abstract class AbstractModel implements Model {
 	 * 
 	 * @return {@inheritDoc}
 	 */
-	@Override
 	public int getNoRuns() {
 		return noRuns;
 	}
@@ -132,7 +228,6 @@ public abstract class AbstractModel implements Model {
 	 * 
 	 * @return {@inheritDoc}
 	 */
-	@Override
 	public int getNoGenerations() {
 		return noGenerations;
 	}
@@ -153,7 +248,6 @@ public abstract class AbstractModel implements Model {
 	 * 
 	 * @return {@inheritDoc}
 	 */
-	@Override
 	public int getPopulationSize() {
 		return populationSize;
 	}
@@ -175,7 +269,6 @@ public abstract class AbstractModel implements Model {
 	 * 
 	 * @return {@inheritDoc}
 	 */
-	@Override
 	public int getPoolSize() {
 		return poolSize;
 	}
@@ -196,7 +289,6 @@ public abstract class AbstractModel implements Model {
 	 * 
 	 * @return {@inheritDoc}
 	 */
-	@Override
 	public int getNoElites() {
 		return noElites;
 	}
@@ -219,7 +311,6 @@ public abstract class AbstractModel implements Model {
 	 * 
 	 * @return {@inheritDoc}
 	 */
-	@Override
 	public double getCrossoverProbability() {
 		return crossoverProbability;
 	}
@@ -240,7 +331,6 @@ public abstract class AbstractModel implements Model {
 	 * 
 	 * @return {@inheritDoc}
 	 */
-	@Override
 	public double getMutationProbability() {
 		return mutationProbability;
 	}
@@ -263,7 +353,6 @@ public abstract class AbstractModel implements Model {
 	 * 
 	 * @return {@inheritDoc}
 	 */
-	@Override
 	public double getReproductionProbability() {
 		return 1.0 - (getCrossoverProbability() + getMutationProbability());
 	}
@@ -275,7 +364,6 @@ public abstract class AbstractModel implements Model {
 	 * 
 	 * @return {@inheritDoc}
 	 */
-	@Override
 	public double getTerminationFitness() {
 		return terminationFitness;
 	}
@@ -297,7 +385,6 @@ public abstract class AbstractModel implements Model {
 	 * 
 	 * @return {@inheritDoc}
 	 */
-	@Override
 	public ProgramSelector getProgramSelector() {
 		return programSelector;
 	}
@@ -321,7 +408,6 @@ public abstract class AbstractModel implements Model {
 	 * 
 	 * @return {@inheritDoc}
 	 */
-	@Override
 	public PoolSelector getPoolSelector() {
 		return poolSelector;
 	}
@@ -343,7 +429,6 @@ public abstract class AbstractModel implements Model {
 	 * 
 	 * @return {@inheritDoc}
 	 */
-	@Override
 	public RandomNumberGenerator getRNG() {
 		return randomNumberGenerator;
 	}
@@ -366,7 +451,6 @@ public abstract class AbstractModel implements Model {
 	 * 
 	 * @return {@inheritDoc}
 	 */
-	@Override
 	public StatsEngine getStatsEngine() {
 		return statsEngine;
 	}

@@ -23,7 +23,7 @@ package org.epochx.ge.representation;
 
 import java.util.*;
 
-import org.epochx.ge.model.GEModel;
+import org.epochx.ge.model.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.*;
 
@@ -46,7 +46,7 @@ import org.epochx.tools.grammar.*;
 public class GECandidateProgram extends CandidateProgram {
 
 	// The controlling model.
-	private GEModel model;
+	private GEAbstractModel model;
 	
 	// The genotype. For caching to work, it must be impossible to gain direct access to this list.
 	private List<Integer> codons;
@@ -69,7 +69,7 @@ public class GECandidateProgram extends CandidateProgram {
 	 * @param model the controlling model which provides the configuration 
 	 * 				parameters for the run. 				
 	 */
-	public GECandidateProgram(GEModel model) {
+	public GECandidateProgram(GEAbstractModel model) {
 		this(new ArrayList<Integer>(), model);
 	}
 	
@@ -81,7 +81,7 @@ public class GECandidateProgram extends CandidateProgram {
 	 * @param model the controlling model which provides the configuration 
 	 * 				parameters for the run. 				
 	 */
-	public GECandidateProgram(List<Integer> codons, GEModel model) {
+	public GECandidateProgram(List<Integer> codons, GEAbstractModel model) {
 		this.codons = codons;
 		this.model = model;
 		

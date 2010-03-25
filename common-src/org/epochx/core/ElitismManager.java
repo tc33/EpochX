@@ -24,7 +24,6 @@ package org.epochx.core;
 import java.util.*;
 
 import org.epochx.life.*;
-import org.epochx.model.Model;
 import org.epochx.representation.CandidateProgram;
 
 /**
@@ -69,6 +68,9 @@ import org.epochx.representation.CandidateProgram;
  */
 public class ElitismManager {
 
+	// The controlling model.
+	private Model model;
+	
 	// The number of elites to be used.
 	private int noElites;
 	
@@ -79,9 +81,11 @@ public class ElitismManager {
 	 * @param model the Model which defines the run parameters such as number
 	 * 				of elites to use.
 	 */
-	public ElitismManager() {
+	public ElitismManager(Model model) {
+		this.model = model;
+		
 		// Configure parameters from the model.
-		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
 			public void onConfigure() {
 				configure();
@@ -93,8 +97,6 @@ public class ElitismManager {
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
-		Model model = Controller.getModel();
-		
 		// Discover how many elites we need.
 		noElites = model.getNoElites();
 		int popSize = model.getPopulationSize();
@@ -123,7 +125,7 @@ public class ElitismManager {
 	 * 		   contain all CandidatePrograms from the population sorted.
 	 */
 	public List<CandidateProgram> elitism(final List<CandidateProgram> pop) {
-		LifeCycleManager.getLifeCycleManager().onElitismStart();
+		model.getLifeCycleManager().onElitismStart();
 		
 		// Construct an array for elites.
 		List<CandidateProgram> elites;
@@ -137,9 +139,9 @@ public class ElitismManager {
 		}
 		
 		// Allow life cycle listener to confirm or modify.
-		elites = LifeCycleManager.getLifeCycleManager().onElitism(elites);
+		elites = model.getLifeCycleManager().onElitism(elites);
 		
-		LifeCycleManager.getLifeCycleManager().onElitismEnd();
+		model.getLifeCycleManager().onElitismEnd();
 		
 		return elites;
 	}

@@ -23,8 +23,7 @@ package org.epochx.gp.op.init;
 
 import java.util.*;
 
-import org.epochx.core.Controller;
-import org.epochx.gp.model.GPModel;
+import org.epochx.gp.model.GPAbstractModel;
 import org.epochx.gp.representation.*;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
@@ -37,8 +36,8 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class GrowInitialiser implements GPInitialiser {
 	
-	// The current controlling model.
-	private GPModel model;
+	// The controlling model.
+	private GPAbstractModel model;
 	
 	private List<Node> syntax;
 	private List<Node> terminals;
@@ -55,12 +54,14 @@ public class GrowInitialiser implements GPInitialiser {
 	 * @param model The current controlling model. Run parameters such as the 
 	 * population size will be obtained from this.
 	 */
-	public GrowInitialiser() {
+	public GrowInitialiser(GPAbstractModel model) {
+		this.model = model;
+		
 		terminals = new ArrayList<Node>();
 		functions = new ArrayList<Node>();
 		
 		// Configure parameters from the model.
-		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
 			public void onConfigure() {
 				configure();
@@ -72,8 +73,6 @@ public class GrowInitialiser implements GPInitialiser {
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
-		model = (GPModel) Controller.getModel();
-		
 		rng = model.getRNG();
 		popSize = model.getPopulationSize();
 		maxInitialDepth = model.getInitialMaxDepth();

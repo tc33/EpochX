@@ -23,9 +23,8 @@ package org.epochx.op.selection;
 
 import java.util.*;
 
-import org.epochx.core.Controller;
+import org.epochx.core.Model;
 import org.epochx.life.*;
-import org.epochx.model.Model;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
@@ -37,14 +36,19 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class RandomSelector implements ProgramSelector, PoolSelector {
 	
+	// The controlling model.
+	private Model model;
+	
 	private RandomNumberGenerator rng;
 	
 	// The current population from which programs should be chosen.
 	private List<CandidateProgram> pop;
 	
-	public RandomSelector() {
+	public RandomSelector(Model model) {
+		this.model = model;
+		
 		// Configure parameters from the model.
-		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
 			public void onConfigure() {
 				configure();
@@ -56,8 +60,6 @@ public class RandomSelector implements ProgramSelector, PoolSelector {
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
-		Model model = Controller.getModel();
-		
 		rng = model.getRNG();
 	}
 	

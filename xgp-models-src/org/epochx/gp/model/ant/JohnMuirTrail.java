@@ -25,7 +25,6 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-import org.epochx.core.Controller;
 import org.epochx.gp.model.GPAbstractModel;
 import org.epochx.gp.representation.*;
 import org.epochx.gp.representation.ant.*;
@@ -112,10 +111,5 @@ public class JohnMuirTrail extends GPAbstractModel {
 	
 	public AntLandscape getAntLandScape() {
 		return landscape;
-	}
-	
-	public static void main(String[] args) {
-		GPAbstractModel model = new JohnMuirTrail();
-		Controller.run(model);
 	}
 }

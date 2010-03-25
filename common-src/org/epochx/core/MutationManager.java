@@ -24,7 +24,6 @@ package org.epochx.core;
 import static org.epochx.stats.StatField.*;
 
 import org.epochx.life.*;
-import org.epochx.model.Model;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.StatsManager;
@@ -72,6 +71,9 @@ import org.epochx.stats.StatsManager;
  */
 public class MutationManager {
 	
+	// The controlling model.
+	private Model model;
+	
 	// The selector for choosing the individual to mutate.
 	private ProgramSelector programSelector;
 	
@@ -92,9 +94,11 @@ public class MutationManager {
 	 * 				an individual in the population.
 	 * @see Mutation
 	 */
-	public MutationManager() {
+	public MutationManager(Model model) {
+		this.model = model;
+		
 		// Configure parameters from the model.
-		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
 			public void onConfigure() {
 				configure();
@@ -106,8 +110,6 @@ public class MutationManager {
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
-		Model model = Controller.getModel();
-		
 		programSelector = model.getProgramSelector();
 		mutator = model.getMutation();
 	}
@@ -124,7 +126,7 @@ public class MutationManager {
 	 *         the original selected program before mutation will be returned.
 	 */
 	public CandidateProgram mutate() {
-		LifeCycleManager.getLifeCycleManager().onMutationStart();
+		model.getLifeCycleManager().onMutationStart();
 		
 		final long crossoverStartTime = System.nanoTime();
 		
@@ -149,7 +151,7 @@ public class MutationManager {
 			}
 
 			// Allow the life cycle listener to confirm or modify.
-			child = LifeCycleManager.getLifeCycleManager().onMutation(parent, child);
+			child = model.getLifeCycleManager().onMutation(parent, child);
 			
 			if (child == null) {
 				reversions++;
@@ -159,12 +161,12 @@ public class MutationManager {
 		final long runtime = System.nanoTime() - crossoverStartTime;
 		
 		// Store the stats from the mutation.
-		StatsManager.getStatsManager().addMutationData(MUTATION_PROGRAM_BEFORE, parent);
-		StatsManager.getStatsManager().addMutationData(MUTATION_PROGRAM_AFTER, child);
-		StatsManager.getStatsManager().addMutationData(MUTATION_TIME, runtime);
-		StatsManager.getStatsManager().addMutationData(MUTATION_REVERSIONS, reversions);
+		model.getStatsManager().addMutationData(MUTATION_PROGRAM_BEFORE, parent);
+		model.getStatsManager().addMutationData(MUTATION_PROGRAM_AFTER, child);
+		model.getStatsManager().addMutationData(MUTATION_TIME, runtime);
+		model.getStatsManager().addMutationData(MUTATION_REVERSIONS, reversions);
 		
-		LifeCycleManager.getLifeCycleManager().onMutationEnd();
+		model.getLifeCycleManager().onMutationEnd();
 		
 		return child;
 	}

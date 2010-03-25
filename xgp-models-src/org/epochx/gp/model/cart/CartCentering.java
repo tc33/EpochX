@@ -41,7 +41,6 @@ package org.epochx.gp.model.cart;
 
 import java.util.*;
 
-import org.epochx.core.Controller;
 import org.epochx.gp.model.GPAbstractModel;
 import org.epochx.gp.op.crossover.UniformPointCrossover;
 import org.epochx.gp.op.mutation.PointMutation;
@@ -178,7 +177,7 @@ public class CartCentering extends GPAbstractModel {
 		return ((double) totalTime) / 1000;
 	}
 	
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		GPAbstractModel model = new CartCentering();
 		
 		model.setPopulationSize(500);
@@ -195,7 +194,7 @@ public class CartCentering extends GPAbstractModel {
 		model.setMutator(new PointMutation(0.1));
 		
 		Controller.run(model);
-	}
+	}*/
 	
 	private double solution(double x, double v) {
 		if ((-1.0*x) > (v*Math.abs(v))) {

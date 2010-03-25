@@ -21,10 +21,9 @@
  */
 package org.epochx.gp.op.crossover;
 
-import org.epochx.core.Controller;
+import org.epochx.gp.model.GPAbstractModel;
 import org.epochx.gp.representation.*;
-import org.epochx.life.*;
-import org.epochx.model.Model;
+import org.epochx.life.ConfigAdapter;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
 
@@ -40,6 +39,9 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class KozaCrossover implements GPCrossover {
 	
+	// The controlling model.
+	private GPAbstractModel model;
+	
 	// The probability of choosing a function node as the swap point.
 	private double functionSwapProbability;
 	
@@ -50,8 +52,8 @@ public class KozaCrossover implements GPCrossover {
 	 * Default constructor for Koza standard crossover. The probability of a 
 	 * function node being selected as the swap point will default to 90%.
 	 */
-	public KozaCrossover() {
-		this(0.9);
+	public KozaCrossover(GPAbstractModel model) {
+		this(model, 0.9);
 	}
 	
 	/**
@@ -60,11 +62,12 @@ public class KozaCrossover implements GPCrossover {
 	 * @param functionSwapProbability The probability of crossover operations 
 	 * 								  choosing a function node as the swap point.
 	 */
-	public KozaCrossover(double functionSwapProbability) {
+	public KozaCrossover(GPAbstractModel model, double functionSwapProbability) {
+		this.model = model;
 		this.functionSwapProbability = functionSwapProbability;
 
 		// Configure parameters from the model.
-		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
 			public void onConfigure() {
 				configure();
@@ -76,8 +79,6 @@ public class KozaCrossover implements GPCrossover {
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
-		Model model = Controller.getModel();
-		
 		rng = model.getRNG();
 	}
 	

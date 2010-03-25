@@ -21,15 +21,14 @@
  */
 package org.epochx.gp.model;
 
-import org.epochx.gp.op.crossover.GPCrossover;
-import org.epochx.gp.op.crossover.UniformPointCrossover;
-import org.epochx.gp.op.init.FullInitialiser;
-import org.epochx.gp.op.init.GPInitialiser;
-import org.epochx.gp.op.mutation.GPMutation;
-import org.epochx.gp.op.mutation.SubtreeMutation;
-import org.epochx.gp.representation.GPCandidateProgram;
+import java.util.List;
+
+import org.epochx.core.Model;
+import org.epochx.gp.op.crossover.*;
+import org.epochx.gp.op.init.*;
+import org.epochx.gp.op.mutation.*;
+import org.epochx.gp.representation.*;
 import org.epochx.gp.stats.GPStatsEngine;
-import org.epochx.model.AbstractModel;
 
 
 /**
@@ -46,7 +45,7 @@ import org.epochx.model.AbstractModel;
  * 
  * @see GPModel
  */
-public abstract class GPAbstractModel extends AbstractModel implements GPModel {
+public abstract class GPAbstractModel extends Model {
 
 	private int maxInitialDepth;
 	private int maxProgramDepth;
@@ -55,6 +54,8 @@ public abstract class GPAbstractModel extends AbstractModel implements GPModel {
 	private GPInitialiser initialiser;
 	private GPCrossover crossover;
 	private GPMutation mutator;
+	
+	private List<Node> syntax;
 	
 	/**
 	 * Construct a GPModel with a set of sensible defaults. See the appropriate
@@ -66,12 +67,12 @@ public abstract class GPAbstractModel extends AbstractModel implements GPModel {
 		maxProgramDepth = 17;
 		
 		// Initialise components.
-		initialiser = new FullInitialiser();
-		crossover = new UniformPointCrossover();
-		mutator = new SubtreeMutation();
+		initialiser = new FullInitialiser(this);
+		crossover = new UniformPointCrossover(this);
+		mutator = new SubtreeMutation(this);
 		
 		// Stats - overwrite parent default.
-		setStatsEngine(new GPStatsEngine());
+		setStatsEngine(new GPStatsEngine(this));
 	}
 
 	/**
@@ -145,7 +146,6 @@ public abstract class GPAbstractModel extends AbstractModel implements GPModel {
 	 * 
 	 * @return {@inheritDoc}
 	 */
-	@Override
 	public int getInitialMaxDepth() {
 		return maxInitialDepth;
 	}
@@ -168,7 +168,6 @@ public abstract class GPAbstractModel extends AbstractModel implements GPModel {
 	 * 
 	 * @return {@inheritDoc}
 	 */
-	@Override
 	public int getMaxProgramDepth() {
 		return maxProgramDepth;
 	}
@@ -183,7 +182,21 @@ public abstract class GPAbstractModel extends AbstractModel implements GPModel {
 		this.maxProgramDepth = maxDepth;
 	}
 	
+	/**
+	 * Retrieves the full set of syntax, that is terminals AND function nodes.
+	 * 
+	 * @return the full syntax for use in building node trees.
+	 */
+	public List<Node> getSyntax() {
+		return syntax;
+	}
 	
+	/**
+	 * 
+	 */
+	public void setSyntax(List<Node> syntax) {
+		this.syntax = syntax;
+	}
 	
 	/**
 	 * Default implementation which accepts all crossovers.

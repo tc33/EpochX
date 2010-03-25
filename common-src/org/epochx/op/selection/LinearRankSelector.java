@@ -23,9 +23,8 @@ package org.epochx.op.selection;
 
 import java.util.*;
 
-import org.epochx.core.Controller;
+import org.epochx.core.Model;
 import org.epochx.life.*;
-import org.epochx.model.Model;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
@@ -37,6 +36,9 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * linear fashion with a gradient as given at construction.
  */
 public class LinearRankSelector implements ProgramSelector, PoolSelector {
+	
+	// The controlling model.
+	private Model model;
 	
 	private RandomNumberGenerator rng;
 	
@@ -51,11 +53,12 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector {
 	// The gradient of the linear probabilities.
 	private double gradient;
 	
-	public LinearRankSelector(double gradient) {
+	public LinearRankSelector(Model model, double gradient) {
+		this.model = model;
 		setGradient(gradient);
 		
 		// Configure parameters from the model.
-		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
 			public void onConfigure() {
 				configure();
@@ -67,8 +70,6 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector {
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
-		Model model = Controller.getModel();
-		
 		rng = model.getRNG();
 	}
 	
@@ -149,7 +150,7 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector {
 			return pop;
 		}
 		
-		ProgramSelector programSelector = new LinearRankSelector(gradient);
+		ProgramSelector programSelector = new LinearRankSelector(model, gradient);
 		programSelector.setSelectionPool(pop);
 		List<CandidateProgram> pool = new ArrayList<CandidateProgram>();
 		

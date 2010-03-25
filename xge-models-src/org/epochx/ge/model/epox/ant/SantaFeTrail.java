@@ -24,7 +24,6 @@ package org.epochx.ge.model.epox.ant;
 import java.awt.*;
 import java.util.*;
 
-import org.epochx.core.Controller;
 import org.epochx.ge.model.GEAbstractModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.gp.representation.FunctionParser;
@@ -118,9 +117,5 @@ public class SantaFeTrail extends GEAbstractModel {
 	@Override
 	public Grammar getGrammar() {
 		return grammar;
-	}
-	
-	public static void main(String[] args) {
-		Controller.run(new SantaFeTrail());
 	}
 }

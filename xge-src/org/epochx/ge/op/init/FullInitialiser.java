@@ -23,8 +23,7 @@ package org.epochx.ge.op.init;
 
 import java.util.*;
 
-import org.epochx.core.Controller;
-import org.epochx.ge.model.GEModel;
+import org.epochx.ge.model.GEAbstractModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
@@ -41,8 +40,8 @@ public class FullInitialiser implements GEInitialiser {
 	 * TODO This constructs the chromosome using depth first mapping - what about others?
 	 */
 	
-	// The current controlling model.
-	private GEModel model;
+	// The controlling model.
+	private GEAbstractModel model;
 	
 	private RandomNumberGenerator rng;
 	private Grammar grammar;
@@ -55,9 +54,11 @@ public class FullInitialiser implements GEInitialiser {
 	 * 
 	 * @param model
 	 */
-	public FullInitialiser() {
+	public FullInitialiser(GEAbstractModel model) {
+		this.model = model;
+		
 		// Configure parameters from the model.
-		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
 			public void onConfigure() {
 				configure();
@@ -69,8 +70,6 @@ public class FullInitialiser implements GEInitialiser {
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
-		model = (GEModel) Controller.getModel();
-		
 		rng = model.getRNG();
 		grammar = model.getGrammar();
 		popSize = model.getPopulationSize();

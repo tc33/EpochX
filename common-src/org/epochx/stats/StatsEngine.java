@@ -25,10 +25,18 @@ import static org.epochx.stats.StatField.*;
 
 import java.util.List;
 
+import org.epochx.core.Model;
 import org.epochx.representation.CandidateProgram;
 
 public class StatsEngine {
 
+	// The controlling model.
+	private Model model;
+	
+	public StatsEngine(Model model) {
+		this.model = model;
+	}
+	
 	public Object getRunStat(String field) {
 		return null;
 	}
@@ -69,7 +77,7 @@ public class StatsEngine {
 		double[] fitnesses = null;
 		
 		// Request the population from the stats manager.
-		List<CandidateProgram> pop = (List<CandidateProgram>) StatsManager.getStatsManager().getGenerationStat(GEN_POPULATION);
+		List<CandidateProgram> pop = (List<CandidateProgram>) model.getStatsManager().getGenerationStat(GEN_POPULATION);
 		
 		if (pop != null) {
 			fitnesses = new double[pop.size()];
@@ -86,7 +94,7 @@ public class StatsEngine {
 		Double minFitness = null;
 		
 		// Request the population from the stats manager.
-		double[] fitnesses = (double[]) StatsManager.getStatsManager().getGenerationStat(GEN_FITNESSES);
+		double[] fitnesses = (double[]) model.getStatsManager().getGenerationStat(GEN_FITNESSES);
 		
 		// 
 		if (fitnesses != null) {
@@ -100,7 +108,7 @@ public class StatsEngine {
 		Double maxFitness = null;
 		
 		// Request the population from the stats manager.
-		double[] fitnesses = (double[]) StatsManager.getStatsManager().getGenerationStat(GEN_FITNESSES);
+		double[] fitnesses = (double[]) model.getStatsManager().getGenerationStat(GEN_FITNESSES);
 		
 		// 
 		if (fitnesses != null) {
@@ -114,7 +122,7 @@ public class StatsEngine {
 		Double aveFitness = null;
 		
 		// Request the population from the stats manager.
-		double[] fitnesses = (double[]) StatsManager.getStatsManager().getGenerationStat(GEN_FITNESSES);
+		double[] fitnesses = (double[]) model.getStatsManager().getGenerationStat(GEN_FITNESSES);
 		
 		// 
 		if (fitnesses != null) {
@@ -128,8 +136,8 @@ public class StatsEngine {
 		Double stdevFitness = null;
 		
 		// Request the population from the stats manager.
-		double[] fitnesses = (double[]) StatsManager.getStatsManager().getGenerationStat(GEN_FITNESSES);
-		double averageFitness = (Double) StatsManager.getStatsManager().getGenerationStat(GEN_FITNESS_AVE);
+		double[] fitnesses = (double[]) model.getStatsManager().getGenerationStat(GEN_FITNESSES);
+		double averageFitness = (Double) model.getStatsManager().getGenerationStat(GEN_FITNESS_AVE);
 		
 		// 
 		if (fitnesses != null) {
@@ -143,7 +151,7 @@ public class StatsEngine {
 		Double medianFitness = null;
 		
 		// Request the population from the stats manager.
-		double[] fitnesses = (double[]) StatsManager.getStatsManager().getGenerationStat(GEN_FITNESSES);
+		double[] fitnesses = (double[]) model.getStatsManager().getGenerationStat(GEN_FITNESSES);
 		
 		// 
 		if (fitnesses != null) {
@@ -157,8 +165,8 @@ public class StatsEngine {
 		Double ci95Fitness = null;
 		
 		// Request the population from the stats manager.
-		double[] fitnesses = (double[]) StatsManager.getStatsManager().getGenerationStat(GEN_FITNESSES);
-		double stdev = (Double) StatsManager.getStatsManager().getGenerationStat(GEN_FITNESS_STDEV);
+		double[] fitnesses = (double[]) model.getStatsManager().getGenerationStat(GEN_FITNESSES);
+		double stdev = (Double) model.getStatsManager().getGenerationStat(GEN_FITNESS_STDEV);
 		
 		// 
 		if (fitnesses != null) {
@@ -171,8 +179,8 @@ public class StatsEngine {
 	private Object getGenBestProgram() {
 		CandidateProgram bestProgram = null;
 		
-		double[] fitnesses = (double[]) StatsManager.getStatsManager().getGenerationStat(GEN_FITNESSES);
-		List<CandidateProgram> pop = (List<CandidateProgram>) StatsManager.getStatsManager().getGenerationStat(GEN_POPULATION);
+		double[] fitnesses = (double[]) model.getStatsManager().getGenerationStat(GEN_FITNESSES);
+		List<CandidateProgram> pop = (List<CandidateProgram>) model.getStatsManager().getGenerationStat(GEN_POPULATION);
 		
 		if (fitnesses != null) {
 			int bestProgramIndex = StatsUtils.minIndex(fitnesses);

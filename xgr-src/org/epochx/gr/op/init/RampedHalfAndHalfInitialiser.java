@@ -23,8 +23,7 @@ package org.epochx.gr.op.init;
 
 import java.util.*;
 
-import org.epochx.core.Controller;
-import org.epochx.gr.model.GRModel;
+import org.epochx.gr.model.GRAbstractModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
@@ -44,7 +43,7 @@ import org.epochx.tools.grammar.Grammar;
 public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 
 	// The current controlling model.
-	private GRModel model;	
+	private GRAbstractModel model;	
 	
 	private Grammar grammar;
 	private int popSize;
@@ -62,8 +61,8 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 	 * 
 	 * @param model The model being assessed
 	 */
-	public RampedHalfAndHalfInitialiser() {		
-		this(-1);
+	public RampedHalfAndHalfInitialiser(GRAbstractModel model) {		
+		this(model, -1);
 	}
 	
 	/**
@@ -74,15 +73,16 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 	 * ramping up. If a value smaller than the smallest allowable by the 
 	 * grammar is given then this smallest possible value is used.
 	 */
-	public RampedHalfAndHalfInitialiser(int minDepth) {
+	public RampedHalfAndHalfInitialiser(GRAbstractModel model, int minDepth) {
+		this.model = model;
 		this.minDepth = minDepth;
 		
 		// set up the grow and full parts
-		grow = new GrowInitialiser();
-		full = new FullInitialiser();
+		grow = new GrowInitialiser(model);
+		full = new FullInitialiser(model);
 		
 		// Configure parameters from the model.
-		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
 			public void onConfigure() {
 				configure();
@@ -94,8 +94,6 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
-		model = (GRModel) Controller.getModel();
-		
 		grammar = model.getGrammar();
 		popSize = model.getPopulationSize();
 		maxInitialProgramDepth = model.getMaxInitialProgramDepth();

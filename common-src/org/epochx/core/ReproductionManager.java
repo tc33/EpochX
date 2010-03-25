@@ -21,13 +21,11 @@
  */
 package org.epochx.core;
 
+import static org.epochx.stats.StatField.REP_REVERSIONS;
+
 import org.epochx.life.*;
-import org.epochx.model.Model;
 import org.epochx.op.ProgramSelector;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.StatsManager;
-
-import static org.epochx.stats.StatField.*;
 
 /**
  * This component manages the reproduction operation of selecting a program to
@@ -70,6 +68,9 @@ import static org.epochx.stats.StatField.*;
  */
 public class ReproductionManager {
 
+	// The controlling model.
+	private Model model;
+	
 	// Manager of life cycle events.
 	private LifeCycleManager lifeCycle;
 	
@@ -88,9 +89,11 @@ public class ReproductionManager {
 	 * @param model the model which defines the ProgramSelector to use to 
 	 * 				select the program to be reproduced.
 	 */
-	public ReproductionManager() {
+	public ReproductionManager(Model model) {
+		this.model = model;
+		
 		// Configure parameters from the model.
-		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
 			public void onConfigure() {
 				configure();
@@ -102,8 +105,6 @@ public class ReproductionManager {
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
-		Model model = Controller.getModel();
-		
 		programSelector = model.getProgramSelector();
 	}
 	
@@ -115,7 +116,7 @@ public class ReproductionManager {
 	 * @return a CandidateProgram selected for reproduction.
 	 */
 	public CandidateProgram reproduce() {
-		LifeCycleManager.getLifeCycleManager().onReproductionStart();
+		model.getLifeCycleManager().onReproductionStart();
 		
 		CandidateProgram parent = null;
 		
@@ -134,9 +135,9 @@ public class ReproductionManager {
 		} while(parent == null);
 		
 		// Store the stats from the reproduction.
-		StatsManager.getStatsManager().addGenerationData(REP_REVERSIONS, reversions);
+		model.getStatsManager().addGenerationData(REP_REVERSIONS, reversions);
 		
-		LifeCycleManager.getLifeCycleManager().onReproductionEnd();
+		model.getLifeCycleManager().onReproductionEnd();
 		
 		return parent;
 	}

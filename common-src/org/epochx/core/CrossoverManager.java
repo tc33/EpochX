@@ -24,7 +24,6 @@ package org.epochx.core;
 import static org.epochx.stats.StatField.*;
 
 import org.epochx.life.*;
-import org.epochx.model.Model;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.StatsManager;
@@ -71,6 +70,9 @@ import org.epochx.stats.StatsManager;
  * </table>
  */
 public class CrossoverManager {
+
+	// The controlling model.
+	private Model model;
 	
 	// The selector for choosing parents.
 	private ProgramSelector programSelector;
@@ -89,9 +91,11 @@ public class CrossoverManager {
 	 * 
 	 * @see Crossover
 	 */
-	public CrossoverManager() {
+	public CrossoverManager(Model model) {
+		this.model = model;
+		
 		// Configure parameters from the model.
-		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
 			public void onConfigure() {
 				configure();
@@ -103,8 +107,6 @@ public class CrossoverManager {
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
-		Model model = Controller.getModel();
-		
 		programSelector = model.getProgramSelector();
 		crossover = model.getCrossover();
 	}
@@ -136,7 +138,7 @@ public class CrossoverManager {
 	 */
 	public CandidateProgram[] crossover() {
 		// Inform everyone we're about to start crossover.
-		LifeCycleManager.getLifeCycleManager().onCrossoverStart();
+		model.getLifeCycleManager().onCrossoverStart();
 		
 		// Record the start time.
 		final long crossoverStartTime = System.nanoTime();
@@ -170,7 +172,7 @@ public class CrossoverManager {
 			}
 			
 			// Ask life cycle listener to confirm the crossover.
-			children = LifeCycleManager.getLifeCycleManager().onCrossover(parents, children);
+			children = model.getLifeCycleManager().onCrossover(parents, children);
 			
 			// If reverted then increment reversion counter.
 			if (children == null) {
@@ -180,12 +182,12 @@ public class CrossoverManager {
 		
 		final long runtime = System.nanoTime() - crossoverStartTime;
 
-		StatsManager.getStatsManager().addCrossoverData(CROSSOVER_PARENTS, parents);
-		StatsManager.getStatsManager().addCrossoverData(CROSSOVER_CHILDREN, children);
-		StatsManager.getStatsManager().addCrossoverData(CROSSOVER_REVERSIONS, reversions);
-		StatsManager.getStatsManager().addCrossoverData(CROSSOVER_TIME, runtime);
+		model.getStatsManager().addCrossoverData(CROSSOVER_PARENTS, parents);
+		model.getStatsManager().addCrossoverData(CROSSOVER_CHILDREN, children);
+		model.getStatsManager().addCrossoverData(CROSSOVER_REVERSIONS, reversions);
+		model.getStatsManager().addCrossoverData(CROSSOVER_TIME, runtime);
 		
-		LifeCycleManager.getLifeCycleManager().onCrossoverEnd();
+		model.getLifeCycleManager().onCrossoverEnd();
 		
 		return children;
 	}

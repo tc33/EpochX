@@ -26,10 +26,23 @@ import static org.epochx.stats.StatField.GEN_POPULATION;
 
 import java.util.List;
 
+import org.epochx.gp.model.GPAbstractModel;
 import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.stats.*;
 
 public class GPStatsEngine extends StatsEngine {
+
+	// The controlling model.
+	private GPAbstractModel model;
+	
+	/**
+	 * @param model
+	 */
+	public GPStatsEngine(GPAbstractModel model) {
+		super(model);
+		
+		this.model = model;
+	}
 
 	@Override
 	public Object getGenerationStat(String field) {
@@ -108,7 +121,7 @@ public class GPStatsEngine extends StatsEngine {
 		int[] depths = null;
 		
 		// Request the population from the stats manager.
-		List<GPCandidateProgram> pop = (List<GPCandidateProgram>) StatsManager.getStatsManager().getGenerationStat(GEN_POPULATION);
+		List<GPCandidateProgram> pop = (List<GPCandidateProgram>) model.getStatsManager().getGenerationStat(GEN_POPULATION);
 		
 		if (pop != null) {
 			depths = new int[pop.size()];
@@ -125,7 +138,7 @@ public class GPStatsEngine extends StatsEngine {
 		Integer minDepth = null;
 		
 		// Request the population from the stats manager.
-		int[] depths = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_DEPTHS);
+		int[] depths = (int[]) model.getStatsManager().getGenerationStat(GEN_DEPTHS);
 		
 		if (depths != null) {
 			minDepth = StatsUtils.min(depths);
@@ -138,7 +151,7 @@ public class GPStatsEngine extends StatsEngine {
 		Integer maxDepth = null;
 		
 		// Request the population from the stats manager.
-		int[] depths = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_DEPTHS);
+		int[] depths = (int[]) model.getStatsManager().getGenerationStat(GEN_DEPTHS);
 		
 		if (depths != null) {
 			maxDepth = StatsUtils.max(depths);
@@ -151,7 +164,7 @@ public class GPStatsEngine extends StatsEngine {
 		Double aveDepth = null;
 		
 		// Request the population from the stats manager.
-		int[] depths = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_DEPTHS);
+		int[] depths = (int[]) model.getStatsManager().getGenerationStat(GEN_DEPTHS);
 		
 		if (depths != null) {
 			aveDepth = StatsUtils.ave(depths);
@@ -164,7 +177,7 @@ public class GPStatsEngine extends StatsEngine {
 		Double stdevDepth = null;
 		
 		// Request the population from the stats manager.
-		int[] depths = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_DEPTHS);
+		int[] depths = (int[]) model.getStatsManager().getGenerationStat(GEN_DEPTHS);
 		
 		if (depths != null) {
 			stdevDepth = StatsUtils.stdev(depths);
@@ -177,9 +190,9 @@ public class GPStatsEngine extends StatsEngine {
 		double[] aveNodes = null;
 		
 		// Request the population from the stats manager.
-		int[] depths = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_DEPTHS);
-		int maxDepth = (Integer) StatsManager.getStatsManager().getGenerationStat(GEN_DEPTH_MAX);
-		List<GPCandidateProgram> pop = (List<GPCandidateProgram>) StatsManager.getStatsManager().getGenerationStat(GEN_POPULATION);
+		int[] depths = (int[]) model.getStatsManager().getGenerationStat(GEN_DEPTHS);
+		int maxDepth = (Integer) model.getStatsManager().getGenerationStat(GEN_DEPTH_MAX);
+		List<GPCandidateProgram> pop = (List<GPCandidateProgram>) model.getStatsManager().getGenerationStat(GEN_POPULATION);
 		
 		if (depths != null) {
 			// Array to fill with average number of nodes at each depth.
@@ -203,7 +216,7 @@ public class GPStatsEngine extends StatsEngine {
 		int[] lengths = null;
 		
 		// Request the population from the stats manager.
-		List<GPCandidateProgram> pop = (List<GPCandidateProgram>) StatsManager.getStatsManager().getGenerationStat(GEN_POPULATION);
+		List<GPCandidateProgram> pop = (List<GPCandidateProgram>) model.getStatsManager().getGenerationStat(GEN_POPULATION);
 		
 		if (pop != null) {
 			lengths = new int[pop.size()];
@@ -220,7 +233,7 @@ public class GPStatsEngine extends StatsEngine {
 		Integer minLength = null;
 		
 		// Request the population from the stats manager.
-		int[] lengths = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_LENGTHS);
+		int[] lengths = (int[]) model.getStatsManager().getGenerationStat(GEN_LENGTHS);
 		
 		if (lengths != null) {
 			minLength = StatsUtils.min(lengths);
@@ -233,7 +246,7 @@ public class GPStatsEngine extends StatsEngine {
 		Integer maxLength = null;
 		
 		// Request the population from the stats manager.
-		int[] lengths = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_LENGTHS);
+		int[] lengths = (int[]) model.getStatsManager().getGenerationStat(GEN_LENGTHS);
 		
 		if (lengths != null) {
 			maxLength = StatsUtils.max(lengths);
@@ -246,7 +259,7 @@ public class GPStatsEngine extends StatsEngine {
 		Double aveLength = null;
 		
 		// Request the population from the stats manager.
-		int[] lengths = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_LENGTHS);
+		int[] lengths = (int[]) model.getStatsManager().getGenerationStat(GEN_LENGTHS);
 		
 		if (lengths != null) {
 			aveLength = StatsUtils.ave(lengths);
@@ -259,7 +272,7 @@ public class GPStatsEngine extends StatsEngine {
 		Double stdevLength = null;
 		
 		// Request the population from the stats manager.
-		int[] lengths = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_LENGTHS);
+		int[] lengths = (int[]) model.getStatsManager().getGenerationStat(GEN_LENGTHS);
 		
 		if (lengths != null) {
 			stdevLength = StatsUtils.stdev(lengths);
@@ -272,7 +285,7 @@ public class GPStatsEngine extends StatsEngine {
 		int[] noTerminals = null;
 		
 		// Request the population from the stats manager.
-		List<GPCandidateProgram> pop = (List<GPCandidateProgram>) StatsManager.getStatsManager().getGenerationStat(GEN_POPULATION);
+		List<GPCandidateProgram> pop = (List<GPCandidateProgram>) model.getStatsManager().getGenerationStat(GEN_POPULATION);
 		
 		if (pop != null) {
 			noTerminals = new int[pop.size()];
@@ -289,7 +302,7 @@ public class GPStatsEngine extends StatsEngine {
 		Integer minNoTerminals = null;
 		
 		// Request the population from the stats manager.
-		int[] noTerminals = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_NO_TERMINALS);
+		int[] noTerminals = (int[]) model.getStatsManager().getGenerationStat(GEN_NO_TERMINALS);
 		
 		if (noTerminals != null) {
 			minNoTerminals = StatsUtils.min(noTerminals);
@@ -302,7 +315,7 @@ public class GPStatsEngine extends StatsEngine {
 		Integer maxNoTerminals = null;
 		
 		// Request the population from the stats manager.
-		int[] noTerminals = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_NO_TERMINALS);
+		int[] noTerminals = (int[]) model.getStatsManager().getGenerationStat(GEN_NO_TERMINALS);
 		
 		if (noTerminals != null) {
 			maxNoTerminals = StatsUtils.max(noTerminals);
@@ -315,7 +328,7 @@ public class GPStatsEngine extends StatsEngine {
 		Double aveNoTerminals = null;
 		
 		// Request the population from the stats manager.
-		int[] noTerminals = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_NO_TERMINALS);
+		int[] noTerminals = (int[]) model.getStatsManager().getGenerationStat(GEN_NO_TERMINALS);
 		
 		if (noTerminals != null) {
 			aveNoTerminals = StatsUtils.ave(noTerminals);
@@ -328,7 +341,7 @@ public class GPStatsEngine extends StatsEngine {
 		Double stdevNoTerminals = null;
 		
 		// Request the population from the stats manager.
-		int[] noTerminals = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_NO_TERMINALS);
+		int[] noTerminals = (int[]) model.getStatsManager().getGenerationStat(GEN_NO_TERMINALS);
 		
 		if (noTerminals != null) {
 			stdevNoTerminals = StatsUtils.stdev(noTerminals);
@@ -341,7 +354,7 @@ public class GPStatsEngine extends StatsEngine {
 		int[] noDistinctTerminals = null;
 		
 		// Request the population from the stats manager.
-		List<GPCandidateProgram> pop = (List<GPCandidateProgram>) StatsManager.getStatsManager().getGenerationStat(GEN_POPULATION);
+		List<GPCandidateProgram> pop = (List<GPCandidateProgram>) model.getStatsManager().getGenerationStat(GEN_POPULATION);
 		
 		if (pop != null) {
 			noDistinctTerminals = new int[pop.size()];
@@ -358,7 +371,7 @@ public class GPStatsEngine extends StatsEngine {
 		Integer minNoDistinctTerminals = null;
 		
 		// Request the population from the stats manager.
-		int[] noTerminals = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_NO_DISTINCT_TERMINALS);
+		int[] noTerminals = (int[]) model.getStatsManager().getGenerationStat(GEN_NO_DISTINCT_TERMINALS);
 		
 		if (noTerminals != null) {
 			minNoDistinctTerminals = StatsUtils.min(noTerminals);
@@ -371,7 +384,7 @@ public class GPStatsEngine extends StatsEngine {
 		Integer maxNoDistinctTerminals = null;
 		
 		// Request the population from the stats manager.
-		int[] noTerminals = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_NO_DISTINCT_TERMINALS);
+		int[] noTerminals = (int[]) model.getStatsManager().getGenerationStat(GEN_NO_DISTINCT_TERMINALS);
 		
 		if (noTerminals != null) {
 			maxNoDistinctTerminals = StatsUtils.max(noTerminals);
@@ -384,7 +397,7 @@ public class GPStatsEngine extends StatsEngine {
 		Double aveNoDistinctTerminals = null;
 		
 		// Request the population from the stats manager.
-		int[] noTerminals = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_NO_DISTINCT_TERMINALS);
+		int[] noTerminals = (int[]) model.getStatsManager().getGenerationStat(GEN_NO_DISTINCT_TERMINALS);
 		
 		if (noTerminals != null) {
 			aveNoDistinctTerminals = StatsUtils.ave(noTerminals);
@@ -397,7 +410,7 @@ public class GPStatsEngine extends StatsEngine {
 		Double stdevNoDistinctTerminals = null;
 		
 		// Request the population from the stats manager.
-		int[] noTerminals = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_NO_DISTINCT_TERMINALS);
+		int[] noTerminals = (int[]) model.getStatsManager().getGenerationStat(GEN_NO_DISTINCT_TERMINALS);
 		
 		if (noTerminals != null) {
 			stdevNoDistinctTerminals = StatsUtils.stdev(noTerminals);
@@ -410,7 +423,7 @@ public class GPStatsEngine extends StatsEngine {
 		int[] noFunctions = null;
 		
 		// Request the population from the stats manager.
-		List<GPCandidateProgram> pop = (List<GPCandidateProgram>) StatsManager.getStatsManager().getGenerationStat(GEN_POPULATION);
+		List<GPCandidateProgram> pop = (List<GPCandidateProgram>) model.getStatsManager().getGenerationStat(GEN_POPULATION);
 		
 		if (pop != null) {
 			noFunctions = new int[pop.size()];
@@ -427,7 +440,7 @@ public class GPStatsEngine extends StatsEngine {
 		Integer minNoFunctions = null;
 		
 		// Request the population from the stats manager.
-		int[] noFunctions = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_NO_FUNCTIONS);
+		int[] noFunctions = (int[]) model.getStatsManager().getGenerationStat(GEN_NO_FUNCTIONS);
 		
 		if (noFunctions != null) {
 			minNoFunctions = StatsUtils.min(noFunctions);
@@ -440,7 +453,7 @@ public class GPStatsEngine extends StatsEngine {
 		Integer maxNoFunctions = null;
 		
 		// Request the population from the stats manager.
-		int[] noFunctions = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_NO_FUNCTIONS);
+		int[] noFunctions = (int[]) model.getStatsManager().getGenerationStat(GEN_NO_FUNCTIONS);
 		
 		if (noFunctions != null) {
 			maxNoFunctions = StatsUtils.max(noFunctions);
@@ -453,7 +466,7 @@ public class GPStatsEngine extends StatsEngine {
 		Double aveNoFunctions = null;
 		
 		// Request the population from the stats manager.
-		int[] noFunctions = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_NO_FUNCTIONS);
+		int[] noFunctions = (int[]) model.getStatsManager().getGenerationStat(GEN_NO_FUNCTIONS);
 		
 		if (noFunctions != null) {
 			aveNoFunctions = StatsUtils.ave(noFunctions);
@@ -466,7 +479,7 @@ public class GPStatsEngine extends StatsEngine {
 		Double stdevNoFunctions = null;
 		
 		// Request the population from the stats manager.
-		int[] noFunctions = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_NO_FUNCTIONS);
+		int[] noFunctions = (int[]) model.getStatsManager().getGenerationStat(GEN_NO_FUNCTIONS);
 		
 		if (noFunctions != null) {
 			stdevNoFunctions = StatsUtils.stdev(noFunctions);
@@ -479,7 +492,7 @@ public class GPStatsEngine extends StatsEngine {
 		int[] noDistinctFunctions = null;
 		
 		// Request the population from the stats manager.
-		List<GPCandidateProgram> pop = (List<GPCandidateProgram>) StatsManager.getStatsManager().getGenerationStat(GEN_POPULATION);
+		List<GPCandidateProgram> pop = (List<GPCandidateProgram>) model.getStatsManager().getGenerationStat(GEN_POPULATION);
 		
 		if (pop != null) {
 			noDistinctFunctions = new int[pop.size()];
@@ -496,7 +509,7 @@ public class GPStatsEngine extends StatsEngine {
 		Integer minNoDistinctFunctions = null;
 		
 		// Request the population from the stats manager.
-		int[] noFunctions = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_NO_DISTINCT_FUNCTIONS);
+		int[] noFunctions = (int[]) model.getStatsManager().getGenerationStat(GEN_NO_DISTINCT_FUNCTIONS);
 		
 		if (noFunctions != null) {
 			minNoDistinctFunctions = StatsUtils.min(noFunctions);
@@ -509,7 +522,7 @@ public class GPStatsEngine extends StatsEngine {
 		Integer maxNoDistinctFunctions = null;
 		
 		// Request the population from the stats manager.
-		int[] noFunctions = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_NO_DISTINCT_FUNCTIONS);
+		int[] noFunctions = (int[]) model.getStatsManager().getGenerationStat(GEN_NO_DISTINCT_FUNCTIONS);
 		
 		if (noFunctions != null) {
 			maxNoDistinctFunctions = StatsUtils.max(noFunctions);
@@ -522,7 +535,7 @@ public class GPStatsEngine extends StatsEngine {
 		Double aveNoDistinctFunctions = null;
 		
 		// Request the population from the stats manager.
-		int[] noFunctions = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_NO_DISTINCT_FUNCTIONS);
+		int[] noFunctions = (int[]) model.getStatsManager().getGenerationStat(GEN_NO_DISTINCT_FUNCTIONS);
 		
 		if (noFunctions != null) {
 			aveNoDistinctFunctions = StatsUtils.ave(noFunctions);
@@ -535,7 +548,7 @@ public class GPStatsEngine extends StatsEngine {
 		Double stdevNoDistinctFunctions = null;
 		
 		// Request the population from the stats manager.
-		int[] noFunctions = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_NO_DISTINCT_FUNCTIONS);
+		int[] noFunctions = (int[]) model.getStatsManager().getGenerationStat(GEN_NO_DISTINCT_FUNCTIONS);
 		
 		if (noFunctions != null) {
 			stdevNoDistinctFunctions = StatsUtils.stdev(noFunctions);

@@ -24,7 +24,6 @@ package org.epochx.ge.model.epox.ant;
 import java.awt.*;
 import java.util.*;
 
-import org.epochx.core.Controller;
 import org.epochx.ge.model.GEAbstractModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.gp.representation.FunctionParser;
@@ -117,8 +116,8 @@ public class JohnMuirTrail extends GEAbstractModel {
 		return grammar;
 	}
 	
-	public static void main(String[] args) {
-		/*for (int i=0; i<32; i++) {
+	/*public static void main(String[] args) {
+		for (int i=0; i<32; i++) {
 			for (int j=0; j<32; j++) {
 				boolean food = false;
 				
@@ -139,8 +138,6 @@ public class JohnMuirTrail extends GEAbstractModel {
 				}
 			}
 			System.out.println();
-		}*/
-		
-		Controller.run(new JohnMuirTrail());
-	}
+		}
+	}*/
 }

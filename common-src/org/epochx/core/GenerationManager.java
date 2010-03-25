@@ -26,7 +26,6 @@ import static org.epochx.stats.StatField.*;
 import java.util.*;
 
 import org.epochx.life.*;
-import org.epochx.model.Model;
 import org.epochx.op.ProgramSelector;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.StatsManager;
@@ -82,6 +81,9 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class GenerationManager {
 
+	// The controlling model.
+	private Model model;
+	
 	// Core components.
 	private final ElitismManager elitism;
 	private final PoolSelectionManager poolSelection;
@@ -109,18 +111,20 @@ public class GenerationManager {
 	 * @param model a model which will provide the control parameters for the 
 	 * generation.
 	 */
-	public GenerationManager() {
+	public GenerationManager(Model model) {
+		this.model = model;
+		
 		// Setup core components.
-		elitism = new ElitismManager();
-		poolSelection = new PoolSelectionManager();
-		crossover = new CrossoverManager();
-		mutation = new MutationManager();
-		reproduction = new ReproductionManager();
+		elitism = new ElitismManager(model);
+		poolSelection = new PoolSelectionManager(model);
+		crossover = new CrossoverManager(model);
+		mutation = new MutationManager(model);
+		reproduction = new ReproductionManager(model);
 		
 		reversions = 0;
 		
 		// Configure parameters from the model.
-		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
 			public void onConfigure() {
 				configure();
@@ -132,8 +136,6 @@ public class GenerationManager {
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
-		Model model = Controller.getModel();
-		
 		rng = model.getRNG();
 		programSelector = model.getProgramSelector();
 		popSize = model.getPopulationSize();
@@ -178,14 +180,14 @@ public class GenerationManager {
 		reversions = 0;
 		
 		// Inform all listeners that a generation is starting.
-		LifeCycleManager.getLifeCycleManager().onConfigure();
-		LifeCycleManager.getLifeCycleManager().onGenerationStart();
+		model.getLifeCycleManager().onConfigure();
+		model.getLifeCycleManager().onGenerationStart();
 		
 		// Record the generation start time.
 		final long startTime = System.nanoTime();
 		
 		// Record the generation number in the stats data.
-		StatsManager.getStatsManager().addGenerationData(GEN_NUMBER, generationNumber);
+		model.getStatsManager().addGenerationData(GEN_NUMBER, generationNumber);
 		
 		// Create next population to fill.
 		List<CandidateProgram> pop = new ArrayList<CandidateProgram>(popSize);
@@ -223,7 +225,7 @@ public class GenerationManager {
 			}
 			
 			// Request confirmation of generation.
-			pop = LifeCycleManager.getLifeCycleManager().onGeneration(pop);
+			pop = model.getLifeCycleManager().onGeneration(pop);
 			
 			// If reverted, increment reversions count.
 			if (pop == null) {
@@ -232,12 +234,12 @@ public class GenerationManager {
 		} while(pop == null);
 		
 		// Store the stats data from the generation.
-		StatsManager.getStatsManager().addGenerationData(GEN_REVERSIONS, reversions);
-		StatsManager.getStatsManager().addGenerationData(GEN_POPULATION, pop);
-		StatsManager.getStatsManager().addGenerationData(GEN_TIME, (System.nanoTime() - startTime));
+		model.getStatsManager().addGenerationData(GEN_REVERSIONS, reversions);
+		model.getStatsManager().addGenerationData(GEN_POPULATION, pop);
+		model.getStatsManager().addGenerationData(GEN_TIME, (System.nanoTime() - startTime));
 		
 		// Tell everyone the generation has ended.
-		LifeCycleManager.getLifeCycleManager().onGenerationEnd();
+		model.getLifeCycleManager().onGenerationEnd();
 		
 		return pop;
 	}

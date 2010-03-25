@@ -21,13 +21,14 @@
  */
 package org.epochx.gr.model;
 
+import org.epochx.core.Model;
 import org.epochx.gr.op.crossover.*;
 import org.epochx.gr.op.init.*;
 import org.epochx.gr.op.mutation.*;
 import org.epochx.gr.stats.GRStatsEngine;
-import org.epochx.model.AbstractModel;
+import org.epochx.tools.grammar.Grammar;
 
-public abstract class GRAbstractModel extends AbstractModel implements GRModel {
+public abstract class GRAbstractModel extends Model {
 	
 	private GRInitialiser initialiser;
 	private GRCrossover crossover;
@@ -46,13 +47,23 @@ public abstract class GRAbstractModel extends AbstractModel implements GRModel {
 		maxInitialDepth = 8;
 		
 		// GP Components.
-		initialiser = new RampedHalfAndHalfInitialiser();
-		crossover = new WhighamCrossover();
-		mutator = new WhighamMutation();
+		initialiser = new RampedHalfAndHalfInitialiser(this);
+		crossover = new WhighamCrossover(this);
+		mutator = new WhighamMutation(this);
 		
 		// Stats - overwrite parent default.
-		setStatsEngine(new GRStatsEngine());
+		setStatsEngine(new GRStatsEngine(this));
 	}
+	
+	/**
+	 * Returns the grammar instance that determines the structure of the 
+	 * programs to be evolved. As well as defining the syntax of solutions, the 
+	 * grammar also essentially determines the function and terminal sets which 
+	 * are features of tree GP. 
+	 * 
+	 * @return the language grammar that defines the syntax of solutions.
+	 */
+	public abstract Grammar getGrammar();
 	
 	/**
 	 * {@inheritDoc}
@@ -125,7 +136,6 @@ public abstract class GRAbstractModel extends AbstractModel implements GRModel {
 	 * 
 	 * @return {@inheritDoc}
 	 */
-	@Override
 	public int getMaxProgramDepth() {
 		return maxDepth;
 	}
@@ -147,7 +157,6 @@ public abstract class GRAbstractModel extends AbstractModel implements GRModel {
 	 * 
 	 * @return {@inheritDoc}
 	 */
-	@Override
 	public int getMaxInitialProgramDepth() {
 		return maxInitialDepth;
 	}

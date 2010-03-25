@@ -23,10 +23,9 @@ package org.epochx.ge.op.crossover;
 
 import java.util.List;
 
-import org.epochx.core.Controller;
-import org.epochx.ge.model.GEModel;
+import org.epochx.ge.model.GEAbstractModel;
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.life.*;
+import org.epochx.life.ConfigAdapter;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
 
@@ -50,6 +49,9 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class FixedPointCrossover implements GECrossover {
 	
+	// The controlling model.
+	private GEAbstractModel model;
+	
 	// Operator statistics store.
 	private int crossoverPoint;
 	
@@ -61,9 +63,11 @@ public class FixedPointCrossover implements GECrossover {
 	 * 
 	 * @param model the current controlling model.
 	 */
-	public FixedPointCrossover() {
+	public FixedPointCrossover(GEAbstractModel model) {
+		this.model = model;
+		
 		// Configure parameters from the model.
-		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
 			public void onConfigure() {
 				configure();
@@ -75,8 +79,6 @@ public class FixedPointCrossover implements GECrossover {
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
-		GEModel model = (GEModel) Controller.getModel();
-		
 		rng = model.getRNG();
 	}
 	

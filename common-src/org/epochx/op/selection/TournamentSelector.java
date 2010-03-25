@@ -23,6 +23,7 @@ package org.epochx.op.selection;
 
 import java.util.*;
 
+import org.epochx.core.Model;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
 
@@ -36,6 +37,9 @@ import org.epochx.representation.CandidateProgram;
  */
 public class TournamentSelector implements ProgramSelector, PoolSelector {
 
+	// The controlling model.
+	private Model model;
+	
 	// The size of the tournment from which the best program will be taken.
 	private int tournamentSize;
 
@@ -48,7 +52,8 @@ public class TournamentSelector implements ProgramSelector, PoolSelector {
 	 * 
 	 * @param tournamentSize the number of programs in each tournament.
 	 */
-	public TournamentSelector(int tournamentSize) {
+	public TournamentSelector(Model model, int tournamentSize) {
+		this.model = model;
 		this.tournamentSize = tournamentSize;
 		
 		poolSelection = new ProgramTournamentSelector();
@@ -124,7 +129,7 @@ public class TournamentSelector implements ProgramSelector, PoolSelector {
 		private RandomSelector randomSelector;
 		
 		public ProgramTournamentSelector() {
-			randomSelector = new RandomSelector();
+			randomSelector = new RandomSelector(model);
 		}
 		
 		@Override

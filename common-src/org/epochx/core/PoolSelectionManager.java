@@ -26,7 +26,6 @@ import static org.epochx.stats.StatField.POOL_REVERSIONS;
 import java.util.List;
 
 import org.epochx.life.*;
-import org.epochx.model.Model;
 import org.epochx.op.PoolSelector;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.StatsManager;
@@ -85,6 +84,9 @@ import org.epochx.stats.StatsManager;
  */
 public class PoolSelectionManager {
 	
+	// The controlling model.
+	private Model model;
+	
 	// The pool selector to use to generate the breeding pool.
 	private PoolSelector poolSelector;
 	
@@ -103,9 +105,11 @@ public class PoolSelectionManager {
 	 * 
 	 * @see PoolSelector
 	 */
-	public PoolSelectionManager() {
+	public PoolSelectionManager(Model model) {
+		this.model = model;
+		
 		// Configure parameters from the model.
-		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
 			public void onConfigure() {
 				configure();
@@ -117,8 +121,6 @@ public class PoolSelectionManager {
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
-		Model model = Controller.getModel();
-		
 		poolSize = model.getPoolSize();
 		poolSelector = model.getPoolSelector();
 	}
@@ -141,7 +143,7 @@ public class PoolSelectionManager {
 	 */
 	public List<CandidateProgram> getPool(List<CandidateProgram> pop) {
 		// Inform all listeners that pool selection is starting.
-		LifeCycleManager.getLifeCycleManager().onPoolSelectionStart();
+		model.getLifeCycleManager().onPoolSelectionStart();
 		
 		// Reset the number of reversions.
 		reversions = 0;
@@ -152,7 +154,7 @@ public class PoolSelectionManager {
 			pool = poolSelector.getPool(pop, poolSize);
 			
 			// Allow life cycle listener to confirm or modify.
-			pool = LifeCycleManager.getLifeCycleManager().onPoolSelection(pool);
+			pool = model.getLifeCycleManager().onPoolSelection(pool);
 			
 			// If reverted then increment reversion counter.
 			if (pool == null) {
@@ -161,10 +163,10 @@ public class PoolSelectionManager {
 		} while(pool == null);
 		
 		// Store the stats from the pool selection.
-		StatsManager.getStatsManager().addGenerationData(POOL_REVERSIONS, reversions);
+		model.getStatsManager().addGenerationData(POOL_REVERSIONS, reversions);
 		
 		// Inform all listeners that pool selection has ended.
-		LifeCycleManager.getLifeCycleManager().onPoolSelectionEnd();
+		model.getLifeCycleManager().onPoolSelectionEnd();
 		
 		return pool;
 	}

@@ -23,10 +23,9 @@ package org.epochx.ge.op.init;
 
 import java.util.*;
 
-import org.epochx.core.Controller;
-import org.epochx.ge.model.GEModel;
+import org.epochx.ge.model.GEAbstractModel;
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.life.*;
+import org.epochx.life.ConfigAdapter;
 import org.epochx.representation.CandidateProgram;
 
 
@@ -39,7 +38,8 @@ public class FixedLengthInitialiser implements GEInitialiser {
 	 * TODO Implement a similar initialiser that uses variable lengths up to maximum.
 	 */
 	
-	private GEModel model;
+	// The controlling model.
+	private GEAbstractModel model;
 	
 	private int popSize;
 	
@@ -53,11 +53,12 @@ public class FixedLengthInitialiser implements GEInitialiser {
 	 * @param initialLength The initial length that chromosomes should be 
 	 * 			  			generated to.
 	 */
-	public FixedLengthInitialiser(int initialLength) {
+	public FixedLengthInitialiser(GEAbstractModel model, int initialLength) {
+		this.model = model;
 		this.initialLength = initialLength;
 		
 		// Configure parameters from the model.
-		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
 			public void onConfigure() {
 				configure();
@@ -69,8 +70,6 @@ public class FixedLengthInitialiser implements GEInitialiser {
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
-		model = (GEModel) Controller.getModel();
-		
 		popSize = model.getPopulationSize();
 	}
 	

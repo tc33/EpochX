@@ -23,8 +23,7 @@ package org.epochx.gp.op.mutation;
 
 import java.util.List;
 
-import org.epochx.core.Controller;
-import org.epochx.gp.model.GPModel;
+import org.epochx.gp.model.GPAbstractModel;
 import org.epochx.gp.representation.*;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
@@ -42,6 +41,9 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class PointMutation implements GPMutation {
 	
+	// The controlling model.
+	private GPAbstractModel model;
+	
 	private List<Node> syntax;
 	
 	private RandomNumberGenerator rng;
@@ -57,8 +59,8 @@ public class PointMutation implements GPMutation {
 	 * @param model The current controlling model. Parameters such as full 
 	 * 				syntax will be obtained from this.
 	 */
-	public PointMutation() {
-		this(0.01);
+	public PointMutation(GPAbstractModel model) {
+		this(model, 0.01);
 	}
 	
 	/**
@@ -69,11 +71,12 @@ public class PointMutation implements GPMutation {
 	 * changed, and 0.0 would mean no nodes were changed. A typical value 
 	 * would be 0.01.
 	 */
-	public PointMutation(double pointProbability) {
+	public PointMutation(GPAbstractModel model, double pointProbability) {
+		this.model = model;
 		this.pointProbability = pointProbability;
 		
 		// Configure parameters from the model.
-		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
 			public void onConfigure() {
 				configure();
@@ -85,8 +88,6 @@ public class PointMutation implements GPMutation {
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
-		GPModel model = (GPModel) Controller.getModel();
-		
 		syntax = model.getSyntax();
 		rng = model.getRNG();
 	}

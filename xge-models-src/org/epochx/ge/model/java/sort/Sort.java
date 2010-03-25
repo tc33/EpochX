@@ -23,7 +23,6 @@ package org.epochx.ge.model.java.sort;
 
 import java.io.File;
 
-import org.epochx.core.Controller;
 import org.epochx.ge.model.GEAbstractModel;
 import org.epochx.ge.op.init.GrowInitialiser;
 import org.epochx.ge.representation.GECandidateProgram;
@@ -54,7 +53,7 @@ public class Sort extends GEAbstractModel {
 		setPopulationSize(1000);
 		setNoGenerations(100);
 		setNoElites(30);
-		setInitialiser(new GrowInitialiser());
+		setInitialiser(new GrowInitialiser(this));
 		setMaxProgramDepth(15);
 		setMaxInitialProgramDepth(15);
 		setPoolSize(100);
@@ -176,7 +175,7 @@ public class Sort extends GEAbstractModel {
 		}
 	}
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		Controller.run(new Sort());
-	}
+	}*/
 }

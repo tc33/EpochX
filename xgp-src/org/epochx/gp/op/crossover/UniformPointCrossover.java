@@ -21,10 +21,10 @@
  */
 package org.epochx.gp.op.crossover;
 
-import org.epochx.core.Controller;
+import org.epochx.core.Model;
+import org.epochx.gp.model.GPAbstractModel;
 import org.epochx.gp.representation.*;
 import org.epochx.life.*;
-import org.epochx.model.Model;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
 
@@ -33,12 +33,17 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class UniformPointCrossover implements GPCrossover {
 
+	// The controlling model.
+	private GPAbstractModel model;
+	
 	// The random number generator for controlling random behaviour.
 	private RandomNumberGenerator rng;
 	
-	public UniformPointCrossover() {
+	public UniformPointCrossover(GPAbstractModel model) {
+		this.model = model;
+		
 		// Configure parameters from the model.
-		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
 			public void onConfigure() {
 				configure();
@@ -50,8 +55,6 @@ public class UniformPointCrossover implements GPCrossover {
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
-		Model model = Controller.getModel();
-		
 		rng = model.getRNG();
 	}
 	

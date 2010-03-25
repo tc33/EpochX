@@ -23,8 +23,7 @@ package org.epochx.gr.op.crossover;
 
 import java.util.*;
 
-import org.epochx.core.Controller;
-import org.epochx.gr.model.GRModel;
+import org.epochx.gr.model.GRAbstractModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
@@ -33,12 +32,17 @@ import org.epochx.tools.random.RandomNumberGenerator;
 
 public class WhighamCrossover implements GRCrossover {
 
+	// The controlling model.
+	private GRAbstractModel model;
+	
 	// The random number generator in use.
 	private RandomNumberGenerator rng;
 	
-	public WhighamCrossover() {
+	public WhighamCrossover(GRAbstractModel model) {
+		this.model = model;
+		
 		// Configure parameters from the model.
-		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
 			public void onConfigure() {
 				configure();
@@ -50,8 +54,6 @@ public class WhighamCrossover implements GRCrossover {
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
-		GRModel model = (GRModel) Controller.getModel();
-		
 		rng = model.getRNG();
 	}
 	

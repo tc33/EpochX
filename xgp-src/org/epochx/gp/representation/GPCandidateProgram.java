@@ -23,7 +23,7 @@ package org.epochx.gp.representation;
 
 import java.util.List;
 
-import org.epochx.gp.model.GPModel;
+import org.epochx.gp.model.*;
 import org.epochx.representation.CandidateProgram;
 
 
@@ -42,7 +42,7 @@ public class GPCandidateProgram extends CandidateProgram {
 	private Node rootNode;
 	
 	// The controlling model.
-	private GPModel model;
+	private GPAbstractModel model;
 	
 	// The cached program fitness.
 	private double fitness;
@@ -50,7 +50,7 @@ public class GPCandidateProgram extends CandidateProgram {
 	// The source at last evaluation for testing fitness cache is still good.
 	private String sourceCache;
 	
-	public GPCandidateProgram(GPModel model) {
+	public GPCandidateProgram(GPAbstractModel model) {
 		this(null, model);
 	}
 	
@@ -64,7 +64,7 @@ public class GPCandidateProgram extends CandidateProgram {
 	 * @param model the controlling model which provides the configuration 
 	 * 				parameters for the run. 				
 	 */
-	public GPCandidateProgram(Node rootNode, GPModel model) {
+	public GPCandidateProgram(Node rootNode, GPAbstractModel model) {
 		this.model = model;
 		this.rootNode = rootNode;
 	}

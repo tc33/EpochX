@@ -21,9 +21,8 @@
  */
 package org.epochx.ge.mapper;
 
-import org.epochx.core.Controller;
 import org.epochx.ge.codon.CodonGenerator;
-import org.epochx.ge.model.GEModel;
+import org.epochx.ge.model.GEAbstractModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.life.*;
 import org.epochx.tools.grammar.*;
@@ -41,6 +40,8 @@ public class DepthFirstMapper implements Mapper {
 	 * TODO Write a non-recursive mapper like breadth first mapper and make a 
 	 * secondary contructor with a boolean option.
 	 */
+	// The controlling model.
+	private GEAbstractModel model;
 	
 	// Wrapping and extending are mutually exclusive, they cannot both be true.
 	private boolean wrapping;
@@ -63,7 +64,9 @@ public class DepthFirstMapper implements Mapper {
 	 * @param model the controlling model providing configuration details such 
 	 * 				as the Grammar.
 	 */
-	public DepthFirstMapper() {
+	public DepthFirstMapper(GEAbstractModel model) {
+		this.model = model;
+		
 		// Default to extending.
 		wrapping = true;
 		extending = false;
@@ -78,7 +81,7 @@ public class DepthFirstMapper implements Mapper {
 		noWraps = 0;
 		
 		// Configure parameters from the model.
-		LifeCycleManager.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
 			public void onConfigure() {
 				configure();
@@ -90,8 +93,6 @@ public class DepthFirstMapper implements Mapper {
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
-		GEModel model = (GEModel) Controller.getModel();
-		
 		grammar = model.getGrammar();
 		maxProgramDepth = model.getMaxProgramDepth();
 		maxChromosomeLength = model.getMaxChromosomeLength();

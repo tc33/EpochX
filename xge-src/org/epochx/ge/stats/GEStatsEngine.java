@@ -26,10 +26,22 @@ import static org.epochx.stats.StatField.GEN_POPULATION;
 
 import java.util.List;
 
+import org.epochx.core.Model;
+import org.epochx.ge.model.GEAbstractModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.stats.*;
 
 public class GEStatsEngine extends StatsEngine {
+
+	// The controlling model.
+	private GEAbstractModel model;
+	
+	
+	public GEStatsEngine(GEAbstractModel model) {
+		super(model);
+		
+		this.model = model;
+	}
 
 	@Override
 	public Object getGenerationStat(String field) {
@@ -66,7 +78,7 @@ public class GEStatsEngine extends StatsEngine {
 		int[] lengths = null;
 		
 		// Request the population from the stats manager.
-		List<GECandidateProgram> pop = (List<GECandidateProgram>) StatsManager.getStatsManager().getGenerationStat(GEN_POPULATION);
+		List<GECandidateProgram> pop = (List<GECandidateProgram>) model.getStatsManager().getGenerationStat(GEN_POPULATION);
 		
 		if (pop != null) {
 			lengths = new int[pop.size()];
@@ -83,7 +95,7 @@ public class GEStatsEngine extends StatsEngine {
 		Integer minLength = null;
 		
 		// Request the population from the stats manager.
-		int[] lengths = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_LENGTHS);
+		int[] lengths = (int[]) model.getStatsManager().getGenerationStat(GEN_LENGTHS);
 		
 		if (lengths != null) {
 			minLength = StatsUtils.min(lengths);
@@ -96,7 +108,7 @@ public class GEStatsEngine extends StatsEngine {
 		Integer maxLength = null;
 		
 		// Request the population from the stats manager.
-		int[] lengths = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_LENGTHS);
+		int[] lengths = (int[]) model.getStatsManager().getGenerationStat(GEN_LENGTHS);
 		
 		if (lengths != null) {
 			maxLength = StatsUtils.max(lengths);
@@ -109,7 +121,7 @@ public class GEStatsEngine extends StatsEngine {
 		Double aveLength = null;
 		
 		// Request the population from the stats manager.
-		int[] lengths = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_LENGTHS);
+		int[] lengths = (int[]) model.getStatsManager().getGenerationStat(GEN_LENGTHS);
 		
 		if (lengths != null) {
 			aveLength = StatsUtils.ave(lengths);
@@ -122,7 +134,7 @@ public class GEStatsEngine extends StatsEngine {
 		Double stdevLength = null;
 		
 		// Request the population from the stats manager.
-		int[] lengths = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_LENGTHS);
+		int[] lengths = (int[]) model.getStatsManager().getGenerationStat(GEN_LENGTHS);
 		
 		if (lengths != null) {
 			stdevLength = StatsUtils.stdev(lengths);
@@ -135,7 +147,7 @@ public class GEStatsEngine extends StatsEngine {
 		int[] depths = null;
 		
 		// Request the population from the stats manager.
-		List<GECandidateProgram> pop = (List<GECandidateProgram>) StatsManager.getStatsManager().getGenerationStat(GEN_POPULATION);
+		List<GECandidateProgram> pop = (List<GECandidateProgram>) model.getStatsManager().getGenerationStat(GEN_POPULATION);
 		
 		if (pop != null) {
 			depths = new int[pop.size()];
@@ -152,7 +164,7 @@ public class GEStatsEngine extends StatsEngine {
 		Integer minDepth = null;
 		
 		// Request the population from the stats manager.
-		int[] depths = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_DEPTHS);
+		int[] depths = (int[]) model.getStatsManager().getGenerationStat(GEN_DEPTHS);
 		
 		if (depths != null) {
 			minDepth = StatsUtils.min(depths);
@@ -165,7 +177,7 @@ public class GEStatsEngine extends StatsEngine {
 		Integer maxDepth = null;
 		
 		// Request the population from the stats manager.
-		int[] depths = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_DEPTHS);
+		int[] depths = (int[]) model.getStatsManager().getGenerationStat(GEN_DEPTHS);
 		
 		if (depths != null) {
 			maxDepth = StatsUtils.max(depths);
@@ -178,7 +190,7 @@ public class GEStatsEngine extends StatsEngine {
 		Double aveDepth = null;
 		
 		// Request the population from the stats manager.
-		int[] depths = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_DEPTHS);
+		int[] depths = (int[]) model.getStatsManager().getGenerationStat(GEN_DEPTHS);
 		
 		if (depths != null) {
 			aveDepth = StatsUtils.ave(depths);
@@ -191,7 +203,7 @@ public class GEStatsEngine extends StatsEngine {
 		Double stdevDepth = null;
 		
 		// Request the population from the stats manager.
-		int[] depths = (int[]) StatsManager.getStatsManager().getGenerationStat(GEN_DEPTHS);
+		int[] depths = (int[]) model.getStatsManager().getGenerationStat(GEN_DEPTHS);
 		
 		if (depths != null) {
 			stdevDepth = StatsUtils.stdev(depths);

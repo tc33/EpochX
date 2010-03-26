@@ -69,7 +69,7 @@ import org.epochx.representation.CandidateProgram;
 public class ElitismManager {
 
 	// The controlling model.
-	private Model model;
+	private final Model model;
 	
 	// The number of elites to be used.
 	private int noElites;

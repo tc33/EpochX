@@ -194,6 +194,10 @@ public class GenerationManager {
 	 */
 	public List<CandidateProgram> generation(final int generationNo, 
 					final List<CandidateProgram> previousPop) {
+		if (previousPop.size() < 1) {
+			throw new IllegalArgumentException("previousPop size must be 1 or greater.");
+		}
+		
 		// Inform all listeners that a generation is starting.
 		model.getLifeCycleManager().fireConfigureEvent();
 		model.getLifeCycleManager().fireGenerationStartEvent();
@@ -204,11 +208,13 @@ public class GenerationManager {
 		
 		// Record the generation number in the stats data.
 		model.getStatsManager().addGenerationData(GEN_NUMBER, generationNo);
-		
-		// Create next population to fill.
-		List<CandidateProgram> pop = new ArrayList<CandidateProgram>(popSize);
 
+		List<CandidateProgram> pop;
+		
 		do {
+			// Create next population to fill.
+			pop = new ArrayList<CandidateProgram>(popSize);
+			
 			// Perform elitism.
 			pop.addAll(elitism.elitism(previousPop));
 			

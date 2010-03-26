@@ -22,7 +22,7 @@
 package org.epochx.representation;
 
 public abstract class CandidateProgram implements Cloneable, Comparable<CandidateProgram> {
-
+	
 	public abstract double getFitness();
 	
 	/**

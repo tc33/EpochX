@@ -71,9 +71,6 @@ public class ReproductionManager {
 	// The controlling model.
 	private Model model;
 	
-	// Manager of life cycle events.
-	private LifeCycleManager lifeCycle;
-	
 	// The selector to use to choose the program to reproduce.
 	private ProgramSelector programSelector;
 	
@@ -127,7 +124,7 @@ public class ReproductionManager {
 			parent = programSelector.getProgram();
 			
 			// Allow the life cycle listener to confirm or modify.
-			parent = lifeCycle.fireReproductionEvent(parent);
+			parent = model.getLifeCycleManager().fireReproductionEvent(parent);
 			
 			if (parent == null) {
 				reversions++;

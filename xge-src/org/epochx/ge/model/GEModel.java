@@ -31,21 +31,11 @@ import org.epochx.tools.grammar.Grammar;
 
 
 /**
- * GEModel is a partial implementation of GEModel which provides 
- * sensible defaults for many of the necessary control parameters. It also 
- * provides a simple way of setting many values so an extending class isn't 
- * required to override all methods they wish to alter, and can instead use 
- * a simple setter method call. 
- * 
- * <p>Those methods that it isn't possible to provide a <em>sensible</em> 
- * default for, for example getFitness(GECandidateProgram) and 
- * getGrammar(Grammar), are not implemented to force the extending class to 
- * consider their implementation.
- * 
- * @see GEModel
+ * Model implementation for performing Grammatical Evolution.
  */
 public abstract class GEModel extends Model {
 	
+	// Control parameters.
 	private Grammar grammar;
 	private Mapper mapper;
 	private CodonGenerator codonGenerator;
@@ -63,6 +53,10 @@ public abstract class GEModel extends Model {
 	 */
 	public GEModel() {
 		// Set default parameter values.
+		mapper = new DepthFirstMapper(this);
+		codonGenerator = new StandardGenerator(this);
+		grammar = null;
+		
 		maxDepth = 14;
 		maxInitialDepth = 8;
 		maxCodonSize = Integer.MAX_VALUE;
@@ -75,38 +69,14 @@ public abstract class GEModel extends Model {
 		setInitialiser(new RampedHalfAndHalfInitialiser(this));
 		setCrossover(new OnePointCrossover(this));
 		setMutation(new PointMutation(this));
-		
-		mapper = new DepthFirstMapper(this);
-		codonGenerator = new StandardGenerator(this);
-		grammar = null;
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * This implementation checks that this model is in a runnable state for 
-	 * performing an XGE run before executing. A model is in a runnable state if
-	 * all compulsory control parameters and operators have been set, for 
-	 * example, a valid grammr. If it is not in a runnable state then an 
-	 * <code>IllegalStateException</code> is thrown.
+	 * @return {@inheritDoc}
 	 */
 	@Override
-	public void run() {
-		// Validate that the model is in a runnable state.
-		if (!isInRunnableState()) {
-			throw new IllegalStateException("model not in runnable state - one or more compulsory control parameters unset");
-		}
-		
-		super.run();
-	}
-	
-	/**
-	 * Tests whether the model is sufficiently setup to be executed. For a model
-	 * to be in a runnable state it must have all compulsory control parameters 
-	 * and operators set.
-	 * 
-	 * @return true if this model is in a runnable state, false otherwise.
-	 */
 	public boolean isInRunnableState() {
 		/*
 		 * We assume all parameters with a default are still set because their 
@@ -140,12 +110,14 @@ public abstract class GEModel extends Model {
 	 * @param grammar the language grammar to use to define the syntax of 
 	 * solutions.
 	 */
-	public void setGrammar(Grammar grammar) {
+	public void setGrammar(final Grammar grammar) {
 		if (grammar != null) {
 			this.grammar = grammar;
 		} else {
 			throw new IllegalArgumentException("grammar must not be null");
 		}
+		
+		assert (this.grammar != null);
 	}
 
 	/**
@@ -166,12 +138,14 @@ public abstract class GEModel extends Model {
 	 * 
 	 * @param mapper the mapper to be used during the mapping operation.
 	 */
-	public void setMapper(Mapper mapper) {
+	public void setMapper(final Mapper mapper) {
 		if (mapper != null) {
 			this.mapper = mapper;
 		} else {
 			throw new IllegalArgumentException("mapper must not be null");
 		}
+		
+		assert (this.mapper != null);
 	}
 
 	/**
@@ -193,12 +167,14 @@ public abstract class GEModel extends Model {
 	 * @param codonGenerator the codon generator to be used any time a new 
 	 * 						 codon is required.
 	 */
-	public void setCodonGenerator(CodonGenerator codonGenerator) {
+	public void setCodonGenerator(final CodonGenerator codonGenerator) {
 		if (codonGenerator != null) {
 			this.codonGenerator = codonGenerator;
 		} else {
 			throw new IllegalArgumentException("codonGenerator must not be null");
 		}
+		
+		assert (this.codonGenerator != null);
 	}
 
 	/**
@@ -219,12 +195,14 @@ public abstract class GEModel extends Model {
 	 * @param maxCodonSize the maximum size of a codon to replace the current 
 	 * 					   maximum with. Must be a positive integer.
 	 */
-	public void setMaxCodonSize(int maxCodonSize) {
+	public void setMaxCodonSize(final int maxCodonSize) {
 		if (maxCodonSize >= 0) {
 			this.maxCodonSize = maxCodonSize;
 		} else {
 			throw new IllegalArgumentException("maxCodonSize must be zero or more");
 		}
+		
+		assert (this.maxCodonSize >= 0);
 	}
 
 	/**
@@ -247,12 +225,14 @@ public abstract class GEModel extends Model {
 	 * @param maxChromosomeLength the maximum number of codons to allow in a 
 	 * 							  chromosome.
 	 */
-	public void setMaxChromosomeLength(int maxChromosomeLength) {
+	public void setMaxChromosomeLength(final int maxChromosomeLength) {
 		if (maxChromosomeLength >= -1) {
 			this.maxCodonSize = maxChromosomeLength;
 		} else {
 			throw new IllegalArgumentException("maxChromosomeLength must be -1 or more");
 		}
+		
+		assert (this.maxChromosomeLength >= 0);
 	}
 
 	/**
@@ -275,12 +255,14 @@ public abstract class GEModel extends Model {
 	 * 
 	 * @param maxDepth the maximum depth to allow a program's derivation tree.
 	 */
-	public void setMaxProgramDepth(int maxDepth) {
+	public void setMaxProgramDepth(final int maxDepth) {
 		if (maxDepth >= 1 || maxDepth == -1) {
 			this.maxDepth = maxDepth;
 		} else {
 			throw new IllegalArgumentException("maxDepth must either be -1 or greater than 0");
 		}
+		
+		assert (this.maxDepth >= 1 || this.maxDepth == -1);
 	}
 	
 	/**
@@ -305,12 +287,14 @@ public abstract class GEModel extends Model {
 	 * @param maxDepth the maximum depth to allow a program's derivation tree
 	 * 				   after initialisation.
 	 */
-	public void setMaxInitialProgramDepth(int maxInitialDepth) {
+	public void setMaxInitialProgramDepth(final int maxInitialDepth) {
 		if (maxInitialDepth >= 1 || maxInitialDepth == -1) {
 			this.maxInitialDepth = maxInitialDepth;
 		} else {
 			throw new IllegalArgumentException("maxInitialDepth must either be -1 or greater than 0");
 		}
+		
+		assert (this.maxInitialDepth >= 1 || this.maxInitialDepth == -1);
 	}
 	
 	/**

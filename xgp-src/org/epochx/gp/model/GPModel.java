@@ -31,67 +31,38 @@ import org.epochx.gp.representation.Node;
 
 
 /**
- * GPModel is a partial implementation of GPModel which provides 
- * sensible defaults for many of the necessary control parameters. It also 
- * provides a simple way of setting many values so an extending class isn't 
- * required to override all methods they wish to alter, and can instead use 
- * a simple setter method call. 
- * 
- * <p>Those methods that it isn't possible to provide a <em>sensible</em> 
- * default for, for example getFitness(GPCandidateProgram), getTerminals() and
- * getFunctions(), are not implemented to force the extending class to 
- * consider their implementation.
- * 
- * @see GPModel
+ * Model implementation for performing tree-based genetic programming 
+ * evolutionary runs.
  */
 public abstract class GPModel extends Model {
 
+	// Control parameters.
+	private List<Node> syntax;	
+	
 	private int maxInitialDepth;
 	private int maxProgramDepth;
-	
-	private List<Node> syntax;
 	
 	/**
 	 * Construct a GPModel with a set of sensible defaults. See the appropriate
 	 * accessor method for information of each default value.
 	 */
 	public GPModel() {
-		// Initialise default parameter values.
+		// Set default parameter values.
 		maxInitialDepth = 6;
 		maxProgramDepth = 12;
 		
-		// Initialise components.
+		// Operators.
 		setInitialiser(new FullInitialiser(this));
 		setCrossover(new UniformPointCrossover(this));
 		setMutation(new SubtreeMutation(this));
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * This implementation checks that this model is in a runnable state for 
-	 * performing an XGP run before executing. A model is in a runnable state if
-	 * all compulsory control parameters and operators have been set, for 
-	 * example, syntax must not be an empty list. If it is not in a runnable 
-	 * state then an <code>IllegalStateException</code> is thrown.
+	 * @return {@inheritDoc}
 	 */
 	@Override
-	public void run() {
-		// Validate that the model is in a runnable state.
-		if (!isInRunnableState()) {
-			throw new IllegalStateException("model not in runnable state - one or more compulsory control parameters unset");
-		}
-		
-		super.run();
-	}
-	
-	/**
-	 * Tests whether the model is sufficiently setup to be executed. For a model
-	 * to be in a runnable state it must have all compulsory control parameters 
-	 * and operators set.
-	 * 
-	 * @return true if this model is in a runnable state, false otherwise.
-	 */
 	public boolean isInRunnableState() {
 		/*
 		 * We assume all parameters with a default are still set because their 
@@ -135,6 +106,8 @@ public abstract class GPModel extends Model {
 		} else {
 			throw new IllegalArgumentException("maxInitialDepth must be -1 or greater");
 		}
+		
+		assert (this.maxInitialDepth >= -1);
 	}
 
 	/**
@@ -166,6 +139,8 @@ public abstract class GPModel extends Model {
 		} else {
 			throw new IllegalArgumentException("maxProgramDepth must be -1 or greater");
 		}
+		
+		assert (this.maxProgramDepth >= -1);
 	}
 	
 	/**
@@ -189,5 +164,7 @@ public abstract class GPModel extends Model {
 		} else {
 			throw new IllegalArgumentException("syntax must not be null");
 		}
+		
+		assert (this.syntax != null);
 	}
 }

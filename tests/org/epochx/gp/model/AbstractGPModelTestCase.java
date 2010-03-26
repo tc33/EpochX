@@ -38,6 +38,7 @@ import org.epochx.gp.representation.Node;
  */
 public abstract class AbstractGPModelTestCase extends AbstractModelTestCase {
 
+	@Override
 	public abstract GPModel getModel();
 	
 	/**

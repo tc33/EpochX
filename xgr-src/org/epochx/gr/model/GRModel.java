@@ -27,8 +27,13 @@ import org.epochx.gr.op.init.*;
 import org.epochx.gr.op.mutation.*;
 import org.epochx.tools.grammar.Grammar;
 
+/**
+ * Model implementation for performing grammar-guided evolution using the 
+ * approach outlined by Whigham he called CFG-GP.
+ */
 public abstract class GRModel extends Model {
 	
+	// Control parameters.
 	private Grammar grammar;
 	
 	private int maxDepth;
@@ -40,6 +45,8 @@ public abstract class GRModel extends Model {
 	 */
 	public GRModel() {
 		// Set default parameter values.
+		grammar = null;
+		
 		maxDepth = 14;
 		maxInitialDepth = 8;
 		
@@ -47,36 +54,14 @@ public abstract class GRModel extends Model {
 		setInitialiser(new RampedHalfAndHalfInitialiser(this));
 		setCrossover(new WhighamCrossover(this));
 		setMutation(new WhighamMutation(this));
-		
-		grammar = null;
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * This implementation checks that this model is in a runnable state for 
-	 * performing an XGR run before executing. A model is in a runnable state if
-	 * all compulsory control parameters and operators have been set, for 
-	 * example, a valid grammr. If it is not in a runnable state then an 
-	 * <code>IllegalStateException</code> is thrown.
+	 * @return {@inheritDoc}
 	 */
 	@Override
-	public void run() {
-		// Validate that the model is in a runnable state.
-		if (!isInRunnableState()) {
-			throw new IllegalStateException("model not in runnable state - one or more compulsory control parameters unset");
-		}
-		
-		super.run();
-	}
-	
-	/**
-	 * Tests whether the model is sufficiently setup to be executed. For a model
-	 * to be in a runnable state it must have all compulsory control parameters 
-	 * and operators set.
-	 * 
-	 * @return true if this model is in a runnable state, false otherwise.
-	 */
 	public boolean isInRunnableState() {
 		/*
 		 * We assume all parameters with a default are still set because their 
@@ -110,12 +95,14 @@ public abstract class GRModel extends Model {
 	 * @param grammar the language grammar to use to define the syntax of 
 	 * solutions.
 	 */
-	public void setGrammar(Grammar grammar) {
+	public void setGrammar(final Grammar grammar) {
 		if (grammar != null) {
 			this.grammar = grammar;
 		} else {
 			throw new IllegalArgumentException("grammar must not be null");
 		}
+		
+		assert (this.grammar != null);
 	}
 
 	/**
@@ -138,12 +125,14 @@ public abstract class GRModel extends Model {
 	 * 
 	 * @param maxDepth the maximum depth to allow a program's derivation tree.
 	 */
-	public void setMaxProgramDepth(int maxDepth) {
+	public void setMaxProgramDepth(final int maxDepth) {
 		if (maxDepth >= 1 || maxDepth == -1) {
 			this.maxDepth = maxDepth;
 		} else {
 			throw new IllegalArgumentException("maxDepth must either be -1 or greater than 0");
 		}
+		
+		assert (this.maxDepth >= 1 || this.maxDepth == -1);
 	}
 	
 	/**
@@ -168,11 +157,13 @@ public abstract class GRModel extends Model {
 	 * @param maxDepth the maximum depth to allow a program's derivation tree
 	 * 				   after initialisation.
 	 */
-	public void setMaxInitialProgramDepth(int maxInitialDepth) {
+	public void setMaxInitialProgramDepth(final int maxInitialDepth) {
 		if (maxInitialDepth >= 1 || maxInitialDepth == -1) {
 			this.maxInitialDepth = maxInitialDepth;
 		} else {
 			throw new IllegalArgumentException("maxInitialDepth must either be -1 or greater than 0");
 		}
+		
+		assert (this.maxInitialDepth >= 1 || this.maxInitialDepth == -1);
 	}
 }

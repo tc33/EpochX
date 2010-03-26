@@ -37,6 +37,7 @@ import org.epochx.ge.op.mutation.PointMutation;
  */
 public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 
+	@Override
 	public abstract GEModel getModel();
 	
 	/**

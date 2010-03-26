@@ -66,11 +66,20 @@ import org.epochx.tools.random.*;
 public abstract class Model implements Runnable {
 
 	// Components.
-	private LifeCycleManager life;
-	private StatsManager stats;
-	private RunManager run;
+	private final LifeCycleManager life;
+	private final StatsManager stats;
+	private final RunManager run;
 	
-	// Run parameters.
+	// Operators.
+	private PoolSelector poolSelector;
+	private ProgramSelector programSelector;
+	private RandomNumberGenerator randomNumberGenerator;
+
+	private Initialiser initialiser;
+	private Crossover crossover;
+	private Mutation mutation;
+	
+	// Control parameters.
 	private int noRuns;
 	private int noGenerations;
 	private int populationSize;
@@ -81,15 +90,6 @@ public abstract class Model implements Runnable {
 	private double crossoverProbability;
 	private double mutationProbability;
 	private double reproductionProbability;
-	
-	// Operators.
-	private PoolSelector poolSelector;
-	private ProgramSelector programSelector;
-	private RandomNumberGenerator randomNumberGenerator;
-
-	private Initialiser initialiser;
-	private Crossover crossover;
-	private Mutation mutation;
 	
 	// Caching.
 	private boolean cacheFitness;
@@ -130,15 +130,48 @@ public abstract class Model implements Runnable {
 	 * Calling this method directly will run this model sequentially, or it can
 	 * be passed into a new thread object whose start() method is then called to
 	 * run this model in a new thread.
+	 * 
+	 * A checks is performed after running the configure event that the model is
+	 * in a runnable state. A model is in a runnable state if all compulsory 
+	 * control parameters and operators have been set. If it is not in a 
+	 * runnable state then an <code>IllegalStateException</code> is thrown.
 	 */
 	public void run() {
 		// Fire config event.
 		life.fireConfigureEvent();
 		
+		// Validate that the model is in a runnable state.
+		if (!isInRunnableState()) {
+			throw new IllegalStateException("model not in runnable state - one or more compulsory control parameters unset");
+		}
+		
 		// Execute all the runs.
 		for (int i=0; i<getNoRuns(); i++) {
 			run.run(i);
 		}
+	}
+	
+	/**
+	 * Tests whether the model is sufficiently setup to be executed. For a model
+	 * to be in a runnable state it must have all compulsory control parameters 
+	 * and operators set.
+	 * 
+	 * @return true if this model is in a runnable state, false otherwise.
+	 */
+	public boolean isInRunnableState() {
+		/*
+		 * We assume all parameters with a default are still set because their 
+		 * own validation should have caught any attempt to unset them.
+		 */
+		boolean runnable = true;
+		
+		if ((initialiser == null)
+				|| (crossover == null)
+				|| (mutation == null)) {
+			runnable = false;
+		}
+		
+		return runnable;
 	}
 	
 	/**
@@ -200,14 +233,14 @@ public abstract class Model implements Runnable {
 	 * @return the <code>Initialiser</code> to be responsible for generating 
 	 * the initial population of the runs.
 	 */
-	public void setInitialiser(Initialiser initialiser) {
+	public void setInitialiser(final Initialiser initialiser) {
 		if (initialiser != null) {
 			this.initialiser = initialiser;
 		} else {
 			throw new IllegalArgumentException("initialiser must not be null");
 		}
 		
-		assert (this.initialiser != null) : "";
+		assert (this.initialiser != null);
 	}
 	
 	/**
@@ -226,12 +259,14 @@ public abstract class Model implements Runnable {
 	 * @return the <code>Crossover</code> to perform the exchange of genetic 
 	 * material between two programs.
 	 */
-	public void setCrossover(Crossover crossover) {
+	public void setCrossover(final Crossover crossover) {
 		if (crossover != null) {
 			this.crossover = crossover;
 		} else {
 			throw new IllegalArgumentException("crossover must not be null");
 		}
+		
+		assert (this.crossover != null);
 	}
 	
 	/**
@@ -250,12 +285,14 @@ public abstract class Model implements Runnable {
 	 * @return the <code>Mutation</code> that will carry out
 	 * the mutation of a program.
 	 */
-	public void setMutation(Mutation mutation) {
+	public void setMutation(final Mutation mutation) {
 		if (mutation != null) {
 			this.mutation = mutation;
 		} else {
 			throw new IllegalArgumentException("mutation must not be null");
 		}
+		
+		assert (this.crossover != null);
 	}
 
 	/**
@@ -277,7 +314,7 @@ public abstract class Model implements Runnable {
 	 * 
 	 * @param cacheFitness whether fitnesses should be cached or not.
 	 */
-	public void setCacheFitness(boolean cacheFitness) {
+	public void setCacheFitness(final boolean cacheFitness) {
 		this.cacheFitness = cacheFitness;
 	}
 
@@ -298,12 +335,14 @@ public abstract class Model implements Runnable {
 	 * 
 	 * @param noRuns the new number of runs to execute with this model.
 	 */
-	public void setNoRuns(int noRuns) {
+	public void setNoRuns(final int noRuns) {
 		if (noRuns >= 0) {
 			this.noRuns = noRuns;
 		} else {
 			throw new IllegalArgumentException("noRuns must be zero or more");
 		}
+		
+		assert (this.noRuns >= 0);
 	}
 
 	/**
@@ -324,12 +363,14 @@ public abstract class Model implements Runnable {
 	 * 
 	 * @param noGenerations the new number of generations to use within a run.
 	 */
-	public void setNoGenerations(int noGenerations) {
+	public void setNoGenerations(final int noGenerations) {
 		if (noGenerations >= 0) {
 			this.noGenerations = noGenerations;
 		} else {
 			throw new IllegalArgumentException("noGenerations must be zero or more");
 		}
+		
+		assert (this.noGenerations >= 0);
 	}
 	
 	/**
@@ -349,12 +390,14 @@ public abstract class Model implements Runnable {
 	 * @param populationSize the new number of CandidatePrograms each generation 
 	 * 						 should contain.
 	 */
-	public void setPopulationSize(int populationSize) {
+	public void setPopulationSize(final int populationSize) {
 		if (populationSize >= 1) {
 			this.populationSize = populationSize;
 		} else {
 			throw new IllegalArgumentException("populationSize must be one or more");
 		}
+		
+		assert (this.populationSize >= 1);
 	}
 
 	/**
@@ -374,12 +417,14 @@ public abstract class Model implements Runnable {
 	 * 
 	 * @param poolSize the new size of the mating pool to use.
 	 */
-	public void setPoolSize(int poolSize) {
+	public void setPoolSize(final int poolSize) {
 		if (poolSize >= 1) {
 			this.poolSize = poolSize;
 		} else {
 			throw new IllegalArgumentException("poolSize must be one or more");
 		}
+		
+		assert (this.poolSize >= 1);
 	}
 	
 	/**
@@ -401,12 +446,14 @@ public abstract class Model implements Runnable {
 	 * @param noElites the new number of elites to copy across from one 
 	 * 				   population to the next.
 	 */
-	public void setNoElites(int noElites) {
+	public void setNoElites(final int noElites) {
 		if (noElites >= 0) {
 			this.noElites = noElites;
 		} else {
 			throw new IllegalArgumentException("noElites must be zero or more");
 		}
+		
+		assert (this.noElites >= 1);
 	}
 
 	/**
@@ -431,12 +478,14 @@ public abstract class Model implements Runnable {
 	 * 
 	 * @param crossoverProbability the new Crossover probability to use.
 	 */
-	public void setCrossoverProbability(double crossoverProbability) {
+	public void setCrossoverProbability(final double crossoverProbability) {
 		if (crossoverProbability >= 0.0 && crossoverProbability <= 1.0) {
 			this.crossoverProbability = crossoverProbability;
 		} else {
 			throw new IllegalArgumentException("crossoverProbability must be between 0.0 and 1.0 inclusive");
 		}
+		
+		assert (this.crossoverProbability >= 0.0 && this.crossoverProbability <= 1.0);
 	}
 
 	/**
@@ -461,12 +510,14 @@ public abstract class Model implements Runnable {
 	 * 
 	 * @param mutationProbability the new mutation probability to use.
 	 */
-	public void setMutationProbability(double mutationProbability) {
+	public void setMutationProbability(final double mutationProbability) {
 		if (mutationProbability >= 0.0 && mutationProbability <= 1.0) {
 			this.mutationProbability = mutationProbability;
 		} else {
 			throw new IllegalArgumentException("mutationProbability must be between 0.0 and 1.0 inclusive");
 		}
+		
+		assert (this.mutationProbability >= 0.0 && this.mutationProbability <= 1.0);
 	}
 
 	/**
@@ -489,12 +540,14 @@ public abstract class Model implements Runnable {
 	 * 
 	 * @param mutationProbability the new mutation probability to use.
 	 */
-	public void setReproductionProbability(double reproductionProbability) {
+	public void setReproductionProbability(final double reproductionProbability) {
 		if (reproductionProbability >= 0.0 && reproductionProbability <= 1.0) {
 			this.reproductionProbability = reproductionProbability;
 		} else {
 			throw new IllegalArgumentException("reproductionProbability must be between 0.0 and 1.0 inclusive");
 		}
+		
+		assert (this.reproductionProbability >= 0.0 && this.reproductionProbability <= 1.0);
 	}
 
 	/**
@@ -520,7 +573,7 @@ public abstract class Model implements Runnable {
 	 * @param terminationFitness the new fitness below which a run will be 
 	 * 							 terminated.
 	 */
-	public void setTerminationFitness(double terminationFitness) {
+	public void setTerminationFitness(final double terminationFitness) {
 		this.terminationFitness = terminationFitness;
 	}
 	
@@ -545,12 +598,14 @@ public abstract class Model implements Runnable {
 	 * @param ProgramSelector the new ProgramSelector to be used when selecting 
 	 * 						 parents for a genetic operator.
 	 */
-	public void setProgramSelector(ProgramSelector programSelector) {
+	public void setProgramSelector(final ProgramSelector programSelector) {
 		if (programSelector != null) {
 			this.programSelector = programSelector;
 		} else {
 			throw new IllegalArgumentException("program selector must not be null");
 		}
+		
+		assert (this.programSelector != null);
 	}
 
 	/**
@@ -573,7 +628,7 @@ public abstract class Model implements Runnable {
 	 * @param PoolSelector the new PoolSelector to be used when building a 
 	 * 						breeding pool.
 	 */
-	public void setPoolSelector(PoolSelector poolSelector) {
+	public void setPoolSelector(final PoolSelector poolSelector) {
 		this.poolSelector = poolSelector;
 	}
 	
@@ -604,11 +659,13 @@ public abstract class Model implements Runnable {
 	 * @param rng the random number generator to be used any time random 
 	 * 				behaviour is required.
 	 */
-	public void setRNG(RandomNumberGenerator rng) {
+	public void setRNG(final RandomNumberGenerator rng) {
 		if (rng != null) {
 			this.randomNumberGenerator = rng;
 		} else {
 			throw new IllegalArgumentException("random number generator must not be null");
 		}
+		
+		assert (this.randomNumberGenerator != null);
 	}
 }

@@ -149,8 +149,13 @@ public class PoolSelectionManager {
 		
 		List<CandidateProgram> pool = null;
 		do {
-			// Perform pool selection.
-			pool = poolSelector.getPool(pop, poolSize);
+			if (poolSelector == null) {
+				// Use population as the pool.
+				pool = pop;
+			} else {
+				// Perform pool selection.
+				pool = poolSelector.getPool(pop, poolSize);
+			}
 			
 			// Allow life cycle listener to confirm or modify.
 			pool = model.getLifeCycleManager().firePoolSelectionEvent(pool);

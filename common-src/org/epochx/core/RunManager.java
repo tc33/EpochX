@@ -110,6 +110,10 @@ public class RunManager {
 	 * Executes a single evolutionary run of this <code>RunManager's</code> 
 	 * <code>Model</code>.
 	 * 
+	 * If noGenerations is zero, initialisation will be performed but no further
+	 * generations. If it is one, then initialisation and one other generation
+	 * will be performed.
+	 * 
 	 * @param runNo the sequential number which identifies this run out of the 
 	 * 				set of runs being performed.
 	 */

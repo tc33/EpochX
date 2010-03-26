@@ -367,7 +367,22 @@ public class GECandidateProgram extends CandidateProgram {
 	 */
 	@Override
 	public boolean isValid() {
-		return (getSourceCode() != null) && (codons.size() <= model.getMaxChromosomeLength());
+		boolean valid = true;
+		
+		int maxChromosomeLength = model.getMaxChromosomeLength();
+		int maxProgramDepth = model.getMaxProgramDepth();
+		
+		if (getSourceCode() == null) {
+			valid = false;
+		} else if ((maxChromosomeLength != -1)
+					&& (codons.size() > maxChromosomeLength)) {
+			valid = false;
+		} else if ((maxProgramDepth != -1)
+					&& (parseTree.getDepth() > maxProgramDepth)) {
+			valid = false;
+		}
+		
+		return valid;
 	}
 	
 	/**

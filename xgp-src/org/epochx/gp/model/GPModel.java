@@ -27,8 +27,7 @@ import org.epochx.core.Model;
 import org.epochx.gp.op.crossover.*;
 import org.epochx.gp.op.init.*;
 import org.epochx.gp.op.mutation.*;
-import org.epochx.gp.representation.*;
-import org.epochx.gp.stats.GPStatsEngine;
+import org.epochx.gp.representation.Node;
 
 
 /**
@@ -50,11 +49,6 @@ public abstract class GPModel extends Model {
 	private int maxInitialDepth;
 	private int maxProgramDepth;
 	
-	// Run components.
-	private GPInitialiser initialiser;
-	private GPCrossover crossover;
-	private GPMutation mutator;
-	
 	private List<Node> syntax;
 	
 	/**
@@ -64,87 +58,63 @@ public abstract class GPModel extends Model {
 	public GPModel() {
 		// Initialise default parameter values.
 		maxInitialDepth = 6;
-		maxProgramDepth = 17;
+		maxProgramDepth = 12;
 		
 		// Initialise components.
-		initialiser = new FullInitialiser(this);
-		crossover = new UniformPointCrossover(this);
-		mutator = new SubtreeMutation(this);
-		
-		// Stats - overwrite parent default.
-		setStatsEngine(new GPStatsEngine(this));
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Defaults to FullInitialiser in GPModel.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public GPInitialiser getInitialiser() {
-		return initialiser;
-	}
-
-	/**
-	 * Overwrites the default initialiser.
-	 * 
-	 * @param initialiser the new GPInitialiser to use when generating the 
-	 * 		 			  starting population.
-	 */
-	public void setInitialiser(GPInitialiser initialiser) {
-		this.initialiser = initialiser;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Defaults to {@link UniformPointCrossover} in GPModel.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public GPCrossover getCrossover() {
-		return crossover;
-	}
-
-	/**
-	 * Overwrites the default crossover operator.
-	 * 
-	 * @param crossover the crossover to set
-	 */
-	public void setCrossover(GPCrossover crossover) {
-		this.crossover = crossover;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Defaults to {@link SubtreeMutation} in GPModel.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public GPMutation getMutation() {
-		return mutator;
-	}
-
-	/**
-	 * Overwrites the default mutator used to perform mutation.
-	 * 
-	 * @param mutator the mutator to set.
-	 */
-	public void setMutator(GPMutation mutator) {
-		this.mutator = mutator;
+		setInitialiser(new FullInitialiser(this));
+		setCrossover(new UniformPointCrossover(this));
+		setMutation(new SubtreeMutation(this));
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * <p>Defaults to 6 in GPModel.
+	 * This implementation checks that this model is in a runnable state for 
+	 * performing an XGP run before executing. A model is in a runnable state if
+	 * all compulsory control parameters and operators have been set, for 
+	 * example, syntax must not be an empty list. If it is not in a runnable 
+	 * state then an <code>IllegalStateException</code> is thrown.
+	 */
+	@Override
+	public void run() {
+		// Validate that the model is in a runnable state.
+		if (!isInRunnableState()) {
+			throw new IllegalStateException("model not in runnable state - one or more compulsory control parameters unset");
+		}
+		
+		super.run();
+	}
+	
+	/**
+	 * Tests whether the model is sufficiently setup to be executed. For a model
+	 * to be in a runnable state it must have all compulsory control parameters 
+	 * and operators set.
 	 * 
-	 * @return {@inheritDoc}
+	 * @return true if this model is in a runnable state, false otherwise.
+	 */
+	public boolean isInRunnableState() {
+		/*
+		 * We assume all parameters with a default are still set because their 
+		 * own validation should have caught any attempt to unset them.
+		 */
+		boolean runnable = true;		
+		
+		if (getSyntax().isEmpty()) {
+			runnable = false;
+		}
+
+		return runnable;
+	}
+	
+	/**
+	 * Retrieves the maximum depth of CandidatePrograms allowed in the 
+	 * population after initialisation. The exact way in which the 
+	 * implementation ensures this depth is kept to may vary.
+	 * 
+	 * <p>Defaults to 6.
+	 * 
+	 * @return the maximum depth of CandidatePrograms to be allowed in the 
+	 * 		   population after initialisation.
 	 */
 	public int getInitialMaxDepth() {
 		return maxInitialDepth;
@@ -154,19 +124,29 @@ public abstract class GPModel extends Model {
 	 * Overwrites the default max program tree depth allowed after 
 	 * initialisation is performed.
 	 * 
+	 * <p>Max depth of -1 is allowed to indicate no limit.
+	 * 
 	 * @param maxInitialDepth the new max program tree depth to use.
 	 */
 	public void setInitialMaxDepth(int maxInitialDepth) {
 		//TODO The name of this needs to be made consistent with those from XGR and XGE.
-		this.maxInitialDepth = maxInitialDepth;
+		if (maxInitialDepth >= -1) {
+			this.maxInitialDepth = maxInitialDepth;
+		} else {
+			throw new IllegalArgumentException("maxInitialDepth must be -1 or greater");
+		}
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Retrieves the maximum depth of CandidatePrograms allowed in the 
+	 * population after undergoing genetic operators. The exact way in which 
+	 * CandidatePrograms deeper than this limit are dealt with may vary, but 
+	 * they will not be allowed to remain into the next generation unaltered.
 	 * 
-	 * <p>Defaults to 17 in GPModel.
+	 * <p>Defaults to 12.
 	 * 
-	 * @return {@inheritDoc}
+	 * @return the maximum depth of CandidatePrograms to be allowed in the 
+	 * 		   population after genetic operators.
 	 */
 	public int getMaxProgramDepth() {
 		return maxProgramDepth;
@@ -176,10 +156,16 @@ public abstract class GPModel extends Model {
 	 * Overwrites the default max program tree depth allowed after genetic 
 	 * operators are performed.
 	 * 
+	 * <p>Max depth of -1 is allowed to indicate no limit.
+	 * 
 	 * @param maxDepth the new max program tree depth to use.
 	 */
 	public void setMaxProgramDepth(int maxDepth) {
-		this.maxProgramDepth = maxDepth;
+		if (maxDepth >= -1) {
+			this.maxProgramDepth = maxDepth;
+		} else {
+			throw new IllegalArgumentException("maxProgramDepth must be -1 or greater");
+		}
 	}
 	
 	/**
@@ -192,39 +178,16 @@ public abstract class GPModel extends Model {
 	}
 	
 	/**
+	 * Sets the syntax to use, that is a complete set of the terminals and 
+	 * function nodes.
 	 * 
+	 * @param syntax a list of the functions and terminals.
 	 */
 	public void setSyntax(List<Node> syntax) {
-		this.syntax = syntax;
+		if (syntax != null) {
+			this.syntax = syntax;
+		} else {
+			throw new IllegalArgumentException("syntax must not be null");
+		}
 	}
-	
-	/**
-	 * Default implementation which accepts all crossovers.
-	 * 
-	 * @param parents The programs that were crossed over to create the given 
-	 * 				  children.
-	 * @param children The children that resulted from the parents being 
-	 * 				   crossed over.
-	 * @return True if the crossover operation should proceed, false if it is 
-	 * 		   rejected and should be retried with new parents.
-	 */
-	public boolean acceptCrossover(GPCandidateProgram[] parents, 
-								   GPCandidateProgram[] children) {
-		return true;
-	}
-
-	/**
-	 * Default implementation which accepts all mutations.
-	 * 
-	 * @param parent The program before the mutation operation.
-	 * @param child  The program after the mutation operation has been carried 
-	 * 				 out.
-	 * @return True if the mutation operation should proceed, false if it is 
-	 * rejected and should be retried with a new parent.
-	 */
-	public boolean acceptMutation(GPCandidateProgram parent, 
-								  GPCandidateProgram child) {
-		return true;
-	}
-
 }

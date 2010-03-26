@@ -25,14 +25,11 @@ import org.epochx.core.Model;
 import org.epochx.gr.op.crossover.*;
 import org.epochx.gr.op.init.*;
 import org.epochx.gr.op.mutation.*;
-import org.epochx.gr.stats.GRStatsEngine;
 import org.epochx.tools.grammar.Grammar;
 
 public abstract class GRModel extends Model {
 	
-	private GRInitialiser initialiser;
-	private GRCrossover crossover;
-	private GRMutation mutator;
+	private Grammar grammar;
 	
 	private int maxDepth;
 	private int maxInitialDepth;
@@ -43,16 +40,55 @@ public abstract class GRModel extends Model {
 	 */
 	public GRModel() {
 		// Set default parameter values.
-		maxDepth = 12;
+		maxDepth = 14;
 		maxInitialDepth = 8;
 		
-		// GP Components.
-		initialiser = new RampedHalfAndHalfInitialiser(this);
-		crossover = new WhighamCrossover(this);
-		mutator = new WhighamMutation(this);
+		// Operators.
+		setInitialiser(new RampedHalfAndHalfInitialiser(this));
+		setCrossover(new WhighamCrossover(this));
+		setMutation(new WhighamMutation(this));
 		
-		// Stats - overwrite parent default.
-		setStatsEngine(new GRStatsEngine(this));
+		grammar = null;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * This implementation checks that this model is in a runnable state for 
+	 * performing an XGR run before executing. A model is in a runnable state if
+	 * all compulsory control parameters and operators have been set, for 
+	 * example, a valid grammr. If it is not in a runnable state then an 
+	 * <code>IllegalStateException</code> is thrown.
+	 */
+	@Override
+	public void run() {
+		// Validate that the model is in a runnable state.
+		if (!isInRunnableState()) {
+			throw new IllegalStateException("model not in runnable state - one or more compulsory control parameters unset");
+		}
+		
+		super.run();
+	}
+	
+	/**
+	 * Tests whether the model is sufficiently setup to be executed. For a model
+	 * to be in a runnable state it must have all compulsory control parameters 
+	 * and operators set.
+	 * 
+	 * @return true if this model is in a runnable state, false otherwise.
+	 */
+	public boolean isInRunnableState() {
+		/*
+		 * We assume all parameters with a default are still set because their 
+		 * own validation should have caught any attempt to unset them.
+		 */
+		boolean runnable = true;		
+		
+		if (getGrammar() == null) {
+			runnable = false;
+		}
+		
+		return runnable;
 	}
 	
 	/**
@@ -63,78 +99,32 @@ public abstract class GRModel extends Model {
 	 * 
 	 * @return the language grammar that defines the syntax of solutions.
 	 */
-	public abstract Grammar getGrammar();
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Defaults to RandomInitialiser in GRModel.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public GRInitialiser getInitialiser() {
-		return initialiser;
-	}
-
-	/**
-	 * Overwrites the default initialiser.
-	 * 
-	 * @param initialiser the new GPInitialiser to use when generating the 
-	 * 		 			  starting population.
-	 */
-	public void setInitialiser(GRInitialiser gEInitialiser) {
-		this.initialiser = gEInitialiser;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Defaults to {@link OnePointCrossover} in GRModel.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public GRCrossover getCrossover() {
-		return crossover;
+	public Grammar getGrammar() {
+		return grammar;
 	}
 	
 	/**
-	 * Overwrites the default crossover operator.
+	 * Sets the grammar that defines the valid syntax of the programs to be 
+	 * evolves.
 	 * 
-	 * @param crossover the crossover to set
+	 * @param grammar the language grammar to use to define the syntax of 
+	 * solutions.
 	 */
-	public void setCrossover(GRCrossover crossover) {
-		this.crossover = crossover;
+	public void setGrammar(Grammar grammar) {
+		if (grammar != null) {
+			this.grammar = grammar;
+		} else {
+			throw new IllegalArgumentException("grammar must not be null");
+		}
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Returns the maximum depth of the derivation trees allowed. Crossovers or 
+	 * mutations that result in a larger chromosome will not be allowed.
 	 * 
-	 * <p>Defaults to {@link PointMutation} in GRModel.
+	 * <p>Defaults to 14.
 	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public GRMutation getMutation() {
-		return mutator;
-	}
-
-	/**
-	 * Overwrites the default mutator used to perform mutation.
-	 * 
-	 * @param mutator the mutator to set.
-	 */
-	public void setMutation(GRMutation mutator) {
-		this.mutator = mutator;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Defaults to 20 in GRModel.
-	 * 
-	 * @return {@inheritDoc}
+	 * @return the maximum depth of derivation trees to allow.
 	 */
 	public int getMaxProgramDepth() {
 		return maxDepth;
@@ -144,18 +134,26 @@ public abstract class GRModel extends Model {
 	 * Overwrites the default maximum allowable depth of a program's derivation 
 	 * tree.
 	 * 
+	 * <p>Max depth of -1 is allowed to indicate no limit.
+	 * 
 	 * @param maxDepth the maximum depth to allow a program's derivation tree.
 	 */
 	public void setMaxProgramDepth(int maxDepth) {
-		this.maxDepth = maxDepth;
+		if (maxDepth >= 1 || maxDepth == -1) {
+			this.maxDepth = maxDepth;
+		} else {
+			throw new IllegalArgumentException("maxDepth must either be -1 or greater than 0");
+		}
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * Returns the maximum depth of the derivation trees allowed at 
+	 * initialisation.
 	 * 
-	 * <p>Defaults to 8 in GRModel.
+	 * <p>Defaults to 8.
 	 * 
-	 * @return {@inheritDoc}
+	 * @return the maximum depth of derivation trees to allow after 
+	 * initialisation.
 	 */
 	public int getMaxInitialProgramDepth() {
 		return maxInitialDepth;
@@ -165,10 +163,16 @@ public abstract class GRModel extends Model {
 	 * Overwrites the default maximum allowable depth of a program's derivation 
 	 * tree after initialisation.
 	 * 
+	 * <p>Max depth of -1 is allowed to indicate no limit.
+	 * 
 	 * @param maxDepth the maximum depth to allow a program's derivation tree
 	 * 				   after initialisation.
 	 */
 	public void setMaxInitialProgramDepth(int maxInitialDepth) {
-		this.maxInitialDepth = maxInitialDepth;
+		if (maxInitialDepth >= 1 || maxInitialDepth == -1) {
+			this.maxInitialDepth = maxInitialDepth;
+		} else {
+			throw new IllegalArgumentException("maxInitialDepth must either be -1 or greater than 0");
+		}
 	}
 }

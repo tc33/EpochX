@@ -167,7 +167,16 @@ public class GPCandidateProgram extends CandidateProgram {
 	
 	@Override
 	public boolean isValid() {
-		return (getProgramDepth() <= model.getMaxProgramDepth());
+		boolean valid = true;
+		
+		int maxProgramDepth = model.getMaxProgramDepth();
+		
+		if ((maxProgramDepth != -1)
+				&& (getProgramDepth() > maxProgramDepth)) {
+			valid = false;
+		}
+		
+		return valid;
 	}
 	
 	/**

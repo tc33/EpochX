@@ -69,10 +69,7 @@ public class SantaFeTrail extends GPModel {
 	public SantaFeTrail() {
 		landscape = new AntLandscape(new Dimension(32, 32), null);
 		ant = new Ant(600, landscape);
-	}
-	
-	@Override
-	public List<Node> getSyntax() {
+		
 		// Define functions.
 		List<Node> syntax = new ArrayList<Node>();
 		syntax.add(new IfFoodAheadFunction(ant));
@@ -84,7 +81,7 @@ public class SantaFeTrail extends GPModel {
 		syntax.add(new AntTurnLeftAction(ant));
 		syntax.add(new AntTurnRightAction(ant));
 		
-		return syntax;
+		setSyntax(syntax);
 	}
 	
 	@Override

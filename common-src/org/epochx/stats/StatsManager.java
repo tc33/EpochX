@@ -52,7 +52,7 @@ public class StatsManager {
 	
 	public StatsManager(Model model, StatsEngine statsEngine) {
 		this.model = model;
-		this.statsEngine = statsEngine;
+		setStatsEngine(statsEngine);
 		
 		runData = new HashMap<String, Object>();
 		generationData = new HashMap<String, Object>();
@@ -63,6 +63,14 @@ public class StatsManager {
 		setupListeners();
 	}
 	
+	public void setStatsEngine(StatsEngine statsEngine) {
+		if (statsEngine == null) {
+			statsEngine = new StatsEngine(model);
+		}
+		
+		this.statsEngine = statsEngine;
+	}
+
 	public void addRunData(String field, Object value) {
 		runData.put(field, value);
 	}
@@ -221,14 +229,6 @@ public class StatsManager {
 	
 	private Object generateMutationStat(String field) {
 		return statsEngine.getMutationStat(field);
-	}
-	
-	public void setStatsEngine(StatsEngine statsEngine) {
-		if (statsEngine == null) {
-			statsEngine = new StatsEngine(model);
-		}
-		
-		this.statsEngine = statsEngine;
 	}
 
 	private void setupListeners() {

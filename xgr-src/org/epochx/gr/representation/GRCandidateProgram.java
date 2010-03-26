@@ -75,7 +75,16 @@ public class GRCandidateProgram extends CandidateProgram {
 	
 	@Override
 	public boolean isValid() {
-		return (getDepth() <= model.getMaxProgramDepth());
+		boolean valid = true;
+		
+		int maxProgramDepth = model.getMaxProgramDepth();
+		
+		if ((maxProgramDepth != -1)
+				&& (getDepth() > maxProgramDepth)) {
+			valid = false;
+		}
+		
+		return valid;
 	}
 
 	public String getSourceCode() {

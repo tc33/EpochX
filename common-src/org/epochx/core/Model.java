@@ -86,12 +86,13 @@ public abstract class Model implements Runnable {
 	private PoolSelector poolSelector;
 	private ProgramSelector programSelector;
 	private RandomNumberGenerator randomNumberGenerator;
+
+	private Initialiser initialiser;
+	private Crossover crossover;
+	private Mutation mutation;
 	
 	// Caching.
 	private boolean cacheFitness;
-	
-	// Stats.
-	private StatsEngine statsEngine;
 	
 	/**
 	 * Construct the model with defaults.
@@ -114,31 +115,25 @@ public abstract class Model implements Runnable {
 		reproductionProbability = 0.0;
 		
 		// Operators.
-		programSelector = new RandomSelector(this);
-		poolSelector = new TournamentSelector(this, 7);
+		programSelector = new TournamentSelector(this, 7);
+		poolSelector = null;
 		randomNumberGenerator = new MersenneTwisterFast();
 		
 		// Caching.
 		cacheFitness = true;
-		
-		// Stats.
-		statsEngine = new StatsEngine(this);
 	}
 	
 	/**
-	 * Executes this model.
+	 * Executes this model to perform a series of evolutionary runs.
 	 * 
 	 * <p>
 	 * Calling this method directly will run this model sequentially, or it can
 	 * be passed into a new thread object whose start() method is then called to
 	 * run this model in a new thread.
 	 */
-	public void run() {		
+	public void run() {
 		// Fire config event.
 		life.fireConfigureEvent();
-		
-		// Set the stats engine straight away so it can be used.
-		stats.setStatsEngine(getStatsEngine());
 		
 		// Execute all the runs.
 		for (int i=0; i<getNoRuns(); i++) {
@@ -146,63 +141,130 @@ public abstract class Model implements Runnable {
 		}
 	}
 	
-	
-
+	/**
+	 * Retrieves this model's life cycle manager that can be used to both 
+	 * trigger life cycle events and listen to life cycle events.
+	 * 
+	 * @return this model's life cycle manager.
+	 */
 	public LifeCycleManager getLifeCycleManager() {
 		return life;
 	}
 
+	/**
+	 * Retrieves this model's stats manager that can be used to obtain 
+	 * statistics and raw data about the runs as they're progressing or to 
+	 * insert data that can be retrievable by all.
+	 * 
+	 * @return this model's stats manager.
+	 */
 	public StatsManager getStatsManager() {
 		return stats;
 	}
 
+	/**
+	 * Retrieves this model's run manager that will perform the task of 
+	 * executing single evolutionary runs according to this model.
+	 * 
+	 * @return the run manager that will handle execution of evolutionary runs.
+	 */
 	public RunManager getRunManager() {
 		return run;
 	}
 	
 	/**
-	 * Specifies the component to be used to generate an initial population.
-	 * 
-	 * @return the <code>Initialiser</code> to be responsible for generating 
-	 * the initial population of the runs.
-	 */
-	public abstract Initialiser getInitialiser();
-	
-	/**
-	 * Specifies the component to perform the crossover operation.
-	 * 
-	 * @return the <code>Crossover</code> to perform the exchange of genetic 
-	 * material between two programs.
-	 */
-	public abstract Crossover getCrossover();
-	
-	/**
-	 * Specifies the component to perform the mutation operation.
-	 * 
-	 * @return the <code>Mutation</code> that will carry out
-	 * the mutation of a program.
-	 */
-	public abstract Mutation getMutation();
-	
-	/**
-	 * Calculates a fitness score of a program. In EpochX fitness is minimised 
-	 * so a fitness score of 0.1 is better than 0.2. It is essential that this 
-	 * method is implemented to provide a measure of how good the given program
-	 * solution is.
+	 * Calculates a fitness score of a program. In EpochX fitness is 
+	 * standardised so a fitness score of 0.1 is better than 0.2. It is 
+	 * essential that this  method is implemented to provide a measure of how 
+	 * good the given program solution is.
 	 * 
 	 * @param program the candidate program to be evaluated.
 	 * @return a fitness score for the program given as a parameter.
 	 */
 	public abstract double getFitness(CandidateProgram program);
+	
+	/**
+	 * Retrieves the operator that is currently set to perform the operation of
+	 * initialisation.
+	 * 
+	 * @return the operator that will perform initialisation.
+	 */
+	public Initialiser getInitialiser() {
+		return initialiser;
+	}
+	
+	/**
+	 * Specifies the operator that should be used to perform the operation of 
+	 * initialisation.
+	 * 
+	 * @return the <code>Initialiser</code> to be responsible for generating 
+	 * the initial population of the runs.
+	 */
+	public void setInitialiser(Initialiser initialiser) {
+		if (initialiser != null) {
+			this.initialiser = initialiser;
+		} else {
+			throw new IllegalArgumentException("initialiser must not be null");
+		}
+		
+		assert (this.initialiser != null) : "";
+	}
+	
+	/**
+	 * Retrieves the operator that is currently set to perform the genetic 
+	 * operation of crossover.
+	 * 
+	 * @return the operator that will perform crossover.
+	 */
+	public Crossover getCrossover() {
+		return crossover;
+	}
+	
+	/**
+	 * Specifies the operator to perform the crossover operation.
+	 * 
+	 * @return the <code>Crossover</code> to perform the exchange of genetic 
+	 * material between two programs.
+	 */
+	public void setCrossover(Crossover crossover) {
+		if (crossover != null) {
+			this.crossover = crossover;
+		} else {
+			throw new IllegalArgumentException("crossover must not be null");
+		}
+	}
+	
+	/**
+	 * Retrieves the operator that is currently set to perform the genetic 
+	 * operation of mutation.
+	 * 
+	 * @return the operator that will perform mutation.
+	 */
+	public Mutation getMutation() {
+		return mutation;
+	}
+	
+	/**
+	 * Specifies the operator to perform the mutation operation.
+	 * 
+	 * @return the <code>Mutation</code> that will carry out
+	 * the mutation of a program.
+	 */
+	public void setMutation(Mutation mutation) {
+		if (mutation != null) {
+			this.mutation = mutation;
+		} else {
+			throw new IllegalArgumentException("mutation must not be null");
+		}
+	}
 
 	/**
-	 * Specifies whether fitness caching should be used to increase 
-	 * performance. Fitness caching should be used for most problems but if the
-	 * same source code can be designated different fitness scores (due to the
-	 * fitness being dependent upon other properties) then fitness caching 
-	 * should be disabled.
+	 * Returns whether fitness caching is to be used or not. Fitness caching 
+	 * should be used for most problems but if the same source code can be 
+	 * designated different fitness scores (due to the fitness being dependent 
+	 * upon other properties) then fitness caching should be disabled.
 	 * 
-	 * <p>Defaults to true in AbstractModel.
+	 * <p>Defaults to <code>true</code>.
 	 * 
 	 * @return true if fitness caching should be used, false otherwise.
 	 */
@@ -218,13 +280,14 @@ public abstract class Model implements Runnable {
 	public void setCacheFitness(boolean cacheFitness) {
 		this.cacheFitness = cacheFitness;
 	}
-	
+
 	/**
-	 * {@inheritDoc}
+	 * Returns the number of separate runs that will be carried out with this
+	 * model.
 	 * 
-	 * <p>Defaults to 1 in AbstractModel.
+	 * <p>Defaults to <code>1</code>.
 	 * 
-	 * @return {@inheritDoc}
+	 * @return the number of runs that will be performed.
 	 */
 	public int getNoRuns() {
 		return noRuns;
@@ -236,15 +299,21 @@ public abstract class Model implements Runnable {
 	 * @param noRuns the new number of runs to execute with this model.
 	 */
 	public void setNoRuns(int noRuns) {
-		this.noRuns = noRuns;
+		if (noRuns >= 0) {
+			this.noRuns = noRuns;
+		} else {
+			throw new IllegalArgumentException("noRuns must be zero or more");
+		}
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Returns the maximum number of generations that each run will contain. 
+	 * Termination may be caused by other criteria such as fitness.
 	 * 
-	 * <p>Defaults to 50 in AbstractModel.
+	 * <p>Defaults to 50.
 	 * 
-	 * @return {@inheritDoc}
+	 * @return the maximum number of generations that will be performed in a 
+	 * run before termination.
 	 */
 	public int getNoGenerations() {
 		return noGenerations;
@@ -256,15 +325,19 @@ public abstract class Model implements Runnable {
 	 * @param noGenerations the new number of generations to use within a run.
 	 */
 	public void setNoGenerations(int noGenerations) {
-		this.noGenerations = noGenerations;
+		if (noGenerations >= 0) {
+			this.noGenerations = noGenerations;
+		} else {
+			throw new IllegalArgumentException("noGenerations must be zero or more");
+		}
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * Specifies the number of programs to maintain in the population.
 	 * 
-	 * <p>Defaults to 100 in AbstractModel.
+	 * <p>Defaults to 100.
 	 * 
-	 * @return {@inheritDoc}
+	 * @return the size of the population to be used.
 	 */
 	public int getPopulationSize() {
 		return populationSize;
@@ -277,15 +350,20 @@ public abstract class Model implements Runnable {
 	 * 						 should contain.
 	 */
 	public void setPopulationSize(int populationSize) {
-		this.populationSize = populationSize;
+		if (populationSize >= 1) {
+			this.populationSize = populationSize;
+		} else {
+			throw new IllegalArgumentException("populationSize must be one or more");
+		}
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Returns the size of the breeding pool to use. If a value of zero or 
+	 * less is returned then the whole population will be used as the pool.
 	 * 
-	 * <p>Defaults to 50 in AbstractModel.
+	 * <p>Defaults to 50.
 	 * 
-	 * @return {@inheritDoc}
+	 * @return the number of programs that should form the breeding pool.
 	 */
 	public int getPoolSize() {
 		return poolSize;
@@ -297,15 +375,20 @@ public abstract class Model implements Runnable {
 	 * @param poolSize the new size of the mating pool to use.
 	 */
 	public void setPoolSize(int poolSize) {
-		this.poolSize = poolSize;
+		if (poolSize >= 1) {
+			this.poolSize = poolSize;
+		} else {
+			throw new IllegalArgumentException("poolSize must be one or more");
+		}
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * Returns the number of elite programs to be copied directly into each
+	 * generation, where elites are the very best programs in a population.
 	 * 
-	 * <p>Defaults to 10 in AbstractModel.
+	 * <p>Defaults to 10.
 	 * 
-	 * @return {@inheritDoc}
+	 * @return the number of elites to be used each generation.
 	 */
 	public int getNoElites() {
 		return noElites;
@@ -319,15 +402,25 @@ public abstract class Model implements Runnable {
 	 * 				   population to the next.
 	 */
 	public void setNoElites(int noElites) {
-		this.noElites = noElites;
+		if (noElites >= 0) {
+			this.noElites = noElites;
+		} else {
+			throw new IllegalArgumentException("noElites must be zero or more");
+		}
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Returns the probability that when choosing how the next programs will 
+	 * be generated, whether crossover will be used. The probabilities of 
+	 * crossover, mutation and reproduction should add up to 1.0. If the 
+	 * probabilities do not add up then crossover will be given the priority, 
+	 * followed by mutation, with the remaining probability left to 
+	 * reproduction.
 	 * 
-	 * <p>Defaults to 0.9 in AbstractModel to represent a 90% chance.
+	 * <p>Defaults to 0.9 to represent a 90% chance.
 	 * 
-	 * @return {@inheritDoc}
+	 * @return the probability that the crossover operation will be carried 
+	 * out.
 	 */
 	public double getCrossoverProbability() {
 		return crossoverProbability;
@@ -339,15 +432,25 @@ public abstract class Model implements Runnable {
 	 * @param crossoverProbability the new Crossover probability to use.
 	 */
 	public void setCrossoverProbability(double crossoverProbability) {
-		this.crossoverProbability = crossoverProbability;
+		if (crossoverProbability >= 0.0 && crossoverProbability <= 1.0) {
+			this.crossoverProbability = crossoverProbability;
+		} else {
+			throw new IllegalArgumentException("crossoverProbability must be between 0.0 and 1.0 inclusive");
+		}
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Returns the probability that when choosing how the next programs will 
+	 * be generated, whether mutation will be used. The probabilities of 
+	 * crossover, mutation and reproduction should add up to 1.0. If the 
+	 * probabilities do not add up then crossover will be given the priority, 
+	 * followed by mutation, with the remaining probability left to 
+	 * reproduction.
 	 * 
-	 * <p>Defaults to 0.1 in AbstractModel to represent a 10% chance.
+	 * <p>Defaults to 0.1 to represent a 10% chance.
 	 * 
-	 * @return {@inheritDoc}
+	 * @return the probability that the mutation operation will be carried 
+	 * out.
 	 */
 	public double getMutationProbability() {
 		return mutationProbability;
@@ -359,17 +462,23 @@ public abstract class Model implements Runnable {
 	 * @param mutationProbability the new mutation probability to use.
 	 */
 	public void setMutationProbability(double mutationProbability) {
-		this.mutationProbability = mutationProbability;
+		if (mutationProbability >= 0.0 && mutationProbability <= 1.0) {
+			this.mutationProbability = mutationProbability;
+		} else {
+			throw new IllegalArgumentException("mutationProbability must be between 0.0 and 1.0 inclusive");
+		}
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Returns the probability that when choosing how the next programs will 
+	 * be generated, whether reproduction will be used. The probabilities of 
+	 * crossover, mutation and reproduction should add up to 1.0. If the 
+	 * probabilities do not add up then crossover will be given the priority, 
+	 * followed by mutation, with the remaining probability left to 
+	 * reproduction.
 	 * 
-	 * <p>Automatically calculates the reproduction probability based upon the 
-	 * Crossover and mutation probabilities as all three together must add up 
-	 * to 100%. Defaults to 0% in AbstractModel.
-	 * 
-	 * @return {@inheritDoc}
+	 * @return the probability that the reproduction operation will be carried 
+	 * out.
 	 */
 	public double getReproductionProbability() {
 		return reproductionProbability;
@@ -381,15 +490,25 @@ public abstract class Model implements Runnable {
 	 * @param mutationProbability the new mutation probability to use.
 	 */
 	public void setReproductionProbability(double reproductionProbability) {
-		this.reproductionProbability = reproductionProbability;
+		if (reproductionProbability >= 0.0 && reproductionProbability <= 1.0) {
+			this.reproductionProbability = reproductionProbability;
+		} else {
+			throw new IllegalArgumentException("reproductionProbability must be between 0.0 and 1.0 inclusive");
+		}
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Returns the target fitness score. The current run will be terminated if a
+	 * fitness score equal to or less than this value is achieved. If this 
+	 * happens the run will be considered a success. If the implementer doesn't 
+	 * wish to use a fitness termination criterion then a fitness score lower 
+	 * than the lowest possible value should be used, such as <code>
+	 * Double.NEGATIVE_INFINITY</code>.
 	 * 
-	 * <p>Defaults to 0.0 in AbstractModel.
+	 * <p>Defaults to 0.0.
 	 * 
-	 * @return {@inheritDoc}
+	 * @return the fitness score that will be used as the fitness termination 
+	 * criterion.
 	 */
 	public double getTerminationFitness() {
 		return terminationFitness;
@@ -406,11 +525,14 @@ public abstract class Model implements Runnable {
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * Returns the component to be used to select individual programs from a
+	 * breeding pool to undergo operations such as crossover and mutation.
 	 * 
-	 * <p>Defaults to {@link RandomSelector} in AbstractModel.
+	 * <p>Defaults to an instance of {@link TournamentSelector} with a 
+	 * tournament size of 7.
 	 * 
-	 * @return {@inheritDoc}
+	 * @return the <code>ProgramSelector</code> that will be used to select the
+	 * programs to undergo operations.
 	 */
 	public ProgramSelector getProgramSelector() {
 		return programSelector;
@@ -424,16 +546,22 @@ public abstract class Model implements Runnable {
 	 * 						 parents for a genetic operator.
 	 */
 	public void setProgramSelector(ProgramSelector programSelector) {
-		this.programSelector = programSelector;
+		if (programSelector != null) {
+			this.programSelector = programSelector;
+		} else {
+			throw new IllegalArgumentException("program selector must not be null");
+		}
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Returns the component to perform the selection of a breeding pool. A 
+	 * <code>null</code> pool selector will result in no pool selection being
+	 * performed, and programs will be selected directly from the population.
 	 * 
-	 * <p>Defaults to {@link TournamentSelector} with a tournament size of 7 
-	 * in AbstractModel.
+	 * <p>Defaults to <code>null</code>.
 	 * 
-	 * @return {@inheritDoc}
+	 * @return the <code>PoolSelector</code> that will select the breeding pool
+	 * of programs.
 	 */
 	public PoolSelector getPoolSelector() {
 		return poolSelector;
@@ -450,11 +578,20 @@ public abstract class Model implements Runnable {
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * Returns the random number generator that to be responsible for 
+	 * determining random behaviour. It is important that the random number 
+	 * generator is not unnecessary re-constructed on each call to this method
+	 * as that could reduce the quality of the random numbers.
 	 * 
-	 * <p>Defaults to {@link MersenneTwisterFast} in AbstractModel.
+	 * <p>
+	 * Evolutionary algorithms are inherently non-deterministic, so the result of 
+	 * multiple calls to the <code>run</code> method with identical models will 
+	 * naturally produce different results if the random number generator in use by
+	 * the model is seeded differently.
 	 * 
-	 * @return {@inheritDoc}
+	 * <p>Defaults to {@link MersenneTwisterFast}.
+	 * 
+	 * @return the random number generator to be provide the random numbers.
 	 */
 	public RandomNumberGenerator getRNG() {
 		return randomNumberGenerator;
@@ -468,26 +605,10 @@ public abstract class Model implements Runnable {
 	 * 				behaviour is required.
 	 */
 	public void setRNG(RandomNumberGenerator rng) {
-		this.randomNumberGenerator = rng;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Defaults to {@link StatsEngine} in AbstractModel.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	public StatsEngine getStatsEngine() {
-		return statsEngine;
-	}
-	
-	/**
-	 * Sets the stats engine to use.
-	 * 
-	 * @param statsEngine the stats engine to use in providing statistics.
-	 */
-	public void setStatsEngine(StatsEngine statsEngine) {
-		this.statsEngine = statsEngine;
+		if (rng != null) {
+			this.randomNumberGenerator = rng;
+		} else {
+			throw new IllegalArgumentException("random number generator must not be null");
+		}
 	}
 }

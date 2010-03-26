@@ -80,6 +80,24 @@ public class TournamentSelector implements ProgramSelector, PoolSelector {
 	public CandidateProgram getProgram() {
 		return programSelection.getProgram();
 	}
+	
+	/**
+	 * Returns the number of programs that compete in each tournament selection.
+	 * 
+	 * @return the number of programs that a tournament consists of.
+	 */
+	public int getTournamentSize() {
+		return tournamentSize;
+	}
+	
+	/**
+	 * Sets the number of programs that should compete in each tournament.
+	 * 
+	 * @param tournamentSize the number of programs to use in each tournament.
+	 */
+	public void setTournamentSize(int tournamentSize) {
+		this.tournamentSize = tournamentSize;
+	}
 
 	/**
 	 * Constructs a pool of programs from the population, choosing each one 

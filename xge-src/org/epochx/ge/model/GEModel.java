@@ -27,7 +27,6 @@ import org.epochx.ge.mapper.*;
 import org.epochx.ge.op.crossover.*;
 import org.epochx.ge.op.init.*;
 import org.epochx.ge.op.mutation.*;
-import org.epochx.ge.stats.GEStatsEngine;
 import org.epochx.tools.grammar.Grammar;
 
 
@@ -47,9 +46,7 @@ import org.epochx.tools.grammar.Grammar;
  */
 public abstract class GEModel extends Model {
 	
-	private GEInitialiser initialiser;
-	private GECrossover crossover;
-	private GEMutation mutator;
+	private Grammar grammar;
 	private Mapper mapper;
 	private CodonGenerator codonGenerator;
 	
@@ -66,23 +63,62 @@ public abstract class GEModel extends Model {
 	 */
 	public GEModel() {
 		// Set default parameter values.
-		maxDepth = 20;
+		maxDepth = 14;
 		maxInitialDepth = 8;
 		maxCodonSize = Integer.MAX_VALUE;
-		maxChromosomeLength = 100;
+		maxChromosomeLength = -1;
 		
 		// Caching.
 		cacheSource = true;
 		
-		// GP Components.
-		initialiser = new RampedHalfAndHalfInitialiser(this);
-		crossover = new OnePointCrossover(this);
-		mutator = new PointMutation(this);
+		// Operators.
+		setInitialiser(new RampedHalfAndHalfInitialiser(this));
+		setCrossover(new OnePointCrossover(this));
+		setMutation(new PointMutation(this));
+		
 		mapper = new DepthFirstMapper(this);
 		codonGenerator = new StandardGenerator(this);
+		grammar = null;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * This implementation checks that this model is in a runnable state for 
+	 * performing an XGE run before executing. A model is in a runnable state if
+	 * all compulsory control parameters and operators have been set, for 
+	 * example, a valid grammr. If it is not in a runnable state then an 
+	 * <code>IllegalStateException</code> is thrown.
+	 */
+	@Override
+	public void run() {
+		// Validate that the model is in a runnable state.
+		if (!isInRunnableState()) {
+			throw new IllegalStateException("model not in runnable state - one or more compulsory control parameters unset");
+		}
 		
-		// Stats - overwrite parent default.
-		setStatsEngine(new GEStatsEngine(this));
+		super.run();
+	}
+	
+	/**
+	 * Tests whether the model is sufficiently setup to be executed. For a model
+	 * to be in a runnable state it must have all compulsory control parameters 
+	 * and operators set.
+	 * 
+	 * @return true if this model is in a runnable state, false otherwise.
+	 */
+	public boolean isInRunnableState() {
+		/*
+		 * We assume all parameters with a default are still set because their 
+		 * own validation should have caught any attempt to unset them.
+		 */
+		boolean runnable = true;		
+		
+		if (getGrammar() == null) {
+			runnable = false;
+		}
+		
+		return runnable;
 	}
 	
 	/**
@@ -93,78 +129,33 @@ public abstract class GEModel extends Model {
 	 * 
 	 * @return the language grammar that defines the syntax of solutions.
 	 */
-	public abstract Grammar getGrammar();
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Defaults to RandomInitialiser in GEModel.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public GEInitialiser getInitialiser() {
-		return initialiser;
-	}
-
-	/**
-	 * Overwrites the default initialiser.
-	 * 
-	 * @param initialiser the new GPInitialiser to use when generating the 
-	 * 		 			  starting population.
-	 */
-	public void setInitialiser(GEInitialiser gEInitialiser) {
-		this.initialiser = gEInitialiser;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Defaults to {@link OnePointCrossover} in GEModel.
-	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public GECrossover getCrossover() {
-		return crossover;
+	public Grammar getGrammar() {
+		return grammar;
 	}
 	
 	/**
-	 * Overwrites the default crossover operator.
+	 * Sets the grammar that defines the valid syntax of the programs to be 
+	 * evolves.
 	 * 
-	 * @param crossover the crossover to set
+	 * @param grammar the language grammar to use to define the syntax of 
+	 * solutions.
 	 */
-	public void setCrossover(GECrossover gECrossover) {
-		this.crossover = gECrossover;
+	public void setGrammar(Grammar grammar) {
+		if (grammar != null) {
+			this.grammar = grammar;
+		} else {
+			throw new IllegalArgumentException("grammar must not be null");
+		}
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Returns the mapper which should be used to perform the mapping from a 
+	 * chromosome (List of Codons) to a source string with a syntax matching 
+	 * the grammar. 
 	 * 
-	 * <p>Defaults to {@link PointMutation} in GEModel.
+	 * <p>Defaults to an instance of {@link DepthFirstMapper}.
 	 * 
-	 * @return {@inheritDoc}
-	 */
-	@Override
-	public GEMutation getMutation() {
-		return mutator;
-	}
-
-	/**
-	 * Overwrites the default mutator used to perform mutation.
-	 * 
-	 * @param mutator the mutator to set.
-	 */
-	public void setMutation(GEMutation mutator) {
-		this.mutator = mutator;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * <p>Defaults to DepthFirstMapper in GEModel.
-	 * 
-	 * @return {@inheritDoc}
+	 * @return a Mapper to be used to map from chromosome to source.
 	 */
 	public Mapper getMapper() {
 		return mapper;
@@ -176,15 +167,20 @@ public abstract class GEModel extends Model {
 	 * @param mapper the mapper to be used during the mapping operation.
 	 */
 	public void setMapper(Mapper mapper) {
-		this.mapper = mapper;
+		if (mapper != null) {
+			this.mapper = mapper;
+		} else {
+			throw new IllegalArgumentException("mapper must not be null");
+		}
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Returns the CodonGenerator that the system should use for generating any 
+	 * new Codons.
 	 * 
-	 * <p>Defaults to StandardGenerator in GEModel.
+	 * <p>Defaults to an instance of {@link StandardGenerator}.
 	 * 
-	 * @return {@inheritDoc}
+	 * @return the CodonGenerator to use for generating new codons.
 	 */
 	public CodonGenerator getCodonGenerator() {
 		return codonGenerator;
@@ -198,15 +194,20 @@ public abstract class GEModel extends Model {
 	 * 						 codon is required.
 	 */
 	public void setCodonGenerator(CodonGenerator codonGenerator) {
-		this.codonGenerator = codonGenerator;
+		if (codonGenerator != null) {
+			this.codonGenerator = codonGenerator;
+		} else {
+			throw new IllegalArgumentException("codonGenerator must not be null");
+		}
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Returns the maximum value of a codon. Codon values are positive integers 
+	 * from zero to this size.
 	 * 
-	 * <p>Defaults to Integer.MAX_VALUE in GEModel.
+	 * <p>Defaults to <code>Integer.MAX_VALUE</code>.
 	 * 
-	 * @return {@inheritDoc}
+	 * @return the maximum value of a codon.
 	 */
 	public int getMaxCodonSize() {
 		return maxCodonSize;
@@ -219,15 +220,21 @@ public abstract class GEModel extends Model {
 	 * 					   maximum with. Must be a positive integer.
 	 */
 	public void setMaxCodonSize(int maxCodonSize) {
-		this.maxCodonSize = maxCodonSize;
+		if (maxCodonSize >= 0) {
+			this.maxCodonSize = maxCodonSize;
+		} else {
+			throw new IllegalArgumentException("maxCodonSize must be zero or more");
+		}
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Returns the maximum number of codons that should be allowed in a 
+	 * chromosome. Crossovers or mutations that result in a larger chromosome
+	 * size will not be allowed.
 	 * 
-	 * <p>Defaults to 100 in GEModel.
+	 * <p>Defaults to 100.
 	 * 
-	 * @return {@inheritDoc}
+	 * @return the maximum number of codons to be allowed in a chromosome.
 	 */
 	public int getMaxChromosomeLength() {
 		return maxChromosomeLength;
@@ -241,15 +248,20 @@ public abstract class GEModel extends Model {
 	 * 							  chromosome.
 	 */
 	public void setMaxChromosomeLength(int maxChromosomeLength) {
-		this.maxChromosomeLength = maxChromosomeLength;
+		if (maxChromosomeLength >= -1) {
+			this.maxCodonSize = maxChromosomeLength;
+		} else {
+			throw new IllegalArgumentException("maxChromosomeLength must be -1 or more");
+		}
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Returns the maximum depth of the derivation trees allowed. Crossovers or 
+	 * mutations that result in a larger chromosome will not be allowed.
 	 * 
-	 * <p>Defaults to 20 in GEModel.
+	 * <p>Defaults to 14.
 	 * 
-	 * @return {@inheritDoc}
+	 * @return the maximum depth of derivation trees to allow.
 	 */
 	public int getMaxProgramDepth() {
 		return maxDepth;
@@ -259,18 +271,26 @@ public abstract class GEModel extends Model {
 	 * Overwrites the default maximum allowable depth of a program's derivation 
 	 * tree.
 	 * 
+	 * <p>Max depth of -1 is allowed to indicate no limit.
+	 * 
 	 * @param maxDepth the maximum depth to allow a program's derivation tree.
 	 */
 	public void setMaxProgramDepth(int maxDepth) {
-		this.maxDepth = maxDepth;
+		if (maxDepth >= 1 || maxDepth == -1) {
+			this.maxDepth = maxDepth;
+		} else {
+			throw new IllegalArgumentException("maxDepth must either be -1 or greater than 0");
+		}
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * Returns the maximum depth of the derivation trees allowed at 
+	 * initialisation.
 	 * 
-	 * <p>Defaults to 8 in GEModel.
+	 * <p>Defaults to 8.
 	 * 
-	 * @return {@inheritDoc}
+	 * @return the maximum depth of derivation trees to allow after 
+	 * initialisation.
 	 */
 	public int getMaxInitialProgramDepth() {
 		return maxInitialDepth;
@@ -280,19 +300,31 @@ public abstract class GEModel extends Model {
 	 * Overwrites the default maximum allowable depth of a program's derivation 
 	 * tree after initialisation.
 	 * 
+	 * Max depth of -1 is allowed to indicate no limit.
+	 * 
 	 * @param maxDepth the maximum depth to allow a program's derivation tree
 	 * 				   after initialisation.
 	 */
 	public void setMaxInitialProgramDepth(int maxInitialDepth) {
-		this.maxInitialDepth = maxInitialDepth;
+		if (maxInitialDepth >= 1 || maxInitialDepth == -1) {
+			this.maxInitialDepth = maxInitialDepth;
+		} else {
+			throw new IllegalArgumentException("maxInitialDepth must either be -1 or greater than 0");
+		}
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * Whether CandidatePrograms should cache their source code after mapping 
+	 * to reduce the need for mapping when the codons are unchanged. Caching 
+	 * the source potentially gives a large performance improvement and is 
+	 * generally desirable but if the grammar might change during a run then 
+	 * caching shouldn't be used as the same codons will evaluate to a 
+	 * different source.
 	 * 
-	 * <p>Defaults to true in GEModel.
+	 * <p>Defaults to <code>true</code>.
 	 * 
-	 * @return {@inheritDoc}
+	 * @return true if the source should be cached after mapping and false 
+	 * otherwise.
 	 */
 	public boolean cacheSource() {
 		return cacheSource;
@@ -302,7 +334,7 @@ public abstract class GEModel extends Model {
 	 * Overwrites the default setting of whether to cache the source code after 
 	 * mapping, until the chromosome is changed again.
 	 * 
-	 * @param cacheSource
+	 * @param cacheSource true if the source should be cached, false otherwise.
 	 */
 	public void setCacheSource(boolean cacheSource) {
 		this.cacheSource = cacheSource;

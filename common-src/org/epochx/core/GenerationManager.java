@@ -53,6 +53,13 @@ import org.epochx.tools.random.RandomNumberGenerator;
  *         <th>Raised when?</th>
  *     </tr>
  *     <tr>
+ *         <td>onConfigure</td>
+ *         <td>no</td>
+ *         <td>no</td>
+ *         <td>Immediately before the onGenerationStart event.
+ *         </td>
+ *     </tr>
+ *     <tr>
  *         <td>onGenerationStart</td>
  *         <td>no</td>
  *         <td>no</td>
@@ -81,23 +88,25 @@ import org.epochx.tools.random.RandomNumberGenerator;
 public class GenerationManager {
 
 	// The controlling model.
-	private Model model;
+	private final Model model;
 	
-	// Core components.
+	// Components.
 	private final ElitismManager elitism;
 	private final PoolSelectionManager poolSelection;
 	private final CrossoverManager crossover;
 	private final MutationManager mutation;
 	private final ReproductionManager reproduction;
 	
+	// Operators.
+	private ProgramSelector programSelector;
+	
+	// Control parameters.
 	private RandomNumberGenerator rng;
-
-	// Operator probabilities.
-	private double mutationProbability;
-	private double crossoverProbability;
 	
 	private int popSize;
-	private ProgramSelector programSelector;
+	
+	private double mutationProbability;
+	private double crossoverProbability;
 	
 	// Count of generation reversions.
 	private int reversions;
@@ -107,13 +116,13 @@ public class GenerationManager {
 	 * <code>Model</code> defines how the components will be configured for the
 	 * generation.
 	 * 
-	 * @param model a model which will provide the control parameters for the 
-	 * generation.
+	 * @param model a model which will provide the control parameters and 
+	 * operators for the generation.
 	 */
-	public GenerationManager(Model model) {
+	public GenerationManager(final Model model) {
 		this.model = model;
 		
-		// Setup core components.
+		// Components.
 		elitism = new ElitismManager(model);
 		poolSelection = new PoolSelectionManager(model);
 		crossover = new CrossoverManager(model);
@@ -140,6 +149,14 @@ public class GenerationManager {
 		popSize = model.getPopulationSize();
 		mutationProbability = model.getMutationProbability();
 		crossoverProbability = model.getCrossoverProbability();
+		
+		assert (rng != null);
+		assert (programSelector != null);
+		assert (popSize >= 1);
+		assert (this.mutationProbability >= 0.0 
+				&& this.mutationProbability <= 1.0);
+		assert (this.crossoverProbability >= 0.0 
+				&& this.crossoverProbability <= 1.0);
 	}
 	
 	/**
@@ -168,25 +185,25 @@ public class GenerationManager {
 	 * <p>
 	 * The necessary events trigger life cycle events.
 	 * 
+	 * @param generationNo the sequential number which identifies this 
+	 * 					  generation out of all the generations of this run.
 	 * @param previousPop the previous population which will undergo 
 	 * 				      manipulation to create the next population.
 	 * @return the population derived from performing genetic operations on the
 	 * 					  previous population.
 	 */
-	public List<CandidateProgram> generation(final int generationNumber, 
+	public List<CandidateProgram> generation(final int generationNo, 
 					final List<CandidateProgram> previousPop) {
-		// Initialise all variables.
-		reversions = 0;
-		
 		// Inform all listeners that a generation is starting.
 		model.getLifeCycleManager().fireConfigureEvent();
 		model.getLifeCycleManager().fireGenerationStartEvent();
 		
-		// Record the generation start time.
+		// Setup the generation manager for a new generation.
+		reversions = 0;
 		final long startTime = System.nanoTime();
 		
 		// Record the generation number in the stats data.
-		model.getStatsManager().addGenerationData(GEN_NUMBER, generationNumber);
+		model.getStatsManager().addGenerationData(GEN_NUMBER, generationNo);
 		
 		// Create next population to fill.
 		List<CandidateProgram> pop = new ArrayList<CandidateProgram>(popSize);
@@ -240,6 +257,63 @@ public class GenerationManager {
 		// Tell everyone the generation has ended.
 		model.getLifeCycleManager().fireGenerationEndEvent();
 		
+		assert (pop != null);
+		
 		return pop;
+	}
+
+	/**
+	 * Retrieves this generation manager's elitism manager that will perform the 
+	 * operation elitism.
+	 * 
+	 * @return the elitism manager that is responsible for the task of elitism 
+	 * for each generation.
+	 */
+	public ElitismManager getElitismManager() {
+		return elitism;
+	}
+
+	/**
+	 * Retrieves this generation manager's pool selection manager that will 
+	 * handle the task of constructing a breeding pool.
+	 * 
+	 * @return the pool selection manager that is responsible for the task of 
+	 * constructing a breeding pool for each generation.
+	 */
+	public PoolSelectionManager getPoolSelectionManager() {
+		return poolSelection;
+	}
+
+	/**
+	 * Retrieves this generation manager's crossover manager that will manage
+	 * each crossover operation.
+	 * 
+	 * @return the crossover manager that is responsible for the managing the
+	 * task of crossover for each generation.
+	 */
+	public CrossoverManager getCrossoverManager() {
+		return crossover;
+	}
+
+	/**
+	 * Retrieves this generation manager's mutation manager that will manage
+	 * each mutation operation.
+	 * 
+	 * @return the mutation manager that is responsible for the managing the
+	 * task of mutation for each generation.
+	 */
+	public MutationManager getMutationManager() {
+		return mutation;
+	}
+
+	/**
+	 * Retrieves this generation manager's reproduction manager that will manage
+	 * each reproduction operation.
+	 * 
+	 * @return the reproduction manager that is responsible for the managing the
+	 * task of reproduction for each generation.
+	 */
+	public ReproductionManager getReproductionManager() {
+		return reproduction;
 	}
 }

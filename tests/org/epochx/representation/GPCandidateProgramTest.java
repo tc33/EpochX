@@ -36,6 +36,7 @@ public class GPCandidateProgramTest extends AbstractCandidateProgramTestCase {
 	private Node node1;
 	private Node node2;
 	
+	@Override
 	public CandidateProgram getCandidateProgram() {
 		return new GPCandidateProgram(null);
 	}

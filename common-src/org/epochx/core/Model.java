@@ -73,13 +73,14 @@ public abstract class Model implements Runnable {
 	// Operators.
 	private PoolSelector poolSelector;
 	private ProgramSelector programSelector;
-	private RandomNumberGenerator randomNumberGenerator;
 
 	private Initialiser initialiser;
 	private Crossover crossover;
 	private Mutation mutation;
 	
 	// Control parameters.
+	private RandomNumberGenerator randomNumberGenerator;
+	
 	private int noRuns;
 	private int noGenerations;
 	private int populationSize;
@@ -142,7 +143,8 @@ public abstract class Model implements Runnable {
 		
 		// Validate that the model is in a runnable state.
 		if (!isInRunnableState()) {
-			throw new IllegalStateException("model not in runnable state - one or more compulsory control parameters unset");
+			throw new IllegalStateException("model not in runnable state - " +
+					"one or more compulsory control parameters unset");
 		}
 		
 		// Execute all the runs.

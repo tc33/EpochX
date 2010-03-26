@@ -37,7 +37,7 @@ import org.epochx.stats.*;
  * <p>
  * Users of the EpochX framework would not typically create and use instances 
  * of this class directly, but rather would through use of the 
- * <code>Controller's</code> <code>run</code> class method which will execute 
+ * <code>Model</code>'s <code>run</code> class method which will execute 
  * an instance of this class multiple times.
  * 
  * <p>
@@ -46,18 +46,51 @@ import org.epochx.stats.*;
  * <code>StatsManager</code>, view the {@link StatField} class and any 
  * extending classes.
  * 
+ * <p>
+ * Use of the run manager will generate the following events:
+ * 
+ * <p>
+ * <table border="1">
+ *     <tr>
+ *         <th>Event</th>
+ *         <th>Revert</th>
+ *         <th>Modify</th>
+ *         <th>Raised when?</th>
+ *     </tr>
+ *     <tr>
+ *         <td>onConfigure</td>
+ *         <td>no</td>
+ *         <td>no</td>
+ *         <td>Immediately before the onRunStart event.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>onRunStart</td>
+ *         <td>no</td>
+ *         <td>no</td>
+ *         <td>Before the run starts.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>onRunEnd</td>
+ *         <td>no</td>
+ *         <td>no</td>
+ *         <td>After the run has terminated.
+ *         </td>
+ *     </tr>
+ * </table>
  */
 public class RunManager {
+	//TODO Is there someway we could allow each run to be in a separate thread?
 	
 	// The controlling model.
-	private Model model;
+	private final Model model;
 	
 	// Core components.
 	private final GenerationManager generation;
 	private final InitialisationManager initialisation;
 	
 	private int noGenerations;
-	
 	private double terminationFitness;
 	
 	// The best program found so far during the run.
@@ -74,7 +107,7 @@ public class RunManager {
 	 * @param model the model which will control the run with the parameters 
 	 * 				and fitness function to use.
 	 */
-	public RunManager(Model model) {
+	public RunManager(final Model model) {
 		this.model = model;
 		
 		// Setup core components.
@@ -98,34 +131,40 @@ public class RunManager {
 		terminationFitness = model.getTerminationFitness();
 	}
 	
-	/*
-	 * Initialise the run manager for a new run.
-	 */
-	private void setup() {
-		bestProgram = null;
-		bestFitness = Double.POSITIVE_INFINITY;
-	}
-	
 	/**
 	 * Executes a single evolutionary run of this <code>RunManager's</code> 
 	 * <code>Model</code>.
 	 * 
-	 * If noGenerations is zero, initialisation will be performed but no further
-	 * generations. If it is one, then initialisation and one other generation
-	 * will be performed.
+	 * <p>
+	 * If the number of generations obtained from the model is zero, then 
+	 * initialisation will be performed but no further generations. If the 
+	 * number of generations specified is one, then initialisation and one other
+	 * generation will be performed.
+	 * 
+	 * <p>
+	 * If the model is not in a runnable state after the the final call to 
+	 * configure fired at the start of this method execution then an illegal 
+	 * state exception will be thrown.
 	 * 
 	 * @param runNo the sequential number which identifies this run out of the 
 	 * 				set of runs being performed.
 	 */
 	public void run(final int runNo) {
-		// Inform everyone we're starting a run.
+		// Give final opportunity to configure before starting the run.
 		model.getLifeCycleManager().fireConfigureEvent();
+		
+		// Validate that the model is in a runnable state.
+		if (!model.isInRunnableState()) {
+			throw new IllegalStateException("model not in runnable state - " +
+					"one or more compulsory control parameters unset");
+		}
+		
+		// Inform everyone we're starting a run.
 		model.getLifeCycleManager().fireRunStartEvent();
 		
-		// Setup the run manager for a new run
-		setup();
-		
-		// Record the start time.
+		// Setup the run manager for a new run.
+		bestProgram = null;
+		bestFitness = Double.POSITIVE_INFINITY;
 		final long startTime = System.nanoTime();
 
 		// Add the run number to the available stats data.
@@ -179,5 +218,30 @@ public class RunManager {
 				model.getStatsManager().addRunData(RUN_FITTEST_PROGRAM, bestProgram);
 			}
 		}
+		
+		assert (bestProgram != null);
+	}
+	
+	/**
+	 * Retrieves this run manager's generation manager that will perform the 
+	 * execution of single evolutionary generations.
+	 * 
+	 * @return the generation manager that will handle execution of each
+	 * evolutionary generation.
+	 */
+	public GenerationManager getGenerationManager() {
+		return generation;
+	}
+
+	/**
+	 * Retrieves this run manager's initialisation manager that will perform the 
+	 * execution of the 0th evolutionary generations, that is generation of an
+	 * initial population.
+	 * 
+	 * @return the initialisation manager that will handle execution of the 0th
+	 * evolutionary generation.
+	 */
+	public InitialisationManager getInitialisationManager() {
+		return initialisation;
 	}
 }

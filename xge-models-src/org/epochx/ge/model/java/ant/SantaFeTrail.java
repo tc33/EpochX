@@ -39,7 +39,8 @@ public class SantaFeTrail extends GEModel {
 		+ "<line> ::= <expr>\n"
 		+ "<expr> ::= <condition> | <op>\n"
 		+ "<condition> ::= if(ant.isFoodAhead()){ <op> }else{ <op> }\n"
-		+ "<op> ::=  ant.turnLeft(); | ant.turnRight(); | ant.move();\n";
+		+ "<op> ::= <opcode> | <op> <opcode>\n"
+		+ "<opcode> ::=  ant.turnLeft(); | ant.turnRight(); | ant.move();\n";
 	
 	private Grammar grammar;
 	

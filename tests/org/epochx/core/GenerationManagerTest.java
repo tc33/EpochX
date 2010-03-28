@@ -157,5 +157,4 @@ public class GenerationManagerTest extends TestCase {
 		assertEquals("generation events were not called in the correct order", "1233334", verify.toString());
 	}
 	
-	
 }

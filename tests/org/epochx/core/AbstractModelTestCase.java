@@ -385,24 +385,5 @@ public abstract class AbstractModelTestCase extends TestCase {
 			fail("illegal argument exception not thrown for initialiser of null");
 		} catch (IllegalArgumentException e) {}
 	}
-	
-	/**
-	 * Tests that trying to set a null crossover throws an exception.
-	 */
-	public void testSetCrossoverNull() {
-		try {
-			getModel().setCrossover(null);
-			fail("illegal argument exception not thrown for crossover of null");
-		} catch (IllegalArgumentException e) {}
-	}
-	
-	/**
-	 * Tests that trying to set a null mutator throws an exception.
-	 */
-	public void testSetMutationNull() {
-		try {
-			getModel().setMutation(null);
-			fail("illegal argument exception not thrown for mutation of null");
-		} catch (IllegalArgumentException e) {}
-	}
+
 }

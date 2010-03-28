@@ -125,6 +125,10 @@ public class MutationManager {
 	 *         the original selected program before mutation will be returned.
 	 */
 	public CandidateProgram mutate() {
+		if (mutator == null) {
+			throw new IllegalStateException("mutation operator cannot be null");
+		}
+		
 		model.getLifeCycleManager().fireMutationStartEvent();
 		
 		final long crossoverStartTime = System.nanoTime();

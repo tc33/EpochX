@@ -154,9 +154,8 @@ public class RunManager {
 		model.getLifeCycleManager().fireConfigureEvent();
 		
 		// Validate that the model is in a runnable state.
-		if (!model.isInRunnableState()) {
-			throw new IllegalStateException("model not in runnable state - " +
-					"one or more compulsory control parameters unset");
+		if (noGenerations < 0) {
+			throw new IllegalStateException("number of generations must be 0 or greater");
 		}
 		
 		// Inform everyone we're starting a run.

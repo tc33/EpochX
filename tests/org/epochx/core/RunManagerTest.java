@@ -21,21 +21,23 @@
  */
 package org.epochx.core;
 
-import java.util.*;
-
-import org.epochx.life.ElitismListener;
-import org.epochx.representation.CandidateProgram;
+import java.util.ArrayList;
+import java.util.List;
 
 import junit.framework.TestCase;
+
+import org.epochx.life.ConfigListener;
+import org.epochx.life.RunAdapter;
+import org.epochx.op.Initialiser;
+import org.epochx.representation.CandidateProgram;
 
 /**
  * 
  */
-public class ElitismManagerTest extends TestCase {
+public class RunManagerTest extends TestCase {
 
 	private Model model;
-	private ElitismManager elitismManager;
-	private List<CandidateProgram> pop;
+	private RunManager runManager;
 	
 	@Override
 	protected void setUp() throws Exception {
@@ -45,49 +47,62 @@ public class ElitismManagerTest extends TestCase {
 				return 0;
 			}
 		};
-		elitismManager = new ElitismManager(model);
-		pop = new ArrayList<CandidateProgram>();
+		model.setPopulationSize(1);
+		model.setNoGenerations(0);
+		model.setCrossoverProbability(0.0);
+		model.setMutationProbability(0.0);
+		model.setNoElites(0);
+		model.setInitialiser(new Initialiser() {
+			@Override
+			public List<CandidateProgram> getInitialPopulation() {
+				List<CandidateProgram> pop = new ArrayList<CandidateProgram>();
+				pop.add(new CandidateProgram() {
+					@Override
+					public boolean isValid() {
+						return true;
+					}
+					
+					@Override
+					public double getFitness() {
+						return 0;
+					}
+				});
+				return pop;
+			}
+		});
+		runManager = new RunManager(model);
 	}
 	
 	/**
-	 * Tests that the elitism events are fired in the correct order.
+	 * Tests that the generation events are all triggered and in the correct 
+	 * order.
 	 */
-	public void testElitismEventsOrder() {
+	public void testRunEventsOrder() {
 		// We add the chars '1', '2', '3' to builder to check order of calls.
 		final StringBuilder verify = new StringBuilder();
 		
-		// Listen for the events.
-		model.getLifeCycleManager().addElitismListener(new ElitismListener() {
+		// Listen for the config events.
+		model.getLifeCycleManager().addConfigListener(new ConfigListener() {
 			@Override
-			public void onElitismStart() {
+			public void onConfigure() {
 				verify.append('1');
 			}
+		});
+		// Listen for the generation.
+		model.getLifeCycleManager().addRunListener(new RunAdapter() {
 			@Override
-			public List<CandidateProgram> onElitism(List<CandidateProgram> elites) {
+			public void onRunStart() {
 				verify.append('2');
-				return elites;
 			}
 			@Override
-			public void onElitismEnd() {
+			public void onRunEnd() {
 				verify.append('3');
 			}
 		});
 		
-		elitismManager.elitism(pop);
+		runManager.run(1);
 		
-		assertEquals("elitism events were not called in the correct order", "123", verify.toString());
+		assertEquals("run events were not called in the correct order", "1213", verify.toString());
 	}
-	
-	/**
-	 * Tests that an exception is thrown when trying to perform elitism on a 
-	 * null population.
-	 */
-	public void testElitismPopNull() {
-		try {
-			elitismManager.elitism(null);
-			fail("exception not thrown for elitism on a null population");
-		} catch(IllegalArgumentException e) {}
-	}
-	
-	
+
 }

@@ -81,7 +81,7 @@ public class ElitismManager {
 	 * @param model the Model which defines the run parameters such as number
 	 * 				of elites to use.
 	 */
-	public ElitismManager(Model model) {
+	public ElitismManager(final Model model) {
 		this.model = model;
 		
 		// Configure parameters from the model.
@@ -99,8 +99,10 @@ public class ElitismManager {
 	private void configure() {
 		// Discover how many elites we need.
 		noElites = model.getNoElites();
-		int popSize = model.getPopulationSize();
+		final int popSize = model.getPopulationSize();
 		noElites = (noElites < popSize) ? noElites : popSize;
+		
+		assert (noElites <= popSize);
 	}
 	
 	/**
@@ -125,6 +127,13 @@ public class ElitismManager {
 	 * 		   contain all CandidatePrograms from the population sorted.
 	 */
 	public List<CandidateProgram> elitism(final List<CandidateProgram> pop) {
+		if (pop == null) {
+			throw new IllegalArgumentException("pop size must not be null");
+		}
+		if (noElites < 0) {
+			throw new IllegalStateException("no elites is less than 0");
+		}
+		
 		model.getLifeCycleManager().fireElitismStartEvent();
 		
 		// Construct an array for elites.
@@ -137,6 +146,8 @@ public class ElitismManager {
 		} else {
 			elites = new ArrayList<CandidateProgram>();
 		}
+		
+		assert (elites.size() == noElites);
 		
 		// Allow life cycle listener to confirm or modify.
 		elites = model.getLifeCycleManager().fireElitismEvent(elites);

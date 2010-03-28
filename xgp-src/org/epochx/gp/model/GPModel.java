@@ -59,22 +59,14 @@ public abstract class GPModel extends Model {
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @return {@inheritDoc}
 	 */
 	@Override
-	public boolean isInRunnableState() {
-		/*
-		 * We assume all parameters with a default are still set because their 
-		 * own validation should have caught any attempt to unset them.
-		 */
-		boolean runnable = true;		
-		
-		if (getSyntax().isEmpty()) {
-			runnable = false;
+	public void run() {
+		if (syntax == null || syntax.isEmpty()) {
+			throw new IllegalStateException("no syntax set");
 		}
-
-		return runnable;
+		
+		super.run();
 	}
 	
 	/**

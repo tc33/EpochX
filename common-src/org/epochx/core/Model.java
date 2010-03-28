@@ -142,38 +142,18 @@ public abstract class Model implements Runnable {
 		life.fireConfigureEvent();
 		
 		// Validate that the model is in a runnable state.
-		if (!isInRunnableState()) {
-			throw new IllegalStateException("model not in runnable state - " +
-					"one or more compulsory control parameters unset");
+		if (initialiser == null)  {
+			throw new IllegalStateException("no initialiser set");
+		} else if ((crossover == null) && (crossoverProbability != 0.0)) {
+			throw new IllegalStateException("no crossover set");
+		} else if ((mutation == null) && (mutationProbability != 0.0)) {
+			throw new IllegalStateException("no mutation set");
 		}
 		
 		// Execute all the runs.
 		for (int i=0; i<getNoRuns(); i++) {
 			run.run(i);
 		}
-	}
-	
-	/**
-	 * Tests whether the model is sufficiently setup to be executed. For a model
-	 * to be in a runnable state it must have all compulsory control parameters 
-	 * and operators set.
-	 * 
-	 * @return true if this model is in a runnable state, false otherwise.
-	 */
-	public boolean isInRunnableState() {
-		/*
-		 * We assume all parameters with a default are still set because their 
-		 * own validation should have caught any attempt to unset them.
-		 */
-		boolean runnable = true;
-		
-		if ((initialiser == null)
-				|| (crossover == null)
-				|| (mutation == null)) {
-			runnable = false;
-		}
-		
-		return runnable;
 	}
 	
 	/**
@@ -262,13 +242,7 @@ public abstract class Model implements Runnable {
 	 * material between two programs.
 	 */
 	public void setCrossover(final Crossover crossover) {
-		if (crossover != null) {
-			this.crossover = crossover;
-		} else {
-			throw new IllegalArgumentException("crossover must not be null");
-		}
-		
-		assert (this.crossover != null);
+		this.crossover = crossover;
 	}
 	
 	/**
@@ -288,13 +262,7 @@ public abstract class Model implements Runnable {
 	 * the mutation of a program.
 	 */
 	public void setMutation(final Mutation mutation) {
-		if (mutation != null) {
-			this.mutation = mutation;
-		} else {
-			throw new IllegalArgumentException("mutation must not be null");
-		}
-		
-		assert (this.crossover != null);
+		this.mutation = mutation;
 	}
 
 	/**

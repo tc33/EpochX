@@ -149,14 +149,6 @@ public class GenerationManager {
 		popSize = model.getPopulationSize();
 		mutationProbability = model.getMutationProbability();
 		crossoverProbability = model.getCrossoverProbability();
-		
-		assert (rng != null);
-		assert (programSelector != null);
-		assert (popSize >= 1);
-		assert (this.mutationProbability >= 0.0 
-				&& this.mutationProbability <= 1.0);
-		assert (this.crossoverProbability >= 0.0 
-				&& this.crossoverProbability <= 1.0);
 	}
 	
 	/**
@@ -194,12 +186,28 @@ public class GenerationManager {
 	 */
 	public List<CandidateProgram> generation(final int generationNo, 
 					final List<CandidateProgram> previousPop) {
+		// Validate inputs.
 		if (previousPop.size() < 1) {
 			throw new IllegalArgumentException("previousPop size must be 1 or greater.");
 		}
 		
-		// Inform all listeners that a generation is starting.
+		// Give the model a chance to configure.
 		model.getLifeCycleManager().fireConfigureEvent();
+		
+		// Validate state.
+		if (rng == null) {
+			throw new IllegalStateException("no random number generator set");
+		} else if (programSelector == null) {
+			throw new IllegalStateException("no program selector set");
+		} else if (popSize < 1) {
+			throw new IllegalStateException("pop size should be 1 or greater");
+		} else if (crossoverProbability < 0.0 || crossoverProbability > 1.0) {
+			throw new IllegalStateException("crossover probability should be between 0.0 and 1.0");
+		} else if (mutationProbability < 0.0 || mutationProbability > 1.0) {
+			throw new IllegalStateException("mutation probability should be between 0.0 and 1.0");
+		}
+		
+		// Inform all listeners that a generation is starting.
 		model.getLifeCycleManager().fireGenerationStartEvent();
 		
 		// Setup the generation manager for a new generation.
@@ -267,7 +275,7 @@ public class GenerationManager {
 		
 		return pop;
 	}
-
+	
 	/**
 	 * Retrieves this generation manager's elitism manager that will perform the 
 	 * operation elitism.

@@ -58,22 +58,14 @@ public abstract class GRModel extends Model {
 	
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @return {@inheritDoc}
 	 */
 	@Override
-	public boolean isInRunnableState() {
-		/*
-		 * We assume all parameters with a default are still set because their 
-		 * own validation should have caught any attempt to unset them.
-		 */
-		boolean runnable = true;		
-		
+	public void run() {
 		if (getGrammar() == null) {
-			runnable = false;
+			throw new IllegalStateException("no grammar set");
 		}
 		
-		return runnable;
+		super.run();
 	}
 	
 	/**

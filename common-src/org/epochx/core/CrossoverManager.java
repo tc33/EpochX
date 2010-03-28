@@ -71,7 +71,7 @@ import org.epochx.representation.CandidateProgram;
 public class CrossoverManager {
 
 	// The controlling model.
-	private Model model;
+	private final Model model;
 	
 	// The selector for choosing parents.
 	private ProgramSelector programSelector;
@@ -90,7 +90,7 @@ public class CrossoverManager {
 	 * 
 	 * @see Crossover
 	 */
-	public CrossoverManager(Model model) {
+	public CrossoverManager(final Model model) {
 		this.model = model;
 		
 		// Configure parameters from the model.
@@ -116,7 +116,12 @@ public class CrossoverManager {
 	 * to the <code>Crossover</code> operator which is obtained by calling 
 	 * <code>getCrossover()</code> on the model. 
 	 * 
-	 * <p>After a crossover is made, the controlling model is requested to 
+	 * <p>After a crossover is made, all the child programs are checked for 
+	 * validity by calling their <code>isValid()</code> method. If the 
+	 * 
+	 * 
+	 * 
+	 * the controlling model is requested to 
 	 * confirm the crossover by a call to <code>acceptCrossover()</code>. This 
 	 * gives the model total control over whether a crossover is allowed to 
 	 * proceed. If <code>acceptCrossover()</code> returns <code>false</code> 
@@ -136,6 +141,13 @@ public class CrossoverManager {
 	 * 	 	   as returned by the Crossover operator in use.
 	 */
 	public CandidateProgram[] crossover() {
+		if (crossover == null) {
+			throw new IllegalStateException("crossover operator cannot be null");
+		}
+		if (programSelector == null) {
+			throw new IllegalStateException("program selector cannot be null");
+		}
+		
 		// Inform everyone we're about to start crossover.
 		model.getLifeCycleManager().fireCrossoverStartEvent();
 		
@@ -178,7 +190,7 @@ public class CrossoverManager {
 				reversions++;
 			}
 		} while(children == null);
-		
+
 		final long runtime = System.nanoTime() - crossoverStartTime;
 
 		model.getStatsManager().addCrossoverData(CROSSOVER_PARENTS, parents);
@@ -187,6 +199,8 @@ public class CrossoverManager {
 		model.getStatsManager().addCrossoverData(CROSSOVER_TIME, runtime);
 		
 		model.getLifeCycleManager().fireCrossoverEndEvent();
+
+		assert (children != null);
 		
 		return children;
 	}
@@ -196,6 +210,8 @@ public class CrossoverManager {
 	 * one or more are invalid then it returns false otherwise it returns true.
 	 */
 	private boolean allValid(CandidateProgram[] programs) {
+		assert (programs != null);
+		
 		boolean valid = true;
 		for (CandidateProgram p: programs) {
 			if (!p.isValid()) {

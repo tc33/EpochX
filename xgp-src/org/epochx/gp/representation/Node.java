@@ -463,16 +463,18 @@ public abstract class Node implements Cloneable {
 			
 			if (n.getArity() != this.getArity()) {
 				equal = false;
-			}
-			
-			for(int i=0; i<n.getArity() && equal; i++) {
-				Node thatChild = n.getChild(i);
-				Node thisChild = this.getChild(i);
-				
-				if ((thisChild != null) ^ (thatChild != null)) {
-					equal = false;
-				} else {
-					equal = ((thisChild == null) && (thatChild == null) || thisChild.equals(thatChild));
+			} else if (n.getIdentifier() != this.getIdentifier()) {
+				equal = false;
+			} else {
+				for(int i=0; i<n.getArity() && equal; i++) {
+					Node thatChild = n.getChild(i);
+					Node thisChild = this.getChild(i);
+					
+					if ((thisChild != null) ^ (thatChild != null)) {
+						equal = false;
+					} else {
+						equal = ((thisChild == null) && (thatChild == null) || thisChild.equals(thatChild));
+					}
 				}
 			}
 		} else {

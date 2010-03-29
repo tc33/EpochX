@@ -31,13 +31,13 @@ import org.epochx.representation.CandidateProgram;
 
 /**
  * This component manages the initialisation step of an evolutionary run and
- * raises initialisation events. The actual act of program generation and 
+ * fires initialisation events. The actual act of program construction and 
  * population initialisation is performed by the implementation of Initialiser 
  * that is obtained from the {@link Model} provided to the constructor.
  * 
  * <p>
  * With regards to life cycle, initialisation as performed by this class is  
- * considered to be generation zero. As such both a generation event and an 
+ * considered to be generation zero. As such, both a generation event and an 
  * initialisation event will be generated, for both the start and end. 
  * Immediately after an initial population is generated, the life cycle 
  * listeners are given an opportunity to revert or modify it. This occurs 
@@ -63,10 +63,34 @@ import org.epochx.representation.CandidateProgram;
  *         <th>Raised when?</th>
  *     </tr>
  *     <tr>
+ *         <td>onConfigure</td>
+ *         <td>no</td>
+ *         <td>no</td>
+ *         <td>Immediately before the onGenerationStart event is fired.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>onGenerationStart</td>
+ *         <td>no</td>
+ *         <td>no</td>
+ *         <td>Immediately before the onInitialisationStart event is fired.
+ *         </td>
+ *     </tr>
+ *     <tr>
  *         <td>onInitialisationStart</td>
  *         <td>no</td>
  *         <td>no</td>
  *         <td>Before the initialisation operation is carried out.
+ *         </td>
+ *     </tr>
+ *     <tr>
+ *         <td>onGeneration</td>
+ *         <td><strong>yes</strong></td>
+ *         <td><strong>yes</strong></td>
+ *         <td>Immediately after a population has been generated, giving
+ *         the listener the opportunity to request a revert by returning null.
+ *         If null is returned then the following onInitialisation event will
+ *         still be fired.
  *         </td>
  *     </tr>
  *     <tr>
@@ -76,7 +100,8 @@ import org.epochx.representation.CandidateProgram;
  *         <td>Immediately after a population has been generated, giving
  *         the listener the opportunity to request a revert which will cause 
  *         the re-generation of an initial population and cause this event to 
- *         be raised again.
+ *         be raised again. The population that is passed will be the result of
+ *         the onGeneration event so may be null.
  *         </td>
  *     </tr>
  *     <tr>
@@ -93,7 +118,7 @@ import org.epochx.representation.CandidateProgram;
 public class InitialisationManager {
 	
 	// The controlling model.
-	private Model model;
+	private final Model model;
 	
 	// The initialisation operator.
 	private Initialiser initialiser;
@@ -109,7 +134,7 @@ public class InitialisationManager {
 	 * 				other control parameters.
 	 * @see Initialiser
 	 */
-	public InitialisationManager(Model model) {
+	public InitialisationManager(final Model model) {
 		this.model = model;
 		
 		// Configure parameters from the model.
@@ -143,6 +168,11 @@ public class InitialisationManager {
 	public List<CandidateProgram> initialise() {
 		// Trigger life cycle events for both generation and initialisation.
 		model.getLifeCycleManager().fireConfigureEvent();
+		
+		if (initialiser == null) {
+			throw new IllegalStateException("no initialiser set");
+		}
+		
 		model.getLifeCycleManager().fireGenerationStartEvent();
 		model.getLifeCycleManager().fireInitialisationStartEvent();
 		

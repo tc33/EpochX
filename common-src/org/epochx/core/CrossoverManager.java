@@ -23,7 +23,6 @@ package org.epochx.core;
 
 import static org.epochx.stats.StatField.*;
 
-import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.life.ConfigAdapter;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
@@ -118,24 +117,15 @@ public class CrossoverManager {
 	 * <code>getCrossover()</code> on the model. 
 	 * 
 	 * <p>After a crossover is made, all the child programs are checked for 
-	 * validity by calling their <code>isValid()</code> method. If the 
-	 * 
-	 * 
-	 * 
-	 * the controlling model is requested to 
-	 * confirm the crossover by a call to <code>acceptCrossover()</code>. This 
-	 * gives the model total control over whether a crossover is allowed to 
-	 * proceed. If <code>acceptCrossover()</code> returns <code>false</code> 
-	 * then the children are discarded and two new parents are selected and 
-	 * attempted for crossover. The number of times the crossover was reverted 
-	 * before being accepted is available through a call to 
-	 * <code>getRevertedCount()</code>.
-	 * 
-	 * <p>Even after a crossover has been accepted by the model, it may still 
-	 * be prevented from proceeding if the program depth of either of the 
-	 * children exceeds the max depth that the model defines. In the case that 
-	 * the children do exceed the limit then the parents are returned as the 
-	 * result. This does not count towards the number of reversions.
+	 * validity by calling their <code>isValid()</code> method. If <strong>any
+	 * </strong> of the programs are found to be invalid then the programs are 
+	 * discarded, two new parents are selected and the crossover operation is 
+	 * attempted again. If all the child programs are valid then the crossover
+	 * event is fired which gives any listeners the opportunity to revert the 
+	 * operation by returning null, or modify the children that are returned. If
+	 * null is returned to revert then the reversion count is incremented by 1 
+	 * and two new programs are selected and the crossover operation is 
+	 * repeated.
 	 * 
 	 * @return an array of CandidatePrograms generated through crossover. This 
 	 * 		   is typically 2 child programs, but could in theory be any number 
@@ -143,10 +133,10 @@ public class CrossoverManager {
 	 */
 	public CandidateProgram[] crossover() {
 		if (crossover == null) {
-			throw new IllegalStateException("crossover operator cannot be null");
+			throw new IllegalStateException("crossover operator not set");
 		}
 		if (programSelector == null) {
-			throw new IllegalStateException("program selector cannot be null");
+			throw new IllegalStateException("program selector not set");
 		}
 		
 		// Inform everyone we're about to start crossover.

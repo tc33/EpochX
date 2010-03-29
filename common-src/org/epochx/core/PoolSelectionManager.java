@@ -84,7 +84,7 @@ import org.epochx.representation.CandidateProgram;
 public class PoolSelectionManager {
 	
 	// The controlling model.
-	private Model model;
+	private final Model model;
 	
 	// The pool selector to use to generate the breeding pool.
 	private PoolSelector poolSelector;
@@ -104,7 +104,7 @@ public class PoolSelectionManager {
 	 * 
 	 * @see PoolSelector
 	 */
-	public PoolSelectionManager(Model model) {
+	public PoolSelectionManager(final Model model) {
 		this.model = model;
 		
 		// Configure parameters from the model.
@@ -141,6 +141,10 @@ public class PoolSelectionManager {
 	 * breeding pool.
 	 */
 	public List<CandidateProgram> getPool(List<CandidateProgram> pop) {
+		if ((poolSelector != null) && (poolSize == 0 || poolSize < -1)) {
+			throw new IllegalStateException("pool selector set but invalid pool size (="+poolSize+')');
+		}
+		
 		// Inform all listeners that pool selection is starting.
 		model.getLifeCycleManager().firePoolSelectionStartEvent();
 		
@@ -149,7 +153,7 @@ public class PoolSelectionManager {
 		
 		List<CandidateProgram> pool = null;
 		do {
-			if (poolSelector == null) {
+			if (poolSelector == null || poolSize == -1) {
 				// Use population as the pool.
 				pool = pop;
 			} else {
@@ -171,6 +175,8 @@ public class PoolSelectionManager {
 		
 		// Inform all listeners that pool selection has ended.
 		model.getLifeCycleManager().firePoolSelectionEndEvent();
+		
+		assert (pool != null);
 		
 		return pool;
 	}

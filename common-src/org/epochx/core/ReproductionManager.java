@@ -69,7 +69,7 @@ import org.epochx.representation.CandidateProgram;
 public class ReproductionManager {
 
 	// The controlling model.
-	private Model model;
+	private final Model model;
 	
 	// The selector to use to choose the program to reproduce.
 	private ProgramSelector programSelector;
@@ -86,7 +86,7 @@ public class ReproductionManager {
 	 * @param model the model which defines the ProgramSelector to use to 
 	 * 				select the program to be reproduced.
 	 */
-	public ReproductionManager(Model model) {
+	public ReproductionManager(final Model model) {
 		this.model = model;
 		
 		// Configure parameters from the model.
@@ -113,12 +113,16 @@ public class ReproductionManager {
 	 * @return a CandidateProgram selected for reproduction.
 	 */
 	public CandidateProgram reproduce() {
+		if (programSelector == null) {
+			throw new IllegalStateException("no program selector set");
+		}
+		
+		// Inform all listeners we're about to start.
 		model.getLifeCycleManager().fireReproductionStartEvent();
 		
 		CandidateProgram parent = null;
 		
 		reversions = 0;
-		
 		do {
 			// Choose a parent.
 			parent = programSelector.getProgram();
@@ -134,7 +138,10 @@ public class ReproductionManager {
 		// Store the stats from the reproduction.
 		model.getStatsManager().addGenerationData(REP_REVERSIONS, reversions);
 		
+		// Inform all listeners reproduction has ended.
 		model.getLifeCycleManager().fireReproductionEndEvent();
+		
+		assert(parent != null);
 		
 		return parent;
 	}

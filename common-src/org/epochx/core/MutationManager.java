@@ -29,7 +29,7 @@ import org.epochx.representation.CandidateProgram;
 
 /**
  * This component is responsible for handling the mutation operation and for 
- * raising mutation events.
+ * firing mutation events.
  * 
  * <p>
  * Use of the mutation operation will generate the following events:
@@ -71,7 +71,7 @@ import org.epochx.representation.CandidateProgram;
 public class MutationManager {
 	
 	// The controlling model.
-	private Model model;
+	private final Model model;
 	
 	// The selector for choosing the individual to mutate.
 	private ProgramSelector programSelector;
@@ -93,7 +93,7 @@ public class MutationManager {
 	 * 				an individual in the population.
 	 * @see Mutation
 	 */
-	public MutationManager(Model model) {
+	public MutationManager(final Model model) {
 		this.model = model;
 		
 		// Configure parameters from the model.
@@ -120,17 +120,31 @@ public class MutationManager {
 	 * submits it to the <code>Mutation</code> operator which is obtained by 
 	 * calling <code>getMutation()</code> on the model. 
 	 * 
-	 * @return a GPCandidateProgram generated through mutation by the Mutation
-	 *         operator in use, or if the max depth limit was exceeded then 
-	 *         the original selected program before mutation will be returned.
+	 * <p>After a mutation is made, the child program is checked for 
+	 * validity by calling its <code>isValid()</code> method. If the program is
+	 * found to be invalid then the program is discarded, a new program is and
+	 * the mutation operation is attempted again. If the child program is valid 
+	 * then the mutation event is fired which gives any listeners the 
+	 * opportunity to revert the operation by returning null, or modify the 
+	 * child that is returned. If null is returned to revert then the reversion 
+	 * count is incremented by 1 and a new program is selected mutation 
+	 * operation is repeated.
+	 * 
+	 * @return a CandidateProgram generated through mutation by the Mutation
+	 *         operator in use.
 	 */
 	public CandidateProgram mutate() {
 		if (mutator == null) {
-			throw new IllegalStateException("mutation operator cannot be null");
+			throw new IllegalStateException("mutation operator not set");
+		}
+		if (programSelector == null) {
+			throw new IllegalStateException("program selector not set");
 		}
 		
+		// Inform everyone we're about to start crossover.
 		model.getLifeCycleManager().fireMutationStartEvent();
 		
+		// Record the start time.
 		final long crossoverStartTime = System.nanoTime();
 		
 		CandidateProgram parent = null;
@@ -170,6 +184,8 @@ public class MutationManager {
 		model.getStatsManager().addMutationData(MUTATION_REVERSIONS, reversions);
 		
 		model.getLifeCycleManager().fireMutationEndEvent();
+		
+		assert (child != null);
 		
 		return child;
 	}

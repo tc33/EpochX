@@ -22,9 +22,10 @@
 package org.epochx.gr.model;
 
 import org.epochx.core.Model;
-import org.epochx.gr.op.crossover.*;
-import org.epochx.gr.op.init.*;
-import org.epochx.gr.op.mutation.*;
+import org.epochx.gr.op.crossover.WhighamCrossover;
+import org.epochx.gr.op.init.RampedHalfAndHalfInitialiser;
+import org.epochx.gr.op.mutation.WhighamMutation;
+import org.epochx.gr.stats.GRStatsEngine;
 import org.epochx.tools.grammar.Grammar;
 
 /**
@@ -44,6 +45,9 @@ public abstract class GRModel extends Model {
 	 * accessor method for information of each default value.
 	 */
 	public GRModel() {
+		// Use the GR stats engine.
+		getStatsManager().setStatsEngine(new GRStatsEngine(this));
+		
 		// Set default parameter values.
 		grammar = null;
 		

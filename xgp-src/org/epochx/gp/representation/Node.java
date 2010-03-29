@@ -171,6 +171,7 @@ public abstract class Node implements Cloneable {
 			// Only look at the subtree if it contains the right range of nodes.
 			if (n <= childLength + current) {
 				child.setNthNode(n, newNode, current+1);
+				return;
 			}
 			
 			current += childLength;

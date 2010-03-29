@@ -21,10 +21,9 @@
  */
 package org.epochx.gp.op.crossover;
 
-import org.epochx.core.Model;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
-import org.epochx.life.*;
+import org.epochx.life.ConfigAdapter;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
 

@@ -28,6 +28,7 @@ import org.epochx.gp.op.crossover.*;
 import org.epochx.gp.op.init.*;
 import org.epochx.gp.op.mutation.*;
 import org.epochx.gp.representation.Node;
+import org.epochx.gp.stats.GPStatsEngine;
 
 
 /**
@@ -47,6 +48,9 @@ public abstract class GPModel extends Model {
 	 * accessor method for information of each default value.
 	 */
 	public GPModel() {
+		// Use the GP stats engine.
+		getStatsManager().setStatsEngine(new GPStatsEngine(this));
+		
 		// Set default parameter values.
 		maxInitialDepth = 6;
 		maxProgramDepth = 12;

@@ -108,6 +108,21 @@ public abstract class AbstractNodeTestCase extends TestCase {
 	}
 	
 	/**
+	 * Tests that setting the nth node at a valid index does not throw an 
+	 * exception and the node is set correctly.
+	 */
+	public void testSetNthNodeLast() {
+		try {
+			Node newChild = new BooleanLiteral(false);
+			int lastIndex = node.getLength()-1;
+			node.setNthNode(lastIndex, newChild);
+			assertSame("nth node in node tree not set when n is the last node index", newChild, node.getNthNode(lastIndex));
+		} catch (Exception e) {
+			fail("Exception thrown when setting last node in node tree");
+		}
+	}
+	
+	/**
 	 * Test that an index out of bounds exception is thrown when trying to get
 	 * nodes at a negative depth.
 	 */

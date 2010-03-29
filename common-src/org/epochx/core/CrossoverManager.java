@@ -23,6 +23,7 @@ package org.epochx.core;
 
 import static org.epochx.stats.StatField.*;
 
+import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.life.ConfigAdapter;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
@@ -168,7 +169,7 @@ public class CrossoverManager {
 			// Select the parents for crossover.
 			parent1 = programSelector.getProgram();
 			parent2 = programSelector.getProgram();
-
+			
 			clone1 = (CandidateProgram) parent1.clone();
 			clone2 = (CandidateProgram) parent2.clone();
 			parents = new CandidateProgram[]{parent1, parent2};

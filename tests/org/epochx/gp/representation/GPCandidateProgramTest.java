@@ -19,12 +19,12 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.representation;
+package org.epochx.gp.representation;
 
 import java.util.List;
 
-import org.epochx.gp.representation.*;
 import org.epochx.gp.representation.bool.AndFunction;
+import org.epochx.representation.*;
 
 /**
  * 

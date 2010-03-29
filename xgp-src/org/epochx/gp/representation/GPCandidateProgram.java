@@ -149,6 +149,7 @@ public class GPCandidateProgram extends CandidateProgram {
 	 * 
 	 * @return the fitness of this candidate program according to the model.
 	 */
+	@Override
 	public double getFitness() {
 		// Only get the source code if caching to avoid overhead otherwise.
 		String source = null;

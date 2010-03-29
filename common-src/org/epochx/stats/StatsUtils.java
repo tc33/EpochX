@@ -92,13 +92,13 @@ public class StatsUtils {
 	}
 	
 	public static int max(int[] values) {
-		int min = Integer.MIN_VALUE;
+		int max = Integer.MIN_VALUE;
 		for (int i=0; i<values.length; i++) {
-			if (values[i] < min) {
-				min = values[i];
+			if (values[i] > max) {
+				max = values[i];
 			}
 		}
-		return min;
+		return max;
 	}
 	
 	public static int maxIndex(double[] values) {

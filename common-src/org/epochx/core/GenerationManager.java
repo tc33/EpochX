@@ -187,8 +187,8 @@ public class GenerationManager {
 	public List<CandidateProgram> generation(final int generationNo, 
 					final List<CandidateProgram> previousPop) {
 		// Validate inputs.
-		if (previousPop.size() < 1) {
-			throw new IllegalArgumentException("previousPop size must be 1 or greater.");
+		if (previousPop == null || previousPop.size() < 1) {
+			throw new IllegalArgumentException("previousPop must not be null and size must be 1 or greater.");
 		}
 		
 		// Give the model a chance to configure.

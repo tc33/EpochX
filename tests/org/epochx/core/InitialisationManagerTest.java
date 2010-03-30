@@ -19,33 +19,35 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.example.mux;
+package org.epochx.core;
 
-import org.epochx.gp.op.crossover.UniformPointCrossover;
-import org.epochx.op.selection.*;
-
+import junit.framework.TestCase;
 
 /**
  * 
- *
  */
-public class Multiplexer11Bit extends org.epochx.gp.model.mux.Multiplexer11Bit {
+public class InitialisationManagerTest extends TestCase {
+
+	private Model model;
+	private InitialisationManager initialisationManager;
 	
-	public Multiplexer11Bit() {
-		setPopulationSize(500);
-		setNoGenerations(50);
-		setCrossoverProbability(0.9);
-		setMutationProbability(0.0);
-		setNoRuns(1);
-		setPoolSize(50);
-		setNoElites(50);
-		setMaxProgramDepth(6);
-		setPoolSelector(new TournamentSelector(this, 7));
-		setProgramSelector(new RandomSelector(this));
-		setCrossover(new UniformPointCrossover(this));
+	@Override
+	protected void setUp() throws Exception {
+		model = new ModelDummy();
+		
+		initialisationManager = new InitialisationManager(model);
 	}
 	
-	public static void main(String[] args) {
-		new Multiplexer11Bit().run();
+	/**
+	 * Tests that an exception is thrown if the initialiser is null.
+	 */
+	public void testInitialiserNotSet() {
+		model.setInitialiser(null);
+		
+		try {
+			initialisationManager.initialise();
+			fail("illegal state exception not thrown initialisation with a null initialiser");
+		} catch(IllegalStateException e) {}
 	}
+	
 }

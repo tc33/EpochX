@@ -23,8 +23,10 @@ package org.epochx.core;
 
 import java.util.*;
 
+import org.epochx.gp.model.ant.SantaFeTrail;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.tools.random.RandomNumberGenerator;
 
 import junit.framework.TestCase;
 
@@ -64,6 +66,18 @@ public class GenerationManagerTest extends TestCase {
 			}
 		});
 		count = 0;
+	}
+	
+	/**
+	 * Tests that trying to run a generation with a previous population of null
+	 * throws an exception.
+	 */
+	public void testGenerationPopNull() {
+		pop.clear();
+		try {
+			genManager.generation(1, null);
+			fail("illegal argument exception not thrown for null previous population");
+		} catch (IllegalArgumentException e) {}
 	}
 	
 	/**
@@ -154,7 +168,15 @@ public class GenerationManagerTest extends TestCase {
 		
 		genManager.generation(1, pop);
 		
-		assertEquals("generation events were not called in the correct order", "1233334", verify.toString());
+		assertEquals("generation was not correctly reverted", "1233334", verify.toString());
 	}
 	
+	public void testGenerationRNGNull() {
+		model = new SantaFeTrail() {
+			@Override
+			public RandomNumberGenerator getRNG() {
+				return super.getRNG();
+			}
+		};
+	}
 }

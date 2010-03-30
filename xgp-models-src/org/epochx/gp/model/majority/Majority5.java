@@ -46,17 +46,14 @@ public class Majority5 extends GPModel {
 		configure();
 	}
 	
-	public void configure() {
+	private void configure() {
 		// Define variables.
 		variables.put("D4", new BooleanVariable("D4"));
 		variables.put("D3", new BooleanVariable("D3"));
 		variables.put("D2", new BooleanVariable("D2"));
 		variables.put("D1", new BooleanVariable("D1"));
 		variables.put("D0", new BooleanVariable("D0"));
-	}
-	
-	@Override
-	public List<Node> getSyntax() {
+		
 		// Define functions.
 		List<Node> syntax = new ArrayList<Node>();
 		syntax.add(new IfFunction());
@@ -71,7 +68,7 @@ public class Majority5 extends GPModel {
 		syntax.add(variables.get("D1"));
 		syntax.add(variables.get("D0"));
 		
-		return syntax;
+		setSyntax(syntax);
 	}
 	
 	@Override

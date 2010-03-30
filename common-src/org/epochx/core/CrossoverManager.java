@@ -102,10 +102,10 @@ public class CrossoverManager {
 		});
 	}
 	
-	/*
+	/**
 	 * Configure component with parameters from the model.
 	 */
-	private void configure() {
+	public void configure() {
 		programSelector = model.getProgramSelector();
 		crossover = model.getCrossover();
 	}

@@ -38,8 +38,6 @@ public class AntTurnRightAction extends VoidNode {
 	 * @param ant the Ant that will be turned right upon execution.
 	 */
 	public AntTurnRightAction(Ant ant) {
-		super();
-		
 		this.ant = ant;
 	}
 	

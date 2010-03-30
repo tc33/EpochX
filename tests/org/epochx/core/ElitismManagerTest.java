@@ -23,10 +23,10 @@ package org.epochx.core;
 
 import java.util.*;
 
+import junit.framework.TestCase;
+
 import org.epochx.life.ElitismListener;
 import org.epochx.representation.CandidateProgram;
-
-import junit.framework.TestCase;
 
 /**
  * 
@@ -39,12 +39,7 @@ public class ElitismManagerTest extends TestCase {
 	
 	@Override
 	protected void setUp() throws Exception {
-		model = new Model() {
-			@Override
-			public double getFitness(CandidateProgram program) {
-				return 0;
-			}
-		};
+		model = new ModelDummy();
 		elitismManager = new ElitismManager(model);
 		pop = new ArrayList<CandidateProgram>();
 	}
@@ -89,5 +84,17 @@ public class ElitismManagerTest extends TestCase {
 		} catch(IllegalArgumentException e) {}
 	}
 	
-	
+	/**
+	 * Tests that an exception is thrown if the program selector is null when
+	 * attempting crossover.
+	 */
+	public void testNoElitesNegative() {
+		model.setNoElites(-1);
+		elitismManager.configure();
+		
+		try {
+			elitismManager.elitism(pop);
+			fail("illegal state exception not thrown elitism with a negative number of elites");
+		} catch(IllegalStateException e) {}
+	}
 }

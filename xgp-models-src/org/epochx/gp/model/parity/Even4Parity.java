@@ -52,10 +52,7 @@ public class Even4Parity extends GPModel {
 		variables.put("D2", new BooleanVariable("D2"));
 		variables.put("D1", new BooleanVariable("D1"));
 		variables.put("D0", new BooleanVariable("D0"));
-	}
-	
-	@Override
-	public List<Node> getSyntax() {
+		
 		// Define functions.
 		List<Node> syntax = new ArrayList<Node>();
 		syntax.add(new IfFunction());
@@ -69,7 +66,7 @@ public class Even4Parity extends GPModel {
 		syntax.add(variables.get("D1"));
 		syntax.add(variables.get("D0"));
 		
-		return syntax;
+		setSyntax(syntax);
 	}
 	
 	@Override

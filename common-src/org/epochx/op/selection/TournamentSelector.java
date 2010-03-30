@@ -163,7 +163,7 @@ public class TournamentSelector implements ProgramSelector, PoolSelector {
 			for (int i=0; i<tournamentSize; i++) {
 				tournament[i] = randomSelector.getProgram();
 			}
-			
+
 			// Check the fitness of each program, stashing the best.
 			double bestFitness = Double.POSITIVE_INFINITY;
 			CandidateProgram bestProgram = null;
@@ -174,7 +174,7 @@ public class TournamentSelector implements ProgramSelector, PoolSelector {
 					bestProgram = p;
 				}
 			}
-					
+			
 			return bestProgram;
 		}
 	}

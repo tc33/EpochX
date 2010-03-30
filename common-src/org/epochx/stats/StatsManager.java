@@ -165,7 +165,7 @@ public class StatsManager {
 		return stats;
 	}
 	
-	public void printRunStats(String[] fields) {
+	public void printRunStats(String ... fields) {
 		printRunStats(fields, "\t");
 	}
 	
@@ -175,7 +175,7 @@ public class StatsManager {
 		printStats(stats, separator);
 	}
 	
-	public void printGenerationStats(String[] fields) {
+	public void printGenerationStats(String ... fields) {
 		printGenerationStats(fields, "\t");
 	}
 	
@@ -185,7 +185,7 @@ public class StatsManager {
 		printStats(stats, separator);
 	}
 	
-	public void printCrossoverStats(String[] fields) {
+	public void printCrossoverStats(String ... fields) {
 		printCrossoverStats(fields, "\t");
 	}
 	
@@ -195,7 +195,7 @@ public class StatsManager {
 		printStats(stats, separator);
 	}
 	
-	public void printMutationStats(String[] fields) {
+	public void printMutationStats(String ... fields) {
 		printMutationStats(fields, "\t");
 	}
 	

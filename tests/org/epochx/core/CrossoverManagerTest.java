@@ -21,8 +21,13 @@
  */
 package org.epochx.core;
 
+import java.util.*;
+
 import junit.framework.TestCase;
 
+import org.epochx.gp.model.*;
+import org.epochx.gp.representation.*;
+import org.epochx.life.CrossoverListener;
 import org.epochx.representation.CandidateProgram;
 
 /**
@@ -30,17 +35,14 @@ import org.epochx.representation.CandidateProgram;
  */
 public class CrossoverManagerTest extends TestCase {
 
-	private Model model;
+	private GPModel model;
 	private CrossoverManager crossoverManager;
+	
+	private int count;
 	
 	@Override
 	protected void setUp() throws Exception {
-		model = new Model() {
-			@Override
-			public double getFitness(CandidateProgram program) {
-				return 0;
-			}
-		};
+		model = new GPModelDummy();
 		crossoverManager = new CrossoverManager(model);
 	}
 	
@@ -58,4 +60,95 @@ public class CrossoverManagerTest extends TestCase {
 		} catch(IllegalStateException e) {}
 	}
 	
+	/**
+	 * Tests that an exception is thrown if the program selector is null when
+	 * attempting crossover.
+	 */
+	public void testProgramSelectorNotSet() {
+		// Create a model with a null program selector.
+		model.setProgramSelector(null);
+		crossoverManager = new CrossoverManager(model);
+		try {
+			crossoverManager.crossover();
+			fail("illegal state exception not thrown for a model with null a program selector");
+		} catch(IllegalStateException e) {}
+	}
+	
+	/**
+	 * Tests that the crossover events are all triggered and in the correct 
+	 * order.
+	 */
+	public void testCrossoverEventsOrder() {
+		// We add the chars '1', '2', '3' to builder to check order of calls.
+		final StringBuilder verify = new StringBuilder();
+		
+		List<CandidateProgram> pop = new ArrayList<CandidateProgram>();
+		pop.add(new GPCandidateProgram(new BooleanLiteral(false), (GPModel) model));
+		pop.add(new GPCandidateProgram(new BooleanLiteral(false), (GPModel) model));
+		model.getProgramSelector().setSelectionPool(pop);
+		
+		// Listen for the crossver.
+		model.getLifeCycleManager().addCrossoverListener(new CrossoverListener() {
+			@Override
+			public void onCrossoverStart() {
+				verify.append('1');
+			}
+			@Override
+			public CandidateProgram[] onCrossover(CandidateProgram[] parents, CandidateProgram[] children) {
+				verify.append('2');
+				return children;
+			}
+			@Override
+			public void onCrossoverEnd() {
+				verify.append('3');
+			}
+		});
+		model.getLifeCycleManager().fireConfigureEvent();
+		crossoverManager.crossover();
+		
+		assertEquals("crossover events were not called in the correct order", "123", verify.toString());
+	}
+	
+	/**
+	 * Tests that returning null to the crossover event will revert the crossover.
+	 */
+	public void testGenerationEventRevert() {
+		// We add the chars '1', '2', '3' to builder to check order of calls.
+		final StringBuilder verify = new StringBuilder();
+		
+		List<CandidateProgram> pop = new ArrayList<CandidateProgram>();
+		pop.add(new GPCandidateProgram(new BooleanLiteral(false), (GPModel) model));
+		pop.add(new GPCandidateProgram(new BooleanLiteral(false), (GPModel) model));
+		model.getProgramSelector().setSelectionPool(pop);
+		
+		count = 0;
+		
+		// Listen for the generation.
+		model.getLifeCycleManager().addCrossoverListener(new CrossoverListener() {
+			@Override
+			public void onCrossoverStart() {
+				verify.append('1');
+			}
+			@Override
+			public CandidateProgram[] onCrossover(CandidateProgram[] parents, CandidateProgram[] children) {
+				verify.append('2');
+				// Revert 3 times before confirming.
+				if (count == 3) {
+					return children;
+				} else {
+					count++;
+				}
+				return null;
+			}
+			@Override
+			public void onCrossoverEnd() {
+				verify.append('3');
+			}
+		});
+		
+		model.getLifeCycleManager().fireConfigureEvent();
+		crossoverManager.crossover();
+		
+		assertEquals("crossover operation was not correctly reverted", "122223", verify.toString());
+	}
 }

@@ -93,10 +93,10 @@ public class ElitismManager {
 		});
 	}
 	
-	/*
+	/**
 	 * Configure component with parameters from the model.
 	 */
-	private void configure() {
+	public void configure() {
 		// Discover how many elites we need.
 		noElites = model.getNoElites();
 		final int popSize = model.getPopulationSize();

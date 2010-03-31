@@ -65,7 +65,6 @@ public class GenerationManagerTest extends TestCase {
 				return 0;
 			}
 		});
-		count = 0;
 	}
 	
 	/**
@@ -114,9 +113,9 @@ public class GenerationManagerTest extends TestCase {
 				verify.append('2');
 			}
 			@Override
-			public List<CandidateProgram> onGeneration(List<CandidateProgram> elites) {
+			public List<CandidateProgram> onGeneration(List<CandidateProgram> genPop) {
 				verify.append('3');
-				return elites;
+				return genPop;
 			}
 			@Override
 			public void onGenerationEnd() {
@@ -133,22 +132,13 @@ public class GenerationManagerTest extends TestCase {
 	 * Tests that returning null to the generation event will revert the generation.
 	 */
 	public void testGenerationEventRevert() {
+		count = 0;
+		
 		// We add the chars '1', '2', '3' to builder to check order of calls.
 		final StringBuilder verify = new StringBuilder();
 		
-		// Listen for the config events.
-		model.getLifeCycleManager().addConfigListener(new ConfigListener() {
-			@Override
-			public void onConfigure() {
-				verify.append('1');
-			}
-		});
 		// Listen for the generation.
-		model.getLifeCycleManager().addGenerationListener(new GenerationListener() {
-			@Override
-			public void onGenerationStart() {
-				verify.append('2');
-			}
+		model.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public List<CandidateProgram> onGeneration(List<CandidateProgram> elites) {
 				verify.append('3');
@@ -160,15 +150,11 @@ public class GenerationManagerTest extends TestCase {
 				}
 				return null;
 			}
-			@Override
-			public void onGenerationEnd() {
-				verify.append('4');
-			}
 		});
 		
 		genManager.generation(1, pop);
 		
-		assertEquals("generation was not correctly reverted", "1233334", verify.toString());
+		assertEquals("generation was not correctly reverted", "3333", verify.toString());
 	}
 	
 	public void testGenerationRNGNull() {

@@ -150,8 +150,8 @@ public class FullInitialiser implements GPInitialiser {
 	        // Populate the root node with full children of depth-1.
 			fillChildren(root, 0, depth);
 		}
-        
-        return root;
+
+		return root;
 	}
 	
 	/*

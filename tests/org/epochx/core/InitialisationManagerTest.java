@@ -21,6 +21,13 @@
  */
 package org.epochx.core;
 
+import java.util.*;
+
+import org.epochx.gp.model.*;
+import org.epochx.gp.representation.*;
+import org.epochx.life.*;
+import org.epochx.representation.*;
+
 import junit.framework.TestCase;
 
 /**
@@ -30,10 +37,17 @@ public class InitialisationManagerTest extends TestCase {
 
 	private Model model;
 	private InitialisationManager initialisationManager;
+	private int count;
 	
 	@Override
 	protected void setUp() throws Exception {
-		model = new ModelDummy();
+		model = new GPModelDummy();
+		
+		// Need to give the model a valid syntax so we can perform initialisations.
+		List<Node> syntax = new ArrayList<Node>();
+		syntax.add(new BooleanLiteral(false));
+		((GPModel) model).setSyntax(syntax);
+		((GPModel) model).setInitialMaxDepth(0);
 		
 		initialisationManager = new InitialisationManager(model);
 	}
@@ -50,4 +64,116 @@ public class InitialisationManagerTest extends TestCase {
 		} catch(IllegalStateException e) {}
 	}
 	
+	/**
+	 * Tests that the initialisation events are all triggered and in the correct 
+	 * order.
+	 */
+	public void testInitialisationEventsOrder() {		
+		// We add the chars '1', '2', '3' to builder to check order of calls.
+		final StringBuilder verify = new StringBuilder();
+		
+		// Listen for the config events.
+		model.getLifeCycleManager().addConfigListener(new ConfigListener() {
+			@Override
+			public void onConfigure() {
+				verify.append('1');
+			}
+		});
+		// Listen for the generation.
+		model.getLifeCycleManager().addGenerationListener(new GenerationListener() {
+			@Override
+			public void onGenerationStart() {
+				verify.append('2');
+			}
+			@Override
+			public List<CandidateProgram> onGeneration(List<CandidateProgram> genPop) {
+				verify.append('4');
+				return genPop;
+			}
+			@Override
+			public void onGenerationEnd() {
+				verify.append('7');
+			}
+		});
+		// Listen for the initialisation.
+		model.getLifeCycleManager().addInitialisationListener(new InitialisationListener() {
+			@Override
+			public void onInitialisationStart() {
+				verify.append('3');
+			}
+			@Override
+			public List<CandidateProgram> onInitialisation(List<CandidateProgram> genPop) {
+				verify.append('5');
+				return genPop;
+			}
+			@Override
+			public void onInitialisationEnd() {
+				verify.append('6');
+			}
+		});
+		
+		initialisationManager.initialise();
+		
+		assertEquals("initialisation events were not called in the correct order", "1234567", verify.toString());
+	}
+	
+	/**
+	 * Tests that the initialisation events are all triggered and in the correct 
+	 * order.
+	 */
+	public void testInitialisationEventRevert() {	
+		count = 0;
+		
+		// We add the chars '1', '2', '3' to builder to check order of calls.
+		final StringBuilder verify = new StringBuilder();
+
+		// Listen for the initialisation.
+		model.getLifeCycleManager().addInitialisationListener(new InitialisationAdapter() {
+			@Override
+			public List<CandidateProgram> onInitialisation(List<CandidateProgram> genPop) {
+				verify.append('3');
+				// Revert 3 times before confirming.
+				if (count == 3) {
+					return genPop;
+				} else {
+					count++;
+				}
+				return null;
+			}
+		});
+		
+		initialisationManager.initialise();
+		
+		assertEquals("initialisation not reverted for null return from onInitialisation event", "3333", verify.toString());
+	}
+	
+	/**
+	 * Tests that the initialisation events are all triggered and in the correct 
+	 * order.
+	 */
+	public void testGenerationEventRevert() {	
+		count = 0;
+		
+		// We add the chars '1', '2', '3' to builder to check order of calls.
+		final StringBuilder verify = new StringBuilder();
+
+		// Listen for the initialisation.
+		model.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public List<CandidateProgram> onGeneration(List<CandidateProgram> genPop) {
+				verify.append('3');
+				// Revert 3 times before confirming.
+				if (count == 3) {
+					return genPop;
+				} else {
+					count++;
+				}
+				return null;
+			}
+		});
+		
+		initialisationManager.initialise();
+		
+		assertEquals("initialisation not reverted for null return from onGeneration event", "3333", verify.toString());
+	}
 }

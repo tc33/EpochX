@@ -189,7 +189,7 @@ public class InitialisationManager {
 		do {
 			// Perform initialisation.
 			pop = initialiser.getInitialPopulation();
-			
+
 			// Allow life cycle manager to confirm or modify. (init has final say).
 			pop = model.getLifeCycleManager().fireGenerationEvent(pop);
 			pop = model.getLifeCycleManager().fireInitialisationEvent(pop);

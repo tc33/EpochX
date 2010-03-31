@@ -64,10 +64,10 @@ public class ModelDummy extends Model {
 	public ModelDummy() {		
 		// Control parameters.
 		noRuns = 1;
-		noGenerations = 50;
-		populationSize = 100;
-		poolSize = 50;
-		noElites = 10;
+		noGenerations = 1;
+		populationSize = 1;
+		poolSize = 1;
+		noElites = 1;
 		terminationFitness = 0.0;
 		crossoverProbability = 0.9;
 		mutationProbability = 0.1;

@@ -98,7 +98,7 @@ public class WhighamMutation implements GRMutation {
 		try {
 			parser.parse(parseTree.toString());
 		} catch (MalformedProgramException e) {
-			System.out.println("");			
+			//System.out.println("Malformed program");
 		}
 		
 		return mutatedProgram;

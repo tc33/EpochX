@@ -27,7 +27,7 @@ import junit.framework.TestCase;
 
 import org.epochx.gp.model.*;
 import org.epochx.gp.representation.*;
-import org.epochx.life.CrossoverListener;
+import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
 
 /**
@@ -67,10 +67,11 @@ public class CrossoverManagerTest extends TestCase {
 	public void testProgramSelectorNotSet() {
 		// Create a model with a null program selector.
 		model.setProgramSelector(null);
-		crossoverManager = new CrossoverManager(model);
+
+		model.getLifeCycleManager().fireConfigureEvent();
 		try {
 			crossoverManager.crossover();
-			fail("illegal state exception not thrown for a model with null a program selector");
+			fail("illegal state exception not thrown when performing crossover with a null program selector");
 		} catch(IllegalStateException e) {}
 	}
 	
@@ -124,11 +125,7 @@ public class CrossoverManagerTest extends TestCase {
 		count = 0;
 		
 		// Listen for the generation.
-		model.getLifeCycleManager().addCrossoverListener(new CrossoverListener() {
-			@Override
-			public void onCrossoverStart() {
-				verify.append('1');
-			}
+		model.getLifeCycleManager().addCrossoverListener(new CrossoverAdapter() {
 			@Override
 			public CandidateProgram[] onCrossover(CandidateProgram[] parents, CandidateProgram[] children) {
 				verify.append('2');
@@ -140,15 +137,11 @@ public class CrossoverManagerTest extends TestCase {
 				}
 				return null;
 			}
-			@Override
-			public void onCrossoverEnd() {
-				verify.append('3');
-			}
 		});
 		
 		model.getLifeCycleManager().fireConfigureEvent();
 		crossoverManager.crossover();
 		
-		assertEquals("crossover operation was not correctly reverted", "122223", verify.toString());
+		assertEquals("crossover operation was not correctly reverted", "2222", verify.toString());
 	}
 }

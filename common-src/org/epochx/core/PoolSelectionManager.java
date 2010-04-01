@@ -140,7 +140,7 @@ public class PoolSelectionManager {
 	 * @return a list of <code>CandidatePrograms</code> to be used as a 
 	 * breeding pool.
 	 */
-	public List<CandidateProgram> getPool(List<CandidateProgram> pop) {
+	public List<CandidateProgram> getPool(final List<CandidateProgram> pop) {
 		if ((poolSelector != null) && (poolSize == 0 || poolSize < -1)) {
 			throw new IllegalStateException("pool selector set but invalid pool size (="+poolSize+')');
 		}

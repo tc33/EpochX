@@ -21,35 +21,16 @@
  */
 package org.epochx.example.regression;
 
-import java.util.*;
-
-import org.epochx.core.*;
-import org.epochx.op.crossover.*;
+import org.epochx.gp.op.crossover.UniformPointCrossover;
 import org.epochx.op.selection.*;
-import org.epochx.representation.*;
-import org.epochx.representation.dbl.*;
-import org.epochx.stats.*;
 
 
 /**
  * 
  */
-public class QuarticRegression extends GPAbstractModel {
+public class QuarticRegression extends org.epochx.gp.model.regression.QuarticRegression {
 
-	private DoubleVariable x;
-	
 	public QuarticRegression() {
-		configure();
-	}
-	
-	public void configure() {
-		// Create variables.
-		x = new DoubleVariable("X");
-		
-		setGenStatFields(new GenerationStatField[]{GenerationStatField.FITNESS_MIN, GenerationStatField.FITNESS_AVE, GenerationStatField.LENGTH_AVE, GenerationStatField.RUN_TIME});
-		setRunStatFields(new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM, RunStatField.RUN_TIME});
-		
-		// Setup run.
 		setPopulationSize(500);
 		setCrossoverProbability(0.9);
 		setMutationProbability(0.0);
@@ -62,67 +43,8 @@ public class QuarticRegression extends GPAbstractModel {
 		setMaxProgramDepth(17);
 		setNoRuns(1);
 	}
-
-	@Override
-	public List<Node> getFunctions() {
-		// Define function set.
-		List<Node> functions = new ArrayList<Node>();
-		functions.add(new AddFunction());
-		functions.add(new SubtractFunction());
-		functions.add(new MultiplyFunction());
-		functions.add(new ProtectedDivisionFunction());
-		
-		return functions;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.epochx.core.GPModel#getTerminals()
-	 */
-	@Override
-	public List<Node> getTerminals() {
-		// Define terminal set.
-		List<Node> terminals = new ArrayList<Node>();
-		terminals.add(new DoubleLiteral(5d));
-		terminals.add(new DoubleLiteral(4d));
-		terminals.add(new DoubleLiteral(3d));
-		terminals.add(new DoubleLiteral(2d));
-		terminals.add(new DoubleLiteral(1d));
-		terminals.add(new DoubleLiteral(0d));
-		terminals.add(new DoubleLiteral(-5d));
-		terminals.add(new DoubleLiteral(-4d));
-		terminals.add(new DoubleLiteral(-3d));
-		terminals.add(new DoubleLiteral(-2d));
-		terminals.add(new DoubleLiteral(-1d));
-		
-		// Define variables;
-		terminals.add(x);
-		
-		return terminals;
-	}
-	
-	@Override
-	public double getFitness(CandidateProgram p) {
-		GPCandidateProgram program = (GPCandidateProgram) p;
-		
-		double[] inputs = new double[]{-1.0, -0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9};
-		int noWrong = 0;
-		
-		for (double in: inputs) {
-			x.setValue(in);
-			if ((Double) program.evaluate() != getCorrectResult(in)) {
-				noWrong++;
-			}
-		}
-		
-		// How good is this result?
-		return noWrong;
-	}
-	
-	private double getCorrectResult(double x) {
-		return x + (x*x) + (x*x*x) + (x*x*x*x);
-	}
 	
 	public static void main(String[] args) {
-		Controller.run(new QuarticRegression());
+		new QuarticRegression().run();
 	}
 }

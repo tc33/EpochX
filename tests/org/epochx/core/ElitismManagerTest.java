@@ -90,7 +90,7 @@ public class ElitismManagerTest extends TestCase {
 	 */
 	public void testNoElitesNegative() {
 		model.setNoElites(-1);
-		elitismManager.configure();
+		model.getLifeCycleManager().fireConfigureEvent();
 		
 		try {
 			elitismManager.elitism(pop);

@@ -23,6 +23,9 @@ package org.epochx.gp.model;
 
 import java.util.*;
 
+import org.epochx.gp.op.crossover.UniformPointCrossover;
+import org.epochx.gp.op.init.FullInitialiser;
+import org.epochx.gp.op.mutation.SubtreeMutation;
 import org.epochx.gp.representation.Node;
 import org.epochx.op.*;
 import org.epochx.op.selection.TournamentSelector;
@@ -93,6 +96,11 @@ public class GPModelDummy extends GPModel {
 		maxProgramDepth = 12;
 		
 		syntax = new ArrayList<Node>();
+		
+		// Operators.
+		initialiser = new FullInitialiser(this);
+		crossover = new UniformPointCrossover(this);
+		mutation = new SubtreeMutation(this);
 	}
 
 	@Override

@@ -19,33 +19,37 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.example.mux;
+package org.epochx.core;
 
-import org.epochx.gp.op.crossover.UniformPointCrossover;
-import org.epochx.op.selection.*;
-
+import junit.framework.TestCase;
 
 /**
  * 
- *
  */
-public class Multiplexer37Bit extends org.epochx.gp.model.mux.Multiplexer37Bit {
+public class ReproductionManagerTest extends TestCase {
+
+	private Model model;
 	
-	public Multiplexer37Bit() {
-		setPopulationSize(500);
-		setNoGenerations(50);
-		setCrossoverProbability(0.9);
-		setMutationProbability(0.0);
-		setNoRuns(1);
-		setPoolSize(50);
-		setNoElites(50);
-		setMaxProgramDepth(6);
-		setPoolSelector(new TournamentSelector(this, 7));
-		setProgramSelector(new RandomSelector(this));
-		setCrossover(new UniformPointCrossover(this));
+	private ReproductionManager reproductionManager;
+	
+	@Override
+	protected void setUp() throws Exception {
+		model = new ModelDummy();
+		
+		reproductionManager = new ReproductionManager(model);
 	}
 	
-	public static void main(String[] args) {
-		new Multiplexer37Bit().run();
+	/**
+	 * Tests that an exception is thrown if the program selector is null when
+	 * attempting reproduction.
+	 */
+	public void testProgramSelectorNotSet() {
+		model.setProgramSelector(null);
+		
+		try {
+			reproductionManager.reproduce();
+			fail("illegal state exception not thrown when performing reproduction with a null program selector");
+		} catch(IllegalStateException e) {}
 	}
+	
 }

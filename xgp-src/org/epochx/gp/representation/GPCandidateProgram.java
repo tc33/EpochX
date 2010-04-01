@@ -313,7 +313,11 @@ public class GPCandidateProgram extends CandidateProgram {
 	 */
 	@Override
 	public String toString() {
-		return rootNode.toString();
+		if (rootNode == null) {
+			return null;
+		} else {
+			return rootNode.toString();
+		}
 	}
 	
 	/**

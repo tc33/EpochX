@@ -21,14 +21,8 @@
  */
 package org.epochx.example.mux;
 
-import java.util.*;
-
-import org.epochx.core.*;
 import org.epochx.gp.op.crossover.UniformPointCrossover;
 import org.epochx.op.selection.*;
-import org.epochx.representation.*;
-import org.epochx.stats.*;
-import org.epochx.tools.util.BoolUtils;
 
 
 /**

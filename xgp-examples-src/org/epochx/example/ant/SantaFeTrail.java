@@ -23,7 +23,9 @@ package org.epochx.example.ant;
 
 import static org.epochx.gp.stats.GPStatField.*;
 
-import org.epochx.gp.op.crossover.UniformPointCrossover;
+import org.epochx.gp.op.crossover.*;
+import org.epochx.gp.op.init.FullInitialiser;
+import org.epochx.gp.op.mutation.SubtreeMutation;
 import org.epochx.life.*;
 import org.epochx.op.selection.*;
 
@@ -36,10 +38,10 @@ public class SantaFeTrail extends org.epochx.gp.model.ant.SantaFeTrail {
 	public SantaFeTrail() {
 		super();
 		
-		setPopulationSize(500);
-		setNoGenerations(50);
+		setPopulationSize(10000);
+		setNoGenerations(100);
 		setCrossoverProbability(0.9);
-		setMutationProbability(0.0);
+		setMutationProbability(0.1);
 		setNoRuns(100);
 		//setPoolSize(-1);
 		setNoElites(50);
@@ -47,14 +49,16 @@ public class SantaFeTrail extends org.epochx.gp.model.ant.SantaFeTrail {
 		setMaxProgramDepth(17);
 		setPoolSelector(null);
 		setProgramSelector(new TournamentSelector(this, 7));
-		setCrossover(new UniformPointCrossover(this));
-		
-		/*getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+		setCrossover(new KozaCrossover(this));
+		setMutation(new SubtreeMutation(this));
+		setInitialiser(new FullInitialiser(this));
+
+		getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationEnd() {
 				getStatsManager().printGenerationStats(GEN_NUMBER, GEN_FITNESS_MIN, GEN_FITNESS_AVE, GEN_DEPTH_AVE, GEN_DEPTH_MAX);
 			}
-		});*/
+		});
 		
 		getLifeCycleManager().addRunListener(new RunAdapter() {
 			@Override

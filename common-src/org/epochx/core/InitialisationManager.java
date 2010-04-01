@@ -111,6 +111,13 @@ import org.epochx.representation.CandidateProgram;
  *         <td>After the initialisation operation has been completed.
  *         </td>
  *     </tr>
+ *     <tr>
+ *         <td>onGenerationEnd</td>
+ *         <td>no</td>
+ *         <td>no</td>
+ *         <td>Immediately after the initialisation end event is fired.
+ *         </td>
+ *     </tr>
  * </table>
  * 
  * @see Initialiser

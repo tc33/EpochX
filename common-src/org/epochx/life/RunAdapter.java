@@ -22,10 +22,21 @@
 package org.epochx.life;
 
 /**
- * Provides neutral implementations of the run events. Creating an anonymous 
- * implementation of this class is often preferable to implementing <code>
- * RunListener</code> since it avoids the need to implement methods which
- * may be of no interest.
+ * Provides an <code>abstract</code> implementation of <code>RunListener</code>. 
+ * 
+ * <p>Typical use of this class would be in an anonymous class. For example:
+ * 
+ * <blockquote><pre>
+ *     model.getLifeCycleListener().addRunListener(new RunAdapter(){
+ *     		public void onRunStart() {
+ *     			... do something ...
+ *     		}
+ *     });
+ * </pre></blockquote>
+ * 
+ * <p>Creating an anonymous implementation of this class is often preferable to 
+ * implementing <code>RunListener</code> since it avoids the need to implement 
+ * methods which may be of no interest.
  */
 public abstract class RunAdapter implements RunListener {
 

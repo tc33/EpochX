@@ -113,7 +113,7 @@ public class CrossoverManagerTest extends TestCase {
 	/**
 	 * Tests that returning null to the crossover event will revert the crossover.
 	 */
-	public void testGenerationEventRevert() {
+	public void testCrossoverEventRevert() {
 		// We add the chars '1', '2', '3' to builder to check order of calls.
 		final StringBuilder verify = new StringBuilder();
 		

@@ -21,35 +21,49 @@
  */
 package org.epochx.life;
 
+import org.epochx.core.MutationManager;
 import org.epochx.representation.CandidateProgram;
 
 /**
- * Defines the mutation events which may be raised.
+ * Provides the interface to be implemented by objects that wish to handle run
+ * events. See the {@link MutationManager}'s class documentation for details of 
+ * when each mutation event will be fired. To listen for mutation events during 
+ * execution of a model, instances of <code>MutationListener</code> must be 
+ * added to the model's <code>LifeCycleManager</code> which is retrievable 
+ * through a call to the model's <code>getLifeCycleManager()</code> method.
+ * 
+ * <p>
+ * It is typical to listen to events using an anonymous class which often makes
+ * the <code>abstract</code> <code>MutationAdapter</code> class more convenient 
+ * to implement.
+ * 
+ * @see MutationAdapter
+ * @see MutationManager
  */
 public interface MutationListener {
 	
 	/**
-	 * Event raised before the mutation operation starts.
+	 * Event fired before the mutation operation starts.
 	 */
-	public void onMutationStart();
+	void onMutationStart();
 	
 	/**
-	 * Event raised after the selection and mutation operation has occurred. 
+	 * Event fired after the selection and mutation operation has occurred. 
 	 * The child may be modified and returned. This event is revertable by 
-	 * returning null which will trigger the discarding of the parent and 
-	 * mutant child, the reselection of a new parent, a new mutation attempt 
-	 * and this event being raised again. If the mutation should be accepted 
-	 * then the child should be returned as it is.
+	 * returning <code>null</code> which will trigger the discarding of the 
+	 * parent and mutant child, the reselection of a new parent, a new mutation 
+	 * attempt and this event being raised again. If the mutation should be 
+	 * accepted then the child should be returned as it is.
 	 * 
 	 * @param parent the program that was selected to undergo mutation.
 	 * @param child the resultant program from the parent undergoing mutation.
 	 * @return a GPCandidateProgram that should be considered the result of a 
 	 * mutation operation, or null if the mutation should be reverted.
 	 */
-	public CandidateProgram onMutation(CandidateProgram parent, CandidateProgram child);
+	CandidateProgram onMutation(CandidateProgram parent, CandidateProgram child);
 	
 	/**
-	 * Event raised after the mutation operation has ended and been accepted.
+	 * Event fired after the mutation operation has ended.
 	 */
-	public void onMutationEnd();
+	void onMutationEnd();
 }

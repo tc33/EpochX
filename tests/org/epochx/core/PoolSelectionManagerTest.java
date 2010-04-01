@@ -180,7 +180,7 @@ public class PoolSelectionManagerTest extends TestCase {
 	/**
 	 * Tests that returning null to the pool selection event will revert the selection.
 	 */
-	public void testGenerationEventRevert() {
+	public void testPoolSelectionEventRevert() {
 		// We add the chars '1', '2', '3' to builder to check order of calls.
 		final StringBuilder verify = new StringBuilder();
 		

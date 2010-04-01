@@ -21,27 +21,42 @@
  */
 package org.epochx.life;
 
+import org.epochx.core.RunManager;
+
 /**
- * Defines the run events which may be raised.
+ * Provides the interface to be implemented by objects that wish to handle run
+ * events. See the {@link RunManager}'s class documentation for details of when 
+ * each run event will be fired. To listen for run events during execution of
+ * a model, instances of <code>RunListener</code> must be added to the model's 
+ * <code>LifeCycleManager</code> which is retrievable through a call to the 
+ * model's <code>getLifeCycleManager()</code> method.
+ * 
+ * <p>
+ * It is typical to listen to events using an anonymous class which often makes
+ * the <code>abstract</code> <code>RunAdapter</code> class more convenient to
+ * implement.
+ * 
+ * @see RunAdapter
+ * @see RunManager
  */
 public interface RunListener {
 
 	/**
-	 * Event raised before the run starts.
+	 * Event fired before the run starts.
 	 */
-	public void onRunStart();
+	void onRunStart();
 
 	/**
-	 * Event raised when a program with a fitness lower than the model's 
+	 * Event fired when a program with a fitness lower than the model's 
 	 * termination fitness is found.
 	 */
-	public void onSuccess();
+	void onSuccess();
 	
-	//public void onStagnate();
+	//TODO public void onStagnate();
 	
 	/**
-	 * Event raised after the run has ended.
+	 * Event fired after the run has ended.
 	 */
-	public void onRunEnd();
+	void onRunEnd();
 	
 }

@@ -26,11 +26,22 @@ import java.util.List;
 import org.epochx.representation.CandidateProgram;
 
 /**
- * Provides neutral implementations of the pool selection events which by 
- * default will where necessary accept the operation. Creating an anonymous 
- * implementation of this class is often preferable to implementing <code>
- * PoolSelectionListener</code> since it avoids the need to implement methods 
- * which may be of no interest.
+ * Provides an <code>abstract</code> implementation of 
+ * <code>PoolSelectionListener</code>. 
+ * 
+ * <p>Typical use of this class would be in an anonymous class. For example:
+ * 
+ * <blockquote><pre>
+ *     model.getLifeCycleListener().addPoolSelectionListener(new PoolSelectionAdapter(){
+ *     		public void onPoolSelectionStart() {
+ *     			... do something ...
+ *     		}
+ *     });
+ * </pre></blockquote>
+ * 
+ * <p>Creating an anonymous implementation of this class is often preferable to 
+ * implementing <code>PoolSelectionListener</code> since it avoids the need to 
+ * implement methods which may be of no interest.
  */
 public class PoolSelectionAdapter implements PoolSelectionListener {
 

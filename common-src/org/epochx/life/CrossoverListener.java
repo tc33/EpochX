@@ -21,25 +21,40 @@
  */
 package org.epochx.life;
 
+import org.epochx.core.CrossoverManager;
 import org.epochx.representation.CandidateProgram;
 
 /**
- * Defines the crossover events which may be raised.
+ * Provides the interface to be implemented by objects that wish to handle 
+ * crossover events. See the {@link CrossoverManager}'s class documentation for 
+ * details of when each crossover event will be fired. To listen for crossover 
+ * events during execution of a model, instances of 
+ * <code>CrossoverListener</code> must be added to the model's 
+ * <code>LifeCycleManager</code> which is retrievable through a call to the 
+ * model's <code>getLifeCycleManager()</code> method.
+ * 
+ * <p>
+ * It is typical to listen to events using an anonymous class which often makes
+ * the <code>abstract</code> <code>CrossoverAdapter</code> class more convenient
+ * to implement.
+ * 
+ * @see CrossoverAdapter
+ * @see CrossoverManager
  */
 public interface CrossoverListener {
 
 	/**
-	 * Event raised before the crossover operation starts.
+	 * Event fired before the crossover operation starts.
 	 */
-	public void onCrossoverStart();
+	void onCrossoverStart();
 	
 	/**
-	 * Event raised after the selection and crossover operation has occurred. 
+	 * Event fired after the selection and crossover operation has occurred. 
 	 * The children may be modified and returned. This event is revertable by 
-	 * returning null which will trigger the discarding of the parents and 
-	 * children, the reselection of new parents, a new crossover attempt and 
-	 * this event being raised again. If the crossover should be accepted then
-	 * the children should be returned as they are.
+	 * returning <code>null</code> which will trigger the discarding of the 
+	 * parents and children, the reselection of new parents, a new crossover 
+	 * attempt and this event being raised again. If the crossover should be 
+	 * accepted then the children should be returned as they are.
 	 * 
 	 * @param parents the programs that were selected to undergo crossover.
 	 * @param children the programs that were generated as a result of the 
@@ -47,11 +62,11 @@ public interface CrossoverListener {
 	 * @return an array of CandidatePrograms to be used as the children of the 
 	 * crossover operation, or null if the crossover should be reverted.
 	 */
-	public CandidateProgram[] onCrossover(CandidateProgram[] parents, CandidateProgram[] children);
+	CandidateProgram[] onCrossover(CandidateProgram[] parents, CandidateProgram[] children);
 	
 	/**
-	 * Event raised after the crossover operation has ended and been accepted.
+	 * Event fired after the crossover operation has ended.
 	 */
-	public void onCrossoverEnd();
+	void onCrossoverEnd();
 	
 }

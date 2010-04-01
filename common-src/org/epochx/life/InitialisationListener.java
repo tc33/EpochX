@@ -23,35 +23,51 @@ package org.epochx.life;
 
 import java.util.List;
 
+import org.epochx.core.InitialisationManager;
 import org.epochx.representation.CandidateProgram;
 
 
 /**
- * Defines the initialisation events which may be raised.
+ * Provides the interface to be implemented by objects that wish to handle run
+ * events. See the {@link InitialisationManager}'s class documentation for 
+ * details of when each initialisation event will be fired. To listen for 
+ * initialisation events during execution of a model, instances of 
+ * <code>InitialisationListener</code> must be added to the model's 
+ * <code>LifeCycleManager</code> which is retrievable through a call to the 
+ * model's <code>getLifeCycleManager()</code> method.
+ * 
+ * <p>
+ * It is typical to listen to events using an anonymous class which often makes
+ * the <code>abstract</code> <code>InitialisationAdapter</code> class more 
+ * convenient to implement.
+ * 
+ * @see InitialisationAdapter
+ * @see InitialisationManager
  */
 public interface InitialisationListener {
 
 	/**
-	 * Event raised before the initialisation operation starts.
+	 * Event fired before the initialisation operation starts.
 	 */
-	public void onInitialisationStart();
+	void onInitialisationStart();
 	
 	/**
-	 * Event raised after a population has been initialised. The initial 
+	 * Event fired after a population has been initialised. The initial 
 	 * population may be modified and returned. This event is revertable by 
-	 * returning null which will trigger the discarding of the population and 
-	 * a reattempt at initialisation with this event being raised again after. 
-	 * If the initialisation should be accepted then the population should be 
-	 * returned as it is.
+	 * returning <code>null</code> which will trigger the discarding of the 
+	 * population and a reattempt at initialisation with this event being raised
+	 * again after. If the initialisation should be accepted then the population
+	 * should be returned as it is.
 	 * 
 	 * @param pop the newly initialised population.
 	 * @return the population of CandidatePrograms to continue with as the 
 	 * newly initialised population, or null if initialisation should be rerun.
 	 */
-	public List<CandidateProgram> onInitialisation(List<CandidateProgram> pop);
+	List<CandidateProgram> onInitialisation(List<CandidateProgram> pop);
 	
 	/**
-	 * Event raised after the initialisation operation has ended and been accepted.
+	 * Event fired after the initialisation operation has ended and been 
+	 * accepted.
 	 */
-	public void onInitialisationEnd();
+	void onInitialisationEnd();
 }

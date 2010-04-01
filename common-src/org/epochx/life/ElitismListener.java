@@ -23,33 +23,48 @@ package org.epochx.life;
 
 import java.util.List;
 
+import org.epochx.core.ElitismManager;
 import org.epochx.representation.CandidateProgram;
 
 
 /**
- * Defines the elitism events which may be raised.
+ * Provides the interface to be implemented by objects that wish to handle 
+ * elitism events. See the {@link ElitismManager}'s class documentation for 
+ * details of when each elitism event will be fired. To listen for elitism 
+ * events during execution of a model, instances of <code>ElitismListener</code>
+ * must be added to the model's <code>LifeCycleManager</code> which is 
+ * retrievable through a call to the model's <code>getLifeCycleManager()</code> 
+ * method.
+ * 
+ * <p>
+ * It is typical to listen to events using an anonymous class which often makes
+ * the <code>abstract</code> <code>ElitismAdapter</code> class more convenient 
+ * to implement.
+ * 
+ * @see ElitismAdapter
+ * @see ElitismManager
  */
 public interface ElitismListener {
 
 	/**
-	 * Event raised before the elitism operation starts.
+	 * Event fired before the elitism operation starts.
 	 */
-	public void onElitismStart();
+	void onElitismStart();
 	
 	/**
-	 * Event raised after the elitism operation has been carried out. 
+	 * Event fired after the elitism operation has been carried out. 
 	 * The elites may be modified and returned to be used, but it is not 
-	 * possible to (not does it make sense to) revert elitism.
+	 * possible to (nor does it make sense to) revert elitism.
 	 * 
 	 * @param elites the selection of chosen elites.
 	 * @return a list of <code>CandidatePrograms</code> to use as the set of 
 	 * elites. Note that it is not appropriate to return a value of null and 
 	 * this will cause undefined behaviour.
 	 */
-	public List<CandidateProgram> onElitism(List<CandidateProgram> elites);
+	List<CandidateProgram> onElitism(List<CandidateProgram> elites);
 	
 	/**
-	 * Event raised after the crossover operation has ended and been accepted.
+	 * Event fired after the crossover operation has ended and been accepted.
 	 */
-	public void onElitismEnd();
+	void onElitismEnd();
 }

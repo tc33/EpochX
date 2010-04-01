@@ -26,11 +26,22 @@ import java.util.List;
 import org.epochx.representation.CandidateProgram;
 
 /**
- * Provides neutral implementations of the generation events which by default 
- * will where necessary accept the operation. Creating an anonymous 
- * implementation of this class is often preferable to implementing <code>
- * GenerationListener</code> since it avoids the need to implement methods 
- * which may be of no interest.
+ * Provides an <code>abstract</code> implementation of 
+ * <code>GenerationListener</code>. 
+ * 
+ * <p>Typical use of this class would be in an anonymous class. For example:
+ * 
+ * <blockquote><pre>
+ *     model.getLifeCycleListener().addGenerationListener(new GenerationAdapter(){
+ *     		public void onGenerationStart() {
+ *     			... do something ...
+ *     		}
+ *     });
+ * </pre></blockquote>
+ * 
+ * <p>Creating an anonymous implementation of this class is often preferable to 
+ * implementing <code>GenerationListener</code> since it avoids the need to 
+ * implement methods which may be of no interest.
  */
 public abstract class GenerationAdapter implements GenerationListener {
 

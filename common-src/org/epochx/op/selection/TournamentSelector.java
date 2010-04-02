@@ -44,7 +44,6 @@ public class TournamentSelector implements ProgramSelector, PoolSelector {
 	private int tournamentSize;
 
 	private ProgramTournamentSelector poolSelection;
-	
 	private ProgramTournamentSelector programSelection;
 	
 	/**

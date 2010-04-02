@@ -27,7 +27,7 @@ import org.epochx.representation.CandidateProgram;
 
 /**
  * Program selectors perform the task of selecting individuals from a 
- * population to be used as input to genetic operations.
+ * population to be used as input to genetic operators.
  * 
  * <p>
  * The population from which individual programs are to be selected is provided

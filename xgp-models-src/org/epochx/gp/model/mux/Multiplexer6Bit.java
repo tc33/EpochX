@@ -54,10 +54,7 @@ public class Multiplexer6Bit extends GPModel {
 		variables.put("D0", new BooleanVariable("D0"));
 		variables.put("A1", new BooleanVariable("A1"));
 		variables.put("A0", new BooleanVariable("A0"));
-	}
-	
-	@Override
-	public List<Node> getSyntax() {
+		
 		// Define functions.
 		List<Node> syntax = new ArrayList<Node>();
 		syntax.add(new IfFunction());
@@ -73,7 +70,7 @@ public class Multiplexer6Bit extends GPModel {
 		syntax.add(variables.get("A1"));
 		syntax.add(variables.get("A0"));
 		
-		return syntax;
+		setSyntax(syntax);
 	}
 	
 	@Override

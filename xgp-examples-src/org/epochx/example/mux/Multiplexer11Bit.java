@@ -21,7 +21,12 @@
  */
 package org.epochx.example.mux;
 
-import org.epochx.gp.op.crossover.UniformPointCrossover;
+import static org.epochx.gp.stats.GPStatField.*;
+
+import org.epochx.gp.op.crossover.*;
+import org.epochx.gp.op.init.FullInitialiser;
+import org.epochx.gp.op.mutation.SubtreeMutation;
+import org.epochx.life.*;
 import org.epochx.op.selection.*;
 
 
@@ -32,17 +37,34 @@ import org.epochx.op.selection.*;
 public class Multiplexer11Bit extends org.epochx.gp.model.mux.Multiplexer11Bit {
 	
 	public Multiplexer11Bit() {
-		setPopulationSize(500);
+		setPopulationSize(4000);
 		setNoGenerations(50);
 		setCrossoverProbability(0.9);
-		setMutationProbability(0.0);
-		setNoRuns(1);
-		setPoolSize(50);
-		setNoElites(50);
-		setMaxProgramDepth(6);
-		setPoolSelector(new TournamentSelector(this, 7));
-		setProgramSelector(new RandomSelector(this));
-		setCrossover(new UniformPointCrossover(this));
+		setMutationProbability(0.1);
+		setNoRuns(100);
+		//setPoolSize(-1);
+		setNoElites(400);
+		setInitialMaxDepth(6);
+		setMaxProgramDepth(17);
+		setPoolSelector(null);
+		setProgramSelector(new TournamentSelector(this, 7));
+		setCrossover(new KozaCrossover(this));
+		setMutation(new SubtreeMutation(this));
+		setInitialiser(new FullInitialiser(this));
+		
+		getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationEnd() {
+				getStatsManager().printGenerationStats(GEN_NUMBER, GEN_FITNESS_MIN, GEN_FITNESS_AVE, GEN_DEPTH_AVE, GEN_DEPTH_MAX);
+			}
+		});
+		
+		getLifeCycleManager().addRunListener(new RunAdapter() {
+			@Override
+			public void onRunEnd() {
+				getStatsManager().printRunStats(RUN_NUMBER, RUN_FITNESS_MIN, RUN_FITTEST_PROGRAM);
+			}
+		});
 	}
 	
 	public static void main(String[] args) {

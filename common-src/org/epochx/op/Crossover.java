@@ -27,6 +27,10 @@ import org.epochx.representation.CandidateProgram;
  * Crossover operators perform the task of exchanging genetic material between
  * two programs. The manner in which the exchange is made is up to each 
  * implementation, and the number of resulting child programs is also flexible.
+ * 
+ * <p>
+ * Currently there is no provision for implementing crossover operators which 
+ * operate on more than 2 programs.
  */
 public interface Crossover extends Operator {
 

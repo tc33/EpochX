@@ -24,8 +24,8 @@ package org.epochx.op;
 import org.epochx.representation.CandidateProgram;
 
 /**
- * Mutation operators perform the task of manipulating a program. The manner in
- * which the mutation is made is up to each implementation.
+ * Mutation operators perform the task of manipulating a single program. The 
+ * manner in which the mutation is made is up to each implementation.
  */
 public interface Mutation extends Operator {
 

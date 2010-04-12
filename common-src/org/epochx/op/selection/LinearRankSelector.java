@@ -44,8 +44,6 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector {
 	// Random number generator.
 	private RandomNumberGenerator rng;
 	
-	// An array of size pool.size() giving probabilities for each program.
-	private double probabilities[];
 	private double nPlus;
 	private double nMinus;
 	
@@ -57,11 +55,23 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector {
 	 * Constructs an instance of <code>LinearRankSelector</code>.
 	 * 
 	 * @param model
+	 */
+	public LinearRankSelector(final Model model) {
+		this(model, 1.0);
+	}
+	
+	/**
+	 * Constructs an instance of <code>LinearRankSelector</code>.
+	 * 
+	 * @param model
 	 * @param gradient
 	 */
 	public LinearRankSelector(final Model model, final double gradient) {
 		this.model = model;
 		setGradient(gradient);
+		
+		programSelection = new ProgramLinearRankSelector();
+		poolSelection = new ProgramLinearRankSelector();
 		
 		// Configure parameters from the model.
 		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
@@ -159,6 +169,9 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector {
 		// The current population from which programs should be chosen.
 		private List<CandidateProgram> pool;
 		
+		// An array of size pool.size() giving probabilities for each program.
+		private double probabilities[];
+		
 		@Override
 		public void setSelectionPool(List<CandidateProgram> pool) {
 			if (pool == null || pool.size() < 1) {
@@ -201,7 +214,7 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector {
 			assert (ran >= 0.0 && ran <= 1.0);
 			
 			for (int i=0; i<probabilities.length; i++) {
-				if (ran < probabilities[i]) {
+				if (ran <= probabilities[i]) {
 					return pool.get(i);
 				}
 			}

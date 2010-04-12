@@ -166,6 +166,17 @@ public abstract class AbstractModelTestCase extends TestCase {
 	}
 	
 	/**
+	 * Tests that setting a pool size of minus one is allowed.
+	 */
+	public void testSetPoolSizeMinusOne() {
+		try {
+			getModel().setPoolSize(-1);
+		} catch (IllegalArgumentException e) {
+			fail("illegal argument exception thrown for pool size of minus one");
+		}
+	}
+	
+	/**
 	 * Tests that the default number of elites property is set correctly. 
 	 */
 	public void testNoElitesDefault() {

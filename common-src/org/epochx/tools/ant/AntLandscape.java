@@ -58,6 +58,9 @@ public class AntLandscape {
 	// The locations of food pellets.
 	private List<Point> foodLocations;
 	
+	// An optional ant which may be present on this landscape.
+	private Ant ant;
+	
 	/**
 	 * Constructs an AntLandscape with the given dimensions and food locations.
 	 * To be reachable, foodLocations should refer to points inside the size 
@@ -181,7 +184,7 @@ public class AntLandscape {
 				break;
 				
 			case WEST:
-				newLocation.x = (location.x > 0) ? (location.y-1) : (size.width-1);
+				newLocation.x = (location.x > 0) ? (location.x-1) : (size.width-1);
 				break;
 	
 			default:
@@ -189,5 +192,59 @@ public class AntLandscape {
 		}
 		
 		return newLocation;
+	}
+	
+	/**
+	 * Sets an ant onto this landscape. It is optional for a landscape to 
+	 * contain a reference to an ant, but if an ant is set then the landscapes 
+	 * toString method will include the ants location.
+	 * 
+	 * @param ant an ant which can be considered to be navigating this 
+	 * landscape.
+	 */
+	public void setAnt(Ant ant) {
+		this.ant = ant;
+	}
+	
+	/**
+	 * Returns an ASCII representation of the landscape.
+	 */
+	@Override
+	public String toString() {
+		StringBuilder buffer = new StringBuilder();
+		
+		int antX = -1;
+		int antY = -1;
+		if (ant != null) {
+			antX = ant.getLocation().x;
+			antY = ant.getLocation().y;
+		}
+		
+		for (int y=0; y<size.height; y++) {
+			for (int x=0; x<size.width; x++) {
+				if ((antX == x) && (antY == y)) {
+					switch (ant.getOrientation()) {
+					case NORTH:
+						buffer.append('^');
+						break;
+					case EAST:
+						buffer.append('>');
+						break;
+					case SOUTH:
+						buffer.append('V');
+						break;
+					case WEST:
+						buffer.append('<');
+						break;
+					}
+				} else if (isFoodLocation(new Point(x, y))) {
+					buffer.append('X');
+				} else {
+					buffer.append('.');
+				}
+			}
+			buffer.append('\n');
+		}
+		return buffer.toString();
 	}
 }

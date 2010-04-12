@@ -90,6 +90,8 @@ public class Ant {
         this.maxTimesteps = timeSteps;
         this.landscape = landscape;
     	
+        landscape.setAnt(this);
+        
         // Initialise the ant.
     	reset();
     }

@@ -388,7 +388,7 @@ public abstract class Model implements Runnable {
 	 * @param poolSize the new size of the mating pool to use.
 	 */
 	public void setPoolSize(final int poolSize) {
-		if (poolSize >= 1) {
+		if (poolSize == -1 || poolSize >= 1) {
 			this.poolSize = poolSize;
 		} else {
 			throw new IllegalArgumentException("poolSize must be one or more");

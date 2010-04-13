@@ -35,6 +35,18 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * Each program is then assigned a probability according to their rank in a 
  * linear fashion with a gradient as given at construction. Programs are 
  * selected according to this probability.
+ * 
+ * <p>
+ * Valid gradients are values between 0.0 and 1.0. A gradient of 1.0 is 
+ * generally not very useful since it will result in all ranks being assigned 
+ * the same probability, and as such will provide no selection pressure at all.
+ * A gradient of 0.0 on the other hand will provide the largest selection 
+ * pressure, with the least fit individual having a probability of selection of
+ * 0.0 meaning it will never be selected.
+ * 
+ * @see FitnessProportionateSelector
+ * @see RandomSelector
+ * @see TournamentSelector
  */
 public class LinearRankSelector implements ProgramSelector, PoolSelector {
 	
@@ -44,7 +56,13 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector {
 	// Random number generator.
 	private RandomNumberGenerator rng;
 	
+	// The gradient of the probabilities.
+	private double gradient;
+	
+	// Probability of selecting the most fit program.
 	private double nPlus;
+	
+	// Probability of selecting the least fit program.
 	private double nMinus;
 	
 	// Internal program selectors used by the 2 different tasks.
@@ -52,24 +70,29 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector {
 	private ProgramLinearRankSelector poolSelection;
 	
 	/**
-	 * Constructs an instance of <code>LinearRankSelector</code>.
+	 * Constructs an instance of <code>LinearRankSelector</code> with a default
+	 * gradient value of <code>0.2</code>.
 	 * 
-	 * @param model
+	 * @param model the Model which defines the run parameters such as the 
+	 * 				random number generator to use.
 	 */
 	public LinearRankSelector(final Model model) {
-		this(model, 1.0);
+		this(model, 0.2);
 	}
 	
 	/**
 	 * Constructs an instance of <code>LinearRankSelector</code>.
 	 * 
-	 * @param model
-	 * @param gradient
+	 * @param model the Model which defines the run parameters such as the 
+	 * 				random number generator to use.
+	 * @param gradient a value between 0.0 and 1.0 which indicates the gradient
+	 * 				at which fitnesses are assigned to ranks.
 	 */
 	public LinearRankSelector(final Model model, final double gradient) {
 		this.model = model;
 		setGradient(gradient);
 		
+		// Construct the internal program selectors.
 		programSelection = new ProgramLinearRankSelector();
 		poolSelection = new ProgramLinearRankSelector();
 		
@@ -90,13 +113,58 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector {
 	}
 	
 	/**
-	 * Sets the gradient of the linear probabilities.
+	 * Sets the gradient of the linear probabilities. Valid gradients are 
+	 * between <code>0.0</code> and <code>1.0</code> inclusive, where a smaller
+	 * value provides a steeper gradient and a larger probability difference 
+	 * between the worst and best individuals. A gradient of <code>1.0</code>
+	 * will be a level gradient and as such will provide no selection pressure 
+	 * at all.
 	 * 
-	 * @param gradient the gradient to use when assigning probabilities.
+	 * @param gradient the gradient to use when assigning probabilities, between
+	 * 				   0.0 and 1.0.
 	 */
-	public void setGradient(double gradient) {
+	public void setGradient(final double gradient) {
+		if (gradient < 0.0 || gradient > 1.0) {
+			throw new IllegalArgumentException("linear rank gradient " +
+					"must be between 0.0 and 1.0");
+		}
+		
+		this.gradient = gradient;
+		
 		nMinus = 2/(gradient+1);
 		nPlus = (2*gradient)/(gradient+1);
+		
+		assert ((nMinus + nPlus) == 2);
+	}
+	
+	/**
+	 * Gets the gradient of the linear probabilities.
+	 * 
+	 * @return a double between 0.0 and 1.0 representing the gradient of the 
+	 * probabilities where 0.0 is a steep gradient and 1.0 is no gradient.
+	 */
+	public double getGradient() {
+		return gradient;
+	}
+	
+	/**
+	 * Gets the probability of the worst program being selected with the
+	 * current gradient.
+	 * 
+	 * @return the probability of the worst program being selected.
+	 */
+	public double getWorstProbability(int popSize) {
+		return nPlus/popSize;
+	}
+	
+	/**
+	 * Gets the probability of the best program being selected with the
+	 * current gradient.
+	 * 
+	 * @return the probability of the best program being selected.
+	 */
+	public double getBestProbability(int popSize) {
+		return nMinus/popSize;
 	}
 	
 	/**
@@ -108,13 +176,13 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector {
 	 * 			  should be selected.
 	 */
 	@Override
-	public void setSelectionPool(List<CandidateProgram> pool) {
+	public void setSelectionPool(final List<CandidateProgram> pool) {
 		programSelection.setSelectionPool(pool);
 	}
 
 	/**
-	 * Selects a candidate program from the population using the probabilities 
-	 * which were assigned based on fitness rank.
+	 * Selects a candidate program at random from the population according to 
+	 * the probabilities which were assigned based on fitness rank.
 	 * 
 	 * @return a program selected from the current population based on fitness 
 	 * rank.
@@ -141,13 +209,15 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector {
 	 */
 	@Override
 	public List<CandidateProgram> getPool(
-			List<CandidateProgram> pop, int poolSize) {
+			final List<CandidateProgram> pop, final int poolSize) {
 		if (poolSize < 1) {
 			throw new IllegalArgumentException("poolSize must be greater than 0");
+		} else if ((pop == null) || (pop.isEmpty())) {
+			throw new IllegalArgumentException("population to select pool from must not be null nor empty");
 		}
 		
 		poolSelection.setSelectionPool(pop);
-		List<CandidateProgram> pool = new ArrayList<CandidateProgram>();
+		final List<CandidateProgram> pool = new ArrayList<CandidateProgram>();
 		
 		for (int i=0; i<poolSize; i++) {
 			pool.add(poolSelection.getProgram());
@@ -161,7 +231,7 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector {
 	 * create 2 separate instances of it internally for the 2 tasks of pool
 	 * selection and program selection which is necessary because they both 
 	 * select from different pools. The original implementation of getPool 
-	 * created an internal instance of TournamentSelector but it is not 
+	 * created an internal instance of LinearRankSelector but it is not 
 	 * advisable to create components between model configurations.
 	 */
 	private class ProgramLinearRankSelector implements ProgramSelector {
@@ -174,30 +244,31 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector {
 		
 		@Override
 		public void setSelectionPool(List<CandidateProgram> pool) {
-			if (pool == null || pool.size() < 1) {
+			if (pool == null || pool.isEmpty()) {
 				throw new IllegalArgumentException("selection pool cannot be " +
 						"null and must contain 1 or more CandidatePrograms");
 			}
 			
-			// Sort the pool of programs.
+			// Sort the pool of programs from worst to best.
 			this.pool = pool;
-			Collections.sort(pool);
+			Collections.sort(pool, Collections.reverseOrder());
 			
 			// Create array of probabilities.
 			int popSize = pool.size();
 			probabilities = new double[popSize];
 			double total = 0;
 			
-			for (int i=1; i<=popSize; i++) {
-				double p = (1/popSize) * (nMinus + ((nPlus - nMinus) * ((i-1)/(popSize-1))));
-				
+			// Calculate probabilities this way so last element can safely receive whatever is left.
+			for (int i=0; i<popSize; i++) {
+				int n = popSize - i;				
+				double p = (1.0/popSize) * (nMinus + ((nPlus - nMinus) * ((n-1.0)/(popSize-1.0))));
+
 				total += p;
-				probabilities[i-1] = total;
+				probabilities[i] = total;
 			}
 			
-			// This probably won't be true how things are because of rounding.
-			//TODO We can overcome this problem (IF it is a problem) by assigning the last element the probability of 1.0.
-			assert (total == 1.0);
+			// Ensure the final probability is at least 1.0, we may have lost some precision.
+			probabilities[popSize-1] = 1.0;
 		}
 
 		/**

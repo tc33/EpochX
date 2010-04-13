@@ -59,6 +59,8 @@ public class GPModelDummy extends GPModel {
 	private double mutationProbability;
 	private double reproductionProbability;
 	
+	private double fitness;
+	
 	// Caching.
 	private boolean cacheFitness;
 	
@@ -83,6 +85,8 @@ public class GPModelDummy extends GPModel {
 		mutationProbability = 0.1;
 		reproductionProbability = 0.0;
 		
+		fitness = 0.0;
+		
 		// Operators.
 		programSelector = new TournamentSelector(this, 7);
 		poolSelector = null;
@@ -105,7 +109,11 @@ public class GPModelDummy extends GPModel {
 
 	@Override
 	public double getFitness(CandidateProgram program) {
-		return 0;
+		return fitness;
+	}
+	
+	public void setFitness(double fitness) {
+		this.fitness = fitness;
 	}
 	
 	@Override

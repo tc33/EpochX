@@ -23,6 +23,9 @@ package org.epochx.tools.grammar;
 
 import java.util.*;
 
+import org.apache.commons.lang.*;
+import org.epochx.gp.representation.*;
+
 /**
  *
  */
@@ -441,13 +444,28 @@ public class NonTerminalSymbol implements Symbol {
 	
 	@Override
 	public boolean equals(Object obj) {
+		boolean equal = true;
+		
 		if (obj != null && obj instanceof NonTerminalSymbol) {
 			NonTerminalSymbol otherSymbol = (NonTerminalSymbol) obj;
 			
-			//TODO Think carefully about whether this is correct.
-			return this.getGrammarRule() == otherSymbol.getGrammarRule();
+			if (this.getGrammarRule() == otherSymbol.getGrammarRule()) {
+				for(int i=0; i<children.size(); i++) {
+					Symbol thatChild = otherSymbol.getChild(i);
+					Symbol thisChild = this.getChild(i);
+					
+					if (!ObjectUtils.equals(thisChild, thatChild)) {
+						equal = false;
+						break;
+					}
+				}
+			} else {
+				equal = false;
+			}
 		} else {
-			return false;
+			equal = false;
 		}
+		
+		return equal;
 	}
 }

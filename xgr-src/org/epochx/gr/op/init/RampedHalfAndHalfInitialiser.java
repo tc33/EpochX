@@ -143,8 +143,8 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 				}
 				//TODO Need to look out for infinite loop here - where not enough different programs possible, should drop out and readjust depth sizes (with a warning).
 			} while(firstGen.contains(program));
-			
-            firstGen.add(program);
+
+			firstGen.add(program);
 		}
 		
 		return firstGen;

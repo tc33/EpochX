@@ -27,7 +27,7 @@ import java.util.*;
 /**
  * 
  */
-public class ReferenceUtils {
+public final class ReferenceUtils {
 
 	public static <T> List<T> stripRefs(Set<WeakReference<T>> refs) {
 		List<T> objs = new ArrayList<T>();

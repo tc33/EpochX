@@ -143,24 +143,21 @@ public class GRCandidateProgram extends CandidateProgram {
 	
 	/**
 	 * Compares the given argument for equivalence to this GECandidateProgram.
-	 * Two candidate programs are equal if they have equal genotypes, or if 
-	 * they have equal (but non-null) phenotypes.
+	 * Two GR candidate programs are equal if they have equal syntax regardless
+	 * of grammar rules used or if both have a null parse tree.
 	 * 
 	 * @return true if the object is an equivalent candidate program, false 
 	 * otherwise.
 	 */
 	@Override
 	public boolean equals(Object o) {
-		//TODO Should really be checking the datatype of o first.
-		GRCandidateProgram prog = (GRCandidateProgram) o;
 		
-		Symbol thisParseTree = this.parseTree;
-		Symbol progParseTree = prog.parseTree;
-		
-		if (thisParseTree == null && progParseTree == null) {
-			return true;
+		if (o instanceof GRCandidateProgram) {
+			GRCandidateProgram prog = (GRCandidateProgram) o;
+			
+			return prog.toString().equals(this.toString());
 		} else {
-			return thisParseTree.equals(progParseTree);
+			return false;
 		}
 	}
 }

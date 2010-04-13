@@ -25,6 +25,7 @@ import java.util.*;
 
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
+import org.epochx.gr.model.*;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
 
@@ -55,13 +56,26 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 	private GrowInitialiser grow;
 	private FullInitialiser full;
 
+	// The smallest depth to be used.
+	private int minDepth;
+	
 	/**
 	 * Construct a RampedHalfAndHalfInitialiser.
 	 * 
 	 * @param model The model being assessed
 	 */
-	public RampedHalfAndHalfInitialiser(GPModel model) {
+	public RampedHalfAndHalfInitialiser(GPModel model) {		
+		this(model, -1);
+	}
+	
+	/**
+	 * Construct a RampedHalfAndHalfInitialiser.
+	 * 
+	 * @param model The model being assessed
+	 */
+	public RampedHalfAndHalfInitialiser(GPModel model, int minDepth) {
 		this.model = model;
+		this.minDepth = minDepth;
 		
 		// set up the grow and full parts
 		grow = new GrowInitialiser(model);

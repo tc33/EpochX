@@ -45,7 +45,7 @@ package org.epochx.tools.util;
  * This class provides static utility methods for working with booleans and 
  * boolean arrays.
  */
-public class BoolUtils {
+public final class BoolUtils {
     
     /**
      * Translates a String of zeros ('0') and ones ('1') to an array of 

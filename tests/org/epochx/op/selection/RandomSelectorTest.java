@@ -8,20 +8,20 @@ import org.epochx.representation.*;
 
 import junit.framework.*;
 
-public class FitnessProportionateSelectorTest extends TestCase {
+public class RandomSelectorTest extends TestCase {
 	
-	private FitnessProportionateSelector selector;
+	private RandomSelector selector;
 	private GPModelDummy model;
 	private List<CandidateProgram> pop;
 	
 	@Override
 	protected void setUp() throws Exception {
 		model = new GPModelDummy();
-		selector = new FitnessProportionateSelector(model);
+		selector = new RandomSelector(model);
 		model.getLifeCycleManager().fireConfigureEvent();
 		
 		pop = new ArrayList<CandidateProgram>();
-		pop.add(new GPCandidateProgram(model));
+		pop.add(new GPCandidateProgram(null));
 	}
 	
 	/**
@@ -79,23 +79,25 @@ public class FitnessProportionateSelectorTest extends TestCase {
 	 * Tests that an exception is thrown when attempting to set a null selection
 	 * pool.
 	 */
-	public void testSetSelectionPoolNull() {
+	public void testGetProgramPoolNull() {
+		selector.setSelectionPool(null);
 		try {
-			selector.setSelectionPool(null);
-			fail("Illegal argument exception not thrown for a null pool");
-		} catch (IllegalArgumentException e) {}
+			selector.getProgram();
+			fail("Illegal state exception not thrown for a null pool");
+		} catch (IllegalStateException e) {}
 	}
 	
 	/**
 	 * Tests that an exception is thrown when attempting to set an empty 
 	 * selection pool.
 	 */
-	public void testSetSelectionPoolEmpty() {
+	public void testGetProgramPoolEmpty() {
+		pop.clear();
+		selector.setSelectionPool(pop);
 		try {
-			pop.clear();
-			selector.setSelectionPool(pop);
-			fail("Illegal argument exception not thrown for an empty pool");
-		} catch (IllegalArgumentException e) {}
+			selector.getProgram();
+			fail("Illegal state exception not thrown for an empty pool");
+		} catch (IllegalStateException e) {}
 	}
 	
 	/**
@@ -104,8 +106,6 @@ public class FitnessProportionateSelectorTest extends TestCase {
 	 */
 	public void testGetProgramRNGNull() {
 		model.setRNG(null);
-		model.setFitness(1.0);
-		model.setCacheFitness(false);
 		model.getLifeCycleManager().fireConfigureEvent();
 		selector.setSelectionPool(pop);
 		try {

@@ -29,42 +29,47 @@ import org.epochx.representation.CandidateProgram;
 
 
 /**
- * Tournament selection provides both program and pool selection. In tournament 
- * selection, x programs are randomly selected from the population to enter a 
- * 'tournament'. The program with the best fitness in the tournament then 
- * becomes the selected program. The tournament size, x, is given as an argument 
- * to the constructor.
+ * Tournament selection chooses programs through a tournament performed on a 
+ * subset of the population. In tournament selection, x programs are randomly 
+ * selected from the population to enter a 'tournament'. The program with the 
+ * best fitness in the tournament then becomes the selected program. The 
+ * tournament size, x, is given as an argument to the constructor.
  */
 public class TournamentSelector implements ProgramSelector, PoolSelector {
 
 	// The controlling model.
-	private Model model;
+	private final Model model;
+	
+	// Internal program selectors used by the 2 different tasks.
+	private final ProgramTournamentSelector poolSelection;
+	private final ProgramTournamentSelector programSelection;
 	
 	// The size of the tournment from which the best program will be taken.
 	private int tournamentSize;
 
-	private ProgramTournamentSelector poolSelection;
-	private ProgramTournamentSelector programSelection;
-	
 	/**
 	 * Construct a tournament selector with the specified tournament size.
 	 * 
 	 * @param tournamentSize the number of programs in each tournament.
 	 */
-	public TournamentSelector(Model model, int tournamentSize) {
+	public TournamentSelector(final Model model, final int tournamentSize) {
 		this.model = model;
 		this.tournamentSize = tournamentSize;
 		
+		// Construct the internal program selectors.
 		poolSelection = new ProgramTournamentSelector();
 		programSelection = new ProgramTournamentSelector();
 	}
 	
 	/**
-	 * Store the population for creating tournaments from.
+	 * Sets the population from which programs will be selected to participate 
+	 * in tournaments.
+	 * 
+	 * @param pool the population of candidate programs from which programs 
+	 * 			  should be selected.
 	 */
 	@Override
-	public void setSelectionPool(List<CandidateProgram> pop) {
-		// We'll be using a random selector to construct a tournament.
+	public void setSelectionPool(final List<CandidateProgram> pop) {
 		programSelection.setSelectionPool(pop);
 	}
 	
@@ -94,7 +99,7 @@ public class TournamentSelector implements ProgramSelector, PoolSelector {
 	 * 
 	 * @param tournamentSize the number of programs to use in each tournament.
 	 */
-	public void setTournamentSize(int tournamentSize) {
+	public void setTournamentSize(final int tournamentSize) {
 		this.tournamentSize = tournamentSize;
 	}
 
@@ -106,25 +111,23 @@ public class TournamentSelector implements ProgramSelector, PoolSelector {
 	 * greater than the population size.
 	 * 
 	 * @param pop the population of CandidatePrograms from which the programs 
-	 * 			  in the pool should be chosen.
+	 * 			  in the pool should be chosen. Must not be null, nor empty.
 	 * @param poolSize the number of programs that should be selected from the 
-	 * 			 	   population to form the pool. If poolSize is zero or less  
-	 * 				   then no selection takes place and the given population 
-	 * 				   is returned unaltered.
+	 * 			 	   population to form the pool. Must be 1 or greater.
 	 * @return the pool of candidate programs selected using tournament 
 	 * selection.
 	 */
 	@Override
 	public List<CandidateProgram> getPool(List<CandidateProgram> pop, int poolSize) {
-		// If poolSize is 0 or less then we use the whole population.
-		if (poolSize <= 0) {
-			return pop;
+		if (poolSize < 1) {
+			throw new IllegalArgumentException("poolSize must be greater than 0");
+		} else if ((pop == null) || (pop.isEmpty())) {
+			throw new IllegalArgumentException("population to select pool from must not be null nor empty");
 		}
 		
-		List<CandidateProgram> pool = new ArrayList<CandidateProgram>(poolSize);
-		
+		// Construct the pool using the internal program selector.
+		final List<CandidateProgram> pool = new ArrayList<CandidateProgram>(poolSize);
 		poolSelection.setSelectionPool(pop);
-		
 		for (int i=0; i<poolSize; i++) {
 			pool.add(poolSelection.getProgram());
 		}
@@ -143,7 +146,7 @@ public class TournamentSelector implements ProgramSelector, PoolSelector {
 	private class ProgramTournamentSelector implements ProgramSelector {
 
 		// We use a random selector to construct tournaments.
-		private RandomSelector randomSelector;
+		private final RandomSelector randomSelector;
 		
 		public ProgramTournamentSelector() {
 			randomSelector = new RandomSelector(model);
@@ -157,16 +160,12 @@ public class TournamentSelector implements ProgramSelector, PoolSelector {
 
 		@Override
 		public CandidateProgram getProgram() {
-			// Use random selector to create tournament.
-			CandidateProgram[] tournament = new CandidateProgram[tournamentSize];
-			for (int i=0; i<tournamentSize; i++) {
-				tournament[i] = randomSelector.getProgram();
-			}
-
-			// Check the fitness of each program, stashing the best.
-			double bestFitness = Double.POSITIVE_INFINITY;
 			CandidateProgram bestProgram = null;
-			for (CandidateProgram p: tournament) {
+			double bestFitness = Double.POSITIVE_INFINITY;
+			
+			// Choose and compare randomly selected programs.
+			for (int i=0; i<tournamentSize; i++) {
+				final CandidateProgram p = randomSelector.getProgram();
 				double fitness = p.getFitness();
 				if (fitness < bestFitness) {
 					bestFitness = fitness;

@@ -202,6 +202,13 @@ public class FitnessProportionateSelector implements ProgramSelector, PoolSelect
 
 		@Override
 		public CandidateProgram getProgram() {
+			if (pool == null || pool.isEmpty()) {
+				throw new IllegalStateException("selection pool cannot be " +
+						"null and must contain 1 or more CandidatePrograms");
+			} else if (rng == null) {
+				throw new IllegalStateException("random number generator not set");
+			}
+			
 			double ran = rng.nextDouble();
 			
 			assert (ran >= 0.0 && ran <= 1.0);

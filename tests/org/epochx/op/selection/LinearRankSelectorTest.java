@@ -192,4 +192,18 @@ public class LinearRankSelectorTest extends TestCase {
 		assertEquals("probability of worst program being selected is not 0.0", 
 				0.0, selector.getWorstProbability(10));
 	}
+	
+	/**
+	 * Tests that an exception is thrown when attempting to get a program with 
+	 * no random number generator set.
+	 */
+	public void testGetProgramRNGNull() {
+		model.setRNG(null);
+		model.getLifeCycleManager().fireConfigureEvent();
+		selector.setSelectionPool(pop);
+		try {
+			selector.getProgram();
+			fail("Illegal state exception not thrown for a null random number generator");
+		} catch (IllegalStateException e) {}
+	}
 }

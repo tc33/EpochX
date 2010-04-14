@@ -37,14 +37,21 @@ import org.epochx.tools.random.RandomNumberGenerator;
 public class RandomSelector implements ProgramSelector, PoolSelector {
 	
 	// The controlling model.
-	private Model model;
+	private final Model model;
 	
+	// Random number generator.
 	private RandomNumberGenerator rng;
 	
-	// The current population from which programs should be chosen.
-	private List<CandidateProgram> pop;
+	// The current pool from which programs should be chosen.
+	private List<CandidateProgram> pool;
 	
-	public RandomSelector(Model model) {
+	/**
+	 * Constructs an instance of <code>LinearRankSelector</code>.
+	 * 
+	 * @param model the Model which defines the run parameters such as the 
+	 * 				random number generator to use.
+	 */
+	public RandomSelector(final Model model) {
 		this.model = model;
 		
 		// Configure parameters from the model.
@@ -64,14 +71,15 @@ public class RandomSelector implements ProgramSelector, PoolSelector {
 	}
 	
 	/**
-	 * This method should only be called by the GP system. It is used to 
-	 * provide the population for the current generation.
+	 * Sets the population from which individual programs will be randomly 
+	 * selected.
 	 * 
-	 * @param pop the current population for this generation.
+	 * @param pool the population of candidate programs from which programs 
+	 * 			  should be selected.
 	 */
 	@Override
-	public void setSelectionPool(List<CandidateProgram> pop) {
-		this.pop = pop;
+	public void setSelectionPool(final List<CandidateProgram> pool) {
+		this.pool = pool;
 	}
 	
 	/**
@@ -80,33 +88,42 @@ public class RandomSelector implements ProgramSelector, PoolSelector {
 	 * @return a randomly selected program.
 	 */
 	@Override
-	public CandidateProgram getProgram() {		
-		return pop.get(rng.nextInt(pop.size()));
+	public CandidateProgram getProgram() {
+		if (pool == null || pool.isEmpty()) {
+			throw new IllegalStateException("selection pool cannot be " +
+					"null and must contain 1 or more CandidatePrograms");
+		} else if (rng == null) {
+			throw new IllegalStateException("random number generator not set");
+		}
+		
+		return pool.get(rng.nextInt(pool.size()));
 	}
 
 	/**
 	 * Randomly chooses programs from the given population up to a total of 
 	 * <code>poolSize</code> and returns them as a list. The generated pool may 
-	 * contain duplicate programs, and as such the pool size can be greater 
-	 * than the population size.
+	 * contain duplicate programs, and as such the pool size is allowed to be
+	 * greater than the population size.
 	 * 
 	 * @param pop the population of CandidatePrograms from which the programs 
-	 * 			  in the pool should be chosen.
+	 * 			  in the pool should be chosen. Must not be null, nor empty.
 	 * @param poolSize the number of programs that should be selected from the 
-	 * 			 	   population to form the pool. If poolSize is less than 
-	 * 				   zero then no selection takes place and the given  
-	 * 				   population is returned unaltered.
+	 * 			 	   population to form the pool. Must be 1 or greater.
 	 * @return the randomly selected pool of candidate programs.
 	 */
 	@Override
-	public List<CandidateProgram> getPool(List<CandidateProgram> pop, int poolSize) {
-		// If poolSize is 0 or less then we use the whole population.
-		if (poolSize <= 0) {
-			return pop;
+	public List<CandidateProgram> getPool(final List<CandidateProgram> pop, 
+			final int poolSize) {
+		if (poolSize < 1) {
+			throw new IllegalArgumentException("poolSize must be greater than 0");
+		} else if ((pop == null) || (pop.isEmpty())) {
+			throw new IllegalArgumentException("population to select pool from must not be null nor empty");
+		} else if (rng == null) {
+			throw new IllegalStateException("random number generator not set");
 		}
 		
 		// Construct our pool.
-		List<CandidateProgram> pool = new ArrayList<CandidateProgram>(poolSize);
+		final List<CandidateProgram> pool = new ArrayList<CandidateProgram>(poolSize);
 		for (int i=0; i<poolSize; i++) {
 			pool.add(pop.get(rng.nextInt(pop.size())));
 		}

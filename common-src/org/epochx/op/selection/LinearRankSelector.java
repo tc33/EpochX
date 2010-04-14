@@ -53,6 +53,10 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector {
 	// The controlling model.
 	private final Model model;
 	
+	// Internal program selectors used by the 2 different tasks.
+	private final ProgramLinearRankSelector programSelection;
+	private final ProgramLinearRankSelector poolSelection;
+	
 	// Random number generator.
 	private RandomNumberGenerator rng;
 	
@@ -64,10 +68,6 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector {
 	
 	// Probability of selecting the least fit program.
 	private double nMinus;
-	
-	// Internal program selectors used by the 2 different tasks.
-	private ProgramLinearRankSelector programSelection;
-	private ProgramLinearRankSelector poolSelection;
 	
 	/**
 	 * Constructs an instance of <code>LinearRankSelector</code> with a default
@@ -153,7 +153,7 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector {
 	 * 
 	 * @return the probability of the worst program being selected.
 	 */
-	public double getWorstProbability(int popSize) {
+	public double getWorstProbability(final int popSize) {
 		return nPlus/popSize;
 	}
 	
@@ -163,7 +163,7 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector {
 	 * 
 	 * @return the probability of the best program being selected.
 	 */
-	public double getBestProbability(int popSize) {
+	public double getBestProbability(final int popSize) {
 		return nMinus/popSize;
 	}
 	
@@ -271,15 +271,12 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector {
 			probabilities[popSize-1] = 1.0;
 		}
 
-		/**
-		 * Selects a candidate program from the population using the probabilities 
-		 * which were assigned based on fitness rank.
-		 * 
-		 * @return a program selected from the current population based on fitness 
-		 * rank.
-		 */
 		@Override
 		public CandidateProgram getProgram() {
+			if (rng == null) {
+				throw new IllegalStateException("random number generator not set");
+			}
+			
 			double ran = rng.nextDouble();
 			
 			assert (ran >= 0.0 && ran <= 1.0);

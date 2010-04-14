@@ -23,12 +23,11 @@ package org.epochx.op.selection;
 
 import java.util.*;
 
-import org.epochx.core.*;
+import junit.framework.*;
+
 import org.epochx.gp.model.*;
 import org.epochx.gp.representation.*;
 import org.epochx.representation.*;
-
-import junit.framework.TestCase;
 
 /**
  * 

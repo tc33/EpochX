@@ -38,7 +38,7 @@ public class GPCandidateProgramTest extends AbstractCandidateProgramTestCase {
 	
 	@Override
 	public CandidateProgram getCandidateProgram() {
-		return new GPCandidateProgram(null);
+		return new GPCandidateProgram(new BooleanLiteral(true), null);
 	}
 	
 	@Override

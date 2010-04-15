@@ -54,8 +54,8 @@ public class Sort extends GEModel {
 		setNoGenerations(100);
 		setNoElites(30);
 		setInitialiser(new GrowInitialiser(this));
-		setMaxProgramDepth(15);
-		setMaxInitialProgramDepth(15);
+		setMaxDepth(15);
+		setMaxInitialDepth(15);
 		setPoolSize(100);
 		
 		executor = new JavaEvaluator();

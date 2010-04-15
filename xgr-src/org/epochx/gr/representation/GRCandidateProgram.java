@@ -77,7 +77,7 @@ public class GRCandidateProgram extends CandidateProgram {
 	public boolean isValid() {
 		boolean valid = true;
 		
-		int maxProgramDepth = model.getMaxProgramDepth();
+		int maxProgramDepth = model.getMaxDepth();
 		
 		if ((maxProgramDepth != -1)
 				&& (getDepth() > maxProgramDepth)) {

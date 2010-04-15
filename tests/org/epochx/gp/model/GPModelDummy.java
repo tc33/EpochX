@@ -281,22 +281,22 @@ public class GPModelDummy extends GPModel {
  */
 	
 	@Override
-	public int getInitialMaxDepth() {
+	public int getMaxInitialDepth() {
 		return maxInitialDepth;
 	}
 
 	@Override
-	public void setInitialMaxDepth(int maxInitialDepth) {
+	public void setMaxInitialDepth(int maxInitialDepth) {
 		this.maxInitialDepth = maxInitialDepth;
 	}
 
 	@Override
-	public int getMaxProgramDepth() {
+	public int getMaxDepth() {
 		return maxProgramDepth;
 	}
 
 	@Override
-	public void setMaxProgramDepth(int maxDepth) {
+	public void setMaxDepth(int maxDepth) {
 		this.maxProgramDepth = maxDepth;
 	}
 

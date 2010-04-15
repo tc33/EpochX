@@ -47,7 +47,7 @@ public class InitialisationManagerTest extends TestCase {
 		List<Node> syntax = new ArrayList<Node>();
 		syntax.add(new BooleanLiteral(false));
 		((GPModel) model).setSyntax(syntax);
-		((GPModel) model).setInitialMaxDepth(0);
+		((GPModel) model).setMaxInitialDepth(0);
 		
 		initialisationManager = new InitialisationManager(model);
 	}

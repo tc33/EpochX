@@ -21,28 +21,50 @@
  */
 package org.epochx.representation;
 
-public abstract class CandidateProgram implements Cloneable, Comparable<CandidateProgram> {
+/**
+ * An instance of <code>CandidateProgram</code> represents an individual 
+ * candidate solution to a problem. Specific subclasses represent the programs 
+ * in different ways.
+ */
+public abstract class CandidateProgram implements Cloneable, 
+												  Comparable<CandidateProgram> {
 	
+	/**
+	 * Calculates a quality score for this program. The exact calculation 
+	 * implementation varies by subclass. Fitnesses are standardised 
+	 * so implementations should return lower values for better programs. 
+	 * 
+	 * @return a standardised fitness score indicating the quality of this 
+	 * candidate program.
+	 */
 	public abstract double getFitness();
 	
 	/**
 	 * Tests whether this <code>CandidateProgram</code> is valid according to
-	 * any restrictions in the model, for example, that it does not exceed any 
-	 * maximum depth or length parameter.
+	 * any restrictions in the model. For example, certain implementations may
+	 * test that it does not exceed any maximum depth or length parameter.
 	 * 
 	 * @return true if this program abides by all restrictions and false 
 	 * otherwise.
 	 */
 	public abstract boolean isValid();
 	
+	/**
+	 * Creates a copy of this candidate program. Subclass implementations should
+	 * override this method to copy their internal program structure. It should 
+	 * always be true that the returned program is equal to this program 
+	 * according to the implementation of the <code>equals</code> method.
+	 * 
+	 * @return a new instance of <code>CandidateProgram</code> that is 
+	 * equivalent to this <code>CandidateProgram</code>.
+	 */
 	@Override
 	public CandidateProgram clone() {
 		CandidateProgram clone = null;
 		try {
 			clone = (CandidateProgram) super.clone();
-		} catch (CloneNotSupportedException e) {
-			// This shouldn't ever happen - if it does then everything is 
-			// going to blow up anyway.
+		} catch (final CloneNotSupportedException e) {
+			assert false;
 		}
 		
 		return clone;
@@ -50,22 +72,18 @@ public abstract class CandidateProgram implements Cloneable, Comparable<Candidat
 	
 	/**
 	 * Compares this program to another based upon fitness. Returns a negative 
-	 * integer if this program has a larger (worse) fitness value, zero if they 
+	 * integer if this program has a worse (larger) fitness value, zero if they 
 	 * have equal fitnesses and a positive integer if this program has a 
-	 * smaller (better) fitness value.
+	 * better (smaller) fitness value.
 	 * 
-	 * This is super expensive if using to sort a list. Might be possible to 
-	 * improve performance if we can implement caching of fitness within a 
-	 * GPCandidateProgram.
-	 * 
-	 * @param o the GPCandidateProgram to be compared.
+	 * @param o the <code>CandidateProgram</code> instance to compare against.
 	 * @return a negative integer, zero, or a positive integer if this program 
-	 * has a worse, equal or better fitness respectively. 
+	 * has a worse, equal or better fitness than <code>o</code> respectively. 
 	 */
 	@Override
-	public int compareTo(CandidateProgram o) {
-		double thisFitness = this.getFitness();
-		double objFitness = o.getFitness();
+	public int compareTo(final CandidateProgram o) {
+		final double thisFitness = this.getFitness();
+		final double objFitness = o.getFitness();
 		
 		if (thisFitness > objFitness) {
 			return -1;

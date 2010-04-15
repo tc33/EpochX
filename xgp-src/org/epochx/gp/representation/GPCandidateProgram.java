@@ -23,6 +23,7 @@ package org.epochx.gp.representation;
 
 import java.util.List;
 
+import org.apache.commons.lang.*;
 import org.epochx.gp.model.*;
 import org.epochx.representation.CandidateProgram;
 
@@ -170,7 +171,7 @@ public class GPCandidateProgram extends CandidateProgram {
 	public boolean isValid() {
 		boolean valid = true;
 		
-		int maxProgramDepth = model.getMaxProgramDepth();
+		int maxProgramDepth = model.getMaxDepth();
 		
 		if ((maxProgramDepth != -1)
 				&& (getProgramDepth() > maxProgramDepth)) {
@@ -332,7 +333,15 @@ public class GPCandidateProgram extends CandidateProgram {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		return rootNode.equals(((GPCandidateProgram) obj).rootNode);
+		boolean equal = false;
+		if (obj != null && obj instanceof GPCandidateProgram) {
+			GPCandidateProgram p = (GPCandidateProgram) obj;
+			if (ObjectUtils.equals(rootNode, p.rootNode)) {
+				equal = true;
+			}
+		}
+		
+		return equal;
 	}
 
 }

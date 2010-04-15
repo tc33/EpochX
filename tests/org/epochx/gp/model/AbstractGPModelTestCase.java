@@ -46,7 +46,7 @@ public abstract class AbstractGPModelTestCase extends AbstractModelTestCase {
 	 */
 	public void testSetInitialMaxDepthNegative() {
 		try {
-			getModel().setInitialMaxDepth(-2);
+			getModel().setMaxInitialDepth(-2);
 			fail("illegal argument exception not thrown for negative initial max depth");
 		} catch (IllegalArgumentException e) {}
 	}
@@ -56,7 +56,7 @@ public abstract class AbstractGPModelTestCase extends AbstractModelTestCase {
 	 */
 	public void testSetInitialMaxDepthMinusOne() {
 		try {
-			getModel().setInitialMaxDepth(-1);
+			getModel().setMaxInitialDepth(-1);
 		} catch (IllegalArgumentException e) {
 			fail("illegal argument exception thrown for initial max depth of -1");
 		}
@@ -67,7 +67,7 @@ public abstract class AbstractGPModelTestCase extends AbstractModelTestCase {
 	 */
 	public void testSetMaxDepthNegative() {
 		try {
-			getModel().setMaxProgramDepth(-2);
+			getModel().setMaxDepth(-2);
 			fail("illegal argument exception not thrown for negative max depth");
 		} catch (IllegalArgumentException e) {}
 	}
@@ -77,7 +77,7 @@ public abstract class AbstractGPModelTestCase extends AbstractModelTestCase {
 	 */
 	public void testSetMaxDepthMinusOne() {
 		try {
-			getModel().setMaxProgramDepth(0);
+			getModel().setMaxDepth(0);
 		} catch (IllegalArgumentException e) {
 			fail("illegal argument exception thrown for max depth of -1");
 		}
@@ -114,7 +114,7 @@ public abstract class AbstractGPModelTestCase extends AbstractModelTestCase {
 	public void testMaxInitialDepthDefault() {
 		GPModel model = getModel();
 		
-		assertEquals("model's default max initial depth is not 6", 6, model.getInitialMaxDepth());
+		assertEquals("model's default max initial depth is not 6", 6, model.getMaxInitialDepth());
 	}
 	
 	/**
@@ -123,7 +123,7 @@ public abstract class AbstractGPModelTestCase extends AbstractModelTestCase {
 	public void testMaxDepthDefault() {
 		GPModel model = getModel();
 		
-		assertEquals("model's default max depth is not 12", 12, model.getMaxProgramDepth());
+		assertEquals("model's default max depth is not 12", 12, model.getMaxDepth());
 	}
 	
 	/**

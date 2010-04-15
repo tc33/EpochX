@@ -239,7 +239,7 @@ public abstract class GEModel extends Model {
 	 * 
 	 * @return the maximum depth of derivation trees to allow.
 	 */
-	public int getMaxProgramDepth() {
+	public int getMaxDepth() {
 		return maxDepth;
 	}
 
@@ -251,7 +251,7 @@ public abstract class GEModel extends Model {
 	 * 
 	 * @param maxDepth the maximum depth to allow a program's derivation tree.
 	 */
-	public void setMaxProgramDepth(final int maxDepth) {
+	public void setMaxDepth(final int maxDepth) {
 		if (maxDepth >= 1 || maxDepth == -1) {
 			this.maxDepth = maxDepth;
 		} else {
@@ -270,7 +270,7 @@ public abstract class GEModel extends Model {
 	 * @return the maximum depth of derivation trees to allow after 
 	 * initialisation.
 	 */
-	public int getMaxInitialProgramDepth() {
+	public int getMaxInitialDepth() {
 		return maxInitialDepth;
 	}
 
@@ -283,7 +283,7 @@ public abstract class GEModel extends Model {
 	 * @param maxDepth the maximum depth to allow a program's derivation tree
 	 * 				   after initialisation.
 	 */
-	public void setMaxInitialProgramDepth(final int maxInitialDepth) {
+	public void setMaxInitialDepth(final int maxInitialDepth) {
 		if (maxInitialDepth >= 1 || maxInitialDepth == -1) {
 			this.maxInitialDepth = maxInitialDepth;
 		} else {

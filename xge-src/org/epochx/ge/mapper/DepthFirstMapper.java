@@ -94,7 +94,7 @@ public class DepthFirstMapper implements Mapper {
 	 */
 	private void configure() {
 		grammar = model.getGrammar();
-		maxProgramDepth = model.getMaxProgramDepth();
+		maxProgramDepth = model.getMaxDepth();
 		maxChromosomeLength = model.getMaxChromosomeLength();
 		codonGenerator = model.getCodonGenerator();
 	}

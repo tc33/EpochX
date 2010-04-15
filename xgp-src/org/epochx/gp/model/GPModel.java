@@ -44,8 +44,8 @@ public abstract class GPModel extends Model {
 	private int maxProgramDepth;
 	
 	/**
-	 * Construct a GPModel with a set of sensible defaults. See the appropriate
-	 * accessor method for information of each default value.
+	 * Constructs a <code>GPModel</code> with a set of sensible defaults. See 
+	 * the appropriate accessor method for information of each default value.
 	 */
 	public GPModel() {
 		// Use the GP stats engine.
@@ -53,7 +53,7 @@ public abstract class GPModel extends Model {
 		
 		// Set default parameter values.
 		maxInitialDepth = 6;
-		maxProgramDepth = 12;
+		maxProgramDepth = 17;
 		
 		// Operators.
 		setInitialiser(new FullInitialiser(this));
@@ -83,7 +83,7 @@ public abstract class GPModel extends Model {
 	 * @return the maximum depth of CandidatePrograms to be allowed in the 
 	 * 		   population after initialisation.
 	 */
-	public int getInitialMaxDepth() {
+	public int getMaxInitialDepth() {
 		return maxInitialDepth;
 	}
 
@@ -95,7 +95,7 @@ public abstract class GPModel extends Model {
 	 * 
 	 * @param maxInitialDepth the new max program tree depth to use.
 	 */
-	public void setInitialMaxDepth(int maxInitialDepth) {
+	public void setMaxInitialDepth(int maxInitialDepth) {
 		//TODO The name of this needs to be made consistent with those from XGR and XGE.
 		if (maxInitialDepth >= -1) {
 			this.maxInitialDepth = maxInitialDepth;
@@ -112,12 +112,12 @@ public abstract class GPModel extends Model {
 	 * CandidatePrograms deeper than this limit are dealt with may vary, but 
 	 * they will not be allowed to remain into the next generation unaltered.
 	 * 
-	 * <p>Defaults to 12.
+	 * <p>Defaults to 17.
 	 * 
 	 * @return the maximum depth of CandidatePrograms to be allowed in the 
 	 * 		   population after genetic operators.
 	 */
-	public int getMaxProgramDepth() {
+	public int getMaxDepth() {
 		return maxProgramDepth;
 	}
 
@@ -129,7 +129,7 @@ public abstract class GPModel extends Model {
 	 * 
 	 * @param maxDepth the new max program tree depth to use.
 	 */
-	public void setMaxProgramDepth(int maxDepth) {
+	public void setMaxDepth(int maxDepth) {
 		if (maxDepth >= -1) {
 			this.maxProgramDepth = maxDepth;
 		} else {

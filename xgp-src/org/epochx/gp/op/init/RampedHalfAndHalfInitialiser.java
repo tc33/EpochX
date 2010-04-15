@@ -95,7 +95,7 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 	 */
 	private void configure() {
 		popSize = model.getPopulationSize();
-		initialMaxDepth = model.getInitialMaxDepth();
+		initialMaxDepth = model.getMaxInitialDepth();
 	}
 	
 	/**

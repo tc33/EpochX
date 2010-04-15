@@ -23,13 +23,10 @@ package org.epochx.gp.model.cart;
 
 import java.util.*;
 
-import org.epochx.gp.model.GPModel;
-import org.epochx.gp.op.crossover.UniformPointCrossover;
-import org.epochx.gp.op.mutation.PointMutation;
+import org.epochx.gp.model.*;
 import org.epochx.gp.representation.*;
 import org.epochx.gp.representation.dbl.*;
-import org.epochx.op.selection.*;
-import org.epochx.representation.CandidateProgram;
+import org.epochx.representation.*;
 
 /**
  *

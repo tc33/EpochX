@@ -69,7 +69,7 @@ public class FullInitialiser implements GRInitialiser {
 		rng = model.getRNG();
 		grammar = model.getGrammar();
 		popSize = model.getPopulationSize();
-		maxInitialProgramDepth = model.getMaxInitialProgramDepth();
+		maxInitialProgramDepth = model.getMaxInitialDepth();
 	}
 	
 	

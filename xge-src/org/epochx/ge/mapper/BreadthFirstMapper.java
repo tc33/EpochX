@@ -93,7 +93,7 @@ public class BreadthFirstMapper implements Mapper {
 		
 		int i = 0;
 		while(containsNonTerminals(symbols)) {
-			if (i > model.getMaxProgramDepth() || program.getNoCodons() > model.getMaxChromosomeLength()) {
+			if (i > model.getMaxDepth() || program.getNoCodons() > model.getMaxChromosomeLength()) {
 				return null;
 			} else {
 				if (!map(codons)) {

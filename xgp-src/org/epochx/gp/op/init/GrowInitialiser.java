@@ -75,7 +75,7 @@ public class GrowInitialiser implements GPInitialiser {
 	private void configure() {
 		rng = model.getRNG();
 		popSize = model.getPopulationSize();
-		maxInitialDepth = model.getInitialMaxDepth();
+		maxInitialDepth = model.getMaxInitialDepth();
 		
 		terminals.clear();
 		functions.clear();

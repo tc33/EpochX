@@ -78,7 +78,7 @@ public class FullInitialiser implements GPInitialiser {
 		functions.clear();		
 		syntax = model.getSyntax();
 		
-		maxInitialDepth = model.getInitialMaxDepth();
+		maxInitialDepth = model.getMaxInitialDepth();
 		popSize = model.getPopulationSize();
 		
 		for (Node n: syntax) {

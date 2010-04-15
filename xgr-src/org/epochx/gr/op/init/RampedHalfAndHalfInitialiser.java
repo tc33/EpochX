@@ -96,7 +96,7 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 	private void configure() {
 		grammar = model.getGrammar();
 		popSize = model.getPopulationSize();
-		maxInitialProgramDepth = model.getMaxInitialProgramDepth();
+		maxInitialProgramDepth = model.getMaxInitialDepth();
 	}
 	
 	/**

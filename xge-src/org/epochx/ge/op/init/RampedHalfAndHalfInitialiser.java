@@ -80,7 +80,7 @@ public class RampedHalfAndHalfInitialiser implements GEInitialiser {
 	private void configure() {
 		grammar = model.getGrammar();
 		popSize = model.getPopulationSize();
-		maxInitialProgramDepth = model.getMaxInitialProgramDepth();
+		maxInitialProgramDepth = model.getMaxInitialDepth();
 	}
 	
 	/**

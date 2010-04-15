@@ -370,7 +370,7 @@ public class GECandidateProgram extends CandidateProgram {
 		boolean valid = true;
 		
 		int maxChromosomeLength = model.getMaxChromosomeLength();
-		int maxProgramDepth = model.getMaxProgramDepth();
+		int maxProgramDepth = model.getMaxDepth();
 		
 		if (getSourceCode() == null) {
 			valid = false;

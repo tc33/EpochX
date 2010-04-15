@@ -53,7 +53,7 @@ public abstract class AbstractGRModelTestCase extends AbstractModelTestCase {
 	 */
 	public void testSetInitialMaxDepthZero() {
 		try {
-			getModel().setMaxInitialProgramDepth(0);
+			getModel().setMaxInitialDepth(0);
 			fail("illegal argument exception not thrown for initial max depth of zero");
 		} catch (IllegalArgumentException e) {}
 	}
@@ -63,7 +63,7 @@ public abstract class AbstractGRModelTestCase extends AbstractModelTestCase {
 	 */
 	public void testSetInitialMaxDepthPositive() {
 		try {
-			getModel().setMaxInitialProgramDepth(1);
+			getModel().setMaxInitialDepth(1);
 		} catch (IllegalArgumentException e) {
 			fail("illegal argument exception thrown for initial max depth of 1");
 		}
@@ -74,7 +74,7 @@ public abstract class AbstractGRModelTestCase extends AbstractModelTestCase {
 	 */
 	public void testSetInitialMaxDepthMinusOne() {
 		try {
-			getModel().setMaxInitialProgramDepth(-1);
+			getModel().setMaxInitialDepth(-1);
 		} catch (IllegalArgumentException e) {
 			fail("illegal argument exception thrown for initial max depth of -1");
 		}
@@ -85,7 +85,7 @@ public abstract class AbstractGRModelTestCase extends AbstractModelTestCase {
 	 */
 	public void testSetMaxDepthZero() {
 		try {
-			getModel().setMaxProgramDepth(0);
+			getModel().setMaxDepth(0);
 			fail("illegal argument exception not thrown for max depth of zero");
 		} catch (IllegalArgumentException e) {}
 	}
@@ -95,7 +95,7 @@ public abstract class AbstractGRModelTestCase extends AbstractModelTestCase {
 	 */
 	public void testSetMaxDepthPositive() {
 		try {
-			getModel().setMaxProgramDepth(1);
+			getModel().setMaxDepth(1);
 		} catch (IllegalArgumentException e) {
 			fail("illegal argument exception thrown for max depth of 1");
 		}
@@ -106,7 +106,7 @@ public abstract class AbstractGRModelTestCase extends AbstractModelTestCase {
 	 */
 	public void testSetMaxDepthMinusOne() {
 		try {
-			getModel().setMaxProgramDepth(-1);
+			getModel().setMaxDepth(-1);
 		} catch (IllegalArgumentException e) {
 			fail("illegal argument exception thrown for initial max depth of -1");
 		}
@@ -118,7 +118,7 @@ public abstract class AbstractGRModelTestCase extends AbstractModelTestCase {
 	public void testMaxInitialDepthDefault() {
 		GRModel model = getModel();
 		
-		assertEquals("model's default max initial depth is not 8", 8, model.getMaxInitialProgramDepth());
+		assertEquals("model's default max initial depth is not 8", 8, model.getMaxInitialDepth());
 	}
 	
 	/**
@@ -127,7 +127,7 @@ public abstract class AbstractGRModelTestCase extends AbstractModelTestCase {
 	public void testMaxDepthDefault() {
 		GRModel model = getModel();
 		
-		assertEquals("model's default max depth is not 14", 14, model.getMaxProgramDepth());
+		assertEquals("model's default max depth is not 14", 14, model.getMaxDepth());
 	}
 	
 	/**

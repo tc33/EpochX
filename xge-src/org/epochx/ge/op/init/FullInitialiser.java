@@ -73,7 +73,7 @@ public class FullInitialiser implements GEInitialiser {
 		rng = model.getRNG();
 		grammar = model.getGrammar();
 		popSize = model.getPopulationSize();
-		maxInitialProgramDepth = model.getMaxInitialProgramDepth();
+		maxInitialProgramDepth = model.getMaxInitialDepth();
 		maxCodonSize = model.getMaxCodonSize();
 	}
 	

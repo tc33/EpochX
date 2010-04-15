@@ -22,13 +22,12 @@
 package org.epochx.ge.stats;
 
 import static org.epochx.ge.stats.GEStatField.*;
-import static org.epochx.stats.StatField.GEN_POPULATION;
+import static org.epochx.stats.StatField.*;
 
-import java.util.List;
+import java.util.*;
 
-import org.epochx.core.Model;
-import org.epochx.ge.model.GEModel;
-import org.epochx.ge.representation.GECandidateProgram;
+import org.epochx.ge.model.*;
+import org.epochx.ge.representation.*;
 import org.epochx.stats.*;
 
 public class GEStatsEngine extends StatsEngine {

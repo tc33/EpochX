@@ -96,7 +96,7 @@ public class FullInitialiser implements GPInitialiser {
 	 * population will be equal to the result of calling getPopulationSize() on
 	 * the controlling model. All programs in the population will be unique.
 	 * Each candidate program will have a full node tree with a depth as given 
-	 * by a call to getInitialMaxDepth() on the model.
+	 * by a call to getMaxInitialDepth() on the model.
 	 * 
 	 * @return A List of newly generated CandidatePrograms which will form the 
 	 * initial population for a GP run.

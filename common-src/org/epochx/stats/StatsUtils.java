@@ -21,7 +21,7 @@
  */
 package org.epochx.stats;
 
-import java.util.Arrays;
+import java.util.*;
 
 public class StatsUtils {
 	
@@ -82,6 +82,7 @@ public class StatsUtils {
 	}
 	
 	public static double max(double[] values) {
+		//TODO No need for this - use apache commons NumberUtils.
 		double max = Double.MIN_VALUE;
 		for (int i=0; i<values.length; i++) {
 			if (values[i] > max) {
@@ -92,6 +93,7 @@ public class StatsUtils {
 	}
 	
 	public static int max(int[] values) {
+		//TODO No need for this - use apache commons NumberUtils.
 		int max = Integer.MIN_VALUE;
 		for (int i=0; i<values.length; i++) {
 			if (values[i] > max) {
@@ -126,6 +128,7 @@ public class StatsUtils {
 	}
 	
 	public static double min(double[] values) {
+		//TODO No need for this - use apache commons NumberUtils.
 		double min = Double.MAX_VALUE;
 		for (int i=0; i<values.length; i++) {
 			if (values[i] < min) {
@@ -136,6 +139,7 @@ public class StatsUtils {
 	}
 	
 	public static int min(int[] values) {
+		//TODO No need for this - use apache commons NumberUtils.
 		int min = Integer.MAX_VALUE;
 		for (int i=0; i<values.length; i++) {
 			if (values[i] < min) {
@@ -172,7 +176,7 @@ public class StatsUtils {
 	public static double median(double[] values) {
 		// Sort the array.
 		Arrays.sort(values);
-		
+
 		// Pick out the middle value.
 		int medianIndex = (int) Math.floor(values.length / 2);
 		double median = values[medianIndex-1];

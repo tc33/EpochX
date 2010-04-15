@@ -28,7 +28,7 @@ import org.epochx.op.selection.*;
 /**
  * 
  */
-public class CubicRegression extends org.epochx.gp.model.regression.CubicRegression {
+public class CubicRegression extends org.epochx.gp.model.CubicRegression {
 
 	public CubicRegression() {
 		setPopulationSize(500);
@@ -40,7 +40,7 @@ public class CubicRegression extends org.epochx.gp.model.regression.CubicRegress
 		setPoolSize(50);
 		setNoGenerations(50);
 		setNoElites(50);
-		setMaxProgramDepth(17);
+		setMaxDepth(17);
 		setNoRuns(1);
 	}
 	

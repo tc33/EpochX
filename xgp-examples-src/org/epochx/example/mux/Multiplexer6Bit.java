@@ -33,7 +33,7 @@ import org.epochx.op.selection.*;
 /**
  * 
  */
-public class Multiplexer6Bit extends org.epochx.gp.model.mux.Multiplexer6Bit {
+public class Multiplexer6Bit extends org.epochx.gp.model.Multiplexer6Bit {
 	
 	public Multiplexer6Bit() {
 		/*setPopulationSize(500);
@@ -56,8 +56,8 @@ public class Multiplexer6Bit extends org.epochx.gp.model.mux.Multiplexer6Bit {
 		setNoRuns(100);
 		//setPoolSize(-1);
 		setNoElites(50);
-		setInitialMaxDepth(6);
-		setMaxProgramDepth(17);
+		setMaxInitialDepth(6);
+		setMaxDepth(17);
 		setPoolSelector(null);
 		setProgramSelector(new TournamentSelector(this, 3));
 		setCrossover(new KozaCrossover(this));

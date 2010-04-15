@@ -28,7 +28,7 @@ import org.epochx.op.selection.*;
 /**
  * 
  */
-public class QuarticRegression extends org.epochx.gp.model.regression.QuarticRegression {
+public class QuarticRegression extends org.epochx.gp.model.QuarticRegression {
 
 	public QuarticRegression() {
 		setPopulationSize(500);
@@ -40,7 +40,7 @@ public class QuarticRegression extends org.epochx.gp.model.regression.QuarticReg
 		setPoolSize(50);
 		setNoGenerations(50);
 		setNoElites(50);
-		setMaxProgramDepth(17);
+		setMaxDepth(17);
 		setNoRuns(1);
 	}
 	

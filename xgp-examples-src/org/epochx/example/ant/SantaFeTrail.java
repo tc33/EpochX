@@ -33,7 +33,7 @@ import org.epochx.op.selection.*;
 /**
  * 
  */
-public class SantaFeTrail extends org.epochx.gp.model.ant.SantaFeTrail {
+public class SantaFeTrail extends org.epochx.gp.model.SantaFeTrail {
 	
 	public SantaFeTrail() {
 		setPopulationSize(10000);
@@ -43,8 +43,8 @@ public class SantaFeTrail extends org.epochx.gp.model.ant.SantaFeTrail {
 		setNoRuns(100);
 		//setPoolSize(-1);
 		setNoElites(50);
-		setInitialMaxDepth(6);
-		setMaxProgramDepth(17);
+		setMaxInitialDepth(6);
+		setMaxDepth(17);
 		setPoolSelector(null);
 		setProgramSelector(new TournamentSelector(this, 3));
 		setCrossover(new KozaCrossover(this));

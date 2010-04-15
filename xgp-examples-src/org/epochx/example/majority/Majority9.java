@@ -28,7 +28,7 @@ import org.epochx.op.selection.*;
 /**
  * 
  */
-public class Majority9 extends org.epochx.gp.model.majority.Majority9 {
+public class Majority9 extends org.epochx.gp.model.Majority9 {
 
 	public Majority9() {
 		setPopulationSize(500);
@@ -38,8 +38,8 @@ public class Majority9 extends org.epochx.gp.model.majority.Majority9 {
 		setNoRuns(1);
 		setPoolSize(50);
 		setNoElites(50);
-		setInitialMaxDepth(6);
-		setMaxProgramDepth(17);
+		setMaxInitialDepth(6);
+		setMaxDepth(17);
 		setPoolSelector(new TournamentSelector(this, 7));
 		setProgramSelector(new RandomSelector(this));
 		setCrossover(new UniformPointCrossover(this));

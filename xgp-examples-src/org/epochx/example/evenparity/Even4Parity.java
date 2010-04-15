@@ -32,7 +32,7 @@ import org.epochx.op.selection.*;
 /**
  * 
  */
-public class Even4Parity extends org.epochx.gp.model.parity.Even4Parity {
+public class Even4Parity extends org.epochx.gp.model.Even4Parity {
 	
 	public Even4Parity() {
 		super();
@@ -43,8 +43,8 @@ public class Even4Parity extends org.epochx.gp.model.parity.Even4Parity {
 		setMutationProbability(0.1);
 		setNoRuns(100);
 		setNoElites(50);
-		setInitialMaxDepth(6);
-		setMaxProgramDepth(17);
+		setMaxInitialDepth(6);
+		setMaxDepth(17);
 		setPoolSelector(null);
 		setProgramSelector(new TournamentSelector(this, 7));
 		setCrossover(new UniformPointCrossover(this));

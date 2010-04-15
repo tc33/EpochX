@@ -31,7 +31,7 @@ import org.epochx.op.selection.*;
 /**
  * 
  */
-public class Even5Parity extends org.epochx.gp.model.parity.Even5Parity {
+public class Even5Parity extends org.epochx.gp.model.Even5Parity {
 
 	public Even5Parity() {
 		super();
@@ -42,7 +42,7 @@ public class Even5Parity extends org.epochx.gp.model.parity.Even5Parity {
 		setMutationProbability(0.1);
 		setNoRuns(5);
 		setNoElites(50);
-		setMaxProgramDepth(17);
+		setMaxDepth(17);
 		setProgramSelector(new TournamentSelector(this, 7));
 		setPoolSelector(null);
 		setCrossover(new UniformPointCrossover(this));

@@ -29,7 +29,7 @@ import org.epochx.op.selection.*;
  * 
  *
  */
-public class Multiplexer20Bit extends org.epochx.gp.model.mux.Multiplexer20Bit {
+public class Multiplexer20Bit extends org.epochx.gp.model.Multiplexer20Bit {
 
 	public Multiplexer20Bit() {
 		setPopulationSize(500);
@@ -39,7 +39,7 @@ public class Multiplexer20Bit extends org.epochx.gp.model.mux.Multiplexer20Bit {
 		setNoRuns(1);
 		setPoolSize(50);
 		setNoElites(50);
-		setMaxProgramDepth(6);
+		setMaxDepth(6);
 		setPoolSelector(new TournamentSelector(this, 7));
 		setProgramSelector(new RandomSelector(this));
 		setCrossover(new UniformPointCrossover(this));

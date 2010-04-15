@@ -19,11 +19,10 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.gp.model.mux;
+package org.epochx.gp.model;
 
 import java.util.*;
 
-import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
 import org.epochx.gp.representation.bool.*;
 import org.epochx.representation.CandidateProgram;

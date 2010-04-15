@@ -19,11 +19,10 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.gp.model.mux;
+package org.epochx.gp.model;
 
 import java.util.*;
 
-import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
 import org.epochx.gp.representation.bool.*;
 import org.epochx.representation.CandidateProgram;
@@ -33,27 +32,26 @@ import org.epochx.tools.util.BoolUtils;
 /**
  * 
  */
-public class Multiplexer6Bit extends GPModel {
+public class Majority5 extends GPModel {
 
 	private boolean[][] inputs;
 	
-	private HashMap<String, BooleanVariable> variables;	
+	private HashMap<String, BooleanVariable> variables;
 	
-	public Multiplexer6Bit() {
-		inputs = BoolUtils.generateBoolSequences(6);
+	public Majority5() {
+		inputs = BoolUtils.generateBoolSequences(5);
 		variables = new HashMap<String, BooleanVariable>();
 		
 		configure();
 	}
 	
-	public void configure() {
+	private void configure() {
 		// Define variables.
+		variables.put("D4", new BooleanVariable("D4"));
 		variables.put("D3", new BooleanVariable("D3"));
 		variables.put("D2", new BooleanVariable("D2"));
 		variables.put("D1", new BooleanVariable("D1"));
 		variables.put("D0", new BooleanVariable("D0"));
-		variables.put("A1", new BooleanVariable("A1"));
-		variables.put("A0", new BooleanVariable("A0"));
 		
 		// Define functions.
 		List<Node> syntax = new ArrayList<Node>();
@@ -61,14 +59,13 @@ public class Multiplexer6Bit extends GPModel {
 		syntax.add(new AndFunction());
 		syntax.add(new OrFunction());
 		syntax.add(new NotFunction());
-			
+	
 		// Define terminals.
+		syntax.add(variables.get("D4"));
 		syntax.add(variables.get("D3"));
 		syntax.add(variables.get("D2"));
 		syntax.add(variables.get("D1"));
 		syntax.add(variables.get("D0"));
-		syntax.add(variables.get("A1"));
-		syntax.add(variables.get("A0"));
 		
 		setSyntax(syntax);
 	}
@@ -82,33 +79,34 @@ public class Multiplexer6Bit extends GPModel {
         // Execute on all possible inputs.
         for (boolean[] in: inputs) {        	
         	// Set the variables.
-        	variables.get("A0").setValue(in[0]);
-        	variables.get("A1").setValue(in[1]);
-        	variables.get("D0").setValue(in[2]);
-        	variables.get("D1").setValue(in[3]);
-        	variables.get("D2").setValue(in[4]);
-        	variables.get("D3").setValue(in[5]);
+        	variables.get("D0").setValue(in[0]);
+        	variables.get("D1").setValue(in[1]);
+        	variables.get("D2").setValue(in[2]);
+        	variables.get("D3").setValue(in[3]);
+        	variables.get("D4").setValue(in[4]);
         	
             if ((Boolean) program.evaluate() == chooseResult(in)) {
                 score++;
             }
         }
         
-        return 64 - score;
+        return 32 - score;
 	}
 	
     private boolean chooseResult(boolean[] input) {
-        boolean result = false;
     	// scoring solution
-        if(input[0] && input[1]) {
-            result = input[2];
-        } else if(input[0] && !input[1]) {
-            result = input[3];
-        } else if(!input[0] && input[1]) {
-            result = input[4];
-        } else if(!input[0] && !input[1]) {
-            result = input[5];
+        int len = input.length;
+        int trueCount = 0;
+        for(int i = 0; i<len; i++) {
+            if(input[i]) {
+                trueCount++;
+            }
         }
-        return result;
+        
+        if(trueCount>=(len/2)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

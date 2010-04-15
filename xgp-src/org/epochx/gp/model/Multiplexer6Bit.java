@@ -19,11 +19,10 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.gp.model.parity;
+package org.epochx.gp.model;
 
 import java.util.*;
 
-import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
 import org.epochx.gp.representation.bool.*;
 import org.epochx.representation.CandidateProgram;
@@ -33,14 +32,14 @@ import org.epochx.tools.util.BoolUtils;
 /**
  * 
  */
-public class Even7Parity extends GPModel {
+public class Multiplexer6Bit extends GPModel {
 
 	private boolean[][] inputs;
 	
-	private HashMap<String, BooleanVariable> variables;
+	private HashMap<String, BooleanVariable> variables;	
 	
-	public Even7Parity() {
-		inputs = BoolUtils.generateBoolSequences(7);
+	public Multiplexer6Bit() {
+		inputs = BoolUtils.generateBoolSequences(6);
 		variables = new HashMap<String, BooleanVariable>();
 		
 		configure();
@@ -48,13 +47,12 @@ public class Even7Parity extends GPModel {
 	
 	public void configure() {
 		// Define variables.
-		variables.put("D6", new BooleanVariable("D6"));
-		variables.put("D5", new BooleanVariable("D5"));
-		variables.put("D4", new BooleanVariable("D4"));
 		variables.put("D3", new BooleanVariable("D3"));
 		variables.put("D2", new BooleanVariable("D2"));
 		variables.put("D1", new BooleanVariable("D1"));
 		variables.put("D0", new BooleanVariable("D0"));
+		variables.put("A1", new BooleanVariable("A1"));
+		variables.put("A0", new BooleanVariable("A0"));
 		
 		// Define functions.
 		List<Node> syntax = new ArrayList<Node>();
@@ -64,13 +62,12 @@ public class Even7Parity extends GPModel {
 		syntax.add(new NotFunction());
 			
 		// Define terminals.
-		syntax.add(variables.get("D6"));
-		syntax.add(variables.get("D5"));
-		syntax.add(variables.get("D4"));
 		syntax.add(variables.get("D3"));
 		syntax.add(variables.get("D2"));
 		syntax.add(variables.get("D1"));
 		syntax.add(variables.get("D0"));
+		syntax.add(variables.get("A1"));
+		syntax.add(variables.get("A0"));
 		
 		setSyntax(syntax);
 	}
@@ -84,34 +81,33 @@ public class Even7Parity extends GPModel {
         // Execute on all possible inputs.
         for (boolean[] in: inputs) {        	
         	// Set the variables.
-        	variables.get("D0").setValue(in[0]);
-        	variables.get("D1").setValue(in[1]);
-        	variables.get("D2").setValue(in[2]);
-        	variables.get("D3").setValue(in[3]);
-        	variables.get("D4").setValue(in[4]);
-        	variables.get("D5").setValue(in[5]);
-        	variables.get("D6").setValue(in[6]);
+        	variables.get("A0").setValue(in[0]);
+        	variables.get("A1").setValue(in[1]);
+        	variables.get("D0").setValue(in[2]);
+        	variables.get("D1").setValue(in[3]);
+        	variables.get("D2").setValue(in[4]);
+        	variables.get("D3").setValue(in[5]);
         	
             if ((Boolean) program.evaluate() == chooseResult(in)) {
                 score++;
             }
         }
         
-        return 128 - score;
+        return 64 - score;
 	}
 	
     private boolean chooseResult(boolean[] input) {
-        // scoring solution
-        int eCount = 0;
-        for(int i = 0; i<input.length; i++) {
-            if(input[i]==true) {
-                eCount++;
-            }
+        boolean result = false;
+    	// scoring solution
+        if(input[0] && input[1]) {
+            result = input[2];
+        } else if(input[0] && !input[1]) {
+            result = input[3];
+        } else if(!input[0] && input[1]) {
+            result = input[4];
+        } else if(!input[0] && !input[1]) {
+            result = input[5];
         }
-        if(eCount%2==0) {
-            return true;
-        } else {
-            return false;
-        }
+        return result;
     }
 }

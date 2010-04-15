@@ -23,7 +23,7 @@ package org.epochx.core;
 
 import java.util.*;
 
-import org.epochx.gp.model.ant.SantaFeTrail;
+import org.epochx.gp.model.*;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;

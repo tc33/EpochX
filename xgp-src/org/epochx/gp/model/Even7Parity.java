@@ -19,11 +19,10 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.gp.model.majority;
+package org.epochx.gp.model;
 
 import java.util.*;
 
-import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
 import org.epochx.gp.representation.bool.*;
 import org.epochx.representation.CandidateProgram;
@@ -33,21 +32,23 @@ import org.epochx.tools.util.BoolUtils;
 /**
  * 
  */
-public class Majority5 extends GPModel {
+public class Even7Parity extends GPModel {
 
 	private boolean[][] inputs;
 	
 	private HashMap<String, BooleanVariable> variables;
 	
-	public Majority5() {
-		inputs = BoolUtils.generateBoolSequences(5);
+	public Even7Parity() {
+		inputs = BoolUtils.generateBoolSequences(7);
 		variables = new HashMap<String, BooleanVariable>();
 		
 		configure();
 	}
 	
-	private void configure() {
+	public void configure() {
 		// Define variables.
+		variables.put("D6", new BooleanVariable("D6"));
+		variables.put("D5", new BooleanVariable("D5"));
 		variables.put("D4", new BooleanVariable("D4"));
 		variables.put("D3", new BooleanVariable("D3"));
 		variables.put("D2", new BooleanVariable("D2"));
@@ -60,8 +61,10 @@ public class Majority5 extends GPModel {
 		syntax.add(new AndFunction());
 		syntax.add(new OrFunction());
 		syntax.add(new NotFunction());
-	
+			
 		// Define terminals.
+		syntax.add(variables.get("D6"));
+		syntax.add(variables.get("D5"));
 		syntax.add(variables.get("D4"));
 		syntax.add(variables.get("D3"));
 		syntax.add(variables.get("D2"));
@@ -85,26 +88,26 @@ public class Majority5 extends GPModel {
         	variables.get("D2").setValue(in[2]);
         	variables.get("D3").setValue(in[3]);
         	variables.get("D4").setValue(in[4]);
+        	variables.get("D5").setValue(in[5]);
+        	variables.get("D6").setValue(in[6]);
         	
             if ((Boolean) program.evaluate() == chooseResult(in)) {
                 score++;
             }
         }
         
-        return 32 - score;
+        return 128 - score;
 	}
 	
     private boolean chooseResult(boolean[] input) {
-    	// scoring solution
-        int len = input.length;
-        int trueCount = 0;
-        for(int i = 0; i<len; i++) {
-            if(input[i]) {
-                trueCount++;
+        // scoring solution
+        int eCount = 0;
+        for(int i = 0; i<input.length; i++) {
+            if(input[i]==true) {
+                eCount++;
             }
         }
-        
-        if(trueCount>=(len/2)) {
+        if(eCount%2==0) {
             return true;
         } else {
             return false;

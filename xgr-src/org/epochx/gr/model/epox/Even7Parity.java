@@ -19,19 +19,34 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.gr.model.epox.ant;
+package org.epochx.gr.model.epox;
 
-import org.epochx.gr.model.*;
-import org.epochx.gr.model.epox.*;
+import org.epochx.tools.grammar.Grammar;
 
 /**
- * 
+ *
  */
-public class SantaFeTrailTest extends AbstractGRModelTestCase {
+public class Even7Parity extends EvenParity {
+	
+	public static final String GRAMMAR_STRING =
+		"<prog> ::= <node>\n" +
+		"<node> ::= <function> | <terminal>\n" +
+		"<function> ::= NOT( <node> ) " +
+					"| OR( <node> , <node> ) " +
+					"| AND( <node> , <node> ) " +
+					"| XOR( <node> , <node> )\n" +
+		"<terminal> ::= d0 | d1 | d2 | d3 | d4 | d5 | d6\n";
+	
+	private Grammar grammar;
 
-	@Override
-	public GRModel getModel() {
-		return new SantaFeTrail();
+	public Even7Parity() {
+		super(7);
+
+		grammar = new Grammar(GRAMMAR_STRING);
 	}
-
+	
+	@Override
+	public Grammar getGrammar() {
+		return grammar;
+	}
 }

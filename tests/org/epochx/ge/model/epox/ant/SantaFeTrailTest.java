@@ -22,6 +22,7 @@
 package org.epochx.ge.model.epox.ant;
 
 import org.epochx.ge.model.*;
+import org.epochx.ge.model.epox.*;
 
 /**
  * 

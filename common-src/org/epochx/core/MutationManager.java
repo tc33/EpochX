@@ -145,7 +145,7 @@ public class MutationManager {
 		model.getLifeCycleManager().fireMutationStartEvent();
 		
 		// Record the start time.
-		final long crossoverStartTime = System.nanoTime();
+		final long mutationStartTime = System.nanoTime();
 		
 		CandidateProgram parent = null;
 		CandidateProgram child = null;
@@ -175,7 +175,7 @@ public class MutationManager {
 			}
 		} while(child == null);
 		
-		final long runtime = System.nanoTime() - crossoverStartTime;
+		final long runtime = System.nanoTime() - mutationStartTime;
 		
 		// Store the stats from the mutation.
 		model.getStatsManager().addMutationData(MUTATION_PROGRAM_BEFORE, parent);

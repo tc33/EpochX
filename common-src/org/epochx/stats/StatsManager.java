@@ -133,15 +133,16 @@ public class StatsManager {
 		return stat;
 	}
 	
-	public Object[] getRunStats(String[] fields) {
+	public Object[] getRunStats(String ... fields) {
 		Object[] stats = new Object[fields.length];
 		for (int i=0; i<fields.length; i++) {
 			stats[i] = getRunStat(fields[i]);
 		}
+		
 		return stats;
 	}
 	
-	public Object[] getGenerationStats(String[] fields) {
+	public Object[] getGenerationStats(String ... fields) {
 		Object[] stats = new Object[fields.length];
 		for (int i=0; i<fields.length; i++) {
 			stats[i] = getGenerationStat(fields[i]);
@@ -149,7 +150,7 @@ public class StatsManager {
 		return stats;
 	}
 	
-	public Object[] getCrossoverStats(String[] fields) {
+	public Object[] getCrossoverStats(String ... fields) {
 		Object[] stats = new Object[fields.length];
 		for (int i=0; i<fields.length; i++) {
 			stats[i] = getCrossoverStat(fields[i]);
@@ -157,7 +158,7 @@ public class StatsManager {
 		return stats;
 	}
 	
-	public Object[] getMutationStats(String[] fields) {
+	public Object[] getMutationStats(String ... fields) {
 		Object[] stats = new Object[fields.length];
 		for (int i=0; i<fields.length; i++) {
 			stats[i] = getMutationStat(fields[i]);

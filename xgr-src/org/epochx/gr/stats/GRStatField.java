@@ -23,34 +23,49 @@ package org.epochx.gr.stats;
 
 import org.epochx.stats.StatField;
 
+/**
+ * Provides constants to be used as keys to request statistics from the 
+ * StatsManager specific to XGR.
+ */
 public final class GRStatField extends StatField {
 	
+	/*
+	 * No need to ever create an object of GRStatField.
+	 */
+	private GRStatField() {}
+	
 	/**
-	 * 
+	 * Returns an <code>int[]</code> which contains the depths of all the 
+	 * <code>CandidateProgram</code>s in the population at the end of the 
+	 * previous generation.
 	 */
 	public static final String GEN_DEPTHS = "xgr-gen-depths";
 	
 	/**
-	 * Requests a Double which is the average depth of CandidatePrograms in 
-	 * that generation.
+	 * Returns a <code>Double</code> which is the average depth of all the
+	 * <code>CandidateProgram</code>s in the population at the end of the
+	 * previous generation.
 	 */
 	public static final String GEN_DEPTH_AVE = "xgr-gen-depth-ave";
 	
 	/**
-	 * Requests a Double which is the standard deviation of depths of 
-	 * CandidatePrograms in that generation.
+	 * Returns a <code>Double</code> which is the standard deviation of the 
+	 * depths of all the <code>CandidateProgram</code>s in the 
+	 * population at the end of the previous generation.
 	 */
 	public static final String GEN_DEPTH_STDEV = "xgr-gen-depth-stdev";
 	
 	/**
-	 * Requests a Double which is maximum depth of all the CandidatePrograms in 
-	 * that generation. Should always be a whole number.
+	 * Returns an <code>Integer</code> which is the maximum program depth of 
+	 * all the <code>CandidateProgram</code>s in the population at the end of
+	 * the previous generation.
 	 */
 	public static final String GEN_DEPTH_MAX = "xgr-gen-depth-max";
 	
 	/**
-	 * Requests a Double which is minimum depth of all the CandidatePrograms in 
-	 * that generation. Should always be a whole number.
+	 * Returns an <code>Integer</code> which is the minimum program depth of all
+	 * the <code>CandidateProgram</code>s in the population at the end of the
+	 * previous generation.
 	 */
 	public static final String GEN_DEPTH_MIN = "xgr-gen-depth-min";
 

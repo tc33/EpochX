@@ -21,103 +21,52 @@
  */
 package org.epochx.ge.example.java.ant;
 
-import java.awt.*;
-import java.io.File;
-import java.util.*;
-import java.util.List;
+import static org.epochx.ge.stats.GEStatField.*;
 
-import org.epochx.core.Controller;
-import org.epochx.ge.core.GEAbstractModel;
-import org.epochx.ge.mapper.DepthFirstMapper;
-import org.epochx.ge.op.init.RampedHalfAndHalfInitialiser;
-import org.epochx.ge.representation.GECandidateProgram;
+import org.epochx.ge.mapper.*;
+import org.epochx.ge.op.init.*;
+import org.epochx.life.*;
 import org.epochx.op.selection.*;
-import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.*;
-import org.epochx.tools.ant.*;
-import org.epochx.tools.eval.*;
-import org.epochx.tools.grammar.Grammar;
-import org.epochx.tools.util.FileManip;
 
 
-public class SantaFeTrail extends GEAbstractModel {
+public class SantaFeTrail extends org.epochx.ge.model.java.SantaFeTrail {
 
-	private Grammar grammar;
-	
-	private List<Point> foodLocations;
-	private AntLandscape landscape;
-	private Ant ant;
-	
 	public SantaFeTrail() {
-		grammar = new Grammar(new File("example-grammars/Java/SantaFeTrail.bnf"));
-		
-		landscape = new AntLandscape(new Dimension(32, 32), null);
-		ant = new Ant(600, landscape);
-		
-		List<String> inputs = FileManip.loadInput(new File("inputsantafe.txt"));
-		// create list of food locations
-		foodLocations = new ArrayList<Point>();
-		for(String i: inputs) {
-			if(!i.equalsIgnoreCase("DC")) {
-				String[] parts = i.split(":");
-				int x = Integer.parseInt(parts[0]);
-				int y = Integer.parseInt(parts[1]);
-				Point p = new Point(x, y);
-				foodLocations.add(p);
-			}
-		}
-		
-		setGenStatFields(new GenerationStatField[]{GenerationStatField.RUN_TIME, GenerationStatField.FITNESS_MIN, GenerationStatField.FITNESS_AVE, GenerationStatField.FITNESS_STDEV, GenerationStatField.LENGTH_AVE, GenerationStatField.LENGTH_STDEV, GenerationStatField.BEST_PROGRAM});
-		setRunStatFields(new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM, RunStatField.RUN_TIME});
-	
 		DepthFirstMapper mapper = new DepthFirstMapper(this);
 		mapper.setWrapping(true);
 		mapper.setRemovingUnusedCodons(false);
 		setMapper(mapper);
 		
+		setMaxCodonSize(256);
 		setNoRuns(100);
 		setNoElites(10);
 		setNoGenerations(100);
 		setPopulationSize(500);
-		setMaxProgramDepth(12);
-		setMaxInitialProgramDepth(8);
+		setMaxDepth(12);
+		setMaxInitialDepth(8);
 		setMutationProbability(0.1);
 		setCrossoverProbability(0.9);
 		setProgramSelector(new TournamentSelector(this, 3));
-		setPoolSelector(new RandomSelector(this));
-		setPoolSize(0);
+		setPoolSelector(null);
+		setPoolSize(-1);
 		setInitialiser(new RampedHalfAndHalfInitialiser(this));
-	}
-	
-	@Override
-	public double getFitness(CandidateProgram p) {
-		GECandidateProgram program = (GECandidateProgram) p;
 		
-		landscape.setFoodLocations(new ArrayList<Point>(foodLocations));
-		ant.reset(600, landscape);
+		getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationEnd() {
+				getStatsManager().printGenerationStats(GEN_NUMBER, GEN_FITNESS_MIN, GEN_FITNESS_AVE, GEN_DEPTH_AVE, GEN_DEPTH_MAX, GEN_FITTEST_PROGRAM);
+			}
+		});
 		
-		// Construct argument arrays.
-		String[] argNames = {"ant"};
-		Object[] argValues = {ant};
-		
-		// Evaluate multiple times until all time moves used.
-		Evaluator evaluator = new JavaEvaluator();
-		while(ant.getMoves() < ant.getMaxMoves()) {
-			evaluator.eval(program.getSourceCode(), argNames, argValues);
-		}
-
-		// Calculate score.
-		double score = (double) (foodLocations.size() - ant.getFoodEaten());
-		
-		return score;
-	}
-
-	@Override
-	public Grammar getGrammar() {
-		return grammar;
+		getLifeCycleManager().addRunListener(new RunAdapter() {
+			@Override
+			public void onRunEnd() {
+				getStatsManager().printRunStats(RUN_NUMBER, RUN_FITNESS_MIN, RUN_FITTEST_PROGRAM);
+			}
+		});
 	}
 
 	public static void main(String[] args) {
-		Controller.run(new SantaFeTrail());
+		new SantaFeTrail().run();
 	}
 }

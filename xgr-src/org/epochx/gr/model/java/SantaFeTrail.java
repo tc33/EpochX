@@ -37,9 +37,8 @@ public class SantaFeTrail extends GRModel {
 	public static final String GRAMMAR_STRING = 
 		  "<code> ::= <line> | <code> <line>\n"
 		+ "<line> ::= <expr>\n"
-		+ "<expr> ::= <condition> | <op>\n"
-		+ "<condition> ::= if(ant.isFoodAhead()){ <op> }else{ <op> }\n"
-		+ "<op> ::= <opcode> | <op> <opcode>\n"
+		+ "<expr> ::= <condition> | <opcode>\n"
+		+ "<condition> ::= if(ant.isFoodAhead()){ <opcode> }else{ <opcode> }\n"
 		+ "<opcode> ::=  ant.turnLeft(); | ant.turnRight(); | ant.move();\n";
 	
 	private Grammar grammar;

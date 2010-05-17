@@ -24,7 +24,6 @@ package org.epochx.tools.grammar;
 import java.util.*;
 
 import org.apache.commons.lang.*;
-import org.epochx.gp.representation.*;
 
 /**
  *

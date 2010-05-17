@@ -19,11 +19,12 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.gp.representation;
+package org.epochx.tools.eval;
 
 import java.util.*;
 import java.util.regex.Pattern;
 
+import org.epochx.gp.representation.*;
 import org.epochx.gp.representation.ant.*;
 import org.epochx.gp.representation.bool.*;
 import org.epochx.gp.representation.dbl.*;
@@ -33,7 +34,7 @@ import org.epochx.tools.ant.Ant;
  * The function parser can parse a nested function into a node tree. It can 
  * only parse those functions that it knows about.
  */
-public class FunctionParser {
+public class EpoxParser {
 	
 	// This map is to contain only simple functions that require no additional info.
 	private final Map<String, Class<?>> simpleFunctions;
@@ -65,7 +66,7 @@ public class FunctionParser {
 	             					  "[fFdD]?))" +
 	             					  "[\\x00-\\x20]*");
 	
-	public FunctionParser() {
+	public EpoxParser() {
 		variables = new ArrayList<Node>();
 		simpleFunctions = new HashMap<String, Class<?>>();
 		
@@ -293,7 +294,7 @@ public class FunctionParser {
 	}
 	
 	public static void main(String[] args) {
-		FunctionParser parser = new FunctionParser();
+		EpoxParser parser = new EpoxParser();
 		
 		//System.out.println(parser.parse("IF(ADD(1,false),NOT(true),false)").toString());
 		//Node programTree = parser.parse("XOR(D1 XOR(NOT(XOR(D0 D3)) D2))");

@@ -34,13 +34,13 @@ import org.epochx.gp.representation.*;
  */
 public class EpoxEvaluator implements Evaluator {
 
-	private FunctionParser parser;
+	private EpoxParser parser;
 	
 	public EpoxEvaluator() {
-		parser = new FunctionParser();
+		parser = new EpoxParser();
 	}
 	
-	public EpoxEvaluator(FunctionParser parser) {
+	public EpoxEvaluator(EpoxParser parser) {
 		this.parser = parser;
 	}
 	

@@ -22,12 +22,11 @@ package org.epochx.gr.model.epox;
 import java.awt.*;
 import java.util.*;
 
-import org.epochx.gp.representation.FunctionParser;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.ant.*;
-import org.epochx.tools.eval.EpoxEvaluator;
+import org.epochx.tools.eval.*;
 import org.epochx.tools.grammar.Grammar;
 
 public class JohnMuirTrail extends GRModel {
@@ -42,7 +41,7 @@ public class JohnMuirTrail extends GRModel {
 	
 	private Grammar grammar;
 	
-	private FunctionParser parser;
+	private EpoxParser parser;
 	private EpoxEvaluator evaluator;
 	
 	private AntLandscape landscape;
@@ -81,7 +80,7 @@ public class JohnMuirTrail extends GRModel {
 		ant = new Ant(100, landscape);
 		
 		// Construct the evaluator to use.
-		parser = new FunctionParser();
+		parser = new EpoxParser();
 		evaluator = new EpoxEvaluator(parser);
 	}
 	

@@ -23,11 +23,28 @@ package org.epochx.stats;
 
 import java.util.*;
 
-public class StatsUtils {
+/**
+ * This class contains static utility methods for the generation or use of 
+ * statistics.
+ */
+public final class StatsUtils {
 	
-	private StatsUtils() {}
+	/*
+	 * Suppress default constructor for noninstantiability.
+	 */
+	private StatsUtils() {
+		assert false;
+	}
 	
-	public static double ave(double[] values) {
+	/**
+	 * Calculates and returns the mean average of an array of 
+	 * <code>double</code>. The provided argument must not be null nor an empty
+	 * array.
+	 * 
+	 * @param values an array of doubles to calculate the mean average of.
+	 * @return the mean average of the provided array of doubles.
+	 */
+	public static double ave(final double ... values) {
 		if ((values != null) && (values.length != 0)) {
 			double sum = 0;
 			for (int i=0; i<values.length; i++) {
@@ -35,11 +52,19 @@ public class StatsUtils {
 			}
 			return sum/values.length;
 		} else {
-			throw new IllegalArgumentException("cannot calculate average of null or empty array of values");
+			throw new IllegalArgumentException("cannot calculate average of " +
+					"null or empty array of values");
 		}		
 	}
 	
-	public static double ave(int[] values) {
+	/**
+	 * Calculates and returns the mean average of an array of <code>int</code>. 
+	 * The provided argument must not be null nor an empty array.
+	 * 
+	 * @param values an array of int to calculate the mean average of.
+	 * @return the mean average of the provided array of int.
+	 */
+	public static double ave(final int ... values) {
 		if ((values != null) && (values.length != 0)) {
 			int sum = 0;
 			for (int i=0; i<values.length; i++) {
@@ -51,11 +76,29 @@ public class StatsUtils {
 		}
 	}
 	
-	public static double stdev(double[] values) {
+	/**
+	 * Calculates and returns the standard deviation of an array of 
+	 * <code>double</code>. The provided argument must not be null nor an empty 
+	 * array.
+	 * 
+	 * @param values an array of doubles to calculate the standard deviation of.
+	 * @return the standard deviation of the provided array of doubles.
+	 */
+	public static double stdev(final double ... values) {
 		return stdev(values, ave(values));
 	}
 	
-	public static double stdev(double[] values, double ave) {
+	/**
+	 * Calculates and returns the standard deviation of an array of 
+	 * <code>double</code>. The provided <code>values</code>argument must not be
+	 * null nor an empty array. The <code>ave</code> argument supplies the mean
+	 * average of the values if it is known to save calculating it again.
+	 * 
+	 * @param values an array of doubles to calculate the standard deviation of.
+	 * @param ave the mean average of the values.
+	 * @return the standard deviation of the provided array of doubles.
+	 */
+	public static double stdev(final double[] values, final double ave) {
 		// Sum the squared differences.
 		double sqDiff = 0;
 		for (int i=0; i<values.length; i++) {
@@ -66,11 +109,29 @@ public class StatsUtils {
 		return Math.sqrt(sqDiff / values.length);
 	}
 	
-	public static double stdev(int[] values) {
+	/**
+	 * Calculates and returns the standard deviation of an array of 
+	 * <code>int</code>. The provided argument must not be null nor an empty 
+	 * array.
+	 * 
+	 * @param values an array of int to calculate the standard deviation of.
+	 * @return the standard deviation of the provided array of ints.
+	 */
+	public static double stdev(final int ... values) {
 		return stdev(values, ave(values));
 	}
 	
-	public static double stdev(int[] values, double ave) {
+	/**
+	 * Calculates and returns the standard deviation of an array of 
+	 * <code>int</code>. The provided <code>values</code>argument must not be
+	 * null nor an empty array. The <code>ave</code> argument supplies the mean
+	 * average of the values if it is known to save calculating it again.
+	 * 
+	 * @param values an array of int to calculate the standard deviation of.
+	 * @param ave the mean average of the values.
+	 * @return the standard deviation of the provided array of ints.
+	 */
+	public static double stdev(final int[] values, final double ave) {
 		// Sum the squared differences.
 		double sqDiff = 0;
 		for (int i=0; i<values.length; i++) {
@@ -81,7 +142,15 @@ public class StatsUtils {
 		return Math.sqrt(sqDiff / values.length);
 	}
 	
-	public static double max(double[] values) {
+	/**
+	 * Calculates and returns the maximum value of an array of 
+	 * <code>double</code>. The provided argument must not be null nor an empty 
+	 * array.
+	 * 
+	 * @param values an array of double to calculate the maximum of.
+	 * @return the maximum value of the provided array of doubles.
+	 */
+	public static double max(final double... values) {
 		//TODO No need for this - use apache commons NumberUtils.
 		double max = Double.MIN_VALUE;
 		for (int i=0; i<values.length; i++) {
@@ -92,7 +161,15 @@ public class StatsUtils {
 		return max;
 	}
 	
-	public static int max(int[] values) {
+	/**
+	 * Calculates and returns the maximum value of an array of 
+	 * <code>int</code>. The provided argument must not be null nor an empty 
+	 * array.
+	 * 
+	 * @param values an array of int to calculate the maximum of.
+	 * @return the maximum value of the provided array of ints.
+	 */
+	public static int max(final int ... values) {
 		//TODO No need for this - use apache commons NumberUtils.
 		int max = Integer.MIN_VALUE;
 		for (int i=0; i<values.length; i++) {
@@ -103,7 +180,15 @@ public class StatsUtils {
 		return max;
 	}
 	
-	public static int maxIndex(double[] values) {
+	/**
+	 * Finds the maximum value of an array of <code>double</code> and returns 
+	 * its index in the array. The provided argument must not be null nor an 
+	 * empty array.
+	 * 
+	 * @param values an array of double.
+	 * @return the index of the maximum value in the provided array of doubles.
+	 */
+	public static int maxIndex(final double[] values) {
 		double max = 0;
 		int maxIndex = -1;
 		for (int i=0; i<values.length; i++) {
@@ -115,7 +200,15 @@ public class StatsUtils {
 		return maxIndex;
 	}
 	
-	public static int maxIndex(int[] values) {
+	/**
+	 * Finds the maximum value of an array of <code>int</code> and returns 
+	 * its index in the array. The provided argument must not be null nor an 
+	 * empty array.
+	 * 
+	 * @param values an array of int.
+	 * @return the index of the maximum value in the provided array of ints.
+	 */
+	public static int maxIndex(final int[] values) {
 		int max = 0;
 		int maxIndex = -1;
 		for (int i=0; i<values.length; i++) {
@@ -127,7 +220,15 @@ public class StatsUtils {
 		return maxIndex;
 	}
 	
-	public static double min(double[] values) {
+	/**
+	 * Calculates and returns the minimum value of an array of 
+	 * <code>double</code>. The provided argument must not be null nor an empty 
+	 * array.
+	 * 
+	 * @param values an array of double to calculate the minimum of.
+	 * @return the minimum value of the provided array of doubles.
+	 */
+	public static double min(final double[] values) {
 		//TODO No need for this - use apache commons NumberUtils.
 		double min = Double.MAX_VALUE;
 		for (int i=0; i<values.length; i++) {
@@ -138,7 +239,15 @@ public class StatsUtils {
 		return min;
 	}
 	
-	public static int min(int[] values) {
+	/**
+	 * Calculates and returns the minimum value of an array of 
+	 * <code>int</code>. The provided argument must not be null nor an empty 
+	 * array.
+	 * 
+	 * @param values an array of int to calculate the minimum of.
+	 * @return the minimum value of the provided array of ints.
+	 */
+	public static int min(final int[] values) {
 		//TODO No need for this - use apache commons NumberUtils.
 		int min = Integer.MAX_VALUE;
 		for (int i=0; i<values.length; i++) {
@@ -149,7 +258,15 @@ public class StatsUtils {
 		return min;
 	}
 	
-	public static int minIndex(double[] values) {
+	/**
+	 * Finds the minimum value of an array of <code>double</code> and returns 
+	 * its index in the array. The provided argument must not be null nor an 
+	 * empty array.
+	 * 
+	 * @param values an array of double.
+	 * @return the index of the minimum value in the provided array of doubles.
+	 */
+	public static int minIndex(final double[] values) {
 		double min = Double.MAX_VALUE;
 		int minIndex = -1;
 		for (int i=0; i<values.length; i++) {
@@ -161,7 +278,15 @@ public class StatsUtils {
 		return minIndex;
 	}
 	
-	public static int minIndex(int[] values) {
+	/**
+	 * Finds the minimum value of an array of <code>int</code> and returns 
+	 * its index in the array. The provided argument must not be null nor an 
+	 * empty array.
+	 * 
+	 * @param values an array of int.
+	 * @return the index of the minimum value in the provided array of ints.
+	 */
+	public static int minIndex(final int[] values) {
 		int min = Integer.MAX_VALUE;
 		int minIndex = -1;
 		for (int i=0; i<values.length; i++) {
@@ -173,12 +298,19 @@ public class StatsUtils {
 		return minIndex;
 	}
 	
-	public static double median(double[] values) {
+	/**
+	 * Calculates and returns the median of an array of <code>double</code>. The
+	 * provided <code>values</code>argument must not be null nor an empty array.
+	 * 
+	 * @param values an array of doubles to calculate the median of.
+	 * @return the median of the provided array of doubles.
+	 */
+	public static double median(final double ... values) {
 		// Sort the array.
 		Arrays.sort(values);
 
 		// Pick out the middle value.
-		int medianIndex = (int) Math.floor(values.length / 2);
+		final int medianIndex = (int) Math.floor(values.length / 2);
 		double median = values[medianIndex-1];
 		
 		// There might have been an even number - use average of 2 medians.
@@ -190,12 +322,19 @@ public class StatsUtils {
 		return median;
 	}
 	
-	public static double median(int[] values) {
+	/**
+	 * Calculates and returns the median of an array of <code>int</code>. The
+	 * provided <code>values</code>argument must not be null nor an empty array.
+	 * 
+	 * @param values an array of int to calculate the median of.
+	 * @return the median of the provided array of ints.
+	 */
+	public static double median(final int ... values) {
 		// Sort the array.
 		Arrays.sort(values);
 		
 		// Pick out the middle value.
-		int medianIndex = (int) Math.floor(values.length / 2);
+		final int medianIndex = (int) Math.floor(values.length / 2);
 		int median = values[medianIndex-1];
 		
 		// There might have been an even number - use average of 2 medians.
@@ -207,21 +346,61 @@ public class StatsUtils {
 		return median;
 	}
 	
-	public static double ci95(double[] values) {
+	/**
+	 * Calculates and returns the 95% confidence interval of an array of 
+	 * <code>double</code>. The returned value represents an interval so the 
+	 * actual interval is +/- the returned value either side of the mean. 
+	 * The provided <code>values</code>argument must not be null nor an empty 
+	 * array.
+	 * 
+	 * @param values an array of double to calculate the 95% confidence interval
+	 * for.
+	 * @return the confidence interval either side of the mean for the provided 
+	 * array of doubles.
+	 */
+	public static double ci95(final double ... values) {
 		return ci95(values, stdev(values));
 	}
 	
-	public static double ci95(double[] values, double stdev) {
+	/**
+	 * Calculates and returns the 95% confidence interval of an array of 
+	 * <code>double</code>. The returned value represents an interval so the 
+	 * actual interval is +/- the returned value either side of the mean. 
+	 * The provided <code>values</code>argument must not be null nor an empty 
+	 * array. The <code>stdev</code> argument supplies the standard deviation
+	 * of the values if it is known to save calculating it again.
+	 * 
+	 * @param values an array of double to calculate the 95% confidence interval
+	 * for.
+	 * @param stdev the standard deviation of the values.
+	 * @return the confidence interval either side of the mean for the provided 
+	 * array of doubles.
+	 */
+	public static double ci95(final double[] values, final double stdev) {
 		double ci = 1.96 * (stdev/Math.sqrt(values.length));
 		
 		return ci;
 	}
 	
-	public static double ci95(int[] values) {
+	public static double ci95(final int ... values) {
 		return ci95(values, stdev(values));
 	}
 	
-	public static double ci95(int[] values, double stdev) {
+	/**
+	 * Calculates and returns the 95% confidence interval of an array of 
+	 * <code>int</code>. The returned value represents an interval so the 
+	 * actual interval is +/- the returned value either side of the mean. 
+	 * The provided <code>values</code>argument must not be null nor an empty 
+	 * array. The <code>stdev</code> argument supplies the standard deviation
+	 * of the values if it is known to save calculating it again.
+	 * 
+	 * @param values an array of int to calculate the 95% confidence interval
+	 * for.
+	 * @param stdev the standard deviation of the values.
+	 * @return the confidence interval either side of the mean for the provided 
+	 * array of ints.
+	 */
+	public static double ci95(final int[] values, final double stdev) {
 		double ci = 1.96 * (stdev/Math.sqrt(values.length));
 		
 		return ci;

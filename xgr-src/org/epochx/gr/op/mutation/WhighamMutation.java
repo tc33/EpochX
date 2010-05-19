@@ -94,7 +94,7 @@ public class WhighamMutation implements GRMutation {
 			parseTree.setNthSymbol(selection, replacement);
 		}
 		
-		FunctionParser parser = new FunctionParser();
+		EpoxParser parser = new EpoxParser();
 		try {
 			parser.parse(parseTree.toString());
 		} catch (MalformedProgramException e) {

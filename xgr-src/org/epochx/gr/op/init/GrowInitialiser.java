@@ -105,7 +105,7 @@ public class GrowInitialiser implements GRInitialiser {
 		
 		buildDerivationTree(parseTree, startRule, 0, depth);
 		
-		return parseTree;		
+		return parseTree;
 	}
 	
 	private void buildDerivationTree(NonTerminalSymbol parseTree, GrammarRule rule, int depth, int maxDepth) {		

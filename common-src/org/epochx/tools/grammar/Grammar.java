@@ -37,14 +37,14 @@ import java.util.*;
  * may be either a GrammarLiteral or a GrammarRule. Terminal symbols 
  * simply have a string value which matches the string from the BNF grammar, 
  * this will become part of the source of any program that uses it. 
- * Non-terminals have a set of Productions, where each GrammarProduction is a valid 
+ * Non-literals have a set of Productions, where each GrammarProduction is a valid 
  * syntax for that non-terminal rule. 
  */
 public class Grammar {
 
 	// Index into the rulesets.
-	private Map<String, GrammarLiteral> terminals;
-	private Map<String, GrammarRule> nonTerminals;
+	private Map<String, GrammarLiteral> literals;
+	private Map<String, GrammarRule> rules;
 	
 	// The starting symbol - the root of the parse tree.
 	private GrammarRule start;
@@ -56,8 +56,8 @@ public class Grammar {
 	 * @param grammarStr a String containing a BNF language grammar.
 	 */
 	public Grammar(String grammarStr) {
-		terminals = new HashMap<String, GrammarLiteral>();
-		nonTerminals = new HashMap<String, GrammarRule>();
+		literals = new HashMap<String, GrammarLiteral>();
+		rules = new HashMap<String, GrammarRule>();
 		
 		parseGrammar(grammarStr);
 	}
@@ -72,17 +72,17 @@ public class Grammar {
 	public Grammar(File grammarFile) {
 		String grammar = readGrammarFile(grammarFile);
 		
-		terminals = new HashMap<String, GrammarLiteral>();
-		nonTerminals = new HashMap<String, GrammarRule>();
+		literals = new HashMap<String, GrammarLiteral>();
+		rules = new HashMap<String, GrammarRule>();
 		
 		parseGrammar(grammar);
 	}
 	
 	/**
 	 * Returns the root of the grammar parse tree. This GrammarNode will be a 
-	 * GrammarRule unless the grammar contains no non-terminals rules.
+	 * GrammarRule unless the grammar contains no non-literals rules.
 	 * The symbol that is returned provides access to the grammar parse tree, 
-	 * by use of it's Productions in the case of non-terminals and values in 
+	 * by use of it's Productions in the case of non-literals and values in 
 	 * the case of terminal symbols.
 	 * 
 	 * @return the starting GrammarNode that is at the root of the grammar parse 
@@ -226,11 +226,11 @@ public class Grammar {
 					} else if (ch == '>') {
 						// Possible end of non-terminal.
 						String symbolName = buffer.toString();
-						if (!nonTerminals.containsKey(symbolName)) {
+						if (!rules.containsKey(symbolName)) {
 							lhs = new GrammarRule(symbolName);
-							nonTerminals.put(symbolName, lhs);
+							rules.put(symbolName, lhs);
 						} else {
-							lhs = nonTerminals.get(symbolName);
+							lhs = rules.get(symbolName);
 							// LHS might have been a production already, but shouldn't have been a LHS.
 							if (lhs.getNoProductions() > 0) {
 								throw new MalformedGrammarException("Duplicate rule: " + symbolName);
@@ -289,14 +289,14 @@ public class Grammar {
 						if (buffer.length() != 0) {
 							String symbolName = buffer.toString();
 							if (terminal) {
-								GrammarLiteral newSymbol = terminals.get(symbolName);
+								GrammarLiteral newSymbol = literals.get(symbolName);
 								if (newSymbol == null) {
 									newSymbol = new GrammarLiteral(symbolName);
-									terminals.put(symbolName, newSymbol);
+									literals.put(symbolName, newSymbol);
 								}
 								grammarProduction.addGrammarNode(newSymbol);
 							} else {
-								/*GrammarNode newSymbol = nonTerminals.get(symbolName);
+								/*GrammarNode newSymbol = rules.get(symbolName);
 								if (newSymbol == null) {
 									newSymbol = new GrammarRule(symbolName);
 								}
@@ -353,10 +353,10 @@ public class Grammar {
 						} else if (!terminal) {
 							// End of non-terminal.
 							String symbolName = buffer.toString();
-							GrammarRule newSymbol = nonTerminals.get(symbolName);
+							GrammarRule newSymbol = rules.get(symbolName);
 							if (newSymbol == null) {
 								newSymbol = new GrammarRule(symbolName);
-								nonTerminals.put(symbolName, newSymbol);
+								rules.put(symbolName, newSymbol);
 							}
 							grammarProduction.addGrammarNode(newSymbol);
 							terminal = true;
@@ -372,10 +372,10 @@ public class Grammar {
 						} else if (buffer.length() != 0) {
 							// Token separator.
 							String symbolName = buffer.toString();
-							GrammarLiteral newSymbol = terminals.get(symbolName);
+							GrammarLiteral newSymbol = literals.get(symbolName);
 							if (newSymbol == null) {
 								newSymbol = new GrammarLiteral(symbolName);
-								terminals.put(symbolName, newSymbol);
+								literals.put(symbolName, newSymbol);
 							}
 							grammarProduction.addGrammarNode(newSymbol);
 							// Clear buffer.
@@ -470,7 +470,7 @@ public class Grammar {
 	}
 	
 	private void setMinDepths() {
-		Collection<GrammarRule> symbols = nonTerminals.values();
+		Collection<GrammarRule> symbols = rules.values();
 		
 		for (GrammarRule nt: symbols) {
 			nt.setMinDepth(getMinDepth(new ArrayList<GrammarRule>(), nt));
@@ -529,10 +529,10 @@ public class Grammar {
 	/**
 	 * Returns a list of the grammars terminal symbols.
 	 * 
-	 * @return a complete list of the terminals in this grammar.
+	 * @return a complete list of the literals in this grammar.
 	 */
-	public List<GrammarLiteral> getTerminals() {
-		return new ArrayList<GrammarLiteral>(terminals.values());
+	public List<GrammarLiteral> getGrammarLiterals() {
+		return new ArrayList<GrammarLiteral>(literals.values());
 	}
 	
 	/**
@@ -543,17 +543,17 @@ public class Grammar {
 	 * @return the terminal symbol with the given name label, or null if a 
 	 * terminal with that name does not exist in the grammar.
 	 */
-	public GrammarLiteral getTerminal(String name) {
-		return terminals.get(name);
+	public GrammarLiteral getGrammarLiteral(String name) {
+		return literals.get(name);
 	}
 	
 	/**
 	 * Returns a list of the grammars non-terminal symbols.
 	 * 
-	 * @return a complete list of the non-terminals in this grammar.
+	 * @return a complete list of the non-literals in this grammar.
 	 */
-	public List<GrammarRule> getNonTerminals() {
-		return new ArrayList<GrammarRule>(nonTerminals.values());
+	public List<GrammarRule> getGrammarRules() {
+		return new ArrayList<GrammarRule>(rules.values());
 	}
 	
 	/**
@@ -564,8 +564,8 @@ public class Grammar {
 	 * @return the non-terminal symbol with the given name label, or null if 
 	 * a non-terminal with that name does not exist in the grammar.
 	 */
-	public GrammarRule getNonTerminal(String name) {
-		return nonTerminals.get(name);
+	public GrammarRule getGrammarRule(String name) {
+		return rules.get(name);
 	}
 	
 	/**

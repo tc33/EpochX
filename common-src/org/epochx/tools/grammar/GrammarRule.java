@@ -28,7 +28,7 @@ import java.util.*;
  * rule of a BNF language grammar. Each non-terminal should have one or more 
  * grammarProductions which are the valid mappings for that rule.
  */
-public class GrammarRule implements GrammarNode {
+public class GrammarRule implements GrammarNode, Cloneable {
 
 	private List<GrammarProduction> grammarProductions;
 	
@@ -205,6 +205,28 @@ public class GrammarRule implements GrammarNode {
 		this.minDepth = minDepth;
 	}
 	
+	@Override
+	public GrammarRule clone() {
+		GrammarRule clone = null;
+		try {
+			clone = (GrammarRule) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		
+		clone.name = this.name;
+		clone.recursive = this.recursive;
+		clone.minDepth = this.minDepth;
+		
+		// Clone the grammar productions (but this will not clone their rules).
+		clone.grammarProductions = new ArrayList<GrammarProduction>(this.grammarProductions.size());
+		for (GrammarProduction p: this.grammarProductions) {
+			clone.grammarProductions.add(p.clone());
+		}
+		
+		return clone;
+	}
+	
 	/**
 	 * Returns a string representation of this non-terminal symbol's rule.
 	 * 
@@ -224,5 +246,5 @@ public class GrammarRule implements GrammarNode {
 			buffer.append(grammarProductions.get(i).toString());
 		}
 		return buffer.toString();
-	}	
+	}
 }

@@ -26,7 +26,7 @@ import java.util.*;
 
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.gp.representation.FunctionParser;
+import org.epochx.gp.representation.EpoxParser;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.ant.*;
 import org.epochx.tools.eval.EpoxEvaluator;
@@ -44,7 +44,7 @@ public class JohnMuirTrail extends GEModel {
 	
 	private Grammar grammar;
 	
-	private FunctionParser parser;
+	private EpoxParser parser;
 	private EpoxEvaluator evaluator;
 	
 	private AntLandscape landscape;
@@ -83,7 +83,7 @@ public class JohnMuirTrail extends GEModel {
 		ant = new Ant(100, landscape);
 		
 		// Construct the evaluator to use.
-		parser = new FunctionParser();
+		parser = new EpoxParser();
 		evaluator = new EpoxEvaluator(parser);
 	}
 	

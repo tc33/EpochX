@@ -28,7 +28,7 @@ import java.util.*;
  * valid mapping of a non-terminal symbol (the left-hand side of a grammar 
  * rule).
  */
-public class GrammarProduction {
+public class GrammarProduction implements Cloneable {
 
 	private List<GrammarNode> grammarNodes;
 	
@@ -82,6 +82,17 @@ public class GrammarProduction {
 	 */
 	public GrammarNode getGrammarNode(int index) {
 		return grammarNodes.get(index);
+	}
+	
+	/**
+	 * Set the grammar node at the specific index, overwriting the current 
+	 * occupant.
+	 * 
+	 * @param index
+	 * @param symbol
+	 */
+	public void setGrammarNode(int index, GrammarNode symbol) {
+		grammarNodes.set(index, symbol);
 	}
 	
 	/**
@@ -159,6 +170,23 @@ public class GrammarProduction {
 		}
 		
 		return recursive;
+	}
+	
+	@Override
+	public GrammarProduction clone() {
+		GrammarProduction clone = null;
+		try {
+			clone = (GrammarProduction) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		
+		// Shallow copy the grammar nodes.
+		clone.grammarNodes = new ArrayList<GrammarNode>(this.grammarNodes);
+		
+		clone.weight = this.weight;
+		
+		return clone;
 	}
 	
 	/**

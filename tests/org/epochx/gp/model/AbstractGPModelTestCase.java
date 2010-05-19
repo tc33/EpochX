@@ -123,7 +123,7 @@ public abstract class AbstractGPModelTestCase extends AbstractModelTestCase {
 	public void testMaxDepthDefault() {
 		GPModel model = getModel();
 		
-		assertEquals("model's default max depth is not 12", 12, model.getMaxDepth());
+		assertEquals("model's default max depth is not 17", 17, model.getMaxDepth());
 	}
 	
 	/**

@@ -96,7 +96,7 @@ public class CartCentering extends GPModel {
 		// Total time taken for all fitness cases in ms.
 		int totalTime = 0;
 
-		/*FunctionParser<Double> parser = new FunctionParser<Double>();
+		/*EpoxParser<Double> parser = new EpoxParser<Double>();
 		parser.addAvailableVariable(varV);
 		parser.addAvailableVariable(varX);
 		Node<Double> nodeTree = parser.parse("GT(MUL(-1.0 X) MUL(V ABS(V)))");

@@ -22,7 +22,7 @@ package org.epochx.gr.model.epox;
 import java.awt.*;
 import java.util.*;
 
-import org.epochx.gp.representation.FunctionParser;
+import org.epochx.gp.representation.EpoxParser;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.representation.CandidateProgram;
@@ -45,7 +45,7 @@ public class SantaFeTrail extends GRModel {
 	
 	private Grammar grammar;
 	
-	private FunctionParser parser;
+	private EpoxParser parser;
 	private EpoxEvaluator evaluator;
 	
 	private AntLandscape landscape;
@@ -84,7 +84,7 @@ public class SantaFeTrail extends GRModel {
 		ant = new Ant(600, landscape);
 		
 		// Construct the evaluator to use.
-		parser = new FunctionParser();
+		parser = new EpoxParser();
 		evaluator = new EpoxEvaluator(parser);
 	}
 	

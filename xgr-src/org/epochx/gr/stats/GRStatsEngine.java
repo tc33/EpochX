@@ -26,6 +26,7 @@ import static org.epochx.stats.StatField.GEN_POPULATION;
 
 import java.util.List;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.stats.*;
@@ -115,7 +116,7 @@ public class GRStatsEngine extends StatsEngine {
 		
 		// Calculate the minimum depth.
 		if (depths != null) {
-			minDepth = StatsUtils.min(depths);
+			minDepth = NumberUtils.min(depths);
 		}
 		
 		return minDepth;
@@ -132,7 +133,7 @@ public class GRStatsEngine extends StatsEngine {
 		
 		// Calculate the maximum depth.
 		if (depths != null) {
-			maxDepth = StatsUtils.max(depths);
+			maxDepth = NumberUtils.max(depths);
 		}
 		
 		return maxDepth;

@@ -21,6 +21,8 @@
  */
 package org.epochx.stats;
 
+import org.apache.commons.lang.math.NumberUtils;
+
 import junit.framework.TestCase;
 
 /**
@@ -28,6 +30,9 @@ import junit.framework.TestCase;
  */
 public class StatsUtilsTest extends TestCase {
 
+	/**
+	 * Tests that an exception is thrown for the average of an empty array.
+	 */
 	public void testAveDoubleEmpty() {
 		try {
 			StatsUtils.ave(new double[0]);
@@ -35,6 +40,9 @@ public class StatsUtilsTest extends TestCase {
 		} catch (IllegalArgumentException e) {}
 	}
 	
+	/**
+	 * Tests that an exception is thrown for the average of an empty array.
+	 */
 	public void testAveIntEmpty() {
 		try {
 			StatsUtils.ave(new int[0]);
@@ -42,4 +50,171 @@ public class StatsUtilsTest extends TestCase {
 		} catch (IllegalArgumentException e) {}
 	}
 	
+	/**
+	 * Tests that an exception is thrown for the standard deviation of an empty
+	 * array.
+	 */
+	public void testStdevDoubleEmpty() {
+		try {
+			StatsUtils.stdev(new double[0]);
+			fail("exception not thrown for standard deviation of an empty array");
+		} catch (IllegalArgumentException e) {}
+	}
+	
+	/**
+	 * Tests that an exception is thrown for the standard deviation of an empty
+	 * array.
+	 */
+	public void testStdevDoubleEmptyAve() {
+		try {
+			StatsUtils.stdev(new double[0], 3.0);
+			fail("exception not thrown for standard deviation of an empty array");
+		} catch (IllegalArgumentException e) {}
+	}
+	
+	/**
+	 * Tests that an exception is thrown for the standard deviation of an empty
+	 * array.
+	 */
+	public void testStdevIntEmpty() {
+		try {
+			StatsUtils.stdev(new int[0]);
+			fail("exception not thrown for standard deviation of an empty array");
+		} catch (IllegalArgumentException e) {}
+	}
+	
+	/**
+	 * Tests that an exception is thrown for the standard deviation of an empty
+	 * array.
+	 */
+	public void testStdevIntEmptyAve() {
+		try {
+			StatsUtils.stdev(new int[0], 3.0);
+			fail("exception not thrown for standard deviation of an empty array");
+		} catch (IllegalArgumentException e) {}
+	}
+	
+	/**
+	 * Tests that an exception is thrown for the maximum index of an empty 
+	 * array.
+	 */
+	public void testMaxIndexDoubleEmpty() {
+		try {
+			StatsUtils.maxIndex(new double[0]);
+			fail("exception not thrown for maximum index of an empty array");
+		} catch (IllegalArgumentException e) {}
+	}
+	
+	/**
+	 * Tests that the value returned from maxIndex is the index for the largest
+	 * value.
+	 */
+	public void testMaxIndexDouble() {
+		double[] values = {0.1, 0.2, 0.3, 0.4};
+		
+		assertEquals("maximum index not for the maximum value", NumberUtils.max(values), values[StatsUtils.maxIndex(values)]);
+	}
+	
+	/**
+	 * Tests that an exception is thrown for the maximum index of an empty 
+	 * array.
+	 */
+	public void testMaxIndexIntEmpty() {
+		try {
+			StatsUtils.maxIndex(new double[0]);
+			fail("exception not thrown for maximum index of an empty array");
+		} catch (IllegalArgumentException e) {}
+	}
+	
+	/**
+	 * Tests that the value returned from maxIndex is the index for the largest
+	 * value.
+	 */
+	public void testMaxIndexInt() {
+		int[] values = {1, 2, 3, 4};
+		
+		assertEquals("maximum index not for the maximum value", NumberUtils.max(values), values[StatsUtils.maxIndex(values)]);
+	}
+	
+	/**
+	 * Tests that an exception is thrown for the minimum index of an empty 
+	 * array.
+	 */
+	public void testMinIndexDoubleEmpty() {
+		try {
+			StatsUtils.minIndex(new double[0]);
+			fail("exception not thrown for minimum index of an empty array");
+		} catch (IllegalArgumentException e) {}
+	}
+	
+	/**
+	 * Tests that the value returned from minIndex is the index for the largest
+	 * value.
+	 */
+	public void testMinIndexDouble() {
+		double[] values = {0.1, 0.2, 0.3, 0.4};
+		
+		assertEquals("minimum index not for the minimum value", NumberUtils.min(values), values[StatsUtils.minIndex(values)]);
+	}
+	
+	/**
+	 * Tests that an exception is thrown for the minimum index of an empty 
+	 * array.
+	 */
+	public void testMinIndexIntEmpty() {
+		try {
+			StatsUtils.minIndex(new double[0]);
+			fail("exception not thrown for minimum index of an empty array");
+		} catch (IllegalArgumentException e) {}
+	}
+	
+	/**
+	 * Tests that the value returned from minIndex is the index for the largest
+	 * value.
+	 */
+	public void testMinIndexInt() {
+		int[] values = {1, 2, 3, 4};
+		
+		assertEquals("minimum index not for the minimum value", NumberUtils.min(values), values[StatsUtils.minIndex(values)]);
+	}
+	
+	/**
+	 * Tests that an exception is thrown for the median of an empty array.
+	 */
+	public void testMedianDoubleEmpty() {
+		try {
+			StatsUtils.median(new double[0]);
+			fail("exception not thrown for median of an empty array");
+		} catch (IllegalArgumentException e) {}
+	}
+	
+	/**
+	 * Tests that an exception is thrown for the median of an empty array.
+	 */
+	public void testMedianIntEmpty() {
+		try {
+			StatsUtils.median(new int[0]);
+			fail("exception not thrown for median of an empty array");
+		} catch (IllegalArgumentException e) {}
+	}
+	
+	/**
+	 * Tests that an exception is thrown for the median of an empty array.
+	 */
+	public void testCi95DoubleEmpty() {
+		try {
+			StatsUtils.ci95(new double[0]);
+			fail("exception not thrown for 95% confidence interval of an empty array");
+		} catch (IllegalArgumentException e) {}
+	}
+	
+	/**
+	 * Tests that an exception is thrown for the median of an empty array.
+	 */
+	public void testCi95IntEmpty() {
+		try {
+			StatsUtils.ci95(new int[0]);
+			fail("exception not thrown for 95% confidence interval of an empty array");
+		} catch (IllegalArgumentException e) {}
+	}
 }

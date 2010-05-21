@@ -26,6 +26,7 @@ import static org.epochx.stats.StatField.GEN_POPULATION;
 
 import java.util.List;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.stats.*;
@@ -125,7 +126,7 @@ public class GEStatsEngine extends StatsEngine {
 		
 		// Calculate the minimum depth.
 		if (depths != null) {
-			minDepth = StatsUtils.min(depths);
+			minDepth = NumberUtils.min(depths);
 		}
 		
 		return minDepth;
@@ -142,7 +143,7 @@ public class GEStatsEngine extends StatsEngine {
 		
 		// Calculate the maximum depth.
 		if (depths != null) {
-			maxDepth = StatsUtils.max(depths);
+			maxDepth = NumberUtils.max(depths);
 		}
 		
 		return maxDepth;
@@ -215,7 +216,7 @@ public class GEStatsEngine extends StatsEngine {
 		
 		// Calculate the minimum length.
 		if (lengths != null) {
-			minLength = StatsUtils.min(lengths);
+			minLength = NumberUtils.min(lengths);
 		}
 		
 		return minLength;
@@ -232,7 +233,7 @@ public class GEStatsEngine extends StatsEngine {
 		
 		// Calculate the maximum length.
 		if (lengths != null) {
-			maxLength = StatsUtils.max(lengths);
+			maxLength = NumberUtils.max(lengths);
 		}
 		
 		return maxLength;

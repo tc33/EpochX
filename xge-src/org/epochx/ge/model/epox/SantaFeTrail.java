@@ -103,7 +103,7 @@ public class SantaFeTrail extends GEModel {
 		
 		if (program.isValid()) {
 			// Evaluate multiple times until all time moves used.
-			while(ant.getMoves() < ant.getMaxMoves()) {
+			while(ant.getTimesteps() < ant.getMaxMoves()) {
 				evaluator.eval(program.getSourceCode(), new String[]{}, new Object[]{});
 			}
 		}

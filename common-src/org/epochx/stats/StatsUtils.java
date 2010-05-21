@@ -54,7 +54,7 @@ public final class StatsUtils {
 		} else {
 			throw new IllegalArgumentException("cannot calculate average of " +
 					"null or empty array of values");
-		}		
+		}
 	}
 	
 	/**
@@ -99,14 +99,18 @@ public final class StatsUtils {
 	 * @return the standard deviation of the provided array of doubles.
 	 */
 	public static double stdev(final double[] values, final double ave) {
-		// Sum the squared differences.
-		double sqDiff = 0;
-		for (int i=0; i<values.length; i++) {
-			sqDiff += Math.pow(values[i] - ave, 2);
+		if ((values != null) && (values.length != 0)) {
+			// Sum the squared differences.
+			double sqDiff = 0;
+			for (int i=0; i<values.length; i++) {
+				sqDiff += Math.pow(values[i] - ave, 2);
+			}
+			
+			// Take the square root of the average.
+			return Math.sqrt(sqDiff / values.length);
+		} else {
+			throw new IllegalArgumentException("cannot calculate standard deviation of null or empty array of values");
 		}
-		
-		// Take the square root of the average.
-		return Math.sqrt(sqDiff / values.length);
 	}
 	
 	/**
@@ -132,52 +136,18 @@ public final class StatsUtils {
 	 * @return the standard deviation of the provided array of ints.
 	 */
 	public static double stdev(final int[] values, final double ave) {
-		// Sum the squared differences.
-		double sqDiff = 0;
-		for (int i=0; i<values.length; i++) {
-			sqDiff += Math.pow(values[i] - ave, 2);
-		}
-		
-		// Take the square root of the average.
-		return Math.sqrt(sqDiff / values.length);
-	}
-	
-	/**
-	 * Calculates and returns the maximum value of an array of 
-	 * <code>double</code>. The provided argument must not be null nor an empty 
-	 * array.
-	 * 
-	 * @param values an array of double to calculate the maximum of.
-	 * @return the maximum value of the provided array of doubles.
-	 */
-	public static double max(final double... values) {
-		//TODO No need for this - use apache commons NumberUtils.
-		double max = Double.MIN_VALUE;
-		for (int i=0; i<values.length; i++) {
-			if (values[i] > max) {
-				max = values[i];
+		if ((values != null) && (values.length != 0)) {
+			// Sum the squared differences.
+			double sqDiff = 0;
+			for (int i=0; i<values.length; i++) {
+				sqDiff += Math.pow(values[i] - ave, 2);
 			}
+			
+			// Take the square root of the average.
+			return Math.sqrt(sqDiff / values.length);
+		} else {
+			throw new IllegalArgumentException("cannot calculate average of null or empty array of values");
 		}
-		return max;
-	}
-	
-	/**
-	 * Calculates and returns the maximum value of an array of 
-	 * <code>int</code>. The provided argument must not be null nor an empty 
-	 * array.
-	 * 
-	 * @param values an array of int to calculate the maximum of.
-	 * @return the maximum value of the provided array of ints.
-	 */
-	public static int max(final int ... values) {
-		//TODO No need for this - use apache commons NumberUtils.
-		int max = Integer.MIN_VALUE;
-		for (int i=0; i<values.length; i++) {
-			if (values[i] > max) {
-				max = values[i];
-			}
-		}
-		return max;
 	}
 	
 	/**
@@ -189,15 +159,19 @@ public final class StatsUtils {
 	 * @return the index of the maximum value in the provided array of doubles.
 	 */
 	public static int maxIndex(final double[] values) {
-		double max = 0;
-		int maxIndex = -1;
-		for (int i=0; i<values.length; i++) {
-			if (values[i] > max) {
-				max = values[i];
-				maxIndex = i;
+		if ((values != null) && (values.length != 0)) {
+			double max = 0;
+			int maxIndex = -1;
+			for (int i=0; i<values.length; i++) {
+				if (values[i] > max) {
+					max = values[i];
+					maxIndex = i;
+				}
 			}
+			return maxIndex;
+		} else {
+			throw new IllegalArgumentException("cannot calculate maximum index of null or empty array of values");
 		}
-		return maxIndex;
 	}
 	
 	/**
@@ -209,55 +183,21 @@ public final class StatsUtils {
 	 * @return the index of the maximum value in the provided array of ints.
 	 */
 	public static int maxIndex(final int[] values) {
-		int max = 0;
-		int maxIndex = -1;
-		for (int i=0; i<values.length; i++) {
-			if (values[i] > max) {
-				max = values[i];
-				maxIndex = i;
+		if ((values != null) && (values.length != 0)) {
+			int max = 0;
+			int maxIndex = -1;
+			for (int i=0; i<values.length; i++) {
+				if (values[i] > max) {
+					max = values[i];
+					maxIndex = i;
+				}
 			}
+			return maxIndex;
+		} else {
+			throw new IllegalArgumentException("cannot calculate maximum index of null or empty array of values");
 		}
-		return maxIndex;
 	}
-	
-	/**
-	 * Calculates and returns the minimum value of an array of 
-	 * <code>double</code>. The provided argument must not be null nor an empty 
-	 * array.
-	 * 
-	 * @param values an array of double to calculate the minimum of.
-	 * @return the minimum value of the provided array of doubles.
-	 */
-	public static double min(final double[] values) {
-		//TODO No need for this - use apache commons NumberUtils.
-		double min = Double.MAX_VALUE;
-		for (int i=0; i<values.length; i++) {
-			if (values[i] < min) {
-				min = values[i];
-			}
-		}
-		return min;
-	}
-	
-	/**
-	 * Calculates and returns the minimum value of an array of 
-	 * <code>int</code>. The provided argument must not be null nor an empty 
-	 * array.
-	 * 
-	 * @param values an array of int to calculate the minimum of.
-	 * @return the minimum value of the provided array of ints.
-	 */
-	public static int min(final int[] values) {
-		//TODO No need for this - use apache commons NumberUtils.
-		int min = Integer.MAX_VALUE;
-		for (int i=0; i<values.length; i++) {
-			if (values[i] < min) {
-				min = values[i];
-			}
-		}
-		return min;
-	}
-	
+
 	/**
 	 * Finds the minimum value of an array of <code>double</code> and returns 
 	 * its index in the array. The provided argument must not be null nor an 
@@ -267,15 +207,19 @@ public final class StatsUtils {
 	 * @return the index of the minimum value in the provided array of doubles.
 	 */
 	public static int minIndex(final double[] values) {
-		double min = Double.MAX_VALUE;
-		int minIndex = -1;
-		for (int i=0; i<values.length; i++) {
-			if (values[i] < min) {
-				min = values[i];
-				minIndex = i;
+		if ((values != null) && (values.length != 0)) {
+			double min = Double.MAX_VALUE;
+			int minIndex = -1;
+			for (int i=0; i<values.length; i++) {
+				if (values[i] < min) {
+					min = values[i];
+					minIndex = i;
+				}
 			}
+			return minIndex;
+		} else {
+			throw new IllegalArgumentException("cannot calculate minimum index of null or empty array of values");
 		}
-		return minIndex;
 	}
 	
 	/**
@@ -287,15 +231,19 @@ public final class StatsUtils {
 	 * @return the index of the minimum value in the provided array of ints.
 	 */
 	public static int minIndex(final int[] values) {
-		int min = Integer.MAX_VALUE;
-		int minIndex = -1;
-		for (int i=0; i<values.length; i++) {
-			if (values[i] < min) {
-				min = values[i];
-				minIndex = i;
+		if ((values != null) && (values.length != 0)) {
+			int min = Integer.MAX_VALUE;
+			int minIndex = -1;
+			for (int i=0; i<values.length; i++) {
+				if (values[i] < min) {
+					min = values[i];
+					minIndex = i;
+				}
 			}
+			return minIndex;
+		} else {
+			throw new IllegalArgumentException("cannot calculate minimum index of null or empty array of values");
 		}
-		return minIndex;
 	}
 	
 	/**
@@ -306,20 +254,24 @@ public final class StatsUtils {
 	 * @return the median of the provided array of doubles.
 	 */
 	public static double median(final double ... values) {
-		// Sort the array.
-		Arrays.sort(values);
-
-		// Pick out the middle value.
-		final int medianIndex = (int) Math.floor(values.length / 2);
-		double median = values[medianIndex-1];
-		
-		// There might have been an even number - use average of 2 medians.
-		if ((values.length % 2) == 0) {
-			median += values[medianIndex];
-			median = median/2;
+		if ((values != null) && (values.length != 0)) {
+			// Sort the array.
+			Arrays.sort(values);
+	
+			// Pick out the middle value.
+			final int medianIndex = (int) Math.floor(values.length / 2);
+			double median = values[medianIndex-1];
+			
+			// There might have been an even number - use average of 2 medians.
+			if ((values.length % 2) == 0) {
+				median += values[medianIndex];
+				median = median/2;
+			}
+			
+			return median;
+		} else {
+			throw new IllegalArgumentException("cannot calculate median of null or empty array of values");
 		}
-		
-		return median;
 	}
 	
 	/**
@@ -330,20 +282,24 @@ public final class StatsUtils {
 	 * @return the median of the provided array of ints.
 	 */
 	public static double median(final int ... values) {
-		// Sort the array.
-		Arrays.sort(values);
-		
-		// Pick out the middle value.
-		final int medianIndex = (int) Math.floor(values.length / 2);
-		int median = values[medianIndex-1];
-		
-		// There might have been an even number - use average of 2 medians.
-		if ((values.length % 2) == 0) {
-			median += values[medianIndex];
-			median = median/2;
+		if ((values != null) && (values.length != 0)) {
+			// Sort the array.
+			Arrays.sort(values);
+			
+			// Pick out the middle value.
+			final int medianIndex = (int) Math.floor(values.length / 2);
+			int median = values[medianIndex-1];
+			
+			// There might have been an even number - use average of 2 medians.
+			if ((values.length % 2) == 0) {
+				median += values[medianIndex];
+				median = median/2;
+			}
+			
+			return median;
+		} else {
+			throw new IllegalArgumentException("cannot calculate median of null or empty array of values");
 		}
-		
-		return median;
 	}
 	
 	/**

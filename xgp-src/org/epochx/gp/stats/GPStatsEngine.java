@@ -26,6 +26,7 @@ import static org.epochx.stats.StatField.GEN_POPULATION;
 
 import java.util.List;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.stats.*;
@@ -167,7 +168,7 @@ public class GPStatsEngine extends StatsEngine {
 		
 		// Calculate the minimum depth.
 		if (depths != null) {
-			minDepth = StatsUtils.min(depths);
+			minDepth = NumberUtils.min(depths);
 		}
 		
 		return minDepth;
@@ -184,7 +185,7 @@ public class GPStatsEngine extends StatsEngine {
 		
 		// Calculate the maximum depth.
 		if (depths != null) {
-			maxDepth = StatsUtils.max(depths);
+			maxDepth = NumberUtils.max(depths);
 		}
 		
 		return maxDepth;
@@ -287,7 +288,7 @@ public class GPStatsEngine extends StatsEngine {
 		
 		// Calculate the minimum length.
 		if (lengths != null) {
-			minLength = StatsUtils.min(lengths);
+			minLength = NumberUtils.min(lengths);
 		}
 		
 		return minLength;
@@ -304,7 +305,7 @@ public class GPStatsEngine extends StatsEngine {
 		
 		// Calculate the maximum length.
 		if (lengths != null) {
-			maxLength = StatsUtils.max(lengths);
+			maxLength = NumberUtils.max(lengths);
 		}
 		
 		return maxLength;
@@ -377,7 +378,7 @@ public class GPStatsEngine extends StatsEngine {
 		
 		// Calculate the minimum number of terminals.
 		if (noTerminals != null) {
-			minNoTerminals = StatsUtils.min(noTerminals);
+			minNoTerminals = NumberUtils.min(noTerminals);
 		}
 		
 		return minNoTerminals;
@@ -394,7 +395,7 @@ public class GPStatsEngine extends StatsEngine {
 		
 		// Calculate the maximum number of terminals.
 		if (noTerminals != null) {
-			maxNoTerminals = StatsUtils.max(noTerminals);
+			maxNoTerminals = NumberUtils.max(noTerminals);
 		}
 		
 		return maxNoTerminals;
@@ -467,7 +468,7 @@ public class GPStatsEngine extends StatsEngine {
 		
 		// Calculate the minimum number of unique terminals.
 		if (noTerminals != null) {
-			minNoDistinctTerminals = StatsUtils.min(noTerminals);
+			minNoDistinctTerminals = NumberUtils.min(noTerminals);
 		}
 		
 		return minNoDistinctTerminals;
@@ -484,7 +485,7 @@ public class GPStatsEngine extends StatsEngine {
 		
 		// Calculate the maximum number of unique terminals.
 		if (noTerminals != null) {
-			maxNoDistinctTerminals = StatsUtils.max(noTerminals);
+			maxNoDistinctTerminals = NumberUtils.max(noTerminals);
 		}
 		
 		return maxNoDistinctTerminals;
@@ -557,7 +558,7 @@ public class GPStatsEngine extends StatsEngine {
 		
 		// Calculate the minimum number of functions.
 		if (noFunctions != null) {
-			minNoFunctions = StatsUtils.min(noFunctions);
+			minNoFunctions = NumberUtils.min(noFunctions);
 		}
 		
 		return minNoFunctions;
@@ -574,7 +575,7 @@ public class GPStatsEngine extends StatsEngine {
 		
 		// Calculate the maximum number of functions.
 		if (noFunctions != null) {
-			maxNoFunctions = StatsUtils.max(noFunctions);
+			maxNoFunctions = NumberUtils.max(noFunctions);
 		}
 		
 		return maxNoFunctions;
@@ -647,7 +648,7 @@ public class GPStatsEngine extends StatsEngine {
 		
 		// Calculate the minimum number of unique functions.
 		if (noFunctions != null) {
-			minNoDistinctFunctions = StatsUtils.min(noFunctions);
+			minNoDistinctFunctions = NumberUtils.min(noFunctions);
 		}
 		
 		return minNoDistinctFunctions;
@@ -664,7 +665,7 @@ public class GPStatsEngine extends StatsEngine {
 		
 		// Calculate the maximum number of unique functions.
 		if (noFunctions != null) {
-			maxNoDistinctFunctions = StatsUtils.max(noFunctions);
+			maxNoDistinctFunctions = NumberUtils.max(noFunctions);
 		}
 		
 		return maxNoDistinctFunctions;

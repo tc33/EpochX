@@ -25,6 +25,7 @@ import static org.epochx.stats.StatField.*;
 
 import java.util.List;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.epochx.core.Model;
 import org.epochx.representation.CandidateProgram;
 
@@ -161,7 +162,7 @@ public class StatsEngine {
 		
 		// Calculate the minimum fitness value.
 		if (fitnesses != null) {
-			minFitness = StatsUtils.min(fitnesses);
+			minFitness = NumberUtils.min(fitnesses);
 		}
 		
 		return minFitness;
@@ -178,7 +179,7 @@ public class StatsEngine {
 		
 		// Calculate the maximum fitness value.
 		if (fitnesses != null) {
-			maxFitness = StatsUtils.max(fitnesses);
+			maxFitness = NumberUtils.max(fitnesses);
 		}
 		
 		return maxFitness;

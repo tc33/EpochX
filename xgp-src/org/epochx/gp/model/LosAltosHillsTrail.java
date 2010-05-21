@@ -112,7 +112,7 @@ public class LosAltosHillsTrail extends GPModel {
 		ant.reset(3000, landscape);
 
 		// Run the ant.
-		while(ant.getMoves() < ant.getMaxMoves()) {
+		while(ant.getTimesteps() < ant.getMaxMoves()) {
 			program.evaluate();
 		}
 

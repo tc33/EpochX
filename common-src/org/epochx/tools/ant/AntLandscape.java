@@ -23,6 +23,7 @@ package org.epochx.tools.ant;
 
 
 import java.awt.*;
+import java.util.*;
 import java.util.List;
 
 /**
@@ -50,9 +51,18 @@ public class AntLandscape {
 	 * @param size the width/height dimensions of the landscape.
 	 * @param foodLocations the location of food pellets upon the landscape.
 	 */
-	public AntLandscape(Dimension size, List<Point> foodLocations) {
+	public AntLandscape(final Dimension size, final List<Point> foodLocations) {
 		this.size = size;
 		this.foodLocations = foodLocations;
+	}
+	
+	/**
+	 * Constructs an AntLandscape with the given dimensions but without any
+	 * food locations.
+	 * @param size the width/height dimensions of the landscape.
+	 */
+	public AntLandscape(final Dimension size) {
+		this(size, new ArrayList<Point>());
 	}
 	
 	/**
@@ -61,7 +71,7 @@ public class AntLandscape {
 	 * dimensions so care should be taken to provide valid locations.
 	 * @param location the x/y co-ordinates of the new item of food.
 	 */
-	public void addFoodLocation(Point location) {
+	public void addFoodLocation(final Point location) {
 		foodLocations.add(location);
 	}
 	
@@ -72,7 +82,7 @@ public class AntLandscape {
 	 * method will do nothing.
 	 * @param location the location of a current food item to be removed.
 	 */
-	public void removeFoodLocation(Point location) {
+	public void removeFoodLocation(final Point location) {
 		foodLocations.remove(location);
 	}
 	
@@ -81,7 +91,7 @@ public class AntLandscape {
 	 * @param location The location in the landscape to test.
 	 * @return true if food is present at the given location, false otherwise.
 	 */
-	public boolean isFoodLocation(Point location) {
+	public boolean isFoodLocation(final Point location) {
 		return foodLocations.contains(location);
 	}
 	
@@ -92,7 +102,7 @@ public class AntLandscape {
 	 * from 0.
 	 * @param foodLocations the location of food pellets upon the landscape.
 	 */
-	public void setFoodLocations(List<Point> foodLocations) {
+	public void setFoodLocations(final List<Point> foodLocations) {
 		this.foodLocations = foodLocations;
 	}
 	
@@ -133,7 +143,7 @@ public class AntLandscape {
 	 * @param location the location to test.
 	 * @return true if the location is a valid position on the landscape.
 	 */
-	public boolean isValidLocation(Point location) {
+	public boolean isValidLocation(final Point location) {
 		return (location.x >= 0) 
 			&& (location.x < size.width) 
 			&& (location.y >= 0) 
@@ -149,7 +159,7 @@ public class AntLandscape {
 	 * @return the next location one move on from the given location in the 
 	 * direction of the provided orientation.
 	 */
-	public Point getNextLocation(Point location, Orientation orientation) {
+	public Point getNextLocation(final Point location, final Orientation orientation) {
 		Point newLocation = new Point(location);
 		
 		switch (orientation) {
@@ -184,7 +194,7 @@ public class AntLandscape {
 	 * @param ant an ant which can be considered to be navigating this 
 	 * landscape.
 	 */
-	public void setAnt(Ant ant) {
+	public void setAnt(final Ant ant) {
 		this.ant = ant;
 	}
 	
@@ -193,7 +203,7 @@ public class AntLandscape {
 	 */
 	@Override
 	public String toString() {
-		StringBuilder buffer = new StringBuilder();
+		final StringBuilder buffer = new StringBuilder();
 		
 		int antX = -1;
 		int antY = -1;

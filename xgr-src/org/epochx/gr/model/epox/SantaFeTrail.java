@@ -100,7 +100,7 @@ public class SantaFeTrail extends GRModel {
 		parser.setAnt(ant);
 		
 		// Evaluate multiple times until all time moves used.
-		while(ant.getMoves() < ant.getMaxMoves()) {
+		while(ant.getTimesteps() < ant.getMaxMoves()) {
 			evaluator.eval(program.getSourceCode(), new String[]{}, new Object[]{});
 		}
 

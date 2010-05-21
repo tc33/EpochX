@@ -31,6 +31,9 @@ import java.awt.Point;
  */
 public class Ant {
     
+    // The landscape that this ant exists within.
+    private AntLandscape landscape;
+	
 	// The compass direction the ant is currently facing to travel.
     private Orientation orientation;
     
@@ -47,39 +50,56 @@ public class Ant {
     // How many food pellets this ant has eaten.
     private int foodEaten;
     
-    // The landscape that this ant exists within.
-    private AntLandscape landscape;
-    
     /**
      * Constructs an Ant object on the given landscape.
      * @param timeSteps the maximum number of time steps the ant is allowed to 
      * move. Turning, moving and skipping all count as one time step.
      * @param landscape the landscape the ant will move through.
      */
-    public Ant(int timeSteps, AntLandscape landscape) {
+    public Ant(final int timeSteps, final AntLandscape landscape) {
         // Initialise the ant.
     	reset(timeSteps, landscape);
     }
     
     /**
-     * Resets the ant, setting it up with a new number of time steps allocated 
+     * Resets this ant, setting it up with a new number of time steps allocated 
      * and a new <code>AntLandscape</code>.
-     * @param timeSteps the maximum number of time steps the ant is allowed to 
+     * @param maxTimeSteps the maximum number of time steps the ant is allowed to 
      * move. Turning, moving and skipping all count as one time step.
-     * @param landscape the landscape the ant will move through.
+     * @param landscape the landscape this ant will move through.
      */
-    public void reset(int timeSteps, AntLandscape landscape) {
-        this.maxTimesteps = timeSteps;
-        this.landscape = landscape;
-    	
-        landscape.setAnt(this);
+    public void reset(final int maxTimeSteps, final AntLandscape landscape) {
+        setMaxTimeSteps(maxTimeSteps);
+        setAntLandscape(landscape);
         
         // Initialise the ant.
     	reset();
     }
     
     /**
-     * Reset the ant using the same number of time steps and on the same 
+     * Sets the maximum number of timesteps this ant is allowed to move. Turning,
+     * moving and skipping all count as one time step.
+     * 
+     * @param maxTimeSteps the maximum number of time steps the ant is allowed to 
+     * move.
+     */
+    public void setMaxTimeSteps(final int maxTimeSteps) {
+    	this.maxTimesteps = maxTimeSteps;
+    }
+    
+    /**
+     * Sets the landscape this ant will navigate.
+     * 
+     * @param landscape the landscape this ant will move through.
+     */
+    public void setAntLandscape(final AntLandscape landscape) {
+    	this.landscape = landscape;
+    	
+    	landscape.setAnt(this);
+    }
+    
+    /**
+     * Resets this ant using the same number of time steps and on the same 
      * <code>AntLandscape</code>.
      */
     public void reset() {
@@ -91,14 +111,14 @@ public class Ant {
     }
     
     /**
-     * Turn the ant to the left relative to its current orientation. For 
+     * Turns this ant to the left relative to its current orientation. For 
      * example, if calling getOrientation() returns EAST before calling this 
      * method it will return NORTH after calling this method. If the ant 
      * has reached its maximum number of allowed time steps then this method 
      * will do nothing.
      */
     public void turnLeft() {
-        // Don't allow the turn it the ant has reached its maximum.
+        // Don't allow the turn if the ant has reached its maximum.
     	if(timesteps >= maxTimesteps) {
             return;
         }
@@ -118,14 +138,14 @@ public class Ant {
     }
     
     /**
-     * Turn the ant to the right relative to its current orientation. For 
+     * Turns this ant to the right relative to its current orientation. For 
      * example, if calling getOrientation() returns EAST before calling this 
      * method it will return SOUTH after calling this method. If the ant 
      * has reached its maximum number of allowed time steps then this method 
      * will do nothing.
      */
     public void turnRight() {
-    	// Don't allow the turn it the ant has reached its maximum.
+    	// Don't allow the turn if the ant has reached its maximum.
     	if(timesteps >= maxTimesteps) {
             return;
         }
@@ -145,14 +165,14 @@ public class Ant {
     }
     
     /**
-     * Moves the ant's position one place in the direction it is currently 
+     * Moves this ant's position one place in the direction it is currently 
      * facing based upon its orientation. If the ant's new location on the 
      * landscape contains a food pellet then the ant will attempt to eat it. 
      * If the ant has reached its maximum number of allowed time steps then 
      * this method will do nothing.
      */
     public void move() {
-    	// Don't allow the move it the ant has reached its maximum.
+    	// Don't allow the move if the ant has reached its maximum.
         if(timesteps>=maxTimesteps) {
             return;
         }
@@ -183,30 +203,20 @@ public class Ant {
                 yLocation = 0;
             }
         }
-        /*
-         * TODO If we update the number of timesteps BEFORE eating then we might 
-         * reach the limit here and not beable to eat. Is that right? Because 
-         * eating doesn't take a timestep. I'm not sure eatFood should test for
-         * max timesteps at all.
-         */
-        timesteps++;
-        
+
         // If the new location has food then eat it.
         if(landscape.isFoodLocation(getLocation())) {
         	this.eatFood();
         	landscape.removeFoodLocation(getLocation());
         }
+        
+        timesteps++;
     }
     
     /**
      * Increments the number of food pellets the ant has eaten.
      */
-    public void eatFood() {
-    	// Don't allow the ant to eat if it has reached its maximum moves.
-    	if(timesteps>=maxTimesteps) {
-            return;
-        }
-    	
+    public void eatFood() {    	
         foodEaten++;
     }
     
@@ -225,7 +235,7 @@ public class Ant {
      * @param x the x axis location of the ant.
      * @param y the Y axis location of the ant.
      */
-    public void setLocation(int x, int y) {
+    public void setLocation(final int x, final int y) {
         xLocation = x;
         yLocation = y;
     }
@@ -235,7 +245,7 @@ public class Ant {
      * skipping all count as one time step.
      * @return The number of time steps the ant has gone through.
      */
-    public int getMoves() {
+    public int getTimesteps() {
         return timesteps;
     }
     
@@ -257,11 +267,11 @@ public class Ant {
     }
     
     /**
-     * Sets the orientation the Ant is to facing. This is the direction the 
+     * Sets the orientation the Ant is to face. This is the direction the 
      * ant will proceed in if the move method is called next.
      * @param orientation The new orientation the ant is to face.
      */
-    public void setOrientation(Orientation orientation) {
+    public void setOrientation(final Orientation orientation) {
         this.orientation = orientation;
     }
     
@@ -295,10 +305,5 @@ public class Ant {
      */
     public int getMaxMoves() {
     	return maxTimesteps;
-    }
-    
-    @Override
-    public String toString() {
-    	return xLocation + ":" + yLocation + " Facing " + orientation + " --- moves = " + timesteps;
     }
 }

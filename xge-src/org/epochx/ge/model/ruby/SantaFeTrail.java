@@ -92,7 +92,7 @@ public class SantaFeTrail extends GEModel {
 		
 		// Evaluate multiple times until all time moves used.
 		Executor evaluator = new RubyEvaluator();
-		while(ant.getMoves() < ant.getMaxMoves()) {
+		while(ant.getTimesteps() < ant.getMaxMoves()) {
 			evaluator.exec(program.getSourceCode(), argNames, argValues);
 		}
 

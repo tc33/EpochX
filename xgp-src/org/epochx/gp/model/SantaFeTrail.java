@@ -91,7 +91,7 @@ public class SantaFeTrail extends GPModel {
 		ant.reset(600, landscape);
 
 		// Run the ant.
-		while(ant.getMoves() < ant.getMaxMoves()) {
+		while(ant.getTimesteps() < ant.getMaxMoves()) {
 			//System.out.println(landscape.toString());
 			program.evaluate();
 		}

@@ -1,0 +1,11 @@
+<program> ::= <line> | <program> <line>
+
+<line> ::= <declaration>
+
+<declaration> ::= <data-type> " " @var-decl = <literal> ;
+
+<literal> ::= <boolean-literal> | <int-literal>
+
+<int-literal> ::= @random-int
+
+<boolean-literal> ::= true | false

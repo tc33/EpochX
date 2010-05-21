@@ -32,13 +32,15 @@ public class GrammarLiteral implements GrammarNode {
 
 	private String value;
 	
+	private boolean dynamic;
+	
 	/**
 	 * Constructs a terminal symbol with the specified value.
 	 * 
 	 * @param value snippet of source that this terminal represents.
 	 */
 	public GrammarLiteral(String value) {
-		this.value = value;
+		setValue(value);
 	}
 	
 	/**
@@ -51,6 +53,31 @@ public class GrammarLiteral implements GrammarNode {
 	}
 	
 	/**
+	 * Sets the value of this terminal symbol.
+	 * 
+	 * @param value the new value to set for this terminal.
+	 */
+	public void setValue(String value) {
+		this.value = value;
+		
+		dynamic = value.startsWith("@");
+	}
+	
+	/**
+	 * Returns true if this grammar literal is a dynamic literal - that is, the 
+	 * value should be generated at parse tree construction.
+	 * 
+	 * Currently a dynamic node is defined to be one that starts with an '@' 
+	 * character.
+	 *  
+	 * @return true if this grammar literal has a dynamic value as defined 
+	 * above, and false otherwise.
+	 */
+	public boolean isDynamic() {
+		return dynamic;
+	}
+	
+	/**
 	 * Return a string representation of this terminal symbol.
 	 * 
 	 * @return a string representation of this terminal symbol.
@@ -59,5 +86,4 @@ public class GrammarLiteral implements GrammarNode {
 	public String toString() {
 		return value;
 	}
-
 }

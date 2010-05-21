@@ -329,10 +329,9 @@ public class Grammar {
 						//} else if (special) {
 						if (special) {
 							// This should be the closing '?'.
-							String specialCommand = buffer.toString();
-							// Parse and process the command - only weights supported currently.
-							double weight = Double.parseDouble(specialCommand.trim());
-							grammarProduction.setWeight(weight);							
+							String specialCommand = buffer.toString().trim();
+							// Parse and process the command.
+							processSpecialCommands(specialCommand, grammarProduction);
 						} else if (!terminal) {
 							// This should be the opening '?'.
 							special = true;
@@ -523,6 +522,23 @@ public class Grammar {
 			//current.setMinDepth(minDepth);
 			
 			return minDepth;
+		}
+	}
+	
+	/*
+	 * Only weights supported currently.
+	 */
+	private void processSpecialCommands(String command, GrammarProduction production) {
+		String[] commands = command.split(";");
+		
+		for (String c: commands) {
+			String[] keyAndValue = c.split("=");
+			if (keyAndValue[0].equals("weight")) {
+				double weight = Double.parseDouble(keyAndValue[1]);
+				production.setWeight(weight);
+			} else {
+				production.setAttribute(keyAndValue[0], keyAndValue[1]);
+			}
 		}
 	}
 	

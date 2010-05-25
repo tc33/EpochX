@@ -25,91 +25,91 @@ import org.apache.bsf.*;
 
 
 /**
- * An inline groovy evaluator is for evaluating single line Groovy programs 
- * where the return value is the result of execution of that one nested 
- * statement.
+ * A GroovyInterpreter provides the facility to evaluate individual Groovy 
+ * expressions and execute multi-line Groovy statements. Groovy language 
+ * features up to and including version 1.6 are supported.
  * 
- * <p>In theory it is capable of executing any Groovy program in this 
- * inline form up to and including Groovy 1.6 features. 
- * 
- * <p>This evaluator uses the bean scripting framework and requires access to 
- * the following jars which should all have come with XGE: 
- * <ul>
- * 		<li>antlr-3.1.3.jar
- * 		<li>asm-2.2.jar</li>
- * 		<li>bsf.jar</li>
- * 		<li>commons-lang-2.4.jar</li>
- * 		<li>commons-logging-1.1.jar</li>
- * 		<li>groovy-1.6.3.jar</li>
- * </ul>
+ * <p>
+ * There is no publically visible constructor. A singleton instance is 
+ * maintained which is accessible through the <code>getInstance()</code> method.
  */
 public class GroovyInterpreter implements Interpreter {
+	
+	// Singleton instance.
+	private static GroovyInterpreter instance;
 	
 	// From the Bean Scripting Framework.
 	private BSFManager manager;
 	
-	/**
-	 * Constructs a Groovy evaluator.
+	/*
+	 * Constructs a GroovyInterpreter.
 	 */
-	public GroovyInterpreter() {
+	private GroovyInterpreter() {
 		manager = new BSFManager();
 	}
+	
 	/**
-	 * Evaluates the given program as a one line Ruby statement. The program 
-	 * should have been evolved with a grammar enforcing a subset of the Ruby 
-	 * language syntax, else there are likely to be evaluation errors. 
+	 * Returns a reference to the singleton <code>GroovyInterpreter</code> 
+	 * instance.
 	 * 
-	 * <p>Variables with the specified names and values are automatically 
-	 * declared and initialised before the generated code is run. The argument 
-	 * names link up with the argument value in the same array index, so both 
-	 * arguments must have the same length.
+	 * @return an instance of GroovyInterpreter.
+	 */
+	public static GroovyInterpreter getInstance() {
+		if (instance == null) {
+			instance = new GroovyInterpreter();
+		}
+		
+		return instance;
+	}
+	
+	/**
+	 * Evaluates any valid Groovy expression which may optionally contain the 
+	 * use of any argument named in the <code>argNames</code> array which will 
+	 * be pre-declared and assigned to the associated value taken from the 
+	 * <code>argValues</code> array. The result of evaluating the expression 
+	 * will be returned from this method. The runtime <code>Object</code> return
+	 * type will match the type returned by the expression.
 	 * 
-	 * @param program the CandidateProgram to be executed.
-	 * @param argNames an array of arguments that the argValues should be 
-	 * 				   assigned to. The array should have equal length to the 
-	 * 				   argValues array.
-	 * @param argValues an array of argument values to be assigned to the 
-	 * 				    specified argument names. The array should have equal 
-	 * 				    length to the argNames array.
-	 * @return the return value of the CandidateProgram. The runtime type of 
-	 * the returned Object may vary from program to program.
+	 * @param expression a valid Groovy expression that is to be evaluated.
+	 * @param argNames {@inheritDoc}
+	 * @param argValues {@inheritDoc}
+	 * @return the return value from evaluating the expression.
 	 */
 	@Override
-	public Object eval(String program, String[] argNames, Object[] argValues) {
-        Object[] results = eval(program, argNames, new Object[][]{argValues});
+	public Object eval(final String expression, final String[] argNames, final Object[] argValues) {
+        Object[] results = eval(expression, argNames, new Object[][]{argValues});
 		
         return results[0];
 	}
 	
 	/**
-	 * Evaluates the given program as a one line Ruby statement. The program 
-	 * should have been evolved with a grammar enforcing a subset of the Ruby 
-	 * language syntax, else there are likely to be evaluation errors. 
+	 * Evaluates any valid Groovy expression which may optionally contain the 
+	 * use of any argument named in the <code>argNames</code> array which will 
+	 * be pre-declared and assigned to the associated value taken from the 
+	 * <code>argValues</code> array. The result of evaluating the expression 
+	 * will be returned from this method. The runtime <code>Object</code> return
+	 * type will match the type returned by the expression.
 	 * 
-	 * <p>This version of the eval method executes the CandidateProgram 
+	 * <p>This version of the <code>eval</code> method evaluates the expression 
 	 * multiple times. The variable names remain the same for each evaluation 
 	 * but for each evaluation the variable values will come from the next 
-	 * array in the argValues argument. Ruby variables with the specified names 
-	 * and values are automatically declared and initialised before the 
-	 * generated code is run. The argument names link up with the argument value 
-	 * in the same array index, so both arguments must have the same length.
+	 * array in the <code>argValues</code> argument. Groovy variables with the 
+	 * specified names and values are automatically declared and initialised 
+	 * before the generated code is run. The argument names link up with the 
+	 * argument value in the same array index, so both arguments must have the 
+	 * same length.
 	 * 
-	 * @param program the CandidateProgram to be executed.
-	 * @param argNames an array of arguments that the argValues should be 
-	 * 				   assigned to. The array should have equal length to the 
-	 * 				   argValues array.
-	 * @param argValues argument values to be assigned to the specified argument 
-	 * 					names. Each element is an array of argument values for 
-	 * 					one evaluation. As such there should be argValues.length 
-	 * 					evaluations and argValues.length elements in the 
-	 * 					returned Object array. The array should also have equal 
-	 * 				    length to the argNames array.
-	 * @return the return value of the CandidateProgram. The runtime type of 
-	 * the returned Object may vary from program to program.
+	 * @param expression a valid Java expression that is to be evaluated.
+	 * @param argNames {@inheritDoc}
+	 * @param argValues {@inheritDoc}
+	 * @return the return values from evaluating the expression. The runtime 
+	 * type of the returned Objects may vary from program to program. If the 
+	 * program does not return a value then this method will return an array of 
+	 * nulls.
 	 */
 	@Override
-	public Object[] eval(String program, String[] argNames, Object[][] argValues) {
-		String code = getEvalCode(program, argNames, argValues);
+	public Object[] eval(final String expression, final String[] argNames, final Object[][] argValues) {
+		final String code = getEvalCode(expression, argNames, argValues);
 		
 		Object[] results = null;
 		
@@ -122,21 +122,20 @@ public class GroovyInterpreter implements Interpreter {
             e.printStackTrace();
         }
         
-        // Convert RubyArray to an Object[].
 		return results;
 	}
 
 	/*
 	 * Helper method to the multiple eval.
 	 * 
-	 * Constructs a string representing source code of a Groovy method containing 
-	 * the candidate program source. The class also contains a method call to 
-	 * this method for each of the different variable sets. The result of 
-	 * execution of this class should be an Object array suitable 
+	 * Constructs a string representing source code of a Groovy method 
+	 * containing the expression to be evaluated. The class also contains a 
+	 * method call to this method for each of the different variable sets. The 
+	 * result of execution of this class should be an Object array suitable 
 	 * for returning from eval.
 	 */
-	private String getEvalCode(String source, String[] argNames, Object[][] inputs) {
-        StringBuilder code = new StringBuilder();
+	private String getEvalCode(final String source, final String[] argNames, final Object[][] inputs) {
+        final StringBuilder code = new StringBuilder();
 
         code.append("public class Evaluation {");
         code.append("public Object expr(");
@@ -171,41 +170,43 @@ public class GroovyInterpreter implements Interpreter {
         }
         code.append("return results;");
         
-        //System.out.println(code);
-        
         return code.toString();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public void exec(String program, String[] argNames, Object[] argValues) {
+	public void exec(final String program, final String[] argNames, final Object[] argValues) {
 		exec(program, argNames, new Object[][]{argValues});
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public void exec(String program, String[] argNames, Object[][] argValues) {
-		String code = getExecCode(program, argNames, argValues);
+	public void exec(final String program, final String[] argNames, final Object[][] argValues) {
+		final String code = getExecCode(program, argNames, argValues);
 		
         // Execute.
         try {
         	manager.declareBean("inputs", argValues, Object[][].class);
             manager.exec("groovy", "(groovy)", 0, 0, code);
-        } catch (BSFException e) {
+        } catch (final BSFException e) {
             System.err.println("Exception evaluating code using bsf: " + e);
             e.printStackTrace();
         }
 	}
 	
 	/*
-	 * Helper method to the multiple eval.
+	 * Helper method to the multiple exec.
 	 * 
-	 * Constructs a string representing source code of a Groovy method containing 
-	 * the candidate program source. The class also contains a method call to 
-	 * this method for each of the different variable sets. The result of 
-	 * execution of this class should be an Object array suitable 
-	 * for returning from eval.
+	 * Constructs a string representing source code of a Groovy method 
+	 * containing the program source. The class also contains a method call to 
+	 * this method for each of the different variable sets.
 	 */
-	private String getExecCode(String source, String[] argNames, Object[][] inputs) {
-		StringBuilder code = new StringBuilder();
+	private String getExecCode(final String source, final String[] argNames, final Object[][] inputs) {
+		final StringBuilder code = new StringBuilder();
 
         code.append("public class Execution {");
         code.append("public Object expr(");
@@ -232,8 +233,6 @@ public class GroovyInterpreter implements Interpreter {
         	}
         	code.append(");");
         }
-        
-        //System.out.println(code);
         
         return code.toString();
 	}

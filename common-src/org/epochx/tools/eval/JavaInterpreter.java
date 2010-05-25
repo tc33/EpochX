@@ -34,6 +34,7 @@ import bsh.*;
  * maintained which is accessible through the <code>getInstance()</code> method.
  */
 public class JavaInterpreter implements Interpreter {
+	//TODO Using singleton pattern is nice but will cause some problems when introduce threaded fitness evaluations.
 
 	// Singleton instance.
 	private static JavaInterpreter instance;

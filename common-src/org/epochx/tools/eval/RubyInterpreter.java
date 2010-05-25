@@ -33,18 +33,35 @@ import org.jruby.RubyArray;
  */
 public class RubyInterpreter implements Interpreter {
 
+	// Singleton instance.
+	private static RubyInterpreter instance;
+	
 	// From the Bean Scripting Framework.
 	private BSFManager manager;
 	
-	/**
-	 * Constructs a Ruby evaluator.
+	/*
+	 * Constructs a RubyInterpreter.
 	 */
-	public RubyInterpreter() {
+	private RubyInterpreter() {
 		BSFManager.registerScriptingEngine("ruby", 
 				"org.jruby.javasupport.bsf.JRubyEngine", 
 				new String[] { "rb" });
 		
 		manager = new BSFManager();
+	}
+	
+	/**
+	 * Returns a reference to the singleton <code>GroovyInterpreter</code> 
+	 * instance.
+	 * 
+	 * @return an instance of GroovyInterpreter.
+	 */
+	public static RubyInterpreter getInstance() {
+		if (instance == null) {
+			instance = new RubyInterpreter();
+		}
+		
+		return instance;
 	}
 	
 	/**

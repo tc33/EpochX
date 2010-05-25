@@ -25,7 +25,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.epochx.gr.model.*;
 import org.epochx.gr.representation.*;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.eval.JavaEvaluator;
+import org.epochx.tools.eval.JavaInterpreter;
 import org.epochx.tools.util.BoolUtils;
 
 
@@ -33,14 +33,14 @@ public abstract class EvenParity extends GRModel {
 	
 	private boolean[][] inputs;
 	
-	private JavaEvaluator evaluator;
+	private JavaInterpreter evaluator;
 	
 	private int noInputs;
 	
 	private String[] argNames;
 	
 	public EvenParity(int noInputBits) {		
-		evaluator = new JavaEvaluator();
+		evaluator = JavaInterpreter.getInstance();
 		
 		inputs = BoolUtils.generateBoolSequences(noInputBits);
 		noInputs = (int) Math.pow(2, noInputBits);

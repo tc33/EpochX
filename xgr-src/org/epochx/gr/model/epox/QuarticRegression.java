@@ -19,11 +19,11 @@ public class QuarticRegression extends GRModel {
 	
 	private Grammar grammar;
 	
-	private Evaluator evaluator;
+	private Interpreter interpreter;
 	
 	public QuarticRegression() {
 		grammar = new Grammar(GRAMMAR_STRING);
-		evaluator = new EpoxEvaluator();
+		interpreter = new EpoxInterpreter();
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class QuarticRegression extends GRModel {
         // Execute on all possible inputs.
         double dd = 0;
         for (double x = -1; x < 1; x+=0.1){
-        	Double result = (Double) evaluator.eval(program.getSourceCode(), new String[]{"X"}, new Double[]{x});
+        	Double result = (Double) interpreter.eval(program.getSourceCode(), new String[]{"X"}, new Double[]{x});
         	if (result != null) {
         		dd += Math.abs(result - fun(x));
         	}

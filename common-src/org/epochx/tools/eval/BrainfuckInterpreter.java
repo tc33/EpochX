@@ -23,13 +23,15 @@ package org.epochx.tools.eval;
 
 import java.util.Arrays;
 
-
-public class BrainfuckEvaluator implements Evaluator {
+/**
+ * 
+ */
+public class BrainfuckInterpreter implements Interpreter {
 
 	private byte[] memory;
 	private int pointer;
 	
-	public BrainfuckEvaluator() {
+	public BrainfuckInterpreter() {
 		memory = new byte[30000];
 		pointer = 0;
 	}
@@ -125,5 +127,21 @@ public class BrainfuckEvaluator implements Evaluator {
 		}
 		// There is no closing bracket.
 		return -1;
+	}
+	
+	/**
+	 * Not currently supported by BrainfuckInterpreter. Calling will throw an 
+	 * IllegalStateException.
+	 */
+	public void exec(String program, String[] argNames, Object[] argValues) {
+		throw new IllegalStateException("method not supported");
+	}
+
+	/**
+	 * Not currently supported by BrainfuckInterpreter. Calling will throw an 
+	 * IllegalStateException.
+	 */
+	public void exec(String program, String[] argNames, Object[][] argValues) {
+		throw new IllegalStateException("method not supported");
 	}
 }

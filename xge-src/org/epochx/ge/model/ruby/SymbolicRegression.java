@@ -25,7 +25,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.eval.RubyEvaluator;
+import org.epochx.tools.eval.RubyInterpreter;
 import org.epochx.tools.grammar.Grammar;
 
 
@@ -38,13 +38,13 @@ public class SymbolicRegression extends GEModel {
 	
 	private Grammar grammar;
 	
-	private RubyEvaluator evaluator;
+	private RubyInterpreter evaluator;
 	
 	private double[][] inputs;
 	
 	public SymbolicRegression() {
 		grammar = new Grammar(GRAMMAR_STRING);
-		evaluator = new RubyEvaluator();
+		evaluator = new RubyInterpreter();
 		
 		inputs = generateInputs(-1.0, 1.0, 0.1);
 	}

@@ -45,11 +45,11 @@ public class Majority5 extends GRModel {
 	
 	private boolean[][] inputs;
 	
-	private Evaluator evaluator;
+	private Interpreter interpreter;
 	
 	public Majority5() {
 		grammar = new Grammar(GRAMMAR_STRING);
-		evaluator = new EpoxEvaluator();
+		interpreter = new EpoxInterpreter();
 		
 		inputs = BoolUtils.generateBoolSequences(5);
 	}
@@ -67,7 +67,7 @@ public class Majority5 extends GRModel {
         	// Convert to object array.
         	Boolean[] objVars = ArrayUtils.toObject(vars);
         	
-        	Boolean result = (Boolean) evaluator.eval(program.getSourceCode(), argNames, objVars);
+        	Boolean result = (Boolean) interpreter.eval(program.getSourceCode(), argNames, objVars);
         	
             if (result != null && result == chooseResult(vars)) {
                 score++;

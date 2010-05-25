@@ -43,7 +43,7 @@ import org.apache.bsf.*;
  * 		<li>groovy-1.6.3.jar</li>
  * </ul>
  */
-public class GroovyEvaluator implements Evaluator, Executor {
+public class GroovyInterpreter implements Interpreter {
 	
 	// From the Bean Scripting Framework.
 	private BSFManager manager;
@@ -51,7 +51,7 @@ public class GroovyEvaluator implements Evaluator, Executor {
 	/**
 	 * Constructs a Groovy evaluator.
 	 */
-	public GroovyEvaluator() {
+	public GroovyInterpreter() {
 		manager = new BSFManager();
 	}
 	/**

@@ -25,7 +25,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.eval.GroovyEvaluator;
+import org.epochx.tools.eval.GroovyInterpreter;
 import org.epochx.tools.grammar.Grammar;
 import org.epochx.tools.util.BoolUtils;
 
@@ -42,7 +42,7 @@ public class Even5Parity extends GEModel {
 		"<op> ::= \"|\" | & | ^ \n" +
 		"<var> ::= d0 | d1 | d2 | d3 | d4 \n";
 	
-	private GroovyEvaluator evaluator;
+	private GroovyInterpreter evaluator;
 	
 	private Grammar grammar;
 	
@@ -50,7 +50,7 @@ public class Even5Parity extends GEModel {
 	private boolean[][] inputs;
 	
 	public Even5Parity() {
-		evaluator = new GroovyEvaluator();
+		evaluator = new GroovyInterpreter();
 		grammar = new Grammar(GRAMMAR_STRING);	
 		
 		inputs = BoolUtils.generateBoolSequences(5);

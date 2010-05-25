@@ -91,7 +91,7 @@ public class SantaFeTrail extends GEModel {
 		Object[] argValues = {ant};
 		
 		// Evaluate multiple times until all time moves used.
-		Executor evaluator = new RubyEvaluator();
+		Interpreter evaluator = new RubyInterpreter();
 		while(ant.getTimesteps() < ant.getMaxMoves()) {
 			evaluator.exec(program.getSourceCode(), argNames, argValues);
 		}

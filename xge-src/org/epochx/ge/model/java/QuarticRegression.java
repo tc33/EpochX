@@ -24,7 +24,7 @@ package org.epochx.ge.model.java;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.eval.JavaEvaluator;
+import org.epochx.tools.eval.JavaInterpreter;
 import org.epochx.tools.grammar.Grammar;
 
 
@@ -37,11 +37,11 @@ public class QuarticRegression extends GEModel {
 	
 	private Grammar grammar;
 	
-	private JavaEvaluator evaluator;
+	private JavaInterpreter evaluator;
 	
 	public QuarticRegression() {
 		grammar = new Grammar(GRAMMAR_STRING);
-		evaluator = new JavaEvaluator();
+		evaluator = JavaInterpreter.getInstance();
 	}
 
 	@Override

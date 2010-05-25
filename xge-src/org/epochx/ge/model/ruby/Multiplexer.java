@@ -25,7 +25,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.eval.RubyEvaluator;
+import org.epochx.tools.eval.RubyInterpreter;
 import org.epochx.tools.util.BoolUtils;
 
 
@@ -35,12 +35,12 @@ public abstract class Multiplexer extends GEModel {
 	
 	private int noInputs;
 	
-	private RubyEvaluator evaluator;
+	private RubyInterpreter evaluator;
 	
 	private String[] argNames;
 	
 	public Multiplexer(int noInputBits, int noAddressBits) {
-		evaluator = new RubyEvaluator();
+		evaluator = new RubyInterpreter();
 		
 		inputs = BoolUtils.generateBoolSequences(noInputBits);
 		noInputs = (int) Math.pow(2, noInputBits);

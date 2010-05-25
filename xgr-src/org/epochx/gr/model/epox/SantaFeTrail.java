@@ -27,7 +27,7 @@ import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.ant.*;
-import org.epochx.tools.eval.EpoxEvaluator;
+import org.epochx.tools.eval.EpoxInterpreter;
 import org.epochx.tools.grammar.Grammar;
 
 /**
@@ -46,7 +46,7 @@ public class SantaFeTrail extends GRModel {
 	private Grammar grammar;
 	
 	private EpoxParser parser;
-	private EpoxEvaluator evaluator;
+	private EpoxInterpreter evaluator;
 	
 	private AntLandscape landscape;
 	private Ant ant;
@@ -85,7 +85,7 @@ public class SantaFeTrail extends GRModel {
 		
 		// Construct the evaluator to use.
 		parser = new EpoxParser();
-		evaluator = new EpoxEvaluator(parser);
+		evaluator = new EpoxInterpreter(parser);
 	}
 	
 	@Override

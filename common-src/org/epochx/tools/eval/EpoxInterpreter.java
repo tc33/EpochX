@@ -32,15 +32,15 @@ import org.epochx.gp.representation.*;
  * same syntax as EpochX where the function names (and arity) match functions 
  * in EpochX's function libraries.
  */
-public class EpoxEvaluator implements Evaluator {
+public class EpoxInterpreter implements Interpreter {
 
 	private EpoxParser parser;
 	
-	public EpoxEvaluator() {
+	public EpoxInterpreter() {
 		parser = new EpoxParser();
 	}
 	
-	public EpoxEvaluator(EpoxParser parser) {
+	public EpoxInterpreter(EpoxParser parser) {
 		this.parser = parser;
 	}
 	
@@ -84,4 +84,19 @@ public class EpoxEvaluator implements Evaluator {
 		return results;
 	}
 
+	/**
+	 * Not supported by EpoxInterpreter. Calling will throw an 
+	 * IllegalStateException.
+	 */
+	public void exec(String program, String[] argNames, Object[] argValues) {
+		throw new IllegalStateException("method not supported");
+	}
+
+	/**
+	 * Not supported by EpoxInterpreter. Calling will throw an 
+	 * IllegalStateException.
+	 */
+	public void exec(String program, String[] argNames, Object[][] argValues) {
+		throw new IllegalStateException("method not supported");
+	}
 }

@@ -91,7 +91,7 @@ public class SantaFeTrail extends GRModel {
 		Object[] argValues = {ant};
 		
 		// Evaluate multiple times until all time moves used.
-		Executor executor = new JavaEvaluator();
+		Interpreter executor = JavaInterpreter.getInstance();
 		while(ant.getTimesteps() < ant.getMaxMoves()) {
 			executor.exec(program.getSourceCode(), argNames, argValues);
 		}

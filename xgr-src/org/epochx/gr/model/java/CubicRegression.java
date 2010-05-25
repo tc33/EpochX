@@ -24,7 +24,7 @@ package org.epochx.gr.model.java;
 import org.epochx.gr.model.*;
 import org.epochx.gr.representation.*;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.eval.JavaEvaluator;
+import org.epochx.tools.eval.JavaInterpreter;
 import org.epochx.tools.grammar.Grammar;
 
 public class CubicRegression extends GRModel {
@@ -36,11 +36,11 @@ public class CubicRegression extends GRModel {
 	
 	private Grammar grammar;
 	
-	private JavaEvaluator evaluator;
+	private JavaInterpreter evaluator;
 	
 	public CubicRegression() {
 		grammar = new Grammar(GRAMMAR_STRING);
-		evaluator = new JavaEvaluator();
+		evaluator = JavaInterpreter.getInstance();
 	}
 
 	@Override

@@ -160,7 +160,7 @@ public class AntLandscape {
 	 * direction of the provided orientation.
 	 */
 	public Point getNextLocation(final Point location, final Orientation orientation) {
-		Point newLocation = new Point(location);
+		final Point newLocation = new Point(location);
 		
 		switch (orientation) {
 			case NORTH:

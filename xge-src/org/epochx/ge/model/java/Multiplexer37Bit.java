@@ -25,7 +25,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.eval.JavaEvaluator;
+import org.epochx.tools.eval.JavaInterpreter;
 import org.epochx.tools.grammar.Grammar;
 import org.epochx.tools.util.BoolUtils;
 
@@ -52,11 +52,11 @@ public class Multiplexer37Bit extends GEModel {
 	
 	private boolean[][] inputs;
 	
-	private JavaEvaluator evaluator;
+	private JavaInterpreter evaluator;
 	
 	public Multiplexer37Bit() {
 		grammar = new Grammar(GRAMMAR_STRING);
-		evaluator = new JavaEvaluator();
+		evaluator = JavaInterpreter.getInstance();
 		
 		inputs = BoolUtils.generateBoolSequences(37);
 	}

@@ -40,7 +40,7 @@ public class Sort extends GEModel {
 	
 	private Grammar grammar;
 	
-	private Executor executor;
+	private Interpreter executor;
 	
 	private int[][] testSet;
 	
@@ -58,7 +58,7 @@ public class Sort extends GEModel {
 		setMaxInitialDepth(15);
 		setPoolSize(100);
 		
-		executor = new JavaEvaluator();
+		executor = JavaInterpreter.getInstance();
 		generateTestSet(NO_ELEMENTS, NO_TESTS);
 		
 		fullScore = (NO_ELEMENTS-1) * NO_TESTS;

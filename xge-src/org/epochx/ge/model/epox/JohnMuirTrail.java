@@ -29,7 +29,7 @@ import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.gp.representation.EpoxParser;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.ant.*;
-import org.epochx.tools.eval.EpoxEvaluator;
+import org.epochx.tools.eval.EpoxInterpreter;
 import org.epochx.tools.grammar.Grammar;
 
 public class JohnMuirTrail extends GEModel {
@@ -45,7 +45,7 @@ public class JohnMuirTrail extends GEModel {
 	private Grammar grammar;
 	
 	private EpoxParser parser;
-	private EpoxEvaluator evaluator;
+	private EpoxInterpreter evaluator;
 	
 	private AntLandscape landscape;
 	private Ant ant;
@@ -84,7 +84,7 @@ public class JohnMuirTrail extends GEModel {
 		
 		// Construct the evaluator to use.
 		parser = new EpoxParser();
-		evaluator = new EpoxEvaluator(parser);
+		evaluator = new EpoxInterpreter(parser);
 	}
 	
 	@Override

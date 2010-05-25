@@ -31,7 +31,7 @@ import org.jruby.RubyArray;
  * although the multi-input versions of the evaluator/executor are just about 
  * usable in a useful way.
  */
-public class RubyEvaluator implements Evaluator, Executor {
+public class RubyInterpreter implements Interpreter {
 
 	// From the Bean Scripting Framework.
 	private BSFManager manager;
@@ -39,7 +39,7 @@ public class RubyEvaluator implements Evaluator, Executor {
 	/**
 	 * Constructs a Ruby evaluator.
 	 */
-	public RubyEvaluator() {
+	public RubyInterpreter() {
 		BSFManager.registerScriptingEngine("ruby", 
 				"org.jruby.javasupport.bsf.JRubyEngine", 
 				new String[] { "rb" });

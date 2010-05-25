@@ -45,11 +45,11 @@ public class Multiplexer11Bit extends GEModel {
 	
 	private boolean[][] inputs;
 	
-	private Evaluator evaluator;
+	private Interpreter interpreter;
 	
 	public Multiplexer11Bit() {
 		grammar = new Grammar(GRAMMAR_STRING);
-		evaluator = new EpoxEvaluator();
+		interpreter = new EpoxInterpreter();
 		
 		inputs = BoolUtils.generateBoolSequences(11);
 	}
@@ -67,7 +67,7 @@ public class Multiplexer11Bit extends GEModel {
         	// Convert to object array.
         	Boolean[] objVars = ArrayUtils.toObject(vars);
         	
-        	Boolean result = (Boolean) evaluator.eval(program.getSourceCode(), argNames, objVars);
+        	Boolean result = (Boolean) interpreter.eval(program.getSourceCode(), argNames, objVars);
         	
             if (result != null && result == chooseResult(vars)) {
                 score++;

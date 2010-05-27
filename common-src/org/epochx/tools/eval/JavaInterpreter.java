@@ -57,19 +57,21 @@ public class JavaInterpreter implements Interpreter {
 	 * @param argNames {@inheritDoc}
 	 * @param argValues {@inheritDoc}
 	 * @return the return value from evaluating the expression.
+	 * @throws MalformedProgramException if the given expression is not valid 
+	 * according to the language's syntax rules.
 	 */
 	@Override
-	public Object eval(final String source, final String[] argNames, final Object[] argValues) {		
+	public Object eval(final String expression, final String[] argNames, final Object[] argValues) throws MalformedProgramException {		
 		Object result = null;
 		
-		if (source != null) {
+		if (expression != null) {
 			try {
 				// Declare all the variables.
 				for (int i=0; i<argNames.length; i++) {
 					beanShell.set(argNames[i], argValues[i]);
 				}
 				
-				result = beanShell.eval(source);
+				result = beanShell.eval(expression);
 			} catch (final EvalError e) {
 				throw new MalformedProgramException();
 			}
@@ -100,13 +102,15 @@ public class JavaInterpreter implements Interpreter {
 	 * type of the returned Objects may vary from program to program. If the 
 	 * program does not return a value then this method will return an array of 
 	 * nulls.
+	 * @throws MalformedProgramException if the given expression is not valid 
+	 * according to the language's syntax rules.
 	 */
 	@Override
-	public Object[] eval(final String program, final String[] argNames, final Object[][] argValues) {
+	public Object[] eval(final String expression, final String[] argNames, final Object[][] argValues) throws MalformedProgramException {
 		final Object[] results = new Object[argValues.length];
 		
 		for (int i=0; i<argValues.length; i++) {
-			results[i] = eval(program, argNames, argValues[i]);
+			results[i] = eval(expression, argNames, argValues[i]);
 		}
 		
 		return results;
@@ -116,7 +120,7 @@ public class JavaInterpreter implements Interpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void exec(final String program, final String[] argNames, final Object[] argValues) {
+	public void exec(final String program, final String[] argNames, final Object[] argValues) throws MalformedProgramException {
 		eval(program, argNames, argValues);
 	}
 
@@ -124,7 +128,7 @@ public class JavaInterpreter implements Interpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void exec(final String program, final String[] argNames, final Object[][] argValues) {
+	public void exec(final String program, final String[] argNames, final Object[][] argValues) throws MalformedProgramException {
 		eval(program, argNames, argValues);
 	}
 	

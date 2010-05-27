@@ -65,7 +65,7 @@ public class EpoxInterpreter implements Interpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object eval(final String source, final String[] argNames, final Object[] argValues) {
+	public Object eval(final String source, final String[] argNames, final Object[] argValues) throws MalformedProgramException {
 		if (source == null) {
 			return null;
 		}
@@ -93,7 +93,7 @@ public class EpoxInterpreter implements Interpreter {
 	 */
 	@Override
 	public Object[] eval(final String source, final String[] argNames,
-			Object[][] argValues) {
+			Object[][] argValues) throws MalformedProgramException {
 
 		Object[] results = new Object[argValues.length];
 		

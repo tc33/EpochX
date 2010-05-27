@@ -33,7 +33,7 @@ public class RubyInterpreterTest extends TestCase {
 	/**
 	 * Tests that the eval method can handle simple expressions.
 	 */
-	public void testEval() {
+	public void testEval() throws MalformedProgramException {
 		Interpreter interpreter = new RubyInterpreter();
 		
 		String expression = "(b1 || false) && (s1.to_i < 4.435)";
@@ -53,7 +53,7 @@ public class RubyInterpreterTest extends TestCase {
 	/**
 	 * Tests that the eval method can handle simple expressions.
 	 */
-	public void testMultiEval() {
+	public void testMultiEval() throws MalformedProgramException {
 		Interpreter interpreter = new RubyInterpreter();
 		
 		String expression = "(b1 || false) && (s1.to_i < 4.435)";
@@ -78,7 +78,7 @@ public class RubyInterpreterTest extends TestCase {
 	/**
 	 * Tests that the exec method can execute sequences of statements.
 	 */
-	public void testExec() {
+	public void testExec() throws MalformedProgramException {
 		Interpreter interpreter = new RubyInterpreter();
 		
 		Point p = new Point(2,3);
@@ -96,7 +96,7 @@ public class RubyInterpreterTest extends TestCase {
 	 * Tests that the exec method can execute sequences of statements multiple
 	 * times.
 	 */
-	public void testMultiExec() {
+	public void testMultiExec() throws MalformedProgramException {
 		Interpreter interpreter = new RubyInterpreter();
 		
 		Point p1 = new Point(0,0);

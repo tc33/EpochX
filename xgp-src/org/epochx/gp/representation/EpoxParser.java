@@ -160,7 +160,7 @@ public class EpoxParser {
 		return node;
 	}
 	
-	public Node parse(String source) {
+	public Node parse(String source) throws MalformedProgramException {
 		if (source == null) {
 			return null;
 		}
@@ -294,7 +294,7 @@ public class EpoxParser {
 		return args;
 	}
 	
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		EpoxParser parser = new EpoxParser();
 		
 		//System.out.println(parser.parse("IF(ADD(1,false),NOT(true),false)").toString());
@@ -305,5 +305,5 @@ public class EpoxParser {
 		Node programTree = parser.parse("XOR(OR(d0,d0),NOT(d0))");
 		System.out.println(programTree.toString());
 		System.out.println(programTree.evaluate());
-	}
+	}*/
 }

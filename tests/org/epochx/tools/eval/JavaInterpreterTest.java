@@ -31,7 +31,7 @@ public class JavaInterpreterTest extends TestCase {
 	/**
 	 * Tests that the eval method can handle simple expressions.
 	 */
-	public void testEval() {
+	public void testEval() throws MalformedProgramException {
 		Interpreter interpreter = new JavaInterpreter();
 		
 		String expression = "(b1 || false) && (i1 < 4.435)";
@@ -51,7 +51,7 @@ public class JavaInterpreterTest extends TestCase {
 	/**
 	 * Tests that the eval method can handle multiple simple expressions.
 	 */
-	public void testMultiEval() {
+	public void testMultiEval() throws MalformedProgramException {
 		Interpreter interpreter = new JavaInterpreter();
 		
 		String expression = "(b1 || false) && (i1 < 4.435)";

@@ -31,7 +31,7 @@ public class EpoxInterpreterTest extends TestCase {
 	/**
 	 * Tests that the eval method can handle simple expressions.
 	 */
-	public void testEval() {
+	public void testEval() throws MalformedProgramException {
 		Interpreter interpreter = new EpoxInterpreter();
 		
 		String expression = "AND(OR(b1 false) NOT(false))";
@@ -53,7 +53,7 @@ public class EpoxInterpreterTest extends TestCase {
 	/**
 	 * Tests that the eval method can handle multiple simple expressions.
 	 */
-	public void testMultiEval() {
+	public void testMultiEval() throws MalformedProgramException {
 		Interpreter interpreter = new EpoxInterpreter();
 		
 		String expression = "AND(OR(b1 false) NOT(false))";

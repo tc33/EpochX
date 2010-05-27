@@ -62,8 +62,10 @@ public interface Interpreter {
 	 * 				    length to the argNames array.
 	 * @return the return value from evaluating the expression. The runtime type
 	 * of the returned Object will be depend upon the specific implementation.
+	 * @throws MalformedProgramException if the given expression is not valid 
+	 * according to the language's syntax rules.
 	 */
-	public Object eval(String expression, String[] argNames, Object[] argValues);
+	public Object eval(String expression, String[] argNames, Object[] argValues) throws MalformedProgramException;
 	
 	/**
 	 * Evaluates an expression multiple times with each set of argument values 
@@ -94,8 +96,10 @@ public interface Interpreter {
 	 * @return an array of objects which are the return values from evaluating 
 	 * the expression with each set of argument values. The type of the 
 	 * returned Objects may vary from program to program.
+	 * @throws MalformedProgramException if the given expression is not valid 
+	 * according to the language's syntax rules.
 	 */
-	public Object[] eval(String expression, String[] argNames, Object[][] argValues);
+	public Object[] eval(String expression, String[] argNames, Object[][] argValues) throws MalformedProgramException;
 	
 	/**
 	 * Executes a program which may consist of multiple program statements. The
@@ -111,8 +115,10 @@ public interface Interpreter {
 	 * @param argValues an array of argument values to be assigned to the 
 	 * 				    specified argument names. The array should have equal 
 	 * 				    length to the argNames array.
+	 * @throws MalformedProgramException if the given program is not valid 
+	 * according to the language's syntax rules.
 	 */
-	public void exec(String program, String[] argNames, Object[] argValues);
+	public void exec(String program, String[] argNames, Object[] argValues) throws MalformedProgramException;
 
 	/**
 	 * Executes a program which may consist of multiple program statements, 
@@ -136,6 +142,8 @@ public interface Interpreter {
 	 * 					evaluations and argValues.length elements in the 
 	 * 					returned Object array. The array should also have equal 
 	 * 				    length to the argNames array.
+	 * @throws MalformedProgramException if the given program is not valid 
+	 * according to the language's syntax rules.
 	 */
-	public void exec(String program, String[] argNames, Object[][] argValues);
+	public void exec(String program, String[] argNames, Object[][] argValues) throws MalformedProgramException;
 }

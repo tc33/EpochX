@@ -30,42 +30,42 @@ import javax.script.*;
  * features up to and including version 1.6 are supported.
  * 
  * <p>
- * <code>RubyInterpreter</code> extends from the <code>ScriptingInterpreter
- * </code>, adding ruby specific enhancements, including optimized performance.
+ * <code>GroovyInterpreter</code> extends from the <code>ScriptingInterpreter
+ * </code>, adding Groovy specific enhancements, including optimized performance.
  */
 public class GroovyInterpreter extends ScriptingInterpreter {
 	
-	/*
+	/**
 	 * Constructs a GroovyInterpreter.
 	 */
 	public GroovyInterpreter() {
 		super("groovy");
 	}
 	
-	private String getEvalCode(final String expression, final String[] argNames) {
-        final StringBuilder code = new StringBuilder();
-
-        code.append("public Object expr(");
-        for (int i=0; i<argNames.length; i++) {
-        	if (i > 0) {
-        		code.append(',');
-        	}
-			code.append("Object ");
-			code.append(argNames[i]);
-		}
-        code.append(") {");
-        
-        code.append("return ");
-        code.append(expression);
-        code.append(';');
-
-        code.append("}");
-        
-        return code.toString();
-	}
-	
 	/**
-	 * {@inheritDoc}
+	 * Evaluates any valid Groovy expression which may optionally contain the 
+	 * use of any argument named in the <code>argNames</code> array which will 
+	 * be pre-declared and assigned to the associated value taken from the 
+	 * <code>argValues</code> array. The result of evaluating the expression 
+	 * will be returned from this method. The runtime <code>Object</code> return
+	 * type will match the type returned by the expression.
+	 * 
+	 * <p>This version of the <code>eval</code> method evaluates the expression 
+	 * multiple times. The variable names remain the same for each evaluation 
+	 * but for each evaluation the variable values will come from the next 
+	 * array in the <code>argValues</code> argument. Groovy variables with the 
+	 * specified names and values are automatically declared and initialised 
+	 * before the generated code is run. The argument names link up with the 
+	 * argument value in the same array index, so both arguments must have the 
+	 * same length.
+	 * 
+	 * @param expression a valid Groovy expression that is to be evaluated.
+	 * @param argNames {@inheritDoc}
+	 * @param argValues {@inheritDoc}
+	 * @return the return values from evaluating the expression. The runtime 
+	 * type of the returned Objects may vary from program to program. If the 
+	 * program does not return a value then this method will return an array of 
+	 * nulls.
 	 */
 	@Override
 	public Object[] eval(final String expression, final String[] argNames, final Object[][] argValues) {
@@ -115,6 +115,41 @@ public class GroovyInterpreter extends ScriptingInterpreter {
 		}
 	}
 	
+	/*
+	 * Helper method to the multiple eval.
+	 * 
+	 * Constructs a string representing source code of a Groovy method 
+	 * containing a return statement that returns the result of evaluating
+	 * the given expression.
+	 */
+	private String getEvalCode(final String expression, final String[] argNames) {
+        final StringBuilder code = new StringBuilder();
+
+        code.append("public Object expr(");
+        for (int i=0; i<argNames.length; i++) {
+        	if (i > 0) {
+        		code.append(',');
+        	}
+			code.append("Object ");
+			code.append(argNames[i]);
+		}
+        code.append(") {");
+        
+        code.append("return ");
+        code.append(expression);
+        code.append(';');
+
+        code.append("}");
+        
+        return code.toString();
+	}
+	
+	/*
+	 * Helper method to the multiple exec.
+	 * 
+	 * Constructs a string representing source code of a Groovy method 
+	 * containing the given program.
+	 */
 	private String getExecCode(final String program, final String[] argNames) {
 		final StringBuffer code = new StringBuffer();
 

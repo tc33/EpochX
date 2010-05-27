@@ -24,25 +24,127 @@ package org.epochx.tools.eval;
 import java.util.Arrays;
 
 /**
+ * A BrainfuckInterpreter provides the facility to execute programs in the 
+ * esoteric Brainfuck programming language. Memory is provided in the form of
+ * a 30,000 element byte array which the programs manipulate. The 
+ * <code>eval</code> interpreter functions are not supported since Brainfuck
+ * provides no evaluateable expressions. The <code>exec</code> methods should 
+ * be used, with the memory retrievable after execution. The <code>argValues
+ * </code> given to the <code>exec</code> methods will be used to populate the 
+ * first elements of the memory array in sequence. The <code>argNames</code>
+ * array is not used.
  * 
+ * <h4>Supported language syntax</h4>
+ * 
+ * <table>
+ * <tr>
+ * 		<td>Syntax</td>
+ * 		<td>Effect</td>
+ * </tr>
+ * <tr>
+ * 		<td>&lt;</td>
+ * 		<td>Increments the pointer. The pointer wraps around to 0 if it is to
+ * 			become larger than the memory capacity.</td>
+ * </tr>
+ * <tr>
+ * 		<td>&gt;</td>
+ * 		<td>Decrements the pointer. The pointer wraps around to point to the 
+ * 			last memory address if it would otherwise become negative.</td>
+ * </tr>
+ * <tr>
+ * 		<td>+</td>
+ * 		<td>Increments the value of the memory location addressed by the current
+ * 			pointer.</td>
+ * </tr>
+ * <tr>
+ * 		<td>-</td>
+ * 		<td>Decrements the value of the memory location addressed by the current
+ * 			pointer.</td>
+ * </tr>
+ * <tr>
+ * 		<td>,</td>
+ * 		<td>Not currently supported.</td>
+ * </tr>
+ * <tr>
+ * 		<td>.</td>
+ * 		<td>Not currently supported.</td>
+ * </tr>
+ * <tr>
+ * 		<td>[</td>
+ * 		<td>If value of current memory location is 0 then jump forward to matching ']'.</td>
+ * </tr>
+ * <tr>
+ * 		<td>]</td>
+ * 		<td>Jump back to just before matching '['.</td>
+ * </tr>
+ * </table>
  */
 public class BrainfuckInterpreter implements Interpreter {
 
+	// The indexable memory available to programs.
 	private byte[] memory;
+	
+	// Pointer to current memory address.
 	private int pointer;
 	
+	/**
+	 * Constructs a BrainfuckInterpreter with a 30000 element byte array for 
+	 * memory.
+	 */
 	public BrainfuckInterpreter() {
-		memory = new byte[30000];
+		this(30000);
+	}
+	
+	/**
+	 * Constructs a BrainfuckInterpreter with a byte array for memory with the 
+	 * given capacity.
+	 */
+	public BrainfuckInterpreter(final int memorySize) {
+		memory = new byte[memorySize];
 		pointer = 0;
 	}
 	
+	/*
+	 * Resets the memory array to be filled with 0 bytes, and the pointer to 
+	 * address element 0.
+	 */
 	private void reset() {
 		Arrays.fill(memory, (byte) 0);
 		pointer = 0;
 	}
 	
+	/**
+	 * Not currently supported by BrainfuckInterpreter. Calling will throw an 
+	 * IllegalStateException.
+	 */
 	@Override
 	public Object eval(String program, String[] argNames, Object[] argValues) {
+		throw new IllegalStateException("method not supported");
+	}
+
+	/**
+	 * Not currently supported by BrainfuckInterpreter. Calling will throw an 
+	 * IllegalStateException.
+	 */
+	@Override
+	public Object[] eval(String program, String[] argNames, Object[][] argValues) {
+		throw new IllegalStateException("method not supported");
+	}
+	
+	/**
+	 * Executes the given Brainfuck program upon the memory byte array. The 
+	 * given <code>argValues </code> will be used to populate the first elements
+	 * of the memory array in sequence. All other elements of the memory array 
+	 * will be set to 0 byte and the pointer will also be reset to address 0
+	 * before execution. The <code>argNames</code> argument is not used.
+	 * 
+	 * @param program a valid Brainfuck program that is to be executed
+	 * @param argNames not used in this implementation
+	 * @param argValues an array of values which can be considered the inputs to
+	 * the program. They will populate the first elements of the memory array in
+	 * sequence before execution starts.
+	 */
+	public void exec(final String program, final String[] argNames, final Object[] argValues) {
 		// Reset the environment.
 		reset();
 		
@@ -52,25 +154,38 @@ public class BrainfuckInterpreter implements Interpreter {
 		}
 
 		// Execute the program.
-		execute(program);
-		
-		// Return output as first memory cell.
-		//TODO Consider returning the whole memory array as the result.
-		return memory;
+		execute(program);		
 	}
 
-	@Override
-	public Object[] eval(String program, String[] argNames,
-			Object[][] argValues) {
-		return null;
+	/**
+	 * Executes the given Brainfuck program multiple times with each of the 
+	 * given arrays of values. Each time the program is executed the memory 
+	 * will setup with the next set of variable values as given by the 
+	 * 2-dimensional <code>argValues</code> array.
+	 * 
+	 * @param program a valid Brainfuck program that is to be executed multiple 
+	 * times
+	 * @param argNames not used in this implementation
+	 * @param argValues an array of value arrays, which can be considered the 
+	 * inputs to the program on each call. They will populate the first elements
+	 * of the memory array in sequence each time before execution starts.
+	 */
+	public void exec(final String program, final String[] argNames, final Object[][] argValues) {
+        // Execute each argument set.
+        for (int i=0; i<argValues.length; i++) {
+        	exec(program, argNames, argValues[i]);
+        }
 	}
 
-	private void execute(String source) {
+	/*
+	 * Parses and executes the given source string as a Brainfuck program.
+	 */
+	private void execute(final String source) {
 		if (source == null)
 			return;
 		
 		for (int i=0; i<source.length(); i++) {
-			char c = source.charAt(i);
+			final char c = source.charAt(i);
 			
 			switch (c) {
 			case '>':
@@ -93,6 +208,7 @@ public class BrainfuckInterpreter implements Interpreter {
 				break;
 			case '.':
 				// Not supported.
+				//System.out.print((char) memory[pointer]);
 				break;
 			case '[':
 				int bracketIndex = findClosingBracket(source.substring(i+1)) + (i+1);
@@ -106,15 +222,19 @@ public class BrainfuckInterpreter implements Interpreter {
 				// Implemented as part of '['.
 				break;
 			default:
+				// Ignore all other characters.
 				break;
 			}
 		}
 	}
 	
-	private int findClosingBracket(String source) {
+	/*
+	 * Locate the matching bracket in the given source.
+	 */
+	private int findClosingBracket(final String source) {
 		int open = 1;
 		for (int i=0; i<source.length(); i++) {
-			char c = source.charAt(i);
+			final char c = source.charAt(i);
 			
 			if (c == '[') {
 				open++;
@@ -130,18 +250,12 @@ public class BrainfuckInterpreter implements Interpreter {
 	}
 	
 	/**
-	 * Not currently supported by BrainfuckInterpreter. Calling will throw an 
-	 * IllegalStateException.
+	 * Returns the byte array which is providing indexed memory for the 
+	 * programs. The array will be cleared for each execution.
+	 * 
+	 * @return the program's indexed memory.
 	 */
-	public void exec(String program, String[] argNames, Object[] argValues) {
-		throw new IllegalStateException("method not supported");
-	}
-
-	/**
-	 * Not currently supported by BrainfuckInterpreter. Calling will throw an 
-	 * IllegalStateException.
-	 */
-	public void exec(String program, String[] argNames, Object[][] argValues) {
-		throw new IllegalStateException("method not supported");
+	public byte[] getMemory() {
+		return memory;
 	}
 }

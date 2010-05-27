@@ -1,0 +1,127 @@
+ScriptEngineFactory Info
+	Script Engine: jep (2.4.0)
+	Engine Alias: jep
+	Language: jep (2.4.0)
+ScriptEngineFactory Info
+	Script Engine: Mozilla Rhino (1.6R7)
+	Engine Alias: rhino-nonjdk
+	Engine Alias: js
+	Engine Alias: rhino
+	Engine Alias: JavaScript
+	Engine Alias: javascript
+	Engine Alias: ECMAScript
+	Engine Alias: ecmascript
+	Language: ECMAScript (1.6)
+ScriptEngineFactory Info
+	Script Engine: judo (0.9)
+	Engine Alias: judo
+	Engine Alias: judoscript
+	Engine Alias: JudoScript
+	Language: judo (0.9)
+ScriptEngineFactory Info
+	Script Engine: Groovy Scripting Engine (2.0)
+	Engine Alias: groovy
+	Engine Alias: Groovy
+	Language: Groovy (1.6.3)
+ScriptEngineFactory Info
+	Script Engine: jacl (1.3.3)
+	Engine Alias: jacl
+	Engine Alias: tcl
+	Language: tcl (1.3.3)
+ScriptEngineFactory Info
+	Script Engine: sisc (1.16.6)
+	Engine Alias: scheme
+	Engine Alias: sisc
+	Language: scheme (R5RS)
+ScriptEngineFactory Info
+	Script Engine: groovy (1.6.3)
+	Engine Alias: groovy
+	Language: groovy (1.5.6)
+ScriptEngineFactory Info
+	Script Engine: juel (2.1.0-rc2)
+	Engine Alias: juel
+	Language: JSP 2.1 EL (2.1)
+ScriptEngineFactory Info
+	Script Engine: Mozilla Rhino (1.6 release 2)
+	Engine Alias: ejs
+	Engine Alias: EmbeddedJavaScript
+	Engine Alias: embeddedjavascript
+	Language: EmbeddedECMAScript (1.6)
+ScriptEngineFactory Info
+	Script Engine: Pnuts (3.0)
+	Engine Alias: pnuts
+	Language: Pnuts (1.2)
+ScriptEngineFactory Info
+	Script Engine: jexl (1.0)
+	Engine Alias: jexl
+	Language: jexl (1.0)
+ScriptEngineFactory Info
+	Script Engine: ognl (2.6.9)
+	Engine Alias: ognl
+	Language: ognl (2.6.9)
+ScriptEngineFactory Info
+	Script Engine: JSR 223 JRuby Engine (0.2.1)
+	Engine Alias: ruby
+	Engine Alias: jruby
+	Language: ruby (jruby 1.5.0 (ruby 1.8.7 patchlevel 249) (2010-05-12 6586) (Java HotSpot(TM) 64-Bit Server VM 1.6.0_16) [amd64-java])
+ScriptEngineFactory Info
+	Script Engine: jelly (1.0)
+	Engine Alias: jelly
+	Language: jelly (1.0)
+ScriptEngineFactory Info
+	Script Engine: BeanShell Engine (1.0)
+	Engine Alias: beanshell
+	Engine Alias: bsh
+	Engine Alias: java
+	Language: BeanShell (2.0b5)
+ScriptEngineFactory Info
+	Script Engine: jython (2.2.1)
+	Engine Alias: jython
+	Engine Alias: python
+	Language: python (2.2.1)
+ScriptEngineFactory Info
+	Script Engine: freemarker (2.3.11)
+	Engine Alias: FreeMarker
+	Engine Alias: freemarker
+	Language: freemarker (2.3.11)
+ScriptEngineFactory Info
+	Script Engine: Mozilla Rhino (1.6 release 2)
+	Engine Alias: js
+	Engine Alias: rhino
+	Engine Alias: JavaScript
+	Engine Alias: javascript
+	Engine Alias: ECMAScript
+	Engine Alias: ecmascript
+	Language: ECMAScript (1.6)
+ScriptEngineFactory Info
+	Script Engine: xpath (1.0)
+	Engine Alias: xpath
+	Language: jaxp (1.4)
+ScriptEngineFactory Info
+	Script Engine: java (1.6)
+	Engine Alias: java
+	Language: java (1.6)
+ScriptEngineFactory Info
+	Script Engine: xslt (1.0)
+	Engine Alias: xsl
+	Engine Alias: xslt
+	Language: jaxp (1.4)
+ScriptEngineFactory Info
+	Script Engine: jaskell (1.0)
+	Engine Alias: jaskell
+	Language: jaskell (1.0)
+ScriptEngineFactory Info
+	Script Engine: velocity (1.5)
+	Engine Alias: Velocity
+	Engine Alias: velocity
+	Language: velocity (1.5)
+ScriptEngineFactory Info
+	Script Engine: jawk (0.14)
+	Engine Alias: jawk
+	Engine Alias: awk
+	Language: awk (Awk as specified in OpenGroup's single UNIX spec. Version 2)
+ScriptEngineFactory Info
+	Script Engine: JRuby Engine (1.1.4)
+	Engine Alias: jruby
+	Engine Alias: ruby
+	Language: ruby (1.8.6)

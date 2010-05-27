@@ -35,6 +35,7 @@ import org.epochx.tools.eval.MalformedProgramException;
  * only parse those functions that it knows about.
  */
 public class EpoxParser {
+	//TODO Should be able to cope with parsing commas ',' OR spaces to separate values.
 	
 	// This map is to contain only simple functions that require no additional info.
 	private final Map<String, Class<?>> simpleFunctions;

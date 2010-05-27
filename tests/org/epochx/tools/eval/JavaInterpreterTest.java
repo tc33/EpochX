@@ -32,7 +32,7 @@ public class JavaInterpreterTest extends TestCase {
 	 * Tests that the eval method can handle simple expressions.
 	 */
 	public void testEval() {
-		Interpreter interpreter = JavaInterpreter.getInstance();
+		Interpreter interpreter = new JavaInterpreter();
 		
 		String expression = "(b1 || false) && (i1 < 4.435)";
 		String[] args = {"b1", "i1"};
@@ -52,7 +52,7 @@ public class JavaInterpreterTest extends TestCase {
 	 * Tests that the eval method can handle multiple simple expressions.
 	 */
 	public void testMultiEval() {
-		Interpreter interpreter = JavaInterpreter.getInstance();
+		Interpreter interpreter = new JavaInterpreter();
 		
 		String expression = "(b1 || false) && (i1 < 4.435)";
 		String[] args = {"b1", "i1"};

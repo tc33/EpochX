@@ -21,7 +21,7 @@
  */
 package org.epochx.tools.eval;
 
-import bsh.*;
+import bsh.EvalError;
 
 
 /**
@@ -34,33 +34,15 @@ import bsh.*;
  * maintained which is accessible through the <code>getInstance()</code> method.
  */
 public class JavaInterpreter implements Interpreter {
-	//TODO Using singleton pattern is nice but will cause some problems when introduce threaded fitness evaluations.
 
-	// Singleton instance.
-	private static JavaInterpreter instance;
-	
 	// The bean shell beanShell.
 	private final bsh.Interpreter beanShell;
 	
-	/*
+	/**
 	 * Constructs a JavaInterpreter.
 	 */
-	private JavaInterpreter() {
+	public JavaInterpreter() {
 		beanShell = new bsh.Interpreter();
-	}
-	
-	/**
-	 * Returns a reference to the singleton <code>JavaInterpreter</code> 
-	 * instance.
-	 * 
-	 * @return an instance of JavaInterpreter.
-	 */
-	public static JavaInterpreter getInstance() {
-		if (instance == null) {
-			instance = new JavaInterpreter();
-		}
-		
-		return instance;
 	}
 	
 	/**

@@ -24,30 +24,48 @@ package org.epochx.tools.eval;
 import org.epochx.gp.representation.*;
 
 /**
- * The EpochX evaluator is a special example of an evaluator in that the 
- * language it evaluates is EpochX's version of Lisp. EpochX is a strongly 
- * typed tree-based genetic programming API very similar to XGE. EpochX has 
- * built-in functions which it can piece together in a nested structure like 
- * Lisp. This evaluator is capable of evaluating any program which uses the 
- * same syntax as EpochX where the function names (and arity) match functions 
- * in EpochX's function libraries.
+ * An <code>EpoxInterpreter</code> provides the facility to evaluate individual 
+ * Epox expressions. Epox is the lisp like language used by the tree based 
+ * representation in EpochX. This allows the grammar based representations to 
+ * evolve programs that are directly equivalent to the tree based system.
+ * 
+ * <p>
+ * The program strings are parsed by the <code>EpoxParser</code> into the same 
+ * program trees used by the tree GP aspect of EpochX, which can then be 
+ * evaluated internally. The Epox language is extendable and this interpreter
+ * will correctly evaluate any new functions or data-types which have been added
+ * to the <code>EpoxParser</code> that is used here.
+ * 
+ * @see EpoxParser
  */
 public class EpoxInterpreter implements Interpreter {
 
-	private EpoxParser parser;
+	// The Epox language parser.
+	private final EpoxParser parser;
 	
+	/**
+	 * Constructs a new <code>EpoxInterpreter</code> with a new 
+	 * <code>EpoxParser</code>.
+	 */
 	public EpoxInterpreter() {
 		parser = new EpoxParser();
 	}
 	
-	public EpoxInterpreter(EpoxParser parser) {
+	/**
+	 * Constructs a new <code>EpoxInterpreter</code> using the given parser to
+	 * parse the program strings into Epox program trees for evaluation.
+	 * 
+	 * @param parser the Epox language parser.
+	 */
+	public EpoxInterpreter(final EpoxParser parser) {
 		this.parser = parser;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public Object eval(String source, String[] argNames,
-			Object[] argValues) {
-		
+	public Object eval(final String source, final String[] argNames, final Object[] argValues) {
 		if (source == null) {
 			return null;
 		}
@@ -65,13 +83,16 @@ public class EpoxInterpreter implements Interpreter {
 			}
 		}
 		
-		Node programTree = parser.parse(source);
+		final Node programTree = parser.parse(source);
 		
 		return programTree.evaluate();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public Object[] eval(String source, String[] argNames,
+	public Object[] eval(final String source, final String[] argNames,
 			Object[][] argValues) {
 
 		Object[] results = new Object[argValues.length];
@@ -85,18 +106,27 @@ public class EpoxInterpreter implements Interpreter {
 	}
 
 	/**
-	 * Not supported by EpoxInterpreter. Calling will throw an 
-	 * IllegalStateException.
+	 * Not supported by <code>EpoxInterpreter</code>. Calling will throw an 
+	 * <code>IllegalStateException</code>.
 	 */
-	public void exec(String program, String[] argNames, Object[] argValues) {
+	public void exec(final String program, final String[] argNames, final Object[] argValues) {
 		throw new IllegalStateException("method not supported");
 	}
 
 	/**
-	 * Not supported by EpoxInterpreter. Calling will throw an 
-	 * IllegalStateException.
+	 * Not supported by <code>EpoxInterpreter</code>. Calling will throw an 
+	 * <code>IllegalStateException</code>.
 	 */
-	public void exec(String program, String[] argNames, Object[][] argValues) {
+	public void exec(final String program, final String[] argNames, final Object[][] argValues) {
 		throw new IllegalStateException("method not supported");
+	}
+	
+	/**
+	 * Returns the <code>EpoxParser</code> used to parse the program strings.
+	 * 
+	 * @return the Epox parser
+	 */
+	public EpoxParser getParser() {
+		return parser;
 	}
 }

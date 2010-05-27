@@ -34,7 +34,7 @@ import javax.script.*;
  */
 public class RubyInterpreter extends ScriptingInterpreter {
 	
-	/*
+	/**
 	 * Constructs a RubyInterpreter.
 	 */
 	public RubyInterpreter() {
@@ -63,26 +63,6 @@ public class RubyInterpreter extends ScriptingInterpreter {
 		return result;
 	}
 	
-	private String getEvalCode(final String expression, final String[] argNames) {
-		final StringBuffer code = new StringBuffer();
-
-        code.append("def expr(");
-        for (int i=0; i<argNames.length; i++) {
-        	if (i > 0) {
-        		code.append(',');
-        	}
-			code.append(argNames[i]);
-		}
-        code.append(")\n");
-        
-        code.append("return ");
-        code.append(expression);
-        code.append(";\n");
-        code.append("end\n");
-        
-        return code.toString();
-	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -94,7 +74,7 @@ public class RubyInterpreter extends ScriptingInterpreter {
 		final String code = getEvalCode(expression, argNames);
 		
         
-		Invocable invocableEngine = (Invocable) getEngine();
+		final Invocable invocableEngine = (Invocable) getEngine();
 		try {
 			getEngine().eval(code);
 			
@@ -152,6 +132,39 @@ public class RubyInterpreter extends ScriptingInterpreter {
 		}
 	}
 	
+	/*
+	 * Helper method to the multiple eval.
+	 * 
+	 * Constructs a string representing source code of a Ruby method 
+	 * containing a return statement that returns the result of evaluating
+	 * the given expression.
+	 */
+	private String getEvalCode(final String expression, final String[] argNames) {
+		final StringBuffer code = new StringBuffer();
+
+        code.append("def expr(");
+        for (int i=0; i<argNames.length; i++) {
+        	if (i > 0) {
+        		code.append(',');
+        	}
+			code.append(argNames[i]);
+		}
+        code.append(")\n");
+        
+        code.append("return ");
+        code.append(expression);
+        code.append(";\n");
+        code.append("end\n");
+        
+        return code.toString();
+	}
+	
+	/*
+	 * Helper method to the multiple exec.
+	 * 
+	 * Constructs a string representing source code of a Ruby method 
+	 * containing the given program.
+	 */
 	private String getExecCode(final String program, final String[] argNames) {
 		final StringBuffer code = new StringBuffer();
 

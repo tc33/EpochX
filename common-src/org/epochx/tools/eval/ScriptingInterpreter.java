@@ -24,20 +24,60 @@ package org.epochx.tools.eval;
 import javax.script.*;
 
 /**
+ * The ScriptingInterpreter provides a generic interpreter for any language 
+ * which supports the javax.scripting API (JSR 223). Two constructors are 
+ * provided, one which receives the name of an installed scripting engine or 
+ * one of its aliases, for example "ruby", "jruby" and "javascript" would be 
+ * valid engine names. The second constructor receives a script engine directly
+ * which makes it possible to easily plug in support for new languages by 
+ * implementing a ScriptEngine (or otherwise obtaining an implementation).
  * 
+ * <p>
+ * It is often the case that performance can improved by handling evaluation 
+ * and execution in a language specific way, so subclasses of this class may be 
+ * available for some languages. Where available these language specific 
+ * classes should be used in preference to this general class.
+ * 
+ * <p>
+ * The javax.scripting API was added to Java in version 1.6 and as such this 
+ * class and any subclasses require a 1.6 compatible JRE.
+ * 
+ * @see RubyInterpreter
+ * @see GroovyInterpreter
  */
 public class ScriptingInterpreter implements Interpreter {
 
-	// From the Bean Scripting Framework.
-	private ScriptEngine engine;
+	// The language specific scripting engine.
+	private final ScriptEngine engine;
 	
 	/**
-	 * Constructs a ScriptingInterpreter.
+	 * Constructs a ScriptingInterpreter for a named scripting engine. A list 
+	 * of installed ScriptEngine names can be obtained with the following code:
+	 * 
+	 * <blockquote><code>
+	 * ScriptEngineManager mgr = new ScriptEngineManager();
+	 * List<ScriptEngineFactory> factories = mgr.getEngineFactories();
+	 * List<String> engineNames = new ArrayList<String>();
+	 * for (ScriptEngineFactory factory: factories) {
+	 *     engineNames.addAll(factory.getNames());
+	 * }
+	 * </code></blockquote>
 	 */
-	public ScriptingInterpreter(String engineName) {
-		ScriptEngineManager manager = new ScriptEngineManager();
+	public ScriptingInterpreter(final String engineName) {
+		final ScriptEngineManager manager = new ScriptEngineManager();
 		
 		engine = manager.getEngineByName(engineName);
+		
+		if (engine == null) {
+			throw new IllegalArgumentException("no engine matching alias " + engineName);
+		}
+	}
+	
+	/**
+	 * Constructs a ScriptingInterpreter for the given ScriptEngine.
+	 */
+	public ScriptingInterpreter(final ScriptEngine engine) {
+		this.engine = engine;
 	}
 	
 	/**
@@ -95,6 +135,8 @@ public class ScriptingInterpreter implements Interpreter {
 	}
 	
 	/**
+	 * Returns the scripting engine performing the evaluation and execution.
+	 * 
 	 * @return the script engine
 	 */
 	public ScriptEngine getEngine() {

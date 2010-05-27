@@ -28,6 +28,7 @@ import org.epochx.gp.representation.ant.*;
 import org.epochx.gp.representation.bool.*;
 import org.epochx.gp.representation.dbl.*;
 import org.epochx.tools.ant.Ant;
+import org.epochx.tools.eval.MalformedProgramException;
 
 /**
  * The function parser can parse a nested function into a node tree. It can 

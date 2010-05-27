@@ -89,7 +89,7 @@ public class JavaInterpreter implements Interpreter {
 				
 				result = beanShell.eval(source);
 			} catch (final EvalError e) {
-				throw new InvalidProgramException();
+				throw new MalformedProgramException();
 			}
 		}
 		return result;

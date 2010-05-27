@@ -29,6 +29,7 @@ import org.epochx.gr.op.init.GrowInitialiser;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.tools.eval.MalformedProgramException;
 import org.epochx.tools.grammar.*;
 import org.epochx.tools.random.RandomNumberGenerator;
 
@@ -92,13 +93,6 @@ public class WhighamMutation implements GRMutation {
 			mutatedProgram.setParseTree(replacement);
 		} else {
 			parseTree.setNthSymbol(selection, replacement);
-		}
-		
-		EpoxParser parser = new EpoxParser();
-		try {
-			parser.parse(parseTree.toString());
-		} catch (MalformedProgramException e) {
-			//System.out.println("Malformed program");
 		}
 		
 		return mutatedProgram;

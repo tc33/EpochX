@@ -10,7 +10,7 @@ public class GroovyInterpreterTest extends TestCase {
 	 * Tests that the eval method can handle simple expressions.
 	 */
 	public void testEval() {
-		Interpreter interpreter = GroovyInterpreter.getInstance();
+		Interpreter interpreter = new GroovyInterpreter();
 		
 		String expression = "(b1 || false) && (i1 < 4.435)";
 		String[] args = {"b1", "i1"};
@@ -33,7 +33,7 @@ public class GroovyInterpreterTest extends TestCase {
 	 * Tests that the eval method can handle multiple simple expressions.
 	 */
 	public void testMultiEval() {
-		Interpreter interpreter = GroovyInterpreter.getInstance();
+		Interpreter interpreter = new GroovyInterpreter();
 		
 		String expression = "(b1 || false) && (i1 < 4.435)";
 		String[] args = {"b1", "i1"};
@@ -58,7 +58,7 @@ public class GroovyInterpreterTest extends TestCase {
 	 * Tests that the exec method can execute sequences of statements.
 	 */
 	public void testExec() {
-		Interpreter interpreter = GroovyInterpreter.getInstance();
+		Interpreter interpreter = new GroovyInterpreter();
 		
 		Point p = new Point(2,3);
 
@@ -76,7 +76,7 @@ public class GroovyInterpreterTest extends TestCase {
 	 * times.
 	 */
 	public void testMultiExec() {
-		Interpreter interpreter = GroovyInterpreter.getInstance();
+		Interpreter interpreter = new GroovyInterpreter();
 		
 		Point p1 = new Point(0,0);
 		Point p2 = new Point(-10,-10);

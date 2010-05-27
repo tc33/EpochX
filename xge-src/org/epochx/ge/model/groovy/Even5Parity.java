@@ -50,7 +50,7 @@ public class Even5Parity extends GEModel {
 	private boolean[][] inputs;
 	
 	public Even5Parity() {
-		evaluator = GroovyInterpreter.getInstance();
+		evaluator = new GroovyInterpreter();
 		grammar = new Grammar(GRAMMAR_STRING);	
 		
 		inputs = BoolUtils.generateBoolSequences(5);

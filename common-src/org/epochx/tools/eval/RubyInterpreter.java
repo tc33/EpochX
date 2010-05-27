@@ -21,202 +21,51 @@
  */
 package org.epochx.tools.eval;
 
-import org.apache.bsf.*;
-import org.jruby.RubyArray;
+import javax.script.*;
 
 
 /**
- * This class provides support for the evaluation and execution of Ruby source 
- * code. Both evaluation and execution with this class are currently very slow, 
- * although the multi-input versions of the evaluator/executor are just about 
- * usable in a useful way.
+ * A <code>RubyInterpreter</code> provides the facility to evaluate individual 
+ * Ruby expressions and execute multi-line Ruby statements.
+ * 
+ * <p>
+ * <code>RubyInterpreter</code> extends from the <code>ScriptingInterpreter
+ * </code>, adding ruby specific enhancements, including optimized performance.
  */
-public class RubyInterpreter implements Interpreter {
-
-	// Singleton instance.
-	private static RubyInterpreter instance;
-	
-	// From the Bean Scripting Framework.
-	private BSFManager manager;
+public class RubyInterpreter extends ScriptingInterpreter {
 	
 	/*
 	 * Constructs a RubyInterpreter.
 	 */
-	private RubyInterpreter() {
-		BSFManager.registerScriptingEngine("ruby", 
-				"org.jruby.javasupport.bsf.JRubyEngine", 
-				new String[] { "rb" });
-		
-		manager = new BSFManager();
+	public RubyInterpreter() {
+		super("ruby");
 	}
-	
+
 	/**
-	 * Returns a reference to the singleton <code>GroovyInterpreter</code> 
-	 * instance.
-	 * 
-	 * @return an instance of GroovyInterpreter.
+	 * {@inheritDoc}
 	 */
-	public static RubyInterpreter getInstance() {
-		if (instance == null) {
-			instance = new RubyInterpreter();
+	@Override
+	public Object eval(final String expression, final String[] argNames, final Object[] argValues) {
+		final String code = getEvalCode(expression, argNames);
+
+		Object result = null;
+		
+		Invocable invocableEngine = (Invocable) getEngine();
+		try {
+			getEngine().eval(code);
+		    result = invocableEngine.invokeFunction("expr", argValues);
+		} catch (ScriptException ex) {
+			ex.printStackTrace();
+		} catch (NoSuchMethodException ex) {
+		    ex.printStackTrace();
 		}
-		
-		return instance;
-	}
-	
-	/**
-	 * Evaluates the given program as a one line Ruby statement. The program 
-	 * should have been evolved with a grammar enforcing a subset of the Ruby 
-	 * language syntax, else there are likely to be evaluation errors. 
-	 * 
-	 * <p>Variables with the specified names and values are automatically 
-	 * declared and initialised before the generated code is run. The argument 
-	 * names link up with the argument value in the same array index, so both 
-	 * arguments must have the same length.
-	 * 
-	 * @param program the CandidateProgram to be executed.
-	 * @param argNames an array of arguments that the argValues should be 
-	 * 				   assigned to. The array should have equal length to the 
-	 * 				   argValues array.
-	 * @param argValues an array of argument values to be assigned to the 
-	 * 				    specified argument names. The array should have equal 
-	 * 				    length to the argNames array.
-	 * @return the return value of the CandidateProgram. The runtime type of 
-	 * the returned Object may vary from program to program.
-	 */
-	@Override
-	public Object eval(String program, String[] argNames, Object[] argValues) {
-        Object[] results = eval(program, argNames, new Object[][]{argValues});
-		
-        return results[0];
-	}
-	
-	/**
-	 * Evaluates the given program as a one line Ruby statement. The program 
-	 * should have been evolved with a grammar enforcing a subset of the Ruby 
-	 * language syntax, else there are likely to be evaluation errors. 
-	 * 
-	 * <p>This version of the eval method executes the CandidateProgram 
-	 * multiple times. The variable names remain the same for each evaluation 
-	 * but for each evaluation the variable values will come from the next 
-	 * array in the argValues argument. Ruby variables with the specified names 
-	 * and values are automatically declared and initialised before the 
-	 * generated code is run. The argument names link up with the argument value 
-	 * in the same array index, so both arguments must have the same length.
-	 * 
-	 * @param program the CandidateProgram to be executed.
-	 * @param argNames an array of arguments that the argValues should be 
-	 * 				   assigned to. The array should have equal length to the 
-	 * 				   argValues array.
-	 * @param argValues argument values to be assigned to the specified argument 
-	 * 					names. Each element is an array of argument values for 
-	 * 					one evaluation. As such there should be argValues.length 
-	 * 					evaluations and argValues.length elements in the 
-	 * 					returned Object array. The array should also have equal 
-	 * 				    length to the argNames array.
-	 * @return the return value of the CandidateProgram. The runtime type of 
-	 * the returned Object may vary from program to program.
-	 */
-	@Override
-	public Object[] eval(String program, String[] argNames, Object[][] argValues) {
-		String code = getEvalCode(program, argNames, argValues);
-		
-		RubyArray results = null;
-		
-        //Evaluate
-        try {
-        	manager.declareBean("inputs", argValues, Object[][].class);
-            results = (RubyArray) manager.eval("ruby", "(ruby)", 0, 0, code);
-        } catch (BSFException e) {
-            System.err.println("Exception evaluating code using bsf: " + e);
-            e.printStackTrace();
-        }
-        
-        // Convert RubyArray to an Object[].
-		return results.toArray();
-	}
-	
-	/**
-	 * Executes the given program as a multi-line Ruby statement. The program 
-	 * should have been evolved with a grammar enforcing a subset of the Ruby 
-	 * language syntax, else there are likely to be evaluation errors. 
-	 * 
-	 * <p>Variables with the specified names and values are automatically 
-	 * declared and initialised before the generated code is run. The argument 
-	 * names link up with the argument value in the same array index, so both 
-	 * arguments must have the same length.
-	 * 
-	 * @param program the CandidateProgram to be executed.
-	 * @param argNames an array of arguments that the argValues should be 
-	 * 				   assigned to. The array should have equal length to the 
-	 * 				   argValues array.
-	 * @param argValues an array of argument values to be assigned to the 
-	 * 				    specified argument names. The array should have equal 
-	 * 				    length to the argNames array.
-	 */
-	@Override
-	public void exec(String program, String[] argNames, Object[] argValues) {		
-		exec(program, argNames, new Object[][]{argValues});
-	}
-	
-	/**
-	 * Executes the given program as a multi-line line Ruby statement. The 
-	 * program should have been evolved with a grammar enforcing a subset of 
-	 * the Ruby language syntax, else there are likely to be evaluation 
-	 * errors. 
-	 * 
-	 * <p>This version of the exec method executes the CandidateProgram 
-	 * multiple times. The variable names remain the same for each evaluation 
-	 * but for each evaluation the variable values will come from the next 
-	 * array in the argValues argument. Ruby variables with the specified names 
-	 * and values are automatically declared and initialised before the 
-	 * generated code is run. The argument names link up with the argument value 
-	 * in the same array index, so both arguments must have the same length.
-	 * 
-	 * @param program the CandidateProgram to be executed.
-	 * @param argNames an array of arguments that the argValues should be 
-	 * 				   assigned to. The array should have equal length to the 
-	 * 				   argValues array.
-	 * @param argValues argument values to be assigned to the specified argument 
-	 * 					names. Each element is an array of argument values for 
-	 * 					one evaluation. As such there should be argValues.length 
-	 * 					evaluations and argValues.length elements in the 
-	 * 					returned Object array. The array should also have equal 
-	 * 				    length to the argNames array.
-	 */
-	@Override
-	public void exec(String program, String[] argNames, Object[][] argValues) {
-		String code = getExecCode(program, argNames, argValues);
 
-        //Evaluate
-        try {
-        	manager.declareBean("inputs", argValues, Object[][].class);
-            manager.exec("ruby", "(ruby)", 0, 0, code);
-        } catch (BSFException e) {
-            System.err.println("Exception evaluating code using bsf:" + e);
-            e.printStackTrace();
-        }
+		return result;
 	}
 	
-	/*
-	 * Helper method to the multiple eval.
-	 * 
-	 * Constructs a string representing source code of a Ruby method containing 
-	 * the candidate program source. The class also contains a method call to 
-	 * this method for each of the different variable sets. The result of 
-	 * execution of this class should be an Object array suitable 
-	 * for returning from eval.
-	 * 
-	 * The reason we do eval this long winded way even for single evaluations is
-	 * to avoid the problems with the declared beans being initialised as global
-	 * meaning we need to use $ notation to access them, which means using $ in 
-	 * the grammar - which is fine but is more difficult to use the global $ in 
-	 * the multiple evaluator.
-	 */
-	private String getEvalCode(String source, String[] argNames, Object[][] inputs) {
-        StringBuffer code = new StringBuffer();
+	private String getEvalCode(final String expression, final String[] argNames) {
+		final StringBuffer code = new StringBuffer();
 
-        //code.append("class Evaluation\n");
         code.append("def expr(");
         for (int i=0; i<argNames.length; i++) {
         	if (i > 0) {
@@ -227,52 +76,84 @@ public class RubyInterpreter implements Interpreter {
         code.append(")\n");
         
         code.append("return ");
-        code.append(source);
-        code.append(';');
+        code.append(expression);
+        code.append(";\n");
         code.append("end\n");
-        //code.append("end\n");
-        
-        //code.append("eval = Evaluation.new();");
-        
-        // This is where it gets tricky.       
-        code.append("results = [");
-        for (int i=0; i<inputs.length; i++) {
-        	if (i > 0) code.append(',');
-        	
-        	code.append("expr(");
-        	for (int j=0; j<inputs[i].length; j++) {
-        		if (j > 0) {
-        			code.append(',');
-        		}
-        		code.append("$inputs[" + i + "][" + j + ']');
-        	}
-        	code.append(")");
-        }
-        code.append("];");
-        code.append("return results;");
-        
-        //System.out.println(code);
         
         return code.toString();
 	}
 	
-	/*
-	 * Helper method to the multiple exec.
-	 * 
-	 * Constructs a string representing source code of a Ruby method containing 
-	 * the candidate program source. The class also contains a method call to 
-	 * this method for each of the different variable sets. The result of 
-	 * execution of this class should be an Object array suitable 
-	 * for returning from exec.
-	 * 
-	 * The reason we do exec this long winded way even for single evaluations is
-	 * to avoid the problems with the declared beans being initialised as global
-	 * meaning we need to use $ notation to access them, which means using $ in 
-	 * the grammar - which is fine but is more difficult to use the global $ in 
-	 * the multiple evaluator.
+	/**
+	 * {@inheritDoc}
 	 */
-	private String getExecCode(String source, String[] argNames, Object[][] inputs) {
-		StringBuffer code = new StringBuffer();
+	@Override
+	public Object[] eval(final String expression, final String[] argNames, final Object[][] argValues) {
+		//TODO Might be able to speed this up further by compiling then using invokeMethod.
+		final Object[] results = new Object[argValues.length];
+
+		final String code = getEvalCode(expression, argNames);
+		
+        
+		Invocable invocableEngine = (Invocable) getEngine();
+		try {
+			getEngine().eval(code);
+			
+			// Evaluate each argument set.
+	        for (int i=0; i<results.length; i++) {
+	        	results[i] = invocableEngine.invokeFunction("expr", argValues[i]);
+	        }
+		} catch (ScriptException ex) {
+			ex.printStackTrace();
+		} catch (NoSuchMethodException ex) {
+		    ex.printStackTrace();
+		}
+			        
+		return results;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void exec(final String program, final String[] argNames, final Object[] argValues) {		
+		final String code = getExecCode(program, argNames);
+
+		Invocable invocableEngine = (Invocable) getEngine();
+		try {
+			getEngine().eval(code);
+		    invocableEngine.invokeFunction("expr", argValues);
+		} catch (ScriptException ex) {
+			ex.printStackTrace();
+		} catch (NoSuchMethodException ex) {
+		    ex.printStackTrace();
+		}
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void exec(final String program, final String[] argNames, final Object[][] argValues) {
+		//TODO Might be able to speed this up further by compiling then using invokeMethod.
+		final String code = getExecCode(program, argNames);
+		
+		Invocable invocableEngine = (Invocable) getEngine();
+		try {
+			getEngine().eval(code);
+			
+			// Evaluate each argument set.
+	        for (int i=0; i<argValues.length; i++) {
+	        	invocableEngine.invokeFunction("expr", argValues[i]);
+	        }
+		} catch (ScriptException ex) {
+			ex.printStackTrace();
+		} catch (NoSuchMethodException ex) {
+		    ex.printStackTrace();
+		}
+	}
+	
+	private String getExecCode(final String program, final String[] argNames) {
+		final StringBuffer code = new StringBuffer();
 
         //code.append("class Evaluation\n");
         code.append("def expr(");
@@ -284,22 +165,9 @@ public class RubyInterpreter implements Interpreter {
 		}
         code.append(")\n");
         
-        code.append(source);
-        
-        //code.append("\nend");
-        code.append("\nend");
-        
-        //code.append("\neval = Evaluation.new();\n");
-        for (int i=0; i<inputs.length; i++) {
-        	code.append("\nexpr(");
-        	for (int j=0; j<inputs[i].length; j++) {
-        		if (j > 0) {
-        			code.append(',');
-        		}
-        		code.append("$inputs[" + i + "][" + j + ']');
-        	}
-        	code.append(")");
-        }
+        code.append(program);
+        code.append("\n");
+        code.append("end\n");
         
         return code.toString();
 	}

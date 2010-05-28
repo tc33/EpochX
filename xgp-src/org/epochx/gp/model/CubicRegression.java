@@ -25,6 +25,8 @@ import java.util.*;
 
 import org.epochx.gp.representation.*;
 import org.epochx.gp.representation.dbl.*;
+import org.epochx.gp.stats.GPStatField;
+import org.epochx.life.GenerationAdapter;
 import org.epochx.representation.CandidateProgram;
 
 
@@ -42,10 +44,7 @@ public class CubicRegression extends GPModel {
 	public void configure() {
 		// Create variables.
 		x = new DoubleVariable("X");
-	}
-
-	@Override
-	public List<Node> getSyntax() {
+	
 		// Define function set.
 		List<Node> syntax = new ArrayList<Node>();
 		syntax.add(new AddFunction());
@@ -69,7 +68,7 @@ public class CubicRegression extends GPModel {
 		// Define variables;
 		syntax.add(x);
 		
-		return syntax;
+		setSyntax(syntax);
 	}
 	
 	@Override
@@ -92,5 +91,18 @@ public class CubicRegression extends GPModel {
 	
 	private double getCorrectResult(double x) {
 		return x + (x*x) + (x*x*x);
+	}
+	
+    public static void main(String[] args) {
+		final GPModel model = new CubicRegression();
+		model.setNoGenerations(100);
+		model.setMaxDepth(17);
+		model.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {			
+			@Override
+			public void onGenerationEnd() {
+				model.getStatsManager().printGenerationStats(GPStatField.GEN_NUMBER, GPStatField.GEN_FITNESS_MIN, GPStatField.GEN_FITNESS_AVE);
+			}
+		});
+		model.run();
 	}
 }

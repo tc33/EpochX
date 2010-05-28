@@ -17,11 +17,36 @@
  *  You should have received a copy of the GNU General Public License
  *  along with XGE.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.gr.model.epox;
+package org.epochx.gr.example.epox;
 
 import java.awt.*;
+import java.util.*;
 
-public class JohnMuirTrail extends AntTrail {
+import org.epochx.gp.representation.EpoxParser;
+import org.epochx.gr.model.GRModel;
+import org.epochx.gr.representation.GRCandidateProgram;
+import org.epochx.representation.CandidateProgram;
+import org.epochx.tools.ant.*;
+import org.epochx.tools.eval.EpoxInterpreter;
+import org.epochx.tools.grammar.Grammar;
+
+public class JohnMuirTrail extends GRModel {
+
+	public static final String GRAMMAR_STRING = 
+		"<prog> ::= <node>\n" +
+		"<node> ::= <function> | <terminal>\n" +
+		"<function> ::= IF-FOOD-AHEAD( <node> , <node> ) " +
+					"| SEQ2( <node> , <node> ) " +
+					"| SEQ3( <node> , <node> , <node> )\n" +
+		"<terminal> ::= MOVE() | TURN-LEFT() | TURN-RIGHT()\n";
+	
+	private Grammar grammar;
+	
+	private EpoxParser parser;
+	private EpoxInterpreter evaluator;
+	
+	private AntLandscape landscape;
+	private Ant ant;
 	
 	private static final Point[] foodLocations = {
 		new Point(1,0), new Point(2,0), new Point(3,0), new Point(4,0),
@@ -50,7 +75,40 @@ public class JohnMuirTrail extends AntTrail {
 	};
 	
 	public JohnMuirTrail() {
-		super(foodLocations, new Dimension(32, 32), 100);
+		grammar = new Grammar(GRAMMAR_STRING);
+		
+		landscape = new AntLandscape(new Dimension(32, 32), null);
+		ant = new Ant(100, landscape);
+		
+		// Construct the evaluator to use.
+		parser = new EpoxParser();
+		evaluator = new EpoxInterpreter(parser);
+	}
+	
+	@Override
+	public double getFitness(CandidateProgram p) {
+		GRCandidateProgram program = (GRCandidateProgram) p;
+		
+		// Reset the ant.
+		landscape.setFoodLocations(new ArrayList<Point>(Arrays.asList(foodLocations)));
+		ant.reset(100, landscape);
+
+		//TODO Look at a better solution to the ant parameter problem using executors.
+		parser.setAnt(ant);
+		
+		// Evaluate multiple times until all time moves used.
+		while(ant.getTimesteps() < ant.getMaxMoves()) {
+			evaluator.eval(program.getSourceCode(), new String[]{}, new Object[]{});
+		}
+
+		// Calculate score.
+		double score = (double) (foodLocations.length - ant.getFoodEaten());
+
+		return score;
 	}
 
+	@Override
+	public Grammar getGrammar() {
+		return grammar;
+	}
 }

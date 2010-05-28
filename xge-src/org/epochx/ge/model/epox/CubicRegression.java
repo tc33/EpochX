@@ -54,7 +54,11 @@ public class CubicRegression extends GEModel {
         // Execute on all possible inputs.
         double dd = 0;
         for (double x = -1; x < 1; x+=0.1){
-        	Double result = (Double) interpreter.eval(program.getSourceCode(), new String[]{"X"}, new Double[]{x});
+        	Double result = null;
+        	try {
+        		result = (Double) interpreter.eval(program.getSourceCode(), new String[]{"X"}, new Double[]{x});
+        	} catch (MalformedProgramException e) {}
+        	
         	if (result != null) {
         		dd += Math.abs(result - fun(x));
         	} else {

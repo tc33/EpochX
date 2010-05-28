@@ -28,18 +28,18 @@ import java.util.Arrays;
  * esoteric Brainfuck programming language. Memory is provided in the form of
  * a 30,000 element byte array which the programs manipulate. The 
  * <code>eval</code> interpreter functions are not supported since Brainfuck
- * provides no evaluateable expressions. The <code>exec</code> methods should 
- * be used, with the memory retrievable after execution. The <code>argValues
- * </code> given to the <code>exec</code> methods will be used to populate the 
- * first elements of the memory array in sequence. The <code>argNames</code>
- * array is not used.
+ * provides no expressions that can be evaluated. The <code>exec</code> methods 
+ * should be used, with the memory retrievable after execution. The 
+ * <code>argValues</code> given to the <code>exec</code> methods will be used to
+ * populate the first elements of the memory array in sequence. The 
+ * <code>argNames</code> array is not used.
  * 
  * <h4>Supported language syntax</h4>
  * 
  * <table>
  * <tr>
- * 		<td>Syntax</td>
- * 		<td>Effect</td>
+ * 		<th>Syntax</th>
+ * 		<th>Effect</th>
  * </tr>
  * <tr>
  * 		<td>&lt;</td>
@@ -88,7 +88,7 @@ public class BrainfuckInterpreter implements Interpreter {
 	private int pointer;
 	
 	/**
-	 * Constructs a BrainfuckInterpreter with a 30000 element byte array for 
+	 * Constructs a BrainfuckInterpreter with a 30,000 element byte array for 
 	 * memory.
 	 */
 	public BrainfuckInterpreter() {

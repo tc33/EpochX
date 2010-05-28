@@ -79,7 +79,6 @@ public class LosAltosHillsTrail extends GPModel {
 		new Point(23,56), new Point(22,58), new Point(22,59), new Point(22,60), 
 		new Point(22,61), new Point(22,62), new Point(22,63), new Point(22,64), 
 		new Point(22,65), new Point(22,66)
-		
 	};
 	
 	public LosAltosHillsTrail() {

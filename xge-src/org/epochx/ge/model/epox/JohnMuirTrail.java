@@ -121,9 +121,9 @@ public class JohnMuirTrail extends GEModel {
 			for (int j=0; j<32; j++) {
 				boolean food = false;
 				
-				for (int k=0; k<foodLocations.length; k++) {
-					int x = foodLocations[k].x;
-					int y = foodLocations[k].y;
+				for (int k=0; k<FOOD_LOCATIONS.length; k++) {
+					int x = FOOD_LOCATIONS[k].x;
+					int y = FOOD_LOCATIONS[k].y;
 					
 					if (y == i && x == j) {
 						food = true;

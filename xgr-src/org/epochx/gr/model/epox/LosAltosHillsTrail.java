@@ -24,12 +24,15 @@ package org.epochx.gr.model.epox;
 import java.awt.*;
 
 /**
- * 
+ * XGR model for the Los Altos Hills ant trail problem in the Epox language.
  */
 public class LosAltosHillsTrail extends AntTrail {
 	//TODO We really shouldn't have the food locations listed for every representation/language.
 	
-	private static final Point[] foodLocations = {
+	/**
+	 * The points in the landscape that will be occupied by food.
+	 */
+	public static final Point[] FOOD_LOCATIONS = {
 		new Point(1,0), new Point(2,0), new Point(3,0), new Point(3,1),
 		new Point(3,2), new Point(3,3), new Point(3,4), new Point(3,5),
 		new Point(4,5), new Point(5,5), new Point(6,5), new Point(8,5),
@@ -73,9 +76,11 @@ public class LosAltosHillsTrail extends AntTrail {
 	};
 	
 	/**
-	 * 
+	 * Constructs the ant trail with the necessary food locations on an ant 
+	 * landscape of dimensions 100 x 100. The ant is set to 3000 allowed 
+	 * timesteps.
 	 */
 	public LosAltosHillsTrail() {
-		super(foodLocations, new Dimension(100, 100), 3000);
+		super(FOOD_LOCATIONS, new Dimension(100, 100), 3000);
 	}
 }

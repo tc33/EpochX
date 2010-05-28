@@ -46,10 +46,10 @@ public class AntLandscape {
 	
 	/**
 	 * Constructs an AntLandscape with the given dimensions and food locations.
-	 * To be reachable, foodLocations should refer to points inside the size 
+	 * To be reachable, FOOD_LOCATIONS should refer to points inside the size 
 	 * dimensions where co-ordinate points are indexed from 0.
 	 * @param size the width/height dimensions of the landscape.
-	 * @param foodLocations the location of food pellets upon the landscape.
+	 * @param FOOD_LOCATIONS the location of food pellets upon the landscape.
 	 */
 	public AntLandscape(final Dimension size, final List<Point> foodLocations) {
 		this.size = size;
@@ -97,10 +97,10 @@ public class AntLandscape {
 	
 	/**
 	 * Replaces the current set of food locations with a new set. To be 
-	 * reachable, foodLocations should refer to points inside the size 
+	 * reachable, FOOD_LOCATIONS should refer to points inside the size 
 	 * dimensions of the landscape where co-ordinate points are indexed 
 	 * from 0.
-	 * @param foodLocations the location of food pellets upon the landscape.
+	 * @param FOOD_LOCATIONS the location of food pellets upon the landscape.
 	 */
 	public void setFoodLocations(final List<Point> foodLocations) {
 		this.foodLocations = foodLocations;

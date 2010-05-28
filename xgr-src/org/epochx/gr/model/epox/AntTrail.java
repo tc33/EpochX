@@ -34,11 +34,16 @@ import org.epochx.tools.eval.*;
 import org.epochx.tools.grammar.Grammar;
 
 /**
- * This class provides the general functionality of ant trail models, but does 
- * not itself define a trail. 
+ * Abstract XGR model for ant trail problems in the Epox language. This class 
+ * provides the general functionality of ant trail models, but does not itself 
+ * define a trail. Ant trail models for the Epox language should extend this 
+ * class.
  */
 public abstract class AntTrail extends GRModel {
 
+	/**
+	 * The grammar that defines valid solution space.
+	 */
 	public static final String GRAMMAR_STRING = 
 		"<prog> ::= <node>\n" +
 		"<node> ::= <function> | <terminal>\n" +
@@ -47,17 +52,30 @@ public abstract class AntTrail extends GRModel {
 					"| SEQ3( <node> , <node> , <node> )\n" +
 		"<terminal> ::= MOVE() | TURN-LEFT() | TURN-RIGHT()\n";
 	
+	// Epox interpreter for performing evaluation.
 	private EpoxParser parser;
-	
 	private EpoxInterpreter interpreter;
 	
+	// Ant components.
 	private AntLandscape landscape;
 	private Ant ant;
 	
+	// Trail settings.
 	private List<Point> foodLocations;
-	
 	private final int allowedTimeSteps;
 	
+	/**
+	 * Constructs a new AntTrail with the given <code>FOOD_LOCATIONS</code> which
+	 * must all be positioned at points within the given <code>landscapeSize
+	 * </code>. 
+	 * 
+	 * @param FOOD_LOCATIONS the points on the landscape which will be occupied 
+	 * by food
+	 * @param landscapeSize the dimensions of the landscape that the ant will 
+	 * operate within
+	 * @param allowedTimeSteps the number of moves and turns the ant will be 
+	 * allowed to collect the food before timing out.
+	 */
 	public AntTrail(final Point[] foodLocations, final Dimension landscapeSize, final int allowedTimeSteps) {
 		this.foodLocations = new ArrayList<Point>(Arrays.asList(foodLocations));		
 		this.allowedTimeSteps = allowedTimeSteps;
@@ -67,11 +85,19 @@ public abstract class AntTrail extends GRModel {
 		
 		setGrammar(new Grammar(GRAMMAR_STRING));
 		
-		// Construct the interpreter to use.
 		parser = new EpoxParser();
 		interpreter = new EpoxInterpreter(parser);
 	}
 	
+	/**
+	 * Calculates and returns the fitness of the given program. The fitness of a 
+	 * program is calculated as the number of food pieces that the ant did not
+	 * manage to reach. That is, a fitness of 0.0 means the ant found every food
+	 * item.
+	 * 
+	 * @param p {@inheritDoc}
+	 * @return the calculated fitness for the given program.
+	 */
 	@Override
 	public double getFitness(final CandidateProgram p) {
 		final GRCandidateProgram program = (GRCandidateProgram) p;

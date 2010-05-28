@@ -1,29 +1,38 @@
-/*  
- *  Copyright 2009 Tom Castle
- *  Licensed under GNU General Public License
+/* 
+ * Copyright 2007-2010 Tom Castle & Lawrence Beadle
+ * Licensed under GNU General Public License
  * 
- *  This file is part of XGE: grammatical evolution for research
- *
- *  XGE is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  XGE is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * This file is part of EpochX: genetic programming software for research
  * 
- *  You should have received a copy of the GNU General Public License
- *  along with XGE.  If not, see <http://www.gnu.org/licenses/>.
+ * EpochX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * EpochX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with EpochX. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * The latest version is available from: http:/www.epochx.org
  */
 package org.epochx.gr.model.epox;
 
 import java.awt.*;
 
+/**
+ * XGR model for the John Muir ant trail problem in the Epox language.
+ */
 public class JohnMuirTrail extends AntTrail {
+	//TODO Insert details of the trail in the class JavaDoc.
 	
-	private static final Point[] foodLocations = {
+	/**
+	 * The points in the landscape that will be occupied by food.
+	 */
+	public static final Point[] FOOD_LOCATIONS = {
 		new Point(1,0), new Point(2,0), new Point(3,0), new Point(4,0),
 		new Point(5,0), new Point(6,0), new Point(7,0), new Point(8,0),
 		new Point(9,0), new Point(10,0), new Point(10,1), new Point(10,2),
@@ -49,8 +58,11 @@ public class JohnMuirTrail extends AntTrail {
 		new Point(15,4)
 	};
 	
+	/**
+	 * Constructs the ant trail with the necessary food locations on an ant 
+	 * landscape of dimensions 32 x 32. The ant is set to 100 allowed timesteps.
+	 */
 	public JohnMuirTrail() {
-		super(foodLocations, new Dimension(32, 32), 100);
+		super(FOOD_LOCATIONS, new Dimension(32, 32), 100);
 	}
-
 }

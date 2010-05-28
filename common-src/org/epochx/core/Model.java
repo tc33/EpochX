@@ -212,8 +212,8 @@ public abstract class Model implements Runnable {
 	 * Specifies the operator that should be used to perform the operation of 
 	 * initialisation.
 	 * 
-	 * @return the <code>Initialiser</code> to be responsible for generating 
-	 * the initial population of the runs.
+	 * @param initialiser the <code>Initialiser</code> to be responsible for 
+	 * generating the initial population of the runs
 	 */
 	public void setInitialiser(final Initialiser initialiser) {
 		if (initialiser != null) {
@@ -238,8 +238,8 @@ public abstract class Model implements Runnable {
 	/**
 	 * Specifies the operator to perform the crossover operation.
 	 * 
-	 * @return the <code>Crossover</code> to perform the exchange of genetic 
-	 * material between two programs.
+	 * @param crossover the <code>Crossover</code> to perform the exchange of 
+	 * genetic material between two programs
 	 */
 	public void setCrossover(final Crossover crossover) {
 		this.crossover = crossover;
@@ -258,8 +258,8 @@ public abstract class Model implements Runnable {
 	/**
 	 * Specifies the operator to perform the mutation operation.
 	 * 
-	 * @return the <code>Mutation</code> that will carry out
-	 * the mutation of a program.
+	 * @param mutation the <code>Mutation</code> that will carry out the 
+	 * mutation of a program
 	 */
 	public void setMutation(final Mutation mutation) {
 		this.mutation = mutation;
@@ -506,9 +506,9 @@ public abstract class Model implements Runnable {
 	}
 	
 	/**
-	 * Overwrites the default mutation probability.
+	 * Overwrites the default reproduction probability.
 	 * 
-	 * @param mutationProbability the new mutation probability to use.
+	 * @param reproductionProbability the new reproduction probability to use.
 	 */
 	public void setReproductionProbability(final double reproductionProbability) {
 		if (reproductionProbability >= 0.0 && reproductionProbability <= 1.0) {
@@ -565,7 +565,7 @@ public abstract class Model implements Runnable {
 	 * Overwrites the default parent selector used to select parents to undergo
 	 * a genetic operator from either a pool or the previous population.
 	 * 
-	 * @param ProgramSelector the new ProgramSelector to be used when selecting 
+	 * @param programSelector the new ProgramSelector to be used when selecting 
 	 * 						 parents for a genetic operator.
 	 */
 	public void setProgramSelector(final ProgramSelector programSelector) {
@@ -595,8 +595,8 @@ public abstract class Model implements Runnable {
 	/**
 	 * Overwrites the default pool selector used to generate a mating pool.
 	 * 
-	 * @param PoolSelector the new PoolSelector to be used when building a 
-	 * 						breeding pool.
+	 * @param poolSelector the new PoolSelector to be used when building a 
+	 * breeding pool
 	 */
 	public void setPoolSelector(final PoolSelector poolSelector) {
 		this.poolSelector = poolSelector;

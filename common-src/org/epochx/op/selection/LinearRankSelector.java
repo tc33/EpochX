@@ -199,11 +199,11 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector {
 	 * pool may contain duplicate programs, and as such the pool size may be 
 	 * greater than the population size.
 	 * 
-	 * @param pool the population of CandidatePrograms from which the programs 
-	 * 			  in the pool should be chosen.
+	 * @param pop the population of CandidatePrograms from which the programs 
+	 * in the pool should be chosen.
 	 * @param poolSize the number of programs that should be selected from the 
-	 * 			 	   population to form the pool. The poolSize must be 1 or 
-	 * 				   greater.
+	 * population to form the pool. The poolSize must be 1 or 
+	 * greater.
 	 * @return the pool of candidate programs selected according to fitness 
 	 * rank.
 	 */

@@ -38,8 +38,6 @@ public class IfFoodAheadFunction extends VoidNode {
 	/**
 	 * Construct an IfFoodAheadFunction with no children.
 	 * @param ant the ant which this function will be controlling.
-	 * @param landscape the landscape upon which the ant is roaming which will
-	 * be used to check for food locations.
 	 */
 	public IfFoodAheadFunction(Ant ant) {
 		this(ant, null, null);
@@ -51,8 +49,6 @@ public class IfFoodAheadFunction extends VoidNode {
 	 * location then the first child node will be evaluated and executed, 
 	 * otherwise the second child node is evaluated and executed.
 	 * @param ant the ant which this function will be controlling.
-	 * @param landscape the landscape upon which the ant is roaming which will
-	 * be used to check for food locations.
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
 	 */

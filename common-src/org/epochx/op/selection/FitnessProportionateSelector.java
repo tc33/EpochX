@@ -111,7 +111,7 @@ public class FitnessProportionateSelector implements ProgramSelector, PoolSelect
 	 * generated pool may contain duplicate programs, and as such the pool size 
 	 * may be greater than the population size.
 	 * 
-	 * @param pool the population of CandidatePrograms from which the programs 
+	 * @param pop the population of CandidatePrograms from which the programs 
 	 * 			  in the pool should be chosen.
 	 * @param poolSize the number of programs that should be selected from the 
 	 * 			 	   population to form the pool. The poolSize must be 1 or 

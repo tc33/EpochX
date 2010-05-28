@@ -65,7 +65,7 @@ public class TournamentSelector implements ProgramSelector, PoolSelector {
 	 * Sets the population from which programs will be selected to participate 
 	 * in tournaments.
 	 * 
-	 * @param pool the population of candidate programs from which programs 
+	 * @param pop the population of candidate programs from which programs 
 	 * 			  should be selected.
 	 */
 	@Override

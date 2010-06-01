@@ -21,49 +21,36 @@
  */
 package org.epochx.gr.model.java;
 
-import org.epochx.gr.model.*;
-import org.epochx.gr.representation.*;
-import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.eval.JavaInterpreter;
-import org.epochx.tools.grammar.Grammar;
 
-public class CubicRegression extends GRModel {
+/**
+ * XGR model for a cubic symbolic regression problem in the Java language.
+ * 
+ * <p>
+ * The target program is the function: x + x^2 + x^3
+ */
+public class CubicRegression extends Regression {
 	
-	public static final String GRAMMAR_STRING = 
-		"<expr> ::= ( <expr> <op> <expr> ) | <var>\n" +
-		"<op>   ::= + | - | * \n" +
-		"<var>  ::= X | 1.0 \n";
-	
-	private Grammar grammar;
-	
-	private JavaInterpreter evaluator;
-	
+	/**
+	 * Constructs an instance of the CubicRegression model with 50 input 
+	 * points.
+	 */
 	public CubicRegression() {
-		grammar = new Grammar(GRAMMAR_STRING);
-		evaluator = JavaInterpreter.getInstance();
+		super();
 	}
-
+	
+	/**
+	 * Constructs an instance of the CubicRegression model.
+	 */
+	public CubicRegression(final int noPoints) {
+		super(noPoints);
+	}
+	
+	/**
+	 * The actual function we are trying to evolve.
+	 */
 	@Override
-	public double getFitness(CandidateProgram p) {
-		GRCandidateProgram program = (GRCandidateProgram) p;
-		
-        // Execute on all possible inputs.
-        double dd = 0;
-        for (double x = -1; x < 1; x+=0.1){
-        	Double result = (Double) evaluator.eval(program.getSourceCode(), new String[]{"X"}, new Double[]{x});
-        	if (result != null) {
-        		dd += Math.abs(result - fun(x));
-        	}
-        }
-        return dd;
-	}	
-
-    public double fun(double x){
-        return x + x*x + x*x*x;
+    public double getCorrectResult(final double x){
+		return x + x*x + x*x*x;
     }
-    
-	@Override
-	public Grammar getGrammar() {
-		return grammar;
-	}
+
 }

@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.gr.model.epox;
+package org.epochx.gr.model.java;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.epochx.gr.model.GRModel;
@@ -30,7 +30,7 @@ import org.epochx.tools.grammar.Grammar;
 import org.epochx.tools.util.BoolUtils;
 
 /**
- * Grammar model for the majority problems using an Epox grammar.
+ * Grammar model for the majority problems using a Java grammar.
  * 
  * <h4>Majority problem</h4>
  * 
@@ -42,16 +42,18 @@ public class Majority extends GRModel {
 
 	// Incomplete grammar requiring correct number of terminals to be added.
 	private static final String GRAMMAR_FRAGMENT =
-		"<prog> ::= <node>\n" +
-		"<node> ::= <function> | <terminal>\n" +
-		"<function> ::= NOT( <node> ) " +
-					"| OR( <node> , <node> ) " +
-					"| AND( <node> , <node> ) " +
-					"| IF( <node> , <node> , <node> )\n" +
-		"<terminal> ::= ";
+		"<prog> ::= <expr>\n" +
+		"<expr> ::= <expr> <op> <expr> " +
+				"| ( <expr> <op> <expr> ) " +
+				"| <var> " +
+				"| <pre-op> ( <var> ) " +
+				"| ( <expr> ) ? <expr> : <expr>\n" +
+		"<pre-op> ::= !\n" +
+		"<op> ::= \"||\" | &&\n" +
+		"<var> ::= ";
 	
-	// Epox interpreter for performing evaluation.
-	private final EpoxInterpreter interpreter;
+	// Java interpreter for performing evaluation.
+	private final JavaInterpreter interpreter;
 	
 	// The names of the inputValues used in the grammar.
 	private final String[] argNames;
@@ -66,7 +68,7 @@ public class Majority extends GRModel {
 	 * for
 	 */
 	public Majority(final int noInputBits) {
-		interpreter = new EpoxInterpreter();
+		interpreter = new JavaInterpreter();
 		
 		// Generate the input sequences.
 		inputValues = BoolUtils.generateBoolSequences(noInputBits);

@@ -21,31 +21,35 @@
  */
 package org.epochx.gr.model.java;
 
-import org.epochx.tools.grammar.Grammar;
 
-
-public class Even4Parity extends EvenParity {
+/**
+ * XGR model for a sextic symbolic regression problem in the Java language.
+ * 
+ * <p>
+ * The target program is the function: x^6 - (2 * x^4) + x^2
+ */
+public class SexticRegression extends Regression {
 	
-	public static final String GRAMMAR_STRING = 
-		"<prog> ::= <expr>\n" +
-		"<expr> ::= <expr> <op> <expr> " +
-				"| ( <expr> <op> <expr> ) " +
-				"| <var> " +
-				"| <pre-op> ( <var> )\n" +
-		"<pre-op> ::= !\n" +
-		"<op> ::= \"||\" | && | !=\n" +
-		"<var> ::= d0 | d1 | d2 | d3 \n";
-	
-	private Grammar grammar;
-	
-	public Even4Parity() {
-		super(4);
-		
-		grammar = new Grammar(GRAMMAR_STRING);
+	/**
+	 * Constructs an instance of the SexticRegression model with 50 input 
+	 * points.
+	 */
+	public SexticRegression() {
+		super();
 	}
-    
+	
+	/**
+	 * Constructs an instance of the SexticRegression model.
+	 */
+	public SexticRegression(final int noPoints) {
+		super(noPoints);
+	}
+	
+	/**
+	 * The actual function we are trying to evolve.
+	 */
 	@Override
-	public Grammar getGrammar() {
-		return grammar;
-	}
+    public double getCorrectResult(final double x){
+		return Math.pow(x, 6) - (2 * Math.pow(x, 4)) + Math.pow(x, 2);
+    }
 }

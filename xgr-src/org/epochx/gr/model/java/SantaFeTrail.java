@@ -22,31 +22,16 @@
 package org.epochx.gr.model.java;
 
 import java.awt.*;
-import java.util.*;
 
-import org.epochx.gr.model.*;
-import org.epochx.gr.representation.*;
-import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.ant.*;
-import org.epochx.tools.eval.*;
-import org.epochx.tools.grammar.Grammar;
+/**
+ * XGR model for the Santa Fe ant trail problem in the Java language.
+ */
+public class SantaFeTrail extends AntTrail {
 
-
-public class SantaFeTrail extends GRModel {
-
-	public static final String GRAMMAR_STRING = 
-		  "<code> ::= <line> | <code> <line>\n"
-		+ "<line> ::= <expr>\n"
-		+ "<expr> ::= <condition> | <opcode>\n"
-		+ "<condition> ::= if(ant.isFoodAhead()){ <opcode> }else{ <opcode> }\n"
-		+ "<opcode> ::=  ant.turnLeft(); | ant.turnRight(); | ant.move();\n";
-	
-	private Grammar grammar;
-	
-	private AntLandscape landscape;
-	private Ant ant;
-	
-	private static final Point[] foodLocations = {
+	/**
+	 * The points in the landscape that will be occupied by food.
+	 */
+	public static final Point[] FOOD_LOCATIONS = {
 		new Point(1,0), new Point(2,0), new Point(3,0), new Point(3,1),
 		new Point(3,2), new Point(3,3), new Point(3,4), new Point(3,5),
 		new Point(4,5), new Point(5,5), new Point(6,5), new Point(8,5),
@@ -72,38 +57,11 @@ public class SantaFeTrail extends GRModel {
 		new Point(23,23)
 	};
 	
+	/**
+	 * Constructs the ant trail with the necessary food locations on an ant 
+	 * landscape of dimensions 32 x 32. The ant is set to 600 allowed timesteps.
+	 */
 	public SantaFeTrail() {
-		grammar = new Grammar(GRAMMAR_STRING);
-		
-		landscape = new AntLandscape(new Dimension(32, 32), null);
-		ant = new Ant(600, landscape);
-	}
-	
-	@Override
-	public double getFitness(CandidateProgram p) {
-		GRCandidateProgram program = (GRCandidateProgram) p;
-		
-		landscape.setFoodLocations(new ArrayList<Point>(Arrays.asList(foodLocations)));
-		ant.reset(600, landscape);
-		
-		// Construct argument arrays.
-		String[] argNames = {"ant"};
-		Object[] argValues = {ant};
-		
-		// Evaluate multiple times until all time moves used.
-		Interpreter executor = JavaInterpreter.getInstance();
-		while(ant.getTimesteps() < ant.getMaxMoves()) {
-			executor.exec(program.getSourceCode(), argNames, argValues);
-		}
-
-		// Calculate score.
-		double score = (double) (foodLocations.length - ant.getFoodEaten());
-		
-		return score;
-	}
-
-	@Override
-	public Grammar getGrammar() {
-		return grammar;
+		super(FOOD_LOCATIONS, new Dimension(32, 32), 600);
 	}
 }

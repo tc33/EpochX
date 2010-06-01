@@ -19,13 +19,12 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.gr.model.epox;
+package org.epochx.gr.model.java;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-import org.epochx.gp.representation.EpoxParser;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.representation.CandidateProgram;
@@ -34,9 +33,9 @@ import org.epochx.tools.eval.*;
 import org.epochx.tools.grammar.Grammar;
 
 /**
- * Abstract XGR model for ant trail problems in the Epox language. This class 
+ * Abstract XGR model for ant trail problems in the Java language. This class 
  * provides the general functionality of ant trail models, but does not itself 
- * define a trail. Ant trail models for the Epox language should extend this 
+ * define a trail. Ant trail models for the Java language should extend this 
  * class.
  */
 public abstract class AntTrail extends GRModel {
@@ -45,16 +44,14 @@ public abstract class AntTrail extends GRModel {
 	 * The grammar that defines valid solution space.
 	 */
 	public static final String GRAMMAR_STRING = 
-		"<prog> ::= <node>\n" +
-		"<node> ::= <function> | <terminal>\n" +
-		"<function> ::= IF-FOOD-AHEAD( <node> , <node> ) " +
-					"| SEQ2( <node> , <node> ) " +
-					"| SEQ3( <node> , <node> , <node> )\n" +
-		"<terminal> ::= MOVE() | TURN-LEFT() | TURN-RIGHT()\n";
+		  "<code> ::= <line> | <code> <line>\n"
+		+ "<line> ::= <expr>\n"
+		+ "<expr> ::= <condition> | <opcode>\n"
+		+ "<condition> ::= if(ant.isFoodAhead()){ <opcode> }else{ <opcode> }\n"
+		+ "<opcode> ::=  ant.turnLeft(); | ant.turnRight(); | ant.move();\n";
 	
-	// Epox interpreter for performing evaluation.
-	private final EpoxParser parser;
-	private final EpoxInterpreter interpreter;
+	// Java interpreter for performing evaluation.
+	private final JavaInterpreter interpreter;
 	
 	// Ant components.
 	private final AntLandscape landscape;
@@ -85,8 +82,7 @@ public abstract class AntTrail extends GRModel {
 		
 		setGrammar(new Grammar(GRAMMAR_STRING));
 		
-		parser = new EpoxParser();
-		interpreter = new EpoxInterpreter(parser);
+		interpreter = new JavaInterpreter();
 	}
 	
 	/**
@@ -98,6 +94,7 @@ public abstract class AntTrail extends GRModel {
 	 * @param p {@inheritDoc}
 	 * @return the calculated fitness for the given program.
 	 */
+	
 	@Override
 	public double getFitness(final CandidateProgram p) {
 		final GRCandidateProgram program = (GRCandidateProgram) p;
@@ -105,15 +102,16 @@ public abstract class AntTrail extends GRModel {
 		// Reset the ant.
 		landscape.setFoodLocations(foodLocations);
 		ant.reset(allowedTimeSteps, landscape);
-
-		//TODO Look at a better solution to the ant parameter problem using interpreters.
-		parser.setAnt(ant);
+		
+		// Construct argument arrays.
+		final String[] argNames = {"ant"};
+		final Object[] argValues = {ant};
 		
 		// Evaluate multiple times until all time moves used.
 		while(ant.getTimesteps() < ant.getMaxMoves()) {
 			try {
-				interpreter.eval(program.getSourceCode(), new String[]{}, new Object[]{});
-			} catch (MalformedProgramException e) {
+				interpreter.eval(program.getSourceCode(), argNames, argValues);
+			} catch (final MalformedProgramException e) {
 				// Stop evaluation and give a bad score.
 				break;
 			}

@@ -30,62 +30,66 @@ import org.epochx.tools.grammar.Grammar;
 import org.epochx.tools.util.BoolUtils;
 
 /**
- * Grammar model for the even parity problems using a Java grammar.
+ * Grammar model for the multiplexer problems using a Java grammar.
  * 
- * <h4>Even parity problem</h4>
+ * <h4>Multiplexer problem</h4>
  * 
- * Given n binary inputValues, a program that solves the even-n-parity problem 
- * will return true in all circumstances where an even number of the inputValues
- * are true (or 1), and return false whenever there is an odd number of true 
- * inputValues.
+ * Given n binary inputValues, a program that solves the majority problem will 
+ * return true in all circumstances where a majority of the inputValues are true 
+ * (or 1), and return false whenever there is not a majority of true values.
  */
-public class EvenParity extends GEModel {
-	
+public class Multiplexer extends GEModel {
+
 	// Incomplete grammar requiring correct number of terminals to be added.
-	public static final String GRAMMAR_FRAGMENT = 
+	private static final String GRAMMAR_FRAGMENT = 
 		"<prog> ::= <expr>\n" +
 		"<expr> ::= <expr> <op> <expr> " +
 				"| ( <expr> <op> <expr> ) " +
 				"| <var> " +
-				"| <pre-op> ( <var> )\n" +
+				"| <pre-op> ( <var> ) " +
+				"| ( <expr> ) ? <expr> : <expr>\n" +
 		"<pre-op> ::= !\n" +
-		"<op> ::= \"||\" | && | !=\n" +
+		"<op> ::= \"||\" | &&\n" +
 		"<var> ::= ";
 	
 	// Java interpreter for performing evaluation.
 	private final JavaInterpreter interpreter;
 	
-	// The names of the inputValues used in the grammar.
-	private final String[] argNames;
-	
 	// The boolean input sequences.
 	private final boolean[][] inputValues;
 	
+	// The names of the inputValues used in the grammar.
+	private String[] argNames;
+	
+	// No input bits.
+	private int noAddressBits;
+	private int noDataBits;
+	
 	/**
-	 * Constructs an EvenParity model for the given number of inputs.
+	 * Constructs a Multiplexer model for the given number of inputs.
 	 * 
-	 * @param noInputBits the number of inputs the even parity problem should be
+	 * @param noInputBits the number of inputs the multiplexer problem should be
 	 * for
 	 */
-	public EvenParity(final int noInputBits) {
+	public Multiplexer(final int noInputBits) {
 		interpreter = new JavaInterpreter();
-		
+
 		// Generate the input sequences.
 		inputValues = BoolUtils.generateBoolSequences(noInputBits);
+
+		// Calculate number of address/data bits.
+		setBitSizes(noInputBits);
 		
 		// Determine the input argument names.
-		argNames = new String[noInputBits];
-		for (int i=0; i<noInputBits; i++) {
-			argNames[i] = "d" + i;
-		}
+		setArgNames(noInputBits);
 		
 		// Complete the grammar string and construct grammar instance.
 		setGrammar(new Grammar(getGrammarString()));
-	}
-
+	}	
+	
 	/**
 	 * Calculates the fitness score for the given program. The fitness of a 
-	 * program for the even-parity problem is calculated by evaluating it 
+	 * program for the majority problem is calculated by evaluating it 
 	 * using each of the possible sets of input values. There are 
 	 * <code>2^noInputBits</code> possible sets of inputs. The fitness of the 
 	 * program is the quantity of those input sequences that the program 
@@ -101,35 +105,34 @@ public class EvenParity extends GEModel {
 		final GECandidateProgram program = (GECandidateProgram) p;
 		
 		double score = 0;
-		
+        
         // Evaluate all possible inputValues.
-        for (boolean[] vars : inputValues) {
+		for (final boolean[] vars : inputValues) {
         	// Convert to object array.
         	final Boolean[] objVars = ArrayUtils.toObject(vars);
         	
         	Boolean result = null;
 			try {
 				result = (Boolean) interpreter.eval(program.getSourceCode(), argNames, objVars);
-			} catch (final MalformedProgramException e) {
+			} catch (MalformedProgramException e) {
 				// Assign worst possible fitness and stop evaluating.
         		score = 0;
         		break;
 			}
-
-			// Increment score for a correct response.
-            if ((result != null) && (result == isEvenNoTrue(vars))) {
+        	
+            if (result != null && result == multiplex(vars)) {
                 score++;
             }
         }
-
+        
         return inputValues.length - score;
 	}
-	
+
 	/**
-	 * Constructs and returns the full grammar string for the even parity 
-	 * problem with the correct number of input bits.
+	 * Constructs and returns the full grammar string for the multiplexer 
+	 * problem with the correct number of address and data bits.
 	 * 
-	 * @return the grammar string for the even parity problem with the set 
+	 * @return the grammar string for the multiplexer problem with the set 
 	 * number of input bits
 	 */
 	public String getGrammarString() {
@@ -144,19 +147,51 @@ public class EvenParity extends GEModel {
 		
 		return buffer.toString();
 	}
+	
+	/*
+	 * Calculate and set the number of address and data bits.
+	 */
+	private void setBitSizes(final int noInputBits) {
+		noAddressBits = 1;
+		while (true) {
+			noDataBits = (int) Math.pow(2, noAddressBits);			
+			
+			if ((noAddressBits + noDataBits) == noInputBits) {
+				break;
+			}
 
+			noAddressBits++;
+		}
+	}
+	
+	/*
+	 * Set the argument names for the inputs.
+	 */
+	private void setArgNames(final int noInputBits) {
+		argNames = new String[noInputBits];
+		// Add address inputs.
+		for (int i=0; i<noAddressBits; i++) {
+			argNames[i] = "a" + i;
+		}
+		// Add data inputs.
+		for (int i=noAddressBits; i<noInputBits; i++) {
+			argNames[i] = "d" + i;
+		}
+	}
+	
 	/*
 	 * Calculate what the correct response should be for the given inputs.
 	 */
-    private boolean isEvenNoTrue(final boolean[] input) {
-        int noTrues = 0;
+	private Boolean multiplex(final boolean[] vars) {
+		//TODO This is quite a lot slower than the x-bit specific versions.
+		// Calculate which data position to use.
+		int dataPosition = 0;
+		for (int i=0; i<noAddressBits; i++) {
+			if (vars[i]) {
+				dataPosition += Math.pow(2, i);
+			}
+		}
 
-        for (final boolean b: input) {
-            if(b) {
-                noTrues++;
-            }
-        }
-        
-        return ((noTrues % 2) == 0);
-    }
+		return vars[noAddressBits + dataPosition];
+	}
 }

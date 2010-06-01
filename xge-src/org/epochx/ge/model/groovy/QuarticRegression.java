@@ -19,33 +19,38 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.ge.model.java;
-
-import org.epochx.tools.grammar.Grammar;
+package org.epochx.ge.model.groovy;
 
 
-public class Even5Parity extends EvenParity {
-	
-	public static final String GRAMMAR_STRING = 
-		"<prog> ::= <expr>\n" +
-		"<expr> ::= <expr> <op> <expr> " +
-				"| ( <expr> <op> <expr> ) " +
-				"| <var> " +
-				"| <pre-op> ( <var> )\n" +
-		"<pre-op> ::= !\n" +
-		"<op> ::= \"||\" | && | !=\n" +
-		"<var> ::= d0 | d1 | d2 | d3 | d4 \n";
-	
-	private Grammar grammar;
-	
-	public Even5Parity() {
-		super(5);
-		
-		grammar = new Grammar(GRAMMAR_STRING);
+/**
+ * XGE model for a quartic symbolic regression problem in the Groovy language.
+ * 
+ * <p>
+ * The target program is the function: x + x^2 + x^3 + x^4
+ */
+public class QuarticRegression extends Regression {
+
+	/**
+	 * Constructs an instance of the QuarticRegression model with 50 input 
+	 * points.
+	 */
+	public QuarticRegression() {
+		super();
 	}
-    
+	
+	/**
+	 * Constructs an instance of the QuarticRegression model.
+	 */
+	public QuarticRegression(final int noPoints) {
+		super(noPoints);
+	}
+	
+	/**
+	 * The actual function we are trying to evolve.
+	 */
 	@Override
-	public Grammar getGrammar() {
-		return grammar;
-	}
+    public double getCorrectResult(final double x){
+		return x + x*x + x*x*x;
+    }
+
 }

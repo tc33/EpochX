@@ -21,55 +21,36 @@
  */
 package org.epochx.ge.model.java;
 
-import org.epochx.ge.model.GEModel;
-import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.eval.JavaInterpreter;
-import org.epochx.tools.grammar.Grammar;
 
+/**
+ * XGE model for a quartic symbolic regression problem in the Java language.
+ * 
+ * <p>
+ * The target program is the function: x + x^2 + x^3 + x^4
+ */
+public class QuarticRegression extends Regression {
 
-public class QuarticRegression extends GEModel {
-
-	public static final String GRAMMAR_STRING = 
-		"<expr> ::= ( <expr> <op> <expr> ) | <var>\n" +
-		"<op>   ::= + | - | * \n" +
-		"<var>  ::= X | 1.0 \n";
-	
-	private Grammar grammar;
-	
-	private JavaInterpreter evaluator;
-	
+	/**
+	 * Constructs an instance of the QuarticRegression model with 50 input 
+	 * points.
+	 */
 	public QuarticRegression() {
-		grammar = new Grammar(GRAMMAR_STRING);
-		evaluator = JavaInterpreter.getInstance();
+		super();
 	}
-
+	
+	/**
+	 * Constructs an instance of the QuarticRegression model.
+	 */
+	public QuarticRegression(final int noPoints) {
+		super(noPoints);
+	}
+	
+	/**
+	 * The actual function we are trying to evolve.
+	 */
 	@Override
-	public double getFitness(CandidateProgram p) {
-		GECandidateProgram program = (GECandidateProgram) p;
-		
-        // Execute on all possible inputs.
-        double dd = 0;
-        for (double x = -1; x < 1; x+=0.1){
-        	Double result = (Double) evaluator.eval(program.getSourceCode(), new String[]{"X"}, new Double[]{x});
-        	if (result != null) {
-        		dd += Math.abs(result - fun(x));
-        	} else {
-        		if (!program.isValid()) {
-        			dd = Double.POSITIVE_INFINITY;
-        			break;
-        		}
-        	}
-        }
-        return dd;
-	}	
-
-    public double fun(double x){
-        return x + x*x + x*x*x + x*x*x*x;
+    public double getCorrectResult(final double x){
+		return x + x*x + x*x*x;
     }
-    
-	@Override
-	public Grammar getGrammar() {
-		return grammar;
-	}
+
 }

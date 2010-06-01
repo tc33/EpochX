@@ -19,14 +19,12 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.ge.model.epox;
+package org.epochx.ge.model.java;
 
 import java.awt.*;
 
-import org.epochx.gr.model.epox.AntTrail;
-
 /**
- * XGE model for the John Muir ant trail problem in the Epox language.
+ * XGE model for the John Muir ant trail problem in the Java language.
  */
 public class JohnMuirTrail extends AntTrail {
 	//TODO Insert details of the trail in the class JavaDoc.

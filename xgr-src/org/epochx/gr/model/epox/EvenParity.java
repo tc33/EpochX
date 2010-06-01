@@ -157,5 +157,4 @@ public class EvenParity extends GRModel {
         
         return ((noTrues % 2) == 0);
     }
-    
 }

@@ -19,12 +19,12 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.ge.model.java;
+package org.epochx.ge.model.groovy;
 
 import java.awt.*;
 
 /**
- * XGE model for the Santa Fe ant trail problem in the Java language.
+ * XGE model for the Santa Fe ant trail problem in the Groovy language.
  */
 public class SantaFeTrail extends AntTrail {
 

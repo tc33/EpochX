@@ -49,7 +49,7 @@ public class Multiplexer extends GRModel {
 				"| <pre-op> ( <var> ) " +
 				"| ( <expr> ) ? <expr> : <expr>\n" +
 		"<pre-op> ::= !\n" +
-		"<op> ::= \"||\" | &&\n" +
+		"<op> ::= \"|\" | &\n" +
 		"<var> ::= ";
 	
 	// Groovy interpreter for performing evaluation.

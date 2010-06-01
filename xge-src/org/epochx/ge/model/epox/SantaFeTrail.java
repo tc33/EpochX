@@ -22,38 +22,16 @@
 package org.epochx.ge.model.epox;
 
 import java.awt.*;
-import java.util.*;
-
-import org.epochx.ge.model.GEModel;
-import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.gp.representation.EpoxParser;
-import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.ant.*;
-import org.epochx.tools.eval.EpoxInterpreter;
-import org.epochx.tools.grammar.Grammar;
 
 /**
- *
+ * XGE model for the Santa Fe ant trail problem in the Epox language.
  */
-public class SantaFeTrail extends GEModel {
-	
-	public static final String GRAMMAR_STRING = 
-		"<prog> ::= <node>\n" +
-		"<node> ::= <function> | <terminal>\n" +
-		"<function> ::= IF-FOOD-AHEAD( <node> , <node> ) " +
-					"| SEQ2( <node> , <node> ) " +
-					"| SEQ3( <node> , <node> , <node> )\n" +
-		"<terminal> ::= MOVE() | TURN-LEFT() | TURN-RIGHT()\n";
-	
-	private Grammar grammar;
-	
-	private EpoxParser parser;
-	private EpoxInterpreter evaluator;
-	
-	private AntLandscape landscape;
-	private Ant ant;
-	
-	private static final Point[] foodLocations = {
+public class SantaFeTrail extends AntTrail {
+
+	/**
+	 * The points in the landscape that will be occupied by food.
+	 */
+	public static final Point[] FOOD_LOCATIONS = {
 		new Point(1,0), new Point(2,0), new Point(3,0), new Point(3,1),
 		new Point(3,2), new Point(3,3), new Point(3,4), new Point(3,5),
 		new Point(4,5), new Point(5,5), new Point(6,5), new Point(8,5),
@@ -79,43 +57,11 @@ public class SantaFeTrail extends GEModel {
 		new Point(23,23)
 	};
 	
+	/**
+	 * Constructs the ant trail with the necessary food locations on an ant 
+	 * landscape of dimensions 32 x 32. The ant is set to 600 allowed timesteps.
+	 */
 	public SantaFeTrail() {
-		grammar = new Grammar(GRAMMAR_STRING);
-		
-		landscape = new AntLandscape(new Dimension(32, 32), null);
-		ant = new Ant(600, landscape);
-		
-		// Construct the evaluator to use.
-		parser = new EpoxParser();
-		evaluator = new EpoxInterpreter(parser);
-	}
-	
-	@Override
-	public double getFitness(CandidateProgram p) {
-		GECandidateProgram program = (GECandidateProgram) p;
-		
-		// Reset the ant.
-		landscape.setFoodLocations(new ArrayList<Point>(Arrays.asList(foodLocations)));
-		ant.reset(600, landscape);
-
-		//TODO Look at a better solution to the ant parameter problem using executors.
-		parser.setAnt(ant);
-		
-		if (program.isValid()) {
-			// Evaluate multiple times until all time moves used.
-			while(ant.getTimesteps() < ant.getMaxMoves()) {
-				evaluator.eval(program.getSourceCode(), new String[]{}, new Object[]{});
-			}
-		}
-
-		// Calculate score.
-		double score = (double) (foodLocations.length - ant.getFoodEaten());
-
-		return score;
-	}
-
-	@Override
-	public Grammar getGrammar() {
-		return grammar;
+		super(FOOD_LOCATIONS, new Dimension(32, 32), 600);
 	}
 }

@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.ge.model.java;
+package org.epochx.ge.model.groovy;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.epochx.ge.model.GEModel;
@@ -30,7 +30,7 @@ import org.epochx.tools.grammar.Grammar;
 import org.epochx.tools.util.BoolUtils;
 
 /**
- * Grammar model for the even parity problems using a Java grammar.
+ * Grammar model for the even parity problems using a Groovy grammar.
  * 
  * <h4>Even parity problem</h4>
  * 
@@ -49,11 +49,11 @@ public class EvenParity extends GEModel {
 				"| <var> " +
 				"| <pre-op> ( <var> )\n" +
 		"<pre-op> ::= !\n" +
-		"<op> ::= \"||\" | && | !=\n" +
+		"<op> ::= \"|\" | & | ^ \n" +
 		"<var> ::= ";
 	
-	// Java interpreter for performing evaluation.
-	private final JavaInterpreter interpreter;
+	// Groovy interpreter for performing evaluation.
+	private final GroovyInterpreter interpreter;
 	
 	// The names of the inputValues used in the grammar.
 	private final String[] argNames;
@@ -68,7 +68,7 @@ public class EvenParity extends GEModel {
 	 * for
 	 */
 	public EvenParity(final int noInputBits) {
-		interpreter = new JavaInterpreter();
+		interpreter = new GroovyInterpreter();
 		
 		// Generate the input sequences.
 		inputValues = BoolUtils.generateBoolSequences(noInputBits);

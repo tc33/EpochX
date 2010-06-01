@@ -19,34 +19,37 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.ge.model.epox;
+package org.epochx.ge.model.java;
 
-import org.epochx.tools.grammar.Grammar;
 
 /**
- *
+ * XGE model for a sextic symbolic regression problem in the Java language.
+ * 
+ * <p>
+ * The target program is the function: x^6 - (2 * x^4) + x^2
  */
-public class Even5Parity extends EvenParity {
+public class SexticRegression extends Regression {
 	
-	public static final String GRAMMAR_STRING =
-		"<prog> ::= <node>\n" +
-		"<node> ::= <function> | <terminal>\n" +
-		"<function> ::= NOT( <node> ) " +
-					"| OR( <node> , <node> ) " +
-					"| AND( <node> , <node> ) " +
-					"| XOR( <node> , <node> )\n" +
-		"<terminal> ::= d0 | d1 | d2 | d3 | d4\n";
-	
-	private Grammar grammar;
-
-	public Even5Parity() {
-		super(5);
-
-		grammar = new Grammar(GRAMMAR_STRING);
+	/**
+	 * Constructs an instance of the SexticRegression model with 50 input 
+	 * points.
+	 */
+	public SexticRegression() {
+		super();
 	}
 	
+	/**
+	 * Constructs an instance of the SexticRegression model.
+	 */
+	public SexticRegression(final int noPoints) {
+		super(noPoints);
+	}
+	
+	/**
+	 * The actual function we are trying to evolve.
+	 */
 	@Override
-	public Grammar getGrammar() {
-		return grammar;
-	}
+    public double getCorrectResult(final double x){
+		return Math.pow(x, 6) - (2 * Math.pow(x, 4)) + Math.pow(x, 2);
+    }
 }

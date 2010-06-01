@@ -1,4 +1,4 @@
-package org.epochx.gr.example.java;
+package org.epochx.gr.model.java.example;
 
 import static org.epochx.gr.stats.GRStatField.*;
 

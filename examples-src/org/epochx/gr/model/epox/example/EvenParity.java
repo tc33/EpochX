@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.gr.example.epox;
+package org.epochx.gr.model.epox.example;
 
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.op.init.FullInitialiser;

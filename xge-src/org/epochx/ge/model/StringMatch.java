@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.ge.example.match;
+package org.epochx.ge.model;
 
 import java.io.File;
 

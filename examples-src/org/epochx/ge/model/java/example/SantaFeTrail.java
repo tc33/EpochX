@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.ge.example.java.ant;
+package org.epochx.ge.model.java.example;
 
 import static org.epochx.ge.stats.GEStatField.*;
 

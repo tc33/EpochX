@@ -19,54 +19,32 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.example.regression;
+package org.epochx.gp.model.example;
 
-import org.epochx.core.*;
-import org.epochx.gp.op.crossover.*;
-import org.epochx.gp.op.init.*;
-import org.epochx.gp.op.mutation.*;
-import org.epochx.gp.stats.*;
-import org.epochx.life.*;
+import org.epochx.gp.op.crossover.UniformPointCrossover;
 import org.epochx.op.selection.*;
 
 
 /**
  * 
  */
-public class QuarticRegression extends org.epochx.gp.model.QuarticRegression {
+public class CubicRegression extends org.epochx.gp.model.CubicRegression {
 
-	public QuarticRegression() {
-		setPopulationSize(1024);
-		setCrossoverProbability(0.8);
-		setMutationProbability(0.1);
+	public CubicRegression() {
+		setPopulationSize(500);
+		setCrossoverProbability(0.9);
+		setMutationProbability(0.0);
 		setPoolSelector(new TournamentSelector(this, 7));
 		setProgramSelector(new LinearRankSelector(this, 0.5));
-		setCrossover(new KozaCrossover(this));
-		setMutation(new PointMutation(this));
-		setInitialiser(new RampedHalfAndHalfInitialiser(this));
-		setPoolSize(-1);
+		setCrossover(new UniformPointCrossover(this));
+		setPoolSize(50);
 		setNoGenerations(50);
 		setNoElites(50);
 		setMaxDepth(17);
-		setNoRuns(50);
+		setNoRuns(1);
 	}
 	
 	public static void main(String[] args) {
-		final Model m = new QuarticRegression();
-		
-		/*m.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
-			@Override
-			public void onGenerationEnd() {
-				m.getStatsManager().printGenerationStats(GPStatField.GEN_NUMBER, GPStatField.GEN_FITNESS_MIN, GPStatField.GEN_FITTEST_PROGRAM);
-			}
-		});*/
-		m.getLifeCycleManager().addRunListener(new RunAdapter() {
-			@Override
-			public void onRunEnd() {
-				m.getStatsManager().printRunStats(GPStatField.RUN_NUMBER, GPStatField.RUN_FITNESS_MIN);
-			}
-		});
-		
-		m.run();
+		new CubicRegression().run();
 	}
 }

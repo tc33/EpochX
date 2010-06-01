@@ -1,17 +1,18 @@
-package org.epochx.gr.example.epox;
+package org.epochx.gr.model.epox.example;
 
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.op.init.FullInitialiser;
 import org.epochx.gr.stats.GRStatField;
 import org.epochx.life.RunAdapter;
 
+
 /**
  * 
  */
-public class CubicRegression extends org.epochx.gr.model.epox.CubicRegression {
-    
+public class QuarticRegression extends org.epochx.gr.model.epox.QuarticRegression {
+	
     public static void main(String[] args) {
-		final GRModel model = new CubicRegression();
+		final GRModel model = new QuarticRegression();
 		model.setNoRuns(50);
 		model.setNoGenerations(100);
 		model.setMaxDepth(14);
@@ -33,4 +34,5 @@ public class CubicRegression extends org.epochx.gr.model.epox.CubicRegression {
 		});
 		model.run();
 	}
+	
 }

@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.example.regression;
+package org.epochx.gp.model.example;
 
 import org.epochx.core.*;
 import org.epochx.gp.op.crossover.*;

@@ -19,13 +19,13 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.example.ant;
+package org.epochx.gp.model.example;
 
-import static org.epochx.gp.stats.GPStatField.*;
-
+import org.epochx.core.*;
 import org.epochx.gp.op.crossover.*;
-import org.epochx.gp.op.init.FullInitialiser;
-import org.epochx.gp.op.mutation.SubtreeMutation;
+import org.epochx.gp.op.init.*;
+import org.epochx.gp.op.mutation.*;
+import org.epochx.gp.stats.*;
 import org.epochx.life.*;
 import org.epochx.op.selection.*;
 
@@ -33,40 +33,40 @@ import org.epochx.op.selection.*;
 /**
  * 
  */
-public class SantaFeTrail extends org.epochx.gp.model.SantaFeTrail {
-	
-	public SantaFeTrail() {
-		setPopulationSize(500);
-		setNoGenerations(50);
-		setCrossoverProbability(0.9);
-		setMutationProbability(0.1);
-		setNoRuns(100);
-		//setPoolSize(-1);
-		setNoElites(50);
-		setMaxInitialDepth(6);
-		setMaxDepth(17);
-		setPoolSelector(null);
-		setProgramSelector(new TournamentSelector(this, 3));
-		setCrossover(new KozaCrossover(this));
-		setMutation(new SubtreeMutation(this));
-		setInitialiser(new FullInitialiser(this));
+public class QuarticRegression extends org.epochx.gp.model.QuarticRegression {
 
-		getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
-			@Override
-			public void onGenerationEnd() {
-				getStatsManager().printGenerationStats(GEN_NUMBER, GEN_FITNESS_MIN, GEN_FITNESS_AVE, GEN_DEPTH_AVE, GEN_DEPTH_MAX);
-			}
-		});
-		
-		getLifeCycleManager().addRunListener(new RunAdapter() {
-			@Override
-			public void onRunEnd() {
-				getStatsManager().printRunStats(RUN_NUMBER, RUN_FITNESS_MIN, RUN_FITTEST_PROGRAM);
-			}
-		});
+	public QuarticRegression() {
+		setPopulationSize(1024);
+		setCrossoverProbability(0.8);
+		setMutationProbability(0.1);
+		setPoolSelector(new TournamentSelector(this, 7));
+		setProgramSelector(new LinearRankSelector(this, 0.5));
+		setCrossover(new KozaCrossover(this));
+		setMutation(new PointMutation(this));
+		setInitialiser(new RampedHalfAndHalfInitialiser(this));
+		setPoolSize(-1);
+		setNoGenerations(50);
+		setNoElites(50);
+		setMaxDepth(17);
+		setNoRuns(50);
 	}
 	
 	public static void main(String[] args) {
-		new SantaFeTrail().run();
+		final Model m = new QuarticRegression();
+		
+		/*m.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationEnd() {
+				m.getStatsManager().printGenerationStats(GPStatField.GEN_NUMBER, GPStatField.GEN_FITNESS_MIN, GPStatField.GEN_FITTEST_PROGRAM);
+			}
+		});*/
+		m.getLifeCycleManager().addRunListener(new RunAdapter() {
+			@Override
+			public void onRunEnd() {
+				m.getStatsManager().printRunStats(GPStatField.RUN_NUMBER, GPStatField.RUN_FITNESS_MIN);
+			}
+		});
+		
+		m.run();
 	}
 }

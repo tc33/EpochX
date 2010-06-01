@@ -35,17 +35,24 @@ public class QuarticRegression extends GPModel {
 
 	private DoubleVariable x;
 	
+	private double[] inputs;
+	private double[] outputs;
+	
 	public QuarticRegression() {
 		configure();
+	
+		inputs = new double[100];
+		outputs = new double[inputs.length];
+		for (int i=0; i<inputs.length; i++) {
+			inputs[i] = (getRNG().nextDouble() * 2) - 1.0;
+			outputs[i] = getCorrectResult(inputs[i]);
+		}
 	}
 	
 	public void configure() {
 		// Create variables.
 		x = new DoubleVariable("X");
-	}
 
-	@Override
-	public List<Node> getSyntax() {
 		// Define function set.
 		List<Node> syntax = new ArrayList<Node>();
 		syntax.add(new AddFunction());
@@ -54,7 +61,7 @@ public class QuarticRegression extends GPModel {
 		syntax.add(new ProtectedDivisionFunction());
 		
 		// Define terminal set.
-		syntax.add(new DoubleLiteral(5d));
+		/*syntax.add(new DoubleLiteral(5d));
 		syntax.add(new DoubleLiteral(4d));
 		syntax.add(new DoubleLiteral(3d));
 		syntax.add(new DoubleLiteral(2d));
@@ -64,24 +71,26 @@ public class QuarticRegression extends GPModel {
 		syntax.add(new DoubleLiteral(-4d));
 		syntax.add(new DoubleLiteral(-3d));
 		syntax.add(new DoubleLiteral(-2d));
-		syntax.add(new DoubleLiteral(-1d));
+		syntax.add(new DoubleLiteral(-1d));*/
 		
 		// Define variables;
 		syntax.add(x);
 		
-		return syntax;
+		setSyntax(syntax);
 	}
 	
 	@Override
 	public double getFitness(CandidateProgram p) {
 		GPCandidateProgram program = (GPCandidateProgram) p;
 		
-		double[] inputs = new double[]{-1.0, -0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9};
 		int noWrong = 0;
 		
-		for (double in: inputs) {
-			x.setValue(in);
-			if ((Double) program.evaluate() != getCorrectResult(in)) {
+		for (int i=0; i<inputs.length; i++) {
+			x.setValue(inputs[i]);
+			double result = (Double) program.evaluate();
+			double error = Math.abs(result - outputs[i]);
+			
+			if (error > 0.01) {
 				noWrong++;
 			}
 		}

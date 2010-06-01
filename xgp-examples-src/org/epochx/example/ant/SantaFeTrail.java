@@ -36,8 +36,8 @@ import org.epochx.op.selection.*;
 public class SantaFeTrail extends org.epochx.gp.model.SantaFeTrail {
 	
 	public SantaFeTrail() {
-		setPopulationSize(10000);
-		setNoGenerations(100);
+		setPopulationSize(500);
+		setNoGenerations(50);
 		setCrossoverProbability(0.9);
 		setMutationProbability(0.1);
 		setNoRuns(100);

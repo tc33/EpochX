@@ -123,6 +123,7 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 			// Grow on even numbers, full on odd.
 			GPCandidateProgram program;
 			
+			int attempts=0;
 			do {
 				Node rootNode;
 				if ((i % 2) == 0) {
@@ -131,7 +132,8 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 					rootNode = full.buildFullNodeTree(depth);
 				}
 				program = new GPCandidateProgram(rootNode, model);
-			} while(firstGen.contains(program));
+				attempts++;
+			} while(firstGen.contains(program) && attempts<5);
 
             firstGen.add(program);
 		}

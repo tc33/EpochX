@@ -21,31 +21,36 @@
  */
 package org.epochx.ge.model.ruby;
 
-import org.epochx.tools.grammar.Grammar;
 
-
-public class Even4Parity extends EvenParity {
+/**
+ * XGE model for a cubic symbolic regression problem in the Ruby language.
+ * 
+ * <p>
+ * The target program is the function: x + x^2 + x^3
+ */
+public class CubicRegression extends Regression {
 	
-	public static final String GRAMMAR_STRING = 
-		  "<prog> ::= <expr>\n" +
-		  "<expr> ::= ( <expr> <op> <expr> ) " +
-		  			"| <var> " +
-		  			"| <pre-op> ( <var> )\n" +
-		  "<pre-op> ::= !\n" +
-		  "<op> ::= \"||\" | && | !=\n" +
-		  "<var> ::= d0 | d1 | d2 | d3\n";
-	
-	private Grammar grammar;
-	
-	public Even4Parity() {
-		super(4);
-		
-		grammar = new Grammar(GRAMMAR_STRING);
+	/**
+	 * Constructs an instance of the CubicRegression model with 50 input 
+	 * points.
+	 */
+	public CubicRegression() {
+		super();
 	}
-    
+	
+	/**
+	 * Constructs an instance of the CubicRegression model.
+	 */
+	public CubicRegression(final int noPoints) {
+		super(noPoints);
+	}
+	
+	/**
+	 * The actual function we are trying to evolve.
+	 */
 	@Override
-	public Grammar getGrammar() {
-		return grammar;
-	}
+    public double getCorrectResult(final double x){
+		return x + x*x + x*x*x;
+    }
 
 }

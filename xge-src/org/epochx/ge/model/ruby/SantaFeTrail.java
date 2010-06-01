@@ -22,31 +22,16 @@
 package org.epochx.ge.model.ruby;
 
 import java.awt.*;
-import java.util.*;
 
-import org.epochx.ge.model.GEModel;
-import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.ant.*;
-import org.epochx.tools.eval.*;
-import org.epochx.tools.grammar.Grammar;
+/**
+ * XGE model for the Santa Fe ant trail problem in the Ruby language.
+ */
+public class SantaFeTrail extends AntTrail {
 
-
-public class SantaFeTrail extends GEModel {
-
-	public static final String GRAMMAR_STRING = 
-		  "<code> ::= <line> | <code> <line>\n" +
-		  "<line> ::= <expr> \n" +
-		  "<expr> ::= <condition> | <op>\n" +
-		  "<condition> ::= \"if ant.isFoodAhead()\" \\n <op> \\n else \\n <op> \\n end \n" +
-		  "<op> ::= ant.turnLeft(); | ant.turnRight(); | ant.move();";
-	
-	private Grammar grammar;
-	
-	private AntLandscape landscape;
-	private Ant ant;
-	
-	private static final Point[] foodLocations = {
+	/**
+	 * The points in the landscape that will be occupied by food.
+	 */
+	public static final Point[] FOOD_LOCATIONS = {
 		new Point(1,0), new Point(2,0), new Point(3,0), new Point(3,1),
 		new Point(3,2), new Point(3,3), new Point(3,4), new Point(3,5),
 		new Point(4,5), new Point(5,5), new Point(6,5), new Point(8,5),
@@ -72,38 +57,11 @@ public class SantaFeTrail extends GEModel {
 		new Point(23,23)
 	};
 	
+	/**
+	 * Constructs the ant trail with the necessary food locations on an ant 
+	 * landscape of dimensions 32 x 32. The ant is set to 600 allowed timesteps.
+	 */
 	public SantaFeTrail() {
-		grammar = new Grammar(GRAMMAR_STRING);
-		
-		landscape = new AntLandscape(new Dimension(32, 32), null);
-		ant = new Ant(600, landscape);
-	}
-	
-	@Override
-	public double getFitness(CandidateProgram p) {
-		GECandidateProgram program = (GECandidateProgram) p;
-		
-		landscape.setFoodLocations(new ArrayList<Point>(Arrays.asList(foodLocations)));
-		ant.reset(600, landscape);
-		
-		// Construct argument arrays.
-		String[] argNames = {"ant"};
-		Object[] argValues = {ant};
-		
-		// Evaluate multiple times until all time moves used.
-		Interpreter evaluator = new RubyInterpreter();
-		while(ant.getTimesteps() < ant.getMaxMoves()) {
-			evaluator.exec(program.getSourceCode(), argNames, argValues);
-		}
-
-		// Calculate score.
-		double score = (double) (foodLocations.length - ant.getFoodEaten());
-		
-		return score;
-	}
-
-	@Override
-	public Grammar getGrammar() {
-		return grammar;
+		super(FOOD_LOCATIONS, new Dimension(32, 32), 600);
 	}
 }

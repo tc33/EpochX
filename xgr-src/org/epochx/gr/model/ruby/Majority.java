@@ -103,7 +103,7 @@ public class Majority extends GRModel {
 		double score = 0;
         
         // Evaluate all possible inputValues.
-		for (boolean[] vars : inputValues) {
+		for (final boolean[] vars : inputValues) {
         	// Convert to object array.
         	final Boolean[] objVars = ArrayUtils.toObject(vars);
         	

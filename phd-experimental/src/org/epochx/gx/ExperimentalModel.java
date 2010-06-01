@@ -1,9 +1,9 @@
-package org.epochx.gr.ex;
+package org.epochx.gx;
 
 import java.io.*;
 
 import org.epochx.gr.model.*;
-import org.epochx.gr.op.init.*;
+import org.epochx.gx.op.init.*;
 import org.epochx.representation.*;
 import org.epochx.tools.grammar.*;
 

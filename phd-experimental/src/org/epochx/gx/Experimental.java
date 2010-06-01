@@ -1,4 +1,4 @@
-package org.epochx.gr.ex;
+package org.epochx.gx;
 
 public class Experimental {
 

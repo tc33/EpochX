@@ -1,6 +1,5 @@
-package org.epochx.gr.op.init;
+package org.epochx.gx.op.init;
 
-import org.epochx.gr.op.init.Variable.*;
 
 public class Declaration implements Statement {
 

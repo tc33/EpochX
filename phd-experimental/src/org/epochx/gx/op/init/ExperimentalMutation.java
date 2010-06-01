@@ -1,4 +1,4 @@
-package org.epochx.gr.op.init;
+package org.epochx.gx.op.init;
 
 import org.epochx.gr.op.mutation.*;
 import org.epochx.gr.representation.*;

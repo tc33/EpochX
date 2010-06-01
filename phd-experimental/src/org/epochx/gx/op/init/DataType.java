@@ -1,4 +1,4 @@
-package org.epochx.gr.op.init;
+package org.epochx.gx.op.init;
 
 public enum DataType {
 	BOOLEAN, DOUBLE, INT;

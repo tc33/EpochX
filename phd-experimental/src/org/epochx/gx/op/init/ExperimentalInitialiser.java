@@ -1,9 +1,10 @@
-package org.epochx.gr.op.init;
+package org.epochx.gx.op.init;
 
 import java.util.*;
 
 import org.apache.commons.lang.*;
 import org.epochx.gr.model.*;
+import org.epochx.gr.op.init.*;
 import org.epochx.gr.representation.*;
 import org.epochx.life.*;
 import org.epochx.representation.*;

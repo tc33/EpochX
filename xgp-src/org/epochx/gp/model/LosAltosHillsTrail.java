@@ -22,23 +22,17 @@
 package org.epochx.gp.model;
 
 import java.awt.*;
-import java.util.*;
-import java.util.List;
-
-import org.epochx.gp.representation.*;
-import org.epochx.gp.representation.ant.*;
-import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.ant.*;
 
 /**
- *
+ * GP model for the Los Altos Hills ant trail problem.
  */
-public class LosAltosHillsTrail extends GPModel {
+public class LosAltosHillsTrail extends AntTrail {
+	//TODO We really shouldn't have the food locations listed for every representation/language.
 	
-	private AntLandscape landscape;
-	private Ant ant;
-	
-	private static final Point[] foodLocations = {
+	/**
+	 * The points in the landscape that will be occupied by food.
+	 */
+	public static final Point[] FOOD_LOCATIONS = {
 		new Point(1,0), new Point(2,0), new Point(3,0), new Point(3,1),
 		new Point(3,2), new Point(3,3), new Point(3,4), new Point(3,5),
 		new Point(4,5), new Point(5,5), new Point(6,5), new Point(8,5),
@@ -81,51 +75,12 @@ public class LosAltosHillsTrail extends GPModel {
 		new Point(22,65), new Point(22,66)
 	};
 	
+	/**
+	 * Constructs the ant trail with the necessary food locations on an ant 
+	 * landscape of dimensions 100 x 100. The ant is set to 3000 allowed 
+	 * timesteps.
+	 */
 	public LosAltosHillsTrail() {
-		landscape = new AntLandscape(new Dimension(100, 100), null);
-		ant = new Ant(3000, landscape);
-	}
-	
-	@Override
-	public List<Node> getSyntax() {
-		// Define functions.
-		List<Node> syntax = new ArrayList<Node>();
-		syntax.add(new IfFoodAheadFunction(ant));
-		syntax.add(new Seq2Function());
-		syntax.add(new Seq3Function());
-		syntax.add(new Seq4Function());
-	
-		// Define terminals.
-		syntax.add(new AntMoveAction(ant));
-		syntax.add(new AntTurnLeftAction(ant));
-		syntax.add(new AntTurnRightAction(ant));
-		
-		return syntax;
-	}
-	
-	@Override
-	public double getFitness(CandidateProgram p) {
-		GPCandidateProgram program = (GPCandidateProgram) p;
-		
-		landscape.setFoodLocations(new ArrayList<Point>(Arrays.asList(foodLocations)));
-		ant.reset(3000, landscape);
-
-		// Run the ant.
-		while(ant.getTimesteps() < ant.getMaxMoves()) {
-			program.evaluate();
-		}
-
-		// Calculate score.
-		double score = (double) (foodLocations.length - ant.getFoodEaten());
-
-		return score;
-	}
-	
-	public Ant getAnt() {
-		return ant;
-	}
-	
-	public AntLandscape getAntLandScape() {
-		return landscape;
+		super(FOOD_LOCATIONS, new Dimension(100, 100), 3000);
 	}
 }

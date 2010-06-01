@@ -22,24 +22,18 @@
 package org.epochx.gp.model;
 
 import java.awt.*;
-import java.util.*;
-import java.util.List;
-
-import org.epochx.gp.representation.*;
-import org.epochx.gp.representation.ant.*;
-import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.ant.*;
 
 
 /**
- * 
+ * GP model for the John Muir ant trail problem.
  */
-public class JohnMuirTrail extends GPModel {
-
-	private AntLandscape landscape;
-	private Ant ant;
+public class JohnMuirTrail extends AntTrail {
+	//TODO Insert details of the trail in the class JavaDoc.
 	
-	private static final Point[] foodLocations = {
+	/**
+	 * The points in the landscape that will be occupied by food.
+	 */
+	public static final Point[] FOOD_LOCATIONS = {
 		new Point(1,0), new Point(2,0), new Point(3,0), new Point(4,0),
 		new Point(5,0), new Point(6,0), new Point(7,0), new Point(8,0),
 		new Point(9,0), new Point(10,0), new Point(10,1), new Point(10,2),
@@ -65,50 +59,11 @@ public class JohnMuirTrail extends GPModel {
 		new Point(15,4)
 	};
 	
+	/**
+	 * Constructs the ant trail with the necessary food locations on an ant 
+	 * landscape of dimensions 32 x 32. The ant is set to 100 allowed timesteps.
+	 */
 	public JohnMuirTrail() {
-		landscape = new AntLandscape(new Dimension(32, 32), null);
-		ant = new Ant(600, landscape);
-	}
-	
-	@Override
-	public List<Node> getSyntax() {
-		// Define functions.
-		List<Node> syntax = new ArrayList<Node>();
-		syntax.add(new IfFoodAheadFunction(ant));
-		syntax.add(new Seq2Function());
-		syntax.add(new Seq3Function());
-		
-		// Define terminals.
-		syntax.add(new AntMoveAction(ant));
-		syntax.add(new AntTurnLeftAction(ant));
-		syntax.add(new AntTurnRightAction(ant));
-		
-		return syntax;
-	}
-	
-	@Override
-	public double getFitness(CandidateProgram p) {
-		GPCandidateProgram program = (GPCandidateProgram) p;
-		
-		landscape.setFoodLocations(new ArrayList<Point>(Arrays.asList(foodLocations)));
-		ant.reset(600, landscape);
-
-		// Run the ant.
-		while(ant.getTimesteps() < ant.getMaxMoves()) {
-			program.evaluate();
-		}
-
-		// Calculate score.
-		double score = (double) (foodLocations.length - ant.getFoodEaten());
-
-		return score;
-	}
-	
-	public Ant getAnt() {
-		return ant;
-	}
-	
-	public AntLandscape getAntLandScape() {
-		return landscape;
+		super(FOOD_LOCATIONS, new Dimension(32, 32), 100);
 	}
 }

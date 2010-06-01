@@ -19,43 +19,28 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.gr.model.ruby;
+package org.epochx.gp.model;
 
-import org.apache.commons.lang.ArrayUtils;
-import org.epochx.gr.model.*;
-import org.epochx.gr.representation.*;
+import java.util.*;
+
+import org.epochx.gp.representation.*;
+import org.epochx.gp.representation.bool.*;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.eval.*;
-import org.epochx.tools.grammar.Grammar;
 import org.epochx.tools.util.BoolUtils;
 
 /**
- * Grammar model for the even parity problems using a Ruby grammar.
+ * GP model for the even parity problems.
  * 
  * <h4>Even parity problem</h4>
  * 
- * Given n binary inputValues, a program that solves the even-n-parity problem 
- * will return true in all circumstances where an even number of the inputValues
- * are true (or 1), and return false whenever there is an odd number of true 
- * inputValues.
+ * Given n binary inputValues, a program that solves the even-n-parity problem will 
+ * return true in all circumstances where an even number of the inputValues are true 
+ * (or 1), and return false whenever there is an odd number of true inputValues.
  */
-public class EvenParity extends GRModel {
-	
-	// Incomplete grammar requiring correct number of terminals to be added.
-	public static final String GRAMMAR_FRAGMENT = 
-		  "<prog> ::= <expr>\n" +
-		  "<expr> ::= ( <expr> <op> <expr> ) " +
-		  			"| <var> " +
-		  			"| <pre-op> ( <var> )\n" +
-		  "<pre-op> ::= !\n" +
-		  "<op> ::= \"||\" | && | !=\n" +
-		  "<var> ::= ";
-	
-	// Ruby interpreter for performing evaluation.
-	private final RubyInterpreter interpreter;
-	
+public class EvenParity extends GPModel {
+		
 	// The names of the inputValues used in the grammar.
-	private final String[] argNames;
+	private final BooleanVariable[] variables;
 	
 	// The boolean input sequences.
 	private final boolean[][] inputValues;
@@ -67,19 +52,24 @@ public class EvenParity extends GRModel {
 	 * for
 	 */
 	public EvenParity(final int noInputBits) {
-		interpreter = new RubyInterpreter();
-		
 		// Generate the input sequences.
 		inputValues = BoolUtils.generateBoolSequences(noInputBits);
 		
-		// Determine the input argument names.
-		argNames = new String[noInputBits];
+		// Define functions.
+		List<Node> syntax = new ArrayList<Node>();
+		syntax.add(new IfFunction());
+		syntax.add(new AndFunction());
+		syntax.add(new OrFunction());
+		syntax.add(new NotFunction());
+		
+		// Define terminal variables.
+		variables = new BooleanVariable[noInputBits];
 		for (int i=0; i<noInputBits; i++) {
-			argNames[i] = "d" + i;
+			variables[i] = new BooleanVariable("d" + i);
+			syntax.add(variables[i]);
 		}
 		
-		// Complete the grammar string and construct grammar instance.
-		setGrammar(new Grammar(getGrammarString()));
+		setSyntax(syntax);
 	}
 
 	/**
@@ -97,53 +87,26 @@ public class EvenParity extends GRModel {
 	 */
 	@Override
 	public double getFitness(final CandidateProgram p) {
-		final GRCandidateProgram program = (GRCandidateProgram) p;
+		final GPCandidateProgram program = (GPCandidateProgram) p;
 		
-		double score = 0;
-		
-        // Evaluate all possible inputValues.
-        for (boolean[] vars : inputValues) {
-        	// Convert to object array.
-        	final Boolean[] objVars = ArrayUtils.toObject(vars);
+        double score = 0;
+        
+        // Execute on all possible inputs.
+        for (boolean[] in: inputValues) {
         	
-        	Boolean result = null;
-			try {
-				result = (Boolean) interpreter.eval(program.getSourceCode(), argNames, objVars);
-			} catch (final MalformedProgramException e) {
-				// Assign worst possible fitness and stop evaluating.
-        		score = 0;
-        		break;
-			}
-
-			// Increment score for a correct response.
-            if ((result != null) && (result == isEvenNoTrue(vars))) {
+        	// Set the variables.
+        	for (int i=0; i<in.length; i++) {
+        		variables[i].setValue(in[i]);
+        	}
+        	
+            if ((Boolean) program.evaluate() == isEvenNoTrue(in)) {
                 score++;
             }
         }
-
+        
         return inputValues.length - score;
 	}
 	
-	/**
-	 * Constructs and returns the full grammar string for the even parity 
-	 * problem with the correct number of input bits.
-	 * 
-	 * @return the grammar string for the even parity problem with the set 
-	 * number of input bits
-	 */
-	public String getGrammarString() {
-		final StringBuilder buffer = new StringBuilder(GRAMMAR_FRAGMENT);
-		for (int i=0; i<argNames.length; i++) {
-			if (i > 0) {
-				buffer.append(" | ");
-			}
-			buffer.append(argNames[i]);
-		}
-		buffer.append('\n');
-		
-		return buffer.toString();
-	}
-
 	/*
 	 * Calculate what the correct response should be for the given inputs.
 	 */
@@ -158,4 +121,5 @@ public class EvenParity extends GRModel {
         
         return ((noTrues % 2) == 0);
     }
+    
 }

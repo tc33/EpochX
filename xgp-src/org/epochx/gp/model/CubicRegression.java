@@ -21,88 +21,35 @@
  */
 package org.epochx.gp.model;
 
-import java.util.*;
-
-import org.epochx.gp.representation.*;
-import org.epochx.gp.representation.dbl.*;
-import org.epochx.gp.stats.GPStatField;
-import org.epochx.life.GenerationAdapter;
-import org.epochx.representation.CandidateProgram;
-
 
 /**
+ * GP model for a cubic symbolic regression problem.
  * 
+ * <p>
+ * The target program is the function: x + x^2 + x^3
  */
-public class CubicRegression extends GPModel {
-
-	private DoubleVariable x;
+public class CubicRegression extends Regression {
 	
+	/**
+	 * Constructs an instance of the CubicRegression model with 50 input 
+	 * points.
+	 */
 	public CubicRegression() {
-		configure();
+		super();
 	}
 	
-	public void configure() {
-		// Create variables.
-		x = new DoubleVariable("X");
-	
-		// Define function set.
-		List<Node> syntax = new ArrayList<Node>();
-		syntax.add(new AddFunction());
-		syntax.add(new SubtractFunction());
-		syntax.add(new MultiplyFunction());
-		syntax.add(new ProtectedDivisionFunction());
-		
-		// Define terminal set.
-		syntax.add(new DoubleLiteral(5d));
-		syntax.add(new DoubleLiteral(4d));
-		syntax.add(new DoubleLiteral(3d));
-		syntax.add(new DoubleLiteral(2d));
-		syntax.add(new DoubleLiteral(1d));
-		syntax.add(new DoubleLiteral(0d));
-		syntax.add(new DoubleLiteral(-5d));
-		syntax.add(new DoubleLiteral(-4d));
-		syntax.add(new DoubleLiteral(-3d));
-		syntax.add(new DoubleLiteral(-2d));
-		syntax.add(new DoubleLiteral(-1d));
-		
-		// Define variables;
-		syntax.add(x);
-		
-		setSyntax(syntax);
+	/**
+	 * Constructs an instance of the CubicRegression model.
+	 */
+	public CubicRegression(final int noPoints) {
+		super(noPoints);
 	}
 	
+	/**
+	 * The actual function we are trying to evolve.
+	 */
 	@Override
-	public double getFitness(CandidateProgram p) {
-		GPCandidateProgram program = (GPCandidateProgram) p;
-		
-		double[] inputs = new double[]{-1.0, -0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9};
-		int noWrong = 0;
-		
-		for (double in: inputs) {
-			x.setValue(in);
-			if ((Double) program.evaluate() != getCorrectResult(in)) {
-				noWrong++;
-			}
-		}
-		
-		// How good is this result?
-		return noWrong;
-	}
-	
-	private double getCorrectResult(double x) {
-		return x + (x*x) + (x*x*x);
-	}
-	
-    public static void main(String[] args) {
-		final GPModel model = new CubicRegression();
-		model.setNoGenerations(100);
-		model.setMaxDepth(17);
-		model.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {			
-			@Override
-			public void onGenerationEnd() {
-				model.getStatsManager().printGenerationStats(GPStatField.GEN_NUMBER, GPStatField.GEN_FITNESS_MIN, GPStatField.GEN_FITNESS_AVE);
-			}
-		});
-		model.run();
-	}
+    public double getCorrectResult(final double x){
+		return x + x*x + x*x*x;
+    }
 }

@@ -21,85 +21,35 @@
  */
 package org.epochx.gp.model;
 
-import java.util.*;
-
-import org.epochx.gp.representation.*;
-import org.epochx.gp.representation.dbl.*;
-import org.epochx.representation.CandidateProgram;
-
 
 /**
+ * GP model for a quartic symbolic regression problem.
  * 
+ * <p>
+ * The target program is the function: x + x^2 + x^3 + x^4
  */
-public class QuarticRegression extends GPModel {
-
-	private DoubleVariable x;
+public class QuarticRegression extends Regression {
 	
-	private double[] inputs;
-	private double[] outputs;
-	
+	/**
+	 * Constructs an instance of the QuarticRegression model with 50 input 
+	 * points.
+	 */
 	public QuarticRegression() {
-		configure();
-	
-		inputs = new double[100];
-		outputs = new double[inputs.length];
-		for (int i=0; i<inputs.length; i++) {
-			inputs[i] = (getRNG().nextDouble() * 2) - 1.0;
-			outputs[i] = getCorrectResult(inputs[i]);
-		}
+		super();
 	}
 	
-	public void configure() {
-		// Create variables.
-		x = new DoubleVariable("X");
-
-		// Define function set.
-		List<Node> syntax = new ArrayList<Node>();
-		syntax.add(new AddFunction());
-		syntax.add(new SubtractFunction());
-		syntax.add(new MultiplyFunction());
-		syntax.add(new ProtectedDivisionFunction());
-		
-		// Define terminal set.
-		/*syntax.add(new DoubleLiteral(5d));
-		syntax.add(new DoubleLiteral(4d));
-		syntax.add(new DoubleLiteral(3d));
-		syntax.add(new DoubleLiteral(2d));
-		syntax.add(new DoubleLiteral(1d));
-		syntax.add(new DoubleLiteral(0d));
-		syntax.add(new DoubleLiteral(-5d));
-		syntax.add(new DoubleLiteral(-4d));
-		syntax.add(new DoubleLiteral(-3d));
-		syntax.add(new DoubleLiteral(-2d));
-		syntax.add(new DoubleLiteral(-1d));*/
-		
-		// Define variables;
-		syntax.add(x);
-		
-		setSyntax(syntax);
+	/**
+	 * Constructs an instance of the QuarticRegression model.
+	 */
+	public QuarticRegression(final int noPoints) {
+		super(noPoints);
 	}
 	
+	/**
+	 * The actual function we are trying to evolve.
+	 */
 	@Override
-	public double getFitness(CandidateProgram p) {
-		GPCandidateProgram program = (GPCandidateProgram) p;
-		
-		int noWrong = 0;
-		
-		for (int i=0; i<inputs.length; i++) {
-			x.setValue(inputs[i]);
-			double result = (Double) program.evaluate();
-			double error = Math.abs(result - outputs[i]);
-			
-			if (error > 0.01) {
-				noWrong++;
-			}
-		}
-		
-		// How good is this result?
-		return noWrong;
-	}
-	
-	private double getCorrectResult(double x) {
-		return x + (x*x) + (x*x*x) + (x*x*x*x);
-	}
+    public double getCorrectResult(final double x){
+		return x + x*x + x*x*x + x*x*x*x;
+    }
 }

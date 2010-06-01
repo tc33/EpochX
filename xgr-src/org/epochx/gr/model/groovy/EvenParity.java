@@ -117,7 +117,7 @@ public class EvenParity extends GRModel {
 			}
 
 			// Increment score for a correct response.
-            if ((result != null) && (result == evenNoTrue(vars))) {
+            if ((result != null) && (result == isEvenNoTrue(vars))) {
                 score++;
             }
         }
@@ -148,7 +148,7 @@ public class EvenParity extends GRModel {
 	/*
 	 * Calculate what the correct response should be for the given inputs.
 	 */
-    private boolean evenNoTrue(final boolean[] input) {
+    private boolean isEvenNoTrue(final boolean[] input) {
         int noTrues = 0;
 
         for (final boolean b: input) {

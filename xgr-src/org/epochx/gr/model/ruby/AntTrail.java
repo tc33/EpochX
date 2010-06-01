@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.gr.model.java;
+package org.epochx.gr.model.ruby;
 
 import java.awt.*;
 import java.util.*;
@@ -33,9 +33,9 @@ import org.epochx.tools.eval.*;
 import org.epochx.tools.grammar.Grammar;
 
 /**
- * Abstract XGR model for ant trail problems in the Java language. This class 
+ * Abstract XGR model for ant trail problems in the Ruby language. This class 
  * provides the general functionality of ant trail models, but does not itself 
- * define a trail. Ant trail models for the Java language should extend this 
+ * define a trail. Ant trail models for the Ruby language should extend this 
  * class.
  */
 public abstract class AntTrail extends GRModel {
@@ -44,14 +44,14 @@ public abstract class AntTrail extends GRModel {
 	 * The grammar that defines valid solution space.
 	 */
 	public static final String GRAMMAR_STRING = 
-		  "<code> ::= <line> | <code> <line>\n"
-		+ "<line> ::= <expr>\n"
-		+ "<expr> ::= <condition> | <opcode>\n"
-		+ "<condition> ::= if(ant.isFoodAhead()){ <opcode> }else{ <opcode> }\n"
-		+ "<opcode> ::=  ant.turnLeft(); | ant.turnRight(); | ant.move();\n";
+		  "<code> ::= <line> | <code> <line>\n" +
+		  "<line> ::= <expr> \n" +
+		  "<expr> ::= <condition> | <op>\n" +
+		  "<condition> ::= \"if ant.isFoodAhead()\" \\n <op> \\n else \\n <op> \\n end \n" +
+		  "<op> ::= ant.turnLeft(); | ant.turnRight(); | ant.move();";
 	
-	// Java interpreter for performing evaluation.
-	private final JavaInterpreter interpreter;
+	// Ruby interpreter for performing evaluation.
+	private final RubyInterpreter interpreter;
 	
 	// Ant components.
 	private final AntLandscape landscape;
@@ -82,7 +82,7 @@ public abstract class AntTrail extends GRModel {
 		
 		setGrammar(new Grammar(GRAMMAR_STRING));
 		
-		interpreter = new JavaInterpreter();
+		interpreter = new RubyInterpreter();
 	}
 	
 	/**

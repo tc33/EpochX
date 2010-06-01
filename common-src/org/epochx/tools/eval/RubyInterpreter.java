@@ -45,7 +45,7 @@ public class RubyInterpreter extends ScriptingInterpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object eval(final String expression, final String[] argNames, final Object[] argValues) {
+	public Object eval(final String expression, final String[] argNames, final Object[] argValues) throws MalformedProgramException {
 		final String code = getEvalCode(expression, argNames);
 
 		Object result = null;
@@ -55,9 +55,9 @@ public class RubyInterpreter extends ScriptingInterpreter {
 			getEngine().eval(code);
 		    result = invocableEngine.invokeFunction("expr", argValues);
 		} catch (ScriptException ex) {
-			ex.printStackTrace();
+			throw new MalformedProgramException();
 		} catch (NoSuchMethodException ex) {
-		    ex.printStackTrace();
+			throw new MalformedProgramException();
 		}
 
 		return result;
@@ -67,7 +67,7 @@ public class RubyInterpreter extends ScriptingInterpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object[] eval(final String expression, final String[] argNames, final Object[][] argValues) {
+	public Object[] eval(final String expression, final String[] argNames, final Object[][] argValues) throws MalformedProgramException {
 		//TODO Might be able to speed this up further by compiling then using invokeMethod.
 		final Object[] results = new Object[argValues.length];
 
@@ -83,9 +83,9 @@ public class RubyInterpreter extends ScriptingInterpreter {
 	        	results[i] = invocableEngine.invokeFunction("expr", argValues[i]);
 	        }
 		} catch (ScriptException ex) {
-			ex.printStackTrace();
+			throw new MalformedProgramException();
 		} catch (NoSuchMethodException ex) {
-		    ex.printStackTrace();
+			throw new MalformedProgramException();
 		}
 			        
 		return results;
@@ -95,7 +95,7 @@ public class RubyInterpreter extends ScriptingInterpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void exec(final String program, final String[] argNames, final Object[] argValues) {		
+	public void exec(final String program, final String[] argNames, final Object[] argValues) throws MalformedProgramException {		
 		final String code = getExecCode(program, argNames);
 
 		Invocable invocableEngine = (Invocable) getEngine();
@@ -103,9 +103,9 @@ public class RubyInterpreter extends ScriptingInterpreter {
 			getEngine().eval(code);
 		    invocableEngine.invokeFunction("expr", argValues);
 		} catch (ScriptException ex) {
-			ex.printStackTrace();
+			throw new MalformedProgramException();
 		} catch (NoSuchMethodException ex) {
-		    ex.printStackTrace();
+			throw new MalformedProgramException();
 		}
 	}
 	
@@ -113,7 +113,7 @@ public class RubyInterpreter extends ScriptingInterpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void exec(final String program, final String[] argNames, final Object[][] argValues) {
+	public void exec(final String program, final String[] argNames, final Object[][] argValues) throws MalformedProgramException {
 		//TODO Might be able to speed this up further by compiling then using invokeMethod.
 		final String code = getExecCode(program, argNames);
 		
@@ -126,9 +126,9 @@ public class RubyInterpreter extends ScriptingInterpreter {
 	        	invocableEngine.invokeFunction("expr", argValues[i]);
 	        }
 		} catch (ScriptException ex) {
-			ex.printStackTrace();
+			throw new MalformedProgramException();
 		} catch (NoSuchMethodException ex) {
-		    ex.printStackTrace();
+			throw new MalformedProgramException();
 		}
 	}
 	

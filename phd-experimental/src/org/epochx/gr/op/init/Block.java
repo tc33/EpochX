@@ -13,7 +13,7 @@ public class Block {
 	@Override
 	public String toString() {
 		StringBuilder buffer = new StringBuilder();
-		buffer.append("{\n");
+		buffer.append(" {\n");
 		
 		for (Statement s: statements) {
 			buffer.append(s.toString());

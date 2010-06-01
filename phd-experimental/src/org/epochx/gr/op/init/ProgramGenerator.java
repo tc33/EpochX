@@ -2,10 +2,9 @@ package org.epochx.gr.op.init;
 
 import java.util.*;
 
-import org.epochx.gr.op.init.Variable.*;
 import org.epochx.tools.random.*;
 
-public class ExperimentalProgramGenerator {
+public class ProgramGenerator {
 
 	private RandomNumberGenerator rng;
 	
@@ -13,9 +12,7 @@ public class ExperimentalProgramGenerator {
 	
 	private Stack<Variable> variables;
 	
-	private int indentLevel = 0;
-	
-	public ExperimentalProgramGenerator() {
+	public ProgramGenerator() {
 		rng = new MersenneTwisterFast();
 		variables = new Stack<Variable>();
 
@@ -23,9 +20,11 @@ public class ExperimentalProgramGenerator {
 	}
 	
 	public static void main(String[] args) {
-		ExperimentalProgramGenerator generator = new ExperimentalProgramGenerator();
+		ProgramGenerator generator = new ProgramGenerator();
 		
-		System.out.println(generator.getProgram(10));
+		Program program = generator.getProgram(10);
+		
+		System.out.println(format(program.toString()));
 	}
 	
 	public Program getProgram(int noStatements) {
@@ -304,15 +303,35 @@ public class ExperimentalProgramGenerator {
 		return typeVariables;
 	}
 	
-	private String indent() {
+	public static String format(CharSequence s) {
+		int indentLevel = 0;
+		StringBuilder formatted = new StringBuilder();
+		
+		for (int i=0; i<s.length(); i++) {
+			char c = s.charAt(i);
+			formatted.append(c);
+			if (c == '{') {
+				indentLevel++;
+			} else if (c == '\n') {
+				// If there's space then look ahead to test next char.
+				if (i+1 < s.length()) {
+					c = s.charAt(i+1);
+					if (c == '}') {
+						indentLevel--;
+					}
+				}
+				formatted.append(indent(indentLevel));
+			}
+		}
+		
+		return formatted.toString();
+	}
+	
+	private static String indent(int indentLevel) {
 		StringBuilder buffer = new StringBuilder();
 		for (int i=0; i<indentLevel; i++) {
 			buffer.append("    ");
 		}
 		return buffer.toString();
-	}
-	
-	private void test() {
-        
 	}
 }

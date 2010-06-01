@@ -1,10 +1,6 @@
 package org.epochx.gr.op.init;
 
 public class Variable implements Expression {
-
-	public enum DataType {
-		BOOLEAN, DOUBLE, INT;
-	}
 	
 	private DataType datatype;
 	

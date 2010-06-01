@@ -23,37 +23,18 @@ package org.epochx.ge.model;
 
 import java.io.File;
 
-import org.epochx.core.Controller;
-import org.epochx.ge.core.GEAbstractModel;
-import org.epochx.ge.mapper.DepthFirstMapper;
-import org.epochx.ge.op.init.FixedLengthInitialiser;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.*;
 import org.epochx.tools.grammar.Grammar;
 
+/**
+ * This model needs to undergo some work and is unlikely to function correctly
+ * at present.
+ */
+public class StringMatch extends GEModel {
 
-public class StringMatch extends GEAbstractModel {
-
-	private Grammar grammar;
-	
 	public StringMatch() {
-		grammar = new Grammar(new File("example-grammars/StringMatch.bnf"));
-		
-		DepthFirstMapper mapper = new DepthFirstMapper(this);
-		mapper.setRemovingUnusedCodons(false);
-		mapper.setWrapping(false);
-		mapper.setExtending(false);
-		
-		setMapper(mapper);
-		setInitialiser(new FixedLengthInitialiser(this, 30));
-		setMaxChromosomeLength(500);
-		setGenStatFields(new GenerationStatField[]{GenerationStatField.FITNESS_MIN, GenerationStatField.FITNESS_AVE, GenerationStatField.LENGTH_AVE});
-		setRunStatFields(new RunStatField[]{RunStatField.BEST_FITNESS, RunStatField.BEST_PROGRAM});
-		setNoGenerations(1000);
-		setNoElites(20);
-		setPopulationSize(500);
-		setNoRuns(100);
+		setGrammar(new Grammar(new File("example-grammars/StringMatch.bnf")));
 	}
 	
 	@Override
@@ -84,12 +65,20 @@ public class StringMatch extends GEAbstractModel {
 		return score;
 	}
 
-	@Override
-	public Grammar getGrammar() {
-		return grammar;
-	}
-
-	public static void main(String[] args) {
-		Controller.run(new StringMatch());
-	}
+	/*public static void main(String[] args) {
+		GEModel model = new StringMatch();
+		
+		DepthFirstMapper mapper = new DepthFirstMapper(model);
+		mapper.setRemovingUnusedCodons(false);
+		mapper.setWrapping(false);
+		mapper.setExtending(false);
+		
+		model.setMapper(mapper);
+		model.setInitialiser(new FixedLengthInitialiser(model, 30));
+		model.setMaxChromosomeLength(500);
+		model.setNoGenerations(1000);
+		model.setNoElites(20);
+		model.setPopulationSize(500);
+		model.setNoRuns(100);
+	}*/
 }

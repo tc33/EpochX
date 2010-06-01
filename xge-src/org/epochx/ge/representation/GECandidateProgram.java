@@ -311,6 +311,7 @@ public class GECandidateProgram extends CandidateProgram {
 	 * @return the fitness score of this candidate program according to the 
 	 * model's getFitness method.
 	 */
+	@Override
 	public double getFitness() {
 		if (!model.cacheFitness() || (fitness == -1)) {
 			fitness = model.getFitness(this);

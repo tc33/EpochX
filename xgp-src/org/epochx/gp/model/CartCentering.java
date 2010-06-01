@@ -174,7 +174,7 @@ public class CartCentering extends GPModel {
 		Controller.run(model);
 	}*/
 	
-	private double solution(double x, double v) {
+	public double solution(double x, double v) {
 		if ((-1.0*x) > (v*Math.abs(v))) {
 			return 1.0;
 		} else {

@@ -21,7 +21,6 @@
  */
 package org.epochx.gr.model.epox.ant;
 
-import org.epochx.gr.example.epox.*;
 import org.epochx.gr.model.*;
 import org.epochx.gr.model.epox.SantaFeTrail;
 

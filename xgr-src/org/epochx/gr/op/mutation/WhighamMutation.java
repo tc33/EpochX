@@ -23,13 +23,11 @@ package org.epochx.gr.op.mutation;
 
 import java.util.List;
 
-import org.epochx.gp.representation.*;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.op.init.GrowInitialiser;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.eval.MalformedProgramException;
 import org.epochx.tools.grammar.*;
 import org.epochx.tools.random.RandomNumberGenerator;
 

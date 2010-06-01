@@ -176,7 +176,13 @@ import java.util.Random;
 // -- Sean
 
 public class MersenneTwisterFast implements Serializable, Cloneable, RandomNumberGenerator {
-    // Period parameters
+	
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 7948923816122472519L;
+	
+	// Period parameters
     private static final int N = 624;
     private static final int M = 397;
     private static final int MATRIX_A = 0x9908b0df;   //    private static final * constant vector a
@@ -199,6 +205,7 @@ public class MersenneTwisterFast implements Serializable, Cloneable, RandomNumbe
     private boolean __haveNextNextGaussian;
     
     /* We're overriding all internal data, to my knowledge, so this should be okay */
+    @Override
     public Object clone() throws CloneNotSupportedException {
         MersenneTwisterFast f = (MersenneTwisterFast)(super.clone());
         f.mt = mt.clone();
@@ -528,9 +535,8 @@ public class MersenneTwisterFast implements Serializable, Cloneable, RandomNumbe
     
     /** This generates a coin flip with a probability <tt>probability</tt>
      * of returning true, else returning false.  <tt>probability</tt> must
-     * be between 0.0 and 1.0, inclusive. */
-    
-    @SuppressWarnings({"ConstantConditions"})
+     * be between 0.0 and 1.0, inclusive. 
+     */
     public final boolean nextBoolean(final double probability) {
         int y;
         int z;
@@ -664,7 +670,6 @@ public class MersenneTwisterFast implements Serializable, Cloneable, RandomNumbe
     }
     
     
-    @SuppressWarnings({"ConstantConditions"})
     public final long nextLong() {
         int y;
         int z;
@@ -731,7 +736,6 @@ public class MersenneTwisterFast implements Serializable, Cloneable, RandomNumbe
      * @param n max long
      * @return next long
      */
-    @SuppressWarnings({"ConstantConditions"})
     public final long nextLong(final long n) {
         if (n<=0)
             throw new IllegalArgumentException("n must be positive");
@@ -802,7 +806,6 @@ public class MersenneTwisterFast implements Serializable, Cloneable, RandomNumbe
     
     /** Returns a random double in the half-open range from [0.0,1.0).  Thus 0.0 is a valid
      * result but 1.0 is not. */
-    @SuppressWarnings({"ConstantConditions"})
     public final double nextDouble() {
         int y;
         int z;
@@ -867,7 +870,6 @@ public class MersenneTwisterFast implements Serializable, Cloneable, RandomNumbe
     
     
     
-    @SuppressWarnings({"ConstantConditions"})
     public final double nextGaussian() {
         if (__haveNextNextGaussian) {
             __haveNextNextGaussian = false;
@@ -1044,7 +1046,6 @@ public class MersenneTwisterFast implements Serializable, Cloneable, RandomNumbe
     
     /** Returns an integer drawn uniformly from 0 to n-1.  Suffice it to say,
      * n must be > 0, or an IllegalArgumentException is raised. */
-    @SuppressWarnings({"ConstantConditions"})
     public final int nextInt(final int n) {
         if (n<=0)
             throw new IllegalArgumentException("n must be positive");
@@ -1124,7 +1125,6 @@ public class MersenneTwisterFast implements Serializable, Cloneable, RandomNumbe
      * Tests the code.
      * @param args arguments
      */
-    @SuppressWarnings({"ConstantConditions"})
     public static void main(String args[]) {
         int j;
         

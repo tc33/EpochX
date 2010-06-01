@@ -31,6 +31,11 @@ public class MalformedGrammarException extends RuntimeException {
 	 */
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4253637393156061665L;
+
+	/**
 	 * Constructs a MalformedGrammarException with the specified message.
 	 * 
 	 * @param message {@inheritDoc}

@@ -34,4 +34,20 @@ public class IfStatement implements Statement {
 		return buffer.toString();
 	}
 	
+	@Override
+	public IfStatement clone() {
+		IfStatement clone = null;
+		try {
+			clone = (IfStatement) super.clone();
+		} catch (CloneNotSupportedException e) {
+			assert false;
+		}
+		
+		clone.condition = this.condition.clone();
+		clone.ifCode = this.ifCode.clone();
+		clone.elseCode = this.elseCode.clone();
+		
+		return clone;
+	}
+	
 }

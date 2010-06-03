@@ -17,4 +17,19 @@ public class Assignment implements Statement {
 		return variable.getVariableName() + " = " + expression.toString() + ';';
 	}
 	
+	@Override
+	public Assignment clone() {
+		Assignment clone = null;
+		try {
+			clone = (Assignment) super.clone();
+		} catch (final CloneNotSupportedException e) {
+			assert false;
+		}
+		
+		clone.variable = this.variable.clone();
+		clone.expression = this.expression.clone();
+		
+		return clone;
+	}
+	
 }

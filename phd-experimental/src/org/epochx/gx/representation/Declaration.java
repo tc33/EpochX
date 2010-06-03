@@ -20,4 +20,20 @@ public class Declaration implements Statement {
 		return type.toString().toLowerCase() + ' ' + variable.getVariableName() + " = " + expression.toString() + ';';
 	}
 	
+	@Override
+	public Declaration clone() {
+		Declaration clone = null;
+		try {
+			clone = (Declaration) super.clone();
+		} catch (CloneNotSupportedException e) {
+			assert false;
+		}
+		
+		clone.type = this.type;
+		clone.variable = this.variable.clone();
+		clone.expression = this.expression.clone();
+		
+		return clone;
+	}
+	
 }

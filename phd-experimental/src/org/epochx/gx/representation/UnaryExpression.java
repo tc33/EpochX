@@ -21,4 +21,19 @@ public class UnaryExpression implements Expression {
 		return buffer.toString();
 	}
 	
+	@Override
+	public UnaryExpression clone() {
+		UnaryExpression clone = null;
+		try {
+			clone = (UnaryExpression) super.clone();
+		} catch (CloneNotSupportedException e) {
+			assert false;
+		}
+		
+		clone.expression = this.expression.clone();
+		clone.operator = this.operator;
+		
+		return clone;
+	}
+	
 }

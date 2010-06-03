@@ -17,4 +17,18 @@ public class BooleanLiteral implements Literal {
 		return Boolean.toString(value);
 	}
 	
+	@Override
+	public BooleanLiteral clone() {
+		BooleanLiteral clone = null;
+		try {
+			clone = (BooleanLiteral) super.clone();
+		} catch (CloneNotSupportedException e) {
+			assert false;
+		}
+		
+		clone.value = this.value;
+		
+		return clone;
+	}
+	
 }

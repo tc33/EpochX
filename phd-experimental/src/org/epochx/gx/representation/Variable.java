@@ -23,4 +23,19 @@ public class Variable implements Expression {
 	public String toString() {
 		return variableName;
 	}
+	
+	@Override
+	public Variable clone() {
+		Variable clone = null;
+		try {
+			clone = (Variable) super.clone();
+		} catch (CloneNotSupportedException e) {
+			assert false;
+		}
+		
+		clone.datatype = this.datatype;
+		clone.variableName = this.variableName;
+		
+		return clone;
+	}
 }

@@ -25,4 +25,20 @@ public class BinaryExpression implements Expression {
 		
 		return buffer.toString();
 	}
+
+	@Override
+	public BinaryExpression clone() {
+		BinaryExpression clone = null;
+		try {
+			clone = (BinaryExpression) super.clone();
+		} catch (CloneNotSupportedException e) {
+			assert false;
+		}
+		
+		clone.leftExpression = this.leftExpression.clone();
+		clone.rightExpression = this.rightExpression.clone();
+		clone.operator = this.operator;
+		
+		return clone;
+	}
 }

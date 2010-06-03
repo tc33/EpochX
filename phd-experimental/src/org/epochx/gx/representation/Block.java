@@ -24,4 +24,20 @@ public class Block {
 		return buffer.toString();
 	}
 	
+	@Override
+	public Block clone() {
+		Block clone = null;
+		try {
+			clone = (Block) super.clone();
+		} catch (CloneNotSupportedException e) {
+			assert false;
+		}
+		
+		clone.statements = new ArrayList<Statement>();
+		for (Statement s: this.statements) {
+			clone.statements.add((Statement) s.clone());
+		}
+		
+		return clone;
+	}
 }

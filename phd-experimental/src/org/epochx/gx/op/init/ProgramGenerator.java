@@ -14,18 +14,14 @@ public class ProgramGenerator {
 	private Stack<Variable> variables;
 	
 	public ProgramGenerator() {
-		rng = new MersenneTwisterFast();
+		this(new MersenneTwisterFast());
+	}
+	
+	public ProgramGenerator(final RandomNumberGenerator rng) {
+		this.rng = rng;
 		variables = new Stack<Variable>();
 
 		noVars = 0;
-	}
-	
-	public static void main(String[] args) {
-		ProgramGenerator generator = new ProgramGenerator();
-		
-		Program program = generator.getProgram(10);
-		
-		System.out.println(format(program.toString()));
 	}
 	
 	public Program getProgram(int noStatements) {
@@ -334,5 +330,13 @@ public class ProgramGenerator {
 			buffer.append("    ");
 		}
 		return buffer.toString();
+	}
+	
+	public static void main(String[] args) {
+		ProgramGenerator generator = new ProgramGenerator();
+		
+		Program program = generator.getProgram(10);
+		
+		System.out.println(format(program.toString()));
 	}
 }

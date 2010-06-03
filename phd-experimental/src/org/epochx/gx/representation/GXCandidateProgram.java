@@ -22,15 +22,14 @@
 package org.epochx.gx.representation;
 
 import org.epochx.gx.model.*;
-import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.grammar.*;
+import org.epochx.representation.*;
 
 public class GXCandidateProgram extends CandidateProgram {
 
 	private GXModel model;
 	
-	// The phenotype.
-	private NonTerminalSymbol parseTree;
+	// The abstract syntax tree.
+	private Program program;
 	
 	// The fitness of the phenotype.
 	private double fitness;
@@ -42,9 +41,9 @@ public class GXCandidateProgram extends CandidateProgram {
 		this(null, model);
 	}
 	
-	public GXCandidateProgram(NonTerminalSymbol parseTree, GXModel model) {
+	public GXCandidateProgram(Program program, GXModel model) {
 		this.model = model;
-		this.parseTree = parseTree;
+		this.program = program;
 		
 		sourceCache = null;
 		
@@ -52,8 +51,8 @@ public class GXCandidateProgram extends CandidateProgram {
 		fitness = -1;
 	}
 	
-	public void setParseTree(NonTerminalSymbol parseTree) {
-		this.parseTree = parseTree;
+	public void setParseTree(Program program) {
+		this.program = program;
 	}
 	
 	@Override
@@ -77,33 +76,32 @@ public class GXCandidateProgram extends CandidateProgram {
 	public boolean isValid() {
 		boolean valid = true;
 		
-		int maxProgramDepth = model.getMaxDepth();
+		/*int maxProgramDepth = model.getMaxDepth();
 		
 		if ((maxProgramDepth != -1)
 				&& (getDepth() > maxProgramDepth)) {
 			valid = false;
-		}
+		}*/
 		
 		return valid;
 	}
 
 	public String getSourceCode() {
-		return parseTree.toString();
+		return program.toString();
 	}
 	
-	public NonTerminalSymbol getParseTree() {
-		return parseTree;
+	public Program getAST() {
+		return program;
 	}
 	
-	public int getDepth() {
+	/*public int getDepth() {
 		return parseTree.getDepth();
-	}
+	}*/
 	
 	/**
-	 * Create a clone of this GECandidateProgram. The list of codons are copied 
-	 * as are all caches.
+	 * Create a clone of this GXCandidateProgram.
 	 * 
-	 * @return a copy of this GECandidateProgram instance.
+	 * @return a copy of this GXCandidateProgram instance.
 	 */
 	@Override
 	public CandidateProgram clone() {
@@ -111,11 +109,7 @@ public class GXCandidateProgram extends CandidateProgram {
 		GXCandidateProgram clone = (GXCandidateProgram) super.clone();
 				
 		// If codons are the same then the source and fitness should be the same.
-		if (this.parseTree == null) {
-			clone.parseTree = null;
-		} else {
-			clone.parseTree = (NonTerminalSymbol) this.parseTree.clone();
-		}
+		clone.program = (Program) this.program.clone();
 		
 		// Copy the caches.
 		clone.sourceCache = this.sourceCache;
@@ -134,17 +128,16 @@ public class GXCandidateProgram extends CandidateProgram {
 	 */
 	@Override
 	public String toString() {
-		if (parseTree != null) {
-			return parseTree.toString();
+		if (program != null) {
+			return program.toString();
 		} else {
 			return null;
 		}
 	}
 	
 	/**
-	 * Compares the given argument for equivalence to this GECandidateProgram.
-	 * Two GR candidate programs are equal if they have equal syntax regardless
-	 * of grammar rules used or if both have a null parse tree.
+	 * Compares the given argument for equivalence to this GXCandidateProgram.
+	 * Two GX candidate programs are equal if they have equal syntax.
 	 * 
 	 * @return true if the object is an equivalent candidate program, false 
 	 * otherwise.

@@ -2,7 +2,7 @@ package org.epochx.gx.representation;
 
 import java.util.*;
 
-public class Program {
+public class Program implements Cloneable {
 
 	private List<Statement> statements;
 	
@@ -39,5 +39,22 @@ public class Program {
 	public static Program getProgram() {
 		return Program.getProgram(rng.nextInt(10) + 1);
 	}*/
+	
+	@Override
+	public Object clone() {
+		Program clone = null;
+		try {
+			clone = (Program) super.clone();
+		} catch (CloneNotSupportedException e) {
+			assert false;
+		}
+		
+		clone.statements = new ArrayList<Statement>();
+		for (Statement s: this.statements) {
+			clone.statements.add((Statement) s.clone());
+		}
+		
+		return clone;
+	}
 	
 }

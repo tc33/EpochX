@@ -31,7 +31,7 @@ public class GXCandidateProgram extends CandidateProgram {
 	// The abstract syntax tree.
 	private Program program;
 	
-	// The fitness of the phenotype.
+	// The fitness of this program.
 	private double fitness;
 	
 	// A stash of the source for testing if fitness cache is up to date.

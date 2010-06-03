@@ -145,9 +145,9 @@ public abstract class Model implements Runnable {
 		if (initialiser == null)  {
 			throw new IllegalStateException("no initialiser set");
 		} else if ((crossover == null) && (crossoverProbability != 0.0)) {
-			throw new IllegalStateException("no crossover set");
+			throw new IllegalStateException("no crossover set but crossover probability is >0.0");
 		} else if ((mutation == null) && (mutationProbability != 0.0)) {
-			throw new IllegalStateException("no mutation set");
+			throw new IllegalStateException("no mutation set but mutation probability is >0.0");
 		}
 		
 		// Execute all the runs.

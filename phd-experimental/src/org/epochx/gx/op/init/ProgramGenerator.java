@@ -13,6 +13,8 @@ public class ProgramGenerator {
 	
 	private Stack<Variable> variables;
 	
+	private Set<Variable> parameters;
+	
 	public ProgramGenerator() {
 		this(new MersenneTwisterFast());
 	}
@@ -20,11 +22,38 @@ public class ProgramGenerator {
 	public ProgramGenerator(final RandomNumberGenerator rng) {
 		this.rng = rng;
 		variables = new Stack<Variable>();
+		parameters = new HashSet<Variable>();
 
 		noVars = 0;
 	}
 	
+	/**
+	 * Arguments are essentially variables but they are available at the 
+	 * start of each program that is generated with the assumption that they
+	 * have already been declared.
+	 * 
+	 * @param var
+	 */
+	public void setParameters(Variable ... parameters) {
+		this.parameters.clear();
+		for (Variable v: parameters) {
+			this.parameters.add(v);
+			variables.push(v);
+		}
+	}
+	
+	public void reset() {
+		variables.clear();
+		variables.addAll(parameters);
+		noVars = 0;
+	}
+	
+	public void setRNG(RandomNumberGenerator rng) {
+		this.rng = rng;
+	}
+	
 	public Program getProgram(int noStatements) {
+		reset();
 		Program p = new Program();
 		
 		for (int i=0; i<noStatements; i++) {
@@ -153,7 +182,7 @@ public class ProgramGenerator {
 		String[] operators = null;
 		
 		if (dataType == DataType.BOOLEAN) {
-			operators = new String[]{"&&", "||", "^"};
+			operators = new String[]{"&&", "||"}; // ^ not supported by bsh.
 		} else if (dataType == DataType.INT) {
 			operators = new String[]{"+", "/", "%", "*", "-"};
 		} else if (dataType == DataType.DOUBLE) {
@@ -171,23 +200,30 @@ public class ProgramGenerator {
 	}
 	
 	public UnaryExpression getUnaryExpression(DataType dataType) {
-		String[] operators = null;
+		UnaryExpression result = null;
 		
+		String[] operators = null;
 		if (dataType == DataType.BOOLEAN) {
 			operators = new String[]{"!"};
 		} else if (dataType == DataType.INT) {
 			operators = new String[]{"++", "--"};
 		} else if (dataType == DataType.DOUBLE) {
-			operators = new String[]{"++", "--"};
+			//operators = new String[]{"++", "--"};
 		} else {
 			// Broken.
 		}
 		
-		int ran = rng.nextInt(operators.length);
+		if (operators != null) {
+			int ran = rng.nextInt(operators.length);
 		
-		Expression expression = getExpression(dataType);
-		
-		return new UnaryExpression(operators[ran], expression);
+			Variable var = getVariable(dataType);
+			
+			if (var != null) {
+				result = new UnaryExpression(operators[ran], var);
+			}
+		}
+
+		return result;
 	}
 	
 	public Block getBlock() {
@@ -214,7 +250,7 @@ public class ProgramGenerator {
 	public DataType getDataType() {
 		DataType result = null;
 		
-		int ran = rng.nextInt(3);
+		int ran = rng.nextInt(1);
 		
 		if (ran == 0) {
 			result = DataType.BOOLEAN;

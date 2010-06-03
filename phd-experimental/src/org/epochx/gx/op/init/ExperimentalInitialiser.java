@@ -6,19 +6,13 @@ import org.epochx.gx.model.*;
 import org.epochx.gx.representation.*;
 import org.epochx.life.*;
 import org.epochx.representation.*;
-import org.epochx.tools.random.*;
 
 public class ExperimentalInitialiser implements GXInitialiser {
 
 	// The controlling model.
 	private GXModel model;
 	
-	private RandomNumberGenerator rng;
 	private int popSize;
-	private int maxInitialProgramDepth;
-	
-	private List<String> declaredVariables;
-	private int variableIndex;
 	
 	private ProgramGenerator generator;
 	
@@ -40,9 +34,8 @@ public class ExperimentalInitialiser implements GXInitialiser {
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
-		rng = model.getRNG();
+		generator.setRNG(model.getRNG());
 		popSize = model.getPopulationSize();
-		maxInitialProgramDepth = model.getMaxInitialDepth();
 	}
 	
 	@Override
@@ -51,18 +44,19 @@ public class ExperimentalInitialiser implements GXInitialiser {
 		
 		for (int i=0; i<popSize; i++) {
 			pop.add(initialiseProgram());
-			System.out.println(pop.get(i));
+			//System.out.println(pop.get(i));
 		}
 		
 		return pop;
 	}
 
-	private CandidateProgram initialiseProgram() {
-		GXCandidateProgram program = new GXCandidateProgram(model);
+	private GXCandidateProgram initialiseProgram() {
+		Program ast = generator.getProgram(2);		
 		
-		
-		
-		return null;
+		return new GXCandidateProgram(ast, model);
 	}
-
+	
+	public void setParameters(Variable ... parameters) {
+		generator.setParameters(parameters);
+	}
 }

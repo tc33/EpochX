@@ -25,7 +25,7 @@ import org.epochx.core.Model;
 import org.epochx.gr.op.crossover.WhighamCrossover;
 import org.epochx.gr.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.gr.op.mutation.WhighamMutation;
-import org.epochx.gr.stats.GRStatsEngine;
+import org.epochx.gr.stats.*;
 import org.epochx.tools.grammar.Grammar;
 
 /**

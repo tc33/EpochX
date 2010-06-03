@@ -17,11 +17,13 @@ public class BinaryExpression implements Expression {
 	public String toString() {
 		StringBuilder buffer = new StringBuilder();
 		
+		buffer.append('(');
 		buffer.append(leftExpression);
 		buffer.append(' ');
 		buffer.append(operator);
 		buffer.append(' ');
 		buffer.append(rightExpression);
+		buffer.append(')');
 		
 		return buffer.toString();
 	}

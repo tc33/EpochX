@@ -1,4 +1,4 @@
-package org.epochx.gx.op.init;
+package org.epochx.gx.representation;
 
 public interface Literal extends Expression {
 

@@ -2,6 +2,7 @@ package org.epochx.gx.op.init;
 
 import java.util.*;
 
+import org.epochx.gx.representation.*;
 import org.epochx.tools.random.*;
 
 public class ProgramGenerator {

@@ -3,18 +3,18 @@ package org.epochx.gx.op.init;
 import java.util.*;
 
 import org.apache.commons.lang.*;
-import org.epochx.gr.model.*;
 import org.epochx.gr.op.init.*;
 import org.epochx.gr.representation.*;
+import org.epochx.gx.model.*;
 import org.epochx.life.*;
 import org.epochx.representation.*;
 import org.epochx.tools.grammar.*;
 import org.epochx.tools.random.*;
 
-public class ExperimentalInitialiser implements GRInitialiser {
+public class ExperimentalInitialiser implements GXInitialiser {
 
 	// The controlling model.
-	private GRModel model;
+	private GXModel model;
 	
 	private RandomNumberGenerator rng;
 	private Grammar grammar;
@@ -24,7 +24,7 @@ public class ExperimentalInitialiser implements GRInitialiser {
 	private List<String> declaredVariables;
 	private int variableIndex;
 	
-	public ExperimentalInitialiser(GRModel model) {
+	public ExperimentalInitialiser(GXModel model) {
 		this.model = model;
 		
 		// Configure parameters from the model.
@@ -41,7 +41,6 @@ public class ExperimentalInitialiser implements GRInitialiser {
 	 */
 	private void configure() {
 		rng = model.getRNG();
-		grammar = model.getGrammar();
 		popSize = model.getPopulationSize();
 		maxInitialProgramDepth = model.getMaxInitialDepth();
 	}
@@ -58,7 +57,7 @@ public class ExperimentalInitialiser implements GRInitialiser {
 		return pop;
 	}
 	
-	private GRCandidateProgram initialiseProgram() {
+	private GXCandidateProgram initialiseProgram() {
 		GrammarRule startRule = grammar.getStartRule();
 		
 		declaredVariables = new ArrayList<String>();
@@ -68,7 +67,7 @@ public class ExperimentalInitialiser implements GRInitialiser {
 		
 		buildDerivationTree(parseTree, startRule, 0, maxInitialProgramDepth);
 		
-		return new GRCandidateProgram(parseTree, model);
+		return new GXCandidateProgram(parseTree, model);
 	}
 	
 	private void buildDerivationTree(NonTerminalSymbol parseTree, GrammarRule rule, int depth, int maxDepth) {		

@@ -1,4 +1,4 @@
-package org.epochx.gx.op.init;
+package org.epochx.gx.representation;
 
 public class IntLiteral implements Literal {
 

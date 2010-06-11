@@ -2,12 +2,20 @@ package org.epochx.gx.representation;
 
 import java.util.*;
 
-public class Program implements Cloneable {
+public class AST implements Cloneable {
 
 	private List<Statement> statements;
 	
-	public Program() {
+	public AST() {
 		statements = new ArrayList<Statement>();
+	}
+	
+	public void insertStatement(int index, Statement statement) {
+		if (index == statements.size()) {
+			addStatement(statement);
+		} else {
+			statements.add(index, statement);
+		}
 	}
 	
 	public void addStatement(Statement statement) {
@@ -26,6 +34,16 @@ public class Program implements Cloneable {
 		return buffer.toString();
 	}
 	
+	public List<Statement> getStatements() {
+		return statements;
+	}
+	
+	public void modifyExpression(double probability) {
+		for (Statement s: statements) {
+			s.modifyExpression(probability);
+		}
+	}
+	
 	/*public static Program getProgram(int noStatements) {
 		Program p = new Program();
 		
@@ -42,9 +60,9 @@ public class Program implements Cloneable {
 	
 	@Override
 	public Object clone() {
-		Program clone = null;
+		AST clone = null;
 		try {
-			clone = (Program) super.clone();
+			clone = (AST) super.clone();
 		} catch (CloneNotSupportedException e) {
 			assert false;
 		}

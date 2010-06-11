@@ -1,19 +1,24 @@
 package org.epochx.gx.op.mutation;
 
+import java.util.*;
+
 import org.epochx.gx.model.*;
+import org.epochx.gx.op.init.*;
 import org.epochx.gx.representation.*;
 import org.epochx.life.*;
 import org.epochx.representation.*;
 import org.epochx.tools.random.*;
 
-public class ExperimentalMutation implements GXMutation {
+public class DeleteMutation implements GXMutation {
 
 	// The controlling model.
 	private GXModel model;
 	
 	private RandomNumberGenerator rng;
 	
-	public ExperimentalMutation(final GXModel model) {
+	private ProgramGenerator programGenerator;
+	
+	public DeleteMutation(final GXModel model) {
 		this.model = model;
 		
 		// Configure parameters from the model.
@@ -30,38 +35,29 @@ public class ExperimentalMutation implements GXMutation {
 	 */
 	private void configure() {
 		rng = model.getRNG();
+		programGenerator = model.getProgramGenerator();
 	}
 	
 	@Override
-	public GXCandidateProgram mutate(final CandidateProgram p) {
+	public GXCandidateProgram mutate(CandidateProgram p) {
 		GXCandidateProgram program = (GXCandidateProgram) p;
 		
-		double random = rng.nextDouble();
+		AST ast = program.getAST();
+		List<Statement> statements = ast.getStatements();
 		
-		if (random < 0.2) {
-			// Insert statement.
-			insertStatement(program.getAST());
-		} else if (random < 0.4) {
-			// Delete statement.
+		for (int i=0; i<statements.size(); i++) {
+			int deletePosition = rng.nextInt(statements.size());
 			
-		} else {
-			// Modify expression.
+			Statement s = statements.get(deletePosition);
 			
+			if (s instanceof Declaration) {
+				continue;
+			} else {
+				statements.remove(s);
+			}
 		}
-		
-		return null;
-	}
-	
-	private void insertStatement(AST ast) {
-		
-	}
-	
-	private void deleteStatement() {
-		
-	}
-	
-	private void modifyExpression() {
-		
+
+		return program;
 	}
 
 }

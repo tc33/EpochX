@@ -63,7 +63,8 @@ public class WhighamMutation implements GRMutation {
 	
 	@Override
 	public GRCandidateProgram mutate(CandidateProgram program) {
-		GRCandidateProgram mutatedProgram = (GRCandidateProgram) program.clone();
+		//GRCandidateProgram mutatedProgram = (GRCandidateProgram) program.clone();
+		GRCandidateProgram mutatedProgram = (GRCandidateProgram) program;
 		
 		NonTerminalSymbol parseTree = mutatedProgram.getParseTree();
 		

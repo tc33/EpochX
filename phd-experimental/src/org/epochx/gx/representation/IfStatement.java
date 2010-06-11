@@ -1,21 +1,33 @@
 package org.epochx.gx.representation;
 
+import java.util.*;
+
+import org.epochx.gx.op.init.*;
+
 public class IfStatement implements Statement {
 
+	private ProgramGenerator generator;
+	
 	private Expression condition;
 	
 	private Block ifCode;
 	
 	private Block elseCode;
 	
-	public IfStatement(Expression condition, Block ifCode, Block elseCode) {
+	public IfStatement(ProgramGenerator generator, Expression condition, Block ifCode, Block elseCode) {
+		this.generator = generator;
 		this.condition = condition;
 		this.ifCode = ifCode;
 		this.elseCode = elseCode;
 	}
 	
-	public IfStatement(Expression condition, Block ifCode) {
-		this(condition, ifCode, null);
+	public IfStatement(ProgramGenerator generator, Expression condition, Block ifCode) {
+		this(generator, condition, ifCode, null);
+	}
+	
+	@Override
+	public void apply(Stack<Variable> variables) {
+		// Variable scope will hide any new variables here so do nothing.
 	}
 
 	@Override
@@ -45,9 +57,30 @@ public class IfStatement implements Statement {
 		
 		clone.condition = this.condition.clone();
 		clone.ifCode = this.ifCode.clone();
-		clone.elseCode = this.elseCode.clone();
 		
+		if (this.elseCode != null) {
+			clone.elseCode = this.elseCode.clone();
+		}
+			
 		return clone;
+	}
+
+	@Override
+	public void modifyExpression(double probability) {
+		//TODO Should use model's RNG.
+		double rand = Math.random();
+		
+		if (rand < probability) {
+			condition = generator.getExpression(condition.getDataType());
+		} else {
+			condition.modifyExpression(probability);
+		}
+		
+		ifCode.modifyExpression(probability);
+		
+		if (elseCode != null) {
+			elseCode.modifyExpression(probability);
+		}
 	}
 	
 }

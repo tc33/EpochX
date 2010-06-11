@@ -23,6 +23,7 @@ package org.epochx.gx.model.example;
 
 import org.epochx.gx.model.*;
 import org.epochx.gx.op.init.*;
+import org.epochx.gx.op.mutation.*;
 import org.epochx.life.*;
 import org.epochx.stats.*;
 
@@ -35,24 +36,25 @@ public class EvenParity extends org.epochx.gx.model.EvenParity {
 	
     public static void main(String[] args) {
 		final GXModel model = new EvenParity(2);
-		model.setNoRuns(1);
+		model.setNoRuns(100);
 		model.setNoGenerations(0);
-		model.setPopulationSize(100000);
+		model.setPopulationSize(1000);
 		model.setInitialiser(new ExperimentalInitialiser(model));
+		model.setMutation(new ModifyMutation(model));
 		model.setCrossoverProbability(0.0);
-		model.setMutationProbability(0.0);
+		model.setMutationProbability(1.0);
 		model.setTerminationFitness(0.01);
-		model.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+		/*model.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationEnd() {
-				model.getStatsManager().printGenerationStats(StatField.GEN_NUMBER, StatField.GEN_FITNESS_MIN, StatField.GEN_FITNESS_AVE, StatField.GEN_FITTEST_PROGRAM);
+				model.getStatsManager().printGenerationStats(StatField.GEN_NUMBER, StatField.GEN_FITNESS_MIN, StatField.GEN_FITNESS_AVE);
 			}
-		});
+		});*/
 		
 		model.getLifeCycleManager().addRunListener(new RunAdapter() {			
 			@Override
 			public void onRunEnd() {
-				model.getStatsManager().printRunStats(StatField.RUN_NUMBER, StatField.RUN_FITNESS_MIN, StatField.RUN_FITTEST_PROGRAM);
+				model.getStatsManager().printRunStats(StatField.RUN_NUMBER, StatField.RUN_FITNESS_MIN);
 			}
 		});
 		model.run();

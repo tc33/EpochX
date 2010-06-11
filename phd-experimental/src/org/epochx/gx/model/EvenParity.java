@@ -133,9 +133,9 @@ public class EvenParity extends GXModel {
     @Override
     public void run() {
     	// We assume we know the initialiser here, really all GXInitialisers should support this.
-    	ExperimentalInitialiser init = (ExperimentalInitialiser) getInitialiser();
+    	//ExperimentalInitialiser init = (ExperimentalInitialiser) getInitialiser();
     	
-    	init.setParameters(arguments);
+    	getProgramGenerator().setParameters(arguments);
     	
     	super.run();
     }

@@ -2,7 +2,7 @@ package org.epochx.gx.representation;
 
 import java.util.*;
 
-public class Block {
+public class Block implements Cloneable {
 
 	private List<Statement> statements;
 	
@@ -39,5 +39,11 @@ public class Block {
 		}
 		
 		return clone;
+	}
+	
+	public void modifyExpression(double probability) {
+		for (Statement s: statements) {
+			s.modifyExpression(probability);
+		}
 	}
 }

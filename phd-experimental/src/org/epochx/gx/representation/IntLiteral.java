@@ -30,4 +30,14 @@ public class IntLiteral implements Literal {
 		
 		return clone;
 	}
+
+	@Override
+	public DataType getDataType() {
+		return DataType.INT;
+	}
+
+	@Override
+	public void modifyExpression(double probability) {
+		//TODO Could modify the int value.
+	}
 }

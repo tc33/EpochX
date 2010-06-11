@@ -21,6 +21,8 @@
  */
 package org.epochx.gx.representation;
 
+import java.util.*;
+
 import org.epochx.gx.model.*;
 import org.epochx.representation.*;
 
@@ -29,7 +31,7 @@ public class GXCandidateProgram extends CandidateProgram {
 	private GXModel model;
 	
 	// The abstract syntax tree.
-	private Program program;
+	private AST program;
 	
 	// The fitness of this program.
 	private double fitness;
@@ -37,13 +39,17 @@ public class GXCandidateProgram extends CandidateProgram {
 	// A stash of the source for testing if fitness cache is up to date.
 	private String sourceCache;
 	
+	// Set of all variables that are declared throughout the program.
+	private Set<Variable> variables;
+	
 	public GXCandidateProgram(GXModel model) {
-		this(null, model);
+		this(null, null, model);
 	}
 	
-	public GXCandidateProgram(Program program, GXModel model) {
+	public GXCandidateProgram(AST program, Set<Variable> variables, GXModel model) {
 		this.model = model;
 		this.program = program;
+		this.variables = variables;
 		
 		sourceCache = null;
 		
@@ -51,8 +57,9 @@ public class GXCandidateProgram extends CandidateProgram {
 		fitness = -1;
 	}
 	
-	public void setParseTree(Program program) {
+	public void setParseTree(AST program, Set<Variable> variables) {
 		this.program = program;
+		this.variables = variables;
 	}
 	
 	@Override
@@ -90,13 +97,17 @@ public class GXCandidateProgram extends CandidateProgram {
 		return program.toString();
 	}
 	
-	public Program getAST() {
+	public AST getAST() {
 		return program;
 	}
 	
 	/*public int getDepth() {
 		return parseTree.getDepth();
 	}*/
+	
+	public Set<Variable> getVariables() {
+		return variables;
+	}
 	
 	/**
 	 * Create a clone of this GXCandidateProgram.
@@ -109,7 +120,7 @@ public class GXCandidateProgram extends CandidateProgram {
 		GXCandidateProgram clone = (GXCandidateProgram) super.clone();
 				
 		// If codons are the same then the source and fitness should be the same.
-		clone.program = (Program) this.program.clone();
+		clone.program = (AST) this.program.clone();
 		
 		// Copy the caches.
 		clone.sourceCache = this.sourceCache;

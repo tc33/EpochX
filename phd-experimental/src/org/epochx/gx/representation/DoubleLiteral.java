@@ -30,4 +30,14 @@ public class DoubleLiteral implements Literal {
 		
 		return clone;
 	}
+
+	@Override
+	public DataType getDataType() {
+		return DataType.DOUBLE;
+	}
+
+	@Override
+	public void modifyExpression(double probability) {
+		//TODO Could modify the double value.
+	}
 }

@@ -1,19 +1,24 @@
 package org.epochx.gx.op.mutation;
 
+import java.util.*;
+
 import org.epochx.gx.model.*;
+import org.epochx.gx.op.init.*;
 import org.epochx.gx.representation.*;
 import org.epochx.life.*;
 import org.epochx.representation.*;
 import org.epochx.tools.random.*;
 
-public class ExperimentalMutation implements GXMutation {
+public class ModifyMutation implements GXMutation {
 
 	// The controlling model.
 	private GXModel model;
 	
 	private RandomNumberGenerator rng;
 	
-	public ExperimentalMutation(final GXModel model) {
+	private ProgramGenerator programGenerator;
+	
+	public ModifyMutation(final GXModel model) {
 		this.model = model;
 		
 		// Configure parameters from the model.
@@ -30,38 +35,17 @@ public class ExperimentalMutation implements GXMutation {
 	 */
 	private void configure() {
 		rng = model.getRNG();
+		programGenerator = model.getProgramGenerator();
 	}
 	
 	@Override
-	public GXCandidateProgram mutate(final CandidateProgram p) {
+	public GXCandidateProgram mutate(CandidateProgram p) {
 		GXCandidateProgram program = (GXCandidateProgram) p;
 		
-		double random = rng.nextDouble();
-		
-		if (random < 0.2) {
-			// Insert statement.
-			insertStatement(program.getAST());
-		} else if (random < 0.4) {
-			// Delete statement.
-			
-		} else {
-			// Modify expression.
-			
-		}
-		
-		return null;
-	}
-	
-	private void insertStatement(AST ast) {
-		
-	}
-	
-	private void deleteStatement() {
-		
-	}
-	
-	private void modifyExpression() {
-		
+		AST ast = program.getAST();
+		ast.modifyExpression(0.2);
+
+		return program;
 	}
 
 }

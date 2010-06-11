@@ -1,18 +1,30 @@
 package org.epochx.gx.representation;
 
+import java.util.*;
+
+import org.epochx.gx.op.init.*;
+
 
 public class Declaration implements Statement {
 
+	private ProgramGenerator generator;
+	
 	private DataType type;
 	
 	private Variable variable;
 	
 	private Expression expression;
 	
-	public Declaration(DataType type, Variable variable, Expression expression) {
+	public Declaration(ProgramGenerator generator, DataType type, Variable variable, Expression expression) {
+		this.generator = generator;
 		this.type = type;
 		this.variable = variable;
 		this.expression = expression;
+	}
+	
+	@Override
+	public void apply(Stack<Variable> variables) {
+		variables.add(variable);
 	}
 	
 	@Override
@@ -34,6 +46,18 @@ public class Declaration implements Statement {
 		clone.expression = this.expression.clone();
 		
 		return clone;
+	}
+
+	@Override
+	public void modifyExpression(double probability) {
+		//TODO Should use model's RNG.
+		double rand = Math.random();
+		
+		if (rand < probability) {
+			expression = generator.getExpression(expression.getDataType());
+		} else {
+			expression.modifyExpression(probability);
+		}
 	}
 	
 }

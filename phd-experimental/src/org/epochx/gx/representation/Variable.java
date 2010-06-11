@@ -38,4 +38,9 @@ public class Variable implements Expression {
 		
 		return clone;
 	}
+
+	@Override
+	public void modifyExpression(double probability) {
+		// Nothing to be done here - no expressions.
+	}
 }

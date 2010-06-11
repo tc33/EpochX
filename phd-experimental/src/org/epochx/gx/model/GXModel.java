@@ -34,17 +34,21 @@ public abstract class GXModel extends Model {
 	private int maxDepth;
 	private int maxInitialDepth;
 	
+	private ProgramGenerator programGenerator;
+	
 	/**
-	 * Construct a GRModel with a set of sensible defaults. See the appropriate
+	 * Construct a GXModel with a set of sensible defaults. See the appropriate
 	 * accessor method for information of each default value.
 	 */
 	public GXModel() {
-		// Use the GR stats engine.
+		// Use the default stats engine.
 		getStatsManager().setStatsEngine(new StatsEngine(this));
 		
 		// Set default parameter values.
 		maxDepth = 14;
 		maxInitialDepth = 8;
+		
+		programGenerator = new ProgramGenerator();
 		
 		// Operators.
 		setInitialiser(new ExperimentalInitialiser(this));
@@ -58,6 +62,10 @@ public abstract class GXModel extends Model {
 	@Override
 	public void run() {
 		super.run();
+	}
+	
+	public ProgramGenerator getProgramGenerator() {
+		return programGenerator;
 	}
 
 	/**

@@ -19,8 +19,6 @@ public class ExperimentalInitialiser implements GXInitialiser {
 	public ExperimentalInitialiser(GXModel model) {
 		this.model = model;
 		
-		generator = new ProgramGenerator();
-		
 		// Configure parameters from the model.
 		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 			@Override
@@ -34,8 +32,8 @@ public class ExperimentalInitialiser implements GXInitialiser {
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
-		generator.setRNG(model.getRNG());
 		popSize = model.getPopulationSize();
+		generator = model.getProgramGenerator();
 	}
 	
 	@Override
@@ -51,9 +49,10 @@ public class ExperimentalInitialiser implements GXInitialiser {
 	}
 
 	private GXCandidateProgram initialiseProgram() {
-		Program ast = generator.getProgram(2);		
+		AST ast = generator.getProgram(2);
+		Set<Variable> variables = new HashSet<Variable>(generator.getVariables());
 		
-		return new GXCandidateProgram(ast, model);
+		return new GXCandidateProgram(ast, variables, model);
 	}
 	
 	public void setParameters(Variable ... parameters) {

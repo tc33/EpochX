@@ -11,9 +11,14 @@ public class ProgramGenerator {
 	
 	private int noVars;
 	
-	private Stack<Variable> variables;
+	// The variables that are currently in scope.
+	private Stack<Variable> variableStack;
 	
+	// The parameters which are available as variables.
 	private Set<Variable> parameters;
+	
+	// All variables that are used throughout the program, in scope or otherwise.
+	private Set<Variable> variables;
 	
 	public ProgramGenerator() {
 		this(new MersenneTwisterFast());
@@ -21,8 +26,9 @@ public class ProgramGenerator {
 	
 	public ProgramGenerator(final RandomNumberGenerator rng) {
 		this.rng = rng;
-		variables = new Stack<Variable>();
+		variableStack = new Stack<Variable>();
 		parameters = new HashSet<Variable>();
+		variables = new HashSet<Variable>();
 
 		noVars = 0;
 	}
@@ -38,23 +44,44 @@ public class ProgramGenerator {
 		this.parameters.clear();
 		for (Variable v: parameters) {
 			this.parameters.add(v);
-			variables.push(v);
+			variableStack.push(v);
 		}
 	}
 	
+	public void setVariableStack(Stack<Variable> variables) {
+		this.variableStack = variables;
+	}
+	
+	public Stack<Variable> getVariableStack() {
+		return variableStack;
+	}
+	
 	public void reset() {
+		variableStack.clear();
+		variableStack.addAll(parameters);
 		variables.clear();
-		variables.addAll(parameters);
 		noVars = 0;
+	}
+	
+	public void addVariable(Variable variable) {
+		variables.add(variable);
+	}
+	
+	public void setVariables(Set<Variable> variables) {
+		this.variables = variables;
+	}
+	
+	public Set<Variable> getVariables() {
+		return variables;
 	}
 	
 	public void setRNG(RandomNumberGenerator rng) {
 		this.rng = rng;
 	}
 	
-	public Program getProgram(int noStatements) {
+	public AST getProgram(int noStatements) {
 		reset();
-		Program p = new Program();
+		AST p = new AST();
 		
 		for (int i=0; i<noStatements; i++) {
 			p.addStatement(getStatement());
@@ -106,9 +133,10 @@ public class ProgramGenerator {
 		Variable variable = new Variable(type, varName);
 		Expression expression = getExpression(type);
 		
-		variables.push(variable);
+		variableStack.push(variable);
+		variables.add(variable);
 		
-		Declaration decl = new Declaration(type, variable, expression);
+		Declaration decl = new Declaration(this, type, variable, expression);
 		
 		return decl;
 	}
@@ -119,7 +147,7 @@ public class ProgramGenerator {
 
 		if (variable != null) {
 			Expression expression = getExpression(variable.getDataType());
-			result = new Assignment(variable, expression);
+			result = new Assignment(this, variable, expression);
 		}
 		
 		return result;
@@ -129,7 +157,7 @@ public class ProgramGenerator {
 		Expression condition = getExpression(DataType.BOOLEAN);
 		Block ifCode = getBlock();
 		
-		IfStatement ifStatement = new IfStatement(condition, ifCode);
+		IfStatement ifStatement = new IfStatement(this, condition, ifCode);
 		
 		return ifStatement;
 	}
@@ -196,7 +224,7 @@ public class ProgramGenerator {
 		Expression leftExpression = getExpression(dataType);
 		Expression rightExpression = getExpression(dataType);
 		
-		return new BinaryExpression(operators[ran], leftExpression, rightExpression);
+		return new BinaryExpression(this, operators[ran], leftExpression, rightExpression, dataType);
 	}
 	
 	public UnaryExpression getUnaryExpression(DataType dataType) {
@@ -219,7 +247,7 @@ public class ProgramGenerator {
 			Variable var = getVariable(dataType);
 			
 			if (var != null) {
-				result = new UnaryExpression(operators[ran], var);
+				result = new UnaryExpression(this, operators[ran], var, dataType);
 			}
 		}
 
@@ -228,7 +256,7 @@ public class ProgramGenerator {
 	
 	public Block getBlock() {
 		// Record number of variables to return to.
-		int noVariables = variables.size();
+		int noVariables = variableStack.size();
 		
 		List<Statement> statements = new ArrayList<Statement>();
 
@@ -242,7 +270,7 @@ public class ProgramGenerator {
 		Block result = new Block(statements);
 		
 		// Pop off any newly declared variables to return to size before block.
-		variables.setSize(noVariables);
+		variableStack.setSize(noVariables);
 		
 		return result;
 	}
@@ -264,7 +292,22 @@ public class ProgramGenerator {
 	}
 	
 	public String getNewVariableName() {
-		return "var" + noVars++;
+		String name;
+		
+		do {
+			name = "var" + noVars++;
+		} while (variablesContains(name));
+		
+		return name;
+	}
+	
+	public boolean variablesContains(String varName) {
+		for (Variable v: variables) {
+			if (v.getVariableName().equals(varName)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public Literal getLiteral(DataType datatype) {
@@ -304,10 +347,10 @@ public class ProgramGenerator {
 	public Variable getVariable() {
 		Variable var = null;
 		
-		if (!variables.isEmpty()) {
-			int choice = rng.nextInt(variables.size());
+		if (!variableStack.isEmpty()) {
+			int choice = rng.nextInt(variableStack.size());
 			
-			var = variables.get(choice);
+			var = variableStack.get(choice);
 		}
 		
 		return var;
@@ -315,7 +358,7 @@ public class ProgramGenerator {
 	
 	public Variable getVariable(DataType dataType) {
 		Variable var = null;
-		List<Variable> variables = getVariables(dataType);
+		List<Variable> variables = getVariablesFromStack(dataType);
 		
 		if (!variables.isEmpty()) {
 			int choice = rng.nextInt(variables.size());
@@ -326,9 +369,9 @@ public class ProgramGenerator {
 		return var;
 	}
 	
-	public List<Variable> getVariables(DataType dataType) {
+	public List<Variable> getVariablesFromStack(DataType dataType) {
 		List<Variable> typeVariables = new ArrayList<Variable>();
-		for (Variable v: variables) {
+		for (Variable v: variableStack) {
 			if (v.getDataType() == dataType) {
 				typeVariables.add(v);
 			}
@@ -371,7 +414,7 @@ public class ProgramGenerator {
 	public static void main(String[] args) {
 		ProgramGenerator generator = new ProgramGenerator();
 		
-		Program program = generator.getProgram(10);
+		AST program = generator.getProgram(10);
 		
 		System.out.println(format(program.toString()));
 	}

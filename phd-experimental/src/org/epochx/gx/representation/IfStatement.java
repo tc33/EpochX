@@ -1,33 +1,38 @@
 package org.epochx.gx.representation;
 
-import java.util.*;
-
-import org.epochx.gx.op.init.*;
+import org.epochx.tools.random.*;
 
 public class IfStatement implements Statement {
 
-	private ProgramGenerator generator;
-	
 	private Expression condition;
 	
 	private Block ifCode;
 	
 	private Block elseCode;
 	
-	public IfStatement(ProgramGenerator generator, Expression condition, Block ifCode, Block elseCode) {
-		this.generator = generator;
+	public IfStatement(Expression condition, Block ifCode, Block elseCode) {
 		this.condition = condition;
 		this.ifCode = ifCode;
 		this.elseCode = elseCode;
 	}
 	
-	public IfStatement(ProgramGenerator generator, Expression condition, Block ifCode) {
-		this(generator, condition, ifCode, null);
+	public IfStatement(Expression condition, Block ifCode) {
+		this(condition, ifCode, null);
 	}
 	
 	@Override
-	public void apply(Stack<Variable> variables) {
+	public void apply(VariableHandler vars) {
 		// Variable scope will hide any new variables here so do nothing.
+	}
+
+	@Override
+	public void evaluate(VariableHandler vars) {
+		Boolean result = (Boolean) condition.evaluate(vars);
+		if (result == true) {
+			ifCode.evaluate(vars);
+		} else if (elseCode != null){
+			elseCode.evaluate(vars);
+		}
 	}
 
 	@Override
@@ -66,21 +71,29 @@ public class IfStatement implements Statement {
 	}
 
 	@Override
-	public void modifyExpression(double probability) {
+	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars) {
 		//TODO Should use model's RNG.
 		double rand = Math.random();
 		
 		if (rand < probability) {
-			condition = generator.getExpression(condition.getDataType());
+			condition = AST.getExpression(condition.getDataType(), rng, vars);
 		} else {
-			condition.modifyExpression(probability);
+			condition.modifyExpression(probability, rng, vars);
 		}
 		
-		ifCode.modifyExpression(probability);
+		ifCode.modifyExpression(probability, rng, vars);
 		
 		if (elseCode != null) {
-			elseCode.modifyExpression(probability);
+			elseCode.modifyExpression(probability, rng, vars);
 		}
 	}
-	
+
+	public static Statement getIf(RandomNumberGenerator rng, VariableHandler vars) {
+		Expression condition = AST.getExpression(DataType.BOOLEAN, rng, vars);
+		Block ifCode = Block.getBlock(rng, vars);
+		
+		IfStatement ifStatement = new IfStatement(condition, ifCode);
+		
+		return ifStatement;
+	}
 }

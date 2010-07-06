@@ -1,12 +1,14 @@
 package org.epochx.gx.representation;
 
-import java.util.*;
+import org.epochx.tools.random.*;
 
 public interface Statement extends Cloneable {
 
 	public Statement clone();
 	
-	public void apply(Stack<Variable> variables);
+	public void apply(VariableHandler vars);
+	
+	public void evaluate(VariableHandler vars);
 
-	public void modifyExpression(double probability);	
+	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars);	
 }

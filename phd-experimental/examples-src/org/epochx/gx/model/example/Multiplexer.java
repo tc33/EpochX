@@ -28,35 +28,35 @@ import org.epochx.life.*;
 import org.epochx.stats.*;
 
 
-public class EvenParity extends org.epochx.gx.model.EvenParity {
+public class Multiplexer extends org.epochx.gx.model.Multiplexer {
 	
-	public EvenParity(int noInputBits) {
+	public Multiplexer(int noInputBits) {
 		super(noInputBits);
 	}
 	
     public static void main(String[] args) {
-		final GXModel model = new EvenParity(3);
+		final GXModel model = new Multiplexer(6);
 		model.setNoRuns(100);
 		model.setNoGenerations(50);
 		model.setPopulationSize(500);
-		model.setInitialiser(new ExperimentalInitialiser(model, 3));
+		model.setInitialiser(new ExperimentalInitialiser(model, 5));
 		model.setMutation(new ExperimentalMutation(model));
 		model.setCrossoverProbability(0.0);
 		model.setMutationProbability(1.0);
 		model.setTerminationFitness(0.01);
-		model.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+		/*model.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationEnd() {
 				model.getStatsManager().printGenerationStats(StatField.GEN_NUMBER, StatField.GEN_FITNESS_MIN, StatField.GEN_FITNESS_AVE);
 			}
-		});
+		});*/
 		
-		/*model.getLifeCycleManager().addRunListener(new RunAdapter() {
+		model.getLifeCycleManager().addRunListener(new RunAdapter() {
 			@Override
 			public void onRunEnd() {
-				model.getStatsManager().printRunStats(StatField.RUN_NUMBER, StatField.RUN_FITNESS_MIN, StatField.RUN_FITTEST_PROGRAM);
+				model.getStatsManager().printRunStats(StatField.RUN_NUMBER, StatField.RUN_FITNESS_MIN);
 			}
-		});*/
+		});
 		model.run();
 	}
     

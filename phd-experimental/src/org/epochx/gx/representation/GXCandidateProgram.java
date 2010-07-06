@@ -109,6 +109,10 @@ public class GXCandidateProgram extends CandidateProgram {
 		return variables;
 	}
 	
+	public void setVariables(Set<Variable> variables) {
+		this.variables = variables;
+	}
+	
 	/**
 	 * Create a clone of this GXCandidateProgram.
 	 * 

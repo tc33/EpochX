@@ -3,7 +3,6 @@ package org.epochx.gx.op.mutation;
 import java.util.*;
 
 import org.epochx.gx.model.*;
-import org.epochx.gx.op.init.*;
 import org.epochx.gx.representation.*;
 import org.epochx.life.*;
 import org.epochx.representation.*;
@@ -15,8 +14,6 @@ public class DeleteMutation implements GXMutation {
 	private GXModel model;
 	
 	private RandomNumberGenerator rng;
-	
-	private ProgramGenerator programGenerator;
 	
 	public DeleteMutation(final GXModel model) {
 		this.model = model;
@@ -35,7 +32,6 @@ public class DeleteMutation implements GXMutation {
 	 */
 	private void configure() {
 		rng = model.getRNG();
-		programGenerator = model.getProgramGenerator();
 	}
 	
 	@Override
@@ -54,6 +50,7 @@ public class DeleteMutation implements GXMutation {
 				continue;
 			} else {
 				statements.remove(s);
+				break;
 			}
 		}
 

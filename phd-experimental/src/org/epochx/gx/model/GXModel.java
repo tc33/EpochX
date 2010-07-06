@@ -23,6 +23,7 @@ package org.epochx.gx.model;
 
 import org.epochx.core.*;
 import org.epochx.gx.op.init.*;
+import org.epochx.gx.representation.*;
 import org.epochx.stats.*;
 
 /**
@@ -34,7 +35,7 @@ public abstract class GXModel extends Model {
 	private int maxDepth;
 	private int maxInitialDepth;
 	
-	private ProgramGenerator programGenerator;
+	private VariableHandler variableHandler;
 	
 	/**
 	 * Construct a GXModel with a set of sensible defaults. See the appropriate
@@ -48,7 +49,7 @@ public abstract class GXModel extends Model {
 		maxDepth = 14;
 		maxInitialDepth = 8;
 		
-		programGenerator = new ProgramGenerator();
+		variableHandler = new VariableHandler(this);
 		
 		// Operators.
 		setInitialiser(new ExperimentalInitialiser(this));
@@ -64,8 +65,8 @@ public abstract class GXModel extends Model {
 		super.run();
 	}
 	
-	public ProgramGenerator getProgramGenerator() {
-		return programGenerator;
+	public VariableHandler getVariableHandler() {
+		return variableHandler;
 	}
 
 	/**

@@ -1,9 +1,6 @@
 package org.epochx.gx.op.mutation;
 
-import java.util.*;
-
 import org.epochx.gx.model.*;
-import org.epochx.gx.op.init.*;
 import org.epochx.gx.representation.*;
 import org.epochx.life.*;
 import org.epochx.representation.*;
@@ -16,7 +13,7 @@ public class ModifyMutation implements GXMutation {
 	
 	private RandomNumberGenerator rng;
 	
-	private ProgramGenerator programGenerator;
+	private VariableHandler vars;
 	
 	public ModifyMutation(final GXModel model) {
 		this.model = model;
@@ -35,16 +32,18 @@ public class ModifyMutation implements GXMutation {
 	 */
 	private void configure() {
 		rng = model.getRNG();
-		programGenerator = model.getProgramGenerator();
+		vars = model.getVariableHandler();
 	}
 	
 	@Override
 	public GXCandidateProgram mutate(CandidateProgram p) {
-		GXCandidateProgram program = (GXCandidateProgram) p;
+		GXCandidateProgram program = (GXCandidateProgram) p.clone();
+		
+		vars.reset();
 		
 		AST ast = program.getAST();
-		ast.modifyExpression(0.2);
-
+		ast.modifyExpression(0.2, vars, rng);
+		
 		return program;
 	}
 

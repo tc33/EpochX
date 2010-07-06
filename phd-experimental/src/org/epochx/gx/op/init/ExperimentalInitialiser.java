@@ -6,6 +6,7 @@ import org.epochx.gx.model.*;
 import org.epochx.gx.representation.*;
 import org.epochx.life.*;
 import org.epochx.representation.*;
+import org.epochx.tools.random.*;
 
 public class ExperimentalInitialiser implements GXInitialiser {
 
@@ -14,10 +15,19 @@ public class ExperimentalInitialiser implements GXInitialiser {
 	
 	private int popSize;
 	
-	private ProgramGenerator generator;
+	private RandomNumberGenerator rng;
+	
+	private VariableHandler vars;
+	
+	private int noStatements;
 	
 	public ExperimentalInitialiser(GXModel model) {
+		this(model, 3);
+	}
+	
+	public ExperimentalInitialiser(GXModel model, int noStatements) {
 		this.model = model;
+		this.noStatements = noStatements;
 		
 		// Configure parameters from the model.
 		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
@@ -33,7 +43,8 @@ public class ExperimentalInitialiser implements GXInitialiser {
 	 */
 	private void configure() {
 		popSize = model.getPopulationSize();
-		generator = model.getProgramGenerator();
+		rng = model.getRNG();
+		vars = model.getVariableHandler();
 	}
 	
 	@Override
@@ -49,13 +60,10 @@ public class ExperimentalInitialiser implements GXInitialiser {
 	}
 
 	private GXCandidateProgram initialiseProgram() {
-		AST ast = generator.getProgram(2);
-		Set<Variable> variables = new HashSet<Variable>(generator.getVariables());
+		vars.reset();
+		AST ast = AST.getProgram(noStatements, rng, vars);
+		Set<Variable> variables = new HashSet<Variable>(vars.getAllVariables());
 		
 		return new GXCandidateProgram(ast, variables, model);
-	}
-	
-	public void setParameters(Variable ... parameters) {
-		generator.setParameters(parameters);
 	}
 }

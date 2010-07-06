@@ -2,6 +2,8 @@ package org.epochx.gx.representation;
 
 import java.util.*;
 
+import org.epochx.tools.random.*;
+
 public class Block implements Cloneable {
 
 	private List<Statement> statements;
@@ -41,9 +43,37 @@ public class Block implements Cloneable {
 		return clone;
 	}
 	
-	public void modifyExpression(double probability) {
+	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars) {
 		for (Statement s: statements) {
-			s.modifyExpression(probability);
+			s.modifyExpression(probability, rng, vars);
 		}
+	}
+	
+	public void evaluate(VariableHandler vars) {
+		// Evaluate each statement.
+		for (Statement s: statements) {
+			s.evaluate(vars);
+		}
+	}
+
+	public static Block getBlock(RandomNumberGenerator rng, VariableHandler vars) {
+		// Record number of variables to return to.
+		int noVariables = vars.getNoActiveVariables();
+		
+		List<Statement> statements = new ArrayList<Statement>();
+
+		//int noStatements = rng.nextInt(10);
+		int noStatements = 1;
+		
+		for (int i=0; i<noStatements; i++) {
+			statements.add(AST.getStatement(rng, vars));
+		}
+		
+		Block result = new Block(statements);
+		
+		// Pop off any newly declared variables to return to size before block.
+		vars.setNoActiveVariables(noVariables);
+		
+		return result;
 	}
 }

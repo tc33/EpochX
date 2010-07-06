@@ -1,5 +1,7 @@
 package org.epochx.gx.representation;
 
+import org.epochx.tools.random.*;
+
 public class DoubleLiteral implements Literal {
 	
 	private double value;
@@ -37,7 +39,18 @@ public class DoubleLiteral implements Literal {
 	}
 
 	@Override
-	public void modifyExpression(double probability) {
+	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars) {
 		//TODO Could modify the double value.
+	}
+
+	@Override
+	public Object evaluate(VariableHandler vars) {
+		return value;
+	}
+
+	public static Literal getDoubleLiteral(RandomNumberGenerator rng) {
+		DoubleLiteral literal = new DoubleLiteral(rng.nextDouble());
+		
+		return literal;
 	}
 }

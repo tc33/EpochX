@@ -1,21 +1,19 @@
 package org.epochx.gx.representation;
 
-import org.epochx.gx.op.init.*;
+import org.epochx.tools.random.*;
+
 
 public class BinaryExpression implements Expression {
 
-	private ProgramGenerator generator;
-	
 	private Expression leftExpression;
 	private Expression rightExpression;
 	
-	private String operator;
+	private Operator op;
 	
 	private DataType dataType;
 	
-	public BinaryExpression(ProgramGenerator generator, String operator, Expression leftExpression, Expression rightExpression, DataType dataType) {
-		this.generator = generator;
-		this.operator = operator;
+	public BinaryExpression(Operator op, Expression leftExpression, Expression rightExpression, DataType dataType) {
+		this.op = op;
 		this.leftExpression = leftExpression;
 		this.rightExpression = rightExpression;
 		this.dataType = dataType;
@@ -28,7 +26,7 @@ public class BinaryExpression implements Expression {
 		buffer.append('(');
 		buffer.append(leftExpression);
 		buffer.append(' ');
-		buffer.append(operator);
+		buffer.append(op);
 		buffer.append(' ');
 		buffer.append(rightExpression);
 		buffer.append(')');
@@ -47,7 +45,7 @@ public class BinaryExpression implements Expression {
 		
 		clone.leftExpression = this.leftExpression.clone();
 		clone.rightExpression = this.rightExpression.clone();
-		clone.operator = this.operator;
+		clone.op = this.op;
 		
 		return clone;
 	}
@@ -58,21 +56,38 @@ public class BinaryExpression implements Expression {
 	}
 
 	@Override
-	public void modifyExpression(double probability) {
+	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars) {
 		//TODO Should use model's RNG.
 		double rand = Math.random();
 		
 		if (rand < probability) {
-			leftExpression = generator.getExpression(leftExpression.getDataType());
+			leftExpression = AST.getExpression(leftExpression.getDataType(), rng, vars);
 		} else {
-			leftExpression.modifyExpression(probability);
+			leftExpression.modifyExpression(probability, rng, vars);
 		}
 		
 		rand = Math.random();
 		if (rand < probability) {
-			rightExpression = generator.getExpression(rightExpression.getDataType());
+			rightExpression = AST.getExpression(rightExpression.getDataType(), rng, vars);
 		} else {
-			rightExpression.modifyExpression(probability);
+			rightExpression.modifyExpression(probability, rng, vars);
 		}
+	}
+
+	@Override
+	public Object evaluate(VariableHandler vars) {		
+		Object l = leftExpression.evaluate(vars);
+		Object r = rightExpression.evaluate(vars);
+
+		return op.evaluateBinaryOperator(l, r);
+	}
+
+	public static Expression getBinaryExpression(DataType dataType, RandomNumberGenerator rng, VariableHandler vars) {
+		Operator op = Operator.getBinaryOperator(rng, dataType);
+		
+		Expression leftExpression = AST.getExpression(dataType, rng, vars);
+		Expression rightExpression = AST.getExpression(dataType, rng, vars);
+		
+		return new BinaryExpression(op, leftExpression, rightExpression, dataType);
 	}
 }

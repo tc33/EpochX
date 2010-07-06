@@ -13,8 +13,16 @@ public class ExperimentalMutation implements GXMutation {
 	
 	private RandomNumberGenerator rng;
 	
+	private InsertMutation insert;
+	private DeleteMutation delete;
+	private ModifyMutation modify;
+	
 	public ExperimentalMutation(final GXModel model) {
 		this.model = model;
+		
+		insert = new InsertMutation(model);
+		delete = new DeleteMutation(model);
+		modify = new ModifyMutation(model);
 		
 		// Configure parameters from the model.
 		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
@@ -40,28 +48,16 @@ public class ExperimentalMutation implements GXMutation {
 		
 		if (random < 0.2) {
 			// Insert statement.
-			insertStatement(program.getAST());
+			program = insert.mutate(program);
 		} else if (random < 0.4) {
 			// Delete statement.
-			
+			program = delete.mutate(program);
 		} else {
 			// Modify expression.
-			
+			program = modify.mutate(program);
 		}
 		
-		return null;
-	}
-	
-	private void insertStatement(AST ast) {
-		
-	}
-	
-	private void deleteStatement() {
-		
-	}
-	
-	private void modifyExpression() {
-		
+		return program;
 	}
 
 }

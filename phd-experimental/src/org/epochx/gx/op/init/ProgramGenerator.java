@@ -9,8 +9,6 @@ public class ProgramGenerator {
 
 	private RandomNumberGenerator rng;
 	
-	private int noVars;
-	
 	// The variables that are currently in scope.
 	private Stack<Variable> variableStack;
 	
@@ -29,8 +27,6 @@ public class ProgramGenerator {
 		variableStack = new Stack<Variable>();
 		parameters = new HashSet<Variable>();
 		variables = new HashSet<Variable>();
-
-		noVars = 0;
 	}
 	
 	/**
@@ -56,30 +52,29 @@ public class ProgramGenerator {
 		return variableStack;
 	}
 	
-	public void reset() {
-		variableStack.clear();
-		variableStack.addAll(parameters);
-		variables.clear();
-		noVars = 0;
-	}
+//	public void reset() {
+//		variableStack.clear();
+//		variableStack.addAll(parameters);
+//		variables.clear();
+//	}
 	
-	public void addVariable(Variable variable) {
-		variables.add(variable);
-	}
-	
-	public void setVariables(Set<Variable> variables) {
-		this.variables = variables;
-	}
-	
-	public Set<Variable> getVariables() {
-		return variables;
-	}
+//	public void addVariable(Variable variable) {
+//		variables.add(variable);
+//	}
+//	
+//	public void setVariables(Set<Variable> variables) {
+//		this.variables = variables;
+//	}
+//	
+//	public Set<Variable> getVariables() {
+//		return variables;
+//	}
 	
 	public void setRNG(RandomNumberGenerator rng) {
 		this.rng = rng;
 	}
 	
-	public AST getProgram(int noStatements) {
+	/*public AST getProgram(int noStatements) {
 		reset();
 		AST p = new AST();
 		
@@ -88,7 +83,7 @@ public class ProgramGenerator {
 		}
 		
 		return p;
-	}
+	}*/
 	
 	/**
 	 * Randomly chooses a statement type to construct. If there are no possible
@@ -96,10 +91,10 @@ public class ProgramGenerator {
 	 * selected until all have been tried. If none are valid then null is 
 	 * returned, otherwise the constructed statement is returned.
 	 */
-	public Statement getStatement() {
+	/*public Statement getStatement() {
 		Statement result = null;
 		
-		int noOptions = 4;
+		int noOptions = 3;
 		List<Integer> indexes = new ArrayList<Integer>();
 		for (int i=0; i<noOptions; i++) {
 			indexes.add(i);
@@ -119,14 +114,14 @@ public class ProgramGenerator {
 				result = getIf();
 			} else {
 				// Loop.
-				//result = getForLoop();
+				result = getLoop();
 			}
 		}
 		
 		return result;
-	}
+	}*/
 	
-	public Declaration getDeclaration() {
+	/*public Declaration getDeclaration() {
 		String varName = getNewVariableName();
 		
 		DataType type = getDataType();
@@ -139,9 +134,9 @@ public class ProgramGenerator {
 		Declaration decl = new Declaration(this, type, variable, expression);
 		
 		return decl;
-	}
+	}*/
 	
-	public Assignment getAssignment() {
+	/*public Assignment getAssignment() {
 		Assignment result = null;
 		Variable variable = getVariable();
 
@@ -151,32 +146,27 @@ public class ProgramGenerator {
 		}
 		
 		return result;
-	}
+	}*/
 	
-	public IfStatement getIf() {
+	/*public IfStatement getIf() {
 		Expression condition = getExpression(DataType.BOOLEAN);
 		Block ifCode = getBlock();
 		
 		IfStatement ifStatement = new IfStatement(this, condition, ifCode);
 		
 		return ifStatement;
-	}
-	
-	/*public String getExpression(DataType datatype) {
-		String result = null;
-		
-		if (datatype == DataType.BOOLEAN) {
-			result = getBooleanExpression();
-		} else if (datatype == DataType.INT) {
-			result = getIntExpression();
-		} else if (datatype == DataType.DOUBLE) {
-			result = getDoubleExpression();
-		} else {
-			// Broken.
-		}
 	}*/
 	
-	public Expression getExpression(DataType type) {
+	/*public Loop getLoop() {
+		Expression condition = getExpression(DataType.BOOLEAN);
+		Block body = getBlock();
+		
+		Loop loop = new Loop(this, condition, body);
+		
+		return loop;
+	}*/
+	
+	/*public Expression getExpression(DataType type) {
 		Expression result = null;
 		
 		int noOptions = 4;
@@ -204,57 +194,57 @@ public class ProgramGenerator {
 		}
 		
 		return result;
-	}
+	}*/
 	
-	public BinaryExpression getBinaryExpression(DataType dataType) {
-		String[] operators = null;
-		
-		if (dataType == DataType.BOOLEAN) {
-			operators = new String[]{"&&", "||"}; // ^ not supported by bsh.
-		} else if (dataType == DataType.INT) {
-			operators = new String[]{"+", "/", "%", "*", "-"};
-		} else if (dataType == DataType.DOUBLE) {
-			operators = new String[]{"+", "/", "%", "*", "-"};
-		} else {
-			// Broken.
-		}
-		
-		int ran = rng.nextInt(operators.length);
-		
-		Expression leftExpression = getExpression(dataType);
-		Expression rightExpression = getExpression(dataType);
-		
-		return new BinaryExpression(this, operators[ran], leftExpression, rightExpression, dataType);
-	}
+//	public BinaryExpression getBinaryExpression(DataType dataType) {
+//		String[] operators = null;
+//		
+//		if (dataType == DataType.BOOLEAN) {
+//			operators = new String[]{"&&", "||"}; // ^ not supported by bsh.
+//		} else if (dataType == DataType.INT) {
+//			operators = new String[]{"+", "/", "%", "*", "-"};
+//		} else if (dataType == DataType.DOUBLE) {
+//			operators = new String[]{"+", "/", "%", "*", "-"};
+//		} else {
+//			// Broken.
+//		}
+//		
+//		int ran = rng.nextInt(operators.length);
+//		
+//		Expression leftExpression = AST.getExpression(dataType);
+//		Expression rightExpression = AST.getExpression(dataType);
+//		
+//		return new BinaryExpression(this, operators[ran], leftExpression, rightExpression, dataType);
+//	}
 	
-	public UnaryExpression getUnaryExpression(DataType dataType) {
-		UnaryExpression result = null;
-		
-		String[] operators = null;
-		if (dataType == DataType.BOOLEAN) {
-			operators = new String[]{"!"};
-		} else if (dataType == DataType.INT) {
-			operators = new String[]{"++", "--"};
-		} else if (dataType == DataType.DOUBLE) {
-			//operators = new String[]{"++", "--"};
-		} else {
-			// Broken.
-		}
-		
-		if (operators != null) {
-			int ran = rng.nextInt(operators.length);
-		
-			Variable var = getVariable(dataType);
-			
-			if (var != null) {
-				result = new UnaryExpression(this, operators[ran], var, dataType);
-			}
-		}
-
-		return result;
-	}
+//	public UnaryExpression getUnaryExpression(DataType dataType) {
+//		UnaryExpression result = null;
+//		
+//		String[] operators = null;
+//		if (dataType == DataType.BOOLEAN) {
+//			operators = new String[]{"!"};
+//		} else if (dataType == DataType.INT) {
+//			operators = new String[]{"++", "--"};
+//		} else if (dataType == DataType.DOUBLE) {
+//			//operators = new String[]{"++", "--"};
+//		} else {
+//			// Broken.
+//		}
+//		
+//		if (operators != null) {
+//			int ran = rng.nextInt(operators.length);
+//		
+//			Variable var = getVariable(dataType);
+//			
+//			if (var != null) {
+//				result = new UnaryExpression(this, operators[ran], var, dataType);
+//			}
+//		}
+//
+//		return result;
+//	}
 	
-	public Block getBlock() {
+	/*public Block getBlock() {
 		// Record number of variables to return to.
 		int noVariables = variableStack.size();
 		
@@ -273,12 +263,12 @@ public class ProgramGenerator {
 		variableStack.setSize(noVariables);
 		
 		return result;
-	}
+	}*/
 	
-	public DataType getDataType() {
+	/*public DataType getDataType() {
 		DataType result = null;
 		
-		int ran = rng.nextInt(1);
+		int ran = rng.nextInt(3);
 		
 		if (ran == 0) {
 			result = DataType.BOOLEAN;
@@ -289,28 +279,28 @@ public class ProgramGenerator {
 		}
 		
 		return result;
-	}
+	}*/
 	
-	public String getNewVariableName() {
-		String name;
-		
-		do {
-			name = "var" + noVars++;
-		} while (variablesContains(name));
-		
-		return name;
-	}
+//	public String getNewVariableName() {
+//		String name;
+//		
+//		do {
+//			name = "var" + noVars++;
+//		} while (variablesContains(name));
+//		
+//		return name;
+//	}
+//	
+//	public boolean variablesContains(String varName) {
+//		for (Variable v: variables) {
+//			if (v.getVariableName().equals(varName)) {
+//				return true;
+//			}
+//		}
+//		return false;
+//	}
 	
-	public boolean variablesContains(String varName) {
-		for (Variable v: variables) {
-			if (v.getVariableName().equals(varName)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public Literal getLiteral(DataType datatype) {
+	/*public Literal getLiteral(DataType datatype) {
 		Literal result = null;
 		
 		if (datatype == DataType.BOOLEAN) {
@@ -324,60 +314,60 @@ public class ProgramGenerator {
 		}
 		
 		return result;
-	}
+	}*/
 	
-	public BooleanLiteral getBooleanLiteral() {
+	/*public BooleanLiteral getBooleanLiteral() {
 		BooleanLiteral literal = new BooleanLiteral(rng.nextBoolean());
 		
 		return literal;
-	}
+	}*/
 	
-	public IntLiteral getIntLiteral() {
+	/*public IntLiteral getIntLiteral() {
 		IntLiteral literal = new IntLiteral(rng.nextInt());
 		
 		return literal;
-	}
+	}*/
 	
-	public DoubleLiteral getDoubleLiteral() {
+	/*public DoubleLiteral getDoubleLiteral() {
 		DoubleLiteral literal = new DoubleLiteral(rng.nextDouble());
 		
 		return literal;
-	}
+	}*/
 	
-	public Variable getVariable() {
-		Variable var = null;
-		
-		if (!variableStack.isEmpty()) {
-			int choice = rng.nextInt(variableStack.size());
-			
-			var = variableStack.get(choice);
-		}
-		
-		return var;
-	}
+//	public Variable getVariable() {
+//		Variable var = null;
+//		
+//		if (!variableStack.isEmpty()) {
+//			int choice = rng.nextInt(variableStack.size());
+//			
+//			var = variableStack.get(choice);
+//		}
+//		
+//		return var;
+//	}
 	
-	public Variable getVariable(DataType dataType) {
-		Variable var = null;
-		List<Variable> variables = getVariablesFromStack(dataType);
-		
-		if (!variables.isEmpty()) {
-			int choice = rng.nextInt(variables.size());
-			
-			var = variables.get(choice);
-		}
-		
-		return var;
-	}
-	
-	public List<Variable> getVariablesFromStack(DataType dataType) {
-		List<Variable> typeVariables = new ArrayList<Variable>();
-		for (Variable v: variableStack) {
-			if (v.getDataType() == dataType) {
-				typeVariables.add(v);
-			}
-		}
-		return typeVariables;
-	}
+//	public Variable getVariable(DataType dataType) {
+//		Variable var = null;
+//		List<Variable> variables = getVariablesFromStack(dataType);
+//		
+//		if (!variables.isEmpty()) {
+//			int choice = rng.nextInt(variables.size());
+//			
+//			var = variables.get(choice);
+//		}
+//		
+//		return var;
+//	}
+//	
+//	public List<Variable> getVariablesFromStack(DataType dataType) {
+//		List<Variable> typeVariables = new ArrayList<Variable>();
+//		for (Variable v: variableStack) {
+//			if (v.getDataType() == dataType) {
+//				typeVariables.add(v);
+//			}
+//		}
+//		return typeVariables;
+//	}
 	
 	public static String format(CharSequence s) {
 		int indentLevel = 0;
@@ -412,9 +402,8 @@ public class ProgramGenerator {
 	}
 	
 	public static void main(String[] args) {
-		ProgramGenerator generator = new ProgramGenerator();
-		
-		AST program = generator.getProgram(10);
+		RandomNumberGenerator rng = new MersenneTwisterFast();
+		AST program = AST.getProgram(10, rng, new VariableHandler());
 		
 		System.out.println(format(program.toString()));
 	}

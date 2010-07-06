@@ -1,5 +1,7 @@
 package org.epochx.gx.representation;
 
+import org.epochx.tools.random.*;
+
 public class IntLiteral implements Literal {
 
 	private int value;
@@ -37,7 +39,18 @@ public class IntLiteral implements Literal {
 	}
 
 	@Override
-	public void modifyExpression(double probability) {
+	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars) {
 		//TODO Could modify the int value.
+	}
+
+	@Override
+	public Object evaluate(VariableHandler vars) {
+		return value;
+	}
+
+	public static Literal getIntLiteral(RandomNumberGenerator rng) {
+		IntLiteral literal = new IntLiteral(rng.nextInt());
+		
+		return literal;
 	}
 }

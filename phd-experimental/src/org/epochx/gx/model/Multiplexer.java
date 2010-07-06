@@ -21,64 +21,63 @@
  */
 package org.epochx.gx.model;
 
-import org.apache.commons.lang.*;
+import org.apache.commons.lang.ArrayUtils;
 import org.epochx.gx.representation.*;
-import org.epochx.representation.*;
+import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.eval.*;
-import org.epochx.tools.util.*;
+import org.epochx.tools.util.BoolUtils;
 
 /**
- * Experimental model for the even parity problems using nano-java.
+ * Grammar model for the multiplexer problems using a Java grammar.
  * 
- * <h4>Even parity problem</h4>
+ * <h4>Multiplexer problem</h4>
  * 
- * Given n binary inputValues, a program that solves the even-n-parity problem 
- * will return true in all circumstances where an even number of the inputValues
- * are true (or 1), and return false whenever there is an odd number of true 
- * inputValues.
+ * Given n binary inputValues, a program that solves the majority problem will 
+ * return true in all circumstances where a majority of the inputValues are true 
+ * (or 1), and return false whenever there is not a majority of true values.
  */
-public class EvenParity extends GXModel {
+public class Multiplexer extends GXModel {
 	
 	// Java interpreter for performing evaluation.
 	private final JavaInterpreter interpreter;
 	
+	// The boolean input sequences.
+	private final boolean[][] inputValues;
+	
 	// The names of the inputValues used in the grammar.
-	private final String[] argNames;
+	private String[] argNames;
 	
 	// The Variable objects for the arguments.
 	private final Variable[] arguments;
 	
-	// The boolean input sequences.
-	private final boolean[][] inputValues;
-	
-	private VariableHandler vars;
+	// No input bits.
+	private int noAddressBits;
+	private int noDataBits;
 	
 	/**
-	 * Constructs an EvenParity model for the given number of inputs.
+	 * Constructs a Multiplexer model for the given number of inputs.
 	 * 
-	 * @param noInputBits the number of inputs the even parity problem should be
+	 * @param noInputBits the number of inputs the multiplexer problem should be
 	 * for
 	 */
-	public EvenParity(final int noInputBits) {
+	public Multiplexer(final int noInputBits) {
 		interpreter = new JavaInterpreter();
-		
+
 		// Generate the input sequences.
 		inputValues = BoolUtils.generateBoolSequences(noInputBits);
+
+		arguments = new Variable[noInputBits];
+		
+		// Calculate number of address/data bits.
+		setBitSizes(noInputBits);
 		
 		// Determine the input argument names.
-		argNames = new String[noInputBits];
-		arguments = new Variable[noInputBits];
-		for (int i=0; i<noInputBits; i++) {
-			argNames[i] = "d" + i;
-			arguments[i] = new Variable(DataType.BOOLEAN, argNames[i]);
-		}
-		
-		vars = new VariableHandler(this);
-	}
-
+		setArgNames(noInputBits);
+	}	
+	
 	/**
 	 * Calculates the fitness score for the given program. The fitness of a 
-	 * program for the even-parity problem is calculated by evaluating it 
+	 * program for the majority problem is calculated by evaluating it 
 	 * using each of the possible sets of input values. There are 
 	 * <code>2^noInputBits</code> possible sets of inputs. The fitness of the 
 	 * program is the quantity of those input sequences that the program 
@@ -92,23 +91,24 @@ public class EvenParity extends GXModel {
 	@Override
 	public double getFitness(final CandidateProgram p) {
 		final GXCandidateProgram program = (GXCandidateProgram) p;
-		final AST ast = program.getAST();
 		
 		double score = 0;
-		
+        
         // Evaluate all possible inputValues.
-        for (boolean[] argValues: inputValues) {
+		for (final boolean[] vars : inputValues) {
         	// Convert to object array.
-        	final Boolean[] objVars = ArrayUtils.toObject(argValues);
+        	final Boolean[] objVars = ArrayUtils.toObject(vars);
         	
-        	for (int i=0; i<argNames.length; i++) {
-        		vars.setParameterValue(argNames[i], argValues[i]);
-        	}
+        	Boolean result = null;
+			try {
+				result = (Boolean) interpreter.eval(program.getSourceCode(), argNames, objVars);
+			} catch (MalformedProgramException e) {
+				// Assign worst possible fitness and stop evaluating.
+        		score = 0;
+        		break;
+			}
         	
-        	Boolean result = (Boolean) ast.evaluate(vars);
-
-			// Increment score for a correct response.
-            if ((result != null) && (result == isEvenNoTrue(argValues))) {
+            if (result != null && result == multiplex(vars)) {
                 score++;
             }
         }
@@ -116,56 +116,58 @@ public class EvenParity extends GXModel {
         return inputValues.length - score;
 	}
 	
-	/*@Override
-	public double getFitness(final CandidateProgram p) {
-		final GXCandidateProgram program = (GXCandidateProgram) p;
-		
-		//System.out.println("++++++++++++++++++++++++++\n" + program);
-
-		double score = 0;
-		
-        // Evaluate all possible inputValues.
-        for (boolean[] vars : inputValues) {
-        	// Convert to object array.
-        	final Boolean[] objVars = ArrayUtils.toObject(vars);
-        	
-        	Boolean result = null;
-			try {
-				result = (Boolean) interpreter.eval(program.getSourceCode(), argNames, objVars);
-			} catch (final MalformedProgramException e) {
-				// Assign worst possible fitness and stop evaluating.
-        		score = 0;
-        		break;
+	/*
+	 * Calculate and set the number of address and data bits.
+	 */
+	private void setBitSizes(final int noInputBits) {
+		noAddressBits = 1;
+		while (true) {
+			noDataBits = (int) Math.pow(2, noAddressBits);			
+			
+			if ((noAddressBits + noDataBits) == noInputBits) {
+				break;
 			}
 
-			// Increment score for a correct response.
-            if ((result != null) && (result == isEvenNoTrue(vars))) {
-                score++;
-            }
-        }
-        //System.out.println("--------------------------");
-        
-        return inputValues.length - score;
-	}*/
-
+			noAddressBits++;
+		}
+	}
+	
+	/*
+	 * Set the argument names for the inputs.
+	 */
+	private void setArgNames(final int noInputBits) {
+		argNames = new String[noInputBits];
+		// Add address inputs.
+		for (int i=0; i<noAddressBits; i++) {
+			argNames[i] = "a" + i;
+			arguments[i] = new Variable(DataType.BOOLEAN, argNames[i]);
+		}
+		// Add data inputs.
+		for (int i=noAddressBits; i<noInputBits; i++) {
+			argNames[i] = "d" + i;
+			arguments[i] = new Variable(DataType.BOOLEAN, argNames[i]);
+		}
+	}
+	
 	/*
 	 * Calculate what the correct response should be for the given inputs.
 	 */
-    private boolean isEvenNoTrue(final boolean[] input) {
-        int noTrues = 0;
+	private Boolean multiplex(final boolean[] vars) {
+		//TODO This is quite a lot slower than the x-bit specific versions.
+		// Calculate which data position to use.
+		int dataPosition = 0;
+		for (int i=0; i<noAddressBits; i++) {
+			if (vars[i]) {
+				dataPosition += Math.pow(2, i);
+			}
+		}
 
-        for (final boolean b: input) {
-            if(b) {
-                noTrues++;
-            }
-        }
-        
-        return ((noTrues % 2) == 0);
-    }
-    
+		return vars[noAddressBits + dataPosition];
+	}
+	
     @Override
     public void run() {
-    	getVariableHandler().setParameters(arguments);
+    	getProgramGenerator().setParameters(arguments);
     	
     	super.run();
     }

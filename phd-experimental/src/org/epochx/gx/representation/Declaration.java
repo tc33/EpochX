@@ -1,30 +1,39 @@
 package org.epochx.gx.representation;
 
-import java.util.*;
-
-import org.epochx.gx.op.init.*;
+import org.epochx.tools.random.*;
 
 
 public class Declaration implements Statement {
 
-	private ProgramGenerator generator;
-	
 	private DataType type;
 	
 	private Variable variable;
 	
 	private Expression expression;
 	
-	public Declaration(ProgramGenerator generator, DataType type, Variable variable, Expression expression) {
-		this.generator = generator;
+	public Declaration(DataType type, Variable variable, Expression expression) {
 		this.type = type;
 		this.variable = variable;
 		this.expression = expression;
 	}
 	
+	public static Declaration getDeclaration(RandomNumberGenerator rng, VariableHandler vars) {
+		String varName = vars.getNewVariableName();
+		
+		DataType type = AST.getDataType(rng);
+		Variable variable = new Variable(type, varName);
+		Expression expression = AST.getExpression(type, rng, vars);
+		
+		vars.add(variable);
+		
+		Declaration decl = new Declaration(type, variable, expression);
+		
+		return decl;
+	}
+	
 	@Override
-	public void apply(Stack<Variable> variables) {
-		variables.add(variable);
+	public void apply(VariableHandler vars) {
+		vars.add(variable);
 	}
 	
 	@Override
@@ -49,15 +58,24 @@ public class Declaration implements Statement {
 	}
 
 	@Override
-	public void modifyExpression(double probability) {
+	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars) {
 		//TODO Should use model's RNG.
 		double rand = Math.random();
 		
 		if (rand < probability) {
-			expression = generator.getExpression(expression.getDataType());
+			expression = AST.getExpression(expression.getDataType(), rng, vars);
 		} else {
-			expression.modifyExpression(probability);
+			expression.modifyExpression(probability, rng, vars);
 		}
+	}
+
+	@Override
+	public void evaluate(VariableHandler vars) {
+		Object value = expression.evaluate(vars);
+		
+		// Update variable value.
+		variable.setValue(value);
+		vars.add(variable);
 	}
 	
 }

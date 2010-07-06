@@ -1,27 +1,30 @@
 package org.epochx.gx.representation;
 
-import java.util.*;
-
-import org.epochx.gx.op.init.*;
+import org.epochx.tools.random.*;
 
 
 public class Assignment implements Statement {
 
-	private ProgramGenerator generator;
-	
 	private Variable variable;
 	
 	private Expression expression;
 	
-	public Assignment(ProgramGenerator generator, Variable variable, Expression expression) {
-		this.generator = generator;
+	public Assignment(Variable variable, Expression expression) {
 		this.variable = variable;
 		this.expression = expression;
 	}
 	
 	@Override
-	public void apply(Stack<Variable> variables) {
+	public void apply(VariableHandler vars) {
 		// We're not interested in variable values so do nothing.
+	}
+	
+	@Override
+	public void evaluate(VariableHandler vars) {
+		Object value = expression.evaluate(vars);
+		
+		// Update variable value.
+		variable.setValue(value);
 	}
 	
 	@Override
@@ -45,15 +48,27 @@ public class Assignment implements Statement {
 	}
 
 	@Override
-	public void modifyExpression(double probability) {
+	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars) {
 		//TODO Should use model's RNG.
 		double rand = Math.random();
 		
 		if (rand < probability) {
-			expression = generator.getExpression(expression.getDataType());
+			expression = AST.getExpression(expression.getDataType(), rng, vars);
 		} else {
-			expression.modifyExpression(probability);
+			expression.modifyExpression(probability, rng, vars);
 		}
 	}
-	
+
+	public static Assignment getAssignment(RandomNumberGenerator rng, VariableHandler vars) {
+		Assignment result = null;
+		Variable variable = vars.getVariable();
+
+		if (variable != null) {
+			Expression expression = AST.getExpression(variable.getDataType(), rng, vars);
+			result = new Assignment(variable, expression);
+		}
+		
+		return result;
+	}
+
 }

@@ -1,5 +1,7 @@
 package org.epochx.gx.representation;
 
+import org.epochx.tools.random.*;
+
 
 public class BooleanLiteral implements Literal {
 
@@ -38,7 +40,7 @@ public class BooleanLiteral implements Literal {
 	}
 
 	@Override
-	public void modifyExpression(double probability) {
+	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars) {
 		//TODO Should use model's RNG.
 		//TODO Could modify the boolean value.
 		/*double rand = Math.random();
@@ -46,6 +48,17 @@ public class BooleanLiteral implements Literal {
 		if (rand < probability) {
 			value = 
 		}*/
+	}
+
+	@Override
+	public Object evaluate(VariableHandler vars) {
+		return value;
+	}
+
+	public static Literal getBooleanLiteral(RandomNumberGenerator rng) {
+		BooleanLiteral literal = new BooleanLiteral(rng.nextBoolean());
+		
+		return literal;
 	}
 	
 }

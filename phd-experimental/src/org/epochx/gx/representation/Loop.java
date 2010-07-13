@@ -2,6 +2,7 @@ package org.epochx.gx.representation;
 
 import java.util.*;
 
+import org.epochx.gx.op.init.*;
 import org.epochx.tools.random.*;
 
 public class Loop implements Statement {
@@ -72,20 +73,11 @@ public class Loop implements Statement {
 		double rand = Math.random();
 		
 		if (rand < probability) {
-			condition = AST.getExpression(condition.getDataType(), rng, vars);
+			condition = ProgramGenerator.getExpression(rng, vars, condition.getDataType());
 		} else {
 			condition.modifyExpression(probability, rng, vars);
 		}
 		
 		body.modifyExpression(probability, rng, vars);
-	}
-
-	public static Statement getLoop(RandomNumberGenerator rng, VariableHandler vars) {
-		Expression condition = AST.getExpression(DataType.BOOLEAN, rng, vars);
-		Block body = Block.getBlock(rng, vars);
-		
-		Loop loop = new Loop(condition, body);
-		
-		return loop;
 	}
 }

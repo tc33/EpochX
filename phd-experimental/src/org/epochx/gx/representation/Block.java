@@ -55,25 +55,4 @@ public class Block implements Cloneable {
 			s.evaluate(vars);
 		}
 	}
-
-	public static Block getBlock(RandomNumberGenerator rng, VariableHandler vars) {
-		// Record number of variables to return to.
-		int noVariables = vars.getNoActiveVariables();
-		
-		List<Statement> statements = new ArrayList<Statement>();
-
-		//int noStatements = rng.nextInt(10);
-		int noStatements = 1;
-		
-		for (int i=0; i<noStatements; i++) {
-			statements.add(AST.getStatement(rng, vars));
-		}
-		
-		Block result = new Block(statements);
-		
-		// Pop off any newly declared variables to return to size before block.
-		vars.setNoActiveVariables(noVariables);
-		
-		return result;
-	}
 }

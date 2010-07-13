@@ -22,6 +22,7 @@
 package org.epochx.gx.model;
 
 import org.apache.commons.lang.*;
+import org.epochx.gx.op.init.*;
 import org.epochx.gx.representation.*;
 import org.epochx.representation.*;
 import org.epochx.tools.eval.*;
@@ -51,8 +52,6 @@ public class EvenParity extends GXModel {
 	// The boolean input sequences.
 	private final boolean[][] inputValues;
 	
-	private VariableHandler vars;
-	
 	/**
 	 * Constructs an EvenParity model for the given number of inputs.
 	 * 
@@ -73,7 +72,7 @@ public class EvenParity extends GXModel {
 			arguments[i] = new Variable(DataType.BOOLEAN, argNames[i]);
 		}
 		
-		vars = new VariableHandler(this);
+		getVariableHandler().setParameters(arguments);
 	}
 
 	/**
@@ -94,18 +93,21 @@ public class EvenParity extends GXModel {
 		final GXCandidateProgram program = (GXCandidateProgram) p;
 		final AST ast = program.getAST();
 		
+		//System.out.println(ProgramGenerator.format(ast.toString()));
+		//System.out.println("-------------------------------");
+		
 		double score = 0;
 		
         // Evaluate all possible inputValues.
         for (boolean[] argValues: inputValues) {
         	// Convert to object array.
-        	final Boolean[] objVars = ArrayUtils.toObject(argValues);
+        	//final Boolean[] objVars = ArrayUtils.toObject(argValues);
         	
         	for (int i=0; i<argNames.length; i++) {
-        		vars.setParameterValue(argNames[i], argValues[i]);
+        		getVariableHandler().setParameterValue(argNames[i], argValues[i]);
         	}
         	
-        	Boolean result = (Boolean) ast.evaluate(vars);
+        	Boolean result = (Boolean) ast.evaluate(getVariableHandler());
 
 			// Increment score for a correct response.
             if ((result != null) && (result == isEvenNoTrue(argValues))) {
@@ -161,12 +163,5 @@ public class EvenParity extends GXModel {
         }
         
         return ((noTrues % 2) == 0);
-    }
-    
-    @Override
-    public void run() {
-    	getVariableHandler().setParameters(arguments);
-    	
-    	super.run();
     }
 }

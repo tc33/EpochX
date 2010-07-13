@@ -3,6 +3,7 @@ package org.epochx.gx.op.mutation;
 import java.util.*;
 
 import org.epochx.gx.model.*;
+import org.epochx.gx.op.init.*;
 import org.epochx.gx.representation.*;
 import org.epochx.life.*;
 import org.epochx.representation.*;
@@ -52,7 +53,7 @@ public class InsertMutation implements GXMutation {
 			statements.get(i).apply(vars);
 		}
 		
-		ast.insertStatement(insertPosition, AST.getStatement(rng, vars));
+		ast.insertStatement(insertPosition, ProgramGenerator.getStatement(rng, vars));
 
 		program.setVariables(new HashSet<Variable>(vars.getAllVariables()));
 		

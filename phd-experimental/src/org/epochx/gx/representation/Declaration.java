@@ -1,5 +1,6 @@
 package org.epochx.gx.representation;
 
+import org.epochx.gx.op.init.*;
 import org.epochx.tools.random.*;
 
 
@@ -20,9 +21,9 @@ public class Declaration implements Statement {
 	public static Declaration getDeclaration(RandomNumberGenerator rng, VariableHandler vars) {
 		String varName = vars.getNewVariableName();
 		
-		DataType type = AST.getDataType(rng);
+		DataType type = ProgramGenerator.getDataType(rng);
 		Variable variable = new Variable(type, varName);
-		Expression expression = AST.getExpression(type, rng, vars);
+		Expression expression = ProgramGenerator.getExpression(rng, vars, type);
 		
 		vars.add(variable);
 		
@@ -63,7 +64,7 @@ public class Declaration implements Statement {
 		double rand = Math.random();
 		
 		if (rand < probability) {
-			expression = AST.getExpression(expression.getDataType(), rng, vars);
+			expression = ProgramGenerator.getExpression(rng, vars, expression.getDataType());
 		} else {
 			expression.modifyExpression(probability, rng, vars);
 		}

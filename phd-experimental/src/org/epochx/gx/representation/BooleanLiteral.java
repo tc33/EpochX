@@ -54,11 +54,4 @@ public class BooleanLiteral implements Literal {
 	public Object evaluate(VariableHandler vars) {
 		return value;
 	}
-
-	public static Literal getBooleanLiteral(RandomNumberGenerator rng) {
-		BooleanLiteral literal = new BooleanLiteral(rng.nextBoolean());
-		
-		return literal;
-	}
-	
 }

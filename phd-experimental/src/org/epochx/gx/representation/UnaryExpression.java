@@ -49,12 +49,10 @@ public class UnaryExpression implements Expression {
 	}
 	
 	@Override
-	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars) {
-		//TODO Should use model's RNG.
-		double rand = Math.random();
-		
-		if (rand < probability) {
-			expression = AST.getExpression(expression.getDataType(), rng, vars);
+	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars) {		
+		if (rng.nextDouble() < probability) {
+			//expression = ProgramGenerator.getExpression(rng, vars, expression.getDataType());
+			expression = vars.getActiveVariable(dataType);
 		} else {
 			expression.modifyExpression(probability, rng, vars);
 		}
@@ -82,20 +80,5 @@ public class UnaryExpression implements Expression {
 		}
 		
 		return value;
-	}
-
-	public static Expression getUnaryExpression(DataType dataType, RandomNumberGenerator rng, VariableHandler vars) {
-		Operator op = Operator.getUnaryOperator(rng, dataType);
-		UnaryExpression result = null;
-		
-		if (op != null) {
-			Variable var = vars.getVariable(dataType);
-			
-			if (var != null) {
-				result = new UnaryExpression(op, var, dataType);
-			}
-		}
-
-		return result;
 	}
 }

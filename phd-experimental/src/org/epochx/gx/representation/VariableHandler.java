@@ -72,7 +72,7 @@ public class VariableHandler {
 		allVariables.clear();
 	}
 	
-	public Variable getVariable() {
+	public Variable getActiveVariable() {
 		Variable var = null;
 		
 		if (!variableStack.isEmpty()) {
@@ -84,7 +84,7 @@ public class VariableHandler {
 		return var;
 	}
 	
-	public Variable getVariable(DataType dataType) {
+	public Variable getActiveVariable(DataType dataType) {
 		Variable var = null;
 		List<Variable> variables = getActiveVariables(dataType);
 		

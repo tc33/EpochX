@@ -68,6 +68,10 @@ public abstract class GXModel extends Model {
 	public VariableHandler getVariableHandler() {
 		return variableHandler;
 	}
+	
+	public void setVariableHandler(VariableHandler variableHandler) {
+		this.variableHandler = variableHandler;
+	}
 
 	/**
 	 * Returns the maximum depth of the derivation trees allowed. Crossovers or 

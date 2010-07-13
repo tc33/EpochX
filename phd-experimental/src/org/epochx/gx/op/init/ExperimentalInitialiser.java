@@ -61,7 +61,8 @@ public class ExperimentalInitialiser implements GXInitialiser {
 
 	private GXCandidateProgram initialiseProgram() {
 		vars.reset();
-		AST ast = AST.getProgram(noStatements, rng, vars);
+		//TODO Need to get the data type here from the model.
+		AST ast = ProgramGenerator.getAST(DataType.BOOLEAN, rng, vars, noStatements);
 		Set<Variable> variables = new HashSet<Variable>(vars.getAllVariables());
 		
 		return new GXCandidateProgram(ast, variables, model);

@@ -1,5 +1,6 @@
 package org.epochx.gx.representation;
 
+import org.epochx.gx.op.init.*;
 import org.epochx.tools.random.*;
 
 
@@ -57,18 +58,16 @@ public class BinaryExpression implements Expression {
 
 	@Override
 	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars) {
-		//TODO Should use model's RNG.
-		double rand = Math.random();
-		
-		if (rand < probability) {
-			leftExpression = AST.getExpression(leftExpression.getDataType(), rng, vars);
+		if (rng.nextDouble() < probability) {
+			leftExpression = ProgramGenerator.getExpression(rng, vars, leftExpression.getDataType());
 		} else {
 			leftExpression.modifyExpression(probability, rng, vars);
 		}
 		
-		rand = Math.random();
-		if (rand < probability) {
-			rightExpression = AST.getExpression(rightExpression.getDataType(), rng, vars);
+		//TODO Need to be able to modify the operator too.
+		
+		if (rng.nextDouble() < probability) {
+			rightExpression = ProgramGenerator.getExpression(rng, vars, rightExpression.getDataType());
 		} else {
 			rightExpression.modifyExpression(probability, rng, vars);
 		}
@@ -80,14 +79,5 @@ public class BinaryExpression implements Expression {
 		Object r = rightExpression.evaluate(vars);
 
 		return op.evaluateBinaryOperator(l, r);
-	}
-
-	public static Expression getBinaryExpression(DataType dataType, RandomNumberGenerator rng, VariableHandler vars) {
-		Operator op = Operator.getBinaryOperator(rng, dataType);
-		
-		Expression leftExpression = AST.getExpression(dataType, rng, vars);
-		Expression rightExpression = AST.getExpression(dataType, rng, vars);
-		
-		return new BinaryExpression(op, leftExpression, rightExpression, dataType);
 	}
 }

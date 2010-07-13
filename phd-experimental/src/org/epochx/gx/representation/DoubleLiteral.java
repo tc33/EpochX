@@ -47,10 +47,4 @@ public class DoubleLiteral implements Literal {
 	public Object evaluate(VariableHandler vars) {
 		return value;
 	}
-
-	public static Literal getDoubleLiteral(RandomNumberGenerator rng) {
-		DoubleLiteral literal = new DoubleLiteral(rng.nextDouble());
-		
-		return literal;
-	}
 }

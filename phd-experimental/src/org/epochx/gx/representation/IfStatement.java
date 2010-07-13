@@ -1,5 +1,6 @@
 package org.epochx.gx.representation;
 
+import org.epochx.gx.op.init.*;
 import org.epochx.tools.random.*;
 
 public class IfStatement implements Statement {
@@ -28,7 +29,7 @@ public class IfStatement implements Statement {
 	@Override
 	public void evaluate(VariableHandler vars) {
 		Boolean result = (Boolean) condition.evaluate(vars);
-		if (result == true) {
+		if (result) {
 			ifCode.evaluate(vars);
 		} else if (elseCode != null){
 			elseCode.evaluate(vars);
@@ -76,7 +77,7 @@ public class IfStatement implements Statement {
 		double rand = Math.random();
 		
 		if (rand < probability) {
-			condition = AST.getExpression(condition.getDataType(), rng, vars);
+			condition = ProgramGenerator.getExpression(rng, vars, condition.getDataType());
 		} else {
 			condition.modifyExpression(probability, rng, vars);
 		}
@@ -86,14 +87,5 @@ public class IfStatement implements Statement {
 		if (elseCode != null) {
 			elseCode.modifyExpression(probability, rng, vars);
 		}
-	}
-
-	public static Statement getIf(RandomNumberGenerator rng, VariableHandler vars) {
-		Expression condition = AST.getExpression(DataType.BOOLEAN, rng, vars);
-		Block ifCode = Block.getBlock(rng, vars);
-		
-		IfStatement ifStatement = new IfStatement(condition, ifCode);
-		
-		return ifStatement;
 	}
 }

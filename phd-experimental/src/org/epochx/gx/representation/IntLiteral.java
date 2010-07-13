@@ -47,10 +47,4 @@ public class IntLiteral implements Literal {
 	public Object evaluate(VariableHandler vars) {
 		return value;
 	}
-
-	public static Literal getIntLiteral(RandomNumberGenerator rng) {
-		IntLiteral literal = new IntLiteral(rng.nextInt());
-		
-		return literal;
-	}
 }

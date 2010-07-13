@@ -179,10 +179,10 @@ public class RunManager {
 		for (int gen=1; gen<=noGenerations; gen++) {
 			// Perform the generation.
 			pop = generation.generation(gen, pop);
-			
+
 			// Keep track of the best program and fitness.
 			updateBestProgram(pop);
-			
+
 			// We might be finished?
 			if (bestFitness <= terminationFitness) {
 				model.getLifeCycleManager().fireSuccessEvent();

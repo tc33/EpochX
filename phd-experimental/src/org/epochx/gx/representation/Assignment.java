@@ -1,5 +1,6 @@
 package org.epochx.gx.representation;
 
+import org.epochx.gx.op.init.*;
 import org.epochx.tools.random.*;
 
 
@@ -53,22 +54,9 @@ public class Assignment implements Statement {
 		double rand = Math.random();
 		
 		if (rand < probability) {
-			expression = AST.getExpression(expression.getDataType(), rng, vars);
+			expression = ProgramGenerator.getExpression(rng, vars, expression.getDataType());
 		} else {
 			expression.modifyExpression(probability, rng, vars);
 		}
 	}
-
-	public static Assignment getAssignment(RandomNumberGenerator rng, VariableHandler vars) {
-		Assignment result = null;
-		Variable variable = vars.getVariable();
-
-		if (variable != null) {
-			Expression expression = AST.getExpression(variable.getDataType(), rng, vars);
-			result = new Assignment(variable, expression);
-		}
-		
-		return result;
-	}
-
 }

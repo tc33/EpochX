@@ -57,7 +57,7 @@ public class EvenParity extends GPModel {
 		
 		// Define functions.
 		List<Node> syntax = new ArrayList<Node>();
-		syntax.add(new IfFunction());
+		syntax.add(new NandFunction());
 		syntax.add(new AndFunction());
 		syntax.add(new OrFunction());
 		syntax.add(new NotFunction());

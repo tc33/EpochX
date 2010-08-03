@@ -58,7 +58,7 @@ public abstract class AntTrail extends GPModel {
 	 * allowed to collect the food before timing out.
 	 */
 	public AntTrail(final Point[] foodLocations, final Dimension landscapeSize, final int allowedTimeSteps) {
-		this.foodLocations = new ArrayList<Point>(Arrays.asList(foodLocations));		
+		this.foodLocations = Arrays.asList(foodLocations);
 		this.allowedTimeSteps = allowedTimeSteps;
 		
 		landscape = new AntLandscape(landscapeSize, null);
@@ -91,7 +91,7 @@ public abstract class AntTrail extends GPModel {
 	public double getFitness(final CandidateProgram p) {
 		final GPCandidateProgram program = (GPCandidateProgram) p;
 		
-		landscape.setFoodLocations(foodLocations);
+		landscape.setFoodLocations(new ArrayList<Point>(foodLocations));
 		ant.reset(allowedTimeSteps, landscape);
 
 		// Run the ant.

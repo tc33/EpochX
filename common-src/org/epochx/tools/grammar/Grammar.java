@@ -25,37 +25,61 @@ import java.io.*;
 import java.util.*;
 
 /**
- * A grammar object is constructed from a BNF language grammar and defines the 
+ * A grammar object is constructed from a BNF language grammar. In the grammar 
+ * guided evolutionary approaches, a <code>Grammar</code> instance defines the 
  * valid syntax of a program's source being evolved. As well as defining the 
  * syntax of solutions, the grammar also essentially determines the function 
- * and terminal sets which are features of tree GP.
+ * and terminal sets which are explicitly defined in tree GP.
  * 
  * <p>A file or string containing a BNF grammar is parsed upon construction and 
  * a form of derivation tree with all possible options is created. The root of 
  * this tree is determined as the first rule in the grammar string and is 
- * retrieveable with a call to getStartSymbol(). The GrammarNode this method returns 
- * may be either a GrammarLiteral or a GrammarRule. Terminal symbols 
- * simply have a string value which matches the string from the BNF grammar, 
- * this will become part of the source of any program that uses it. 
- * Non-literals have a set of Productions, where each GrammarProduction is a valid 
- * syntax for that non-terminal rule. 
+ * retrieveable with a call to the <code>getStartSymbol()</code> method. The 
+ * <code>GrammarNode</code> this method returns may be either a 
+ * <code>GrammarLiteral</code> or a <code>GrammarRule</code>. Terminal symbols 
+ * are represented as <code>GrammarLiterals</code> and simply consist of a 
+ * string value which matches the string from the BNF grammar. It is these 
+ * terminals that will form the source code of any program that uses it. 
+ * Non-literals are represented as <code>GrammarRules</code> and each have a set
+ * of <code>GrammarProductions</code>. Each production describes a valid syntax 
+ * for that non-terminal rule.
+ * 
+ * <p>Productions can also be provided with attributes. Attributes are simply 
+ * key/value pairs which are then stored in the resultant 
+ * <code>GrammarProduction</code> instance. They provide a basic mechanism to 
+ * implement semantic constraints such as those used in attribute grammars or 
+ * to otherwise provide meta-data about a production, e.g. weights. The format 
+ * to provide attributes is to include within the production a special grammar 
+ * rule. The rule should begin and end with a question mark character '?'. 
+ * Between those question marks a series of key/values, made up of the key and 
+ * an equals character '=' followed by the value. Multiple key/values can be 
+ * provided separated by a semi-colon ';' character. 
+ * 
+ * <p>An example rule:</p>
+ * 
+ * <blockquote><code>
+ * &lt;example-rule&gt; ::= abc <?key1=32;key2=true?> | cde | &lt;ruleA&gt; &lt;ruleB&gt;
+ * </code></blockquote>
+ * 
+ * <p>Most of the features known as EBNF (extended BNF) are not currently 
+ * supported.
  */
 public class Grammar {
 
 	// Index into the rulesets.
-	private Map<String, GrammarLiteral> literals;
-	private Map<String, GrammarRule> rules;
+	private final Map<String, GrammarLiteral> literals;
+	private final Map<String, GrammarRule> rules;
 	
 	// The starting symbol - the root of the parse tree.
 	private GrammarRule start;
 	
 	/**
-	 * Constructs a Grammar with the given string as the BNF grammar to be 
-	 * parsed.
+	 * Constructs a <code>Grammar</code> with the given string as the BNF 
+	 * grammar to be parsed.
 	 * 
-	 * @param grammarStr a String containing a BNF language grammar.
+	 * @param grammarStr a <code>String</code> containing a BNF language grammar.
 	 */
-	public Grammar(String grammarStr) {
+	public Grammar(final String grammarStr) {
 		literals = new HashMap<String, GrammarLiteral>();
 		rules = new HashMap<String, GrammarRule>();
 		
@@ -63,14 +87,15 @@ public class Grammar {
 	}
 	
 	/**
-	 * Constructs a Grammar with the given file as a reference to a text file 
-	 * containing a BNF grammar, which will be read and parsed.
+	 * Constructs a <code>Grammar</code> with the given file as a reference to a
+	 * text file containing a BNF grammar, which will be read and parsed.
 	 * 
-	 * @param grammarFile a File pointing to a text file containing a BNF 
-	 * language grammar.
+	 * @param grammarFile a <code>File</code> pointing to a text file containing
+	 * a BNF language grammar.
+	 * @throws IOException if there was a problem reading the file.
 	 */
-	public Grammar(File grammarFile) {
-		String grammar = readGrammarFile(grammarFile);
+	public Grammar(final File grammarFile) throws IOException {
+		final String grammar = readGrammarFile(grammarFile);
 		
 		literals = new HashMap<String, GrammarLiteral>();
 		rules = new HashMap<String, GrammarRule>();
@@ -79,13 +104,10 @@ public class Grammar {
 	}
 	
 	/**
-	 * Returns the root of the grammar parse tree. This GrammarNode will be a 
-	 * GrammarRule unless the grammar contains no non-literals rules.
-	 * The symbol that is returned provides access to the grammar parse tree, 
-	 * by use of it's Productions in the case of non-literals and values in 
-	 * the case of terminal symbols.
+	 * Returns the root of the grammar parse tree. This will always be a 
+	 * <code>GrammarRule</code> for a valid BNF grammar.
 	 * 
-	 * @return the starting GrammarNode that is at the root of the grammar parse 
+	 * @return the starting GrammarRule that is at the root of the grammar parse 
 	 * tree.
 	 */
 	public GrammarRule getStartRule() {
@@ -93,28 +115,23 @@ public class Grammar {
 	}
 	
 	/*
-	 * Simply reads the contents of the given File and returns it as a String.
+	 * Reads the contents of the given File and returns it as a String.
 	 */
-	private String readGrammarFile(File grammarFile) {
-		StringBuilder grammar = new StringBuilder();
+	private String readGrammarFile(final File grammarFile) throws IOException {
+		final BufferedReader input = new BufferedReader(new FileReader(grammarFile));
+		final StringBuilder grammarStr = new StringBuilder();
 		
+		String line = null;
 		try {
-			BufferedReader input =  new BufferedReader(new FileReader(grammarFile));
-			try {
-				String line = null;
-
-				while ((line = input.readLine()) != null){
-					grammar.append(line);
-					grammar.append(System.getProperty("line.separator"));
-				}
-			} finally {
-				input.close();
+			while ((line = input.readLine()) != null){
+				grammarStr.append(line);
+				grammarStr.append(System.getProperty("line.separator"));
 			}
-		} catch (IOException ex){
-			ex.printStackTrace();
+		} finally {
+			input.close();
 		}
 		
-		return grammar.toString();
+		return grammarStr.toString();
 	}
 	
 	/*
@@ -135,7 +152,7 @@ public class Grammar {
 	 * This is based upon the grammar parser found in the 
 	 * Mapper.ContextFreeGrammar class of GEVA v.1.0.
 	 */
-	protected void parseGrammar(String grammar) throws MalformedGrammarException {
+	protected void parseGrammar(final String grammar) throws MalformedGrammarException {
 		State state = State.START;
 		StringBuilder buffer = new StringBuilder();
 		GrammarRule lhs = null;
@@ -148,49 +165,51 @@ public class Grammar {
 		for (int i=0; i<grammar.length(); i++) {
 			char ch = grammar.charAt(i);
 			
-			if(grammar.charAt(i) == '\\') { // Escape sequence
+			if (grammar.charAt(i) == '\\') {
+				// Start of an escape sequence - test next character.
                 i++;
-                if(i>=grammar.length()){// Escape sequence as last char is invalid
+                if (i >= grammar.length()){
+                	// Escape sequence as last char is invalid.
                     throw new MalformedGrammarException("Escape sequence as last char is invalid");
-                } else {
-                    if((!terminal) && (grammar.charAt(i) != '\n')){
-                        // Only escaped newline allowed inside non-terminal
-                        throw new MalformedGrammarException("Only escaped newline allowed inside non-terminal");
-                    }
+                } else if ((!terminal) && (grammar.charAt(i) != '\n')){
+                    // Only escaped newline allowed inside non-terminal
+                    throw new MalformedGrammarException("Only escaped newline allowed inside non-terminal");
                 }
+                
                 boolean skip = false;
-                if(grammar.charAt(i)=='\''){// Single quote
+                if (grammar.charAt(i)=='\''){// Single quote
                     ch='\'';
-                } else if(grammar.charAt(i)=='\''){// Double quote
+                } else if (grammar.charAt(i)=='\''){// Double quote
                     ch='\'';
-                } else if(grammar.charAt(i)=='\\'){// Backslash
+                } else if (grammar.charAt(i)=='\\'){// Backslash
                     ch='\\';
-                } else if(grammar.charAt(i)=='0'){// Null character
+                } else if (grammar.charAt(i)=='0'){// Null character
                     ch='\0';
-                } else if(grammar.charAt(i)=='a'){// Audible bell
+                } else if (grammar.charAt(i)=='a'){// Audible bell
                     ch='\007';
-                } else if(grammar.charAt(i)=='b'){// Backspace
+                } else if (grammar.charAt(i)=='b'){// Backspace
                     ch='\b';
-                } else if(grammar.charAt(i)=='f'){// Formfeed
+                } else if (grammar.charAt(i)=='f'){// Formfeed
                     ch='\f';
-                } else if(grammar.charAt(i)=='n'){// Newline
+                } else if (grammar.charAt(i)=='n'){// Newline
                     ch='\n';
-                } else if(grammar.charAt(i)=='r'){// Carriage return
+                } else if (grammar.charAt(i)=='r'){// Carriage return
                     ch='\r';
-                } else if(grammar.charAt(i)=='t'){// Horizontal tab
+                } else if (grammar.charAt(i)=='t'){// Horizontal tab
                     ch='\t';
-                } else if(grammar.charAt(i)=='v'){// Vertical tab
+                } else if (grammar.charAt(i)=='v'){// Vertical tab
                     ch='\013';
-                } else if(grammar.charAt(i)=='\n'){// Escaped newline
+                } else if (grammar.charAt(i)=='\n'){// Escaped newline
                     skip=true;// Ignore newline
                 } else if(grammar.charAt(i)=='\r'){// Escaped DOS return
                     skip=true;// Ignore newline
                     if(grammar.charAt(++i) != '\n'){
-                        throw new MalformedGrammarException("No newlinwe");
+                        throw new MalformedGrammarException("No newline");
                     }
-                } else{// Normal character
+                } else {// Normal character
                     ch=grammar.charAt(i);
                 }
+                
                 if(!skip){
                     buffer.append(ch);
                 }
@@ -212,6 +231,7 @@ public class Grammar {
 					} else if (ch == '<') {
 						state = State.START_RULE;
 					} else {
+						// No other valid chars in this state.
 						throw new MalformedGrammarException("Illegal character: " + ch);
 					}
 				break;
@@ -225,7 +245,7 @@ public class Grammar {
 						throw new MalformedGrammarException("Misplaced newline");
 					} else if (ch == '>') {
 						// Possible end of non-terminal.
-						String symbolName = buffer.toString();
+						final String symbolName = buffer.toString();
 						if (!rules.containsKey(symbolName)) {
 							lhs = new GrammarRule(symbolName);
 							rules.put(symbolName, lhs);
@@ -329,10 +349,9 @@ public class Grammar {
 						//} else if (special) {
 						if (special) {
 							// This should be the closing '?'.
-							String specialCommand = buffer.toString();
-							// Parse and process the command - only weights supported currently.
-							double weight = Double.parseDouble(specialCommand.trim());
-							grammarProduction.setWeight(weight);							
+							String specialCommand = buffer.toString().trim();
+							// Parse and process the command.
+							processSpecialRule(specialCommand, grammarProduction);
 						} else if (!terminal) {
 							// This should be the opening '?'.
 							special = true;
@@ -422,12 +441,39 @@ public class Grammar {
 		setRecursiveness();
 		setMinDepths();
 		
+		// Check the validity of the grammar.
+		// Test a start rule was found.
+		if (start == null) {
+			throw new MalformedGrammarException("No valid rules found in grammar string");
+		}
+		
+		// Test that all rules have at least one valid production.
+		Collection<GrammarRule> ruleList = rules.values();
+		for (GrammarRule rule: ruleList) {
+			if (rule.getNoProductions() == 0) {
+				throw new MalformedGrammarException("Grammar rule " + rule.getName() + " has no productions");
+			}
+		}
+		
 		/*
 		 * TODO Need to check at the end that the whole grammar is valid 
 		 * 	- infinitely recursive? 
 		 * 	- Empty productions? 
 		 *  - No Productions?
 		 */
+	}
+	
+	/*
+	 * Process a special rule. Currently the only supported special rule is 
+	 * key value pairs.
+	 */
+	private void processSpecialRule(final String command, final GrammarProduction production) {
+		final String[] commands = command.split(";");
+		
+		for (final String c: commands) {
+			String[] keyAndValue = c.split("=");
+			production.setAttribute(keyAndValue[0], keyAndValue[1]);
+		}
 	}
 	
 	/*
@@ -443,7 +489,7 @@ public class Grammar {
 	/*
 	 * Recursive helper for setRecursiveness().
 	 */
-	private void setRecursiveness(List<GrammarRule> path, GrammarRule current) {
+	private void setRecursiveness(final List<GrammarRule> path, final GrammarRule current) {
 		// Check for recursiveness then step down.
 		if (path.contains(current)) {
 			// Then everything in the path is recursive.
@@ -469,6 +515,10 @@ public class Grammar {
 		}
 	}
 	
+	/*
+	 * Calculates and sets the minimum depths of all grammar rules in the parse
+	 * tree.
+	 */
 	private void setMinDepths() {
 		Collection<GrammarRule> symbols = rules.values();
 		
@@ -478,7 +528,7 @@ public class Grammar {
 	}
 	
 	/*
-	 * Recursive helper that gets the minimum depth of the current symbol.
+	 * Recursive helper that calculates the minimum depth of the current symbol.
 	 */
 	private int getMinDepth(List<GrammarRule> path, GrammarNode currentSymbol) {
 		if (!(currentSymbol instanceof GrammarRule)) {
@@ -527,7 +577,7 @@ public class Grammar {
 	}
 	
 	/**
-	 * Returns a list of the grammars terminal symbols.
+	 * Returns a list of the grammar's terminal symbols.
 	 * 
 	 * @return a complete list of the literals in this grammar.
 	 */
@@ -543,7 +593,7 @@ public class Grammar {
 	 * @return the terminal symbol with the given name label, or null if a 
 	 * terminal with that name does not exist in the grammar.
 	 */
-	public GrammarLiteral getGrammarLiteral(String name) {
+	public GrammarLiteral getGrammarLiteral(final String name) {
 		return literals.get(name);
 	}
 	
@@ -564,7 +614,7 @@ public class Grammar {
 	 * @return the non-terminal symbol with the given name label, or null if 
 	 * a non-terminal with that name does not exist in the grammar.
 	 */
-	public GrammarRule getGrammarRule(String name) {
+	public GrammarRule getGrammarRule(final String name) {
 		return rules.get(name);
 	}
 	

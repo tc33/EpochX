@@ -21,7 +21,7 @@
  */
 package org.epochx.ge.model;
 
-import java.io.File;
+import java.io.*;
 
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.representation.CandidateProgram;
@@ -34,7 +34,12 @@ import org.epochx.tools.grammar.Grammar;
 public class StringMatch extends GEModel {
 
 	public StringMatch() {
-		setGrammar(new Grammar(new File("example-grammars/StringMatch.bnf")));
+		try {
+			setGrammar(new Grammar(new File("example-grammars/StringMatch.bnf")));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@Override

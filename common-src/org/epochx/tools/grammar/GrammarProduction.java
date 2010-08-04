@@ -32,12 +32,7 @@ public class GrammarProduction implements Cloneable {
 
 	private List<GrammarNode> grammarNodes;
 	
-	private double weight;
-	
-	public GrammarProduction(List<GrammarNode> grammarNodes, double weight) {
-		this.grammarNodes = grammarNodes;
-		this.weight = weight;
-	}
+	private Map<String, Object> attributes;
 	
 	/**
 	 * Constructs a production around the specified sequence of grammarNodes.
@@ -46,8 +41,11 @@ public class GrammarProduction implements Cloneable {
 	 * 				  this production.
 	 */
 	public GrammarProduction(List<GrammarNode> grammarNodes) {
-		this(grammarNodes, 1);
+		this.grammarNodes = grammarNodes;
+		
+		attributes = new HashMap<String, Object>();
 	}
+
 	
 	/**
 	 * Constructs a production with no grammarNodes. Symbols should be added to the 
@@ -104,29 +102,16 @@ public class GrammarProduction implements Cloneable {
 		return grammarNodes.size();
 	}
 	
-	/**
-	 * Overwrite the weight associated with this production. Weights are used 
-	 * as suggestions to bias the construction of parse trees. It is the 
-	 * responsibility of the Initialiser (or other class creating a parse 
-	 * tree) to use or ignore these weights.
-	 * 
-	 * @param weight the new weight to set to this production.
-	 */
-	public void setWeight(double weight) {
-		this.weight = weight;
+	public Object getAttribute(String key) {
+		return attributes.get(key);
 	}
 	
-	/**
-	 * Return the weight associated with this production. Weights are used 
-	 * as suggestions to bias the construction of parse trees. It is the 
-	 * responsibility of the Initialiser (or other class creating a parse 
-	 * tree) to use or ignore these weights. The default weight for a 
-	 * production is 1.0.
-	 * 
-	 * @return the weight bias associated with this production.
-	 */
-	public double getWeight() {
-		return weight;
+	public void setAttribute(String key, Object value) {
+		attributes.put(key, value);
+	}
+	
+	public Set<String> getAttributeKeys() {
+		return attributes.keySet();
 	}
 	
 	/**
@@ -184,7 +169,8 @@ public class GrammarProduction implements Cloneable {
 		// Shallow copy the grammar nodes.
 		clone.grammarNodes = new ArrayList<GrammarNode>(this.grammarNodes);
 		
-		clone.weight = this.weight;
+		// Shallow copy the attributes. Might need to be a deep copy though.
+		clone.attributes = new HashMap<String, Object>(this.attributes);
 		
 		return clone;
 	}

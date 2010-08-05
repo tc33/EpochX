@@ -83,80 +83,40 @@ public class Operator {
 		} else if (op.equals("^")) {
 			return (Boolean) operand1 ^ (Boolean) operand2;
 		} else if ((dataType == DataType.INT) && op.equals("+")) {
-			if (!(operand1 instanceof Integer) || !(operand2 instanceof Integer)) {
-				System.out.println(operand1.toString() + '+' + operand2.toString());
-			}
-			
 			return (Integer) operand1 + (Integer) operand2;
 		} else if ((dataType == DataType.INT) && op.equals("/")) {
-			if (!(operand1 instanceof Integer) || !(operand2 instanceof Integer)) {
-				System.out.println(operand1.toString() + '/' + operand2.toString());
-			}
-			
 			if ((Integer) operand2 == 0) {
 				return 0;
 			} else {
 				return (Integer) operand1 / (Integer) operand2;
 			}
 		} else if ((dataType == DataType.INT) && op.equals("%")) {
-			if (!(operand1 instanceof Integer) || !(operand2 instanceof Integer)) {
-				System.out.println(operand1.toString() + '%' + operand2.toString());
-			}
-			
 			if ((Integer) operand2 == 0) {
 				return 0;
 			} else {
 				return (Integer) operand1 % (Integer) operand2;
 			}
 		} else if ((dataType == DataType.INT) && op.equals("*")) {
-			if (!(operand1 instanceof Integer) || !(operand2 instanceof Integer)) {
-				System.out.println(operand1.toString() + '*' + operand2.toString());
-			}
-			
 			return (Integer) operand1 * (Integer) operand2;
 		} else if ((dataType == DataType.INT) && op.equals("-")) {
-			if (!(operand1 instanceof Integer) || !(operand2 instanceof Integer)) {
-				System.out.println(operand1.toString() + '-' + operand2.toString());
-			}
-			
 			return (Integer) operand1 - (Integer) operand2;
 		} else if ((dataType == DataType.DOUBLE) && op.equals("+")) {
-			if (!(operand1 instanceof Double) || !(operand2 instanceof Double)) {
-				System.out.println(operand1.toString() + '+' + operand2.toString());
-			}
-			
 			return (Double) operand1 + (Double) operand2;
 		} else if ((dataType == DataType.DOUBLE) && op.equals("/")) {
-			if (!(operand1 instanceof Double) || !(operand2 instanceof Double)) {
-				System.out.println(operand1.toString() + '/' + operand2.toString());
-			}
-			
 			if ((Double) operand2 == 0.0) {
-				return 0;
+				return 0.0;
 			} else {
 				return (Double) operand1 / (Double) operand2;
 			}
 		} else if ((dataType == DataType.DOUBLE) && op.equals("%")) {
-			if (!(operand1 instanceof Double) || !(operand2 instanceof Double)) {
-				System.out.println(operand1.toString() + '%' + operand2.toString());
-			}
-			
 			if ((Double) operand2 == 0.0) {
-				return 0;
+				return 0.0;
 			} else {
 				return (Double) operand1 % (Double) operand2;
 			}
 		} else if ((dataType == DataType.DOUBLE) && op.equals("*")) {
-			if (!(operand1 instanceof Double) || !(operand2 instanceof Double)) {
-				System.out.println(operand1.toString() + '*' + operand2.toString());
-			}
-			
 			return (Double) operand1 * (Double) operand2;
 		} else if ((dataType == DataType.DOUBLE) && op.equals("-")) {
-			if (!(operand1 instanceof Double) || !(operand2 instanceof Double)) {
-				System.out.println(operand1.toString() + '-' + operand2.toString());
-			}
-			
 			return (Double) operand1 - (Double) operand2;
 		} else {
 			// Broken.

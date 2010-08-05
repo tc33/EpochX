@@ -21,11 +21,8 @@
  */
 package org.epochx.gx.model;
 
-import org.apache.commons.lang.*;
-import org.epochx.gx.op.init.*;
 import org.epochx.gx.representation.*;
 import org.epochx.representation.*;
-import org.epochx.tools.eval.*;
 import org.epochx.tools.util.*;
 
 /**
@@ -39,9 +36,6 @@ import org.epochx.tools.util.*;
  * inputValues.
  */
 public class EvenParity extends GXModel {
-	
-	// Java interpreter for performing evaluation.
-	private final JavaInterpreter interpreter;
 	
 	// The names of the inputValues used in the grammar.
 	private final String[] argNames;
@@ -59,8 +53,6 @@ public class EvenParity extends GXModel {
 	 * for
 	 */
 	public EvenParity(final int noInputBits) {
-		interpreter = new JavaInterpreter();
-		
 		// Generate the input sequences.
 		inputValues = BoolUtils.generateBoolSequences(noInputBits);
 		

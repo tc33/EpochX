@@ -24,6 +24,7 @@ package org.epochx.gx.model.example;
 import org.epochx.gx.model.*;
 import org.epochx.gx.op.init.*;
 import org.epochx.gx.op.mutation.*;
+import org.epochx.gx.representation.*;
 import org.epochx.life.*;
 import org.epochx.stats.*;
 
@@ -51,12 +52,16 @@ public class EvenParity extends org.epochx.gx.model.EvenParity {
 			}
 		});
 		
-		/*model.getLifeCycleManager().addRunListener(new RunAdapter() {
+		model.getLifeCycleManager().addRunListener(new RunAdapter() {
 			@Override
 			public void onRunEnd() {
-				model.getStatsManager().printRunStats(StatField.RUN_NUMBER, StatField.RUN_FITNESS_MIN, StatField.RUN_FITTEST_PROGRAM);
+				System.out.println("-----------------------");
+				model.getStatsManager().printRunStats(StatField.RUN_NUMBER, StatField.RUN_FITNESS_MIN);
+				GXCandidateProgram best = (GXCandidateProgram) model.getStatsManager().getRunStat(StatField.RUN_FITTEST_PROGRAM);
+				System.out.println(ProgramGenerator.format(best.toString()));
+				System.out.println("-----------------------");
 			}
-		});*/
+		});
 		model.run();
 	}
     

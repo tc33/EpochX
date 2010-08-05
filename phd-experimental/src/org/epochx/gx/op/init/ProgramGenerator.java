@@ -12,7 +12,7 @@ public class ProgramGenerator {
 		AST p = new AST();
 		
 		for (int i=0; i<noStatements; i++) {
-			p.addStatement(getStatement(rng, vars));
+			p.addStatement(getStatement(rng, vars, 0));
 		}
 		
 		p.addReturnStatement(getReturnStatement(returnType, rng, vars));
@@ -34,7 +34,7 @@ public class ProgramGenerator {
 	 * selected until all have been tried. If none are valid then null is 
 	 * returned, otherwise the constructed statement is returned.
 	 */
-	public static Statement getStatement(RandomNumberGenerator rng, VariableHandler vars) {
+	public static Statement getStatement(RandomNumberGenerator rng, VariableHandler vars, int nesting) {
 		Statement result = null;
 		
 		int noOptions = 4;
@@ -54,22 +54,24 @@ public class ProgramGenerator {
 				result = getAssignment(rng, vars);
 			} else if (ran == 2) {
 				// If statement.
-				result = getIf(rng, vars);
-			} else {
+				result = getIf(rng, vars, nesting);
+			} else if (ran == 3) {
+				// Times loop.
+				result = getTimesLoop(rng, vars, nesting);
+			}/* else {
 				// Loop.
-				result = getLoop(rng, vars);
-			}
+				result = getWhileLoop(rng, vars);
+			}*/
 		}
 		
 		return result;
 	}
 	
-	public static Declaration getDeclaration(RandomNumberGenerator rng, VariableHandler vars) {
+	public static Declaration getDeclaration(RandomNumberGenerator rng, VariableHandler vars, Expression expression) {
 		String varName = vars.getNewVariableName();
 		
-		DataType type = getDataType(rng);
+		DataType type = expression.getDataType();
 		Variable variable = new Variable(type, varName);
-		Expression expression = getExpression(rng, vars, type);
 
 		vars.add(variable);
 		
@@ -78,37 +80,85 @@ public class ProgramGenerator {
 		return decl;
 	}
 	
+	public static Declaration getDeclaration(RandomNumberGenerator rng, VariableHandler vars, DataType type) {
+		Expression expression = getExpression(rng, vars, type, 0);
+
+		return getDeclaration(rng, vars, expression);
+	}
+	
+	public static Declaration getDeclaration(RandomNumberGenerator rng, VariableHandler vars) {
+		DataType type = getDataType(rng);
+		
+		return getDeclaration(rng, vars, type);
+	}
+	
 	public static Assignment getAssignment(RandomNumberGenerator rng, VariableHandler vars) {
 		Assignment result = null;
 		Variable variable = vars.getActiveVariable();
 
 		if (variable != null) {
-			Expression expression = getExpression(rng, vars, variable.getDataType());
+			Expression expression = getExpression(rng, vars, variable.getDataType(), 0);
 			result = new Assignment(variable, expression);
 		}
 		
 		return result;
 	}
 	
-	public static IfStatement getIf(RandomNumberGenerator rng, VariableHandler vars) {
-		Expression condition = getExpression(rng, vars, DataType.BOOLEAN);
-		Block ifCode = getBlock(rng, vars);
+	public static IfStatement getIf(RandomNumberGenerator rng, VariableHandler vars, int nesting) {
+		Expression condition = getExpression(rng, vars, DataType.BOOLEAN, 0);
+		Block ifCode = getBlock(rng, vars, nesting+1);
 		
 		IfStatement ifStatement = new IfStatement(condition, ifCode);
 		
 		return ifStatement;
 	}
 	
-	public static Loop getLoop(RandomNumberGenerator rng, VariableHandler vars) {
-		Expression condition = getExpression(rng, vars, DataType.BOOLEAN);
+	/*public static Loop getWhileLoop(RandomNumberGenerator rng, VariableHandler vars) {
+		Expression condition = getExpression(rng, vars, DataType.BOOLEAN, 0);
 		Block body = getBlock(rng, vars);
 		
 		Loop loop = new Loop(condition, body);
 		
 		return null;
+	}*/
+	
+	/**
+	 * 
+	 */
+	public static TimesLoop getTimesLoop(RandomNumberGenerator rng, VariableHandler vars, int nesting) {
+		if (nesting >= 2) {
+			return null;
+		}
+		
+		// End point declaration.
+		//Expression iterations = getExpression(rng, vars, DataType.INT, 0);
+		Declaration endVar = getDeclaration(rng, vars, DataType.INT);
+		
+		// End variable should not be used so hide from active.
+		vars.removeActiveVariable(endVar.getVariable());
+		
+		// Index variable.
+		Declaration indexVar = getDeclaration(rng, vars, new IntLiteral(0));
+		
+		// Index variable should not be used directly so hide from active.
+		vars.removeActiveVariable(indexVar.getVariable());
+		
+		// Index cover variable.
+		Declaration indexCoverVar = getDeclaration(rng, vars, indexVar.getVariable());
+		
+		// Generate a block.
+		Block body = getBlock(rng, vars, nesting+1);
+		
+		// Remove the index cover variable, to ensure scope restricted to block.
+		vars.removeActiveVariable(indexCoverVar.getVariable());
+		
+		TimesLoop loop = new TimesLoop(body, indexVar, indexCoverVar, endVar);
+		
+		return loop;
 	}
 	
-	public static Expression getExpression(RandomNumberGenerator rng, VariableHandler vars, DataType type) {
+	public static Expression getExpression(RandomNumberGenerator rng, VariableHandler vars, DataType type, int level) {
+		//System.out.println("level: " + level);
 		Expression result = null;
 		
 		int noOptions = 4;
@@ -117,9 +167,15 @@ public class ProgramGenerator {
 			indexes.add(i);
 		}
 		
+		//TODO This needs to be formalised. And why does it happen anyway.
+		// If nesting level exceeds 10 then don't allow any more binary expressions.
+		if (level > 10) {
+			indexes.remove(2);
+		}
+		
 		while (result == null && !indexes.isEmpty()) {
 			int ran = indexes.remove(rng.nextInt(indexes.size()));
-			
+
 			if (ran == 0) {
 				// Literal value.
 				result = getLiteral(rng, type);
@@ -128,7 +184,7 @@ public class ProgramGenerator {
 				result = vars.getActiveVariable(type);
 			} else if (ran == 2) {
 				// Binary expression.
-				result = getBinaryExpression(rng, vars, type);
+				result = getBinaryExpression(rng, vars, type, level+1);
 			} else {
 				// Unary expression.
 				result = getUnaryExpression(rng, vars, type);
@@ -138,11 +194,11 @@ public class ProgramGenerator {
 		return result;
 	}
 	
-	public static BinaryExpression getBinaryExpression(RandomNumberGenerator rng, VariableHandler vars, DataType dataType) {
+	public static BinaryExpression getBinaryExpression(RandomNumberGenerator rng, VariableHandler vars, DataType dataType, int level) {
 		Operator op = Operator.getBinaryOperator(rng, dataType);
 		
-		Expression leftExpression = getExpression(rng, vars, dataType);
-		Expression rightExpression = getExpression(rng, vars, dataType);
+		Expression leftExpression = getExpression(rng, vars, dataType, level);
+		Expression rightExpression = getExpression(rng, vars, dataType, level);
 		
 		return new BinaryExpression(op, leftExpression, rightExpression, dataType);
 	}
@@ -163,7 +219,7 @@ public class ProgramGenerator {
 		return result;
 	}
 	
-	public static Block getBlock(RandomNumberGenerator rng, VariableHandler vars) {
+	public static Block getBlock(RandomNumberGenerator rng, VariableHandler vars, int nesting) {
 		// Record number of variables to return to.
 		int noVariables = vars.getNoActiveVariables();
 		
@@ -173,7 +229,7 @@ public class ProgramGenerator {
 		int noStatements = 1;
 		
 		for (int i=0; i<noStatements; i++) {
-			statements.add(getStatement(rng, vars));
+			statements.add(getStatement(rng, vars, nesting));
 		}
 		
 		Block result = new Block(statements);

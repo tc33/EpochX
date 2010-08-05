@@ -40,7 +40,7 @@ public class BooleanLiteral implements Literal {
 	}
 
 	@Override
-	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars) {
+	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars, int level) {
 		//TODO Should use model's RNG.
 		//TODO Could modify the boolean value.
 		/*double rand = Math.random();

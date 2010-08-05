@@ -12,7 +12,7 @@ public class VariableHandler {
 	private GXModel model;
 	
 	// The variables that are currently in scope.
-	private Stack<Variable> variableStack;
+	private Stack<Variable> activeVariables;
 	
 	// The parameters which are available as variables.
 	private Set<Variable> parameters;
@@ -25,7 +25,7 @@ public class VariableHandler {
 	public VariableHandler(final GXModel model) {
 		this.model = model;
 		
-		variableStack = new Stack<Variable>();
+		activeVariables = new Stack<Variable>();
 		parameters = new HashSet<Variable>();
 		allVariables = new HashSet<Variable>();
 		
@@ -67,18 +67,18 @@ public class VariableHandler {
 	}
 	
 	public void reset() {
-		variableStack.clear();
-		variableStack.addAll(parameters);
+		activeVariables.clear();
+		activeVariables.addAll(parameters);
 		allVariables.clear();
 	}
 	
 	public Variable getActiveVariable() {
 		Variable var = null;
 		
-		if (!variableStack.isEmpty()) {
-			int choice = rng.nextInt(variableStack.size());
+		if (!activeVariables.isEmpty()) {
+			int choice = rng.nextInt(activeVariables.size());
 			
-			var = variableStack.get(choice);
+			var = activeVariables.get(choice);
 		}
 		
 		return var;
@@ -103,7 +103,7 @@ public class VariableHandler {
 	 * @return
 	 */
 	public List<Variable> getActiveVariables() {
-		return new ArrayList<Variable>(variableStack);
+		return new ArrayList<Variable>(activeVariables);
 	}
 	
 	public List<Variable> getActiveVariablesCopy() {
@@ -116,7 +116,7 @@ public class VariableHandler {
 	
 	public List<Variable> getActiveVariables(DataType dataType) {
 		List<Variable> typeVariables = new ArrayList<Variable>();
-		for (Variable v: variableStack) {
+		for (Variable v: activeVariables) {
 			if (v.getDataType() == dataType) {
 				typeVariables.add(v);
 			}
@@ -146,15 +146,19 @@ public class VariableHandler {
 	
 	public void add(Variable variable) {
 		allVariables.add(variable);
-		variableStack.push(variable);
+		activeVariables.push(variable);
+	}
+	
+	public void removeActiveVariable(Variable variable) {
+		activeVariables.remove(variable);
 	}
 	
 	public int getNoActiveVariables() {
-		return variableStack.size();
+		return activeVariables.size();
 	}
 	
 	public void setNoActiveVariables(int size) {
-		variableStack.setSize(size);
+		activeVariables.setSize(size);
 	}
 	
 	public Set<Variable> getAllVariables() {

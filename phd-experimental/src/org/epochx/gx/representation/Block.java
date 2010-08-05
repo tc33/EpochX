@@ -12,6 +12,10 @@ public class Block implements Cloneable {
 		this.statements = statements;
 	}
 	
+	public void insertStatement(int index, Statement statement) {
+		statements.add(index, statement);
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder buffer = new StringBuilder();
@@ -19,9 +23,10 @@ public class Block implements Cloneable {
 		
 		for (Statement s: statements) {
 			buffer.append(s.toString());
+			buffer.append('\n');
 		}
 		
-		buffer.append("\n}");
+		buffer.append("}");
 
 		return buffer.toString();
 	}

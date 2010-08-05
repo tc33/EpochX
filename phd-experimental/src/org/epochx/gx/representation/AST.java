@@ -2,6 +2,7 @@ package org.epochx.gx.representation;
 
 import java.util.*;
 
+import org.epochx.gx.op.init.*;
 import org.epochx.tools.random.*;
 
 public class AST implements Cloneable {
@@ -55,7 +56,7 @@ public class AST implements Cloneable {
 		}
 	}
 		
-	public Object evaluate(VariableHandler vars) {
+	public Object evaluate(VariableHandler vars) {		
 		// Evaluate each statement.
 		for (Statement s: statements) {
 			s.evaluate(vars);
@@ -77,6 +78,8 @@ public class AST implements Cloneable {
 		for (Statement s: this.statements) {
 			clone.statements.add((Statement) s.clone());
 		}
+		
+		clone.returnStatement = this.returnStatement.clone();
 		
 		return clone;
 	}

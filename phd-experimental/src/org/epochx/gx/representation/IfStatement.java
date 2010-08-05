@@ -77,9 +77,9 @@ public class IfStatement implements Statement {
 		double rand = Math.random();
 		
 		if (rand < probability) {
-			condition = ProgramGenerator.getExpression(rng, vars, condition.getDataType());
+			condition = ProgramGenerator.getExpression(rng, vars, condition.getDataType(), 0);
 		} else {
-			condition.modifyExpression(probability, rng, vars);
+			condition.modifyExpression(probability, rng, vars, 0);
 		}
 		
 		ifCode.modifyExpression(probability, rng, vars);

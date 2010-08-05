@@ -49,12 +49,12 @@ public class UnaryExpression implements Expression {
 	}
 	
 	@Override
-	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars) {		
+	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars, int level) {		
 		if (rng.nextDouble() < probability) {
 			//expression = ProgramGenerator.getExpression(rng, vars, expression.getDataType());
 			expression = vars.getActiveVariable(dataType);
 		} else {
-			expression.modifyExpression(probability, rng, vars);
+			expression.modifyExpression(probability, rng, vars, level+1);
 		}
 	}
 

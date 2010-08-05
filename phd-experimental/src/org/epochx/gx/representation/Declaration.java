@@ -12,24 +12,31 @@ public class Declaration implements Statement {
 	
 	private Expression expression;
 	
+	/**
+	 * @return the type
+	 */
+	public DataType getType() {
+		return type;
+	}
+
+	/**
+	 * @return the variable
+	 */
+	public Variable getVariable() {
+		return variable;
+	}
+
+	/**
+	 * @return the expression
+	 */
+	public Expression getExpression() {
+		return expression;
+	}
+
 	public Declaration(DataType type, Variable variable, Expression expression) {
 		this.type = type;
 		this.variable = variable;
 		this.expression = expression;
-	}
-	
-	public static Declaration getDeclaration(RandomNumberGenerator rng, VariableHandler vars) {
-		String varName = vars.getNewVariableName();
-		
-		DataType type = ProgramGenerator.getDataType(rng);
-		Variable variable = new Variable(type, varName);
-		Expression expression = ProgramGenerator.getExpression(rng, vars, type);
-		
-		vars.add(variable);
-		
-		Declaration decl = new Declaration(type, variable, expression);
-		
-		return decl;
 	}
 	
 	@Override
@@ -64,9 +71,9 @@ public class Declaration implements Statement {
 		double rand = Math.random();
 		
 		if (rand < probability) {
-			expression = ProgramGenerator.getExpression(rng, vars, expression.getDataType());
+			expression = ProgramGenerator.getExpression(rng, vars, expression.getDataType(), 0);
 		} else {
-			expression.modifyExpression(probability, rng, vars);
+			expression.modifyExpression(probability, rng, vars, 0);
 		}
 	}
 

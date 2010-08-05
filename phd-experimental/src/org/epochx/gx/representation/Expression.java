@@ -8,7 +8,7 @@ public interface Expression extends Cloneable {
 	
 	public Expression clone();
 	
-	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars);
+	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars, int level);
 	
 	public Object evaluate(VariableHandler vars);
 	

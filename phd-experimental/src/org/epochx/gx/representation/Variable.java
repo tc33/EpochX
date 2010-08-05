@@ -56,7 +56,7 @@ public class Variable implements Expression {
 	}
 
 	@Override
-	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars) {
+	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars, int level) {
 		// Nothing to be done here - no expressions.
 	}
 

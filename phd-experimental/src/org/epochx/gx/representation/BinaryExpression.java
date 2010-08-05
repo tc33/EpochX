@@ -57,19 +57,19 @@ public class BinaryExpression implements Expression {
 	}
 
 	@Override
-	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars) {
+	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars, int level) {
 		if (rng.nextDouble() < probability) {
-			leftExpression = ProgramGenerator.getExpression(rng, vars, leftExpression.getDataType());
+			leftExpression = ProgramGenerator.getExpression(rng, vars, leftExpression.getDataType(), level+1);
 		} else {
-			leftExpression.modifyExpression(probability, rng, vars);
+			leftExpression.modifyExpression(probability, rng, vars, level+1);
 		}
 		
 		//TODO Need to be able to modify the operator too.
 		
 		if (rng.nextDouble() < probability) {
-			rightExpression = ProgramGenerator.getExpression(rng, vars, rightExpression.getDataType());
+			rightExpression = ProgramGenerator.getExpression(rng, vars, rightExpression.getDataType(), level+1);
 		} else {
-			rightExpression.modifyExpression(probability, rng, vars);
+			rightExpression.modifyExpression(probability, rng, vars, level+1);
 		}
 	}
 

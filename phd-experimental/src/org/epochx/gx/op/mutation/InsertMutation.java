@@ -53,7 +53,7 @@ public class InsertMutation implements GXMutation {
 			statements.get(i).apply(vars);
 		}
 		
-		ast.insertStatement(insertPosition, ProgramGenerator.getStatement(rng, vars));
+		ast.insertStatement(insertPosition, ProgramGenerator.getStatement(rng, vars, 0));
 
 		program.setVariables(new HashSet<Variable>(vars.getAllVariables()));
 		

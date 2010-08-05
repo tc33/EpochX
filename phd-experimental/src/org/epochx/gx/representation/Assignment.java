@@ -54,9 +54,9 @@ public class Assignment implements Statement {
 		double rand = Math.random();
 		
 		if (rand < probability) {
-			expression = ProgramGenerator.getExpression(rng, vars, expression.getDataType());
+			expression = ProgramGenerator.getExpression(rng, vars, expression.getDataType(), 0);
 		} else {
-			expression.modifyExpression(probability, rng, vars);
+			expression.modifyExpression(probability, rng, vars, 0);
 		}
 	}
 }

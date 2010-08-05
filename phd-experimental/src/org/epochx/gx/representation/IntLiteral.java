@@ -39,7 +39,7 @@ public class IntLiteral implements Literal {
 	}
 
 	@Override
-	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars) {
+	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars, int level) {
 		//TODO Could modify the int value.
 	}
 

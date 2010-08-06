@@ -31,6 +31,13 @@ import junit.framework.TestCase;
 public class ScriptingInterpreterTest extends TestCase {
 
 	/**
+	 * Dummy test because junit doesn't like empty TestCases.
+	 */
+	public void testDummy() {
+		assertTrue(true);
+	}
+	
+	/**
 	 * Tests that the eval method can handle simple expressions.
 	 */
 	/*public void testEval() {

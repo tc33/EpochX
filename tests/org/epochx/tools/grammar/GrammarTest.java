@@ -26,7 +26,7 @@ import junit.framework.TestCase;
 public class GrammarTest extends TestCase {
 
 	/**
-	 * Test that a malformed grammar exception is thrown for a grammar with no
+	 * Tests that a malformed grammar exception is thrown for a grammar with no
 	 * rules.
 	 */
 	public void testEmptyGrammar() {
@@ -37,7 +37,7 @@ public class GrammarTest extends TestCase {
 	}
 	
 	/**
-	 * Test that a malformed grammar exception is thrown for a grammar with a 
+	 * Tests that a malformed grammar exception is thrown for a grammar with a 
 	 * rule that is referred to but is missing.
 	 */
 	public void testMissingRule() {
@@ -47,4 +47,35 @@ public class GrammarTest extends TestCase {
 		} catch (final MalformedGrammarException e) {}
 	}
 	
+	
+	/**
+	 * Tests that a malformed grammar exception is thrown for a grammar 
+	 * including infinitely recursive rules.
+	 */
+	public void testInfiniteRecursion() {
+		String grammarStr = "<rule> ::= <rule> | <rule2> <rule3>\n" +
+							"<rule2> ::= abc | dcd\n" +
+							"<rule3> ::= <rule2> <rule> | dvd <rule3>\n";
+		
+		try {
+			new Grammar(grammarStr);
+			fail("Malformed grammar exception not thrown for an infinitely recursive grammar");
+		} catch (final MalformedGrammarException e) {}
+	}
+	
+	/**
+	 * Tests that a malformed grammar exception is not thrown for a grammar 
+	 * which is heavily recursive but not infinitely so.
+	 */
+	public void testNonInfiniteRecursion() {
+		String grammarStr = "<rule> ::= <rule> | <rule2> <rule3>\n" +
+							"<rule2> ::= abc | dcd\n" +
+							"<rule3> ::= <rule2> <rule> | dvd\n";
+		
+		try {
+			new Grammar(grammarStr);
+		} catch (final MalformedGrammarException e) {
+			fail("Malformed grammar exception thrown for recursive grammar");
+		}
+	}
 }

@@ -453,16 +453,63 @@ public class Grammar {
 			if (rule.getNoProductions() == 0) {
 				throw new MalformedGrammarException("Grammar rule " + rule.getName() + " has no productions");
 			}
+			
+			if (isInfinitelyRecursive(rule)) {
+				throw new MalformedGrammarException("Grammar rule " + rule.getName() + " is infinitely recursive");
+			}
 		}
-		
-		/*
-		 * TODO Need to check at the end that the whole grammar is valid 
-		 * 	- infinitely recursive? 
-		 * 	- Empty productions? 
-		 *  - No Productions?
-		 */
 	}
 	
+	/**
+	 * Determines whether the given <code>GrammarRule</code> is infinitely 
+	 * recursive. A rule is infinitely recursive if all its productions  
+	 * contain either a recursive reference to the rule, or a reference to 
+	 * another rule where all its productions contain a reference to the rule.
+	 * @param rule the rule to test for infinite recursion.
+	 * @return true if the given rule is infinitely recursive, and false 
+	 * otherwise.
+	 */
+	private boolean isInfinitelyRecursive(final GrammarRule rule) {
+		return rule.isRecursive() && allProductionsContainRule(rule, rule, new ArrayList<GrammarRule>());
+	}
+	
+	/**
+	 * 
+	 * @param rule
+	 * @param ruleTree
+	 * @return
+	 */
+	private boolean allProductionsContainRule(final GrammarRule rule, final GrammarRule parseTree, final List<GrammarRule> path) {
+		path.add(parseTree);
+		boolean ref = true;
+		
+		final List<GrammarProduction> productions = parseTree.getProductions();
+		outer: for (final GrammarProduction p: productions) {
+			final List<GrammarNode> nodes = p.getGrammarNodes();
+			
+			if (nodes.contains(rule)) {
+				continue outer;
+			} else {
+				for (GrammarNode n: nodes) {
+					if (n instanceof GrammarRule) {
+						GrammarRule r = (GrammarRule) n;
+
+						if (path.contains(r) || allProductionsContainRule(rule, r, path)) {
+							continue outer;
+						}
+					}
+				}
+				ref = false;
+				break outer;
+			}
+		}
+		
+		// Remove the last element from the path.
+		path.remove(path.size()-1);
+		
+		return ref;
+	}
+
 	/*
 	 * Process a special rule. Currently the only supported special rule is 
 	 * key value pairs.

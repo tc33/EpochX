@@ -4,8 +4,8 @@
     </description>
   
 	<!-- set global properties for this build -->
-	<property name="version" value="1.1.2"/>
-	<!--<input message="Please enter the build version number:" addproperty="version" />-->
+	<!--<property name="version" value="1.1.2"/>-->
+	<input message="Please enter the build version number:" addproperty="version" />
 	
 	<property name="tests" location="$tests"/>
 	
@@ -17,7 +17,7 @@
 	
 	<property name="lib" location="lib"/>
 	<property name="dists" location="dist"/>
-    <property name="dist" location="${dists}/epochx-${version}_$"/>
+    <property name="dist" location="${dists}/epochx-${version}"/>
 	<property name="distsrc" location="${dist}/src"/>
 	<property name="distbin" location="${dist}/bin"/>
 	<property name="distlib" location="${dist}/lib"/>

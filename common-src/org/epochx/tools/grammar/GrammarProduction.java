@@ -98,7 +98,7 @@ public class GrammarProduction implements Cloneable {
 	 * 
 	 * @return the number of grammarNodes in this production.
 	 */
-	public int getNoChildren() {
+	public int getNoGrammarNodes() {
 		return grammarNodes.size();
 	}
 	

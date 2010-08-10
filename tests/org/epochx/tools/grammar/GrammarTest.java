@@ -53,9 +53,9 @@ public class GrammarTest extends TestCase {
 	 * including infinitely recursive rules.
 	 */
 	public void testInfiniteRecursion() {
-		String grammarStr = "<rule> ::= <rule> | <rule2> <rule3>\n" +
+		String grammarStr = "<rule1> ::= <rule1> | <rule2> <rule3>\n" +
 							"<rule2> ::= abc | dcd\n" +
-							"<rule3> ::= <rule2> <rule> | dvd <rule3>\n";
+							"<rule3> ::= <rule2> <rule1> | dvd <rule3>\n";
 		
 		try {
 			new Grammar(grammarStr);
@@ -68,14 +68,52 @@ public class GrammarTest extends TestCase {
 	 * which is heavily recursive but not infinitely so.
 	 */
 	public void testNonInfiniteRecursion() {
-		String grammarStr = "<rule> ::= <rule> | <rule2> <rule3>\n" +
+		String grammarStr = "<rule1> ::= <rule1> | <rule2> <rule3>\n" +
 							"<rule2> ::= abc | dcd\n" +
-							"<rule3> ::= <rule2> <rule> | dvd\n";
+							"<rule3> ::= <rule2> <rule1> | dvd\n";
 		
 		try {
 			new Grammar(grammarStr);
 		} catch (final MalformedGrammarException e) {
 			fail("Malformed grammar exception thrown for recursive grammar");
+		}
+	}
+	
+	/**
+	 * Tests that rules get set recursive correctly.
+	 */
+	public void testSetRecursive() {
+		String grammarStr = "<rule1> ::= <rule2> | <rule3>\n" +
+							"<rule2> ::= <rule1> <rule3>\n" +
+							"<rule3> ::= abc | def\n";
+		
+		Grammar g = new Grammar(grammarStr);
+		if (!g.getGrammarRule("rule1").isRecursive()) {
+			fail("Recursive flag not set for recursive rule");
+		}
+		if (!g.getGrammarRule("rule2").isRecursive()) {
+			fail("Recursive flag not set for recursive rule");
+		}
+		if (g.getGrammarRule("rule3").isRecursive()) {
+			fail("Recursive flag set for non-recursive rule");
+		}
+	}
+	
+	/**
+	 * Tests that attributes get set correctly on productions.
+	 */
+	public void testAttributesSet() {
+		String grammarStr = "<rule1> ::= afg | <rule2> <?k1=v1;k2=3?>\n" +
+							"<rule2> ::= abc | def\n";
+		
+		Grammar g = new Grammar(grammarStr);
+		GrammarRule rule1 = g.getGrammarRule("rule1");
+		GrammarProduction p = rule1.getProduction(1);
+		if (!"v1".equals(p.getAttribute("k1"))) {
+			fail("Production attribute key/values not set");
+		}
+		if (!"3".equals(p.getAttribute("k2"))) {
+			fail("Production attribute key/values not set");
 		}
 	}
 }

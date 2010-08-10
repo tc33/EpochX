@@ -439,7 +439,6 @@ public class Grammar {
 		}
 		
 		setRecursiveness();
-		setMinDepths();
 		
 		// Check the validity of the grammar.
 		// Test a start rule was found.
@@ -447,13 +446,18 @@ public class Grammar {
 			throw new MalformedGrammarException("No valid rules found in grammar string");
 		}
 		
-		// Test that all rules have at least one valid production.
+		// Setup and validate each rule - done together for efficiency only.
 		Collection<GrammarRule> ruleList = rules.values();
 		for (GrammarRule rule: ruleList) {
+			// Calculate and set the minimum depths of all rules.
+			rule.setMinDepth(getMinDepth(new ArrayList<GrammarRule>(), rule));
+			
+			// Test that all rules have at least one valid production.
 			if (rule.getNoProductions() == 0) {
 				throw new MalformedGrammarException("Grammar rule " + rule.getName() + " has no productions");
 			}
 			
+			// Test that all rules have a potential exit point.
 			if (isInfinitelyRecursive(rule)) {
 				throw new MalformedGrammarException("Grammar rule " + rule.getName() + " is infinitely recursive");
 			}
@@ -464,26 +468,27 @@ public class Grammar {
 	 * Determines whether the given <code>GrammarRule</code> is infinitely 
 	 * recursive. A rule is infinitely recursive if all its productions  
 	 * contain either a recursive reference to the rule, or a reference to 
-	 * another rule where all its productions contain a reference to the rule.
+	 * another rule where all its productions contain such a reference to the 
+	 * rule.
+	 * 
 	 * @param rule the rule to test for infinite recursion.
 	 * @return true if the given rule is infinitely recursive, and false 
 	 * otherwise.
 	 */
-	private boolean isInfinitelyRecursive(final GrammarRule rule) {
-		return rule.isRecursive() && allProductionsContainRule(rule, rule, new ArrayList<GrammarRule>());
+	protected boolean isInfinitelyRecursive(final GrammarRule rule) {
+		return rule.isRecursive() && isInfinitelyRecursive(rule, rule, new ArrayList<GrammarRule>());
 	}
 	
-	/**
-	 * 
-	 * @param rule
-	 * @param ruleTree
-	 * @return
+	/*
+	 * Recursive helper method for isInfinitelyRecursive(GrammarRule).
 	 */
-	private boolean allProductionsContainRule(final GrammarRule rule, final GrammarRule parseTree, final List<GrammarRule> path) {
-		path.add(parseTree);
+	private boolean isInfinitelyRecursive(final GrammarRule rule, 
+										  final GrammarRule currentRule, 
+										  final List<GrammarRule> path) {
+		path.add(currentRule);
 		boolean ref = true;
 		
-		final List<GrammarProduction> productions = parseTree.getProductions();
+		final List<GrammarProduction> productions = currentRule.getProductions();
 		outer: for (final GrammarProduction p: productions) {
 			final List<GrammarNode> nodes = p.getGrammarNodes();
 			
@@ -494,7 +499,7 @@ public class Grammar {
 					if (n instanceof GrammarRule) {
 						GrammarRule r = (GrammarRule) n;
 
-						if (path.contains(r) || allProductionsContainRule(rule, r, path)) {
+						if (path.contains(r) || isInfinitelyRecursive(rule, r, path)) {
 							continue outer;
 						}
 					}
@@ -509,23 +514,15 @@ public class Grammar {
 		
 		return ref;
 	}
-
-	/*
-	 * Process a special rule. Currently the only supported special rule is 
-	 * key value pairs.
-	 */
-	private void processSpecialRule(final String command, final GrammarProduction production) {
-		final String[] commands = command.split(";");
-		
-		for (final String c: commands) {
-			String[] keyAndValue = c.split("=");
-			production.setAttribute(keyAndValue[0], keyAndValue[1]);
-		}
-	}
 	
 	/*
 	 * Iterates through the grammar and searches for cases of recursiveness and
-	 * sets symbol's recursive flag accordingly.
+	 * sets symbol's recursive flag accordingly. A rule is recursive if any of
+	 * its productions contain a reference to itself, or if any of the 
+	 * productions in the tree below that rule contain a reference to that rule.
+	 * TODO This isn't actually what is going on here - this sets the whole path
+	 * between to recursive which is how it works for the FullInitialiser, but 
+	 * essentially seems wrong.
 	 */
 	private void setRecursiveness() {
 		if (start instanceof GrammarRule) {
@@ -548,7 +545,7 @@ public class Grammar {
 			
 			for (int i=0; i<current.getNoProductions(); i++) {
 				GrammarProduction p = current.getProduction(i);
-				for (int j=0; j<p.getNoChildren(); j++) {
+				for (int j=0; j<p.getNoGrammarNodes(); j++) {
 					// We only care about non-terminal symbols here.
 					if (!(p.getGrammarNode(j) instanceof GrammarRule)) {
 						continue;
@@ -561,23 +558,24 @@ public class Grammar {
 			}
 		}
 	}
-	
+
 	/*
-	 * Calculates and sets the minimum depths of all grammar rules in the parse
-	 * tree.
+	 * Processes a special rule. Currently the only supported special rule is 
+	 * key value pairs.
 	 */
-	private void setMinDepths() {
-		Collection<GrammarRule> symbols = rules.values();
+	private void processSpecialRule(final String command, final GrammarProduction production) {
+		final String[] commands = command.split(";");
 		
-		for (GrammarRule nt: symbols) {
-			nt.setMinDepth(getMinDepth(new ArrayList<GrammarRule>(), nt));
+		for (final String c: commands) {
+			final String[] keyAndValue = c.split("=");
+			production.setAttribute(keyAndValue[0], keyAndValue[1]);
 		}
 	}
 	
 	/*
 	 * Recursive helper that calculates the minimum depth of the current symbol.
 	 */
-	private int getMinDepth(List<GrammarRule> path, GrammarNode currentSymbol) {
+	private int getMinDepth(final List<GrammarRule> path, final GrammarNode currentSymbol) {
 		if (!(currentSymbol instanceof GrammarRule)) {
 			return 0;
 		}
@@ -597,7 +595,7 @@ public class Grammar {
 			for (int i=0; i<current.getNoProductions(); i++) {
 				GrammarProduction p = current.getProduction(i);
 				int productionsMinDepth = -1;
-				for (int j=0; j<p.getNoChildren(); j++) {
+				for (int j=0; j<p.getNoGrammarNodes(); j++) {
 					// The largest of production's symbols min depths, is productions min depth.
 					int d = getMinDepth(new ArrayList<GrammarRule>(path), p.getGrammarNode(j));
 					
@@ -624,42 +622,45 @@ public class Grammar {
 	}
 	
 	/**
-	 * Returns a list of the grammar's terminal symbols.
+	 * Returns a list of the grammar's terminal symbols - the literal values.
 	 * 
 	 * @return a complete list of the literals in this grammar.
 	 */
 	public List<GrammarLiteral> getGrammarLiterals() {
+		//TODO Is it necessary to make a copy of the list?
 		return new ArrayList<GrammarLiteral>(literals.values());
 	}
 	
 	/**
-	 * Returns a specific terminal from the grammar, according to the name 
-	 * label of the symbol. 
+	 * Returns a specific terminal from this grammar, according to the name 
+	 * label of the symbol.
 	 * 
-	 * @param name the label that refers to the terminal symbol to return.
-	 * @return the terminal symbol with the given name label, or null if a 
-	 * terminal with that name does not exist in the grammar.
+	 * @param name the label that refers to the grammar literal to return.
+	 * @return the grammar terminal with the given name label, or 
+	 * <code>null</code> if a terminal with that name does not exist in the 
+	 * grammar.
 	 */
 	public GrammarLiteral getGrammarLiteral(final String name) {
 		return literals.get(name);
 	}
 	
 	/**
-	 * Returns a list of the grammars non-terminal symbols.
+	 * Returns a list of the grammar rules that make up this grammar.
 	 * 
 	 * @return a complete list of the non-literals in this grammar.
 	 */
 	public List<GrammarRule> getGrammarRules() {
+		//TODO Does this need to be a new ArrayList?
 		return new ArrayList<GrammarRule>(rules.values());
 	}
 	
 	/**
-	 * Returns a specific non-terminal from the grammar, according to the name 
-	 * label of the symbol.
+	 * Returns a specific GrammarRule from this grammar, according to the name 
+	 * label of the rule.
 	 * 
-	 * @param name the label that refers to the non-terminal symbol to return.
-	 * @return the non-terminal symbol with the given name label, or null if 
-	 * a non-terminal with that name does not exist in the grammar.
+	 * @param name the label that refers to the grammar rule to return.
+	 * @return the <code>GrammarRule</code> with the given name label, or 
+	 * <code>null</code> if rule with that name does not exist in the grammar.
 	 */
 	public GrammarRule getGrammarRule(final String name) {
 		return rules.get(name);
@@ -668,16 +669,14 @@ public class Grammar {
 	/**
 	 * Returns the minimum depth of this grammr. The minimum depth of a grammar 
 	 * is equal to the minimum depth of its start symbol, which is the minimum 
-	 * depth required to reach all terminal symbols.
+	 * depth required to resolve to only grammar literals.
 	 * 
-	 * @return the minimum depth required by this grammar to reach all terminal
-	 * symbols.
+	 * @return the minimum depth required by this grammar to resolve to only
+	 * grammar literals.
 	 */
 	public int getMinimumDepth() {
-		int minDepth = 0;
-		if (start instanceof GrammarRule) {
-			minDepth = ((GrammarRule) start).getMinDepth();
-		}
-		return minDepth;
+		assert (start != null);
+		
+		return start.getMinDepth();
 	}
 }

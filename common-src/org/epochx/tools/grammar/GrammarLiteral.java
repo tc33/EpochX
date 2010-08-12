@@ -22,14 +22,16 @@
 package org.epochx.tools.grammar;
 
 /**
- * Terminal symbols are those symbols which are never found on the left-hand 
- * side of grammar rules and as such contain no productions. Instead, 
- * TerminalSymbols each have a value which is the string they represent in the 
- * grammar string. The final source of a program that is valid according to a
- * grammar will be made up solely of terminal symbol values.
+ * Grammar literals are a type of grammar node, that represent the terminals of 
+ * a grammar. They are those nodes which are never found on the left-hand side 
+ * of grammar rules and as such contain no productions. Instead, 
+ * <code>GrammarLiterals</code> each have a value which is the string they 
+ * represent in the grammar string. The final source of a program that is valid 
+ * according to a grammar will be made up solely of these terminal values.
  */
 public class GrammarLiteral implements GrammarNode {
 
+	// The literal value of this grammar terminal.
 	private String value;
 	
 	/**
@@ -37,27 +39,35 @@ public class GrammarLiteral implements GrammarNode {
 	 * 
 	 * @param value snippet of source that this terminal represents.
 	 */
-	public GrammarLiteral(String value) {
+	public GrammarLiteral(final String value) {
 		this.value = value;
 	}
 	
 	/**
-	 * Returns the value of this terminal symbol.
+	 * Returns the literal value of this grammar terminal.
 	 * 
-	 * @return this terminal's value.
+	 * @return this grammar literal's value.
 	 */
 	public String getValue() {
 		return value;
 	}
 	
 	/**
-	 * Return a string representation of this terminal symbol.
+	 * Sets the literal value of this grammar terminal.
 	 * 
-	 * @return a string representation of this terminal symbol.
+	 * @param value the new grammar literal value to set.
+	 */
+	public void setValue(final String value) {
+		this.value = value;
+	}
+	
+	/**
+	 * Returns a <code>String</code> representation of this grammar literal.
+	 * 
+	 * @return a string representation of this grammar literal.
 	 */
 	@Override
 	public String toString() {
 		return value;
 	}
-
 }

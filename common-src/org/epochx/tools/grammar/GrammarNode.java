@@ -22,9 +22,10 @@
 package org.epochx.tools.grammar;
 
 /**
- * Symbols are the elements that make up a grammar.
- * 
- * Currently this GrammarNode interface does not require any methods.
+ * Instances of <code>GrammarNode</code> implementations are the elements that 
+ * represent the set of rules that make up a <code>Grammar</code>.
+ *  
+ * @see GrammarProduction
  */
 public interface GrammarNode {
 	

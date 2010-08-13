@@ -334,6 +334,7 @@ public abstract class Model implements Runnable {
 	 * @param noGenerations the new number of generations to use within a run.
 	 */
 	public void setNoGenerations(final int noGenerations) {
+		//TODO Should be able to set this to -1 to not use a generation limit.
 		if (noGenerations >= 0) {
 			this.noGenerations = noGenerations;
 		} else {

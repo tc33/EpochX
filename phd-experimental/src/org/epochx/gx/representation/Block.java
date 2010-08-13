@@ -16,6 +16,14 @@ public class Block implements Cloneable {
 		statements.add(index, statement);
 	}
 	
+	public List<Statement> getStatements() {
+		return statements;
+	}
+	
+	public int getNoStatements() {
+		return statements.size();
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder buffer = new StringBuilder();

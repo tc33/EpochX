@@ -39,9 +39,6 @@ public class TimesLoop implements Statement {
 		for (int i=0; (i<n && i<MAX_ITERATIONS); i++) {
 			// Record the number of variables to remove all new declarations.
 			int noVars = vars.getNoActiveVariables();
-			if (indexCoverVarDecl.getVariable().getValue() == null) {
-				System.out.println("+++++++++++++++NULL");
-			}
 			
 			body.evaluate(vars);
 			
@@ -63,7 +60,17 @@ public class TimesLoop implements Statement {
 		buffer.append('\n');
 		
 		buffer.append("for (");
-		buffer.append(indexVarDecl.toString());
+		
+		// Declarations.
+		buffer.append("int ");
+		buffer.append(indexVarDecl.getVariable().getVariableName());
+		buffer.append("=0,");
+		buffer.append(indexCoverVarDecl.getVariable().getVariableName());
+		buffer.append('=');
+		buffer.append(indexVarDecl.getVariable().getVariableName());
+		buffer.append(';');
+		
+		// Conditions.
 		buffer.append(" (");
 		buffer.append(indexVarDecl.getVariable().getVariableName());
 		buffer.append('<');
@@ -73,12 +80,16 @@ public class TimesLoop implements Statement {
 		buffer.append('<');
 		buffer.append(MAX_ITERATIONS);
 		buffer.append("); ");
+		
+		// Updates.
 		buffer.append(indexVarDecl.getVariable().getVariableName());
 		buffer.append("++,");
 		buffer.append(indexCoverVarDecl.getVariable().getVariableName());
 		buffer.append('=');
 		buffer.append(indexVarDecl.getVariable().getVariableName());
 		buffer.append(")");
+		
+		// Body.
 		buffer.append(body.toString());
 
 		return buffer.toString();
@@ -93,10 +104,11 @@ public class TimesLoop implements Statement {
 			assert false;
 		}
 		
+		clone.indexCoverVarDecl = this.indexCoverVarDecl.clone();
 		clone.indexVarDecl = this.indexVarDecl.clone();
 		clone.endVarDecl = this.endVarDecl.clone();
 		clone.body = this.body.clone();
-			
+		
 		return clone;
 	}
 
@@ -104,5 +116,10 @@ public class TimesLoop implements Statement {
 	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars) {
 		endVarDecl.modifyExpression(probability, rng, vars);
 		body.modifyExpression(probability, rng, vars);
+	}
+
+	@Override
+	public int getNoStatements() {
+		return 1 + body.getNoStatements();
 	}
 }

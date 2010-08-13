@@ -79,4 +79,9 @@ public class Loop implements Statement {
 		
 		body.modifyExpression(probability, rng, vars);
 	}
+
+	@Override
+	public int getNoStatements() {
+		return 1 + body.getNoStatements();
+	}
 }

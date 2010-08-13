@@ -12,6 +12,8 @@ public class ExperimentalMutation implements GXMutation {
 	private GXModel model;
 	
 	private RandomNumberGenerator rng;
+	private int minNoStatements;
+	private int maxNoStatements;
 	
 	private InsertMutation insert;
 	private DeleteMutation delete;
@@ -38,6 +40,8 @@ public class ExperimentalMutation implements GXMutation {
 	 */
 	private void configure() {
 		rng = model.getRNG();
+		minNoStatements = model.getMinNoStatements();
+		maxNoStatements = model.getMaxNoStatements();
 	}
 	
 	@Override
@@ -46,17 +50,30 @@ public class ExperimentalMutation implements GXMutation {
 		
 		double random = rng.nextDouble();
 		
-		if (random < 0.2) {
+		int noStatements = program.getNoStatements();
+		
+		double[] probabilties = {0.8, 0.1, 0.1};
+		if (noStatements <= minNoStatements) {
+			// Don't allow delete.
+			probabilties[2] += probabilties[1];
+			probabilties[1] = 0.0;
+		} else if (noStatements >= maxNoStatements) {
+			// Don't allow insert.
+			probabilties[1] += probabilties[2];
+			probabilties[2] = 0.0;
+		}
+		
+		if (random < probabilties[0]) {
 			// Insert statement.
-			program = insert.mutate(program);
-		} else if (random < 0.4) {
+			program = modify.mutate(program);
+		} else if (random < probabilties[0]+probabilties[1]) {
 			// Delete statement.
 			program = delete.mutate(program);
 		} else {
 			// Modify expression.
-			program = modify.mutate(program);
+			program = insert.mutate(program);
 		}
-		
+
 		return program;
 	}
 

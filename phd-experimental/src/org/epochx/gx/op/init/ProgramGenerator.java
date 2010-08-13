@@ -126,7 +126,7 @@ public class ProgramGenerator {
 	 * 
 	 */
 	public static TimesLoop getTimesLoop(RandomNumberGenerator rng, VariableHandler vars, int nesting) {
-		if (nesting >= 2) {
+		if (nesting >= 1) {
 			return null;
 		}
 		

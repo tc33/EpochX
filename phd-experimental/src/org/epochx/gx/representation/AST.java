@@ -2,7 +2,6 @@ package org.epochx.gx.representation;
 
 import java.util.*;
 
-import org.epochx.gx.op.init.*;
 import org.epochx.tools.random.*;
 
 public class AST implements Cloneable {

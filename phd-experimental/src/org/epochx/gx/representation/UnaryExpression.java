@@ -70,13 +70,17 @@ public class UnaryExpression implements Expression {
 			value = ((Integer) v.getValue()) + 1;
 			v.setValue(value);
 		} else if (operator.getOp().equals("++") && (operator.getOperatorType() == OperatorType.UNARY_POST)) {
-			//TODO
+			Variable v = (Variable) expression;
+			value = (Integer) v.getValue();
+			v.setValue(((Integer) value).intValue() + 1);
 		} else if (operator.getOp().equals("--") && (operator.getOperatorType() == OperatorType.UNARY_PRE)) {
 			Variable v = (Variable) expression;
 			value = ((Integer) v.getValue()) - 1;
 			v.setValue(value);
-		} else if (operator.getOp().equals("++") && (operator.getOperatorType() == OperatorType.UNARY_POST)) {
-			//TODO
+		} else if (operator.getOp().equals("--") && (operator.getOperatorType() == OperatorType.UNARY_POST)) {
+			Variable v = (Variable) expression;
+			value = (Integer) v.getValue();
+			v.setValue(((Integer) value).intValue() - 1);
 		}
 		
 		return value;

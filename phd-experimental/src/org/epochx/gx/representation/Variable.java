@@ -41,7 +41,7 @@ public class Variable implements Expression {
 	
 	@Override
 	public Variable clone() {
-		Variable clone = null;
+		/*Variable clone = null;
 		try {
 			clone = (Variable) super.clone();
 		} catch (CloneNotSupportedException e) {
@@ -50,9 +50,9 @@ public class Variable implements Expression {
 		
 		clone.datatype = this.datatype;
 		clone.variableName = this.variableName;
-		clone.value = this.value;
+		clone.value = this.value;*/
 		
-		return clone;
+		return this;
 	}
 
 	@Override

@@ -180,6 +180,7 @@ public class RunManager {
 			// Perform the generation.
 			pop = generation.generation(gen, pop);
 
+			//TODO Should be able to utilise the statsmanager here.
 			// Keep track of the best program and fitness.
 			updateBestProgram(pop);
 

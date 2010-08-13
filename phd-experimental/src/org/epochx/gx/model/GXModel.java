@@ -32,8 +32,8 @@ import org.epochx.stats.*;
 public abstract class GXModel extends Model {
 	
 	// Control parameters.
-	private int maxDepth;
-	private int maxInitialDepth;
+	private int maxNoStatements;
+	private int minNoStatements;
 	
 	private VariableHandler variableHandler;
 	
@@ -46,8 +46,8 @@ public abstract class GXModel extends Model {
 		getStatsManager().setStatsEngine(new StatsEngine(this));
 		
 		// Set default parameter values.
-		maxDepth = 14;
-		maxInitialDepth = 8;
+		maxNoStatements = 10;
+		minNoStatements = 3;
 		
 		variableHandler = new VariableHandler(this);
 		
@@ -74,64 +74,36 @@ public abstract class GXModel extends Model {
 	}
 
 	/**
-	 * Returns the maximum depth of the derivation trees allowed. Crossovers or 
-	 * mutations that result in a larger chromosome will not be allowed.
 	 * 
-	 * <p>Defaults to 14.
-	 * 
-	 * @return the maximum depth of derivation trees to allow.
 	 */
-	public int getMaxDepth() {
-		return maxDepth;
+	public int getMaxNoStatements() {
+		return maxNoStatements;
 	}
 
 	/**
-	 * Overwrites the default maximum allowable depth of a program's derivation 
-	 * tree.
 	 * 
-	 * <p>Max depth of -1 is allowed to indicate no limit.
-	 * 
-	 * @param maxDepth the maximum depth to allow a program's derivation tree.
 	 */
-	public void setMaxDepth(final int maxDepth) {
-		if (maxDepth >= 1 || maxDepth == -1) {
-			this.maxDepth = maxDepth;
+	public void setMaxNoStatements(final int maxNoStatements) {
+		if (maxNoStatements >= 1 || maxNoStatements == -1) {
+			this.maxNoStatements = maxNoStatements;
 		} else {
-			throw new IllegalArgumentException("maxDepth must either be -1 or greater than 0");
+			throw new IllegalArgumentException("maximum number of statements must either be -1 or greater than 0");
 		}
 		
-		assert (this.maxDepth >= 1 || this.maxDepth == -1);
+		assert (this.maxNoStatements >= 1 || this.maxNoStatements == -1);
 	}
 	
 	/**
-	 * Returns the maximum depth of the derivation trees allowed at 
-	 * initialisation.
 	 * 
-	 * <p>Defaults to 8.
-	 * 
-	 * @return the maximum depth of derivation trees to allow after 
-	 * initialisation.
 	 */
-	public int getMaxInitialDepth() {
-		return maxInitialDepth;
+	public int getMinNoStatements() {
+		return minNoStatements;
 	}
 
 	/**
-	 * Overwrites the default maximum allowable depth of a program's derivation 
-	 * tree after initialisation.
 	 * 
-	 * <p>Max depth of -1 is allowed to indicate no limit.
-	 * 
-	 * @param maxDepth the maximum depth to allow a program's derivation tree
-	 * 				   after initialisation.
 	 */
-	public void setMaxInitialDepth(final int maxInitialDepth) {
-		if (maxInitialDepth >= 1 || maxInitialDepth == -1) {
-			this.maxInitialDepth = maxInitialDepth;
-		} else {
-			throw new IllegalArgumentException("maxInitialDepth must either be -1 or greater than 0");
-		}
-		
-		assert (this.maxInitialDepth >= 1 || this.maxInitialDepth == -1);
+	public void setMinNoStatements(final int minNoStatements) {
+		this.minNoStatements = minNoStatements;
 	}
 }

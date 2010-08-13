@@ -21,31 +21,55 @@
  */
 package org.epochx.gx.model.example;
 
+import java.io.*;
+import java.util.*;
+
 import org.epochx.gx.model.*;
 import org.epochx.gx.op.init.*;
 import org.epochx.gx.op.mutation.*;
+import org.epochx.gx.representation.*;
 import org.epochx.life.*;
+import org.epochx.representation.*;
 import org.epochx.stats.*;
 
 
-public class Fibonnaci extends org.epochx.gx.model.Fibonnaci {
+public class Fibonnaci extends org.epochx.gx.model.Fibonacci {
 	
     public static void main(String[] args) {
 		final GXModel model = new Fibonnaci();
 		model.setNoRuns(100);
-		model.setNoGenerations(50);
-		model.setPopulationSize(500);
-		model.setInitialiser(new ExperimentalInitialiser(model, 5));
+		model.setNoGenerations(1000);
+		model.setPopulationSize(1000);
+		model.setInitialiser(new ExperimentalInitialiser(model, 3));
 		model.setMutation(new ExperimentalMutation(model));
+		model.setNoElites(10);
 		model.setCrossoverProbability(0.0);
 		model.setMutationProbability(1.0);
 		model.setTerminationFitness(0.0);
-		model.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+		model.setMaxNoStatements(14);
+		model.setMinNoStatements(3);
+		/*model.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationEnd() {
-				model.getStatsManager().printGenerationStats(StatField.GEN_NUMBER, StatField.GEN_FITNESS_MIN, StatField.GEN_FITNESS_AVE);
+				Object[] stats = model.getStatsManager().getGenerationStats(StatField.GEN_NUMBER, 
+						   StatField.GEN_FITNESS_MIN, 
+						   StatField.GEN_FITNESS_AVE,
+						   StatField.GEN_POPULATION);
+				
+				for (int i=0; i<3; i++) {
+					System.out.print(stats[i]);
+					System.out.print('\t');
+				}
+				
+				List<CandidateProgram> pop = (List<CandidateProgram>) stats[3];
+				double totalSize = 0;
+				for (CandidateProgram p: pop) {
+					totalSize += ((GXCandidateProgram) p).getNoStatements();
+				}
+				double aveSize = totalSize / pop.size();
+				System.out.print(aveSize + "\n");
 			}
-		});
+		});*/
 		
 		model.getLifeCycleManager().addRunListener(new RunAdapter() {
 			@Override
@@ -55,6 +79,5 @@ public class Fibonnaci extends org.epochx.gx.model.Fibonnaci {
 		});
 		
 		model.run();
-	}
-    
+	}    
 }

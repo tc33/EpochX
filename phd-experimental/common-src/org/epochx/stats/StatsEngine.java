@@ -131,7 +131,6 @@ public class StatsEngine {
 	/*
 	 * Calculate and return the GEN_FITNESSES statistic.
 	 */
-	@SuppressWarnings("unchecked")
 	private Object getGenFitnesses() {
 		double[] fitnesses = null;
 		
@@ -257,7 +256,6 @@ public class StatsEngine {
 	/*
 	 * Calculate and return the GEN_FITTEST_PROGRAM statistic.
 	 */
-	@SuppressWarnings("unchecked")
 	private Object getGenBestProgram() {
 		CandidateProgram bestProgram = null;
 		

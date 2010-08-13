@@ -88,4 +88,15 @@ public class IfStatement implements Statement {
 			elseCode.modifyExpression(probability, rng, vars);
 		}
 	}
+
+	@Override
+	public int getNoStatements() {
+		int noStatements = 1 + ifCode.getNoStatements();
+		
+		if (elseCode != null) {
+			noStatements += elseCode.getNoStatements();
+		}
+		
+		return noStatements;
+	}
 }

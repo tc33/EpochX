@@ -85,5 +85,10 @@ public class Declaration implements Statement {
 		variable.setValue(value);
 		vars.add(variable);
 	}
+
+	@Override
+	public int getNoStatements() {
+		return 1;
+	}
 	
 }

@@ -59,4 +59,9 @@ public class Assignment implements Statement {
 			expression.modifyExpression(probability, rng, vars, 0);
 		}
 	}
+
+	@Override
+	public int getNoStatements() {
+		return 1;
+	}
 }

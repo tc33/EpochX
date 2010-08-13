@@ -114,6 +114,23 @@ public class GXCandidateProgram extends CandidateProgram {
 	}
 	
 	/**
+	 * Returns a count of the number of statements in the program, this includes
+	 * all top level statements plus all statements nested within blocks of 
+	 * if or for loop statements.
+	 * 
+	 * @return
+	 */
+	public int getNoStatements() {
+		List<Statement> topStatements = program.getStatements();
+		int noStatements = 0;
+		for (Statement s: topStatements) {
+			noStatements += s.getNoStatements();
+		}
+		
+		return noStatements;
+	}
+	
+	/**
 	 * Create a clone of this GXCandidateProgram.
 	 * 
 	 * @return a copy of this GXCandidateProgram instance.
@@ -123,7 +140,6 @@ public class GXCandidateProgram extends CandidateProgram {
 		//TODO This needs writing properly.
 		GXCandidateProgram clone = (GXCandidateProgram) super.clone();
 				
-		// If codons are the same then the source and fitness should be the same.
 		clone.program = (AST) this.program.clone();
 		
 		// Copy the caches.

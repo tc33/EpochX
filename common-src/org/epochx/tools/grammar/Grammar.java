@@ -78,8 +78,10 @@ public class Grammar {
 	 * grammar to be parsed.
 	 * 
 	 * @param grammarStr a <code>String</code> containing a BNF language grammar.
+	 * @throws MalformedGrammarException if the given grammar string is not in a
+	 * valid format.
 	 */
-	public Grammar(final String grammarStr) {
+	public Grammar(final String grammarStr) throws MalformedGrammarException {
 		literals = new HashMap<String, GrammarLiteral>();
 		rules = new HashMap<String, GrammarRule>();
 		
@@ -93,8 +95,10 @@ public class Grammar {
 	 * @param grammarFile a <code>File</code> pointing to a text file containing
 	 * a BNF language grammar.
 	 * @throws IOException if there was a problem reading the file.
+	 * @throws MalformedGrammarException if the given grammar string is not in a
+	 * valid format.
 	 */
-	public Grammar(final File grammarFile) throws IOException {
+	public Grammar(final File grammarFile) throws IOException, MalformedGrammarException {
 		final String grammar = readGrammarFile(grammarFile);
 		
 		literals = new HashMap<String, GrammarLiteral>();

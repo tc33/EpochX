@@ -22,13 +22,10 @@
 package org.epochx.tools.grammar;
 
 /**
- * A MalformedGrammarException is thrown to indicate that a grammar string is 
- * not in a valid BNF format. 
+ * A checked exception that is thrown to indicate that a grammar string is 
+ * not in a valid BNF format.
  */
-public class MalformedGrammarException extends RuntimeException {
-	/*
-	 * TODO Consider whether this should be a checked exception or not.
-	 */
+public class MalformedGrammarException extends Exception {
 
 	/**
 	 * 
@@ -36,7 +33,8 @@ public class MalformedGrammarException extends RuntimeException {
 	private static final long serialVersionUID = 4253637393156061665L;
 
 	/**
-	 * Constructs a MalformedGrammarException with the specified message.
+	 * Constructs a <code>MalformedGrammarException</code> with the specified 
+	 * message.
 	 * 
 	 * @param message {@inheritDoc}
 	 */

@@ -26,6 +26,7 @@ import java.io.*;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.Grammar;
+import org.epochx.tools.grammar.MalformedGrammarException;
 
 /**
  * This model needs to undergo some work and is unlikely to function correctly
@@ -37,7 +38,8 @@ public class StringMatch extends GEModel {
 		try {
 			setGrammar(new Grammar(new File("example-grammars/StringMatch.bnf")));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MalformedGrammarException e) {
 			e.printStackTrace();
 		}
 	}

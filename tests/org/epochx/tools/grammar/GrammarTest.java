@@ -87,15 +87,19 @@ public class GrammarTest extends TestCase {
 							"<rule2> ::= <rule1> <rule3>\n" +
 							"<rule3> ::= abc | def\n";
 		
-		Grammar g = new Grammar(grammarStr);
-		if (!g.getGrammarRule("rule1").isRecursive()) {
-			fail("Recursive flag not set for recursive rule");
-		}
-		if (!g.getGrammarRule("rule2").isRecursive()) {
-			fail("Recursive flag not set for recursive rule");
-		}
-		if (g.getGrammarRule("rule3").isRecursive()) {
-			fail("Recursive flag set for non-recursive rule");
+		try {
+			Grammar g = new Grammar(grammarStr);
+			if (!g.getGrammarRule("rule1").isRecursive()) {
+				fail("Recursive flag not set for recursive rule");
+			}
+			if (!g.getGrammarRule("rule2").isRecursive()) {
+				fail("Recursive flag not set for recursive rule");
+			}
+			if (g.getGrammarRule("rule3").isRecursive()) {
+				fail("Recursive flag set for non-recursive rule");
+			}
+		} catch (MalformedGrammarException ex) {
+			fail("Malformed grammar exception thrown for a valid grammar");
 		}
 	}
 	
@@ -106,14 +110,18 @@ public class GrammarTest extends TestCase {
 		String grammarStr = "<rule1> ::= afg | <rule2> <?k1=v1;k2=3?>\n" +
 							"<rule2> ::= abc | def\n";
 		
-		Grammar g = new Grammar(grammarStr);
-		GrammarRule rule1 = g.getGrammarRule("rule1");
-		GrammarProduction p = rule1.getProduction(1);
-		if (!"v1".equals(p.getAttribute("k1"))) {
-			fail("Production attribute key/values not set");
-		}
-		if (!"3".equals(p.getAttribute("k2"))) {
-			fail("Production attribute key/values not set");
+		try {
+			Grammar g = new Grammar(grammarStr);
+			GrammarRule rule1 = g.getGrammarRule("rule1");
+			GrammarProduction p = rule1.getProduction(1);
+			if (!"v1".equals(p.getAttribute("k1"))) {
+				fail("Production attribute key/values not set");
+			}
+			if (!"3".equals(p.getAttribute("k2"))) {
+				fail("Production attribute key/values not set");
+			}
+		} catch (MalformedGrammarException ex) {
+			fail("Malformed grammar exception thrown for a valid grammar");
 		}
 	}
 }

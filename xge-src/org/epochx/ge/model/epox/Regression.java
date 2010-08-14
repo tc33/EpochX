@@ -26,6 +26,7 @@ import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.eval.*;
 import org.epochx.tools.grammar.Grammar;
+import org.epochx.tools.grammar.MalformedGrammarException;
 
 /**
  * The abstract super class for regression problems in XGE in the Epox language.
@@ -79,7 +80,13 @@ public abstract class Regression extends GEModel {
 	 * Constructs an instance of the abstract Regression model.
 	 */
 	public Regression(final int noPoints) {
-		setGrammar(new Grammar(GRAMMAR_STRING));
+		try {
+			setGrammar(new Grammar(GRAMMAR_STRING));
+		} catch (MalformedGrammarException ex) {
+			// It is our grammar so this shouldn't happen.
+			assert false;
+		}
+			
 		interpreter = new EpoxInterpreter();
 		
 		// Generate the random inputs and the correct outputs.

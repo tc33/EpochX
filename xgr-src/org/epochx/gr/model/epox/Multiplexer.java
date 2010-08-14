@@ -27,6 +27,7 @@ import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.eval.*;
 import org.epochx.tools.grammar.Grammar;
+import org.epochx.tools.grammar.MalformedGrammarException;
 import org.epochx.tools.util.BoolUtils;
 
 /**
@@ -81,9 +82,14 @@ public class Multiplexer extends GRModel {
 		// Determine the input argument names.
 		setArgNames(noInputBits);
 		
-		// Complete the grammar string and construct grammar instance.
-		setGrammar(new Grammar(getGrammarString()));
-	}	
+		try {
+			// Complete the grammar string and construct grammar instance.
+			setGrammar(new Grammar(getGrammarString()));
+		} catch (MalformedGrammarException ex) {
+			// It is our grammar so this shouldn't happen.
+			assert false;
+		}
+	}
 	
 	/**
 	 * Calculates the fitness score for the given program. The fitness of a 

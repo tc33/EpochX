@@ -31,6 +31,7 @@ import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.ant.*;
 import org.epochx.tools.eval.*;
 import org.epochx.tools.grammar.Grammar;
+import org.epochx.tools.grammar.MalformedGrammarException;
 
 /**
  * Abstract XGR model for ant trail problems in the Java language. This class 
@@ -80,7 +81,12 @@ public abstract class AntTrail extends GRModel {
 		landscape = new AntLandscape(landscapeSize, null);
 		ant = new Ant(allowedTimeSteps, landscape);
 		
-		setGrammar(new Grammar(GRAMMAR_STRING));
+		try {
+			setGrammar(new Grammar(GRAMMAR_STRING));
+		} catch (MalformedGrammarException ex) {
+			// It is our grammar so this shouldn't happen.
+			assert false;
+		}
 		
 		interpreter = new JavaInterpreter();
 	}

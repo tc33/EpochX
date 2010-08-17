@@ -31,7 +31,15 @@ public class JavaRandom implements RandomNumberGenerator {
 	private Random rand;
 	
 	public JavaRandom() {
-		rand = new Random();
+		this.rand = new Random();
+	}
+	
+	public JavaRandom(long seed) {
+		this.rand = new Random(seed);
+	}
+	
+	public JavaRandom(Random rand) {
+		this.rand = rand;
 	}
 
 	@Override

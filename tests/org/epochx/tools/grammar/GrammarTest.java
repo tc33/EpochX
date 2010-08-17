@@ -21,6 +21,7 @@
  */
 package org.epochx.tools.grammar;
 
+import org.apache.commons.lang.ArrayUtils;
 import junit.framework.TestCase;
 
 public class GrammarTest extends TestCase {
@@ -120,6 +121,52 @@ public class GrammarTest extends TestCase {
 			if (!"3".equals(p.getAttribute("k2"))) {
 				fail("Production attribute key/values not set");
 			}
+		} catch (MalformedGrammarException ex) {
+			fail("Malformed grammar exception thrown for a valid grammar");
+		}
+	}
+	
+	/**
+	 * Tests that grammar literals are correctly listed by getGrammarLiterals
+	 * method.
+	 */
+	public void testGrammarLiterals() {
+		String grammarStr = "<rule1> ::= <rule2> | <rule3>\n" +
+							"<rule2> ::= <rule1> dfa\n" +
+							"<rule3> ::= abc | def\n";
+
+		String[] terminals = {"dfa", "abc", "def"};
+		
+		try {
+			Grammar g = new Grammar(grammarStr);
+			GrammarLiteral[] literals = g.getGrammarLiterals().toArray(new GrammarLiteral[terminals.length]);
+			for (GrammarLiteral literal: literals) {
+				assertTrue("Grammar literals not correctly set", ArrayUtils.contains(terminals, literal.getValue()));
+			}
+			assertSame("Grammar literals not correctly set", terminals.length, literals.length);
+		} catch (MalformedGrammarException ex) {
+			fail("Malformed grammar exception thrown for a valid grammar");
+		}
+	}
+	
+	/**
+	 * Tests that grammar rules are correctly listed by getGrammarRules
+	 * method.
+	 */
+	public void testGrammarRules() {
+		String grammarStr = "<rule1> ::= <rule2> | dfa\n" +
+							"<rule2> ::= <rule1> agd\n" +
+							"<rule3> ::= abc | def\n";
+
+		String[] ruleNames = {"rule1", "rule2", "rule3"};
+		
+		try {
+			Grammar g = new Grammar(grammarStr);
+			GrammarRule[] rules = g.getGrammarRules().toArray(new GrammarRule[ruleNames.length]);
+			for (GrammarRule r: rules) {
+				assertTrue("Grammar rules not correctly set", ArrayUtils.contains(ruleNames, r.getName()));
+			}
+			assertSame("Grammar rules not correctly set", ruleNames.length, rules.length);
 		} catch (MalformedGrammarException ex) {
 			fail("Malformed grammar exception thrown for a valid grammar");
 		}

@@ -26,42 +26,83 @@ import java.util.*;
 import org.apache.commons.lang.*;
 
 /**
- *
+ * A non-terminal node of a parse tree, that was constructed to satisfy a 
+ * specific rule of a grammar. The underlying <code>GrammarRule</code> is 
+ * provided at construction time. An instance's children are those 
+ * <code>Symbol</code> objects that the non-terminal resolves to, as supported 
+ * by the grammar rule.
  */
 public class NonTerminalSymbol implements Symbol {
 
+	// The child nodes in the parse tree.
 	private List<Symbol> children;
 	
 	// The associated grammar symbol.
 	private GrammarRule grammarRule;
 
+	/**
+	 * Constructs a <code>NonTerminalSymbol</code> for the given 
+	 * <code>GrammarRule</code>.
+	 * 
+	 * @param grammarRule the <code>GrammarRule</code> which this new object is 
+	 * representing an instance of.
+	 */
 	public NonTerminalSymbol(GrammarRule grammarRule) {
 		this(grammarRule, new ArrayList<Symbol>());
 	}
 	
+	/**
+	 * Constructs a <code>NonTerminalSymbol</code> for the given 
+	 * <code>GrammarRule</code> and with a list of child parse tree symbols.
+	 * 
+	 * @param grammarRule the <code>GrammarRule</code> which this new object is 
+	 * representing an instance of
+	 * @param children a list of <code>Symbol</code> instances which this 
+	 * <code>NonTerminalSymbol</code> resolves to, as supported by the grammar
+	 * rule.
+	 */
 	public NonTerminalSymbol(GrammarRule grammarRule, List<Symbol> children) {
 		this.grammarRule = grammarRule;
 		this.children = children;
 	}
 	
+	/**
+	 * Overwrites the <code>Symbol</code> at the specified index. Note that the
+	 * index must be a currently valid index.
+	 * 
+	 * @param index the index of the <code>Symbol</code> to change.
+	 * @param child the <code>Symbol</code> to set at the specified index.
+	 */
 	public void setChild(int index, Symbol child) {		
 		// Make the change.
 		children.set(index, child);
 	}
 	
+	/**
+	 * Returns the <code>Symbol</code> at the specified index.
+	 * 
+	 * @param index the index of the <code>Symbol</code> to return.
+	 * @return the <code>Symbol</code> found at the given index.
+	 */
 	public Symbol getChild(int index) {
 		return children.get(index);
 	}
 	
+	/**
+	 * Appends the given <code>Symbol</code> to the list of child nodes.
+	 * 
+	 * @param child the <code>Symbol</code> instance to append.
+	 */
 	public void addChild(Symbol child) {
 		// Make the change.
 		children.add(child);
 	}
 	
 	/**
-	 * There is no getChildren() method because it is important a child has only
-	 * one parent for the sake of caching fitness.
-	 * @return The children that were removed.
+	 * Removes all currently set child <code>Symbols</code>.
+	 * 
+	 * @return a <code>List</code> of the child <code>Symbol</code> instances 
+	 * that were removed.
 	 */
 	public List<Symbol> removeChildren() {
 		// Make the change.
@@ -70,10 +111,22 @@ public class NonTerminalSymbol implements Symbol {
 		return children;
 	}
 	
+	/**
+	 * Removes a the <code>Symbol</code> that is at the specified index.
+	 * 
+	 * @param index the index of the <code>Symbol</code> to remove.
+	 * @return the <code>Symbol</code> instance that was removed.
+	 */
 	public Symbol removeChild(int index) {		
 		return children.remove(index);
 	}
 	
+	/**
+	 * Returns a reference to the underlying <code>List</code> of child
+	 * <code>Symbol</code> instances for this non-terminal. Any changes to the 
+	 * returned list will be reflected in this symbol.
+	 * @return a <code>List</code> of the child <code>Symbol</code> instances.
+	 */
 	public List<Symbol> getChildren() {
 		return children;
 	}

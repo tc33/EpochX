@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -22,7 +22,7 @@
 package org.epochx.ge.model.epox.ant;
 
 import org.epochx.ge.model.*;
-import org.epochx.ge.model.epox.*;
+import org.epochx.ge.model.epox.SantaFeTrail;
 
 /**
  * 

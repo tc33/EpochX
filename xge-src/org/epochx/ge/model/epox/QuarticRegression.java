@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -28,27 +28,27 @@ package org.epochx.ge.model.epox;
  * The target program is the function: x + x^2 + x^3 + x^4
  */
 public class QuarticRegression extends Regression {
-	
+
 	/**
-	 * Constructs an instance of the QuarticRegression model with 50 input 
+	 * Constructs an instance of the QuarticRegression model with 50 input
 	 * points.
 	 */
 	public QuarticRegression() {
 		super();
 	}
-	
+
 	/**
 	 * Constructs an instance of the QuarticRegression model.
 	 */
 	public QuarticRegression(final int noPoints) {
 		super(noPoints);
 	}
-	
+
 	/**
 	 * The actual function we are trying to evolve.
 	 */
 	@Override
-    public double getCorrectResult(final double x){
-        return x + x*x + x*x*x + x*x*x*x;
-    }
+	public double getCorrectResult(final double x) {
+		return x + x * x + x * x * x + x * x * x * x;
+	}
 }

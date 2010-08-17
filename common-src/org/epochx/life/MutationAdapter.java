@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,21 +24,27 @@ package org.epochx.life;
 import org.epochx.representation.CandidateProgram;
 
 /**
- * Provides an <code>abstract</code> implementation of 
- * <code>MutationListener</code>. 
+ * Provides an <code>abstract</code> implementation of
+ * <code>MutationListener</code>.
  * 
- * <p>Typical use of this class would be in an anonymous class. For example:
+ * <p>
+ * Typical use of this class would be in an anonymous class. For example:
  * 
- * <blockquote><pre>
+ * <blockquote>
+ * 
+ * <pre>
  *     model.getLifeCycleListener().addMutationListener(new MutationAdapter(){
  *     		public void onMutationStart() {
  *     			... do something ...
  *     		}
  *     });
- * </pre></blockquote>
+ * </pre>
  * 
- * <p>Creating an anonymous implementation of this class is often preferable to 
- * implementing <code>MutationListener</code> since it avoids the need to 
+ * </blockquote>
+ * 
+ * <p>
+ * Creating an anonymous implementation of this class is often preferable to
+ * implementing <code>MutationListener</code> since it avoids the need to
  * implement methods which may be of no interest.
  */
 public abstract class MutationAdapter implements MutationListener {
@@ -47,14 +53,15 @@ public abstract class MutationAdapter implements MutationListener {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void onMutationStart() {}
-	
+	public void onMutationStart() {
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public CandidateProgram onMutation(CandidateProgram parent,
-			CandidateProgram child) {
+	public CandidateProgram onMutation(final CandidateProgram parent,
+			final CandidateProgram child) {
 		return child;
 	}
 
@@ -62,6 +69,7 @@ public abstract class MutationAdapter implements MutationListener {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void onMutationEnd() {}
+	public void onMutationEnd() {
+	}
 
 }

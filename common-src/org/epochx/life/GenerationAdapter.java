@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -26,21 +26,27 @@ import java.util.List;
 import org.epochx.representation.CandidateProgram;
 
 /**
- * Provides an <code>abstract</code> implementation of 
- * <code>GenerationListener</code>. 
+ * Provides an <code>abstract</code> implementation of
+ * <code>GenerationListener</code>.
  * 
- * <p>Typical use of this class would be in an anonymous class. For example:
+ * <p>
+ * Typical use of this class would be in an anonymous class. For example:
  * 
- * <blockquote><pre>
+ * <blockquote>
+ * 
+ * <pre>
  *     model.getLifeCycleListener().addGenerationListener(new GenerationAdapter(){
  *     		public void onGenerationStart() {
  *     			... do something ...
  *     		}
  *     });
- * </pre></blockquote>
+ * </pre>
  * 
- * <p>Creating an anonymous implementation of this class is often preferable to 
- * implementing <code>GenerationListener</code> since it avoids the need to 
+ * </blockquote>
+ * 
+ * <p>
+ * Creating an anonymous implementation of this class is often preferable to
+ * implementing <code>GenerationListener</code> since it avoids the need to
  * implement methods which may be of no interest.
  */
 public abstract class GenerationAdapter implements GenerationListener {
@@ -49,20 +55,22 @@ public abstract class GenerationAdapter implements GenerationListener {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void onGenerationStart() {}
-	
+	public void onGenerationStart() {
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<CandidateProgram> onGeneration(List<CandidateProgram> pop) {
+	public List<CandidateProgram> onGeneration(final List<CandidateProgram> pop) {
 		return pop;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void onGenerationEnd() {}
+	public void onGenerationEnd() {
+	}
 
 }

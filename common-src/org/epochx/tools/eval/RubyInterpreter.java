@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -23,9 +23,8 @@ package org.epochx.tools.eval;
 
 import javax.script.*;
 
-
 /**
- * A <code>RubyInterpreter</code> provides the facility to evaluate individual 
+ * A <code>RubyInterpreter</code> provides the facility to evaluate individual
  * Ruby expressions and execute multi-line Ruby statements.
  * 
  * <p>
@@ -33,7 +32,7 @@ import javax.script.*;
  * </code>, adding ruby specific enhancements, including optimized performance.
  */
 public class RubyInterpreter extends ScriptingInterpreter {
-	
+
 	/**
 	 * Constructs a RubyInterpreter.
 	 */
@@ -45,143 +44,149 @@ public class RubyInterpreter extends ScriptingInterpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object eval(final String expression, final String[] argNames, final Object[] argValues) throws MalformedProgramException {
+	public Object eval(final String expression, final String[] argNames,
+			final Object[] argValues) throws MalformedProgramException {
 		final String code = getEvalCode(expression, argNames);
 
 		Object result = null;
-		
-		Invocable invocableEngine = (Invocable) getEngine();
+
+		final Invocable invocableEngine = (Invocable) getEngine();
 		try {
 			getEngine().eval(code);
-		    result = invocableEngine.invokeFunction("expr", argValues);
-		} catch (ScriptException ex) {
+			result = invocableEngine.invokeFunction("expr", argValues);
+		} catch (final ScriptException ex) {
 			throw new MalformedProgramException();
-		} catch (NoSuchMethodException ex) {
+		} catch (final NoSuchMethodException ex) {
 			throw new MalformedProgramException();
 		}
 
 		return result;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object[] eval(final String expression, final String[] argNames, final Object[][] argValues) throws MalformedProgramException {
-		//TODO Might be able to speed this up further by compiling then using invokeMethod.
+	public Object[] eval(final String expression, final String[] argNames,
+			final Object[][] argValues) throws MalformedProgramException {
+		// TODO Might be able to speed this up further by compiling then using
+		// invokeMethod.
 		final Object[] results = new Object[argValues.length];
 
 		final String code = getEvalCode(expression, argNames);
-		
-        
+
 		final Invocable invocableEngine = (Invocable) getEngine();
 		try {
 			getEngine().eval(code);
-			
+
 			// Evaluate each argument set.
-	        for (int i=0; i<results.length; i++) {
-	        	results[i] = invocableEngine.invokeFunction("expr", argValues[i]);
-	        }
-		} catch (ScriptException ex) {
+			for (int i = 0; i < results.length; i++) {
+				results[i] = invocableEngine.invokeFunction("expr",
+						argValues[i]);
+			}
+		} catch (final ScriptException ex) {
 			throw new MalformedProgramException();
-		} catch (NoSuchMethodException ex) {
+		} catch (final NoSuchMethodException ex) {
 			throw new MalformedProgramException();
 		}
-			        
+
 		return results;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void exec(final String program, final String[] argNames, final Object[] argValues) throws MalformedProgramException {		
+	public void exec(final String program, final String[] argNames,
+			final Object[] argValues) throws MalformedProgramException {
 		final String code = getExecCode(program, argNames);
 
-		Invocable invocableEngine = (Invocable) getEngine();
+		final Invocable invocableEngine = (Invocable) getEngine();
 		try {
 			getEngine().eval(code);
-		    invocableEngine.invokeFunction("expr", argValues);
-		} catch (ScriptException ex) {
+			invocableEngine.invokeFunction("expr", argValues);
+		} catch (final ScriptException ex) {
 			throw new MalformedProgramException();
-		} catch (NoSuchMethodException ex) {
+		} catch (final NoSuchMethodException ex) {
 			throw new MalformedProgramException();
 		}
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void exec(final String program, final String[] argNames, final Object[][] argValues) throws MalformedProgramException {
-		//TODO Might be able to speed this up further by compiling then using invokeMethod.
+	public void exec(final String program, final String[] argNames,
+			final Object[][] argValues) throws MalformedProgramException {
+		// TODO Might be able to speed this up further by compiling then using
+		// invokeMethod.
 		final String code = getExecCode(program, argNames);
-		
-		Invocable invocableEngine = (Invocable) getEngine();
+
+		final Invocable invocableEngine = (Invocable) getEngine();
 		try {
 			getEngine().eval(code);
-			
+
 			// Evaluate each argument set.
-	        for (int i=0; i<argValues.length; i++) {
-	        	invocableEngine.invokeFunction("expr", argValues[i]);
-	        }
-		} catch (ScriptException ex) {
+			for (int i = 0; i < argValues.length; i++) {
+				invocableEngine.invokeFunction("expr", argValues[i]);
+			}
+		} catch (final ScriptException ex) {
 			throw new MalformedProgramException();
-		} catch (NoSuchMethodException ex) {
+		} catch (final NoSuchMethodException ex) {
 			throw new MalformedProgramException();
 		}
 	}
-	
+
 	/*
 	 * Helper method to the multiple eval.
 	 * 
-	 * Constructs a string representing source code of a Ruby method 
+	 * Constructs a string representing source code of a Ruby method
 	 * containing a return statement that returns the result of evaluating
 	 * the given expression.
 	 */
 	private String getEvalCode(final String expression, final String[] argNames) {
 		final StringBuffer code = new StringBuffer();
 
-        code.append("def expr(");
-        for (int i=0; i<argNames.length; i++) {
-        	if (i > 0) {
-        		code.append(',');
-        	}
+		code.append("def expr(");
+		for (int i = 0; i < argNames.length; i++) {
+			if (i > 0) {
+				code.append(',');
+			}
 			code.append(argNames[i]);
 		}
-        code.append(")\n");
-        
-        code.append("return ");
-        code.append(expression);
-        code.append(";\n");
-        code.append("end\n");
-        
-        return code.toString();
+		code.append(")\n");
+
+		code.append("return ");
+		code.append(expression);
+		code.append(";\n");
+		code.append("end\n");
+
+		return code.toString();
 	}
-	
+
 	/*
 	 * Helper method to the multiple exec.
 	 * 
-	 * Constructs a string representing source code of a Ruby method 
+	 * Constructs a string representing source code of a Ruby method
 	 * containing the given program.
 	 */
 	private String getExecCode(final String program, final String[] argNames) {
 		final StringBuffer code = new StringBuffer();
 
-        //code.append("class Evaluation\n");
-        code.append("def expr(");
-        for (int i=0; i<argNames.length; i++) {
-        	if (i > 0) {
-        		code.append(',');
-        	}
+		// code.append("class Evaluation\n");
+		code.append("def expr(");
+		for (int i = 0; i < argNames.length; i++) {
+			if (i > 0) {
+				code.append(',');
+			}
 			code.append(argNames[i]);
 		}
-        code.append(")\n");
-        
-        code.append(program);
-        code.append("\n");
-        code.append("end\n");
-        
-        return code.toString();
+		code.append(")\n");
+
+		code.append(program);
+		code.append("\n");
+		code.append("end\n");
+
+		return code.toString();
 	}
 }

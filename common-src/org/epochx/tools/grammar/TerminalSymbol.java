@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -21,44 +21,43 @@
  */
 package org.epochx.tools.grammar;
 
-
 /**
  *
  */
 public class TerminalSymbol implements Symbol {
 
 	private GrammarLiteral literal;
-	
-	public TerminalSymbol(GrammarLiteral literal) {
+
+	public TerminalSymbol(final GrammarLiteral literal) {
 		this.literal = literal;
 	}
-	
+
 	@Override
 	public String toString() {
 		return literal.toString();
 	}
-	
+
 	@Override
 	public Object clone() {
 		TerminalSymbol clone = null;
 		try {
 			clone = (TerminalSymbol) super.clone();
-		} catch (CloneNotSupportedException e) {
-			// This shouldn't ever happen - if it does then everything is 
+		} catch (final CloneNotSupportedException e) {
+			// This shouldn't ever happen - if it does then everything is
 			// going to blow up anyway.
 		}
-		
+
 		// Shallow copy the grammar rules.
-		clone.literal = this.literal;
-		
+		clone.literal = literal;
+
 		return clone;
 	}
-	
+
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (obj instanceof TerminalSymbol) {
-			TerminalSymbol objSymbol = (TerminalSymbol) obj;
-			
+			final TerminalSymbol objSymbol = (TerminalSymbol) obj;
+
 			return this.toString().equals(objSymbol.toString());
 		} else {
 			return false;

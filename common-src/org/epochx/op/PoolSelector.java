@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -26,24 +26,25 @@ import java.util.List;
 import org.epochx.representation.CandidateProgram;
 
 /**
- * Pool selector operators perform the task of selecting a pool of programs 
+ * Pool selector operators perform the task of selecting a pool of programs
  * from a population of programs. The way in which the programs are selected is
  * up to each implementation to decide. The returned pool may contain duplicate
  * programs. The number of programs in the returned pool should be equal to the
  * pool size given here as a parameter.
  */
 public interface PoolSelector {
-	
+
 	/**
 	 * Performs the selection of a pool of programs from a population.
 	 * 
-	 * @param pop the population of programs from which the pool should be 
-	 * 			  selected or otherwise constructed.
+	 * @param pop the population of programs from which the pool should be
+	 *        selected or otherwise constructed.
 	 * @param poolSize the requested size for the pool to be constructed.
-	 * @return a list of the programs that have been selected to form the 
-	 * 			  breeding pool. The size of the list should equal the poolSize
-	 * 			  parameter.
+	 * @return a list of the programs that have been selected to form the
+	 *         breeding pool. The size of the list should equal the poolSize
+	 *         parameter.
 	 */
-	public List<CandidateProgram> getPool(List<CandidateProgram> pop, int poolSize);
+	public List<CandidateProgram> getPool(List<CandidateProgram> pop,
+			int poolSize);
 
 }

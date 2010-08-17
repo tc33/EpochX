@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -28,82 +28,85 @@ import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.life.ConfigAdapter;
 import org.epochx.representation.CandidateProgram;
 
-
 /**
- * Initialisation implementation that randomly generates a chromosome up to a 
+ * Initialisation implementation that randomly generates a chromosome up to a
  * specified length.
  */
 public class FixedLengthInitialiser implements GEInitialiser {
+
 	/*
-	 * TODO Implement a similar initialiser that uses variable lengths up to maximum.
+	 * TODO Implement a similar initialiser that uses variable lengths up to
+	 * maximum.
 	 */
-	
+
 	// The controlling model.
-	private GEModel model;
-	
+	private final GEModel model;
+
 	private int popSize;
-	
-	private int initialLength;
-	
+
+	private final int initialLength;
+
 	/**
 	 * Constructs a RandomInitialiser.
 	 * 
-	 * @param model The GE model that will provide any required control 
-	 * 				parameters such as the desired population size.
-	 * @param initialLength The initial length that chromosomes should be 
-	 * 			  			generated to.
+	 * @param model The GE model that will provide any required control
+	 *        parameters such as the desired population size.
+	 * @param initialLength The initial length that chromosomes should be
+	 *        generated to.
 	 */
-	public FixedLengthInitialiser(GEModel model, int initialLength) {
+	public FixedLengthInitialiser(final GEModel model, final int initialLength) {
 		this.model = model;
 		this.initialLength = initialLength;
-		
+
 		// Configure parameters from the model.
 		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+
 			@Override
 			public void onConfigure() {
 				configure();
 			}
 		});
 	}
-	
+
 	/*
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
 		popSize = model.getPopulationSize();
 	}
-	
+
 	/**
-	 * Generate a population of new CandidatePrograms constructed by randomly 
-	 * generating their chromosomes. The size of the population will be equal 
-	 * to the result of calling getPopulationSize() on the controlling model. 
-	 * All programs in the population will be unique. Each candidate program 
-	 * will have a chromosome length equal to the initialLength provided to the 
+	 * Generate a population of new CandidatePrograms constructed by randomly
+	 * generating their chromosomes. The size of the population will be equal
+	 * to the result of calling getPopulationSize() on the controlling model.
+	 * All programs in the population will be unique. Each candidate program
+	 * will have a chromosome length equal to the initialLength provided to the
 	 * constructor.
 	 * 
-	 * @return A List of newly generated CandidatePrograms which will form the 
-	 * initial population for a GE run.
+	 * @return A List of newly generated CandidatePrograms which will form the
+	 *         initial population for a GE run.
 	 */
 	@Override
 	public List<CandidateProgram> getInitialPopulation() {
-		//TODO No check for program uniqueness is currently made.
-		
+		// TODO No check for program uniqueness is currently made.
+
 		// Initialise population of candidate programs.
-		List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
-		
+		final List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(
+				popSize);
+
 		// Build population.
-		int i=0;
-		while (i<popSize) {
-			GECandidateProgram candidate = new GECandidateProgram(model);
-			
+		int i = 0;
+		while (i < popSize) {
+			final GECandidateProgram candidate = new GECandidateProgram(model);
+
 			// Initialise the program.
 			candidate.appendNewCodons(initialLength);
-            //if (candidate.isValid() && !firstGen.contains(candidate)) {
-            	firstGen.add(candidate);
-            	i++;
-            //}
+			// if (candidate.isValid() && !firstGen.contains(candidate)) {
+			firstGen.add(candidate);
+			i++;
+			// }
 		}
-		
+
 		// Return starting population.
 		return firstGen;
 	}

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -34,13 +34,13 @@ public class AntTest extends TestCase {
 
 	private Ant ant;
 	private AntLandscape landscape;
-	
+
 	@Override
 	protected void setUp() throws Exception {
 		landscape = new AntLandscape(new Dimension(32, 32));
 		ant = new Ant(500, landscape);
 	}
-	
+
 	/**
 	 * Tests that an ant is reset correctly.
 	 */
@@ -49,115 +49,139 @@ public class AntTest extends TestCase {
 		ant.setOrientation(Orientation.SOUTH);
 		ant.move();
 		ant.eatFood();
-		
+
 		ant.reset();
-		assertEquals("ant location not reset to 0,0.", ant.getLocation(), new Point(0, 0));
+		assertEquals("ant location not reset to 0,0.", ant.getLocation(),
+				new Point(0, 0));
 		assertEquals("ant timesteps not reset to 0.", ant.getTimesteps(), 0);
 		assertEquals("ant food eaten not reset to 0.", ant.getFoodEaten(), 0);
-		assertSame("ant orientation not reset to EAST.", ant.getOrientation(), Orientation.EAST);
+		assertSame("ant orientation not reset to EAST.", ant.getOrientation(),
+				Orientation.EAST);
 	}
-	
+
 	/**
 	 * Tests that an ant turns left from each possible orientation.
 	 */
 	public void testTurnLeft() {
-		int timesteps = ant.getTimesteps();
-		
+		final int timesteps = ant.getTimesteps();
+
 		ant.setOrientation(Orientation.EAST);
 		ant.turnLeft();
-		assertSame("ant turning left from EAST is not NORTH", ant.getOrientation(), Orientation.NORTH);
-		
+		assertSame("ant turning left from EAST is not NORTH",
+				ant.getOrientation(), Orientation.NORTH);
+
 		ant.setOrientation(Orientation.SOUTH);
 		ant.turnLeft();
-		assertSame("ant turning left from SOUTH is not EAST", ant.getOrientation(), Orientation.EAST);
-		
+		assertSame("ant turning left from SOUTH is not EAST",
+				ant.getOrientation(), Orientation.EAST);
+
 		ant.setOrientation(Orientation.WEST);
 		ant.turnLeft();
-		assertSame("ant turning left from WEST is not SOUTH", ant.getOrientation(), Orientation.SOUTH);
-		
+		assertSame("ant turning left from WEST is not SOUTH",
+				ant.getOrientation(), Orientation.SOUTH);
+
 		ant.setOrientation(Orientation.NORTH);
 		ant.turnLeft();
-		assertSame("ant turning left from NORTH is not WEST", ant.getOrientation(), Orientation.WEST);
-		
-		assertSame("number of timesteps not incremented for turning left", timesteps+4, ant.getTimesteps());
-		
-		Orientation before = ant.getOrientation();
+		assertSame("ant turning left from NORTH is not WEST",
+				ant.getOrientation(), Orientation.WEST);
+
+		assertSame("number of timesteps not incremented for turning left",
+				timesteps + 4, ant.getTimesteps());
+
+		final Orientation before = ant.getOrientation();
 		ant.setMaxTimeSteps(4);
 		ant.turnLeft();
-		assertSame("ant can still turn left after reaching the maximum time steps", before, ant.getOrientation());
+		assertSame(
+				"ant can still turn left after reaching the maximum time steps",
+				before, ant.getOrientation());
 	}
-	
+
 	/**
 	 * Tests that an ant turns right from each possible orientation.
 	 */
 	public void testTurnRight() {
-		int timesteps = ant.getTimesteps();
-		
+		final int timesteps = ant.getTimesteps();
+
 		ant.setOrientation(Orientation.EAST);
 		ant.turnRight();
-		assertSame("ant turning right from EAST is not SOUTH", ant.getOrientation(), Orientation.SOUTH);
-		
+		assertSame("ant turning right from EAST is not SOUTH",
+				ant.getOrientation(), Orientation.SOUTH);
+
 		ant.setOrientation(Orientation.SOUTH);
 		ant.turnRight();
-		assertSame("ant turning right from SOUTH is not WEST", ant.getOrientation(), Orientation.WEST);
-		
+		assertSame("ant turning right from SOUTH is not WEST",
+				ant.getOrientation(), Orientation.WEST);
+
 		ant.setOrientation(Orientation.WEST);
 		ant.turnRight();
-		assertSame("ant turning right from WEST is not NORTH", ant.getOrientation(), Orientation.NORTH);
-		
+		assertSame("ant turning right from WEST is not NORTH",
+				ant.getOrientation(), Orientation.NORTH);
+
 		ant.setOrientation(Orientation.NORTH);
 		ant.turnRight();
-		assertSame("ant turning right from NORTH is not EAST", ant.getOrientation(), Orientation.EAST);
-		
-		assertSame("number of timesteps not incremented for turning right", timesteps+4, ant.getTimesteps());
-		
-		Orientation before = ant.getOrientation();
+		assertSame("ant turning right from NORTH is not EAST",
+				ant.getOrientation(), Orientation.EAST);
+
+		assertSame("number of timesteps not incremented for turning right",
+				timesteps + 4, ant.getTimesteps());
+
+		final Orientation before = ant.getOrientation();
 		ant.setMaxTimeSteps(4);
 		ant.turnRight();
-		assertSame("ant can still turn right after reaching the maximum time steps", before, ant.getOrientation());
+		assertSame(
+				"ant can still turn right after reaching the maximum time steps",
+				before, ant.getOrientation());
 	}
-	
+
 	/**
 	 * Tests that an ant moves correctly.
 	 */
 	public void testMove() {
-		int timesteps = ant.getTimesteps();
-		
+		final int timesteps = ant.getTimesteps();
+
 		ant.setOrientation(Orientation.WEST);
 		ant.setLocation(0, 0);
 		ant.move();
-		assertEquals("ant moving WEST from 0,0 does not go to 31,0", ant.getLocation(), new Point(31,0));
-		
+		assertEquals("ant moving WEST from 0,0 does not go to 31,0",
+				ant.getLocation(), new Point(31, 0));
+
 		ant.setOrientation(Orientation.NORTH);
 		ant.setLocation(0, 0);
 		ant.move();
-		assertEquals("ant moving NORTH from 0,0 does not go to 0,31", ant.getLocation(), new Point(0,31));
-		
+		assertEquals("ant moving NORTH from 0,0 does not go to 0,31",
+				ant.getLocation(), new Point(0, 31));
+
 		ant.setOrientation(Orientation.EAST);
 		ant.setLocation(31, 31);
 		ant.move();
-		assertEquals("ant moving EAST from 31,31 does not go to 0,31", ant.getLocation(), new Point(0,31));
-		
+		assertEquals("ant moving EAST from 31,31 does not go to 0,31",
+				ant.getLocation(), new Point(0, 31));
+
 		ant.setOrientation(Orientation.SOUTH);
 		ant.setLocation(31, 31);
 		ant.move();
-		assertEquals("ant moving SOUTH from 31,31 does not go to 31,0", ant.getLocation(), new Point(31,0));
-		
-		assertSame("number of timesteps not incremented for moving", timesteps+4, ant.getTimesteps());
-		
-		Point before = ant.getLocation();
+		assertEquals("ant moving SOUTH from 31,31 does not go to 31,0",
+				ant.getLocation(), new Point(31, 0));
+
+		assertSame("number of timesteps not incremented for moving",
+				timesteps + 4, ant.getTimesteps());
+
+		final Point before = ant.getLocation();
 		ant.setMaxTimeSteps(4);
 		ant.move();
-		assertEquals("ant can still move after reaching the maximum time steps", before, ant.getLocation());
+		assertEquals(
+				"ant can still move after reaching the maximum time steps",
+				before, ant.getLocation());
 	}
-	
+
 	public void testIsFoodAhead() {
-		assertFalse("ant reporting food ahead without there being food", ant.isFoodAhead());
-		
-		List<Point> food = new ArrayList<Point>();
-		food.add(new Point(1,0));
+		assertFalse("ant reporting food ahead without there being food",
+				ant.isFoodAhead());
+
+		final List<Point> food = new ArrayList<Point>();
+		food.add(new Point(1, 0));
 		landscape.setFoodLocations(food);
-		
+
 		assertTrue("ant does not report food ahead", ant.isFoodAhead());
 	}
 }

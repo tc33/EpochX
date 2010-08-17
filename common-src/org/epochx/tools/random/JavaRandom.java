@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -28,17 +28,17 @@ import java.util.Random;
  */
 public class JavaRandom implements RandomNumberGenerator {
 
-	private Random rand;
-	
+	private final Random rand;
+
 	public JavaRandom() {
-		this.rand = new Random();
+		rand = new Random();
 	}
-	
-	public JavaRandom(long seed) {
-		this.rand = new Random(seed);
+
+	public JavaRandom(final long seed) {
+		rand = new Random(seed);
 	}
-	
-	public JavaRandom(Random rand) {
+
+	public JavaRandom(final Random rand) {
 		this.rand = rand;
 	}
 
@@ -53,7 +53,7 @@ public class JavaRandom implements RandomNumberGenerator {
 	}
 
 	@Override
-	public int nextInt(int n) {
+	public int nextInt(final int n) {
 		return rand.nextInt(n);
 	}
 
@@ -63,7 +63,7 @@ public class JavaRandom implements RandomNumberGenerator {
 	}
 
 	@Override
-	public void setSeed(long l) {
+	public void setSeed(final long l) {
 		rand.setSeed(l);
 	}
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,7 +24,7 @@ package org.epochx.gp.representation.dbl;
 import org.epochx.gp.representation.DoubleNode;
 
 /**
- * A <code>FunctionNode</code> which performs the reciprocal trigonometric 
+ * A <code>FunctionNode</code> which performs the reciprocal trigonometric
  * function of secant. Secant x is equal to 1/cos x.
  */
 public class SecantFunction extends DoubleNode {
@@ -35,29 +35,31 @@ public class SecantFunction extends DoubleNode {
 	public SecantFunction() {
 		this(null);
 	}
-	
+
 	/**
 	 * Construct a SecantFunction with one child. When evaluated, the child
 	 * will be evaluated with secant performed on the result.
+	 * 
 	 * @param child The child which secant will be performed on.
 	 */
-	public SecantFunction(DoubleNode child) {
+	public SecantFunction(final DoubleNode child) {
 		super(child);
 	}
 
 	/**
-	 * Evaluating a <code>SecantFunction</code> involves calculating cos of the 
+	 * Evaluating a <code>SecantFunction</code> involves calculating cos of the
 	 * child once it's been evaluated, then dividing 1 by the result.
 	 */
 	@Override
 	public Double evaluate() {
-		double c = ((Double) getChild(0).evaluate()).doubleValue();
-		
+		final double c = ((Double) getChild(0).evaluate()).doubleValue();
+
 		return 1 / Math.cos(c);
 	}
-	
+
 	/**
 	 * Get the unique name that identifies this function.
+	 * 
 	 * @return the unique name for the SecantFunction which is SEC.
 	 */
 	@Override

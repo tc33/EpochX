@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,7 +24,7 @@ package org.epochx.gp.representation.dbl;
 import org.epochx.gp.representation.DoubleNode;
 
 /**
- * A <code>FunctionNode</code> which performs the modulo operation, that is 
+ * A <code>FunctionNode</code> which performs the modulo operation, that is
  * it finds the remainder of division.
  */
 public class ModuloFunction extends DoubleNode {
@@ -35,31 +35,33 @@ public class ModuloFunction extends DoubleNode {
 	public ModuloFunction() {
 		this(null, null);
 	}
-	
+
 	/**
-	 * Construct a ModuloFunction with two children. When evaluated, the modulo 
+	 * Construct a ModuloFunction with two children. When evaluated, the modulo
 	 * of the evaluated children will be calculated.
+	 * 
 	 * @param child1 The first child node - the dividend.
 	 * @param child2 The second child node - the divisor.
 	 */
-	public ModuloFunction(DoubleNode child1, DoubleNode child2) {
+	public ModuloFunction(final DoubleNode child1, final DoubleNode child2) {
 		super(child1, child2);
 	}
 
 	/**
-	 * Evaluating a <code>ModuloFunction</code> involves dividing the evaluated 
+	 * Evaluating a <code>ModuloFunction</code> involves dividing the evaluated
 	 * first child, by the second child with the result being the remainder.
 	 */
 	@Override
 	public Double evaluate() {
-		double c1 = ((Double) getChild(0).evaluate()).doubleValue();
-		double c2 = ((Double) getChild(1).evaluate()).doubleValue();
-		
+		final double c1 = ((Double) getChild(0).evaluate()).doubleValue();
+		final double c2 = ((Double) getChild(1).evaluate()).doubleValue();
+
 		return c1 % c2;
 	}
-	
+
 	/**
 	 * Get the unique name that identifies this function.
+	 * 
 	 * @return the unique name for the ModuloFunction which is MOD.
 	 */
 	@Override

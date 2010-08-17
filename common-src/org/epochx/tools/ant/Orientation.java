@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -25,17 +25,17 @@ package org.epochx.tools.ant;
  * Enumerates the possible orientations of an ant within its landscape.
  */
 public enum Orientation {
-	
+
 	/** North compass direction. **/
-	NORTH, 
-	
+	NORTH,
+
 	/** East compass direction. **/
-	EAST, 
-	
+	EAST,
+
 	/** South compass direction. **/
-	SOUTH, 
-	
+	SOUTH,
+
 	/** West compass direction. **/
 	WEST
-	
+
 }

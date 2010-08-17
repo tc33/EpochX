@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -27,8 +27,8 @@ import org.epochx.representation.CandidateProgram;
 
 /**
  * Initialiser implementations perform the task of generating an initial set of
- * programs. The technique used to construct the programs is up to each 
- * implementation. The number of programs to be generated would normally be 
+ * programs. The technique used to construct the programs is up to each
+ * implementation. The number of programs to be generated would normally be
  * equal to the population size requested by the model's <code>
  * getPopulationSize</code> method but it is not required to be.
  */
@@ -40,5 +40,5 @@ public interface Initialiser {
 	 * @return a population of programs.
 	 */
 	public List<CandidateProgram> getInitialPopulation();
-	
+
 }

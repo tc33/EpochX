@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -29,9 +29,9 @@ import junit.framework.*;
 public class BoolFunctionTests {
 
 	public static Test suite() {
-		TestSuite suite = new TestSuite(
+		final TestSuite suite = new TestSuite(
 				"Test for org.epochx.gp.representation.bool");
-		//$JUnit-BEGIN$
+		// $JUnit-BEGIN$
 		suite.addTestSuite(NotFunctionTest.class);
 		suite.addTestSuite(IfFunctionTest.class);
 		suite.addTestSuite(IfAndOnlyIfFunctionTest.class);
@@ -41,7 +41,7 @@ public class BoolFunctionTests {
 		suite.addTestSuite(NorFunctionTest.class);
 		suite.addTestSuite(ImpliesFunctionTest.class);
 		suite.addTestSuite(OrFunctionTest.class);
-		//$JUnit-END$
+		// $JUnit-END$
 		return suite;
 	}
 

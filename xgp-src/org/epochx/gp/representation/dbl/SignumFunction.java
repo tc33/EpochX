@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,7 +24,7 @@ package org.epochx.gp.representation.dbl;
 import org.epochx.gp.representation.DoubleNode;
 
 /**
- * A <code>FunctionNode</code> which performs the mathematical sign function  
+ * A <code>FunctionNode</code> which performs the mathematical sign function
  * that extracts the sign of a number.
  */
 public class SignumFunction extends DoubleNode {
@@ -35,30 +35,32 @@ public class SignumFunction extends DoubleNode {
 	public SignumFunction() {
 		this(null);
 	}
-	
+
 	/**
 	 * Construct a SignumFunction with one child. When evaluated, the child
 	 * will be evaluated with signum performed on the result.
+	 * 
 	 * @param child The child which signum will be performed on.
 	 */
-	public SignumFunction(DoubleNode child) {
+	public SignumFunction(final DoubleNode child) {
 		super(child);
 	}
 
 	/**
-	 * Evaluating a <code>SignumFunction</code> involves evaluating the child  
+	 * Evaluating a <code>SignumFunction</code> involves evaluating the child
 	 * then the result will be zero if it resolves to zero, 1.0 if greater than
 	 * zero and -1.0 if less than zero.
 	 */
 	@Override
 	public Double evaluate() {
-		double c = ((Double) getChild(0).evaluate()).doubleValue();
-		
+		final double c = ((Double) getChild(0).evaluate()).doubleValue();
+
 		return Math.signum(c);
 	}
-	
+
 	/**
 	 * Get the unique name that identifies this function.
+	 * 
 	 * @return the unique name for the SignumFunction which is SGN.
 	 */
 	@Override

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -21,14 +21,13 @@
  */
 package org.epochx.gp.model.example;
 
-import org.epochx.core.*;
-import org.epochx.gp.op.crossover.*;
-import org.epochx.gp.op.init.*;
-import org.epochx.gp.op.mutation.*;
-import org.epochx.gp.stats.*;
-import org.epochx.life.*;
+import org.epochx.core.Model;
+import org.epochx.gp.op.crossover.KozaCrossover;
+import org.epochx.gp.op.init.RampedHalfAndHalfInitialiser;
+import org.epochx.gp.op.mutation.PointMutation;
+import org.epochx.life.RunAdapter;
 import org.epochx.op.selection.*;
-
+import org.epochx.stats.StatField;
 
 /**
  * 
@@ -50,23 +49,30 @@ public class SexticRegression extends org.epochx.gp.model.SexticRegression {
 		setMaxDepth(17);
 		setNoRuns(50);
 	}
-	
-	public static void main(String[] args) {
+
+	public static void main(final String[] args) {
 		final Model m = new SexticRegression();
-		
-		/*m.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
-			@Override
-			public void onGenerationEnd() {
-				m.getStatsManager().printGenerationStats(GPStatField.GEN_NUMBER, GPStatField.GEN_FITNESS_MIN, GPStatField.GEN_FITTEST_PROGRAM);
-			}
-		});*/
+
+		/*
+		 * m.getLifeCycleManager().addGenerationListener(new GenerationAdapter()
+		 * {
+		 * 
+		 * @Override
+		 * public void onGenerationEnd() {
+		 * m.getStatsManager().printGenerationStats(GPStatField.GEN_NUMBER,
+		 * GPStatField.GEN_FITNESS_MIN, GPStatField.GEN_FITTEST_PROGRAM);
+		 * }
+		 * });
+		 */
 		m.getLifeCycleManager().addRunListener(new RunAdapter() {
+
 			@Override
 			public void onRunEnd() {
-				m.getStatsManager().printRunStats(GPStatField.RUN_NUMBER, GPStatField.RUN_FITNESS_MIN);
+				m.getStatsManager().printRunStats(StatField.RUN_NUMBER,
+						StatField.RUN_FITNESS_MIN);
 			}
 		});
-		
+
 		m.run();
 	}
 }

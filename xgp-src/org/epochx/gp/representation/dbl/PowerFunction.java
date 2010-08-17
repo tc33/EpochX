@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,7 +24,7 @@ package org.epochx.gp.representation.dbl;
 import org.epochx.gp.representation.DoubleNode;
 
 /**
- * A <code>FunctionNode</code> which performs the mathematical operation of 
+ * A <code>FunctionNode</code> which performs the mathematical operation of
  * exponentiation.
  */
 public class PowerFunction extends DoubleNode {
@@ -35,31 +35,34 @@ public class PowerFunction extends DoubleNode {
 	public PowerFunction() {
 		this(null, null);
 	}
-	
+
 	/**
-	 * Construct a PowerFunction with 2 children. When evaluated, the evaluation 
-	 * of the first child is raised to the power of the evaluation of the second.
+	 * Construct a PowerFunction with 2 children. When evaluated, the evaluation
+	 * of the first child is raised to the power of the evaluation of the
+	 * second.
+	 * 
 	 * @param base The first child node - the base.
 	 * @param exponent The second child node - the exponent.
 	 */
-	public PowerFunction(DoubleNode base, DoubleNode exponent) {
+	public PowerFunction(final DoubleNode base, final DoubleNode exponent) {
 		super(base, exponent);
 	}
 
 	/**
-	 * Evaluating a <code>PowerFunction</code> involves raising the first child 
+	 * Evaluating a <code>PowerFunction</code> involves raising the first child
 	 * to the power of the second, after both children are evaluated.
 	 */
 	@Override
 	public Double evaluate() {
-		double c1 = ((Double) getChild(0).evaluate()).doubleValue();
-		double c2 = ((Double) getChild(1).evaluate()).doubleValue();
-		
+		final double c1 = ((Double) getChild(0).evaluate()).doubleValue();
+		final double c2 = ((Double) getChild(1).evaluate()).doubleValue();
+
 		return Math.pow(c1, c2);
 	}
-	
+
 	/**
 	 * Get the unique name that identifies this function.
+	 * 
 	 * @return the unique name for the PowerFunction which is POW.
 	 */
 	@Override

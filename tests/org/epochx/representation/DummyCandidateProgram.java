@@ -1,13 +1,12 @@
 package org.epochx.representation;
 
-
 public class DummyCandidateProgram extends CandidateProgram {
-	
+
 	private double fitness;
-	
+
 	private boolean valid;
-	
-	public void setFitness(double fitness) {
+
+	public void setFitness(final double fitness) {
 		this.fitness = fitness;
 	}
 
@@ -15,11 +14,11 @@ public class DummyCandidateProgram extends CandidateProgram {
 	public double getFitness() {
 		return fitness;
 	}
-	
-	public void setValid(boolean valid) {
+
+	public void setValid(final boolean valid) {
 		this.valid = valid;
 	}
-	
+
 	@Override
 	public boolean isValid() {
 		return valid;

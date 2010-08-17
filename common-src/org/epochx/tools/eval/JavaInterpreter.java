@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -23,54 +23,54 @@ package org.epochx.tools.eval;
 
 import bsh.EvalError;
 
-
 /**
- * A JavaInterpreter provides the facility to evaluate individual Java 
- * expressions and execute multi-line Java statements. Java language features 
+ * A JavaInterpreter provides the facility to evaluate individual Java
+ * expressions and execute multi-line Java statements. Java language features
  * up to and including version 1.5 are supported.
  * 
  * <p>
- * There is no publically visible constructor. A singleton instance is 
+ * There is no publically visible constructor. A singleton instance is
  * maintained which is accessible through the <code>getInstance()</code> method.
  */
 public class JavaInterpreter implements Interpreter {
 
 	// The bean shell beanShell.
 	private final bsh.Interpreter beanShell;
-	
+
 	/**
 	 * Constructs a JavaInterpreter.
 	 */
 	public JavaInterpreter() {
 		beanShell = new bsh.Interpreter();
 	}
-	
+
 	/**
-	 * Evaluates any valid Java expression which may optionally contain the use 
-	 * of any argument named in the <code>argNames</code> array which will be 
+	 * Evaluates any valid Java expression which may optionally contain the use
+	 * of any argument named in the <code>argNames</code> array which will be
 	 * provided with the associated value from the <code>argValues</code> array.
-	 * The result of evaluating the expression will be returned from this 
-	 * method. The runtime <code>Object</code> return type will match the type 
+	 * The result of evaluating the expression will be returned from this
+	 * method. The runtime <code>Object</code> return type will match the type
 	 * returned by the expression.
 	 * 
 	 * @param expression a valid Java expression that is to be evaluated.
 	 * @param argNames {@inheritDoc}
 	 * @param argValues {@inheritDoc}
 	 * @return the return value from evaluating the expression.
-	 * @throws MalformedProgramException if the given expression is not valid 
-	 * according to the language's syntax rules.
+	 * @throws MalformedProgramException if the given expression is not valid
+	 *         according to the language's syntax rules.
 	 */
 	@Override
-	public Object eval(final String expression, final String[] argNames, final Object[] argValues) throws MalformedProgramException {		
+	public Object eval(final String expression, final String[] argNames,
+			final Object[] argValues) throws MalformedProgramException {
 		Object result = null;
-		
+
 		if (expression != null) {
 			try {
 				// Declare all the variables.
-				for (int i=0; i<argNames.length; i++) {
+				for (int i = 0; i < argNames.length; i++) {
 					beanShell.set(argNames[i], argValues[i]);
 				}
-				
+
 				result = beanShell.eval(expression);
 			} catch (final EvalError e) {
 				throw new MalformedProgramException();
@@ -78,41 +78,45 @@ public class JavaInterpreter implements Interpreter {
 		}
 		return result;
 	}
-	
+
 	/**
-	 * Evaluates any valid Java expression which may optionally contain the use 
-	 * of any argument named in the <code>argNames</code> array which will be 
+	 * Evaluates any valid Java expression which may optionally contain the use
+	 * of any argument named in the <code>argNames</code> array which will be
 	 * provided with the associated value from the <code>argValues</code> array.
-	 * The result of evaluating the expression will be returned from this 
-	 * method. The runtime <code>Object</code> return type will match the type 
+	 * The result of evaluating the expression will be returned from this
+	 * method. The runtime <code>Object</code> return type will match the type
 	 * returned by the expression.
 	 * 
-	 * <p>This version of the eval method executes the expression 
-	 * multiple times. The variable names remain the same for each evaluation 
-	 * but for each evaluation the variable values will come from the next 
-	 * array in the argValues argument. Java variables with the specified names 
-	 * and values are automatically declared and initialised before the 
-	 * generated code is run. The argument names link up with the argument value 
-	 * in the same array index, so both arguments must have the same length.
+	 * <p>
+	 * This version of the eval method executes the expression multiple times.
+	 * The variable names remain the same for each evaluation but for each
+	 * evaluation the variable values will come from the next array in the
+	 * argValues argument. Java variables with the specified names and values
+	 * are automatically declared and initialised before the generated code is
+	 * run. The argument names link up with the argument value in the same array
+	 * index, so both arguments must have the same length.
 	 * 
 	 * @param expression a valid Java expression that is to be evaluated.
 	 * @param argNames {@inheritDoc}
 	 * @param argValues {@inheritDoc}
-	 * @return the return values from evaluating the expression. The runtime 
-	 * type of the returned Objects may vary from program to program. If the 
-	 * program does not return a value then this method will return an array of 
-	 * nulls.
-	 * @throws MalformedProgramException if the given expression is not valid 
-	 * according to the language's syntax rules.
+	 * @return the return values from evaluating the expression. The runtime
+	 *         type of the returned Objects may vary from program to program. If
+	 *         the
+	 *         program does not return a value then this method will return an
+	 *         array of
+	 *         nulls.
+	 * @throws MalformedProgramException if the given expression is not valid
+	 *         according to the language's syntax rules.
 	 */
 	@Override
-	public Object[] eval(final String expression, final String[] argNames, final Object[][] argValues) throws MalformedProgramException {
+	public Object[] eval(final String expression, final String[] argNames,
+			final Object[][] argValues) throws MalformedProgramException {
 		final Object[] results = new Object[argValues.length];
-		
-		for (int i=0; i<argValues.length; i++) {
+
+		for (int i = 0; i < argValues.length; i++) {
 			results[i] = eval(expression, argNames, argValues[i]);
 		}
-		
+
 		return results;
 	}
 
@@ -120,7 +124,8 @@ public class JavaInterpreter implements Interpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void exec(final String program, final String[] argNames, final Object[] argValues) throws MalformedProgramException {
+	public void exec(final String program, final String[] argNames,
+			final Object[] argValues) throws MalformedProgramException {
 		eval(program, argNames, argValues);
 	}
 
@@ -128,8 +133,9 @@ public class JavaInterpreter implements Interpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void exec(final String program, final String[] argNames, final Object[][] argValues) throws MalformedProgramException {
+	public void exec(final String program, final String[] argNames,
+			final Object[][] argValues) throws MalformedProgramException {
 		eval(program, argNames, argValues);
 	}
-	
+
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,7 +24,8 @@ package org.epochx.gp.representation.dbl;
 import org.epochx.gp.representation.DoubleNode;
 
 /**
- * A <code>FunctionNode</code> which performs the mathematical function of square 
+ * A <code>FunctionNode</code> which performs the mathematical function of
+ * square
  * root.
  */
 public class SquareRootFunction extends DoubleNode {
@@ -35,29 +36,33 @@ public class SquareRootFunction extends DoubleNode {
 	public SquareRootFunction() {
 		this(null);
 	}
-	
+
 	/**
-	 * Construct a SquareRootFunction with one child. When evaluated, the child will 
+	 * Construct a SquareRootFunction with one child. When evaluated, the child
+	 * will
 	 * be first evaluated, with the result square-rooted.
+	 * 
 	 * @param child The child which cube root will be performed on.
 	 */
-	public SquareRootFunction(DoubleNode child) {
+	public SquareRootFunction(final DoubleNode child) {
 		super(child);
 	}
 
 	/**
-	 * Evaluating a <code>SquareRootFunction</code> involves evaluating the child 
+	 * Evaluating a <code>SquareRootFunction</code> involves evaluating the
+	 * child
 	 * first then performing square root on the result.
 	 */
 	@Override
 	public Double evaluate() {
-		double c = ((Double) getChild(0).evaluate()).doubleValue();
-		
+		final double c = ((Double) getChild(0).evaluate()).doubleValue();
+
 		return Math.sqrt(c);
 	}
-	
+
 	/**
 	 * Get the unique name that identifies this function.
+	 * 
 	 * @return the unique name for the SquareRootFunction which is SQRT.
 	 */
 	@Override

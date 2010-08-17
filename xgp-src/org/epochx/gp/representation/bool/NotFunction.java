@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -27,36 +27,39 @@ import org.epochx.gp.representation.BooleanNode;
  * A <code>FunctionNode</code> which performs logical negation.
  */
 public class NotFunction extends BooleanNode {
-	
+
 	/**
 	 * Construct a NotFunction with no children.
 	 */
 	public NotFunction() {
 		this(null);
 	}
-	
+
 	/**
-	 * Construct a NotFunction with one children. When evaluated, if the child 
+	 * Construct a NotFunction with one children. When evaluated, if the child
 	 * evaluates to true, the result will be false. If false, the result will be
 	 * true.
+	 * 
 	 * @param child The child node which will be evaluated and negated.
 	 */
-	public NotFunction(BooleanNode child) {
+	public NotFunction(final BooleanNode child) {
 		super(child);
 	}
-	
+
 	/**
-	 * Evaluating a <code>NotFunction</code> involves evaluating the child, then 
-	 * negating the result. If the child evaluates to true, the result will be false, 
+	 * Evaluating a <code>NotFunction</code> involves evaluating the child, then
+	 * negating the result. If the child evaluates to true, the result will be
+	 * false,
 	 * otherwise it will be true.
 	 */
 	@Override
 	public Boolean evaluate() {
 		return !((Boolean) getChild(0).evaluate()).booleanValue();
 	}
-	
+
 	/**
 	 * Get the unique name that identifies this function.
+	 * 
 	 * @return the unique name for the NotFunction which is NOT.
 	 */
 	@Override

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -32,20 +32,20 @@ public class NotFunctionTest extends AbstractBooleanNodeTestCase {
 	public Node getNode() {
 		return new NotFunction();
 	}
-	
+
 	public void testEvaluateT() {
-		NotFunction node = (NotFunction) getNode();
+		final NotFunction node = (NotFunction) getNode();
 		node.setChild(0, new BooleanLiteral(true));
-		boolean result = node.evaluate();
-		
+		final boolean result = node.evaluate();
+
 		assertFalse("NOT of true is not false", result);
 	}
-	
+
 	public void testEvaluateF() {
-		NotFunction node = (NotFunction) getNode();
+		final NotFunction node = (NotFunction) getNode();
 		node.setChild(0, new BooleanLiteral(false));
-		boolean result = node.evaluate();
-		
+		final boolean result = node.evaluate();
+
 		assertTrue("NOT of false is not true", result);
 	}
 

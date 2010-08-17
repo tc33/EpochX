@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -28,191 +28,203 @@ import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
- * This class implements a Koza style crossover operation on two 
+ * This class implements a Koza style crossover operation on two
  * <code>CandidatePrograms</code>.
  * 
- * <p>Koza crossover performs a one point exchange with the choice of a swap 
- * point being either a function or terminal node with assigned probabilities.
- * This class provides a constructor for specifying a probability of selecting 
- * a function swap point. The default constructor uses the typical rates of 90% 
+ * <p>
+ * Koza crossover performs a one point exchange with the choice of a swap point
+ * being either a function or terminal node with assigned probabilities. This
+ * class provides a constructor for specifying a probability of selecting a
+ * function swap point. The default constructor uses the typical rates of 90%
  * function node swap point and 10% terminal node swap points.
  */
 public class KozaCrossover implements GPCrossover {
-	
+
 	// The controlling model.
-	private GPModel model;
-	
+	private final GPModel model;
+
 	// The probability of choosing a function node as the swap point.
-	private double functionSwapProbability;
-	
+	private final double functionSwapProbability;
+
 	// The random number generator for controlling random behaviour.
 	private RandomNumberGenerator rng;
-	
+
 	/**
-	 * Default constructor for Koza standard crossover. The probability of a 
+	 * Default constructor for Koza standard crossover. The probability of a
 	 * function node being selected as the swap point will default to 90%.
 	 */
-	public KozaCrossover(GPModel model) {
+	public KozaCrossover(final GPModel model) {
 		this(model, 0.9);
 	}
-	
+
 	/**
 	 * Construct an instance of Koza crossover.
 	 * 
-	 * @param functionSwapProbability The probability of crossover operations 
-	 * 								  choosing a function node as the swap point.
+	 * @param functionSwapProbability The probability of crossover operations
+	 *        choosing a function node as the swap point.
 	 */
-	public KozaCrossover(GPModel model, double functionSwapProbability) {
+	public KozaCrossover(final GPModel model,
+			final double functionSwapProbability) {
 		this.model = model;
 		this.functionSwapProbability = functionSwapProbability;
 
 		// Configure parameters from the model.
 		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+
 			@Override
 			public void onConfigure() {
 				configure();
 			}
 		});
 	}
-	
+
 	/*
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
 		rng = model.getRNG();
 	}
-	
+
 	/**
-	 * GPCrossover the two <code>CandidatePrograms</code> provided as arguments 
-	 * using Koza crossover. The crossover points will be chosen from the 
-	 * function or terminal sets with the probability assigned at construction 
+	 * GPCrossover the two <code>CandidatePrograms</code> provided as arguments
+	 * using Koza crossover. The crossover points will be chosen from the
+	 * function or terminal sets with the probability assigned at construction
 	 * or the default value of 90% function node.
 	 * 
-	 * @param program1 The first GPCandidateProgram selected to undergo Koza 
-	 * 				   crossover.
-	 * @param program2 The second GPCandidateProgram selected to undergo Koza 
-	 * 				   crossover.
+	 * @param program1 The first GPCandidateProgram selected to undergo Koza
+	 *        crossover.
+	 * @param program2 The second GPCandidateProgram selected to undergo Koza
+	 *        crossover.
 	 */
 	@Override
-	public GPCandidateProgram[] crossover(CandidateProgram p1, CandidateProgram p2) {		
-		GPCandidateProgram program1 = (GPCandidateProgram) p1;
-		GPCandidateProgram program2 = (GPCandidateProgram) p2;
-		
+	public GPCandidateProgram[] crossover(final CandidateProgram p1,
+			final CandidateProgram p2) {
+		final GPCandidateProgram program1 = (GPCandidateProgram) p1;
+		final GPCandidateProgram program2 = (GPCandidateProgram) p2;
+
 		// Get swap points.
-		int swapPoint1 = getCrossoverPoint(program1);
-		int swapPoint2 = getCrossoverPoint(program2);
-		
+		final int swapPoint1 = getCrossoverPoint(program1);
+		final int swapPoint2 = getCrossoverPoint(program2);
+
 		// Get copies of subtrees to swap.
-		Node subtree1 = program1.getNthNode(swapPoint1);//.clone();
-		Node subtree2 = program2.getNthNode(swapPoint2);//.clone();
-		
+		final Node subtree1 = program1.getNthNode(swapPoint1);// .clone();
+		final Node subtree2 = program2.getNthNode(swapPoint2);// .clone();
+
 		// Perform swap.
 		program1.setNthNode(swapPoint1, subtree2);
 		program2.setNthNode(swapPoint2, subtree1);
 
 		return new GPCandidateProgram[]{program1, program2};
 	}
-	
+
 	/*
-	 * Choose the crossover point for the given GPCandidateProgram with respect 
+	 * Choose the crossover point for the given GPCandidateProgram with respect
 	 * to the probabilities assigned for function and terminal node points.
 	 */
-	private int getCrossoverPoint(GPCandidateProgram program) {
+	private int getCrossoverPoint(final GPCandidateProgram program) {
 		// Calculate numbers of terminal and function nodes.
-		int length = program.getProgramLength();
-		int noTerminals = program.getNoTerminals();
-		int noFunctions = length - noTerminals;
-		
+		final int length = program.getProgramLength();
+		final int noTerminals = program.getNoTerminals();
+		final int noFunctions = length - noTerminals;
+
 		// Randomly decide whether to use a function or terminal node point.
 		if ((noFunctions > 0) && (rng.nextDouble() < functionSwapProbability)) {
 			// Randomly select a function node from the function set.
-			int f = rng.nextInt(noFunctions);
-			int nthFunctionNode = getNthFunctionNode(f, program);
-			
+			final int f = rng.nextInt(noFunctions);
+			final int nthFunctionNode = getNthFunctionNode(f, program);
+
 			return nthFunctionNode;
 		} else {
 			// Randomly select a terminal node from the terminal set.
-			int t = rng.nextInt(noTerminals);
-			int nthTerminalNode = getNthTerminalNode(t, program);
-			
+			final int t = rng.nextInt(noTerminals);
+			final int nthTerminalNode = getNthTerminalNode(t, program);
+
 			return nthTerminalNode;
 		}
 	}
 
 	/*
-	 * Recurse through the given GPCandidateProgram to find the nth function 
+	 * Recurse through the given GPCandidateProgram to find the nth function
 	 * node and return its node index.
 	 * 
-	 * TODO Consider moving all these functions to the GPCandidateProgram class 
+	 * TODO Consider moving all these functions to the GPCandidateProgram class
 	 * as first class citizens in some form - they might be useful for others.
 	 */
-	private int getNthFunctionNode(int n, GPCandidateProgram program) {
+	private int getNthFunctionNode(final int n, final GPCandidateProgram program) {
 		return getNthFunctionNode(n, 0, 0, program.getRootNode());
 	}
-	
+
 	/*
 	 * Recursive helper function.
 	 */
-	private int getNthFunctionNode(int n, int functionCount, int nodeCount, Node current) {
+	private int getNthFunctionNode(final int n, int functionCount,
+			int nodeCount, final Node current) {
 		// Found the nth function node.
-		if ((current.getArity() > 0) && (n == functionCount))
+		if ((current.getArity() > 0) && (n == functionCount)) {
 			return nodeCount;
-		
-		int result = -1;
-		for (Node child: current.getChildren()) {
-			int noNodes = child.getLength();
-			int noFunctions = child.getNoFunctions();
-			
+		}
+
+		final int result = -1;
+		for (final Node child: current.getChildren()) {
+			final int noNodes = child.getLength();
+			final int noFunctions = child.getNoFunctions();
+
 			// Only look at the subtree if it contains the right range of nodes.
 			if (n <= noFunctions + functionCount) {
-				int childResult = getNthFunctionNode(n, functionCount+1, nodeCount+1, child);
-				if (childResult != -1) 
+				final int childResult = getNthFunctionNode(n,
+						functionCount + 1, nodeCount + 1, child);
+				if (childResult != -1) {
 					return childResult;
+				}
 			}
-			
+
 			// Skip the correct number of nodes from the subtree.
 			functionCount += noFunctions;
 			nodeCount += noNodes;
 		}
-		
+
 		return result;
 	}
-	
+
 	/*
-	 * Recurse through the given GPCandidateProgram to find the nth terminal 
+	 * Recurse through the given GPCandidateProgram to find the nth terminal
 	 * node and return its node index.
 	 */
-	private int getNthTerminalNode(int n, GPCandidateProgram program) {
+	private int getNthTerminalNode(final int n, final GPCandidateProgram program) {
 		return getNthTerminalNode(n, 0, 0, program.getRootNode());
 	}
-	
+
 	/*
 	 * Recursive helper function.
 	 */
-	private int getNthTerminalNode(int n, int terminalCount, int nodeCount, Node current) {
+	private int getNthTerminalNode(final int n, int terminalCount,
+			int nodeCount, final Node current) {
 		// Found the nth terminal node.
 		if (current.getArity() == 0) {
-			if (n == terminalCount++)
+			if (n == terminalCount++) {
 				return nodeCount;
+			}
 		}
-		
-		int result = -1;
-		for (Node child: current.getChildren()) {
-			int noNodes = child.getLength();
-			int noTerminals = child.getNoTerminals();
-			
+
+		final int result = -1;
+		for (final Node child: current.getChildren()) {
+			final int noNodes = child.getLength();
+			final int noTerminals = child.getNoTerminals();
+
 			// Only look at the subtree if it contains the right range of nodes.
 			if (n <= noTerminals + terminalCount) {
-				int childResult = getNthTerminalNode(n, terminalCount, nodeCount+1, child);
-				if (childResult != -1) 
+				final int childResult = getNthTerminalNode(n, terminalCount,
+						nodeCount + 1, child);
+				if (childResult != -1) {
 					return childResult;
+				}
 			}
-			
+
 			// Skip the correct number of nodes from the subtree.
 			terminalCount += noTerminals;
 			nodeCount += noNodes;
 		}
-		
+
 		return result;
 	}
 

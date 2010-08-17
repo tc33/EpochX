@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -27,30 +27,32 @@ import org.epochx.core.Model;
 import org.epochx.life.*;
 
 /**
- * Gathers data and statistics about events that occur during execution of the 
+ * Gathers data and statistics about events that occur during execution of the
  * given <code>Model</code> and makes them available for use. Any component may
  * add data into the <code>StatsManager</code> by using the <code>addXxxData
- * </code> methods. The <code>StatsManager</code> will also use its internal 
- * <code>StatsEngine</code> instance to generate statistics upon request, and 
- * stash the results internally. The data that is stored will only be held for 
+ * </code> methods. The <code>StatsManager</code> will also use its internal
+ * <code>StatsEngine</code> instance to generate statistics upon request, and
+ * stash the results internally. The data that is stored will only be held for
  * the current/previous incident of that event that took place. All data for an
  * event will be cleared upon the start of the next incident.
  */
 public class StatsManager {
-	//TODO Statistics from the controller about the whole set of runs.
-	//TODO Initialisation statistics.
-	//TODO Do we really need to separate run/gen/crossover/mutation etc like this?
+
+	// TODO Statistics from the controller about the whole set of runs.
+	// TODO Initialisation statistics.
+	// TODO Do we really need to separate run/gen/crossover/mutation etc like
+	// this?
 
 	// The controlling model.
 	private final Model model;
-	
+
 	private final Map<String, Object> runData;
 	private final Map<String, Object> generationData;
 	private final Map<String, Object> crossoverData;
 	private final Map<String, Object> mutationData;
-	
+
 	private StatsEngine statsEngine;
-	
+
 	/**
 	 * Constructs a <code>StatsManager</code> for the given <code>Model</code>,
 	 * with a new <code>StatsEngine</code>.
@@ -60,34 +62,34 @@ public class StatsManager {
 	public StatsManager(final Model model) {
 		this(model, new StatsEngine(model));
 	}
-	
+
 	/**
 	 * Constructs a <code>StatsManager</code> for the given <code>Model</code>.
 	 * 
 	 * @param model the Model statistics will be about.
 	 * @param statsEngine a <code>StatsEngine</code> that can generate further
-	 * statistics upon request.
+	 *        statistics upon request.
 	 */
 	public StatsManager(final Model model, final StatsEngine statsEngine) {
 		this.model = model;
 		setStatsEngine(statsEngine);
-		
+
 		// Construct the data stores.
 		runData = new HashMap<String, Object>();
 		generationData = new HashMap<String, Object>();
 		crossoverData = new HashMap<String, Object>();
 		mutationData = new HashMap<String, Object>();
-		
+
 		// Setup the listeners to clear the data stores when appropriate.
 		setupListeners();
 	}
-	
+
 	/**
-	 * Sets the <code>StatsEngine</code> responsible for generating new 
+	 * Sets the <code>StatsEngine</code> responsible for generating new
 	 * statistics upon request.
 	 * 
 	 * @param statsEngine a <code>StatsEngine</code> that can generate further
-	 * statistics upon request.
+	 *        statistics upon request.
 	 */
 	public void setStatsEngine(final StatsEngine statsEngine) {
 		if (statsEngine == null) {
@@ -98,8 +100,9 @@ public class StatsManager {
 	}
 
 	/**
-	 * Inserts an item of data about a run into the stats manager associated with
-	 * the given field key. If data is already stored against the given field 
+	 * Inserts an item of data about a run into the stats manager associated
+	 * with
+	 * the given field key. If data is already stored against the given field
 	 * then it will be overwritten.
 	 * 
 	 * @param field the key to associate with the given data value.
@@ -108,10 +111,10 @@ public class StatsManager {
 	public void addRunData(final String field, final Object value) {
 		runData.put(field, value);
 	}
-	
+
 	/**
-	 * Inserts an item of data about a generation into the stats manager 
-	 * associated with the given field key. If data is already stored against 
+	 * Inserts an item of data about a generation into the stats manager
+	 * associated with the given field key. If data is already stored against
 	 * the given field then it will be overwritten.
 	 * 
 	 * @param field the key to associate with the given data value.
@@ -120,10 +123,10 @@ public class StatsManager {
 	public void addGenerationData(final String field, final Object value) {
 		generationData.put(field, value);
 	}
-	
+
 	/**
-	 * Inserts an item of data about a crossover into the stats manager 
-	 * associated with the given field key. If data is already stored against 
+	 * Inserts an item of data about a crossover into the stats manager
+	 * associated with the given field key. If data is already stored against
 	 * the given field then it will be overwritten.
 	 * 
 	 * @param field the key to associate with the given data value.
@@ -132,10 +135,11 @@ public class StatsManager {
 	public void addCrossoverData(final String field, final Object value) {
 		crossoverData.put(field, value);
 	}
-	
+
 	/**
-	 * Inserts an item of data about a mutation into the stats manager associated
-	 * with the given field key. If data is already stored against the given 
+	 * Inserts an item of data about a mutation into the stats manager
+	 * associated
+	 * with the given field key. If data is already stored against the given
 	 * field then it will be overwritten.
 	 * 
 	 * @param field the key to associate with the given data value.
@@ -144,242 +148,254 @@ public class StatsManager {
 	public void addMutationData(final String field, final Object value) {
 		mutationData.put(field, value);
 	}
-	
+
 	/**
-	 * Retrieves the statistic data about a run associated with the provided 
-	 * field. If the stat field does not exist or is otherwise unavailable then 
+	 * Retrieves the statistic data about a run associated with the provided
+	 * field. If the stat field does not exist or is otherwise unavailable then
 	 * null will be returned.
 	 * 
 	 * <p>
 	 * This object will start by checking its internal storage for the field, if
-	 * it holds an entry for that field then the data will be returned. If no 
-	 * entry is stored, then the <code>StatsEngine</code> instance will be 
-	 * asked if it is able to generate it. If it can be generated then it will 
-	 * then be stored for future requests and then returned. If the 
+	 * it holds an entry for that field then the data will be returned. If no
+	 * entry is stored, then the <code>StatsEngine</code> instance will be asked
+	 * if it is able to generate it. If it can be generated then it will then be
+	 * stored for future requests and then returned. If the
 	 * <code>StatsEngine</code> is unable to create the statistic then <code>
 	 * null</code> will be returned from this method.
 	 * 
 	 * <p>
-	 * The object type of the instance that is returned will be dependent upon 
-	 * the field requested. The object type is normally specified in the 
+	 * The object type of the instance that is returned will be dependent upon
+	 * the field requested. The object type is normally specified in the
 	 * documentation for the field.
 	 * 
 	 * @param field the name of the statistics field to retrieve.
-	 * @return an object which represents the statistics data requested or 
-	 * <code>null</code> if the field does not exist of the data is otherwise 
-	 * unavailable.
+	 * @return an object which represents the statistics data requested or
+	 *         <code>null</code> if the field does not exist of the data is
+	 *         otherwise
+	 *         unavailable.
 	 */
 	public Object getRunStat(final String field) {
 		Object stat = runData.get(field);
-		
+
 		if (stat == null) {
 			stat = statsEngine.getRunStat(field);
 		}
-		
+
 		return stat;
 	}
-	
+
 	/**
-	 * Retrieves the statistic data about a generation associated with the 
-	 * provided field. If the stat field does not exist or is otherwise 
+	 * Retrieves the statistic data about a generation associated with the
+	 * provided field. If the stat field does not exist or is otherwise
 	 * unavailable then null will be returned.
 	 * 
 	 * <p>
 	 * This object will start by checking its internal storage for the field, if
-	 * it holds an entry for that field then the data will be returned. If no 
-	 * entry is stored, then the <code>StatsEngine</code> instance will be 
-	 * asked if it is able to generate it. If it can be generated then it will 
-	 * then be stored for future requests and then returned. If the 
+	 * it holds an entry for that field then the data will be returned. If no
+	 * entry is stored, then the <code>StatsEngine</code> instance will be asked
+	 * if it is able to generate it. If it can be generated then it will then be
+	 * stored for future requests and then returned. If the
 	 * <code>StatsEngine</code> is unable to create the statistic then <code>
 	 * null</code> will be returned from this method.
 	 * 
 	 * <p>
-	 * The object type of the instance that is returned will be dependent upon 
-	 * the field requested. The object type is normally specified in the 
+	 * The object type of the instance that is returned will be dependent upon
+	 * the field requested. The object type is normally specified in the
 	 * documentation for the field.
 	 * 
 	 * @param field the name of the statistics field to retrieve.
-	 * @return an object which represents the statistics data requested or 
-	 * <code>null</code> if the field does not exist of the data is otherwise 
-	 * unavailable.
+	 * @return an object which represents the statistics data requested or
+	 *         <code>null</code> if the field does not exist of the data is
+	 *         otherwise
+	 *         unavailable.
 	 */
 	public Object getGenerationStat(final String field) {
 		Object stat = generationData.get(field);
-		
+
 		if (stat == null) {
 			stat = statsEngine.getGenerationStat(field);
 		}
-		
+
 		return stat;
 	}
-	
+
 	/**
-	 * Retrieves the statistic data about a crossover associated with the 
-	 * provided field. If the stat field does not exist or is otherwise 
+	 * Retrieves the statistic data about a crossover associated with the
+	 * provided field. If the stat field does not exist or is otherwise
 	 * unavailable then null will be returned.
 	 * 
 	 * <p>
 	 * This object will start by checking its internal storage for the field, if
-	 * it holds an entry for that field then the data will be returned. If no 
-	 * entry is stored, then the <code>StatsEngine</code> instance will be 
-	 * asked if it is able to generate it. If it can be generated then it will 
-	 * then be stored for future requests and then returned. If the 
+	 * it holds an entry for that field then the data will be returned. If no
+	 * entry is stored, then the <code>StatsEngine</code> instance will be asked
+	 * if it is able to generate it. If it can be generated then it will then be
+	 * stored for future requests and then returned. If the
 	 * <code>StatsEngine</code> is unable to create the statistic then <code>
 	 * null</code> will be returned from this method.
 	 * 
 	 * <p>
-	 * The object type of the instance that is returned will be dependent upon 
-	 * the field requested. The object type is normally specified in the 
+	 * The object type of the instance that is returned will be dependent upon
+	 * the field requested. The object type is normally specified in the
 	 * documentation for the field.
 	 * 
 	 * @param field the name of the statistics field to retrieve.
-	 * @return an object which represents the statistics data requested or 
-	 * <code>null</code> if the field does not exist of the data is otherwise 
-	 * unavailable.
+	 * @return an object which represents the statistics data requested or
+	 *         <code>null</code> if the field does not exist of the data is
+	 *         otherwise
+	 *         unavailable.
 	 */
 	public Object getCrossoverStat(final String field) {
 		Object stat = crossoverData.get(field);
-		
+
 		if (stat == null) {
 			stat = statsEngine.getCrossoverStat(field);
 		}
-		
+
 		return stat;
 	}
-	
+
 	/**
-	 * Retrieves the statistic data about a mutation associated with the 
-	 * provided field. If the stat field does not exist or is otherwise 
+	 * Retrieves the statistic data about a mutation associated with the
+	 * provided field. If the stat field does not exist or is otherwise
 	 * unavailable then null will be returned.
 	 * 
 	 * <p>
 	 * This object will start by checking its internal storage for the field, if
-	 * it holds an entry for that field then the data will be returned. If no 
-	 * entry is stored, then the <code>StatsEngine</code> instance will be 
-	 * asked if it is able to generate it. If it can be generated then it will 
-	 * then be stored for future requests and then returned. If the 
+	 * it holds an entry for that field then the data will be returned. If no
+	 * entry is stored, then the <code>StatsEngine</code> instance will be asked
+	 * if it is able to generate it. If it can be generated then it will then be
+	 * stored for future requests and then returned. If the
 	 * <code>StatsEngine</code> is unable to create the statistic then <code>
 	 * null</code> will be returned from this method.
 	 * 
 	 * <p>
-	 * The object type of the instance that is returned will be dependent upon 
-	 * the field requested. The object type is normally specified in the 
+	 * The object type of the instance that is returned will be dependent upon
+	 * the field requested. The object type is normally specified in the
 	 * documentation for the field.
 	 * 
 	 * @param field the name of the statistics field to retrieve.
-	 * @return an object which represents the statistics data requested or 
-	 * <code>null</code> if the field does not exist of the data is otherwise 
-	 * unavailable.
+	 * @return an object which represents the statistics data requested or
+	 *         <code>null</code> if the field does not exist of the data is
+	 *         otherwise
+	 *         unavailable.
 	 */
 	public Object getMutationStat(final String field) {
 		Object stat = mutationData.get(field);
-		
+
 		if (stat == null) {
 			stat = statsEngine.getMutationStat(field);
 		}
-		
+
 		return stat;
 	}
-	
+
 	/**
-	 * Retrieves a sequence of run statistics associated with the given fields. 
-	 * The returned array will be of the same length as the number of fields 
-	 * provided and each element will represent each field in order. 
+	 * Retrieves a sequence of run statistics associated with the given fields.
+	 * The returned array will be of the same length as the number of fields
+	 * provided and each element will represent each field in order.
 	 * 
 	 * <p>
 	 * Each statistic field requested will be obtained according to the contract
 	 * specified by the <code>getRunStat(String)</code> method.
 	 * 
 	 * @param fields the names of the statistics fields to retrieve.
-	 * @return an array of Objects where each element is the statistic field 
-	 * generated for the requested field at that array index. If a field is
-	 * for data that does not exist or is otherwise unavailable then that array
-	 * element will be <code>null</code>.
+	 * @return an array of Objects where each element is the statistic field
+	 *         generated for the requested field at that array index. If a field
+	 *         is
+	 *         for data that does not exist or is otherwise unavailable then
+	 *         that array
+	 *         element will be <code>null</code>.
 	 */
 	public Object[] getRunStats(final String ... fields) {
-		Object[] stats = new Object[fields.length];
-		for (int i=0; i<fields.length; i++) {
+		final Object[] stats = new Object[fields.length];
+		for (int i = 0; i < fields.length; i++) {
 			stats[i] = getRunStat(fields[i]);
 		}
-		
+
 		return stats;
 	}
-	
+
 	/**
-	 * Retrieves a sequence of generation statistics associated with the given 
-	 * fields. The returned array will be of the same length as the number of 
-	 * fields provided and each element will represent each field in order. 
+	 * Retrieves a sequence of generation statistics associated with the given
+	 * fields. The returned array will be of the same length as the number of
+	 * fields provided and each element will represent each field in order.
 	 * 
 	 * <p>
 	 * Each statistic field requested will be obtained according to the contract
 	 * specified by the <code>getGenerationStat(String)</code> method.
 	 * 
 	 * @param fields the names of the statistics fields to retrieve.
-	 * @return an array of Objects where each element is the statistic field 
-	 * generated for the requested field at that array index. If a field is
-	 * for data that does not exist or is otherwise unavailable then that array
-	 * element will be <code>null</code>.
+	 * @return an array of Objects where each element is the statistic field
+	 *         generated for the requested field at that array index. If a field
+	 *         is
+	 *         for data that does not exist or is otherwise unavailable then
+	 *         that array
+	 *         element will be <code>null</code>.
 	 */
 	public Object[] getGenerationStats(final String ... fields) {
-		Object[] stats = new Object[fields.length];
-		for (int i=0; i<fields.length; i++) {
+		final Object[] stats = new Object[fields.length];
+		for (int i = 0; i < fields.length; i++) {
 			stats[i] = getGenerationStat(fields[i]);
 		}
 		return stats;
 	}
-	
+
 	/**
-	 * Retrieves a sequence of crossover statistics associated with the given 
-	 * fields. The returned array will be of the same length as the number of 
-	 * fields provided and each element will represent each field in order. 
+	 * Retrieves a sequence of crossover statistics associated with the given
+	 * fields. The returned array will be of the same length as the number of
+	 * fields provided and each element will represent each field in order.
 	 * 
 	 * <p>
 	 * Each statistic field requested will be obtained according to the contract
 	 * specified by the <code>getCrossoverStat(String)</code> method.
 	 * 
 	 * @param fields the names of the statistics fields to retrieve.
-	 * @return an array of Objects where each element is the statistic field 
-	 * generated for the requested field at that array index. If a field is
-	 * for data that does not exist or is otherwise unavailable then that array
-	 * element will be <code>null</code>.
+	 * @return an array of Objects where each element is the statistic field
+	 *         generated for the requested field at that array index. If a field
+	 *         is
+	 *         for data that does not exist or is otherwise unavailable then
+	 *         that array
+	 *         element will be <code>null</code>.
 	 */
 	public Object[] getCrossoverStats(final String ... fields) {
-		Object[] stats = new Object[fields.length];
-		for (int i=0; i<fields.length; i++) {
+		final Object[] stats = new Object[fields.length];
+		for (int i = 0; i < fields.length; i++) {
 			stats[i] = getCrossoverStat(fields[i]);
 		}
 		return stats;
 	}
-	
+
 	/**
-	 * Retrieves a sequence of mutation statistics associated with the given 
-	 * fields. The returned array will be of the same length as the number of 
-	 * fields provided and each element will represent each field in order. 
+	 * Retrieves a sequence of mutation statistics associated with the given
+	 * fields. The returned array will be of the same length as the number of
+	 * fields provided and each element will represent each field in order.
 	 * 
 	 * <p>
 	 * Each statistic field requested will be obtained according to the contract
 	 * specified by the <code>getMutationStat(String)</code> method.
 	 * 
 	 * @param fields the names of the statistics fields to retrieve.
-	 * @return an array of Objects where each element is the statistic field 
-	 * generated for the requested field at that array index. If a field is
-	 * for data that does not exist or is otherwise unavailable then that array
-	 * element will be <code>null</code>.
+	 * @return an array of Objects where each element is the statistic field
+	 *         generated for the requested field at that array index. If a field
+	 *         is
+	 *         for data that does not exist or is otherwise unavailable then
+	 *         that array
+	 *         element will be <code>null</code>.
 	 */
 	public Object[] getMutationStats(final String ... fields) {
-		Object[] stats = new Object[fields.length];
-		for (int i=0; i<fields.length; i++) {
+		final Object[] stats = new Object[fields.length];
+		for (int i = 0; i < fields.length; i++) {
 			stats[i] = getMutationStat(fields[i]);
 		}
 		return stats;
 	}
-	
+
 	/**
 	 * Retrieve and print to the standard output the sequence of run statistics
 	 * referenced by the given fields. The statistics will be obtained according
-	 * to the contract specified by the <code>getRunStats(String[])</code> 
+	 * to the contract specified by the <code>getRunStats(String[])</code>
 	 * method. The result of calling the <code>toString()</code> method on each
-	 * statistic object returned will be printed separated by a '\t' tab 
+	 * statistic object returned will be printed separated by a '\t' tab
 	 * character, and the line terminated with a '\n' newline character.
 	 * 
 	 * @param fields the names of the statistics fields to print out.
@@ -387,14 +403,14 @@ public class StatsManager {
 	public void printRunStats(final String ... fields) {
 		printRunStats(fields, "\t");
 	}
-	
+
 	/**
 	 * Retrieve and print to the standard output the sequence of run statistics
 	 * referenced by the given fields. The statistics will be obtained according
-	 * to the contract specified by the <code>getRunStats(String[])</code> 
+	 * to the contract specified by the <code>getRunStats(String[])</code>
 	 * method. The result of calling the <code>toString()</code> method on each
-	 * statistic object returned will be printed separated by a the 
-	 * <code>separator</code> <code>String</code> parameter provided, and the 
+	 * statistic object returned will be printed separated by a the
+	 * <code>separator</code> <code>String</code> parameter provided, and the
 	 * line terminated with a '\n' newline character.
 	 * 
 	 * @param fields the names of the statistics fields to print out.
@@ -402,17 +418,17 @@ public class StatsManager {
 	 */
 	public void printRunStats(final String[] fields, final String separator) {
 		final Object[] stats = getRunStats(fields);
-		
+
 		printArray(stats, separator);
 	}
-	
+
 	/**
 	 * Retrieve and print to the standard output the sequence of generation
-	 * statistics referenced by the given fields. The statistics will be 
-	 * obtained according to the contract specified by the 
-	 * <code>getRunStats(String[])</code> method. The result of calling the 
-	 * <code>toString()</code> method on each statistic object returned will be 
-	 * printed separated by a '\t' tab character, and the line terminated with 
+	 * statistics referenced by the given fields. The statistics will be
+	 * obtained according to the contract specified by the
+	 * <code>getRunStats(String[])</code> method. The result of calling the
+	 * <code>toString()</code> method on each statistic object returned will be
+	 * printed separated by a '\t' tab character, and the line terminated with
 	 * a '\n' newline character.
 	 * 
 	 * @param fields the names of the statistics fields to print out.
@@ -420,32 +436,33 @@ public class StatsManager {
 	public void printGenerationStats(final String ... fields) {
 		printGenerationStats(fields, "\t");
 	}
-	
+
 	/**
 	 * Retrieve and print to the standard output the sequence of generation
-	 * statistics referenced by the given fields. The statistics will be 
-	 * obtained according to the contract specified by the 
-	 * <code>getRunStats(String[])</code> method. The result of calling the 
-	 * <code>toString()</code> method on each statistic object returned will be 
-	 * printed separated by a the <code>separator</code> <code>String</code> 
-	 * parameter provided, and the line terminated with a '\n' newline 
+	 * statistics referenced by the given fields. The statistics will be
+	 * obtained according to the contract specified by the
+	 * <code>getRunStats(String[])</code> method. The result of calling the
+	 * <code>toString()</code> method on each statistic object returned will be
+	 * printed separated by a the <code>separator</code> <code>String</code>
+	 * parameter provided, and the line terminated with a '\n' newline
 	 * character.
 	 * 
 	 * @param fields the names of the statistics fields to print out.
 	 * @param separator the String to be printed between each statistic.
 	 */
-	public void printGenerationStats(final String[] fields, final String separator) {
+	public void printGenerationStats(final String[] fields,
+			final String separator) {
 		final Object[] stats = getGenerationStats(fields);
-		
+
 		printArray(stats, separator);
 	}
-	
+
 	/**
 	 * Retrieve and print to the standard output the sequence of crossover
-	 * statistics referenced by the given fields. The statistics will be 
-	 * obtained according to the contract specified by the 
-	 * <code>getRunStats(String[])</code> method. The result of calling the 
-	 * <code>toString()</code> method on each statistic object returned will be 
+	 * statistics referenced by the given fields. The statistics will be
+	 * obtained according to the contract specified by the
+	 * <code>getRunStats(String[])</code> method. The result of calling the
+	 * <code>toString()</code> method on each statistic object returned will be
 	 * printed separated by a '\t' tab character, and the line terminated with a
 	 * '\n' newline character.
 	 * 
@@ -454,32 +471,33 @@ public class StatsManager {
 	public void printCrossoverStats(final String ... fields) {
 		printCrossoverStats(fields, "\t");
 	}
-	
+
 	/**
 	 * Retrieve and print to the standard output the sequence of crossover
-	 * statistics referenced by the given fields. The statistics will be 
-	 * obtained according to the contract specified by the 
-	 * <code>getRunStats(String[])</code> method. The result of calling the 
-	 * <code>toString()</code> method on each statistic object returned will be 
-	 * printed separated by a the <code>separator</code> <code>String</code> 
-	 * parameter provided, and the line terminated with a '\n' newline 
+	 * statistics referenced by the given fields. The statistics will be
+	 * obtained according to the contract specified by the
+	 * <code>getRunStats(String[])</code> method. The result of calling the
+	 * <code>toString()</code> method on each statistic object returned will be
+	 * printed separated by a the <code>separator</code> <code>String</code>
+	 * parameter provided, and the line terminated with a '\n' newline
 	 * character.
 	 * 
 	 * @param fields the names of the statistics fields to print out.
 	 * @param separator the String to be printed between each statistic.
 	 */
-	public void printCrossoverStats(final String[] fields, final String separator) {
+	public void printCrossoverStats(final String[] fields,
+			final String separator) {
 		final Object[] stats = getCrossoverStats(fields);
-		
+
 		printArray(stats, separator);
 	}
-	
+
 	/**
 	 * Retrieve and print to the standard output the sequence of mutation
-	 * statistics referenced by the given fields. The statistics will be 
-	 * obtained according to the contract specified by the 
-	 * <code>getRunStats(String[])</code> method. The result of calling the 
-	 * <code>toString()</code> method on each statistic object returned will be 
+	 * statistics referenced by the given fields. The statistics will be
+	 * obtained according to the contract specified by the
+	 * <code>getRunStats(String[])</code> method. The result of calling the
+	 * <code>toString()</code> method on each statistic object returned will be
 	 * printed separated by a '\t' tab character, and the line terminated with a
 	 * '\n' newline character.
 	 * 
@@ -488,15 +506,15 @@ public class StatsManager {
 	public void printMutationStats(final String ... fields) {
 		printMutationStats(fields, "\t");
 	}
-	
+
 	/**
 	 * Retrieve and print to the standard output the sequence of mutation
-	 * statistics referenced by the given fields. The statistics will be 
-	 * obtained according to the contract specified by the 
-	 * <code>getRunStats(String[])</code> method. The result of calling the 
-	 * <code>toString()</code> method on each statistic object returned will be 
-	 * printed separated by a the <code>separator</code> <code>String</code> 
-	 * parameter provided, and the line terminated with a '\n' newline 
+	 * statistics referenced by the given fields. The statistics will be
+	 * obtained according to the contract specified by the
+	 * <code>getRunStats(String[])</code> method. The result of calling the
+	 * <code>toString()</code> method on each statistic object returned will be
+	 * printed separated by a the <code>separator</code> <code>String</code>
+	 * parameter provided, and the line terminated with a '\n' newline
 	 * character.
 	 * 
 	 * @param fields the names of the statistics fields to print out.
@@ -504,16 +522,16 @@ public class StatsManager {
 	 */
 	public void printMutationStats(final String[] fields, final String separator) {
 		final Object[] stats = getMutationStats(fields);
-		
+
 		printArray(stats, separator);
 	}
-	
+
 	/*
 	 * Print each element of the given array separated by the provided separator
 	 * character followed by a new line character.
 	 */
 	private static void printArray(final Object[] array, final String separator) {
-		for (int i=0; i<array.length; i++) {
+		for (int i = 0; i < array.length; i++) {
 			if (i != 0) {
 				System.out.print(separator);
 			}
@@ -523,35 +541,42 @@ public class StatsManager {
 	}
 
 	/*
-	 * Listen for life cycle events and if they happen then clear appropriate old data out of the data maps.
+	 * Listen for life cycle events and if they happen then clear appropriate
+	 * old data out of the data maps.
 	 */
 	private void setupListeners() {
 		// Clear the run data.
-		model.getLifeCycleManager().addRunListener(new RunAdapter(){
+		model.getLifeCycleManager().addRunListener(new RunAdapter() {
+
 			@Override
 			public void onRunStart() {
 				runData.clear();
 			}
 		});
-		
+
 		// Clear the run data.
-		model.getLifeCycleManager().addGenerationListener(new GenerationAdapter(){
-			@Override
-			public void onGenerationStart() {
-				generationData.clear();
-			}
-		});
-		
+		model.getLifeCycleManager().addGenerationListener(
+				new GenerationAdapter() {
+
+					@Override
+					public void onGenerationStart() {
+						generationData.clear();
+					}
+				});
+
 		// Clear the run data.
-		model.getLifeCycleManager().addCrossoverListener(new CrossoverAdapter(){
-			@Override
-			public void onCrossoverStart() {
-				crossoverData.clear();
-			}
-		});
-		
+		model.getLifeCycleManager().addCrossoverListener(
+				new CrossoverAdapter() {
+
+					@Override
+					public void onCrossoverStart() {
+						crossoverData.clear();
+					}
+				});
+
 		// Clear the run data.
-		model.getLifeCycleManager().addMutationListener(new MutationAdapter(){
+		model.getLifeCycleManager().addMutationListener(new MutationAdapter() {
+
 			@Override
 			public void onMutationStart() {
 				mutationData.clear();

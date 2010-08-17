@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -25,10 +25,10 @@ import org.epochx.core.RunManager;
 
 /**
  * Provides the interface to be implemented by objects that wish to handle run
- * events. See the {@link RunManager}'s class documentation for details of when 
+ * events. See the {@link RunManager}'s class documentation for details of when
  * each run event will be fired. To listen for run events during execution of
- * a model, instances of <code>RunListener</code> must be added to the model's 
- * <code>LifeCycleManager</code> which is retrievable through a call to the 
+ * a model, instances of <code>RunListener</code> must be added to the model's
+ * <code>LifeCycleManager</code> which is retrievable through a call to the
  * model's <code>getLifeCycleManager()</code> method.
  * 
  * <p>
@@ -47,16 +47,16 @@ public interface RunListener {
 	void onRunStart();
 
 	/**
-	 * Event fired when a program with a fitness lower than the model's 
+	 * Event fired when a program with a fitness lower than the model's
 	 * termination fitness is found.
 	 */
 	void onSuccess();
-	
-	//TODO public void onStagnate();
-	
+
+	// TODO public void onStagnate();
+
 	/**
 	 * Event fired after the run has ended.
 	 */
 	void onRunEnd();
-	
+
 }

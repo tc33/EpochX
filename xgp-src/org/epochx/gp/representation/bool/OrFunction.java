@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -34,34 +34,36 @@ public class OrFunction extends BooleanNode {
 	public OrFunction() {
 		this(null, null);
 	}
-	
+
 	/**
-	 * Construct an OrFunction with two children. When evaluated, if both 
-	 * children evaluate to false then the result will be false. All other 
+	 * Construct an OrFunction with two children. When evaluated, if both
+	 * children evaluate to false then the result will be false. All other
 	 * combinations will return a result of true.
+	 * 
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
 	 */
-	public OrFunction(BooleanNode child1, BooleanNode child2) {
+	public OrFunction(final BooleanNode child1, final BooleanNode child2) {
 		super(child1, child2);
 	}
-	
+
 	/**
-	 * Evaluating an <code>OrFunction</code> involves combining the evaluation 
-	 * of the children according to the rules of OR where if both children 
-	 * evaluate to false then the result will be false. All other combinations 
+	 * Evaluating an <code>OrFunction</code> involves combining the evaluation
+	 * of the children according to the rules of OR where if both children
+	 * evaluate to false then the result will be false. All other combinations
 	 * will return a result of true.
 	 */
 	@Override
 	public Boolean evaluate() {
-		boolean c1 = ((Boolean) getChild(0).evaluate()).booleanValue();
-		boolean c2 = ((Boolean) getChild(1).evaluate()).booleanValue();
-		
+		final boolean c1 = ((Boolean) getChild(0).evaluate()).booleanValue();
+		final boolean c2 = ((Boolean) getChild(1).evaluate()).booleanValue();
+
 		return c1 || c2;
 	}
-	
+
 	/**
 	 * Get the unique name that identifies this function.
+	 * 
 	 * @return the unique name for the OrFunction which is OR.
 	 */
 	@Override

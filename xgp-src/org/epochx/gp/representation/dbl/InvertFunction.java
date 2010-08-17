@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,7 +24,7 @@ package org.epochx.gp.representation.dbl;
 import org.epochx.gp.representation.DoubleNode;
 
 /**
- * A <code>FunctionNode</code> which performs the multiplicative inverse (or 
+ * A <code>FunctionNode</code> which performs the multiplicative inverse (or
  * reciprocal), that is the inverse of x is 1/x.
  */
 public class InvertFunction extends DoubleNode {
@@ -35,35 +35,37 @@ public class InvertFunction extends DoubleNode {
 	public InvertFunction() {
 		this(null);
 	}
-	
+
 	/**
 	 * Construct an InvertFunction with one child. When evaluated, the child
 	 * will be evaluated before the inversion operation is performed.
+	 * 
 	 * @param child The child which the reciprocal will be found for.
 	 */
-	public InvertFunction(DoubleNode child) {
+	public InvertFunction(final DoubleNode child) {
 		super(child);
 	}
 
 	/**
-	 * Evaluating an <code>InvertFunction</code> involves calculating the 
-	 * result of 1 divided by the result of evaluating the child. The 
-	 * exception to this is where the child evaluates to 0.0. In this case 
+	 * Evaluating an <code>InvertFunction</code> involves calculating the
+	 * result of 1 divided by the result of evaluating the child. The
+	 * exception to this is where the child evaluates to 0.0. In this case
 	 * there is no finite reciprocal and the result will be 1.0.
 	 */
 	@Override
 	public Double evaluate() {
-		double c = ((Double) getChild(0).evaluate()).doubleValue();
-		
+		final double c = ((Double) getChild(0).evaluate()).doubleValue();
+
 		if (c == 0) {
-		    return 1.0;
+			return 1.0;
 		} else {
-		    return 1 / c;
+			return 1 / c;
 		}
 	}
-	
+
 	/**
 	 * Get the unique name that identifies this function.
+	 * 
 	 * @return the unique name for the InvertFunction which is INV.
 	 */
 	@Override

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -26,19 +26,18 @@ import java.util.List;
 import org.epochx.core.ElitismManager;
 import org.epochx.representation.CandidateProgram;
 
-
 /**
- * Provides the interface to be implemented by objects that wish to handle 
- * elitism events. See the {@link ElitismManager}'s class documentation for 
- * details of when each elitism event will be fired. To listen for elitism 
+ * Provides the interface to be implemented by objects that wish to handle
+ * elitism events. See the {@link ElitismManager}'s class documentation for
+ * details of when each elitism event will be fired. To listen for elitism
  * events during execution of a model, instances of <code>ElitismListener</code>
- * must be added to the model's <code>LifeCycleManager</code> which is 
- * retrievable through a call to the model's <code>getLifeCycleManager()</code> 
+ * must be added to the model's <code>LifeCycleManager</code> which is
+ * retrievable through a call to the model's <code>getLifeCycleManager()</code>
  * method.
  * 
  * <p>
  * It is typical to listen to events using an anonymous class which often makes
- * the <code>abstract</code> <code>ElitismAdapter</code> class more convenient 
+ * the <code>abstract</code> <code>ElitismAdapter</code> class more convenient
  * to implement.
  * 
  * @see ElitismAdapter
@@ -50,19 +49,20 @@ public interface ElitismListener {
 	 * Event fired before the elitism operation starts.
 	 */
 	void onElitismStart();
-	
+
 	/**
-	 * Event fired after the elitism operation has been carried out. 
-	 * The elites may be modified and returned to be used, but it is not 
+	 * Event fired after the elitism operation has been carried out.
+	 * The elites may be modified and returned to be used, but it is not
 	 * possible to (nor does it make sense to) revert elitism.
 	 * 
 	 * @param elites the selection of chosen elites.
-	 * @return a list of <code>CandidatePrograms</code> to use as the set of 
-	 * elites. Note that it is not appropriate to return a value of null and 
-	 * this will cause undefined behaviour.
+	 * @return a list of <code>CandidatePrograms</code> to use as the set of
+	 *         elites. Note that it is not appropriate to return a value of null
+	 *         and
+	 *         this will cause undefined behaviour.
 	 */
 	List<CandidateProgram> onElitism(List<CandidateProgram> elites);
-	
+
 	/**
 	 * Event fired after the crossover operation has ended and been accepted.
 	 */

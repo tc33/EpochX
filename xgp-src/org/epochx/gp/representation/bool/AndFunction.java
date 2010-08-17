@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,46 +24,48 @@ package org.epochx.gp.representation.bool;
 import org.epochx.gp.representation.BooleanNode;
 
 /**
- * A <code>FunctionNode</code> which performs logical conjunction or the 
+ * A <code>FunctionNode</code> which performs logical conjunction or the
  * boolean function of AND.
  */
 public class AndFunction extends BooleanNode {
-	
+
 	/**
 	 * Construct an AndFunction with no children.
 	 */
 	public AndFunction() {
 		this(null, null);
 	}
-	
+
 	/**
-	 * Construct an AndFunction with two children. When evaluated, if both 
-	 * children evaluate to true then the result will be true. All other 
+	 * Construct an AndFunction with two children. When evaluated, if both
+	 * children evaluate to true then the result will be true. All other
 	 * combinations will return a result of false.
+	 * 
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
 	 */
-	public AndFunction(BooleanNode child1, BooleanNode child2) {
+	public AndFunction(final BooleanNode child1, final BooleanNode child2) {
 		super(child1, child2);
 	}
-	
+
 	/**
-	 * Evaluating an <code>AndFunction</code> involves combining the evaluation 
-	 * of the children according to the rules of AND where if both children 
-	 * evaluate to true then the result will be true. All other combinations 
+	 * Evaluating an <code>AndFunction</code> involves combining the evaluation
+	 * of the children according to the rules of AND where if both children
+	 * evaluate to true then the result will be true. All other combinations
 	 * will return a result of false.
 	 */
 	@Override
 	public Boolean evaluate() {
-		//TODO Perhaps we should lazily evaluate the second child?
-		boolean c1 = ((Boolean) getChild(0).evaluate()).booleanValue();
-		boolean c2 = ((Boolean) getChild(1).evaluate()).booleanValue();
-		
+		// TODO Perhaps we should lazily evaluate the second child?
+		final boolean c1 = ((Boolean) getChild(0).evaluate()).booleanValue();
+		final boolean c2 = ((Boolean) getChild(1).evaluate()).booleanValue();
+
 		return c1 && c2;
 	}
 
 	/**
 	 * Get the unique name that identifies this function.
+	 * 
 	 * @return the unique name for the AndFunction which is AND.
 	 */
 	@Override

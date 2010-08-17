@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -32,40 +32,44 @@ public class XorFunctionTest extends AbstractBooleanNodeTestCase {
 	public Node getNode() {
 		return new XorFunction();
 	}
-	
+
 	public void testEvaluateTT() {
-		XorFunction node = (XorFunction) getNode();
-		Node[] children = new Node[]{new BooleanLiteral(true), new BooleanLiteral(true)};
+		final XorFunction node = (XorFunction) getNode();
+		final Node[] children = new Node[]{new BooleanLiteral(true),
+				new BooleanLiteral(true)};
 		node.setChildren(children);
-		boolean result = node.evaluate();
-		
+		final boolean result = node.evaluate();
+
 		assertFalse("XOR of true and true is not false", result);
 	}
-	
+
 	public void testEvaluateTF() {
-		XorFunction node = (XorFunction) getNode();
-		Node[] children = new Node[]{new BooleanLiteral(true), new BooleanLiteral(false)};
+		final XorFunction node = (XorFunction) getNode();
+		final Node[] children = new Node[]{new BooleanLiteral(true),
+				new BooleanLiteral(false)};
 		node.setChildren(children);
-		boolean result = node.evaluate();
-		
+		final boolean result = node.evaluate();
+
 		assertTrue("XOR of true and false is not true", result);
 	}
-	
+
 	public void testEvaluateFT() {
-		XorFunction node = (XorFunction) getNode();
-		Node[] children = new Node[]{new BooleanLiteral(false), new BooleanLiteral(true)};
+		final XorFunction node = (XorFunction) getNode();
+		final Node[] children = new Node[]{new BooleanLiteral(false),
+				new BooleanLiteral(true)};
 		node.setChildren(children);
-		boolean result = node.evaluate();
-		
+		final boolean result = node.evaluate();
+
 		assertTrue("XOR of false and true is not true", result);
 	}
-	
+
 	public void testEvaluateFF() {
-		XorFunction node = (XorFunction) getNode();
-		Node[] children = new Node[]{new BooleanLiteral(false), new BooleanLiteral(false)};
+		final XorFunction node = (XorFunction) getNode();
+		final Node[] children = new Node[]{new BooleanLiteral(false),
+				new BooleanLiteral(false)};
 		node.setChildren(children);
-		boolean result = node.evaluate();
-		
+		final boolean result = node.evaluate();
+
 		assertFalse("XOR of false and false is not false", result);
 	}
 

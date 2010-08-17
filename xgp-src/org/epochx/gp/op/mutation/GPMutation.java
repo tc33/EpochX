@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -27,8 +27,10 @@ import org.epochx.representation.CandidateProgram;
 
 /**
  * This interface defines the structure which specific mutation operators can
- * implement to provide different methods of mutating a <code>GPCandidateProgram</code>. 
- * GPMutation instances are used by the core GPMutation class to perform a single 
+ * implement to provide different methods of mutating a
+ * <code>GPCandidateProgram</code>.
+ * GPMutation instances are used by the core GPMutation class to perform a
+ * single
  * mutation operation.
  * 
  * @see GPMutation
@@ -36,15 +38,16 @@ import org.epochx.representation.CandidateProgram;
 public interface GPMutation extends Mutation {
 
 	/**
-	 * Implementations should perform some form of alteration to the genetic 
-	 * material of the given GPCandidateProgram, returning the resultant program.
+	 * Implementations should perform some form of alteration to the genetic
+	 * material of the given GPCandidateProgram, returning the resultant
+	 * program.
 	 * 
-	 * @param program The GPCandidateProgram selected to undergo this mutation 
-	 * 				  operation.
-	 * @return A GPCandidateProgram that was the result of altering the provided 
-	 * GPCandidateProgram.
+	 * @param program The GPCandidateProgram selected to undergo this mutation
+	 *        operation.
+	 * @return A GPCandidateProgram that was the result of altering the provided
+	 *         GPCandidateProgram.
 	 */
 	@Override
 	public GPCandidateProgram mutate(CandidateProgram parent);
-	
+
 }

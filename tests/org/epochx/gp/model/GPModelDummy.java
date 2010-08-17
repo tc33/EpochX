@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -44,10 +44,10 @@ public class GPModelDummy extends GPModel {
 	private Initialiser initialiser;
 	private Crossover crossover;
 	private Mutation mutation;
-	
+
 	// Control parameters.
 	private RandomNumberGenerator randomNumberGenerator;
-	
+
 	private int noRuns;
 	private int noGenerations;
 	private int populationSize;
@@ -58,22 +58,22 @@ public class GPModelDummy extends GPModel {
 	private double crossoverProbability;
 	private double mutationProbability;
 	private double reproductionProbability;
-	
+
 	private double fitness;
-	
+
 	// Caching.
 	private boolean cacheFitness;
-	
+
 	// GP Model parameters.
-	private List<Node> syntax;	
-	
+	private List<Node> syntax;
+
 	private int maxInitialDepth;
 	private int maxProgramDepth;
-	
+
 	/**
 	 * Construct the model with defaults.
 	 */
-	public GPModelDummy() {		
+	public GPModelDummy() {
 		// Control parameters.
 		noRuns = 1;
 		noGenerations = 1;
@@ -84,23 +84,23 @@ public class GPModelDummy extends GPModel {
 		crossoverProbability = 0.9;
 		mutationProbability = 0.1;
 		reproductionProbability = 0.0;
-		
+
 		fitness = 0.0;
-		
+
 		// Operators.
 		programSelector = new TournamentSelector(this, 7);
 		poolSelector = null;
 		randomNumberGenerator = new MersenneTwisterFast();
-		
+
 		// Caching.
 		cacheFitness = true;
-		
+
 		// GP Model parameters.
 		maxInitialDepth = 6;
 		maxProgramDepth = 12;
-		
+
 		syntax = new ArrayList<Node>();
-		
+
 		// Operators.
 		initialiser = new FullInitialiser(this);
 		crossover = new UniformPointCrossover(this);
@@ -108,14 +108,14 @@ public class GPModelDummy extends GPModel {
 	}
 
 	@Override
-	public double getFitness(CandidateProgram program) {
+	public double getFitness(final CandidateProgram program) {
 		return fitness;
 	}
-	
-	public void setFitness(double fitness) {
+
+	public void setFitness(final double fitness) {
 		this.fitness = fitness;
 	}
-	
+
 	@Override
 	public Initialiser getInitialiser() {
 		return initialiser;
@@ -130,7 +130,7 @@ public class GPModelDummy extends GPModel {
 	public Crossover getCrossover() {
 		return crossover;
 	}
-	
+
 	@Override
 	public void setCrossover(final Crossover crossover) {
 		this.crossover = crossover;
@@ -165,7 +165,7 @@ public class GPModelDummy extends GPModel {
 	public void setNoRuns(final int noRuns) {
 		this.noRuns = noRuns;
 	}
-	
+
 	@Override
 	public int getNoGenerations() {
 		return noGenerations;
@@ -220,7 +220,7 @@ public class GPModelDummy extends GPModel {
 	public double getMutationProbability() {
 		return mutationProbability;
 	}
-	
+
 	@Override
 	public void setMutationProbability(final double mutationProbability) {
 		this.mutationProbability = mutationProbability;
@@ -230,22 +230,22 @@ public class GPModelDummy extends GPModel {
 	public double getReproductionProbability() {
 		return reproductionProbability;
 	}
-	
+
 	@Override
 	public void setReproductionProbability(final double reproductionProbability) {
 		this.reproductionProbability = reproductionProbability;
 	}
-	
+
 	@Override
 	public double getTerminationFitness() {
 		return terminationFitness;
 	}
-	
+
 	@Override
 	public void setTerminationFitness(final double terminationFitness) {
 		this.terminationFitness = terminationFitness;
 	}
-	
+
 	@Override
 	public ProgramSelector getProgramSelector() {
 		return programSelector;
@@ -265,28 +265,28 @@ public class GPModelDummy extends GPModel {
 	public void setPoolSelector(final PoolSelector poolSelector) {
 		this.poolSelector = poolSelector;
 	}
-	
+
 	@Override
 	public RandomNumberGenerator getRNG() {
 		return randomNumberGenerator;
 	}
-	
+
 	@Override
 	public void setRNG(final RandomNumberGenerator rng) {
-		this.randomNumberGenerator = rng;
+		randomNumberGenerator = rng;
 	}
-	
-/*
- * GP MODEL METHODS
- */
-	
+
+	/*
+	 * GP MODEL METHODS
+	 */
+
 	@Override
 	public int getMaxInitialDepth() {
 		return maxInitialDepth;
 	}
 
 	@Override
-	public void setMaxInitialDepth(int maxInitialDepth) {
+	public void setMaxInitialDepth(final int maxInitialDepth) {
 		this.maxInitialDepth = maxInitialDepth;
 	}
 
@@ -296,8 +296,8 @@ public class GPModelDummy extends GPModel {
 	}
 
 	@Override
-	public void setMaxDepth(int maxDepth) {
-		this.maxProgramDepth = maxDepth;
+	public void setMaxDepth(final int maxDepth) {
+		maxProgramDepth = maxDepth;
 	}
 
 	@Override
@@ -306,7 +306,7 @@ public class GPModelDummy extends GPModel {
 	}
 
 	@Override
-	public void setSyntax(List<Node> syntax) {
+	public void setSyntax(final List<Node> syntax) {
 		this.syntax = syntax;
 	}
 

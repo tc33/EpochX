@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -27,45 +27,49 @@ import org.epochx.gp.representation.*;
  * 
  */
 public class NandFunctionTest extends AbstractBooleanNodeTestCase {
-	
+
 	@Override
 	public Node getNode() {
 		return new NandFunction();
 	}
-	
+
 	public void testEvaluateTT() {
-		NandFunction node = (NandFunction) getNode();
-		Node[] children = new Node[]{new BooleanLiteral(true), new BooleanLiteral(true)};
+		final NandFunction node = (NandFunction) getNode();
+		final Node[] children = new Node[]{new BooleanLiteral(true),
+				new BooleanLiteral(true)};
 		node.setChildren(children);
-		boolean result = node.evaluate();
-		
+		final boolean result = node.evaluate();
+
 		assertFalse("NAND of true and true is not false", result);
 	}
-	
+
 	public void testEvaluateTF() {
-		NandFunction node = (NandFunction) getNode();
-		Node[] children = new Node[]{new BooleanLiteral(true), new BooleanLiteral(false)};
+		final NandFunction node = (NandFunction) getNode();
+		final Node[] children = new Node[]{new BooleanLiteral(true),
+				new BooleanLiteral(false)};
 		node.setChildren(children);
-		boolean result = node.evaluate();
-		
+		final boolean result = node.evaluate();
+
 		assertTrue("NAND of true and false is not true", result);
 	}
-	
+
 	public void testEvaluateFT() {
-		NandFunction node = (NandFunction) getNode();
-		Node[] children = new Node[]{new BooleanLiteral(false), new BooleanLiteral(true)};
+		final NandFunction node = (NandFunction) getNode();
+		final Node[] children = new Node[]{new BooleanLiteral(false),
+				new BooleanLiteral(true)};
 		node.setChildren(children);
-		boolean result = node.evaluate();
-		
+		final boolean result = node.evaluate();
+
 		assertTrue("NAND of false and true is not true", result);
 	}
-	
+
 	public void testEvaluateFF() {
-		NandFunction node = (NandFunction) getNode();
-		Node[] children = new Node[]{new BooleanLiteral(false), new BooleanLiteral(false)};
+		final NandFunction node = (NandFunction) getNode();
+		final Node[] children = new Node[]{new BooleanLiteral(false),
+				new BooleanLiteral(false)};
 		node.setChildren(children);
-		boolean result = node.evaluate();
-		
+		final boolean result = node.evaluate();
+
 		assertTrue("NAND of false and false is not true", result);
 	}
 

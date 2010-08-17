@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -22,7 +22,7 @@
 package org.epochx.tools.grammar;
 
 /**
- * A checked exception that is thrown to indicate that a grammar string is 
+ * A checked exception that is thrown to indicate that a grammar string is
  * not in a valid BNF format.
  */
 public class MalformedGrammarException extends Exception {
@@ -33,13 +33,13 @@ public class MalformedGrammarException extends Exception {
 	private static final long serialVersionUID = 4253637393156061665L;
 
 	/**
-	 * Constructs a <code>MalformedGrammarException</code> with the specified 
+	 * Constructs a <code>MalformedGrammarException</code> with the specified
 	 * message.
 	 * 
 	 * @param message {@inheritDoc}
 	 */
-	public MalformedGrammarException(String message) {
+	public MalformedGrammarException(final String message) {
 		super(message);
 	}
-	
+
 }

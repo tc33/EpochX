@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -26,7 +26,7 @@ import java.util.List;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.op.init.GrowInitialiser;
 import org.epochx.gr.representation.GRCandidateProgram;
-import org.epochx.life.*;
+import org.epochx.life.ConfigAdapter;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.*;
 import org.epochx.tools.random.RandomNumberGenerator;
@@ -34,65 +34,71 @@ import org.epochx.tools.random.RandomNumberGenerator;
 public class WhighamMutation implements GRMutation {
 
 	// The controlling model.
-	private GRModel model;
-	
+	private final GRModel model;
+
 	private RandomNumberGenerator rng;
-	
-	private GrowInitialiser init;
-	
-	public WhighamMutation(GRModel model) {
+
+	private final GrowInitialiser init;
+
+	public WhighamMutation(final GRModel model) {
 		this.model = model;
-		
+
 		init = new GrowInitialiser(model);
 
 		// Configure parameters from the model.
 		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+
 			@Override
 			public void onConfigure() {
 				configure();
 			}
 		});
 	}
-	
+
 	/*
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
 		rng = model.getRNG();
 	}
-	
+
 	@Override
-	public GRCandidateProgram mutate(CandidateProgram program) {
-		GRCandidateProgram mutatedProgram = (GRCandidateProgram) program.clone();
-		
-		NonTerminalSymbol parseTree = mutatedProgram.getParseTree();
-		
-		//TODO This is v.inefficient because we have to fly up and down the tree lots of times.
-		List<Integer> nonTerminals = parseTree.getNonTerminalIndexes();
-		
+	public GRCandidateProgram mutate(final CandidateProgram program) {
+		final GRCandidateProgram mutatedProgram = (GRCandidateProgram) program
+				.clone();
+
+		final NonTerminalSymbol parseTree = mutatedProgram.getParseTree();
+
+		// TODO This is v.inefficient because we have to fly up and down the
+		// tree lots of times.
+		final List<Integer> nonTerminals = parseTree.getNonTerminalIndexes();
+
 		// Choose a node to change.
-		int selection = nonTerminals.get(rng.nextInt(nonTerminals.size()));
-		NonTerminalSymbol point = (NonTerminalSymbol) parseTree.getNthSymbol(selection);
-		int originalDepth = point.getDepth();
-		
+		final int selection = nonTerminals
+				.get(rng.nextInt(nonTerminals.size()));
+		final NonTerminalSymbol point = (NonTerminalSymbol) parseTree
+				.getNthSymbol(selection);
+		final int originalDepth = point.getDepth();
+
 		/*
-		 * TODO At the mo we use a max depth of whatever the original had but 
-		 * would be better to use up to the maximum program depth. This is 
-		 * difficult though because we don't know how deep the node with chose 
-		 * is. 
+		 * TODO At the mo we use a max depth of whatever the original had but
+		 * would be better to use up to the maximum program depth. This is
+		 * difficult though because we don't know how deep the node with chose
+		 * is.
 		 */
-		
+
 		// Construct a new subtree from that node's grammar rule.
-		GrammarRule rule = point.getGrammarRule();
-		NonTerminalSymbol replacement = init.growParseTree(originalDepth, rule);
-		
+		final GrammarRule rule = point.getGrammarRule();
+		final NonTerminalSymbol replacement = init.growParseTree(originalDepth,
+				rule);
+
 		// Replace node.
 		if (selection == 0) {
 			mutatedProgram.setParseTree(replacement);
 		} else {
 			parseTree.setNthSymbol(selection, replacement);
 		}
-		
+
 		return mutatedProgram;
 	}
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -37,15 +37,15 @@ public class MutationManagerTest extends TestCase {
 
 	private GPModel model;
 	private MutationManager mutationManager;
-	
+
 	private int count;
-	
+
 	@Override
 	protected void setUp() throws Exception {
 		model = new GPModelDummy();
 		mutationManager = new MutationManager(model);
 	}
-	
+
 	/**
 	 * Tests that an exception is thrown if the crossover is null but crossover
 	 * probability is not null.
@@ -53,15 +53,15 @@ public class MutationManagerTest extends TestCase {
 	public void testMutatorNotSet() {
 		model.setMutation(null);
 		model.setMutationProbability(0.1);
-		
+
 		model.getLifeCycleManager().fireConfigureEvent();
-		
+
 		try {
 			mutationManager.mutate();
 			fail("illegal state exception not thrown for a model with mutation enabled but null operator");
-		} catch(IllegalStateException e) {}
+		} catch (final IllegalStateException e) {
+		}
 	}
-	
 
 	/**
 	 * Tests that an exception is thrown if the program selector is null when
@@ -70,39 +70,44 @@ public class MutationManagerTest extends TestCase {
 	public void testProgramSelectorNotSet() {
 		// Create a model with a null program selector.
 		model.setProgramSelector(null);
-		
+
 		model.getLifeCycleManager().fireConfigureEvent();
-		
+
 		try {
 			mutationManager.mutate();
 			fail("illegal state exception not thrown when performing mutation with a null program selector");
-		} catch(IllegalStateException e) {}
+		} catch (final IllegalStateException e) {
+		}
 	}
-	
+
 	/**
-	 * Tests that the mutation events are all triggered and in the correct 
+	 * Tests that the mutation events are all triggered and in the correct
 	 * order.
 	 */
 	public void testMutationEventsOrder() {
 		// We add the chars '1', '2', '3' to builder to check order of calls.
 		final StringBuilder verify = new StringBuilder();
-		
-		List<CandidateProgram> pop = new ArrayList<CandidateProgram>();
-		pop.add(new GPCandidateProgram(new BooleanLiteral(false), (GPModel) model));
+
+		final List<CandidateProgram> pop = new ArrayList<CandidateProgram>();
+		pop.add(new GPCandidateProgram(new BooleanLiteral(false), model));
 		model.getProgramSelector().setSelectionPool(pop);
 		model.getSyntax().add(new BooleanLiteral(false));
-		
+
 		// Listen for the crossver.
 		model.getLifeCycleManager().addMutationListener(new MutationListener() {
+
 			@Override
 			public void onMutationStart() {
 				verify.append('1');
 			}
+
 			@Override
-			public CandidateProgram onMutation(CandidateProgram parent, CandidateProgram child) {
+			public CandidateProgram onMutation(final CandidateProgram parent,
+					final CandidateProgram child) {
 				verify.append('2');
 				return child;
 			}
+
 			@Override
 			public void onMutationEnd() {
 				verify.append('3');
@@ -110,29 +115,33 @@ public class MutationManagerTest extends TestCase {
 		});
 		model.getLifeCycleManager().fireConfigureEvent();
 		mutationManager.mutate();
-		
-		assertEquals("mutation events were not called in the correct order", "123", verify.toString());
+
+		assertEquals("mutation events were not called in the correct order",
+				"123", verify.toString());
 	}
-	
+
 	/**
-	 * Tests that returning null to the crossover event will revert the crossover.
+	 * Tests that returning null to the crossover event will revert the
+	 * crossover.
 	 */
 	public void testGenerationEventRevert() {
 		// We add the chars '1', '2', '3' to builder to check order of calls.
 		final StringBuilder verify = new StringBuilder();
-		
-		List<CandidateProgram> pop = new ArrayList<CandidateProgram>();
-		pop.add(new GPCandidateProgram(new BooleanLiteral(false), (GPModel) model));
-		pop.add(new GPCandidateProgram(new BooleanLiteral(false), (GPModel) model));
+
+		final List<CandidateProgram> pop = new ArrayList<CandidateProgram>();
+		pop.add(new GPCandidateProgram(new BooleanLiteral(false), model));
+		pop.add(new GPCandidateProgram(new BooleanLiteral(false), model));
 		model.getProgramSelector().setSelectionPool(pop);
 		model.getSyntax().add(new BooleanLiteral(false));
-		
+
 		count = 0;
-		
+
 		// Listen for the generation.
 		model.getLifeCycleManager().addMutationListener(new MutationAdapter() {
+
 			@Override
-			public CandidateProgram onMutation(CandidateProgram parent, CandidateProgram child) {
+			public CandidateProgram onMutation(final CandidateProgram parent,
+					final CandidateProgram child) {
 				verify.append('2');
 				// Revert 3 times before confirming.
 				if (count == 3) {
@@ -143,10 +152,11 @@ public class MutationManagerTest extends TestCase {
 				return null;
 			}
 		});
-		
+
 		model.getLifeCycleManager().fireConfigureEvent();
 		mutationManager.mutate();
-		
-		assertEquals("mutation operation was not correctly reverted", "2222", verify.toString());
+
+		assertEquals("mutation operation was not correctly reverted", "2222",
+				verify.toString());
 	}
 }

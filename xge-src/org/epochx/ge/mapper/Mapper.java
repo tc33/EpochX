@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -25,12 +25,13 @@ import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.tools.grammar.NonTerminalSymbol;
 
 /**
- * A mapper's job is to convert a GECandidateProgram into a String sequence. 
- * Conventionally in GE the mapping process uses the chromosome of the 
+ * A mapper's job is to convert a GECandidateProgram into a String sequence.
+ * Conventionally in GE the mapping process uses the chromosome of the
  * GECandidateProgram and a guide production choices in a grammar.
  * 
- * <p>The method of mapping is the responsibility of the Mapper and as such 
- * options such as wrapping of codons or not are down to the Mapper.
+ * <p>
+ * The method of mapping is the responsibility of the Mapper and as such options
+ * such as wrapping of codons or not are down to the Mapper.
  */
 public interface Mapper {
 
@@ -38,20 +39,21 @@ public interface Mapper {
 	 * Map the given GECandidateProgram to a parse tree.
 	 * 
 	 * @param program the program to be converted to a parse tree.
-	 * @return a Symbol which is the root node of a valid parse tree, or null 
-	 * if no valid parse tree could be created from the GECandidateProgram.
+	 * @return a Symbol which is the root node of a valid parse tree, or null
+	 *         if no valid parse tree could be created from the
+	 *         GECandidateProgram.
 	 */
 	public NonTerminalSymbol map(GECandidateProgram program);
-	
+
 	/**
-	 * Should return the number of codons that were used in mapping the last 
-	 * GECandidateProgram to be mapped, or -1 if no CandidatePrograms have yet 
-	 * been mapped. The number of mapped codons constitutes the active portion 
-	 * of a chromosome. Typically this will refer to the first n codons, but 
+	 * Should return the number of codons that were used in mapping the last
+	 * GECandidateProgram to be mapped, or -1 if no CandidatePrograms have yet
+	 * been mapped. The number of mapped codons constitutes the active portion
+	 * of a chromosome. Typically this will refer to the first n codons, but
 	 * that is dependent upon the mapper implementation in use.
 	 * 
 	 * @return the number of codons used during the last mapping process.
 	 */
 	public int getNoMappedCodons();
-	
+
 }

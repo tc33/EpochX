@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -23,10 +23,10 @@ package org.epochx.gp.representation;
 
 public abstract class BooleanNode extends Node {
 
-	public BooleanNode(Node ... children) {
+	public BooleanNode(final Node ... children) {
 		super(children);
 	}
-	
+
 	@Override
 	public abstract Boolean evaluate();
 

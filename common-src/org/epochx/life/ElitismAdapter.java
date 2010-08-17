@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -26,20 +26,27 @@ import java.util.List;
 import org.epochx.representation.CandidateProgram;
 
 /**
- * Provides an <code>abstract</code> implementation of <code>ElitismListener</code>. 
+ * Provides an <code>abstract</code> implementation of
+ * <code>ElitismListener</code>.
  * 
- * <p>Typical use of this class would be in an anonymous class. For example:
+ * <p>
+ * Typical use of this class would be in an anonymous class. For example:
  * 
- * <blockquote><pre>
+ * <blockquote>
+ * 
+ * <pre>
  *     model.getLifeCycleListener().addElitismListener(new ElitismAdapter(){
  *     		public void onElitismStart() {
  *     			... do something ...
  *     		}
  *     });
- * </pre></blockquote>
+ * </pre>
  * 
- * <p>Creating an anonymous implementation of this class is often preferable to 
- * implementing <code>ElitismListener</code> since it avoids the need to 
+ * </blockquote>
+ * 
+ * <p>
+ * Creating an anonymous implementation of this class is often preferable to
+ * implementing <code>ElitismListener</code> since it avoids the need to
  * implement methods which may be of no interest.
  */
 public class ElitismAdapter implements ElitismListener {
@@ -48,13 +55,14 @@ public class ElitismAdapter implements ElitismListener {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void onElitismStart() {}
-	
+	public void onElitismStart() {
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<CandidateProgram> onElitism(List<CandidateProgram> elites) {
+	public List<CandidateProgram> onElitism(final List<CandidateProgram> elites) {
 		return elites;
 	}
 
@@ -62,6 +70,7 @@ public class ElitismAdapter implements ElitismListener {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void onElitismEnd() {}
+	public void onElitismEnd() {
+	}
 
 }

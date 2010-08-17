@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -29,11 +29,11 @@ import java.util.*;
  */
 public final class ReferenceUtils {
 
-	public static <T> List<T> stripRefs(Set<WeakReference<T>> refs) {
-		List<T> objs = new ArrayList<T>();
-		Set<WeakReference<T>> removals = new HashSet<WeakReference<T>>();
-		for (WeakReference<T> ref: refs) {
-			T obj = ref.get();
+	public static <T> List<T> stripRefs(final Set<WeakReference<T>> refs) {
+		final List<T> objs = new ArrayList<T>();
+		final Set<WeakReference<T>> removals = new HashSet<WeakReference<T>>();
+		for (final WeakReference<T> ref: refs) {
+			final T obj = ref.get();
 			if (obj == null) {
 				removals.add(ref);
 			} else {
@@ -43,5 +43,5 @@ public final class ReferenceUtils {
 		refs.removeAll(refs);
 		return objs;
 	}
-	
+
 }

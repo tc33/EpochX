@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -26,21 +26,27 @@ import java.util.List;
 import org.epochx.representation.CandidateProgram;
 
 /**
- * Provides an <code>abstract</code> implementation of 
- * <code>PoolSelectionListener</code>. 
+ * Provides an <code>abstract</code> implementation of
+ * <code>PoolSelectionListener</code>.
  * 
- * <p>Typical use of this class would be in an anonymous class. For example:
+ * <p>
+ * Typical use of this class would be in an anonymous class. For example:
  * 
- * <blockquote><pre>
+ * <blockquote>
+ * 
+ * <pre>
  *     model.getLifeCycleListener().addPoolSelectionListener(new PoolSelectionAdapter(){
  *     		public void onPoolSelectionStart() {
  *     			... do something ...
  *     		}
  *     });
- * </pre></blockquote>
+ * </pre>
  * 
- * <p>Creating an anonymous implementation of this class is often preferable to 
- * implementing <code>PoolSelectionListener</code> since it avoids the need to 
+ * </blockquote>
+ * 
+ * <p>
+ * Creating an anonymous implementation of this class is often preferable to
+ * implementing <code>PoolSelectionListener</code> since it avoids the need to
  * implement methods which may be of no interest.
  */
 public class PoolSelectionAdapter implements PoolSelectionListener {
@@ -49,13 +55,15 @@ public class PoolSelectionAdapter implements PoolSelectionListener {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void onPoolSelectionStart() {}
-	
+	public void onPoolSelectionStart() {
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<CandidateProgram> onPoolSelection(List<CandidateProgram> pool) {
+	public List<CandidateProgram> onPoolSelection(
+			final List<CandidateProgram> pool) {
 		return pool;
 	}
 
@@ -63,6 +71,7 @@ public class PoolSelectionAdapter implements PoolSelectionListener {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void onPoolSelectionEnd() {}
+	public void onPoolSelectionEnd() {
+	}
 
 }

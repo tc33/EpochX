@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -25,27 +25,27 @@ import org.epochx.gp.representation.VoidNode;
 import org.epochx.tools.ant.Ant;
 
 /**
- * This class defines an action which when executed will trigger the ant 
+ * This class defines an action which when executed will trigger the ant
  * to move one position in its ant landscape.
  */
 public class AntMoveAction extends VoidNode {
-	
-	private Ant ant;
-	
+
+	private final Ant ant;
+
 	/**
-	 * Constructs an AntMoveAction, supplying an ant that the action can be 
+	 * Constructs an AntMoveAction, supplying an ant that the action can be
 	 * performed on.
 	 * 
 	 * @param ant the Ant that will be moved upon execution.
 	 */
-	public AntMoveAction(Ant ant) {
+	public AntMoveAction(final Ant ant) {
 		this.ant = ant;
 	}
 
 	@Override
 	public Void evaluate() {
 		ant.move();
-		
+
 		return null;
 	}
 

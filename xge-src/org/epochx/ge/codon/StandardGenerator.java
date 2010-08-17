@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -22,7 +22,7 @@
 package org.epochx.ge.codon;
 
 import org.epochx.ge.model.GEModel;
-import org.epochx.life.*;
+import org.epochx.life.ConfigAdapter;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
@@ -32,30 +32,31 @@ import org.epochx.tools.random.RandomNumberGenerator;
 public class StandardGenerator implements CodonGenerator {
 
 	// The controlling model.
-	private GEModel model;
-	
+	private final GEModel model;
+
 	private RandomNumberGenerator rng;
-	
+
 	private int maxCodonSize;
-	
+
 	/**
 	 * Construct a StandardGenerator.
 	 * 
-	 * @param model the model that controls the run, providing the maximum 
-	 * 				codon size.
+	 * @param model the model that controls the run, providing the maximum
+	 *        codon size.
 	 */
-	public StandardGenerator(GEModel model) {
+	public StandardGenerator(final GEModel model) {
 		this.model = model;
-		
+
 		// Configure parameters from the model.
 		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+
 			@Override
 			public void onConfigure() {
 				configure();
 			}
 		});
 	}
-	
+
 	/*
 	 * Configure component with parameters from the model.
 	 */
@@ -63,10 +64,10 @@ public class StandardGenerator implements CodonGenerator {
 		rng = model.getRNG();
 		maxCodonSize = model.getMaxCodonSize();
 	}
-	
+
 	/**
-	 * Generates and returns a new codon value, randomly generated with a 
-	 * uniform distribution between zero and the maximum codon size. 
+	 * Generates and returns a new codon value, randomly generated with a
+	 * uniform distribution between zero and the maximum codon size.
 	 * 
 	 * @return the newly generated codon value.
 	 */

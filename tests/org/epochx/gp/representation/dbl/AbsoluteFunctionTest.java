@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -27,33 +27,33 @@ import org.epochx.gp.representation.*;
  * 
  */
 public class AbsoluteFunctionTest extends AbstractDoubleNodeTestCase {
-	
+
 	@Override
 	public Node getNode() {
 		return new AbsoluteFunction();
 	}
-	
+
 	public void testEvaluateZero() {
-		AbsoluteFunction node = (AbsoluteFunction) getNode();
+		final AbsoluteFunction node = (AbsoluteFunction) getNode();
 		node.setChild(0, new DoubleLiteral(0.0));
-		double result = node.evaluate();
-		
+		final double result = node.evaluate();
+
 		assertEquals("ABS of 0.0 is not 0.0", 0.0, result);
 	}
-	
+
 	public void testEvaluateMinusOne() {
-		AbsoluteFunction node = (AbsoluteFunction) getNode();
+		final AbsoluteFunction node = (AbsoluteFunction) getNode();
 		node.setChild(0, new DoubleLiteral(-1.0));
-		double result = node.evaluate();
-		
+		final double result = node.evaluate();
+
 		assertEquals("ABS of -1.0 is not 1.0", 1.0, result);
 	}
-	
+
 	public void testEvaluatePlusOne() {
-		AbsoluteFunction node = (AbsoluteFunction) getNode();
+		final AbsoluteFunction node = (AbsoluteFunction) getNode();
 		node.setChild(0, new DoubleLiteral(1.0));
-		double result = node.evaluate();
-		
+		final double result = node.evaluate();
+
 		assertEquals("ABS of 1.0 is not 1.0", 1.0, result);
 	}
 

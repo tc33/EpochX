@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -27,36 +27,39 @@ import org.epochx.gp.representation.*;
  * 
  */
 public class AddFunctionTest extends AbstractDoubleNodeTestCase {
-	
+
 	@Override
 	public Node getNode() {
 		return new AddFunction();
 	}
-	
+
 	public void testEvaluatePositive() {
-		AddFunction node = (AddFunction) getNode();
-		Node[] children = new Node[]{new DoubleLiteral(2.0), new DoubleLiteral(3.0)};
+		final AddFunction node = (AddFunction) getNode();
+		final Node[] children = new Node[]{new DoubleLiteral(2.0),
+				new DoubleLiteral(3.0)};
 		node.setChildren(children);
-		double result = node.evaluate();
-		
+		final double result = node.evaluate();
+
 		assertEquals("ADD of 2.0 and 3.0 is not 5.0", 5.0, result);
 	}
-	
+
 	public void testEvaluateNegative() {
-		AddFunction node = (AddFunction) getNode();
-		Node[] children = new Node[]{new DoubleLiteral(-2.1), new DoubleLiteral(-3.9)};
+		final AddFunction node = (AddFunction) getNode();
+		final Node[] children = new Node[]{new DoubleLiteral(-2.1),
+				new DoubleLiteral(-3.9)};
 		node.setChildren(children);
-		double result = node.evaluate();
-		
+		final double result = node.evaluate();
+
 		assertEquals("ADD of -2.1 and -3.9 is not -6.0", -6.0, result);
 	}
-	
+
 	public void testEvaluatePositiveNegative() {
-		AddFunction node = (AddFunction) getNode();
-		Node[] children = new Node[]{new DoubleLiteral(-3.5), new DoubleLiteral(4.5)};
+		final AddFunction node = (AddFunction) getNode();
+		final Node[] children = new Node[]{new DoubleLiteral(-3.5),
+				new DoubleLiteral(4.5)};
 		node.setChildren(children);
-		double result = node.evaluate();
-		
+		final double result = node.evaluate();
+
 		assertEquals("ADD of -3.5 and 4.5 is not 1.0", 1.0, result);
 	}
 }

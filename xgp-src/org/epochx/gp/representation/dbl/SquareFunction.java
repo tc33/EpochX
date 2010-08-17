@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,8 +24,9 @@ package org.epochx.gp.representation.dbl;
 import org.epochx.gp.representation.DoubleNode;
 
 /**
- * A <code>FunctionNode</code> which performs the arithmetic function of squaring, 
- * that is - raising to the second power. It is equivalent to the 
+ * A <code>FunctionNode</code> which performs the arithmetic function of
+ * squaring,
+ * that is - raising to the second power. It is equivalent to the
  * <code>PowerFunction</code> where the second child is the double literal 2.0.
  */
 public class SquareFunction extends DoubleNode {
@@ -36,29 +37,31 @@ public class SquareFunction extends DoubleNode {
 	public SquareFunction() {
 		this(null);
 	}
-	
+
 	/**
-	 * Construct a SquareFunction with one child. When evaluated, the child will 
+	 * Construct a SquareFunction with one child. When evaluated, the child will
 	 * be evaluated with the result then raised to the power of 2.
+	 * 
 	 * @param child The child which will be squared.
 	 */
-	public SquareFunction(DoubleNode child) {
+	public SquareFunction(final DoubleNode child) {
 		super(child);
 	}
 
 	/**
-	 * Evaluating a <code>SquareFunction</code> involves evaluating the child 
+	 * Evaluating a <code>SquareFunction</code> involves evaluating the child
 	 * then raising the result to the power of 2.
 	 */
 	@Override
 	public Double evaluate() {
-		double c = ((Double) getChild(0).evaluate()).doubleValue();
-		
-		return Math.pow(c,2);
+		final double c = ((Double) getChild(0).evaluate()).doubleValue();
+
+		return Math.pow(c, 2);
 	}
-	
+
 	/**
 	 * Get the unique name that identifies this function.
+	 * 
 	 * @return the unique name for the SquareFunction which is SQUARE.
 	 */
 	@Override

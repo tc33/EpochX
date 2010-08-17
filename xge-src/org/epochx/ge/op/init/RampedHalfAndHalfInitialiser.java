@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -29,51 +29,51 @@ import org.epochx.life.ConfigAdapter;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.Grammar;
 
-
 /**
  * Note: Ramped half & half initialisation currently only works for depth first
  * mapping.
  * 
  * Ramped half-and-half initialisation in grammatical evolution works similarly
  * to ramped half-and-half in genetic programming but due to the differences of
- * representation it has differences. See Chapter 8: Sensible Initialisation, 
+ * representation it has differences. See Chapter 8: Sensible Initialisation,
  * in Grammatical Evolution by O'Neill and Ryan for details.
  * 
  */
 public class RampedHalfAndHalfInitialiser implements GEInitialiser {
 
 	// The controlling model.
-	private GEModel model;
-	
+	private final GEModel model;
+
 	private Grammar grammar;
 	private int popSize;
 	private int maxInitialProgramDepth;
-	
+
 	// The grow and full instances for doing their share of the work.
-	private GrowInitialiser grow;
-	private FullInitialiser full;
-	
+	private final GrowInitialiser grow;
+	private final FullInitialiser full;
+
 	/**
 	 * Construct a RampedHalfAndHalfInitialiser.
 	 * 
 	 * @param model The model being assessed
 	 */
-	public RampedHalfAndHalfInitialiser(GEModel model) {
+	public RampedHalfAndHalfInitialiser(final GEModel model) {
 		this.model = model;
-		
+
 		// set up the grow and full parts
 		grow = new GrowInitialiser(model);
 		full = new FullInitialiser(model);
-		
+
 		// Configure parameters from the model.
 		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+
 			@Override
 			public void onConfigure() {
 				configure();
 			}
 		});
 	}
-	
+
 	/*
 	 * Configure component with parameters from the model.
 	 */
@@ -82,44 +82,52 @@ public class RampedHalfAndHalfInitialiser implements GEInitialiser {
 		popSize = model.getPopulationSize();
 		maxInitialProgramDepth = model.getMaxInitialDepth();
 	}
-	
+
 	/**
-	 * Will use grow initialisation on half the population and full on the other half. If 
-	 * the population size is an odd number then the extra individual will be initialised with
+	 * Will use grow initialisation on half the population and full on the other
+	 * half. If
+	 * the population size is an odd number then the extra individual will be
+	 * initialised with
 	 * grow.
 	 */
+	@Override
 	public List<CandidateProgram> getInitialPopulation() {
 		// Create population list to populate.
-		List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
-		
+		final List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(
+				popSize);
+
 		// Our start depth can only be as small as the grammars minimum depth.
-		int startDepth = grammar.getMinimumDepth();
-		
+		final int startDepth = grammar.getMinimumDepth();
+
 		if (maxInitialProgramDepth < 2) {
-			throw new IllegalArgumentException("Initial maximum depth must be greater than 1 for RH+H.");
+			throw new IllegalArgumentException(
+					"Initial maximum depth must be greater than 1 for RH+H.");
 		}
-		
-		// Number of programs each depth SHOULD have. But won't unless remainder is 0.
-		double programsPerDepth = (double) popSize / (maxInitialProgramDepth - startDepth + 1);
-		
-		for (int i=0; i<popSize; i++) {
+
+		// Number of programs each depth SHOULD have. But won't unless remainder
+		// is 0.
+		final double programsPerDepth = (double) popSize
+				/ (maxInitialProgramDepth - startDepth + 1);
+
+		for (int i = 0; i < popSize; i++) {
 			// Calculate depth
-			int depth = (int) Math.floor((firstGen.size() / programsPerDepth) + startDepth);
-			
+			final int depth = (int) Math
+					.floor((firstGen.size() / programsPerDepth) + startDepth);
+
 			// Grow on even numbers, full on odd.
 			GECandidateProgram program;
-			
+
 			do {
 				if ((i % 2) == 0) {
 					program = grow.getInitialProgram(depth);
 				} else {
 					program = full.getInitialProgram(depth);
 				}
-			} while(firstGen.contains(program));
-			
-            firstGen.add(program);
+			} while (firstGen.contains(program));
+
+			firstGen.add(program);
 		}
-		
+
 		return firstGen;
 	}
 }

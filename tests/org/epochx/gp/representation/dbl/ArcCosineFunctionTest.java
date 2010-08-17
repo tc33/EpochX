@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -32,49 +32,52 @@ public class ArcCosineFunctionTest extends AbstractDoubleNodeTestCase {
 	public Node getNode() {
 		return new ArcCosineFunction();
 	}
-	
+
 	public void testEvaluatePositive() {
-		ArcCosineFunction node = (ArcCosineFunction) getNode();
+		final ArcCosineFunction node = (ArcCosineFunction) getNode();
 		node.setChild(0, new DoubleLiteral(Math.cos(0.6)));
-		double result = node.evaluate();
-		
-		assertEquals("ACOS of 0.6 is not equal to the inverse of cos", 0.6, result);
+		final double result = node.evaluate();
+
+		assertEquals("ACOS of 0.6 is not equal to the inverse of cos", 0.6,
+				result);
 	}
-	
+
 	public void testEvaluateNegative() {
-		ArcCosineFunction node = (ArcCosineFunction) getNode();
+		final ArcCosineFunction node = (ArcCosineFunction) getNode();
 		node.setChild(0, new DoubleLiteral(Math.cos(-0.6)));
-		double result = node.evaluate();
-		
-		assertEquals("ACOS of -0.6 is not equal to the inverse of cos", 0.6, result);
+		final double result = node.evaluate();
+
+		assertEquals("ACOS of -0.6 is not equal to the inverse of cos", 0.6,
+				result);
 	}
-	
+
 	public void testEvaluateOne() {
-		ArcCosineFunction node = (ArcCosineFunction) getNode();
+		final ArcCosineFunction node = (ArcCosineFunction) getNode();
 		node.setChild(0, new DoubleLiteral(1.0));
-		double result = node.evaluate();
-		
-		assertEquals("ACOS of 0.0 and not equal to the inverse of cos", 0.0, result);
+		final double result = node.evaluate();
+
+		assertEquals("ACOS of 0.0 and not equal to the inverse of cos", 0.0,
+				result);
 	}
-	
+
 	public void testEvaluatePositiveNaN() {
-		ArcCosineFunction node = (ArcCosineFunction) getNode();
+		final ArcCosineFunction node = (ArcCosineFunction) getNode();
 		node.setChild(0, new DoubleLiteral(2.0));
-		double result = node.evaluate();
-		
+		final double result = node.evaluate();
+
 		assertEquals("ACOS of 2.0 not returning NaN", Double.NaN, result);
 	}
-	
+
 	public void testEvaluateNegativeNaN() {
-		ArcCosineFunction node = (ArcCosineFunction) getNode();
+		final ArcCosineFunction node = (ArcCosineFunction) getNode();
 		node.setChild(0, new DoubleLiteral(-2.0));
-		double result = node.evaluate();
-		
+		final double result = node.evaluate();
+
 		assertEquals("ACOS of 0.0 not returning NaN", Double.NaN, result);
 	}
-	
-	public static void main(String[] args) {
+
+	public static void main(final String[] args) {
 		System.out.println(Math.acos(Math.cos(0.6)));
-		System.out.println(Math.acos(Math.cos(-0.6)));	
+		System.out.println(Math.acos(Math.cos(-0.6)));
 	}
 }

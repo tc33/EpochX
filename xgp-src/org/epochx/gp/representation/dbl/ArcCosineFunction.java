@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,40 +24,43 @@ package org.epochx.gp.representation.dbl;
 import org.epochx.gp.representation.DoubleNode;
 
 /**
- * A <code>FunctionNode</code> which performs the inverse trigonometric function of 
+ * A <code>FunctionNode</code> which performs the inverse trigonometric function
+ * of
  * arccosine.
  */
 public class ArcCosineFunction extends DoubleNode {
-	
+
 	/**
 	 * Construct an ArcCosineFunction with no children.
 	 */
 	public ArcCosineFunction() {
 		this(null);
 	}
-	
+
 	/**
 	 * Construct an ArcCosineFunction with one child. When evaluated, the child
 	 * will be evaluated with arccosine performed on the result.
+	 * 
 	 * @param child The child which arccosine will be performed on.
 	 */
-	public ArcCosineFunction(DoubleNode child) {
+	public ArcCosineFunction(final DoubleNode child) {
 		super(child);
 	}
 
 	/**
-	 * Evaluating an <code>ArcCosineFunction</code> involves calculating the 
+	 * Evaluating an <code>ArcCosineFunction</code> involves calculating the
 	 * arccosine of the child once it's been evaluated.
 	 */
 	@Override
 	public Double evaluate() {
-		double c = ((Double) getChild(0).evaluate()).doubleValue();
-		
+		final double c = ((Double) getChild(0).evaluate()).doubleValue();
+
 		return Math.acos(c);
 	}
-	
+
 	/**
 	 * Get the unique name that identifies this function.
+	 * 
 	 * @return the unique name for the ArcCosineFunction which is ACOS.
 	 */
 	@Override

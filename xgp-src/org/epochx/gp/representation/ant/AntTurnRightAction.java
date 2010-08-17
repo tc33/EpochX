@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -25,22 +25,23 @@ import org.epochx.gp.representation.VoidNode;
 import org.epochx.tools.ant.Ant;
 
 /**
- * This class defines an action which when executed will trigger the ant 
+ * This class defines an action which when executed will trigger the ant
  * to turn right from its current orientation in its ant landscape.
  */
 public class AntTurnRightAction extends VoidNode {
 
-	private Ant ant;
-	
+	private final Ant ant;
+
 	/**
-	 * Constructs an AntTurnRightAction, supplying an ant that the action can be 
+	 * Constructs an AntTurnRightAction, supplying an ant that the action can be
 	 * performed on.
+	 * 
 	 * @param ant the Ant that will be turned right upon execution.
 	 */
-	public AntTurnRightAction(Ant ant) {
+	public AntTurnRightAction(final Ant ant) {
 		this.ant = ant;
 	}
-	
+
 	@Override
 	public String getIdentifier() {
 		return "TURN-RIGHT";
@@ -49,7 +50,7 @@ public class AntTurnRightAction extends VoidNode {
 	@Override
 	public Void evaluate() {
 		ant.turnRight();
-		
+
 		return null;
 	}
 }

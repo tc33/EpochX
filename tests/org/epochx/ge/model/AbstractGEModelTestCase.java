@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -29,17 +29,17 @@ import org.epochx.ge.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.ge.op.mutation.PointMutation;
 
 /**
- * Some of these test check that the default values are correct. It is possible 
- * that the default should not be hardcoded here but it means that changing the 
- * defaults cannot be taken lightly since it also requires updating the tests. 
- * It also has the side-effect that it checks that none of the built in models 
+ * Some of these test check that the default values are correct. It is possible
+ * that the default should not be hardcoded here but it means that changing the
+ * defaults cannot be taken lightly since it also requires updating the tests.
+ * It also has the side-effect that it checks that none of the built in models
  * change the defaults.
  */
 public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 
 	@Override
 	public abstract GEModel getModel();
-	
+
 	/**
 	 * Tests that trying to set a null grammar throws an exception.
 	 */
@@ -47,9 +47,10 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 		try {
 			getModel().setGrammar(null);
 			fail("illegal argument exception not thrown for null grammar");
-		} catch (IllegalArgumentException e) {}
+		} catch (final IllegalArgumentException e) {
+		}
 	}
-	
+
 	/**
 	 * Tests that trying to set a null mapper throws an exception.
 	 */
@@ -57,9 +58,10 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 		try {
 			getModel().setMapper(null);
 			fail("illegal argument exception not thrown for null mapper");
-		} catch (IllegalArgumentException e) {}
+		} catch (final IllegalArgumentException e) {
+		}
 	}
-	
+
 	/**
 	 * Tests that trying to set a null mapper throws an exception.
 	 */
@@ -67,9 +69,10 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 		try {
 			getModel().setCodonGenerator(null);
 			fail("illegal argument exception not thrown for null codon generator");
-		} catch (IllegalArgumentException e) {}
+		} catch (final IllegalArgumentException e) {
+		}
 	}
-	
+
 	/**
 	 * Tests that trying to set a negative max codon size throws an exception.
 	 */
@@ -77,31 +80,34 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 		try {
 			getModel().setMaxCodonSize(-1);
 			fail("illegal argument exception not thrown for a negative max codon size");
-		} catch (IllegalArgumentException e) {}
+		} catch (final IllegalArgumentException e) {
+		}
 	}
-	
+
 	/**
 	 * Tests that setting a max codon size of zero is allowed.
 	 */
 	public void testSetMaxCodonSizeZero() {
 		try {
 			getModel().setMaxCodonSize(0);
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			fail("illegal argument exception thrown for max codon size of zero");
 		}
 	}
-	
+
 	/**
-	 * Tests that trying to set a negative max chromosome length throws an exception.
+	 * Tests that trying to set a negative max chromosome length throws an
+	 * exception.
 	 */
 	public void testSetMaxChromosomeLengthNegative() {
 		// A chromosome length of -1 is allowed because it designates no limit.
 		try {
 			getModel().setMaxChromosomeLength(-2);
 			fail("illegal argument exception not thrown for a negative max chromosome length");
-		} catch (IllegalArgumentException e) {}
+		} catch (final IllegalArgumentException e) {
+		}
 	}
-	
+
 	/**
 	 * Tests that trying to set a initial max depth of zero throws an exception.
 	 */
@@ -109,31 +115,33 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 		try {
 			getModel().setMaxInitialDepth(0);
 			fail("illegal argument exception not thrown for initial max depth of zero");
-		} catch (IllegalArgumentException e) {}
+		} catch (final IllegalArgumentException e) {
+		}
 	}
-	
+
 	/**
 	 * Tests that setting an initial max depth of zero is allowed.
 	 */
 	public void testSetInitialMaxDepthPositive() {
 		try {
 			getModel().setMaxInitialDepth(1);
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			fail("illegal argument exception thrown for initial max depth of 1");
 		}
 	}
-	
+
 	/**
-	 * Tests that trying to set an initial max depth of minus one does not throw an exception.
+	 * Tests that trying to set an initial max depth of minus one does not throw
+	 * an exception.
 	 */
 	public void testSetInitialMaxDepthMinusOne() {
 		try {
 			getModel().setMaxInitialDepth(-1);
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			fail("illegal argument exception thrown for initial max depth of -1");
 		}
 	}
-	
+
 	/**
 	 * Tests that trying to set a zero max depth throws an exception.
 	 */
@@ -141,118 +149,134 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 		try {
 			getModel().setMaxDepth(0);
 			fail("illegal argument exception not thrown for max depth of zero");
-		} catch (IllegalArgumentException e) {}
+		} catch (final IllegalArgumentException e) {
+		}
 	}
-	
+
 	/**
 	 * Tests that setting a max depth of zero is allowed.
 	 */
 	public void testSetMaxDepthPositive() {
 		try {
 			getModel().setMaxDepth(1);
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			fail("illegal argument exception thrown for max depth of 1");
 		}
 	}
-	
+
 	/**
-	 * Tests that trying to set an max depth of minus one does not throw an exception.
+	 * Tests that trying to set an max depth of minus one does not throw an
+	 * exception.
 	 */
 	public void testSetMaxDepthMinusOne() {
 		try {
 			getModel().setMaxDepth(-1);
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			fail("illegal argument exception thrown for initial max depth of -1");
 		}
 	}
 
 	/**
-	 * Tests that the default cache source property is set correctly. 
+	 * Tests that the default cache source property is set correctly.
 	 */
 	public void testCacheSourceDefault() {
-		GEModel model = getModel();
-		
+		final GEModel model = getModel();
+
 		assertTrue("model not caching source by default", model.cacheSource());
 	}
-	
+
 	/**
-	 * Tests that the default max initial depth property is set correctly. 
+	 * Tests that the default max initial depth property is set correctly.
 	 */
 	public void testMaxInitialDepthDefault() {
-		GEModel model = getModel();
-		
-		assertEquals("model's default max initial depth is not 8", 8, model.getMaxInitialDepth());
+		final GEModel model = getModel();
+
+		assertEquals("model's default max initial depth is not 8", 8,
+				model.getMaxInitialDepth());
 	}
-	
+
 	/**
-	 * Tests that the default max depth property is set correctly. 
+	 * Tests that the default max depth property is set correctly.
 	 */
 	public void testMaxDepthDefault() {
-		GEModel model = getModel();
-		
-		assertEquals("model's default max depth is not 14", 14, model.getMaxDepth());
+		final GEModel model = getModel();
+
+		assertEquals("model's default max depth is not 14", 14,
+				model.getMaxDepth());
 	}
-	
+
 	/**
-	 * Tests that the default max chromosome length property is set correctly. 
+	 * Tests that the default max chromosome length property is set correctly.
 	 */
 	public void testMaxChromosomeLengthDefault() {
-		GEModel model = getModel();
-		
-		assertEquals("model's default max chromosome length is not -1", -1, model.getMaxChromosomeLength());
+		final GEModel model = getModel();
+
+		assertEquals("model's default max chromosome length is not -1", -1,
+				model.getMaxChromosomeLength());
 	}
-	
+
 	/**
-	 * Tests that the default max codon size property is set correctly. 
+	 * Tests that the default max codon size property is set correctly.
 	 */
 	public void testMaxCodonSizeDefault() {
-		GEModel model = getModel();
-		
-		assertEquals("model's default max codon size is not Integer.MAX_VALUE", Integer.MAX_VALUE, model.getMaxCodonSize());
+		final GEModel model = getModel();
+
+		assertEquals("model's default max codon size is not Integer.MAX_VALUE",
+				Integer.MAX_VALUE, model.getMaxCodonSize());
 	}
-	
+
 	/**
-	 * Tests that the default initialiser operator is set correctly. 
+	 * Tests that the default initialiser operator is set correctly.
 	 */
 	public void testInitialiserDefault() {
-		Model model = getModel();
-		
-		assertTrue("model's default initialiser is not an instance of ramped half-and-half", (model.getInitialiser() instanceof RampedHalfAndHalfInitialiser));
+		final Model model = getModel();
+
+		assertTrue(
+				"model's default initialiser is not an instance of ramped half-and-half",
+				(model.getInitialiser() instanceof RampedHalfAndHalfInitialiser));
 	}
-	
+
 	/**
-	 * Tests that the default crossover operator is set correctly. 
+	 * Tests that the default crossover operator is set correctly.
 	 */
 	public void testCrossoverDefault() {
-		Model model = getModel();
-		
-		assertTrue("model's default crossover is not an instance of one point crossover", (model.getCrossover() instanceof OnePointCrossover));
+		final Model model = getModel();
+
+		assertTrue(
+				"model's default crossover is not an instance of one point crossover",
+				(model.getCrossover() instanceof OnePointCrossover));
 	}
-	
+
 	/**
-	 * Tests that the default mutation operator is set correctly. 
+	 * Tests that the default mutation operator is set correctly.
 	 */
 	public void testMutationDefault() {
-		Model model = getModel();
-		
-		assertTrue("model's default mutation is not an instance of point mutation", (model.getMutation() instanceof PointMutation));
+		final Model model = getModel();
+
+		assertTrue(
+				"model's default mutation is not an instance of point mutation",
+				(model.getMutation() instanceof PointMutation));
 	}
-	
+
 	/**
-	 * Tests that the default crossover operator is set correctly. 
+	 * Tests that the default crossover operator is set correctly.
 	 */
 	public void testMapperDefault() {
-		GEModel model = getModel();
-		
-		assertTrue("model's default mapper is not an instance of depth first mapper", (model.getMapper() instanceof DepthFirstMapper));
+		final GEModel model = getModel();
+
+		assertTrue(
+				"model's default mapper is not an instance of depth first mapper",
+				(model.getMapper() instanceof DepthFirstMapper));
 	}
-	
+
 	/**
-	 * Tests that the default mutation operator is set correctly. 
+	 * Tests that the default mutation operator is set correctly.
 	 */
 	public void testCodonGeneratorDefault() {
-		GEModel model = getModel();
-		
-		assertTrue("model's default codon generator is not an instance of standard generator", (model.getCodonGenerator() instanceof StandardGenerator));
+		final GEModel model = getModel();
+
+		assertTrue(
+				"model's default codon generator is not an instance of standard generator",
+				(model.getCodonGenerator() instanceof StandardGenerator));
 	}
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -27,7 +27,7 @@ package org.epochx.tools.eval;
  * appropriate syntax rules.
  */
 public class MalformedProgramException extends Exception {
-	
+
 	private static final long serialVersionUID = -5736308741313493577L;
 
 	/**
@@ -36,15 +36,15 @@ public class MalformedProgramException extends Exception {
 	public MalformedProgramException() {
 		super();
 	}
-	
+
 	/**
 	 * Constructs an exception with the given message.
 	 * 
-	 * @param message a message describing the unexpected behaviour that 
-	 * occurred.
+	 * @param message a message describing the unexpected behaviour that
+	 *        occurred.
 	 */
-	public MalformedProgramException(String message) {
+	public MalformedProgramException(final String message) {
 		super(message);
 	}
-	
+
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,8 +24,8 @@ package org.epochx.gp.representation.bool;
 import org.epochx.gp.representation.BooleanNode;
 
 /**
- * A <code>FunctionNode</code> which performs the logical operation of NAND 
- * that is equivalent to the negation of the conjunction or NOT AND. 
+ * A <code>FunctionNode</code> which performs the logical operation of NAND
+ * that is equivalent to the negation of the conjunction or NOT AND.
  */
 public class NandFunction extends BooleanNode {
 
@@ -35,34 +35,36 @@ public class NandFunction extends BooleanNode {
 	public NandFunction() {
 		this(null, null);
 	}
-	
+
 	/**
-	 * Construct a NandFunction with two children. When evaluated, if both 
-	 * children evaluate to true then the result will be false. All other 
+	 * Construct a NandFunction with two children. When evaluated, if both
+	 * children evaluate to true then the result will be false. All other
 	 * combinations will return a result of true.
+	 * 
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
 	 */
-	public NandFunction(BooleanNode child1, BooleanNode child2) {
+	public NandFunction(final BooleanNode child1, final BooleanNode child2) {
 		super(child1, child2);
 	}
-	
+
 	/**
-	 * Evaluating a <code>NandFunction</code> involves combining the evaluation 
-	 * of the children according to the rules of NAND where if both children 
-	 * evaluate to true then the result will be false. All other combinations 
+	 * Evaluating a <code>NandFunction</code> involves combining the evaluation
+	 * of the children according to the rules of NAND where if both children
+	 * evaluate to true then the result will be false. All other combinations
 	 * will return a result of true.
 	 */
 	@Override
 	public Boolean evaluate() {
-		boolean c1 = ((Boolean) getChild(0).evaluate()).booleanValue();
-		boolean c2 = ((Boolean) getChild(1).evaluate()).booleanValue();
-		
+		final boolean c1 = ((Boolean) getChild(0).evaluate()).booleanValue();
+		final boolean c2 = ((Boolean) getChild(1).evaluate()).booleanValue();
+
 		return !(c1 && c2);
 	}
-	
+
 	/**
 	 * Get the unique name that identifies this function.
+	 * 
 	 * @return the unique name for the NandFunction which is NAND.
 	 */
 	@Override

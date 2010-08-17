@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -32,7 +32,7 @@ import org.epochx.tools.random.*;
  * tested with invalid data.
  */
 public class ModelDummy extends Model {
-	
+
 	// Operators.
 	private PoolSelector poolSelector;
 	private ProgramSelector programSelector;
@@ -40,10 +40,10 @@ public class ModelDummy extends Model {
 	private Initialiser initialiser;
 	private Crossover crossover;
 	private Mutation mutation;
-	
+
 	// Control parameters.
 	private RandomNumberGenerator randomNumberGenerator;
-	
+
 	private int noRuns;
 	private int noGenerations;
 	private int populationSize;
@@ -54,14 +54,14 @@ public class ModelDummy extends Model {
 	private double crossoverProbability;
 	private double mutationProbability;
 	private double reproductionProbability;
-	
+
 	// Caching.
 	private boolean cacheFitness;
-	
+
 	/**
 	 * Construct the model with defaults.
 	 */
-	public ModelDummy() {		
+	public ModelDummy() {
 		// Control parameters.
 		noRuns = 1;
 		noGenerations = 1;
@@ -72,21 +72,21 @@ public class ModelDummy extends Model {
 		crossoverProbability = 0.9;
 		mutationProbability = 0.1;
 		reproductionProbability = 0.0;
-		
+
 		// Operators.
 		programSelector = new TournamentSelector(this, 7);
 		poolSelector = null;
 		randomNumberGenerator = new MersenneTwisterFast();
-		
+
 		// Caching.
 		cacheFitness = true;
 	}
 
 	@Override
-	public double getFitness(CandidateProgram program) {
+	public double getFitness(final CandidateProgram program) {
 		return 0;
 	}
-	
+
 	@Override
 	public Initialiser getInitialiser() {
 		return initialiser;
@@ -101,7 +101,7 @@ public class ModelDummy extends Model {
 	public Crossover getCrossover() {
 		return crossover;
 	}
-	
+
 	@Override
 	public void setCrossover(final Crossover crossover) {
 		this.crossover = crossover;
@@ -136,7 +136,7 @@ public class ModelDummy extends Model {
 	public void setNoRuns(final int noRuns) {
 		this.noRuns = noRuns;
 	}
-	
+
 	@Override
 	public int getNoGenerations() {
 		return noGenerations;
@@ -191,7 +191,7 @@ public class ModelDummy extends Model {
 	public double getMutationProbability() {
 		return mutationProbability;
 	}
-	
+
 	@Override
 	public void setMutationProbability(final double mutationProbability) {
 		this.mutationProbability = mutationProbability;
@@ -201,22 +201,22 @@ public class ModelDummy extends Model {
 	public double getReproductionProbability() {
 		return reproductionProbability;
 	}
-	
+
 	@Override
 	public void setReproductionProbability(final double reproductionProbability) {
 		this.reproductionProbability = reproductionProbability;
 	}
-	
+
 	@Override
 	public double getTerminationFitness() {
 		return terminationFitness;
 	}
-	
+
 	@Override
 	public void setTerminationFitness(final double terminationFitness) {
 		this.terminationFitness = terminationFitness;
 	}
-	
+
 	@Override
 	public ProgramSelector getProgramSelector() {
 		return programSelector;
@@ -236,15 +236,15 @@ public class ModelDummy extends Model {
 	public void setPoolSelector(final PoolSelector poolSelector) {
 		this.poolSelector = poolSelector;
 	}
-	
+
 	@Override
 	public RandomNumberGenerator getRNG() {
 		return randomNumberGenerator;
 	}
-	
+
 	@Override
 	public void setRNG(final RandomNumberGenerator rng) {
-		this.randomNumberGenerator = rng;
+		randomNumberGenerator = rng;
 	}
 
 }

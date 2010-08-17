@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,21 +24,27 @@ package org.epochx.life;
 import org.epochx.representation.CandidateProgram;
 
 /**
- * Provides an <code>abstract</code> implementation of 
- * <code>ReproductionListener</code>. 
+ * Provides an <code>abstract</code> implementation of
+ * <code>ReproductionListener</code>.
  * 
- * <p>Typical use of this class would be in an anonymous class. For example:
+ * <p>
+ * Typical use of this class would be in an anonymous class. For example:
  * 
- * <blockquote><pre>
+ * <blockquote>
+ * 
+ * <pre>
  *     model.getLifeCycleListener().addReproductionListener(new ReproductionAdapter(){
  *     		public void onReproductionStart() {
  *     			... do something ...
  *     		}
  *     });
- * </pre></blockquote>
+ * </pre>
  * 
- * <p>Creating an anonymous implementation of this class is often preferable to 
- * implementing <code>ReproductionListener</code> since it avoids the need to 
+ * </blockquote>
+ * 
+ * <p>
+ * Creating an anonymous implementation of this class is often preferable to
+ * implementing <code>ReproductionListener</code> since it avoids the need to
  * implement methods which may be of no interest.
  */
 public abstract class ReproductionAdapter implements ReproductionListener {
@@ -47,13 +53,14 @@ public abstract class ReproductionAdapter implements ReproductionListener {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void onReproductionStart() {}
-	
+	public void onReproductionStart() {
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public CandidateProgram onReproduction(CandidateProgram program) {
+	public CandidateProgram onReproduction(final CandidateProgram program) {
 		return program;
 	}
 
@@ -61,6 +68,7 @@ public abstract class ReproductionAdapter implements ReproductionListener {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void onReproductionEnd() {}
+	public void onReproductionEnd() {
+	}
 
 }

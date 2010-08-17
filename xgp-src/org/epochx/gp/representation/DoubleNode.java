@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -23,11 +23,11 @@ package org.epochx.gp.representation;
 
 public abstract class DoubleNode extends Node {
 
-	public DoubleNode(Node ... children) {
+	public DoubleNode(final Node ... children) {
 		super(children);
 	}
-	
+
 	@Override
 	public abstract Double evaluate();
-	
+
 }

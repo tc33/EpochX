@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -25,43 +25,43 @@ import org.epochx.core.ReproductionManager;
 import org.epochx.representation.CandidateProgram;
 
 /**
- * Provides the interface to be implemented by objects that wish to handle 
- * reproduction events. See the {@link ReproductionManager}'s class 
- * documentation for details of when each reproduction event will be fired. To 
- * listen for reproduction events during execution of a model, instances of 
- * <code>ReproductionListener</code> must be added to the model's 
- * <code>LifeCycleManager</code> which is retrievable through a call to the 
+ * Provides the interface to be implemented by objects that wish to handle
+ * reproduction events. See the {@link ReproductionManager}'s class
+ * documentation for details of when each reproduction event will be fired. To
+ * listen for reproduction events during execution of a model, instances of
+ * <code>ReproductionListener</code> must be added to the model's
+ * <code>LifeCycleManager</code> which is retrievable through a call to the
  * model's <code>getLifeCycleManager()</code> method.
  * 
  * <p>
  * It is typical to listen to events using an anonymous class which often makes
- * the <code>abstract</code> <code>ReproductionAdapter</code> class more 
+ * the <code>abstract</code> <code>ReproductionAdapter</code> class more
  * convenient to implement.
  * 
  * @see ReproductionAdapter
  * @see ReproductionManager
  */
 public interface ReproductionListener {
-	
+
 	/**
 	 * Event fired before the reproduction operation starts.
 	 */
 	void onReproductionStart();
-	
+
 	/**
-	 * Event fired after the selection of a program to be reproduced. 
-	 * The selected program may be modified and returned. This event is 
-	 * revertable by returning <code>null</code> which will trigger the 
-	 * discarding of the program and the reselection of a new one. This event 
-	 * will then be raised again. If the reproduction should be accepted then 
+	 * Event fired after the selection of a program to be reproduced.
+	 * The selected program may be modified and returned. This event is
+	 * revertable by returning <code>null</code> which will trigger the
+	 * discarding of the program and the reselection of a new one. This event
+	 * will then be raised again. If the reproduction should be accepted then
 	 * the program should be returned as it is, or it may be modified.
 	 * 
 	 * @param program the program that was selected to be reproduced.
 	 * @return a CandidateProgram that should be used as the reproduced program
-	 * and inserted into the next population.
+	 *         and inserted into the next population.
 	 */
 	CandidateProgram onReproduction(CandidateProgram program);
-	
+
 	/**
 	 * Event fired after the reproduction operation has ended and been accepted.
 	 */

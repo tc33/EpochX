@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -21,17 +21,16 @@
  */
 package org.epochx.life;
 
-
 /**
  * Provides the interface to be implemented by objects that wish to listen for
- * configure events. Configure events are specifically for triggering the 
- * configuration of components with parameters from the model, and are called 
- * at the start of execution, prior to the start of each run and before the 
+ * configure events. Configure events are specifically for triggering the
+ * configuration of components with parameters from the model, and are called
+ * at the start of execution, prior to the start of each run and before the
  * start of each generation. The event may also be fired manually with a call to
  * the <code>LifeCycleManager</code>'s <code>fireConfigureEvent()</code> method.
- * To listen for configure events during execution of a model, instances of 
- * <code>ConfigListener</code> must be added to the model's 
- * <code>LifeCycleManager</code> which is retrievable through a call to the 
+ * To listen for configure events during execution of a model, instances of
+ * <code>ConfigListener</code> must be added to the model's
+ * <code>LifeCycleManager</code> which is retrievable through a call to the
  * model's <code>getLifeCycleManager()</code> method.
  * 
  * <p>
@@ -45,11 +44,11 @@ public interface ConfigListener {
 
 	/**
 	 * This event is automatically fired at the recommended times for loading
-	 * model parameters - that is at the start of model execution, prior to run 
-	 * start and before generation start. It may also be triggered manually, 
-	 * potentially by the model if it updates its parameters at an unorthadox 
+	 * model parameters - that is at the start of model execution, prior to run
+	 * start and before generation start. It may also be triggered manually,
+	 * potentially by the model if it updates its parameters at an unorthadox
 	 * time in the life cycle.
 	 */
 	void onConfigure();
-	
+
 }

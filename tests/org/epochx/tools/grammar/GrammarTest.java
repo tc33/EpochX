@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -21,8 +21,9 @@
  */
 package org.epochx.tools.grammar;
 
-import org.apache.commons.lang.ArrayUtils;
 import junit.framework.TestCase;
+
+import org.apache.commons.lang.ArrayUtils;
 
 public class GrammarTest extends TestCase {
 
@@ -34,62 +35,63 @@ public class GrammarTest extends TestCase {
 		try {
 			new Grammar("");
 			fail("Malformed grammar exception not thrown for a grammar with no rules");
-		} catch (final MalformedGrammarException e) {}
+		} catch (final MalformedGrammarException e) {
+		}
 	}
-	
+
 	/**
-	 * Tests that a malformed grammar exception is thrown for a grammar with a 
+	 * Tests that a malformed grammar exception is thrown for a grammar with a
 	 * rule that is referred to but is missing.
 	 */
 	public void testMissingRule() {
 		try {
 			new Grammar("<rule> ::= abc | <missing>");
 			fail("Malformed grammar exception not thrown for a grammar a missing rule");
-		} catch (final MalformedGrammarException e) {}
+		} catch (final MalformedGrammarException e) {
+		}
 	}
-	
-	
+
 	/**
-	 * Tests that a malformed grammar exception is thrown for a grammar 
+	 * Tests that a malformed grammar exception is thrown for a grammar
 	 * including infinitely recursive rules.
 	 */
 	public void testInfiniteRecursion() {
-		String grammarStr = "<rule1> ::= <rule1> | <rule2> <rule3>\n" +
-							"<rule2> ::= abc | dcd\n" +
-							"<rule3> ::= <rule2> <rule1> | dvd <rule3>\n";
-		
+		final String grammarStr = "<rule1> ::= <rule1> | <rule2> <rule3>\n"
+				+ "<rule2> ::= abc | dcd\n"
+				+ "<rule3> ::= <rule2> <rule1> | dvd <rule3>\n";
+
 		try {
 			new Grammar(grammarStr);
 			fail("Malformed grammar exception not thrown for an infinitely recursive grammar");
-		} catch (final MalformedGrammarException e) {}
+		} catch (final MalformedGrammarException e) {
+		}
 	}
-	
+
 	/**
-	 * Tests that a malformed grammar exception is not thrown for a grammar 
+	 * Tests that a malformed grammar exception is not thrown for a grammar
 	 * which is heavily recursive but not infinitely so.
 	 */
 	public void testNonInfiniteRecursion() {
-		String grammarStr = "<rule1> ::= <rule1> | <rule2> <rule3>\n" +
-							"<rule2> ::= abc | dcd\n" +
-							"<rule3> ::= <rule2> <rule1> | dvd\n";
-		
+		final String grammarStr = "<rule1> ::= <rule1> | <rule2> <rule3>\n"
+				+ "<rule2> ::= abc | dcd\n"
+				+ "<rule3> ::= <rule2> <rule1> | dvd\n";
+
 		try {
 			new Grammar(grammarStr);
 		} catch (final MalformedGrammarException e) {
 			fail("Malformed grammar exception thrown for recursive grammar");
 		}
 	}
-	
+
 	/**
 	 * Tests that rules get set recursive correctly.
 	 */
 	public void testSetRecursive() {
-		String grammarStr = "<rule1> ::= <rule2> | <rule3>\n" +
-							"<rule2> ::= <rule1> <rule3>\n" +
-							"<rule3> ::= abc | def\n";
-		
+		final String grammarStr = "<rule1> ::= <rule2> | <rule3>\n"
+				+ "<rule2> ::= <rule1> <rule3>\n" + "<rule3> ::= abc | def\n";
+
 		try {
-			Grammar g = new Grammar(grammarStr);
+			final Grammar g = new Grammar(grammarStr);
 			if (!g.getGrammarRule("rule1").isRecursive()) {
 				fail("Recursive flag not set for recursive rule");
 			}
@@ -99,75 +101,79 @@ public class GrammarTest extends TestCase {
 			if (g.getGrammarRule("rule3").isRecursive()) {
 				fail("Recursive flag set for non-recursive rule");
 			}
-		} catch (MalformedGrammarException ex) {
+		} catch (final MalformedGrammarException ex) {
 			fail("Malformed grammar exception thrown for a valid grammar");
 		}
 	}
-	
+
 	/**
 	 * Tests that attributes get set correctly on productions.
 	 */
 	public void testAttributesSet() {
-		String grammarStr = "<rule1> ::= afg | <rule2> <?k1=v1;k2=3?>\n" +
-							"<rule2> ::= abc | def\n";
-		
+		final String grammarStr = "<rule1> ::= afg | <rule2> <?k1=v1;k2=3?>\n"
+				+ "<rule2> ::= abc | def\n";
+
 		try {
-			Grammar g = new Grammar(grammarStr);
-			GrammarRule rule1 = g.getGrammarRule("rule1");
-			GrammarProduction p = rule1.getProduction(1);
+			final Grammar g = new Grammar(grammarStr);
+			final GrammarRule rule1 = g.getGrammarRule("rule1");
+			final GrammarProduction p = rule1.getProduction(1);
 			if (!"v1".equals(p.getAttribute("k1"))) {
 				fail("Production attribute key/values not set");
 			}
 			if (!"3".equals(p.getAttribute("k2"))) {
 				fail("Production attribute key/values not set");
 			}
-		} catch (MalformedGrammarException ex) {
+		} catch (final MalformedGrammarException ex) {
 			fail("Malformed grammar exception thrown for a valid grammar");
 		}
 	}
-	
+
 	/**
 	 * Tests that grammar literals are correctly listed by getGrammarLiterals
 	 * method.
 	 */
 	public void testGrammarLiterals() {
-		String grammarStr = "<rule1> ::= <rule2> | <rule3>\n" +
-							"<rule2> ::= <rule1> dfa\n" +
-							"<rule3> ::= abc | def\n";
+		final String grammarStr = "<rule1> ::= <rule2> | <rule3>\n"
+				+ "<rule2> ::= <rule1> dfa\n" + "<rule3> ::= abc | def\n";
 
-		String[] terminals = {"dfa", "abc", "def"};
-		
+		final String[] terminals = {"dfa", "abc", "def"};
+
 		try {
-			Grammar g = new Grammar(grammarStr);
-			GrammarLiteral[] literals = g.getGrammarLiterals().toArray(new GrammarLiteral[terminals.length]);
-			for (GrammarLiteral literal: literals) {
-				assertTrue("Grammar literals not correctly set", ArrayUtils.contains(terminals, literal.getValue()));
+			final Grammar g = new Grammar(grammarStr);
+			final GrammarLiteral[] literals = g.getGrammarLiterals().toArray(
+					new GrammarLiteral[terminals.length]);
+			for (final GrammarLiteral literal: literals) {
+				assertTrue("Grammar literals not correctly set",
+						ArrayUtils.contains(terminals, literal.getValue()));
 			}
-			assertSame("Grammar literals not correctly set", terminals.length, literals.length);
-		} catch (MalformedGrammarException ex) {
+			assertSame("Grammar literals not correctly set", terminals.length,
+					literals.length);
+		} catch (final MalformedGrammarException ex) {
 			fail("Malformed grammar exception thrown for a valid grammar");
 		}
 	}
-	
+
 	/**
 	 * Tests that grammar rules are correctly listed by getGrammarRules
 	 * method.
 	 */
 	public void testGrammarRules() {
-		String grammarStr = "<rule1> ::= <rule2> | dfa\n" +
-							"<rule2> ::= <rule1> agd\n" +
-							"<rule3> ::= abc | def\n";
+		final String grammarStr = "<rule1> ::= <rule2> | dfa\n"
+				+ "<rule2> ::= <rule1> agd\n" + "<rule3> ::= abc | def\n";
 
-		String[] ruleNames = {"rule1", "rule2", "rule3"};
-		
+		final String[] ruleNames = {"rule1", "rule2", "rule3"};
+
 		try {
-			Grammar g = new Grammar(grammarStr);
-			GrammarRule[] rules = g.getGrammarRules().toArray(new GrammarRule[ruleNames.length]);
-			for (GrammarRule r: rules) {
-				assertTrue("Grammar rules not correctly set", ArrayUtils.contains(ruleNames, r.getName()));
+			final Grammar g = new Grammar(grammarStr);
+			final GrammarRule[] rules = g.getGrammarRules().toArray(
+					new GrammarRule[ruleNames.length]);
+			for (final GrammarRule r: rules) {
+				assertTrue("Grammar rules not correctly set",
+						ArrayUtils.contains(ruleNames, r.getName()));
 			}
-			assertSame("Grammar rules not correctly set", ruleNames.length, rules.length);
-		} catch (MalformedGrammarException ex) {
+			assertSame("Grammar rules not correctly set", ruleNames.length,
+					rules.length);
+		} catch (final MalformedGrammarException ex) {
 			fail("Malformed grammar exception thrown for a valid grammar");
 		}
 	}

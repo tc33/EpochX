@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -33,59 +33,61 @@ import org.epochx.tools.random.RandomNumberGenerator;
 public class UniformPointCrossover implements GPCrossover {
 
 	// The controlling model.
-	private GPModel model;
-	
+	private final GPModel model;
+
 	// The random number generator for controlling random behaviour.
 	private RandomNumberGenerator rng;
-	
-	public UniformPointCrossover(GPModel model) {
+
+	public UniformPointCrossover(final GPModel model) {
 		this.model = model;
-		
+
 		// Configure parameters from the model.
 		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+
 			@Override
 			public void onConfigure() {
 				configure();
 			}
 		});
 	}
-	
+
 	/*
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
 		rng = model.getRNG();
 	}
-	
+
 	/**
-	 * GPCrossover the two <code>CandidatePrograms</code> provided as arguments 
-	 * using uniform swap points. Random crossover points are chosen at random 
+	 * GPCrossover the two <code>CandidatePrograms</code> provided as arguments
+	 * using uniform swap points. Random crossover points are chosen at random
 	 * in both programs, the genetic material at the points are then exchanged.
 	 * The resulting programs are returned as new GPCandidateProgram objects.
 	 * 
-	 * @param program1 The first GPCandidateProgram selected to undergo uniform  
-	 * 			       point crossover.
-	 * @param program2 The second GPCandidateProgram selected to undergo uniform  
-	 * 				   point crossover.
+	 * @param program1 The first GPCandidateProgram selected to undergo uniform
+	 *        point crossover.
+	 * @param program2 The second GPCandidateProgram selected to undergo uniform
+	 *        point crossover.
 	 */
 	@Override
-	public GPCandidateProgram[] crossover(CandidateProgram p1, CandidateProgram p2) {
-		GPCandidateProgram program1 = (GPCandidateProgram) p1;
-		GPCandidateProgram program2 = (GPCandidateProgram) p2;
-		
+	public GPCandidateProgram[] crossover(final CandidateProgram p1,
+			final CandidateProgram p2) {
+		final GPCandidateProgram program1 = (GPCandidateProgram) p1;
+		final GPCandidateProgram program2 = (GPCandidateProgram) p2;
+
 		// Select swap points.
-		int swapPoint1 = rng.nextInt(program1.getProgramLength());
-		int swapPoint2 = rng.nextInt(program2.getProgramLength());
+		final int swapPoint1 = rng.nextInt(program1.getProgramLength());
+		final int swapPoint2 = rng.nextInt(program2.getProgramLength());
 
 		// Get copies of subtrees to swap.
-		Node subTree1 = program1.getNthNode(swapPoint1);//.clone();
-		Node subTree2 = program2.getNthNode(swapPoint2);//.clone();
-		
+		final Node subTree1 = program1.getNthNode(swapPoint1);// .clone();
+		final Node subTree2 = program2.getNthNode(swapPoint2);// .clone();
+
 		// Perform swap.
 		program1.setNthNode(swapPoint1, subTree2);
-		program2.setNthNode(swapPoint2, subTree1);		
-		
+		program2.setNthNode(swapPoint2, subTree1);
+
 		return new GPCandidateProgram[]{program1, program2};
 	}
-	
+
 }

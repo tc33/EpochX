@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -25,11 +25,10 @@ import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.eval.*;
-import org.epochx.tools.grammar.Grammar;
-import org.epochx.tools.grammar.MalformedGrammarException;
+import org.epochx.tools.grammar.*;
 
 /**
- * The abstract super class for regression problems in XGR in the Groovy 
+ * The abstract super class for regression problems in XGR in the Groovy
  * language.
  * 
  * <p>
@@ -46,86 +45,85 @@ public abstract class Regression extends GRModel {
 	/**
 	 * The grammar that defines valid solution space.
 	 */
-	//TODO This is missing a divide operator.
-	public static final String GRAMMAR_STRING = 
-		"<expr> ::= ( <expr> <op> <expr> ) | <terminal>\n" +
-		"<op>   ::= + | - | * \n" +
-		"<terminal>  ::= X \n";
-	
+	// TODO This is missing a divide operator.
+	public static final String GRAMMAR_STRING = "<expr> ::= ( <expr> <op> <expr> ) | <terminal>\n"
+			+ "<op>   ::= + | - | * \n" + "<terminal>  ::= X \n";
+
 	// The error each point must be within.
 	private static final double POINT_ERROR = 0.01;
-	
+
 	// Groovy interpreter for performing evaluation.
 	private final GroovyInterpreter interpreter;
-	
+
 	// Inputs and associated outputs.
-	private double[] inputs;
-	private double[] outputs;
-	
+	private final double[] inputs;
+	private final double[] outputs;
+
 	/**
-	 * Constructs an instance of the abstract Regression model with 50 input 
+	 * Constructs an instance of the abstract Regression model with 50 input
 	 * points.
 	 */
 	public Regression() {
 		this(50);
 	}
-	
+
 	/**
 	 * Constructs an instance of the abstract Regression model.
 	 */
 	public Regression(final int noPoints) {
 		try {
 			setGrammar(new Grammar(GRAMMAR_STRING));
-		} catch (MalformedGrammarException ex) {
+		} catch (final MalformedGrammarException ex) {
 			// It is our grammar so this shouldn't happen.
 			assert false;
 		}
-		
+
 		interpreter = new GroovyInterpreter();
-		
+
 		// Generate the random inputs and the correct outputs.
 		inputs = new double[noPoints];
 		outputs = new double[inputs.length];
-		for (int i=0; i<inputs.length; i++) {
+		for (int i = 0; i < inputs.length; i++) {
 			inputs[i] = (getRNG().nextDouble() * 2) - 1.0;
 			outputs[i] = getCorrectResult(inputs[i]);
 		}
 	}
 
 	/**
-	 * Calculates the fitness score for the given program. The fitness of a 
-	 * program is the number of inputs the program incorrectly calculates the 
-	 * output for. The output must be within 0.01 of the correct result to be 
-	 * considered correct. All programs are evaluated against the same inputs 
-	 * which are randomly selected between -1.0 and 1.0. The number of inputs 
+	 * Calculates the fitness score for the given program. The fitness of a
+	 * program is the number of inputs the program incorrectly calculates the
+	 * output for. The output must be within 0.01 of the correct result to be
+	 * considered correct. All programs are evaluated against the same inputs
+	 * which are randomly selected between -1.0 and 1.0. The number of inputs
 	 * can be provided as an argument to the constructor or defaults to 50.
 	 * 
 	 * @param p {@inheritDoc}
 	 * @return the calculated fitness for the given program.
-	 */	
+	 */
 	@Override
 	public double getFitness(final CandidateProgram p) {
-		//TODO Should change to use the multi-input eval method.
+		// TODO Should change to use the multi-input eval method.
 		final GRCandidateProgram program = (GRCandidateProgram) p;
-		
+
 		int noWrong = 0;
-		
-		for (int i=0; i<inputs.length; i++) {
+
+		for (int i = 0; i < inputs.length; i++) {
 			Double result = null;
 			try {
-				result = (Double) interpreter.eval(program.getSourceCode(), new String[]{"X"}, new Double[]{inputs[i]});
+				result = (Double) interpreter.eval(program.getSourceCode(),
+						new String[]{"X"}, new Double[]{inputs[i]});
 			} catch (final MalformedProgramException e) {
 				// This should not ever happen unless user changes grammar.
 				assert false;
 			}
-			
+
 			if (result == null) {
 				noWrong++;
 			} else if (Math.abs(result - outputs[i]) > POINT_ERROR) {
 				noWrong++;
 			}
 		}
-		
+
 		// How good is this result?
 		return noWrong;
 	}
@@ -133,6 +131,6 @@ public abstract class Regression extends GRModel {
 	/*
 	 * The actual function we are trying to evolve.
 	 */
-    public abstract double getCorrectResult(final double x);
+	public abstract double getCorrectResult(final double x);
 
 }

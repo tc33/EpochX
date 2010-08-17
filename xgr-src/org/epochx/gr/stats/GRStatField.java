@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,44 +24,45 @@ package org.epochx.gr.stats;
 import org.epochx.stats.StatField;
 
 /**
- * Provides constants to be used as keys to request statistics from the 
+ * Provides constants to be used as keys to request statistics from the
  * StatsManager specific to XGR.
  */
 public final class GRStatField extends StatField {
-	
+
 	/*
 	 * No need to ever create an object of GRStatField.
 	 */
-	private GRStatField() {}
-	
+	private GRStatField() {
+	}
+
 	/**
-	 * Returns an <code>int[]</code> which contains the depths of all the 
-	 * <code>CandidateProgram</code>s in the population at the end of the 
+	 * Returns an <code>int[]</code> which contains the depths of all the
+	 * <code>CandidateProgram</code>s in the population at the end of the
 	 * previous generation.
 	 */
 	public static final String GEN_DEPTHS = "xgr-gen-depths";
-	
+
 	/**
 	 * Returns a <code>Double</code> which is the average depth of all the
 	 * <code>CandidateProgram</code>s in the population at the end of the
 	 * previous generation.
 	 */
 	public static final String GEN_DEPTH_AVE = "xgr-gen-depth-ave";
-	
+
 	/**
-	 * Returns a <code>Double</code> which is the standard deviation of the 
-	 * depths of all the <code>CandidateProgram</code>s in the 
+	 * Returns a <code>Double</code> which is the standard deviation of the
+	 * depths of all the <code>CandidateProgram</code>s in the
 	 * population at the end of the previous generation.
 	 */
 	public static final String GEN_DEPTH_STDEV = "xgr-gen-depth-stdev";
-	
+
 	/**
-	 * Returns an <code>Integer</code> which is the maximum program depth of 
+	 * Returns an <code>Integer</code> which is the maximum program depth of
 	 * all the <code>CandidateProgram</code>s in the population at the end of
 	 * the previous generation.
 	 */
 	public static final String GEN_DEPTH_MAX = "xgr-gen-depth-max";
-	
+
 	/**
 	 * Returns an <code>Integer</code> which is the minimum program depth of all
 	 * the <code>CandidateProgram</code>s in the population at the end of the

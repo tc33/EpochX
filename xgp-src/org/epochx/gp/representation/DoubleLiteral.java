@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,11 +24,11 @@ package org.epochx.gp.representation;
 public class DoubleLiteral extends DoubleNode {
 
 	private Double value;
-	
-	public DoubleLiteral(Double value) {
+
+	public DoubleLiteral(final Double value) {
 		this.value = value;
 	}
-	
+
 	@Override
 	public Double evaluate() {
 		return value;
@@ -38,34 +38,35 @@ public class DoubleLiteral extends DoubleNode {
 	public String getIdentifier() {
 		return Double.toString(value);
 	}
-	
+
 	@Override
 	public String toString() {
 		return value.toString();
 	}
-	
+
 	@Override
-	public boolean equals(Object obj) {
-		boolean inst = (obj instanceof DoubleLiteral);
-		
-		if (!inst)
+	public boolean equals(final Object obj) {
+		final boolean inst = (obj instanceof DoubleLiteral);
+
+		if (!inst) {
 			return false;
-		
-		Double objVal = ((DoubleLiteral) obj).value;
-		Double thisVal = this.value;
-		
+		}
+
+		final Double objVal = ((DoubleLiteral) obj).value;
+		final Double thisVal = value;
+
 		if ((objVal == null) ^ (thisVal == null)) {
 			return false;
 		}
-		
+
 		return (thisVal == objVal) || thisVal.equals(objVal);
 	}
-	
+
 	@Override
 	public DoubleLiteral clone() {
-		DoubleLiteral clone = (DoubleLiteral) super.clone();
-		
-		clone.value = this.value;
+		final DoubleLiteral clone = (DoubleLiteral) super.clone();
+
+		clone.value = value;
 
 		return clone;
 	}

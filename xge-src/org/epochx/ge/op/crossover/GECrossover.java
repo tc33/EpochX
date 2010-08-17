@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -27,8 +27,8 @@ import org.epochx.representation.CandidateProgram;
 
 /**
  * This interface defines the structure which specific crossover operations can
- * implement to provide different methods of crossing over two 
- * <code>CandidatePrograms</code>. GPCrossover instances are used by the core 
+ * implement to provide different methods of crossing over two
+ * <code>CandidatePrograms</code>. GPCrossover instances are used by the core
  * GRCrossover class to perform a single crossover operation.
  * 
  * @see org.epochx.ge.model.GRCrossover
@@ -36,17 +36,18 @@ import org.epochx.representation.CandidateProgram;
 public interface GECrossover extends Crossover {
 
 	/**
-	 * Implementations should perform some form of exchange of material between 
+	 * Implementations should perform some form of exchange of material between
 	 * the two children, returning the resultant children.
 	 * 
-	 * @param parent1 The first GECandidateProgram selected to undergo this 
-	 * 				  crossover operation.
-	 * @param parent2 The second GECandidateProgram selected to undergo this 
-	 * 				  crossover operation.
-	 * @return An array of the child CandidatePrograms that were the result of 
-	 * an exchange of genetic material between the two parents.
+	 * @param parent1 The first GECandidateProgram selected to undergo this
+	 *        crossover operation.
+	 * @param parent2 The second GECandidateProgram selected to undergo this
+	 *        crossover operation.
+	 * @return An array of the child CandidatePrograms that were the result of
+	 *         an exchange of genetic material between the two parents.
 	 */
 	@Override
-	public GECandidateProgram[] crossover(CandidateProgram parent1, CandidateProgram parent2);
-	
+	public GECandidateProgram[] crossover(CandidateProgram parent1,
+			CandidateProgram parent2);
+
 }

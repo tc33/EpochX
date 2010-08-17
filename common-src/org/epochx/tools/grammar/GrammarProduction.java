@@ -44,7 +44,7 @@ public class GrammarProduction implements Cloneable {
 	 * <code>GrammarNode</code>s.
 	 * 
 	 * @param grammarNodes a <code>List</code> of <code>GrammarNode</code>s that
-	 *            provides the mapping sequence for this production.
+	 *        provides the mapping sequence for this production.
 	 */
 	public GrammarProduction(final List<GrammarNode> grammarNodes) {
 		this.grammarNodes = grammarNodes;
@@ -101,9 +101,9 @@ public class GrammarProduction implements Cloneable {
 	 * current occupant.
 	 * 
 	 * @param index the index of the current <code>GrammarNode</code> to be
-	 *            replaced.
+	 *        replaced.
 	 * @param node the new <code>GrammarNode</code> to place at the specified
-	 *            index in this production.
+	 *        index in this production.
 	 * @see GrammarProduction#addGrammarNode(GrammarNode)
 	 */
 	public void setGrammarNode(final int index, final GrammarNode node) {
@@ -143,7 +143,7 @@ public class GrammarProduction implements Cloneable {
 	 * 
 	 * @param key the unique key of the attribute to set.
 	 * @param value an value of any Object type to store as an attribute under
-	 *            the given key.
+	 *        the given key.
 	 */
 	public void setAttribute(final String key, final Object value) {
 		attributes.put(key, value);

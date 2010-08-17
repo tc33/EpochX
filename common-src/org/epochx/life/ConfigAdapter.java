@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -22,20 +22,27 @@
 package org.epochx.life;
 
 /**
- * Provides an <code>abstract</code> implementation of <code>ConfigListener</code>. 
+ * Provides an <code>abstract</code> implementation of
+ * <code>ConfigListener</code>.
  * 
- * <p>Typical use of this class would be in an anonymous class. For example:
+ * <p>
+ * Typical use of this class would be in an anonymous class. For example:
  * 
- * <blockquote><pre>
+ * <blockquote>
+ * 
+ * <pre>
  *     model.getLifeCycleListener().addConfigListener(new ConfigAdapter(){
  *     		public void onConfigure() {
  *     			... do something ...
  *     		}
  *     });
- * </pre></blockquote>
+ * </pre>
  * 
- * <p>Creating an anonymous implementation of this class is often preferable to 
- * implementing <code>ConfigListener</code> since it avoids the need to 
+ * </blockquote>
+ * 
+ * <p>
+ * Creating an anonymous implementation of this class is often preferable to
+ * implementing <code>ConfigListener</code> since it avoids the need to
  * implement methods which may be of no interest.
  */
 public class ConfigAdapter implements ConfigListener {
@@ -44,6 +51,7 @@ public class ConfigAdapter implements ConfigListener {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void onConfigure() {}
+	public void onConfigure() {
+	}
 
 }

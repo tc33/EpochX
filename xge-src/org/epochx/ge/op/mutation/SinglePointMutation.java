@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,49 +24,52 @@ package org.epochx.ge.op.mutation;
 import org.epochx.ge.codon.CodonGenerator;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.life.*;
+import org.epochx.life.ConfigAdapter;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
- * This class performs a single point mutation on a <code>GECandidateProgram</code>.
+ * This class performs a single point mutation on a
+ * <code>GECandidateProgram</code>.
  * 
- * <p>Whereas a standard PointMutation will consider each codon in the selected 
- * program for mutation, and could potentially mutate any number of codons from 
- * 0 to the number of codons, SinglePointMutation will always mutate exactly 
- * one codon in a program that it is asked to mutate. If the codon does undergo 
- * mutation then a replacement codon is generated using the CodonGenerator 
+ * <p>
+ * Whereas a standard PointMutation will consider each codon in the selected
+ * program for mutation, and could potentially mutate any number of codons from
+ * 0 to the number of codons, SinglePointMutation will always mutate exactly one
+ * codon in a program that it is asked to mutate. If the codon does undergo
+ * mutation then a replacement codon is generated using the CodonGenerator
  * specified in the model.
  */
 public class SinglePointMutation implements GEMutation {
 
 	// The controlling model.
-	private GEModel model;
-	
+	private final GEModel model;
+
 	// Operator statistics store.
 	private int mutationPoint;
-	
+
 	private RandomNumberGenerator rng;
 	private CodonGenerator codonGenerator;
-	
+
 	/**
 	 * Construct a single point mutation.
 	 * 
 	 * @param model The current controlling model. Parameters such as the codon
-	 * 				generator to use will come from here.
+	 *        generator to use will come from here.
 	 */
-	public SinglePointMutation(GEModel model) {
+	public SinglePointMutation(final GEModel model) {
 		this.model = model;
-		
+
 		// Configure parameters from the model.
 		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+
 			@Override
 			public void onConfigure() {
 				configure();
 			}
 		});
 	}
-	
+
 	/*
 	 * Configure component with parameters from the model.
 	 */
@@ -74,23 +77,24 @@ public class SinglePointMutation implements GEMutation {
 		rng = model.getRNG();
 		codonGenerator = model.getCodonGenerator();
 	}
-	
+
 	/**
-	 * Perform point mutation on the given GECandidateProgram. A codon position 
-	 * will be randomly chosen from the length of codons in the program, and 
+	 * Perform point mutation on the given GECandidateProgram. A codon position
+	 * will be randomly chosen from the length of codons in the program, and
 	 * will undergo mutation.
 	 * 
-	 * @param program The GECandidateProgram selected to undergo this mutation 
-	 * 				  operation.
-	 * @return A GECandidateProgram that was the result of a single point mutation 
-	 * on the provided GECandidateProgram.
+	 * @param program The GECandidateProgram selected to undergo this mutation
+	 *        operation.
+	 * @return A GECandidateProgram that was the result of a single point
+	 *         mutation
+	 *         on the provided GECandidateProgram.
 	 */
 	@Override
-	public GECandidateProgram mutate(CandidateProgram p) {
-		GECandidateProgram program = (GECandidateProgram) p;
-		
+	public GECandidateProgram mutate(final CandidateProgram p) {
+		final GECandidateProgram program = (GECandidateProgram) p;
+
 		mutationPoint = rng.nextInt(program.getNoCodons());
-		int codon = codonGenerator.getCodon();
+		final int codon = codonGenerator.getCodon();
 		program.setCodon(mutationPoint, codon);
 
 		return program;

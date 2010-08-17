@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -23,23 +23,23 @@ package org.epochx.gp.representation;
 
 public class BooleanVariable extends BooleanNode {
 
-	private String identifier;
-	
+	private final String identifier;
+
 	private Boolean value;
-	
-	public BooleanVariable(String identifier) {
+
+	public BooleanVariable(final String identifier) {
 		this(identifier, null);
 	}
-	
-	public BooleanVariable(String identifier, Boolean value) {
+
+	public BooleanVariable(final String identifier, final Boolean value) {
 		this.identifier = identifier;
 		this.value = value;
 	}
-	
-	public void setValue(boolean value) {
+
+	public void setValue(final boolean value) {
 		this.value = value;
 	}
-	
+
 	@Override
 	public Boolean evaluate() {
 		return value;
@@ -54,12 +54,12 @@ public class BooleanVariable extends BooleanNode {
 	public String toString() {
 		return identifier;
 	}
-	
+
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		return (obj == this);
 	}
-	
+
 	@Override
 	public BooleanVariable clone() {
 		return this;

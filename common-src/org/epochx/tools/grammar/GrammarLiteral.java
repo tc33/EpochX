@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -22,18 +22,18 @@
 package org.epochx.tools.grammar;
 
 /**
- * Grammar literals are a type of grammar node, that represent the terminals of 
- * a grammar. They are those nodes which are never found on the left-hand side 
- * of grammar rules and as such contain no productions. Instead, 
- * <code>GrammarLiterals</code> each have a value which is the string they 
- * represent in the grammar string. The final source of a program that is valid 
+ * Grammar literals are a type of grammar node, that represent the terminals of
+ * a grammar. They are those nodes which are never found on the left-hand side
+ * of grammar rules and as such contain no productions. Instead,
+ * <code>GrammarLiterals</code> each have a value which is the string they
+ * represent in the grammar string. The final source of a program that is valid
  * according to a grammar will be made up solely of these terminal values.
  */
 public class GrammarLiteral implements GrammarNode {
 
 	// The literal value of this grammar terminal.
 	private String value;
-	
+
 	/**
 	 * Constructs a terminal symbol with the specified value.
 	 * 
@@ -42,7 +42,7 @@ public class GrammarLiteral implements GrammarNode {
 	public GrammarLiteral(final String value) {
 		this.value = value;
 	}
-	
+
 	/**
 	 * Returns the literal value of this grammar terminal.
 	 * 
@@ -51,7 +51,7 @@ public class GrammarLiteral implements GrammarNode {
 	public String getValue() {
 		return value;
 	}
-	
+
 	/**
 	 * Sets the literal value of this grammar terminal.
 	 * 
@@ -60,7 +60,7 @@ public class GrammarLiteral implements GrammarNode {
 	public void setValue(final String value) {
 		this.value = value;
 	}
-	
+
 	/**
 	 * Returns a <code>String</code> representation of this grammar literal.
 	 * 

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -32,40 +32,44 @@ public class OrFunctionTest extends AbstractBooleanNodeTestCase {
 	public Node getNode() {
 		return new OrFunction();
 	}
-	
+
 	public void testEvaluateTT() {
-		OrFunction node = (OrFunction) getNode();
-		Node[] children = new Node[]{new BooleanLiteral(true), new BooleanLiteral(true)};
+		final OrFunction node = (OrFunction) getNode();
+		final Node[] children = new Node[]{new BooleanLiteral(true),
+				new BooleanLiteral(true)};
 		node.setChildren(children);
-		boolean result = node.evaluate();
-		
+		final boolean result = node.evaluate();
+
 		assertTrue("OR of true and true is not true", result);
 	}
-	
+
 	public void testEvaluateTF() {
-		OrFunction node = (OrFunction) getNode();
-		Node[] children = new Node[]{new BooleanLiteral(true), new BooleanLiteral(false)};
+		final OrFunction node = (OrFunction) getNode();
+		final Node[] children = new Node[]{new BooleanLiteral(true),
+				new BooleanLiteral(false)};
 		node.setChildren(children);
-		boolean result = node.evaluate();
-		
+		final boolean result = node.evaluate();
+
 		assertTrue("OR of true and false is not true", result);
 	}
-	
+
 	public void testEvaluateFT() {
-		OrFunction node = (OrFunction) getNode();
-		Node[] children = new Node[]{new BooleanLiteral(false), new BooleanLiteral(true)};
+		final OrFunction node = (OrFunction) getNode();
+		final Node[] children = new Node[]{new BooleanLiteral(false),
+				new BooleanLiteral(true)};
 		node.setChildren(children);
-		boolean result = node.evaluate();
-		
+		final boolean result = node.evaluate();
+
 		assertTrue("OR of false and true is not true", result);
 	}
-	
+
 	public void testEvaluateFF() {
-		OrFunction node = (OrFunction) getNode();
-		Node[] children = new Node[]{new BooleanLiteral(false), new BooleanLiteral(false)};
+		final OrFunction node = (OrFunction) getNode();
+		final Node[] children = new Node[]{new BooleanLiteral(false),
+				new BooleanLiteral(false)};
 		node.setChildren(children);
-		boolean result = node.evaluate();
-		
+		final boolean result = node.evaluate();
+
 		assertFalse("OR of false and false is not false", result);
 	}
 

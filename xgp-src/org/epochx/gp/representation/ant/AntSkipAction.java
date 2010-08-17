@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -25,20 +25,20 @@ import org.epochx.gp.representation.VoidNode;
 import org.epochx.tools.ant.Ant;
 
 /**
- * This class defines an action which when executed will trigger the ant 
+ * This class defines an action which when executed will trigger the ant
  * to do nothing for one timestep.
  */
 public class AntSkipAction extends VoidNode {
 
-	private Ant ant;
-	
+	private final Ant ant;
+
 	/**
-	 * Constructs an AntSkipAction, supplying an ant that the action can be 
+	 * Constructs an AntSkipAction, supplying an ant that the action can be
 	 * performed on.
 	 * 
 	 * @param ant the Ant that will be moved upon execution.
 	 */
-	public AntSkipAction(Ant ant) {
+	public AntSkipAction(final Ant ant) {
 		this.ant = ant;
 	}
 
@@ -50,7 +50,7 @@ public class AntSkipAction extends VoidNode {
 	@Override
 	public Void evaluate() {
 		ant.skip();
-		
+
 		return null;
 	}
 }

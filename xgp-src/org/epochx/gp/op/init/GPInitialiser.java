@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -26,23 +26,23 @@ import java.util.List;
 import org.epochx.op.Initialiser;
 import org.epochx.representation.CandidateProgram;
 
-
 /**
- * Implementations of this interface should be capable of generating an initial 
- * population of <code>CandidatePrograms</code>. The getInitialPopulation() 
- * method is called towards the start of execution of a run to get the first 
+ * Implementations of this interface should be capable of generating an initial
+ * population of <code>CandidatePrograms</code>. The getInitialPopulation()
+ * method is called towards the start of execution of a run to get the first
  * population which will then be evolved.
  */
 public interface GPInitialiser extends Initialiser {
 
 	/**
 	 * Construct and return an initial population of CandidatePrograms.
-	 * Implementations will typically wish to return a population with a size 
+	 * Implementations will typically wish to return a population with a size
 	 * as given by calling getPopulationSize() on the controlling model.
 	 * 
-	 * @return A List of newly generated CandidatePrograms which will form the 
-	 * initial population for a GP run.
+	 * @return A List of newly generated CandidatePrograms which will form the
+	 *         initial population for a GP run.
 	 */
+	@Override
 	public List<CandidateProgram> getInitialPopulation();
-	
+
 }

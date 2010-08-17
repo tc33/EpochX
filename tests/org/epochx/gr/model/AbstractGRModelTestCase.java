@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -27,17 +27,17 @@ import org.epochx.gr.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.gr.op.mutation.WhighamMutation;
 
 /**
- * Some of these test check that the default values are correct. It is possible 
- * that the default should not be hardcoded here but it means that changing the 
+ * Some of these test check that the default values are correct. It is possible
+ * that the default should not be hardcoded here but it means that changing the
  * defaults cannot be taken lightly since it also requires updating the tests.
- * It also has the side-effect that it checks that none of the built in models 
+ * It also has the side-effect that it checks that none of the built in models
  * change the defaults.
  */
 public abstract class AbstractGRModelTestCase extends AbstractModelTestCase {
 
 	@Override
 	public abstract GRModel getModel();
-	
+
 	/**
 	 * Tests that trying to set a null grammar throws an exception.
 	 */
@@ -45,7 +45,8 @@ public abstract class AbstractGRModelTestCase extends AbstractModelTestCase {
 		try {
 			getModel().setGrammar(null);
 			fail("illegal argument exception not thrown for null grammar");
-		} catch (IllegalArgumentException e) {}
+		} catch (final IllegalArgumentException e) {
+		}
 	}
 
 	/**
@@ -55,31 +56,33 @@ public abstract class AbstractGRModelTestCase extends AbstractModelTestCase {
 		try {
 			getModel().setMaxInitialDepth(0);
 			fail("illegal argument exception not thrown for initial max depth of zero");
-		} catch (IllegalArgumentException e) {}
+		} catch (final IllegalArgumentException e) {
+		}
 	}
-	
+
 	/**
 	 * Tests that setting an initial max depth of zero is allowed.
 	 */
 	public void testSetInitialMaxDepthPositive() {
 		try {
 			getModel().setMaxInitialDepth(1);
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			fail("illegal argument exception thrown for initial max depth of 1");
 		}
 	}
-	
+
 	/**
-	 * Tests that trying to set an initial max depth of minus one does not throw an exception.
+	 * Tests that trying to set an initial max depth of minus one does not throw
+	 * an exception.
 	 */
 	public void testSetInitialMaxDepthMinusOne() {
 		try {
 			getModel().setMaxInitialDepth(-1);
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			fail("illegal argument exception thrown for initial max depth of -1");
 		}
 	}
-	
+
 	/**
 	 * Tests that trying to set a zero max depth throws an exception.
 	 */
@@ -87,73 +90,83 @@ public abstract class AbstractGRModelTestCase extends AbstractModelTestCase {
 		try {
 			getModel().setMaxDepth(0);
 			fail("illegal argument exception not thrown for max depth of zero");
-		} catch (IllegalArgumentException e) {}
+		} catch (final IllegalArgumentException e) {
+		}
 	}
-	
+
 	/**
 	 * Tests that setting a max depth of zero is allowed.
 	 */
 	public void testSetMaxDepthPositive() {
 		try {
 			getModel().setMaxDepth(1);
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			fail("illegal argument exception thrown for max depth of 1");
 		}
 	}
-	
+
 	/**
-	 * Tests that trying to set an max depth of minus one does not throw an exception.
+	 * Tests that trying to set an max depth of minus one does not throw an
+	 * exception.
 	 */
 	public void testSetMaxDepthMinusOne() {
 		try {
 			getModel().setMaxDepth(-1);
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			fail("illegal argument exception thrown for initial max depth of -1");
 		}
 	}
-	
+
 	/**
-	 * Tests that the default max initial depth property is set correctly. 
+	 * Tests that the default max initial depth property is set correctly.
 	 */
 	public void testMaxInitialDepthDefault() {
-		GRModel model = getModel();
-		
-		assertEquals("model's default max initial depth is not 8", 8, model.getMaxInitialDepth());
+		final GRModel model = getModel();
+
+		assertEquals("model's default max initial depth is not 8", 8,
+				model.getMaxInitialDepth());
 	}
-	
+
 	/**
-	 * Tests that the default max depth property is set correctly. 
+	 * Tests that the default max depth property is set correctly.
 	 */
 	public void testMaxDepthDefault() {
-		GRModel model = getModel();
-		
-		assertEquals("model's default max depth is not 14", 14, model.getMaxDepth());
+		final GRModel model = getModel();
+
+		assertEquals("model's default max depth is not 14", 14,
+				model.getMaxDepth());
 	}
-	
+
 	/**
-	 * Tests that the default initialiser operator is set correctly. 
+	 * Tests that the default initialiser operator is set correctly.
 	 */
 	public void testInitialiserDefault() {
-		Model model = getModel();
-		
-		assertTrue("model's default initialiser is not an instance of ramped half-and-half", (model.getInitialiser() instanceof RampedHalfAndHalfInitialiser));
+		final Model model = getModel();
+
+		assertTrue(
+				"model's default initialiser is not an instance of ramped half-and-half",
+				(model.getInitialiser() instanceof RampedHalfAndHalfInitialiser));
 	}
-	
+
 	/**
-	 * Tests that the default crossover operator is set correctly. 
+	 * Tests that the default crossover operator is set correctly.
 	 */
 	public void testCrossoverDefault() {
-		Model model = getModel();
-		
-		assertTrue("model's default crossover is not an instance of whigham crossover", (model.getCrossover() instanceof WhighamCrossover));
+		final Model model = getModel();
+
+		assertTrue(
+				"model's default crossover is not an instance of whigham crossover",
+				(model.getCrossover() instanceof WhighamCrossover));
 	}
-	
+
 	/**
-	 * Tests that the default mutation operator is set correctly. 
+	 * Tests that the default mutation operator is set correctly.
 	 */
 	public void testMutationDefault() {
-		Model model = getModel();
-		
-		assertTrue("model's default mutation is not an instance of whigham mutation", (model.getMutation() instanceof WhighamMutation));
+		final Model model = getModel();
+
+		assertTrue(
+				"model's default mutation is not an instance of whigham mutation",
+				(model.getMutation() instanceof WhighamMutation));
 	}
 }

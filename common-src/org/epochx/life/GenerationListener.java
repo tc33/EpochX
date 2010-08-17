@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -27,17 +27,17 @@ import org.epochx.core.GenerationManager;
 import org.epochx.representation.CandidateProgram;
 
 /**
- * Provides the interface to be implemented by objects that wish to handle 
- * generation events. See the {@link GenerationManager}'s class documentation 
- * for details of when each generation event will be fired. To listen for 
- * generation events during execution of a model, instances of 
- * <code>GenerationListener</code> must be added to the model's 
- * <code>LifeCycleManager</code> which is retrievable through a call to the 
+ * Provides the interface to be implemented by objects that wish to handle
+ * generation events. See the {@link GenerationManager}'s class documentation
+ * for details of when each generation event will be fired. To listen for
+ * generation events during execution of a model, instances of
+ * <code>GenerationListener</code> must be added to the model's
+ * <code>LifeCycleManager</code> which is retrievable through a call to the
  * model's <code>getLifeCycleManager()</code> method.
  * 
  * <p>
  * It is typical to listen to events using an anonymous class which often makes
- * the <code>abstract</code> <code>GenerationAdapter</code> class more 
+ * the <code>abstract</code> <code>GenerationAdapter</code> class more
  * convenient to implement.
  * 
  * @see GenerationAdapter
@@ -49,26 +49,26 @@ public interface GenerationListener {
 	 * Event fired before a generation starts.
 	 */
 	void onGenerationStart();
-	
+
 	/**
-	 * Event fired after a generation has been carried out. The resultant 
-	 * population may be modified and returned. This event is revertable by 
-	 * returning <code>null</code> which will trigger the population to be 
-	 * discarded and for the whole generation to be performed again from the 
+	 * Event fired after a generation has been carried out. The resultant
+	 * population may be modified and returned. This event is revertable by
+	 * returning <code>null</code> which will trigger the population to be
+	 * discarded and for the whole generation to be performed again from the
 	 * previous population. This event will then be raised again. If the
-	 * generation should be accepted then the population should be returned as 
+	 * generation should be accepted then the population should be returned as
 	 * it is.
 	 * 
-	 * @param pop the population that is the result of carrying out the 
-	 * 			  generation.
+	 * @param pop the population that is the result of carrying out the
+	 *        generation.
 	 * @return the list of programs that should become the next population, or
-	 * 		   null if the generation should be reverted.
+	 *         null if the generation should be reverted.
 	 */
 	List<CandidateProgram> onGeneration(List<CandidateProgram> pop);
-	
+
 	/**
 	 * Event fired once a generation has ended and been accepted.
 	 */
 	void onGenerationEnd();
-	
+
 }

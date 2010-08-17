@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,21 +24,27 @@ package org.epochx.life;
 import org.epochx.representation.CandidateProgram;
 
 /**
- * Provides an <code>abstract</code> implementation of 
- * <code>CrossoverListener</code>. 
+ * Provides an <code>abstract</code> implementation of
+ * <code>CrossoverListener</code>.
  * 
- * <p>Typical use of this class would be in an anonymous class. For example:
+ * <p>
+ * Typical use of this class would be in an anonymous class. For example:
  * 
- * <blockquote><pre>
+ * <blockquote>
+ * 
+ * <pre>
  *     model.getLifeCycleListener().addCrossoverListener(new CrossoverAdapter(){
  *     		public void onCrossoverStart() {
  *     			... do something ...
  *     		}
  *     });
- * </pre></blockquote>
+ * </pre>
  * 
- * <p>Creating an anonymous implementation of this class is often preferable to 
- * implementing <code>CrossoverListener</code> since it avoids the need to 
+ * </blockquote>
+ * 
+ * <p>
+ * Creating an anonymous implementation of this class is often preferable to
+ * implementing <code>CrossoverListener</code> since it avoids the need to
  * implement methods which may be of no interest.
  */
 public abstract class CrossoverAdapter implements CrossoverListener {
@@ -47,14 +53,15 @@ public abstract class CrossoverAdapter implements CrossoverListener {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void onCrossoverStart() {}
-	
+	public void onCrossoverStart() {
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public CandidateProgram[] onCrossover(CandidateProgram[] parents,
-			CandidateProgram[] children) {
+	public CandidateProgram[] onCrossover(final CandidateProgram[] parents,
+			final CandidateProgram[] children) {
 		return children;
 	}
 
@@ -62,6 +69,7 @@ public abstract class CrossoverAdapter implements CrossoverListener {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void onCrossoverEnd() {}
+	public void onCrossoverEnd() {
+	}
 
 }

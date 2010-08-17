@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,10 +24,10 @@ package org.epochx.gp.representation.dbl;
 import org.epochx.gp.representation.DoubleNode;
 
 /**
- * The greater than function is a numerically valued logical function. It 
+ * The greater than function is a numerically valued logical function. It
  * performs the standard logic function "Greater Than", where true or false
- * is return depending on if the first argument is larger than the second 
- * argument or not, respectively. However, to satisfy the closure principle 
+ * is return depending on if the first argument is larger than the second
+ * argument or not, respectively. However, to satisfy the closure principle
  * this implementation returns +1 for true or -1 for false.
  */
 public class GreaterThanFunction extends DoubleNode {
@@ -38,37 +38,39 @@ public class GreaterThanFunction extends DoubleNode {
 	public GreaterThanFunction() {
 		this(null, null);
 	}
-	
+
 	/**
-	 * Construct a GreaterThanFunction with two children. When evaluated, both 
-	 * children will be evaluated. Then if the numerical result of evaluating 
-	 * the first child is larger than the result of the second, then the 
+	 * Construct a GreaterThanFunction with two children. When evaluated, both
+	 * children will be evaluated. Then if the numerical result of evaluating
+	 * the first child is larger than the result of the second, then the
 	 * function will return +1.0 else, -1.0 will be the result.
+	 * 
 	 * @param child1 The first child which is being tested if it is greater than
-	 * the second child.
-	 * @param child2 The second child which the first child is being tested 
-	 * against.
+	 *        the second child.
+	 * @param child2 The second child which the first child is being tested
+	 *        against.
 	 */
-	public GreaterThanFunction(DoubleNode child1, DoubleNode child2) {
+	public GreaterThanFunction(final DoubleNode child1, final DoubleNode child2) {
 		super(child1, child2);
 	}
 
 	/**
-	 * Evaluating a <code>GreaterThanFunction</code> involves evaluating both 
-	 * children first then performing the logical greater than operation. If 
-	 * the first child is greater in value than the second child then this 
-	 * method will return +1.0 else it will return -1.0. 
+	 * Evaluating a <code>GreaterThanFunction</code> involves evaluating both
+	 * children first then performing the logical greater than operation. If
+	 * the first child is greater in value than the second child then this
+	 * method will return +1.0 else it will return -1.0.
 	 */
 	@Override
 	public Double evaluate() {
-		double value1 = (Double) getChild(0).evaluate();
-		double value2 = (Double) getChild(1).evaluate();
+		final double value1 = (Double) getChild(0).evaluate();
+		final double value2 = (Double) getChild(1).evaluate();
 
 		return (value1 > value2) ? +1.0 : -1.0;
 	}
-	
+
 	/**
 	 * Get the unique name that identifies this function.
+	 * 
 	 * @return the unique name for the GreaterThanFunction which is GT.
 	 */
 	@Override

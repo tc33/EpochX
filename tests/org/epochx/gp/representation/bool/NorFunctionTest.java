@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -32,40 +32,44 @@ public class NorFunctionTest extends AbstractBooleanNodeTestCase {
 	public Node getNode() {
 		return new NorFunction();
 	}
-	
+
 	public void testEvaluateTT() {
-		NorFunction node = (NorFunction) getNode();
-		Node[] children = new Node[]{new BooleanLiteral(true), new BooleanLiteral(true)};
+		final NorFunction node = (NorFunction) getNode();
+		final Node[] children = new Node[]{new BooleanLiteral(true),
+				new BooleanLiteral(true)};
 		node.setChildren(children);
-		boolean result = node.evaluate();
-		
+		final boolean result = node.evaluate();
+
 		assertFalse("NOR of true and true is not false", result);
 	}
-	
+
 	public void testEvaluateTF() {
-		NorFunction node = (NorFunction) getNode();
-		Node[] children = new Node[]{new BooleanLiteral(true), new BooleanLiteral(false)};
+		final NorFunction node = (NorFunction) getNode();
+		final Node[] children = new Node[]{new BooleanLiteral(true),
+				new BooleanLiteral(false)};
 		node.setChildren(children);
-		boolean result = node.evaluate();
-		
+		final boolean result = node.evaluate();
+
 		assertFalse("NOR of true and false is not false", result);
 	}
-	
+
 	public void testEvaluateFT() {
-		NorFunction node = (NorFunction) getNode();
-		Node[] children = new Node[]{new BooleanLiteral(false), new BooleanLiteral(true)};
+		final NorFunction node = (NorFunction) getNode();
+		final Node[] children = new Node[]{new BooleanLiteral(false),
+				new BooleanLiteral(true)};
 		node.setChildren(children);
-		boolean result = node.evaluate();
-		
+		final boolean result = node.evaluate();
+
 		assertFalse("NOR of false and true is not false", result);
 	}
-	
+
 	public void testEvaluateFF() {
-		NorFunction node = (NorFunction) getNode();
-		Node[] children = new Node[]{new BooleanLiteral(false), new BooleanLiteral(false)};
+		final NorFunction node = (NorFunction) getNode();
+		final Node[] children = new Node[]{new BooleanLiteral(false),
+				new BooleanLiteral(false)};
 		node.setChildren(children);
-		boolean result = node.evaluate();
-		
+		final boolean result = node.evaluate();
+
 		assertTrue("NOR of false and false is not true", result);
 	}
 

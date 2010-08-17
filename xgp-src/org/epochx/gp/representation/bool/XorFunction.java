@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,7 +24,7 @@ package org.epochx.gp.representation.bool;
 import org.epochx.gp.representation.BooleanNode;
 
 /**
- * A <code>FunctionNode</code> which performs exclusive disjunction, also known 
+ * A <code>FunctionNode</code> which performs exclusive disjunction, also known
  * as exclusive OR.
  */
 public class XorFunction extends BooleanNode {
@@ -35,33 +35,36 @@ public class XorFunction extends BooleanNode {
 	public XorFunction() {
 		this(null, null);
 	}
-	
+
 	/**
-	 * Construct an XorFunction with two children. When evaluated, if either 
-	 * child evaluates to true (but not both) then the result will be true, 
+	 * Construct an XorFunction with two children. When evaluated, if either
+	 * child evaluates to true (but not both) then the result will be true,
 	 * otherwise the result will be false.
+	 * 
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
 	 */
-	public XorFunction(BooleanNode child1, BooleanNode child2) {
+	public XorFunction(final BooleanNode child1, final BooleanNode child2) {
 		super(child1, child2);
 	}
-	
+
 	/**
 	 * Evaluating an <code>XorFunction</code> involves evaluating both children.
-	 * If either child evaluates to true (but not both) then the result will be true, 
+	 * If either child evaluates to true (but not both) then the result will be
+	 * true,
 	 * otherwise the result will be false.
 	 */
 	@Override
 	public Boolean evaluate() {
-		boolean c1 = ((Boolean) getChild(0).evaluate()).booleanValue();
-		boolean c2 = ((Boolean) getChild(1).evaluate()).booleanValue();
-		
+		final boolean c1 = ((Boolean) getChild(0).evaluate()).booleanValue();
+		final boolean c2 = ((Boolean) getChild(1).evaluate()).booleanValue();
+
 		return c1 != c2;
 	}
-	
+
 	/**
 	 * Get the unique name that identifies this function.
+	 * 
 	 * @return the unique name for the XorFunction which is XOR.
 	 */
 	@Override

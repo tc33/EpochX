@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -26,8 +26,7 @@ import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.eval.*;
-import org.epochx.tools.grammar.Grammar;
-import org.epochx.tools.grammar.MalformedGrammarException;
+import org.epochx.tools.grammar.*;
 import org.epochx.tools.util.BoolUtils;
 
 /**
@@ -35,68 +34,63 @@ import org.epochx.tools.util.BoolUtils;
  * 
  * <h4>Majority problem</h4>
  * 
- * Given n binary inputValues, a program that solves the majority problem will 
- * return true in all circumstances where a majority of the inputValues are true 
+ * Given n binary inputValues, a program that solves the majority problem will
+ * return true in all circumstances where a majority of the inputValues are true
  * (or 1), and return false whenever there is not a majority of true values.
  */
 public class Majority extends GRModel {
 
 	// Incomplete grammar requiring correct number of terminals to be added.
-	private static final String GRAMMAR_FRAGMENT =
-		"<prog> ::= <expr>\n" +
-		"<expr> ::= <expr> <op> <expr> " +
-				"| ( <expr> <op> <expr> ) " +
-				"| <var> " +
-				"| <pre-op> ( <var> ) " +
-				"| ( <expr> ) ? <expr> : <expr>\n" +
-		"<pre-op> ::= !\n" +
-		"<op> ::= \"||\" | &&\n" +
-		"<var> ::= ";
-	
+	private static final String GRAMMAR_FRAGMENT = "<prog> ::= <expr>\n"
+			+ "<expr> ::= <expr> <op> <expr> " + "| ( <expr> <op> <expr> ) "
+			+ "| <var> " + "| <pre-op> ( <var> ) "
+			+ "| ( <expr> ) ? <expr> : <expr>\n" + "<pre-op> ::= !\n"
+			+ "<op> ::= \"||\" | &&\n" + "<var> ::= ";
+
 	// Ruby interpreter for performing evaluation.
 	private final RubyInterpreter interpreter;
-	
+
 	// The names of the inputValues used in the grammar.
 	private final String[] argNames;
-	
+
 	// The boolean input sequences.
 	private final boolean[][] inputValues;
-	
+
 	/**
 	 * Constructs a Majority model for the given number of inputs.
 	 * 
 	 * @param noInputBits the number of inputs the majority problem should be
-	 * for
+	 *        for
 	 */
 	public Majority(final int noInputBits) {
 		interpreter = new RubyInterpreter();
-		
+
 		// Generate the input sequences.
 		inputValues = BoolUtils.generateBoolSequences(noInputBits);
-		
+
 		// Determine the input argument names.
 		argNames = new String[noInputBits];
-		for (int i=0; i<noInputBits; i++) {
+		for (int i = 0; i < noInputBits; i++) {
 			argNames[i] = "d" + i;
 		}
-		
+
 		try {
 			// Complete the grammar string and construct grammar instance.
 			setGrammar(new Grammar(getGrammarString()));
-		} catch (MalformedGrammarException ex) {
+		} catch (final MalformedGrammarException ex) {
 			// It is our grammar so this shouldn't happen.
 			assert false;
 		}
 	}
 
 	/**
-	 * Calculates the fitness score for the given program. The fitness of a 
-	 * program for the majority problem is calculated by evaluating it 
-	 * using each of the possible sets of input values. There are 
-	 * <code>2^noInputBits</code> possible sets of inputs. The fitness of the 
-	 * program is the quantity of those input sequences that the program 
+	 * Calculates the fitness score for the given program. The fitness of a
+	 * program for the majority problem is calculated by evaluating it
+	 * using each of the possible sets of input values. There are
+	 * <code>2^noInputBits</code> possible sets of inputs. The fitness of the
+	 * program is the quantity of those input sequences that the program
 	 * returned an incorrect response for. That is, a fitness value of
-	 * <code>0.0</code> indicates the program responded correctly for every 
+	 * <code>0.0</code> indicates the program responded correctly for every
 	 * possible set of input values.
 	 * 
 	 * @param p {@inheritDoc}
@@ -105,63 +99,64 @@ public class Majority extends GRModel {
 	@Override
 	public double getFitness(final CandidateProgram p) {
 		final GRCandidateProgram program = (GRCandidateProgram) p;
-		
+
 		double score = 0;
-        
-        // Evaluate all possible inputValues.
-		for (final boolean[] vars : inputValues) {
-        	// Convert to object array.
-        	final Boolean[] objVars = ArrayUtils.toObject(vars);
-        	
-        	Boolean result = null;
+
+		// Evaluate all possible inputValues.
+		for (final boolean[] vars: inputValues) {
+			// Convert to object array.
+			final Boolean[] objVars = ArrayUtils.toObject(vars);
+
+			Boolean result = null;
 			try {
-				result = (Boolean) interpreter.eval(program.getSourceCode(), argNames, objVars);
+				result = (Boolean) interpreter.eval(program.getSourceCode(),
+						argNames, objVars);
 			} catch (final MalformedProgramException e) {
 				// Assign worst possible fitness and stop evaluating.
-        		score = 0;
-        		break;
+				score = 0;
+				break;
 			}
-        	
-            if (result != null && result == majorityTrue(vars)) {
-                score++;
-            }
-        }
-        
-        return inputValues.length - score;
+
+			if ((result != null) && (result == majorityTrue(vars))) {
+				score++;
+			}
+		}
+
+		return inputValues.length - score;
 	}
-	
+
 	/**
-	 * Constructs and returns the full grammar string for the majority problem 
+	 * Constructs and returns the full grammar string for the majority problem
 	 * with the correct number of input bits.
 	 * 
-	 * @return the grammar string for the majority problem with the set number 
-	 * of input bits
+	 * @return the grammar string for the majority problem with the set number
+	 *         of input bits
 	 */
 	public String getGrammarString() {
 		final StringBuilder buffer = new StringBuilder(GRAMMAR_FRAGMENT);
-		for (int i=0; i<argNames.length; i++) {
+		for (int i = 0; i < argNames.length; i++) {
 			if (i > 0) {
 				buffer.append(" | ");
 			}
 			buffer.append(argNames[i]);
 		}
 		buffer.append('\n');
-		
+
 		return buffer.toString();
 	}
-	
+
 	/*
 	 * Calculate what the correct response should be for the given inputs.
 	 */
 	private boolean majorityTrue(final boolean[] input) {
-        int trueCount = 0;
-        
-        for(final boolean b: input) {
-            if(b) {
-                trueCount++;
-            }
-        }
-        
-        return (trueCount >= (input.length / 2));
-    }
+		int trueCount = 0;
+
+		for (final boolean b: input) {
+			if (b) {
+				trueCount++;
+			}
+		}
+
+		return (trueCount >= (input.length / 2));
+	}
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -22,18 +22,18 @@
 package org.epochx.ge.codon;
 
 /**
- * Implementations of <code>CodonGenerator</code> are used to generate new 
+ * Implementations of <code>CodonGenerator</code> are used to generate new
  * codon values for use in Chromosomes.
  */
 public interface CodonGenerator {
 
 	/**
-	 * Generates a new codon value. A codon value is essentially just an 
-	 * integer between 0 and the maximum codon size as specified by the 
+	 * Generates a new codon value. A codon value is essentially just an
+	 * integer between 0 and the maximum codon size as specified by the
 	 * model.
 	 * 
 	 * @return a newly generated codon value.
 	 */
 	public int getCodon();
-	
+
 }

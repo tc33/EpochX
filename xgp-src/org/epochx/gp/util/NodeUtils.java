@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -28,39 +28,41 @@ import org.epochx.gp.representation.*;
 public final class NodeUtils {
 
 	public static List<DoubleLiteral> doubleRange(int start, int end) {
-		List<DoubleLiteral> range = new ArrayList<DoubleLiteral>();
+		final List<DoubleLiteral> range = new ArrayList<DoubleLiteral>();
 		if (start > end) {
-			int temp = start;
+			final int temp = start;
 			start = end;
-			end = temp;			
+			end = temp;
 		}
-		
-		while (start<=end) {
+
+		while (start <= end) {
 			start++;
-			
+
 			range.add(new DoubleLiteral((double) start));
 		}
-		
+
 		return range;
 	}
-	
-	public static List<BooleanVariable> booleanVariables(String ... variableNames) {
-		List<BooleanVariable> variables = new ArrayList<BooleanVariable>();
-		
-		for (String name: variableNames) {
+
+	public static List<BooleanVariable> booleanVariables(
+			final String ... variableNames) {
+		final List<BooleanVariable> variables = new ArrayList<BooleanVariable>();
+
+		for (final String name: variableNames) {
 			variables.add(new BooleanVariable(name));
 		}
-		
+
 		return variables;
 	}
-	
-	public static List<DoubleVariable> doubleVariables(String ... variableNames) {
-		List<DoubleVariable> variables = new ArrayList<DoubleVariable>();
-		
-		for (String name: variableNames) {
+
+	public static List<DoubleVariable> doubleVariables(
+			final String ... variableNames) {
+		final List<DoubleVariable> variables = new ArrayList<DoubleVariable>();
+
+		for (final String name: variableNames) {
 			variables.add(new DoubleVariable(name));
 		}
-		
+
 		return variables;
 	}
 }

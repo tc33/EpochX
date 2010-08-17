@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,42 +24,46 @@ package org.epochx.gp.representation.dbl;
 import org.epochx.gp.representation.DoubleNode;
 
 /**
- * A <code>FunctionNode</code> which performs the mathematical function of 
+ * A <code>FunctionNode</code> which performs the mathematical function of
  * multiplication.
  */
 public class MultiplyFunction extends DoubleNode {
-	
+
 	/**
 	 * Construct a MultiplyFunction with no children.
 	 */
 	public MultiplyFunction() {
 		this(null, null);
 	}
-	
+
 	/**
-	 * Construct a MultiplyFunction with 2 children. When evaluated, both children will 
+	 * Construct a MultiplyFunction with 2 children. When evaluated, both
+	 * children will
 	 * be evaluated and then multiplied together.
+	 * 
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
 	 */
-	public MultiplyFunction(DoubleNode child1, DoubleNode child2) {
+	public MultiplyFunction(final DoubleNode child1, final DoubleNode child2) {
 		super(child1, child2);
 	}
 
 	/**
-	 * Evaluating a <code>MultiplyFunction</code> involves multiplying the result of 
+	 * Evaluating a <code>MultiplyFunction</code> involves multiplying the
+	 * result of
 	 * evaluating both children.
 	 */
 	@Override
 	public Double evaluate() {
-		double c1 = ((Double) getChild(0).evaluate()).doubleValue();
-		double c2 = ((Double) getChild(1).evaluate()).doubleValue();
-		
+		final double c1 = ((Double) getChild(0).evaluate()).doubleValue();
+		final double c2 = ((Double) getChild(1).evaluate()).doubleValue();
+
 		return c1 * c2;
 	}
-	
+
 	/**
 	 * Get the unique name that identifies this function.
+	 * 
 	 * @return the unique name for the MultiplyFunction which is MUL.
 	 */
 	@Override

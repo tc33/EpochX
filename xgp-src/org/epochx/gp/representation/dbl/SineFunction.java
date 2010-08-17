@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,7 +24,7 @@ package org.epochx.gp.representation.dbl;
 import org.epochx.gp.representation.DoubleNode;
 
 /**
- * A <code>FunctionNode</code> which performs the trigonometric function of 
+ * A <code>FunctionNode</code> which performs the trigonometric function of
  * sine.
  */
 public class SineFunction extends DoubleNode {
@@ -35,29 +35,31 @@ public class SineFunction extends DoubleNode {
 	public SineFunction() {
 		this(null);
 	}
-	
+
 	/**
 	 * Construct a SineFunction with one child. When evaluated, the child
 	 * will be evaluated with sine performed on the result.
+	 * 
 	 * @param child The child which sine will be performed on.
 	 */
-	public SineFunction(DoubleNode child) {
+	public SineFunction(final DoubleNode child) {
 		super(child);
 	}
 
 	/**
-	 * Evaluating a <code>SineFunction</code> involves evaluating the child 
+	 * Evaluating a <code>SineFunction</code> involves evaluating the child
 	 * then calculating the sine of the result.
 	 */
 	@Override
 	public Double evaluate() {
-		double c = ((Double) getChild(0).evaluate()).doubleValue();
-		
+		final double c = ((Double) getChild(0).evaluate()).doubleValue();
+
 		return Math.sin(c);
 	}
-	
+
 	/**
 	 * Get the unique name that identifies this function.
+	 * 
 	 * @return the unique name for the SineFunction which is SIN.
 	 */
 	@Override

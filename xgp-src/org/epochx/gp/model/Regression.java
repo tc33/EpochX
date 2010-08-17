@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -31,25 +31,25 @@ import org.epochx.representation.CandidateProgram;
  * The abstract super class for regression problems in XGR in the Epox language.
  */
 public abstract class Regression extends GPModel {
-	
+
 	// The error each point must be within.
 	private static final double POINT_ERROR = 0.01;
-	
+
 	// Inputs and associated outputs.
 	private final double[] inputs;
 	private final double[] outputs;
-	
+
 	// Variables.
 	private final DoubleVariable x;
-	
+
 	/**
-	 * Constructs an instance of the abstract Regression model with 50 input 
+	 * Constructs an instance of the abstract Regression model with 50 input
 	 * points.
 	 */
 	public Regression() {
 		this(50);
 	}
-	
+
 	/**
 	 * Constructs an instance of the abstract Regression model.
 	 */
@@ -63,48 +63,48 @@ public abstract class Regression extends GPModel {
 		syntax.add(new SubtractFunction());
 		syntax.add(new MultiplyFunction());
 		syntax.add(new ProtectedDivisionFunction());
-		
+
 		// Define terminal set;
 		syntax.add(x);
-		
+
 		setSyntax(syntax);
-		
+
 		// Generate the random inputs and the correct outputs.
 		inputs = new double[noPoints];
 		outputs = new double[inputs.length];
-		for (int i=0; i<inputs.length; i++) {
+		for (int i = 0; i < inputs.length; i++) {
 			inputs[i] = (getRNG().nextDouble() * 2) - 1.0;
 			outputs[i] = getCorrectResult(inputs[i]);
 		}
 	}
 
 	/**
-	 * Calculates the fitness score for the given program. The fitness of a 
-	 * program is the number of inputs the program incorrectly calculates the 
-	 * output for. The output must be within 0.01 of the correct result to be 
-	 * considered correct. All programs are evaluated against the same inputs 
-	 * which are randomly selected between -1.0 and 1.0. The number of inputs 
+	 * Calculates the fitness score for the given program. The fitness of a
+	 * program is the number of inputs the program incorrectly calculates the
+	 * output for. The output must be within 0.01 of the correct result to be
+	 * considered correct. All programs are evaluated against the same inputs
+	 * which are randomly selected between -1.0 and 1.0. The number of inputs
 	 * can be provided as an argument to the constructor or defaults to 50.
 	 * 
 	 * @param p {@inheritDoc}
 	 * @return the calculated fitness for the given program.
-	 */	
+	 */
 	@Override
 	public double getFitness(final CandidateProgram p) {
 		final GPCandidateProgram program = (GPCandidateProgram) p;
-		
+
 		int noWrong = 0;
-		
-		for (int i=0; i<inputs.length; i++) {
+
+		for (int i = 0; i < inputs.length; i++) {
 			x.setValue(inputs[i]);
-			double result = (Double) program.evaluate();
-			double error = Math.abs(result - outputs[i]);
-			
+			final double result = (Double) program.evaluate();
+			final double error = Math.abs(result - outputs[i]);
+
 			if (error > POINT_ERROR) {
 				noWrong++;
 			}
 		}
-		
+
 		// How good is this result?
 		return noWrong;
 	}
@@ -112,6 +112,6 @@ public abstract class Regression extends GPModel {
 	/*
 	 * The actual function we are trying to evolve.
 	 */
-    public abstract double getCorrectResult(final double x);
+	public abstract double getCorrectResult(final double x);
 
 }

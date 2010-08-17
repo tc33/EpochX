@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -29,29 +29,29 @@ import junit.framework.TestCase;
  * 
  */
 public abstract class AbstractNodeTestCase extends TestCase {
-	
+
 	private Node node;
-	
+
 	public abstract Node getNode();
-	
+
 	@Override
 	protected void setUp() throws Exception {
 		node = getNode();
-		
+
 		// Ensure children are filled.
-		int arity = node.getArity();
-		for (int i=0; i<arity; i++) {
+		final int arity = node.getArity();
+		for (int i = 0; i < arity; i++) {
 			node.setChild(i, new BooleanLiteral(true));
 		}
 	}
-	
+
 	/**
 	 * Test that getting an nth node of zero returns the node itself.
 	 */
 	public void testGetNthNodeZero() {
 		assertSame("node not its own 0th node", node, node.getNthNode(0));
 	}
-	
+
 	/**
 	 * Test that an index out of bounds exception is thrown when trying to get
 	 * a node at a negative index.
@@ -60,20 +60,22 @@ public abstract class AbstractNodeTestCase extends TestCase {
 		try {
 			node.getNthNode(-1);
 			fail("Exception not thrown for negative index");
-		} catch (IndexOutOfBoundsException e) {}
+		} catch (final IndexOutOfBoundsException e) {
+		}
 	}
 
 	/**
 	 * Test that an index out of bounds exception is thrown when trying to get
-	 * a node an index beyond the tree's length - 1. 
+	 * a node an index beyond the tree's length - 1.
 	 */
 	public void testGetNthTooLarge() {
 		try {
 			node.getNthNode(node.getLength());
 			fail("Exception not thrown for index >= length");
-		} catch (IndexOutOfBoundsException e) {}
+		} catch (final IndexOutOfBoundsException e) {
+		}
 	}
-	
+
 	/**
 	 * Test that an index out of bounds exception is thrown when trying to set
 	 * a node at a negative index.
@@ -82,20 +84,22 @@ public abstract class AbstractNodeTestCase extends TestCase {
 		try {
 			node.setNthNode(-1, new BooleanLiteral(false));
 			fail("Exception not thrown for negative index");
-		} catch (IndexOutOfBoundsException e) {}
+		} catch (final IndexOutOfBoundsException e) {
+		}
 	}
-	
+
 	/**
 	 * Test that an index out of bounds exception is thrown when trying to set
-	 * a node at an index beyond the tree's length - 1. 
+	 * a node at an index beyond the tree's length - 1.
 	 */
 	public void testSetNthNodeTooLarge() {
 		try {
 			node.setNthNode(node.getLength(), new BooleanLiteral(false));
 			fail("Exception not thrown for index >= length");
-		} catch (IndexOutOfBoundsException e) {}
+		} catch (final IndexOutOfBoundsException e) {
+		}
 	}
-	
+
 	/**
 	 * Test that an index out of bounds exception is thrown when trying to set
 	 * a node at an index of zero. A node cannot replace itself.
@@ -104,24 +108,27 @@ public abstract class AbstractNodeTestCase extends TestCase {
 		try {
 			node.setNthNode(0, new BooleanLiteral(false));
 			fail("Exception not thrown for index == 0, cannot replace self");
-		} catch (IndexOutOfBoundsException e) {}
+		} catch (final IndexOutOfBoundsException e) {
+		}
 	}
-	
+
 	/**
-	 * Tests that setting the nth node at a valid index does not throw an 
+	 * Tests that setting the nth node at a valid index does not throw an
 	 * exception and the node is set correctly.
 	 */
 	public void testSetNthNodeLast() {
 		try {
-			Node newChild = new BooleanLiteral(false);
-			int lastIndex = node.getLength()-1;
+			final Node newChild = new BooleanLiteral(false);
+			final int lastIndex = node.getLength() - 1;
 			node.setNthNode(lastIndex, newChild);
-			assertSame("nth node in node tree not set when n is the last node index", newChild, node.getNthNode(lastIndex));
-		} catch (Exception e) {
+			assertSame(
+					"nth node in node tree not set when n is the last node index",
+					newChild, node.getNthNode(lastIndex));
+		} catch (final Exception e) {
 			fail("Exception thrown when setting last node in node tree");
 		}
 	}
-	
+
 	/**
 	 * Test that an index out of bounds exception is thrown when trying to get
 	 * nodes at a negative depth.
@@ -130,28 +137,32 @@ public abstract class AbstractNodeTestCase extends TestCase {
 		try {
 			node.getNodesAtDepth(-1);
 			fail("Exception not thrown for negative depth");
-		} catch (IndexOutOfBoundsException e) {}
+		} catch (final IndexOutOfBoundsException e) {
+		}
 	}
-	
+
 	/**
-	 * Test that just the root node is returned when requesting nodes at depth 
+	 * Test that just the root node is returned when requesting nodes at depth
 	 * 0.
 	 */
 	public void testGetNodesAtDepthZero() {
-		List<Node> nodes = node.getNodesAtDepth(0);
+		final List<Node> nodes = node.getNodesAtDepth(0);
 		assertEquals("more than one node at depth zero", 1, nodes.size());
-		assertSame("current node not returned for depth zero", node, nodes.get(0));
+		assertSame("current node not returned for depth zero", node,
+				nodes.get(0));
 	}
-	
+
 	/**
-	 * Test that an empty list is returned if retrieving nodes at a depth 
+	 * Test that an empty list is returned if retrieving nodes at a depth
 	 * greater than the programs maximum depth.
 	 */
 	public void testGetNodesAtDepthTooLarge() {
 		try {
-			List<Node> nodes = node.getNodesAtDepth(node.getDepth()+1);
-			assertEquals("empty list not returned for nodes greater than maximum depth in program", 0, nodes.size());
-		} catch (IndexOutOfBoundsException e) {
+			final List<Node> nodes = node.getNodesAtDepth(node.getDepth() + 1);
+			assertEquals(
+					"empty list not returned for nodes greater than maximum depth in program",
+					0, nodes.size());
+		} catch (final IndexOutOfBoundsException e) {
 			fail("Exception thrown for depth greater than the maximum depth");
 		}
 	}

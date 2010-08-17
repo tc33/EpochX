@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -21,7 +21,6 @@
  */
 package org.epochx.gr.model.epox;
 
-
 /**
  * XGR model for a sextic symbolic regression problem in the Epox language.
  * 
@@ -29,27 +28,27 @@ package org.epochx.gr.model.epox;
  * The target program is the function: x^6 - (2 * x^4) + x^2
  */
 public class SexticRegression extends Regression {
-	
+
 	/**
-	 * Constructs an instance of the SexticRegression model with 50 input 
+	 * Constructs an instance of the SexticRegression model with 50 input
 	 * points.
 	 */
 	public SexticRegression() {
 		super();
 	}
-	
+
 	/**
 	 * Constructs an instance of the SexticRegression model.
 	 */
 	public SexticRegression(final int noPoints) {
 		super(noPoints);
 	}
-	
+
 	/**
 	 * The actual function we are trying to evolve.
 	 */
 	@Override
-    public double getCorrectResult(final double x){
+	public double getCorrectResult(final double x) {
 		return Math.pow(x, 6) - (2 * Math.pow(x, 4)) + Math.pow(x, 2);
-    }
+	}
 }

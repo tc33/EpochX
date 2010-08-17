@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -27,45 +27,49 @@ import org.epochx.gp.representation.*;
  * 
  */
 public class ImpliesFunctionTest extends AbstractBooleanNodeTestCase {
-	
+
 	@Override
 	public Node getNode() {
 		return new ImpliesFunction();
 	}
-	
+
 	public void testEvaluateTT() {
-		ImpliesFunction node = (ImpliesFunction) getNode();
-		Node[] children = new Node[]{new BooleanLiteral(true), new BooleanLiteral(true)};
+		final ImpliesFunction node = (ImpliesFunction) getNode();
+		final Node[] children = new Node[]{new BooleanLiteral(true),
+				new BooleanLiteral(true)};
 		node.setChildren(children);
-		boolean result = node.evaluate();
-		
+		final boolean result = node.evaluate();
+
 		assertTrue("IMPLIES of true and true is not true", result);
 	}
-	
+
 	public void testEvaluateTF() {
-		ImpliesFunction node = (ImpliesFunction) getNode();
-		Node[] children = new Node[]{new BooleanLiteral(true), new BooleanLiteral(false)};
+		final ImpliesFunction node = (ImpliesFunction) getNode();
+		final Node[] children = new Node[]{new BooleanLiteral(true),
+				new BooleanLiteral(false)};
 		node.setChildren(children);
-		boolean result = node.evaluate();
-		
+		final boolean result = node.evaluate();
+
 		assertFalse("IMPLIES of true and false is not false", result);
 	}
-	
+
 	public void testEvaluateFT() {
-		ImpliesFunction node = (ImpliesFunction) getNode();
-		Node[] children = new Node[]{new BooleanLiteral(false), new BooleanLiteral(true)};
+		final ImpliesFunction node = (ImpliesFunction) getNode();
+		final Node[] children = new Node[]{new BooleanLiteral(false),
+				new BooleanLiteral(true)};
 		node.setChildren(children);
-		boolean result = node.evaluate();
-		
+		final boolean result = node.evaluate();
+
 		assertTrue("IMPLIES of false and true is not true", result);
 	}
-	
+
 	public void testEvaluateFF() {
-		ImpliesFunction node = (ImpliesFunction) getNode();
-		Node[] children = new Node[]{new BooleanLiteral(false), new BooleanLiteral(false)};
+		final ImpliesFunction node = (ImpliesFunction) getNode();
+		final Node[] children = new Node[]{new BooleanLiteral(false),
+				new BooleanLiteral(false)};
 		node.setChildren(children);
-		boolean result = node.evaluate();
-		
+		final boolean result = node.evaluate();
+
 		assertTrue("IMPLIES of false and false is not true", result);
 	}
 }

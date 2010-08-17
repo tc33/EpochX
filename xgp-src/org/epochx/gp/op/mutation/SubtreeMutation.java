@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,98 +24,101 @@ package org.epochx.gp.op.mutation;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.op.init.GrowInitialiser;
 import org.epochx.gp.representation.*;
-import org.epochx.life.*;
+import org.epochx.life.ConfigAdapter;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
  * This class performs a subtree mutation on a <code>GPCandidateProgram</code>.
  * 
- * <p>A mutation point is randomly selected anywhere in the program tree. Then 
- * the node at that point is replaced with a newly generated program tree, 
- * which is created using a grow strategy.
+ * <p>
+ * A mutation point is randomly selected anywhere in the program tree. Then the
+ * node at that point is replaced with a newly generated program tree, which is
+ * created using a grow strategy.
  */
 public class SubtreeMutation implements GPMutation {
 
 	// The controlling model.
-	private GPModel model;
-	
+	private final GPModel model;
+
 	// The maximum depth of the new subtree.
-	private int maxSubtreeDepth;
-	
+	private final int maxSubtreeDepth;
+
 	// Grow initialiser to build our replacement subtrees.
-	private GrowInitialiser grower;
-	
+	private final GrowInitialiser grower;
+
 	private RandomNumberGenerator rng;
-	
+
 	/**
-	 * Simple constructor for subtree mutation using a default maximum depth 
+	 * Simple constructor for subtree mutation using a default maximum depth
 	 * of 4 for new subtrees.
 	 * 
-	 * @param model The controlling model which provides any configuration 
-	 * parameters for the run.
+	 * @param model The controlling model which provides any configuration
+	 *        parameters for the run.
 	 */
-	public SubtreeMutation(GPModel model) {
+	public SubtreeMutation(final GPModel model) {
 		// 4 is a slightly arbitrary choice but we had to choose something.
 		this(model, 4);
 	}
-	
+
 	/**
 	 * Subtree mutation constructor with control for the maximum depth of new
 	 * subtrees.
 	 * 
-	 * @param model The controlling model which provides any configuration 
-	 * parameters for the run.
+	 * @param model The controlling model which provides any configuration
+	 *        parameters for the run.
 	 * @param maxSubtreeDepth The maximum depth of the inserted subtree.
 	 */
-	public SubtreeMutation(GPModel model, int maxSubtreeDepth) {
+	public SubtreeMutation(final GPModel model, final int maxSubtreeDepth) {
 		this.model = model;
 		this.maxSubtreeDepth = maxSubtreeDepth;
-		
+
 		grower = new GrowInitialiser(model);
-		
+
 		// Configure parameters from the model.
 		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+
 			@Override
 			public void onConfigure() {
 				configure();
 			}
 		});
 	}
-	
+
 	/*
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
 		rng = model.getRNG();
 	}
-	
+
 	/**
-	 * Perform subtree mutation on the given GPCandidateProgram. A mutation point 
-	 * is randomly selected anywhere in the program tree. Then the node at that 
-	 * point is replaced with a newly generated program tree, which is created 
+	 * Perform subtree mutation on the given GPCandidateProgram. A mutation
+	 * point
+	 * is randomly selected anywhere in the program tree. Then the node at that
+	 * point is replaced with a newly generated program tree, which is created
 	 * using a grow strategy.
 	 * 
-	 * @param program The GPCandidateProgram selected to undergo this mutation 
-	 * 				  operation.
-	 * @return A GPCandidateProgram that was the result of a point mutation on 
-	 * the provided GPCandidateProgram.
+	 * @param program The GPCandidateProgram selected to undergo this mutation
+	 *        operation.
+	 * @return A GPCandidateProgram that was the result of a point mutation on
+	 *         the provided GPCandidateProgram.
 	 */
 	@Override
-	public GPCandidateProgram mutate(CandidateProgram p) {
-		GPCandidateProgram program = (GPCandidateProgram) p;
-		
+	public GPCandidateProgram mutate(final CandidateProgram p) {
+		final GPCandidateProgram program = (GPCandidateProgram) p;
+
 		// Randonly choose a mutation point.
-		int length = program.getProgramLength();
-		int mutationPoint = rng.nextInt(length);
-		
+		final int length = program.getProgramLength();
+		final int mutationPoint = rng.nextInt(length);
+
 		// Grow a new subtree using the GrowInitialiser.
-		Node subtree = grower.buildGrowNodeTree(maxSubtreeDepth);
-		
+		final Node subtree = grower.buildGrowNodeTree(maxSubtreeDepth);
+
 		// Set the new subtree.
 		program.setNthNode(mutationPoint, subtree);
-		
+
 		return program;
 	}
-	
+
 }

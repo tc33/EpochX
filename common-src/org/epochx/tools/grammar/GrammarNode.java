@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -22,11 +22,11 @@
 package org.epochx.tools.grammar;
 
 /**
- * Instances of <code>GrammarNode</code> implementations are the elements that 
+ * Instances of <code>GrammarNode</code> implementations are the elements that
  * represent the set of rules that make up a <code>Grammar</code>.
- *  
+ * 
  * @see GrammarProduction
  */
 public interface GrammarNode {
-	
+
 }

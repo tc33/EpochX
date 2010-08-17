@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -28,16 +28,16 @@ import org.epochx.representation.CandidateProgram;
 
 /**
  * Provides the interface to be implemented by objects that wish to handle pool
- * selection events. See the {@link PoolSelectionManager}'s class documentation 
- * for details of when each pool selection event will be fired. To listen for 
- * pool selection events during execution of a model, instances of 
- * <code>PoolSelectionListener</code> must be added to the model's 
- * <code>LifeCycleManager</code> which is retrievable through a call to the 
+ * selection events. See the {@link PoolSelectionManager}'s class documentation
+ * for details of when each pool selection event will be fired. To listen for
+ * pool selection events during execution of a model, instances of
+ * <code>PoolSelectionListener</code> must be added to the model's
+ * <code>LifeCycleManager</code> which is retrievable through a call to the
  * model's <code>getLifeCycleManager()</code> method.
  * 
  * <p>
  * It is typical to listen to events using an anonymous class which often makes
- * the <code>abstract</code> <code>PoolSelectionAdapter</code> class more 
+ * the <code>abstract</code> <code>PoolSelectionAdapter</code> class more
  * convenient to implement.
  * 
  * @see PoolSelectionAdapter
@@ -49,23 +49,24 @@ public interface PoolSelectionListener {
 	 * Event fired before the pool selection operation starts.
 	 */
 	void onPoolSelectionStart();
-	
+
 	/**
 	 * Event fired after the pool selection operation has occurred. The pool
-	 * may be modified and returned. This event is revertable by 
+	 * may be modified and returned. This event is revertable by
 	 * returning <code>null</code> which will trigger the discarding of the pool
-	 * the reselection of a new pool. This event will then be raised again. If 
-	 * the selection should be accepted then the pool should be returned as it 
+	 * the reselection of a new pool. This event will then be raised again. If
+	 * the selection should be accepted then the pool should be returned as it
 	 * is.
 	 * 
 	 * @param pool the suggested breeding pool of programs.
-	 * @return the breeding pool of CandidatePrograms that should actually be 
-	 * used, or <code>null</code> if breeding pool selection should be reverted.
+	 * @return the breeding pool of CandidatePrograms that should actually be
+	 *         used, or <code>null</code> if breeding pool selection should be
+	 *         reverted.
 	 */
 	List<CandidateProgram> onPoolSelection(List<CandidateProgram> pool);
-	
+
 	/**
-	 * Event fired after the pool selection operation has ended and been 
+	 * Event fired after the pool selection operation has ended and been
 	 * accepted.
 	 */
 	void onPoolSelectionEnd();

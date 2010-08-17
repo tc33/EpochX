@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -29,95 +29,100 @@ import org.epochx.life.ConfigAdapter;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
 
-
 /**
- * This class implements a fixed point crossover on two 
+ * This class implements a fixed point crossover on two
  * <code>CandidatePrograms</code>.
  * 
- * <p>The operation is performed on the programs' chromosomes in a similar 
- * manner to OnePointCrossover. One random codon position is chosen which is 
- * within the length bounds of both parent programs. Then all codons from that 
- * point onwards in both programs are exchanged.
+ * <p>
+ * The operation is performed on the programs' chromosomes in a similar manner
+ * to OnePointCrossover. One random codon position is chosen which is within the
+ * length bounds of both parent programs. Then all codons from that point
+ * onwards in both programs are exchanged.
  * 
- * <p>Fixed point crossover results in two child programs with chromosomes of 
- * equal size to the two parents passed in, thus fixed point crossover prevents
- * chromosome length expanding over a run. However, chromosome length may 
- * still change as a result of other operations in the algorithm such as the 
- * extension property if used during mapping.
+ * <p>
+ * Fixed point crossover results in two child programs with chromosomes of equal
+ * size to the two parents passed in, thus fixed point crossover prevents
+ * chromosome length expanding over a run. However, chromosome length may still
+ * change as a result of other operations in the algorithm such as the extension
+ * property if used during mapping.
  * 
  * @see OnePointCrossover
  */
 public class FixedPointCrossover implements GECrossover {
-	
+
 	// The controlling model.
-	private GEModel model;
-	
+	private final GEModel model;
+
 	// Operator statistics store.
 	private int crossoverPoint;
-	
+
 	// The random number generator in use.
 	private RandomNumberGenerator rng;
-	
+
 	/**
 	 * Constructs an instance of FixedPointCrossover.
 	 * 
 	 * @param model the current controlling model.
 	 */
-	public FixedPointCrossover(GEModel model) {
+	public FixedPointCrossover(final GEModel model) {
 		this.model = model;
-		
+
 		// Configure parameters from the model.
 		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+
 			@Override
 			public void onConfigure() {
 				configure();
 			}
 		});
 	}
-	
+
 	/*
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
 		rng = model.getRNG();
 	}
-	
+
 	/**
-	 * Performs a fixed point crossover operation on the specified parent 
+	 * Performs a fixed point crossover operation on the specified parent
 	 * programs.
 	 * 
-	 * <p>The operation is performed on the programs' chromosomes in a similar 
-	 * manner to OnePointCrossover. One random codon position is chosen which is 
-	 * within the length bounds of both parent programs. Then all codons from that 
-	 * point onwards in both programs are exchanged.
+	 * <p>
+	 * The operation is performed on the programs' chromosomes in a similar
+	 * manner to OnePointCrossover. One random codon position is chosen which is
+	 * within the length bounds of both parent programs. Then all codons from
+	 * that point onwards in both programs are exchanged.
 	 * 
 	 * @param parent1 {@inheritDoc}
 	 * @param parent2 {@inheritDoc}
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public GECandidateProgram[] crossover(CandidateProgram p1,
-										CandidateProgram p2) {
-		GECandidateProgram parent1 = (GECandidateProgram) p1;
-		GECandidateProgram parent2 = (GECandidateProgram) p2;
-		
+	public GECandidateProgram[] crossover(final CandidateProgram p1,
+			final CandidateProgram p2) {
+		final GECandidateProgram parent1 = (GECandidateProgram) p1;
+		final GECandidateProgram parent2 = (GECandidateProgram) p2;
+
 		// Pick a point in the shortest parent chromosome.
 		crossoverPoint = 0;
-		int parent1Codons = parent1.getNoCodons();
-		int parent2Codons = parent2.getNoCodons();
+		final int parent1Codons = parent1.getNoCodons();
+		final int parent2Codons = parent2.getNoCodons();
 		if (parent1Codons < parent2Codons) {
 			crossoverPoint = rng.nextInt(parent1Codons);
 		} else {
 			crossoverPoint = rng.nextInt(parent2Codons);
 		}
-		
+
 		// Make copies of the parents.
-		GECandidateProgram child1 = (GECandidateProgram) parent1.clone();
-		GECandidateProgram child2 = (GECandidateProgram) parent2.clone();
-		
-		List<Integer> part1 = child1.removeCodons(crossoverPoint, child1.getNoCodons());
-		List<Integer> part2 = child2.removeCodons(crossoverPoint, child2.getNoCodons());
-		
+		final GECandidateProgram child1 = (GECandidateProgram) parent1.clone();
+		final GECandidateProgram child2 = (GECandidateProgram) parent2.clone();
+
+		final List<Integer> part1 = child1.removeCodons(crossoverPoint,
+				child1.getNoCodons());
+		final List<Integer> part2 = child2.removeCodons(crossoverPoint,
+				child2.getNoCodons());
+
 		// Swap over the endings at the crossover points.
 		child2.appendCodons(part1);
 		child1.appendCodons(part2);

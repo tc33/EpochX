@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,7 +24,6 @@ package org.epochx.gp.model.example;
 import org.epochx.gp.op.crossover.UniformPointCrossover;
 import org.epochx.op.selection.*;
 
-
 /**
  * 
  */
@@ -43,8 +42,8 @@ public class CubicRegression extends org.epochx.gp.model.CubicRegression {
 		setMaxDepth(17);
 		setNoRuns(1);
 	}
-	
-	public static void main(String[] args) {
+
+	public static void main(final String[] args) {
 		new CubicRegression().run();
 	}
 }

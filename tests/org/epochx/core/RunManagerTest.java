@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -21,13 +21,11 @@
  */
 package org.epochx.core;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import junit.framework.TestCase;
 
-import org.epochx.life.ConfigListener;
-import org.epochx.life.RunAdapter;
+import org.epochx.life.*;
 import org.epochx.op.Initialiser;
 import org.epochx.representation.CandidateProgram;
 
@@ -38,12 +36,13 @@ public class RunManagerTest extends TestCase {
 
 	private Model model;
 	private RunManager runManager;
-	
+
 	@Override
 	protected void setUp() throws Exception {
 		model = new Model() {
+
 			@Override
-			public double getFitness(CandidateProgram program) {
+			public double getFitness(final CandidateProgram program) {
 				return 0;
 			}
 		};
@@ -53,15 +52,17 @@ public class RunManagerTest extends TestCase {
 		model.setMutationProbability(0.0);
 		model.setNoElites(0);
 		model.setInitialiser(new Initialiser() {
+
 			@Override
 			public List<CandidateProgram> getInitialPopulation() {
-				List<CandidateProgram> pop = new ArrayList<CandidateProgram>();
+				final List<CandidateProgram> pop = new ArrayList<CandidateProgram>();
 				pop.add(new CandidateProgram() {
+
 					@Override
 					public boolean isValid() {
 						return true;
 					}
-					
+
 					@Override
 					public double getFitness() {
 						return 0;
@@ -72,17 +73,18 @@ public class RunManagerTest extends TestCase {
 		});
 		runManager = new RunManager(model);
 	}
-	
+
 	/**
-	 * Tests that the generation events are all triggered and in the correct 
+	 * Tests that the generation events are all triggered and in the correct
 	 * order.
 	 */
 	public void testRunEventsOrder() {
 		// We add the chars '1', '2', '3' to builder to check order of calls.
 		final StringBuilder verify = new StringBuilder();
-		
+
 		// Listen for the config events.
 		model.getLifeCycleManager().addConfigListener(new ConfigListener() {
+
 			@Override
 			public void onConfigure() {
 				verify.append('1');
@@ -90,19 +92,22 @@ public class RunManagerTest extends TestCase {
 		});
 		// Listen for the generation.
 		model.getLifeCycleManager().addRunListener(new RunAdapter() {
+
 			@Override
 			public void onRunStart() {
 				verify.append('2');
 			}
+
 			@Override
 			public void onRunEnd() {
 				verify.append('3');
 			}
 		});
-		
+
 		runManager.run(1);
-		
-		assertEquals("run events were not called in the correct order", "1213", verify.toString());
+
+		assertEquals("run events were not called in the correct order", "1213",
+				verify.toString());
 	}
 
 }

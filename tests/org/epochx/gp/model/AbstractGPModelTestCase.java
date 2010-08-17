@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -30,38 +30,40 @@ import org.epochx.gp.op.mutation.SubtreeMutation;
 import org.epochx.gp.representation.Node;
 
 /**
- * Some of these test check that the default values are correct. It is possible 
- * that the default should not be hardcoded here but it means that changing the 
+ * Some of these test check that the default values are correct. It is possible
+ * that the default should not be hardcoded here but it means that changing the
  * defaults cannot be taken lightly since it also requires updating the tests.
- * It also has the side-effect that it checks that none of the built in models 
+ * It also has the side-effect that it checks that none of the built in models
  * change the defaults.
  */
 public abstract class AbstractGPModelTestCase extends AbstractModelTestCase {
 
 	@Override
 	public abstract GPModel getModel();
-	
+
 	/**
-	 * Tests that trying to set a negative initial max depth throws an exception.
+	 * Tests that trying to set a negative initial max depth throws an
+	 * exception.
 	 */
 	public void testSetInitialMaxDepthNegative() {
 		try {
 			getModel().setMaxInitialDepth(-2);
 			fail("illegal argument exception not thrown for negative initial max depth");
-		} catch (IllegalArgumentException e) {}
+		} catch (final IllegalArgumentException e) {
+		}
 	}
-	
+
 	/**
 	 * Tests that setting an initial max depth of zero is allowed.
 	 */
 	public void testSetInitialMaxDepthMinusOne() {
 		try {
 			getModel().setMaxInitialDepth(-1);
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			fail("illegal argument exception thrown for initial max depth of -1");
 		}
 	}
-	
+
 	/**
 	 * Tests that trying to set a negative max depth throws an exception.
 	 */
@@ -69,20 +71,21 @@ public abstract class AbstractGPModelTestCase extends AbstractModelTestCase {
 		try {
 			getModel().setMaxDepth(-2);
 			fail("illegal argument exception not thrown for negative max depth");
-		} catch (IllegalArgumentException e) {}
+		} catch (final IllegalArgumentException e) {
+		}
 	}
-	
+
 	/**
 	 * Tests that setting a max depth of zero is allowed.
 	 */
 	public void testSetMaxDepthMinusOne() {
 		try {
 			getModel().setMaxDepth(0);
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			fail("illegal argument exception thrown for max depth of -1");
 		}
 	}
-	
+
 	/**
 	 * Tests that trying to set a null syntax throws an exception.
 	 */
@@ -90,66 +93,76 @@ public abstract class AbstractGPModelTestCase extends AbstractModelTestCase {
 		try {
 			getModel().setSyntax(null);
 			fail("illegal argument exception not thrown for syntax of null");
-		} catch (IllegalArgumentException e) {}
+		} catch (final IllegalArgumentException e) {
+		}
 	}
-	
+
 	/**
 	 * Tests that attempting to execute a run with an empty syntax throws an
 	 * exception.
 	 */
 	public void testRunEmptySyntax() {
-		GPModel model = getModel();
+		final GPModel model = getModel();
 		try {
 			// Set low number of generations so won't take too long if failing.
 			model.setNoGenerations(1);
 			model.setSyntax(new ArrayList<Node>());
 			model.run();
 			fail("illegal state exception not thrown when running with empty syntax");
-		} catch (IllegalStateException e) {}
+		} catch (final IllegalStateException e) {
+		}
 	}
-	
+
 	/**
-	 * Tests that the default max initial depth property is set correctly. 
+	 * Tests that the default max initial depth property is set correctly.
 	 */
 	public void testMaxInitialDepthDefault() {
-		GPModel model = getModel();
-		
-		assertEquals("model's default max initial depth is not 6", 6, model.getMaxInitialDepth());
+		final GPModel model = getModel();
+
+		assertEquals("model's default max initial depth is not 6", 6,
+				model.getMaxInitialDepth());
 	}
-	
+
 	/**
-	 * Tests that the default max depth property is set correctly. 
+	 * Tests that the default max depth property is set correctly.
 	 */
 	public void testMaxDepthDefault() {
-		GPModel model = getModel();
-		
-		assertEquals("model's default max depth is not 17", 17, model.getMaxDepth());
+		final GPModel model = getModel();
+
+		assertEquals("model's default max depth is not 17", 17,
+				model.getMaxDepth());
 	}
-	
+
 	/**
-	 * Tests that the default initialiser operator is set correctly. 
+	 * Tests that the default initialiser operator is set correctly.
 	 */
 	public void testInitialiserDefault() {
-		Model model = getModel();
-		
-		assertTrue("model's default initialiser is not an instance of full initialiser", (model.getInitialiser() instanceof FullInitialiser));
+		final Model model = getModel();
+
+		assertTrue(
+				"model's default initialiser is not an instance of full initialiser",
+				(model.getInitialiser() instanceof FullInitialiser));
 	}
-	
+
 	/**
-	 * Tests that the default crossover operator is set correctly. 
+	 * Tests that the default crossover operator is set correctly.
 	 */
 	public void testCrossoverDefault() {
-		Model model = getModel();
-		
-		assertTrue("model's default crossover is not an instance of uniform point crossover", (model.getCrossover() instanceof UniformPointCrossover));
+		final Model model = getModel();
+
+		assertTrue(
+				"model's default crossover is not an instance of uniform point crossover",
+				(model.getCrossover() instanceof UniformPointCrossover));
 	}
-	
+
 	/**
-	 * Tests that the default mutation operator is set correctly. 
+	 * Tests that the default mutation operator is set correctly.
 	 */
 	public void testMutationDefault() {
-		Model model = getModel();
-		
-		assertTrue("model's default mutation is not an instance of subtree mutation", (model.getMutation() instanceof SubtreeMutation));
+		final Model model = getModel();
+
+		assertTrue(
+				"model's default mutation is not an instance of subtree mutation",
+				(model.getMutation() instanceof SubtreeMutation));
 	}
 }

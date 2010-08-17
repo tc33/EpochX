@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -23,12 +23,12 @@ package org.epochx.core;
 
 import java.util.*;
 
+import junit.framework.TestCase;
+
 import org.epochx.gp.model.*;
 import org.epochx.gp.representation.*;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
-
-import junit.framework.TestCase;
 
 /**
  * 
@@ -36,98 +36,111 @@ import junit.framework.TestCase;
 public class ReproductionManagerTest extends TestCase {
 
 	private Model model;
-	
+
 	private ReproductionManager reproductionManager;
-	
+
 	private int count;
-	
+
 	@Override
 	protected void setUp() throws Exception {
 		model = new GPModelDummy();
-		
+
 		reproductionManager = new ReproductionManager(model);
 	}
-	
+
 	/**
 	 * Tests that an exception is thrown if the program selector is null when
 	 * attempting reproduction.
 	 */
 	public void testProgramSelectorNotSet() {
 		model.setProgramSelector(null);
-		
+
 		try {
 			reproductionManager.reproduce();
 			fail("illegal state exception not thrown when performing reproduction with a null program selector");
-		} catch(IllegalStateException e) {}
+		} catch (final IllegalStateException e) {
+		}
 	}
-	
 
 	/**
-	 * Tests that the reproduction events are all triggered and in the correct 
+	 * Tests that the reproduction events are all triggered and in the correct
 	 * order.
 	 */
 	public void testReproductionEventsOrder() {
 		// We add the chars '1', '2', '3' to builder to check order of calls.
 		final StringBuilder verify = new StringBuilder();
-		
-		List<CandidateProgram> pop = new ArrayList<CandidateProgram>();
-		pop.add(new GPCandidateProgram(new BooleanLiteral(false), (GPModel) model));
+
+		final List<CandidateProgram> pop = new ArrayList<CandidateProgram>();
+		pop.add(new GPCandidateProgram(new BooleanLiteral(false),
+				(GPModel) model));
 		model.getProgramSelector().setSelectionPool(pop);
-		
+
 		// Listen for the crossver.
-		model.getLifeCycleManager().addReproductionListener(new ReproductionListener() {
-			@Override
-			public void onReproductionStart() {
-				verify.append('1');
-			}
-			@Override
-			public CandidateProgram onReproduction(CandidateProgram program) {
-				verify.append('2');
-				return program;
-			}
-			@Override
-			public void onReproductionEnd() {
-				verify.append('3');
-			}
-		});
+		model.getLifeCycleManager().addReproductionListener(
+				new ReproductionListener() {
+
+					@Override
+					public void onReproductionStart() {
+						verify.append('1');
+					}
+
+					@Override
+					public CandidateProgram onReproduction(
+							final CandidateProgram program) {
+						verify.append('2');
+						return program;
+					}
+
+					@Override
+					public void onReproductionEnd() {
+						verify.append('3');
+					}
+				});
 		model.getLifeCycleManager().fireConfigureEvent();
 		reproductionManager.reproduce();
-		
-		assertEquals("reproduction events were not called in the correct order", "123", verify.toString());
+
+		assertEquals(
+				"reproduction events were not called in the correct order",
+				"123", verify.toString());
 	}
-	
 
 	/**
-	 * Tests that returning null to the pool selection event will revert the selection.
+	 * Tests that returning null to the pool selection event will revert the
+	 * selection.
 	 */
 	public void testReproductionEventRevert() {
 		// We add the chars '1', '2', '3' to builder to check order of calls.
 		final StringBuilder verify = new StringBuilder();
-		
-		List<CandidateProgram> pop = new ArrayList<CandidateProgram>();
-		pop.add(new GPCandidateProgram(new BooleanLiteral(false), (GPModel) model));
+
+		final List<CandidateProgram> pop = new ArrayList<CandidateProgram>();
+		pop.add(new GPCandidateProgram(new BooleanLiteral(false),
+				(GPModel) model));
 		model.getProgramSelector().setSelectionPool(pop);
-		
+
 		count = 0;
-		
+
 		// Listen for the generation.
-		model.getLifeCycleManager().addReproductionListener(new ReproductionAdapter() {
-			@Override
-			public CandidateProgram onReproduction(CandidateProgram program) {
-				verify.append('2');
-				// Revert 3 times before confirming.
-				if (count == 3) {
-					return program;
-				} else {
-					count++;
-				}
-				return null;
-			}
-		});
-		
+		model.getLifeCycleManager().addReproductionListener(
+				new ReproductionAdapter() {
+
+					@Override
+					public CandidateProgram onReproduction(
+							final CandidateProgram program) {
+						verify.append('2');
+						// Revert 3 times before confirming.
+						if (count == 3) {
+							return program;
+						} else {
+							count++;
+						}
+						return null;
+					}
+				});
+
 		model.getLifeCycleManager().fireConfigureEvent();
 		reproductionManager.reproduce();
-		
-		assertEquals("reproduction operation was not correctly reverted", "2222", verify.toString());
+
+		assertEquals("reproduction operation was not correctly reverted",
+				"2222", verify.toString());
 	}
 }

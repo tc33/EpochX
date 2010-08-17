@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -29,5 +29,5 @@ public interface GRMutation extends Mutation {
 
 	@Override
 	public GRCandidateProgram mutate(CandidateProgram program);
-		
+
 }

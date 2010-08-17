@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,7 +24,7 @@ package org.epochx.gp.representation.dbl;
 import org.epochx.gp.representation.DoubleNode;
 
 /**
- * A <code>FunctionNode</code> which performs the hyperbolic trigonometric 
+ * A <code>FunctionNode</code> which performs the hyperbolic trigonometric
  * function of hyperbolic sine.
  */
 public class HyperbolicSineFunction extends DoubleNode {
@@ -35,29 +35,33 @@ public class HyperbolicSineFunction extends DoubleNode {
 	public HyperbolicSineFunction() {
 		this(null);
 	}
-	
+
 	/**
-	 * Construct a HyperbolicSineFunction with one child. When evaluated, the 
-	 * child will first be evaluated with hyperbolic sine performed on the result.
+	 * Construct a HyperbolicSineFunction with one child. When evaluated, the
+	 * child will first be evaluated with hyperbolic sine performed on the
+	 * result.
+	 * 
 	 * @param child The child which hyperbolic sine will be performed on.
 	 */
-	public HyperbolicSineFunction(DoubleNode child) {
+	public HyperbolicSineFunction(final DoubleNode child) {
 		super(child);
 	}
 
 	/**
-	 * Evaluating an <code>HyperbolicSineFunction</code> involves calculating the 
+	 * Evaluating an <code>HyperbolicSineFunction</code> involves calculating
+	 * the
 	 * hyperbolic sine of the child once it has also been evaluated.
 	 */
 	@Override
 	public Double evaluate() {
-		double c = ((Double) getChild(0).evaluate()).doubleValue();
-		
+		final double c = ((Double) getChild(0).evaluate()).doubleValue();
+
 		return Math.sinh(c);
 	}
-	
+
 	/**
 	 * Get the unique name that identifies this function.
+	 * 
 	 * @return the unique name for the HyperbolicSineFunction which is SINH.
 	 */
 	@Override

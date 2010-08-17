@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,7 +24,7 @@ package org.epochx.gp.representation.dbl;
 import org.epochx.gp.representation.DoubleNode;
 
 /**
- * A <code>FunctionNode</code> which performs the reciprocal trigonometric 
+ * A <code>FunctionNode</code> which performs the reciprocal trigonometric
  * function of cotangent. Cotangent x is equal to 1/tan x.
  */
 public class CotangentFunction extends DoubleNode {
@@ -35,29 +35,32 @@ public class CotangentFunction extends DoubleNode {
 	public CotangentFunction() {
 		this(null);
 	}
-	
+
 	/**
 	 * Construct a CotangentFunction with one child. When evaluated, the child
 	 * will be evaluated with cotangent performed on the result.
+	 * 
 	 * @param child The child which cotangent will be performed on.
 	 */
-	public CotangentFunction(DoubleNode child) {
+	public CotangentFunction(final DoubleNode child) {
 		super(child);
 	}
 
 	/**
-	 * Evaluating a <code>CotangentFunction</code> involves calculating tan of the 
+	 * Evaluating a <code>CotangentFunction</code> involves calculating tan of
+	 * the
 	 * child once it's been evaluated, then dividing 1 by the result.
 	 */
 	@Override
 	public Double evaluate() {
-		double c = ((Double) getChild(0).evaluate()).doubleValue();
-		
+		final double c = ((Double) getChild(0).evaluate()).doubleValue();
+
 		return 1 / Math.tan(c);
 	}
-	
+
 	/**
 	 * Get the unique name that identifies this function.
+	 * 
 	 * @return the unique name for the CotangentFunction which is COT.
 	 */
 	@Override

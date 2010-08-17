@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,7 +24,6 @@ package org.epochx.ge.op.init;
 import java.util.List;
 
 import org.epochx.representation.CandidateProgram;
-
 
 public class VariableLengthInitialiser implements GEInitialiser {
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -29,17 +29,17 @@ import org.epochx.gr.stats.GRStatsEngine;
 import org.epochx.tools.grammar.Grammar;
 
 /**
- * Model implementation for performing grammar-guided evolution using the 
+ * Model implementation for performing grammar-guided evolution using the
  * approach outlined by Whigham he called CFG-GP.
  */
 public abstract class GRModel extends Model {
-	
+
 	// Control parameters.
 	private Grammar grammar;
-	
+
 	private int maxDepth;
 	private int maxInitialDepth;
-	
+
 	/**
 	 * Construct a GRModel with a set of sensible defaults. See the appropriate
 	 * accessor method for information of each default value.
@@ -47,19 +47,19 @@ public abstract class GRModel extends Model {
 	public GRModel() {
 		// Use the GR stats engine.
 		getStatsManager().setStatsEngine(new GRStatsEngine(this));
-		
+
 		// Set default parameter values.
 		grammar = null;
-		
+
 		maxDepth = 14;
 		maxInitialDepth = 8;
-		
+
 		// Operators.
 		setInitialiser(new RampedHalfAndHalfInitialiser(this));
 		setCrossover(new WhighamCrossover(this));
 		setMutation(new WhighamMutation(this));
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -68,28 +68,28 @@ public abstract class GRModel extends Model {
 		if (getGrammar() == null) {
 			throw new IllegalStateException("no grammar set");
 		}
-		
+
 		super.run();
 	}
-	
+
 	/**
-	 * Returns the grammar instance that determines the structure of the 
-	 * programs to be evolved. As well as defining the syntax of solutions, the 
-	 * grammar also essentially determines the function and terminal sets which 
-	 * are features of tree GP. 
+	 * Returns the grammar instance that determines the structure of the
+	 * programs to be evolved. As well as defining the syntax of solutions, the
+	 * grammar also essentially determines the function and terminal sets which
+	 * are features of tree GP.
 	 * 
 	 * @return the language grammar that defines the syntax of solutions.
 	 */
 	public Grammar getGrammar() {
 		return grammar;
 	}
-	
+
 	/**
-	 * Sets the grammar that defines the valid syntax of the programs to be 
+	 * Sets the grammar that defines the valid syntax of the programs to be
 	 * evolves.
 	 * 
-	 * @param grammar the language grammar to use to define the syntax of 
-	 * solutions.
+	 * @param grammar the language grammar to use to define the syntax of
+	 *        solutions.
 	 */
 	public void setGrammar(final Grammar grammar) {
 		if (grammar != null) {
@@ -97,15 +97,16 @@ public abstract class GRModel extends Model {
 		} else {
 			throw new IllegalArgumentException("grammar must not be null");
 		}
-		
+
 		assert (this.grammar != null);
 	}
 
 	/**
-	 * Returns the maximum depth of the derivation trees allowed. Crossovers or 
+	 * Returns the maximum depth of the derivation trees allowed. Crossovers or
 	 * mutations that result in a larger chromosome will not be allowed.
 	 * 
-	 * <p>Defaults to 14.
+	 * <p>
+	 * Defaults to 14.
 	 * 
 	 * @return the maximum depth of derivation trees to allow.
 	 */
@@ -114,52 +115,57 @@ public abstract class GRModel extends Model {
 	}
 
 	/**
-	 * Overwrites the default maximum allowable depth of a program's derivation 
+	 * Overwrites the default maximum allowable depth of a program's derivation
 	 * tree.
 	 * 
-	 * <p>Max depth of -1 is allowed to indicate no limit.
+	 * <p>
+	 * Max depth of -1 is allowed to indicate no limit.
 	 * 
 	 * @param maxDepth the maximum depth to allow a program's derivation tree.
 	 */
 	public void setMaxDepth(final int maxDepth) {
-		if (maxDepth >= 1 || maxDepth == -1) {
+		if ((maxDepth >= 1) || (maxDepth == -1)) {
 			this.maxDepth = maxDepth;
 		} else {
-			throw new IllegalArgumentException("maxDepth must either be -1 or greater than 0");
+			throw new IllegalArgumentException(
+					"maxDepth must either be -1 or greater than 0");
 		}
-		
-		assert (this.maxDepth >= 1 || this.maxDepth == -1);
+
+		assert ((this.maxDepth >= 1) || (this.maxDepth == -1));
 	}
-	
+
 	/**
-	 * Returns the maximum depth of the derivation trees allowed at 
+	 * Returns the maximum depth of the derivation trees allowed at
 	 * initialisation.
 	 * 
-	 * <p>Defaults to 8.
+	 * <p>
+	 * Defaults to 8.
 	 * 
-	 * @return the maximum depth of derivation trees to allow after 
-	 * initialisation.
+	 * @return the maximum depth of derivation trees to allow after
+	 *         initialisation.
 	 */
 	public int getMaxInitialDepth() {
 		return maxInitialDepth;
 	}
 
 	/**
-	 * Overwrites the default maximum allowable depth of a program's derivation 
+	 * Overwrites the default maximum allowable depth of a program's derivation
 	 * tree after initialisation.
 	 * 
-	 * <p>Max depth of -1 is allowed to indicate no limit.
+	 * <p>
+	 * Max depth of -1 is allowed to indicate no limit.
 	 * 
 	 * @param maxDepth the maximum depth to allow a program's derivation tree
-	 * 				   after initialisation.
+	 *        after initialisation.
 	 */
 	public void setMaxInitialDepth(final int maxInitialDepth) {
-		if (maxInitialDepth >= 1 || maxInitialDepth == -1) {
+		if ((maxInitialDepth >= 1) || (maxInitialDepth == -1)) {
 			this.maxInitialDepth = maxInitialDepth;
 		} else {
-			throw new IllegalArgumentException("maxInitialDepth must either be -1 or greater than 0");
+			throw new IllegalArgumentException(
+					"maxInitialDepth must either be -1 or greater than 0");
 		}
-		
-		assert (this.maxInitialDepth >= 1 || this.maxInitialDepth == -1);
+
+		assert ((this.maxInitialDepth >= 1) || (this.maxInitialDepth == -1));
 	}
 }

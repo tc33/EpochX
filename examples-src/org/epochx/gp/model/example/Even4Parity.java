@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -26,9 +26,9 @@ import org.epochx.gp.model.EvenParity;
 import org.epochx.gp.op.crossover.KozaCrossover;
 import org.epochx.gp.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.gp.op.mutation.PointMutation;
-import org.epochx.gp.stats.GPStatField;
-import org.epochx.life.*;
-import org.epochx.op.selection.*;
+import org.epochx.life.GenerationAdapter;
+import org.epochx.op.selection.FitnessProportionateSelector;
+import org.epochx.stats.StatField;
 
 /**
  * 
@@ -40,7 +40,7 @@ public class Even4Parity extends EvenParity {
 	 */
 	public Even4Parity() {
 		super(4);
-		
+
 		setPopulationSize(4000);
 		setCrossoverProbability(0.9);
 		setMutationProbability(0.1);
@@ -57,23 +57,30 @@ public class Even4Parity extends EvenParity {
 		setNoRuns(1000);
 	}
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		final Model m = new Even4Parity();
-		
+
 		m.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+
 			@Override
 			public void onGenerationEnd() {
-				m.getStatsManager().printGenerationStats(GPStatField.GEN_NUMBER, GPStatField.GEN_FITNESS_MIN, GPStatField.GEN_FITTEST_PROGRAM);
+				m.getStatsManager().printGenerationStats(StatField.GEN_NUMBER,
+						StatField.GEN_FITNESS_MIN,
+						StatField.GEN_FITTEST_PROGRAM);
 			}
 		});
-		/*m.getLifeCycleManager().addRunListener(new RunAdapter() {
-			@Override
-			public void onRunEnd() {
-				m.getStatsManager().printRunStats(GPStatField.RUN_NUMBER, GPStatField.RUN_FITNESS_MIN, GPStatField.RUN_FITTEST_PROGRAM);
-			}
-		});*/
-		
+		/*
+		 * m.getLifeCycleManager().addRunListener(new RunAdapter() {
+		 * 
+		 * @Override
+		 * public void onRunEnd() {
+		 * m.getStatsManager().printRunStats(GPStatField.RUN_NUMBER,
+		 * GPStatField.RUN_FITNESS_MIN, GPStatField.RUN_FITTEST_PROGRAM);
+		 * }
+		 * });
+		 */
+
 		m.run();
 	}
-	
+
 }

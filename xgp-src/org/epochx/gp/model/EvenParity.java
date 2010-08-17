@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -33,53 +33,55 @@ import org.epochx.tools.util.BoolUtils;
  * 
  * <h4>Even parity problem</h4>
  * 
- * Given n binary inputValues, a program that solves the even-n-parity problem will 
- * return true in all circumstances where an even number of the inputValues are true 
+ * Given n binary inputValues, a program that solves the even-n-parity problem
+ * will
+ * return true in all circumstances where an even number of the inputValues are
+ * true
  * (or 1), and return false whenever there is an odd number of true inputValues.
  */
 public class EvenParity extends GPModel {
-		
+
 	// The names of the inputValues used in the grammar.
 	private final BooleanVariable[] variables;
-	
+
 	// The boolean input sequences.
 	private final boolean[][] inputValues;
-	
+
 	/**
 	 * Constructs an EvenParity model for the given number of inputs.
 	 * 
 	 * @param noInputBits the number of inputs the even parity problem should be
-	 * for
+	 *        for
 	 */
 	public EvenParity(final int noInputBits) {
 		// Generate the input sequences.
 		inputValues = BoolUtils.generateBoolSequences(noInputBits);
-		
+
 		// Define functions.
-		List<Node> syntax = new ArrayList<Node>();
+		final List<Node> syntax = new ArrayList<Node>();
 		syntax.add(new NandFunction());
 		syntax.add(new AndFunction());
 		syntax.add(new OrFunction());
 		syntax.add(new NotFunction());
-		
+
 		// Define terminal variables.
 		variables = new BooleanVariable[noInputBits];
-		for (int i=0; i<noInputBits; i++) {
+		for (int i = 0; i < noInputBits; i++) {
 			variables[i] = new BooleanVariable("d" + i);
 			syntax.add(variables[i]);
 		}
-		
+
 		setSyntax(syntax);
 	}
 
 	/**
-	 * Calculates the fitness score for the given program. The fitness of a 
-	 * program for the even-parity problem is calculated by evaluating it 
-	 * using each of the possible sets of input values. There are 
-	 * <code>2^noInputBits</code> possible sets of inputs. The fitness of the 
-	 * program is the quantity of those input sequences that the program 
+	 * Calculates the fitness score for the given program. The fitness of a
+	 * program for the even-parity problem is calculated by evaluating it
+	 * using each of the possible sets of input values. There are
+	 * <code>2^noInputBits</code> possible sets of inputs. The fitness of the
+	 * program is the quantity of those input sequences that the program
 	 * returned an incorrect response for. That is, a fitness value of
-	 * <code>0.0</code> indicates the program responded correctly for every 
+	 * <code>0.0</code> indicates the program responded correctly for every
 	 * possible set of input values.
 	 * 
 	 * @param p {@inheritDoc}
@@ -88,38 +90,38 @@ public class EvenParity extends GPModel {
 	@Override
 	public double getFitness(final CandidateProgram p) {
 		final GPCandidateProgram program = (GPCandidateProgram) p;
-		
-        double score = 0;
-        
-        // Execute on all possible inputs.
-        for (boolean[] in: inputValues) {
-        	
-        	// Set the variables.
-        	for (int i=0; i<in.length; i++) {
-        		variables[i].setValue(in[i]);
-        	}
-        	
-            if ((Boolean) program.evaluate() == isEvenNoTrue(in)) {
-                score++;
-            }
-        }
-        
-        return inputValues.length - score;
+
+		double score = 0;
+
+		// Execute on all possible inputs.
+		for (final boolean[] in: inputValues) {
+
+			// Set the variables.
+			for (int i = 0; i < in.length; i++) {
+				variables[i].setValue(in[i]);
+			}
+
+			if ((Boolean) program.evaluate() == isEvenNoTrue(in)) {
+				score++;
+			}
+		}
+
+		return inputValues.length - score;
 	}
-	
+
 	/*
 	 * Calculate what the correct response should be for the given inputs.
 	 */
-    private boolean isEvenNoTrue(final boolean[] input) {
-        int noTrues = 0;
+	private boolean isEvenNoTrue(final boolean[] input) {
+		int noTrues = 0;
 
-        for (final boolean b: input) {
-            if(b) {
-                noTrues++;
-            }
-        }
-        
-        return ((noTrues % 2) == 0);
-    }
-    
+		for (final boolean b: input) {
+			if (b) {
+				noTrues++;
+			}
+		}
+
+		return ((noTrues % 2) == 0);
+	}
+
 }

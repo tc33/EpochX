@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -32,47 +32,54 @@ public class EpoxInterpreterTest extends TestCase {
 	 * Tests that the eval method can handle simple expressions.
 	 */
 	public void testEval() throws MalformedProgramException {
-		Interpreter interpreter = new EpoxInterpreter();
-		
+		final Interpreter interpreter = new EpoxInterpreter();
+
 		String expression = "AND(OR(b1 false) NOT(false))";
 		String[] args = {"b1", "i1"};
 		Object[] values = {true, 3.0};
-		
-		assertEquals("evaluation of simple expression incorrect", true, interpreter.eval(expression, args, values));
-		
+
+		assertEquals("evaluation of simple expression incorrect", true,
+				interpreter.eval(expression, args, values));
+
 		expression = "NOT(" + expression + ")";
-		assertEquals("evaluation of simple expression incorrect", false, interpreter.eval(expression, args, values));
-		
+		assertEquals("evaluation of simple expression incorrect", false,
+				interpreter.eval(expression, args, values));
+
 		expression = "PDIV(ADD(4 2) SUB(3 d1))";
 		args = new String[]{"d1"};
 		values = new Object[]{1.0};
-		
-		assertEquals("evaluation of simple expression incorrect", 3.0, interpreter.eval(expression, args, values));
+
+		assertEquals("evaluation of simple expression incorrect", 3.0,
+				interpreter.eval(expression, args, values));
 	}
-	
+
 	/**
 	 * Tests that the eval method can handle multiple simple expressions.
 	 */
 	public void testMultiEval() throws MalformedProgramException {
-		Interpreter interpreter = new EpoxInterpreter();
-		
+		final Interpreter interpreter = new EpoxInterpreter();
+
 		String expression = "AND(OR(b1 false) NOT(false))";
 		String[] args = {"b1", "i1"};
 		Object[][] values = {{true, 3}, {false, 4}};
-		
+
 		Object[] result = interpreter.eval(expression, args, values);
-		
-		assertEquals("evaluation of simple expression incorrect", true, result[0]);
-		assertEquals("evaluation of simple expression incorrect", false, result[1]);
-		
+
+		assertEquals("evaluation of simple expression incorrect", true,
+				result[0]);
+		assertEquals("evaluation of simple expression incorrect", false,
+				result[1]);
+
 		expression = "PDIV(ADD(4 2) SUB(3 d1))";
 		args = new String[]{"d1"};
-		values = new Object[][]{{1.0},{2.0}};
-		
+		values = new Object[][]{{1.0}, {2.0}};
+
 		result = interpreter.eval(expression, args, values);
-		
-		assertEquals("evaluation of simple expression incorrect", 3.0, result[0]);
-		assertEquals("evaluation of simple expression incorrect", 6.0, result[1]);
+
+		assertEquals("evaluation of simple expression incorrect", 3.0,
+				result[0]);
+		assertEquals("evaluation of simple expression incorrect", 6.0,
+				result[1]);
 	}
-	
+
 }

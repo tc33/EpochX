@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -30,24 +30,23 @@ import org.epochx.ge.op.mutation.PointMutation;
 import org.epochx.ge.stats.GEStatsEngine;
 import org.epochx.tools.grammar.Grammar;
 
-
 /**
  * Model implementation for performing Grammatical Evolution.
  */
 public abstract class GEModel extends Model {
-	
+
 	// Control parameters.
 	private Grammar grammar;
 	private Mapper mapper;
 	private CodonGenerator codonGenerator;
-	
+
 	private int maxDepth;
 	private int maxInitialDepth;
 	private int maxCodonSize;
-	private int maxChromosomeLength;
-	
+	private final int maxChromosomeLength;
+
 	private boolean cacheSource;
-	
+
 	/**
 	 * Construct a GEModel with a set of sensible defaults. See the appropriate
 	 * accessor method for information of each default value.
@@ -55,20 +54,20 @@ public abstract class GEModel extends Model {
 	public GEModel() {
 		// Use the GE stats engine.
 		getStatsManager().setStatsEngine(new GEStatsEngine(this));
-		
+
 		// Set default parameter values.
 		mapper = new DepthFirstMapper(this);
 		codonGenerator = new StandardGenerator(this);
 		grammar = null;
-		
+
 		maxDepth = 14;
 		maxInitialDepth = 8;
 		maxCodonSize = Integer.MAX_VALUE;
 		maxChromosomeLength = -1;
-		
+
 		// Caching.
 		cacheSource = true;
-		
+
 		// Operators.
 		setInitialiser(new RampedHalfAndHalfInitialiser(this));
 		setCrossover(new OnePointCrossover(this));
@@ -83,28 +82,28 @@ public abstract class GEModel extends Model {
 		if (getGrammar() == null) {
 			throw new IllegalStateException("no grammar set");
 		}
-		
+
 		super.run();
 	}
-	
+
 	/**
-	 * Returns the grammar instance that determines the structure of the 
-	 * programs to be evolved. As well as defining the syntax of solutions, the 
-	 * grammar also essentially determines the function and terminal sets which 
-	 * are features of tree GP. 
+	 * Returns the grammar instance that determines the structure of the
+	 * programs to be evolved. As well as defining the syntax of solutions, the
+	 * grammar also essentially determines the function and terminal sets which
+	 * are features of tree GP.
 	 * 
 	 * @return the language grammar that defines the syntax of solutions.
 	 */
 	public Grammar getGrammar() {
 		return grammar;
 	}
-	
+
 	/**
-	 * Sets the grammar that defines the valid syntax of the programs to be 
+	 * Sets the grammar that defines the valid syntax of the programs to be
 	 * evolves.
 	 * 
-	 * @param grammar the language grammar to use to define the syntax of 
-	 * solutions.
+	 * @param grammar the language grammar to use to define the syntax of
+	 *        solutions.
 	 */
 	public void setGrammar(final Grammar grammar) {
 		if (grammar != null) {
@@ -112,16 +111,17 @@ public abstract class GEModel extends Model {
 		} else {
 			throw new IllegalArgumentException("grammar must not be null");
 		}
-		
+
 		assert (this.grammar != null);
 	}
 
 	/**
-	 * Returns the mapper which should be used to perform the mapping from a 
-	 * chromosome (List of Codons) to a source string with a syntax matching 
-	 * the grammar. 
+	 * Returns the mapper which should be used to perform the mapping from a
+	 * chromosome (List of Codons) to a source string with a syntax matching
+	 * the grammar.
 	 * 
-	 * <p>Defaults to an instance of {@link DepthFirstMapper}.
+	 * <p>
+	 * Defaults to an instance of {@link DepthFirstMapper}.
 	 * 
 	 * @return a Mapper to be used to map from chromosome to source.
 	 */
@@ -140,15 +140,16 @@ public abstract class GEModel extends Model {
 		} else {
 			throw new IllegalArgumentException("mapper must not be null");
 		}
-		
+
 		assert (this.mapper != null);
 	}
 
 	/**
-	 * Returns the CodonGenerator that the system should use for generating any 
+	 * Returns the CodonGenerator that the system should use for generating any
 	 * new Codons.
 	 * 
-	 * <p>Defaults to an instance of {@link StandardGenerator}.
+	 * <p>
+	 * Defaults to an instance of {@link StandardGenerator}.
 	 * 
 	 * @return the CodonGenerator to use for generating new codons.
 	 */
@@ -157,27 +158,29 @@ public abstract class GEModel extends Model {
 	}
 
 	/**
-	 * Overwrites the default codon generator used to generate new codons 
+	 * Overwrites the default codon generator used to generate new codons
 	 * throughout the run.
 	 * 
-	 * @param codonGenerator the codon generator to be used any time a new 
-	 * 						 codon is required.
+	 * @param codonGenerator the codon generator to be used any time a new
+	 *        codon is required.
 	 */
 	public void setCodonGenerator(final CodonGenerator codonGenerator) {
 		if (codonGenerator != null) {
 			this.codonGenerator = codonGenerator;
 		} else {
-			throw new IllegalArgumentException("codonGenerator must not be null");
+			throw new IllegalArgumentException(
+					"codonGenerator must not be null");
 		}
-		
+
 		assert (this.codonGenerator != null);
 	}
 
 	/**
-	 * Returns the maximum value of a codon. Codon values are positive integers 
+	 * Returns the maximum value of a codon. Codon values are positive integers
 	 * from zero to this size.
 	 * 
-	 * <p>Defaults to <code>Integer.MAX_VALUE</code>.
+	 * <p>
+	 * Defaults to <code>Integer.MAX_VALUE</code>.
 	 * 
 	 * @return the maximum value of a codon.
 	 */
@@ -188,25 +191,27 @@ public abstract class GEModel extends Model {
 	/**
 	 * Overwrites the default maximum size of each codon.
 	 * 
-	 * @param maxCodonSize the maximum size of a codon to replace the current 
-	 * 					   maximum with. Must be a positive integer.
+	 * @param maxCodonSize the maximum size of a codon to replace the current
+	 *        maximum with. Must be a positive integer.
 	 */
 	public void setMaxCodonSize(final int maxCodonSize) {
 		if (maxCodonSize >= 0) {
 			this.maxCodonSize = maxCodonSize;
 		} else {
-			throw new IllegalArgumentException("maxCodonSize must be zero or more");
+			throw new IllegalArgumentException(
+					"maxCodonSize must be zero or more");
 		}
-		
+
 		assert (this.maxCodonSize >= 0);
 	}
 
 	/**
-	 * Returns the maximum number of codons that should be allowed in a 
+	 * Returns the maximum number of codons that should be allowed in a
 	 * chromosome. Crossovers or mutations that result in a larger chromosome
 	 * size will not be allowed.
 	 * 
-	 * <p>Defaults to 100.
+	 * <p>
+	 * Defaults to 100.
 	 * 
 	 * @return the maximum number of codons to be allowed in a chromosome.
 	 */
@@ -215,27 +220,29 @@ public abstract class GEModel extends Model {
 	}
 
 	/**
-	 * Overwrites the default maximum number of codons in a program's 
+	 * Overwrites the default maximum number of codons in a program's
 	 * chromosome.
 	 * 
-	 * @param maxChromosomeLength the maximum number of codons to allow in a 
-	 * 							  chromosome.
+	 * @param maxChromosomeLength the maximum number of codons to allow in a
+	 *        chromosome.
 	 */
 	public void setMaxChromosomeLength(final int maxChromosomeLength) {
 		if (maxChromosomeLength >= -1) {
-			this.maxCodonSize = maxChromosomeLength;
+			maxCodonSize = maxChromosomeLength;
 		} else {
-			throw new IllegalArgumentException("maxChromosomeLength must be -1 or more");
+			throw new IllegalArgumentException(
+					"maxChromosomeLength must be -1 or more");
 		}
-		
+
 		assert (this.maxChromosomeLength >= 0);
 	}
 
 	/**
-	 * Returns the maximum depth of the derivation trees allowed. Crossovers or 
+	 * Returns the maximum depth of the derivation trees allowed. Crossovers or
 	 * mutations that result in a larger chromosome will not be allowed.
 	 * 
-	 * <p>Defaults to 14.
+	 * <p>
+	 * Defaults to 14.
 	 * 
 	 * @return the maximum depth of derivation trees to allow.
 	 */
@@ -244,79 +251,84 @@ public abstract class GEModel extends Model {
 	}
 
 	/**
-	 * Overwrites the default maximum allowable depth of a program's derivation 
+	 * Overwrites the default maximum allowable depth of a program's derivation
 	 * tree.
 	 * 
-	 * <p>Max depth of -1 is allowed to indicate no limit.
+	 * <p>
+	 * Max depth of -1 is allowed to indicate no limit.
 	 * 
 	 * @param maxDepth the maximum depth to allow a program's derivation tree.
 	 */
 	public void setMaxDepth(final int maxDepth) {
-		if (maxDepth >= 1 || maxDepth == -1) {
+		if ((maxDepth >= 1) || (maxDepth == -1)) {
 			this.maxDepth = maxDepth;
 		} else {
-			throw new IllegalArgumentException("maxDepth must either be -1 or greater than 0");
+			throw new IllegalArgumentException(
+					"maxDepth must either be -1 or greater than 0");
 		}
-		
-		assert (this.maxDepth >= 1 || this.maxDepth == -1);
+
+		assert ((this.maxDepth >= 1) || (this.maxDepth == -1));
 	}
-	
+
 	/**
-	 * Returns the maximum depth of the derivation trees allowed at 
+	 * Returns the maximum depth of the derivation trees allowed at
 	 * initialisation.
 	 * 
-	 * <p>Defaults to 8.
+	 * <p>
+	 * Defaults to 8.
 	 * 
-	 * @return the maximum depth of derivation trees to allow after 
-	 * initialisation.
+	 * @return the maximum depth of derivation trees to allow after
+	 *         initialisation.
 	 */
 	public int getMaxInitialDepth() {
 		return maxInitialDepth;
 	}
 
 	/**
-	 * Overwrites the default maximum allowable depth of a program's derivation 
+	 * Overwrites the default maximum allowable depth of a program's derivation
 	 * tree after initialisation.
 	 * 
 	 * Max depth of -1 is allowed to indicate no limit.
 	 * 
 	 * @param maxDepth the maximum depth to allow a program's derivation tree
-	 * 				   after initialisation.
+	 *        after initialisation.
 	 */
 	public void setMaxInitialDepth(final int maxInitialDepth) {
-		if (maxInitialDepth >= 1 || maxInitialDepth == -1) {
+		if ((maxInitialDepth >= 1) || (maxInitialDepth == -1)) {
 			this.maxInitialDepth = maxInitialDepth;
 		} else {
-			throw new IllegalArgumentException("maxInitialDepth must either be -1 or greater than 0");
+			throw new IllegalArgumentException(
+					"maxInitialDepth must either be -1 or greater than 0");
 		}
-		
-		assert (this.maxInitialDepth >= 1 || this.maxInitialDepth == -1);
+
+		assert ((this.maxInitialDepth >= 1) || (this.maxInitialDepth == -1));
 	}
-	
+
 	/**
-	 * Whether CandidatePrograms should cache their source code after mapping 
-	 * to reduce the need for mapping when the codons are unchanged. Caching 
-	 * the source potentially gives a large performance improvement and is 
-	 * generally desirable but if the grammar might change during a run then 
-	 * caching shouldn't be used as the same codons will evaluate to a 
+	 * Whether CandidatePrograms should cache their source code after mapping
+	 * to reduce the need for mapping when the codons are unchanged. Caching
+	 * the source potentially gives a large performance improvement and is
+	 * generally desirable but if the grammar might change during a run then
+	 * caching shouldn't be used as the same codons will evaluate to a
 	 * different source.
 	 * 
-	 * <p>Defaults to <code>true</code>.
+	 * <p>
+	 * Defaults to <code>true</code>.
 	 * 
-	 * @return true if the source should be cached after mapping and false 
-	 * otherwise.
+	 * @return true if the source should be cached after mapping and false
+	 *         otherwise.
 	 */
 	public boolean cacheSource() {
 		return cacheSource;
 	}
-	
+
 	/**
-	 * Overwrites the default setting of whether to cache the source code after 
+	 * Overwrites the default setting of whether to cache the source code after
 	 * mapping, until the chromosome is changed again.
 	 * 
 	 * @param cacheSource true if the source should be cached, false otherwise.
 	 */
-	public void setCacheSource(boolean cacheSource) {
+	public void setCacheSource(final boolean cacheSource) {
 		this.cacheSource = cacheSource;
 	}
 }

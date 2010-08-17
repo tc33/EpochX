@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -25,104 +25,103 @@ import static org.epochx.stats.StatField.*;
 
 import java.util.List;
 
-import org.epochx.life.*;
+import org.epochx.life.ConfigAdapter;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
 
 /**
- * Instances of this class are responsible for executing single evolutionary 
- * runs. Execution will be controlled by parameters retrieved from the 
+ * Instances of this class are responsible for executing single evolutionary
+ * runs. Execution will be controlled by parameters retrieved from the
  * <code>Model</code> provided to the constructor.
  * 
  * <p>
- * Users of the EpochX framework would not typically create and use instances 
- * of this class directly, but rather would through use of the 
- * <code>Model</code>'s <code>run</code> class method which will execute 
- * an instance of this class multiple times.
+ * Users of the EpochX framework would not typically create and use instances of
+ * this class directly, but rather would through use of the <code>Model</code>'s
+ * <code>run</code> class method which will execute an instance of this class
+ * multiple times.
  * 
  * <p>
  * Instances of this class will update the {@link StatsManager} class with data
- * about the run as the run progresses. For the statistics available from the 
- * <code>StatsManager</code>, view the {@link StatField} class and any 
- * extending classes.
+ * about the run as the run progresses. For the statistics available from the
+ * <code>StatsManager</code>, view the {@link StatField} class and any extending
+ * classes.
  * 
  * <p>
  * Use of the run manager will generate the following events:
  * 
  * <p>
  * <table border="1">
- *     <tr>
- *         <th>Event</th>
- *         <th>Revert</th>
- *         <th>Modify</th>
- *         <th>Raised when?</th>
- *     </tr>
- *     <tr>
- *         <td>onConfigure</td>
- *         <td>no</td>
- *         <td>no</td>
- *         <td>Immediately before the onRunStart event.
- *         </td>
- *     </tr>
- *     <tr>
- *         <td>onRunStart</td>
- *         <td>no</td>
- *         <td>no</td>
- *         <td>Before the run starts.
- *         </td>
- *     </tr>
- *     <tr>
- *         <td>onRunEnd</td>
- *         <td>no</td>
- *         <td>no</td>
- *         <td>After the run has terminated.
- *         </td>
- *     </tr>
+ * <tr>
+ * <th>Event</th>
+ * <th>Revert</th>
+ * <th>Modify</th>
+ * <th>Raised when?</th>
+ * </tr>
+ * <tr>
+ * <td>onConfigure</td>
+ * <td>no</td>
+ * <td>no</td>
+ * <td>Immediately before the onRunStart event.</td>
+ * </tr>
+ * <tr>
+ * <td>onRunStart</td>
+ * <td>no</td>
+ * <td>no</td>
+ * <td>Before the run starts.</td>
+ * </tr>
+ * <tr>
+ * <td>onRunEnd</td>
+ * <td>no</td>
+ * <td>no</td>
+ * <td>After the run has terminated.</td>
+ * </tr>
  * </table>
  */
 public class RunManager {
-	//TODO Is there someway we could allow each run to be in a separate thread?
-	
+
+	// TODO Is there someway we could allow each run to be in a separate thread?
+
 	// The controlling model.
 	private final Model model;
-	
+
 	// Core components.
 	private final GenerationManager generation;
 	private final InitialisationManager initialisation;
-	
+
 	private int noGenerations;
 	private double terminationFitness;
-	
+
 	// The best program found so far during the run.
 	private CandidateProgram bestProgram;
-	
+
 	// The fitness of the best program found so far during the run.
 	private double bestFitness;
-	
+
 	/**
-	 * Constructs an instance of RunManager to be controlled by parameters 
-	 * retrieved from the given <code>Model</code>. Fitness evaluation will 
+	 * Constructs an instance of RunManager to be controlled by parameters
+	 * retrieved from the given <code>Model</code>. Fitness evaluation will
 	 * also be diverted to the given model.
 	 * 
-	 * @param model the model which will control the run with the parameters 
-	 * 				and fitness function to use.
+	 * @param model the model which will control the run with the parameters
+	 *        and fitness function to use.
 	 */
 	public RunManager(final Model model) {
 		this.model = model;
-		
+
 		// Setup core components.
 		generation = new GenerationManager(model);
 		initialisation = new InitialisationManager(model);
-		
+
 		// Configure parameters from the model.
 		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+
 			@Override
 			public void onConfigure() {
 				configure();
 			}
 		});
 	}
-	
+
 	/*
 	 * Configure component with parameters from the model.
 	 */
@@ -130,37 +129,38 @@ public class RunManager {
 		noGenerations = model.getNoGenerations();
 		terminationFitness = model.getTerminationFitness();
 	}
-	
+
 	/**
-	 * Executes a single evolutionary run of this <code>RunManager's</code> 
+	 * Executes a single evolutionary run of this <code>RunManager's</code>
 	 * <code>Model</code>.
 	 * 
 	 * <p>
-	 * If the number of generations obtained from the model is zero, then 
-	 * initialisation will be performed but no further generations. If the 
+	 * If the number of generations obtained from the model is zero, then
+	 * initialisation will be performed but no further generations. If the
 	 * number of generations specified is one, then initialisation and one other
 	 * generation will be performed.
 	 * 
 	 * <p>
-	 * If the model is not in a runnable state after the the final call to 
-	 * configure fired at the start of this method execution then an illegal 
+	 * If the model is not in a runnable state after the the final call to
+	 * configure fired at the start of this method execution then an illegal
 	 * state exception will be thrown.
 	 * 
-	 * @param runNo the sequential number which identifies this run out of the 
-	 * 				set of runs being performed.
+	 * @param runNo the sequential number which identifies this run out of the
+	 *        set of runs being performed.
 	 */
 	public void run(final int runNo) {
 		// Give final opportunity to configure before starting the run.
 		model.getLifeCycleManager().fireConfigureEvent();
-		
+
 		// Validate that the model is in a runnable state.
 		if (noGenerations < 0) {
-			throw new IllegalStateException("number of generations must be 0 or greater");
+			throw new IllegalStateException(
+					"number of generations must be 0 or greater");
 		}
-		
+
 		// Inform everyone we're starting a run.
 		model.getLifeCycleManager().fireRunStartEvent();
-		
+
 		// Setup the run manager for a new run.
 		bestProgram = null;
 		bestFitness = Double.POSITIVE_INFINITY;
@@ -168,21 +168,21 @@ public class RunManager {
 
 		// Add the run number to the available stats data.
 		model.getStatsManager().addRunData(RUN_NUMBER, runNo);
-		
+
 		// Perform initialisation.
 		List<CandidateProgram> pop = initialisation.initialise();
-		
+
 		// Record best program so far and its fitness.
 		updateBestProgram(pop);
 
 		// Execute each generation.
-		for (int gen=1; gen<=noGenerations; gen++) {
+		for (int gen = 1; gen <= noGenerations; gen++) {
 			// Perform the generation.
 			pop = generation.generation(gen, pop);
-			
+
 			// Keep track of the best program and fitness.
 			updateBestProgram(pop);
-			
+
 			// We might be finished?
 			if (bestFitness <= terminationFitness) {
 				model.getLifeCycleManager().fireSuccessEvent();
@@ -192,53 +192,55 @@ public class RunManager {
 
 		// Inform everyone the run has ended.
 		model.getLifeCycleManager().fireRunEndEvent();
-		
+
 		// Calculate how long the run took.
 		final long runtime = System.nanoTime() - startTime;
-		
+
 		// Add run time to stats data.
 		model.getStatsManager().addRunData(RUN_TIME, runtime);
 	}
 
-	/* 
+	/*
 	 * Update new best program.
 	 * Note this forces us to evaluate all programs, which we might
-	 * not have done if using TournamentSelection. 
+	 * not have done if using TournamentSelection.
 	 */
 	private void updateBestProgram(final List<CandidateProgram> pop) {
-		for (CandidateProgram program: pop) {
+		for (final CandidateProgram program: pop) {
 			final double fitness = program.getFitness();
 			if (fitness < bestFitness) {
 				bestFitness = fitness;
 				bestProgram = program;
-				
+
 				// Update the stats.
-				model.getStatsManager().addRunData(RUN_FITNESS_MIN, bestFitness);
-				model.getStatsManager().addRunData(RUN_FITTEST_PROGRAM, bestProgram);
+				model.getStatsManager()
+						.addRunData(RUN_FITNESS_MIN, bestFitness);
+				model.getStatsManager().addRunData(RUN_FITTEST_PROGRAM,
+						bestProgram);
 			}
 		}
-		
+
 		assert (bestProgram != null);
 	}
-	
+
 	/**
-	 * Retrieves this run manager's generation manager that will perform the 
+	 * Retrieves this run manager's generation manager that will perform the
 	 * execution of single evolutionary generations.
 	 * 
 	 * @return the generation manager that will handle execution of each
-	 * evolutionary generation.
+	 *         evolutionary generation.
 	 */
 	public GenerationManager getGenerationManager() {
 		return generation;
 	}
 
 	/**
-	 * Retrieves this run manager's initialisation manager that will perform the 
+	 * Retrieves this run manager's initialisation manager that will perform the
 	 * execution of the 0th evolutionary generations, that is generation of an
 	 * initial population.
 	 * 
 	 * @return the initialisation manager that will handle execution of the 0th
-	 * evolutionary generation.
+	 *         evolutionary generation.
 	 */
 	public InitialisationManager getInitialisationManager() {
 		return initialisation;

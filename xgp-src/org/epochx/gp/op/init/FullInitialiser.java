@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -29,45 +29,45 @@ import org.epochx.life.ConfigAdapter;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
 
-
 /**
  * Initialisation implementation which produces full program trees.
  */
 public class FullInitialiser implements GPInitialiser {
-	
+
 	// The controlling model.
-	private GPModel model;
-	
-	private List<Node> terminals;
-	private List<Node> functions;
+	private final GPModel model;
+
+	private final List<Node> terminals;
+	private final List<Node> functions;
 	private List<Node> syntax;
-	
+
 	private RandomNumberGenerator rng;
-	
+
 	private int popSize;
 	private int maxInitialDepth;
-	
+
 	/**
 	 * Constructor for the full initialiser.
 	 * 
-	 * @param model The current controlling model. Run parameters such as the 
-	 * population size will be obtained from this.
+	 * @param model The current controlling model. Run parameters such as the
+	 *        population size will be obtained from this.
 	 */
-	public FullInitialiser(GPModel model) {
+	public FullInitialiser(final GPModel model) {
 		this.model = model;
-		
+
 		terminals = new ArrayList<Node>();
 		functions = new ArrayList<Node>();
-		
+
 		// Configure parameters from the model.
 		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+
 			@Override
 			public void onConfigure() {
 				configure();
 			}
 		});
 	}
-	
+
 	/*
 	 * Configure component with parameters from the model.
 	 */
@@ -75,13 +75,13 @@ public class FullInitialiser implements GPInitialiser {
 		rng = model.getRNG();
 
 		terminals.clear();
-		functions.clear();		
+		functions.clear();
 		syntax = model.getSyntax();
-		
+
 		maxInitialDepth = model.getMaxInitialDepth();
 		popSize = model.getPopulationSize();
-		
-		for (Node n: syntax) {
+
+		for (final Node n: syntax) {
 			if (n.getArity() == 0) {
 				terminals.add(n);
 			} else {
@@ -89,92 +89,95 @@ public class FullInitialiser implements GPInitialiser {
 			}
 		}
 	}
-	
+
 	/**
-	 * Generate a population of new CandidatePrograms constructed from the 
-	 * function and terminal sets defined by the model. The size of the 
+	 * Generate a population of new CandidatePrograms constructed from the
+	 * function and terminal sets defined by the model. The size of the
 	 * population will be equal to the result of calling getPopulationSize() on
 	 * the controlling model. All programs in the population will be unique.
-	 * Each candidate program will have a full node tree with a depth as given 
+	 * Each candidate program will have a full node tree with a depth as given
 	 * by a call to getMaxInitialDepth() on the model.
 	 * 
-	 * @return A List of newly generated CandidatePrograms which will form the 
-	 * initial population for a GP run.
+	 * @return A List of newly generated CandidatePrograms which will form the
+	 *         initial population for a GP run.
 	 */
 	@Override
 	public List<CandidateProgram> getInitialPopulation() {
 		// Create population list to be populated.
-		List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
-		
+		final List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(
+				popSize);
+
 		// Create and add new programs to the population.
-		for(int i=0; i<popSize; i++) {
+		for (int i = 0; i < popSize; i++) {
 			GPCandidateProgram candidate;
-			
+
 			do {
 				// Build a new full node tree.
-				Node nodeTree = buildFullNodeTree(maxInitialDepth);
-            	
+				final Node nodeTree = buildFullNodeTree(maxInitialDepth);
+
 				// Create a program around the node tree.
 				candidate = new GPCandidateProgram(nodeTree, model);
 			} while (firstGen.contains(candidate));
-			
+
 			// Must be unique - add to the new population.
 			firstGen.add(candidate);
-        }
-		
+		}
+
 		return firstGen;
 	}
-	
+
 	/**
-	 * Build a full node tree with a given depth. As the node tree will be full 
-	 * the maximum and minimum depths of the returned node tree should be equal 
-	 * to the depth argument. The internal and leaf nodes will be selected from 
+	 * Build a full node tree with a given depth. As the node tree will be full
+	 * the maximum and minimum depths of the returned node tree should be equal
+	 * to the depth argument. The internal and leaf nodes will be selected from
 	 * the function and terminal sets respectively, as provided by the model.
 	 * 
-	 * @param depth The depth of the full node tree, where the depth is the 
-	 * number of nodes from the root.
-	 * @return The root node of a randomly generated full node tree of the 
-	 * requested depth.
+	 * @param depth The depth of the full node tree, where the depth is the
+	 *        number of nodes from the root.
+	 * @return The root node of a randomly generated full node tree of the
+	 *         requested depth.
 	 */
-	public Node buildFullNodeTree(int depth) {
+	public Node buildFullNodeTree(final int depth) {
 		Node root;
 		if (depth == 0) {
 			// Randomly choose a terminal node as our root.
-			int randomIndex = rng.nextInt(terminals.size());
+			final int randomIndex = rng.nextInt(terminals.size());
 			root = terminals.get(randomIndex).clone();
 		} else {
 			// Randomly choose a root function node.
-	        int randomIndex = rng.nextInt(functions.size());
-	        root = functions.get(randomIndex).clone();
-	        
-	        // Populate the root node with full children of depth-1.
+			final int randomIndex = rng.nextInt(functions.size());
+			root = functions.get(randomIndex).clone();
+
+			// Populate the root node with full children of depth-1.
 			fillChildren(root, 0, depth);
 		}
 
 		return root;
 	}
-	
+
 	/*
 	 * Recursively fill the children of a node, to construct a full tree down
 	 * to a depth of maxDepth.
 	 */
-	private void fillChildren(Node currentNode, int currentDepth, int maxDepth) {
-		int arity = currentNode.getArity();
-		
-		if(currentDepth<maxDepth-1) {
-			// Not near the maximum depth yet, fill children with functions only.
-			for(int i = 0; i<arity; i++) {
-				int randomIndex = rng.nextInt(functions.size());
-				Node child = functions.get(randomIndex).clone();
+	private void fillChildren(final Node currentNode, final int currentDepth,
+			final int maxDepth) {
+		final int arity = currentNode.getArity();
+
+		if (currentDepth < maxDepth - 1) {
+			// Not near the maximum depth yet, fill children with functions
+			// only.
+			for (int i = 0; i < arity; i++) {
+				final int randomIndex = rng.nextInt(functions.size());
+				final Node child = functions.get(randomIndex).clone();
 
 				currentNode.setChild(i, child);
-				fillChildren(child, (currentDepth+1), maxDepth);
+				fillChildren(child, (currentDepth + 1), maxDepth);
 			}
 		} else {
 			// At maximum depth-1, fill children with terminals.
-			for(int i = 0; i<arity; i++) {
-				int randomIndex = rng.nextInt(terminals.size());
-				Node child = terminals.get(randomIndex).clone();
+			for (int i = 0; i < arity; i++) {
+				final int randomIndex = rng.nextInt(terminals.size());
+				final Node child = terminals.get(randomIndex).clone();
 
 				currentNode.setChild(i, child);
 			}

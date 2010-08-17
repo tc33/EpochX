@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -23,76 +23,74 @@ package org.epochx.core;
 
 import java.util.*;
 
-import org.epochx.life.*;
+import org.epochx.life.ConfigAdapter;
 import org.epochx.representation.CandidateProgram;
 
 /**
- * This component handles the elitism operation to ensure the survival of the 
- * most fit programs in a generation of an evolutionary run. This class 
- * performs this task of scooping off and returning the best programs from a 
- * population. The number of programs taken is decided by a call to the 
+ * This component handles the elitism operation to ensure the survival of the
+ * most fit programs in a generation of an evolutionary run. This class
+ * performs this task of scooping off and returning the best programs from a
+ * population. The number of programs taken is decided by a call to the
  * model's <code>getNoElites</code> method.
  * 
  * <p>
  * Use of the elitism operation will generate the following events:
  * 
  * <table border="1">
- *     <tr>
- *         <th>Event</th>
- *         <th>Revert</th>
- *         <th>Modify</th>
- *         <th>Raised when?</th>
- *     </tr>
- *     <tr>
- *         <td>onElitismStart</td>
- *         <td>no</td>
- *         <td>no</td>
- *         <td>Before the elitism operation is carried out.
- *         </td>
- *     </tr>
- *     <tr>
- *         <td>onElitism</td>
- *         <td>no</td>
- *         <td><strong>yes</strong></td>
- *         <td>After the elitism operation is carried out.
- *         </td>
- *     </tr>
- *     <tr>
- *         <td>onElitismEnd</td>
- *         <td>no</td>
- *         <td>no</td>
- *         <td>After the elitism operation has been completed.
- *         </td>
- *     </tr>
+ * <tr>
+ * <th>Event</th>
+ * <th>Revert</th>
+ * <th>Modify</th>
+ * <th>Raised when?</th>
+ * </tr>
+ * <tr>
+ * <td>onElitismStart</td>
+ * <td>no</td>
+ * <td>no</td>
+ * <td>Before the elitism operation is carried out.</td>
+ * </tr>
+ * <tr>
+ * <td>onElitism</td>
+ * <td>no</td>
+ * <td><strong>yes</strong></td>
+ * <td>After the elitism operation is carried out.</td>
+ * </tr>
+ * <tr>
+ * <td>onElitismEnd</td>
+ * <td>no</td>
+ * <td>no</td>
+ * <td>After the elitism operation has been completed.</td>
+ * </tr>
  * </table>
  */
 public class ElitismManager {
 
 	// The controlling model.
 	private final Model model;
-	
+
 	// The number of elites to be used.
 	private int noElites;
-	
+
 	/**
-	 * Constructs an instance of <code>Elitism</code> which will perform the 
-	 * evolutionary operation of elitism. 
+	 * Constructs an instance of <code>Elitism</code> which will perform the
+	 * evolutionary operation of elitism.
 	 * 
 	 * @param model the Model which defines the run parameters such as number
-	 * 				of elites to use.
+	 *        of elites to use.
 	 */
 	public ElitismManager(final Model model) {
 		this.model = model;
-		
+
 		// Configure parameters from the model.
 		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+
 			@Override
 			public void onConfigure() {
 				configure();
 			}
 		});
 	}
-	
+
 	/*
 	 * Configure component with parameters from the model.
 	 */
@@ -101,30 +99,31 @@ public class ElitismManager {
 		noElites = model.getNoElites();
 		final int popSize = model.getPopulationSize();
 		noElites = (noElites < popSize) ? noElites : popSize;
-		
+
 		assert (noElites <= popSize);
 	}
-	
+
 	/**
-	 * Gets the best <code>CandidatePrograms</code> from the given population 
-	 * and returns them. The number of programs returned will be determined by 
-	 * a call to the model's <code>getNoElites()</code> method. If this method 
-	 * returns a value greater than the allowable population size then the 
-	 * population size will be used. Elites in EpochX are defined as the very 
+	 * Gets the best <code>CandidatePrograms</code> from the given population
+	 * and returns them. The number of programs returned will be determined by
+	 * a call to the model's <code>getNoElites()</code> method. If this method
+	 * returns a value greater than the allowable population size then the
+	 * population size will be used. Elites in EpochX are defined as the very
 	 * best programs in a population.
 	 * 
-	 * <p>After selection and before returning, the model's life cycle listener
-	 * will be informed of the elitism operation with a call to 
-	 * <code>onElitism()</code>. Unlike many of the other life cycle methods, 
-	 * it is not possible to 'revert' an elitism event by returning null. This 
-	 * is because elitism is a deterministic operation, and so re-running would
+	 * <p>
+	 * After selection and before returning, the model's life cycle listener
+	 * will be informed of the elitism operation with a call to
+	 * <code>onElitism()</code>. Unlike many of the other life cycle methods, it
+	 * is not possible to 'revert' an elitism event by returning null. This is
+	 * because elitism is a deterministic operation, and so re-running would
 	 * lead to the same result.
 	 * 
 	 * @param pop the population from which elites are to be retrieved.
-	 * @return a list containing the best CandidatePrograms determined by 
-	 * 		   fitness. If the models required number of elites is equal to or 
-	 * 		   greater than the population size then the returned list will 
-	 * 		   contain all CandidatePrograms from the population sorted.
+	 * @return a list containing the best CandidatePrograms determined by
+	 *         fitness. If the models required number of elites is equal to or
+	 *         greater than the population size then the returned list will
+	 *         contain all CandidatePrograms from the population sorted.
 	 */
 	public List<CandidateProgram> elitism(final List<CandidateProgram> pop) {
 		if (pop == null) {
@@ -133,27 +132,28 @@ public class ElitismManager {
 		if (noElites < 0) {
 			throw new IllegalStateException("no elites is less than 0");
 		}
-		
+
 		model.getLifeCycleManager().fireElitismStartEvent();
-		
+
 		// Construct an array for elites.
 		List<CandidateProgram> elites;
-		
-		if (noElites > 0) {			
+
+		if (noElites > 0) {
 			// Sort the population and scoop off the best noElites.
 			Collections.sort(pop);
-			elites = new ArrayList<CandidateProgram>(pop.subList(pop.size()-noElites, pop.size()));
+			elites = new ArrayList<CandidateProgram>(pop.subList(pop.size()
+					- noElites, pop.size()));
 		} else {
 			elites = new ArrayList<CandidateProgram>();
 		}
-		
+
 		assert (elites.size() == noElites);
-		
+
 		// Allow life cycle listener to confirm or modify.
 		elites = model.getLifeCycleManager().fireElitismEvent(elites);
-		
+
 		model.getLifeCycleManager().fireElitismEndEvent();
-		
+
 		return elites;
 	}
 

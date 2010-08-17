@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,42 +24,44 @@ package org.epochx.gp.representation.dbl;
 import org.epochx.gp.representation.DoubleNode;
 
 /**
- * A <code>FunctionNode</code> which performs the mathematical function of 
+ * A <code>FunctionNode</code> which performs the mathematical function of
  * subtraction.
  */
 public class SubtractFunction extends DoubleNode {
-	
+
 	/**
 	 * Construct an SubtractFunction with no children.
 	 */
 	public SubtractFunction() {
 		this(null, null);
 	}
-	
+
 	/**
-	 * Construct a SubtractFunction with 2 children. When evaluated, both 
+	 * Construct a SubtractFunction with 2 children. When evaluated, both
 	 * children will be evaluated, with the second subtracted from the first.
+	 * 
 	 * @param child1 The first child node.
 	 * @param child2 The second child node, to be subtracted from the first.
 	 */
-	public SubtractFunction(DoubleNode child1, DoubleNode child2) {
+	public SubtractFunction(final DoubleNode child1, final DoubleNode child2) {
 		super(child1, child2);
 	}
-	
+
 	/**
-	 * Evaluating a <code>SubtractFunction</code> involves subtracting the 
+	 * Evaluating a <code>SubtractFunction</code> involves subtracting the
 	 * result of the second child from the first.
 	 */
 	@Override
 	public Double evaluate() {
-		double c1 = ((Double) getChild(0).evaluate()).doubleValue();
-		double c2 = ((Double) getChild(1).evaluate()).doubleValue();
-		
+		final double c1 = ((Double) getChild(0).evaluate()).doubleValue();
+		final double c2 = ((Double) getChild(1).evaluate()).doubleValue();
+
 		return c1 - c2;
 	}
-	
+
 	/**
 	 * Get the unique name that identifies this function.
+	 * 
 	 * @return the unique name for the SubtractFunction which is SUB.
 	 */
 	@Override

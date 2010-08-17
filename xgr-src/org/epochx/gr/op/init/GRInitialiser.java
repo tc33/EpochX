@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -26,9 +26,9 @@ import java.util.List;
 import org.epochx.op.Initialiser;
 import org.epochx.representation.CandidateProgram;
 
-
 public interface GRInitialiser extends Initialiser {
 
+	@Override
 	public List<CandidateProgram> getInitialPopulation();
-	
+
 }

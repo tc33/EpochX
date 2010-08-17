@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -22,21 +22,21 @@
 package org.epochx.ge.model.java.example;
 
 import static org.epochx.ge.stats.GEStatField.*;
+import static org.epochx.stats.StatField.*;
 
-import org.epochx.ge.mapper.*;
-import org.epochx.ge.op.init.*;
+import org.epochx.ge.mapper.DepthFirstMapper;
+import org.epochx.ge.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.life.*;
-import org.epochx.op.selection.*;
-
+import org.epochx.op.selection.TournamentSelector;
 
 public class SantaFeTrail extends org.epochx.ge.model.java.SantaFeTrail {
 
 	public SantaFeTrail() {
-		DepthFirstMapper mapper = new DepthFirstMapper(this);
+		final DepthFirstMapper mapper = new DepthFirstMapper(this);
 		mapper.setWrapping(true);
 		mapper.setRemovingUnusedCodons(false);
 		setMapper(mapper);
-		
+
 		setMaxCodonSize(256);
 		setNoRuns(100);
 		setNoElites(10);
@@ -50,23 +50,28 @@ public class SantaFeTrail extends org.epochx.ge.model.java.SantaFeTrail {
 		setPoolSelector(null);
 		setPoolSize(-1);
 		setInitialiser(new RampedHalfAndHalfInitialiser(this));
-		
+
 		getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+
 			@Override
 			public void onGenerationEnd() {
-				getStatsManager().printGenerationStats(GEN_NUMBER, GEN_FITNESS_MIN, GEN_FITNESS_AVE, GEN_DEPTH_AVE, GEN_DEPTH_MAX, GEN_FITTEST_PROGRAM);
+				getStatsManager().printGenerationStats(GEN_NUMBER,
+						GEN_FITNESS_MIN, GEN_FITNESS_AVE, GEN_DEPTH_AVE,
+						GEN_DEPTH_MAX, GEN_FITTEST_PROGRAM);
 			}
 		});
-		
+
 		getLifeCycleManager().addRunListener(new RunAdapter() {
+
 			@Override
 			public void onRunEnd() {
-				getStatsManager().printRunStats(RUN_NUMBER, RUN_FITNESS_MIN, RUN_FITTEST_PROGRAM);
+				getStatsManager().printRunStats(RUN_NUMBER, RUN_FITNESS_MIN,
+						RUN_FITTEST_PROGRAM);
 			}
 		});
 	}
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		new SantaFeTrail().run();
 	}
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -26,26 +26,27 @@ import java.util.List;
 import org.epochx.op.Initialiser;
 import org.epochx.representation.CandidateProgram;
 
-
 /**
- * Initialisers are responsible for constructing the initial population that 
+ * Initialisers are responsible for constructing the initial population that
  * the XGE system will evolve.
  * 
- * <p>Implementations of this interface should be capable of generating a 
- * population of <code>CandidatePrograms</code>. The getInitialPopulation() 
- * method is called towards the start of execution of a run to get the first 
+ * <p>
+ * Implementations of this interface should be capable of generating a
+ * population of <code>CandidatePrograms</code>. The getInitialPopulation()
+ * method is called towards the start of execution of a run to get the first
  * population which will then be evolved.
  */
 public interface GEInitialiser extends Initialiser {
 
 	/**
 	 * Construct and return an initial population of CandidatePrograms.
-	 * Implementations will typically wish to return a population with a size 
+	 * Implementations will typically wish to return a population with a size
 	 * as given by calling getPopulationSize() on the controlling model.
 	 * 
-	 * @return A List of newly generated CandidatePrograms which will form the 
-	 * initial population for a GP run.
+	 * @return A List of newly generated CandidatePrograms which will form the
+	 *         initial population for a GP run.
 	 */
+	@Override
 	public List<CandidateProgram> getInitialPopulation();
-	
+
 }

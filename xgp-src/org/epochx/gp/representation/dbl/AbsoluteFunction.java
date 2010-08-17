@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -35,11 +35,11 @@ public class AbsoluteFunction extends DoubleNode {
 	public AbsoluteFunction() {
 		this(null);
 	}
-	
+
 	/**
 	 * 
 	 */
-	public AbsoluteFunction(DoubleNode child) {
+	public AbsoluteFunction(final DoubleNode child) {
 		super(child);
 	}
 
@@ -48,13 +48,14 @@ public class AbsoluteFunction extends DoubleNode {
 	 */
 	@Override
 	public Double evaluate() {
-		double value = (Double) getChild(0).evaluate();
+		final double value = (Double) getChild(0).evaluate();
 
 		return Math.abs(value);
 	}
-	
+
 	/**
 	 * Get the unique name that identifies this function.
+	 * 
 	 * @return the unique name for the AbsoluteFunction which is ABS.
 	 */
 	@Override

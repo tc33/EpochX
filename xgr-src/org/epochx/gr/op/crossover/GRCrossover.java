@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -28,6 +28,7 @@ import org.epochx.representation.CandidateProgram;
 public interface GRCrossover extends Crossover {
 
 	@Override
-	public GRCandidateProgram[] crossover(CandidateProgram parent1, CandidateProgram parent2);
-	
+	public GRCandidateProgram[] crossover(CandidateProgram parent1,
+			CandidateProgram parent2);
+
 }

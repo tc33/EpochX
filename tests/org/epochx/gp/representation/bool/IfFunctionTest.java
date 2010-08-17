@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -29,32 +29,33 @@ import org.epochx.gp.representation.*;
 public class IfFunctionTest extends AbstractBooleanNodeTestCase {
 
 	private IfFunction ifFunction;
-	
+
 	@Override
 	public Node getNode() {
 		return new IfFunction();
 	}
-	
+
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		
+
 		ifFunction = (IfFunction) getNode();
-		Node[] children = new Node[]{null, new BooleanLiteral(true), new BooleanLiteral(false)};
+		final Node[] children = new Node[]{null, new BooleanLiteral(true),
+				new BooleanLiteral(false)};
 		ifFunction.setChildren(children);
 	}
-	
+
 	public void testEvaluateT() {
 		ifFunction.setChild(0, new BooleanLiteral(true));
-		boolean result = ifFunction.evaluate();
-		
+		final boolean result = ifFunction.evaluate();
+
 		assertTrue("IF did not evaluate 2nd child when 1st was true", result);
 	}
-	
+
 	public void testEvaluateF() {
 		ifFunction.setChild(0, new BooleanLiteral(false));
-		boolean result = ifFunction.evaluate();
-		
+		final boolean result = ifFunction.evaluate();
+
 		assertFalse("IF did not evaluate 3rd child when 1st was false", result);
 	}
 

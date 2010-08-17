@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -25,5 +25,5 @@ package org.epochx.op;
  * All genetic operators implement this interface for convenience.
  */
 public interface Operator {
-	
+
 }

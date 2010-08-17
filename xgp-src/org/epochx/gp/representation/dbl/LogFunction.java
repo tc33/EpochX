@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -25,39 +25,42 @@ import org.epochx.gp.representation.DoubleNode;
 
 /**
  * A <code>FunctionNode</code> which performs the natural (base e) logarithm.
+ * 
  * @see Log10Function
  */
 public class LogFunction extends DoubleNode {
-	
+
 	/**
 	 * Construct a LogFunction with no children.
 	 */
 	public LogFunction() {
 		this(null);
 	}
-	
+
 	/**
-	 * Construct a LogFunction with one child. When evaluated, the logarithm 
+	 * Construct a LogFunction with one child. When evaluated, the logarithm
 	 * of the evaluated child will be calculated.
+	 * 
 	 * @param child The child of which the base e logarithm will be calculated.
 	 */
-	public LogFunction(DoubleNode child) {
+	public LogFunction(final DoubleNode child) {
 		super(child);
 	}
 
 	/**
-	 * Evaluating a <code>LogFunction</code> involves evaluating the child 
+	 * Evaluating a <code>LogFunction</code> involves evaluating the child
 	 * then calculating it's base e logarithm.
 	 */
 	@Override
 	public Double evaluate() {
-		double c = ((Double) getChild(0).evaluate()).doubleValue();
-		
+		final double c = ((Double) getChild(0).evaluate()).doubleValue();
+
 		return Math.log(c);
 	}
-	
+
 	/**
 	 * Get the unique name that identifies this function.
+	 * 
 	 * @return the unique name for the LogFunction which is LN.
 	 */
 	@Override

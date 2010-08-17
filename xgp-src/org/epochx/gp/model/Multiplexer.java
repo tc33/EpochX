@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -33,27 +33,27 @@ import org.epochx.tools.util.BoolUtils;
  * 
  * <h4>Multiplexer problem</h4>
  * 
- * Given n binary inputValues, a program that solves the majority problem will 
- * return true in all circumstances where a majority of the inputValues are true 
+ * Given n binary inputValues, a program that solves the majority problem will
+ * return true in all circumstances where a majority of the inputValues are true
  * (or 1), and return false whenever there is not a majority of true values.
  */
 public class Multiplexer extends GPModel {
 
 	// The names of the inputValues used in the grammar.
 	private final BooleanVariable[] variables;
-	
+
 	// The boolean input sequences.
 	private final boolean[][] inputValues;
-	
+
 	// No input bits.
 	private int noAddressBits;
 	private int noDataBits;
-	
+
 	/**
 	 * Constructs a Multiplexer model for the given number of inputs.
 	 * 
 	 * @param noInputBits the number of inputs the multiplexer problem should be
-	 * for
+	 *        for
 	 */
 	public Multiplexer(final int noInputBits) {
 		// Generate the input sequences.
@@ -61,38 +61,38 @@ public class Multiplexer extends GPModel {
 
 		// Calculate number of address/data bits.
 		setBitSizes(noInputBits);
-		
+
 		// Define functions.
-		List<Node> syntax = new ArrayList<Node>();
+		final List<Node> syntax = new ArrayList<Node>();
 		syntax.add(new IfFunction());
 		syntax.add(new AndFunction());
 		syntax.add(new OrFunction());
 		syntax.add(new NotFunction());
-		
+
 		// Define terminal variables.
 		variables = new BooleanVariable[noInputBits];
 		// Add address inputs.
-		for (int i=0; i<noAddressBits; i++) {
+		for (int i = 0; i < noAddressBits; i++) {
 			variables[i] = new BooleanVariable("a" + i);
 			syntax.add(variables[i]);
 		}
 		// Add data inputs.
-		for (int i=noAddressBits; i<noInputBits; i++) {
+		for (int i = noAddressBits; i < noInputBits; i++) {
 			variables[i] = new BooleanVariable("d" + i);
 			syntax.add(variables[i]);
 		}
-		
+
 		setSyntax(syntax);
-	}	
-	
+	}
+
 	/**
-	 * Calculates the fitness score for the given program. The fitness of a 
-	 * program for the majority problem is calculated by evaluating it 
-	 * using each of the possible sets of input values. There are 
-	 * <code>2^noInputBits</code> possible sets of inputs. The fitness of the 
-	 * program is the quantity of those input sequences that the program 
+	 * Calculates the fitness score for the given program. The fitness of a
+	 * program for the majority problem is calculated by evaluating it
+	 * using each of the possible sets of input values. There are
+	 * <code>2^noInputBits</code> possible sets of inputs. The fitness of the
+	 * program is the quantity of those input sequences that the program
 	 * returned an incorrect response for. That is, a fitness value of
-	 * <code>0.0</code> indicates the program responded correctly for every 
+	 * <code>0.0</code> indicates the program responded correctly for every
 	 * possible set of input values.
 	 * 
 	 * @param p {@inheritDoc}
@@ -101,33 +101,33 @@ public class Multiplexer extends GPModel {
 	@Override
 	public double getFitness(final CandidateProgram p) {
 		final GPCandidateProgram program = (GPCandidateProgram) p;
-		
-        double score = 0;
-        
-        // Execute on all possible inputs.
-        for (boolean[] in: inputValues) {
-        	
-        	// Set the variables.
-        	for (int i=0; i<in.length; i++) {
-        		variables[i].setValue(in[i]);
-        	}
-        	
-            if ((Boolean) program.evaluate() == multiplex(in)) {
-                score++;
-            }
-        }
-        
-        return inputValues.length - score;
+
+		double score = 0;
+
+		// Execute on all possible inputs.
+		for (final boolean[] in: inputValues) {
+
+			// Set the variables.
+			for (int i = 0; i < in.length; i++) {
+				variables[i].setValue(in[i]);
+			}
+
+			if ((Boolean) program.evaluate() == multiplex(in)) {
+				score++;
+			}
+		}
+
+		return inputValues.length - score;
 	}
-	
+
 	/*
 	 * Calculate and set the number of address and data bits.
 	 */
 	private void setBitSizes(final int noInputBits) {
 		noAddressBits = 1;
 		while (true) {
-			noDataBits = (int) Math.pow(2, noAddressBits);			
-			
+			noDataBits = (int) Math.pow(2, noAddressBits);
+
 			if ((noAddressBits + noDataBits) == noInputBits) {
 				break;
 			}
@@ -135,15 +135,15 @@ public class Multiplexer extends GPModel {
 			noAddressBits++;
 		}
 	}
-	
+
 	/*
 	 * Calculate what the correct response should be for the given inputs.
 	 */
 	private Boolean multiplex(final boolean[] vars) {
-		//TODO This is quite a lot slower than the x-bit specific versions.
+		// TODO This is quite a lot slower than the x-bit specific versions.
 		// Calculate which data position to use.
 		int dataPosition = 0;
-		for (int i=0; i<noAddressBits; i++) {
+		for (int i = 0; i < noAddressBits; i++) {
 			if (vars[i]) {
 				dataPosition += Math.pow(2, i);
 			}

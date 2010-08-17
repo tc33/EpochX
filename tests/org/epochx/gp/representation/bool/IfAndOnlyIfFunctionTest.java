@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -32,41 +32,45 @@ public class IfAndOnlyIfFunctionTest extends AbstractBooleanNodeTestCase {
 	public Node getNode() {
 		return new IfAndOnlyIfFunction();
 	}
-	
+
 	public void testEvaluateTT() {
-		IfAndOnlyIfFunction node = (IfAndOnlyIfFunction) getNode();
-		Node[] children = new Node[]{new BooleanLiteral(true), new BooleanLiteral(true)};
+		final IfAndOnlyIfFunction node = (IfAndOnlyIfFunction) getNode();
+		final Node[] children = new Node[]{new BooleanLiteral(true),
+				new BooleanLiteral(true)};
 		node.setChildren(children);
-		boolean result = node.evaluate();
-		
+		final boolean result = node.evaluate();
+
 		assertTrue("IFF of true and true is not true", result);
 	}
-	
+
 	public void testEvaluateTF() {
-		IfAndOnlyIfFunction node = (IfAndOnlyIfFunction) getNode();
-		Node[] children = new Node[]{new BooleanLiteral(true), new BooleanLiteral(false)};
+		final IfAndOnlyIfFunction node = (IfAndOnlyIfFunction) getNode();
+		final Node[] children = new Node[]{new BooleanLiteral(true),
+				new BooleanLiteral(false)};
 		node.setChildren(children);
-		boolean result = node.evaluate();
-		
+		final boolean result = node.evaluate();
+
 		assertFalse("IFF of true and false is not false", result);
 	}
-	
+
 	public void testEvaluateFT() {
-		IfAndOnlyIfFunction node = (IfAndOnlyIfFunction) getNode();
-		Node[] children = new Node[]{new BooleanLiteral(false), new BooleanLiteral(true)};
+		final IfAndOnlyIfFunction node = (IfAndOnlyIfFunction) getNode();
+		final Node[] children = new Node[]{new BooleanLiteral(false),
+				new BooleanLiteral(true)};
 		node.setChildren(children);
-		boolean result = node.evaluate();
-		
+		final boolean result = node.evaluate();
+
 		assertFalse("IFF of false and true is not false", result);
 	}
-	
+
 	public void testEvaluateFF() {
-		IfAndOnlyIfFunction node = (IfAndOnlyIfFunction) getNode();
-		Node[] children = new Node[]{new BooleanLiteral(false), new BooleanLiteral(false)};
+		final IfAndOnlyIfFunction node = (IfAndOnlyIfFunction) getNode();
+		final Node[] children = new Node[]{new BooleanLiteral(false),
+				new BooleanLiteral(false)};
 		node.setChildren(children);
-		boolean result = node.evaluate();
-		
+		final boolean result = node.evaluate();
+
 		assertTrue("IFF of false and false is not true", result);
 	}
-	
+
 }

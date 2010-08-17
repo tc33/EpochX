@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -31,44 +31,57 @@ import junit.framework.TestCase;
 public class AntLandscapeTest extends TestCase {
 
 	private AntLandscape landscape;
-	
+
 	@Override
 	protected void setUp() throws Exception {
 		landscape = new AntLandscape(new Dimension(32, 32));
 	}
-	
+
 	/**
 	 * Test the isValidLocation method.
 	 */
 	public void testIsValidLocation() {
-		assertFalse("location at excessive x point not invalid", landscape.isValidLocation(new Point(landscape.getWidth(), landscape.getHeight()-1)));
-		assertFalse("location at excessive y point not invalid", landscape.isValidLocation(new Point(landscape.getWidth()-1, landscape.getHeight())));
-		assertFalse("location at negative x point not invalid", landscape.isValidLocation(new Point(-1, 0)));
-		assertFalse("location at negative y point not invalid", landscape.isValidLocation(new Point(0, -1)));
-		
-		assertTrue("location at 0,0 point not valid", landscape.isValidLocation(new Point(0, 0)));
-		assertTrue("location at valid point not indicated valid", landscape.isValidLocation(new Point(landscape.getWidth()-1, landscape.getHeight()-1)));
+		assertFalse("location at excessive x point not invalid",
+				landscape.isValidLocation(new Point(landscape.getWidth(),
+						landscape.getHeight() - 1)));
+		assertFalse("location at excessive y point not invalid",
+				landscape.isValidLocation(new Point(landscape.getWidth() - 1,
+						landscape.getHeight())));
+		assertFalse("location at negative x point not invalid",
+				landscape.isValidLocation(new Point(-1, 0)));
+		assertFalse("location at negative y point not invalid",
+				landscape.isValidLocation(new Point(0, -1)));
+
+		assertTrue("location at 0,0 point not valid",
+				landscape.isValidLocation(new Point(0, 0)));
+		assertTrue("location at valid point not indicated valid",
+				landscape.isValidLocation(new Point(landscape.getWidth() - 1,
+						landscape.getHeight() - 1)));
 	}
-	
+
 	/**
 	 * Test the getNextLocation method.
 	 */
 	public void testGetNextLocation() {
-		Point location = new Point(0,0);
+		Point location = new Point(0, 0);
 		Orientation orientation = Orientation.EAST;
-		assertEquals("next location from (0,0):EAST is not 1,0.", new Point(1,0), landscape.getNextLocation(location, orientation));
-		
-		location = new Point(0,0);
+		assertEquals("next location from (0,0):EAST is not 1,0.", new Point(1,
+				0), landscape.getNextLocation(location, orientation));
+
+		location = new Point(0, 0);
 		orientation = Orientation.SOUTH;
-		assertEquals("next location from (0,0):SOUTH is not 0,1.", new Point(0,1), landscape.getNextLocation(location, orientation));
-		
-		location = new Point(0,0);
+		assertEquals("next location from (0,0):SOUTH is not 0,1.", new Point(0,
+				1), landscape.getNextLocation(location, orientation));
+
+		location = new Point(0, 0);
 		orientation = Orientation.WEST;
-		assertEquals("next location from (0,0):WEST is not 31,0.", new Point(31,0), landscape.getNextLocation(location, orientation));
-		
-		location = new Point(0,0);
+		assertEquals("next location from (0,0):WEST is not 31,0.", new Point(
+				31, 0), landscape.getNextLocation(location, orientation));
+
+		location = new Point(0, 0);
 		orientation = Orientation.NORTH;
-		assertEquals("next location from (0,0):NORTH is not 0,31.", new Point(0,31), landscape.getNextLocation(location, orientation));
+		assertEquals("next location from (0,0):NORTH is not 0,31.", new Point(
+				0, 31), landscape.getNextLocation(location, orientation));
 	}
-	
+
 }

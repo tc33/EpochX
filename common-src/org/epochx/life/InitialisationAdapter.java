@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -26,21 +26,27 @@ import java.util.List;
 import org.epochx.representation.CandidateProgram;
 
 /**
- * Provides an <code>abstract</code> implementation of 
- * <code>InitialisationListener</code>. 
+ * Provides an <code>abstract</code> implementation of
+ * <code>InitialisationListener</code>.
  * 
- * <p>Typical use of this class would be in an anonymous class. For example:
+ * <p>
+ * Typical use of this class would be in an anonymous class. For example:
  * 
- * <blockquote><pre>
+ * <blockquote>
+ * 
+ * <pre>
  *     model.getLifeCycleListener().addInitialisationListener(new RunAdapter(){
  *     		public void onInitialisationStart() {
  *     			... do something ...
  *     		}
  *     });
- * </pre></blockquote>
+ * </pre>
  * 
- * <p>Creating an anonymous implementation of this class is often preferable to 
- * implementing <code>InitialisationListener</code> since it avoids the need to 
+ * </blockquote>
+ * 
+ * <p>
+ * Creating an anonymous implementation of this class is often preferable to
+ * implementing <code>InitialisationListener</code> since it avoids the need to
  * implement methods which may be of no interest.
  */
 public abstract class InitialisationAdapter implements InitialisationListener {
@@ -49,13 +55,15 @@ public abstract class InitialisationAdapter implements InitialisationListener {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void onInitialisationStart() {}
-	
+	public void onInitialisationStart() {
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<CandidateProgram> onInitialisation(List<CandidateProgram> pop) {
+	public List<CandidateProgram> onInitialisation(
+			final List<CandidateProgram> pop) {
 		return pop;
 	}
 
@@ -63,6 +71,7 @@ public abstract class InitialisationAdapter implements InitialisationListener {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void onInitialisationEnd() {}
+	public void onInitialisationEnd() {
+	}
 
 }

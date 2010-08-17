@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,37 +24,36 @@ package org.epochx.gp.model;
 import java.util.List;
 
 import org.epochx.core.Model;
-import org.epochx.gp.op.crossover.*;
-import org.epochx.gp.op.init.*;
-import org.epochx.gp.op.mutation.*;
+import org.epochx.gp.op.crossover.UniformPointCrossover;
+import org.epochx.gp.op.init.FullInitialiser;
+import org.epochx.gp.op.mutation.SubtreeMutation;
 import org.epochx.gp.representation.Node;
 import org.epochx.gp.stats.GPStatsEngine;
 
-
 /**
- * Model implementation for performing tree-based genetic programming 
+ * Model implementation for performing tree-based genetic programming
  * evolutionary runs.
  */
 public abstract class GPModel extends Model {
 
 	// Control parameters.
-	private List<Node> syntax;	
-	
+	private List<Node> syntax;
+
 	private int maxInitialDepth;
 	private int maxProgramDepth;
-	
+
 	/**
-	 * Constructs a <code>GPModel</code> with a set of sensible defaults. See 
+	 * Constructs a <code>GPModel</code> with a set of sensible defaults. See
 	 * the appropriate accessor method for information of each default value.
 	 */
 	public GPModel() {
 		// Use the GP stats engine.
 		getStatsManager().setStatsEngine(new GPStatsEngine(this));
-		
+
 		// Set default parameter values.
 		maxInitialDepth = 6;
 		maxProgramDepth = 17;
-		
+
 		// Operators.
 		setInitialiser(new FullInitialiser(this));
 		setCrossover(new UniformPointCrossover(this));
@@ -66,79 +65,86 @@ public abstract class GPModel extends Model {
 	 */
 	@Override
 	public void run() {
-		if (syntax == null || syntax.isEmpty()) {
+		if ((syntax == null) || syntax.isEmpty()) {
 			throw new IllegalStateException("no syntax set");
 		}
-		
+
 		super.run();
 	}
-	
+
 	/**
-	 * Retrieves the maximum depth of CandidatePrograms allowed in the 
-	 * population after initialisation. The exact way in which the 
+	 * Retrieves the maximum depth of CandidatePrograms allowed in the
+	 * population after initialisation. The exact way in which the
 	 * implementation ensures this depth is kept to may vary.
 	 * 
-	 * <p>Defaults to 6.
+	 * <p>
+	 * Defaults to 6.
 	 * 
-	 * @return the maximum depth of CandidatePrograms to be allowed in the 
-	 * 		   population after initialisation.
+	 * @return the maximum depth of CandidatePrograms to be allowed in the
+	 *         population after initialisation.
 	 */
 	public int getMaxInitialDepth() {
 		return maxInitialDepth;
 	}
 
 	/**
-	 * Overwrites the default max program tree depth allowed after 
+	 * Overwrites the default max program tree depth allowed after
 	 * initialisation is performed.
 	 * 
-	 * <p>Max depth of -1 is allowed to indicate no limit.
+	 * <p>
+	 * Max depth of -1 is allowed to indicate no limit.
 	 * 
 	 * @param maxInitialDepth the new max program tree depth to use.
 	 */
-	public void setMaxInitialDepth(int maxInitialDepth) {
-		//TODO The name of this needs to be made consistent with those from XGR and XGE.
+	public void setMaxInitialDepth(final int maxInitialDepth) {
+		// TODO The name of this needs to be made consistent with those from XGR
+		// and XGE.
 		if (maxInitialDepth >= -1) {
 			this.maxInitialDepth = maxInitialDepth;
 		} else {
-			throw new IllegalArgumentException("maxInitialDepth must be -1 or greater");
+			throw new IllegalArgumentException(
+					"maxInitialDepth must be -1 or greater");
 		}
-		
+
 		assert (this.maxInitialDepth >= -1);
 	}
 
 	/**
-	 * Retrieves the maximum depth of CandidatePrograms allowed in the 
-	 * population after undergoing genetic operators. The exact way in which 
-	 * CandidatePrograms deeper than this limit are dealt with may vary, but 
+	 * Retrieves the maximum depth of CandidatePrograms allowed in the
+	 * population after undergoing genetic operators. The exact way in which
+	 * CandidatePrograms deeper than this limit are dealt with may vary, but
 	 * they will not be allowed to remain into the next generation unaltered.
 	 * 
-	 * <p>Defaults to 17.
+	 * <p>
+	 * Defaults to 17.
 	 * 
-	 * @return the maximum depth of CandidatePrograms to be allowed in the 
-	 * 		   population after genetic operators.
+	 * @return the maximum depth of CandidatePrograms to be allowed in the
+	 *         population after genetic operators.
 	 */
 	public int getMaxDepth() {
 		return maxProgramDepth;
 	}
 
 	/**
-	 * Overwrites the default max program tree depth allowed after genetic 
+	 * Overwrites the default max program tree depth allowed after genetic
 	 * operators are performed.
 	 * 
-	 * <p>Max depth of -1 is allowed to indicate no limit.
+	 * <p>
+	 * Max depth of -1 is allowed to indicate no limit.
 	 * 
 	 * @param maxDepth the new max program tree depth to use.
 	 */
-	public void setMaxDepth(int maxDepth) {
+	public void setMaxDepth(final int maxDepth) {
 		if (maxDepth >= -1) {
-			this.maxProgramDepth = maxDepth;
+			maxProgramDepth = maxDepth;
 		} else {
-			throw new IllegalArgumentException("maxProgramDepth must be -1 or greater");
+			throw new IllegalArgumentException(
+					"maxProgramDepth must be -1 or greater");
 		}
-		
-		assert (this.maxProgramDepth >= -1);
+
+		assert (maxProgramDepth >= -1);
 	}
-	
+
 	/**
 	 * Retrieves the full set of syntax, that is terminals AND function nodes.
 	 * 
@@ -147,20 +153,20 @@ public abstract class GPModel extends Model {
 	public List<Node> getSyntax() {
 		return syntax;
 	}
-	
+
 	/**
-	 * Sets the syntax to use, that is a complete set of the terminals and 
+	 * Sets the syntax to use, that is a complete set of the terminals and
 	 * function nodes.
 	 * 
 	 * @param syntax a list of the functions and terminals.
 	 */
-	public void setSyntax(List<Node> syntax) {
+	public void setSyntax(final List<Node> syntax) {
 		if (syntax != null) {
 			this.syntax = syntax;
 		} else {
 			throw new IllegalArgumentException("syntax must not be null");
 		}
-		
+
 		assert (this.syntax != null);
 	}
 }

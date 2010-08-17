@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -26,35 +26,40 @@ package org.epochx.tools.random;
  */
 public interface RandomNumberGenerator {
 
-    /**
-     * Get the next int, where n is max
-     * @param n max in value
-     * @return next random int
-     */
-    public int nextInt(int n);
+	/**
+	 * Get the next int, where n is max
+	 * 
+	 * @param n max in value
+	 * @return next random int
+	 */
+	public int nextInt(int n);
 
-    /**
-     * Get the next int
-     * @return next int
-     */
-    public int nextInt();
+	/**
+	 * Get the next int
+	 * 
+	 * @return next int
+	 */
+	public int nextInt();
 
-    /**
-     * Get the next double 0<=x<1
-     * @return next double
-     */
-    public double nextDouble();
+	/**
+	 * Get the next double 0<=x<1
+	 * 
+	 * @return next double
+	 */
+	public double nextDouble();
 
-    /**
-     * Get the next boolean
-     * @return next boolean
-     */
-    public boolean nextBoolean();
+	/**
+	 * Get the next boolean
+	 * 
+	 * @return next boolean
+	 */
+	public boolean nextBoolean();
 
-    /**
-     * Set the seed
-     * @param l seed
-     */
-    public void setSeed(long l);
-    
+	/**
+	 * Set the seed
+	 * 
+	 * @param l seed
+	 */
+	public void setSeed(long l);
+
 }

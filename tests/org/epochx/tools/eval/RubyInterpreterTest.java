@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -34,82 +34,92 @@ public class RubyInterpreterTest extends TestCase {
 	 * Tests that the eval method can handle simple expressions.
 	 */
 	public void testEval() throws MalformedProgramException {
-		Interpreter interpreter = new RubyInterpreter();
-		
+		final Interpreter interpreter = new RubyInterpreter();
+
 		String expression = "(b1 || false) && (s1.to_i < 4.435)";
 		String[] args = {"b1", "s1"};
 		Object[] values = {true, "3"};
-		
-		assertEquals("evaluation of simple expression incorrect", true, interpreter.eval(expression, args, values));
-		assertEquals("evaluation of simple expression incorrect", false, interpreter.eval('!' + expression, args, values));
-		
+
+		assertEquals("evaluation of simple expression incorrect", true,
+				interpreter.eval(expression, args, values));
+		assertEquals("evaluation of simple expression incorrect", false,
+				interpreter.eval('!' + expression, args, values));
+
 		expression = "(4.0 + 2.0) / (3.0 - d1)";
 		args = new String[]{"d1"};
 		values = new Object[]{1.0};
-		
-		assertEquals("evaluation of simple expression incorrect", 3.0, interpreter.eval(expression, args, values));
+
+		assertEquals("evaluation of simple expression incorrect", 3.0,
+				interpreter.eval(expression, args, values));
 	}
 
 	/**
 	 * Tests that the eval method can handle simple expressions.
 	 */
 	public void testMultiEval() throws MalformedProgramException {
-		Interpreter interpreter = new RubyInterpreter();
-		
+		final Interpreter interpreter = new RubyInterpreter();
+
 		String expression = "(b1 || false) && (s1.to_i < 4.435)";
 		String[] args = {"b1", "s1"};
 		Object[][] values = {{true, "3"}, {false, "4"}};
-		
+
 		Object[] result = interpreter.eval(expression, args, values);
-		
-		assertEquals("evaluation of simple expression incorrect", true, result[0]);
-		assertEquals("evaluation of simple expression incorrect", false, result[1]);
-		
+
+		assertEquals("evaluation of simple expression incorrect", true,
+				result[0]);
+		assertEquals("evaluation of simple expression incorrect", false,
+				result[1]);
+
 		expression = "(4.0 + 2.0) / (3.0 - s1.to_i)";
 		args = new String[]{"s1"};
-		values = new Object[][]{{"1.0"},{"2.0"}};
-		
+		values = new Object[][]{{"1.0"}, {"2.0"}};
+
 		result = interpreter.eval(expression, args, values);
-		
-		assertEquals("evaluation of simple expression incorrect", 3.0, result[0]);
-		assertEquals("evaluation of simple expression incorrect", 6.0, result[1]);
+
+		assertEquals("evaluation of simple expression incorrect", 3.0,
+				result[0]);
+		assertEquals("evaluation of simple expression incorrect", 6.0,
+				result[1]);
 	}
-	
+
 	/**
 	 * Tests that the exec method can execute sequences of statements.
 	 */
 	public void testExec() throws MalformedProgramException {
-		Interpreter interpreter = new RubyInterpreter();
-		
-		Point p = new Point(2,3);
+		final Interpreter interpreter = new RubyInterpreter();
 
-		String program = "x = 25; p.setLocation(x, p.getY() + \"1\".to_i);";
-		String[] args = {"p"};
-		Object[] values = {p};
-		
+		final Point p = new Point(2, 3);
+
+		final String program = "x = 25; p.setLocation(x, p.getY() + \"1\".to_i);";
+		final String[] args = {"p"};
+		final Object[] values = {p};
+
 		interpreter.exec(program, args, values);
-		
-		assertEquals("execution of statements had unexpected side-effects", new Point(25, 4), p.getLocation());
+
+		assertEquals("execution of statements had unexpected side-effects",
+				new Point(25, 4), p.getLocation());
 	}
-	
+
 	/**
 	 * Tests that the exec method can execute sequences of statements multiple
 	 * times.
 	 */
 	public void testMultiExec() throws MalformedProgramException {
-		Interpreter interpreter = new RubyInterpreter();
-		
-		Point p1 = new Point(0,0);
-		Point p2 = new Point(-10,-10);
+		final Interpreter interpreter = new RubyInterpreter();
 
-		String program = "x = p.getX() + \"1\".to_i; y = p.getY() + 2; p.setLocation(x, y);";
-		String[] args = {"p"};
-		Object[][] values = {{p1},{p1},{p2}};
-		
+		final Point p1 = new Point(0, 0);
+		final Point p2 = new Point(-10, -10);
+
+		final String program = "x = p.getX() + \"1\".to_i; y = p.getY() + 2; p.setLocation(x, y);";
+		final String[] args = {"p"};
+		final Object[][] values = {{p1}, {p1}, {p2}};
+
 		// Execute the program with p1 twice then p2 once.
 		interpreter.exec(program, args, values);
-		
-		assertEquals("execution of statements had unexpected side-effects", new Point(2, 4), p1.getLocation());
-		assertEquals("execution of statements had unexpected side-effects", new Point(-9, -8), p2.getLocation());
+
+		assertEquals("execution of statements had unexpected side-effects",
+				new Point(2, 4), p1.getLocation());
+		assertEquals("execution of statements had unexpected side-effects",
+				new Point(-9, -8), p2.getLocation());
 	}
 }

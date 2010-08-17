@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -25,39 +25,42 @@ import org.epochx.gp.representation.DoubleNode;
 
 /**
  * A <code>FunctionNode</code> which performs the common (base 10) logarithm.
+ * 
  * @see LogFunction
  */
 public class Log10Function extends DoubleNode {
-	
+
 	/**
 	 * Construct a Log10Function with no children.
 	 */
 	public Log10Function() {
 		this(null);
 	}
-	
+
 	/**
-	 * Construct a Log10Function with one child. When evaluated, the logarithm 
+	 * Construct a Log10Function with one child. When evaluated, the logarithm
 	 * of the evaluated child will be calculated.
+	 * 
 	 * @param child The child of which the base 10 logarithm will be calculated.
 	 */
-	public Log10Function(DoubleNode child) {
+	public Log10Function(final DoubleNode child) {
 		super(child);
 	}
 
 	/**
-	 * Evaluating a <code>Log10Function</code> involves evaluating the child 
+	 * Evaluating a <code>Log10Function</code> involves evaluating the child
 	 * then calculating it's base 10 logarithm.
 	 */
 	@Override
 	public Double evaluate() {
-		double c = ((Double) getChild(0).evaluate()).doubleValue();
-		
+		final double c = ((Double) getChild(0).evaluate()).doubleValue();
+
 		return Math.log10(c);
 	}
-	
+
 	/**
 	 * Get the unique name that identifies this function.
+	 * 
 	 * @return the unique name for the Log10Function which is LOG-10.
 	 */
 	@Override

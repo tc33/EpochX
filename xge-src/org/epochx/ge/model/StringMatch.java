@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -25,8 +25,7 @@ import java.io.*;
 
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.grammar.Grammar;
-import org.epochx.tools.grammar.MalformedGrammarException;
+import org.epochx.tools.grammar.*;
 
 /**
  * This model needs to undergo some work and is unlikely to function correctly
@@ -37,55 +36,57 @@ public class StringMatch extends GEModel {
 	public StringMatch() {
 		try {
 			setGrammar(new Grammar(new File("example-grammars/StringMatch.bnf")));
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
-		} catch (MalformedGrammarException e) {
+		} catch (final MalformedGrammarException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
-	public double getFitness(CandidateProgram p) {
-		GECandidateProgram program = (GECandidateProgram) p;
-		
-		String match = "hello_world";
-		String src = program.getSourceCode();
-		
+	public double getFitness(final CandidateProgram p) {
+		final GECandidateProgram program = (GECandidateProgram) p;
+
+		final String match = "hello_world";
+		final String src = program.getSourceCode();
+
 		if (src == null) {
 			return Integer.MAX_VALUE;
 		}
-		
-		int srcLength = src.length();
-		int matchLength = match.length();
+
+		final int srcLength = src.length();
+		final int matchLength = match.length();
 		int score = 0;
-		
-		for (int i=0; i<matchLength; i++) {
+
+		for (int i = 0; i < matchLength; i++) {
 			if ((i < srcLength) && (match.charAt(i) != src.charAt(i))) {
 				score++;
 			}
 		}
-		
+
 		if (srcLength != matchLength) {
 			score += Math.abs(matchLength - srcLength);
 		}
-		
+
 		return score;
 	}
 
-	/*public static void main(String[] args) {
-		GEModel model = new StringMatch();
-		
-		DepthFirstMapper mapper = new DepthFirstMapper(model);
-		mapper.setRemovingUnusedCodons(false);
-		mapper.setWrapping(false);
-		mapper.setExtending(false);
-		
-		model.setMapper(mapper);
-		model.setInitialiser(new FixedLengthInitialiser(model, 30));
-		model.setMaxChromosomeLength(500);
-		model.setNoGenerations(1000);
-		model.setNoElites(20);
-		model.setPopulationSize(500);
-		model.setNoRuns(100);
-	}*/
+	/*
+	 * public static void main(String[] args) {
+	 * GEModel model = new StringMatch();
+	 * 
+	 * DepthFirstMapper mapper = new DepthFirstMapper(model);
+	 * mapper.setRemovingUnusedCodons(false);
+	 * mapper.setWrapping(false);
+	 * mapper.setExtending(false);
+	 * 
+	 * model.setMapper(mapper);
+	 * model.setInitialiser(new FixedLengthInitialiser(model, 30));
+	 * model.setMaxChromosomeLength(500);
+	 * model.setNoGenerations(1000);
+	 * model.setNoElites(20);
+	 * model.setPopulationSize(500);
+	 * model.setNoRuns(100);
+	 * }
+	 */
 }

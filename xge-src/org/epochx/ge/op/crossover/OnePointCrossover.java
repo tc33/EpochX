@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -25,83 +25,88 @@ import java.util.List;
 
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.life.*;
+import org.epochx.life.ConfigAdapter;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
 
-
 /**
- * This class implements a one point crossover on two 
+ * This class implements a one point crossover on two
  * <code>CandidatePrograms</code>.
  * 
- * <p>The operation is performed on the programs' chromosomes. A random codon 
- * position is chosen in both parent programs and all the codons from that 
- * point onwards are exchanged.
+ * <p>
+ * The operation is performed on the programs' chromosomes. A random codon
+ * position is chosen in both parent programs and all the codons from that point
+ * onwards are exchanged.
  */
 public class OnePointCrossover implements GECrossover {
+
 	/*
-	 * TODO This seems ridiculous. Crossing over like this will completely 
+	 * TODO This seems ridiculous. Crossing over like this will completely
 	 * remove all context so how can it crossover building blocks!?
 	 */
-	
+
 	// The controlling model.
-	private GEModel model;
-	
+	private final GEModel model;
+
 	// Operator statistics store.
 	private int crossoverPoint1;
 	private int crossoverPoint2;
-	
+
 	// The random number generator in use.
 	private RandomNumberGenerator rng;
-	
-	public OnePointCrossover(GEModel model) {
+
+	public OnePointCrossover(final GEModel model) {
 		this.model = model;
-		
+
 		// Configure parameters from the model.
 		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+
 			@Override
 			public void onConfigure() {
 				configure();
 			}
 		});
 	}
-	
+
 	/*
 	 * Configure component with parameters from the model.
 	 */
 	private void configure() {
 		rng = model.getRNG();
 	}
-	
+
 	/**
-	 * Performs a one point crossover operation on the specified parent 
+	 * Performs a one point crossover operation on the specified parent
 	 * programs.
 	 * 
-	 * <p>The operation is performed on the programs' chromosomes. A random 
-	 * codon position is chosen in <b>both</b> parent programs and all the 
-	 * codons from that point onwards are exchanged.
+	 * <p>
+	 * The operation is performed on the programs' chromosomes. A random codon
+	 * position is chosen in <b>both</b> parent programs and all the codons from
+	 * that point onwards are exchanged.
 	 * 
 	 * @param parent1 {@inheritDoc}
 	 * @param parent2 {@inheritDoc}
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public GECandidateProgram[] crossover(CandidateProgram p1,
-										CandidateProgram p2) {
-		GECandidateProgram parent1 = (GECandidateProgram) p1;
-		GECandidateProgram parent2 = (GECandidateProgram) p2;
-		
+	public GECandidateProgram[] crossover(final CandidateProgram p1,
+			final CandidateProgram p2) {
+		final GECandidateProgram parent1 = (GECandidateProgram) p1;
+		final GECandidateProgram parent2 = (GECandidateProgram) p2;
+
 		// Choose crossover points.
 		crossoverPoint1 = rng.nextInt(parent1.getNoCodons());
 		crossoverPoint2 = rng.nextInt(parent2.getNoCodons());
-		
+
 		// Make copies of the parents.
-		GECandidateProgram child1 = (GECandidateProgram) parent1.clone();
-		GECandidateProgram child2 = (GECandidateProgram) parent2.clone();
-		
-		List<Integer> part1 = child1.removeCodons(crossoverPoint1, child1.getNoCodons());
-		List<Integer> part2 = child2.removeCodons(crossoverPoint2, child2.getNoCodons());
-		
+		final GECandidateProgram child1 = (GECandidateProgram) parent1.clone();
+		final GECandidateProgram child2 = (GECandidateProgram) parent2.clone();
+
+		final List<Integer> part1 = child1.removeCodons(crossoverPoint1,
+				child1.getNoCodons());
+		final List<Integer> part2 = child2.removeCodons(crossoverPoint2,
+				child2.getNoCodons());
+
 		// Swap over the endings at the crossover points.
 		child2.appendCodons(part1);
 		child1.appendCodons(part2);

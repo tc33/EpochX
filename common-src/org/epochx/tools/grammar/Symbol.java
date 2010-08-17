@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -21,16 +21,16 @@
  */
 package org.epochx.tools.grammar;
 
-
 /**
  *
  */
 public interface Symbol extends Cloneable {
+
 	/*
-	 * TODO Consider making this an abstract class with the parentGrammarRule 
+	 * TODO Consider making this an abstract class with the parentGrammarRule
 	 * thing in here.
 	 */
-	
+
 	public Object clone();
-	
+
 }

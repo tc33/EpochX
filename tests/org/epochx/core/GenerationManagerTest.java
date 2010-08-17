@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -23,12 +23,12 @@ package org.epochx.core;
 
 import java.util.*;
 
-import org.epochx.gp.model.*;
+import junit.framework.TestCase;
+
+import org.epochx.gp.model.SantaFeTrail;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
-
-import junit.framework.TestCase;
 
 /**
  * 
@@ -39,12 +39,13 @@ public class GenerationManagerTest extends TestCase {
 	private GenerationManager genManager;
 	private List<CandidateProgram> pop;
 	private int count;
-	
+
 	@Override
 	protected void setUp() throws Exception {
 		model = new Model() {
+
 			@Override
-			public double getFitness(CandidateProgram program) {
+			public double getFitness(final CandidateProgram program) {
 				return 0;
 			}
 		};
@@ -55,18 +56,19 @@ public class GenerationManagerTest extends TestCase {
 		genManager = new GenerationManager(model);
 		pop = new ArrayList<CandidateProgram>();
 		pop.add(new CandidateProgram() {
+
 			@Override
 			public boolean isValid() {
 				return true;
 			}
-			
+
 			@Override
 			public double getFitness() {
 				return 0;
 			}
 		});
 	}
-	
+
 	/**
 	 * Tests that trying to run a generation with a previous population of null
 	 * throws an exception.
@@ -76,9 +78,10 @@ public class GenerationManagerTest extends TestCase {
 		try {
 			genManager.generation(1, null);
 			fail("illegal argument exception not thrown for null previous population");
-		} catch (IllegalArgumentException e) {}
+		} catch (final IllegalArgumentException e) {
+		}
 	}
-	
+
 	/**
 	 * Tests that trying to run a generation with a previous population of size
 	 * zero throws an exception.
@@ -88,77 +91,91 @@ public class GenerationManagerTest extends TestCase {
 		try {
 			genManager.generation(1, pop);
 			fail("illegal argument exception not thrown for empty previous population");
-		} catch (IllegalArgumentException e) {}
+		} catch (final IllegalArgumentException e) {
+		}
 	}
-	
+
 	/**
-	 * Tests that the generation events are all triggered and in the correct 
+	 * Tests that the generation events are all triggered and in the correct
 	 * order.
 	 */
 	public void testGenerationEventsOrder() {
 		// We add the chars '1', '2', '3' to builder to check order of calls.
 		final StringBuilder verify = new StringBuilder();
-		
+
 		// Listen for the config events.
 		model.getLifeCycleManager().addConfigListener(new ConfigListener() {
+
 			@Override
 			public void onConfigure() {
 				verify.append('1');
 			}
 		});
 		// Listen for the generation.
-		model.getLifeCycleManager().addGenerationListener(new GenerationListener() {
-			@Override
-			public void onGenerationStart() {
-				verify.append('2');
-			}
-			@Override
-			public List<CandidateProgram> onGeneration(List<CandidateProgram> genPop) {
-				verify.append('3');
-				return genPop;
-			}
-			@Override
-			public void onGenerationEnd() {
-				verify.append('4');
-			}
-		});
-		
+		model.getLifeCycleManager().addGenerationListener(
+				new GenerationListener() {
+
+					@Override
+					public void onGenerationStart() {
+						verify.append('2');
+					}
+
+					@Override
+					public List<CandidateProgram> onGeneration(
+							final List<CandidateProgram> genPop) {
+						verify.append('3');
+						return genPop;
+					}
+
+					@Override
+					public void onGenerationEnd() {
+						verify.append('4');
+					}
+				});
+
 		genManager.generation(1, pop);
-		
-		assertEquals("generation events were not called in the correct order", "1234", verify.toString());
+
+		assertEquals("generation events were not called in the correct order",
+				"1234", verify.toString());
 	}
-	
+
 	/**
-	 * Tests that returning null to the generation event will revert the generation.
+	 * Tests that returning null to the generation event will revert the
+	 * generation.
 	 */
 	public void testGenerationEventRevert() {
 		count = 0;
-		
+
 		// We add the chars '1', '2', '3' to builder to check order of calls.
 		final StringBuilder verify = new StringBuilder();
-		
+
 		// Listen for the generation.
-		model.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
-			@Override
-			public List<CandidateProgram> onGeneration(List<CandidateProgram> elites) {
-				verify.append('3');
-				// Revert 3 times before confirming.
-				if (count == 3) {
-					return elites;
-				} else {
-					count++;
-				}
-				return null;
-			}
-		});
-		
+		model.getLifeCycleManager().addGenerationListener(
+				new GenerationAdapter() {
+
+					@Override
+					public List<CandidateProgram> onGeneration(
+							final List<CandidateProgram> elites) {
+						verify.append('3');
+						// Revert 3 times before confirming.
+						if (count == 3) {
+							return elites;
+						} else {
+							count++;
+						}
+						return null;
+					}
+				});
+
 		genManager.generation(1, pop);
-		
-		assertEquals("generation was not correctly reverted", "3333", verify.toString());
+
+		assertEquals("generation was not correctly reverted", "3333",
+				verify.toString());
 	}
-	
+
 	public void testGenerationRNGNull() {
 		model = new SantaFeTrail() {
+
 			@Override
 			public RandomNumberGenerator getRNG() {
 				return super.getRNG();

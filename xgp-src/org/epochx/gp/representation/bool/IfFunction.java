@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,48 +24,52 @@ package org.epochx.gp.representation.bool;
 import org.epochx.gp.representation.BooleanNode;
 
 /**
- * A <code>FunctionNode</code> which represents the conditional if-then-else 
+ * A <code>FunctionNode</code> which represents the conditional if-then-else
  * statement.
  */
 public class IfFunction extends BooleanNode {
-	
+
 	/**
 	 * Construct an IfFunction with no children.
 	 */
 	public IfFunction() {
 		this(null, null, null);
 	}
-	
+
 	/**
-	 * Construct an IfFunction with three children. When evaluated, if the first 
-	 * child evaluates to true then the second child is evaluated and return, 
+	 * Construct an IfFunction with three children. When evaluated, if the first
+	 * child evaluates to true then the second child is evaluated and return,
 	 * otherwise the third child is evaluated and returned.
+	 * 
 	 * @param condition The first child node.
 	 * @param ifStatement The second child node.
 	 * @param elseStatement The third child node.
 	 */
-	public IfFunction(BooleanNode condition, BooleanNode ifStatement, BooleanNode elseStatement) {
+	public IfFunction(final BooleanNode condition,
+			final BooleanNode ifStatement, final BooleanNode elseStatement) {
 		super(condition, ifStatement, elseStatement);
 	}
 
 	/**
-	 * Evaluating an <code>IfFunction</code> involves evaluating the first child, 
-	 * if it evaluates to true then the second child is evaluated as the result. 
+	 * Evaluating an <code>IfFunction</code> involves evaluating the first
+	 * child,
+	 * if it evaluates to true then the second child is evaluated as the result.
 	 * Otherwise the third child is evaluated and returned.
 	 */
 	@Override
 	public Boolean evaluate() {
-		boolean c1 = ((Boolean) getChild(0).evaluate()).booleanValue();
+		final boolean c1 = ((Boolean) getChild(0).evaluate()).booleanValue();
 
-		if(c1) {
+		if (c1) {
 			return (Boolean) getChild(1).evaluate();
 		} else {
 			return (Boolean) getChild(2).evaluate();
 		}
 	}
-	
+
 	/**
 	 * Get the unique name that identifies this function.
+	 * 
 	 * @return the unique name for the IfFunction which is IF.
 	 */
 	@Override

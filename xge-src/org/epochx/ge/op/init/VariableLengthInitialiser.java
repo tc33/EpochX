@@ -25,6 +25,9 @@ import java.util.List;
 
 import org.epochx.representation.CandidateProgram;
 
+/**
+ * This is currently an unimplemented class stub. All methods will return null.
+ */
 public class VariableLengthInitialiser implements GEInitialiser {
 
 	@Override

@@ -45,16 +45,15 @@ public class PointMutation implements GEMutation {
 	private final GEModel model;
 
 	// The probability each codon has of being mutated in a selected program.
-	private final double pointProbability;
+	private double pointProbability;
 
 	private RandomNumberGenerator rng;
 	private CodonGenerator codonGenerator;
 
 	/**
 	 * Construct a point mutation with a default point probability of 0.01. It
-	 * is
-	 * generally recommended that the PointMutation(GEModel, double) constructor
-	 * is used instead.
+	 * is generally recommended that the
+	 * <code>PointMutation(GEModel, double)</code> constructor is used instead.
 	 * 
 	 * @param model The current controlling model. Parameters such as the codon
 	 *        generator to use will come from here.
@@ -68,9 +67,9 @@ public class PointMutation implements GEMutation {
 	 * 
 	 * @param model The current controlling model. Parameters such as the codon
 	 *        generator to use will come from here.
-	 * @param pointProbability The probability each node in a selected program
+	 * @param pointProbability The probability each codon in a selected program
 	 *        has of undergoing a mutation. 1.0 would result in all nodes
-	 *        being changed, and 0.0 would mean no nodes were changed. A
+	 *        being changed, and 0.0 would mean no codons were changed. A
 	 *        typical value would be 0.01.
 	 */
 	public PointMutation(final GEModel model, final double pointProbability) {
@@ -125,4 +124,25 @@ public class PointMutation implements GEMutation {
 		return program;
 	}
 
+	/**
+	 * Returns the currently set probability of each codon undergoing mutation.
+	 * 
+	 * @return a value between <code>0.0</code> and <code>1.0</code> inclusive
+	 *         which is the probability that a codon will undergo mutation.
+	 */
+	public double getPointProbability() {
+		return pointProbability;
+	}
+
+	/**
+	 * Sets the probability that each codon considered undergoes mutation.
+	 * 
+	 * @param pointProbability The probability each codon in a selected program
+	 *        has of undergoing a mutation. 1.0 would result in all nodes
+	 *        being changed, and 0.0 would mean no codons were changed. A
+	 *        typical value would be 0.01.
+	 */
+	public void setPointProbability(double pointProbability) {
+		this.pointProbability = pointProbability;
+	}
 }

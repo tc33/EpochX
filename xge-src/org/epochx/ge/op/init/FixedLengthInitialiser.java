@@ -44,19 +44,20 @@ public class FixedLengthInitialiser implements GEInitialiser {
 
 	private int popSize;
 
-	private final int initialLength;
+	private int chromosomeLength;
 
 	/**
 	 * Constructs a RandomInitialiser.
 	 * 
 	 * @param model The GE model that will provide any required control
 	 *        parameters such as the desired population size.
-	 * @param initialLength The initial length that chromosomes should be
+	 * @param chromosomeLength The initial length that chromosomes should be
 	 *        generated to.
 	 */
-	public FixedLengthInitialiser(final GEModel model, final int initialLength) {
+	public FixedLengthInitialiser(final GEModel model,
+			final int chromosomeLength) {
 		this.model = model;
-		this.initialLength = initialLength;
+		this.chromosomeLength = chromosomeLength;
 
 		// Configure parameters from the model.
 		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
@@ -80,7 +81,8 @@ public class FixedLengthInitialiser implements GEInitialiser {
 	 * generating their chromosomes. The size of the population will be equal
 	 * to the result of calling getPopulationSize() on the controlling model.
 	 * All programs in the population will be unique. Each candidate program
-	 * will have a chromosome length equal to the initialLength provided to the
+	 * will have a chromosome length equal to the chromosomeLength provided to
+	 * the
 	 * constructor.
 	 * 
 	 * @return A List of newly generated CandidatePrograms which will form the
@@ -100,7 +102,7 @@ public class FixedLengthInitialiser implements GEInitialiser {
 			final GECandidateProgram candidate = new GECandidateProgram(model);
 
 			// Initialise the program.
-			candidate.appendNewCodons(initialLength);
+			candidate.appendNewCodons(chromosomeLength);
 			// if (candidate.isValid() && !firstGen.contains(candidate)) {
 			firstGen.add(candidate);
 			i++;
@@ -109,6 +111,28 @@ public class FixedLengthInitialiser implements GEInitialiser {
 
 		// Return starting population.
 		return firstGen;
+	}
+
+	/**
+	 * Returns the length of chromosome that all new
+	 * <code>CandidateProgram</code> instances will be generated with.
+	 * 
+	 * @return the fixed length that this initialiser is generating chromosomes
+	 *         to.
+	 */
+	public int getChromosomeLength() {
+		return chromosomeLength;
+	}
+
+	/**
+	 * Sets the length of chromosome for all future
+	 * <code>CandidateProgram</code> generations.
+	 * 
+	 * @param chromosomeLength the fixed length to use for the chromosomes of
+	 *        generated programs.
+	 */
+	public void setChromosomeLength(int chromosomeLength) {
+		this.chromosomeLength = chromosomeLength;
 	}
 
 }

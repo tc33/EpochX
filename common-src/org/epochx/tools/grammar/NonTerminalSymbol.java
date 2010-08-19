@@ -31,13 +31,16 @@ import org.apache.commons.lang.ObjectUtils;
  * provided at construction time. An instance's children are those
  * <code>Symbol</code> objects that the non-terminal resolves to, as supported
  * by the grammar rule.
+ * 
+ * @see TerminalSymbol
+ * @see GrammarRule
  */
 public class NonTerminalSymbol implements Symbol {
 
 	// The child nodes in the parse tree.
 	private List<Symbol> children;
 
-	// The associated grammar symbol.
+	// The associated grammar node.
 	private GrammarRule grammarRule;
 
 	/**
@@ -134,16 +137,32 @@ public class NonTerminalSymbol implements Symbol {
 		return children;
 	}
 
+	/**
+	 * Overwrites this non-terminal's <code>List</code> of child
+	 * <code>Symbols</code>.
+	 * 
+	 * @param newChildren the <code>List</code> of child <code>Symbol</code>
+	 *        instances to set.
+	 */
 	public void setChildren(final List<Symbol> newChildren) {
 		// Make the change.
 		children = newChildren;
 	}
 
+	/**
+	 * Calculates and returns the number of non-terminal symbols that exist
+	 * within the tree rooted at this non-terminal symbol, including this
+	 * <code>Symbol</code>. The result should always be equal or greater than 1.
+	 * 
+	 * @return a positive integer which is the count of the number of
+	 *         <code>NonTerminalSymbol</code> instances in the parse tree rooted
+	 *         at this <code>Symbol</code>, inclusive of this symbol.
+	 */
 	public int getNoNonTerminalSymbols() {
 		// Start by adding self.
 		int noNonTerminals = 1;
 
-		// Add all the non-terminals below each child.
+		// Count all the non-terminals below each child.
 		for (final Symbol child: children) {
 			if (child instanceof NonTerminalSymbol) {
 				noNonTerminals += ((NonTerminalSymbol) child)
@@ -151,15 +170,27 @@ public class NonTerminalSymbol implements Symbol {
 			}
 		}
 
+		assert (noNonTerminals >= 1);
+
 		return noNonTerminals;
 	}
 
 	/**
-	 * Counts the number of non-terminal symbols below this non-terminal
-	 * (inclusive), that have the specified underlying grammar rule.
+	 * Calculates and returns the number of non-terminal symbols that exist
+	 * within the tree rooted at this non-terminal symbol which have the
+	 * specified underlying <code>GrammarRule</code>. The count is inclusive of
+	 * this <code>NonTerminalSymbol</code>. A <code>NonTerminalSymbol</code>
+	 * <code>x</code>is included in the count if the following expression is
+	 * <code>true</code>.
 	 * 
-	 * @param rule
-	 * @return
+	 * <blockquote><code>
+	 * 		this.getGrammarRule().equals(x.getGrammarRule())
+	 * </code></blockquote>
+	 * 
+	 * @param rule the <code>GrammarRule</code> that should be matched in all
+	 *        <code>NonTerminalSymbols</code> included in the count.
+	 * @return the total number of non-terminal symbols that have a matching
+	 *         <code>GrammarRule</code>.
 	 */
 	public int getNoNonTerminalSymbols(final GrammarRule rule) {
 		int noNonTerminals = 0;
@@ -167,10 +198,9 @@ public class NonTerminalSymbol implements Symbol {
 		// Start by adding self.
 		if (this.getGrammarRule().equals(rule)) {
 			noNonTerminals++;
-			;
 		}
 
-		// Add all the non-terminals below each child.
+		// Count all the non-terminals below each child.
 		for (final Symbol child: children) {
 			if (child instanceof NonTerminalSymbol) {
 				noNonTerminals += ((NonTerminalSymbol) child)
@@ -181,10 +211,19 @@ public class NonTerminalSymbol implements Symbol {
 		return noNonTerminals;
 	}
 
+	/**
+	 * Calculates and returns the number of terminal symbols that exist at the
+	 * leaves of the parse tree rooted at this non-terminal symbol. The count
+	 * should always be positive, and will only ever be zero in the case of an
+	 * incomplete parse tree.
+	 * 
+	 * @return an <code>int</code> which is the total number of terminal symbols
+	 *         in this parse tree.
+	 */
 	public int getNoTerminalSymbols() {
 		int noTerminals = 0;
 
-		// Add all the non-terminals below each child.
+		// Count all the terminals below each child.
 		for (final Symbol child: children) {
 			if (child instanceof TerminalSymbol) {
 				noTerminals++;
@@ -197,10 +236,21 @@ public class NonTerminalSymbol implements Symbol {
 		return noTerminals;
 	}
 
+	/**
+	 * Calculates and returns the total number of <code>Symbol</code> instances
+	 * that exist in the parse tree rooted at this non-terminal symbol,
+	 * including this <code>Symbol</code> itself. The result should be equal to
+	 * the sum of the results from the <code>getNoNonTerminalSymbols()</code>
+	 * and <code>getNoTerminalSymbols()</code> methods.
+	 * 
+	 * @return the total number of symbols that exist in the parse tree rooted
+	 *         at this <code>Symbol</code>.
+	 */
 	public int getNoSymbols() {
 		// Start by adding self.
 		int noSymbols = 1;
 
+		// Count all the symbols below each child.
 		for (final Symbol child: children) {
 			if (child instanceof TerminalSymbol) {
 				noSymbols++;
@@ -212,16 +262,37 @@ public class NonTerminalSymbol implements Symbol {
 		return noSymbols;
 	}
 
+	/**
+	 * Returns the number of direct child <code>Symbols</code> this non-terminal
+	 * symbol has.
+	 * 
+	 * @return an <code>int</code> which is the number of child symbols this
+	 *         non-terminal has.
+	 */
 	public int getNoChildren() {
 		return children.size();
 	}
 
+	/**
+	 * Removes the nth non-terminal from the parse tree rooted at this
+	 * <code>NonTerminalSymbol</code> instance, as counted using a pre-order
+	 * traversal. Indexing starts at zero for this non-terminal symbol. As such,
+	 * valid values of n must be greater than or equal to 1, since it is
+	 * impossible to remove a symbol from itself.
+	 * 
+	 * @param n an <code>int</code> with a value of 1 or greater which is the
+	 *        index of the <code>NonTerminalSymbol</code> that should be
+	 *        removed.
+	 * @return the <code>NonTerminalSymbol</code> that was removed, or
+	 *         <code>null</code> if none were removed.
+	 */
 	public NonTerminalSymbol removeNthNonTerminal(final int n) {
-		// n must be greater than 0 because you cannot remove the current node.
-
 		return removeNthNonTerminal(n, 0, null);
 	}
 
+	/*
+	 * Recursive helper method for the removeNthNonTerminal method.
+	 */
 	private NonTerminalSymbol removeNthNonTerminal(final int n, int current,
 			final GrammarRule rule) {
 		for (int i = 0; i < children.size(); i++) {
@@ -254,25 +325,45 @@ public class NonTerminalSymbol implements Symbol {
 		return null;
 	}
 
+	/**
+	 * Removes the nth non-terminal with the given <code>GrammarRule</code> from
+	 * the parse tree rooted at this <code>NonTerminalSymbol</code> instance, as
+	 * counted using a pre-order traversal. Indexing starts at zero and from
+	 * this non-terminal symbol itself. It does not make sense to remove this
+	 * <code>Symbol</code> from itself however so a value for <code>n</code> of
+	 * <code>0</code> is only possible if the given <code>GrammarRule</code>
+	 * does not match this <code>Symbol</code>.
+	 * 
+	 * @param n an <code>int</code> which is the index of the
+	 *        <code>NonTerminalSymbol</code> with the given grammar rule that
+	 *        should be
+	 *        removed.
+	 * @param grammarRule the <code>GrammarRule</code> that the symbol to be
+	 *        removed should have.
+	 * @return the <code>NonTerminalSymbol</code> that was removed, or
+	 *         <code>null</code> if none were removed.
+	 */
 	public NonTerminalSymbol removeNthNonTerminal(final int n,
 			final GrammarRule grammarRule) {
 		return removeNthNonTerminal(n, 0, grammarRule);
 	}
 
-	/*
-	 * public Symbol removeNthSymbol(int n) {
+	/**
+	 * Returns the nth non-terminal from the parse tree rooted at this
+	 * <code>NonTerminalSymbol</code>. Indexing starts at zero for this symbol
+	 * as the root, and proceeds in a pre-order traversal of the tree.
 	 * 
-	 * }
-	 * 
-	 * public TerminalSymbol removeNthTerminal(int n) {
-	 * 
-	 * }
+	 * @param n the index of the non-terminal to return.
+	 * @return the <code>NonTerminalSymbol</code> which was the nth in the parse
+	 *         tree.
 	 */
-
 	public NonTerminalSymbol getNthNonTerminal(final int n) {
 		return getNthNonTerminal(n, 0);
 	}
 
+	/*
+	 * Recursive helper method for the getNthNonTerminal method.
+	 */
 	private NonTerminalSymbol getNthNonTerminal(final int n, int current) {
 		// Is this the one we're looking for?
 		if (n == current) {
@@ -297,15 +388,20 @@ public class NonTerminalSymbol implements Symbol {
 		return null;
 	}
 
-	/*
+	/**
+	 * Returns the nth symbol from the parse tree rooted at this symbol.
+	 * Indexing starts at zero for this, the root, and proceeds in a pre-order
+	 * traversal of the tree until the nth symbol is found.
 	 * 
+	 * @param n the index of the symbol to be returned.
+	 * @return the nth symbol from this parse tree.
 	 */
 	public Symbol getNthSymbol(final int n) {
 		return getNthSymbol(n, 0);
 	}
 
 	/*
-	 * 
+	 * Recursive helper method for the getNthSymbol method.
 	 */
 	private Symbol getNthSymbol(final int n, int current) {
 		// Is this the one we're looking for?
@@ -335,16 +431,26 @@ public class NonTerminalSymbol implements Symbol {
 	}
 
 	/**
-	 * n must be greater than 0 because you cannot replace the root node.
+	 * Overwrites the nth symbol in the parse tree rooted at this symbol.
+	 * Indexing starts at zero for this, the root and proceeds in a pre-order
+	 * traversal of the tree until the nth symbol is found. However, it is not
+	 * possible to set the zeroth symbol since that would mean replacing this
+	 * instance itself. To replace it, the <code>setNthSymbol</code> method
+	 * should be called upon any parent <code>NonTerminalSymbol</code> or if it
+	 * is the root of the whole tree then by using the replacement directly as
+	 * the new parse tree.
 	 * 
-	 * @param n
-	 * @param nt
+	 * @param n the index of where to set the new symbol.
+	 * @param newSymbol the replacement <code>Symbol</code> to set at the nth
+	 *        position.
 	 */
-	public void setNthSymbol(final int n, final Symbol nt) {
-		// Must remove and add listeners.
-		setNthSymbol(n, nt, 0);
+	public void setNthSymbol(final int n, final Symbol newSymbol) {
+		setNthSymbol(n, newSymbol, 0);
 	}
 
+	/*
+	 * Recursive helper method for the setNthSymbol method.
+	 */
 	private void setNthSymbol(final int n, final Symbol symbol, int current) {
 		final int noChildren = getNoChildren();
 		for (int i = 0; i < noChildren; i++) {
@@ -373,10 +479,11 @@ public class NonTerminalSymbol implements Symbol {
 	}
 
 	/**
-	 * Returns a list of all non-terminal symbols in the parse tree below this
-	 * symbol, including this symbol itself.
+	 * Returns a <code>List</code> of all the non-terminal symbols in the parse
+	 * tree below this symbol, including this symbol itself.
 	 * 
-	 * @return
+	 * @return a <code>List</code> of <code>NonTerminalSymbol</code> instances
+	 *         from the parse tree rooted at this symbol.
 	 */
 	public List<NonTerminalSymbol> getNonTerminalSymbols() {
 		final List<NonTerminalSymbol> nonTerminals = new ArrayList<NonTerminalSymbol>();
@@ -395,10 +502,22 @@ public class NonTerminalSymbol implements Symbol {
 		return nonTerminals;
 	}
 
+	/**
+	 * Returns a <code>List</code> of the indexes of all the symbols in the
+	 * parse tree rooted at this symbol that are instances of
+	 * <code>NonTerminalSymbol</code>.
+	 * 
+	 * @return a <code>List</code> of <code>Integers</code> which are the
+	 *         indexes of the non-terminal symbols in the parse tree rooted at
+	 *         this symbol.
+	 */
 	public List<Integer> getNonTerminalIndexes() {
 		return getNonTerminalIndexes(0);
 	}
 
+	/*
+	 * Recursive helper method for the getNonTerminalIndexes method.
+	 */
 	private List<Integer> getNonTerminalIndexes(int index) {
 		final List<Integer> nonTerminals = new ArrayList<Integer>();
 
@@ -420,15 +539,16 @@ public class NonTerminalSymbol implements Symbol {
 	}
 
 	/**
-	 * Returns a list of all terminal symbols in the parse tree below this
-	 * symbol.
+	 * Returns a <code>List</code> of all the terminal symbols in the parse
+	 * tree below this non-terminal symbol.
 	 * 
-	 * @return
+	 * @return a <code>List</code> of <code>TerminalSymbol</code> instances
+	 *         from the parse tree rooted at this symbol.
 	 */
 	public List<TerminalSymbol> getTerminalSymbols() {
 		final List<TerminalSymbol> terminals = new ArrayList<TerminalSymbol>();
 
-		// Add all the non-terminals below each child.
+		// Add all terminal children and terminals below a non-terminal child.
 		for (final Symbol child: children) {
 			if (child instanceof TerminalSymbol) {
 				terminals.add((TerminalSymbol) child);
@@ -441,6 +561,13 @@ public class NonTerminalSymbol implements Symbol {
 		return terminals;
 	}
 
+	/**
+	 * Returns a <code>List</code> of all <code>Symbol</code> instances from the
+	 * parse tree rooted at this symbol.
+	 * 
+	 * @return a <code>List</code> of <code>Symbol</code> instances from the
+	 *         parse tree rooted at this symbol.
+	 */
 	public List<Symbol> getAllSymbols() {
 		final List<Symbol> symbols = new ArrayList<Symbol>();
 
@@ -457,10 +584,25 @@ public class NonTerminalSymbol implements Symbol {
 		return symbols;
 	}
 
+	/**
+	 * Returns this non-terminal symbol's grammar rule.
+	 * 
+	 * @return the underlying grammar rule this non-terminal symbol is defined
+	 *         by.
+	 */
 	public GrammarRule getGrammarRule() {
 		return grammarRule;
 	}
 
+	/**
+	 * Returns the depth of the parse tree rooted at this
+	 * <code>NonTerminalSymbol</code>. The depth is considered to be the maximum
+	 * number of steps down the tree from this symbol to a terminal symbol. A
+	 * tree made up of one non-terminal symbol with all terminal children will
+	 * have a depth of <code>1</code>.
+	 * 
+	 * @return the depth of the parse tree rooted at this symbol.
+	 */
 	public int getDepth() {
 		int maxChildDepth = 0;
 
@@ -480,6 +622,12 @@ public class NonTerminalSymbol implements Symbol {
 		return maxChildDepth;
 	}
 
+	/**
+	 * Returns a string representation of this non-terminal symbol, which is a
+	 * conjunction of the string representations of each child symbol.
+	 * 
+	 * @return a <code>String</code> representation of this object.
+	 */
 	@Override
 	public String toString() {
 		final StringBuilder buffer = new StringBuilder(children.size());
@@ -490,14 +638,22 @@ public class NonTerminalSymbol implements Symbol {
 		return buffer.toString();
 	}
 
+	/**
+	 * Constructs and returns a copy of this non-terminal symbol. Each child
+	 * <code>Symbol</code> is itself cloned, but the grammar rule is shallow
+	 * copied.
+	 * 
+	 * @return a copy of this non-terminal symbol.
+	 */
 	@Override
-	public Object clone() {
+	public NonTerminalSymbol clone() {
 		NonTerminalSymbol clone = null;
 		try {
 			clone = (NonTerminalSymbol) super.clone();
 		} catch (final CloneNotSupportedException e) {
 			// This shouldn't ever happen - if it does then everything is
 			// going to blow up anyway.
+			assert false;
 		}
 
 		// Copy cloned child symbols.
@@ -512,6 +668,18 @@ public class NonTerminalSymbol implements Symbol {
 		return clone;
 	}
 
+	/**
+	 * Tests the given <code>Object</code> for equality with this non-terminal
+	 * symbol. They will be considered equal if the given <code>Object</code> is
+	 * an instance of <code>NonTerminalSymbol</code>, all their child symbols
+	 * are equal according to the contract of their <code>equals</code> method,
+	 * in the same order, and their grammar rules refer to the same instance.
+	 * 
+	 * @param obj the <code>Object</code> to test for equality.
+	 * @return <code>true</code> if the given <code>Object</code> is equal to
+	 *         this non-terminal according to the contract outlined above and
+	 *         <code>false</code> otherwise.
+	 */
 	@Override
 	public boolean equals(final Object obj) {
 		boolean equal = true;

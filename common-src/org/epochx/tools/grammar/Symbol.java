@@ -22,15 +22,16 @@
 package org.epochx.tools.grammar;
 
 /**
- *
+ * A node of a parse tree that was constructed to satisfy a grammar. It is the 
+ * instantiated form of a {@link GrammarNode}.
+ * 
+ * @see GrammarNode
  */
 public interface Symbol extends Cloneable {
 
-	/*
-	 * TODO Consider making this an abstract class with the parentGrammarRule
-	 * thing in here.
+	/**
+	 * {@inheritDoc}
 	 */
-
-	public Object clone();
+	public Symbol clone();
 
 }

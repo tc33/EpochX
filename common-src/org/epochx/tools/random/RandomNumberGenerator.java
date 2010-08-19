@@ -22,44 +22,51 @@
 package org.epochx.tools.random;
 
 /**
- * 
+ * An implementation of this interface is used to generate a stream of numbers
+ * with pseudo random qualities, in different data types.
  */
 public interface RandomNumberGenerator {
 
 	/**
-	 * Get the next int, where n is max
+	 * Get the next <code>int</code> between <code>0</code> (inclusive) and
+	 * <code>n</code> (exclusive).
 	 * 
-	 * @param n max in value
-	 * @return next random int
+	 * @param n the upper limit of the generation.
+	 * @return the next <code>int</code> in the pseudo random sequence.
 	 */
 	public int nextInt(int n);
 
 	/**
-	 * Get the next int
+	 * Get the next <code>int</code> with the only limits being the bounds of
+	 * Java's <code>int</code> data type.
 	 * 
-	 * @return next int
+	 * @return the next <code>int</code> in the pseudo random sequence.
 	 */
 	public int nextInt();
 
 	/**
-	 * Get the next double 0<=x<1
+	 * Get the next <code>double</code> in the range <code>0.0</code>
+	 * (inclusive) and <code>1.0</code> (exclusive).
 	 * 
-	 * @return next double
+	 * @return the next <code>double</code> in the pseudo random sequence.
 	 */
 	public double nextDouble();
 
 	/**
-	 * Get the next boolean
+	 * Get the next <code>boolean</code> value.
 	 * 
-	 * @return next boolean
+	 * @return the next <code>true</code> or <code>false</code> value in the
+	 *         pseudo random sequence.
 	 */
 	public boolean nextBoolean();
 
 	/**
-	 * Set the seed
+	 * Set the initial seed of the random number generation. Two instances of 
+	 * the same implementation of <code>RandomNumberGenerator</code> given the 
+	 * same seed, should produce the same sequence of numbers.
 	 * 
-	 * @param l seed
+	 * @param seed the initial seed.
 	 */
-	public void setSeed(long l);
+	public void setSeed(long seed);
 
 }

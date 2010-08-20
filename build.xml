@@ -23,6 +23,7 @@
 	<property name="distlib" location="${dist}/lib"/>
 	<property name="disttests" location="${dist}/tests"/>
 	<property name="javadoc" location="${dist}/javadoc"/>
+	<property name="notes" location="release-notes.txt"/>
 
 	<path id="classpath.src">
 	  <fileset dir="${lib}">
@@ -89,6 +90,9 @@
 	<target name="package" depends="compile" description="package class files into a Jar">
         <!-- Put everything in ${bin} into the epochx-${version}.jar file -->
         <jar jarfile="${dist}/epochx-${version}.jar" basedir="${distbin}"/>
+		
+        <!-- Delete the bin directory -->
+        <delete dir="${distbin}"/>
 	</target>
 	
 <!-- Merge source directories -->
@@ -123,13 +127,16 @@
 	
 <!-- Generate distribution -->
     <target name="dist" depends="unit-test,package,javadoc" description="generate the distribution">    	
-    	<!-- Put a copy of the LICENSE and README in the dist directory. -->
+    	<!-- Put a copy of the LICENSE in the dist directory. -->
     	<copy file="LICENSE" tofile="${dist}/LICENSE"/>
     	
     	<!-- Copy the lib directory into the dist directory. -->
     	<copy todir="${distlib}">
     	    <fileset dir="${lib}"/>
     	</copy>
+    	
+    	<!-- Move the release notes to the dist directory. -->
+    	<move todir="${dist}" file="${notes}"/>
     	
     	<!-- Generate the zip distributable. -->
     	<zip basedir="${dist}" destfile="${dists}/epochx-${version}.zip"/>
@@ -138,9 +145,6 @@
     	<tar basedir="${dist}" destfile="${dist}/epochx-${version}.tar"/>
     	<gzip src="${dist}/epochx-${version}.tar" destfile="${dists}/epochx-${version}.tar.gz"/>
     	<delete file="${dist}/epochx-${version}.tar"/>
-    	
-    	<!-- Delete the bin directory -->
-    	<delete dir="${distbin}"/>
     </target>
 
 <!-- Clean up after the build -->

@@ -70,12 +70,7 @@ public abstract class Regression extends GRModel {
 	 * Constructs an instance of the abstract Regression model.
 	 */
 	public Regression(final int noPoints) {
-		try {
-			setGrammar(new Grammar(GRAMMAR_STRING));
-		} catch (final MalformedGrammarException ex) {
-			// It is our grammar so this shouldn't happen.
-			assert false;
-		}
+		setGrammar(new Grammar(GRAMMAR_STRING));
 
 		interpreter = new RubyInterpreter();
 

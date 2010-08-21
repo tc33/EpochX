@@ -87,7 +87,7 @@ public class Grammar {
 	 * @throws MalformedGrammarException if the given grammar string is not in a
 	 *         valid format.
 	 */
-	public Grammar(final String grammarStr) throws MalformedGrammarException {
+	public Grammar(final String grammarStr) {
 		literals = new HashMap<String, GrammarLiteral>();
 		rules = new HashMap<String, GrammarRule>();
 
@@ -104,8 +104,7 @@ public class Grammar {
 	 * @throws MalformedGrammarException if the given grammar string is not in a
 	 *         valid format.
 	 */
-	public Grammar(final File grammarFile) throws IOException,
-			MalformedGrammarException {
+	public Grammar(final File grammarFile) throws IOException {
 		final String grammar = readGrammarFile(grammarFile);
 
 		literals = new HashMap<String, GrammarLiteral>();
@@ -160,8 +159,7 @@ public class Grammar {
 	 * This is based upon the grammar parser found in the
 	 * Mapper.ContextFreeGrammar class of GEVA v.1.0.
 	 */
-	protected void parseGrammar(final String grammar)
-			throws MalformedGrammarException {
+	protected void parseGrammar(final String grammar) {
 		State state = State.START;
 		StringBuilder buffer = new StringBuilder();
 		GrammarRule lhs = null;

@@ -38,8 +38,6 @@ public class StringMatch extends GEModel {
 			setGrammar(new Grammar(new File("example-grammars/StringMatch.bnf")));
 		} catch (final IOException e) {
 			e.printStackTrace();
-		} catch (final MalformedGrammarException e) {
-			e.printStackTrace();
 		}
 	}
 

@@ -76,13 +76,8 @@ public abstract class EvenParity extends GEModel {
 			argNames[i] = "d" + i;
 		}
 
-		try {
-			// Complete the grammar string and construct grammar instance.
-			setGrammar(new Grammar(getGrammarString()));
-		} catch (final MalformedGrammarException ex) {
-			// It is our grammar so this shouldn't happen.
-			assert false;
-		}
+		// Complete the grammar string and construct grammar instance.
+		setGrammar(new Grammar(getGrammarString()));
 	}
 
 	/**

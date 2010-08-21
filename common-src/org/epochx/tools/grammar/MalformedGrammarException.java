@@ -22,10 +22,10 @@
 package org.epochx.tools.grammar;
 
 /**
- * A checked exception that is thrown to indicate that a grammar string is
+ * A runtime exception that is thrown to indicate that a grammar string is
  * not in a valid BNF format.
  */
-public class MalformedGrammarException extends Exception {
+public class MalformedGrammarException extends RuntimeException {
 
 	/**
 	 * 

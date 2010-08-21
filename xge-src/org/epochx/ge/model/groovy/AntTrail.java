@@ -81,12 +81,7 @@ public abstract class AntTrail extends GEModel {
 		landscape = new AntLandscape(landscapeSize, null);
 		ant = new Ant(allowedTimeSteps, landscape);
 
-		try {
-			setGrammar(new Grammar(GRAMMAR_STRING));
-		} catch (final MalformedGrammarException ex) {
-			// It is our grammar so this shouldn't happen.
-			assert false;
-		}
+		setGrammar(new Grammar(GRAMMAR_STRING));
 
 		interpreter = new GroovyInterpreter();
 	}

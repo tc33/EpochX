@@ -84,12 +84,7 @@ public abstract class AntTrail extends GRModel {
 		landscape = new AntLandscape(landscapeSize, null);
 		ant = new Ant(allowedTimeSteps, landscape);
 
-		try {
-			setGrammar(new Grammar(GRAMMAR_STRING));
-		} catch (final MalformedGrammarException ex) {
-			// It is our grammar so this shouldn't happen.
-			assert false;
-		}
+		setGrammar(new Grammar(GRAMMAR_STRING));
 
 		parser = new EpoxParser();
 		interpreter = new EpoxInterpreter(parser);

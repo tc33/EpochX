@@ -40,11 +40,6 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class OnePointCrossover implements GECrossover {
 
-	/*
-	 * TODO This seems ridiculous. Crossing over like this will completely
-	 * remove all context so how can it crossover building blocks!?
-	 */
-
 	// The controlling model.
 	private final GEModel model;
 

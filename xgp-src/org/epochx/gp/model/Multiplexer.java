@@ -140,7 +140,6 @@ public class Multiplexer extends GPModel {
 	 * Calculate what the correct response should be for the given inputs.
 	 */
 	private Boolean multiplex(final boolean[] vars) {
-		// TODO This is quite a lot slower than the x-bit specific versions.
 		// Calculate which data position to use.
 		int dataPosition = 0;
 		for (int i = 0; i < noAddressBits; i++) {

@@ -44,7 +44,6 @@ public abstract class Regression extends GEModel {
 	/**
 	 * The grammar that defines valid solution space.
 	 */
-	// TODO This is missing a divide operator.
 	public static final String GRAMMAR_STRING = "<expr> ::= ( <expr> <op> <expr> ) | <terminal>\n"
 			+ "<op>   ::= + | - | * \n" + "<terminal>  ::= X \n";
 
@@ -96,7 +95,6 @@ public abstract class Regression extends GEModel {
 	 */
 	@Override
 	public double getFitness(final CandidateProgram p) {
-		// TODO Should change to use the multi-input eval method.
 		final GECandidateProgram program = (GECandidateProgram) p;
 
 		int noWrong = 0;

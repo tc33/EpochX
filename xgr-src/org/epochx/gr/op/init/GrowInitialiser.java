@@ -101,8 +101,6 @@ public class GrowInitialiser implements GRInitialiser {
 
 	public NonTerminalSymbol growParseTree(final int depth,
 			final GrammarRule startRule) {
-		// TODO Check it is possible to create a program inside the max depth.
-
 		final NonTerminalSymbol parseTree = new NonTerminalSymbol(startRule);
 
 		buildDerivationTree(parseTree, startRule, 0, depth);

@@ -107,7 +107,6 @@ public class GRCandidateProgram extends CandidateProgram {
 	 */
 	@Override
 	public CandidateProgram clone() {
-		// TODO This needs writing properly.
 		final GRCandidateProgram clone = (GRCandidateProgram) super.clone();
 
 		// If codons are the same then the source and fitness should be the

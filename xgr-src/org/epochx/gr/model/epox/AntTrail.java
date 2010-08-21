@@ -107,8 +107,6 @@ public abstract class AntTrail extends GRModel {
 		landscape.setFoodLocations(foodLocations);
 		ant.reset(allowedTimeSteps, landscape);
 
-		// TODO Look at a better solution to the ant parameter problem using
-		// interpreters.
 		parser.setAnt(ant);
 
 		// Evaluate multiple times until all time moves used.

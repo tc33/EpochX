@@ -28,9 +28,6 @@ import java.awt.*;
  */
 public class LosAltosHillsTrail extends AntTrail {
 
-	// TODO We really shouldn't have the food locations listed for every
-	// representation/language.
-
 	/**
 	 * The points in the landscape that will be occupied by food.
 	 */

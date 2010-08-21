@@ -52,8 +52,6 @@ public interface RunListener {
 	 */
 	void onSuccess();
 
-	// TODO public void onStagnate();
-
 	/**
 	 * Event fired after the run has ended.
 	 */

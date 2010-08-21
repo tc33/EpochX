@@ -34,11 +34,6 @@ import org.epochx.representation.CandidateProgram;
  */
 public class FixedLengthInitialiser implements GEInitialiser {
 
-	/*
-	 * TODO Implement a similar initialiser that uses variable lengths up to
-	 * maximum.
-	 */
-
 	// The controlling model.
 	private final GEModel model;
 
@@ -90,8 +85,6 @@ public class FixedLengthInitialiser implements GEInitialiser {
 	 */
 	@Override
 	public List<CandidateProgram> getInitialPopulation() {
-		// TODO No check for program uniqueness is currently made.
-
 		// Initialise population of candidate programs.
 		final List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(
 				popSize);

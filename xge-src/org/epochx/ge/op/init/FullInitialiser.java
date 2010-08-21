@@ -36,11 +36,6 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class FullInitialiser implements GEInitialiser {
 
-	/*
-	 * TODO This constructs the chromosome using depth first mapping - what
-	 * about others?
-	 */
-
 	// The controlling model.
 	private final GEModel model;
 
@@ -103,7 +98,6 @@ public class FullInitialiser implements GEInitialiser {
 	public GECandidateProgram getInitialProgram(final int depth) {
 		final GrammarNode start = grammar.getStartRule();
 
-		// TODO Check it is possible to create a program inside the max depth.
 		final List<Integer> codons = new ArrayList<Integer>();
 
 		buildDerivationTree(codons, start, 0, depth);

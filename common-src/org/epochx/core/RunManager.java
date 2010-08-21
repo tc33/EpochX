@@ -79,8 +79,6 @@ import org.epochx.stats.*;
  */
 public class RunManager {
 
-	// TODO Is there someway we could allow each run to be in a separate thread?
-
 	// The controlling model.
 	private final Model model;
 

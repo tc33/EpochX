@@ -99,7 +99,6 @@ public class GrowInitialiser implements GEInitialiser {
 	public GECandidateProgram getInitialProgram(final int depth) {
 		final GrammarNode start = grammar.getStartRule();
 
-		// TODO Check it is possible to create a program inside the max depth.
 		int minDepth = 0;
 		if (start instanceof GrammarRule) {
 			minDepth = ((GrammarRule) start).getMinDepth();

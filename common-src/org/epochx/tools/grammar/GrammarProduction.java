@@ -31,8 +31,6 @@ import java.util.*;
  */
 public class GrammarProduction implements Cloneable {
 
-	// TODO Consider if GrammarProduction should extend GrammarNode.
-
 	// The grammar rules and literals in order that make up this production.
 	private final List<GrammarNode> grammarNodes;
 
@@ -231,8 +229,7 @@ public class GrammarProduction implements Cloneable {
 		// Shallow copy the grammar nodes.
 		clone.grammarNodes.addAll(grammarNodes);
 
-		// Shallow copy the attributes. TODO Might need to be a deep copy
-		// though.
+		// Shallow copy the attributes.
 		clone.attributes.putAll(attributes);
 
 		return clone;
@@ -245,12 +242,10 @@ public class GrammarProduction implements Cloneable {
 	 */
 	@Override
 	public String toString() {
-		// TODO Need to express attributes.
 		final StringBuilder buffer = new StringBuilder();
 
 		for (final GrammarNode s: grammarNodes) {
 			if (s instanceof GrammarLiteral) {
-				// TODO Need to implement escaping.
 				buffer.append(((GrammarLiteral) s).toString());
 			}
 			if (s instanceof GrammarRule) {

@@ -28,8 +28,6 @@ import java.awt.*;
  */
 public class JohnMuirTrail extends AntTrail {
 
-	// TODO Insert details of the trail in the class JavaDoc.
-
 	/**
 	 * The points in the landscape that will be occupied by food.
 	 */

@@ -146,9 +146,6 @@ public class KozaCrossover implements GPCrossover {
 	/*
 	 * Recurse through the given GPCandidateProgram to find the nth function
 	 * node and return its node index.
-	 * 
-	 * TODO Consider moving all these functions to the GPCandidateProgram class
-	 * as first class citizens in some form - they might be useful for others.
 	 */
 	private int getNthFunctionNode(final int n, final GPCandidateProgram program) {
 		return getNthFunctionNode(n, 0, 0, program.getRootNode());

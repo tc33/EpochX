@@ -268,8 +268,6 @@ public class GECandidateProgram extends CandidateProgram {
 	 * @return a list of the codons between the specified indexes.
 	 */
 	public List<Integer> getCodons(final int from, final int to) {
-		// TODO This NEEDS to return a copy if we're caching, otherwise it will
-		// all be screwed up.
 		return codons.subList(from, to);
 	}
 
@@ -395,11 +393,6 @@ public class GECandidateProgram extends CandidateProgram {
 	 * modified so that the caches can be reset.
 	 */
 	private void modified() {
-		/*
-		 * TODO Should consider implementing a Chromosome class which extends
-		 * List and can implement all the
-		 * caching for us so we don't have to worry here.
-		 */
 		// Remove source cache.
 		parseTree = null;
 
@@ -418,7 +411,6 @@ public class GECandidateProgram extends CandidateProgram {
 	 */
 	@Override
 	public CandidateProgram clone() {
-		// TODO This needs writing properly.
 		final GECandidateProgram clone = (GECandidateProgram) super.clone();
 
 		// Copy codons.
@@ -465,7 +457,6 @@ public class GECandidateProgram extends CandidateProgram {
 	 */
 	@Override
 	public boolean equals(final Object o) {
-		// TODO Should really be checking the datatype of o first.
 		final GECandidateProgram prog = (GECandidateProgram) o;
 
 		final Symbol thisParseTree = parseTree;

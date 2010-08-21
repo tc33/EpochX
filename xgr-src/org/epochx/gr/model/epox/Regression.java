@@ -102,7 +102,6 @@ public abstract class Regression extends GRModel {
 	 */
 	@Override
 	public double getFitness(final CandidateProgram p) {
-		// TODO Should change to use the multi-input eval method.
 		final GRCandidateProgram program = (GRCandidateProgram) p;
 
 		int noWrong = 0;

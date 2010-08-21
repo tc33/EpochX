@@ -69,8 +69,8 @@ public class WhighamMutation implements GRMutation {
 
 		final NonTerminalSymbol parseTree = mutatedProgram.getParseTree();
 
-		// TODO This is v.inefficient because we have to fly up and down the
-		// tree lots of times.
+		// This is v.inefficient because we have to fly up and down the tree 
+		// lots of times.
 		final List<Integer> nonTerminals = parseTree.getNonTerminalIndexes();
 
 		// Choose a node to change.
@@ -79,13 +79,6 @@ public class WhighamMutation implements GRMutation {
 		final NonTerminalSymbol point = (NonTerminalSymbol) parseTree
 				.getNthSymbol(selection);
 		final int originalDepth = point.getDepth();
-
-		/*
-		 * TODO At the mo we use a max depth of whatever the original had but
-		 * would be better to use up to the maximum program depth. This is
-		 * difficult though because we don't know how deep the node with chose
-		 * is.
-		 */
 
 		// Construct a new subtree from that node's grammar rule.
 		final GrammarRule rule = point.getGrammarRule();

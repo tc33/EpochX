@@ -98,8 +98,6 @@ public class IfFoodAheadFunction extends VoidNode {
 
 	@Override
 	public boolean equals(final Object obj) {
-		// TODO This should probably check it has the same ant and landscape
-		// too.
 		return super.equals(obj);
 	}
 }

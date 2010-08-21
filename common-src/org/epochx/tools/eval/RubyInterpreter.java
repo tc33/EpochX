@@ -69,8 +69,6 @@ public class RubyInterpreter extends ScriptingInterpreter {
 	@Override
 	public Object[] eval(final String expression, final String[] argNames,
 			final Object[][] argValues) throws MalformedProgramException {
-		// TODO Might be able to speed this up further by compiling then using
-		// invokeMethod.
 		final Object[] results = new Object[argValues.length];
 
 		final String code = getEvalCode(expression, argNames);
@@ -118,8 +116,6 @@ public class RubyInterpreter extends ScriptingInterpreter {
 	@Override
 	public void exec(final String program, final String[] argNames,
 			final Object[][] argValues) throws MalformedProgramException {
-		// TODO Might be able to speed this up further by compiling then using
-		// invokeMethod.
 		final String code = getExecCode(program, argNames);
 
 		final Invocable invocableEngine = (Invocable) getEngine();

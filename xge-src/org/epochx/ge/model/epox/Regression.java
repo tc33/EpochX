@@ -102,7 +102,6 @@ public abstract class Regression extends GEModel {
 	 */
 	@Override
 	public double getFitness(final CandidateProgram p) {
-		// TODO Should change to use the multi-input eval method.
 		final GECandidateProgram program = (GECandidateProgram) p;
 
 		int noWrong = 0;

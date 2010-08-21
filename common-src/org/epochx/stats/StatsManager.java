@@ -38,11 +38,6 @@ import org.epochx.life.*;
  */
 public class StatsManager {
 
-	// TODO Statistics from the controller about the whole set of runs.
-	// TODO Initialisation statistics.
-	// TODO Do we really need to separate run/gen/crossover/mutation etc like
-	// this?
-
 	// The controlling model.
 	private final Model model;
 

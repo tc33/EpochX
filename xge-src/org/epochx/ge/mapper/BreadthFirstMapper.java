@@ -28,6 +28,8 @@ import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.tools.grammar.*;
 
 /**
+ * This class is not fully implemented. It should NOT be used.
+ * 
  * A breadth first mapper is a twist on the classic depth-first mapper
  * typically used by GE. It maps a GECandidateProgram's chromosome to a
  * String by using each codon in order to choose between productions
@@ -282,16 +284,12 @@ public class BreadthFirstMapper implements Mapper {
 		return noMappedCodons;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.epochxge.mapper.Mapper#map(com.epochxge.representation.CandidateProgram
-	 * )
+	/**
+	 * This mapper is currently not fully implemented. It should not be used.
+	 * This method will just return null.
 	 */
 	@Override
 	public NonTerminalSymbol map(final GECandidateProgram program) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

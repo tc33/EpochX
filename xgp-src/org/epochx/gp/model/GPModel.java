@@ -97,8 +97,6 @@ public abstract class GPModel extends Model {
 	 * @param maxInitialDepth the new max program tree depth to use.
 	 */
 	public void setMaxInitialDepth(final int maxInitialDepth) {
-		// TODO The name of this needs to be made consistent with those from XGR
-		// and XGE.
 		if (maxInitialDepth >= -1) {
 			this.maxInitialDepth = maxInitialDepth;
 		} else {

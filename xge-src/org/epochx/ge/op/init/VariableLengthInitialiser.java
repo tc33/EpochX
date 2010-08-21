@@ -32,7 +32,6 @@ public class VariableLengthInitialiser implements GEInitialiser {
 
 	@Override
 	public List<CandidateProgram> getInitialPopulation() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

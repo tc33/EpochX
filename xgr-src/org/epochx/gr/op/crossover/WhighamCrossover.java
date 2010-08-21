@@ -68,8 +68,6 @@ public class WhighamCrossover implements GRCrossover {
 		final NonTerminalSymbol parseTree1 = child1.getParseTree();
 		final NonTerminalSymbol parseTree2 = child2.getParseTree();
 
-		// TODO Implement getNoNonTerminals(), getNthTerminal() etc methods in
-		// Grammar parse tree representation.
 		final List<NonTerminalSymbol> nonTerminals1 = parseTree1
 				.getNonTerminalSymbols();
 		final List<NonTerminalSymbol> nonTerminals2 = parseTree2

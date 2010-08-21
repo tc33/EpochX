@@ -82,7 +82,7 @@ public class EpoxInterpreter implements Interpreter {
 				parser.addAvailableVariable(new DoubleVariable(argNames[i],
 						(Double) argValues[i]));
 			} else {
-				// TODO Unknown variable type - throw exception.
+				throw new MalformedProgramException("Unknown variable type");
 			}
 		}
 

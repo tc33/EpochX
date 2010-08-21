@@ -38,10 +38,6 @@ import org.epochx.tools.grammar.*;
  */
 public class DepthFirstMapper implements Mapper {
 
-	/*
-	 * TODO Write a non-recursive mapper like breadth first mapper and make a
-	 * secondary contructor with a boolean option.
-	 */
 	// The controlling model.
 	private final GEModel model;
 

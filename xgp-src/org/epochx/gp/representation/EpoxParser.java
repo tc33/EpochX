@@ -36,9 +36,6 @@ import org.epochx.tools.eval.MalformedProgramException;
  */
 public class EpoxParser {
 
-	// TODO Should be able to cope with parsing commas ',' OR spaces to separate
-	// values.
-
 	// This map is to contain only simple functions that require no additional
 	// info.
 	private final Map<String, Class<?>> simpleFunctions;
@@ -142,7 +139,7 @@ public class EpoxParser {
 	 * We do lazy initialisation, so if the object hasn't been initialised yet,
 	 * we do it now.
 	 */
-	private Node initialiseFunction(final String name) {
+	private Node initialiseFunction(final String name) throws MalformedProgramException {
 		// The function node we're going to create.
 		Node node = null;
 
@@ -154,9 +151,9 @@ public class EpoxParser {
 			try {
 				node = (Node) functionClass.newInstance();
 			} catch (final InstantiationException e) {
-				// TODO Do something...
+				assert false;
 			} catch (final IllegalAccessException e) {
-				// TODO Do something...
+				assert false;
 			}
 		} else if (name.equals("IF-FOOD-AHEAD")) {
 			node = new IfFoodAheadFunction(ant);
@@ -170,7 +167,7 @@ public class EpoxParser {
 			node = new AntSkipAction(ant);
 		} else {
 			// Function unknown - error.
-			// TODO Do something for error.
+			throw new MalformedProgramException("Unknown function " + name + " encountered");
 		}
 
 		return node;

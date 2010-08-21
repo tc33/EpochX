@@ -553,9 +553,6 @@ public class Grammar {
 	 * sets symbol's recursive flag accordingly. A rule is recursive if any of
 	 * its productions contain a reference to itself, or if any of the
 	 * productions in the tree below that rule contain a reference to that rule.
-	 * TODO This isn't actually what is going on here - this sets the whole path
-	 * between to recursive which is how it works for the FullInitialiser, but
-	 * essentially seems wrong.
 	 */
 	private void setRecursiveness() {
 		if (start instanceof GrammarRule) {
@@ -669,7 +666,6 @@ public class Grammar {
 	 * @return a complete list of the literals in this grammar.
 	 */
 	public List<GrammarLiteral> getGrammarLiterals() {
-		// TODO Is it necessary to make a copy of the list?
 		return new ArrayList<GrammarLiteral>(literals.values());
 	}
 
@@ -693,7 +689,6 @@ public class Grammar {
 	 * @return a complete list of the non-literals in this grammar.
 	 */
 	public List<GrammarRule> getGrammarRules() {
-		// TODO Does this need to be a new ArrayList?
 		return new ArrayList<GrammarRule>(rules.values());
 	}
 

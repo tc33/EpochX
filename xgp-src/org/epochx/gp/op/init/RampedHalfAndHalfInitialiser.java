@@ -189,13 +189,11 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 			GPCandidateProgram program;
 
 			do {
-				Node rootNode;
 				if ((i % 2) == 0) {
-					rootNode = grow.buildGrowNodeTree(depth);
+					program = grow.getInitialProgram(depth);
 				} else {
-					rootNode = full.buildFullNodeTree(depth);
+					program = full.getInitialProgram(depth);
 				}
-				program = new GPCandidateProgram(rootNode, model);
 			} while (!acceptDuplicates && firstGen.contains(program));
 
 			firstGen.add(program);

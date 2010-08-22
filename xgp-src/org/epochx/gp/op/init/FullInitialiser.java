@@ -31,7 +31,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
  * Initialisation implementation which produces full program trees down to a
- * specified initialDepth.
+ * specified depth.
  * 
  * <p>
  * If a model is provided then the following parameters are loaded upon every
@@ -39,7 +39,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * 
  * <ul>
  * <li>population size</li>
- * <li>maximum initial program initialDepth</li>
+ * <li>maximum initial program depth</li>
  * <li>syntax</li>
  * <li>random number generator</li>
  * </ul>
@@ -62,7 +62,7 @@ public class FullInitialiser implements GPInitialiser {
 	// The size of the populations to construct.
 	private int popSize;
 
-	// The initialDepth of every program tree to generate.
+	// The depth of every program tree to generate.
 	private int initialDepth;
 
 	// Whether programs must be unique in generated populations.
@@ -137,11 +137,12 @@ public class FullInitialiser implements GPInitialiser {
 	 * in the population are only guarenteed to be unique (as defined by the
 	 * <code>equals</code> method on <code>GPCandidateProgram</code>) if the
 	 * <code>isDuplicatesEnabled</code> method returns <code>true</code>. Each
-	 * program will have a full node tree with a initialDepth equal to the initialDepth
+	 * program will have a full node tree with a depth equal to the
+	 * depth
 	 * attribute.
 	 * 
 	 * @return A <code>List</code> of newly generated
-	 *         <code>CandidateProgram</code> instances with full node trees.
+	 *         <code>GPCandidateProgram</code> instances with full node trees.
 	 */
 	@Override
 	public List<CandidateProgram> getInitialPopulation() {
@@ -155,10 +156,7 @@ public class FullInitialiser implements GPInitialiser {
 
 			do {
 				// Build a new full node tree.
-				final Node nodeTree = buildFullNodeTree(initialDepth);
-
-				// Create a program around the node tree.
-				candidate = new GPCandidateProgram(nodeTree, model);
+				candidate = getInitialProgram(initialDepth);
 			} while (!acceptDuplicates && firstGen.contains(candidate));
 
 			// Must be unique - add to the new population.
@@ -167,17 +165,32 @@ public class FullInitialiser implements GPInitialiser {
 
 		return firstGen;
 	}
-
+	
 	/**
-	 * Builds a full node tree down to the given initialDepth. As the node tree will be
-	 * full the maximum and minimum depths of the returned node tree should be
-	 * equal to the initialDepth argument. The nodes that form the tree will be
+	 * Constructs a new full node tree and returns it within a 
+	 * <code>GPCandidateProgram</code>. The nodes that form the tree will be 
 	 * randomly selected from the nodes provided as the syntax attribute.
 	 * 
-	 * @param initialDepth The initialDepth of the full node tree, where the initialDepth is the
-	 *        number of nodes from the root.
+	 * @param maxDepth The maximum depth of the node tree to be grown, where
+	 *        the depth is the number of nodes from the root.
+	 * @return a new <code>GPCandidateProgram</code> instance.
+	 */
+	public GPCandidateProgram getInitialProgram(final int maxDepth) {
+		Node root = buildFullNodeTree(maxDepth);
+
+		return new GPCandidateProgram(root, model);
+	}
+
+	/**
+	 * Builds a full node tree down to the given depth. As the node tree will be
+	 * full the maximum and minimum depths of the returned node tree should be
+	 * equal to the depth argument. The nodes that form the tree will be
+	 * randomly selected from the nodes provided as the syntax attribute.
+	 * 
+	 * @param depth The depth of the full node tree, where the
+	 *        depth is the number of nodes from the root.
 	 * @return The root node of a randomly generated full node tree of the
-	 *         requested initialDepth.
+	 *         requested depth.
 	 */
 	public Node buildFullNodeTree(final int depth) {
 		Node root;
@@ -190,7 +203,7 @@ public class FullInitialiser implements GPInitialiser {
 			final int randomIndex = rng.nextInt(functions.size());
 			root = functions.get(randomIndex).clone();
 
-			// Populate the root node with full children of initialDepth-1.
+			// Populate the root node with full children of depth-1.
 			fillChildren(root, 0, depth);
 		}
 
@@ -199,14 +212,16 @@ public class FullInitialiser implements GPInitialiser {
 
 	/*
 	 * Helper method for the buildFullNodeTree method. Recursively fills the
-	 * children of a node, to construct a full tree down to a initialDepth of maxDepth.
+	 * children of a node, to construct a full tree down to a depth of
+	 * maxDepth.
 	 */
 	private void fillChildren(final Node currentNode, final int currentDepth,
 			final int maxDepth) {
 		final int arity = currentNode.getArity();
 
 		if (currentDepth < maxDepth - 1) {
-			// Not near the maximum initialDepth yet, fill children with functions.
+			// Not near the maximum depth yet, fill children with
+			// functions.
 			for (int i = 0; i < arity; i++) {
 				final int randomIndex = rng.nextInt(functions.size());
 				final Node child = functions.get(randomIndex).clone();
@@ -215,7 +230,7 @@ public class FullInitialiser implements GPInitialiser {
 				fillChildren(child, (currentDepth + 1), maxDepth);
 			}
 		} else {
-			// At maximum initialDepth-1, fill children with terminals.
+			// At maximum depth-1, fill children with terminals.
 			for (int i = 0; i < arity; i++) {
 				final int randomIndex = rng.nextInt(terminals.size());
 				final Node child = terminals.get(randomIndex).clone();

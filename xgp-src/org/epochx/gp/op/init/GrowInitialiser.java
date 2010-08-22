@@ -155,10 +155,7 @@ public class GrowInitialiser implements GPInitialiser {
 
 			do {
 				// Grow a new node tree.
-				final Node nodeTree = buildGrowNodeTree(initialMaxDepth);
-
-				// Create a program around the node tree.
-				candidate = new GPCandidateProgram(nodeTree, model);
+				candidate = getInitialProgram(initialMaxDepth);
 			} while (!acceptDuplicates && firstGen.contains(candidate));
 
 			// Must be unique - add to the new population.
@@ -169,11 +166,26 @@ public class GrowInitialiser implements GPInitialiser {
 	}
 
 	/**
+	 * Grows a new node tree and returns it within a 
+	 * <code>GPCandidateProgram</code>. The nodes that form the tree will be 
+	 * randomly selected from the nodes provided as the syntax attribute.
+	 * 
+	 * @param maxDepth The maximum depth of the node tree to be grown, where
+	 *        the depth is the number of nodes from the root.
+	 * @return a new <code>GPCandidateProgram</code> instance.
+	 */
+	public GPCandidateProgram getInitialProgram(final int maxDepth) {
+		Node root = buildGrowNodeTree(maxDepth);
+
+		return new GPCandidateProgram(root, model);
+	}
+	
+	/**
 	 * Builds a grown node tree with a maximum depth as given. The nodes that 
 	 * form the tree will be randomly selected from the nodes provided as the 
 	 * syntax attribute.
 	 * 
-	 * @param initialMaxDepth The maximum depth of the node tree to be grown, where
+	 * @param maxDepth The maximum depth of the node tree to be grown, where
 	 *        the depth is the number of nodes from the root.
 	 * @return The root node of a randomly generated node tree.
 	 */
@@ -184,10 +196,10 @@ public class GrowInitialiser implements GPInitialiser {
 
 		// Populate the root node with grown children with maximum depth-1.
 		this.fillChildren(root, 0, maxDepth);
-
+		
 		return root;
 	}
-
+	
 	/*
 	 * Helper method for the buildFullNodeTree method. Recursively fills the 
 	 * children of a node, to construct a grown tree down to at most a depth of 

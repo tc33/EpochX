@@ -44,14 +44,21 @@ public class FullInitialiser implements GEInitialiser {
 	private int popSize;
 	private int maxInitialProgramDepth;
 	private int maxCodonSize;
+	
+	private boolean acceptDuplicates;
 
+	public FullInitialiser(final GEModel model) {
+		this(model, true);
+	}
+	
 	/**
 	 * Constructs a full initialiser.
 	 * 
 	 * @param model
 	 */
-	public FullInitialiser(final GEModel model) {
+	public FullInitialiser(final GEModel model, final boolean acceptDuplicates) {
 		this.model = model;
+		this.acceptDuplicates = acceptDuplicates;
 
 		// Configure parameters from the model.
 		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
@@ -86,7 +93,7 @@ public class FullInitialiser implements GEInitialiser {
 			do {
 				// Create a new program at the models initial max depth.
 				candidate = getInitialProgram(maxInitialProgramDepth);
-			} while (firstGen.contains(candidate));
+			} while (!acceptDuplicates && firstGen.contains(candidate));
 
 			// Add to the new population.
 			firstGen.add(candidate);
@@ -184,4 +191,11 @@ public class FullInitialiser implements GEInitialiser {
 		return codon;
 	}
 
+	public boolean isDuplicatesEnabled() {
+		return acceptDuplicates;
+	}
+
+	public void setDuplicatesEnabled(boolean acceptDuplicates) {
+		this.acceptDuplicates = acceptDuplicates;
+	}
 }

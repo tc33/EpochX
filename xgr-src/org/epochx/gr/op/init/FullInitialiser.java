@@ -43,14 +43,21 @@ public class FullInitialiser implements GRInitialiser {
 	private Grammar grammar;
 	private int popSize;
 	private int maxInitialProgramDepth;
+	
+	private boolean acceptDuplicates;
 
+	public FullInitialiser(final GRModel model) {
+		this(model, true);
+	}
+	
 	/**
 	 * Constructs a full initialiser.
 	 * 
 	 * @param model
 	 */
-	public FullInitialiser(final GRModel model) {
+	public FullInitialiser(final GRModel model, final boolean acceptDuplicates) {
 		this.model = model;
+		this.acceptDuplicates = acceptDuplicates;
 
 		// Configure parameters from the model.
 		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
@@ -84,7 +91,7 @@ public class FullInitialiser implements GRInitialiser {
 			do {
 				// Create a new program at the models initial max depth.
 				candidate = getInitialProgram(maxInitialProgramDepth);
-			} while (firstGen.contains(candidate));
+			} while (!acceptDuplicates && firstGen.contains(candidate));
 
 			// Add to the new population.
 			firstGen.add(candidate);
@@ -158,5 +165,13 @@ public class FullInitialiser implements GRInitialiser {
 		// If there were any valid recursive productions, return them, otherwise
 		// use the others.
 		return validRecursive.isEmpty() ? validAll : validRecursive;
+	}
+	
+	public boolean isDuplicatesEnabled() {
+		return acceptDuplicates;
+	}
+
+	public void setDuplicatesEnabled(boolean acceptDuplicates) {
+		this.acceptDuplicates = acceptDuplicates;
 	}
 }

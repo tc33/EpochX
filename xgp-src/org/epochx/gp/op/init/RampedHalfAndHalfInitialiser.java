@@ -57,25 +57,39 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 	private final GrowInitialiser grow;
 	private final FullInitialiser full;
 
-	private final int minDepth;
+	private int minDepth;
+	private boolean acceptDuplicates;
 
 	/**
-	 * Construct a RampedHalfAndHalfInitialiser.
+	 * Constructs a RampedHalfAndHalfInitialiser.
 	 * 
 	 * @param model The model being assessed
 	 */
 	public RampedHalfAndHalfInitialiser(final GPModel model) {
-		this(model, -1);
+		this(model, 2);
 	}
 
 	/**
-	 * Construct a RampedHalfAndHalfInitialiser.
+	 * Constructs a RampedHalfAndHalfInitialiser.
 	 * 
 	 * @param model The model being assessed
 	 */
 	public RampedHalfAndHalfInitialiser(final GPModel model, final int minDepth) {
+		this(model, minDepth, true);
+	}
+
+	/**
+	 * Constructs a <code>RampedHalfAndHalfInitialiser</code>.
+	 * 
+	 * @param model
+	 * @param minDepth
+	 * @param acceptDuplicates
+	 */
+	public RampedHalfAndHalfInitialiser(final GPModel model,
+			final int minDepth, final boolean acceptDuplicates) {
 		this.model = model;
 		this.minDepth = minDepth;
+		this.acceptDuplicates = acceptDuplicates;
 
 		// set up the grow and full parts
 		grow = new GrowInitialiser(model);
@@ -132,7 +146,6 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 			// Grow on even numbers, full on odd.
 			GPCandidateProgram program;
 
-			int attempts = 0;
 			do {
 				Node rootNode;
 				if ((i % 2) == 0) {
@@ -141,12 +154,27 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 					rootNode = full.buildFullNodeTree(depth);
 				}
 				program = new GPCandidateProgram(rootNode, model);
-				attempts++;
-			} while (firstGen.contains(program) && (attempts < 5));
+			} while (!acceptDuplicates && firstGen.contains(program));
 
 			firstGen.add(program);
 		}
 
 		return firstGen;
+	}
+
+	public int getMinDepth() {
+		return minDepth;
+	}
+
+	public void setMinDepth(int minDepth) {
+		this.minDepth = minDepth;
+	}
+
+	public boolean isDuplicatesEnabled() {
+		return acceptDuplicates;
+	}
+
+	public void setDuplicatesEnabled(boolean acceptDuplicates) {
+		this.acceptDuplicates = acceptDuplicates;
 	}
 }

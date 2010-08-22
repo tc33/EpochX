@@ -47,14 +47,23 @@ public class GrowInitialiser implements GPInitialiser {
 	private int popSize;
 	private int maxInitialDepth;
 
+	private boolean acceptDuplicates;
+
+	public GrowInitialiser(final GPModel model) {
+		this(model, true);
+	}
+
 	/**
-	 * Constructor for the grow initialiser.
+	 * Constructor for the grow initialiser. Note that turning reject duplicates
+	 * on could lead to an infinite loop if there are insufficient unique 
+	 * programs to fill the population. 
 	 * 
 	 * @param model The current controlling model. Run parameters such as the
 	 *        population size will be obtained from this.
 	 */
-	public GrowInitialiser(final GPModel model) {
+	public GrowInitialiser(final GPModel model, final boolean acceptDuplicates) {
 		this.model = model;
+		this.acceptDuplicates = acceptDuplicates;
 
 		terminals = new ArrayList<Node>();
 		functions = new ArrayList<Node>();
@@ -117,7 +126,7 @@ public class GrowInitialiser implements GPInitialiser {
 
 				// Create a program around the node tree.
 				candidate = new GPCandidateProgram(nodeTree, model);
-			} while (firstGen.contains(candidate));
+			} while (!acceptDuplicates && firstGen.contains(candidate));
 
 			// Must be unique - add to the new population.
 			firstGen.add(candidate);
@@ -173,5 +182,13 @@ public class GrowInitialiser implements GPInitialiser {
 				}
 			}
 		}
+	}
+
+	public boolean isDuplicatesEnabled() {
+		return acceptDuplicates;
+	}
+
+	public void setDuplicatesEnabled(boolean acceptDuplicates) {
+		this.acceptDuplicates = acceptDuplicates;
 	}
 }

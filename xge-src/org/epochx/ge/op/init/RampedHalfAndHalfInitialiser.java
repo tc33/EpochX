@@ -52,13 +52,20 @@ public class RampedHalfAndHalfInitialiser implements GEInitialiser {
 	private final GrowInitialiser grow;
 	private final FullInitialiser full;
 
+	private boolean acceptDuplicates;
+
+	public RampedHalfAndHalfInitialiser(final GEModel model) {
+		this(model, true);
+	}
+	
 	/**
 	 * Construct a RampedHalfAndHalfInitialiser.
 	 * 
 	 * @param model The model being assessed
 	 */
-	public RampedHalfAndHalfInitialiser(final GEModel model) {
+	public RampedHalfAndHalfInitialiser(final GEModel model, final boolean acceptDuplicates) {
 		this.model = model;
+		this.acceptDuplicates = acceptDuplicates;
 
 		// set up the grow and full parts
 		grow = new GrowInitialiser(model);
@@ -123,11 +130,19 @@ public class RampedHalfAndHalfInitialiser implements GEInitialiser {
 				} else {
 					program = full.getInitialProgram(depth);
 				}
-			} while (firstGen.contains(program));
+			} while (!acceptDuplicates && firstGen.contains(program));
 
 			firstGen.add(program);
 		}
 
 		return firstGen;
+	}
+
+	public boolean isDuplicatesEnabled() {
+		return acceptDuplicates;
+	}
+
+	public void setDuplicatesEnabled(boolean acceptDuplicates) {
+		this.acceptDuplicates = acceptDuplicates;
 	}
 }

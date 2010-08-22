@@ -45,13 +45,24 @@ public class GrowInitialiser implements GEInitialiser {
 	private int maxInitialProgramDepth;
 	private int maxCodonSize;
 
+	private boolean acceptDuplicates;
+
+	/**
+	 * Constructs a <code>GrowInitialiser</code>.
+	 * 
+	 */
+	public GrowInitialiser(final GEModel model) {
+		this(model, true);
+	}
+
 	/**
 	 * Constructs a grow initialiser.
 	 * 
 	 * @param model
 	 */
-	public GrowInitialiser(final GEModel model) {
+	public GrowInitialiser(final GEModel model, final boolean acceptDuplicates) {
 		this.model = model;
+		this.acceptDuplicates = acceptDuplicates;
 
 		// Configure parameters from the model.
 		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
@@ -87,7 +98,7 @@ public class GrowInitialiser implements GEInitialiser {
 			do {
 				// Create a new program down to the models initial max depth.
 				candidate = getInitialProgram(maxInitialProgramDepth);
-			} while (firstGen.contains(candidate));
+			} while (!acceptDuplicates && firstGen.contains(candidate));
 
 			// Add to the new population.
 			firstGen.add(candidate);
@@ -189,4 +200,11 @@ public class GrowInitialiser implements GEInitialiser {
 		return codon;
 	}
 
+	public boolean isDuplicatesEnabled() {
+		return acceptDuplicates;
+	}
+
+	public void setDuplicatesEnabled(boolean acceptDuplicates) {
+		this.acceptDuplicates = acceptDuplicates;
+	}
 }

@@ -54,6 +54,8 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 
 	// The smallest depth to be used.
 	private int minDepth;
+	
+	private boolean acceptDuplicates;
 
 	/**
 	 * Construct a RampedHalfAndHalfInitialiser.
@@ -64,6 +66,10 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 		this(model, -1);
 	}
 
+	public RampedHalfAndHalfInitialiser(final GRModel model, final int minDepth) {
+		this(model, minDepth, true);
+	}
+	
 	/**
 	 * Construct a RampedHalfAndHalfInitialiser.
 	 * 
@@ -72,9 +78,10 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 	 *        ramping up. If a value smaller than the smallest allowable by the
 	 *        grammar is given then this smallest possible value is used.
 	 */
-	public RampedHalfAndHalfInitialiser(final GRModel model, final int minDepth) {
+	public RampedHalfAndHalfInitialiser(final GRModel model, final int minDepth, final boolean acceptDuplicates) {
 		this.model = model;
 		this.minDepth = minDepth;
+		this.acceptDuplicates = acceptDuplicates;
 
 		// set up the grow and full parts
 		grow = new GrowInitialiser(model);
@@ -137,25 +144,25 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 			// Grow on even numbers, full on odd.
 			GRCandidateProgram program;
 
-			int tries = 0;
 			do {
 				if ((i % 2) == 0) {
 					program = grow.getInitialProgram(depth);
 				} else {
 					program = full.getInitialProgram(depth);
 				}
-
-				tries++;
-				if (tries == 10) {
-					// If we can't get a unique program after 10 tries, then
-					// just go with it.
-					break;
-				}
-			} while (firstGen.contains(program));
+			} while (!acceptDuplicates && firstGen.contains(program));
 
 			firstGen.add(program);
 		}
 
 		return firstGen;
+	}
+
+	public boolean isDuplicatesEnabled() {
+		return acceptDuplicates;
+	}
+
+	public void setDuplicatesEnabled(boolean acceptDuplicates) {
+		this.acceptDuplicates = acceptDuplicates;
 	}
 }

@@ -46,6 +46,8 @@ public class FullInitialiser implements GPInitialiser {
 	private int popSize;
 	private int maxInitialDepth;
 
+	private boolean acceptDuplicates;
+
 	/**
 	 * Constructor for the full initialiser.
 	 * 
@@ -53,7 +55,12 @@ public class FullInitialiser implements GPInitialiser {
 	 *        population size will be obtained from this.
 	 */
 	public FullInitialiser(final GPModel model) {
+		this(model, true);
+	}
+
+	public FullInitialiser(final GPModel model, final boolean acceptDuplicates) {
 		this.model = model;
+		this.acceptDuplicates = acceptDuplicates;
 
 		terminals = new ArrayList<Node>();
 		functions = new ArrayList<Node>();
@@ -117,7 +124,7 @@ public class FullInitialiser implements GPInitialiser {
 
 				// Create a program around the node tree.
 				candidate = new GPCandidateProgram(nodeTree, model);
-			} while (firstGen.contains(candidate));
+			} while (!acceptDuplicates && firstGen.contains(candidate));
 
 			// Must be unique - add to the new population.
 			firstGen.add(candidate);
@@ -182,5 +189,13 @@ public class FullInitialiser implements GPInitialiser {
 				currentNode.setChild(i, child);
 			}
 		}
+	}
+
+	public boolean isDuplicatesEnabled() {
+		return acceptDuplicates;
+	}
+
+	public void setDuplicatesEnabled(boolean acceptDuplicates) {
+		this.acceptDuplicates = acceptDuplicates;
 	}
 }

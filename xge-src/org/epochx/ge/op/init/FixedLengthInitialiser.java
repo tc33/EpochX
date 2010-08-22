@@ -40,7 +40,13 @@ public class FixedLengthInitialiser implements GEInitialiser {
 	private int popSize;
 
 	private int chromosomeLength;
+	
+	private boolean acceptDuplicates;
 
+	public FixedLengthInitialiser(final GEModel model, final int chromosomeLength) {
+		this(model, chromosomeLength, true);
+	}
+	
 	/**
 	 * Constructs a RandomInitialiser.
 	 * 
@@ -50,9 +56,10 @@ public class FixedLengthInitialiser implements GEInitialiser {
 	 *        generated to.
 	 */
 	public FixedLengthInitialiser(final GEModel model,
-			final int chromosomeLength) {
+			final int chromosomeLength, final boolean acceptDuplicates) {
 		this.model = model;
 		this.chromosomeLength = chromosomeLength;
+		this.acceptDuplicates = acceptDuplicates;
 
 		// Configure parameters from the model.
 		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
@@ -90,16 +97,16 @@ public class FixedLengthInitialiser implements GEInitialiser {
 				popSize);
 
 		// Build population.
-		int i = 0;
-		while (i < popSize) {
-			final GECandidateProgram candidate = new GECandidateProgram(model);
+		for (int i=0; i<popSize; i++) {
+			GECandidateProgram candidate;
 
-			// Initialise the program.
-			candidate.appendNewCodons(chromosomeLength);
-			// if (candidate.isValid() && !firstGen.contains(candidate)) {
-			firstGen.add(candidate);
-			i++;
-			// }
+			do {
+				candidate = new GECandidateProgram(model);
+				// Initialise the program.
+				candidate.appendNewCodons(chromosomeLength);
+	
+				firstGen.add(candidate);
+			} while (!acceptDuplicates && firstGen.contains(candidate));
 		}
 
 		// Return starting population.
@@ -128,4 +135,11 @@ public class FixedLengthInitialiser implements GEInitialiser {
 		this.chromosomeLength = chromosomeLength;
 	}
 
+	public boolean isDuplicatesEnabled() {
+		return acceptDuplicates;
+	}
+
+	public void setDuplicatesEnabled(boolean acceptDuplicates) {
+		this.acceptDuplicates = acceptDuplicates;
+	}
 }

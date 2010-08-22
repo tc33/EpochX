@@ -49,14 +49,20 @@ public class ModuloFunction extends DoubleNode {
 
 	/**
 	 * Evaluating a <code>ModuloFunction</code> involves dividing the evaluated
-	 * first child, by the second child with the result being the remainder.
+	 * first child, by the second child with the result being the remainder. If
+	 * the second child evaluates to <code>0</code>, then the result will be 
+	 * whatever the first child evaluated to.
 	 */
 	@Override
 	public Double evaluate() {
 		final double c1 = ((Double) getChild(0).evaluate()).doubleValue();
 		final double c2 = ((Double) getChild(1).evaluate()).doubleValue();
 
-		return c1 % c2;
+		if (c2 == 0) {
+			return c1;
+		} else {
+			return c1 % c2;
+		}
 	}
 
 	/**

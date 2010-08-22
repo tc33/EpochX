@@ -50,14 +50,23 @@ public class PowerFunction extends DoubleNode {
 
 	/**
 	 * Evaluating a <code>PowerFunction</code> involves raising the first child
-	 * to the power of the second, after both children are evaluated.
+	 * to the power of the second, after both children are evaluated. For
+	 * performance, this function is evaluated lazily. The second child is
+	 * evaluated first, if it evaluates to <code>0.0</code> then the result will
+	 * always be <code>1.0</code> and the first child will not be evaluated at
+	 * all.
 	 */
 	@Override
 	public Double evaluate() {
-		final double c1 = ((Double) getChild(0).evaluate()).doubleValue();
 		final double c2 = ((Double) getChild(1).evaluate()).doubleValue();
 
-		return Math.pow(c1, c2);
+		if (c2 == 0.0) {
+			return 1.0;
+		} else {
+			final double c1 = ((Double) getChild(0).evaluate()).doubleValue();
+
+			return Math.pow(c1, c2);
+		}
 	}
 
 	/**

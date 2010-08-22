@@ -91,15 +91,19 @@ public class ProtectedDivisionFunction extends DoubleNode {
 	 * Evaluating a <code>ProtectedDivisionFunction</code> involves dividing
 	 * the result of evaluating both children. If the divisor resolves to zero
 	 * then the result returned will be zero to avoid the divide by zero issue.
+	 * For performance, this function is evaluated lazily. The divisor child is
+	 * evaluated first, if it evaluates to <code>0.0</code> then the first child
+	 * will not be evaluated at all.
 	 */
 	@Override
 	public Double evaluate() {
-		final double c1 = ((Double) getChild(0).evaluate()).doubleValue();
 		final double c2 = ((Double) getChild(1).evaluate()).doubleValue();
 
 		if (c2 == 0) {
 			return protectionValue;
 		} else {
+			final double c1 = ((Double) getChild(0).evaluate()).doubleValue();
+
 			return c1 / c2;
 		}
 	}

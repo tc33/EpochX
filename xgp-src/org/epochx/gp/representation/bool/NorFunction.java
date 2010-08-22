@@ -52,14 +52,20 @@ public class NorFunction extends BooleanNode {
 	 * Evaluating a <code>NorFunction</code> involves combining the evaluation
 	 * of the children according to the rules of NOR where if both children
 	 * evaluate to false then the result will be true. All other combinations
-	 * will return a result of false.
+	 * will return a result of false. For performance, this function is 
+	 * evaluated lazily. The first child is evaluated first, if it evaluates to 
+	 * <code>true</code> then the overall result will always be 
+	 * <code>false</code>, so the second child will not be evaluated at all.
 	 */
 	@Override
 	public Boolean evaluate() {
-		final boolean c1 = ((Boolean) getChild(0).evaluate()).booleanValue();
-		final boolean c2 = ((Boolean) getChild(1).evaluate()).booleanValue();
-
-		return !(c1 || c2);
+		boolean result = ((Boolean) getChild(0).evaluate()).booleanValue();
+		
+		if (!result) {
+			result = ((Boolean) getChild(1).evaluate()).booleanValue();
+		}
+		
+		return !result;
 	}
 
 	/**

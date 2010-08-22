@@ -50,15 +50,20 @@ public class MultiplyFunction extends DoubleNode {
 
 	/**
 	 * Evaluating a <code>MultiplyFunction</code> involves multiplying the
-	 * result of
-	 * evaluating both children.
+	 * result of evaluating both children. For performance, this function is 
+	 * evaluated lazily. The first child is evaluated first, if it evaluates 
+	 * to <code>0.0</code> then the result will always be <code>0.0</code> and 
+	 * so the second child will not be evaluated at all.
 	 */
 	@Override
 	public Double evaluate() {
-		final double c1 = ((Double) getChild(0).evaluate()).doubleValue();
-		final double c2 = ((Double) getChild(1).evaluate()).doubleValue();
+		double result = ((Double) getChild(0).evaluate()).doubleValue();
+		
+		if (result != 0.0) {
+			result = result * ((Double) getChild(1).evaluate()).doubleValue();
+		}
 
-		return c1 * c2;
+		return result;
 	}
 
 	/**

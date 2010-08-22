@@ -53,14 +53,20 @@ public class ImpliesFunction extends BooleanNode {
 	 * evaluation of the children according to the rules of IMPLIES where if the
 	 * first child evaluates to true and the second child evaluates to false
 	 * then the result will be false. All other combinations give a result of
-	 * true.
+	 * true. For performance, this function is  evaluated lazily. The first 
+	 * child is evaluated first, if it evaluates to <code>false</code> then the 
+	 * overall result will always be <code>true</code>, so the second child will
+	 * not be evaluated at all.
 	 */
 	@Override
 	public Boolean evaluate() {
-		final boolean c1 = ((Boolean) getChild(0).evaluate()).booleanValue();
-		final boolean c2 = ((Boolean) getChild(1).evaluate()).booleanValue();
+		boolean result = ((Boolean) getChild(0).evaluate()).booleanValue();
+		
+		if (result) {
+			result = !((Boolean) getChild(1).evaluate()).booleanValue();
+		}
 
-		return (!c1 || (c1 && c2));
+		return !result;
 	}
 
 	/**

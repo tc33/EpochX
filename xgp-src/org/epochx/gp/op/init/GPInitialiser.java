@@ -35,12 +35,10 @@ import org.epochx.representation.CandidateProgram;
 public interface GPInitialiser extends Initialiser {
 
 	/**
-	 * Construct and return an initial population of CandidatePrograms.
-	 * Implementations will typically wish to return a population with a size
-	 * as given by calling getPopulationSize() on the controlling model.
+	 * Constructs and returns an initial population of 
+	 * <code>GPCandidateProgram</code> instances.
 	 * 
-	 * @return A List of newly generated CandidatePrograms which will form the
-	 *         initial population for a GP run.
+	 * @return A List of newly generated GPCandidatePrograms.
 	 */
 	@Override
 	public List<CandidateProgram> getInitialPopulation();

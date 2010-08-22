@@ -31,64 +31,88 @@ import org.epochx.representation.CandidateProgram;
 /**
  * Initialisation implementation which uses a combination of full and grow
  * initialisers to create an initial population of
- * <code>CandidatePrograms</code>.
+ * <code>GPCandidatePrograms</code>.
  * 
  * <p>
- * Depths are equally split between depths of 2 up to the maximum initial depth
- * as specified by the model. Initialisation of individuals at each of these
- * depths is then alternated between full and grow initialisers.
+ * Depths are equally split between depths from the minimum initial depth
+ * attribute up to the maximum initial depth. Initialisation of individuals at
+ * each of these depths is then alternated between full and grow initialisers
+ * starting with grow.
  * 
  * <p>
  * There will not always be an equal number of programs created to each depth,
  * this will depend on if the population size is exactly divisible by the range
- * of depths (initial maximum depth - 2). If the range of depths is greater than
- * the population size then some depths will not occur at all in order to ensure
- * as wide a spread of depths up to the maximum as possible.
+ * of depths (<code>initial maximum depth - initial minimum depth</code>). If
+ * the range of depths is greater than the population size then some depths will
+ * not occur at all in order to ensure as wide a spread of depths up to the
+ * maximum as possible.
+ * 
+ * @see FullInitialiser
+ * @see GrowInitialiser
  */
 public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 
 	// The current controlling model.
 	private final GPModel model;
 
-	private int popSize;
-	private int initialMaxDepth;
-
 	// The grow and full instances for doing their share of the work.
 	private final GrowInitialiser grow;
 	private final FullInitialiser full;
 
-	private int minDepth;
+	// The size of the populations to construct.
+	private int popSize;
+
+	// The depth limits of each program tree to generate.
+	private int initialMaxDepth;
+	private int initialMinDepth;
+
+	// Whether programs must be unique in generated populations.
 	private boolean acceptDuplicates;
 
 	/**
-	 * Constructs a RampedHalfAndHalfInitialiser.
+	 * Constructs a <code>RampedHalfAndHalfInitialiser</code> with the necessary
+	 * parameters loaded from the given model. The parameters are reloaded on
+	 * configure events. Duplicate programs are allowed in the populations that
+	 * are constructed.
 	 * 
-	 * @param model The model being assessed
+	 * @param model the <code>Model</code> instance from which the necessary
+	 *        parameters should be loaded.
 	 */
 	public RampedHalfAndHalfInitialiser(final GPModel model) {
 		this(model, 2);
 	}
 
 	/**
-	 * Constructs a RampedHalfAndHalfInitialiser.
+	 * Constructs a <code>RampedHalfAndHalfInitialiser</code> with the necessary
+	 * parameters loaded from the given model. The parameters are reloaded on
+	 * configure events. Duplicate programs are allowed in the populations that
+	 * are constructed.
 	 * 
-	 * @param model The model being assessed
+	 * @param model the <code>Model</code> instance from which the necessary
+	 *        parameters should be loaded.
+	 * @param minDepth the minimum depth from which programs should be generated
+	 *        to.
 	 */
 	public RampedHalfAndHalfInitialiser(final GPModel model, final int minDepth) {
 		this(model, minDepth, true);
 	}
 
 	/**
-	 * Constructs a <code>RampedHalfAndHalfInitialiser</code>.
+	 * Constructs a <code>RampedHalfAndHalfInitialiser</code> with the necessary
+	 * parameters loaded from the given model. The parameters are reloaded on
+	 * configure events.
 	 * 
-	 * @param model
-	 * @param minDepth
-	 * @param acceptDuplicates
+	 * @param model the <code>Model</code> instance from which the necessary
+	 *        parameters should be loaded.
+	 * @param minDepth the minimum depth from which programs should be generated
+	 *        to.
+	 * @param acceptDuplicates whether duplicates should be allowed in the
+	 *        populations that are generated.
 	 */
 	public RampedHalfAndHalfInitialiser(final GPModel model,
 			final int minDepth, final boolean acceptDuplicates) {
 		this.model = model;
-		this.minDepth = minDepth;
+		this.initialMinDepth = minDepth;
 		this.acceptDuplicates = acceptDuplicates;
 
 		// set up the grow and full parts
@@ -114,11 +138,18 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 	}
 
 	/**
-	 * Will use grow initialisation on half the population and full on the other
-	 * half. If
-	 * the population size is an odd number then the extra individual will be
-	 * initialised with
-	 * grow.
+	 * Generates a population of new <code>CandidatePrograms</code> constructed
+	 * from the <code>Nodes</code> in the syntax attribute. The size of the
+	 * population will be equal to the population size attribute. All programs
+	 * in the population are only guarenteed to be unique (as defined by the
+	 * <code>equals</code> method on <code>GPCandidateProgram</code>) if the
+	 * <code>isDuplicatesEnabled</code> method returns <code>true</code>.
+	 * Each program will alternately be generated with the
+	 * {@link FullInitialiser} and {@link GrowInitialiser}. If the population
+	 * size is odd then the extra individual will be initialised using grow.
+	 * 
+	 * @return A <code>List</code> of newly generated
+	 *         <code>CandidatePrograms</code>.
 	 */
 	@Override
 	public List<CandidateProgram> getInitialPopulation() {
@@ -126,9 +157,9 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 		final List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(
 				popSize);
 
-		final int startDepth = minDepth;
+		final int startDepth = initialMinDepth;
 
-		if (initialMaxDepth < minDepth) {
+		if (initialMaxDepth < initialMinDepth) {
 			throw new IllegalArgumentException(
 					"Initial maximum depth must be greater than the start depth.");
 		}
@@ -162,18 +193,44 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 		return firstGen;
 	}
 
+	/**
+	 * Returns the minimum initial depth from which depths are being ramped.
+	 * 
+	 * @return the minimum depth that programs are being generated down to.
+	 */
 	public int getMinDepth() {
-		return minDepth;
+		return initialMinDepth;
 	}
 
-	public void setMinDepth(int minDepth) {
-		this.minDepth = minDepth;
+	/**
+	 * Sets the minimum initial depth from which depths are being ramped.
+	 * 
+	 * @param minDepth the minimum depth that programs should be generated down
+	 *        to.
+	 */
+	public void setMinDepth(final int minDepth) {
+		this.initialMinDepth = minDepth;
 	}
 
+	/**
+	 * Returns whether or not duplicates are currently accepted or rejected from
+	 * generated populations.
+	 * 
+	 * @return <code>true</code> if duplicates are currently accepted in any
+	 *         populations generated by the <code>getInitialPopulation</code>
+	 *         method and <code>false</code> otherwise
+	 */
 	public boolean isDuplicatesEnabled() {
 		return acceptDuplicates;
 	}
 
+	/**
+	 * Sets whether duplicates should be allowed in the populations that are
+	 * generated, or if they should be discarded.
+	 * 
+	 * @param acceptDuplicates whether duplicates should be accepted in the
+	 *        populations that are constructed.
+	 */
 	public void setDuplicatesEnabled(boolean acceptDuplicates) {
 		this.acceptDuplicates = acceptDuplicates;
 	}

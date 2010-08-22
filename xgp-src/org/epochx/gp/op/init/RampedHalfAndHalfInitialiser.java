@@ -57,7 +57,6 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 	private final GrowInitialiser grow;
 	private final FullInitialiser full;
 
-	// The smallest depth to be used.
 	private final int minDepth;
 
 	/**
@@ -113,11 +112,11 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 		final List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(
 				popSize);
 
-		final int startDepth = 2;
+		final int startDepth = minDepth;
 
-		if (initialMaxDepth < 2) {
+		if (initialMaxDepth < minDepth) {
 			throw new IllegalArgumentException(
-					"Initial maximum depth must be greater than 1 for RH+H.");
+					"Initial maximum depth must be greater than the start depth.");
 		}
 
 		// Number of programs each depth SHOULD have. But won't unless remainder

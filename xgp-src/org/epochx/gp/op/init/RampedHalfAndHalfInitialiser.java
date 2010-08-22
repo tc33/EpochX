@@ -47,6 +47,17 @@ import org.epochx.representation.CandidateProgram;
  * not occur at all in order to ensure as wide a spread of depths up to the
  * maximum as possible.
  * 
+ * <p>
+ * If a model is provided then the following parameters are loaded upon every
+ * configure event:
+ * 
+ * <ul>
+ * <li>population size</li>
+ * <li>maximum initial program initialDepth</li>
+ * <li>syntax</li>
+ * <li>random number generator</li>
+ * </ul>
+ * 
  * @see FullInitialiser
  * @see GrowInitialiser
  */

@@ -36,7 +36,6 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * <p>
  * If a model is provided then the following parameters are loaded upon every
  * configure event:
- * </p>
  * 
  * <ul>
  * <li>population size</li>

@@ -23,6 +23,8 @@ package org.epochx.gp.representation;
 
 import java.util.*;
 
+import org.apache.commons.lang.ObjectUtils;
+
 /**
  * Subclasses of <code>Node</code> should ensure they call the superclass
  * constructor with all child Nodes so information such as the arity of the
@@ -485,12 +487,7 @@ public abstract class Node implements Cloneable {
 					final Node thatChild = n.getChild(i);
 					final Node thisChild = this.getChild(i);
 
-					if ((thisChild != null) ^ (thatChild != null)) {
-						equal = false;
-					} else {
-						equal = (((thisChild == null) && (thatChild == null)) || thisChild
-								.equals(thatChild));
-					}
+					equal = ObjectUtils.equals(thisChild, thatChild);
 				}
 			}
 		} else {

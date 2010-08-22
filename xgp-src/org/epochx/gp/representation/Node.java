@@ -478,7 +478,7 @@ public abstract class Node implements Cloneable {
 
 			if (n.getArity() != this.getArity()) {
 				equal = false;
-			} else if (n.getIdentifier() != this.getIdentifier()) {
+			} else if (!this.getIdentifier().equals(n.getIdentifier())) {
 				equal = false;
 			} else {
 				for (int i = 0; (i < n.getArity()) && equal; i++) {

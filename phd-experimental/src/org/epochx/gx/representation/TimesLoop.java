@@ -18,9 +18,21 @@ public class TimesLoop implements Statement {
 		this.endVarDecl = endVar;
 	}
 	
+	public Block getBody() {
+		return body;
+	}
+	
 	@Override
 	public void apply(VariableHandler vars) {
 		// Variable scope will hide any new variables here so do nothing.
+	}
+	
+	/**
+	 * Applies the loop setup only - not the body.
+	 * @param vars
+	 */
+	public void applySetup(VariableHandler vars) {
+		vars.add(indexCoverVarDecl.getVariable());
 	}
 
 	@Override
@@ -114,12 +126,52 @@ public class TimesLoop implements Statement {
 
 	@Override
 	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars) {
+		// Record the number of active variables.
+		int noActive = vars.getNoActiveVariables();
+		
 		endVarDecl.modifyExpression(probability, rng, vars);
 		body.modifyExpression(probability, rng, vars);
+		
+		// Remove any variables declared within.
+		vars.setNoActiveVariables(noActive);
 	}
 
 	@Override
 	public int getNoStatements() {
 		return 1 + body.getNoStatements();
+	}
+	
+	@Override
+	public void insertStatement(double probability, RandomNumberGenerator rng, VariableHandler vars, int maxNoStatements) {
+		// Record the number of active variables.
+		int noActive = vars.getNoActiveVariables();
+		
+		// Apply the loop setup.
+		applySetup(vars);
+		
+		// Insert in body.
+		body.insertStatement(probability, rng, vars, maxNoStatements);
+		
+		// Remove any variables declared within.
+		vars.setNoActiveVariables(noActive);
+	}
+	
+	@Override
+	public Statement deleteStatement(int deletePosition) {
+		return body.deleteStatement(deletePosition);
+	}
+	
+	@Override
+	public boolean hasBlock() {
+		return true;
+	}
+	
+	@Override
+	public Statement getStatement(int index) {
+		if (index == 0) {
+			return this;
+		} else {
+			return body.getStatement(index-1);
+		}
 	}
 }

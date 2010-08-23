@@ -20,6 +20,13 @@ public class Assignment implements Statement {
 		// We're not interested in variable values so do nothing.
 	}
 	
+	/**
+	 * @return the expression
+	 */
+	public Expression getExpression() {
+		return expression;
+	}
+	
 	@Override
 	public void evaluate(VariableHandler vars) {
 		Object value = expression.evaluate(vars);
@@ -63,5 +70,30 @@ public class Assignment implements Statement {
 	@Override
 	public int getNoStatements() {
 		return 1;
+	}
+	
+	@Override
+	public void insertStatement(double probability, RandomNumberGenerator rng, VariableHandler vars, int maxNoStatements) {
+		// No internal statements so not used here.
+	}
+	
+	@Override
+	public Statement deleteStatement(int i) {
+		// No internal statements so not used here.
+		return null;
+	}
+
+	@Override
+	public boolean hasBlock() {
+		return false;
+	}
+
+	@Override
+	public Statement getStatement(int index) {
+		if (index == 0) {
+			return this;
+		} else {
+			return null;
+		}
 	}
 }

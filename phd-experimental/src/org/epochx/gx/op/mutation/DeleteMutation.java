@@ -1,7 +1,5 @@
 package org.epochx.gx.op.mutation;
 
-import java.util.*;
-
 import org.epochx.gx.model.*;
 import org.epochx.gx.representation.*;
 import org.epochx.life.*;
@@ -14,6 +12,8 @@ public class DeleteMutation implements GXMutation {
 	private GXModel model;
 	
 	private RandomNumberGenerator rng;
+	
+	private int minNoStatements;
 	
 	public DeleteMutation(final GXModel model) {
 		this.model = model;
@@ -32,6 +32,7 @@ public class DeleteMutation implements GXMutation {
 	 */
 	private void configure() {
 		rng = model.getRNG();
+		minNoStatements = model.getMinNoStatements();
 	}
 	
 	@Override
@@ -39,21 +40,23 @@ public class DeleteMutation implements GXMutation {
 		GXCandidateProgram program = (GXCandidateProgram) p;
 		
 		AST ast = program.getAST();
-		List<Statement> statements = ast.getStatements();
+		int noStatements = program.getNoStatements();
 		
-		for (int i=0; i<statements.size(); i++) {
-			int deletePosition = rng.nextInt(statements.size());
+		Statement deleted = null;
+		int i = 0;
+		do {
+			int deletePosition = rng.nextInt(noStatements);
+			Statement s = ast.getStatement(deletePosition);
 			
-			Statement s = statements.get(deletePosition);
-			
-			if (s instanceof Declaration) {
-				continue;
-			} else {
-				statements.remove(s);
-				break;
+			if ((noStatements - s.getNoStatements()) > minNoStatements) {
+				// Deleted may be null if would remove too many statements OR if attempted to delete a decl.
+				deleted = ast.deleteStatement(deletePosition);
 			}
-		}
-
+			
+			// Try 3 times at most, then cancel.
+			i++;
+		} while(deleted == null && i < 3);
+		
 		return program;
 	}
 

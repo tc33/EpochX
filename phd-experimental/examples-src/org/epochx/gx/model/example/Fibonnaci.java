@@ -40,14 +40,14 @@ public class Fibonnaci extends org.epochx.gx.model.Fibonacci {
 		model.setNoRuns(100);
 		model.setNoGenerations(1000);
 		model.setPopulationSize(1000);
-		model.setInitialiser(new ExperimentalInitialiser(model, 3));
+		model.setInitialiser(new ExperimentalInitialiser(model));
 		model.setMutation(new ExperimentalMutation(model));
 		model.setNoElites(10);
 		model.setCrossoverProbability(0.0);
 		model.setMutationProbability(1.0);
 		model.setTerminationFitness(0.0);
-		model.setMaxNoStatements(14);
-		model.setMinNoStatements(3);
+		model.setMaxNoStatements(6);
+		model.setMinNoStatements(4);
 		/*model.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationEnd() {
@@ -62,19 +62,51 @@ public class Fibonnaci extends org.epochx.gx.model.Fibonacci {
 				}
 				
 				List<CandidateProgram> pop = (List<CandidateProgram>) stats[3];
+				int maxNoStatements = Integer.MIN_VALUE;
+				int minNoStatements = Integer.MAX_VALUE;
 				double totalSize = 0;
 				for (CandidateProgram p: pop) {
-					totalSize += ((GXCandidateProgram) p).getNoStatements();
+					int noStatements = ((GXCandidateProgram) p).getNoStatements();
+					totalSize += noStatements;
+					if (noStatements > maxNoStatements) {
+						maxNoStatements = noStatements;
+					}
+					if (noStatements < minNoStatements) {
+						minNoStatements = noStatements;
+					}
 				}
 				double aveSize = totalSize / pop.size();
-				System.out.print(aveSize + "\n");
+				System.out.print(minNoStatements + "\t" + maxNoStatements + "\t" + aveSize + "\n");
 			}
 		});*/
 		
 		model.getLifeCycleManager().addRunListener(new RunAdapter() {
 			@Override
 			public void onRunEnd() {
-				model.getStatsManager().printRunStats(StatField.RUN_NUMBER, StatField.RUN_FITNESS_MIN);
+				Object[] stats = model.getStatsManager().getRunStats(StatField.RUN_NUMBER, StatField.RUN_FITNESS_MIN, StatField.RUN_FITTEST_PROGRAM);
+			
+				System.out.println(stats[0] + "\t" + stats[1]);
+				
+				BufferedWriter bw = null;
+
+			    try {
+			      	bw = new BufferedWriter(new FileWriter("results/best-programs.txt", true));
+			      	bw.write("\n"+stats[0]+"|***************************\n");
+			        bw.write(stats[2].toString());
+			         
+			        bw.newLine();
+			        bw.flush();
+			    } catch (IOException ioe) {
+			    	ioe.printStackTrace();
+			    } finally {                       // always close the file
+			    	if (bw != null) 
+			    		try {
+			    			bw.close();
+			    		} catch (IOException ioe2) {
+			    			// just ignore it
+			    		}
+			    } // end try/catch/finally
+
 			}
 		});
 		

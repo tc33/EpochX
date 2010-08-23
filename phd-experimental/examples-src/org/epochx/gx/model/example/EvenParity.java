@@ -40,7 +40,7 @@ public class EvenParity extends org.epochx.gx.model.EvenParity {
 		model.setNoRuns(100);
 		model.setNoGenerations(50);
 		model.setPopulationSize(500);
-		model.setInitialiser(new ExperimentalInitialiser(model, 3));
+		model.setInitialiser(new ExperimentalInitialiser(model));
 		model.setMutation(new ExperimentalMutation(model));
 		model.setCrossoverProbability(0.0);
 		model.setMutationProbability(1.0);

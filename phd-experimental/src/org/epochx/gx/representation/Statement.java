@@ -6,6 +6,11 @@ public interface Statement extends Cloneable {
 
 	public Statement clone();
 	
+	/**
+	 * The upToStatement number refers to this statement and its nested 
+	 * statements only, so the maximum value for upToStatement is the result of 
+	 * getNoStatements - 1.
+	 */
 	public void apply(VariableHandler vars);
 	
 	public void evaluate(VariableHandler vars);
@@ -21,4 +26,15 @@ public interface Statement extends Cloneable {
 	 * @return
 	 */
 	public int getNoStatements();
+
+	public void insertStatement(double probability, RandomNumberGenerator rng, VariableHandler vars, int maxNoStatements);
+
+	public Statement deleteStatement(int deletePosition);
+	
+	/**
+	 * @return true if the statement can have nested statements, false otherwise.
+	 */
+	public boolean hasBlock();
+
+	public Statement getStatement(int index);
 }

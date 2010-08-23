@@ -1,5 +1,7 @@
 package org.epochx.gx.op.mutation;
 
+import java.util.*;
+
 import org.epochx.gx.model.*;
 import org.epochx.gx.representation.*;
 import org.epochx.life.*;
@@ -45,6 +47,30 @@ public class ModifyMutation implements GXMutation {
 		ast.modifyExpression(0.2, vars, rng);
 		
 		return program;
+	}
+	
+	public static boolean hasNullExpression(List<Statement> statements) {
+		boolean hasNull = false;
+		
+		for (Statement s: statements) {
+			if (s instanceof TimesLoop) {
+				hasNull = hasNullExpression(((TimesLoop) s).getBody().getStatements());
+			} else if (s instanceof IfStatement) {
+				IfStatement ifStatement = ((IfStatement) s);
+				hasNull = hasNullExpression(ifStatement.getIfCode().getStatements());
+				hasNull = hasNull || (ifStatement.getCondition() == null);
+			} else if (s instanceof Declaration) {
+				hasNull = (((Declaration) s).getExpression() == null);
+			} else if (s instanceof Assignment) {
+				hasNull = (((Assignment) s).getExpression() == null);
+			}
+			
+			if (hasNull) {
+				break;
+			}
+		}
+		
+		return hasNull;
 	}
 
 }

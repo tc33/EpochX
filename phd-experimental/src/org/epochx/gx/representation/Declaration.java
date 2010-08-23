@@ -90,5 +90,29 @@ public class Declaration implements Statement {
 	public int getNoStatements() {
 		return 1;
 	}
+
+	@Override
+	public void insertStatement(double probability, RandomNumberGenerator rng, VariableHandler vars, int maxNoStatements) {
+		// No internal statements so not used here.
+	}
 	
+	@Override
+	public Statement deleteStatement(int i) {
+		// No internal statements so not used here.
+		return null;
+	}
+	
+	@Override
+	public boolean hasBlock() {
+		return false;
+	}
+	
+	@Override
+	public Statement getStatement(int index) {
+		if (index == 0) {
+			return this;
+		} else {
+			return null;
+		}
+	}
 }

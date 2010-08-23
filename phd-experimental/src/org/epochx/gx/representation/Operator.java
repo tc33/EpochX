@@ -88,13 +88,23 @@ public class Operator {
 			if ((Integer) operand2 == 0) {
 				return 0;
 			} else {
-				return (Integer) operand1 / (Integer) operand2;
+				Object o = (Integer) operand1 % (Integer) operand2;
+				if (o instanceof Double) {
+					//TODO Check for this happening.
+					System.err.println("ERROR: Auto cast to Double");
+				}
+				return o;
 			}
 		} else if ((dataType == DataType.INT) && op.equals("%")) {
 			if ((Integer) operand2 == 0) {
 				return 0;
 			} else {
-				return (Integer) operand1 % (Integer) operand2;
+				Object o = (Integer) operand1 % (Integer) operand2;
+				if (o instanceof Double) {
+					//TODO Check for this happening.
+					System.err.println("ERROR: Auto cast to Double");
+				}
+				return o;
 			}
 		} else if ((dataType == DataType.INT) && op.equals("*")) {
 			return (Integer) operand1 * (Integer) operand2;

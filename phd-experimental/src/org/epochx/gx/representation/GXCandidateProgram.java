@@ -121,13 +121,7 @@ public class GXCandidateProgram extends CandidateProgram {
 	 * @return
 	 */
 	public int getNoStatements() {
-		List<Statement> topStatements = program.getStatements();
-		int noStatements = 0;
-		for (Statement s: topStatements) {
-			noStatements += s.getNoStatements();
-		}
-		
-		return noStatements;
+		return program.getNoStatements();
 	}
 	
 	/**

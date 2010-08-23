@@ -61,7 +61,7 @@ public class UnaryExpression implements Expression {
 	@Override
 	public Object evaluate(VariableHandler vars) {
 		Object value = null;
-		//TODO This is more complicated because have to update the actual variable value etc.
+		// This is more complicated because have to update the actual variable value etc.
 		if (operator.getOp().equals("!")) {
 			value = expression.evaluate(vars);
 			value = !((Boolean) value);

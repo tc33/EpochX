@@ -1,5 +1,7 @@
 package org.epochx.gx.model;
 
+import java.util.*;
+
 import org.epochx.gx.representation.*;
 import org.epochx.representation.*;
 
@@ -74,10 +76,21 @@ public class Fibonacci extends GXModel {
 	}
 	
 	public static int getNthFibonnaciSolution(int n, int n0, int n1) {
-		int var1 = --n;
-		for (int var2=0,var3=var2; (var2<var1 && var2<100); var2++,var3=var2) {
-			n1 = (++n1 + ((1566650868 % n1) * n0));
+		int var4 = --n;
+		for (int var5=0,var6=var5; (var5<var4 && var5<100); var5++,var6=var5) {
+		n1 = (n1 + (1066889581 % n1));
+		int var26 = (n % (n + (++n1 % -1429604798)));
+		for (int var27=0,var28=var27; (var27<var26 && var27<100); var27++,var28=var27) {
+		int var29 = ++n;
 		}
+		double var40 = (0.5389215444346025 % 0.4381355783205967);
+		}
+		int var36 = (((38269433 - (n1 * n)) * (((220493603 - (((--n - n1) + 168395372) % n)) % 1046684714) % --n1)) / ++n0);
+		for (int var37=0,var38=var37; (var37<var36 && var37<100); var37++,var38=var37) {
+		boolean var41 = (true || true);
+		var38 = ((n + --n) - --n1);
+		}
+		int var14 = ((n % n0) % ++n1);
 		return n1;
 	}
 	

@@ -2,6 +2,7 @@ package org.epochx.gx.representation;
 
 import java.util.*;
 
+import org.epochx.gx.op.init.*;
 import org.epochx.tools.random.*;
 
 public class AST implements Cloneable {
@@ -14,12 +15,35 @@ public class AST implements Cloneable {
 		statements = new ArrayList<Statement>();
 	}
 	
-	public void insertStatement(int index, Statement statement) {
-		if (index == statements.size()) {
-			addStatement(statement);
-		} else {
-			statements.add(index, statement);
+	public int getNoStatements() {
+		List<Statement> topStatements = getStatements();
+		int noStatements = 0;
+		for (Statement s: topStatements) {
+			noStatements += s.getNoStatements();
 		}
+		
+		return noStatements;
+	}
+	
+	/**
+	 * Gets a statement indexed throughout all the statements at all levels.
+	 * @param index
+	 * @return
+	 */
+	public Statement getStatement(int index) {
+		int i = 0;
+		for (Statement s: statements) {
+			if (i == index) {
+				return s;
+			} else {
+				int noStatements = s.getNoStatements();
+				if (index < i+noStatements) {
+					return s.getStatement(index-i);
+				}
+				i += s.getNoStatements();
+			}
+		}
+		return null;
 	}
 	
 	public void addStatement(Statement statement) {
@@ -81,6 +105,73 @@ public class AST implements Cloneable {
 		clone.returnStatement = this.returnStatement.clone();
 		
 		return clone;
+	}
+
+	public Statement deleteStatement(int deletePosition) {
+		int current = 0;
+		for (int i=0; i<statements.size(); i++) {
+			if (current == deletePosition) {
+				Statement toDelete = statements.get(i);
+				if (toDelete instanceof Declaration) {
+					return null;
+				} else {
+					return statements.remove(i);
+				}
+			}
+			
+			// Does index lie within this statement.
+			Statement s = statements.get(i);
+			int noStatements = s.getNoStatements();
+			if (deletePosition < (current + noStatements)) {
+				// Position is inside this statement.
+				return s.deleteStatement(deletePosition-current-1);
+			}
+				
+			current += noStatements;
+		}
+		
+		return null;
+	}
+
+	public void insertStatement(double probability, VariableHandler vars, RandomNumberGenerator rng, int maxNoStatements) {
+		// The number of insert points at this level.
+		int noInsertPoints = statements.size() + 1;
+		
+		for (int i=0; i<noInsertPoints; i++) {
+			if (getNoStatements() >= maxNoStatements) {
+				break;
+			}
+			
+			double rnd = rng.nextDouble();
+			
+			if (rnd < probability) {
+				int maxNestedStatements = maxNoStatements - getNoStatements() - 1;
+				
+				// Generate new statement.
+				Statement newStatement = ProgramGenerator.getStatement(rng, vars, 0, maxNestedStatements);
+				
+				// Insert at ith point.
+				statements.add(i, newStatement);
+				
+				// The number of insert points has just increased.
+				noInsertPoints++;
+				i++;
+			} else if (i < statements.size()) {
+				Statement s = statements.get(i);
+				if (s.hasBlock()) {
+					/*
+					 * Max allowed at next level is amount unused at this level, plus the amount that are already inside the block.
+					 */
+					int maxNestedStatements = (maxNoStatements - getNoStatements()) + (s.getNoStatements() - 1);
+					
+					// Step into the block.
+					s.insertStatement(probability, rng, vars, maxNestedStatements);
+				} else {
+					// Apply the statement.
+					s.apply(vars);
+				}
+			}
+		}
 	}
 	
 }

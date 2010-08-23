@@ -84,4 +84,28 @@ public class Loop implements Statement {
 	public int getNoStatements() {
 		return 1 + body.getNoStatements();
 	}
+	
+	@Override
+	public void insertStatement(double probability, RandomNumberGenerator rng, VariableHandler vars, int maxNoStatements) {
+		body.insertStatement(probability, rng, vars, maxNoStatements);
+	}
+	
+	@Override
+	public Statement deleteStatement(int deletePosition) {
+		return body.deleteStatement(deletePosition);
+	}
+	
+	@Override
+	public boolean hasBlock() {
+		return true;
+	}
+	
+	@Override
+	public Statement getStatement(int index) {
+		if (index == 0) {
+			return this;
+		} else {
+			return body.getStatement(index-1);
+		}
+	}
 }

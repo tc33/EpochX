@@ -10,9 +10,20 @@ public class ProgramGenerator {
 	
 	public static AST getAST(DataType returnType, RandomNumberGenerator rng, VariableHandler vars, int noStatements) {
 		AST p = new AST();
-		
-		for (int i=0; i<noStatements; i++) {
-			p.addStatement(getStatement(rng, vars, 0));
+
+		// Keep adding new statements until there are enough.
+		int currentNo = 0;
+		while (currentNo < noStatements) {
+			int maxNestedStatements = noStatements - currentNo - 1;
+			
+			Statement s = getStatement(rng, vars, 0, maxNestedStatements);
+			
+			// Don't add a multiple statement that will take us over the size limit.
+			int n = s.getNoStatements();
+			if (n + currentNo <= noStatements) {
+				currentNo += n;
+				p.addStatement(s);
+			}
 		}
 		
 		p.addReturnStatement(getReturnStatement(returnType, rng, vars));
@@ -34,7 +45,7 @@ public class ProgramGenerator {
 	 * selected until all have been tried. If none are valid then null is 
 	 * returned, otherwise the constructed statement is returned.
 	 */
-	public static Statement getStatement(RandomNumberGenerator rng, VariableHandler vars, int nesting) {
+	public static Statement getStatement(RandomNumberGenerator rng, VariableHandler vars, int nesting, int maxNestedStatements) {
 		Statement result = null;
 		
 		int noOptions = 4;
@@ -52,12 +63,12 @@ public class ProgramGenerator {
 			} else if (ran == 1) {
 				// Assignment.
 				result = getAssignment(rng, vars);
-			} else if (ran == 2) {
+			} else if (ran == 2 && maxNestedStatements > 0) {
 				// If statement.
-				result = getIf(rng, vars, nesting);
-			} else if (ran == 3) {
+				result = getIf(rng, vars, nesting, maxNestedStatements);
+			} else if (ran == 3 && maxNestedStatements > 0) {
 				// Times loop.
-				result = getTimesLoop(rng, vars, nesting);
+				result = getTimesLoop(rng, vars, nesting, maxNestedStatements);
 			}/* else {
 				// Loop.
 				result = getWhileLoop(rng, vars);
@@ -104,9 +115,9 @@ public class ProgramGenerator {
 		return result;
 	}
 	
-	public static IfStatement getIf(RandomNumberGenerator rng, VariableHandler vars, int nesting) {
+	public static IfStatement getIf(RandomNumberGenerator rng, VariableHandler vars, int nesting, int maxNestedStatements) {
 		Expression condition = getExpression(rng, vars, DataType.BOOLEAN, 0);
-		Block ifCode = getBlock(rng, vars, nesting+1);
+		Block ifCode = getBlock(rng, vars, nesting+1, maxNestedStatements);
 		
 		IfStatement ifStatement = new IfStatement(condition, ifCode);
 		
@@ -125,7 +136,7 @@ public class ProgramGenerator {
 	/**
 	 * 
 	 */
-	public static TimesLoop getTimesLoop(RandomNumberGenerator rng, VariableHandler vars, int nesting) {
+	public static TimesLoop getTimesLoop(RandomNumberGenerator rng, VariableHandler vars, int nesting, int maxNestedStatements) {
 		if (nesting >= 1) {
 			return null;
 		}
@@ -147,7 +158,7 @@ public class ProgramGenerator {
 		Declaration indexCoverVar = getDeclaration(rng, vars, indexVar.getVariable());
 		
 		// Generate a block.
-		Block body = getBlock(rng, vars, nesting+1);
+		Block body = getBlock(rng, vars, nesting+1, maxNestedStatements);
 		
 		// Remove the index cover variable, to ensure scope restricted to block.
 		vars.removeActiveVariable(indexCoverVar.getVariable());
@@ -219,18 +230,27 @@ public class ProgramGenerator {
 		return result;
 	}
 	
-	public static Block getBlock(RandomNumberGenerator rng, VariableHandler vars, int nesting) {
+	public static Block getBlock(RandomNumberGenerator rng, VariableHandler vars, int nesting, int maxNestedStatements) {
 		// Record number of variables to return to.
 		int noVariables = vars.getNoActiveVariables();
 		
 		List<Statement> statements = new ArrayList<Statement>();
 
-		//int noStatements = rng.nextInt(10);
-		int noStatements = 1;
+		int noStatements = rng.nextInt(maxNestedStatements);
 		
-		for (int i=0; i<noStatements; i++) {
-			statements.add(getStatement(rng, vars, nesting));
-		}
+		int currentNo = 0;
+		while (currentNo < noStatements) {
+			int nextLevelStatements = noStatements - currentNo - 1;
+			
+			Statement s = getStatement(rng, vars, 0, nextLevelStatements);
+			
+			// Don't add a multiple statement that will take us over the size limit.
+			int n = s.getNoStatements();
+			if (n + currentNo <= noStatements) {
+				currentNo += n;
+				statements.add(s);
+			}
+		}		
 		
 		Block result = new Block(statements);
 		
@@ -238,6 +258,10 @@ public class ProgramGenerator {
 		vars.setNoActiveVariables(noVariables);
 		
 		return result;
+	}
+	
+	public static Block getBlock(RandomNumberGenerator rng, VariableHandler vars, int nesting) {
+		return getBlock(rng, vars, nesting, 1);
 	}
 
 	public static DataType getDataType(RandomNumberGenerator rng) {

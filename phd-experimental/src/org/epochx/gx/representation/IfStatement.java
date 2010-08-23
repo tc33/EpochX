@@ -21,6 +21,10 @@ public class IfStatement implements Statement {
 		this(condition, ifCode, null);
 	}
 	
+	public Block getIfCode() {
+		return ifCode;
+	}
+	
 	@Override
 	public void apply(VariableHandler vars) {
 		// Variable scope will hide any new variables here so do nothing.
@@ -82,10 +86,19 @@ public class IfStatement implements Statement {
 			condition.modifyExpression(probability, rng, vars, 0);
 		}
 		
+		// Record the number of active variables.
+		int noActive = vars.getNoActiveVariables();
+		
 		ifCode.modifyExpression(probability, rng, vars);
+		
+		// Remove any variables declared within.
+		vars.setNoActiveVariables(noActive);
 		
 		if (elseCode != null) {
 			elseCode.modifyExpression(probability, rng, vars);
+			
+			// Remove any variables declared within.
+			vars.setNoActiveVariables(noActive);
 		}
 	}
 
@@ -98,5 +111,39 @@ public class IfStatement implements Statement {
 		}
 		
 		return noStatements;
+	}
+	
+	@Override
+	public void insertStatement(double probability, RandomNumberGenerator rng, VariableHandler vars, int maxNoStatements) {
+		// Record the number of active variables.
+		int noActive = vars.getNoActiveVariables();
+		
+		ifCode.insertStatement(probability, rng, vars, maxNoStatements);
+		
+		// Remove any variables declared within.
+		vars.setNoActiveVariables(noActive);
+	}
+	
+	@Override
+	public Statement deleteStatement(int deletePosition) {
+		return ifCode.deleteStatement(deletePosition);
+	}
+
+	public Expression getCondition() {
+		return condition;
+	}
+	
+	@Override
+	public boolean hasBlock() {
+		return true;
+	}
+	
+	@Override
+	public Statement getStatement(int index) {
+		if (index == 0) {
+			return this;
+		} else {
+			return ifCode.getStatement(index-1);
+		}
 	}
 }

@@ -19,15 +19,11 @@ public class ExperimentalInitialiser implements GXInitialiser {
 	
 	private VariableHandler vars;
 	
-	private int noStatements;
+	private int minNoStatements;
+	private int maxNoStatements;
 	
 	public ExperimentalInitialiser(GXModel model) {
-		this(model, 3);
-	}
-	
-	public ExperimentalInitialiser(GXModel model, int noStatements) {
 		this.model = model;
-		this.noStatements = noStatements;
 		
 		// Configure parameters from the model.
 		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
@@ -45,6 +41,8 @@ public class ExperimentalInitialiser implements GXInitialiser {
 		popSize = model.getPopulationSize();
 		rng = model.getRNG();
 		vars = model.getVariableHandler();
+		minNoStatements = model.getMinNoStatements();
+		maxNoStatements = model.getMaxNoStatements();
 	}
 	
 	@Override
@@ -61,6 +59,7 @@ public class ExperimentalInitialiser implements GXInitialiser {
 
 	private GXCandidateProgram initialiseProgram() {
 		vars.reset();
+		int noStatements = rng.nextInt(maxNoStatements-minNoStatements) + minNoStatements;		
 		//TODO Need to get the data type here from the model.
 		AST ast = ProgramGenerator.getAST(DataType.INT, rng, vars, noStatements);
 		//System.out.println(ProgramGenerator.format(ast.toString()));

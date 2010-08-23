@@ -1,5 +1,7 @@
 package org.epochx.gx.op.mutation;
 
+import java.util.*;
+
 import org.epochx.gx.model.*;
 import org.epochx.gx.representation.*;
 import org.epochx.life.*;
@@ -44,37 +46,50 @@ public class ExperimentalMutation implements GXMutation {
 		maxNoStatements = model.getMaxNoStatements();
 	}
 	
+	private CandidateProgram last;
+	
 	@Override
 	public GXCandidateProgram mutate(final CandidateProgram p) {
+		//TODO why is this happening?
+		/*if (last != null && last.equals(p)) {
+			System.err.println(last);
+			System.out.println("-----------------------");
+			System.err.println(p);
+			System.out.println("+++++++++++++++++++++++");
+		}
+		last = p;*/
+		
 		GXCandidateProgram program = (GXCandidateProgram) p;
 		
 		double random = rng.nextDouble();
 		
 		int noStatements = program.getNoStatements();
 		
-		double[] probabilties = {0.8, 0.1, 0.1};
+		double[] probabilities = {0.8, 0.1, 0.1};
 		if (noStatements <= minNoStatements) {
 			// Don't allow delete.
-			probabilties[2] += probabilties[1];
-			probabilties[1] = 0.0;
+			probabilities[2] += probabilities[1];
+			probabilities[1] = 0.0;
 		} else if (noStatements >= maxNoStatements) {
 			// Don't allow insert.
-			probabilties[1] += probabilties[2];
-			probabilties[2] = 0.0;
+			probabilities[1] += probabilities[2];
+			probabilities[2] = 0.0;
 		}
 		
-		if (random < probabilties[0]) {
-			// Insert statement.
+		if (random < probabilities[0]) {
+			// Modify expression.
 			program = modify.mutate(program);
-		} else if (random < probabilties[0]+probabilties[1]) {
+		} else if (random < probabilities[0]+probabilities[1]) {
 			// Delete statement.
 			program = delete.mutate(program);
 		} else {
-			// Modify expression.
+			// Insert statement.
 			program = insert.mutate(program);
 		}
-
+		
 		return program;
 	}
+	
+	private List<GXCandidateProgram> pop = new ArrayList<GXCandidateProgram>();
 
 }

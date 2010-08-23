@@ -3,7 +3,6 @@ package org.epochx.gx.op.mutation;
 import java.util.*;
 
 import org.epochx.gx.model.*;
-import org.epochx.gx.op.init.*;
 import org.epochx.gx.representation.*;
 import org.epochx.life.*;
 import org.epochx.representation.*;
@@ -17,6 +16,8 @@ public class InsertMutation implements GXMutation {
 	private RandomNumberGenerator rng;
 	
 	private VariableHandler vars;
+	
+	private int maxNoStatements;
 	
 	public InsertMutation(final GXModel model) {
 		this.model = model;
@@ -36,25 +37,22 @@ public class InsertMutation implements GXMutation {
 	private void configure() {
 		rng = model.getRNG();
 		vars = model.getVariableHandler();
+		maxNoStatements = model.getMaxNoStatements();
 	}
 	
 	@Override
 	public GXCandidateProgram mutate(CandidateProgram p) {
 		GXCandidateProgram program = (GXCandidateProgram) p;
 		
-		AST ast = program.getAST();
-		List<Statement> statements = ast.getStatements();
-		
-		int insertPosition = rng.nextInt(statements.size() + 1);
+		// Reset the program state.
 		vars.reset();
 		vars.setAllVariables(new HashSet<Variable>(program.getVariables()));
 		
-		for (int i=0; i<insertPosition; i++) {
-			statements.get(i).apply(vars);
-		}
+		// Consider each insert point for insertion.
+		AST ast = program.getAST();
+		ast.insertStatement(0.1, vars, rng, maxNoStatements);
 		
-		ast.insertStatement(insertPosition, ProgramGenerator.getStatement(rng, vars, 0));
-
+		// Update the set of variables stored in the program.
 		program.setVariables(new HashSet<Variable>(vars.getAllVariables()));
 		
 		return program;

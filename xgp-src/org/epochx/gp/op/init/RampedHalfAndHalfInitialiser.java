@@ -86,7 +86,7 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser {
 	 * configure events. Duplicate programs are allowed in the populations that
 	 * are constructed.
 	 * 
-	 * @param model the <code>Model</code> instance from which the necessary
+	 * @param model the <code>GPModel</code> instance from which the necessary
 	 *        parameters should be loaded.
 	 */
 	public RampedHalfAndHalfInitialiser(final GPModel model) {

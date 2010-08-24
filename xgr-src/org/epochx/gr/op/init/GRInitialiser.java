@@ -26,8 +26,20 @@ import java.util.List;
 import org.epochx.op.Initialiser;
 import org.epochx.representation.CandidateProgram;
 
+/**
+ * Implementations of this interface should be capable of generating an initial
+ * population of <code>GRCandidatePrograms</code>. The getInitialPopulation()
+ * method is called towards the start of execution of a run to get the first
+ * population which will then be evolved.
+ */
 public interface GRInitialiser extends Initialiser {
 
+	/**
+	 * Constructs and returns an initial population of 
+	 * <code>GRCandidateProgram</code> instances.
+	 * 
+	 * @return A List of newly generated GRCandidatePrograms.
+	 */
 	@Override
 	public List<CandidateProgram> getInitialPopulation();
 

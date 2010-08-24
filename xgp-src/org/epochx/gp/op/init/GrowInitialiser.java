@@ -74,7 +74,7 @@ public class GrowInitialiser implements GPInitialiser {
 	 * events. Duplicate programs are allowed in the populations that are
 	 * constructed.
 	 * 
-	 * @param model the <code>Model</code> instance from which the necessary
+	 * @param model the <code>GPModel</code> instance from which the necessary
 	 *        parameters should be loaded.
 	 */
 	public GrowInitialiser(final GPModel model) {
@@ -86,7 +86,7 @@ public class GrowInitialiser implements GPInitialiser {
 	 * loaded from the given model. The parameters are reloaded on configure
 	 * events.
 	 * 
-	 * @param model the <code>Model</code> instance from which the necessary
+	 * @param model the <code>GPModel</code> instance from which the necessary
 	 *        parameters should be loaded.
 	 * @param acceptDuplicates whether duplicates should be allowed in the
 	 *        populations that are generated.
@@ -131,7 +131,7 @@ public class GrowInitialiser implements GPInitialiser {
 	}
 
 	/**
-	 * Generates a population of new <code>CandidatePrograms</code> constructed
+	 * Generates a population of new <code>GPCandidatePrograms</code> constructed
 	 * from the <code>Nodes</code> in the syntax attribute. The size of the
 	 * population will be equal to the population size attribute. All programs
 	 * in the population are only guarenteed to be unique (as defined by the
@@ -141,7 +141,7 @@ public class GrowInitialiser implements GPInitialiser {
 	 * value of the maximum depth attribute.
 	 * 
 	 * @return A <code>List</code> of newly generated
-	 *         <code>CandidatePrograms</code>.
+	 *         <code>GPCandidatePrograms</code>.
 	 */
 	@Override
 	public List<CandidateProgram> getInitialPopulation() {

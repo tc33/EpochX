@@ -28,7 +28,7 @@ import org.epochx.representation.CandidateProgram;
 
 /**
  * Implementations of this interface should be capable of generating an initial
- * population of <code>CandidatePrograms</code>. The getInitialPopulation()
+ * population of <code>GPCandidatePrograms</code>. The getInitialPopulation()
  * method is called towards the start of execution of a run to get the first
  * population which will then be evolved.
  */

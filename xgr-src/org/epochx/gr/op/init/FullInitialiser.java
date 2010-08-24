@@ -31,8 +31,22 @@ import org.epochx.tools.grammar.*;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
- * Note: full initialisation currently only works for depth first mapping.
+ * Initialisation implementation which produces full program parse trees down to
+ * a specified depth.
  * 
+ * <p>
+ * If a model is provided then the following parameters are loaded upon every
+ * configure event:
+ * 
+ * <ul>
+ * <li>population size</li>
+ * <li>maximum initial program depth</li>
+ * <li>grammar</li>
+ * <li>random number generator</li>
+ * </ul>
+ * 
+ * @see GrowInitialiser
+ * @see RampedHalfAndHalfInitialiser
  */
 public class FullInitialiser implements GRInitialiser {
 
@@ -40,20 +54,41 @@ public class FullInitialiser implements GRInitialiser {
 	private final GRModel model;
 
 	private RandomNumberGenerator rng;
+
+	// The grammar all new programs must be valid against.
 	private Grammar grammar;
+
+	// The size of the populations to construct.
 	private int popSize;
-	private int maxInitialProgramDepth;
-	
+
+	// The depth of every program parse tree to generate.
+	private int maxInitialDepth;
+
+	// Whether programs must be unique in generated populations.
 	private boolean acceptDuplicates;
 
+	/**
+	 * Constructs a <code>FullInitialiser</code> with the necessary parameters
+	 * loaded from the given model. The parameters are reloaded on configure
+	 * events. Duplicate programs are allowed in the populations that are
+	 * constructed.
+	 * 
+	 * @param model the <code>Model</code> instance from which the necessary
+	 *        parameters should be loaded.
+	 */
 	public FullInitialiser(final GRModel model) {
 		this(model, true);
 	}
-	
+
 	/**
-	 * Constructs a full initialiser.
+	 * Constructs a <code>FullInitialiser</code> with the necessary parameters
+	 * loaded from the given model. The parameters are reloaded on configure
+	 * events.
 	 * 
-	 * @param model
+	 * @param model the <code>Model</code> instance from which the necessary
+	 *        parameters should be loaded.
+	 * @param acceptDuplicates whether duplicates should be allowed in the
+	 *        populations that are generated.
 	 */
 	public FullInitialiser(final GRModel model, final boolean acceptDuplicates) {
 		this.model = model;
@@ -76,9 +111,22 @@ public class FullInitialiser implements GRInitialiser {
 		rng = model.getRNG();
 		grammar = model.getGrammar();
 		popSize = model.getPopulationSize();
-		maxInitialProgramDepth = model.getMaxInitialDepth();
+		maxInitialDepth = model.getMaxInitialDepth();
 	}
 
+	/**
+	 * Generates a population of new <code>CandidatePrograms</code> constructed
+	 * from the <code>Grammar</code> attribute. The size of the population will
+	 * be equal to the population size attribute. All programs in the population
+	 * are only guarenteed to be unique (as defined by the <code>equals</code>
+	 * method on <code>GRCandidateProgram</code>) if the
+	 * <code>isDuplicatesEnabled</code> method returns <code>true</code>. Each
+	 * program will have a full parse tree with a depth equal to the depth
+	 * attribute.
+	 * 
+	 * @return A <code>List</code> of newly generated
+	 *         <code>GRCandidateProgram</code> instances with full parse trees.
+	 */
 	@Override
 	public List<CandidateProgram> getInitialPopulation() {
 		// Create population list to be populated.
@@ -90,7 +138,7 @@ public class FullInitialiser implements GRInitialiser {
 			GRCandidateProgram candidate;
 			do {
 				// Create a new program at the models initial max depth.
-				candidate = getInitialProgram(maxInitialProgramDepth);
+				candidate = getInitialProgram(maxInitialDepth);
 			} while (!acceptDuplicates && firstGen.contains(candidate));
 
 			// Add to the new population.
@@ -100,16 +148,31 @@ public class FullInitialiser implements GRInitialiser {
 		return firstGen;
 	}
 
+	/**
+	 * Constructs and returns a new <code>GRCandidateProgram</code> with a full
+	 * parse tree with the given depth.
+	 * 
+	 * @param depth The depth of the full parse tree, where the
+	 *        depth is the number of nodes from the root.
+	 * @return The root node of a randomly generated full parse tree of the
+	 *         requested depth.
+	 */
 	public GRCandidateProgram getInitialProgram(final int depth) {
+		// Construct the root of the parse tree.
 		final GrammarRule startRule = grammar.getStartRule();
-
 		final NonTerminalSymbol parseTree = new NonTerminalSymbol(startRule);
 
+		// Build a tree below the root.
 		buildDerivationTree(parseTree, startRule, 0, depth);
 
+		// Construct and return the program.
 		return new GRCandidateProgram(parseTree, model);
 	}
 
+	/*
+	 * Builds a full parse tree from the given non-terminal symbol using the
+	 * grammar rule.
+	 */
 	private void buildDerivationTree(final NonTerminalSymbol parseTree,
 			final GrammarRule rule, final int depth, final int maxDepth) {
 		// Check if theres more than one production.
@@ -145,6 +208,10 @@ public class FullInitialiser implements GRInitialiser {
 		}
 	}
 
+	/*
+	 * Gets a List of indexes to those productions from the List of productions
+	 * given that can be used with the specified maximum depth constraint.
+	 */
 	private List<Integer> getValidProductionIndexes(
 			final List<GrammarProduction> grammarProductions, final int maxDepth) {
 		final List<Integer> validRecursive = new ArrayList<Integer>();
@@ -166,11 +233,26 @@ public class FullInitialiser implements GRInitialiser {
 		// use the others.
 		return validRecursive.isEmpty() ? validAll : validRecursive;
 	}
-	
+
+	/**
+	 * Returns whether or not duplicates are currently accepted or rejected from
+	 * generated populations.
+	 * 
+	 * @return <code>true</code> if duplicates are currently accepted in any
+	 *         populations generated by the <code>getInitialPopulation</code>
+	 *         method and <code>false</code> otherwise
+	 */
 	public boolean isDuplicatesEnabled() {
 		return acceptDuplicates;
 	}
 
+	/**
+	 * Sets whether duplicates should be allowed in the populations that are
+	 * generated, or if they should be discarded.
+	 * 
+	 * @param acceptDuplicates whether duplicates should be accepted in the
+	 *        populations that are constructed.
+	 */
 	public void setDuplicatesEnabled(boolean acceptDuplicates) {
 		this.acceptDuplicates = acceptDuplicates;
 	}

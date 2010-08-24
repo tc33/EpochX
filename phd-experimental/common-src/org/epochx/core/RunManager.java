@@ -25,6 +25,7 @@ import static org.epochx.stats.StatField.*;
 
 import java.util.List;
 
+import org.epochx.gx.op.init.*;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
@@ -174,7 +175,7 @@ public class RunManager {
 		
 		// Record best program so far and its fitness.
 		updateBestProgram(pop);
-
+		
 		// Execute each generation.
 		for (int gen=1; gen<=noGenerations; gen++) {
 			// Perform the generation.

@@ -2,6 +2,7 @@ package org.epochx.gx.op.init;
 
 import java.util.*;
 
+import org.apache.commons.lang.*;
 import org.epochx.gx.model.*;
 import org.epochx.gx.representation.*;
 import org.epochx.life.*;
@@ -55,6 +56,22 @@ public class ExperimentalInitialiser implements GXInitialiser {
 		}
 		
 		return pop;
+	}
+	
+	public static void printNoCopies(List<CandidateProgram> pop) {
+		// How many duplicates?
+		int[] copies = new int[pop.size()];
+		for (int i=0; i<copies.length; i++) {
+			int noMatching = 0;
+			CandidateProgram p = pop.get(i);
+			for (CandidateProgram q: pop) {
+				if (p.equals(q)) {
+					noMatching++;
+				}
+			}
+			copies[i] = noMatching;
+		}
+		System.out.println(ArrayUtils.toString(copies));
 	}
 
 	private GXCandidateProgram initialiseProgram() {

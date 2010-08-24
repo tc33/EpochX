@@ -25,10 +25,10 @@ import static org.epochx.stats.StatField.*;
 
 import java.util.*;
 
-import org.epochx.life.ConfigAdapter;
-import org.epochx.op.ProgramSelector;
-import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.random.RandomNumberGenerator;
+import org.epochx.life.*;
+import org.epochx.op.*;
+import org.epochx.representation.*;
+import org.epochx.tools.random.*;
 
 /**
  * This component is responsible for carrying out single generations of an 
@@ -222,10 +222,10 @@ public class GenerationManager {
 		do {
 			// Create next population to fill.
 			pop = new ArrayList<CandidateProgram>(popSize);
-			
+
 			// Perform elitism.
 			pop.addAll(elitism.elitism(previousPop));
-			
+
 			// Construct a breeding pool.
 			final List<CandidateProgram> pool = poolSelection.getPool(previousPop);
 			
@@ -253,7 +253,7 @@ public class GenerationManager {
 					pop.add(reproduction.reproduce());
 				}
 			}
-			
+
 			// Request confirmation of generation.
 			pop = model.getLifeCycleManager().fireGenerationEvent(pop);
 			

@@ -76,21 +76,14 @@ public class Fibonacci extends GXModel {
 	}
 	
 	public static int getNthFibonnaciSolution(int n, int n0, int n1) {
-		int var4 = --n;
-		for (int var5=0,var6=var5; (var5<var4 && var5<100); var5++,var6=var5) {
-		n1 = (n1 + (1066889581 % n1));
-		int var26 = (n % (n + (++n1 % -1429604798)));
-		for (int var27=0,var28=var27; (var27<var26 && var27<100); var27++,var28=var27) {
-		int var29 = ++n;
+		int var0 = --n;
+		for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+		var2 = ++n0;
+		n = n1;
+		n1 = n0;
+		n0 = (--n + n0);
 		}
-		double var40 = (0.5389215444346025 % 0.4381355783205967);
-		}
-		int var36 = (((38269433 - (n1 * n)) * (((220493603 - (((--n - n1) + 168395372) % n)) % 1046684714) % --n1)) / ++n0);
-		for (int var37=0,var38=var37; (var37<var36 && var37<100); var37++,var38=var37) {
-		boolean var41 = (true || true);
-		var38 = ((n + --n) - --n1);
-		}
-		int var14 = ((n % n0) % ++n1);
+		double var6 = (0.22557474780671372 % (0.7913649399170898 * 0.12563305253354873));
 		return n1;
 	}
 	

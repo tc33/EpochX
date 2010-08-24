@@ -1,7 +1,5 @@
 package org.epochx.gx.op.mutation;
 
-import java.util.*;
-
 import org.epochx.gx.model.*;
 import org.epochx.gx.representation.*;
 import org.epochx.life.*;
@@ -46,19 +44,8 @@ public class ExperimentalMutation implements GXMutation {
 		maxNoStatements = model.getMaxNoStatements();
 	}
 	
-	private CandidateProgram last;
-	
 	@Override
 	public GXCandidateProgram mutate(final CandidateProgram p) {
-		//TODO why is this happening?
-		/*if (last != null && last.equals(p)) {
-			System.err.println(last);
-			System.out.println("-----------------------");
-			System.err.println(p);
-			System.out.println("+++++++++++++++++++++++");
-		}
-		last = p;*/
-		
 		GXCandidateProgram program = (GXCandidateProgram) p;
 		
 		double random = rng.nextDouble();
@@ -89,7 +76,4 @@ public class ExperimentalMutation implements GXMutation {
 		
 		return program;
 	}
-	
-	private List<GXCandidateProgram> pop = new ArrayList<GXCandidateProgram>();
-
 }

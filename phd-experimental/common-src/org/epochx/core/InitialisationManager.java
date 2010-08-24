@@ -25,6 +25,7 @@ import static org.epochx.stats.StatField.*;
 
 import java.util.List;
 
+import org.epochx.gx.op.init.*;
 import org.epochx.life.ConfigAdapter;
 import org.epochx.op.Initialiser;
 import org.epochx.representation.CandidateProgram;
@@ -206,7 +207,7 @@ public class InitialisationManager {
 				reversions++;
 			}
 		} while(pop == null);
-		
+
 		// Store the stats data from the initialisation.
 		model.getStatsManager().addGenerationData(INIT_REVERSIONS, reversions);
 		model.getStatsManager().addGenerationData(GEN_POPULATION, pop);
@@ -215,7 +216,7 @@ public class InitialisationManager {
 		// Trigger life cycle events for end of initialisation and generation 0.
 		model.getLifeCycleManager().fireInitialisationEndEvent();
 		model.getLifeCycleManager().fireGenerationEndEvent();
-		
+
 		return pop;
 	}
 	

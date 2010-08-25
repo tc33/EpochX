@@ -1,7 +1,5 @@
 package org.epochx.gx.model;
 
-import java.util.*;
-
 import org.epochx.gx.representation.*;
 import org.epochx.representation.*;
 
@@ -29,7 +27,7 @@ public class Fibonacci extends GXModel {
 	@Override
 	public double getFitness(CandidateProgram p) {
 		final GXCandidateProgram program = (GXCandidateProgram) p;
-		final AST ast = program.getAST();
+		final Method method = program.getMethod();
 		
 		final VariableHandler vars = getVariableHandler();
 		
@@ -41,7 +39,7 @@ public class Fibonacci extends GXModel {
         	vars.setParameterValue("n0", 1);
         	vars.setParameterValue("n1", 1);
         	
-        	Integer result = (Integer) ast.evaluate(vars);
+        	Integer result = (Integer) method.evaluate(vars);
         	
         	// Sum the errors.
             score += Math.abs(result - sequence[i]);

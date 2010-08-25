@@ -2,7 +2,7 @@ package org.epochx.gx.representation;
 
 import org.epochx.tools.random.*;
 
-public class ReturnStatement implements Cloneable {
+public class ReturnStatement implements Statement {
 
 	private Variable expression;
 	
@@ -18,14 +18,17 @@ public class ReturnStatement implements Cloneable {
 		this.expression = expression;
 	}
 	
-	public Object evaluate(VariableHandler vars) {
+	public Object evaluateReturn(VariableHandler vars) {
 		return expression.evaluate(vars);
 	}
-
+	
+	public void evaluate(VariableHandler vars) {
+		expression.evaluate(vars);
+	}
 	
 	public void modifyExpression(double probability, RandomNumberGenerator rng,
 			VariableHandler vars) {
-		
+
 	}
 	
 	/**
@@ -60,6 +63,42 @@ public class ReturnStatement implements Cloneable {
 		clone.returnType = this.returnType;
 			
 		return clone;
+	}
+
+	@Override
+	public void apply(VariableHandler vars) {
+		// Not relevant here.
+	}
+
+	@Override
+	public Statement deleteStatement(int deletePosition) {
+		// No internal statements so not used here.
+		return null;
+	}
+
+	@Override
+	public int getNoStatements() {
+		return 1;
+	}
+
+	@Override
+	public Statement getStatement(int index) {
+		if (index == 0) {
+			return this;
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public boolean hasBlock() {
+		return false;
+	}
+
+	@Override
+	public void insertStatement(double probability, RandomNumberGenerator rng,
+			VariableHandler vars, int maxNoStatements) {
+		// No internal statements so do nothing.
 	}
 
 }

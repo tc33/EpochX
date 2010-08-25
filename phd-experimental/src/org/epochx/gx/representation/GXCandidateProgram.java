@@ -31,7 +31,7 @@ public class GXCandidateProgram extends CandidateProgram {
 	private GXModel model;
 	
 	// The abstract syntax tree.
-	private AST program;
+	private Method method;
 	
 	// The fitness of this program.
 	private double fitness;
@@ -46,9 +46,9 @@ public class GXCandidateProgram extends CandidateProgram {
 		this(null, null, model);
 	}
 	
-	public GXCandidateProgram(AST program, Set<Variable> variables, GXModel model) {
+	public GXCandidateProgram(Method method, Set<Variable> variables, GXModel model) {
 		this.model = model;
-		this.program = program;
+		this.method = method;
 		this.variables = variables;
 		
 		sourceCache = null;
@@ -57,8 +57,8 @@ public class GXCandidateProgram extends CandidateProgram {
 		fitness = -1;
 	}
 	
-	public void setParseTree(AST program, Set<Variable> variables) {
-		this.program = program;
+	public void setParseTree(Method method, Set<Variable> variables) {
+		this.method = method;
 		this.variables = variables;
 	}
 	
@@ -94,11 +94,11 @@ public class GXCandidateProgram extends CandidateProgram {
 	}
 
 	public String getSourceCode() {
-		return program.toString();
+		return method.toString();
 	}
 	
-	public AST getAST() {
-		return program;
+	public Method getMethod() {
+		return method;
 	}
 	
 	/*public int getDepth() {
@@ -121,7 +121,7 @@ public class GXCandidateProgram extends CandidateProgram {
 	 * @return
 	 */
 	public int getNoStatements() {
-		return program.getNoStatements();
+		return method.getBody().getNoStatements();
 	}
 	
 	/**
@@ -134,7 +134,7 @@ public class GXCandidateProgram extends CandidateProgram {
 		//TODO This needs writing properly.
 		GXCandidateProgram clone = (GXCandidateProgram) super.clone();
 				
-		clone.program = (AST) this.program.clone();
+		clone.method = (Method) this.method.clone();
 		
 		// Copy the caches.
 		clone.sourceCache = this.sourceCache;
@@ -153,8 +153,8 @@ public class GXCandidateProgram extends CandidateProgram {
 	 */
 	@Override
 	public String toString() {
-		if (program != null) {
-			return program.toString();
+		if (method != null) {
+			return method.toString();
 		} else {
 			return null;
 		}

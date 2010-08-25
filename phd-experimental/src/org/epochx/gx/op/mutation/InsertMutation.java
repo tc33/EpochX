@@ -49,8 +49,8 @@ public class InsertMutation implements GXMutation {
 		vars.setAllVariables(new HashSet<Variable>(program.getVariables()));
 		
 		// Consider each insert point for insertion.
-		AST ast = program.getAST();
-		ast.insertStatement(0.1, vars, rng, maxNoStatements);
+		Method method = program.getMethod();
+		method.insertStatement(0.1, vars, rng, maxNoStatements);
 		
 		// Update the set of variables stored in the program.
 		program.setVariables(new HashSet<Variable>(vars.getAllVariables()));

@@ -8,27 +8,13 @@ import org.epochx.tools.random.*;
 
 public class ProgramGenerator {
 	
-	public static AST getAST(DataType returnType, RandomNumberGenerator rng, VariableHandler vars, int noStatements) {
-		AST p = new AST();
-
-		// Keep adding new statements until there are enough.
-		int currentNo = 0;
-		while (currentNo < noStatements) {
-			int maxNestedStatements = noStatements - currentNo - 1;
-			
-			Statement s = getStatement(rng, vars, 0, maxNestedStatements);
-			
-			// Don't add a multiple statement that will take us over the size limit.
-			int n = s.getNoStatements();
-			if (n + currentNo <= noStatements) {
-				currentNo += n;
-				p.addStatement(s);
-			}
-		}
+	public static Method getMethod(String name, DataType returnType, RandomNumberGenerator rng, VariableHandler vars, int noStatements) {
+		Block body = getBlock(rng, vars, 0, noStatements, false);
+		ReturnStatement returnStatement = getReturnStatement(returnType, rng, vars);
 		
-		p.addReturnStatement(getReturnStatement(returnType, rng, vars));
+		Method m = new Method(name, body, returnStatement);
 		
-		return p;
+		return m;
 	}
 	
 	public static ReturnStatement getReturnStatement(DataType type, RandomNumberGenerator rng, VariableHandler vars) {
@@ -116,8 +102,12 @@ public class ProgramGenerator {
 	}
 	
 	public static IfStatement getIf(RandomNumberGenerator rng, VariableHandler vars, int nesting, int maxNestedStatements) {
+		if (maxNestedStatements == 0) {
+			return null;
+		}
+		
 		Expression condition = getExpression(rng, vars, DataType.BOOLEAN, 0);
-		Block ifCode = getBlock(rng, vars, nesting+1, maxNestedStatements);
+		Block ifCode = getBlock(rng, vars, nesting+1, maxNestedStatements, true);
 		
 		IfStatement ifStatement = new IfStatement(condition, ifCode);
 		
@@ -140,6 +130,9 @@ public class ProgramGenerator {
 		if (nesting >= 1) {
 			return null;
 		}
+		if (maxNestedStatements == 0) {
+			return null;
+		}
 		
 		// End point declaration.
 		//Expression iterations = getExpression(rng, vars, DataType.INT, 0);
@@ -158,7 +151,7 @@ public class ProgramGenerator {
 		Declaration indexCoverVar = getDeclaration(rng, vars, indexVar.getVariable());
 		
 		// Generate a block.
-		Block body = getBlock(rng, vars, nesting+1, maxNestedStatements);
+		Block body = getBlock(rng, vars, nesting+1, maxNestedStatements, true);
 		
 		// Remove the index cover variable, to ensure scope restricted to block.
 		vars.removeActiveVariable(indexCoverVar.getVariable());
@@ -179,8 +172,8 @@ public class ProgramGenerator {
 		}
 		
 		//TODO This needs to be formalised. And why does it happen anyway.
-		// If nesting level exceeds 10 then don't allow any more binary expressions.
-		if (level > 10) {
+		// If nesting level exceeds 5 then don't allow any more binary expressions.
+		if (level > 5) {
 			indexes.remove(2);
 		}
 		
@@ -230,14 +223,18 @@ public class ProgramGenerator {
 		return result;
 	}
 	
-	public static Block getBlock(RandomNumberGenerator rng, VariableHandler vars, int nesting, int maxNestedStatements) {
+	public static Block getBlock(RandomNumberGenerator rng, VariableHandler vars, int nesting, int noStatements, boolean upToNoStatements) {
 		// Record number of variables to return to.
 		int noVariables = vars.getNoActiveVariables();
 		
 		List<Statement> statements = new ArrayList<Statement>();
 
-		int noStatements = rng.nextInt(maxNestedStatements);
-		
+		// If only an up to number, then randomly decide how many.
+		if (upToNoStatements && noStatements > 1) {
+			// Minimum of 1 statement.
+			noStatements = rng.nextInt(noStatements-1)+1;
+		}
+			
 		int currentNo = 0;
 		while (currentNo < noStatements) {
 			int nextLevelStatements = noStatements - currentNo - 1;
@@ -261,7 +258,7 @@ public class ProgramGenerator {
 	}
 	
 	public static Block getBlock(RandomNumberGenerator rng, VariableHandler vars, int nesting) {
-		return getBlock(rng, vars, nesting, 1);
+		return getBlock(rng, vars, nesting, 1, true);
 	}
 
 	public static DataType getDataType(RandomNumberGenerator rng) {
@@ -340,7 +337,7 @@ public class ProgramGenerator {
 		GXModel model = new EvenParity(3);
 		model.getLifeCycleManager().fireConfigureEvent();
 		VariableHandler vars = model.getVariableHandler();
-		AST program = getAST(DataType.BOOLEAN, model.getRNG(), vars, 10);
+		Method program = getMethod("getFibonacci", DataType.BOOLEAN, model.getRNG(), vars, 10);
 		
 		vars.reset();
 		System.out.println(format(program.toString()));

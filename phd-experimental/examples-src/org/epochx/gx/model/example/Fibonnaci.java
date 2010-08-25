@@ -21,6 +21,7 @@
  */
 package org.epochx.gx.model.example;
 
+import java.io.*;
 import java.util.*;
 
 import org.epochx.gx.model.*;
@@ -41,13 +42,13 @@ public class Fibonnaci extends org.epochx.gx.model.Fibonacci {
 		model.setPopulationSize(1000);
 		model.setInitialiser(new ExperimentalInitialiser(model));
 		model.setMutation(new ExperimentalMutation(model));
-		model.setNoElites(0);
+		model.setNoElites(1);
 		model.setCrossoverProbability(0.0);
 		model.setMutationProbability(1.0);
 		model.setTerminationFitness(0.0);
 		model.setMaxNoStatements(6);
 		model.setMinNoStatements(4);
-		model.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+		/*model.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationEnd() {
 				Object[] stats = model.getStatsManager().getGenerationStats(StatField.GEN_NUMBER, 
@@ -77,9 +78,9 @@ public class Fibonnaci extends org.epochx.gx.model.Fibonacci {
 				double aveSize = totalSize / pop.size();
 				System.out.print(minNoStatements + "\t" + maxNoStatements + "\t" + aveSize + "\n");
 			}
-		});
+		});*/
 		
-		/*model.getLifeCycleManager().addRunListener(new RunAdapter() {
+		model.getLifeCycleManager().addRunListener(new RunAdapter() {
 			@Override
 			public void onRunEnd() {
 				Object[] stats = model.getStatsManager().getRunStats(StatField.RUN_NUMBER, StatField.RUN_FITNESS_MIN, StatField.RUN_FITTEST_PROGRAM);
@@ -91,7 +92,7 @@ public class Fibonnaci extends org.epochx.gx.model.Fibonacci {
 			    try {
 			      	bw = new BufferedWriter(new FileWriter("results/best-programs.txt", true));
 			      	bw.write("\n"+stats[0]+"|***************************\n");
-			        bw.write(stats[2].toString());
+			        bw.write(ProgramGenerator.format(stats[2].toString()));
 			         
 			        bw.newLine();
 			        bw.flush();
@@ -107,7 +108,7 @@ public class Fibonnaci extends org.epochx.gx.model.Fibonacci {
 			    } // end try/catch/finally
 
 			}
-		});*/
+		});
 		
 		model.run();
 	}    

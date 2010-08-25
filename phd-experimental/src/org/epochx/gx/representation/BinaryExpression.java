@@ -64,7 +64,7 @@ public class BinaryExpression implements Expression {
 			leftExpression.modifyExpression(probability, rng, vars, level+1);
 		}
 		
-		//TODO Need to be able to modify the operator too.
+		//TODO Need to be able to modify the operator too?
 		
 		if (rng.nextDouble() < probability) {
 			rightExpression = ProgramGenerator.getExpression(rng, vars, rightExpression.getDataType(), level+1);

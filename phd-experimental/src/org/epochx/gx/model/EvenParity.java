@@ -83,7 +83,7 @@ public class EvenParity extends GXModel {
 	@Override
 	public double getFitness(final CandidateProgram p) {
 		final GXCandidateProgram program = (GXCandidateProgram) p;
-		final AST ast = program.getAST();
+		final Method method = program.getMethod();
 		
 		//System.out.println(ProgramGenerator.format(ast.toString()));
 		//System.out.println("-------------------------------");
@@ -99,7 +99,7 @@ public class EvenParity extends GXModel {
         		getVariableHandler().setParameterValue(argNames[i], argValues[i]);
         	}
         	
-        	Boolean result = (Boolean) ast.evaluate(getVariableHandler());
+        	Boolean result = (Boolean) method.evaluate(getVariableHandler());
 
 			// Increment score for a correct response.
             if ((result != null) && (result == isEvenNoTrue(argValues))) {

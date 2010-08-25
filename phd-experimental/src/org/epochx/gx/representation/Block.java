@@ -120,10 +120,13 @@ public class Block implements Cloneable {
 			if (current == deletePosition) {
 				Statement toDelete = statements.get(i);
 				if (toDelete instanceof Declaration) {
-					return null;
-				} else {
-					return statements.remove(i);
+					// Only allow declaration to be removed if that variable is not referenced anywhere else.
+					Variable v = ((Declaration) toDelete).getVariable();
+					if (countVariableUses(v) != 1) {
+						return null;
+					}
 				}
+				return statements.remove(i);
 			}
 			
 			// Does index lie within this statement.
@@ -138,6 +141,14 @@ public class Block implements Cloneable {
 		}
 		
 		return null;
+	}
+	
+	public void addStatement(Statement s) {
+		statements.add(s);
+	}
+	
+	public void removeStatement(Statement s) {
+		statements.remove(s);
 	}
 
 	public Statement getStatement(int index) {
@@ -154,5 +165,22 @@ public class Block implements Cloneable {
 			}
 		}
 		return null;
+	}
+	
+	public int countVariableUses(Variable v) {
+		String blockStr = toString();
+		String varName = v.getVariableName();
+		int lastIndex = 0;
+		int count = 0;
+
+		while (lastIndex != -1) {
+			lastIndex = blockStr.indexOf(varName, lastIndex+1);
+
+			if (lastIndex != -1) {
+				count++;
+			}
+		}
+		
+		return count;
 	}
 }

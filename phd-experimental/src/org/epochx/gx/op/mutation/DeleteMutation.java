@@ -1,5 +1,7 @@
 package org.epochx.gx.op.mutation;
 
+import java.util.*;
+
 import org.epochx.gx.model.*;
 import org.epochx.gx.representation.*;
 import org.epochx.life.*;
@@ -39,18 +41,18 @@ public class DeleteMutation implements GXMutation {
 	public GXCandidateProgram mutate(CandidateProgram p) {
 		GXCandidateProgram program = (GXCandidateProgram) p;
 		
-		AST ast = program.getAST();
+		Method method = program.getMethod();
 		int noStatements = program.getNoStatements();
 		
 		Statement deleted = null;
 		int i = 0;
 		do {
 			int deletePosition = rng.nextInt(noStatements);
-			Statement s = ast.getStatement(deletePosition);
+			Statement s = method.getBody().getStatement(deletePosition);
 			
 			if ((noStatements - s.getNoStatements()) > minNoStatements) {
-				// Deleted may be null if would remove too many statements OR if attempted to delete a decl.
-				deleted = ast.deleteStatement(deletePosition);
+				// Deleted may be null if would remove too many statements OR if attempted to delete an ineligible decl.
+				deleted = method.deleteStatement(deletePosition);
 			}
 			
 			// Try 3 times at most, then cancel.

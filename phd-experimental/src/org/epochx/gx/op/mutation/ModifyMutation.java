@@ -43,8 +43,8 @@ public class ModifyMutation implements GXMutation {
 		
 		vars.reset();
 		
-		AST ast = program.getAST();
-		ast.modifyExpression(0.2, vars, rng);
+		Method method = program.getMethod();
+		method.modifyExpression(0.2, vars, rng);
 		
 		return program;
 	}

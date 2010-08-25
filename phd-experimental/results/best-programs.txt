@@ -1,1011 +1,1122 @@
 
 0|***************************
-int var0 = ((1717486723 % (n * n)) * (--n - ((++n0 + n) % (-977569462 / ((--n - (--n - n0)) * n0)))));
-int var1 = (++var0 * n);
-double var5 = 0.3618606381257552;
-double var2 = var5;
-double var4 = (((var2 * var5) % 0.25352363382287413) / ((var2 + (0.24216808133900714 / 0.8928141419892576)) - 0.7073285271607485));
-double var3 = ((0.38106435774813796 / (0.24104768639480467 % ((0.3053294765420801 - 0.5673879424159487) - (var2 * var4)))) - var5);
-return var0;
-
-0|***************************
-boolean var3 = (true && false);
-int var0 = n0;
-if (true) {
-var0 = (((1398647929 % n) * --n) * ((n - (++n / (n1 - n))) % ++n));
-boolean var2 = ((false || !var3) && !var3);
+public static int getNthFibonacci() {
+    n0 = 1123829543;
+    boolean var9 = ((true || false) ^ false);
+    n = (((1565248445 % --n) * (--n * n)) - ((n + ((n * (--n * ++n)) - (++n + (-1560363968 / n)))) % ++n));
+    double var7 = (0.34660329315642335 / 0.1422217402720729);
+    int var0 = ++n;
+    int var8 = n0;
 }
-int var1 = ++var0;
-return var0;
 
 1|***************************
-int var0 = --n;
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-int var3 = n0;
-for (int var4=0,var5=var4; (var4<var3 && var4<100); var4++,var5=var4) {
-n = ++n1;
+public static int getNthFibonacci() {
+    int var0 = --n;
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        n1 = (++n1 + (911080596 / n1));
+        boolean var3 = true;
+    }
+    boolean var4 = ((false || (((false && false) || true) && (((true || false) || (false || true)) ^ false))) && true);
+    int var6 = n;
+    boolean var5 = var4;
 }
-n0 = (n - n0);
-}
-n = n1;
-boolean var6 = (false && (false || false));
-return n;
 
 2|***************************
-int var0 = n0;
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-boolean var5 = true;
-n1 = n;
+public static int getNthFibonacci() {
+    if ((true || ((true && (((false ^ false) && false) ^ (false ^ false))) ^ ((((false ^ true) && false) && ((false || true) ^ false)) && false)))) {
+        int var3 = (-702886842 - ((--n % 559730096) * ((410545595 / --n1) - (--n1 - -1355281931))));
+        double var5 = 0.49748164512846915;
+        double var6 = 0.759084789832515;
+        int var4 = --n;
+        n = ((((((--n1 + 79480334) % var4) + n) * --n) * (270312187 % var4)) + ++n0);
+    }
 }
-boolean var4 = (((false || false) && false) || ((((((((true || ((false ^ false) ^ (false || false))) && (((false ^ true) || true) && false)) ^ true) || true) || true) || true) || true) || true));
-n0 = (--n1 * (1289224741 % (n * --n)));
-int var3 = ++n0;
-return n0;
 
 3|***************************
-int var0 = --n;
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-n1 = (++n0 - n1);
-int var3 = ++n1;
-n0 = (n0 + --var3);
-double var4 = (0.3126055497944896 / 0.1197875129475443);
+public static int getNthFibonacci() {
+    n = (n * ((929766632 % n) * ((18743738 + ++n) / ++n)));
+    if (true) {
+        int var3 = ++n;
+        boolean var2 = ((true ^ (((true || (true ^ true)) ^ ((false ^ true) && true)) && (false || true))) || true);
+        boolean var0 = true;
+    }
+    double var1 = 0.0029076109280955498;
 }
-return n1;
 
 4|***************************
-int var0 = n;
-boolean var8 = (true && true);
-boolean var7 = true;
-int var1 = ((((-2088139129 % (var0 * n)) + ((n0 % --n1) - n0)) + (1085487726 % ++var0)) * ((-51154696 % ++var0) - n0));
-boolean var6 = false;
-double var5 = 0.7550062887426087;
-return var1;
+public static int getNthFibonacci() {
+    double var4 = 0.036988844105535934;
+    int var0 = --n0;
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        boolean var3 = ((((false ^ true) ^ (false && false)) || (((false ^ (false || false)) || false) || (false ^ ((true ^ true) ^ (false || true))))) ^ true);
+        double var5 = var4;
+    }
+    n0 = (((1714999925 % n) * (++n1 + (91080041 % ((++n + n1) + --n1)))) * --n);
+    int var6 = ++n0;
+}
 
 5|***************************
-double var9 = (0.5768573469560178 - 0.07216548983936033);
-int var10 = -638995401;
-double var8 = var9;
-n1 = (1039609853 + 169868605);
-int var0 = ((((n1 / n) * (n1 / ++n)) + (n0 % -727746734)) * ++n);
-boolean var7 = true;
-return var0;
+public static int getNthFibonacci() {
+    double var4 = (0.09766341831409842 + ((0.2937620934563364 - (((0.6592243185203077 / 0.8468879299086364) * (0.49376088678440555 + 0.2879197585489295)) + ((0.1723089723570197 / 0.8825114988153187) + (0.0690851191161761 - 0.6584642991716223)))) / 0.5343799904385725));
+    boolean var3 = (true && (false || ((true ^ ((false && false) || true)) || (false || ((false ^ true) && (true || true))))));
+    boolean var6 = var3;
+    n0 = n;
+    n0 = (((826871917 % (n0 * n0)) + (((-663024223 % 337641244) - (-1990565238 * (735432799 + n))) % ++n0)) * --n);
+    int var5 = ++n0;
+}
 
 6|***************************
-boolean var0 = false;
-int var1 = (1811078041 / n);
-for (int var2=0,var3=var2; (var2<var1 && var2<100); var2++,var3=var2) {
-int var6 = n;
-n1 = ((++n0 * (n - (var6 % n0))) * var6);
-double var5 = (0.5559077763547816 % (0.5397017127322379 + 0.15441866271384608));
+public static int getNthFibonacci() {
+    boolean var5 = (((((false ^ false) ^ false) ^ false) || false) ^ ((false || false) && false));
+    int var6 = n;
+    int var0 = (n1 % (-97568505 / n));
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        double var4 = 0.38786386880439905;
+        n = ((((1227077112 + n0) - n) % n) * (n * n));
+        int var3 = ((1988786856 - (--n - (++var6 - ((1493354508 * --n) - --n)))) % --n);
+    }
 }
-double var4 = 0.2687335722997092;
-return n1;
 
 7|***************************
-if (((true ^ (((((true && true) || true) || (true && true)) || (false && (((true || (true && ((false ^ true) || (true && false)))) && true) || (true || true)))) ^ false)) || true)) {
-double var2 = 0.1974556266134796;
+public static int getNthFibonacci() {
+    boolean var0 = (true ^ false);
+    int var1 = ++n;
+    for (int var2=0,var3=var2; (var2<var1 && var2<100); var2++,var3=var2) {
+        int var6 = n0;
+        boolean var4 = true;
+    }
+    boolean var5 = false;
+    n0 = (((370956378 / (n - ((--n + ++n1) % ++n1))) * ++n) * n);
 }
-n1 = (((135750473 / --n) * (--n + (779186 % n))) * --n);
-double var0 = 0.32219211352687926;
-boolean var3 = (((false ^ false) ^ ((false || (false || ((false ^ true) || (((true || ((true && true) || (false ^ true))) && true) || false)))) && (true && true))) ^ ((((((true ^ false) ^ (true || true)) || true) || (((false || ((((false ^ true) && (false ^ true)) && ((false && true) ^ true)) ^ (false && (false || (true && false))))) ^ false) ^ ((false || (true && false)) && (false && (false ^ true))))) && ((((true ^ false) || (true && true)) || (false ^ (false || true))) && (true ^ false))) && false));
-int var1 = ++n1;
-return n1;
 
 8|***************************
-int var0 = (1932553721 / ((n % n1) + (n0 - ((n - n0) % n))));
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-n0 = (++n * (528328845 / (n1 * --n)));
-n1 = n;
+public static int getNthFibonacci() {
+    boolean var0 = (false || ((false || ((false || (false ^ true)) ^ ((true ^ false) ^ true))) || true));
+    double var3 = (0.37186266115737265 + 0.6834998887608795);
+    int var1 = (((n * n0) + (n % ++n0)) * ((++n1 * -1976007523) % --n));
+    boolean var4 = var0;
+    n = (++var1 * ++n);
+    int var2 = var1;
 }
-double var3 = 0.2503436890573778;
-double var4 = ((0.27389439347443356 * (var3 / var3)) + ((((0.1547564653718554 - (var3 / var3)) - var3) * var3) / (var3 + ((var3 * 0.09445973145728048) + var3))));
-return n0;
 
 9|***************************
-n0 = (-504731047 / n);
-double var5 = 0.5076764085110949;
-double var3 = ((var5 * (var5 * var5)) * var5);
-n = (((((n + n) % (n1 - (-1685198017 % --n))) - n) * n0) * n);
-int var4 = ++n;
-return n;
+public static int getNthFibonacci() {
+    int var3 = --n1;
+    int var6 = 1044686580;
+    n0 = ((((((--n0 + 87861127) % (n + var3)) * n) - ((--var6 % -1975017711) % (n * --n1))) * --n) + ++var3);
+    int var0 = --var3;
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        boolean var4 = (false || (((true && ((false && true) || (true ^ false))) ^ (((false || true) && false) ^ true)) ^ true));
+        double var5 = (0.006375808193262333 * (0.9364258887633042 / 0.5841811537288703));
+    }
+}
 
 10|***************************
-n0 = n;
-int var0 = (-128909305 * (--n1 + (n / ++n)));
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-n = ((-1023033669 / n0) * --n0);
+public static int getNthFibonacci() {
+    int var0 = --n;
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        int var3 = (n0 * -223293286);
+        for (int var4=0,var5=var4; (var4<var3 && var4<100); var4++,var5=var4) {
+            n = --n1;
+        }
+        n0 = var2;
+        n1 = ((--n1 + ++n) % -1035684495);
+    }
+    double var6 = (0.36775716996175134 * (0.41353914611720743 % 0.9979568944675387));
 }
-int var4 = --n;
-double var3 = 0.9485636494936507;
-double var5 = (0.29351356259587735 % 0.696404750928145);
-return n;
 
 11|***************************
-int var0 = --n;
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-boolean var3 = (true || false);
-int var4 = n1;
-for (int var5=0,var6=var5; (var5<var4 && var5<100); var5++,var6=var5) {
-n0 = (++n0 - ((128647648 - 1964754178) / n0));
+public static int getNthFibonacci() {
+    int var0 = n1;
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        boolean var3 = (true && false);
+    }
+    double var4 = 0.11354070595031762;
+    n1 = ((--n * --n) * (154622393 % ++n));
+    int var6 = ++n1;
+    boolean var5 = true;
 }
-}
-n = n0;
-return n;
 
 12|***************************
-boolean var3 = false;
-double var2 = 0.8738245279806411;
-n1 = ((--n + (++n / n0)) * (--n * (106399865 % ++n)));
-double var0 = var2;
-int var1 = ++n1;
-return n1;
+public static int getNthFibonacci() {
+    int var0 = --n;
+    n0 = ++n1;
+    n0 = (n * (((1284443528 + var0) % ++n) * (((1900510891 + (--var0 % n1)) / var0) + (826903861 / n))));
+    int var3 = -858151544;
+    int var2 = ++n0;
+    double var1 = (((0.3379279211113594 % (0.5882630295511266 + 0.706008866311878)) + 0.6271800967097803) + ((0.6817472443820763 * (0.4726781009032429 - 0.037310897607560234)) % 0.965770249709707));
+}
 
 13|***************************
-n1 = --n;
-n1 = (n % ++n);
-n1 = (--n1 * (335733025 / ((--n1 + n1) * --n1)));
-int var0 = (++n1 - ++n1);
-double var1 = 0.9305334698416285;
-double var2 = var1;
-return n1;
+public static int getNthFibonacci() {
+    int var0 = (n - ((n0 * 540515675) % ++n1));
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        n1 = (((143393716 - 103620640) / ++n1) + n1);
+    }
+    int var3 = --n1;
+    int var4 = ++var3;
+    double var8 = (0.7104363507354211 * (0.9642306935343363 / ((0.18334484260069928 % 0.38215050899277725) + (0.9339029026803097 * (0.2576578414901888 % (0.4937122605606442 / 0.6553348853899555))))));
+}
 
 14|***************************
-int var0 = (++n0 + (--n * n));
-n1 = ((1237410682 / n) * (1078624105 % (++n1 * --var0)));
-boolean var2 = true;
-boolean var3 = !var2;
-int var1 = ++var0;
-return n1;
+public static int getNthFibonacci() {
+    double var3 = ((0.5033697619884329 * 0.6351283040097906) * ((0.9800058053884384 * 0.022947389078986302) + (((0.9620565571399621 - 0.20967471438243135) % (0.822601976230341 - 0.0877652753238054)) / 0.6794058930434661)));
+    n1 = (n * ((752177641 / (((837670177 + --n) / ++n) - n)) * n));
+    if ((true && false)) {
+        double var0 = 0.05475487471737206;
+    }
+    double var1 = var3;
+    int var2 = ++n1;
+}
 
 15|***************************
-double var7 = 0.504690368726107;
-int var0 = (1011194762 / n);
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-boolean var6 = false;
-int var3 = --n1;
+public static int getNthFibonacci() {
+    n0 = (--n - ++n1);
+    boolean var0 = ((false && true) && false);
+    boolean var2 = (var0 ^ var0);
+    double var1 = (0.6010444298305448 + ((0.7935369289507923 - ((0.2566986693983433 - 0.1555515182325664) + (0.12858326756917515 % 0.7137003212993023))) * 0.4163085109524033));
+    n0 = ((--n0 * (((1474421140 / --n0) + --n0) - (-552758843 % --n0))) * --n0);
+    n0 = (n + ++n0);
 }
-boolean var4 = false;
-int var5 = (n * ((n / (1599559759 + --n1)) + ((n0 * (-1222552601 / --n)) * --n1)));
-return var5;
 
 16|***************************
-int var0 = (627609270 / n);
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-n1 = (n + (--n1 + ((1713301856 / (++n1 + n1)) % n0)));
-int var4 = ++n0;
+public static int getNthFibonacci() {
+    int var0 = (--n - ++n1);
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        n = (--n + (293560463 / n));
+        int var6 = n0;
+    }
+    n = (n / (++n % (543813497 + --n)));
+    int var8 = ((--n1 + --n0) + ++n);
+    boolean var7 = (((((false ^ true) || (false && false)) && false) || (false || true)) || (false || true));
 }
-n1 = (n * n1);
-boolean var3 = false;
-return n1;
 
 17|***************************
-boolean var2 = false;
-n0 = n;
-n0 = (-1035200730 % n);
-n0 = (--n0 * ((239050314 / n) + (n * n0)));
-double var0 = (0.3231519656603805 % 0.18929535860893076);
-int var1 = 231170236;
-return n0;
+public static int getNthFibonacci() {
+    int var4 = n0;
+    int var0 = 23329277;
+    boolean var6 = ((false ^ true) && true);
+    boolean var5 = true;
+    int var1 = --n;
+    for (int var2=0,var3=var2; (var2<var1 && var2<100); var2++,var3=var2) {
+        n0 = ((426894532 % n0) + ++n0);
+    }
+}
 
 18|***************************
-if (true) {
-n0 = (n0 + --n);
-n = (((1793208918 / ++n0) * --n) * n);
+public static int getNthFibonacci() {
+    boolean var0 = (false && ((true || false) || false));
+    if (!var0) {
+        boolean var2 = !var0;
+        double var1 = ((0.3786626969897694 * ((((0.8593033699622226 + 0.24251491788790602) - (0.7311813226072855 / 0.2971343678341174)) - 0.7224505628387939) / 0.11691279690212963)) - (0.32604834642513747 % (0.5422896329842133 + (0.6479339080123377 % ((0.6016578183740068 - 0.2889168367312751) / (0.7981281714346721 / 0.3932422350978587))))));
+    }
+    n1 = ((n + n1) * (1873325856 % (n * (-368779530 / n))));
+    n1 = ((((--n - (-1891820975 + n)) / (--n % ((++n1 % ++n0) + (++n1 + -2078630581)))) + n1) + n);
 }
-n = ++n;
-boolean var1 = (((((((false && false) || true) && true) || false) ^ false) ^ ((false && (false ^ (false && true))) && true)) && (false && (true ^ (false ^ (false ^ ((false ^ true) || true))))));
-double var0 = (0.819685977719164 + 0.3449978650650005);
-return n;
 
 19|***************************
-int var0 = n;
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-n = 897521025;
-n1 = (n1 - ((--n0 - --n) % ++n1));
-double var3 = 0.8452609544474982;
-n0 = -1075171384;
+public static int getNthFibonacci() {
+    int var0 = --n;
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        double var6 = (((0.8903196615638326 + 0.9566666762082185) % (((0.7812210159900386 / (0.7365675127126692 - 0.8628904414489277)) % ((0.8459186646788435 % 0.3401009160644246) * (0.3338377146977046 - 0.8487690731204225))) / (0.10168452527061567 % (0.3898732924149031 % (0.648576785611413 % 0.27667354525874843))))) / (0.8496369845741863 * (0.8429919049701607 / (((0.18165341177295669 + 0.7025309231522119) / 0.5092265840368617) - 0.442856381196029))));
+        int var5 = 270893513;
+        double var4 = 0.5621431843430782;
+        double var3 = var4;
+        n1 = (++n1 + (++n1 + (-113016599 % ++n1)));
+    }
 }
-double var4 = 0.5449966336845512;
-return n1;
 
 20|***************************
-int var8 = --n;
-int var0 = (++n + ((2008324114 % var8) - (((-1820155442 * (++n0 * n)) / (n % ++n)) % (-2057568166 * (((--n % --n1) % ((++n1 - ++var8) / --n1)) - --n)))));
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-int var3 = ((var8 / ((++n1 * n) - n1)) * -149963683);
-for (int var4=0,var5=var4; (var4<var3 && var4<100); var4++,var5=var4) {
-int var6 = ++n1;
-boolean var9 = (((((true && (true && (true || true))) && (true && false)) ^ false) ^ (true || ((((true || false) && (((true && false) ^ (((true || true) || false) || true)) ^ false)) && ((false || ((true && ((true || true) || false)) && (true || true))) ^ (false && ((true ^ true) ^ true)))) && (true ^ false)))) || true);
+public static int getNthFibonacci() {
+    double var8 = ((((0.44945510857266335 - ((0.8115222706984514 / 0.5911669272659664) - 0.22790583348944238)) / 0.6372852696892434) % (0.6637669284499862 / (((0.5202928710644019 / 0.16967617404812896) % (0.42085927601853024 * 0.013732901514418083)) % 0.6049399925681141))) * (((((0.6491287133715896 / 0.8467027612890601) % (0.5843508162327316 % 0.3156775214408347)) + 0.25344242561766217) / (0.48227748346707855 - 0.9625625771941708)) / 0.2557453143639279));
+    int var0 = ++n1;
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        double var3 = (0.602053720141573 % (0.5902774801108363 - (var8 * 0.6628414233291948)));
+    }
+    double var4 = (var8 / var8);
+    n0 = (((n / ++n1) + n) * ((1455775610 % n) * --n));
+    n = ++n0;
 }
-}
-double var7 = (((0.5476114698155611 / ((0.2837945898685166 / ((((0.8040567573513001 % ((0.6635660899427058 / 0.4558234650329813) - (0.47577984535525775 % 0.9609151045293441))) % 0.46523861713114445) / (0.33760046682950295 % 0.5765939793282379)) + (0.10191688698595136 * 0.5406232687951843))) % (0.8978576089069172 + 0.12285604476098055))) * 0.7567897795519622) + 0.8987794359697764);
-return n1;
 
 21|***************************
-boolean var6 = ((true || true) || false);
-int var4 = ++n;
-n = (n0 + (((1939157365 % ((552427342 / (-1625274537 / var4)) - --var4)) * n) * --var4));
-boolean var5 = (!var6 ^ !var6);
-int var3 = --n0;
-double var7 = ((0.14170772820947275 / (0.05482581066683079 + (0.20312362027824638 * (0.091661364207832 / 0.1645376877510335)))) / ((0.615237404886617 + 0.2592434500413532) / 0.06016312214867925));
-return n;
+public static int getNthFibonacci() {
+    double var9 = 0.6215750632172615;
+    if ((((false ^ false) && true) ^ false)) {
+        double var7 = (var9 - 0.29376935612018396);
+    }
+    double var8 = ((((((var9 - var9) - 0.4244276277262896) - (var9 - var9)) % 0.36789285129117855) + ((var9 % var9) - var9)) + (0.4132619160584976 - var9));
+    n0 = (((1225542255 - (-876291034 + --n1)) / (n * n)) * --n);
+    int var6 = ++n0;
+}
 
 22|***************************
-int var0 = n;
-int var1 = (--var0 * ++var0);
-n = (--var0 * (((n1 + (802405252 + (++n0 % ++n))) % ++var1) % var1));
-boolean var2 = (false || (false ^ ((true ^ ((true && false) ^ ((true ^ ((false ^ true) ^ ((true ^ false) && false))) || false))) && true)));
-double var3 = 0.3174708861621308;
-int var4 = ++n;
-return n;
+public static int getNthFibonacci() {
+    double var0 = (((0.3709458996505235 % 0.5561070224667223) - (0.008629309112335837 % 0.9301260926511343)) * (0.5479862887812655 + (0.9044631551269032 / 0.17815410826393308)));
+    int var1 = ((++n1 * (++n0 + 2062001829)) * n);
+    for (int var2=0,var3=var2; (var2<var1 && var2<100); var2++,var3=var2) {
+        double var10 = var0;
+        int var9 = ((++n * ((++n - (++n * (--n1 / ++n))) * ++n)) * (++n + ((++n + ++n) + ((++n % (--n0 - ++n)) % ((++n - ++n) / ++n)))));
+        double var4 = var0;
+    }
+    double var8 = ((0.8749572157313009 / var0) + var0);
+}
 
 23|***************************
-int var0 = n0;
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-n = (((n1 + ((n1 - (-747195689 / n)) % -334587070)) * ((1110188732 % n) / (1617924039 / ++n))) * ++n);
-boolean var8 = true;
-int var6 = ++n1;
+public static int getNthFibonacci() {
+    int var3 = (n + -657186995);
+    n1 = (-1411565242 % --n);
+    int var0 = --n;
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        double var4 = 0.32056553165192225;
+        n0 = (var2 * (((var3 * (++var3 + var3)) % n) + (++n * ++n1)));
+    }
 }
-int var7 = ++n;
-return n;
 
 24|***************************
-boolean var7 = (true || (true ^ ((true || true) && false)));
-double var4 = (0.5908737698125285 * (0.7613230486547309 - 0.07759679932986896));
-if (var7) {
-double var6 = 0.7483824544751093;
-double var5 = 0.3412611923378722;
+public static int getNthFibonacci() {
+    n0 = ((-2121324164 + -954364865) + (1387588482 * n0));
+    n0 = (((((--n0 + ++n0) + --n1) / n) * --n) * n);
+    int var3 = ++n0;
+    boolean var5 = true;
+    n0 = (n0 - (-2144245136 % n));
+    boolean var4 = true;
 }
-int var3 = ((((1782697818 % (--n0 + (n + (((++n + --n) * 581638095) % ++n1)))) * (1635723356 % n)) + --n1) * n);
-return var3;
 
 25|***************************
-n0 = (--n * (1261424921 % (++n * (-1586192218 / ++n))));
-if (true) {
-double var6 = 0.7795796963220007;
-int var4 = ++n0;
+public static int getNthFibonacci() {
+    int var5 = n;
+    int var0 = --n;
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        n0 = (n1 + (n0 - (-560744887 % --n0)));
+        int var4 = 1075916651;
+    }
+    double var3 = ((0.6920745367917579 - ((0.8245983919062806 - 0.30536728306954364) % 0.46300423528334234)) + 0.11859254879495529);
 }
-double var5 = ((0.07743509888678057 + 0.11070062579090834) % 0.15990743517668438);
-boolean var3 = (true && true);
-return n0;
 
 26|***************************
-boolean var5 = ((true && (true || true)) ^ (((false ^ (true && (false || false))) && false) ^ true));
-int var4 = n;
-int var0 = --n1;
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-boolean var3 = true;
+public static int getNthFibonacci() {
+    n0 = --n;
+    double var4 = (0.1589925806485416 - ((((0.5012596194475503 / (0.7709906842714511 % 0.9445652526818054)) * 0.29879979950452795) * 0.8736016171444173) + (0.9196472505133925 - 0.8988575538388273)));
+    n0 = ((n - (-1394147754 % (((n1 + -2059810015) + n1) % n))) * ((492002907 / n0) * ((1891808275 - 1364269802) / n0)));
+    double var3 = var4;
+    double var6 = (var3 / ((var4 / (((var3 % var3) - 0.3494373164598823) / var3)) + (var4 + var3)));
+    int var5 = ++n0;
 }
-n1 = ((n * (1735273400 % n)) * (1641991912 % (--n1 - --var4)));
-int var6 = ++n1;
-return n1;
 
 27|***************************
-if (true) {
-n0 = ((((849508196 % ++n) + (++n0 / n)) * n) * (848112399 % n));
-boolean var1 = (true ^ false);
+public static int getNthFibonacci() {
+    boolean var8 = ((false && ((false || true) || (true || ((true && false) || true)))) || false);
+    int var0 = --n;
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        double var3 = ((((((0.18950049140696623 + 0.6593918175269987) % 0.06761024588829989) + ((0.059838472104045026 * 0.0878295609394647) * 0.06729144630926287)) % (0.5120959020411587 / 0.2977381350263547)) * (((0.5700895534417494 * 0.8173034982697964) - ((0.4872939013033172 + 0.09190101224854563) % 0.36730533680656297)) + ((0.20039878881653028 + 0.5619144122586386) % 0.46586162479161064))) - 0.5736278861553231);
+        n1 = ((1000552720 % ++n1) + n1);
+    }
+    double var7 = ((0.1034366151087539 - ((0.7579353587498076 - 0.25237595741757424) - ((0.9165951674999627 / 0.6208074874902519) % (0.7881803931185056 % 0.07411701804185256)))) % 0.5535651850701432);
 }
-n1 = (++n % ++n0);
-boolean var0 = (true ^ ((false ^ false) ^ true));
-return n0;
 
 28|***************************
-boolean var6 = true;
-int var4 = n;
-int var0 = (((var4 - (n / ++n0)) / (var4 + (555347966 + -945718636))) / (-265075658 % n));
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-int var5 = var4;
-n1 = --n;
+public static int getNthFibonacci() {
+    boolean var6 = (true || false);
+    n = ((((n + (1103277979 % (133449342 / n))) / -1388680064) % -221337186) + ((((n0 * (1615902708 % n)) / n) * n) * ++n));
+    boolean var4 = (true && (!var6 ^ false));
+    int var0 = -351893031;
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        boolean var5 = (false ^ var4);
+    }
+    double var3 = (0.034896487646255525 - ((0.3310864662618226 % (0.1608418531939353 - 0.9476953985810287)) % 0.789791492153185));
 }
-int var3 = (n1 * (n * n1));
-return var3;
 
 29|***************************
-int var7 = --n;
-int var0 = --var7;
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-boolean var8 = false;
-int var3 = (32137482 % --var7);
-for (int var4=0,var5=var4; (var4<var3 && var4<100); var4++,var5=var4) {
-int var6 = (++n + ((((--var7 % --var7) / (-1552367984 / ++n)) - (++n + -1862066220)) * ++n));
+public static int getNthFibonacci() {
+    n0 = ++n1;
+    int var4 = ++n;
+    int var0 = (n1 % --n);
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        int var5 = ++n;
+        n = ((++n % -693698262) * ((-1795509510 - (var4 / ++n0)) % ++var4));
+    }
+    double var3 = ((0.5145982168682468 + 0.17746725152048903) / ((0.6534362175465982 * 0.6267062234224815) / (((0.854875137085038 * 0.6375442030995123) - (0.4200618633610952 * 0.8591947324199107)) * ((0.1992078516083282 + (0.8820604906400894 % 0.248346079642091)) + ((0.2846529928416832 / 0.48768667890023043) * 0.9378204804839889)))));
 }
-}
-int var9 = (n + (n1 - ++n));
-return n;
 
 30|***************************
-double var7 = (0.08244897844813726 % (0.9339046354205391 - (0.30872085951933625 / (((0.5184230837328724 - (0.2067888148817716 / 0.4544464378165525)) * (0.6997980789983369 * (0.600088445594145 - 0.08217678149117924))) + (0.22547700306132157 % (0.6533575784308148 % 0.021969226831174304))))));
-double var6 = ((var7 - var7) * 0.39297290827596854);
-int var8 = n;
-int var9 = -1413463837;
-var9 = --var9;
-n = ((++var8 * (--n + (n / (((--var9 - 207185471) % 1743607278) / ++var8)))) * (2099732185 / --n));
-return n;
+public static int getNthFibonacci() {
+    int var0 = --n;
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        boolean var4 = (false && (true || false));
+        n0 = (++n0 + ((2134735817 + n0) % --n0));
+        boolean var5 = false;
+    }
+    boolean var3 = (true ^ false);
+}
 
 31|***************************
-double var0 = 0.9604622278262118;
-boolean var1 = false;
-n1 = ((1594235819 / (--n * n)) - (((-1731634185 + n) + (n1 * ((++n1 / 2093784413) - (n * (713141929 + n0))))) % n));
-n0 = ((n1 * n) - --n1);
-double var2 = 0.429758945389475;
-double var3 = ((var0 / var0) - var0);
-return n0;
+public static int getNthFibonacci() {
+    n0 = --n;
+    double var10 = (((0.4164173861641616 + ((0.8862583740779028 - 0.3354697015429241) - (0.3174994020765801 + (0.7948740623355894 + 0.3025325290697364)))) * (((0.667502588526127 - 0.4060626268002022) * 0.48605154081385415) - 0.4208771012285115)) - ((0.1613672634634291 + (0.28985980800118394 * (0.325130547115729 + (0.6812380378053562 / 0.9560952979381531)))) * (((0.8050430993954208 * 0.001701250912549357) + (0.8961002293251893 - (0.9088902227307324 - 0.7726195785073944))) % (((0.1599112184784356 + 0.8102659493799873) % (0.5492713854008995 % 0.5195226607892438)) % 0.6470791162908804))));
+    n1 = (n0 * ((1905498719 % n) * ((1254434095 - -679677098) % ++n)));
+    n1 = (++n1 + n0);
+    int var3 = ++n;
+    for (int var4=0,var5=var4; (var4<var3 && var4<100); var4++,var5=var4) {
+        boolean var9 = ((true ^ false) ^ (true ^ true));
+    }
+}
 
 32|***************************
-int var0 = n0;
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-boolean var3 = false;
+public static int getNthFibonacci() {
+    double var0 = (0.9487393088276117 + 0.16512509348630966);
+    n0 = --n;
+    int var1 = ++n0;
+    int var3 = n;
+    n0 = ((n1 - ((2075412611 * (--n + (-176470019 + --var3))) % --var1)) + (((429242093 / var1) * --n) * var1));
+    double var2 = var0;
 }
-n0 = ((1372598150 / n) * (((--n - n1) / ++n) * ++n));
-double var4 = ((0.23402053452202465 - (((0.5146420644494125 % 0.3595103796330139) - (((0.9986851334930342 * (0.25842452848315567 % 0.49162966021388976)) / 0.106380785460918) - 0.4633005156115867)) + 0.5429257227042592)) - ((0.40814400711329535 - (((0.4999272409610396 * (0.9165408094227778 * 0.10750199812805372)) - 0.19849664977969328) * 0.7863620970851035)) + 0.29829800416622176));
-boolean var5 = true;
-int var6 = ++n0;
-return n0;
 
 33|***************************
-n1 = ((1111789673 % (n % (--n - -141675614))) * (--n * n));
-int var3 = (((n - n0) - (-1390626720 / ++n1)) - (n0 % n1));
-for (int var4=0,var5=var4; (var4<var3 && var4<100); var4++,var5=var4) {
-int var8 = (-2068507841 + (--n1 - n0));
+public static int getNthFibonacci() {
+    double var4 = ((0.7115731332885199 - 0.18241332880757377) - 0.257708740262678);
+    double var5 = (var4 - (var4 + 0.24690647831222223));
+    if ((true ^ false)) {
+        var5 = (var5 - 0.5307349155470044);
+        boolean var0 = (false ^ false);
+    }
+    n0 = ((((190125771 % --n) * n) + (--n + (((++n1 * n) * -1460015277) / (n1 * n)))) * n);
 }
-int var7 = n0;
-double var6 = 0.05046134979243866;
-return n1;
 
 34|***************************
-boolean var7 = (false ^ ((false && (((true && ((false || (false ^ ((false ^ false) && false))) ^ ((true ^ false) && true))) || false) && true)) || (false && (true && false))));
-int var3 = --n;
-for (int var4=0,var5=var4; (var4<var3 && var4<100); var4++,var5=var4) {
-double var6 = 0.4319018879949972;
-int var8 = ++n0;
-int var9 = n;
+public static int getNthFibonacci() {
+    n1 = ((1972201480 % n) * (--n * --n));
+    int var0 = (442530940 * (n1 - ++n0));
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        int var3 = --n1;
+    }
+    double var6 = 0.27351121484465934;
+    int var4 = -2006265408;
+    int var5 = ++n1;
 }
-n1 = (((264889901 / --n) * (n0 % (--n + (--n - n1)))) * n0);
-return n1;
 
 35|***************************
-double var8 = ((((0.3877715130883036 % (0.1368138654802742 * (((((0.10734810737526645 + (0.08402688830186389 % 0.5211051873668145)) / 0.32846263430207) / ((0.8974382276102746 / 0.28167994613080616) * 0.09961890030835785)) * 0.2726837187583908) - (0.2005932863619665 / (0.7490137072107544 / 0.7173755291237462))))) - (((0.3372212194649312 - 0.42045294826903634) - 0.7229314287285801) * 0.028089697598616792)) * 0.9109460104647511) + 0.9228931109228343);
-boolean var0 = ((false && (true ^ false)) && (false && true));
-int var7 = --n;
-boolean var9 = (true ^ !var0);
-n0 = ((--var7 * (1952253590 % ++n)) * (++n0 + ++n));
-int var10 = (++n0 / ++var7);
-return n0;
+public static int getNthFibonacci() {
+    n1 = (++n1 / (++n0 + 1405265469));
+    double var5 = (0.3246915757911879 - 0.6816533906996733);
+    boolean var6 = true;
+    double var4 = 0.8958735130455409;
+    n0 = ((n * (731391353 % --n)) * (n - (++n1 - (++n1 / ((1270175831 + -2045409444) / (--n1 - n))))));
+    int var3 = ++n0;
+}
 
 36|***************************
-n0 = --n;
-int var2 = (1138734180 * -1862911471);
-if (((false && (false || (true ^ false))) ^ false)) {
-boolean var0 = (((false || false) ^ (true && ((false && true) && ((((true && (false && false)) ^ ((false || ((true || false) || (true || false))) ^ true)) && false) || true)))) ^ false);
-boolean var1 = ((var0 && !var0) || var0);
+public static int getNthFibonacci() {
+    int var9 = n;
+    n = (--n * (n * (558664503 / ++n)));
+    int var3 = ++n;
+    for (int var4=0,var5=var4; (var4<var3 && var4<100); var4++,var5=var4) {
+        double var7 = 0.6681068732499295;
+    }
+    double var6 = 0.5387513577128593;
+    int var8 = ++n1;
 }
-n = (((--n * ++n) * (348567641 % n0)) - ((++n / (((n0 * (--n1 + n0)) + n) - (++n / 1426690458))) - ++n1));
-return n;
 
 37|***************************
-double var0 = (0.6052610094291319 % ((((0.4560709507241273 - 0.029948919318050993) % ((0.5236650727379453 / (0.8986590853483545 / 0.7683332297789119)) / 0.5703643030389349)) / 0.46328827402509876) / (((0.3214136050847932 % ((0.8705160723344718 % 0.7584809874477239) / 0.6259925685399049)) * 0.16580349631821267) % (0.19651731594094213 - 0.317020346603473))));
-boolean var7 = ((true && false) || true);
-boolean var6 = !var7;
-int var4 = (n * ((1838207080 % (++n1 + (++n1 + (1410993356 * (--n - ((((--n * --n1) - ++n) * n) / ++n1)))))) % (--n * n)));
-int var5 = ++var4;
-double var8 = 0.2865928400853768;
-return var4;
+public static int getNthFibonacci() {
+    int var0 = --n;
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        int var7 = ++n0;
+        n0 = n1;
+        int var8 = --n1;
+        n1 = (++n1 + (--var7 / ++var7));
+        boolean var6 = (false ^ false);
+    }
+}
 
 38|***************************
-int var0 = n;
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-int var9 = --n1;
-boolean var3 = (true && false);
+public static int getNthFibonacci() {
+    int var4 = n;
+    boolean var3 = (true && false);
+    n0 = (n0 - (1501916539 / ++n));
+    n = ((++n0 * n) * ((n1 % (((--var4 + var4) / ++var4) + n0)) + (n0 % ++n)));
+    int var5 = --n;
 }
-double var8 = (0.6052577624591416 * 0.9968825209767375);
-int var7 = (((n - ++n0) * (1185654472 % n)) * ((901525223 % n1) * (n0 % ((-1547123599 - n0) - (n0 * ++n0)))));
-int var10 = ++var7;
-return var7;
 
 39|***************************
-n1 = ((n0 - n) - n);
-int var1 = --n;
-n = (var1 * ((1581995209 % (var1 * --n)) + (((n1 + (254249823 - var1)) * ++n) % ++n1)));
-boolean var2 = false;
-int var0 = ++n;
-n1 = var0;
-return n1;
+public static int getNthFibonacci() {
+    int var0 = --n;
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        boolean var7 = (false || false);
+        double var8 = (0.32656530617482926 % 0.10761955219483788);
+        n0 = (n1 + (n0 + (51646313 % --n0)));
+    }
+    double var6 = 0.8119740293965537;
+    int var9 = (n0 / ((2004876985 * n0) / 375343930));
+}
 
 40|***************************
-double var4 = 0.9632455999796489;
-n = (((650403593 / --n) * (((--n + ++n0) + ++n0) - (--n1 + n0))) * --n);
-double var0 = (var4 + (var4 - var4));
-double var1 = var0;
-int var3 = ++n;
-boolean var2 = false;
-return n;
+public static int getNthFibonacci() {
+    double var0 = 0.10472380521166413;
+    int var1 = n1;
+    for (int var2=0,var3=var2; (var2<var1 && var2<100); var2++,var3=var2) {
+        double var5 = 0.3355320431521087;
+    }
+    n = ((((-1085762732 % n) - -422974597) % n) * ((--n - ((1605276139 - ++n0) % ++n1)) * --n));
+    int var6 = ((++n - ++n1) * -495592413);
+    boolean var4 = ((false && false) && (false && false));
+}
 
 41|***************************
-int var0 = --n;
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-n1 = ((1798387450 % ++n1) + n1);
-int var5 = n1;
-double var3 = ((((0.05078802005752281 / 0.5094928670308889) - 0.7387524883902999) / (0.2506251594960164 - ((0.4546316907315838 * (0.0468600700404298 / (0.05536561950041585 % (0.35431595353145495 / (0.15037806470228998 - ((0.0026439519556579194 - 0.06615240303910508) * 0.30919515896243854)))))) % ((0.02538401547811353 * (((0.7381985290755485 + 0.28318164120550826) + ((0.6622602384558978 - 0.8143354965328025) + 0.707969945419216)) - 0.5642529559146895)) * (((0.41919565201645903 + (0.9384323500071104 % 0.346736043205889)) / 0.9877820472458578) - (0.7108207357642203 - 0.053784769410717415)))))) * ((0.39130426127393325 * (0.7628068323674919 - (((0.015035812477767307 * (0.16887765436230284 % ((0.5887465178100715 / (0.19793023360109852 % 0.3107642588456524)) / 0.2011373670295361))) + (0.8763190965448338 * ((0.009336642836434761 / 0.40726276926330884) % ((0.1843994986199573 % (0.46256765177771797 % 0.7646790100108893)) % 0.5668837516085352)))) * (((0.5942996555697991 * 0.022457103959467872) - (0.6200630234956009 * 0.20521830351005155)) * 0.8936059281118566)))) / 0.38744234554258905));
+public static int getNthFibonacci() {
+    int var0 = ((1074308810 % --n) % 1271509968);
+    n1 = ((n1 + (n - --n0)) * (--var0 * (var0 - (-56415410 % var0))));
+    double var1 = (0.29233655080775844 * 0.012080976943338317);
+    int var7 = --var0;
+    int var2 = 865375923;
+    boolean var6 = ((false ^ true) ^ true);
 }
-n0 = --n0;
-int var4 = (2095507714 - (((-1137342166 + 356611525) * n1) / 1249685067));
-return n1;
 
 42|***************************
-if (false) {
-int var0 = (n0 + ++n);
+public static int getNthFibonacci() {
+    if (true) {
+        double var0 = 0.3488811659846125;
+        double var1 = (((var0 + (((var0 * var0) / (0.4731924071534064 + var0)) * var0)) / (0.5659089931905936 % 0.43906221437862336)) * 0.19595733316969977);
+        int var2 = ++n1;
+    }
+    n = ((((2044914461 - (n % n1)) / --n) % n) * (--n * --n));
+    int var3 = ++n;
 }
-boolean var1 = (false ^ ((true ^ (false ^ false)) && (true && (((true ^ false) ^ false) && false))));
-if (var1) {
-}
-n = (((545862033 % ++n) * --n) * --n);
-int var2 = ++n;
-return n;
 
 43|***************************
-double var3 = 0.8702650028089441;
-double var5 = (0.2713294494395765 + (0.2504792917071704 % 0.45715661147681674));
-int var0 = ((n * --n) * ((n - (1729785428 % --n)) - ((++n0 / ((++n / ++n) + ++n)) / ((-1443098516 / (-20782717 % ++n)) * -184160825))));
-boolean var1 = false;
-double var2 = var5;
-int var4 = ((var0 + ++var0) % --n0);
-return var0;
+public static int getNthFibonacci() {
+    n0 = (n * ((n1 * --n) * (1175736879 / --n)));
+    boolean var5 = ((true ^ true) || false);
+    int var0 = (((n1 + n) * 176919475) / ++n0);
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        int var3 = ++n;
+        n0 = (37911589 % --n1);
+        double var4 = 0.4692645180256567;
+    }
+}
 
 44|***************************
-boolean var4 = (false && (true && false));
-boolean var6 = false;
-double var5 = (0.8702392753850788 % 0.977676209572188);
-n = ((1618678387 / (((--n1 - (++n + ((n1 / n0) * --n))) * --n1) * n)) * --n);
-int var3 = ++n;
-return n;
+public static int getNthFibonacci() {
+    int var2 = (-374851636 / n0);
+    if (false) {
+        double var0 = 0.39712557387473457;
+        double var1 = 0.5589589090118364;
+    }
+    n1 = ((((((1573306969 - n) % n) / (-2122108423 - ++n0)) * n) + (-939429149 % --n)) * --n);
+    n0 = ++n1;
+}
 
 45|***************************
-n1 = (-76770411 % n);
-int var0 = ((-1118310568 / n) * (n * --n1));
-double var4 = 0.4121581677462789;
-boolean var1 = false;
-boolean var2 = var1;
-int var3 = ++var0;
-return var0;
+public static int getNthFibonacci() {
+    if ((true || true)) {
+        int var7 = 195179289;
+        boolean var0 = ((true && (true || ((false && (false && true)) || false))) ^ false);
+        n = (--n * (n * (18914095 / ((n - (++n % ++n0)) + --n1))));
+        int var9 = (++n % n0);
+    }
+    double var8 = (((0.6458614376008622 % (0.012704359773372587 / 0.06648470529500983)) - 0.8833997512706364) * ((0.09136244902293955 + (0.5032620793961319 * 0.501771939137545)) + 0.7038358118170596));
+}
 
 46|***************************
-double var5 = 0.08500777296863593;
-n0 = (1665810137 % ++n);
-boolean var0 = false;
-int var1 = (((++n * --n) % --n0) + n0);
-n = (++var1 * (n0 * n));
-int var6 = ((n1 / (n0 * ++n1)) * ++n);
-return n;
+public static int getNthFibonacci() {
+    boolean var4 = false;
+    int var0 = --n;
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        if (!var4) {
+            n1 = (++n1 + (2080850542 % --n1));
+        }
+    }
+    double var3 = ((0.06422459702942551 - (0.6615269354549331 * 0.6721128091603922)) % 0.5731655947180697);
+    double var5 = (((0.4082746514334398 % 0.72396407073224) + var3) + var3);
+}
 
 47|***************************
-boolean var7 = false;
-boolean var4 = !var7;
-n0 = (((--n - n1) * (545967515 / (n * n))) + (-209673273 % n));
-double var0 = 0.4541673662355028;
-double var6 = ((var0 % var0) * (var0 + 0.6832164284220582));
-int var5 = (++n0 % -1194776301);
-return n0;
+public static int getNthFibonacci() {
+    n0 = --n;
+    n = (n * ((820840691 + ++n1) % (++n0 * --n0)));
+    int var0 = (-938695557 % ++n);
+    n = (((++n / --n0) % n1) + --n);
+    double var5 = (0.7665950380459687 - 0.5865184863474623);
+    boolean var1 = (((false && (true ^ false)) || ((((true || false) && true) || (true ^ true)) && (false || ((false || false) && true)))) || (true ^ true));
+}
 
 48|***************************
-n = ((--n + (((n1 - ((++n * 251455068) - 1975149400)) / --n) + n1)) * (--n * (1132022092 % n)));
-n = (--n % (--n + ++n0));
-int var4 = ++n1;
-int var0 = ++n;
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-double var3 = (0.33709456428759366 + (0.978186428638235 + ((0.5196720805076704 * ((((0.277995861047753 * 0.2694923325153147) / ((0.45425080456187283 / ((0.7272192227303853 % 0.2571988234011049) + (0.9146450484107586 % 0.374800631939442))) + 0.15064870510106798)) % 0.7574688811457415) % 0.9732522622797444)) % (0.15008577727678996 * 0.8535158721919303))));
+public static int getNthFibonacci() {
+    n = ((n / --n) + (n - (--n1 / (n0 * n0))));
+    boolean var1 = ((((false && (true && true)) && (false || (true || (true && false)))) && (((false ^ (true && true)) ^ false) ^ (true ^ true))) || false);
+    double var3 = 0.38015474438968366;
+    double var2 = ((0.7513871737629664 % var3) / 0.14475313369777454);
+    n0 = (n * ((-1056559547 / n) + (((1563744873 % -26724503) % n) * ++n)));
+    int var0 = ++n0;
 }
-double var5 = 0.830184264690073;
-return n;
 
 49|***************************
-boolean var0 = (false ^ true);
-boolean var5 = !var0;
-n0 = ((n % (++n0 % (--n * (((382277398 * n) * --n1) + (++n * (855167973 + ++n0)))))) + (1368394360 / --n));
-n = ((n0 * ++n) * n0);
-int var6 = ++n;
-double var4 = 0.9233060939384798;
-return n;
+public static int getNthFibonacci() {
+    boolean var3 = false;
+    boolean var4 = !var3;
+    int var0 = --n;
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        n = (n0 + (1034778322 % n0));
+        n0 = ++n;
+    }
+    n1 = n0;
+}
 
 50|***************************
-n0 = n;
-boolean var0 = true;
-n = (((n0 - ++n1) * ((1434638676 % ++n0) * n0)) - ((n0 - (-988698484 * n0)) / n));
-double var1 = ((0.0765931826957128 + 0.1778817250285688) / ((0.7299350267442346 + 0.6478398457828898) * (0.4658172122384182 - 0.6926651802429368)));
-int var2 = ++n;
-return n;
+public static int getNthFibonacci() {
+    double var4 = 0.47503169473110796;
+    boolean var0 = ((false && false) || ((false ^ true) || true));
+    n1 = ((((1766469993 / n) * --n) - ((1774585852 * ((n0 * n) + n)) / ++n)) * --n);
+    int var2 = ++n1;
+    boolean var3 = ((!var0 || true) && !var0);
+    double var1 = ((0.7890705924587943 * (var4 + var4)) + 0.638064671797671);
+}
 
 51|***************************
-int var0 = --n;
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-int var7 = n;
-boolean var8 = (((false ^ false) && false) && (true && true));
-n0 = ((n1 + (1884746092 % n0)) + ((n0 % -436143494) % (n * 1996231112)));
+public static int getNthFibonacci() {
+    int var11 = (1008471036 / n);
+    int var0 = n;
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        int var3 = ((152831098 * --n1) + (++n0 + var11));
+        for (int var4=0,var5=var4; (var4<var3 && var4<100); var4++,var5=var4) {
+            n = (n + (--var11 % ((n1 + ++var11) % ++var11)));
+        }
+        double var6 = (((0.09351739431771355 + (((0.461751012322965 + 0.18903254409902814) - 0.5777739034557403) % 0.445281365450686)) % 0.511432176883993) * 0.7762392494330406);
+    }
+    boolean var10 = true;
 }
-boolean var6 = true;
-boolean var9 = var6;
-return n0;
 
 52|***************************
-boolean var0 = (false || true);
-double var3 = 0.947189699902026;
-if (var0) {
-double var1 = 0.00608841279905703;
+public static int getNthFibonacci() {
+    n = ((n * ((1213191106 % --n) + (((n0 * --n) + (++n1 - ++n0)) - ++n1))) * (236395721 % n));
+    int var0 = ++n;
+    boolean var6 = (true && (((false || true) ^ false) || (false || true)));
+    double var4 = 0.21576357311806849;
+    double var5 = var4;
+    boolean var7 = var6;
 }
-int var2 = ((--n * --n) * (1853729622 / (--n + n)));
-int var4 = ((++var2 + n0) * n1);
-return var2;
 
 53|***************************
-boolean var3 = false;
-double var0 = 0.04460708456312923;
-boolean var2 = var3;
-n0 = ++n;
-double var4 = 0.22378217076193585;
-int var1 = (--n * ((((-177213996 % (n1 - n)) - (-1709102755 + (1983478913 / n))) + (1720550164 % (n0 % 1512624041))) / (n0 * n0)));
-return var1;
+public static int getNthFibonacci() {
+    double var9 = (((0.5592935041580818 % (0.5438862441705666 - ((0.9271324248843944 + 0.49138280692109615) * (0.22889304747815076 % 0.09944026736271527)))) * 0.8681934559988236) - 0.4731058503167621);
+    int var0 = (n - (++n1 + n0));
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        int var3 = (264900636 / (-1715879939 / (++n1 - (++n + ((--n1 % 2084693492) % --n0)))));
+        for (int var4=0,var5=var4; (var4<var3 && var4<100); var4++,var5=var4) {
+            int var8 = ((++n % ((((1971132690 - ++n) % -2051233392) / (++n / -1909193989)) - n)) + ((++n * n0) + ++n));
+        }
+        double var7 = ((var9 - 0.3353258723917969) + 0.35387792068931945);
+    }
+    double var6 = ((var9 * var9) % var9);
+}
 
 54|***************************
-n0 = (--n * ((1598590493 % n) * --n));
-int var0 = (686752413 % (++n0 - n));
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-boolean var3 = true;
-int var6 = --n0;
+public static int getNthFibonacci() {
+    int var0 = --n;
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        double var3 = 0.8550898532755136;
+        n1 = (n1 + (1544204749 % ++n1));
+    }
+    double var4 = 0.0767731941899199;
+    int var5 = -2144345667;
+    double var6 = 0.5612941710121724;
 }
-double var5 = 0.5835556189693767;
-int var4 = ++n0;
-return n0;
 
 55|***************************
-int var4 = --n;
-int var0 = (--n1 / --n0);
-int var1 = (--var0 + --var4);
-for (int var2=0,var3=var2; (var2<var1 && var2<100); var2++,var3=var2) {
-n0 = ++var0;
+public static int getNthFibonacci() {
+    n0 = (++n0 / n);
+    int var0 = (++n0 % n);
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        int var4 = (--n * --n);
+        boolean var5 = ((false ^ false) || ((((false && (false && true)) || (false || false)) && true) || ((((false ^ true) && true) ^ true) ^ true)));
+        n0 = ((--var4 * ++n1) * --n);
+    }
+    boolean var3 = false;
 }
-n1 = (n0 * ((--var0 - (((-293592951 - (((-913271481 / 785137423) / --n) + ++var0)) * n) % ++var0)) * var0));
-return n1;
 
 56|***************************
-int var8 = ++n0;
-int var0 = --n;
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-int var3 = --var8;
-for (int var4=0,var5=var4; (var4<var3 && var4<100); var4++,var5=var4) {
-n1 = (n1 - ((var8 * -2024108497) % (n1 + (var8 + ++var8))));
+public static int getNthFibonacci() {
+    double var6 = 0.23238682072004158;
+    n1 = 1411506086;
+    n = (--n * (n * (--n1 % ++n)));
+    boolean var0 = false;
+    boolean var4 = true;
+    int var5 = ++n;
 }
-int var6 = ((n - n) - -630138006);
-}
-double var7 = (0.1904497995148564 % 0.05103445171509102);
-return n1;
 
 57|***************************
-int var0 = --n;
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-double var6 = ((((0.9661567510991386 / 0.5865158017849947) - 0.2945115686686951) + 0.24353892913243913) * (((0.6065003166589369 - (0.5045102665683645 % ((((0.16573888757053978 % (0.7095651547928185 - 0.302023456906643)) / (0.17748332153361657 * 0.14797668698183952)) / 0.6851189337012519) + (0.11820658465310652 + (0.27437475060288596 - 0.6081668637658734))))) * 0.28482578656334656) + 0.924076389013389));
-int var5 = n0;
-n0 = (++n0 + (847915536 % n0));
+public static int getNthFibonacci() {
+    n1 = (--n1 % (404457002 * 1070627539));
+    double var5 = 0.833293005185207;
+    boolean var3 = (true ^ true);
+    n = (((1067430486 / n) * (((--n % (-1977249628 / n)) + --n) / -111398307)) * --n);
+    boolean var4 = !var3;
+    int var6 = ++n;
 }
-int var3 = (n0 + (--n0 / (((-494904603 - n0) % n0) * (++n - ++n))));
-boolean var4 = true;
-return var3;
 
 58|***************************
-int var1 = --n;
-double var0 = 0.2561018766673866;
-n1 = (((((142919690 / (n * (27142505 + ++n0))) - ++n) / n) * var1) * var1);
-boolean var4 = (true ^ true);
-double var3 = (var0 + 0.9757604406483994);
-int var2 = ++n1;
-return n1;
+public static int getNthFibonacci() {
+    int var0 = --n;
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        n = --n1;
+        n1 = ++n0;
+        n0 = (++n + --n0);
+        boolean var7 = true;
+    }
+    boolean var6 = (false || ((true || true) ^ (false ^ true)));
+}
 
 59|***************************
-if (true) {
-double var0 = 0.5736473588928108;
+public static int getNthFibonacci() {
+    double var8 = (0.688827488676704 - 0.3482943940172232);
+    boolean var7 = (((true && true) ^ false) || (false && true));
+    int var0 = ((((++n1 * ++n1) + n1) * n0) * n);
+    int var1 = var0;
+    for (int var2=0,var3=var2; (var2<var1 && var2<100); var2++,var3=var2) {
+        int var4 = --var0;
+        for (int var5=0,var6=var5; (var5<var4 && var5<100); var5++,var6=var5) {
+        }
+    }
+    n0 = (--var0 * (var0 + (++var0 % --n)));
 }
-int var1 = (n0 + 453537593);
-n = (--n * ((--var1 % n) * --n));
-n1 = ++n;
-return n;
 
 60|***************************
-int var0 = --n;
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-var2 = ++n0;
-n = n1;
-n1 = n0;
-n0 = (--n + n0);
+public static int getNthFibonacci() {
+    if ((((((false && (true ^ false)) ^ (false ^ false)) && (true ^ false)) ^ (((false || true) || ((false || false) && (false ^ true))) && (false || (false ^ (false || false))))) || (false ^ (true || false)))) {
+        n1 = (n - ((n0 + (-684558813 * ++n)) / ++n0));
+        boolean var0 = true;
+    }
+    n = (((112460847 % --n1) * (((++n + 18688295) / 683865289) % ++n)) * n1);
+    n1 = 609497427;
+    n1 = ((--n1 - (++n - ((n % (2043880324 - 749883968)) * ((++n - -383457672) % ++n)))) + ((n / ++n1) % (--n1 - n1)));
 }
-double var6 = (0.22557474780671372 % (0.7913649399170898 * 0.12563305253354873));
-return n1;
 
 61|***************************
-int var0 = (--n + ((-2103465422 - ((-2036536052 % 1939762154) / (n * --n))) % --n));
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-if (true) {
-int var3 = ++n1;
-int var6 = --n0;
+public static int getNthFibonacci() {
+    boolean var5 = ((false || (((true || false) ^ ((true || true) ^ false)) && true)) && (false && ((false || true) || false)));
+    int var0 = n;
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        n1 = ((1748566202 / ++n1) + n1);
+        double var3 = (((0.060160844398487456 - 0.7401314884580392) + ((0.7584806776997821 % (0.18242945226731588 * 9.182749192673256E-4)) + 0.8456255368306009)) * 0.48650032711462576);
+        double var4 = var3;
+    }
+    n = (n1 - (n + (1548040018 % ++n)));
 }
-int var4 = (((n0 * n1) * (-1300540708 % 483724546)) * (n0 % ((--n * ((--n + (-1867651682 + -1559649525)) - 2075447248)) % n0)));
-}
-int var5 = (n0 * (n0 * (n1 - ((n % n0) / (--n1 % -93323156)))));
-return var5;
 
 62|***************************
-double var0 = 0.38873345342924015;
-n = (--n * ((((--n + --n0) % (1522194906 % n)) + ++n) * (444958505 / n)));
-double var1 = 0.3344867647855094;
-var1 = var1;
-n = ++n;
-return n;
+public static int getNthFibonacci() {
+    double var0 = 0.7350583955153346;
+    int var4 = --n0;
+    boolean var1 = (true || (false ^ false));
+    n0 = ((--n + ((--n0 - ++n1) - (-860243720 / --n))) * ((1362211609 / (n + n1)) * (n - n1)));
+    int var3 = ++n0;
+    boolean var2 = (!var1 && var1);
+}
 
 63|***************************
-boolean var5 = false;
-int var0 = -1476047319;
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-int var3 = ++n;
-double var4 = ((0.10688264624828991 / 0.6002468121834176) + ((0.822491561210961 % 0.49655469901023996) + 0.28160357033694694));
+public static int getNthFibonacci() {
+    n = ((n + n0) * ((219801004 % n) * (1196001279 / ++n)));
+    int var4 = ++n;
+    n = (n - ++n1);
+    int var0 = --n;
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        n0 = --var4;
+        double var3 = (0.6991667195050125 * 0.09921226718153653);
+    }
 }
-n = ((((++n - -65584597) / --n) * --n) * (++n + --n0));
-int var6 = ++n;
-return n;
 
 64|***************************
-int var4 = --n0;
-n0 = n;
-n1 = (((1301315431 % -2038368678) % (--n1 + n)) % (--n0 + --n1));
-n = (++n * ((n0 * (n1 % -1582457480)) - (++var4 / n0)));
-int var3 = ++n;
-return n;
+public static int getNthFibonacci() {
+    int var0 = ((++n - ++n1) % n);
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        double var3 = 0.5110441437332932;
+        n1 = ((1996817016 % ++n1) + n1);
+        var3 = ((var3 / var3) + 0.7210913514817875);
+    }
+    double var4 = 0.6073554918420249;
+    n0 = --n1;
+}
 
 65|***************************
-n1 = ((--n * n) * --n);
-int var0 = (1345070091 + ((-1490960788 * (++n - ++n0)) / (n + (++n0 / (--n / -1556476137)))));
-var0 = (--var0 / n1);
-boolean var1 = (true || true);
-int var2 = (++var0 - (((-1535484035 / n1) * 960526268) / -686007782));
-return var0;
+public static int getNthFibonacci() {
+    double var1 = 0.2527550562902825;
+    n = (((2145810200 % n) * ((2072592159 % ++n) / -779369319)) * (n - (n % ++n0)));
+    if (((false ^ false) && false)) {
+        int var2 = -2091029409;
+        boolean var3 = false;
+    }
+    int var0 = ++n;
+}
 
 66|***************************
-double var3 = 0.40716638752216483;
-boolean var2 = false;
-int var0 = ((--n + --n) * ((--n * ((1638459642 - (((--n0 * -1775180679) + (--n - -1025538948)) % -601447518)) / n)) - --n0));
-boolean var5 = var2;
-double var1 = 0.9264333858687075;
-int var4 = (++n1 * n);
-return var0;
+public static int getNthFibonacci() {
+    n1 = --n;
+    n = ++n;
+    n0 = --n1;
+    boolean var4 = true;
+    n0 = (((--n1 + (--n1 + (n1 - ++n))) * ((1492410922 % n0) % --n1)) * --n);
+    int var3 = ++n0;
+}
 
 67|***************************
-int var0 = 1771522449;
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-n0 = (1487492006 % n);
+public static int getNthFibonacci() {
+    n0 = --n;
+    double var1 = ((0.6454388064637496 / (0.6408236336133759 - (0.5937417641255609 - 0.2538138122272626))) + (9.958184679359494E-5 % (0.09530161445154439 % ((0.14248600527059696 - 0.12128164556747989) + (0.12947906914547813 * 0.07777759026264797)))));
+    double var0 = (var1 + var1);
+    n1 = (((195525533 / --n) * --n0) * (95135001 % ((--n % n0) * ++n1)));
+    n0 = ((((++n1 % ((n0 / --n) + (++n1 + --n0))) * n0) + n) + n);
+    int var2 = ++n1;
 }
-n = (n - (1102431376 / ++n0));
-n = (n * (++n0 * --n));
-n0 = ++n;
-return n;
 
 68|***************************
-boolean var1 = (true || false);
-boolean var0 = (var1 ^ var1);
-boolean var2 = var0;
-n = ((586158893 % (894835133 / n)) * (--n * (n - ((1240179265 * --n) % ++n0))));
-int var4 = ++n;
-int var3 = ++n1;
-return n;
+public static int getNthFibonacci() {
+    n0 = (((774749365 / ((n0 + n0) * (n - --n1))) + ((n * (240831770 % --n)) + (--n1 / n0))) * n);
+    boolean var0 = false;
+    n1 = ++n0;
+    boolean var1 = var0;
+    boolean var5 = false;
+}
 
 69|***************************
-int var0 = (n1 + (((--n * --n) + (-798457172 % --n)) * (--n - ((++n0 / n) + ((((((-1266584762 + (++n % 143764095)) % n) / -281804757) + n0) % (--n - n0)) * n1)))));
-boolean var1 = ((false || (false || (true || ((false && false) && (((false || false) ^ false) && ((false || (((true ^ true) || true) ^ ((true ^ true) ^ (false ^ true)))) && (true && (((false && true) ^ false) ^ true)))))))) ^ ((false || true) || ((((((false && true) && (false || (((false && true) && false) && true))) && (((true && true) && (false && ((false && false) && (true ^ false)))) ^ true)) && (((false && (((true && false) ^ true) ^ true)) ^ ((true || ((false || true) || true)) && false)) && (((((true ^ false) || (false ^ false)) || true) ^ true) || ((false ^ false) ^ true)))) && true) ^ false)));
-int var7 = ++n0;
-double var6 = 0.5999545497129202;
-int var5 = var7;
-boolean var8 = (true || var1);
-return var0;
+public static int getNthFibonacci() {
+    boolean var1 = ((((true ^ true) ^ false) ^ false) || false);
+    n = ((n * ((124706572 / (501350428 * n)) / --n)) * ((++n / ++n1) + (n / (((++n0 - ++n1) + (1899825725 / --n)) * n))));
+    n0 = n;
+    int var0 = ++n0;
+    boolean var2 = true;
+}
 
 70|***************************
-double var6 = 0.5682778668903897;
-int var4 = 1401796252;
-int var0 = --n;
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-n1 = ((var4 % n1) + ++n1);
+public static int getNthFibonacci() {
+    int var6 = 1988160889;
+    n = ((--n * n) * (++var6 % (n1 + n)));
+    if (false) {
+        int var5 = 1947766482;
+    }
+    double var4 = (0.1125523065437215 * (0.04687405436871228 / ((0.05596384945053923 - (0.6005622442787983 - 0.7753043218815674)) + (((0.36088160890169085 + 0.9459507942969099) - 0.10727699939627877) / 0.8501301499729613))));
+    int var3 = ++n;
 }
-boolean var5 = true;
-int var3 = 2099406892;
-return n1;
 
 71|***************************
-int var12 = --n;
-n0 = ((16257148 / n) * (n * (647656970 / ++var12)));
-double var10 = 0.6769262551114956;
-int var7 = ++n0;
-for (int var8=0,var9=var8; (var8<var7 && var8<100); var8++,var9=var8) {
-boolean var11 = false;
+public static int getNthFibonacci() {
+    double var0 = 0.5411923626699658;
+    if (true) {
+        boolean var3 = true;
+        double var2 = (0.6273096536355661 + 0.142108153521453);
+        n = (n * ((1844433305 / ((n1 - n) / 1843474324)) * n));
+    }
+    int var1 = ++n;
 }
-double var6 = var10;
-return n0;
 
 72|***************************
-int var0 = (n * ((2119963638 / ++n) % (++n0 * (-1239645070 / ++n))));
-if (true) {
-int var5 = n;
-int var6 = (335002748 % -626876347);
-n0 = (++var0 * --n);
+public static int getNthFibonacci() {
+    if (true) {
+        n1 = (((((n / (n * ++n)) % --n1) / --n0) + ((--n / ++n0) * --n0)) + --n);
+        n = ((--n1 * ((207484 / n) * --n)) / 537061722);
+        int var2 = ++n;
+    }
+    double var1 = (0.13519668089829628 % 0.855884649417263);
+    double var0 = (var1 % 0.9439553694505336);
 }
-int var4 = --n0;
-return n0;
 
 73|***************************
-boolean var5 = true;
-int var0 = ((n0 + --n) * (((((n % (((n / ++n0) + ++n0) + n0)) / n0) + 1758449464) % n) * ++n));
-boolean var4 = !var5;
-int var1 = ++var0;
-for (int var2=0,var3=var2; (var2<var1 && var2<100); var2++,var3=var2) {
-boolean var7 = !var5;
-boolean var6 = var5;
+public static int getNthFibonacci() {
+    n1 = --n;
+    int var0 = ++n0;
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        double var3 = ((0.864218099978897 % (((0.7433332995617101 % (0.380740189661148 * 0.9961784190466414)) * ((0.490180256990296 + 0.5494583870238366) / 0.9345682122855672)) % 0.45289354752678457)) + 0.6162072417500359);
+    }
+    n0 = ((n1 * ((--n + (2108865114 / ++n)) / ++n)) * --n1);
+    int var4 = ++n0;
+    int var5 = (n1 - n0);
 }
-return var0;
 
 74|***************************
-int var0 = --n;
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-n1 = ((1609859182 / n1) + ++n1);
-int var3 = -1555009045;
-double var5 = 0.1268709974735679;
+public static int getNthFibonacci() {
+    double var3 = ((((0.4125621509593401 + ((0.18397565440296837 + 0.3142611887478307) * 0.032350479209203864)) * (0.5677139210127277 % 0.4013558617219771)) + 0.245360062885711) + 0.33754177006254515);
+    double var0 = ((var3 * ((var3 % 0.9352595553267902) + 0.6926186006763184)) + 0.626402355281353);
+    n1 = (--n * (((--n0 - -342744171) / n) * ((2020707580 / ((-1476358485 % 1686920785) / --n)) + n)));
+    double var4 = 0.680265228322013;
+    boolean var1 = false;
+    int var2 = (601189172 / (++n1 * -1798166062));
 }
-int var4 = 427367134;
-return n1;
 
 75|***************************
-boolean var1 = true;
-int var0 = n;
-if (true) {
-n1 = ((--n * (((304504695 % (-1175093238 % (-395817149 % --n))) % --var0) + var0)) * (893836025 / var0));
+public static int getNthFibonacci() {
+    boolean var0 = ((true ^ (false && (((true && false) || (true ^ true)) && (true || (false || false))))) && true);
+    int var4 = n0;
+    double var1 = 0.6573015726309772;
+    double var2 = 0.1713665161500001;
+    n1 = (((523329367 % n) * ((n1 + (var4 + n)) / ((n1 + ++n1) * (1451112363 % n)))) * --n);
+    int var3 = ++n1;
 }
-n0 = ++n1;
-return n1;
 
 76|***************************
-int var4 = n1;
-double var0 = 0.18442279363738268;
-int var3 = n;
-double var1 = var0;
-n1 = (((++var4 + n) * ((++n0 - -841128419) % n)) * n);
-int var2 = (++n1 / (-326244328 % n));
-return n1;
+public static int getNthFibonacci() {
+    int var0 = --n;
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        int var9 = n0;
+        n0 = (++n0 + ((1968270388 + var9) / --var9));
+        boolean var3 = false;
+    }
+    double var7 = 0.8608074707725467;
+    double var8 = var7;
+}
 
 77|***************************
-double var6 = (0.7242297461036662 % (0.3781774071616655 / 0.3213450845744321));
-double var0 = 0.14507991066262294;
-int var1 = --n;
-for (int var2=0,var3=var2; (var2<var1 && var2<100); var2++,var3=var2) {
-n0 = (++n0 + (357536748 % n0));
+public static int getNthFibonacci() {
+    int var0 = n;
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        n = (n + ((-1594616545 % (++n1 * (37372252 % --n1))) * n1));
+        int var7 = --n1;
+        int var8 = n0;
+    }
+    boolean var9 = (true && (true && false));
+    boolean var6 = false;
 }
-boolean var5 = ((((false ^ false) || (((true && false) ^ false) || true)) || (true ^ false)) && (false && (false || (true ^ false))));
-boolean var4 = true;
-return n0;
 
 78|***************************
-double var7 = 0.48898172222757863;
-int var0 = n;
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-int var3 = ((1468718094 % -1118958480) % --n0);
-for (int var4=0,var5=var4; (var4<var3 && var4<100); var4++,var5=var4) {
-double var8 = (((0.10449661642757857 / 0.9607651189719427) + var7) - ((var7 * ((var7 * 0.4885861004240716) * (var7 % var7))) - var7));
-n = (++n1 + ((n0 / (2067611743 / n0)) + (n / (1982242947 % -382650448))));
+public static int getNthFibonacci() {
+    int var0 = ((538871943 + ((-1641953314 * ++n0) % ++n0)) * n1);
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        boolean var3 = (false || (true && ((false || true) || false)));
+    }
+    n1 = ((((((1445994633 / 568752242) * n) / ++n0) + (1402662649 / n)) * --n) * --n);
+    boolean var4 = true;
+    int var5 = (--n1 - --n);
 }
-}
-boolean var6 = true;
-return n;
 
 79|***************************
-int var0 = ((--n * n) * ((--n1 + 811663430) % (n + n0)));
-double var7 = 0.8655940090953775;
-int var4 = (1835960753 % (-232246059 + -637401105));
-int var1 = ++var0;
-for (int var2=0,var3=var2; (var2<var1 && var2<100); var2++,var3=var2) {
-double var5 = (0.8471895862034513 * (0.2980010586346279 / (var7 * (((((var7 % ((var7 % (var7 + var7)) - ((var7 - var7) / var7))) / 0.45513998269183553) - ((var7 - (((0.18561920096981976 - 0.7387905280100521) % (0.5695375017688 % var7)) - (var7 * var7))) / (0.08204973717913788 / 0.49378024740199167))) - var7) * ((var7 - var7) * var7)))));
+public static int getNthFibonacci() {
+    int var0 = --n;
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        int var3 = (1673652493 % --n);
+        for (int var4=0,var5=var4; (var4<var3 && var4<100); var4++,var5=var4) {
+            n0 = (var5 * --n1);
+        }
+        int var9 = (--n0 + (--n + (n1 % (++n - ++n1))));
+        n0 = (++n0 * --n1);
+        int var10 = ++n0;
+    }
 }
-boolean var6 = (false || true);
-return var0;
 
 80|***************************
-boolean var5 = (false || true);
-double var6 = (0.8918881021856827 - (0.6517880811539247 * (0.42454364060578076 % 0.6485882342799394)));
-boolean var0 = false;
-int var1 = --n;
-for (int var2=0,var3=var2; (var2<var1 && var2<100); var2++,var3=var2) {
-boolean var4 = !var5;
-n1 = (((1060184746 + n1) % n1) + ++n1);
+public static int getNthFibonacci() {
+    boolean var2 = (false && (false && false));
+    n1 = (++n * ((57244566 % --n) * n));
+    double var1 = 0.03769422653786492;
+    int var0 = n1;
+    n = (n + ((((var0 / --n0) / 1445754829) + n1) % ((((--n - --n1) / n) * n1) + --n1)));
 }
-return n1;
 
 81|***************************
-boolean var0 = (((false || (true || true)) ^ (true || true)) ^ ((false || true) && ((true ^ false) ^ true)));
-int var3 = (440014077 * n0);
-n = (--n * ((1525698231 % (n + (n0 % ((++n0 / (629200056 / (-567561830 - (--var3 * --n1)))) % n)))) * --n));
-int var2 = ++n;
-boolean var1 = (true ^ false);
-return n;
+public static int getNthFibonacci() {
+    int var5 = n;
+    int var6 = --n;
+    boolean var0 = false;
+    n = ((--n * ((1261460119 / ++var5) / (++var5 + ((-743581448 * -1347491239) / (n * --var6))))) * n);
+    boolean var4 = false;
+}
 
 82|***************************
-if ((((((((false && true) && false) || false) || true) || ((true ^ true) && true)) && false) && true)) {
-int var0 = ++n0;
-double var6 = (0.7731981024528723 / 0.32535931898590187);
+public static int getNthFibonacci() {
+    double var3 = 0.6428625071862344;
+    double var0 = 0.05119387659911123;
+    int var4 = -1143766491;
+    n0 = ((--n * (--n * (546438222 / n))) - (((var4 / n) - n) - ++n0));
+    boolean var1 = false;
+    boolean var2 = (!var1 ^ (!var1 ^ (false && !var1)));
 }
-double var5 = 0.8399979140132278;
-n0 = ((1879276341 % (++n * n)) * ((212539657 / n) + n1));
-int var4 = ++n0;
-return n0;
 
 83|***************************
-int var0 = (++n1 * ((++n - (--n0 - (((--n1 / 1050739007) + 654863850) - 188688555))) / --n));
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-int var3 = (n * -142171961);
-for (int var4=0,var5=var4; (var4<var3 && var4<100); var4++,var5=var4) {
-var5 = (++n0 * ++n0);
-double var8 = 0.08087537779440623;
+public static int getNthFibonacci() {
+    int var0 = ((n0 - n) * (n1 - 1704973588));
+    double var1 = 0.19896509028756093;
+    n1 = (((614748723 % --var0) / n) * (--n * n));
+    int var2 = ++n1;
+    boolean var3 = false;
 }
-boolean var6 = (true && ((true && (false ^ (((true && ((((true ^ false) || false) || ((true && false) && (true ^ true))) && false)) && false) && true))) || ((true ^ (true && false)) && (false || (true || (((((false && (true ^ false)) || (true && true)) ^ (false && ((false || false) ^ false))) && true) && (((false && false) ^ true) ^ true)))))));
-}
-boolean var7 = true;
-return n0;
 
 84|***************************
-if (false) {
-boolean var0 = (((false && (((true && false) ^ (false && true)) || true)) && (true && false)) ^ false);
-boolean var1 = false;
-double var4 = (0.6260285251241399 - 0.6112494037767057);
+public static int getNthFibonacci() {
+    int var3 = (353356071 % n);
+    int var2 = (--var3 % (-809257774 * --var3));
+    n1 = (++var2 * (--n * n));
+    int var0 = ++n1;
+    if (false) {
+        double var1 = (0.6038394922455846 + (((0.7141428141257656 / 0.6459900832680953) - ((0.20293282297915793 / 0.4426007770007766) % ((0.6912759821634529 + 0.6909437721973503) * 0.17277954400563977))) + 0.3820587046490952));
+    }
 }
-boolean var2 = false;
-int var3 = (((n + 1660946198) / (--n + ++n1)) * ((n * --n) - (--n * n1)));
-return var3;
 
 85|***************************
-int var0 = --n;
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-int var3 = ((++n % --n) / --n1);
-for (int var4=0,var5=var4; (var4<var3 && var4<100); var4++,var5=var4) {
-n0 = (--n0 + ((-1057453218 / (++n1 * n0)) + (n0 / -1354556880)));
+public static int getNthFibonacci() {
+    int var0 = 828718871;
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        int var3 = n1;
+    }
+    int var4 = (((n1 + n) - -49084299) % (n - (++n1 / 1413306230)));
+    double var6 = (0.8351377996178623 + (0.1853961112520106 % (0.9742368000598033 % 0.7634528972664464)));
+    n1 = (++var4 * (var4 * n));
+    int var5 = ++n;
 }
-int var6 = (++n0 * -615266763);
-boolean var8 = false;
-double var7 = 0.34665381578126464;
-}
-return n0;
 
 86|***************************
-int var0 = --n;
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-double var6 = 0.026598632864127114;
-n0 = ((1025860368 % ++n0) + n0);
+public static int getNthFibonacci() {
+    boolean var2 = (true && ((((false ^ (true && true)) ^ true) || true) ^ ((((false ^ true) && true) ^ (true ^ false)) && (false && (true || false)))));
+    n0 = (--n * ((((1400109065 + (n % ++n0)) % n) + (--n % ((--n1 - 614177102) % n))) * n));
+    if (!var2) {
+        boolean var3 = var2;
+    }
+    double var0 = (((0.8249146959374932 / 0.5290482401845685) - (0.7420986288584608 * 0.0715117266076607)) * 0.8437295045543932);
+    int var1 = ++n0;
 }
-double var3 = 0.13709844829001838;
-double var5 = 0.3017729017559606;
-int var4 = n;
-return n0;
 
 87|***************************
-boolean var3 = false;
-boolean var0 = true;
-boolean var2 = var3;
-boolean var1 = var0;
-n0 = ((n + n0) * (734680884 % n));
-n1 = (++n0 * (++n - (1201237381 % n)));
-return n1;
+public static int getNthFibonacci() {
+    n0 = ((((-900887010 + 1073082621) % n) * --n) * n);
+    double var5 = 0.35761412601552733;
+    boolean var4 = true;
+    int var0 = (((647553367 * n1) * n1) / ((++n0 / (--n * 1809093010)) + --n1));
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        int var6 = (-1819241723 / --n0);
+    }
+    double var3 = var5;
+}
 
 88|***************************
-n1 = --n;
-double var0 = ((0.33619436982965667 % 0.9433620844018505) - 0.15686693172447053);
-int var4 = (1348317327 / --n);
-n = ((++var4 * n1) * (var4 % ++n1));
-n1 = ++n;
-return n;
+public static int getNthFibonacci() {
+    int var4 = n1;
+    n0 = (--n0 - ++var4);
+    int var5 = --n1;
+    n0 = ((((n - ++var4) * n) + --n0) * ((527796951 / n) + (((n % (--n * --n)) + 359254968) % var4)));
+    boolean var3 = false;
+    n = ++n0;
+}
 
 89|***************************
-n1 = (((2076549652 / n) * (--n + (1573186890 % (--n / -512681178)))) * n);
-double var3 = 0.030040386588276236;
-boolean var0 = false;
-double var1 = var3;
-int var2 = ++n1;
-return n1;
+public static int getNthFibonacci() {
+    int var1 = n;
+    n1 = ((++n * ++n) * (((n1 / ((698773395 / n) % (-1100120247 % --var1))) + 1713964970) / --var1));
+    n = ++n1;
+    if (true) {
+        double var0 = 0.6977422114803367;
+    }
+}
 
 90|***************************
-double var3 = 0.9143979512903492;
-if (true) {
-int var0 = ++n1;
-int var2 = var0;
+public static int getNthFibonacci() {
+    if (false) {
+        boolean var4 = true;
+        int var5 = ((819634936 - n0) * n1);
+        boolean var0 = true;
+    }
+    int var1 = n0;
+    for (int var2=0,var3=var2; (var2<var1 && var2<100); var2++,var3=var2) {
+        n = (n * (n0 + ((1192451512 + ((n * -1038665201) % n)) % (--n * n))));
+    }
 }
-n1 = (563164541 / --n);
-int var1 = (((n1 * n1) - --n1) * ++n);
-return var1;
 
 91|***************************
-int var0 = ++n0;
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-n0 = ((1678473001 % (n0 * --n0)) * ((n - (--n0 / (((++n + --n) % n0) / -1213156248))) % 2121161343));
-boolean var6 = false;
-double var4 = (0.589035530798182 + 0.7307268941773932);
-int var5 = --n;
+public static int getNthFibonacci() {
+    double var9 = 0.2640478134310562;
+    boolean var8 = false;
+    int var3 = --n;
+    for (int var4=0,var5=var4; (var4<var3 && var4<100); var4++,var5=var4) {
+        int var6 = ++n0;
+        n1 = (((1598704351 % 1592996871) % n1) + ++n1);
+    }
+    int var7 = -2103077092;
 }
-int var3 = ++n0;
-return n0;
 
 92|***************************
-if (true) {
-double var1 = 0.12464886492995009;
-boolean var0 = true;
+public static int getNthFibonacci() {
+    double var3 = (((0.0792672825623344 - ((0.8067063079609744 / 0.8298985825008639) + ((0.8094054536526477 + 0.10494751806419766) % 0.9150757931658184))) * (0.3366471546661315 + (((0.17994360446026092 / 0.6284535746614299) - 0.16362748335845312) - ((0.26047174012139196 + 0.21033930764660624) - (0.506850348665837 + 0.14162462016265254))))) + (0.5965932547584882 % ((0.34503571907100994 % ((0.07285029625478945 / 0.22721490379334242) % (0.8386330763374862 - 0.8959474107490478))) - 0.8722681996532055)));
+    n1 = (--n * --n);
+    n1 = (((n1 / (-360582555 % n1)) - (-342423763 % n1)) * (++n / 1294080393));
+    int var0 = (++n1 - (n0 / (++n1 - (n1 % --n))));
+    double var1 = 0.3859303885393184;
+    int var2 = --n0;
 }
-n = ((--n * --n) * ((1170248664 + (((n0 % (206033392 / ++n)) * ++n1) - n1)) / ++n));
-int var2 = ++n;
-return n;
 
 93|***************************
-boolean var2 = true;
-double var1 = (0.20530885730514803 - (0.34886409448164823 + (((((0.06745658267816268 % 0.872734528238612) / 0.6693393754792136) / ((0.025717812149122055 / (0.7784190068716506 % 0.6930286615655386)) % ((((0.6674159471888663 * (0.47829049262711165 + 0.9319735219910269)) / 0.05976534219751817) * 0.2290742278967981) * 0.5835643506214315))) * 0.4741072277639463) % 0.03709541400135552)));
-n0 = (n * n);
-n0 = (n * (1732056338 / n0));
-int var0 = (++n0 - (++n % ((1299273469 % --n) * (476300902 % ++n0))));
-return var0;
+public static int getNthFibonacci() {
+    if ((false || (((false || true) || ((true && false) ^ ((false || true) || (false ^ true)))) && true))) {
+        n0 = n;
+        double var0 = 0.3953532127023289;
+        double var1 = ((0.16411799980573893 % (var0 + 0.20838521197335036)) / 0.1528189055209228);
+        n = (((n0 - (((++n1 / n) % -592227287) + (++n % n0))) * (1214012117 % ++n)) * --n0);
+        n0 = (((n1 - ++n) * n) - n);
+    }
+}
 
 94|***************************
-n0 = 1659199646;
-int var3 = (n1 * -1514678254);
-int var4 = -1598447886;
-int var0 = --n;
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-n1 = (n * n);
+public static int getNthFibonacci() {
+    int var0 = --n;
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        int var3 = --n1;
+        for (int var4=0,var5=var4; (var4<var3 && var4<100); var4++,var5=var4) {
+            double var8 = (((0.24732202963122085 % 0.8620020704720484) - ((((0.20851843632398281 / 0.4055234036866311) - 0.6402267852587408) * ((0.19030175509310399 - 0.3159954981026424) % 0.11951857740919358)) / 0.5039140931920492)) * (0.22897450142099574 + 0.822804543834012));
+            double var6 = 0.8457196321638689;
+        }
+        n0 = ((965443786 % n0) + ++n0);
+        boolean var7 = false;
+    }
 }
-n = (++n * ((2095804087 - (n / ((68791011 - --n0) / n1))) % ++n1));
-return n;
 
 95|***************************
-boolean var7 = false;
-int var0 = --n;
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-int var4 = ((1617002396 * -1029942399) / (--n * (((1571893139 * (++n + (-594046181 / 887760155))) % n) / ((n0 - -885523865) / ++n0))));
-for (int var5=0,var6=var5; (var5<var4 && var5<100); var5++,var6=var5) {
-int var8 = ((((-1535511697 * --n) - (n % (n1 - ++n))) + ((++n0 / n1) * ++n0)) / ++n0);
+public static int getNthFibonacci() {
+    int var3 = --n1;
+    boolean var5 = false;
+    int var0 = (1667099933 / --n);
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        double var4 = 0.0900904072855061;
+        int var6 = (++n1 * n1);
+        n0 = ((n % (n1 - -2108589426)) * ++var6);
+    }
 }
-}
-double var3 = (0.7842771457278224 + 0.7062858136938256);
-boolean var9 = ((!var7 && var7) && var7);
-return n0;
 
 96|***************************
-int var0 = --n;
-for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
-n0 = ((1555775714 % ++n0) + n0);
-boolean var3 = true;
-boolean var6 = !var3;
+public static int getNthFibonacci() {
+    int var0 = --n;
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        boolean var6 = ((false || (false || (true && (false && false)))) || false);
+        int var5 = n1;
+        n0 = ((618257392 / n0) + ++n0);
+    }
+    double var4 = (0.2305989366043193 - ((0.5382840137060103 - 0.5227108965670634) * 0.7123825413549261));
+    int var3 = -303080797;
 }
-int var4 = n0;
-double var5 = (0.5260640403918654 % 0.05051186595269319);
-return n0;
 
 97|***************************
-boolean var2 = (true ^ (((false && true) || ((true && false) || ((false || false) && false))) || false));
-n1 = (--n - ++n1);
-double var0 = (0.5615848639716106 - 0.4190870926255308);
-n1 = (((1511633741 % n1) * (++n1 + (318639769 / --n))) * --n);
-n1 = --n1;
-double var1 = var0;
-return n1;
+public static int getNthFibonacci() {
+    n0 = n;
+    int var7 = (744809990 % --n0);
+    int var0 = (var7 % (var7 - n));
+    for (int var1=0,var2=var1; (var1<var0 && var1<100); var1++,var2=var1) {
+        n1 = ((var7 * (++var7 % ++n0)) * n0);
+    }
+    boolean var6 = true;
+    n1 = (++n1 + --n0);
+}
 
 98|***************************
-n0 = 46642014;
-if (true) {
-int var3 = n1;
-n1 = --n;
+public static int getNthFibonacci() {
+    if (false) {
+        boolean var0 = (true ^ (true && false));
+        double var3 = (0.22930437759761202 / (0.11455639779022708 + 0.5863855538060028));
+        boolean var1 = !var0;
+    }
+    double var2 = (((((0.7677399985651846 * (0.2669901142312693 + 0.9171128635329822)) % (0.44517123686378257 % (0.7758532385252199 + 0.7239467579302423))) - ((0.7599388389041983 % 0.9792997973386461) + 0.11417526010942936)) + (0.5699938805818515 + (0.8244446789985399 - (0.16272716141744736 / (0.2396966685122387 - 0.916287539414403))))) * 0.8751295038982126);
+    n = (n * ((n0 - (-383641612 / n)) * (((372008118 + n1) % ++n) + --n1)));
 }
-n0 = (n1 * ((++n0 % --n1) * n));
-n0 = (++n + n0);
-return n0;
 
 99|***************************
-n = ((--n * (--n - ++n1)) * (--n - (658113317 / (n - (++n % ++n1)))));
-boolean var1 = (((false ^ false) ^ false) || (((((true || (false && (false && ((true || (true || false)) || false)))) || true) ^ ((((false || true) && (false && false)) || (true ^ false)) || false)) && true) ^ (true ^ false)));
-boolean var3 = var1;
-boolean var2 = var1;
-boolean var4 = !var3;
-boolean var0 = var1;
-return n;
+public static int getNthFibonacci() {
+    boolean var0 = (false || false);
+    double var1 = 0.5724071095898637;
+    int var2 = n;
+    for (int var3=0,var4=var3; (var3<var2 && var3<100); var3++,var4=var3) {
+        n1 = (((--n0 + 2019263868) / ++n1) + --n1);
+        var0 = ((var0 || ((false || (false || false)) && (!var0 || (var0 ^ (true && true))))) ^ !var0);
+    }
+    boolean var5 = var0;
+}

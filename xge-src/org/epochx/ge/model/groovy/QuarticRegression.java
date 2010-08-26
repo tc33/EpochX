@@ -49,7 +49,7 @@ public class QuarticRegression extends Regression {
 	 */
 	@Override
 	public double getCorrectResult(final double x) {
-		return x + x * x + x * x * x;
+		return x + x * x + x * x * x + x * x * x * x;
 	}
 
 }

@@ -53,6 +53,9 @@ public class EvenParity extends GXModel {
 	 * for
 	 */
 	public EvenParity(final int noInputBits) {
+		setMethodName("getEven"+noInputBits+"Parity");
+		setReturnType(DataType.BOOLEAN);
+		
 		// Generate the input sequences.
 		inputValues = BoolUtils.generateBoolSequences(noInputBits);
 		
@@ -85,21 +88,19 @@ public class EvenParity extends GXModel {
 		final GXCandidateProgram program = (GXCandidateProgram) p;
 		final Method method = program.getMethod();
 		
-		//System.out.println(ProgramGenerator.format(ast.toString()));
-		//System.out.println("-------------------------------");
+		final VariableHandler vars = getVariableHandler();
 		
 		double score = 0;
 		
         // Evaluate all possible inputValues.
         for (boolean[] argValues: inputValues) {
+        	vars.reset();
         	// Convert to object array.
-        	//final Boolean[] objVars = ArrayUtils.toObject(argValues);
-        	
         	for (int i=0; i<argNames.length; i++) {
-        		getVariableHandler().setParameterValue(argNames[i], argValues[i]);
+        		vars.setParameterValue(argNames[i], argValues[i]);
         	}
         	
-        	Boolean result = (Boolean) method.evaluate(getVariableHandler());
+        	Boolean result = (Boolean) method.evaluate(vars);
 
 			// Increment score for a correct response.
             if ((result != null) && (result == isEvenNoTrue(argValues))) {

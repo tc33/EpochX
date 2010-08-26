@@ -48,7 +48,7 @@ public class Fibonnaci extends org.epochx.gx.model.Fibonacci {
 		model.setTerminationFitness(0.0);
 		model.setMaxNoStatements(6);
 		model.setMinNoStatements(4);
-		/*model.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+		model.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationEnd() {
 				Object[] stats = model.getStatsManager().getGenerationStats(StatField.GEN_NUMBER, 
@@ -78,7 +78,7 @@ public class Fibonnaci extends org.epochx.gx.model.Fibonacci {
 				double aveSize = totalSize / pop.size();
 				System.out.print(minNoStatements + "\t" + maxNoStatements + "\t" + aveSize + "\n");
 			}
-		});*/
+		});
 		
 		model.getLifeCycleManager().addRunListener(new RunAdapter() {
 			@Override
@@ -91,7 +91,7 @@ public class Fibonnaci extends org.epochx.gx.model.Fibonacci {
 
 			    try {
 			      	bw = new BufferedWriter(new FileWriter("results/best-programs.txt", true));
-			      	bw.write("\n"+stats[0]+"|***************************\n");
+			      	bw.write("\n"+stats[0]+" |***************************| "+stats[1]+"\n");
 			        bw.write(ProgramGenerator.format(stats[2].toString()));
 			         
 			        bw.newLine();

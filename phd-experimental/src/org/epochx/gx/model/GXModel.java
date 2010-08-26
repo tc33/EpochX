@@ -37,6 +37,10 @@ public abstract class GXModel extends Model {
 	
 	private VariableHandler variableHandler;
 	
+	private String methodName;
+	
+	private DataType returnType;
+	
 	/**
 	 * Construct a GXModel with a set of sensible defaults. See the appropriate
 	 * accessor method for information of each default value.
@@ -48,6 +52,8 @@ public abstract class GXModel extends Model {
 		// Set default parameter values.
 		maxNoStatements = 10;
 		minNoStatements = 3;
+		
+		methodName = "getResult";
 		
 		variableHandler = new VariableHandler(this);
 		
@@ -62,6 +68,10 @@ public abstract class GXModel extends Model {
 	 */
 	@Override
 	public void run() {
+		if (getReturnType() == null) {
+			throw new IllegalStateException("no return type set");
+		}
+		
 		super.run();
 	}
 	
@@ -105,5 +115,33 @@ public abstract class GXModel extends Model {
 	 */
 	public void setMinNoStatements(final int minNoStatements) {
 		this.minNoStatements = minNoStatements;
+	}
+
+	/**
+	 * @return the methodName
+	 */
+	public String getMethodName() {
+		return methodName;
+	}
+
+	/**
+	 * @param methodName the methodName to set
+	 */
+	public void setMethodName(String methodName) {
+		this.methodName = methodName;
+	}
+
+	/**
+	 * @return the returnType
+	 */
+	public DataType getReturnType() {
+		return returnType;
+	}
+
+	/**
+	 * @param returnType the returnType to set
+	 */
+	public void setReturnType(DataType returnType) {
+		this.returnType = returnType;
 	}
 }

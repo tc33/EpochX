@@ -76,9 +76,12 @@ public class ExperimentalInitialiser implements GXInitialiser {
 
 	private GXCandidateProgram initialiseProgram() {
 		vars.reset();
-		int noStatements = rng.nextInt(maxNoStatements-minNoStatements) + minNoStatements;		
-		//TODO Need to get the data type here from the model.
-		Method method = ProgramGenerator.getMethod("getNthFibonacci", DataType.INT, rng, vars, noStatements);
+		int noStatements = rng.nextInt(maxNoStatements-minNoStatements) + minNoStatements;
+
+		String methodName = model.getMethodName();
+		DataType returnType = model.getReturnType();
+		
+		Method method = ProgramGenerator.getMethod(methodName, returnType, rng, vars, noStatements);
 		//System.out.println(ProgramGenerator.format(ast.toString()));
 		Set<Variable> variables = new HashSet<Variable>(vars.getAllVariables());
 		//System.out.println("------");

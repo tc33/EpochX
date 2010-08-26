@@ -10,6 +10,9 @@ public class Fibonacci extends GXModel {
 	private int[] sequence;
 	
 	public Fibonacci() {
+		setMethodName("getNthFibonacci");
+		setReturnType(DataType.INT);
+		
 		// Construct parameters.
 		Variable n0 = new Variable(DataType.INT, "n0", 1);
 		Variable n1 = new Variable(DataType.INT, "n1", 1);

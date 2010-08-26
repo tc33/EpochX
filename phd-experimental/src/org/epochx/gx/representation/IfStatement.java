@@ -77,8 +77,7 @@ public class IfStatement implements Statement {
 
 	@Override
 	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars) {
-		//TODO Should use model's RNG.
-		double rand = Math.random();
+		double rand = rng.nextDouble();
 		
 		if (rand < probability) {
 			condition = ProgramGenerator.getExpression(rng, vars, condition.getDataType(), 0);

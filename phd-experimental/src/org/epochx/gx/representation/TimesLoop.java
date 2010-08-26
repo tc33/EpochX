@@ -130,6 +130,9 @@ public class TimesLoop implements Statement {
 		int noActive = vars.getNoActiveVariables();
 		
 		endVarDecl.modifyExpression(probability, rng, vars);
+		
+		// Apply the loop setup.
+		applySetup(vars);
 		body.modifyExpression(probability, rng, vars);
 		
 		// Remove any variables declared within.

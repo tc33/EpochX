@@ -67,8 +67,7 @@ public class Declaration implements Statement {
 
 	@Override
 	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars) {
-		//TODO Should use model's RNG.
-		double rand = Math.random();
+		double rand = rng.nextDouble();
 		
 		if (rand < probability) {
 			expression = ProgramGenerator.getExpression(rng, vars, expression.getDataType(), 0);

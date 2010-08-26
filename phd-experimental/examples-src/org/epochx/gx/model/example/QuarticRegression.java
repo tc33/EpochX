@@ -33,14 +33,14 @@ import org.epochx.representation.*;
 import org.epochx.stats.*;
 
 
-public class EvenParity extends org.epochx.gx.model.EvenParity {
+public class QuarticRegression extends org.epochx.gx.model.QuarticRegression {
 	
-	public EvenParity(int noInputBits) {
-		super(noInputBits);
+	public QuarticRegression(int noInputs) {
+		super(noInputs);
 	}
 	
     public static void main(String[] args) {
-		final GXModel model = new EvenParity(5);
+		final GXModel model = new QuarticRegression(50);
 		model.setNoRuns(100);
 		model.setNoGenerations(1000);
 		model.setPopulationSize(1000);

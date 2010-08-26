@@ -1,5 +1,6 @@
 package org.epochx.gx.op.init;
 
+import java.math.*;
 import java.util.*;
 
 import org.epochx.gx.model.*;
@@ -7,6 +8,13 @@ import org.epochx.gx.representation.*;
 import org.epochx.tools.random.*;
 
 public class ProgramGenerator {
+	
+	public static final double PROB_INT_GROUP1 = 0.9; // Includes +1, 0, -1
+	public static final double PROB_INT_GROUP2 = 0.05; // Includes 2 -> 10
+	public static final double PROB_INT_GROUP3 = 0.05; // Includes ints of 1sf
+	
+	public static final double PROB_DBL_GROUP1 = 0.5; // Includes -1.0 -> +1.0
+	public static final double PROB_DBL_GROUP2 = 0.5; // Includes everything else.
 	
 	public static Method getMethod(String name, DataType returnType, RandomNumberGenerator rng, VariableHandler vars, int noStatements) {
 		Block body = getBlock(rng, vars, 0, noStatements, false);
@@ -290,15 +298,42 @@ public class ProgramGenerator {
 	}
 
 	public static IntLiteral getIntLiteral(RandomNumberGenerator rng) {
-		IntLiteral literal = new IntLiteral(rng.nextInt());
+		double choice = rng.nextDouble();
 		
-		return literal;
+		int value;
+		if (choice < PROB_INT_GROUP1) {
+			// -1, 0 or +1
+			value = rng.nextInt(2)-1;
+		} else if (choice < PROB_INT_GROUP2) {
+			// 2-10
+			value = rng.nextInt(8)+2;
+		} else {
+			// 1 s.f.
+			value = rng.nextInt(9)+1;
+			// How many 0s? (up to 8)
+			int exp = rng.nextInt(7)+1;
+			// value * 10^exp
+			value = value * new Double(Math.pow(10, exp)).intValue();
+		}
+		
+		return new IntLiteral(value);
 	}
 	
 	public static DoubleLiteral getDoubleLiteral(RandomNumberGenerator rng) {
-		DoubleLiteral literal = new DoubleLiteral(rng.nextDouble());
+		double choice = rng.nextDouble();
 		
-		return literal;
+		double value = rng.nextDouble();
+		if (choice < (PROB_DBL_GROUP1/2)) {
+			// -1.0 -> 0.0.
+			value = -value;
+		}
+		
+		// Round to 3 d.p.
+		BigDecimal bd = new BigDecimal(choice);
+	    bd = bd.setScale(3, BigDecimal.ROUND_HALF_UP);
+	    value = bd.doubleValue();
+		
+		return new DoubleLiteral(value);
 	}
 	
 	public static String format(CharSequence s) {

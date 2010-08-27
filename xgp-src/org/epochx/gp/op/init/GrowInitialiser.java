@@ -44,13 +44,21 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * <li>random number generator</li>
  * </ul>
  * 
+ * <p>
+ * If the <code>getModel</code> method returns <code>null</code> then no model
+ * is set and whatever static parameters have been set as parameters to the
+ * constructor or using the standard accessor methods will be used. If any
+ * compulsory parameters remain unset when the initialiser is requested to
+ * generate new programs, then an <code>IllegalStateException</code> will be
+ * thrown.
+ * 
  * @see FullInitialiser
  * @see RampedHalfAndHalfInitialiser
  */
 public class GrowInitialiser implements GPInitialiser {
 
 	// The controlling model.
-	private final GPModel model;
+	private GPModel model;
 
 	private RandomNumberGenerator rng;
 
@@ -63,11 +71,29 @@ public class GrowInitialiser implements GPInitialiser {
 	private int popSize;
 
 	// The maximum depth of each program tree to generate.
-	private int initialMaxDepth;
+	private int maxDepth;
 
 	// Whether programs must be unique in generated populations.
 	private boolean acceptDuplicates;
 
+	/**
+	 * Constructs a <code>GrowInitialiser</code> with all the necessary
+	 * parameters given.
+	 */
+	public GrowInitialiser(final RandomNumberGenerator rng, 
+			final List<Node> syntax, final int popSize,
+			final int maxDepth, final boolean acceptDuplicates) {
+		this.rng = rng;
+		this.syntax = syntax;
+		this.popSize = popSize;
+		this.maxDepth = maxDepth;
+		this.acceptDuplicates = acceptDuplicates;
+
+		terminals = new ArrayList<Node>();
+		functions = new ArrayList<Node>();
+		updateSyntax();
+	}
+	
 	/**
 	 * Constructs a <code>GrowInitialiser</code> with the necessary parameters
 	 * loaded from the given model. The parameters are reloaded on configure
@@ -92,12 +118,10 @@ public class GrowInitialiser implements GPInitialiser {
 	 *        populations that are generated.
 	 */
 	public GrowInitialiser(final GPModel model, final boolean acceptDuplicates) {
+		this(null, new ArrayList<Node>(), -1, -1, acceptDuplicates);
+
 		this.model = model;
-		this.acceptDuplicates = acceptDuplicates;
-
-		terminals = new ArrayList<Node>();
-		functions = new ArrayList<Node>();
-
+		
 		// Configure parameters from the model.
 		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
 
@@ -114,24 +138,37 @@ public class GrowInitialiser implements GPInitialiser {
 	private void configure() {
 		rng = model.getRNG();
 		popSize = model.getPopulationSize();
-		initialMaxDepth = model.getMaxInitialDepth();
+		maxDepth = model.getMaxInitialDepth();
 
-		// Perhaps we could check whether the syntax has changed first?
-		terminals.clear();
-		functions.clear();
-		syntax = model.getSyntax();
-
-		for (final Node n: syntax) {
-			if (n.getArity() == 0) {
-				terminals.add(n);
-			} else {
-				functions.add(n);
-			}
+		// Only update the syntax if it has changed.
+		final List<Node> newSyntax = model.getSyntax();
+		if (!newSyntax.equals(syntax)) {
+			syntax = newSyntax;
+			updateSyntax();
 		}
 	}
 
+	/*
+	 * Updates the terminals and functions lists from the syntax.
+	 */
+	private void updateSyntax() {
+		terminals.clear();
+		functions.clear();
+
+		if (syntax != null) {
+			for (final Node n: syntax) {
+				if (n.getArity() == 0) {
+					terminals.add(n);
+				} else {
+					functions.add(n);
+				}
+			}
+		}
+	}
+	
 	/**
-	 * Generates a population of new <code>GPCandidatePrograms</code> constructed
+	 * Generates a population of new <code>GPCandidatePrograms</code>
+	 * constructed
 	 * from the <code>Nodes</code> in the syntax attribute. The size of the
 	 * population will be equal to the population size attribute. All programs
 	 * in the population are only guarenteed to be unique (as defined by the
@@ -145,6 +182,11 @@ public class GrowInitialiser implements GPInitialiser {
 	 */
 	@Override
 	public List<CandidateProgram> getInitialPopulation() {
+		if (popSize < 1) {
+			throw new IllegalStateException(
+					"Population size must be 1 or greater");
+		}
+		
 		// Create population list to be populated.
 		final List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(
 				popSize);
@@ -155,7 +197,7 @@ public class GrowInitialiser implements GPInitialiser {
 
 			do {
 				// Grow a new node tree.
-				candidate = getInitialProgram(initialMaxDepth);
+				candidate = getInitialProgram();
 			} while (!acceptDuplicates && firstGen.contains(candidate));
 
 			// Must be unique - add to the new population.
@@ -166,44 +208,54 @@ public class GrowInitialiser implements GPInitialiser {
 	}
 
 	/**
-	 * Grows a new node tree and returns it within a 
-	 * <code>GPCandidateProgram</code>. The nodes that form the tree will be 
+	 * Grows a new node tree and returns it within a
+	 * <code>GPCandidateProgram</code>. The nodes that form the tree will be
 	 * randomly selected from the nodes provided as the syntax attribute.
 	 * 
 	 * @param maxDepth The maximum depth of the node tree to be grown, where
 	 *        the depth is the number of nodes from the root.
 	 * @return a new <code>GPCandidateProgram</code> instance.
 	 */
-	public GPCandidateProgram getInitialProgram(final int maxDepth) {
-		Node root = buildGrowNodeTree(maxDepth);
+	public GPCandidateProgram getInitialProgram() {
+		final Node root = getGrownNodeTree(maxDepth);
 
 		return new GPCandidateProgram(root, model);
 	}
-	
+
 	/**
-	 * Builds a grown node tree with a maximum depth as given. The nodes that 
-	 * form the tree will be randomly selected from the nodes provided as the 
+	 * Builds a grown node tree with a maximum depth as given. The nodes that
+	 * form the tree will be randomly selected from the nodes provided as the
 	 * syntax attribute.
 	 * 
 	 * @param maxDepth The maximum depth of the node tree to be grown, where
 	 *        the depth is the number of nodes from the root.
 	 * @return The root node of a randomly generated node tree.
 	 */
-	public Node buildGrowNodeTree(final int maxDepth) {
+	public Node getGrownNodeTree(final int maxDepth) {
+		if (rng == null) {
+			throw new IllegalStateException(
+					"No random number generator has been set");
+		} else if (maxDepth < 0) {
+			throw new IllegalStateException("Depth must be 0 or greater");
+		} else if (terminals.isEmpty()) {
+			throw new IllegalStateException(
+					"Syntax must include nodes with arity of 0");
+		}
+		
 		// Randomly choose a root node.
 		final int randomIndex = rng.nextInt(syntax.size());
 		final Node root = syntax.get(randomIndex).clone();
 
 		// Populate the root node with grown children with maximum depth-1.
 		this.fillChildren(root, 0, maxDepth);
-		
+
 		return root;
 	}
-	
+
 	/*
-	 * Helper method for the buildFullNodeTree method. Recursively fills the 
-	 * children of a node, to construct a grown tree down to at most a depth of 
-	 * initialMaxDepth.
+	 * Helper method for the getGrownNodeTree method. Recursively fills the
+	 * children of a node, to construct a grown tree down to at most a depth of
+	 * maxDepth.
 	 */
 	private void fillChildren(final Node currentNode, final int currentDepth,
 			final int maxDepth) {
@@ -249,7 +301,123 @@ public class GrowInitialiser implements GPInitialiser {
 	 * @param acceptDuplicates whether duplicates should be accepted in the
 	 *        populations that are constructed.
 	 */
-	public void setDuplicatesEnabled(boolean acceptDuplicates) {
+	public void setDuplicatesEnabled(final boolean acceptDuplicates) {
 		this.acceptDuplicates = acceptDuplicates;
+	}
+	
+	/**
+	 * Returns the model that is providing the configuration for this
+	 * initialiser, or <code>null</code> if none is set.
+	 * 
+	 * @return the model that is supplying the configuration parameters or null
+	 *         if the parameters are individually set.
+	 */
+	public GPModel getModel() {
+		return model;
+	}
+
+	/**
+	 * Sets a model that will provide the configuration for this initialiser.
+	 * The necessary parameters will be obtained from the model the next time,
+	 * and each time a configure event is triggered. Note that until a configure
+	 * event is fired this initialiser may be in an unusable state. Any
+	 * previously set parameters will stay active until they are overwritten at
+	 * the next configure event.
+	 * 
+	 * <p>
+	 * If a model is already set, it may be cleared by calling this method with
+	 * <code>null</code>.
+	 * 
+	 * @param model the model to set or null to clear any current model.
+	 */
+	public void setModel(final GPModel model) {
+		this.model = model;
+	}
+
+	/**
+	 * Returns the random number generator that this initialiser is using or
+	 * <code>null</code> if none has been set.
+	 * 
+	 * @return the rng the currently set random number generator.
+	 */
+	public RandomNumberGenerator getRNG() {
+		return rng;
+	}
+
+	/**
+	 * Sets the random number generator to use. If a model has been set then
+	 * this parameter will be overwritten with the random number generator from
+	 * that model on the next configure event.
+	 * 
+	 * @param rng the random number generator to set.
+	 */
+	public void setRNG(final RandomNumberGenerator rng) {
+		this.rng = rng;
+	}
+
+	/**
+	 * Returns a <code>List</code> of the <code>Nodes</code> that form the
+	 * syntax of new program generated with this initialiser, or
+	 * an empty list if none have been set.
+	 * 
+	 * @return the types of <code>Node</code> that should be used in
+	 *         constructing new programs.
+	 */
+	public List<Node> getSyntax() {
+		return syntax;
+	}
+
+	/**
+	 * Sets the <code>Nodes</code> that should be used to construct new
+	 * programs. If a model has been set then this parameter will be overwritten
+	 * with the syntax from that model on the next configure event.
+	 * 
+	 * @param syntax a <code>List</code> of the types of <code>Node</code> that
+	 *        should be used in constructing new programs.
+	 */
+	public void setSyntax(final List<Node> syntax) {
+		this.syntax = syntax;
+		updateSyntax();
+	}
+
+	/**
+	 * Returns the size of the populations that this initialiser constructs or
+	 * <code>-1</code> if none has been set.
+	 * 
+	 * @return the size of the populations that this initialiser will generate.
+	 */
+	public int getPopSize() {
+		return popSize;
+	}
+
+	/**
+	 * Sets the size of the populations that this initialiser should construct
+	 * on calls to the <code>getInitialPopulation</code> method.
+	 * 
+	 * @param popSize the size of the populations that should be created by this
+	 *        initialiser.
+	 */
+	public void setPopSize(final int popSize) {
+		this.popSize = popSize;
+	}
+
+	/**
+	 * Returns the depth that every program generated by this initialiser should
+	 * have.
+	 * 
+	 * @return the maximum depth the program trees constructed should be.
+	 */
+	public int getMaxDepth() {
+		return maxDepth;
+	}
+
+	/**
+	 * Sets the depth that the program trees this initialiser constructs should
+	 * be.
+	 * 
+	 * @param maxDepth the maximum depth of all new program trees.
+	 */
+	public void setMaxDepth(final int maxDepth) {
+		this.maxDepth = maxDepth;
 	}
 }

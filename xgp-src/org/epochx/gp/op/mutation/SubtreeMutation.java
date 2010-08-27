@@ -113,7 +113,7 @@ public class SubtreeMutation implements GPMutation {
 		final int mutationPoint = rng.nextInt(length);
 
 		// Grow a new subtree using the GrowInitialiser.
-		final Node subtree = grower.buildGrowNodeTree(maxSubtreeDepth);
+		final Node subtree = grower.getGrownNodeTree(maxSubtreeDepth);
 
 		// Set the new subtree.
 		program.setNthNode(mutationPoint, subtree);

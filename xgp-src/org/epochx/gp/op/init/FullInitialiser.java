@@ -44,13 +44,21 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * <li>random number generator</li>
  * </ul>
  * 
+ * <p>
+ * If the <code>getModel</code> method returns <code>null</code> then no model
+ * is set and whatever static parameters have been set as parameters to the
+ * constructor or using the standard accessor methods will be used. If any
+ * compulsory parameters remain unset when the initialiser is requested to
+ * generate new programs, then an <code>IllegalStateException</code> will be
+ * thrown.
+ * 
  * @see GrowInitialiser
  * @see RampedHalfAndHalfInitialiser
  */
 public class FullInitialiser implements GPInitialiser {
 
 	// The controlling model.
-	private final GPModel model;
+	private GPModel model;
 
 	private RandomNumberGenerator rng;
 
@@ -63,10 +71,28 @@ public class FullInitialiser implements GPInitialiser {
 	private int popSize;
 
 	// The depth of every program tree to generate.
-	private int initialDepth;
+	private int depth;
 
 	// Whether programs must be unique in generated populations.
 	private boolean acceptDuplicates;
+
+	/**
+	 * Constructs a <code>FullInitialiser</code> with all the necessary
+	 * parameters given.
+	 */
+	public FullInitialiser(final RandomNumberGenerator rng, 
+			final List<Node> syntax, final int popSize,
+			final int depth, final boolean acceptDuplicates) {
+		this.rng = rng;
+		this.syntax = syntax;
+		this.popSize = popSize;
+		this.depth = depth;
+		this.acceptDuplicates = acceptDuplicates;
+
+		terminals = new ArrayList<Node>();
+		functions = new ArrayList<Node>();
+		updateSyntax();
+	}
 
 	/**
 	 * Constructs a <code>FullInitialiser</code> with the necessary parameters
@@ -92,11 +118,9 @@ public class FullInitialiser implements GPInitialiser {
 	 *        populations that are generated.
 	 */
 	public FullInitialiser(final GPModel model, final boolean acceptDuplicates) {
-		this.model = model;
-		this.acceptDuplicates = acceptDuplicates;
+		this(null, new ArrayList<Node>(), -1, -1, acceptDuplicates);
 
-		terminals = new ArrayList<Node>();
-		functions = new ArrayList<Node>();
+		this.model = model;
 
 		// Configure parameters from the model.
 		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
@@ -113,19 +137,31 @@ public class FullInitialiser implements GPInitialiser {
 	 */
 	private void configure() {
 		rng = model.getRNG();
-		initialDepth = model.getMaxInitialDepth();
+		depth = model.getMaxInitialDepth();
 		popSize = model.getPopulationSize();
 
-		// Perhaps we could check whether the syntax has changed first?
-		syntax = model.getSyntax();
+		// Only update the syntax if it has changed.
+		final List<Node> newSyntax = model.getSyntax();
+		if (!newSyntax.equals(syntax)) {
+			syntax = newSyntax;
+			updateSyntax();
+		}
+	}
+
+	/*
+	 * Updates the terminals and functions lists from the syntax.
+	 */
+	private void updateSyntax() {
 		terminals.clear();
 		functions.clear();
 
-		for (final Node n: syntax) {
-			if (n.getArity() == 0) {
-				terminals.add(n);
-			} else {
-				functions.add(n);
+		if (syntax != null) {
+			for (final Node n: syntax) {
+				if (n.getArity() == 0) {
+					terminals.add(n);
+				} else {
+					functions.add(n);
+				}
 			}
 		}
 	}
@@ -138,14 +174,18 @@ public class FullInitialiser implements GPInitialiser {
 	 * <code>equals</code> method on <code>GPCandidateProgram</code>) if the
 	 * <code>isDuplicatesEnabled</code> method returns <code>true</code>. Each
 	 * program will have a full node tree with a depth equal to the
-	 * depth
-	 * attribute.
+	 * depth attribute.
 	 * 
 	 * @return A <code>List</code> of newly generated
 	 *         <code>GPCandidateProgram</code> instances with full node trees.
 	 */
 	@Override
 	public List<CandidateProgram> getInitialPopulation() {
+		if (popSize < 1) {
+			throw new IllegalStateException(
+					"Population size must be 1 or greater");
+		}
+
 		// Create population list to be populated.
 		final List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(
 				popSize);
@@ -156,7 +196,7 @@ public class FullInitialiser implements GPInitialiser {
 
 			do {
 				// Build a new full node tree.
-				candidate = getInitialProgram(initialDepth);
+				candidate = getInitialProgram();
 			} while (!acceptDuplicates && firstGen.contains(candidate));
 
 			// Must be unique - add to the new population.
@@ -165,18 +205,16 @@ public class FullInitialiser implements GPInitialiser {
 
 		return firstGen;
 	}
-	
+
 	/**
-	 * Constructs a new full node tree and returns it within a 
-	 * <code>GPCandidateProgram</code>. The nodes that form the tree will be 
+	 * Constructs a new full node tree and returns it within a
+	 * <code>GPCandidateProgram</code>. The nodes that form the tree will be
 	 * randomly selected from the nodes provided as the syntax attribute.
 	 * 
-	 * @param maxDepth The maximum depth of the node tree to be grown, where
-	 *        the depth is the number of nodes from the root.
 	 * @return a new <code>GPCandidateProgram</code> instance.
 	 */
-	public GPCandidateProgram getInitialProgram(final int maxDepth) {
-		Node root = buildFullNodeTree(maxDepth);
+	public GPCandidateProgram getInitialProgram() {
+		final Node root = getFullNodeTree();
 
 		return new GPCandidateProgram(root, model);
 	}
@@ -187,12 +225,23 @@ public class FullInitialiser implements GPInitialiser {
 	 * equal to the depth argument. The nodes that form the tree will be
 	 * randomly selected from the nodes provided as the syntax attribute.
 	 * 
-	 * @param depth The depth of the full node tree, where the
-	 *        depth is the number of nodes from the root.
 	 * @return The root node of a randomly generated full node tree of the
 	 *         requested depth.
 	 */
-	public Node buildFullNodeTree(final int depth) {
+	public Node getFullNodeTree() {
+		if (rng == null) {
+			throw new IllegalStateException(
+					"No random number generator has been set");
+		} else if (depth < 0) {
+			throw new IllegalStateException("Depth must be 0 or greater");
+		} else if (terminals.isEmpty()) {
+			throw new IllegalStateException(
+					"Syntax must include nodes with arity of 0");
+		} else if ((depth > 0) && functions.isEmpty()) {
+			throw new IllegalStateException(
+					"Syntax must include nodes with arity of >=1 if a depth >0 is used");
+		}
+
 		Node root;
 		if (depth == 0) {
 			// Randomly choose a terminal node as our root.
@@ -211,7 +260,7 @@ public class FullInitialiser implements GPInitialiser {
 	}
 
 	/*
-	 * Helper method for the buildFullNodeTree method. Recursively fills the
+	 * Helper method for the getFullNodeTree method. Recursively fills the
 	 * children of a node, to construct a full tree down to a depth of
 	 * maxDepth.
 	 */
@@ -259,7 +308,123 @@ public class FullInitialiser implements GPInitialiser {
 	 * @param acceptDuplicates whether duplicates should be accepted in the
 	 *        populations that are constructed.
 	 */
-	public void setDuplicatesEnabled(boolean acceptDuplicates) {
+	public void setDuplicatesEnabled(final boolean acceptDuplicates) {
 		this.acceptDuplicates = acceptDuplicates;
+	}
+
+	/**
+	 * Returns the model that is providing the configuration for this
+	 * initialiser, or <code>null</code> if none is set.
+	 * 
+	 * @return the model that is supplying the configuration parameters or null
+	 *         if the parameters are individually set.
+	 */
+	public GPModel getModel() {
+		return model;
+	}
+
+	/**
+	 * Sets a model that will provide the configuration for this initialiser.
+	 * The necessary parameters will be obtained from the model the next time,
+	 * and each time a configure event is triggered. Note that until a configure
+	 * event is fired this initialiser may be in an unusable state. Any
+	 * previously set parameters will stay active until they are overwritten at
+	 * the next configure event.
+	 * 
+	 * <p>
+	 * If a model is already set, it may be cleared by calling this method with
+	 * <code>null</code>.
+	 * 
+	 * @param model the model to set or null to clear any current model.
+	 */
+	public void setModel(final GPModel model) {
+		this.model = model;
+	}
+
+	/**
+	 * Returns the random number generator that this initialiser is using or
+	 * <code>null</code> if none has been set.
+	 * 
+	 * @return the rng the currently set random number generator.
+	 */
+	public RandomNumberGenerator getRNG() {
+		return rng;
+	}
+
+	/**
+	 * Sets the random number generator to use. If a model has been set then
+	 * this parameter will be overwritten with the random number generator from
+	 * that model on the next configure event.
+	 * 
+	 * @param rng the random number generator to set.
+	 */
+	public void setRNG(final RandomNumberGenerator rng) {
+		this.rng = rng;
+	}
+
+	/**
+	 * Returns a <code>List</code> of the <code>Nodes</code> that form the
+	 * syntax of new program generated with this initialiser, or
+	 * an empty list if none have been set.
+	 * 
+	 * @return the types of <code>Node</code> that should be used in
+	 *         constructing new programs.
+	 */
+	public List<Node> getSyntax() {
+		return syntax;
+	}
+
+	/**
+	 * Sets the <code>Nodes</code> that should be used to construct new
+	 * programs. If a model has been set then this parameter will be overwritten
+	 * with the syntax from that model on the next configure event.
+	 * 
+	 * @param syntax a <code>List</code> of the types of <code>Node</code> that
+	 *        should be used in constructing new programs.
+	 */
+	public void setSyntax(final List<Node> syntax) {
+		this.syntax = syntax;
+		updateSyntax();
+	}
+
+	/**
+	 * Returns the size of the populations that this initialiser constructs or
+	 * <code>-1</code> if none has been set.
+	 * 
+	 * @return the size of the populations that this initialiser will generate.
+	 */
+	public int getPopSize() {
+		return popSize;
+	}
+
+	/**
+	 * Sets the size of the populations that this initialiser should construct
+	 * on calls to the <code>getInitialPopulation</code> method.
+	 * 
+	 * @param popSize the size of the populations that should be created by this
+	 *        initialiser.
+	 */
+	public void setPopSize(final int popSize) {
+		this.popSize = popSize;
+	}
+
+	/**
+	 * Returns the depth that every program generated by this initialiser should
+	 * have.
+	 * 
+	 * @return the depth of the program trees constructed.
+	 */
+	public int getDepth() {
+		return depth;
+	}
+
+	/**
+	 * Sets the depth that the program trees this initialiser constructs should
+	 * be.
+	 * 
+	 * @param depth the depth of all new program trees.
+	 */
+	public void setDepth(final int depth) {
+		this.depth = depth;
 	}
 }

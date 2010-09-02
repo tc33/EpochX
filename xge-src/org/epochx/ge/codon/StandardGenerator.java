@@ -32,12 +32,17 @@ import org.epochx.tools.random.RandomNumberGenerator;
 public class StandardGenerator implements CodonGenerator {
 
 	// The controlling model.
-	private final GEModel model;
+	private GEModel model;
 
 	private RandomNumberGenerator rng;
 
 	private int maxCodonSize;
 
+	public StandardGenerator(RandomNumberGenerator rng, int maxCodonSize) {
+		this.rng = rng;
+		this.maxCodonSize = maxCodonSize;
+	}
+	
 	/**
 	 * Construct a StandardGenerator.
 	 * 
@@ -75,4 +80,54 @@ public class StandardGenerator implements CodonGenerator {
 	public int getCodon() {
 		return rng.nextInt(maxCodonSize);
 	}
+
+	
+	/**
+	 * @return the model
+	 */
+	public GEModel getModel() {
+		return model;
+	}
+
+	
+	/**
+	 * @param model the model to set
+	 */
+	public void setModel(GEModel model) {
+		this.model = model;
+	}
+
+	
+	/**
+	 * @return the rng
+	 */
+	public RandomNumberGenerator getRng() {
+		return rng;
+	}
+
+	
+	/**
+	 * @param rng the rng to set
+	 */
+	public void setRng(RandomNumberGenerator rng) {
+		this.rng = rng;
+	}
+
+	
+	/**
+	 * @return the maxCodonSize
+	 */
+	public int getMaxCodonSize() {
+		return maxCodonSize;
+	}
+
+	
+	/**
+	 * @param maxCodonSize the maxCodonSize to set
+	 */
+	public void setMaxCodonSize(int maxCodonSize) {
+		this.maxCodonSize = maxCodonSize;
+	}
+	
+	
 }

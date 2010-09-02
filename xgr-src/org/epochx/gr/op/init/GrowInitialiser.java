@@ -32,7 +32,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
  * Initialisation implementation which randomly grows program parse trees down
- * to a maximum depth.
+ * to a maximum maxDepth.
  * 
  * <p>
  * If a model is provided then the following parameters are loaded upon every
@@ -40,10 +40,18 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * 
  * <ul>
  * <li>population size</li>
- * <li>maximum initial program depth</li>
+ * <li>maximum initial program maxDepth</li>
  * <li>grammar</li>
  * <li>random number generator</li>
  * </ul>
+ * 
+ * <p>
+ * If the <code>getModel</code> method returns <code>null</code> then no model
+ * is set and whatever static parameters have been set as parameters to the
+ * constructor or using the standard accessor methods will be used. If any
+ * compulsory parameters remain unset when the initialiser is requested to
+ * generate new programs, then an <code>IllegalStateException</code> will be
+ * thrown.
  * 
  * @see FullInitialiser
  * @see RampedHalfAndHalfInitialiser
@@ -51,7 +59,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
 public class GrowInitialiser implements GRInitialiser {
 
 	// The controlling model.
-	private final GRModel model;
+	private GRModel model;
 
 	private RandomNumberGenerator rng;
 
@@ -61,12 +69,26 @@ public class GrowInitialiser implements GRInitialiser {
 	// The size of the populations to construct.
 	private int popSize;
 
-	// The maximum depth of each program tree to generate.
-	private int initialMaxDepth;
+	// The maximum maxDepth of each program tree to generate.
+	private int maxDepth;
 
 	// Whether programs must be unique in generated populations.
 	private boolean acceptDuplicates;
 
+	/**
+	 * Constructs a <code>GrowInitialiser</code> with all the necessary
+	 * parameters given.
+	 */
+	public GrowInitialiser(final RandomNumberGenerator rng,
+			final Grammar grammar, final int popSize, final int maxDepth,
+			final boolean acceptDuplicates) {
+		this.rng = rng;
+		this.grammar = grammar;
+		this.popSize = popSize;
+		this.maxDepth = maxDepth;
+		this.acceptDuplicates = acceptDuplicates;
+	}
+	
 	/**
 	 * Constructs a <code>GrowInitialiser</code> with the necessary parameters
 	 * loaded from the given model. The parameters are reloaded on configure
@@ -111,7 +133,7 @@ public class GrowInitialiser implements GRInitialiser {
 		rng = model.getRNG();
 		grammar = model.getGrammar();
 		popSize = model.getPopulationSize();
-		initialMaxDepth = model.getMaxInitialDepth();
+		maxDepth = model.getMaxInitialDepth();
 	}
 
 	/**
@@ -128,6 +150,11 @@ public class GrowInitialiser implements GRInitialiser {
 	 */
 	@Override
 	public List<CandidateProgram> getInitialPopulation() {
+		if (popSize < 1) {
+			throw new IllegalStateException(
+					"Population size must be 1 or greater");
+		}
+		
 		// Create population list to be populated.
 		final List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(
 				popSize);
@@ -137,8 +164,8 @@ public class GrowInitialiser implements GRInitialiser {
 			GRCandidateProgram candidate;
 
 			do {
-				// Create a new program down to the models initial max depth.
-				candidate = getInitialProgram(initialMaxDepth);
+				// Create a new program down to the models initial max maxDepth.
+				candidate = getInitialProgram();
 			} while (!acceptDuplicates && firstGen.contains(candidate));
 
 			// Add to the new population.
@@ -150,29 +177,45 @@ public class GrowInitialiser implements GRInitialiser {
 
 	/**
 	 * Constructs and returns a new <code>GRCandidateProgram</code> with a grown
-	 * parse tree with the given maximum depth.
+	 * parse tree with the given maximum maxDepth.
 	 * 
-	 * @param maxDepth The maximum depth of the parse tree, where the
-	 *        depth is the number of nodes from the root.
+	 * @param maxDepth The maximum maxDepth of the parse tree, where the
+	 *        maxDepth is the number of nodes from the root.
 	 * @return A new <code>GRCandidateProgram</code> with a grown parse tree.
 	 */
-	public GRCandidateProgram getInitialProgram(final int maxDepth) {
+	public GRCandidateProgram getInitialProgram() {
+		if (grammar == null) {
+			throw new IllegalStateException("No grammar has been set");
+		}
+		
 		final GrammarRule startRule = grammar.getStartRule();
+		
+		// Check the min depth of a valid tree is not more than the max depth.
+		if (startRule.getMinDepth() > maxDepth) {
+			throw new IllegalStateException(
+					"No possible programs within given max depth parameter for this grammar.");
+		}
 
-		return new GRCandidateProgram(growParseTree(maxDepth, startRule), model);
+		return new GRCandidateProgram(getGrownParseTree(maxDepth, startRule), model);
 	}
 
 	/**
-	 * Grows and returns a new parse tree with a maximum depth of the specified
+	 * Grows and returns a new parse tree with a maximum maxDepth of the specified
 	 * maxDepth parameter.
 	 * 
-	 * @param maxDepth The maximum depth of the parse tree, where the
-	 *        depth is the number of nodes from the root.
+	 * @param maxDepth The maximum maxDepth of the parse tree, where the
+	 *        maxDepth is the number of nodes from the root.
 	 * @return The root node of a randomly generated full parse tree of the
-	 *         requested depth.
+	 *         requested maxDepth.
 	 */
-	public NonTerminalSymbol growParseTree(final int maxDepth,
-			final GrammarRule startRule) {
+	public NonTerminalSymbol getGrownParseTree(final int maxDepth, final GrammarRule startRule) {
+		if (rng == null) {
+			throw new IllegalStateException(
+					"No random number generator has been set");
+		} else if (maxDepth < 0) {
+			throw new IllegalStateException("Maximum depth must be 0 or greater");
+		}
+		
 		final NonTerminalSymbol parseTree = new NonTerminalSymbol(startRule);
 
 		buildDerivationTree(parseTree, startRule, 0, maxDepth);
@@ -181,16 +224,16 @@ public class GrowInitialiser implements GRInitialiser {
 	}
 
 	/*
-	 * Recursive helper for the growParseTree method.
+	 * Recursive helper for the getGrownParseTree method.
 	 */
 	private void buildDerivationTree(final NonTerminalSymbol parseTree,
-			final GrammarRule rule, final int depth, final int maxDepth) {
+			final GrammarRule rule, final int currentDepth, final int maxDepth) {
 		// Check if theres more than one production.
 		int productionIndex = 0;
 		final int noProductions = rule.getNoProductions();
 		if (noProductions > 1) {
 			final List<Integer> validProductions = getValidProductionIndexes(
-					rule.getProductions(), maxDepth - depth - 1);
+					rule.getProductions(), maxDepth - currentDepth - 1);
 
 			// Choose a production randomly.
 			final int chosenProduction = rng.nextInt(validProductions.size());
@@ -208,7 +251,7 @@ public class GrowInitialiser implements GRInitialiser {
 				final NonTerminalSymbol nt = new NonTerminalSymbol(
 						(GrammarRule) node);
 
-				buildDerivationTree(nt, r, depth + 1, maxDepth);
+				buildDerivationTree(nt, r, currentDepth + 1, maxDepth);
 
 				parseTree.addChild(nt);
 			} else {
@@ -220,7 +263,7 @@ public class GrowInitialiser implements GRInitialiser {
 
 	/*
 	 * Gets a List of indexes to those productions from the List of productions
-	 * given that can be used with the specified maximum depth constraint.
+	 * given that can be used with the specified maximum maxDepth constraint.
 	 */
 	private List<Integer> getValidProductionIndexes(
 			final List<GrammarProduction> grammarProductions, final int maxDepth) {
@@ -260,5 +303,116 @@ public class GrowInitialiser implements GRInitialiser {
 	 */
 	public void setDuplicatesEnabled(boolean acceptDuplicates) {
 		this.acceptDuplicates = acceptDuplicates;
+	}
+	
+	/**
+	 * Returns the model that is providing the configuration for this
+	 * initialiser, or <code>null</code> if none is set.
+	 * 
+	 * @return the model that is supplying the configuration parameters or null
+	 *         if the parameters are individually set.
+	 */
+	public GRModel getModel() {
+		return model;
+	}
+
+	/**
+	 * Sets a model that will provide the configuration for this initialiser.
+	 * The necessary parameters will be obtained from the model the next time,
+	 * and each time a configure event is triggered. Note that until a configure
+	 * event is fired this initialiser may be in an unusable state. Any
+	 * previously set parameters will stay active until they are overwritten at
+	 * the next configure event.
+	 * 
+	 * <p>
+	 * If a model is already set, it may be cleared by calling this method with
+	 * <code>null</code>.
+	 * 
+	 * @param model the model to set or null to clear any current model.
+	 */
+	public void setModel(final GRModel model) {
+		this.model = model;
+	}
+
+	/**
+	 * Returns the random number generator that this initialiser is using or
+	 * <code>null</code> if none has been set.
+	 * 
+	 * @return the rng the currently set random number generator.
+	 */
+	public RandomNumberGenerator getRNG() {
+		return rng;
+	}
+
+	/**
+	 * Sets the random number generator to use. If a model has been set then
+	 * this parameter will be overwritten with the random number generator from
+	 * that model on the next configure event.
+	 * 
+	 * @param rng the random number generator to set.
+	 */
+	public void setRNG(final RandomNumberGenerator rng) {
+		this.rng = rng;
+	}
+
+	/**
+	 * Returns the grammar that this initialiser is generating programs to
+	 * satisfy.
+	 * 
+	 * @return the grammar that generated programs are being constructed for.
+	 */
+	public Grammar getGrammar() {
+		return grammar;
+	}
+
+	/**
+	 * Sets the grammar that program parse trees should be generated for.
+	 * 
+	 * @param grammar the <code>Grammar</code> that generated programs should be
+	 *        constructed for.
+	 */
+	public void setGrammar(final Grammar grammar) {
+		this.grammar = grammar;
+	}
+
+	/**
+	 * Returns the size of the populations that this initialiser constructs or
+	 * <code>-1</code> if none has been set.
+	 * 
+	 * @return the size of the populations that this initialiser will generate.
+	 */
+	public int getPopSize() {
+		return popSize;
+	}
+
+	/**
+	 * Sets the size of the populations that this initialiser should construct
+	 * on calls to the <code>getInitialPopulation</code> method.
+	 * 
+	 * @param popSize the size of the populations that should be created by this
+	 *        initialiser.
+	 */
+	public void setPopSize(final int popSize) {
+		this.popSize = popSize;
+	}
+
+	/**
+	 * Returns the maximum depth that any program parse tree generated by this 
+	 * initialiser will have.
+	 * 
+	 * @return the maximum depth the program trees constructed should be.
+	 */
+	public int getMaxDepth() {
+		return maxDepth;
+	}
+
+	/**
+	 * Sets the maximum depth that any program parse trees generated by this 
+	 * initialiser should be.
+	 * 
+	 * @param maxDepth the maximum depth of all new program trees.
+	 */
+	public void setMaxDepth(final int maxDepth) {
+		this.maxDepth = maxDepth;
 	}
 }

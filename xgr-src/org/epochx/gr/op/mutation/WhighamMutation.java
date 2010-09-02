@@ -82,7 +82,7 @@ public class WhighamMutation implements GRMutation {
 
 		// Construct a new subtree from that node's grammar rule.
 		final GrammarRule rule = point.getGrammarRule();
-		final NonTerminalSymbol replacement = init.growParseTree(originalDepth,
+		final NonTerminalSymbol replacement = init.getGrownParseTree(originalDepth,
 				rule);
 
 		// Replace node.

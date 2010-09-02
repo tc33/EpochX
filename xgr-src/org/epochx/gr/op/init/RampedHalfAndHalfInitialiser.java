@@ -28,6 +28,7 @@ import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.life.ConfigAdapter;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.Grammar;
+import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
  * Initialisation implementation which uses a combination of full and grow
@@ -59,13 +60,21 @@ import org.epochx.tools.grammar.Grammar;
  * <li>random number generator</li>
  * </ul>
  * 
+ * <p>
+ * If the <code>getModel</code> method returns <code>null</code> then no model
+ * is set and whatever static parameters have been set as parameters to the
+ * constructor or using the standard accessor methods will be used. If any
+ * compulsory parameters remain unset when the initialiser is requested to
+ * generate new programs, then an <code>IllegalStateException</code> will be
+ * thrown.
+ * 
  * @see FullInitialiser
  * @see GrowInitialiser
  */
 public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 
 	// The controlling model.
-	private final GRModel model;
+	private GRModel model;
 
 	// The grammar all new programs must be valid against.
 	private Grammar grammar;
@@ -73,11 +82,9 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 	// The size of the populations to construct.
 	private int popSize;
 
-	// The depth of every program parse tree to generate.
-	private int maxInitialDepth;
-
-	// The smallest depth to be used.
-	private int minDepth;
+	// The depth limits of each program tree to generate.
+	private int endMaxDepth;
+	private int startMaxDepth;
 
 	// Whether programs must be unique in generated populations.
 	private boolean acceptDuplicates;
@@ -85,6 +92,26 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 	// The grow and full instances for doing their share of the work.
 	private final GrowInitialiser grow;
 	private final FullInitialiser full;
+
+	/**
+	 * Constructs a <code>RampedHalfAndHalfInitialiser</code> with all the
+	 * necessary parameters given.
+	 */
+	public RampedHalfAndHalfInitialiser(final RandomNumberGenerator rng,
+			final Grammar grammar, final int popSize, final int startMaxDepth,
+			final int endMaxDepth, final boolean acceptDuplicates) {
+		this.endMaxDepth = endMaxDepth;
+		this.startMaxDepth = startMaxDepth;
+		this.grammar = grammar;
+		this.popSize = popSize;
+		this.acceptDuplicates = acceptDuplicates;
+
+		// Set up the grow and full parts.
+		grow = new GrowInitialiser(rng, grammar, popSize, endMaxDepth,
+				acceptDuplicates);
+		full = new FullInitialiser(rng, grammar, popSize, endMaxDepth,
+				acceptDuplicates);
+	}
 
 	/**
 	 * Constructs a <code>RampedHalfAndHalfInitialiser</code> with the necessary
@@ -107,7 +134,8 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 	 * 
 	 * @param model the <code>Model</code> instance from which the necessary
 	 *        parameters should be loaded.
-	 * @param minDepth the minimum depth from which programs should be generated
+	 * @param startMaxDepth the minimum depth from which programs should be
+	 *        generated
 	 *        to.
 	 */
 	public RampedHalfAndHalfInitialiser(final GRModel model, final int minDepth) {
@@ -121,7 +149,8 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 	 * 
 	 * @param model the <code>Model</code> instance from which the necessary
 	 *        parameters should be loaded.
-	 * @param minDepth the minimum depth from which programs should be generated
+	 * @param startMaxDepth the minimum depth from which programs should be
+	 *        generated
 	 *        to.
 	 * @param acceptDuplicates whether duplicates should be allowed in the
 	 *        populations that are generated.
@@ -129,7 +158,7 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 	public RampedHalfAndHalfInitialiser(final GRModel model,
 			final int minDepth, final boolean acceptDuplicates) {
 		this.model = model;
-		this.minDepth = minDepth;
+		this.startMaxDepth = minDepth;
 		this.acceptDuplicates = acceptDuplicates;
 
 		// set up the grow and full parts
@@ -152,11 +181,12 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 	private void configure() {
 		grammar = model.getGrammar();
 		popSize = model.getPopulationSize();
-		maxInitialDepth = model.getMaxInitialDepth();
+		endMaxDepth = model.getMaxInitialDepth();
 	}
 
 	/**
-	 * Generates a population of new <code>GRCandidatePrograms</code> constructed
+	 * Generates a population of new <code>GRCandidatePrograms</code>
+	 * constructed
 	 * from the <code>Grammar</code> attribute. The size of the population will
 	 * be equal to the population size attribute. All programs in the population
 	 * are only guarenteed to be unique (as defined by the <code>equals</code>
@@ -171,40 +201,50 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 	 */
 	@Override
 	public List<CandidateProgram> getInitialPopulation() {
+		if (popSize < 1) {
+			throw new IllegalStateException(
+					"Population size must be 1 or greater");
+		} else if (grammar == null) {
+			throw new IllegalStateException("No grammar has been set");
+		}
+
 		// Create population list to populate.
 		final List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(
 				popSize);
 
+		int startDepth = startMaxDepth;
 		final int minDepthPossible = grammar.getMinimumDepth();
-		if (minDepth < minDepthPossible) {
+		if (startMaxDepth < minDepthPossible) {
 			// Our start depth can only be as small as the grammars minimum
 			// depth.
-			minDepth = minDepthPossible;
+			startDepth = minDepthPossible;
 		}
 
-		if (maxInitialDepth < 2) {
-			throw new IllegalArgumentException(
-					"Initial maximum depth must be greater than 1 for RH+H.");
+		if (endMaxDepth < startDepth) {
+			throw new IllegalStateException(
+					"End maximum depth must be greater than the minimum possible depth.");
 		}
 
 		// Number of programs each depth SHOULD have. But won't unless remainder
 		// is 0.
 		final double programsPerDepth = (double) popSize
-				/ (maxInitialDepth - minDepth + 1);
+				/ (endMaxDepth - startMaxDepth + 1);
 
 		for (int i = 0; i < popSize; i++) {
 			// Calculate depth
 			final int depth = (int) Math.floor((i / programsPerDepth)
-					+ minDepth);
+					+ startMaxDepth);
 
 			// Grow on even numbers, full on odd.
 			GRCandidateProgram program;
 
 			do {
 				if ((i % 2) == 0) {
-					program = grow.getInitialProgram(depth);
+					grow.setMaxDepth(depth);
+					program = grow.getInitialProgram();
 				} else {
-					program = full.getInitialProgram(depth);
+					full.setDepth(depth);
+					program = full.getInitialProgram();
 				}
 			} while (!acceptDuplicates && firstGen.contains(program));
 
@@ -235,5 +275,138 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser {
 	 */
 	public void setDuplicatesEnabled(boolean acceptDuplicates) {
 		this.acceptDuplicates = acceptDuplicates;
+	}
+
+	/**
+	 * Returns the model that is providing the configuration for this
+	 * initialiser, or <code>null</code> if none is set.
+	 * 
+	 * @return the model that is supplying the configuration parameters or null
+	 *         if the parameters are individually set.
+	 */
+	public GRModel getModel() {
+		return model;
+	}
+
+	/**
+	 * Sets a model that will provide the configuration for this initialiser.
+	 * The necessary parameters will be obtained from the model the next time,
+	 * and each time a configure event is triggered. Note that until a configure
+	 * event is fired this initialiser may be in an unusable state. Any
+	 * previously set parameters will stay active until they are overwritten at
+	 * the next configure event.
+	 * 
+	 * <p>
+	 * If a model is already set, it may be cleared by calling this method with
+	 * <code>null</code>.
+	 * 
+	 * @param model the model to set or null to clear any current model.
+	 */
+	public void setModel(final GRModel model) {
+		this.model = model;
+
+		grow.setModel(model);
+		full.setModel(model);
+	}
+
+	/**
+	 * Sets the random number generator to use. If a model has been set then
+	 * this parameter will be overwritten with the random number generator from
+	 * that model on the next configure event.
+	 * 
+	 * @param rng the random number generator to set.
+	 */
+	public void setRNG(final RandomNumberGenerator rng) {
+		grow.setRNG(rng);
+		full.setRNG(rng);
+	}
+
+	/**
+	 * Returns the grammar that this initialiser is generating programs to
+	 * satisfy.
+	 * 
+	 * @return the grammar that generated programs are being constructed for.
+	 */
+	public Grammar getGrammar() {
+		return grammar;
+	}
+
+	/**
+	 * Sets the grammar that program parse trees should be generated for.
+	 * 
+	 * @param grammar the <code>Grammar</code> that generated programs should be
+	 *        constructed for.
+	 */
+	public void setGrammar(final Grammar grammar) {
+		this.grammar = grammar;
+
+		grow.setGrammar(grammar);
+		full.setGrammar(grammar);
+	}
+
+	/**
+	 * Returns the size of the populations that this initialiser constructs or
+	 * <code>-1</code> if none has been set.
+	 * 
+	 * @return the size of the populations that this initialiser will generate.
+	 */
+	public int getPopSize() {
+		return popSize;
+	}
+
+	/**
+	 * Sets the size of the populations that this initialiser should construct
+	 * on calls to the <code>getInitialPopulation</code> method.
+	 * 
+	 * @param popSize the size of the populations that should be created by this
+	 *        initialiser.
+	 */
+	public void setPopSize(final int popSize) {
+		this.popSize = popSize;
+	}
+
+	/**
+	 * Returns the final maximum depth that will be used for programs this
+	 * initialiser generates. Program depths will have been gradually ramped up
+	 * to this value from the start max depth.
+	 * 
+	 * @return the maximum depth the program trees constructed should be.
+	 */
+	public int getEndMaxDepth() {
+		return endMaxDepth;
+	}
+
+	/**
+	 * Sets the maximum depth used for the parse trees of the programs this
+	 * initialiser constructs. Depths will be ramped up to this maximum depth.
+	 * 
+	 * @param endMaxDepth the maximum depth of the ramping process.
+	 */
+	public void setEndMaxDepth(final int maxDepth) {
+		this.endMaxDepth = maxDepth;
+	}
+
+	/**
+	 * Returns the first maximum depth that will be used for programs this
+	 * initialiser generates. Program depths will then be gradually ramped up to
+	 * the end max depth.
+	 * 
+	 * @return the maximum depth used for the first program trees before the
+	 *         depth is ramped up to the end max depth.
+	 */
+	public int getStartMaxDepth() {
+		return startMaxDepth;
+	}
+	
+
+	/**
+	 * Sets the first maximum depth used for program trees this initialiser
+	 * constructs. Depths will be ramped up from here to the end maximum depth.
+	 * 
+	 * @param endMaxDepth the maximum depth to be used for the smallest set of
+	 *        program trees.
+	 */
+	public void setStartMaxDepth(final int startMaxDepth) {
+		this.startMaxDepth = startMaxDepth;
 	}
 }

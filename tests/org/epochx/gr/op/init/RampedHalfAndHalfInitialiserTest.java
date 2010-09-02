@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.ge.op.init;
+package org.epochx.gr.op.init;
 
 import junit.framework.TestCase;
 
@@ -36,14 +36,13 @@ public class RampedHalfAndHalfInitialiserTest extends TestCase {
 	
 	@Override
 	protected void setUp() throws Exception {
-		initialiser = new RampedHalfAndHalfInitialiser(null, null, -1, -1, -1, -1, false);
+		initialiser = new RampedHalfAndHalfInitialiser(null, null, -1, -1, -1, false);
 		
 		String grammarStr = "<a> ::= x | y\n";
 		
 		// Ensure setup is valid.
-		initialiser.setEndMaxDepth(1);
 		initialiser.setStartMaxDepth(1);
-		initialiser.setMaxCodonValue(3);
+		initialiser.setEndMaxDepth(1);
 		initialiser.setRNG(new MersenneTwisterFast());
 		initialiser.setGrammar(new Grammar(grammarStr));
 		initialiser.setPopSize(1);
@@ -91,19 +90,6 @@ public class RampedHalfAndHalfInitialiserTest extends TestCase {
 		try {
 			initialiser.getInitialPopulation();
 			fail("illegal state exception not thrown for a maximum depth which is less than the minimum possible depth");
-		} catch (IllegalStateException e) {}
-	}
-	
-	/**
-	 * Tests that an illegal state exception is thrown if the maximum codon 
-	 * value is less than 3.
-	 */
-	public void testGetPopMaxCodon() {
-		initialiser.setMaxCodonValue(2);
-		
-		try {
-			initialiser.getInitialPopulation();
-			fail("illegal state exception not thrown for a maximum codon value <3");
 		} catch (IllegalStateException e) {}
 	}
 	

@@ -19,38 +19,36 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.ge.op.init;
-
-import junit.framework.TestCase;
+package org.epochx.gr.op.init;
 
 import org.epochx.tools.grammar.Grammar;
 import org.epochx.tools.random.MersenneTwisterFast;
+
+import junit.framework.TestCase;
 
 
 /**
  * 
  */
-public class RampedHalfAndHalfInitialiserTest extends TestCase {
-	
-	private RampedHalfAndHalfInitialiser initialiser;
-	
+public class GrowInitialiserTest extends TestCase {
+
+	private GrowInitialiser initialiser;
+
 	@Override
 	protected void setUp() throws Exception {
-		initialiser = new RampedHalfAndHalfInitialiser(null, null, -1, -1, -1, -1, false);
-		
+		initialiser = new GrowInitialiser(null, null, -1, -1, false);
+
 		String grammarStr = "<a> ::= x | y\n";
 		
 		// Ensure setup is valid.
-		initialiser.setEndMaxDepth(1);
-		initialiser.setStartMaxDepth(1);
-		initialiser.setMaxCodonValue(3);
-		initialiser.setRNG(new MersenneTwisterFast());
+		initialiser.setMaxDepth(1);
 		initialiser.setGrammar(new Grammar(grammarStr));
 		initialiser.setPopSize(1);
+		initialiser.setRNG(new MersenneTwisterFast());
 	}
 	
 	/**
-	 * Tests that an illegal state exception is not thrown with valid 
+	 * Tests that an illegal state exception is not thrown with valid
 	 * parameters.
 	 */
 	public void testGetPopValid() {
@@ -76,34 +74,15 @@ public class RampedHalfAndHalfInitialiserTest extends TestCase {
 	}
 	
 	/**
-	 * Tests that an illegal state exception is thrown if the minimum possible 
-	 * depth is greater than the maximum depth setting.
+	 * Tests that an illegal state exception is thrown if no random number 
+	 * generator is set.
 	 */
-	public void testGetPopMaxDepth() {
-		initialiser.setEndMaxDepth(1);
-		String grammarStr = "<a> ::= <b> | y <b>\n" +
-							"<b> ::= c | x\n";
-		initialiser.setGrammar(new Grammar(grammarStr));
-		
-		int minDepth = initialiser.getGrammar().getStartRule().getMinDepth();
-		assertEquals("Minimum depth not calculated correctly", 2, minDepth);
+	public void testGetPopRNGNull() {
+		initialiser.setRNG(null);
 		
 		try {
 			initialiser.getInitialPopulation();
-			fail("illegal state exception not thrown for a maximum depth which is less than the minimum possible depth");
-		} catch (IllegalStateException e) {}
-	}
-	
-	/**
-	 * Tests that an illegal state exception is thrown if the maximum codon 
-	 * value is less than 3.
-	 */
-	public void testGetPopMaxCodon() {
-		initialiser.setMaxCodonValue(2);
-		
-		try {
-			initialiser.getInitialPopulation();
-			fail("illegal state exception not thrown for a maximum codon value <3");
+			fail("illegal state exception not thrown for a null RNG");
 		} catch (IllegalStateException e) {}
 	}
 	
@@ -120,16 +99,21 @@ public class RampedHalfAndHalfInitialiserTest extends TestCase {
 	}
 	
 	/**
-	 * Tests that an illegal state exception is thrown if the start maximum 
-	 * depth is larger than the end maximum depth.
+	 * Tests that an illegal state exception is thrown if the minimum possible 
+	 * depth is greater than the maximum depth setting.
 	 */
-	public void testGetPopDepthsSequence() {
-		initialiser.setStartMaxDepth(4);
-		initialiser.setEndMaxDepth(3);
+	public void testGetPopMaxDepth() {
+		initialiser.setMaxDepth(1);
+		String grammarStr = "<a> ::= <b> | y <b>\n" +
+							"<b> ::= c | x\n";
+		initialiser.setGrammar(new Grammar(grammarStr));
+		
+		int minDepth = initialiser.getGrammar().getStartRule().getMinDepth();
+		assertEquals("Minimum depth not calculated correctly", 2, minDepth);
 		
 		try {
 			initialiser.getInitialPopulation();
-			fail("illegal state exception not thrown when start depth is greater than end depth");
+			fail("illegal state exception not thrown for a maximum depth which is less than the minimum possible depth");
 		} catch (IllegalStateException e) {}
 	}
 }

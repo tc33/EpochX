@@ -59,6 +59,14 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * <li>random number generator</li>
  * </ul>
  * 
+ * <p>
+ * If the <code>getModel</code> method returns <code>null</code> then no model
+ * is set and whatever static parameters have been set as parameters to the
+ * constructor or using the standard accessor methods will be used. If any
+ * compulsory parameters remain unset when the initialiser is requested to
+ * generate new programs, then an <code>IllegalStateException</code> will be
+ * thrown.
+ * 
  * @see FullInitialiser
  * @see GrowInitialiser
  */

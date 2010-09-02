@@ -61,7 +61,7 @@ public class EpoxInterpreterTest extends TestCase {
 
 		String expression = "AND(OR(b1 false) NOT(false))";
 		String[] args = {"b1", "i1"};
-		Object[][] values = {{true, 3}, {false, 4}};
+		Object[][] values = {{true, 3.0}, {false, 4.0}};
 
 		Object[] result = interpreter.eval(expression, args, values);
 

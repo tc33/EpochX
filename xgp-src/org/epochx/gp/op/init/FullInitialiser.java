@@ -100,7 +100,7 @@ public class FullInitialiser implements GPInitialiser {
 	 * events. Duplicate programs are allowed in the populations that are
 	 * constructed.
 	 * 
-	 * @param model the <code>Model</code> instance from which the necessary
+	 * @param model the <code>GPModel</code> instance from which the necessary
 	 *        parameters should be loaded.
 	 */
 	public FullInitialiser(final GPModel model) {
@@ -112,7 +112,7 @@ public class FullInitialiser implements GPInitialiser {
 	 * loaded from the given model. The parameters are reloaded on configure
 	 * events.
 	 * 
-	 * @param model the <code>Model</code> instance from which the necessary
+	 * @param model the <code>GPModel</code> instance from which the necessary
 	 *        parameters should be loaded.
 	 * @param acceptDuplicates whether duplicates should be allowed in the
 	 *        populations that are generated.

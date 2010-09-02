@@ -39,7 +39,7 @@ import org.epochx.representation.CandidateProgram;
 public interface GEInitialiser extends Initialiser {
 
 	/**
-	 * Construct and return an initial population of CandidatePrograms.
+	 * Constructs and return an initial population of CandidatePrograms.
 	 * Implementations will typically wish to return a population with a size
 	 * as given by calling getPopulationSize() on the controlling model.
 	 * 

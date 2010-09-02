@@ -23,37 +23,98 @@ package org.epochx.ge.op.init;
 
 import java.util.*;
 
+import org.epochx.ge.codon.CodonGenerator;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.life.ConfigAdapter;
 import org.epochx.representation.CandidateProgram;
 
 /**
- * Initialisation implementation that randomly generates a chromosome up to a
- * specified length.
+ * Initialisation implementation which constructs each program's chromosome to
+ * a specified length with a random sequence of codons. All programs generated
+ * with this initialiser will have the same length of chromosome. Each codon
+ * is generated with the <code>CodonGenerator</code>.
+ * 
+ * <p>
+ * If a model is provided then the following parameters are loaded upon every
+ * configure event:
+ * 
+ * <ul>
+ * <li>population size</li>
+ * <li>codon generator</code>
+ * </ul>
+ * 
+ * <p>
+ * If the <code>getModel</code> method returns <code>null</code> then no model
+ * is set and whatever static parameters have been set as parameters to the
+ * constructor or using the standard accessor methods will be used. If any
+ * compulsory parameters remain unset when the initialiser is requested to
+ * generate new programs, then an <code>IllegalStateException</code> will be
+ * thrown.
+ * 
+ * @see FullInitialiser
+ * @see GrowInitialiser
+ * @see RampedHalfAndHalfInitialiser
  */
 public class FixedLengthInitialiser implements GEInitialiser {
 
 	// The controlling model.
-	private final GEModel model;
+	private GEModel model;
 
+	// The generator to provide the new codons.
+	private CodonGenerator codonGenerator;
+
+	// The size of the populations to construct.
 	private int popSize;
 
+	// The length of every program chromosome to generate.
 	private int chromosomeLength;
-	
+
+	// Whether programs must be unique in generated populations.
 	private boolean acceptDuplicates;
 
-	public FixedLengthInitialiser(final GEModel model, final int chromosomeLength) {
-		this(model, chromosomeLength, true);
-	}
-	
 	/**
-	 * Constructs a RandomInitialiser.
+	 * Constructs a <code>FixedLengthInitialiser</code> with all the necessary
+	 * parameters given.
+	 */
+	public FixedLengthInitialiser(final CodonGenerator codonGenerator,
+			final int popSize, final int chromosomeLength,
+			final boolean acceptDuplicates) {
+		this.codonGenerator = codonGenerator;
+		this.popSize = popSize;
+		this.chromosomeLength = chromosomeLength;
+		this.acceptDuplicates = acceptDuplicates;
+	}
+
+	/**
+	 * Constructs a <code>FixedLengthInitialiser</code> with the necessary
+	 * parameters loaded from the given model. The parameters are reloaded on
+	 * configure events. Duplicate programs are allowed in the populations that
+	 * are constructed.
 	 * 
-	 * @param model The GE model that will provide any required control
-	 *        parameters such as the desired population size.
+	 * @param model the <code>GEModel</code> instance from which the necessary
+	 *        parameters should be loaded.
 	 * @param chromosomeLength The initial length that chromosomes should be
 	 *        generated to.
+	 * @param acceptDuplicates whether duplicates should be allowed in the
+	 *        populations that are generated.
+	 */
+	public FixedLengthInitialiser(final GEModel model,
+			final int chromosomeLength) {
+		this(model, chromosomeLength, true);
+	}
+
+	/**
+	 * Constructs a <code>FixedLengthInitialiser</code> with the necessary
+	 * parameters loaded from the given model. The parameters are reloaded on
+	 * configure events.
+	 * 
+	 * @param model the <code>GEModel</code> instance from which the necessary
+	 *        parameters should be loaded.
+	 * @param chromosomeLength The initial length that chromosomes should be
+	 *        generated to.
+	 * @param acceptDuplicates whether duplicates should be allowed in the
+	 *        populations that are generated.
 	 */
 	public FixedLengthInitialiser(final GEModel model,
 			final int chromosomeLength, final boolean acceptDuplicates) {
@@ -76,37 +137,41 @@ public class FixedLengthInitialiser implements GEInitialiser {
 	 */
 	private void configure() {
 		popSize = model.getPopulationSize();
+		codonGenerator = model.getCodonGenerator();
 	}
 
 	/**
-	 * Generate a population of new CandidatePrograms constructed by randomly
-	 * generating their chromosomes. The size of the population will be equal
-	 * to the result of calling getPopulationSize() on the controlling model.
-	 * All programs in the population will be unique. Each candidate program
-	 * will have a chromosome length equal to the chromosomeLength provided to
-	 * the
-	 * constructor.
+	 * Generates a population of new CandidatePrograms constructed by generating
+	 * their chromosomes with the codon generator to the currently set
+	 * chromosome length. The size of the population will be equal to the
+	 * population size attribute. All programs in the population are only
+	 * guarenteed to be unique (as defined by the <code>equals</code> method on
+	 * <code>GECandidateProgram</code>) if the <code>isDuplicatesEnabled</code>
+	 * method returns <code>true</code>.
 	 * 
 	 * @return A List of newly generated CandidatePrograms which will form the
 	 *         initial population for a GE run.
 	 */
 	@Override
 	public List<CandidateProgram> getInitialPopulation() {
+		if (popSize < 1) {
+			throw new IllegalStateException(
+					"Population size must be 1 or greater");
+		}
+
 		// Initialise population of candidate programs.
 		final List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(
 				popSize);
 
 		// Build population.
-		for (int i=0; i<popSize; i++) {
+		for (int i = 0; i < popSize; i++) {
 			GECandidateProgram candidate;
 
 			do {
-				candidate = new GECandidateProgram(model);
-				// Initialise the program.
-				candidate.appendNewCodons(chromosomeLength);
-	
-				firstGen.add(candidate);
+				candidate = getInitialProgram();
 			} while (!acceptDuplicates && firstGen.contains(candidate));
+			
+			firstGen.add(candidate);
 		}
 
 		// Return starting population.
@@ -114,8 +179,32 @@ public class FixedLengthInitialiser implements GEInitialiser {
 	}
 
 	/**
+	 * Constructs a new <code>GECandidateProgram</code> with a chromosome of
+	 * length that matches the chromosome length property of this initialiser.
+	 * Each codon will be generated with the currently set
+	 * <code>CodonGenerator</code>.
+	 * 
+	 * @return a new <code>GECandidateProgram</code> instance.
+	 */
+	public GECandidateProgram getInitialProgram() {
+		if (chromosomeLength < 1) {
+			throw new IllegalStateException(
+					"Chromosome length must be 1 or greater");
+		}
+
+		// Generate the list of codons.
+		List<Integer> codons = new ArrayList<Integer>(chromosomeLength);
+		for (int i = 0; i < chromosomeLength; i++) {
+			codons.add(codonGenerator.getCodon());
+		}
+
+		// Construct and return the new program.
+		return new GECandidateProgram(codons, model);
+	}
+
+	/**
 	 * Returns the length of chromosome that all new
-	 * <code>CandidateProgram</code> instances will be generated with.
+	 * <code>GECandidateProgram</code> instances will be generated with.
 	 * 
 	 * @return the fixed length that this initialiser is generating chromosomes
 	 *         to.
@@ -126,7 +215,7 @@ public class FixedLengthInitialiser implements GEInitialiser {
 
 	/**
 	 * Sets the length of chromosome for all future
-	 * <code>CandidateProgram</code> generations.
+	 * <code>GECandidateProgram</code> constructions.
 	 * 
 	 * @param chromosomeLength the fixed length to use for the chromosomes of
 	 *        generated programs.
@@ -135,11 +224,98 @@ public class FixedLengthInitialiser implements GEInitialiser {
 		this.chromosomeLength = chromosomeLength;
 	}
 
+	/**
+	 * Returns whether or not duplicates are currently accepted or rejected from
+	 * generated populations.
+	 * 
+	 * @return <code>true</code> if duplicates are currently accepted in any
+	 *         populations generated by the <code>getInitialPopulation</code>
+	 *         method and <code>false</code> otherwise
+	 */
 	public boolean isDuplicatesEnabled() {
 		return acceptDuplicates;
 	}
 
-	public void setDuplicatesEnabled(boolean acceptDuplicates) {
+	/**
+	 * Sets whether duplicates should be allowed in the populations that are
+	 * generated, or if they should be discarded.
+	 * 
+	 * @param acceptDuplicates whether duplicates should be accepted in the
+	 *        populations that are constructed.
+	 */
+	public void setDuplicatesEnabled(final boolean acceptDuplicates) {
 		this.acceptDuplicates = acceptDuplicates;
+	}
+
+	/**
+	 * Returns the model that is providing the configuration for this
+	 * initialiser, or <code>null</code> if none is set.
+	 * 
+	 * @return the model that is supplying the configuration parameters or null
+	 *         if the parameters are individually set.
+	 */
+	public GEModel getModel() {
+		return model;
+	}
+
+	/**
+	 * Sets a model that will provide the configuration for this initialiser.
+	 * The necessary parameters will be obtained from the model the next time,
+	 * and each time a configure event is triggered. Note that until a configure
+	 * event is fired this initialiser may be in an unusable state. Any
+	 * previously set parameters will stay active until they are overwritten at
+	 * the next configure event.
+	 * 
+	 * <p>
+	 * If a model is already set, it may be cleared by calling this method with
+	 * <code>null</code>.
+	 * 
+	 * @param model the model to set or null to clear any current model.
+	 */
+	public void setModel(final GEModel model) {
+		this.model = model;
+	}
+
+	/**
+	 * Returns the size of the populations that this initialiser constructs or
+	 * <code>-1</code> if none has been set.
+	 * 
+	 * @return the size of the populations that this initialiser will generate.
+	 */
+	public int getPopSize() {
+		return popSize;
+	}
+
+	/**
+	 * Sets the size of the populations that this initialiser should construct
+	 * on calls to the <code>getInitialPopulation</code> method.
+	 * 
+	 * @param popSize the size of the populations that should be created by this
+	 *        initialiser.
+	 */
+	public void setPopSize(final int popSize) {
+		this.popSize = popSize;
+	}
+
+	/**
+	 * Returns the codon generator that this initialiser is using to provide
+	 * new codons for each candidate program that is constructed.
+	 * 
+	 * @return the codonGenerator the <code>CodonGenerator</code> that is
+	 *         providing each new codon.
+	 */
+	public CodonGenerator getCodonGenerator() {
+		return codonGenerator;
+	}
+
+	/**
+	 * Sets the codon generator that this initialiser should use to obtain new
+	 * codons for newly constructed candidate programs.
+	 * 
+	 * @param codonGenerator the codonGenerator to use in generating new codons
+	 *        for the new candidate programs.
+	 */
+	public void setCodonGenerator(CodonGenerator codonGenerator) {
+		this.codonGenerator = codonGenerator;
 	}
 }

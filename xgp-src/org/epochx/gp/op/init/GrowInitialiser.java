@@ -242,12 +242,19 @@ public class GrowInitialiser implements GPInitialiser {
 					"Syntax must include nodes with arity of 0");
 		}
 		
-		// Randomly choose a root node.
-		final int randomIndex = rng.nextInt(syntax.size());
-		final Node root = syntax.get(randomIndex).clone();
-
-		// Populate the root node with grown children with maximum depth-1.
-		this.fillChildren(root, 0, maxDepth);
+		Node root;
+		if (maxDepth == 0) {
+			// Randomly choose a terminal node as our root.
+			final int randomIndex = rng.nextInt(terminals.size());
+			root = terminals.get(randomIndex).clone();
+		} else {
+			// Randomly choose a root node.
+			final int randomIndex = rng.nextInt(syntax.size());
+			root = syntax.get(randomIndex).clone();
+	
+			// Populate the root node with grown children with maximum depth-1.
+			this.fillChildren(root, 0, maxDepth);
+		}
 
 		return root;
 	}

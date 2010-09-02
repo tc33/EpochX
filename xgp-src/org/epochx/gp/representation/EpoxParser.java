@@ -184,10 +184,13 @@ public class EpoxParser {
 		String identifier = null;
 		List<String> args = null;
 
+		boolean terminal = false;
+		
 		// If there is no bracket then it must be a terminal.
 		if (openingBracket == -1) {
 			identifier = source;
 			args = new ArrayList<String>();
+			terminal = true;
 		} else {
 			// Get the name of the function.
 			identifier = source.substring(0, openingBracket);
@@ -204,10 +207,11 @@ public class EpoxParser {
 			args = splitArguments(argumentStr);
 		}
 
-		Node node = initialiseFunction(identifier);
-
-		if (node == null) {
+		Node node;
+		if (terminal) {
 			node = parseTerminal(identifier);
+		} else {
+			node = initialiseFunction(identifier);
 		}
 
 		// Check the arities match.

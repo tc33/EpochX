@@ -302,6 +302,9 @@ public class EpoxParser {
 			if (((c == ' ') || (c == ',')) && (depth == 0)) {
 				args.add(buffer.toString());
 				buffer = new StringBuilder();
+				while (argStr.charAt(i+1) == ' ') {
+					i++;
+				}
 			} else {
 				buffer.append(c);
 			}

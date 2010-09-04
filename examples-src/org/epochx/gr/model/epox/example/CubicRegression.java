@@ -24,7 +24,7 @@ public class CubicRegression extends org.epochx.gr.model.epox.CubicRegression {
 		 * 
 		 * @Override
 		 * public void onGenerationEnd() {
-		 * model.getStatsManager().printGenerationStats(GRStatField.GEN_NUMBER,
+		 * model.getStatsManager().printStats(GRStatField.GEN_NUMBER,
 		 * GRStatField.GEN_FITNESS_MIN, GRStatField.GEN_FITNESS_AVE,
 		 * GRStatField.GEN_DEPTH_AVE, GRStatField.GEN_DEPTH_MAX,
 		 * GRStatField.GEN_FITTEST_PROGRAM);
@@ -36,7 +36,7 @@ public class CubicRegression extends org.epochx.gr.model.epox.CubicRegression {
 
 			@Override
 			public void onRunEnd() {
-				model.getStatsManager().printRunStats(StatField.RUN_NUMBER,
+				model.getStatsManager().printStats(StatField.RUN_NUMBER,
 						StatField.RUN_FITNESS_MIN,
 						StatField.RUN_FITTEST_PROGRAM);
 			}

@@ -179,7 +179,7 @@ public class InitialisationManager {
 		final long startTime = System.nanoTime();
 
 		// Record the generation number as zero in the stats data.
-		model.getStatsManager().addGenerationData(GEN_NUMBER, 0);
+		model.getStatsManager().addData(GEN_NUMBER, 0);
 
 		// Reset the number of reversions.
 		reversions = 0;
@@ -201,9 +201,9 @@ public class InitialisationManager {
 		} while (pop == null);
 
 		// Store the stats data from the initialisation.
-		model.getStatsManager().addGenerationData(INIT_REVERSIONS, reversions);
-		model.getStatsManager().addGenerationData(GEN_POPULATION, pop);
-		model.getStatsManager().addGenerationData(GEN_TIME,
+		model.getStatsManager().addData(INIT_REVERSIONS, reversions);
+		model.getStatsManager().addData(GEN_POPULATION, pop);
+		model.getStatsManager().addData(GEN_TIME,
 				(System.nanoTime() - startTime));
 
 		// Trigger life cycle events for end of initialisation and generation 0.

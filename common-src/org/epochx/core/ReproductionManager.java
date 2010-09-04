@@ -134,7 +134,7 @@ public class ReproductionManager {
 		} while (parent == null);
 
 		// Store the stats from the reproduction.
-		model.getStatsManager().addGenerationData(REP_REVERSIONS, reversions);
+		model.getStatsManager().addData(REP_REVERSIONS, reversions);
 
 		// Inform all listeners reproduction has ended.
 		model.getLifeCycleManager().fireReproductionEndEvent();

@@ -25,20 +25,19 @@ package org.epochx.stats;
  * Provides constants to be used as keys to request statistics from the
  * StatsManager.
  */
-public class StatField {
-
+public enum StatField {
+	
 	/**
 	 * Returns an <code>Integer</code> which is the sequential identifier of the
-	 * last run in the series of runs. The first run will be run
-	 * number 0.
+	 * last run in the series of runs. The first run will be run number 0.
 	 */
-	public static final String RUN_NUMBER = "run-number";
+	RUN_NUMBER,
 
 	/**
 	 * Returns a <code>Long</code> which is the length of time in nanoseconds
 	 * that the last run took to complete.
 	 */
-	public static final String RUN_TIME = "run-time";
+	RUN_TIME,
 
 	/**
 	 * Returns a <code>Double</code> which is the lowest fitness score achieved
@@ -46,32 +45,32 @@ public class StatField {
 	 * standardised fitness is used, so the best program has the minimum
 	 * fitness.
 	 */
-	public static final String RUN_FITNESS_MIN = "run-fitness-min";
+	RUN_FITNESS_MIN,
 
 	/**
 	 * Returns the <code>CandidateProgram</code> which obtained the fitness
 	 * score in the RUN_FITNESS_MIN field.
 	 */
-	public static final String RUN_FITTEST_PROGRAM = "run-fittest-program";
+	RUN_FITTEST_PROGRAM,
 
 	/**
 	 * Returns an <code>Integer</code> which is the number of times the last
 	 * initialisation operation was reverted.
 	 */
-	public static final String INIT_REVERSIONS = "init-reversions";
+	INIT_REVERSIONS,
 
 	/**
 	 * Returns an <code>Integer</code> which is the sequential identifier of the
 	 * last generation where generation 0 is the initialisation phase.
 	 */
-	public static final String GEN_NUMBER = "gen-number";
+	GEN_NUMBER,
 
 	/**
 	 * Returns a <code>double[]</code> which contains the fitnesses of all the
 	 * <code>CandidateProgram</code>s in the population at the end of the
 	 * previous generation. The fitnesses are arbitrarily ordered.
 	 */
-	public static final String GEN_FITNESSES = "gen-fitnesses";
+	GEN_FITNESSES,
 
 	/**
 	 * Returns a <code>Double</code> which is the lowest fitness score of a
@@ -79,7 +78,7 @@ public class StatField {
 	 * standardised fitness is used, so the best program has the minimum
 	 * fitness.
 	 */
-	public static final String GEN_FITNESS_MIN = "gen-fitness-min";
+	GEN_FITNESS_MIN,
 
 	/**
 	 * Returns a <code>Double</code> which is the highest fitness score of a
@@ -87,120 +86,120 @@ public class StatField {
 	 * standardised fitness is used, so the best program has the minimum
 	 * fitness.
 	 */
-	public static final String GEN_FITNESS_MAX = "gen-fitness-max";
+	GEN_FITNESS_MAX,
 
 	/**
 	 * Returns a <code>Double</code> which is the average fitness score of all
 	 * the <code>CandidateProgram</code>s in the population at the end of the
 	 * previous generation.
 	 */
-	public static final String GEN_FITNESS_AVE = "gen-fitness-ave";
+	GEN_FITNESS_AVE,
 
 	/**
 	 * Returns a <code>Double</code> which is the standard deviation of the
 	 * fitness scores of all the <code>CandidateProgram</code>s in the
 	 * population at the end of the previous generation.
 	 */
-	public static final String GEN_FITNESS_STDEV = "gen-fitness-stdev";
+	GEN_FITNESS_STDEV,
 
 	/**
 	 * Returns a <code>Double</code> which is the median value of all the
 	 * fitness scores from the population of <code>CandidateProgram</code>s at
 	 * the end of the previous generation.
 	 */
-	public static final String GEN_FITNESS_MEDIAN = "gen-fitness-median";
+	GEN_FITNESS_MEDIAN,
 
 	/**
 	 * Returns a <code>Double</code> which is the 95% confidence interval either
 	 * side of the fitness mean for the population of
 	 * <code>CandidateProgram</code>s at the end of the previous generation.
 	 */
-	public static final String GEN_FITNESS_CI95 = "gen-fitness-ci95";
+	GEN_FITNESS_CI95,
 
 	/**
 	 * Returns the <code>CandidateProgram</code> which obtained the fitness
 	 * score in the GEN_FITNESS_MIN field.
 	 */
-	public static final String GEN_FITTEST_PROGRAM = "gen-fittest-program";
+	GEN_FITTEST_PROGRAM,
 
 	/**
 	 * Returns an <code>Integer</code> which is the number of times the previous
 	 * generation was reverted.
 	 */
-	public static final String GEN_REVERSIONS = "gen-reversions";
+	GEN_REVERSIONS,
 
 	/**
 	 * Returns a <code>List&lt;CandidateProgram&gt;</code> which is the
 	 * population of <code>CandidateProgram</code>s at the end of the previous
 	 * generation.
 	 */
-	public static final String GEN_POPULATION = "gen-population";
+	GEN_POPULATION,
 
 	/**
 	 * Returns a <code>Long</code> which is the length of time in nanoseconds
 	 * that the last generation took to complete.
 	 */
-	public static final String GEN_TIME = "gen-time";
+	GEN_TIME,
 
 	/**
 	 * Returns a <code>CandidateProgram</code> which is a copy of the program
 	 * which underwent mutation as it was <b>before</b> the mutation operation
 	 * was applied.
 	 */
-	public static final String MUTATION_PROGRAM_BEFORE = "mutation-program-before";
+	MUTATION_PROGRAM_BEFORE,
 
 	/**
 	 * Returns a <code>CandidateProgram</code> which is the program that is the
 	 * result of the last mutation operation.
 	 */
-	public static final String MUTATION_PROGRAM_AFTER = "mutation-program-after";
+	MUTATION_PROGRAM_AFTER,
 
 	/**
 	 * Returns a <code>Long</code> which is the length of time in nanoseconds
 	 * that the last mutation operation took to complete.
 	 */
-	public static final String MUTATION_TIME = "mutation-time";
+	MUTATION_TIME,
 
 	/**
 	 * Returns an <code>Integer</code> which is the number of times the last
 	 * mutation operation was reverted.
 	 */
-	public static final String MUTATION_REVERSIONS = "mutation-reversions";
+	MUTATION_REVERSIONS,
 
 	/**
 	 * Returns a <code>CandidateProgram[]</code> which contains a copy of the
 	 * programs which underwent crossover as they were <b>before</b> the
 	 * crossover operation was applied.
 	 **/
-	public static final String CROSSOVER_PARENTS = "crossover-parents";
+	CROSSOVER_PARENTS,
 
 	/**
 	 * Returns a <code>CandidateProgram[]</code> which contains the programs
 	 * that are the result of the last crossover operation.
 	 **/
-	public static final String CROSSOVER_CHILDREN = "crossover-children";
+	CROSSOVER_CHILDREN,
 
 	/**
 	 * Returns a <code>Long</code> which is the length of time in nanoseconds
 	 * that the last crossover operation took to complete.
 	 */
-	public static final String CROSSOVER_TIME = "crossover-time";
+	CROSSOVER_TIME,
 
 	/**
 	 * Returns an <code>Integer</code> which is the number of times the last
 	 * crossover operation was reverted.
 	 */
-	public static final String CROSSOVER_REVERSIONS = "crossover-reversions";
+	CROSSOVER_REVERSIONS,
 
 	/**
 	 * Returns an <code>Integer</code> which is the number of times the last
 	 * pool selection operation was reverted.
 	 */
-	public static final String POOL_REVERSIONS = "pool-reversions";
+	POOL_REVERSIONS,
 
 	/**
 	 * Returns an <code>Integer</code> which is the number of times the last
 	 * reproduction operation was reverted.
 	 */
-	public static final String REP_REVERSIONS = "rep-reversions";
+	REP_REVERSIONS
 }

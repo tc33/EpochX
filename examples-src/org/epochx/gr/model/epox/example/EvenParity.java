@@ -46,7 +46,7 @@ public class EvenParity extends org.epochx.gr.model.epox.EvenParity {
 
 					@Override
 					public void onGenerationEnd() {
-						model.getStatsManager().printGenerationStats(
+						model.getStatsManager().printStats(
 								StatField.GEN_NUMBER,
 								StatField.GEN_FITNESS_MIN,
 								StatField.GEN_FITNESS_AVE,
@@ -60,7 +60,7 @@ public class EvenParity extends org.epochx.gr.model.epox.EvenParity {
 
 			@Override
 			public void onRunEnd() {
-				model.getStatsManager().printRunStats(StatField.RUN_NUMBER,
+				model.getStatsManager().printStats(StatField.RUN_NUMBER,
 						StatField.RUN_FITNESS_MIN,
 						StatField.RUN_FITTEST_PROGRAM);
 			}

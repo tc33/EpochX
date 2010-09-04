@@ -21,54 +21,45 @@
  */
 package org.epochx.gp.stats;
 
-import org.epochx.stats.StatField;
-
 /**
  * Provides constants to be used as keys to request statistics from the
  * StatsManager specific to XGP.
  */
-public class GPStatField extends StatField {
-
-	/*
-	 * No need to ever create an object of GPStatField.
-	 */
-	private GPStatField() {
-	}
-
+public enum GPStatField {
 	/**
 	 * Returns an <code>int[]</code> which contains the depths of all the
 	 * <code>CandidateProgram</code>s in the population at the end of the
 	 * previous generation.
 	 */
-	public static final String GEN_DEPTHS = "xgp-gen-depths";
+	GEN_DEPTHS,
 
 	/**
 	 * Returns a <code>Double</code> which is the average depth of all the
 	 * <code>CandidateProgram</code>s in the population at the end of the
 	 * previous generation.
 	 */
-	public static final String GEN_DEPTH_AVE = "xgp-gen-depth-ave";
+	GEN_DEPTH_AVE,
 
 	/**
 	 * Returns a <code>Double</code> which is the standard deviation of the
 	 * depths of all the <code>CandidateProgram</code>s in the
 	 * population at the end of the previous generation.
 	 */
-	public static final String GEN_DEPTH_STDEV = "xgp-gen-depth-stdev";
+	GEN_DEPTH_STDEV,
 
 	/**
 	 * Returns an <code>Integer</code> which is the maximum program depth of
 	 * all the <code>CandidateProgram</code>s in the population at the end of
 	 * the previous generation.
 	 */
-	public static final String GEN_DEPTH_MAX = "xgp-gen-depth-max";
+	GEN_DEPTH_MAX,
 
 	/**
 	 * Returns an <code>Integer</code> which is the minimum program depth of all
 	 * the <code>CandidateProgram</code>s in the population at the end of the
 	 * previous generation.
 	 */
-	public static final String GEN_DEPTH_MIN = "xgp-gen-depth-min";
+	GEN_DEPTH_MIN,
 
 	/**
 	 * Returns a <code>double[]</code> which contains the average number of
@@ -76,181 +67,181 @@ public class GPStatField extends StatField {
 	 * population at the end of the previous generation. The root node of a
 	 * <code>CandidateProgram</code> is depth 0.
 	 */
-	public static final String GEN_AVE_NODES_PER_DEPTH = "xgp-gen-ave-nodes-per-depth";
+	GEN_AVE_NODES_PER_DEPTH,
 
 	/**
 	 * Returns an <code>int[]</code> which contains the lengths of all the
 	 * <code>CandidateProgram</code>s in the population at the end of the
 	 * previous generation.
 	 */
-	public static final String GEN_LENGTHS = "xgp-gen-lengths";
+	GEN_LENGTHS,
 
 	/**
 	 * Returns a <code>Double</code> which is the average length of all the
 	 * <code>CandidateProgram</code>s in the population at the end of the
 	 * previous generation.
 	 */
-	public static final String GEN_LENGTH_AVE = "xgp-gen-length-ave";
+	GEN_LENGTH_AVE,
 
 	/**
 	 * Returns a <code>Double</code> which is the standard deviation of the
 	 * lengths of all the <code>CandidateProgram</code>s in the
 	 * population at the end of the previous generation.
 	 */
-	public static final String GEN_LENGTH_STDEV = "xgp-gen-length-stdev";
+	GEN_LENGTH_STDEV,
 
 	/**
 	 * Returns an <code>Integer</code> which is the maximum program length of
 	 * all the <code>CandidateProgram</code>s in the population at the end of
 	 * the previous generation.
 	 */
-	public static final String GEN_LENGTH_MAX = "xgp-gen-length-max";
+	GEN_LENGTH_MAX,
 
 	/**
 	 * Returns an <code>Integer</code> which is the minimum program length of
 	 * all the <code>CandidateProgram</code>s in the population at the end of
 	 * the previous generation.
 	 */
-	public static final String GEN_LENGTH_MIN = "xgp-gen-length-min";
+	GEN_LENGTH_MIN,
 
 	/**
 	 * Returns a <code>int[]</code> which contains the number of terminal nodes
 	 * in each <code>CandidateProgram</code> in the population at the end of the
 	 * previous generation.
 	 */
-	public static final String GEN_NO_TERMINALS = "xgp-gen-no-terminals";
+	GEN_NO_TERMINALS,
 
 	/**
 	 * Returns a <code>Double</code> which is the average number of terminals
 	 * in all the <code>CandidateProgram</code>s in the population at the end of
 	 * the previous generation.
 	 */
-	public static final String GEN_NO_TERMINALS_AVE = "xgp-gen-no-terminals-ave";
+	GEN_NO_TERMINALS_AVE,
 
 	/**
 	 * Returns a <code>Double</code> which is the standard deviation of the
 	 * number of terminals in all the <code>CandidateProgram</code>s in the
 	 * population at the end of the previous generation.
 	 */
-	public static final String GEN_NO_TERMINALS_STDEV = "xgp-gen-no-terminals-stdev";
+	GEN_NO_TERMINALS_STDEV,
 
 	/**
 	 * Returns an <code>Integer</code> which is the maximum number of terminals
 	 * of all the <code>CandidateProgram</code>s in the population at the end of
 	 * the previous generation.
 	 */
-	public static final String GEN_NO_TERMINALS_MAX = "xgp-gen-no-terminals-max";
+	GEN_NO_TERMINALS_MAX,
 
 	/**
 	 * Returns an <code>Integer</code> which is the minimum number of terminals
 	 * of all the <code>CandidateProgram</code>s in the population at the end of
 	 * the previous generation.
 	 */
-	public static final String GEN_NO_TERMINALS_MIN = "xgp-gen-no-terminals-min";
+	GEN_NO_TERMINALS_MIN,
 
 	/**
 	 * Returns a <code>int[]</code> which contains the number of unique terminal
 	 * nodes in each <code>CandidateProgram</code> in the population at the end
 	 * of the previous generation.
 	 */
-	public static final String GEN_NO_DISTINCT_TERMINALS = "xgp-gen-no-distinct-terminals";
+	GEN_NO_DISTINCT_TERMINALS,
 
 	/**
 	 * Returns a <code>Double</code> which is the average number of unique
 	 * terminals in all the <code>CandidateProgram</code>s in the population at
 	 * the end of the previous generation.
 	 */
-	public static final String GEN_NO_DISTINCT_TERMINALS_AVE = "xgp-gen-no-distinct-terminals-ave";
+	GEN_NO_DISTINCT_TERMINALS_AVE,
 
 	/**
 	 * Returns a <code>Double</code> which is the standard deviation of the
 	 * number of unique terminals in all the <code>CandidateProgram</code>s in
 	 * the population at the end of the previous generation.
 	 */
-	public static final String GEN_NO_DISTINCT_TERMINALS_STDEV = "xgp-gen-no-distinct-terminals-stdev";
+	GEN_NO_DISTINCT_TERMINALS_STDEV,
 
 	/**
 	 * Returns an <code>Integer</code> which is the maximum number of unique
 	 * terminals of all the <code>CandidateProgram</code>s in the population at
 	 * the end of the previous generation.
 	 */
-	public static final String GEN_NO_DISTINCT_TERMINALS_MAX = "xgp-gen-no-distinct-terminals-max";
+	GEN_NO_DISTINCT_TERMINALS_MAX,
 
 	/**
 	 * Returns an <code>Integer</code> which is the minimum number of unique
 	 * terminals of all the <code>CandidateProgram</code>s in the population at
 	 * the end of the previous generation.
 	 */
-	public static final String GEN_NO_DISTINCT_TERMINALS_MIN = "xgp-gen-no-distinct-terminals-min";
+	GEN_NO_DISTINCT_TERMINALS_MIN,
 
 	/**
 	 * Returns a <code>int[]</code> which contains the number of function nodes
 	 * in each <code>CandidateProgram</code> in the population at the end of the
 	 * previous generation.
 	 */
-	public static final String GEN_NO_FUNCTIONS = "xgp-gen-no-functions";
+	GEN_NO_FUNCTIONS,
 
 	/**
 	 * Returns a <code>Double</code> which is the average number of functions
 	 * in all the <code>CandidateProgram</code>s in the population at the end of
 	 * the previous generation.
 	 */
-	public static final String GEN_NO_FUNCTIONS_AVE = "xgp-gen-no-functions-ave";
+	GEN_NO_FUNCTIONS_AVE,
 
 	/**
 	 * Returns a <code>Double</code> which is the standard deviation of the
 	 * number of functions in all the <code>CandidateProgram</code>s in the
 	 * population at the end of the previous generation.
 	 */
-	public static final String GEN_NO_FUNCTIONS_STDEV = "xgp-gen-no-functions-stdev";
+	GEN_NO_FUNCTIONS_STDEV,
 
 	/**
 	 * Returns an <code>Integer</code> which is the maximum number of functions
 	 * of all the <code>CandidateProgram</code>s in the population at the end of
 	 * the previous generation.
 	 */
-	public static final String GEN_NO_FUNCTIONS_MAX = "xgp-gen-no-functions-max";
+	GEN_NO_FUNCTIONS_MAX,
 
 	/**
 	 * Returns an <code>Integer</code> which is the minimum number of functions
 	 * of all the <code>CandidateProgram</code>s in the population at the end of
 	 * the previous generation.
 	 */
-	public static final String GEN_NO_FUNCTIONS_MIN = "xgp-gen-no-functions-min";
+	GEN_NO_FUNCTIONS_MIN,
 
 	/**
 	 * Returns a <code>int[]</code> which contains the number of unique function
 	 * nodes in each <code>CandidateProgram</code> in the population at the end
 	 * of the previous generation.
 	 */
-	public static final String GEN_NO_DISTINCT_FUNCTIONS = "xgp-gen-no-distinct-functions";
+	GEN_NO_DISTINCT_FUNCTIONS,
 
 	/**
 	 * Returns a <code>Double</code> which is the average number of unique
 	 * functions in all the <code>CandidateProgram</code>s in the population at
 	 * the end of the previous generation.
 	 */
-	public static final String GEN_NO_DISTINCT_FUNCTIONS_AVE = "xgp-gen-no-distinct-functions-ave";
+	GEN_NO_DISTINCT_FUNCTIONS_AVE,
 
 	/**
 	 * Returns a <code>Double</code> which is the standard deviation of the
 	 * number of unique functions in all the <code>CandidateProgram</code>s in
 	 * the population at the end of the previous generation.
 	 */
-	public static final String GEN_NO_DISTINCT_FUNCTIONS_STDEV = "xgp-gen-no-distinct-functions-stdev";
+	GEN_NO_DISTINCT_FUNCTIONS_STDEV,
 
 	/**
 	 * Returns an <code>Integer</code> which is the maximum number of unique
 	 * functions of all the <code>CandidateProgram</code>s in the population at
 	 * the end of the previous generation.
 	 */
-	public static final String GEN_NO_DISTINCT_FUNCTIONS_MAX = "xgp-gen-no-distinct-functions-max";
+	GEN_NO_DISTINCT_FUNCTIONS_MAX,
 
 	/**
 	 * Returns an <code>Integer</code> which is the minimum number of unique
 	 * functions of all the <code>CandidateProgram</code>s in the population at
 	 * the end of the previous generation.
 	 */
-	public static final String GEN_NO_DISTINCT_FUNCTIONS_MIN = "xgp-gen-no-distinct-functions-min";
+	GEN_NO_DISTINCT_FUNCTIONS_MIN
 
 }

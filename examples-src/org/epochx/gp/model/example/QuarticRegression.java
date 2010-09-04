@@ -59,7 +59,7 @@ public class QuarticRegression extends org.epochx.gp.model.QuarticRegression {
 		 * 
 		 * @Override
 		 * public void onGenerationEnd() {
-		 * m.getStatsManager().printGenerationStats(GPStatField.GEN_NUMBER,
+		 * m.getStatsManager().printStats(GPStatField.GEN_NUMBER,
 		 * GPStatField.GEN_FITNESS_MIN, GPStatField.GEN_FITTEST_PROGRAM);
 		 * }
 		 * });
@@ -68,7 +68,7 @@ public class QuarticRegression extends org.epochx.gp.model.QuarticRegression {
 
 			@Override
 			public void onRunEnd() {
-				m.getStatsManager().printRunStats(StatField.RUN_NUMBER,
+				m.getStatsManager().printStats(StatField.RUN_NUMBER,
 						StatField.RUN_FITNESS_MIN);
 			}
 		});

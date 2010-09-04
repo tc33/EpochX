@@ -32,7 +32,7 @@ public class SantaFeTrail extends org.epochx.gr.model.java.SantaFeTrail {
 		 * 
 		 * @Override
 		 * public void onGenerationEnd() {
-		 * getStatsManager().printGenerationStats(GEN_NUMBER, GEN_FITNESS_MIN,
+		 * getStatsManager().printStats(GEN_NUMBER, GEN_FITNESS_MIN,
 		 * GEN_FITNESS_AVE, GEN_DEPTH_AVE, GEN_DEPTH_MAX, GEN_FITTEST_PROGRAM);
 		 * }
 		 * });
@@ -42,7 +42,7 @@ public class SantaFeTrail extends org.epochx.gr.model.java.SantaFeTrail {
 
 			@Override
 			public void onRunEnd() {
-				getStatsManager().printRunStats(RUN_NUMBER, RUN_FITNESS_MIN,
+				getStatsManager().printStats(RUN_NUMBER, RUN_FITNESS_MIN,
 						RUN_FITTEST_PROGRAM);
 			}
 		});

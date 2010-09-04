@@ -46,34 +46,7 @@ public class StatsManagerTest extends TestCase {
 	public void testRunStatNotFound() {
 		final String field = "runtest";
 		assertNull("null not returned for missing run stat",
-				statsManager.getRunStat(field));
-	}
-
-	/**
-	 * Test that if a generation statistic is not found then null is returned.
-	 */
-	public void testGenStatNotFound() {
-		final String field = "gentest";
-		assertNull("null not returned for missing generation stat",
-				statsManager.getGenerationStat(field));
-	}
-
-	/**
-	 * Test that if a crossover statistic is not found then null is returned.
-	 */
-	public void testCrossoverStatNotFound() {
-		final String field = "xotest";
-		assertNull("null not returned for missing crossover stat",
-				statsManager.getCrossoverStat(field));
-	}
-
-	/**
-	 * Test that if a mutation statistic is not found then null is returned.
-	 */
-	public void testMutationStatNotFound() {
-		final String field = "muttest";
-		assertNull("null not returned for missing mutation stat",
-				statsManager.getMutationStat(field));
+				statsManager.getStat(field));
 	}
 
 	/**
@@ -83,95 +56,8 @@ public class StatsManagerTest extends TestCase {
 	public void testAddRunStat() {
 		final String field = "runtest";
 		final String value = "value";
-		statsManager.addRunData(field, value);
+		statsManager.addData(field, value);
 		assertSame("stats manager not storing run stats", value,
-				statsManager.getRunStat(field));
-	}
-
-	/**
-	 * Tests that a generation statistic that is added to a stats manager is
-	 * remembered.
-	 */
-	public void testAddGenerationStat() {
-		final String field = "gentest";
-		final String value = "value";
-		statsManager.addGenerationData(field, value);
-		assertSame("stats manager not storing generation stats", value,
-				statsManager.getGenerationStat(field));
-	}
-
-	/**
-	 * Tests that a crossover statistic that is added to a stats manager is
-	 * remembered.
-	 */
-	public void testAddCrossoverStat() {
-		final String field = "xotest";
-		final String value = "value";
-		statsManager.addCrossoverData(field, value);
-		assertSame("stats manager not storing crossover stats", value,
-				statsManager.getCrossoverStat(field));
-	}
-
-	/**
-	 * Tests that a mutation statistic that is added to a stats manager is
-	 * remembered.
-	 */
-	public void testAddMutationStat() {
-		final String field = "muttest";
-		final String value = "value";
-		statsManager.addMutationData(field, value);
-		assertSame("stats manager not storing mutation stats", value,
-				statsManager.getMutationStat(field));
-	}
-
-	/**
-	 * Tests that run stats get cleared at the start of a new run.
-	 */
-	public void testRunStatsCleared() {
-		final String field = "runtest";
-		final String value = "value";
-		statsManager.addRunData(field, value);
-		model.getLifeCycleManager().fireRunStartEvent();
-		assertNull("run stats not cleared when a run start event is fired",
-				statsManager.getRunStat(field));
-	}
-
-	/**
-	 * Tests that generation stats get cleared at the start of a new generation.
-	 */
-	public void testGenerationStatsCleared() {
-		final String field = "gentest";
-		final String value = "value";
-		statsManager.addGenerationData(field, value);
-		model.getLifeCycleManager().fireGenerationStartEvent();
-		assertNull(
-				"generation stats not cleared when a generation start event is fired",
-				statsManager.getGenerationStat(field));
-	}
-
-	/**
-	 * Tests that crossover stats get cleared at the start of a new crossover.
-	 */
-	public void testCrossoverStatsCleared() {
-		final String field = "crossovertest";
-		final String value = "value";
-		statsManager.addCrossoverData(field, value);
-		model.getLifeCycleManager().fireCrossoverStartEvent();
-		assertNull(
-				"crossover stats not cleared when a crossover start event is fired",
-				statsManager.getCrossoverStat(field));
-	}
-
-	/**
-	 * Tests that mutation stats get cleared at the start of a new mutation.
-	 */
-	public void testMutationStatsCleared() {
-		final String field = "mutationtest";
-		final String value = "value";
-		statsManager.addMutationData(field, value);
-		model.getLifeCycleManager().fireMutationStartEvent();
-		assertNull(
-				"mutation stats not cleared when a mutation start event is fired",
-				statsManager.getMutationStat(field));
+				statsManager.getStat(field));
 	}
 }

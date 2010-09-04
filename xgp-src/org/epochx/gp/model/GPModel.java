@@ -48,7 +48,7 @@ public abstract class GPModel extends Model {
 	 */
 	public GPModel() {
 		// Use the GP stats engine.
-		getStatsManager().setStatsEngine(new GPStatsEngine(this));
+		getStatsManager().addStatsEngine(new GPStatsEngine(this));
 
 		// Set default parameter values.
 		maxInitialDepth = 6;

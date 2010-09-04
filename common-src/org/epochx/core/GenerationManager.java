@@ -214,7 +214,7 @@ public class GenerationManager {
 		final long startTime = System.nanoTime();
 
 		// Record the generation number in the stats data.
-		model.getStatsManager().addGenerationData(GEN_NUMBER, generationNo);
+		model.getStatsManager().addData(GEN_NUMBER, generationNo);
 
 		List<CandidateProgram> pop;
 
@@ -264,9 +264,9 @@ public class GenerationManager {
 		} while (pop == null);
 
 		// Store the stats data from the generation.
-		model.getStatsManager().addGenerationData(GEN_REVERSIONS, reversions);
-		model.getStatsManager().addGenerationData(GEN_POPULATION, pop);
-		model.getStatsManager().addGenerationData(GEN_TIME,
+		model.getStatsManager().addData(GEN_REVERSIONS, reversions);
+		model.getStatsManager().addData(GEN_POPULATION, pop);
+		model.getStatsManager().addData(GEN_TIME,
 				(System.nanoTime() - startTime));
 
 		// Tell everyone the generation has ended.

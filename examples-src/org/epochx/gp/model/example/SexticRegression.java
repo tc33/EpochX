@@ -25,7 +25,7 @@ import org.epochx.core.Model;
 import org.epochx.gp.op.crossover.KozaCrossover;
 import org.epochx.gp.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.gp.op.mutation.PointMutation;
-import org.epochx.life.RunAdapter;
+import org.epochx.life.*;
 import org.epochx.op.selection.*;
 import org.epochx.stats.StatField;
 
@@ -53,22 +53,20 @@ public class SexticRegression extends org.epochx.gp.model.SexticRegression {
 	public static void main(final String[] args) {
 		final Model m = new SexticRegression();
 
-		/*
-		 * m.getLifeCycleManager().addGenerationListener(new GenerationAdapter()
-		 * {
-		 * 
-		 * @Override
-		 * public void onGenerationEnd() {
-		 * m.getStatsManager().printGenerationStats(GPStatField.GEN_NUMBER,
-		 * GPStatField.GEN_FITNESS_MIN, GPStatField.GEN_FITTEST_PROGRAM);
-		 * }
-		 * });
-		 */
+		
+		m.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationEnd() {
+				m.getStatsManager().printStats(StatField.GEN_NUMBER,
+				StatField.GEN_FITNESS_MIN, StatField.GEN_FITTEST_PROGRAM);
+			}
+		});
+		 
 		m.getLifeCycleManager().addRunListener(new RunAdapter() {
 
 			@Override
 			public void onRunEnd() {
-				m.getStatsManager().printRunStats(StatField.RUN_NUMBER,
+				m.getStatsManager().printStats(StatField.RUN_NUMBER,
 						StatField.RUN_FITNESS_MIN);
 			}
 		});

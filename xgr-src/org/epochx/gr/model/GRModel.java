@@ -46,7 +46,7 @@ public abstract class GRModel extends Model {
 	 */
 	public GRModel() {
 		// Use the GR stats engine.
-		getStatsManager().setStatsEngine(new GRStatsEngine(this));
+		getStatsManager().addStatsEngine(new GRStatsEngine(this));
 
 		// Set default parameter values.
 		grammar = null;

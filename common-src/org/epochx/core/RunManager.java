@@ -165,7 +165,7 @@ public class RunManager {
 		final long startTime = System.nanoTime();
 
 		// Add the run number to the available stats data.
-		model.getStatsManager().addRunData(RUN_NUMBER, runNo);
+		model.getStatsManager().addData(RUN_NUMBER, runNo);
 
 		// Perform initialisation.
 		List<CandidateProgram> pop = initialisation.initialise();
@@ -195,7 +195,7 @@ public class RunManager {
 		final long runtime = System.nanoTime() - startTime;
 
 		// Add run time to stats data.
-		model.getStatsManager().addRunData(RUN_TIME, runtime);
+		model.getStatsManager().addData(RUN_TIME, runtime);
 	}
 
 	/*
@@ -211,9 +211,8 @@ public class RunManager {
 				bestProgram = program;
 
 				// Update the stats.
-				model.getStatsManager()
-						.addRunData(RUN_FITNESS_MIN, bestFitness);
-				model.getStatsManager().addRunData(RUN_FITTEST_PROGRAM,
+				model.getStatsManager().addData(RUN_FITNESS_MIN, bestFitness);
+				model.getStatsManager().addData(RUN_FITTEST_PROGRAM,
 						bestProgram);
 			}
 		}

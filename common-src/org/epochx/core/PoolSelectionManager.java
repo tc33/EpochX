@@ -172,7 +172,7 @@ public class PoolSelectionManager {
 		} while (pool == null);
 
 		// Store the stats from the pool selection.
-		model.getStatsManager().addGenerationData(POOL_REVERSIONS, reversions);
+		model.getStatsManager().addData(POOL_REVERSIONS, reversions);
 
 		// Inform all listeners that pool selection has ended.
 		model.getLifeCycleManager().firePoolSelectionEndEvent();

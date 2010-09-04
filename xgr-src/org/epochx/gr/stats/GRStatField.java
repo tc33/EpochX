@@ -21,53 +21,45 @@
  */
 package org.epochx.gr.stats;
 
-import org.epochx.stats.StatField;
-
 /**
  * Provides constants to be used as keys to request statistics from the
  * StatsManager specific to XGR.
  */
-public final class GRStatField extends StatField {
-
-	/*
-	 * No need to ever create an object of GRStatField.
-	 */
-	private GRStatField() {
-	}
+public enum GRStatField {
 
 	/**
 	 * Returns an <code>int[]</code> which contains the depths of all the
 	 * <code>CandidateProgram</code>s in the population at the end of the
 	 * previous generation.
 	 */
-	public static final String GEN_DEPTHS = "xgr-gen-depths";
+	GEN_DEPTHS,
 
 	/**
 	 * Returns a <code>Double</code> which is the average depth of all the
 	 * <code>CandidateProgram</code>s in the population at the end of the
 	 * previous generation.
 	 */
-	public static final String GEN_DEPTH_AVE = "xgr-gen-depth-ave";
+	GEN_DEPTH_AVE,
 
 	/**
 	 * Returns a <code>Double</code> which is the standard deviation of the
 	 * depths of all the <code>CandidateProgram</code>s in the
 	 * population at the end of the previous generation.
 	 */
-	public static final String GEN_DEPTH_STDEV = "xgr-gen-depth-stdev";
+	GEN_DEPTH_STDEV,
 
 	/**
 	 * Returns an <code>Integer</code> which is the maximum program depth of
 	 * all the <code>CandidateProgram</code>s in the population at the end of
 	 * the previous generation.
 	 */
-	public static final String GEN_DEPTH_MAX = "xgr-gen-depth-max";
+	GEN_DEPTH_MAX,
 
 	/**
 	 * Returns an <code>Integer</code> which is the minimum program depth of all
 	 * the <code>CandidateProgram</code>s in the population at the end of the
 	 * previous generation.
 	 */
-	public static final String GEN_DEPTH_MIN = "xgr-gen-depth-min";
+	GEN_DEPTH_MIN
 
 }

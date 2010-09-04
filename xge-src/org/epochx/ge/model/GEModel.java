@@ -53,7 +53,7 @@ public abstract class GEModel extends Model {
 	 */
 	public GEModel() {
 		// Use the GE stats engine.
-		getStatsManager().setStatsEngine(new GEStatsEngine(this));
+		getStatsManager().addStatsEngine(new GEStatsEngine(this));
 
 		// Set default parameter values.
 		mapper = new DepthFirstMapper(this);

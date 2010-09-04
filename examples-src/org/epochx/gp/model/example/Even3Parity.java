@@ -75,7 +75,7 @@ public class Even3Parity extends EvenParity {
 
 			@Override
 			public void onRunEnd() {
-				m.getStatsManager().printRunStats(StatField.RUN_NUMBER,
+				m.getStatsManager().printStats(StatField.RUN_NUMBER,
 						StatField.RUN_FITNESS_MIN,
 						StatField.RUN_FITTEST_PROGRAM);
 			}

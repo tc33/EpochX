@@ -178,12 +178,10 @@ public class MutationManager {
 		final long runtime = System.nanoTime() - mutationStartTime;
 
 		// Store the stats from the mutation.
-		model.getStatsManager()
-				.addMutationData(MUTATION_PROGRAM_BEFORE, parent);
-		model.getStatsManager().addMutationData(MUTATION_PROGRAM_AFTER, child);
-		model.getStatsManager().addMutationData(MUTATION_TIME, runtime);
-		model.getStatsManager()
-				.addMutationData(MUTATION_REVERSIONS, reversions);
+		model.getStatsManager().addData(MUTATION_PROGRAM_BEFORE, parent);
+		model.getStatsManager().addData(MUTATION_PROGRAM_AFTER, child);
+		model.getStatsManager().addData(MUTATION_TIME, runtime);
+		model.getStatsManager().addData(MUTATION_REVERSIONS, reversions);
 
 		model.getLifeCycleManager().fireMutationEndEvent();
 

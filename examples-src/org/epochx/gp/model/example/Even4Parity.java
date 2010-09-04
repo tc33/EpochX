@@ -64,7 +64,7 @@ public class Even4Parity extends EvenParity {
 
 			@Override
 			public void onGenerationEnd() {
-				m.getStatsManager().printGenerationStats(StatField.GEN_NUMBER,
+				m.getStatsManager().printStats(StatField.GEN_NUMBER,
 						StatField.GEN_FITNESS_MIN,
 						StatField.GEN_FITTEST_PROGRAM);
 			}
@@ -74,7 +74,7 @@ public class Even4Parity extends EvenParity {
 		 * 
 		 * @Override
 		 * public void onRunEnd() {
-		 * m.getStatsManager().printRunStats(GPStatField.RUN_NUMBER,
+		 * m.getStatsManager().printStats(GPStatField.RUN_NUMBER,
 		 * GPStatField.RUN_FITNESS_MIN, GPStatField.RUN_FITTEST_PROGRAM);
 		 * }
 		 * });

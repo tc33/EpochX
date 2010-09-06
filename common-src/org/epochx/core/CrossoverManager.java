@@ -184,10 +184,10 @@ public class CrossoverManager {
 
 		final long runtime = System.nanoTime() - crossoverStartTime;
 
-		model.getStatsManager().addData(CROSSOVER_PARENTS, parents);
-		model.getStatsManager().addData(CROSSOVER_CHILDREN, children);
-		model.getStatsManager().addData(CROSSOVER_REVERSIONS, reversions);
-		model.getStatsManager().addData(CROSSOVER_TIME, runtime);
+		model.getStatsManager().addData(XO_PARENTS, parents);
+		model.getStatsManager().addData(XO_CHILDREN, children);
+		model.getStatsManager().addData(XO_REVERSIONS, reversions);
+		model.getStatsManager().addData(XO_TIME, runtime);
 
 		model.getLifeCycleManager().fireCrossoverEndEvent();
 

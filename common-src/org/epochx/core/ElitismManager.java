@@ -21,6 +21,8 @@
  */
 package org.epochx.core;
 
+import static org.epochx.stats.StatField.*;
+
 import java.util.*;
 
 import org.epochx.life.ConfigAdapter;
@@ -134,6 +136,9 @@ public class ElitismManager {
 		}
 
 		model.getLifeCycleManager().fireElitismStartEvent();
+		
+		// Record the start time.
+		final long startTime = System.nanoTime();
 
 		// Construct an array for elites.
 		List<CandidateProgram> elites;
@@ -149,6 +154,12 @@ public class ElitismManager {
 
 		assert (elites.size() == noElites);
 
+		final long runtime = System.nanoTime() - startTime;
+		
+		// Store the stats from the reproduction.
+		model.getStatsManager().addData(ELITE_PROGRAMS, elites);
+		model.getStatsManager().addData(ELITE_TIME, runtime);
+		
 		// Allow life cycle listener to confirm or modify.
 		elites = model.getLifeCycleManager().fireElitismEvent(elites);
 

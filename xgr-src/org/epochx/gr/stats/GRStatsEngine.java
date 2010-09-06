@@ -22,7 +22,7 @@
 package org.epochx.gr.stats;
 
 import static org.epochx.gr.stats.GRStatField.*;
-import static org.epochx.stats.StatField.GEN_POPULATION;
+import static org.epochx.stats.StatField.GEN_POP;
 
 import java.util.List;
 
@@ -95,7 +95,7 @@ public class GRStatsEngine extends CommonStatsEngine {
 
 		// Request the population from the stats manager.
 		final List<GRCandidateProgram> pop = (List<GRCandidateProgram>) model
-				.getStatsManager().getStat(GEN_POPULATION);
+				.getStatsManager().getStat(GEN_POP);
 
 		// Get the depths of each program.
 		if (pop != null) {

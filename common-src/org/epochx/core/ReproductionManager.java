@@ -21,7 +21,7 @@
  */
 package org.epochx.core;
 
-import static org.epochx.stats.StatField.REP_REVERSIONS;
+import static org.epochx.stats.StatField.*;
 
 import org.epochx.life.ConfigAdapter;
 import org.epochx.op.ProgramSelector;
@@ -117,6 +117,9 @@ public class ReproductionManager {
 
 		// Inform all listeners we're about to start.
 		model.getLifeCycleManager().fireReproductionStartEvent();
+		
+		// Record the start time.
+		final long startTime = System.nanoTime();
 
 		CandidateProgram parent = null;
 
@@ -132,9 +135,12 @@ public class ReproductionManager {
 				reversions++;
 			}
 		} while (parent == null);
+		
+		final long runtime = System.nanoTime() - startTime;
 
 		// Store the stats from the reproduction.
 		model.getStatsManager().addData(REP_REVERSIONS, reversions);
+		model.getStatsManager().addData(REP_TIME, runtime);
 
 		// Inform all listeners reproduction has ended.
 		model.getLifeCycleManager().fireReproductionEndEvent();

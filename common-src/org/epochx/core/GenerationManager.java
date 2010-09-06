@@ -265,7 +265,7 @@ public class GenerationManager {
 
 		// Store the stats data from the generation.
 		model.getStatsManager().addData(GEN_REVERSIONS, reversions);
-		model.getStatsManager().addData(GEN_POPULATION, pop);
+		model.getStatsManager().addData(GEN_POP, pop);
 		model.getStatsManager().addData(GEN_TIME,
 				(System.nanoTime() - startTime));
 

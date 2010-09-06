@@ -21,7 +21,7 @@
  */
 package org.epochx.core;
 
-import static org.epochx.stats.StatField.POOL_REVERSIONS;
+import static org.epochx.stats.StatField.*;
 
 import java.util.List;
 
@@ -149,6 +149,9 @@ public class PoolSelectionManager {
 		// Inform all listeners that pool selection is starting.
 		model.getLifeCycleManager().firePoolSelectionStartEvent();
 
+		// Record the start time.
+		final long startTime = System.nanoTime();
+		
 		// Reset the number of reversions.
 		reversions = 0;
 
@@ -171,8 +174,12 @@ public class PoolSelectionManager {
 			}
 		} while (pool == null);
 
+		final long runtime = System.nanoTime() - startTime;
+		
 		// Store the stats from the pool selection.
 		model.getStatsManager().addData(POOL_REVERSIONS, reversions);
+		model.getStatsManager().addData(POOL_PROGRAMS, pool);
+		model.getStatsManager().addData(POOL_TIME, runtime);
 
 		// Inform all listeners that pool selection has ended.
 		model.getLifeCycleManager().firePoolSelectionEndEvent();

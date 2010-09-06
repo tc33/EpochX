@@ -22,7 +22,7 @@
 package org.epochx.ge.stats;
 
 import static org.epochx.ge.stats.GEStatField.*;
-import static org.epochx.stats.StatField.GEN_POPULATION;
+import static org.epochx.stats.StatField.GEN_POP;
 
 import java.util.List;
 
@@ -105,7 +105,7 @@ public class GEStatsEngine extends CommonStatsEngine {
 
 		// Request the population from the stats manager.
 		final List<GECandidateProgram> pop = (List<GECandidateProgram>) model
-				.getStatsManager().getStat(GEN_POPULATION);
+				.getStatsManager().getStat(GEN_POP);
 
 		// Get the depths of each program.
 		if (pop != null) {
@@ -200,7 +200,7 @@ public class GEStatsEngine extends CommonStatsEngine {
 
 		// Request the population from the stats manager.
 		final List<GECandidateProgram> pop = (List<GECandidateProgram>) model
-				.getStatsManager().getStat(GEN_POPULATION);
+				.getStatsManager().getStat(GEN_POP);
 
 		// Get the lengths of each program.
 		if (pop != null) {

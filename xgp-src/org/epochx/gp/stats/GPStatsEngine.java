@@ -22,7 +22,7 @@
 package org.epochx.gp.stats;
 
 import static org.epochx.gp.stats.GPStatField.*;
-import static org.epochx.stats.StatField.GEN_POPULATION;
+import static org.epochx.stats.StatField.GEN_POP;
 
 import java.util.List;
 
@@ -145,7 +145,7 @@ public class GPStatsEngine implements StatsEngine {
 
 		// Request the population from the stats manager.
 		final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) model
-				.getStatsManager().getStat(GEN_POPULATION);
+				.getStatsManager().getStat(GEN_POP);
 
 		// Get the depths of each program.
 		if (pop != null) {
@@ -244,7 +244,7 @@ public class GPStatsEngine implements StatsEngine {
 		final int maxDepth = (Integer) model.getStatsManager()
 				.getStat(GEN_DEPTH_MAX);
 		final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) model
-				.getStatsManager().getStat(GEN_POPULATION);
+				.getStatsManager().getStat(GEN_POP);
 
 		if (depths != null) {
 			// Array to fill with average number of nodes at each depth.
@@ -273,7 +273,7 @@ public class GPStatsEngine implements StatsEngine {
 
 		// Request the population from the stats manager.
 		final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) model
-				.getStatsManager().getStat(GEN_POPULATION);
+				.getStatsManager().getStat(GEN_POP);
 
 		// Get the lengths of each program.
 		if (pop != null) {
@@ -368,7 +368,7 @@ public class GPStatsEngine implements StatsEngine {
 
 		// Request the population from the stats manager.
 		final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) model
-				.getStatsManager().getStat(GEN_POPULATION);
+				.getStatsManager().getStat(GEN_POP);
 
 		// Get the number of terminals of each program.
 		if (pop != null) {
@@ -463,7 +463,7 @@ public class GPStatsEngine implements StatsEngine {
 
 		// Request the population from the stats manager.
 		final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) model
-				.getStatsManager().getStat(GEN_POPULATION);
+				.getStatsManager().getStat(GEN_POP);
 
 		// Get the number of unique terminals of each program.
 		if (pop != null) {
@@ -562,7 +562,7 @@ public class GPStatsEngine implements StatsEngine {
 
 		// Request the population from the stats manager.
 		final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) model
-				.getStatsManager().getStat(GEN_POPULATION);
+				.getStatsManager().getStat(GEN_POP);
 
 		// Get the number of functions of each program.
 		if (pop != null) {
@@ -657,7 +657,7 @@ public class GPStatsEngine implements StatsEngine {
 
 		// Request the population from the stats manager.
 		final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) model
-				.getStatsManager().getStat(GEN_POPULATION);
+				.getStatsManager().getStat(GEN_POP);
 
 		// Get the number of unique functions of each program.
 		if (pop != null) {

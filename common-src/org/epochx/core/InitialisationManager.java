@@ -202,7 +202,7 @@ public class InitialisationManager {
 
 		// Store the stats data from the initialisation.
 		model.getStatsManager().addData(INIT_REVERSIONS, reversions);
-		model.getStatsManager().addData(GEN_POPULATION, pop);
+		model.getStatsManager().addData(GEN_POP, pop);
 		model.getStatsManager().addData(GEN_TIME,
 				(System.nanoTime() - startTime));
 

@@ -1,5 +1,8 @@
 package org.epochx.gx.representation;
 
+import java.util.*;
+
+import org.epochx.gx.op.init.*;
 import org.epochx.tools.random.*;
 
 public class TimesLoop implements Statement {
@@ -176,5 +179,38 @@ public class TimesLoop implements Statement {
 		} else {
 			return body.getStatement(index-1);
 		}
+	}
+
+	@Override
+	public Set<Variable> getDeclaredVariables() {
+		Set<Variable> variables = body.getDeclaredVariables();
+		
+		variables.addAll(indexCoverVarDecl.getDeclaredVariables());
+		variables.addAll(indexVarDecl.getDeclaredVariables());
+		variables.addAll(endVarDecl.getDeclaredVariables());
+		
+		return variables;
+	}
+
+	@Override
+	public Set<Variable> getUsedVariables() {
+		Set<Variable> variables = body.getUsedVariables();
+		
+		variables.addAll(endVarDecl.getUsedVariables());
+		
+		return variables;
+	}
+	
+	@Override
+	public Declaration getDeclaration(Variable v) {
+		if (indexCoverVarDecl.getVariable() == v) {
+			// The index cover var assigns itself to the value of the index which will
+			// always start as 0, so just setup a new declaration for the var to 0.
+			Declaration d = new Declaration(indexCoverVarDecl.getType(), indexCoverVarDecl.getVariable(), new IntLiteral(0));
+			
+			return d;
+		}
+		
+		return body.getDeclaration(v);
 	}
 }

@@ -1,5 +1,7 @@
 package org.epochx.gx.representation;
 
+import java.util.*;
+
 import org.epochx.gx.op.init.*;
 import org.epochx.tools.random.*;
 
@@ -79,5 +81,14 @@ public class BinaryExpression implements Expression {
 		Object r = rightExpression.evaluate(vars);
 
 		return op.evaluateBinaryOperator(l, r);
+	}
+	
+	@Override
+	public Set<Variable> getUsedVariables() {
+		Set<Variable> variables = leftExpression.getUsedVariables();
+		
+		variables.addAll(rightExpression.getUsedVariables());
+		
+		return variables;
 	}
 }

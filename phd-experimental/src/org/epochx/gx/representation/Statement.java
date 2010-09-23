@@ -1,5 +1,7 @@
 package org.epochx.gx.representation;
 
+import java.util.*;
+
 import org.epochx.tools.random.*;
 
 public interface Statement extends Cloneable {
@@ -37,4 +39,23 @@ public interface Statement extends Cloneable {
 	public boolean hasBlock();
 
 	public Statement getStatement(int index);
+	
+	/**
+	 * Returns a list of those variables that get declared in this statement or
+	 * any nested statements.
+	 * 
+	 * @return
+	 */
+	public Set<Variable> getDeclaredVariables();
+	
+	/**
+	 * Returns a list of those variables that are used in expressions within 
+	 * this statement or any nested statements. It does not include those 
+	 * variables that are declared but unused in expressions.
+	 * 
+	 * @return
+	 */
+	public Set<Variable> getUsedVariables();
+	
+	public Declaration getDeclaration(Variable v);
 }

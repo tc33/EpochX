@@ -1,5 +1,7 @@
 package org.epochx.gx.representation;
 
+import java.util.*;
+
 import org.epochx.tools.random.*;
 
 public class Variable implements Expression {
@@ -63,6 +65,14 @@ public class Variable implements Expression {
 	@Override
 	public Object evaluate(VariableHandler vars) {
 		return value;
+	}
+
+	@Override
+	public Set<Variable> getUsedVariables() {
+		Set<Variable> variables = new HashSet<Variable>();
+		variables.add(this);
+		
+		return variables;
 	}
 
 }

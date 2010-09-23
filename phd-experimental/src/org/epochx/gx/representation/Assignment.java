@@ -1,5 +1,7 @@
 package org.epochx.gx.representation;
 
+import java.util.*;
+
 import org.epochx.gx.op.init.*;
 import org.epochx.tools.random.*;
 
@@ -95,5 +97,26 @@ public class Assignment implements Statement {
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public Set<Variable> getDeclaredVariables() {
+		// No declared variables here so return empty set.
+		return new HashSet<Variable>();
+	}
+
+	@Override
+	public Set<Variable> getUsedVariables() {
+		Set<Variable> usedVars = new HashSet<Variable>();
+		usedVars.add(variable);
+		usedVars.addAll(expression.getUsedVariables());
+		
+		return usedVars;
+	}
+	
+	@Override
+	public Declaration getDeclaration(Variable v) {
+		// No internal statements so not used here.
+		return null;
 	}
 }

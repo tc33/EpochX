@@ -1,5 +1,7 @@
 package org.epochx.gx.representation;
 
+import java.util.*;
+
 import org.epochx.tools.random.*;
 
 
@@ -53,5 +55,10 @@ public class BooleanLiteral implements Literal {
 	@Override
 	public Object evaluate(VariableHandler vars) {
 		return value;
+	}
+
+	@Override
+	public Set<Variable> getUsedVariables() {
+		return new HashSet<Variable>();
 	}
 }

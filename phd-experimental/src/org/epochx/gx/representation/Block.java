@@ -183,4 +183,61 @@ public class Block implements Cloneable {
 		
 		return count;
 	}
+	
+	/**
+	 * Returns a list of those variables that get declared in this statement or
+	 * any nested statements.
+	 * 
+	 * @return
+	 */
+	public Set<Variable> getDeclaredVariables() {
+		Set<Variable> variables = new HashSet<Variable>();
+		for (Statement s: statements) {
+			variables.addAll(s.getDeclaredVariables());
+		}
+		
+		return variables;
+	}
+	
+	/**
+	 * Returns a list of those variables that are used in expressions within 
+	 * this statement or any nested statements. It does not include those 
+	 * variables that are declared but unused in expressions.
+	 * 
+	 * @return
+	 */
+	public Set<Variable> getUsedVariables() {
+		Set<Variable> variables = new HashSet<Variable>();
+		for (Statement s: statements) {
+			variables.addAll(s.getUsedVariables());
+		}
+		
+		return variables;
+	}
+
+	/**
+	 * Returns the declaration statement for the given variable if one exists
+	 * else returns null.
+	 * @param v
+	 * @return
+	 */
+
+	public Declaration getDeclaration(Variable v) {
+		for (Statement s: statements) {
+			if (s instanceof Declaration) {
+				Declaration d = (Declaration) s;
+				if (d.getVariable() == v) {
+					return d;
+				}
+			} else if (s.hasBlock()) {
+				Declaration d = s.getDeclaration(v);
+				
+				if (d != null) {
+					return d;
+				}
+			}
+		}
+
+		return null;
+	}
 }

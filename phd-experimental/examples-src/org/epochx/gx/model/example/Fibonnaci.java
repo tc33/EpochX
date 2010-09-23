@@ -25,6 +25,7 @@ import java.io.*;
 import java.util.*;
 
 import org.epochx.gx.model.*;
+import org.epochx.gx.op.crossover.*;
 import org.epochx.gx.op.init.*;
 import org.epochx.gx.op.mutation.*;
 import org.epochx.gx.representation.*;
@@ -42,9 +43,10 @@ public class Fibonnaci extends org.epochx.gx.model.Fibonacci {
 		model.setPopulationSize(1000);
 		model.setInitialiser(new ExperimentalInitialiser(model));
 		model.setMutation(new ExperimentalMutation(model));
+		model.setCrossover(new ExperimentalCrossover(model));
 		model.setNoElites(1);
-		model.setCrossoverProbability(0.0);
-		model.setMutationProbability(1.0);
+		model.setCrossoverProbability(0.8);
+		model.setMutationProbability(0.2);
 		model.setTerminationFitness(0.0);
 		model.setMaxNoStatements(6);
 		model.setMinNoStatements(4);

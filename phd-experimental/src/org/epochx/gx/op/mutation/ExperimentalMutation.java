@@ -1,7 +1,6 @@
 package org.epochx.gx.op.mutation;
 
 import org.epochx.gx.model.*;
-import org.epochx.gx.op.init.*;
 import org.epochx.gx.representation.*;
 import org.epochx.life.*;
 import org.epochx.representation.*;

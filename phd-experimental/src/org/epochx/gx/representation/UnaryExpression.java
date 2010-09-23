@@ -1,5 +1,7 @@
 package org.epochx.gx.representation;
 
+import java.util.*;
+
 import org.epochx.gx.representation.Operator.*;
 import org.epochx.tools.random.*;
 
@@ -84,5 +86,10 @@ public class UnaryExpression implements Expression {
 		}
 		
 		return value;
+	}
+	
+	@Override
+	public Set<Variable> getUsedVariables() {
+		return expression.getUsedVariables();
 	}
 }

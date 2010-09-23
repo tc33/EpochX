@@ -1,5 +1,7 @@
 package org.epochx.gx.representation;
 
+import java.util.*;
+
 import org.epochx.tools.random.*;
 
 public class ReturnStatement implements Statement {
@@ -101,4 +103,19 @@ public class ReturnStatement implements Statement {
 		// No internal statements so do nothing.
 	}
 
+	@Override
+	public Set<Variable> getDeclaredVariables() {
+		return new HashSet<Variable>();
+	}
+
+	@Override
+	public Set<Variable> getUsedVariables() {
+		return expression.getUsedVariables();
+	}
+
+	@Override
+	public Declaration getDeclaration(Variable v) {
+		// No internal statements so not used here.
+		return null;
+	}
 }

@@ -78,6 +78,16 @@ public class Method implements Cloneable {
 		body.insertStatement(probability, rng, vars, maxNoStatements);
 	}
 	
+	/**
+	 * Returns the declaration statement for the given variable if one exists
+	 * else returns null.
+	 * @param v
+	 * @return
+	 */
+	public Declaration getDeclaration(Variable v) {
+		return body.getDeclaration(v);
+	}
+	
 	@Override
 	public Object clone() {
 		Method clone = null;

@@ -1,5 +1,7 @@
 package org.epochx.gx.representation;
 
+import java.util.*;
+
 import org.epochx.gx.op.init.*;
 import org.epochx.tools.random.*;
 
@@ -144,5 +146,24 @@ public class IfStatement implements Statement {
 		} else {
 			return ifCode.getStatement(index-1);
 		}
+	}
+
+	@Override
+	public Set<Variable> getDeclaredVariables() {
+		return ifCode.getDeclaredVariables();
+	}
+
+	@Override
+	public Set<Variable> getUsedVariables() {
+		Set<Variable> variables = ifCode.getUsedVariables();
+
+		variables.addAll(condition.getUsedVariables());
+		
+		return variables;
+	}
+	
+	@Override
+	public Declaration getDeclaration(Variable v) {
+		return ifCode.getDeclaration(v);
 	}
 }

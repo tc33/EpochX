@@ -1,5 +1,7 @@
 package org.epochx.gx.representation;
 
+import java.util.*;
+
 import org.epochx.tools.random.*;
 
 public interface Expression extends Cloneable {
@@ -11,5 +13,7 @@ public interface Expression extends Cloneable {
 	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars, int level);
 	
 	public Object evaluate(VariableHandler vars);
+	
+	public Set<Variable> getUsedVariables();
 	
 }

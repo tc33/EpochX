@@ -59,8 +59,7 @@ public class Assignment implements Statement {
 
 	@Override
 	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars) {
-		//TODO Should use model's RNG.
-		double rand = Math.random();
+		double rand = rng.nextDouble();
 		
 		if (rand < probability) {
 			expression = ProgramGenerator.getExpression(rng, vars, expression.getDataType(), 0);
@@ -74,22 +73,6 @@ public class Assignment implements Statement {
 		return 1;
 	}
 	
-	@Override
-	public void insertStatement(double probability, RandomNumberGenerator rng, VariableHandler vars, int maxNoStatements) {
-		// No internal statements so not used here.
-	}
-	
-	@Override
-	public Statement deleteStatement(int i) {
-		// No internal statements so not used here.
-		return null;
-	}
-
-	@Override
-	public boolean hasBlock() {
-		return false;
-	}
-
 	@Override
 	public Statement getStatement(int index) {
 		if (index == 0) {
@@ -112,19 +95,5 @@ public class Assignment implements Statement {
 		usedVars.addAll(expression.getUsedVariables());
 		
 		return usedVars;
-	}
-	
-	@Override
-	public Declaration getDeclaration(Variable v) {
-		// No internal statements so not used here.
-		return null;
-	}
-	
-	public int getNoInsertPoints() {
-		return 0;
-	}
-	
-	public void insertStatements(int i, List<Statement> swapStatements) {
-		// No internal statements so not used here.
 	}
 }

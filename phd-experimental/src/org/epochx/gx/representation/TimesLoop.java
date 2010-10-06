@@ -4,7 +4,7 @@ import java.util.*;
 
 import org.epochx.tools.random.*;
 
-public class TimesLoop implements Statement {
+public class TimesLoop extends BlockStatement {
 
 	private final static int MAX_ITERATIONS = 100;
 	
@@ -111,12 +111,7 @@ public class TimesLoop implements Statement {
 	
 	@Override
 	public TimesLoop clone() {
-		TimesLoop clone = null;
-		try {
-			clone = (TimesLoop) super.clone();
-		} catch (CloneNotSupportedException e) {
-			assert false;
-		}
+		TimesLoop clone = (TimesLoop) super.clone();
 		
 		clone.indexCoverVarDecl = this.indexCoverVarDecl.clone();
 		clone.indexVarDecl = this.indexVarDecl.clone();
@@ -164,11 +159,6 @@ public class TimesLoop implements Statement {
 	@Override
 	public Statement deleteStatement(int deletePosition) {
 		return body.deleteStatement(deletePosition);
-	}
-	
-	@Override
-	public boolean hasBlock() {
-		return true;
 	}
 	
 	@Override

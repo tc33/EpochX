@@ -6,17 +6,22 @@ import org.epochx.tools.random.*;
 
 public interface Statement extends Cloneable {
 
-	public Statement clone();
-	
 	/**
-	 * The upToStatement number refers to this statement and its nested 
-	 * statements only, so the maximum value for upToStatement is the result of 
-	 * getNoStatements - 1.
+	 * Provides a shortcut for determining variable scope without performing 
+	 * evaluation. Variable values are not handled, only variable declarations.
 	 */
 	public void apply(VariableHandler vars);
 	
+	/**
+	 * Evaluate this statement, updating variables in the VariableHandler as 
+	 * necessary.
+	 */
 	public void evaluate(VariableHandler vars);
 
+	/**
+	 * Consider each expression within this statement for modification and 
+	 * modify it with probability chance.
+	 */
 	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars);
 	
 	/**
@@ -25,26 +30,19 @@ public interface Statement extends Cloneable {
 	 * statements and loops, they may contain multiple nested statements, in 
 	 * which case the result will be 1 plus the number of statements nested 
 	 * internally.
-	 * @return
 	 */
 	public int getNoStatements();
 
-	public void insertStatement(double probability, RandomNumberGenerator rng, VariableHandler vars, int maxNoStatements);
-
-	public Statement deleteStatement(int deletePosition);
-	
 	/**
-	 * @return true if the statement can have nested statements, false otherwise.
+	 * Returns the statement at the given index. A non-block statement counts 
+	 * for 1 and block statements count for 1 plus another 1 for each internal
+	 * statement.
 	 */
-	public boolean hasBlock();
-
 	public Statement getStatement(int index);
 	
 	/**
 	 * Returns a list of those variables that get declared in this statement or
 	 * any nested statements.
-	 * 
-	 * @return
 	 */
 	public Set<Variable> getDeclaredVariables();
 	
@@ -52,14 +50,8 @@ public interface Statement extends Cloneable {
 	 * Returns a list of those variables that are used in expressions within 
 	 * this statement or any nested statements. It does not include those 
 	 * variables that are declared but unused in expressions.
-	 * 
-	 * @return
 	 */
 	public Set<Variable> getUsedVariables();
 	
-	public Declaration getDeclaration(Variable v);
-	
-	public int getNoInsertPoints();
-
-	public void insertStatements(int i, List<Statement> swapStatements);
+	public Statement clone();
 }

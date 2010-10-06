@@ -5,7 +5,7 @@ import java.util.*;
 import org.epochx.gx.op.init.*;
 import org.epochx.tools.random.*;
 
-public class IfStatement implements Statement {
+public class IfStatement extends BlockStatement {
 
 	private Expression condition;
 	
@@ -60,12 +60,7 @@ public class IfStatement implements Statement {
 	
 	@Override
 	public IfStatement clone() {
-		IfStatement clone = null;
-		try {
-			clone = (IfStatement) super.clone();
-		} catch (CloneNotSupportedException e) {
-			assert false;
-		}
+		IfStatement clone = (IfStatement) super.clone();
 		
 		clone.condition = this.condition.clone();
 		clone.ifCode = this.ifCode.clone();
@@ -132,11 +127,6 @@ public class IfStatement implements Statement {
 
 	public Expression getCondition() {
 		return condition;
-	}
-	
-	@Override
-	public boolean hasBlock() {
-		return true;
 	}
 	
 	@Override

@@ -38,14 +38,16 @@ public class Block implements Cloneable {
 				i++;
 			} else if (i < statements.size()) {
 				Statement s = statements.get(i);
-				if (s.hasBlock()) {
+				if (s instanceof BlockStatement) {
+					BlockStatement bs = (BlockStatement) s;
+					
 					/*
 					 * Max allowed at next level is amount unused at this level, plus the amount that are already inside the block.
 					 */
-					int maxNestedStatements = (maxNoStatements - getNoStatements()) + (s.getNoStatements() - 1);
+					int maxNestedStatements = (maxNoStatements - getNoStatements()) + (bs.getNoStatements() - 1);
 					
 					// Step into the block.
-					s.insertStatement(probability, rng, vars, maxNestedStatements);
+					bs.insertStatement(probability, rng, vars, maxNestedStatements);
 				} else {
 					// Apply the statement.
 					s.apply(vars);
@@ -131,13 +133,17 @@ public class Block implements Cloneable {
 			
 			// Does index lie within this statement.
 			Statement s = statements.get(i);
-			int noStatements = s.getNoStatements();
-			if (deletePosition < (current + noStatements)) {
-				// Position is inside this statement.
-				return s.deleteStatement(deletePosition-current-1);
+			if (s instanceof BlockStatement) {
+				BlockStatement bs = (BlockStatement) s;
+				int noStatements = bs.getNoStatements();
+				if (deletePosition < (current + noStatements)) {
+					// Position is inside this statement.
+					return bs.deleteStatement(deletePosition-current-1);
+				}
+				current += noStatements;
+			} else {
+				current++;
 			}
-				
-			current += noStatements;
 		}
 		
 		return null;
@@ -229,8 +235,8 @@ public class Block implements Cloneable {
 				if (d.getVariable() == v) {
 					return d;
 				}
-			} else if (s.hasBlock()) {
-				Declaration d = s.getDeclaration(v);
+			} else if (s instanceof BlockStatement) {
+				Declaration d = ((BlockStatement) s).getDeclaration(v);
 				
 				if (d != null) {
 					return d;
@@ -242,11 +248,17 @@ public class Block implements Cloneable {
 	}
 
 	public int getNoInsertPoints() {
+		// Start at 1 to count for insert point at beginning.
 		int noInsertPoints = 1;
 		
 		for (Statement s: statements) {
+			if (s instanceof BlockStatement) {
+				// Block statements contain insert points internally.
+				noInsertPoints += ((BlockStatement) s).getNoInsertPoints();
+			}
+			
+			// Add insert point after each statement.
 			noInsertPoints++;
-			noInsertPoints += s.getNoInsertPoints();
 		}
 		
 		return noInsertPoints;
@@ -259,12 +271,18 @@ public class Block implements Cloneable {
 			if (point == insertPoint) {
 				statements.addAll(i, swapStatements);
 				return;
-			} else if (point+s.getNoInsertPoints() >= insertPoint) {
-				s.insertStatements(insertPoint-point-1, swapStatements);
-				return;
+			} else if (s instanceof BlockStatement) {
+				// Insert point might be inside this statement.
+				BlockStatement bs = (BlockStatement) s;
+				if (point + bs.getNoInsertPoints() >= insertPoint) {
+					bs.insertStatements(insertPoint-point-1, swapStatements);
+					return;
+				}
+				
+				point += bs.getNoInsertPoints();
 			}
 			i++;
-			point += s.getNoInsertPoints() + 1;
+			point++;
 		}
 		
 		// If we get to here, then we just add the statements at the end.

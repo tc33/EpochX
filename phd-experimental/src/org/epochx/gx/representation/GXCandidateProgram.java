@@ -178,4 +178,8 @@ public class GXCandidateProgram extends CandidateProgram {
 			return false;
 		}
 	}
+
+	public int getNoInsertPoints() {
+		return method.getBody().getNoInsertPoints();
+	}
 }

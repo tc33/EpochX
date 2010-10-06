@@ -240,4 +240,34 @@ public class Block implements Cloneable {
 
 		return null;
 	}
+
+	public int getNoInsertPoints() {
+		int noInsertPoints = 1;
+		
+		for (Statement s: statements) {
+			noInsertPoints++;
+			noInsertPoints += s.getNoInsertPoints();
+		}
+		
+		return noInsertPoints;
+	}
+
+	public void insertStatements(List<Statement> swapStatements, int insertPoint) {
+		int point = 0;
+		int i = 0;
+		for (Statement s: statements) {
+			if (point == insertPoint) {
+				statements.addAll(i, swapStatements);
+				return;
+			} else if (point+s.getNoInsertPoints() >= insertPoint) {
+				s.insertStatements(insertPoint-point-1, swapStatements);
+				return;
+			}
+			i++;
+			point += s.getNoInsertPoints() + 1;
+		}
+		
+		// If we get to here, then we just add the statements at the end.
+		statements.addAll(swapStatements);
+	}
 }

@@ -2,7 +2,6 @@ package org.epochx.gx.representation;
 
 import java.util.*;
 
-import org.epochx.gx.op.init.*;
 import org.epochx.tools.random.*;
 
 public class TimesLoop implements Statement {
@@ -212,5 +211,13 @@ public class TimesLoop implements Statement {
 		}
 		
 		return body.getDeclaration(v);
+	}
+	
+	public int getNoInsertPoints() {
+		return body.getNoInsertPoints();
+	}
+	
+	public void insertStatements(int insertPoint, List<Statement> swapStatements) {
+		body.insertStatements(swapStatements, insertPoint);
 	}
 }

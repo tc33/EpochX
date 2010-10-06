@@ -118,4 +118,12 @@ public class ReturnStatement implements Statement {
 		// No internal statements so not used here.
 		return null;
 	}
+	
+	public int getNoInsertPoints() {
+		return 0;
+	}
+	
+	public void insertStatements(int insertPoint, List<Statement> swapStatements) {
+		// No internal statements so not used here.
+	}
 }

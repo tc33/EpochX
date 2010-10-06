@@ -58,4 +58,8 @@ public interface Statement extends Cloneable {
 	public Set<Variable> getUsedVariables();
 	
 	public Declaration getDeclaration(Variable v);
+	
+	public int getNoInsertPoints();
+
+	public void insertStatements(int i, List<Statement> swapStatements);
 }

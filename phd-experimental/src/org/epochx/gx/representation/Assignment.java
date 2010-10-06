@@ -119,4 +119,12 @@ public class Assignment implements Statement {
 		// No internal statements so not used here.
 		return null;
 	}
+	
+	public int getNoInsertPoints() {
+		return 0;
+	}
+	
+	public void insertStatements(int i, List<Statement> swapStatements) {
+		// No internal statements so not used here.
+	}
 }

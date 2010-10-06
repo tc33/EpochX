@@ -24,6 +24,10 @@ public class Variable implements Expression {
 		return datatype;
 	}
 	
+	public void setVariableName(String name) {
+		this.variableName = name;
+	}
+	
 	public String getVariableName() {
 		return variableName;
 	}

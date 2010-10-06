@@ -166,4 +166,12 @@ public class IfStatement implements Statement {
 	public Declaration getDeclaration(Variable v) {
 		return ifCode.getDeclaration(v);
 	}
+	
+	public int getNoInsertPoints() {
+		return ifCode.getNoInsertPoints();
+	}
+	
+	public void insertStatements(int insertPoint, List<Statement> swapStatements) {
+		ifCode.insertStatements(swapStatements, insertPoint);
+	}
 }

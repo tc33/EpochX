@@ -45,8 +45,8 @@ public class Fibonnaci extends org.epochx.gx.model.Fibonacci {
 		model.setMutation(new ExperimentalMutation(model));
 		model.setCrossover(new ExperimentalCrossover(model));
 		model.setNoElites(1);
-		model.setCrossoverProbability(0.8);
-		model.setMutationProbability(0.2);
+		model.setCrossoverProbability(0.0);
+		model.setMutationProbability(1.0);
 		model.setTerminationFitness(0.0);
 		model.setMaxNoStatements(6);
 		model.setMinNoStatements(4);
@@ -76,6 +76,7 @@ public class Fibonnaci extends org.epochx.gx.model.Fibonacci {
 					if (noStatements < minNoStatements) {
 						minNoStatements = noStatements;
 					}
+					
 				}
 				double aveSize = totalSize / pop.size();
 				System.out.print(minNoStatements + "\t" + maxNoStatements + "\t" + aveSize + "\n");
@@ -113,5 +114,5 @@ public class Fibonnaci extends org.epochx.gx.model.Fibonacci {
 		});
 		
 		model.run();
-	}    
+	}
 }

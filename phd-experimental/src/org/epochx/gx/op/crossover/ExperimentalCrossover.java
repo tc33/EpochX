@@ -47,14 +47,37 @@ public class ExperimentalCrossover implements GXCrossover {
 		// Select a random statement from the first parent.
 		int noStatements = child1.getNoStatements();
 		int statementIndex = rng.nextInt(noStatements);
-		Statement s = child1.getMethod().getBody().getStatement(statementIndex);
-		s = s.clone();
+		Statement swap = child1.getMethod().getBody().getStatement(statementIndex);
 
 		// Get any required declarations.
-		List<Statement> swapStatements = getDependentStatements(s, child1);
+		List<Statement> swapStatements = getDependentStatements(swap, child1);
 		
+		VariableHandler vars = model.getVariableHandler();
+		vars.setAllVariables(child2.getVariables());
+		
+		// Clone all the swap statements.
+		int noNewStatements = 0;
+		for (int i=0; i<swapStatements.size(); i++) {
+			Statement s = swapStatements.get(i).clone();
+			swapStatements.set(i, s);
+			
+			// Rename all variables to avoid clashes.
+			if (s instanceof Declaration) {
+				Declaration d = (Declaration) s;
+				d.getVariable().setVariableName(vars.getNewVariableName());
+			}
+			
+			// Count the number of statements.
+			noNewStatements += s.getNoStatements();
+		}
+
 		// Insert the statements into the second parent.
-		
+		int insertPoint = rng.nextInt(child2.getNoInsertPoints());
+		if (noNewStatements + child2.getNoStatements() <= maxNoStatements) {
+			child2.getMethod().getBody().insertStatements(swapStatements, insertPoint);
+		} else {
+			return null;
+		}
 		
 		// Return an array containing only the second parent.
 		return new GXCandidateProgram[]{child2};

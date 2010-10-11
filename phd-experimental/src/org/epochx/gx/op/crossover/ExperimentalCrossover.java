@@ -49,35 +49,64 @@ public class ExperimentalCrossover implements GXCrossover {
 		int statementIndex = rng.nextInt(noStatements);
 		Statement swap = child1.getMethod().getBody().getStatement(statementIndex);
 
-		// Get any required declarations.
+		// Get any dependencies.
 		List<Statement> swapStatements = getDependentStatements(swap, child1);
 		
+		// Count the number of new statements.
+		int noNewStatements = 0;
+		for (Statement s: swapStatements) {
+			noNewStatements += s.getNoStatements();
+		}
+		
+		// Check there is room for this amount of new statements in program 2.
+		if (noNewStatements + child2.getNoStatements() > maxNoStatements) {
+			return null;
+		}
+		
+		// Setup variable handler for program 2.
 		VariableHandler vars = model.getVariableHandler();
 		vars.setAllVariables(child2.getVariables());
+		Map<Variable, Variable> variableCopies = new HashMap<Variable, Variable>();
 		
 		// Clone all the swap statements.
-		int noNewStatements = 0;
 		for (int i=0; i<swapStatements.size(); i++) {
 			Statement s = swapStatements.get(i).clone();
 			swapStatements.set(i, s);
 			
-			// Rename all variables to avoid clashes.
-			if (s instanceof Declaration) {
-				Declaration d = (Declaration) s;
-				d.getVariable().setVariableName(vars.getNewVariableName());
-			}
-			
-			// Count the number of statements.
-			noNewStatements += s.getNoStatements();
+			// Replace the variables with copies.
+			s.copyVariables(variableCopies);
 		}
 
-		// Insert the statements into the second parent.
-		int insertPoint = rng.nextInt(child2.getNoInsertPoints());
-		if (noNewStatements + child2.getNoStatements() <= maxNoStatements) {
-			child2.getMethod().getBody().insertStatements(swapStatements, insertPoint);
-		} else {
-			return null;
+		// Rename all the variable copies to ensure they avoid clashes.
+		Set<Variable> allVariables = variableCopies.keySet();
+		for (Variable v: allVariables) {
+			v.setVariableName(vars.getNewVariableName());
 		}
+		
+		int insertPoint = -1;
+		int swapDepth = -1;
+		int insertPointDepth = -1;
+		do {
+			// Pick an insertion point at random.
+			insertPoint = rng.nextInt(child2.getNoInsertPoints());
+	
+			// Find the maximum depth of the swap statements.
+			swapDepth = 0;
+			for (Statement s: swapStatements) {
+				int d = s.getDepth();
+				if (d > swapDepth) {
+					swapDepth = d;
+				}
+			}
+			
+			// Find the current depth at the insert point.
+			insertPointDepth = child2.getDepthOfInsertPoint(insertPoint);
+
+			// Check the nesting depth will be valid if we insert here.
+		} while ((insertPointDepth + swapDepth) > 1);
+		
+		// Insert the statements into the second parent.
+		child2.getMethod().getBody().insertStatements(swapStatements, insertPoint);
 		
 		// Return an array containing only the second parent.
 		return new GXCandidateProgram[]{child2};

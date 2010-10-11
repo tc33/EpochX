@@ -182,4 +182,8 @@ public class GXCandidateProgram extends CandidateProgram {
 	public int getNoInsertPoints() {
 		return method.getBody().getNoInsertPoints();
 	}
+	
+	public int getDepthOfInsertPoint(int insertPoint) {
+		return method.getBody().getDepthOfInsertPoint(insertPoint);
+	}
 }

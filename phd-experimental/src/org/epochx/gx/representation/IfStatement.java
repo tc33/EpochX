@@ -164,4 +164,30 @@ public class IfStatement extends BlockStatement {
 	public void insertStatements(int insertPoint, List<Statement> swapStatements) {
 		ifCode.insertStatements(swapStatements, insertPoint);
 	}
+
+	@Override
+	public void copyVariables(Map<Variable, Variable> variableCopies) {
+		if (condition instanceof Variable) {
+			Variable v = (Variable) condition;
+			if (!variableCopies.containsKey(v)) {
+				variableCopies.put(v, v.copy());
+			}
+			condition = variableCopies.get(v);
+		} else {
+			condition.copyVariables(variableCopies);
+		}
+		
+		ifCode.copyVariables(variableCopies);
+	}
+	
+
+	@Override
+	public int getDepth() {
+		return 1 + ifCode.getDepth();
+	}
+
+	@Override
+	public int getDepthOfInsertPoint(int insertPoint) {
+		return ifCode.getDepthOfInsertPoint(insertPoint);
+	}
 }

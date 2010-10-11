@@ -210,4 +210,23 @@ public class TimesLoop extends BlockStatement {
 	public void insertStatements(int insertPoint, List<Statement> swapStatements) {
 		body.insertStatements(swapStatements, insertPoint);
 	}
+
+	@Override
+	public void copyVariables(Map<Variable, Variable> variableCopies) {
+		indexCoverVarDecl.copyVariables(variableCopies);
+		indexVarDecl.copyVariables(variableCopies);
+		endVarDecl.copyVariables(variableCopies);
+		
+		body.copyVariables(variableCopies);
+	}
+	
+	@Override
+	public int getDepth() {
+		return 1 + body.getDepth();
+	}
+	
+	@Override
+	public int getDepthOfInsertPoint(int insertPoint) {
+		return body.getDepthOfInsertPoint(insertPoint);
+	}
 }

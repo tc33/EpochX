@@ -16,6 +16,9 @@ public class ProgramGenerator {
 	public static final double PROB_DBL_GROUP1 = 0.5; // Includes -1.0 -> +1.0
 	public static final double PROB_DBL_GROUP2 = 0.5; // Includes everything else.
 	
+	//private static final int MAX_NESTED_BLOCKS = 1;
+	private static final int MAX_NESTED_LOOPS = 1;
+	
 	public static Method getMethod(String name, DataType returnType, RandomNumberGenerator rng, VariableHandler vars, int noStatements) {
 		Block body = getBlock(rng, vars, 0, noStatements, false);
 		ReturnStatement returnStatement = getReturnStatement(returnType, rng, vars);
@@ -39,7 +42,7 @@ public class ProgramGenerator {
 	 * selected until all have been tried. If none are valid then null is 
 	 * returned, otherwise the constructed statement is returned.
 	 */
-	public static Statement getStatement(RandomNumberGenerator rng, VariableHandler vars, int nesting, int maxNestedStatements) {
+	public static Statement getStatement(RandomNumberGenerator rng, VariableHandler vars, int loopNestingLevel, int maxNestedStatements) {
 		Statement result = null;
 		
 		int noOptions = 4;
@@ -59,10 +62,10 @@ public class ProgramGenerator {
 				result = getAssignment(rng, vars);
 			} else if (ran == 2 && maxNestedStatements > 0) {
 				// If statement.
-				result = getIf(rng, vars, nesting, maxNestedStatements);
-			} else if (ran == 3 && maxNestedStatements > 0) {
+				result = getIf(rng, vars, loopNestingLevel, maxNestedStatements);
+			} else if (ran == 3 && maxNestedStatements > 0 && loopNestingLevel < MAX_NESTED_LOOPS) {
 				// Times loop.
-				result = getTimesLoop(rng, vars, nesting, maxNestedStatements);
+				result = getTimesLoop(rng, vars, loopNestingLevel, maxNestedStatements);
 			}/* else {
 				// Loop.
 				result = getWhileLoop(rng, vars);
@@ -109,13 +112,13 @@ public class ProgramGenerator {
 		return result;
 	}
 	
-	public static IfStatement getIf(RandomNumberGenerator rng, VariableHandler vars, int nesting, int maxNestedStatements) {
+	public static IfStatement getIf(RandomNumberGenerator rng, VariableHandler vars, int loopNestingLevel, int maxNestedStatements) {
 		if (maxNestedStatements == 0) {
 			return null;
 		}
 		
 		Expression condition = getExpression(rng, vars, DataType.BOOLEAN, 0);
-		Block ifCode = getBlock(rng, vars, nesting+1, maxNestedStatements, true);
+		Block ifCode = getBlock(rng, vars, loopNestingLevel, maxNestedStatements, true);
 		
 		IfStatement ifStatement = new IfStatement(condition, ifCode);
 		
@@ -134,8 +137,8 @@ public class ProgramGenerator {
 	/**
 	 * 
 	 */
-	public static TimesLoop getTimesLoop(RandomNumberGenerator rng, VariableHandler vars, int nesting, int maxNestedStatements) {
-		if (nesting >= 1) {
+	public static TimesLoop getTimesLoop(RandomNumberGenerator rng, VariableHandler vars, int loopNestingLevel, int maxNestedStatements) {
+		if (loopNestingLevel >= 1) {
 			return null;
 		}
 		if (maxNestedStatements == 0) {
@@ -159,7 +162,7 @@ public class ProgramGenerator {
 		Declaration indexCoverVar = getDeclaration(rng, vars, indexVar.getVariable());
 		
 		// Generate a block.
-		Block body = getBlock(rng, vars, nesting+1, maxNestedStatements, true);
+		Block body = getBlock(rng, vars, loopNestingLevel+1, maxNestedStatements, true);
 		
 		// Remove the index cover variable, to ensure scope restricted to block.
 		vars.removeActiveVariable(indexCoverVar.getVariable());
@@ -247,7 +250,7 @@ public class ProgramGenerator {
 		while (currentNo < noStatements) {
 			int nextLevelStatements = noStatements - currentNo - 1;
 			
-			Statement s = getStatement(rng, vars, 0, nextLevelStatements);
+			Statement s = getStatement(rng, vars, nesting, nextLevelStatements);
 			
 			// Don't add a multiple statement that will take us over the size limit.
 			int n = s.getNoStatements();
@@ -255,7 +258,7 @@ public class ProgramGenerator {
 				currentNo += n;
 				statements.add(s);
 			}
-		}		
+		}
 		
 		Block result = new Block(statements);
 		
@@ -265,8 +268,8 @@ public class ProgramGenerator {
 		return result;
 	}
 	
-	public static Block getBlock(RandomNumberGenerator rng, VariableHandler vars, int nesting) {
-		return getBlock(rng, vars, nesting, 1, true);
+	public static Block getBlock(RandomNumberGenerator rng, VariableHandler vars, int loopNestingLevel) {
+		return getBlock(rng, vars, loopNestingLevel, 1, true);
 	}
 
 	public static DataType getDataType(RandomNumberGenerator rng) {

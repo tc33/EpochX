@@ -54,4 +54,18 @@ public interface Statement extends Cloneable {
 	public Set<Variable> getUsedVariables();
 	
 	public Statement clone();
+	
+	/**
+	 * If this statement contains any variable uses or declarations then they 
+	 * should be replaced by the copy that is found in the given map. If no 
+	 * entry exists for that variable then a new copy should be made.
+	 */
+	public void copyVariables(Map<Variable, Variable> variableCopies);
+	
+	/**
+	 * Returns the nesting depth of this statement. This will be 0 for a 
+	 * statement at the top level, and 1 for any statements within a block of an
+	 * if statement or loop.
+	 */
+	public int getDepth();
 }

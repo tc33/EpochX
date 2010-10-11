@@ -45,11 +45,12 @@ public class Fibonnaci extends org.epochx.gx.model.Fibonacci {
 		model.setMutation(new ExperimentalMutation(model));
 		model.setCrossover(new ExperimentalCrossover(model));
 		model.setNoElites(1);
-		model.setCrossoverProbability(0.0);
-		model.setMutationProbability(1.0);
+		model.setCrossoverProbability(0.5);
+		model.setMutationProbability(0.5);
 		model.setTerminationFitness(0.0);
 		model.setMaxNoStatements(6);
 		model.setMinNoStatements(4);
+		
 		model.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationEnd() {
@@ -68,6 +69,12 @@ public class Fibonnaci extends org.epochx.gx.model.Fibonacci {
 				int minNoStatements = Integer.MAX_VALUE;
 				double totalSize = 0;
 				for (CandidateProgram p: pop) {
+					/*GXCandidateProgram gxp = (GXCandidateProgram) p;
+					if (gxp.getMethod().getBody().getDepth() > 1) {
+						System.out.println(ProgramGenerator.format(p.toString()));
+						System.out.println("-----------------------");
+					}*/
+					
 					int noStatements = ((GXCandidateProgram) p).getNoStatements();
 					totalSize += noStatements;
 					if (noStatements > maxNoStatements) {
@@ -83,7 +90,7 @@ public class Fibonnaci extends org.epochx.gx.model.Fibonacci {
 			}
 		});
 		
-		model.getLifeCycleManager().addRunListener(new RunAdapter() {
+		/*model.getLifeCycleManager().addRunListener(new RunAdapter() {
 			@Override
 			public void onRunEnd() {
 				Object[] stats = model.getStatsManager().getRunStats(StatField.RUN_NUMBER, StatField.RUN_FITNESS_MIN, StatField.RUN_FITTEST_PROGRAM);
@@ -111,7 +118,7 @@ public class Fibonnaci extends org.epochx.gx.model.Fibonacci {
 			    } // end try/catch/finally
 
 			}
-		});
+		});*/
 		
 		model.run();
 	}

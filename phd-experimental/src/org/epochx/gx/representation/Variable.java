@@ -60,6 +60,10 @@ public class Variable implements Expression {
 		
 		return this;
 	}
+	
+	public Variable copy() {
+		return new Variable(this.datatype, this.variableName, this.value);
+	}
 
 	@Override
 	public void modifyExpression(double probability, RandomNumberGenerator rng, VariableHandler vars, int level) {
@@ -77,6 +81,11 @@ public class Variable implements Expression {
 		variables.add(this);
 		
 		return variables;
+	}
+
+	@Override
+	public void copyVariables(Map<Variable, Variable> variableCopies) {
+		// No variables inside here - copying should have been done up a level.
 	}
 
 }

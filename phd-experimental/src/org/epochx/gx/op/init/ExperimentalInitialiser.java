@@ -85,6 +85,7 @@ public class ExperimentalInitialiser implements GXInitialiser {
 		//System.out.println(ProgramGenerator.format(ast.toString()));
 		Set<Variable> variables = new HashSet<Variable>(vars.getAllVariables());
 		//System.out.println("------");
+
 		
 		return new GXCandidateProgram(method, variables, model);
 	}

@@ -183,7 +183,9 @@ public class RunManager {
 
 			//TODO Should be able to utilise the statsmanager here.
 			// Keep track of the best program and fitness.
+			//long fitStart = System.currentTimeMillis();
 			updateBestProgram(pop);
+			//System.out.println(System.currentTimeMillis() - fitStart);
 
 			// We might be finished?
 			if (bestFitness <= terminationFitness) {

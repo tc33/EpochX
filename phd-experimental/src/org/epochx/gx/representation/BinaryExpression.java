@@ -91,4 +91,27 @@ public class BinaryExpression implements Expression {
 		
 		return variables;
 	}
+	
+	@Override
+	public void copyVariables(Map<Variable, Variable> variableCopies) {
+		if (leftExpression instanceof Variable) {
+			Variable v = (Variable) leftExpression;
+			if (!variableCopies.containsKey(v)) {
+				variableCopies.put(v, v.copy());
+			}
+			leftExpression = variableCopies.get(v);
+		} else {
+			leftExpression.copyVariables(variableCopies);
+		}
+
+		if (rightExpression instanceof Variable) {
+			Variable v = (Variable) rightExpression;
+			if (!variableCopies.containsKey(v)) {
+				variableCopies.put(v, v.copy());
+			}
+			rightExpression = variableCopies.get(v);
+		} else {
+			rightExpression.copyVariables(variableCopies);
+		}
+	}
 }

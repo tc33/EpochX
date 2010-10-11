@@ -92,4 +92,17 @@ public class UnaryExpression implements Expression {
 	public Set<Variable> getUsedVariables() {
 		return expression.getUsedVariables();
 	}
+
+	@Override
+	public void copyVariables(Map<Variable, Variable> variableCopies) {
+		if (expression instanceof Variable) {
+			Variable v = (Variable) expression;
+			if (!variableCopies.containsKey(v)) {
+				variableCopies.put(v, v.copy());
+			}
+			expression = variableCopies.get(v);
+		} else {
+			expression.copyVariables(variableCopies);
+		}
+	}
 }

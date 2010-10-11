@@ -26,4 +26,6 @@ public abstract class BlockStatement implements Statement {
 
 	public abstract void insertStatements(int i, List<Statement> swapStatements);
 
+	public abstract int getDepthOfInsertPoint(int insertPoint);
+
 }

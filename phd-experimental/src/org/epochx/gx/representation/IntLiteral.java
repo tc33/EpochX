@@ -54,4 +54,9 @@ public class IntLiteral implements Literal {
 	public Set<Variable> getUsedVariables() {
 		return new HashSet<Variable>();
 	}
+
+	@Override
+	public void copyVariables(Map<Variable, Variable> variableCopies) {
+		// No variables here.
+	}
 }

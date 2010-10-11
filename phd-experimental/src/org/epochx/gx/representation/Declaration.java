@@ -113,4 +113,28 @@ public class Declaration implements Statement {
 	public Set<Variable> getUsedVariables() {
 		return expression.getUsedVariables();
 	}
+	
+	@Override
+	public void copyVariables(Map<Variable, Variable> variableCopies) {
+		if (!variableCopies.containsKey(variable)) {
+			variableCopies.put(variable, variable.copy());
+		}
+		variable = variableCopies.get(variable);
+		
+		if (expression instanceof Variable) {
+			Variable v = (Variable) expression;
+			if (!variableCopies.containsKey(v)) {
+				variableCopies.put(v, v.copy());
+			}
+			expression = variableCopies.get(v);
+		} else {
+			expression.copyVariables(variableCopies);
+		}
+	}
+	
+
+	@Override
+	public int getDepth() {
+		return 0;
+	}
 }

@@ -288,4 +288,47 @@ public class Block implements Cloneable {
 		// If we get to here, then we just add the statements at the end.
 		statements.addAll(swapStatements);
 	}
+
+	public void copyVariables(Map<Variable, Variable> variableCopies) {
+		for (Statement s: statements) {
+			s.copyVariables(variableCopies);
+		}
+	}
+	
+	/**
+	 * The depth of a block is the maximum depth of all its statements.
+	 */
+	public int getDepth() {
+		int maxDepth = 0;
+		for (Statement s: statements) {
+			int depth = s.getDepth();
+			if (depth > maxDepth) {
+				maxDepth = depth;
+			}
+		}
+		
+		return maxDepth;
+	}
+
+	public int getDepthOfInsertPoint(int insertPoint) {
+		int depth = 0;
+		int point = 0;
+		for (Statement s: statements) {
+			if (point == insertPoint) {
+				return depth;
+			} else if (s instanceof BlockStatement) {
+				// Insert point might be inside this statement.
+				BlockStatement bs = (BlockStatement) s;
+				if (point + bs.getNoInsertPoints() >= insertPoint) {
+					return 1 + bs.getDepthOfInsertPoint(insertPoint-point-1);
+				}
+				
+				point += bs.getNoInsertPoints();
+			}
+			point++;
+		}
+		
+		// Must be at the end of the block - depth is 0.
+		return depth;
+	}
 }

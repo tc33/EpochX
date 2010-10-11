@@ -387,6 +387,22 @@ public class NonTerminalSymbol implements Symbol {
 
 		return null;
 	}
+	
+	/**
+	 * Returns the nth terminal from the parse tree rooted at this
+	 * <code>NonTerminalSymbol</code>. Indexing starts at zero and proceeds 
+	 * according to the order that terminals are met while performing a 
+	 * pre-order traversal of the tree from this symbol.
+	 * 
+	 * @param n the index of the terminal to return.
+	 * @return the <code>TerminalSymbol</code> which was the nth in the parse
+	 *         tree.
+	 */
+	public TerminalSymbol getNthTerminal(final int n) {
+		List<TerminalSymbol> terminals = getTerminalSymbols();
+		
+		return terminals.get(n);
+	}
 
 	/**
 	 * Returns the nth symbol from the parse tree rooted at this symbol.

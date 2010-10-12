@@ -255,9 +255,39 @@ public class GrammarProduction implements Cloneable {
 			}
 			buffer.append(' ');
 		}
-		// Remove the last space.
-		buffer.deleteCharAt(buffer.length() - 1);
+		
+		// Append any attributes.
+		if (attributes.size() > 0) {
+			buffer.append("<?");
+			Set<String> keys = attributes.keySet();
+			int i = 0;
+			for (String k: keys) {
+				if (i != 0) {
+					buffer.append(';');
+				}
+				buffer.append(k);
+				buffer.append('=');
+				buffer.append(attributes.get(k));
+				i++;
+			}
+			buffer.append("?>");
+		}
 
 		return buffer.toString();
+	}
+	
+	public static void main(String[] args) {
+		List<GrammarNode> nodes = new ArrayList<GrammarNode>();
+		nodes.add(new GrammarLiteral("val1"));
+		nodes.add(new GrammarLiteral("val2"));
+		
+		GrammarProduction gp = new GrammarProduction(nodes);
+		
+		System.out.println(gp.toString());
+		
+		gp.setAttribute("key1", "3");
+		gp.setAttribute("key2", "82");
+		
+		System.out.println(gp.toString());
 	}
 }

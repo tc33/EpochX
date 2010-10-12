@@ -212,12 +212,12 @@ public class TimesLoop extends BlockStatement {
 	}
 
 	@Override
-	public void copyVariables(Map<Variable, Variable> variableCopies) {
-		indexCoverVarDecl.copyVariables(variableCopies);
-		indexVarDecl.copyVariables(variableCopies);
-		endVarDecl.copyVariables(variableCopies);
+	public void copyVariables(VariableHandler vars, Map<Variable, Variable> variableCopies) {
+		indexCoverVarDecl.copyVariables(vars, variableCopies);
+		indexVarDecl.copyVariables(vars, variableCopies);
+		endVarDecl.copyVariables(vars, variableCopies);
 		
-		body.copyVariables(variableCopies);
+		body.copyVariables(vars, variableCopies);
 	}
 	
 	@Override

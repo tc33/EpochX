@@ -66,6 +66,10 @@ public class VariableHandler {
 		}
 	}
 	
+	public boolean isParameter(Variable var) {
+		return parameters.contains(var);
+	}
+	
 	public void reset() {
 		activeVariables.clear();
 		activeVariables.addAll(parameters);

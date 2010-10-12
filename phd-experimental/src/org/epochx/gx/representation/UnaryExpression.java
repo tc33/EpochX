@@ -3,6 +3,7 @@ package org.epochx.gx.representation;
 import java.util.*;
 
 import org.epochx.gx.representation.Operator.*;
+import org.epochx.gx.tools.util.*;
 import org.epochx.tools.random.*;
 
 
@@ -94,15 +95,7 @@ public class UnaryExpression implements Expression {
 	}
 
 	@Override
-	public void copyVariables(Map<Variable, Variable> variableCopies) {
-		if (expression instanceof Variable) {
-			Variable v = (Variable) expression;
-			if (!variableCopies.containsKey(v)) {
-				variableCopies.put(v, v.copy());
-			}
-			expression = variableCopies.get(v);
-		} else {
-			expression.copyVariables(variableCopies);
-		}
+	public void copyVariables(VariableHandler vars, Map<Variable, Variable> variableCopies) {
+		expression = VariableUtils.copyVariable(expression, variableCopies, vars);
 	}
 }

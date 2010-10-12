@@ -23,6 +23,8 @@ package org.epochx.core;
 
 import static org.epochx.stats.StatField.*;
 
+import java.util.*;
+
 import org.epochx.life.ConfigAdapter;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;

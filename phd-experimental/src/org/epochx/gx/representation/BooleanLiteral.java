@@ -63,7 +63,7 @@ public class BooleanLiteral implements Literal {
 	}
 
 	@Override
-	public void copyVariables(Map<Variable, Variable> variableCopies) {
+	public void copyVariables(VariableHandler vars, Map<Variable, Variable> variableCopies) {
 		// No variables here.
 	}
 }

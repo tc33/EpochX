@@ -21,8 +21,11 @@
  */
 package org.epochx.core;
 
+import static org.epochx.stats.StatField.*;
+
 import java.util.*;
 
+import org.epochx.gx.representation.*;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
 
@@ -152,8 +155,11 @@ public class ElitismManager {
 		// Allow life cycle listener to confirm or modify.
 		elites = model.getLifeCycleManager().fireElitismEvent(elites);
 		
-		model.getLifeCycleManager().fireElitismEndEvent();
+		// Store the stats from the pool selection.
+		model.getStatsManager().addGenerationData("ELITES", elites);
 		
+		model.getLifeCycleManager().fireElitismEndEvent();
+
 		return elites;
 	}
 

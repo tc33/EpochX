@@ -84,7 +84,7 @@ public class Variable implements Expression {
 	}
 
 	@Override
-	public void copyVariables(Map<Variable, Variable> variableCopies) {
+	public void copyVariables(VariableHandler vars, Map<Variable, Variable> variableCopies) {
 		// No variables inside here - copying should have been done up a level.
 	}
 

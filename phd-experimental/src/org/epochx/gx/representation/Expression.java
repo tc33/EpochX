@@ -16,5 +16,5 @@ public interface Expression extends Cloneable {
 	
 	public Set<Variable> getUsedVariables();
 	
-	public void copyVariables(Map<Variable, Variable> variableCopies);
+	public void copyVariables(VariableHandler vars, Map<Variable, Variable> variableCopies);
 }

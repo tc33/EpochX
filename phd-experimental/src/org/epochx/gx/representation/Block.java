@@ -289,9 +289,9 @@ public class Block implements Cloneable {
 		statements.addAll(swapStatements);
 	}
 
-	public void copyVariables(Map<Variable, Variable> variableCopies) {
+	public void copyVariables(VariableHandler vars, Map<Variable, Variable> variableCopies) {
 		for (Statement s: statements) {
-			s.copyVariables(variableCopies);
+			s.copyVariables(vars, variableCopies);
 		}
 	}
 	

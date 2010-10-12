@@ -60,7 +60,7 @@ public interface Statement extends Cloneable {
 	 * should be replaced by the copy that is found in the given map. If no 
 	 * entry exists for that variable then a new copy should be made.
 	 */
-	public void copyVariables(Map<Variable, Variable> variableCopies);
+	public void copyVariables(VariableHandler vars, Map<Variable, Variable> variableCopies);
 	
 	/**
 	 * Returns the nesting depth of this statement. This will be 0 for a 

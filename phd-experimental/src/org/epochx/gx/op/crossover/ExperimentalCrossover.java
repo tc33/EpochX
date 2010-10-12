@@ -74,13 +74,14 @@ public class ExperimentalCrossover implements GXCrossover {
 			swapStatements.set(i, s);
 			
 			// Replace the variables with copies.
-			s.copyVariables(variableCopies);
+			s.copyVariables(vars, variableCopies);
 		}
 
 		// Rename all the variable copies to ensure they avoid clashes.
-		Set<Variable> allVariables = variableCopies.keySet();
+		Collection<Variable> allVariables = variableCopies.values();
 		for (Variable v: allVariables) {
 			v.setVariableName(vars.getNewVariableName());
+			vars.add(v);
 		}
 		
 		int insertPoint = -1;

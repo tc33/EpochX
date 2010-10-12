@@ -3,6 +3,7 @@ package org.epochx.gx.representation;
 import java.util.*;
 
 import org.epochx.gx.op.init.*;
+import org.epochx.gx.tools.util.*;
 import org.epochx.tools.random.*;
 
 public class IfStatement extends BlockStatement {
@@ -166,18 +167,10 @@ public class IfStatement extends BlockStatement {
 	}
 
 	@Override
-	public void copyVariables(Map<Variable, Variable> variableCopies) {
-		if (condition instanceof Variable) {
-			Variable v = (Variable) condition;
-			if (!variableCopies.containsKey(v)) {
-				variableCopies.put(v, v.copy());
-			}
-			condition = variableCopies.get(v);
-		} else {
-			condition.copyVariables(variableCopies);
-		}
+	public void copyVariables(VariableHandler vars, Map<Variable, Variable> variableCopies) {
+		condition = VariableUtils.copyVariable(condition, variableCopies, vars);
 		
-		ifCode.copyVariables(variableCopies);
+		ifCode.copyVariables(vars, variableCopies);
 	}
 	
 

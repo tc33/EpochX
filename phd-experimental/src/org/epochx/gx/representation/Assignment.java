@@ -3,6 +3,7 @@ package org.epochx.gx.representation;
 import java.util.*;
 
 import org.epochx.gx.op.init.*;
+import org.epochx.gx.tools.util.*;
 import org.epochx.tools.random.*;
 
 
@@ -98,21 +99,13 @@ public class Assignment implements Statement {
 	}
 
 	@Override
-	public void copyVariables(Map<Variable, Variable> variableCopies) {
+	public void copyVariables(VariableHandler vars, Map<Variable, Variable> variableCopies) {
 		if (!variableCopies.containsKey(variable)) {
 			variableCopies.put(variable, variable.copy());
 		}
 		variable = variableCopies.get(variable);
 		
-		if (expression instanceof Variable) {
-			Variable v = (Variable) expression;
-			if (!variableCopies.containsKey(v)) {
-				variableCopies.put(v, v.copy());
-			}
-			expression = variableCopies.get(v);
-		} else {
-			expression.copyVariables(variableCopies);
-		}
+		expression = VariableUtils.copyVariable(expression, variableCopies, vars);
 	}
 
 	@Override

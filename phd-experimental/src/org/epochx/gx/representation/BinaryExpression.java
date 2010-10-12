@@ -3,6 +3,7 @@ package org.epochx.gx.representation;
 import java.util.*;
 
 import org.epochx.gx.op.init.*;
+import org.epochx.gx.tools.util.*;
 import org.epochx.tools.random.*;
 
 
@@ -93,25 +94,8 @@ public class BinaryExpression implements Expression {
 	}
 	
 	@Override
-	public void copyVariables(Map<Variable, Variable> variableCopies) {
-		if (leftExpression instanceof Variable) {
-			Variable v = (Variable) leftExpression;
-			if (!variableCopies.containsKey(v)) {
-				variableCopies.put(v, v.copy());
-			}
-			leftExpression = variableCopies.get(v);
-		} else {
-			leftExpression.copyVariables(variableCopies);
-		}
-
-		if (rightExpression instanceof Variable) {
-			Variable v = (Variable) rightExpression;
-			if (!variableCopies.containsKey(v)) {
-				variableCopies.put(v, v.copy());
-			}
-			rightExpression = variableCopies.get(v);
-		} else {
-			rightExpression.copyVariables(variableCopies);
-		}
+	public void copyVariables(VariableHandler vars, Map<Variable, Variable> variableCopies) {
+		leftExpression = VariableUtils.copyVariable(leftExpression, variableCopies, vars);
+		rightExpression = VariableUtils.copyVariable(rightExpression, variableCopies, vars);
 	}
 }

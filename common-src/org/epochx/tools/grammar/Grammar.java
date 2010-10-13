@@ -159,7 +159,7 @@ public class Grammar {
 	 * This is based upon the grammar parser found in the
 	 * Mapper.ContextFreeGrammar class of GEVA v.1.0.
 	 */
-	protected void parseGrammar(final String grammar) {
+	protected void parseGrammar(String grammar) {
 		State state = State.START;
 		StringBuilder buffer = new StringBuilder();
 		GrammarRule lhs = null;
@@ -168,6 +168,9 @@ public class Grammar {
 		boolean quoted = false;
 		boolean terminal = true;
 		boolean special = false;
+		
+		// Append a \n to ensure we detect the end of file.
+		grammar += '\n';
 
 		for (int i = 0; i < grammar.length(); i++) {
 			char ch = grammar.charAt(i);

@@ -6,6 +6,7 @@ import junit.framework.TestCase;
 
 import org.epochx.gp.model.GPModelDummy;
 import org.epochx.gp.representation.GPCandidateProgram;
+import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
 
 public class FitnessProportionateSelectorTest extends TestCase {
@@ -18,7 +19,7 @@ public class FitnessProportionateSelectorTest extends TestCase {
 	protected void setUp() throws Exception {
 		model = new GPModelDummy();
 		selector = new FitnessProportionateSelector(model);
-		model.getLifeCycleManager().fireConfigureEvent();
+		LifeCycleManager.getInstance().fireConfigureEvent();
 
 		pop = new ArrayList<CandidateProgram>();
 		pop.add(new GPCandidateProgram(model));
@@ -112,7 +113,7 @@ public class FitnessProportionateSelectorTest extends TestCase {
 		model.setRNG(null);
 		model.setFitness(1.0);
 		model.setCacheFitness(false);
-		model.getLifeCycleManager().fireConfigureEvent();
+		LifeCycleManager.getInstance().fireConfigureEvent();
 		selector.setSelectionPool(pop);
 		try {
 			selector.getProgram();

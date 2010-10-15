@@ -28,6 +28,7 @@ import org.epochx.ge.mapper.DepthFirstMapper;
 import org.epochx.ge.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.life.*;
 import org.epochx.op.selection.TournamentSelector;
+import org.epochx.stats.*;
 
 public class SantaFeTrail extends org.epochx.ge.model.java.SantaFeTrail {
 
@@ -51,21 +52,21 @@ public class SantaFeTrail extends org.epochx.ge.model.java.SantaFeTrail {
 		setPoolSize(-1);
 		setInitialiser(new RampedHalfAndHalfInitialiser(this));
 
-		getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+		LifeCycleManager.getInstance().addGenerationListener(new GenerationAdapter() {
 
 			@Override
 			public void onGenerationEnd() {
-				getStatsManager().printStats(GEN_NUMBER,
+				StatsManager.getInstance().printStats(GEN_NUMBER,
 						GEN_FITNESS_MIN, GEN_FITNESS_AVE, GEN_DEPTH_AVE,
 						GEN_DEPTH_MAX, GEN_FITTEST_PROGRAM);
 			}
 		});
 
-		getLifeCycleManager().addRunListener(new RunAdapter() {
+		LifeCycleManager.getInstance().addRunListener(new RunAdapter() {
 
 			@Override
 			public void onRunEnd() {
-				getStatsManager().printStats(RUN_NUMBER, RUN_FITNESS_MIN,
+				StatsManager.getInstance().printStats(RUN_NUMBER, RUN_FITNESS_MIN,
 						RUN_FITTEST_PROGRAM);
 			}
 		});

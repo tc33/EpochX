@@ -25,9 +25,10 @@ import static org.epochx.stats.StatField.*;
 
 import java.util.*;
 
-import org.epochx.life.ConfigAdapter;
+import org.epochx.life.*;
 import org.epochx.op.ProgramSelector;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.stats.*;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
@@ -127,7 +128,7 @@ public class GenerationManager {
 		reversions = 0;
 
 		// Configure parameters from the model.
-		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		LifeCycleManager.getInstance().addConfigListener(new ConfigAdapter() {
 
 			@Override
 			public void onConfigure() {
@@ -189,7 +190,7 @@ public class GenerationManager {
 		}
 
 		// Give the model a chance to configure.
-		model.getLifeCycleManager().fireConfigureEvent();
+		LifeCycleManager.getInstance().fireConfigureEvent();
 
 		// Validate state.
 		if (rng == null) {
@@ -207,14 +208,14 @@ public class GenerationManager {
 		}
 
 		// Inform all listeners that a generation is starting.
-		model.getLifeCycleManager().fireGenerationStartEvent();
+		LifeCycleManager.getInstance().fireGenerationStartEvent();
 
 		// Setup the generation manager for a new generation.
 		reversions = 0;
 		final long startTime = System.nanoTime();
 
 		// Record the generation number in the stats data.
-		model.getStatsManager().addData(GEN_NUMBER, generationNo);
+		StatsManager.getInstance().addData(GEN_NUMBER, generationNo);
 
 		List<CandidateProgram> pop;
 
@@ -255,7 +256,7 @@ public class GenerationManager {
 			}
 
 			// Request confirmation of generation.
-			pop = model.getLifeCycleManager().fireGenerationEvent(pop);
+			pop = LifeCycleManager.getInstance().fireGenerationEvent(pop);
 
 			// If reverted, increment reversions count.
 			if (pop == null) {
@@ -264,13 +265,13 @@ public class GenerationManager {
 		} while (pop == null);
 
 		// Store the stats data from the generation.
-		model.getStatsManager().addData(GEN_REVERSIONS, reversions);
-		model.getStatsManager().addData(GEN_POP, pop);
-		model.getStatsManager().addData(GEN_TIME,
+		StatsManager.getInstance().addData(GEN_REVERSIONS, reversions);
+		StatsManager.getInstance().addData(GEN_POP, pop);
+		StatsManager.getInstance().addData(GEN_TIME,
 				(System.nanoTime() - startTime));
 
 		// Tell everyone the generation has ended.
-		model.getLifeCycleManager().fireGenerationEndEvent();
+		LifeCycleManager.getInstance().fireGenerationEndEvent();
 
 		assert (pop != null);
 

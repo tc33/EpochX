@@ -27,6 +27,7 @@ import junit.framework.TestCase;
 
 import org.epochx.gp.model.GPModelDummy;
 import org.epochx.gp.representation.GPCandidateProgram;
+import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
 
 /**
@@ -42,7 +43,7 @@ public class LinearRankSelectorTest extends TestCase {
 	protected void setUp() throws Exception {
 		model = new GPModelDummy();
 		selector = new LinearRankSelector(model);
-		model.getLifeCycleManager().fireConfigureEvent();
+		LifeCycleManager.getInstance().fireConfigureEvent();
 
 		pop = new ArrayList<CandidateProgram>();
 		pop.add(new GPCandidateProgram(null));
@@ -210,7 +211,7 @@ public class LinearRankSelectorTest extends TestCase {
 	 */
 	public void testGetProgramRNGNull() {
 		model.setRNG(null);
-		model.getLifeCycleManager().fireConfigureEvent();
+		LifeCycleManager.getInstance().fireConfigureEvent();
 		selector.setSelectionPool(pop);
 		try {
 			selector.getProgram();

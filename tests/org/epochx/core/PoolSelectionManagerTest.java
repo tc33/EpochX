@@ -61,7 +61,7 @@ public class PoolSelectionManagerTest extends TestCase {
 		model.setPoolSize(0);
 		model.setPoolSelector(new RandomSelector(model));
 
-		model.getLifeCycleManager().fireConfigureEvent();
+		LifeCycleManager.getInstance().fireConfigureEvent();
 		try {
 			poolManager.getPool(pop);
 			fail("illegal state exception not thrown for pool selection with a pool size of zero");
@@ -80,7 +80,7 @@ public class PoolSelectionManagerTest extends TestCase {
 		model.setPoolSize(-2);
 		model.setPoolSelector(new RandomSelector(model));
 
-		model.getLifeCycleManager().fireConfigureEvent();
+		LifeCycleManager.getInstance().fireConfigureEvent();
 		try {
 			poolManager.getPool(pop);
 			fail("illegal state exception not thrown for pool selection with a pool size of -2");
@@ -97,7 +97,7 @@ public class PoolSelectionManagerTest extends TestCase {
 		model.setPoolSize(-1);
 		model.setPoolSelector(new RandomSelector(model));
 
-		model.getLifeCycleManager().fireConfigureEvent();
+		LifeCycleManager.getInstance().fireConfigureEvent();
 		try {
 			final List<CandidateProgram> pool = poolManager.getPool(pop);
 			assertSame("returned pool is not same as pop when pool size is -1",
@@ -117,7 +117,7 @@ public class PoolSelectionManagerTest extends TestCase {
 		model.setPoolSize(5);
 		model.setPoolSelector(null);
 
-		model.getLifeCycleManager().fireConfigureEvent();
+		LifeCycleManager.getInstance().fireConfigureEvent();
 		try {
 			final List<CandidateProgram> pool = poolManager.getPool(pop);
 			assertSame(
@@ -137,7 +137,7 @@ public class PoolSelectionManagerTest extends TestCase {
 		model.setPoolSize(1);
 		model.setPoolSelector(new RandomSelector(model));
 
-		model.getLifeCycleManager().fireConfigureEvent();
+		LifeCycleManager.getInstance().fireConfigureEvent();
 		try {
 			poolManager.getPool(pop);
 		} catch (final Exception e) {
@@ -160,7 +160,7 @@ public class PoolSelectionManagerTest extends TestCase {
 		model.getProgramSelector().setSelectionPool(pop);
 
 		// Listen for the crossver.
-		model.getLifeCycleManager().addPoolSelectionListener(
+		LifeCycleManager.getInstance().addPoolSelectionListener(
 				new PoolSelectionListener() {
 
 					@Override
@@ -180,7 +180,7 @@ public class PoolSelectionManagerTest extends TestCase {
 						verify.append('3');
 					}
 				});
-		model.getLifeCycleManager().fireConfigureEvent();
+		LifeCycleManager.getInstance().fireConfigureEvent();
 		poolManager.getPool(pop);
 
 		assertEquals(
@@ -204,7 +204,7 @@ public class PoolSelectionManagerTest extends TestCase {
 		count = 0;
 
 		// Listen for the generation.
-		model.getLifeCycleManager().addPoolSelectionListener(
+		LifeCycleManager.getInstance().addPoolSelectionListener(
 				new PoolSelectionAdapter() {
 
 					@Override
@@ -221,7 +221,7 @@ public class PoolSelectionManagerTest extends TestCase {
 					}
 				});
 
-		model.getLifeCycleManager().fireConfigureEvent();
+		LifeCycleManager.getInstance().fireConfigureEvent();
 		poolManager.getPool(pop);
 
 		assertEquals("pool selection operation was not correctly reverted",

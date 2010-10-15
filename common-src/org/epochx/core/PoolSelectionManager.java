@@ -25,9 +25,10 @@ import static org.epochx.stats.StatField.*;
 
 import java.util.List;
 
-import org.epochx.life.ConfigAdapter;
+import org.epochx.life.*;
 import org.epochx.op.PoolSelector;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.stats.*;
 
 /**
  * This component manages the selection of a breeding pool to undergo the
@@ -106,7 +107,7 @@ public class PoolSelectionManager {
 		this.model = model;
 
 		// Configure parameters from the model.
-		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		LifeCycleManager.getInstance().addConfigListener(new ConfigAdapter() {
 
 			@Override
 			public void onConfigure() {
@@ -147,7 +148,7 @@ public class PoolSelectionManager {
 		}
 
 		// Inform all listeners that pool selection is starting.
-		model.getLifeCycleManager().firePoolSelectionStartEvent();
+		LifeCycleManager.getInstance().firePoolSelectionStartEvent();
 
 		// Record the start time.
 		final long startTime = System.nanoTime();
@@ -166,7 +167,7 @@ public class PoolSelectionManager {
 			}
 
 			// Allow life cycle listener to confirm or modify.
-			pool = model.getLifeCycleManager().firePoolSelectionEvent(pool);
+			pool = LifeCycleManager.getInstance().firePoolSelectionEvent(pool);
 
 			// If reverted then increment reversion counter.
 			if (pool == null) {
@@ -177,12 +178,12 @@ public class PoolSelectionManager {
 		final long runtime = System.nanoTime() - startTime;
 		
 		// Store the stats from the pool selection.
-		model.getStatsManager().addData(POOL_REVERSIONS, reversions);
-		model.getStatsManager().addData(POOL_PROGRAMS, pool);
-		model.getStatsManager().addData(POOL_TIME, runtime);
+		StatsManager.getInstance().addData(POOL_REVERSIONS, reversions);
+		StatsManager.getInstance().addData(POOL_PROGRAMS, pool);
+		StatsManager.getInstance().addData(POOL_TIME, runtime);
 
 		// Inform all listeners that pool selection has ended.
-		model.getLifeCycleManager().firePoolSelectionEndEvent();
+		LifeCycleManager.getInstance().firePoolSelectionEndEvent();
 
 		assert (pool != null);
 

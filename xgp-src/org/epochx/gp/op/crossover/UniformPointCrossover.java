@@ -23,7 +23,7 @@ package org.epochx.gp.op.crossover;
 
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
-import org.epochx.life.ConfigAdapter;
+import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
 
@@ -42,7 +42,7 @@ public class UniformPointCrossover implements GPCrossover {
 		this.model = model;
 
 		// Configure parameters from the model.
-		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		LifeCycleManager.getInstance().addConfigListener(new ConfigAdapter() {
 
 			@Override
 			public void onConfigure() {

@@ -25,7 +25,7 @@ import static org.epochx.stats.StatField.*;
 
 import java.util.List;
 
-import org.epochx.life.ConfigAdapter;
+import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
 
@@ -111,7 +111,7 @@ public class RunManager {
 		initialisation = new InitialisationManager(model);
 
 		// Configure parameters from the model.
-		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		LifeCycleManager.getInstance().addConfigListener(new ConfigAdapter() {
 
 			@Override
 			public void onConfigure() {
@@ -148,7 +148,7 @@ public class RunManager {
 	 */
 	public void run(final int runNo) {
 		// Give final opportunity to configure before starting the run.
-		model.getLifeCycleManager().fireConfigureEvent();
+		LifeCycleManager.getInstance().fireConfigureEvent();
 
 		// Validate that the model is in a runnable state.
 		if (noGenerations < 0) {
@@ -157,7 +157,7 @@ public class RunManager {
 		}
 
 		// Inform everyone we're starting a run.
-		model.getLifeCycleManager().fireRunStartEvent();
+		LifeCycleManager.getInstance().fireRunStartEvent();
 
 		// Setup the run manager for a new run.
 		bestProgram = null;
@@ -165,7 +165,7 @@ public class RunManager {
 		final long startTime = System.nanoTime();
 
 		// Add the run number to the available stats data.
-		model.getStatsManager().addData(RUN_NUMBER, runNo);
+		StatsManager.getInstance().addData(RUN_NUMBER, runNo);
 
 		// Perform initialisation.
 		List<CandidateProgram> pop = initialisation.initialise();
@@ -183,19 +183,19 @@ public class RunManager {
 
 			// We might be finished?
 			if (bestFitness <= terminationFitness) {
-				model.getLifeCycleManager().fireSuccessEvent();
+				LifeCycleManager.getInstance().fireSuccessEvent();
 				break;
 			}
 		}
 
 		// Inform everyone the run has ended.
-		model.getLifeCycleManager().fireRunEndEvent();
+		LifeCycleManager.getInstance().fireRunEndEvent();
 
 		// Calculate how long the run took.
 		final long runtime = System.nanoTime() - startTime;
 
 		// Add run time to stats data.
-		model.getStatsManager().addData(RUN_TIME, runtime);
+		StatsManager.getInstance().addData(RUN_TIME, runtime);
 	}
 
 	/*
@@ -211,8 +211,8 @@ public class RunManager {
 				bestProgram = program;
 
 				// Update the stats.
-				model.getStatsManager().addData(RUN_FITNESS_MIN, bestFitness);
-				model.getStatsManager().addData(RUN_FITTEST_PROGRAM,
+				StatsManager.getInstance().addData(RUN_FITNESS_MIN, bestFitness);
+				StatsManager.getInstance().addData(RUN_FITTEST_PROGRAM,
 						bestProgram);
 			}
 		}

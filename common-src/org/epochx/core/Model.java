@@ -60,11 +60,9 @@ import org.epochx.tools.random.*;
  * @see StatsManager
  * @see LifeCycleManager
  */
-public abstract class Model implements Runnable {
+public abstract class Model {
 
 	// Components.
-	private final LifeCycleManager life;
-	private final StatsManager stats;
 	private final RunManager run;
 
 	// Operators.
@@ -97,8 +95,6 @@ public abstract class Model implements Runnable {
 	 */
 	public Model() {
 		// Components.
-		life = new LifeCycleManager();
-		stats = new StatsManager(this);
 		run = new RunManager(this);
 
 		// Control parameters.
@@ -134,10 +130,9 @@ public abstract class Model implements Runnable {
 	 * control parameters and operators have been set. If it is not in a
 	 * runnable state then an <code>IllegalStateException</code> is thrown.
 	 */
-	@Override
 	public void run() {
 		// Fire config event.
-		life.fireConfigureEvent();
+		LifeCycleManager.getInstance().fireConfigureEvent();
 
 		// Validate that the model is in a runnable state.
 		if (initialiser == null) {
@@ -152,27 +147,6 @@ public abstract class Model implements Runnable {
 		for (int i = 0; i < getNoRuns(); i++) {
 			run.run(i);
 		}
-	}
-
-	/**
-	 * Retrieves this model's life cycle manager that can be used to both
-	 * trigger life cycle events and listen to life cycle events.
-	 * 
-	 * @return this model's life cycle manager.
-	 */
-	public LifeCycleManager getLifeCycleManager() {
-		return life;
-	}
-
-	/**
-	 * Retrieves this model's stats manager that can be used to obtain
-	 * statistics and raw data about the runs as they're progressing or to
-	 * insert data that can be retrievable by all.
-	 * 
-	 * @return this model's stats manager.
-	 */
-	public StatsManager getStatsManager() {
-		return stats;
 	}
 
 	/**

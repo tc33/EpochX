@@ -23,9 +23,10 @@ package org.epochx.core;
 
 import static org.epochx.stats.StatField.*;
 
-import org.epochx.life.ConfigAdapter;
+import org.epochx.life.*;
 import org.epochx.op.ProgramSelector;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.stats.*;
 
 /**
  * This component manages the reproduction operation of selecting a program to
@@ -87,7 +88,7 @@ public class ReproductionManager {
 		this.model = model;
 
 		// Configure parameters from the model.
-		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		LifeCycleManager.getInstance().addConfigListener(new ConfigAdapter() {
 
 			@Override
 			public void onConfigure() {
@@ -116,7 +117,7 @@ public class ReproductionManager {
 		}
 
 		// Inform all listeners we're about to start.
-		model.getLifeCycleManager().fireReproductionStartEvent();
+		LifeCycleManager.getInstance().fireReproductionStartEvent();
 		
 		// Record the start time.
 		final long startTime = System.nanoTime();
@@ -129,7 +130,7 @@ public class ReproductionManager {
 			parent = programSelector.getProgram();
 
 			// Allow the life cycle listener to confirm or modify.
-			parent = model.getLifeCycleManager().fireReproductionEvent(parent);
+			parent = LifeCycleManager.getInstance().fireReproductionEvent(parent);
 
 			if (parent == null) {
 				reversions++;
@@ -139,11 +140,11 @@ public class ReproductionManager {
 		final long runtime = System.nanoTime() - startTime;
 
 		// Store the stats from the reproduction.
-		model.getStatsManager().addData(REP_REVERSIONS, reversions);
-		model.getStatsManager().addData(REP_TIME, runtime);
+		StatsManager.getInstance().addData(REP_REVERSIONS, reversions);
+		StatsManager.getInstance().addData(REP_TIME, runtime);
 
 		// Inform all listeners reproduction has ended.
-		model.getLifeCycleManager().fireReproductionEndEvent();
+		LifeCycleManager.getInstance().fireReproductionEndEvent();
 
 		assert (parent != null);
 

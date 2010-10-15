@@ -24,7 +24,7 @@ package org.epochx.op.selection;
 import java.util.*;
 
 import org.epochx.core.Model;
-import org.epochx.life.ConfigAdapter;
+import org.epochx.life.*;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
@@ -54,7 +54,7 @@ public class RandomSelector implements ProgramSelector, PoolSelector {
 		this.model = model;
 
 		// Configure parameters from the model.
-		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		LifeCycleManager.getInstance().addConfigListener(new ConfigAdapter() {
 
 			@Override
 			public void onConfigure() {

@@ -36,7 +36,7 @@ public class LifeCycleManagerTest extends TestCase {
 
 	@Override
 	protected void setUp() throws Exception {
-		lifeManager = new LifeCycleManager();
+		lifeManager = LifeCycleManager.getInstance();
 	}
 
 	/**

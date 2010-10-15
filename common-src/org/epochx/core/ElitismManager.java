@@ -25,8 +25,9 @@ import static org.epochx.stats.StatField.*;
 
 import java.util.*;
 
-import org.epochx.life.ConfigAdapter;
+import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.stats.*;
 
 /**
  * This component handles the elitism operation to ensure the survival of the
@@ -84,7 +85,7 @@ public class ElitismManager {
 		this.model = model;
 
 		// Configure parameters from the model.
-		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		LifeCycleManager.getInstance().addConfigListener(new ConfigAdapter() {
 
 			@Override
 			public void onConfigure() {
@@ -135,7 +136,7 @@ public class ElitismManager {
 			throw new IllegalStateException("no elites is less than 0");
 		}
 
-		model.getLifeCycleManager().fireElitismStartEvent();
+		LifeCycleManager.getInstance().fireElitismStartEvent();
 		
 		// Record the start time.
 		final long startTime = System.nanoTime();
@@ -157,13 +158,13 @@ public class ElitismManager {
 		final long runtime = System.nanoTime() - startTime;
 		
 		// Store the stats from the reproduction.
-		model.getStatsManager().addData(ELITE_PROGRAMS, elites);
-		model.getStatsManager().addData(ELITE_TIME, runtime);
+		StatsManager.getInstance().addData(ELITE_PROGRAMS, elites);
+		StatsManager.getInstance().addData(ELITE_TIME, runtime);
 		
 		// Allow life cycle listener to confirm or modify.
-		elites = model.getLifeCycleManager().fireElitismEvent(elites);
+		elites = LifeCycleManager.getInstance().fireElitismEvent(elites);
 
-		model.getLifeCycleManager().fireElitismEndEvent();
+		LifeCycleManager.getInstance().fireElitismEndEvent();
 
 		return elites;
 	}

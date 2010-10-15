@@ -57,6 +57,8 @@ import org.epochx.representation.CandidateProgram;
  * listeners.
  */
 public class LifeCycleManager {
+	
+	private static LifeCycleManager instance;
 
 	// The life cycle listeners.
 	private final List<ConfigListener> configListeners;
@@ -69,10 +71,10 @@ public class LifeCycleManager {
 	private final List<ReproductionListener> reproductionListeners;
 	private final List<GenerationListener> generationListeners;
 
-	/**
+	/*
 	 * Construct a new life cycle manager.
 	 */
-	public LifeCycleManager() {
+	private LifeCycleManager() {
 		// Initialise listener lists.
 		configListeners = new ArrayList<ConfigListener>();
 		runListeners = new ArrayList<RunListener>();
@@ -83,6 +85,14 @@ public class LifeCycleManager {
 		mutationListeners = new ArrayList<MutationListener>();
 		reproductionListeners = new ArrayList<ReproductionListener>();
 		generationListeners = new ArrayList<GenerationListener>();
+	}
+	
+	public static LifeCycleManager getInstance() {
+		if (instance == null) {
+			instance = new LifeCycleManager();
+		}
+		
+		return instance;
 	}
 
 	/**

@@ -29,6 +29,7 @@ import org.epochx.gp.op.init.FullInitialiser;
 import org.epochx.gp.op.mutation.SubtreeMutation;
 import org.epochx.life.*;
 import org.epochx.op.selection.TournamentSelector;
+import org.epochx.stats.*;
 
 /**
  * 
@@ -51,21 +52,21 @@ public class SantaFeTrail extends org.epochx.gp.model.SantaFeTrail {
 		setMutation(new SubtreeMutation(this));
 		setInitialiser(new FullInitialiser(this));
 
-		getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+		LifeCycleManager.getInstance().addGenerationListener(new GenerationAdapter() {
 
 			@Override
 			public void onGenerationEnd() {
-				getStatsManager().printStats(GEN_NUMBER,
+				StatsManager.getInstance().printStats(GEN_NUMBER,
 						GEN_FITNESS_MIN, GEN_FITNESS_AVE, GEN_DEPTH_AVE,
 						GEN_DEPTH_MAX);
 			}
 		});
 
-		getLifeCycleManager().addRunListener(new RunAdapter() {
+		LifeCycleManager.getInstance().addRunListener(new RunAdapter() {
 
 			@Override
 			public void onRunEnd() {
-				getStatsManager().printStats(RUN_NUMBER, RUN_FITNESS_MIN,
+				StatsManager.getInstance().printStats(RUN_NUMBER, RUN_FITNESS_MIN,
 						RUN_FITTEST_PROGRAM);
 			}
 		});

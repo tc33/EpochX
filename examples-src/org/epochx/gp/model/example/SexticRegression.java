@@ -53,23 +53,6 @@ public class SexticRegression extends org.epochx.gp.model.SexticRegression {
 	public static void main(final String[] args) {
 		final Model m = new SexticRegression();
 
-		
-		m.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
-			@Override
-			public void onGenerationEnd() {
-				m.getStatsManager().printStats(StatField.GEN_NUMBER,
-				StatField.GEN_FITNESS_MIN, StatField.GEN_FITTEST_PROGRAM);
-			}
-		});
-		 
-		m.getLifeCycleManager().addRunListener(new RunAdapter() {
-
-			@Override
-			public void onRunEnd() {
-				m.getStatsManager().printStats(StatField.RUN_NUMBER,
-						StatField.RUN_FITNESS_MIN);
-			}
-		});
 
 		m.run();
 	}

@@ -25,7 +25,7 @@ import org.epochx.core.Model;
 import org.epochx.gp.op.crossover.KozaCrossover;
 import org.epochx.gp.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.gp.op.mutation.PointMutation;
-import org.epochx.life.RunAdapter;
+import org.epochx.life.*;
 import org.epochx.op.selection.*;
 import org.epochx.stats.StatField;
 
@@ -54,7 +54,7 @@ public class QuarticRegression extends org.epochx.gp.model.QuarticRegression {
 		final Model m = new QuarticRegression();
 
 		/*
-		 * m.getLifeCycleManager().addGenerationListener(new GenerationAdapter()
+		 * LifeCycleManager.getInstance().addGenerationListener(new GenerationAdapter()
 		 * {
 		 * 
 		 * @Override
@@ -64,14 +64,6 @@ public class QuarticRegression extends org.epochx.gp.model.QuarticRegression {
 		 * }
 		 * });
 		 */
-		m.getLifeCycleManager().addRunListener(new RunAdapter() {
-
-			@Override
-			public void onRunEnd() {
-				m.getStatsManager().printStats(StatField.RUN_NUMBER,
-						StatField.RUN_FITNESS_MIN);
-			}
-		});
 
 		m.run();
 	}

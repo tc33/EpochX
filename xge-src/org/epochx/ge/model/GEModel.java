@@ -27,7 +27,6 @@ import org.epochx.ge.mapper.*;
 import org.epochx.ge.op.crossover.OnePointCrossover;
 import org.epochx.ge.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.ge.op.mutation.PointMutation;
-import org.epochx.ge.stats.GEStatsEngine;
 import org.epochx.tools.grammar.Grammar;
 
 /**
@@ -52,9 +51,6 @@ public abstract class GEModel extends Model {
 	 * accessor method for information of each default value.
 	 */
 	public GEModel() {
-		// Use the GE stats engine.
-		getStatsManager().addStatsEngine(new GEStatsEngine(this));
-
 		// Set default parameter values.
 		mapper = new DepthFirstMapper(this);
 		codonGenerator = new StandardGenerator(this);

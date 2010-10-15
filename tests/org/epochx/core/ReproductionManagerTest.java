@@ -76,7 +76,7 @@ public class ReproductionManagerTest extends TestCase {
 		model.getProgramSelector().setSelectionPool(pop);
 
 		// Listen for the crossver.
-		model.getLifeCycleManager().addReproductionListener(
+		LifeCycleManager.getInstance().addReproductionListener(
 				new ReproductionListener() {
 
 					@Override
@@ -96,7 +96,7 @@ public class ReproductionManagerTest extends TestCase {
 						verify.append('3');
 					}
 				});
-		model.getLifeCycleManager().fireConfigureEvent();
+		LifeCycleManager.getInstance().fireConfigureEvent();
 		reproductionManager.reproduce();
 
 		assertEquals(
@@ -120,7 +120,7 @@ public class ReproductionManagerTest extends TestCase {
 		count = 0;
 
 		// Listen for the generation.
-		model.getLifeCycleManager().addReproductionListener(
+		LifeCycleManager.getInstance().addReproductionListener(
 				new ReproductionAdapter() {
 
 					@Override
@@ -137,7 +137,7 @@ public class ReproductionManagerTest extends TestCase {
 					}
 				});
 
-		model.getLifeCycleManager().fireConfigureEvent();
+		LifeCycleManager.getInstance().fireConfigureEvent();
 		reproductionManager.reproduce();
 
 		assertEquals("reproduction operation was not correctly reverted",

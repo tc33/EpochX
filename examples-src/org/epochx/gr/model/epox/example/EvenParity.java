@@ -41,30 +41,7 @@ public class EvenParity extends org.epochx.gr.model.epox.EvenParity {
 		model.setMaxInitialDepth(14);
 		model.setInitialiser(new FullInitialiser(model));
 		model.setTerminationFitness(0.01);
-		model.getLifeCycleManager().addGenerationListener(
-				new GenerationAdapter() {
 
-					@Override
-					public void onGenerationEnd() {
-						model.getStatsManager().printStats(
-								StatField.GEN_NUMBER,
-								StatField.GEN_FITNESS_MIN,
-								StatField.GEN_FITNESS_AVE,
-								GRStatField.GEN_DEPTH_AVE,
-								GRStatField.GEN_DEPTH_MAX,
-								StatField.GEN_FITTEST_PROGRAM);
-					}
-				});
-
-		model.getLifeCycleManager().addRunListener(new RunAdapter() {
-
-			@Override
-			public void onRunEnd() {
-				model.getStatsManager().printStats(StatField.RUN_NUMBER,
-						StatField.RUN_FITNESS_MIN,
-						StatField.RUN_FITTEST_PROGRAM);
-			}
-		});
 		model.run();
 	}
 

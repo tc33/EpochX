@@ -21,45 +21,131 @@
  */
 package org.epochx.gr.stats;
 
+import java.util.*;
+
+import org.apache.commons.lang.math.*;
+import org.epochx.gr.representation.*;
+import org.epochx.stats.*;
+
+import static org.epochx.stats.StatField.*;
+import static org.epochx.stats.StatsManager.ExpiryEvent.*;
+
 /**
  * Provides constants to be used as keys to request statistics from the
  * StatsManager specific to XGR.
  */
-public enum GRStatField {
+public class GRStatField {
 
 	/**
 	 * Returns an <code>int[]</code> which contains the depths of all the
 	 * <code>CandidateProgram</code>s in the population at the end of the
 	 * previous generation.
 	 */
-	GEN_DEPTHS,
+	public static final Stat GEN_DEPTHS = new AbstractStat(GENERATION) {
+		public Object getStatValue() {
+			int[] depths = null;
+
+			// Request the population from the stats manager.
+			final List<GRCandidateProgram> pop = (List<GRCandidateProgram>) StatsManager.getInstance().getStat(GEN_POP);
+
+			// Get the depths of each program.
+			if (pop != null) {
+				depths = new int[pop.size()];
+
+				for (int i = 0; i < pop.size(); i++) {
+					depths[i] = pop.get(i).getDepth();
+				}
+			}
+
+			return depths;
+		};
+	};
 
 	/**
 	 * Returns a <code>Double</code> which is the average depth of all the
 	 * <code>CandidateProgram</code>s in the population at the end of the
 	 * previous generation.
 	 */
-	GEN_DEPTH_AVE,
+	public static final Stat GEN_DEPTH_AVE = new AbstractStat(GENERATION) {
+		public Object getStatValue() {
+			Double aveDepth = null;
+
+			// Request the population depths from the stats manager.
+			final int[] depths = (int[]) StatsManager.getInstance().getStat(
+					GEN_DEPTHS);
+
+			// Calculate the average depth.
+			if (depths != null) {
+				aveDepth = StatsUtils.ave(depths);
+			}
+
+			return aveDepth;
+		};
+	};
 
 	/**
 	 * Returns a <code>Double</code> which is the standard deviation of the
 	 * depths of all the <code>CandidateProgram</code>s in the
 	 * population at the end of the previous generation.
 	 */
-	GEN_DEPTH_STDEV,
+	public static final Stat GEN_DEPTH_STDEV = new AbstractStat(GENERATION) {
+		public Object getStatValue() {
+			Double stdevDepth = null;
+
+			// Request the population depths from the stats manager.
+			final int[] depths = (int[]) StatsManager.getInstance().getStat(GEN_DEPTHS);
+
+			// Calculate the standard deviation of the depths.
+			if (depths != null) {
+				stdevDepth = StatsUtils.stdev(depths);
+			}
+
+			return stdevDepth;
+		};
+	};
 
 	/**
 	 * Returns an <code>Integer</code> which is the maximum program depth of
 	 * all the <code>CandidateProgram</code>s in the population at the end of
 	 * the previous generation.
 	 */
-	GEN_DEPTH_MAX,
+	public static final Stat GEN_DEPTH_MAX = new AbstractStat(GENERATION) {
+		public Object getStatValue() {
+			Integer maxDepth = null;
+
+			// Request the population depths from the stats manager.
+			final int[] depths = (int[]) StatsManager.getInstance().getStat(
+					GEN_DEPTHS);
+
+			// Calculate the maximum depth.
+			if (depths != null) {
+				maxDepth = NumberUtils.max(depths);
+			}
+
+			return maxDepth;
+		};
+	};
 
 	/**
 	 * Returns an <code>Integer</code> which is the minimum program depth of all
 	 * the <code>CandidateProgram</code>s in the population at the end of the
 	 * previous generation.
 	 */
-	GEN_DEPTH_MIN
+	public static final Stat GEN_DEPTH_MIN = new AbstractStat(GENERATION) {
+		public Object getStatValue() {
+			Integer minDepth = null;
+
+			// Request the population depths from the stats manager.
+			final int[] depths = (int[]) StatsManager.getInstance().getStat(
+					GEN_DEPTHS);
+
+			// Calculate the minimum depth.
+			if (depths != null) {
+				minDepth = NumberUtils.min(depths);
+			}
+
+			return minDepth;
+		};
+	};
 
 }

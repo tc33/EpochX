@@ -28,7 +28,6 @@ import org.epochx.gp.op.crossover.UniformPointCrossover;
 import org.epochx.gp.op.init.FullInitialiser;
 import org.epochx.gp.op.mutation.SubtreeMutation;
 import org.epochx.gp.representation.Node;
-import org.epochx.gp.stats.GPStatsEngine;
 
 /**
  * Model implementation for performing tree-based genetic programming
@@ -47,9 +46,6 @@ public abstract class GPModel extends Model {
 	 * the appropriate accessor method for information of each default value.
 	 */
 	public GPModel() {
-		// Use the GP stats engine.
-		getStatsManager().addStatsEngine(new GPStatsEngine(this));
-
 		// Set default parameter values.
 		maxInitialDepth = 6;
 		maxProgramDepth = 17;

@@ -25,7 +25,7 @@ import java.util.*;
 
 import junit.framework.TestCase;
 
-import org.epochx.life.ElitismListener;
+import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
 
 /**
@@ -52,7 +52,7 @@ public class ElitismManagerTest extends TestCase {
 		final StringBuilder verify = new StringBuilder();
 
 		// Listen for the events.
-		model.getLifeCycleManager().addElitismListener(new ElitismListener() {
+		LifeCycleManager.getInstance().addElitismListener(new ElitismListener() {
 
 			@Override
 			public void onElitismStart() {
@@ -96,7 +96,7 @@ public class ElitismManagerTest extends TestCase {
 	 */
 	public void testNoElitesNegative() {
 		model.setNoElites(-1);
-		model.getLifeCycleManager().fireConfigureEvent();
+		LifeCycleManager.getInstance().fireConfigureEvent();
 
 		try {
 			elitismManager.elitism(pop);

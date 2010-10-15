@@ -26,9 +26,9 @@ import org.epochx.gp.model.EvenParity;
 import org.epochx.gp.op.crossover.KozaCrossover;
 import org.epochx.gp.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.gp.op.mutation.PointMutation;
-import org.epochx.life.RunAdapter;
+import org.epochx.life.*;
 import org.epochx.op.selection.FitnessProportionateSelector;
-import org.epochx.stats.StatField;
+import org.epochx.stats.*;
 
 /**
  * 
@@ -61,7 +61,7 @@ public class Even3Parity extends EvenParity {
 		final Model m = new Even3Parity();
 
 		/*
-		 * m.getLifeCycleManager().addGenerationListener(new GenerationAdapter()
+		 * LifeCycleManager.getInstance().addGenerationListener(new GenerationAdapter()
 		 * {
 		 * 
 		 * @Override
@@ -71,15 +71,6 @@ public class Even3Parity extends EvenParity {
 		 * }
 		 * });
 		 */
-		m.getLifeCycleManager().addRunListener(new RunAdapter() {
-
-			@Override
-			public void onRunEnd() {
-				m.getStatsManager().printStats(StatField.RUN_NUMBER,
-						StatField.RUN_FITNESS_MIN,
-						StatField.RUN_FITTEST_PROGRAM);
-			}
-		});
 
 		m.run();
 	}

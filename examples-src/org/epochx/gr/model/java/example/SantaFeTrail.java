@@ -5,7 +5,7 @@ import static org.epochx.stats.StatField.*;
 import org.epochx.gr.op.crossover.WhighamCrossover;
 import org.epochx.gr.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.gr.op.mutation.WhighamMutation;
-import org.epochx.life.RunAdapter;
+import org.epochx.life.*;
 import org.epochx.op.selection.TournamentSelector;
 
 public class SantaFeTrail extends org.epochx.gr.model.java.SantaFeTrail {
@@ -27,25 +27,7 @@ public class SantaFeTrail extends org.epochx.gr.model.java.SantaFeTrail {
 		setMutation(new WhighamMutation(this));
 		setInitialiser(new RampedHalfAndHalfInitialiser(this));
 
-		/*
-		 * getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
-		 * 
-		 * @Override
-		 * public void onGenerationEnd() {
-		 * getStatsManager().printStats(GEN_NUMBER, GEN_FITNESS_MIN,
-		 * GEN_FITNESS_AVE, GEN_DEPTH_AVE, GEN_DEPTH_MAX, GEN_FITTEST_PROGRAM);
-		 * }
-		 * });
-		 */
-
-		getLifeCycleManager().addRunListener(new RunAdapter() {
-
-			@Override
-			public void onRunEnd() {
-				getStatsManager().printStats(RUN_NUMBER, RUN_FITNESS_MIN,
-						RUN_FITTEST_PROGRAM);
-			}
-		});
+		
 	}
 
 	public static void main(final String[] args) {

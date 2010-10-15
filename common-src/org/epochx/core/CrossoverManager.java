@@ -23,9 +23,10 @@ package org.epochx.core;
 
 import static org.epochx.stats.StatField.*;
 
-import org.epochx.life.ConfigAdapter;
+import org.epochx.life.*;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.stats.*;
 
 /**
  * This component is responsible for handling the crossover operation and for
@@ -91,7 +92,7 @@ public class CrossoverManager {
 		this.model = model;
 
 		// Configure parameters from the model.
-		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		LifeCycleManager.getInstance().addConfigListener(new ConfigAdapter() {
 
 			@Override
 			public void onConfigure() {
@@ -139,7 +140,7 @@ public class CrossoverManager {
 		}
 
 		// Inform everyone we're about to start crossover.
-		model.getLifeCycleManager().fireCrossoverStartEvent();
+		LifeCycleManager.getInstance().fireCrossoverStartEvent();
 
 		// Record the start time.
 		final long crossoverStartTime = System.nanoTime();
@@ -173,7 +174,7 @@ public class CrossoverManager {
 			}
 
 			// Ask life cycle listener to confirm the crossover.
-			children = model.getLifeCycleManager().fireCrossoverEvent(parents,
+			children = LifeCycleManager.getInstance().fireCrossoverEvent(parents,
 					children);
 
 			// If reverted then increment reversion counter.
@@ -184,12 +185,12 @@ public class CrossoverManager {
 
 		final long runtime = System.nanoTime() - crossoverStartTime;
 
-		model.getStatsManager().addData(XO_PARENTS, parents);
-		model.getStatsManager().addData(XO_CHILDREN, children);
-		model.getStatsManager().addData(XO_REVERSIONS, reversions);
-		model.getStatsManager().addData(XO_TIME, runtime);
+		StatsManager.getInstance().addData(XO_PARENTS, parents);
+		StatsManager.getInstance().addData(XO_CHILDREN, children);
+		StatsManager.getInstance().addData(XO_REVERSIONS, reversions);
+		StatsManager.getInstance().addData(XO_TIME, runtime);
 
-		model.getLifeCycleManager().fireCrossoverEndEvent();
+		LifeCycleManager.getInstance().fireCrossoverEndEvent();
 
 		assert (children != null);
 

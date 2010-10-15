@@ -23,7 +23,7 @@ package org.epochx.stats;
 
 import java.util.*;
 
-import org.epochx.core.Model;
+import org.epochx.life.*;
 
 /**
  * Gathers data and statistics about events that occur during execution of the
@@ -37,58 +37,58 @@ import org.epochx.core.Model;
  */
 public class StatsManager {
 	
-	private final Map<Object, Object> data;
+	private static StatsManager instance;
+	
+	private final Map<ExpiryEvent, Map<Stat, Object>> data;
 
-	private List<StatsEngine> statsEngines;
-
+	public enum ExpiryEvent {
+		RUN, 
+		GENERATION, 
+		INITIALISATION, 
+		ELITISM, 
+		POOL_SELECTION, 
+		CROSSOVER, 
+		MUTATION, 
+		REPRODUCTION
+	}
+	
 	/**
 	 * Constructs a <code>StatsManager</code> for the given <code>Model</code>,
 	 * with a new <code>CommonStatsEngine</code>.
 	 * 
 	 * @param model the Model statistics will be about.
 	 */
-	public StatsManager(final Model model) {
-		// Setup the stats manager.
-		data = new HashMap<Object, Object>();
-		statsEngines = new ArrayList<StatsEngine>();
+	private StatsManager() {
 		
-		addStatsEngine(new CommonStatsEngine(model));
+		// Setup the stats manager.
+		data = new HashMap<ExpiryEvent, Map<Stat, Object>>();
+		
+		// Construct a map for each event now because will only be needed to be done later.
+		ExpiryEvent[] events = ExpiryEvent.values();
+		for (ExpiryEvent e: events) {
+			data.put(e, new HashMap<Stat, Object>());
+		}
+		
+		setupListeners();
+	}
+	
+	public static StatsManager getInstance() {
+		if (instance == null) {
+			instance = new StatsManager();
+		}
+		return instance;
 	}
 
 	/**
-	 * Sets the <code>StatsEngine</code> responsible for generating new
-	 * statistics upon request.
-	 * 
-	 * @param statsEngine a <code>StatsEngine</code> that can generate further
-	 *        statistics upon request.
-	 */
-	public void addStatsEngine(final StatsEngine statsEngine) {
-		statsEngines.add(statsEngine);
-	}
-	
-	public void addStatsEngine(int index, StatsEngine statsEngine) {
-		statsEngines.add(index, statsEngine);
-	}
-	
-	public StatsEngine removeStatsEngine(int index) {
-		return statsEngines.remove(index);
-	}
-	
-	public void removeStatsEngine(StatsEngine statsEngine) {
-		statsEngines.remove(statsEngine);
-	}
-
-	/**
-	 * Inserts an item of data about a mutation into the stats manager
-	 * associated
-	 * with the given field key. If data is already stored against the given
-	 * field then it will be overwritten.
+	 * Inserts an item of data about a run into the stats manager
+	 * associated with the given field key. If data is already stored against 
+	 * the given field then it will be overwritten.
 	 * 
 	 * @param field the key to associate with the given data value.
 	 * @param value the statistics/data to be stored.
 	 */
-	public void addData(final Object field, final Object value) {
-		data.put(field, value);
+	public void addData(final Stat field, final Object value) {
+		data.get(field.getExpiryEvent()).put(field, value);
 	}
 
 	/**
@@ -115,21 +115,19 @@ public class StatsManager {
 	 *         <code>null</code> if the field does not exist or the data is
 	 *         otherwise unavailable.
 	 */
-	public Object getStat(final Object field) {
-		Object stat = data.get(field);
+	public Object getStat(final Stat field) {
+		Object value = data.get(field.getExpiryEvent()).get(field);
 
-		// If stat not stored then ask the stats engines if they can generate it.
-		if (stat == null) {
-			for (StatsEngine s: statsEngines) {
-				stat = s.getStat(field);
-				
-				if (stat != null) {
-					break;
-				}
+		// If stat not stored then ask the stat if it can generate the value.
+		if (value == null) {
+			value = field.getStatValue();
+			
+			if (value != null) {
+				addData(field, value);
 			}
 		}
 
-		return stat;
+		return value;
 	}
 
 	/**
@@ -149,7 +147,7 @@ public class StatsManager {
 	 *         that array
 	 *         element will be <code>null</code>.
 	 */
-	public Object[] getStats(final Object ... fields) {
+	public Object[] getStats(final Stat ... fields) {
 		final Object[] stats = new Object[fields.length];
 		for (int i = 0; i < fields.length; i++) {
 			stats[i] = getStat(fields[i]);
@@ -185,7 +183,7 @@ public class StatsManager {
 	 * @param fields the names of the statistics fields to print out.
 	 * @param separator the String to be printed between each statistic.
 	 */
-	public void printStats(final Object[] fields, final String separator) {
+	public void printStats(final Stat[] fields, final String separator) {
 		final Object[] stats = getStats(fields);
 
 		printArray(stats, separator);
@@ -204,4 +202,75 @@ public class StatsManager {
 		}
 		System.out.println();
 	}
+
+	/*
+	 * Listen for life cycle events and if they happen then clear appropriate
+	 * old data out of the data maps.
+	 */
+	private void setupListeners() {
+		// Clear the run data.
+		LifeCycleManager.getInstance().addRunListener(new RunAdapter() {
+			@Override
+			public void onRunStart() {
+				data.get(ExpiryEvent.RUN).clear();
+			}
+		});
+
+		// Clear the generation data.
+		LifeCycleManager.getInstance().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationStart() {
+				data.get(ExpiryEvent.GENERATION).clear();
+			}
+		});
+
+		// Clear the initialisation data.
+		LifeCycleManager.getInstance().addInitialisationListener(new InitialisationAdapter() {
+			@Override
+			public void onInitialisationStart() {
+				data.get(ExpiryEvent.INITIALISATION).clear();
+			}
+		});
+		
+		// Clear the elitism data.
+		LifeCycleManager.getInstance().addElitismListener(new ElitismAdapter() {
+			@Override
+			public void onElitismStart() {
+				data.get(ExpiryEvent.INITIALISATION).clear();
+			}
+		});
+		
+		// Clear the elitism data.
+		LifeCycleManager.getInstance().addElitismListener(new ElitismAdapter() {
+			@Override
+			public void onElitismStart() {
+				data.get(ExpiryEvent.ELITISM).clear();
+			}
+		});
+		
+		// Clear the pool selection data.
+		LifeCycleManager.getInstance().addPoolSelectionListener(new PoolSelectionAdapter() {
+			@Override
+			public void onPoolSelectionStart() {
+				data.get(ExpiryEvent.POOL_SELECTION).clear();
+			}
+		});
+		
+		// Clear the crossover data.
+		LifeCycleManager.getInstance().addCrossoverListener(new CrossoverAdapter() {
+			@Override
+			public void onCrossoverStart() {
+				data.get(ExpiryEvent.CROSSOVER).clear();
+			}
+		});
+		
+		// Clear the mutation data.
+		LifeCycleManager.getInstance().addMutationListener(new MutationAdapter() {
+			@Override
+			public void onMutationStart() {
+				data.get(ExpiryEvent.MUTATION).clear();
+			}
+		});
+	}
+
 }

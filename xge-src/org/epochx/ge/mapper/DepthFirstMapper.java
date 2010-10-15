@@ -24,7 +24,7 @@ package org.epochx.ge.mapper;
 import org.epochx.ge.codon.CodonGenerator;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.life.ConfigAdapter;
+import org.epochx.life.*;
 import org.epochx.tools.grammar.*;
 
 /**
@@ -79,7 +79,7 @@ public class DepthFirstMapper implements Mapper {
 		noWraps = 0;
 
 		// Configure parameters from the model.
-		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		LifeCycleManager.getInstance().addConfigListener(new ConfigAdapter() {
 
 			@Override
 			public void onConfigure() {

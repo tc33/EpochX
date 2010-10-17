@@ -54,7 +54,7 @@ public class QuarticRegression extends org.epochx.gp.model.QuarticRegression {
 		final Model m = new QuarticRegression();
 
 		/*
-		 * LifeCycleManager.getInstance().addGenerationListener(new GenerationAdapter()
+		 * Life.getInstance().addGenerationListener(new GenerationAdapter()
 		 * {
 		 * 
 		 * @Override

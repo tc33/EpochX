@@ -66,7 +66,7 @@ import org.epochx.stats.*;
  * </tr>
  * </table>
  */
-public class ElitismManager {
+public class ElitismManager implements ConfigListener {
 
 	// The controlling model.
 	private final Model model;
@@ -85,19 +85,14 @@ public class ElitismManager {
 		this.model = model;
 
 		// Configure parameters from the model.
-		LifeCycleManager.getInstance().addConfigListener(new ConfigAdapter() {
-
-			@Override
-			public void onConfigure() {
-				configure();
-			}
-		});
+		Life.get().addConfigListener(this, false);
 	}
 
 	/*
 	 * Configure component with parameters from the model.
 	 */
-	private void configure() {
+	@Override
+	public void onConfigure() {
 		// Discover how many elites we need.
 		noElites = model.getNoElites();
 		final int popSize = model.getPopulationSize();
@@ -136,7 +131,7 @@ public class ElitismManager {
 			throw new IllegalStateException("no elites is less than 0");
 		}
 
-		LifeCycleManager.getInstance().fireElitismStartEvent();
+		Life.get().fireElitismStartEvent();
 		
 		// Record the start time.
 		final long startTime = System.nanoTime();
@@ -158,13 +153,13 @@ public class ElitismManager {
 		final long runtime = System.nanoTime() - startTime;
 		
 		// Store the stats from the reproduction.
-		StatsManager.getInstance().addData(ELITE_PROGRAMS, elites);
-		StatsManager.getInstance().addData(ELITE_TIME, runtime);
+		Stats.get().addData(ELITE_PROGRAMS, elites);
+		Stats.get().addData(ELITE_TIME, runtime);
 		
 		// Allow life cycle listener to confirm or modify.
-		elites = LifeCycleManager.getInstance().fireElitismEvent(elites);
+		elites = Life.get().fireElitismEvent(elites);
 
-		LifeCycleManager.getInstance().fireElitismEndEvent();
+		Life.get().fireElitismEndEvent();
 
 		return elites;
 	}

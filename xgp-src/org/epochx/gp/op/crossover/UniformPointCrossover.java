@@ -30,7 +30,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
 /**
  * This class implements standard crossover with uniform swap points.
  */
-public class UniformPointCrossover implements GPCrossover {
+public class UniformPointCrossover implements GPCrossover, ConfigListener {
 
 	// The controlling model.
 	private final GPModel model;
@@ -42,19 +42,14 @@ public class UniformPointCrossover implements GPCrossover {
 		this.model = model;
 
 		// Configure parameters from the model.
-		LifeCycleManager.getInstance().addConfigListener(new ConfigAdapter() {
-
-			@Override
-			public void onConfigure() {
-				configure();
-			}
-		});
+		Life.get().addConfigListener(this, false);
 	}
 
 	/*
 	 * Configure component with parameters from the model.
 	 */
-	private void configure() {
+	@Override
+	public void onConfigure() {
 		rng = model.getRNG();
 	}
 

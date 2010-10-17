@@ -28,19 +28,27 @@ import org.epochx.life.*;
 /**
  * Gathers data and statistics about events that occur during execution of the
  * given <code>Model</code> and makes them available for use. Any component may
- * add data into the <code>StatsManager</code> by using the <code>addXxxData
- * </code> methods. The <code>StatsManager</code> will also use its internal
+ * add data into the <code>Stats</code> by using the <code>addXxxData
+ * </code> methods. The <code>Stats</code> will also use its internal
  * <code>CommonStatsEngine</code> instance to generate statistics upon request, and
  * stash the results internally. The data that is stored will only be held for
  * the current/previous incident of that event that took place. All data for an
  * event will be cleared upon the start of the next incident.
  */
-public class StatsManager {
+public class Stats {
 	
-	private static StatsManager instance;
+	// Singleton instance.
+	private static Stats instance;
 	
+	// Map of all stats data, by event at which they should be cleared.
 	private final Map<ExpiryEvent, Map<Stat, Object>> data;
 
+	/**
+	 * Possible events at which statistics fields can be considered expired. 
+	 * Each one refers to the start of the next occurrence of that event. For
+	 * example, all fields with an expiry of <code>ExpiryEvent.RUN</code> will
+	 * be cleared on the start of the next run.
+	 */
 	public enum ExpiryEvent {
 		RUN, 
 		GENERATION, 
@@ -52,14 +60,12 @@ public class StatsManager {
 		REPRODUCTION
 	}
 	
-	/**
-	 * Constructs a <code>StatsManager</code> for the given <code>Model</code>,
-	 * with a new <code>CommonStatsEngine</code>.
-	 * 
-	 * @param model the Model statistics will be about.
+	/*
+	 * Constructs a <code>Stats</code> - this class uses the singleton pattern
+	 * so this constructor is private. An instance can be obtained using the 
+	 * get() method.
 	 */
-	private StatsManager() {
-		
+	private Stats() {
 		// Setup the stats manager.
 		data = new HashMap<ExpiryEvent, Map<Stat, Object>>();
 		
@@ -69,12 +75,18 @@ public class StatsManager {
 			data.put(e, new HashMap<Stat, Object>());
 		}
 		
+		// Setup listeners to clear stats at appropriate times.
 		setupListeners();
 	}
 	
-	public static StatsManager getInstance() {
+	/**
+	 * Returns the singleton instance of Stats.
+	 * 
+	 * @return the only Stats instance.
+	 */
+	public static Stats get() {
 		if (instance == null) {
-			instance = new StatsManager();
+			instance = new Stats();
 		}
 		return instance;
 	}
@@ -82,7 +94,9 @@ public class StatsManager {
 	/**
 	 * Inserts an item of data about a run into the stats manager
 	 * associated with the given field key. If data is already stored against 
-	 * the given field then it will be overwritten.
+	 * the given field then it will be overwritten. The value will be cleared
+	 * upon the appropriate event as designated by the given stat field's 
+	 * <code>getExpiryEvent</code> method.
 	 * 
 	 * @param field the key to associate with the given data value.
 	 * @param value the statistics/data to be stored.
@@ -166,7 +180,7 @@ public class StatsManager {
 	 * 
 	 * @param fields the names of the statistics fields to print out.
 	 */
-	public void printStats(final Object ... fields) {
+	public void printStats(final Stat ... fields) {
 		printStats(fields, "\t");
 	}
 
@@ -209,7 +223,7 @@ public class StatsManager {
 	 */
 	private void setupListeners() {
 		// Clear the run data.
-		LifeCycleManager.getInstance().addRunListener(new RunAdapter() {
+		Life.get().addRunListener(new RunAdapter() {
 			@Override
 			public void onRunStart() {
 				data.get(ExpiryEvent.RUN).clear();
@@ -217,7 +231,7 @@ public class StatsManager {
 		});
 
 		// Clear the generation data.
-		LifeCycleManager.getInstance().addGenerationListener(new GenerationAdapter() {
+		Life.get().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationStart() {
 				data.get(ExpiryEvent.GENERATION).clear();
@@ -225,7 +239,7 @@ public class StatsManager {
 		});
 
 		// Clear the initialisation data.
-		LifeCycleManager.getInstance().addInitialisationListener(new InitialisationAdapter() {
+		Life.get().addInitialisationListener(new InitialisationAdapter() {
 			@Override
 			public void onInitialisationStart() {
 				data.get(ExpiryEvent.INITIALISATION).clear();
@@ -233,7 +247,7 @@ public class StatsManager {
 		});
 		
 		// Clear the elitism data.
-		LifeCycleManager.getInstance().addElitismListener(new ElitismAdapter() {
+		Life.get().addElitismListener(new ElitismAdapter() {
 			@Override
 			public void onElitismStart() {
 				data.get(ExpiryEvent.INITIALISATION).clear();
@@ -241,7 +255,7 @@ public class StatsManager {
 		});
 		
 		// Clear the elitism data.
-		LifeCycleManager.getInstance().addElitismListener(new ElitismAdapter() {
+		Life.get().addElitismListener(new ElitismAdapter() {
 			@Override
 			public void onElitismStart() {
 				data.get(ExpiryEvent.ELITISM).clear();
@@ -249,7 +263,7 @@ public class StatsManager {
 		});
 		
 		// Clear the pool selection data.
-		LifeCycleManager.getInstance().addPoolSelectionListener(new PoolSelectionAdapter() {
+		Life.get().addPoolSelectionListener(new PoolSelectionAdapter() {
 			@Override
 			public void onPoolSelectionStart() {
 				data.get(ExpiryEvent.POOL_SELECTION).clear();
@@ -257,7 +271,7 @@ public class StatsManager {
 		});
 		
 		// Clear the crossover data.
-		LifeCycleManager.getInstance().addCrossoverListener(new CrossoverAdapter() {
+		Life.get().addCrossoverListener(new CrossoverAdapter() {
 			@Override
 			public void onCrossoverStart() {
 				data.get(ExpiryEvent.CROSSOVER).clear();
@@ -265,7 +279,7 @@ public class StatsManager {
 		});
 		
 		// Clear the mutation data.
-		LifeCycleManager.getInstance().addMutationListener(new MutationAdapter() {
+		Life.get().addMutationListener(new MutationAdapter() {
 			@Override
 			public void onMutationStart() {
 				data.get(ExpiryEvent.MUTATION).clear();

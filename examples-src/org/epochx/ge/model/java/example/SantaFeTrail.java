@@ -52,21 +52,21 @@ public class SantaFeTrail extends org.epochx.ge.model.java.SantaFeTrail {
 		setPoolSize(-1);
 		setInitialiser(new RampedHalfAndHalfInitialiser(this));
 
-		LifeCycleManager.getInstance().addGenerationListener(new GenerationAdapter() {
+		Life.get().addGenerationListener(new GenerationAdapter() {
 
 			@Override
 			public void onGenerationEnd() {
-				StatsManager.getInstance().printStats(GEN_NUMBER,
+				Stats.get().printStats(GEN_NUMBER,
 						GEN_FITNESS_MIN, GEN_FITNESS_AVE, GEN_DEPTH_AVE,
 						GEN_DEPTH_MAX, GEN_FITTEST_PROGRAM);
 			}
 		});
 
-		LifeCycleManager.getInstance().addRunListener(new RunAdapter() {
+		Life.get().addRunListener(new RunAdapter() {
 
 			@Override
 			public void onRunEnd() {
-				StatsManager.getInstance().printStats(RUN_NUMBER, RUN_FITNESS_MIN,
+				Stats.get().printStats(RUN_NUMBER, RUN_FITNESS_MIN,
 						RUN_FITTEST_PROGRAM);
 			}
 		});

@@ -36,7 +36,7 @@ import org.epochx.tools.grammar.*;
  * <p>
  * It provides facility for wrapping and extending of chromosomes.
  */
-public class DepthFirstMapper implements Mapper {
+public class DepthFirstMapper implements Mapper, ConfigListener {
 
 	// The controlling model.
 	private final GEModel model;
@@ -79,19 +79,14 @@ public class DepthFirstMapper implements Mapper {
 		noWraps = 0;
 
 		// Configure parameters from the model.
-		LifeCycleManager.getInstance().addConfigListener(new ConfigAdapter() {
-
-			@Override
-			public void onConfigure() {
-				configure();
-			}
-		});
+		Life.get().addConfigListener(this, false);
 	}
 
 	/*
 	 * Configure component with parameters from the model.
 	 */
-	private void configure() {
+	@Override
+	public void onConfigure() {
 		grammar = model.getGrammar();
 		maxProgramDepth = model.getMaxDepth();
 		maxChromosomeLength = model.getMaxChromosomeLength();

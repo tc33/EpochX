@@ -51,7 +51,7 @@ import org.epochx.stats.*;
  * become the initial population or null, and initialisation will be reverted.
  * In the case of reversion the newly initialised population will be discarded
  * and a new one generated. A reversion counter will be incremented, the value
- * of which is retrievable from the <code>StatsManager</code>.
+ * of which is retrievable from the <code>Stats</code>.
  * 
  * <p>
  * Use of the initialisation operation will generate the following events:
@@ -114,7 +114,7 @@ import org.epochx.stats.*;
  * 
  * @see Initialiser
  */
-public class InitialisationManager {
+public class InitialisationManager implements ConfigListener {
 
 	// The controlling model.
 	private final Model model;
@@ -137,19 +137,14 @@ public class InitialisationManager {
 		this.model = model;
 
 		// Configure parameters from the model.
-		LifeCycleManager.getInstance().addConfigListener(new ConfigAdapter() {
-
-			@Override
-			public void onConfigure() {
-				configure();
-			}
-		});
+		Life.get().addConfigListener(this, false);
 	}
 
 	/*
 	 * Configure component with parameters from the model.
 	 */
-	private void configure() {
+	@Override
+	public void onConfigure() {
 		initialiser = model.getInitialiser();
 	}
 
@@ -167,20 +162,20 @@ public class InitialisationManager {
 	 */
 	public List<CandidateProgram> initialise() {
 		// Trigger life cycle events for both generation and initialisation.
-		LifeCycleManager.getInstance().fireConfigureEvent();
+		Life.get().fireConfigureEvent();
 
 		if (initialiser == null) {
 			throw new IllegalStateException("no initialiser set");
 		}
 
-		LifeCycleManager.getInstance().fireGenerationStartEvent();
-		LifeCycleManager.getInstance().fireInitialisationStartEvent();
+		Life.get().fireGenerationStartEvent();
+		Life.get().fireInitialisationStartEvent();
 
 		// Record the start time.
 		final long startTime = System.nanoTime();
 
 		// Record the generation number as zero in the stats data.
-		StatsManager.getInstance().addData(GEN_NUMBER, 0);
+		Stats.get().addData(GEN_NUMBER, 0);
 
 		// Reset the number of reversions.
 		reversions = 0;
@@ -192,8 +187,8 @@ public class InitialisationManager {
 
 			// Allow life cycle manager to confirm or modify. (init has final
 			// say).
-			pop = LifeCycleManager.getInstance().fireGenerationEvent(pop);
-			pop = LifeCycleManager.getInstance().fireInitialisationEvent(pop);
+			pop = Life.get().fireGenerationEvent(pop);
+			pop = Life.get().fireInitialisationEvent(pop);
 
 			// If reverted then increment reversion count.
 			if (pop == null) {
@@ -202,14 +197,14 @@ public class InitialisationManager {
 		} while (pop == null);
 
 		// Store the stats data from the initialisation.
-		StatsManager.getInstance().addData(INIT_REVERSIONS, reversions);
-		StatsManager.getInstance().addData(GEN_POP, pop);
-		StatsManager.getInstance().addData(GEN_TIME,
+		Stats.get().addData(INIT_REVERSIONS, reversions);
+		Stats.get().addData(GEN_POP, pop);
+		Stats.get().addData(GEN_TIME,
 				(System.nanoTime() - startTime));
 
 		// Trigger life cycle events for end of initialisation and generation 0.
-		LifeCycleManager.getInstance().fireInitialisationEndEvent();
-		LifeCycleManager.getInstance().fireGenerationEndEvent();
+		Life.get().fireInitialisationEndEvent();
+		Life.get().fireGenerationEndEvent();
 
 		return pop;
 	}

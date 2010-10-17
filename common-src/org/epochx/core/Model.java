@@ -21,11 +21,11 @@
  */
 package org.epochx.core;
 
-import org.epochx.life.LifeCycleManager;
+import org.epochx.life.Life;
 import org.epochx.op.*;
 import org.epochx.op.selection.TournamentSelector;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.StatsManager;
+import org.epochx.stats.Stats;
 import org.epochx.tools.random.*;
 
 /**
@@ -39,10 +39,10 @@ import org.epochx.tools.random.*;
  * Prior to calling the <code>run</code> method it is typical to arrange for
  * some form of output to be generated each generation, each run or even each
  * crossover or mutation. A wide range of statistics are available from the
- * {@link StatsManager}. A listener model is employed through the
- * {@link LifeCycleManager} to allow events such as a generation starting, or
+ * {@link Stats}. A listener model is employed through the
+ * {@link Life} to allow events such as a generation starting, or
  * crossover being carried out, to be handled and responded to. This is commonly
- * combined with the <code>StatsManager</code> to output statistics each
+ * combined with the <code>Stats</code> to output statistics each
  * generation or run. Instances of both these class are obtainable from a model.
  * 
  * <p>
@@ -57,13 +57,13 @@ import org.epochx.tools.random.*;
  * threadsafe, so it is not advisable to start the same model multiple times
  * concurrently.
  * 
- * @see StatsManager
- * @see LifeCycleManager
+ * @see Stats
+ * @see Life
  */
 public abstract class Model {
 
 	// Components.
-	private final RunManager run;
+	private RunManager run;
 
 	// Operators.
 	private PoolSelector poolSelector;
@@ -94,9 +94,6 @@ public abstract class Model {
 	 * Construct the model with defaults.
 	 */
 	public Model() {
-		// Components.
-		run = new RunManager(this);
-
 		// Control parameters.
 		noRuns = 1;
 		noGenerations = 50;
@@ -131,8 +128,10 @@ public abstract class Model {
 	 * runnable state then an <code>IllegalStateException</code> is thrown.
 	 */
 	public void run() {
+		run = new RunManager(this);
+		
 		// Fire config event.
-		LifeCycleManager.getInstance().fireConfigureEvent();
+		Life.get().fireConfigureEvent();
 
 		// Validate that the model is in a runnable state.
 		if (initialiser == null) {

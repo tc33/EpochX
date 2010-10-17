@@ -32,7 +32,7 @@ import org.epochx.representation.CandidateProgram;
  * for details of when each pool selection event will be fired. To listen for
  * pool selection events during execution of a model, instances of
  * <code>PoolSelectionListener</code> must be added to the model's
- * <code>LifeCycleManager</code> which is retrievable through a call to the
+ * <code>Life</code> which is retrievable through a call to the
  * model's <code>getLifeCycleManager()</code> method.
  * 
  * <p>
@@ -43,7 +43,7 @@ import org.epochx.representation.CandidateProgram;
  * @see PoolSelectionAdapter
  * @see PoolSelectionManager
  */
-public interface PoolSelectionListener {
+public interface PoolSelectionListener extends Listener {
 
 	/**
 	 * Event fired before the pool selection operation starts.

@@ -31,7 +31,7 @@ import org.epochx.representation.CandidateProgram;
  * elitism events. See the {@link ElitismManager}'s class documentation for
  * details of when each elitism event will be fired. To listen for elitism
  * events during execution of a model, instances of <code>ElitismListener</code>
- * must be added to the model's <code>LifeCycleManager</code> which is
+ * must be added to the model's <code>Life</code> which is
  * retrievable through a call to the model's <code>getLifeCycleManager()</code>
  * method.
  * 
@@ -43,7 +43,7 @@ import org.epochx.representation.CandidateProgram;
  * @see ElitismAdapter
  * @see ElitismManager
  */
-public interface ElitismListener {
+public interface ElitismListener extends Listener {
 
 	/**
 	 * Event fired before the elitism operation starts.

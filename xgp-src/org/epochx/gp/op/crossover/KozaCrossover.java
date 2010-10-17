@@ -38,7 +38,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * function swap point. The default constructor uses the typical rates of 90%
  * function node swap point and 10% terminal node swap points.
  */
-public class KozaCrossover implements GPCrossover {
+public class KozaCrossover implements GPCrossover, ConfigListener {
 
 	// The controlling model.
 	private final GPModel model;
@@ -69,19 +69,14 @@ public class KozaCrossover implements GPCrossover {
 		this.functionSwapProbability = functionSwapProbability;
 
 		// Configure parameters from the model.
-		LifeCycleManager.getInstance().addConfigListener(new ConfigAdapter() {
-
-			@Override
-			public void onConfigure() {
-				configure();
-			}
-		});
+		Life.get().addConfigListener(this, false);
 	}
 
 	/*
 	 * Configure component with parameters from the model.
 	 */
-	private void configure() {
+	@Override
+	public void onConfigure() {
 		rng = model.getRNG();
 	}
 

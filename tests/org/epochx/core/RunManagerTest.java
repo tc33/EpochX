@@ -83,7 +83,7 @@ public class RunManagerTest extends TestCase {
 		final StringBuilder verify = new StringBuilder();
 
 		// Listen for the config events.
-		LifeCycleManager.getInstance().addConfigListener(new ConfigListener() {
+		Life.get().addConfigListener(new ConfigListener() {
 
 			@Override
 			public void onConfigure() {
@@ -91,7 +91,7 @@ public class RunManagerTest extends TestCase {
 			}
 		});
 		// Listen for the generation.
-		LifeCycleManager.getInstance().addRunListener(new RunAdapter() {
+		Life.get().addRunListener(new RunAdapter() {
 
 			@Override
 			public void onRunStart() {

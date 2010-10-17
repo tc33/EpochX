@@ -28,11 +28,11 @@ import org.epochx.gr.representation.*;
 import org.epochx.stats.*;
 
 import static org.epochx.stats.StatField.*;
-import static org.epochx.stats.StatsManager.ExpiryEvent.*;
+import static org.epochx.stats.Stats.ExpiryEvent.*;
 
 /**
  * Provides constants to be used as keys to request statistics from the
- * StatsManager specific to XGR.
+ * Stats specific to XGR.
  */
 public class GRStatField {
 
@@ -46,7 +46,7 @@ public class GRStatField {
 			int[] depths = null;
 
 			// Request the population from the stats manager.
-			final List<GRCandidateProgram> pop = (List<GRCandidateProgram>) StatsManager.getInstance().getStat(GEN_POP);
+			final List<GRCandidateProgram> pop = (List<GRCandidateProgram>) Stats.get().getStat(GEN_POP);
 
 			// Get the depths of each program.
 			if (pop != null) {
@@ -71,7 +71,7 @@ public class GRStatField {
 			Double aveDepth = null;
 
 			// Request the population depths from the stats manager.
-			final int[] depths = (int[]) StatsManager.getInstance().getStat(
+			final int[] depths = (int[]) Stats.get().getStat(
 					GEN_DEPTHS);
 
 			// Calculate the average depth.
@@ -93,7 +93,7 @@ public class GRStatField {
 			Double stdevDepth = null;
 
 			// Request the population depths from the stats manager.
-			final int[] depths = (int[]) StatsManager.getInstance().getStat(GEN_DEPTHS);
+			final int[] depths = (int[]) Stats.get().getStat(GEN_DEPTHS);
 
 			// Calculate the standard deviation of the depths.
 			if (depths != null) {
@@ -114,7 +114,7 @@ public class GRStatField {
 			Integer maxDepth = null;
 
 			// Request the population depths from the stats manager.
-			final int[] depths = (int[]) StatsManager.getInstance().getStat(
+			final int[] depths = (int[]) Stats.get().getStat(
 					GEN_DEPTHS);
 
 			// Calculate the maximum depth.
@@ -136,7 +136,7 @@ public class GRStatField {
 			Integer minDepth = null;
 
 			// Request the population depths from the stats manager.
-			final int[] depths = (int[]) StatsManager.getInstance().getStat(
+			final int[] depths = (int[]) Stats.get().getStat(
 					GEN_DEPTHS);
 
 			// Calculate the minimum depth.

@@ -80,7 +80,7 @@ import org.epochx.stats.*;
  * 
  * @see PoolSelector
  */
-public class PoolSelectionManager {
+public class PoolSelectionManager implements ConfigListener {
 
 	// The controlling model.
 	private final Model model;
@@ -107,19 +107,14 @@ public class PoolSelectionManager {
 		this.model = model;
 
 		// Configure parameters from the model.
-		LifeCycleManager.getInstance().addConfigListener(new ConfigAdapter() {
-
-			@Override
-			public void onConfigure() {
-				configure();
-			}
-		});
+		Life.get().addConfigListener(this, false);
 	}
 
 	/*
 	 * Configure component with parameters from the model.
 	 */
-	private void configure() {
+	@Override
+	public void onConfigure() {
 		poolSize = model.getPoolSize();
 		poolSelector = model.getPoolSelector();
 	}
@@ -148,7 +143,7 @@ public class PoolSelectionManager {
 		}
 
 		// Inform all listeners that pool selection is starting.
-		LifeCycleManager.getInstance().firePoolSelectionStartEvent();
+		Life.get().firePoolSelectionStartEvent();
 
 		// Record the start time.
 		final long startTime = System.nanoTime();
@@ -167,7 +162,7 @@ public class PoolSelectionManager {
 			}
 
 			// Allow life cycle listener to confirm or modify.
-			pool = LifeCycleManager.getInstance().firePoolSelectionEvent(pool);
+			pool = Life.get().firePoolSelectionEvent(pool);
 
 			// If reverted then increment reversion counter.
 			if (pool == null) {
@@ -178,12 +173,12 @@ public class PoolSelectionManager {
 		final long runtime = System.nanoTime() - startTime;
 		
 		// Store the stats from the pool selection.
-		StatsManager.getInstance().addData(POOL_REVERSIONS, reversions);
-		StatsManager.getInstance().addData(POOL_PROGRAMS, pool);
-		StatsManager.getInstance().addData(POOL_TIME, runtime);
+		Stats.get().addData(POOL_REVERSIONS, reversions);
+		Stats.get().addData(POOL_PROGRAMS, pool);
+		Stats.get().addData(POOL_TIME, runtime);
 
 		// Inform all listeners that pool selection has ended.
-		LifeCycleManager.getInstance().firePoolSelectionEndEvent();
+		Life.get().firePoolSelectionEndEvent();
 
 		assert (pool != null);
 

@@ -104,7 +104,7 @@ public class GenerationManagerTest extends TestCase {
 		final StringBuilder verify = new StringBuilder();
 
 		// Listen for the config events.
-		LifeCycleManager.getInstance().addConfigListener(new ConfigListener() {
+		Life.get().addConfigListener(new ConfigListener() {
 
 			@Override
 			public void onConfigure() {
@@ -112,7 +112,7 @@ public class GenerationManagerTest extends TestCase {
 			}
 		});
 		// Listen for the generation.
-		LifeCycleManager.getInstance().addGenerationListener(
+		Life.get().addGenerationListener(
 				new GenerationListener() {
 
 					@Override
@@ -150,7 +150,7 @@ public class GenerationManagerTest extends TestCase {
 		final StringBuilder verify = new StringBuilder();
 
 		// Listen for the generation.
-		LifeCycleManager.getInstance().addGenerationListener(
+		Life.get().addGenerationListener(
 				new GenerationAdapter() {
 
 					@Override

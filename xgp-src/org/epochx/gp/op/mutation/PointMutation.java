@@ -40,7 +40,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * replacement node is selected from the full syntax (function and terminal
  * sets), at random.
  */
-public class PointMutation implements GPMutation {
+public class PointMutation implements GPMutation, ConfigListener {
 
 	// The controlling model.
 	private final GPModel model;
@@ -78,19 +78,14 @@ public class PointMutation implements GPMutation {
 		this.pointProbability = pointProbability;
 
 		// Configure parameters from the model.
-		LifeCycleManager.getInstance().addConfigListener(new ConfigAdapter() {
-
-			@Override
-			public void onConfigure() {
-				configure();
-			}
-		});
+		Life.get().addConfigListener(this, false);
 	}
 
 	/*
 	 * Configure component with parameters from the model.
 	 */
-	private void configure() {
+	@Override
+	public void onConfigure() {
 		syntax = model.getSyntax();
 		rng = model.getRNG();
 	}

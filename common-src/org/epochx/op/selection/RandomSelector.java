@@ -33,7 +33,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * A random selector is a program and pool selector which provides no selection
  * pressure. No reference is made to the programs' fitness scores.
  */
-public class RandomSelector implements ProgramSelector, PoolSelector {
+public class RandomSelector implements ProgramSelector, PoolSelector, ConfigListener {
 
 	// The controlling model.
 	private final Model model;
@@ -54,19 +54,14 @@ public class RandomSelector implements ProgramSelector, PoolSelector {
 		this.model = model;
 
 		// Configure parameters from the model.
-		LifeCycleManager.getInstance().addConfigListener(new ConfigAdapter() {
-
-			@Override
-			public void onConfigure() {
-				configure();
-			}
-		});
+		Life.get().addConfigListener(this, false);
 	}
 
 	/*
 	 * Configure component with parameters from the model.
 	 */
-	private void configure() {
+	@Override
+	public void onConfigure() {
 		rng = model.getRNG();
 	}
 

@@ -30,7 +30,7 @@ import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.*;
 import org.epochx.tools.random.RandomNumberGenerator;
 
-public class WhighamCrossover implements GRCrossover {
+public class WhighamCrossover implements GRCrossover, ConfigListener {
 
 	// The controlling model.
 	private final GRModel model;
@@ -42,19 +42,14 @@ public class WhighamCrossover implements GRCrossover {
 		this.model = model;
 
 		// Configure parameters from the model.
-		LifeCycleManager.getInstance().addConfigListener(new ConfigAdapter() {
-
-			@Override
-			public void onConfigure() {
-				configure();
-			}
-		});
+		Life.get().addConfigListener(this, false);
 	}
 
 	/*
 	 * Configure component with parameters from the model.
 	 */
-	private void configure() {
+	@Override
+	public void onConfigure() {
 		rng = model.getRNG();
 	}
 

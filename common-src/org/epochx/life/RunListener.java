@@ -28,7 +28,7 @@ import org.epochx.core.RunManager;
  * events. See the {@link RunManager}'s class documentation for details of when
  * each run event will be fired. To listen for run events during execution of
  * a model, instances of <code>RunListener</code> must be added to the model's
- * <code>LifeCycleManager</code> which is retrievable through a call to the
+ * <code>Life</code> which is retrievable through a call to the
  * model's <code>getLifeCycleManager()</code> method.
  * 
  * <p>
@@ -39,7 +39,7 @@ import org.epochx.core.RunManager;
  * @see RunAdapter
  * @see RunManager
  */
-public interface RunListener {
+public interface RunListener extends Listener {
 
 	/**
 	 * Event fired before the run starts.

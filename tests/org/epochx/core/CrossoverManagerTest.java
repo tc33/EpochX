@@ -69,7 +69,7 @@ public class CrossoverManagerTest extends TestCase {
 		// Create a model with a null program selector.
 		model.setProgramSelector(null);
 
-		LifeCycleManager.getInstance().fireConfigureEvent();
+		Life.get().fireConfigureEvent();
 		try {
 			crossoverManager.crossover();
 			fail("illegal state exception not thrown when performing crossover with a null program selector");
@@ -91,7 +91,7 @@ public class CrossoverManagerTest extends TestCase {
 		model.getProgramSelector().setSelectionPool(pop);
 
 		// Listen for the crossver.
-		LifeCycleManager.getInstance().addCrossoverListener(
+		Life.get().addCrossoverListener(
 				new CrossoverListener() {
 
 					@Override
@@ -112,7 +112,7 @@ public class CrossoverManagerTest extends TestCase {
 						verify.append('3');
 					}
 				});
-		LifeCycleManager.getInstance().fireConfigureEvent();
+		Life.get().fireConfigureEvent();
 		crossoverManager.crossover();
 
 		assertEquals("crossover events were not called in the correct order",
@@ -135,7 +135,7 @@ public class CrossoverManagerTest extends TestCase {
 		count = 0;
 
 		// Listen for the generation.
-		LifeCycleManager.getInstance().addCrossoverListener(
+		Life.get().addCrossoverListener(
 				new CrossoverAdapter() {
 
 					@Override
@@ -153,7 +153,7 @@ public class CrossoverManagerTest extends TestCase {
 					}
 				});
 
-		LifeCycleManager.getInstance().fireConfigureEvent();
+		Life.get().fireConfigureEvent();
 		crossoverManager.crossover();
 
 		assertEquals("crossover operation was not correctly reverted", "2222",

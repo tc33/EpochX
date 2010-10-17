@@ -29,7 +29,7 @@ import org.epochx.representation.CandidateProgram;
  * events. See the {@link MutationManager}'s class documentation for details of
  * when each mutation event will be fired. To listen for mutation events during
  * execution of a model, instances of <code>MutationListener</code> must be
- * added to the model's <code>LifeCycleManager</code> which is retrievable
+ * added to the model's <code>Life</code> which is retrievable
  * through a call to the model's <code>getLifeCycleManager()</code> method.
  * 
  * <p>
@@ -40,7 +40,7 @@ import org.epochx.representation.CandidateProgram;
  * @see MutationAdapter
  * @see MutationManager
  */
-public interface MutationListener {
+public interface MutationListener extends Listener {
 
 	/**
 	 * Event fired before the mutation operation starts.

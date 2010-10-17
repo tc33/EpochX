@@ -28,11 +28,11 @@ import org.epochx.ge.representation.*;
 import org.epochx.stats.*;
 
 import static org.epochx.stats.StatField.*;
-import static org.epochx.stats.StatsManager.ExpiryEvent.*;
+import static org.epochx.stats.Stats.ExpiryEvent.*;
 
 /**
  * Provides constants to be used as keys to request statistics from the
- * StatsManager specific to XGE.
+ * Stats specific to XGE.
  */
 public class GEStatField {
 
@@ -46,7 +46,7 @@ public class GEStatField {
 			int[] depths = null;
 
 			// Request the population from the stats manager.
-			final List<GECandidateProgram> pop = (List<GECandidateProgram>) StatsManager.getInstance().getStat(GEN_POP);
+			final List<GECandidateProgram> pop = (List<GECandidateProgram>) Stats.get().getStat(GEN_POP);
 
 			// Get the depths of each program.
 			if (pop != null) {
@@ -71,7 +71,7 @@ public class GEStatField {
 			Double aveDepth = null;
 
 			// Request the population depths from the stats manager.
-			final int[] depths = (int[]) StatsManager.getInstance().getStat(GEN_DEPTHS);
+			final int[] depths = (int[]) Stats.get().getStat(GEN_DEPTHS);
 
 			// Calculate the average depth.
 			if (depths != null) {
@@ -92,7 +92,7 @@ public class GEStatField {
 			Double stdevDepth = null;
 
 			// Request the population depths from the stats manager.
-			final int[] depths = (int[]) StatsManager.getInstance().getStat(GEN_DEPTHS);
+			final int[] depths = (int[]) Stats.get().getStat(GEN_DEPTHS);
 
 			// Calculate the standard deviation of the depths.
 			if (depths != null) {
@@ -113,7 +113,7 @@ public class GEStatField {
 			Integer maxDepth = null;
 
 			// Request the population depths from the stats manager.
-			final int[] depths = (int[]) StatsManager.getInstance().getStat(GEN_DEPTHS);
+			final int[] depths = (int[]) Stats.get().getStat(GEN_DEPTHS);
 
 			// Calculate the maximum depth.
 			if (depths != null) {
@@ -134,7 +134,7 @@ public class GEStatField {
 			Integer minDepth = null;
 
 			// Request the population depths from the stats manager.
-			final int[] depths = (int[]) StatsManager.getInstance().getStat(GEN_DEPTHS);
+			final int[] depths = (int[]) Stats.get().getStat(GEN_DEPTHS);
 
 			// Calculate the minimum depth.
 			if (depths != null) {
@@ -155,7 +155,7 @@ public class GEStatField {
 			int[] lengths = null;
 
 			// Request the population from the stats manager.
-			final List<GECandidateProgram> pop = (List<GECandidateProgram>) StatsManager.getInstance().getStat(GEN_POP);
+			final List<GECandidateProgram> pop = (List<GECandidateProgram>) Stats.get().getStat(GEN_POP);
 
 			// Get the lengths of each program.
 			if (pop != null) {
@@ -180,7 +180,7 @@ public class GEStatField {
 			Double aveLength = null;
 
 			// Request the population lengths from the stats manager.
-			final int[] lengths = (int[]) StatsManager.getInstance().getStat(GEN_LENGTHS);
+			final int[] lengths = (int[]) Stats.get().getStat(GEN_LENGTHS);
 
 			// Calculate the average length.
 			if (lengths != null) {
@@ -201,7 +201,7 @@ public class GEStatField {
 			Double stdevLength = null;
 
 			// Request the population depths from the stats manager.
-			final int[] lengths = (int[]) StatsManager.getInstance().getStat(GEN_LENGTHS);
+			final int[] lengths = (int[]) Stats.get().getStat(GEN_LENGTHS);
 
 			// Calculate the standard deviation of the lengths.
 			if (lengths != null) {
@@ -222,7 +222,7 @@ public class GEStatField {
 			Integer maxLength = null;
 
 			// Request the population lengths from the stats manager.
-			final int[] lengths = (int[]) StatsManager.getInstance().getStat(GEN_LENGTHS);
+			final int[] lengths = (int[]) Stats.get().getStat(GEN_LENGTHS);
 
 			// Calculate the maximum length.
 			if (lengths != null) {
@@ -243,7 +243,7 @@ public class GEStatField {
 			Integer minLength = null;
 
 			// Request the population lengths from the stats manager.
-			final int[] lengths = (int[]) StatsManager.getInstance().getStat(GEN_LENGTHS);
+			final int[] lengths = (int[]) Stats.get().getStat(GEN_LENGTHS);
 
 			// Calculate the minimum length.
 			if (lengths != null) {

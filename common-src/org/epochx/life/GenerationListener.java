@@ -32,7 +32,7 @@ import org.epochx.representation.CandidateProgram;
  * for details of when each generation event will be fired. To listen for
  * generation events during execution of a model, instances of
  * <code>GenerationListener</code> must be added to the model's
- * <code>LifeCycleManager</code> which is retrievable through a call to the
+ * <code>Life</code> which is retrievable through a call to the
  * model's <code>getLifeCycleManager()</code> method.
  * 
  * <p>
@@ -43,7 +43,7 @@ import org.epochx.representation.CandidateProgram;
  * @see GenerationAdapter
  * @see GenerationManager
  */
-public interface GenerationListener {
+public interface GenerationListener extends Listener {
 
 	/**
 	 * Event fired before a generation starts.

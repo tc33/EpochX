@@ -23,6 +23,7 @@ package org.epochx.life;
 
 import java.util.*;
 
+import org.epochx.ref.ListenerList;
 import org.epochx.representation.CandidateProgram;
 
 /**
@@ -41,7 +42,7 @@ import org.epochx.representation.CandidateProgram;
  * For example, to perform an action at the end of each generation:
  * 
  * <pre>
- * LifeCycleManager.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+ * Life.getLife().addGenerationListener(new GenerationAdapter() {
  * 		public void onGenerationEnd() {
  * 			... do something ...
  * 		}
@@ -56,52 +57,64 @@ import org.epochx.representation.CandidateProgram;
  * methods. This will trigger a distribution of the event to all appropriate
  * listeners.
  */
-public class LifeCycleManager {
+public class Life {
 	
-	private static LifeCycleManager instance;
+	private static Life instance;
 
 	// The life cycle listeners.
-	private final List<ConfigListener> configListeners;
-	private final List<RunListener> runListeners;
-	private final List<InitialisationListener> initialisationListeners;
-	private final List<ElitismListener> elitismListeners;
-	private final List<PoolSelectionListener> poolSelectionListeners;
-	private final List<CrossoverListener> crossoverListeners;
-	private final List<MutationListener> mutationListeners;
-	private final List<ReproductionListener> reproductionListeners;
-	private final List<GenerationListener> generationListeners;
+	private final ListenerList<ConfigListener> configListeners;
+	private final ListenerList<RunListener> runListeners;
+	private final ListenerList<InitialisationListener> initialisationListeners;
+	private final ListenerList<ElitismListener> elitismListeners;
+	private final ListenerList<PoolSelectionListener> poolSelectionListeners;
+	private final ListenerList<CrossoverListener> crossoverListeners;
+	private final ListenerList<MutationListener> mutationListeners;
+	private final ListenerList<ReproductionListener> reproductionListeners;
+	private final ListenerList<GenerationListener> generationListeners;
 
 	/*
 	 * Construct a new life cycle manager.
 	 */
-	private LifeCycleManager() {
+	private Life() {
 		// Initialise listener lists.
-		configListeners = new ArrayList<ConfigListener>();
-		runListeners = new ArrayList<RunListener>();
-		initialisationListeners = new ArrayList<InitialisationListener>();
-		elitismListeners = new ArrayList<ElitismListener>();
-		poolSelectionListeners = new ArrayList<PoolSelectionListener>();
-		crossoverListeners = new ArrayList<CrossoverListener>();
-		mutationListeners = new ArrayList<MutationListener>();
-		reproductionListeners = new ArrayList<ReproductionListener>();
-		generationListeners = new ArrayList<GenerationListener>();
+		configListeners = new ListenerList<ConfigListener>();
+		runListeners = new ListenerList<RunListener>();
+		initialisationListeners = new ListenerList<InitialisationListener>();
+		elitismListeners = new ListenerList<ElitismListener>();
+		poolSelectionListeners = new ListenerList<PoolSelectionListener>();
+		crossoverListeners = new ListenerList<CrossoverListener>();
+		mutationListeners = new ListenerList<MutationListener>();
+		reproductionListeners = new ListenerList<ReproductionListener>();
+		generationListeners = new ListenerList<GenerationListener>();
 	}
 	
-	public static LifeCycleManager getInstance() {
+	public static Life get() {
 		if (instance == null) {
-			instance = new LifeCycleManager();
+			instance = new Life();
 		}
 		
 		return instance;
 	}
-
+	
 	/**
-	 * Adds a <code>ConfigListener</code> to the life cycle.
+	 * Adds a <code>ConfigListener</code> to the life cycle. 
 	 * 
 	 * @param listener the <code>ConfigListener</code> to be added.
 	 */
 	public void addConfigListener(final ConfigListener listener) {
-		configListeners.add(listener);
+		addConfigListener(listener, true);
+	}
+	
+	/**
+	 * It does not make sense to use this method with an anonymous inner class 
+	 * as the listener since it will contain an implicit strong reference to the
+	 * owner, and as such neither will ever be garbage collected. 
+	 * 
+	 * @param listener
+	 * @param owner
+	 */
+	public void addConfigListener(final ConfigListener listener, boolean strong) {
+		configListeners.add(listener, strong);
 	}
 
 	/**
@@ -120,6 +133,10 @@ public class LifeCycleManager {
 	 */
 	public void addRunListener(final RunListener listener) {
 		runListeners.add(listener);
+	}
+	
+	public void addRunListener(final RunListener listener, boolean strong) {
+		runListeners.add(listener, strong);
 	}
 
 	/**
@@ -140,6 +157,10 @@ public class LifeCycleManager {
 		initialisationListeners.add(listener);
 	}
 
+	public void addInitialisationListener(final InitialisationListener listener, boolean strong) {
+		initialisationListeners.add(listener, strong);
+	}
+	
 	/**
 	 * Removes a <code>InitialisationListener</code> from the life cycle.
 	 * 
@@ -159,6 +180,10 @@ public class LifeCycleManager {
 		elitismListeners.add(listener);
 	}
 
+	public void addElitismListener(final ElitismListener listener, boolean strong) {
+		elitismListeners.add(listener, strong);
+	}
+	
 	/**
 	 * Removes a <code>ElitismListener</code> from the life cycle.
 	 * 
@@ -175,6 +200,10 @@ public class LifeCycleManager {
 	 */
 	public void addPoolSelectionListener(final PoolSelectionListener listener) {
 		poolSelectionListeners.add(listener);
+	}
+	
+	public void addPoolSelectionListener(final PoolSelectionListener listener, boolean strong) {
+		poolSelectionListeners.add(listener, strong);
 	}
 
 	/**
@@ -194,6 +223,10 @@ public class LifeCycleManager {
 	public void addCrossoverListener(final CrossoverListener listener) {
 		crossoverListeners.add(listener);
 	}
+	
+	public void addCrossoverListener(final CrossoverListener listener, boolean strong) {
+		crossoverListeners.add(listener, strong);
+	}
 
 	/**
 	 * Removes a <code>CrossoverListener</code> from the life cycle.
@@ -211,6 +244,10 @@ public class LifeCycleManager {
 	 */
 	public void addMutationListener(final MutationListener listener) {
 		mutationListeners.add(listener);
+	}
+	
+	public void addMutationListener(final MutationListener listener, boolean strong) {
+		mutationListeners.add(listener, strong);
 	}
 
 	/**
@@ -230,6 +267,10 @@ public class LifeCycleManager {
 	public void addReproductionListener(final ReproductionListener listener) {
 		reproductionListeners.add(listener);
 	}
+	
+	public void addReproductionListener(final ReproductionListener listener, boolean strong) {
+		reproductionListeners.add(listener, strong);
+	}
 
 	/**
 	 * Removes a <code>ReproductionListener</code> from the life cycle.
@@ -248,6 +289,10 @@ public class LifeCycleManager {
 	public void addGenerationListener(final GenerationListener listener) {
 		generationListeners.add(listener);
 	}
+	
+	public void addGenerationListener(final GenerationListener listener, boolean strong) {
+		generationListeners.add(listener, strong);
+	}
 
 	/**
 	 * Removes a <code>GenerationListener</code> from the life cycle.
@@ -264,7 +309,9 @@ public class LifeCycleManager {
 	 */
 	public void fireConfigureEvent() {
 		for (final ConfigListener listener: configListeners) {
-			listener.onConfigure();
+			if (listener != null) {
+				listener.onConfigure();
+			}
 		}
 	}
 

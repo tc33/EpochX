@@ -41,9 +41,9 @@ import org.epochx.stats.*;
  * multiple times.
  * 
  * <p>
- * Instances of this class will update the {@link StatsManager} class with data
+ * Instances of this class will update the {@link Stats} class with data
  * about the run as the run progresses. For the statistics available from the
- * <code>StatsManager</code>, view the {@link StatField} class and any extending
+ * <code>Stats</code>, view the {@link StatField} class and any extending
  * classes.
  * 
  * <p>
@@ -77,7 +77,7 @@ import org.epochx.stats.*;
  * </tr>
  * </table>
  */
-public class RunManager {
+public class RunManager implements ConfigListener {
 
 	// The controlling model.
 	private final Model model;
@@ -111,19 +111,14 @@ public class RunManager {
 		initialisation = new InitialisationManager(model);
 
 		// Configure parameters from the model.
-		LifeCycleManager.getInstance().addConfigListener(new ConfigAdapter() {
-
-			@Override
-			public void onConfigure() {
-				configure();
-			}
-		});
+		Life.get().addConfigListener(this, false);
 	}
 
 	/*
 	 * Configure component with parameters from the model.
 	 */
-	private void configure() {
+	@Override
+	public void onConfigure() {
 		noGenerations = model.getNoGenerations();
 		terminationFitness = model.getTerminationFitness();
 	}
@@ -148,7 +143,7 @@ public class RunManager {
 	 */
 	public void run(final int runNo) {
 		// Give final opportunity to configure before starting the run.
-		LifeCycleManager.getInstance().fireConfigureEvent();
+		Life.get().fireConfigureEvent();
 
 		// Validate that the model is in a runnable state.
 		if (noGenerations < 0) {
@@ -157,7 +152,7 @@ public class RunManager {
 		}
 
 		// Inform everyone we're starting a run.
-		LifeCycleManager.getInstance().fireRunStartEvent();
+		Life.get().fireRunStartEvent();
 
 		// Setup the run manager for a new run.
 		bestProgram = null;
@@ -165,7 +160,7 @@ public class RunManager {
 		final long startTime = System.nanoTime();
 
 		// Add the run number to the available stats data.
-		StatsManager.getInstance().addData(RUN_NUMBER, runNo);
+		Stats.get().addData(RUN_NUMBER, runNo);
 
 		// Perform initialisation.
 		List<CandidateProgram> pop = initialisation.initialise();
@@ -183,19 +178,19 @@ public class RunManager {
 
 			// We might be finished?
 			if (bestFitness <= terminationFitness) {
-				LifeCycleManager.getInstance().fireSuccessEvent();
+				Life.get().fireSuccessEvent();
 				break;
 			}
 		}
 
 		// Inform everyone the run has ended.
-		LifeCycleManager.getInstance().fireRunEndEvent();
+		Life.get().fireRunEndEvent();
 
 		// Calculate how long the run took.
 		final long runtime = System.nanoTime() - startTime;
 
 		// Add run time to stats data.
-		StatsManager.getInstance().addData(RUN_TIME, runtime);
+		Stats.get().addData(RUN_TIME, runtime);
 	}
 
 	/*
@@ -211,8 +206,8 @@ public class RunManager {
 				bestProgram = program;
 
 				// Update the stats.
-				StatsManager.getInstance().addData(RUN_FITNESS_MIN, bestFitness);
-				StatsManager.getInstance().addData(RUN_FITTEST_PROGRAM,
+				Stats.get().addData(RUN_FITNESS_MIN, bestFitness);
+				Stats.get().addData(RUN_FITTEST_PROGRAM,
 						bestProgram);
 			}
 		}

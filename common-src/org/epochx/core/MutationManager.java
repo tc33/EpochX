@@ -66,7 +66,7 @@ import org.epochx.stats.*;
  * </tr>
  * </table>
  */
-public class MutationManager {
+public class MutationManager implements ConfigListener {
 
 	// The controlling model.
 	private final Model model;
@@ -95,19 +95,14 @@ public class MutationManager {
 		this.model = model;
 
 		// Configure parameters from the model.
-		LifeCycleManager.getInstance().addConfigListener(new ConfigAdapter() {
-
-			@Override
-			public void onConfigure() {
-				configure();
-			}
-		});
+		Life.get().addConfigListener(this, false);
 	}
 
 	/*
 	 * Configure component with parameters from the model.
 	 */
-	private void configure() {
+	@Override
+	public void onConfigure() {
 		programSelector = model.getProgramSelector();
 		mutator = model.getMutation();
 	}
@@ -142,7 +137,7 @@ public class MutationManager {
 		}
 
 		// Inform everyone we're about to start crossover.
-		LifeCycleManager.getInstance().fireMutationStartEvent();
+		Life.get().fireMutationStartEvent();
 
 		// Record the start time.
 		final long mutationStartTime = System.nanoTime();
@@ -168,7 +163,7 @@ public class MutationManager {
 			}
 
 			// Allow the life cycle listener to confirm or modify.
-			child = LifeCycleManager.getInstance()
+			child = Life.get()
 					.fireMutationEvent(parent, child);
 
 			if (child == null) {
@@ -179,12 +174,12 @@ public class MutationManager {
 		final long runtime = System.nanoTime() - mutationStartTime;
 
 		// Store the stats from the mutation.
-		StatsManager.getInstance().addData(MUT_PARENT, parent);
-		StatsManager.getInstance().addData(MUT_CHILD, child);
-		StatsManager.getInstance().addData(MUT_TIME, runtime);
-		StatsManager.getInstance().addData(MUT_REVERSIONS, reversions);
+		Stats.get().addData(MUT_PARENT, parent);
+		Stats.get().addData(MUT_CHILD, child);
+		Stats.get().addData(MUT_TIME, runtime);
+		Stats.get().addData(MUT_REVERSIONS, reversions);
 
-		LifeCycleManager.getInstance().fireMutationEndEvent();
+		Life.get().fireMutationEndEvent();
 
 		assert (child != null);
 

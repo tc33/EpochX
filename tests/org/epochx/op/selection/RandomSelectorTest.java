@@ -19,7 +19,7 @@ public class RandomSelectorTest extends TestCase {
 	protected void setUp() throws Exception {
 		model = new GPModelDummy();
 		selector = new RandomSelector(model);
-		LifeCycleManager.getInstance().fireConfigureEvent();
+		Life.get().fireConfigureEvent();
 
 		pop = new ArrayList<CandidateProgram>();
 		pop.add(new GPCandidateProgram(null));
@@ -113,7 +113,7 @@ public class RandomSelectorTest extends TestCase {
 	 */
 	public void testGetProgramRNGNull() {
 		model.setRNG(null);
-		LifeCycleManager.getInstance().fireConfigureEvent();
+		Life.get().fireConfigureEvent();
 		selector.setSelectionPool(pop);
 		try {
 			selector.getProgram();

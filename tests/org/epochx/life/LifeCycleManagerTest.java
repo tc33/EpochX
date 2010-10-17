@@ -32,11 +32,11 @@ import org.epochx.representation.CandidateProgram;
  */
 public class LifeCycleManagerTest extends TestCase {
 
-	private LifeCycleManager lifeManager;
+	private Life lifeManager;
 
 	@Override
 	protected void setUp() throws Exception {
-		lifeManager = LifeCycleManager.getInstance();
+		lifeManager = Life.get();
 	}
 
 	/**

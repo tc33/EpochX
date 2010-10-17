@@ -54,7 +54,7 @@ public class MutationManagerTest extends TestCase {
 		model.setMutation(null);
 		model.setMutationProbability(0.1);
 
-		LifeCycleManager.getInstance().fireConfigureEvent();
+		Life.get().fireConfigureEvent();
 
 		try {
 			mutationManager.mutate();
@@ -71,7 +71,7 @@ public class MutationManagerTest extends TestCase {
 		// Create a model with a null program selector.
 		model.setProgramSelector(null);
 
-		LifeCycleManager.getInstance().fireConfigureEvent();
+		Life.get().fireConfigureEvent();
 
 		try {
 			mutationManager.mutate();
@@ -94,7 +94,7 @@ public class MutationManagerTest extends TestCase {
 		model.getSyntax().add(new BooleanLiteral(false));
 
 		// Listen for the crossver.
-		LifeCycleManager.getInstance().addMutationListener(new MutationListener() {
+		Life.get().addMutationListener(new MutationListener() {
 
 			@Override
 			public void onMutationStart() {
@@ -113,7 +113,7 @@ public class MutationManagerTest extends TestCase {
 				verify.append('3');
 			}
 		});
-		LifeCycleManager.getInstance().fireConfigureEvent();
+		Life.get().fireConfigureEvent();
 		mutationManager.mutate();
 
 		assertEquals("mutation events were not called in the correct order",
@@ -137,7 +137,7 @@ public class MutationManagerTest extends TestCase {
 		count = 0;
 
 		// Listen for the generation.
-		LifeCycleManager.getInstance().addMutationListener(new MutationAdapter() {
+		Life.get().addMutationListener(new MutationAdapter() {
 
 			@Override
 			public CandidateProgram onMutation(final CandidateProgram parent,
@@ -153,7 +153,7 @@ public class MutationManagerTest extends TestCase {
 			}
 		});
 
-		LifeCycleManager.getInstance().fireConfigureEvent();
+		Life.get().fireConfigureEvent();
 		mutationManager.mutate();
 
 		assertEquals("mutation operation was not correctly reverted", "2222",

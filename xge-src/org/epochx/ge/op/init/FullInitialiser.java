@@ -69,7 +69,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * @see GrowInitialiser
  * @see RampedHalfAndHalfInitialiser
  */
-public class FullInitialiser implements GEInitialiser {
+public class FullInitialiser implements GEInitialiser, ConfigListener {
 
 	// The controlling model.
 	private GEModel model;
@@ -134,19 +134,14 @@ public class FullInitialiser implements GEInitialiser {
 		this.acceptDuplicates = acceptDuplicates;
 
 		// Configure parameters from the model.
-		LifeCycleManager.getInstance().addConfigListener(new ConfigAdapter() {
-
-			@Override
-			public void onConfigure() {
-				configure();
-			}
-		});
+		Life.get().addConfigListener(this, false);
 	}
 
 	/*
 	 * Configure component with parameters from the model.
 	 */
-	private void configure() {
+	@Override
+	public void onConfigure() {
 		rng = model.getRNG();
 		grammar = model.getGrammar();
 		popSize = model.getPopulationSize();

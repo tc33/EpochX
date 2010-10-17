@@ -32,7 +32,7 @@ import org.epochx.representation.CandidateProgram;
  * details of when each initialisation event will be fired. To listen for
  * initialisation events during execution of a model, instances of
  * <code>InitialisationListener</code> must be added to the model's
- * <code>LifeCycleManager</code> which is retrievable through a call to the
+ * <code>Life</code> which is retrievable through a call to the
  * model's <code>getLifeCycleManager()</code> method.
  * 
  * <p>
@@ -43,7 +43,7 @@ import org.epochx.representation.CandidateProgram;
  * @see InitialisationAdapter
  * @see InitialisationManager
  */
-public interface InitialisationListener {
+public interface InitialisationListener extends Listener {
 
 	/**
 	 * Event fired before the initialisation operation starts.

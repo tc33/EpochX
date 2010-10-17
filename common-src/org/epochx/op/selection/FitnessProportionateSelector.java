@@ -41,7 +41,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * @see TournamentSelector
  */
 public class FitnessProportionateSelector implements ProgramSelector,
-		PoolSelector {
+		PoolSelector, ConfigListener {
 
 	// The controlling model.
 	private final Model model;
@@ -67,19 +67,14 @@ public class FitnessProportionateSelector implements ProgramSelector,
 		poolSelection = new ProgramFitnessProportionateSelector();
 
 		// Configure parameters from the model.
-		LifeCycleManager.getInstance().addConfigListener(new ConfigAdapter() {
-
-			@Override
-			public void onConfigure() {
-				configure();
-			}
-		});
+		Life.get().addConfigListener(this, false);
 	}
 
 	/*
 	 * Configures component with parameters from the model.
 	 */
-	private void configure() {
+	@Override
+	public void onConfigure() {
 		rng = model.getRNG();
 	}
 

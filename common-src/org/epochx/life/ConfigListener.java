@@ -27,10 +27,10 @@ package org.epochx.life;
  * configuration of components with parameters from the model, and are called
  * at the start of execution, prior to the start of each run and before the
  * start of each generation. The event may also be fired manually with a call to
- * the <code>LifeCycleManager</code>'s <code>fireConfigureEvent()</code> method.
+ * the <code>Life</code>'s <code>fireConfigureEvent()</code> method.
  * To listen for configure events during execution of a model, instances of
  * <code>ConfigListener</code> must be added to the model's
- * <code>LifeCycleManager</code> which is retrievable through a call to the
+ * <code>Life</code> which is retrievable through a call to the
  * model's <code>getLifeCycleManager()</code> method.
  * 
  * <p>
@@ -40,7 +40,7 @@ package org.epochx.life;
  * 
  * @see ConfigAdapter
  */
-public interface ConfigListener {
+public interface ConfigListener extends Listener {
 
 	/**
 	 * This event is automatically fired at the recommended times for loading

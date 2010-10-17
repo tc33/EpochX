@@ -66,7 +66,7 @@ import org.epochx.stats.*;
  * </tr>
  * </table>
  */
-public class CrossoverManager {
+public class CrossoverManager implements ConfigListener {
 
 	// The controlling model.
 	private final Model model;
@@ -92,19 +92,14 @@ public class CrossoverManager {
 		this.model = model;
 
 		// Configure parameters from the model.
-		LifeCycleManager.getInstance().addConfigListener(new ConfigAdapter() {
-
-			@Override
-			public void onConfigure() {
-				configure();
-			}
-		});
+		Life.get().addConfigListener(this, false);
 	}
 
 	/*
 	 * Configure component with parameters from the model.
 	 */
-	private void configure() {
+	@Override
+	public void onConfigure() {
 		programSelector = model.getProgramSelector();
 		crossover = model.getCrossover();
 	}
@@ -140,7 +135,7 @@ public class CrossoverManager {
 		}
 
 		// Inform everyone we're about to start crossover.
-		LifeCycleManager.getInstance().fireCrossoverStartEvent();
+		Life.get().fireCrossoverStartEvent();
 
 		// Record the start time.
 		final long crossoverStartTime = System.nanoTime();
@@ -174,7 +169,7 @@ public class CrossoverManager {
 			}
 
 			// Ask life cycle listener to confirm the crossover.
-			children = LifeCycleManager.getInstance().fireCrossoverEvent(parents,
+			children = Life.get().fireCrossoverEvent(parents,
 					children);
 
 			// If reverted then increment reversion counter.
@@ -185,12 +180,12 @@ public class CrossoverManager {
 
 		final long runtime = System.nanoTime() - crossoverStartTime;
 
-		StatsManager.getInstance().addData(XO_PARENTS, parents);
-		StatsManager.getInstance().addData(XO_CHILDREN, children);
-		StatsManager.getInstance().addData(XO_REVERSIONS, reversions);
-		StatsManager.getInstance().addData(XO_TIME, runtime);
+		Stats.get().addData(XO_PARENTS, parents);
+		Stats.get().addData(XO_CHILDREN, children);
+		Stats.get().addData(XO_REVERSIONS, reversions);
+		Stats.get().addData(XO_TIME, runtime);
 
-		LifeCycleManager.getInstance().fireCrossoverEndEvent();
+		Life.get().fireCrossoverEndEvent();
 
 		assert (children != null);
 

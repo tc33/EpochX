@@ -19,7 +19,7 @@ public class FitnessProportionateSelectorTest extends TestCase {
 	protected void setUp() throws Exception {
 		model = new GPModelDummy();
 		selector = new FitnessProportionateSelector(model);
-		LifeCycleManager.getInstance().fireConfigureEvent();
+		Life.get().fireConfigureEvent();
 
 		pop = new ArrayList<CandidateProgram>();
 		pop.add(new GPCandidateProgram(model));
@@ -113,7 +113,7 @@ public class FitnessProportionateSelectorTest extends TestCase {
 		model.setRNG(null);
 		model.setFitness(1.0);
 		model.setCacheFitness(false);
-		LifeCycleManager.getInstance().fireConfigureEvent();
+		Life.get().fireConfigureEvent();
 		selector.setSelectionPool(pop);
 		try {
 			selector.getProgram();

@@ -64,7 +64,7 @@ import org.epochx.stats.*;
  * </tr>
  * </table>
  */
-public class ReproductionManager {
+public class ReproductionManager implements ConfigListener {
 
 	// The controlling model.
 	private final Model model;
@@ -88,19 +88,14 @@ public class ReproductionManager {
 		this.model = model;
 
 		// Configure parameters from the model.
-		LifeCycleManager.getInstance().addConfigListener(new ConfigAdapter() {
-
-			@Override
-			public void onConfigure() {
-				configure();
-			}
-		});
+		Life.get().addConfigListener(this, false);
 	}
 
 	/*
 	 * Configure component with parameters from the model.
 	 */
-	private void configure() {
+	@Override
+	public void onConfigure() {
 		programSelector = model.getProgramSelector();
 	}
 
@@ -117,7 +112,7 @@ public class ReproductionManager {
 		}
 
 		// Inform all listeners we're about to start.
-		LifeCycleManager.getInstance().fireReproductionStartEvent();
+		Life.get().fireReproductionStartEvent();
 		
 		// Record the start time.
 		final long startTime = System.nanoTime();
@@ -130,7 +125,7 @@ public class ReproductionManager {
 			parent = programSelector.getProgram();
 
 			// Allow the life cycle listener to confirm or modify.
-			parent = LifeCycleManager.getInstance().fireReproductionEvent(parent);
+			parent = Life.get().fireReproductionEvent(parent);
 
 			if (parent == null) {
 				reversions++;
@@ -140,11 +135,11 @@ public class ReproductionManager {
 		final long runtime = System.nanoTime() - startTime;
 
 		// Store the stats from the reproduction.
-		StatsManager.getInstance().addData(REP_REVERSIONS, reversions);
-		StatsManager.getInstance().addData(REP_TIME, runtime);
+		Stats.get().addData(REP_REVERSIONS, reversions);
+		Stats.get().addData(REP_TIME, runtime);
 
 		// Inform all listeners reproduction has ended.
-		LifeCycleManager.getInstance().fireReproductionEndEvent();
+		Life.get().fireReproductionEndEvent();
 
 		assert (parent != null);
 

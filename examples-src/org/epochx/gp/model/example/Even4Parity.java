@@ -61,7 +61,7 @@ public class Even4Parity extends EvenParity {
 		final Model m = new Even4Parity();
 
 		/*
-		 * LifeCycleManager.getInstance().addRunListener(new RunAdapter() {
+		 * Life.getInstance().addRunListener(new RunAdapter() {
 		 * 
 		 * @Override
 		 * public void onRunEnd() {

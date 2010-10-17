@@ -30,7 +30,7 @@ import org.epochx.representation.CandidateProgram;
  * details of when each crossover event will be fired. To listen for crossover
  * events during execution of a model, instances of
  * <code>CrossoverListener</code> must be added to the model's
- * <code>LifeCycleManager</code> which is retrievable through a call to the
+ * <code>Life</code> which is retrievable through a call to the
  * model's <code>getLifeCycleManager()</code> method.
  * 
  * <p>
@@ -41,7 +41,7 @@ import org.epochx.representation.CandidateProgram;
  * @see CrossoverAdapter
  * @see CrossoverManager
  */
-public interface CrossoverListener {
+public interface CrossoverListener extends Listener {
 
 	/**
 	 * Event fired before the crossover operation starts.

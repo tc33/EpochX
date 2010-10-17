@@ -75,7 +75,7 @@ public class InitialisationManagerTest extends TestCase {
 		final StringBuilder verify = new StringBuilder();
 
 		// Listen for the config events.
-		LifeCycleManager.getInstance().addConfigListener(new ConfigListener() {
+		Life.get().addConfigListener(new ConfigListener() {
 
 			@Override
 			public void onConfigure() {
@@ -83,7 +83,7 @@ public class InitialisationManagerTest extends TestCase {
 			}
 		});
 		// Listen for the generation.
-		LifeCycleManager.getInstance().addGenerationListener(
+		Life.get().addGenerationListener(
 				new GenerationListener() {
 
 					@Override
@@ -104,7 +104,7 @@ public class InitialisationManagerTest extends TestCase {
 					}
 				});
 		// Listen for the initialisation.
-		LifeCycleManager.getInstance().addInitialisationListener(
+		Life.get().addInitialisationListener(
 				new InitialisationListener() {
 
 					@Override
@@ -143,7 +143,7 @@ public class InitialisationManagerTest extends TestCase {
 		final StringBuilder verify = new StringBuilder();
 
 		// Listen for the initialisation.
-		LifeCycleManager.getInstance().addInitialisationListener(
+		Life.get().addInitialisationListener(
 				new InitialisationAdapter() {
 
 					@Override
@@ -178,7 +178,7 @@ public class InitialisationManagerTest extends TestCase {
 		final StringBuilder verify = new StringBuilder();
 
 		// Listen for the initialisation.
-		LifeCycleManager.getInstance().addGenerationListener(
+		Life.get().addGenerationListener(
 				new GenerationAdapter() {
 
 					@Override

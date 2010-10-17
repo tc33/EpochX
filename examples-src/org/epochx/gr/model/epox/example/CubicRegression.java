@@ -19,7 +19,7 @@ public class CubicRegression extends org.epochx.gr.model.epox.CubicRegression {
 		model.setInitialiser(new FullInitialiser(model));
 		model.setTerminationFitness(0.01);
 		/*
-		 * LifeCycleManager.getInstance().addGenerationListener(new
+		 * Life.getInstance().addGenerationListener(new
 		 * GenerationAdapter() {
 		 * 
 		 * @Override

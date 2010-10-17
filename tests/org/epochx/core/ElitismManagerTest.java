@@ -52,7 +52,7 @@ public class ElitismManagerTest extends TestCase {
 		final StringBuilder verify = new StringBuilder();
 
 		// Listen for the events.
-		LifeCycleManager.getInstance().addElitismListener(new ElitismListener() {
+		Life.get().addElitismListener(new ElitismListener() {
 
 			@Override
 			public void onElitismStart() {
@@ -96,7 +96,7 @@ public class ElitismManagerTest extends TestCase {
 	 */
 	public void testNoElitesNegative() {
 		model.setNoElites(-1);
-		LifeCycleManager.getInstance().fireConfigureEvent();
+		Life.get().fireConfigureEvent();
 
 		try {
 			elitismManager.elitism(pop);

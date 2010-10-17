@@ -22,7 +22,7 @@
 package org.epochx.gp.stats;
 
 import static org.epochx.stats.StatField.*;
-import static org.epochx.stats.StatsManager.ExpiryEvent.*;
+import static org.epochx.stats.Stats.ExpiryEvent.*;
 
 import java.util.*;
 
@@ -32,7 +32,7 @@ import org.epochx.stats.*;
 
 /**
  * Provides constants to be used as keys to request statistics from the
- * StatsManager specific to XGP.
+ * Stats specific to XGP.
  */
 public class GPStatField {
 	
@@ -46,7 +46,7 @@ public class GPStatField {
 			int[] depths = null;
 
 			// Request the population from the stats manager.
-			final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) StatsManager.getInstance().getStat(GEN_POP);
+			final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) Stats.get().getStat(GEN_POP);
 
 			// Get the depths of each program.
 			if (pop != null) {
@@ -71,7 +71,7 @@ public class GPStatField {
 			Double aveDepth = null;
 
 			// Request the population depths from the stats manager.
-			final int[] depths = (int[]) StatsManager.getInstance().getStat(GEN_DEPTHS);
+			final int[] depths = (int[]) Stats.get().getStat(GEN_DEPTHS);
 
 			// Calculate the average depth.
 			if (depths != null) {
@@ -92,7 +92,7 @@ public class GPStatField {
 			Double stdevDepth = null;
 
 			// Request the population depths from the stats manager.
-			final int[] depths = (int[]) StatsManager.getInstance().getStat(GEN_DEPTHS);
+			final int[] depths = (int[]) Stats.get().getStat(GEN_DEPTHS);
 
 			// Calculate the standard deviation of the depths.
 			if (depths != null) {
@@ -113,7 +113,7 @@ public class GPStatField {
 			Integer maxDepth = null;
 
 			// Request the population depths from the stats manager.
-			final int[] depths = (int[]) StatsManager.getInstance().getStat(GEN_DEPTHS);
+			final int[] depths = (int[]) Stats.get().getStat(GEN_DEPTHS);
 
 			// Calculate the maximum depth.
 			if (depths != null) {
@@ -134,7 +134,7 @@ public class GPStatField {
 			Integer minDepth = null;
 
 			// Request the population depths from the stats manager.
-			final int[] depths = (int[]) StatsManager.getInstance().getStat(GEN_DEPTHS);
+			final int[] depths = (int[]) Stats.get().getStat(GEN_DEPTHS);
 
 			// Calculate the minimum depth.
 			if (depths != null) {
@@ -156,9 +156,9 @@ public class GPStatField {
 			double[] aveNodes = null;
 
 			// Request the dependant statistics from the stats manager.
-			final int[] depths = (int[]) StatsManager.getInstance().getStat(GEN_DEPTHS);
-			final int maxDepth = (Integer) StatsManager.getInstance().getStat(GEN_DEPTH_MAX);
-			final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) StatsManager.getInstance().getStat(GEN_POP);
+			final int[] depths = (int[]) Stats.get().getStat(GEN_DEPTHS);
+			final int maxDepth = (Integer) Stats.get().getStat(GEN_DEPTH_MAX);
+			final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) Stats.get().getStat(GEN_POP);
 
 			if (depths != null) {
 				// Array to fill with average number of nodes at each depth.
@@ -189,7 +189,7 @@ public class GPStatField {
 			int[] lengths = null;
 
 			// Request the population from the stats manager.
-			final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) StatsManager.getInstance().getStat(GEN_POP);
+			final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) Stats.get().getStat(GEN_POP);
 
 			// Get the lengths of each program.
 			if (pop != null) {
@@ -214,7 +214,7 @@ public class GPStatField {
 			Double aveLength = null;
 
 			// Request the population lengths from the stats manager.
-			final int[] lengths = (int[]) StatsManager.getInstance().getStat(GEN_LENGTHS);
+			final int[] lengths = (int[]) Stats.get().getStat(GEN_LENGTHS);
 
 			// Calculate the average length.
 			if (lengths != null) {
@@ -235,7 +235,7 @@ public class GPStatField {
 			Double stdevLength = null;
 
 			// Request the population lengths from the stats manager.
-			final int[] lengths = (int[]) StatsManager.getInstance().getStat(GEN_LENGTHS);
+			final int[] lengths = (int[]) Stats.get().getStat(GEN_LENGTHS);
 
 			// Calculate the standard deviation of the lengths.
 			if (lengths != null) {
@@ -256,7 +256,7 @@ public class GPStatField {
 			Integer maxLength = null;
 
 			// Request the population lengths from the stats manager.
-			final int[] lengths = (int[]) StatsManager.getInstance().getStat(GEN_LENGTHS);
+			final int[] lengths = (int[]) Stats.get().getStat(GEN_LENGTHS);
 
 			// Calculate the maximum length.
 			if (lengths != null) {
@@ -277,7 +277,7 @@ public class GPStatField {
 			Integer minLength = null;
 
 			// Request the population lengths from the stats manager.
-			final int[] lengths = (int[]) StatsManager.getInstance().getStat(GEN_LENGTHS);
+			final int[] lengths = (int[]) Stats.get().getStat(GEN_LENGTHS);
 
 			// Calculate the minimum length.
 			if (lengths != null) {
@@ -298,7 +298,7 @@ public class GPStatField {
 			int[] noTerminals = null;
 
 			// Request the population from the stats manager.
-			final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) StatsManager.getInstance().getStat(GEN_POP);
+			final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) Stats.get().getStat(GEN_POP);
 
 			// Get the number of terminals of each program.
 			if (pop != null) {
@@ -323,7 +323,7 @@ public class GPStatField {
 			Double aveNoTerminals = null;
 
 			// Request the population's number of terminals from the stats manager.
-			final int[] noTerminals = (int[]) StatsManager.getInstance().getStat(GEN_NO_TERMINALS);
+			final int[] noTerminals = (int[]) Stats.get().getStat(GEN_NO_TERMINALS);
 
 			// Calculate the average number of terminals.
 			if (noTerminals != null) {
@@ -344,7 +344,7 @@ public class GPStatField {
 			Double stdevNoTerminals = null;
 
 			// Request the population's number of terminals from the stats manager.
-			final int[] noTerminals = (int[]) StatsManager.getInstance().getStat(GEN_NO_TERMINALS);
+			final int[] noTerminals = (int[]) Stats.get().getStat(GEN_NO_TERMINALS);
 
 			// Calculate the standard deviation of the number of terminals.
 			if (noTerminals != null) {
@@ -365,7 +365,7 @@ public class GPStatField {
 			Integer maxNoTerminals = null;
 
 			// Request the population's number of terminals from the stats manager.
-			final int[] noTerminals = (int[]) StatsManager.getInstance().getStat(GEN_NO_TERMINALS);
+			final int[] noTerminals = (int[]) Stats.get().getStat(GEN_NO_TERMINALS);
 
 			// Calculate the maximum number of terminals.
 			if (noTerminals != null) {
@@ -386,7 +386,7 @@ public class GPStatField {
 			Integer minNoTerminals = null;
 
 			// Request the population's number of terminals from the stats manager.
-			final int[] noTerminals = (int[]) StatsManager.getInstance().getStat(GEN_NO_TERMINALS);
+			final int[] noTerminals = (int[]) Stats.get().getStat(GEN_NO_TERMINALS);
 
 			// Calculate the minimum number of terminals.
 			if (noTerminals != null) {
@@ -407,7 +407,7 @@ public class GPStatField {
 			int[] noDistinctTerminals = null;
 
 			// Request the population from the stats manager.
-			final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) StatsManager.getInstance().getStat(GEN_POP);
+			final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) Stats.get().getStat(GEN_POP);
 
 			// Get the number of unique terminals of each program.
 			if (pop != null) {
@@ -433,7 +433,7 @@ public class GPStatField {
 
 			// Request the population's number of distinct terminals from the stats
 			// manager.
-			final int[] noTerminals = (int[]) StatsManager.getInstance().getStat(GEN_NO_DISTINCT_TERMINALS);
+			final int[] noTerminals = (int[]) Stats.get().getStat(GEN_NO_DISTINCT_TERMINALS);
 
 			// Calculate the average number of unique terminals.
 			if (noTerminals != null) {
@@ -455,7 +455,7 @@ public class GPStatField {
 
 			// Request the population's number of distinct terminals from the stats
 			// manager.
-			final int[] noTerminals = (int[]) StatsManager.getInstance().getStat(GEN_NO_DISTINCT_TERMINALS);
+			final int[] noTerminals = (int[]) Stats.get().getStat(GEN_NO_DISTINCT_TERMINALS);
 
 			// Calculate the standard deviation of the number of unique terminals.
 			if (noTerminals != null) {
@@ -477,7 +477,7 @@ public class GPStatField {
 
 			// Request the population's number of distinct terminals from the stats
 			// manager.
-			final int[] noTerminals = (int[]) StatsManager.getInstance().getStat(GEN_NO_DISTINCT_TERMINALS);
+			final int[] noTerminals = (int[]) Stats.get().getStat(GEN_NO_DISTINCT_TERMINALS);
 
 			// Calculate the maximum number of unique terminals.
 			if (noTerminals != null) {
@@ -499,7 +499,7 @@ public class GPStatField {
 
 			// Request the population's number of distinct terminals from the stats
 			// manager.
-			final int[] noTerminals = (int[]) StatsManager.getInstance().getStat(GEN_NO_DISTINCT_TERMINALS);
+			final int[] noTerminals = (int[]) Stats.get().getStat(GEN_NO_DISTINCT_TERMINALS);
 
 			// Calculate the minimum number of unique terminals.
 			if (noTerminals != null) {
@@ -520,7 +520,7 @@ public class GPStatField {
 			int[] noFunctions = null;
 
 			// Request the population from the stats manager.
-			final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) StatsManager.getInstance().getStat(GEN_POP);
+			final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) Stats.get().getStat(GEN_POP);
 
 			// Get the number of functions of each program.
 			if (pop != null) {
@@ -545,7 +545,7 @@ public class GPStatField {
 			Double aveNoFunctions = null;
 
 			// Request the population's number of functions from the stats manager.
-			final int[] noFunctions = (int[]) StatsManager.getInstance().getStat(GEN_NO_FUNCTIONS);
+			final int[] noFunctions = (int[]) Stats.get().getStat(GEN_NO_FUNCTIONS);
 
 			// Calculate the average number of functions.
 			if (noFunctions != null) {
@@ -566,7 +566,7 @@ public class GPStatField {
 			Double stdevNoFunctions = null;
 
 			// Request the population's number of functions from the stats manager.
-			final int[] noFunctions = (int[]) StatsManager.getInstance().getStat(GEN_NO_FUNCTIONS);
+			final int[] noFunctions = (int[]) Stats.get().getStat(GEN_NO_FUNCTIONS);
 
 			// Calculate the standard deviation of the number of functions.
 			if (noFunctions != null) {
@@ -587,7 +587,7 @@ public class GPStatField {
 			Integer maxNoFunctions = null;
 
 			// Request the population's number of functions from the stats manager.
-			final int[] noFunctions = (int[]) StatsManager.getInstance().getStat(GEN_NO_FUNCTIONS);
+			final int[] noFunctions = (int[]) Stats.get().getStat(GEN_NO_FUNCTIONS);
 
 			// Calculate the maximum number of functions.
 			if (noFunctions != null) {
@@ -608,7 +608,7 @@ public class GPStatField {
 			Integer minNoFunctions = null;
 
 			// Request the population's number of functions from the stats manager.
-			final int[] noFunctions = (int[]) StatsManager.getInstance().getStat(GEN_NO_FUNCTIONS);
+			final int[] noFunctions = (int[]) Stats.get().getStat(GEN_NO_FUNCTIONS);
 
 			// Calculate the minimum number of functions.
 			if (noFunctions != null) {
@@ -629,7 +629,7 @@ public class GPStatField {
 			int[] noDistinctFunctions = null;
 
 			// Request the population from the stats manager.
-			final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) StatsManager.getInstance().getStat(GEN_POP);
+			final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) Stats.get().getStat(GEN_POP);
 
 			// Get the number of unique functions of each program.
 			if (pop != null) {
@@ -655,7 +655,7 @@ public class GPStatField {
 
 			// Request the population's number of distinct functions from the stats
 			// manager.
-			final int[] noFunctions = (int[]) StatsManager.getInstance().getStat(GEN_NO_DISTINCT_FUNCTIONS);
+			final int[] noFunctions = (int[]) Stats.get().getStat(GEN_NO_DISTINCT_FUNCTIONS);
 
 			// Calculate the average number of unique functions.
 			if (noFunctions != null) {
@@ -677,7 +677,7 @@ public class GPStatField {
 
 			// Request the population's number of distinct functions from the stats
 			// manager.
-			final int[] noFunctions = (int[]) StatsManager.getInstance().getStat(GEN_NO_DISTINCT_FUNCTIONS);
+			final int[] noFunctions = (int[]) Stats.get().getStat(GEN_NO_DISTINCT_FUNCTIONS);
 
 			// Calculate the standard deviation of the number of unique functions.
 			if (noFunctions != null) {
@@ -699,7 +699,7 @@ public class GPStatField {
 
 			// Request the population's number of distinct functions from the stats
 			// manager.
-			final int[] noFunctions = (int[]) StatsManager.getInstance().getStat(GEN_NO_DISTINCT_FUNCTIONS);
+			final int[] noFunctions = (int[]) Stats.get().getStat(GEN_NO_DISTINCT_FUNCTIONS);
 
 			// Calculate the maximum number of unique functions.
 			if (noFunctions != null) {
@@ -721,7 +721,7 @@ public class GPStatField {
 
 			// Request the population's number of distinct functions from the stats
 			// manager.
-			final int[] noFunctions = (int[]) StatsManager.getInstance().getStat(GEN_NO_DISTINCT_FUNCTIONS);
+			final int[] noFunctions = (int[]) Stats.get().getStat(GEN_NO_DISTINCT_FUNCTIONS);
 
 			// Calculate the minimum number of unique functions.
 			if (noFunctions != null) {

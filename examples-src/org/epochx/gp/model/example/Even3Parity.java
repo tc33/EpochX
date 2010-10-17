@@ -30,6 +30,8 @@ import org.epochx.life.*;
 import org.epochx.op.selection.FitnessProportionateSelector;
 import org.epochx.stats.*;
 
+import static org.epochx.stats.StatField.*;
+
 /**
  * 
  */
@@ -60,17 +62,14 @@ public class Even3Parity extends EvenParity {
 	public static void main(final String[] args) {
 		final Model m = new Even3Parity();
 
-		/*
-		 * LifeCycleManager.getInstance().addGenerationListener(new GenerationAdapter()
-		 * {
-		 * 
-		 * @Override
-		 * public void onGenerationEnd() {
-		 * m.getStatsManager().printGenerationStats(GPStatField.GEN_NUMBER,
-		 * GPStatField.GEN_FITNESS_MIN, GPStatField.GEN_FITTEST_PROGRAM);
-		 * }
-		 * });
-		 */
+		
+		Life.get().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationEnd() {
+				Stats.get().printStats(RUN_NUMBER, GEN_NUMBER, GEN_FITNESS_MIN, GEN_FITNESS_AVE);
+			}
+		});
+		 
 
 		m.run();
 	}

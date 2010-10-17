@@ -86,6 +86,7 @@ public class StatField {
 			double[] fitnesses = null;
 
 			// Request the population from the stats manager.
+			@SuppressWarnings("unchecked")
 			final List<CandidateProgram> pop = (List<CandidateProgram>) Stats.get().getStat(GEN_POP);
 
 			// Get the fitnesses of each program.
@@ -255,6 +256,7 @@ public class StatField {
 
 			// Request the population fitnesses from the stats manager.
 			final double[] fitnesses = (double[]) Stats.get().getStat(GEN_FITNESSES);
+			@SuppressWarnings("unchecked")
 			final List<CandidateProgram> pop = (List<CandidateProgram>) Stats.get().getStat(GEN_POP);
 
 			// Retrieve the program with the minimum fitness value.
@@ -282,6 +284,7 @@ public class StatField {
 			// Request the population fitnesses from the stats manager.
 			final Double minFitness = (Double) Stats.get().getStat(GEN_FITNESS_MIN);
 			final double[] fitnesses = (double[]) Stats.get().getStat(GEN_FITNESSES);
+			@SuppressWarnings("unchecked")
 			final List<CandidateProgram> pop = (List<CandidateProgram>) Stats.get().getStat(GEN_POP);
 
 			// Retrieve all the programs with the minimum fitness value.
@@ -323,6 +326,7 @@ public class StatField {
 			List<CandidateProgram> sortedPop = null;
 			
 			// Request the population from the stats manager.
+			@SuppressWarnings("unchecked")
 			final List<CandidateProgram> pop = (List<CandidateProgram>) Stats.get().getStat(GEN_POP);
 			
 			if (pop != null) {
@@ -349,6 +353,7 @@ public class StatField {
 			List<CandidateProgram> sortedPop = null;
 			
 			// Request the population from the stats manager.
+			@SuppressWarnings("unchecked")
 			final List<CandidateProgram> pop = (List<CandidateProgram>) Stats.get().getStat(GEN_POP);
 			
 			if (pop != null) {
@@ -686,6 +691,7 @@ public class StatField {
 			double[] fitnesses = null;
 
 			// Request the pool from the stats manager.
+			@SuppressWarnings("unchecked")
 			final List<CandidateProgram> pop = (List<CandidateProgram>) Stats.get().getStat(POOL_PROGRAMS);
 
 			// Get the fitnesses of each program.
@@ -856,6 +862,7 @@ public class StatField {
 
 			// Request the pool fitnesses from the stats manager.
 			final double[] fitnesses = (double[]) Stats.get().getStat(POOL_FITNESSES);
+			@SuppressWarnings("unchecked")
 			final List<CandidateProgram> pool = (List<CandidateProgram>) Stats.get().getStat(POOL_PROGRAMS);
 
 			// Retrieve the program with the minimum fitness value.
@@ -883,6 +890,7 @@ public class StatField {
 			// Request the pool fitnesses from the stats manager.
 			final Double minFitness = (Double) Stats.get().getStat(POOL_FITNESS_MIN);
 			final double[] fitnesses = (double[]) Stats.get().getStat(POOL_FITNESSES);
+			@SuppressWarnings("unchecked")
 			final List<CandidateProgram> pool = (List<CandidateProgram>) Stats.get().getStat(POOL_PROGRAMS);
 
 			// Retrieve all the programs with the minimum fitness value.
@@ -915,6 +923,7 @@ public class StatField {
 			Integer poolSize = null;
 			
 			// Request the pool from the stats manager.
+			@SuppressWarnings("unchecked")
 			final List<CandidateProgram> pool = (List<CandidateProgram>) Stats.get().getStat(XO_PARENTS_FITNESS_AVE);
 			
 			if (pool != null) {
@@ -960,6 +969,7 @@ public class StatField {
 			Integer eliteSize = null;
 			
 			// Request the pool from the stats manager.
+			@SuppressWarnings("unchecked")
 			final List<CandidateProgram> elites = (List<CandidateProgram>) Stats.get().getStat(ELITE_PROGRAMS);
 			
 			if (elites != null) {
@@ -983,6 +993,7 @@ public class StatField {
 			double[] fitnesses = null;
 
 			// Request the elites from the stats manager.
+			@SuppressWarnings("unchecked")
 			final List<CandidateProgram> elites = (List<CandidateProgram>) Stats.get().getStat(ELITE_PROGRAMS);
 
 			// Get the fitnesses of each program.

@@ -26,6 +26,8 @@ import org.epochx.gp.op.init.GrowInitialiser;
 import org.epochx.gp.representation.*;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.stats.*;
+import org.epochx.stats.Stats.ExpiryEvent;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
@@ -38,6 +40,18 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class SubtreeMutation implements GPMutation, ConfigListener {
 
+	/**
+	 * Requests an <code>Integer</code> which is the point which was modified as
+	 * a result of the subtree mutation operation.
+	 */
+	public static final Stat MUT_POINT = new AbstractStat(ExpiryEvent.MUTATION) {};
+	
+	/**
+	 * Requests a <code>Node</code> which is the subtree that was inserted in
+	 * the program undergoing subtree mutation.
+	 */
+	public static final Stat MUT_SUBTREE = new AbstractStat(ExpiryEvent.MUTATION) {};
+	
 	// The controlling model.
 	private final GPModel model;
 
@@ -107,9 +121,15 @@ public class SubtreeMutation implements GPMutation, ConfigListener {
 		final int length = program.getProgramLength();
 		final int mutationPoint = rng.nextInt(length);
 
+		// Add mutation point into the stats manager.
+		Stats.get().addData(MUT_POINT, mutationPoint);
+		
 		// Grow a new subtree using the GrowInitialiser.
 		final Node subtree = grower.getGrownNodeTree(maxSubtreeDepth);
 
+		// Add subtree into the stats manager.
+		Stats.get().addData(MUT_SUBTREE, subtree);
+		
 		// Set the new subtree.
 		program.setNthNode(mutationPoint, subtree);
 

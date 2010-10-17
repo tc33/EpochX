@@ -21,11 +21,15 @@
  */
 package org.epochx.ge.op.mutation;
 
+import java.util.*;
+
 import org.epochx.ge.codon.CodonGenerator;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.stats.*;
+import org.epochx.stats.Stats.ExpiryEvent;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
@@ -41,6 +45,12 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class PointMutation implements GEMutation, ConfigListener {
 
+	/**
+	 * Requests a <code>List&lt;Integer&gt;</code> which is a list of the points
+	 * modified as a result of the point mutation operation.
+	 */
+	public static final Stat MUT_POINTS = new AbstractStat(ExpiryEvent.MUTATION) {};
+	
 	// The controlling model.
 	private final GEModel model;
 
@@ -107,14 +117,20 @@ public class PointMutation implements GEMutation, ConfigListener {
 
 		final int noCodons = program.getNoCodons();
 
+		List<Integer> points = new ArrayList<Integer>();
+		
 		for (int i = 0; i < noCodons; i++) {
 			// Perform a point mutation at the ith node, pointProbability% of
 			// time.
 			if (rng.nextDouble() < pointProbability) {
 				final int c = codonGenerator.getCodon();
 				program.setCodon(i, c);
+				points.add(i);
 			}
 		}
+		
+		// Add mutation points into the stats manager.
+		Stats.get().addData(MUT_POINTS, points);
 
 		return program;
 	}

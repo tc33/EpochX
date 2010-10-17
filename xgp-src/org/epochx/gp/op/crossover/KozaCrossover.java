@@ -25,6 +25,8 @@ import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.stats.*;
+import org.epochx.stats.Stats.ExpiryEvent;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
@@ -40,6 +42,30 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class KozaCrossover implements GPCrossover, ConfigListener {
 
+	/**
+	 * Requests an <code>Integer</code> which is the point chosen in the first
+	 * parent for the koza crossover operation.
+	 */
+	public static final Stat XO_POINT1 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
+	
+	/**
+	 * Requests an <code>Integer</code> which is the point chosen in the second
+	 * parent for the koza crossover operation.
+	 */
+	public static final Stat XO_POINT2 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
+	
+	/**
+	 * Requests a <code>Node</code> which is the subtree from the
+	 * first parent program which is being exchanged into the second parent.
+	 */
+	public static final Stat XO_SUBTREE1 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
+	
+	/**
+	 * Requests a <code>Node</code> which is the subtree from the
+	 * second parent program which is being exchanged into the first parent.
+	 */
+	public static final Stat XO_SUBTREE2 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
+	
 	// The controlling model.
 	private final GPModel model;
 
@@ -101,10 +127,18 @@ public class KozaCrossover implements GPCrossover, ConfigListener {
 		final int swapPoint1 = getCrossoverPoint(program1);
 		final int swapPoint2 = getCrossoverPoint(program2);
 
+		// Add crossover points to the stats manager.
+		Stats.get().addData(XO_POINT1, swapPoint1);
+		Stats.get().addData(XO_POINT2, swapPoint2);
+		
 		// Get copies of subtrees to swap.
 		final Node subtree1 = program1.getNthNode(swapPoint1);// .clone();
 		final Node subtree2 = program2.getNthNode(swapPoint2);// .clone();
 
+		// Add subtrees into the stats manager.
+		Stats.get().addData(XO_SUBTREE1, subtree1);
+		Stats.get().addData(XO_SUBTREE2, subtree2);
+		
 		// Perform swap.
 		program1.setNthNode(swapPoint1, subtree2);
 		program2.setNthNode(swapPoint2, subtree1);

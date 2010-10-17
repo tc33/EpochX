@@ -28,11 +28,25 @@ import org.epochx.gr.op.init.GrowInitialiser;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.stats.*;
+import org.epochx.stats.Stats.ExpiryEvent;
 import org.epochx.tools.grammar.*;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 public class WhighamMutation implements GRMutation, ConfigListener {
 
+	/**
+	 * Requests an <code>Integer</code> which is the index of the non-terminal
+	 * which was selected to be modified by the whigham mutation.
+	 */
+	public static final Stat MUT_POINT = new AbstractStat(ExpiryEvent.MUTATION) {};
+	
+	/**
+	 * Requests a <code>NonTerminalSymbol</code> which is the subtree that was 
+	 * inserted in the program undergoing whigham mutation.
+	 */
+	public static final Stat MUT_SUBTREE = new AbstractStat(ExpiryEvent.MUTATION) {};
+	
 	// The controlling model.
 	private final GRModel model;
 
@@ -69,22 +83,25 @@ public class WhighamMutation implements GRMutation, ConfigListener {
 		final List<Integer> nonTerminals = parseTree.getNonTerminalIndexes();
 
 		// Choose a node to change.
-		final int selection = nonTerminals
-				.get(rng.nextInt(nonTerminals.size()));
-		final NonTerminalSymbol point = (NonTerminalSymbol) parseTree
-				.getNthSymbol(selection);
-		final int originalDepth = point.getDepth();
+		final int point = nonTerminals.get(rng.nextInt(nonTerminals.size()));
+		final NonTerminalSymbol original = (NonTerminalSymbol) parseTree.getNthSymbol(point);
+		final int originalDepth = original.getDepth();
 
+		// Add subtree into the stats manager.
+		Stats.get().addData(MUT_POINT, point);
+		
 		// Construct a new subtree from that node's grammar rule.
-		final GrammarRule rule = point.getGrammarRule();
-		final NonTerminalSymbol replacement = init.getGrownParseTree(originalDepth,
-				rule);
+		final GrammarRule rule = original.getGrammarRule();
+		final NonTerminalSymbol subtree = init.getGrownParseTree(originalDepth, rule);
 
+		// Add subtree into the stats manager.
+		Stats.get().addData(MUT_SUBTREE, subtree);
+		
 		// Replace node.
-		if (selection == 0) {
-			mutatedProgram.setParseTree(replacement);
+		if (point == 0) {
+			mutatedProgram.setParseTree(subtree);
 		} else {
-			parseTree.setNthSymbol(selection, replacement);
+			parseTree.setNthSymbol(point, subtree);
 		}
 
 		return mutatedProgram;

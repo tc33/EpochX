@@ -27,6 +27,8 @@ import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.stats.*;
+import org.epochx.stats.Stats.ExpiryEvent;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
@@ -40,12 +42,32 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class OnePointCrossover implements GECrossover, ConfigListener {
 
+	/**
+	 * Requests an <code>Integer</code> which is the point chosen in the first
+	 * parent's chromosomes for the one point crossover operation.
+	 */
+	public static final Stat XO_POINT1 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
+	
+	/**
+	 * Requests an <code>Integer</code> which is the point chosen in the second
+	 * parent's chromosomes for the one point crossover operation.
+	 */
+	public static final Stat XO_POINT2 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
+	
+	/**
+	 * Requests a <code>List&lt;Integer&gt;</code> which is the portion of the
+	 * first parent program which is being exchanged into the second parent.
+	 */
+	public static final Stat XO_CODONS1 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
+	
+	/**
+	 * Requests a <code>List&lt;Integer&gt;</code> which is the portion of the
+	 * second parent program which is being exchanged into the first parent.
+	 */
+	public static final Stat XO_CODONS2 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
+	
 	// The controlling model.
 	private final GEModel model;
-
-	// Operator statistics store.
-	private int crossoverPoint1;
-	private int crossoverPoint2;
 
 	// The random number generator in use.
 	private RandomNumberGenerator rng;
@@ -85,9 +107,13 @@ public class OnePointCrossover implements GECrossover, ConfigListener {
 		final GECandidateProgram parent2 = (GECandidateProgram) p2;
 
 		// Choose crossover points.
-		crossoverPoint1 = rng.nextInt(parent1.getNoCodons());
-		crossoverPoint2 = rng.nextInt(parent2.getNoCodons());
+		int crossoverPoint1 = rng.nextInt(parent1.getNoCodons());
+		int crossoverPoint2 = rng.nextInt(parent2.getNoCodons());
 
+		// Add crossover points to the stats manager.
+		Stats.get().addData(XO_POINT1, crossoverPoint1);
+		Stats.get().addData(XO_POINT2, crossoverPoint2);
+		
 		// Make copies of the parents.
 		final GECandidateProgram child1 = (GECandidateProgram) parent1.clone();
 		final GECandidateProgram child2 = (GECandidateProgram) parent2.clone();
@@ -96,6 +122,10 @@ public class OnePointCrossover implements GECrossover, ConfigListener {
 				child1.getNoCodons());
 		final List<Integer> part2 = child2.removeCodons(crossoverPoint2,
 				child2.getNoCodons());
+		
+		// Add codon portions into the stats manager.
+		Stats.get().addData(XO_CODONS1, part1);
+		Stats.get().addData(XO_CODONS2, part2);
 
 		// Swap over the endings at the crossover points.
 		child2.appendCodons(part1);

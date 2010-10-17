@@ -26,6 +26,8 @@ import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.stats.*;
+import org.epochx.stats.Stats.ExpiryEvent;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
@@ -42,11 +44,14 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class SinglePointMutation implements GEMutation, ConfigListener {
 
+	/**
+	 * Requests an <code>Integer</code> which is the point which was modified as
+	 * a result of the single point mutation operation.
+	 */
+	public static final Stat MUT_POINT = new AbstractStat(ExpiryEvent.MUTATION) {};
+	
 	// The controlling model.
 	private final GEModel model;
-
-	// Operator statistics store.
-	private int mutationPoint;
 
 	private RandomNumberGenerator rng;
 	private CodonGenerator codonGenerator;
@@ -88,10 +93,13 @@ public class SinglePointMutation implements GEMutation, ConfigListener {
 	public GECandidateProgram mutate(final CandidateProgram p) {
 		final GECandidateProgram program = (GECandidateProgram) p;
 
-		mutationPoint = rng.nextInt(program.getNoCodons());
+		int point = rng.nextInt(program.getNoCodons());
 		final int codon = codonGenerator.getCodon();
-		program.setCodon(mutationPoint, codon);
+		program.setCodon(point, codon);
 
+		// Add mutation point into the stats manager.
+		Stats.get().addData(MUT_POINT, point);
+		
 		return program;
 	}
 }

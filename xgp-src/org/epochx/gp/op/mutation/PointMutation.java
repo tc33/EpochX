@@ -21,12 +21,14 @@
  */
 package org.epochx.gp.op.mutation;
 
-import java.util.List;
+import java.util.*;
 
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.stats.*;
+import org.epochx.stats.Stats.ExpiryEvent;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
@@ -42,6 +44,12 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class PointMutation implements GPMutation, ConfigListener {
 
+	/**
+	 * Requests a <code>List&lt;Integer&gt;</code> which is a list of the points
+	 * modified as a result of the point mutation operation.
+	 */
+	public static final Stat MUT_POINTS = new AbstractStat(ExpiryEvent.MUTATION) {};
+	
 	// The controlling model.
 	private final GPModel model;
 
@@ -106,6 +114,8 @@ public class PointMutation implements GPMutation, ConfigListener {
 	public GPCandidateProgram mutate(final CandidateProgram p) {
 		final GPCandidateProgram program = (GPCandidateProgram) p;
 
+		List<Integer> points = new ArrayList<Integer>();
+		
 		// Iterate over each node in the program tree.
 		final int length = program.getProgramLength();
 		for (int i = 0; i < length; i++) {
@@ -132,6 +142,9 @@ public class PointMutation implements GPMutation, ConfigListener {
 						// Then set the new node back into the program.
 						program.setNthNode(i, n);
 
+						// Record the index of the node that we changed.
+						points.add(i);
+						
 						// No need to keep looking.
 						break;
 					}
@@ -140,6 +153,9 @@ public class PointMutation implements GPMutation, ConfigListener {
 				// the next node.
 			}
 		}
+		
+		// Add mutation points into the stats manager.
+		Stats.get().addData(MUT_POINTS, points);
 
 		return program;
 	}

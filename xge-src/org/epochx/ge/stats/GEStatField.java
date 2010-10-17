@@ -42,10 +42,12 @@ public class GEStatField {
 	 * previous generation.
 	 */
 	public static final Stat GEN_DEPTHS = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			int[] depths = null;
 
 			// Request the population from the stats manager.
+			@SuppressWarnings("unchecked")
 			final List<GECandidateProgram> pop = (List<GECandidateProgram>) Stats.get().getStat(GEN_POP);
 
 			// Get the depths of each program.
@@ -67,6 +69,7 @@ public class GEStatField {
 	 * previous generation.
 	 */
 	public static final Stat GEN_DEPTH_AVE = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Double aveDepth = null;
 
@@ -88,6 +91,7 @@ public class GEStatField {
 	 * population at the end of the previous generation.
 	 */
 	public static final Stat GEN_DEPTH_STDEV = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Double stdevDepth = null;
 
@@ -109,6 +113,7 @@ public class GEStatField {
 	 * the previous generation.
 	 */
 	public static final Stat GEN_DEPTH_MAX = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Integer maxDepth = null;
 
@@ -130,6 +135,7 @@ public class GEStatField {
 	 * previous generation.
 	 */
 	public static final Stat GEN_DEPTH_MIN = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Integer minDepth = null;
 
@@ -151,10 +157,12 @@ public class GEStatField {
 	 * previous generation.
 	 */
 	public static final Stat GEN_LENGTHS = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			int[] lengths = null;
 
 			// Request the population from the stats manager.
+			@SuppressWarnings("unchecked")
 			final List<GECandidateProgram> pop = (List<GECandidateProgram>) Stats.get().getStat(GEN_POP);
 
 			// Get the lengths of each program.
@@ -176,6 +184,7 @@ public class GEStatField {
 	 * previous generation.
 	 */
 	public static final Stat GEN_LENGTH_AVE = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Double aveLength = null;
 
@@ -197,6 +206,7 @@ public class GEStatField {
 	 * population at the end of the previous generation.
 	 */
 	public static final Stat GEN_LENGTH_STDEV = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Double stdevLength = null;
 
@@ -218,6 +228,7 @@ public class GEStatField {
 	 * the previous generation.
 	 */
 	public static final Stat GEN_LENGTH_MAX = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Integer maxLength = null;
 
@@ -239,6 +250,7 @@ public class GEStatField {
 	 * the previous generation.
 	 */
 	public static final Stat GEN_LENGTH_MIN = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Integer minLength = null;
 

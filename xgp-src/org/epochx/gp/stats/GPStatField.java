@@ -42,10 +42,12 @@ public class GPStatField {
 	 * previous generation.
 	 */
 	public static final Stat GEN_DEPTHS = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			int[] depths = null;
 
 			// Request the population from the stats manager.
+			@SuppressWarnings("unchecked")
 			final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) Stats.get().getStat(GEN_POP);
 
 			// Get the depths of each program.
@@ -67,6 +69,7 @@ public class GPStatField {
 	 * previous generation.
 	 */
 	public static final Stat GEN_DEPTH_AVE = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Double aveDepth = null;
 
@@ -88,6 +91,7 @@ public class GPStatField {
 	 * population at the end of the previous generation.
 	 */
 	public static final Stat GEN_DEPTH_STDEV = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Double stdevDepth = null;
 
@@ -109,6 +113,7 @@ public class GPStatField {
 	 * the previous generation.
 	 */
 	public static final Stat GEN_DEPTH_MAX = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Integer maxDepth = null;
 
@@ -130,6 +135,7 @@ public class GPStatField {
 	 * previous generation.
 	 */
 	public static final Stat GEN_DEPTH_MIN = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Integer minDepth = null;
 
@@ -152,12 +158,14 @@ public class GPStatField {
 	 * <code>CandidateProgram</code> is depth 0.
 	 */
 	public static final Stat GEN_AVE_NODES_PER_DEPTH = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			double[] aveNodes = null;
 
 			// Request the dependant statistics from the stats manager.
 			final int[] depths = (int[]) Stats.get().getStat(GEN_DEPTHS);
 			final int maxDepth = (Integer) Stats.get().getStat(GEN_DEPTH_MAX);
+			@SuppressWarnings("unchecked")
 			final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) Stats.get().getStat(GEN_POP);
 
 			if (depths != null) {
@@ -185,10 +193,12 @@ public class GPStatField {
 	 * previous generation.
 	 */
 	public static final Stat GEN_LENGTHS = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			int[] lengths = null;
 
 			// Request the population from the stats manager.
+			@SuppressWarnings("unchecked")
 			final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) Stats.get().getStat(GEN_POP);
 
 			// Get the lengths of each program.
@@ -210,6 +220,7 @@ public class GPStatField {
 	 * previous generation.
 	 */
 	public static final Stat GEN_LENGTH_AVE = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Double aveLength = null;
 
@@ -231,6 +242,7 @@ public class GPStatField {
 	 * population at the end of the previous generation.
 	 */
 	public static final Stat GEN_LENGTH_STDEV = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Double stdevLength = null;
 
@@ -252,6 +264,7 @@ public class GPStatField {
 	 * the previous generation.
 	 */
 	public static final Stat GEN_LENGTH_MAX = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Integer maxLength = null;
 
@@ -273,6 +286,7 @@ public class GPStatField {
 	 * the previous generation.
 	 */
 	public static final Stat GEN_LENGTH_MIN = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Integer minLength = null;
 
@@ -294,10 +308,12 @@ public class GPStatField {
 	 * previous generation.
 	 */
 	public static final Stat GEN_NO_TERMINALS = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			int[] noTerminals = null;
 
 			// Request the population from the stats manager.
+			@SuppressWarnings("unchecked")
 			final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) Stats.get().getStat(GEN_POP);
 
 			// Get the number of terminals of each program.
@@ -319,6 +335,7 @@ public class GPStatField {
 	 * the previous generation.
 	 */
 	public static final Stat GEN_NO_TERMINALS_AVE = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Double aveNoTerminals = null;
 
@@ -340,6 +357,7 @@ public class GPStatField {
 	 * population at the end of the previous generation.
 	 */
 	public static final Stat GEN_NO_TERMINALS_STDEV = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Double stdevNoTerminals = null;
 
@@ -361,6 +379,7 @@ public class GPStatField {
 	 * the previous generation.
 	 */
 	public static final Stat GEN_NO_TERMINALS_MAX = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Integer maxNoTerminals = null;
 
@@ -382,6 +401,7 @@ public class GPStatField {
 	 * the previous generation.
 	 */
 	public static final Stat GEN_NO_TERMINALS_MIN = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Integer minNoTerminals = null;
 
@@ -403,10 +423,12 @@ public class GPStatField {
 	 * of the previous generation.
 	 */
 	public static final Stat GEN_NO_DISTINCT_TERMINALS = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			int[] noDistinctTerminals = null;
 
 			// Request the population from the stats manager.
+			@SuppressWarnings("unchecked")
 			final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) Stats.get().getStat(GEN_POP);
 
 			// Get the number of unique terminals of each program.
@@ -428,6 +450,7 @@ public class GPStatField {
 	 * the end of the previous generation.
 	 */
 	public static final Stat GEN_NO_DISTINCT_TERMINALS_AVE = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Double aveNoDistinctTerminals = null;
 
@@ -450,6 +473,7 @@ public class GPStatField {
 	 * the population at the end of the previous generation.
 	 */
 	public static final Stat GEN_NO_DISTINCT_TERMINALS_STDEV = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Double stdevNoDistinctTerminals = null;
 
@@ -472,6 +496,7 @@ public class GPStatField {
 	 * the end of the previous generation.
 	 */
 	public static final Stat GEN_NO_DISTINCT_TERMINALS_MAX = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Integer maxNoDistinctTerminals = null;
 
@@ -494,6 +519,7 @@ public class GPStatField {
 	 * the end of the previous generation.
 	 */
 	public static final Stat GEN_NO_DISTINCT_TERMINALS_MIN = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Integer minNoDistinctTerminals = null;
 
@@ -516,10 +542,12 @@ public class GPStatField {
 	 * previous generation.
 	 */
 	public static final Stat GEN_NO_FUNCTIONS = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			int[] noFunctions = null;
 
 			// Request the population from the stats manager.
+			@SuppressWarnings("unchecked")
 			final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) Stats.get().getStat(GEN_POP);
 
 			// Get the number of functions of each program.
@@ -541,6 +569,7 @@ public class GPStatField {
 	 * the previous generation.
 	 */
 	public static final Stat GEN_NO_FUNCTIONS_AVE = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Double aveNoFunctions = null;
 
@@ -562,6 +591,7 @@ public class GPStatField {
 	 * population at the end of the previous generation.
 	 */
 	public static final Stat GEN_NO_FUNCTIONS_STDEV = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Double stdevNoFunctions = null;
 
@@ -583,6 +613,7 @@ public class GPStatField {
 	 * the previous generation.
 	 */
 	public static final Stat GEN_NO_FUNCTIONS_MAX = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Integer maxNoFunctions = null;
 
@@ -604,6 +635,7 @@ public class GPStatField {
 	 * the previous generation.
 	 */
 	public static final Stat GEN_NO_FUNCTIONS_MIN = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Integer minNoFunctions = null;
 
@@ -625,10 +657,12 @@ public class GPStatField {
 	 * of the previous generation.
 	 */
 	public static final Stat GEN_NO_DISTINCT_FUNCTIONS = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			int[] noDistinctFunctions = null;
 
 			// Request the population from the stats manager.
+			@SuppressWarnings("unchecked")
 			final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) Stats.get().getStat(GEN_POP);
 
 			// Get the number of unique functions of each program.
@@ -650,6 +684,7 @@ public class GPStatField {
 	 * the end of the previous generation.
 	 */
 	public static final Stat GEN_NO_DISTINCT_FUNCTIONS_AVE = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Double aveNoDistinctFunctions = null;
 
@@ -672,6 +707,7 @@ public class GPStatField {
 	 * the population at the end of the previous generation.
 	 */
 	public static final Stat GEN_NO_DISTINCT_FUNCTIONS_STDEV = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Double stdevNoDistinctFunctions = null;
 
@@ -694,6 +730,7 @@ public class GPStatField {
 	 * the end of the previous generation.
 	 */
 	public static final Stat GEN_NO_DISTINCT_FUNCTIONS_MAX = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Integer maxNoDistinctFunctions = null;
 
@@ -716,6 +753,7 @@ public class GPStatField {
 	 * the end of the previous generation.
 	 */
 	public static final Stat GEN_NO_DISTINCT_FUNCTIONS_MIN = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Integer minNoDistinctFunctions = null;
 

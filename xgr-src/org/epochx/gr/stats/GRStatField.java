@@ -42,10 +42,12 @@ public class GRStatField {
 	 * previous generation.
 	 */
 	public static final Stat GEN_DEPTHS = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			int[] depths = null;
 
 			// Request the population from the stats manager.
+			@SuppressWarnings("unchecked")
 			final List<GRCandidateProgram> pop = (List<GRCandidateProgram>) Stats.get().getStat(GEN_POP);
 
 			// Get the depths of each program.
@@ -67,6 +69,7 @@ public class GRStatField {
 	 * previous generation.
 	 */
 	public static final Stat GEN_DEPTH_AVE = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Double aveDepth = null;
 
@@ -89,6 +92,7 @@ public class GRStatField {
 	 * population at the end of the previous generation.
 	 */
 	public static final Stat GEN_DEPTH_STDEV = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Double stdevDepth = null;
 
@@ -110,6 +114,7 @@ public class GRStatField {
 	 * the previous generation.
 	 */
 	public static final Stat GEN_DEPTH_MAX = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Integer maxDepth = null;
 
@@ -132,6 +137,7 @@ public class GRStatField {
 	 * previous generation.
 	 */
 	public static final Stat GEN_DEPTH_MIN = new AbstractStat(GENERATION) {
+		@Override
 		public Object getStatValue() {
 			Integer minDepth = null;
 

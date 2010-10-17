@@ -27,6 +27,8 @@ import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.stats.*;
+import org.epochx.stats.Stats.ExpiryEvent;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
@@ -72,6 +74,14 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class RampedHalfAndHalfInitialiser implements GPInitialiser, ConfigListener {
 
+	/**
+	 * Requests an <code>boolean[]</code> which has one element per program 
+	 * initialised by this RH+H initialiser. A value of <code>true</code> 
+	 * indicates the program was initialised with grow, and <code>false</code>
+	 * indicates full initialisation was used.
+	 */
+	public static final Stat INIT_GROWN = new AbstractStat(ExpiryEvent.INITIALISATION) {};
+	
 	// The current controlling model.
 	private GPModel model;
 
@@ -209,6 +219,9 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser, ConfigListen
 		final double programsPerDepth = (double) popSize
 				/ (endMaxDepth - startDepth + 1);
 
+		// Whether each program was grown or not (full).
+		boolean[] grown = new boolean[popSize];
+		
 		for (int i = 0; i < popSize; i++) {
 			// Calculate depth
 			final int depth = (int) Math
@@ -219,6 +232,7 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser, ConfigListen
 
 			do {
 				if ((i % 2) == 0) {
+					grown[i] = true;
 					grow.setMaxDepth(depth);
 					program = grow.getInitialProgram();
 				} else {
@@ -229,6 +243,9 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser, ConfigListen
 
 			firstGen.add(program);
 		}
+		
+		// Add the grown or full nature of all the programs.
+		Stats.get().addData(INIT_GROWN, grown);
 
 		return firstGen;
 	}

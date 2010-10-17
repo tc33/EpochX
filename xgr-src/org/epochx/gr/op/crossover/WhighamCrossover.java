@@ -27,11 +27,41 @@ import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.stats.*;
+import org.epochx.stats.Stats.ExpiryEvent;
 import org.epochx.tools.grammar.*;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 public class WhighamCrossover implements GRCrossover, ConfigListener {
 
+	/**
+	 * Requests an <code>Integer</code> which is the index of the point chosen 
+	 * for the whigham crossover operation. The index is from the list of all 
+	 * non-terminal symbols in the parse tree of the first program, as would be 
+	 * returned by the <code>getNonTerminalSymbols</code> method.
+	 */
+	public static final Stat XO_POINT1 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
+	
+	/**
+	 * Requests an <code>Integer</code> which is the index of the point chosen 
+	 * for the whigham crossover operation. The index is from the list of all 
+	 * non-terminal symbols in the parse tree of the second program, as would be 
+	 * returned by the <code>getNonTerminalSymbols</code> method.
+	 */
+	public static final Stat XO_POINT2 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
+	
+	/**
+	 * Requests a <code>NonTerminalSymbol</code> which is the subtree from the
+	 * first parent program which is being exchanged into the second parent.
+	 */
+	public static final Stat XO_SUBTREE1 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
+	
+	/**
+	 * Requests a <code>NonTerminalSymbol</code> which is the subtree from the
+	 * second parent program which is being exchanged into the first parent.
+	 */
+	public static final Stat XO_SUBTREE2 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
+	
 	// The controlling model.
 	private final GRModel model;
 
@@ -63,19 +93,17 @@ public class WhighamCrossover implements GRCrossover, ConfigListener {
 		final NonTerminalSymbol parseTree1 = child1.getParseTree();
 		final NonTerminalSymbol parseTree2 = child2.getParseTree();
 
-		final List<NonTerminalSymbol> nonTerminals1 = parseTree1
-				.getNonTerminalSymbols();
-		final List<NonTerminalSymbol> nonTerminals2 = parseTree2
-				.getNonTerminalSymbols();
+		final List<NonTerminalSymbol> nonTerminals1 = parseTree1.getNonTerminalSymbols();
+		final List<NonTerminalSymbol> nonTerminals2 = parseTree2.getNonTerminalSymbols();
 
-		int selection = rng.nextInt(nonTerminals1.size());
+		int point1 = rng.nextInt(nonTerminals1.size());
 
-		final NonTerminalSymbol point1 = nonTerminals1.get(selection);
+		final NonTerminalSymbol subtree1 = nonTerminals1.get(point1);
 
 		// Generate a list of matching non-terminals from the second program.
 		final List<NonTerminalSymbol> matchingNonTerminals = new ArrayList<NonTerminalSymbol>();
 		for (final NonTerminalSymbol nt: nonTerminals2) {
-			if (nt.equals(point1)) {
+			if (nt.equals(subtree1)) {
 				matchingNonTerminals.add(nt);
 			}
 		}
@@ -85,14 +113,21 @@ public class WhighamCrossover implements GRCrossover, ConfigListener {
 			return null;
 		} else {
 			// Randomly choose a second point out of the matching non-terminals.
-			selection = rng.nextInt(matchingNonTerminals.size());
-			final NonTerminalSymbol point2 = matchingNonTerminals
-					.get(selection);
+			int point2 = rng.nextInt(matchingNonTerminals.size());
+			final NonTerminalSymbol subtree2 = matchingNonTerminals.get(point2);
 
+			// Add crossover points to the stats manager.
+			Stats.get().addData(XO_POINT1, point1);
+			Stats.get().addData(XO_POINT2, point2);
+			
 			// Swap the non-terminals' children.
-			final List<Symbol> temp = point1.getChildren();
-			point1.setChildren(point2.getChildren());
-			point2.setChildren(temp);
+			final List<Symbol> temp = subtree1.getChildren();
+			subtree1.setChildren(subtree2.getChildren());
+			subtree2.setChildren(temp);
+			
+			// Add subtrees into the stats manager.
+			Stats.get().addData(XO_SUBTREE1, subtree1);
+			Stats.get().addData(XO_SUBTREE2, subtree2);
 		}
 
 		return new GRCandidateProgram[]{child1, child2};

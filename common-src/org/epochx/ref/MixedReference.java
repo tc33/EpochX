@@ -23,6 +23,8 @@ package org.epochx.ref;
 
 import java.lang.ref.*;
 
+import org.apache.commons.lang.ObjectUtils;
+
 
 /**
  * A MixedReference provides an optionally weak reference.
@@ -109,7 +111,7 @@ public class MixedReference<T> extends WeakReference<T> {
 	public boolean equals(Object obj) {
 		if (obj instanceof MixedReference<?>) {
 			MixedReference<?> ref = (MixedReference<?>) obj;
-			return this.get().equals(ref.get());
+			return ObjectUtils.equals(this.get(), ref.get());
 		}
 		
 		return false;

@@ -685,4 +685,19 @@ public class Life {
 			listener.onGenerationEnd();
 		}
 	}
+	
+	/**
+	 * Clears all listeners for all types of events.
+	 */
+	public void clearListeners() {
+		configListeners.clear();
+		runListeners.clear();
+		initialisationListeners.clear();
+		elitismListeners.clear();
+		poolSelectionListeners.clear();
+		crossoverListeners.clear();
+		mutationListeners.clear();
+		reproductionListeners.clear();
+		generationListeners.clear();
+	}
 }

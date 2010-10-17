@@ -62,8 +62,7 @@ public abstract class InitialisationAdapter implements InitialisationListener {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<CandidateProgram> onInitialisation(
-			final List<CandidateProgram> pop) {
+	public List<CandidateProgram> onInitialisation(final List<CandidateProgram> pop) {
 		return pop;
 	}
 

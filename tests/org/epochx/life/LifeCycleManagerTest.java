@@ -32,20 +32,18 @@ import org.epochx.representation.CandidateProgram;
  */
 public class LifeCycleManagerTest extends TestCase {
 
-	private Life lifeManager;
-
 	@Override
 	protected void setUp() throws Exception {
-		lifeManager = Life.get();
+		Life.get().clearListeners();
 	}
-
+	
 	/**
 	 * Tests that configure event is dispatched correctly.
 	 */
 	public void testConfigureEvent() {
 		final StringBuilder order = new StringBuilder();
 
-		lifeManager.addConfigListener(new ConfigListener() {
+		Life.get().addConfigListener(new ConfigListener() {
 
 			@Override
 			public void onConfigure() {
@@ -53,7 +51,7 @@ public class LifeCycleManagerTest extends TestCase {
 			}
 		});
 
-		lifeManager.fireConfigureEvent();
+		Life.get().fireConfigureEvent();
 
 		assertEquals("configure event not dispatched correctly", "1",
 				order.toString());
@@ -65,7 +63,7 @@ public class LifeCycleManagerTest extends TestCase {
 	public void testRunEvents() {
 		final StringBuilder order = new StringBuilder();
 
-		lifeManager.addRunListener(new RunListener() {
+		Life.get().addRunListener(new RunListener() {
 
 			@Override
 			public void onRunStart() {
@@ -83,9 +81,9 @@ public class LifeCycleManagerTest extends TestCase {
 			}
 		});
 
-		lifeManager.fireRunStartEvent();
-		lifeManager.fireSuccessEvent();
-		lifeManager.fireRunEndEvent();
+		Life.get().fireRunStartEvent();
+		Life.get().fireSuccessEvent();
+		Life.get().fireRunEndEvent();
 
 		assertEquals("run events not dispatched correctly", "123",
 				order.toString());
@@ -97,7 +95,7 @@ public class LifeCycleManagerTest extends TestCase {
 	public void testInitialisationEvents() {
 		final StringBuilder order = new StringBuilder();
 
-		lifeManager.addInitialisationListener(new InitialisationListener() {
+		Life.get().addInitialisationListener(new InitialisationListener() {
 
 			@Override
 			public void onInitialisationStart() {
@@ -117,9 +115,9 @@ public class LifeCycleManagerTest extends TestCase {
 			}
 		});
 
-		lifeManager.fireInitialisationStartEvent();
-		lifeManager.fireInitialisationEvent(null);
-		lifeManager.fireInitialisationEndEvent();
+		Life.get().fireInitialisationStartEvent();
+		Life.get().fireInitialisationEvent(null);
+		Life.get().fireInitialisationEndEvent();
 
 		assertEquals("initialisation events not dispatched correctly", "123",
 				order.toString());
@@ -131,7 +129,7 @@ public class LifeCycleManagerTest extends TestCase {
 	public void testElitismEvents() {
 		final StringBuilder order = new StringBuilder();
 
-		lifeManager.addElitismListener(new ElitismListener() {
+		Life.get().addElitismListener(new ElitismListener() {
 
 			@Override
 			public void onElitismStart() {
@@ -151,9 +149,9 @@ public class LifeCycleManagerTest extends TestCase {
 			}
 		});
 
-		lifeManager.fireElitismStartEvent();
-		lifeManager.fireElitismEvent(new ArrayList<CandidateProgram>());
-		lifeManager.fireElitismEndEvent();
+		Life.get().fireElitismStartEvent();
+		Life.get().fireElitismEvent(new ArrayList<CandidateProgram>());
+		Life.get().fireElitismEndEvent();
 
 		assertEquals("elitism events not dispatched correctly", "123",
 				order.toString());
@@ -165,7 +163,7 @@ public class LifeCycleManagerTest extends TestCase {
 	public void testPoolSelectionEvents() {
 		final StringBuilder order = new StringBuilder();
 
-		lifeManager.addPoolSelectionListener(new PoolSelectionListener() {
+		Life.get().addPoolSelectionListener(new PoolSelectionListener() {
 
 			@Override
 			public void onPoolSelectionStart() {
@@ -185,9 +183,9 @@ public class LifeCycleManagerTest extends TestCase {
 			}
 		});
 
-		lifeManager.firePoolSelectionStartEvent();
-		lifeManager.firePoolSelectionEvent(new ArrayList<CandidateProgram>());
-		lifeManager.firePoolSelectionEndEvent();
+		Life.get().firePoolSelectionStartEvent();
+		Life.get().firePoolSelectionEvent(new ArrayList<CandidateProgram>());
+		Life.get().firePoolSelectionEndEvent();
 
 		assertEquals("pool selection events not dispatched correctly", "123",
 				order.toString());
@@ -199,7 +197,7 @@ public class LifeCycleManagerTest extends TestCase {
 	public void testCrossoverEvents() {
 		final StringBuilder order = new StringBuilder();
 
-		lifeManager.addCrossoverListener(new CrossoverListener() {
+		Life.get().addCrossoverListener(new CrossoverListener() {
 
 			@Override
 			public void onCrossoverStart() {
@@ -220,9 +218,9 @@ public class LifeCycleManagerTest extends TestCase {
 			}
 		});
 
-		lifeManager.fireCrossoverStartEvent();
-		lifeManager.fireCrossoverEvent(null, null);
-		lifeManager.fireCrossoverEndEvent();
+		Life.get().fireCrossoverStartEvent();
+		Life.get().fireCrossoverEvent(null, null);
+		Life.get().fireCrossoverEndEvent();
 
 		assertEquals("crossover events not dispatched correctly", "123",
 				order.toString());
@@ -234,7 +232,7 @@ public class LifeCycleManagerTest extends TestCase {
 	public void testMutationEvents() {
 		final StringBuilder order = new StringBuilder();
 
-		lifeManager.addMutationListener(new MutationListener() {
+		Life.get().addMutationListener(new MutationListener() {
 
 			@Override
 			public void onMutationStart() {
@@ -254,9 +252,9 @@ public class LifeCycleManagerTest extends TestCase {
 			}
 		});
 
-		lifeManager.fireMutationStartEvent();
-		lifeManager.fireMutationEvent(null, null);
-		lifeManager.fireMutationEndEvent();
+		Life.get().fireMutationStartEvent();
+		Life.get().fireMutationEvent(null, null);
+		Life.get().fireMutationEndEvent();
 
 		assertEquals("mutation events not dispatched correctly", "123",
 				order.toString());
@@ -268,7 +266,7 @@ public class LifeCycleManagerTest extends TestCase {
 	public void testReproductionEvents() {
 		final StringBuilder order = new StringBuilder();
 
-		lifeManager.addReproductionListener(new ReproductionListener() {
+		Life.get().addReproductionListener(new ReproductionListener() {
 
 			@Override
 			public void onReproductionStart() {
@@ -288,9 +286,9 @@ public class LifeCycleManagerTest extends TestCase {
 			}
 		});
 
-		lifeManager.fireReproductionStartEvent();
-		lifeManager.fireReproductionEvent(null);
-		lifeManager.fireReproductionEndEvent();
+		Life.get().fireReproductionStartEvent();
+		Life.get().fireReproductionEvent(null);
+		Life.get().fireReproductionEndEvent();
 
 		assertEquals("reproduction events not dispatched correctly", "123",
 				order.toString());
@@ -302,7 +300,7 @@ public class LifeCycleManagerTest extends TestCase {
 	public void testGenerationEvents() {
 		final StringBuilder order = new StringBuilder();
 
-		lifeManager.addGenerationListener(new GenerationListener() {
+		Life.get().addGenerationListener(new GenerationListener() {
 
 			@Override
 			public void onGenerationStart() {
@@ -322,9 +320,9 @@ public class LifeCycleManagerTest extends TestCase {
 			}
 		});
 
-		lifeManager.fireGenerationStartEvent();
-		lifeManager.fireGenerationEvent(null);
-		lifeManager.fireGenerationEndEvent();
+		Life.get().fireGenerationStartEvent();
+		Life.get().fireGenerationEvent(null);
+		Life.get().fireGenerationEndEvent();
 
 		assertEquals("generation events not dispatched correctly", "123",
 				order.toString());

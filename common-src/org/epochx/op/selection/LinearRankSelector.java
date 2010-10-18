@@ -24,7 +24,6 @@ package org.epochx.op.selection;
 import java.util.*;
 
 import org.epochx.core.Model;
-import org.epochx.life.*;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
@@ -44,14 +43,26 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * pressure, with the least fit individual having a probability of selection of
  * 0.0 meaning it will never be selected.
  * 
+ * <p>
+ * If a model is provided then the following parameters are loaded upon every
+ * configure event:
+ * 
+ * <ul>
+ * <li>random number generator</li>
+ * </ul>
+ * 
+ * <p>
+ * If the <code>getModel</code> method returns <code>null</code> then no model
+ * is set and whatever static parameters have been set as parameters to the
+ * constructor or using the standard accessor methods will be used. If any
+ * compulsory parameters remain unset when the selector is requested to
+ * select programs, then an <code>IllegalStateException</code> will be thrown.
+ * 
  * @see FitnessProportionateSelector
  * @see RandomSelector
  * @see TournamentSelector
  */
-public class LinearRankSelector implements ProgramSelector, PoolSelector, ConfigListener {
-
-	// The controlling model.
-	private final Model model;
+public class LinearRankSelector extends ConfigOperator<Model> implements ProgramSelector, PoolSelector {
 
 	// Internal program selectors used by the 2 different tasks.
 	private final ProgramLinearRankSelector programSelection;
@@ -69,6 +80,34 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector, Config
 	// Probability of selecting the least fit program.
 	private double nMinus;
 
+	/**
+	 * Constructs an instance of <code>LinearRankSelector</code> with the only 
+	 * necessary parameter given.
+	 * 
+	 * @param rng a <code>RandomNumberGenerator</code> used to lead 
+	 * non-deterministic behaviour.
+	 */
+	public LinearRankSelector(final RandomNumberGenerator rng) {
+		this((Model) null);
+		
+		this.rng = rng;
+	}
+	
+	/**
+	 * Constructs an instance of <code>LinearRankSelector</code> with all the
+	 * necessary parameters given.
+	 * 
+	 * @param rng a <code>RandomNumberGenerator</code> used to lead 
+	 * non-deterministic behaviour.
+	 * @param gradient a value between 0.0 and 1.0 which indicates the gradient
+	 *        at which fitnesses are assigned to ranks.
+	 */
+	public LinearRankSelector(final RandomNumberGenerator rng, final double gradient) {
+		this((Model) null, gradient);
+		
+		this.rng = rng;
+	}
+	
 	/**
 	 * Constructs an instance of <code>LinearRankSelector</code> with a default
 	 * gradient value of <code>0.2</code>.
@@ -89,23 +128,20 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector, Config
 	 *        at which fitnesses are assigned to ranks.
 	 */
 	public LinearRankSelector(final Model model, final double gradient) {
-		this.model = model;
+		super(model);
 		setGradient(gradient);
 
 		// Construct the internal program selectors.
 		programSelection = new ProgramLinearRankSelector();
 		poolSelection = new ProgramLinearRankSelector();
-
-		// Configure parameters from the model.
-		Life.get().addConfigListener(this, false);
 	}
 
-	/*
-	 * Configures component with parameters from the model.
+	/**
+	 * Configures this operator with parameters from the model.
 	 */
 	@Override
 	public void onConfigure() {
-		rng = model.getRNG();
+		rng = getModel().getRNG();
 	}
 
 	/**
@@ -224,6 +260,27 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector, Config
 
 		return pool;
 	}
+	
+	/**
+	 * Returns the random number generator that this selector is using or
+	 * <code>null</code> if none has been set.
+	 * 
+	 * @return the rng the currently set random number generator.
+	 */
+	public RandomNumberGenerator getRNG() {
+		return rng;
+	}
+
+	/**
+	 * Sets the random number generator to use. If a model has been set then
+	 * this parameter will be overwritten with the random number generator from
+	 * that model on the next configure event.
+	 * 
+	 * @param rng the random number generator to set.
+	 */
+	public void setRNG(final RandomNumberGenerator rng) {
+		this.rng = rng;
+	}
 
 	/*
 	 * This is a little strange, but we use an inner class here so we can
@@ -276,8 +333,7 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector, Config
 		@Override
 		public CandidateProgram getProgram() {
 			if (rng == null) {
-				throw new IllegalStateException(
-						"random number generator not set");
+				throw new IllegalStateException("random number generator not set");
 			}
 
 			final double ran = rng.nextDouble();

@@ -25,7 +25,7 @@ import java.util.List;
 
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.life.*;
+import org.epochx.op.ConfigOperator;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
 import org.epochx.stats.Stats.ExpiryEvent;
@@ -50,7 +50,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * 
  * @see OnePointCrossover
  */
-public class FixedPointCrossover implements GECrossover, ConfigListener {
+public class FixedPointCrossover extends ConfigOperator<GEModel> implements GECrossover {
 
 	/**
 	 * Requests an <code>Integer</code> which is the point in the parents'
@@ -70,30 +70,37 @@ public class FixedPointCrossover implements GECrossover, ConfigListener {
 	 */
 	public static final Stat XO_CODONS2 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
 	
-	// The controlling model.
-	private final GEModel model;
-
 	// The random number generator in use.
 	private RandomNumberGenerator rng;
 
 	/**
-	 * Constructs an instance of FixedPointCrossover.
+	 * Constructs an instance of <code>FixedPointCrossover</code> with the only 
+	 * necessary parameter given.
+	 * 
+	 * @param rng a <code>RandomNumberGenerator</code> used to lead 
+	 * non-deterministic behaviour.
+	 */
+	public FixedPointCrossover(final RandomNumberGenerator rng) {
+		this((GEModel) null);
+		
+		this.rng = rng;
+	}
+	
+	/**
+	 * Constructs an instance of <code>FixedPointCrossover</code>.
 	 * 
 	 * @param model the current controlling model.
 	 */
 	public FixedPointCrossover(final GEModel model) {
-		this.model = model;
-
-		// Configure parameters from the model.
-		Life.get().addConfigListener(this, false);
+		super(model);
 	}
 
-	/*
-	 * Configure component with parameters from the model.
+	/**
+	 * Configures this operator with parameters from the model.
 	 */
 	@Override
 	public void onConfigure() {
-		rng = model.getRNG();
+		rng = getModel().getRNG();
 	}
 
 	/**
@@ -147,5 +154,26 @@ public class FixedPointCrossover implements GECrossover, ConfigListener {
 		child1.appendCodons(part2);
 
 		return new GECandidateProgram[]{child1, child2};
+	}
+	
+	/**
+	 * Returns the random number generator that this crossover is using or
+	 * <code>null</code> if none has been set.
+	 * 
+	 * @return the rng the currently set random number generator.
+	 */
+	public RandomNumberGenerator getRNG() {
+		return rng;
+	}
+
+	/**
+	 * Sets the random number generator to use. If a model has been set then
+	 * this parameter will be overwritten with the random number generator from
+	 * that model on the next configure event.
+	 * 
+	 * @param rng the random number generator to set.
+	 */
+	public void setRNG(final RandomNumberGenerator rng) {
+		this.rng = rng;
 	}
 }

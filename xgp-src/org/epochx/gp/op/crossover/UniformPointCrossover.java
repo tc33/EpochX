@@ -23,7 +23,7 @@ package org.epochx.gp.op.crossover;
 
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
-import org.epochx.life.*;
+import org.epochx.op.ConfigOperator;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
 import org.epochx.stats.Stats.ExpiryEvent;
@@ -31,8 +31,25 @@ import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
  * This class implements standard crossover with uniform swap points.
+ * 
+ * <p>
+ * If a model is provided then the following parameters are loaded upon every
+ * configure event:
+ * 
+ * <ul>
+ * <li>random number generator</li>
+ * </ul>
+ * 
+ * <p>
+ * If the <code>getModel</code> method returns <code>null</code> then no model
+ * is set and whatever static parameters have been set as parameters to the
+ * constructor or using the standard accessor methods will be used. If any
+ * compulsory parameters remain unset when the crossover is performed then an 
+ * <code>IllegalStateException</code> will be thrown.
+ * 
+ * @see KozaCrossover
  */
-public class UniformPointCrossover implements GPCrossover, ConfigListener {
+public class UniformPointCrossover extends ConfigOperator<GPModel> implements GPCrossover {
 
 	/**
 	 * Requests an <code>Integer</code> which is the point chosen in the first
@@ -58,25 +75,37 @@ public class UniformPointCrossover implements GPCrossover, ConfigListener {
 	 */
 	public static final Stat XO_SUBTREE2 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
 	
-	// The controlling model.
-	private final GPModel model;
-
 	// The random number generator for controlling random behaviour.
 	private RandomNumberGenerator rng;
 
+	/**
+	 * Constructs a <code>UniformPointCrossover</code> with the only necessary
+	 * parameter provided.
+	 * 
+	 * @param rng a <code>RandomNumberGenerator</code> used to lead 
+	 * non-deterministic behaviour.
+	 */
+	public UniformPointCrossover(final RandomNumberGenerator rng) {
+		this((GPModel) null);
+		
+		this.rng = rng;
+	}
+	
+	/**
+	 * Constructs a <code>UniformPointCrossover</code>.
+	 * 
+	 * @param model the current controlling model.
+	 */
 	public UniformPointCrossover(final GPModel model) {
-		this.model = model;
-
-		// Configure parameters from the model.
-		Life.get().addConfigListener(this, false);
+		super(model);
 	}
 
-	/*
-	 * Configure component with parameters from the model.
+	/**
+	 * Configures this operator with parameters from the model.
 	 */
 	@Override
 	public void onConfigure() {
-		rng = model.getRNG();
+		rng = getModel().getRNG();
 	}
 
 	/**
@@ -118,5 +147,25 @@ public class UniformPointCrossover implements GPCrossover, ConfigListener {
 
 		return new GPCandidateProgram[]{program1, program2};
 	}
+	
+	/**
+	 * Returns the random number generator that this crossover is using or
+	 * <code>null</code> if none has been set.
+	 * 
+	 * @return the rng the currently set random number generator.
+	 */
+	public RandomNumberGenerator getRNG() {
+		return rng;
+	}
 
+	/**
+	 * Sets the random number generator to use. If a model has been set then
+	 * this parameter will be overwritten with the random number generator from
+	 * that model on the next configure event.
+	 * 
+	 * @param rng the random number generator to set.
+	 */
+	public void setRNG(final RandomNumberGenerator rng) {
+		this.rng = rng;
+	}
 }

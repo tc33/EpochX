@@ -25,7 +25,7 @@ import java.util.*;
 
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
-import org.epochx.life.*;
+import org.epochx.op.ConfigOperator;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.*;
 import org.epochx.tools.random.RandomNumberGenerator;
@@ -56,10 +56,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * @see GrowInitialiser
  * @see RampedHalfAndHalfInitialiser
  */
-public class FullInitialiser implements GRInitialiser, ConfigListener {
-
-	// The controlling model.
-	private GRModel model;
+public class FullInitialiser extends ConfigOperator<GRModel> implements GRInitialiser {
 
 	private RandomNumberGenerator rng;
 
@@ -82,11 +79,12 @@ public class FullInitialiser implements GRInitialiser, ConfigListener {
 	public FullInitialiser(final RandomNumberGenerator rng,
 			final Grammar grammar, final int popSize, final int depth,
 			final boolean acceptDuplicates) {
+		this(null, acceptDuplicates);
+		
 		this.rng = rng;
 		this.grammar = grammar;
 		this.popSize = popSize;
 		this.depth = depth;
-		this.acceptDuplicates = acceptDuplicates;
 	}
 	
 	/**
@@ -113,11 +111,9 @@ public class FullInitialiser implements GRInitialiser, ConfigListener {
 	 *        populations that are generated.
 	 */
 	public FullInitialiser(final GRModel model, final boolean acceptDuplicates) {
-		this.model = model;
+		super(model);
+		
 		this.acceptDuplicates = acceptDuplicates;
-
-		// Configure parameters from the model.
-		Life.get().addConfigListener(this, false);
 	}
 
 	/*
@@ -125,10 +121,10 @@ public class FullInitialiser implements GRInitialiser, ConfigListener {
 	 */
 	@Override
 	public void onConfigure() {
-		rng = model.getRNG();
-		grammar = model.getGrammar();
-		popSize = model.getPopulationSize();
-		depth = model.getMaxInitialDepth();
+		rng = getModel().getRNG();
+		grammar = getModel().getGrammar();
+		popSize = getModel().getPopulationSize();
+		depth = getModel().getMaxInitialDepth();
 	}
 
 	/**
@@ -204,7 +200,7 @@ public class FullInitialiser implements GRInitialiser, ConfigListener {
 		buildDerivationTree(parseTree, startRule, 0, depth);
 
 		// Construct and return the program.
-		return new GRCandidateProgram(parseTree, model);
+		return new GRCandidateProgram(parseTree, getModel());
 	}
 
 	/*
@@ -293,35 +289,6 @@ public class FullInitialiser implements GRInitialiser, ConfigListener {
 	 */
 	public void setDuplicatesEnabled(boolean acceptDuplicates) {
 		this.acceptDuplicates = acceptDuplicates;
-	}
-	
-	/**
-	 * Returns the model that is providing the configuration for this
-	 * initialiser, or <code>null</code> if none is set.
-	 * 
-	 * @return the model that is supplying the configuration parameters or null
-	 *         if the parameters are individually set.
-	 */
-	public GRModel getModel() {
-		return model;
-	}
-
-	/**
-	 * Sets a model that will provide the configuration for this initialiser.
-	 * The necessary parameters will be obtained from the model the next time,
-	 * and each time a configure event is triggered. Note that until a configure
-	 * event is fired this initialiser may be in an unusable state. Any
-	 * previously set parameters will stay active until they are overwritten at
-	 * the next configure event.
-	 * 
-	 * <p>
-	 * If a model is already set, it may be cleared by calling this method with
-	 * <code>null</code>.
-	 * 
-	 * @param model the model to set or null to clear any current model.
-	 */
-	public void setModel(final GRModel model) {
-		this.model = model;
 	}
 
 	/**

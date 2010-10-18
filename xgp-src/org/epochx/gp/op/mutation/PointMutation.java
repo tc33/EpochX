@@ -25,7 +25,7 @@ import java.util.*;
 
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
-import org.epochx.life.*;
+import org.epochx.op.ConfigOperator;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
 import org.epochx.stats.Stats.ExpiryEvent;
@@ -41,8 +41,26 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * PointMutation constructor. If the node does undergo mutation then a
  * replacement node is selected from the full syntax (function and terminal
  * sets), at random.
+ * 
+ * <p>
+ * If a model is provided then the following parameters are loaded upon every
+ * configure event:
+ * 
+ * <ul>
+ * <li>random number generator</li>
+ * <li>syntax</li>
+ * </ul>
+ * 
+ * <p>
+ * If the <code>getModel</code> method returns <code>null</code> then no model
+ * is set and whatever static parameters have been set as parameters to the
+ * constructor or using the standard accessor methods will be used. If any
+ * compulsory parameters remain unset when the mutation is performed then an 
+ * <code>IllegalStateException</code> will be thrown.
+ * 
+ * @see SubtreeMutation
  */
-public class PointMutation implements GPMutation, ConfigListener {
+public class PointMutation extends ConfigOperator<GPModel> implements GPMutation {
 
 	/**
 	 * Requests a <code>List&lt;Integer&gt;</code> which is a list of the points
@@ -50,9 +68,6 @@ public class PointMutation implements GPMutation, ConfigListener {
 	 */
 	public static final Stat MUT_POINTS = new AbstractStat(ExpiryEvent.MUTATION) {};
 	
-	// The controlling model.
-	private final GPModel model;
-
 	private List<Node> syntax;
 
 	private RandomNumberGenerator rng;
@@ -61,10 +76,22 @@ public class PointMutation implements GPMutation, ConfigListener {
 	private final double pointProbability;
 
 	/**
+	 * Constructs a <code>PointMutation</code>.
+	 * 
+	 * @param rng 
+	 * @param syntax
+	 */
+	public PointMutation(final RandomNumberGenerator rng, List<Node> syntax, final double pointProbability) {
+		this(null, pointProbability);
+		
+		this.rng = rng;
+		this.syntax = syntax;
+	}
+	
+	/**
 	 * Construct a point mutation with a default point probability of 0.01. It
-	 * is
-	 * generally recommended that the PointMutation(GPModel, double) constructor
-	 * is used instead.
+	 * is generally recommended that the PointMutation(GPModel, double)
+	 * constructor is used instead.
 	 * 
 	 * @param model The current controlling model. Parameters such as full
 	 *        syntax will be obtained from this.
@@ -82,20 +109,18 @@ public class PointMutation implements GPMutation, ConfigListener {
 	 *        would be 0.01.
 	 */
 	public PointMutation(final GPModel model, final double pointProbability) {
-		this.model = model;
+		super(model);
+		
 		this.pointProbability = pointProbability;
-
-		// Configure parameters from the model.
-		Life.get().addConfigListener(this, false);
 	}
 
-	/*
-	 * Configure component with parameters from the model.
+	/**
+	 * Configures this operator with parameters from the model.
 	 */
 	@Override
 	public void onConfigure() {
-		syntax = model.getSyntax();
-		rng = model.getRNG();
+		syntax = getModel().getSyntax();
+		rng = getModel().getRNG();
 	}
 
 	/**
@@ -181,4 +206,48 @@ public class PointMutation implements GPMutation, ConfigListener {
 		return equal;
 	}
 
+	/**
+	 * Returns the random number generator that this mutation is using or
+	 * <code>null</code> if none has been set.
+	 * 
+	 * @return the rng the currently set random number generator.
+	 */
+	public RandomNumberGenerator getRNG() {
+		return rng;
+	}
+
+	/**
+	 * Sets the random number generator to use. If a model has been set then
+	 * this parameter will be overwritten with the random number generator from
+	 * that model on the next configure event.
+	 * 
+	 * @param rng the random number generator to set.
+	 */
+	public void setRNG(final RandomNumberGenerator rng) {
+		this.rng = rng;
+	}
+
+	/**
+	 * Returns a <code>List</code> of the <code>Nodes</code> that form the
+	 * syntax of new program generated with this mutation, or
+	 * an empty list if none have been set.
+	 * 
+	 * @return the types of <code>Node</code> that should be used in
+	 *         constructing new programs.
+	 */
+	public List<Node> getSyntax() {
+		return syntax;
+	}
+
+	/**
+	 * Sets the <code>Nodes</code> that should be used to construct new
+	 * programs. If a model has been set then this parameter will be overwritten
+	 * with the syntax from that model on the next configure event.
+	 * 
+	 * @param syntax a <code>List</code> of the types of <code>Node</code> that
+	 *        should be used in constructing new programs.
+	 */
+	public void setSyntax(final List<Node> syntax) {
+		this.syntax = syntax;
+	}
 }

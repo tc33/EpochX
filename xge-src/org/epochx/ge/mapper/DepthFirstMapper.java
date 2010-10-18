@@ -24,7 +24,7 @@ package org.epochx.ge.mapper;
 import org.epochx.ge.codon.CodonGenerator;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.life.*;
+import org.epochx.op.ConfigOperator;
 import org.epochx.tools.grammar.*;
 
 /**
@@ -35,11 +35,26 @@ import org.epochx.tools.grammar.*;
  * 
  * <p>
  * It provides facility for wrapping and extending of chromosomes.
+ * 
+ * <p>
+ * If a model is provided then the following parameters are loaded upon every
+ * configure event:
+ * 
+ * <ul>
+ * <li>grammar</li>
+ * <li>maximum program depth</li>
+ * <li>maximum chromosome length</li>
+ * <li>codon generator</li>
+ * </ul>
+ * 
+ * <p>
+ * If the <code>getModel</code> method returns <code>null</code> then no model
+ * is set and whatever static parameters have been set as parameters to the
+ * constructor or using the standard accessor methods will be used. If any
+ * compulsory parameters remain unset when a new codon is requested, then an 
+ * <code>IllegalStateException</code> will be thrown.
  */
-public class DepthFirstMapper implements Mapper, ConfigListener {
-
-	// The controlling model.
-	private final GEModel model;
+public class DepthFirstMapper extends ConfigOperator<GEModel> implements Mapper {
 
 	// Wrapping and extending are mutually exclusive, they cannot both be true.
 	private boolean wrapping;
@@ -57,13 +72,31 @@ public class DepthFirstMapper implements Mapper, ConfigListener {
 	private CodonGenerator codonGenerator;
 
 	/**
+	 * Constructs a <code>DepthFirstMapper</code>.
+	 * 
+	 * @param grammar
+	 * @param maxProgramDepth
+	 * @param maxChromosomeLength
+	 * @param codonGenerator
+	 */
+	public DepthFirstMapper(Grammar grammar, int maxProgramDepth, 
+			int maxChromosomeLength, CodonGenerator codonGenerator) {
+		this(null);
+		
+		this.grammar = grammar;
+		this.maxProgramDepth = maxProgramDepth;
+		this.maxChromosomeLength = maxChromosomeLength;
+		this.codonGenerator = codonGenerator;
+	}
+	
+	/**
 	 * Constructs an instance of DepthFirstMapper.
 	 * 
 	 * @param model the controlling model providing configuration details such
 	 *        as the Grammar.
 	 */
 	public DepthFirstMapper(final GEModel model) {
-		this.model = model;
+		super(model);
 
 		// Default to extending.
 		wrapping = true;
@@ -77,20 +110,17 @@ public class DepthFirstMapper implements Mapper, ConfigListener {
 
 		noMappedCodons = -1;
 		noWraps = 0;
-
-		// Configure parameters from the model.
-		Life.get().addConfigListener(this, false);
 	}
 
-	/*
-	 * Configure component with parameters from the model.
+	/**
+	 * Configures this operator with parameters from the model.
 	 */
 	@Override
 	public void onConfigure() {
-		grammar = model.getGrammar();
-		maxProgramDepth = model.getMaxDepth();
-		maxChromosomeLength = model.getMaxChromosomeLength();
-		codonGenerator = model.getCodonGenerator();
+		grammar = getModel().getGrammar();
+		maxProgramDepth = getModel().getMaxDepth();
+		maxChromosomeLength = getModel().getMaxChromosomeLength();
+		codonGenerator = getModel().getCodonGenerator();
 	}
 
 	/**
@@ -110,6 +140,12 @@ public class DepthFirstMapper implements Mapper, ConfigListener {
 	 */
 	@Override
 	public NonTerminalSymbol map(final GECandidateProgram program) {
+		if (grammar == null) {
+			throw new IllegalStateException("grammar not set");
+		} else if (codonGenerator == null) {
+			throw new IllegalStateException("codon generator not set");
+		}
+		
 		// The root node/symbol of the grammar tree.
 		final GrammarRule grammarTree = grammar.getStartRule();
 		// The root node/symbol of the parse tree.
@@ -322,5 +358,36 @@ public class DepthFirstMapper implements Mapper, ConfigListener {
 	public int getNoMappedCodons() {
 		return noMappedCodons;
 	}
+	
+	public Grammar getGrammar() {
+		return grammar;
+	}
+	
+	public void setGrammar(Grammar grammar) {
+		this.grammar = grammar;
+	}
 
+	public CodonGenerator getCodonGenerator() {
+		return codonGenerator;
+	}
+	
+	public void setCodonGenerator(CodonGenerator codonGenerator) {
+		this.codonGenerator = codonGenerator;
+	}
+	
+	public int getMaxProgramDepth() {
+		return maxProgramDepth;
+	}
+	
+	public void setMaxProgramDepth(int maxProgramDepth) {
+		this.maxProgramDepth = maxProgramDepth;
+	}
+	
+	public int getMaxChromosomeLength() {
+		return maxChromosomeLength;
+	}
+	
+	public void setMaxChromosomeLength(int maxChromosomeLength) {
+		this.maxChromosomeLength = maxChromosomeLength;
+	}
 }

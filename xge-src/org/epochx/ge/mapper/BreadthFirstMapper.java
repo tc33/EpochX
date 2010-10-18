@@ -28,7 +28,8 @@ import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.tools.grammar.*;
 
 /**
- * This class is not fully implemented. It should NOT be used.
+ * <strong>WARNING: This class is not fully implemented. It should NOT currently 
+ * be used.</strong>
  * 
  * A breadth first mapper is a twist on the classic depth-first mapper
  * typically used by GE. It maps a GECandidateProgram's chromosome to a

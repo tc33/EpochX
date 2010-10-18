@@ -26,6 +26,7 @@ import java.util.*;
 import org.epochx.core.Model;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
  * Tournament selection chooses programs through a tournament performed on a
@@ -33,11 +34,27 @@ import org.epochx.representation.CandidateProgram;
  * selected from the population to enter a 'tournament'. The program with the
  * best fitness in the tournament then becomes the selected program. The
  * tournament size, x, is given as an argument to the constructor.
+ * 
+ * <p>
+ * If a model is provided then the following parameters are loaded upon every
+ * configure event:
+ * 
+ * <ul>
+ * <li>random number generator</li>
+ * </ul>
+ * 
+ * <p>
+ * If the <code>getModel</code> method returns <code>null</code> then no model
+ * is set and whatever static parameters have been set as parameters to the
+ * constructor or using the standard accessor methods will be used. If any
+ * compulsory parameters remain unset when the selector is requested to
+ * select programs, then an <code>IllegalStateException</code> will be thrown.
+ * 
+ * @see FitnessProportionateSelector
+ * @see RandomSelector
+ * @see LinearRankSelector
  */
-public class TournamentSelector implements ProgramSelector, PoolSelector {
-
-	// The controlling model.
-	private final Model model;
+public class TournamentSelector extends ConfigOperator<Model> implements ProgramSelector, PoolSelector {
 
 	// Internal program selectors used by the 2 different tasks.
 	private final ProgramTournamentSelector poolSelection;
@@ -45,19 +62,44 @@ public class TournamentSelector implements ProgramSelector, PoolSelector {
 
 	// The size of the tournment from which the best program will be taken.
 	private int tournamentSize;
+	
+	// Random number generator.
+	private RandomNumberGenerator rng;
 
+	/**
+	 * Constructs an instance of <code>LinearRankSelector</code> with all the
+	 * necessary parameters given.
+	 * 
+	 * @param rng a <code>RandomNumberGenerator</code> used to lead 
+	 * non-deterministic behaviour.
+	 */
+	public TournamentSelector(final RandomNumberGenerator rng, final int tournamentSize) {
+		this((Model) null, tournamentSize);
+		
+		this.rng = rng;
+	}
+	
 	/**
 	 * Construct a tournament selector with the specified tournament size.
 	 * 
 	 * @param tournamentSize the number of programs in each tournament.
 	 */
 	public TournamentSelector(final Model model, final int tournamentSize) {
-		this.model = model;
+		super(model);
+		
 		this.tournamentSize = tournamentSize;
 
 		// Construct the internal program selectors.
 		poolSelection = new ProgramTournamentSelector();
 		programSelection = new ProgramTournamentSelector();
+	}
+	
+	/**
+	 * Configures this operator with parameters from the model.
+	 */
+	@Override
+	public void onConfigure() {
+		rng = getModel().getRNG();
 	}
 
 	/**
@@ -120,22 +162,57 @@ public class TournamentSelector implements ProgramSelector, PoolSelector {
 	public List<CandidateProgram> getPool(final List<CandidateProgram> pop,
 			final int poolSize) {
 		if (poolSize < 1) {
-			throw new IllegalArgumentException(
-					"poolSize must be greater than 0");
+			throw new IllegalArgumentException("poolSize must be greater than 0");
 		} else if ((pop == null) || (pop.isEmpty())) {
 			throw new IllegalArgumentException(
 					"population to select pool from must not be null nor empty");
 		}
 
 		// Construct the pool using the internal program selector.
-		final List<CandidateProgram> pool = new ArrayList<CandidateProgram>(
-				poolSize);
+		final List<CandidateProgram> pool = new ArrayList<CandidateProgram>(poolSize);
 		poolSelection.setSelectionPool(pop);
 		for (int i = 0; i < poolSize; i++) {
 			pool.add(poolSelection.getProgram());
 		}
 
 		return pool;
+	}
+	
+	/**
+	 * Returns the random number generator that this selector is using or
+	 * <code>null</code> if none has been set.
+	 * 
+	 * @return the rng the currently set random number generator.
+	 */
+	public RandomNumberGenerator getRNG() {
+		return rng;
+	}
+
+	/**
+	 * Sets the random number generator to use. If a model has been set then
+	 * this parameter will be overwritten with the random number generator from
+	 * that model on the next configure event.
+	 * 
+	 * @param rng the random number generator to set.
+	 */
+	public void setRNG(final RandomNumberGenerator rng) {
+		this.rng = rng;
+		
+		// Set internal selector's rng.
+		poolSelection.randomSelector.setRNG(rng);
+		programSelection.randomSelector.setRNG(rng);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setModel(final Model model) {
+		super.setModel(model);
+		
+		// Set internal selector's models.
+		poolSelection.randomSelector.setModel(model);
+		programSelection.randomSelector.setModel(model);
 	}
 
 	/*
@@ -152,7 +229,12 @@ public class TournamentSelector implements ProgramSelector, PoolSelector {
 		private final RandomSelector randomSelector;
 
 		public ProgramTournamentSelector() {
-			randomSelector = new RandomSelector(model);
+			Model model = getModel();
+			if (model == null) {
+				randomSelector = new RandomSelector(rng);
+			} else {
+				randomSelector = new RandomSelector(model);
+			}
 		}
 
 		@Override

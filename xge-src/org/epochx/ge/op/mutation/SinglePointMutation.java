@@ -24,7 +24,7 @@ package org.epochx.ge.op.mutation;
 import org.epochx.ge.codon.CodonGenerator;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.life.*;
+import org.epochx.op.ConfigOperator;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
 import org.epochx.stats.Stats.ExpiryEvent;
@@ -42,7 +42,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * mutation then a replacement codon is generated using the CodonGenerator
  * specified in the model.
  */
-public class SinglePointMutation implements GEMutation, ConfigListener {
+public class SinglePointMutation extends ConfigOperator<GEModel> implements GEMutation {
 
 	/**
 	 * Requests an <code>Integer</code> which is the point which was modified as
@@ -50,12 +50,21 @@ public class SinglePointMutation implements GEMutation, ConfigListener {
 	 */
 	public static final Stat MUT_POINT = new AbstractStat(ExpiryEvent.MUTATION) {};
 	
-	// The controlling model.
-	private final GEModel model;
-
 	private RandomNumberGenerator rng;
 	private CodonGenerator codonGenerator;
 
+	/**
+	 * Constructs a <code>SinglePointMutation</code> with all the necessary
+	 * parameters given.
+	 */
+	public SinglePointMutation(final CodonGenerator codonGenerator, 
+			final RandomNumberGenerator rng) {
+		this(null);
+		
+		this.codonGenerator = codonGenerator;
+		this.rng = rng;
+	}
+	
 	/**
 	 * Construct a single point mutation.
 	 * 
@@ -63,10 +72,7 @@ public class SinglePointMutation implements GEMutation, ConfigListener {
 	 *        generator to use will come from here.
 	 */
 	public SinglePointMutation(final GEModel model) {
-		this.model = model;
-
-		// Configure parameters from the model.
-		Life.get().addConfigListener(this, false);
+		super(model);
 	}
 
 	/*
@@ -74,8 +80,8 @@ public class SinglePointMutation implements GEMutation, ConfigListener {
 	 */
 	@Override
 	public void onConfigure() {
-		rng = model.getRNG();
-		codonGenerator = model.getCodonGenerator();
+		rng = getModel().getRNG();
+		codonGenerator = getModel().getCodonGenerator();
 	}
 
 	/**
@@ -101,5 +107,48 @@ public class SinglePointMutation implements GEMutation, ConfigListener {
 		Stats.get().addData(MUT_POINT, point);
 		
 		return program;
+	}
+	
+	/**
+	 * Returns the random number generator that this initialiser is using or
+	 * <code>null</code> if none has been set.
+	 * 
+	 * @return the rng the currently set random number generator.
+	 */
+	public RandomNumberGenerator getRNG() {
+		return rng;
+	}
+
+	/**
+	 * Sets the random number generator to use. If a model has been set then
+	 * this parameter will be overwritten with the random number generator from
+	 * that model on the next configure event.
+	 * 
+	 * @param rng the random number generator to set.
+	 */
+	public void setRNG(final RandomNumberGenerator rng) {
+		this.rng = rng;
+	}
+	
+	/**
+	 * Returns the codon generator that this mutation is using to provide
+	 * new codons.
+	 * 
+	 * @return the codonGenerator the <code>CodonGenerator</code> that is
+	 *         providing each new codon.
+	 */
+	public CodonGenerator getCodonGenerator() {
+		return codonGenerator;
+	}
+
+	/**
+	 * Sets the codon generator that this mutation should use to obtain new
+	 * codons.
+	 * 
+	 * @param codonGenerator the codonGenerator to use in generating new codons
+	 *        for the new candidate programs.
+	 */
+	public void setCodonGenerator(final CodonGenerator codonGenerator) {
+		this.codonGenerator = codonGenerator;
 	}
 }

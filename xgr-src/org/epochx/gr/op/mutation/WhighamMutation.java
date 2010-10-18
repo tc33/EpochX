@@ -26,14 +26,14 @@ import java.util.List;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.op.init.GrowInitialiser;
 import org.epochx.gr.representation.GRCandidateProgram;
-import org.epochx.life.*;
+import org.epochx.op.ConfigOperator;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
 import org.epochx.stats.Stats.ExpiryEvent;
 import org.epochx.tools.grammar.*;
 import org.epochx.tools.random.RandomNumberGenerator;
 
-public class WhighamMutation implements GRMutation, ConfigListener {
+public class WhighamMutation extends ConfigOperator<GRModel> implements GRMutation {
 
 	/**
 	 * Requests an <code>Integer</code> which is the index of the non-terminal
@@ -47,20 +47,31 @@ public class WhighamMutation implements GRMutation, ConfigListener {
 	 */
 	public static final Stat MUT_SUBTREE = new AbstractStat(ExpiryEvent.MUTATION) {};
 	
-	// The controlling model.
-	private final GRModel model;
-
 	private RandomNumberGenerator rng;
 
-	private final GrowInitialiser init;
+	private final GrowInitialiser grower;
 
+	/**
+	 * Constructs a <code>WhighamMutation</code>.
+	 * 
+	 */
+	public WhighamMutation(final RandomNumberGenerator rng) {
+		this((GRModel) null);
+		
+		this.rng = rng;
+		
+		grower.setRNG(rng);
+	}
+	
+	/**
+	 * Constructs a <code>WhighamMutation</code>.
+	 * 
+	 * @param model
+	 */
 	public WhighamMutation(final GRModel model) {
-		this.model = model;
+		super(model);
 
-		init = new GrowInitialiser(model);
-
-		// Configure parameters from the model.
-		Life.get().addConfigListener(this, false);
+		grower = new GrowInitialiser(model);
 	}
 
 	/*
@@ -68,13 +79,12 @@ public class WhighamMutation implements GRMutation, ConfigListener {
 	 */
 	@Override
 	public void onConfigure() {
-		rng = model.getRNG();
+		rng = getModel().getRNG();
 	}
 
 	@Override
 	public GRCandidateProgram mutate(final CandidateProgram program) {
-		final GRCandidateProgram mutatedProgram = (GRCandidateProgram) program
-				.clone();
+		final GRCandidateProgram mutatedProgram = (GRCandidateProgram) program.clone();
 
 		final NonTerminalSymbol parseTree = mutatedProgram.getParseTree();
 
@@ -92,7 +102,7 @@ public class WhighamMutation implements GRMutation, ConfigListener {
 		
 		// Construct a new subtree from that node's grammar rule.
 		final GrammarRule rule = original.getGrammarRule();
-		final NonTerminalSymbol subtree = init.getGrownParseTree(originalDepth, rule);
+		final NonTerminalSymbol subtree = grower.getGrownParseTree(originalDepth, rule);
 
 		// Add subtree into the stats manager.
 		Stats.get().addData(MUT_SUBTREE, subtree);
@@ -105,5 +115,29 @@ public class WhighamMutation implements GRMutation, ConfigListener {
 		}
 
 		return mutatedProgram;
+	}
+	
+	
+	/**
+	 * Returns the random number generator that this crossover is using or
+	 * <code>null</code> if none has been set.
+	 * 
+	 * @return the rng the currently set random number generator.
+	 */
+	public RandomNumberGenerator getRNG() {
+		return rng;
+	}
+
+	/**
+	 * Sets the random number generator to use. If a model has been set then
+	 * this parameter will be overwritten with the random number generator from
+	 * that model on the next configure event.
+	 * 
+	 * @param rng the random number generator to set.
+	 */
+	public void setRNG(final RandomNumberGenerator rng) {
+		this.rng = rng;
+		
+		grower.setRNG(rng);
 	}
 }

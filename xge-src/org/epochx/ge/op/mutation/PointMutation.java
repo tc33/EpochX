@@ -26,7 +26,7 @@ import java.util.*;
 import org.epochx.ge.codon.CodonGenerator;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.life.*;
+import org.epochx.op.ConfigOperator;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
 import org.epochx.stats.Stats.ExpiryEvent;
@@ -43,7 +43,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * replacement codon is generated using the CodonGenerator specified in the
  * model.
  */
-public class PointMutation implements GEMutation, ConfigListener {
+public class PointMutation extends ConfigOperator<GEModel> implements GEMutation {
 
 	/**
 	 * Requests a <code>List&lt;Integer&gt;</code> which is a list of the points
@@ -51,15 +51,24 @@ public class PointMutation implements GEMutation, ConfigListener {
 	 */
 	public static final Stat MUT_POINTS = new AbstractStat(ExpiryEvent.MUTATION) {};
 	
-	// The controlling model.
-	private final GEModel model;
-
 	// The probability each codon has of being mutated in a selected program.
 	private double pointProbability;
 
 	private RandomNumberGenerator rng;
 	private CodonGenerator codonGenerator;
 
+	/**
+	 * Constructs a <code>PointMutation</code> with all the necessary
+	 * parameters given.
+	 */
+	public PointMutation(final CodonGenerator codonGenerator, 
+			final RandomNumberGenerator rng, final double pointProbability) {
+		this(null, pointProbability);
+		
+		this.codonGenerator = codonGenerator;
+		this.rng = rng;
+	}
+	
 	/**
 	 * Construct a point mutation with a default point probability of 0.01. It
 	 * is generally recommended that the
@@ -83,20 +92,18 @@ public class PointMutation implements GEMutation, ConfigListener {
 	 *        typical value would be 0.01.
 	 */
 	public PointMutation(final GEModel model, final double pointProbability) {
-		this.model = model;
+		super(model);
+		
 		this.pointProbability = pointProbability;
-
-		// Configure parameters from the model.
-		Life.get().addConfigListener(this, false);
 	}
 
 	/*
-	 * Configure component with parameters from the model.
+	 * Configures this operator with parameters from the model.
 	 */
 	@Override
 	public void onConfigure() {
-		rng = model.getRNG();
-		codonGenerator = model.getCodonGenerator();
+		rng = getModel().getRNG();
+		codonGenerator = getModel().getCodonGenerator();
 	}
 
 	/**
@@ -155,5 +162,48 @@ public class PointMutation implements GEMutation, ConfigListener {
 	 */
 	public void setPointProbability(double pointProbability) {
 		this.pointProbability = pointProbability;
+	}
+	
+	/**
+	 * Returns the random number generator that this initialiser is using or
+	 * <code>null</code> if none has been set.
+	 * 
+	 * @return the rng the currently set random number generator.
+	 */
+	public RandomNumberGenerator getRNG() {
+		return rng;
+	}
+
+	/**
+	 * Sets the random number generator to use. If a model has been set then
+	 * this parameter will be overwritten with the random number generator from
+	 * that model on the next configure event.
+	 * 
+	 * @param rng the random number generator to set.
+	 */
+	public void setRNG(final RandomNumberGenerator rng) {
+		this.rng = rng;
+	}
+	
+	/**
+	 * Returns the codon generator that this mutation is using to provide
+	 * new codons.
+	 * 
+	 * @return the codonGenerator the <code>CodonGenerator</code> that is
+	 *         providing each new codon.
+	 */
+	public CodonGenerator getCodonGenerator() {
+		return codonGenerator;
+	}
+
+	/**
+	 * Sets the codon generator that this mutation should use to obtain new
+	 * codons.
+	 * 
+	 * @param codonGenerator the codonGenerator to use in generating new codons
+	 *        for the new candidate programs.
+	 */
+	public void setCodonGenerator(final CodonGenerator codonGenerator) {
+		this.codonGenerator = codonGenerator;
 	}
 }

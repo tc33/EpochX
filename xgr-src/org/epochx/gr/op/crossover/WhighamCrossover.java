@@ -25,14 +25,14 @@ import java.util.*;
 
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
-import org.epochx.life.*;
+import org.epochx.op.ConfigOperator;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
 import org.epochx.stats.Stats.ExpiryEvent;
 import org.epochx.tools.grammar.*;
 import org.epochx.tools.random.RandomNumberGenerator;
 
-public class WhighamCrossover implements GRCrossover, ConfigListener {
+public class WhighamCrossover extends ConfigOperator<GRModel> implements GRCrossover {
 
 	/**
 	 * Requests an <code>Integer</code> which is the index of the point chosen 
@@ -62,25 +62,34 @@ public class WhighamCrossover implements GRCrossover, ConfigListener {
 	 */
 	public static final Stat XO_SUBTREE2 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
 	
-	// The controlling model.
-	private final GRModel model;
-
 	// The random number generator in use.
 	private RandomNumberGenerator rng;
 
+	/**
+	 * Constructs a <code>WhighamCrossover</code>.
+	 * 
+	 */
+	public WhighamCrossover(final RandomNumberGenerator rng) {
+		this((GRModel) null);
+		
+		this.rng = rng;
+	}
+	
+	/**
+	 * Constructs a <code>WhighamCrossover</code>.
+	 * 
+	 * @param model
+	 */
 	public WhighamCrossover(final GRModel model) {
-		this.model = model;
-
-		// Configure parameters from the model.
-		Life.get().addConfigListener(this, false);
+		super(model);
 	}
 
-	/*
-	 * Configure component with parameters from the model.
+	/**
+	 * Configures this operator with parameters from the model.
 	 */
 	@Override
 	public void onConfigure() {
-		rng = model.getRNG();
+		rng = getModel().getRNG();
 	}
 
 	@Override
@@ -132,5 +141,25 @@ public class WhighamCrossover implements GRCrossover, ConfigListener {
 
 		return new GRCandidateProgram[]{child1, child2};
 	}
+	
+	/**
+	 * Returns the random number generator that this crossover is using or
+	 * <code>null</code> if none has been set.
+	 * 
+	 * @return the rng the currently set random number generator.
+	 */
+	public RandomNumberGenerator getRNG() {
+		return rng;
+	}
 
+	/**
+	 * Sets the random number generator to use. If a model has been set then
+	 * this parameter will be overwritten with the random number generator from
+	 * that model on the next configure event.
+	 * 
+	 * @param rng the random number generator to set.
+	 */
+	public void setRNG(final RandomNumberGenerator rng) {
+		this.rng = rng;
+	}
 }

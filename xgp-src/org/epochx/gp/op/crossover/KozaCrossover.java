@@ -24,6 +24,7 @@ package org.epochx.gp.op.crossover;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
 import org.epochx.life.*;
+import org.epochx.op.ConfigOperator;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
 import org.epochx.stats.Stats.ExpiryEvent;
@@ -39,8 +40,25 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * class provides a constructor for specifying a probability of selecting a
  * function swap point. The default constructor uses the typical rates of 90%
  * function node swap point and 10% terminal node swap points.
+ * 
+ * <p>
+ * If a model is provided then the following parameters are loaded upon every
+ * configure event:
+ * 
+ * <ul>
+ * <li>random number generator</li>
+ * </ul>
+ * 
+ * <p>
+ * If the <code>getModel</code> method returns <code>null</code> then no model
+ * is set and whatever static parameters have been set as parameters to the
+ * constructor or using the standard accessor methods will be used. If any
+ * compulsory parameters remain unset when the crossover is performed then an 
+ * <code>IllegalStateException</code> will be thrown.
+ * 
+ * @see UniformPointCrossover
  */
-public class KozaCrossover implements GPCrossover, ConfigListener {
+public class KozaCrossover extends ConfigOperator<GPModel> implements GPCrossover, ConfigListener {
 
 	/**
 	 * Requests an <code>Integer</code> which is the point chosen in the first
@@ -66,15 +84,37 @@ public class KozaCrossover implements GPCrossover, ConfigListener {
 	 */
 	public static final Stat XO_SUBTREE2 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
 	
-	// The controlling model.
-	private final GPModel model;
-
 	// The probability of choosing a function node as the swap point.
-	private final double functionSwapProbability;
+	private double functionSwapProbability;
 
 	// The random number generator for controlling random behaviour.
 	private RandomNumberGenerator rng;
 
+	/**
+	 * Constructs a <code>KozaCrossover</code>. The probability of a
+	 * function node being selected as the swap point will default to 90%.
+	 * 
+	 * @param rng
+	 */
+	public KozaCrossover(final RandomNumberGenerator rng) {
+		this((GPModel) null);
+		
+		this.rng = rng;
+	}
+	
+	/**
+	 * Constructs a <code>KozaCrossover</code>.
+	 * 
+	 * @param rng a random number generator.
+	 * @param functionSwapProbability The probability of crossover operations
+	 *        choosing a function node as the swap point.
+	 */
+	public KozaCrossover(final RandomNumberGenerator rng, final double functionSwapProbability) {
+		this((GPModel) null, functionSwapProbability);
+		
+		this.rng = rng;
+	}
+	
 	/**
 	 * Default constructor for Koza standard crossover. The probability of a
 	 * function node being selected as the swap point will default to 90%.
@@ -89,21 +129,18 @@ public class KozaCrossover implements GPCrossover, ConfigListener {
 	 * @param functionSwapProbability The probability of crossover operations
 	 *        choosing a function node as the swap point.
 	 */
-	public KozaCrossover(final GPModel model,
-			final double functionSwapProbability) {
-		this.model = model;
+	public KozaCrossover(final GPModel model, final double functionSwapProbability) {
+		super(model);
+		
 		this.functionSwapProbability = functionSwapProbability;
-
-		// Configure parameters from the model.
-		Life.get().addConfigListener(this, false);
 	}
 
-	/*
-	 * Configure component with parameters from the model.
+	/**
+	 * Configures this operator with parameters from the model.
 	 */
 	@Override
 	public void onConfigure() {
-		rng = model.getRNG();
+		rng = getModel().getRNG();
 	}
 
 	/**
@@ -253,5 +290,46 @@ public class KozaCrossover implements GPCrossover, ConfigListener {
 
 		return result;
 	}
+	
+	/**
+	 * Returns the random number generator that this crossover is using or
+	 * <code>null</code> if none has been set.
+	 * 
+	 * @return the rng the currently set random number generator.
+	 */
+	public RandomNumberGenerator getRNG() {
+		return rng;
+	}
 
+	/**
+	 * Sets the random number generator to use. If a model has been set then
+	 * this parameter will be overwritten with the random number generator from
+	 * that model on the next configure event.
+	 * 
+	 * @param rng the random number generator to set.
+	 */
+	public void setRNG(final RandomNumberGenerator rng) {
+		this.rng = rng;
+	}
+	
+	/**
+	 * Returns the currently set probability of a function being selected as the
+	 * swap point.
+	 * 
+	 * @return a value between 0.0 and 1.0 which indicates the probability of a 
+	 * function node being selected as a swap point instead of a terminal.
+	 */
+	public double getFunctionSwapProbability() {
+		return functionSwapProbability;
+	}
+	
+	/**
+	 * Sets the probability of choosing a function node as the swap point rather
+	 * than a terminal node. 
+	 * @param functionSwapProbability a value between 0.0 and 1.0 for the 
+	 * probability of choosing a function node to swap.
+	 */
+	public void setFunctionSwapProbability(double functionSwapProbability) {
+		this.functionSwapProbability = functionSwapProbability;
+	}
 }

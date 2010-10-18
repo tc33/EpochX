@@ -25,7 +25,7 @@ import java.util.*;
 
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
-import org.epochx.life.*;
+import org.epochx.op.ConfigOperator;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
 
@@ -55,16 +55,13 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * @see GrowInitialiser
  * @see RampedHalfAndHalfInitialiser
  */
-public class FullInitialiser implements GPInitialiser, ConfigListener {
-
-	// The controlling model.
-	private GPModel model;
+public class FullInitialiser extends ConfigOperator<GPModel> implements GPInitialiser {
 
 	private RandomNumberGenerator rng;
 
 	// The language to construct the trees from.
-	private final List<Node> terminals;
-	private final List<Node> functions;
+	private List<Node> terminals;
+	private List<Node> functions;
 	private List<Node> syntax;
 
 	// The size of the populations to construct.
@@ -83,14 +80,13 @@ public class FullInitialiser implements GPInitialiser, ConfigListener {
 	public FullInitialiser(final RandomNumberGenerator rng, 
 			final List<Node> syntax, final int popSize,
 			final int depth, final boolean acceptDuplicates) {
+		this(null, acceptDuplicates);
+		
 		this.rng = rng;
 		this.syntax = syntax;
 		this.popSize = popSize;
 		this.depth = depth;
-		this.acceptDuplicates = acceptDuplicates;
 
-		terminals = new ArrayList<Node>();
-		functions = new ArrayList<Node>();
 		updateSyntax();
 	}
 
@@ -118,25 +114,25 @@ public class FullInitialiser implements GPInitialiser, ConfigListener {
 	 *        populations that are generated.
 	 */
 	public FullInitialiser(final GPModel model, final boolean acceptDuplicates) {
-		this(null, new ArrayList<Node>(), -1, -1, acceptDuplicates);
-
-		this.model = model;
-
-		// Configure parameters from the model.
-		Life.get().addConfigListener(this, false);
+		super(model);
+		
+		terminals = new ArrayList<Node>();
+		functions = new ArrayList<Node>();
+		
+		this.acceptDuplicates = acceptDuplicates;
 	}
 
-	/*
-	 * Configure component with parameters from the model.
+	/**
+	 * Configures this operator with parameters from the model.
 	 */
 	@Override
 	public void onConfigure() {
-		rng = model.getRNG();
-		depth = model.getMaxInitialDepth();
-		popSize = model.getPopulationSize();
+		rng = getModel().getRNG();
+		depth = getModel().getMaxInitialDepth();
+		popSize = getModel().getPopulationSize();
 
 		// Only update the syntax if it has changed.
-		final List<Node> newSyntax = model.getSyntax();
+		final List<Node> newSyntax = getModel().getSyntax();
 		if (!newSyntax.equals(syntax)) {
 			syntax = newSyntax;
 			updateSyntax();
@@ -211,7 +207,7 @@ public class FullInitialiser implements GPInitialiser, ConfigListener {
 	public GPCandidateProgram getInitialProgram() {
 		final Node root = getFullNodeTree();
 
-		return new GPCandidateProgram(root, model);
+		return new GPCandidateProgram(root, getModel());
 	}
 
 	/**
@@ -305,35 +301,6 @@ public class FullInitialiser implements GPInitialiser, ConfigListener {
 	 */
 	public void setDuplicatesEnabled(final boolean acceptDuplicates) {
 		this.acceptDuplicates = acceptDuplicates;
-	}
-
-	/**
-	 * Returns the model that is providing the configuration for this
-	 * initialiser, or <code>null</code> if none is set.
-	 * 
-	 * @return the model that is supplying the configuration parameters or null
-	 *         if the parameters are individually set.
-	 */
-	public GPModel getModel() {
-		return model;
-	}
-
-	/**
-	 * Sets a model that will provide the configuration for this initialiser.
-	 * The necessary parameters will be obtained from the model the next time,
-	 * and each time a configure event is triggered. Note that until a configure
-	 * event is fired this initialiser may be in an unusable state. Any
-	 * previously set parameters will stay active until they are overwritten at
-	 * the next configure event.
-	 * 
-	 * <p>
-	 * If a model is already set, it may be cleared by calling this method with
-	 * <code>null</code>.
-	 * 
-	 * @param model the model to set or null to clear any current model.
-	 */
-	public void setModel(final GPModel model) {
-		this.model = model;
 	}
 
 	/**

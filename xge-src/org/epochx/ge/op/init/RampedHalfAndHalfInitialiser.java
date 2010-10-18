@@ -25,7 +25,7 @@ import java.util.*;
 
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.life.*;
+import org.epochx.op.ConfigOperator;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
 import org.epochx.stats.Stats.ExpiryEvent;
@@ -77,7 +77,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * @see FullInitialiser
  * @see GrowInitialiser
  */
-public class RampedHalfAndHalfInitialiser implements GEInitialiser, ConfigListener {
+public class RampedHalfAndHalfInitialiser extends ConfigOperator<GEModel> implements GEInitialiser {
 
 	/**
 	 * Requests an <code>boolean[]</code> which has one element per program 
@@ -87,9 +87,6 @@ public class RampedHalfAndHalfInitialiser implements GEInitialiser, ConfigListen
 	 */
 	public static final Stat INIT_GROWN = new AbstractStat(ExpiryEvent.INITIALISATION) {};
 	
-	// The controlling model.
-	private GEModel model;
-
 	// The grow and full instances for doing their share of the work.
 	private final GrowInitialiser grow;
 	private final FullInitialiser full;
@@ -115,17 +112,20 @@ public class RampedHalfAndHalfInitialiser implements GEInitialiser, ConfigListen
 			final Grammar grammar, final int popSize, final int startMaxDepth,
 			final int endMaxDepth, final int maxCodonValue,
 			final boolean acceptDuplicates) {
+		this(null, acceptDuplicates);
+		
 		this.endMaxDepth = endMaxDepth;
 		this.startMaxDepth = startMaxDepth;
 		this.grammar = grammar;
 		this.popSize = popSize;
-		this.acceptDuplicates = acceptDuplicates;
-
-		// Set up the grow and full parts.
-		grow = new GrowInitialiser(rng, grammar, popSize, endMaxDepth,
-				maxCodonValue, acceptDuplicates);
-		full = new FullInitialiser(rng, grammar, popSize, endMaxDepth,
-				maxCodonValue, acceptDuplicates);
+		
+		grow.setRNG(rng);
+		grow.setGrammar(grammar);
+		grow.setMaxCodonValue(maxCodonValue);
+		
+		full.setRNG(rng);
+		full.setGrammar(grammar);
+		full.setMaxCodonValue(maxCodonValue);
 	}
 
 	/**
@@ -148,15 +148,13 @@ public class RampedHalfAndHalfInitialiser implements GEInitialiser, ConfigListen
 	 */
 	public RampedHalfAndHalfInitialiser(final GEModel model,
 			final boolean acceptDuplicates) {
-		this.model = model;
+		super(model);
+		
 		this.acceptDuplicates = acceptDuplicates;
 
 		// set up the grow and full parts
 		grow = new GrowInitialiser(model);
 		full = new FullInitialiser(model);
-
-		// Configure parameters from the model.
-		Life.get().addConfigListener(this, false);
 	}
 
 	/*
@@ -164,9 +162,9 @@ public class RampedHalfAndHalfInitialiser implements GEInitialiser, ConfigListen
 	 */
 	@Override
 	public void onConfigure() {
-		grammar = model.getGrammar();
-		popSize = model.getPopulationSize();
-		endMaxDepth = model.getMaxInitialDepth();
+		grammar = getModel().getGrammar();
+		popSize = getModel().getPopulationSize();
+		endMaxDepth = getModel().getMaxInitialDepth();
 	}
 
 	/**
@@ -262,32 +260,11 @@ public class RampedHalfAndHalfInitialiser implements GEInitialiser, ConfigListen
 	}
 
 	/**
-	 * Returns the model that is providing the configuration for this
-	 * initialiser, or <code>null</code> if none is set.
-	 * 
-	 * @return the model that is supplying the configuration parameters or null
-	 *         if the parameters are individually set.
+	 * {@inheritDoc}
 	 */
-	public GEModel getModel() {
-		return model;
-	}
-
-	/**
-	 * Sets a model that will provide the configuration for this initialiser.
-	 * The necessary parameters will be obtained from the model the next time,
-	 * and each time a configure event is triggered. Note that until a configure
-	 * event is fired this initialiser may be in an unusable state. Any
-	 * previously set parameters will stay active until they are overwritten at
-	 * the next configure event.
-	 * 
-	 * <p>
-	 * If a model is already set, it may be cleared by calling this method with
-	 * <code>null</code>.
-	 * 
-	 * @param model the model to set or null to clear any current model.
-	 */
+	@Override
 	public void setModel(final GEModel model) {
-		this.model = model;
+		super.setModel(model);
 
 		grow.setModel(model);
 		full.setModel(model);

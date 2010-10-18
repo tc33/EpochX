@@ -22,23 +22,46 @@
 package org.epochx.ge.codon;
 
 import org.epochx.ge.model.GEModel;
-import org.epochx.life.*;
+import org.epochx.op.ConfigOperator;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
  * Generates codon values randomly between zero and the maximum codon size as
  * specified by the model given as an argument to the constructor.
+ * 
+ * <p>
+ * If a model is provided then the following parameters are loaded upon every
+ * configure event:
+ * 
+ * <ul>
+ * <li>random number generator</li>
+ * <li>maximum codon size</li>
+ * </ul>
+ * 
+ * <p>
+ * If the <code>getModel</code> method returns <code>null</code> then no model
+ * is set and whatever static parameters have been set as parameters to the
+ * constructor or using the standard accessor methods will be used. If any
+ * compulsory parameters remain unset when a new codon is requested, then an 
+ * <code>IllegalStateException</code> will be thrown.
  */
-public class StandardGenerator implements CodonGenerator, ConfigListener {
+public class StandardGenerator extends ConfigOperator<GEModel> implements CodonGenerator {
 
-	// The controlling model.
-	private GEModel model;
-
+	// Random number generator.
 	private RandomNumberGenerator rng;
 
+	// The maximum integer value of a codon.
 	private int maxCodonSize;
 
+	/**
+	 * Constructs a <code>StandardGenerator</code>.
+	 * 
+	 * @param rng
+	 * @param maxCodonSize
+	 */
 	public StandardGenerator(RandomNumberGenerator rng, int maxCodonSize) {
+		this(null);
+		
 		this.rng = rng;
 		this.maxCodonSize = maxCodonSize;
 	}
@@ -50,19 +73,16 @@ public class StandardGenerator implements CodonGenerator, ConfigListener {
 	 *        codon size.
 	 */
 	public StandardGenerator(final GEModel model) {
-		this.model = model;
-
-		// Configure parameters from the model.
-		Life.get().addConfigListener(this, false);
+		super(model);
 	}
 
-	/*
-	 * Configure component with parameters from the model.
+	/**
+	 * Configures this operator with parameters from the model.
 	 */
 	@Override
 	public void onConfigure() {
-		rng = model.getRNG();
-		maxCodonSize = model.getMaxCodonSize();
+		rng = getModel().getRNG();
+		maxCodonSize = getModel().getMaxCodonSize();
 	}
 
 	/**
@@ -73,30 +93,19 @@ public class StandardGenerator implements CodonGenerator, ConfigListener {
 	 */
 	@Override
 	public int getCodon() {
+		if (rng == null) {
+			throw new IllegalStateException("random number generator not set");
+		} else if (maxCodonSize <= 0) {
+			throw new IllegalStateException("max codon size must not be less than 1");
+		}
+		
 		return rng.nextInt(maxCodonSize);
 	}
-
-	
-	/**
-	 * @return the model
-	 */
-	public GEModel getModel() {
-		return model;
-	}
-
-	
-	/**
-	 * @param model the model to set
-	 */
-	public void setModel(GEModel model) {
-		this.model = model;
-	}
-
 	
 	/**
 	 * @return the rng
 	 */
-	public RandomNumberGenerator getRng() {
+	public RandomNumberGenerator getRNG() {
 		return rng;
 	}
 
@@ -104,7 +113,7 @@ public class StandardGenerator implements CodonGenerator, ConfigListener {
 	/**
 	 * @param rng the rng to set
 	 */
-	public void setRng(RandomNumberGenerator rng) {
+	public void setRNG(RandomNumberGenerator rng) {
 		this.rng = rng;
 	}
 

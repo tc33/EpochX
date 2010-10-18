@@ -25,7 +25,7 @@ import java.util.*;
 
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.life.*;
+import org.epochx.op.ConfigOperator;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.*;
 import org.epochx.tools.random.RandomNumberGenerator;
@@ -63,10 +63,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * @see FullInitialiser
  * @see RampedHalfAndHalfInitialiser
  */
-public class GrowInitialiser implements GEInitialiser, ConfigListener {
-
-	// The controlling model.
-	private GEModel model;
+public class GrowInitialiser extends ConfigOperator<GEModel> implements GEInitialiser {
 
 	private RandomNumberGenerator rng;
 
@@ -92,12 +89,13 @@ public class GrowInitialiser implements GEInitialiser, ConfigListener {
 	public GrowInitialiser(final RandomNumberGenerator rng,
 			final Grammar grammar, final int popSize, final int maxDepth,
 			final int maxCodonValue, final boolean acceptDuplicates) {
+		this(null, acceptDuplicates);
+		
 		this.rng = rng;
 		this.grammar = grammar;
 		this.popSize = popSize;
 		this.maxDepth = maxDepth;
 		this.maxCodonValue = maxCodonValue;
-		this.acceptDuplicates = acceptDuplicates;
 	}
 
 	/**
@@ -124,11 +122,9 @@ public class GrowInitialiser implements GEInitialiser, ConfigListener {
 	 *        populations that are generated.
 	 */
 	public GrowInitialiser(final GEModel model, final boolean acceptDuplicates) {
-		this.model = model;
+		super(model);
+		
 		this.acceptDuplicates = acceptDuplicates;
-
-		// Configure parameters from the model.
-		Life.get().addConfigListener(this, false);
 	}
 
 	/*
@@ -136,11 +132,11 @@ public class GrowInitialiser implements GEInitialiser, ConfigListener {
 	 */
 	@Override
 	public void onConfigure() {
-		rng = model.getRNG();
-		grammar = model.getGrammar();
-		popSize = model.getPopulationSize();
-		maxDepth = model.getMaxInitialDepth();
-		maxCodonValue = model.getMaxCodonSize();
+		rng = getModel().getRNG();
+		grammar = getModel().getGrammar();
+		popSize = getModel().getPopulationSize();
+		maxDepth = getModel().getMaxInitialDepth();
+		maxCodonValue = getModel().getMaxCodonSize();
 	}
 
 	/**
@@ -212,7 +208,7 @@ public class GrowInitialiser implements GEInitialiser, ConfigListener {
 		// Fill in the list of codons with reference to the grammar.
 		fillCodons(codons, start, 0, maxDepth);
 
-		return new GECandidateProgram(codons, model);
+		return new GECandidateProgram(codons, getModel());
 	}
 
 	/*
@@ -319,35 +315,6 @@ public class GrowInitialiser implements GEInitialiser, ConfigListener {
 	 */
 	public void setDuplicatesEnabled(final boolean acceptDuplicates) {
 		this.acceptDuplicates = acceptDuplicates;
-	}
-
-	/**
-	 * Returns the model that is providing the configuration for this
-	 * initialiser, or <code>null</code> if none is set.
-	 * 
-	 * @return the model that is supplying the configuration parameters or null
-	 *         if the parameters are individually set.
-	 */
-	public GEModel getModel() {
-		return model;
-	}
-
-	/**
-	 * Sets a model that will provide the configuration for this initialiser.
-	 * The necessary parameters will be obtained from the model the next time,
-	 * and each time a configure event is triggered. Note that until a configure
-	 * event is fired this initialiser may be in an unusable state. Any
-	 * previously set parameters will stay active until they are overwritten at
-	 * the next configure event.
-	 * 
-	 * <p>
-	 * If a model is already set, it may be cleared by calling this method with
-	 * <code>null</code>.
-	 * 
-	 * @param model the model to set or null to clear any current model.
-	 */
-	public void setModel(final GEModel model) {
-		this.model = model;
 	}
 
 	/**

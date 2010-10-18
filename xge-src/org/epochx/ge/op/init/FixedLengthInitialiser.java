@@ -26,7 +26,7 @@ import java.util.*;
 import org.epochx.ge.codon.CodonGenerator;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.life.*;
+import org.epochx.op.ConfigOperator;
 import org.epochx.representation.CandidateProgram;
 
 /**
@@ -56,10 +56,7 @@ import org.epochx.representation.CandidateProgram;
  * @see GrowInitialiser
  * @see RampedHalfAndHalfInitialiser
  */
-public class FixedLengthInitialiser implements GEInitialiser, ConfigListener {
-
-	// The controlling model.
-	private GEModel model;
+public class FixedLengthInitialiser extends ConfigOperator<GEModel> implements GEInitialiser {
 
 	// The generator to provide the new codons.
 	private CodonGenerator codonGenerator;
@@ -80,10 +77,10 @@ public class FixedLengthInitialiser implements GEInitialiser, ConfigListener {
 	public FixedLengthInitialiser(final CodonGenerator codonGenerator,
 			final int popSize, final int chromosomeLength,
 			final boolean acceptDuplicates) {
+		this(null, chromosomeLength, acceptDuplicates);
+		
 		this.codonGenerator = codonGenerator;
 		this.popSize = popSize;
-		this.chromosomeLength = chromosomeLength;
-		this.acceptDuplicates = acceptDuplicates;
 	}
 
 	/**
@@ -118,21 +115,19 @@ public class FixedLengthInitialiser implements GEInitialiser, ConfigListener {
 	 */
 	public FixedLengthInitialiser(final GEModel model,
 			final int chromosomeLength, final boolean acceptDuplicates) {
-		this.model = model;
+		super(model);
+		
 		this.chromosomeLength = chromosomeLength;
 		this.acceptDuplicates = acceptDuplicates;
-
-		// Configure parameters from the model.
-		Life.get().addConfigListener(this, false);
 	}
 
-	/*
-	 * Configure component with parameters from the model.
+	/**
+	 * Configures this operator with parameters from the model.
 	 */
 	@Override
 	public void onConfigure() {
-		popSize = model.getPopulationSize();
-		codonGenerator = model.getCodonGenerator();
+		popSize = getModel().getPopulationSize();
+		codonGenerator = getModel().getCodonGenerator();
 	}
 
 	/**
@@ -183,8 +178,9 @@ public class FixedLengthInitialiser implements GEInitialiser, ConfigListener {
 	 */
 	public GECandidateProgram getInitialProgram() {
 		if (chromosomeLength < 1) {
-			throw new IllegalStateException(
-					"Chromosome length must be 1 or greater");
+			throw new IllegalStateException("Chromosome length must be 1 or greater");
+		} else if (codonGenerator == null) {
+			throw new IllegalStateException("Codon generator is not set");
 		}
 
 		// Generate the list of codons.
@@ -194,7 +190,7 @@ public class FixedLengthInitialiser implements GEInitialiser, ConfigListener {
 		}
 
 		// Construct and return the new program.
-		return new GECandidateProgram(codons, model);
+		return new GECandidateProgram(codons, getModel());
 	}
 
 	/**
@@ -240,35 +236,6 @@ public class FixedLengthInitialiser implements GEInitialiser, ConfigListener {
 	 */
 	public void setDuplicatesEnabled(final boolean acceptDuplicates) {
 		this.acceptDuplicates = acceptDuplicates;
-	}
-
-	/**
-	 * Returns the model that is providing the configuration for this
-	 * initialiser, or <code>null</code> if none is set.
-	 * 
-	 * @return the model that is supplying the configuration parameters or null
-	 *         if the parameters are individually set.
-	 */
-	public GEModel getModel() {
-		return model;
-	}
-
-	/**
-	 * Sets a model that will provide the configuration for this initialiser.
-	 * The necessary parameters will be obtained from the model the next time,
-	 * and each time a configure event is triggered. Note that until a configure
-	 * event is fired this initialiser may be in an unusable state. Any
-	 * previously set parameters will stay active until they are overwritten at
-	 * the next configure event.
-	 * 
-	 * <p>
-	 * If a model is already set, it may be cleared by calling this method with
-	 * <code>null</code>.
-	 * 
-	 * @param model the model to set or null to clear any current model.
-	 */
-	public void setModel(final GEModel model) {
-		this.model = model;
 	}
 
 	/**

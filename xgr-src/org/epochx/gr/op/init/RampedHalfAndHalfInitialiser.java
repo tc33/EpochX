@@ -25,7 +25,7 @@ import java.util.*;
 
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
-import org.epochx.life.*;
+import org.epochx.op.ConfigOperator;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.Grammar;
 import org.epochx.tools.random.RandomNumberGenerator;
@@ -55,7 +55,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * 
  * <ul>
  * <li>population size</li>
- * <li>maximum initial program initialDepth</li>
+ * <li>maximum initial program depth</li>
  * <li>grammar</li>
  * <li>random number generator</li>
  * </ul>
@@ -71,10 +71,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * @see FullInitialiser
  * @see GrowInitialiser
  */
-public class RampedHalfAndHalfInitialiser implements GRInitialiser, ConfigListener {
-
-	// The controlling model.
-	private GRModel model;
+public class RampedHalfAndHalfInitialiser extends ConfigOperator<GRModel> implements GRInitialiser {
 
 	// The grammar all new programs must be valid against.
 	private Grammar grammar;
@@ -100,17 +97,18 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser, ConfigListen
 	public RampedHalfAndHalfInitialiser(final RandomNumberGenerator rng,
 			final Grammar grammar, final int popSize, final int startMaxDepth,
 			final int endMaxDepth, final boolean acceptDuplicates) {
+		this(null, startMaxDepth, acceptDuplicates);
+		
 		this.endMaxDepth = endMaxDepth;
-		this.startMaxDepth = startMaxDepth;
 		this.grammar = grammar;
 		this.popSize = popSize;
 		this.acceptDuplicates = acceptDuplicates;
 
 		// Set up the grow and full parts.
-		grow = new GrowInitialiser(rng, grammar, popSize, endMaxDepth,
-				acceptDuplicates);
-		full = new FullInitialiser(rng, grammar, popSize, endMaxDepth,
-				acceptDuplicates);
+		grow.setGrammar(grammar);
+		grow.setRNG(rng);
+		full.setGrammar(grammar);
+		full.setRNG(rng);
 	}
 
 	/**
@@ -138,8 +136,8 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser, ConfigListen
 	 *        generated
 	 *        to.
 	 */
-	public RampedHalfAndHalfInitialiser(final GRModel model, final int minDepth) {
-		this(model, minDepth, true);
+	public RampedHalfAndHalfInitialiser(final GRModel model, final int startMaxDepth) {
+		this(model, startMaxDepth, true);
 	}
 
 	/**
@@ -156,17 +154,15 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser, ConfigListen
 	 *        populations that are generated.
 	 */
 	public RampedHalfAndHalfInitialiser(final GRModel model,
-			final int minDepth, final boolean acceptDuplicates) {
-		this.model = model;
-		this.startMaxDepth = minDepth;
+			final int startMaxDepth, final boolean acceptDuplicates) {
+		super(model);
+		
+		this.startMaxDepth = startMaxDepth;
 		this.acceptDuplicates = acceptDuplicates;
 
 		// set up the grow and full parts
 		grow = new GrowInitialiser(model);
 		full = new FullInitialiser(model);
-
-		// Configure parameters from the model.
-		Life.get().addConfigListener(this, false);
 	}
 
 	/*
@@ -174,9 +170,9 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser, ConfigListen
 	 */
 	@Override
 	public void onConfigure() {
-		grammar = model.getGrammar();
-		popSize = model.getPopulationSize();
-		endMaxDepth = model.getMaxInitialDepth();
+		grammar = getModel().getGrammar();
+		popSize = getModel().getPopulationSize();
+		endMaxDepth = getModel().getMaxInitialDepth();
 	}
 
 	/**
@@ -271,34 +267,13 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser, ConfigListen
 	public void setDuplicatesEnabled(boolean acceptDuplicates) {
 		this.acceptDuplicates = acceptDuplicates;
 	}
-
+	
 	/**
-	 * Returns the model that is providing the configuration for this
-	 * initialiser, or <code>null</code> if none is set.
-	 * 
-	 * @return the model that is supplying the configuration parameters or null
-	 *         if the parameters are individually set.
+	 * {@inheritDoc}
 	 */
-	public GRModel getModel() {
-		return model;
-	}
-
-	/**
-	 * Sets a model that will provide the configuration for this initialiser.
-	 * The necessary parameters will be obtained from the model the next time,
-	 * and each time a configure event is triggered. Note that until a configure
-	 * event is fired this initialiser may be in an unusable state. Any
-	 * previously set parameters will stay active until they are overwritten at
-	 * the next configure event.
-	 * 
-	 * <p>
-	 * If a model is already set, it may be cleared by calling this method with
-	 * <code>null</code>.
-	 * 
-	 * @param model the model to set or null to clear any current model.
-	 */
+	@Override
 	public void setModel(final GRModel model) {
-		this.model = model;
+		super.setModel(model);
 
 		grow.setModel(model);
 		full.setModel(model);

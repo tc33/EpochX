@@ -160,26 +160,25 @@ public class PoolSelectionManagerTest extends TestCase {
 		model.getProgramSelector().setSelectionPool(pop);
 
 		// Listen for the crossver.
-		Life.get().addPoolSelectionListener(
-				new PoolSelectionListener() {
+		Life.get().addPoolSelectionListener(new PoolSelectionListener() {
+			@Override
+			public void onPoolSelectionStart() {
+				verify.append('1');
+			}
 
-					@Override
-					public void onPoolSelectionStart() {
-						verify.append('1');
-					}
-
-					@Override
-					public List<CandidateProgram> onPoolSelection(
-							final List<CandidateProgram> pool) {
-						verify.append('2');
-						return pool;
-					}
-
-					@Override
-					public void onPoolSelectionEnd() {
-						verify.append('3');
-					}
-				});
+			@Override
+			public void onPoolSelectionEnd() {
+				verify.append('3');
+			}
+		});
+		Life.get().addHook(new AbstractHook() {
+			@Override
+			public List<CandidateProgram> poolSelectionHook(
+					final List<CandidateProgram> pool) {
+				verify.append('2');
+				return pool;
+			}
+		});
 		Life.get().fireConfigureEvent();
 		poolManager.getPool(pop);
 
@@ -204,22 +203,20 @@ public class PoolSelectionManagerTest extends TestCase {
 		count = 0;
 
 		// Listen for the generation.
-		Life.get().addPoolSelectionListener(
-				new PoolSelectionAdapter() {
-
-					@Override
-					public List<CandidateProgram> onPoolSelection(
-							final List<CandidateProgram> pool) {
-						verify.append('2');
-						// Revert 3 times before confirming.
-						if (count == 3) {
-							return pool;
-						} else {
-							count++;
-						}
-						return null;
-					}
-				});
+		Life.get().addHook(new AbstractHook() {
+			@Override
+			public List<CandidateProgram> poolSelectionHook(
+					final List<CandidateProgram> pool) {
+				verify.append('2');
+				// Revert 3 times before confirming.
+				if (count == 3) {
+					return pool;
+				} else {
+					count++;
+				}
+				return null;
+			}
+		});
 
 		Life.get().fireConfigureEvent();
 		poolManager.getPool(pop);

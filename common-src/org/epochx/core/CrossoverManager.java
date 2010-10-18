@@ -169,8 +169,7 @@ public class CrossoverManager implements ConfigListener {
 			}
 
 			// Ask life cycle listener to confirm the crossover.
-			children = Life.get().fireCrossoverEvent(parents,
-					children);
+			children = Life.get().runCrossoverHooks(parents, children);
 
 			// If reverted then increment reversion counter.
 			if (children == null) {

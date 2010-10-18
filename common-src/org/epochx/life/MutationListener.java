@@ -22,7 +22,6 @@
 package org.epochx.life;
 
 import org.epochx.core.MutationManager;
-import org.epochx.representation.CandidateProgram;
 
 /**
  * Provides the interface to be implemented by objects that wish to handle run
@@ -45,25 +44,10 @@ public interface MutationListener extends Listener {
 	/**
 	 * Event fired before the mutation operation starts.
 	 */
-	void onMutationStart();
-
-	/**
-	 * Event fired after the selection and mutation operation has occurred.
-	 * The child may be modified and returned. This event is revertable by
-	 * returning <code>null</code> which will trigger the discarding of the
-	 * parent and mutant child, the reselection of a new parent, a new mutation
-	 * attempt and this event being raised again. If the mutation should be
-	 * accepted then the child should be returned as it is.
-	 * 
-	 * @param parent the program that was selected to undergo mutation.
-	 * @param child the resultant program from the parent undergoing mutation.
-	 * @return a GPCandidateProgram that should be considered the result of a
-	 *         mutation operation, or null if the mutation should be reverted.
-	 */
-	CandidateProgram onMutation(CandidateProgram parent, CandidateProgram child);
+	public void onMutationStart();
 
 	/**
 	 * Event fired after the mutation operation has ended.
 	 */
-	void onMutationEnd();
+	public void onMutationEnd();
 }

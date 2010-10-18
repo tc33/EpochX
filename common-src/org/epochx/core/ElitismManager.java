@@ -157,7 +157,7 @@ public class ElitismManager implements ConfigListener {
 		Stats.get().addData(ELITE_TIME, runtime);
 		
 		// Allow life cycle listener to confirm or modify.
-		elites = Life.get().fireElitismEvent(elites);
+		elites = Life.get().runElitismHooks(elites);
 
 		Life.get().fireElitismEndEvent();
 

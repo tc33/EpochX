@@ -187,8 +187,8 @@ public class InitialisationManager implements ConfigListener {
 
 			// Allow life cycle manager to confirm or modify. (init has final
 			// say).
-			pop = Life.get().fireGenerationEvent(pop);
-			pop = Life.get().fireInitialisationEvent(pop);
+			pop = Life.get().runGenerationHooks(pop);
+			pop = Life.get().runInitialisationHooks(pop);
 
 			// If reverted then increment reversion count.
 			if (pop == null) {

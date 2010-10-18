@@ -21,10 +21,7 @@
  */
 package org.epochx.life;
 
-import java.util.List;
-
 import org.epochx.core.InitialisationManager;
-import org.epochx.representation.CandidateProgram;
 
 /**
  * Provides the interface to be implemented by objects that wish to handle run
@@ -48,26 +45,11 @@ public interface InitialisationListener extends Listener {
 	/**
 	 * Event fired before the initialisation operation starts.
 	 */
-	void onInitialisationStart();
-
-	/**
-	 * Event fired after a population has been initialised. The initial
-	 * population may be modified and returned. This event is revertable by
-	 * returning <code>null</code> which will trigger the discarding of the
-	 * population and a reattempt at initialisation with this event being raised
-	 * again after. If the initialisation should be accepted then the population
-	 * should be returned as it is.
-	 * 
-	 * @param pop the newly initialised population.
-	 * @return the population of CandidatePrograms to continue with as the
-	 *         newly initialised population, or null if initialisation should be
-	 *         rerun.
-	 */
-	List<CandidateProgram> onInitialisation(List<CandidateProgram> pop);
+	public void onInitialisationStart();
 
 	/**
 	 * Event fired after the initialisation operation has ended and been
 	 * accepted.
 	 */
-	void onInitialisationEnd();
+	public void onInitialisationEnd();
 }

@@ -251,7 +251,7 @@ public class GenerationManager implements ConfigListener {
 			}
 
 			// Request confirmation of generation.
-			pop = Life.get().fireGenerationEvent(pop);
+			pop = Life.get().runGenerationHooks(pop);
 
 			// If reverted, increment reversions count.
 			if (pop == null) {

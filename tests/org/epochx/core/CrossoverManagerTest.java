@@ -100,18 +100,20 @@ public class CrossoverManagerTest extends TestCase {
 					}
 
 					@Override
-					public CandidateProgram[] onCrossover(
-							final CandidateProgram[] parents,
-							final CandidateProgram[] children) {
-						verify.append('2');
-						return children;
-					}
-
-					@Override
 					public void onCrossoverEnd() {
 						verify.append('3');
 					}
-				});
+		});
+		Life.get().addHook(new AbstractHook() {
+			@Override
+			public CandidateProgram[] crossoverHook(
+					final CandidateProgram[] parents,
+					final CandidateProgram[] children) {
+				verify.append('2');
+				return children;
+			}
+		});
+		
 		Life.get().fireConfigureEvent();
 		crossoverManager.crossover();
 
@@ -135,23 +137,21 @@ public class CrossoverManagerTest extends TestCase {
 		count = 0;
 
 		// Listen for the generation.
-		Life.get().addCrossoverListener(
-				new CrossoverAdapter() {
-
-					@Override
-					public CandidateProgram[] onCrossover(
-							final CandidateProgram[] parents,
-							final CandidateProgram[] children) {
-						verify.append('2');
-						// Revert 3 times before confirming.
-						if (count == 3) {
-							return children;
-						} else {
-							count++;
-						}
-						return null;
-					}
-				});
+		Life.get().addHook(new AbstractHook() {
+			@Override
+			public CandidateProgram[] crossoverHook(
+					final CandidateProgram[] parents,
+					final CandidateProgram[] children) {
+				verify.append('2');
+				// Revert 3 times before confirming.
+				if (count == 3) {
+					return children;
+				} else {
+					count++;
+				}
+				return null;
+			}
+		});
 
 		Life.get().fireConfigureEvent();
 		crossoverManager.crossover();

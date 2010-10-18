@@ -83,47 +83,45 @@ public class InitialisationManagerTest extends TestCase {
 			}
 		});
 		// Listen for the generation.
-		Life.get().addGenerationListener(
-				new GenerationListener() {
+		Life.get().addGenerationListener(new GenerationListener() {
+			@Override
+			public void onGenerationStart() {
+				verify.append('2');
+			}
 
-					@Override
-					public void onGenerationStart() {
-						verify.append('2');
-					}
-
-					@Override
-					public List<CandidateProgram> onGeneration(
-							final List<CandidateProgram> genPop) {
-						verify.append('4');
-						return genPop;
-					}
-
-					@Override
-					public void onGenerationEnd() {
-						verify.append('7');
-					}
-				});
+			@Override
+			public void onGenerationEnd() {
+				verify.append('7');
+			}
+		});
+		Life.get().addHook(new AbstractHook() {
+			@Override
+			public List<CandidateProgram> generationHook(
+					final List<CandidateProgram> genPop) {
+				verify.append('4');
+				return genPop;
+			}
+		});
 		// Listen for the initialisation.
-		Life.get().addInitialisationListener(
-				new InitialisationListener() {
+		Life.get().addInitialisationListener(new InitialisationListener() {
+			@Override
+			public void onInitialisationStart() {
+				verify.append('3');
+			}
 
-					@Override
-					public void onInitialisationStart() {
-						verify.append('3');
-					}
-
-					@Override
-					public List<CandidateProgram> onInitialisation(
-							final List<CandidateProgram> genPop) {
-						verify.append('5');
-						return genPop;
-					}
-
-					@Override
-					public void onInitialisationEnd() {
-						verify.append('6');
-					}
-				});
+			@Override
+			public void onInitialisationEnd() {
+				verify.append('6');
+			}
+		});
+		Life.get().addHook(new AbstractHook() {
+			@Override
+			public List<CandidateProgram> initialisationHook(
+					final List<CandidateProgram> genPop) {
+				verify.append('5');
+				return genPop;
+			}
+		});
 
 		initialisationManager.initialise();
 
@@ -143,11 +141,9 @@ public class InitialisationManagerTest extends TestCase {
 		final StringBuilder verify = new StringBuilder();
 
 		// Listen for the initialisation.
-		Life.get().addInitialisationListener(
-				new InitialisationAdapter() {
-
+		Life.get().addHook(new AbstractHook() {
 					@Override
-					public List<CandidateProgram> onInitialisation(
+					public List<CandidateProgram> initialisationHook(
 							final List<CandidateProgram> genPop) {
 						verify.append('3');
 						// Revert 3 times before confirming.
@@ -178,11 +174,9 @@ public class InitialisationManagerTest extends TestCase {
 		final StringBuilder verify = new StringBuilder();
 
 		// Listen for the initialisation.
-		Life.get().addGenerationListener(
-				new GenerationAdapter() {
-
+		Life.get().addHook(new AbstractHook() {
 					@Override
-					public List<CandidateProgram> onGeneration(
+					public List<CandidateProgram> generationHook(
 							final List<CandidateProgram> genPop) {
 						verify.append('3');
 						// Revert 3 times before confirming.

@@ -21,7 +21,6 @@
  */
 package org.epochx.life;
 
-import org.epochx.representation.CandidateProgram;
 
 /**
  * Provides an <code>abstract</code> implementation of
@@ -54,15 +53,6 @@ public abstract class MutationAdapter implements MutationListener {
 	 */
 	@Override
 	public void onMutationStart() {
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public CandidateProgram onMutation(final CandidateProgram parent,
-			final CandidateProgram child) {
-		return child;
 	}
 
 	/**

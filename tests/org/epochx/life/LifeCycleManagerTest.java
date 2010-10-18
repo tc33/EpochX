@@ -35,6 +35,7 @@ public class LifeCycleManagerTest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 		Life.get().clearListeners();
+		Life.get().clearHooks();
 	}
 	
 	/**
@@ -96,17 +97,9 @@ public class LifeCycleManagerTest extends TestCase {
 		final StringBuilder order = new StringBuilder();
 
 		Life.get().addInitialisationListener(new InitialisationListener() {
-
 			@Override
 			public void onInitialisationStart() {
 				order.append("1");
-			}
-
-			@Override
-			public List<CandidateProgram> onInitialisation(
-					final List<CandidateProgram> pop) {
-				order.append("2");
-				return pop;
 			}
 
 			@Override
@@ -114,13 +107,19 @@ public class LifeCycleManagerTest extends TestCase {
 				order.append("3");
 			}
 		});
+		Life.get().addHook(new AbstractHook() {
+			@Override
+			public List<CandidateProgram> initialisationHook(final List<CandidateProgram> pop) {
+				order.append("2");
+				return pop;
+			}
+		});
 
 		Life.get().fireInitialisationStartEvent();
-		Life.get().fireInitialisationEvent(null);
+		Life.get().runInitialisationHooks(null);
 		Life.get().fireInitialisationEndEvent();
 
-		assertEquals("initialisation events not dispatched correctly", "123",
-				order.toString());
+		assertEquals("initialisation events not dispatched correctly", "123", order.toString());
 	}
 
 	/**
@@ -137,20 +136,20 @@ public class LifeCycleManagerTest extends TestCase {
 			}
 
 			@Override
-			public List<CandidateProgram> onElitism(
-					final List<CandidateProgram> elites) {
-				order.append("2");
-				return elites;
-			}
-
-			@Override
 			public void onElitismEnd() {
 				order.append("3");
 			}
 		});
+		Life.get().addHook(new AbstractHook() {
+			@Override
+			public List<CandidateProgram> elitismHook(final List<CandidateProgram> elites) {
+				order.append("2");
+				return elites;
+			}
+		});
 
 		Life.get().fireElitismStartEvent();
-		Life.get().fireElitismEvent(new ArrayList<CandidateProgram>());
+		Life.get().runElitismHooks(new ArrayList<CandidateProgram>());
 		Life.get().fireElitismEndEvent();
 
 		assertEquals("elitism events not dispatched correctly", "123",
@@ -164,17 +163,9 @@ public class LifeCycleManagerTest extends TestCase {
 		final StringBuilder order = new StringBuilder();
 
 		Life.get().addPoolSelectionListener(new PoolSelectionListener() {
-
 			@Override
 			public void onPoolSelectionStart() {
 				order.append("1");
-			}
-
-			@Override
-			public List<CandidateProgram> onPoolSelection(
-					final List<CandidateProgram> pool) {
-				order.append("2");
-				return pool;
 			}
 
 			@Override
@@ -182,9 +173,16 @@ public class LifeCycleManagerTest extends TestCase {
 				order.append("3");
 			}
 		});
+		Life.get().addHook(new AbstractHook() {
+			@Override
+			public List<CandidateProgram> poolSelectionHook(final List<CandidateProgram> pool) {
+				order.append("2");
+				return pool;
+			}
+		});
 
 		Life.get().firePoolSelectionStartEvent();
-		Life.get().firePoolSelectionEvent(new ArrayList<CandidateProgram>());
+		Life.get().runPoolSelectionHooks(new ArrayList<CandidateProgram>());
 		Life.get().firePoolSelectionEndEvent();
 
 		assertEquals("pool selection events not dispatched correctly", "123",
@@ -205,21 +203,22 @@ public class LifeCycleManagerTest extends TestCase {
 			}
 
 			@Override
-			public CandidateProgram[] onCrossover(
+			public void onCrossoverEnd() {
+				order.append("3");
+			}
+		});
+		Life.get().addHook(new AbstractHook() {
+			@Override
+			public CandidateProgram[] crossoverHook(
 					final CandidateProgram[] parents,
 					final CandidateProgram[] children) {
 				order.append("2");
 				return children;
 			}
-
-			@Override
-			public void onCrossoverEnd() {
-				order.append("3");
-			}
 		});
 
 		Life.get().fireCrossoverStartEvent();
-		Life.get().fireCrossoverEvent(null, null);
+		Life.get().runCrossoverHooks(null, null);
 		Life.get().fireCrossoverEndEvent();
 
 		assertEquals("crossover events not dispatched correctly", "123",
@@ -240,20 +239,21 @@ public class LifeCycleManagerTest extends TestCase {
 			}
 
 			@Override
-			public CandidateProgram onMutation(final CandidateProgram parent,
-					final CandidateProgram child) {
-				order.append("2");
-				return child;
-			}
-
-			@Override
 			public void onMutationEnd() {
 				order.append("3");
 			}
 		});
-
+		Life.get().addHook(new AbstractHook() {
+			@Override
+			public CandidateProgram mutationHook(final CandidateProgram parent,
+					final CandidateProgram child) {
+				order.append("2");
+				return child;
+			}
+		});
+		
 		Life.get().fireMutationStartEvent();
-		Life.get().fireMutationEvent(null, null);
+		Life.get().runMutationHooks(null, null);
 		Life.get().fireMutationEndEvent();
 
 		assertEquals("mutation events not dispatched correctly", "123",
@@ -267,17 +267,9 @@ public class LifeCycleManagerTest extends TestCase {
 		final StringBuilder order = new StringBuilder();
 
 		Life.get().addReproductionListener(new ReproductionListener() {
-
 			@Override
 			public void onReproductionStart() {
 				order.append("1");
-			}
-
-			@Override
-			public CandidateProgram onReproduction(
-					final CandidateProgram program) {
-				order.append("2");
-				return program;
 			}
 
 			@Override
@@ -285,9 +277,17 @@ public class LifeCycleManagerTest extends TestCase {
 				order.append("3");
 			}
 		});
+		Life.get().addHook(new AbstractHook() {
+			@Override
+			public CandidateProgram reproductionHook(
+					final CandidateProgram program) {
+				order.append("2");
+				return program;
+			}
+		});
 
 		Life.get().fireReproductionStartEvent();
-		Life.get().fireReproductionEvent(null);
+		Life.get().runReproductionHooks(null);
 		Life.get().fireReproductionEndEvent();
 
 		assertEquals("reproduction events not dispatched correctly", "123",
@@ -308,20 +308,20 @@ public class LifeCycleManagerTest extends TestCase {
 			}
 
 			@Override
-			public List<CandidateProgram> onGeneration(
-					final List<CandidateProgram> pop) {
-				order.append("2");
-				return pop;
-			}
-
-			@Override
 			public void onGenerationEnd() {
 				order.append("3");
 			}
 		});
-
+		Life.get().addHook(new AbstractHook() {
+			@Override
+			public List<CandidateProgram> generationHook(final List<CandidateProgram> pop) {
+				order.append("2");
+				return pop;
+			}
+		});
+		
 		Life.get().fireGenerationStartEvent();
-		Life.get().fireGenerationEvent(null);
+		Life.get().runGenerationHooks(null);
 		Life.get().fireGenerationEndEvent();
 
 		assertEquals("generation events not dispatched correctly", "123",

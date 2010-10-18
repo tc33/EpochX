@@ -102,17 +102,19 @@ public class MutationManagerTest extends TestCase {
 			}
 
 			@Override
-			public CandidateProgram onMutation(final CandidateProgram parent,
-					final CandidateProgram child) {
-				verify.append('2');
-				return child;
-			}
-
-			@Override
 			public void onMutationEnd() {
 				verify.append('3');
 			}
 		});
+		Life.get().addHook(new AbstractHook() {
+			@Override
+			public CandidateProgram mutationHook(final CandidateProgram parent,
+					final CandidateProgram child) {
+				verify.append('2');
+				return child;
+			}
+		});
+		
 		Life.get().fireConfigureEvent();
 		mutationManager.mutate();
 
@@ -137,10 +139,9 @@ public class MutationManagerTest extends TestCase {
 		count = 0;
 
 		// Listen for the generation.
-		Life.get().addMutationListener(new MutationAdapter() {
-
+		Life.get().addHook(new AbstractHook() {
 			@Override
-			public CandidateProgram onMutation(final CandidateProgram parent,
+			public CandidateProgram mutationHook(final CandidateProgram parent,
 					final CandidateProgram child) {
 				verify.append('2');
 				// Revert 3 times before confirming.

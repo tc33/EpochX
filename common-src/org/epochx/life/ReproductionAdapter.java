@@ -21,7 +21,6 @@
  */
 package org.epochx.life;
 
-import org.epochx.representation.CandidateProgram;
 
 /**
  * Provides an <code>abstract</code> implementation of
@@ -60,15 +59,6 @@ public abstract class ReproductionAdapter implements ReproductionListener {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public CandidateProgram onReproduction(final CandidateProgram program) {
-		return program;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void onReproductionEnd() {
 	}
-
 }

@@ -21,9 +21,6 @@
  */
 package org.epochx.life;
 
-import java.util.List;
-
-import org.epochx.representation.CandidateProgram;
 
 /**
  * Provides an <code>abstract</code> implementation of
@@ -56,14 +53,6 @@ public abstract class GenerationAdapter implements GenerationListener {
 	 */
 	@Override
 	public void onGenerationStart() {
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<CandidateProgram> onGeneration(final List<CandidateProgram> pop) {
-		return pop;
 	}
 
 	/**

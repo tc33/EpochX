@@ -162,7 +162,7 @@ public class PoolSelectionManager implements ConfigListener {
 			}
 
 			// Allow life cycle listener to confirm or modify.
-			pool = Life.get().firePoolSelectionEvent(pool);
+			pool = Life.get().runPoolSelectionHooks(pool);
 
 			// If reverted then increment reversion counter.
 			if (pool == null) {

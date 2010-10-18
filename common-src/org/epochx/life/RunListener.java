@@ -44,17 +44,17 @@ public interface RunListener extends Listener {
 	/**
 	 * Event fired before the run starts.
 	 */
-	void onRunStart();
+	public void onRunStart();
 
 	/**
 	 * Event fired when a program with a fitness lower than the model's
 	 * termination fitness is found.
 	 */
-	void onSuccess();
+	public void onSuccess();
 
 	/**
 	 * Event fired after the run has ended.
 	 */
-	void onRunEnd();
+	public void onRunEnd();
 
 }

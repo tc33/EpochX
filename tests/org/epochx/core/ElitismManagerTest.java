@@ -60,15 +60,17 @@ public class ElitismManagerTest extends TestCase {
 			}
 
 			@Override
-			public List<CandidateProgram> onElitism(
+			public void onElitismEnd() {
+				verify.append('3');
+			}
+		});
+		
+		Life.get().addHook(new AbstractHook() {
+			@Override
+			public List<CandidateProgram> elitismHook(
 					final List<CandidateProgram> elites) {
 				verify.append('2');
 				return elites;
-			}
-
-			@Override
-			public void onElitismEnd() {
-				verify.append('3');
 			}
 		});
 

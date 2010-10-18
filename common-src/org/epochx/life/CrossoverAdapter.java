@@ -21,7 +21,6 @@
  */
 package org.epochx.life;
 
-import org.epochx.representation.CandidateProgram;
 
 /**
  * Provides an <code>abstract</code> implementation of
@@ -54,15 +53,6 @@ public abstract class CrossoverAdapter implements CrossoverListener {
 	 */
 	@Override
 	public void onCrossoverStart() {
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public CandidateProgram[] onCrossover(final CandidateProgram[] parents,
-			final CandidateProgram[] children) {
-		return children;
 	}
 
 	/**

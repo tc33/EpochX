@@ -21,10 +21,7 @@
  */
 package org.epochx.life;
 
-import java.util.List;
-
 import org.epochx.core.PoolSelectionManager;
-import org.epochx.representation.CandidateProgram;
 
 /**
  * Provides the interface to be implemented by objects that wish to handle pool
@@ -48,26 +45,11 @@ public interface PoolSelectionListener extends Listener {
 	/**
 	 * Event fired before the pool selection operation starts.
 	 */
-	void onPoolSelectionStart();
-
-	/**
-	 * Event fired after the pool selection operation has occurred. The pool
-	 * may be modified and returned. This event is revertable by
-	 * returning <code>null</code> which will trigger the discarding of the pool
-	 * the reselection of a new pool. This event will then be raised again. If
-	 * the selection should be accepted then the pool should be returned as it
-	 * is.
-	 * 
-	 * @param pool the suggested breeding pool of programs.
-	 * @return the breeding pool of CandidatePrograms that should actually be
-	 *         used, or <code>null</code> if breeding pool selection should be
-	 *         reverted.
-	 */
-	List<CandidateProgram> onPoolSelection(List<CandidateProgram> pool);
+	public void onPoolSelectionStart();
 
 	/**
 	 * Event fired after the pool selection operation has ended and been
 	 * accepted.
 	 */
-	void onPoolSelectionEnd();
+	public void onPoolSelectionEnd();
 }

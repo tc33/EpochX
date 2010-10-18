@@ -21,9 +21,6 @@
  */
 package org.epochx.life;
 
-import java.util.List;
-
-import org.epochx.representation.CandidateProgram;
 
 /**
  * Provides an <code>abstract</code> implementation of
@@ -56,15 +53,6 @@ public class PoolSelectionAdapter implements PoolSelectionListener {
 	 */
 	@Override
 	public void onPoolSelectionStart() {
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<CandidateProgram> onPoolSelection(
-			final List<CandidateProgram> pool) {
-		return pool;
 	}
 
 	/**

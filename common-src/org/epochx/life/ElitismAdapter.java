@@ -21,9 +21,6 @@
  */
 package org.epochx.life;
 
-import java.util.List;
-
-import org.epochx.representation.CandidateProgram;
 
 /**
  * Provides an <code>abstract</code> implementation of
@@ -56,14 +53,6 @@ public class ElitismAdapter implements ElitismListener {
 	 */
 	@Override
 	public void onElitismStart() {
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<CandidateProgram> onElitism(final List<CandidateProgram> elites) {
-		return elites;
 	}
 
 	/**

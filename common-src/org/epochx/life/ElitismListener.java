@@ -21,10 +21,8 @@
  */
 package org.epochx.life;
 
-import java.util.List;
 
 import org.epochx.core.ElitismManager;
-import org.epochx.representation.CandidateProgram;
 
 /**
  * Provides the interface to be implemented by objects that wish to handle
@@ -48,23 +46,10 @@ public interface ElitismListener extends Listener {
 	/**
 	 * Event fired before the elitism operation starts.
 	 */
-	void onElitismStart();
-
-	/**
-	 * Event fired after the elitism operation has been carried out.
-	 * The elites may be modified and returned to be used, but it is not
-	 * possible to (nor does it make sense to) revert elitism.
-	 * 
-	 * @param elites the selection of chosen elites.
-	 * @return a list of <code>CandidatePrograms</code> to use as the set of
-	 *         elites. Note that it is not appropriate to return a value of null
-	 *         and
-	 *         this will cause undefined behaviour.
-	 */
-	List<CandidateProgram> onElitism(List<CandidateProgram> elites);
+	public void onElitismStart();
 
 	/**
 	 * Event fired after the crossover operation has ended and been accepted.
 	 */
-	void onElitismEnd();
+	public void onElitismEnd();
 }

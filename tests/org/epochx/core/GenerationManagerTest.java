@@ -112,26 +112,25 @@ public class GenerationManagerTest extends TestCase {
 			}
 		});
 		// Listen for the generation.
-		Life.get().addGenerationListener(
-				new GenerationListener() {
+		Life.get().addGenerationListener(new GenerationListener() {
+			@Override
+			public void onGenerationStart() {
+				verify.append('2');
+			}
 
-					@Override
-					public void onGenerationStart() {
-						verify.append('2');
-					}
-
-					@Override
-					public List<CandidateProgram> onGeneration(
-							final List<CandidateProgram> genPop) {
-						verify.append('3');
-						return genPop;
-					}
-
-					@Override
-					public void onGenerationEnd() {
-						verify.append('4');
-					}
-				});
+			@Override
+			public void onGenerationEnd() {
+				verify.append('4');
+			}
+		});
+		Life.get().addHook(new AbstractHook() {
+			@Override
+			public List<CandidateProgram> generationHook(
+					final List<CandidateProgram> genPop) {
+				verify.append('3');
+				return genPop;
+			}
+		});
 
 		genManager.generation(1, pop);
 
@@ -150,22 +149,19 @@ public class GenerationManagerTest extends TestCase {
 		final StringBuilder verify = new StringBuilder();
 
 		// Listen for the generation.
-		Life.get().addGenerationListener(
-				new GenerationAdapter() {
-
-					@Override
-					public List<CandidateProgram> onGeneration(
-							final List<CandidateProgram> elites) {
-						verify.append('3');
-						// Revert 3 times before confirming.
-						if (count == 3) {
-							return elites;
-						} else {
-							count++;
-						}
-						return null;
-					}
-				});
+		Life.get().addHook(new AbstractHook() {
+			@Override
+			public List<CandidateProgram> generationHook(final List<CandidateProgram> elites) {
+				verify.append('3');
+				// Revert 3 times before confirming.
+				if (count == 3) {
+					return elites;
+				} else {
+					count++;
+				}
+				return null;
+			}
+		});
 
 		genManager.generation(1, pop);
 

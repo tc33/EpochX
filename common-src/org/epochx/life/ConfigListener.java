@@ -49,6 +49,6 @@ public interface ConfigListener extends Listener {
 	 * potentially by the model if it updates its parameters at an unorthadox
 	 * time in the life cycle.
 	 */
-	void onConfigure();
+	public void onConfigure();
 
 }

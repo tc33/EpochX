@@ -125,7 +125,7 @@ public class ReproductionManager implements ConfigListener {
 			parent = programSelector.getProgram();
 
 			// Allow the life cycle listener to confirm or modify.
-			parent = Life.get().fireReproductionEvent(parent);
+			parent = Life.get().runReproductionHooks(parent);
 
 			if (parent == null) {
 				reversions++;

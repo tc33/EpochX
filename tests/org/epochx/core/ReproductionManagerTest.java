@@ -76,26 +76,25 @@ public class ReproductionManagerTest extends TestCase {
 		model.getProgramSelector().setSelectionPool(pop);
 
 		// Listen for the crossver.
-		Life.get().addReproductionListener(
-				new ReproductionListener() {
+		Life.get().addReproductionListener(new ReproductionListener() {
+			@Override
+			public void onReproductionStart() {
+				verify.append('1');
+			}
 
-					@Override
-					public void onReproductionStart() {
-						verify.append('1');
-					}
-
-					@Override
-					public CandidateProgram onReproduction(
-							final CandidateProgram program) {
-						verify.append('2');
-						return program;
-					}
-
-					@Override
-					public void onReproductionEnd() {
-						verify.append('3');
-					}
-				});
+			@Override
+			public void onReproductionEnd() {
+				verify.append('3');
+			}
+		});
+		Life.get().addHook(new AbstractHook() {
+			@Override
+			public CandidateProgram reproductionHook(final CandidateProgram program) {
+				verify.append('2');
+				return program;
+			}
+		});
+		
 		Life.get().fireConfigureEvent();
 		reproductionManager.reproduce();
 
@@ -120,12 +119,9 @@ public class ReproductionManagerTest extends TestCase {
 		count = 0;
 
 		// Listen for the generation.
-		Life.get().addReproductionListener(
-				new ReproductionAdapter() {
-
+		Life.get().addHook(new AbstractHook() {
 					@Override
-					public CandidateProgram onReproduction(
-							final CandidateProgram program) {
+					public CandidateProgram reproductionHook(final CandidateProgram program) {
 						verify.append('2');
 						// Revert 3 times before confirming.
 						if (count == 3) {

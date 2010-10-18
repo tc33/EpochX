@@ -21,9 +21,6 @@
  */
 package org.epochx.life;
 
-import java.util.List;
-
-import org.epochx.representation.CandidateProgram;
 
 /**
  * Provides an <code>abstract</code> implementation of
@@ -56,14 +53,6 @@ public abstract class InitialisationAdapter implements InitialisationListener {
 	 */
 	@Override
 	public void onInitialisationStart() {
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<CandidateProgram> onInitialisation(final List<CandidateProgram> pop) {
-		return pop;
 	}
 
 	/**

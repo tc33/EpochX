@@ -71,6 +71,9 @@ public class Life {
 	private final ListenerList<MutationListener> mutationListeners;
 	private final ListenerList<ReproductionListener> reproductionListeners;
 	private final ListenerList<GenerationListener> generationListeners;
+	
+	// Hooks.
+	private final ListenerList<Hook> hooks;
 
 	/*
 	 * Construct a new life cycle manager.
@@ -86,6 +89,8 @@ public class Life {
 		mutationListeners = new ListenerList<MutationListener>();
 		reproductionListeners = new ListenerList<ReproductionListener>();
 		generationListeners = new ListenerList<GenerationListener>();
+		
+		hooks = new ListenerList<Hook>();
 	}
 	
 	public static Life get() {
@@ -94,6 +99,36 @@ public class Life {
 		}
 		
 		return instance;
+	}
+	
+	/**
+	 * Adds a <code>Hook</code> to the life cycle.
+	 * 
+	 * @param hook the <code>Hook</code> to be added.
+	 */
+	public void addHook(final Hook hook) {
+		hooks.add(hook);
+	}
+
+	public void addHook(final Hook hook, final boolean strong) {
+		hooks.add(hook, strong);
+	}
+	
+	public void insertHook(final int index, final Hook hook) {
+		hooks.add(index, hook);
+	}
+	
+	public void insertHook(final int index, final Hook hook, final boolean strong) {
+		hooks.add(index, hook, strong);
+	}
+	
+	/**
+	 * Removes a <code>Hook</code> from the life cycle.
+	 * 
+	 * @param hook the <code>Hook</code> to be removed.
+	 */
+	public void removeHook(final InitialisationListener hook) {
+		hooks.remove(hook);
 	}
 	
 	/**
@@ -357,33 +392,6 @@ public class Life {
 
 	/**
 	 * Notifies all listeners that have registered interest for notification on
-	 * this event type. Each listener has the opportunity to return a value to
-	 * replace the current population, that new population will then become the
-	 * argument to all subsequent listeners, and the population returned by the
-	 * final listener will be returned from this method. If any of the listeners
-	 * returns <code>null</code> then no further listeners will be informed and
-	 * <code>null</code> will be returned from this method.
-	 * 
-	 * @param pop a population of <code>CandidatePrograms</code>.
-	 * @return the response from the listeners which may be the given pop, a
-	 *         different or modified list of <code>CandidatePrograms</code> or
-	 *         null.
-	 */
-	public List<CandidateProgram> fireInitialisationEvent(
-			List<CandidateProgram> pop) {
-		for (final InitialisationListener listener: initialisationListeners) {
-			pop = listener.onInitialisation(pop);
-
-			if (pop == null) {
-				break;
-			}
-		}
-
-		return pop;
-	}
-
-	/**
-	 * Notifies all listeners that have registered interest for notification on
 	 * this event type.
 	 */
 	public void fireInitialisationEndEvent() {
@@ -400,34 +408,6 @@ public class Life {
 		for (final ElitismListener listener: elitismListeners) {
 			listener.onElitismStart();
 		}
-	}
-
-	/**
-	 * Notifies all listeners that have registered interest for notification on
-	 * this event type. Each listener has the opportunity to return a value to
-	 * replace the current set of elites, those programs will then become the
-	 * argument to all subsequent listeners, and the elites returned by the
-	 * final listener will be returned from this method. No listeners may return
-	 * <code>null</code>.
-	 * 
-	 * @param elites a population of <code>CandidatePrograms</code> chosen as
-	 *        elites.
-	 * @return the response from the listeners which may be the given elites, a
-	 *         different or modified list of <code>CandidatePrograms</code>.
-	 */
-	public List<CandidateProgram> fireElitismEvent(List<CandidateProgram> elites) {
-		for (final ElitismListener listener: elitismListeners) {
-			elites = listener.onElitism(elites);
-
-			if (elites == null) {
-				throw new NullPointerException(
-						"an elitism listener returned elites as null");
-			}
-		}
-
-		assert (elites != null);
-
-		return elites;
 	}
 
 	/**
@@ -452,33 +432,6 @@ public class Life {
 
 	/**
 	 * Notifies all listeners that have registered interest for notification on
-	 * this event type. Each listener has the opportunity to return a value to
-	 * replace the current pool of programs, those programs will then become the
-	 * argument to all subsequent listeners, and the pool returned by the
-	 * final listener will be returned from this method. If any of the listeners
-	 * returns <code>null</code> then no further listeners will be informed and
-	 * <code>null</code> will be returned from this method.
-	 * 
-	 * @param pool a population of <code>CandidatePrograms</code> chosen as
-	 *        a breeding pool.
-	 * @return the response from the listeners which may be the given pool, a
-	 *         different or modified list of <code>CandidatePrograms</code>.
-	 */
-	public List<CandidateProgram> firePoolSelectionEvent(
-			List<CandidateProgram> pool) {
-		for (final PoolSelectionListener listener: poolSelectionListeners) {
-			pool = listener.onPoolSelection(pool);
-
-			if (pool == null) {
-				break;
-			}
-		}
-
-		return pool;
-	}
-
-	/**
-	 * Notifies all listeners that have registered interest for notification on
 	 * this event type.
 	 */
 	public void firePoolSelectionEndEvent() {
@@ -495,38 +448,6 @@ public class Life {
 		for (final CrossoverListener listener: crossoverListeners) {
 			listener.onCrossoverStart();
 		}
-	}
-
-	/**
-	 * Notifies all listeners that have registered interest for notification on
-	 * this event type. Each listener has the opportunity to return a value to
-	 * replace the current child programs, those programs will then become the
-	 * child argument to all subsequent listeners, and the children returned by
-	 * the final listener will be returned from this method. If any of the
-	 * listeners returns <code>null</code> then no further listeners will be
-	 * informed and <code>null</code> will be returned from this method.
-	 * 
-	 * @param parents an array of <code>CandidatePrograms</code> which underwent
-	 *        crossover.
-	 * @param children an array of <code>CandidatePrograms</code> which are the
-	 *        result of a crossover operation on the parents.
-	 * @return the response from the listeners which may be the given children,
-	 *         or potentially an array of entirely different
-	 *         <code>CandidatePrograms</code>. <code>null</code> is also a valid
-	 *         return
-	 *         value.
-	 */
-	public CandidateProgram[] fireCrossoverEvent(
-			final CandidateProgram[] parents, CandidateProgram[] children) {
-		for (final CrossoverListener listener: crossoverListeners) {
-			children = listener.onCrossover(parents, children);
-
-			if (children == null) {
-				break;
-			}
-		}
-
-		return children;
 	}
 
 	/**
@@ -551,36 +472,6 @@ public class Life {
 
 	/**
 	 * Notifies all listeners that have registered interest for notification on
-	 * this event type. Each listener has the opportunity to return a value to
-	 * replace the child, that program will then become the child argument to
-	 * all subsequent listeners, and the program returned by the final listener
-	 * will be returned from this method. If any of the listeners returns
-	 * <code>null</code> then no further listeners will be informed and
-	 * <code>null</code> will be returned from this method.
-	 * 
-	 * @param parent a <code>CandidateProgram</code> which underwent mutation.
-	 * @param child a <code>CandidateProgram</code> which is the result of a
-	 *        mutation operation on the parent.
-	 * @return the response from the listeners which may be the given child,
-	 *         or potentially an entirely different
-	 *         <code>CandidateProgram</code>. <code>null</code> is also a valid
-	 *         return value.
-	 */
-	public CandidateProgram fireMutationEvent(final CandidateProgram parent,
-			CandidateProgram child) {
-		for (final MutationListener listener: mutationListeners) {
-			child = listener.onMutation(parent, child);
-
-			if (child == null) {
-				break;
-			}
-		}
-
-		return child;
-	}
-
-	/**
-	 * Notifies all listeners that have registered interest for notification on
 	 * this event type.
 	 */
 	public void fireMutationEndEvent() {
@@ -597,34 +488,6 @@ public class Life {
 		for (final ReproductionListener listener: reproductionListeners) {
 			listener.onReproductionStart();
 		}
-	}
-
-	/**
-	 * Notifies all listeners that have registered interest for notification on
-	 * this event type. Each listener has the opportunity to return a value to
-	 * replace the child, that program will then become the child argument to
-	 * all subsequent listeners, and the program returned by the final listener
-	 * will be returned from this method. If any of the listeners returns
-	 * <code>null</code> then no further listeners will be informed and
-	 * <code>null</code> will be returned from this method.
-	 * 
-	 * @param program a <code>CandidateProgram</code> which was selected for
-	 *        reproduction.
-	 * @return the response from the listeners which may be the given program,
-	 *         or potentially an entirely different
-	 *         <code>CandidateProgram</code>. <code>null</code> is also a valid
-	 *         return value.
-	 */
-	public CandidateProgram fireReproductionEvent(CandidateProgram program) {
-		for (final ReproductionListener listener: reproductionListeners) {
-			program = listener.onReproduction(program);
-
-			if (program == null) {
-				break;
-			}
-		}
-
-		return program;
 	}
 
 	/**
@@ -649,24 +512,32 @@ public class Life {
 
 	/**
 	 * Notifies all listeners that have registered interest for notification on
-	 * this event type. Each listener has the opportunity to return a value to
-	 * replace the population, those programs will then become the pop argument
-	 * to all subsequent listeners, and the programs returned by the final
-	 * listener will be returned from this method. If any of the listeners
-	 * returns <code>null</code> then no further listeners will be informed and
-	 * <code>null</code> will be returned from this method.
-	 * 
-	 * @param pop a list of <code>CandidatePrograms</code> which were the result
-	 *        of an evolutionary generation.
-	 * @return the response from the listeners which may be the given pop,
-	 *         or potentially a list of entirely different
-	 *         <code>CandidatePrograms</code>. <code>null</code> is also a valid
-	 *         return
-	 *         value.
+	 * this event type.
 	 */
-	public List<CandidateProgram> fireGenerationEvent(List<CandidateProgram> pop) {
+	public void fireGenerationEndEvent() {
 		for (final GenerationListener listener: generationListeners) {
-			pop = listener.onGeneration(pop);
+			listener.onGenerationEnd();
+		}
+	}
+
+	/**
+	 * Runs all initialisation hooks that have been registered. If multiple 
+	 * hooks are used then the ordering is significant. The population 
+	 * received as a parameter is fed to the first hook method. Each hook is 
+	 * then chained so that the value returned from one hook is fed into the 
+	 * next. The value returned by the final hook is returned from this method.
+	 * The exception to this is if any of the hooks return <code>null</code>, 
+	 * then no further hooks will be used and this method immediately returns 
+	 * with <code>null</code>.
+	 * 
+	 * @param pop a population of <code>CandidatePrograms</code>.
+	 * @return the response from the hooks which may be the given pop, a
+	 *         different or modified list of <code>CandidatePrograms</code> or
+	 *         null.
+	 */
+	public List<CandidateProgram> runInitialisationHooks(List<CandidateProgram> pop) {
+		for (final Hook h: hooks) {
+			pop = h.initialisationHook(pop);
 
 			if (pop == null) {
 				break;
@@ -675,15 +546,178 @@ public class Life {
 
 		return pop;
 	}
+	
+	/**
+	 * Runs all elitism hooks that have been registered. If multiple 
+	 * hooks are used then the ordering is significant. The population of elites
+	 * received as a parameter is fed to the first hook method. Each hook is 
+	 * then chained so that the value returned from one hook is fed into the 
+	 * next. The value returned by the final hook is returned from this method.
+	 * No hooks may return a <code>null</code> value.
+	 * 
+	 * @param elites a population of <code>CandidatePrograms</code>.
+	 * @return the response from the hooks which may be the given list of 
+	 * 		   elites, a different or modified list of 
+	 * 		   <code>CandidatePrograms</code> or null.
+	 */
+	public List<CandidateProgram> runElitismHooks(List<CandidateProgram> elites) {
+		for (final Hook h: hooks) {
+			elites = h.elitismHook(elites);
+
+			if (elites == null) {
+				throw new NullPointerException("an elitism hook returned elites as null");
+			}
+		}
+
+		assert (elites != null);
+
+		return elites;
+	}
+	
+	/**
+	 * Runs all pool selection hooks that have been registered. If multiple 
+	 * hooks are used then the ordering is significant. The breeding pool 
+	 * received as a parameter is fed to the first hook method. Each hook is 
+	 * then chained so that the value returned from one hook is fed into the 
+	 * next. The value returned by the final hook is returned from this method.
+	 * The exception to this is if any of the hooks return <code>null</code>, 
+	 * then no further hooks will be used and this method immediately returns 
+	 * with <code>null</code>.
+	 * 
+	 * @param pool a population of <code>CandidatePrograms</code>.
+	 * @return the response from the hooks which may be the given pool, a
+	 *         different or modified list of <code>CandidatePrograms</code> or
+	 *         null.
+	 */
+	public List<CandidateProgram> runPoolSelectionHooks(List<CandidateProgram> pool) {
+		for (final Hook h: hooks) {
+			pool = h.poolSelectionHook(pool);
+
+			if (pool == null) {
+				break;
+			}
+		}
+
+		return pool;
+	}
+	
+	/**
+	 * Runs all crossover hooks that have been registered. If multiple 
+	 * hooks are used then the ordering is significant. The parents and children 
+	 * received as a parameter are fed to the first hook method. Each hook is 
+	 * then chained so that the value returned from one hook is fed in as the 
+	 * children to the next. The value returned by the final hook is then 
+	 * returned from this method. The exception to this is if any of the hooks 
+	 * return <code>null</code>, then no further hooks will be used and this 
+	 * method immediately returns with <code>null</code>.
+	 * 
+	 * @param parents an array of <code>CandidatePrograms</code> which underwent
+	 *        crossover.
+	 * @param children an array of <code>CandidatePrograms</code> which are the
+	 *        result of a crossover operation on the parents.
+	 * @return the response from the hooks which may be the given children,
+	 *         or potentially an array of entirely different
+	 *         <code>CandidatePrograms</code>. <code>null</code> is also a valid
+	 *         return value.
+	 */
+	public CandidateProgram[] runCrossoverHooks(final CandidateProgram[] parents, CandidateProgram[] children) {
+		for (final Hook h: hooks) {
+			children = h.crossoverHook(parents, children);
+
+			if (children == null) {
+				break;
+			}
+		}
+
+		return children;
+	}
 
 	/**
-	 * Notifies all listeners that have registered interest for notification on
-	 * this event type.
+	 * Runs all mutation hooks that have been registered. If multiple 
+	 * hooks are used then the ordering is significant. The parent and child 
+	 * received as a parameter are fed to the first hook method. Each hook is 
+	 * then chained so that the value returned from one hook is fed in as the 
+	 * child to the next. The value returned by the final hook is then 
+	 * returned from this method. The exception to this is if any of the hooks 
+	 * return <code>null</code>, then no further hooks will be used and this 
+	 * method immediately returns with <code>null</code>.
+	 * 
+	 * @param parent a <code>CandidateProgram</code> which underwent mutation.
+	 * @param child a <code>CandidateProgram</code> which is the result of a
+	 *        mutation operation on the parent.
+	 * @return the response from the hooks which may be the given child,
+	 *         or potentially an entirely different
+	 *         <code>CandidateProgram</code>. <code>null</code> is also a valid
+	 *         return value.
 	 */
-	public void fireGenerationEndEvent() {
-		for (final GenerationListener listener: generationListeners) {
-			listener.onGenerationEnd();
+	public CandidateProgram runMutationHooks(final CandidateProgram parent, CandidateProgram child) {
+		for (final Hook h: hooks) {
+			child = h.mutationHook(parent, child);
+
+			if (child == null) {
+				break;
+			}
 		}
+
+		return child;
+	}
+	
+	/**
+	 * Runs all reproduction hooks that have been registered. If multiple 
+	 * hooks are used then the ordering is significant. The program 
+	 * received as a parameter is fed to the first hook method. Each hook is 
+	 * then chained so that the value returned from one hook is fed in to the 
+	 * next. The value returned by the final hook is then returned from this 
+	 * method. The exception to this is if any of the hooks return 
+	 * <code>null</code>, then no further hooks will be used and this method 
+	 * immediately returns with <code>null</code>.
+	 * 
+	 * @param program a <code>CandidateProgram</code> which was selected for
+	 *        reproduction.
+	 * @return the response from the hooks which may be the given program,
+	 *         or potentially an entirely different
+	 *         <code>CandidateProgram</code>. <code>null</code> is also a valid
+	 *         return value.
+	 */
+	public CandidateProgram runReproductionHooks(CandidateProgram program) {
+		for (final Hook h: hooks) {
+			program = h.reproductionHook(program);
+
+			if (program == null) {
+				break;
+			}
+		}
+
+		return program;
+	}
+
+	/**
+	 * Runs all generation hooks that have been registered. If multiple 
+	 * hooks are used then the ordering is significant. The population 
+	 * received as a parameter is fed to the first hook method. Each hook is 
+	 * then chained so that the value returned from one hook is fed in to the 
+	 * next. The value returned by the final hook is then returned from this 
+	 * method. The exception to this is if any of the hooks return 
+	 * <code>null</code>, then no further hooks will be used and this method 
+	 * immediately returns with <code>null</code>.
+	 * 
+	 * @param pop a list of <code>CandidatePrograms</code> which were the result
+	 *        of an evolutionary generation.
+	 * @return the response from the hooks which may be the given pop,
+	 *         or potentially a list of entirely different
+	 *         <code>CandidatePrograms</code>. <code>null</code> is also a valid
+	 *         return value.
+	 */
+	public List<CandidateProgram> runGenerationHooks(List<CandidateProgram> pop) {
+		for (final Hook h: hooks) {
+			pop = h.generationHook(pop);
+
+			if (pop == null) {
+				break;
+			}
+		}
+
+		return pop;
 	}
 	
 	/**
@@ -699,5 +733,12 @@ public class Life {
 		mutationListeners.clear();
 		reproductionListeners.clear();
 		generationListeners.clear();
+	}
+	
+	/**
+	 * Clears all hooks.
+	 */
+	public void clearHooks() {
+		hooks.clear();
 	}
 }

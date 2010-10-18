@@ -197,100 +197,18 @@ public class KozaCrossover extends ConfigOperator<GPModel> implements GPCrossove
 		if ((noFunctions > 0) && (rng.nextDouble() < functionSwapProbability)) {
 			// Randomly select a function node from the function set.
 			final int f = rng.nextInt(noFunctions);
-			final int nthFunctionNode = getNthFunctionNode(f, program);
+			final int nthFunctionNode = program.getRootNode().getNthFunctionNodeIndex(f);
 
 			return nthFunctionNode;
 		} else {
 			// Randomly select a terminal node from the terminal set.
 			final int t = rng.nextInt(noTerminals);
-			final int nthTerminalNode = getNthTerminalNode(t, program);
+			final int nthTerminalNode = program.getRootNode().getNthTerminalNodeIndex(t);
 
 			return nthTerminalNode;
 		}
 	}
 
-	/*
-	 * Recurse through the given GPCandidateProgram to find the nth function
-	 * node and return its node index.
-	 */
-	private int getNthFunctionNode(final int n, final GPCandidateProgram program) {
-		return getNthFunctionNode(n, 0, 0, program.getRootNode());
-	}
-
-	/*
-	 * Recursive helper function.
-	 */
-	private int getNthFunctionNode(final int n, int functionCount,
-			int nodeCount, final Node current) {
-		// Found the nth function node.
-		if ((current.getArity() > 0) && (n == functionCount)) {
-			return nodeCount;
-		}
-
-		final int result = -1;
-		for (final Node child: current.getChildren()) {
-			final int noNodes = child.getLength();
-			final int noFunctions = child.getNoFunctions();
-
-			// Only look at the subtree if it contains the right range of nodes.
-			if (n <= noFunctions + functionCount) {
-				final int childResult = getNthFunctionNode(n,
-						functionCount + 1, nodeCount + 1, child);
-				if (childResult != -1) {
-					return childResult;
-				}
-			}
-
-			// Skip the correct number of nodes from the subtree.
-			functionCount += noFunctions;
-			nodeCount += noNodes;
-		}
-
-		return result;
-	}
-
-	/*
-	 * Recurse through the given GPCandidateProgram to find the nth terminal
-	 * node and return its node index.
-	 */
-	private int getNthTerminalNode(final int n, final GPCandidateProgram program) {
-		return getNthTerminalNode(n, 0, 0, program.getRootNode());
-	}
-
-	/*
-	 * Recursive helper function.
-	 */
-	private int getNthTerminalNode(final int n, int terminalCount,
-			int nodeCount, final Node current) {
-		// Found the nth terminal node.
-		if (current.getArity() == 0) {
-			if (n == terminalCount++) {
-				return nodeCount;
-			}
-		}
-
-		final int result = -1;
-		for (final Node child: current.getChildren()) {
-			final int noNodes = child.getLength();
-			final int noTerminals = child.getNoTerminals();
-
-			// Only look at the subtree if it contains the right range of nodes.
-			if (n <= noTerminals + terminalCount) {
-				final int childResult = getNthTerminalNode(n, terminalCount,
-						nodeCount + 1, child);
-				if (childResult != -1) {
-					return childResult;
-				}
-			}
-
-			// Skip the correct number of nodes from the subtree.
-			terminalCount += noTerminals;
-			nodeCount += noNodes;
-		}
-
-		return result;
-	}
-	
 	/**
 	 * Returns the random number generator that this crossover is using or
 	 * <code>null</code> if none has been set.

@@ -189,6 +189,98 @@ public abstract class Node implements Cloneable {
 		throw new IndexOutOfBoundsException(
 				"attempt to set node at index >= length");
 	}
+	
+	/**
+	 * Returns the index of the nth function node, where this node is considered
+	 * to be the root - that is the 0th node. The tree's nodes are counted in 
+	 * pre-order (depth first) to locate the nth function, and return its index
+	 * within all nodes.
+	 * 
+	 * @param n the function to find the index of.
+	 * @return the index of the nth function node.
+	 */
+	public int getNthFunctionNodeIndex(final int n) {
+		return getNthFunctionNodeIndex(n, 0, 0, this);
+	}
+
+	/*
+	 * Recursive helper function for getNthFunctionNodeIndex.
+	 */
+	private int getNthFunctionNodeIndex(final int n, int functionCount,
+			int nodeCount, final Node current) {
+		// Found the nth function node.
+		if ((current.getArity() > 0) && (n == functionCount)) {
+			return nodeCount;
+		}
+
+		final int result = -1;
+		for (final Node child: current.getChildren()) {
+			final int noNodes = child.getLength();
+			final int noFunctions = child.getNoFunctions();
+
+			// Only look at the subtree if it contains the right range of nodes.
+			if (n <= noFunctions + functionCount) {
+				final int childResult = getNthFunctionNodeIndex(n,
+						functionCount + 1, nodeCount + 1, child);
+				if (childResult != -1) {
+					return childResult;
+				}
+			}
+
+			// Skip the correct number of nodes from the subtree.
+			functionCount += noFunctions;
+			nodeCount += noNodes;
+		}
+
+		return result;
+	}
+
+	/**
+	 * Returns the index of the nth terminal node, where this node is considered
+	 * to be the root - that is the 0th node. The tree's nodes are counted in 
+	 * pre-order (depth first) to locate the nth terminal, and return its index
+	 * within all nodes.
+	 * 
+	 * @param n the terminal to find the index of.
+	 * @return the index of the nth terminal node.
+	 */
+	public int getNthTerminalNodeIndex(final int n) {
+		return getNthTerminalNodeIndex(n, 0, 0, this);
+	}
+
+	/*
+	 * Recursive helper function for getNthTerminalNodeIndex.
+	 */
+	private int getNthTerminalNodeIndex(final int n, int terminalCount,
+			int nodeCount, final Node current) {
+		// Found the nth terminal node.
+		if (current.getArity() == 0) {
+			if (n == terminalCount++) {
+				return nodeCount;
+			}
+		}
+
+		final int result = -1;
+		for (final Node child: current.getChildren()) {
+			final int noNodes = child.getLength();
+			final int noTerminals = child.getNoTerminals();
+
+			// Only look at the subtree if it contains the right range of nodes.
+			if (n <= noTerminals + terminalCount) {
+				final int childResult = getNthTerminalNodeIndex(n, terminalCount,
+						nodeCount + 1, child);
+				if (childResult != -1) {
+					return childResult;
+				}
+			}
+
+			// Skip the correct number of nodes from the subtree.
+			terminalCount += noTerminals;
+			nodeCount += noNodes;
+		}
+
+		return result;
+	}
 
 	/**
 	 * Retrieves all the nodes in the node tree at a specified depth from this

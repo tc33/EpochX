@@ -29,15 +29,13 @@ package org.epochx.life;
  * Typical use of this class would be in an anonymous class. For example:
  * 
  * <blockquote>
- * 
  * <pre>
- *     model.getLifeCycleListener().addConfigListener(new ConfigAdapter(){
+ *     Life.get().addConfigListener(new ConfigAdapter(){
  *     		public void onConfigure() {
  *     			... do something ...
  *     		}
  *     });
  * </pre>
- * 
  * </blockquote>
  * 
  * <p>

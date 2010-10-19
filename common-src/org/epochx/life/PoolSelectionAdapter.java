@@ -32,7 +32,7 @@ package org.epochx.life;
  * <blockquote>
  * 
  * <pre>
- *     model.getLifeCycleListener().addPoolSelectionListener(new PoolSelectionAdapter(){
+ *     Life.get().addPoolSelectionListener(new PoolSelectionAdapter(){
  *     		public void onPoolSelectionStart() {
  *     			... do something ...
  *     		}

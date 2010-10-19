@@ -32,7 +32,7 @@ package org.epochx.life;
  * <blockquote>
  * 
  * <pre>
- *     model.getLifeCycleListener().addElitismListener(new ElitismAdapter(){
+ *     Life.get().addElitismListener(new ElitismAdapter(){
  *     		public void onElitismStart() {
  *     			... do something ...
  *     		}

@@ -28,9 +28,8 @@ import org.epochx.core.PoolSelectionManager;
  * selection events. See the {@link PoolSelectionManager}'s class documentation
  * for details of when each pool selection event will be fired. To listen for
  * pool selection events during execution of a model, instances of
- * <code>PoolSelectionListener</code> must be added to the model's
- * <code>Life</code> which is retrievable through a call to the
- * model's <code>getLifeCycleManager()</code> method.
+ * <code>PoolSelectionListener</code> must be added to the <code>Life</code> instance 
+ * which is retrievable through a call to the static <code>get()</code> method.
  * 
  * <p>
  * It is typical to listen to events using an anonymous class which often makes

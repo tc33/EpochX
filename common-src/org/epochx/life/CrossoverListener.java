@@ -28,9 +28,8 @@ import org.epochx.core.CrossoverManager;
  * crossover events. See the {@link CrossoverManager}'s class documentation for
  * details of when each crossover event will be fired. To listen for crossover
  * events during execution of a model, instances of
- * <code>CrossoverListener</code> must be added to the model's
- * <code>Life</code> which is retrievable through a call to the
- * model's <code>getLifeCycleManager()</code> method.
+ * <code>CrossoverListener</code> must be added to the <code>Life</code> instance 
+ * which is retrievable through a call to the static <code>get()</code> method.
  * 
  * <p>
  * It is typical to listen to events using an anonymous class which often makes

@@ -32,7 +32,7 @@ package org.epochx.life;
  * <blockquote>
  * 
  * <pre>
- *     model.getLifeCycleListener().addGenerationListener(new GenerationAdapter(){
+ *     Life.get().addGenerationListener(new GenerationAdapter(){
  *     		public void onGenerationStart() {
  *     			... do something ...
  *     		}

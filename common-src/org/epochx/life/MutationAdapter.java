@@ -32,7 +32,7 @@ package org.epochx.life;
  * <blockquote>
  * 
  * <pre>
- *     model.getLifeCycleListener().addMutationListener(new MutationAdapter(){
+ *     Life.get().addMutationListener(new MutationAdapter(){
  *     		public void onMutationStart() {
  *     			... do something ...
  *     		}

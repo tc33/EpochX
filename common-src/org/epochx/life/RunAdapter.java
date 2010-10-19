@@ -30,7 +30,7 @@ package org.epochx.life;
  * <blockquote>
  * 
  * <pre>
- *     model.getLifeCycleListener().addRunListener(new RunAdapter(){
+ *     Life.get().addRunListener(new RunAdapter(){
  *     		public void onRunStart() {
  *     			... do something ...
  *     		}

@@ -29,9 +29,8 @@ package org.epochx.life;
  * start of each generation. The event may also be fired manually with a call to
  * the <code>Life</code>'s <code>fireConfigureEvent()</code> method.
  * To listen for configure events during execution of a model, instances of
- * <code>ConfigListener</code> must be added to the model's
- * <code>Life</code> which is retrievable through a call to the
- * model's <code>getLifeCycleManager()</code> method.
+ * <code>ConfigListener</code> must be added to the <code>Life</code> instance 
+ * which is retrievable through a call to the static <code>get()</code> method.
  * 
  * <p>
  * It is typical to listen to events using an anonymous class which often makes

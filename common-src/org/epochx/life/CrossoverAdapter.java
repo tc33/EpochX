@@ -32,7 +32,7 @@ package org.epochx.life;
  * <blockquote>
  * 
  * <pre>
- *     model.getLifeCycleListener().addCrossoverListener(new CrossoverAdapter(){
+ *     Life.get().addCrossoverListener(new CrossoverAdapter(){
  *     		public void onCrossoverStart() {
  *     			... do something ...
  *     		}

@@ -25,8 +25,7 @@ import java.util.*;
 
 import org.epochx.epox.*;
 import org.epochx.epox.bool.*;
-import org.epochx.gp.representation.*;
-import org.epochx.gp.representation.bool.*;
+import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.util.BoolUtils;
 

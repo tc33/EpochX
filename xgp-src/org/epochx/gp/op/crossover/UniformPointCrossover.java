@@ -23,7 +23,7 @@ package org.epochx.gp.op.crossover;
 
 import org.epochx.epox.*;
 import org.epochx.gp.model.GPModel;
-import org.epochx.gp.representation.*;
+import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.op.ConfigOperator;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;

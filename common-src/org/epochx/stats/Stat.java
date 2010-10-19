@@ -1,6 +1,6 @@
 package org.epochx.stats;
 
-import org.epochx.stats.Stats.*;
+import org.epochx.stats.Stats.ExpiryEvent;
 
 /**
  * A Stat is both a statistic field and a way of generating a statistic 

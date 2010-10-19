@@ -25,9 +25,7 @@ import org.epochx.core.Model;
 import org.epochx.gp.op.crossover.KozaCrossover;
 import org.epochx.gp.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.gp.op.mutation.PointMutation;
-import org.epochx.life.*;
 import org.epochx.op.selection.*;
-import org.epochx.stats.StatField;
 
 /**
  * 

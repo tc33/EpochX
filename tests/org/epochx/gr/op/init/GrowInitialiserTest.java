@@ -21,10 +21,10 @@
  */
 package org.epochx.gr.op.init;
 
+import junit.framework.TestCase;
+
 import org.epochx.tools.grammar.Grammar;
 import org.epochx.tools.random.MersenneTwisterFast;
-
-import junit.framework.TestCase;
 
 
 /**

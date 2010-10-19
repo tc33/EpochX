@@ -4,9 +4,9 @@ import java.util.*;
 
 import junit.framework.TestCase;
 
-import org.epochx.epox.GPCandidateProgram;
 import org.epochx.gp.model.GPModelDummy;
-import org.epochx.life.*;
+import org.epochx.gp.representation.GPCandidateProgram;
+import org.epochx.life.Life;
 import org.epochx.representation.CandidateProgram;
 
 public class FitnessProportionateSelectorTest extends TestCase {

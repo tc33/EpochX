@@ -27,7 +27,7 @@ import junit.framework.TestCase;
 
 import org.epochx.epox.*;
 import org.epochx.gp.model.*;
-import org.epochx.gp.representation.*;
+import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.life.*;
 import org.epochx.op.selection.RandomSelector;
 import org.epochx.representation.CandidateProgram;

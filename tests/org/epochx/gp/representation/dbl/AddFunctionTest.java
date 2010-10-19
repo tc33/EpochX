@@ -23,7 +23,7 @@ package org.epochx.gp.representation.dbl;
 
 import org.epochx.epox.*;
 import org.epochx.epox.dbl.AddFunction;
-import org.epochx.gp.representation.*;
+import org.epochx.gp.representation.AbstractDoubleNodeTestCase;
 
 /**
  * 

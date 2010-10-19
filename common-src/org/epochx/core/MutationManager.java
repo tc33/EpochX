@@ -26,7 +26,7 @@ import static org.epochx.stats.StatField.*;
 import org.epochx.life.*;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.*;
+import org.epochx.stats.Stats;
 
 /**
  * This component is responsible for handling the mutation operation and for

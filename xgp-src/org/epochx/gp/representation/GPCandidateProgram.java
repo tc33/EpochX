@@ -19,11 +19,12 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.epox;
+package org.epochx.gp.representation;
 
 import java.util.List;
 
 import org.apache.commons.lang.ObjectUtils;
+import org.epochx.epox.Node;
 import org.epochx.gp.model.GPModel;
 import org.epochx.representation.CandidateProgram;
 

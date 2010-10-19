@@ -23,9 +23,9 @@ package org.epochx.gp.representation;
 
 import java.util.List;
 
-import org.epochx.epox.*;
-
 import junit.framework.TestCase;
+
+import org.epochx.epox.*;
 
 /**
  * 

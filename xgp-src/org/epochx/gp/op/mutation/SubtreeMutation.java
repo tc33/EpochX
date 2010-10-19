@@ -26,7 +26,7 @@ import java.util.List;
 import org.epochx.epox.*;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.op.init.GrowInitialiser;
-import org.epochx.gp.representation.*;
+import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.op.ConfigOperator;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;

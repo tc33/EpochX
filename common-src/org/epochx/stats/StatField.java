@@ -21,13 +21,13 @@
  */
 package org.epochx.stats;
 
+import static org.epochx.stats.Stats.ExpiryEvent.*;
+
 import java.util.*;
 
-import org.apache.commons.lang.*;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.epochx.representation.*;
-
-import static org.epochx.stats.Stats.ExpiryEvent.*;
+import org.epochx.representation.CandidateProgram;
 
 /**
  * Provides constants to be used as keys to request statistics from the

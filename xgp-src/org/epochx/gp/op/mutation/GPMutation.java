@@ -21,7 +21,7 @@
  */
 package org.epochx.gp.op.mutation;
 
-import org.epochx.epox.GPCandidateProgram;
+import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.op.Mutation;
 import org.epochx.representation.CandidateProgram;
 

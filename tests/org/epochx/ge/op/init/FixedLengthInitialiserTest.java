@@ -21,10 +21,10 @@
  */
 package org.epochx.ge.op.init;
 
+import junit.framework.TestCase;
+
 import org.epochx.ge.codon.StandardGenerator;
 import org.epochx.tools.random.*;
-
-import junit.framework.TestCase;
 
 /**
  * 

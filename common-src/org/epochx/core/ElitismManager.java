@@ -27,7 +27,7 @@ import java.util.*;
 
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.*;
+import org.epochx.stats.Stats;
 
 /**
  * This component handles the elitism operation to ensure the survival of the

@@ -23,9 +23,6 @@ package org.epochx.gr.model.epox.example;
 
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.op.init.FullInitialiser;
-import org.epochx.gr.stats.GRStatField;
-import org.epochx.life.*;
-import org.epochx.stats.StatField;
 
 public class EvenParity extends org.epochx.gr.model.epox.EvenParity {
 

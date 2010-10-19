@@ -21,7 +21,7 @@
  */
 package org.epochx.gp.op.crossover;
 
-import org.epochx.epox.GPCandidateProgram;
+import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.op.Crossover;
 import org.epochx.representation.CandidateProgram;
 

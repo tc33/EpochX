@@ -28,7 +28,7 @@ import java.util.List;
 import org.epochx.life.*;
 import org.epochx.op.Initialiser;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.*;
+import org.epochx.stats.Stats;
 
 /**
  * This component manages the initialisation step of an evolutionary run and

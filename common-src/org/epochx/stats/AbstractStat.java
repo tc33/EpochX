@@ -1,6 +1,6 @@
 package org.epochx.stats;
 
-import org.epochx.stats.Stats.*;
+import org.epochx.stats.Stats.ExpiryEvent;
 
 /**
  * This class is an abstract implementation of Stat that allows a slightly 

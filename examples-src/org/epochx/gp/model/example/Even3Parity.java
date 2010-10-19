@@ -21,6 +21,8 @@
  */
 package org.epochx.gp.model.example;
 
+import static org.epochx.stats.StatField.*;
+
 import org.epochx.core.Model;
 import org.epochx.gp.model.EvenParity;
 import org.epochx.gp.op.crossover.KozaCrossover;
@@ -28,9 +30,7 @@ import org.epochx.gp.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.gp.op.mutation.PointMutation;
 import org.epochx.life.*;
 import org.epochx.op.selection.FitnessProportionateSelector;
-import org.epochx.stats.*;
-
-import static org.epochx.stats.StatField.*;
+import org.epochx.stats.Stats;
 
 /**
  * 

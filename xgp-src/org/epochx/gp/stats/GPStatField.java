@@ -21,14 +21,13 @@
  */
 package org.epochx.gp.stats;
 
-import static org.epochx.stats.StatField.*;
-import static org.epochx.stats.Stats.ExpiryEvent.*;
+import static org.epochx.stats.StatField.GEN_POP;
+import static org.epochx.stats.Stats.ExpiryEvent.GENERATION;
 
-import java.util.*;
+import java.util.List;
 
-import org.apache.commons.lang.math.*;
-import org.epochx.epox.GPCandidateProgram;
-import org.epochx.gp.representation.*;
+import org.apache.commons.lang.math.NumberUtils;
+import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.stats.*;
 
 /**

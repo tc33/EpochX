@@ -25,7 +25,7 @@ import junit.framework.TestCase;
 
 import org.epochx.core.Model;
 import org.epochx.gp.model.GPModelDummy;
-import org.epochx.stats.Stats.*;
+import org.epochx.stats.Stats.ExpiryEvent;
 
 /**
  * 

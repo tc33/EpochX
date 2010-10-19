@@ -26,7 +26,7 @@ import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.eval.*;
-import org.epochx.tools.grammar.*;
+import org.epochx.tools.grammar.Grammar;
 import org.epochx.tools.util.BoolUtils;
 
 /**

@@ -23,8 +23,6 @@ package org.epochx.ge.model.epox;
 
 import java.awt.*;
 
-import org.epochx.gr.model.epox.AntTrail;
-
 /**
  * XGE model for the John Muir ant trail problem in the Epox language.
  */

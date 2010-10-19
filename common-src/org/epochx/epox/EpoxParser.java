@@ -27,9 +27,6 @@ import java.util.regex.Pattern;
 import org.epochx.epox.ant.*;
 import org.epochx.epox.bool.*;
 import org.epochx.epox.dbl.*;
-import org.epochx.gp.representation.ant.*;
-import org.epochx.gp.representation.bool.*;
-import org.epochx.gp.representation.dbl.*;
 import org.epochx.tools.ant.Ant;
 import org.epochx.tools.eval.MalformedProgramException;
 

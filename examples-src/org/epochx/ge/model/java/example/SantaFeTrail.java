@@ -28,7 +28,7 @@ import org.epochx.ge.mapper.DepthFirstMapper;
 import org.epochx.ge.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.life.*;
 import org.epochx.op.selection.TournamentSelector;
-import org.epochx.stats.*;
+import org.epochx.stats.Stats;
 
 public class SantaFeTrail extends org.epochx.ge.model.java.SantaFeTrail {
 

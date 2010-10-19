@@ -23,12 +23,11 @@ package org.epochx.gp.op.init;
 
 import java.util.*;
 
+import junit.framework.TestCase;
+
 import org.epochx.epox.*;
 import org.epochx.epox.bool.NotFunction;
-import org.epochx.gp.representation.*;
 import org.epochx.tools.random.MersenneTwisterFast;
-
-import junit.framework.TestCase;
 
 
 /**

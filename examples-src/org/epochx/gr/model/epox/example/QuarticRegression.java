@@ -2,8 +2,6 @@ package org.epochx.gr.model.epox.example;
 
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.op.init.FullInitialiser;
-import org.epochx.life.*;
-import org.epochx.stats.StatField;
 
 /**
  * 

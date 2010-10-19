@@ -1,11 +1,8 @@
 package org.epochx.gr.model.java.example;
 
-import static org.epochx.stats.StatField.*;
-
 import org.epochx.gr.op.crossover.WhighamCrossover;
 import org.epochx.gr.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.gr.op.mutation.WhighamMutation;
-import org.epochx.life.*;
 import org.epochx.op.selection.TournamentSelector;
 
 public class SantaFeTrail extends org.epochx.gr.model.java.SantaFeTrail {

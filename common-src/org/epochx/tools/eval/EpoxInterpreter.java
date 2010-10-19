@@ -22,7 +22,6 @@
 package org.epochx.tools.eval;
 
 import org.epochx.epox.*;
-import org.epochx.gp.representation.*;
 
 /**
  * An <code>EpoxInterpreter</code> provides the facility to evaluate individual

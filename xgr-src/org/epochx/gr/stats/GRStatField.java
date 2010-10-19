@@ -21,14 +21,14 @@
  */
 package org.epochx.gr.stats;
 
-import java.util.*;
+import static org.epochx.stats.StatField.GEN_POP;
+import static org.epochx.stats.Stats.ExpiryEvent.GENERATION;
 
-import org.apache.commons.lang.math.*;
-import org.epochx.gr.representation.*;
+import java.util.List;
+
+import org.apache.commons.lang.math.NumberUtils;
+import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.stats.*;
-
-import static org.epochx.stats.StatField.*;
-import static org.epochx.stats.Stats.ExpiryEvent.*;
 
 /**
  * Provides constants to be used as keys to request statistics from the

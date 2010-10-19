@@ -28,7 +28,7 @@ import java.util.*;
 import org.epochx.life.*;
 import org.epochx.op.ProgramSelector;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.*;
+import org.epochx.stats.Stats;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 /**

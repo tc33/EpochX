@@ -30,7 +30,7 @@ import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.ant.*;
 import org.epochx.tools.eval.*;
-import org.epochx.tools.grammar.*;
+import org.epochx.tools.grammar.Grammar;
 
 /**
  * Abstract XGR model for ant trail problems in the Ruby language. This class

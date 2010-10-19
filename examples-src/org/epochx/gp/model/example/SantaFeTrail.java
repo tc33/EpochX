@@ -29,7 +29,7 @@ import org.epochx.gp.op.init.FullInitialiser;
 import org.epochx.gp.op.mutation.SubtreeMutation;
 import org.epochx.life.*;
 import org.epochx.op.selection.TournamentSelector;
-import org.epochx.stats.*;
+import org.epochx.stats.Stats;
 
 /**
  * 

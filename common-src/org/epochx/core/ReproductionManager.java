@@ -26,7 +26,7 @@ import static org.epochx.stats.StatField.*;
 import org.epochx.life.*;
 import org.epochx.op.ProgramSelector;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.*;
+import org.epochx.stats.Stats;
 
 /**
  * This component manages the reproduction operation of selecting a program to

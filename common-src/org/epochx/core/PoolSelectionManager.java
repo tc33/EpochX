@@ -28,7 +28,7 @@ import java.util.List;
 import org.epochx.life.*;
 import org.epochx.op.PoolSelector;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.*;
+import org.epochx.stats.Stats;
 
 /**
  * This component manages the selection of a breeding pool to undergo the

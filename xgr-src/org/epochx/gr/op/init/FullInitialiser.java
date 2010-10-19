@@ -170,8 +170,6 @@ public class FullInitialiser extends ConfigOperator<GRModel> implements GRInitia
 	 * Constructs and returns a new <code>GRCandidateProgram</code> with a full
 	 * parse tree with the given depth.
 	 * 
-	 * @param depth The depth of the full parse tree, where the
-	 *        depth is the number of nodes from the root.
 	 * @return The root node of a randomly generated full parse tree of the
 	 *         requested depth.
 	 */

@@ -352,8 +352,8 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GRModel> implem
 	 * 
 	 * @param endMaxDepth the maximum depth of the ramping process.
 	 */
-	public void setEndMaxDepth(final int maxDepth) {
-		this.endMaxDepth = maxDepth;
+	public void setEndMaxDepth(final int endMaxDepth) {
+		this.endMaxDepth = endMaxDepth;
 	}
 
 	/**
@@ -373,7 +373,7 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GRModel> implem
 	 * Sets the first maximum depth used for program trees this initialiser
 	 * constructs. Depths will be ramped up from here to the end maximum depth.
 	 * 
-	 * @param endMaxDepth the maximum depth to be used for the smallest set of
+	 * @param startMaxDepth the maximum depth to be used for the smallest set of
 	 *        program trees.
 	 */
 	public void setStartMaxDepth(final int startMaxDepth) {

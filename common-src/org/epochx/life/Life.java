@@ -110,14 +110,38 @@ public class Life {
 		hooks.add(hook);
 	}
 
+	/**
+	 * Adds a <code>Hook</code> to the life cycle with either a strong or a weak
+	 * reference.
+	 * 	
+	 * @param hook the hook to register.
+	 * @param strong whether the reference to the hook should be either strong 
+	 * 			or weak.
+	 */
 	public void addHook(final Hook hook, final boolean strong) {
 		hooks.add(hook, strong);
 	}
 	
+	/**
+	 * Inserts a <code>Hook</code> into the list of hooks at the specified 
+	 * index.
+	 * 
+	 * @param index the index of where to insert the hook.
+	 * @param hook the hook to insert into the list of hooks registered.
+	 */
 	public void insertHook(final int index, final Hook hook) {
 		hooks.add(index, hook);
 	}
 	
+	/**
+	 * Inserts a <code>Hook</code> into the list of hooks at the specified 
+	 * index with either a strong or a weak reference
+	 * 
+	 * @param index the index of where to insert the hook.
+	 * @param hook the hook to insert into the list of hooks registered.
+	 * @param strong whether the reference to the hook should be either strong 
+	 * 			or weak.
+	 */
 	public void insertHook(final int index, final Hook hook, final boolean strong) {
 		hooks.add(index, hook, strong);
 	}
@@ -141,12 +165,15 @@ public class Life {
 	}
 	
 	/**
-	 * It does not make sense to use this method with an anonymous inner class 
-	 * as the listener since it will contain an implicit strong reference to the
-	 * owner, and as such neither will ever be garbage collected. 
+	 * Registers a listener to receive configuration events.
 	 * 
-	 * @param listener
-	 * @param owner
+	 * It does not make sense to use a weak reference with an anonymous inner 
+	 * class as the listener since it will contain an implicit strong reference 
+	 * to the owner, and as such neither will ever be garbage collected. 
+	 * 
+	 * @param listener the <code>ConfigListener</code> to be added.
+	 * @param strong whether the listener should be referred to by a strong 
+	 * 			or weak reference.
 	 */
 	public void addConfigListener(final ConfigListener listener, boolean strong) {
 		configListeners.add(listener, strong);
@@ -170,6 +197,17 @@ public class Life {
 		runListeners.add(listener);
 	}
 	
+	/**
+	 * Registers a listener to receive run events.
+	 * 
+	 * It does not make sense to use a weak reference with an anonymous inner 
+	 * class as the listener since it will contain an implicit strong reference 
+	 * to the owner, and as such neither will ever be garbage collected. 
+	 * 
+	 * @param listener the <code>RunListener</code> to be added.
+	 * @param strong whether the listener should be referred to by a strong 
+	 * 			or weak reference.
+	 */
 	public void addRunListener(final RunListener listener, boolean strong) {
 		runListeners.add(listener, strong);
 	}
@@ -192,6 +230,17 @@ public class Life {
 		initialisationListeners.add(listener);
 	}
 
+	/**
+	 * Registers a listener to receive initialisation events.
+	 * 
+	 * It does not make sense to use a weak reference with an anonymous inner 
+	 * class as the listener since it will contain an implicit strong reference 
+	 * to the owner, and as such neither will ever be garbage collected. 
+	 * 
+	 * @param listener the <code>InitialisationListener</code> to be added.
+	 * @param strong whether the listener should be referred to by a strong 
+	 * 			or weak reference.
+	 */
 	public void addInitialisationListener(final InitialisationListener listener, boolean strong) {
 		initialisationListeners.add(listener, strong);
 	}
@@ -215,6 +264,17 @@ public class Life {
 		elitismListeners.add(listener);
 	}
 
+	/**
+	 * Registers a listener to receive elitism events.
+	 * 
+	 * It does not make sense to use a weak reference with an anonymous inner 
+	 * class as the listener since it will contain an implicit strong reference 
+	 * to the owner, and as such neither will ever be garbage collected. 
+	 * 
+	 * @param listener the <code>ElitismListener</code> to be added.
+	 * @param strong whether the listener should be referred to by a strong 
+	 * 			or weak reference.
+	 */
 	public void addElitismListener(final ElitismListener listener, boolean strong) {
 		elitismListeners.add(listener, strong);
 	}
@@ -237,6 +297,17 @@ public class Life {
 		poolSelectionListeners.add(listener);
 	}
 	
+	/**
+	 * Registers a listener to receive pool selection events.
+	 * 
+	 * It does not make sense to use a weak reference with an anonymous inner 
+	 * class as the listener since it will contain an implicit strong reference 
+	 * to the owner, and as such neither will ever be garbage collected. 
+	 * 
+	 * @param listener the <code>PoolSelectionListener</code> to be added.
+	 * @param strong whether the listener should be referred to by a strong 
+	 * 			or weak reference.
+	 */
 	public void addPoolSelectionListener(final PoolSelectionListener listener, boolean strong) {
 		poolSelectionListeners.add(listener, strong);
 	}
@@ -259,6 +330,17 @@ public class Life {
 		crossoverListeners.add(listener);
 	}
 	
+	/**
+	 * Registers a listener to receive crossover events.
+	 * 
+	 * It does not make sense to use a weak reference with an anonymous inner 
+	 * class as the listener since it will contain an implicit strong reference 
+	 * to the owner, and as such neither will ever be garbage collected. 
+	 * 
+	 * @param listener the <code>CrossoverListener</code> to be added.
+	 * @param strong whether the listener should be referred to by a strong 
+	 * 			or weak reference.
+	 */
 	public void addCrossoverListener(final CrossoverListener listener, boolean strong) {
 		crossoverListeners.add(listener, strong);
 	}
@@ -281,6 +363,17 @@ public class Life {
 		mutationListeners.add(listener);
 	}
 	
+	/**
+	 * Registers a listener to receive mutation events.
+	 * 
+	 * It does not make sense to use a weak reference with an anonymous inner 
+	 * class as the listener since it will contain an implicit strong reference 
+	 * to the owner, and as such neither will ever be garbage collected. 
+	 * 
+	 * @param listener the <code>MutationListener</code> to be added.
+	 * @param strong whether the listener should be referred to by a strong 
+	 * 			or weak reference.
+	 */
 	public void addMutationListener(final MutationListener listener, boolean strong) {
 		mutationListeners.add(listener, strong);
 	}
@@ -303,6 +396,17 @@ public class Life {
 		reproductionListeners.add(listener);
 	}
 	
+	/**
+	 * Registers a listener to receive reproduction events.
+	 * 
+	 * It does not make sense to use a weak reference with an anonymous inner 
+	 * class as the listener since it will contain an implicit strong reference 
+	 * to the owner, and as such neither will ever be garbage collected. 
+	 * 
+	 * @param listener the <code>ReproductionListener</code> to be added.
+	 * @param strong whether the listener should be referred to by a strong 
+	 * 			or weak reference.
+	 */
 	public void addReproductionListener(final ReproductionListener listener, boolean strong) {
 		reproductionListeners.add(listener, strong);
 	}
@@ -325,6 +429,17 @@ public class Life {
 		generationListeners.add(listener);
 	}
 	
+	/**
+	 * Registers a listener to receive generation events.
+	 * 
+	 * It does not make sense to use a weak reference with an anonymous inner 
+	 * class as the listener since it will contain an implicit strong reference 
+	 * to the owner, and as such neither will ever be garbage collected. 
+	 * 
+	 * @param listener the <code>GenerationListener</code> to be added.
+	 * @param strong whether the listener should be referred to by a strong 
+	 * 			or weak reference.
+	 */
 	public void addGenerationListener(final GenerationListener listener, boolean strong) {
 		generationListeners.add(listener, strong);
 	}

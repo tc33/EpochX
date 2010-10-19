@@ -30,7 +30,7 @@ package org.epochx.tools.grammar;
 public interface Symbol extends Cloneable {
 
 	/**
-	 * {@inheritDoc}
+	 * 
 	 */
 	public Symbol clone();
 

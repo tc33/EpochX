@@ -66,7 +66,7 @@ public abstract class AntTrail extends GRModel {
 	 * must all be positioned at points within the given <code>landscapeSize
 	 * </code>.
 	 * 
-	 * @param FOOD_LOCATIONS the points on the landscape which will be occupied
+	 * @param foodLocations the points on the landscape which will be occupied
 	 *        by food
 	 * @param landscapeSize the dimensions of the landscape that the ant will
 	 *        operate within

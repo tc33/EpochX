@@ -115,9 +115,9 @@ public class UniformPointCrossover extends ConfigOperator<GPModel> implements GP
 	 * in both programs, the genetic material at the points are then exchanged.
 	 * The resulting programs are returned as new GPCandidateProgram objects.
 	 * 
-	 * @param program1 The first GPCandidateProgram selected to undergo uniform
+	 * @param p1 The first GPCandidateProgram selected to undergo uniform
 	 *        point crossover.
-	 * @param program2 The second GPCandidateProgram selected to undergo uniform
+	 * @param p2 The second GPCandidateProgram selected to undergo uniform
 	 *        point crossover.
 	 */
 	@Override

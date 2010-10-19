@@ -113,8 +113,8 @@ public class FixedPointCrossover extends ConfigOperator<GEModel> implements GECr
 	 * within the length bounds of both parent programs. Then all codons from
 	 * that point onwards in both programs are exchanged.
 	 * 
-	 * @param parent1 {@inheritDoc}
-	 * @param parent2 {@inheritDoc}
+	 * @param p1 {@inheritDoc}
+	 * @param p2 {@inheritDoc}
 	 * @return {@inheritDoc}
 	 */
 	@Override

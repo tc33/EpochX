@@ -150,9 +150,9 @@ public class KozaCrossover extends ConfigOperator<GPModel> implements GPCrossove
 	 * function or terminal sets with the probability assigned at construction
 	 * or the default value of 90% function node.
 	 * 
-	 * @param program1 The first GPCandidateProgram selected to undergo Koza
+	 * @param p1 The first GPCandidateProgram selected to undergo Koza
 	 *        crossover.
-	 * @param program2 The second GPCandidateProgram selected to undergo Koza
+	 * @param p2 The second GPCandidateProgram selected to undergo Koza
 	 *        crossover.
 	 */
 	@Override

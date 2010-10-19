@@ -113,7 +113,7 @@ public class PointMutation extends ConfigOperator<GEModel> implements GEMutation
 	 * then a new codon is generated using the model's CodonGenerator to
 	 * replace it.
 	 * 
-	 * @param program The GECandidateProgram selected to undergo this mutation
+	 * @param p The GECandidateProgram selected to undergo this mutation
 	 *        operation.
 	 * @return A GECandidateProgram that was the result of a point mutation on
 	 *         the provided GECandidateProgram.

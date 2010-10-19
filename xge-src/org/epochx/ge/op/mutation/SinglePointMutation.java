@@ -89,7 +89,7 @@ public class SinglePointMutation extends ConfigOperator<GEModel> implements GEMu
 	 * will be randomly chosen from the length of codons in the program, and
 	 * will undergo mutation.
 	 * 
-	 * @param program The GECandidateProgram selected to undergo this mutation
+	 * @param p The GECandidateProgram selected to undergo this mutation
 	 *        operation.
 	 * @return A GECandidateProgram that was the result of a single point
 	 *         mutation

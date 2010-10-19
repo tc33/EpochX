@@ -108,8 +108,8 @@ public class OnePointCrossover extends ConfigOperator<GEModel> implements GECros
 	 * position is chosen in <b>both</b> parent programs and all the codons from
 	 * that point onwards are exchanged.
 	 * 
-	 * @param parent1 {@inheritDoc}
-	 * @param parent2 {@inheritDoc}
+	 * @param p1 {@inheritDoc}
+	 * @param p2 {@inheritDoc}
 	 * @return {@inheritDoc}
 	 */
 	@Override

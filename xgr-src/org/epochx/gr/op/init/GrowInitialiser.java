@@ -170,8 +170,6 @@ public class GrowInitialiser extends ConfigOperator<GRModel> implements GRInitia
 	 * Constructs and returns a new <code>GRCandidateProgram</code> with a grown
 	 * parse tree with the given maximum maxDepth.
 	 * 
-	 * @param maxDepth The maximum maxDepth of the parse tree, where the
-	 *        maxDepth is the number of nodes from the root.
 	 * @return A new <code>GRCandidateProgram</code> with a grown parse tree.
 	 */
 	public GRCandidateProgram getInitialProgram() {

@@ -36,8 +36,9 @@ import org.apache.commons.lang.ObjectUtils;
  * performing some operation and/or returning a value. A program
  * is maintained by the <code>GPCandidateProgram</code> class.
  * 
- * @see FunctionNode
- * @see TerminalNode
+ * @see BooleanNode
+ * @see DoubleNode
+ * @see VoidNode
  */
 public abstract class Node implements Cloneable {
 

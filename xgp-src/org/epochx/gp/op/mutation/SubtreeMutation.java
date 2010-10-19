@@ -135,7 +135,7 @@ public class SubtreeMutation extends ConfigOperator<GPModel> implements GPMutati
 	 * point is replaced with a newly generated program tree, which is created
 	 * using a grow strategy.
 	 * 
-	 * @param program The GPCandidateProgram selected to undergo this mutation
+	 * @param p The GPCandidateProgram selected to undergo this mutation
 	 *        operation.
 	 * @return A GPCandidateProgram that was the result of a point mutation on
 	 *         the provided GPCandidateProgram.

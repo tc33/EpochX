@@ -131,7 +131,7 @@ public class PointMutation extends ConfigOperator<GPModel> implements GPMutation
 	 * then a new function or terminal node of the same arity is used to
 	 * replace it.
 	 * 
-	 * @param program The GPCandidateProgram selected to undergo this mutation
+	 * @param p The GPCandidateProgram selected to undergo this mutation
 	 *        operation.
 	 * @return A GPCandidateProgram that was the result of a point mutation on
 	 *         the provided GPCandidateProgram.

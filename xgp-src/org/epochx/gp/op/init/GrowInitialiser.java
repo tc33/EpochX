@@ -204,8 +204,6 @@ public class GrowInitialiser extends ConfigOperator<GPModel> implements GPInitia
 	 * <code>GPCandidateProgram</code>. The nodes that form the tree will be
 	 * randomly selected from the nodes provided as the syntax attribute.
 	 * 
-	 * @param maxDepth The maximum depth of the node tree to be grown, where
-	 *        the depth is the number of nodes from the root.
 	 * @return a new <code>GPCandidateProgram</code> instance.
 	 */
 	public GPCandidateProgram getInitialProgram() {

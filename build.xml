@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project name="EpochX" default="dist" basedir=".">
     <description>
     	EpochX is an open source genetic programming framework.
@@ -120,7 +121,8 @@
     	           author="true"
     	           version="true"
     	           use="true"
-    	           windowtitle="EpochX ${version}">
+    	           windowtitle="EpochX ${version}" 
+    	           classpathref="classpath.src">
     	    <bottom><![CDATA[<i>Copyright &#169; 2007 Tom Castle & Lawrence Beadle. All Rights Reserved.</i>]]></bottom>
     	  </javadoc>
     </target>

@@ -93,8 +93,6 @@ public class FixedLengthInitialiser extends ConfigOperator<GEModel> implements G
 	 *        parameters should be loaded.
 	 * @param chromosomeLength The initial length that chromosomes should be
 	 *        generated to.
-	 * @param acceptDuplicates whether duplicates should be allowed in the
-	 *        populations that are generated.
 	 */
 	public FixedLengthInitialiser(final GEModel model,
 			final int chromosomeLength) {

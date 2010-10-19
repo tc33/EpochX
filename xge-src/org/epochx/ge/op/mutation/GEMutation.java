@@ -33,7 +33,7 @@ import org.epochx.representation.CandidateProgram;
  * single
  * mutation operation.
  * 
- * @see org.epochx.ge.model.GRMutation
+ * @see GEMutation
  */
 public interface GEMutation extends Mutation {
 

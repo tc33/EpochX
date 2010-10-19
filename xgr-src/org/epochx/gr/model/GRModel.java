@@ -151,8 +151,8 @@ public abstract class GRModel extends Model {
 	 * <p>
 	 * Max depth of -1 is allowed to indicate no limit.
 	 * 
-	 * @param maxDepth the maximum depth to allow a program's derivation tree
-	 *        after initialisation.
+	 * @param maxInitialDepth the maximum depth to allow a program's derivation 
+	 * 			tree after initialisation.
 	 */
 	public void setMaxInitialDepth(final int maxInitialDepth) {
 		if ((maxInitialDepth >= 1) || (maxInitialDepth == -1)) {

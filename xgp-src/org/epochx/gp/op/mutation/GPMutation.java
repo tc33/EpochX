@@ -48,6 +48,6 @@ public interface GPMutation extends Mutation {
 	 *         GPCandidateProgram.
 	 */
 	@Override
-	public GPCandidateProgram mutate(CandidateProgram parent);
+	public GPCandidateProgram mutate(CandidateProgram program);
 
 }

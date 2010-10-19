@@ -21,6 +21,7 @@
  */
 package org.epochx.stats;
 
+import java.io.*;
 import java.util.*;
 
 import org.epochx.life.*;
@@ -28,12 +29,15 @@ import org.epochx.life.*;
 /**
  * Gathers data and statistics about events that occur during execution of the
  * given <code>Model</code> and makes them available for use. Any component may
- * add data into the <code>Stats</code> by using the <code>addXxxData
- * </code> methods. The <code>Stats</code> will also use its internal
- * <code>CommonStatsEngine</code> instance to generate statistics upon request, and
+ * add data into the <code>Stats</code> by using the <code>addData</code> 
+ * method. The <code>Stats</code> manager will also make requests of 
+ * <code>Stat</code> objects to generate the statistic and then
  * stash the results internally. The data that is stored will only be held for
- * the current/previous incident of that event that took place. All data for an
- * event will be cleared upon the start of the next incident.
+ * until the next occurrence of the <code>ExpiryEvent</code> of the Stat.
+ * 
+ * <p>
+ * To print to a file use the <code>printToStream</code> method, passing in a 
+ * suitable <code>OutputStream</code> such as <code>FileOutputStream</code>.
  */
 public class Stats {
 	
@@ -106,18 +110,11 @@ public class Stats {
 	}
 
 	/**
-	 * Retrieves the statistic data about a mutation associated with the
-	 * provided field. If the stat field does not exist or is otherwise
-	 * unavailable then null will be returned.
-	 * 
-	 * <p>
-	 * This object will start by checking its internal storage for the field, if
-	 * it holds an entry for that field then the data will be returned. If no
-	 * entry is stored, then the <code>CommonStatsEngine</code> instance will be asked
-	 * if it is able to generate it. If it can be generated then it will then be
-	 * stored for future requests and then returned. If the
-	 * <code>CommonStatsEngine</code> is unable to create the statistic then <code>
-	 * null</code> will be returned from this method.
+	 * Retrieves the statistic data associated with the provided field in the 
+	 * stats being stored. If a value for the stat field is not currently held
+	 * then the <code>getStatValue</code> method on the Stat will be called, 
+	 * with the resulting value returned from this method and also stored for 
+	 * future requests.
 	 * 
 	 * <p>
 	 * The object type of the instance that is returned will be dependent upon
@@ -145,21 +142,19 @@ public class Stats {
 	}
 
 	/**
-	 * Retrieves a sequence of mutation statistics associated with the given
+	 * Retrieves a sequence of statistics associated with the given
 	 * fields. The returned array will be of the same length as the number of
 	 * fields provided and each element will represent each field in order.
 	 * 
 	 * <p>
 	 * Each statistic field requested will be obtained according to the contract
-	 * specified by the <code>getMutationStat(String)</code> method.
+	 * specified by the <code>getStat(Stat)</code> method.
 	 * 
 	 * @param fields the names of the statistics fields to retrieve.
 	 * @return an array of Objects where each element is the statistic field
 	 *         generated for the requested field at that array index. If a field
-	 *         is
-	 *         for data that does not exist or is otherwise unavailable then
-	 *         that array
-	 *         element will be <code>null</code>.
+	 *         is for data that does not exist or is otherwise unavailable then
+	 *         that array element will be <code>null</code>.
 	 */
 	public Object[] getStats(final Stat ... fields) {
 		final Object[] stats = new Object[fields.length];
@@ -170,53 +165,87 @@ public class Stats {
 	}
 
 	/**
-	 * Retrieve and print to the standard output the sequence of mutation
-	 * statistics referenced by the given fields. The statistics will be
-	 * obtained according to the contract specified by the
-	 * <code>getRunStats(String[])</code> method. The result of calling the
-	 * <code>toString()</code> method on each statistic object returned will be
-	 * printed separated by a '\t' tab character, and the line terminated with a
-	 * '\n' newline character.
+	 * Retrieve and print to the standard output the sequence of statistics 
+	 * referenced by the given fields. The statistics will be obtained according
+	 * to the contract specified by the <code>getStats(Stat[])</code> method. 
+	 * The result of calling the <code>toString()</code> method on each 
+	 * statistic object returned will be printed separated by a '\t' tab 
+	 * character, and the line terminated with a '\n' newline character.
 	 * 
-	 * @param fields the names of the statistics fields to print out.
+	 * @param fields the Stat fields to print out.
 	 */
-	public void printStats(final Stat ... fields) {
-		printStats(fields, "\t");
+	public void print(final Stat ... fields) {
+		print("\t", fields);
 	}
 
 	/**
-	 * Retrieve and print to the standard output the sequence of mutation
-	 * statistics referenced by the given fields. The statistics will be
-	 * obtained according to the contract specified by the
-	 * <code>getRunStats(String[])</code> method. The result of calling the
-	 * <code>toString()</code> method on each statistic object returned will be
-	 * printed separated by a the <code>separator</code> <code>String</code>
-	 * parameter provided, and the line terminated with a '\n' newline
-	 * character.
+	 * Retrieve and print to the standard output the sequence of statistics 
+	 * referenced by the given fields. The statistics will be obtained according
+	 * to the contract specified by the <code>getStats(Stat[])</code> method. 
+	 * The result of calling the <code>toString()</code> method on each 
+	 * statistic object returned will be printed separated by the 
+	 * <code>separator</code> <code>String</code> parameter provided, and the 
+	 * line terminated with a '\n' newline character.
 	 * 
-	 * @param fields the names of the statistics fields to print out.
+	 * @param fields the Stat fields to print out.
 	 * @param separator the String to be printed between each statistic.
 	 */
-	public void printStats(final Stat[] fields, final String separator) {
+	public void print(final String separator, final Stat ... fields) {
 		final Object[] stats = getStats(fields);
 
-		printArray(stats, separator);
+		printArray(System.out, stats, separator);
+	}
+	
+	/**
+	 * Retrieve and print to an output stream the sequence of statistics 
+	 * referenced by the given fields. The statistics will be obtained according
+	 * to the contract specified by the <code>getStats(Stat[])</code> method. 
+	 * The result of calling the <code>toString()</code> method on each 
+	 * statistic object returned will be printed separated by a '\t' tab 
+	 * character, and the line terminated with a '\n' newline character.
+	 * 
+	 * @param out the OutputStream to print to.
+	 * @param fields the Stat fields to print to the stream.
+	 */
+	public void printToStream(final OutputStream out, final Stat ... fields) {
+		printToStream(out, "\t", fields);
 	}
 
+	/**
+	 * Retrieve and print to an output stream the sequence of statistics 
+	 * referenced by the given fields. The statistics will be obtained according
+	 * to the contract specified by the <code>getStats(Stat[])</code> method. 
+	 * The result of calling the <code>toString()</code> method on each 
+	 * statistic object returned will be printed separated by the 
+	 * <code>separator</code> <code>String</code> parameter provided, and the 
+	 * line terminated with a '\n' newline character.
+	 * 
+	 * @param out the OutputStream to print to.
+	 * @param fields the Stat fields to print to the stream.
+	 * @param separator the String to be printed between each statistic.
+	 */
+	public void printToStream(final OutputStream out, final String separator, final Stat ... fields) {
+		final Object[] stats = getStats(fields);
+
+		printArray(out, stats, separator);
+	}
+	
 	/*
 	 * Print each element of the given array separated by the provided separator
 	 * character followed by a new line character.
 	 */
-	private static void printArray(final Object[] array, final String separator) {
+	private static void printArray(final OutputStream outputStream, final Object[] array, final String separator) {
+		PrintStream out = new PrintStream(outputStream);
 		for (int i = 0; i < array.length; i++) {
 			if (i != 0) {
-				System.out.print(separator);
+				out.print(separator);
 			}
-			System.out.print(array[i]);
+			out.print(array[i]);
 		}
-		System.out.println();
+		out.println();
+		out.flush();
 	}
-
+	
 	/*
 	 * Listen for life cycle events and if they happen then clear appropriate
 	 * old data out of the data maps.

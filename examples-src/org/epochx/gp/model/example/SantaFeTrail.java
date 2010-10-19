@@ -56,7 +56,7 @@ public class SantaFeTrail extends org.epochx.gp.model.SantaFeTrail {
 
 			@Override
 			public void onGenerationEnd() {
-				Stats.get().printStats(GEN_NUMBER,
+				Stats.get().print(GEN_NUMBER,
 						GEN_FITNESS_MIN, GEN_FITNESS_AVE, GEN_DEPTH_AVE,
 						GEN_DEPTH_MAX);
 			}
@@ -66,7 +66,7 @@ public class SantaFeTrail extends org.epochx.gp.model.SantaFeTrail {
 
 			@Override
 			public void onRunEnd() {
-				Stats.get().printStats(RUN_NUMBER, RUN_FITNESS_MIN,
+				Stats.get().print(RUN_NUMBER, RUN_FITNESS_MIN,
 						RUN_FITTEST_PROGRAM);
 			}
 		});

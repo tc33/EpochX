@@ -66,7 +66,7 @@ public class Even3Parity extends EvenParity {
 		Life.get().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationEnd() {
-				Stats.get().printStats(RUN_NUMBER, GEN_NUMBER, GEN_FITNESS_MIN, GEN_FITNESS_AVE);
+				Stats.get().print(RUN_NUMBER, GEN_NUMBER, GEN_FITNESS_MIN, GEN_FITNESS_AVE);
 			}
 		});
 		 

@@ -40,7 +40,7 @@ import org.epochx.tools.util.BoolUtils;
  * true
  * (or 1), and return false whenever there is an odd number of true inputValues.
  */
-public abstract class EvenParity extends GEModel {
+public class EvenParity extends GEModel {
 
 	// Incomplete grammar requiring correct number of terminals to be added.
 	private static final String GRAMMAR_FRAGMENT = "<prog> ::= <node>\n"

@@ -183,14 +183,14 @@ public class RunManager implements ConfigListener {
 			}
 		}
 
-		// Inform everyone the run has ended.
-		Life.get().fireRunEndEvent();
-
 		// Calculate how long the run took.
 		final long runtime = System.nanoTime() - startTime;
 
 		// Add run time to stats data.
 		Stats.get().addData(RUN_TIME, runtime);
+		
+		// Inform everyone the run has ended.
+		Life.get().fireRunEndEvent();
 	}
 
 	/*

@@ -23,6 +23,7 @@ package org.epochx.ge.representation;
 
 import java.util.*;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.epochx.ge.model.GEModel;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.*;
@@ -49,18 +50,20 @@ public class GECandidateProgram extends CandidateProgram {
 	// The controlling model.
 	private GEModel model;
 
-	// The genotype. For caching to work, it must be impossible to gain direct
-	// access to this list.
+	// The genotype.
 	private List<Integer> codons;
+	
+	// How the codons looked when we last built the phenotype.
+	private List<Integer> sourceCacheCodons;
+	
+	// How the codons looked when we last evaluated the program fitness.
+	private List<Integer> fitnessCacheCodons;
 
-	// The phenotype.
+	// The phenotype cache.
 	private NonTerminalSymbol parseTree;
 
-	// The fitness of the phenotype.
+	// The fitness of the phenotype cache.
 	private double fitness;
-
-	// Whether the current version of the chromosome has been mapped.
-	private boolean mapped;
 
 	// How many of the codons are actually used during mapping.
 	private int noActiveCodons;
@@ -88,8 +91,10 @@ public class GECandidateProgram extends CandidateProgram {
 		this.model = model;
 
 		parseTree = null;
-		mapped = false;
 		fitness = -1;
+		
+		sourceCacheCodons = null;
+		fitnessCacheCodons = null;
 	}
 
 	/**
@@ -98,8 +103,6 @@ public class GECandidateProgram extends CandidateProgram {
 	 */
 	public void appendNewCodon() {
 		appendCodon(model.getCodonGenerator().getCodon());
-
-		modified();
 	}
 
 	/**
@@ -112,8 +115,6 @@ public class GECandidateProgram extends CandidateProgram {
 		for (int i = 0; i < no; i++) {
 			appendNewCodon();
 		}
-
-		modified();
 	}
 
 	/**
@@ -126,8 +127,6 @@ public class GECandidateProgram extends CandidateProgram {
 	 */
 	public void insertNewCodon(final int index) {
 		codons.add(index, model.getCodonGenerator().getCodon());
-
-		modified();
 	}
 
 	/**
@@ -139,11 +138,7 @@ public class GECandidateProgram extends CandidateProgram {
 	 * @return the codon that was removed from the chromosome.
 	 */
 	public int removeCodon(final int index) {
-		final int c = codons.remove(index);
-
-		modified();
-
-		return c;
+		return codons.remove(index);
 	}
 
 	/**
@@ -165,8 +160,6 @@ public class GECandidateProgram extends CandidateProgram {
 			removed.add(codons.remove(from));
 		}
 
-		modified();
-
 		return removed;
 	}
 
@@ -180,10 +173,8 @@ public class GECandidateProgram extends CandidateProgram {
 	 */
 	public void appendCodon(final int newCodon) {
 		codons.add(newCodon);
-
-		modified();
 	}
-
+		
 	/**
 	 * Appends multiple codons to the candidate program's chromosome. Care
 	 * should be taken when using this method as it allows the generation
@@ -196,8 +187,6 @@ public class GECandidateProgram extends CandidateProgram {
 		for (int i = 0; i < newCodons.size(); i++) {
 			appendCodon(newCodons.get(i));
 		}
-
-		modified();
 	}
 
 	/**
@@ -209,8 +198,6 @@ public class GECandidateProgram extends CandidateProgram {
 	 */
 	public void setCodon(final int index, final int newCodon) {
 		codons.set(index, model.getCodonGenerator().getCodon());
-
-		modified();
 	}
 
 	/**
@@ -242,8 +229,6 @@ public class GECandidateProgram extends CandidateProgram {
 				appendCodon(c);
 			}
 		}
-
-		modified();
 	}
 
 	/**
@@ -280,8 +265,8 @@ public class GECandidateProgram extends CandidateProgram {
 	 * 
 	 * @return a copy of this program's codon string.
 	 */
-	public List<Integer> getCodonsCopy() {
-		return new ArrayList<Integer>(codons);
+	public List<Integer> getCodons() {
+		return codons;
 	}
 
 	/**
@@ -314,8 +299,10 @@ public class GECandidateProgram extends CandidateProgram {
 	 */
 	@Override
 	public double getFitness() {
-		if (!model.cacheFitness() || (fitness == -1)) {
+		// If we're not caching or the cache is out of date.
+		if (!model.cacheFitness() || !codons.equals(fitnessCacheCodons)) {
 			fitness = model.getFitness(this);
+			fitnessCacheCodons = new ArrayList<Integer>(codons);
 		}
 
 		return fitness;
@@ -336,13 +323,13 @@ public class GECandidateProgram extends CandidateProgram {
 	 */
 	public String getSourceCode() {
 		// If we have not already done the mapping then do it now and stash it.
-		if (!model.cacheSource() || (mapped == false)) {
+		if (!model.cacheSource() || !codons.equals(sourceCacheCodons)) {
 			// May be null still after if the map was invalid.
 			parseTree = model.getMapper().map(this);
 			// Update the number of codons that were used in mapping.
 			noActiveCodons = model.getMapper().getNoMappedCodons();
-			// Set flag to say the codons have been mapped.
-			mapped = true;
+			// Store the codons as they are now.
+			sourceCacheCodons = new ArrayList<Integer>(codons);
 		}
 
 		return (parseTree == null) ? null : parseTree.toString();
@@ -389,21 +376,6 @@ public class GECandidateProgram extends CandidateProgram {
 	}
 
 	/**
-	 * It's imperative this method is called whenever the list of codons gets
-	 * modified so that the caches can be reset.
-	 */
-	private void modified() {
-		// Remove source cache.
-		parseTree = null;
-
-		// Set flag to say the modified version hasn't been mapped.
-		mapped = false;
-
-		// Reset source fitness cache.
-		fitness = -1;
-	}
-
-	/**
 	 * Create a clone of this GECandidateProgram. The list of codons are copied
 	 * as are all caches.
 	 * 
@@ -425,7 +397,8 @@ public class GECandidateProgram extends CandidateProgram {
 		}
 
 		clone.fitness = fitness;
-		clone.mapped = mapped;
+		clone.sourceCacheCodons = new ArrayList<Integer>(sourceCacheCodons);
+		clone.fitnessCacheCodons = new ArrayList<Integer>(fitnessCacheCodons);
 
 		// Shallow copy the model.
 		clone.model = model;
@@ -440,7 +413,7 @@ public class GECandidateProgram extends CandidateProgram {
 	 */
 	@Override
 	public String toString() {
-		if (mapped && (parseTree != null)) {
+		if (codons.equals(sourceCacheCodons) && (parseTree != null)) {
 			return parseTree.toString();
 		} else {
 			return codons.toString();
@@ -465,11 +438,9 @@ public class GECandidateProgram extends CandidateProgram {
 		if ((thisParseTree == null) && (progParseTree == null)) {
 			// Compare genotypes.
 			return codons.equals(prog.codons);
-		} else if ((thisParseTree == null) || (progParseTree == null)) {
-			return false;
 		} else {
 			// Compare phenotypes.
-			return thisParseTree.equals(progParseTree);
+			return ObjectUtils.equals(thisParseTree, progParseTree);
 		}
 	}
 }

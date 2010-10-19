@@ -90,7 +90,7 @@ public class BreadthFirstMapper implements Mapper {
 	public String mapToString(final GECandidateProgram program) {
 		final Grammar grammar = model.getGrammar();
 		symbols = new ArrayList<GrammarNode>();
-		final List<Integer> codons = program.getCodonsCopy();
+		final List<Integer> codons = program.getCodons();
 		this.program = program;
 
 		symbols.add(grammar.getStartRule());
@@ -166,7 +166,7 @@ public class BreadthFirstMapper implements Mapper {
 							}
 						} else if (wrapping) {
 							// Refresh set of codons to start again.
-							codons.addAll(program.getCodonsCopy());
+							codons.addAll(program.getCodons());
 						} else {
 							// We're not wrapping or extending so the chromosome
 							// is invalid.

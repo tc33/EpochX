@@ -25,6 +25,7 @@ import java.util.*;
 
 import junit.framework.TestCase;
 
+import org.epochx.epox.*;
 import org.epochx.gp.model.*;
 import org.epochx.gp.representation.*;
 import org.epochx.life.*;

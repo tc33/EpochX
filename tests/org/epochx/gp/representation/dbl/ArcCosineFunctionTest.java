@@ -21,6 +21,8 @@
  */
 package org.epochx.gp.representation.dbl;
 
+import org.epochx.epox.*;
+import org.epochx.epox.dbl.ArcCosineFunction;
 import org.epochx.gp.representation.*;
 
 /**

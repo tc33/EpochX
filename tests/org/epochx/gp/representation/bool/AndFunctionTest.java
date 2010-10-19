@@ -21,6 +21,8 @@
  */
 package org.epochx.gp.representation.bool;
 
+import org.epochx.epox.*;
+import org.epochx.epox.bool.AndFunction;
 import org.epochx.gp.representation.*;
 
 /**

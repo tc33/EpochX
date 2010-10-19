@@ -21,6 +21,7 @@
  */
 package org.epochx.gp.representation;
 
+import org.epochx.epox.EpoxParser;
 import org.epochx.tools.eval.MalformedProgramException;
 
 import junit.framework.TestCase;

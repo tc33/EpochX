@@ -24,10 +24,10 @@ package org.epochx.gp.model;
 import java.util.ArrayList;
 
 import org.epochx.core.*;
+import org.epochx.epox.Node;
 import org.epochx.gp.op.crossover.UniformPointCrossover;
 import org.epochx.gp.op.init.FullInitialiser;
 import org.epochx.gp.op.mutation.SubtreeMutation;
-import org.epochx.gp.representation.Node;
 
 /**
  * Some of these test check that the default values are correct. It is possible

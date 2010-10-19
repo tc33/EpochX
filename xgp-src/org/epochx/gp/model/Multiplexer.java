@@ -23,6 +23,8 @@ package org.epochx.gp.model;
 
 import java.util.*;
 
+import org.epochx.epox.*;
+import org.epochx.epox.bool.*;
 import org.epochx.gp.representation.*;
 import org.epochx.gp.representation.bool.*;
 import org.epochx.representation.CandidateProgram;

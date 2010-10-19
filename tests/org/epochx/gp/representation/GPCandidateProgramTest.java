@@ -23,7 +23,8 @@ package org.epochx.gp.representation;
 
 import java.util.List;
 
-import org.epochx.gp.representation.bool.AndFunction;
+import org.epochx.epox.*;
+import org.epochx.epox.bool.AndFunction;
 import org.epochx.representation.*;
 
 /**

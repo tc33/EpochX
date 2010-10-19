@@ -24,10 +24,10 @@ package org.epochx.gp.model;
 import java.util.List;
 
 import org.epochx.core.Model;
+import org.epochx.epox.Node;
 import org.epochx.gp.op.crossover.UniformPointCrossover;
 import org.epochx.gp.op.init.FullInitialiser;
 import org.epochx.gp.op.mutation.SubtreeMutation;
-import org.epochx.gp.representation.Node;
 
 /**
  * Model implementation for performing tree-based genetic programming

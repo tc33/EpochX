@@ -25,6 +25,8 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+import org.epochx.epox.*;
+import org.epochx.epox.ant.*;
 import org.epochx.gp.representation.*;
 import org.epochx.gp.representation.ant.*;
 import org.epochx.representation.CandidateProgram;

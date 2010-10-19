@@ -27,6 +27,7 @@ import static org.epochx.stats.Stats.ExpiryEvent.*;
 import java.util.*;
 
 import org.apache.commons.lang.math.*;
+import org.epochx.epox.GPCandidateProgram;
 import org.epochx.gp.representation.*;
 import org.epochx.stats.*;
 

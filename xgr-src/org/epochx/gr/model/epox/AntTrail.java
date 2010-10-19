@@ -25,7 +25,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-import org.epochx.gp.representation.EpoxParser;
+import org.epochx.epox.EpoxParser;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.representation.CandidateProgram;

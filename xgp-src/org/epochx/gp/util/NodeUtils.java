@@ -23,6 +23,7 @@ package org.epochx.gp.util;
 
 import java.util.*;
 
+import org.epochx.epox.*;
 import org.epochx.gp.representation.*;
 
 public final class NodeUtils {

@@ -23,6 +23,7 @@ package org.epochx.gp.op.mutation;
 
 import java.util.*;
 
+import org.epochx.epox.*;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.*;
 import org.epochx.op.ConfigOperator;

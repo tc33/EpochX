@@ -23,10 +23,10 @@ package org.epochx.gp.model;
 
 import java.util.*;
 
+import org.epochx.epox.Node;
 import org.epochx.gp.op.crossover.UniformPointCrossover;
 import org.epochx.gp.op.init.FullInitialiser;
 import org.epochx.gp.op.mutation.SubtreeMutation;
-import org.epochx.gp.representation.Node;
 import org.epochx.op.*;
 import org.epochx.op.selection.TournamentSelector;
 import org.epochx.representation.CandidateProgram;

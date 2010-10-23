@@ -143,6 +143,11 @@ public class GXCandidateProgram extends CandidateProgram {
 		// Shallow copy the model.
 		clone.model = this.model;
 		
+		// Copy the variables.
+		Map<Variable, Variable> variableCopies = new HashMap<Variable, Variable>();
+		clone.method.getBody().copyVariables(model.getVariableHandler(), variableCopies);
+		clone.variables = new HashSet<Variable>(variableCopies.values());
+		
 		return clone;
 	}
 	
@@ -185,5 +190,9 @@ public class GXCandidateProgram extends CandidateProgram {
 	
 	public int getDepthOfInsertPoint(int insertPoint) {
 		return method.getBody().getDepthOfInsertPoint(insertPoint);
+	}
+
+	public int getLoopDepthOfInsertPoint(int insertPoint) {
+		return method.getBody().getLoopDepthOfInsertPoint(insertPoint);
 	}
 }

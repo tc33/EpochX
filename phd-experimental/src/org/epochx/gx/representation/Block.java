@@ -149,6 +149,24 @@ public class Block implements Cloneable {
 		return null;
 	}
 	
+	public void deleteStatement(Statement toDelete) {
+		int statementIndex = -1;
+		for (int i=0; i<statements.size(); i++) {
+			Statement s = statements.get(i);
+			if (s == toDelete) {
+				statementIndex = i;
+				break;
+			} else if (s instanceof BlockStatement) {
+				BlockStatement bs = (BlockStatement) s;
+				bs.deleteStatement(toDelete);
+			}
+		}
+		
+		if (statementIndex != -1) {
+			statements.remove(statementIndex);
+		}
+	}
+	
 	public void addStatement(Statement s) {
 		statements.add(s);
 	}
@@ -330,5 +348,43 @@ public class Block implements Cloneable {
 		
 		// Must be at the end of the block - depth is 0.
 		return depth;
+	}
+	
+	public int getLoopDepthOfInsertPoint(int insertPoint) {
+		int depth = 0;
+		int point = 0;
+		for (Statement s: statements) {
+			if (point == insertPoint) {
+				return depth;
+			} else if (s instanceof BlockStatement) {
+				// Insert point might be inside this statement.
+				BlockStatement bs = (BlockStatement) s;
+				if (point + bs.getNoInsertPoints() >= insertPoint) {
+					if (bs instanceof TimesLoop) {
+						return 1 + bs.getLoopDepthOfInsertPoint(insertPoint-point-1);
+					} else {
+						return bs.getLoopDepthOfInsertPoint(insertPoint-point-1);
+					}
+				}
+				
+				point += bs.getNoInsertPoints();
+			}
+			point++;
+		}
+		
+		// Must be at the end of the block - depth is 0.
+		return depth;
+	}
+
+	public int getLoopDepth() {
+		int maxDepth = 0;
+		for (Statement s: statements) {
+			int depth = s.getLoopDepth();
+			if (depth > maxDepth) {
+				maxDepth = depth;
+			}
+		}
+		
+		return maxDepth;
 	}
 }

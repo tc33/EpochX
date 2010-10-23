@@ -23,9 +23,8 @@ package org.epochx.core;
 
 import static org.epochx.stats.StatField.*;
 
-import java.util.List;
+import java.util.*;
 
-import org.epochx.gx.op.init.*;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
@@ -172,7 +171,7 @@ public class RunManager {
 		
 		// Perform initialisation.
 		List<CandidateProgram> pop = initialisation.initialise();
-		
+				
 		// Record best program so far and its fitness.
 		updateBestProgram(pop);
 		
@@ -180,7 +179,7 @@ public class RunManager {
 		for (int gen=1; gen<=noGenerations; gen++) {
 			// Perform the generation.
 			pop = generation.generation(gen, pop);
-
+			
 			//TODO Should be able to utilise the statsmanager here.
 			// Keep track of the best program and fitness.
 			//long fitStart = System.currentTimeMillis();

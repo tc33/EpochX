@@ -37,14 +37,14 @@ import org.epochx.stats.*;
 public class Fibonnaci extends org.epochx.gx.model.Fibonacci {
 	
     public static void main(String[] args) {
-    	final double crossoverProbability = 1.0;//Double.valueOf(args[0]);
+    	final double crossoverProbability = Double.valueOf(args[0]);
     	final double mutationProbability = 1.0 - crossoverProbability;
     	
     	final String outputPath = (args.length > 1) ? args[1] : "results/";
     	
 		final GXModel model = new Fibonnaci();
 		model.setNoRuns(100);
-		model.setNoGenerations(100);
+		model.setNoGenerations(1000);
 		model.setPopulationSize(1000);
 		model.setInitialiser(new ExperimentalInitialiser(model));
 		model.setMutation(new ExperimentalMutation(model));
@@ -56,7 +56,7 @@ public class Fibonnaci extends org.epochx.gx.model.Fibonacci {
 		model.setMaxNoStatements(6);
 		model.setMinNoStatements(4);
 		
-		model.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
+		/*model.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
 			@Override
 			public void onGenerationEnd() {
 				Object[] stats = model.getStatsManager().getGenerationStats(StatField.GEN_NUMBER, 
@@ -88,63 +88,63 @@ public class Fibonnaci extends org.epochx.gx.model.Fibonacci {
 				double aveSize = totalSize / pop.size();
 				System.out.print(minNoStatements + "\t" + maxNoStatements + "\t" + aveSize + "\n");
 			}
-		});
+		});*/
 		
-//		model.getLifeCycleManager().addRunListener(new RunAdapter() {
-//			@Override
-//			public void onRunEnd() {
-//				Object[] stats = model.getStatsManager().getRunStats(StatField.RUN_NUMBER, StatField.RUN_FITNESS_MIN);
-//				StringBuilder statsOutput = new StringBuilder();
-//				int i = 0;
-//				for (Object o: stats) {
-//					if (i != 0) {
-//						statsOutput.append('\t');
-//					}
-//					statsOutput.append(o.toString());
-//					i++;
-//				}
-//				
-//				BufferedWriter bw = null;
-//				try {
-//			      	bw = new BufferedWriter(new FileWriter(outputPath+"/results-x"+crossoverProbability+".txt", true));
-//			      	bw.write(statsOutput.toString());
-//			         
-//			        bw.newLine();
-//			        bw.flush();
-//				} catch (IOException ioe) {
-//			    	ioe.printStackTrace();
-//			    } finally {                       // always close the file
-//			    	if (bw != null) 
-//			    		try {
-//			    			bw.close();
-//			    		} catch (IOException ioe2) {
-//			    			// just ignore it
-//			    		}
-//			    }
-//				/*System.out.println(stats[0] + "\t" + stats[1]);
-//				
-//				BufferedWriter bw = null;
-//
-//			    try {
-//			      	bw = new BufferedWriter(new FileWriter("results/best-programs.txt", true));
-//			      	bw.write("\n"+stats[0]+" |***************************| "+stats[1]+"\n");
-//			        bw.write(ProgramGenerator.format(stats[2].toString()));
-//			         
-//			        bw.newLine();
-//			        bw.flush();
-//			    } catch (IOException ioe) {
-//			    	ioe.printStackTrace();
-//			    } finally {                       // always close the file
-//			    	if (bw != null) 
-//			    		try {
-//			    			bw.close();
-//			    		} catch (IOException ioe2) {
-//			    			// just ignore it
-//			    		}
-//			    } // end try/catch/finally
-//				*/
-//			}
-//		});
+		model.getLifeCycleManager().addRunListener(new RunAdapter() {
+			@Override
+			public void onRunEnd() {
+				Object[] stats = model.getStatsManager().getRunStats(StatField.RUN_NUMBER, StatField.RUN_FITNESS_MIN);
+				StringBuilder statsOutput = new StringBuilder();
+				int i = 0;
+				for (Object o: stats) {
+					if (i != 0) {
+						statsOutput.append('\t');
+					}
+					statsOutput.append(o.toString());
+					i++;
+				}
+				
+				BufferedWriter bw = null;
+				try {
+			      	bw = new BufferedWriter(new FileWriter(outputPath+"/results-x"+crossoverProbability+".txt", true));
+			      	bw.write(statsOutput.toString());
+			         
+			        bw.newLine();
+			        bw.flush();
+				} catch (IOException ioe) {
+			    	ioe.printStackTrace();
+			    } finally {                       // always close the file
+			    	if (bw != null) 
+			    		try {
+			    			bw.close();
+			    		} catch (IOException ioe2) {
+			    			// just ignore it
+			    		}
+			    }
+				System.out.println(stats[0] + "\t" + stats[1]);
+				
+				/*
+				BufferedWriter bw = null;
+			    try {
+			      	bw = new BufferedWriter(new FileWriter("results/best-programs.txt", true));
+			      	bw.write("\n"+stats[0]+" |***************************| "+stats[1]+"\n");
+			        bw.write(ProgramGenerator.format(stats[2].toString()));
+			         
+			        bw.newLine();
+			        bw.flush();
+			    } catch (IOException ioe) {
+			    	ioe.printStackTrace();
+			    } finally {                       // always close the file
+			    	if (bw != null) 
+			    		try {
+			    			bw.close();
+			    		} catch (IOException ioe2) {
+			    			// just ignore it
+			    		}
+			    } // end try/catch/finally
+				*/
+			}
+		});
 		
 		model.run();
 	}

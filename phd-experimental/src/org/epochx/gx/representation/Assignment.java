@@ -100,16 +100,18 @@ public class Assignment implements Statement {
 
 	@Override
 	public void copyVariables(VariableHandler vars, Map<Variable, Variable> variableCopies) {
-		if (!variableCopies.containsKey(variable)) {
-			variableCopies.put(variable, variable.copy());
-		}
-		variable = variableCopies.get(variable);
+		variable = (Variable) VariableUtils.copyVariable(variable, variableCopies, vars);
 		
 		expression = VariableUtils.copyVariable(expression, variableCopies, vars);
 	}
 
 	@Override
 	public int getDepth() {
+		return 0;
+	}
+	
+	@Override
+	public int getLoopDepth() {
 		return 0;
 	}
 }

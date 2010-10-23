@@ -178,9 +178,24 @@ public class IfStatement extends BlockStatement {
 	public int getDepth() {
 		return 1 + ifCode.getDepth();
 	}
+	
+	@Override
+	public int getLoopDepth() {
+		return ifCode.getLoopDepth();
+	}
 
 	@Override
 	public int getDepthOfInsertPoint(int insertPoint) {
 		return ifCode.getDepthOfInsertPoint(insertPoint);
+	}
+	
+	@Override
+	public int getLoopDepthOfInsertPoint(int insertPoint) {
+		return ifCode.getLoopDepthOfInsertPoint(insertPoint);
+	}
+
+	@Override
+	public void deleteStatement(Statement toDelete) {
+		ifCode.deleteStatement(toDelete);
 	}
 }

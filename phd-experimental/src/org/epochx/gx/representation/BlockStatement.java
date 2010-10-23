@@ -28,4 +28,8 @@ public abstract class BlockStatement implements Statement {
 
 	public abstract int getDepthOfInsertPoint(int insertPoint);
 
+	public abstract void deleteStatement(Statement toDelete);
+
+	public abstract int getLoopDepthOfInsertPoint(int insertPoint);
+
 }

@@ -38,40 +38,35 @@ public class ExperimentalCrossover implements GXCrossover {
 		maxNoStatements = model.getMaxNoStatements();
 	}
 	
-	@Override
-	public GXCandidateProgram[] crossover(CandidateProgram p1,
-			CandidateProgram p2) {
-		GXCandidateProgram child1 = (GXCandidateProgram) p1;
-		GXCandidateProgram child2 = (GXCandidateProgram) p2;
-		
-		// Select a random statement from the first parent.
-		int noStatements = child1.getNoStatements();
+	public List<Statement> getSwapStatements(GXCandidateProgram child) {
+		// Select a random statement (and dependencies) from the first parent.
+		int noStatements = child.getNoStatements();
 		int statementIndex = rng.nextInt(noStatements);
-		Statement swap = child1.getMethod().getBody().getStatement(statementIndex);
-
-		// Get any dependencies.
-		List<Statement> swapStatements = getDependentStatements(swap, child1);
+		Statement swap = child.getMethod().getBody().getStatement(statementIndex);
+		List<Statement> swapStatements = getDependentStatements(swap, child);
 		
-		// Count the number of new statements.
-		int noNewStatements = 0;
-		for (Statement s: swapStatements) {
-			noNewStatements += s.getNoStatements();
+		return swapStatements;
+	}
+	
+	public int getNoStatements(List<Statement> statements) {
+		int noStatements = 0;
+		for (Statement s: statements) {
+			noStatements += s.getNoStatements();
 		}
 		
-		// Check there is room for this amount of new statements in program 2.
-		if (noNewStatements + child2.getNoStatements() > maxNoStatements) {
-			return null;
-		}
-		
+		return noStatements;
+	}
+	
+	public void copyStatements(List<Statement> statements, GXCandidateProgram program) {
 		// Setup variable handler for program 2.
 		VariableHandler vars = model.getVariableHandler();
-		vars.setAllVariables(child2.getVariables());
+		vars.setAllVariables(new HashSet<Variable>(program.getVariables()));
 		Map<Variable, Variable> variableCopies = new HashMap<Variable, Variable>();
 		
 		// Clone all the swap statements.
-		for (int i=0; i<swapStatements.size(); i++) {
-			Statement s = swapStatements.get(i).clone();
-			swapStatements.set(i, s);
+		for (int i=0; i<statements.size(); i++) {
+			Statement s = statements.get(i).clone();
+			statements.set(i, s);
 			
 			// Replace the variables with copies.
 			s.copyVariables(vars, variableCopies);
@@ -83,36 +78,125 @@ public class ExperimentalCrossover implements GXCrossover {
 			v.setVariableName(vars.getNewVariableName());
 			vars.add(v);
 		}
-		
+	}
+	
+	public void insertStatements(List<Statement> statements, GXCandidateProgram program) {
 		int insertPoint = -1;
 		int swapDepth = -1;
 		int insertPointDepth = -1;
 		do {
 			// Pick an insertion point at random.
-			insertPoint = rng.nextInt(child2.getNoInsertPoints());
+			insertPoint = rng.nextInt(program.getNoInsertPoints());
 	
-			// Find the maximum depth of the swap statements.
+			// Find the maximum loop depth of the swap statements.
 			swapDepth = 0;
-			for (Statement s: swapStatements) {
-				int d = s.getDepth();
+			for (Statement s: statements) {
+				int d = s.getLoopDepth();
 				if (d > swapDepth) {
 					swapDepth = d;
 				}
 			}
 			
-			// Find the current depth at the insert point.
-			insertPointDepth = child2.getDepthOfInsertPoint(insertPoint);
+			// Find the current loop depth at the insert point.
+			insertPointDepth = program.getLoopDepthOfInsertPoint(insertPoint);
 
 			// Check the nesting depth will be valid if we insert here.
 		} while ((insertPointDepth + swapDepth) > 1);
 		
-		// Insert the statements into the second parent.
-		child2.getMethod().getBody().insertStatements(swapStatements, insertPoint);
+		// Insert the statements into the program.
+		program.getMethod().getBody().insertStatements(statements, insertPoint);
 		
-		// Return an array containing only the second parent.
-		return new GXCandidateProgram[]{child2};
+		// Any new variables need to be added to the program's list of variables.
+		List<Variable> newVars = new ArrayList<Variable>();
+		for (Statement s: statements) {
+			newVars.addAll(s.getDeclaredVariables());
+		}
+		program.getVariables().addAll(newVars);
+	}
+	
+	public void deleteStatements(int noDeletions, GXCandidateProgram program) {
+		int i=0;
+		int attempts = 0;
+		int noStatements = program.getNoStatements();
+		while (i < noDeletions && attempts < 5 && noStatements > minNoStatements) {
+			int toDelete = rng.nextInt(noStatements);
+			Statement s = program.getMethod().getBody().getStatement(toDelete);
+			int noDeleted = s.getNoStatements();
+			
+			if ((noStatements - noDeleted) >= minNoStatements) {
+				// Will return null if the statement is a declaration which is used.
+				Statement deleted = program.getMethod().getBody().deleteStatement(toDelete);
+				
+				if (deleted != null) {
+					attempts = 0;
+					i += noDeleted;
+					noStatements -= noDeleted;
+					
+					// Remove any variables that were eclaration here.
+					Set<Variable> declaredVars = deleted.getDeclaredVariables();
+					for (Variable v: declaredVars) {
+						program.getVariables().remove(v);
+					}
+					continue;
+				}
+			}
+			
+			attempts++;
+		}
 	}
 
+	public int getNoDeletable(List<Statement> statements) {
+		int noDeletable = 0;
+		for (Statement s: statements) {
+			if (!(s instanceof Declaration)) {
+				noDeletable += s.getNoStatements();
+			}
+		}
+		
+		return noDeletable;
+	}
+	
+	@Override
+	public GXCandidateProgram[] crossover(CandidateProgram p1,
+			CandidateProgram p2) {
+		GXCandidateProgram child1 = (GXCandidateProgram) p1;
+		GXCandidateProgram child2 = (GXCandidateProgram) p2;
+		
+		// Pick the statements to be swapped between programs.
+		List<Statement> swapStatements1 = getSwapStatements(child1);
+		List<Statement> swapStatements2 = getSwapStatements(child2);
+		
+		// Count the number of new statements.
+		int noNewStatements1 = getNoStatements(swapStatements1);
+		int noNewStatements2 = getNoStatements(swapStatements2);
+
+		// Keep a copy of the non-copied swaps so we can remove them later.
+		//List<Statement> originalSwaps1 = new ArrayList<Statement>(swapStatements1);
+		//List<Statement> originalSwaps2 = new ArrayList<Statement>(swapStatements2);
+		
+		// Create a copy of each of the statements and rename variables.
+		copyStatements(swapStatements1, child2);
+		copyStatements(swapStatements2, child1);
+		
+		// Delete the right number of statements.
+		deleteStatements(noNewStatements2, child1);
+		deleteStatements(noNewStatements1, child2);
+		
+		List<GXCandidateProgram> children = new ArrayList<GXCandidateProgram>();
+		// Insert the new statements.
+		if ((child1.getNoStatements() + noNewStatements2) <= maxNoStatements) {
+			insertStatements(swapStatements2, child1);
+			children.add(child1);
+		}
+		if ((child2.getNoStatements() + noNewStatements1) <= maxNoStatements) {
+			insertStatements(swapStatements1, child2);
+			children.add(child2);
+		}
+		
+		// Return an array containing only the second parent.
+		return children.toArray(new GXCandidateProgram[children.size()]);
+	}
+	
 	/*
 	 * Returns the given statement along with all its dependencies and 
 	 * recursively all their dependencies too.

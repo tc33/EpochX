@@ -130,4 +130,9 @@ public class Declaration implements Statement {
 	public int getDepth() {
 		return 0;
 	}
+	
+	@Override
+	public int getLoopDepth() {
+		return 0;
+	}
 }

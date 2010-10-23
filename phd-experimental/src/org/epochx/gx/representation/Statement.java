@@ -63,9 +63,14 @@ public interface Statement extends Cloneable {
 	public void copyVariables(VariableHandler vars, Map<Variable, Variable> variableCopies);
 	
 	/**
-	 * Returns the nesting depth of this statement. This will be 0 for a 
+	 * Returns the maximum nesting depth of this statement. This will be 0 for a 
 	 * statement at the top level, and 1 for any statements within a block of an
 	 * if statement or loop.
 	 */
 	public int getDepth();
+	
+	/**
+	 * Returns the maximum nesting depth of this statement within loops only.
+	 */
+	public int getLoopDepth();
 }

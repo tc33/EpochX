@@ -229,4 +229,19 @@ public class TimesLoop extends BlockStatement {
 	public int getDepthOfInsertPoint(int insertPoint) {
 		return body.getDepthOfInsertPoint(insertPoint);
 	}
+	
+	@Override
+	public int getLoopDepthOfInsertPoint(int insertPoint) {
+		return body.getLoopDepthOfInsertPoint(insertPoint);
+	}
+
+	@Override
+	public void deleteStatement(Statement toDelete) {
+		body.deleteStatement(toDelete);
+	}
+	
+	@Override
+	public int getLoopDepth() {
+		return 1 + body.getLoopDepth();
+	}
 }

@@ -84,24 +84,35 @@ public class ExperimentalCrossover implements GXCrossover {
 		int insertPoint = -1;
 		int swapDepth = -1;
 		int insertPointDepth = -1;
+		
+		// Find the maximum loop depth of the swap statements.
+		swapDepth = 0;
+		for (Statement s: statements) {
+			int d = s.getLoopDepth();
+			if (d > swapDepth) {
+				swapDepth = d;
+			}
+		}
+		
+		List<Integer> insertPoints = new ArrayList<Integer>();
+		int noInsertPoints = program.getNoInsertPoints();
+		for (int i=0; i<noInsertPoints; i++) {
+			insertPoints.add(i);
+		}
+		
 		do {
 			// Pick an insertion point at random.
-			insertPoint = rng.nextInt(program.getNoInsertPoints());
-	
-			// Find the maximum loop depth of the swap statements.
-			swapDepth = 0;
-			for (Statement s: statements) {
-				int d = s.getLoopDepth();
-				if (d > swapDepth) {
-					swapDepth = d;
-				}
-			}
+			insertPoint = insertPoints.get(rng.nextInt(insertPoints.size()));
 			
 			// Find the current loop depth at the insert point.
 			insertPointDepth = program.getLoopDepthOfInsertPoint(insertPoint);
 
+			if (insertPoints.isEmpty()) {
+				System.out.println("Insert points run out - this shouldn't ever happen!");
+			}
+			
 			// Check the nesting depth will be valid if we insert here.
-		} while ((insertPointDepth + swapDepth) > 1);
+		} while ((insertPointDepth + swapDepth) > 1 && !insertPoints.isEmpty());
 		
 		// Insert the statements into the program.
 		program.getMethod().getBody().insertStatements(statements, insertPoint);

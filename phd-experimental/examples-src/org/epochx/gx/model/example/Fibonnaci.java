@@ -22,15 +22,12 @@
 package org.epochx.gx.model.example;
 
 import java.io.*;
-import java.util.*;
 
 import org.epochx.gx.model.*;
 import org.epochx.gx.op.crossover.*;
 import org.epochx.gx.op.init.*;
 import org.epochx.gx.op.mutation.*;
-import org.epochx.gx.representation.*;
 import org.epochx.life.*;
-import org.epochx.representation.*;
 import org.epochx.stats.*;
 
 
@@ -121,7 +118,7 @@ public class Fibonnaci extends org.epochx.gx.model.Fibonacci {
 			    			// just ignore it
 			    		}
 			    }
-				System.out.println(stats[0] + "\t" + stats[1]);
+				//System.out.println(stats[0] + "\t" + stats[1]);
 				
 				/*
 				BufferedWriter bw = null;

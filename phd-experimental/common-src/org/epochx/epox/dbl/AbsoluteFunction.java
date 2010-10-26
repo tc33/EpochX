@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -19,17 +19,48 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.gx.op.init;
+package org.epochx.epox.dbl;
 
-import java.util.List;
+import org.epochx.epox.DoubleNode;
 
-import org.epochx.op.Initialiser;
-import org.epochx.representation.CandidateProgram;
+/**
+ * 
+ * 
+ */
+public class AbsoluteFunction extends DoubleNode {
 
+	/**
+	 * Construct an AbsoluteFunction with no children.
+	 */
+	public AbsoluteFunction() {
+		this(null);
+	}
 
-public interface GXInitialiser extends Initialiser {
+	/**
+	 * 
+	 */
+	public AbsoluteFunction(final DoubleNode child) {
+		super(child);
+	}
 
+	/**
+	 * 
+	 */
 	@Override
-	public List<CandidateProgram> getInitialPopulation();
-	
+	public Double evaluate() {
+		final double value = (Double) getChild(0).evaluate();
+
+		return Math.abs(value);
+	}
+
+	/**
+	 * Get the unique name that identifies this function.
+	 * 
+	 * @return the unique name for the AbsoluteFunction which is ABS.
+	 */
+	@Override
+	public String getIdentifier() {
+		return "ABS";
+	}
+
 }

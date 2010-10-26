@@ -5,6 +5,7 @@ import java.util.*;
 
 import org.epochx.gx.model.*;
 import org.epochx.gx.representation.*;
+import org.epochx.life.Life;
 import org.epochx.tools.random.*;
 
 public class ProgramGenerator {
@@ -373,7 +374,7 @@ public class ProgramGenerator {
 	
 	public static void main(String[] args) {
 		GXModel model = new EvenParity(3);
-		model.getLifeCycleManager().fireConfigureEvent();
+		Life.get().fireConfigureEvent();
 		VariableHandler vars = model.getVariableHandler();
 		Method program = getMethod("getFibonacci", DataType.BOOLEAN, model.getRNG(), vars, 10);
 		

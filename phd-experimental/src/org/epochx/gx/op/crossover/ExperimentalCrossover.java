@@ -21,7 +21,7 @@ public class ExperimentalCrossover implements GXCrossover {
 		this.model = model;
 		
 		// Configure parameters from the model.
-		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		Life.get().addConfigListener(new ConfigAdapter() {
 			@Override
 			public void onConfigure() {
 				configure();

@@ -27,7 +27,7 @@ public class ExperimentalMutation implements GXMutation {
 		modify = new ModifyMutation(model);
 		
 		// Configure parameters from the model.
-		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		Life.get().addConfigListener(new ConfigAdapter() {
 			@Override
 			public void onConfigure() {
 				configure();

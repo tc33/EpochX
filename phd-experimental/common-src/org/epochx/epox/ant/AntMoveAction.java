@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -19,17 +19,38 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.gx.op.init;
+package org.epochx.epox.ant;
 
-import java.util.List;
+import org.epochx.epox.VoidNode;
+import org.epochx.tools.ant.Ant;
 
-import org.epochx.op.Initialiser;
-import org.epochx.representation.CandidateProgram;
+/**
+ * This class defines an action which when executed will trigger the ant
+ * to move one position in its ant landscape.
+ */
+public class AntMoveAction extends VoidNode {
 
+	private final Ant ant;
 
-public interface GXInitialiser extends Initialiser {
+	/**
+	 * Constructs an AntMoveAction, supplying an ant that the action can be
+	 * performed on.
+	 * 
+	 * @param ant the Ant that will be moved upon execution.
+	 */
+	public AntMoveAction(final Ant ant) {
+		this.ant = ant;
+	}
 
 	@Override
-	public List<CandidateProgram> getInitialPopulation();
-	
+	public Void evaluate() {
+		ant.move();
+
+		return null;
+	}
+
+	@Override
+	public String getIdentifier() {
+		return "MOVE";
+	}
 }

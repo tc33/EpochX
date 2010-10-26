@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -19,29 +19,53 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.tools.util;
+package org.epochx.epox;
 
-import java.lang.ref.WeakReference;
-import java.util.*;
+public class DoubleVariable extends DoubleNode {
 
-/**
- * 
- */
-public final class ReferenceUtils {
+	private final String identifier;
 
-	public static <T> List<T> stripRefs(Set<WeakReference<T>> refs) {
-		List<T> objs = new ArrayList<T>();
-		Set<WeakReference<T>> removals = new HashSet<WeakReference<T>>();
-		for (WeakReference<T> ref: refs) {
-			T obj = ref.get();
-			if (obj == null) {
-				removals.add(ref);
-			} else {
-				objs.add(obj);
-			}
-		}
-		refs.removeAll(refs);
-		return objs;
+	private Double value;
+
+	public DoubleVariable(final String identifier) {
+		this(identifier, null);
 	}
-	
+
+	public DoubleVariable(final String identifier, final Double value) {
+		this.identifier = identifier;
+		this.value = value;
+	}
+
+	public void setValue(final Double value) {
+		this.value = value;
+	}
+
+	public Double getValue() {
+		return value;
+	}
+
+	@Override
+	public Double evaluate() {
+		return value;
+	}
+
+	@Override
+	public String getIdentifier() {
+		return identifier;
+	}
+
+	@Override
+	public String toString() {
+		return identifier;
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		return (obj == this);
+	}
+
+	@Override
+	public DoubleVariable clone() {
+		return this;
+	}
 }

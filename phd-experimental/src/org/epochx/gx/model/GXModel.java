@@ -24,7 +24,6 @@ package org.epochx.gx.model;
 import org.epochx.core.*;
 import org.epochx.gx.op.init.*;
 import org.epochx.gx.representation.*;
-import org.epochx.stats.*;
 
 /**
  * Model implementation for the experimental nano-java system.
@@ -46,9 +45,6 @@ public abstract class GXModel extends Model {
 	 * accessor method for information of each default value.
 	 */
 	public GXModel() {
-		// Use the default stats engine.
-		getStatsManager().setStatsEngine(new StatsEngine(this));
-		
 		// Set default parameter values.
 		maxNoStatements = 10;
 		minNoStatements = 3;

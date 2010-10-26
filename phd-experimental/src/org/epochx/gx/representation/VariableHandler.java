@@ -30,7 +30,7 @@ public class VariableHandler {
 		allVariables = new HashSet<Variable>();
 		
 		// Configure parameters from the model.
-		model.getLifeCycleManager().addConfigListener(new ConfigAdapter() {
+		Life.get().addConfigListener(new ConfigAdapter() {
 			@Override
 			public void onConfigure() {
 				configure();

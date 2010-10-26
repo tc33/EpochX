@@ -22,14 +22,12 @@
 package org.epochx.gx.model.example;
 
 import java.io.*;
-import java.util.*;
 
 import org.epochx.gx.model.*;
+import org.epochx.gx.op.crossover.ExperimentalCrossover;
 import org.epochx.gx.op.init.*;
 import org.epochx.gx.op.mutation.*;
-import org.epochx.gx.representation.*;
 import org.epochx.life.*;
-import org.epochx.representation.*;
 import org.epochx.stats.*;
 
 
@@ -40,79 +38,50 @@ public class QuarticRegression extends org.epochx.gx.model.QuarticRegression {
 	}
 	
     public static void main(String[] args) {
+    	final double crossoverProbability = Double.valueOf(args[0]);
+    	final double mutationProbability = 1.0 - crossoverProbability;
+    	
+    	final String outputPath = (args.length > 1) ? args[1] : "results/";
+    	
 		final GXModel model = new QuarticRegression(50);
 		model.setNoRuns(100);
 		model.setNoGenerations(1000);
 		model.setPopulationSize(1000);
 		model.setInitialiser(new ExperimentalInitialiser(model));
 		model.setMutation(new ExperimentalMutation(model));
+		model.setCrossover(new ExperimentalCrossover(model));
 		model.setNoElites(1);
-		model.setCrossoverProbability(0.0);
-		model.setMutationProbability(1.0);
+		model.setCrossoverProbability(crossoverProbability);
+		model.setMutationProbability(mutationProbability);
 		model.setTerminationFitness(0.0);
 		model.setMaxNoStatements(6);
 		model.setMinNoStatements(4);
-		/*model.getLifeCycleManager().addGenerationListener(new GenerationAdapter() {
-			@Override
-			public void onGenerationEnd() {
-				Object[] stats = model.getStatsManager().getGenerationStats(StatField.GEN_NUMBER, 
-						   StatField.GEN_FITNESS_MIN, 
-						   StatField.GEN_FITNESS_AVE,
-						   StatField.GEN_POPULATION);
+
+//		Life.get().addGenerationListener(new GenerationAdapter() {
+//			@Override
+//			public void onGenerationEnd() {
+//				Stats.get().print(StatField.GEN_NUMBER, 
+//					   StatField.GEN_FITNESS_MIN, 
+//					   StatField.GEN_FITNESS_AVE,
+//					   GXStatField.GEN_NO_STATEMENTS_MIN,
+//					   GXStatField.GEN_NO_STATEMENTS_MAX,
+//					   GXStatField.GEN_NO_STATEMENTS_AVE);
+//			}
+//		});
+	
+		try {
+			final FileOutputStream fileout = new FileOutputStream(new File(outputPath+"/results-x"+crossoverProbability+".txt"));
 			
-				for (int i=0; i<3; i++) {
-					System.out.print(stats[i]);
-					System.out.print('\t');
+			Life.get().addRunListener(new RunAdapter() {
+				@Override
+				public void onRunEnd() {
+					Stats.get().printToStream(fileout, StatField.RUN_NUMBER, StatField.RUN_FITNESS_MIN);
 				}
-				
-				List<CandidateProgram> pop = (List<CandidateProgram>) stats[3];
-				int maxNoStatements = Integer.MIN_VALUE;
-				int minNoStatements = Integer.MAX_VALUE;
-				double totalSize = 0;
-				for (CandidateProgram p: pop) {
-					int noStatements = ((GXCandidateProgram) p).getNoStatements();
-					totalSize += noStatements;
-					if (noStatements > maxNoStatements) {
-						maxNoStatements = noStatements;
-					}
-					if (noStatements < minNoStatements) {
-						minNoStatements = noStatements;
-					}
-				}
-				double aveSize = totalSize / pop.size();
-				System.out.print(minNoStatements + "\t" + maxNoStatements + "\t" + aveSize + "\n");
-			}
-		});*/
-	
-		model.getLifeCycleManager().addRunListener(new RunAdapter() {
-			@Override
-			public void onRunEnd() {
-				Object[] stats = model.getStatsManager().getRunStats(StatField.RUN_NUMBER, StatField.RUN_FITNESS_MIN, StatField.RUN_FITTEST_PROGRAM);
-			
-				System.out.println(stats[0] + "\t" + stats[1]);
-				
-				BufferedWriter bw = null;
-	
-			    try {
-			      	bw = new BufferedWriter(new FileWriter("results/best-programs.txt", true));
-			      	bw.write("\n"+stats[0]+" |***************************| "+stats[1]+"\n");
-			        bw.write(ProgramGenerator.format(stats[2].toString()));
-			         
-			        bw.newLine();
-			        bw.flush();
-			    } catch (IOException ioe) {
-			    	ioe.printStackTrace();
-			    } finally {                       // always close the file
-			    	if (bw != null) 
-			    		try {
-			    			bw.close();
-			    		} catch (IOException ioe2) {
-			    			// just ignore it
-			    		}
-			    } // end try/catch/finally
-	
-			}
-		});
+			});
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
 		model.run();
 	}
     

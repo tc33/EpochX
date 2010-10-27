@@ -38,7 +38,7 @@ public class Fibonnaci extends org.epochx.gx.model.Fibonacci {
     	final double crossoverProbability = 0.5;//Double.valueOf(args[0]);
     	final double mutationProbability = 1.0 - crossoverProbability;
     	
-    	final String outputPath = (args.length > 1) ? args[1] : "results/";
+    	final String outputPath = (args.length > 1) ? args[1] : "fibonnaci-results/";
     	
 		final GXModel model = new Fibonnaci();
 		model.setNoRuns(100);
@@ -67,7 +67,7 @@ public class Fibonnaci extends org.epochx.gx.model.Fibonacci {
 //		});
 		
 		try {
-			final FileOutputStream fileout = new FileOutputStream(new File(outputPath+"/results-x"+crossoverProbability+".txt"));
+			final FileOutputStream fileout = new FileOutputStream(new File(outputPath+"/fibonnaci-x"+crossoverProbability+".txt"));
 			
 			Life.get().addRunListener(new RunAdapter() {
 				@Override

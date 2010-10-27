@@ -41,7 +41,7 @@ public class QuarticRegression extends org.epochx.gx.model.QuarticRegression {
     	final double crossoverProbability = Double.valueOf(args[0]);
     	final double mutationProbability = 1.0 - crossoverProbability;
     	
-    	final String outputPath = (args.length > 1) ? args[1] : "results/";
+    	final String outputPath = (args.length > 1) ? args[1] : "quartic-results/";
     	
 		final GXModel model = new QuarticRegression(50);
 		model.setNoRuns(100);
@@ -70,7 +70,7 @@ public class QuarticRegression extends org.epochx.gx.model.QuarticRegression {
 //		});
 	
 		try {
-			final FileOutputStream fileout = new FileOutputStream(new File(outputPath+"/results-x"+crossoverProbability+".txt"));
+			final FileOutputStream fileout = new FileOutputStream(new File(outputPath+"/quartic-x"+crossoverProbability+".txt"));
 			
 			Life.get().addRunListener(new RunAdapter() {
 				@Override

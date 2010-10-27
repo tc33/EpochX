@@ -44,11 +44,11 @@ public class EvenParity extends org.epochx.gx.model.EvenParity {
     	final double crossoverProbability = Double.valueOf(args[0]);
     	final double mutationProbability = 1.0 - crossoverProbability;
     	
-    	final String outputPath = (args.length > 1) ? args[1] : "results/";
+    	final String outputPath = (args.length > 1) ? args[1] : "parity-results/";
     	
 		final GXModel model = new EvenParity(5);
 		model.setNoRuns(100);
-		model.setNoGenerations(1000);
+		model.setNoGenerations(100);
 		model.setPopulationSize(1000);
 		model.setInitialiser(new ExperimentalInitialiser(model));
 		model.setMutation(new ExperimentalMutation(model));
@@ -73,7 +73,7 @@ public class EvenParity extends org.epochx.gx.model.EvenParity {
 //	});
 	
 		try {
-			final FileOutputStream fileout = new FileOutputStream(new File(outputPath+"/results-x"+crossoverProbability+".txt"));
+			final FileOutputStream fileout = new FileOutputStream(new File(outputPath+"/even-parity-x"+crossoverProbability+".txt"));
 			
 			Life.get().addRunListener(new RunAdapter() {
 				@Override

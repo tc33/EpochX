@@ -35,7 +35,7 @@ import org.epochx.stats.*;
 public class Fibonacci extends org.epochx.gx.model.Fibonacci {
 	
     public static void main(String[] args) {
-    	final double crossoverProbability = 0.5;//Double.valueOf(args[0]);
+    	final double crossoverProbability = Double.valueOf(args[0]);
     	final double mutationProbability = 1.0 - crossoverProbability;
     	
     	final String outputPath = (args.length > 1) ? args[1] : "fibonnaci-results/";

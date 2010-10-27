@@ -13,7 +13,7 @@ public class Block implements Cloneable {
 		this.statements = statements;
 	}
 	
-	public void insertStatement(double probability, RandomNumberGenerator rng, VariableHandler vars, int maxNoStatements) {
+	public void insertStatement(double probability, RandomNumberGenerator rng, VariableHandler vars, int maxNoStatements, int loopDepth) {
 		// The number of insert points at this level.
 		int noInsertPoints = statements.size() + 1;
 		
@@ -28,7 +28,7 @@ public class Block implements Cloneable {
 				int maxNestedStatements = maxNoStatements - getNoStatements() - 1;
 				
 				// Generate new statement.
-				Statement newStatement = ProgramGenerator.getStatement(rng, vars, 0, maxNestedStatements);
+				Statement newStatement = ProgramGenerator.getStatement(rng, vars, loopDepth, maxNestedStatements);
 				
 				// Insert at ith point.
 				statements.add(i, newStatement);
@@ -47,7 +47,7 @@ public class Block implements Cloneable {
 					int maxNestedStatements = (maxNoStatements - getNoStatements()) + (bs.getNoStatements() - 1);
 					
 					// Step into the block.
-					bs.insertStatement(probability, rng, vars, maxNestedStatements);
+					bs.insertStatement(probability, rng, vars, maxNestedStatements, loopDepth);
 				} else {
 					// Apply the statement.
 					s.apply(vars);

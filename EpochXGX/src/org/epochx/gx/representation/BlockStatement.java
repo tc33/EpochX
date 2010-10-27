@@ -22,7 +22,7 @@ public abstract class BlockStatement implements Statement {
 	public abstract int getNoInsertPoints();
 
 	public abstract void insertStatement(double probability, RandomNumberGenerator rng,
-			VariableHandler vars, int maxNoStatements);
+			VariableHandler vars, int maxNoStatements, int loopDepth);
 
 	public abstract void insertStatements(int i, List<Statement> swapStatements);
 

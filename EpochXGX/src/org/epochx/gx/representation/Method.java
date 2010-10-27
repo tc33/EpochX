@@ -75,7 +75,7 @@ public class Method implements Cloneable {
 	}
 
 	public void insertStatement(double probability, VariableHandler vars, RandomNumberGenerator rng, int maxNoStatements) {
-		body.insertStatement(probability, rng, vars, maxNoStatements);
+		body.insertStatement(probability, rng, vars, maxNoStatements, 0);
 	}
 	
 	/**

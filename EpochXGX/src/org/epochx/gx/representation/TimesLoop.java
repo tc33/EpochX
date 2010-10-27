@@ -142,7 +142,7 @@ public class TimesLoop extends BlockStatement {
 	}
 	
 	@Override
-	public void insertStatement(double probability, RandomNumberGenerator rng, VariableHandler vars, int maxNoStatements) {
+	public void insertStatement(double probability, RandomNumberGenerator rng, VariableHandler vars, int maxNoStatements, int loopDepth) {
 		// Record the number of active variables.
 		int noActive = vars.getNoActiveVariables();
 		
@@ -150,7 +150,7 @@ public class TimesLoop extends BlockStatement {
 		applySetup(vars);
 		
 		// Insert in body.
-		body.insertStatement(probability, rng, vars, maxNoStatements);
+		body.insertStatement(probability, rng, vars, maxNoStatements, loopDepth+1);
 		
 		// Remove any variables declared within.
 		vars.setNoActiveVariables(noActive);

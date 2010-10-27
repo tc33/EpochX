@@ -111,11 +111,11 @@ public class IfStatement extends BlockStatement {
 	}
 	
 	@Override
-	public void insertStatement(double probability, RandomNumberGenerator rng, VariableHandler vars, int maxNoStatements) {
+	public void insertStatement(double probability, RandomNumberGenerator rng, VariableHandler vars, int maxNoStatements, int loopDepth) {
 		// Record the number of active variables.
 		int noActive = vars.getNoActiveVariables();
 		
-		ifCode.insertStatement(probability, rng, vars, maxNoStatements);
+		ifCode.insertStatement(probability, rng, vars, maxNoStatements, loopDepth);
 		
 		// Remove any variables declared within.
 		vars.setNoActiveVariables(noActive);

@@ -102,7 +102,7 @@ public class ExperimentalCrossover implements GXCrossover {
 		
 		do {
 			// Pick an insertion point at random.
-			insertPoint = insertPoints.get(rng.nextInt(insertPoints.size()));
+			insertPoint = insertPoints.remove(rng.nextInt(insertPoints.size()));
 			
 			// Find the current loop depth at the insert point.
 			insertPointDepth = program.getLoopDepthOfInsertPoint(insertPoint);

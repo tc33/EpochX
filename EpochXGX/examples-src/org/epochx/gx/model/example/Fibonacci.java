@@ -32,7 +32,7 @@ import org.epochx.life.*;
 import org.epochx.stats.*;
 
 
-public class Fibonnaci extends org.epochx.gx.model.Fibonacci {
+public class Fibonacci extends org.epochx.gx.model.Fibonacci {
 	
     public static void main(String[] args) {
     	final double crossoverProbability = 0.5;//Double.valueOf(args[0]);
@@ -40,7 +40,7 @@ public class Fibonnaci extends org.epochx.gx.model.Fibonacci {
     	
     	final String outputPath = (args.length > 1) ? args[1] : "fibonnaci-results/";
     	
-		final GXModel model = new Fibonnaci();
+		final GXModel model = new Fibonacci();
 		model.setNoRuns(100);
 		model.setNoGenerations(1000);
 		model.setPopulationSize(1000);

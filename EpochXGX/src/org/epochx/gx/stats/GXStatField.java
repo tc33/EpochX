@@ -47,7 +47,6 @@ public class GXStatField {
 			int[] noStatements = null;
 
 			// Request the population from the stats manager.
-			@SuppressWarnings("unchecked")
 			final List<GXCandidateProgram> pop = (List<GXCandidateProgram>) Stats.get().getStat(GEN_POP);
 
 			// Get the depths of each program.

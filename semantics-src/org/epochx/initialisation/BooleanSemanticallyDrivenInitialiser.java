@@ -20,18 +20,24 @@
 package org.epochx.initialisation;
 
 import java.util.*;
-import com.epochx.core.GPModel;
-import com.epochx.op.initialisation.*;
-import com.epochx.representation.*;
-import com.epochx.semantics.*;
+
+import org.epochx.epox.Node;
+import org.epochx.gp.model.GPModel;
+import org.epochx.gp.representation.GPCandidateProgram;
+import org.epochx.op.Initialiser;
+import org.epochx.representation.CandidateProgram;
+import org.epochx.semantics.BooleanRepresentation;
+import org.epochx.semantics.BooleanSemanticModule;
+import org.epochx.semantics.SemanticModule;
+
 import net.sf.javabdd.*;
 
 /**
  * Boolean Semantically Driven Initialisation
  */
-public class BooleanSemanticallyDrivenInitialiser implements Initialiser<Boolean> {
+public class BooleanSemanticallyDrivenInitialiser implements Initialiser {
 
-	private GPModel<Boolean> model;
+	private GPModel model;
 	private BooleanSemanticModule semMod;
 	
 	/**
@@ -39,7 +45,7 @@ public class BooleanSemanticallyDrivenInitialiser implements Initialiser<Boolean
 	 * @param model The GP model in use
 	 * @param semMod The semantic module in use
 	 */
-	public BooleanSemanticallyDrivenInitialiser(GPModel<Boolean> model, SemanticModule<Boolean> semMod) {
+	public BooleanSemanticallyDrivenInitialiser(GPModel model, SemanticModule semMod) {
 		this.model = model;
 		this.semMod = (BooleanSemanticModule) semMod;
 	}
@@ -48,25 +54,25 @@ public class BooleanSemanticallyDrivenInitialiser implements Initialiser<Boolean
 	 * @see com.epochx.core.initialisation.Initialiser#getInitialPopulation()
 	 */
 	@Override
-	public List<CandidateProgram<Boolean>> getInitialPopulation() {
-		return generatePopulation();
+	public List<CandidateProgram> getInitialPopulation() {
+		return getInitialPopulation();
 	}
 	
-	private List<CandidateProgram<Boolean>> generatePopulation() {
+	private List<CandidateProgram> generatePopulation() {
 		// initialise BDD stuff
         semMod.start();
         List<BDD> storage = new ArrayList<BDD>();
         
         // load terminals only
-        for(TerminalNode<Boolean> t: model.getTerminals()) {
-        	CandidateProgram<Boolean> c = new CandidateProgram<Boolean>(t, model);
+        for(Node t: model.getSyntax()) {
+        	GPCandidateProgram c = new GPCandidateProgram(t, model);
             BDD rep = semMod.codeToBehaviour(c).getBDD();
             storage.add(rep);
         }
 
         // create random number generator
         Random random = new Random();
-        int noOfFunctions = model.getFunctions().size();
+        int noOfFunctions = model.getSyntax().size();
         // mash together rest to make full pop
         while(storage.size()<model.getPopulationSize()) {
             int cFunc = random.nextInt(noOfFunctions);
@@ -87,7 +93,7 @@ public class BooleanSemanticallyDrivenInitialiser implements Initialiser<Boolean
         }
         
         // translate back and add to first gen
-        List<CandidateProgram<Boolean>> firstGen = new ArrayList<CandidateProgram<Boolean>>();
+        List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>();
         for(BDD toProg: storage) {
             firstGen.add(semMod.behaviourToCode(new BooleanRepresentation(toProg)));
         }

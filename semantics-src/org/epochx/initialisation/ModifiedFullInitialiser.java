@@ -20,29 +20,34 @@
 package org.epochx.initialisation;
 
 import java.util.*;
-import com.epochx.core.GPModel;
-import com.epochx.op.initialisation.*;
-import com.epochx.representation.*;
-import com.epochx.semantics.*;
+
+import org.epochx.gp.model.GPModel;
+import org.epochx.gp.op.init.FullInitialiser;
+import org.epochx.gp.representation.GPCandidateProgram;
+import org.epochx.op.Initialiser;
+import org.epochx.representation.CandidateProgram;
+import org.epochx.semantics.Representation;
+import org.epochx.semantics.SemanticModule;
+
 
 /**
  * The modified FULL initialiser creates a starting population similar to full
  * which will not produce any programs which are not dependent on any of the terminals.
  */
-public class ModifiedFullInitialiser<TYPE> implements Initialiser<TYPE> {
+public class ModifiedFullInitialiser implements Initialiser {
 	
-	private GPModel<TYPE> model;
-	private FullInitialiser<TYPE> full;
-	private SemanticModule<TYPE> semanticModule;
+	private GPModel model;
+	private FullInitialiser full;
+	private SemanticModule semanticModule;
 	
 	/**
 	 * Constructor for Modified Full Initialiser
 	 * @param model The current model
 	 * @param semMod The associated semantic module
 	 */
-	public ModifiedFullInitialiser(GPModel<TYPE> model, SemanticModule<TYPE> semMod) {
+	public ModifiedFullInitialiser(GPModel model, SemanticModule semMod) {
 		this.model = model;
-		this.full = new FullInitialiser<TYPE>(model);
+		this.full = new FullInitialiser(model);
 		this.semanticModule = semMod;
 	}
 
@@ -50,18 +55,18 @@ public class ModifiedFullInitialiser<TYPE> implements Initialiser<TYPE> {
 	 * @see com.epochx.core.initialisation.Initialiser#getInitialPopulation()
 	 */
 	@Override
-	public List<CandidateProgram<TYPE>> getInitialPopulation() {
+	public List<CandidateProgram> getInitialPopulation() {
 		// Initialise population of candidate programs.
 		int popSize = model.getPopulationSize();
-		List<CandidateProgram<TYPE>> firstGen = new ArrayList<CandidateProgram<TYPE>>(popSize);
+		List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
 		// start the semantic module
 		this.semanticModule.start();
 		// Build population		
 		for(int i=0; i<popSize; i++) {
-			CandidateProgram<TYPE> candidate;
+			GPCandidateProgram candidate;
 			Representation representation;
 			do {
-            	candidate = new CandidateProgram<TYPE>(full.buildFullNodeTree(model.getInitialMaxDepth()), model);
+            	candidate = new GPCandidateProgram(model);
             	representation = semanticModule.codeToBehaviour(candidate);
 			} while (firstGen.contains(candidate) || representation.isConstant());
 			firstGen.add(candidate);

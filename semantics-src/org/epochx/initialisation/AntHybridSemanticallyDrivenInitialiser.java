@@ -51,20 +51,20 @@ public class AntHybridSemanticallyDrivenInitialiser implements GPInitialiser {
 	 * @see com.epochx.core.initialisation.Initialiser#getInitialPopulation()
 	 */
 	@Override
-	public List<GPCandidateProgram> getInitialPopulation() {
-		return generatePopulation();
+	public List<CandidateProgram> getInitialPopulation() {
+		return getInitialPopulation();
 	}
 	
-	private List<GPCandidateProgram> generatePopulation() {
+	private List<CandidateProgram> generatePopulation() {
 		// make a random object
 		Random rGen = new Random();
 		ArrayList<ArrayList<String>> storage = new ArrayList<ArrayList<String>>();
         FullInitialiser f = new FullInitialiser(model);
-        List<GPCandidateProgram> firstPass = f.getInitialPopulation();
+        List<CandidateProgram> firstPass = f.getInitialPopulation();
         
         // generate a full population to start with
-        for(GPCandidateProgram c: firstPass) {
-        	AntRepresentation b = (AntRepresentation) semMod.codeToBehaviour(c);
+        for(CandidateProgram c: firstPass) {
+        	AntRepresentation b = (AntRepresentation) semMod.codeToBehaviour((GPCandidateProgram) c);
         	if(!b.isConstant()) {
         		storage.add(b.getAntRepresentation());
         	}
@@ -139,7 +139,7 @@ public class AntHybridSemanticallyDrivenInitialiser implements GPInitialiser {
         }
         
         // backwards translate
-        List<GPCandidateProgram> firstGen = new ArrayList<GPCandidateProgram>();
+        List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>();
         int i = 1;
         for(ArrayList<String> toProg: storage) {                
             GPCandidateProgram holder = semMod.behaviourToCode(new AntRepresentation(toProg));

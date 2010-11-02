@@ -18,15 +18,11 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.epochx.initialisation.analysis;
+package org.epochx.initialisation.analysis;
 
 import java.io.File;
 import java.util.ArrayList;
 
-import com.epochx.example.regression.RegressionModelCUBIC;
-import com.epochx.initialisation.RegressionSemanticallyDrivenInitialiser;
-import com.epochx.representation.*;
-import com.epochx.util.FileManip;
 
 /**
  * Runs a full analysis of a starting population for a specific model for
@@ -41,6 +37,8 @@ public class MainSizeAndShapeAnalysis {
 		// CODE TO ANALYSE STARTING POPULATIONS
 		System.out.println("STARTING SIZE AND SHAPE ANALYSIS - PROGRAM STARTED");
 
+		/*
+		
 		// set up model and initialiser -- configure up here
 		RegressionModelCUBIC model = new RegressionModelCUBIC();
 		String modelName = "RegressionModelCUBIC";
@@ -69,6 +67,8 @@ public class MainSizeAndShapeAnalysis {
 		 * sizes.add(new Integer(13500)); sizes.add(new Integer(14000));
 		 * sizes.add(new Integer(14500)); sizes.add(new Integer(15000));
 		 * **/
+		
+		/*
 		// set up storage
 		ArrayList<String> dump;
 		ArrayList<CandidateProgram<Double>> newPop;
@@ -138,6 +138,8 @@ public class MainSizeAndShapeAnalysis {
 			dump = null;
 			System.gc();
 		}
+		
+		*/
 
 		// final output
 		System.out.println("STARTING POPS SIZE AND SHAPE ANALYSIS COMPLETE!");

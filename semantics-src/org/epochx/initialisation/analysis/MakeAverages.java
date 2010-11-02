@@ -18,12 +18,10 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.epochx.initialisation.analysis;
+package org.epochx.initialisation.analysis;
 
 import java.io.File;
 import java.util.ArrayList;
-
-import com.epochx.util.FileManip;
 
 /**
  * Helper file to combine and make averages of the output statistics from the 
@@ -33,6 +31,8 @@ public class MakeAverages {
     
     public static void main(String[] args) {
         
+    	/*
+    	
         // create file control stuff
         //File dir = new File("D:/JavaProjects/StartingPops6bit/Results");
         File dir = new File("Results");
@@ -95,7 +95,11 @@ public class MakeAverages {
         
         // dump to new average file
         String nameX = testFor + "-Averages.txt";
-        FileManip.doOutput(dir, output, nameX, false);
+        // TODO
+        //FileManip.doOutput(dir, output, nameX, false);
+         * 
+         * 
+         */
         
     }
     

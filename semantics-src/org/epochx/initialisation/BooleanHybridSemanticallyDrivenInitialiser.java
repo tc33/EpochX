@@ -20,18 +20,24 @@
 package org.epochx.initialisation;
 
 import java.util.*;
-import com.epochx.core.GPModel;
-import com.epochx.op.initialisation.*;
-import com.epochx.representation.*;
-import com.epochx.semantics.*;
+
+import org.epochx.gp.model.GPModel;
+import org.epochx.gp.op.init.FullInitialiser;
+import org.epochx.gp.representation.GPCandidateProgram;
+import org.epochx.op.Initialiser;
+import org.epochx.representation.CandidateProgram;
+import org.epochx.semantics.BooleanRepresentation;
+import org.epochx.semantics.BooleanSemanticModule;
+import org.epochx.semantics.SemanticModule;
+
 import net.sf.javabdd.*;
 
 /**
- * Boolean domian hybrid semantically driven initalisation
+ * Boolean domain hybrid semantically driven initialisation
  */
-public class BooleanHybridSemanticallyDrivenInitialiser implements Initialiser<Boolean> {
+public class BooleanHybridSemanticallyDrivenInitialiser implements Initialiser {
 
-	private GPModel<Boolean> model;
+	private GPModel model;
 	private BooleanSemanticModule semMod;
 	
 	/**
@@ -39,7 +45,7 @@ public class BooleanHybridSemanticallyDrivenInitialiser implements Initialiser<B
 	 * @param model The GP model in use
 	 * @param semMod The semantic module in use
 	 */
-	public BooleanHybridSemanticallyDrivenInitialiser(GPModel<Boolean> model, SemanticModule<Boolean> semMod) {
+	public BooleanHybridSemanticallyDrivenInitialiser(GPModel model, SemanticModule semMod) {
 		this.model = model;
 		this.semMod = (BooleanSemanticModule) semMod;
 	}
@@ -48,20 +54,20 @@ public class BooleanHybridSemanticallyDrivenInitialiser implements Initialiser<B
 	 * @see com.epochx.core.initialisation.Initialiser#getInitialPopulation()
 	 */
 	@Override
-	public List<CandidateProgram<Boolean>> getInitialPopulation() {
-		return generatePopulation();
+	public List<CandidateProgram> getInitialPopulation() {
+		return getInitialPopulation();
 	}
 	
-	private List<CandidateProgram<Boolean>> generatePopulation() {
+	private List<CandidateProgram> generatePopulation() {
 		// initialise BDD stuff
         semMod.start();
         List<BDD> storage = new ArrayList<BDD>();
-        FullInitialiser<Boolean> f = new FullInitialiser<Boolean>(model);
-        List<CandidateProgram<Boolean>> firstPass = f.getInitialPopulation();
+        FullInitialiser f = new FullInitialiser(model);
+        List<CandidateProgram> firstPass = f.getInitialPopulation();
         
         // generate a full population to start with
-        for(CandidateProgram<Boolean> c: firstPass) {
-        	BooleanRepresentation b = semMod.codeToBehaviour(c);
+        for(CandidateProgram c: firstPass) {
+        	BooleanRepresentation b = semMod.codeToBehaviour((GPCandidateProgram) c);
         	if(!b.isConstant()) {
         		storage.add(b.getBDD());
         	}
@@ -69,7 +75,7 @@ public class BooleanHybridSemanticallyDrivenInitialiser implements Initialiser<B
 
         // create random number generator
         Random random = new Random();
-        int noOfFunctions = model.getFunctions().size();
+        int noOfFunctions = model.getSyntax().size();
         // mash together rest to make full pop
         while(storage.size()<model.getPopulationSize()) {
             int cFunc = random.nextInt(noOfFunctions);
@@ -90,7 +96,7 @@ public class BooleanHybridSemanticallyDrivenInitialiser implements Initialiser<B
         }
         
         // translate back and add to first gen
-        List<CandidateProgram<Boolean>> firstGen = new ArrayList<CandidateProgram<Boolean>>();
+        List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>();
         for(BDD toProg: storage) {
             firstGen.add(semMod.behaviourToCode(new BooleanRepresentation(toProg)));
         }

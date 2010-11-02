@@ -18,17 +18,22 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.epochx.initialisation.analysis;
+package org.epochx.initialisation.analysis;
 
 import java.io.File;
 import java.util.*;
+
+import org.epochx.gp.op.init.RampedHalfAndHalfInitialiser;
+import org.epochx.gp.representation.GPCandidateProgram;
+import org.epochx.representation.CandidateProgram;
+import org.epochx.semantics.AntRepresentation;
+import org.epochx.semantics.BooleanRepresentation;
+import org.epochx.semantics.RegressionRepresentation;
+import org.epochx.semantics.Representation;
+import org.epochx.semantics.SemanticModule;
+
 import net.sf.javabdd.*;
 
-import com.epochx.example.regression.RegressionModelCUBIC;
-import com.epochx.op.initialisation.*;
-import com.epochx.representation.*;
-import com.epochx.semantics.*;
-import com.epochx.util.FileManip;
 
 /**
  * Bias Analyser is used to analyse starting populations by checking 
@@ -42,6 +47,8 @@ public class BiasAnalyser {
      */
     public static void main(String[] args) {
 
+    	/*
+    	
         // decide which model
     	RegressionModelCUBIC model = new RegressionModelCUBIC();
 
@@ -63,7 +70,7 @@ public class BiasAnalyser {
             for (CandidateProgram prog : testPop) {
 
                 // work out BDD
-                Representation progRep = semMod.codeToBehaviour(prog);
+                Representation progRep = semMod.codeToBehaviour((GPCandidateProgram) prog);
 
                 // cycle through storage and find match
                 boolean match = false;
@@ -107,11 +114,16 @@ public class BiasAnalyser {
             }
         }
         
-        FileManip.doOutput(new File("Results"), output, "biasoutput-REGRESSION.txt", false);
+        // TODO
+        //FileManip.doOutput(new File("Results"), output, "biasoutput-REGRESSION.txt", false);
 
         // close BDD link
         semMod.stop();
+        
+        **/
     }
+    
+    
     
     /**
      * Helper method for artificial ant analysis

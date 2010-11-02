@@ -18,12 +18,13 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.epochx.initialisation.analysis;
+package org.epochx.initialisation.analysis;
 
 import java.util.ArrayList;
 
-import com.epochx.representation.*;
-import com.epochx.semantics.Representation;
+import org.epochx.representation.CandidateProgram;
+import org.epochx.semantics.Representation;
+
 
 /**
  * The behaviour manager aids analysis of starting populations by recording

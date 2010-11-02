@@ -18,19 +18,18 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.epochx.initialisation.analysis;
+package org.epochx.initialisation.analysis;
 
 import java.util.ArrayList;
 import java.io.File;
 import net.sf.javabdd.*;
 import java.lang.reflect.*;
 
-import com.epochx.example.artificialant.ArtificialAntSantaFe;
-import com.epochx.example.regression.RegressionModelCUBIC;
-import com.epochx.op.initialisation.*;
-import com.epochx.representation.*;
-import com.epochx.semantics.*;
-import com.epochx.util.FileManip;
+import org.epochx.gp.op.init.FullInitialiser;
+import org.epochx.gp.representation.GPCandidateProgram;
+import org.epochx.representation.CandidateProgram;
+import org.epochx.semantics.Representation;
+import org.epochx.semantics.SemanticModule;
 
 /**
  * Runs a full analysis of a starting population for a specific model for
@@ -45,6 +44,8 @@ public class MainBehaviourAnalysis {
 		// CODE TO ANALYSE STARTING POPULATIONS
 		System.out.println("STARTING POP ANALYSIS - PROGRAM STARTED");
 
+		/*
+		
 		// set up model and initialiser -- configure up here
 		ArtificialAntSantaFe model = new ArtificialAntSantaFe();
 		String modelName = "AASF";
@@ -81,6 +82,8 @@ public class MainBehaviourAnalysis {
 		 * sizes.add(new Integer(14500)); sizes.add(new Integer(15000));
 		 * **/
 
+		/*
+		
 		// set up equivalence storage
 		ArrayList<Representation> behaviours;
 		ArrayList<CandidateProgram> progs, newPop;
@@ -122,7 +125,7 @@ public class MainBehaviourAnalysis {
 					}
 
 					// check for semantic equivalence
-					specimin = semMod.codeToBehaviour(testProg);
+					specimin = semMod.codeToBehaviour((GPCandidateProgram) testProg);
 					boolean marker = false;
 					for (Representation b : behaviours) {
 						if (b.equals(specimin)) {
@@ -156,12 +159,15 @@ public class MainBehaviourAnalysis {
 
 			// dump to file
 			String name = genType + "-B+S-" + size.toString() + "-" + modelName + ".txt";
-			FileManip.doOutput(place, dump, name, false);
+			// TODO
+			//FileManip.doOutput(place, dump, name, false);
 
 			// dump files and force gc
 			dump = null;
 			System.gc();
 		}
+		
+		**/
 
 		// final output
 		System.out.println("STARTING POPS ANALYSIS COMPLETE!");

@@ -18,18 +18,13 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.epochx.initialisation.analysis;
+package org.epochx.initialisation.analysis;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.javabdd.*;
 import java.lang.reflect.*;
-import com.epochx.example.regression.*;
-import com.epochx.initialisation.RegressionHybridSemanticallyDrivenInitialiser;
-import com.epochx.op.initialisation.*;
-import com.epochx.representation.*;
-import com.epochx.semantics.SemanticModule;
 
 /**
  * Runs a full analysis of a starting population for a specific model for varying sizes
@@ -42,6 +37,8 @@ public class MainISpeedAnalysis {
     public static void main(String[] args) {
         // CODE TO ANALYSE STARTING POPULATIONS
         System.out.println("STARTING INITIALISATION ANALYSIS - PROGRAM STARTED");
+        
+        /*
         
         // decide which model
         RegressionModelCUBIC model = new RegressionModelCUBIC();
@@ -70,6 +67,8 @@ public class MainISpeedAnalysis {
         System.out.println("TIME OUT: " + lC);
         long time = (lC-fC)/100;
         System.out.println("TIME TAKEN: " + time);
+        
+        **/
         
         System.out.println("ANALYSIS COMPLETE!");
     }

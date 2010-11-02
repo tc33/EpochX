@@ -21,18 +21,18 @@ package org.epochx.initialisation;
 
 import java.util.*;
 
-import com.epochx.action.Action;
-import com.epochx.core.GPModel;
-import com.epochx.op.initialisation.*;
-import com.epochx.representation.*;
-import com.epochx.semantics.*;
+import org.epochx.gp.model.GPModel;
+import org.epochx.op.Initialiser;
+import org.epochx.representation.CandidateProgram;
+import org.epochx.semantics.*;
+
 
 /**
  * Artificial Ant Semantically Driven Initialisation
  */
-public class AntSemanticallyDrivenInitialiser implements Initialiser<Action> {
+public class AntSemanticallyDrivenInitialiser implements Initialiser {
 
-	private GPModel<Action> model;
+	private GPModel model;
 	private AntSemanticModule semMod;
 	
 	/**
@@ -40,7 +40,7 @@ public class AntSemanticallyDrivenInitialiser implements Initialiser<Action> {
 	 * @param model The GP model in use
 	 * @param semMod The semantic module on use
 	 */
-	public AntSemanticallyDrivenInitialiser(GPModel<Action> model, SemanticModule<Action> semMod) {
+	public AntSemanticallyDrivenInitialiser(GPModel model, SemanticModule semMod) {
 		this.model = model;
 		this.semMod = (AntSemanticModule) semMod;
 	}
@@ -49,11 +49,11 @@ public class AntSemanticallyDrivenInitialiser implements Initialiser<Action> {
 	 * @see com.epochx.core.initialisation.Initialiser#getInitialPopulation()
 	 */
 	@Override
-	public List<CandidateProgram<Action>> getInitialPopulation() {
-		return generatePopulation();
+	public List<CandidateProgram> getInitialPopulation() {
+		return getInitialPopulation();
 	}
 	
-	private List<CandidateProgram<Action>> generatePopulation() {
+	private List<CandidateProgram> generatePopulation() {
 		// make a random object
 		Random rGen = new Random();
 		ArrayList<ArrayList<String>> storage = new ArrayList<ArrayList<String>>();
@@ -72,7 +72,7 @@ public class AntSemanticallyDrivenInitialiser implements Initialiser<Action> {
         int partSize = 10;
         // mash up at root
         while(storage.size()<model.getPopulationSize()) {
-            int cFunc = rGen.nextInt(model.getFunctions().size());
+            int cFunc = rGen.nextInt(model.getSyntax().size());
             result = new ArrayList<String>();
             if(cFunc==0) {
                 // IF-FOOD-AHEAD - add brackets and just stick two paths together
@@ -134,10 +134,10 @@ public class AntSemanticallyDrivenInitialiser implements Initialiser<Action> {
         }
         
         // backwards translate
-        List<CandidateProgram<Action>> firstGen = new ArrayList<CandidateProgram<Action>>();
+        List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>();
         int i = 1;
         for(ArrayList<String> toProg: storage) {                
-            CandidateProgram<Action> holder = semMod.behaviourToCode(new AntRepresentation(toProg));
+            CandidateProgram holder = semMod.behaviourToCode(new AntRepresentation(toProg));
             firstGen.add(holder);
             //System.out.println(holder);
             //System.out.println("Reverse Translation at: " + i);

@@ -1,5 +1,5 @@
 /*  
- *  Copyright 2007-2008 Lawrence Beadle & Tom Castle
+ *  Copyright 2007-2010 Lawrence Beadle & Tom Castle
  *  Licensed under GNU General Public License
  * 
  *  This file is part of Epoch X - (The Genetic Programming Analysis Software)
@@ -17,12 +17,13 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.pruning;
+
+package org.epochx.semantics.gp.pruning;
 
 import java.util.*;
 
+
 import org.epochx.epox.Node;
-import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.semantics.*;
 
@@ -31,7 +32,7 @@ import org.epochx.semantics.*;
  * The semantic pruner class provides a method to reconstruct code in a reduced from which contains
  * no introns
  */
-public class SemanticPruner {
+public class GPSemanticPruner {
 	
 	/**
 	 * SemanticPruner constructor which provides all the functionality for this class
@@ -39,7 +40,7 @@ public class SemanticPruner {
 	 * @param model The GP model in use
 	 * @param semMod The semantic module in use
 	 */
-	public SemanticPruner(List<GPCandidateProgram> population, GPModel model, SemanticModule semMod) {
+	public GPSemanticPruner(List<GPCandidateProgram> population, GPSemanticModel model, SemanticModule semMod) {
 		
 		// reduce to behaviour
 		List<Representation> behaviours = new ArrayList<Representation>(model.getPopulationSize());
@@ -52,13 +53,13 @@ public class SemanticPruner {
 			if(behaviours.get(i).isConstant()) {
 				// replace with random terminal
 				Random rGen = new Random();
-				int n = model.getSyntax().size();
+				int n = model.getTerminals().size();
 				Node terminal = (Node) model.getSyntax().get(rGen.nextInt(n));
 				GPCandidateProgram newProg = new GPCandidateProgram(terminal, model);
 				population.set(i, newProg);
 			} else {
 				// return to syntax
-				population.set(i, semMod.behaviourToCode(behaviours.get(i)));
+				population.set(i, (GPCandidateProgram) semMod.behaviourToCode(behaviours.get(i)));
 			}
 		}		
 	}

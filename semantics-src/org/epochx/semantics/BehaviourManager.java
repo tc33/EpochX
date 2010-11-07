@@ -1,5 +1,5 @@
 /*  
- *  Copyright 2007-2008 Lawrence Beadle
+ *  Copyright 2007-2010 Lawrence Beadle & Tom Castle
  *  Licensed under GNU General Public License
  * 
  *  This file is part of Epoch X - (The Genetic Programming Analysis Software)
@@ -18,7 +18,7 @@
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.epochx.initialisation.analysis;
+package org.epochx.semantics;
 
 import java.util.ArrayList;
 

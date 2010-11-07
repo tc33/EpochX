@@ -1,5 +1,5 @@
 /*  
- *  Copyright 2007-2008 Lawrence Beadle & Tom Castle
+ *  Copyright 2007-2010 Lawrence Beadle & Tom Castle
  *  Licensed under GNU General Public License
  * 
  *  This file is part of Epoch X - (The Genetic Programming Analysis Software)
@@ -17,7 +17,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.initialisation;
+
+package org.epochx.semantics.gp.initialisation;
 
 import java.util.*;
 
@@ -53,7 +54,7 @@ public class RegressionSemanticallyDrivenInitialiser implements Initialiser {
 	 */
 	@Override
 	public List<CandidateProgram> getInitialPopulation() {
-		return getInitialPopulation();
+		return generatePopulation();
 	}
 	
 	private List<CandidateProgram> generatePopulation() {
@@ -76,29 +77,29 @@ public class RegressionSemanticallyDrivenInitialiser implements Initialiser {
             if(cFunc==0) {
             	RegressionRepresentation rep1 = storage.get(random.nextInt(storage.size()));
             	RegressionRepresentation rep2 = storage.get(random.nextInt(storage.size()));
-            	DoubleNode node1 = (DoubleNode) semMod.behaviourToCode(rep1).getRootNode().clone();
-            	DoubleNode node2 = (DoubleNode) semMod.behaviourToCode(rep2).getRootNode().clone();
+            	DoubleNode node1 = (DoubleNode) ((GPCandidateProgram) semMod.behaviourToCode(rep1)).getRootNode().clone();
+            	DoubleNode node2 = (DoubleNode) ((GPCandidateProgram) semMod.behaviourToCode(rep2)).getRootNode().clone();
             	DoubleNode newTree = new AddFunction(node1, node2);
                 result = (RegressionRepresentation) semMod.codeToBehaviour(new GPCandidateProgram(newTree, model));
             } else if(cFunc==1) {
             	RegressionRepresentation rep1 = storage.get(random.nextInt(storage.size()));
             	RegressionRepresentation rep2 = storage.get(random.nextInt(storage.size()));
-            	DoubleNode node1 = (DoubleNode) semMod.behaviourToCode(rep1).getRootNode().clone();
-            	DoubleNode node2 = (DoubleNode) semMod.behaviourToCode(rep2).getRootNode().clone();
+            	DoubleNode node1 = (DoubleNode) ((GPCandidateProgram) semMod.behaviourToCode(rep1)).getRootNode().clone();
+            	DoubleNode node2 = (DoubleNode) ((GPCandidateProgram) semMod.behaviourToCode(rep2)).getRootNode().clone();
             	DoubleNode newTree = new SubtractFunction(node1, node2);
                 result = (RegressionRepresentation) semMod.codeToBehaviour(new GPCandidateProgram(newTree, model));
             } else if(cFunc==2) {
             	RegressionRepresentation rep1 = storage.get(random.nextInt(storage.size()));
             	RegressionRepresentation rep2 = storage.get(random.nextInt(storage.size()));
-            	DoubleNode node1 = (DoubleNode) semMod.behaviourToCode(rep1).getRootNode().clone();
-            	DoubleNode node2 = (DoubleNode) semMod.behaviourToCode(rep2).getRootNode().clone();
+            	DoubleNode node1 = (DoubleNode) ((GPCandidateProgram) semMod.behaviourToCode(rep1)).getRootNode().clone();
+            	DoubleNode node2 = (DoubleNode) ((GPCandidateProgram) semMod.behaviourToCode(rep2)).getRootNode().clone();
             	DoubleNode newTree = new MultiplyFunction(node1, node2);
                 result = (RegressionRepresentation) semMod.codeToBehaviour(new GPCandidateProgram(newTree, model));
             } else if(cFunc==3) {
             	RegressionRepresentation rep1 = storage.get(random.nextInt(storage.size()));
             	RegressionRepresentation rep2 = storage.get(random.nextInt(storage.size()));
-            	DoubleNode node1 = (DoubleNode) semMod.behaviourToCode(rep1).getRootNode().clone();
-            	DoubleNode node2 = (DoubleNode) semMod.behaviourToCode(rep2).getRootNode().clone();
+            	DoubleNode node1 = (DoubleNode) ((GPCandidateProgram) semMod.behaviourToCode(rep1)).getRootNode().clone();
+            	DoubleNode node2 = (DoubleNode) ((GPCandidateProgram) semMod.behaviourToCode(rep2)).getRootNode().clone();
             	DoubleNode newTree = new ProtectedDivisionFunction(node1, node2);
                 result = (RegressionRepresentation) semMod.codeToBehaviour(new GPCandidateProgram(newTree, model));
             }

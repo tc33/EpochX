@@ -1,5 +1,5 @@
 /*  
- *  Copyright 2007-2008 Lawrence Beadle & Tom Castle
+ *  Copyright 2007-2010 Lawrence Beadle & Tom Castle
  *  Licensed under GNU General Public License
  * 
  *  This file is part of Epoch X - (The Genetic Programming Analysis Software)
@@ -17,7 +17,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.initialisation;
+
+package org.epochx.semantics.gp.initialisation;
 
 import java.util.*;
 
@@ -55,7 +56,7 @@ public class BooleanSemanticallyDrivenInitialiser implements Initialiser {
 	 */
 	@Override
 	public List<CandidateProgram> getInitialPopulation() {
-		return getInitialPopulation();
+		return generatePopulation();
 	}
 	
 	private List<CandidateProgram> generatePopulation() {

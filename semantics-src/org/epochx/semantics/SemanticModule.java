@@ -1,5 +1,5 @@
 /*  
- *  Copyright 2007-2008 Lawrence Beadle & Tom Castle
+ *  Copyright 2007-2010 Lawrence Beadle & Tom Castle
  *  Licensed under GNU General Public License
  * 
  *  This file is part of Epoch X - (The Genetic Programming Analysis Software)
@@ -20,8 +20,7 @@
 
 package org.epochx.semantics;
 
-import org.epochx.gp.representation.GPCandidateProgram;
-
+import org.epochx.representation.CandidateProgram;
 
 /**
  * The semantic module interface sets out the basic methods required for all semantic modules.
@@ -33,23 +32,13 @@ public interface SemanticModule {
 	 * @param program The syntax tree to convert
 	 * @return The canonical behaviour
 	 */
-	public Representation codeToBehaviour(GPCandidateProgram program);
+	public Representation codeToBehaviour(CandidateProgram program);
 	
 	/**
 	 * Converts a given behaviour back to a syntax tree
 	 * @param representation The behaviour to convert to syntax
 	 * @return The syntax tree
 	 */
-	public GPCandidateProgram behaviourToCode(Representation representation);
-	
-	/**
-	 * Method to start actions in an external piece of software - for CUDD
-	 */
-	public void start();
-	
-	/**
-	 * Method to stop actions in an external piece of software - for CUDD
-	 */
-	public void stop();
+	public CandidateProgram behaviourToCode(Representation representation);
 
 }

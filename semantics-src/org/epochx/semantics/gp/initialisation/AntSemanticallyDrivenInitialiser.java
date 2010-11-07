@@ -1,5 +1,5 @@
 /*  
- *  Copyright 2007-2008 Lawrence Beadle & Tom Castle
+ *  Copyright 2007-2010 Lawrence Beadle & Tom Castle
  *  Licensed under GNU General Public License
  * 
  *  This file is part of Epoch X - (The Genetic Programming Analysis Software)
@@ -17,32 +17,31 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.epochx.initialisation;
+
+package org.epochx.semantics.gp.initialisation;
 
 import java.util.*;
 
 import org.epochx.gp.model.GPModel;
-import org.epochx.gp.op.init.FullInitialiser;
-import org.epochx.gp.representation.GPCandidateProgram;
-import org.epochx.gp.op.init.*;
+import org.epochx.op.Initialiser;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.semantics.*;
 
 
 /**
- * Artificial Ant hybrid semantically driven initialisation
+ * Artificial Ant Semantically Driven Initialisation
  */
-public class AntHybridSemanticallyDrivenInitialiser implements GPInitialiser {
+public class AntSemanticallyDrivenInitialiser implements Initialiser {
 
 	private GPModel model;
 	private AntSemanticModule semMod;
 	
 	/**
-	 * Construcor for AA hybrid SDI method
+	 * Constructor for semantically driven initialisation for artificial ant
 	 * @param model The GP model in use
-	 * @param semMod The relevant semantic module
+	 * @param semMod The semantic module on use
 	 */
-	public AntHybridSemanticallyDrivenInitialiser(GPModel model, SemanticModule semMod) {
+	public AntSemanticallyDrivenInitialiser(GPModel model, SemanticModule semMod) {
 		this.model = model;
 		this.semMod = (AntSemanticModule) semMod;
 	}
@@ -52,23 +51,20 @@ public class AntHybridSemanticallyDrivenInitialiser implements GPInitialiser {
 	 */
 	@Override
 	public List<CandidateProgram> getInitialPopulation() {
-		return getInitialPopulation();
+		return generatePopulation();
 	}
 	
 	private List<CandidateProgram> generatePopulation() {
 		// make a random object
 		Random rGen = new Random();
 		ArrayList<ArrayList<String>> storage = new ArrayList<ArrayList<String>>();
-        FullInitialiser f = new FullInitialiser(model);
-        List<CandidateProgram> firstPass = f.getInitialPopulation();
-        
-        // generate a full population to start with
-        for(CandidateProgram c: firstPass) {
-        	AntRepresentation b = (AntRepresentation) semMod.codeToBehaviour((GPCandidateProgram) c);
-        	if(!b.isConstant()) {
-        		storage.add(b.getAntRepresentation());
-        	}
+        // seed the basic representations
+        ArrayList<ArrayList<String>> seed = makeAntBaseMoves();
+        for(ArrayList<String> s: seed) {
+            storage.add(s);
         }
+        // clear seed
+        seed = null;
         
         ArrayList<String> result;
         String oB = ("{");
@@ -142,7 +138,7 @@ public class AntHybridSemanticallyDrivenInitialiser implements GPInitialiser {
         List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>();
         int i = 1;
         for(ArrayList<String> toProg: storage) {                
-            GPCandidateProgram holder = semMod.behaviourToCode(new AntRepresentation(toProg));
+            CandidateProgram holder = semMod.behaviourToCode(new AntRepresentation(toProg));
             firstGen.add(holder);
             //System.out.println(holder);
             //System.out.println("Reverse Translation at: " + i);
@@ -153,6 +149,38 @@ public class AntHybridSemanticallyDrivenInitialiser implements GPInitialiser {
         
         return firstGen;
 	}
+	
+	/**
+     * Constructs the 4 basic manoeuvres in behaviour form for semantic ant initialisation
+     * @return An ArrayList containing the 4 basic moves
+     */
+    public ArrayList<ArrayList<String>> makeAntBaseMoves() {
+        // make master
+        ArrayList<ArrayList<String>> master = new ArrayList<ArrayList<String>>();
+        // make behaviours
+        ArrayList<String> beh = new ArrayList<String>();
+        // move east
+        beh.add("E");
+        beh.add("M");
+        master.add(beh);
+        beh = new ArrayList<String>();
+        // move south
+        beh.add("S");
+        beh.add("M");
+        master.add(beh);
+        beh = new ArrayList<String>();
+        // move west
+        beh.add("W");
+        beh.add("M");
+        master.add(beh);
+        beh = new ArrayList<String>();
+        // move north
+        beh.add("N");
+        beh.add("M");
+        master.add(beh);
+        beh = null;
+        return master;        
+    }
     
     private int getMoves(ArrayList<String> part) {
         int count = 0;

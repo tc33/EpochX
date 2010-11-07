@@ -1,5 +1,5 @@
 /*  
- *  Copyright 2007-2008 Lawrence Beadle & Tom Castle
+ *  Copyright 2007-2010 Lawrence Beadle & Tom Castle
  *  Licensed under GNU General Public License
  * 
  *  This file is part of Epoch X - (The Genetic Programming Analysis Software)
@@ -17,28 +17,51 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.epochx.semantics;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.epochx.epox.Node;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.GPCandidateProgram;
-
-
 
 /**
  *
  */
-public abstract class SemanticModel extends GPModel {
+public abstract class GPSemanticModel extends GPModel {
 
 	private boolean doStateCheckedCrossover;
-	private boolean doStateCheckedMutation;
-	
+	private boolean doStateCheckedMutation;	
 	private SemanticModule semanticModule;
 	
-	public SemanticModel() {
+	public GPSemanticModel() {
 		doStateCheckedCrossover = false;
-		doStateCheckedMutation = false;
-		
+		doStateCheckedMutation = false;		
 		semanticModule = null;
+	}
+	
+	public List<Node> getTerminals() {
+		List<Node> fullSyntax = super.getSyntax();
+		List<Node> terminals = new ArrayList<Node>();
+		for(Node test: fullSyntax) {
+			if(test.getArity()==0) {
+				terminals.add(test);
+			}
+		}
+		return terminals;
+	}
+	
+	public List<Node> getFunctions() {
+		List<Node> fullSyntax = super.getSyntax();
+		List<Node> terminals = new ArrayList<Node>();
+		for(Node test: fullSyntax) {
+			if(test.getArity()!=0) {
+				terminals.add(test);
+			}
+		}
+		return terminals;
 	}
 	
 	/**
@@ -53,8 +76,8 @@ public abstract class SemanticModel extends GPModel {
 	 * Sets whether to run the crossover state checker
 	 * @param runStateCheck TRUE if the crossover state checker should be run
 	 */
-	public void setStateCheckedCrossover(boolean runStateCheck) {
-		this.doStateCheckedCrossover = runStateCheck;
+	public void setStateCheckedCrossover(boolean doStateCheckedCrossover) {
+		this.doStateCheckedCrossover = doStateCheckedCrossover;
 	}
 	
 	public boolean getStateCheckedMutation() {
@@ -96,7 +119,10 @@ public abstract class SemanticModel extends GPModel {
 			}
 			
 			//start semantic module
-			semMod.start();
+			// TODO find a better way of doing this
+			if(semMod instanceof BooleanSemanticModule) {
+				((BooleanSemanticModule) semMod).start();
+			}
 			
 			// check behaviours
 			Representation p1Rep = semMod.codeToBehaviour(parents[0]);
@@ -111,7 +137,10 @@ public abstract class SemanticModel extends GPModel {
 			}
 			
 			// stop semantic module
-			semMod.stop();
+			// TODO find a better way of doing this
+			if(semMod instanceof BooleanSemanticModule) {
+				((BooleanSemanticModule) semMod).stop();
+			}
 		}
 			
 		return !equal;
@@ -132,7 +161,10 @@ public abstract class SemanticModel extends GPModel {
 			}
 			
 			//start semantic module
-			semMod.start();
+			// TODO find a better way of doing this
+			if(semMod instanceof BooleanSemanticModule) {
+				((BooleanSemanticModule) semMod).start();
+			}
 			
 			// check behaviours
 			Representation p1Rep = semMod.codeToBehaviour(parent);
@@ -143,7 +175,10 @@ public abstract class SemanticModel extends GPModel {
 			}
 			
 			// stop semantic module
-			semMod.stop();
+			// TODO find a better way of doing this
+			if(semMod instanceof BooleanSemanticModule) {
+				((BooleanSemanticModule) semMod).stop();
+			}
 		}
 		return !equal;
 	}

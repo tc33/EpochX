@@ -1,5 +1,5 @@
 /*  
- *  Copyright 2007-2008 Lawrence Beadle & Tom Castle
+ *  Copyright 2007-2010 Lawrence Beadle & Tom Castle
  *  Licensed under GNU General Public License
  * 
  *  This file is part of Epoch X - (The Genetic Programming Analysis Software)
@@ -17,15 +17,18 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.epochx.semantics;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.epochx.core.Model;
 import org.epochx.epox.*;
 import org.epochx.epox.ant.*;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.GPCandidateProgram;
+import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.ant.*;
 
 
@@ -36,10 +39,11 @@ import org.epochx.tools.ant.*;
 public class AntSemanticModule implements SemanticModule {
 	
 	//private List<TerminalNode<Action>> terminals;
-	private GPModel model;
+	private Model model;
 	private ArrayList<String> antModel;
 	private String orientation;
 	private Ant ant;
+	private String environment;
 	@SuppressWarnings("unused")
 	private AntLandscape landscape;
 	
@@ -50,49 +54,45 @@ public class AntSemanticModule implements SemanticModule {
 	 * @param ant The Ant object
 	 * @param antLandscape The AntLanscape object
 	 */
-	public AntSemanticModule(List<VoidNode> list, GPModel model, Ant ant, AntLandscape landscape) {
+	public AntSemanticModule(List<VoidNode> list, Model model, Ant ant, AntLandscape landscape, String environment) {
 		//this.terminals = list;
 		this.model = model;
 		this.ant = ant;
 		this.landscape = landscape;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.epochx.semantics.SemanticModule#start()
-	 */
-	@Override
-	public void start() {
-		// Not required as we do not need to activate external software to study behaviour
-	}
-
-	/* (non-Javadoc)
-	 * @see com.epochx.semantics.SemanticModule#stop()
-	 */
-	@Override
-	public void stop() {
-		// Not required as we do not need to activate external software to study behaviour
+		this.environment = environment;
 	}
 	
 	/* (non-Javadoc)
 	 * @see com.epochx.semantics.SemanticModule#behaviourToCode(com.epochx.semantics.Representation)
 	 */
 	@Override
-	public GPCandidateProgram behaviourToCode(Representation representation) {
+	public CandidateProgram behaviourToCode(Representation representation) {
 		Node rootNode = this.repToCode1(representation, "E");
-		return new GPCandidateProgram(rootNode, model);
+		
+		CandidateProgram result = null;
+		if(environment.equalsIgnoreCase("GP")) {
+			result = new GPCandidateProgram(rootNode, (GPModel) model);
+		} else if(environment.equalsIgnoreCase("GE")) {
+			// TODO GE Constructor
+		} else if(environment.equalsIgnoreCase("GR")) {
+			// TODO GR Constructor
+		}
+		
+		return result;
 	}
 
 	/* (non-Javadoc)
 	 * @see com.epochx.semantics.SemanticModule#codeToBehaviour(com.epochx.core.representation.CandidateProgram)
 	 */
 	@Override
-	public Representation codeToBehaviour(GPCandidateProgram program) {
+	public Representation codeToBehaviour(CandidateProgram program) {
 		// develop ant monitoring model
         antModel = new ArrayList<String>();
 
         // initialise a new ant
         orientation = "E";
-        Node rootNode = program.getRootNode();
+        SemanticCandidateProgram prog = new SemanticCandidateProgram(program, ant);
+        Node rootNode = prog.getRootNode();
         this.runAnt(rootNode);
         
         // work out depth of if statements

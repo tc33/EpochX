@@ -1,5 +1,5 @@
 /*  
- *  Copyright 2007-2008 Lawrence Beadle & Tom Castle
+ *  Copyright 2007-2010 Lawrence Beadle & Tom Castle
  *  Licensed under GNU General Public License
  * 
  *  This file is part of Epoch X - (The Genetic Programming Analysis Software)
@@ -17,14 +17,17 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Epoch X.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.epochx.semantics;
 
 import java.util.*;
 
+import org.epochx.core.Model;
 import org.epochx.epox.*;
 import org.epochx.epox.dbl.*;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.GPCandidateProgram;
+import org.epochx.representation.CandidateProgram;
 
 /**
  * The regression semantic module controls all aspects of the modelling of
@@ -33,40 +36,26 @@ import org.epochx.gp.representation.GPCandidateProgram;
 public class RegressionSemanticModule implements SemanticModule {
 	
 	private List<DoubleVariable> terminals;
-	private GPModel model;
+	private Model model;
 	private DoubleVariable var;
+	private String environment;
 	
 	/**
 	 * Constructor for Regression Semantic Module
 	 * @param list List of terminal nodes
 	 * @param model The GPModel object
 	 */
-	public RegressionSemanticModule(List<DoubleVariable> list, GPModel model) {
+	public RegressionSemanticModule(List<DoubleVariable> list, Model model, String environment) {
 		this.terminals = list;
 		this.model = model;
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.epochx.semantics.SemanticModule#start()
-	 */
-	@Override
-	public void start() {
-		// Not required as not accessing external software for this model
-	}
-
-	/* (non-Javadoc)
-	 * @see com.epochx.semantics.SemanticModule#stop()
-	 */
-	@Override
-	public void stop() {
-		// Not required as not accessing external software for this model
+		this.environment = environment;
 	}
 	
 	/* (non-Javadoc)
 	 * @see com.epochx.semantics.SemanticModule#behaviourToCode(com.epochx.semantics.Representation)
 	 */
 	@Override
-	public GPCandidateProgram behaviourToCode(Representation representation) {
+	public CandidateProgram behaviourToCode(Representation representation) {
 		// check representation is right type
 		RegressionRepresentation regRep;
 		if(representation instanceof RegressionRepresentation) {
@@ -88,19 +77,33 @@ public class RegressionSemanticModule implements SemanticModule {
 		// expand the CVPS to normal functions
 		rootNode = this.expandCVPTree(rootNode);
 		
-		return new GPCandidateProgram(rootNode, model);
+		// sort out return environment
+		CandidateProgram toReturn = null;		
+		if(environment.equalsIgnoreCase("GP")) {
+			toReturn = new GPCandidateProgram(rootNode, (GPModel) model);
+		} else if(environment.equalsIgnoreCase("GE")) {
+			// TODO GE Construction ------------------------------------------------------
+			
+		} else if(environment.equalsIgnoreCase("GR")) {
+			// TODO GR Construction ------------------------------------------------------
+			
+		}
+		
+		return toReturn;
 	}
 
 	/* (non-Javadoc)
 	 * @see com.epochx.semantics.SemanticModule#codeToBehaviour(com.epochx.core.representation.CandidateProgram)
 	 */
 	@Override
-	public Representation codeToBehaviour(GPCandidateProgram program) {
+	public Representation codeToBehaviour(CandidateProgram program) {
 		
 		// clone the program to prevent back modification
-		GPCandidateProgram program1 = (GPCandidateProgram) program.clone();
+		SemanticCandidateProgram program1 = new SemanticCandidateProgram((CandidateProgram) program.clone());
+		
 		// extract and simplify program
-		DoubleNode rootNode = (DoubleNode) program1.getRootNode();
+		DoubleNode rootNode;
+		rootNode = (DoubleNode) program1.getRootNode();
 
 		// resolve any multiply by zeros
 		if(rootNode.getLength()>1) {

@@ -112,7 +112,7 @@ public class WhighamCrossover extends ConfigOperator<GRModel> implements GRCross
 		// Generate a list of matching non-terminals from the second program.
 		final List<NonTerminalSymbol> matchingNonTerminals = new ArrayList<NonTerminalSymbol>();
 		for (final NonTerminalSymbol nt: nonTerminals2) {
-			if (nt.equals(subtree1)) {
+			if (nt.getGrammarRule().equals(subtree1.getGrammarRule())) {
 				matchingNonTerminals.add(nt);
 			}
 		}

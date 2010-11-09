@@ -239,21 +239,36 @@ public class EpoxParser {
 	 * @return
 	 */
 	private Node parseTerminal(final String terminalStr) {
-		if (Pattern.matches(fpRegex, terminalStr)) {
-			return new DoubleLiteral(Double.valueOf(terminalStr));
-		} else if (terminalStr.equalsIgnoreCase("true")
-				|| terminalStr.equalsIgnoreCase("false")) {
-			return new BooleanLiteral(Boolean.valueOf(terminalStr));
+		Node node = parseBooleanLiteral(terminalStr);
+			
+		if (node == null) {
+			node = parseVariable(terminalStr);
+		}
+		
+		if (node == null && Pattern.matches(fpRegex, terminalStr)) {
+			node = new DoubleLiteral(Double.valueOf(terminalStr));
+		}
+		
+		return node;
+	}
+	
+	private BooleanLiteral parseBooleanLiteral(final String literalStr) {
+		if (literalStr.equalsIgnoreCase("true") || literalStr.equalsIgnoreCase("false")) {
+			return new BooleanLiteral(Boolean.valueOf(literalStr));
 		} else {
-			// Must be a variable.
-			for (final Node v: variables) {
-				if (v.getIdentifier().equals(terminalStr)) {
-					return v;
-				}
-			}
-
 			return null;
 		}
+	}
+	
+	private Node parseVariable(final String variableStr) {
+		Node variable = null;
+		for (final Node v: variables) {
+			if (v.getIdentifier().equals(variableStr)) {
+				variable = v;
+				break;
+			}
+		}
+		return variable;
 	}
 
 	public void addSimpleFunction(final String name,

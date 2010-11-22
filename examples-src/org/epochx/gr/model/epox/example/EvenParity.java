@@ -23,6 +23,8 @@ package org.epochx.gr.model.epox.example;
 
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.op.init.FullInitialiser;
+import org.epochx.life.*;
+import org.epochx.stats.*;
 
 public class EvenParity extends org.epochx.gr.model.epox.EvenParity {
 
@@ -31,14 +33,21 @@ public class EvenParity extends org.epochx.gr.model.epox.EvenParity {
 	}
 
 	public static void main(final String[] args) {
-		final GRModel model = new EvenParity(3);
-		model.setNoRuns(50);
+		final GRModel model = new EvenParity(5);
+		model.setNoRuns(1);
 		model.setNoGenerations(100);
 		model.setMaxDepth(14);
 		model.setMaxInitialDepth(14);
 		model.setInitialiser(new FullInitialiser(model));
-		model.setTerminationFitness(0.01);
+		model.setTerminationFitness(0.0);
 
+		Life.get().addGenerationListener(new GenerationAdapter() {
+			@Override
+			public void onGenerationEnd() {
+				Stats.get().print(StatField.GEN_NUMBER, StatField.GEN_FITNESS_MIN);
+			}
+		});
+		
 		model.run();
 	}
 

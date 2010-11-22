@@ -106,6 +106,7 @@ public class EpoxParser {
 		simpleFunctions.put("COS", CosineFunction.class);
 		simpleFunctions.put("COT", CotangentFunction.class);
 		simpleFunctions.put("CUBE", CubeFunction.class);
+		simpleFunctions.put("EXP", ExponentialFunction.class);
 		simpleFunctions.put("FACTORIAL", FactorialFunction.class);
 		simpleFunctions.put("GT", GreaterThanFunction.class);
 		simpleFunctions.put("COSH", HyperbolicCosineFunction.class);

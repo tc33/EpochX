@@ -12,10 +12,10 @@ public class EvenParityTest extends ModelTest {
 	 * Testing against Koza's setup and results.
 	 * 
 	 * Koza's success rate: 100% (p531).
-	 * Expecting success rate between 98% and 100%.
+	 * Expecting success rate of 100%.
 	 */
 	public void testEven3Parity() {
-		final int LOWER_SUCCESS = 98;
+		final int LOWER_SUCCESS = 100;
 		final int UPPER_SUCCESS = 100;
 		
 		EvenParity model = new EvenParity(3);
@@ -30,9 +30,11 @@ public class EvenParityTest extends ModelTest {
 		
 		model.setCrossover(new KozaCrossover(model));
 		
-		model.setMaxDepth(17);
-		model.setMaxInitialDepth(6);
-		model.setInitialiser(new RampedHalfAndHalfInitialiser(model));
+		model.setMaxDepth(16);
+		model.setMaxInitialDepth(5);
+		RampedHalfAndHalfInitialiser initialiser = new RampedHalfAndHalfInitialiser(model);
+		initialiser.setDuplicatesEnabled(false);
+		model.setInitialiser(initialiser);
 		model.setPoolSelector(null);
 		model.setProgramSelector(new FitnessProportionateSelector(model));
 		model.setNoElites(0);

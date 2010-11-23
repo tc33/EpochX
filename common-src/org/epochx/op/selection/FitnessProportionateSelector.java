@@ -30,10 +30,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
  * Fitness proportionate selection chooses programs with a probability
- * proportional to their fitness inverted. Fitnesses must be inverted prior to
- * selection since fitness is standardised. Inversion is performed by
- * subtracting each fitness from the maximum fitness in the population, plus the
- * minimum fitness.
+ * proportional to their adjusted fitness. 
  * 
  * <p>
  * If a model is provided then the following parameters are loaded upon every
@@ -190,8 +187,8 @@ public class FitnessProportionateSelector extends ConfigOperator<Model>
 		// The current population from which programs should be chosen.
 		private List<CandidateProgram> pool;
 
-		// Normalised fitnesses.
-		private double[] fitnesses;
+		// Normalised normalised.
+		private double[] normalised;
 
 		@Override
 		public void setSelectionPool(final List<CandidateProgram> pool) {
@@ -201,41 +198,25 @@ public class FitnessProportionateSelector extends ConfigOperator<Model>
 			}
 			this.pool = pool;
 
-			fitnesses = new double[pool.size()];
-
-			double maxFitness = Double.NEGATIVE_INFINITY;
-			double minFitness = Double.POSITIVE_INFINITY;
-
-			// Find the max and min fitnesses.
-			for (int i = 0; i < fitnesses.length; i++) {
-				fitnesses[i] = pool.get(i).getFitness();
-				if (fitnesses[i] > maxFitness) {
-					maxFitness = fitnesses[i];
-				}
-				if (fitnesses[i] < minFitness) {
-					minFitness = fitnesses[i];
-				}
-			}
-
-			// Add the minimum fitness as an offset.
-			maxFitness += minFitness;
-
-			// Invert and sum all the fitnesses.
-			double totalFitness = 0;
-			for (int i = 0; i < pool.size(); i++) {
-				fitnesses[i] = maxFitness - fitnesses[i];
-				totalFitness += fitnesses[i];
+			// Get adjusted fitnesses for each program.
+			double[] adjusted = new double[pool.size()];
+			double adjustedSum = 0.0;
+			for (int i=0; i<adjusted.length; i++) {
+				double adjustedFitness = pool.get(i).getAdjustedFitness();
+				adjusted[i] = adjustedFitness;
+				adjustedSum += adjustedFitness;
 			}
 
 			// Calculate cumulative normalised fitnesses.
-			double sum = 0.0;
-			for (int i = 0; i < fitnesses.length; i++) {
-				sum += (fitnesses[i] / totalFitness);
-				fitnesses[i] = sum;
+			normalised = new double[pool.size()];
+			double normalisedSum = 0.0;
+			for (int i = 0; i < normalised.length; i++) {
+				normalisedSum += (adjusted[i] / adjustedSum);
+				normalised[i] = normalisedSum;
 			}
 
 			// Ensure the final probability is 1.0.
-			fitnesses[fitnesses.length - 1] = 1.0;
+			normalised[normalised.length - 1] = 1.0;
 		}
 
 		@Override
@@ -251,8 +232,8 @@ public class FitnessProportionateSelector extends ConfigOperator<Model>
 
 			assert ((ran >= 0.0) && (ran <= 1.0));
 
-			for (int i = 0; i < fitnesses.length; i++) {
-				if (ran <= fitnesses[i]) {
+			for (int i = 0; i < normalised.length; i++) {
+				if (ran <= normalised[i]) {
 					return pool.get(i);
 				}
 			}

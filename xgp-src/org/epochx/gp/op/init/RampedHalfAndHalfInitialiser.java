@@ -128,7 +128,7 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GPModel> implem
 	 *        parameters should be loaded.
 	 */
 	public RampedHalfAndHalfInitialiser(final GPModel model) {
-		this(model, 2);
+		this(model, 1);
 	}
 
 	/**

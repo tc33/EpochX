@@ -21,7 +21,6 @@
  */
 package org.epochx.gr.stats;
 
-import static org.epochx.stats.StatField.GEN_POP;
 import static org.epochx.stats.Stats.ExpiryEvent.GENERATION;
 
 import java.util.List;
@@ -34,7 +33,7 @@ import org.epochx.stats.*;
  * Provides constants to be used as keys to request statistics from the
  * Stats specific to XGR.
  */
-public class GRStatField {
+public class GRStatField extends StatField {
 
 	/**
 	 * Returns an <code>int[]</code> which contains the depths of all the

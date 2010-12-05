@@ -24,6 +24,7 @@ package org.epochx.stats;
 import static org.epochx.stats.Stats.ExpiryEvent.*;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.math.NumberUtils;
@@ -46,6 +47,90 @@ public class StatField {
 	 * that the last run took to complete.
 	 */
 	public static final Stat RUN_TIME = new AbstractStat(RUN) {};
+	
+	/**
+	 * Returns a <code>Long</code> which is the length of time in milliseconds
+	 * that the last run took to complete.
+	 */
+	public static final Stat RUN_TIME_MS = new AbstractStat(RUN) {
+		@Override
+		public Object getStatValue() {
+			Long ms = null;
+			
+			// Request the time in nanoseconds.
+			final Long ns = (Long) Stats.get().getStat(RUN_TIME);
+					
+			if (ns != null) {
+				// Convert to milliseconds.
+				ms = TimeUnit.NANOSECONDS.toMillis(ns);
+			}
+			
+			return ms;
+		};
+	};
+	
+	/**
+	 * Returns a <code>Long</code> which is the length of time in seconds
+	 * that the last run took to complete.
+	 */
+	public static final Stat RUN_TIME_S = new AbstractStat(RUN) {
+		@Override
+		public Object getStatValue() {
+			Long s = null;
+			
+			// Request the time in nanoseconds.
+			final Long ns = (Long) Stats.get().getStat(RUN_TIME);
+					
+			if (ns != null) {
+				// Convert to seconds.
+				s = TimeUnit.NANOSECONDS.toSeconds(ns);
+			}
+			
+			return s;
+		};
+	};
+	
+	/**
+	 * Returns a <code>Long</code> which is the length of time in minutes
+	 * that the last run took to complete.
+	 */
+	public static final Stat RUN_TIME_M = new AbstractStat(RUN) {
+		@Override
+		public Object getStatValue() {
+			Long m = null;
+			
+			// Request the time in nanoseconds.
+			final Long ns = (Long) Stats.get().getStat(RUN_TIME);
+					
+			if (ns != null) {
+				// Convert to minutes.
+				m = TimeUnit.NANOSECONDS.toMinutes(ns);
+			}
+			
+			return m;
+		};
+	};
+	
+	/**
+	 * Returns a <code>Long</code> which is the length of time in hours
+	 * that the last run took to complete.
+	 */
+	public static final Stat RUN_TIME_H = new AbstractStat(RUN) {
+		@Override
+		public Object getStatValue() {
+			Long h = null;
+			
+			// Request the time in nanoseconds.
+			final Long ns = (Long) Stats.get().getStat(RUN_TIME);
+					
+			if (ns != null) {
+				// Convert to hours.
+				h = TimeUnit.NANOSECONDS.toHours(ns);
+			}
+			
+			return h;
+		};
+	};
 	
 	/**
 	 * Returns a <code>Double</code> which is the lowest fitness score achieved
@@ -431,6 +516,90 @@ public class StatField {
 	public static final Stat GEN_TIME = new AbstractStat(GENERATION) {};
 
 	/**
+	 * Returns a <code>Long</code> which is the length of time in milliseconds
+	 * that the last generation took to complete.
+	 */
+	public static final Stat GEN_TIME_MS = new AbstractStat(GENERATION) {
+		@Override
+		public Object getStatValue() {
+			Long ms = null;
+			
+			// Request the time in nanoseconds.
+			final Long ns = (Long) Stats.get().getStat(GEN_TIME);
+					
+			if (ns != null) {
+				// Convert to milliseconds.
+				ms = TimeUnit.NANOSECONDS.toMillis(ns);
+			}
+			
+			return ms;
+		};
+	};
+	
+	/**
+	 * Returns a <code>Long</code> which is the length of time in seconds
+	 * that the last generation took to complete.
+	 */
+	public static final Stat GEN_TIME_S = new AbstractStat(GENERATION) {
+		@Override
+		public Object getStatValue() {
+			Long s = null;
+			
+			// Request the time in nanoseconds.
+			final Long ns = (Long) Stats.get().getStat(GEN_TIME);
+					
+			if (ns != null) {
+				// Convert to seconds.
+				s = TimeUnit.NANOSECONDS.toSeconds(ns);
+			}
+			
+			return s;
+		};
+	};
+	
+	/**
+	 * Returns a <code>Long</code> which is the length of time in minutes
+	 * that the last generation took to complete.
+	 */
+	public static final Stat GEN_TIME_M = new AbstractStat(GENERATION) {
+		@Override
+		public Object getStatValue() {
+			Long m = null;
+			
+			// Request the time in nanoseconds.
+			final Long ns = (Long) Stats.get().getStat(GEN_TIME);
+					
+			if (ns != null) {
+				// Convert to minutes.
+				m = TimeUnit.NANOSECONDS.toMinutes(ns);
+			}
+			
+			return m;
+		};
+	};
+	
+	/**
+	 * Returns a <code>Long</code> which is the length of time in hours
+	 * that the last generation took to complete.
+	 */
+	public static final Stat GEN_TIME_H = new AbstractStat(GENERATION) {
+		@Override
+		public Object getStatValue() {
+			Long h = null;
+			
+			// Request the time in nanoseconds.
+			final Long ns = (Long) Stats.get().getStat(GEN_TIME);
+					
+			if (ns != null) {
+				// Convert to hours.
+				h = TimeUnit.NANOSECONDS.toHours(ns);
+			}
+			
+			return h;
+		};
+	};
+	
+	/**
 	 * Returns a <code>CandidateProgram</code> which is a copy of the program
 	 * which underwent mutation as it was <b>before</b> the mutation operation
 	 * was applied.
@@ -449,6 +618,48 @@ public class StatField {
 	 */
 	public static final Stat MUT_TIME = new AbstractStat(MUTATION) {};
 
+	/**
+	 * Returns a <code>Long</code> which is the length of time in milliseconds
+	 * that the last mutation operation took to complete.
+	 */
+	public static final Stat MUT_TIME_MS = new AbstractStat(MUTATION) {
+		@Override
+		public Object getStatValue() {
+			Long ms = null;
+			
+			// Request the time in nanoseconds.
+			final Long ns = (Long) Stats.get().getStat(MUT_TIME);
+					
+			if (ns != null) {
+				// Convert to milliseconds.
+				ms = TimeUnit.NANOSECONDS.toMillis(ns);
+			}
+			
+			return ms;
+		};
+	};
+	
+	/**
+	 * Returns a <code>Long</code> which is the length of time in seconds
+	 * that the last mutation operation took to complete.
+	 */
+	public static final Stat MUT_TIME_S = new AbstractStat(MUTATION) {
+		@Override
+		public Object getStatValue() {
+			Long s = null;
+			
+			// Request the time in nanoseconds.
+			final Long ns = (Long) Stats.get().getStat(MUT_TIME);
+					
+			if (ns != null) {
+				// Convert to seconds.
+				s = TimeUnit.NANOSECONDS.toSeconds(ns);
+			}
+			
+			return s;
+		};
+	};
+	
 	/**
 	 * Returns an <code>Integer</code> which is the number of times the last
 	 * mutation operation was reverted.
@@ -541,6 +752,48 @@ public class StatField {
 	 */
 	public static final Stat XO_TIME = new AbstractStat(CROSSOVER) {};
 
+	/**
+	 * Returns a <code>Long</code> which is the length of time in milliseconds
+	 * that the last crossover operation took to complete.
+	 */
+	public static final Stat XO_TIME_MS = new AbstractStat(CROSSOVER) {
+		@Override
+		public Object getStatValue() {
+			Long ms = null;
+			
+			// Request the time in nanoseconds.
+			final Long ns = (Long) Stats.get().getStat(XO_TIME);
+					
+			if (ns != null) {
+				// Convert to milliseconds.
+				ms = TimeUnit.NANOSECONDS.toMillis(ns);
+			}
+			
+			return ms;
+		};
+	};
+	
+	/**
+	 * Returns a <code>Long</code> which is the length of time in seconds
+	 * that the last crossover operation took to complete.
+	 */
+	public static final Stat XO_TIME_S = new AbstractStat(CROSSOVER) {
+		@Override
+		public Object getStatValue() {
+			Long s = null;
+			
+			// Request the time in nanoseconds.
+			final Long ns = (Long) Stats.get().getStat(XO_TIME);
+					
+			if (ns != null) {
+				// Convert to seconds.
+				s = TimeUnit.NANOSECONDS.toSeconds(ns);
+			}
+			
+			return s;
+		};
+	};
+	
 	/**
 	 * Returns an <code>Integer</code> which is the number of times the last
 	 * crossover operation was reverted.
@@ -942,6 +1195,90 @@ public class StatField {
 	public static final Stat POOL_TIME = new AbstractStat(POOL_SELECTION) {};
 	
 	/**
+	 * Returns a <code>Long</code> which is the length of time in milliseconds
+	 * that the last pool selection took to complete.
+	 */
+	public static final Stat POOL_TIME_MS = new AbstractStat(POOL_SELECTION) {
+		@Override
+		public Object getStatValue() {
+			Long ms = null;
+			
+			// Request the time in nanoseconds.
+			final Long ns = (Long) Stats.get().getStat(POOL_TIME);
+					
+			if (ns != null) {
+				// Convert to milliseconds.
+				ms = TimeUnit.NANOSECONDS.toMillis(ns);
+			}
+			
+			return ms;
+		};
+	};
+	
+	/**
+	 * Returns a <code>Long</code> which is the length of time in seconds
+	 * that the last pool selection took to complete.
+	 */
+	public static final Stat POOL_TIME_S = new AbstractStat(POOL_SELECTION) {
+		@Override
+		public Object getStatValue() {
+			Long s = null;
+			
+			// Request the time in nanoseconds.
+			final Long ns = (Long) Stats.get().getStat(POOL_TIME);
+					
+			if (ns != null) {
+				// Convert to seconds.
+				s = TimeUnit.NANOSECONDS.toSeconds(ns);
+			}
+			
+			return s;
+		};
+	};
+	
+	/**
+	 * Returns a <code>Long</code> which is the length of time in minutes
+	 * that the last pool selection took to complete.
+	 */
+	public static final Stat POOL_TIME_M = new AbstractStat(POOL_SELECTION) {
+		@Override
+		public Object getStatValue() {
+			Long s = null;
+			
+			// Request the time in nanoseconds.
+			final Long ns = (Long) Stats.get().getStat(POOL_TIME);
+					
+			if (ns != null) {
+				// Convert to minutes.
+				s = TimeUnit.NANOSECONDS.toMinutes(ns);
+			}
+			
+			return s;
+		};
+	};
+	
+	/**
+	 * Returns a <code>Long</code> which is the length of time in hours
+	 * that the last pool selection took to complete.
+	 */
+	public static final Stat POOL_TIME_H = new AbstractStat(POOL_SELECTION) {
+		@Override
+		public Object getStatValue() {
+			Long s = null;
+			
+			// Request the time in nanoseconds.
+			final Long ns = (Long) Stats.get().getStat(POOL_TIME);
+					
+			if (ns != null) {
+				// Convert to hours.
+				s = TimeUnit.NANOSECONDS.toHours(ns);
+			}
+			
+			return s;
+		};
+	};
+	
+	/**
 	 * Returns an <code>Integer</code> which is the number of times the last
 	 * reproduction operation was reverted.
 	 */
@@ -1150,4 +1487,87 @@ public class StatField {
 	 */
 	public static final Stat ELITE_TIME = new AbstractStat(ELITISM) {};
 
+	/**
+	 * Returns a <code>Long</code> which is the length of time in milliseconds
+	 * that the last elitism operation took to complete.
+	 */
+	public static final Stat ELITE_TIME_MS = new AbstractStat(ELITISM) {
+		@Override
+		public Object getStatValue() {
+			Long ms = null;
+			
+			// Request the time in nanoseconds.
+			final Long ns = (Long) Stats.get().getStat(ELITE_TIME);
+					
+			if (ns != null) {
+				// Convert to milliseconds.
+				ms = TimeUnit.NANOSECONDS.toMillis(ns);
+			}
+			
+			return ms;
+		};
+	};
+	
+	/**
+	 * Returns a <code>Long</code> which is the length of time in seconds
+	 * that the last elitism operation took to complete.
+	 */
+	public static final Stat ELITE_TIME_S = new AbstractStat(ELITISM) {
+		@Override
+		public Object getStatValue() {
+			Long s = null;
+			
+			// Request the time in nanoseconds.
+			final Long ns = (Long) Stats.get().getStat(ELITE_TIME);
+					
+			if (ns != null) {
+				// Convert to seconds.
+				s = TimeUnit.NANOSECONDS.toSeconds(ns);
+			}
+			
+			return s;
+		};
+	};
+	
+	/**
+	 * Returns a <code>Long</code> which is the length of time in minutes
+	 * that the last elitism operation took to complete.
+	 */
+	public static final Stat ELITE_TIME_M = new AbstractStat(ELITISM) {
+		@Override
+		public Object getStatValue() {
+			Long s = null;
+			
+			// Request the time in nanoseconds.
+			final Long ns = (Long) Stats.get().getStat(ELITE_TIME);
+					
+			if (ns != null) {
+				// Convert to minutes.
+				s = TimeUnit.NANOSECONDS.toMinutes(ns);
+			}
+			
+			return s;
+		};
+	};
+	
+	/**
+	 * Returns a <code>Long</code> which is the length of time in hours
+	 * that the last elitism operation took to complete.
+	 */
+	public static final Stat ELITE_TIME_H = new AbstractStat(ELITISM) {
+		@Override
+		public Object getStatValue() {
+			Long s = null;
+			
+			// Request the time in nanoseconds.
+			final Long ns = (Long) Stats.get().getStat(ELITE_TIME);
+					
+			if (ns != null) {
+				// Convert to hours.
+				s = TimeUnit.NANOSECONDS.toHours(ns);
+			}
+			
+			return s;
+		};
+	};
 }

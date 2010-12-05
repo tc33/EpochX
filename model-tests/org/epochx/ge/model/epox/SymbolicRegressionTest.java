@@ -1,7 +1,8 @@
-package org.epochx.gp.model;
+package org.epochx.ge.model.epox;
 
-import org.epochx.gp.op.crossover.KozaCrossover;
-import org.epochx.gp.op.init.RampedHalfAndHalfInitialiser;
+import org.epochx.ge.op.crossover.FixedPointCrossover;
+import org.epochx.ge.op.init.RampedHalfAndHalfInitialiser;
+import org.epochx.ge.op.mutation.PointMutation;
 import org.epochx.life.*;
 import org.epochx.op.selection.FitnessProportionateSelector;
 import org.epochx.stats.*;
@@ -42,10 +43,11 @@ public class SymbolicRegressionTest extends ModelTest {
 		model.setPopulationSize(500);
 		model.setNoGenerations(51);
 		model.setCrossoverProbability(0.9);
-		model.setMutationProbability(0.0);
-		model.setReproductionProbability(0.1);
+		model.setMutationProbability(0.1);
+		model.setReproductionProbability(0.0);
 		
-		model.setCrossover(new KozaCrossover(model));
+		model.setCrossover(new FixedPointCrossover(model));
+		model.setMutation(new PointMutation(model));
 		
 		model.setMaxDepth(16);
 		model.setMaxInitialDepth(5);
@@ -60,10 +62,7 @@ public class SymbolicRegressionTest extends ModelTest {
 	/**
 	 * Tests quartic symbolic regression with standard setup.
 	 * 
-	 * Koza's success rate: 23% (p586).
-	 * OR 35% (p203).
-	 * 
-	 * Expecting success rate between 45% and 55%.
+	 * Expecting success rate between % and %.
 	 */
 	public void testQuartic() {
 		final int LOWER_SUCCESS = 45;

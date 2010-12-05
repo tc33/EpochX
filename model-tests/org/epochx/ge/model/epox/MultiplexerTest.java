@@ -1,7 +1,8 @@
-package org.epochx.gp.model;
+package org.epochx.ge.model.epox;
 
-import org.epochx.gp.op.crossover.KozaCrossover;
-import org.epochx.gp.op.init.RampedHalfAndHalfInitialiser;
+import org.epochx.ge.op.crossover.FixedPointCrossover;
+import org.epochx.ge.op.init.RampedHalfAndHalfInitialiser;
+import org.epochx.ge.op.mutation.PointMutation;
 import org.epochx.life.*;
 import org.epochx.op.selection.FitnessProportionateSelector;
 import org.epochx.stats.*;
@@ -42,10 +43,11 @@ public class MultiplexerTest extends ModelTest {
 		model.setPopulationSize(500);
 		model.setNoGenerations(51);
 		model.setCrossoverProbability(0.9);
-		model.setMutationProbability(0.0);
-		model.setReproductionProbability(0.1);
+		model.setMutationProbability(0.1);
+		model.setReproductionProbability(0.0);
 		
-		model.setCrossover(new KozaCrossover(model));
+		model.setCrossover(new FixedPointCrossover(model));
+		model.setMutation(new PointMutation(model));
 		
 		model.setMaxDepth(16);
 		model.setMaxInitialDepth(5);
@@ -60,10 +62,7 @@ public class MultiplexerTest extends ModelTest {
 	/**
 	 * Tests 6-bit multiplexer with standard setup.
 	 * 
-	 * Koza's success rate: 63% (p572).
-	 * OR: 28% (p195).
-	 * 
-	 * Expecting success rate between 37% and 47%.
+	 * Expecting success rate between % and %.
 	 */
 	public void testMultiplexer6Bit() {
 		final int LOWER_SUCCESS = 37;
@@ -89,7 +88,7 @@ public class MultiplexerTest extends ModelTest {
 	 * - Population size of 4000
 	 * - Program selector of FitnessProportionateSelector with over-selection
 	 * 
-	 * Expecting success rate between 35% and 45%.
+	 * Expecting success rate between % and %.
 	 */
 	public void testMultiplexer11Bit() {
 		final int LOWER_SUCCESS = 35;

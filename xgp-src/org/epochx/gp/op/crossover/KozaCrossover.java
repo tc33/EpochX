@@ -58,6 +58,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * <code>IllegalStateException</code> will be thrown.
  * 
  * @see SubtreeCrossover
+ * @see OnePointCrossover
  */
 public class KozaCrossover extends ConfigOperator<GPModel> implements GPCrossover, ConfigListener {
 

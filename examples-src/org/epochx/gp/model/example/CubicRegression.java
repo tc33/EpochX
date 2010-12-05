@@ -21,7 +21,7 @@
  */
 package org.epochx.gp.model.example;
 
-import org.epochx.gp.op.crossover.UniformPointCrossover;
+import org.epochx.gp.op.crossover.SubtreeCrossover;
 import org.epochx.op.selection.*;
 
 /**
@@ -35,7 +35,7 @@ public class CubicRegression extends org.epochx.gp.model.CubicRegression {
 		setMutationProbability(0.0);
 		setPoolSelector(new TournamentSelector(this, 7));
 		setProgramSelector(new LinearRankSelector(this, 0.5));
-		setCrossover(new UniformPointCrossover(this));
+		setCrossover(new SubtreeCrossover(this));
 		setPoolSize(50);
 		setNoGenerations(50);
 		setNoElites(50);

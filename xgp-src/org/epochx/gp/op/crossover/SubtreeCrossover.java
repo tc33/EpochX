@@ -31,8 +31,8 @@ import org.epochx.stats.Stats.ExpiryEvent;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
- * This class implements standard crossover with uniform swap points. Uniform
- * point crossover works by randomly selecting a crossover point in both parent
+ * This class implements standard crossover with uniform swap points. Subtree
+ * crossover works by randomly selecting a crossover point in both parent
  * programs and then swapping the subtrees at those points.
  * 
  * <p>
@@ -51,6 +51,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * <code>IllegalStateException</code> will be thrown.
  * 
  * @see KozaCrossover
+ * @see OnePointCrossover
  */
 public class SubtreeCrossover extends ConfigOperator<GPModel> implements GPCrossover {
 
@@ -112,15 +113,15 @@ public class SubtreeCrossover extends ConfigOperator<GPModel> implements GPCross
 	}
 
 	/**
-	 * GPCrossover the two <code>CandidatePrograms</code> provided as arguments
+	 * Crosses over the two <code>CandidatePrograms</code> provided as arguments
 	 * using uniform swap points. Random crossover points are chosen at random
 	 * in both programs, the genetic material at the points are then exchanged.
 	 * The resulting programs are returned as new GPCandidateProgram objects.
 	 * 
-	 * @param p1 The first GPCandidateProgram selected to undergo uniform
-	 *        point crossover.
-	 * @param p2 The second GPCandidateProgram selected to undergo uniform
-	 *        point crossover.
+	 * @param p1 The first GPCandidateProgram selected to undergo subtree
+	 *        crossover.
+	 * @param p2 The second GPCandidateProgram selected to undergo subtree
+	 *        crossover.
 	 */
 	@Override
 	public GPCandidateProgram[] crossover(final CandidateProgram p1,

@@ -108,6 +108,8 @@ public class EvenParityTest extends ModelTest {
 	
 	/**
 	 * Tests even 5 parity with standard setup.
+	 * 
+	 * Expecting success rate between % and %.
 	 */
 	public void testEven5Parity() {
 		final int LOWER_SUCCESS = 0;
@@ -134,11 +136,11 @@ public class EvenParityTest extends ModelTest {
 	 * - Mutation probability of 0.1
 	 * - Mutation operator of SubtreeMutation
 	 * 
-	 * Expecting success rate between % and %.
+	 * Expecting success rate between 85% and 95%.
 	 */
 	public void testEven4ParitySubtreeMutation() {
-		final int LOWER_SUCCESS = 50;
-		final int UPPER_SUCCESS = 50;
+		final int LOWER_SUCCESS = 85;
+		final int UPPER_SUCCESS = 95;
 		
 		EvenParity model = new EvenParity(4);
 		setupModel(model);
@@ -163,11 +165,11 @@ public class EvenParityTest extends ModelTest {
 	 * - Mutation probability of 0.1
 	 * - Mutation operator of PointMutation
 	 * 
-	 * Expecting success rate between % and %.
+	 * Expecting success rate between 90% and 100%.
 	 */
 	public void testEven4ParityPointMutation() {
-		final int LOWER_SUCCESS = 50;
-		final int UPPER_SUCCESS = 50;
+		final int LOWER_SUCCESS = 90;
+		final int UPPER_SUCCESS = 100;
 		
 		EvenParity model = new EvenParity(4);
 		setupModel(model);
@@ -188,19 +190,17 @@ public class EvenParityTest extends ModelTest {
 	
 	/**
 	 * Tests standard setup except:
-	 * - Crossover operator of UniformPointCrossover
+	 * - Crossover operator of SubtreeCrossover
 	 * 
-	 * Expecting success rate between 83% and 93%.
+	 * Expecting success rate between % and %.
 	 */
-	public void testEven4ParityUniformPointCrossover() {
-		final int LOWER_SUCCESS = 83;
-		final int UPPER_SUCCESS = 93;
+	public void testEven4ParitySubtreeCrossover() {
+		final int LOWER_SUCCESS = 0;
+		final int UPPER_SUCCESS = 0;
 		
 		EvenParity model = new EvenParity(4);
 		setupModel(model);
-		model.setMutationProbability(0.1);
-		model.setReproductionProbability(0.0);
-		model.setMutation(new SubtreeMutation(model));
+		model.setCrossover(new SubtreeCrossover(model));
 		
 		SuccessCounter counter = new SuccessCounter();
 		Life.get().addRunListener(counter);
@@ -210,18 +210,53 @@ public class EvenParityTest extends ModelTest {
 		Life.get().removeRunListener(counter);
 		
 		int noSuccess = counter.getNoSuccess();
-		assertBetween("Unexpected success rate for Even 4 Parity with uniform point crossover", LOWER_SUCCESS, UPPER_SUCCESS, noSuccess);
+		assertBetween("Unexpected success rate for Even 4 Parity with subtree crossover", LOWER_SUCCESS, UPPER_SUCCESS, noSuccess);
+	}
+	
+	/**
+	 * Tests standard setup except:
+	 * - Crossover operator of OnePointCrossover
+	 * - Mutation operator of SubtreeMutation (because one-point crossover needs mutation).
+	 * - Reproduction probability of 0.0
+	 * - Mutation probability of 0.3
+	 * - Crossover probability of 0.7
+	 * - Program selector of TournamentSelector 7.
+	 * 
+	 * Expecting success rate between % and %.
+	 */
+	public void testEven4ParityOnePointCrossover() {
+		final int LOWER_SUCCESS = 0;
+		final int UPPER_SUCCESS = 0;
+		
+		EvenParity model = new EvenParity(4);
+		setupModel(model);
+		model.setCrossover(new OnePointCrossover(model));
+		model.setMutation(new SubtreeMutation(model));
+		model.setProgramSelector(new TournamentSelector(model, 7));
+		model.setMutationProbability(0.3);
+		model.setReproductionProbability(0.0);
+		model.setCrossoverProbability(0.7);
+		
+		SuccessCounter counter = new SuccessCounter();
+		Life.get().addRunListener(counter);
+		
+		model.run();
+		
+		Life.get().removeRunListener(counter);
+		
+		int noSuccess = counter.getNoSuccess();
+		assertBetween("Unexpected success rate for Even 4 Parity with one-point crossover", LOWER_SUCCESS, UPPER_SUCCESS, noSuccess);
 	}
 	
 	/**
 	 * Tests standard setup except:
 	 * - Program selector of LinearRankSelector
 	 * 
-	 * Expecting success rate between % and %.
+	 * Expecting success rate between 0% and 0%.
 	 */
 	public void testEven4ParityLinearRankSelection() {
-		final int LOWER_SUCCESS = 50;
-		final int UPPER_SUCCESS = 50;
+		final int LOWER_SUCCESS = 0;
+		final int UPPER_SUCCESS = 0;
 		
 		EvenParity model = new EvenParity(4);
 		setupModel(model);
@@ -242,11 +277,11 @@ public class EvenParityTest extends ModelTest {
 	 * Tests standard setup except:
 	 * - Program selector of TournamentSelector (size 7)
 	 * 
-	 * Expecting success rate between % and %.
+	 * Expecting success rate between 90% and 100%.
 	 */
 	public void testEven4ParityTournament7Selection() {
-		final int LOWER_SUCCESS = 50;
-		final int UPPER_SUCCESS = 50;
+		final int LOWER_SUCCESS = 90;
+		final int UPPER_SUCCESS = 100;
 		
 		EvenParity model = new EvenParity(4);
 		setupModel(model);

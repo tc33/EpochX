@@ -25,7 +25,7 @@ import java.util.ArrayList;
 
 import org.epochx.core.*;
 import org.epochx.epox.Node;
-import org.epochx.gp.op.crossover.UniformPointCrossover;
+import org.epochx.gp.op.crossover.SubtreeCrossover;
 import org.epochx.gp.op.init.FullInitialiser;
 import org.epochx.gp.op.mutation.SubtreeMutation;
 
@@ -152,7 +152,7 @@ public abstract class AbstractGPModelTestCase extends AbstractModelTestCase {
 
 		assertTrue(
 				"model's default crossover is not an instance of uniform point crossover",
-				(model.getCrossover() instanceof UniformPointCrossover));
+				(model.getCrossover() instanceof SubtreeCrossover));
 	}
 
 	/**

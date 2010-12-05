@@ -31,7 +31,9 @@ import org.epochx.stats.Stats.ExpiryEvent;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
- * This class implements standard crossover with uniform swap points.
+ * This class implements standard crossover with uniform swap points. Uniform
+ * point crossover works by randomly selecting a crossover point in both parent
+ * programs and then swapping the subtrees at those points.
  * 
  * <p>
  * If a model is provided then the following parameters are loaded upon every
@@ -50,7 +52,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * 
  * @see KozaCrossover
  */
-public class UniformPointCrossover extends ConfigOperator<GPModel> implements GPCrossover {
+public class SubtreeCrossover extends ConfigOperator<GPModel> implements GPCrossover {
 
 	/**
 	 * Requests an <code>Integer</code> which is the point chosen in the first
@@ -80,24 +82,24 @@ public class UniformPointCrossover extends ConfigOperator<GPModel> implements GP
 	private RandomNumberGenerator rng;
 
 	/**
-	 * Constructs a <code>UniformPointCrossover</code> with the only necessary
+	 * Constructs a <code>SubtreeCrossover</code> with the only necessary
 	 * parameter provided.
 	 * 
 	 * @param rng a <code>RandomNumberGenerator</code> used to lead 
 	 * non-deterministic behaviour.
 	 */
-	public UniformPointCrossover(final RandomNumberGenerator rng) {
+	public SubtreeCrossover(final RandomNumberGenerator rng) {
 		this((GPModel) null);
 		
 		this.rng = rng;
 	}
 	
 	/**
-	 * Constructs a <code>UniformPointCrossover</code>.
+	 * Constructs a <code>SubtreeCrossover</code>.
 	 * 
 	 * @param model the current controlling model.
 	 */
-	public UniformPointCrossover(final GPModel model) {
+	public SubtreeCrossover(final GPModel model) {
 		super(model);
 	}
 

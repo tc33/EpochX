@@ -57,7 +57,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * compulsory parameters remain unset when the crossover is performed then an 
  * <code>IllegalStateException</code> will be thrown.
  * 
- * @see UniformPointCrossover
+ * @see SubtreeCrossover
  */
 public class KozaCrossover extends ConfigOperator<GPModel> implements GPCrossover, ConfigListener {
 

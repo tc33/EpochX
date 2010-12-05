@@ -25,7 +25,7 @@ import java.util.List;
 
 import org.epochx.core.Model;
 import org.epochx.epox.Node;
-import org.epochx.gp.op.crossover.UniformPointCrossover;
+import org.epochx.gp.op.crossover.SubtreeCrossover;
 import org.epochx.gp.op.init.FullInitialiser;
 import org.epochx.gp.op.mutation.SubtreeMutation;
 
@@ -52,7 +52,7 @@ public abstract class GPModel extends Model {
 
 		// Operators.
 		setInitialiser(new FullInitialiser(this));
-		setCrossover(new UniformPointCrossover(this));
+		setCrossover(new SubtreeCrossover(this));
 		setMutation(new SubtreeMutation(this));
 	}
 

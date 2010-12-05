@@ -174,7 +174,7 @@ public class CartCentering extends GPModel {
 	 * model.setMaxProgramDepth(5);
 	 * model.setPoolSelector(new TournamentSelector(7));
 	 * model.setProgramSelector(new RandomSelector());
-	 * model.setCrossover(new UniformPointCrossover());
+	 * model.setCrossover(new SubtreeCrossover());
 	 * model.setMutator(new PointMutation(0.1));
 	 * 
 	 * Controller.run(model);

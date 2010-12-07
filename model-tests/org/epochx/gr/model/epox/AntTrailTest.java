@@ -54,7 +54,7 @@ public class AntTrailTest extends ModelTest {
 				Stats.get().print(StatField.RUN_NUMBER, StatField.GEN_NUMBER, StatField.GEN_FITNESS_MIN, StatField.GEN_FITNESS_AVE);
 			}
 		};
-		//Life.get().addGenerationListener(genListener);
+		Life.get().addGenerationListener(genPrinter);
 	}
 	
 	@Override
@@ -74,9 +74,9 @@ public class AntTrailTest extends ModelTest {
 		model.setCrossover(new WhighamCrossover(model));
 		model.setMutation(new WhighamMutation(model));
 		
-		model.setMaxDepth(16);
-		model.setMaxInitialDepth(5);
-		model.setInitialiser(new RampedHalfAndHalfInitialiser(model, 1, false));
+		model.setMaxDepth(8);
+		model.setMaxInitialDepth(8);
+		model.setInitialiser(new RampedHalfAndHalfInitialiser(model, 4, false));
 		model.setPoolSelector(null);
 		model.setProgramSelector(new FitnessProportionateSelector(model));
 		model.setNoElites(0);

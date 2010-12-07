@@ -109,11 +109,11 @@ public class EvenParityTest extends ModelTest {
 	/**
 	 * Tests even 5 parity with standard setup.
 	 * 
-	 * Expecting success rate between % and %.
+	 * Expecting success rate between 70% and 80%.
 	 */
 	public void testEven5Parity() {
-		final int LOWER_SUCCESS = 0;
-		final int UPPER_SUCCESS = 0;
+		final int LOWER_SUCCESS = 70;
+		final int UPPER_SUCCESS = 80;
 		
 		EvenParity model = new EvenParity(5);
 		setupModel(model);
@@ -192,11 +192,11 @@ public class EvenParityTest extends ModelTest {
 	 * Tests standard setup except:
 	 * - Crossover operator of SubtreeCrossover
 	 * 
-	 * Expecting success rate between % and %.
+	 * Expecting success rate between 70% and 80%.
 	 */
 	public void testEven4ParitySubtreeCrossover() {
-		final int LOWER_SUCCESS = 0;
-		final int UPPER_SUCCESS = 0;
+		final int LOWER_SUCCESS = 70;
+		final int UPPER_SUCCESS = 80;
 		
 		EvenParity model = new EvenParity(4);
 		setupModel(model);
@@ -222,11 +222,11 @@ public class EvenParityTest extends ModelTest {
 	 * - Crossover probability of 0.7
 	 * - Program selector of TournamentSelector 7.
 	 * 
-	 * Expecting success rate between % and %.
+	 * Expecting success rate between 10% and 20%.
 	 */
 	public void testEven4ParityOnePointCrossover() {
-		final int LOWER_SUCCESS = 0;
-		final int UPPER_SUCCESS = 0;
+		final int LOWER_SUCCESS = 10;
+		final int UPPER_SUCCESS = 20;
 		
 		EvenParity model = new EvenParity(4);
 		setupModel(model);

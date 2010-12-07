@@ -35,7 +35,9 @@ import org.epochx.tools.random.RandomNumberGenerator;
 /**
  * This class implements one point crossover as described by Poli and Langdon
  * in their paper Genetic Programming with One-Point Crossover and Point 
- * Mutation. 
+ * Mutation. It is recommended that a significant mutation rate (Poli & Langdon
+ * use 30%) is used in combination with one-point crossover since it encourages 
+ * rapid convergence.
  * 
  * <p>
  * If a model is provided then the following parameters are loaded upon every

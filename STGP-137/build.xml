@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="EpochX" default="dist" basedir=".">
+    <description>
+    	EpochX is an open source genetic programming framework.
+    </description>
+  
+	<!-- set global properties for this build -->
+	<!--<property name="version" value="1.1.2"/>-->
+	<input message="Please enter the build version number:" addproperty="version" />
+	
+	<property name="tests" location="$tests"/>
+	
+	<property name="commonsrc" location="common-src"/>
+	<property name="xgpsrc" location="xgp-src"/>
+	<property name="xgrsrc" location="xgr-src"/>
+	<property name="xgesrc" location="xge-src"/>
+	<property name="testsrc" location="tests"/>
+	
+	<property name="lib" location="lib"/>
+	<property name="dists" location="dist"/>
+    <property name="dist" location="${dists}/epochx-${version}"/>
+	<property name="distsrc" location="${dist}/src"/>
+	<property name="distbin" location="${dist}/bin"/>
+	<property name="distlib" location="${dist}/lib"/>
+	<property name="disttests" location="${dist}/tests"/>
+	<property name="javadoc" location="${dist}/javadoc"/>
+	<property name="notes" location="release-notes-${version}.txt"/>
+
+	<path id="classpath.src">
+	  <fileset dir="${lib}">
+	    <include name="*.jar"/>
+	  </fileset>
+
+	  <pathelement path="${distbin}"/>
+	</path>
+	
+    <path id="classpath.test">
+        <pathelement location="${disttests}"/>
+    	<path refid="classpath.src"/>
+    </path>
+
+<!-- Initialise -->
+    <target name="init">
+        <!-- Create the time stamp -->
+        <tstamp/>
+    	
+        <!-- Create the distribution directory -->
+        <mkdir dir="${dist}"/>
+    </target>
+
+<!-- Compile source into bin. -->
+    <target name="compile" depends="merge-source" description="compile the source">
+        <!-- Create the build directory structure used by compile -->
+        <mkdir dir="${distbin}"/>
+    	
+        <!-- Compile the java code from ${src} into ${bin} -->
+    	<javac destdir="${distbin}">
+    	    <src path="${distsrc}"/>
+    	    <classpath refid="classpath.src"/>
+    	</javac>
+    </target>
+
+<!-- Run JUnit tests. -->
+    <target name="unit-test" depends="compile" description="run the unit tests">
+        <!-- Compile the tests. -->
+        <mkdir dir="${disttests}"/>
+        
+        <!-- Compile the tests from ${testsrc} into ${disttests}. -->
+        <javac destdir="${disttests}">
+          <src path="${testsrc}"/>
+          <classpath refid="classpath.src"/>
+        </javac>
+
+    	<!-- Run the tests. -->
+        <junit printsummary="yes" haltonfailure="yes">
+        	<classpath refid="classpath.test" />
+        	
+            <batchtest fork="yes">
+                <fileset dir="${testsrc}">
+                  <include name="**/*Test.java"/>
+                  <exclude name="**/Abstract*.java"/>
+                </fileset>
+            </batchtest>
+    	</junit>
+    	
+    	<!-- Delete the tests. -->
+    	<delete dir="${disttests}"/>
+    </target>
+	
+<!-- Package class files into Jar -->
+	<target name="package" depends="compile" description="package class files into a Jar">
+        <!-- Put everything in ${bin} into the epochx-${version}.jar file -->
+        <jar jarfile="${dist}/epochx-${version}.jar" basedir="${distbin}"/>
+		
+        <!-- Delete the bin directory -->
+        <delete dir="${distbin}"/>
+	</target>
+	
+<!-- Merge source directories -->
+    <target name="merge-source" depends="init" description="copies and merges the necessary source directories">
+        <!-- Must be a better way of doing this. -->
+    	
+        <!-- Copy source files to one directory temporarily. -->
+        <mkdir dir="${distsrc}"/>
+        <copy todir="${distsrc}">
+            <fileset dir="${commonsrc}"/>
+            <fileset dir="${xgpsrc}"/>
+            <fileset dir="${xgrsrc}"/>
+            <fileset dir="${xgesrc}"/>
+        </copy>
+    </target>
+
+<!-- Generate JavaDoc. -->
+    <target name="javadoc" depends="merge-source" description="generate javadoc documentation">
+    	<mkdir dir="${javadoc}"/>
+    	
+    	<javadoc packagenames="org.epochx.*"
+    	           sourcepath="${distsrc}"
+    	           defaultexcludes="yes"
+    	           destdir="${javadoc}"
+    	           author="true"
+    	           version="true"
+    	           use="true"
+    	           windowtitle="EpochX ${version}" 
+    	           classpathref="classpath.src">
+    	    <bottom><![CDATA[<i>Copyright &#169; 2007-2010 Tom Castle & Lawrence Beadle. All Rights Reserved.</i>]]></bottom>
+    	  </javadoc>
+    </target>
+	
+<!-- Generate distribution -->
+    <target name="dist" depends="unit-test,package,javadoc" description="generate the distribution">    	
+    	<!-- Put a copy of the LICENSE in the dist directory. -->
+    	<copy file="LICENSE" tofile="${dist}/LICENSE"/>
+    	
+    	<!-- Copy the lib directory into the dist directory. -->
+    	<copy todir="${distlib}">
+    	    <fileset dir="${lib}"/>
+    	</copy>
+    	
+    	<!-- Move the release notes to the dist directory. -->
+    	<copy todir="${dist}" file="${notes}"/>
+    	
+    	<!-- Generate the zip distributable. -->
+    	<zip basedir="${dist}" destfile="${dists}/epochx-${version}.zip"/>
+    	
+    	<!-- Generate the tar.gz distributable. -->
+    	<tar basedir="${dist}" destfile="${dist}/epochx-${version}.tar"/>
+    	<gzip src="${dist}/epochx-${version}.tar" destfile="${dists}/epochx-${version}.tar.gz"/>
+    	<delete file="${dist}/epochx-${version}.tar"/>
+    </target>
+
+<!-- Clean up after the build -->
+    <target name="clean" description="clean up" >
+        <!-- Delete the ${bin} and ${dist} directory trees -->
+        <delete dir="${dist}"/>
+    </target>
+</project>

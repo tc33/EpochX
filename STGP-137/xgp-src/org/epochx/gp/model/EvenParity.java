@@ -125,4 +125,9 @@ public class EvenParity extends GPModel {
 		return ((noTrues % 2) == 0);
 	}
 
+	@Override
+	public Class<?> getReturnType() {
+		return Boolean.class;
+	}
+
 }

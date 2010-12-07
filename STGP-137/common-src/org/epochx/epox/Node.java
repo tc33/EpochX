@@ -517,6 +517,39 @@ public abstract class Node implements Cloneable {
 
 	public abstract String getIdentifier();
 
+	/**
+	 * This method may return null if any child nodes are missing, but if a full
+	 * set of child nodes have been attached then it should always return a 
+	 * valid type.
+	 */
+	public abstract Class<?> getReturnType();
+	
+	/**
+	 * Default implementation is that the node will enforce the closure 
+	 * requirement, and all its inputs and its return type will be the same.
+	 * @param inputTypes
+	 * @return
+	 */
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		int arity = getArity();
+		
+		// Validate the number of input types given against the arity.
+		if (inputTypes.length != arity) {
+			throw new IllegalArgumentException("The number of input types should match a node's arity.");
+		}
+		
+		if (arity == 0) {
+			// Is a terminal.
+			return getReturnType();
+		} else if (NodeUtils.classEquals(inputTypes)) {
+			// All input types are the same.
+			return inputTypes[0];
+		} else {
+			// Not valid.
+			return null;
+		}
+	}
+	
 	@Override
 	public int hashCode() {
 		int result = 17;

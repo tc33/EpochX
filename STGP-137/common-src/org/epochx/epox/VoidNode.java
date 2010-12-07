@@ -30,4 +30,7 @@ public abstract class VoidNode extends Node {
 	@Override
 	public abstract Void evaluate();
 
+	public Class<?> getReturnType() {
+		return Void.TYPE;
+	}
 }

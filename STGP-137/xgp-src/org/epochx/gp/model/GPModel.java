@@ -163,4 +163,6 @@ public abstract class GPModel extends Model {
 
 		assert (this.syntax != null);
 	}
+	
+	public abstract Class<?> getReturnType();
 }

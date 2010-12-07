@@ -42,6 +42,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * <li>population size</li>
  * <li>maximum initial program depth</li>
  * <li>syntax</li>
+ * <li>program return type</li>
  * <li>random number generator</li>
  * </ul>
  * 
@@ -65,6 +66,9 @@ public class FullInitialiser extends ConfigOperator<GPModel> implements GPInitia
 	private List<Node> functions;
 	private List<Node> syntax;
 
+	// Each generated program's return type.
+	private Class<?> returnType;
+	
 	// The size of the populations to construct.
 	private int popSize;
 
@@ -73,22 +77,28 @@ public class FullInitialiser extends ConfigOperator<GPModel> implements GPInitia
 
 	// Whether programs must be unique in generated populations.
 	private boolean acceptDuplicates;
+	
+	// Return types that are valid at each depth.
+	private Class<?>[][] validDepthTypes;
+	
 
 	/**
 	 * Constructs a <code>FullInitialiser</code> with all the necessary
 	 * parameters given.
 	 */
 	public FullInitialiser(final RandomNumberGenerator rng, 
-			final List<Node> syntax, final int popSize,
+			final List<Node> syntax, final Class<?> returnType, final int popSize,
 			final int depth, final boolean acceptDuplicates) {
 		this(null, acceptDuplicates);
 		
 		this.rng = rng;
 		this.syntax = syntax;
+		this.returnType = returnType;
 		this.popSize = popSize;
 		this.depth = depth;
 
 		updateSyntax();
+		updateValidTypes();
 	}
 
 	/**
@@ -132,11 +142,27 @@ public class FullInitialiser extends ConfigOperator<GPModel> implements GPInitia
 		depth = getModel().getMaxInitialDepth();
 		popSize = getModel().getPopulationSize();
 
+		// Flag indicating if the types table needs updating.
+		boolean updateTypes = false;
+		
 		// Only update the syntax if it has changed.
 		final List<Node> newSyntax = getModel().getSyntax();
 		if (!newSyntax.equals(syntax)) {
 			syntax = newSyntax;
 			updateSyntax();
+			updateTypes = true;
+		}
+		
+		// Update return type.
+		final Class<?> newReturnType = getModel().getReturnType();
+		if (!newReturnType.equals(returnType)) {
+			returnType = newReturnType;
+			updateTypes = true;
+		}
+		
+		// Only update the types table if return type or syntax changed.
+		if (updateTypes) {
+			updateValidTypes();
 		}
 	}
 
@@ -232,6 +258,8 @@ public class FullInitialiser extends ConfigOperator<GPModel> implements GPInitia
 		} else if ((depth > 0) && functions.isEmpty()) {
 			throw new IllegalStateException(
 					"Syntax must include nodes with arity of >=1 if a depth >0 is used");
+		} else if (!NodeUtils.containsAssignableFrom(Arrays.asList(validDepthTypes[depth]), returnType)) {
+			throw new IllegalStateException("Syntax is not able to produce full trees with the given return type.");
 		}
 
 		Node root;
@@ -280,6 +308,28 @@ public class FullInitialiser extends ConfigOperator<GPModel> implements GPInitia
 			}
 		}
 	}
+	
+	/*
+	 * Generates the "type possibilities table" from the syntax and return 
+	 * type, as described by Montana.
+	 */
+	private void updateValidTypes() {
+		validDepthTypes = new Class<?>[depth][];
+		
+		// Trees of depth 0 must be single terminal element.
+		Set<Class<?>> types = new HashSet<Class<?>>();
+		for (Node n: terminals) {
+			NodeUtils.addClassUniquely(types, n.getReturnType());
+		}
+		validDepthTypes[0] = types.toArray(new Class<?>[types.size()]);
+		
+		// Handle depths above 1.
+		for (int i=1; i<depth; i++) {
+			
+		}
+	}
+	
+
 
 	/**
 	 * Returns whether or not duplicates are currently accepted or rejected from
@@ -347,7 +397,33 @@ public class FullInitialiser extends ConfigOperator<GPModel> implements GPInitia
 	 */
 	public void setSyntax(final List<Node> syntax) {
 		this.syntax = syntax;
+		
 		updateSyntax();
+		updateValidTypes();
+	}
+	
+	/**
+	 * Gets the return type of the program trees that are generated with this 
+	 * initialiser. For a program to have a specific return type means that its
+	 * root node should return an instance of the given type.
+	 * 
+	 * @return the return type of the programs being generated.
+	 */
+	public Class<?> getReturnType() {
+		return returnType;
+	}
+
+	/**
+	 * Sets the return type of the program trees that are generated with this
+	 * initialiser. For a program to have a specific return type means that is
+	 * root node will return an instance of the given type.
+	 * 
+	 * @param returnType the return type that generated programs should have.
+	 */
+	public void setReturnType(final Class<?> returnType) {
+		this.returnType = returnType;
+		
+		updateValidTypes();
 	}
 
 	/**

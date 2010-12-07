@@ -30,4 +30,7 @@ public abstract class DoubleNode extends Node {
 	@Override
 	public abstract Double evaluate();
 
+	public Class<?> getReturnType() {
+		return Double.class;
+	}
 }

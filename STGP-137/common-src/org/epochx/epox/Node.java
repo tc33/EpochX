@@ -516,13 +516,23 @@ public abstract class Node implements Cloneable {
 	}
 
 	public abstract String getIdentifier();
-
+	
 	/**
-	 * This method may return null if any child nodes are missing, but if a full
-	 * set of child nodes have been attached then it should always return a 
-	 * valid type.
+	 * This method MUST be overridden by any terminal nodes to return the 
+	 * correct type.
 	 */
-	public abstract Class<?> getReturnType();
+	public Class<?> getReturnType() {
+		int arity = getArity();
+		if (arity > 0) {
+			Class<?>[] argTypes = new Class<?>[getArity()];
+			for (int i=0; i<getArity(); i++) {
+				argTypes[i] = getChild(i).getReturnType();
+			}
+			return getReturnType(argTypes);
+		} else {
+			return null;
+		}
+	}
 	
 	/**
 	 * Default implementation is that the node will enforce the closure 

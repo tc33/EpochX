@@ -98,7 +98,7 @@ public class FullInitialiser extends ConfigOperator<GPModel> implements GPInitia
 		this.depth = depth;
 
 		updateSyntax();
-		updateValidTypes();
+		//updateValidTypes();
 	}
 
 	/**
@@ -161,9 +161,9 @@ public class FullInitialiser extends ConfigOperator<GPModel> implements GPInitia
 		}
 		
 		// Only update the types table if return type or syntax changed.
-		if (updateTypes) {
-			updateValidTypes();
-		}
+		//if (updateTypes) {
+		//	updateValidTypes();
+		//}
 	}
 
 	/*
@@ -248,65 +248,83 @@ public class FullInitialiser extends ConfigOperator<GPModel> implements GPInitia
 	 */
 	public Node getFullNodeTree() {
 		if (rng == null) {
-			throw new IllegalStateException(
-					"No random number generator has been set");
+			throw new IllegalStateException("No random number generator has been set");
+		} else if (returnType == null) {
+			throw new IllegalStateException("No return type has been set");
 		} else if (depth < 0) {
 			throw new IllegalStateException("Depth must be 0 or greater");
 		} else if (terminals.isEmpty()) {
-			throw new IllegalStateException(
-					"Syntax must include nodes with arity of 0");
+			throw new IllegalStateException("Syntax must include nodes with arity of 0");
 		} else if ((depth > 0) && functions.isEmpty()) {
-			throw new IllegalStateException(
-					"Syntax must include nodes with arity of >=1 if a depth >0 is used");
-		} else if (!NodeUtils.containsAssignableFrom(Arrays.asList(validDepthTypes[depth]), returnType)) {
+			throw new IllegalStateException("Syntax must include nodes with arity of >=1 if a depth >0 is used");
+		}
+		
+		//TODO This CANNOT stay here, because it is too expensive.
+		updateValidTypes();
+		
+		if (!NodeUtils.containsAssignableFrom(Arrays.asList(validDepthTypes[depth]), returnType)) {
 			throw new IllegalStateException("Syntax is not able to produce full trees with the given return type.");
 		}
-
-		Node root;
-		if (depth == 0) {
-			// Randomly choose a terminal node as our root.
-			final int randomIndex = rng.nextInt(terminals.size());
-			root = terminals.get(randomIndex).clone();
-		} else {
-			// Randomly choose a root function node.
-			final int randomIndex = rng.nextInt(functions.size());
-			root = functions.get(randomIndex).clone();
-
-			// Populate the root node with full children of depth-1.
-			fillChildren(root, 0, depth);
-		}
-
-		return root;
+		
+		return getNodeTree(returnType, 0);
 	}
-
+	
 	/*
 	 * Helper method for the getFullNodeTree method. Recursively fills the
 	 * children of a node, to construct a full tree down to a depth of
 	 * maxDepth.
 	 */
-	private void fillChildren(final Node currentNode, final int currentDepth,
-			final int maxDepth) {
-		final int arity = currentNode.getArity();
-
-		if (currentDepth < maxDepth - 1) {
-			// Not near the maximum depth yet, fill children with
-			// functions.
-			for (int i = 0; i < arity; i++) {
-				final int randomIndex = rng.nextInt(functions.size());
-				final Node child = functions.get(randomIndex).clone();
-
-				currentNode.setChild(i, child);
-				fillChildren(child, (currentDepth + 1), maxDepth);
-			}
-		} else {
-			// At maximum depth-1, fill children with terminals.
-			for (int i = 0; i < arity; i++) {
-				final int randomIndex = rng.nextInt(terminals.size());
-				final Node child = terminals.get(randomIndex).clone();
-
-				currentNode.setChild(i, child);
+	private Node getNodeTree(Class<?> requiredType, int currentDepth) {
+		// Choose a node with correct type and obtainable arg types.
+		List<Node> validNodes = getValidNodes(depth-currentDepth, requiredType);
+		final int randomIndex = rng.nextInt(validNodes.size());
+		Node root = validNodes.get(randomIndex).clone();
+		int arity = root.getArity();
+		
+		// Construct a list of the arg sets that produce the right return type.
+		// TODO We can surely cut down the amount of times we're calling this?!
+		Class<?>[][] argTypeSets = getPossibleArgTypes(arity, validDepthTypes[depth-currentDepth]);
+		List<Class<?>[]> validArgTypeSets = new ArrayList<Class<?>[]>();
+		for (Class<?>[] argTypes: argTypeSets) {
+			Class<?> type = root.getReturnType(argTypes);
+			if (type != null && requiredType.isAssignableFrom(type)) {
+				validArgTypeSets.add(argTypes);
+				break;
 			}
 		}
+		
+		// Randomly select from the valid arg sets.
+		Class<?>[] argTypes = validArgTypeSets.get(rng.nextInt(validArgTypeSets.size()));
+		
+		for (int i = 0; i < arity; i++) {
+			root.setChild(i, getNodeTree(argTypes[i], currentDepth+1));
+		}
+		
+		return root;
+	}
+	
+	private List<Node> getValidNodes(int remainingDepth, Class<?> requiredType) {
+		List<Node> validNodes = new ArrayList<Node>();
+		if (remainingDepth == 0) {
+			for (Node n: terminals) {
+				if (n.getReturnType().isAssignableFrom(returnType)) {
+					validNodes.add(n);
+				}
+			}
+		} else {
+			for (Node n: functions) {
+				Class<?>[][] argTypeSets = getPossibleArgTypes(n.getArity(), validDepthTypes[remainingDepth-1]);
+				
+				for (Class<?>[] argTypes: argTypeSets) {
+					Class<?> type = n.getReturnType(argTypes);
+					if (type != null && requiredType.isAssignableFrom(type)) {
+						validNodes.add(n);
+						break;
+					}
+				}
+			}
+		}
+		return validNodes;
 	}
 	
 	/*
@@ -314,23 +332,51 @@ public class FullInitialiser extends ConfigOperator<GPModel> implements GPInitia
 	 * type, as described by Montana.
 	 */
 	private void updateValidTypes() {
-		validDepthTypes = new Class<?>[depth][];
+		validDepthTypes = new Class<?>[depth+1][];
 		
 		// Trees of depth 0 must be single terminal element.
 		Set<Class<?>> types = new HashSet<Class<?>>();
 		for (Node n: terminals) {
-			NodeUtils.addClassUniquely(types, n.getReturnType());
+			types.add(n.getReturnType());
 		}
 		validDepthTypes[0] = types.toArray(new Class<?>[types.size()]);
 		
 		// Handle depths above 1.
-		for (int i=1; i<depth; i++) {
+		for (int i=1; i<=depth; i++) {
+			types = new HashSet<Class<?>>();
+			for (Node n: functions) {
+				Class<?>[][] argTypeSets = getPossibleArgTypes(n.getArity(), validDepthTypes[i-1]);
 			
+				// Test each possible set of arguments.
+				for (Class<?>[] argTypes: argTypeSets) {
+					Class<?> returnType = n.getReturnType(argTypes);
+					types.add(returnType);
+				}
+			}
+			validDepthTypes[i] = types.toArray(new Class<?>[types.size()]);
 		}
 	}
 	
+	/*
+	 * TODO We actually only need to do this once at each depth for a particular arity.
+	 */
+	private Class<?>[][] getPossibleArgTypes(int arity, Class<?>[] availableTypes) {
+		int noTypes = availableTypes.length;
+		int noCombinations = (int) Math.pow(noTypes, arity);
+		Class<?>[][] possibleTypes = new Class<?>[noCombinations][arity];
+		
+		for (int i=0; i<arity; i++) {
+			final int period = (int) Math.pow(noTypes, i);
 
-
+			for (int j = 0; j < noCombinations; j++) {
+				int group = (int) j / period;
+				possibleTypes[j][i] = availableTypes[group % noTypes];
+			}
+		}
+		
+		return possibleTypes;
+	}
+	
 	/**
 	 * Returns whether or not duplicates are currently accepted or rejected from
 	 * generated populations.
@@ -399,7 +445,7 @@ public class FullInitialiser extends ConfigOperator<GPModel> implements GPInitia
 		this.syntax = syntax;
 		
 		updateSyntax();
-		updateValidTypes();
+		//updateValidTypes();
 	}
 	
 	/**
@@ -423,7 +469,7 @@ public class FullInitialiser extends ConfigOperator<GPModel> implements GPInitia
 	public void setReturnType(final Class<?> returnType) {
 		this.returnType = returnType;
 		
-		updateValidTypes();
+		//updateValidTypes();
 	}
 
 	/**

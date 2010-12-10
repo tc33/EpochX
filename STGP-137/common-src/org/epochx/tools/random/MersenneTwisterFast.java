@@ -987,6 +987,9 @@ public class MersenneTwisterFast implements Serializable, Cloneable,
 	public final int nextInt(final int n) {
 		if (n <= 0) {
 			throw new IllegalArgumentException("n must be positive");
+		} else if (n == 1) {
+			// Will always be the value 0.
+			return 0;
 		}
 
 		if ((n & -n) == n) // i.e., n is a power of 2

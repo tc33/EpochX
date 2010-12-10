@@ -21,17 +21,58 @@
  */
 package org.epochx.epox;
 
-public abstract class DoubleNode extends Node {
+public class IntLiteral extends Node {
 
-	public DoubleNode(final Node ... children) {
-		super(children);
+	private Integer value;
+
+	public IntLiteral(final Integer value) {
+		this.value = value;
 	}
 
 	@Override
-	public abstract Double evaluate();
+	public Integer evaluate() {
+		return value;
+	}
 
 	@Override
+	public String getIdentifier() {
+		return Double.toString(value);
+	}
+	
+	@Override
 	public Class<?> getReturnType() {
-		return Double.class;
+		return Integer.class;
+	}
+
+	@Override
+	public String toString() {
+		return value.toString();
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		final boolean inst = (obj instanceof IntLiteral);
+
+		if (!inst) {
+			return false;
+		}
+
+		final Integer objVal = ((IntLiteral) obj).value;
+		final Integer thisVal = value;
+
+		if ((objVal == null) ^ (thisVal == null)) {
+			return false;
+		}
+
+		return (thisVal == objVal) || thisVal.equals(objVal);
+	}
+
+	@Override
+	public IntLiteral clone() {
+		final IntLiteral clone = (IntLiteral) super.clone();
+
+		clone.value = value;
+
+		return clone;
 	}
 }

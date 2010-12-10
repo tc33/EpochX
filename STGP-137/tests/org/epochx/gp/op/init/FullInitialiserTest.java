@@ -26,7 +26,9 @@ import java.util.*;
 import junit.framework.TestCase;
 
 import org.epochx.epox.*;
-import org.epochx.epox.bool.NotFunction;
+import org.epochx.epox.bool.*;
+import org.epochx.epox.dbl.*;
+import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.tools.random.MersenneTwisterFast;
 
 
@@ -39,7 +41,7 @@ public class FullInitialiserTest extends TestCase {
 	
 	@Override
 	protected void setUp() throws Exception {
-		initialiser = new FullInitialiser(null, null, -1, -1, false);
+		initialiser = new FullInitialiser(null, null, null, -1, -1, false);
 		
 		// Ensure setup is valid.
 		initialiser.setDepth(0);
@@ -48,6 +50,7 @@ public class FullInitialiserTest extends TestCase {
 		syntax.add(new BooleanLiteral(true));
 		syntax.add(new NotFunction());
 		initialiser.setSyntax(syntax);
+		initialiser.setReturnType(Boolean.class);
 		initialiser.setPopSize(1);
 	}
 	
@@ -208,5 +211,21 @@ public class FullInitialiserTest extends TestCase {
 			initialiser.getInitialProgram();
 			fail("illegal state exception not thrown for a null RNG");
 		} catch (IllegalStateException e) {}
+	}
+	
+	public void testInit() {
+		List<Node> syntax = new ArrayList<Node>();
+		syntax.add(new DoubleLiteral(0.3));
+		syntax.add(new IntLiteral(2));
+		syntax.add(new AddFunction());
+		//syntax.add(new SubtractFunction());
+		initialiser.setSyntax(syntax);
+		initialiser.setDepth(2);
+		initialiser.setReturnType(Double.class);
+		
+		for (int i=0; i<100; i++) {
+			GPCandidateProgram p = initialiser.getInitialProgram();
+			System.out.println(p);
+		}
 	}
 }

@@ -30,6 +30,7 @@ public abstract class BooleanNode extends Node {
 	@Override
 	public abstract Boolean evaluate();
 
+	@Override
 	public Class<?> getReturnType() {
 		return Boolean.class;
 	}

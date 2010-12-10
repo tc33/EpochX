@@ -44,7 +44,7 @@ public class BooleanVariable extends BooleanNode {
 	public Boolean evaluate() {
 		return value;
 	}
-
+	
 	@Override
 	public String getIdentifier() {
 		return identifier;

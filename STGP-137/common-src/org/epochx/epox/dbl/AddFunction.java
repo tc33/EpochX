@@ -21,13 +21,27 @@
  */
 package org.epochx.epox.dbl;
 
-import org.epochx.epox.DoubleNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs the mathematical function of
  * addition.
+ * 
+ * Addition can be performed on inputs of the following types: 
+ * <ul>
+ * <li>Character</li> 
+ * <li>Byte</li>
+ * <li>Short</li>
+ * <li>Integer</li>
+ * <li>Long</li>
+ * <li>Float</li>
+ * <li>Double</li>
+ * </ul>
+ * 
+ * Addition can be performed between mixed types, with a widening operation 
+ * performed and the result being of the wider of the two types.
  */
-public class AddFunction extends DoubleNode {
+public class AddFunction extends Node {
 
 	/**
 	 * Construct an AddFunction with no children.
@@ -44,7 +58,7 @@ public class AddFunction extends DoubleNode {
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
 	 */
-	public AddFunction(final DoubleNode child1, final DoubleNode child2) {
+	public AddFunction(final Node child1, final Node child2) {
 		super(child1, child2);
 	}
 
@@ -53,11 +67,33 @@ public class AddFunction extends DoubleNode {
 	 * evaluating both children.
 	 */
 	@Override
-	public Double evaluate() {
-		final double c1 = ((Double) getChild(0).evaluate()).doubleValue();
-		final double c2 = ((Double) getChild(1).evaluate()).doubleValue();
-
-		return c1 + c2;
+	public Object evaluate() {
+		Object c1 = getChild(0).evaluate();
+		Object c2 = getChild(1).evaluate();
+		
+		Class<?> returnType = getReturnType();
+		
+		if (returnType == Double.class) {
+			// Add as doubles.
+			double d1 = NodeUtils.asDouble(c1);
+			double d2 = NodeUtils.asDouble(c2);
+			
+			return d1 + d2;
+		} else if (returnType == Long.class) {
+			// Add as longs.
+			long l1 = NodeUtils.asLong(c1);
+			long l2 = NodeUtils.asLong(c2);
+			
+			return l1 + l2;
+		} else if (returnType == Integer.class) {
+			// Add as intgers.
+			int i1 = NodeUtils.asInteger(c1);
+			int i2 = NodeUtils.asInteger(c2);
+			
+			return i1 + i2;
+		}
+		
+		return null;
 	}
 
 	/**
@@ -68,5 +104,10 @@ public class AddFunction extends DoubleNode {
 	@Override
 	public String getIdentifier() {
 		return "ADD";
+	}
+	
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		return NodeUtils.getWidestNumericalClass(inputTypes);
 	}
 }

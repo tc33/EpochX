@@ -21,8 +21,9 @@
  */
 package org.epochx.gp.model;
 
-import org.epochx.gp.op.crossover.KozaCrossover;
+import org.epochx.gp.op.crossover.*;
 import org.epochx.gp.op.init.*;
+import org.epochx.gp.op.mutation.SubtreeMutation;
 import org.epochx.life.*;
 import org.epochx.op.selection.FitnessProportionateSelector;
 import org.epochx.stats.*;
@@ -53,7 +54,7 @@ public class AntTrailTest extends ModelTest {
 				Stats.get().print(StatField.RUN_NUMBER, StatField.GEN_NUMBER, StatField.GEN_FITNESS_MIN, StatField.GEN_FITNESS_AVE);
 			}
 		};
-		//Life.get().addGenerationListener(genListener);
+		//Life.get().addGenerationListener(genPrinter);
 	}
 	
 	@Override
@@ -109,4 +110,37 @@ public class AntTrailTest extends ModelTest {
 		assertBetween("Unexpected success rate for Santa Fe trail", LOWER_SUCCESS, UPPER_SUCCESS, noSuccess);
 	}
 	
+	/**
+	 * Tests Santa Fe trail with standard setup.
+	 * 
+	 * Koza's success rate: 16% (p202).
+	 * OR: 14%/50%/46% with full/grow/RH+H (p599).
+	 * 
+	 * Expecting success rate between 12% and 20%.
+	 */
+	public void testGenericSantaFeTrail() {
+		final int LOWER_SUCCESS = 12;
+		final int UPPER_SUCCESS = 20;
+		
+		AntTrail model = new SantaFeTrail(600);
+		setupModel(model);
+		model.setCrossoverProbability(0.9);
+		model.setMutationProbability(0.1);
+		model.setReproductionProbability(0.0);
+		
+		//model.setInitialiser(new RampedHalfAndHalfInitialiser(model, 2, false));
+		model.setCrossover(new SubtreeCrossover(model));
+		model.setMutation(new SubtreeMutation(model));
+		
+		SuccessCounter counter = new SuccessCounter();
+		
+		Life.get().addRunListener(counter);
+		
+		model.run();
+		
+		Life.get().removeRunListener(counter);
+		
+		int noSuccess = counter.getNoSuccess();
+		assertBetween("Unexpected success rate for Santa Fe trail", LOWER_SUCCESS, UPPER_SUCCESS, noSuccess);
+	}
 }

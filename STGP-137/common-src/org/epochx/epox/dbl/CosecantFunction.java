@@ -21,13 +21,13 @@
  */
 package org.epochx.epox.dbl;
 
-import org.epochx.epox.DoubleNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs the reciprocal trigonometric
  * function of cosecant. Cosecant x is equal to 1/sin x.
  */
-public class CosecantFunction extends DoubleNode {
+public class CosecantFunction extends Node {
 
 	/**
 	 * Construct a CosecantFunction with no children.
@@ -42,7 +42,7 @@ public class CosecantFunction extends DoubleNode {
 	 * 
 	 * @param child The child which cosecant will be performed on.
 	 */
-	public CosecantFunction(final DoubleNode child) {
+	public CosecantFunction(final Node child) {
 		super(child);
 	}
 
@@ -53,9 +53,9 @@ public class CosecantFunction extends DoubleNode {
 	 */
 	@Override
 	public Double evaluate() {
-		final double c = ((Double) getChild(0).evaluate()).doubleValue();
-
-		return 1 / Math.sin(c);
+		Object c = getChild(0).evaluate();
+		
+		return 1 / Math.sin(NodeUtils.asDouble(c));
 	}
 
 	/**
@@ -66,5 +66,14 @@ public class CosecantFunction extends DoubleNode {
 	@Override
 	public String getIdentifier() {
 		return "COSEC";
+	}
+	
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (inputTypes.length == 1 && NodeUtils.isNumericalClass(inputTypes[0])) {
+			return Double.class;
+		} else {
+			return null;
+		}
 	}
 }

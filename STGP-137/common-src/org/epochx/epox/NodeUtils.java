@@ -289,10 +289,8 @@ public final class NodeUtils {
 	 * @return
 	 */
 	public static Class<?> getWidestNumericalClass(Class<?>[] classes) {
-		for (Class<?> c: classes) {
-			if (!ArrayUtils.contains(new Class<?>[]{Double.class, Long.class, Integer.class}, c)) {
-				return null;
-			}
+		if (!isAllNumericalClass(classes)) {
+			return null;
 		}
 			
 		if (ArrayUtils.contains(classes, Double.class)) {
@@ -304,6 +302,30 @@ public final class NodeUtils {
 		} else {
 			return null;
 		}
+	}
+	
+	public static boolean isNumericalClass(Class<?> cls) {
+		return ArrayUtils.contains(new Class<?>[]{Double.class, Long.class, Integer.class}, cls);
+	}
+	
+	public static boolean isAllNumericalClass(Class<?>[] classes) {
+		for (Class<?> c: classes) {
+			if (!isNumericalClass(c)) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	public static boolean allEquals(Object[] inputs, Object o) {
+		for (Object in: inputs) {
+			if (!o.equals(in)) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 	
 	public static Double asDouble(Object o) {		

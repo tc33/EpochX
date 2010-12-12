@@ -41,7 +41,7 @@ import org.epochx.tools.util.BoolUtils;
 public class Majority extends GPModel {
 
 	// The names of the inputValues used in the grammar.
-	private final BooleanVariable[] variables;
+	private final Variable[] variables;
 
 	// The boolean input sequences.
 	private final boolean[][] inputValues;
@@ -64,9 +64,9 @@ public class Majority extends GPModel {
 		syntax.add(new NotFunction());
 
 		// Define terminal variables.
-		variables = new BooleanVariable[noInputBits];
+		variables = new Variable[noInputBits];
 		for (int i = 0; i < noInputBits; i++) {
-			variables[i] = new BooleanVariable("d" + i);
+			variables[i] = new Variable("d" + i, Boolean.class);
 			syntax.add(variables[i]);
 		}
 
@@ -121,5 +121,10 @@ public class Majority extends GPModel {
 		}
 
 		return (trueCount >= (input.length / 2));
+	}
+
+	@Override
+	public Class<?> getReturnType() {
+		return Boolean.class;
 	}
 }

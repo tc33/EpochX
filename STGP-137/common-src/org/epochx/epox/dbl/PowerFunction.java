@@ -21,13 +21,13 @@
  */
 package org.epochx.epox.dbl;
 
-import org.epochx.epox.DoubleNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs the mathematical operation of
  * exponentiation.
  */
-public class PowerFunction extends DoubleNode {
+public class PowerFunction extends Node {
 
 	/**
 	 * Construct a PowerFunction with no children.
@@ -44,7 +44,7 @@ public class PowerFunction extends DoubleNode {
 	 * @param base The first child node - the base.
 	 * @param exponent The second child node - the exponent.
 	 */
-	public PowerFunction(final DoubleNode base, final DoubleNode exponent) {
+	public PowerFunction(final Node base, final Node exponent) {
 		super(base, exponent);
 	}
 
@@ -58,12 +58,12 @@ public class PowerFunction extends DoubleNode {
 	 */
 	@Override
 	public Double evaluate() {
-		final double c2 = ((Double) getChild(1).evaluate()).doubleValue();
+		final double c2 = NodeUtils.asDouble(getChild(1).evaluate());
 
 		if (c2 == 0.0) {
 			return 1.0;
 		} else {
-			final double c1 = ((Double) getChild(0).evaluate()).doubleValue();
+			final double c1 = NodeUtils.asDouble(getChild(0).evaluate());
 
 			return Math.pow(c1, c2);
 		}
@@ -77,5 +77,14 @@ public class PowerFunction extends DoubleNode {
 	@Override
 	public String getIdentifier() {
 		return "POW";
+	}
+	
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (inputTypes.length == 2 && NodeUtils.isAllNumericalClass(inputTypes)) {
+			return Double.class;
+		} else {
+			return null;
+		}
 	}
 }

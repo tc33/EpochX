@@ -21,20 +21,22 @@
  */
 package org.epochx.epox.dbl;
 
-import org.epochx.epox.DoubleNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>MinFunction</code> which performs the simple comparison function
  * of determining which of 2 numbers is smaller, as per the boolean less-than
  * function.
  */
-public class MinFunction extends DoubleNode {
+public class MinFunction extends Node {
 
 	/**
 	 * Construct a MinFunction with no children.
 	 */
-	public MinFunction() {
-		this(null, null);
+	public MinFunction(int n) {
+		this((Node) null);
+		
+		setChildren(new Node[n]);
 	}
 
 	/**
@@ -44,8 +46,8 @@ public class MinFunction extends DoubleNode {
 	 * @param child1 The first child node for comparison.
 	 * @param child2 The second child node for comparison.
 	 */
-	public MinFunction(final DoubleNode child1, final DoubleNode child2) {
-		super(child1, child2);
+	public MinFunction(final Node ... children) {
+		super(children);
 	}
 
 	/**
@@ -54,14 +56,33 @@ public class MinFunction extends DoubleNode {
 	 * children.
 	 */
 	@Override
-	public Double evaluate() {
-		final double c1 = ((Double) getChild(0).evaluate()).doubleValue();
-		final double c2 = ((Double) getChild(1).evaluate()).doubleValue();
-
-		if (c1 <= c2) {
-			return c1;
+	public Object evaluate() {
+		int arity = getArity();
+		Class<?> returnType = getReturnType();
+		
+		if (returnType == Double.class) {
+			double min = Double.MAX_VALUE;
+			for (int i=0; i<arity; i++) {
+				double value = NodeUtils.asDouble(getChild(i).evaluate());
+				min = Math.min(value, min);
+			}
+			return min;
+		} else if (returnType == Integer.class) {
+			int min = Integer.MAX_VALUE;
+			for (int i=0; i<arity; i++) {
+				int value = NodeUtils.asInteger(getChild(i).evaluate());
+				min = Math.min(value, min);
+			}
+			return min;
+		} else if (returnType == Long.class) {
+			long min = Long.MAX_VALUE;
+			for (int i=0; i<arity; i++) {
+				long value = NodeUtils.asLong(getChild(i).evaluate());
+				min = Math.min(value, min);
+			}
+			return min;
 		} else {
-			return c2;
+			return null;
 		}
 	}
 
@@ -73,5 +94,10 @@ public class MinFunction extends DoubleNode {
 	@Override
 	public String getIdentifier() {
 		return "MIN";
+	}
+	
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		return NodeUtils.getWidestNumericalClass(inputTypes);
 	}
 }

@@ -21,14 +21,14 @@
  */
 package org.epochx.epox.ant;
 
-import org.epochx.epox.VoidNode;
+import org.epochx.epox.*;
 import org.epochx.tools.ant.Ant;
 
 /**
  * This class defines an action which when executed will trigger the ant
  * to do nothing for one timestep.
  */
-public class AntSkipAction extends VoidNode {
+public class AntSkipAction extends Node {
 
 	private final Ant ant;
 
@@ -52,5 +52,13 @@ public class AntSkipAction extends VoidNode {
 		ant.skip();
 
 		return null;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Class<?> getReturnType() {
+		return Void.class;
 	}
 }

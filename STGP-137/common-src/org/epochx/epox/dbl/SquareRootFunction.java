@@ -21,14 +21,14 @@
  */
 package org.epochx.epox.dbl;
 
-import org.epochx.epox.DoubleNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs the mathematical function of
  * square
  * root.
  */
-public class SquareRootFunction extends DoubleNode {
+public class SquareRootFunction extends Node {
 
 	/**
 	 * Construct a SquareRootFunction with no children.
@@ -44,7 +44,7 @@ public class SquareRootFunction extends DoubleNode {
 	 * 
 	 * @param child The child which cube root will be performed on.
 	 */
-	public SquareRootFunction(final DoubleNode child) {
+	public SquareRootFunction(final Node child) {
 		super(child);
 	}
 
@@ -55,9 +55,9 @@ public class SquareRootFunction extends DoubleNode {
 	 */
 	@Override
 	public Double evaluate() {
-		final double c = ((Double) getChild(0).evaluate()).doubleValue();
-
-		return Math.sqrt(c);
+		Object c = getChild(0).evaluate();
+		
+		return Math.sqrt(NodeUtils.asDouble(c));
 	}
 
 	/**
@@ -68,5 +68,14 @@ public class SquareRootFunction extends DoubleNode {
 	@Override
 	public String getIdentifier() {
 		return "SQRT";
+	}
+	
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (inputTypes.length == 1 && NodeUtils.isNumericalClass(inputTypes[0])) {
+			return Double.class;
+		} else {
+			return null;
+		}
 	}
 }

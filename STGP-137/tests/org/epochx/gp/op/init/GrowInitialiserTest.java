@@ -27,6 +27,10 @@ import junit.framework.TestCase;
 
 import org.epochx.epox.*;
 import org.epochx.epox.bool.NotFunction;
+import org.epochx.epox.dbl.*;
+import org.epochx.gp.op.crossover.SubtreeCrossover;
+import org.epochx.gp.representation.GPCandidateProgram;
+import org.epochx.stats.*;
 import org.epochx.tools.random.MersenneTwisterFast;
 
 
@@ -39,14 +43,15 @@ public class GrowInitialiserTest extends TestCase {
 	
 	@Override
 	protected void setUp() throws Exception {
-		initialiser = new GrowInitialiser(null, null, -1, -1, false);
+		initialiser = new GrowInitialiser(null, null, null, -1, -1, false);
 		
 		// Ensure setup is valid.
 		initialiser.setMaxDepth(0);
 		initialiser.setRNG(new MersenneTwisterFast());
 		List<Node> syntax = new ArrayList<Node>();
-		syntax.add(new BooleanLiteral(true));
+		syntax.add(new Literal(true));
 		initialiser.setSyntax(syntax);
+		initialiser.setReturnType(Boolean.class);
 		initialiser.setPopSize(1);
 	}
 	
@@ -69,7 +74,7 @@ public class GrowInitialiserTest extends TestCase {
 	 */
 	public void testGetPopNoFunctions() {
 		List<Node> syntax = new ArrayList<Node>();
-		syntax.add(new BooleanLiteral(true));
+		syntax.add(new Literal(true));
 		initialiser.setSyntax(syntax);
 		initialiser.setMaxDepth(1);
 		
@@ -191,5 +196,38 @@ public class GrowInitialiserTest extends TestCase {
 			initialiser.getInitialProgram();
 			fail("illegal state exception not thrown for a null RNG");
 		} catch (IllegalStateException e) {}
+	}
+	
+	public void testInit() {
+		List<Node> syntax = new ArrayList<Node>();
+		syntax.add(new Literal(0.3));
+		syntax.add(new Literal(2));
+		syntax.add(new AddFunction());
+		syntax.add(new SubtractFunction());
+		initialiser.setSyntax(syntax);
+		initialiser.setMaxDepth(2);
+		initialiser.setReturnType(Double.class);
+		
+		SubtreeCrossover crossover = new SubtreeCrossover(initialiser.getRNG());
+		
+		for (int i=0; i<100; i++) {
+			GPCandidateProgram p1 = initialiser.getInitialProgram();
+			GPCandidateProgram p2 = initialiser.getInitialProgram();
+			Double d1 = (Double) p1.evaluate();
+			Double d2 = (Double) p2.evaluate();
+			System.out.println(p1 + " = " + d1);
+			System.out.println(p2 + " = " + d2);
+			
+			GPCandidateProgram[] children = crossover.crossover(p1, p2);
+			if (children.length > 0) {
+				d1 = (Double) children[0].evaluate();
+				d2 = (Double) children[1].evaluate();
+				System.out.println(children[0] + " = " + d1);
+				System.out.println(children[1] + " = " + d2);
+				System.out.println(Stats.get().getStat(SubtreeCrossover.XO_POINT1) + " " + Stats.get().getStat(SubtreeCrossover.XO_SUBTREE1));
+				System.out.println(Stats.get().getStat(SubtreeCrossover.XO_POINT2) + " " + Stats.get().getStat(SubtreeCrossover.XO_SUBTREE2));
+			}
+			System.out.println("-------------------------------------------");
+		}
 	}
 }

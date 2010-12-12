@@ -21,13 +21,13 @@
  */
 package org.epochx.epox.dbl;
 
-import org.epochx.epox.DoubleNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs the hyperbolic trigonometric
  * function of hyperbolic tangent.
  */
-public class HyperbolicTangentFunction extends DoubleNode {
+public class HyperbolicTangentFunction extends Node {
 
 	/**
 	 * Construct a HyperbolicTangentFunction with no children.
@@ -43,7 +43,7 @@ public class HyperbolicTangentFunction extends DoubleNode {
 	 * 
 	 * @param child The child which hyperbolic tangent will be performed on.
 	 */
-	public HyperbolicTangentFunction(final DoubleNode child) {
+	public HyperbolicTangentFunction(final Node child) {
 		super(child);
 	}
 
@@ -54,9 +54,9 @@ public class HyperbolicTangentFunction extends DoubleNode {
 	 */
 	@Override
 	public Double evaluate() {
-		final double c = ((Double) getChild(0).evaluate()).doubleValue();
+		Object c = getChild(0).evaluate();
 
-		return Math.tanh(c);
+		return Math.tanh(NodeUtils.asDouble(c));
 	}
 
 	/**
@@ -67,5 +67,14 @@ public class HyperbolicTangentFunction extends DoubleNode {
 	@Override
 	public String getIdentifier() {
 		return "TANH";
+	}
+	
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (inputTypes.length == 1 && NodeUtils.isNumericalClass(inputTypes[0])) {
+			return Double.class;
+		} else {
+			return null;
+		}
 	}
 }

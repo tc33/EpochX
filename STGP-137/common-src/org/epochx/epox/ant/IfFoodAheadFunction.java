@@ -21,7 +21,7 @@
  */
 package org.epochx.epox.ant;
 
-import org.epochx.epox.VoidNode;
+import org.epochx.epox.*;
 import org.epochx.tools.ant.Ant;
 
 /**
@@ -30,7 +30,7 @@ import org.epochx.tools.ant.Ant;
  * if statement has the condition predefined as a check for whether the next
  * move in the landscape contains a food item.
  */
-public class IfFoodAheadFunction extends VoidNode {
+public class IfFoodAheadFunction extends Node {
 
 	// The artificial ant the Actions will be controlling.
 	private final Ant ant;
@@ -54,8 +54,8 @@ public class IfFoodAheadFunction extends VoidNode {
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
 	 */
-	public IfFoodAheadFunction(final Ant ant, final VoidNode child1,
-			final VoidNode child2) {
+	public IfFoodAheadFunction(final Ant ant, final Node child1,
+			final Node child2) {
 		super(child1, child2);
 
 		this.ant = ant;
@@ -66,13 +66,6 @@ public class IfFoodAheadFunction extends VoidNode {
 	 * next location the ant would move to on the landscape were it to be moved.
 	 * If this position contains a food item then the first child is evaluated
 	 * and executed, else the second child is evaluated and executed.
-	 * 
-	 * <p>
-	 * One of the children will thus have been evaluated (triggering execution
-	 * of actions at the <code>TerminalNodes</code>) and then this method which
-	 * must return an Action, returns Action.DO_NOTHING which any functions
-	 * higher up in the program tree will execute, but with no effect.
-	 * </p>
 	 */
 	@Override
 	public Void evaluate() {
@@ -95,9 +88,12 @@ public class IfFoodAheadFunction extends VoidNode {
 	public String getIdentifier() {
 		return "IF-FOOD-AHEAD";
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public boolean equals(final Object obj) {
-		return super.equals(obj);
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		return Void.class;
 	}
 }

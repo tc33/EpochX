@@ -27,8 +27,6 @@ import junit.framework.TestCase;
 
 import org.epochx.epox.*;
 import org.epochx.epox.bool.*;
-import org.epochx.epox.dbl.*;
-import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.tools.random.MersenneTwisterFast;
 
 
@@ -47,7 +45,7 @@ public class FullInitialiserTest extends TestCase {
 		initialiser.setDepth(0);
 		initialiser.setRNG(new MersenneTwisterFast());
 		List<Node> syntax = new ArrayList<Node>();
-		syntax.add(new BooleanLiteral(true));
+		syntax.add(new Literal(true));
 		syntax.add(new NotFunction());
 		initialiser.setSyntax(syntax);
 		initialiser.setReturnType(Boolean.class);
@@ -73,7 +71,7 @@ public class FullInitialiserTest extends TestCase {
 	 */
 	public void testGetPopNoFunctions() {
 		List<Node> syntax = new ArrayList<Node>();
-		syntax.add(new BooleanLiteral(true));
+		syntax.add(new Literal(true));
 		initialiser.setSyntax(syntax);
 		initialiser.setDepth(1);
 		
@@ -161,7 +159,7 @@ public class FullInitialiserTest extends TestCase {
 	 */
 	public void testGetProgramNoFunctions() {
 		List<Node> syntax = new ArrayList<Node>();
-		syntax.add(new BooleanLiteral(true));
+		syntax.add(new Literal(true));
 		initialiser.setSyntax(syntax);
 		initialiser.setDepth(1);
 		
@@ -211,21 +209,5 @@ public class FullInitialiserTest extends TestCase {
 			initialiser.getInitialProgram();
 			fail("illegal state exception not thrown for a null RNG");
 		} catch (IllegalStateException e) {}
-	}
-	
-	public void testInit() {
-		List<Node> syntax = new ArrayList<Node>();
-		syntax.add(new DoubleLiteral(0.3));
-		syntax.add(new IntLiteral(2));
-		syntax.add(new AddFunction());
-		//syntax.add(new SubtractFunction());
-		initialiser.setSyntax(syntax);
-		initialiser.setDepth(2);
-		initialiser.setReturnType(Double.class);
-		
-		for (int i=0; i<100; i++) {
-			GPCandidateProgram p = initialiser.getInitialProgram();
-			System.out.println(p);
-		}
 	}
 }

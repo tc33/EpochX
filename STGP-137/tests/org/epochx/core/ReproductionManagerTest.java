@@ -72,7 +72,7 @@ public class ReproductionManagerTest extends TestCase {
 		final StringBuilder verify = new StringBuilder();
 
 		final List<CandidateProgram> pop = new ArrayList<CandidateProgram>();
-		pop.add(new GPCandidateProgram(new BooleanLiteral(false),
+		pop.add(new GPCandidateProgram(new Literal(false),
 				(GPModel) model));
 		model.getProgramSelector().setSelectionPool(pop);
 
@@ -113,7 +113,7 @@ public class ReproductionManagerTest extends TestCase {
 		final StringBuilder verify = new StringBuilder();
 
 		final List<CandidateProgram> pop = new ArrayList<CandidateProgram>();
-		pop.add(new GPCandidateProgram(new BooleanLiteral(false),
+		pop.add(new GPCandidateProgram(new Literal(false),
 				(GPModel) model));
 		model.getProgramSelector().setSelectionPool(pop);
 

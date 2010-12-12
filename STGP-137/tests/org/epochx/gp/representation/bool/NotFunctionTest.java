@@ -37,7 +37,7 @@ public class NotFunctionTest extends AbstractBooleanNodeTestCase {
 
 	public void testEvaluateT() {
 		final NotFunction node = (NotFunction) getNode();
-		node.setChild(0, new BooleanLiteral(true));
+		node.setChild(0, new Literal(true));
 		final boolean result = node.evaluate();
 
 		assertFalse("NOT of true is not false", result);
@@ -45,7 +45,7 @@ public class NotFunctionTest extends AbstractBooleanNodeTestCase {
 
 	public void testEvaluateF() {
 		final NotFunction node = (NotFunction) getNode();
-		node.setChild(0, new BooleanLiteral(false));
+		node.setChild(0, new Literal(false));
 		final boolean result = node.evaluate();
 
 		assertTrue("NOT of false is not true", result);

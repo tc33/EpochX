@@ -1,7 +1,8 @@
 package org.epochx.gp.model;
 
-import org.epochx.gp.op.crossover.KozaCrossover;
+import org.epochx.gp.op.crossover.*;
 import org.epochx.gp.op.init.RampedHalfAndHalfInitialiser;
+import org.epochx.gp.op.mutation.SubtreeMutation;
 import org.epochx.life.*;
 import org.epochx.op.selection.FitnessProportionateSelector;
 import org.epochx.stats.*;
@@ -28,7 +29,7 @@ public class SymbolicRegressionTest extends ModelTest {
 				Stats.get().print(StatField.RUN_NUMBER, StatField.GEN_NUMBER, StatField.GEN_FITNESS_MIN, StatField.GEN_FITNESS_AVE);
 			}
 		};
-		//Life.get().addGenerationListener(genListener);
+		//Life.get().addGenerationListener(genPrinter);
 	}
 	
 	@Override
@@ -71,7 +72,7 @@ public class SymbolicRegressionTest extends ModelTest {
 		
 		QuarticRegression model = new QuarticRegression(20);
 		setupModel(model);
-		
+		((RampedHalfAndHalfInitialiser) model.getInitialiser()).setStartMaxDepth(2);
 		SuccessCounter counter = new SuccessCounter();
 		
 		Life.get().addRunListener(counter);

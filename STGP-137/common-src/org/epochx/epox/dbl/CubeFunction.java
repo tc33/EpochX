@@ -21,14 +21,14 @@
  */
 package org.epochx.epox.dbl;
 
-import org.epochx.epox.DoubleNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs the arithmetic function of cube,
  * that is - raising to the third power. It is equivalent to the
  * <code>PowerFunction</code> where the second child is the double literal 3.0.
  */
-public class CubeFunction extends DoubleNode {
+public class CubeFunction extends Node {
 
 	/**
 	 * Construct a CubeFunction with no children.
@@ -43,7 +43,7 @@ public class CubeFunction extends DoubleNode {
 	 * 
 	 * @param child The child which will be cubed.
 	 */
-	public CubeFunction(final DoubleNode child) {
+	public CubeFunction(final Node child) {
 		super(child);
 	}
 
@@ -52,10 +52,20 @@ public class CubeFunction extends DoubleNode {
 	 * then raising the result to the power of 3.
 	 */
 	@Override
-	public Double evaluate() {
-		final double c = ((Double) getChild(0).evaluate()).doubleValue();
+	public Object evaluate() {
+		Object c = getChild(0).evaluate();
+		
+		double result = Math.pow(NodeUtils.asDouble(c), 3);
 
-		return Math.pow(c, 3);
+		if (c instanceof Long) {
+			return (long) result;
+		} else if (c instanceof Integer) {
+			return (int) result;
+		} else if (c instanceof Double) {
+			return result;
+		} else {
+			return null;
+		}
 	}
 
 	/**
@@ -66,5 +76,14 @@ public class CubeFunction extends DoubleNode {
 	@Override
 	public String getIdentifier() {
 		return "CUBE";
+	}
+	
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (inputTypes.length == 1 && NodeUtils.isNumericalClass(inputTypes[0])) {
+			return inputTypes[0];
+		} else {
+			return null;
+		}
 	}
 }

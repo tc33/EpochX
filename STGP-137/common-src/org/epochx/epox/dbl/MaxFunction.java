@@ -21,20 +21,22 @@
  */
 package org.epochx.epox.dbl;
 
-import org.epochx.epox.DoubleNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs the simple comparison function
  * of determining which of 2 numbers is larger, as per the boolean greater-than
  * function.
  */
-public class MaxFunction extends DoubleNode {
+public class MaxFunction extends Node {
 
 	/**
-	 * Construct a MaxFunction with no children.
+	 * Construct a MaxFunction which takes the given number of children.
 	 */
-	public MaxFunction() {
-		this(null, null);
+	public MaxFunction(int n) {
+		this((Node) null);
+		
+		setChildren(new Node[n]);
 	}
 
 	/**
@@ -44,8 +46,8 @@ public class MaxFunction extends DoubleNode {
 	 * @param child1 The first child node for comparison.
 	 * @param child2 The second child node for comparison.
 	 */
-	public MaxFunction(final DoubleNode child1, final DoubleNode child2) {
-		super(child1, child2);
+	public MaxFunction(final Node ... children) {
+		super(children);
 	}
 
 	/**
@@ -54,14 +56,33 @@ public class MaxFunction extends DoubleNode {
 	 * children.
 	 */
 	@Override
-	public Double evaluate() {
-		final double c1 = ((Double) getChild(0).evaluate()).doubleValue();
-		final double c2 = ((Double) getChild(1).evaluate()).doubleValue();
-
-		if (c1 >= c2) {
-			return c1;
+	public Object evaluate() {
+		int arity = getArity();
+		Class<?> returnType = getReturnType();
+		
+		if (returnType == Double.class) {
+			double max = Double.MIN_VALUE;
+			for (int i=0; i<arity; i++) {
+				double value = NodeUtils.asDouble(getChild(i).evaluate());
+				max = Math.max(value, max);
+			}
+			return max;
+		} else if (returnType == Integer.class) {
+			int max = Integer.MIN_VALUE;
+			for (int i=0; i<arity; i++) {
+				int value = NodeUtils.asInteger(getChild(i).evaluate());
+				max = Math.max(value, max);
+			}
+			return max;
+		} else if (returnType == Long.class) {
+			long max = Long.MIN_VALUE;
+			for (int i=0; i<arity; i++) {
+				long value = NodeUtils.asLong(getChild(i).evaluate());
+				max = Math.max(value, max);
+			}
+			return max;
 		} else {
-			return c2;
+			return null;
 		}
 	}
 
@@ -73,5 +94,10 @@ public class MaxFunction extends DoubleNode {
 	@Override
 	public String getIdentifier() {
 		return "MAX";
+	}
+	
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		return NodeUtils.getWidestNumericalClass(inputTypes);
 	}
 }

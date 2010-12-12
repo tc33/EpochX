@@ -21,7 +21,7 @@
  */
 package org.epochx.epox.dbl;
 
-import org.epochx.epox.DoubleNode;
+import org.epochx.epox.*;
 
 /**
  * The CoefficientPowerFunction is equivalent to a <code>PowerFunction</code>
@@ -32,7 +32,7 @@ import org.epochx.epox.DoubleNode;
  * 3x^2, which is equivalent to 3*(x^2)
  * CVP 3 x 2, which is equivalent to MUL(POW x 2)
  */
-public class CoefficientPowerFunction extends DoubleNode {
+public class CoefficientPowerFunction extends Node {
 
 	/**
 	 * Construct an CoefficientPowerFunction with no children.
@@ -53,8 +53,8 @@ public class CoefficientPowerFunction extends DoubleNode {
 	 *        the coefficient.
 	 * @param exponent the power the term will be raised to.
 	 */
-	public CoefficientPowerFunction(final DoubleNode coefficient,
-			final DoubleNode term, final DoubleNode exponent) {
+	public CoefficientPowerFunction(final Node coefficient,
+			final Node term, final Node exponent) {
 		super(coefficient, term, exponent);
 	}
 
@@ -66,11 +66,15 @@ public class CoefficientPowerFunction extends DoubleNode {
 	 */
 	@Override
 	public Double evaluate() {
-		final double c1 = ((Double) getChild(0).evaluate()).doubleValue();
-		final double c2 = ((Double) getChild(1).evaluate()).doubleValue();
-		final double c3 = ((Double) getChild(2).evaluate()).doubleValue();
-
-		return c1 * (Math.pow(c2, c3));
+		if (getReturnType() == Double.class) {
+			final double c1 = NodeUtils.asDouble(getChild(0).evaluate());
+			final double c2 = NodeUtils.asDouble(getChild(1).evaluate());
+			final double c3 = NodeUtils.asDouble(getChild(2).evaluate());
+	
+			return c1 * (Math.pow(c2, c3));
+		}
+			
+		return null;
 	}
 
 	/**
@@ -81,5 +85,14 @@ public class CoefficientPowerFunction extends DoubleNode {
 	@Override
 	public String getIdentifier() {
 		return "CVP";
+	}
+	
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (NodeUtils.isAllNumericalClass(inputTypes)) {
+			return Double.class;
+		} else {
+			return null;
+		}
 	}
 }

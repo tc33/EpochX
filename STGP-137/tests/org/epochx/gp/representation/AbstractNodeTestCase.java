@@ -43,7 +43,7 @@ public abstract class AbstractNodeTestCase extends TestCase {
 		// Ensure children are filled.
 		final int arity = node.getArity();
 		for (int i = 0; i < arity; i++) {
-			node.setChild(i, new BooleanLiteral(true));
+			node.setChild(i, new Literal(true));
 		}
 	}
 
@@ -84,7 +84,7 @@ public abstract class AbstractNodeTestCase extends TestCase {
 	 */
 	public void testSetNthNodeNegativeIndex() {
 		try {
-			node.setNthNode(-1, new BooleanLiteral(false));
+			node.setNthNode(-1, new Literal(false));
 			fail("Exception not thrown for negative index");
 		} catch (final IndexOutOfBoundsException e) {
 		}
@@ -96,7 +96,7 @@ public abstract class AbstractNodeTestCase extends TestCase {
 	 */
 	public void testSetNthNodeTooLarge() {
 		try {
-			node.setNthNode(node.getLength(), new BooleanLiteral(false));
+			node.setNthNode(node.getLength(), new Literal(false));
 			fail("Exception not thrown for index >= length");
 		} catch (final IndexOutOfBoundsException e) {
 		}
@@ -108,7 +108,7 @@ public abstract class AbstractNodeTestCase extends TestCase {
 	 */
 	public void testSetNthNodeZero() {
 		try {
-			node.setNthNode(0, new BooleanLiteral(false));
+			node.setNthNode(0, new Literal(false));
 			fail("Exception not thrown for index == 0, cannot replace self");
 		} catch (final IndexOutOfBoundsException e) {
 		}
@@ -120,7 +120,7 @@ public abstract class AbstractNodeTestCase extends TestCase {
 	 */
 	public void testSetNthNodeLast() {
 		try {
-			final Node newChild = new BooleanLiteral(false);
+			final Node newChild = new Literal(false);
 			final int lastIndex = node.getLength() - 1;
 			node.setNthNode(lastIndex, newChild);
 			assertSame(

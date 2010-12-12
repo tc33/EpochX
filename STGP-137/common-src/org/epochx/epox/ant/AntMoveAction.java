@@ -21,14 +21,14 @@
  */
 package org.epochx.epox.ant;
 
-import org.epochx.epox.VoidNode;
+import org.epochx.epox.Node;
 import org.epochx.tools.ant.Ant;
 
 /**
  * This class defines an action which when executed will trigger the ant
  * to move one position in its ant landscape.
  */
-public class AntMoveAction extends VoidNode {
+public class AntMoveAction extends Node {
 
 	private final Ant ant;
 
@@ -52,5 +52,13 @@ public class AntMoveAction extends VoidNode {
 	@Override
 	public String getIdentifier() {
 		return "MOVE";
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Class<?> getReturnType() {
+		return Void.class;
 	}
 }

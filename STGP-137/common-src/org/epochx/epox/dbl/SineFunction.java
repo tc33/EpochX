@@ -21,13 +21,13 @@
  */
 package org.epochx.epox.dbl;
 
-import org.epochx.epox.DoubleNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs the trigonometric function of
  * sine.
  */
-public class SineFunction extends DoubleNode {
+public class SineFunction extends Node {
 
 	/**
 	 * Construct a SineFunction with no children.
@@ -42,7 +42,7 @@ public class SineFunction extends DoubleNode {
 	 * 
 	 * @param child The child which sine will be performed on.
 	 */
-	public SineFunction(final DoubleNode child) {
+	public SineFunction(final Node child) {
 		super(child);
 	}
 
@@ -52,9 +52,9 @@ public class SineFunction extends DoubleNode {
 	 */
 	@Override
 	public Double evaluate() {
-		final double c = ((Double) getChild(0).evaluate()).doubleValue();
-
-		return Math.sin(c);
+		Object c = getChild(0).evaluate();
+		
+		return Math.sin(NodeUtils.asDouble(c));
 	}
 
 	/**
@@ -65,5 +65,14 @@ public class SineFunction extends DoubleNode {
 	@Override
 	public String getIdentifier() {
 		return "SIN";
+	}
+	
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (inputTypes.length == 1 && NodeUtils.isNumericalClass(inputTypes[0])) {
+			return inputTypes[0];
+		} else {
+			return null;
+		}
 	}
 }

@@ -70,8 +70,8 @@ public abstract class AntTrail extends GPModel {
 		// Define functions.
 		final List<Node> syntax = new ArrayList<Node>();
 		syntax.add(new IfFoodAheadFunction(ant));
-		syntax.add(new Seq2Function());
-		syntax.add(new Seq3Function());
+		syntax.add(new SeqNFunction(2));
+		syntax.add(new SeqNFunction(3));
 
 		// Define terminals.
 		syntax.add(new AntMoveAction(ant));
@@ -113,5 +113,10 @@ public abstract class AntTrail extends GPModel {
 
 	public AntLandscape getAntLandScape() {
 		return landscape;
+	}
+	
+	@Override
+	public Class<?> getReturnType() {
+		return Void.class;
 	}
 }

@@ -41,7 +41,7 @@ import org.epochx.tools.util.BoolUtils;
 public class Multiplexer extends GPModel {
 
 	// The names of the inputValues used in the grammar.
-	private final BooleanVariable[] variables;
+	private final Variable[] variables;
 
 	// The boolean input sequences.
 	private final boolean[][] inputValues;
@@ -71,15 +71,15 @@ public class Multiplexer extends GPModel {
 		syntax.add(new NotFunction());
 
 		// Define terminal variables.
-		variables = new BooleanVariable[noInputBits];
+		variables = new Variable[noInputBits];
 		// Add address inputs.
 		for (int i = 0; i < noAddressBits; i++) {
-			variables[i] = new BooleanVariable("a" + i);
+			variables[i] = new Variable("a" + i, Boolean.class);
 			syntax.add(variables[i]);
 		}
 		// Add data inputs.
 		for (int i = noAddressBits; i < noInputBits; i++) {
-			variables[i] = new BooleanVariable("d" + i);
+			variables[i] = new Variable("d" + i, Boolean.class);
 			syntax.add(variables[i]);
 		}
 
@@ -150,5 +150,10 @@ public class Multiplexer extends GPModel {
 		}
 
 		return vars[noAddressBits + dataPosition];
+	}
+
+	@Override
+	public Class<?> getReturnType() {
+		return Boolean.class;
 	}
 }

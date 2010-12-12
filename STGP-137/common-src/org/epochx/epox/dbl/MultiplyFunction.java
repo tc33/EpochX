@@ -21,13 +21,13 @@
  */
 package org.epochx.epox.dbl;
 
-import org.epochx.epox.DoubleNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs the mathematical function of
  * multiplication.
  */
-public class MultiplyFunction extends DoubleNode {
+public class MultiplyFunction extends Node {
 
 	/**
 	 * Construct a MultiplyFunction with no children.
@@ -44,7 +44,7 @@ public class MultiplyFunction extends DoubleNode {
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
 	 */
-	public MultiplyFunction(final DoubleNode child1, final DoubleNode child2) {
+	public MultiplyFunction(final Node child1, final Node child2) {
 		super(child1, child2);
 	}
 
@@ -56,14 +56,33 @@ public class MultiplyFunction extends DoubleNode {
 	 * so the second child will not be evaluated at all.
 	 */
 	@Override
-	public Double evaluate() {
-		double result = ((Double) getChild(0).evaluate()).doubleValue();
+	public Object evaluate() {
+		Object c1 = getChild(0).evaluate();
+		Object c2 = getChild(1).evaluate();
 		
-		if (result != 0.0) {
-			result = result * ((Double) getChild(1).evaluate()).doubleValue();
+		Class<?> returnType = getReturnType();
+		
+		if (returnType == Double.class) {
+			// Multiply as doubles.
+			double d1 = NodeUtils.asDouble(c1);
+			double d2 = NodeUtils.asDouble(c2);
+			
+			return d1 * d2;
+		} else if (returnType == Long.class) {
+			// Multiply as longs.
+			long l1 = NodeUtils.asLong(c1);
+			long l2 = NodeUtils.asLong(c2);
+			
+			return l1 * l2;
+		} else if (returnType == Integer.class) {
+			// Multiply as intgers.
+			int i1 = NodeUtils.asInteger(c1);
+			int i2 = NodeUtils.asInteger(c2);
+			
+			return i1 * i2;
 		}
-
-		return result;
+		
+		return null;
 	}
 
 	/**
@@ -74,5 +93,10 @@ public class MultiplyFunction extends DoubleNode {
 	@Override
 	public String getIdentifier() {
 		return "MUL";
+	}
+	
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		return NodeUtils.getWidestNumericalClass(inputTypes);
 	}
 }

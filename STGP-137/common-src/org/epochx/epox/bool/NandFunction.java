@@ -21,13 +21,13 @@
  */
 package org.epochx.epox.bool;
 
-import org.epochx.epox.BooleanNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs the logical operation of NAND
  * that is equivalent to the negation of the conjunction or NOT AND.
  */
-public class NandFunction extends BooleanNode {
+public class NandFunction extends Node {
 
 	/**
 	 * Construct a NandFunction with no children.
@@ -44,7 +44,7 @@ public class NandFunction extends BooleanNode {
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
 	 */
-	public NandFunction(final BooleanNode child1, final BooleanNode child2) {
+	public NandFunction(final Node child1, final Node child2) {
 		super(child1, child2);
 	}
 
@@ -76,5 +76,17 @@ public class NandFunction extends BooleanNode {
 	@Override
 	public String getIdentifier() {
 		return "NAND";
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (NodeUtils.allEquals(inputTypes, Boolean.class)) {
+			return Boolean.class;
+		} else {
+			return null;
+		}
 	}
 }

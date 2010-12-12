@@ -46,7 +46,7 @@ public class InitialisationManagerTest extends TestCase {
 		// Need to give the model a valid syntax so we can perform
 		// initialisations.
 		final List<Node> syntax = new ArrayList<Node>();
-		syntax.add(new BooleanLiteral(false));
+		syntax.add(new Literal(false));
 		((GPModel) model).setSyntax(syntax);
 		((GPModel) model).setMaxInitialDepth(0);
 

@@ -45,8 +45,8 @@ public class CartCentering extends GPModel {
 	// The acceleration based upon a = F/m
 	private final double a;
 
-	private DoubleVariable varX;
-	private DoubleVariable varV;
+	private Variable varX;
+	private Variable varV;
 
 	private final double[] testPositions;
 	private final double[] testVelocities;
@@ -68,8 +68,8 @@ public class CartCentering extends GPModel {
 
 	public void configure() {
 		// Create variables.
-		varX = new DoubleVariable("X");
-		varV = new DoubleVariable("V");
+		varX = new Variable("X", Double.class);
+		varV = new Variable("V", Double.class);
 	}
 
 	@Override
@@ -126,10 +126,10 @@ public class CartCentering extends GPModel {
 
 			while (t < maxTime) {
 				// Is the cart centered?
-				if ((varV.getValue() >= 0 - targetRange)
-						&& (varV.getValue() <= 0 + targetRange)
-						&& (varX.getValue() >= 0 - targetRange)
-						&& (varX.getValue() <= 0 + targetRange)) {
+				if (((Double) varV.getValue() >= 0 - targetRange)
+						&& ((Double) varV.getValue() <= 0 + targetRange)
+						&& ((Double) varX.getValue() >= 0 - targetRange)
+						&& ((Double) varX.getValue() <= 0 + targetRange)) {
 					break;
 				}
 
@@ -140,8 +140,8 @@ public class CartCentering extends GPModel {
 				u = Math.signum(u);
 
 				// Calculate new position and velocity based on u.
-				final double v = varV.getValue() + (timestep * (a * u));
-				final double x = varX.getValue() + (timestep * varV.getValue());
+				final double v = (Double) varV.getValue() + (timestep * (a * u));
+				final double x = (Double) varX.getValue() + (timestep * (Double) varV.getValue());
 
 				// System.out.println(v + " " + x + " " + u);
 
@@ -187,6 +187,11 @@ public class CartCentering extends GPModel {
 		} else {
 			return -1.0;
 		}
+	}
+
+	@Override
+	public Class<?> getReturnType() {
+		return Double.class;
 	}
 
 }

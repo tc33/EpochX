@@ -21,13 +21,13 @@
  */
 package org.epochx.epox.dbl;
 
-import org.epochx.epox.DoubleNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs the trigonometric function of
  * tangent.
  */
-public class TangentFunction extends DoubleNode {
+public class TangentFunction extends Node {
 
 	/**
 	 * Construct a TangentFunction with no children.
@@ -42,7 +42,7 @@ public class TangentFunction extends DoubleNode {
 	 * 
 	 * @param child The child which tangent will be performed on.
 	 */
-	public TangentFunction(final DoubleNode child) {
+	public TangentFunction(final Node child) {
 		super(child);
 	}
 
@@ -52,9 +52,9 @@ public class TangentFunction extends DoubleNode {
 	 */
 	@Override
 	public Double evaluate() {
-		final double c = ((Double) getChild(0).evaluate()).doubleValue();
-
-		return Math.tan(c);
+		Object c = getChild(0).evaluate();
+		
+		return Math.tan(NodeUtils.asDouble(c));
 	}
 
 	/**
@@ -65,5 +65,14 @@ public class TangentFunction extends DoubleNode {
 	@Override
 	public String getIdentifier() {
 		return "TAN";
+	}
+	
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (inputTypes.length == 1 && NodeUtils.isNumericalClass(inputTypes[0])) {
+			return inputTypes[0];
+		} else {
+			return null;
+		}
 	}
 }

@@ -37,7 +37,7 @@ public class ArcCosineFunctionTest extends AbstractDoubleNodeTestCase {
 
 	public void testEvaluatePositive() {
 		final ArcCosineFunction node = (ArcCosineFunction) getNode();
-		node.setChild(0, new DoubleLiteral(Math.cos(0.6)));
+		node.setChild(0, new Literal(Math.cos(0.6)));
 		final double result = node.evaluate();
 
 		assertEquals("ACOS of 0.6 is not equal to the inverse of cos", 0.6,
@@ -46,7 +46,7 @@ public class ArcCosineFunctionTest extends AbstractDoubleNodeTestCase {
 
 	public void testEvaluateNegative() {
 		final ArcCosineFunction node = (ArcCosineFunction) getNode();
-		node.setChild(0, new DoubleLiteral(Math.cos(-0.6)));
+		node.setChild(0, new Literal(Math.cos(-0.6)));
 		final double result = node.evaluate();
 
 		assertEquals("ACOS of -0.6 is not equal to the inverse of cos", 0.6,
@@ -55,7 +55,7 @@ public class ArcCosineFunctionTest extends AbstractDoubleNodeTestCase {
 
 	public void testEvaluateOne() {
 		final ArcCosineFunction node = (ArcCosineFunction) getNode();
-		node.setChild(0, new DoubleLiteral(1.0));
+		node.setChild(0, new Literal(1.0));
 		final double result = node.evaluate();
 
 		assertEquals("ACOS of 0.0 and not equal to the inverse of cos", 0.0,
@@ -64,7 +64,7 @@ public class ArcCosineFunctionTest extends AbstractDoubleNodeTestCase {
 
 	public void testEvaluatePositiveNaN() {
 		final ArcCosineFunction node = (ArcCosineFunction) getNode();
-		node.setChild(0, new DoubleLiteral(2.0));
+		node.setChild(0, new Literal(2.0));
 		final double result = node.evaluate();
 
 		assertEquals("ACOS of 2.0 not returning NaN", Double.NaN, result);
@@ -72,7 +72,7 @@ public class ArcCosineFunctionTest extends AbstractDoubleNodeTestCase {
 
 	public void testEvaluateNegativeNaN() {
 		final ArcCosineFunction node = (ArcCosineFunction) getNode();
-		node.setChild(0, new DoubleLiteral(-2.0));
+		node.setChild(0, new Literal(-2.0));
 		final double result = node.evaluate();
 
 		assertEquals("ACOS of 0.0 not returning NaN", Double.NaN, result);

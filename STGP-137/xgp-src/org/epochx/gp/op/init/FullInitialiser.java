@@ -281,23 +281,24 @@ public class FullInitialiser extends ConfigOperator<GPModel> implements GPInitia
 		Node root = validNodes.get(randomIndex).clone();
 		int arity = root.getArity();
 		
-		// Construct a list of the arg sets that produce the right return type.
-		// TODO We can surely cut down the amount of times we're calling this?!
-		Class<?>[][] argTypeSets = getPossibleArgTypes(arity, validDepthTypes[depth-currentDepth]);
-		List<Class<?>[]> validArgTypeSets = new ArrayList<Class<?>[]>();
-		for (Class<?>[] argTypes: argTypeSets) {
-			Class<?> type = root.getReturnType(argTypes);
-			if (type != null && requiredType.isAssignableFrom(type)) {
-				validArgTypeSets.add(argTypes);
-				break;
+		if (arity > 0) {
+			// Construct a list of the arg sets that produce the right return type.
+			// TODO We can surely cut down the amount of times we're calling this?!
+			Class<?>[][] argTypeSets = getPossibleArgTypes(arity, validDepthTypes[depth-currentDepth]);
+			List<Class<?>[]> validArgTypeSets = new ArrayList<Class<?>[]>();
+			for (Class<?>[] argTypes: argTypeSets) {
+				Class<?> type = root.getReturnType(argTypes);
+				if (type != null && requiredType.isAssignableFrom(type)) {
+					validArgTypeSets.add(argTypes);
+				}
 			}
-		}
-		
-		// Randomly select from the valid arg sets.
-		Class<?>[] argTypes = validArgTypeSets.get(rng.nextInt(validArgTypeSets.size()));
-		
-		for (int i = 0; i < arity; i++) {
-			root.setChild(i, getNodeTree(argTypes[i], currentDepth+1));
+			
+			// Randomly select from the valid arg sets.
+			Class<?>[] argTypes = validArgTypeSets.get(rng.nextInt(validArgTypeSets.size()));
+			
+			for (int i = 0; i < arity; i++) {
+				root.setChild(i, getNodeTree(argTypes[i], currentDepth+1));
+			}
 		}
 		
 		return root;
@@ -307,7 +308,7 @@ public class FullInitialiser extends ConfigOperator<GPModel> implements GPInitia
 		List<Node> validNodes = new ArrayList<Node>();
 		if (remainingDepth == 0) {
 			for (Node n: terminals) {
-				if (n.getReturnType().isAssignableFrom(returnType)) {
+				if (n.getReturnType().isAssignableFrom(requiredType)) {
 					validNodes.add(n);
 				}
 			}

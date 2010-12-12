@@ -29,12 +29,8 @@ import org.epochx.epox.*;
  * 
  * Addition can be performed on inputs of the following types: 
  * <ul>
- * <li>Character</li> 
- * <li>Byte</li>
- * <li>Short</li>
  * <li>Integer</li>
  * <li>Long</li>
- * <li>Float</li>
  * <li>Double</li>
  * </ul>
  * 

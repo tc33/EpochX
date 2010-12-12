@@ -21,13 +21,13 @@
  */
 package org.epochx.epox.dbl;
 
-import org.epochx.epox.DoubleNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs the mathematical sign function
  * that extracts the sign of a number.
  */
-public class SignumFunction extends DoubleNode {
+public class SignumFunction extends Node {
 
 	/**
 	 * Construct a SignumFunction with no children.
@@ -42,7 +42,7 @@ public class SignumFunction extends DoubleNode {
 	 * 
 	 * @param child The child which signum will be performed on.
 	 */
-	public SignumFunction(final DoubleNode child) {
+	public SignumFunction(final Node child) {
 		super(child);
 	}
 
@@ -52,10 +52,20 @@ public class SignumFunction extends DoubleNode {
 	 * zero and -1.0 if less than zero.
 	 */
 	@Override
-	public Double evaluate() {
-		final double c = ((Double) getChild(0).evaluate()).doubleValue();
-
-		return Math.signum(c);
+	public Object evaluate() {
+		Object c = getChild(0).evaluate();
+		
+		double result = Math.signum(NodeUtils.asDouble(c));
+		
+		if (c instanceof Double) {
+			return result;
+		} else if (c instanceof Integer) {
+			return (int) result;
+		} else if (c instanceof Long) {
+			return (long) result;
+		}
+		
+		return null;
 	}
 
 	/**
@@ -66,5 +76,14 @@ public class SignumFunction extends DoubleNode {
 	@Override
 	public String getIdentifier() {
 		return "SGN";
+	}
+	
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (inputTypes.length == 1 && NodeUtils.isNumericalClass(inputTypes[0])) {
+			return inputTypes[0];
+		} else {
+			return null;
+		}
 	}
 }

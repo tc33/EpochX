@@ -39,14 +39,14 @@ public class RampedHalfAndHalfInitialiserTest extends TestCase {
 	
 	@Override
 	protected void setUp() throws Exception {
-		initialiser = new RampedHalfAndHalfInitialiser(null, null, -1, -1, -1, false);
+		initialiser = new RampedHalfAndHalfInitialiser(null, null, Boolean.class, -1, -1, -1, false);
 		
 		// Ensure setup is valid.
 		initialiser.setStartMaxDepth(0);
 		initialiser.setEndMaxDepth(1);
 		initialiser.setRNG(new MersenneTwisterFast());
 		List<Node> syntax = new ArrayList<Node>();
-		syntax.add(new BooleanLiteral(true));
+		syntax.add(new Literal(true));
 		syntax.add(new NotFunction());
 		initialiser.setSyntax(syntax);
 		initialiser.setPopSize(2);

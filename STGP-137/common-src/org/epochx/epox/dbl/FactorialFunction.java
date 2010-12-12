@@ -21,7 +21,7 @@
  */
 package org.epochx.epox.dbl;
 
-import org.epochx.epox.DoubleNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs the mathematical function of
@@ -31,7 +31,7 @@ import org.epochx.epox.DoubleNode;
  * 5! = 5 x 4 x 3 x 2 x 1 = FACTORIAL 5
  * 
  */
-public class FactorialFunction extends DoubleNode {
+public class FactorialFunction extends Node {
 
 	/**
 	 * Construct a FactorialFunction with no children.
@@ -47,7 +47,7 @@ public class FactorialFunction extends DoubleNode {
 	 * 
 	 * @param child The child which factorial will be performed on.
 	 */
-	public FactorialFunction(final DoubleNode child) {
+	public FactorialFunction(final Node child) {
 		super(child);
 	}
 
@@ -59,12 +59,18 @@ public class FactorialFunction extends DoubleNode {
 	 * rounding.
 	 */
 	@Override
-	public Double evaluate() {
-		final double c = ((Double) getChild(0).evaluate()).doubleValue();
-
-		final int cint = (int) Math.abs(c);
-		double factorial = 1;
-		for (int i = 1; i <= cint; i++) {
+	public Object evaluate() {
+		Object c = getChild(0).evaluate();
+		
+		long cint = -1;
+		if (c instanceof Integer) {
+			cint = Math.abs((Integer) c);
+		} else if (c instanceof Long) {
+			cint = Math.abs((Long) c);
+		}
+		
+		long factorial = 1;
+		for (long i = 1; i <= cint; i++) {
 			factorial = factorial * i;
 		}
 
@@ -79,5 +85,18 @@ public class FactorialFunction extends DoubleNode {
 	@Override
 	public String getIdentifier() {
 		return "FACTORIAL";
+	}
+	
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (inputTypes.length == 1) {
+			if (inputTypes[0] == Integer.class) {
+				return Integer.class;
+			} else if (inputTypes[0] == Long.class) {
+				return Long.class;
+			}
+		}
+		
+		return null;
 	}
 }

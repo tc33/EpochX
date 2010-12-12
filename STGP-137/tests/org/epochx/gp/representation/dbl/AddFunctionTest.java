@@ -37,30 +37,30 @@ public class AddFunctionTest extends AbstractDoubleNodeTestCase {
 
 	public void testEvaluatePositive() {
 		final AddFunction node = (AddFunction) getNode();
-		final Node[] children = new Node[]{new DoubleLiteral(2.0),
-				new DoubleLiteral(3.0)};
+		final Node[] children = new Node[]{new Literal(2.0),
+				new Literal(3.0)};
 		node.setChildren(children);
-		final double result = node.evaluate();
+		final double result = (Double) node.evaluate();
 
 		assertEquals("ADD of 2.0 and 3.0 is not 5.0", 5.0, result);
 	}
 
 	public void testEvaluateNegative() {
 		final AddFunction node = (AddFunction) getNode();
-		final Node[] children = new Node[]{new DoubleLiteral(-2.1),
-				new DoubleLiteral(-3.9)};
+		final Node[] children = new Node[]{new Literal(-2.1),
+				new Literal(-3.9)};
 		node.setChildren(children);
-		final double result = node.evaluate();
+		final double result = (Double) node.evaluate();
 
 		assertEquals("ADD of -2.1 and -3.9 is not -6.0", -6.0, result);
 	}
 
 	public void testEvaluatePositiveNegative() {
 		final AddFunction node = (AddFunction) getNode();
-		final Node[] children = new Node[]{new DoubleLiteral(-3.5),
-				new DoubleLiteral(4.5)};
+		final Node[] children = new Node[]{new Literal(-3.5),
+				new Literal(4.5)};
 		node.setChildren(children);
-		final double result = node.evaluate();
+		final double result = (Double) node.evaluate();
 
 		assertEquals("ADD of -3.5 and 4.5 is not 1.0", 1.0, result);
 	}

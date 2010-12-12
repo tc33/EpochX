@@ -21,13 +21,13 @@
  */
 package org.epochx.epox.dbl;
 
-import org.epochx.epox.DoubleNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs the multiplicative inverse (or
  * reciprocal), that is the inverse of x is 1/x.
  */
-public class InvertFunction extends DoubleNode {
+public class InvertFunction extends Node {
 
 	/**
 	 * Construct an InvertFunction with no children.
@@ -42,7 +42,7 @@ public class InvertFunction extends DoubleNode {
 	 * 
 	 * @param child The child which the reciprocal will be found for.
 	 */
-	public InvertFunction(final DoubleNode child) {
+	public InvertFunction(final Node child) {
 		super(child);
 	}
 
@@ -54,8 +54,8 @@ public class InvertFunction extends DoubleNode {
 	 */
 	@Override
 	public Double evaluate() {
-		final double c = ((Double) getChild(0).evaluate()).doubleValue();
-
+		double c = NodeUtils.asDouble(getChild(0).evaluate());
+		
 		if (c == 0) {
 			return 1.0;
 		} else {
@@ -71,5 +71,14 @@ public class InvertFunction extends DoubleNode {
 	@Override
 	public String getIdentifier() {
 		return "INV";
+	}
+	
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (inputTypes.length == 1 && NodeUtils.isNumericalClass(inputTypes[0])) {
+			return Double.class;
+		} else {
+			return null;
+		}
 	}
 }

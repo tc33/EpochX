@@ -21,12 +21,12 @@
  */
 package org.epochx.epox.bool;
 
-import org.epochx.epox.BooleanNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs logical disjunction.
  */
-public class OrFunction extends BooleanNode {
+public class OrFunction extends Node {
 
 	/**
 	 * Construct an OrFunction with no children.
@@ -43,7 +43,7 @@ public class OrFunction extends BooleanNode {
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
 	 */
-	public OrFunction(final BooleanNode child1, final BooleanNode child2) {
+	public OrFunction(final Node child1, final Node child2) {
 		super(child1, child2);
 	}
 
@@ -75,5 +75,17 @@ public class OrFunction extends BooleanNode {
 	@Override
 	public String getIdentifier() {
 		return "OR";
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (NodeUtils.allEquals(inputTypes, Boolean.class)) {
+			return Boolean.class;
+		} else {
+			return null;
+		}
 	}
 }

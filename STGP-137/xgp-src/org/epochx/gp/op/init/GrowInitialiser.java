@@ -143,11 +143,22 @@ public class GrowInitialiser extends ConfigOperator<GPModel> implements GPInitia
 		final List<Node> newSyntax = getModel().getSyntax();
 		if (!newSyntax.equals(syntax)) {
 			syntax = newSyntax;
+			
+			// Update the terminal and function sets.
 			updateSyntax();
+			
+			// Types possibilities table needs updating.
+			validDepthTypes = null;
 		}
 		
 		// Update return type.
-		returnType = getModel().getReturnType();
+		final Class<?> newReturnType = getModel().getReturnType();
+		if (newReturnType != returnType) {
+			returnType = newReturnType;
+			
+			// Types possibilities table needs updating.
+			validDepthTypes = null;
+		}
 	}
 
 	/*
@@ -242,8 +253,10 @@ public class GrowInitialiser extends ConfigOperator<GPModel> implements GPInitia
 					"Syntax must include nodes with arity of 0");
 		}
 		
-		//TODO This CANNOT stay here, because it is too expensive.
-		updateValidTypes();
+		// Update the types possibilities table if needed.
+		if (validDepthTypes == null) {
+			updateValidTypes();
+		}
 		
 		//TODO Add validation that syntax contains node that matches return type.
 		
@@ -427,6 +440,9 @@ public class GrowInitialiser extends ConfigOperator<GPModel> implements GPInitia
 		this.syntax = syntax;
 		
 		updateSyntax();
+		
+		// Types possibilities table needs updating.
+		validDepthTypes = null;
 	}
 	
 	/**
@@ -450,7 +466,8 @@ public class GrowInitialiser extends ConfigOperator<GPModel> implements GPInitia
 	public void setReturnType(final Class<?> returnType) {
 		this.returnType = returnType;
 		
-		//updateValidTypes();
+		// Types possibilities table needs updating.
+		validDepthTypes = null;
 	}
 
 	/**
@@ -491,6 +508,12 @@ public class GrowInitialiser extends ConfigOperator<GPModel> implements GPInitia
 	 * @param maxDepth the maximum depth of all new program trees.
 	 */
 	public void setMaxDepth(final int maxDepth) {
+		if (maxDepth > this.maxDepth) {
+			// Types possibilities table needs updating.
+			//TODO Actually the whole table doesn't need updating, just extending to new depth.
+			validDepthTypes = null;
+		}
+		
 		this.maxDepth = maxDepth;
 	}
 }

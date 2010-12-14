@@ -98,7 +98,6 @@ public class FullInitialiser extends ConfigOperator<GPModel> implements GPInitia
 		this.depth = depth;
 
 		updateSyntax();
-		//updateValidTypes();
 	}
 
 	/**
@@ -141,29 +140,27 @@ public class FullInitialiser extends ConfigOperator<GPModel> implements GPInitia
 		rng = getModel().getRNG();
 		depth = getModel().getMaxInitialDepth();
 		popSize = getModel().getPopulationSize();
-
-		// Flag indicating if the types table needs updating.
-		boolean updateTypes = false;
 		
 		// Only update the syntax if it has changed.
 		final List<Node> newSyntax = getModel().getSyntax();
 		if (!newSyntax.equals(syntax)) {
 			syntax = newSyntax;
+			
+			// Update the terminal and function sets.
 			updateSyntax();
-			updateTypes = true;
+			
+			// Types possibilities table needs updating.
+			validDepthTypes = null;
 		}
 		
 		// Update return type.
 		final Class<?> newReturnType = getModel().getReturnType();
-		if (!newReturnType.equals(returnType)) {
+		if (newReturnType != returnType) {
 			returnType = newReturnType;
-			updateTypes = true;
+			
+			// Types possibilities table needs updating.
+			validDepthTypes = null;
 		}
-		
-		// Only update the types table if return type or syntax changed.
-		//if (updateTypes) {
-		//	updateValidTypes();
-		//}
 	}
 
 	/*
@@ -259,8 +256,10 @@ public class FullInitialiser extends ConfigOperator<GPModel> implements GPInitia
 			throw new IllegalStateException("Syntax must include nodes with arity of >=1 if a depth >0 is used");
 		}
 		
-		//TODO This CANNOT stay here, because it is too expensive.
-		updateValidTypes();
+		// Update the types possibilities table if needed.
+		if (validDepthTypes == null) {
+			updateValidTypes();
+		}
 		
 		if (!NodeUtils.containsAssignableFrom(Arrays.asList(validDepthTypes[depth]), returnType)) {
 			throw new IllegalStateException("Syntax is not able to produce full trees with the given return type.");
@@ -446,7 +445,9 @@ public class FullInitialiser extends ConfigOperator<GPModel> implements GPInitia
 		this.syntax = syntax;
 		
 		updateSyntax();
-		//updateValidTypes();
+		
+		// Types possibilities table needs updating.
+		validDepthTypes = null;
 	}
 	
 	/**
@@ -470,7 +471,8 @@ public class FullInitialiser extends ConfigOperator<GPModel> implements GPInitia
 	public void setReturnType(final Class<?> returnType) {
 		this.returnType = returnType;
 		
-		//updateValidTypes();
+		// Types possibilities table needs updating.
+		validDepthTypes = null;
 	}
 
 	/**
@@ -511,6 +513,12 @@ public class FullInitialiser extends ConfigOperator<GPModel> implements GPInitia
 	 * @param depth the depth of all new program trees.
 	 */
 	public void setDepth(final int depth) {
+		if (depth > this.depth) {
+			// Types possibilities table needs updating.
+			//TODO Actually the whole table doesn't need updating, just extending to new depth.
+			validDepthTypes = null;
+		}
+		
 		this.depth = depth;
 	}
 }

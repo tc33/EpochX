@@ -205,7 +205,8 @@ public class OnePointCrossover extends ConfigOperator<GPModel> implements GPCros
 		
 		boolean valid = false;
 		if (!strict) {
-			valid = (root1.getArity() == root2.getArity());
+			valid = (root1.getArity() == root2.getArity())
+			     && (root1.getReturnType() == root2.getReturnType());
 		} else {
 			valid = root1.getClass().equals(root2.getClass());
 		}

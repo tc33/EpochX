@@ -41,6 +41,7 @@ public abstract class AntTrail extends GPModel {
 	// Ant components.
 	private final AntLandscape landscape;
 	private final Ant ant;
+	private final Variable antVariable;
 
 	// Trail settings.
 	private final List<Point> foodLocations;
@@ -66,17 +67,17 @@ public abstract class AntTrail extends GPModel {
 
 		landscape = new AntLandscape(landscapeSize, null);
 		ant = new Ant(allowedTimeSteps, landscape);
+		antVariable = new Variable("ANT", ant);
 
 		// Define functions.
 		final List<Node> syntax = new ArrayList<Node>();
-		syntax.add(new IfFoodAheadFunction(ant));
+		syntax.add(new IfFoodAheadFunction());
 		syntax.add(new SeqNFunction(2));
 		syntax.add(new SeqNFunction(3));
-
-		// Define terminals.
-		syntax.add(new AntMoveAction(ant));
-		syntax.add(new AntTurnLeftAction(ant));
-		syntax.add(new AntTurnRightAction(ant));
+		syntax.add(new AntMoveFunction());
+		syntax.add(new AntTurnLeftFunction());
+		syntax.add(new AntTurnRightFunction());
+		syntax.add(antVariable);
 
 		setSyntax(syntax);
 	}

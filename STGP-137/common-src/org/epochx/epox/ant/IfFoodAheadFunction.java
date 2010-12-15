@@ -32,16 +32,13 @@ import org.epochx.tools.ant.Ant;
  */
 public class IfFoodAheadFunction extends Node {
 
-	// The artificial ant the Actions will be controlling.
-	private final Ant ant;
-
 	/**
 	 * Construct an IfFoodAheadFunction with no children.
 	 * 
 	 * @param ant the ant which this function will be controlling.
 	 */
-	public IfFoodAheadFunction(final Ant ant) {
-		this(ant, null, null);
+	public IfFoodAheadFunction() {
+		this(null, null, null);
 	}
 
 	/**
@@ -54,11 +51,8 @@ public class IfFoodAheadFunction extends Node {
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
 	 */
-	public IfFoodAheadFunction(final Ant ant, final Node child1,
-			final Node child2) {
-		super(child1, child2);
-
-		this.ant = ant;
+	public IfFoodAheadFunction(final Node ant, final Node child1, final Node child2) {
+		super(ant, child1, child2);
 	}
 
 	/**
@@ -69,10 +63,12 @@ public class IfFoodAheadFunction extends Node {
 	 */
 	@Override
 	public Void evaluate() {
+		Ant ant = (Ant) getChild(0).evaluate();
+		
 		if (ant.isFoodAhead()) {
-			getChild(0).evaluate();
-		} else {
 			getChild(1).evaluate();
+		} else {
+			getChild(2).evaluate();
 		}
 
 		return null;
@@ -89,11 +85,12 @@ public class IfFoodAheadFunction extends Node {
 		return "IF-FOOD-AHEAD";
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		return Void.class;
+		if (inputTypes.length == 3 && Ant.class.isAssignableFrom(inputTypes[0])) {
+			return Void.class;
+		} else {
+			return null;
+		}
 	}
 }

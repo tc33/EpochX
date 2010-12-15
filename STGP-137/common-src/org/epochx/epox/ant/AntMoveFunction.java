@@ -21,44 +21,46 @@
  */
 package org.epochx.epox.ant;
 
-import org.epochx.epox.Node;
+import org.epochx.epox.*;
 import org.epochx.tools.ant.Ant;
 
 /**
  * This class defines an action which when executed will trigger the ant
- * to turn right from its current orientation in its ant landscape.
+ * to move one position in its ant landscape.
  */
-public class AntTurnRightAction extends Node {
-
-	private final Ant ant;
+public class AntMoveFunction extends Node {
 
 	/**
-	 * Constructs an AntTurnRightAction, supplying an ant that the action can be
-	 * performed on.
-	 * 
-	 * @param ant the Ant that will be turned right upon execution.
+	 * Constructs an AntMoveFunction.
 	 */
-	public AntTurnRightAction(final Ant ant) {
-		this.ant = ant;
+	public AntMoveFunction() {
+		this(null);
 	}
-
-	@Override
-	public String getIdentifier() {
-		return "TURN-RIGHT";
+	
+	public AntMoveFunction(final Node child) {
+		super(child);
 	}
 
 	@Override
 	public Void evaluate() {
-		ant.turnRight();
+		Ant ant = (Ant) getChild(0).evaluate();
+		
+		ant.move();
 
 		return null;
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
 	@Override
-	public Class<?> getReturnType() {
-		return Void.class;
+	public String getIdentifier() {
+		return "MOVE";
+	}
+
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (inputTypes.length == 1 && Ant.class.isAssignableFrom(inputTypes[0])) {
+			return Void.class;
+		} else {
+			return null;
+		}
 	}
 }

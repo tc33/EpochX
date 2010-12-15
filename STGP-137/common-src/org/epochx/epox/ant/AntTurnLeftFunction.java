@@ -28,18 +28,14 @@ import org.epochx.tools.ant.Ant;
  * This class defines an action which when executed will trigger the ant
  * to turn left from its current orientation in its ant landscape.
  */
-public class AntTurnLeftAction extends Node {
+public class AntTurnLeftFunction extends Node {
 
-	private final Ant ant;
-
-	/**
-	 * Constructs an AntTurnLeftAction, supplying an ant that the action can be
-	 * performed on.
-	 * 
-	 * @param ant the Ant that will be moved upon execution.
-	 */
-	public AntTurnLeftAction(final Ant ant) {
-		this.ant = ant;
+	public AntTurnLeftFunction() {
+		this(null);
+	}
+	
+	public AntTurnLeftFunction(final Node child) {
+		super(child);
 	}
 
 	@Override
@@ -49,16 +45,19 @@ public class AntTurnLeftAction extends Node {
 
 	@Override
 	public Void evaluate() {
+		Ant ant = (Ant) getChild(0).evaluate();
+		
 		ant.turnLeft();
 
 		return null;
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public Class<?> getReturnType() {
-		return Void.class;
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (inputTypes.length == 1 && Ant.class.isAssignableFrom(inputTypes[0])) {
+			return Void.class;
+		} else {
+			return null;
+		}
 	}
 }

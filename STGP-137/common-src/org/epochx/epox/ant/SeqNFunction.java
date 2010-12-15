@@ -76,7 +76,7 @@ public class SeqNFunction extends Node {
 	 */
 	@Override
 	public String getIdentifier() {
-		return "SEQ" + getArity();
+		return "SEQN";
 	}
 	
 	/**

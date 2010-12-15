@@ -42,7 +42,7 @@ public class EpoxParser {
 
 	// List of variables to be used, any variables found, not provided will be
 	// created.
-	private List<Node> variables;
+	private List<Variable> variables;
 
 	// An ant which we may need to use in some function creations - lazily
 	// created.
@@ -81,7 +81,7 @@ public class EpoxParser {
 			+ ")[pP][+-]?" + Digits + "))" + "[fFdD]?))" + "[\\x00-\\x20]*");
 
 	public EpoxParser() {
-		variables = new ArrayList<Node>();
+		variables = new ArrayList<Variable>();
 		simpleFunctions = new HashMap<String, Class<?>>();
 
 		// Insert the Boolean functions.
@@ -106,6 +106,7 @@ public class EpoxParser {
 		simpleFunctions.put("COS", CosineFunction.class);
 		simpleFunctions.put("COT", CotangentFunction.class);
 		simpleFunctions.put("CUBE", CubeFunction.class);
+		simpleFunctions.put("CBRT", CubeRootFunction.class);
 		simpleFunctions.put("EXP", ExponentialFunction.class);
 		simpleFunctions.put("FACTORIAL", FactorialFunction.class);
 		simpleFunctions.put("GT", GreaterThanFunction.class);
@@ -129,49 +130,14 @@ public class EpoxParser {
 		simpleFunctions.put("SQRT", SquareRootFunction.class);
 		simpleFunctions.put("SUB", SubtractFunction.class);
 		simpleFunctions.put("TAN", TangentFunction.class);
+		simpleFunctions.put("IF-FOOD-AHEAD", IfFoodAheadFunction.class);
+		simpleFunctions.put("MOVE", AntMoveFunction.class);
+		simpleFunctions.put("TURN-LEFT", AntTurnLeftFunction.class);
+		simpleFunctions.put("TURN-RIGHT", AntTurnRightFunction.class);
+		simpleFunctions.put("SKIP", AntSkipFunction.class);
 
 		// Insert the Action functions.
-		simpleFunctions.put("SEQ2", Seq2Function.class);
-		simpleFunctions.put("SEQ3", Seq3Function.class);
-		simpleFunctions.put("SEQ4", Seq4Function.class);
-	}
-
-	/*
-	 * We do lazy initialisation, so if the object hasn't been initialised yet,
-	 * we do it now.
-	 */
-	private Node initialiseFunction(final String name) throws MalformedProgramException {
-		// The function node we're going to create.
-		Node node = null;
-
-		// Attempt to find the function in the list of simple functions.
-		final Class<?> functionClass = simpleFunctions.get(name);
-
-		if (functionClass != null) {
-			// Instantiate the function node.
-			try {
-				node = (Node) functionClass.newInstance();
-			} catch (final InstantiationException e) {
-				assert false;
-			} catch (final IllegalAccessException e) {
-				assert false;
-			}
-		} else if (name.equals("IF-FOOD-AHEAD")) {
-			node = new IfFoodAheadFunction(ant);
-		} else if (name.equals("MOVE")) {
-			node = new AntMoveAction(ant);
-		} else if (name.equals("TURN-LEFT")) {
-			node = new AntTurnLeftAction(ant);
-		} else if (name.equals("TURN-RIGHT")) {
-			node = new AntTurnRightAction(ant);
-		} else if (name.equals("SKIP")) {
-			node = new AntSkipAction(ant);
-		} else {
-			// Function unknown - error.
-			throw new MalformedProgramException("Unknown function " + name + " encountered");
-		}
-
-		return node;
+		simpleFunctions.put("SEQN", SeqNFunction.class);
 	}
 
 	public Node parse(final String source) throws MalformedProgramException {
@@ -226,6 +192,34 @@ public class EpoxParser {
 
 		return node;
 	}
+	
+	/*
+	 * We do lazy initialisation, so if the object hasn't been initialised yet,
+	 * we do it now.
+	 */
+	private Node initialiseFunction(final String name) throws MalformedProgramException {
+		// The function node we're going to create.
+		Node node = null;
+
+		// Attempt to find the function in the list of simple functions.
+		final Class<?> functionClass = simpleFunctions.get(name);
+
+		if (functionClass != null) {
+			// Instantiate the function node.
+			try {
+				node = (Node) functionClass.newInstance();
+			} catch (final InstantiationException e) {
+				assert false;
+			} catch (final IllegalAccessException e) {
+				assert false;
+			}
+		} else {
+			// Function unknown - error.
+			throw new MalformedProgramException("Unknown function " + name + " encountered");
+		}
+
+		return node;
+	}
 
 	/**
 	 * Parses the given string as a terminal. It will be treated as either a
@@ -240,11 +234,12 @@ public class EpoxParser {
 	 * @return
 	 */
 	private Node parseTerminal(final String terminalStr) {
-		Node node = parseBooleanLiteral(terminalStr);
-			
+		Node node = parseVariable(terminalStr);
+		
 		if (node == null) {
-			node = parseVariable(terminalStr);
+			node = parseLiteral(terminalStr);
 		}
+		
 		
 		if (node == null && Pattern.matches(fpRegex, terminalStr)) {
 			node = new DoubleLiteral(Double.valueOf(terminalStr));
@@ -272,16 +267,15 @@ public class EpoxParser {
 		return variable;
 	}
 
-	public void addSimpleFunction(final String name,
-			final Class<Node> functionClass) {
+	public void addFunction(final String name, final Class<? extends Node> functionClass) {
 		simpleFunctions.put(name, functionClass);
 	}
 
-	public void setAvailableVariables(final List<Node> variables) {
+	public void setAvailableVariables(final List<Variable> variables) {
 		this.variables = variables;
 	}
 
-	public void addAvailableVariable(final Node variable) {
+	public void addAvailableVariable(final Variable variable) {
 		variables.add(variable);
 	}
 

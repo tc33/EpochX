@@ -21,7 +21,8 @@
  */
 package org.epochx.epox.math;
 
-import org.epochx.epox.*;
+import org.epochx.epox.Node;
+import org.epochx.tools.util.*;
 
 /**
  * A <code>FunctionNode</code> which performs the mathematical sign function
@@ -55,10 +56,12 @@ public class SignumFunction extends Node {
 	public Object evaluate() {
 		Object c = getChild(0).evaluate();
 		
-		double result = Math.signum(NodeUtils.asDouble(c));
+		double result = Math.signum(NumericUtils.asDouble(c));
 		
 		if (c instanceof Double) {
 			return result;
+		} else if (c instanceof Float) {
+			return (float) result;
 		} else if (c instanceof Integer) {
 			return (int) result;
 		} else if (c instanceof Long) {
@@ -80,7 +83,7 @@ public class SignumFunction extends Node {
 	
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (inputTypes.length == 1 && NodeUtils.isNumericalClass(inputTypes[0])) {
+		if (inputTypes.length == 1 && TypeUtils.isNumericType(inputTypes[0])) {
 			return inputTypes[0];
 		} else {
 			return null;

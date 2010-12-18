@@ -21,7 +21,8 @@
  */
 package org.epochx.epox.math;
 
-import org.epochx.epox.*;
+import org.epochx.epox.Node;
+import org.epochx.tools.util.*;
 
 /**
  * A <code>FunctionNode</code> which performs the modulo operation, that is
@@ -61,18 +62,23 @@ public class ModuloFunction extends Node {
 		Class<?> returnType = getReturnType();
 		
 		if (returnType == Double.class) {
-			double d1 = NodeUtils.asDouble(c1);
-			double d2 = NodeUtils.asDouble(c2);
+			double d1 = NumericUtils.asDouble(c1);
+			double d2 = NumericUtils.asDouble(c2);
 			
 			return (d2 == 0) ? d1 : (d1 % d2);
+		} else if (returnType == Float.class) {
+			double f1 = NumericUtils.asFloat(c1);
+			double f2 = NumericUtils.asFloat(c2);
+			
+			return (f2 == 0) ? f1 : (f1 % f2);
 		} else if (returnType == Integer.class) {
-			int i1 = NodeUtils.asInteger(c1);
-			int i2 = NodeUtils.asInteger(c2);
+			int i1 = NumericUtils.asInteger(c1);
+			int i2 = NumericUtils.asInteger(c2);
 			
 			return (i2 == 0) ? i1 : (i1 % i2);
 		} else if (returnType == Long.class) {
-			long l1 = NodeUtils.asLong(c1);
-			long l2 = NodeUtils.asLong(c2);
+			long l1 = NumericUtils.asLong(c1);
+			long l2 = NumericUtils.asLong(c2);
 			
 			return (l2 == 0) ? l1 : (l1 % l2);
 		} else {
@@ -92,6 +98,6 @@ public class ModuloFunction extends Node {
 	
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		return NodeUtils.getWidestNumericalClass(inputTypes);
+		return TypeUtils.getNumericType(inputTypes);
 	}
 }

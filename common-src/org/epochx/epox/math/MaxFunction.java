@@ -21,12 +21,14 @@
  */
 package org.epochx.epox.math;
 
-import org.epochx.epox.*;
+import org.epochx.epox.Node;
+import org.epochx.tools.util.*;
 
 /**
  * A <code>FunctionNode</code> which performs the simple comparison function
  * of determining which of 2 numbers is larger, as per the boolean greater-than
- * function.
+ * function. This function can have a flexible number of children and as such 
+ * cannot be parsed by the EpoxParser, look at using Max2Function instead.
  */
 public class MaxFunction extends Node {
 
@@ -63,21 +65,28 @@ public class MaxFunction extends Node {
 		if (returnType == Double.class) {
 			double max = Double.MIN_VALUE;
 			for (int i=0; i<arity; i++) {
-				double value = NodeUtils.asDouble(getChild(i).evaluate());
+				double value = NumericUtils.asDouble(getChild(i).evaluate());
 				max = Math.max(value, max);
 			}
 			return max;
-		} else if (returnType == Integer.class) {
-			int max = Integer.MIN_VALUE;
+		} else if (returnType == Float.class) {
+			float max = Float.MIN_VALUE;
 			for (int i=0; i<arity; i++) {
-				int value = NodeUtils.asInteger(getChild(i).evaluate());
+				float value = NumericUtils.asFloat(getChild(i).evaluate());
 				max = Math.max(value, max);
 			}
 			return max;
 		} else if (returnType == Long.class) {
 			long max = Long.MIN_VALUE;
 			for (int i=0; i<arity; i++) {
-				long value = NodeUtils.asLong(getChild(i).evaluate());
+				long value = NumericUtils.asLong(getChild(i).evaluate());
+				max = Math.max(value, max);
+			}
+			return max;
+		} else if (TypeUtils.isNumericType(returnType)) {
+			int max = Integer.MIN_VALUE;
+			for (int i=0; i<arity; i++) {
+				int value = NumericUtils.asInteger(getChild(i).evaluate());
 				max = Math.max(value, max);
 			}
 			return max;
@@ -98,6 +107,6 @@ public class MaxFunction extends Node {
 	
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		return NodeUtils.getWidestNumericalClass(inputTypes);
+		return TypeUtils.getNumericType(inputTypes);
 	}
 }

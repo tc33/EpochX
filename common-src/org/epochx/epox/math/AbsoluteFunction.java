@@ -21,7 +21,8 @@
  */
 package org.epochx.epox.math;
 
-import org.epochx.epox.*;
+import org.epochx.epox.Node;
+import org.epochx.tools.util.*;
 
 
 /**
@@ -55,17 +56,16 @@ public class AbsoluteFunction extends Node {
 		
 		if (returnType == Double.class) {
 			// Perform absolute on double.
-			return Math.abs(NodeUtils.asDouble(c));
+			return Math.abs(NumericUtils.asDouble(c));
+		} else if (returnType == Float.class) {
+			// Perform absolute on float.
+			return Math.abs(NumericUtils.asFloat(c));
 		} else if (returnType == Long.class) {
 			// Perform absolute on long.
-			long l = NodeUtils.asLong(c);
-			
-			return Math.abs(l);
+			return Math.abs(NumericUtils.asLong(c));
 		} else if (returnType == Integer.class) {
 			// Perform absolute on integer.
-			int i = NodeUtils.asInteger(c);
-			
-			return Math.abs(i);
+			return Math.abs(NumericUtils.asInteger(c));
 		}
 
 		return null;
@@ -83,6 +83,6 @@ public class AbsoluteFunction extends Node {
 
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		return NodeUtils.getWidestNumericalClass(inputTypes);
+		return TypeUtils.getNumericType(inputTypes);
 	}
 }

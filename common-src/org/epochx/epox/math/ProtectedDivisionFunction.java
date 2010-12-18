@@ -21,7 +21,8 @@
  */
 package org.epochx.epox.math;
 
-import org.epochx.epox.*;
+import org.epochx.epox.Node;
+import org.epochx.tools.util.*;
 
 /**
  * A <code>FunctionNode</code> which performs the arithmetic function of
@@ -31,7 +32,7 @@ import org.epochx.epox.*;
  */
 public class ProtectedDivisionFunction extends Node {
 
-	private final double protectionValue;
+	private final Double protectionValue;
 
 	/**
 	 * Construct a ProtectedDivisionFunction with no children. A default
@@ -95,16 +96,38 @@ public class ProtectedDivisionFunction extends Node {
 	 * will not be evaluated at all.
 	 */
 	@Override
-	public Double evaluate() {
-		final double c2 = NodeUtils.asDouble(getChild(1).evaluate());
-
-		if (c2 == 0) {
-			return protectionValue;
-		} else {
-			final double c1 = NodeUtils.asDouble(getChild(0).evaluate());
-
-			return c1 / c2;
+	public Object evaluate() {
+		Object c1 = getChild(0).evaluate();
+		Object c2 = getChild(1).evaluate();
+		Class<?> returnType = getReturnType();
+		
+		if (returnType == Double.class) {
+			// Divide as doubles.
+			double d1 = NumericUtils.asDouble(c1);
+			double d2 = NumericUtils.asDouble(c2);
+			
+			return (d2 == 0) ? NumericUtils.asDouble(protectionValue) : (d1 / d2);
+		} else if (returnType == Float.class) {
+			// Divide as floats.
+			float f1 = NumericUtils.asFloat(c1);
+			float f2 = NumericUtils.asFloat(c2);
+			
+			return (f2 == 0) ? NumericUtils.asFloat(protectionValue) : (f1 / f2);
+		} else if (returnType == Long.class) {
+			// Divide as longs.
+			long l1 = NumericUtils.asLong(c1);
+			long l2 = NumericUtils.asLong(c2);
+			
+			return (l2 == 0) ? NumericUtils.asLong(protectionValue) : (l1 / l2);
+		} else if (returnType == Integer.class) {
+			// Divide as intgers.
+			int i1 = NumericUtils.asInteger(c1);
+			int i2 = NumericUtils.asInteger(c2);
+			
+			return (i2 == 0) ? NumericUtils.asInteger(protectionValue) : (i1 / i2);
 		}
+		
+		return null;
 	}
 
 	/**
@@ -115,5 +138,10 @@ public class ProtectedDivisionFunction extends Node {
 	@Override
 	public String getIdentifier() {
 		return "PDIV";
+	}
+	
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		return TypeUtils.getNumericType(inputTypes);
 	}
 }

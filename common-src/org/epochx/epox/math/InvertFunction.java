@@ -21,7 +21,8 @@
  */
 package org.epochx.epox.math;
 
-import org.epochx.epox.*;
+import org.epochx.epox.Node;
+import org.epochx.tools.util.*;
 
 /**
  * A <code>FunctionNode</code> which performs the multiplicative inverse (or
@@ -54,7 +55,7 @@ public class InvertFunction extends Node {
 	 */
 	@Override
 	public Double evaluate() {
-		double c = NodeUtils.asDouble(getChild(0).evaluate());
+		double c = NumericUtils.asDouble(getChild(0).evaluate());
 		
 		if (c == 0) {
 			return 1.0;
@@ -75,7 +76,7 @@ public class InvertFunction extends Node {
 	
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (inputTypes.length == 1 && NodeUtils.isNumericalClass(inputTypes[0])) {
+		if (inputTypes.length == 1 && TypeUtils.isNumericType(inputTypes[0])) {
 			return Double.class;
 		} else {
 			return null;

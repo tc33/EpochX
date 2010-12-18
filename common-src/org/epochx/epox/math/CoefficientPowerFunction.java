@@ -21,7 +21,8 @@
  */
 package org.epochx.epox.math;
 
-import org.epochx.epox.*;
+import org.epochx.epox.Node;
+import org.epochx.tools.util.*;
 
 /**
  * The CoefficientPowerFunction is equivalent to a <code>PowerFunction</code>
@@ -67,9 +68,9 @@ public class CoefficientPowerFunction extends Node {
 	@Override
 	public Double evaluate() {
 		if (getReturnType() == Double.class) {
-			final double c1 = NodeUtils.asDouble(getChild(0).evaluate());
-			final double c2 = NodeUtils.asDouble(getChild(1).evaluate());
-			final double c3 = NodeUtils.asDouble(getChild(2).evaluate());
+			final double c1 = NumericUtils.asDouble(getChild(0).evaluate());
+			final double c2 = NumericUtils.asDouble(getChild(1).evaluate());
+			final double c3 = NumericUtils.asDouble(getChild(2).evaluate());
 	
 			return c1 * (Math.pow(c2, c3));
 		}
@@ -89,7 +90,7 @@ public class CoefficientPowerFunction extends Node {
 	
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (NodeUtils.isAllNumericalClass(inputTypes)) {
+		if (TypeUtils.isAllNumericType(inputTypes)) {
 			return Double.class;
 		} else {
 			return null;

@@ -120,8 +120,10 @@ public class EpoxParser {
 		functions.put("LOG-10", Log10Function.class);
 		functions.put("LN", LogFunction.class);
 		functions.put("LT", LessThanFunction.class);
-		functions.put("MAX", MaxFunction.class);
-		functions.put("MIN", MinFunction.class);
+		functions.put("MAX", Max2Function.class);
+		functions.put("MIN", Min2Function.class);
+		functions.put("MAX3", Max3Function.class);
+		functions.put("MIN3", Min3Function.class);
 		functions.put("MOD", ModuloFunction.class);
 		functions.put("MUL", MultiplyFunction.class);
 		functions.put("POW", PowerFunction.class);

@@ -22,6 +22,7 @@
 package org.epochx.epox.bool;
 
 import org.epochx.epox.*;
+import org.epochx.tools.util.TypeUtils;
 
 /**
  * A <code>FunctionNode</code> which performs logical conjunction or the
@@ -83,7 +84,7 @@ public class AndFunction extends Node {
 	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (NodeUtils.allEquals(inputTypes, Boolean.class)) {
+		if (TypeUtils.allEqual(inputTypes, Boolean.class)) {
 			return Boolean.class;
 		} else {
 			return null;

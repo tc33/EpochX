@@ -21,12 +21,14 @@
  */
 package org.epochx.epox.math;
 
-import org.epochx.epox.*;
+import org.epochx.epox.Node;
+import org.epochx.tools.util.*;
 
 /**
  * A <code>MinFunction</code> which performs the simple comparison function
  * of determining which of 2 numbers is smaller, as per the boolean less-than
- * function.
+ * function. This function can have a flexible number of children and as such 
+ * cannot be parsed by the EpoxParser, look at using Min2Function instead.
  */
 public class MinFunction extends Node {
 
@@ -63,21 +65,28 @@ public class MinFunction extends Node {
 		if (returnType == Double.class) {
 			double min = Double.MAX_VALUE;
 			for (int i=0; i<arity; i++) {
-				double value = NodeUtils.asDouble(getChild(i).evaluate());
+				double value = NumericUtils.asDouble(getChild(i).evaluate());
+				min = Math.min(value, min);
+			}
+			return min;
+		} else if (returnType == Float.class) {
+			float min = Float.MAX_VALUE;
+			for (int i=0; i<arity; i++) {
+				float value = NumericUtils.asFloat(getChild(i).evaluate());
 				min = Math.min(value, min);
 			}
 			return min;
 		} else if (returnType == Integer.class) {
 			int min = Integer.MAX_VALUE;
 			for (int i=0; i<arity; i++) {
-				int value = NodeUtils.asInteger(getChild(i).evaluate());
+				int value = NumericUtils.asInteger(getChild(i).evaluate());
 				min = Math.min(value, min);
 			}
 			return min;
 		} else if (returnType == Long.class) {
 			long min = Long.MAX_VALUE;
 			for (int i=0; i<arity; i++) {
-				long value = NodeUtils.asLong(getChild(i).evaluate());
+				long value = NumericUtils.asLong(getChild(i).evaluate());
 				min = Math.min(value, min);
 			}
 			return min;
@@ -98,6 +107,6 @@ public class MinFunction extends Node {
 	
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		return NodeUtils.getWidestNumericalClass(inputTypes);
+		return TypeUtils.getNumericType(inputTypes);
 	}
 }

@@ -21,7 +21,8 @@
  */
 package org.epochx.epox.math;
 
-import org.epochx.epox.*;
+import org.epochx.epox.Node;
+import org.epochx.tools.util.*;
 
 /**
  * A <code>FunctionNode</code> which performs the mathematical function of
@@ -62,19 +63,18 @@ public class FactorialFunction extends Node {
 	public Object evaluate() {
 		Object c = getChild(0).evaluate();
 		
-		long cint = -1;
-		if (c instanceof Integer) {
-			cint = Math.abs((Integer) c);
-		} else if (c instanceof Long) {
-			cint = Math.abs((Long) c);
-		}
+		long cint = Math.abs(NumericUtils.asLong(c));
 		
 		long factorial = 1;
 		for (long i = 1; i <= cint; i++) {
 			factorial = factorial * i;
 		}
-
-		return factorial;
+		
+		if (c instanceof Long) {
+			return factorial;
+		} else {
+			return (int) factorial;
+		}
 	}
 
 	/**
@@ -89,12 +89,8 @@ public class FactorialFunction extends Node {
 	
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (inputTypes.length == 1) {
-			if (inputTypes[0] == Integer.class) {
-				return Integer.class;
-			} else if (inputTypes[0] == Long.class) {
-				return Long.class;
-			}
+		if (inputTypes.length == 1 && TypeUtils.isIntegerType(inputTypes[0])) {
+			return TypeUtils.getNumericType(inputTypes[0]);
 		}
 		
 		return null;

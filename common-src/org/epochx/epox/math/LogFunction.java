@@ -21,7 +21,8 @@
  */
 package org.epochx.epox.math;
 
-import org.epochx.epox.*;
+import org.epochx.epox.Node;
+import org.epochx.tools.util.*;
 
 /**
  * A <code>FunctionNode</code> which performs the natural (base e) logarithm.
@@ -53,7 +54,7 @@ public class LogFunction extends Node {
 	 */
 	@Override
 	public Double evaluate() {
-		double c = NodeUtils.asDouble(getChild(0).evaluate());
+		double c = NumericUtils.asDouble(getChild(0).evaluate());
 
 		return Math.log(c);
 	}
@@ -70,7 +71,7 @@ public class LogFunction extends Node {
 	
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (inputTypes.length == 2 && NodeUtils.isAllNumericalClass(inputTypes)) {
+		if (inputTypes.length == 2 && TypeUtils.isAllNumericType(inputTypes)) {
 			return Double.class;
 		}
 		

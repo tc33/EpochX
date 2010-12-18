@@ -21,7 +21,8 @@
  */
 package org.epochx.epox.math;
 
-import org.epochx.epox.*;
+import org.epochx.epox.Node;
+import org.epochx.tools.util.*;
 
 /**
  * A <code>FunctionNode</code> which performs the mathematical function of
@@ -60,20 +61,26 @@ public class SubtractFunction extends Node {
 		
 		if (returnType == Double.class) {
 			// Subtract as doubles.
-			double d1 = NodeUtils.asDouble(c1);
-			double d2 = NodeUtils.asDouble(c2);
+			double d1 = NumericUtils.asDouble(c1);
+			double d2 = NumericUtils.asDouble(c2);
 			
 			return d1 - d2;
+		} else if (returnType == Float.class) {
+			// Subtract as floats.
+			double f1 = NumericUtils.asFloat(c1);
+			double f2 = NumericUtils.asFloat(c2);
+			
+			return f1 - f2;
 		} else if (returnType == Long.class) {
 			// Subtract as longs.
-			long l1 = NodeUtils.asLong(c1);
-			long l2 = NodeUtils.asLong(c2);
+			long l1 = NumericUtils.asLong(c1);
+			long l2 = NumericUtils.asLong(c2);
 			
 			return l1 - l2;
 		} else if (returnType == Integer.class) {
 			// Subtract as integers.
-			int i1 = NodeUtils.asInteger(c1);
-			int i2 = NodeUtils.asInteger(c2);
+			int i1 = NumericUtils.asInteger(c1);
+			int i2 = NumericUtils.asInteger(c2);
 			
 			return i1 - i2;
 		}
@@ -93,6 +100,6 @@ public class SubtractFunction extends Node {
 	
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		return NodeUtils.getWidestNumericalClass(inputTypes);
+		return TypeUtils.getNumericType(inputTypes);
 	}
 }

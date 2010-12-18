@@ -21,7 +21,8 @@
  */
 package org.epochx.epox.math;
 
-import org.epochx.epox.*;
+import org.epochx.epox.Node;
+import org.epochx.tools.util.*;
 
 /**
  * A <code>FunctionNode</code> which performs the arithmetic function of
@@ -56,10 +57,12 @@ public class SquareFunction extends Node {
 	public Object evaluate() {
 		Object c = getChild(0).evaluate();
 		
-		double result = Math.pow(NodeUtils.asDouble(c), 2);
+		double result = Math.pow(NumericUtils.asDouble(c), 2);
 
 		if (c instanceof Long) {
 			return (long) result;
+		} else if (c instanceof Float) {
+			return (float) result;
 		} else if (c instanceof Integer) {
 			return (int) result;
 		} else if (c instanceof Double) {
@@ -81,7 +84,7 @@ public class SquareFunction extends Node {
 	
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (inputTypes.length == 1 && NodeUtils.isNumericalClass(inputTypes[0])) {
+		if (inputTypes.length == 1 && TypeUtils.isNumericType(inputTypes[0])) {
 			return inputTypes[0];
 		} else {
 			return null;

@@ -21,7 +21,8 @@
  */
 package org.epochx.epox.math;
 
-import org.epochx.epox.*;
+import org.epochx.epox.Node;
+import org.epochx.tools.util.*;
 
 /**
  * The greater than function is a numerically valued logical function. It
@@ -65,8 +66,8 @@ public class GreaterThanFunction extends Node {
 		Object c1 = getChild(0).evaluate();
 		Object c2 = getChild(1).evaluate();
 		
-		double value1 = NodeUtils.asDouble(c1);
-		double value2 = NodeUtils.asDouble(c2);
+		double value1 = NumericUtils.asDouble(c1);
+		double value2 = NumericUtils.asDouble(c2);
 
 		return (value1 > value2);
 	}
@@ -83,7 +84,7 @@ public class GreaterThanFunction extends Node {
 
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (inputTypes.length == 2 && NodeUtils.isAllNumericalClass(inputTypes)) {
+		if (inputTypes.length == 2 && TypeUtils.isAllNumericType(inputTypes)) {
 			return Boolean.class;
 		}
 		

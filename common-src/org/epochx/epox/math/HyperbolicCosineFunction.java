@@ -21,7 +21,8 @@
  */
 package org.epochx.epox.math;
 
-import org.epochx.epox.*;
+import org.epochx.epox.Node;
+import org.epochx.tools.util.*;
 
 /**
  * A <code>FunctionNode</code> which performs the hyperbolic trigonometric
@@ -56,7 +57,7 @@ public class HyperbolicCosineFunction extends Node {
 	public Double evaluate() {
 		Object c = getChild(0).evaluate();
 
-		return Math.cosh(NodeUtils.asDouble(c));
+		return Math.cosh(NumericUtils.asDouble(c));
 	}
 
 	/**
@@ -71,7 +72,7 @@ public class HyperbolicCosineFunction extends Node {
 	
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (inputTypes.length == 1 && NodeUtils.isNumericalClass(inputTypes[0])) {
+		if (inputTypes.length == 1 && TypeUtils.isNumericType(inputTypes[0])) {
 			return Double.class;
 		} else {
 			return null;

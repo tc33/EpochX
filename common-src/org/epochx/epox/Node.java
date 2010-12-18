@@ -24,6 +24,7 @@ package org.epochx.epox;
 import java.util.*;
 
 import org.apache.commons.lang.ObjectUtils;
+import org.epochx.tools.util.TypeUtils;
 
 /**
  * Subclasses of <code>Node</code> should ensure they call the superclass
@@ -551,12 +552,9 @@ public abstract class Node implements Cloneable {
 		if (arity == 0) {
 			// Is a terminal.
 			return getReturnType();
-		} else if (NodeUtils.classEquals(inputTypes)) {
-			// All input types are the same.
-			return inputTypes[0];
 		} else {
-			// Not valid.
-			return null;
+			// Either the widest type or null if not valid.
+			return TypeUtils.getSuper(inputTypes);
 		}
 	}
 	

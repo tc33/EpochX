@@ -21,7 +21,8 @@
  */
 package org.epochx.epox.math;
 
-import org.epochx.epox.*;
+import org.epochx.epox.Node;
+import org.epochx.tools.util.*;
 
 /**
  * A <code>FunctionNode</code> which performs the trigonometric function of
@@ -54,7 +55,7 @@ public class TangentFunction extends Node {
 	public Double evaluate() {
 		Object c = getChild(0).evaluate();
 		
-		return Math.tan(NodeUtils.asDouble(c));
+		return Math.tan(NumericUtils.asDouble(c));
 	}
 
 	/**
@@ -69,7 +70,7 @@ public class TangentFunction extends Node {
 	
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (inputTypes.length == 1 && NodeUtils.isNumericalClass(inputTypes[0])) {
+		if (inputTypes.length == 1 && TypeUtils.isNumericType(inputTypes[0])) {
 			return inputTypes[0];
 		} else {
 			return null;

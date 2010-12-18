@@ -21,7 +21,8 @@
  */
 package org.epochx.epox.math;
 
-import org.epochx.epox.*;
+import org.epochx.epox.Node;
+import org.epochx.tools.util.*;
 
 /**
  * A <code>FunctionNode</code> which performs the reciprocal trigonometric
@@ -55,7 +56,7 @@ public class CotangentFunction extends Node {
 	public Double evaluate() {
 		Object c = getChild(0).evaluate();
 
-		return 1 / Math.tan(NodeUtils.asDouble(c));
+		return 1 / Math.tan(NumericUtils.asDouble(c));
 	}
 
 	/**
@@ -70,7 +71,7 @@ public class CotangentFunction extends Node {
 	
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (inputTypes.length == 1 && NodeUtils.isNumericalClass(inputTypes[0])) {
+		if (inputTypes.length == 1 && TypeUtils.isNumericType(inputTypes[0])) {
 			return Double.class;
 		} else {
 			return null;

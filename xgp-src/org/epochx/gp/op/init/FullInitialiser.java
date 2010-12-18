@@ -29,6 +29,7 @@ import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.op.ConfigOperator;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
+import org.epochx.tools.util.TypeUtils;
 
 /**
  * Initialisation implementation which produces full program trees down to a
@@ -261,7 +262,7 @@ public class FullInitialiser extends ConfigOperator<GPModel> implements GPInitia
 			updateValidTypes();
 		}
 		
-		if (!NodeUtils.containsAssignableFrom(Arrays.asList(validDepthTypes[depth]), returnType)) {
+		if (!TypeUtils.containsSub(validDepthTypes[depth], returnType)) {
 			throw new IllegalStateException("Syntax is not able to produce full trees with the given return type.");
 		}
 		

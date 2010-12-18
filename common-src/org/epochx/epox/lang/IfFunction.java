@@ -22,6 +22,7 @@
 package org.epochx.epox.lang;
 
 import org.epochx.epox.*;
+import org.epochx.tools.util.TypeUtils;
 
 /**
  * A <code>FunctionNode</code> which represents the conditional if-then-else
@@ -83,7 +84,7 @@ public class IfFunction extends Node {
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
 		if ((inputTypes.length == 3) 
 				&& (inputTypes[0] == Boolean.class)) {
-			return NodeUtils.getSuper(inputTypes[1], inputTypes[2]);
+			return TypeUtils.getSuper(inputTypes[1], inputTypes[2]);
 		} else {
 			return null;
 		}

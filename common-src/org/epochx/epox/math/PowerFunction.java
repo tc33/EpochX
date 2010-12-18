@@ -21,7 +21,8 @@
  */
 package org.epochx.epox.math;
 
-import org.epochx.epox.*;
+import org.epochx.epox.Node;
+import org.epochx.tools.util.*;
 
 /**
  * A <code>FunctionNode</code> which performs the mathematical operation of
@@ -58,12 +59,12 @@ public class PowerFunction extends Node {
 	 */
 	@Override
 	public Double evaluate() {
-		final double c2 = NodeUtils.asDouble(getChild(1).evaluate());
+		final double c2 = NumericUtils.asDouble(getChild(1).evaluate());
 
 		if (c2 == 0.0) {
 			return 1.0;
 		} else {
-			final double c1 = NodeUtils.asDouble(getChild(0).evaluate());
+			final double c1 = NumericUtils.asDouble(getChild(0).evaluate());
 
 			return Math.pow(c1, c2);
 		}
@@ -81,7 +82,7 @@ public class PowerFunction extends Node {
 	
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (inputTypes.length == 2 && NodeUtils.isAllNumericalClass(inputTypes)) {
+		if (inputTypes.length == 2 && TypeUtils.isAllNumericType(inputTypes)) {
 			return Double.class;
 		} else {
 			return null;

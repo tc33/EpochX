@@ -109,8 +109,7 @@ public abstract class Regression extends GEModel {
 		for (int i = 0; i < inputs.length; i++) {
 			Double result = null;
 			try {
-				result = (Double) interpreter.eval(program.getSourceCode(),
-						new String[]{"X"}, new Double[]{inputs[i]});
+				result = (Double) interpreter.eval(program.getSourceCode(), new String[]{"X"}, new Double[]{inputs[i]});
 			} catch (final MalformedProgramException e) {
 				// This should not ever happen unless user changes grammar.
 				assert false;

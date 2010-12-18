@@ -21,123 +21,126 @@
  */
 package org.epochx.epox;
 
+import java.text.*;
 import java.util.*;
-import java.util.regex.Pattern;
 
 import org.epochx.epox.ant.*;
 import org.epochx.epox.bool.*;
 import org.epochx.epox.dbl.*;
-import org.epochx.tools.ant.Ant;
 import org.epochx.tools.eval.MalformedProgramException;
 
 /**
  * The function parser can parse a nested function into a node tree. It can
- * only parse those functions that it knows about.
+ * only parse those functions that it knows about. It is fine for variables to 
+ * be name the same as functions, and it is also okay for variables to have 
+ * names which could be interpreted as literal values. However, a program that
+ * contains a literal value with the same string representation as a known 
+ * variable, will be parsed as a variable so it is advisable to name variables
+ * carefully.
  */
 public class EpoxParser {
 
-	// This map is to contain only simple functions that require no additional
-	// info.
-	private final Map<String, Class<?>> simpleFunctions;
+	// The functions the parser knows about and their identifiers.
+	private final Map<String, Class<? extends Node>> functions;
 
-	// List of variables to be used, any variables found, not provided will be
-	// created.
-	private List<Variable> variables;
-
-	// An ant which we may need to use in some function creations - lazily
-	// created.
-	private Ant ant;
+	// Known variables, any variables that are not provided will be created.
+	private final Map<String, Variable> variables;
 
 	/*
 	 * These regexps come directly from JavaDoc for Double.valueOf(String) to
 	 * check the validity of a double without having to rely on catching number
 	 * format exceptions.
 	 */
-	private final String Digits = "(\\p{Digit}+)";
-	private final String HexDigits = "(\\p{XDigit}+)";
-	private final String Exp = "[eE][+-]?" + Digits;
-	private final String fpRegex = ("[\\x00-\\x20]*" + "[+-]?(" + "NaN|"
-			+ "Infinity|" + "((("
-			+ Digits
-			+ "(\\.)?("
-			+ Digits
-			+ "?)("
-			+ Exp
-			+ ")?)|"
-			+ "(\\.("
-			+ Digits
-			+ ")("
-			+ Exp
-			+ ")?)|"
-			+ "(("
-			+ "(0[xX]"
-			+ HexDigits
-			+ "(\\.)?)|"
-			+ "(0[xX]"
-			+ HexDigits
-			+ "?(\\.)"
-			+ HexDigits
-			+ ")"
-			+ ")[pP][+-]?" + Digits + "))" + "[fFdD]?))" + "[\\x00-\\x20]*");
+//	private final String Digits = "(\\p{Digit}+)";
+//	private final String HexDigits = "(\\p{XDigit}+)";
+//	private final String Exp = "[eE][+-]?" + Digits;
+//	private final String fpRegex = ("[\\x00-\\x20]*" + "[+-]?(" + "NaN|"
+//			+ "Infinity|" + "((("
+//			+ Digits
+//			+ "(\\.)?("
+//			+ Digits
+//			+ "?)("
+//			+ Exp
+//			+ ")?)|"
+//			+ "(\\.("
+//			+ Digits
+//			+ ")("
+//			+ Exp
+//			+ ")?)|"
+//			+ "(("
+//			+ "(0[xX]"
+//			+ HexDigits
+//			+ "(\\.)?)|"
+//			+ "(0[xX]"
+//			+ HexDigits
+//			+ "?(\\.)"
+//			+ HexDigits
+//			+ ")"
+//			+ ")[pP][+-]?" + Digits + "))" + "[fFdD]?))" + "[\\x00-\\x20]*");
 
 	public EpoxParser() {
-		variables = new ArrayList<Variable>();
-		simpleFunctions = new HashMap<String, Class<?>>();
-
+		variables = new HashMap<String, Variable>();
+		functions = new HashMap<String, Class<? extends Node>>();
+		
+		initialiseKnownFunctions();
+	}
+	
+	private void initialiseKnownFunctions() {
 		// Insert the Boolean functions.
-		simpleFunctions.put("AND", AndFunction.class);
-		simpleFunctions.put("IFF", IfAndOnlyIfFunction.class);
-		simpleFunctions.put("IF", IfFunction.class);
-		simpleFunctions.put("IMPLIES", ImpliesFunction.class);
-		simpleFunctions.put("NAND", NandFunction.class);
-		simpleFunctions.put("NOR", NorFunction.class);
-		simpleFunctions.put("NOT", NotFunction.class);
-		simpleFunctions.put("OR", OrFunction.class);
-		simpleFunctions.put("XOR", XorFunction.class);
+		functions.put("AND", AndFunction.class);
+		functions.put("IFF", IfAndOnlyIfFunction.class);
+		functions.put("IF", IfFunction.class);
+		functions.put("IMPLIES", ImpliesFunction.class);
+		functions.put("NAND", NandFunction.class);
+		functions.put("NOR", NorFunction.class);
+		functions.put("NOT", NotFunction.class);
+		functions.put("OR", OrFunction.class);
+		functions.put("XOR", XorFunction.class);
 
 		// Insert the Double functions.
-		simpleFunctions.put("ABS", AbsoluteFunction.class);
-		simpleFunctions.put("ADD", AddFunction.class);
-		simpleFunctions.put("ACOS", ArcCosineFunction.class);
-		simpleFunctions.put("ASIN", ArcSineFunction.class);
-		simpleFunctions.put("ATAN", ArcTangentFunction.class);
-		simpleFunctions.put("CVP", CoefficientPowerFunction.class);
-		simpleFunctions.put("COSEC", CosecantFunction.class);
-		simpleFunctions.put("COS", CosineFunction.class);
-		simpleFunctions.put("COT", CotangentFunction.class);
-		simpleFunctions.put("CUBE", CubeFunction.class);
-		simpleFunctions.put("CBRT", CubeRootFunction.class);
-		simpleFunctions.put("EXP", ExponentialFunction.class);
-		simpleFunctions.put("FACTORIAL", FactorialFunction.class);
-		simpleFunctions.put("GT", GreaterThanFunction.class);
-		simpleFunctions.put("COSH", HyperbolicCosineFunction.class);
-		simpleFunctions.put("SINH", HyperbolicSineFunction.class);
-		simpleFunctions.put("TANH", HyperbolicTangentFunction.class);
-		simpleFunctions.put("INV", InvertFunction.class);
-		simpleFunctions.put("LOG-10", Log10Function.class);
-		simpleFunctions.put("LN", LogFunction.class);
-		simpleFunctions.put("LT", LessThanFunction.class);
-		simpleFunctions.put("MAX", MaxFunction.class);
-		simpleFunctions.put("MIN", MinFunction.class);
-		simpleFunctions.put("MOD", ModuloFunction.class);
-		simpleFunctions.put("MUL", MultiplyFunction.class);
-		simpleFunctions.put("POW", PowerFunction.class);
-		simpleFunctions.put("PDIV", ProtectedDivisionFunction.class);
-		simpleFunctions.put("SEC", SecantFunction.class);
-		simpleFunctions.put("SGN", SignumFunction.class);
-		simpleFunctions.put("SIN", SineFunction.class);
-		simpleFunctions.put("SQUARE", SquareFunction.class);
-		simpleFunctions.put("SQRT", SquareRootFunction.class);
-		simpleFunctions.put("SUB", SubtractFunction.class);
-		simpleFunctions.put("TAN", TangentFunction.class);
-		simpleFunctions.put("IF-FOOD-AHEAD", IfFoodAheadFunction.class);
-		simpleFunctions.put("MOVE", AntMoveFunction.class);
-		simpleFunctions.put("TURN-LEFT", AntTurnLeftFunction.class);
-		simpleFunctions.put("TURN-RIGHT", AntTurnRightFunction.class);
-		simpleFunctions.put("SKIP", AntSkipFunction.class);
+		functions.put("ABS", AbsoluteFunction.class);
+		functions.put("ADD", AddFunction.class);
+		functions.put("ACOS", ArcCosineFunction.class);
+		functions.put("ASIN", ArcSineFunction.class);
+		functions.put("ATAN", ArcTangentFunction.class);
+		functions.put("CVP", CoefficientPowerFunction.class);
+		functions.put("COSEC", CosecantFunction.class);
+		functions.put("COS", CosineFunction.class);
+		functions.put("COT", CotangentFunction.class);
+		functions.put("CUBE", CubeFunction.class);
+		functions.put("CBRT", CubeRootFunction.class);
+		functions.put("EXP", ExponentialFunction.class);
+		functions.put("FACTORIAL", FactorialFunction.class);
+		functions.put("GT", GreaterThanFunction.class);
+		functions.put("COSH", HyperbolicCosineFunction.class);
+		functions.put("SINH", HyperbolicSineFunction.class);
+		functions.put("TANH", HyperbolicTangentFunction.class);
+		functions.put("INV", InvertFunction.class);
+		functions.put("LOG-10", Log10Function.class);
+		functions.put("LN", LogFunction.class);
+		functions.put("LT", LessThanFunction.class);
+		functions.put("MAX", MaxFunction.class);
+		functions.put("MIN", MinFunction.class);
+		functions.put("MOD", ModuloFunction.class);
+		functions.put("MUL", MultiplyFunction.class);
+		functions.put("POW", PowerFunction.class);
+		functions.put("PDIV", ProtectedDivisionFunction.class);
+		functions.put("SEC", SecantFunction.class);
+		functions.put("SGN", SignumFunction.class);
+		functions.put("SIN", SineFunction.class);
+		functions.put("SQUARE", SquareFunction.class);
+		functions.put("SQRT", SquareRootFunction.class);
+		functions.put("SUB", SubtractFunction.class);
+		functions.put("TAN", TangentFunction.class);
+		functions.put("IF-FOOD-AHEAD", IfFoodAheadFunction.class);
+		functions.put("MOVE", AntMoveFunction.class);
+		functions.put("TURN-LEFT", AntTurnLeftFunction.class);
+		functions.put("TURN-RIGHT", AntTurnRightFunction.class);
+		functions.put("SKIP", AntSkipFunction.class);
 
 		// Insert the Action functions.
-		simpleFunctions.put("SEQN", SeqNFunction.class);
+		functions.put("SEQ2", Seq2Function.class);
+		functions.put("SEQ3", Seq3Function.class);
 	}
 
 	public Node parse(final String source) throws MalformedProgramException {
@@ -202,7 +205,7 @@ public class EpoxParser {
 		Node node = null;
 
 		// Attempt to find the function in the list of simple functions.
-		final Class<?> functionClass = simpleFunctions.get(name);
+		final Class<?> functionClass = functions.get(name);
 
 		if (functionClass != null) {
 			// Instantiate the function node.
@@ -234,63 +237,78 @@ public class EpoxParser {
 	 * @return
 	 */
 	private Node parseTerminal(final String terminalStr) {
-		Node node = parseVariable(terminalStr);
+		Node node = variables.get(terminalStr);
 		
 		if (node == null) {
 			node = parseLiteral(terminalStr);
 		}
 		
-		
-		if (node == null && Pattern.matches(fpRegex, terminalStr)) {
-			node = new DoubleLiteral(Double.valueOf(terminalStr));
-		}
-		
 		return node;
 	}
 	
-	private BooleanLiteral parseBooleanLiteral(final String literalStr) {
+	/**
+	 * Should return null if the string cannot be parsed as any type of valid 
+	 * literal.
+	 * @param literalStr
+	 * @return
+	 */
+	protected Literal parseLiteral(final String literalStr) {
+		Literal literal = null;
 		if (literalStr.equalsIgnoreCase("true") || literalStr.equalsIgnoreCase("false")) {
-			return new BooleanLiteral(Boolean.valueOf(literalStr));
+			literal = new Literal(Boolean.valueOf(literalStr));
+		} else if (literalStr.startsWith("\"") && literalStr.endsWith("\"") && literalStr.length() > 1) {
+			literal = new Literal(literalStr.substring(1, literalStr.length()-2));
+		} else if (literalStr.length() == 3 && literalStr.startsWith("'") && literalStr.endsWith("'")) {
+			//TODO This isn't going to catch escaped characters because they will have been converted to e.g. \\x
+			literal = new Literal(literalStr.charAt(1));
 		} else {
-			return null;
-		}
-	}
-	
-	private Node parseVariable(final String variableStr) {
-		Node variable = null;
-		for (final Node v: variables) {
-			if (v.getIdentifier().equals(variableStr)) {
-				variable = v;
-				break;
+			Number n = NumberFormat.getInstance().parse(literalStr, new ParsePosition(0));
+			
+			// If possible, then use int instead of long.
+			if (n instanceof Long) {
+				long l = (Long) n;
+				if (l <= Integer.MAX_VALUE && l >= Integer.MIN_VALUE) {
+					literal = new Literal((int) l);
+				}
+			}
+			
+			if (literal == null && n != null) {
+				literal = new Literal(n);
 			}
 		}
-		return variable;
+		
+		if (literal == null) {
+			literal = parseObjectLiteral(literalStr);
+		}
+		
+		return literal;
+	}
+
+	/**
+	 * Can be overridden to provide support for other literal types.
+	 * @param literalStr
+	 * @return
+	 */
+	protected Literal parseObjectLiteral(final String literalStr) {
+		return null;
 	}
 
 	public void addFunction(final String name, final Class<? extends Node> functionClass) {
-		simpleFunctions.put(name, functionClass);
+		functions.put(name, functionClass);
 	}
 
-	public void setAvailableVariables(final List<Variable> variables) {
-		this.variables = variables;
+	public void addAvailableVariables(final List<Variable> variables) {
+		for (Variable v: variables) {
+			addAvailableVariable(v);
+		}
 	}
 
 	public void addAvailableVariable(final Variable variable) {
-		variables.add(variable);
+		variables.put(variable.getIdentifier(), variable);
 	}
 
 	public void clearAvailableVariables() {
 		variables.clear();
-	}
-
-	/**
-	 * Before parsing an Ant program, the parser needs to have access to an ant
-	 * object.
-	 * 
-	 * @param ant
-	 */
-	public void setAnt(final Ant ant) {
-		this.ant = ant;
 	}
 
 	private List<String> splitArguments(String argStr) {
@@ -327,19 +345,18 @@ public class EpoxParser {
 		return args;
 	}
 
-	/*
-	 * public static void main(String[] args) {
-	 * EpoxParser parser = new EpoxParser();
-	 * 
-	 * //System.out.println(parser.parse("IF(ADD(1,false),NOT(true),false)").
-	 * toString());
-	 * //Node programTree = parser.parse("XOR(D1 XOR(NOT(XOR(D0 D3)) D2))");
-	 * 
-	 * parser.addAvailableVariable(new BooleanVariable("d0", false));
-	 * 
-	 * Node programTree = parser.parse("XOR(OR(d0,d0),NOT(d0))");
-	 * System.out.println(programTree.toString());
-	 * System.out.println(programTree.evaluate());
-	 * }
-	 */
+	
+//	public static void main(String[] args) throws MalformedProgramException {
+//	 	EpoxParser parser = new EpoxParser();
+//
+//	 	//System.out.println(parser.parse("IF(ADD(1,false),NOT(true),false)").toString());
+//	 	//Node programTree = parser.parse("XOR(D1 XOR(NOT(XOR(D0 D3)) D2))");
+//
+//	 	parser.addAvailableVariable(new Variable("d0", false));
+//
+//	 	Node programTree = parser.parse("XOR(OR(d0,d0),NOT(NOT(d0)))");
+//	 	System.out.println(programTree.toString());
+//	 	System.out.println(programTree.evaluate());
+//	 }
+	 
 }

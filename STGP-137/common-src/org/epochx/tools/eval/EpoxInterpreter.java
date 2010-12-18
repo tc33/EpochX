@@ -75,15 +75,7 @@ public class EpoxInterpreter implements Interpreter {
 		parser.clearAvailableVariables();
 
 		for (int i = 0; i < argNames.length; i++) {
-			if (argValues[i] instanceof Boolean) {
-				parser.addAvailableVariable(new BooleanVariable(argNames[i],
-						(Boolean) argValues[i]));
-			} else if (argValues[i] instanceof Double) {
-				parser.addAvailableVariable(new DoubleVariable(argNames[i],
-						(Double) argValues[i]));
-			} else {
-				throw new MalformedProgramException("Unknown variable type");
-			}
+			parser.addAvailableVariable(new Variable(argNames[i], argValues[i]));
 		}
 
 		final Node programTree = parser.parse(source);

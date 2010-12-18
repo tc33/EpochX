@@ -24,7 +24,7 @@ package org.epochx.gp.model;
 import java.util.*;
 
 import org.epochx.epox.*;
-import org.epochx.epox.dbl.*;
+import org.epochx.epox.math.*;
 import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.representation.CandidateProgram;
 

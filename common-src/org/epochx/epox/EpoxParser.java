@@ -26,7 +26,8 @@ import java.util.*;
 
 import org.epochx.epox.ant.*;
 import org.epochx.epox.bool.*;
-import org.epochx.epox.dbl.*;
+import org.epochx.epox.lang.*;
+import org.epochx.epox.math.*;
 import org.epochx.tools.eval.MalformedProgramException;
 
 /**

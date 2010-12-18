@@ -27,6 +27,7 @@ import java.util.List;
 
 import org.epochx.epox.*;
 import org.epochx.epox.ant.*;
+import org.epochx.epox.lang.SeqNFunction;
 import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.ant.*;

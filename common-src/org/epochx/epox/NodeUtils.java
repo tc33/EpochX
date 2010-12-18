@@ -318,6 +318,36 @@ public final class NodeUtils {
 		return true;
 	}
 	
+	/**
+	 * Returns whichever class is the super class of the other, or null if 
+	 * neither are a super class of the other.
+	 * @return
+	 */
+	public static Class<?> getSuper(Class<?> cls1, Class<?> cls2) {
+		if (cls1.isAssignableFrom(cls2)) {
+			return cls1;
+		} else if (cls2.isAssignableFrom(cls1)) {
+			return cls2;
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Returns whichever class is the sub class of the other, or null if 
+	 * neither are a sub class of the other.
+	 * @return
+	 */
+	public static Class<?> getSub(Class<?> cls1, Class<?> cls2) {
+		if (cls1.isAssignableFrom(cls2)) {
+			return cls2;
+		} else if (cls2.isAssignableFrom(cls1)) {
+			return cls1;
+		} else {
+			return null;
+		}
+	}
+	
 	public static boolean allEquals(Object[] inputs, Object o) {
 		for (Object in: inputs) {
 			if (!o.equals(in)) {

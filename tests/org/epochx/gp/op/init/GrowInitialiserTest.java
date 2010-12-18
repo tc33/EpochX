@@ -27,7 +27,7 @@ import junit.framework.TestCase;
 
 import org.epochx.epox.*;
 import org.epochx.epox.bool.NotFunction;
-import org.epochx.epox.dbl.*;
+import org.epochx.epox.math.*;
 import org.epochx.gp.op.crossover.SubtreeCrossover;
 import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.stats.*;

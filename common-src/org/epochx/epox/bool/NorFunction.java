@@ -21,13 +21,13 @@
  */
 package org.epochx.epox.bool;
 
-import org.epochx.epox.BooleanNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs the logical operation of NOR
  * that is equivalent to the negation of logical OR or NOT OR.
  */
-public class NorFunction extends BooleanNode {
+public class NorFunction extends Node {
 
 	/**
 	 * Construct a NorFunction with no children.
@@ -44,7 +44,7 @@ public class NorFunction extends BooleanNode {
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
 	 */
-	public NorFunction(final BooleanNode child1, final BooleanNode child2) {
+	public NorFunction(final Node child1, final Node child2) {
 		super(child1, child2);
 	}
 
@@ -76,5 +76,17 @@ public class NorFunction extends BooleanNode {
 	@Override
 	public String getIdentifier() {
 		return "NOR";
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (NodeUtils.allEquals(inputTypes, Boolean.class)) {
+			return Boolean.class;
+		} else {
+			return null;
+		}
 	}
 }

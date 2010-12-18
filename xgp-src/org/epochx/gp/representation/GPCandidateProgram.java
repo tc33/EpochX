@@ -290,6 +290,16 @@ public class GPCandidateProgram extends CandidateProgram {
 	 * return flatTree.length;
 	 * }
 	 */
+	
+	/**
+	 * Returns the type of output this program will produce.
+	 * 
+	 * @return a Class which represents the type of object this program will 
+	 * output.
+	 */
+	public Class<?> getReturnType() {
+		return getRootNode().getReturnType();
+	}
 
 	/**
 	 * Creates and returns a copy of this program. The clone includes a deep

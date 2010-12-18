@@ -21,14 +21,14 @@
  */
 package org.epochx.epox.dbl;
 
-import org.epochx.epox.DoubleNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs the natural (base e) logarithm.
  * 
  * @see Log10Function
  */
-public class LogFunction extends DoubleNode {
+public class LogFunction extends Node {
 
 	/**
 	 * Construct a LogFunction with no children.
@@ -43,7 +43,7 @@ public class LogFunction extends DoubleNode {
 	 * 
 	 * @param child The child of which the base e logarithm will be calculated.
 	 */
-	public LogFunction(final DoubleNode child) {
+	public LogFunction(final Node child) {
 		super(child);
 	}
 
@@ -53,7 +53,7 @@ public class LogFunction extends DoubleNode {
 	 */
 	@Override
 	public Double evaluate() {
-		final double c = ((Double) getChild(0).evaluate()).doubleValue();
+		double c = NodeUtils.asDouble(getChild(0).evaluate());
 
 		return Math.log(c);
 	}
@@ -66,5 +66,14 @@ public class LogFunction extends DoubleNode {
 	@Override
 	public String getIdentifier() {
 		return "LN";
+	}
+	
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (inputTypes.length == 2 && NodeUtils.isAllNumericalClass(inputTypes)) {
+			return Double.class;
+		}
+		
+		return null;
 	}
 }

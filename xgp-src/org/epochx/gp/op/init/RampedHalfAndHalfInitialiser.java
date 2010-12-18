@@ -91,6 +91,9 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GPModel> implem
 	// Nodes the programs will be constructed from.
 	private List<Node> syntax;
 	
+	// Each generated program's return type.
+	private Class<?> returnType;
+	
 	// The size of the populations to construct.
 	private int popSize;
 
@@ -106,7 +109,7 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GPModel> implem
 	 * parameters given.
 	 */
 	public RampedHalfAndHalfInitialiser(final RandomNumberGenerator rng,
-			final List<Node> syntax, final int popSize,
+			final List<Node> syntax, final Class<?> returnType, final int popSize,
 			final int startMaxDepth, final int endMaxDepth,
 			final boolean acceptDuplicates) {
 		this(null, startMaxDepth, acceptDuplicates);
@@ -115,12 +118,15 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GPModel> implem
 		this.startMaxDepth = startMaxDepth;
 		this.popSize = popSize;
 		this.syntax = syntax;
+		this.returnType = returnType;
 
 		// Set up the grow and full parts.
 		grow.setRNG(rng);
 		grow.setSyntax(syntax);
+		grow.setReturnType(returnType);
 		full.setRNG(rng);
 		full.setSyntax(syntax);
+		full.setReturnType(returnType);
 	}
 
 	/**
@@ -362,6 +368,33 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GPModel> implem
 	 */
 	public void setSyntax(final List<Node> syntax) {
 		this.syntax = syntax;
+		
+		grow.setSyntax(syntax);
+		full.setSyntax(syntax);
+	}
+	
+	/**
+	 * Returns a <code>List</code> of the <code>Nodes</code> that form the
+	 * syntax of new program generated with this initialiser, or
+	 * an empty list if none have been set.
+	 * 
+	 * @return the types of <code>Node</code> that should be used in
+	 *         constructing new programs.
+	 */
+	public Class<?> getReturnType() {
+		return returnType;
+	}
+
+	/**
+	 * Sets the <code>Nodes</code> that should be used to construct new
+	 * programs. If a model has been set then this parameter will be overwritten
+	 * with the syntax from that model on the next configure event.
+	 * 
+	 * @param syntax a <code>List</code> of the types of <code>Node</code> that
+	 *        should be used in constructing new programs.
+	 */
+	public void setReturnType(final Class<?> returnType) {
+		this.returnType = returnType;
 		
 		grow.setSyntax(syntax);
 		full.setSyntax(syntax);

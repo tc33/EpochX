@@ -37,8 +37,8 @@ public class IfAndOnlyIfFunctionTest extends AbstractBooleanNodeTestCase {
 
 	public void testEvaluateTT() {
 		final IfAndOnlyIfFunction node = (IfAndOnlyIfFunction) getNode();
-		final Node[] children = new Node[]{new BooleanLiteral(true),
-				new BooleanLiteral(true)};
+		final Node[] children = new Node[]{new Literal(true),
+				new Literal(true)};
 		node.setChildren(children);
 		final boolean result = node.evaluate();
 
@@ -47,8 +47,8 @@ public class IfAndOnlyIfFunctionTest extends AbstractBooleanNodeTestCase {
 
 	public void testEvaluateTF() {
 		final IfAndOnlyIfFunction node = (IfAndOnlyIfFunction) getNode();
-		final Node[] children = new Node[]{new BooleanLiteral(true),
-				new BooleanLiteral(false)};
+		final Node[] children = new Node[]{new Literal(true),
+				new Literal(false)};
 		node.setChildren(children);
 		final boolean result = node.evaluate();
 
@@ -57,8 +57,8 @@ public class IfAndOnlyIfFunctionTest extends AbstractBooleanNodeTestCase {
 
 	public void testEvaluateFT() {
 		final IfAndOnlyIfFunction node = (IfAndOnlyIfFunction) getNode();
-		final Node[] children = new Node[]{new BooleanLiteral(false),
-				new BooleanLiteral(true)};
+		final Node[] children = new Node[]{new Literal(false),
+				new Literal(true)};
 		node.setChildren(children);
 		final boolean result = node.evaluate();
 
@@ -67,8 +67,8 @@ public class IfAndOnlyIfFunctionTest extends AbstractBooleanNodeTestCase {
 
 	public void testEvaluateFF() {
 		final IfAndOnlyIfFunction node = (IfAndOnlyIfFunction) getNode();
-		final Node[] children = new Node[]{new BooleanLiteral(false),
-				new BooleanLiteral(false)};
+		final Node[] children = new Node[]{new Literal(false),
+				new Literal(false)};
 		node.setChildren(children);
 		final boolean result = node.evaluate();
 

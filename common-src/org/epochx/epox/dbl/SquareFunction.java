@@ -21,7 +21,7 @@
  */
 package org.epochx.epox.dbl;
 
-import org.epochx.epox.DoubleNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs the arithmetic function of
@@ -29,7 +29,7 @@ import org.epochx.epox.DoubleNode;
  * that is - raising to the second power. It is equivalent to the
  * <code>PowerFunction</code> where the second child is the double literal 2.0.
  */
-public class SquareFunction extends DoubleNode {
+public class SquareFunction extends Node {
 
 	/**
 	 * Construct a SquareFunction with no children.
@@ -44,7 +44,7 @@ public class SquareFunction extends DoubleNode {
 	 * 
 	 * @param child The child which will be squared.
 	 */
-	public SquareFunction(final DoubleNode child) {
+	public SquareFunction(final Node child) {
 		super(child);
 	}
 
@@ -53,10 +53,20 @@ public class SquareFunction extends DoubleNode {
 	 * then raising the result to the power of 2.
 	 */
 	@Override
-	public Double evaluate() {
-		final double c = ((Double) getChild(0).evaluate()).doubleValue();
+	public Object evaluate() {
+		Object c = getChild(0).evaluate();
+		
+		double result = Math.pow(NodeUtils.asDouble(c), 2);
 
-		return Math.pow(c, 2);
+		if (c instanceof Long) {
+			return (long) result;
+		} else if (c instanceof Integer) {
+			return (int) result;
+		} else if (c instanceof Double) {
+			return result;
+		} else {
+			return null;
+		}
 	}
 
 	/**
@@ -67,5 +77,14 @@ public class SquareFunction extends DoubleNode {
 	@Override
 	public String getIdentifier() {
 		return "SQUARE";
+	}
+	
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (inputTypes.length == 1 && NodeUtils.isNumericalClass(inputTypes[0])) {
+			return inputTypes[0];
+		} else {
+			return null;
+		}
 	}
 }

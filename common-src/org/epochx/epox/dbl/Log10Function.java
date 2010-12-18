@@ -21,14 +21,14 @@
  */
 package org.epochx.epox.dbl;
 
-import org.epochx.epox.DoubleNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs the common (base 10) logarithm.
  * 
  * @see LogFunction
  */
-public class Log10Function extends DoubleNode {
+public class Log10Function extends Node {
 
 	/**
 	 * Construct a Log10Function with no children.
@@ -43,7 +43,7 @@ public class Log10Function extends DoubleNode {
 	 * 
 	 * @param child The child of which the base 10 logarithm will be calculated.
 	 */
-	public Log10Function(final DoubleNode child) {
+	public Log10Function(final Node child) {
 		super(child);
 	}
 
@@ -53,7 +53,7 @@ public class Log10Function extends DoubleNode {
 	 */
 	@Override
 	public Double evaluate() {
-		final double c = ((Double) getChild(0).evaluate()).doubleValue();
+		double c = NodeUtils.asDouble(getChild(0).evaluate());
 
 		return Math.log10(c);
 	}
@@ -66,5 +66,14 @@ public class Log10Function extends DoubleNode {
 	@Override
 	public String getIdentifier() {
 		return "LOG-10";
+	}
+	
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (inputTypes.length == 2 && NodeUtils.isAllNumericalClass(inputTypes)) {
+			return Double.class;
+		}
+		
+		return null;
 	}
 }

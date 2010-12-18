@@ -310,4 +310,9 @@ public class GPModelDummy extends GPModel {
 		this.syntax = syntax;
 	}
 
+	@Override
+	public Class<?> getReturnType() {
+		return Void.class;
+	}
+
 }

@@ -26,7 +26,7 @@ import java.util.*;
 import junit.framework.TestCase;
 
 import org.epochx.epox.*;
-import org.epochx.epox.bool.NotFunction;
+import org.epochx.epox.bool.*;
 import org.epochx.tools.random.MersenneTwisterFast;
 
 
@@ -39,15 +39,16 @@ public class FullInitialiserTest extends TestCase {
 	
 	@Override
 	protected void setUp() throws Exception {
-		initialiser = new FullInitialiser(null, null, -1, -1, false);
+		initialiser = new FullInitialiser(null, null, null, -1, -1, false);
 		
 		// Ensure setup is valid.
 		initialiser.setDepth(0);
 		initialiser.setRNG(new MersenneTwisterFast());
 		List<Node> syntax = new ArrayList<Node>();
-		syntax.add(new BooleanLiteral(true));
+		syntax.add(new Literal(true));
 		syntax.add(new NotFunction());
 		initialiser.setSyntax(syntax);
+		initialiser.setReturnType(Boolean.class);
 		initialiser.setPopSize(1);
 	}
 	
@@ -70,7 +71,7 @@ public class FullInitialiserTest extends TestCase {
 	 */
 	public void testGetPopNoFunctions() {
 		List<Node> syntax = new ArrayList<Node>();
-		syntax.add(new BooleanLiteral(true));
+		syntax.add(new Literal(true));
 		initialiser.setSyntax(syntax);
 		initialiser.setDepth(1);
 		
@@ -158,7 +159,7 @@ public class FullInitialiserTest extends TestCase {
 	 */
 	public void testGetProgramNoFunctions() {
 		List<Node> syntax = new ArrayList<Node>();
-		syntax.add(new BooleanLiteral(true));
+		syntax.add(new Literal(true));
 		initialiser.setSyntax(syntax);
 		initialiser.setDepth(1);
 		

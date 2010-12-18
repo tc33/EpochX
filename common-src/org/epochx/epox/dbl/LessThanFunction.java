@@ -21,7 +21,7 @@
  */
 package org.epochx.epox.dbl;
 
-import org.epochx.epox.DoubleNode;
+import org.epochx.epox.*;
 
 /**
  * The less than function is a numerically valued logical function. It
@@ -30,7 +30,7 @@ import org.epochx.epox.DoubleNode;
  * argument or not, respectively. However, to satisfy the closure principle
  * this implementation returns +1 for true or -1 for false.
  */
-public class LessThanFunction extends DoubleNode {
+public class LessThanFunction extends Node {
 
 	/**
 	 * Construct a LessThanFunction with no children.
@@ -50,7 +50,7 @@ public class LessThanFunction extends DoubleNode {
 	 * @param child2 The second child which the first child is being tested
 	 *        against.
 	 */
-	public LessThanFunction(final DoubleNode child1, final DoubleNode child2) {
+	public LessThanFunction(final Node child1, final Node child2) {
 		super(child1, child2);
 	}
 
@@ -61,11 +61,14 @@ public class LessThanFunction extends DoubleNode {
 	 * method will return +1.0 else it will return -1.0.
 	 */
 	@Override
-	public Double evaluate() {
-		final double value1 = (Double) getChild(0).evaluate();
-		final double value2 = (Double) getChild(1).evaluate();
+	public Boolean evaluate() {
+		Object c1 = getChild(0).evaluate();
+		Object c2 = getChild(1).evaluate();
+		
+		double value1 = NodeUtils.asDouble(c1);
+		double value2 = NodeUtils.asDouble(c2);
 
-		return (value1 > value2) ? +1.0 : -1.0;
+		return (value1 < value2);
 	}
 
 	/**
@@ -78,4 +81,12 @@ public class LessThanFunction extends DoubleNode {
 		return "LT";
 	}
 
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (inputTypes.length == 2 && NodeUtils.isAllNumericalClass(inputTypes)) {
+			return Boolean.class;
+		}
+		
+		return null;
+	}
 }

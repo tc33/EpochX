@@ -21,7 +21,7 @@
  */
 package org.epochx.epox.dbl;
 
-import org.epochx.epox.DoubleNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs the arithmetic function of
@@ -29,9 +29,9 @@ import org.epochx.epox.DoubleNode;
  * by zero is attempted - which is undefined. Division by zero evaluates to
  * zero.
  */
-public class ProtectedDivisionFunction extends DoubleNode {
+public class ProtectedDivisionFunction extends Node {
 
-	private final Double protectionValue;
+	private final double protectionValue;
 
 	/**
 	 * Construct a ProtectedDivisionFunction with no children. A default
@@ -50,7 +50,7 @@ public class ProtectedDivisionFunction extends DoubleNode {
 	 * @param protectionValue a double value to return in the case of
 	 *        divide-by-zeros.
 	 */
-	public ProtectedDivisionFunction(final Double protectionValue) {
+	public ProtectedDivisionFunction(final double protectionValue) {
 		this(null, null, protectionValue);
 	}
 
@@ -63,8 +63,7 @@ public class ProtectedDivisionFunction extends DoubleNode {
 	 * @param dividend The first child node - the dividend.
 	 * @param divisor The second child node - the divisor.
 	 */
-	public ProtectedDivisionFunction(final DoubleNode dividend,
-			final DoubleNode divisor) {
+	public ProtectedDivisionFunction(final Node dividend, final Node divisor) {
 		this(dividend, divisor, 0.0);
 	}
 
@@ -80,8 +79,8 @@ public class ProtectedDivisionFunction extends DoubleNode {
 	 * @param protectionValue a double value to return in the case of
 	 *        divide-by-zeros.
 	 */
-	public ProtectedDivisionFunction(final DoubleNode dividend,
-			final DoubleNode divisor, final Double protectionValue) {
+	public ProtectedDivisionFunction(final Node dividend,
+			final Node divisor, final double protectionValue) {
 		super(dividend, divisor);
 
 		this.protectionValue = protectionValue;
@@ -97,12 +96,12 @@ public class ProtectedDivisionFunction extends DoubleNode {
 	 */
 	@Override
 	public Double evaluate() {
-		final double c2 = ((Double) getChild(1).evaluate()).doubleValue();
+		final double c2 = NodeUtils.asDouble(getChild(1).evaluate());
 
 		if (c2 == 0) {
 			return protectionValue;
 		} else {
-			final double c1 = ((Double) getChild(0).evaluate()).doubleValue();
+			final double c1 = NodeUtils.asDouble(getChild(0).evaluate());
 
 			return c1 / c2;
 		}

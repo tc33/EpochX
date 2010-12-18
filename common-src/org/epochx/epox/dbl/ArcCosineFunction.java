@@ -21,14 +21,14 @@
  */
 package org.epochx.epox.dbl;
 
-import org.epochx.epox.DoubleNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs the inverse trigonometric function
  * of
  * arccosine.
  */
-public class ArcCosineFunction extends DoubleNode {
+public class ArcCosineFunction extends Node {
 
 	/**
 	 * Construct an ArcCosineFunction with no children.
@@ -43,7 +43,7 @@ public class ArcCosineFunction extends DoubleNode {
 	 * 
 	 * @param child The child which arccosine will be performed on.
 	 */
-	public ArcCosineFunction(final DoubleNode child) {
+	public ArcCosineFunction(final Node child) {
 		super(child);
 	}
 
@@ -53,9 +53,9 @@ public class ArcCosineFunction extends DoubleNode {
 	 */
 	@Override
 	public Double evaluate() {
-		final double c = ((Double) getChild(0).evaluate()).doubleValue();
-
-		return Math.acos(c);
+		Object c = getChild(0).evaluate();
+		
+		return Math.acos(NodeUtils.asDouble(c));
 	}
 
 	/**
@@ -66,5 +66,14 @@ public class ArcCosineFunction extends DoubleNode {
 	@Override
 	public String getIdentifier() {
 		return "ACOS";
+	}
+	
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (inputTypes.length == 1 && NodeUtils.isNumericalClass(inputTypes[0])) {
+			return Double.class;
+		} else {
+			return null;
+		}
 	}
 }

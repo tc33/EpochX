@@ -87,8 +87,8 @@ public class CrossoverManagerTest extends TestCase {
 		final StringBuilder verify = new StringBuilder();
 
 		final List<CandidateProgram> pop = new ArrayList<CandidateProgram>();
-		pop.add(new GPCandidateProgram(new BooleanLiteral(false), model));
-		pop.add(new GPCandidateProgram(new BooleanLiteral(false), model));
+		pop.add(new GPCandidateProgram(new Literal(false), model));
+		pop.add(new GPCandidateProgram(new Literal(false), model));
 		model.getProgramSelector().setSelectionPool(pop);
 
 		// Listen for the crossver.
@@ -131,8 +131,8 @@ public class CrossoverManagerTest extends TestCase {
 		final StringBuilder verify = new StringBuilder();
 
 		final List<CandidateProgram> pop = new ArrayList<CandidateProgram>();
-		pop.add(new GPCandidateProgram(new BooleanLiteral(false), model));
-		pop.add(new GPCandidateProgram(new BooleanLiteral(false), model));
+		pop.add(new GPCandidateProgram(new Literal(false), model));
+		pop.add(new GPCandidateProgram(new Literal(false), model));
 		model.getProgramSelector().setSelectionPool(pop);
 
 		count = 0;

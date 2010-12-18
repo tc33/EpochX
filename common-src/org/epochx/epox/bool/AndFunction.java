@@ -21,13 +21,13 @@
  */
 package org.epochx.epox.bool;
 
-import org.epochx.epox.BooleanNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs logical conjunction or the
  * boolean function of AND.
  */
-public class AndFunction extends BooleanNode {
+public class AndFunction extends Node {
 
 	/**
 	 * Construct an AndFunction with no children.
@@ -44,7 +44,7 @@ public class AndFunction extends BooleanNode {
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
 	 */
-	public AndFunction(final BooleanNode child1, final BooleanNode child2) {
+	public AndFunction(final Node child1, final Node child2) {
 		super(child1, child2);
 	}
 
@@ -76,5 +76,17 @@ public class AndFunction extends BooleanNode {
 	@Override
 	public String getIdentifier() {
 		return "AND";
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (NodeUtils.allEquals(inputTypes, Boolean.class)) {
+			return Boolean.class;
+		} else {
+			return null;
+		}
 	}
 }

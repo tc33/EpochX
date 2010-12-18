@@ -114,7 +114,7 @@ public class SubtreeMutation extends ConfigOperator<GPModel> implements GPMutati
 		this.maxSubtreeDepth = maxSubtreeDepth;
 
 		// Don't let this configure itself because it will use the wrong depth.
-		grower = new GrowInitialiser(null, null, -1, maxSubtreeDepth, false);
+		grower = new GrowInitialiser(null, null, null, -1, maxSubtreeDepth, false);
 	}
 
 	/*
@@ -150,6 +150,10 @@ public class SubtreeMutation extends ConfigOperator<GPModel> implements GPMutati
 
 		// Add mutation point into the stats manager.
 		Stats.get().addData(MUT_POINT, mutationPoint);
+		
+		// Update grower to use the right data-type.
+		final Node originalSubtree = program.getNthNode(mutationPoint);
+		grower.setReturnType(originalSubtree.getReturnType());
 		
 		// Grow a new subtree using the GrowInitialiser.
 		final Node subtree = grower.getGrownNodeTree(maxSubtreeDepth);

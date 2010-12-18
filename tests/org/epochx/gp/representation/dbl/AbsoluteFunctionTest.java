@@ -37,24 +37,24 @@ public class AbsoluteFunctionTest extends AbstractDoubleNodeTestCase {
 
 	public void testEvaluateZero() {
 		final AbsoluteFunction node = (AbsoluteFunction) getNode();
-		node.setChild(0, new DoubleLiteral(0.0));
-		final double result = node.evaluate();
+		node.setChild(0, new Literal(0.0));
+		final double result = (Double) node.evaluate();
 
 		assertEquals("ABS of 0.0 is not 0.0", 0.0, result);
 	}
 
 	public void testEvaluateMinusOne() {
 		final AbsoluteFunction node = (AbsoluteFunction) getNode();
-		node.setChild(0, new DoubleLiteral(-1.0));
-		final double result = node.evaluate();
+		node.setChild(0, new Literal(-1.0));
+		final double result = (Double) node.evaluate();
 
 		assertEquals("ABS of -1.0 is not 1.0", 1.0, result);
 	}
 
 	public void testEvaluatePlusOne() {
 		final AbsoluteFunction node = (AbsoluteFunction) getNode();
-		node.setChild(0, new DoubleLiteral(1.0));
-		final double result = node.evaluate();
+		node.setChild(0, new Literal(1.0));
+		final double result = (Double) node.evaluate();
 
 		assertEquals("ABS of 1.0 is not 1.0", 1.0, result);
 	}

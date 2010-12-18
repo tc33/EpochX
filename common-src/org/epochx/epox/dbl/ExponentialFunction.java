@@ -21,14 +21,14 @@
  */
 package org.epochx.epox.dbl;
 
-import org.epochx.epox.DoubleNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs the mathematical exponential 
  * function <code>e^x</code> where <code>e</code> is the constant known as 
  * Euler's number.
  */
-public class ExponentialFunction extends DoubleNode {
+public class ExponentialFunction extends Node {
 
 	/**
 	 * Construct a ExponentialFunction with no children.
@@ -44,7 +44,7 @@ public class ExponentialFunction extends DoubleNode {
 	 * 
 	 * @param base The child node - the exponent.
 	 */
-	public ExponentialFunction(final DoubleNode exponent) {
+	public ExponentialFunction(final Node exponent) {
 		super(exponent);
 	}
 
@@ -54,9 +54,9 @@ public class ExponentialFunction extends DoubleNode {
 	 */
 	@Override
 	public Double evaluate() {
-		final double c = ((Double) getChild(0).evaluate()).doubleValue();
-
-		return Math.exp(c);
+		Object c = getChild(0).evaluate();
+		
+		return Math.exp(NodeUtils.asDouble(c));
 	}
 
 	/**
@@ -67,5 +67,14 @@ public class ExponentialFunction extends DoubleNode {
 	@Override
 	public String getIdentifier() {
 		return "EXP";
+	}
+	
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (inputTypes.length == 1 && NodeUtils.isNumericalClass(inputTypes[0])) {
+			return Double.class;
+		} else {
+			return null;
+		}
 	}
 }

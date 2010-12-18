@@ -90,9 +90,9 @@ public class MutationManagerTest extends TestCase {
 		final StringBuilder verify = new StringBuilder();
 
 		final List<CandidateProgram> pop = new ArrayList<CandidateProgram>();
-		pop.add(new GPCandidateProgram(new BooleanLiteral(false), model));
+		pop.add(new GPCandidateProgram(new Literal(false), model));
 		model.getProgramSelector().setSelectionPool(pop);
-		model.getSyntax().add(new BooleanLiteral(false));
+		model.getSyntax().add(new Literal(false));
 
 		// Listen for the crossver.
 		Life.get().addMutationListener(new MutationListener() {
@@ -132,10 +132,10 @@ public class MutationManagerTest extends TestCase {
 		final StringBuilder verify = new StringBuilder();
 
 		final List<CandidateProgram> pop = new ArrayList<CandidateProgram>();
-		pop.add(new GPCandidateProgram(new BooleanLiteral(false), model));
-		pop.add(new GPCandidateProgram(new BooleanLiteral(false), model));
+		pop.add(new GPCandidateProgram(new Literal(false), model));
+		pop.add(new GPCandidateProgram(new Literal(false), model));
 		model.getProgramSelector().setSelectionPool(pop);
-		model.getSyntax().add(new BooleanLiteral(false));
+		model.getSyntax().add(new Literal(false));
 
 		count = 0;
 

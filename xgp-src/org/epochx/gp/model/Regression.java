@@ -41,7 +41,7 @@ public abstract class Regression extends GPModel {
 	private final double[] outputs;
 
 	// Variables.
-	private final DoubleVariable x;
+	private final Variable x;
 
 	/**
 	 * Constructs an instance of the abstract Regression model with 50 input
@@ -56,7 +56,7 @@ public abstract class Regression extends GPModel {
 	 */
 	public Regression(final int noPoints) {
 		// Create variables.
-		x = new DoubleVariable("X");
+		x = new Variable("X", Double.class);
 
 		// Define function set.
 		final List<Node> syntax = new ArrayList<Node>();
@@ -146,5 +146,10 @@ public abstract class Regression extends GPModel {
 	 * The actual function we are trying to evolve.
 	 */
 	public abstract double getCorrectResult(final double x);
+	
+	@Override
+	public Class<?> getReturnType() {
+		return Double.class;
+	}
 
 }

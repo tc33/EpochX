@@ -25,7 +25,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-import org.epochx.epox.EpoxParser;
+import org.epochx.epox.*;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.representation.CandidateProgram;
@@ -44,12 +44,14 @@ public abstract class AntTrail extends GEModel {
 	/**
 	 * The grammar that defines valid solution space.
 	 */
-	public static final String GRAMMAR_STRING = "<prog> ::= <node>\n"
-			+ "<node> ::= <function> | <terminal>\n"
-			+ "<function> ::= IF-FOOD-AHEAD( <node> , <node> ) "
-			+ "| SEQ2( <node> , <node> ) "
-			+ "| SEQ3( <node> , <node> , <node> )\n"
-			+ "<terminal> ::= MOVE() | TURN-LEFT() | TURN-RIGHT()\n";
+	public static final String GRAMMAR_STRING = 
+			"<function> ::= IF-FOOD-AHEAD( <var> , <function> , <function> ) "
+			+ "| SEQ2( <function> , <function> ) "
+			+ "| SEQ3( <function> , <function> , <function> ) "
+			+ "| MOVE( <var> ) " 
+			+ "| TURN-LEFT( <var> ) "
+			+ "| TURN-RIGHT( <var> )\n"
+			+ "<var> ::= ANT";
 
 	// Epox interpreter for performing evaluation.
 	private final EpoxParser parser;
@@ -78,7 +80,7 @@ public abstract class AntTrail extends GEModel {
 	 */
 	public AntTrail(final Point[] foodLocations, final Dimension landscapeSize,
 			final int allowedTimeSteps) {
-		this.foodLocations = new ArrayList<Point>(Arrays.asList(foodLocations));
+		this.foodLocations = Arrays.asList(foodLocations);
 		this.allowedTimeSteps = allowedTimeSteps;
 
 		landscape = new AntLandscape(landscapeSize, null);
@@ -88,6 +90,8 @@ public abstract class AntTrail extends GEModel {
 
 		parser = new EpoxParser();
 		interpreter = new EpoxInterpreter(parser);
+		
+		parser.addAvailableVariable(new Variable("ANT", ant));
 	}
 
 	/**
@@ -104,16 +108,13 @@ public abstract class AntTrail extends GEModel {
 		final GECandidateProgram program = (GECandidateProgram) p;
 
 		// Reset the ant.
-		landscape.setFoodLocations(foodLocations);
+		landscape.setFoodLocations(new ArrayList<Point>(foodLocations));
 		ant.reset(allowedTimeSteps, landscape);
-
-		parser.setAnt(ant);
 
 		// Evaluate multiple times until all time moves used.
 		while (program.isValid() && (ant.getTimesteps() < ant.getMaxMoves())) {
 			try {
-				interpreter.eval(program.getSourceCode(), new String[]{},
-						new Object[]{});
+				interpreter.eval(program.getSourceCode(), new String[]{"ANT"}, new Object[]{ant});
 			} catch (final MalformedProgramException e) {
 				// Stop evaluation and give a bad score.
 				break;

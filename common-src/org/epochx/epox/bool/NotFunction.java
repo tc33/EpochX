@@ -21,12 +21,12 @@
  */
 package org.epochx.epox.bool;
 
-import org.epochx.epox.BooleanNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs logical negation.
  */
-public class NotFunction extends BooleanNode {
+public class NotFunction extends Node {
 
 	/**
 	 * Construct a NotFunction with no children.
@@ -42,7 +42,7 @@ public class NotFunction extends BooleanNode {
 	 * 
 	 * @param child The child node which will be evaluated and negated.
 	 */
-	public NotFunction(final BooleanNode child) {
+	public NotFunction(final Node child) {
 		super(child);
 	}
 
@@ -65,5 +65,17 @@ public class NotFunction extends BooleanNode {
 	@Override
 	public String getIdentifier() {
 		return "NOT";
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (NodeUtils.allEquals(inputTypes, Boolean.class)) {
+			return Boolean.class;
+		} else {
+			return null;
+		}
 	}
 }

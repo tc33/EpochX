@@ -19,53 +19,45 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.epox;
+package org.epochx.epox.ant;
 
-public class DoubleVariable extends DoubleNode {
+import org.epochx.epox.*;
+import org.epochx.tools.ant.Ant;
 
-	private final String identifier;
+/**
+ * This class defines an action which when executed will trigger the ant
+ * to do nothing for one timestep.
+ */
+public class AntSkipFunction extends Node {
 
-	private Double value;
-
-	public DoubleVariable(final String identifier) {
-		this(identifier, null);
+	public AntSkipFunction() {
+		this(null);
 	}
-
-	public DoubleVariable(final String identifier, final Double value) {
-		this.identifier = identifier;
-		this.value = value;
-	}
-
-	public void setValue(final Double value) {
-		this.value = value;
-	}
-
-	public Double getValue() {
-		return value;
-	}
-
-	@Override
-	public Double evaluate() {
-		return value;
+	
+	public AntSkipFunction(final Node child) {
+		super(child);
 	}
 
 	@Override
 	public String getIdentifier() {
-		return identifier;
+		return "SKIP";
 	}
 
 	@Override
-	public String toString() {
-		return identifier;
-	}
+	public Void evaluate() {
+		Ant ant = (Ant) getChild(0).evaluate();
+		
+		ant.skip();
 
-	@Override
-	public boolean equals(final Object obj) {
-		return (obj == this);
+		return null;
 	}
-
+	
 	@Override
-	public DoubleVariable clone() {
-		return this;
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (inputTypes.length == 1 && Ant.class.isAssignableFrom(inputTypes[0])) {
+			return Void.class;
+		} else {
+			return null;
+		}
 	}
 }

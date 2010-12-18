@@ -151,32 +151,24 @@ public class PointMutation extends ConfigOperator<GPModel> implements GPMutation
 				final Node node = program.getNthNode(i);
 				final int arity = node.getArity();
 
-				// Find a different function/terminal with same arity - start
-				// from random position.
-				final int rand = rng.nextInt(syntax.size());
-				for (int j = 0; j < syntax.size(); j++) {
-					final int index = (j + rand) % syntax.size();
-					Node n = syntax.get(index);
-
-					if ((n.getArity() == arity) && !nodesEqual(node, n)) {
-						n = n.clone();
-
-						// Attach the old node's children.
-						for (int k = 0; k < arity; k++) {
-							n.setChild(k, node.getChild(k));
-						}
-						// Then set the new node back into the program.
-						program.setNthNode(i, n);
-
-						// Record the index of the node that we changed.
-						points.add(i);
-						
-						// No need to keep looking.
-						break;
+				// Find compatible replacements.
+				List<Node> replacements = getReplacements(node);
+				if (!replacements.isEmpty()) {
+					// Randomly choose a replacement.
+					Node replacement = replacements.get(rng.nextInt(replacements.size()));
+					replacement = replacement.clone();
+					
+					// Attach the old node's children.
+					for (int k = 0; k < arity; k++) {
+						replacement.setChild(k, node.getChild(k));
 					}
+					// Then set the new node back into the program.
+					program.setNthNode(i, replacement);
+
+					// Record the index of the node that we changed.
+					points.add(i);
 				}
-				// If none were found then we fall out the bottom and consider
-				// the next node.
+				// If no replacements then we fall out the bottom and consider the next node.
 			}
 		}
 		
@@ -184,6 +176,33 @@ public class PointMutation extends ConfigOperator<GPModel> implements GPMutation
 		Stats.get().addData(MUT_POINTS, points);
 
 		return program;
+	}
+	
+	private List<Node> getReplacements(Node n) {
+		int arity = n.getArity();
+		
+		// Get the return type.
+		//TODO Ideally this would be the parent's required argument type instead.
+		Class<?> returnType = n.getReturnType();
+		
+		// Get the data-type of children.
+		Class<?>[] argTypes = new Class<?>[arity];
+		for (int i=0; i<arity; i++) {
+			argTypes[i] = n.getChild(i).getClass();
+		}
+		
+		// Filter the syntax down to compatible replacements.
+		List<Node> replacements = new ArrayList<Node>();
+		for (Node replacement: syntax) {
+			if (replacement.getArity() == arity && !nodesEqual(replacement, n)) {
+				Class<?> replacementReturn = replacement.getReturnType(argTypes);
+				if (replacementReturn != null && returnType.isAssignableFrom(replacementReturn)) {
+					replacements.add(replacement);
+				}
+			}
+		}
+		
+		return replacements;
 	}
 
 	/*

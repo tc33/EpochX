@@ -21,13 +21,13 @@
  */
 package org.epochx.epox.dbl;
 
-import org.epochx.epox.DoubleNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs the hyperbolic trigonometric
  * function of hyperbolic cosine.
  */
-public class HyperbolicCosineFunction extends DoubleNode {
+public class HyperbolicCosineFunction extends Node {
 
 	/**
 	 * Construct a HyperbolicCosineFunction with no children.
@@ -43,7 +43,7 @@ public class HyperbolicCosineFunction extends DoubleNode {
 	 * 
 	 * @param child The child which hyperbolic cosine will be performed on.
 	 */
-	public HyperbolicCosineFunction(final DoubleNode child) {
+	public HyperbolicCosineFunction(final Node child) {
 		super(child);
 	}
 
@@ -54,9 +54,9 @@ public class HyperbolicCosineFunction extends DoubleNode {
 	 */
 	@Override
 	public Double evaluate() {
-		final double c = ((Double) getChild(0).evaluate()).doubleValue();
+		Object c = getChild(0).evaluate();
 
-		return Math.cosh(c);
+		return Math.cosh(NodeUtils.asDouble(c));
 	}
 
 	/**
@@ -67,5 +67,14 @@ public class HyperbolicCosineFunction extends DoubleNode {
 	@Override
 	public String getIdentifier() {
 		return "COSH";
+	}
+	
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (inputTypes.length == 1 && NodeUtils.isNumericalClass(inputTypes[0])) {
+			return Double.class;
+		} else {
+			return null;
+		}
 	}
 }

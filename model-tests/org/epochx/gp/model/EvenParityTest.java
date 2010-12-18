@@ -86,11 +86,11 @@ public class EvenParityTest extends ModelTest {
 	 * Tests even 4 parity with standard setup.
 	 * 
 	 * Koza's success rate: 45% (p531).
-	 * Expecting success rate between 40% and 50%.
+	 * Expecting success rate between 80% and 90%.
 	 */
 	public void testEven4Parity() {
-		final int LOWER_SUCCESS = 80;
-		final int UPPER_SUCCESS = 90;
+		final int LOWER_SUCCESS = 82;
+		final int UPPER_SUCCESS = 92;
 		
 		EvenParity model = new EvenParity(4);
 		setupModel(model);

@@ -39,7 +39,7 @@ public class GPCandidateProgramTest extends AbstractCandidateProgramTestCase {
 
 	@Override
 	public CandidateProgram getCandidateProgram() {
-		return new GPCandidateProgram(new BooleanLiteral(true), null);
+		return new GPCandidateProgram(new Literal(true), null);
 	}
 
 	@Override
@@ -47,9 +47,9 @@ public class GPCandidateProgramTest extends AbstractCandidateProgramTestCase {
 		super.setUp();
 
 		program = (GPCandidateProgram) getCandidateProgram();
-		node1 = new BooleanLiteral(true);
-		node2 = new BooleanLiteral(true);
-		node0 = new AndFunction((BooleanNode) node1, (BooleanNode) node2);
+		node1 = new Literal(true);
+		node2 = new Literal(true);
+		node0 = new AndFunction(node1, node2);
 		program.setRootNode(node0);
 	}
 
@@ -103,7 +103,7 @@ public class GPCandidateProgramTest extends AbstractCandidateProgramTestCase {
 	 */
 	public void testSetNthNodeNegativeIndex() {
 		try {
-			program.setNthNode(-1, new BooleanLiteral(false));
+			program.setNthNode(-1, new Literal(false));
 			fail("Exception not thrown for negative index");
 		} catch (final IndexOutOfBoundsException e) {
 		}
@@ -115,7 +115,7 @@ public class GPCandidateProgramTest extends AbstractCandidateProgramTestCase {
 	 */
 	public void testSetNthNodeTooLarge() {
 		try {
-			program.setNthNode(3, new BooleanLiteral(false));
+			program.setNthNode(3, new Literal(false));
 			fail("Exception not thrown for index >= length");
 		} catch (final IndexOutOfBoundsException e) {
 		}
@@ -126,7 +126,7 @@ public class GPCandidateProgramTest extends AbstractCandidateProgramTestCase {
 	 */
 	public void testSetNthNodePositiveIndex() {
 		try {
-			final Node node = new BooleanLiteral(false);
+			final Node node = new Literal(false);
 			program.setNthNode(2, node);
 			assertSame("2nd node not being set at index 2", node,
 					program.getNthNode(2));
@@ -139,7 +139,7 @@ public class GPCandidateProgramTest extends AbstractCandidateProgramTestCase {
 	 * Test that the nth node is set correctly when n is 0.
 	 */
 	public void testSetNthNodeRoot() {
-		final Node node = new BooleanLiteral(false);
+		final Node node = new Literal(false);
 		program.setNthNode(0, node);
 		assertSame("root node not being returned at index 0", node,
 				program.getRootNode());

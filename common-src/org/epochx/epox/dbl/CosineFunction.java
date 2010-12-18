@@ -21,13 +21,13 @@
  */
 package org.epochx.epox.dbl;
 
-import org.epochx.epox.DoubleNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs the trigonometric function of
  * cosine.
  */
-public class CosineFunction extends DoubleNode {
+public class CosineFunction extends Node {
 
 	/**
 	 * Construct a CosineFunction with no children.
@@ -42,7 +42,7 @@ public class CosineFunction extends DoubleNode {
 	 * 
 	 * @param child The child which cosine will be performed on.
 	 */
-	public CosineFunction(final DoubleNode child) {
+	public CosineFunction(final Node child) {
 		super(child);
 	}
 
@@ -52,9 +52,9 @@ public class CosineFunction extends DoubleNode {
 	 */
 	@Override
 	public Double evaluate() {
-		final double c = ((Double) getChild(0).evaluate()).doubleValue();
-
-		return Math.cos(c);
+		Object c = getChild(0).evaluate();
+		
+		return Math.cos(NodeUtils.asDouble(c));
 	}
 
 	/**
@@ -65,5 +65,14 @@ public class CosineFunction extends DoubleNode {
 	@Override
 	public String getIdentifier() {
 		return "COS";
+	}
+	
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (inputTypes.length == 1 && NodeUtils.isNumericalClass(inputTypes[0])) {
+			return Double.class;
+		} else {
+			return null;
+		}
 	}
 }

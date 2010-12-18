@@ -21,14 +21,14 @@
  */
 package org.epochx.epox.dbl;
 
-import org.epochx.epox.DoubleNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs the inverse trigonometric function
  * of
  * arctangent.
  */
-public class ArcTangentFunction extends DoubleNode {
+public class ArcTangentFunction extends Node {
 
 	/**
 	 * Construct an ArcTangentFunction with no children.
@@ -43,7 +43,7 @@ public class ArcTangentFunction extends DoubleNode {
 	 * 
 	 * @param child The child which arctangent will be performed on.
 	 */
-	public ArcTangentFunction(final DoubleNode child) {
+	public ArcTangentFunction(final Node child) {
 		super(child);
 	}
 
@@ -53,9 +53,9 @@ public class ArcTangentFunction extends DoubleNode {
 	 */
 	@Override
 	public Double evaluate() {
-		final double c = ((Double) getChild(0).evaluate()).doubleValue();
-
-		return Math.atan(c);
+		Object c = getChild(0).evaluate();
+		
+		return Math.atan(NodeUtils.asDouble(c));
 	}
 
 	/**
@@ -66,5 +66,14 @@ public class ArcTangentFunction extends DoubleNode {
 	@Override
 	public String getIdentifier() {
 		return "ATAN";
+	}
+	
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (inputTypes.length == 1 && NodeUtils.isNumericalClass(inputTypes[0])) {
+			return Double.class;
+		} else {
+			return null;
+		}
 	}
 }

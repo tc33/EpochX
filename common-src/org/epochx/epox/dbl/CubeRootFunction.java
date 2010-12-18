@@ -21,13 +21,13 @@
  */
 package org.epochx.epox.dbl;
 
-import org.epochx.epox.DoubleNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs the mathematical function of cube
  * root.
  */
-public class CubeRootFunction extends DoubleNode {
+public class CubeRootFunction extends Node {
 
 	/**
 	 * Construct a CubeRootFunction with no children.
@@ -43,7 +43,7 @@ public class CubeRootFunction extends DoubleNode {
 	 * 
 	 * @param child The child which cube root will be performed on.
 	 */
-	public CubeRootFunction(final DoubleNode child) {
+	public CubeRootFunction(final Node child) {
 		super(child);
 	}
 
@@ -53,9 +53,9 @@ public class CubeRootFunction extends DoubleNode {
 	 */
 	@Override
 	public Double evaluate() {
-		final double c = ((Double) getChild(0).evaluate()).doubleValue();
-
-		return Math.cbrt(c);
+		Object c = getChild(0).evaluate();
+		
+		return Math.cbrt(NodeUtils.asDouble(c));
 	}
 
 	/**
@@ -66,5 +66,14 @@ public class CubeRootFunction extends DoubleNode {
 	@Override
 	public String getIdentifier() {
 		return "CBRT";
+	}
+	
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (inputTypes.length == 1 && NodeUtils.isNumericalClass(inputTypes[0])) {
+			return Double.class;
+		} else {
+			return null;
+		}
 	}
 }

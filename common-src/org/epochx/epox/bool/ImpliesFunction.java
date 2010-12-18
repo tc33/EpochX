@@ -21,12 +21,12 @@
  */
 package org.epochx.epox.bool;
 
-import org.epochx.epox.BooleanNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs logical implication.
  */
-public class ImpliesFunction extends BooleanNode {
+public class ImpliesFunction extends Node {
 
 	/**
 	 * Construct an ImpliesFunction with no children.
@@ -44,7 +44,7 @@ public class ImpliesFunction extends BooleanNode {
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
 	 */
-	public ImpliesFunction(final BooleanNode child1, final BooleanNode child2) {
+	public ImpliesFunction(final Node child1, final Node child2) {
 		super(child1, child2);
 	}
 
@@ -77,5 +77,17 @@ public class ImpliesFunction extends BooleanNode {
 	@Override
 	public String getIdentifier() {
 		return "IMPLIES";
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (NodeUtils.allEquals(inputTypes, Boolean.class)) {
+			return Boolean.class;
+		} else {
+			return null;
+		}
 	}
 }

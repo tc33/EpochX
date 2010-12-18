@@ -21,13 +21,13 @@
  */
 package org.epochx.epox.bool;
 
-import org.epochx.epox.BooleanNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which represents the conditional if-then-else
  * statement.
  */
-public class IfFunction extends BooleanNode {
+public class IfFunction extends Node {
 
 	/**
 	 * Construct an IfFunction with no children.
@@ -45,8 +45,7 @@ public class IfFunction extends BooleanNode {
 	 * @param ifStatement The second child node.
 	 * @param elseStatement The third child node.
 	 */
-	public IfFunction(final BooleanNode condition,
-			final BooleanNode ifStatement, final BooleanNode elseStatement) {
+	public IfFunction(final Node condition, final Node ifStatement, final Node elseStatement) {
 		super(condition, ifStatement, elseStatement);
 	}
 
@@ -75,5 +74,17 @@ public class IfFunction extends BooleanNode {
 	@Override
 	public String getIdentifier() {
 		return "IF";
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (NodeUtils.allEquals(inputTypes, Boolean.class)) {
+			return Boolean.class;
+		} else {
+			return null;
+		}
 	}
 }

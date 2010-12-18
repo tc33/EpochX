@@ -21,13 +21,13 @@
  */
 package org.epochx.epox.dbl;
 
-import org.epochx.epox.DoubleNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs the reciprocal trigonometric
  * function of cotangent. Cotangent x is equal to 1/tan x.
  */
-public class CotangentFunction extends DoubleNode {
+public class CotangentFunction extends Node {
 
 	/**
 	 * Construct a CotangentFunction with no children.
@@ -42,7 +42,7 @@ public class CotangentFunction extends DoubleNode {
 	 * 
 	 * @param child The child which cotangent will be performed on.
 	 */
-	public CotangentFunction(final DoubleNode child) {
+	public CotangentFunction(final Node child) {
 		super(child);
 	}
 
@@ -53,9 +53,9 @@ public class CotangentFunction extends DoubleNode {
 	 */
 	@Override
 	public Double evaluate() {
-		final double c = ((Double) getChild(0).evaluate()).doubleValue();
+		Object c = getChild(0).evaluate();
 
-		return 1 / Math.tan(c);
+		return 1 / Math.tan(NodeUtils.asDouble(c));
 	}
 
 	/**
@@ -66,5 +66,14 @@ public class CotangentFunction extends DoubleNode {
 	@Override
 	public String getIdentifier() {
 		return "COT";
+	}
+	
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (inputTypes.length == 1 && NodeUtils.isNumericalClass(inputTypes[0])) {
+			return Double.class;
+		} else {
+			return null;
+		}
 	}
 }

@@ -42,20 +42,20 @@ public class IfFunctionTest extends AbstractBooleanNodeTestCase {
 		super.setUp();
 
 		ifFunction = (IfFunction) getNode();
-		final Node[] children = new Node[]{null, new BooleanLiteral(true),
-				new BooleanLiteral(false)};
+		final Node[] children = new Node[]{null, new Literal(true),
+				new Literal(false)};
 		ifFunction.setChildren(children);
 	}
 
 	public void testEvaluateT() {
-		ifFunction.setChild(0, new BooleanLiteral(true));
+		ifFunction.setChild(0, new Literal(true));
 		final boolean result = ifFunction.evaluate();
 
 		assertTrue("IF did not evaluate 2nd child when 1st was true", result);
 	}
 
 	public void testEvaluateF() {
-		ifFunction.setChild(0, new BooleanLiteral(false));
+		ifFunction.setChild(0, new Literal(false));
 		final boolean result = ifFunction.evaluate();
 
 		assertFalse("IF did not evaluate 3rd child when 1st was false", result);

@@ -24,6 +24,8 @@ package org.epochx.epox;
 import java.math.BigInteger;
 import java.util.*;
 
+import org.apache.commons.lang.ArrayUtils;
+
 
 /**
  * This class provides static utility methods for working with Epox nodes.
@@ -145,5 +147,220 @@ public final class NodeUtils {
 		}
 		
 		return functions;
+	}
+	
+	/**
+	 * Tests whether an array of classes all refer to the same type of class.
+	 * @param classes an array of classes to check for equality.
+	 * @return true if all classes in the given array are of the same type, and
+	 * false otherwise.
+	 */
+	public static boolean classEquals(Class<?>[] classes) {
+		for (int i=1; i<classes.length; i++) {
+			if (!classEquals(classes[i], classes[i-1])) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * Returns true if the two given classes are equal. Two classes are 
+	 * considered to be equal if both are assignable to each other. Note that 
+	 * it is not sufficient for one of the classes to represent a subclass of 
+	 * the other.
+	 * 
+	 * @param cls1 the first class to check for equality.
+	 * @param cls2 the second class to check for equality.
+	 * @return true if the two given classes are equal, and false otherwise.
+	 */
+	public static boolean classEquals(Class<?> cls1, Class<?> cls2) {
+		return cls1.isAssignableFrom(cls2) && cls2.isAssignableFrom(cls1);
+	}
+	
+	/**
+	 * Returns true if all the Classes in the second parameter have at least one
+	 * Class in the first parameter which is either for the same class or a 
+	 * super type.
+	 * @param collection the collection to find an assignable to match in.
+	 * @param toFind the classes to find an assignable to match of.
+	 * @return true if each class in the second parameter has an entry in the 
+	 * first parameter which its type could be assigned to.
+	 */
+	public static boolean containsAllAssignableTo(Collection<Class<?>> collection, Collection<Class<?>> toFind) {
+		for (Class<?> c: toFind) {
+			if (!containsAssignableTo(collection, c)) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * Returns true if all the Classes in the second parameter have at least one
+	 * Class in the first parameter which is either for the same class or a 
+	 * sub type.
+	 * @param collection the collection to find an assignable from match in.
+	 * @param toFind the classes to find an assignable from match of.
+	 * @return true if each class in the second parameter has an entry in the 
+	 * first parameter which its type could be assigned from.
+	 */
+	public static boolean containsAllAssignableFrom(Collection<Class<?>> collection, Collection<Class<?>> toFind) {
+		for (Class<?> c: toFind) {
+			if (!containsAssignableFrom(collection, c)) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * Returns true if the given collection contains an element which represents
+	 * a class which is the same as or is a super type of the given class.
+	 * 
+	 * @param collection the collection to seach for a class that is assignable 
+	 * to amongst.
+	 * @param cls the class that is being searched against the given collection.
+	 * @return true if the given collection contains a Class which is the same 
+	 * as or a supertype of the given class parameter. It returns false 
+	 * otherwise.
+	 */
+	public static boolean containsAssignableTo(Collection<Class<?>> collection, Class<?> cls) {
+		for (Class<?> c: collection) {
+			if (c.isAssignableFrom(cls)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Returns true if the given collection contains an element which represents
+	 * a class which is the same as or is a sub type of the given class.
+	 * 
+	 * @param collection the collection to seach for a class that is assignable 
+	 * from amongst.
+	 * @param cls the class that is being searched against the given collection.
+	 * @return true if the given collection contains a Class which is the same 
+	 * as or a subtype of the given class parameter. It returns false 
+	 * otherwise.
+	 */
+	public static boolean containsAssignableFrom(Collection<Class<?>> collection, Class<?> cls) {
+		for (Class<?> c: collection) {
+			if (cls.isAssignableFrom(c)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Adds the given Class into the specified collection, and removes any other
+	 * classes which are subtypes of the given class. However, if another class
+	 * already in the collection is a supertype of the given class then no 
+	 * change is made.
+	 * @param collection the collection to insert the Class into.
+	 * @param cls the Class to insert into the collection uniquely.
+	 * @return true if the given collection was modified, false otherwise.
+	 */
+	public static boolean addClassUniquely(Collection<Class<?>> collection, Class<?> cls) {
+		if (containsAssignableTo(collection, cls)) {
+			return false;
+		} else {
+			List<Class<?>> toRemove = new ArrayList<Class<?>>();
+			for (Class<?> c: collection) {
+				if (cls.isAssignableFrom(c)) {
+					toRemove.add(c);
+				}
+			}
+			
+			return collection.removeAll(toRemove);
+		}
+	}
+	
+	/**
+	 * It is assumed that the classes paramete contains only numeric types.
+	 * @param classes
+	 * @return
+	 */
+	public static Class<?> getWidestNumericalClass(Class<?>[] classes) {
+		if (!isAllNumericalClass(classes)) {
+			return null;
+		}
+			
+		if (ArrayUtils.contains(classes, Double.class)) {
+			return Double.class;
+		} else if (ArrayUtils.contains(classes, Long.class)) {
+			return Long.class;
+		} else if (ArrayUtils.contains(classes, Integer.class)) {
+			return Integer.class;
+		} else {
+			return null;
+		}
+	}
+	
+	public static boolean isNumericalClass(Class<?> cls) {
+		return ArrayUtils.contains(new Class<?>[]{Double.class, Long.class, Integer.class}, cls);
+	}
+	
+	public static boolean isAllNumericalClass(Class<?>[] classes) {
+		for (Class<?> c: classes) {
+			if (!isNumericalClass(c)) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	public static boolean allEquals(Object[] inputs, Object o) {
+		for (Object in: inputs) {
+			if (!o.equals(in)) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	public static Double asDouble(Object o) {		
+		if (o instanceof Double) {
+			return (Double) o;
+		} else if (o instanceof Integer) {
+			return ((Integer) o).doubleValue();
+		} else if (o instanceof Long) {
+			return ((Long) o).doubleValue();
+		} else {
+			return null;
+		}
+	}
+	
+	public static Integer asInteger(Object o) {		
+		if (o instanceof Double) {
+			return ((Double) o).intValue();
+		} else if (o instanceof Integer) {
+			return (Integer) o;
+		} else if (o instanceof Long) {
+			return ((Long) o).intValue();
+		} else {
+			return null;
+		}
+	}
+	
+	public static Long asLong(Object o) {		
+		if (o instanceof Double) {
+			return ((Double) o).longValue();
+		} else if (o instanceof Integer) {
+			return ((Integer) o).longValue();
+		} else if (o instanceof Long) {
+			return (Long) o;
+		} else {
+			return null;
+		}
 	}
 }

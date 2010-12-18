@@ -21,25 +21,21 @@
  */
 package org.epochx.epox.ant;
 
-import org.epochx.epox.VoidNode;
+import org.epochx.epox.Node;
 import org.epochx.tools.ant.Ant;
 
 /**
  * This class defines an action which when executed will trigger the ant
  * to turn right from its current orientation in its ant landscape.
  */
-public class AntTurnRightAction extends VoidNode {
+public class AntTurnRightFunction extends Node {
 
-	private final Ant ant;
-
-	/**
-	 * Constructs an AntTurnRightAction, supplying an ant that the action can be
-	 * performed on.
-	 * 
-	 * @param ant the Ant that will be turned right upon execution.
-	 */
-	public AntTurnRightAction(final Ant ant) {
-		this.ant = ant;
+	public AntTurnRightFunction() {
+		this(null);
+	}
+	
+	public AntTurnRightFunction(final Node child) {
+		super(child);
 	}
 
 	@Override
@@ -49,8 +45,19 @@ public class AntTurnRightAction extends VoidNode {
 
 	@Override
 	public Void evaluate() {
+		Ant ant = (Ant) getChild(0).evaluate();
+		
 		ant.turnRight();
 
 		return null;
+	}
+	
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		if (inputTypes.length == 1 && Ant.class.isAssignableFrom(inputTypes[0])) {
+			return Void.class;
+		} else {
+			return null;
+		}
 	}
 }

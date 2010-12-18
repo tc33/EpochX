@@ -25,10 +25,13 @@ import java.util.*;
 
 import org.epochx.epox.*;
 
+/*
+ * TODO We seem to have 2 NodeUtils classes?!
+ */
 public final class NodeUtils {
 
-	public static List<DoubleLiteral> doubleRange(int start, int end) {
-		final List<DoubleLiteral> range = new ArrayList<DoubleLiteral>();
+	public static List<Literal> intRange(int start, int end) {
+		final List<Literal> range = new ArrayList<Literal>();
 		if (start > end) {
 			final int temp = start;
 			start = end;
@@ -38,29 +41,17 @@ public final class NodeUtils {
 		while (start <= end) {
 			start++;
 
-			range.add(new DoubleLiteral((double) start));
+			range.add(new Literal(start));
 		}
 
 		return range;
 	}
 
-	public static List<BooleanVariable> booleanVariables(
-			final String ... variableNames) {
-		final List<BooleanVariable> variables = new ArrayList<BooleanVariable>();
+	public static List<Variable> booleanVariables(Class<?> datatype, final String ... variableNames) {
+		final List<Variable> variables = new ArrayList<Variable>();
 
 		for (final String name: variableNames) {
-			variables.add(new BooleanVariable(name));
-		}
-
-		return variables;
-	}
-
-	public static List<DoubleVariable> doubleVariables(
-			final String ... variableNames) {
-		final List<DoubleVariable> variables = new ArrayList<DoubleVariable>();
-
-		for (final String name: variableNames) {
-			variables.add(new DoubleVariable(name));
+			variables.add(new Variable(name, datatype));
 		}
 
 		return variables;

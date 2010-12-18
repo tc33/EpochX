@@ -21,13 +21,13 @@
  */
 package org.epochx.epox.dbl;
 
-import org.epochx.epox.DoubleNode;
+import org.epochx.epox.*;
 
 /**
  * A <code>FunctionNode</code> which performs the modulo operation, that is
  * it finds the remainder of division.
  */
-public class ModuloFunction extends DoubleNode {
+public class ModuloFunction extends Node {
 
 	/**
 	 * Construct a ModuloFunction with no children.
@@ -43,7 +43,7 @@ public class ModuloFunction extends DoubleNode {
 	 * @param child1 The first child node - the dividend.
 	 * @param child2 The second child node - the divisor.
 	 */
-	public ModuloFunction(final DoubleNode child1, final DoubleNode child2) {
+	public ModuloFunction(final Node child1, final Node child2) {
 		super(child1, child2);
 	}
 
@@ -54,14 +54,29 @@ public class ModuloFunction extends DoubleNode {
 	 * whatever the first child evaluated to.
 	 */
 	@Override
-	public Double evaluate() {
-		final double c1 = ((Double) getChild(0).evaluate()).doubleValue();
-		final double c2 = ((Double) getChild(1).evaluate()).doubleValue();
+	public Object evaluate() {
+		Object c1 = getChild(0).evaluate();
+		Object c2 = getChild(1).evaluate();
 
-		if (c2 == 0) {
-			return c1;
+		Class<?> returnType = getReturnType();
+		
+		if (returnType == Double.class) {
+			double d1 = NodeUtils.asDouble(c1);
+			double d2 = NodeUtils.asDouble(c2);
+			
+			return (d2 == 0) ? d1 : (d1 % d2);
+		} else if (returnType == Integer.class) {
+			int i1 = NodeUtils.asInteger(c1);
+			int i2 = NodeUtils.asInteger(c2);
+			
+			return (i2 == 0) ? i1 : (i1 % i2);
+		} else if (returnType == Long.class) {
+			long l1 = NodeUtils.asLong(c1);
+			long l2 = NodeUtils.asLong(c2);
+			
+			return (l2 == 0) ? l1 : (l1 % l2);
 		} else {
-			return c1 % c2;
+			return null;
 		}
 	}
 
@@ -73,5 +88,10 @@ public class ModuloFunction extends DoubleNode {
 	@Override
 	public String getIdentifier() {
 		return "MOD";
+	}
+	
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		return NodeUtils.getWidestNumericalClass(inputTypes);
 	}
 }

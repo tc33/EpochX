@@ -21,6 +21,8 @@
  */
 package org.epochx.gp.op.crossover;
 
+import java.util.*;
+
 import org.epochx.epox.*;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.GPCandidateProgram;
@@ -81,6 +83,9 @@ public class SubtreeCrossover extends ConfigOperator<GPModel> implements GPCross
 	
 	// The random number generator for controlling random behaviour.
 	private RandomNumberGenerator rng;
+	
+	// The probability of choosing a function node as the swap point.
+	private double functionSwapProbability;
 
 	/**
 	 * Constructs a <code>SubtreeCrossover</code> with the only necessary
@@ -98,10 +103,35 @@ public class SubtreeCrossover extends ConfigOperator<GPModel> implements GPCross
 	/**
 	 * Constructs a <code>SubtreeCrossover</code>.
 	 * 
+	 * @param rng a random number generator.
+	 * @param functionSwapProbability The probability of crossover operations
+	 *        choosing a function node as the swap point.
+	 */
+	public SubtreeCrossover(final RandomNumberGenerator rng, final double functionSwapProbability) {
+		this((GPModel) null, functionSwapProbability);
+		
+		this.rng = rng;
+	}
+	
+	/**
+	 * Constructs a <code>SubtreeCrossover</code>.
+	 * 
 	 * @param model the current controlling model.
 	 */
 	public SubtreeCrossover(final GPModel model) {
+		this(model, -1.0);
+	}
+	
+	/**
+	 * Construct an instance of Koza crossover.
+	 * 
+	 * @param functionSwapProbability The probability of crossover operations
+	 *        choosing a function node as the swap point.
+	 */
+	public SubtreeCrossover(final GPModel model, final double functionSwapProbability) {
 		super(model);
+		
+		this.functionSwapProbability = functionSwapProbability;
 	}
 
 	/**
@@ -124,32 +154,111 @@ public class SubtreeCrossover extends ConfigOperator<GPModel> implements GPCross
 	 *        crossover.
 	 */
 	@Override
-	public GPCandidateProgram[] crossover(final CandidateProgram p1,
-			final CandidateProgram p2) {
+	public GPCandidateProgram[] crossover(final CandidateProgram p1, final CandidateProgram p2) {
 		final GPCandidateProgram program1 = (GPCandidateProgram) p1;
 		final GPCandidateProgram program2 = (GPCandidateProgram) p2;
 
-		// Select swap points.
-		final int swapPoint1 = rng.nextInt(program1.getProgramLength());
-		final int swapPoint2 = rng.nextInt(program2.getProgramLength());
-
-		// Add crossover points to the stats manager.
-		Stats.get().addData(XO_POINT1, swapPoint1);
-		Stats.get().addData(XO_POINT2, swapPoint2);
-		
-		// Get copies of subtrees to swap.
+		// Select first swap point.
+		final int swapPoint1 = getCrossoverPoint(program1);
 		final Node subtree1 = program1.getNthNode(swapPoint1);// .clone();
-		final Node subtree2 = program2.getNthNode(swapPoint2);// .clone();
-
-		// Add subtrees into the stats manager.
-		Stats.get().addData(XO_SUBTREE1, subtree1);
-		Stats.get().addData(XO_SUBTREE2, subtree2);
 		
-		// Perform swap.
-		program1.setNthNode(swapPoint1, subtree2);
-		program2.setNthNode(swapPoint2, subtree1);
+		// Find which nodes in program2 have a matching return type to subtree1.
+		Class<?> subtree1Type = subtree1.getReturnType();
+		List<Node> matchingNodes = new ArrayList<Node>();
+		List<Integer> matchingIndexes = new ArrayList<Integer>();
+		getMatchingNodes(program2.getRootNode(), subtree1Type, 0, matchingNodes, matchingIndexes);
+		
+		if (matchingNodes.size() > 0) {
+			// Select second swap point with the same data-type.
+			int index = getSelectedMatch(matchingNodes);
+			final Node subtree2 = matchingNodes.get(index);
+			final int swapPoint2 = matchingIndexes.get(index);
+			
+			// Add data into the stats manager.
+			Stats.get().addData(XO_POINT1, swapPoint1);
+			Stats.get().addData(XO_POINT2, swapPoint2);
+			Stats.get().addData(XO_SUBTREE1, subtree1);
+			Stats.get().addData(XO_SUBTREE2, subtree2);
+			
+			// Perform swap.
+			program1.setNthNode(swapPoint1, subtree2);
+			program2.setNthNode(swapPoint2, subtree1);
+			
+			return new GPCandidateProgram[]{program1, program2};
+		}
 
-		return new GPCandidateProgram[]{program1, program2};
+		return new GPCandidateProgram[0];
+	}
+	
+	private int getMatchingNodes(Node root, Class<?> type, int current, List<Node> matching, List<Integer> indexes) {
+		if (root.getReturnType() == type) {
+			matching.add(root);
+			indexes.add(current);
+		}
+		
+		for (int i=0; i<root.getArity(); i++) {
+			current = getMatchingNodes(root.getChild(i), type, current+1, matching, indexes);
+		}
+		
+		return current;
+	}
+	
+	/*
+	 * Choose the crossover point for the given GPCandidateProgram with respect
+	 * to the probabilities assigned for function and terminal node points.
+	 */
+	private int getCrossoverPoint(final GPCandidateProgram program) {
+		// Calculate numbers of terminal and function nodes.
+		final int length = program.getProgramLength();
+		final int noTerminals = program.getNoTerminals();
+		final int noFunctions = length - noTerminals;
+
+		// Randomly decide whether to use a function or terminal node point.
+		if (functionSwapProbability == -1) {
+			// Randomly select a node from the program.
+			return rng.nextInt(length);
+		} else if ((noFunctions > 0) && (rng.nextDouble() < functionSwapProbability)) {
+			// Randomly select a function node from the function set.
+			final int f = rng.nextInt(noFunctions);
+
+			return program.getRootNode().getNthFunctionNodeIndex(f);
+		} else {
+			// Randomly select a terminal node from the terminal set.
+			final int t = rng.nextInt(noTerminals);
+
+			return program.getRootNode().getNthTerminalNodeIndex(t);
+		}
+	}
+	
+	/*
+	 * Choose the crossover point for the given GPCandidateProgram with respect
+	 * to the probabilities assigned for function and terminal node points.
+	 */
+	private int getSelectedMatch(final List<Node> nodes) {
+		// Randomly decide whether to use a function or terminal node point.
+		if (functionSwapProbability == -1) {
+			// Randomly select a node from the program.
+			return rng.nextInt(nodes.size());
+		} else {
+			List<Integer> terminalIndexes = new ArrayList<Integer>();
+			List<Integer> functionIndexes = new ArrayList<Integer>();
+			
+			for (int i=0; i<nodes.size(); i++) {
+				if (nodes.get(i).getArity() == 0) {
+					terminalIndexes.add(i);
+				} else {
+					functionIndexes.add(i);
+				}
+			}
+			
+			if ((functionIndexes.size() > 0) && (rng.nextDouble() < functionSwapProbability)) {
+				// Randomly select a function node from the function set.
+				return functionIndexes.get(rng.nextInt(functionIndexes.size()));
+			} else {
+				// Randomly select a terminal node from the terminal set.
+				return terminalIndexes.get(rng.nextInt(terminalIndexes.size()));
+			}
+		}
 	}
 	
 	/**

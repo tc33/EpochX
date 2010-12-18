@@ -21,13 +21,14 @@
  */
 package org.epochx.epox.dbl;
 
-import org.epochx.epox.DoubleNode;
+import org.epochx.epox.*;
+
 
 /**
  * 
  * 
  */
-public class AbsoluteFunction extends DoubleNode {
+public class AbsoluteFunction extends Node {
 
 	/**
 	 * Construct an AbsoluteFunction with no children.
@@ -39,7 +40,7 @@ public class AbsoluteFunction extends DoubleNode {
 	/**
 	 * 
 	 */
-	public AbsoluteFunction(final DoubleNode child) {
+	public AbsoluteFunction(final Node child) {
 		super(child);
 	}
 
@@ -47,10 +48,27 @@ public class AbsoluteFunction extends DoubleNode {
 	 * 
 	 */
 	@Override
-	public Double evaluate() {
-		final double value = (Double) getChild(0).evaluate();
+	public Object evaluate() {
+		Object c = getChild(0).evaluate();
+		
+		Class<?> returnType = getReturnType();
+		
+		if (returnType == Double.class) {
+			// Perform absolute on double.
+			return Math.abs(NodeUtils.asDouble(c));
+		} else if (returnType == Long.class) {
+			// Perform absolute on long.
+			long l = NodeUtils.asLong(c);
+			
+			return Math.abs(l);
+		} else if (returnType == Integer.class) {
+			// Perform absolute on integer.
+			int i = NodeUtils.asInteger(c);
+			
+			return Math.abs(i);
+		}
 
-		return Math.abs(value);
+		return null;
 	}
 
 	/**
@@ -63,4 +81,8 @@ public class AbsoluteFunction extends DoubleNode {
 		return "ABS";
 	}
 
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		return NodeUtils.getWidestNumericalClass(inputTypes);
+	}
 }

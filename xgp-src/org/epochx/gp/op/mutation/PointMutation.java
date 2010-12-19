@@ -156,7 +156,7 @@ public class PointMutation extends ConfigOperator<GPModel> implements GPMutation
 				if (!replacements.isEmpty()) {
 					// Randomly choose a replacement.
 					Node replacement = replacements.get(rng.nextInt(replacements.size()));
-					replacement = replacement.clone();
+					replacement = replacement.newInstance();
 					
 					// Attach the old node's children.
 					for (int k = 0; k < arity; k++) {

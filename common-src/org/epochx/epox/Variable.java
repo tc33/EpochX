@@ -67,4 +67,8 @@ public class Variable extends Node {
 		return this;
 	}
 	
+	@Override
+	public Node newInstance() {
+		return clone();
+	}
 }

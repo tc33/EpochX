@@ -568,7 +568,8 @@ public abstract class Node implements Cloneable {
 	}
 
 	/**
-	 * Create a deep copy of this node tree. Each child node will be cloned.
+	 * Create a deep copy of this node tree. Each child node will be cloned. Use
+	 * this method for copying a node tree.
 	 * 
 	 * @return a copy of this Node.
 	 */
@@ -579,7 +580,7 @@ public abstract class Node implements Cloneable {
 
 			clone.children = children.clone();
 			for (int i = 0; i < children.length; i++) {
-				clone.children[i] = children[i];
+				clone.children[i] = children[i]; //TODO Don't think we need this line.
 				if (clone.children[i] != null) {
 					clone.children[i] = clone.children[i].clone();
 				}
@@ -587,9 +588,31 @@ public abstract class Node implements Cloneable {
 
 			return clone;
 		} catch (final CloneNotSupportedException e) {
+			assert false;
 			// This shouldn't ever happen - if it does then everythings going to
 			// blow up anyway.
 		}
+		return null;
+	}
+	
+	/**
+	 * This method should be used instead of clone when creating a new instance
+	 * of this node type, rather than copying the node tree. In some cases the 
+	 * bahaviour of this method may be the same as clone, but where its arity is
+	 * greater than 0 it should not copy children. By default this method will
+	 * simply return a new instance of the same type.
+	 * 
+	 * @return
+	 */
+	public Node newInstance() {
+		try {
+			Node n = (Node) super.clone();
+			n.children = new Node[this.children.length];
+			return n;
+		} catch (CloneNotSupportedException e) {
+				assert false;
+		}
+		
 		return null;
 	}
 

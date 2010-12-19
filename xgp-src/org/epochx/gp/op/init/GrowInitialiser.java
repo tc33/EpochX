@@ -272,7 +272,7 @@ public class GrowInitialiser extends ConfigOperator<GPModel> implements GPInitia
 		// Choose a node with correct type and obtainable arg types.
 		List<Node> validNodes = getValidNodes(maxDepth-currentDepth, requiredType);
 		final int randomIndex = rng.nextInt(validNodes.size());
-		Node root = validNodes.get(randomIndex).clone();
+		Node root = validNodes.get(randomIndex).newInstance();
 		int arity = root.getArity();
 		
 		if (arity > 0) {

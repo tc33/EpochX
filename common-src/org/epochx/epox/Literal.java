@@ -25,6 +25,13 @@ public class Literal extends Node {
 	public Class<?> getReturnType() {
 		return value.getClass();
 	}
+	
+	/**
+	 * @param value the value to set
+	 */
+	protected void setValue(Object value) {
+		this.value = value;
+	}
 
 	@Override
 	public String toString() {
@@ -52,5 +59,10 @@ public class Literal extends Node {
 		clone.value = value;
 
 		return clone;
+	}
+	
+	@Override
+	public Literal newInstance() {
+		return clone();
 	}
 }

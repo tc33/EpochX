@@ -27,32 +27,66 @@ import org.epochx.tools.random.*;
 
 
 /**
- * 
+ * Defines a double ephemeral random constant (ERC). An ERC is a literal with
+ * a value which is randomly generated upon construction. This implementation 
+ * will generate a double value of the specified precision between the lower 
+ * and upper bounds provided. All values between the two bounds (inclusive), can
+ * appear with equal probability. As with all nodes, instances may be 
+ * constructed in any of 3 ways: 
+ * <ul>
+ * <li>constructor - the new instance will be initialised with a value
+ * of <code>null</code>.</li>
+ * <li>clone method - will return an instance with a value equal to the cloned
+ * value.</li>
+ * <li>newInstance method - will return a new instance with a new, randomly 
+ * generated value.</li>
+ * </ul>
+ *
+ * @see BooleanERC
+ * @see IntegerERC
  */
 public class DoubleERC extends Literal {
 
 	private RandomNumberGenerator rng;
 	
-	private double range;
+	// The inclusive bounds.
 	private double lower;
+	private double upper;
 	
+	// The precision of generated values.
 	private int precision;
 	
 	/**
-	 * Constructs a <code>DoubleERC</code>.
+	 * Constructs a new <code>DoubleERC</code> with a value of 
+	 * <code>null</code>. The given random number generator will be be used to
+	 * generate a new value if the <code>newInstance</code> method is used.
 	 * 
-	 * @param value
+	 * @param rng the random number generator to use if randomly generating a 
+	 * double value.
+	 * @param lower the inclusive lower bound of values that are generated.
+	 * @param upper the inclusive upper bound of values that are generated.
+	 * @param precision the non-negative <code>int</code> precision.
 	 */
 	public DoubleERC(RandomNumberGenerator rng, double lower, double upper, int precision) {
 		super(null);
 		
 		this.rng = rng;
-		this.range = upper - lower;
 		this.lower = lower;
+		this.upper = upper;
+		this.precision = precision;
 	}
 
+	/**
+	 * Constructs a new <code>DoubleERC</code> node with a randomly generated
+	 * value, selected using the random number generator. The value will be 
+	 * randomly selected with an equal probability from the set of values 
+	 * between the lower and upper bounds and of the specified precision.
+	 * 
+	 * @return a new <code>DoubleERC</code> instance with a randomly generated
+	 * value.
+	 */
 	@Override
-	public Literal newInstance() {
+	public DoubleERC newInstance() {
 		DoubleERC erc = (DoubleERC) super.newInstance();
 		
 		erc.setValue(generateValue());
@@ -60,8 +94,19 @@ public class DoubleERC extends Literal {
 		return erc;
 	}
 	
+	/**
+	 * Generates and returns a new double value for use in a new 
+	 * <code>DoubleERC</code> instance. This implementation will return a value
+	 * selected randomly from the set of values between the lower and upper 
+	 * bounds, inclusively. The value will be returned with the specified 
+	 * precision.
+	 * 
+	 * @return a double value to be used as the value of a new DoubleERC 
+	 * instance.
+	 */
 	protected double generateValue() {
 		// Position random within range.
+		double range = upper - lower;
 		double d = (rng.nextDouble() * range) + lower;
 
 		// Round to the correct precision.
@@ -69,5 +114,73 @@ public class DoubleERC extends Literal {
 		big.round(new MathContext(precision));
 		
 		return big.doubleValue();
+	}
+	
+	/**
+	 * Returns the random number generator that is currently being used to 
+	 * generate double values for new <code>DoubleERC</code> instances.
+	 * 
+	 * @return the random number generator
+	 */
+	public RandomNumberGenerator getRNG() {
+		return rng;
+	}
+	
+	/**
+	 * Sets the random number generator to be used for generating the double 
+	 * value of new <code>DoubleERC</code> instances.
+	 * 
+	 * @param the random number generator to set
+	 */
+	public void setRNG(RandomNumberGenerator rng) {
+		this.rng = rng;
+	}
+	
+	/**
+	 * Returns the lower bound of the newly generated values.
+	 * @return the lower bound of values.
+	 */
+	public double getLower() {
+		return lower;
+	}
+	
+	/**
+	 * Sets the inclusive lower bound for newly generated values.
+	 * @param lower the lower bound for values.
+	 */
+	public void setLower(double lower) {
+		this.lower = lower;
+	}
+	
+	/**
+	 * Returns the upper bound of the newly generated values.
+	 * @return the upper bound of values.
+	 */
+	public double getUpper() {
+		return upper;
+	}
+	
+	/**
+	 * Sets the inclusive upper bound for newly generated values.
+	 * @param lower the upper bound for values.
+	 */
+	public void setUpper(double upper) {
+		this.upper = upper;
+	}
+	
+	/**
+	 * Returns the non-negative value precision int.
+	 * @return the value precision.
+	 */
+	public int getPrecision() {
+		return precision;
+	}
+	
+	/**
+	 * Sets the non-negative value precision int.
+	 * @param precision a non-negative precision for generated values
+	 */
+	public void setPrecision(int precision) {
+		this.precision = precision;
 	}
 }

@@ -107,6 +107,18 @@ public class GrammarProduction implements Cloneable {
 	public void setGrammarNode(final int index, final GrammarNode node) {
 		grammarNodes.set(index, node);
 	}
+	
+	/**
+	 * Inserts the <code>GrammarNode</code> at the specified index. Shifts the
+	 * node currently at that position along one, with their indices incremented
+	 * by one.
+	 * @param index the index of where to insert the <code>GrammarNode</code>.
+	 * @param node the <code>GrammarNode</code> to place at the specified
+	 *        index in this production.
+	 */
+	public void addGrammarNode(final int index, final GrammarNode node) {
+		grammarNodes.add(index, node);
+	}
 
 	/**
 	 * Returns the quantity of <code>GrammarNode</code>s in this production.
@@ -274,20 +286,5 @@ public class GrammarProduction implements Cloneable {
 		}
 
 		return buffer.toString();
-	}
-	
-	public static void main(String[] args) {
-		List<GrammarNode> nodes = new ArrayList<GrammarNode>();
-		nodes.add(new GrammarLiteral("val1"));
-		nodes.add(new GrammarLiteral("val2"));
-		
-		GrammarProduction gp = new GrammarProduction(nodes);
-		
-		System.out.println(gp.toString());
-		
-		gp.setAttribute("key1", "3");
-		gp.setAttribute("key2", "82");
-		
-		System.out.println(gp.toString());
 	}
 }

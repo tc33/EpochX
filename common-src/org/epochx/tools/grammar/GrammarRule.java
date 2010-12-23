@@ -97,8 +97,7 @@ public class GrammarRule implements GrammarNode, Cloneable {
 	 * @param production the <code>GrammarProduction</code> instance to be
 	 *        inserted.
 	 */
-	public void addProduction(final int index,
-			final GrammarProduction production) {
+	public void addProduction(final int index, final GrammarProduction production) {
 		productions.add(index, production);
 	}
 
@@ -111,8 +110,7 @@ public class GrammarRule implements GrammarNode, Cloneable {
 	 * @param production the <code>GrammarProduction</code> instance to be
 	 *        stored at the specified position.
 	 */
-	public void setProduction(final int index,
-			final GrammarProduction production) {
+	public void setProduction(final int index, final GrammarProduction production) {
 		productions.set(index, production);
 	}
 
@@ -206,7 +204,7 @@ public class GrammarRule implements GrammarNode, Cloneable {
 	}
 
 	/**
-	 * Make and return a copy of this <code>GrammarRule</code> instance.
+	 * Makes and returns a copy of this <code>GrammarRule</code> instance.
 	 */
 	@Override
 	public GrammarRule clone() {

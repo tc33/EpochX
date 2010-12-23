@@ -35,7 +35,7 @@ import java.util.*;
  * A file or string containing a BNF grammar is parsed upon construction and a
  * form of derivation tree with all possible options is created. The root of
  * this tree is determined as the first rule in the grammar string and is
- * retrieveable with a call to the <code>getStartSymbol()</code> method. The
+ * retrievable with a call to the <code>getStartSymbol()</code> method. The
  * <code>GrammarNode</code> this method returns may be either a
  * <code>GrammarLiteral</code> or a <code>GrammarRule</code>. Terminal symbols
  * are represented as <code>GrammarLiterals</code> and simply consist of a

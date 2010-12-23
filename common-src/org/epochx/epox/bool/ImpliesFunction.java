@@ -25,22 +25,19 @@ import org.epochx.epox.*;
 import org.epochx.tools.util.TypeUtils;
 
 /**
- * A <code>FunctionNode</code> which performs logical implication.
+ * A function node which performs logical implication.
  */
 public class ImpliesFunction extends Node {
 
 	/**
-	 * Construct an ImpliesFunction with no children.
+	 * Constructs an ImpliesFunction with two <code>null</code> children.
 	 */
 	public ImpliesFunction() {
 		this(null, null);
 	}
 
 	/**
-	 * Construct an ImpliesFunction with two children. When evaluated, if the
-	 * first child evaluates to true and the second child evaluates to false
-	 * then the result will be false. All other combinations give a result of
-	 * true.
+	 * Constructs an ImpliesFunction with two boolean child nodes.
 	 * 
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
@@ -50,14 +47,11 @@ public class ImpliesFunction extends Node {
 	}
 
 	/**
-	 * Evaluating an <code>ImpliesFunction</code> involves combining the
-	 * evaluation of the children according to the rules of IMPLIES where if the
-	 * first child evaluates to true and the second child evaluates to false
-	 * then the result will be false. All other combinations give a result of
-	 * true. For performance, this function is  evaluated lazily. The first 
-	 * child is evaluated first, if it evaluates to <code>false</code> then the 
-	 * overall result will always be <code>true</code>, so the second child will
-	 * not be evaluated at all.
+	 * Evaluates this function lazily. The first child node is evaluated, the
+	 * result of which must be a <code>Boolean</code> instance. If the result 
+	 * is a false value then true is returned from this method. If the first 
+	 * child evaluates to true, then the second child is also evaluated which 
+	 * becomes the result from this function.
 	 */
 	@Override
 	public Boolean evaluate() {
@@ -71,9 +65,7 @@ public class ImpliesFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the ImpliesFunction which is IMPLIES.
+	 * Returns the identifier of this function which is IMPLIES.
 	 */
 	@Override
 	public String getIdentifier() {
@@ -81,11 +73,17 @@ public class ImpliesFunction extends Node {
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * Returns this function node's return type for the given child input types.
+	 * If there are two children, both of which have a return type of Boolean, 
+	 * then the return type of this function will also be Boolean. In all other 
+	 * cases this method will return <code>null</code> to indicate that the 
+	 * inputs are invalid.
+	 * 
+	 * @return The Boolean class or null if the input type is invalid.
 	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (TypeUtils.allEqual(inputTypes, Boolean.class)) {
+		if (inputTypes.length == 2 && TypeUtils.allEqual(inputTypes, Boolean.class)) {
 			return Boolean.class;
 		} else {
 			return null;

@@ -25,22 +25,20 @@ import org.epochx.epox.*;
 import org.epochx.tools.util.TypeUtils;
 
 /**
- * A <code>FunctionNode</code> which performs the logical operation of NOR
+ * A function node which performs the logical operation of NOR
  * that is equivalent to the negation of logical OR or NOT OR.
  */
 public class NorFunction extends Node {
 
 	/**
-	 * Construct a NorFunction with no children.
+	 * Constructs a NorFunction with two <code>null</code> children.
 	 */
 	public NorFunction() {
 		this(null, null);
 	}
 
 	/**
-	 * Construct a NorFunction with two children. When evaluated, if both
-	 * children evaluate to false then the result will be true. All other
-	 * combinations will return a result of false.
+	 * Constructs a NorFunction with two boolean child nodes.
 	 * 
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
@@ -50,13 +48,11 @@ public class NorFunction extends Node {
 	}
 
 	/**
-	 * Evaluating a <code>NorFunction</code> involves combining the evaluation
-	 * of the children according to the rules of NOR where if both children
-	 * evaluate to false then the result will be true. All other combinations
-	 * will return a result of false. For performance, this function is 
-	 * evaluated lazily. The first child is evaluated first, if it evaluates to 
-	 * <code>true</code> then the overall result will always be 
-	 * <code>false</code>, so the second child will not be evaluated at all.
+	 * Evaluates this function lazily. The first child node is evaluated, the
+	 * result of which must be a <code>Boolean</code> instance. If the result 
+	 * is a false value then the second child is also evaluated. The result of 
+	 * this function will be true if both children evaluate to false, otherwise
+	 * the result will be false.
 	 */
 	@Override
 	public Boolean evaluate() {
@@ -70,9 +66,7 @@ public class NorFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the NorFunction which is NOR.
+	 * Returns the identifier of this function which is NOR.
 	 */
 	@Override
 	public String getIdentifier() {
@@ -80,11 +74,17 @@ public class NorFunction extends Node {
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * Returns this function node's return type for the given child input types.
+	 * If there are two children, both of which have a return type of Boolean, 
+	 * then the return type of this function will also be Boolean. In all other 
+	 * cases this method will return <code>null</code> to indicate that the 
+	 * inputs are invalid.
+	 * 
+	 * @return The Boolean class or null if the input type is invalid.
 	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (TypeUtils.allEqual(inputTypes, Boolean.class)) {
+		if (inputTypes.length == 2 && TypeUtils.allEqual(inputTypes, Boolean.class)) {
 			return Boolean.class;
 		} else {
 			return null;

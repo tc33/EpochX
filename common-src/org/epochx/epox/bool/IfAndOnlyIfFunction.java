@@ -26,22 +26,20 @@ import org.epochx.tools.util.TypeUtils;
 
 
 /**
- * A <code>FunctionNode</code> which performs the biconditional logical
- * connective of IFF (if and only if).
+ * A function node which performs the bi-conditional logical connective of IFF 
+ * (if and only if).
  */
 public class IfAndOnlyIfFunction extends Node {
 
 	/**
-	 * Construct an IfAndOnlyIfFunction with no children.
+	 * Constructs an IfAndOnlyIfFunction with two <code>null</code> children.
 	 */
 	public IfAndOnlyIfFunction() {
 		this(null, null);
 	}
 
 	/**
-	 * Construct an IfAndOnlyIfFunction with two children. When evaluated, if
-	 * both children evaluate to true, or both evaluate to false then the result
-	 * will be true. All other combinations will return a result of false.
+	 * Constructs an IfAndOnlyIfFunction with two boolean child nodes.
 	 * 
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
@@ -51,10 +49,11 @@ public class IfAndOnlyIfFunction extends Node {
 	}
 
 	/**
-	 * Evaluating an <code>IfAndOnlyIfFunction</code> involves combining the
-	 * evaluation of the children according to the rules of IFF where if both
-	 * children evaluate to true or both evaluate to false, then the result
-	 * will be true. All other combinations will return a result of false.
+	 * Evaluates this function. Both child nodes are evaluated, the results of 
+	 * which must be <code>Boolean</code> instances. The two boolean values 
+	 * determine the result of this evaluation. If both inputs are true or both
+	 * are false, then the result will be true. All other combinations of the 
+	 * inputs will result in the return of a value of false.
 	 */
 	@Override
 	public Boolean evaluate() {
@@ -65,9 +64,7 @@ public class IfAndOnlyIfFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the IfAndOnlyIfFunction which is IFF.
+	 * Returns the identifier of this function which is IFF.
 	 */
 	@Override
 	public String getIdentifier() {
@@ -75,11 +72,17 @@ public class IfAndOnlyIfFunction extends Node {
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * Returns this function node's return type for the given child input types.
+	 * If there are two children, both of which have a return type of Boolean, 
+	 * then the return type of this function will also be Boolean. In all other 
+	 * cases this method will return <code>null</code> to indicate that the 
+	 * inputs are invalid.
+	 * 
+	 * @return The Boolean class or null if the input type is invalid.
 	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (TypeUtils.allEqual(inputTypes, Boolean.class)) {
+		if (inputTypes.length == 2 && TypeUtils.allEqual(inputTypes, Boolean.class)) {
 			return Boolean.class;
 		} else {
 			return null;

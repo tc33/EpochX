@@ -25,41 +25,40 @@ import org.epochx.epox.*;
 import org.epochx.tools.ant.Ant;
 
 /**
- * A <code>FunctionNode</code> which represents the conditional if-then-else
- * statement typically used in the artificial ant domain. This version of the
- * if statement has the condition predefined as a check for whether the next
- * move in the landscape contains a food item.
+ * This class defines a function which requires three children, the first of 
+ * which has the data-type of Ant. When evaluated, this function will evaluate 
+ * its first child and then conditionally evaluate either the second or third
+ * child depending on whether the ant has a food item in the position directly
+ * in front of it.
  */
 public class IfFoodAheadFunction extends Node {
 
 	/**
-	 * Construct an IfFoodAheadFunction with no children.
-	 * 
-	 * @param ant the ant which this function will be controlling.
+	 * Constructs an IfFoodAheadFunction with three <code>null</code> children.
 	 */
 	public IfFoodAheadFunction() {
 		this(null, null, null);
 	}
 
 	/**
-	 * Construct an IfFoodAheadFunction with two children. When evaluated,
-	 * if given ant's next location on the provided landscape is a food
-	 * location then the first child node will be evaluated and executed,
-	 * otherwise the second child node is evaluated and executed.
+	 * Constructs an IfFoodAheadFunction with three child nodes. The first child
+	 * must have a return-type of Ant.
 	 * 
-	 * @param ant the ant which this function will be controlling.
-	 * @param child1 The first child node.
-	 * @param child2 The second child node.
+	 * @param ant the ant child upon which the condition is made.
+	 * @param child1 The first conditionally evaluated child node.
+	 * @param child2 The second conditionally evaluated child node.
 	 */
 	public IfFoodAheadFunction(final Node ant, final Node child1, final Node child2) {
 		super(ant, child1, child2);
 	}
 
 	/**
-	 * Evaluating an <code>IfFoodAheadFunction</code> involves identifying the
-	 * next location the ant would move to on the landscape were it to be moved.
-	 * If this position contains a food item then the first child is evaluated
-	 * and executed, else the second child is evaluated and executed.
+	 * Evaluates this function. The Ant returned by evaluating this node's first
+	 * child is checked for whether food is in the position ahead. If food is in
+	 * the position directly in front of the ant then the second child node is
+	 * evaluated, otherwise the third child node is evaluated. The return type 
+	 * of this function node is Void, and so the value returned from this method
+	 * is undefined.
 	 */
 	@Override
 	public Void evaluate() {
@@ -75,16 +74,22 @@ public class IfFoodAheadFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the IfFoodAheadFunction which is
-	 *         IF-FOOD-AHEAD.
+	 * Returns the identifier of this function which is IF-FOOD-AHEAD.
 	 */
 	@Override
 	public String getIdentifier() {
 		return "IF-FOOD-AHEAD";
 	}
 	
+	/**
+	 * Returns this function node's return type for the given child input types.
+	 * If there are three input types, the first of which is a sub-type of Ant 
+	 * then the return type of this function will be Void. In all other cases 
+	 * this method will return <code>null</code> to indicate that the inputs are
+	 * invalid.
+	 * 
+	 * @return The Void class or null if the input type is invalid.
+	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
 		if (inputTypes.length == 3 && Ant.class.isAssignableFrom(inputTypes[0])) {

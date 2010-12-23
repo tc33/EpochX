@@ -25,33 +25,30 @@ import org.epochx.epox.*;
 import org.epochx.tools.util.TypeUtils;
 
 /**
- * A <code>FunctionNode</code> which performs logical negation.
+ * A function node which performs logical negation.
  */
 public class NotFunction extends Node {
 
 	/**
-	 * Construct a NotFunction with no children.
+	 * Constructs a NotFunction with one <code>null</code> child.
 	 */
 	public NotFunction() {
 		this(null);
 	}
 
 	/**
-	 * Construct a NotFunction with one children. When evaluated, if the child
-	 * evaluates to true, the result will be false. If false, the result will be
-	 * true.
+	 * Constructs a NotFunction with one boolean child node.
 	 * 
-	 * @param child The child node which will be evaluated and negated.
+	 * @param child The first child node.
 	 */
 	public NotFunction(final Node child) {
 		super(child);
 	}
 
 	/**
-	 * Evaluating a <code>NotFunction</code> involves evaluating the child, then
-	 * negating the result. If the child evaluates to true, the result will be
-	 * false,
-	 * otherwise it will be true.
+	 * Evaluates this function. The child node is evaluated, the
+	 * result of which must be a <code>Boolean</code> instance. The result is 
+	 * negated and returned as the result.
 	 */
 	@Override
 	public Boolean evaluate() {
@@ -59,9 +56,7 @@ public class NotFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the NotFunction which is NOT.
+	 * Returns the identifier of this function which is NOT.
 	 */
 	@Override
 	public String getIdentifier() {
@@ -69,11 +64,16 @@ public class NotFunction extends Node {
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * Returns this function node's return type for the given child input types.
+	 * If there is one child with a return type of Boolean, then the return type
+	 * of this function will also be Boolean. In all other cases this method 
+	 * will return <code>null</code> to indicate that the inputs are invalid.
+	 * 
+	 * @return The Boolean class or null if the input type is invalid.
 	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (TypeUtils.allEqual(inputTypes, Boolean.class)) {
+		if (inputTypes.length == 1 && TypeUtils.allEqual(inputTypes, Boolean.class)) {
 			return Boolean.class;
 		} else {
 			return null;

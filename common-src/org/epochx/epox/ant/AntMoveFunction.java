@@ -25,22 +25,39 @@ import org.epochx.epox.*;
 import org.epochx.tools.ant.Ant;
 
 /**
- * This class defines an action which when executed will trigger the ant
- * to move one position in its ant landscape.
+ * This class defines a function which requires one child with a data-type of 
+ * Ant. When evaluated, this function will evaluate its child and move the 
+ * returned Ant by one position in its ant landscape.
+ * 
+ * @see AntSkipFunction
+ * @see AntTurnLeftFunction
+ * @see AntTurnRightFunction
  */
 public class AntMoveFunction extends Node {
 
 	/**
-	 * Constructs an AntMoveFunction.
+	 * Constructs an AntMoveFunction with one <code>null</code> child.
 	 */
 	public AntMoveFunction() {
 		this(null);
 	}
 	
+	/**
+	 * Constructs an AntMoveFunction with one child node. The given child
+	 * must have a return-type of Ant.
+	 * 
+	 * @param child this node's only child.
+	 */
 	public AntMoveFunction(final Node child) {
 		super(child);
 	}
 
+	/**
+	 * Evaluates this function. The Ant returned by evaluating this node's child
+	 * is moved one position in the direction it is currently facing. The return
+	 * type of this function node is Void, and so the value returned from this 
+	 * method is undefined.
+	 */
 	@Override
 	public Void evaluate() {
 		Ant ant = (Ant) getChild(0).evaluate();
@@ -50,11 +67,22 @@ public class AntMoveFunction extends Node {
 		return null;
 	}
 
+	/**
+	 * Returns the identifier of this function which is MOVE.
+	 */
 	@Override
 	public String getIdentifier() {
 		return "MOVE";
 	}
 
+	/**
+	 * Returns this function node's return type for the given child input types.
+	 * If there is only one input type which is a sub-type of Ant then the 
+	 * return type of this function will be Void. In all other cases this method
+	 * will return <code>null</code> to indicate that the inputs are invalid.
+	 * 
+	 * @return The Void class or null if the input type is invalid.
+	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
 		if (inputTypes.length == 1 && Ant.class.isAssignableFrom(inputTypes[0])) {

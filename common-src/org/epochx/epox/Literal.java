@@ -9,6 +9,8 @@ import org.apache.commons.lang.ObjectUtils;
  * cannot be copied, instead, all references to the same variable should refer
  * to the same <code>Variable</code> instance. In contrast, <code>Literal</code>
  * instances may be cloned and behave like most other node types.
+ * 
+ * @see Variable
  */
 public class Literal extends Node {
 

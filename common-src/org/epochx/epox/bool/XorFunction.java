@@ -25,22 +25,20 @@ import org.epochx.epox.*;
 import org.epochx.tools.util.TypeUtils;
 
 /**
- * A <code>FunctionNode</code> which performs exclusive disjunction, also known
+ * A function node which performs exclusive disjunction, also known
  * as exclusive OR.
  */
 public class XorFunction extends Node {
 
 	/**
-	 * Construct an XorFunction with no children.
+	 * Constructs an XorFunction with two <code>null</code> children.
 	 */
 	public XorFunction() {
 		this(null, null);
 	}
 
 	/**
-	 * Construct an XorFunction with two children. When evaluated, if either
-	 * child evaluates to true (but not both) then the result will be true,
-	 * otherwise the result will be false.
+	 * Constructs an XorFunction with two boolean child nodes.
 	 * 
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
@@ -50,10 +48,10 @@ public class XorFunction extends Node {
 	}
 
 	/**
-	 * Evaluating an <code>XorFunction</code> involves evaluating both children.
-	 * If either child evaluates to true (but not both) then the result will be
-	 * true,
-	 * otherwise the result will be false.
+	 * Evaluates this function. Both child nodes are evaluated, the result of 
+	 * both must be a <code>Boolean</code> instance. The result of this 
+	 * function will be true if either (but not both) children evaluate to 
+	 * true, otherwise the result will be false.
 	 */
 	@Override
 	public Boolean evaluate() {
@@ -64,9 +62,7 @@ public class XorFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the XorFunction which is XOR.
+	 * Returns the identifier of this function which is XOR.
 	 */
 	@Override
 	public String getIdentifier() {
@@ -74,11 +70,17 @@ public class XorFunction extends Node {
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * Returns this function node's return type for the given child input types.
+	 * If there are two children, both of which have a return type of Boolean, 
+	 * then the return type of this function will also be Boolean. In all other 
+	 * cases this method will return <code>null</code> to indicate that the 
+	 * inputs are invalid.
+	 * 
+	 * @return The Boolean class or null if the input type is invalid.
 	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (TypeUtils.allEqual(inputTypes, Boolean.class)) {
+		if (inputTypes.length == 2 && TypeUtils.allEqual(inputTypes, Boolean.class)) {
 			return Boolean.class;
 		} else {
 			return null;

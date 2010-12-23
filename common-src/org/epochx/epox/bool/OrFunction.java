@@ -25,21 +25,19 @@ import org.epochx.epox.*;
 import org.epochx.tools.util.TypeUtils;
 
 /**
- * A <code>FunctionNode</code> which performs logical disjunction.
+ * A function node which performs logical disjunction.
  */
 public class OrFunction extends Node {
 
 	/**
-	 * Construct an OrFunction with no children.
+	 * Constructs an OrFunction with two <code>null</code> children.
 	 */
 	public OrFunction() {
 		this(null, null);
 	}
 
 	/**
-	 * Construct an OrFunction with two children. When evaluated, if both
-	 * children evaluate to false then the result will be false. All other
-	 * combinations will return a result of true.
+	 * Constructs an OrFunction with two boolean child nodes.
 	 * 
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
@@ -49,13 +47,11 @@ public class OrFunction extends Node {
 	}
 
 	/**
-	 * Evaluating an <code>OrFunction</code> involves combining the evaluation
-	 * of the children according to the rules of OR where if both children
-	 * evaluate to false then the result will be false. All other combinations
-	 * will return a result of true. For performance, this function is 
-	 * evaluated lazily. The first child is evaluated first, if it evaluates to 
-	 * <code>true</code> then the overall result will always be 
-	 * <code>true</code>, so the second child will not be evaluated at all.
+	 * Evaluates this function lazily. The first child node is evaluated, the
+	 * result of which must be a <code>Boolean</code> instance. If the result 
+	 * is a false value then the second child is also evaluated. The result of 
+	 * this function will be true if either (or both) children evaluate to 
+	 * true, otherwise the result will be false.
 	 */
 	@Override
 	public Boolean evaluate() {
@@ -69,9 +65,7 @@ public class OrFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the OrFunction which is OR.
+	 * Returns the identifier of this function which is OR.
 	 */
 	@Override
 	public String getIdentifier() {
@@ -79,11 +73,17 @@ public class OrFunction extends Node {
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * Returns this function node's return type for the given child input types.
+	 * If there are two children, both of which have a return type of Boolean, 
+	 * then the return type of this function will also be Boolean. In all other 
+	 * cases this method will return <code>null</code> to indicate that the 
+	 * inputs are invalid.
+	 * 
+	 * @return The Boolean class or null if the input type is invalid.
 	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (TypeUtils.allEqual(inputTypes, Boolean.class)) {
+		if (inputTypes.length == 2 && TypeUtils.allEqual(inputTypes, Boolean.class)) {
 			return Boolean.class;
 		} else {
 			return null;

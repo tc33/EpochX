@@ -27,19 +27,19 @@ import org.apache.commons.lang.ObjectUtils;
 import org.epochx.tools.util.TypeUtils;
 
 /**
- * Subclasses of <code>Node</code> should ensure they call the superclass
- * constructor with all child Nodes so information such as the arity of the
- * Node can be maintained. Concrete subclasses must also implement evaluate().
- * 
  * A Node is a vertex in a tree structure which represents a program. A Node
  * can be thought of as an expression in a computer programming language.
- * Evaluating a Node will involve evaluating any children and potentially
- * performing some operation and/or returning a value. A program
- * is maintained by the <code>GPCandidateProgram</code> class.
+ * Evaluating a Node will involve evaluating any children and optionally 
+ * returning a value.
  * 
- * @see BooleanNode
- * @see DoubleNode
- * @see VoidNode
+ * Subclasses of <code>Node</code> should ensure they call the superclass
+ * constructor with all child Nodes so information such as the arity of the
+ * node can be maintained. Concrete subclasses must also implement evaluate(). 
+ * Each node may also need to override one of the getReturnType methods. All 
+ * subclasses with an arity of zero should override the no-args version of the
+ * method to indicate their return type. Nodes with an arity of one or more, 
+ * should override the getReturnType(Class<?>[]) method to indicate its return 
+ * type for a given set of input types.
  */
 public abstract class Node implements Cloneable {
 
@@ -47,7 +47,9 @@ public abstract class Node implements Cloneable {
 	private Node[] children;
 
 	/**
-	 * Node constructor.
+	 * Constructs a new Node with the given child nodes. The arity of the node
+	 * will be the number of child nodes provided. If unknown, then the child 
+	 * nodes may be null.
 	 * 
 	 * @param children child nodes to this node.
 	 */
@@ -56,15 +58,15 @@ public abstract class Node implements Cloneable {
 	}
 
 	/**
-	 * Performs some operation and/or returns a value associated
-	 * with this Node.
+	 * Should be implemented by subclasses to perform some operation with 
+	 * respect to its children and return the result.
 	 * 
-	 * @return The result of evaluating the candidate program.
+	 * @return the result of evaluating the node tree rooted at this node.
 	 */
 	public abstract Object evaluate();
 
 	/**
-	 * Returns an array of the children of this node.
+	 * Returns an array of this node's children.
 	 * 
 	 * @return the children of this node.
 	 */
@@ -73,7 +75,7 @@ public abstract class Node implements Cloneable {
 	}
 
 	/**
-	 * Sets the children of this node.
+	 * Sets this node's children.
 	 * 
 	 * @param children the new children to be set.
 	 */
@@ -84,9 +86,9 @@ public abstract class Node implements Cloneable {
 	/**
 	 * Returns a specific child by index.
 	 * 
-	 * @param index the index (representing arity) of the child to be returned,
-	 *        indexes are from zero.
-	 * @return the child node at the specified arity index.
+	 * @param index the index of the child to be returned, valid indexes run 
+	 * from zero to arity-1.
+	 * @return the child node at the specified index.
 	 */
 	public Node getChild(final int index) {
 		return children[index];
@@ -99,13 +101,13 @@ public abstract class Node implements Cloneable {
 	 * 
 	 * @param n the index of the node to be returned.
 	 * @return the node at the specified position in this node tree.
+	 * @throws IndexOutOfBoundsException if n is out of range.
 	 */
 	public Node getNthNode(final int n) {
 		if (n >= 0) {
 			return getNthNode(n, 0);
 		} else {
-			throw new IndexOutOfBoundsException(
-					"attempt to get node at negative index");
+			throw new IndexOutOfBoundsException("attempt to get node at negative index");
 		}
 	}
 
@@ -135,8 +137,7 @@ public abstract class Node implements Cloneable {
 
 		// If node is null now then the index did not exist within any children.
 		if (node == null) {
-			throw new IndexOutOfBoundsException(
-					"attempt to get node at index >= length");
+			throw new IndexOutOfBoundsException("attempt to get node at index >= length");
 		}
 
 		return node;
@@ -151,16 +152,15 @@ public abstract class Node implements Cloneable {
 	 * 
 	 * @param n the index of the node to replace.
 	 * @param newNode the node to be stored at the specified position.
+	 * @throws IndexOutOfBoundsException if n is out of range.
 	 */
 	public void setNthNode(final int n, final Node newNode) {
 		if (n > 0) {
 			setNthNode(n, newNode, 0);
 		} else if (n == 0) {
-			throw new IndexOutOfBoundsException(
-					"attempt to set node at index 0, cannot replace self");
+			throw new IndexOutOfBoundsException("attempt to set node at index 0, cannot replace self");
 		} else {
-			throw new IndexOutOfBoundsException(
-					"attempt to set node at negative index");
+			throw new IndexOutOfBoundsException("attempt to set node at negative index");
 		}
 	}
 
@@ -188,8 +188,7 @@ public abstract class Node implements Cloneable {
 		}
 
 		// If we get to here then the index was larger than was available.
-		throw new IndexOutOfBoundsException(
-				"attempt to set node at index >= length");
+		throw new IndexOutOfBoundsException("attempt to set node at index >= length");
 	}
 	
 	/**
@@ -200,9 +199,19 @@ public abstract class Node implements Cloneable {
 	 * 
 	 * @param n the function to find the index of.
 	 * @return the index of the nth function node.
+	 * @throws IndexOutOfBoundsException if n is out of range.
 	 */
 	public int getNthFunctionNodeIndex(final int n) {
-		return getNthFunctionNodeIndex(n, 0, 0, this);
+		int result = -1;
+		if (n > 0) {
+			result = getNthFunctionNodeIndex(n, 0, 0, this);
+		}
+		
+		if (result == -1) {
+			throw new IndexOutOfBoundsException("attempt to get node at invalid index: " +n);
+		}
+
+		return result;
 	}
 
 	/*
@@ -216,7 +225,7 @@ public abstract class Node implements Cloneable {
 		}
 
 		final int result = -1;
-		for (final Node child: current.getChildren()) {
+		for (final Node child: current.children) {
 			final int noNodes = child.getLength();
 			final int noFunctions = child.getNoFunctions();
 
@@ -245,9 +254,19 @@ public abstract class Node implements Cloneable {
 	 * 
 	 * @param n the terminal to find the index of.
 	 * @return the index of the nth terminal node.
+	 * @throws IllegalArgumentException if n is out of bounds.
 	 */
 	public int getNthTerminalNodeIndex(final int n) {
-		return getNthTerminalNodeIndex(n, 0, 0, this);
+		int result = -1;
+		if (n > 0) {
+			result = getNthTerminalNodeIndex(n, 0, 0, this);
+		}
+		
+		if (result == -1) {
+			throw new IndexOutOfBoundsException("attempt to get node at invalid index: " +n);
+		}
+
+		return result;
 	}
 
 	/*
@@ -292,12 +311,11 @@ public abstract class Node implements Cloneable {
 	 * @return a List of all the nodes at the specified depth.
 	 */
 	public List<Node> getNodesAtDepth(final int depth) {
-		final List<Node> nodes = new ArrayList<Node>();
+		final List<Node> nodes = new ArrayList<Node>((depth+1)*3);
 		if (depth >= 0) {
 			getNodesAtDepth(nodes, depth, 0);
 		} else {
-			throw new IndexOutOfBoundsException(
-					"attempt to get nodes at negative depth");
+			throw new IndexOutOfBoundsException("attempt to get nodes at negative depth");
 		}
 
 		return nodes;
@@ -307,8 +325,7 @@ public abstract class Node implements Cloneable {
 	 * A helper function for getNodesAtDepth(int), to recurse down the node
 	 * tree and populate the nodes array when at the correct depth.
 	 */
-	private void getNodesAtDepth(final List<Node> nodes, final int d,
-			final int current) {
+	private void getNodesAtDepth(final List<Node> nodes, final int d, final int current) {
 		if (d == current) {
 			nodes.add(this);
 		} else {
@@ -322,7 +339,7 @@ public abstract class Node implements Cloneable {
 	/**
 	 * Replaces the child node at the specified index with the specified node.
 	 * 
-	 * @param index the index of the child to replace within the nodes arity.
+	 * @param index the index of the child to replace, from 0 to arity-1.
 	 * @param child the child node to be stored at the specified position.
 	 */
 	public void setChild(final int index, final Node child) {
@@ -339,7 +356,8 @@ public abstract class Node implements Cloneable {
 	}
 
 	/**
-	 * Returns a count of how many terminal nodes are in the node tree.
+	 * Returns a count of how many terminal nodes are in the node tree below 
+	 * this node.
 	 * 
 	 * @return the number of terminal nodes in this node tree.
 	 */
@@ -357,7 +375,8 @@ public abstract class Node implements Cloneable {
 	}
 
 	/**
-	 * Returns a count of how many unique terminal nodes are in the node tree.
+	 * Returns a count of how many unique terminal nodes are in the node tree
+	 * below this node.
 	 * 
 	 * @return the number of unique terminal nodes in this node tree.
 	 */
@@ -378,8 +397,6 @@ public abstract class Node implements Cloneable {
 	 * @return a List of all the terminal nodes in the node tree.
 	 */
 	public List<Node> getTerminalNodes() {
-		// Alternatively we could use an array, which is quicker/more efficient
-		// in this situation?
 		final List<Node> terminals = new ArrayList<Node>();
 
 		final int arity = getArity();
@@ -536,6 +553,7 @@ public abstract class Node implements Cloneable {
 	}
 	
 	/**
+	 * Returns this function node's return type for the given child input types.
 	 * Default implementation is that the node will enforce the closure 
 	 * requirement, and all its inputs and its return type will be the same.
 	 * @param inputTypes
@@ -619,7 +637,7 @@ public abstract class Node implements Cloneable {
 	/**
 	 * Compare an object for equality. If the given object is a Node then it
 	 * may be equal if each Node in the tree is equal. Equality of individual
-	 * Nodes is dependant on the specific node type but typically will be
+	 * Nodes is dependent on the specific node type but typically will be
 	 * whether they are the same type and have the same children for function
 	 * nodes and whether they have the same value or are the same variable for
 	 * terminal nodes.

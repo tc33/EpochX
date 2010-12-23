@@ -25,22 +25,20 @@ import org.epochx.epox.*;
 import org.epochx.tools.util.TypeUtils;
 
 /**
- * A <code>FunctionNode</code> which performs the logical operation of NAND
+ * A function node which performs the logical operation of NAND
  * that is equivalent to the negation of the conjunction or NOT AND.
  */
 public class NandFunction extends Node {
 
 	/**
-	 * Construct a NandFunction with no children.
+	 * Constructs a NandFunction with two <code>null</code> children.
 	 */
 	public NandFunction() {
 		this(null, null);
 	}
 
 	/**
-	 * Construct a NandFunction with two children. When evaluated, if both
-	 * children evaluate to true then the result will be false. All other
-	 * combinations will return a result of true.
+	 * Constructs a NandFunction with two boolean child nodes.
 	 * 
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
@@ -58,6 +56,13 @@ public class NandFunction extends Node {
 	 * <code>false</code> then the overall result will always be 
 	 * <code>true</code>, so the second child will not be evaluated at all.
 	 */
+	/**
+	 * Evaluates this function lazily. The first child node is evaluated, the
+	 * result of which must be a <code>Boolean</code> instance. The second child
+	 * is only evaluated if the first had a true value. The result of this 
+	 * method will be true if both children evaluate to false, otherwise it will
+	 * return false.
+	 */
 	@Override
 	public Boolean evaluate() {
 		boolean result = ((Boolean) getChild(0).evaluate()).booleanValue();
@@ -70,9 +75,7 @@ public class NandFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the NandFunction which is NAND.
+	 * Returns the identifier of this function which is NAND.
 	 */
 	@Override
 	public String getIdentifier() {
@@ -80,11 +83,17 @@ public class NandFunction extends Node {
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * Returns this function node's return type for the given child input types.
+	 * If there are two children, both of which have a return type of Boolean, 
+	 * then the return type of this function will also be Boolean. In all other 
+	 * cases this method will return <code>null</code> to indicate that the 
+	 * inputs are invalid.
+	 * 
+	 * @return The Boolean class or null if the input type is invalid.
 	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (TypeUtils.allEqual(inputTypes, Boolean.class)) {
+		if (inputTypes.length == 2 && TypeUtils.allEqual(inputTypes, Boolean.class)) {
 			return Boolean.class;
 		} else {
 			return null;

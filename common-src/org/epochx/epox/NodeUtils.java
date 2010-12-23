@@ -60,7 +60,6 @@ public final class NodeUtils {
 		return varieties;
 	}
 	
-	
 	/*
 	 * Helper method for noVarieties method which returns a list of those nodes
 	 * that are valid with specified depth remaining. This will exclude 
@@ -147,5 +146,4 @@ public final class NodeUtils {
 		return functions;
 	}
 	
-
 }

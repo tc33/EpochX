@@ -77,9 +77,4 @@ public class ArcCosineFunctionTest extends AbstractDoubleNodeTestCase {
 
 		assertEquals("ACOS of 0.0 not returning NaN", Double.NaN, result);
 	}
-
-	public static void main(final String[] args) {
-		System.out.println(Math.acos(Math.cos(0.6)));
-		System.out.println(Math.acos(Math.cos(-0.6)));
-	}
 }

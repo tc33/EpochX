@@ -146,9 +146,8 @@ public class RunManager implements ConfigListener {
 		Life.get().fireConfigureEvent();
 
 		// Validate that the model is in a runnable state.
-		if (noGenerations < 0) {
-			throw new IllegalStateException(
-					"number of generations must be 0 or greater");
+		if (noGenerations < -1) {
+			throw new IllegalStateException("number of generations must be -1 or greater: " + noGenerations);
 		}
 
 		// Inform everyone we're starting a run.
@@ -169,7 +168,8 @@ public class RunManager implements ConfigListener {
 		updateBestProgram(pop);
 
 		// Execute each generation.
-		for (int gen = 1; gen <= noGenerations; gen++) {
+		int gen = 1;
+		while (gen <= noGenerations || noGenerations == -1) {
 			// Perform the generation.
 			pop = generation.generation(gen, pop);
 
@@ -181,6 +181,8 @@ public class RunManager implements ConfigListener {
 				Life.get().fireSuccessEvent();
 				break;
 			}
+			
+			gen++;
 		}
 
 		// Calculate how long the run took.

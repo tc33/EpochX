@@ -29,7 +29,7 @@ public class EvenParityTest extends ModelTest {
 				Stats.get().print(StatField.RUN_NUMBER, StatField.GEN_NUMBER, StatField.GEN_FITNESS_MIN, StatField.GEN_FITNESS_AVE);
 			}
 		};
-		//Life.get().addGenerationListener(genPrinter);
+		Life.get().addGenerationListener(genPrinter);
 	}
 	
 	@Override

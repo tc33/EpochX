@@ -202,16 +202,7 @@ public abstract class Node implements Cloneable {
 	 * @throws IndexOutOfBoundsException if n is out of range.
 	 */
 	public int getNthFunctionNodeIndex(final int n) {
-		int result = -1;
-		if (n > 0) {
-			result = getNthFunctionNodeIndex(n, 0, 0, this);
-		}
-		
-		if (result == -1) {
-			throw new IndexOutOfBoundsException("attempt to get node at invalid index: " +n);
-		}
-
-		return result;
+		return getNthFunctionNodeIndex(n, 0, 0, this);
 	}
 
 	/*
@@ -257,16 +248,7 @@ public abstract class Node implements Cloneable {
 	 * @throws IllegalArgumentException if n is out of bounds.
 	 */
 	public int getNthTerminalNodeIndex(final int n) {
-		int result = -1;
-		if (n > 0) {
-			result = getNthTerminalNodeIndex(n, 0, 0, this);
-		}
-		
-		if (result == -1) {
-			throw new IndexOutOfBoundsException("attempt to get node at invalid index: " +n);
-		}
-
-		return result;
+		return getNthTerminalNodeIndex(n, 0, 0, this);
 	}
 
 	/*

@@ -198,36 +198,36 @@ public class GrowInitialiserTest extends TestCase {
 		} catch (IllegalStateException e) {}
 	}
 	
-	public void testInit() {
-		List<Node> syntax = new ArrayList<Node>();
-		syntax.add(new Literal(0.3));
-		syntax.add(new Literal(2));
-		syntax.add(new AddFunction());
-		syntax.add(new SubtractFunction());
-		initialiser.setSyntax(syntax);
-		initialiser.setMaxDepth(2);
-		initialiser.setReturnType(Double.class);
-		
-		SubtreeCrossover crossover = new SubtreeCrossover(initialiser.getRNG());
-		
-		for (int i=0; i<100; i++) {
-			GPCandidateProgram p1 = initialiser.getInitialProgram();
-			GPCandidateProgram p2 = initialiser.getInitialProgram();
-			Double d1 = (Double) p1.evaluate();
-			Double d2 = (Double) p2.evaluate();
-			System.out.println(p1 + " = " + d1);
-			System.out.println(p2 + " = " + d2);
-			
-			GPCandidateProgram[] children = crossover.crossover(p1, p2);
-			if (children.length > 0) {
-				d1 = (Double) children[0].evaluate();
-				d2 = (Double) children[1].evaluate();
-				System.out.println(children[0] + " = " + d1);
-				System.out.println(children[1] + " = " + d2);
-				System.out.println(Stats.get().getStat(SubtreeCrossover.XO_POINT1) + " " + Stats.get().getStat(SubtreeCrossover.XO_SUBTREE1));
-				System.out.println(Stats.get().getStat(SubtreeCrossover.XO_POINT2) + " " + Stats.get().getStat(SubtreeCrossover.XO_SUBTREE2));
-			}
-			System.out.println("-------------------------------------------");
-		}
-	}
+//	public void testInit() {
+//		List<Node> syntax = new ArrayList<Node>();
+//		syntax.add(new Literal(0.3));
+//		syntax.add(new Literal(2));
+//		syntax.add(new AddFunction());
+//		syntax.add(new SubtractFunction());
+//		initialiser.setSyntax(syntax);
+//		initialiser.setMaxDepth(2);
+//		initialiser.setReturnType(Double.class);
+//		
+//		SubtreeCrossover crossover = new SubtreeCrossover(initialiser.getRNG());
+//		
+//		for (int i=0; i<100; i++) {
+//			GPCandidateProgram p1 = initialiser.getInitialProgram();
+//			GPCandidateProgram p2 = initialiser.getInitialProgram();
+//			Double d1 = (Double) p1.evaluate();
+//			Double d2 = (Double) p2.evaluate();
+//			System.out.println(p1 + " = " + d1);
+//			System.out.println(p2 + " = " + d2);
+//			
+//			GPCandidateProgram[] children = crossover.crossover(p1, p2);
+//			if (children.length > 0) {
+//				d1 = (Double) children[0].evaluate();
+//				d2 = (Double) children[1].evaluate();
+//				System.out.println(children[0] + " = " + d1);
+//				System.out.println(children[1] + " = " + d2);
+//				System.out.println(Stats.get().getStat(SubtreeCrossover.XO_POINT1) + " " + Stats.get().getStat(SubtreeCrossover.XO_SUBTREE1));
+//				System.out.println(Stats.get().getStat(SubtreeCrossover.XO_POINT2) + " " + Stats.get().getStat(SubtreeCrossover.XO_SUBTREE2));
+//			}
+//			System.out.println("-------------------------------------------");
+//		}
+//	}
 }

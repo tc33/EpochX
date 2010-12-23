@@ -26,6 +26,7 @@ import java.util.*;
 import junit.framework.TestCase;
 
 import org.epochx.epox.*;
+import org.epochx.epox.bool.AndFunction;
 import org.epochx.gp.model.*;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
@@ -47,6 +48,7 @@ public class InitialisationManagerTest extends TestCase {
 		// initialisations.
 		final List<Node> syntax = new ArrayList<Node>();
 		syntax.add(new Literal(false));
+		syntax.add(new AndFunction());
 		((GPModel) model).setSyntax(syntax);
 		((GPModel) model).setMaxInitialDepth(0);
 
@@ -172,7 +174,7 @@ public class InitialisationManagerTest extends TestCase {
 
 		// We add the chars '1', '2', '3' to builder to check order of calls.
 		final StringBuilder verify = new StringBuilder();
-
+		
 		// Listen for the initialisation.
 		Life.get().addHook(new AbstractHook() {
 					@Override

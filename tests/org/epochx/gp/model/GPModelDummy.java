@@ -66,6 +66,8 @@ public class GPModelDummy extends GPModel {
 
 	// GP Model parameters.
 	private List<Node> syntax;
+	
+	private Class<?> returnType;
 
 	private int maxInitialDepth;
 	private int maxProgramDepth;
@@ -100,6 +102,8 @@ public class GPModelDummy extends GPModel {
 		maxProgramDepth = 12;
 
 		syntax = new ArrayList<Node>();
+		
+		returnType = Boolean.class;
 
 		// Operators.
 		initialiser = new FullInitialiser(this);
@@ -312,7 +316,7 @@ public class GPModelDummy extends GPModel {
 
 	@Override
 	public Class<?> getReturnType() {
-		return Void.class;
+		return returnType;
 	}
 
 }

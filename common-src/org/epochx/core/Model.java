@@ -308,14 +308,13 @@ public abstract class Model {
 	 * @param noGenerations the new number of generations to use within a run.
 	 */
 	public void setNoGenerations(final int noGenerations) {
-		if (noGenerations >= 0) {
+		if (noGenerations >= -1) {
 			this.noGenerations = noGenerations;
 		} else {
-			throw new IllegalArgumentException(
-					"noGenerations must be zero or more");
+			throw new IllegalArgumentException("noGenerations must be either -1 or greater: " + noGenerations);
 		}
 
-		assert (this.noGenerations >= 0);
+		assert (this.noGenerations >= -1);
 	}
 
 	/**

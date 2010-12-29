@@ -25,32 +25,32 @@ import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A <code>FunctionNode</code> which performs the inverse trigonometric function
- * of
- * arccosine.
+ * A function node which performs the inverse trigonometric function of
+ * arc-cosine, called ACOS.
  */
 public class ArcCosineFunction extends Node {
 
 	/**
-	 * Construct an ArcCosineFunction with no children.
+	 * Constructs an ArcCosineFunction with one <code>null</code> child.
 	 */
 	public ArcCosineFunction() {
 		this(null);
 	}
 
 	/**
-	 * Construct an ArcCosineFunction with one child. When evaluated, the child
-	 * will be evaluated with arccosine performed on the result.
+	 * Constructs an ArcCosineFunction with one numerical child node.
 	 * 
-	 * @param child The child which arccosine will be performed on.
+	 * @param child the child node.
 	 */
 	public ArcCosineFunction(final Node child) {
 		super(child);
 	}
 
 	/**
-	 * Evaluating an <code>ArcCosineFunction</code> involves calculating the
-	 * arccosine of the child once it's been evaluated.
+	 * Evaluates this function. The child node is evaluated, the
+	 * result of which must be a numeric type (one of Double, Float, Long, 
+	 * Integer). The arc-cosine of this value becomes the result of this 
+	 * method as a double value.
 	 */
 	@Override
 	public Double evaluate() {
@@ -60,15 +60,21 @@ public class ArcCosineFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the ArcCosineFunction which is ACOS.
+	 * Returns the identifier of this function which is ACOS.
 	 */
 	@Override
 	public String getIdentifier() {
 		return "ACOS";
 	}
 	
+	/**
+	 * Returns this function node's return type for the given child input types.
+	 * If there is one input type of a numeric type then the return type will 
+	 * be Double. In all other cases this method will return 
+	 * <code>null</code> to indicate that the inputs are invalid.
+	 * 
+	 * @return the Double class or null if the input type is invalid.
+	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
 		if (inputTypes.length == 1 && TypeUtils.isNumericType(inputTypes[0])) {

@@ -25,32 +25,32 @@ import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A <code>FunctionNode</code> which performs the reciprocal trigonometric
- * function of cotangent. Cotangent x is equal to 1/tan x.
+ * A function node which performs the reciprocal trigonometric
+ * function of cotangent, called COT. Cotangent x is equal to 1/tan x.
  */
 public class CotangentFunction extends Node {
 
 	/**
-	 * Construct a CotangentFunction with no children.
+	 * Constructs an CotangentFunction with one <code>null</code> child.
 	 */
 	public CotangentFunction() {
 		this(null);
 	}
 
 	/**
-	 * Construct a CotangentFunction with one child. When evaluated, the child
-	 * will be evaluated with cotangent performed on the result.
+	 * Constructs a CotangentFunction with one numerical child node.
 	 * 
-	 * @param child The child which cotangent will be performed on.
+	 * @param child the child node.
 	 */
 	public CotangentFunction(final Node child) {
 		super(child);
 	}
 
 	/**
-	 * Evaluating a <code>CotangentFunction</code> involves calculating tan of
-	 * the
-	 * child once it's been evaluated, then dividing 1 by the result.
+	 * Evaluates this function. The child node is evaluated, the
+	 * result of which must be a numeric type (one of Double, Float, Long, 
+	 * Integer). 1 is divided by the tan of this value to give the result as a
+	 * double value.
 	 */
 	@Override
 	public Double evaluate() {
@@ -60,15 +60,21 @@ public class CotangentFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the CotangentFunction which is COT.
+	 * Returns the identifier of this function which is COT.
 	 */
 	@Override
 	public String getIdentifier() {
 		return "COT";
 	}
 	
+	/**
+	 * Returns this function node's return type for the given child input types.
+	 * If there is one input type of a numeric type then the return type will 
+	 * be Double. In all other cases this method will return 
+	 * <code>null</code> to indicate that the inputs are invalid.
+	 * 
+	 * @return the Double class or null if the input type is invalid.
+	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
 		if (inputTypes.length == 1 && TypeUtils.isNumericType(inputTypes[0])) {

@@ -25,7 +25,7 @@ import org.epochx.epox.Node;
 
 
 /**
- * A Node which provides the facility to sequence a specific number of 
+ * A function node which provides the facility to sequence a specific number of 
  * instructions, specified at construction. Each of the instructions may be any 
  * other function or terminal node with a Void return type. This is the same
  * function that Koza calls progN in his work.
@@ -33,8 +33,8 @@ import org.epochx.epox.Node;
 public class SeqNFunction extends Node {
 
 	/**
-	 * Construct a SeqNFunction with no children, but which will be able to have
-	 * the given number of children.
+	 * Constructs a SeqNFunction with the given number of <code>null</code> 
+	 * children.
 	 */
 	public SeqNFunction(int n) {
 		this((Node) null);
@@ -43,9 +43,8 @@ public class SeqNFunction extends Node {
 	}
 
 	/**
-	 * Construct a SeqNFunction with the given children. When evaluated, each
-	 * child will be evaluated in order. As such they will have been
-	 * executed in sequence.
+	 * Constructs a SeqNFunction with the given children. When evaluated, each
+	 * child will be evaluated in sequence.
 	 * 
 	 * @param children The child nodes to be executed in sequence.
 	 */
@@ -54,9 +53,8 @@ public class SeqNFunction extends Node {
 	}
 
 	/**
-	 * Evaluating a <code>SeqNFunction</code> involves evaluating each of the
-	 * children in sequence. After evaluating its children, this method will 
-	 * return null.
+	 * Evaluates this function. Each of the children is evaluated in sequence. 
+	 * After evaluating its children, this method will return null.
 	 */
 	@Override
 	public Void evaluate() {
@@ -69,10 +67,7 @@ public class SeqNFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the SeqNFunction is SEQn, where n is the 
-	 * arity of the function.
+	 * Returns the identifier of this function which is SEQN.
 	 */
 	@Override
 	public String getIdentifier() {
@@ -80,10 +75,19 @@ public class SeqNFunction extends Node {
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * Returns this function node's return type for the given child input types.
+	 * If there is the correct number of inputs, regardless of type, then the 
+	 * return type of this function is Void. Otherwise this method will return 
+	 * <code>null</code> to indicate that the inputs are invalid.
+	 * 
+	 * @return The Void class or null if the input type is invalid.
 	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		return Void.class;
+		if (inputTypes.length == getArity()) {
+			return Void.class;
+		} else {
+			return null;
+		}
 	}
 }

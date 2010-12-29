@@ -25,13 +25,13 @@ import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A <code>FunctionNode</code> which performs the mathematical function of
- * addition.
+ * A function node which performs the mathematical function of addition.
  * 
  * Addition can be performed on inputs of the following types: 
  * <ul>
  * <li>Integer</li>
  * <li>Long</li>
+ * <li>Float</li>
  * <li>Double</li>
  * </ul>
  * 
@@ -41,16 +41,15 @@ import org.epochx.tools.util.*;
 public class AddFunction extends Node {
 
 	/**
-	 * Construct an AddFunction with no children.
+	 * Constructs an AddFunction with two <code>null</code> children.
 	 */
 	public AddFunction() {
 		this(null, null);
 	}
 
 	/**
-	 * Construct an AddFunction with 2 children. When evaluated, both children
-	 * will
-	 * be evaluated and added together.
+	 * Constructs an AddFunction with two numerical child nodes. When evaluated,
+	 * both children will be evaluated and added together.
 	 * 
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
@@ -60,8 +59,10 @@ public class AddFunction extends Node {
 	}
 
 	/**
-	 * Evaluating an <code>AddFunction</code> involves summing the result of
-	 * evaluating both children.
+	 * Evaluates this function. Both child nodes are evaluated, the result of
+	 * both must be of numeric type. If necessary, the inputs are widened to 
+	 * both be of the same type, then addition is performed and the return value
+	 * will be of that wider type.
 	 */
 	@Override
 	public Object evaluate() {
@@ -89,7 +90,7 @@ public class AddFunction extends Node {
 			
 			return l1 + l2;
 		} else if (returnType == Integer.class) {
-			// Add as intgers.
+			// Add as integers.
 			int i1 = NumericUtils.asInteger(c1);
 			int i2 = NumericUtils.asInteger(c2);
 			
@@ -100,17 +101,26 @@ public class AddFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the AddFunction which is ADD.
+	 * Returns the identifier of this function which is ADD.
 	 */
 	@Override
 	public String getIdentifier() {
 		return "ADD";
 	}
 	
+	/**
+	 * Returns this function node's return type for the given child input types.
+	 * If there are two input types of numeric type then the return type will 
+	 * be the wider of those numeric types. In all other cases this method will 
+	 * return <code>null</code> to indicate that the inputs are invalid.
+	 * 
+	 * @return A numeric class or null if the input type is invalid.
+	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		return TypeUtils.getNumericType(inputTypes);
+		if (inputTypes.length == 2) {
+			return TypeUtils.getNumericType(inputTypes);
+		}
+		return null;
 	}
 }

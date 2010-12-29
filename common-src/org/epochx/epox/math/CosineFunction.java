@@ -25,31 +25,32 @@ import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A <code>FunctionNode</code> which performs the trigonometric function of
- * cosine.
+ * A function node which performs the trigonometric function of cosine, called
+ * COS.
  */
 public class CosineFunction extends Node {
 
 	/**
-	 * Construct a CosineFunction with no children.
+	 * Constructs an CosineFunction with one <code>null</code> child.
 	 */
 	public CosineFunction() {
 		this(null);
 	}
 
 	/**
-	 * Construct a CosineFunction with one child. When evaluated, the child
-	 * will be evaluated with cosine performed on the result.
+	 * Constructs a CosineFunction with one numerical child node.
 	 * 
-	 * @param child The child which cosine will be performed on.
+	 * @param child the child node.
 	 */
 	public CosineFunction(final Node child) {
 		super(child);
 	}
 
 	/**
-	 * Evaluating a <code>CosineFunction</code> involves evaluating the child
-	 * then calculating the cosine of the result.
+	 * Evaluates this function. The child node is evaluated, the
+	 * result of which must be a numeric type (one of Double, Float, Long, 
+	 * Integer). The cosine of this value becomes the result of this 
+	 * method as a double value.
 	 */
 	@Override
 	public Double evaluate() {
@@ -59,15 +60,21 @@ public class CosineFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the CosineFunction which is COS.
+	 * Returns the identifier of this function which is COS.
 	 */
 	@Override
 	public String getIdentifier() {
 		return "COS";
 	}
 	
+	/**
+	 * Returns this function node's return type for the given child input types.
+	 * If there is one input type of a numeric type then the return type will 
+	 * be Double. In all other cases this method will return 
+	 * <code>null</code> to indicate that the inputs are invalid.
+	 * 
+	 * @return the Double class or null if the input type is invalid.
+	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
 		if (inputTypes.length == 1 && TypeUtils.isNumericType(inputTypes[0])) {

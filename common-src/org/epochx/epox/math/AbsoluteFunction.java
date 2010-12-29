@@ -24,29 +24,41 @@ package org.epochx.epox.math;
 import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
-
 /**
+ * A function node which performs the mathematical absolute function, called 
+ * ABS.
  * 
- * 
+ * The absolute function can be performed on inputs of the following types: 
+ * <ul>
+ * <li>Integer</li>
+ * <li>Long</li>
+ * <li>Float</li>
+ * <li>Double</li>
+ * </ul>
  */
 public class AbsoluteFunction extends Node {
 
 	/**
-	 * Construct an AbsoluteFunction with no children.
+	 * Constructs an AbsoluteFunction with one <code>null</code> child.
 	 */
 	public AbsoluteFunction() {
 		this(null);
 	}
 
 	/**
+	 * Constructs an AbsoluteFunction with one numerical child node.
 	 * 
+	 * @param child the child node.
 	 */
 	public AbsoluteFunction(final Node child) {
 		super(child);
 	}
 
 	/**
-	 * 
+	 * Evaluates this function. The child node is evaluated, the
+	 * result of which must be a numeric type (one of Double, Float, Long, 
+	 * Integer). The result will be a positive value of equal magnitude to the
+	 * child value. The return type will also be the same as the input type.
 	 */
 	@Override
 	public Object evaluate() {
@@ -72,15 +84,21 @@ public class AbsoluteFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the AbsoluteFunction which is ABS.
+	 * Returns the identifier of this function which is ABS.
 	 */
 	@Override
 	public String getIdentifier() {
 		return "ABS";
 	}
 
+	/**
+	 * Returns this function node's return type for the given child input types.
+	 * If there is one input type of a numeric type then the return type will 
+	 * be that same numeric type. In all other cases this method will return 
+	 * <code>null</code> to indicate that the inputs are invalid.
+	 * 
+	 * @return A numeric class or null if the input type is invalid.
+	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
 		return TypeUtils.getNumericType(inputTypes);

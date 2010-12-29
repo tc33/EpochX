@@ -25,36 +25,39 @@ import org.epochx.epox.*;
 import org.epochx.tools.util.TypeUtils;
 
 /**
- * A <code>FunctionNode</code> which represents the conditional if-then-else
+ * A function node which represents the conditional if-then-else
  * statement.
  */
 public class IfFunction extends Node {
 
 	/**
-	 * Construct an IfFunction with no children.
+	 * Constructs an IfFunction with three <code>null</code> children.
 	 */
 	public IfFunction() {
 		this(null, null, null);
 	}
 
 	/**
-	 * Construct an IfFunction with three children. When evaluated, if the first
-	 * child evaluates to true then the second child is evaluated and return,
-	 * otherwise the third child is evaluated and returned.
+	 * Constructs an IfFunction with three child nodes.
 	 * 
-	 * @param condition The first child node.
-	 * @param ifStatement The second child node.
-	 * @param elseStatement The third child node.
+	 * @param condition a boolean child node which will determine which of the
+	 * other nodes are evaluated.
+	 * @param ifStatement the child node to be evaluated if the condition 
+	 * evaluates to true.
+	 * @param elseStatement the child node to be evaluated if the condition 
+	 * evaluates to false.
 	 */
 	public IfFunction(final Node condition, final Node ifStatement, final Node elseStatement) {
 		super(condition, ifStatement, elseStatement);
 	}
 
 	/**
-	 * Evaluating an <code>IfFunction</code> involves evaluating the first
-	 * child,
-	 * if it evaluates to true then the second child is evaluated as the result.
-	 * Otherwise the third child is evaluated and returned.
+	 * Evaluates this function. The first child node is evaluated, the
+	 * result of which must be a <code>Boolean</code> instance. If the result 
+	 * is a true value then the second child is also evaluated, the result of 
+	 * which becomes the result of this function. If the first child 
+	 * evaluated to a false value then the third child is evaluated and its
+	 * result returned.
 	 */
 	@Override
 	public Object evaluate() {
@@ -68,9 +71,7 @@ public class IfFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the IfFunction which is IF.
+	 * Returns the identifier of this function which is IF.
 	 */
 	@Override
 	public String getIdentifier() {
@@ -78,7 +79,15 @@ public class IfFunction extends Node {
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * Returns this function node's return type for the given child input types.
+	 * If there are three children, the first of which has the data-type 
+	 * Boolean, then the return type of this function will be whichever of the
+	 * second and third children is a super type the other. If neither of the 
+	 * other two children are a subclass of the other, then these input types 
+	 * are invalid and <code>null</code> will be returned.
+	 * 
+	 * @return The <code>Boolean</code> class or <code>null</code> if the input 
+	 * type is invalid.
 	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {

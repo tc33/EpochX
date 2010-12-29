@@ -36,17 +36,15 @@ import org.epochx.tools.util.*;
 public class CoefficientPowerFunction extends Node {
 
 	/**
-	 * Construct an CoefficientPowerFunction with no children.
+	 * Constructs a CoefficientPowerFunction with three <code>null</code> 
+	 * children.
 	 */
 	public CoefficientPowerFunction() {
 		this(null, null, null);
 	}
 
 	/**
-	 * Construct a CoefficientPowerFunction with three children. When evaluated,
-	 * all children will first be evaluated. Then the second child will be
-	 * raised
-	 * to the power of the third child, and multiplied by the first.
+	 * Constructs a CoefficientPowerFunction with three numerical child nodes.
 	 * 
 	 * @param coefficient will be multiplied by the result of the term raised to
 	 *        the exponent.
@@ -60,10 +58,11 @@ public class CoefficientPowerFunction extends Node {
 	}
 
 	/**
-	 * Evaluating a <code>CoefficientPowerFunction</code> is performed by
-	 * evaluating the children and then calculating the result of the second
-	 * child raised to the power of the third, then multiplied by the first
-	 * child.
+	 * Evaluates this function. The child nodes are evaluated, the
+	 * result of which must be a numeric type (one of Double, Float, Long, 
+	 * Integer). The result becomes the second child's value raised to the 
+	 * power of the third, then multiplied by the first. The result is returned
+	 * as a double.
 	 */
 	@Override
 	public Double evaluate() {
@@ -79,15 +78,21 @@ public class CoefficientPowerFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the CoefficientPowerFunction which is CVP.
+	 * Returns the identifier of this function which is CVP.
 	 */
 	@Override
 	public String getIdentifier() {
 		return "CVP";
 	}
 	
+	/**
+	 * Returns this function node's return type for the given child input types.
+	 * If there are three input types that are all numeric then the return type 
+	 * will be Double. In all other cases this method will return 
+	 * <code>null</code> to indicate that the inputs are invalid.
+	 * 
+	 * @return the Double class or null if the input type is invalid.
+	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
 		if (TypeUtils.isAllNumericType(inputTypes)) {

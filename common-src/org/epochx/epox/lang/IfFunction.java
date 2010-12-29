@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with EpochX. If not, see <http://www.gnu.org/licenses/>.
  * 
- * The latest version is available from: http:/www.epochx.org
+ * The latest version is available from: http://www.epochx.org
  */
 package org.epochx.epox.lang;
 

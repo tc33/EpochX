@@ -25,18 +25,31 @@ import org.epochx.epox.Node;
 
 
 /**
- * 
+ * A function node which performs a comparison of two numeric inputs and returns
+ * the smaller of the two.
  */
 public class Min2Function extends MinFunction {
 
+	/**
+	 * Constructs a Min2Function with two <code>null</code> children.
+	 */
 	public Min2Function() {
 		this(null, null);
 	}
 
+	/**
+	 * Constructs a Min2Function with two numerical child nodes.
+	 * 
+	 * @param child1 The first child node.
+	 * @param child2 The second child node
+	 */
 	public Min2Function(final Node child1, final Node child2) {
 		super(child1, child2);
 	}
 	
+	/**
+	 * Returns the identifier of this function which is MIN.
+	 */
 	@Override
 	public String getIdentifier() {
 		return "MIN";

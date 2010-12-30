@@ -25,34 +25,39 @@ import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A <code>FunctionNode</code> which performs the modulo operation, that is
- * it finds the remainder of division.
+ * A function node which performs the modulo operation, that is
+ * it finds the remainder of division. This version of the function is 
+ * protected, so if the divisor input is 0.0 then the result will be value of
+ * the dividend.
  */
-public class ModuloFunction extends Node {
+public class ModuloProtectedFunction extends Node {
 
 	/**
-	 * Construct a ModuloFunction with no children.
+	 * Constructs a ModuloProtectedFunction with two <code>null</code> 
+	 * children.
 	 */
-	public ModuloFunction() {
+	public ModuloProtectedFunction() {
 		this(null, null);
 	}
 
 	/**
-	 * Construct a ModuloFunction with two children. When evaluated, the modulo
-	 * of the evaluated children will be calculated.
+	 * Constructs a ModuloProtectedFunction with two numeric <code>null</code> 
+	 * children. 
 	 * 
 	 * @param child1 The first child node - the dividend.
 	 * @param child2 The second child node - the divisor.
 	 */
-	public ModuloFunction(final Node child1, final Node child2) {
+	public ModuloProtectedFunction(final Node child1, final Node child2) {
 		super(child1, child2);
 	}
 
 	/**
-	 * Evaluating a <code>ModuloFunction</code> involves dividing the evaluated
-	 * first child, by the second child with the result being the remainder. If
-	 * the second child evaluates to <code>0</code>, then the result will be 
-	 * whatever the first child evaluated to.
+	 * Evaluates this function. Both child nodes are evaluated, the result of
+	 * both must be of numeric type. If necessary, the inputs are widened to 
+	 * both be of the same type, then division is performed with the remainder 
+	 * used as the result of this function. The return value will be of the 
+	 * wider input data type. If the divisor resolves to zero then the result 
+	 * returned will be the first (dividend) child.
 	 */
 	@Override
 	public Object evaluate() {
@@ -87,17 +92,26 @@ public class ModuloFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the ModuloFunction which is MOD.
+	 * Returns the identifier of this function which is MOD.
 	 */
 	@Override
 	public String getIdentifier() {
 		return "MOD";
 	}
 	
+	/**
+	 * Returns this function node's return type for the given child input types.
+	 * If there are two input types of numeric type then the return type will 
+	 * be the wider of those numeric types. In all other cases this method will 
+	 * return <code>null</code> to indicate that the inputs are invalid.
+	 * 
+	 * @return A numeric class or null if the input type is invalid.
+	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		return TypeUtils.getNumericType(inputTypes);
+		if (inputTypes.length == 2) {
+			return TypeUtils.getNumericType(inputTypes);
+		}
+		return null;
 	}
 }

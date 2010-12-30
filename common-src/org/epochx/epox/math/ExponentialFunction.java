@@ -25,33 +25,33 @@ import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A <code>FunctionNode</code> which performs the mathematical exponential 
+ * A function node which performs the mathematical exponential 
  * function <code>e^x</code> where <code>e</code> is the constant known as 
  * Euler's number.
  */
 public class ExponentialFunction extends Node {
 
 	/**
-	 * Construct a ExponentialFunction with no children.
+	 * Constructs an ExponentialFunction with one <code>null</code> child.
 	 */
 	public ExponentialFunction() {
 		this(null);
 	}
 
 	/**
-	 * Construct a ExponentialFunction with 1 child. When evaluated, the 
-	 * value of the constant e is raised to the power of the value after 
-	 * evaluating the child.
+	 * Constructs an ExponentialFunction with one numerical child node.
 	 * 
-	 * @param base The child node - the exponent.
+	 * @param child the child node.
 	 */
 	public ExponentialFunction(final Node exponent) {
 		super(exponent);
 	}
 
 	/**
-	 * Evaluating a <code>ExponentialFunction</code> involves evaluating the
-	 * child then raising e to that power. 
+	 * Evaluates this function. The child node is evaluated, the
+	 * result of which must be a numeric type (one of Double, Float, Long, 
+	 * Integer). The mathematical constant <code>e</code> is raised to the power
+	 * of this value.
 	 */
 	@Override
 	public Double evaluate() {
@@ -61,15 +61,21 @@ public class ExponentialFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the ExponentialFunction which is EXP.
+	 * Returns the identifier of this function which is EXP.
 	 */
 	@Override
 	public String getIdentifier() {
 		return "EXP";
 	}
 	
+	/**
+	 * Returns this function node's return type for the given child input types.
+	 * If there is one input type of a numeric type then the return type will 
+	 * be Double. In all other cases this method will return 
+	 * <code>null</code> to indicate that the inputs are invalid.
+	 * 
+	 * @return the Double class or null if the input type is invalid.
+	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
 		if (inputTypes.length == 1 && TypeUtils.isNumericType(inputTypes[0])) {

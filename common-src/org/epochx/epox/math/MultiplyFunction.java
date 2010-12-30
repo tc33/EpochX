@@ -25,22 +25,31 @@ import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A <code>FunctionNode</code> which performs the mathematical function of
- * multiplication.
+ * A function node which performs the mathematical function of multiplication.
+ * 
+ * Multiplication can be performed on inputs of the following types: 
+ * <ul>
+ * <li>Integer</li>
+ * <li>Long</li>
+ * <li>Float</li>
+ * <li>Double</li>
+ * </ul>
+ * 
+ * Multiplication can be performed between mixed types, with a widening 
+ * operation performed and the result being of the wider of the two types.
  */
 public class MultiplyFunction extends Node {
 
 	/**
-	 * Construct a MultiplyFunction with no children.
+	 * Constructs a MultiplyFunction with two <code>null</code> children.
 	 */
 	public MultiplyFunction() {
 		this(null, null);
 	}
 
 	/**
-	 * Construct a MultiplyFunction with 2 children. When evaluated, both
-	 * children will
-	 * be evaluated and then multiplied together.
+	 * Constructs a MultiplyFunction with two numerical child nodes. When 
+	 * evaluated, both children will be evaluated and multiplied together.
 	 * 
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
@@ -50,11 +59,10 @@ public class MultiplyFunction extends Node {
 	}
 
 	/**
-	 * Evaluating a <code>MultiplyFunction</code> involves multiplying the
-	 * result of evaluating both children. For performance, this function is 
-	 * evaluated lazily. The first child is evaluated first, if it evaluates 
-	 * to <code>0.0</code> then the result will always be <code>0.0</code> and 
-	 * so the second child will not be evaluated at all.
+	 * Evaluates this function. Both child nodes are evaluated, the result of
+	 * both must be of numeric type. If necessary, the inputs are widened to 
+	 * both be of the same type, then multiplication is performed and the return
+	 * value will be of that wider type.
 	 */
 	@Override
 	public Object evaluate() {
@@ -82,7 +90,7 @@ public class MultiplyFunction extends Node {
 			
 			return l1 * l2;
 		} else if (returnType == Integer.class) {
-			// Multiply as intgers.
+			// Multiply as integers.
 			int i1 = NumericUtils.asInteger(c1);
 			int i2 = NumericUtils.asInteger(c2);
 			
@@ -93,15 +101,21 @@ public class MultiplyFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the MultiplyFunction which is MUL.
+	 * Returns the identifier of this function which is MUL.
 	 */
 	@Override
 	public String getIdentifier() {
 		return "MUL";
 	}
 	
+	/**
+	 * Returns this function node's return type for the given child input types.
+	 * If there are two input types of numeric type then the return type will 
+	 * be the wider of those numeric types. In all other cases this method will 
+	 * return <code>null</code> to indicate that the inputs are invalid.
+	 * 
+	 * @return A numeric class or null if the input type is invalid.
+	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
 		return TypeUtils.getNumericType(inputTypes);

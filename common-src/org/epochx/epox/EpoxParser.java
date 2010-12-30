@@ -116,7 +116,7 @@ public class EpoxParser {
 		functions.put("COSH", HyperbolicCosineFunction.class);
 		functions.put("SINH", HyperbolicSineFunction.class);
 		functions.put("TANH", HyperbolicTangentFunction.class);
-		functions.put("INV", InvertFunction.class);
+		functions.put("INV", InvertProtectedFunction.class);
 		functions.put("LOG-10", Log10Function.class);
 		functions.put("LN", LogFunction.class);
 		functions.put("LT", LessThanFunction.class);
@@ -124,10 +124,10 @@ public class EpoxParser {
 		functions.put("MIN", Min2Function.class);
 		functions.put("MAX3", Max3Function.class);
 		functions.put("MIN3", Min3Function.class);
-		functions.put("MOD", ModuloFunction.class);
+		functions.put("MOD", ModuloProtectedFunction.class);
 		functions.put("MUL", MultiplyFunction.class);
 		functions.put("POW", PowerFunction.class);
-		functions.put("PDIV", ProtectedDivisionFunction.class);
+		functions.put("PDIV", DivisionProtectedFunction.class);
 		functions.put("SEC", SecantFunction.class);
 		functions.put("SGN", SignumFunction.class);
 		functions.put("SIN", SineFunction.class);

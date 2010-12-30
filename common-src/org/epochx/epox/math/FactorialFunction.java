@@ -25,39 +25,36 @@ import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A <code>FunctionNode</code> which performs the mathematical function of
+ * A function node which performs the mathematical function of
  * factorial, which is normally expressed with an exclamation mark !
  * 
  * For example:
  * 5! = 5 x 4 x 3 x 2 x 1 = FACTORIAL 5
- * 
  */
 public class FactorialFunction extends Node {
 
 	/**
-	 * Construct a FactorialFunction with no children.
+	 * Constructs a FactorialFunction with one <code>null</code> child.
 	 */
 	public FactorialFunction() {
 		this(null);
 	}
 
 	/**
-	 * Construct a FactorialFunction with one child. When evaluated, the child
-	 * will
-	 * be first evaluated, with the result undergoing the factorial function.
+	 * Constructs a FactorialFunction with one numerical child node.
 	 * 
-	 * @param child The child which factorial will be performed on.
+	 * @param child the child node.
 	 */
 	public FactorialFunction(final Node child) {
 		super(child);
 	}
 
 	/**
-	 * Evaluating a <code>FactorialFunction</code> involves evaluating the child
-	 * first then performing factorial on the result. Factorial requires a
-	 * natural
-	 * number, in order to achieve this the evaluated child may undergo
-	 * rounding.
+	 * Evaluates this function. The child node is evaluated, the
+	 * result of which must be a positive value of an integer type (one of Byte,
+	 * Short, Integer, Long). The factorial function is performed on this value
+	 * and the result returned as an Integer if the input was one of Byte, 
+	 * Short or Integer and returned as a Long if the input is a Long.
 	 */
 	@Override
 	public Object evaluate() {
@@ -78,15 +75,22 @@ public class FactorialFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the FactorialFunction which is FACTORIAL.
+	 * Returns the identifier of this function which is FACTORIAL.
 	 */
 	@Override
 	public String getIdentifier() {
 		return "FACTORIAL";
 	}
 	
+	/**
+	 * Returns this function node's return type for the given child input types.
+	 * If there is one input type of Byte, Short or Integer then the return type
+	 * will be Integer, if it is Long then the return type will also be Long. In
+	 * all other cases this method will return <code>null</code> to indicate 
+	 * that the inputs are invalid.
+	 * 
+	 * @return the Integer or Long class or null if the input type is invalid.
+	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
 		if (inputTypes.length == 1 && TypeUtils.isIntegerType(inputTypes[0])) {

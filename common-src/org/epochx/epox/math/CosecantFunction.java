@@ -31,14 +31,14 @@ import org.epochx.tools.util.*;
 public class CosecantFunction extends Node {
 
 	/**
-	 * Constructs an CosecantFunction with one <code>null</code> child.
+	 * Constructs a CosecantFunction with one <code>null</code> child.
 	 */
 	public CosecantFunction() {
 		this(null);
 	}
 
 	/**
-	 * Constructs an CosecantFunction with one numerical child node.
+	 * Constructs a CosecantFunction with one numerical child node.
 	 * 
 	 * @param child the child node.
 	 */

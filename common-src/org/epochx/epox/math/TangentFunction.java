@@ -25,31 +25,32 @@ import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A <code>FunctionNode</code> which performs the trigonometric function of
- * tangent.
+ * A function node which performs the trigonometric function of tangent, called
+ * TAN.
  */
 public class TangentFunction extends Node {
 
 	/**
-	 * Construct a TangentFunction with no children.
+	 * Constructs an TangentFunction with one <code>null</code> child.
 	 */
 	public TangentFunction() {
 		this(null);
 	}
 
 	/**
-	 * Construct a TangentFunction with one child. When evaluated, the child
-	 * will be evaluated with tangent performed on the result.
+	 * Constructs a TangentFunction with one numerical child node.
 	 * 
-	 * @param child The child which tangent will be performed on.
+	 * @param child the child node.
 	 */
 	public TangentFunction(final Node child) {
 		super(child);
 	}
 
 	/**
-	 * Evaluating a <code>TangentFunction</code> involves evaluating the child
-	 * then calculating the tangent of the result.
+	 * Evaluates this function. The child node is evaluated, the
+	 * result of which must be a numeric type (one of Double, Float, Long, 
+	 * Integer). The tangent of this value becomes the result of this 
+	 * method as a double value.
 	 */
 	@Override
 	public Double evaluate() {
@@ -59,15 +60,21 @@ public class TangentFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the TangentFunction which is TAN.
+	 * Returns the identifier of this function which is TAN.
 	 */
 	@Override
 	public String getIdentifier() {
 		return "TAN";
 	}
 	
+	/**
+	 * Returns this function node's return type for the given child input types.
+	 * If there is one input type of a numeric type then the return type will 
+	 * be Double. In all other cases this method will return 
+	 * <code>null</code> to indicate that the inputs are invalid.
+	 * 
+	 * @return the Double class or null if the input type is invalid.
+	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
 		if (inputTypes.length == 1 && TypeUtils.isNumericType(inputTypes[0])) {

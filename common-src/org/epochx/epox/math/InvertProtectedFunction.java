@@ -25,33 +25,36 @@ import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A <code>FunctionNode</code> which performs the multiplicative inverse (or
- * reciprocal), that is the inverse of x is 1/x.
+ * A function node which performs the multiplicative inverse (or
+ * reciprocal), that is the inverse of x is 1/x, called INV. This version of the
+ * function is protected, so if the input is 0.0 then the result will be 1.0 to
+ * protect against divide by zero.
  */
-public class InvertFunction extends Node {
+public class InvertProtectedFunction extends Node {
 
 	/**
-	 * Construct an InvertFunction with no children.
+	 * Constructs an InvertFunction with one <code>null</code> child.
 	 */
-	public InvertFunction() {
+	public InvertProtectedFunction() {
 		this(null);
 	}
 
 	/**
-	 * Construct an InvertFunction with one child. When evaluated, the child
-	 * will be evaluated before the inversion operation is performed.
+	 * Constructs an InvertFunction with one numerical child node.
 	 * 
-	 * @param child The child which the reciprocal will be found for.
+	 * @param child the child node.
 	 */
-	public InvertFunction(final Node child) {
+	public InvertProtectedFunction(final Node child) {
 		super(child);
 	}
 
 	/**
-	 * Evaluating an <code>InvertFunction</code> involves calculating the
-	 * result of 1 divided by the result of evaluating the child. The
-	 * exception to this is where the child evaluates to 0.0. In this case
-	 * there is no finite reciprocal and the result will be 1.0.
+	 * Evaluates this function. The child node is evaluated, the
+	 * result of which must be a numeric type (one of Double, Float, Long, 
+	 * Integer). The value <code>1</code> is divided by this child value to be
+	 * the result of this function. This function is protected, so if the child
+	 * evaluates to a value of <code>0.0</code> then there is no finite 
+	 * reciprocal and so the value <code>1.0</code> will be returned.
 	 */
 	@Override
 	public Double evaluate() {
@@ -65,15 +68,21 @@ public class InvertFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the InvertFunction which is INV.
+	 * Returns the identifier of this function which is INV.
 	 */
 	@Override
 	public String getIdentifier() {
 		return "INV";
 	}
 	
+	/**
+	 * Returns this function node's return type for the given child input types.
+	 * If there is one input type of a numeric type then the return type will 
+	 * be Double. In all other cases this method will return 
+	 * <code>null</code> to indicate that the inputs are invalid.
+	 * 
+	 * @return the Double class or null if the input type is invalid.
+	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
 		if (inputTypes.length == 1 && TypeUtils.isNumericType(inputTypes[0])) {

@@ -25,32 +25,45 @@ import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A <code>FunctionNode</code> which performs the mathematical function of
- * subtraction.
+ * A function node which performs the mathematical function of subtract.
+ * 
+ * Subtraction can be performed on inputs of the following types: 
+ * <ul>
+ * <li>Integer</li>
+ * <li>Long</li>
+ * <li>Float</li>
+ * <li>Double</li>
+ * </ul>
+ * 
+ * Subtraction can be performed between mixed types, with a widening operation 
+ * performed and the result being of the wider of the two types.
  */
 public class SubtractFunction extends Node {
 
 	/**
-	 * Construct an SubtractFunction with no children.
+	 * Constructs a SubtractFunction with two <code>null</code> children.
 	 */
 	public SubtractFunction() {
 		this(null, null);
 	}
 
 	/**
-	 * Construct a SubtractFunction with 2 children. When evaluated, both
-	 * children will be evaluated, with the second subtracted from the first.
+	 * Constructs an SubtractFunction with two numerical child nodes. When 
+	 * evaluated, both children will be evaluated with the first subtracted from
+	 * the second.
 	 * 
 	 * @param child1 The first child node.
-	 * @param child2 The second child node, to be subtracted from the first.
+	 * @param child2 The second child node.
 	 */
 	public SubtractFunction(final Node child1, final Node child2) {
 		super(child1, child2);
 	}
 
 	/**
-	 * Evaluating a <code>SubtractFunction</code> involves subtracting the
-	 * result of the second child from the first.
+	 * Evaluates this function. Both child nodes are evaluated, the result of
+	 * both must be of numeric type. If necessary, the inputs are widened to 
+	 * both be of the same type, then subtraction is performed and the return 
+	 * value will be of that wider type.
 	 */
 	@Override
 	public Object evaluate() {
@@ -89,17 +102,26 @@ public class SubtractFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the SubtractFunction which is SUB.
+	 * Returns the identifier of this function which is SUB.
 	 */
 	@Override
 	public String getIdentifier() {
 		return "SUB";
 	}
 	
+	/**
+	 * Returns this function node's return type for the given child input types.
+	 * If there are two input types of numeric type then the return type will 
+	 * be the wider of those numeric types. In all other cases this method will 
+	 * return <code>null</code> to indicate that the inputs are invalid.
+	 * 
+	 * @return A numeric class or null if the input type is invalid.
+	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		return TypeUtils.getNumericType(inputTypes);
+		if (inputTypes.length == 2) {
+			return TypeUtils.getNumericType(inputTypes);
+		}
+		return null;
 	}
 }

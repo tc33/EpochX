@@ -25,18 +25,31 @@ import org.epochx.epox.Node;
 
 
 /**
- * 
+ * A function node which performs a comparison of two numeric inputs and returns
+ * the greater of the two.
  */
 public class Max2Function extends MaxFunction {
 
+	/**
+	 * Constructs a Max2Function with two <code>null</code> children.
+	 */
 	public Max2Function() {
 		this(null, null);
 	}
 
+	/**
+	 * Constructs a Max2Function with two numerical child nodes.
+	 * 
+	 * @param child1 The first child node.
+	 * @param child2 The second child node
+	 */
 	public Max2Function(final Node child1, final Node child2) {
 		super(child1, child2);
 	}
 	
+	/**
+	 * Returns the identifier of this function which is MAX.
+	 */
 	@Override
 	public String getIdentifier() {
 		return "MAX";

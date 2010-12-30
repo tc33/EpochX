@@ -25,22 +25,21 @@ import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A <code>FunctionNode</code> which performs the natural (base e) logarithm.
+ * A function node which performs the natural (base e) logarithm.
  * 
  * @see Log10Function
  */
 public class LogFunction extends Node {
 
 	/**
-	 * Construct a LogFunction with no children.
+	 * Constructs a LogFunction with one <code>null</code> child.
 	 */
 	public LogFunction() {
 		this(null);
 	}
 
 	/**
-	 * Construct a LogFunction with one child. When evaluated, the logarithm
-	 * of the evaluated child will be calculated.
+	 * Constructs a LogFunction with one numerical child node.
 	 * 
 	 * @param child The child of which the base e logarithm will be calculated.
 	 */
@@ -49,8 +48,10 @@ public class LogFunction extends Node {
 	}
 
 	/**
-	 * Evaluating a <code>LogFunction</code> involves evaluating the child
-	 * then calculating it's base e logarithm.
+	 * Evaluates this function. The child node is evaluated, the
+	 * result of which must be of a numeric type (one of Byte,
+	 * Short, Integer, Long). The base e logarithm is performed on this value
+	 * and the result returned as a Double.
 	 */
 	@Override
 	public Double evaluate() {
@@ -60,15 +61,21 @@ public class LogFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the LogFunction which is LN.
+	 * Returns the identifier of this function which is LN.
 	 */
 	@Override
 	public String getIdentifier() {
 		return "LN";
 	}
 	
+	/**
+	 * Returns this function node's return type for the given child input types.
+	 * If there is one input type of a numeric type then the return type will 
+	 * be Double. In all other cases this method will return 
+	 * <code>null</code> to indicate that the inputs are invalid.
+	 * 
+	 * @return the Double class or null if the input type is invalid.
+	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
 		if (inputTypes.length == 2 && TypeUtils.isAllNumericType(inputTypes)) {

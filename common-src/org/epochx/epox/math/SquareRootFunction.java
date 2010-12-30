@@ -25,34 +25,32 @@ import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A <code>FunctionNode</code> which performs the mathematical function of
- * square
- * root.
+ * A function node which performs the mathematical function of square root, 
+ * called SQRT.
  */
 public class SquareRootFunction extends Node {
 
 	/**
-	 * Construct a SquareRootFunction with no children.
+	 * Constructs a SquareRootFunction with one <code>null</code> child.
 	 */
 	public SquareRootFunction() {
 		this(null);
 	}
 
 	/**
-	 * Construct a SquareRootFunction with one child. When evaluated, the child
-	 * will
-	 * be first evaluated, with the result square-rooted.
+	 * Constructs a SquareRootFunction with one numerical child node.
 	 * 
-	 * @param child The child which cube root will be performed on.
+	 * @param child the child node.
 	 */
 	public SquareRootFunction(final Node child) {
 		super(child);
 	}
 
 	/**
-	 * Evaluating a <code>SquareRootFunction</code> involves evaluating the
-	 * child
-	 * first then performing square root on the result.
+	 * Evaluates this function. The child node is evaluated, the
+	 * result of which must be a numeric type (one of Double, Float, Long, 
+	 * Integer). The square root of this value becomes the result of this 
+	 * method as a double value.
 	 */
 	@Override
 	public Double evaluate() {
@@ -62,15 +60,21 @@ public class SquareRootFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the SquareRootFunction which is SQRT.
+	 * Returns the identifier of this function which is SQRT.
 	 */
 	@Override
 	public String getIdentifier() {
 		return "SQRT";
 	}
 	
+	/**
+	 * Returns this function node's return type for the given child input types.
+	 * If there is one input type of a numeric type then the return type will 
+	 * be Double. In all other cases this method will return 
+	 * <code>null</code> to indicate that the inputs are invalid.
+	 * 
+	 * @return the Double class or null if the input type is invalid.
+	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
 		if (inputTypes.length == 1 && TypeUtils.isNumericType(inputTypes[0])) {

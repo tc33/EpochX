@@ -25,32 +25,33 @@ import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A <code>FunctionNode</code> which performs the arithmetic function of cube,
+ * A function node which performs the arithmetic function of cube,
  * that is - raising to the third power. It is equivalent to the
  * <code>PowerFunction</code> where the second child is the double literal 3.0.
  */
 public class CubeFunction extends Node {
 
 	/**
-	 * Construct a CubeFunction with no children.
+	 * Constructs a CubeFunction with one <code>null</code> child.
 	 */
 	public CubeFunction() {
 		this(null);
 	}
 
 	/**
-	 * Construct a CubeFunction with one child. When evaluated, the child will
-	 * be evaluated with the result then raised to the power of 3.
+	 * Constructs a CubeFunction with one numerical child node.
 	 * 
-	 * @param child The child which will be cubed.
+	 * @param child the child node.
 	 */
 	public CubeFunction(final Node child) {
 		super(child);
 	}
 
 	/**
-	 * Evaluating a <code>CubeFunction</code> involves evaluating the child
-	 * then raising the result to the power of 3.
+	 * Evaluates this function. The child node is evaluated, the
+	 * result of which must be a numeric type (one of Double, Float, Long, 
+	 * Integer). The result is raised to the power of 3 and returned as the 
+	 * same type as the input.
 	 */
 	@Override
 	public Object evaluate() {
@@ -72,15 +73,21 @@ public class CubeFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the CubeFunction which is CUBE.
+	 * Returns the identifier of this function which is CUBE.
 	 */
 	@Override
 	public String getIdentifier() {
 		return "CUBE";
 	}
 	
+	/**
+	 * Returns this function node's return type for the given child input types.
+	 * If there is one input type of a numeric type then the return type will 
+	 * be that numeric type. In all other cases this method will return 
+	 * <code>null</code> to indicate that the inputs are invalid.
+	 * 
+	 * @return a numeric class or null if the input type is invalid.
+	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
 		if (inputTypes.length == 1 && TypeUtils.isNumericType(inputTypes[0])) {

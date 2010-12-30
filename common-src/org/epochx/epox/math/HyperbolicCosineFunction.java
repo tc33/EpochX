@@ -25,33 +25,33 @@ import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A <code>FunctionNode</code> which performs the hyperbolic trigonometric
- * function of hyperbolic cosine.
+ * A function node which performs the hyperbolic trigonometric function of 
+ * hyperbolic cosine, called COSH.
  */
 public class HyperbolicCosineFunction extends Node {
 
 	/**
-	 * Construct a HyperbolicCosineFunction with no children.
+	 * Constructs a HyperbolicCosineFunction with one <code>null</code> 
+	 * child.
 	 */
 	public HyperbolicCosineFunction() {
 		this(null);
 	}
 
 	/**
-	 * Construct a HyperbolicCosineFunction with one child. When evaluated, the
-	 * child will first be evaluated with hyperbolic cosine performed on the
-	 * result.
+	 * Constructs a HyperbolicCosineFunction with one numerical child node.
 	 * 
-	 * @param child The child which hyperbolic cosine will be performed on.
+	 * @param child the child node.
 	 */
 	public HyperbolicCosineFunction(final Node child) {
 		super(child);
 	}
 
 	/**
-	 * Evaluating an <code>HyperbolicCosineFunction</code> involves calculating
-	 * the
-	 * hyperbolic cosine of the child once it has also been evaluated.
+	 * Evaluates this function. The child node is evaluated, the
+	 * result of which must be a numeric type (one of Double, Float, Long, 
+	 * Integer). The hyperbolic cosine of this value becomes the result of this 
+	 * method as a double value.
 	 */
 	@Override
 	public Double evaluate() {
@@ -61,15 +61,21 @@ public class HyperbolicCosineFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the HyperbolicCosineFunction which is COSH.
+	 * Returns the identifier of this function which is COSH.
 	 */
 	@Override
 	public String getIdentifier() {
 		return "COSH";
 	}
 	
+	/**
+	 * Returns this function node's return type for the given child input types.
+	 * If there is one input type of a numeric type then the return type will 
+	 * be Double. In all other cases this method will return 
+	 * <code>null</code> to indicate that the inputs are invalid.
+	 * 
+	 * @return the Double class or null if the input type is invalid.
+	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
 		if (inputTypes.length == 1 && TypeUtils.isNumericType(inputTypes[0])) {

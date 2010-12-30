@@ -25,18 +25,32 @@ import org.epochx.epox.Node;
 
 
 /**
- * 
+ * A function node which performs a comparison of three numeric inputs and 
+ * returns the smallest of the three.
  */
 public class Min3Function extends MinFunction {
 
+	/**
+	 * Constructs a Min3Function with three <code>null</code> children.
+	 */
 	public Min3Function() {
 		this(null, null, null);
 	}
 
+	/**
+	 * Constructs a Min3Function with three numerical child nodes.
+	 * 
+	 * @param child1 The first child node.
+	 * @param child2 The second child node.
+	 * @param child3 The third child node.
+	 */
 	public Min3Function(final Node child1, final Node child2, final Node child3) {
 		super(child1, child2, child3);
 	}
 	
+	/**
+	 * Returns the identifier of this function which is MIN3.
+	 */
 	@Override
 	public String getIdentifier() {
 		return "MIN3";

@@ -25,33 +25,33 @@ import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A <code>FunctionNode</code> which performs the hyperbolic trigonometric
- * function of hyperbolic tangent.
+ * A function node which performs the hyperbolic trigonometric
+ * function of hyperbolic tangent, called TANH.
  */
 public class HyperbolicTangentFunction extends Node {
 
 	/**
-	 * Construct a HyperbolicTangentFunction with no children.
+	 * Constructs a HyperbolicTangentFunction with one <code>null</code> 
+	 * child.
 	 */
 	public HyperbolicTangentFunction() {
 		this(null);
 	}
 
 	/**
-	 * Construct a HyperbolicTangentFunction with one child. When evaluated, the
-	 * child will first be evaluated with hyperbolic tangent performed on the
-	 * result.
+	 * Constructs a HyperbolicTangentFunction with one numerical child node.
 	 * 
-	 * @param child The child which hyperbolic tangent will be performed on.
+	 * @param child the child node.
 	 */
 	public HyperbolicTangentFunction(final Node child) {
 		super(child);
 	}
 
 	/**
-	 * Evaluating an <code>HyperbolicTangentFunction</code> involves calculating
-	 * the
-	 * hyperbolic tangent of the child once it has also been evaluated.
+	 * Evaluates this function. The child node is evaluated, the
+	 * result of which must be a numeric type (one of Double, Float, Long, 
+	 * Integer). The hyperbolic tangent of this value becomes the result of this 
+	 * method as a double value.
 	 */
 	@Override
 	public Double evaluate() {
@@ -61,15 +61,21 @@ public class HyperbolicTangentFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the HyperbolicTangentFunction which is TANH.
+	 * Returns the identifier of this function which is TANH.
 	 */
 	@Override
 	public String getIdentifier() {
 		return "TANH";
 	}
 	
+	/**
+	 * Returns this function node's return type for the given child input types.
+	 * If there is one input type of a numeric type then the return type will 
+	 * be Double. In all other cases this method will return 
+	 * <code>null</code> to indicate that the inputs are invalid.
+	 * 
+	 * @return the Double class or null if the input type is invalid.
+	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
 		if (inputTypes.length == 1 && TypeUtils.isNumericType(inputTypes[0])) {

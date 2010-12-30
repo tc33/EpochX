@@ -25,26 +25,20 @@ import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * The less than function is a numerically valued logical function. It
- * performs the standard logic function "Less Than", where true or false
- * is return depending on if the first argument is smaller than the second
- * argument or not, respectively. However, to satisfy the closure principle
- * this implementation returns +1 for true or -1 for false.
+ * A function node which performs the numerical less than comparison of two 
+ * numeric inputs, called LT.
  */
 public class LessThanFunction extends Node {
-
+	
 	/**
-	 * Construct a LessThanFunction with no children.
+	 * Constructs a LessThanFunction with two <code>null</code> children.
 	 */
 	public LessThanFunction() {
 		this(null, null);
 	}
 
 	/**
-	 * Construct a LessThanFunction with two children. When evaluated, both
-	 * children will be evaluated. Then if the numerical result of evaluating
-	 * the first child is smaller than the result of the second, then the
-	 * function will return +1.0 else, -1.0 will be the result.
+	 * Constructs a LessThanFunction with two numerical child nodes.
 	 * 
 	 * @param child1 The first child which is being tested if it is less than
 	 *        the second child.
@@ -56,10 +50,11 @@ public class LessThanFunction extends Node {
 	}
 
 	/**
-	 * Evaluating a <code>LessThanFunction</code> involves evaluating both
-	 * children first then performing the logical less than operation. If
-	 * the first child is less in value than the second child then this
-	 * method will return +1.0 else it will return -1.0.
+	 * Evaluates this function. The child nodes are evaluated, the
+	 * results of which must be numerically type (any of Double, Float, Long, 
+	 * Integer). If the result of the first child is smaller than the result of 
+	 * the second child, then a boolean value of <code>true</code> will be 
+	 * returned, otherwise a <code>false</code> value will be returned.
 	 */
 	@Override
 	public Boolean evaluate() {
@@ -73,15 +68,21 @@ public class LessThanFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the LessThanFunction which is LT.
+	 * Returns the identifier of this function which is LT.
 	 */
 	@Override
 	public String getIdentifier() {
 		return "LT";
 	}
 
+	/**
+	 * Returns this function node's return type for the given child input types.
+	 * If there is two numeric input types then the return type will be Boolean.
+	 * In all other cases this method will return <code>null</code> to indicate 
+	 * that the inputs are invalid.
+	 * 
+	 * @return the Boolean class or null if the input type is invalid.
+	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
 		if (inputTypes.length == 2 && TypeUtils.isAllNumericType(inputTypes)) {

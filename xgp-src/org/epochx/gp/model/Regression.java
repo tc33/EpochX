@@ -63,7 +63,7 @@ public abstract class Regression extends GPModel {
 		syntax.add(new AddFunction());
 		syntax.add(new SubtractFunction());
 		syntax.add(new MultiplyFunction());
-		syntax.add(new ProtectedDivisionFunction());
+		syntax.add(new DivisionProtectedFunction());
 
 		// Define terminal set;
 		syntax.add(x);

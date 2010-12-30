@@ -25,22 +25,21 @@ import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A <code>FunctionNode</code> which performs the mathematical operation of
- * exponentiation.
+ * A function node which performs the mathematical operation of exponentiation.
  */
 public class PowerFunction extends Node {
 
 	/**
-	 * Construct a PowerFunction with no children.
+	 * Constructs a PowerFunction with two <code>null</code> children.
 	 */
 	public PowerFunction() {
 		this(null, null);
 	}
 
 	/**
-	 * Construct a PowerFunction with 2 children. When evaluated, the evaluation
-	 * of the first child is raised to the power of the evaluation of the
-	 * second.
+	 * Constructs a PowerFunction with two numerical child nodes. When 
+	 * evaluated, both children will be evaluated and the first will be raised
+	 * to the power of the second.
 	 * 
 	 * @param base The first child node - the base.
 	 * @param exponent The second child node - the exponent.
@@ -57,6 +56,12 @@ public class PowerFunction extends Node {
 	 * always be <code>1.0</code> and the first child will not be evaluated at
 	 * all.
 	 */
+	/**
+	 * Evaluates this function lazily. The second child is evaluated. If its 
+	 * value is 0.0 then 1.0 will be returned without evaluating the first child
+	 * at all. Otherwise the value of the first child will be raised to the 
+	 * power of the second child. The result is returned as a double value.
+	 */
 	@Override
 	public Double evaluate() {
 		final double c2 = NumericUtils.asDouble(getChild(1).evaluate());
@@ -71,15 +76,21 @@ public class PowerFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the PowerFunction which is POW.
+	 * Returns the identifier of this function which is POW.
 	 */
 	@Override
 	public String getIdentifier() {
 		return "POW";
 	}
 	
+	/**
+	 * Returns this function node's return type for the given child input types.
+	 * If there are two input types of a numeric type then the return type will 
+	 * be Double. In all other cases this method will return 
+	 * <code>null</code> to indicate that the inputs are invalid.
+	 * 
+	 * @return the Double class or null if the input type is invalid.
+	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
 		if (inputTypes.length == 2 && TypeUtils.isAllNumericType(inputTypes)) {

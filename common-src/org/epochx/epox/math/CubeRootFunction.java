@@ -25,32 +25,32 @@ import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A <code>FunctionNode</code> which performs the mathematical function of cube
- * root.
+ * A function node which performs the mathematical function of cube root, called
+ * CBRT.
  */
 public class CubeRootFunction extends Node {
 
 	/**
-	 * Construct a CubeRootFunction with no children.
+	 * Constructs a CubeRootFunction with one <code>null</code> child.
 	 */
 	public CubeRootFunction() {
 		this(null);
 	}
 
 	/**
-	 * Construct a CubeRootFunction with one child. When evaluated, the child
-	 * will
-	 * be first evaluated, with the result cube-rooted.
+	 * Constructs a CubeRootFunction with one numerical child node.
 	 * 
-	 * @param child The child which cube root will be performed on.
+	 * @param child the child node.
 	 */
 	public CubeRootFunction(final Node child) {
 		super(child);
 	}
 
 	/**
-	 * Evaluating a <code>CubeRootFunction</code> involves evaluating the child
-	 * first then performing cube root on the result.
+	 * Evaluates this function. The child node is evaluated, the
+	 * result of which must be a numeric type (one of Double, Float, Long, 
+	 * Integer). The cube root of this value becomes the result of this 
+	 * method as a double value.
 	 */
 	@Override
 	public Double evaluate() {
@@ -60,15 +60,21 @@ public class CubeRootFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the CubeRootFunction which is CBRT.
+	 * Returns the identifier of this function which is CBRT.
 	 */
 	@Override
 	public String getIdentifier() {
 		return "CBRT";
 	}
 	
+	/**
+	 * Returns this function node's return type for the given child input types.
+	 * If there is one input type of a numeric type then the return type will 
+	 * be Double. In all other cases this method will return 
+	 * <code>null</code> to indicate that the inputs are invalid.
+	 * 
+	 * @return the Double class or null if the input type is invalid.
+	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
 		if (inputTypes.length == 1 && TypeUtils.isNumericType(inputTypes[0])) {

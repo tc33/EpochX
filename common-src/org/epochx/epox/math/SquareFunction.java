@@ -25,33 +25,34 @@ import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A <code>FunctionNode</code> which performs the arithmetic function of
- * squaring,
+ * A function node which performs the arithmetic function of squaring,
  * that is - raising to the second power. It is equivalent to the
- * <code>PowerFunction</code> where the second child is the double literal 2.0.
+ * <code>PowerFunction</code> where the second child is the literal 
+ * <code>2</code>.
  */
 public class SquareFunction extends Node {
 
 	/**
-	 * Construct a SquareFunction with no children.
+	 * Constructs a SquareFunction with one <code>null</code> child.
 	 */
 	public SquareFunction() {
 		this(null);
 	}
 
 	/**
-	 * Construct a SquareFunction with one child. When evaluated, the child will
-	 * be evaluated with the result then raised to the power of 2.
+	 * Constructs a SquareFunction with one numerical child node.
 	 * 
-	 * @param child The child which will be squared.
+	 * @param child the child node.
 	 */
 	public SquareFunction(final Node child) {
 		super(child);
 	}
 
 	/**
-	 * Evaluating a <code>SquareFunction</code> involves evaluating the child
-	 * then raising the result to the power of 2.
+	 * Evaluates this function. The child node is evaluated, the
+	 * result of which must be a numeric type (one of Double, Float, Long, 
+	 * Integer). The result is raised to the power of 2 and returned as the 
+	 * same type as the input.
 	 */
 	@Override
 	public Object evaluate() {
@@ -73,15 +74,21 @@ public class SquareFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the SquareFunction which is SQUARE.
+	 * Returns the identifier of this function which is SQUARE.
 	 */
 	@Override
 	public String getIdentifier() {
 		return "SQUARE";
 	}
 	
+	/**
+	 * Returns this function node's return type for the given child input types.
+	 * If there is one input type of a numeric type then the return type will 
+	 * be that numeric type. In all other cases this method will return 
+	 * <code>null</code> to indicate that the inputs are invalid.
+	 * 
+	 * @return a numeric class or null if the input type is invalid.
+	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
 		if (inputTypes.length == 1 && TypeUtils.isNumericType(inputTypes[0])) {

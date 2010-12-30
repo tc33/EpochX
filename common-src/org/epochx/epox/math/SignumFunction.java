@@ -25,32 +25,33 @@ import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A <code>FunctionNode</code> which performs the mathematical sign function
+ * A function node which performs the mathematical sign function
  * that extracts the sign of a number.
  */
 public class SignumFunction extends Node {
 
 	/**
-	 * Construct a SignumFunction with no children.
+	 * Constructs a SignumFunction with one <code>null</code> child.
 	 */
 	public SignumFunction() {
 		this(null);
 	}
 
 	/**
-	 * Construct a SignumFunction with one child. When evaluated, the child
-	 * will be evaluated with signum performed on the result.
+	 * Constructs a SignumFunction with one numerical child node.
 	 * 
-	 * @param child The child which signum will be performed on.
+	 * @param child the child node.
 	 */
 	public SignumFunction(final Node child) {
 		super(child);
 	}
 
 	/**
-	 * Evaluating a <code>SignumFunction</code> involves evaluating the child
-	 * then the result will be zero if it resolves to zero, 1.0 if greater than
-	 * zero and -1.0 if less than zero.
+	 * Evaluates this function. The child node is evaluated, the
+	 * result of which must be a numeric type (one of Double, Float, Long, 
+	 * Integer). Then the result will be -1, if the value is negative, +1, if
+	 * the value is positive and 0 if the value is zero. The type of the value
+	 * returned will be the same as the input type.
 	 */
 	@Override
 	public Object evaluate() {
@@ -72,15 +73,21 @@ public class SignumFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the SignumFunction which is SGN.
+	 * Returns the identifier of this function which is SGN.
 	 */
 	@Override
 	public String getIdentifier() {
 		return "SGN";
 	}
 	
+	/**
+	 * Returns this function node's return type for the given child input types.
+	 * If there is one input type of a numeric type then the return type will 
+	 * be that same numeric type. In all other cases this method will return 
+	 * <code>null</code> to indicate that the inputs are invalid.
+	 * 
+	 * @return A numeric class or null if the input type is invalid.
+	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
 		if (inputTypes.length == 1 && TypeUtils.isNumericType(inputTypes[0])) {

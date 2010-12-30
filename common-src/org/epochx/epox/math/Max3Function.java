@@ -25,18 +25,32 @@ import org.epochx.epox.Node;
 
 
 /**
- * 
+ * A function node which performs a comparison of three numeric inputs and 
+ * returns the greater of the three.
  */
 public class Max3Function extends MaxFunction {
 
+	/**
+	 * Constructs a Max3Function with three <code>null</code> children.
+	 */
 	public Max3Function() {
 		this(null, null, null);
 	}
 
+	/**
+	 * Constructs a Max3Function with three numerical child nodes.
+	 * 
+	 * @param child1 The first child node.
+	 * @param child2 The second child node.
+	 * @param child3 The third child node.
+	 */
 	public Max3Function(final Node child1, final Node child2, final Node child3) {
 		super(child1, child2, child3);
 	}
 	
+	/**
+	 * Returns the identifier of this function which is MAX3.
+	 */
 	@Override
 	public String getIdentifier() {
 		return "MAX3";

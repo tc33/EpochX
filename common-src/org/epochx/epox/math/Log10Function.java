@@ -25,22 +25,21 @@ import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A <code>FunctionNode</code> which performs the common (base 10) logarithm.
+ * A function node which performs the common (base 10) logarithm, called LOG-10.
  * 
  * @see LogFunction
  */
 public class Log10Function extends Node {
 
 	/**
-	 * Construct a Log10Function with no children.
+	 * Constructs a Log10Function with one <code>null</code> child.
 	 */
 	public Log10Function() {
 		this(null);
 	}
 
 	/**
-	 * Construct a Log10Function with one child. When evaluated, the logarithm
-	 * of the evaluated child will be calculated.
+	 * Constructs a Log10Function with one numerical child nodes.
 	 * 
 	 * @param child The child of which the base 10 logarithm will be calculated.
 	 */
@@ -49,8 +48,10 @@ public class Log10Function extends Node {
 	}
 
 	/**
-	 * Evaluating a <code>Log10Function</code> involves evaluating the child
-	 * then calculating it's base 10 logarithm.
+	 * Evaluates this function. The child node is evaluated, the
+	 * result of which must be of a numeric type (one of Byte,
+	 * Short, Integer, Long). The base 10 logarithm is performed on this value
+	 * and the result returned as a Double.
 	 */
 	@Override
 	public Double evaluate() {
@@ -60,15 +61,21 @@ public class Log10Function extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the Log10Function which is LOG-10.
+	 * Returns the identifier of this function which is LOG-10.
 	 */
 	@Override
 	public String getIdentifier() {
 		return "LOG-10";
 	}
 	
+	/**
+	 * Returns this function node's return type for the given child input types.
+	 * If there is one input type of a numeric type then the return type will 
+	 * be Double. In all other cases this method will return 
+	 * <code>null</code> to indicate that the inputs are invalid.
+	 * 
+	 * @return the Double class or null if the input type is invalid.
+	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
 		if (inputTypes.length == 2 && TypeUtils.isAllNumericType(inputTypes)) {

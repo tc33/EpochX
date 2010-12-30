@@ -25,15 +25,17 @@ import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A <code>MinFunction</code> which performs the simple comparison function
- * of determining which of 2 numbers is smaller, as per the boolean less-than
+ * A function node which performs the simple comparison function of determining 
+ * which of a set of numbers is smaller, as per the boolean less-than
  * function. This function can have a flexible number of children and as such 
- * cannot be parsed by the EpoxParser, look at using Min2Function instead.
+ * cannot be parsed by the {@link EpoxParser}, look at using 
+ * {@link Min2Function} or {@link Min3Function} instead.
  */
 public class MinFunction extends Node {
 
 	/**
-	 * Construct a MinFunction with no children.
+	 * Constructs a MinFunction with the given number of <code>null</code>
+	 * children.
 	 */
 	public MinFunction(int n) {
 		this((Node) null);
@@ -42,20 +44,19 @@ public class MinFunction extends Node {
 	}
 
 	/**
-	 * Construct a MinFunction with two child. When evaluated, the children will
-	 * both be evaluated with the smaller of the two returned as the result.
+	 * Constructs a MinFunction with given numerical child nodes.
 	 * 
-	 * @param child1 The first child node for comparison.
-	 * @param child2 The second child node for comparison.
+	 * @param children the numeric child nodes.
 	 */
 	public MinFunction(final Node ... children) {
 		super(children);
 	}
 
 	/**
-	 * Evaluating a <code>MinFunction</code> involves evaluating the children
-	 * then comparing and returning which ever is the smaller of the 2 evaluated
-	 * children.
+	 * Evaluates this function. The child nodes are evaluated, the
+	 * results of which must be numerically typed (any of Double, Float, Long, 
+	 * Integer). The smallest of the child values will be returned as the result
+	 * as the widest of the numeric types.
 	 */
 	@Override
 	public Object evaluate() {
@@ -96,17 +97,26 @@ public class MinFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the MinFunction which is MIN.
+	 * Returns the identifier of this function which is MIN.
 	 */
 	@Override
 	public String getIdentifier() {
 		return "MIN";
 	}
 	
+	/**
+	 * Returns this function node's return type for the given child input types.
+	 * If there is the correct number of numeric input types then the return 
+	 * type will be the widest of those types. In all other cases this method 
+	 * will return <code>null</code> to indicate that the inputs are invalid.
+	 * 
+	 * @return the widest numeric type or null if the input types are invalid.
+	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		return TypeUtils.getNumericType(inputTypes);
+		if (inputTypes.length == getArity()) {
+			return TypeUtils.getNumericType(inputTypes);
+		}
+		return null;
 	}
 }

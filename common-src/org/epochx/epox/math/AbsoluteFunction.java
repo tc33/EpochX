@@ -101,6 +101,9 @@ public class AbsoluteFunction extends Node {
 	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		return TypeUtils.getNumericType(inputTypes);
+		if (inputTypes.length == 1) {
+			return TypeUtils.getNumericType(inputTypes);
+		}
+		return null;
 	}
 }

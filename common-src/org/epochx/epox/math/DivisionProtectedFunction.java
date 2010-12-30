@@ -25,62 +25,67 @@ import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A <code>FunctionNode</code> which performs the arithmetic function of
- * division. The division is protected to avoid the scenario where division
- * by zero is attempted - which is undefined. Division by zero evaluates to
- * zero.
+ * A function node which performs the mathematical function of division.
+ * 
+ * Division can be performed on inputs of the following types: 
+ * <ul>
+ * <li>Integer</li>
+ * <li>Long</li>
+ * <li>Float</li>
+ * <li>Double</li>
+ * </ul>
+ * 
+ * Division can be performed between mixed types, with a widening operation 
+ * performed and the result being of the wider of the two types. This version of
+ * the function is protected, so if the divisor input is 0.0 then the result 
+ * will be the protected value, which by default is 0.0 to protect against 
+ * divide by zero.
  */
-public class ProtectedDivisionFunction extends Node {
+public class DivisionProtectedFunction extends Node {
 
+	// The value returned in place of divide-by-zero.
 	private final Double protectionValue;
 
 	/**
-	 * Construct a ProtectedDivisionFunction with no children. A default
-	 * protection value that is returned in the case of divide-by-zero is set
-	 * as 0.0.
+	 * Constructs a ProtectedDivisionFunction with two <code>null</code> 
+	 * children. By default a protection value of 0.0 is used.
 	 */
-	public ProtectedDivisionFunction() {
+	public DivisionProtectedFunction() {
 		this(null, null);
 	}
 
 	/**
-	 * Construct a ProtectedDivisionFunction with a protection value to assign
-	 * during divide-by-zero. This overrides the default protection value of
-	 * 0.0.
+	 * Constructs a ProtectedDivisionFunction with two <code>null</code> 
+	 * children. 
 	 * 
 	 * @param protectionValue a double value to return in the case of
 	 *        divide-by-zeros.
 	 */
-	public ProtectedDivisionFunction(final double protectionValue) {
+	public DivisionProtectedFunction(final double protectionValue) {
 		this(null, null, protectionValue);
 	}
 
 	/**
-	 * Construct a ProtectedDivisionFunction with 2 children. When evaluated,
-	 * the evaluation of the first child will be divided by the evaluation of
-	 * the second. A default protection value that is returned in the case of
+	 * Constructs a ProtectedDivisionFunction with two numerical child nodes. 
+	 * A default protection value that is returned in the case of
 	 * divide-by-zero is set as 0.0.
 	 * 
 	 * @param dividend The first child node - the dividend.
 	 * @param divisor The second child node - the divisor.
 	 */
-	public ProtectedDivisionFunction(final Node dividend, final Node divisor) {
+	public DivisionProtectedFunction(final Node dividend, final Node divisor) {
 		this(dividend, divisor, 0.0);
 	}
 
 	/**
-	 * Construct a ProtectedDivisionFunction with 2 children and a
-	 * divide-by-zero protection value. When evaluated, the evaluation of the
-	 * first child will be divided by the evaluation of the second. If the
-	 * second (divisor) child evaluates to zero, then no division takes place
-	 * and the specified protectionValue is returned.
+	 * Constructs a ProtectedDivisionFunction with two numerical child nodes.
 	 * 
 	 * @param dividend The first child node - the dividend.
 	 * @param divisor The second child node - the divisor.
 	 * @param protectionValue a double value to return in the case of
 	 *        divide-by-zeros.
 	 */
-	public ProtectedDivisionFunction(final Node dividend,
+	public DivisionProtectedFunction(final Node dividend,
 			final Node divisor, final double protectionValue) {
 		super(dividend, divisor);
 
@@ -88,12 +93,12 @@ public class ProtectedDivisionFunction extends Node {
 	}
 
 	/**
-	 * Evaluating a <code>ProtectedDivisionFunction</code> involves dividing
-	 * the result of evaluating both children. If the divisor resolves to zero
-	 * then the result returned will be zero to avoid the divide by zero issue.
-	 * For performance, this function is evaluated lazily. The divisor child is
-	 * evaluated first, if it evaluates to <code>0.0</code> then the first child
-	 * will not be evaluated at all.
+	 * Evaluates this function. Both child nodes are evaluated, the result of
+	 * both must be of numeric type. If necessary, the inputs are widened to 
+	 * both be of the same type, then division is performed and the return value
+	 * will be of that wider type. If the divisor resolves to zero
+	 * then the result returned will be the protection value to avoid the divide
+	 * by zero issue.
 	 */
 	@Override
 	public Object evaluate() {
@@ -120,7 +125,7 @@ public class ProtectedDivisionFunction extends Node {
 			
 			return (l2 == 0) ? NumericUtils.asLong(protectionValue) : (l1 / l2);
 		} else if (returnType == Integer.class) {
-			// Divide as intgers.
+			// Divide as integers.
 			int i1 = NumericUtils.asInteger(c1);
 			int i2 = NumericUtils.asInteger(c2);
 			
@@ -131,17 +136,26 @@ public class ProtectedDivisionFunction extends Node {
 	}
 
 	/**
-	 * Get the unique name that identifies this function.
-	 * 
-	 * @return the unique name for the ProtectedDivisionFunction which is PDIV.
+	 * Returns the identifier of this function which is PDIV.
 	 */
 	@Override
 	public String getIdentifier() {
 		return "PDIV";
 	}
 	
+	/**
+	 * Returns this function node's return type for the given child input types.
+	 * If there are two input types of numeric type then the return type will 
+	 * be the wider of those numeric types. In all other cases this method will 
+	 * return <code>null</code> to indicate that the inputs are invalid.
+	 * 
+	 * @return A numeric class or null if the input type is invalid.
+	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		return TypeUtils.getNumericType(inputTypes);
+		if (inputTypes.length == 2) {
+			return TypeUtils.getNumericType(inputTypes);
+		}
+		return null;
 	}
 }

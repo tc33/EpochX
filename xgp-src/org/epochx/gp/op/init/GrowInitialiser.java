@@ -21,6 +21,7 @@
  */
 package org.epochx.gp.op.init;
 
+import java.math.BigInteger;
 import java.util.*;
 
 import org.epochx.epox.*;
@@ -287,6 +288,10 @@ public class GrowInitialiser extends ConfigOperator<GPModel> implements GPInitia
 				}
 			}
 			
+			if (validArgTypeSets.isEmpty()) {
+				throw new IllegalStateException("Syntax is unable to create full node trees of given depth.");
+			}
+			
 			// Randomly select from the valid arg sets.
 			Class<?>[] argTypes = validArgTypeSets.get(rng.nextInt(validArgTypeSets.size()));
 			
@@ -329,7 +334,6 @@ public class GrowInitialiser extends ConfigOperator<GPModel> implements GPInitia
 	private void updateValidTypes() {
 		validDepthTypes = new Class<?>[maxDepth+1][];
 		
-		// Handle depths above 1.
 		for (int i=0; i<=maxDepth; i++) {
 			Set<Class<?>> types = new HashSet<Class<?>>();
 			for (Node n: terminals) {
@@ -344,7 +348,9 @@ public class GrowInitialiser extends ConfigOperator<GPModel> implements GPInitia
 					// Test each possible set of arguments.
 					for (Class<?>[] argTypes: argTypeSets) {
 						Class<?> returnType = n.getReturnType(argTypes);
-						types.add(returnType);
+						if (returnType != null) {
+							types.add(returnType);
+						}
 					}
 				}
 			}
@@ -370,6 +376,177 @@ public class GrowInitialiser extends ConfigOperator<GPModel> implements GPInitia
 		}
 		
 		return possibleTypes;
+	}
+	
+	public BigInteger noVarieties(int remainingDepth, Class<?> returnType) {
+		// Update the types possibilities table if needed.
+		if (validDepthTypes == null) {
+			updateValidTypes();
+		}
+		
+		List<Class<?>> returnTypes = new ArrayList<Class<?>>();
+		returnTypes.add(returnType);
+		return noVarieties(remainingDepth, returnTypes);
+	}
+	
+	/**
+	 * Counts and returns the number of varieties of node tree that are possible
+	 * with a set of nodes to a given depth. The quantity of varieties is 
+	 * effectively the size of the search space. The result will grow 
+	 * exponentially with depth and out grow a long very quickly, so a 
+	 * BigInteger is used here.
+	 * 
+	 * @param syntax the available nodes.
+	 * @param remainingDepth the depth of node trees allowable.
+	 * @return an int which is the number of varieties of node trees possible.
+	 */
+	private BigInteger noVarieties(final int remainingDepth, List<Class<?>> returnTypes) {
+		BigInteger varieties = BigInteger.ZERO;
+		for (Node n: terminals) {
+			for (Class<?> returnType: returnTypes) {
+				if (returnType.isAssignableFrom(n.getReturnType())) {
+					varieties = varieties.add(BigInteger.ONE);
+					break;
+				}
+			}
+		}
+		
+		if (remainingDepth > 0) {
+			// Also add any valid functions.
+			for (Node n: functions) {
+				Class<?>[][] argTypeSets = getPossibleArgTypes(n.getArity(), validDepthTypes[remainingDepth-1]);
+				
+				// Valid sets of argument types.
+				List<Class<?>[]> valid = new ArrayList<Class<?>[]>();
+				
+				// Test each possible set of arguments.
+				for (Class<?>[] argTypes: argTypeSets) {
+					Class<?> type = n.getReturnType(argTypes);
+					
+					if (type != null) {
+						// If the return type is a subtype of one that is needed.
+						for (Class<?> returnType: returnTypes) {
+							if (returnType.isAssignableFrom(type)) {
+								valid.add(argTypes);
+								break;
+							}
+						}
+					}
+				}
+				
+				// If there are any possible valid arguments.
+				if (valid.size() > 0) {
+					BigInteger totalChildVarieties = BigInteger.ONE;
+					for (int i=0; i<n.getArity(); i++) {
+						// Construct a list of the valid argument types for this child.
+						returnTypes = new ArrayList<Class<?>>();
+						for (int j=0; j<valid.size(); j++) {
+							returnTypes.add(valid.get(j)[i]);
+						}
+						
+						// Find the number of varieties for the subtree rooted at this child.
+						BigInteger childVarieties = noVarieties(remainingDepth-1, returnTypes);
+						
+						// Multiply to get the number of varieties amongst the children.
+						totalChildVarieties = totalChildVarieties.multiply(childVarieties);
+					}
+					varieties = varieties.add(totalChildVarieties);
+				}
+			}
+		}
+		
+		return varieties;
+	}
+	
+	public boolean isSufficientVarieties(final int remainingDepth, Class<?> returnType, final BigInteger target) {
+		// Update the types possibilities table if needed.
+		if (validDepthTypes == null) {
+			updateValidTypes();
+		}
+		
+		List<Class<?>> returnTypes = new ArrayList<Class<?>>();
+		returnTypes.add(returnType);
+		return isSufficientVarieties(remainingDepth, returnTypes, target);
+	}
+	
+	/**
+	 * Returns true if the number of node tree varieties is equal to or greater
+	 * than the target parameter. Otherwise, false is returned. The noVarieties
+	 * method can be used to determine the number of varieties, but often the 
+	 * caller is only interested in whether there are sufficient varieties so 
+	 * there is no need to calculate the full number.
+	 *  
+	 * @param syntax the available nodes.
+	 * @param depth the depth of node trees allowable.
+	 * @param target the number of varieties that is considered sufficient.
+	 * @return true if the number of node tree varieties is equal to or greater
+	 * than the target parameter, false otherwise.
+	 */	
+	private boolean isSufficientVarieties(final int remainingDepth, List<Class<?>> returnTypes, final BigInteger target) {
+		//TODO This and the related noVarieties methods can be simplified massively.
+		BigInteger varieties = BigInteger.ZERO;
+		for (Node n: terminals) {
+			for (Class<?> returnType: returnTypes) {
+				if (returnType.isAssignableFrom(n.getReturnType())) {
+					varieties = varieties.add(BigInteger.ONE);
+					break;
+				}
+				
+				if (varieties.compareTo(target) >= 0) {
+					return true;
+				}
+			}
+		}
+		
+		if (remainingDepth > 0) {
+			// Also add any valid functions.
+			for (Node n: functions) {
+				Class<?>[][] argTypeSets = getPossibleArgTypes(n.getArity(), validDepthTypes[remainingDepth-1]);
+				
+				// Valid sets of argument types.
+				List<Class<?>[]> valid = new ArrayList<Class<?>[]>();
+				
+				// Test each possible set of arguments.
+				for (Class<?>[] argTypes: argTypeSets) {
+					Class<?> type = n.getReturnType(argTypes);
+					
+					if (type != null) {
+						// If the return type is a subtype of one that is needed.
+						for (Class<?> returnType: returnTypes) {
+							if (returnType.isAssignableFrom(type)) {
+								valid.add(argTypes);
+								break;
+							}
+						}
+					}
+				}
+				
+				// If there are any possible valid arguments.
+				if (valid.size() > 0) {
+					BigInteger totalChildVarieties = BigInteger.ONE;
+					for (int i=0; i<n.getArity(); i++) {
+						// Construct a list of the valid argument types for this child.
+						returnTypes = new ArrayList<Class<?>>();
+						for (int j=0; j<valid.size(); j++) {
+							returnTypes.add(valid.get(j)[i]);
+						}
+						
+						// Find the number of varieties for the subtree rooted at this child.
+						BigInteger childVarieties = noVarieties(remainingDepth-1, returnTypes);
+						
+						// Multiply to get the number of varieties amongst the children.
+						totalChildVarieties = totalChildVarieties.multiply(childVarieties);
+					}
+					varieties = varieties.add(totalChildVarieties);
+				}
+				
+				if (varieties.compareTo(target) >= 0) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 
 	/**

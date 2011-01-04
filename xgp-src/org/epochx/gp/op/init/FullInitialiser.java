@@ -277,6 +277,10 @@ public class FullInitialiser extends ConfigOperator<GPModel> implements GPInitia
 	private Node getNodeTree(Class<?> requiredType, int currentDepth) {
 		// Choose a node with correct type and obtainable arg types.
 		List<Node> validNodes = getValidNodes(depth-currentDepth, requiredType);
+		
+		if (validNodes.isEmpty()) {
+			throw new IllegalStateException("Syntax is unable to create full node trees of given depth.");
+		}
 		final int randomIndex = rng.nextInt(validNodes.size());
 		Node root = validNodes.get(randomIndex).newInstance();
 		int arity = root.getArity();
@@ -294,6 +298,9 @@ public class FullInitialiser extends ConfigOperator<GPModel> implements GPInitia
 			}
 			
 			// Randomly select from the valid arg sets.
+			if (validArgTypeSets.isEmpty()) {
+				throw new IllegalStateException("Syntax is unable to create full node trees of given depth.");
+			}
 			Class<?>[] argTypes = validArgTypeSets.get(rng.nextInt(validArgTypeSets.size()));
 			
 			for (int i = 0; i < arity; i++) {
@@ -351,7 +358,9 @@ public class FullInitialiser extends ConfigOperator<GPModel> implements GPInitia
 				// Test each possible set of arguments.
 				for (Class<?>[] argTypes: argTypeSets) {
 					Class<?> returnType = n.getReturnType(argTypes);
-					types.add(returnType);
+					if (returnType != null) {
+						types.add(returnType);
+					}
 				}
 			}
 			validDepthTypes[i] = types.toArray(new Class<?>[types.size()]);

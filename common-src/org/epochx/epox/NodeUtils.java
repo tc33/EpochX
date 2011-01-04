@@ -21,96 +21,13 @@
  */
 package org.epochx.epox;
 
-import java.math.BigInteger;
 import java.util.*;
 
 
 /**
  * This class provides static utility methods for working with Epox nodes.
  */
-public final class NodeUtils {
-	
-	/**
-	 * Counts and returns the number of varieties of node tree that are possible
-	 * with a set of nodes to a given depth. The quantity of varieties is 
-	 * effectively the size of the search space. The result will grow 
-	 * exponentially with depth and out grow a long very quickly, so a 
-	 * BigInteger is used here.
-	 * 
-	 * @param syntax the available nodes.
-	 * @param depth the depth of node trees allowable.
-	 * @return an int which is the number of varieties of node trees possible.
-	 */
-	public static BigInteger noVarieties(final List<Node> syntax, final int depth) {
-		List<Node> validRootNodes = getValidNodes(syntax, depth);
-		List<Node> terminals = getTerminals(validRootNodes);
-		List<Node> functions = getFunctions(validRootNodes);
-		
-		BigInteger varieties = BigInteger.valueOf(terminals.size());
-		if (depth > 0) {
-			for (Node n: functions) {
-				BigInteger noChildCombinations = BigInteger.ONE;
-				for (int i=0; i<n.getArity(); i++) {
-					noChildCombinations = noChildCombinations.multiply(noVarieties(syntax, depth-1));
-				}
-				varieties = varieties.add(noChildCombinations);
-			}
-		}
-		
-		return varieties;
-	}
-	
-	/*
-	 * Helper method for noVarieties method which returns a list of those nodes
-	 * that are valid with specified depth remaining. This will exclude 
-	 * terminals at depth 0. Currently this method pays no attention to data
-	 * types but will need to at some point.
-	 */
-	private static List<Node> getValidNodes(final List<Node> syntax, final int depth) {
-		List<Node> validNodes;
-		if (depth > 0) {
-			validNodes = syntax;
-		} else {
-			// Count only terminals.
-			validNodes = getTerminals(syntax);
-		}
-		
-		return validNodes;
-	}
-	
-	/**
-	 * Returns true if the number of node tree varieties is equal to or greater
-	 * than the target parameter. Otherwise, false is returned. The noVarieties
-	 * method can be used to determine the number of varieties, but often the 
-	 * caller is only interested in whether there are sufficient varieties so 
-	 * there is no need to calculate the full number.
-	 *  
-	 * @param syntax the available nodes.
-	 * @param depth the depth of node trees allowable.
-	 * @param target the number of varieties that is considered sufficient.
-	 * @return true if the number of node tree varieties is equal to or greater
-	 * than the target parameter, false otherwise.
-	 */
-	public static boolean isSufficientVarieties(final List<Node> syntax, final int depth, final BigInteger target) {
-		List<Node> validRootNodes = getValidNodes(syntax, depth);
-
-		BigInteger varieties = new BigInteger(Integer.toString(validRootNodes.size()));
-		for (Node n: validRootNodes) {
-			if (n.getArity() > 0) {
-				BigInteger noChildCombinations = BigInteger.ONE;
-				for (int i=0; i<n.getArity(); i++) {
-					noChildCombinations = noChildCombinations.multiply(noVarieties(syntax, depth-1));
-				}
-				varieties = varieties.add(noChildCombinations);
-			}
-			
-			if (varieties.compareTo(target) >= 0) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
+public final class NodeUtils {	
 	
 	/**
 	 * Returns those nodes from the given syntax that have an arity of 0.

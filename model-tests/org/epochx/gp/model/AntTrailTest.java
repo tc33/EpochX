@@ -73,9 +73,9 @@ public class AntTrailTest extends ModelTest {
 		
 		model.setCrossover(new KozaCrossover(model));
 		
-		model.setMaxDepth(16);
-		model.setMaxInitialDepth(5);
-		model.setInitialiser(new RampedHalfAndHalfInitialiser(model, 1, false));
+		model.setMaxDepth(17);
+		model.setMaxInitialDepth(6);
+		model.setInitialiser(new RampedHalfAndHalfInitialiser(model, 2, false));
 		model.setPoolSelector(null);
 		model.setProgramSelector(new FitnessProportionateSelector(model));
 		model.setNoElites(0);

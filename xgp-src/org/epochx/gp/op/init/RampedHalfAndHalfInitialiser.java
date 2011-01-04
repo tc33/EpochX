@@ -191,6 +191,7 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GPModel> implem
 		popSize = getModel().getPopulationSize();
 		endMaxDepth = getModel().getMaxInitialDepth();
 		syntax = getModel().getSyntax();
+		returnType = getModel().getReturnType();
 	}
 
 	/**
@@ -274,14 +275,21 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GPModel> implem
 		
 		if (!acceptDuplicates) {
 			// Can sufficient be created at each depth?
+			int cumulative = 0;
 			for (int i=startMaxDepth; i<=endMaxDepth; i++) {
 				int target = noPrograms[i - startMaxDepth];
 				BigInteger targetBI = BigInteger.valueOf(target);
-				if (!NodeUtils.isSufficientVarieties(syntax, i, targetBI)) {
-					BigInteger noPossibleBI = NodeUtils.noVarieties(syntax, i);
+				if (!grow.isSufficientVarieties(i, returnType, targetBI)) {
+					BigInteger noPossibleBI = grow.noVarieties(i, returnType);
 					
 					// Must fit into an int because target was an int.
 					int noPossible = noPossibleBI.intValue();
+					
+					// Exclude those for lower depths because will already be in pop.
+					noPossible -= cumulative;
+					
+					// Update cumulative.
+					cumulative += noPossible;
 					int shortfall = target - noPossible;
 					
 					// Move the shortfall to the next depth if there is one.

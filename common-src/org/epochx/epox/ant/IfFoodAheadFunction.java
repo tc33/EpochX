@@ -23,6 +23,7 @@ package org.epochx.epox.ant;
 
 import org.epochx.epox.*;
 import org.epochx.tools.ant.Ant;
+import org.epochx.tools.util.TypeUtils;
 
 /**
  * This class defines a function which requires three children, the first of 
@@ -92,7 +93,10 @@ public class IfFoodAheadFunction extends Node {
 	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (inputTypes.length == 3 && Ant.class.isAssignableFrom(inputTypes[0])) {
+		if (inputTypes.length == 3 
+				&& Ant.class.isAssignableFrom(inputTypes[0])
+				&& inputTypes[1] == Void.class
+				&& inputTypes[2] == Void.class) {
 			return Void.class;
 		} else {
 			return null;

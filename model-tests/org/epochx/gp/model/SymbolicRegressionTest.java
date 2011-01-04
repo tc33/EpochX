@@ -50,7 +50,7 @@ public class SymbolicRegressionTest extends ModelTest {
 		model.setMaxDepth(16);
 		model.setMaxInitialDepth(5);
 		//TODO Start depth below should be 1 not 2, but insufficient programs.
-		model.setInitialiser(new RampedHalfAndHalfInitialiser(model, 2, false));
+		model.setInitialiser(new RampedHalfAndHalfInitialiser(model, 1, false));
 		model.setPoolSelector(null);
 		model.setProgramSelector(new FitnessProportionateSelector(model));
 		model.setNoElites(0);

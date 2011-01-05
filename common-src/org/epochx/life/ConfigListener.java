@@ -25,8 +25,8 @@ package org.epochx.life;
  * Provides the interface to be implemented by objects that wish to listen for
  * configure events. Configure events are specifically for triggering the
  * configuration of components with parameters from the model, and are called
- * at the start of execution, prior to the start of each run and before the
- * start of each generation. The event may also be fired manually with a call to
+ * at the start of execution and prior to the start of each run. The event may 
+ * also be fired manually with a call to
  * the <code>Life</code>'s <code>fireConfigureEvent()</code> method.
  * To listen for configure events during execution of a model, instances of
  * <code>ConfigListener</code> must be added to the <code>Life</code> instance 
@@ -43,8 +43,8 @@ public interface ConfigListener extends Listener {
 
 	/**
 	 * This event is automatically fired at the recommended times for loading
-	 * model parameters - that is at the start of model execution, prior to run
-	 * start and before generation start. It may also be triggered manually,
+	 * model parameters - that is at the start of model execution and at the 
+	 * start of each successive run. It may also be triggered manually,
 	 * potentially by the model if it updates its parameters at an unorthadox
 	 * time in the life cycle.
 	 */

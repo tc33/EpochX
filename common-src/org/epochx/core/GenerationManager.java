@@ -53,12 +53,6 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * <th>Raised when?</th>
  * </tr>
  * <tr>
- * <td>onConfigure</td>
- * <td>no</td>
- * <td>no</td>
- * <td>Immediately before the onGenerationStart event.</td>
- * </tr>
- * <tr>
  * <td>onGenerationStart</td>
  * <td>no</td>
  * <td>no</td>
@@ -183,9 +177,6 @@ public class GenerationManager implements ConfigListener {
 			throw new IllegalArgumentException(
 					"previousPop must not be null and size must be 1 or greater.");
 		}
-
-		// Give the model a chance to configure.
-		Life.get().fireConfigureEvent();
 
 		// Validate state.
 		if (rng == null) {

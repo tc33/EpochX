@@ -107,6 +107,10 @@ public abstract class CandidateProgram implements Cloneable,
 	 */
 	@Override
 	public int compareTo(final CandidateProgram o) {
+		if (o == null) {
+			throw new NullPointerException("cannot compare to null");
+		}
+		
 		final double thisFitness = this.getFitness();
 		final double objFitness = o.getFitness();
 

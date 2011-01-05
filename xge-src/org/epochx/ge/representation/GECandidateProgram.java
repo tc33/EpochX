@@ -44,6 +44,9 @@ import org.epochx.tools.grammar.*;
  * instance itself, with a call to <code>getSourceCode()</code> or
  * <code>getFitness()</code>, rather than forcing the model or otherwise to
  * calculate them on each call.
+ * 
+ * <p>
+ * Note: this class has a natural ordering that is inconsistent with equals.
  */
 public class GECandidateProgram extends CandidateProgram {
 

@@ -37,6 +37,9 @@ import org.epochx.representation.CandidateProgram;
  * which will trigger an evaluation of each <code>Node</code> and their child
  * nodes recursively down the tree. As well as the program tree itself, each
  * GPCandidateProgram allows the retrieval of meta-data about the program.
+ * 
+ * <p>
+ * Note: this class has a natural ordering that is inconsistent with equals.
  */
 public class GPCandidateProgram extends CandidateProgram {
 

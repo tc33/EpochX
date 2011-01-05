@@ -25,6 +25,10 @@ import org.epochx.gr.model.GRModel;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.NonTerminalSymbol;
 
+/**
+ * <p>
+ * Note: this class has a natural ordering that is inconsistent with equals.
+ */
 public class GRCandidateProgram extends CandidateProgram {
 
 	private GRModel model;

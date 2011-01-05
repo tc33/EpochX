@@ -319,7 +319,7 @@ public class Grammar {
 					if (ch == '\r') {
 						// Ignore DOS newline.
 					} else if ((ch == '|') && quoted) {
-						buffer.append(ch); // This might not be needed.
+						buffer.append(ch);
 					} else if ((ch == '\n') || (ch == '|')) {
 						// End of production and possibly rule.
 						if (buffer.length() != 0) {

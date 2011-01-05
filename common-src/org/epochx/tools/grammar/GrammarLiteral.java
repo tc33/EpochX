@@ -21,6 +21,8 @@
  */
 package org.epochx.tools.grammar;
 
+import org.epochx.tools.util.StringUtils;
+
 /**
  * Grammar literals are a type of grammar node, that represent the terminals of
  * a grammar. They are those nodes which are never found on the left-hand side
@@ -68,6 +70,24 @@ public class GrammarLiteral implements GrammarNode {
 	 */
 	@Override
 	public String toString() {
-		return value;
+		return escape(value);
+	}
+	
+	/*
+	 * If the input string contains any illegal chars then the whole string is
+	 * wrapped in quotes and returned. Otherwise the original string is 
+	 * returned unmodified.
+	 */
+	private String escape(String input) {
+		char[] escapeChars = {'>', '<', '|'};
+		if (StringUtils.containsAny(input, escapeChars)) {
+			StringBuilder buffer = new StringBuilder();
+			buffer.append('\"');
+			buffer.append(input);
+			buffer.append('\"');
+			input = buffer.toString();
+		}
+		
+		return input;
 	}
 }

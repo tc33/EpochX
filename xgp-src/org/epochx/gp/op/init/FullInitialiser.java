@@ -288,7 +288,7 @@ public class FullInitialiser extends ConfigOperator<GPModel> implements GPInitia
 		if (arity > 0) {
 			// Construct a list of the arg sets that produce the right return type.
 			// TODO We can surely cut down the amount of times we're calling this?!
-			Class<?>[][] argTypeSets = getPossibleArgTypes(arity, validDepthTypes[depth-currentDepth]);
+			Class<?>[][] argTypeSets = getPossibleArgTypes(arity, validDepthTypes[depth-currentDepth-1]);
 			List<Class<?>[]> validArgTypeSets = new ArrayList<Class<?>[]>();
 			for (Class<?>[] argTypes: argTypeSets) {
 				Class<?> type = root.getReturnType(argTypes);

@@ -21,20 +21,21 @@
  */
 package org.epochx.ge.op.init;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.fail;
 
 import org.epochx.ge.codon.StandardGenerator;
 import org.epochx.tools.random.*;
+import org.junit.*;
 
 /**
  * 
  */
-public class FixedLengthInitialiserTest extends TestCase {
+public class FixedLengthInitialiserTest {
 
 	private FixedLengthInitialiser initialiser;
 
-	@Override
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		initialiser = new FixedLengthInitialiser(null, -1, -1, false);
 
 		RandomNumberGenerator rng = new MersenneTwisterFast();
@@ -49,6 +50,7 @@ public class FixedLengthInitialiserTest extends TestCase {
 	 * Tests that an illegal state exception is not thrown with valid
 	 * parameters.
 	 */
+	@Test
 	public void testGetPopValid() {
 		try {
 			initialiser.getInitialPopulation();
@@ -61,6 +63,7 @@ public class FixedLengthInitialiserTest extends TestCase {
 	 * Tests that an illegal state exception is thrown if population size
 	 * parameter is zero.
 	 */
+	@Test
 	public void testGetPopZeroPopSize() {
 		// Setup initialiser to be valid except for pop size.
 		initialiser.setPopSize(0);
@@ -75,6 +78,7 @@ public class FixedLengthInitialiserTest extends TestCase {
 	 * Tests that an illegal state exception is thrown if the chromosome length
 	 * parameter is 0.
 	 */
+	@Test
 	public void testGetPopZeroLength() {
 		// Setup initialiser to be valid except for depth.
 		initialiser.setChromosomeLength(0);

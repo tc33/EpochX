@@ -22,12 +22,13 @@
 package org.epochx.gp.model;
 
 import org.epochx.gp.op.crossover.*;
-import org.epochx.gp.op.init.*;
+import org.epochx.gp.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.gp.op.mutation.SubtreeMutation;
 import org.epochx.life.*;
 import org.epochx.op.selection.FitnessProportionateSelector;
 import org.epochx.stats.*;
 import org.epochx.test.*;
+import org.junit.*;
 
 
 /**
@@ -38,8 +39,8 @@ public class AntTrailTest extends ModelTest {
 	private RunListener runPrinter;
 	private GenerationListener genPrinter;
 	
-	@Override
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		runPrinter = new RunAdapter() {
 			@Override
 			public void onRunEnd() {
@@ -57,8 +58,8 @@ public class AntTrailTest extends ModelTest {
 		//Life.get().addGenerationListener(genPrinter);
 	}
 	
-	@Override
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		Life.get().removeRunListener(runPrinter);
 		Life.get().removeGenerationListener(genPrinter);
 	}
@@ -73,9 +74,9 @@ public class AntTrailTest extends ModelTest {
 		
 		model.setCrossover(new KozaCrossover(model));
 		
-		model.setMaxDepth(17);
-		model.setMaxInitialDepth(6);
-		model.setInitialiser(new RampedHalfAndHalfInitialiser(model, 2, false));
+		model.setMaxDepth(16);
+		model.setMaxInitialDepth(5);
+		model.setInitialiser(new RampedHalfAndHalfInitialiser(model, 1, false));
 		model.setPoolSelector(null);
 		model.setProgramSelector(new FitnessProportionateSelector(model));
 		model.setNoElites(0);
@@ -91,6 +92,7 @@ public class AntTrailTest extends ModelTest {
 	 * 
 	 * Expecting success rate between 12% and 20%.
 	 */
+	@Test
 	public void testSantaFeTrail() {
 		final int LOWER_SUCCESS = 12;
 		final int UPPER_SUCCESS = 20;
@@ -118,6 +120,7 @@ public class AntTrailTest extends ModelTest {
 	 * 
 	 * Expecting success rate between 12% and 20%.
 	 */
+	@Test
 	public void testGenericSantaFeTrail() {
 		final int LOWER_SUCCESS = 12;
 		final int UPPER_SUCCESS = 20;

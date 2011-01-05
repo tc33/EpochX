@@ -21,20 +21,21 @@
  */
 package org.epochx.core;
 
+import static org.junit.Assert.*;
+
 import java.util.*;
 
-import junit.framework.TestCase;
-
-import org.epochx.epox.*;
+import org.epochx.epox.Literal;
 import org.epochx.gp.model.*;
 import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
+import org.junit.*;
 
 /**
  * 
  */
-public class ReproductionManagerTest extends TestCase {
+public class ReproductionManagerTest {
 
 	private Model model;
 
@@ -42,8 +43,8 @@ public class ReproductionManagerTest extends TestCase {
 
 	private int count;
 
-	@Override
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		model = new GPModelDummy();
 
 		reproductionManager = new ReproductionManager(model);
@@ -53,6 +54,7 @@ public class ReproductionManagerTest extends TestCase {
 	 * Tests that an exception is thrown if the program selector is null when
 	 * attempting reproduction.
 	 */
+	@Test
 	public void testProgramSelectorNotSet() {
 		model.setProgramSelector(null);
 
@@ -67,6 +69,7 @@ public class ReproductionManagerTest extends TestCase {
 	 * Tests that the reproduction events are all triggered and in the correct
 	 * order.
 	 */
+	@Test
 	public void testReproductionEventsOrder() {
 		// We add the chars '1', '2', '3' to builder to check order of calls.
 		final StringBuilder verify = new StringBuilder();
@@ -108,6 +111,7 @@ public class ReproductionManagerTest extends TestCase {
 	 * Tests that returning null to the pool selection event will revert the
 	 * selection.
 	 */
+	@Test
 	public void testReproductionEventRevert() {
 		// We add the chars '1', '2', '3' to builder to check order of calls.
 		final StringBuilder verify = new StringBuilder();

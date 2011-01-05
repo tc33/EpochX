@@ -24,6 +24,10 @@ package org.epochx.epox.bool;
 import org.epochx.epox.*;
 import org.epochx.epox.lang.IfFunction;
 import org.epochx.gp.representation.AbstractBooleanNodeTestCase;
+import org.junit.*;
+
+import static org.junit.Assert.*;
+
 
 /**
  * 
@@ -38,7 +42,7 @@ public class IfFunctionTest extends AbstractBooleanNodeTestCase {
 	}
 
 	@Override
-	protected void setUp() throws Exception {
+	public void setUp() throws Exception {
 		super.setUp();
 
 		ifFunction = (IfFunction) getNode();
@@ -47,6 +51,7 @@ public class IfFunctionTest extends AbstractBooleanNodeTestCase {
 		ifFunction.setChildren(children);
 	}
 
+	@Test
 	public void testEvaluateT() {
 		ifFunction.setChild(0, new Literal(true));
 		final boolean result = (Boolean) ifFunction.evaluate();
@@ -54,6 +59,7 @@ public class IfFunctionTest extends AbstractBooleanNodeTestCase {
 		assertTrue("IF did not evaluate 2nd child when 1st was true", result);
 	}
 
+	@Test
 	public void testEvaluateF() {
 		ifFunction.setChild(0, new Literal(false));
 		final boolean result = (Boolean) ifFunction.evaluate();

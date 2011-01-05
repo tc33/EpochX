@@ -7,14 +7,15 @@ import org.epochx.life.*;
 import org.epochx.op.selection.*;
 import org.epochx.stats.*;
 import org.epochx.test.*;
+import org.junit.*;
 
 public class EvenParityTest extends ModelTest {
 	
 	private RunListener runPrinter;
 	private GenerationListener genPrinter;
 	
-	@Override
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		runPrinter = new RunAdapter() {
 			@Override
 			public void onRunEnd() {
@@ -32,8 +33,8 @@ public class EvenParityTest extends ModelTest {
 		//Life.get().addGenerationListener(genPrinter);
 	}
 	
-	@Override
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		Life.get().removeRunListener(runPrinter);
 		Life.get().removeGenerationListener(genPrinter);
 	}
@@ -64,6 +65,7 @@ public class EvenParityTest extends ModelTest {
 	 * 
 	 * Expecting success rate between % and %.
 	 */
+	@Test
 	public void testEven3Parity() {
 		final int LOWER_SUCCESS = 99;
 		final int UPPER_SUCCESS = 100;
@@ -87,6 +89,7 @@ public class EvenParityTest extends ModelTest {
 	 * 
 	 * Expecting success rate between % and %.
 	 */
+	@Test
 	public void testEven4Parity() {
 		final int LOWER_SUCCESS = 40;
 		final int UPPER_SUCCESS = 50;
@@ -110,6 +113,7 @@ public class EvenParityTest extends ModelTest {
 	 * 
 	 * Expecting success rate between % and %.
 	 */
+	@Test
 	public void testEven5Parity() {
 		final int LOWER_SUCCESS = 0;
 		final int UPPER_SUCCESS = 0;
@@ -135,6 +139,7 @@ public class EvenParityTest extends ModelTest {
 	 * 
 	 * Expecting success rate between 40% and 50%.
 	 */
+	@Test
 	public void testEven4ParityLinearRankSelection() {
 		final int LOWER_SUCCESS = 50;
 		final int UPPER_SUCCESS = 50;
@@ -160,6 +165,7 @@ public class EvenParityTest extends ModelTest {
 	 * 
 	 * Expecting success rate between 40% and 50%.
 	 */
+	@Test
 	public void testEven4ParityTournament7Selection() {
 		final int LOWER_SUCCESS = 50;
 		final int UPPER_SUCCESS = 50;

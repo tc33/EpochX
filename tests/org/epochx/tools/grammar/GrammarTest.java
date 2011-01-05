@@ -21,16 +21,18 @@
  */
 package org.epochx.tools.grammar;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.junit.Test;
 
-public class GrammarTest extends TestCase {
+public class GrammarTest {
 
 	/**
 	 * Tests that a malformed grammar exception is thrown for a grammar with no
 	 * rules.
 	 */
+	@Test
 	public void testEmptyGrammar() {
 		try {
 			new Grammar("");
@@ -43,6 +45,7 @@ public class GrammarTest extends TestCase {
 	 * Tests that a malformed grammar exception is thrown for a grammar with a
 	 * rule that is referred to but is missing.
 	 */
+	@Test
 	public void testMissingRule() {
 		try {
 			new Grammar("<rule> ::= abc | <missing>");
@@ -55,6 +58,7 @@ public class GrammarTest extends TestCase {
 	 * Tests that a malformed grammar exception is thrown for a grammar
 	 * including infinitely recursive rules.
 	 */
+	@Test
 	public void testInfiniteRecursion() {
 		final String grammarStr = "<rule1> ::= <rule1> | <rule2> <rule3>\n"
 				+ "<rule2> ::= abc | dcd\n"
@@ -71,6 +75,7 @@ public class GrammarTest extends TestCase {
 	 * Tests that a malformed grammar exception is not thrown for a grammar
 	 * which is heavily recursive but not infinitely so.
 	 */
+	@Test
 	public void testNonInfiniteRecursion() {
 		final String grammarStr = "<rule1> ::= <rule1> | <rule2> <rule3>\n"
 				+ "<rule2> ::= abc | dcd\n"
@@ -86,6 +91,7 @@ public class GrammarTest extends TestCase {
 	/**
 	 * Tests that rules get set recursive correctly.
 	 */
+	@Test
 	public void testSetRecursive() {
 		final String grammarStr = "<rule1> ::= <rule2> | <rule3>\n"
 				+ "<rule2> ::= <rule1> <rule3>\n" + "<rule3> ::= abc | def\n";
@@ -109,6 +115,7 @@ public class GrammarTest extends TestCase {
 	/**
 	 * Tests that attributes get set correctly on productions.
 	 */
+	@Test
 	public void testAttributesSet() {
 		final String grammarStr = "<rule1> ::= afg | <rule2> <?k1=v1;k2=3?>\n"
 				+ "<rule2> ::= abc | def\n";
@@ -132,6 +139,7 @@ public class GrammarTest extends TestCase {
 	 * Tests that grammar literals are correctly listed by getGrammarLiterals
 	 * method.
 	 */
+	@Test
 	public void testGrammarLiterals() {
 		final String grammarStr = "<rule1> ::= <rule2> | <rule3>\n"
 				+ "<rule2> ::= <rule1> dfa\n" + "<rule3> ::= abc | def\n";
@@ -157,6 +165,7 @@ public class GrammarTest extends TestCase {
 	 * Tests that grammar rules are correctly listed by getGrammarRules
 	 * method.
 	 */
+	@Test
 	public void testGrammarRules() {
 		final String grammarStr = "<rule1> ::= <rule2> | dfa\n"
 				+ "<rule2> ::= <rule1> agd\n" + "<rule3> ::= abc | def\n";

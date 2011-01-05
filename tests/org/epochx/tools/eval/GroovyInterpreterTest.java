@@ -1,14 +1,17 @@
 package org.epochx.tools.eval;
 
+import static org.junit.Assert.*;
+
 import java.awt.Point;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class GroovyInterpreterTest extends TestCase {
+public class GroovyInterpreterTest {
 
 	/**
 	 * Tests that the eval method can handle simple expressions.
 	 */
+	@Test
 	public void testEval() throws MalformedProgramException {
 		final Interpreter interpreter = new GroovyInterpreter();
 
@@ -35,6 +38,7 @@ public class GroovyInterpreterTest extends TestCase {
 	/**
 	 * Tests that the eval method can handle multiple simple expressions.
 	 */
+	@Test
 	public void testMultiEval() throws MalformedProgramException {
 		final Interpreter interpreter = new GroovyInterpreter();
 
@@ -64,6 +68,7 @@ public class GroovyInterpreterTest extends TestCase {
 	/**
 	 * Tests that the exec method can execute sequences of statements.
 	 */
+	@Test
 	public void testExec() throws MalformedProgramException {
 		final Interpreter interpreter = new GroovyInterpreter();
 
@@ -83,6 +88,7 @@ public class GroovyInterpreterTest extends TestCase {
 	 * Tests that the exec method can execute sequences of statements multiple
 	 * times.
 	 */
+	@Test
 	public void testMultiExec() throws MalformedProgramException {
 		final Interpreter interpreter = new GroovyInterpreter();
 

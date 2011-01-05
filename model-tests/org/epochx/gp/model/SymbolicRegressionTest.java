@@ -1,19 +1,20 @@
 package org.epochx.gp.model;
 
-import org.epochx.gp.op.crossover.*;
+import org.epochx.gp.op.crossover.KozaCrossover;
 import org.epochx.gp.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.life.*;
 import org.epochx.op.selection.FitnessProportionateSelector;
 import org.epochx.stats.*;
 import org.epochx.test.*;
+import org.junit.*;
 
 public class SymbolicRegressionTest extends ModelTest {
 
 	private RunListener runPrinter;
 	private GenerationListener genPrinter;
 	
-	@Override
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		runPrinter = new RunAdapter() {
 			@Override
 			public void onRunEnd() {
@@ -31,8 +32,8 @@ public class SymbolicRegressionTest extends ModelTest {
 		//Life.get().addGenerationListener(genPrinter);
 	}
 	
-	@Override
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		Life.get().removeRunListener(runPrinter);
 		Life.get().removeGenerationListener(genPrinter);
 	}
@@ -66,6 +67,7 @@ public class SymbolicRegressionTest extends ModelTest {
 	 * 
 	 * Expecting success rate between 45% and 55%.
 	 */
+	@Test
 	public void testQuartic() {
 		final int LOWER_SUCCESS = 45;
 		final int UPPER_SUCCESS = 55;
@@ -92,6 +94,7 @@ public class SymbolicRegressionTest extends ModelTest {
 	 * 
 	 * Expecting success rate between % and %.
 	 */
+//	@Test
 //	public void testEphemeral() {
 //		final int LOWER_SUCCESS = 45;
 //		final int UPPER_SUCCESS = 55;

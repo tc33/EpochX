@@ -21,19 +21,20 @@
  */
 package org.epochx.life;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.*;
 
-import junit.framework.TestCase;
-
 import org.epochx.representation.CandidateProgram;
+import org.junit.*;
 
 /**
  * 
  */
-public class LifeCycleManagerTest extends TestCase {
+public class LifeCycleManagerTest {
 
-	@Override
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		Life.get().clearListeners();
 		Life.get().clearHooks();
 	}
@@ -41,6 +42,7 @@ public class LifeCycleManagerTest extends TestCase {
 	/**
 	 * Tests that configure event is dispatched correctly.
 	 */
+	@Test
 	public void testConfigureEvent() {
 		final StringBuilder order = new StringBuilder();
 
@@ -61,6 +63,7 @@ public class LifeCycleManagerTest extends TestCase {
 	/**
 	 * Tests that run events are dispatched correctly.
 	 */
+	@Test
 	public void testRunEvents() {
 		final StringBuilder order = new StringBuilder();
 
@@ -93,6 +96,7 @@ public class LifeCycleManagerTest extends TestCase {
 	/**
 	 * Tests that initialisation events are dispatched correctly.
 	 */
+	@Test
 	public void testInitialisationEvents() {
 		final StringBuilder order = new StringBuilder();
 
@@ -125,6 +129,7 @@ public class LifeCycleManagerTest extends TestCase {
 	/**
 	 * Tests that elitism events are dispatched correctly.
 	 */
+	@Test
 	public void testElitismEvents() {
 		final StringBuilder order = new StringBuilder();
 
@@ -159,6 +164,7 @@ public class LifeCycleManagerTest extends TestCase {
 	/**
 	 * Tests that pool selection events are dispatched correctly.
 	 */
+	@Test
 	public void testPoolSelectionEvents() {
 		final StringBuilder order = new StringBuilder();
 
@@ -192,6 +198,7 @@ public class LifeCycleManagerTest extends TestCase {
 	/**
 	 * Tests that crossover events are dispatched correctly.
 	 */
+	@Test
 	public void testCrossoverEvents() {
 		final StringBuilder order = new StringBuilder();
 
@@ -228,6 +235,7 @@ public class LifeCycleManagerTest extends TestCase {
 	/**
 	 * Tests that mutation events are dispatched correctly.
 	 */
+	@Test
 	public void testMutationEvents() {
 		final StringBuilder order = new StringBuilder();
 
@@ -263,6 +271,7 @@ public class LifeCycleManagerTest extends TestCase {
 	/**
 	 * Tests that reproduction events are dispatched correctly.
 	 */
+	@Test
 	public void testReproductionEvents() {
 		final StringBuilder order = new StringBuilder();
 
@@ -297,6 +306,7 @@ public class LifeCycleManagerTest extends TestCase {
 	/**
 	 * Tests that generation events are dispatched correctly.
 	 */
+	@Test
 	public void testGenerationEvents() {
 		final StringBuilder order = new StringBuilder();
 

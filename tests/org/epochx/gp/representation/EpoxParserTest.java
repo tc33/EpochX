@@ -21,27 +21,29 @@
  */
 package org.epochx.gp.representation;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.fail;
 
 import org.epochx.epox.EpoxParser;
 import org.epochx.tools.eval.MalformedProgramException;
+import org.junit.*;
 
 
 /**
  * 
  */
-public class EpoxParserTest extends TestCase {
+public class EpoxParserTest {
 
 	private EpoxParser parser;
 	
-	@Override
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		parser = new EpoxParser();
 	}
 	
 	/**
 	 * Tests that function arguments separated with commas are parsed correctly.
 	 */
+	@Test
 	public void testParseCommas() {
 		try {
 			parser.parse("ADD(3.0,2.1)");
@@ -53,6 +55,7 @@ public class EpoxParserTest extends TestCase {
 	/**
 	 * Tests that function arguments separated with spaces are parsed correctly.
 	 */
+	@Test
 	public void testParseSpaces() {
 		try {
 			parser.parse("ADD(3.0 2.1)");
@@ -65,6 +68,7 @@ public class EpoxParserTest extends TestCase {
 	 * Tests that function arguments separated with a comma AND multiple spaces 
 	 * are parsed correctly.
 	 */
+	@Test
 	public void testParseCommaAndSpace() {
 		try {
 			parser.parse("ADD(3.0,  2.1)");

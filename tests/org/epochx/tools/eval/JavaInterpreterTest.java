@@ -21,16 +21,19 @@
  */
 package org.epochx.tools.eval;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
 
 /**
  * 
  */
-public class JavaInterpreterTest extends TestCase {
+public class JavaInterpreterTest {
 
 	/**
 	 * Tests that the eval method can handle simple expressions.
 	 */
+	@Test
 	public void testEval() throws MalformedProgramException {
 		final Interpreter interpreter = new JavaInterpreter();
 
@@ -54,6 +57,7 @@ public class JavaInterpreterTest extends TestCase {
 	/**
 	 * Tests that the eval method can handle multiple simple expressions.
 	 */
+	@Test
 	public void testMultiEval() throws MalformedProgramException {
 		final Interpreter interpreter = new JavaInterpreter();
 

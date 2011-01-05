@@ -21,26 +21,27 @@
  */
 package org.epochx.op.selection;
 
-import java.util.*;
+import static org.junit.Assert.*;
 
-import junit.framework.TestCase;
+import java.util.*;
 
 import org.epochx.gp.model.GPModelDummy;
 import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.life.Life;
 import org.epochx.representation.CandidateProgram;
+import org.junit.*;
 
 /**
  * 
  */
-public class LinearRankSelectorTest extends TestCase {
+public class LinearRankSelectorTest {
 
 	private LinearRankSelector selector;
 	private GPModelDummy model;
 	private List<CandidateProgram> pop;
 
-	@Override
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		model = new GPModelDummy();
 		selector = new LinearRankSelector(model);
 		Life.get().fireConfigureEvent();
@@ -53,6 +54,7 @@ public class LinearRankSelectorTest extends TestCase {
 	 * Tests that an exception is thrown when trying to set a negative
 	 * probability gradient.
 	 */
+	@Test
 	public void testSetGradientNegative() {
 		try {
 			selector.setGradient(-0.001);
@@ -65,6 +67,7 @@ public class LinearRankSelectorTest extends TestCase {
 	 * Tests that an exception is thrown when trying to set a probability
 	 * gradient greater than 1.0.
 	 */
+	@Test
 	public void testSetGradientGreaterThanOne() {
 		try {
 			selector.setGradient(1.001);
@@ -77,6 +80,7 @@ public class LinearRankSelectorTest extends TestCase {
 	 * Tests that an exception is not thrown when setting a probability gradient
 	 * of 1.0.
 	 */
+	@Test
 	public void testSetGradientOne() {
 		try {
 			selector.setGradient(1.0);
@@ -91,6 +95,7 @@ public class LinearRankSelectorTest extends TestCase {
 	 * Tests that an exception is not thrown when setting a probability gradient
 	 * of 0.0.
 	 */
+	@Test
 	public void testSetGradientZero() {
 		try {
 			selector.setGradient(0.0);
@@ -105,6 +110,7 @@ public class LinearRankSelectorTest extends TestCase {
 	 * Tests that an exception is thrown when attempting to select a pool of
 	 * size 0.
 	 */
+	@Test
 	public void testGetPoolSizeZero() {
 		try {
 			selector.getPool(pop, 0);
@@ -117,6 +123,7 @@ public class LinearRankSelectorTest extends TestCase {
 	 * Tests that an exception is thrown when attempting to select a pool from
 	 * a null population.
 	 */
+	@Test
 	public void testGetPoolPopNull() {
 		try {
 			selector.getPool(null, 1);
@@ -129,6 +136,7 @@ public class LinearRankSelectorTest extends TestCase {
 	 * Tests that an exception is thrown when attempting to select a pool from
 	 * an empty population.
 	 */
+	@Test
 	public void testGetPoolPopEmpty() {
 		try {
 			pop.clear();
@@ -141,6 +149,7 @@ public class LinearRankSelectorTest extends TestCase {
 	/**
 	 * Tests that pool selection returns a pool of the correct size.
 	 */
+	@Test
 	public void testGetPoolSize() {
 		final int poolSize = 10;
 		pop.clear();
@@ -160,6 +169,7 @@ public class LinearRankSelectorTest extends TestCase {
 	 * Tests that an exception is thrown when attempting to set a null selection
 	 * pool.
 	 */
+	@Test
 	public void testSetSelectionPoolNull() {
 		try {
 			selector.setSelectionPool(null);
@@ -172,6 +182,7 @@ public class LinearRankSelectorTest extends TestCase {
 	 * Tests that an exception is thrown when attempting to set an empty
 	 * selection pool.
 	 */
+	@Test
 	public void testSetSelectionPoolEmpty() {
 		try {
 			pop.clear();
@@ -185,6 +196,7 @@ public class LinearRankSelectorTest extends TestCase {
 	 * Tests that with a gradient of 1.0, the probability of selecting the best
 	 * program is equal to the probability of the worst program.
 	 */
+	@Test
 	public void testSelectionGradientOne() {
 		selector.setGradient(1.0);
 
@@ -198,6 +210,7 @@ public class LinearRankSelectorTest extends TestCase {
 	 * Tests that with a gradient of 0.0, the probability of selecting the worst
 	 * program is 0.0.
 	 */
+	@Test
 	public void testSelectionGradientZero() {
 		selector.setGradient(0.0);
 
@@ -209,6 +222,7 @@ public class LinearRankSelectorTest extends TestCase {
 	 * Tests that an exception is thrown when attempting to get a program with
 	 * no random number generator set.
 	 */
+	@Test
 	public void testGetProgramRNGNull() {
 		model.setRNG(null);
 		Life.get().fireConfigureEvent();

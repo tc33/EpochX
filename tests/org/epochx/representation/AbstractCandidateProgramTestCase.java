@@ -21,15 +21,18 @@
  */
 package org.epochx.representation;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
+
+import org.junit.Test;
 
 /**
  * 
  */
-public abstract class AbstractCandidateProgramTestCase extends TestCase {
+public abstract class AbstractCandidateProgramTestCase {
 
 	public abstract CandidateProgram getCandidateProgram();
 
+	@Test
 	public void testCloneEqual() {
 		final CandidateProgram p1 = getCandidateProgram();
 		final CandidateProgram p2 = p1.clone();
@@ -38,6 +41,7 @@ public abstract class AbstractCandidateProgramTestCase extends TestCase {
 		assertEquals("cloned CandidateProgram is not equal", p2, p1);
 	}
 
+	@Test
 	public void testCompareTo() {
 		final DummyCandidateProgram p1 = new DummyCandidateProgram();
 		final DummyCandidateProgram p2 = new DummyCandidateProgram();

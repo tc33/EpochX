@@ -22,8 +22,10 @@
 package org.epochx.epox.math;
 
 import org.epochx.epox.*;
-import org.epochx.epox.math.ArcCosineFunction;
 import org.epochx.gp.representation.AbstractDoubleNodeTestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * 
@@ -35,6 +37,7 @@ public class ArcCosineFunctionTest extends AbstractDoubleNodeTestCase {
 		return new ArcCosineFunction();
 	}
 
+	@Test
 	public void testEvaluatePositive() {
 		final ArcCosineFunction node = (ArcCosineFunction) getNode();
 		node.setChild(0, new Literal(Math.cos(0.6)));
@@ -44,6 +47,7 @@ public class ArcCosineFunctionTest extends AbstractDoubleNodeTestCase {
 				result);
 	}
 
+	@Test
 	public void testEvaluateNegative() {
 		final ArcCosineFunction node = (ArcCosineFunction) getNode();
 		node.setChild(0, new Literal(Math.cos(-0.6)));
@@ -53,6 +57,7 @@ public class ArcCosineFunctionTest extends AbstractDoubleNodeTestCase {
 				result);
 	}
 
+	@Test
 	public void testEvaluateOne() {
 		final ArcCosineFunction node = (ArcCosineFunction) getNode();
 		node.setChild(0, new Literal(1.0));
@@ -62,6 +67,7 @@ public class ArcCosineFunctionTest extends AbstractDoubleNodeTestCase {
 				result);
 	}
 
+	@Test
 	public void testEvaluatePositiveNaN() {
 		final ArcCosineFunction node = (ArcCosineFunction) getNode();
 		node.setChild(0, new Literal(2.0));
@@ -70,6 +76,7 @@ public class ArcCosineFunctionTest extends AbstractDoubleNodeTestCase {
 		assertEquals("ACOS of 2.0 not returning NaN", Double.NaN, result);
 	}
 
+	@Test
 	public void testEvaluateNegativeNaN() {
 		final ArcCosineFunction node = (ArcCosineFunction) getNode();
 		node.setChild(0, new Literal(-2.0));

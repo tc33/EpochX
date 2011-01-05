@@ -22,8 +22,10 @@
 package org.epochx.epox.bool;
 
 import org.epochx.epox.*;
-import org.epochx.epox.bool.XorFunction;
 import org.epochx.gp.representation.AbstractBooleanNodeTestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * 
@@ -35,6 +37,7 @@ public class XorFunctionTest extends AbstractBooleanNodeTestCase {
 		return new XorFunction();
 	}
 
+	@Test
 	public void testEvaluateTT() {
 		final XorFunction node = (XorFunction) getNode();
 		final Node[] children = new Node[]{new Literal(true),
@@ -45,6 +48,7 @@ public class XorFunctionTest extends AbstractBooleanNodeTestCase {
 		assertFalse("XOR of true and true is not false", result);
 	}
 
+	@Test
 	public void testEvaluateTF() {
 		final XorFunction node = (XorFunction) getNode();
 		final Node[] children = new Node[]{new Literal(true),
@@ -55,6 +59,7 @@ public class XorFunctionTest extends AbstractBooleanNodeTestCase {
 		assertTrue("XOR of true and false is not true", result);
 	}
 
+	@Test
 	public void testEvaluateFT() {
 		final XorFunction node = (XorFunction) getNode();
 		final Node[] children = new Node[]{new Literal(false),
@@ -65,6 +70,7 @@ public class XorFunctionTest extends AbstractBooleanNodeTestCase {
 		assertTrue("XOR of false and true is not true", result);
 	}
 
+	@Test
 	public void testEvaluateFF() {
 		final XorFunction node = (XorFunction) getNode();
 		final Node[] children = new Node[]{new Literal(false),

@@ -22,8 +22,11 @@
 package org.epochx.epox.bool;
 
 import org.epochx.epox.*;
-import org.epochx.epox.bool.IfAndOnlyIfFunction;
 import org.epochx.gp.representation.AbstractBooleanNodeTestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
 
 /**
  * 
@@ -35,6 +38,7 @@ public class IfAndOnlyIfFunctionTest extends AbstractBooleanNodeTestCase {
 		return new IfAndOnlyIfFunction();
 	}
 
+	@Test
 	public void testEvaluateTT() {
 		final IfAndOnlyIfFunction node = (IfAndOnlyIfFunction) getNode();
 		final Node[] children = new Node[]{new Literal(true),
@@ -45,6 +49,7 @@ public class IfAndOnlyIfFunctionTest extends AbstractBooleanNodeTestCase {
 		assertTrue("IFF of true and true is not true", result);
 	}
 
+	@Test
 	public void testEvaluateTF() {
 		final IfAndOnlyIfFunction node = (IfAndOnlyIfFunction) getNode();
 		final Node[] children = new Node[]{new Literal(true),
@@ -55,6 +60,7 @@ public class IfAndOnlyIfFunctionTest extends AbstractBooleanNodeTestCase {
 		assertFalse("IFF of true and false is not false", result);
 	}
 
+	@Test
 	public void testEvaluateFT() {
 		final IfAndOnlyIfFunction node = (IfAndOnlyIfFunction) getNode();
 		final Node[] children = new Node[]{new Literal(false),
@@ -65,6 +71,7 @@ public class IfAndOnlyIfFunctionTest extends AbstractBooleanNodeTestCase {
 		assertFalse("IFF of false and true is not false", result);
 	}
 
+	@Test
 	public void testEvaluateFF() {
 		final IfAndOnlyIfFunction node = (IfAndOnlyIfFunction) getNode();
 		final Node[] children = new Node[]{new Literal(false),

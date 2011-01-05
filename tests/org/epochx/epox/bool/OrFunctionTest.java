@@ -22,8 +22,10 @@
 package org.epochx.epox.bool;
 
 import org.epochx.epox.*;
-import org.epochx.epox.bool.OrFunction;
 import org.epochx.gp.representation.AbstractBooleanNodeTestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * 
@@ -35,6 +37,7 @@ public class OrFunctionTest extends AbstractBooleanNodeTestCase {
 		return new OrFunction();
 	}
 
+	@Test
 	public void testEvaluateTT() {
 		final OrFunction node = (OrFunction) getNode();
 		final Node[] children = new Node[]{new Literal(true),
@@ -45,6 +48,7 @@ public class OrFunctionTest extends AbstractBooleanNodeTestCase {
 		assertTrue("OR of true and true is not true", result);
 	}
 
+	@Test
 	public void testEvaluateTF() {
 		final OrFunction node = (OrFunction) getNode();
 		final Node[] children = new Node[]{new Literal(true),
@@ -55,6 +59,7 @@ public class OrFunctionTest extends AbstractBooleanNodeTestCase {
 		assertTrue("OR of true and false is not true", result);
 	}
 
+	@Test
 	public void testEvaluateFT() {
 		final OrFunction node = (OrFunction) getNode();
 		final Node[] children = new Node[]{new Literal(false),
@@ -65,6 +70,7 @@ public class OrFunctionTest extends AbstractBooleanNodeTestCase {
 		assertTrue("OR of false and true is not true", result);
 	}
 
+	@Test
 	public void testEvaluateFF() {
 		final OrFunction node = (OrFunction) getNode();
 		final Node[] children = new Node[]{new Literal(false),

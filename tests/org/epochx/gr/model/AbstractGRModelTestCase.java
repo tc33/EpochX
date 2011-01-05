@@ -25,6 +25,9 @@ import org.epochx.core.*;
 import org.epochx.gr.op.crossover.WhighamCrossover;
 import org.epochx.gr.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.gr.op.mutation.WhighamMutation;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * Some of these test check that the default values are correct. It is possible
@@ -41,6 +44,7 @@ public abstract class AbstractGRModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that trying to set a null grammar throws an exception.
 	 */
+	@Test
 	public void testSetGrammarNull() {
 		try {
 			getModel().setGrammar(null);
@@ -52,6 +56,7 @@ public abstract class AbstractGRModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that trying to set a initial max depth of zero throws an exception.
 	 */
+	@Test
 	public void testSetInitialMaxDepthZero() {
 		try {
 			getModel().setMaxInitialDepth(0);
@@ -63,6 +68,7 @@ public abstract class AbstractGRModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that setting an initial max depth of zero is allowed.
 	 */
+	@Test
 	public void testSetInitialMaxDepthPositive() {
 		try {
 			getModel().setMaxInitialDepth(1);
@@ -75,6 +81,7 @@ public abstract class AbstractGRModelTestCase extends AbstractModelTestCase {
 	 * Tests that trying to set an initial max depth of minus one does not throw
 	 * an exception.
 	 */
+	@Test
 	public void testSetInitialMaxDepthMinusOne() {
 		try {
 			getModel().setMaxInitialDepth(-1);
@@ -86,6 +93,7 @@ public abstract class AbstractGRModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that trying to set a zero max depth throws an exception.
 	 */
+	@Test
 	public void testSetMaxDepthZero() {
 		try {
 			getModel().setMaxDepth(0);
@@ -97,6 +105,7 @@ public abstract class AbstractGRModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that setting a max depth of zero is allowed.
 	 */
+	@Test
 	public void testSetMaxDepthPositive() {
 		try {
 			getModel().setMaxDepth(1);
@@ -109,6 +118,7 @@ public abstract class AbstractGRModelTestCase extends AbstractModelTestCase {
 	 * Tests that trying to set an max depth of minus one does not throw an
 	 * exception.
 	 */
+	@Test
 	public void testSetMaxDepthMinusOne() {
 		try {
 			getModel().setMaxDepth(-1);
@@ -120,6 +130,7 @@ public abstract class AbstractGRModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that the default max initial depth property is set correctly.
 	 */
+	@Test
 	public void testMaxInitialDepthDefault() {
 		final GRModel model = getModel();
 
@@ -130,6 +141,7 @@ public abstract class AbstractGRModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that the default max depth property is set correctly.
 	 */
+	@Test
 	public void testMaxDepthDefault() {
 		final GRModel model = getModel();
 
@@ -140,6 +152,7 @@ public abstract class AbstractGRModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that the default initialiser operator is set correctly.
 	 */
+	@Test
 	public void testInitialiserDefault() {
 		final Model model = getModel();
 
@@ -151,6 +164,7 @@ public abstract class AbstractGRModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that the default crossover operator is set correctly.
 	 */
+	@Test
 	public void testCrossoverDefault() {
 		final Model model = getModel();
 
@@ -162,6 +176,7 @@ public abstract class AbstractGRModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that the default mutation operator is set correctly.
 	 */
+	@Test
 	public void testMutationDefault() {
 		final Model model = getModel();
 

@@ -22,8 +22,10 @@
 package org.epochx.epox.bool;
 
 import org.epochx.epox.*;
-import org.epochx.epox.bool.AndFunction;
 import org.epochx.gp.representation.AbstractNodeTestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * 
@@ -35,6 +37,7 @@ public class AndFunctionTest extends AbstractNodeTestCase {
 		return new AndFunction();
 	}
 
+	@Test
 	public void testEvaluateTT() {
 		final AndFunction node = (AndFunction) getNode();
 		final Node[] children = new Node[]{new Literal(true),
@@ -45,6 +48,7 @@ public class AndFunctionTest extends AbstractNodeTestCase {
 		assertTrue("AND of true and true is not true", result);
 	}
 
+	@Test
 	public void testEvaluateTF() {
 		final AndFunction node = (AndFunction) getNode();
 		final Node[] children = new Node[]{new Literal(true),
@@ -55,6 +59,7 @@ public class AndFunctionTest extends AbstractNodeTestCase {
 		assertFalse("AND of true and false is not false", result);
 	}
 
+	@Test
 	public void testEvaluateFT() {
 		final AndFunction node = (AndFunction) getNode();
 		final Node[] children = new Node[]{new Literal(false),
@@ -65,6 +70,7 @@ public class AndFunctionTest extends AbstractNodeTestCase {
 		assertFalse("AND of false and true is not false", result);
 	}
 
+	@Test
 	public void testEvaluateFF() {
 		final AndFunction node = (AndFunction) getNode();
 		final Node[] children = new Node[]{new Literal(false),

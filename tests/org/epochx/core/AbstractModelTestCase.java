@@ -21,24 +21,26 @@
  */
 package org.epochx.core;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 import org.epochx.op.ProgramSelector;
 import org.epochx.op.selection.TournamentSelector;
 import org.epochx.tools.random.RandomNumberGenerator;
+import org.junit.Test;
 
 /**
  * Some of these test check that the default values are correct. It is possible
  * that the default should not be hardcoded here but it means that changing the
  * defaults cannot be taken lightly since it also requires updating the tests.
  */
-public abstract class AbstractModelTestCase extends TestCase {
+public abstract class AbstractModelTestCase {
 
 	public abstract Model getModel();
 
 	/**
 	 * Tests that the default cache fitness property is set correctly.
 	 */
+	@Test
 	public void testCacheFitnessDefault() {
 		final Model model = getModel();
 
@@ -48,6 +50,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	/**
 	 * Tests that the default number of runs property is set correctly.
 	 */
+	@Test
 	public void testNoRunsDefault() {
 		final Model model = getModel();
 
@@ -58,6 +61,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	/**
 	 * Tests that trying to set a negative number of runs throws an exception.
 	 */
+	@Test
 	public void testSetNoRunsNegative() {
 		try {
 			getModel().setNoRuns(-1);
@@ -69,6 +73,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	/**
 	 * Tests that setting a number of runs of zero is allowed.
 	 */
+	@Test
 	public void testSetNoRunsZero() {
 		try {
 			getModel().setNoRuns(0);
@@ -80,6 +85,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	/**
 	 * Tests that the default number of generations property is set correctly.
 	 */
+	@Test
 	public void testNoGenerationsDefault() {
 		final Model model = getModel();
 
@@ -91,6 +97,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	 * Tests that setting a number of generations of -1 is allowed, to indicate
 	 * an infinite number of generations.
 	 */
+	@Test
 	public void testSetNoGenerationsMinusOne() {
 		try {
 			getModel().setNoGenerations(-1);
@@ -103,6 +110,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	 * Tests that trying to set a number of generations throws an
 	 * exception.
 	 */
+	@Test
 	public void testSetNoGenerationsNegative() {
 		try {
 			getModel().setNoGenerations(-2);
@@ -114,6 +122,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	/**
 	 * Tests that setting a number of generations of zero is allowed.
 	 */
+	@Test
 	public void testSetNoGenerationsZero() {
 		try {
 			getModel().setNoGenerations(0);
@@ -125,6 +134,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	/**
 	 * Tests that the default population size property is set correctly.
 	 */
+	@Test
 	public void testPopulationSizeDefault() {
 		final Model model = getModel();
 
@@ -136,6 +146,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	 * Tests that trying to set population size lower than one throws an
 	 * exception.
 	 */
+	@Test
 	public void testSetPopulationSizeZero() {
 		try {
 			getModel().setPopulationSize(0);
@@ -147,6 +158,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	/**
 	 * Tests that setting population size of one is allowed.
 	 */
+	@Test
 	public void testSetPopulationSizePositive() {
 		try {
 			getModel().setPopulationSize(1);
@@ -158,6 +170,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	/**
 	 * Tests that the default pool size property is set correctly.
 	 */
+	@Test
 	public void testPoolSizeDefault() {
 		final Model model = getModel();
 
@@ -168,6 +181,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	/**
 	 * Tests that trying to set a pool size below one throws an exception.
 	 */
+	@Test
 	public void testSetPoolSizeZero() {
 		try {
 			getModel().setPoolSize(0);
@@ -179,6 +193,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	/**
 	 * Tests that setting a pool size of one is allowed.
 	 */
+	@Test
 	public void testSetPoolSizePositive() {
 		try {
 			getModel().setPoolSize(1);
@@ -190,6 +205,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	/**
 	 * Tests that setting a pool size of minus one is allowed.
 	 */
+	@Test
 	public void testSetPoolSizeMinusOne() {
 		try {
 			getModel().setPoolSize(-1);
@@ -201,6 +217,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	/**
 	 * Tests that the default number of elites property is set correctly.
 	 */
+	@Test
 	public void testNoElitesDefault() {
 		final Model model = getModel();
 
@@ -212,6 +229,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	 * Tests that trying to set number of elites lower than zero throws an
 	 * exception.
 	 */
+	@Test
 	public void testSetNoElitesNegative() {
 		try {
 			getModel().setNoElites(-1);
@@ -223,6 +241,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	/**
 	 * Tests that setting a number of elites of zero is allowed.
 	 */
+	@Test
 	public void testSetNoElitesZero() {
 		try {
 			getModel().setNoElites(0);
@@ -234,6 +253,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	/**
 	 * Tests that the default crossover probability property is set correctly.
 	 */
+	@Test
 	public void testCrossoverProbabilityDefault() {
 		final Model model = getModel();
 
@@ -245,6 +265,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	 * Tests that trying to set a crossover probability lower than zero throws
 	 * an exception.
 	 */
+	@Test
 	public void testSetCrossoverProbabilityNegative() {
 		try {
 			getModel().setCrossoverProbability(-0.001);
@@ -256,6 +277,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	/**
 	 * Tests that setting a crossover probability of zero is allowed.
 	 */
+	@Test
 	public void testSetCrossoverProbabilityZero() {
 		try {
 			getModel().setCrossoverProbability(0.0);
@@ -268,6 +290,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	 * Tests that trying to set a crossover probability greater than 1.0 throws
 	 * an exception.
 	 */
+	@Test
 	public void testSetCrossoverProbabilityTooLarge() {
 		try {
 			getModel().setCrossoverProbability(1.001);
@@ -279,6 +302,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	/**
 	 * Tests that the default mutation probability property is set correctly.
 	 */
+	@Test
 	public void testMutationProbabilityDefault() {
 		final Model model = getModel();
 
@@ -290,6 +314,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	 * Tests that trying to set a mutation probability lower than zero throws an
 	 * exception.
 	 */
+	@Test
 	public void testSetMutationProbabilityNegative() {
 		try {
 			getModel().setMutationProbability(-0.001);
@@ -301,6 +326,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	/**
 	 * Tests that setting a mutation probability of zero is allowed.
 	 */
+	@Test
 	public void testSetMutationProbabilityZero() {
 		try {
 			getModel().setMutationProbability(0.0);
@@ -313,6 +339,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	 * Tests that trying to set a mutation probability greater than 1.0 throws
 	 * an exception.
 	 */
+	@Test
 	public void testSetMutationProbabilityTooLarge() {
 		try {
 			getModel().setMutationProbability(1.001);
@@ -325,6 +352,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	 * Tests that the default reproduction probability property is set
 	 * correctly.
 	 */
+	@Test
 	public void testReproductionProbabilityDefault() {
 		final Model model = getModel();
 
@@ -336,6 +364,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	 * Tests that trying to set a reproduction probability lower than zero
 	 * throws an exception.
 	 */
+	@Test
 	public void testSetReproductionProbabilityNegative() {
 		try {
 			getModel().setReproductionProbability(-0.001);
@@ -347,6 +376,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	/**
 	 * Tests that setting a reproduction probability of zero is allowed.
 	 */
+	@Test
 	public void testSetReproductionProbabilityZero() {
 		try {
 			getModel().setReproductionProbability(0.0);
@@ -359,6 +389,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	 * Tests that trying to set a reproduction probability greater than 1.0
 	 * throws an exception.
 	 */
+	@Test
 	public void testSetReproductionProbabilityTooLarge() {
 		try {
 			getModel().setReproductionProbability(1.001);
@@ -370,6 +401,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	/**
 	 * Tests that the default termination fitness property is set correctly.
 	 */
+	@Test
 	public void testTerminationFitnessDefault() {
 		final Model model = getModel();
 
@@ -380,6 +412,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	/**
 	 * Tests that the default program selector operator is set correctly.
 	 */
+	@Test
 	public void testProgramSelectorDefault() {
 		final Model model = getModel();
 
@@ -399,6 +432,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	/**
 	 * Tests that the default pool selector operator is unset.
 	 */
+	@Test
 	public void testPoolSelectorDefault() {
 		final Model model = getModel();
 
@@ -409,6 +443,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	/**
 	 * Tests that the default random number generator is set correctly.
 	 */
+	@Test
 	public void testRNGDefault() {
 		final Model model = getModel();
 
@@ -420,6 +455,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	/**
 	 * Tests that trying to set a null program selector throws an exception.
 	 */
+	@Test
 	public void testSetProgramSelectorNull() {
 		try {
 			getModel().setProgramSelector(null);
@@ -432,6 +468,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	 * Tests that trying to set a null random number generator throws an
 	 * exception.
 	 */
+	@Test
 	public void testSetRNGNull() {
 		try {
 			getModel().setRNG(null);
@@ -443,6 +480,7 @@ public abstract class AbstractModelTestCase extends TestCase {
 	/**
 	 * Tests that trying to set a null initialiser throws an exception.
 	 */
+	@Test
 	public void testSetInitialiserNull() {
 		try {
 			getModel().setInitialiser(null);

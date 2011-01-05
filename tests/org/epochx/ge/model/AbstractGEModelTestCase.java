@@ -27,6 +27,9 @@ import org.epochx.ge.mapper.DepthFirstMapper;
 import org.epochx.ge.op.crossover.OnePointCrossover;
 import org.epochx.ge.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.ge.op.mutation.PointMutation;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * Some of these test check that the default values are correct. It is possible
@@ -43,6 +46,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that trying to set a null grammar throws an exception.
 	 */
+	@Test
 	public void testSetGrammarNull() {
 		try {
 			getModel().setGrammar(null);
@@ -54,6 +58,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that trying to set a null mapper throws an exception.
 	 */
+	@Test
 	public void testSetMapperNull() {
 		try {
 			getModel().setMapper(null);
@@ -65,6 +70,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that trying to set a null mapper throws an exception.
 	 */
+	@Test
 	public void testSetCodonGeneratorNull() {
 		try {
 			getModel().setCodonGenerator(null);
@@ -76,6 +82,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that trying to set a negative max codon size throws an exception.
 	 */
+	@Test
 	public void testSetMaxCodonSizeNegative() {
 		try {
 			getModel().setMaxCodonSize(-1);
@@ -87,6 +94,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that setting a max codon size of zero is allowed.
 	 */
+	@Test
 	public void testSetMaxCodonSizeZero() {
 		try {
 			getModel().setMaxCodonSize(0);
@@ -99,6 +107,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	 * Tests that trying to set a negative max chromosome length throws an
 	 * exception.
 	 */
+	@Test
 	public void testSetMaxChromosomeLengthNegative() {
 		// A chromosome length of -1 is allowed because it designates no limit.
 		try {
@@ -111,6 +120,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that trying to set a initial max depth of zero throws an exception.
 	 */
+	@Test
 	public void testSetInitialMaxDepthZero() {
 		try {
 			getModel().setMaxInitialDepth(0);
@@ -122,6 +132,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that setting an initial max depth of zero is allowed.
 	 */
+	@Test
 	public void testSetInitialMaxDepthPositive() {
 		try {
 			getModel().setMaxInitialDepth(1);
@@ -134,6 +145,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	 * Tests that trying to set an initial max depth of minus one does not throw
 	 * an exception.
 	 */
+	@Test
 	public void testSetInitialMaxDepthMinusOne() {
 		try {
 			getModel().setMaxInitialDepth(-1);
@@ -145,6 +157,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that trying to set a zero max depth throws an exception.
 	 */
+	@Test
 	public void testSetMaxDepthZero() {
 		try {
 			getModel().setMaxDepth(0);
@@ -156,6 +169,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that setting a max depth of zero is allowed.
 	 */
+	@Test
 	public void testSetMaxDepthPositive() {
 		try {
 			getModel().setMaxDepth(1);
@@ -168,6 +182,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	 * Tests that trying to set an max depth of minus one does not throw an
 	 * exception.
 	 */
+	@Test
 	public void testSetMaxDepthMinusOne() {
 		try {
 			getModel().setMaxDepth(-1);
@@ -179,6 +194,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that the default cache source property is set correctly.
 	 */
+	@Test
 	public void testCacheSourceDefault() {
 		final GEModel model = getModel();
 
@@ -188,6 +204,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that the default max initial depth property is set correctly.
 	 */
+	@Test
 	public void testMaxInitialDepthDefault() {
 		final GEModel model = getModel();
 
@@ -198,6 +215,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that the default max depth property is set correctly.
 	 */
+	@Test
 	public void testMaxDepthDefault() {
 		final GEModel model = getModel();
 
@@ -208,6 +226,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that the default max chromosome length property is set correctly.
 	 */
+	@Test
 	public void testMaxChromosomeLengthDefault() {
 		final GEModel model = getModel();
 
@@ -218,6 +237,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that the default max codon size property is set correctly.
 	 */
+	@Test
 	public void testMaxCodonSizeDefault() {
 		final GEModel model = getModel();
 
@@ -228,6 +248,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that the default initialiser operator is set correctly.
 	 */
+	@Test
 	public void testInitialiserDefault() {
 		final Model model = getModel();
 
@@ -239,6 +260,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that the default crossover operator is set correctly.
 	 */
+	@Test
 	public void testCrossoverDefault() {
 		final Model model = getModel();
 
@@ -250,6 +272,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that the default mutation operator is set correctly.
 	 */
+	@Test
 	public void testMutationDefault() {
 		final Model model = getModel();
 
@@ -261,6 +284,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that the default crossover operator is set correctly.
 	 */
+	@Test
 	public void testMapperDefault() {
 		final GEModel model = getModel();
 
@@ -272,6 +296,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that the default mutation operator is set correctly.
 	 */
+	@Test
 	public void testCodonGeneratorDefault() {
 		final GEModel model = getModel();
 

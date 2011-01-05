@@ -22,8 +22,10 @@
 package org.epochx.epox.math;
 
 import org.epochx.epox.*;
-import org.epochx.epox.math.AddFunction;
 import org.epochx.gp.representation.AbstractDoubleNodeTestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * 
@@ -35,6 +37,7 @@ public class AddFunctionTest extends AbstractDoubleNodeTestCase {
 		return new AddFunction();
 	}
 
+	@Test
 	public void testEvaluatePositive() {
 		final AddFunction node = (AddFunction) getNode();
 		final Node[] children = new Node[]{new Literal(2.0),
@@ -45,6 +48,7 @@ public class AddFunctionTest extends AbstractDoubleNodeTestCase {
 		assertEquals("ADD of 2.0 and 3.0 is not 5.0", 5.0, result);
 	}
 
+	@Test
 	public void testEvaluateNegative() {
 		final AddFunction node = (AddFunction) getNode();
 		final Node[] children = new Node[]{new Literal(-2.1),
@@ -55,6 +59,7 @@ public class AddFunctionTest extends AbstractDoubleNodeTestCase {
 		assertEquals("ADD of -2.1 and -3.9 is not -6.0", -6.0, result);
 	}
 
+	@Test
 	public void testEvaluatePositiveNegative() {
 		final AddFunction node = (AddFunction) getNode();
 		final Node[] children = new Node[]{new Literal(-3.5),

@@ -1,8 +1,8 @@
 package org.epochx.test;
 
-import junit.framework.*;
+import static org.junit.Assert.fail;
 
-public class ModelTest extends TestCase {
+public class ModelTest {
 
 	public void assertBetween(String msg, int lower, int upper, int actual) {
 		if (msg == null) {

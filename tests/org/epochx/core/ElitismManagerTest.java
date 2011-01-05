@@ -21,24 +21,25 @@
  */
 package org.epochx.core;
 
-import java.util.*;
+import static org.junit.Assert.*;
 
-import junit.framework.TestCase;
+import java.util.*;
 
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
+import org.junit.*;
 
 /**
  * 
  */
-public class ElitismManagerTest extends TestCase {
+public class ElitismManagerTest {
 
 	private Model model;
 	private ElitismManager elitismManager;
 	private List<CandidateProgram> pop;
 
-	@Override
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		model = new ModelDummy();
 		elitismManager = new ElitismManager(model);
 		pop = new ArrayList<CandidateProgram>();
@@ -47,6 +48,7 @@ public class ElitismManagerTest extends TestCase {
 	/**
 	 * Tests that the elitism events are fired in the correct order.
 	 */
+	@Test
 	public void testElitismEventsOrder() {
 		// We add the chars '1', '2', '3' to builder to check order of calls.
 		final StringBuilder verify = new StringBuilder();
@@ -84,6 +86,7 @@ public class ElitismManagerTest extends TestCase {
 	 * Tests that an exception is thrown when trying to perform elitism on a
 	 * null population.
 	 */
+	@Test
 	public void testElitismPopNull() {
 		try {
 			elitismManager.elitism(null);
@@ -96,6 +99,7 @@ public class ElitismManagerTest extends TestCase {
 	 * Tests that an exception is thrown if the program selector is null when
 	 * attempting crossover.
 	 */
+	@Test
 	public void testNoElitesNegative() {
 		model.setNoElites(-1);
 		Life.get().fireConfigureEvent();

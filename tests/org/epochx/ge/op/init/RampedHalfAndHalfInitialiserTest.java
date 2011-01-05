@@ -21,21 +21,22 @@
  */
 package org.epochx.ge.op.init;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 import org.epochx.tools.grammar.Grammar;
 import org.epochx.tools.random.MersenneTwisterFast;
+import org.junit.*;
 
 
 /**
  * 
  */
-public class RampedHalfAndHalfInitialiserTest extends TestCase {
+public class RampedHalfAndHalfInitialiserTest {
 	
 	private RampedHalfAndHalfInitialiser initialiser;
 	
-	@Override
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		initialiser = new RampedHalfAndHalfInitialiser(null, null, -1, -1, -1, -1, false);
 		
 		String grammarStr = "<a> ::= x | y\n";
@@ -53,6 +54,7 @@ public class RampedHalfAndHalfInitialiserTest extends TestCase {
 	 * Tests that an illegal state exception is not thrown with valid 
 	 * parameters.
 	 */
+	@Test
 	public void testGetPopValid() {
 		try {
 			initialiser.getInitialPopulation();
@@ -65,6 +67,7 @@ public class RampedHalfAndHalfInitialiserTest extends TestCase {
 	 * Tests that an illegal state exception is thrown if population size
 	 * parameter is zero.
 	 */
+	@Test
 	public void testGetPopZeroPopSize() {
 		// Setup initialiser to be valid except for pop size.
 		initialiser.setPopSize(0);
@@ -79,6 +82,7 @@ public class RampedHalfAndHalfInitialiserTest extends TestCase {
 	 * Tests that an illegal state exception is thrown if the minimum possible 
 	 * depth is greater than the maximum depth setting.
 	 */
+	@Test
 	public void testGetPopMaxDepth() {
 		initialiser.setEndMaxDepth(1);
 		String grammarStr = "<a> ::= <b> | y <b>\n" +
@@ -98,6 +102,7 @@ public class RampedHalfAndHalfInitialiserTest extends TestCase {
 	 * Tests that an illegal state exception is thrown if the maximum codon 
 	 * value is less than 3.
 	 */
+	@Test
 	public void testGetPopMaxCodon() {
 		initialiser.setMaxCodonValue(2);
 		
@@ -110,6 +115,7 @@ public class RampedHalfAndHalfInitialiserTest extends TestCase {
 	/**
 	 * Tests that an illegal state exception is thrown if no grammar is set.
 	 */
+	@Test
 	public void testGetPopGrammarNull() {
 		initialiser.setGrammar(null);
 		
@@ -123,6 +129,7 @@ public class RampedHalfAndHalfInitialiserTest extends TestCase {
 	 * Tests that an illegal state exception is thrown if the start maximum 
 	 * depth is larger than the end maximum depth.
 	 */
+	@Test
 	public void testGetPopDepthsSequence() {
 		initialiser.setStartMaxDepth(4);
 		initialiser.setEndMaxDepth(3);

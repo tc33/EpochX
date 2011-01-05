@@ -21,24 +21,25 @@
  */
 package org.epochx.core;
 
-import java.util.*;
+import static org.junit.Assert.assertEquals;
 
-import junit.framework.TestCase;
+import java.util.*;
 
 import org.epochx.life.*;
 import org.epochx.op.Initialiser;
 import org.epochx.representation.CandidateProgram;
+import org.junit.*;
 
 /**
  * 
  */
-public class RunManagerTest extends TestCase {
+public class RunManagerTest {
 
 	private Model model;
 	private RunManager runManager;
 
-	@Override
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		model = new Model() {
 
 			@Override
@@ -78,6 +79,7 @@ public class RunManagerTest extends TestCase {
 	 * Tests that the generation events are all triggered and in the correct
 	 * order.
 	 */
+	@Test
 	public void testRunEventsOrder() {
 		// We add the chars '1', '2', '3' to builder to check order of calls.
 		final StringBuilder verify = new StringBuilder();

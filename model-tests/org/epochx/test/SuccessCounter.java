@@ -1,6 +1,6 @@
 package org.epochx.test;
 
-import org.epochx.life.*;
+import org.epochx.life.RunAdapter;
 
 public class SuccessCounter extends RunAdapter {
 	private int noSuccess;

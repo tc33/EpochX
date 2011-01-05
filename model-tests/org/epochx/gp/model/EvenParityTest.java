@@ -1,20 +1,21 @@
 package org.epochx.gp.model;
 
 import org.epochx.gp.op.crossover.*;
-import org.epochx.gp.op.init.*;
+import org.epochx.gp.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.gp.op.mutation.*;
 import org.epochx.life.*;
 import org.epochx.op.selection.*;
 import org.epochx.stats.*;
 import org.epochx.test.*;
+import org.junit.*;
 
 public class EvenParityTest extends ModelTest {
 	
 	private RunListener runPrinter;
 	private GenerationListener genPrinter;
 	
-	@Override
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		runPrinter = new RunAdapter() {
 			@Override
 			public void onRunEnd() {
@@ -32,8 +33,8 @@ public class EvenParityTest extends ModelTest {
 		Life.get().addGenerationListener(genPrinter);
 	}
 	
-	@Override
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		Life.get().removeRunListener(runPrinter);
 		Life.get().removeGenerationListener(genPrinter);
 	}
@@ -64,6 +65,7 @@ public class EvenParityTest extends ModelTest {
 	 * Koza's success rate: 100% (p531).
 	 * Expecting success rate between 99% and 100%.
 	 */
+	@Test
 	public void testEven3Parity() {
 		final int LOWER_SUCCESS = 99;
 		final int UPPER_SUCCESS = 100;
@@ -88,6 +90,7 @@ public class EvenParityTest extends ModelTest {
 	 * Koza's success rate: 45% (p531).
 	 * Expecting success rate between 80% and 90%.
 	 */
+	@Test
 	public void testEven4Parity() {
 		final int LOWER_SUCCESS = 82;
 		final int UPPER_SUCCESS = 92;
@@ -111,6 +114,7 @@ public class EvenParityTest extends ModelTest {
 	 * 
 	 * Expecting success rate between 70% and 80%.
 	 */
+	@Test
 	public void testEven5Parity() {
 		final int LOWER_SUCCESS = 70;
 		final int UPPER_SUCCESS = 80;
@@ -138,6 +142,7 @@ public class EvenParityTest extends ModelTest {
 	 * 
 	 * Expecting success rate between 85% and 95%.
 	 */
+	@Test
 	public void testEven4ParitySubtreeMutation() {
 		final int LOWER_SUCCESS = 85;
 		final int UPPER_SUCCESS = 95;
@@ -167,6 +172,7 @@ public class EvenParityTest extends ModelTest {
 	 * 
 	 * Expecting success rate between 90% and 100%.
 	 */
+	@Test
 	public void testEven4ParityPointMutation() {
 		final int LOWER_SUCCESS = 90;
 		final int UPPER_SUCCESS = 100;
@@ -194,6 +200,7 @@ public class EvenParityTest extends ModelTest {
 	 * 
 	 * Expecting success rate between 70% and 80%.
 	 */
+	@Test
 	public void testEven4ParitySubtreeCrossover() {
 		final int LOWER_SUCCESS = 70;
 		final int UPPER_SUCCESS = 80;
@@ -224,6 +231,7 @@ public class EvenParityTest extends ModelTest {
 	 * 
 	 * Expecting success rate between 10% and 20%.
 	 */
+	@Test
 	public void testEven4ParityOnePointCrossover() {
 		final int LOWER_SUCCESS = 10;
 		final int UPPER_SUCCESS = 20;
@@ -254,6 +262,7 @@ public class EvenParityTest extends ModelTest {
 	 * 
 	 * Expecting success rate between 0% and 0%.
 	 */
+	@Test
 	public void testEven4ParityLinearRankSelection() {
 		final int LOWER_SUCCESS = 0;
 		final int UPPER_SUCCESS = 0;
@@ -279,6 +288,7 @@ public class EvenParityTest extends ModelTest {
 	 * 
 	 * Expecting success rate between 90% and 100%.
 	 */
+	@Test
 	public void testEven4ParityTournament7Selection() {
 		final int LOWER_SUCCESS = 90;
 		final int UPPER_SUCCESS = 100;

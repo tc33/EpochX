@@ -21,28 +21,25 @@
  */
 package org.epochx.gp.op.init;
 
-import java.util.*;
+import static org.junit.Assert.fail;
 
-import junit.framework.TestCase;
+import java.util.*;
 
 import org.epochx.epox.*;
 import org.epochx.epox.bool.NotFunction;
-import org.epochx.epox.math.*;
-import org.epochx.gp.op.crossover.SubtreeCrossover;
-import org.epochx.gp.representation.GPCandidateProgram;
-import org.epochx.stats.*;
 import org.epochx.tools.random.MersenneTwisterFast;
+import org.junit.*;
 
 
 /**
  * 
  */
-public class GrowInitialiserTest extends TestCase {
+public class GrowInitialiserTest {
 	
 	private GrowInitialiser initialiser;
 	
-	@Override
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		initialiser = new GrowInitialiser(null, null, null, -1, -1, false);
 		
 		// Ensure setup is valid.
@@ -59,6 +56,7 @@ public class GrowInitialiserTest extends TestCase {
 	 * Tests that an illegal state exception is not thrown with valid 
 	 * parameters.
 	 */
+	@Test
 	public void testGetPopValid() {
 		try {
 			initialiser.getInitialPopulation();
@@ -72,6 +70,7 @@ public class GrowInitialiserTest extends TestCase {
 	 * parameter is greater than 0 and no nodes with arity >0 have been included
 	 * in the syntax. This would be illegal on full but not grow.
 	 */
+	@Test
 	public void testGetPopNoFunctions() {
 		List<Node> syntax = new ArrayList<Node>();
 		syntax.add(new Literal(true));
@@ -89,6 +88,7 @@ public class GrowInitialiserTest extends TestCase {
 	 * Tests that an illegal state exception is thrown if there are no terminals
 	 * in the syntax.
 	 */
+	@Test
 	public void testGetPopNoTerminals() {
 		List<Node> syntax = new ArrayList<Node>();
 		syntax.add(new NotFunction());
@@ -104,6 +104,7 @@ public class GrowInitialiserTest extends TestCase {
 	 * Tests that an illegal state exception is thrown if population size
 	 * parameter is zero.
 	 */
+	@Test
 	public void testGetPopZeroPopSize() {
 		// Setup initialiser to be valid except for pop size.
 		initialiser.setPopSize(0);
@@ -118,6 +119,7 @@ public class GrowInitialiserTest extends TestCase {
 	 * Tests that an illegal state exception is thrown if max depth parameter is 
 	 * -1.
 	 */
+	@Test
 	public void testGetPopNegDepth() {
 		// Setup initialiser to be valid except for depth.
 		initialiser.setMaxDepth(-1);
@@ -132,6 +134,7 @@ public class GrowInitialiserTest extends TestCase {
 	 * Tests that an illegal state exception is thrown if no random number 
 	 * generator is set.
 	 */
+	@Test
 	public void testGetPopRNGNull() {
 		initialiser.setRNG(null);
 		
@@ -145,6 +148,7 @@ public class GrowInitialiserTest extends TestCase {
 	 * Tests that an illegal state exception is not thrown with valid 
 	 * parameters.
 	 */
+	@Test
 	public void testGetProgramValid() {
 		// Population size not needed to be valid.
 		initialiser.setPopSize(-1);
@@ -160,6 +164,7 @@ public class GrowInitialiserTest extends TestCase {
 	 * Tests that an illegal state exception is thrown if there are no terminals
 	 * in the syntax.
 	 */
+	@Test
 	public void testGetProgramNoTerminals() {
 		List<Node> syntax = new ArrayList<Node>();
 		syntax.add(new NotFunction());
@@ -175,6 +180,7 @@ public class GrowInitialiserTest extends TestCase {
 	 * Tests that an illegal state exception is thrown if depth parameter is 
 	 * zero.
 	 */
+	@Test
 	public void testGetProgramNegDepth() {
 		// Setup initialiser to be valid except for depth.
 		initialiser.setMaxDepth(-1);
@@ -189,6 +195,7 @@ public class GrowInitialiserTest extends TestCase {
 	 * Tests that an illegal state exception is thrown if no random number 
 	 * generator is set.
 	 */
+	@Test
 	public void testGetProgramRNGNull() {
 		initialiser.setRNG(null);
 		
@@ -198,6 +205,7 @@ public class GrowInitialiserTest extends TestCase {
 		} catch (IllegalStateException e) {}
 	}
 	
+//	@Test
 //	public void testInit() {
 //		List<Node> syntax = new ArrayList<Node>();
 //		syntax.add(new Literal(0.3));

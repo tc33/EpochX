@@ -1,22 +1,23 @@
 package org.epochx.op.selection;
 
-import java.util.*;
+import static org.junit.Assert.*;
 
-import junit.framework.TestCase;
+import java.util.*;
 
 import org.epochx.gp.model.GPModelDummy;
 import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.life.Life;
 import org.epochx.representation.CandidateProgram;
+import org.junit.*;
 
-public class RandomSelectorTest extends TestCase {
+public class RandomSelectorTest {
 
 	private RandomSelector selector;
 	private GPModelDummy model;
 	private List<CandidateProgram> pop;
 
-	@Override
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		model = new GPModelDummy();
 		selector = new RandomSelector(model);
 		Life.get().fireConfigureEvent();
@@ -29,6 +30,7 @@ public class RandomSelectorTest extends TestCase {
 	 * Tests that an exception is thrown when attempting to select a pool of
 	 * size 0.
 	 */
+	@Test
 	public void testGetPoolSizeZero() {
 		try {
 			selector.getPool(pop, 0);
@@ -41,6 +43,7 @@ public class RandomSelectorTest extends TestCase {
 	 * Tests that an exception is thrown when attempting to select a pool from
 	 * a null population.
 	 */
+	@Test
 	public void testGetPoolPopNull() {
 		try {
 			selector.getPool(null, 1);
@@ -53,6 +56,7 @@ public class RandomSelectorTest extends TestCase {
 	 * Tests that an exception is thrown when attempting to select a pool from
 	 * an empty population.
 	 */
+	@Test
 	public void testGetPoolPopEmpty() {
 		try {
 			pop.clear();
@@ -65,6 +69,7 @@ public class RandomSelectorTest extends TestCase {
 	/**
 	 * Tests that pool selection returns a pool of the correct size.
 	 */
+	@Test
 	public void testGetPoolSize() {
 		final int poolSize = 10;
 		pop.clear();
@@ -84,6 +89,7 @@ public class RandomSelectorTest extends TestCase {
 	 * Tests that an exception is thrown when attempting to set a null selection
 	 * pool.
 	 */
+	@Test
 	public void testGetProgramPoolNull() {
 		selector.setSelectionPool(null);
 		try {
@@ -97,6 +103,7 @@ public class RandomSelectorTest extends TestCase {
 	 * Tests that an exception is thrown when attempting to set an empty
 	 * selection pool.
 	 */
+	@Test
 	public void testGetProgramPoolEmpty() {
 		pop.clear();
 		selector.setSelectionPool(pop);
@@ -111,6 +118,7 @@ public class RandomSelectorTest extends TestCase {
 	 * Tests that an exception is thrown when attempting to get a program with
 	 * no random number generator set.
 	 */
+	@Test
 	public void testGetProgramRNGNull() {
 		model.setRNG(null);
 		Life.get().fireConfigureEvent();

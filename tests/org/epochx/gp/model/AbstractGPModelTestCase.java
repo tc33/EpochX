@@ -28,6 +28,9 @@ import org.epochx.epox.Node;
 import org.epochx.gp.op.crossover.SubtreeCrossover;
 import org.epochx.gp.op.init.FullInitialiser;
 import org.epochx.gp.op.mutation.SubtreeMutation;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * Some of these test check that the default values are correct. It is possible
@@ -45,6 +48,7 @@ public abstract class AbstractGPModelTestCase extends AbstractModelTestCase {
 	 * Tests that trying to set a negative initial max depth throws an
 	 * exception.
 	 */
+	@Test
 	public void testSetInitialMaxDepthNegative() {
 		try {
 			getModel().setMaxInitialDepth(-2);
@@ -56,6 +60,7 @@ public abstract class AbstractGPModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that setting an initial max depth of zero is allowed.
 	 */
+	@Test
 	public void testSetInitialMaxDepthMinusOne() {
 		try {
 			getModel().setMaxInitialDepth(-1);
@@ -67,6 +72,7 @@ public abstract class AbstractGPModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that trying to set a negative max depth throws an exception.
 	 */
+	@Test
 	public void testSetMaxDepthNegative() {
 		try {
 			getModel().setMaxDepth(-2);
@@ -78,6 +84,7 @@ public abstract class AbstractGPModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that setting a max depth of zero is allowed.
 	 */
+	@Test
 	public void testSetMaxDepthMinusOne() {
 		try {
 			getModel().setMaxDepth(0);
@@ -89,6 +96,7 @@ public abstract class AbstractGPModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that trying to set a null syntax throws an exception.
 	 */
+	@Test
 	public void testSetSyntaxNull() {
 		try {
 			getModel().setSyntax(null);
@@ -101,6 +109,7 @@ public abstract class AbstractGPModelTestCase extends AbstractModelTestCase {
 	 * Tests that attempting to execute a run with an empty syntax throws an
 	 * exception.
 	 */
+	@Test
 	public void testRunEmptySyntax() {
 		final GPModel model = getModel();
 		try {
@@ -116,6 +125,7 @@ public abstract class AbstractGPModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that the default max initial depth property is set correctly.
 	 */
+	@Test
 	public void testMaxInitialDepthDefault() {
 		final GPModel model = getModel();
 
@@ -126,6 +136,7 @@ public abstract class AbstractGPModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that the default max depth property is set correctly.
 	 */
+	@Test
 	public void testMaxDepthDefault() {
 		final GPModel model = getModel();
 
@@ -136,6 +147,7 @@ public abstract class AbstractGPModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that the default initialiser operator is set correctly.
 	 */
+	@Test
 	public void testInitialiserDefault() {
 		final Model model = getModel();
 
@@ -147,6 +159,7 @@ public abstract class AbstractGPModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that the default crossover operator is set correctly.
 	 */
+	@Test
 	public void testCrossoverDefault() {
 		final Model model = getModel();
 
@@ -158,6 +171,7 @@ public abstract class AbstractGPModelTestCase extends AbstractModelTestCase {
 	/**
 	 * Tests that the default mutation operator is set correctly.
 	 */
+	@Test
 	public void testMutationDefault() {
 		final Model model = getModel();
 

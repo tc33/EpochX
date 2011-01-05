@@ -21,21 +21,22 @@
  */
 package org.epochx.gr.op.init;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 import org.epochx.tools.grammar.Grammar;
 import org.epochx.tools.random.MersenneTwisterFast;
+import org.junit.*;
 
 
 /**
  * 
  */
-public class FullInitialiserTest extends TestCase {
+public class FullInitialiserTest {
 
 	private FullInitialiser initialiser;
 
-	@Override
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		initialiser = new FullInitialiser(null, null, -1, -1, false);
 
 		String grammarStr = "<a> ::= x | y\n";
@@ -51,6 +52,7 @@ public class FullInitialiserTest extends TestCase {
 	 * Tests that an illegal state exception is not thrown with valid
 	 * parameters.
 	 */
+	@Test
 	public void testGetPopValid() {
 		try {
 			initialiser.getInitialPopulation();
@@ -63,6 +65,7 @@ public class FullInitialiserTest extends TestCase {
 	 * Tests that an illegal state exception is thrown if population size
 	 * parameter is zero.
 	 */
+	@Test
 	public void testGetPopZeroPopSize() {
 		// Setup initialiser to be valid except for pop size.
 		initialiser.setPopSize(0);
@@ -77,6 +80,7 @@ public class FullInitialiserTest extends TestCase {
 	 * Tests that an illegal state exception is thrown if the minimum possible 
 	 * depth is greater than the maximum depth setting.
 	 */
+	@Test
 	public void testGetPopDepth() {
 		initialiser.setDepth(1);
 		String grammarStr = "<a> ::= <b> | y <b>\n" +
@@ -96,6 +100,7 @@ public class FullInitialiserTest extends TestCase {
 	 * Tests that an illegal state exception is thrown if no random number 
 	 * generator is set.
 	 */
+	@Test
 	public void testGetPopRNGNull() {
 		initialiser.setRNG(null);
 		
@@ -108,6 +113,7 @@ public class FullInitialiserTest extends TestCase {
 	/**
 	 * Tests that an illegal state exception is thrown if no grammar is set.
 	 */
+	@Test
 	public void testGetPopGrammarNull() {
 		initialiser.setGrammar(null);
 		

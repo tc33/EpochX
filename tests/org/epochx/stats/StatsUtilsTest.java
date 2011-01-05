@@ -21,18 +21,20 @@
  */
 package org.epochx.stats;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 import org.apache.commons.lang.math.NumberUtils;
+import org.junit.Test;
 
 /**
  * 
  */
-public class StatsUtilsTest extends TestCase {
+public class StatsUtilsTest {
 
 	/**
 	 * Tests that an exception is thrown for the average of an empty array.
 	 */
+	@Test
 	public void testAveDoubleEmpty() {
 		try {
 			StatsUtils.ave(new double[0]);
@@ -44,6 +46,7 @@ public class StatsUtilsTest extends TestCase {
 	/**
 	 * Tests that an exception is thrown for the average of an empty array.
 	 */
+	@Test
 	public void testAveIntEmpty() {
 		try {
 			StatsUtils.ave(new int[0]);
@@ -56,6 +59,7 @@ public class StatsUtilsTest extends TestCase {
 	 * Tests that an exception is thrown for the standard deviation of an empty
 	 * array.
 	 */
+	@Test
 	public void testStdevDoubleEmpty() {
 		try {
 			StatsUtils.stdev(new double[0]);
@@ -68,6 +72,7 @@ public class StatsUtilsTest extends TestCase {
 	 * Tests that an exception is thrown for the standard deviation of an empty
 	 * array.
 	 */
+	@Test
 	public void testStdevDoubleEmptyAve() {
 		try {
 			StatsUtils.stdev(new double[0], 3.0);
@@ -80,6 +85,7 @@ public class StatsUtilsTest extends TestCase {
 	 * Tests that an exception is thrown for the standard deviation of an empty
 	 * array.
 	 */
+	@Test
 	public void testStdevIntEmpty() {
 		try {
 			StatsUtils.stdev(new int[0]);
@@ -92,6 +98,7 @@ public class StatsUtilsTest extends TestCase {
 	 * Tests that an exception is thrown for the standard deviation of an empty
 	 * array.
 	 */
+	@Test
 	public void testStdevIntEmptyAve() {
 		try {
 			StatsUtils.stdev(new int[0], 3.0);
@@ -104,6 +111,7 @@ public class StatsUtilsTest extends TestCase {
 	 * Tests that an exception is thrown for the maximum index of an empty
 	 * array.
 	 */
+	@Test
 	public void testMaxIndexDoubleEmpty() {
 		try {
 			StatsUtils.maxIndex(new double[0]);
@@ -116,6 +124,7 @@ public class StatsUtilsTest extends TestCase {
 	 * Tests that the value returned from maxIndex is the index for the largest
 	 * value.
 	 */
+	@Test
 	public void testMaxIndexDouble() {
 		final double[] values = {0.1, 0.2, 0.3, 0.4};
 
@@ -127,6 +136,7 @@ public class StatsUtilsTest extends TestCase {
 	 * Tests that an exception is thrown for the maximum index of an empty
 	 * array.
 	 */
+	@Test
 	public void testMaxIndexIntEmpty() {
 		try {
 			StatsUtils.maxIndex(new double[0]);
@@ -139,6 +149,7 @@ public class StatsUtilsTest extends TestCase {
 	 * Tests that the value returned from maxIndex is the index for the largest
 	 * value.
 	 */
+	@Test
 	public void testMaxIndexInt() {
 		final int[] values = {1, 2, 3, 4};
 
@@ -150,6 +161,7 @@ public class StatsUtilsTest extends TestCase {
 	 * Tests that an exception is thrown for the minimum index of an empty
 	 * array.
 	 */
+	@Test
 	public void testMinIndexDoubleEmpty() {
 		try {
 			StatsUtils.minIndex(new double[0]);
@@ -162,6 +174,7 @@ public class StatsUtilsTest extends TestCase {
 	 * Tests that the value returned from minIndex is the index for the largest
 	 * value.
 	 */
+	@Test
 	public void testMinIndexDouble() {
 		final double[] values = {0.1, 0.2, 0.3, 0.4};
 
@@ -173,6 +186,7 @@ public class StatsUtilsTest extends TestCase {
 	 * Tests that an exception is thrown for the minimum index of an empty
 	 * array.
 	 */
+	@Test
 	public void testMinIndexIntEmpty() {
 		try {
 			StatsUtils.minIndex(new double[0]);
@@ -185,6 +199,7 @@ public class StatsUtilsTest extends TestCase {
 	 * Tests that the value returned from minIndex is the index for the largest
 	 * value.
 	 */
+	@Test
 	public void testMinIndexInt() {
 		final int[] values = {1, 2, 3, 4};
 
@@ -195,6 +210,7 @@ public class StatsUtilsTest extends TestCase {
 	/**
 	 * Tests that an exception is thrown for the median of an empty array.
 	 */
+	@Test
 	public void testMedianDoubleEmpty() {
 		try {
 			StatsUtils.median(new double[0]);
@@ -206,6 +222,7 @@ public class StatsUtilsTest extends TestCase {
 	/**
 	 * Tests that an exception is thrown for the median of an empty array.
 	 */
+	@Test
 	public void testMedianIntEmpty() {
 		try {
 			StatsUtils.median(new int[0]);
@@ -217,6 +234,7 @@ public class StatsUtilsTest extends TestCase {
 	/**
 	 * Tests that an exception is thrown for the median of an empty array.
 	 */
+	@Test
 	public void testCi95DoubleEmpty() {
 		try {
 			StatsUtils.ci95(new double[0]);
@@ -228,6 +246,7 @@ public class StatsUtilsTest extends TestCase {
 	/**
 	 * Tests that an exception is thrown for the median of an empty array.
 	 */
+	@Test
 	public void testCi95IntEmpty() {
 		try {
 			StatsUtils.ci95(new int[0]);

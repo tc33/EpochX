@@ -21,25 +21,28 @@
  */
 package org.epochx.tools.ant;
 
+import static org.junit.Assert.*;
+
 import java.awt.*;
 
-import junit.framework.TestCase;
+import org.junit.*;
 
 /**
  * 
  */
-public class AntLandscapeTest extends TestCase {
+public class AntLandscapeTest {
 
 	private AntLandscape landscape;
 
-	@Override
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		landscape = new AntLandscape(new Dimension(32, 32));
 	}
 
 	/**
 	 * Test the isValidLocation method.
 	 */
+	@Test
 	public void testIsValidLocation() {
 		assertFalse("location at excessive x point not invalid",
 				landscape.isValidLocation(new Point(landscape.getWidth(),
@@ -62,6 +65,7 @@ public class AntLandscapeTest extends TestCase {
 	/**
 	 * Test the getNextLocation method.
 	 */
+	@Test
 	public void testGetNextLocation() {
 		Point location = new Point(0, 0);
 		Orientation orientation = Orientation.EAST;

@@ -21,28 +21,29 @@
  */
 package org.epochx.core;
 
+import static org.junit.Assert.*;
+
 import java.util.*;
 
-import junit.framework.TestCase;
-
-import org.epochx.epox.*;
+import org.epochx.epox.Literal;
 import org.epochx.gp.model.*;
 import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
+import org.junit.*;
 
 /**
  * 
  */
-public class MutationManagerTest extends TestCase {
+public class MutationManagerTest {
 
 	private GPModel model;
 	private MutationManager mutationManager;
 
 	private int count;
 
-	@Override
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		model = new GPModelDummy();
 		mutationManager = new MutationManager(model);
 	}
@@ -51,6 +52,7 @@ public class MutationManagerTest extends TestCase {
 	 * Tests that an exception is thrown if the crossover is null but crossover
 	 * probability is not null.
 	 */
+	@Test
 	public void testMutatorNotSet() {
 		model.setMutation(null);
 		model.setMutationProbability(0.1);
@@ -68,6 +70,7 @@ public class MutationManagerTest extends TestCase {
 	 * Tests that an exception is thrown if the program selector is null when
 	 * attempting mutation.
 	 */
+	@Test
 	public void testProgramSelectorNotSet() {
 		// Create a model with a null program selector.
 		model.setProgramSelector(null);
@@ -85,6 +88,7 @@ public class MutationManagerTest extends TestCase {
 	 * Tests that the mutation events are all triggered and in the correct
 	 * order.
 	 */
+	@Test
 	public void testMutationEventsOrder() {
 		// We add the chars '1', '2', '3' to builder to check order of calls.
 		final StringBuilder verify = new StringBuilder();
@@ -127,6 +131,7 @@ public class MutationManagerTest extends TestCase {
 	 * Tests that returning null to the crossover event will revert the
 	 * crossover.
 	 */
+	@Test
 	public void testGenerationEventRevert() {
 		// We add the chars '1', '2', '3' to builder to check order of calls.
 		final StringBuilder verify = new StringBuilder();

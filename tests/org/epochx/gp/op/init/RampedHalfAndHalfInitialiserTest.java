@@ -21,24 +21,25 @@
  */
 package org.epochx.gp.op.init;
 
-import java.util.*;
+import static org.junit.Assert.fail;
 
-import junit.framework.TestCase;
+import java.util.*;
 
 import org.epochx.epox.*;
 import org.epochx.epox.bool.NotFunction;
 import org.epochx.tools.random.MersenneTwisterFast;
+import org.junit.*;
 
 
 /**
  * 
  */
-public class RampedHalfAndHalfInitialiserTest extends TestCase {
+public class RampedHalfAndHalfInitialiserTest {
 	
 	private RampedHalfAndHalfInitialiser initialiser;
 	
-	@Override
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		initialiser = new RampedHalfAndHalfInitialiser(null, null, Boolean.class, -1, -1, -1, false);
 		
 		// Ensure setup is valid.
@@ -56,6 +57,7 @@ public class RampedHalfAndHalfInitialiserTest extends TestCase {
 	 * Tests that an illegal state exception is not thrown with valid 
 	 * parameters.
 	 */
+	@Test
 	public void testGetPopValid() {
 		try {
 			initialiser.getInitialPopulation();
@@ -68,6 +70,7 @@ public class RampedHalfAndHalfInitialiserTest extends TestCase {
 	 * Tests that an illegal state exception is thrown if population size
 	 * parameter is zero.
 	 */
+	@Test
 	public void testGetPopZeroPopSize() {
 		// Setup initialiser to be valid except for pop size.
 		initialiser.setPopSize(0);
@@ -82,6 +85,7 @@ public class RampedHalfAndHalfInitialiserTest extends TestCase {
 	 * Tests that an illegal state exception is thrown if the start maximum 
 	 * depth is larger than the end maximum depth.
 	 */
+	@Test
 	public void testGetPopDepthsSequence() {
 		initialiser.setStartMaxDepth(4);
 		initialiser.setEndMaxDepth(3);

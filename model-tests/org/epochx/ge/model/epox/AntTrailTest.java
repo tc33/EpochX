@@ -22,12 +22,13 @@
 package org.epochx.ge.model.epox;
 
 import org.epochx.ge.op.crossover.FixedPointCrossover;
-import org.epochx.ge.op.init.*;
+import org.epochx.ge.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.ge.op.mutation.PointMutation;
 import org.epochx.life.*;
 import org.epochx.op.selection.FitnessProportionateSelector;
 import org.epochx.stats.*;
 import org.epochx.test.*;
+import org.junit.*;
 
 
 /**
@@ -38,8 +39,8 @@ public class AntTrailTest extends ModelTest {
 	private RunListener runPrinter;
 	private GenerationListener genPrinter;
 	
-	@Override
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		runPrinter = new RunAdapter() {
 			@Override
 			public void onRunEnd() {
@@ -57,8 +58,8 @@ public class AntTrailTest extends ModelTest {
 		Life.get().addGenerationListener(genPrinter);
 	}
 	
-	@Override
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		Life.get().removeRunListener(runPrinter);
 		Life.get().removeGenerationListener(genPrinter);
 	}
@@ -89,6 +90,7 @@ public class AntTrailTest extends ModelTest {
 	 * 
 	 * Expecting success rate between % and %.
 	 */
+	@Test
 	public void testSantaFeTrail() {
 		final int LOWER_SUCCESS = 0;
 		final int UPPER_SUCCESS = 0;

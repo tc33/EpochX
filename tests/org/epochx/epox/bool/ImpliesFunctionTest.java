@@ -22,8 +22,11 @@
 package org.epochx.epox.bool;
 
 import org.epochx.epox.*;
-import org.epochx.epox.bool.ImpliesFunction;
 import org.epochx.gp.representation.AbstractBooleanNodeTestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
 
 /**
  * 
@@ -35,6 +38,7 @@ public class ImpliesFunctionTest extends AbstractBooleanNodeTestCase {
 		return new ImpliesFunction();
 	}
 
+	@Test
 	public void testEvaluateTT() {
 		final ImpliesFunction node = (ImpliesFunction) getNode();
 		final Node[] children = new Node[]{new Literal(true),
@@ -45,6 +49,7 @@ public class ImpliesFunctionTest extends AbstractBooleanNodeTestCase {
 		assertTrue("IMPLIES of true and true is not true", result);
 	}
 
+	@Test
 	public void testEvaluateTF() {
 		final ImpliesFunction node = (ImpliesFunction) getNode();
 		final Node[] children = new Node[]{new Literal(true),
@@ -55,6 +60,7 @@ public class ImpliesFunctionTest extends AbstractBooleanNodeTestCase {
 		assertFalse("IMPLIES of true and false is not false", result);
 	}
 
+	@Test
 	public void testEvaluateFT() {
 		final ImpliesFunction node = (ImpliesFunction) getNode();
 		final Node[] children = new Node[]{new Literal(false),
@@ -65,6 +71,7 @@ public class ImpliesFunctionTest extends AbstractBooleanNodeTestCase {
 		assertTrue("IMPLIES of false and true is not true", result);
 	}
 
+	@Test
 	public void testEvaluateFF() {
 		final ImpliesFunction node = (ImpliesFunction) getNode();
 		final Node[] children = new Node[]{new Literal(false),

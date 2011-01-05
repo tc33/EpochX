@@ -26,6 +26,9 @@ import java.util.List;
 import org.epochx.epox.*;
 import org.epochx.epox.bool.AndFunction;
 import org.epochx.representation.*;
+import org.junit.*;
+
+import static org.junit.Assert.*;
 
 /**
  * 
@@ -42,10 +45,8 @@ public class GPCandidateProgramTest extends AbstractCandidateProgramTestCase {
 		return new GPCandidateProgram(new Literal(true), null);
 	}
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-
+	@Before
+	public void setUp() throws Exception {
 		program = (GPCandidateProgram) getCandidateProgram();
 		node1 = new Literal(true);
 		node2 = new Literal(true);
@@ -57,6 +58,7 @@ public class GPCandidateProgramTest extends AbstractCandidateProgramTestCase {
 	 * Test that an index out of bounds exception is thrown when trying to get
 	 * a node at a negative index.
 	 */
+	@Test
 	public void testGetNthNodeNegativeIndex() {
 		try {
 			program.getNthNode(-1);
@@ -69,6 +71,7 @@ public class GPCandidateProgramTest extends AbstractCandidateProgramTestCase {
 	 * Test that an index out of bounds exception is thrown when trying to get
 	 * a node an index beyond the tree's length - 1.
 	 */
+	@Test
 	public void testGetNthTooLarge() {
 		try {
 			program.getNthNode(program.getProgramLength());
@@ -80,6 +83,7 @@ public class GPCandidateProgramTest extends AbstractCandidateProgramTestCase {
 	/**
 	 * Test that the nth node is correctly returned when n is positive.
 	 */
+	@Test
 	public void testGetNthNodePositiveIndex() {
 		try {
 			final Node node = program.getNthNode(2);
@@ -92,6 +96,7 @@ public class GPCandidateProgramTest extends AbstractCandidateProgramTestCase {
 	/**
 	 * Test that the root node is returned when retrieving nth node of 0.
 	 */
+	@Test
 	public void testGetNthNodeRoot() {
 		final Node node = program.getNthNode(0);
 		assertSame("root node not being returned at index 0", node0, node);
@@ -101,6 +106,7 @@ public class GPCandidateProgramTest extends AbstractCandidateProgramTestCase {
 	 * Test that an index out of bounds exception is thrown when trying to set
 	 * a node at a negative index.
 	 */
+	@Test
 	public void testSetNthNodeNegativeIndex() {
 		try {
 			program.setNthNode(-1, new Literal(false));
@@ -113,6 +119,7 @@ public class GPCandidateProgramTest extends AbstractCandidateProgramTestCase {
 	 * Test that an index out of bounds exception is thrown when trying to set
 	 * a node an index beyond the tree's length - 1.
 	 */
+	@Test
 	public void testSetNthNodeTooLarge() {
 		try {
 			program.setNthNode(3, new Literal(false));
@@ -124,6 +131,7 @@ public class GPCandidateProgramTest extends AbstractCandidateProgramTestCase {
 	/**
 	 * Test that the nth node is set correctly when it is positive.
 	 */
+	@Test
 	public void testSetNthNodePositiveIndex() {
 		try {
 			final Node node = new Literal(false);
@@ -138,6 +146,7 @@ public class GPCandidateProgramTest extends AbstractCandidateProgramTestCase {
 	/**
 	 * Test that the nth node is set correctly when n is 0.
 	 */
+	@Test
 	public void testSetNthNodeRoot() {
 		final Node node = new Literal(false);
 		program.setNthNode(0, node);
@@ -149,6 +158,7 @@ public class GPCandidateProgramTest extends AbstractCandidateProgramTestCase {
 	 * Test that an index out of bounds exception is thrown when trying to get
 	 * nodes at a negative depth.
 	 */
+	@Test
 	public void testGetNodesAtDepthNegative() {
 		try {
 			program.getNodesAtDepth(-1);
@@ -161,6 +171,7 @@ public class GPCandidateProgramTest extends AbstractCandidateProgramTestCase {
 	 * Test that just the root node is returned when requesting nodes at depth
 	 * 0.
 	 */
+	@Test
 	public void testGetNodesAtDepthZero() {
 		final List<Node> nodes = program.getNodesAtDepth(0);
 		assertEquals("more than one node at depth zero", 1, nodes.size());
@@ -171,6 +182,7 @@ public class GPCandidateProgramTest extends AbstractCandidateProgramTestCase {
 	/**
 	 * Test that only the two child nodes are returned from depth one.
 	 */
+	@Test
 	public void testGetNodesAtDepthPositive() {
 		final List<Node> nodes = program.getNodesAtDepth(1);
 		assertEquals("more than two nodes found at depth one", 2, nodes.size());
@@ -182,6 +194,7 @@ public class GPCandidateProgramTest extends AbstractCandidateProgramTestCase {
 	 * Test that an empty list is returned if retrieving nodes at a depth
 	 * greater than the programs maximum depth.
 	 */
+	@Test
 	public void testGetNodesAtDepthTooLarge() {
 		try {
 			final List<Node> nodes = program.getNodesAtDepth(2);

@@ -21,27 +21,28 @@
  */
 package org.epochx.core;
 
-import java.util.*;
+import static org.junit.Assert.*;
 
-import junit.framework.TestCase;
+import java.util.*;
 
 import org.epochx.gp.model.SantaFeTrail;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
+import org.junit.*;
 
 /**
  * 
  */
-public class GenerationManagerTest extends TestCase {
+public class GenerationManagerTest {
 
 	private Model model;
 	private GenerationManager genManager;
 	private List<CandidateProgram> pop;
 	private int count;
 
-	@Override
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		model = new Model() {
 
 			@Override
@@ -75,6 +76,7 @@ public class GenerationManagerTest extends TestCase {
 	 * Tests that trying to run a generation with a previous population of null
 	 * throws an exception.
 	 */
+	@Test
 	public void testGenerationPopNull() {
 		pop.clear();
 		try {
@@ -88,6 +90,7 @@ public class GenerationManagerTest extends TestCase {
 	 * Tests that trying to run a generation with a previous population of size
 	 * zero throws an exception.
 	 */
+	@Test
 	public void testGenerationPopSizeZero() {
 		pop.clear();
 		try {
@@ -101,6 +104,7 @@ public class GenerationManagerTest extends TestCase {
 	 * Tests that the generation events are all triggered and in the correct
 	 * order.
 	 */
+	@Test
 	public void testGenerationEventsOrder() {
 		// We add the chars '1', '2', '3' to builder to check order of calls.
 		final StringBuilder verify = new StringBuilder();
@@ -136,6 +140,7 @@ public class GenerationManagerTest extends TestCase {
 	 * Tests that returning null to the generation event will revert the
 	 * generation.
 	 */
+	@Test
 	public void testGenerationEventRevert() {
 		count = 0;
 
@@ -163,6 +168,7 @@ public class GenerationManagerTest extends TestCase {
 				verify.toString());
 	}
 
+	@Test
 	public void testGenerationRNGNull() {
 		model = new SantaFeTrail() {
 

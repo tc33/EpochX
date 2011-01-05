@@ -21,16 +21,19 @@
  */
 package org.epochx.tools.eval;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
 
 /**
  * 
  */
-public class ScriptingInterpreterTest extends TestCase {
+public class ScriptingInterpreterTest {
 
 	/**
 	 * Dummy test because junit doesn't like empty TestCases.
 	 */
+	@Test
 	public void testDummy() {
 		assertTrue(true);
 	}
@@ -39,7 +42,8 @@ public class ScriptingInterpreterTest extends TestCase {
 	 * Tests that the eval method can handle simple expressions.
 	 */
 	/*
-	 * public void testEval() {
+	 * @Test
+	public void testEval() {
 	 * Interpreter interpreter = new ScriptingInterpreter("ruby");
 	 * 
 	 * String expression = "($b1 || false) && ($s1.to_i < 4.435)";
@@ -64,7 +68,8 @@ public class ScriptingInterpreterTest extends TestCase {
 	 * Tests that the eval method can handle simple expressions.
 	 */
 	/*
-	 * public void testMultiEval() {
+	 * @Test
+	public void testMultiEval() {
 	 * Interpreter interpreter = new ScriptingInterpreter("ruby");
 	 * 
 	 * String expression = "($b1 || false) && ($s1.to_i < 4.435)";
@@ -95,7 +100,8 @@ public class ScriptingInterpreterTest extends TestCase {
 	 * Tests that the exec method can execute sequences of statements.
 	 */
 	/*
-	 * public void testExec() {
+	 * @Test
+	public void testExec() {
 	 * Interpreter interpreter = new ScriptingInterpreter("ruby");
 	 * 
 	 * Point p = new Point(2,3);
@@ -116,7 +122,8 @@ public class ScriptingInterpreterTest extends TestCase {
 	 * times.
 	 */
 	/*
-	 * public void testMultiExec() {
+	 * @Test
+	public void testMultiExec() {
 	 * Interpreter interpreter = new ScriptingInterpreter("ruby");
 	 * 
 	 * Point p1 = new Point(0,0);

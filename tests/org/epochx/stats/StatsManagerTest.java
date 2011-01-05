@@ -21,22 +21,23 @@
  */
 package org.epochx.stats;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 import org.epochx.core.Model;
 import org.epochx.gp.model.GPModelDummy;
 import org.epochx.stats.Stats.ExpiryEvent;
+import org.junit.*;
 
 /**
  * 
  */
-public class StatsManagerTest extends TestCase {
+public class StatsManagerTest {
 
 	private Stats stats;
 	private Model model;
 
-	@Override
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		model = new GPModelDummy();
 		stats = Stats.get();
 	}
@@ -44,6 +45,7 @@ public class StatsManagerTest extends TestCase {
 	/**
 	 * Test that if a run statistic is not found then null is returned.
 	 */
+	@Test
 	public void testRunStatNotFound() {
 		final Stat field = new AbstractStat(ExpiryEvent.RUN) {};
 		assertNull("null not returned for missing run stat",
@@ -54,6 +56,7 @@ public class StatsManagerTest extends TestCase {
 	 * Tests that a run statistic that is added to a stats manager is
 	 * remembered.
 	 */
+	@Test
 	public void testAddRunStat() {
 		final Stat field = new AbstractStat(ExpiryEvent.RUN) {};
 		final String value = "value";

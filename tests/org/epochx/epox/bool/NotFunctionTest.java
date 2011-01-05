@@ -22,8 +22,10 @@
 package org.epochx.epox.bool;
 
 import org.epochx.epox.*;
-import org.epochx.epox.bool.NotFunction;
 import org.epochx.gp.representation.AbstractBooleanNodeTestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * 
@@ -35,6 +37,7 @@ public class NotFunctionTest extends AbstractBooleanNodeTestCase {
 		return new NotFunction();
 	}
 
+	@Test
 	public void testEvaluateT() {
 		final NotFunction node = (NotFunction) getNode();
 		node.setChild(0, new Literal(true));
@@ -43,6 +46,7 @@ public class NotFunctionTest extends AbstractBooleanNodeTestCase {
 		assertFalse("NOT of true is not false", result);
 	}
 
+	@Test
 	public void testEvaluateF() {
 		final NotFunction node = (NotFunction) getNode();
 		node.setChild(0, new Literal(false));

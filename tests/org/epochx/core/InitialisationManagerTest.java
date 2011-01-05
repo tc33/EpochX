@@ -21,27 +21,28 @@
  */
 package org.epochx.core;
 
-import java.util.*;
+import static org.junit.Assert.*;
 
-import junit.framework.TestCase;
+import java.util.*;
 
 import org.epochx.epox.*;
 import org.epochx.epox.bool.AndFunction;
 import org.epochx.gp.model.*;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
+import org.junit.*;
 
 /**
  * 
  */
-public class InitialisationManagerTest extends TestCase {
+public class InitialisationManagerTest {
 
 	private Model model;
 	private InitialisationManager initialisationManager;
 	private int count;
 
-	@Override
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		model = new GPModelDummy();
 
 		// Need to give the model a valid syntax so we can perform
@@ -58,6 +59,7 @@ public class InitialisationManagerTest extends TestCase {
 	/**
 	 * Tests that an exception is thrown if the initialiser is null.
 	 */
+	@Test
 	public void testInitialiserNotSet() {
 		model.setInitialiser(null);
 
@@ -72,6 +74,7 @@ public class InitialisationManagerTest extends TestCase {
 	 * Tests that the initialisation events are all triggered and in the correct
 	 * order.
 	 */
+	@Test
 	public void testInitialisationEventsOrder() {
 		// We add the chars '1', '2', '3' to builder to check order of calls.
 		final StringBuilder verify = new StringBuilder();
@@ -136,6 +139,7 @@ public class InitialisationManagerTest extends TestCase {
 	 * Tests that the initialisation events are all triggered and in the correct
 	 * order.
 	 */
+	@Test
 	public void testInitialisationEventRevert() {
 		count = 0;
 
@@ -169,6 +173,7 @@ public class InitialisationManagerTest extends TestCase {
 	 * Tests that the initialisation events are all triggered and in the correct
 	 * order.
 	 */
+	@Test
 	public void testGenerationEventRevert() {
 		count = 0;
 

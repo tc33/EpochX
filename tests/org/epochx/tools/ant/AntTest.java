@@ -21,22 +21,24 @@
  */
 package org.epochx.tools.ant;
 
+import static org.junit.Assert.*;
+
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-import junit.framework.TestCase;
+import org.junit.*;
 
 /**
  * 
  */
-public class AntTest extends TestCase {
+public class AntTest {
 
 	private Ant ant;
 	private AntLandscape landscape;
 
-	@Override
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		landscape = new AntLandscape(new Dimension(32, 32));
 		ant = new Ant(500, landscape);
 	}
@@ -44,6 +46,7 @@ public class AntTest extends TestCase {
 	/**
 	 * Tests that an ant is reset correctly.
 	 */
+	@Test
 	public void testReset() {
 		ant.setLocation(3, 3);
 		ant.setOrientation(Orientation.SOUTH);
@@ -62,6 +65,7 @@ public class AntTest extends TestCase {
 	/**
 	 * Tests that an ant turns left from each possible orientation.
 	 */
+	@Test
 	public void testTurnLeft() {
 		final int timesteps = ant.getTimesteps();
 
@@ -99,6 +103,7 @@ public class AntTest extends TestCase {
 	/**
 	 * Tests that an ant turns right from each possible orientation.
 	 */
+	@Test
 	public void testTurnRight() {
 		final int timesteps = ant.getTimesteps();
 
@@ -136,6 +141,7 @@ public class AntTest extends TestCase {
 	/**
 	 * Tests that an ant moves correctly.
 	 */
+	@Test
 	public void testMove() {
 		final int timesteps = ant.getTimesteps();
 
@@ -174,6 +180,7 @@ public class AntTest extends TestCase {
 				before, ant.getLocation());
 	}
 
+	@Test
 	public void testIsFoodAhead() {
 		assertFalse("ant reporting food ahead without there being food",
 				ant.isFoodAhead());

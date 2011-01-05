@@ -21,23 +21,24 @@
  */
 package org.epochx.gp.representation;
 
+import static org.junit.Assert.*;
+
 import java.util.List;
 
-import junit.framework.TestCase;
-
 import org.epochx.epox.*;
+import org.junit.*;
 
 /**
  * 
  */
-public abstract class AbstractNodeTestCase extends TestCase {
+public abstract class AbstractNodeTestCase {
 
 	private Node node;
 
 	public abstract Node getNode();
 
-	@Override
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		node = getNode();
 
 		// Ensure children are filled.
@@ -50,6 +51,7 @@ public abstract class AbstractNodeTestCase extends TestCase {
 	/**
 	 * Test that getting an nth node of zero returns the node itself.
 	 */
+	@Test
 	public void testGetNthNodeZero() {
 		assertSame("node not its own 0th node", node, node.getNthNode(0));
 	}
@@ -58,6 +60,7 @@ public abstract class AbstractNodeTestCase extends TestCase {
 	 * Test that an index out of bounds exception is thrown when trying to get
 	 * a node at a negative index.
 	 */
+	@Test
 	public void testGetNthNodeNegativeIndex() {
 		try {
 			node.getNthNode(-1);
@@ -70,6 +73,7 @@ public abstract class AbstractNodeTestCase extends TestCase {
 	 * Test that an index out of bounds exception is thrown when trying to get
 	 * a node an index beyond the tree's length - 1.
 	 */
+	@Test
 	public void testGetNthTooLarge() {
 		try {
 			node.getNthNode(node.getLength());
@@ -82,6 +86,7 @@ public abstract class AbstractNodeTestCase extends TestCase {
 	 * Test that an index out of bounds exception is thrown when trying to set
 	 * a node at a negative index.
 	 */
+	@Test
 	public void testSetNthNodeNegativeIndex() {
 		try {
 			node.setNthNode(-1, new Literal(false));
@@ -94,6 +99,7 @@ public abstract class AbstractNodeTestCase extends TestCase {
 	 * Test that an index out of bounds exception is thrown when trying to set
 	 * a node at an index beyond the tree's length - 1.
 	 */
+	@Test
 	public void testSetNthNodeTooLarge() {
 		try {
 			node.setNthNode(node.getLength(), new Literal(false));
@@ -106,6 +112,7 @@ public abstract class AbstractNodeTestCase extends TestCase {
 	 * Test that an index out of bounds exception is thrown when trying to set
 	 * a node at an index of zero. A node cannot replace itself.
 	 */
+	@Test
 	public void testSetNthNodeZero() {
 		try {
 			node.setNthNode(0, new Literal(false));
@@ -118,6 +125,7 @@ public abstract class AbstractNodeTestCase extends TestCase {
 	 * Tests that setting the nth node at a valid index does not throw an
 	 * exception and the node is set correctly.
 	 */
+	@Test
 	public void testSetNthNodeLast() {
 		try {
 			final Node newChild = new Literal(false);
@@ -135,6 +143,7 @@ public abstract class AbstractNodeTestCase extends TestCase {
 	 * Test that an index out of bounds exception is thrown when trying to get
 	 * nodes at a negative depth.
 	 */
+	@Test
 	public void testGetNodesAtDepthNegative() {
 		try {
 			node.getNodesAtDepth(-1);
@@ -147,6 +156,7 @@ public abstract class AbstractNodeTestCase extends TestCase {
 	 * Test that just the root node is returned when requesting nodes at depth
 	 * 0.
 	 */
+	@Test
 	public void testGetNodesAtDepthZero() {
 		final List<Node> nodes = node.getNodesAtDepth(0);
 		assertEquals("more than one node at depth zero", 1, nodes.size());
@@ -158,6 +168,7 @@ public abstract class AbstractNodeTestCase extends TestCase {
 	 * Test that an empty list is returned if retrieving nodes at a depth
 	 * greater than the programs maximum depth.
 	 */
+	@Test
 	public void testGetNodesAtDepthTooLarge() {
 		try {
 			final List<Node> nodes = node.getNodesAtDepth(node.getDepth() + 1);

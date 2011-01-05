@@ -21,21 +21,22 @@
  */
 package org.epochx.core;
 
+import static org.junit.Assert.*;
+
 import java.util.*;
 
-import junit.framework.TestCase;
-
-import org.epochx.epox.*;
+import org.epochx.epox.Literal;
 import org.epochx.gp.model.*;
 import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.life.*;
 import org.epochx.op.selection.RandomSelector;
 import org.epochx.representation.CandidateProgram;
+import org.junit.*;
 
 /**
  * 
  */
-public class PoolSelectionManagerTest extends TestCase {
+public class PoolSelectionManagerTest {
 
 	private GPModel model;
 
@@ -45,8 +46,8 @@ public class PoolSelectionManagerTest extends TestCase {
 
 	private int count;
 
-	@Override
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		model = new GPModelDummy();
 		pop = new ArrayList<CandidateProgram>();
 		pop.add(new GPCandidateProgram(model));
@@ -57,6 +58,7 @@ public class PoolSelectionManagerTest extends TestCase {
 	 * Tests that an exception is thrown if the pool size is equal to 0
 	 * if a pool selector is set.
 	 */
+	@Test
 	public void testPoolSizeZero() {
 		// Create a model with a null program selector.
 		model.setPoolSize(0);
@@ -76,6 +78,7 @@ public class PoolSelectionManagerTest extends TestCase {
 	 * size of -1 is fine since it indicates no pool selection should take
 	 * place.
 	 */
+	@Test
 	public void testPoolSizeNegative() {
 		// Create a model with a null program selector.
 		model.setPoolSize(-2);
@@ -93,6 +96,7 @@ public class PoolSelectionManagerTest extends TestCase {
 	 * Tests that an exception is not thrown if the pool size is -1, and instead
 	 * the given population is returned as the pool.
 	 */
+	@Test
 	public void testPoolSizeMinusOne() {
 		// Create a model with a null program selector.
 		model.setPoolSize(-1);
@@ -113,6 +117,7 @@ public class PoolSelectionManagerTest extends TestCase {
 	 * Tests that an exception is not thrown if the pool selector is null, and
 	 * instead the given population is returned as the pool.
 	 */
+	@Test
 	public void testPoolSelectorNull() {
 		// Create a model with a null program selector.
 		model.setPoolSize(5);
@@ -133,6 +138,7 @@ public class PoolSelectionManagerTest extends TestCase {
 	/**
 	 * Tests that an exception is not thrown if the pool size is 1.
 	 */
+	@Test
 	public void testPoolSizeOne() {
 		// Create a model with a null program selector.
 		model.setPoolSize(1);
@@ -151,6 +157,7 @@ public class PoolSelectionManagerTest extends TestCase {
 	 * Tests that the pool selection events are all triggered and in the correct
 	 * order.
 	 */
+	@Test
 	public void testPoolSelectionEventsOrder() {
 		// We add the chars '1', '2', '3' to builder to check order of calls.
 		final StringBuilder verify = new StringBuilder();
@@ -192,6 +199,7 @@ public class PoolSelectionManagerTest extends TestCase {
 	 * Tests that returning null to the pool selection event will revert the
 	 * selection.
 	 */
+	@Test
 	public void testPoolSelectionEventRevert() {
 		// We add the chars '1', '2', '3' to builder to check order of calls.
 		final StringBuilder verify = new StringBuilder();

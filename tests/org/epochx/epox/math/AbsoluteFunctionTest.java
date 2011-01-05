@@ -22,8 +22,10 @@
 package org.epochx.epox.math;
 
 import org.epochx.epox.*;
-import org.epochx.epox.math.AbsoluteFunction;
 import org.epochx.gp.representation.AbstractDoubleNodeTestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * 
@@ -35,6 +37,7 @@ public class AbsoluteFunctionTest extends AbstractDoubleNodeTestCase {
 		return new AbsoluteFunction();
 	}
 
+	@Test
 	public void testEvaluateZero() {
 		final AbsoluteFunction node = (AbsoluteFunction) getNode();
 		node.setChild(0, new Literal(0.0));
@@ -43,6 +46,7 @@ public class AbsoluteFunctionTest extends AbstractDoubleNodeTestCase {
 		assertEquals("ABS of 0.0 is not 0.0", 0.0, result);
 	}
 
+	@Test
 	public void testEvaluateMinusOne() {
 		final AbsoluteFunction node = (AbsoluteFunction) getNode();
 		node.setChild(0, new Literal(-1.0));
@@ -51,6 +55,7 @@ public class AbsoluteFunctionTest extends AbstractDoubleNodeTestCase {
 		assertEquals("ABS of -1.0 is not 1.0", 1.0, result);
 	}
 
+	@Test
 	public void testEvaluatePlusOne() {
 		final AbsoluteFunction node = (AbsoluteFunction) getNode();
 		node.setChild(0, new Literal(1.0));

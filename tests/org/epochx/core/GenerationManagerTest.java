@@ -67,6 +67,8 @@ public class GenerationManagerTest extends TestCase {
 				return 0;
 			}
 		});
+		
+		Life.get().fireConfigureEvent();
 	}
 
 	/**
@@ -103,31 +105,23 @@ public class GenerationManagerTest extends TestCase {
 		// We add the chars '1', '2', '3' to builder to check order of calls.
 		final StringBuilder verify = new StringBuilder();
 
-		// Listen for the config events.
-		Life.get().addConfigListener(new ConfigListener() {
-
-			@Override
-			public void onConfigure() {
-				verify.append('1');
-			}
-		});
 		// Listen for the generation.
 		Life.get().addGenerationListener(new GenerationListener() {
 			@Override
 			public void onGenerationStart() {
-				verify.append('2');
+				verify.append('1');
 			}
 
 			@Override
 			public void onGenerationEnd() {
-				verify.append('4');
+				verify.append('3');
 			}
 		});
 		Life.get().addHook(new AbstractHook() {
 			@Override
 			public List<CandidateProgram> generationHook(
 					final List<CandidateProgram> genPop) {
-				verify.append('3');
+				verify.append('2');
 				return genPop;
 			}
 		});
@@ -135,7 +129,7 @@ public class GenerationManagerTest extends TestCase {
 		genManager.generation(1, pop);
 
 		assertEquals("generation events were not called in the correct order",
-				"1234", verify.toString());
+				"123", verify.toString());
 	}
 
 	/**

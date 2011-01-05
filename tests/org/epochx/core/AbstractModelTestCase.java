@@ -88,12 +88,24 @@ public abstract class AbstractModelTestCase extends TestCase {
 	}
 
 	/**
-	 * Tests that trying to set a negative number of generations throws an
+	 * Tests that setting a number of generations of -1 is allowed, to indicate
+	 * an infinite number of generations.
+	 */
+	public void testSetNoGenerationsMinusOne() {
+		try {
+			getModel().setNoGenerations(-1);
+		} catch (final IllegalArgumentException e) {
+			fail("illegal argument exception thrown for -1 generations");
+		}
+	}
+	
+	/**
+	 * Tests that trying to set a number of generations throws an
 	 * exception.
 	 */
 	public void testSetNoGenerationsNegative() {
 		try {
-			getModel().setNoGenerations(-1);
+			getModel().setNoGenerations(-2);
 			fail("illegal argument exception not thrown for negative number of generations");
 		} catch (final IllegalArgumentException e) {
 		}

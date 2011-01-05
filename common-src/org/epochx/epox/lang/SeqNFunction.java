@@ -22,6 +22,7 @@
 package org.epochx.epox.lang;
 
 import org.epochx.epox.Node;
+import org.epochx.tools.util.TypeUtils;
 
 
 /**
@@ -76,7 +77,7 @@ public class SeqNFunction extends Node {
 	
 	/**
 	 * Returns this function node's return type for the given child input types.
-	 * If there is the correct number of inputs, regardless of type, then the 
+	 * If there is the correct number of inputs of Void type, then the 
 	 * return type of this function is Void. Otherwise this method will return 
 	 * <code>null</code> to indicate that the inputs are invalid.
 	 * 
@@ -84,7 +85,7 @@ public class SeqNFunction extends Node {
 	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (inputTypes.length == getArity()) {
+		if (inputTypes.length == getArity() && TypeUtils.allEqual(inputTypes, Void.class)) {
 			return Void.class;
 		} else {
 			return null;

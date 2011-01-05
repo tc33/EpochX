@@ -72,13 +72,13 @@ public abstract class AntTrail extends GPModel {
 
 		// Define functions.
 		final List<Node> syntax = new ArrayList<Node>();
-		syntax.add(new IfFoodAheadFunction());
+		syntax.add(new IfFoodAheadFunction(ant));
 		syntax.add(new SeqNFunction(2));
 		syntax.add(new SeqNFunction(3));
-		syntax.add(new AntMoveFunction());
-		syntax.add(new AntTurnLeftFunction());
-		syntax.add(new AntTurnRightFunction());
-		syntax.add(antVariable);
+		syntax.add(new AntMoveFunction(ant));
+		syntax.add(new AntTurnLeftFunction(ant));
+		syntax.add(new AntTurnRightFunction(ant));
+		//syntax.add(antVariable);
 
 		setSyntax(syntax);
 	}

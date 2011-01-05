@@ -25,22 +25,26 @@ import org.epochx.epox.*;
 import org.epochx.tools.ant.Ant;
 
 /**
- * This class defines a function which requires one child with a data-type of 
- * Ant. When evaluated, this function will evaluate its child and cause the
- * returned Ant to move on one time-step without moving its position in the 
- * landscape.
+ * This class defines a function which causes an Ant instance to move on one
+ * time-step without moving its position in its landscape. Although named as a 
+ * function, this node may operate as 
+ * either a function or a terminal depending on how the ant is provided. It may
+ * optionally be provided at construction, in which case it becomes a terminal 
+ * which operates on its internal ant. Alternatively, it can require one child 
+ * node with a data-type of Ant. In this case, when evaluated it will first 
+ * evaluate its child to obtain its ant.
  * 
  * @see AntMoveFunction
  * @see AntTurnLeftFunction
  * @see AntTurnRightFunction
  */
-public class AntSkipFunction extends Node {
+public class AntSkipFunction extends AntFunction {
 
 	/**
 	 * Constructs an AntSkipFunction with one <code>null</code> child.
 	 */
 	public AntSkipFunction() {
-		this(null);
+		this((Node) null);
 	}
 	
 	/**
@@ -52,16 +56,33 @@ public class AntSkipFunction extends Node {
 	public AntSkipFunction(final Node child) {
 		super(child);
 	}
+	
+	/**
+	 * Constructs an <code>AntSkipFunction</code> with no child nodes, but the
+	 * given ant which will be held internally. This makes the function a 
+	 * terminal node with arity zero. Note that this differs from the 
+	 * alternative constructors which take a child node with an Ant return type. 
+	 * 
+	 * @param ant
+	 */
+	public AntSkipFunction(final Ant ant) {
+		super(ant);
+	}
 
 	/**
-	 * Evaluates this function. The Ant returned by evaluating this node's child
-	 * is made to skip one time step without moving its position within the 
-	 * landscape. The return type of this function node is Void, and so the 
-	 * value returned from this method is undefined.
+	 * Evaluates this function. The Ant is made to skip one time step without 
+	 * moving its position within the landscape. The return type of this 
+	 * function node is Void, and so the value returned from this method is 
+	 * undefined.
 	 */
 	@Override
 	public Void evaluate() {
-		Ant ant = (Ant) getChild(0).evaluate();
+		Ant ant;
+		if (getArity() == 0) {
+			ant = getAnt();
+		} else {
+			ant = (Ant) getChild(0).evaluate();
+		}
 		
 		ant.skip();
 
@@ -78,7 +99,9 @@ public class AntSkipFunction extends Node {
 	
 	/**
 	 * Returns this function node's return type for the given child input types.
-	 * If there is only one input type which is a sub-type of Ant then the 
+	 * If the arity of this node is zero, and the inputTypes array is empty then
+	 * the return type of this node will be Void. If the arity is one, and there
+	 * is only one input type which is a sub-type of Ant then the 
 	 * return type of this function will be Void. In all other cases this method
 	 * will return <code>null</code> to indicate that the inputs are invalid.
 	 * 
@@ -86,7 +109,9 @@ public class AntSkipFunction extends Node {
 	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (inputTypes.length == 1 && Ant.class.isAssignableFrom(inputTypes[0])) {
+		if (getArity() == 0 && inputTypes.length == 0) {
+			return Void.class;
+		} else if (inputTypes.length == 1 && Ant.class.isAssignableFrom(inputTypes[0])) {
 			return Void.class;
 		} else {
 			return null;

@@ -23,22 +23,22 @@ package org.epochx.epox.ant;
 
 import org.epochx.epox.*;
 import org.epochx.tools.ant.Ant;
-import org.epochx.tools.util.TypeUtils;
 
 /**
- * This class defines a function which requires three children, the first of 
- * which has the data-type of Ant. When evaluated, this function will evaluate 
- * its first child and then conditionally evaluate either the second or third
- * child depending on whether the ant has a food item in the position directly
- * in front of it.
+ * This class defines a function which conditionally evaluates one of two 
+ * children depending on the presence of food in the position in front of an 
+ * ant. The Ant may be provided in one of two ways, depending on the constructor
+ * used. The ant may be provided as a child node, in which case this functions 
+ * arity becomes 3. Otherwise the ant must be provided at construction, and is
+ * held internally, with the node's arity being 2.
  */
-public class IfFoodAheadFunction extends Node {
+public class IfFoodAheadFunction extends AntFunction {
 
 	/**
 	 * Constructs an IfFoodAheadFunction with three <code>null</code> children.
 	 */
 	public IfFoodAheadFunction() {
-		this(null, null, null);
+		this((Node) null, null, null);
 	}
 
 	/**
@@ -52,23 +52,60 @@ public class IfFoodAheadFunction extends Node {
 	public IfFoodAheadFunction(final Node ant, final Node child1, final Node child2) {
 		super(ant, child1, child2);
 	}
+	
+	/**
+	 * Constructs an <code>IfFoodAheadFunction</code> with two child nodes, and
+	 * an ant which will be held internally. This makes the function with arity 
+	 * of two. Note that this differs from the alternative constructors which 
+	 * take three child nodes, one of which has an Ant return type. 
+	 * 
+	 * @param ant
+	 * @param child1 The first conditionally evaluated child node.
+	 * @param child2 The second conditionally evaluated child node.
+	 */
+	public IfFoodAheadFunction(final Ant ant, final Node child1, final Node child2) {
+		super(ant, child1, child2);
+	}
+	
+	/**
+	 * Constructs an <code>IfFoodAheadFunction</code> with two null child nodes,
+	 * and an ant which will be held internally. This makes the function with 
+	 * arity of two. Note that this differs from the alternative constructors 
+	 * which take three child nodes, one of which has an Ant return type. 
+	 * 
+	 * @param ant
+	 */
+	public IfFoodAheadFunction(final Ant ant) {
+		super(ant, null, null);
+	}
 
 	/**
-	 * Evaluates this function. The Ant returned by evaluating this node's first
-	 * child is checked for whether food is in the position ahead. If food is in
-	 * the position directly in front of the ant then the second child node is
-	 * evaluated, otherwise the third child node is evaluated. The return type 
-	 * of this function node is Void, and so the value returned from this method
-	 * is undefined.
+	 * Evaluates this function. The Ant is checked for whether food is in the 
+	 * position ahead. If food is in the position directly in front of the ant 
+	 * then the first other child node is evaluated, otherwise the second other
+	 * child node is evaluated. The return type of this function node is Void, 
+	 * and so the value returned from this method is undefined.
 	 */
 	@Override
 	public Void evaluate() {
-		Ant ant = (Ant) getChild(0).evaluate();
+		Ant ant;
+		Node child1;
+		Node child2;
+		
+		if (getArity() == 2) {
+			ant = getAnt();
+			child1 = getChild(0);
+			child2 = getChild(1);
+		} else {
+			ant = (Ant) getChild(0).evaluate();
+			child1 = getChild(1);
+			child2 = getChild(2);
+		}
 		
 		if (ant.isFoodAhead()) {
-			getChild(1).evaluate();
+			child1.evaluate();
 		} else {
-			getChild(2).evaluate();
+			child2.evaluate();
 		}
 
 		return null;
@@ -84,16 +121,22 @@ public class IfFoodAheadFunction extends Node {
 	
 	/**
 	 * Returns this function node's return type for the given child input types.
-	 * If there are three input types, the first of which is a sub-type of Ant 
-	 * then the return type of this function will be Void. In all other cases 
-	 * this method will return <code>null</code> to indicate that the inputs are
-	 * invalid.
+	 * If the arity of this node is two, and there are two inputs of type Void, 
+	 * then the return type will be Void. If the arity is three, and there are 
+	 * three input types, the first of which is a sub-type of Ant then the 
+	 * return type of this function will be Void. In all other cases this method
+	 * will return <code>null</code> to indicate that the inputs are invalid.
 	 * 
 	 * @return The Void class or null if the input type is invalid.
 	 */
 	@Override
 	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (inputTypes.length == 3 
+		if (getArity() == 2 
+				&& inputTypes.length == 2
+				&& inputTypes[0] == Void.class
+				&& inputTypes[1] == Void.class) {
+			return Void.class;
+		} else if (inputTypes.length == 3 
 				&& Ant.class.isAssignableFrom(inputTypes[0])
 				&& inputTypes[1] == Void.class
 				&& inputTypes[2] == Void.class) {

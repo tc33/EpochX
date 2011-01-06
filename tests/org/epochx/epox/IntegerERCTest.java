@@ -98,7 +98,9 @@ public class IntegerERCTest {
 		try {
 			erc.generateValue();
 			fail("exception not thrown for null RNG");
-		} catch (IllegalStateException expected) {}
+		} catch (IllegalStateException expected) {
+			assertTrue(true);
+		}
 	}
 	
 	/**

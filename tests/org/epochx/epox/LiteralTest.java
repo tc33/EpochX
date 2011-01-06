@@ -92,7 +92,8 @@ public class LiteralTest {
 	}
 
 	/**
-	 * Test method for {@link org.epochx.epox.Literal#newInstance()}.
+	 * Tests that {@link org.epochx.epox.Literal#newInstance()} correctly 
+	 * constructs new instances.
 	 */
 	@Test
 	public void testNewInstance() {

@@ -136,7 +136,7 @@ public class Variable extends Node {
 	 * @return a reference to this variable instance.
 	 */
 	@Override
-	public Node newInstance() {
+	public Variable newInstance() {
 		return clone();
 	}
 }

@@ -81,8 +81,13 @@ public class BooleanERC extends Literal {
 	 * <code>BooleanERC</code> instance.
 	 * @return a boolean value to be used as the value of a new BooleanERC 
 	 * instance.
+	 * @throws IllegalStateException if the random number generator is null.
 	 */
 	protected boolean generateValue() {
+		if (rng == null) {
+			throw new IllegalStateException("random number generator must not be null");
+		}
+		
 		return rng.nextBoolean();
 	}
 	

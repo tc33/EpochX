@@ -103,15 +103,20 @@ public class DoubleERC extends Literal {
 	 * 
 	 * @return a double value to be used as the value of a new DoubleERC 
 	 * instance.
+	 * @throws IllegalStateException if the random number generator is null.
 	 */
 	protected double generateValue() {
+		if (rng == null) {
+			throw new IllegalStateException("random number generator must not be null");
+		}
+		
 		// Position random within range.
 		double range = upper - lower;
 		double d = (rng.nextDouble() * range) + lower;
 
 		// Round to the correct precision.
 		BigDecimal big = new BigDecimal(d);
-		big.round(new MathContext(precision));
+		big = big.round(new MathContext(precision));
 		
 		return big.doubleValue();
 	}

@@ -18,7 +18,7 @@ public class Literal extends Node {
 	private Object value;
 
 	/**
-	 * Construct a new <code>Literal</code> node with the given value. 
+	 * Constructs a new <code>Literal</code> node with the given value. 
 	 * Evaluation of this literal will return the value set here. The data type
 	 * of this node will be determined by the type of the object specified here.
 	 * 
@@ -29,7 +29,8 @@ public class Literal extends Node {
 	}
 
 	/**
-	 * Returns the value of this literal.
+	 * Returns the value of this literal. Has the same functionality as calling
+	 * <code>getValue</code>.
 	 * 
 	 * @return this literal's value
 	 */
@@ -50,13 +51,18 @@ public class Literal extends Node {
 	
 	/**
 	 * Returns the data-type of this node. The data-type of a literal node
-	 * is the type of its value.
+	 * is the type of its value. If no value has been set then <code>null</code>
+	 * will be returned.
 	 * 
 	 * @return the data-type of this node.
 	 */
 	@Override
 	public Class<?> getReturnType() {
-		return value.getClass();
+		if (value != null) {
+			return value.getClass();
+		} else {
+			return null;
+		}
 	}
 	
 	/**
@@ -69,13 +75,28 @@ public class Literal extends Node {
 	}
 
 	/**
+	 * Returns the value of this literal.
+	 * 
+	 * @return the value of this literal.
+	 */
+	public Object getValue() {
+		return value;
+	}
+	
+	/**
 	 * Returns this node's string representation, which is the string 
-	 * representation of the literal value.
+	 * representation of the literal value. If no value is set then 
+	 * <code>null</code> will be returned.
+	 * 
 	 * @return a String representation.
 	 */
 	@Override
 	public String toString() {
-		return value.toString();
+		if (value != null) {
+			return value.toString();
+		} else {
+			return null;
+		}
 	}
 
 	/**
@@ -86,9 +107,7 @@ public class Literal extends Node {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		final boolean inst = (obj instanceof Literal);
-
-		if (!inst) {
+		if (!(obj instanceof Literal)) {
 			return false;
 		}
 

@@ -129,7 +129,7 @@ public class StatsUtilsTest {
 		final double[] values = {0.1, 0.2, 0.3, 0.4};
 
 		assertEquals("maximum index not for the maximum value",
-				NumberUtils.max(values), values[StatsUtils.maxIndex(values)]);
+				NumberUtils.max(values), values[StatsUtils.maxIndex(values)], 0);
 	}
 
 	/**

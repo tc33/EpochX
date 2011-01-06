@@ -95,9 +95,33 @@ public class IntegerERC extends Literal {
 	 * @return an integer value to be used as the value of a new IntegerERC 
 	 * instance.
 	 */
-	protected int generateValue() {	
+	protected int generateValue() {
+		if (rng == null) {
+			throw new IllegalStateException("random number generator must not be null");
+		}
+		
 		int range = upper - lower;
 		return (rng.nextInt(range) + lower);
+	}
+	
+	/**
+	 * Returns the random number generator that is currently being used to 
+	 * generate integer values for new <code>IntegerERC</code> instances.
+	 * 
+	 * @return the random number generator
+	 */
+	public RandomNumberGenerator getRNG() {
+		return rng;
+	}
+	
+	/**
+	 * Sets the random number generator to be used for generating the integer 
+	 * value of new <code>IntegerERC</code> instances.
+	 * 
+	 * @param the random number generator to set
+	 */
+	public void setRNG(RandomNumberGenerator rng) {
+		this.rng = rng;
 	}
 	
 	/**

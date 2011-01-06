@@ -63,4 +63,31 @@ public final class NodeUtils {
 		return functions;
 	}
 	
+	public static List<Literal> intRange(int start, int end) {
+		final List<Literal> range = new ArrayList<Literal>();
+		if (start > end) {
+			final int temp = start;
+			start = end;
+			end = temp;
+		}
+
+		while (start <= end) {
+			start++;
+
+			range.add(new Literal(start));
+		}
+
+		return range;
+	}
+
+	public static List<Variable> booleanVariables(Class<?> datatype, final String ... variableNames) {
+		final List<Variable> variables = new ArrayList<Variable>();
+
+		for (final String name: variableNames) {
+			variables.add(new Variable(name, datatype));
+		}
+
+		return variables;
+	}
+	
 }

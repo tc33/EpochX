@@ -107,11 +107,12 @@ public class GrammarProduction implements Cloneable {
 	public void setGrammarNode(final int index, final GrammarNode node) {
 		grammarNodes.set(index, node);
 	}
-	
+
 	/**
 	 * Inserts the <code>GrammarNode</code> at the specified index. Shifts the
 	 * node currently at that position along one, with their indices incremented
 	 * by one.
+	 * 
 	 * @param index the index of where to insert the <code>GrammarNode</code>.
 	 * @param node the <code>GrammarNode</code> to place at the specified
 	 *        index in this production.
@@ -267,13 +268,13 @@ public class GrammarProduction implements Cloneable {
 			}
 			buffer.append(' ');
 		}
-		
+
 		// Append any attributes.
 		if (attributes.size() > 0) {
 			buffer.append("<?");
-			Set<String> keys = attributes.keySet();
+			final Set<String> keys = attributes.keySet();
 			int i = 0;
-			for (String k: keys) {
+			for (final String k: keys) {
 				if (i != 0) {
 					buffer.append(';');
 				}

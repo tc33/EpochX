@@ -55,10 +55,10 @@ public class GECandidateProgram extends CandidateProgram {
 
 	// The genotype.
 	private List<Integer> codons;
-	
+
 	// How the codons looked when we last built the phenotype.
 	private List<Integer> sourceCacheCodons;
-	
+
 	// How the codons looked when we last evaluated the program fitness.
 	private List<Integer> fitnessCacheCodons;
 
@@ -95,7 +95,7 @@ public class GECandidateProgram extends CandidateProgram {
 
 		parseTree = null;
 		fitness = -1;
-		
+
 		sourceCacheCodons = null;
 		fitnessCacheCodons = null;
 	}
@@ -177,7 +177,7 @@ public class GECandidateProgram extends CandidateProgram {
 	public void appendCodon(final int newCodon) {
 		codons.add(newCodon);
 	}
-		
+
 	/**
 	 * Appends multiple codons to the candidate program's chromosome. Care
 	 * should be taken when using this method as it allows the generation
@@ -367,11 +367,9 @@ public class GECandidateProgram extends CandidateProgram {
 
 		if (getSourceCode() == null) {
 			valid = false;
-		} else if ((maxChromosomeLength != -1)
-				&& (codons.size() > maxChromosomeLength)) {
+		} else if ((maxChromosomeLength != -1) && (codons.size() > maxChromosomeLength)) {
 			valid = false;
-		} else if ((maxProgramDepth != -1)
-				&& (parseTree.getDepth() > maxProgramDepth)) {
+		} else if ((maxProgramDepth != -1) && (parseTree.getDepth() > maxProgramDepth)) {
 			valid = false;
 		}
 
@@ -396,7 +394,7 @@ public class GECandidateProgram extends CandidateProgram {
 		if (parseTree == null) {
 			clone.parseTree = null;
 		} else {
-			clone.parseTree = (NonTerminalSymbol) parseTree.clone();
+			clone.parseTree = parseTree.clone();
 		}
 
 		clone.fitness = fitness;

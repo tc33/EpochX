@@ -32,10 +32,10 @@ import org.epochx.tools.eval.MalformedProgramException;
 
 /**
  * The function parser can parse a nested function into a node tree. It can
- * only parse those functions that it knows about. It is fine for variables to 
- * be name the same as functions, and it is also okay for variables to have 
+ * only parse those functions that it knows about. It is fine for variables to
+ * be name the same as functions, and it is also okay for variables to have
  * names which could be interpreted as literal values. However, a program that
- * contains a literal value with the same string representation as a known 
+ * contains a literal value with the same string representation as a known
  * variable, will be parsed as a variable so it is advisable to name variables
  * carefully.
  */
@@ -52,40 +52,40 @@ public class EpoxParser {
 	 * check the validity of a double without having to rely on catching number
 	 * format exceptions.
 	 */
-//	private final String Digits = "(\\p{Digit}+)";
-//	private final String HexDigits = "(\\p{XDigit}+)";
-//	private final String Exp = "[eE][+-]?" + Digits;
-//	private final String fpRegex = ("[\\x00-\\x20]*" + "[+-]?(" + "NaN|"
-//			+ "Infinity|" + "((("
-//			+ Digits
-//			+ "(\\.)?("
-//			+ Digits
-//			+ "?)("
-//			+ Exp
-//			+ ")?)|"
-//			+ "(\\.("
-//			+ Digits
-//			+ ")("
-//			+ Exp
-//			+ ")?)|"
-//			+ "(("
-//			+ "(0[xX]"
-//			+ HexDigits
-//			+ "(\\.)?)|"
-//			+ "(0[xX]"
-//			+ HexDigits
-//			+ "?(\\.)"
-//			+ HexDigits
-//			+ ")"
-//			+ ")[pP][+-]?" + Digits + "))" + "[fFdD]?))" + "[\\x00-\\x20]*");
+	// private final String Digits = "(\\p{Digit}+)";
+	// private final String HexDigits = "(\\p{XDigit}+)";
+	// private final String Exp = "[eE][+-]?" + Digits;
+	// private final String fpRegex = ("[\\x00-\\x20]*" + "[+-]?(" + "NaN|"
+	// + "Infinity|" + "((("
+	// + Digits
+	// + "(\\.)?("
+	// + Digits
+	// + "?)("
+	// + Exp
+	// + ")?)|"
+	// + "(\\.("
+	// + Digits
+	// + ")("
+	// + Exp
+	// + ")?)|"
+	// + "(("
+	// + "(0[xX]"
+	// + HexDigits
+	// + "(\\.)?)|"
+	// + "(0[xX]"
+	// + HexDigits
+	// + "?(\\.)"
+	// + HexDigits
+	// + ")"
+	// + ")[pP][+-]?" + Digits + "))" + "[fFdD]?))" + "[\\x00-\\x20]*");
 
 	public EpoxParser() {
 		variables = new HashMap<String, Variable>();
 		functions = new HashMap<String, Class<? extends Node>>();
-		
+
 		initialiseKnownFunctions();
 	}
-	
+
 	private void initialiseKnownFunctions() {
 		// Insert the Boolean functions.
 		functions.put("AND", AndFunction.class);
@@ -158,7 +158,7 @@ public class EpoxParser {
 		List<String> args = null;
 
 		boolean terminal = false;
-		
+
 		// If there is no bracket then it must be a terminal.
 		if (openingBracket == -1) {
 			identifier = source;
@@ -173,8 +173,7 @@ public class EpoxParser {
 
 			// Get the comma separated arguments - without the surrounding
 			// brackets.
-			final String argumentStr = source.substring(openingBracket + 1,
-					closingBracket);
+			final String argumentStr = source.substring(openingBracket + 1, closingBracket);
 
 			// Separate the arguments.
 			args = splitArguments(argumentStr);
@@ -198,7 +197,7 @@ public class EpoxParser {
 
 		return node;
 	}
-	
+
 	/*
 	 * We do lazy initialisation, so if the object hasn't been initialised yet,
 	 * we do it now.
@@ -241,17 +240,18 @@ public class EpoxParser {
 	 */
 	private Node parseTerminal(final String terminalStr) {
 		Node node = variables.get(terminalStr);
-		
+
 		if (node == null) {
 			node = parseLiteral(terminalStr);
 		}
-		
+
 		return node;
 	}
-	
+
 	/**
-	 * Should return null if the string cannot be parsed as any type of valid 
+	 * Should return null if the string cannot be parsed as any type of valid
 	 * literal.
+	 * 
 	 * @param literalStr
 	 * @return
 	 */
@@ -259,36 +259,38 @@ public class EpoxParser {
 		Literal literal = null;
 		if (literalStr.equalsIgnoreCase("true") || literalStr.equalsIgnoreCase("false")) {
 			literal = new Literal(Boolean.valueOf(literalStr));
-		} else if (literalStr.startsWith("\"") && literalStr.endsWith("\"") && literalStr.length() > 1) {
-			literal = new Literal(literalStr.substring(1, literalStr.length()-2));
-		} else if (literalStr.length() == 3 && literalStr.startsWith("'") && literalStr.endsWith("'")) {
-			//TODO This isn't going to catch escaped characters because they will have been converted to e.g. \\x
+		} else if (literalStr.startsWith("\"") && literalStr.endsWith("\"") && (literalStr.length() > 1)) {
+			literal = new Literal(literalStr.substring(1, literalStr.length() - 2));
+		} else if ((literalStr.length() == 3) && literalStr.startsWith("'") && literalStr.endsWith("'")) {
+			// TODO This isn't going to catch escaped characters because they
+			// will have been converted to e.g. \\x
 			literal = new Literal(literalStr.charAt(1));
 		} else {
-			Number n = NumberFormat.getInstance().parse(literalStr, new ParsePosition(0));
-			
+			final Number n = NumberFormat.getInstance().parse(literalStr, new ParsePosition(0));
+
 			// If possible, then use int instead of long.
 			if (n instanceof Long) {
-				long l = (Long) n;
-				if (l <= Integer.MAX_VALUE && l >= Integer.MIN_VALUE) {
+				final long l = (Long) n;
+				if ((l <= Integer.MAX_VALUE) && (l >= Integer.MIN_VALUE)) {
 					literal = new Literal((int) l);
 				}
 			}
-			
-			if (literal == null && n != null) {
+
+			if ((literal == null) && (n != null)) {
 				literal = new Literal(n);
 			}
 		}
-		
+
 		if (literal == null) {
 			literal = parseObjectLiteral(literalStr);
 		}
-		
+
 		return literal;
 	}
 
 	/**
 	 * Can be overridden to provide support for other literal types.
+	 * 
 	 * @param literalStr
 	 * @return
 	 */
@@ -301,7 +303,7 @@ public class EpoxParser {
 	}
 
 	public void addAvailableVariables(final List<Variable> variables) {
-		for (Variable v: variables) {
+		for (final Variable v: variables) {
 			addAvailableVariable(v);
 		}
 	}
@@ -333,7 +335,7 @@ public class EpoxParser {
 			if (((c == ' ') || (c == ',')) && (depth == 0)) {
 				args.add(buffer.toString());
 				buffer = new StringBuilder();
-				while (argStr.charAt(i+1) == ' ') {
+				while (argStr.charAt(i + 1) == ' ') {
 					i++;
 				}
 			} else {
@@ -348,18 +350,17 @@ public class EpoxParser {
 		return args;
 	}
 
-	
-//	public static void main(String[] args) throws MalformedProgramException {
-//	 	EpoxParser parser = new EpoxParser();
-//
-//	 	//System.out.println(parser.parse("IF(ADD(1,false),NOT(true),false)").toString());
-//	 	//Node programTree = parser.parse("XOR(D1 XOR(NOT(XOR(D0 D3)) D2))");
-//
-//	 	parser.addAvailableVariable(new Variable("d0", false));
-//
-//	 	Node programTree = parser.parse("XOR(OR(d0,d0),NOT(NOT(d0)))");
-//	 	System.out.println(programTree.toString());
-//	 	System.out.println(programTree.evaluate());
-//	 }
-	 
+	// public static void main(String[] args) throws MalformedProgramException {
+	// EpoxParser parser = new EpoxParser();
+	//
+	// //System.out.println(parser.parse("IF(ADD(1,false),NOT(true),false)").toString());
+	// //Node programTree = parser.parse("XOR(D1 XOR(NOT(XOR(D0 D3)) D2))");
+	//
+	// parser.addAvailableVariable(new Variable("d0", false));
+	//
+	// Node programTree = parser.parse("XOR(OR(d0,d0),NOT(NOT(d0)))");
+	// System.out.println(programTree.toString());
+	// System.out.println(programTree.evaluate());
+	// }
+
 }

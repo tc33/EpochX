@@ -69,8 +69,7 @@ public class ScriptingInterpreter implements Interpreter {
 		engine = manager.getEngineByName(engineName);
 
 		if (engine == null) {
-			throw new IllegalArgumentException("no engine matching alias "
-					+ engineName);
+			throw new IllegalArgumentException("no engine matching alias " + engineName);
 		}
 	}
 
@@ -85,8 +84,8 @@ public class ScriptingInterpreter implements Interpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object eval(final String expression, final String[] argNames,
-			final Object[] argValues) throws MalformedProgramException {
+	public Object eval(final String expression, final String[] argNames, final Object[] argValues)
+			throws MalformedProgramException {
 		Object result = null;
 
 		// Evaluate.
@@ -106,8 +105,8 @@ public class ScriptingInterpreter implements Interpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object[] eval(final String expression, final String[] argNames,
-			final Object[][] argValues) throws MalformedProgramException {
+	public Object[] eval(final String expression, final String[] argNames, final Object[][] argValues)
+			throws MalformedProgramException {
 		final Object[] results = new Object[argValues.length];
 
 		// Evaluate each argument set.
@@ -122,8 +121,8 @@ public class ScriptingInterpreter implements Interpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void exec(final String program, final String[] argNames,
-			final Object[] argValues) throws MalformedProgramException {
+	public void exec(final String program, final String[] argNames, final Object[] argValues)
+			throws MalformedProgramException {
 		eval(program, argNames, argValues);
 	}
 
@@ -131,8 +130,8 @@ public class ScriptingInterpreter implements Interpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void exec(final String program, final String[] argNames,
-			final Object[][] argValues) throws MalformedProgramException {
+	public void exec(final String program, final String[] argNames, final Object[][] argValues)
+			throws MalformedProgramException {
 		// Execute each argument set.
 		for (int i = 0; i < argValues.length; i++) {
 			exec(program, argNames, argValues[i]);

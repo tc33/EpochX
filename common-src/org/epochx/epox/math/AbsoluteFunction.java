@@ -25,10 +25,10 @@ import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A function node which performs the mathematical absolute function, called 
+ * A function node which performs the mathematical absolute function, called
  * ABS.
  * 
- * The absolute function can be performed on inputs of the following types: 
+ * The absolute function can be performed on inputs of the following types:
  * <ul>
  * <li>Integer</li>
  * <li>Long</li>
@@ -56,16 +56,16 @@ public class AbsoluteFunction extends Node {
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
-	 * result of which must be a numeric type (one of Double, Float, Long, 
+	 * result of which must be a numeric type (one of Double, Float, Long,
 	 * Integer). The result will be a positive value of equal magnitude to the
 	 * child value. The return type will also be the same as the input type.
 	 */
 	@Override
 	public Object evaluate() {
-		Object c = getChild(0).evaluate();
-		
-		Class<?> returnType = getReturnType();
-		
+		final Object c = getChild(0).evaluate();
+
+		final Class<?> returnType = getReturnType();
+
 		if (returnType == Double.class) {
 			// Perform absolute on double.
 			return Math.abs(NumericUtils.asDouble(c));
@@ -93,14 +93,14 @@ public class AbsoluteFunction extends Node {
 
 	/**
 	 * Returns this function node's return type for the given child input types.
-	 * If there is one input type of a numeric type then the return type will 
-	 * be that same numeric type. In all other cases this method will return 
+	 * If there is one input type of a numeric type then the return type will
+	 * be that same numeric type. In all other cases this method will return
 	 * <code>null</code> to indicate that the inputs are invalid.
 	 * 
 	 * @return A numeric class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(Class<?> ... inputTypes) {
+	public Class<?> getReturnType(final Class<?> ... inputTypes) {
 		if (inputTypes.length == 1) {
 			return TypeUtils.getNumericType(inputTypes);
 		}

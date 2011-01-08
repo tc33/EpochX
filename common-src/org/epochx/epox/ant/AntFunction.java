@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,17 +24,16 @@ package org.epochx.epox.ant;
 import org.epochx.epox.Node;
 import org.epochx.tools.ant.Ant;
 
-
 /**
- * Ant functions may wish to extend this class to provide much of the 
- * infrastructure necessary to support both of child ant node, and internal 
+ * Ant functions may wish to extend this class to provide much of the
+ * infrastructure necessary to support both of child ant node, and internal
  * ant reference.
  */
 public abstract class AntFunction extends Node {
 
 	// This may remain null, depending on the constructor used.
 	private Ant ant;
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -52,14 +51,14 @@ public abstract class AntFunction extends Node {
 	 */
 	public AntFunction(final Ant ant, final Node ... children) {
 		super(children);
-		
+
 		this.ant = ant;
 	}
-	
+
 	/**
-	 * Creates a new AntFunction instance which is a copy of this instance. 
+	 * Creates a new AntFunction instance which is a copy of this instance.
 	 * Any child nodes will also be cloned, in order to create a new subtree.
-	 * If this node contains an internal Ant reference, then the new node will 
+	 * If this node contains an internal Ant reference, then the new node will
 	 * refer to the same ant instance.
 	 * 
 	 * @return a new AntFunction instance which is a clone of this one.
@@ -73,26 +72,25 @@ public abstract class AntFunction extends Node {
 
 		return clone;
 	}
-	
+
 	/**
-	 * Creates a new AntFunction instance from this instance. If this 
-	 * function contains child nodes, these will not be copied, but the number 
-	 * of required children will be maintained. If this node contains an 
-	 * internal Ant reference, then the new node will refer to the same ant 
+	 * Creates a new AntFunction instance from this instance. If this
+	 * function contains child nodes, these will not be copied, but the number
+	 * of required children will be maintained. If this node contains an
+	 * internal Ant reference, then the new node will refer to the same ant
 	 * instance.
 	 * 
 	 * @return a new AntFunction instance based upon this one.
 	 */
 	@Override
 	public AntFunction newInstance() {
-		AntFunction newInstance = (AntFunction) super.newInstance();
-		
+		final AntFunction newInstance = (AntFunction) super.newInstance();
+
 		newInstance.ant = ant;
-		
+
 		return newInstance;
 	}
-	
-	
+
 	/**
 	 * @return the ant
 	 */

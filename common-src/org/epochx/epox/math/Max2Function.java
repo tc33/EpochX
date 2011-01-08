@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -23,7 +23,6 @@ package org.epochx.epox.math;
 
 import org.epochx.epox.Node;
 
-
 /**
  * A function node which performs a comparison of two numeric inputs and returns
  * the greater of the two.
@@ -46,13 +45,13 @@ public class Max2Function extends MaxFunction {
 	public Max2Function(final Node child1, final Node child2) {
 		super(child1, child2);
 	}
-	
+
 	/**
 	 * Returns the identifier of this function which is MAX.
 	 */
 	@Override
 	public String getIdentifier() {
 		return "MAX";
-	}	
-	
+	}
+
 }

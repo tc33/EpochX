@@ -81,8 +81,7 @@ public class RandomSelectorTest {
 		}
 
 		final List<CandidateProgram> pool = selector.getPool(pop, poolSize);
-		assertEquals("pool returned is not equal to pool size parameter",
-				poolSize, pool.size());
+		assertEquals("pool returned is not equal to pool size parameter", poolSize, pool.size());
 	}
 
 	/**

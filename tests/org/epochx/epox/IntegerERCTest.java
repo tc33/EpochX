@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,8 +24,7 @@ package org.epochx.epox;
 import static org.junit.Assert.*;
 
 import org.epochx.tools.random.*;
-import org.junit.*;
-
+import org.junit.Test;
 
 /**
  * Unit tests for {@link org.epochx.epox.IntegerERC}
@@ -34,7 +33,7 @@ public class IntegerERCTest extends LiteralTest {
 
 	private IntegerERC erc;
 	private RandomNumberGenerator rng;
-	
+
 	/**
 	 * Sets up the test environment.
 	 */
@@ -42,48 +41,48 @@ public class IntegerERCTest extends LiteralTest {
 	public void setUp() throws Exception {
 		rng = new MersenneTwisterFast();
 		erc = new IntegerERC(rng, 1, 2);
-		
+
 		super.setUp();
 	}
 
 	/**
-	 * Tests that {@link org.epochx.epox.IntegerERC#newInstance()} correctly 
+	 * Tests that {@link org.epochx.epox.IntegerERC#newInstance()} correctly
 	 * constructs new instances.
 	 */
 	@Test
 	public void testNewInstanceIntegerERC() {
-		IntegerERC newInstance = erc.newInstance();
-		
+		final IntegerERC newInstance = erc.newInstance();
+
 		assertSame("rng does not refer to the same instance", rng, newInstance.getRNG());
 		assertNotSame("the value of new instance refers to the same object", erc.getValue(), newInstance.getValue());
 	}
 
 	/**
-	 * Tests that {@link org.epochx.epox.IntegerERC#generateValue()} correctly 
+	 * Tests that {@link org.epochx.epox.IntegerERC#generateValue()} correctly
 	 * generates new values.
 	 */
 	@Test
 	public void testGenerateValue() {
-		MockRandom rng = new MockRandom();
+		final MockRandom rng = new MockRandom();
 		erc.setRNG(rng);
-		
-		int lower = 2;
-		int upper = 5;
-		
+
+		final int lower = 2;
+		final int upper = 5;
+
 		// Set the bounds.
 		erc.setLower(lower);
 		erc.setUpper(upper);
-		
+
 		// Tests lower value.
 		rng.setNextInt(0);
 		int generatedValue = erc.generateValue();
 		assertEquals("generated value unexpected", (Object) lower, generatedValue);
-		
+
 		// Tests upper value.
 		rng.setNextInt(3);
 		generatedValue = erc.generateValue();
 		assertEquals("generated value unexpected", (Object) upper, generatedValue);
-		
+
 		// Tests mid-value.
 		rng.setNextInt(1);
 		generatedValue = erc.generateValue();
@@ -100,20 +99,21 @@ public class IntegerERCTest extends LiteralTest {
 		try {
 			erc.generateValue();
 			fail("exception not thrown for null RNG");
-		} catch (IllegalStateException expected) {
+		} catch (final IllegalStateException expected) {
 			assertTrue(true);
 		}
 	}
-	
+
 	/**
-	 * Tests that {@link org.epochx.epox.Literal#clone()} correctly clones 
+	 * Tests that {@link org.epochx.epox.Literal#clone()} correctly clones
 	 * instances.
 	 */
 	@Test
 	public void testCloneIntegerERC() {
-		IntegerERC clone = (IntegerERC) erc.clone();
-		
+		final IntegerERC clone = (IntegerERC) erc.clone();
+
 		assertNotSame("ERC has not been cloned", erc, clone);
 		assertSame("rng does not refer to the same instance", rng, clone.getRNG());
 		assertSame("value does not refer to the same instance", erc.getValue(), clone.getValue());
-	}}
+	}
+}

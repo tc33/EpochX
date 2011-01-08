@@ -65,8 +65,7 @@ public interface Interpreter {
 	 * @throws MalformedProgramException if the given expression is not valid
 	 *         according to the language's syntax rules.
 	 */
-	public Object eval(String expression, String[] argNames, Object[] argValues)
-			throws MalformedProgramException;
+	public Object eval(String expression, String[] argNames, Object[] argValues) throws MalformedProgramException;
 
 	/**
 	 * Evaluates an expression multiple times with each set of argument values
@@ -102,8 +101,7 @@ public interface Interpreter {
 	 * @throws MalformedProgramException if the given expression is not valid
 	 *         according to the language's syntax rules.
 	 */
-	public Object[] eval(String expression, String[] argNames,
-			Object[][] argValues) throws MalformedProgramException;
+	public Object[] eval(String expression, String[] argNames, Object[][] argValues) throws MalformedProgramException;
 
 	/**
 	 * Executes a program which may consist of multiple program statements. The
@@ -122,8 +120,7 @@ public interface Interpreter {
 	 * @throws MalformedProgramException if the given program is not valid
 	 *         according to the language's syntax rules.
 	 */
-	public void exec(String program, String[] argNames, Object[] argValues)
-			throws MalformedProgramException;
+	public void exec(String program, String[] argNames, Object[] argValues) throws MalformedProgramException;
 
 	/**
 	 * Executes a program which may consist of multiple program statements,
@@ -151,6 +148,5 @@ public interface Interpreter {
 	 * @throws MalformedProgramException if the given program is not valid
 	 *         according to the language's syntax rules.
 	 */
-	public void exec(String program, String[] argNames, Object[][] argValues)
-			throws MalformedProgramException;
+	public void exec(String program, String[] argNames, Object[][] argValues) throws MalformedProgramException;
 }

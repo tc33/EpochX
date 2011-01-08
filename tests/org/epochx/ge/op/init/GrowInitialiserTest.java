@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -27,7 +27,6 @@ import org.epochx.tools.grammar.Grammar;
 import org.epochx.tools.random.MersenneTwisterFast;
 import org.junit.*;
 
-
 /**
  * 
  */
@@ -39,8 +38,8 @@ public class GrowInitialiserTest {
 	public void setUp() throws Exception {
 		initialiser = new GrowInitialiser(null, null, -1, -1, -1, false);
 
-		String grammarStr = "<a> ::= x | y\n";
-		
+		final String grammarStr = "<a> ::= x | y\n";
+
 		// Ensure setup is valid.
 		initialiser.setMaxDepth(1);
 		initialiser.setGrammar(new Grammar(grammarStr));
@@ -48,7 +47,7 @@ public class GrowInitialiserTest {
 		initialiser.setPopSize(1);
 		initialiser.setRNG(new MersenneTwisterFast());
 	}
-	
+
 	/**
 	 * Tests that an illegal state exception is not thrown with valid
 	 * parameters.
@@ -57,11 +56,11 @@ public class GrowInitialiserTest {
 	public void testGetPopValid() {
 		try {
 			initialiser.getInitialPopulation();
-		} catch (IllegalStateException e) {
+		} catch (final IllegalStateException e) {
 			fail("illegal state exception thrown for valid parameters");
 		}
 	}
-	
+
 	/**
 	 * Tests that an illegal state exception is thrown if population size
 	 * parameter is zero.
@@ -70,71 +69,75 @@ public class GrowInitialiserTest {
 	public void testGetPopZeroPopSize() {
 		// Setup initialiser to be valid except for pop size.
 		initialiser.setPopSize(0);
-		
+
 		try {
 			initialiser.getInitialPopulation();
 			fail("illegal state exception not thrown for pop size being 0");
-		} catch (IllegalStateException e) {}
+		} catch (final IllegalStateException e) {
+		}
 	}
-	
+
 	/**
-	 * Tests that an illegal state exception is thrown if no random number 
+	 * Tests that an illegal state exception is thrown if no random number
 	 * generator is set.
 	 */
 	@Test
 	public void testGetPopRNGNull() {
 		initialiser.setRNG(null);
-		
+
 		try {
 			initialiser.getInitialPopulation();
 			fail("illegal state exception not thrown for a null RNG");
-		} catch (IllegalStateException e) {}
+		} catch (final IllegalStateException e) {
+		}
 	}
-	
+
 	/**
-	 * Tests that an illegal state exception is thrown if the maximum codon 
+	 * Tests that an illegal state exception is thrown if the maximum codon
 	 * value is less than 3.
 	 */
 	@Test
 	public void testGetPopMaxCodon() {
 		initialiser.setMaxCodonValue(2);
-		
+
 		try {
 			initialiser.getInitialPopulation();
 			fail("illegal state exception not thrown for a maximum codon value <3");
-		} catch (IllegalStateException e) {}
+		} catch (final IllegalStateException e) {
+		}
 	}
-	
+
 	/**
 	 * Tests that an illegal state exception is thrown if no grammar is set.
 	 */
 	@Test
 	public void testGetPopGrammarNull() {
 		initialiser.setGrammar(null);
-		
+
 		try {
 			initialiser.getInitialPopulation();
 			fail("illegal state exception not thrown for a null grammar");
-		} catch (IllegalStateException e) {}
+		} catch (final IllegalStateException e) {
+		}
 	}
-	
+
 	/**
-	 * Tests that an illegal state exception is thrown if the minimum possible 
+	 * Tests that an illegal state exception is thrown if the minimum possible
 	 * depth is greater than the maximum depth setting.
 	 */
 	@Test
 	public void testGetPopMaxDepth() {
 		initialiser.setMaxDepth(1);
-		String grammarStr = "<a> ::= <b> | y <b>\n" +
-							"<b> ::= c | x\n";
+		final String grammarStr = "<a> ::= <b> | y <b>\n" + "<b> ::= c | x\n";
 		initialiser.setGrammar(new Grammar(grammarStr));
-		
-		int minDepth = initialiser.getGrammar().getStartRule().getMinDepth();
+
+		final int minDepth = initialiser.getGrammar().getStartRule().getMinDepth();
 		assertEquals("Minimum depth not calculated correctly", 2, minDepth);
-		
+
 		try {
 			initialiser.getInitialPopulation();
 			fail("illegal state exception not thrown for a maximum depth which is less than the minimum possible depth");
-		} catch (IllegalStateException e) {}
+		} catch (final IllegalStateException e) {
+		}
 	}
 }

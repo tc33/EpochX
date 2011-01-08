@@ -44,11 +44,10 @@ public abstract class AntTrail extends GEModel {
 	/**
 	 * The grammar that defines valid solution space.
 	 */
-	public static final String GRAMMAR_STRING = 
-			"<function> ::= IF-FOOD-AHEAD( <var> , <function> , <function> ) "
+	public static final String GRAMMAR_STRING = "<function> ::= IF-FOOD-AHEAD( <var> , <function> , <function> ) "
 			+ "| SEQ2( <function> , <function> ) "
 			+ "| SEQ3( <function> , <function> , <function> ) "
-			+ "| MOVE( <var> ) " 
+			+ "| MOVE( <var> ) "
 			+ "| TURN-LEFT( <var> ) "
 			+ "| TURN-RIGHT( <var> )\n"
 			+ "<var> ::= ANT";
@@ -78,8 +77,7 @@ public abstract class AntTrail extends GEModel {
 	 * @param allowedTimeSteps the number of moves and turns the ant will be
 	 *        allowed to collect the food before timing out.
 	 */
-	public AntTrail(final Point[] foodLocations, final Dimension landscapeSize,
-			final int allowedTimeSteps) {
+	public AntTrail(final Point[] foodLocations, final Dimension landscapeSize, final int allowedTimeSteps) {
 		this.foodLocations = Arrays.asList(foodLocations);
 		this.allowedTimeSteps = allowedTimeSteps;
 
@@ -90,7 +88,7 @@ public abstract class AntTrail extends GEModel {
 
 		parser = new EpoxParser();
 		interpreter = new EpoxInterpreter(parser);
-		
+
 		parser.addAvailableVariable(new Variable("ANT", ant));
 	}
 

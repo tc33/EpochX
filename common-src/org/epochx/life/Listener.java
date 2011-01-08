@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -21,9 +21,8 @@
  */
 package org.epochx.life;
 
-
 /**
- * A marker interface that indicates an interface forms part of a listener 
+ * A marker interface that indicates an interface forms part of a listener
  * pattern. This interface has no methods that are required to be implemented.
  */
 public interface Listener {

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,8 +24,7 @@ package org.epochx.epox;
 import static org.junit.Assert.*;
 
 import org.epochx.tools.random.*;
-import org.junit.*;
-
+import org.junit.Test;
 
 /**
  * Unit tests for {@link org.epochx.epox.DoubleERC}
@@ -34,7 +33,7 @@ public class DoubleERCTest extends LiteralTest {
 
 	private DoubleERC erc;
 	private RandomNumberGenerator rng;
-	
+
 	/**
 	 * Sets up the test environment.
 	 */
@@ -42,60 +41,60 @@ public class DoubleERCTest extends LiteralTest {
 	public void setUp() throws Exception {
 		rng = new MersenneTwisterFast();
 		erc = new DoubleERC(rng, 1.0, 2.0, 3);
-		
+
 		super.setUp();
 	}
 
 	/**
-	 * Tests that {@link org.epochx.epox.DoubleERC#newInstance()} correctly 
+	 * Tests that {@link org.epochx.epox.DoubleERC#newInstance()} correctly
 	 * constructs new instances.
 	 */
 	@Test
 	public void testNewInstanceDoubleERC() {
-		DoubleERC newInstance = erc.newInstance();
-		
+		final DoubleERC newInstance = erc.newInstance();
+
 		assertSame("rng does not refer to the same instance", rng, newInstance.getRNG());
 		assertNotSame("the value of new instance refers to the same object", erc.getValue(), newInstance.getValue());
 	}
 
 	/**
-	 * Tests that {@link org.epochx.epox.DoubleERC#generateValue()} correctly 
+	 * Tests that {@link org.epochx.epox.DoubleERC#generateValue()} correctly
 	 * generates new values.
 	 */
 	@Test
 	public void testGenerateValue() {
-		MockRandom rng = new MockRandom();
+		final MockRandom rng = new MockRandom();
 		erc.setRNG(rng);
-		
-		double lower = 2.0;
-		double upper = 5.0;
-		
+
+		final double lower = 2.0;
+		final double upper = 5.0;
+
 		// Set the bounds.
 		erc.setLower(lower);
 		erc.setUpper(upper);
 		erc.setPrecision(4);
-		
+
 		// Tests lower value.
 		rng.setNextDouble(0.0);
 		double generatedValue = erc.generateValue();
 		assertEquals("generated value unexpected", (Object) lower, generatedValue);
-		
+
 		// Tests upper value.
 		rng.setNextDouble(1.0);
 		generatedValue = erc.generateValue();
 		assertEquals("generated value unexpected", (Object) upper, generatedValue);
-		
+
 		// Tests mid-value with precision.
 		rng.setNextDouble(0.5155);
 		generatedValue = erc.generateValue();
 		assertEquals("generated value unexpected", (Object) 3.546, generatedValue);
-		
+
 		// Test reduced precision gets rounded up.
 		erc.setPrecision(3);
 		generatedValue = erc.generateValue();
 		assertEquals("generated value unexpected", (Object) 3.55, generatedValue);
 	}
-	
+
 	/**
 	 * Tests that {@link org.epochx.epox.DoubleERC#generateValue()} throws an
 	 * exception if rng is null.
@@ -106,19 +105,19 @@ public class DoubleERCTest extends LiteralTest {
 		try {
 			erc.generateValue();
 			fail("exception not thrown for null RNG");
-		} catch (IllegalStateException expected) {
+		} catch (final IllegalStateException expected) {
 			assertTrue(true);
 		}
 	}
 
 	/**
-	 * Tests that {@link org.epochx.epox.Literal#clone()} correctly clones 
+	 * Tests that {@link org.epochx.epox.Literal#clone()} correctly clones
 	 * instances.
 	 */
 	@Test
 	public void testCloneDoubleERC() {
-		DoubleERC clone = (DoubleERC) erc.clone();
-		
+		final DoubleERC clone = (DoubleERC) erc.clone();
+
 		assertNotSame("ERC has not been cloned", erc, clone);
 		assertSame("rng does not refer to the same instance", rng, clone.getRNG());
 		assertSame("value does not refer to the same instance", erc.getValue(), clone.getValue());

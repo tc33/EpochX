@@ -41,8 +41,8 @@ import org.epochx.stats.*;
  * multiple times.
  * 
  * <p>
- * Instances of this class will update the {@link Stats} class with data
- * about the run as the run progresses. For the statistics available from the
+ * Instances of this class will update the {@link Stats} class with data about
+ * the run as the run progresses. For the statistics available from the
  * <code>Stats</code>, view the {@link StatField} class and any extending
  * classes.
  * 
@@ -169,7 +169,7 @@ public class RunManager implements ConfigListener {
 
 		// Execute each generation.
 		int gen = 1;
-		while (gen <= noGenerations || noGenerations == -1) {
+		while ((gen <= noGenerations) || (noGenerations == -1)) {
 			// Perform the generation.
 			pop = generation.generation(gen, pop);
 
@@ -181,7 +181,7 @@ public class RunManager implements ConfigListener {
 				Life.get().fireSuccessEvent();
 				break;
 			}
-			
+
 			gen++;
 		}
 
@@ -190,7 +190,7 @@ public class RunManager implements ConfigListener {
 
 		// Add run time to stats data.
 		Stats.get().addData(RUN_TIME, runtime);
-		
+
 		// Inform everyone the run has ended.
 		Life.get().fireRunEndEvent();
 	}
@@ -209,8 +209,7 @@ public class RunManager implements ConfigListener {
 
 				// Update the stats.
 				Stats.get().addData(RUN_FITNESS_MIN, bestFitness);
-				Stats.get().addData(RUN_FITTEST_PROGRAM,
-						bestProgram);
+				Stats.get().addData(RUN_FITTEST_PROGRAM, bestProgram);
 			}
 		}
 

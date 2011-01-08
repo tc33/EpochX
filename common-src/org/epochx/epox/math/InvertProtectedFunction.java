@@ -50,16 +50,16 @@ public class InvertProtectedFunction extends Node {
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
-	 * result of which must be a numeric type (one of Double, Float, Long, 
+	 * result of which must be a numeric type (one of Double, Float, Long,
 	 * Integer). The value <code>1</code> is divided by this child value to be
 	 * the result of this function. This function is protected, so if the child
-	 * evaluates to a value of <code>0.0</code> then there is no finite 
+	 * evaluates to a value of <code>0.0</code> then there is no finite
 	 * reciprocal and so the value <code>1.0</code> will be returned.
 	 */
 	@Override
 	public Double evaluate() {
-		double c = NumericUtils.asDouble(getChild(0).evaluate());
-		
+		final double c = NumericUtils.asDouble(getChild(0).evaluate());
+
 		if (c == 0) {
 			return 1.0;
 		} else {
@@ -74,18 +74,18 @@ public class InvertProtectedFunction extends Node {
 	public String getIdentifier() {
 		return "INV";
 	}
-	
+
 	/**
 	 * Returns this function node's return type for the given child input types.
-	 * If there is one input type of a numeric type then the return type will 
-	 * be Double. In all other cases this method will return 
-	 * <code>null</code> to indicate that the inputs are invalid.
+	 * If there is one input type of a numeric type then the return type will
+	 * be Double. In all other cases this method will return <code>null</code>
+	 * to indicate that the inputs are invalid.
 	 * 
 	 * @return the Double class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (inputTypes.length == 1 && TypeUtils.isNumericType(inputTypes[0])) {
+	public Class<?> getReturnType(final Class<?> ... inputTypes) {
+		if ((inputTypes.length == 1) && TypeUtils.isNumericType(inputTypes[0])) {
 			return Double.class;
 		} else {
 			return null;

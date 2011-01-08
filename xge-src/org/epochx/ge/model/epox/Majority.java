@@ -43,9 +43,11 @@ public class Majority extends GEModel {
 	// Incomplete grammar requiring correct number of terminals to be added.
 	private static final String GRAMMAR_FRAGMENT = "<prog> ::= <node>\n"
 			+ "<node> ::= <function> | <terminal>\n"
-			+ "<function> ::= NOT( <node> ) " + "| OR( <node> , <node> ) "
+			+ "<function> ::= NOT( <node> ) "
+			+ "| OR( <node> , <node> ) "
 			+ "| AND( <node> , <node> ) "
-			+ "| IF( <node> , <node> , <node> )\n" + "<terminal> ::= ";
+			+ "| IF( <node> , <node> , <node> )\n"
+			+ "<terminal> ::= ";
 
 	// Epox interpreter for performing evaluation.
 	private final EpoxInterpreter interpreter;
@@ -104,8 +106,7 @@ public class Majority extends GEModel {
 
 			Boolean result = null;
 			try {
-				result = (Boolean) interpreter.eval(program.getSourceCode(),
-						argNames, objVars);
+				result = (Boolean) interpreter.eval(program.getSourceCode(), argNames, objVars);
 			} catch (final MalformedProgramException e) {
 				// Assign worst possible fitness and stop evaluating.
 				score = 0;

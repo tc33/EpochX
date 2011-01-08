@@ -44,8 +44,8 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * If the <code>getModel</code> method returns <code>null</code> then no model
  * is set and whatever static parameters have been set as parameters to the
  * constructor or using the standard accessor methods will be used. If any
- * compulsory parameters remain unset when the selector is requested to
- * select programs, then an <code>IllegalStateException</code> will be thrown.
+ * compulsory parameters remain unset when the selector is requested to select
+ * programs, then an <code>IllegalStateException</code> will be thrown.
  * 
  * @see LinearRankSelector
  * @see FitnessProportionateSelector
@@ -60,18 +60,18 @@ public class RandomSelector extends ConfigOperator<Model> implements ProgramSele
 	private List<CandidateProgram> pool;
 
 	/**
-	 * Constructs an instance of <code>RandomSelector</code> with the only 
+	 * Constructs an instance of <code>RandomSelector</code> with the only
 	 * necessary parameter given.
 	 * 
-	 * @param rng a <code>RandomNumberGenerator</code> used to lead 
-	 * non-deterministic behaviour.
+	 * @param rng a <code>RandomNumberGenerator</code> used to lead
+	 *        non-deterministic behaviour.
 	 */
 	public RandomSelector(final RandomNumberGenerator rng) {
 		this((Model) null);
-		
+
 		this.rng = rng;
 	}
-	
+
 	/**
 	 * Constructs an instance of <code>RandomSelector</code>.
 	 * 
@@ -149,7 +149,7 @@ public class RandomSelector extends ConfigOperator<Model> implements ProgramSele
 
 		return pool;
 	}
-	
+
 	/**
 	 * Returns the random number generator that this selector is using or
 	 * <code>null</code> if none has been set.

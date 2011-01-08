@@ -21,14 +21,14 @@
  */
 package org.epochx.gp.representation;
 
+import static org.junit.Assert.*;
+
 import java.util.List;
 
 import org.epochx.epox.*;
 import org.epochx.epox.bool.AndFunction;
 import org.epochx.representation.*;
 import org.junit.*;
-
-import static org.junit.Assert.*;
 
 /**
  * 
@@ -136,8 +136,7 @@ public class GPCandidateProgramTest extends AbstractCandidateProgramTestCase {
 		try {
 			final Node node = new Literal(false);
 			program.setNthNode(2, node);
-			assertSame("2nd node not being set at index 2", node,
-					program.getNthNode(2));
+			assertSame("2nd node not being set at index 2", node, program.getNthNode(2));
 		} catch (final IndexOutOfBoundsException e) {
 			fail(e.getMessage());
 		}
@@ -150,8 +149,7 @@ public class GPCandidateProgramTest extends AbstractCandidateProgramTestCase {
 	public void testSetNthNodeRoot() {
 		final Node node = new Literal(false);
 		program.setNthNode(0, node);
-		assertSame("root node not being returned at index 0", node,
-				program.getRootNode());
+		assertSame("root node not being returned at index 0", node, program.getRootNode());
 	}
 
 	/**
@@ -175,8 +173,7 @@ public class GPCandidateProgramTest extends AbstractCandidateProgramTestCase {
 	public void testGetNodesAtDepthZero() {
 		final List<Node> nodes = program.getNodesAtDepth(0);
 		assertEquals("more than one node at depth zero", 1, nodes.size());
-		assertSame("root node not returned for depth zero",
-				program.getRootNode(), nodes.get(0));
+		assertSame("root node not returned for depth zero", program.getRootNode(), nodes.get(0));
 	}
 
 	/**
@@ -186,8 +183,7 @@ public class GPCandidateProgramTest extends AbstractCandidateProgramTestCase {
 	public void testGetNodesAtDepthPositive() {
 		final List<Node> nodes = program.getNodesAtDepth(1);
 		assertEquals("more than two nodes found at depth one", 2, nodes.size());
-		assertTrue("nodes at depth one not returned", nodes.contains(node1)
-				&& nodes.contains(node2));
+		assertTrue("nodes at depth one not returned", nodes.contains(node1) && nodes.contains(node2));
 	}
 
 	/**
@@ -198,9 +194,7 @@ public class GPCandidateProgramTest extends AbstractCandidateProgramTestCase {
 	public void testGetNodesAtDepthTooLarge() {
 		try {
 			final List<Node> nodes = program.getNodesAtDepth(2);
-			assertEquals(
-					"empty list not returned for nodes greater than maximum depth in program",
-					0, nodes.size());
+			assertEquals("empty list not returned for nodes greater than maximum depth in program", 0, nodes.size());
 		} catch (final IndexOutOfBoundsException e) {
 			fail("Exception thrown for depth greater than the maximum depth");
 		}

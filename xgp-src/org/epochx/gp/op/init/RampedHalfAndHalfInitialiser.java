@@ -24,7 +24,7 @@ package org.epochx.gp.op.init;
 import java.math.BigInteger;
 import java.util.*;
 
-import org.epochx.epox.*;
+import org.epochx.epox.Node;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.op.ConfigOperator;
@@ -77,23 +77,24 @@ import org.epochx.tools.random.RandomNumberGenerator;
 public class RampedHalfAndHalfInitialiser extends ConfigOperator<GPModel> implements GPInitialiser {
 
 	/**
-	 * Requests an <code>boolean[]</code> which has one element per program 
-	 * initialised by this RH+H initialiser. A value of <code>true</code> 
+	 * Requests an <code>boolean[]</code> which has one element per program
+	 * initialised by this RH+H initialiser. A value of <code>true</code>
 	 * indicates the program was initialised with grow, and <code>false</code>
 	 * indicates full initialisation was used.
 	 */
 	public static final Stat INIT_GROWN = new AbstractStat(ExpiryEvent.INITIALISATION) {};
-	
-	// The grow and full instances for doing their share of the work - do not allow access.
+
+	// The grow and full instances for doing their share of the work - do not
+	// allow access.
 	private final GrowInitialiser grow;
 	private final FullInitialiser full;
 
 	// Nodes the programs will be constructed from.
 	private List<Node> syntax;
-	
+
 	// Each generated program's return type.
 	private Class<?> returnType;
-	
+
 	// The size of the populations to construct.
 	private int popSize;
 
@@ -108,12 +109,11 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GPModel> implem
 	 * Constructs a <code>FullInitialiser</code> with all the necessary
 	 * parameters given.
 	 */
-	public RampedHalfAndHalfInitialiser(final RandomNumberGenerator rng,
-			final List<Node> syntax, final Class<?> returnType, final int popSize,
-			final int startMaxDepth, final int endMaxDepth,
+	public RampedHalfAndHalfInitialiser(final RandomNumberGenerator rng, final List<Node> syntax,
+			final Class<?> returnType, final int popSize, final int startMaxDepth, final int endMaxDepth,
 			final boolean acceptDuplicates) {
 		this(null, startMaxDepth, acceptDuplicates);
-		
+
 		this.endMaxDepth = endMaxDepth;
 		this.startMaxDepth = startMaxDepth;
 		this.popSize = popSize;
@@ -171,8 +171,7 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GPModel> implem
 	 * @param acceptDuplicates whether duplicates should be allowed in the
 	 *        populations that are generated.
 	 */
-	public RampedHalfAndHalfInitialiser(final GPModel model,
-			final int startMaxDepth, final boolean acceptDuplicates) {
+	public RampedHalfAndHalfInitialiser(final GPModel model, final int startMaxDepth, final boolean acceptDuplicates) {
 		super(model);
 
 		this.startMaxDepth = startMaxDepth;
@@ -215,7 +214,7 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GPModel> implem
 		} else if (endMaxDepth < startMaxDepth) {
 			throw new IllegalStateException("End maximum depth must be greater than the start maximum depth.");
 		}
-		
+
 		// Create population list to populate.
 		final List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
 
@@ -223,13 +222,13 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GPModel> implem
 		final int[] programsPerDepth = getProgramsPerDepth();
 
 		// Whether each program was grown or not (full).
-		boolean[] grown = new boolean[popSize];
-		
+		final boolean[] grown = new boolean[popSize];
+
 		int popIndex = 0;
 		boolean growNext = true;
 		for (int depth = startMaxDepth; depth <= endMaxDepth; depth++) {
-			int noPrograms = programsPerDepth[depth-startMaxDepth];
-			
+			final int noPrograms = programsPerDepth[depth - startMaxDepth];
+
 			for (int i = 0; i < noPrograms; i++) {
 				// Grow on even numbers, full on odd.
 				GPCandidateProgram program;
@@ -253,58 +252,60 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GPModel> implem
 				popIndex++;
 			}
 		}
-		
+
 		// Add the grown or full nature of all the programs.
 		Stats.get().addData(INIT_GROWN, grown);
 
 		return firstGen;
 	}
-	
+
 	private int[] getProgramsPerDepth() {
-		int noDepths = endMaxDepth - startMaxDepth + 1;
-		int[] noPrograms = new int[noDepths];
-		
+		final int noDepths = endMaxDepth - startMaxDepth + 1;
+		final int[] noPrograms = new int[noDepths];
+
 		final int programsPerDepth = popSize / noDepths;
 		Arrays.fill(noPrograms, programsPerDepth);
-		
+
 		// Remaining programs missed out by rounding.
 		final int remainder = popSize % noDepths;
-		
+
 		// Add remainders to largest depth. TODO Change to spread?
-		noPrograms[noPrograms.length-1] += remainder;
-		
+		noPrograms[noPrograms.length - 1] += remainder;
+
 		if (!acceptDuplicates) {
 			// Can sufficient be created at each depth?
 			int cumulative = 0;
-			for (int i=startMaxDepth; i<=endMaxDepth; i++) {
-				int target = noPrograms[i - startMaxDepth];
-				BigInteger targetBI = BigInteger.valueOf(target);
+			for (int i = startMaxDepth; i <= endMaxDepth; i++) {
+				final int target = noPrograms[i - startMaxDepth];
+				final BigInteger targetBI = BigInteger.valueOf(target);
 				if (!grow.isSufficientVarieties(i, returnType, targetBI)) {
-					BigInteger noPossibleBI = grow.noVarieties(i, returnType);
-					
+					final BigInteger noPossibleBI = grow.noVarieties(i, returnType);
+
 					// Must fit into an int because target was an int.
 					int noPossible = noPossibleBI.intValue();
-					
-					// Exclude those for lower depths because will already be in pop.
+
+					// Exclude those for lower depths because will already be in
+					// pop.
 					noPossible -= cumulative;
-					
+
 					// Update cumulative.
 					cumulative += noPossible;
-					int shortfall = target - noPossible;
-					
+					final int shortfall = target - noPossible;
+
 					// Move the shortfall to the next depth if there is one.
-					if (i+1 <= endMaxDepth) {
-						noPrograms[i+1 - startMaxDepth] += shortfall;
+					if (i + 1 <= endMaxDepth) {
+						noPrograms[i + 1 - startMaxDepth] += shortfall;
 						noPrograms[i - startMaxDepth] -= shortfall;
 					} else {
-						throw new IllegalStateException("Impossible to create sufficient programs inside depth parameters");
+						throw new IllegalStateException(
+								"Impossible to create sufficient programs inside depth parameters");
 					}
 				} else {
 					break;
 				}
 			}
 		}
-		
+
 		return noPrograms;
 	}
 
@@ -327,7 +328,7 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GPModel> implem
 	 * @param acceptDuplicates whether duplicates should be accepted in the
 	 *        populations that are constructed.
 	 */
-	public void setDuplicatesEnabled(boolean acceptDuplicates) {
+	public void setDuplicatesEnabled(final boolean acceptDuplicates) {
 		this.acceptDuplicates = acceptDuplicates;
 	}
 
@@ -353,7 +354,7 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GPModel> implem
 		grow.setRNG(rng);
 		full.setRNG(rng);
 	}
-	
+
 	/**
 	 * Returns a <code>List</code> of the <code>Nodes</code> that form the
 	 * syntax of new program generated with this initialiser, or
@@ -376,11 +377,11 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GPModel> implem
 	 */
 	public void setSyntax(final List<Node> syntax) {
 		this.syntax = syntax;
-		
+
 		grow.setSyntax(syntax);
 		full.setSyntax(syntax);
 	}
-	
+
 	/**
 	 * Returns a <code>List</code> of the <code>Nodes</code> that form the
 	 * syntax of new program generated with this initialiser, or
@@ -403,7 +404,7 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GPModel> implem
 	 */
 	public void setReturnType(final Class<?> returnType) {
 		this.returnType = returnType;
-		
+
 		grow.setSyntax(syntax);
 		full.setSyntax(syntax);
 	}
@@ -455,8 +456,8 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GPModel> implem
 	 * initialiser generates. Program depths will then be gradually ramped up to
 	 * the end max depth.
 	 * 
-	 * @return the maximum depth used for the first program trees before the 
-	 * depth is ramped up to the end max depth.
+	 * @return the maximum depth used for the first program trees before the
+	 *         depth is ramped up to the end max depth.
 	 */
 	public int getStartMaxDepth() {
 		return startMaxDepth;

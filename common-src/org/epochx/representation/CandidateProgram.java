@@ -26,22 +26,21 @@ package org.epochx.representation;
  * candidate solution to a problem. Specific subclasses represent the programs
  * in different ways.
  */
-public abstract class CandidateProgram implements Cloneable,
-		Comparable<CandidateProgram> {
+public abstract class CandidateProgram implements Cloneable, Comparable<CandidateProgram> {
 
 	/**
 	 * Calculates a quality score for this program. The exact calculation
 	 * implementation varies by subclass. Fitnesses are standardised
-	 * so implementations should return lower values for better programs. There 
+	 * so implementations should return lower values for better programs. There
 	 * is however no obligation for fitness values to be positive.
 	 * 
 	 * @return a standardised fitness score indicating the quality of this
 	 *         candidate program.
 	 */
 	public abstract double getFitness();
-	
+
 	/**
-	 * Calculates and returns the adjusted fitness of this program. A program's 
+	 * Calculates and returns the adjusted fitness of this program. A program's
 	 * adjusted fitness lies between 0 and 1, with a larger value for better
 	 * individuals. The fitness value returned from the <code>getFitness</code>
 	 * method is used as the standardised fitness in the calculation, so it is
@@ -57,9 +56,9 @@ public abstract class CandidateProgram implements Cloneable,
 	 * @return
 	 */
 	public double getAdjustedFitness() {
-		double standardised = getFitness();
-		double adjusted = 1.0 / (1.0 + standardised);
-		
+		final double standardised = getFitness();
+		final double adjusted = 1.0 / (1.0 + standardised);
+
 		return adjusted;
 	}
 
@@ -110,8 +109,8 @@ public abstract class CandidateProgram implements Cloneable,
 		if (o == null) {
 			throw new NullPointerException("cannot compare to null");
 		}
-		
-		final double thisFitness = this.getFitness();
+
+		final double thisFitness = getFitness();
 		final double objFitness = o.getFitness();
 
 		if (thisFitness > objFitness) {

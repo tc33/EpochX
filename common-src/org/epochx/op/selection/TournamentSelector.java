@@ -47,8 +47,8 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * If the <code>getModel</code> method returns <code>null</code> then no model
  * is set and whatever static parameters have been set as parameters to the
  * constructor or using the standard accessor methods will be used. If any
- * compulsory parameters remain unset when the selector is requested to
- * select programs, then an <code>IllegalStateException</code> will be thrown.
+ * compulsory parameters remain unset when the selector is requested to select
+ * programs, then an <code>IllegalStateException</code> will be thrown.
  * 
  * @see FitnessProportionateSelector
  * @see RandomSelector
@@ -62,7 +62,7 @@ public class TournamentSelector extends ConfigOperator<Model> implements Program
 
 	// The size of the tournment from which the best program will be taken.
 	private int tournamentSize;
-	
+
 	// Random number generator.
 	private RandomNumberGenerator rng;
 
@@ -70,15 +70,15 @@ public class TournamentSelector extends ConfigOperator<Model> implements Program
 	 * Constructs an instance of <code>LinearRankSelector</code> with all the
 	 * necessary parameters given.
 	 * 
-	 * @param rng a <code>RandomNumberGenerator</code> used to lead 
-	 * non-deterministic behaviour.
+	 * @param rng a <code>RandomNumberGenerator</code> used to lead
+	 *        non-deterministic behaviour.
 	 */
 	public TournamentSelector(final RandomNumberGenerator rng, final int tournamentSize) {
 		this((Model) null, tournamentSize);
-		
+
 		this.rng = rng;
 	}
-	
+
 	/**
 	 * Construct a tournament selector with the specified tournament size.
 	 * 
@@ -86,14 +86,14 @@ public class TournamentSelector extends ConfigOperator<Model> implements Program
 	 */
 	public TournamentSelector(final Model model, final int tournamentSize) {
 		super(model);
-		
+
 		this.tournamentSize = tournamentSize;
 
 		// Construct the internal program selectors.
 		poolSelection = new ProgramTournamentSelector();
 		programSelection = new ProgramTournamentSelector();
 	}
-	
+
 	/**
 	 * Configures this operator with parameters from the model.
 	 */
@@ -159,13 +159,11 @@ public class TournamentSelector extends ConfigOperator<Model> implements Program
 	 *         selection.
 	 */
 	@Override
-	public List<CandidateProgram> getPool(final List<CandidateProgram> pop,
-			final int poolSize) {
+	public List<CandidateProgram> getPool(final List<CandidateProgram> pop, final int poolSize) {
 		if (poolSize < 1) {
 			throw new IllegalArgumentException("poolSize must be greater than 0");
 		} else if ((pop == null) || (pop.isEmpty())) {
-			throw new IllegalArgumentException(
-					"population to select pool from must not be null nor empty");
+			throw new IllegalArgumentException("population to select pool from must not be null nor empty");
 		}
 
 		// Construct the pool using the internal program selector.
@@ -177,7 +175,7 @@ public class TournamentSelector extends ConfigOperator<Model> implements Program
 
 		return pool;
 	}
-	
+
 	/**
 	 * Returns the random number generator that this selector is using or
 	 * <code>null</code> if none has been set.
@@ -197,19 +195,19 @@ public class TournamentSelector extends ConfigOperator<Model> implements Program
 	 */
 	public void setRNG(final RandomNumberGenerator rng) {
 		this.rng = rng;
-		
+
 		// Set internal selector's rng.
 		poolSelection.randomSelector.setRNG(rng);
 		programSelection.randomSelector.setRNG(rng);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void setModel(final Model model) {
 		super.setModel(model);
-		
+
 		// Set internal selector's models.
 		poolSelection.randomSelector.setModel(model);
 		programSelection.randomSelector.setModel(model);
@@ -229,7 +227,7 @@ public class TournamentSelector extends ConfigOperator<Model> implements Program
 		private final RandomSelector randomSelector;
 
 		public ProgramTournamentSelector() {
-			Model model = getModel();
+			final Model model = getModel();
 			if (model == null) {
 				randomSelector = new RandomSelector(rng);
 			} else {

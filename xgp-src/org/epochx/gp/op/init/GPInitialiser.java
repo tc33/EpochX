@@ -35,7 +35,7 @@ import org.epochx.representation.CandidateProgram;
 public interface GPInitialiser extends Initialiser {
 
 	/**
-	 * Constructs and returns an initial population of 
+	 * Constructs and returns an initial population of
 	 * <code>GPCandidateProgram</code> instances.
 	 * 
 	 * @return A List of newly generated GPCandidatePrograms.

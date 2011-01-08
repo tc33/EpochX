@@ -41,6 +41,7 @@ public class GRStatField extends StatField {
 	 * previous generation.
 	 */
 	public static final Stat GEN_DEPTHS = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			int[] depths = null;
@@ -68,13 +69,13 @@ public class GRStatField extends StatField {
 	 * previous generation.
 	 */
 	public static final Stat GEN_DEPTH_AVE = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Double aveDepth = null;
 
 			// Request the population depths from the stats manager.
-			final int[] depths = (int[]) Stats.get().getStat(
-					GEN_DEPTHS);
+			final int[] depths = (int[]) Stats.get().getStat(GEN_DEPTHS);
 
 			// Calculate the average depth.
 			if (depths != null) {
@@ -91,6 +92,7 @@ public class GRStatField extends StatField {
 	 * population at the end of the previous generation.
 	 */
 	public static final Stat GEN_DEPTH_STDEV = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Double stdevDepth = null;
@@ -113,13 +115,13 @@ public class GRStatField extends StatField {
 	 * the previous generation.
 	 */
 	public static final Stat GEN_DEPTH_MAX = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Integer maxDepth = null;
 
 			// Request the population depths from the stats manager.
-			final int[] depths = (int[]) Stats.get().getStat(
-					GEN_DEPTHS);
+			final int[] depths = (int[]) Stats.get().getStat(GEN_DEPTHS);
 
 			// Calculate the maximum depth.
 			if (depths != null) {
@@ -136,13 +138,13 @@ public class GRStatField extends StatField {
 	 * previous generation.
 	 */
 	public static final Stat GEN_DEPTH_MIN = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Integer minDepth = null;
 
 			// Request the population depths from the stats manager.
-			final int[] depths = (int[]) Stats.get().getStat(
-					GEN_DEPTHS);
+			final int[] depths = (int[]) Stats.get().getStat(GEN_DEPTHS);
 
 			// Calculate the minimum depth.
 			if (depths != null) {

@@ -74,11 +74,10 @@ public class FixedLengthInitialiser extends ConfigOperator<GEModel> implements G
 	 * Constructs a <code>FixedLengthInitialiser</code> with all the necessary
 	 * parameters given.
 	 */
-	public FixedLengthInitialiser(final CodonGenerator codonGenerator,
-			final int popSize, final int chromosomeLength,
+	public FixedLengthInitialiser(final CodonGenerator codonGenerator, final int popSize, final int chromosomeLength,
 			final boolean acceptDuplicates) {
 		this(null, chromosomeLength, acceptDuplicates);
-		
+
 		this.codonGenerator = codonGenerator;
 		this.popSize = popSize;
 	}
@@ -94,8 +93,7 @@ public class FixedLengthInitialiser extends ConfigOperator<GEModel> implements G
 	 * @param chromosomeLength The initial length that chromosomes should be
 	 *        generated to.
 	 */
-	public FixedLengthInitialiser(final GEModel model,
-			final int chromosomeLength) {
+	public FixedLengthInitialiser(final GEModel model, final int chromosomeLength) {
 		this(model, chromosomeLength, true);
 	}
 
@@ -111,10 +109,9 @@ public class FixedLengthInitialiser extends ConfigOperator<GEModel> implements G
 	 * @param acceptDuplicates whether duplicates should be allowed in the
 	 *        populations that are generated.
 	 */
-	public FixedLengthInitialiser(final GEModel model,
-			final int chromosomeLength, final boolean acceptDuplicates) {
+	public FixedLengthInitialiser(final GEModel model, final int chromosomeLength, final boolean acceptDuplicates) {
 		super(model);
-		
+
 		this.chromosomeLength = chromosomeLength;
 		this.acceptDuplicates = acceptDuplicates;
 	}
@@ -143,13 +140,11 @@ public class FixedLengthInitialiser extends ConfigOperator<GEModel> implements G
 	@Override
 	public List<CandidateProgram> getInitialPopulation() {
 		if (popSize < 1) {
-			throw new IllegalStateException(
-					"Population size must be 1 or greater");
+			throw new IllegalStateException("Population size must be 1 or greater");
 		}
 
 		// Initialise population of candidate programs.
-		final List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(
-				popSize);
+		final List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
 
 		// Build population.
 		for (int i = 0; i < popSize; i++) {
@@ -158,7 +153,7 @@ public class FixedLengthInitialiser extends ConfigOperator<GEModel> implements G
 			do {
 				candidate = getInitialProgram();
 			} while (!acceptDuplicates && firstGen.contains(candidate));
-			
+
 			firstGen.add(candidate);
 		}
 
@@ -182,7 +177,7 @@ public class FixedLengthInitialiser extends ConfigOperator<GEModel> implements G
 		}
 
 		// Generate the list of codons.
-		List<Integer> codons = new ArrayList<Integer>(chromosomeLength);
+		final List<Integer> codons = new ArrayList<Integer>(chromosomeLength);
 		for (int i = 0; i < chromosomeLength; i++) {
 			codons.add(codonGenerator.getCodon());
 		}
@@ -209,7 +204,7 @@ public class FixedLengthInitialiser extends ConfigOperator<GEModel> implements G
 	 * @param chromosomeLength the fixed length to use for the chromosomes of
 	 *        generated programs.
 	 */
-	public void setChromosomeLength(int chromosomeLength) {
+	public void setChromosomeLength(final int chromosomeLength) {
 		this.chromosomeLength = chromosomeLength;
 	}
 
@@ -275,7 +270,7 @@ public class FixedLengthInitialiser extends ConfigOperator<GEModel> implements G
 	 * @param codonGenerator the codonGenerator to use in generating new codons
 	 *        for the new candidate programs.
 	 */
-	public void setCodonGenerator(CodonGenerator codonGenerator) {
+	public void setCodonGenerator(final CodonGenerator codonGenerator) {
 		this.codonGenerator = codonGenerator;
 	}
 }

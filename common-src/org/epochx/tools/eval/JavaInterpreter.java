@@ -60,8 +60,8 @@ public class JavaInterpreter implements Interpreter {
 	 *         according to the language's syntax rules.
 	 */
 	@Override
-	public Object eval(final String expression, final String[] argNames,
-			final Object[] argValues) throws MalformedProgramException {
+	public Object eval(final String expression, final String[] argNames, final Object[] argValues)
+			throws MalformedProgramException {
 		Object result = null;
 
 		if (expression != null) {
@@ -109,8 +109,8 @@ public class JavaInterpreter implements Interpreter {
 	 *         according to the language's syntax rules.
 	 */
 	@Override
-	public Object[] eval(final String expression, final String[] argNames,
-			final Object[][] argValues) throws MalformedProgramException {
+	public Object[] eval(final String expression, final String[] argNames, final Object[][] argValues)
+			throws MalformedProgramException {
 		final Object[] results = new Object[argValues.length];
 
 		for (int i = 0; i < argValues.length; i++) {
@@ -124,8 +124,8 @@ public class JavaInterpreter implements Interpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void exec(final String program, final String[] argNames,
-			final Object[] argValues) throws MalformedProgramException {
+	public void exec(final String program, final String[] argNames, final Object[] argValues)
+			throws MalformedProgramException {
 		eval(program, argNames, argValues);
 	}
 
@@ -133,8 +133,8 @@ public class JavaInterpreter implements Interpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void exec(final String program, final String[] argNames,
-			final Object[][] argValues) throws MalformedProgramException {
+	public void exec(final String program, final String[] argNames, final Object[][] argValues)
+			throws MalformedProgramException {
 		eval(program, argNames, argValues);
 	}
 

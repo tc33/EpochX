@@ -33,8 +33,7 @@ public class PerformanceCompare {
 	 * @param args
 	 * @throws MalformedProgramException
 	 */
-	public static void main(final String[] args)
-			throws MalformedProgramException {
+	public static void main(final String[] args) throws MalformedProgramException {
 		final Interpreter[] interpreters = new Interpreter[]{
 				// OldGroovyInterpreter.getInstance(),
 				new GroovyInterpreter(), new ScriptingInterpreter("groovy")};
@@ -52,8 +51,7 @@ public class PerformanceCompare {
 		System.out.println(Arrays.toString(timeCounts));
 	}
 
-	private static long test(final Interpreter interpreter)
-			throws MalformedProgramException {
+	private static long test(final Interpreter interpreter) throws MalformedProgramException {
 		final long start = System.currentTimeMillis();
 
 		for (int i = 0; i < 1; i++) {
@@ -67,8 +65,7 @@ public class PerformanceCompare {
 			args = new String[]{"b1", "i1"};
 			Object[][] valueSets = new Object[][]{{true, 3}, {false, 4}};
 
-			final Object[] results = interpreter.eval(expression, args,
-					valueSets);
+			final Object[] results = interpreter.eval(expression, args, valueSets);
 
 			expression = "(4.0 + 2.0) / (3.0 - d1)";
 			args = new String[]{"d1"};

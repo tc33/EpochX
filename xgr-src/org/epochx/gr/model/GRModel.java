@@ -123,8 +123,7 @@ public abstract class GRModel extends Model {
 		if ((maxDepth >= 1) || (maxDepth == -1)) {
 			this.maxDepth = maxDepth;
 		} else {
-			throw new IllegalArgumentException(
-					"maxDepth must either be -1 or greater than 0");
+			throw new IllegalArgumentException("maxDepth must either be -1 or greater than 0");
 		}
 
 		assert ((this.maxDepth >= 1) || (this.maxDepth == -1));
@@ -151,15 +150,14 @@ public abstract class GRModel extends Model {
 	 * <p>
 	 * Max depth of -1 is allowed to indicate no limit.
 	 * 
-	 * @param maxInitialDepth the maximum depth to allow a program's derivation 
-	 * 			tree after initialisation.
+	 * @param maxInitialDepth the maximum depth to allow a program's derivation
+	 *        tree after initialisation.
 	 */
 	public void setMaxInitialDepth(final int maxInitialDepth) {
 		if ((maxInitialDepth >= 1) || (maxInitialDepth == -1)) {
 			this.maxInitialDepth = maxInitialDepth;
 		} else {
-			throw new IllegalArgumentException(
-					"maxInitialDepth must either be -1 or greater than 0");
+			throw new IllegalArgumentException("maxInitialDepth must either be -1 or greater than 0");
 		}
 
 		assert ((this.maxInitialDepth >= 1) || (this.maxInitialDepth == -1));

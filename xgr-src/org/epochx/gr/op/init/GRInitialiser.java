@@ -35,7 +35,7 @@ import org.epochx.representation.CandidateProgram;
 public interface GRInitialiser extends Initialiser {
 
 	/**
-	 * Constructs and returns an initial population of 
+	 * Constructs and returns an initial population of
 	 * <code>GRCandidateProgram</code> instances.
 	 * 
 	 * @return A List of newly generated GRCandidatePrograms.

@@ -52,8 +52,7 @@ public final class StatsUtils {
 			}
 			return sum / values.length;
 		} else {
-			throw new IllegalArgumentException("cannot calculate average of "
-					+ "null or empty array of values");
+			throw new IllegalArgumentException("cannot calculate average of " + "null or empty array of values");
 		}
 	}
 
@@ -72,8 +71,7 @@ public final class StatsUtils {
 			}
 			return ((double) sum) / values.length;
 		} else {
-			throw new IllegalArgumentException(
-					"cannot calculate average of null or empty array of values");
+			throw new IllegalArgumentException("cannot calculate average of null or empty array of values");
 		}
 	}
 
@@ -110,8 +108,7 @@ public final class StatsUtils {
 			// Take the square root of the average.
 			return Math.sqrt(sqDiff / values.length);
 		} else {
-			throw new IllegalArgumentException(
-					"cannot calculate standard deviation of null or empty array of values");
+			throw new IllegalArgumentException("cannot calculate standard deviation of null or empty array of values");
 		}
 	}
 
@@ -148,8 +145,7 @@ public final class StatsUtils {
 			// Take the square root of the average.
 			return Math.sqrt(sqDiff / values.length);
 		} else {
-			throw new IllegalArgumentException(
-					"cannot calculate average of null or empty array of values");
+			throw new IllegalArgumentException("cannot calculate average of null or empty array of values");
 		}
 	}
 
@@ -173,8 +169,7 @@ public final class StatsUtils {
 			}
 			return maxIndex;
 		} else {
-			throw new IllegalArgumentException(
-					"cannot calculate maximum index of null or empty array of values");
+			throw new IllegalArgumentException("cannot calculate maximum index of null or empty array of values");
 		}
 	}
 
@@ -198,8 +193,7 @@ public final class StatsUtils {
 			}
 			return maxIndex;
 		} else {
-			throw new IllegalArgumentException(
-					"cannot calculate maximum index of null or empty array of values");
+			throw new IllegalArgumentException("cannot calculate maximum index of null or empty array of values");
 		}
 	}
 
@@ -223,8 +217,7 @@ public final class StatsUtils {
 			}
 			return minIndex;
 		} else {
-			throw new IllegalArgumentException(
-					"cannot calculate minimum index of null or empty array of values");
+			throw new IllegalArgumentException("cannot calculate minimum index of null or empty array of values");
 		}
 	}
 
@@ -248,8 +241,7 @@ public final class StatsUtils {
 			}
 			return minIndex;
 		} else {
-			throw new IllegalArgumentException(
-					"cannot calculate minimum index of null or empty array of values");
+			throw new IllegalArgumentException("cannot calculate minimum index of null or empty array of values");
 		}
 	}
 
@@ -277,8 +269,7 @@ public final class StatsUtils {
 
 			return median;
 		} else {
-			throw new IllegalArgumentException(
-					"cannot calculate median of null or empty array of values");
+			throw new IllegalArgumentException("cannot calculate median of null or empty array of values");
 		}
 	}
 
@@ -306,8 +297,7 @@ public final class StatsUtils {
 
 			return median;
 		} else {
-			throw new IllegalArgumentException(
-					"cannot calculate median of null or empty array of values");
+			throw new IllegalArgumentException("cannot calculate median of null or empty array of values");
 		}
 	}
 

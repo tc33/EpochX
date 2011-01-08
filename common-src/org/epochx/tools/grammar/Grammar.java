@@ -128,8 +128,7 @@ public class Grammar {
 	 * Reads the contents of the given File and returns it as a String.
 	 */
 	private String readGrammarFile(final File grammarFile) throws IOException {
-		final BufferedReader input = new BufferedReader(new FileReader(
-				grammarFile));
+		final BufferedReader input = new BufferedReader(new FileReader(grammarFile));
 		final StringBuilder grammarStr = new StringBuilder();
 
 		String line = null;
@@ -168,7 +167,7 @@ public class Grammar {
 		boolean quoted = false;
 		boolean terminal = true;
 		boolean special = false;
-		
+
 		// Append a \n to ensure we detect the end of file.
 		grammar += '\n';
 
@@ -180,12 +179,10 @@ public class Grammar {
 				i++;
 				if (i >= grammar.length()) {
 					// Escape sequence as last char is invalid.
-					throw new MalformedGrammarException(
-							"Escape sequence as last char is invalid");
+					throw new MalformedGrammarException("Escape sequence as last char is invalid");
 				} else if ((!terminal) && (grammar.charAt(i) != '\n')) {
 					// Only escaped newline allowed inside non-terminal
-					throw new MalformedGrammarException(
-							"Only escaped newline allowed inside non-terminal");
+					throw new MalformedGrammarException("Only escaped newline allowed inside non-terminal");
 				}
 
 				boolean skip = false;
@@ -235,8 +232,7 @@ public class Grammar {
 						// Ignore DOS newline.
 					} else if (ch == '#') {
 						// Comment - skip to end of line.
-						while ((i < grammar.length())
-								&& (grammar.charAt(i) != '\n')) {
+						while ((i < grammar.length()) && (grammar.charAt(i) != '\n')) {
 							i++;
 						}
 					} else if ((ch == ' ') || (ch == '\t') || (ch == '\n')) {
@@ -245,8 +241,7 @@ public class Grammar {
 						state = State.START_RULE;
 					} else {
 						// No other valid chars in this state.
-						throw new MalformedGrammarException(
-								"Illegal character: " + ch);
+						throw new MalformedGrammarException("Illegal character: " + ch);
 					}
 					break;
 
@@ -267,8 +262,7 @@ public class Grammar {
 							// LHS might have been a production already, but
 							// shouldn't have been a LHS.
 							if (lhs.getNoProductions() > 0) {
-								throw new MalformedGrammarException(
-										"Duplicate rule: " + symbolName);
+								throw new MalformedGrammarException("Duplicate rule: " + symbolName);
 							}
 						}
 						// The first LHS becomes the start symbol.
@@ -280,8 +274,7 @@ public class Grammar {
 						// Move to next stage.
 						state = State.LHS_READ;
 					} else if ((ch == '"') || (ch == '|') || (ch == '<')) {
-						throw new MalformedGrammarException(
-								"Non-escaped special char: " + ch);
+						throw new MalformedGrammarException("Non-escaped special char: " + ch);
 					} else {
 						// Append char to buffer.
 						buffer.append(ch);
@@ -301,17 +294,14 @@ public class Grammar {
 						buffer.append(ch);
 
 						if (!buffer.toString().equals("::=")) {
-							throw new MalformedGrammarException(
-									"Expected '::=' " + "but found: "
-											+ buffer.toString());
+							throw new MalformedGrammarException("Expected '::=' " + "but found: " + buffer.toString());
 						}
 						// Clear the buffer.
 						buffer = new StringBuilder();
 						// Move onto the next stage.
 						state = State.PRODUCTION;
 					} else {
-						throw new MalformedGrammarException(
-								"Illegal character: " + ch);
+						throw new MalformedGrammarException("Illegal character: " + ch);
 					}
 					break;
 
@@ -325,8 +315,7 @@ public class Grammar {
 						if (buffer.length() != 0) {
 							final String symbolName = buffer.toString();
 							if (terminal) {
-								GrammarLiteral newSymbol = literals
-										.get(symbolName);
+								GrammarLiteral newSymbol = literals.get(symbolName);
 								if (newSymbol == null) {
 									newSymbol = new GrammarLiteral(symbolName);
 									literals.put(symbolName, newSymbol);
@@ -342,8 +331,7 @@ public class Grammar {
 								 * production.addSymbol(newSymbol);
 								 * terminal = true;
 								 */
-								throw new MalformedGrammarException(
-										"Unterminated non-terminal");
+								throw new MalformedGrammarException("Unterminated non-terminal");
 							}
 							buffer = new StringBuilder();
 						}
@@ -362,8 +350,7 @@ public class Grammar {
 						} else if (buffer.length() == 0) {
 							terminal = false;
 						} else {
-							throw new MalformedGrammarException("Non-escaped "
-									+ "special char: " + ch);
+							throw new MalformedGrammarException("Non-escaped " + "special char: " + ch);
 						}
 					} else if (ch == '?') {
 						// if (quoted) {
@@ -371,11 +358,9 @@ public class Grammar {
 						// } else if (special) {
 						if (special) {
 							// This should be the closing '?'.
-							final String specialCommand = buffer.toString()
-									.trim();
+							final String specialCommand = buffer.toString().trim();
 							// Parse and process the command.
-							processSpecialRule(specialCommand,
-									grammarProduction);
+							processSpecialRule(specialCommand, grammarProduction);
 						} else if (!terminal) {
 							// This should be the opening '?'.
 							special = true;
@@ -409,8 +394,7 @@ public class Grammar {
 							// Clear buffer.
 							buffer = new StringBuilder();
 						} else {
-							throw new MalformedGrammarException("Non-escaped "
-									+ "special char: " + ch);
+							throw new MalformedGrammarException("Non-escaped " + "special char: " + ch);
 						}
 					} else if ((ch == ' ') || (ch == '\t')) {
 						if (quoted || !terminal) {
@@ -442,8 +426,7 @@ public class Grammar {
 				case START_OF_LINE:
 					if (ch == '#') {
 						// Comment - skip to end of line.
-						while ((i < grammar.length())
-								&& (grammar.charAt(i) != '\n')) {
+						while ((i < grammar.length()) && (grammar.charAt(i) != '\n')) {
 							i++;
 						}
 					} else if (ch == '\r') {
@@ -457,14 +440,12 @@ public class Grammar {
 						// Start of LHS of new rule.
 						state = State.START_RULE;
 					} else {
-						throw new MalformedGrammarException(
-								"Illegal character: " + ch);
+						throw new MalformedGrammarException("Illegal character: " + ch);
 					}
 					break;
 
 				default:
-					throw new MalformedGrammarException(
-							"Impossible error, quit program now.");
+					throw new MalformedGrammarException("Impossible error, quit program now.");
 			}
 		}
 
@@ -473,8 +454,7 @@ public class Grammar {
 		// Check the validity of the grammar.
 		// Test a start rule was found.
 		if (start == null) {
-			throw new MalformedGrammarException(
-					"No valid rules found in grammar string");
+			throw new MalformedGrammarException("No valid rules found in grammar string");
 		}
 
 		// Setup and validate each rule - done together for efficiency only.
@@ -485,14 +465,12 @@ public class Grammar {
 
 			// Test that all rules have at least one valid production.
 			if (rule.getNoProductions() == 0) {
-				throw new MalformedGrammarException("Grammar rule "
-						+ rule.getName() + " has no productions");
+				throw new MalformedGrammarException("Grammar rule " + rule.getName() + " has no productions");
 			}
 
 			// Test that all rules have a potential exit point.
 			if (isInfinitelyRecursive(rule)) {
-				throw new MalformedGrammarException("Grammar rule "
-						+ rule.getName() + " is infinitely recursive");
+				throw new MalformedGrammarException("Grammar rule " + rule.getName() + " is infinitely recursive");
 			}
 		}
 	}
@@ -509,21 +487,18 @@ public class Grammar {
 	 *         otherwise.
 	 */
 	protected boolean isInfinitelyRecursive(final GrammarRule rule) {
-		return rule.isRecursive()
-				&& isInfinitelyRecursive(rule, rule,
-						new ArrayList<GrammarRule>());
+		return rule.isRecursive() && isInfinitelyRecursive(rule, rule, new ArrayList<GrammarRule>());
 	}
 
 	/*
 	 * Recursive helper method for isInfinitelyRecursive(GrammarRule).
 	 */
-	private boolean isInfinitelyRecursive(final GrammarRule rule,
-			final GrammarRule currentRule, final List<GrammarRule> path) {
+	private boolean isInfinitelyRecursive(final GrammarRule rule, final GrammarRule currentRule,
+			final List<GrammarRule> path) {
 		path.add(currentRule);
 		boolean ref = true;
 
-		final List<GrammarProduction> productions = currentRule
-				.getProductions();
+		final List<GrammarProduction> productions = currentRule.getProductions();
 		outer:for (final GrammarProduction p: productions) {
 			final List<GrammarNode> nodes = p.getGrammarNodes();
 
@@ -534,8 +509,7 @@ public class Grammar {
 					if (n instanceof GrammarRule) {
 						final GrammarRule r = (GrammarRule) n;
 
-						if (path.contains(r)
-								|| isInfinitelyRecursive(rule, r, path)) {
+						if (path.contains(r) || isInfinitelyRecursive(rule, r, path)) {
 							continue outer;
 						}
 					}
@@ -566,8 +540,7 @@ public class Grammar {
 	/*
 	 * Recursive helper for setRecursiveness().
 	 */
-	private void setRecursiveness(final List<GrammarRule> path,
-			final GrammarRule current) {
+	private void setRecursiveness(final List<GrammarRule> path, final GrammarRule current) {
 		// Check for recursiveness then step down.
 		if (path.contains(current)) {
 			// Then everything in the path is recursive.
@@ -597,8 +570,7 @@ public class Grammar {
 	 * Processes a special rule. Currently the only supported special rule is
 	 * key value pairs.
 	 */
-	private void processSpecialRule(final String command,
-			final GrammarProduction production) {
+	private void processSpecialRule(final String command, final GrammarProduction production) {
 		final String[] commands = command.split(";");
 
 		for (final String c: commands) {
@@ -610,8 +582,7 @@ public class Grammar {
 	/*
 	 * Recursive helper that calculates the minimum depth of the current symbol.
 	 */
-	private int getMinDepth(final List<GrammarRule> path,
-			final GrammarNode currentSymbol) {
+	private int getMinDepth(final List<GrammarRule> path, final GrammarNode currentSymbol) {
 		if (!(currentSymbol instanceof GrammarRule)) {
 			return 0;
 		}
@@ -635,8 +606,7 @@ public class Grammar {
 				for (int j = 0; j < p.getNoGrammarNodes(); j++) {
 					// The largest of production's symbols min depths, is
 					// productions min depth.
-					final int d = getMinDepth(new ArrayList<GrammarRule>(path),
-							p.getGrammarNode(j));
+					final int d = getMinDepth(new ArrayList<GrammarRule>(path), p.getGrammarNode(j));
 
 					if (d > productionsMinDepth) {
 						productionsMinDepth = d;

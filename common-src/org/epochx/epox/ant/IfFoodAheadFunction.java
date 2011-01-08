@@ -21,14 +21,14 @@
  */
 package org.epochx.epox.ant;
 
-import org.epochx.epox.*;
+import org.epochx.epox.Node;
 import org.epochx.tools.ant.Ant;
 
 /**
- * This class defines a function which conditionally evaluates one of two 
- * children depending on the presence of food in the position in front of an 
+ * This class defines a function which conditionally evaluates one of two
+ * children depending on the presence of food in the position in front of an
  * ant. The Ant may be provided in one of two ways, depending on the constructor
- * used. The ant may be provided as a child node, in which case this functions 
+ * used. The ant may be provided as a child node, in which case this functions
  * arity becomes 3. Otherwise the ant must be provided at construction, and is
  * held internally, with the node's arity being 2.
  */
@@ -52,12 +52,12 @@ public class IfFoodAheadFunction extends AntFunction {
 	public IfFoodAheadFunction(final Node ant, final Node child1, final Node child2) {
 		super(ant, child1, child2);
 	}
-	
+
 	/**
 	 * Constructs an <code>IfFoodAheadFunction</code> with two child nodes, and
-	 * an ant which will be held internally. This makes the function with arity 
-	 * of two. Note that this differs from the alternative constructors which 
-	 * take three child nodes, one of which has an Ant return type. 
+	 * an ant which will be held internally. This makes the function with arity
+	 * of two. Note that this differs from the alternative constructors which
+	 * take three child nodes, one of which has an Ant return type.
 	 * 
 	 * @param ant
 	 * @param child1 The first conditionally evaluated child node.
@@ -66,12 +66,12 @@ public class IfFoodAheadFunction extends AntFunction {
 	public IfFoodAheadFunction(final Ant ant, final Node child1, final Node child2) {
 		super(ant, child1, child2);
 	}
-	
+
 	/**
 	 * Constructs an <code>IfFoodAheadFunction</code> with two null child nodes,
-	 * and an ant which will be held internally. This makes the function with 
-	 * arity of two. Note that this differs from the alternative constructors 
-	 * which take three child nodes, one of which has an Ant return type. 
+	 * and an ant which will be held internally. This makes the function with
+	 * arity of two. Note that this differs from the alternative constructors
+	 * which take three child nodes, one of which has an Ant return type.
 	 * 
 	 * @param ant
 	 */
@@ -80,10 +80,10 @@ public class IfFoodAheadFunction extends AntFunction {
 	}
 
 	/**
-	 * Evaluates this function. The Ant is checked for whether food is in the 
-	 * position ahead. If food is in the position directly in front of the ant 
+	 * Evaluates this function. The Ant is checked for whether food is in the
+	 * position ahead. If food is in the position directly in front of the ant
 	 * then the first other child node is evaluated, otherwise the second other
-	 * child node is evaluated. The return type of this function node is Void, 
+	 * child node is evaluated. The return type of this function node is Void,
 	 * and so the value returned from this method is undefined.
 	 */
 	@Override
@@ -91,7 +91,7 @@ public class IfFoodAheadFunction extends AntFunction {
 		Ant ant;
 		Node child1;
 		Node child2;
-		
+
 		if (getArity() == 2) {
 			ant = getAnt();
 			child1 = getChild(0);
@@ -101,7 +101,7 @@ public class IfFoodAheadFunction extends AntFunction {
 			child1 = getChild(1);
 			child2 = getChild(2);
 		}
-		
+
 		if (ant.isFoodAhead()) {
 			child1.evaluate();
 		} else {
@@ -118,28 +118,28 @@ public class IfFoodAheadFunction extends AntFunction {
 	public String getIdentifier() {
 		return "IF-FOOD-AHEAD";
 	}
-	
+
 	/**
 	 * Returns this function node's return type for the given child input types.
-	 * If the arity of this node is two, and there are two inputs of type Void, 
-	 * then the return type will be Void. If the arity is three, and there are 
-	 * three input types, the first of which is a sub-type of Ant then the 
+	 * If the arity of this node is two, and there are two inputs of type Void,
+	 * then the return type will be Void. If the arity is three, and there are
+	 * three input types, the first of which is a sub-type of Ant then the
 	 * return type of this function will be Void. In all other cases this method
 	 * will return <code>null</code> to indicate that the inputs are invalid.
 	 * 
 	 * @return The Void class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (getArity() == 2 
-				&& inputTypes.length == 2
-				&& inputTypes[0] == Void.class
-				&& inputTypes[1] == Void.class) {
+	public Class<?> getReturnType(final Class<?> ... inputTypes) {
+		if ((getArity() == 2)
+				&& (inputTypes.length == 2)
+				&& (inputTypes[0] == Void.class)
+				&& (inputTypes[1] == Void.class)) {
 			return Void.class;
-		} else if (inputTypes.length == 3 
+		} else if ((inputTypes.length == 3)
 				&& Ant.class.isAssignableFrom(inputTypes[0])
-				&& inputTypes[1] == Void.class
-				&& inputTypes[2] == Void.class) {
+				&& (inputTypes[1] == Void.class)
+				&& (inputTypes[2] == Void.class)) {
 			return Void.class;
 		} else {
 			return null;

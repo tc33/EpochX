@@ -28,7 +28,7 @@ import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.tools.grammar.*;
 
 /**
- * <strong>WARNING: This class is not fully implemented. It should NOT currently 
+ * <strong>WARNING: This class is not fully implemented. It should NOT currently
  * be used.</strong>
  * 
  * A breadth first mapper is a twist on the classic depth-first mapper
@@ -97,8 +97,7 @@ public class BreadthFirstMapper implements Mapper {
 
 		int i = 0;
 		while (containsNonTerminals(symbols)) {
-			if ((i > model.getMaxDepth())
-					|| (program.getNoCodons() > model.getMaxChromosomeLength())) {
+			if ((i > model.getMaxDepth()) || (program.getNoCodons() > model.getMaxChromosomeLength())) {
 				return null;
 			} else {
 				if (!map(codons)) {
@@ -155,10 +154,8 @@ public class BreadthFirstMapper implements Mapper {
 					// If there are no more codons we simply add one.
 					if (codons.size() == 0) {
 						if (extending) {
-							if (program.getNoCodons() < model
-									.getMaxChromosomeLength()) {
-								final int newCodon = model.getCodonGenerator()
-										.getCodon();
+							if (program.getNoCodons() < model.getMaxChromosomeLength()) {
+								final int newCodon = model.getCodonGenerator().getCodon();
 								program.appendCodon(newCodon);
 								codons.add(newCodon);
 							} else {

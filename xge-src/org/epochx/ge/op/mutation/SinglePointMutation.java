@@ -49,7 +49,7 @@ public class SinglePointMutation extends ConfigOperator<GEModel> implements GEMu
 	 * a result of the single point mutation operation.
 	 */
 	public static final Stat MUT_POINT = new AbstractStat(ExpiryEvent.MUTATION) {};
-	
+
 	private RandomNumberGenerator rng;
 	private CodonGenerator codonGenerator;
 
@@ -57,14 +57,13 @@ public class SinglePointMutation extends ConfigOperator<GEModel> implements GEMu
 	 * Constructs a <code>SinglePointMutation</code> with all the necessary
 	 * parameters given.
 	 */
-	public SinglePointMutation(final CodonGenerator codonGenerator, 
-			final RandomNumberGenerator rng) {
+	public SinglePointMutation(final CodonGenerator codonGenerator, final RandomNumberGenerator rng) {
 		this(null);
-		
+
 		this.codonGenerator = codonGenerator;
 		this.rng = rng;
 	}
-	
+
 	/**
 	 * Construct a single point mutation.
 	 * 
@@ -99,16 +98,16 @@ public class SinglePointMutation extends ConfigOperator<GEModel> implements GEMu
 	public GECandidateProgram mutate(final CandidateProgram p) {
 		final GECandidateProgram program = (GECandidateProgram) p;
 
-		int point = rng.nextInt(program.getNoCodons());
+		final int point = rng.nextInt(program.getNoCodons());
 		final int codon = codonGenerator.getCodon();
 		program.setCodon(point, codon);
 
 		// Add mutation point into the stats manager.
 		Stats.get().addData(MUT_POINT, point);
-		
+
 		return program;
 	}
-	
+
 	/**
 	 * Returns the random number generator that this initialiser is using or
 	 * <code>null</code> if none has been set.
@@ -129,7 +128,7 @@ public class SinglePointMutation extends ConfigOperator<GEModel> implements GEMu
 	public void setRNG(final RandomNumberGenerator rng) {
 		this.rng = rng;
 	}
-	
+
 	/**
 	 * Returns the codon generator that this mutation is using to provide
 	 * new codons.

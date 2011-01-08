@@ -109,8 +109,7 @@ public class GPCandidateProgram extends CandidateProgram {
 		if (n >= 0) {
 			return rootNode.getNthNode(n);
 		} else {
-			throw new IndexOutOfBoundsException(
-					"attempt to get node at negative index");
+			throw new IndexOutOfBoundsException("attempt to get node at negative index");
 		}
 	}
 
@@ -128,8 +127,7 @@ public class GPCandidateProgram extends CandidateProgram {
 		} else if (n == 0) {
 			setRootNode(newNode);
 		} else {
-			throw new IndexOutOfBoundsException(
-					"attempt to set node at negative index");
+			throw new IndexOutOfBoundsException("attempt to set node at negative index");
 		}
 	}
 
@@ -147,8 +145,7 @@ public class GPCandidateProgram extends CandidateProgram {
 		if (depth >= 0) {
 			return rootNode.getNodesAtDepth(depth);
 		} else {
-			throw new IndexOutOfBoundsException(
-					"attempt to get nodes at negative depth");
+			throw new IndexOutOfBoundsException("attempt to get nodes at negative depth");
 		}
 	}
 
@@ -293,12 +290,12 @@ public class GPCandidateProgram extends CandidateProgram {
 	 * return flatTree.length;
 	 * }
 	 */
-	
+
 	/**
 	 * Returns the type of output this program will produce.
 	 * 
-	 * @return a Class which represents the type of object this program will 
-	 * output.
+	 * @return a Class which represents the type of object this program will
+	 *         output.
 	 */
 	public Class<?> getReturnType() {
 		return getRootNode().getReturnType();

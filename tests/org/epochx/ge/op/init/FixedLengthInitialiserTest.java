@@ -38,8 +38,8 @@ public class FixedLengthInitialiserTest {
 	public void setUp() throws Exception {
 		initialiser = new FixedLengthInitialiser(null, -1, -1, false);
 
-		RandomNumberGenerator rng = new MersenneTwisterFast();
-		
+		final RandomNumberGenerator rng = new MersenneTwisterFast();
+
 		// Ensure setup is valid.
 		initialiser.setCodonGenerator(new StandardGenerator(rng, 10));
 		initialiser.setChromosomeLength(1);
@@ -54,7 +54,7 @@ public class FixedLengthInitialiserTest {
 	public void testGetPopValid() {
 		try {
 			initialiser.getInitialPopulation();
-		} catch (IllegalStateException e) {
+		} catch (final IllegalStateException e) {
 			fail("illegal state exception thrown for valid parameters");
 		}
 	}
@@ -67,13 +67,14 @@ public class FixedLengthInitialiserTest {
 	public void testGetPopZeroPopSize() {
 		// Setup initialiser to be valid except for pop size.
 		initialiser.setPopSize(0);
-		
+
 		try {
 			initialiser.getInitialPopulation();
 			fail("illegal state exception not thrown for pop size being 0");
-		} catch (IllegalStateException e) {}
+		} catch (final IllegalStateException e) {
+		}
 	}
-	
+
 	/**
 	 * Tests that an illegal state exception is thrown if the chromosome length
 	 * parameter is 0.
@@ -82,10 +83,11 @@ public class FixedLengthInitialiserTest {
 	public void testGetPopZeroLength() {
 		// Setup initialiser to be valid except for depth.
 		initialiser.setChromosomeLength(0);
-		
+
 		try {
 			initialiser.getInitialPopulation();
 			fail("illegal state exception not thrown for chromosome length being 0");
-		} catch (IllegalStateException e) {}
+		} catch (final IllegalStateException e) {
+		}
 	}
 }

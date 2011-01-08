@@ -55,7 +55,7 @@ public class Log10Function extends Node {
 	 */
 	@Override
 	public Double evaluate() {
-		double c = NumericUtils.asDouble(getChild(0).evaluate());
+		final double c = NumericUtils.asDouble(getChild(0).evaluate());
 
 		return Math.log10(c);
 	}
@@ -67,21 +67,21 @@ public class Log10Function extends Node {
 	public String getIdentifier() {
 		return "LOG-10";
 	}
-	
+
 	/**
 	 * Returns this function node's return type for the given child input types.
-	 * If there is one input type of a numeric type then the return type will 
-	 * be Double. In all other cases this method will return 
-	 * <code>null</code> to indicate that the inputs are invalid.
+	 * If there is one input type of a numeric type then the return type will
+	 * be Double. In all other cases this method will return <code>null</code>
+	 * to indicate that the inputs are invalid.
 	 * 
 	 * @return the Double class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (inputTypes.length == 2 && TypeUtils.isAllNumericType(inputTypes)) {
+	public Class<?> getReturnType(final Class<?> ... inputTypes) {
+		if ((inputTypes.length == 2) && TypeUtils.isAllNumericType(inputTypes)) {
 			return Double.class;
 		}
-		
+
 		return null;
 	}
 }

@@ -72,22 +72,22 @@ public class GrammarLiteral implements GrammarNode {
 	public String toString() {
 		return escape(value);
 	}
-	
+
 	/*
 	 * If the input string contains any illegal chars then the whole string is
-	 * wrapped in quotes and returned. Otherwise the original string is 
+	 * wrapped in quotes and returned. Otherwise the original string is
 	 * returned unmodified.
 	 */
 	private String escape(String input) {
-		char[] escapeChars = {'>', '<', '|'};
+		final char[] escapeChars = {'>', '<', '|'};
 		if (StringUtils.containsAny(input, escapeChars)) {
-			StringBuilder buffer = new StringBuilder();
+			final StringBuilder buffer = new StringBuilder();
 			buffer.append('\"');
 			buffer.append(input);
 			buffer.append('\"');
 			input = buffer.toString();
 		}
-		
+
 		return input;
 	}
 }

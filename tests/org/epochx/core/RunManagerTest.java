@@ -108,8 +108,7 @@ public class RunManagerTest {
 
 		runManager.run(1);
 
-		assertEquals("run events were not called in the correct order", "1213",
-				verify.toString());
+		assertEquals("run events were not called in the correct order", "1213", verify.toString());
 	}
 
 }

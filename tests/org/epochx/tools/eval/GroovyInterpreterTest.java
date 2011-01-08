@@ -22,17 +22,14 @@ public class GroovyInterpreterTest {
 		final Object result = interpreter.eval(expression, args, values);
 
 		assertEquals("evaluation of simple expression incorrect", true, result);
-		assertTrue("evaluation of simple expression incorrect",
-				result instanceof Boolean);
-		assertEquals("evaluation of simple expression incorrect", false,
-				interpreter.eval('!' + expression, args, values));
+		assertTrue("evaluation of simple expression incorrect", result instanceof Boolean);
+		assertEquals("evaluation of simple expression incorrect", false, interpreter.eval('!' + expression, args, values));
 
 		expression = "(4.0 + 2.0) / (3.0 - d1)";
 		args = new String[]{"d1"};
 		values = new Object[]{1.0};
 
-		assertEquals("evaluation of simple expression incorrect", 3.0,
-				interpreter.eval(expression, args, values));
+		assertEquals("evaluation of simple expression incorrect", 3.0, interpreter.eval(expression, args, values));
 	}
 
 	/**
@@ -48,10 +45,8 @@ public class GroovyInterpreterTest {
 
 		Object[] result = interpreter.eval(expression, args, values);
 
-		assertEquals("evaluation of simple expression incorrect", true,
-				result[0]);
-		assertEquals("evaluation of simple expression incorrect", false,
-				result[1]);
+		assertEquals("evaluation of simple expression incorrect", true, result[0]);
+		assertEquals("evaluation of simple expression incorrect", false, result[1]);
 
 		expression = "(4.0 + 2.0) / (3.0 - d1)";
 		args = new String[]{"d1"};
@@ -59,10 +54,8 @@ public class GroovyInterpreterTest {
 
 		result = interpreter.eval(expression, args, values);
 
-		assertEquals("evaluation of simple expression incorrect", 3.0,
-				result[0]);
-		assertEquals("evaluation of simple expression incorrect", 6.0,
-				result[1]);
+		assertEquals("evaluation of simple expression incorrect", 3.0, result[0]);
+		assertEquals("evaluation of simple expression incorrect", 6.0, result[1]);
 	}
 
 	/**
@@ -80,8 +73,7 @@ public class GroovyInterpreterTest {
 
 		interpreter.exec(program, args, values);
 
-		assertEquals("execution of statements had unexpected side-effects",
-				new Point(25, 4), p.getLocation());
+		assertEquals("execution of statements had unexpected side-effects", new Point(25, 4), p.getLocation());
 	}
 
 	/**
@@ -102,9 +94,7 @@ public class GroovyInterpreterTest {
 		// Execute the program with p1 twice then p2 once.
 		interpreter.exec(program, args, values);
 
-		assertEquals("execution of statements had unexpected side-effects",
-				new Point(2, 4), p1.getLocation());
-		assertEquals("execution of statements had unexpected side-effects",
-				new Point(-9, -8), p2.getLocation());
+		assertEquals("execution of statements had unexpected side-effects", new Point(2, 4), p1.getLocation());
+		assertEquals("execution of statements had unexpected side-effects", new Point(-9, -8), p2.getLocation());
 	}
 }

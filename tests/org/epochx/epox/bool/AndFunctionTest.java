@@ -21,11 +21,11 @@
  */
 package org.epochx.epox.bool;
 
+import static org.junit.Assert.*;
+
 import org.epochx.epox.*;
 import org.epochx.gp.representation.AbstractNodeTestCase;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * 
@@ -40,8 +40,7 @@ public class AndFunctionTest extends AbstractNodeTestCase {
 	@Test
 	public void testEvaluateTT() {
 		final AndFunction node = (AndFunction) getNode();
-		final Node[] children = new Node[]{new Literal(true),
-				new Literal(true)};
+		final Node[] children = new Node[]{new Literal(true), new Literal(true)};
 		node.setChildren(children);
 		final boolean result = node.evaluate();
 
@@ -51,8 +50,7 @@ public class AndFunctionTest extends AbstractNodeTestCase {
 	@Test
 	public void testEvaluateTF() {
 		final AndFunction node = (AndFunction) getNode();
-		final Node[] children = new Node[]{new Literal(true),
-				new Literal(false)};
+		final Node[] children = new Node[]{new Literal(true), new Literal(false)};
 		node.setChildren(children);
 		final boolean result = node.evaluate();
 
@@ -62,8 +60,7 @@ public class AndFunctionTest extends AbstractNodeTestCase {
 	@Test
 	public void testEvaluateFT() {
 		final AndFunction node = (AndFunction) getNode();
-		final Node[] children = new Node[]{new Literal(false),
-				new Literal(true)};
+		final Node[] children = new Node[]{new Literal(false), new Literal(true)};
 		node.setChildren(children);
 		final boolean result = node.evaluate();
 
@@ -73,8 +70,7 @@ public class AndFunctionTest extends AbstractNodeTestCase {
 	@Test
 	public void testEvaluateFF() {
 		final AndFunction node = (AndFunction) getNode();
-		final Node[] children = new Node[]{new Literal(false),
-				new Literal(false)};
+		final Node[] children = new Node[]{new Literal(false), new Literal(false)};
 		node.setChildren(children);
 		final boolean result = node.evaluate();
 

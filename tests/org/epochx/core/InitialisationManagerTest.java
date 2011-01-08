@@ -89,6 +89,7 @@ public class InitialisationManagerTest {
 		});
 		// Listen for the generation.
 		Life.get().addGenerationListener(new GenerationListener() {
+
 			@Override
 			public void onGenerationStart() {
 				verify.append('2');
@@ -100,15 +101,16 @@ public class InitialisationManagerTest {
 			}
 		});
 		Life.get().addHook(new AbstractHook() {
+
 			@Override
-			public List<CandidateProgram> generationHook(
-					final List<CandidateProgram> genPop) {
+			public List<CandidateProgram> generationHook(final List<CandidateProgram> genPop) {
 				verify.append('4');
 				return genPop;
 			}
 		});
 		// Listen for the initialisation.
 		Life.get().addInitialisationListener(new InitialisationListener() {
+
 			@Override
 			public void onInitialisationStart() {
 				verify.append('3');
@@ -120,9 +122,9 @@ public class InitialisationManagerTest {
 			}
 		});
 		Life.get().addHook(new AbstractHook() {
+
 			@Override
-			public List<CandidateProgram> initialisationHook(
-					final List<CandidateProgram> genPop) {
+			public List<CandidateProgram> initialisationHook(final List<CandidateProgram> genPop) {
 				verify.append('5');
 				return genPop;
 			}
@@ -130,9 +132,7 @@ public class InitialisationManagerTest {
 
 		initialisationManager.initialise();
 
-		assertEquals(
-				"initialisation events were not called in the correct order",
-				"1234567", verify.toString());
+		assertEquals("initialisation events were not called in the correct order", "1234567", verify.toString());
 	}
 
 	/**
@@ -148,25 +148,23 @@ public class InitialisationManagerTest {
 
 		// Listen for the initialisation.
 		Life.get().addHook(new AbstractHook() {
-					@Override
-					public List<CandidateProgram> initialisationHook(
-							final List<CandidateProgram> genPop) {
-						verify.append('3');
-						// Revert 3 times before confirming.
-						if (count == 3) {
-							return genPop;
-						} else {
-							count++;
-						}
-						return null;
-					}
-				});
+
+			@Override
+			public List<CandidateProgram> initialisationHook(final List<CandidateProgram> genPop) {
+				verify.append('3');
+				// Revert 3 times before confirming.
+				if (count == 3) {
+					return genPop;
+				} else {
+					count++;
+				}
+				return null;
+			}
+		});
 
 		initialisationManager.initialise();
 
-		assertEquals(
-				"initialisation not reverted for null return from onInitialisation event",
-				"3333", verify.toString());
+		assertEquals("initialisation not reverted for null return from onInitialisation event", "3333", verify.toString());
 	}
 
 	/**
@@ -179,27 +177,25 @@ public class InitialisationManagerTest {
 
 		// We add the chars '1', '2', '3' to builder to check order of calls.
 		final StringBuilder verify = new StringBuilder();
-		
+
 		// Listen for the initialisation.
 		Life.get().addHook(new AbstractHook() {
-					@Override
-					public List<CandidateProgram> generationHook(
-							final List<CandidateProgram> genPop) {
-						verify.append('3');
-						// Revert 3 times before confirming.
-						if (count == 3) {
-							return genPop;
-						} else {
-							count++;
-						}
-						return null;
-					}
-				});
+
+			@Override
+			public List<CandidateProgram> generationHook(final List<CandidateProgram> genPop) {
+				verify.append('3');
+				// Revert 3 times before confirming.
+				if (count == 3) {
+					return genPop;
+				} else {
+					count++;
+				}
+				return null;
+			}
+		});
 
 		initialisationManager.initialise();
 
-		assertEquals(
-				"initialisation not reverted for null return from onGeneration event",
-				"3333", verify.toString());
+		assertEquals("initialisation not reverted for null return from onGeneration event", "3333", verify.toString());
 	}
 }

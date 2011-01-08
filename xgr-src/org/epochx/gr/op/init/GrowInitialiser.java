@@ -76,17 +76,16 @@ public class GrowInitialiser extends ConfigOperator<GRModel> implements GRInitia
 	 * Constructs a <code>GrowInitialiser</code> with all the necessary
 	 * parameters given.
 	 */
-	public GrowInitialiser(final RandomNumberGenerator rng,
-			final Grammar grammar, final int popSize, final int maxDepth,
-			final boolean acceptDuplicates) {
+	public GrowInitialiser(final RandomNumberGenerator rng, final Grammar grammar, final int popSize,
+			final int maxDepth, final boolean acceptDuplicates) {
 		this(null, acceptDuplicates);
-		
+
 		this.rng = rng;
 		this.grammar = grammar;
 		this.popSize = popSize;
 		this.maxDepth = maxDepth;
 	}
-	
+
 	/**
 	 * Constructs a <code>GrowInitialiser</code> with the necessary parameters
 	 * loaded from the given model. The parameters are reloaded on configure
@@ -112,7 +111,7 @@ public class GrowInitialiser extends ConfigOperator<GRModel> implements GRInitia
 	 */
 	public GrowInitialiser(final GRModel model, final boolean acceptDuplicates) {
 		super(model);
-		
+
 		this.acceptDuplicates = acceptDuplicates;
 	}
 
@@ -142,13 +141,11 @@ public class GrowInitialiser extends ConfigOperator<GRModel> implements GRInitia
 	@Override
 	public List<CandidateProgram> getInitialPopulation() {
 		if (popSize < 1) {
-			throw new IllegalStateException(
-					"Population size must be 1 or greater");
+			throw new IllegalStateException("Population size must be 1 or greater");
 		}
-		
+
 		// Create population list to be populated.
-		final List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(
-				popSize);
+		final List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
 
 		// Create and add new programs to the population.
 		for (int i = 0; i < popSize; i++) {
@@ -176,20 +173,20 @@ public class GrowInitialiser extends ConfigOperator<GRModel> implements GRInitia
 		if (grammar == null) {
 			throw new IllegalStateException("No grammar has been set");
 		}
-		
+
 		final GrammarRule startRule = grammar.getStartRule();
-		
+
 		// Check the min depth of a valid tree is not more than the max depth.
 		if (startRule.getMinDepth() > maxDepth) {
-			throw new IllegalStateException(
-					"No possible programs within given max depth parameter for this grammar.");
+			throw new IllegalStateException("No possible programs within given max depth parameter for this grammar.");
 		}
 
 		return new GRCandidateProgram(getGrownParseTree(maxDepth, startRule), getModel());
 	}
 
 	/**
-	 * Grows and returns a new parse tree with a maximum maxDepth of the specified
+	 * Grows and returns a new parse tree with a maximum maxDepth of the
+	 * specified
 	 * maxDepth parameter.
 	 * 
 	 * @param maxDepth The maximum maxDepth of the parse tree, where the
@@ -199,12 +196,11 @@ public class GrowInitialiser extends ConfigOperator<GRModel> implements GRInitia
 	 */
 	public NonTerminalSymbol getGrownParseTree(final int maxDepth, final GrammarRule startRule) {
 		if (rng == null) {
-			throw new IllegalStateException(
-					"No random number generator has been set");
+			throw new IllegalStateException("No random number generator has been set");
 		} else if (maxDepth < 0) {
 			throw new IllegalStateException("Maximum depth must be 0 or greater");
 		}
-		
+
 		final NonTerminalSymbol parseTree = new NonTerminalSymbol(startRule);
 
 		buildDerivationTree(parseTree, startRule, 0, maxDepth);
@@ -215,14 +211,15 @@ public class GrowInitialiser extends ConfigOperator<GRModel> implements GRInitia
 	/*
 	 * Recursive helper for the getGrownParseTree method.
 	 */
-	private void buildDerivationTree(final NonTerminalSymbol parseTree,
-			final GrammarRule rule, final int currentDepth, final int maxDepth) {
+	private void buildDerivationTree(final NonTerminalSymbol parseTree, final GrammarRule rule, final int currentDepth,
+			final int maxDepth) {
 		// Check if theres more than one production.
 		int productionIndex = 0;
 		final int noProductions = rule.getNoProductions();
 		if (noProductions > 1) {
-			final List<Integer> validProductions = getValidProductionIndexes(
-					rule.getProductions(), maxDepth - currentDepth - 1);
+			final List<Integer> validProductions = getValidProductionIndexes(rule.getProductions(), maxDepth
+					- currentDepth
+					- 1);
 
 			// Choose a production randomly.
 			final int chosenProduction = rng.nextInt(validProductions.size());
@@ -237,8 +234,7 @@ public class GrowInitialiser extends ConfigOperator<GRModel> implements GRInitia
 			if (node instanceof GrammarRule) {
 				final GrammarRule r = (GrammarRule) node;
 
-				final NonTerminalSymbol nt = new NonTerminalSymbol(
-						(GrammarRule) node);
+				final NonTerminalSymbol nt = new NonTerminalSymbol((GrammarRule) node);
 
 				buildDerivationTree(nt, r, currentDepth + 1, maxDepth);
 
@@ -254,8 +250,7 @@ public class GrowInitialiser extends ConfigOperator<GRModel> implements GRInitia
 	 * Gets a List of indexes to those productions from the List of productions
 	 * given that can be used with the specified maximum maxDepth constraint.
 	 */
-	private List<Integer> getValidProductionIndexes(
-			final List<GrammarProduction> grammarProductions, final int maxDepth) {
+	private List<Integer> getValidProductionIndexes(final List<GrammarProduction> grammarProductions, final int maxDepth) {
 		final List<Integer> valid = new ArrayList<Integer>();
 
 		for (int i = 0; i < grammarProductions.size(); i++) {
@@ -290,7 +285,7 @@ public class GrowInitialiser extends ConfigOperator<GRModel> implements GRInitia
 	 * @param acceptDuplicates whether duplicates should be accepted in the
 	 *        populations that are constructed.
 	 */
-	public void setDuplicatesEnabled(boolean acceptDuplicates) {
+	public void setDuplicatesEnabled(final boolean acceptDuplicates) {
 		this.acceptDuplicates = acceptDuplicates;
 	}
 
@@ -357,7 +352,7 @@ public class GrowInitialiser extends ConfigOperator<GRModel> implements GRInitia
 	}
 
 	/**
-	 * Returns the maximum depth that any program parse tree generated by this 
+	 * Returns the maximum depth that any program parse tree generated by this
 	 * initialiser will have.
 	 * 
 	 * @return the maximum depth the program trees constructed should be.
@@ -367,7 +362,7 @@ public class GrowInitialiser extends ConfigOperator<GRModel> implements GRInitia
 	}
 
 	/**
-	 * Sets the maximum depth that any program parse trees generated by this 
+	 * Sets the maximum depth that any program parse trees generated by this
 	 * initialiser should be.
 	 * 
 	 * @param maxDepth the maximum depth of all new program trees.

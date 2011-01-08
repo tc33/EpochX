@@ -23,7 +23,7 @@ package org.epochx.gp.op.crossover;
 
 import java.util.*;
 
-import org.epochx.epox.*;
+import org.epochx.epox.Node;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.op.ConfigOperator;
@@ -49,7 +49,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * If the <code>getModel</code> method returns <code>null</code> then no model
  * is set and whatever static parameters have been set as parameters to the
  * constructor or using the standard accessor methods will be used. If any
- * compulsory parameters remain unset when the crossover is performed then an 
+ * compulsory parameters remain unset when the crossover is performed then an
  * <code>IllegalStateException</code> will be thrown.
  * 
  * @see KozaCrossover
@@ -62,44 +62,44 @@ public class SubtreeCrossover extends ConfigOperator<GPModel> implements GPCross
 	 * parent for the uniform point crossover operation.
 	 */
 	public static final Stat XO_POINT1 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
-	
+
 	/**
 	 * Requests an <code>Integer</code> which is the point chosen in the second
 	 * parent for the uniform point crossover operation.
 	 */
 	public static final Stat XO_POINT2 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
-	
+
 	/**
 	 * Requests a <code>Node</code> which is the subtree from the
 	 * first parent program which is being exchanged into the second parent.
 	 */
 	public static final Stat XO_SUBTREE1 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
-	
+
 	/**
 	 * Requests a <code>Node</code> which is the subtree from the
 	 * second parent program which is being exchanged into the first parent.
 	 */
 	public static final Stat XO_SUBTREE2 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
-	
+
 	// The random number generator for controlling random behaviour.
 	private RandomNumberGenerator rng;
-	
+
 	// The probability of choosing a function node as the swap point.
-	private double functionSwapProbability;
+	private final double functionSwapProbability;
 
 	/**
 	 * Constructs a <code>SubtreeCrossover</code> with the only necessary
 	 * parameter provided.
 	 * 
-	 * @param rng a <code>RandomNumberGenerator</code> used to lead 
-	 * non-deterministic behaviour.
+	 * @param rng a <code>RandomNumberGenerator</code> used to lead
+	 *        non-deterministic behaviour.
 	 */
 	public SubtreeCrossover(final RandomNumberGenerator rng) {
 		this((GPModel) null);
-		
+
 		this.rng = rng;
 	}
-	
+
 	/**
 	 * Constructs a <code>SubtreeCrossover</code>.
 	 * 
@@ -109,10 +109,10 @@ public class SubtreeCrossover extends ConfigOperator<GPModel> implements GPCross
 	 */
 	public SubtreeCrossover(final RandomNumberGenerator rng, final double functionSwapProbability) {
 		this((GPModel) null, functionSwapProbability);
-		
+
 		this.rng = rng;
 	}
-	
+
 	/**
 	 * Constructs a <code>SubtreeCrossover</code>.
 	 * 
@@ -121,7 +121,7 @@ public class SubtreeCrossover extends ConfigOperator<GPModel> implements GPCross
 	public SubtreeCrossover(final GPModel model) {
 		this(model, -1.0);
 	}
-	
+
 	/**
 	 * Construct an instance of Koza crossover.
 	 * 
@@ -130,7 +130,7 @@ public class SubtreeCrossover extends ConfigOperator<GPModel> implements GPCross
 	 */
 	public SubtreeCrossover(final GPModel model, final double functionSwapProbability) {
 		super(model);
-		
+
 		this.functionSwapProbability = functionSwapProbability;
 	}
 
@@ -161,48 +161,49 @@ public class SubtreeCrossover extends ConfigOperator<GPModel> implements GPCross
 		// Select first swap point.
 		final int swapPoint1 = getCrossoverPoint(program1);
 		final Node subtree1 = program1.getNthNode(swapPoint1);// .clone();
-		
+
 		// Find which nodes in program2 have a matching return type to subtree1.
-		Class<?> subtree1Type = subtree1.getReturnType();
-		List<Node> matchingNodes = new ArrayList<Node>();
-		List<Integer> matchingIndexes = new ArrayList<Integer>();
+		final Class<?> subtree1Type = subtree1.getReturnType();
+		final List<Node> matchingNodes = new ArrayList<Node>();
+		final List<Integer> matchingIndexes = new ArrayList<Integer>();
 		getMatchingNodes(program2.getRootNode(), subtree1Type, 0, matchingNodes, matchingIndexes);
-		
+
 		if (matchingNodes.size() > 0) {
 			// Select second swap point with the same data-type.
-			int index = getSelectedMatch(matchingNodes);
+			final int index = getSelectedMatch(matchingNodes);
 			final Node subtree2 = matchingNodes.get(index);
 			final int swapPoint2 = matchingIndexes.get(index);
-			
+
 			// Add data into the stats manager.
 			Stats.get().addData(XO_POINT1, swapPoint1);
 			Stats.get().addData(XO_POINT2, swapPoint2);
 			Stats.get().addData(XO_SUBTREE1, subtree1);
 			Stats.get().addData(XO_SUBTREE2, subtree2);
-			
+
 			// Perform swap.
 			program1.setNthNode(swapPoint1, subtree2);
 			program2.setNthNode(swapPoint2, subtree1);
-			
+
 			return new GPCandidateProgram[]{program1, program2};
 		}
 
 		return new GPCandidateProgram[0];
 	}
-	
-	private int getMatchingNodes(Node root, Class<?> type, int current, List<Node> matching, List<Integer> indexes) {
+
+	private int getMatchingNodes(final Node root, final Class<?> type, int current, final List<Node> matching,
+			final List<Integer> indexes) {
 		if (root.getReturnType() == type) {
 			matching.add(root);
 			indexes.add(current);
 		}
-		
-		for (int i=0; i<root.getArity(); i++) {
-			current = getMatchingNodes(root.getChild(i), type, current+1, matching, indexes);
+
+		for (int i = 0; i < root.getArity(); i++) {
+			current = getMatchingNodes(root.getChild(i), type, current + 1, matching, indexes);
 		}
-		
+
 		return current;
 	}
-	
+
 	/*
 	 * Choose the crossover point for the given GPCandidateProgram with respect
 	 * to the probabilities assigned for function and terminal node points.
@@ -229,7 +230,7 @@ public class SubtreeCrossover extends ConfigOperator<GPModel> implements GPCross
 			return program.getRootNode().getNthTerminalNodeIndex(t);
 		}
 	}
-	
+
 	/*
 	 * Choose the crossover point for the given GPCandidateProgram with respect
 	 * to the probabilities assigned for function and terminal node points.
@@ -240,17 +241,17 @@ public class SubtreeCrossover extends ConfigOperator<GPModel> implements GPCross
 			// Randomly select a node from the program.
 			return rng.nextInt(nodes.size());
 		} else {
-			List<Integer> terminalIndexes = new ArrayList<Integer>();
-			List<Integer> functionIndexes = new ArrayList<Integer>();
-			
-			for (int i=0; i<nodes.size(); i++) {
+			final List<Integer> terminalIndexes = new ArrayList<Integer>();
+			final List<Integer> functionIndexes = new ArrayList<Integer>();
+
+			for (int i = 0; i < nodes.size(); i++) {
 				if (nodes.get(i).getArity() == 0) {
 					terminalIndexes.add(i);
 				} else {
 					functionIndexes.add(i);
 				}
 			}
-			
+
 			if ((functionIndexes.size() > 0) && (rng.nextDouble() < functionSwapProbability)) {
 				// Randomly select a function node from the function set.
 				return functionIndexes.get(rng.nextInt(functionIndexes.size()));
@@ -260,7 +261,7 @@ public class SubtreeCrossover extends ConfigOperator<GPModel> implements GPCross
 			}
 		}
 	}
-	
+
 	/**
 	 * Returns the random number generator that this crossover is using or
 	 * <code>null</code> if none has been set.

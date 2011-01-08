@@ -131,9 +131,7 @@ public abstract class AbstractNodeTestCase {
 			final Node newChild = new Literal(false);
 			final int lastIndex = node.getLength() - 1;
 			node.setNthNode(lastIndex, newChild);
-			assertSame(
-					"nth node in node tree not set when n is the last node index",
-					newChild, node.getNthNode(lastIndex));
+			assertSame("nth node in node tree not set when n is the last node index", newChild, node.getNthNode(lastIndex));
 		} catch (final Exception e) {
 			fail("Exception thrown when setting last node in node tree");
 		}
@@ -160,8 +158,7 @@ public abstract class AbstractNodeTestCase {
 	public void testGetNodesAtDepthZero() {
 		final List<Node> nodes = node.getNodesAtDepth(0);
 		assertEquals("more than one node at depth zero", 1, nodes.size());
-		assertSame("current node not returned for depth zero", node,
-				nodes.get(0));
+		assertSame("current node not returned for depth zero", node, nodes.get(0));
 	}
 
 	/**
@@ -172,9 +169,7 @@ public abstract class AbstractNodeTestCase {
 	public void testGetNodesAtDepthTooLarge() {
 		try {
 			final List<Node> nodes = node.getNodesAtDepth(node.getDepth() + 1);
-			assertEquals(
-					"empty list not returned for nodes greater than maximum depth in program",
-					0, nodes.size());
+			assertEquals("empty list not returned for nodes greater than maximum depth in program", 0, nodes.size());
 		} catch (final IndexOutOfBoundsException e) {
 			fail("Exception thrown for depth greater than the maximum depth");
 		}

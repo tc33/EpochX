@@ -21,7 +21,7 @@
  */
 package org.epochx.epox.bool;
 
-import org.epochx.epox.*;
+import org.epochx.epox.Node;
 import org.epochx.tools.util.TypeUtils;
 
 /**
@@ -48,19 +48,19 @@ public class OrFunction extends Node {
 
 	/**
 	 * Evaluates this function lazily. The first child node is evaluated, the
-	 * result of which must be a <code>Boolean</code> instance. If the result 
-	 * is a false value then the second child is also evaluated. The result of 
-	 * this function will be true if either (or both) children evaluate to 
+	 * result of which must be a <code>Boolean</code> instance. If the result
+	 * is a false value then the second child is also evaluated. The result of
+	 * this function will be true if either (or both) children evaluate to
 	 * true, otherwise the result will be false.
 	 */
 	@Override
 	public Boolean evaluate() {
 		boolean result = ((Boolean) getChild(0).evaluate()).booleanValue();
-		
+
 		if (!result) {
 			result = ((Boolean) getChild(1).evaluate()).booleanValue();
 		}
-		
+
 		return result;
 	}
 
@@ -71,19 +71,19 @@ public class OrFunction extends Node {
 	public String getIdentifier() {
 		return "OR";
 	}
-	
+
 	/**
 	 * Returns this function node's return type for the given child input types.
-	 * If there are two children, both of which have a return type of Boolean, 
-	 * then the return type of this function will also be Boolean. In all other 
-	 * cases this method will return <code>null</code> to indicate that the 
+	 * If there are two children, both of which have a return type of Boolean,
+	 * then the return type of this function will also be Boolean. In all other
+	 * cases this method will return <code>null</code> to indicate that the
 	 * inputs are invalid.
 	 * 
 	 * @return The Boolean class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (inputTypes.length == 2 && TypeUtils.allEqual(inputTypes, Boolean.class)) {
+	public Class<?> getReturnType(final Class<?> ... inputTypes) {
+		if ((inputTypes.length == 2) && TypeUtils.allEqual(inputTypes, Boolean.class)) {
 			return Boolean.class;
 		} else {
 			return null;

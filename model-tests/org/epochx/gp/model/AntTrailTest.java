@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -30,7 +30,6 @@ import org.epochx.stats.*;
 import org.epochx.test.*;
 import org.junit.*;
 
-
 /**
  * 
  */
@@ -38,52 +37,54 @@ public class AntTrailTest extends ModelTest {
 
 	private RunListener runPrinter;
 	private GenerationListener genPrinter;
-	
+
 	@Before
 	public void setUp() throws Exception {
 		runPrinter = new RunAdapter() {
+
 			@Override
 			public void onRunEnd() {
 				Stats.get().print(StatField.RUN_NUMBER, StatField.RUN_FITNESS_MIN);
 			}
 		};
 		Life.get().addRunListener(runPrinter);
-		
+
 		genPrinter = new GenerationAdapter() {
+
 			@Override
 			public void onGenerationEnd() {
 				Stats.get().print(StatField.RUN_NUMBER, StatField.GEN_NUMBER, StatField.GEN_FITNESS_MIN, StatField.GEN_FITNESS_AVE);
 			}
 		};
-		//Life.get().addGenerationListener(genPrinter);
+		// Life.get().addGenerationListener(genPrinter);
 	}
-	
+
 	@After
 	public void tearDown() throws Exception {
 		Life.get().removeRunListener(runPrinter);
 		Life.get().removeGenerationListener(genPrinter);
 	}
-	
-	private void setupModel(AntTrail model) {
+
+	private void setupModel(final AntTrail model) {
 		model.setNoRuns(100);
 		model.setPopulationSize(500);
 		model.setNoGenerations(51);
 		model.setCrossoverProbability(0.9);
 		model.setMutationProbability(0.0);
 		model.setReproductionProbability(0.1);
-		
+
 		model.setCrossover(new KozaCrossover(model));
-		
+
 		model.setMaxDepth(16);
 		model.setMaxInitialDepth(5);
 		model.setInitialiser(new RampedHalfAndHalfInitialiser(model, 1, false));
 		model.setPoolSelector(null);
 		model.setProgramSelector(new FitnessProportionateSelector(model));
 		model.setNoElites(0);
-		
+
 		model.setTerminationFitness(0.0);
 	}
-	
+
 	/**
 	 * Tests Santa Fe trail with standard setup.
 	 * 
@@ -96,22 +97,22 @@ public class AntTrailTest extends ModelTest {
 	public void testSantaFeTrail() {
 		final int LOWER_SUCCESS = 12;
 		final int UPPER_SUCCESS = 20;
-		
-		AntTrail model = new SantaFeTrail(600);
+
+		final AntTrail model = new SantaFeTrail(600);
 		setupModel(model);
-		
-		SuccessCounter counter = new SuccessCounter();
-		
+
+		final SuccessCounter counter = new SuccessCounter();
+
 		Life.get().addRunListener(counter);
-		
+
 		model.run();
-		
+
 		Life.get().removeRunListener(counter);
-		
-		int noSuccess = counter.getNoSuccess();
+
+		final int noSuccess = counter.getNoSuccess();
 		assertBetween("Unexpected success rate for Santa Fe trail", LOWER_SUCCESS, UPPER_SUCCESS, noSuccess);
 	}
-	
+
 	/**
 	 * Tests Santa Fe trail with standard setup.
 	 * 
@@ -124,26 +125,27 @@ public class AntTrailTest extends ModelTest {
 	public void testGenericSantaFeTrail() {
 		final int LOWER_SUCCESS = 12;
 		final int UPPER_SUCCESS = 20;
-		
-		AntTrail model = new SantaFeTrail(600);
+
+		final AntTrail model = new SantaFeTrail(600);
 		setupModel(model);
 		model.setCrossoverProbability(0.9);
 		model.setMutationProbability(0.1);
 		model.setReproductionProbability(0.0);
-		
-		//model.setInitialiser(new RampedHalfAndHalfInitialiser(model, 2, false));
+
+		// model.setInitialiser(new RampedHalfAndHalfInitialiser(model, 2,
+		// false));
 		model.setCrossover(new SubtreeCrossover(model));
 		model.setMutation(new SubtreeMutation(model));
-		
-		SuccessCounter counter = new SuccessCounter();
-		
+
+		final SuccessCounter counter = new SuccessCounter();
+
 		Life.get().addRunListener(counter);
-		
+
 		model.run();
-		
+
 		Life.get().removeRunListener(counter);
-		
-		int noSuccess = counter.getNoSuccess();
+
+		final int noSuccess = counter.getNoSuccess();
 		assertBetween("Unexpected success rate for Santa Fe trail", LOWER_SUCCESS, UPPER_SUCCESS, noSuccess);
 	}
 }

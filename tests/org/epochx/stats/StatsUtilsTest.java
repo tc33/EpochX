@@ -128,8 +128,7 @@ public class StatsUtilsTest {
 	public void testMaxIndexDouble() {
 		final double[] values = {0.1, 0.2, 0.3, 0.4};
 
-		assertEquals("maximum index not for the maximum value",
-				NumberUtils.max(values), values[StatsUtils.maxIndex(values)], 0);
+		assertEquals("maximum index not for the maximum value", NumberUtils.max(values), values[StatsUtils.maxIndex(values)], 0);
 	}
 
 	/**
@@ -153,8 +152,7 @@ public class StatsUtilsTest {
 	public void testMaxIndexInt() {
 		final int[] values = {1, 2, 3, 4};
 
-		assertEquals("maximum index not for the maximum value",
-				NumberUtils.max(values), values[StatsUtils.maxIndex(values)]);
+		assertEquals("maximum index not for the maximum value", NumberUtils.max(values), values[StatsUtils.maxIndex(values)]);
 	}
 
 	/**
@@ -178,8 +176,7 @@ public class StatsUtilsTest {
 	public void testMinIndexDouble() {
 		final double[] values = {0.1, 0.2, 0.3, 0.4};
 
-		assertEquals("minimum index not for the minimum value",
-				NumberUtils.min(values), values[StatsUtils.minIndex(values)]);
+		assertEquals("minimum index not for the minimum value", NumberUtils.min(values), values[StatsUtils.minIndex(values)]);
 	}
 
 	/**
@@ -203,8 +200,7 @@ public class StatsUtilsTest {
 	public void testMinIndexInt() {
 		final int[] values = {1, 2, 3, 4};
 
-		assertEquals("minimum index not for the minimum value",
-				NumberUtils.min(values), values[StatsUtils.minIndex(values)]);
+		assertEquals("minimum index not for the minimum value", NumberUtils.min(values), values[StatsUtils.minIndex(values)]);
 	}
 
 	/**

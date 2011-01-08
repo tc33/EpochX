@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -21,57 +21,56 @@
  */
 package org.epochx.tools.util;
 
-
 /**
  * 
  */
 public class NumericUtils {
-	
-	public static Double asDouble(Object o) {
+
+	public static Double asDouble(final Object o) {
 		if (o instanceof Number) {
 			return ((Number) o).doubleValue();
 		}
-		
+
 		return null;
 	}
-	
-	public static Float asFloat(Object o) {
+
+	public static Float asFloat(final Object o) {
 		if (o instanceof Number) {
 			return ((Number) o).floatValue();
 		}
-		
+
 		return null;
 	}
-	
-	public static Integer asInteger(Object o) {
+
+	public static Integer asInteger(final Object o) {
 		if (o instanceof Number) {
 			return ((Number) o).intValue();
 		}
-		
+
 		return null;
 	}
-	
-	public static Long asLong(Object o) {
+
+	public static Long asLong(final Object o) {
 		if (o instanceof Number) {
 			return ((Number) o).longValue();
 		}
-		
+
 		return null;
 	}
-	
-	public static Short asShort(Object o) {
+
+	public static Short asShort(final Object o) {
 		if (o instanceof Number) {
 			return ((Number) o).shortValue();
 		}
-		
+
 		return null;
 	}
-	
-	public static Byte asByte(Object o) {
+
+	public static Byte asByte(final Object o) {
 		if (o instanceof Number) {
 			return ((Number) o).byteValue();
 		}
-		
+
 		return null;
 	}
 }

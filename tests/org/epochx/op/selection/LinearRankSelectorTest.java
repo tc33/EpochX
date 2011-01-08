@@ -84,8 +84,7 @@ public class LinearRankSelectorTest {
 	public void testSetGradientOne() {
 		try {
 			selector.setGradient(1.0);
-			assertEquals("gradient not equal to 1.0 after being set to 1.0",
-					1.0, selector.getGradient());
+			assertEquals("gradient not equal to 1.0 after being set to 1.0", 1.0, selector.getGradient());
 		} catch (final Exception e) {
 			fail("Illegal argument exception thrown for a gradient of 1");
 		}
@@ -99,8 +98,7 @@ public class LinearRankSelectorTest {
 	public void testSetGradientZero() {
 		try {
 			selector.setGradient(0.0);
-			assertEquals("gradient not equal to 0.0 after being set to 0.0",
-					0.0, selector.getGradient());
+			assertEquals("gradient not equal to 0.0 after being set to 0.0", 0.0, selector.getGradient());
 		} catch (final Exception e) {
 			fail("Illegal argument exception thrown for a gradient of 0");
 		}
@@ -161,8 +159,7 @@ public class LinearRankSelectorTest {
 		}
 
 		final List<CandidateProgram> pool = selector.getPool(pop, poolSize);
-		assertEquals("pool returned is not equal to pool size parameter",
-				poolSize, pool.size());
+		assertEquals("pool returned is not equal to pool size parameter", poolSize, pool.size());
 	}
 
 	/**
@@ -200,10 +197,7 @@ public class LinearRankSelectorTest {
 	public void testSelectionGradientOne() {
 		selector.setGradient(1.0);
 
-		assertTrue("probability of best and worst programs being "
-				+ "selected is not equal for a gradient of 1.0",
-				selector.getBestProbability(10) == selector
-						.getWorstProbability(10));
+		assertTrue("probability of best and worst programs being " + "selected is not equal for a gradient of 1.0", selector.getBestProbability(10) == selector.getWorstProbability(10));
 	}
 
 	/**
@@ -214,8 +208,7 @@ public class LinearRankSelectorTest {
 	public void testSelectionGradientZero() {
 		selector.setGradient(0.0);
 
-		assertEquals("probability of worst program being selected is not 0.0",
-				0.0, selector.getWorstProbability(10));
+		assertEquals("probability of worst program being selected is not 0.0", 0.0, selector.getWorstProbability(10));
 	}
 
 	/**

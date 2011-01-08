@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -21,7 +21,6 @@
  */
 package org.epochx.tools.random;
 
-
 /**
  * A mock random number generator for the purpose of testing.
  */
@@ -31,42 +30,42 @@ public class MockRandom implements RandomNumberGenerator {
 	private int nextInt;
 	private double nextDouble;
 	private boolean nextBoolean;
-	
+
 	/**
-	 * Sets the <code>int</code> that will be returned by the 
+	 * Sets the <code>int</code> that will be returned by the
 	 * <code>nextInt</code> method.
 	 * 
 	 * @param nextInt the int to be the next 'random' int.
 	 */
-	public void setNextInt(int nextInt) {
+	public void setNextInt(final int nextInt) {
 		this.nextInt = nextInt;
 	}
-	
+
 	/**
-	 * Sets the <code>double</code> that will be returned by the 
+	 * Sets the <code>double</code> that will be returned by the
 	 * <code>nextDouble</code> method.
 	 * 
 	 * @param nextDouble the double to be the next 'random' double.
 	 */
-	public void setNextDouble(double nextDouble) {
+	public void setNextDouble(final double nextDouble) {
 		this.nextDouble = nextDouble;
 	}
-	
+
 	/**
-	 * Sets the <code>boolean</code> that will be returned by the 
+	 * Sets the <code>boolean</code> that will be returned by the
 	 * <code>nextBoolean</code> method.
 	 * 
 	 * @param nextBoolean the boolean to be the next 'random' boolean.
 	 */
-	public void setNextBoolean(boolean nextBoolean) {
+	public void setNextBoolean(final boolean nextBoolean) {
 		this.nextBoolean = nextBoolean;
 	}
-	
+
 	/**
 	 * Returns the mock next 'random' int.
 	 */
 	@Override
-	public int nextInt(int n) {
+	public int nextInt(final int n) {
 		return nextInt;
 	}
 
@@ -98,6 +97,7 @@ public class MockRandom implements RandomNumberGenerator {
 	 * Not implemented.
 	 */
 	@Override
-	public void setSeed(long seed) {}
+	public void setSeed(final long seed) {
+	}
 
 }

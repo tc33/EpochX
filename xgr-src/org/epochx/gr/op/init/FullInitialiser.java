@@ -76,17 +76,16 @@ public class FullInitialiser extends ConfigOperator<GRModel> implements GRInitia
 	 * Constructs a <code>FullInitialiser</code> with all the necessary
 	 * parameters given.
 	 */
-	public FullInitialiser(final RandomNumberGenerator rng,
-			final Grammar grammar, final int popSize, final int depth,
+	public FullInitialiser(final RandomNumberGenerator rng, final Grammar grammar, final int popSize, final int depth,
 			final boolean acceptDuplicates) {
 		this(null, acceptDuplicates);
-		
+
 		this.rng = rng;
 		this.grammar = grammar;
 		this.popSize = popSize;
 		this.depth = depth;
 	}
-	
+
 	/**
 	 * Constructs a <code>FullInitialiser</code> with the necessary parameters
 	 * loaded from the given model. The parameters are reloaded on configure
@@ -112,7 +111,7 @@ public class FullInitialiser extends ConfigOperator<GRModel> implements GRInitia
 	 */
 	public FullInitialiser(final GRModel model, final boolean acceptDuplicates) {
 		super(model);
-		
+
 		this.acceptDuplicates = acceptDuplicates;
 	}
 
@@ -143,13 +142,11 @@ public class FullInitialiser extends ConfigOperator<GRModel> implements GRInitia
 	@Override
 	public List<CandidateProgram> getInitialPopulation() {
 		if (popSize < 1) {
-			throw new IllegalStateException(
-					"Population size must be 1 or greater");
+			throw new IllegalStateException("Population size must be 1 or greater");
 		}
-		
+
 		// Create population list to be populated.
-		final List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(
-				popSize);
+		final List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
 
 		// Create and add new programs to the population.
 		for (int i = 0; i < popSize; i++) {
@@ -175,22 +172,20 @@ public class FullInitialiser extends ConfigOperator<GRModel> implements GRInitia
 	 */
 	public GRCandidateProgram getInitialProgram() {
 		if (rng == null) {
-			throw new IllegalStateException(
-					"No random number generator has been set");
+			throw new IllegalStateException("No random number generator has been set");
 		} else if (grammar == null) {
 			throw new IllegalStateException("No grammar has been set");
 		}
-		
+
 		// Get the root of the grammar.
 		final GrammarRule startRule = grammar.getStartRule();
 
 		// Determine the minimum depth possible for a valid program.
-		int minDepth = startRule.getMinDepth();
+		final int minDepth = startRule.getMinDepth();
 		if (minDepth > depth) {
-			throw new IllegalStateException(
-					"No possible programs within given max depth parameter for this grammar.");
+			throw new IllegalStateException("No possible programs within given max depth parameter for this grammar.");
 		}
-		
+
 		// Construct the root of the parse tree.
 		final NonTerminalSymbol parseTree = new NonTerminalSymbol(startRule);
 
@@ -205,14 +200,15 @@ public class FullInitialiser extends ConfigOperator<GRModel> implements GRInitia
 	 * Builds a full parse tree from the given non-terminal symbol using the
 	 * grammar rule.
 	 */
-	private void buildDerivationTree(final NonTerminalSymbol parseTree,
-			final GrammarRule rule, final int currentDepth, final int maxDepth) {
+	private void buildDerivationTree(final NonTerminalSymbol parseTree, final GrammarRule rule, final int currentDepth,
+			final int maxDepth) {
 		// Check if theres more than one production.
 		int productionIndex = 0;
 		final int noProductions = rule.getNoProductions();
 		if (noProductions > 1) {
-			final List<Integer> validProductions = getValidProductionIndexes(
-					rule.getProductions(), maxDepth - currentDepth - 1);
+			final List<Integer> validProductions = getValidProductionIndexes(rule.getProductions(), maxDepth
+					- currentDepth
+					- 1);
 
 			// Choose a production randomly.
 			final int chosenProduction = rng.nextInt(validProductions.size());
@@ -227,8 +223,7 @@ public class FullInitialiser extends ConfigOperator<GRModel> implements GRInitia
 			if (node instanceof GrammarRule) {
 				final GrammarRule r = (GrammarRule) node;
 
-				final NonTerminalSymbol nt = new NonTerminalSymbol(
-						(GrammarRule) node);
+				final NonTerminalSymbol nt = new NonTerminalSymbol((GrammarRule) node);
 
 				buildDerivationTree(nt, r, currentDepth + 1, maxDepth);
 
@@ -244,8 +239,7 @@ public class FullInitialiser extends ConfigOperator<GRModel> implements GRInitia
 	 * Gets a List of indexes to those productions from the List of productions
 	 * given that can be used with the specified maximum depth constraint.
 	 */
-	private List<Integer> getValidProductionIndexes(
-			final List<GrammarProduction> grammarProductions, final int maxDepth) {
+	private List<Integer> getValidProductionIndexes(final List<GrammarProduction> grammarProductions, final int maxDepth) {
 		final List<Integer> validRecursive = new ArrayList<Integer>();
 		final List<Integer> validAll = new ArrayList<Integer>();
 
@@ -285,7 +279,7 @@ public class FullInitialiser extends ConfigOperator<GRModel> implements GRInitia
 	 * @param acceptDuplicates whether duplicates should be accepted in the
 	 *        populations that are constructed.
 	 */
-	public void setDuplicatesEnabled(boolean acceptDuplicates) {
+	public void setDuplicatesEnabled(final boolean acceptDuplicates) {
 		this.acceptDuplicates = acceptDuplicates;
 	}
 

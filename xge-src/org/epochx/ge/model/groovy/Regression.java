@@ -46,7 +46,8 @@ public abstract class Regression extends GEModel {
 	 * The grammar that defines valid solution space.
 	 */
 	public static final String GRAMMAR_STRING = "<expr> ::= ( <expr> <op> <expr> ) | <terminal>\n"
-			+ "<op>   ::= + | - | * \n" + "<terminal>  ::= X \n";
+			+ "<op>   ::= + | - | * \n"
+			+ "<terminal>  ::= X \n";
 
 	// The error each point must be within.
 	private static final double POINT_ERROR = 0.01;
@@ -103,8 +104,7 @@ public abstract class Regression extends GEModel {
 		for (int i = 0; i < inputs.length; i++) {
 			Double result = null;
 			try {
-				result = (Double) interpreter.eval(program.getSourceCode(),
-						new String[]{"X"}, new Double[]{inputs[i]});
+				result = (Double) interpreter.eval(program.getSourceCode(), new String[]{"X"}, new Double[]{inputs[i]});
 			} catch (final MalformedProgramException e) {
 				// This should not ever happen unless user changes grammar.
 				assert false;

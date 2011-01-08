@@ -96,8 +96,7 @@ public abstract class GPModel extends Model {
 		if (maxInitialDepth >= -1) {
 			this.maxInitialDepth = maxInitialDepth;
 		} else {
-			throw new IllegalArgumentException(
-					"maxInitialDepth must be -1 or greater");
+			throw new IllegalArgumentException("maxInitialDepth must be -1 or greater");
 		}
 
 		assert (this.maxInitialDepth >= -1);
@@ -132,8 +131,7 @@ public abstract class GPModel extends Model {
 		if (maxDepth >= -1) {
 			maxProgramDepth = maxDepth;
 		} else {
-			throw new IllegalArgumentException(
-					"maxProgramDepth must be -1 or greater");
+			throw new IllegalArgumentException("maxProgramDepth must be -1 or greater");
 		}
 
 		assert (maxProgramDepth >= -1);
@@ -163,6 +161,6 @@ public abstract class GPModel extends Model {
 
 		assert (this.syntax != null);
 	}
-	
+
 	public abstract Class<?> getReturnType();
 }

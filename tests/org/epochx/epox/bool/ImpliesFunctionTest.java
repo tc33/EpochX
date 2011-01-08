@@ -21,12 +21,11 @@
  */
 package org.epochx.epox.bool;
 
+import static org.junit.Assert.*;
+
 import org.epochx.epox.*;
 import org.epochx.gp.representation.AbstractBooleanNodeTestCase;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
-
 
 /**
  * 
@@ -41,8 +40,7 @@ public class ImpliesFunctionTest extends AbstractBooleanNodeTestCase {
 	@Test
 	public void testEvaluateTT() {
 		final ImpliesFunction node = (ImpliesFunction) getNode();
-		final Node[] children = new Node[]{new Literal(true),
-				new Literal(true)};
+		final Node[] children = new Node[]{new Literal(true), new Literal(true)};
 		node.setChildren(children);
 		final boolean result = node.evaluate();
 
@@ -52,8 +50,7 @@ public class ImpliesFunctionTest extends AbstractBooleanNodeTestCase {
 	@Test
 	public void testEvaluateTF() {
 		final ImpliesFunction node = (ImpliesFunction) getNode();
-		final Node[] children = new Node[]{new Literal(true),
-				new Literal(false)};
+		final Node[] children = new Node[]{new Literal(true), new Literal(false)};
 		node.setChildren(children);
 		final boolean result = node.evaluate();
 
@@ -63,8 +60,7 @@ public class ImpliesFunctionTest extends AbstractBooleanNodeTestCase {
 	@Test
 	public void testEvaluateFT() {
 		final ImpliesFunction node = (ImpliesFunction) getNode();
-		final Node[] children = new Node[]{new Literal(false),
-				new Literal(true)};
+		final Node[] children = new Node[]{new Literal(false), new Literal(true)};
 		node.setChildren(children);
 		final boolean result = node.evaluate();
 
@@ -74,8 +70,7 @@ public class ImpliesFunctionTest extends AbstractBooleanNodeTestCase {
 	@Test
 	public void testEvaluateFF() {
 		final ImpliesFunction node = (ImpliesFunction) getNode();
-		final Node[] children = new Node[]{new Literal(false),
-				new Literal(false)};
+		final Node[] children = new Node[]{new Literal(false), new Literal(false)};
 		node.setChildren(children);
 		final boolean result = node.evaluate();
 

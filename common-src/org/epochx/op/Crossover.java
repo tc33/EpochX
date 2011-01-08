@@ -49,7 +49,6 @@ public interface Crossover extends Operator {
 	 *         selected and attempted for crossover (this does not count as a
 	 *         reversion).
 	 */
-	public CandidateProgram[] crossover(CandidateProgram parent1,
-			CandidateProgram parent2);
+	public CandidateProgram[] crossover(CandidateProgram parent1, CandidateProgram parent2);
 
 }

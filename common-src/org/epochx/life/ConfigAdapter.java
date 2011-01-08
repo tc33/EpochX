@@ -29,6 +29,7 @@ package org.epochx.life;
  * Typical use of this class would be in an anonymous class. For example:
  * 
  * <blockquote>
+ * 
  * <pre>
  *     Life.get().addConfigListener(new ConfigAdapter(){
  *     		public void onConfigure() {
@@ -36,6 +37,7 @@ package org.epochx.life;
  *     		}
  *     });
  * </pre>
+ * 
  * </blockquote>
  * 
  * <p>

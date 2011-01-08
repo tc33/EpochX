@@ -13,7 +13,7 @@ public class Seq2Function extends SeqNFunction {
 	public Seq2Function() {
 		this(null, null);
 	}
-	
+
 	/**
 	 * Constructs a Seq2Function with two child nodes.
 	 * 
@@ -23,12 +23,12 @@ public class Seq2Function extends SeqNFunction {
 	public Seq2Function(final Node child1, final Node child2) {
 		super(child1, child2);
 	}
-	
+
 	/**
 	 * Returns the identifier of this function which is SEQ2.
 	 */
 	@Override
 	public String getIdentifier() {
 		return "SEQ2";
-	}	
+	}
 }

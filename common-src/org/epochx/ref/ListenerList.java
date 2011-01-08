@@ -26,20 +26,19 @@ import java.util.*;
 
 import org.epochx.life.Listener;
 
-
 /**
- * A List specifically for managing listeners. Each listener element is wrapped 
- * in a MixedReference instance which optionally allows each individual 
- * listener to be referenced either strongly or weakly - thus allowing the 
- * listener to be cleared by the garbage collected when it is no longer needed. 
- * By default strong references are used and in such a case the list behaves 
+ * A List specifically for managing listeners. Each listener element is wrapped
+ * in a MixedReference instance which optionally allows each individual
+ * listener to be referenced either strongly or weakly - thus allowing the
+ * listener to be cleared by the garbage collected when it is no longer needed.
+ * By default strong references are used and in such a case the list behaves
  * exactly like a normal list of listeners. Part of the process of adding a new
- * listener to the list is checking for dead entries and removing them. The 
- * process of removing weakly referenced listeners is at the mercy of the 
+ * listener to the list is checking for dead entries and removing them. The
+ * process of removing weakly referenced listeners is at the mercy of the
  * garbage collector and so there is no guarentee that listeners will be removed
- * promptly when only weak references remain. 
+ * promptly when only weak references remain.
  * 
- * In some applications it might be appropriate to make a call to 
+ * In some applications it might be appropriate to make a call to
  * <code>System.gc()</code> to encourage the garbage collector to release these
  * references.
  * 
@@ -53,11 +52,11 @@ public class ListenerList<T extends Listener> extends AbstractList<T> {
 	private static final long serialVersionUID = -8968847606607124719L;
 
 	// Queue of references to be removed.
-	private ReferenceQueue<T> referenceQueue;
+	private final ReferenceQueue<T> referenceQueue;
 
 	// The actual list of listeners.
-	private List<MixedReference<T>> data;
-	
+	private final List<MixedReference<T>> data;
+
 	/**
 	 * Constructs a <code>ListenerList</code>.
 	 */
@@ -65,7 +64,7 @@ public class ListenerList<T extends Listener> extends AbstractList<T> {
 		data = new ArrayList<MixedReference<T>>();
 		referenceQueue = new ReferenceQueue<T>();
 	}
-	
+
 	/**
 	 * Clears any entries from the list that have been cleared by the garbage
 	 * collector.
@@ -76,52 +75,54 @@ public class ListenerList<T extends Listener> extends AbstractList<T> {
 		while ((ref = (MixedReference<? extends Listener>) referenceQueue.poll()) != null) {
 			data.remove(ref);
 		}
-		
+
 		// This is only for testing - comment out for production.
-		//System.gc();
+		// System.gc();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void add(int index, T element) {
+	public void add(final int index, final T element) {
 		add(index, element, true);
 	}
-	
+
 	/**
-	 * Adds a new listener to the list at the given index using either a strong 
-	 * or a weak reference. After adding the new listener, the list will be 
-	 * expunged of any null references and so on return from this method the 
+	 * Adds a new listener to the list at the given index using either a strong
+	 * or a weak reference. After adding the new listener, the list will be
+	 * expunged of any null references and so on return from this method the
 	 * listener being set may no longer be at the given index.
 	 * 
 	 * @param index the index that the given element should be set at.
 	 * @param element the listener instance to be inserted into the list.
-	 * @param strong true if a strong reference should be maintained to the 
-	 * listener instance, and false if only a weak reference should be used.
+	 * @param strong true if a strong reference should be maintained to the
+	 *        listener instance, and false if only a weak reference should be
+	 *        used.
 	 */
-	public void add(int index, T element, boolean strong) {
-		MixedReference<T> next = new MixedReference<T>(element, strong, referenceQueue);
+	public void add(final int index, final T element, final boolean strong) {
+		final MixedReference<T> next = new MixedReference<T>(element, strong, referenceQueue);
 		data.add(index, next);
-		
+
 		expunge();
 	}
-	
+
 	/**
-	 * Adds a new listener to the end of the list using either a strong or a 
+	 * Adds a new listener to the end of the list using either a strong or a
 	 * weak reference. The list will also be expunged of any null references and
 	 * so on return from this method the size of the list may have reduced.
 	 * 
 	 * @param element the listener instance to be appended to the list.
-	 * @param strong true if a strong reference should be maintained to the 
-	 * listener instance, and false if only a weak reference should be used.
-	 * @return true if the given element was successfully added to the list, 
-	 * false otherwise.
+	 * @param strong true if a strong reference should be maintained to the
+	 *        listener instance, and false if only a weak reference should be
+	 *        used.
+	 * @return true if the given element was successfully added to the list,
+	 *         false otherwise.
 	 */
-	public boolean add(T element, boolean strong) {
+	public boolean add(final T element, final boolean strong) {
 		expunge();
-		
-		MixedReference<T> next = new MixedReference<T>(element, strong, referenceQueue);
+
+		final MixedReference<T> next = new MixedReference<T>(element, strong, referenceQueue);
 		return data.add(next);
 	}
 
@@ -129,34 +130,35 @@ public class ListenerList<T extends Listener> extends AbstractList<T> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public T remove(int index) {
-		MixedReference<T> removed = data.remove(index);
+	public T remove(final int index) {
+		final MixedReference<T> removed = data.remove(index);
 		return removed.get();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public T set(int index, T element) {
+	public T set(final int index, final T element) {
 		return set(index, element, true);
 	}
-	
+
 	/**
 	 * Puts the given listener into this list at the specified index, replacing
-	 * the current listener at that index. Either a strong or a weak reference 
-	 * is maintained to the listener depending upon the <code>strong</code> 
+	 * the current listener at that index. Either a strong or a weak reference
+	 * is maintained to the listener depending upon the <code>strong</code>
 	 * parameter.
 	 * 
 	 * @param index the index that the given element should be set at.
 	 * @param element the listener instance to be inserted into the list.
-	 * @param strong true if a strong reference should be maintained to the 
-	 * listener instance, and false if only a weak reference should be used.
+	 * @param strong true if a strong reference should be maintained to the
+	 *        listener instance, and false if only a weak reference should be
+	 *        used.
 	 */
-	public T set(int index, T element, boolean strong) {
-		MixedReference<T> next = new MixedReference<T>(element, strong, referenceQueue);
-		MixedReference<T> prev = data.set(index, next);
-		
+	public T set(final int index, final T element, final boolean strong) {
+		final MixedReference<T> next = new MixedReference<T>(element, strong, referenceQueue);
+		final MixedReference<T> prev = data.set(index, next);
+
 		return prev.get();
 	}
 
@@ -172,7 +174,7 @@ public class ListenerList<T extends Listener> extends AbstractList<T> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public T get(int index) {
+	public T get(final int index) {
 		// We cannot expunge here because it will break iteration.
 		return data.get(index).get();
 	}

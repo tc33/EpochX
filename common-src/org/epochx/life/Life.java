@@ -58,7 +58,7 @@ import org.epochx.representation.CandidateProgram;
  * listeners.
  */
 public class Life {
-	
+
 	private static Life instance;
 
 	// The life cycle listeners.
@@ -71,7 +71,7 @@ public class Life {
 	private final ListenerList<MutationListener> mutationListeners;
 	private final ListenerList<ReproductionListener> reproductionListeners;
 	private final ListenerList<GenerationListener> generationListeners;
-	
+
 	// Hooks.
 	private final ListenerList<Hook> hooks;
 
@@ -89,18 +89,18 @@ public class Life {
 		mutationListeners = new ListenerList<MutationListener>();
 		reproductionListeners = new ListenerList<ReproductionListener>();
 		generationListeners = new ListenerList<GenerationListener>();
-		
+
 		hooks = new ListenerList<Hook>();
 	}
-	
+
 	public static Life get() {
 		if (instance == null) {
 			instance = new Life();
 		}
-		
+
 		return instance;
 	}
-	
+
 	/**
 	 * Adds a <code>Hook</code> to the life cycle.
 	 * 
@@ -113,17 +113,17 @@ public class Life {
 	/**
 	 * Adds a <code>Hook</code> to the life cycle with either a strong or a weak
 	 * reference.
-	 * 	
+	 * 
 	 * @param hook the hook to register.
-	 * @param strong whether the reference to the hook should be either strong 
-	 * 			or weak.
+	 * @param strong whether the reference to the hook should be either strong
+	 *        or weak.
 	 */
 	public void addHook(final Hook hook, final boolean strong) {
 		hooks.add(hook, strong);
 	}
-	
+
 	/**
-	 * Inserts a <code>Hook</code> into the list of hooks at the specified 
+	 * Inserts a <code>Hook</code> into the list of hooks at the specified
 	 * index.
 	 * 
 	 * @param index the index of where to insert the hook.
@@ -132,20 +132,20 @@ public class Life {
 	public void insertHook(final int index, final Hook hook) {
 		hooks.add(index, hook);
 	}
-	
+
 	/**
-	 * Inserts a <code>Hook</code> into the list of hooks at the specified 
+	 * Inserts a <code>Hook</code> into the list of hooks at the specified
 	 * index with either a strong or a weak reference
 	 * 
 	 * @param index the index of where to insert the hook.
 	 * @param hook the hook to insert into the list of hooks registered.
-	 * @param strong whether the reference to the hook should be either strong 
-	 * 			or weak.
+	 * @param strong whether the reference to the hook should be either strong
+	 *        or weak.
 	 */
 	public void insertHook(final int index, final Hook hook, final boolean strong) {
 		hooks.add(index, hook, strong);
 	}
-	
+
 	/**
 	 * Removes a <code>Hook</code> from the life cycle.
 	 * 
@@ -154,28 +154,28 @@ public class Life {
 	public void removeHook(final InitialisationListener hook) {
 		hooks.remove(hook);
 	}
-	
+
 	/**
-	 * Adds a <code>ConfigListener</code> to the life cycle. 
+	 * Adds a <code>ConfigListener</code> to the life cycle.
 	 * 
 	 * @param listener the <code>ConfigListener</code> to be added.
 	 */
 	public void addConfigListener(final ConfigListener listener) {
 		addConfigListener(listener, true);
 	}
-	
+
 	/**
 	 * Registers a listener to receive configuration events.
 	 * 
-	 * It does not make sense to use a weak reference with an anonymous inner 
-	 * class as the listener since it will contain an implicit strong reference 
-	 * to the owner, and as such neither will ever be garbage collected. 
+	 * It does not make sense to use a weak reference with an anonymous inner
+	 * class as the listener since it will contain an implicit strong reference
+	 * to the owner, and as such neither will ever be garbage collected.
 	 * 
 	 * @param listener the <code>ConfigListener</code> to be added.
-	 * @param strong whether the listener should be referred to by a strong 
-	 * 			or weak reference.
+	 * @param strong whether the listener should be referred to by a strong
+	 *        or weak reference.
 	 */
-	public void addConfigListener(final ConfigListener listener, boolean strong) {
+	public void addConfigListener(final ConfigListener listener, final boolean strong) {
 		configListeners.add(listener, strong);
 	}
 
@@ -196,19 +196,19 @@ public class Life {
 	public void addRunListener(final RunListener listener) {
 		runListeners.add(listener);
 	}
-	
+
 	/**
 	 * Registers a listener to receive run events.
 	 * 
-	 * It does not make sense to use a weak reference with an anonymous inner 
-	 * class as the listener since it will contain an implicit strong reference 
-	 * to the owner, and as such neither will ever be garbage collected. 
+	 * It does not make sense to use a weak reference with an anonymous inner
+	 * class as the listener since it will contain an implicit strong reference
+	 * to the owner, and as such neither will ever be garbage collected.
 	 * 
 	 * @param listener the <code>RunListener</code> to be added.
-	 * @param strong whether the listener should be referred to by a strong 
-	 * 			or weak reference.
+	 * @param strong whether the listener should be referred to by a strong
+	 *        or weak reference.
 	 */
-	public void addRunListener(final RunListener listener, boolean strong) {
+	public void addRunListener(final RunListener listener, final boolean strong) {
 		runListeners.add(listener, strong);
 	}
 
@@ -233,25 +233,24 @@ public class Life {
 	/**
 	 * Registers a listener to receive initialisation events.
 	 * 
-	 * It does not make sense to use a weak reference with an anonymous inner 
-	 * class as the listener since it will contain an implicit strong reference 
-	 * to the owner, and as such neither will ever be garbage collected. 
+	 * It does not make sense to use a weak reference with an anonymous inner
+	 * class as the listener since it will contain an implicit strong reference
+	 * to the owner, and as such neither will ever be garbage collected.
 	 * 
 	 * @param listener the <code>InitialisationListener</code> to be added.
-	 * @param strong whether the listener should be referred to by a strong 
-	 * 			or weak reference.
+	 * @param strong whether the listener should be referred to by a strong
+	 *        or weak reference.
 	 */
-	public void addInitialisationListener(final InitialisationListener listener, boolean strong) {
+	public void addInitialisationListener(final InitialisationListener listener, final boolean strong) {
 		initialisationListeners.add(listener, strong);
 	}
-	
+
 	/**
 	 * Removes a <code>InitialisationListener</code> from the life cycle.
 	 * 
 	 * @param listener the <code>InitialisationListener</code> to be removed.
 	 */
-	public void removeInitialisationListener(
-			final InitialisationListener listener) {
+	public void removeInitialisationListener(final InitialisationListener listener) {
 		initialisationListeners.remove(listener);
 	}
 
@@ -267,18 +266,18 @@ public class Life {
 	/**
 	 * Registers a listener to receive elitism events.
 	 * 
-	 * It does not make sense to use a weak reference with an anonymous inner 
-	 * class as the listener since it will contain an implicit strong reference 
-	 * to the owner, and as such neither will ever be garbage collected. 
+	 * It does not make sense to use a weak reference with an anonymous inner
+	 * class as the listener since it will contain an implicit strong reference
+	 * to the owner, and as such neither will ever be garbage collected.
 	 * 
 	 * @param listener the <code>ElitismListener</code> to be added.
-	 * @param strong whether the listener should be referred to by a strong 
-	 * 			or weak reference.
+	 * @param strong whether the listener should be referred to by a strong
+	 *        or weak reference.
 	 */
-	public void addElitismListener(final ElitismListener listener, boolean strong) {
+	public void addElitismListener(final ElitismListener listener, final boolean strong) {
 		elitismListeners.add(listener, strong);
 	}
-	
+
 	/**
 	 * Removes a <code>ElitismListener</code> from the life cycle.
 	 * 
@@ -296,19 +295,19 @@ public class Life {
 	public void addPoolSelectionListener(final PoolSelectionListener listener) {
 		poolSelectionListeners.add(listener);
 	}
-	
+
 	/**
 	 * Registers a listener to receive pool selection events.
 	 * 
-	 * It does not make sense to use a weak reference with an anonymous inner 
-	 * class as the listener since it will contain an implicit strong reference 
-	 * to the owner, and as such neither will ever be garbage collected. 
+	 * It does not make sense to use a weak reference with an anonymous inner
+	 * class as the listener since it will contain an implicit strong reference
+	 * to the owner, and as such neither will ever be garbage collected.
 	 * 
 	 * @param listener the <code>PoolSelectionListener</code> to be added.
-	 * @param strong whether the listener should be referred to by a strong 
-	 * 			or weak reference.
+	 * @param strong whether the listener should be referred to by a strong
+	 *        or weak reference.
 	 */
-	public void addPoolSelectionListener(final PoolSelectionListener listener, boolean strong) {
+	public void addPoolSelectionListener(final PoolSelectionListener listener, final boolean strong) {
 		poolSelectionListeners.add(listener, strong);
 	}
 
@@ -329,19 +328,19 @@ public class Life {
 	public void addCrossoverListener(final CrossoverListener listener) {
 		crossoverListeners.add(listener);
 	}
-	
+
 	/**
 	 * Registers a listener to receive crossover events.
 	 * 
-	 * It does not make sense to use a weak reference with an anonymous inner 
-	 * class as the listener since it will contain an implicit strong reference 
-	 * to the owner, and as such neither will ever be garbage collected. 
+	 * It does not make sense to use a weak reference with an anonymous inner
+	 * class as the listener since it will contain an implicit strong reference
+	 * to the owner, and as such neither will ever be garbage collected.
 	 * 
 	 * @param listener the <code>CrossoverListener</code> to be added.
-	 * @param strong whether the listener should be referred to by a strong 
-	 * 			or weak reference.
+	 * @param strong whether the listener should be referred to by a strong
+	 *        or weak reference.
 	 */
-	public void addCrossoverListener(final CrossoverListener listener, boolean strong) {
+	public void addCrossoverListener(final CrossoverListener listener, final boolean strong) {
 		crossoverListeners.add(listener, strong);
 	}
 
@@ -362,19 +361,19 @@ public class Life {
 	public void addMutationListener(final MutationListener listener) {
 		mutationListeners.add(listener);
 	}
-	
+
 	/**
 	 * Registers a listener to receive mutation events.
 	 * 
-	 * It does not make sense to use a weak reference with an anonymous inner 
-	 * class as the listener since it will contain an implicit strong reference 
-	 * to the owner, and as such neither will ever be garbage collected. 
+	 * It does not make sense to use a weak reference with an anonymous inner
+	 * class as the listener since it will contain an implicit strong reference
+	 * to the owner, and as such neither will ever be garbage collected.
 	 * 
 	 * @param listener the <code>MutationListener</code> to be added.
-	 * @param strong whether the listener should be referred to by a strong 
-	 * 			or weak reference.
+	 * @param strong whether the listener should be referred to by a strong
+	 *        or weak reference.
 	 */
-	public void addMutationListener(final MutationListener listener, boolean strong) {
+	public void addMutationListener(final MutationListener listener, final boolean strong) {
 		mutationListeners.add(listener, strong);
 	}
 
@@ -395,19 +394,19 @@ public class Life {
 	public void addReproductionListener(final ReproductionListener listener) {
 		reproductionListeners.add(listener);
 	}
-	
+
 	/**
 	 * Registers a listener to receive reproduction events.
 	 * 
-	 * It does not make sense to use a weak reference with an anonymous inner 
-	 * class as the listener since it will contain an implicit strong reference 
-	 * to the owner, and as such neither will ever be garbage collected. 
+	 * It does not make sense to use a weak reference with an anonymous inner
+	 * class as the listener since it will contain an implicit strong reference
+	 * to the owner, and as such neither will ever be garbage collected.
 	 * 
 	 * @param listener the <code>ReproductionListener</code> to be added.
-	 * @param strong whether the listener should be referred to by a strong 
-	 * 			or weak reference.
+	 * @param strong whether the listener should be referred to by a strong
+	 *        or weak reference.
 	 */
-	public void addReproductionListener(final ReproductionListener listener, boolean strong) {
+	public void addReproductionListener(final ReproductionListener listener, final boolean strong) {
 		reproductionListeners.add(listener, strong);
 	}
 
@@ -428,19 +427,19 @@ public class Life {
 	public void addGenerationListener(final GenerationListener listener) {
 		generationListeners.add(listener);
 	}
-	
+
 	/**
 	 * Registers a listener to receive generation events.
 	 * 
-	 * It does not make sense to use a weak reference with an anonymous inner 
-	 * class as the listener since it will contain an implicit strong reference 
-	 * to the owner, and as such neither will ever be garbage collected. 
+	 * It does not make sense to use a weak reference with an anonymous inner
+	 * class as the listener since it will contain an implicit strong reference
+	 * to the owner, and as such neither will ever be garbage collected.
 	 * 
 	 * @param listener the <code>GenerationListener</code> to be added.
-	 * @param strong whether the listener should be referred to by a strong 
-	 * 			or weak reference.
+	 * @param strong whether the listener should be referred to by a strong
+	 *        or weak reference.
 	 */
-	public void addGenerationListener(final GenerationListener listener, boolean strong) {
+	public void addGenerationListener(final GenerationListener listener, final boolean strong) {
 		generationListeners.add(listener, strong);
 	}
 
@@ -636,13 +635,13 @@ public class Life {
 	}
 
 	/**
-	 * Runs all initialisation hooks that have been registered. If multiple 
-	 * hooks are used then the ordering is significant. The population 
-	 * received as a parameter is fed to the first hook method. Each hook is 
-	 * then chained so that the value returned from one hook is fed into the 
+	 * Runs all initialisation hooks that have been registered. If multiple
+	 * hooks are used then the ordering is significant. The population
+	 * received as a parameter is fed to the first hook method. Each hook is
+	 * then chained so that the value returned from one hook is fed into the
 	 * next. The value returned by the final hook is returned from this method.
-	 * The exception to this is if any of the hooks return <code>null</code>, 
-	 * then no further hooks will be used and this method immediately returns 
+	 * The exception to this is if any of the hooks return <code>null</code>,
+	 * then no further hooks will be used and this method immediately returns
 	 * with <code>null</code>.
 	 * 
 	 * @param pop a population of <code>CandidatePrograms</code>.
@@ -661,19 +660,19 @@ public class Life {
 
 		return pop;
 	}
-	
+
 	/**
-	 * Runs all elitism hooks that have been registered. If multiple 
+	 * Runs all elitism hooks that have been registered. If multiple
 	 * hooks are used then the ordering is significant. The population of elites
-	 * received as a parameter is fed to the first hook method. Each hook is 
-	 * then chained so that the value returned from one hook is fed into the 
+	 * received as a parameter is fed to the first hook method. Each hook is
+	 * then chained so that the value returned from one hook is fed into the
 	 * next. The value returned by the final hook is returned from this method.
 	 * No hooks may return a <code>null</code> value.
 	 * 
 	 * @param elites a population of <code>CandidatePrograms</code>.
-	 * @return the response from the hooks which may be the given list of 
-	 * 		   elites, a different or modified list of 
-	 * 		   <code>CandidatePrograms</code> or null.
+	 * @return the response from the hooks which may be the given list of
+	 *         elites, a different or modified list of
+	 *         <code>CandidatePrograms</code> or null.
 	 */
 	public List<CandidateProgram> runElitismHooks(List<CandidateProgram> elites) {
 		for (final Hook h: hooks) {
@@ -688,15 +687,15 @@ public class Life {
 
 		return elites;
 	}
-	
+
 	/**
-	 * Runs all pool selection hooks that have been registered. If multiple 
-	 * hooks are used then the ordering is significant. The breeding pool 
-	 * received as a parameter is fed to the first hook method. Each hook is 
-	 * then chained so that the value returned from one hook is fed into the 
+	 * Runs all pool selection hooks that have been registered. If multiple
+	 * hooks are used then the ordering is significant. The breeding pool
+	 * received as a parameter is fed to the first hook method. Each hook is
+	 * then chained so that the value returned from one hook is fed into the
 	 * next. The value returned by the final hook is returned from this method.
-	 * The exception to this is if any of the hooks return <code>null</code>, 
-	 * then no further hooks will be used and this method immediately returns 
+	 * The exception to this is if any of the hooks return <code>null</code>,
+	 * then no further hooks will be used and this method immediately returns
 	 * with <code>null</code>.
 	 * 
 	 * @param pool a population of <code>CandidatePrograms</code>.
@@ -715,15 +714,15 @@ public class Life {
 
 		return pool;
 	}
-	
+
 	/**
-	 * Runs all crossover hooks that have been registered. If multiple 
-	 * hooks are used then the ordering is significant. The parents and children 
-	 * received as a parameter are fed to the first hook method. Each hook is 
-	 * then chained so that the value returned from one hook is fed in as the 
-	 * children to the next. The value returned by the final hook is then 
-	 * returned from this method. The exception to this is if any of the hooks 
-	 * return <code>null</code>, then no further hooks will be used and this 
+	 * Runs all crossover hooks that have been registered. If multiple
+	 * hooks are used then the ordering is significant. The parents and children
+	 * received as a parameter are fed to the first hook method. Each hook is
+	 * then chained so that the value returned from one hook is fed in as the
+	 * children to the next. The value returned by the final hook is then
+	 * returned from this method. The exception to this is if any of the hooks
+	 * return <code>null</code>, then no further hooks will be used and this
 	 * method immediately returns with <code>null</code>.
 	 * 
 	 * @param parents an array of <code>CandidatePrograms</code> which underwent
@@ -748,13 +747,13 @@ public class Life {
 	}
 
 	/**
-	 * Runs all mutation hooks that have been registered. If multiple 
-	 * hooks are used then the ordering is significant. The parent and child 
-	 * received as a parameter are fed to the first hook method. Each hook is 
-	 * then chained so that the value returned from one hook is fed in as the 
-	 * child to the next. The value returned by the final hook is then 
-	 * returned from this method. The exception to this is if any of the hooks 
-	 * return <code>null</code>, then no further hooks will be used and this 
+	 * Runs all mutation hooks that have been registered. If multiple
+	 * hooks are used then the ordering is significant. The parent and child
+	 * received as a parameter are fed to the first hook method. Each hook is
+	 * then chained so that the value returned from one hook is fed in as the
+	 * child to the next. The value returned by the final hook is then
+	 * returned from this method. The exception to this is if any of the hooks
+	 * return <code>null</code>, then no further hooks will be used and this
 	 * method immediately returns with <code>null</code>.
 	 * 
 	 * @param parent a <code>CandidateProgram</code> which underwent mutation.
@@ -776,15 +775,15 @@ public class Life {
 
 		return child;
 	}
-	
+
 	/**
-	 * Runs all reproduction hooks that have been registered. If multiple 
-	 * hooks are used then the ordering is significant. The program 
-	 * received as a parameter is fed to the first hook method. Each hook is 
-	 * then chained so that the value returned from one hook is fed in to the 
-	 * next. The value returned by the final hook is then returned from this 
-	 * method. The exception to this is if any of the hooks return 
-	 * <code>null</code>, then no further hooks will be used and this method 
+	 * Runs all reproduction hooks that have been registered. If multiple
+	 * hooks are used then the ordering is significant. The program
+	 * received as a parameter is fed to the first hook method. Each hook is
+	 * then chained so that the value returned from one hook is fed in to the
+	 * next. The value returned by the final hook is then returned from this
+	 * method. The exception to this is if any of the hooks return
+	 * <code>null</code>, then no further hooks will be used and this method
 	 * immediately returns with <code>null</code>.
 	 * 
 	 * @param program a <code>CandidateProgram</code> which was selected for
@@ -807,13 +806,13 @@ public class Life {
 	}
 
 	/**
-	 * Runs all generation hooks that have been registered. If multiple 
-	 * hooks are used then the ordering is significant. The population 
-	 * received as a parameter is fed to the first hook method. Each hook is 
-	 * then chained so that the value returned from one hook is fed in to the 
-	 * next. The value returned by the final hook is then returned from this 
-	 * method. The exception to this is if any of the hooks return 
-	 * <code>null</code>, then no further hooks will be used and this method 
+	 * Runs all generation hooks that have been registered. If multiple
+	 * hooks are used then the ordering is significant. The population
+	 * received as a parameter is fed to the first hook method. Each hook is
+	 * then chained so that the value returned from one hook is fed in to the
+	 * next. The value returned by the final hook is then returned from this
+	 * method. The exception to this is if any of the hooks return
+	 * <code>null</code>, then no further hooks will be used and this method
 	 * immediately returns with <code>null</code>.
 	 * 
 	 * @param pop a list of <code>CandidatePrograms</code> which were the result
@@ -834,7 +833,7 @@ public class Life {
 
 		return pop;
 	}
-	
+
 	/**
 	 * Clears all listeners for all types of events.
 	 */
@@ -849,7 +848,7 @@ public class Life {
 		reproductionListeners.clear();
 		generationListeners.clear();
 	}
-	
+
 	/**
 	 * Clears all hooks.
 	 */

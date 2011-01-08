@@ -211,7 +211,7 @@ public class Ant {
 
 		// If the new location has food then eat it.
 		if (landscape.isFoodLocation(getLocation())) {
-			this.eatFood();
+			eatFood();
 			landscape.removeFoodLocation(getLocation());
 		}
 
@@ -294,8 +294,7 @@ public class Ant {
 	 *         and false otherwise.
 	 */
 	public boolean isFoodAhead() {
-		final Point ahead = landscape.getNextLocation(getLocation(),
-				getOrientation());
+		final Point ahead = landscape.getNextLocation(getLocation(), getOrientation());
 
 		return landscape.isFoodLocation(ahead);
 	}

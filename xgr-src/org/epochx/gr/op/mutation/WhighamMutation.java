@@ -40,13 +40,13 @@ public class WhighamMutation extends ConfigOperator<GRModel> implements GRMutati
 	 * which was selected to be modified by the whigham mutation.
 	 */
 	public static final Stat MUT_POINT = new AbstractStat(ExpiryEvent.MUTATION) {};
-	
+
 	/**
-	 * Requests a <code>NonTerminalSymbol</code> which is the subtree that was 
+	 * Requests a <code>NonTerminalSymbol</code> which is the subtree that was
 	 * inserted in the program undergoing whigham mutation.
 	 */
 	public static final Stat MUT_SUBTREE = new AbstractStat(ExpiryEvent.MUTATION) {};
-	
+
 	private RandomNumberGenerator rng;
 
 	private final GrowInitialiser grower;
@@ -57,12 +57,12 @@ public class WhighamMutation extends ConfigOperator<GRModel> implements GRMutati
 	 */
 	public WhighamMutation(final RandomNumberGenerator rng) {
 		this((GRModel) null);
-		
+
 		this.rng = rng;
-		
+
 		grower.setRNG(rng);
 	}
-	
+
 	/**
 	 * Constructs a <code>WhighamMutation</code>.
 	 * 
@@ -88,7 +88,7 @@ public class WhighamMutation extends ConfigOperator<GRModel> implements GRMutati
 
 		final NonTerminalSymbol parseTree = mutatedProgram.getParseTree();
 
-		// This is v.inefficient because we have to fly up and down the tree 
+		// This is v.inefficient because we have to fly up and down the tree
 		// lots of times.
 		final List<Integer> nonTerminals = parseTree.getNonTerminalIndexes();
 
@@ -99,14 +99,14 @@ public class WhighamMutation extends ConfigOperator<GRModel> implements GRMutati
 
 		// Add subtree into the stats manager.
 		Stats.get().addData(MUT_POINT, point);
-		
+
 		// Construct a new subtree from that node's grammar rule.
 		final GrammarRule rule = original.getGrammarRule();
 		final NonTerminalSymbol subtree = grower.getGrownParseTree(originalDepth, rule);
 
 		// Add subtree into the stats manager.
 		Stats.get().addData(MUT_SUBTREE, subtree);
-		
+
 		// Replace node.
 		if (point == 0) {
 			mutatedProgram.setParseTree(subtree);
@@ -116,8 +116,7 @@ public class WhighamMutation extends ConfigOperator<GRModel> implements GRMutati
 
 		return mutatedProgram;
 	}
-	
-	
+
 	/**
 	 * Returns the random number generator that this crossover is using or
 	 * <code>null</code> if none has been set.
@@ -137,7 +136,7 @@ public class WhighamMutation extends ConfigOperator<GRModel> implements GRMutati
 	 */
 	public void setRNG(final RandomNumberGenerator rng) {
 		this.rng = rng;
-		
+
 		grower.setRNG(rng);
 	}
 }

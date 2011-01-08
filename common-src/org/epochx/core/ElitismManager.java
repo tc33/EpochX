@@ -132,7 +132,7 @@ public class ElitismManager implements ConfigListener {
 		}
 
 		Life.get().fireElitismStartEvent();
-		
+
 		// Record the start time.
 		final long startTime = System.nanoTime();
 
@@ -142,8 +142,7 @@ public class ElitismManager implements ConfigListener {
 		if (noElites > 0) {
 			// Sort the population and scoop off the best noElites.
 			Collections.sort(pop);
-			elites = new ArrayList<CandidateProgram>(pop.subList(pop.size()
-					- noElites, pop.size()));
+			elites = new ArrayList<CandidateProgram>(pop.subList(pop.size() - noElites, pop.size()));
 		} else {
 			elites = new ArrayList<CandidateProgram>();
 		}
@@ -151,11 +150,11 @@ public class ElitismManager implements ConfigListener {
 		assert (elites.size() == noElites);
 
 		final long runtime = System.nanoTime() - startTime;
-		
+
 		// Store the stats from the reproduction.
 		Stats.get().addData(ELITE_PROGRAMS, elites);
 		Stats.get().addData(ELITE_TIME, runtime);
-		
+
 		// Allow life cycle listener to confirm or modify.
 		elites = Life.get().runElitismHooks(elites);
 

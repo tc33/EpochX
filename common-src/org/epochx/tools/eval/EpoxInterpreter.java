@@ -65,8 +65,8 @@ public class EpoxInterpreter implements Interpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object eval(final String source, final String[] argNames,
-			final Object[] argValues) throws MalformedProgramException {
+	public Object eval(final String source, final String[] argNames, final Object[] argValues)
+			throws MalformedProgramException {
 		if (source == null) {
 			return null;
 		}
@@ -87,8 +87,8 @@ public class EpoxInterpreter implements Interpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object[] eval(final String source, final String[] argNames,
-			final Object[][] argValues) throws MalformedProgramException {
+	public Object[] eval(final String source, final String[] argNames, final Object[][] argValues)
+			throws MalformedProgramException {
 
 		final Object[] results = new Object[argValues.length];
 
@@ -105,8 +105,7 @@ public class EpoxInterpreter implements Interpreter {
 	 * <code>IllegalStateException</code>.
 	 */
 	@Override
-	public void exec(final String program, final String[] argNames,
-			final Object[] argValues) {
+	public void exec(final String program, final String[] argNames, final Object[] argValues) {
 		throw new IllegalStateException("method not supported");
 	}
 
@@ -115,8 +114,7 @@ public class EpoxInterpreter implements Interpreter {
 	 * <code>IllegalStateException</code>.
 	 */
 	@Override
-	public void exec(final String program, final String[] argNames,
-			final Object[][] argValues) {
+	public void exec(final String program, final String[] argNames, final Object[][] argValues) {
 		throw new IllegalStateException("method not supported");
 	}
 

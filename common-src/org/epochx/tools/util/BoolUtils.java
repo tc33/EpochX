@@ -107,8 +107,7 @@ public final class BoolUtils {
 	 *         unique
 	 *         combination of booleans.
 	 */
-	public static boolean[] generateBoolSequence(final int noBits,
-			final long index) {
+	public static boolean[] generateBoolSequence(final int noBits, final long index) {
 		final boolean[] inputs = new boolean[noBits];
 
 		for (int i = 0; i < noBits; i++) {

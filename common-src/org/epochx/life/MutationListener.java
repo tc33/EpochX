@@ -27,8 +27,8 @@ import org.epochx.core.MutationManager;
  * Provides the interface to be implemented by objects that wish to handle run
  * events. See the {@link MutationManager}'s class documentation for details of
  * when each mutation event will be fired. To listen for mutation events during
- * execution of a model, instances of <code>MutationListener</code> must be 
- * added to the <code>Life</code> instance 
+ * execution of a model, instances of <code>MutationListener</code> must be
+ * added to the <code>Life</code> instance
  * which is retrievable through a call to the static <code>get()</code> method.
  * 
  * <p>

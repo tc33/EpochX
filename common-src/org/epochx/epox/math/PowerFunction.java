@@ -37,7 +37,7 @@ public class PowerFunction extends Node {
 	}
 
 	/**
-	 * Constructs a PowerFunction with two numerical child nodes. When 
+	 * Constructs a PowerFunction with two numerical child nodes. When
 	 * evaluated, both children will be evaluated and the first will be raised
 	 * to the power of the second.
 	 * 
@@ -57,9 +57,9 @@ public class PowerFunction extends Node {
 	 * all.
 	 */
 	/**
-	 * Evaluates this function lazily. The second child is evaluated. If its 
+	 * Evaluates this function lazily. The second child is evaluated. If its
 	 * value is 0.0 then 1.0 will be returned without evaluating the first child
-	 * at all. Otherwise the value of the first child will be raised to the 
+	 * at all. Otherwise the value of the first child will be raised to the
 	 * power of the second child. The result is returned as a double value.
 	 */
 	@Override
@@ -82,18 +82,18 @@ public class PowerFunction extends Node {
 	public String getIdentifier() {
 		return "POW";
 	}
-	
+
 	/**
 	 * Returns this function node's return type for the given child input types.
-	 * If there are two input types of a numeric type then the return type will 
-	 * be Double. In all other cases this method will return 
-	 * <code>null</code> to indicate that the inputs are invalid.
+	 * If there are two input types of a numeric type then the return type will
+	 * be Double. In all other cases this method will return <code>null</code>
+	 * to indicate that the inputs are invalid.
 	 * 
 	 * @return the Double class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (inputTypes.length == 2 && TypeUtils.isAllNumericType(inputTypes)) {
+	public Class<?> getReturnType(final Class<?> ... inputTypes) {
+		if ((inputTypes.length == 2) && TypeUtils.isAllNumericType(inputTypes)) {
 			return Double.class;
 		} else {
 			return null;

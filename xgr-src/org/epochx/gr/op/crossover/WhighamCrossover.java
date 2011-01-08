@@ -35,33 +35,33 @@ import org.epochx.tools.random.RandomNumberGenerator;
 public class WhighamCrossover extends ConfigOperator<GRModel> implements GRCrossover {
 
 	/**
-	 * Requests an <code>Integer</code> which is the index of the point chosen 
-	 * for the whigham crossover operation. The index is from the list of all 
-	 * non-terminal symbols in the parse tree of the first program, as would be 
+	 * Requests an <code>Integer</code> which is the index of the point chosen
+	 * for the whigham crossover operation. The index is from the list of all
+	 * non-terminal symbols in the parse tree of the first program, as would be
 	 * returned by the <code>getNonTerminalSymbols</code> method.
 	 */
 	public static final Stat XO_POINT1 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
-	
+
 	/**
-	 * Requests an <code>Integer</code> which is the index of the point chosen 
-	 * for the whigham crossover operation. The index is from the list of all 
-	 * non-terminal symbols in the parse tree of the second program, as would be 
+	 * Requests an <code>Integer</code> which is the index of the point chosen
+	 * for the whigham crossover operation. The index is from the list of all
+	 * non-terminal symbols in the parse tree of the second program, as would be
 	 * returned by the <code>getNonTerminalSymbols</code> method.
 	 */
 	public static final Stat XO_POINT2 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
-	
+
 	/**
 	 * Requests a <code>NonTerminalSymbol</code> which is the subtree from the
 	 * first parent program which is being exchanged into the second parent.
 	 */
 	public static final Stat XO_SUBTREE1 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
-	
+
 	/**
 	 * Requests a <code>NonTerminalSymbol</code> which is the subtree from the
 	 * second parent program which is being exchanged into the first parent.
 	 */
 	public static final Stat XO_SUBTREE2 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
-	
+
 	// The random number generator in use.
 	private RandomNumberGenerator rng;
 
@@ -71,10 +71,10 @@ public class WhighamCrossover extends ConfigOperator<GRModel> implements GRCross
 	 */
 	public WhighamCrossover(final RandomNumberGenerator rng) {
 		this((GRModel) null);
-		
+
 		this.rng = rng;
 	}
-	
+
 	/**
 	 * Constructs a <code>WhighamCrossover</code>.
 	 * 
@@ -93,8 +93,7 @@ public class WhighamCrossover extends ConfigOperator<GRModel> implements GRCross
 	}
 
 	@Override
-	public GRCandidateProgram[] crossover(final CandidateProgram p1,
-			final CandidateProgram p2) {
+	public GRCandidateProgram[] crossover(final CandidateProgram p1, final CandidateProgram p2) {
 
 		final GRCandidateProgram child1 = (GRCandidateProgram) p1;
 		final GRCandidateProgram child2 = (GRCandidateProgram) p2;
@@ -105,7 +104,7 @@ public class WhighamCrossover extends ConfigOperator<GRModel> implements GRCross
 		final List<NonTerminalSymbol> nonTerminals1 = parseTree1.getNonTerminalSymbols();
 		final List<NonTerminalSymbol> nonTerminals2 = parseTree2.getNonTerminalSymbols();
 
-		int point1 = rng.nextInt(nonTerminals1.size());
+		final int point1 = rng.nextInt(nonTerminals1.size());
 
 		final NonTerminalSymbol subtree1 = nonTerminals1.get(point1);
 
@@ -122,18 +121,18 @@ public class WhighamCrossover extends ConfigOperator<GRModel> implements GRCross
 			return null;
 		} else {
 			// Randomly choose a second point out of the matching non-terminals.
-			int point2 = rng.nextInt(matchingNonTerminals.size());
+			final int point2 = rng.nextInt(matchingNonTerminals.size());
 			final NonTerminalSymbol subtree2 = matchingNonTerminals.get(point2);
 
 			// Add crossover points to the stats manager.
 			Stats.get().addData(XO_POINT1, point1);
 			Stats.get().addData(XO_POINT2, point2);
-			
+
 			// Swap the non-terminals' children.
 			final List<Symbol> temp = subtree1.getChildren();
 			subtree1.setChildren(subtree2.getChildren());
 			subtree2.setChildren(temp);
-			
+
 			// Add subtrees into the stats manager.
 			Stats.get().addData(XO_SUBTREE1, subtree1);
 			Stats.get().addData(XO_SUBTREE2, subtree2);
@@ -141,7 +140,7 @@ public class WhighamCrossover extends ConfigOperator<GRModel> implements GRCross
 
 		return new GRCandidateProgram[]{child1, child2};
 	}
-	
+
 	/**
 	 * Returns the random number generator that this crossover is using or
 	 * <code>null</code> if none has been set.

@@ -21,11 +21,11 @@
  */
 package org.epochx.epox.math;
 
+import static org.junit.Assert.assertEquals;
+
 import org.epochx.epox.*;
 import org.epochx.gp.representation.AbstractDoubleNodeTestCase;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * 

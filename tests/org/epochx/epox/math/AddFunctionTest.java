@@ -21,11 +21,11 @@
  */
 package org.epochx.epox.math;
 
+import static org.junit.Assert.assertEquals;
+
 import org.epochx.epox.*;
 import org.epochx.gp.representation.AbstractDoubleNodeTestCase;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * 
@@ -40,8 +40,7 @@ public class AddFunctionTest extends AbstractDoubleNodeTestCase {
 	@Test
 	public void testEvaluatePositive() {
 		final AddFunction node = (AddFunction) getNode();
-		final Node[] children = new Node[]{new Literal(2.0),
-				new Literal(3.0)};
+		final Node[] children = new Node[]{new Literal(2.0), new Literal(3.0)};
 		node.setChildren(children);
 		final double result = (Double) node.evaluate();
 
@@ -51,8 +50,7 @@ public class AddFunctionTest extends AbstractDoubleNodeTestCase {
 	@Test
 	public void testEvaluateNegative() {
 		final AddFunction node = (AddFunction) getNode();
-		final Node[] children = new Node[]{new Literal(-2.1),
-				new Literal(-3.9)};
+		final Node[] children = new Node[]{new Literal(-2.1), new Literal(-3.9)};
 		node.setChildren(children);
 		final double result = (Double) node.evaluate();
 
@@ -62,8 +60,7 @@ public class AddFunctionTest extends AbstractDoubleNodeTestCase {
 	@Test
 	public void testEvaluatePositiveNegative() {
 		final AddFunction node = (AddFunction) getNode();
-		final Node[] children = new Node[]{new Literal(-3.5),
-				new Literal(4.5)};
+		final Node[] children = new Node[]{new Literal(-3.5), new Literal(4.5)};
 		node.setChildren(children);
 		final double result = (Double) node.evaluate();
 

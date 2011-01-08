@@ -21,13 +21,13 @@
  */
 package org.epochx.gr.model;
 
+import static org.junit.Assert.*;
+
 import org.epochx.core.*;
 import org.epochx.gr.op.crossover.WhighamCrossover;
 import org.epochx.gr.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.gr.op.mutation.WhighamMutation;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Some of these test check that the default values are correct. It is possible
@@ -134,8 +134,7 @@ public abstract class AbstractGRModelTestCase extends AbstractModelTestCase {
 	public void testMaxInitialDepthDefault() {
 		final GRModel model = getModel();
 
-		assertEquals("model's default max initial depth is not 8", 8,
-				model.getMaxInitialDepth());
+		assertEquals("model's default max initial depth is not 8", 8, model.getMaxInitialDepth());
 	}
 
 	/**
@@ -145,8 +144,7 @@ public abstract class AbstractGRModelTestCase extends AbstractModelTestCase {
 	public void testMaxDepthDefault() {
 		final GRModel model = getModel();
 
-		assertEquals("model's default max depth is not 14", 14,
-				model.getMaxDepth());
+		assertEquals("model's default max depth is not 14", 14, model.getMaxDepth());
 	}
 
 	/**
@@ -156,9 +154,7 @@ public abstract class AbstractGRModelTestCase extends AbstractModelTestCase {
 	public void testInitialiserDefault() {
 		final Model model = getModel();
 
-		assertTrue(
-				"model's default initialiser is not an instance of ramped half-and-half",
-				(model.getInitialiser() instanceof RampedHalfAndHalfInitialiser));
+		assertTrue("model's default initialiser is not an instance of ramped half-and-half", (model.getInitialiser() instanceof RampedHalfAndHalfInitialiser));
 	}
 
 	/**
@@ -168,9 +164,7 @@ public abstract class AbstractGRModelTestCase extends AbstractModelTestCase {
 	public void testCrossoverDefault() {
 		final Model model = getModel();
 
-		assertTrue(
-				"model's default crossover is not an instance of whigham crossover",
-				(model.getCrossover() instanceof WhighamCrossover));
+		assertTrue("model's default crossover is not an instance of whigham crossover", (model.getCrossover() instanceof WhighamCrossover));
 	}
 
 	/**
@@ -180,8 +174,6 @@ public abstract class AbstractGRModelTestCase extends AbstractModelTestCase {
 	public void testMutationDefault() {
 		final Model model = getModel();
 
-		assertTrue(
-				"model's default mutation is not an instance of whigham mutation",
-				(model.getMutation() instanceof WhighamMutation));
+		assertTrue("model's default mutation is not an instance of whigham mutation", (model.getMutation() instanceof WhighamMutation));
 	}
 }

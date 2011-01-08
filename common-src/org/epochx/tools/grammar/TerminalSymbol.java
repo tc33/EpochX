@@ -86,7 +86,7 @@ public class TerminalSymbol implements Symbol {
 	 * 
 	 * @param obj the <code>Object</code> to test for equality.
 	 * @return <code>true</code> if the given <code>Object</code> is
-	 *         equal to this non-terminal according to the contract outlined 
+	 *         equal to this non-terminal according to the contract outlined
 	 *         above and <code>false</code> otherwise.
 	 */
 	@Override
@@ -94,7 +94,7 @@ public class TerminalSymbol implements Symbol {
 		if (obj instanceof TerminalSymbol) {
 			final TerminalSymbol objSymbol = (TerminalSymbol) obj;
 
-			return this.toString().equals(objSymbol.toString());
+			return toString().equals(objSymbol.toString());
 		} else {
 			return false;
 		}

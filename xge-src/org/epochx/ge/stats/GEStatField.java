@@ -41,6 +41,7 @@ public class GEStatField extends StatField {
 	 * previous generation.
 	 */
 	public static final Stat GEN_DEPTHS = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			int[] depths = null;
@@ -68,6 +69,7 @@ public class GEStatField extends StatField {
 	 * previous generation.
 	 */
 	public static final Stat GEN_DEPTH_AVE = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Double aveDepth = null;
@@ -90,6 +92,7 @@ public class GEStatField extends StatField {
 	 * population at the end of the previous generation.
 	 */
 	public static final Stat GEN_DEPTH_STDEV = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Double stdevDepth = null;
@@ -112,6 +115,7 @@ public class GEStatField extends StatField {
 	 * the previous generation.
 	 */
 	public static final Stat GEN_DEPTH_MAX = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Integer maxDepth = null;
@@ -134,6 +138,7 @@ public class GEStatField extends StatField {
 	 * previous generation.
 	 */
 	public static final Stat GEN_DEPTH_MIN = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Integer minDepth = null;
@@ -156,6 +161,7 @@ public class GEStatField extends StatField {
 	 * previous generation.
 	 */
 	public static final Stat GEN_LENGTHS = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			int[] lengths = null;
@@ -183,6 +189,7 @@ public class GEStatField extends StatField {
 	 * previous generation.
 	 */
 	public static final Stat GEN_LENGTH_AVE = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Double aveLength = null;
@@ -205,6 +212,7 @@ public class GEStatField extends StatField {
 	 * population at the end of the previous generation.
 	 */
 	public static final Stat GEN_LENGTH_STDEV = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Double stdevLength = null;
@@ -227,6 +235,7 @@ public class GEStatField extends StatField {
 	 * the previous generation.
 	 */
 	public static final Stat GEN_LENGTH_MAX = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Integer maxLength = null;
@@ -249,6 +258,7 @@ public class GEStatField extends StatField {
 	 * the previous generation.
 	 */
 	public static final Stat GEN_LENGTH_MIN = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Integer minLength = null;

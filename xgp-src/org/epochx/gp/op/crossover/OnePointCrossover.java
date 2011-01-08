@@ -23,7 +23,7 @@ package org.epochx.gp.op.crossover;
 
 import java.util.*;
 
-import org.epochx.epox.*;
+import org.epochx.epox.Node;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.op.ConfigOperator;
@@ -34,9 +34,9 @@ import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
  * This class implements one point crossover as described by Poli and Langdon
- * in their paper Genetic Programming with One-Point Crossover and Point 
+ * in their paper Genetic Programming with One-Point Crossover and Point
  * Mutation. It is recommended that a significant mutation rate (Poli & Langdon
- * use 30%) is used in combination with one-point crossover since it encourages 
+ * use 30%) is used in combination with one-point crossover since it encourages
  * rapid convergence.
  * 
  * <p>
@@ -51,7 +51,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * If the <code>getModel</code> method returns <code>null</code> then no model
  * is set and whatever static parameters have been set as parameters to the
  * constructor or using the standard accessor methods will be used. If any
- * compulsory parameters remain unset when the crossover is performed then an 
+ * compulsory parameters remain unset when the crossover is performed then an
  * <code>IllegalStateException</code> will be thrown.
  * 
  * @see KozaCrossover
@@ -64,60 +64,60 @@ public class OnePointCrossover extends ConfigOperator<GPModel> implements GPCros
 	 * parent for the uniform point crossover operation.
 	 */
 	public static final Stat XO_POINT1 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
-	
+
 	/**
 	 * Requests an <code>Integer</code> which is the point chosen in the second
 	 * parent for the uniform point crossover operation.
 	 */
 	public static final Stat XO_POINT2 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
-	
+
 	/**
 	 * Requests a <code>Node</code> which is the subtree from the
 	 * first parent program which is being exchanged into the second parent.
 	 */
 	public static final Stat XO_SUBTREE1 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
-	
+
 	/**
 	 * Requests a <code>Node</code> which is the subtree from the
 	 * second parent program which is being exchanged into the first parent.
 	 */
 	public static final Stat XO_SUBTREE2 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
-	
+
 	// The random number generator for controlling random behaviour.
 	private RandomNumberGenerator rng;
-	
+
 	// Whether to use the strict version of one-point crossover or not.
 	private boolean strict;
 
 	/**
 	 * Constructs a <code>OnePointCrossover</code> with the only necessary
-	 * parameter provided. Defaults to using a non-strict implementation of 
+	 * parameter provided. Defaults to using a non-strict implementation of
 	 * one-point crossover.
 	 * 
-	 * @param rng a <code>RandomNumberGenerator</code> used to lead 
-	 * non-deterministic behaviour.
+	 * @param rng a <code>RandomNumberGenerator</code> used to lead
+	 *        non-deterministic behaviour.
 	 */
 	public OnePointCrossover(final RandomNumberGenerator rng) {
 		this(rng, false);
 	}
-	
+
 	/**
 	 * Constructs a <code>OnePointCrossover</code> with the necessary
 	 * parameters provided.
 	 * 
-	 * @param rng a <code>RandomNumberGenerator</code> used to lead 
-	 * non-deterministic behaviour.
+	 * @param rng a <code>RandomNumberGenerator</code> used to lead
+	 *        non-deterministic behaviour.
 	 * @param strict whether strict one-point crossover should be used where not
-	 * only must the arity of nodes match, but the node types.
+	 *        only must the arity of nodes match, but the node types.
 	 */
 	public OnePointCrossover(final RandomNumberGenerator rng, final boolean strict) {
 		this((GPModel) null, strict);
-		
+
 		this.rng = rng;
 	}
-	
+
 	/**
-	 * Constructs a <code>OnePointCrossover</code>. Defaults to using a 
+	 * Constructs a <code>OnePointCrossover</code>. Defaults to using a
 	 * non-strict implementation of one-point crossover.
 	 * 
 	 * @param model the current controlling model.
@@ -125,17 +125,17 @@ public class OnePointCrossover extends ConfigOperator<GPModel> implements GPCros
 	public OnePointCrossover(final GPModel model) {
 		this(model, false);
 	}
-	
+
 	/**
 	 * Constructs a <code>OnePointCrossover</code>.
 	 * 
 	 * @param model the current controlling model.
 	 * @param strict whether strict one-point crossover should be used where not
-	 * only must the arity of nodes match, but the node types.
+	 *        only must the arity of nodes match, but the node types.
 	 */
 	public OnePointCrossover(final GPModel model, final boolean strict) {
 		super(model);
-		
+
 		this.strict = strict;
 	}
 
@@ -159,25 +159,24 @@ public class OnePointCrossover extends ConfigOperator<GPModel> implements GPCros
 	 *        point crossover.
 	 */
 	@Override
-	public GPCandidateProgram[] crossover(final CandidateProgram p1,
-			final CandidateProgram p2) {
+	public GPCandidateProgram[] crossover(final CandidateProgram p1, final CandidateProgram p2) {
 		final GPCandidateProgram program1 = (GPCandidateProgram) p1;
 		final GPCandidateProgram program2 = (GPCandidateProgram) p2;
 
-		List<Integer> points1 = new ArrayList<Integer>();
-		List<Integer> points2 = new ArrayList<Integer>();
-		
+		final List<Integer> points1 = new ArrayList<Integer>();
+		final List<Integer> points2 = new ArrayList<Integer>();
+
 		traverse(program1.getRootNode(), program2.getRootNode(), points1, points2, 0, 0);
-		
+
 		// Select swap points.
-		int randomIndex = rng.nextInt(points1.size());
+		final int randomIndex = rng.nextInt(points1.size());
 		final int swapPoint1 = points1.get(randomIndex);
 		final int swapPoint2 = points2.get(randomIndex);
 
 		// Add crossover points to the stats manager.
 		Stats.get().addData(XO_POINT1, swapPoint1);
 		Stats.get().addData(XO_POINT2, swapPoint2);
-		
+
 		// Get copies of subtrees to swap.
 		final Node subtree1 = program1.getNthNode(swapPoint1);// .clone();
 		final Node subtree2 = program2.getNthNode(swapPoint2);// .clone();
@@ -185,68 +184,68 @@ public class OnePointCrossover extends ConfigOperator<GPModel> implements GPCros
 		// Add subtrees into the stats manager.
 		Stats.get().addData(XO_SUBTREE1, subtree1);
 		Stats.get().addData(XO_SUBTREE2, subtree2);
-		
+
 		// Perform swap.
 		program1.setNthNode(swapPoint1, subtree2);
 		program2.setNthNode(swapPoint2, subtree1);
 
 		return new GPCandidateProgram[]{program1, program2};
 	}
-	
+
 	/*
-	 * Private helper method for crossover method. Traverses the two program 
+	 * Private helper method for crossover method. Traverses the two program
 	 * trees and identifies the swap points that can be swapped because they're
-	 * connected to a part of the tree that aligns. Supports strict or 
+	 * connected to a part of the tree that aligns. Supports strict or
 	 * non-strict.
 	 */
-	private void traverse(Node root1, Node root2, List<Integer> points1, List<Integer> points2, int current1, int current2) {
+	private void traverse(final Node root1, final Node root2, final List<Integer> points1, final List<Integer> points2,
+			int current1, int current2) {
 		points1.add(current1);
 		points2.add(current2);
-		
+
 		boolean valid = false;
 		if (!strict) {
-			valid = (root1.getArity() == root2.getArity())
-			     && (root1.getReturnType() == root2.getReturnType());
+			valid = (root1.getArity() == root2.getArity()) && (root1.getReturnType() == root2.getReturnType());
 		} else {
 			valid = root1.getClass().equals(root2.getClass());
 		}
-		
+
 		if (valid) {
-			for (int i=0; i<root1.getArity(); i++) {
-				Node child1 = root1.getChild(i);
-				Node child2 = root2.getChild(i);
-				traverse(child1, child2, points1, points2, current1+1, current2+1);
-				
+			for (int i = 0; i < root1.getArity(); i++) {
+				final Node child1 = root1.getChild(i);
+				final Node child2 = root2.getChild(i);
+				traverse(child1, child2, points1, points2, current1 + 1, current2 + 1);
+
 				current1 += child1.getLength();
 				current2 += child2.getLength();
 			}
 		}
 	}
-	
+
 	/**
-	 * Returns whether strict one-point crossover is being used, or not. If set 
-	 * to <code>true</code> then alignment of the parent programs takes into 
+	 * Returns whether strict one-point crossover is being used, or not. If set
+	 * to <code>true</code> then alignment of the parent programs takes into
 	 * account not only the arity of the nodes, but also the node type.
 	 * 
-	 * @return true if strict one-point crossover is in use, and false 
-	 * otherwise.
+	 * @return true if strict one-point crossover is in use, and false
+	 *         otherwise.
 	 */
 	public boolean isStrict() {
 		return strict;
 	}
-	
+
 	/**
 	 * Sets whether strict one-point crossover should be used or not. If set to
-	 * <code>true</code> then alignment of the parent programs takes into 
+	 * <code>true</code> then alignment of the parent programs takes into
 	 * account not only the arity of the nodes, but also the node type.
 	 * 
-	 * @param strict true if strict one-point crossover should be used, and 
-	 * false otherwise.
+	 * @param strict true if strict one-point crossover should be used, and
+	 *        false otherwise.
 	 */
-	public void setStrict(boolean strict) {
+	public void setStrict(final boolean strict) {
 		this.strict = strict;
 	}
-	
+
 	/**
 	 * Returns the random number generator that this crossover is using or
 	 * <code>null</code> if none has been set.

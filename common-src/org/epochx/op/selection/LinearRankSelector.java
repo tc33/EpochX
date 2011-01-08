@@ -55,8 +55,8 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * If the <code>getModel</code> method returns <code>null</code> then no model
  * is set and whatever static parameters have been set as parameters to the
  * constructor or using the standard accessor methods will be used. If any
- * compulsory parameters remain unset when the selector is requested to
- * select programs, then an <code>IllegalStateException</code> will be thrown.
+ * compulsory parameters remain unset when the selector is requested to select
+ * programs, then an <code>IllegalStateException</code> will be thrown.
  * 
  * @see FitnessProportionateSelector
  * @see RandomSelector
@@ -81,33 +81,33 @@ public class LinearRankSelector extends ConfigOperator<Model> implements Program
 	private double nMinus;
 
 	/**
-	 * Constructs an instance of <code>LinearRankSelector</code> with the only 
+	 * Constructs an instance of <code>LinearRankSelector</code> with the only
 	 * necessary parameter given.
 	 * 
-	 * @param rng a <code>RandomNumberGenerator</code> used to lead 
-	 * non-deterministic behaviour.
+	 * @param rng a <code>RandomNumberGenerator</code> used to lead
+	 *        non-deterministic behaviour.
 	 */
 	public LinearRankSelector(final RandomNumberGenerator rng) {
 		this((Model) null);
-		
+
 		this.rng = rng;
 	}
-	
+
 	/**
 	 * Constructs an instance of <code>LinearRankSelector</code> with all the
 	 * necessary parameters given.
 	 * 
-	 * @param rng a <code>RandomNumberGenerator</code> used to lead 
-	 * non-deterministic behaviour.
+	 * @param rng a <code>RandomNumberGenerator</code> used to lead
+	 *        non-deterministic behaviour.
 	 * @param gradient a value between 0.0 and 1.0 which indicates the gradient
 	 *        at which fitnesses are assigned to ranks.
 	 */
 	public LinearRankSelector(final RandomNumberGenerator rng, final double gradient) {
 		this((Model) null, gradient);
-		
+
 		this.rng = rng;
 	}
-	
+
 	/**
 	 * Constructs an instance of <code>LinearRankSelector</code> with a default
 	 * gradient value of <code>0.2</code>.
@@ -157,8 +157,7 @@ public class LinearRankSelector extends ConfigOperator<Model> implements Program
 	 */
 	public void setGradient(final double gradient) {
 		if ((gradient < 0.0) || (gradient > 1.0)) {
-			throw new IllegalArgumentException("linear rank gradient "
-					+ "must be between 0.0 and 1.0");
+			throw new IllegalArgumentException("linear rank gradient " + "must be between 0.0 and 1.0");
 		}
 
 		this.gradient = gradient;
@@ -241,14 +240,11 @@ public class LinearRankSelector extends ConfigOperator<Model> implements Program
 	 *         rank.
 	 */
 	@Override
-	public List<CandidateProgram> getPool(final List<CandidateProgram> pop,
-			final int poolSize) {
+	public List<CandidateProgram> getPool(final List<CandidateProgram> pop, final int poolSize) {
 		if (poolSize < 1) {
-			throw new IllegalArgumentException(
-					"poolSize must be greater than 0");
+			throw new IllegalArgumentException("poolSize must be greater than 0");
 		} else if ((pop == null) || (pop.isEmpty())) {
-			throw new IllegalArgumentException(
-					"population to select pool from must not be null nor empty");
+			throw new IllegalArgumentException("population to select pool from must not be null nor empty");
 		}
 
 		poolSelection.setSelectionPool(pop);
@@ -260,7 +256,7 @@ public class LinearRankSelector extends ConfigOperator<Model> implements Program
 
 		return pool;
 	}
-	
+
 	/**
 	 * Returns the random number generator that this selector is using or
 	 * <code>null</code> if none has been set.
@@ -318,8 +314,7 @@ public class LinearRankSelector extends ConfigOperator<Model> implements Program
 			// receive whatever is left.
 			for (int i = 0; i < popSize; i++) {
 				final int n = popSize - i;
-				final double p = (1.0 / popSize)
-						* (nMinus + ((nPlus - nMinus) * ((n - 1.0) / (popSize - 1.0))));
+				final double p = (1.0 / popSize) * (nMinus + ((nPlus - nMinus) * ((n - 1.0) / (popSize - 1.0))));
 
 				total += p;
 				probabilities[i] = total;

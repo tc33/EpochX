@@ -137,9 +137,7 @@ public class PoolSelectionManager implements ConfigListener {
 	 */
 	public List<CandidateProgram> getPool(final List<CandidateProgram> pop) {
 		if ((poolSelector != null) && ((poolSize == 0) || (poolSize < -1))) {
-			throw new IllegalStateException(
-					"pool selector set but invalid pool size (=" + poolSize
-							+ ')');
+			throw new IllegalStateException("pool selector set but invalid pool size (=" + poolSize + ')');
 		}
 
 		// Inform all listeners that pool selection is starting.
@@ -147,7 +145,7 @@ public class PoolSelectionManager implements ConfigListener {
 
 		// Record the start time.
 		final long startTime = System.nanoTime();
-		
+
 		// Reset the number of reversions.
 		reversions = 0;
 
@@ -171,7 +169,7 @@ public class PoolSelectionManager implements ConfigListener {
 		} while (pool == null);
 
 		final long runtime = System.nanoTime() - startTime;
-		
+
 		// Store the stats from the pool selection.
 		Stats.get().addData(POOL_REVERSIONS, reversions);
 		Stats.get().addData(POOL_PROGRAMS, pool);

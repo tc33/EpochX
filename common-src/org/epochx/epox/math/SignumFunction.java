@@ -48,17 +48,17 @@ public class SignumFunction extends Node {
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
-	 * result of which must be a numeric type (one of Double, Float, Long, 
+	 * result of which must be a numeric type (one of Double, Float, Long,
 	 * Integer). Then the result will be -1, if the value is negative, +1, if
 	 * the value is positive and 0 if the value is zero. The type of the value
 	 * returned will be the same as the input type.
 	 */
 	@Override
 	public Object evaluate() {
-		Object c = getChild(0).evaluate();
-		
-		double result = Math.signum(NumericUtils.asDouble(c));
-		
+		final Object c = getChild(0).evaluate();
+
+		final double result = Math.signum(NumericUtils.asDouble(c));
+
 		if (c instanceof Double) {
 			return result;
 		} else if (c instanceof Float) {
@@ -68,7 +68,7 @@ public class SignumFunction extends Node {
 		} else if (c instanceof Long) {
 			return (long) result;
 		}
-		
+
 		return null;
 	}
 
@@ -79,18 +79,18 @@ public class SignumFunction extends Node {
 	public String getIdentifier() {
 		return "SGN";
 	}
-	
+
 	/**
 	 * Returns this function node's return type for the given child input types.
-	 * If there is one input type of a numeric type then the return type will 
-	 * be that same numeric type. In all other cases this method will return 
+	 * If there is one input type of a numeric type then the return type will
+	 * be that same numeric type. In all other cases this method will return
 	 * <code>null</code> to indicate that the inputs are invalid.
 	 * 
 	 * @return A numeric class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (inputTypes.length == 1 && TypeUtils.isNumericType(inputTypes[0])) {
+	public Class<?> getReturnType(final Class<?> ... inputTypes) {
+		if ((inputTypes.length == 1) && TypeUtils.isNumericType(inputTypes[0])) {
 			return inputTypes[0];
 		} else {
 			return null;

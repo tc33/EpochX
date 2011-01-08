@@ -21,7 +21,6 @@
  */
 package org.epochx.life;
 
-
 /**
  * Provides an <code>abstract</code> implementation of
  * <code>ReproductionListener</code>.

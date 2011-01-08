@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -30,76 +30,77 @@ import org.epochx.epox.bool.NotFunction;
 import org.epochx.tools.random.MersenneTwisterFast;
 import org.junit.*;
 
-
 /**
  * 
  */
 public class FullInitialiserTest {
 
 	private FullInitialiser initialiser;
-	
+
 	@Before
 	public void setUp() throws Exception {
 		initialiser = new FullInitialiser(null, null, null, -1, -1, false);
-		
+
 		// Ensure setup is valid.
 		initialiser.setDepth(0);
 		initialiser.setRNG(new MersenneTwisterFast());
-		List<Node> syntax = new ArrayList<Node>();
+		final List<Node> syntax = new ArrayList<Node>();
 		syntax.add(new Literal(true));
 		syntax.add(new NotFunction());
 		initialiser.setSyntax(syntax);
 		initialiser.setReturnType(Boolean.class);
 		initialiser.setPopSize(1);
 	}
-	
+
 	/**
-	 * Tests that an illegal state exception is not thrown with valid 
+	 * Tests that an illegal state exception is not thrown with valid
 	 * parameters.
 	 */
 	@Test
 	public void testGetPopValid() {
 		try {
 			initialiser.getInitialPopulation();
-		} catch (IllegalStateException e) {
+		} catch (final IllegalStateException e) {
 			fail("illegal state exception thrown for valid parameters");
 		}
 	}
-	
+
 	/**
 	 * Tests that an illegal state exception is thrown if the depth parameter is
-	 * greater than 0 and no nodes with arity >0 have been included in the 
+	 * greater than 0 and no nodes with arity >0 have been included in the
 	 * syntax.
 	 */
 	@Test
 	public void testGetPopNoFunctions() {
-		List<Node> syntax = new ArrayList<Node>();
+		final List<Node> syntax = new ArrayList<Node>();
 		syntax.add(new Literal(true));
 		initialiser.setSyntax(syntax);
 		initialiser.setDepth(1);
-		
+
 		try {
 			initialiser.getInitialPopulation();
 			fail("illegal state exception not thrown for depth of 1 with no function nodes");
-		} catch (IllegalStateException e) {}
+		} catch (final IllegalStateException e) {
+		}
 	}
-	
+
 	/**
 	 * Tests that an illegal state exception is thrown if there are no terminals
 	 * in the syntax.
 	 */
 	@Test
 	public void testGetPopNoTerminals() {
-		List<Node> syntax = new ArrayList<Node>();
+		final List<Node> syntax = new ArrayList<Node>();
 		syntax.add(new NotFunction());
 		initialiser.setSyntax(syntax);
-		
+
 		try {
 			initialiser.getInitialPopulation();
 			fail("illegal state exception not thrown for syntax with no terminal nodes");
-		} catch (IllegalStateException e) {}
+		} catch (final IllegalStateException e) {
+		}
 	}
-	
+
 	/**
 	 * Tests that an illegal state exception is thrown if population size
 	 * parameter is zero.
@@ -108,118 +109,125 @@ public class FullInitialiserTest {
 	public void testGetPopZeroPopSize() {
 		// Setup initialiser to be valid except for pop size.
 		initialiser.setPopSize(0);
-		
+
 		try {
 			initialiser.getInitialPopulation();
 			fail("illegal state exception not thrown for pop size being 0");
-		} catch (IllegalStateException e) {}
+		} catch (final IllegalStateException e) {
+		}
 	}
 
 	/**
-	 * Tests that an illegal state exception is thrown if depth parameter is 
+	 * Tests that an illegal state exception is thrown if depth parameter is
 	 * -1.
 	 */
 	@Test
 	public void testGetPopNegDepth() {
 		// Setup initialiser to be valid except for depth.
 		initialiser.setDepth(-1);
-		
+
 		try {
 			initialiser.getInitialPopulation();
 			fail("illegal state exception not thrown for depth being -1");
-		} catch (IllegalStateException e) {}
+		} catch (final IllegalStateException e) {
+		}
 	}
-	
+
 	/**
-	 * Tests that an illegal state exception is thrown if no random number 
+	 * Tests that an illegal state exception is thrown if no random number
 	 * generator is set.
 	 */
 	@Test
 	public void testGetPopRNGNull() {
 		initialiser.setRNG(null);
-		
+
 		try {
 			initialiser.getInitialPopulation();
 			fail("illegal state exception not thrown for a null RNG");
-		} catch (IllegalStateException e) {}
+		} catch (final IllegalStateException e) {
+		}
 	}
-	
+
 	/**
-	 * Tests that an illegal state exception is not thrown with valid 
+	 * Tests that an illegal state exception is not thrown with valid
 	 * parameters.
 	 */
 	@Test
 	public void testGetProgramValid() {
 		// Population size not needed to be valid.
 		initialiser.setPopSize(-1);
-		
+
 		try {
 			initialiser.getInitialProgram();
-		} catch (IllegalStateException e) {
+		} catch (final IllegalStateException e) {
 			fail("illegal state exception thrown for valid parameters");
 		}
 	}
-	
+
 	/**
 	 * Tests that an illegal state exception is thrown if the depth parameter is
-	 * greater than 0 and no nodes with arity >0 have been included in the 
+	 * greater than 0 and no nodes with arity >0 have been included in the
 	 * syntax.
 	 */
 	@Test
 	public void testGetProgramNoFunctions() {
-		List<Node> syntax = new ArrayList<Node>();
+		final List<Node> syntax = new ArrayList<Node>();
 		syntax.add(new Literal(true));
 		initialiser.setSyntax(syntax);
 		initialiser.setDepth(1);
-		
+
 		try {
 			initialiser.getInitialProgram();
 			fail("illegal state exception not thrown for depth of 1 with no function nodes");
-		} catch (IllegalStateException e) {}
+		} catch (final IllegalStateException e) {
+		}
 	}
-	
+
 	/**
 	 * Tests that an illegal state exception is thrown if there are no terminals
 	 * in the syntax.
 	 */
 	@Test
 	public void testGetProgramNoTerminals() {
-		List<Node> syntax = new ArrayList<Node>();
+		final List<Node> syntax = new ArrayList<Node>();
 		syntax.add(new NotFunction());
 		initialiser.setSyntax(syntax);
-		
+
 		try {
 			initialiser.getInitialProgram();
 			fail("illegal state exception not thrown for syntax with no terminal nodes");
-		} catch (IllegalStateException e) {}
+		} catch (final IllegalStateException e) {
+		}
 	}
 
 	/**
-	 * Tests that an illegal state exception is thrown if depth parameter is 
+	 * Tests that an illegal state exception is thrown if depth parameter is
 	 * -1.
 	 */
 	@Test
 	public void testGetProgramNegDepth() {
 		// Setup initialiser to be valid except for depth.
 		initialiser.setDepth(-1);
-		
+
 		try {
 			initialiser.getInitialProgram();
 			fail("illegal state exception not thrown for depth being -1");
-		} catch (IllegalStateException e) {}
+		} catch (final IllegalStateException e) {
+		}
 	}
-	
+
 	/**
-	 * Tests that an illegal state exception is thrown if no random number 
+	 * Tests that an illegal state exception is thrown if no random number
 	 * generator is set.
 	 */
 	@Test
 	public void testGetProgramRNGNull() {
 		initialiser.setRNG(null);
-		
+
 		try {
 			initialiser.getInitialProgram();
 			fail("illegal state exception not thrown for a null RNG");
-		} catch (IllegalStateException e) {}
+		} catch (final IllegalStateException e) {
+		}
 	}
 }

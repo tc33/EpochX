@@ -68,7 +68,7 @@ public class GenerationManagerTest {
 				return 0;
 			}
 		});
-		
+
 		Life.get().fireConfigureEvent();
 	}
 
@@ -111,6 +111,7 @@ public class GenerationManagerTest {
 
 		// Listen for the generation.
 		Life.get().addGenerationListener(new GenerationListener() {
+
 			@Override
 			public void onGenerationStart() {
 				verify.append('1');
@@ -122,9 +123,9 @@ public class GenerationManagerTest {
 			}
 		});
 		Life.get().addHook(new AbstractHook() {
+
 			@Override
-			public List<CandidateProgram> generationHook(
-					final List<CandidateProgram> genPop) {
+			public List<CandidateProgram> generationHook(final List<CandidateProgram> genPop) {
 				verify.append('2');
 				return genPop;
 			}
@@ -132,8 +133,7 @@ public class GenerationManagerTest {
 
 		genManager.generation(1, pop);
 
-		assertEquals("generation events were not called in the correct order",
-				"123", verify.toString());
+		assertEquals("generation events were not called in the correct order", "123", verify.toString());
 	}
 
 	/**
@@ -149,6 +149,7 @@ public class GenerationManagerTest {
 
 		// Listen for the generation.
 		Life.get().addHook(new AbstractHook() {
+
 			@Override
 			public List<CandidateProgram> generationHook(final List<CandidateProgram> elites) {
 				verify.append('3');
@@ -164,8 +165,7 @@ public class GenerationManagerTest {
 
 		genManager.generation(1, pop);
 
-		assertEquals("generation was not correctly reverted", "3333",
-				verify.toString());
+		assertEquals("generation was not correctly reverted", "3333", verify.toString());
 	}
 
 	@Test

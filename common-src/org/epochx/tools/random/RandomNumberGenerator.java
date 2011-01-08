@@ -61,8 +61,8 @@ public interface RandomNumberGenerator {
 	public boolean nextBoolean();
 
 	/**
-	 * Set the initial seed of the random number generation. Two instances of 
-	 * the same implementation of <code>RandomNumberGenerator</code> given the 
+	 * Set the initial seed of the random number generation. Two instances of
+	 * the same implementation of <code>RandomNumberGenerator</code> given the
 	 * same seed, should produce the same sequence of numbers.
 	 * 
 	 * @param seed the initial seed.

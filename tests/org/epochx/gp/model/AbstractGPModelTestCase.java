@@ -21,6 +21,8 @@
  */
 package org.epochx.gp.model;
 
+import static org.junit.Assert.*;
+
 import java.util.ArrayList;
 
 import org.epochx.core.*;
@@ -29,8 +31,6 @@ import org.epochx.gp.op.crossover.SubtreeCrossover;
 import org.epochx.gp.op.init.FullInitialiser;
 import org.epochx.gp.op.mutation.SubtreeMutation;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Some of these test check that the default values are correct. It is possible
@@ -129,8 +129,7 @@ public abstract class AbstractGPModelTestCase extends AbstractModelTestCase {
 	public void testMaxInitialDepthDefault() {
 		final GPModel model = getModel();
 
-		assertEquals("model's default max initial depth is not 6", 6,
-				model.getMaxInitialDepth());
+		assertEquals("model's default max initial depth is not 6", 6, model.getMaxInitialDepth());
 	}
 
 	/**
@@ -140,8 +139,7 @@ public abstract class AbstractGPModelTestCase extends AbstractModelTestCase {
 	public void testMaxDepthDefault() {
 		final GPModel model = getModel();
 
-		assertEquals("model's default max depth is not 17", 17,
-				model.getMaxDepth());
+		assertEquals("model's default max depth is not 17", 17, model.getMaxDepth());
 	}
 
 	/**
@@ -151,9 +149,7 @@ public abstract class AbstractGPModelTestCase extends AbstractModelTestCase {
 	public void testInitialiserDefault() {
 		final Model model = getModel();
 
-		assertTrue(
-				"model's default initialiser is not an instance of full initialiser",
-				(model.getInitialiser() instanceof FullInitialiser));
+		assertTrue("model's default initialiser is not an instance of full initialiser", (model.getInitialiser() instanceof FullInitialiser));
 	}
 
 	/**
@@ -163,9 +159,7 @@ public abstract class AbstractGPModelTestCase extends AbstractModelTestCase {
 	public void testCrossoverDefault() {
 		final Model model = getModel();
 
-		assertTrue(
-				"model's default crossover is not an instance of uniform point crossover",
-				(model.getCrossover() instanceof SubtreeCrossover));
+		assertTrue("model's default crossover is not an instance of uniform point crossover", (model.getCrossover() instanceof SubtreeCrossover));
 	}
 
 	/**
@@ -175,8 +169,6 @@ public abstract class AbstractGPModelTestCase extends AbstractModelTestCase {
 	public void testMutationDefault() {
 		final Model model = getModel();
 
-		assertTrue(
-				"model's default mutation is not an instance of subtree mutation",
-				(model.getMutation() instanceof SubtreeMutation));
+		assertTrue("model's default mutation is not an instance of subtree mutation", (model.getMutation() instanceof SubtreeMutation));
 	}
 }

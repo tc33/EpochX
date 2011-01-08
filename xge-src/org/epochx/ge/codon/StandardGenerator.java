@@ -42,7 +42,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * If the <code>getModel</code> method returns <code>null</code> then no model
  * is set and whatever static parameters have been set as parameters to the
  * constructor or using the standard accessor methods will be used. If any
- * compulsory parameters remain unset when a new codon is requested, then an 
+ * compulsory parameters remain unset when a new codon is requested, then an
  * <code>IllegalStateException</code> will be thrown.
  */
 public class StandardGenerator extends ConfigOperator<GEModel> implements CodonGenerator {
@@ -59,13 +59,13 @@ public class StandardGenerator extends ConfigOperator<GEModel> implements CodonG
 	 * @param rng
 	 * @param maxCodonSize
 	 */
-	public StandardGenerator(RandomNumberGenerator rng, int maxCodonSize) {
+	public StandardGenerator(final RandomNumberGenerator rng, final int maxCodonSize) {
 		this(null);
-		
+
 		this.rng = rng;
 		this.maxCodonSize = maxCodonSize;
 	}
-	
+
 	/**
 	 * Construct a StandardGenerator.
 	 * 
@@ -98,10 +98,10 @@ public class StandardGenerator extends ConfigOperator<GEModel> implements CodonG
 		} else if (maxCodonSize <= 0) {
 			throw new IllegalStateException("max codon size must not be less than 1");
 		}
-		
+
 		return rng.nextInt(maxCodonSize);
 	}
-	
+
 	/**
 	 * @return the rng
 	 */
@@ -109,15 +109,13 @@ public class StandardGenerator extends ConfigOperator<GEModel> implements CodonG
 		return rng;
 	}
 
-	
 	/**
 	 * @param rng the rng to set
 	 */
-	public void setRNG(RandomNumberGenerator rng) {
+	public void setRNG(final RandomNumberGenerator rng) {
 		this.rng = rng;
 	}
 
-	
 	/**
 	 * @return the maxCodonSize
 	 */
@@ -125,13 +123,11 @@ public class StandardGenerator extends ConfigOperator<GEModel> implements CodonG
 		return maxCodonSize;
 	}
 
-	
 	/**
 	 * @param maxCodonSize the maxCodonSize to set
 	 */
-	public void setMaxCodonSize(int maxCodonSize) {
+	public void setMaxCodonSize(final int maxCodonSize) {
 		this.maxCodonSize = maxCodonSize;
 	}
-	
-	
+
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -25,9 +25,8 @@ import java.util.List;
 
 import org.epochx.representation.CandidateProgram;
 
-
 /**
- * Provides an abstract <code>Hook</code> implementation which for each hook 
+ * Provides an abstract <code>Hook</code> implementation which for each hook
  * method simply returns the parameter as received.
  */
 public abstract class AbstractHook implements Hook {
@@ -39,7 +38,7 @@ public abstract class AbstractHook implements Hook {
 	public List<CandidateProgram> initialisationHook(final List<CandidateProgram> pop) {
 		return pop;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -47,7 +46,7 @@ public abstract class AbstractHook implements Hook {
 	public List<CandidateProgram> elitismHook(final List<CandidateProgram> elites) {
 		return elites;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -55,7 +54,7 @@ public abstract class AbstractHook implements Hook {
 	public List<CandidateProgram> poolSelectionHook(final List<CandidateProgram> pool) {
 		return pool;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -63,7 +62,7 @@ public abstract class AbstractHook implements Hook {
 	public CandidateProgram[] crossoverHook(final CandidateProgram[] parents, final CandidateProgram[] children) {
 		return children;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -71,7 +70,7 @@ public abstract class AbstractHook implements Hook {
 	public CandidateProgram mutationHook(final CandidateProgram parent, final CandidateProgram child) {
 		return child;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -79,7 +78,7 @@ public abstract class AbstractHook implements Hook {
 	public CandidateProgram reproductionHook(final CandidateProgram program) {
 		return program;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */

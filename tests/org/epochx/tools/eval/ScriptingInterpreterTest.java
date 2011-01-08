@@ -43,7 +43,7 @@ public class ScriptingInterpreterTest {
 	 */
 	/*
 	 * @Test
-	public void testEval() {
+	 * public void testEval() {
 	 * Interpreter interpreter = new ScriptingInterpreter("ruby");
 	 * 
 	 * String expression = "($b1 || false) && ($s1.to_i < 4.435)";
@@ -69,7 +69,7 @@ public class ScriptingInterpreterTest {
 	 */
 	/*
 	 * @Test
-	public void testMultiEval() {
+	 * public void testMultiEval() {
 	 * Interpreter interpreter = new ScriptingInterpreter("ruby");
 	 * 
 	 * String expression = "($b1 || false) && ($s1.to_i < 4.435)";
@@ -101,7 +101,7 @@ public class ScriptingInterpreterTest {
 	 */
 	/*
 	 * @Test
-	public void testExec() {
+	 * public void testExec() {
 	 * Interpreter interpreter = new ScriptingInterpreter("ruby");
 	 * 
 	 * Point p = new Point(2,3);
@@ -123,7 +123,7 @@ public class ScriptingInterpreterTest {
 	 */
 	/*
 	 * @Test
-	public void testMultiExec() {
+	 * public void testMultiExec() {
 	 * Interpreter interpreter = new ScriptingInterpreter("ruby");
 	 * 
 	 * Point p1 = new Point(0,0);

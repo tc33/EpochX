@@ -21,11 +21,11 @@
  */
 package org.epochx.epox.math;
 
+import static org.junit.Assert.assertEquals;
+
 import org.epochx.epox.*;
 import org.epochx.gp.representation.AbstractDoubleNodeTestCase;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * 
@@ -43,8 +43,7 @@ public class ArcCosineFunctionTest extends AbstractDoubleNodeTestCase {
 		node.setChild(0, new Literal(Math.cos(0.6)));
 		final double result = node.evaluate();
 
-		assertEquals("ACOS of 0.6 is not equal to the inverse of cos", 0.6,
-				result);
+		assertEquals("ACOS of 0.6 is not equal to the inverse of cos", 0.6, result);
 	}
 
 	@Test
@@ -53,8 +52,7 @@ public class ArcCosineFunctionTest extends AbstractDoubleNodeTestCase {
 		node.setChild(0, new Literal(Math.cos(-0.6)));
 		final double result = node.evaluate();
 
-		assertEquals("ACOS of -0.6 is not equal to the inverse of cos", 0.6,
-				result);
+		assertEquals("ACOS of -0.6 is not equal to the inverse of cos", 0.6, result);
 	}
 
 	@Test
@@ -63,8 +61,7 @@ public class ArcCosineFunctionTest extends AbstractDoubleNodeTestCase {
 		node.setChild(0, new Literal(1.0));
 		final double result = node.evaluate();
 
-		assertEquals("ACOS of 0.0 and not equal to the inverse of cos", 0.0,
-				result);
+		assertEquals("ACOS of 0.0 and not equal to the inverse of cos", 0.0, result);
 	}
 
 	@Test

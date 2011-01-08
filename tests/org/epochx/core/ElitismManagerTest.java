@@ -66,11 +66,11 @@ public class ElitismManagerTest {
 				verify.append('3');
 			}
 		});
-		
+
 		Life.get().addHook(new AbstractHook() {
+
 			@Override
-			public List<CandidateProgram> elitismHook(
-					final List<CandidateProgram> elites) {
+			public List<CandidateProgram> elitismHook(final List<CandidateProgram> elites) {
 				verify.append('2');
 				return elites;
 			}
@@ -78,8 +78,7 @@ public class ElitismManagerTest {
 
 		elitismManager.elitism(pop);
 
-		assertEquals("elitism events were not called in the correct order",
-				"123", verify.toString());
+		assertEquals("elitism events were not called in the correct order", "123", verify.toString());
 	}
 
 	/**

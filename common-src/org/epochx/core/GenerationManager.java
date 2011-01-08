@@ -170,12 +170,10 @@ public class GenerationManager implements ConfigListener {
 	 * @return the population derived from performing genetic operations on the
 	 *         previous population.
 	 */
-	public List<CandidateProgram> generation(final int generationNo,
-			final List<CandidateProgram> previousPop) {
+	public List<CandidateProgram> generation(final int generationNo, final List<CandidateProgram> previousPop) {
 		// Validate inputs.
 		if ((previousPop == null) || (previousPop.size() < 1)) {
-			throw new IllegalArgumentException(
-					"previousPop must not be null and size must be 1 or greater.");
+			throw new IllegalArgumentException("previousPop must not be null and size must be 1 or greater.");
 		}
 
 		// Validate state.
@@ -186,11 +184,9 @@ public class GenerationManager implements ConfigListener {
 		} else if (popSize < 1) {
 			throw new IllegalStateException("pop size should be 1 or greater");
 		} else if ((crossoverProbability < 0.0) || (crossoverProbability > 1.0)) {
-			throw new IllegalStateException(
-					"crossover probability should be between 0.0 and 1.0");
+			throw new IllegalStateException("crossover probability should be between 0.0 and 1.0");
 		} else if ((mutationProbability < 0.0) || (mutationProbability > 1.0)) {
-			throw new IllegalStateException(
-					"mutation probability should be between 0.0 and 1.0");
+			throw new IllegalStateException("mutation probability should be between 0.0 and 1.0");
 		}
 
 		// Inform all listeners that a generation is starting.
@@ -213,8 +209,7 @@ public class GenerationManager implements ConfigListener {
 			pop.addAll(elitism.elitism(previousPop));
 
 			// Construct a breeding pool.
-			final List<CandidateProgram> pool = poolSelection
-					.getPool(previousPop);
+			final List<CandidateProgram> pool = poolSelection.getPool(previousPop);
 
 			// Give parent selector a pool of programs to choose from.
 			programSelector.setSelectionPool(pool);
@@ -253,8 +248,7 @@ public class GenerationManager implements ConfigListener {
 		// Store the stats data from the generation.
 		Stats.get().addData(GEN_REVERSIONS, reversions);
 		Stats.get().addData(GEN_POP, pop);
-		Stats.get().addData(GEN_TIME,
-				(System.nanoTime() - startTime));
+		Stats.get().addData(GEN_TIME, (System.nanoTime() - startTime));
 
 		// Tell everyone the generation has ended.
 		Life.get().fireGenerationEndEvent();

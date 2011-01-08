@@ -119,8 +119,7 @@ public class BrainfuckInterpreter implements Interpreter {
 	 * IllegalStateException.
 	 */
 	@Override
-	public Object eval(final String program, final String[] argNames,
-			final Object[] argValues) {
+	public Object eval(final String program, final String[] argNames, final Object[] argValues) {
 		throw new IllegalStateException("method not supported");
 	}
 
@@ -129,8 +128,7 @@ public class BrainfuckInterpreter implements Interpreter {
 	 * IllegalStateException.
 	 */
 	@Override
-	public Object[] eval(final String program, final String[] argNames,
-			final Object[][] argValues) {
+	public Object[] eval(final String program, final String[] argNames, final Object[][] argValues) {
 		throw new IllegalStateException("method not supported");
 	}
 
@@ -149,8 +147,7 @@ public class BrainfuckInterpreter implements Interpreter {
 	 *        sequence before execution starts.
 	 */
 	@Override
-	public void exec(final String program, final String[] argNames,
-			final Object[] argValues) {
+	public void exec(final String program, final String[] argNames, final Object[] argValues) {
 		// Reset the environment.
 		reset();
 
@@ -178,8 +175,7 @@ public class BrainfuckInterpreter implements Interpreter {
 	 *        of the memory array in sequence each time before execution starts.
 	 */
 	@Override
-	public void exec(final String program, final String[] argNames,
-			final Object[][] argValues) {
+	public void exec(final String program, final String[] argNames, final Object[][] argValues) {
 		// Execute each argument set.
 		for (int i = 0; i < argValues.length; i++) {
 			exec(program, argNames, argValues[i]);
@@ -221,10 +217,8 @@ public class BrainfuckInterpreter implements Interpreter {
 					// System.out.print((char) memory[pointer]);
 					break;
 				case '[':
-					final int bracketIndex = findClosingBracket(source
-							.substring(i + 1)) + (i + 1);
-					final String loopSource = source.substring((i + 1),
-							bracketIndex);
+					final int bracketIndex = findClosingBracket(source.substring(i + 1)) + (i + 1);
+					final String loopSource = source.substring((i + 1), bracketIndex);
 					while (memory[pointer] != 0) {
 						execute(loopSource);
 					}

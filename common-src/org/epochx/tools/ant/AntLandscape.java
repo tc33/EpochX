@@ -153,8 +153,7 @@ public class AntLandscape {
 	 * @return true if the location is a valid position on the landscape.
 	 */
 	public boolean isValidLocation(final Point location) {
-		return (location.x >= 0) && (location.x < size.width)
-				&& (location.y >= 0) && (location.y < size.height);
+		return (location.x >= 0) && (location.x < size.width) && (location.y >= 0) && (location.y < size.height);
 	}
 
 	/**
@@ -167,33 +166,24 @@ public class AntLandscape {
 	 * @return the next location one move on from the given location in the
 	 *         direction of the provided orientation.
 	 */
-	public Point getNextLocation(final Point location,
-			final Orientation orientation) {
+	public Point getNextLocation(final Point location, final Orientation orientation) {
 		final Point newLocation = new Point(location);
 
 		switch (orientation) {
 			case NORTH:
-				newLocation.y = (location.y > 0)
-						? (location.y - 1)
-						: (size.height - 1);
+				newLocation.y = (location.y > 0) ? (location.y - 1) : (size.height - 1);
 				break;
 
 			case EAST:
-				newLocation.x = (location.x < size.width - 1)
-						? (location.x + 1)
-						: 0;
+				newLocation.x = (location.x < size.width - 1) ? (location.x + 1) : 0;
 				break;
 
 			case SOUTH:
-				newLocation.y = (location.y < size.height - 1)
-						? (location.y + 1)
-						: 0;
+				newLocation.y = (location.y < size.height - 1) ? (location.y + 1) : 0;
 				break;
 
 			case WEST:
-				newLocation.x = (location.x > 0)
-						? (location.x - 1)
-						: (size.width - 1);
+				newLocation.x = (location.x > 0) ? (location.x - 1) : (size.width - 1);
 				break;
 
 			default:

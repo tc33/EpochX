@@ -43,9 +43,12 @@ public class EvenParity extends GEModel {
 
 	// Incomplete grammar requiring correct number of terminals to be added.
 	public static final String GRAMMAR_FRAGMENT = "<prog> ::= <expr>\n"
-			+ "<expr> ::= ( <expr> <op> <expr> ) " + "| <var> "
-			+ "| <pre-op> ( <var> )\n" + "<pre-op> ::= !\n"
-			+ "<op> ::= \"||\" | && | !=\n" + "<var> ::= ";
+			+ "<expr> ::= ( <expr> <op> <expr> ) "
+			+ "| <var> "
+			+ "| <pre-op> ( <var> )\n"
+			+ "<pre-op> ::= !\n"
+			+ "<op> ::= \"||\" | && | !=\n"
+			+ "<var> ::= ";
 
 	// Ruby interpreter for performing evaluation.
 	private final RubyInterpreter interpreter;
@@ -104,8 +107,7 @@ public class EvenParity extends GEModel {
 
 			Boolean result = null;
 			try {
-				result = (Boolean) interpreter.eval(program.getSourceCode(),
-						argNames, objVars);
+				result = (Boolean) interpreter.eval(program.getSourceCode(), argNames, objVars);
 			} catch (final MalformedProgramException e) {
 				// Assign worst possible fitness and stop evaluating.
 				score = 0;

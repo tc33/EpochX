@@ -92,11 +92,10 @@ public class FullInitialiser extends ConfigOperator<GEModel> implements GEInitia
 	 * Constructs a <code>FullInitialiser</code> with all the necessary
 	 * parameters given.
 	 */
-	public FullInitialiser(final RandomNumberGenerator rng,
-			final Grammar grammar, final int popSize, final int depth,
+	public FullInitialiser(final RandomNumberGenerator rng, final Grammar grammar, final int popSize, final int depth,
 			final int maxCodonValue, final boolean acceptDuplicates) {
 		this(null, acceptDuplicates);
-		
+
 		this.rng = rng;
 		this.grammar = grammar;
 		this.popSize = popSize;
@@ -129,7 +128,7 @@ public class FullInitialiser extends ConfigOperator<GEModel> implements GEInitia
 	 */
 	public FullInitialiser(final GEModel model, final boolean acceptDuplicates) {
 		super(model);
-		
+
 		this.acceptDuplicates = acceptDuplicates;
 	}
 
@@ -160,13 +159,11 @@ public class FullInitialiser extends ConfigOperator<GEModel> implements GEInitia
 	@Override
 	public List<CandidateProgram> getInitialPopulation() {
 		if (popSize < 1) {
-			throw new IllegalStateException(
-					"Population size must be 1 or greater");
+			throw new IllegalStateException("Population size must be 1 or greater");
 		}
-		
+
 		// Create population list to be populated.
-		final List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(
-				popSize);
+		final List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
 
 		// Create and add new programs to the population.
 		for (int i = 0; i < popSize; i++) {
@@ -191,22 +188,20 @@ public class FullInitialiser extends ConfigOperator<GEModel> implements GEInitia
 	 */
 	public GECandidateProgram getInitialProgram() {
 		if (rng == null) {
-			throw new IllegalStateException(
-					"No random number generator has been set");
+			throw new IllegalStateException("No random number generator has been set");
 		} else if (grammar == null) {
 			throw new IllegalStateException("No grammar has been set");
 		}
-		
+
 		// Get the root of the grammar.
 		final GrammarRule start = grammar.getStartRule();
 
 		// Determine the minimum depth possible for a valid program.
-		int minDepth = start.getMinDepth();
+		final int minDepth = start.getMinDepth();
 		if (minDepth > depth) {
-			throw new IllegalStateException(
-					"No possible programs within given max depth parameter for this grammar.");
+			throw new IllegalStateException("No possible programs within given max depth parameter for this grammar.");
 		}
-		
+
 		// Empty list of codons to be filled.
 		final List<Integer> codons = new ArrayList<Integer>();
 
@@ -221,8 +216,8 @@ public class FullInitialiser extends ConfigOperator<GEModel> implements GEInitia
 	 * and then filling in a randomly selected codon that matches the production
 	 * choice.
 	 */
-	private void fillCodons(final List<Integer> codons, final GrammarNode rule,
-			final int currentDepth, final int maxDepth) {
+	private void fillCodons(final List<Integer> codons, final GrammarNode rule, final int currentDepth,
+			final int maxDepth) {
 
 		if (rule instanceof GrammarRule) {
 			final GrammarRule nt = (GrammarRule) rule;
@@ -231,12 +226,12 @@ public class FullInitialiser extends ConfigOperator<GEModel> implements GEInitia
 			int productionIndex = 0;
 			final int noProductions = nt.getNoProductions();
 			if (noProductions > 1) {
-				final List<Integer> validProductions = getValidProductionIndexes(
-						nt.getProductions(), maxDepth - currentDepth - 1);
+				final List<Integer> validProductions = getValidProductionIndexes(nt.getProductions(), maxDepth
+						- currentDepth
+						- 1);
 
 				// Choose a production randomly.
-				final int chosenProduction = rng.nextInt(validProductions
-						.size());
+				final int chosenProduction = rng.nextInt(validProductions.size());
 				productionIndex = validProductions.get(chosenProduction);
 
 				// Scale the production index up to get our new codon.
@@ -256,11 +251,10 @@ public class FullInitialiser extends ConfigOperator<GEModel> implements GEInitia
 	}
 
 	/*
-	 * Helper method for fillCodons which determines which of a set of 
+	 * Helper method for fillCodons which determines which of a set of
 	 * productions are valid choices to meet the depth constraints.
 	 */
-	private List<Integer> getValidProductionIndexes(
-			final List<GrammarProduction> grammarProductions, final int maxDepth) {
+	private List<Integer> getValidProductionIndexes(final List<GrammarProduction> grammarProductions, final int maxDepth) {
 		final List<Integer> validRecursive = new ArrayList<Integer>();
 		final List<Integer> validAll = new ArrayList<Integer>();
 
@@ -286,12 +280,11 @@ public class FullInitialiser extends ConfigOperator<GEModel> implements GEInitia
 	 * scaling the production index up to a random number inside the model's
 	 * max codon size limit, while maintaining the modulo of the number.
 	 */
-	private int convertToCodon(final int productionIndex,
-			final int noProductions) {
+	private int convertToCodon(final int productionIndex, final int noProductions) {
 		if (maxCodonValue < 3) {
 			throw new IllegalStateException("maximum codon value cannot be less than 3");
 		}
-		
+
 		int codon = rng.nextInt(maxCodonValue - noProductions);
 
 		// Increment codon until it is valid index.
@@ -430,7 +423,7 @@ public class FullInitialiser extends ConfigOperator<GEModel> implements GEInitia
 	 * @param maxCodonValue the maximum integer value that codons selected by
 	 *        this initialiser should take.
 	 */
-	public void setMaxCodonValue(int maxCodonValue) {
+	public void setMaxCodonValue(final int maxCodonValue) {
 		this.maxCodonValue = maxCodonValue;
 	}
 }

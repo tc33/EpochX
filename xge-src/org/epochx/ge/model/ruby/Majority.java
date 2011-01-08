@@ -42,10 +42,14 @@ public class Majority extends GEModel {
 
 	// Incomplete grammar requiring correct number of terminals to be added.
 	private static final String GRAMMAR_FRAGMENT = "<prog> ::= <expr>\n"
-			+ "<expr> ::= <expr> <op> <expr> " + "| ( <expr> <op> <expr> ) "
-			+ "| <var> " + "| <pre-op> ( <var> ) "
-			+ "| ( <expr> ) ? <expr> : <expr>\n" + "<pre-op> ::= !\n"
-			+ "<op> ::= \"||\" | &&\n" + "<var> ::= ";
+			+ "<expr> ::= <expr> <op> <expr> "
+			+ "| ( <expr> <op> <expr> ) "
+			+ "| <var> "
+			+ "| <pre-op> ( <var> ) "
+			+ "| ( <expr> ) ? <expr> : <expr>\n"
+			+ "<pre-op> ::= !\n"
+			+ "<op> ::= \"||\" | &&\n"
+			+ "<var> ::= ";
 
 	// Ruby interpreter for performing evaluation.
 	private final RubyInterpreter interpreter;
@@ -104,8 +108,7 @@ public class Majority extends GEModel {
 
 			Boolean result = null;
 			try {
-				result = (Boolean) interpreter.eval(program.getSourceCode(),
-						argNames, objVars);
+				result = (Boolean) interpreter.eval(program.getSourceCode(), argNames, objVars);
 			} catch (final MalformedProgramException e) {
 				// Assign worst possible fitness and stop evaluating.
 				score = 0;

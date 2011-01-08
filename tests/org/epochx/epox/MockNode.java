@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -21,7 +21,6 @@
  */
 package org.epochx.epox;
 
-
 /**
  * A mock node for the purpose of testing.
  */
@@ -29,27 +28,27 @@ public class MockNode extends Node {
 
 	private Object evaluate;
 	private String getIdentifier;
-	
+
 	/**
-	 * Sets the <code>Object</code> that will be returned by the 
+	 * Sets the <code>Object</code> that will be returned by the
 	 * <code>evaluate</code> method.
 	 * 
 	 * @param evaluate the Object to be returned by evaluate.
 	 */
-	public void setEvaluate(Object evaluate) {
+	public void setEvaluate(final Object evaluate) {
 		this.evaluate = evaluate;
 	}
-	
+
 	/**
-	 * Sets the <code>String</code> that will be returned by the 
+	 * Sets the <code>String</code> that will be returned by the
 	 * <code>getIdentifier</code> method.
 	 * 
 	 * @param getIdentifier the String to be returned by getIdentifier.
 	 */
-	public void setGetIdentifier(String getIdentifier) {
+	public void setGetIdentifier(final String getIdentifier) {
 		this.getIdentifier = getIdentifier;
 	}
-	
+
 	/**
 	 * Returns the mock result of evaluation.
 	 */

@@ -21,12 +21,11 @@
  */
 package org.epochx.epox.bool;
 
-import org.epochx.epox.*;
+import org.epochx.epox.Node;
 import org.epochx.tools.util.TypeUtils;
 
-
 /**
- * A function node which performs the bi-conditional logical connective of IFF 
+ * A function node which performs the bi-conditional logical connective of IFF
  * (if and only if).
  */
 public class IfAndOnlyIfFunction extends Node {
@@ -49,10 +48,10 @@ public class IfAndOnlyIfFunction extends Node {
 	}
 
 	/**
-	 * Evaluates this function. Both child nodes are evaluated, the results of 
-	 * which must be <code>Boolean</code> instances. The two boolean values 
+	 * Evaluates this function. Both child nodes are evaluated, the results of
+	 * which must be <code>Boolean</code> instances. The two boolean values
 	 * determine the result of this evaluation. If both inputs are true or both
-	 * are false, then the result will be true. All other combinations of the 
+	 * are false, then the result will be true. All other combinations of the
 	 * inputs will result in the return of a value of false.
 	 */
 	@Override
@@ -70,19 +69,19 @@ public class IfAndOnlyIfFunction extends Node {
 	public String getIdentifier() {
 		return "IFF";
 	}
-	
+
 	/**
 	 * Returns this function node's return type for the given child input types.
-	 * If there are two children, both of which have a return type of Boolean, 
-	 * then the return type of this function will also be Boolean. In all other 
-	 * cases this method will return <code>null</code> to indicate that the 
+	 * If there are two children, both of which have a return type of Boolean,
+	 * then the return type of this function will also be Boolean. In all other
+	 * cases this method will return <code>null</code> to indicate that the
 	 * inputs are invalid.
 	 * 
 	 * @return The Boolean class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (inputTypes.length == 2 && TypeUtils.allEqual(inputTypes, Boolean.class)) {
+	public Class<?> getReturnType(final Class<?> ... inputTypes) {
+		if ((inputTypes.length == 2) && TypeUtils.allEqual(inputTypes, Boolean.class)) {
 			return Boolean.class;
 		} else {
 			return null;

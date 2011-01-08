@@ -21,6 +21,8 @@
  */
 package org.epochx.ge.model;
 
+import static org.junit.Assert.*;
+
 import org.epochx.core.*;
 import org.epochx.ge.codon.StandardGenerator;
 import org.epochx.ge.mapper.DepthFirstMapper;
@@ -28,8 +30,6 @@ import org.epochx.ge.op.crossover.OnePointCrossover;
 import org.epochx.ge.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.ge.op.mutation.PointMutation;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Some of these test check that the default values are correct. It is possible
@@ -208,8 +208,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	public void testMaxInitialDepthDefault() {
 		final GEModel model = getModel();
 
-		assertEquals("model's default max initial depth is not 8", 8,
-				model.getMaxInitialDepth());
+		assertEquals("model's default max initial depth is not 8", 8, model.getMaxInitialDepth());
 	}
 
 	/**
@@ -219,8 +218,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	public void testMaxDepthDefault() {
 		final GEModel model = getModel();
 
-		assertEquals("model's default max depth is not 14", 14,
-				model.getMaxDepth());
+		assertEquals("model's default max depth is not 14", 14, model.getMaxDepth());
 	}
 
 	/**
@@ -230,8 +228,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	public void testMaxChromosomeLengthDefault() {
 		final GEModel model = getModel();
 
-		assertEquals("model's default max chromosome length is not -1", -1,
-				model.getMaxChromosomeLength());
+		assertEquals("model's default max chromosome length is not -1", -1, model.getMaxChromosomeLength());
 	}
 
 	/**
@@ -241,8 +238,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	public void testMaxCodonSizeDefault() {
 		final GEModel model = getModel();
 
-		assertEquals("model's default max codon size is not Integer.MAX_VALUE",
-				Integer.MAX_VALUE, model.getMaxCodonSize());
+		assertEquals("model's default max codon size is not Integer.MAX_VALUE", Integer.MAX_VALUE, model.getMaxCodonSize());
 	}
 
 	/**
@@ -252,9 +248,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	public void testInitialiserDefault() {
 		final Model model = getModel();
 
-		assertTrue(
-				"model's default initialiser is not an instance of ramped half-and-half",
-				(model.getInitialiser() instanceof RampedHalfAndHalfInitialiser));
+		assertTrue("model's default initialiser is not an instance of ramped half-and-half", (model.getInitialiser() instanceof RampedHalfAndHalfInitialiser));
 	}
 
 	/**
@@ -264,9 +258,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	public void testCrossoverDefault() {
 		final Model model = getModel();
 
-		assertTrue(
-				"model's default crossover is not an instance of one point crossover",
-				(model.getCrossover() instanceof OnePointCrossover));
+		assertTrue("model's default crossover is not an instance of one point crossover", (model.getCrossover() instanceof OnePointCrossover));
 	}
 
 	/**
@@ -276,9 +268,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	public void testMutationDefault() {
 		final Model model = getModel();
 
-		assertTrue(
-				"model's default mutation is not an instance of point mutation",
-				(model.getMutation() instanceof PointMutation));
+		assertTrue("model's default mutation is not an instance of point mutation", (model.getMutation() instanceof PointMutation));
 	}
 
 	/**
@@ -288,9 +278,7 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	public void testMapperDefault() {
 		final GEModel model = getModel();
 
-		assertTrue(
-				"model's default mapper is not an instance of depth first mapper",
-				(model.getMapper() instanceof DepthFirstMapper));
+		assertTrue("model's default mapper is not an instance of depth first mapper", (model.getMapper() instanceof DepthFirstMapper));
 	}
 
 	/**
@@ -300,8 +288,6 @@ public abstract class AbstractGEModelTestCase extends AbstractModelTestCase {
 	public void testCodonGeneratorDefault() {
 		final GEModel model = getModel();
 
-		assertTrue(
-				"model's default codon generator is not an instance of standard generator",
-				(model.getCodonGenerator() instanceof StandardGenerator));
+		assertTrue("model's default codon generator is not an instance of standard generator", (model.getCodonGenerator() instanceof StandardGenerator));
 	}
 }

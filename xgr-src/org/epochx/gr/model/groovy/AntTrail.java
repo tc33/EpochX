@@ -73,8 +73,7 @@ public abstract class AntTrail extends GRModel {
 	 * @param allowedTimeSteps the number of moves and turns the ant will be
 	 *        allowed to collect the food before timing out.
 	 */
-	public AntTrail(final Point[] foodLocations, final Dimension landscapeSize,
-			final int allowedTimeSteps) {
+	public AntTrail(final Point[] foodLocations, final Dimension landscapeSize, final int allowedTimeSteps) {
 		this.foodLocations = new ArrayList<Point>(Arrays.asList(foodLocations));
 		this.allowedTimeSteps = allowedTimeSteps;
 

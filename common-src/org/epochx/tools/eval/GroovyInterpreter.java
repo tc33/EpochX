@@ -71,8 +71,7 @@ public class GroovyInterpreter extends ScriptingInterpreter {
 	 *         nulls.
 	 */
 	@Override
-	public Object[] eval(final String expression, final String[] argNames,
-			final Object[][] argValues) {
+	public Object[] eval(final String expression, final String[] argNames, final Object[][] argValues) {
 		final Object[] results = new Object[argValues.length];
 
 		final String code = getEvalCode(expression, argNames);
@@ -83,8 +82,7 @@ public class GroovyInterpreter extends ScriptingInterpreter {
 
 			// Evaluate each argument set.
 			for (int i = 0; i < results.length; i++) {
-				results[i] = invocableEngine.invokeFunction("expr",
-						argValues[i]);
+				results[i] = invocableEngine.invokeFunction("expr", argValues[i]);
 			}
 		} catch (final ScriptException ex) {
 			ex.printStackTrace();
@@ -99,8 +97,7 @@ public class GroovyInterpreter extends ScriptingInterpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void exec(final String program, final String[] argNames,
-			final Object[][] argValues) {
+	public void exec(final String program, final String[] argNames, final Object[][] argValues) {
 		final String code = getExecCode(program, argNames);
 
 		final Invocable invocableEngine = (Invocable) getEngine();

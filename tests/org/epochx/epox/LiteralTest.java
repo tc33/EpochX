@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -23,8 +23,7 @@ package org.epochx.epox;
 
 import static org.junit.Assert.*;
 
-import org.junit.*;
-
+import org.junit.Test;
 
 /**
  * Unit tests for {@link org.epochx.epox.Literal}
@@ -33,7 +32,7 @@ public class LiteralTest extends NodeTestCase {
 
 	private Literal literal;
 	private Object value;
-	
+
 	/**
 	 * Part of test fixture for superclass.
 	 */
@@ -41,7 +40,7 @@ public class LiteralTest extends NodeTestCase {
 	protected Node getNode() {
 		return new Literal(new Object());
 	}
-	
+
 	/**
 	 * Sets up the test environment.
 	 */
@@ -49,43 +48,45 @@ public class LiteralTest extends NodeTestCase {
 	public void setUp() throws Exception {
 		value = new Object();
 		literal = new Literal(value);
-		
+
 		super.setUp();
 	}
-	
+
 	/**
 	 * Tests that {@link org.epochx.epox.Literal#evaluate()} correctly returns
 	 * the same value instance when evaluated.
 	 */
 	@Test
 	public void testEvaluate() {
-		Object result = literal.evaluate();
-		
+		final Object result = literal.evaluate();
+
 		assertSame("literal does not evaluate to its set value", value, result);
 	}
 
 	/**
-	 * Tests that {@link org.epochx.epox.Literal#getReturnType()} correctly returns
+	 * Tests that {@link org.epochx.epox.Literal#getReturnType()} correctly
+	 * returns
 	 * the class of the set value as the return type.
 	 */
 	@Test
 	public void testGetReturnTypeLiteral() {
-		String strValue = "";
+		final String strValue = "";
 		literal.setValue(strValue);
-		Class<?> returnType = literal.getReturnType();
-		
+		final Class<?> returnType = literal.getReturnType();
+
 		assertSame("literal's return type should match the value's Class", String.class, returnType);
 	}
-	
+
 	/**
-	 * Tests that {@link org.epochx.epox.Literal#getReturnType()} correctly returns
+	 * Tests that {@link org.epochx.epox.Literal#getReturnType()} correctly
+	 * returns
 	 * the class of the set value as the return type.
 	 */
 	@Test
 	public void testGetReturnTypeLiteralNull() {
 		literal.setValue(null);
-		Class<?> returnType = literal.getReturnType();
-		
+		final Class<?> returnType = literal.getReturnType();
+
 		assertNull("getReturnType should be null for a null value", returnType);
 	}
 
@@ -95,74 +96,74 @@ public class LiteralTest extends NodeTestCase {
 	 */
 	@Test
 	public void testCloneLiteral() {
-		Literal clone = literal.clone();
-		
+		final Literal clone = literal.clone();
+
 		assertNotSame("literal has not been cloned", literal, clone);
 		assertSame("value does not refer to the same instance", value, clone.getValue());
 	}
 
 	/**
-	 * Tests that {@link org.epochx.epox.Literal#newInstance()} correctly 
+	 * Tests that {@link org.epochx.epox.Literal#newInstance()} correctly
 	 * constructs new instances.
 	 */
 	@Test
 	public void testNewInstanceLiteral() {
-		Literal newInstance = literal.newInstance();
-		
+		final Literal newInstance = literal.newInstance();
+
 		assertNotSame("literal has not been cloned", literal, newInstance);
 		assertSame("value does not refer to the same instance", value, newInstance.getValue());
 	}
 
 	/**
-	 * Tests that {@link org.epochx.epox.Literal#toString()} returns the  
+	 * Tests that {@link org.epochx.epox.Literal#toString()} returns the
 	 * string representation of the literal's value.
 	 */
 	@Test
 	public void testToStringLiteral() {
-		Object str = literal.toString();
-		
+		final Object str = literal.toString();
+
 		assertEquals("toString should be the values string representation", value.toString(), str);
 	}
-	
+
 	/**
-	 * Tests that {@link org.epochx.epox.Literal#toString()} returns a 
+	 * Tests that {@link org.epochx.epox.Literal#toString()} returns a
 	 * <code>null</code> value if the literal's value is <code>null</code>.
 	 */
 	@Test
 	public void testToStringNull() {
 		literal.setValue(null);
-		Object str = literal.toString();
-		
+		final Object str = literal.toString();
+
 		assertNull("toString should be null for a null value", str);
 	}
-	
+
 	/**
-	 * Tests that {@link org.epochx.epox.Literal#equals()} returns a 
+	 * Tests that {@link org.epochx.epox.Literal#equals()} returns a
 	 * <code>true</code> value if the two literals' values are equal.
 	 */
 	@Test
 	public void testEqualsLiteral() {
-		String strValue = "test";
-		String strValueCopy = new String(strValue);
+		final String strValue = "test";
+		final String strValueCopy = new String(strValue);
 		literal.setValue(strValue);
-		
-		Literal alt = new Literal(strValueCopy);
-		
+
+		final Literal alt = new Literal(strValueCopy);
+
 		assertEquals("test is broken", strValue, strValueCopy);
 		assertTrue("literals with equal values should be equal", literal.equals(alt));
 	}
-	
+
 	/**
-	 * Tests that {@link org.epochx.epox.Literal#equals()} returns a 
+	 * Tests that {@link org.epochx.epox.Literal#equals()} returns a
 	 * <code>false</code> value if the two literals' values are not equal.
 	 */
 	@Test
 	public void testEqualsLiteralFalse() {
-		String strValue = "test";
+		final String strValue = "test";
 		literal.setValue(strValue);
-		
-		Literal alt = new Literal(null);
-		
+
+		final Literal alt = new Literal(null);
+
 		assertTrue("literals with non-equal values should not be equal", !literal.equals(alt));
 	}
 }

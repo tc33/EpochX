@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,7 +24,6 @@ package org.epochx.op;
 import org.epochx.core.Model;
 import org.epochx.life.*;
 
-
 /**
  * Abstract class that should be extended to support auto-configuring operators.
  */
@@ -32,31 +31,33 @@ public abstract class ConfigOperator<T extends Model> implements Operator, Confi
 
 	// The controlling model.
 	private T model;
-	
+
 	/**
 	 * Constructs a <code>ConfigOperator</code> with a model.
 	 * 
-	 * @param model the Model from which configuration parameters should be 
-	 * loaded. If the model is non-null then this operator will be enrolled to 
-	 * receive configure events.
+	 * @param model the Model from which configuration parameters should be
+	 *        loaded. If the model is non-null then this operator will be
+	 *        enrolled to
+	 *        receive configure events.
 	 */
-	public ConfigOperator(T model) {
+	public ConfigOperator(final T model) {
 		this.model = model;
-		
+
 		updateListener();
 	}
-	
+
 	/**
 	 * Configures the operator with parameters from the model. This method will
-	 * be called at the appropriate times to configure this component. 
-	 * Implementing classes should override this method to setup the operator 
+	 * be called at the appropriate times to configure this component.
+	 * Implementing classes should override this method to setup the operator
 	 * with any parameters required from the model. If no model is set then this
-	 * instance will not be subscribed to configure events and so alternative 
+	 * instance will not be subscribed to configure events and so alternative
 	 * means must be used to configure it.
 	 */
 	@Override
-	public void onConfigure() {}
-	
+	public void onConfigure() {
+	}
+
 	/**
 	 * Returns the model that is providing the configuration for this
 	 * initialiser, or <code>null</code> if none is set.
@@ -84,10 +85,10 @@ public abstract class ConfigOperator<T extends Model> implements Operator, Confi
 	 */
 	public void setModel(final T model) {
 		this.model = model;
-		
+
 		updateListener();
 	}
-	
+
 	/*
 	 * Adds or removes self from configure events.
 	 */

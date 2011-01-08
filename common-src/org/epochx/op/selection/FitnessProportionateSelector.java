@@ -30,7 +30,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
  * Fitness proportionate selection chooses programs with a probability
- * proportional to their adjusted fitness. 
+ * proportional to their adjusted fitness.
  * 
  * <p>
  * If a model is provided then the following parameters are loaded upon every
@@ -44,15 +44,14 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * If the <code>getModel</code> method returns <code>null</code> then no model
  * is set and whatever static parameters have been set as parameters to the
  * constructor or using the standard accessor methods will be used. If any
- * compulsory parameters remain unset when the selector is requested to
- * select programs, then an <code>IllegalStateException</code> will be thrown.
+ * compulsory parameters remain unset when the selector is requested to select
+ * programs, then an <code>IllegalStateException</code> will be thrown.
  * 
  * @see LinearRankSelector
  * @see RandomSelector
  * @see TournamentSelector
  */
-public class FitnessProportionateSelector extends ConfigOperator<Model> 
-			implements ProgramSelector, PoolSelector {
+public class FitnessProportionateSelector extends ConfigOperator<Model> implements ProgramSelector, PoolSelector {
 
 	// Internal program selectors used by the 2 different tasks.
 	private final ProgramFitnessProportionateSelector programSelection;
@@ -60,34 +59,34 @@ public class FitnessProportionateSelector extends ConfigOperator<Model>
 
 	// Random number generator.
 	private RandomNumberGenerator rng;
-	
+
 	// Whether over-selection should be used or not.
 	private boolean overSelection;
 
 	/**
-	 * Constructs an instance of <code>FitnessProportionateSelector</code> with 
+	 * Constructs an instance of <code>FitnessProportionateSelector</code> with
 	 * the only compulsory parameter given.
 	 * 
-	 * @param rng a <code>RandomNumberGenerator</code> used to lead 
-	 * non-deterministic behaviour.
+	 * @param rng a <code>RandomNumberGenerator</code> used to lead
+	 *        non-deterministic behaviour.
 	 */
 	public FitnessProportionateSelector(final RandomNumberGenerator rng) {
 		this((Model) null, false);
 	}
-	
+
 	/**
-	 * Constructs an instance of <code>FitnessProportionateSelector</code> with 
+	 * Constructs an instance of <code>FitnessProportionateSelector</code> with
 	 * the only necessary parameters given.
 	 * 
-	 * @param rng a <code>RandomNumberGenerator</code> used to lead 
-	 * non-deterministic behaviour.
-	 * @param overSelection true if greedy over-selection should be used and 
-	 * false otherwise.
+	 * @param rng a <code>RandomNumberGenerator</code> used to lead
+	 *        non-deterministic behaviour.
+	 * @param overSelection true if greedy over-selection should be used and
+	 *        false otherwise.
 	 */
 	public FitnessProportionateSelector(final RandomNumberGenerator rng, final boolean overSelection) {
 		this((Model) null, overSelection);
 	}
-	
+
 	/**
 	 * Constructs an instance of <code>FitnessProportionateSelector</code> that
 	 * does not use over-selection.
@@ -98,19 +97,19 @@ public class FitnessProportionateSelector extends ConfigOperator<Model>
 	public FitnessProportionateSelector(final Model model) {
 		this(model, false);
 	}
-	
+
 	/**
 	 * Constructs an instance of <code>FitnessProportionateSelector</code> that
 	 * does not use over-selection.
 	 * 
 	 * @param model the Model which defines the run parameters such as the
 	 *        random number generator to use.
-	 * @param overSelection true if greedy over-selection should be used and 
-	 * 		  false otherwise.
+	 * @param overSelection true if greedy over-selection should be used and
+	 *        false otherwise.
 	 */
 	public FitnessProportionateSelector(final Model model, final boolean overSelection) {
 		super(model);
-		
+
 		this.overSelection = overSelection;
 
 		// Construct the internal program selectors.
@@ -182,7 +181,7 @@ public class FitnessProportionateSelector extends ConfigOperator<Model>
 
 		return pool;
 	}
-	
+
 	/**
 	 * Returns the random number generator that this selector is using or
 	 * <code>null</code> if none has been set.
@@ -203,7 +202,7 @@ public class FitnessProportionateSelector extends ConfigOperator<Model>
 	public void setRNG(final RandomNumberGenerator rng) {
 		this.rng = rng;
 	}
-	
+
 	/**
 	 * Returns true if over-selection is enabled and false otherwise.
 	 * 
@@ -212,36 +211,38 @@ public class FitnessProportionateSelector extends ConfigOperator<Model>
 	public boolean isOverSelectionEnabled() {
 		return overSelection;
 	}
-	
+
 	/**
-	 * Sets whether over-selection should be used. 
+	 * Sets whether over-selection should be used.
 	 * 
-	 * @param overSelection true if over-selection should be used and false 
-	 * otherwise.
+	 * @param overSelection true if over-selection should be used and false
+	 *        otherwise.
 	 */
-	public void setOverSelectionEnabled(boolean overSelection) {
+	public void setOverSelectionEnabled(final boolean overSelection) {
 		this.overSelection = overSelection;
-		
-		// Any existing selection pool will need to be set again so it can be sorted.
+
+		// Any existing selection pool will need to be set again so it can be
+		// sorted.
 		if (programSelection.pool != null) {
 			setSelectionPool(programSelection.pool);
 		}
 	}
-	
+
 	/**
-	 * Cumulative fitness of programs to go into over-selected group. 
+	 * Cumulative fitness of programs to go into over-selected group.
+	 * 
 	 * @return
 	 */
-	protected double getOverSelectionProportion(int popSize) {
+	protected double getOverSelectionProportion(final int popSize) {
 		double proportion = 0.32;
-		
+
 		// This should change based upon the population size.
 		int delimiter = 1000;
 		while (popSize > delimiter) {
 			proportion /= 2;
 			delimiter *= 2;
 		}
-		
+
 		return proportion;
 	}
 
@@ -260,10 +261,10 @@ public class FitnessProportionateSelector extends ConfigOperator<Model>
 
 		// Normalised normalised.
 		private double[] normalised;
-		
-		// Cumulative fitness of programs to go into over-selected group. 
+
+		// Cumulative fitness of programs to go into over-selected group.
 		private double overSelectionProportion;
-		
+
 		@Override
 		public void setSelectionPool(final List<CandidateProgram> pool) {
 			if ((pool == null) || pool.isEmpty()) {
@@ -277,12 +278,12 @@ public class FitnessProportionateSelector extends ConfigOperator<Model>
 				Collections.sort(pool, Collections.reverseOrder());
 			}
 			overSelectionProportion = getOverSelectionProportion(pool.size());
-			
+
 			// Get adjusted fitnesses for each program.
-			double[] adjusted = new double[pool.size()];
+			final double[] adjusted = new double[pool.size()];
 			double adjustedSum = 0.0;
-			for (int i=0; i<adjusted.length; i++) {
-				double adjustedFitness = pool.get(i).getAdjustedFitness();
+			for (int i = 0; i < adjusted.length; i++) {
+				final double adjustedFitness = pool.get(i).getAdjustedFitness();
 				adjusted[i] = adjustedFitness;
 				adjustedSum += adjustedFitness;
 			}
@@ -317,10 +318,10 @@ public class FitnessProportionateSelector extends ConfigOperator<Model>
 					ran *= overSelectionProportion;
 				} else {
 					// Select from under-selected group.
-					ran = (ran*(1.0-overSelectionProportion)) + overSelectionProportion;
+					ran = (ran * (1.0 - overSelectionProportion)) + overSelectionProportion;
 				}
 			}
-			
+
 			assert ((ran >= 0.0) && (ran <= 1.0));
 
 			for (int i = 0; i < normalised.length; i++) {

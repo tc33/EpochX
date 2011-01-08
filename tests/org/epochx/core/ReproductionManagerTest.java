@@ -75,12 +75,12 @@ public class ReproductionManagerTest {
 		final StringBuilder verify = new StringBuilder();
 
 		final List<CandidateProgram> pop = new ArrayList<CandidateProgram>();
-		pop.add(new GPCandidateProgram(new Literal(false),
-				(GPModel) model));
+		pop.add(new GPCandidateProgram(new Literal(false), (GPModel) model));
 		model.getProgramSelector().setSelectionPool(pop);
 
 		// Listen for the crossver.
 		Life.get().addReproductionListener(new ReproductionListener() {
+
 			@Override
 			public void onReproductionStart() {
 				verify.append('1');
@@ -92,19 +92,18 @@ public class ReproductionManagerTest {
 			}
 		});
 		Life.get().addHook(new AbstractHook() {
+
 			@Override
 			public CandidateProgram reproductionHook(final CandidateProgram program) {
 				verify.append('2');
 				return program;
 			}
 		});
-		
+
 		Life.get().fireConfigureEvent();
 		reproductionManager.reproduce();
 
-		assertEquals(
-				"reproduction events were not called in the correct order",
-				"123", verify.toString());
+		assertEquals("reproduction events were not called in the correct order", "123", verify.toString());
 	}
 
 	/**
@@ -117,31 +116,30 @@ public class ReproductionManagerTest {
 		final StringBuilder verify = new StringBuilder();
 
 		final List<CandidateProgram> pop = new ArrayList<CandidateProgram>();
-		pop.add(new GPCandidateProgram(new Literal(false),
-				(GPModel) model));
+		pop.add(new GPCandidateProgram(new Literal(false), (GPModel) model));
 		model.getProgramSelector().setSelectionPool(pop);
 
 		count = 0;
 
 		// Listen for the generation.
 		Life.get().addHook(new AbstractHook() {
-					@Override
-					public CandidateProgram reproductionHook(final CandidateProgram program) {
-						verify.append('2');
-						// Revert 3 times before confirming.
-						if (count == 3) {
-							return program;
-						} else {
-							count++;
-						}
-						return null;
-					}
-				});
+
+			@Override
+			public CandidateProgram reproductionHook(final CandidateProgram program) {
+				verify.append('2');
+				// Revert 3 times before confirming.
+				if (count == 3) {
+					return program;
+				} else {
+					count++;
+				}
+				return null;
+			}
+		});
 
 		Life.get().fireConfigureEvent();
 		reproductionManager.reproduce();
 
-		assertEquals("reproduction operation was not correctly reverted",
-				"2222", verify.toString());
+		assertEquals("reproduction operation was not correctly reverted", "2222", verify.toString());
 	}
 }

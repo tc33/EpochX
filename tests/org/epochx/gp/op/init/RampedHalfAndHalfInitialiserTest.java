@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -30,42 +30,41 @@ import org.epochx.epox.bool.NotFunction;
 import org.epochx.tools.random.MersenneTwisterFast;
 import org.junit.*;
 
-
 /**
  * 
  */
 public class RampedHalfAndHalfInitialiserTest {
-	
+
 	private RampedHalfAndHalfInitialiser initialiser;
-	
+
 	@Before
 	public void setUp() throws Exception {
 		initialiser = new RampedHalfAndHalfInitialiser(null, null, Boolean.class, -1, -1, -1, false);
-		
+
 		// Ensure setup is valid.
 		initialiser.setStartMaxDepth(0);
 		initialiser.setEndMaxDepth(1);
 		initialiser.setRNG(new MersenneTwisterFast());
-		List<Node> syntax = new ArrayList<Node>();
+		final List<Node> syntax = new ArrayList<Node>();
 		syntax.add(new Literal(true));
 		syntax.add(new NotFunction());
 		initialiser.setSyntax(syntax);
 		initialiser.setPopSize(2);
 	}
-	
+
 	/**
-	 * Tests that an illegal state exception is not thrown with valid 
+	 * Tests that an illegal state exception is not thrown with valid
 	 * parameters.
 	 */
 	@Test
 	public void testGetPopValid() {
 		try {
 			initialiser.getInitialPopulation();
-		} catch (IllegalStateException e) {
+		} catch (final IllegalStateException e) {
 			fail("illegal state exception thrown for valid parameters");
 		}
 	}
-	
+
 	/**
 	 * Tests that an illegal state exception is thrown if population size
 	 * parameter is zero.
@@ -74,25 +73,27 @@ public class RampedHalfAndHalfInitialiserTest {
 	public void testGetPopZeroPopSize() {
 		// Setup initialiser to be valid except for pop size.
 		initialiser.setPopSize(0);
-		
+
 		try {
 			initialiser.getInitialPopulation();
 			fail("illegal state exception not thrown for pop size being 0");
-		} catch (IllegalStateException e) {}
+		} catch (final IllegalStateException e) {
+		}
 	}
-	
+
 	/**
-	 * Tests that an illegal state exception is thrown if the start maximum 
+	 * Tests that an illegal state exception is thrown if the start maximum
 	 * depth is larger than the end maximum depth.
 	 */
 	@Test
 	public void testGetPopDepthsSequence() {
 		initialiser.setStartMaxDepth(4);
 		initialiser.setEndMaxDepth(3);
-		
+
 		try {
 			initialiser.getInitialPopulation();
 			fail("illegal state exception not thrown when start depth is greater than end depth");
-		} catch (IllegalStateException e) {}
+		} catch (final IllegalStateException e) {
+		}
 	}
 }

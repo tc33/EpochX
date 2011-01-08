@@ -66,8 +66,8 @@ public class GPModelDummy extends GPModel {
 
 	// GP Model parameters.
 	private List<Node> syntax;
-	
-	private Class<?> returnType;
+
+	private final Class<?> returnType;
 
 	private int maxInitialDepth;
 	private int maxProgramDepth;
@@ -102,7 +102,7 @@ public class GPModelDummy extends GPModel {
 		maxProgramDepth = 12;
 
 		syntax = new ArrayList<Node>();
-		
+
 		returnType = Boolean.class;
 
 		// Operators.

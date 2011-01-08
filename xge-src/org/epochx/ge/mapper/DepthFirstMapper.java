@@ -51,7 +51,7 @@ import org.epochx.tools.grammar.*;
  * If the <code>getModel</code> method returns <code>null</code> then no model
  * is set and whatever static parameters have been set as parameters to the
  * constructor or using the standard accessor methods will be used. If any
- * compulsory parameters remain unset when a new codon is requested, then an 
+ * compulsory parameters remain unset when a new codon is requested, then an
  * <code>IllegalStateException</code> will be thrown.
  */
 public class DepthFirstMapper extends ConfigOperator<GEModel> implements Mapper {
@@ -79,16 +79,16 @@ public class DepthFirstMapper extends ConfigOperator<GEModel> implements Mapper 
 	 * @param maxChromosomeLength
 	 * @param codonGenerator
 	 */
-	public DepthFirstMapper(Grammar grammar, int maxProgramDepth, 
-			int maxChromosomeLength, CodonGenerator codonGenerator) {
+	public DepthFirstMapper(final Grammar grammar, final int maxProgramDepth, final int maxChromosomeLength,
+			final CodonGenerator codonGenerator) {
 		this(null);
-		
+
 		this.grammar = grammar;
 		this.maxProgramDepth = maxProgramDepth;
 		this.maxChromosomeLength = maxChromosomeLength;
 		this.codonGenerator = codonGenerator;
 	}
-	
+
 	/**
 	 * Constructs an instance of DepthFirstMapper.
 	 * 
@@ -145,7 +145,7 @@ public class DepthFirstMapper extends ConfigOperator<GEModel> implements Mapper 
 		} else if (codonGenerator == null) {
 			throw new IllegalStateException("codon generator not set");
 		}
-		
+
 		// The root node/symbol of the grammar tree.
 		final GrammarRule grammarTree = grammar.getStartRule();
 		// The root node/symbol of the parse tree.
@@ -172,8 +172,7 @@ public class DepthFirstMapper extends ConfigOperator<GEModel> implements Mapper 
 	/*
 	 * Recursive helper method to resolve mapping from codons to source.
 	 */
-	private int map(final GrammarRule grammarRule,
-			final NonTerminalSymbol parseNode, final int depth,
+	private int map(final GrammarRule grammarRule, final NonTerminalSymbol parseNode, final int depth,
 			final GECandidateProgram program, int currentCodon) {
 		// We add one to the depth because the current depth does not include
 		// terminals.
@@ -224,12 +223,10 @@ public class DepthFirstMapper extends ConfigOperator<GEModel> implements Mapper 
 				parseNode.addChild(new TerminalSymbol((GrammarLiteral) s));
 			} else {
 				final GrammarRule nextGrammarRule = (GrammarRule) s;
-				final NonTerminalSymbol nextParseNode = new NonTerminalSymbol(
-						nextGrammarRule);
+				final NonTerminalSymbol nextParseNode = new NonTerminalSymbol(nextGrammarRule);
 				parseNode.addChild(nextParseNode);
 
-				currentCodon = map(nextGrammarRule, nextParseNode, depth + 1,
-						program, currentCodon);
+				currentCodon = map(nextGrammarRule, nextParseNode, depth + 1, program, currentCodon);
 				if (currentCodon == -1) {
 					return -1;
 				}
@@ -358,36 +355,36 @@ public class DepthFirstMapper extends ConfigOperator<GEModel> implements Mapper 
 	public int getNoMappedCodons() {
 		return noMappedCodons;
 	}
-	
+
 	public Grammar getGrammar() {
 		return grammar;
 	}
-	
-	public void setGrammar(Grammar grammar) {
+
+	public void setGrammar(final Grammar grammar) {
 		this.grammar = grammar;
 	}
 
 	public CodonGenerator getCodonGenerator() {
 		return codonGenerator;
 	}
-	
-	public void setCodonGenerator(CodonGenerator codonGenerator) {
+
+	public void setCodonGenerator(final CodonGenerator codonGenerator) {
 		this.codonGenerator = codonGenerator;
 	}
-	
+
 	public int getMaxProgramDepth() {
 		return maxProgramDepth;
 	}
-	
-	public void setMaxProgramDepth(int maxProgramDepth) {
+
+	public void setMaxProgramDepth(final int maxProgramDepth) {
 		this.maxProgramDepth = maxProgramDepth;
 	}
-	
+
 	public int getMaxChromosomeLength() {
 		return maxChromosomeLength;
 	}
-	
-	public void setMaxChromosomeLength(int maxChromosomeLength) {
+
+	public void setMaxChromosomeLength(final int maxChromosomeLength) {
 		this.maxChromosomeLength = maxChromosomeLength;
 	}
 }

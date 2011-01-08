@@ -94,11 +94,10 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GRModel> implem
 	 * Constructs a <code>RampedHalfAndHalfInitialiser</code> with all the
 	 * necessary parameters given.
 	 */
-	public RampedHalfAndHalfInitialiser(final RandomNumberGenerator rng,
-			final Grammar grammar, final int popSize, final int startMaxDepth,
-			final int endMaxDepth, final boolean acceptDuplicates) {
+	public RampedHalfAndHalfInitialiser(final RandomNumberGenerator rng, final Grammar grammar, final int popSize,
+			final int startMaxDepth, final int endMaxDepth, final boolean acceptDuplicates) {
 		this(null, startMaxDepth, acceptDuplicates);
-		
+
 		this.endMaxDepth = endMaxDepth;
 		this.grammar = grammar;
 		this.popSize = popSize;
@@ -153,10 +152,9 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GRModel> implem
 	 * @param acceptDuplicates whether duplicates should be allowed in the
 	 *        populations that are generated.
 	 */
-	public RampedHalfAndHalfInitialiser(final GRModel model,
-			final int startMaxDepth, final boolean acceptDuplicates) {
+	public RampedHalfAndHalfInitialiser(final GRModel model, final int startMaxDepth, final boolean acceptDuplicates) {
 		super(model);
-		
+
 		this.startMaxDepth = startMaxDepth;
 		this.acceptDuplicates = acceptDuplicates;
 
@@ -193,15 +191,13 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GRModel> implem
 	@Override
 	public List<CandidateProgram> getInitialPopulation() {
 		if (popSize < 1) {
-			throw new IllegalStateException(
-					"Population size must be 1 or greater");
+			throw new IllegalStateException("Population size must be 1 or greater");
 		} else if (grammar == null) {
 			throw new IllegalStateException("No grammar has been set");
 		}
 
 		// Create population list to populate.
-		final List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(
-				popSize);
+		final List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
 
 		int startDepth = startMaxDepth;
 		final int minDepthPossible = grammar.getMinimumDepth();
@@ -212,19 +208,16 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GRModel> implem
 		}
 
 		if (endMaxDepth < startDepth) {
-			throw new IllegalStateException(
-					"End maximum depth must be greater than the minimum possible depth.");
+			throw new IllegalStateException("End maximum depth must be greater than the minimum possible depth.");
 		}
 
 		// Number of programs each depth SHOULD have. But won't unless remainder
 		// is 0.
-		final double programsPerDepth = (double) popSize
-				/ (endMaxDepth - startMaxDepth + 1);
+		final double programsPerDepth = (double) popSize / (endMaxDepth - startMaxDepth + 1);
 
 		for (int i = 0; i < popSize; i++) {
 			// Calculate depth
-			final int depth = (int) Math.floor((i / programsPerDepth)
-					+ startMaxDepth);
+			final int depth = (int) Math.floor((i / programsPerDepth) + startMaxDepth);
 
 			// Grow on even numbers, full on odd.
 			GRCandidateProgram program;
@@ -264,10 +257,10 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GRModel> implem
 	 * @param acceptDuplicates whether duplicates should be accepted in the
 	 *        populations that are constructed.
 	 */
-	public void setDuplicatesEnabled(boolean acceptDuplicates) {
+	public void setDuplicatesEnabled(final boolean acceptDuplicates) {
 		this.acceptDuplicates = acceptDuplicates;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -367,7 +360,6 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GRModel> implem
 	public int getStartMaxDepth() {
 		return startMaxDepth;
 	}
-	
 
 	/**
 	 * Sets the first maximum depth used for program trees this initialiser

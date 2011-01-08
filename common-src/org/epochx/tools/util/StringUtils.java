@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -23,7 +23,6 @@ package org.epochx.tools.util;
 
 import org.apache.commons.lang.ArrayUtils;
 
-
 /**
  * 
  */
@@ -31,18 +30,19 @@ public final class StringUtils {
 
 	/**
 	 * Tests whether the given string contains any of the chars in the array.
+	 * 
 	 * @param str
 	 * @param chrs
 	 * @return
 	 */
-	public static boolean containsAny(String str, char[] chrs) {
-		for (int i=0; i<str.length(); i++) {
-			char c = str.charAt(i);
+	public static boolean containsAny(final String str, final char[] chrs) {
+		for (int i = 0; i < str.length(); i++) {
+			final char c = str.charAt(i);
 			if (ArrayUtils.contains(chrs, c)) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 }

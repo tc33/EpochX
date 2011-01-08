@@ -51,8 +51,7 @@ public class GrammarRule implements GrammarNode, Cloneable {
 	 * @param productions a list of all the <code>GrammarProductions</code> that
 	 *        are possible mappings for this rule.
 	 */
-	public GrammarRule(final String name,
-			final List<GrammarProduction> productions) {
+	public GrammarRule(final String name, final List<GrammarProduction> productions) {
 		this.name = name;
 		this.productions = productions;
 	}

@@ -25,7 +25,7 @@ import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A function node which performs the numerical greater than comparison of two 
+ * A function node which performs the numerical greater than comparison of two
  * numeric inputs, called GT.
  */
 public class GreaterThanFunction extends Node {
@@ -51,18 +51,18 @@ public class GreaterThanFunction extends Node {
 
 	/**
 	 * Evaluates this function. The child nodes are evaluated, the
-	 * results of which must be numerically type (any of Double, Float, Long, 
-	 * Integer). If the result of the first child is larger than the result of 
-	 * the second child, then a boolean value of <code>true</code> will be 
+	 * results of which must be numerically type (any of Double, Float, Long,
+	 * Integer). If the result of the first child is larger than the result of
+	 * the second child, then a boolean value of <code>true</code> will be
 	 * returned, otherwise a <code>false</code> value will be returned.
 	 */
 	@Override
 	public Boolean evaluate() {
-		Object c1 = getChild(0).evaluate();
-		Object c2 = getChild(1).evaluate();
-		
-		double value1 = NumericUtils.asDouble(c1);
-		double value2 = NumericUtils.asDouble(c2);
+		final Object c1 = getChild(0).evaluate();
+		final Object c2 = getChild(1).evaluate();
+
+		final double value1 = NumericUtils.asDouble(c1);
+		final double value2 = NumericUtils.asDouble(c2);
 
 		return (value1 > value2);
 	}
@@ -78,17 +78,17 @@ public class GreaterThanFunction extends Node {
 	/**
 	 * Returns this function node's return type for the given child input types.
 	 * If there is two numeric input types then the return type will be Boolean.
-	 * In all other cases this method will return <code>null</code> to indicate 
+	 * In all other cases this method will return <code>null</code> to indicate
 	 * that the inputs are invalid.
 	 * 
 	 * @return the Boolean class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (inputTypes.length == 2 && TypeUtils.isAllNumericType(inputTypes)) {
+	public Class<?> getReturnType(final Class<?> ... inputTypes) {
+		if ((inputTypes.length == 2) && TypeUtils.isAllNumericType(inputTypes)) {
 			return Boolean.class;
 		}
-		
+
 		return null;
 	}
 }

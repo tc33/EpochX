@@ -113,7 +113,7 @@ public class ReproductionManager implements ConfigListener {
 
 		// Inform all listeners we're about to start.
 		Life.get().fireReproductionStartEvent();
-		
+
 		// Record the start time.
 		final long startTime = System.nanoTime();
 
@@ -131,7 +131,7 @@ public class ReproductionManager implements ConfigListener {
 				reversions++;
 			}
 		} while (parent == null);
-		
+
 		final long runtime = System.nanoTime() - startTime;
 
 		// Store the stats from the reproduction.

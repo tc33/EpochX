@@ -53,20 +53,20 @@ public class FactorialFunction extends Node {
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a positive value of an integer type (one of Byte,
 	 * Short, Integer, Long). The factorial function is performed on this value
-	 * and the result returned as an Integer if the input was one of Byte, 
+	 * and the result returned as an Integer if the input was one of Byte,
 	 * Short or Integer and returned as a Long if the input is a Long.
 	 */
 	@Override
 	public Object evaluate() {
-		Object c = getChild(0).evaluate();
-		
-		long cint = Math.abs(NumericUtils.asLong(c));
-		
+		final Object c = getChild(0).evaluate();
+
+		final long cint = Math.abs(NumericUtils.asLong(c));
+
 		long factorial = 1;
 		for (long i = 1; i <= cint; i++) {
 			factorial = factorial * i;
 		}
-		
+
 		if (c instanceof Long) {
 			return factorial;
 		} else {
@@ -81,22 +81,22 @@ public class FactorialFunction extends Node {
 	public String getIdentifier() {
 		return "FACTORIAL";
 	}
-	
+
 	/**
 	 * Returns this function node's return type for the given child input types.
 	 * If there is one input type of Byte, Short or Integer then the return type
 	 * will be Integer, if it is Long then the return type will also be Long. In
-	 * all other cases this method will return <code>null</code> to indicate 
+	 * all other cases this method will return <code>null</code> to indicate
 	 * that the inputs are invalid.
 	 * 
 	 * @return the Integer or Long class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (inputTypes.length == 1 && TypeUtils.isIntegerType(inputTypes[0])) {
+	public Class<?> getReturnType(final Class<?> ... inputTypes) {
+		if ((inputTypes.length == 1) && TypeUtils.isIntegerType(inputTypes[0])) {
 			return TypeUtils.getNumericType(inputTypes[0]);
 		}
-		
+
 		return null;
 	}
 }

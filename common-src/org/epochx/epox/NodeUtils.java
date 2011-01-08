@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -23,46 +23,47 @@ package org.epochx.epox;
 
 import java.util.*;
 
-
 /**
  * This class provides static utility methods for working with Epox nodes.
  */
-public final class NodeUtils {	
-	
+public final class NodeUtils {
+
 	/**
 	 * Returns those nodes from the given syntax that have an arity of 0.
+	 * 
 	 * @param syntax a List of Nodes.
 	 * @return a List of those Node objects that have an arity of 0.
 	 */
 	public static List<Node> getTerminals(final List<Node> syntax) {
-		List<Node> terminals = new ArrayList<Node>(syntax.size());
-		for (Node n: syntax) {
+		final List<Node> terminals = new ArrayList<Node>(syntax.size());
+		for (final Node n: syntax) {
 			if (n.getArity() == 0) {
 				terminals.add(n);
 			}
 		}
-		
+
 		return terminals;
 	}
-	
+
 	/**
 	 * Returns those nodes from the given syntax that have an arity of greater
 	 * than 0.
+	 * 
 	 * @param syntax a List of Nodes.
-	 * @return a List of those Node objects that have an arity of greater than 
-	 * 0.
+	 * @return a List of those Node objects that have an arity of greater than
+	 *         0.
 	 */
 	public static List<Node> getFunctions(final List<Node> syntax) {
-		List<Node> functions = new ArrayList<Node>(syntax.size());
-		for (Node n: syntax) {
+		final List<Node> functions = new ArrayList<Node>(syntax.size());
+		for (final Node n: syntax) {
 			if (n.getArity() > 0) {
 				functions.add(n);
 			}
 		}
-		
+
 		return functions;
 	}
-	
+
 	public static List<Literal> intRange(int start, int end) {
 		final List<Literal> range = new ArrayList<Literal>();
 		if (start > end) {
@@ -80,7 +81,7 @@ public final class NodeUtils {
 		return range;
 	}
 
-	public static List<Variable> booleanVariables(Class<?> datatype, final String ... variableNames) {
+	public static List<Variable> booleanVariables(final Class<?> datatype, final String ... variableNames) {
 		final List<Variable> variables = new ArrayList<Variable>();
 
 		for (final String name: variableNames) {
@@ -89,5 +90,5 @@ public final class NodeUtils {
 
 		return variables;
 	}
-	
+
 }

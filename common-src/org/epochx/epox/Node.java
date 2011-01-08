@@ -29,12 +29,12 @@ import org.epochx.tools.util.TypeUtils;
 /**
  * A Node is a vertex in a tree structure which represents a program. A Node
  * can be thought of as an expression in a computer programming language.
- * Evaluating a Node will involve evaluating any children and optionally 
+ * Evaluating a Node will involve evaluating any children and optionally
  * returning a value.
  * 
  * Subclasses of <code>Node</code> should ensure they call the superclass
  * constructor with all child Nodes so information such as the arity of the
- * node can be maintained. Concrete subclasses must also implement evaluate(). 
+ * node can be maintained. Concrete subclasses must also implement evaluate().
  * Nodes which support mixed type args, or terminal nodes with no-args must also
  * override the getReturnType(Class&lt;?&gt;) method to indicate their return
  * type. The <code>clone</code> and <code>newInstance</code> methods are also
@@ -47,7 +47,7 @@ public abstract class Node implements Cloneable {
 
 	/**
 	 * Constructs a new Node with the given child nodes. The arity of the node
-	 * will be the number of child nodes provided. If unknown, then the child 
+	 * will be the number of child nodes provided. If unknown, then the child
 	 * nodes may be null, but evaluation is unlikely to be possible until they
 	 * have been set. Terminal nodes are simply nodes with no children.
 	 * 
@@ -58,7 +58,7 @@ public abstract class Node implements Cloneable {
 	}
 
 	/**
-	 * Subclasses should implement this method to perform some operation with 
+	 * Subclasses should implement this method to perform some operation with
 	 * respect to its children and optionally return a result.
 	 * 
 	 * @return the result of evaluating the node tree rooted at this node.
@@ -86,8 +86,8 @@ public abstract class Node implements Cloneable {
 	/**
 	 * Returns a specific child by index.
 	 * 
-	 * @param index the index of the child to be returned, valid indexes run 
-	 * from zero to arity-1.
+	 * @param index the index of the child to be returned, valid indexes run
+	 *        from zero to arity-1.
 	 * @return the child node at the specified index.
 	 */
 	public Node getChild(final int index) {
@@ -190,10 +190,10 @@ public abstract class Node implements Cloneable {
 		// If we get to here then the index was larger than was available.
 		throw new IndexOutOfBoundsException("attempt to set node at index >= length");
 	}
-	
+
 	/**
 	 * Returns the index of the nth function node, where this node is considered
-	 * to be the root - that is the 0th node. The tree's nodes are counted in 
+	 * to be the root - that is the 0th node. The tree's nodes are counted in
 	 * pre-order (depth first) to locate the nth function, and return its index
 	 * within all nodes. Will throw an exception if the index is out of bounds,
 	 * which will be the case for all indexes when called upon a terminal node.
@@ -203,21 +203,20 @@ public abstract class Node implements Cloneable {
 	 * @throws IndexOutOfBoundsException if n is out of range.
 	 */
 	public int getNthFunctionNodeIndex(final int n) {
-		int index = getNthFunctionNodeIndex(n, 0, 0, this);
-		
+		final int index = getNthFunctionNodeIndex(n, 0, 0, this);
+
 		// Test if it was found, if not, then index was out of bounds.
 		if (index < 0) {
 			throw new IndexOutOfBoundsException("attempt to get function node index at index out of range");
 		}
-		
+
 		return index;
 	}
 
 	/*
 	 * Recursive helper function for getNthFunctionNodeIndex.
 	 */
-	private int getNthFunctionNodeIndex(final int n, int functionCount,
-			int nodeCount, final Node current) {
+	private int getNthFunctionNodeIndex(final int n, int functionCount, int nodeCount, final Node current) {
 		// Found the nth function node.
 		if ((current.getArity() > 0) && (n == functionCount)) {
 			return nodeCount;
@@ -230,8 +229,7 @@ public abstract class Node implements Cloneable {
 
 			// Only look at the subtree if it contains the right range of nodes.
 			if (n <= noFunctions + functionCount) {
-				final int childResult = getNthFunctionNodeIndex(n,
-						functionCount + 1, nodeCount + 1, child);
+				final int childResult = getNthFunctionNodeIndex(n, functionCount + 1, nodeCount + 1, child);
 				if (childResult != -1) {
 					return childResult;
 				}
@@ -247,7 +245,7 @@ public abstract class Node implements Cloneable {
 
 	/**
 	 * Returns the index of the nth terminal node, where this node is considered
-	 * to be the root - that is the 0th node. The tree's nodes are counted in 
+	 * to be the root - that is the 0th node. The tree's nodes are counted in
 	 * pre-order (depth first) to locate the nth terminal, and return its index
 	 * within all nodes.
 	 * 
@@ -256,21 +254,20 @@ public abstract class Node implements Cloneable {
 	 * @throws IllegalArgumentException if n is out of bounds.
 	 */
 	public int getNthTerminalNodeIndex(final int n) {
-		int index = getNthTerminalNodeIndex(n, 0, 0, this);
-		
+		final int index = getNthTerminalNodeIndex(n, 0, 0, this);
+
 		// Test if it was found, if not, then index was out of bounds.
 		if (index < 0) {
 			throw new IndexOutOfBoundsException("attempt to get terminal node index at index out of range");
 		}
-		
+
 		return index;
 	}
 
 	/*
 	 * Recursive helper function for getNthTerminalNodeIndex.
 	 */
-	private int getNthTerminalNodeIndex(final int n, int terminalCount,
-			int nodeCount, final Node current) {
+	private int getNthTerminalNodeIndex(final int n, int terminalCount, int nodeCount, final Node current) {
 		// Found the nth terminal node.
 		if (current.getArity() == 0) {
 			if (n == terminalCount++) {
@@ -285,8 +282,7 @@ public abstract class Node implements Cloneable {
 
 			// Only look at the subtree if it contains the right range of nodes.
 			if (n <= noTerminals + terminalCount) {
-				final int childResult = getNthTerminalNodeIndex(n, terminalCount,
-						nodeCount + 1, child);
+				final int childResult = getNthTerminalNodeIndex(n, terminalCount, nodeCount + 1, child);
 				if (childResult != -1) {
 					return childResult;
 				}
@@ -308,7 +304,7 @@ public abstract class Node implements Cloneable {
 	 * @return a List of all the nodes at the specified depth.
 	 */
 	public List<Node> getNodesAtDepth(final int depth) {
-		final List<Node> nodes = new ArrayList<Node>((depth+1)*3);
+		final List<Node> nodes = new ArrayList<Node>((depth + 1) * 3);
 		if (depth >= 0) {
 			getNodesAtDepth(nodes, depth, 0);
 		} else {
@@ -318,7 +314,7 @@ public abstract class Node implements Cloneable {
 		if (nodes.isEmpty()) {
 			throw new IndexOutOfBoundsException("attempt to get nodes at depth greater than maximum depth");
 		}
-		
+
 		return nodes;
 	}
 
@@ -349,7 +345,7 @@ public abstract class Node implements Cloneable {
 
 	/**
 	 * Returns the number of immediate children this <code>Node</code> has. This
-	 * is effectively the number of inputs the node has. A node with arity 
+	 * is effectively the number of inputs the node has. A node with arity
 	 * zero, is considered to be a terminal node.
 	 * 
 	 * @return the number of child <code>Node</code>s to this <code>Node</code>.
@@ -359,7 +355,7 @@ public abstract class Node implements Cloneable {
 	}
 
 	/**
-	 * Returns a count of how many terminal nodes are in the node tree below 
+	 * Returns a count of how many terminal nodes are in the node tree below
 	 * this node.
 	 * 
 	 * @return the number of terminal nodes in this node tree.
@@ -380,7 +376,7 @@ public abstract class Node implements Cloneable {
 	/**
 	 * Returns a count of how many unique terminal nodes are in the node tree
 	 * below this node. This depends upon each terminal node's equals method
-	 * being implemented correctly, so care should be taken when overriding 
+	 * being implemented correctly, so care should be taken when overriding
 	 * equals.
 	 * 
 	 * @return the number of unique terminal nodes in this node tree.
@@ -538,20 +534,20 @@ public abstract class Node implements Cloneable {
 	}
 
 	public abstract String getIdentifier();
-	
+
 	/**
 	 * Returns the data-type of this node based upon the child nodes that are
 	 * currently set. If any of the child nodes are currently <code>null</code>
-	 * or their data-types invalid then the return type will also be 
+	 * or their data-types invalid then the return type will also be
 	 * <code>null</code>.
 	 * 
-	 * @return the return type of this node or null if any of its children 
-	 * remain unset or are of an invalid data-type.
+	 * @return the return type of this node or null if any of its children
+	 *         remain unset or are of an invalid data-type.
 	 */
 	public final Class<?> getReturnType() {
-		Class<?>[] argTypes = new Class<?>[getArity()];
-		for (int i=0; i<getArity(); i++) {
-			Node child = getChild(i);
+		final Class<?>[] argTypes = new Class<?>[getArity()];
+		for (int i = 0; i < getArity(); i++) {
+			final Node child = getChild(i);
 			if (child != null) {
 				argTypes[i] = child.getReturnType();
 			} else {
@@ -560,28 +556,28 @@ public abstract class Node implements Cloneable {
 		}
 		return getReturnType(argTypes);
 	}
-	
+
 	/**
 	 * Returns this function node's return type for the given child input types.
-	 * Default implementation for a function is that the node will enforce the 
+	 * Default implementation for a function is that the node will enforce the
 	 * closure requirement, and its return type will be the same as its input
-	 * types. The default return value for a terminal is Void. Mixed type 
-	 * function nodes and most terminal nodes should override this method. If 
+	 * types. The default return value for a terminal is Void. Mixed type
+	 * function nodes and most terminal nodes should override this method. If
 	 * the input types are invalid then <code>null</code> should be returned.
 	 * 
 	 * @param inputTypes the set of input data-types for which to get the return
-	 * type.
-	 * @return the return type of this node given the provided input types, or 
-	 * null if the set of input types is invalid.
+	 *        type.
+	 * @return the return type of this node given the provided input types, or
+	 *         null if the set of input types is invalid.
 	 */
-	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		int arity = getArity();
-		
+	public Class<?> getReturnType(final Class<?> ... inputTypes) {
+		final int arity = getArity();
+
 		// Validate the number of input types given against the arity.
 		if (inputTypes.length != arity) {
 			throw new IllegalArgumentException("The number of input types should match this node's arity.");
 		}
-		
+
 		if (arity == 0) {
 			// Is a terminal.
 			return Void.class;
@@ -590,7 +586,7 @@ public abstract class Node implements Cloneable {
 			return TypeUtils.getSuper(inputTypes);
 		}
 	}
-	
+
 	/**
 	 * Returns true if this node has an arity of greater than 0.
 	 * 
@@ -599,7 +595,7 @@ public abstract class Node implements Cloneable {
 	public boolean isFunction() {
 		return (getArity() > 0);
 	}
-	
+
 	/**
 	 * Returns true if this node has an arity of 0.
 	 * 
@@ -608,7 +604,7 @@ public abstract class Node implements Cloneable {
 	public boolean isTerminal() {
 		return (getArity() == 0);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -625,7 +621,7 @@ public abstract class Node implements Cloneable {
 
 	/**
 	 * Create a deep copy of this node tree. Each child node will be cloned. Use
-	 * this method for copying a node tree. Some implementations of this class 
+	 * this method for copying a node tree. Some implementations of this class
 	 * may need to override this method.
 	 * 
 	 * @return a copy of this <code>Node</code>.
@@ -637,7 +633,8 @@ public abstract class Node implements Cloneable {
 
 			clone.children = children.clone();
 			for (int i = 0; i < children.length; i++) {
-				clone.children[i] = children[i]; //TODO Don't think we need this line.
+				clone.children[i] = children[i]; // TODO Don't think we need
+													// this line.
 				if (clone.children[i] != null) {
 					clone.children[i] = clone.children[i].clone();
 				}
@@ -651,34 +648,34 @@ public abstract class Node implements Cloneable {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * This method should be used instead of clone when creating a new instance
 	 * of this node type. Rather than copying the node tree, the node is copied
-	 * without children. In the case of many terminal nodes the bahaviour of 
-	 * this method will be the same as the clone method. By default this method 
+	 * without children. In the case of many terminal nodes the bahaviour of
+	 * this method will be the same as the clone method. By default this method
 	 * will simply return a new instance of the same type in the same manner as
-	 * clone, but with all children removed. Note that there is no requirement 
+	 * clone, but with all children removed. Note that there is no requirement
 	 * that implementations must not return the same instance.
 	 * 
 	 * @return a copy of this <code>Node</code> with all children removed.
 	 */
 	public Node newInstance() {
 		try {
-			Node n = (Node) super.clone();
-			n.children = new Node[this.children.length];
+			final Node n = (Node) super.clone();
+			n.children = new Node[children.length];
 			return n;
-		} catch (CloneNotSupportedException e) {
+		} catch (final CloneNotSupportedException e) {
 			assert false;
 		}
-		
+
 		return null;
 	}
 
 	/**
-	 * Compare an object for equality. Two nodes may be considered equal if 
-	 * they have equal arity, equal identifiers, and their children are also 
-	 * equal (and in the same order). Some nodes may wish to enforce a stricter 
+	 * Compare an object for equality. Two nodes may be considered equal if
+	 * they have equal arity, equal identifiers, and their children are also
+	 * equal (and in the same order). Some nodes may wish to enforce a stricter
 	 * contract.
 	 * 
 	 * @param obj {@inheritDoc}
@@ -691,14 +688,14 @@ public abstract class Node implements Cloneable {
 		if (obj instanceof Node) {
 			final Node n = (Node) obj;
 
-			if (n.getArity() != this.getArity()) {
+			if (n.getArity() != getArity()) {
 				equal = false;
-			} else if (!this.getIdentifier().equals(n.getIdentifier())) {
+			} else if (!getIdentifier().equals(n.getIdentifier())) {
 				equal = false;
 			} else {
 				for (int i = 0; (i < n.getArity()) && equal; i++) {
 					final Node thatChild = n.getChild(i);
-					final Node thisChild = this.getChild(i);
+					final Node thisChild = getChild(i);
 
 					equal = ObjectUtils.equals(thisChild, thatChild);
 				}
@@ -714,12 +711,12 @@ public abstract class Node implements Cloneable {
 	 * is output of the form:
 	 * 
 	 * <pre>
-	 * identifier ( children )
-	 * </pre> 
+	 * identifier(children)
+	 * </pre>
 	 * 
-	 * where <code>identifier</code> is the nodes identifier as returned by 
-	 * <code>getIdentifier</code>, and <code>children</code> is a space 
-	 * separated list of child nodes, according to their <code>toString</code> 
+	 * where <code>identifier</code> is the nodes identifier as returned by
+	 * <code>getIdentifier</code>, and <code>children</code> is a space
+	 * separated list of child nodes, according to their <code>toString</code>
 	 * representation.
 	 */
 	@Override

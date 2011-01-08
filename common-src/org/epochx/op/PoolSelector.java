@@ -44,7 +44,6 @@ public interface PoolSelector {
 	 *         breeding pool. The size of the list should equal the poolSize
 	 *         parameter.
 	 */
-	public List<CandidateProgram> getPool(List<CandidateProgram> pop,
-			int poolSize);
+	public List<CandidateProgram> getPool(List<CandidateProgram> pop, int poolSize);
 
 }

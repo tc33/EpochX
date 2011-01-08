@@ -50,7 +50,7 @@ public class PointMutation extends ConfigOperator<GEModel> implements GEMutation
 	 * modified as a result of the point mutation operation.
 	 */
 	public static final Stat MUT_POINTS = new AbstractStat(ExpiryEvent.MUTATION) {};
-	
+
 	// The probability each codon has of being mutated in a selected program.
 	private double pointProbability;
 
@@ -61,14 +61,14 @@ public class PointMutation extends ConfigOperator<GEModel> implements GEMutation
 	 * Constructs a <code>PointMutation</code> with all the necessary
 	 * parameters given.
 	 */
-	public PointMutation(final CodonGenerator codonGenerator, 
-			final RandomNumberGenerator rng, final double pointProbability) {
+	public PointMutation(final CodonGenerator codonGenerator, final RandomNumberGenerator rng,
+			final double pointProbability) {
 		this(null, pointProbability);
-		
+
 		this.codonGenerator = codonGenerator;
 		this.rng = rng;
 	}
-	
+
 	/**
 	 * Construct a point mutation with a default point probability of 0.01. It
 	 * is generally recommended that the
@@ -93,7 +93,7 @@ public class PointMutation extends ConfigOperator<GEModel> implements GEMutation
 	 */
 	public PointMutation(final GEModel model, final double pointProbability) {
 		super(model);
-		
+
 		this.pointProbability = pointProbability;
 	}
 
@@ -124,8 +124,8 @@ public class PointMutation extends ConfigOperator<GEModel> implements GEMutation
 
 		final int noCodons = program.getNoCodons();
 
-		List<Integer> points = new ArrayList<Integer>();
-		
+		final List<Integer> points = new ArrayList<Integer>();
+
 		for (int i = 0; i < noCodons; i++) {
 			// Perform a point mutation at the ith node, pointProbability% of
 			// time.
@@ -135,7 +135,7 @@ public class PointMutation extends ConfigOperator<GEModel> implements GEMutation
 				points.add(i);
 			}
 		}
-		
+
 		// Add mutation points into the stats manager.
 		Stats.get().addData(MUT_POINTS, points);
 
@@ -160,10 +160,10 @@ public class PointMutation extends ConfigOperator<GEModel> implements GEMutation
 	 *        being changed, and 0.0 would mean no codons were changed. A
 	 *        typical value would be 0.01.
 	 */
-	public void setPointProbability(double pointProbability) {
+	public void setPointProbability(final double pointProbability) {
 		this.pointProbability = pointProbability;
 	}
-	
+
 	/**
 	 * Returns the random number generator that this initialiser is using or
 	 * <code>null</code> if none has been set.
@@ -184,7 +184,7 @@ public class PointMutation extends ConfigOperator<GEModel> implements GEMutation
 	public void setRNG(final RandomNumberGenerator rng) {
 		this.rng = rng;
 	}
-	
+
 	/**
 	 * Returns the codon generator that this mutation is using to provide
 	 * new codons.

@@ -54,8 +54,7 @@ public abstract class AbstractModelTestCase {
 	public void testNoRunsDefault() {
 		final Model model = getModel();
 
-		assertEquals("model's default number of runs not 1", 1,
-				model.getNoRuns());
+		assertEquals("model's default number of runs not 1", 1, model.getNoRuns());
 	}
 
 	/**
@@ -89,8 +88,7 @@ public abstract class AbstractModelTestCase {
 	public void testNoGenerationsDefault() {
 		final Model model = getModel();
 
-		assertEquals("model's default number of generations not 50", 50,
-				model.getNoGenerations());
+		assertEquals("model's default number of generations not 50", 50, model.getNoGenerations());
 	}
 
 	/**
@@ -105,7 +103,7 @@ public abstract class AbstractModelTestCase {
 			fail("illegal argument exception thrown for -1 generations");
 		}
 	}
-	
+
 	/**
 	 * Tests that trying to set a number of generations throws an
 	 * exception.
@@ -138,8 +136,7 @@ public abstract class AbstractModelTestCase {
 	public void testPopulationSizeDefault() {
 		final Model model = getModel();
 
-		assertEquals("model's default population size is not 100", 100,
-				model.getPopulationSize());
+		assertEquals("model's default population size is not 100", 100, model.getPopulationSize());
 	}
 
 	/**
@@ -174,8 +171,7 @@ public abstract class AbstractModelTestCase {
 	public void testPoolSizeDefault() {
 		final Model model = getModel();
 
-		assertEquals("model's default pool size is not 50", 50,
-				model.getPoolSize());
+		assertEquals("model's default pool size is not 50", 50, model.getPoolSize());
 	}
 
 	/**
@@ -221,8 +217,7 @@ public abstract class AbstractModelTestCase {
 	public void testNoElitesDefault() {
 		final Model model = getModel();
 
-		assertEquals("model's default population size is not 10", 10,
-				model.getNoElites());
+		assertEquals("model's default population size is not 10", 10, model.getNoElites());
 	}
 
 	/**
@@ -257,8 +252,7 @@ public abstract class AbstractModelTestCase {
 	public void testCrossoverProbabilityDefault() {
 		final Model model = getModel();
 
-		assertEquals("model's default population size is not 0.9", 0.9,
-				model.getCrossoverProbability());
+		assertEquals("model's default population size is not 0.9", 0.9, model.getCrossoverProbability());
 	}
 
 	/**
@@ -306,8 +300,7 @@ public abstract class AbstractModelTestCase {
 	public void testMutationProbabilityDefault() {
 		final Model model = getModel();
 
-		assertEquals("model's default population size is not 0.1", 0.1,
-				model.getMutationProbability());
+		assertEquals("model's default population size is not 0.1", 0.1, model.getMutationProbability());
 	}
 
 	/**
@@ -356,8 +349,7 @@ public abstract class AbstractModelTestCase {
 	public void testReproductionProbabilityDefault() {
 		final Model model = getModel();
 
-		assertEquals("model's default population size is not 0.0", 0.0,
-				model.getReproductionProbability());
+		assertEquals("model's default population size is not 0.0", 0.0, model.getReproductionProbability());
 	}
 
 	/**
@@ -405,8 +397,7 @@ public abstract class AbstractModelTestCase {
 	public void testTerminationFitnessDefault() {
 		final Model model = getModel();
 
-		assertEquals("model's default population size is not 0.0", 0.0,
-				model.getTerminationFitness());
+		assertEquals("model's default population size is not 0.0", 0.0, model.getTerminationFitness());
 	}
 
 	/**
@@ -418,15 +409,10 @@ public abstract class AbstractModelTestCase {
 
 		final ProgramSelector programSelector = model.getProgramSelector();
 
-		assertTrue(
-				"model's default program selector is not an instance of tournament selector",
-				(programSelector instanceof TournamentSelector));
+		assertTrue("model's default program selector is not an instance of tournament selector", (programSelector instanceof TournamentSelector));
 
-		final int tournamentSize = ((TournamentSelector) programSelector)
-				.getTournamentSize();
-		assertEquals(
-				"model's default program selector's tournament size is not 7",
-				7, tournamentSize);
+		final int tournamentSize = ((TournamentSelector) programSelector).getTournamentSize();
+		assertEquals("model's default program selector's tournament size is not 7", 7, tournamentSize);
 	}
 
 	/**
@@ -436,8 +422,7 @@ public abstract class AbstractModelTestCase {
 	public void testPoolSelectorDefault() {
 		final Model model = getModel();
 
-		assertNull("model's default program selector is not null",
-				model.getPoolSelector());
+		assertNull("model's default program selector is not null", model.getPoolSelector());
 	}
 
 	/**
@@ -447,9 +432,7 @@ public abstract class AbstractModelTestCase {
 	public void testRNGDefault() {
 		final Model model = getModel();
 
-		assertTrue(
-				"model's default program selector is not an instance of tournament selector",
-				(model.getRNG() instanceof RandomNumberGenerator));
+		assertTrue("model's default program selector is not an instance of tournament selector", (model.getRNG() instanceof RandomNumberGenerator));
 	}
 
 	/**

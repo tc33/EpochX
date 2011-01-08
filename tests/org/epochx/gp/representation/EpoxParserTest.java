@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -27,19 +27,18 @@ import org.epochx.epox.EpoxParser;
 import org.epochx.tools.eval.MalformedProgramException;
 import org.junit.*;
 
-
 /**
  * 
  */
 public class EpoxParserTest {
 
 	private EpoxParser parser;
-	
+
 	@Before
 	public void setUp() throws Exception {
 		parser = new EpoxParser();
 	}
-	
+
 	/**
 	 * Tests that function arguments separated with commas are parsed correctly.
 	 */
@@ -47,11 +46,11 @@ public class EpoxParserTest {
 	public void testParseCommas() {
 		try {
 			parser.parse("ADD(3.0,2.1)");
-		} catch (MalformedProgramException e) {
+		} catch (final MalformedProgramException e) {
 			fail("Malformed program exception thrown for comma separated args");
 		}
 	}
-	
+
 	/**
 	 * Tests that function arguments separated with spaces are parsed correctly.
 	 */
@@ -59,20 +58,20 @@ public class EpoxParserTest {
 	public void testParseSpaces() {
 		try {
 			parser.parse("ADD(3.0 2.1)");
-		} catch (MalformedProgramException e) {
+		} catch (final MalformedProgramException e) {
 			fail("Malformed program exception thrown for comma separated args");
 		}
 	}
-	
+
 	/**
-	 * Tests that function arguments separated with a comma AND multiple spaces 
+	 * Tests that function arguments separated with a comma AND multiple spaces
 	 * are parsed correctly.
 	 */
 	@Test
 	public void testParseCommaAndSpace() {
 		try {
 			parser.parse("ADD(3.0,  2.1)");
-		} catch (MalformedProgramException e) {
+		} catch (final MalformedProgramException e) {
 			fail("Malformed program exception thrown for comma separated args");
 		}
 	}

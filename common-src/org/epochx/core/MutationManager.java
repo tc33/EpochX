@@ -163,8 +163,7 @@ public class MutationManager implements ConfigListener {
 			}
 
 			// Allow the life cycle listener to confirm or modify.
-			child = Life.get()
-					.runMutationHooks(parent, child);
+			child = Life.get().runMutationHooks(parent, child);
 
 			if (child == null) {
 				reversions++;

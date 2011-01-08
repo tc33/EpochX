@@ -31,8 +31,7 @@ import org.epochx.tools.util.*;
 public class HyperbolicSineFunction extends Node {
 
 	/**
-	 * Constructs a HyperbolicSineFunction with one <code>null</code> 
-	 * child.
+	 * Constructs a HyperbolicSineFunction with one <code>null</code> child.
 	 */
 	public HyperbolicSineFunction() {
 		this(null);
@@ -49,13 +48,13 @@ public class HyperbolicSineFunction extends Node {
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
-	 * result of which must be a numeric type (one of Double, Float, Long, 
-	 * Integer). The hyperbolic sine of this value becomes the result of this 
+	 * result of which must be a numeric type (one of Double, Float, Long,
+	 * Integer). The hyperbolic sine of this value becomes the result of this
 	 * method as a double value.
 	 */
 	@Override
 	public Double evaluate() {
-		Object c = getChild(0).evaluate();
+		final Object c = getChild(0).evaluate();
 
 		return Math.sinh(NumericUtils.asDouble(c));
 	}
@@ -67,18 +66,18 @@ public class HyperbolicSineFunction extends Node {
 	public String getIdentifier() {
 		return "SINH";
 	}
-	
+
 	/**
 	 * Returns this function node's return type for the given child input types.
-	 * If there is one input type of a numeric type then the return type will 
-	 * be Double. In all other cases this method will return 
-	 * <code>null</code> to indicate that the inputs are invalid.
+	 * If there is one input type of a numeric type then the return type will
+	 * be Double. In all other cases this method will return <code>null</code>
+	 * to indicate that the inputs are invalid.
 	 * 
 	 * @return the Double class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (inputTypes.length == 1 && TypeUtils.isNumericType(inputTypes[0])) {
+	public Class<?> getReturnType(final Class<?> ... inputTypes) {
+		if ((inputTypes.length == 1) && TypeUtils.isNumericType(inputTypes[0])) {
 			return Double.class;
 		} else {
 			return null;

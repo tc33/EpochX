@@ -39,11 +39,11 @@ import org.epochx.tools.random.*;
  * Prior to calling the <code>run</code> method it is typical to arrange for
  * some form of output to be generated each generation, each run or even each
  * crossover or mutation. A wide range of statistics are available from the
- * {@link Stats}. A listener model is employed through the
- * {@link Life} to allow events such as a generation starting, or
- * crossover being carried out, to be handled and responded to. This is commonly
- * combined with the <code>Stats</code> to output statistics each
- * generation or run. Instances of both these class are obtainable from a model.
+ * {@link Stats}. A listener model is employed through the {@link Life} to allow
+ * events such as a generation starting, or crossover being carried out, to be
+ * handled and responded to. This is commonly combined with the
+ * <code>Stats</code> to output statistics each generation or run. Instances of
+ * both these class are obtainable from a model.
  * 
  * <p>
  * The Model class implements <code>Runnable</code>. Because of this, it is
@@ -129,7 +129,7 @@ public abstract class Model {
 	 */
 	public void run() {
 		run = new RunManager(this);
-		
+
 		// Fire config event.
 		Life.get().fireConfigureEvent();
 
@@ -339,8 +339,7 @@ public abstract class Model {
 		if (populationSize >= 1) {
 			this.populationSize = populationSize;
 		} else {
-			throw new IllegalArgumentException(
-					"populationSize must be one or more");
+			throw new IllegalArgumentException("populationSize must be one or more");
 		}
 
 		assert (this.populationSize >= 1);
@@ -431,8 +430,7 @@ public abstract class Model {
 		if ((crossoverProbability >= 0.0) && (crossoverProbability <= 1.0)) {
 			this.crossoverProbability = crossoverProbability;
 		} else {
-			throw new IllegalArgumentException(
-					"crossoverProbability must be between 0.0 and 1.0 inclusive");
+			throw new IllegalArgumentException("crossoverProbability must be between 0.0 and 1.0 inclusive");
 		}
 
 		assert ((this.crossoverProbability >= 0.0) && (this.crossoverProbability <= 1.0));
@@ -465,8 +463,7 @@ public abstract class Model {
 		if ((mutationProbability >= 0.0) && (mutationProbability <= 1.0)) {
 			this.mutationProbability = mutationProbability;
 		} else {
-			throw new IllegalArgumentException(
-					"mutationProbability must be between 0.0 and 1.0 inclusive");
+			throw new IllegalArgumentException("mutationProbability must be between 0.0 and 1.0 inclusive");
 		}
 
 		assert ((this.mutationProbability >= 0.0) && (this.mutationProbability <= 1.0));
@@ -493,12 +490,10 @@ public abstract class Model {
 	 * @param reproductionProbability the new reproduction probability to use.
 	 */
 	public void setReproductionProbability(final double reproductionProbability) {
-		if ((reproductionProbability >= 0.0)
-				&& (reproductionProbability <= 1.0)) {
+		if ((reproductionProbability >= 0.0) && (reproductionProbability <= 1.0)) {
 			this.reproductionProbability = reproductionProbability;
 		} else {
-			throw new IllegalArgumentException(
-					"reproductionProbability must be between 0.0 and 1.0 inclusive");
+			throw new IllegalArgumentException("reproductionProbability must be between 0.0 and 1.0 inclusive");
 		}
 
 		assert ((this.reproductionProbability >= 0.0) && (this.reproductionProbability <= 1.0));
@@ -558,8 +553,7 @@ public abstract class Model {
 		if (programSelector != null) {
 			this.programSelector = programSelector;
 		} else {
-			throw new IllegalArgumentException(
-					"program selector must not be null");
+			throw new IllegalArgumentException("program selector must not be null");
 		}
 
 		assert (this.programSelector != null);
@@ -622,8 +616,7 @@ public abstract class Model {
 		if (rng != null) {
 			randomNumberGenerator = rng;
 		} else {
-			throw new IllegalArgumentException(
-					"random number generator must not be null");
+			throw new IllegalArgumentException("random number generator must not be null");
 		}
 
 		assert (randomNumberGenerator != null);

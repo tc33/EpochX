@@ -57,35 +57,35 @@ public class FixedPointCrossover extends ConfigOperator<GEModel> implements GECr
 	 * chromosomes chosen for the fixed point crossover operation.
 	 */
 	public static final Stat XO_POINT = new AbstractStat(ExpiryEvent.CROSSOVER) {};
-	
+
 	/**
 	 * Requests a <code>List&lt;Integer&gt;</code> which is the portion of the
 	 * first parent program which is being exchanged into the second parent.
 	 */
 	public static final Stat XO_CODONS1 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
-	
+
 	/**
 	 * Requests a <code>List&lt;Integer&gt;</code> which is the portion of the
 	 * second parent program which is being exchanged into the first parent.
 	 */
 	public static final Stat XO_CODONS2 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
-	
+
 	// The random number generator in use.
 	private RandomNumberGenerator rng;
 
 	/**
-	 * Constructs an instance of <code>FixedPointCrossover</code> with the only 
+	 * Constructs an instance of <code>FixedPointCrossover</code> with the only
 	 * necessary parameter given.
 	 * 
-	 * @param rng a <code>RandomNumberGenerator</code> used to lead 
-	 * non-deterministic behaviour.
+	 * @param rng a <code>RandomNumberGenerator</code> used to lead
+	 *        non-deterministic behaviour.
 	 */
 	public FixedPointCrossover(final RandomNumberGenerator rng) {
 		this((GEModel) null);
-		
+
 		this.rng = rng;
 	}
-	
+
 	/**
 	 * Constructs an instance of <code>FixedPointCrossover</code>.
 	 * 
@@ -118,8 +118,7 @@ public class FixedPointCrossover extends ConfigOperator<GEModel> implements GECr
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public GECandidateProgram[] crossover(final CandidateProgram p1,
-			final CandidateProgram p2) {
+	public GECandidateProgram[] crossover(final CandidateProgram p1, final CandidateProgram p2) {
 		final GECandidateProgram parent1 = (GECandidateProgram) p1;
 		final GECandidateProgram parent2 = (GECandidateProgram) p2;
 
@@ -132,7 +131,7 @@ public class FixedPointCrossover extends ConfigOperator<GEModel> implements GECr
 		} else {
 			crossoverPoint = rng.nextInt(parent2Codons);
 		}
-		
+
 		// Add crossover point to the stats manager.
 		Stats.get().addData(XO_POINT, crossoverPoint);
 
@@ -140,22 +139,20 @@ public class FixedPointCrossover extends ConfigOperator<GEModel> implements GECr
 		final GECandidateProgram child1 = (GECandidateProgram) parent1.clone();
 		final GECandidateProgram child2 = (GECandidateProgram) parent2.clone();
 
-		final List<Integer> part1 = child1.removeCodons(crossoverPoint,
-				child1.getNoCodons());
-		final List<Integer> part2 = child2.removeCodons(crossoverPoint,
-				child2.getNoCodons());
+		final List<Integer> part1 = child1.removeCodons(crossoverPoint, child1.getNoCodons());
+		final List<Integer> part2 = child2.removeCodons(crossoverPoint, child2.getNoCodons());
 
 		// Add codon portions into the stats manager.
 		Stats.get().addData(XO_CODONS1, part1);
 		Stats.get().addData(XO_CODONS2, part2);
-		
+
 		// Swap over the endings at the crossover points.
 		child2.appendCodons(part1);
 		child1.appendCodons(part2);
 
 		return new GECandidateProgram[]{child1, child2};
 	}
-	
+
 	/**
 	 * Returns the random number generator that this crossover is using or
 	 * <code>null</code> if none has been set.

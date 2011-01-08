@@ -48,14 +48,14 @@ public class TangentFunction extends Node {
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
-	 * result of which must be a numeric type (one of Double, Float, Long, 
-	 * Integer). The tangent of this value becomes the result of this 
+	 * result of which must be a numeric type (one of Double, Float, Long,
+	 * Integer). The tangent of this value becomes the result of this
 	 * method as a double value.
 	 */
 	@Override
 	public Double evaluate() {
-		Object c = getChild(0).evaluate();
-		
+		final Object c = getChild(0).evaluate();
+
 		return Math.tan(NumericUtils.asDouble(c));
 	}
 
@@ -66,18 +66,18 @@ public class TangentFunction extends Node {
 	public String getIdentifier() {
 		return "TAN";
 	}
-	
+
 	/**
 	 * Returns this function node's return type for the given child input types.
-	 * If there is one input type of a numeric type then the return type will 
-	 * be Double. In all other cases this method will return 
-	 * <code>null</code> to indicate that the inputs are invalid.
+	 * If there is one input type of a numeric type then the return type will
+	 * be Double. In all other cases this method will return <code>null</code>
+	 * to indicate that the inputs are invalid.
 	 * 
 	 * @return the Double class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (inputTypes.length == 1 && TypeUtils.isNumericType(inputTypes[0])) {
+	public Class<?> getReturnType(final Class<?> ... inputTypes) {
+		if ((inputTypes.length == 1) && TypeUtils.isNumericType(inputTypes[0])) {
 			return inputTypes[0];
 		} else {
 			return null;

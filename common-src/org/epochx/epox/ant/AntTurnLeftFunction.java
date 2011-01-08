@@ -21,17 +21,17 @@
  */
 package org.epochx.epox.ant;
 
-import org.epochx.epox.*;
+import org.epochx.epox.Node;
 import org.epochx.tools.ant.Ant;
 
 /**
- * This class defines a function which causes an Ant instance to turn left in 
- * from its current orientation in its landscape. Although named as a 
- * function, this node may operate as 
+ * This class defines a function which causes an Ant instance to turn left in
+ * from its current orientation in its landscape. Although named as a
+ * function, this node may operate as
  * either a function or a terminal depending on how the ant is provided. It may
- * optionally be provided at construction, in which case it becomes a terminal 
- * which operates on its internal ant. Alternatively, it can require one child 
- * node with a data-type of Ant. In this case, when evaluated it will first 
+ * optionally be provided at construction, in which case it becomes a terminal
+ * which operates on its internal ant. Alternatively, it can require one child
+ * node with a data-type of Ant. In this case, when evaluated it will first
  * evaluate its child to obtain its ant.
  * 
  * @see AntSkipFunction
@@ -39,14 +39,14 @@ import org.epochx.tools.ant.Ant;
  * @see AntTurnRightFunction
  */
 public class AntTurnLeftFunction extends AntFunction {
-	
+
 	/**
 	 * Constructs an AntTurnLeftFunction with one <code>null</code> child.
 	 */
 	public AntTurnLeftFunction() {
 		this((Node) null);
 	}
-	
+
 	/**
 	 * Constructs an AntTurnLeftFunction with one child node. The given child
 	 * must have a return-type of Ant.
@@ -59,20 +59,20 @@ public class AntTurnLeftFunction extends AntFunction {
 
 	/**
 	 * Constructs an <code>AntTurnLeftFunction</code> with no child nodes, but
-	 * the given ant which will be held internally. This makes the function a 
-	 * terminal node with arity zero. Note that this differs from the 
-	 * alternative constructors which take a child node with an Ant return type. 
+	 * the given ant which will be held internally. This makes the function a
+	 * terminal node with arity zero. Note that this differs from the
+	 * alternative constructors which take a child node with an Ant return type.
 	 * 
 	 * @param ant
 	 */
 	public AntTurnLeftFunction(final Ant ant) {
 		super(ant);
 	}
-	
+
 	/**
-	 * Evaluates this function. The Ant is made to turn left from its current 
-	 * orientation in its landscape. The return type of this 
-	 * function node is Void, and so the value returned from this method is 
+	 * Evaluates this function. The Ant is made to turn left from its current
+	 * orientation in its landscape. The return type of this
+	 * function node is Void, and so the value returned from this method is
 	 * undefined.
 	 */
 	@Override
@@ -83,12 +83,12 @@ public class AntTurnLeftFunction extends AntFunction {
 		} else {
 			ant = (Ant) getChild(0).evaluate();
 		}
-		
+
 		ant.turnLeft();
 
 		return null;
 	}
-	
+
 	/**
 	 * Returns the identifier of this function which is TURN-LEFT.
 	 */
@@ -96,22 +96,22 @@ public class AntTurnLeftFunction extends AntFunction {
 	public String getIdentifier() {
 		return "TURN-LEFT";
 	}
-	
+
 	/**
 	 * Returns this function node's return type for the given child input types.
 	 * If the arity of this node is zero, and the inputTypes array is empty then
 	 * the return type of this node will be Void. If the arity is one, and there
-	 * is only one input type which is a sub-type of Ant then the 
+	 * is only one input type which is a sub-type of Ant then the
 	 * return type of this function will be Void. In all other cases this method
 	 * will return <code>null</code> to indicate that the inputs are invalid.
 	 * 
 	 * @return The Void class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (getArity() == 0 && inputTypes.length == 0) {
+	public Class<?> getReturnType(final Class<?> ... inputTypes) {
+		if ((getArity() == 0) && (inputTypes.length == 0)) {
 			return Void.class;
-		} else if (inputTypes.length == 1 && Ant.class.isAssignableFrom(inputTypes[0])) {
+		} else if ((inputTypes.length == 1) && Ant.class.isAssignableFrom(inputTypes[0])) {
 			return Void.class;
 		} else {
 			return null;

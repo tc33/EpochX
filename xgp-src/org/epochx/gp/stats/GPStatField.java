@@ -34,13 +34,14 @@ import org.epochx.stats.*;
  * Stats specific to XGP.
  */
 public class GPStatField extends StatField {
-	
+
 	/**
 	 * Returns an <code>int[]</code> which contains the depths of all the
 	 * <code>CandidateProgram</code>s in the population at the end of the
 	 * previous generation.
 	 */
 	public static final Stat GEN_DEPTHS = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			int[] depths = null;
@@ -68,6 +69,7 @@ public class GPStatField extends StatField {
 	 * previous generation.
 	 */
 	public static final Stat GEN_DEPTH_AVE = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Double aveDepth = null;
@@ -90,6 +92,7 @@ public class GPStatField extends StatField {
 	 * population at the end of the previous generation.
 	 */
 	public static final Stat GEN_DEPTH_STDEV = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Double stdevDepth = null;
@@ -112,6 +115,7 @@ public class GPStatField extends StatField {
 	 * the previous generation.
 	 */
 	public static final Stat GEN_DEPTH_MAX = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Integer maxDepth = null;
@@ -134,6 +138,7 @@ public class GPStatField extends StatField {
 	 * previous generation.
 	 */
 	public static final Stat GEN_DEPTH_MIN = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Integer minDepth = null;
@@ -157,6 +162,7 @@ public class GPStatField extends StatField {
 	 * <code>CandidateProgram</code> is depth 0.
 	 */
 	public static final Stat GEN_AVE_NODES_PER_DEPTH = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			double[] aveNodes = null;
@@ -192,6 +198,7 @@ public class GPStatField extends StatField {
 	 * previous generation.
 	 */
 	public static final Stat GEN_LENGTHS = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			int[] lengths = null;
@@ -219,6 +226,7 @@ public class GPStatField extends StatField {
 	 * previous generation.
 	 */
 	public static final Stat GEN_LENGTH_AVE = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Double aveLength = null;
@@ -241,6 +249,7 @@ public class GPStatField extends StatField {
 	 * population at the end of the previous generation.
 	 */
 	public static final Stat GEN_LENGTH_STDEV = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Double stdevLength = null;
@@ -263,6 +272,7 @@ public class GPStatField extends StatField {
 	 * the previous generation.
 	 */
 	public static final Stat GEN_LENGTH_MAX = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Integer maxLength = null;
@@ -285,6 +295,7 @@ public class GPStatField extends StatField {
 	 * the previous generation.
 	 */
 	public static final Stat GEN_LENGTH_MIN = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Integer minLength = null;
@@ -307,6 +318,7 @@ public class GPStatField extends StatField {
 	 * previous generation.
 	 */
 	public static final Stat GEN_NO_TERMINALS = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			int[] noTerminals = null;
@@ -334,11 +346,13 @@ public class GPStatField extends StatField {
 	 * the previous generation.
 	 */
 	public static final Stat GEN_NO_TERMINALS_AVE = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Double aveNoTerminals = null;
 
-			// Request the population's number of terminals from the stats manager.
+			// Request the population's number of terminals from the stats
+			// manager.
 			final int[] noTerminals = (int[]) Stats.get().getStat(GEN_NO_TERMINALS);
 
 			// Calculate the average number of terminals.
@@ -356,11 +370,13 @@ public class GPStatField extends StatField {
 	 * population at the end of the previous generation.
 	 */
 	public static final Stat GEN_NO_TERMINALS_STDEV = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Double stdevNoTerminals = null;
 
-			// Request the population's number of terminals from the stats manager.
+			// Request the population's number of terminals from the stats
+			// manager.
 			final int[] noTerminals = (int[]) Stats.get().getStat(GEN_NO_TERMINALS);
 
 			// Calculate the standard deviation of the number of terminals.
@@ -378,11 +394,13 @@ public class GPStatField extends StatField {
 	 * the previous generation.
 	 */
 	public static final Stat GEN_NO_TERMINALS_MAX = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Integer maxNoTerminals = null;
 
-			// Request the population's number of terminals from the stats manager.
+			// Request the population's number of terminals from the stats
+			// manager.
 			final int[] noTerminals = (int[]) Stats.get().getStat(GEN_NO_TERMINALS);
 
 			// Calculate the maximum number of terminals.
@@ -400,11 +418,13 @@ public class GPStatField extends StatField {
 	 * the previous generation.
 	 */
 	public static final Stat GEN_NO_TERMINALS_MIN = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Integer minNoTerminals = null;
 
-			// Request the population's number of terminals from the stats manager.
+			// Request the population's number of terminals from the stats
+			// manager.
 			final int[] noTerminals = (int[]) Stats.get().getStat(GEN_NO_TERMINALS);
 
 			// Calculate the minimum number of terminals.
@@ -422,6 +442,7 @@ public class GPStatField extends StatField {
 	 * of the previous generation.
 	 */
 	public static final Stat GEN_NO_DISTINCT_TERMINALS = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			int[] noDistinctTerminals = null;
@@ -449,11 +470,13 @@ public class GPStatField extends StatField {
 	 * the end of the previous generation.
 	 */
 	public static final Stat GEN_NO_DISTINCT_TERMINALS_AVE = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Double aveNoDistinctTerminals = null;
 
-			// Request the population's number of distinct terminals from the stats
+			// Request the population's number of distinct terminals from the
+			// stats
 			// manager.
 			final int[] noTerminals = (int[]) Stats.get().getStat(GEN_NO_DISTINCT_TERMINALS);
 
@@ -472,15 +495,18 @@ public class GPStatField extends StatField {
 	 * the population at the end of the previous generation.
 	 */
 	public static final Stat GEN_NO_DISTINCT_TERMINALS_STDEV = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Double stdevNoDistinctTerminals = null;
 
-			// Request the population's number of distinct terminals from the stats
+			// Request the population's number of distinct terminals from the
+			// stats
 			// manager.
 			final int[] noTerminals = (int[]) Stats.get().getStat(GEN_NO_DISTINCT_TERMINALS);
 
-			// Calculate the standard deviation of the number of unique terminals.
+			// Calculate the standard deviation of the number of unique
+			// terminals.
 			if (noTerminals != null) {
 				stdevNoDistinctTerminals = StatsUtils.stdev(noTerminals);
 			}
@@ -495,11 +521,13 @@ public class GPStatField extends StatField {
 	 * the end of the previous generation.
 	 */
 	public static final Stat GEN_NO_DISTINCT_TERMINALS_MAX = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Integer maxNoDistinctTerminals = null;
 
-			// Request the population's number of distinct terminals from the stats
+			// Request the population's number of distinct terminals from the
+			// stats
 			// manager.
 			final int[] noTerminals = (int[]) Stats.get().getStat(GEN_NO_DISTINCT_TERMINALS);
 
@@ -518,11 +546,13 @@ public class GPStatField extends StatField {
 	 * the end of the previous generation.
 	 */
 	public static final Stat GEN_NO_DISTINCT_TERMINALS_MIN = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Integer minNoDistinctTerminals = null;
 
-			// Request the population's number of distinct terminals from the stats
+			// Request the population's number of distinct terminals from the
+			// stats
 			// manager.
 			final int[] noTerminals = (int[]) Stats.get().getStat(GEN_NO_DISTINCT_TERMINALS);
 
@@ -541,6 +571,7 @@ public class GPStatField extends StatField {
 	 * previous generation.
 	 */
 	public static final Stat GEN_NO_FUNCTIONS = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			int[] noFunctions = null;
@@ -568,11 +599,13 @@ public class GPStatField extends StatField {
 	 * the previous generation.
 	 */
 	public static final Stat GEN_NO_FUNCTIONS_AVE = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Double aveNoFunctions = null;
 
-			// Request the population's number of functions from the stats manager.
+			// Request the population's number of functions from the stats
+			// manager.
 			final int[] noFunctions = (int[]) Stats.get().getStat(GEN_NO_FUNCTIONS);
 
 			// Calculate the average number of functions.
@@ -590,11 +623,13 @@ public class GPStatField extends StatField {
 	 * population at the end of the previous generation.
 	 */
 	public static final Stat GEN_NO_FUNCTIONS_STDEV = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Double stdevNoFunctions = null;
 
-			// Request the population's number of functions from the stats manager.
+			// Request the population's number of functions from the stats
+			// manager.
 			final int[] noFunctions = (int[]) Stats.get().getStat(GEN_NO_FUNCTIONS);
 
 			// Calculate the standard deviation of the number of functions.
@@ -612,11 +647,13 @@ public class GPStatField extends StatField {
 	 * the previous generation.
 	 */
 	public static final Stat GEN_NO_FUNCTIONS_MAX = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Integer maxNoFunctions = null;
 
-			// Request the population's number of functions from the stats manager.
+			// Request the population's number of functions from the stats
+			// manager.
 			final int[] noFunctions = (int[]) Stats.get().getStat(GEN_NO_FUNCTIONS);
 
 			// Calculate the maximum number of functions.
@@ -634,11 +671,13 @@ public class GPStatField extends StatField {
 	 * the previous generation.
 	 */
 	public static final Stat GEN_NO_FUNCTIONS_MIN = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Integer minNoFunctions = null;
 
-			// Request the population's number of functions from the stats manager.
+			// Request the population's number of functions from the stats
+			// manager.
 			final int[] noFunctions = (int[]) Stats.get().getStat(GEN_NO_FUNCTIONS);
 
 			// Calculate the minimum number of functions.
@@ -656,6 +695,7 @@ public class GPStatField extends StatField {
 	 * of the previous generation.
 	 */
 	public static final Stat GEN_NO_DISTINCT_FUNCTIONS = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			int[] noDistinctFunctions = null;
@@ -683,11 +723,13 @@ public class GPStatField extends StatField {
 	 * the end of the previous generation.
 	 */
 	public static final Stat GEN_NO_DISTINCT_FUNCTIONS_AVE = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Double aveNoDistinctFunctions = null;
 
-			// Request the population's number of distinct functions from the stats
+			// Request the population's number of distinct functions from the
+			// stats
 			// manager.
 			final int[] noFunctions = (int[]) Stats.get().getStat(GEN_NO_DISTINCT_FUNCTIONS);
 
@@ -706,15 +748,18 @@ public class GPStatField extends StatField {
 	 * the population at the end of the previous generation.
 	 */
 	public static final Stat GEN_NO_DISTINCT_FUNCTIONS_STDEV = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Double stdevNoDistinctFunctions = null;
 
-			// Request the population's number of distinct functions from the stats
+			// Request the population's number of distinct functions from the
+			// stats
 			// manager.
 			final int[] noFunctions = (int[]) Stats.get().getStat(GEN_NO_DISTINCT_FUNCTIONS);
 
-			// Calculate the standard deviation of the number of unique functions.
+			// Calculate the standard deviation of the number of unique
+			// functions.
 			if (noFunctions != null) {
 				stdevNoDistinctFunctions = StatsUtils.stdev(noFunctions);
 			}
@@ -729,11 +774,13 @@ public class GPStatField extends StatField {
 	 * the end of the previous generation.
 	 */
 	public static final Stat GEN_NO_DISTINCT_FUNCTIONS_MAX = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Integer maxNoDistinctFunctions = null;
 
-			// Request the population's number of distinct functions from the stats
+			// Request the population's number of distinct functions from the
+			// stats
 			// manager.
 			final int[] noFunctions = (int[]) Stats.get().getStat(GEN_NO_DISTINCT_FUNCTIONS);
 
@@ -752,11 +799,13 @@ public class GPStatField extends StatField {
 	 * the end of the previous generation.
 	 */
 	public static final Stat GEN_NO_DISTINCT_FUNCTIONS_MIN = new AbstractStat(GENERATION) {
+
 		@Override
 		public Object getStatValue() {
 			Integer minNoDistinctFunctions = null;
 
-			// Request the population's number of distinct functions from the stats
+			// Request the population's number of distinct functions from the
+			// stats
 			// manager.
 			final int[] noFunctions = (int[]) Stats.get().getStat(GEN_NO_DISTINCT_FUNCTIONS);
 

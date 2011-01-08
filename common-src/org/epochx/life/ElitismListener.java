@@ -21,7 +21,6 @@
  */
 package org.epochx.life;
 
-
 import org.epochx.core.ElitismManager;
 
 /**
@@ -29,7 +28,7 @@ import org.epochx.core.ElitismManager;
  * elitism events. See the {@link ElitismManager}'s class documentation for
  * details of when each elitism event will be fired. To listen for elitism
  * events during execution of a model, instances of <code>ElitismListener</code>
- *  must be added to the <code>Life</code> instance 
+ * must be added to the <code>Life</code> instance
  * which is retrievable through a call to the static <code>get()</code> method.
  * 
  * <p>

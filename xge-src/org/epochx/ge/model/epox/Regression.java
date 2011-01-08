@@ -51,8 +51,10 @@ public abstract class Regression extends GEModel {
 	public static final String GRAMMAR_STRING = "<prog> ::= <node>\n"
 			+ "<node> ::= <function> | <terminal>\n"
 			+ "<function> ::= ADD( <node> , <node> ) "
-			+ "| SUB( <node> , <node> ) " + "| MUL( <node> , <node> ) "
-			+ "| PDIV( <node> , <node> )\n" + "<terminal> ::= X\n";
+			+ "| SUB( <node> , <node> ) "
+			+ "| MUL( <node> , <node> ) "
+			+ "| PDIV( <node> , <node> )\n"
+			+ "<terminal> ::= X\n";
 
 	// The error each point must be within.
 	private static final double POINT_ERROR = 0.01;

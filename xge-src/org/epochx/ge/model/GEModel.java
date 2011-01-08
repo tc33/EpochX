@@ -164,8 +164,7 @@ public abstract class GEModel extends Model {
 		if (codonGenerator != null) {
 			this.codonGenerator = codonGenerator;
 		} else {
-			throw new IllegalArgumentException(
-					"codonGenerator must not be null");
+			throw new IllegalArgumentException("codonGenerator must not be null");
 		}
 
 		assert (this.codonGenerator != null);
@@ -194,8 +193,7 @@ public abstract class GEModel extends Model {
 		if (maxCodonSize >= 0) {
 			this.maxCodonSize = maxCodonSize;
 		} else {
-			throw new IllegalArgumentException(
-					"maxCodonSize must be zero or more");
+			throw new IllegalArgumentException("maxCodonSize must be zero or more");
 		}
 
 		assert (this.maxCodonSize >= 0);
@@ -226,8 +224,7 @@ public abstract class GEModel extends Model {
 		if (maxChromosomeLength >= -1) {
 			maxCodonSize = maxChromosomeLength;
 		} else {
-			throw new IllegalArgumentException(
-					"maxChromosomeLength must be -1 or more");
+			throw new IllegalArgumentException("maxChromosomeLength must be -1 or more");
 		}
 
 		assert (this.maxChromosomeLength >= 0);
@@ -259,8 +256,7 @@ public abstract class GEModel extends Model {
 		if ((maxDepth >= 1) || (maxDepth == -1)) {
 			this.maxDepth = maxDepth;
 		} else {
-			throw new IllegalArgumentException(
-					"maxDepth must either be -1 or greater than 0");
+			throw new IllegalArgumentException("maxDepth must either be -1 or greater than 0");
 		}
 
 		assert ((this.maxDepth >= 1) || (this.maxDepth == -1));
@@ -286,15 +282,14 @@ public abstract class GEModel extends Model {
 	 * 
 	 * Max depth of -1 is allowed to indicate no limit.
 	 * 
-	 * @param maxInitialDepth the maximum depth to allow a program's derivation 
-	 * 			tree after initialisation.
+	 * @param maxInitialDepth the maximum depth to allow a program's derivation
+	 *        tree after initialisation.
 	 */
 	public void setMaxInitialDepth(final int maxInitialDepth) {
 		if ((maxInitialDepth >= 1) || (maxInitialDepth == -1)) {
 			this.maxInitialDepth = maxInitialDepth;
 		} else {
-			throw new IllegalArgumentException(
-					"maxInitialDepth must either be -1 or greater than 0");
+			throw new IllegalArgumentException("maxInitialDepth must either be -1 or greater than 0");
 		}
 
 		assert ((this.maxInitialDepth >= 1) || (this.maxInitialDepth == -1));

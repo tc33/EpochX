@@ -21,11 +21,11 @@
  */
 package org.epochx.epox.bool;
 
+import static org.junit.Assert.*;
+
 import org.epochx.epox.*;
 import org.epochx.gp.representation.AbstractBooleanNodeTestCase;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * 

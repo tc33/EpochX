@@ -94,7 +94,8 @@ public class GrammarTest {
 	@Test
 	public void testSetRecursive() {
 		final String grammarStr = "<rule1> ::= <rule2> | <rule3>\n"
-				+ "<rule2> ::= <rule1> <rule3>\n" + "<rule3> ::= abc | def\n";
+				+ "<rule2> ::= <rule1> <rule3>\n"
+				+ "<rule3> ::= abc | def\n";
 
 		try {
 			final Grammar g = new Grammar(grammarStr);
@@ -117,8 +118,7 @@ public class GrammarTest {
 	 */
 	@Test
 	public void testAttributesSet() {
-		final String grammarStr = "<rule1> ::= afg | <rule2> <?k1=v1;k2=3?>\n"
-				+ "<rule2> ::= abc | def\n";
+		final String grammarStr = "<rule1> ::= afg | <rule2> <?k1=v1;k2=3?>\n" + "<rule2> ::= abc | def\n";
 
 		try {
 			final Grammar g = new Grammar(grammarStr);
@@ -142,20 +142,18 @@ public class GrammarTest {
 	@Test
 	public void testGrammarLiterals() {
 		final String grammarStr = "<rule1> ::= <rule2> | <rule3>\n"
-				+ "<rule2> ::= <rule1> dfa\n" + "<rule3> ::= abc | def\n";
+				+ "<rule2> ::= <rule1> dfa\n"
+				+ "<rule3> ::= abc | def\n";
 
 		final String[] terminals = {"dfa", "abc", "def"};
 
 		try {
 			final Grammar g = new Grammar(grammarStr);
-			final GrammarLiteral[] literals = g.getGrammarLiterals().toArray(
-					new GrammarLiteral[terminals.length]);
+			final GrammarLiteral[] literals = g.getGrammarLiterals().toArray(new GrammarLiteral[terminals.length]);
 			for (final GrammarLiteral literal: literals) {
-				assertTrue("Grammar literals not correctly set",
-						ArrayUtils.contains(terminals, literal.getValue()));
+				assertTrue("Grammar literals not correctly set", ArrayUtils.contains(terminals, literal.getValue()));
 			}
-			assertSame("Grammar literals not correctly set", terminals.length,
-					literals.length);
+			assertSame("Grammar literals not correctly set", terminals.length, literals.length);
 		} catch (final MalformedGrammarException ex) {
 			fail("Malformed grammar exception thrown for a valid grammar");
 		}
@@ -168,20 +166,18 @@ public class GrammarTest {
 	@Test
 	public void testGrammarRules() {
 		final String grammarStr = "<rule1> ::= <rule2> | dfa\n"
-				+ "<rule2> ::= <rule1> agd\n" + "<rule3> ::= abc | def\n";
+				+ "<rule2> ::= <rule1> agd\n"
+				+ "<rule3> ::= abc | def\n";
 
 		final String[] ruleNames = {"rule1", "rule2", "rule3"};
 
 		try {
 			final Grammar g = new Grammar(grammarStr);
-			final GrammarRule[] rules = g.getGrammarRules().toArray(
-					new GrammarRule[ruleNames.length]);
+			final GrammarRule[] rules = g.getGrammarRules().toArray(new GrammarRule[ruleNames.length]);
 			for (final GrammarRule r: rules) {
-				assertTrue("Grammar rules not correctly set",
-						ArrayUtils.contains(ruleNames, r.getName()));
+				assertTrue("Grammar rules not correctly set", ArrayUtils.contains(ruleNames, r.getName()));
 			}
-			assertSame("Grammar rules not correctly set", ruleNames.length,
-					rules.length);
+			assertSame("Grammar rules not correctly set", ruleNames.length, rules.length);
 		} catch (final MalformedGrammarException ex) {
 			fail("Malformed grammar exception thrown for a valid grammar");
 		}

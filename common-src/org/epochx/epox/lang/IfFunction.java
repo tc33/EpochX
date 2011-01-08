@@ -21,7 +21,7 @@
  */
 package org.epochx.epox.lang;
 
-import org.epochx.epox.*;
+import org.epochx.epox.Node;
 import org.epochx.tools.util.TypeUtils;
 
 /**
@@ -41,11 +41,11 @@ public class IfFunction extends Node {
 	 * Constructs an IfFunction with three child nodes.
 	 * 
 	 * @param condition a boolean child node which will determine which of the
-	 * other nodes are evaluated.
-	 * @param ifStatement the child node to be evaluated if the condition 
-	 * evaluates to true.
-	 * @param elseStatement the child node to be evaluated if the condition 
-	 * evaluates to false.
+	 *        other nodes are evaluated.
+	 * @param ifStatement the child node to be evaluated if the condition
+	 *        evaluates to true.
+	 * @param elseStatement the child node to be evaluated if the condition
+	 *        evaluates to false.
 	 */
 	public IfFunction(final Node condition, final Node ifStatement, final Node elseStatement) {
 		super(condition, ifStatement, elseStatement);
@@ -53,9 +53,9 @@ public class IfFunction extends Node {
 
 	/**
 	 * Evaluates this function. The first child node is evaluated, the
-	 * result of which must be a <code>Boolean</code> instance. If the result 
-	 * is a true value then the second child is also evaluated, the result of 
-	 * which becomes the result of this function. If the first child 
+	 * result of which must be a <code>Boolean</code> instance. If the result
+	 * is a true value then the second child is also evaluated, the result of
+	 * which becomes the result of this function. If the first child
 	 * evaluated to a false value then the third child is evaluated and its
 	 * result returned.
 	 */
@@ -77,22 +77,21 @@ public class IfFunction extends Node {
 	public String getIdentifier() {
 		return "IF";
 	}
-	
+
 	/**
 	 * Returns this function node's return type for the given child input types.
-	 * If there are three children, the first of which has the data-type 
+	 * If there are three children, the first of which has the data-type
 	 * Boolean, then the return type of this function will be whichever of the
-	 * second and third children is a super type the other. If neither of the 
-	 * other two children are a subclass of the other, then these input types 
+	 * second and third children is a super type the other. If neither of the
+	 * other two children are a subclass of the other, then these input types
 	 * are invalid and <code>null</code> will be returned.
 	 * 
-	 * @return The <code>Boolean</code> class or <code>null</code> if the input 
-	 * type is invalid.
+	 * @return The <code>Boolean</code> class or <code>null</code> if the input
+	 *         type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if ((inputTypes.length == 3) 
-				&& (inputTypes[0] == Boolean.class)) {
+	public Class<?> getReturnType(final Class<?> ... inputTypes) {
+		if ((inputTypes.length == 3) && (inputTypes[0] == Boolean.class)) {
 			return TypeUtils.getSuper(inputTypes[1], inputTypes[2]);
 		} else {
 			return null;

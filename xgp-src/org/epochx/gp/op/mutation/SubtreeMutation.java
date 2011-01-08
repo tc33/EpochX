@@ -23,7 +23,7 @@ package org.epochx.gp.op.mutation;
 
 import java.util.List;
 
-import org.epochx.epox.*;
+import org.epochx.epox.Node;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.op.init.GrowInitialiser;
 import org.epochx.gp.representation.GPCandidateProgram;
@@ -54,7 +54,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * If the <code>getModel</code> method returns <code>null</code> then no model
  * is set and whatever static parameters have been set as parameters to the
  * constructor or using the standard accessor methods will be used. If any
- * compulsory parameters remain unset when the mutation is performed then an 
+ * compulsory parameters remain unset when the mutation is performed then an
  * <code>IllegalStateException</code> will be thrown.
  */
 public class SubtreeMutation extends ConfigOperator<GPModel> implements GPMutation {
@@ -64,30 +64,30 @@ public class SubtreeMutation extends ConfigOperator<GPModel> implements GPMutati
 	 * a result of the subtree mutation operation.
 	 */
 	public static final Stat MUT_POINT = new AbstractStat(ExpiryEvent.MUTATION) {};
-	
+
 	/**
 	 * Requests a <code>Node</code> which is the subtree that was inserted in
 	 * the program undergoing subtree mutation.
 	 */
 	public static final Stat MUT_SUBTREE = new AbstractStat(ExpiryEvent.MUTATION) {};
-	
+
 	// Grow initialiser to build our replacement subtrees.
 	private final GrowInitialiser grower;
-	
+
 	private RandomNumberGenerator rng;
-	
+
 	// The maximum depth of the new subtree.
 	private int maxSubtreeDepth;
 
 	public SubtreeMutation(final RandomNumberGenerator rng, final List<Node> syntax, final int maxSubtreeDepth) {
 		this((GPModel) null, maxSubtreeDepth);
-		
+
 		this.rng = rng;
-		
+
 		grower.setRNG(rng);
 		grower.setSyntax(syntax);
 	}
-	
+
 	/**
 	 * Simple constructor for subtree mutation using a default maximum depth
 	 * of 4 for new subtrees.
@@ -110,7 +110,7 @@ public class SubtreeMutation extends ConfigOperator<GPModel> implements GPMutati
 	 */
 	public SubtreeMutation(final GPModel model, final int maxSubtreeDepth) {
 		super(model);
-		
+
 		this.maxSubtreeDepth = maxSubtreeDepth;
 
 		// Don't let this configure itself because it will use the wrong depth.
@@ -123,7 +123,7 @@ public class SubtreeMutation extends ConfigOperator<GPModel> implements GPMutati
 	@Override
 	public void onConfigure() {
 		rng = getModel().getRNG();
-		
+
 		grower.setRNG(rng);
 		grower.setSyntax(getModel().getSyntax());
 	}
@@ -150,17 +150,17 @@ public class SubtreeMutation extends ConfigOperator<GPModel> implements GPMutati
 
 		// Add mutation point into the stats manager.
 		Stats.get().addData(MUT_POINT, mutationPoint);
-		
+
 		// Update grower to use the right data-type.
 		final Node originalSubtree = program.getNthNode(mutationPoint);
 		grower.setReturnType(originalSubtree.getReturnType());
-		
+
 		// Grow a new subtree using the GrowInitialiser.
 		final Node subtree = grower.getGrownNodeTree(maxSubtreeDepth);
 
 		// Add subtree into the stats manager.
 		Stats.get().addData(MUT_SUBTREE, subtree);
-		
+
 		// Set the new subtree.
 		program.setNthNode(mutationPoint, subtree);
 
@@ -186,29 +186,29 @@ public class SubtreeMutation extends ConfigOperator<GPModel> implements GPMutati
 	 */
 	public void setRNG(final RandomNumberGenerator rng) {
 		this.rng = rng;
-		
+
 		grower.setRNG(rng);
 	}
-	
+
 	/**
-	 * Returns the maximum depth that the new subtrees being inserted into the 
+	 * Returns the maximum depth that the new subtrees being inserted into the
 	 * program may be.
-	 *  
+	 * 
 	 * @return an int which is the maximum subtree depth that will be generated.
 	 */
 	public int getMaxSubtreeDepth() {
 		return maxSubtreeDepth;
 	}
-	
+
 	/**
-	 * Sets the maximum depth to use for new subtrees being inserted into 
+	 * Sets the maximum depth to use for new subtrees being inserted into
 	 * programs by this mutation.
 	 * 
 	 * @param maxSubtreeDepth the maximum subtree depth to use for new subtrees.
 	 */
-	public void setMaxSubtreeDepth(int maxSubtreeDepth) {
+	public void setMaxSubtreeDepth(final int maxSubtreeDepth) {
 		this.maxSubtreeDepth = maxSubtreeDepth;
-		
+
 		grower.setMaxDepth(maxSubtreeDepth);
 	}
 }

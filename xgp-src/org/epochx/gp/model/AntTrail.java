@@ -61,8 +61,7 @@ public abstract class AntTrail extends GPModel {
 	 * @param allowedTimeSteps the number of moves and turns the ant will be
 	 *        allowed to collect the food before timing out.
 	 */
-	public AntTrail(final Point[] foodLocations, final Dimension landscapeSize,
-			final int allowedTimeSteps) {
+	public AntTrail(final Point[] foodLocations, final Dimension landscapeSize, final int allowedTimeSteps) {
 		this.foodLocations = Arrays.asList(foodLocations);
 		this.allowedTimeSteps = allowedTimeSteps;
 
@@ -78,7 +77,7 @@ public abstract class AntTrail extends GPModel {
 		syntax.add(new AntMoveFunction(ant));
 		syntax.add(new AntTurnLeftFunction(ant));
 		syntax.add(new AntTurnRightFunction(ant));
-		//syntax.add(antVariable);
+		// syntax.add(antVariable);
 
 		setSyntax(syntax);
 	}
@@ -116,7 +115,7 @@ public abstract class AntTrail extends GPModel {
 	public AntLandscape getAntLandScape() {
 		return landscape;
 	}
-	
+
 	@Override
 	public Class<?> getReturnType() {
 		return Void.class;

@@ -96,34 +96,31 @@ public class CrossoverManagerTest {
 		model.getProgramSelector().setSelectionPool(pop);
 
 		// Listen for the crossver.
-		Life.get().addCrossoverListener(
-				new CrossoverListener() {
+		Life.get().addCrossoverListener(new CrossoverListener() {
 
-					@Override
-					public void onCrossoverStart() {
-						verify.append('1');
-					}
+			@Override
+			public void onCrossoverStart() {
+				verify.append('1');
+			}
 
-					@Override
-					public void onCrossoverEnd() {
-						verify.append('3');
-					}
+			@Override
+			public void onCrossoverEnd() {
+				verify.append('3');
+			}
 		});
 		Life.get().addHook(new AbstractHook() {
+
 			@Override
-			public CandidateProgram[] crossoverHook(
-					final CandidateProgram[] parents,
-					final CandidateProgram[] children) {
+			public CandidateProgram[] crossoverHook(final CandidateProgram[] parents, final CandidateProgram[] children) {
 				verify.append('2');
 				return children;
 			}
 		});
-		
+
 		Life.get().fireConfigureEvent();
 		crossoverManager.crossover();
 
-		assertEquals("crossover events were not called in the correct order",
-				"123", verify.toString());
+		assertEquals("crossover events were not called in the correct order", "123", verify.toString());
 	}
 
 	/**
@@ -144,10 +141,9 @@ public class CrossoverManagerTest {
 
 		// Listen for the generation.
 		Life.get().addHook(new AbstractHook() {
+
 			@Override
-			public CandidateProgram[] crossoverHook(
-					final CandidateProgram[] parents,
-					final CandidateProgram[] children) {
+			public CandidateProgram[] crossoverHook(final CandidateProgram[] parents, final CandidateProgram[] children) {
 				verify.append('2');
 				// Revert 3 times before confirming.
 				if (count == 3) {
@@ -162,7 +158,6 @@ public class CrossoverManagerTest {
 		Life.get().fireConfigureEvent();
 		crossoverManager.crossover();
 
-		assertEquals("crossover operation was not correctly reverted", "2222",
-				verify.toString());
+		assertEquals("crossover operation was not correctly reverted", "2222", verify.toString());
 	}
 }

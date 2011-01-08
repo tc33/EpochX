@@ -112,19 +112,18 @@ public class MutationManagerTest {
 			}
 		});
 		Life.get().addHook(new AbstractHook() {
+
 			@Override
-			public CandidateProgram mutationHook(final CandidateProgram parent,
-					final CandidateProgram child) {
+			public CandidateProgram mutationHook(final CandidateProgram parent, final CandidateProgram child) {
 				verify.append('2');
 				return child;
 			}
 		});
-		
+
 		Life.get().fireConfigureEvent();
 		mutationManager.mutate();
 
-		assertEquals("mutation events were not called in the correct order",
-				"123", verify.toString());
+		assertEquals("mutation events were not called in the correct order", "123", verify.toString());
 	}
 
 	/**
@@ -146,9 +145,9 @@ public class MutationManagerTest {
 
 		// Listen for the generation.
 		Life.get().addHook(new AbstractHook() {
+
 			@Override
-			public CandidateProgram mutationHook(final CandidateProgram parent,
-					final CandidateProgram child) {
+			public CandidateProgram mutationHook(final CandidateProgram parent, final CandidateProgram child) {
 				verify.append('2');
 				// Revert 3 times before confirming.
 				if (count == 3) {
@@ -163,7 +162,6 @@ public class MutationManagerTest {
 		Life.get().fireConfigureEvent();
 		mutationManager.mutate();
 
-		assertEquals("mutation operation was not correctly reverted", "2222",
-				verify.toString());
+		assertEquals("mutation operation was not correctly reverted", "2222", verify.toString());
 	}
 }

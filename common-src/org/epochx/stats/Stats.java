@@ -29,60 +29,54 @@ import org.epochx.life.*;
 /**
  * Gathers data and statistics about events that occur during execution of the
  * given <code>Model</code> and makes them available for use. Any component may
- * add data into the <code>Stats</code> by using the <code>addData</code> 
- * method. The <code>Stats</code> manager will also make requests of 
+ * add data into the <code>Stats</code> by using the <code>addData</code>
+ * method. The <code>Stats</code> manager will also make requests of
  * <code>Stat</code> objects to generate the statistic and then
  * stash the results internally. The data that is stored will only be held for
  * until the next occurrence of the <code>ExpiryEvent</code> of the Stat.
  * 
  * <p>
- * To print to a file use the <code>printToStream</code> method, passing in a 
+ * To print to a file use the <code>printToStream</code> method, passing in a
  * suitable <code>OutputStream</code> such as <code>FileOutputStream</code>.
  */
 public class Stats {
-	
+
 	// Singleton instance.
 	private static Stats instance;
-	
+
 	// Map of all stats data, by event at which they should be cleared.
 	private final Map<ExpiryEvent, Map<Stat, Object>> data;
 
 	/**
-	 * Possible events at which statistics fields can be considered expired. 
+	 * Possible events at which statistics fields can be considered expired.
 	 * Each one refers to the start of the next occurrence of that event. For
 	 * example, all fields with an expiry of <code>ExpiryEvent.RUN</code> will
 	 * be cleared on the start of the next run.
 	 */
 	public enum ExpiryEvent {
-		RUN, 
-		GENERATION, 
-		INITIALISATION, 
-		ELITISM, 
-		POOL_SELECTION, 
-		CROSSOVER, 
-		MUTATION, 
-		REPRODUCTION
+		RUN, GENERATION, INITIALISATION, ELITISM, POOL_SELECTION, CROSSOVER, MUTATION, REPRODUCTION
 	}
-	
+
 	/*
 	 * Constructs a <code>Stats</code> - this class uses the singleton pattern
-	 * so this constructor is private. An instance can be obtained using the 
+	 * so this constructor is private. An instance can be obtained using the
 	 * get() method.
 	 */
 	private Stats() {
 		// Setup the stats manager.
 		data = new HashMap<ExpiryEvent, Map<Stat, Object>>();
-		
-		// Construct a map for each event now because will only be needed to be done later.
-		ExpiryEvent[] events = ExpiryEvent.values();
-		for (ExpiryEvent e: events) {
+
+		// Construct a map for each event now because will only be needed to be
+		// done later.
+		final ExpiryEvent[] events = ExpiryEvent.values();
+		for (final ExpiryEvent e: events) {
 			data.put(e, new HashMap<Stat, Object>());
 		}
-		
+
 		// Setup listeners to clear stats at appropriate times.
 		setupListeners();
 	}
-	
+
 	/**
 	 * Returns the singleton instance of Stats.
 	 * 
@@ -97,9 +91,9 @@ public class Stats {
 
 	/**
 	 * Inserts an item of data about a run into the stats manager
-	 * associated with the given field key. If data is already stored against 
+	 * associated with the given field key. If data is already stored against
 	 * the given field then it will be overwritten. The value will be cleared
-	 * upon the appropriate event as designated by the given stat field's 
+	 * upon the appropriate event as designated by the given stat field's
 	 * <code>getExpiryEvent</code> method.
 	 * 
 	 * @param field the key to associate with the given data value.
@@ -110,10 +104,10 @@ public class Stats {
 	}
 
 	/**
-	 * Retrieves the statistic data associated with the provided field in the 
+	 * Retrieves the statistic data associated with the provided field in the
 	 * stats being stored. If a value for the stat field is not currently held
-	 * then the <code>getStatValue</code> method on the Stat will be called, 
-	 * with the resulting value returned from this method and also stored for 
+	 * then the <code>getStatValue</code> method on the Stat will be called,
+	 * with the resulting value returned from this method and also stored for
 	 * future requests.
 	 * 
 	 * <p>
@@ -132,7 +126,7 @@ public class Stats {
 		// If stat not stored then ask the stat if it can generate the value.
 		if (value == null) {
 			value = field.getStatValue();
-			
+
 			if (value != null) {
 				addData(field, value);
 			}
@@ -165,11 +159,11 @@ public class Stats {
 	}
 
 	/**
-	 * Retrieve and print to the standard output the sequence of statistics 
+	 * Retrieve and print to the standard output the sequence of statistics
 	 * referenced by the given fields. The statistics will be obtained according
-	 * to the contract specified by the <code>getStats(Stat[])</code> method. 
-	 * The result of calling the <code>toString()</code> method on each 
-	 * statistic object returned will be printed separated by a '\t' tab 
+	 * to the contract specified by the <code>getStats(Stat[])</code> method.
+	 * The result of calling the <code>toString()</code> method on each
+	 * statistic object returned will be printed separated by a '\t' tab
 	 * character, and the line terminated with a '\n' newline character.
 	 * 
 	 * @param fields the Stat fields to print out.
@@ -179,12 +173,12 @@ public class Stats {
 	}
 
 	/**
-	 * Retrieve and print to the standard output the sequence of statistics 
+	 * Retrieve and print to the standard output the sequence of statistics
 	 * referenced by the given fields. The statistics will be obtained according
-	 * to the contract specified by the <code>getStats(Stat[])</code> method. 
-	 * The result of calling the <code>toString()</code> method on each 
-	 * statistic object returned will be printed separated by the 
-	 * <code>separator</code> <code>String</code> parameter provided, and the 
+	 * to the contract specified by the <code>getStats(Stat[])</code> method.
+	 * The result of calling the <code>toString()</code> method on each
+	 * statistic object returned will be printed separated by the
+	 * <code>separator</code> <code>String</code> parameter provided, and the
 	 * line terminated with a '\n' newline character.
 	 * 
 	 * @param fields the Stat fields to print out.
@@ -195,13 +189,13 @@ public class Stats {
 
 		printArray(System.out, stats, separator);
 	}
-	
+
 	/**
-	 * Retrieve and print to an output stream the sequence of statistics 
+	 * Retrieve and print to an output stream the sequence of statistics
 	 * referenced by the given fields. The statistics will be obtained according
-	 * to the contract specified by the <code>getStats(Stat[])</code> method. 
-	 * The result of calling the <code>toString()</code> method on each 
-	 * statistic object returned will be printed separated by a '\t' tab 
+	 * to the contract specified by the <code>getStats(Stat[])</code> method.
+	 * The result of calling the <code>toString()</code> method on each
+	 * statistic object returned will be printed separated by a '\t' tab
 	 * character, and the line terminated with a '\n' newline character.
 	 * 
 	 * @param out the OutputStream to print to.
@@ -212,12 +206,12 @@ public class Stats {
 	}
 
 	/**
-	 * Retrieve and print to an output stream the sequence of statistics 
+	 * Retrieve and print to an output stream the sequence of statistics
 	 * referenced by the given fields. The statistics will be obtained according
-	 * to the contract specified by the <code>getStats(Stat[])</code> method. 
-	 * The result of calling the <code>toString()</code> method on each 
-	 * statistic object returned will be printed separated by the 
-	 * <code>separator</code> <code>String</code> parameter provided, and the 
+	 * to the contract specified by the <code>getStats(Stat[])</code> method.
+	 * The result of calling the <code>toString()</code> method on each
+	 * statistic object returned will be printed separated by the
+	 * <code>separator</code> <code>String</code> parameter provided, and the
 	 * line terminated with a '\n' newline character.
 	 * 
 	 * @param out the OutputStream to print to.
@@ -229,13 +223,13 @@ public class Stats {
 
 		printArray(out, stats, separator);
 	}
-	
+
 	/*
 	 * Print each element of the given array separated by the provided separator
 	 * character followed by a new line character.
 	 */
 	private static void printArray(final OutputStream outputStream, final Object[] array, final String separator) {
-		PrintStream out = new PrintStream(outputStream);
+		final PrintStream out = new PrintStream(outputStream);
 		for (int i = 0; i < array.length; i++) {
 			if (i != 0) {
 				out.print(separator);
@@ -245,7 +239,7 @@ public class Stats {
 		out.println();
 		out.flush();
 	}
-	
+
 	/*
 	 * Listen for life cycle events and if they happen then clear appropriate
 	 * old data out of the data maps.
@@ -253,6 +247,7 @@ public class Stats {
 	private void setupListeners() {
 		// Clear the run data.
 		Life.get().addRunListener(new RunAdapter() {
+
 			@Override
 			public void onRunStart() {
 				data.get(ExpiryEvent.RUN).clear();
@@ -261,6 +256,7 @@ public class Stats {
 
 		// Clear the generation data.
 		Life.get().addGenerationListener(new GenerationAdapter() {
+
 			@Override
 			public void onGenerationStart() {
 				data.get(ExpiryEvent.GENERATION).clear();
@@ -269,46 +265,52 @@ public class Stats {
 
 		// Clear the initialisation data.
 		Life.get().addInitialisationListener(new InitialisationAdapter() {
+
 			@Override
 			public void onInitialisationStart() {
 				data.get(ExpiryEvent.INITIALISATION).clear();
 			}
 		});
-		
+
 		// Clear the elitism data.
 		Life.get().addElitismListener(new ElitismAdapter() {
+
 			@Override
 			public void onElitismStart() {
 				data.get(ExpiryEvent.INITIALISATION).clear();
 			}
 		});
-		
+
 		// Clear the elitism data.
 		Life.get().addElitismListener(new ElitismAdapter() {
+
 			@Override
 			public void onElitismStart() {
 				data.get(ExpiryEvent.ELITISM).clear();
 			}
 		});
-		
+
 		// Clear the pool selection data.
 		Life.get().addPoolSelectionListener(new PoolSelectionAdapter() {
+
 			@Override
 			public void onPoolSelectionStart() {
 				data.get(ExpiryEvent.POOL_SELECTION).clear();
 			}
 		});
-		
+
 		// Clear the crossover data.
 		Life.get().addCrossoverListener(new CrossoverAdapter() {
+
 			@Override
 			public void onCrossoverStart() {
 				data.get(ExpiryEvent.CROSSOVER).clear();
 			}
 		});
-		
+
 		// Clear the mutation data.
 		Life.get().addMutationListener(new MutationAdapter() {
+
 			@Override
 			public void onMutationStart() {
 				data.get(ExpiryEvent.MUTATION).clear();

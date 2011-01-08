@@ -21,7 +21,6 @@
  */
 package org.epochx.life;
 
-
 import org.epochx.core.GenerationManager;
 
 /**
@@ -29,7 +28,8 @@ import org.epochx.core.GenerationManager;
  * generation events. See the {@link GenerationManager}'s class documentation
  * for details of when each generation event will be fired. To listen for
  * generation events during execution of a model, instances of
- * <code>GenerationListener</code> must be added to the <code>Life</code> instance 
+ * <code>GenerationListener</code> must be added to the <code>Life</code>
+ * instance
  * which is retrievable through a call to the static <code>get()</code> method.
  * 
  * <p>

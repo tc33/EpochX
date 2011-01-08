@@ -49,15 +49,10 @@ public abstract class AbstractCandidateProgramTestCase {
 		p1.setFitness(0.0);
 		p2.setFitness(1.0);
 
-		assertTrue(
-				"comparing against worse program does not return a positive integer",
-				p1.compareTo(p2) > 0);
-		assertTrue(
-				"comparing against a better program does not return a negative integer",
-				p2.compareTo(p1) < 0);
+		assertTrue("comparing against worse program does not return a positive integer", p1.compareTo(p2) > 0);
+		assertTrue("comparing against a better program does not return a negative integer", p2.compareTo(p1) < 0);
 
 		p1.setFitness(1.0);
-		assertTrue("comparing equally fit programs does not return 0",
-				p1.compareTo(p2) == 0);
+		assertTrue("comparing equally fit programs does not return 0", p1.compareTo(p2) == 0);
 	}
 }

@@ -23,7 +23,7 @@ package org.epochx.gp.op.mutation;
 
 import java.util.*;
 
-import org.epochx.epox.*;
+import org.epochx.epox.Node;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.op.ConfigOperator;
@@ -56,7 +56,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * If the <code>getModel</code> method returns <code>null</code> then no model
  * is set and whatever static parameters have been set as parameters to the
  * constructor or using the standard accessor methods will be used. If any
- * compulsory parameters remain unset when the mutation is performed then an 
+ * compulsory parameters remain unset when the mutation is performed then an
  * <code>IllegalStateException</code> will be thrown.
  * 
  * @see SubtreeMutation
@@ -68,7 +68,7 @@ public class PointMutation extends ConfigOperator<GPModel> implements GPMutation
 	 * modified as a result of the point mutation operation.
 	 */
 	public static final Stat MUT_POINTS = new AbstractStat(ExpiryEvent.MUTATION) {};
-	
+
 	private List<Node> syntax;
 
 	private RandomNumberGenerator rng;
@@ -79,16 +79,16 @@ public class PointMutation extends ConfigOperator<GPModel> implements GPMutation
 	/**
 	 * Constructs a <code>PointMutation</code>.
 	 * 
-	 * @param rng 
+	 * @param rng
 	 * @param syntax
 	 */
-	public PointMutation(final RandomNumberGenerator rng, List<Node> syntax, final double pointProbability) {
+	public PointMutation(final RandomNumberGenerator rng, final List<Node> syntax, final double pointProbability) {
 		this(null, pointProbability);
-		
+
 		this.rng = rng;
 		this.syntax = syntax;
 	}
-	
+
 	/**
 	 * Construct a point mutation with a default point probability of 0.01. It
 	 * is generally recommended that the PointMutation(GPModel, double)
@@ -111,7 +111,7 @@ public class PointMutation extends ConfigOperator<GPModel> implements GPMutation
 	 */
 	public PointMutation(final GPModel model, final double pointProbability) {
 		super(model);
-		
+
 		this.pointProbability = pointProbability;
 	}
 
@@ -140,8 +140,8 @@ public class PointMutation extends ConfigOperator<GPModel> implements GPMutation
 	public GPCandidateProgram mutate(final CandidateProgram p) {
 		final GPCandidateProgram program = (GPCandidateProgram) p;
 
-		List<Integer> points = new ArrayList<Integer>();
-		
+		final List<Integer> points = new ArrayList<Integer>();
+
 		// Iterate over each node in the program tree.
 		final int length = program.getProgramLength();
 		for (int i = 0; i < length; i++) {
@@ -152,12 +152,12 @@ public class PointMutation extends ConfigOperator<GPModel> implements GPMutation
 				final int arity = node.getArity();
 
 				// Find compatible replacements.
-				List<Node> replacements = getReplacements(node);
+				final List<Node> replacements = getReplacements(node);
 				if (!replacements.isEmpty()) {
 					// Randomly choose a replacement.
 					Node replacement = replacements.get(rng.nextInt(replacements.size()));
 					replacement = replacement.newInstance();
-					
+
 					// Attach the old node's children.
 					for (int k = 0; k < arity; k++) {
 						replacement.setChild(k, node.getChild(k));
@@ -168,40 +168,42 @@ public class PointMutation extends ConfigOperator<GPModel> implements GPMutation
 					// Record the index of the node that we changed.
 					points.add(i);
 				}
-				// If no replacements then we fall out the bottom and consider the next node.
+				// If no replacements then we fall out the bottom and consider
+				// the next node.
 			}
 		}
-		
+
 		// Add mutation points into the stats manager.
 		Stats.get().addData(MUT_POINTS, points);
 
 		return program;
 	}
-	
-	private List<Node> getReplacements(Node n) {
-		int arity = n.getArity();
-		
+
+	private List<Node> getReplacements(final Node n) {
+		final int arity = n.getArity();
+
 		// Get the return type.
-		//TODO Ideally this would be the parent's required argument type instead.
-		Class<?> returnType = n.getReturnType();
-		
+		// TODO Ideally this would be the parent's required argument type
+		// instead.
+		final Class<?> returnType = n.getReturnType();
+
 		// Get the data-type of children.
-		Class<?>[] argTypes = new Class<?>[arity];
-		for (int i=0; i<arity; i++) {
+		final Class<?>[] argTypes = new Class<?>[arity];
+		for (int i = 0; i < arity; i++) {
 			argTypes[i] = n.getChild(i).getClass();
 		}
-		
+
 		// Filter the syntax down to compatible replacements.
-		List<Node> replacements = new ArrayList<Node>();
-		for (Node replacement: syntax) {
-			if (replacement.getArity() == arity && !nodesEqual(replacement, n)) {
-				Class<?> replacementReturn = replacement.getReturnType(argTypes);
-				if (replacementReturn != null && returnType.isAssignableFrom(replacementReturn)) {
+		final List<Node> replacements = new ArrayList<Node>();
+		for (final Node replacement: syntax) {
+			if ((replacement.getArity() == arity) && !nodesEqual(replacement, n)) {
+				final Class<?> replacementReturn = replacement.getReturnType(argTypes);
+				if ((replacementReturn != null) && returnType.isAssignableFrom(replacementReturn)) {
 					replacements.add(replacement);
 				}
 			}
 		}
-		
+
 		return replacements;
 	}
 

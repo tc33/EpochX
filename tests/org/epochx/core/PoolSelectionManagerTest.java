@@ -105,8 +105,7 @@ public class PoolSelectionManagerTest {
 		Life.get().fireConfigureEvent();
 		try {
 			final List<CandidateProgram> pool = poolManager.getPool(pop);
-			assertSame("returned pool is not same as pop when pool size is -1",
-					pop, pool);
+			assertSame("returned pool is not same as pop when pool size is -1", pop, pool);
 		} catch (final Exception e) {
 			e.printStackTrace();
 			fail("exception thrown for pool selection with a pool size of -1");
@@ -126,9 +125,7 @@ public class PoolSelectionManagerTest {
 		Life.get().fireConfigureEvent();
 		try {
 			final List<CandidateProgram> pool = poolManager.getPool(pop);
-			assertSame(
-					"returned pool is not same as pop when pool selector is null",
-					pop, pool);
+			assertSame("returned pool is not same as pop when pool selector is null", pop, pool);
 		} catch (final Exception e) {
 			e.printStackTrace();
 			fail("exception thrown for pool selection with a pool selector of null");
@@ -169,6 +166,7 @@ public class PoolSelectionManagerTest {
 
 		// Listen for the crossver.
 		Life.get().addPoolSelectionListener(new PoolSelectionListener() {
+
 			@Override
 			public void onPoolSelectionStart() {
 				verify.append('1');
@@ -180,9 +178,9 @@ public class PoolSelectionManagerTest {
 			}
 		});
 		Life.get().addHook(new AbstractHook() {
+
 			@Override
-			public List<CandidateProgram> poolSelectionHook(
-					final List<CandidateProgram> pool) {
+			public List<CandidateProgram> poolSelectionHook(final List<CandidateProgram> pool) {
 				verify.append('2');
 				return pool;
 			}
@@ -190,9 +188,7 @@ public class PoolSelectionManagerTest {
 		Life.get().fireConfigureEvent();
 		poolManager.getPool(pop);
 
-		assertEquals(
-				"pool selection events were not called in the correct order",
-				"123", verify.toString());
+		assertEquals("pool selection events were not called in the correct order", "123", verify.toString());
 	}
 
 	/**
@@ -213,9 +209,9 @@ public class PoolSelectionManagerTest {
 
 		// Listen for the generation.
 		Life.get().addHook(new AbstractHook() {
+
 			@Override
-			public List<CandidateProgram> poolSelectionHook(
-					final List<CandidateProgram> pool) {
+			public List<CandidateProgram> poolSelectionHook(final List<CandidateProgram> pool) {
 				verify.append('2');
 				// Revert 3 times before confirming.
 				if (count == 3) {
@@ -230,8 +226,7 @@ public class PoolSelectionManagerTest {
 		Life.get().fireConfigureEvent();
 		poolManager.getPool(pop);
 
-		assertEquals("pool selection operation was not correctly reverted",
-				"2222", verify.toString());
+		assertEquals("pool selection operation was not correctly reverted", "2222", verify.toString());
 	}
 
 }

@@ -47,7 +47,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * If the <code>getModel</code> method returns <code>null</code> then no model
  * is set and whatever static parameters have been set as parameters to the
  * constructor or using the standard accessor methods will be used. If any
- * compulsory parameters remain unset when the crossover is performed then an 
+ * compulsory parameters remain unset when the crossover is performed then an
  * <code>IllegalStateException</code> will be thrown.
  * 
  * @see SubtreeCrossover
@@ -64,7 +64,7 @@ public class KozaCrossover extends SubtreeCrossover {
 	public KozaCrossover(final RandomNumberGenerator rng) {
 		this(rng, 0.9);
 	}
-	
+
 	/**
 	 * Constructs a <code>KozaCrossover</code>.
 	 * 
@@ -75,7 +75,7 @@ public class KozaCrossover extends SubtreeCrossover {
 	public KozaCrossover(final RandomNumberGenerator rng, final double functionSwapProbability) {
 		super(rng, functionSwapProbability);
 	}
-	
+
 	/**
 	 * Default constructor for Koza standard crossover. The probability of a
 	 * function node being selected as the swap point will default to 90%.

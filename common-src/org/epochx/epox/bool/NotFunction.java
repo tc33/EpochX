@@ -21,7 +21,7 @@
  */
 package org.epochx.epox.bool;
 
-import org.epochx.epox.*;
+import org.epochx.epox.Node;
 import org.epochx.tools.util.TypeUtils;
 
 /**
@@ -47,7 +47,7 @@ public class NotFunction extends Node {
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
-	 * result of which must be a <code>Boolean</code> instance. The result is 
+	 * result of which must be a <code>Boolean</code> instance. The result is
 	 * negated and returned as the result.
 	 */
 	@Override
@@ -62,18 +62,18 @@ public class NotFunction extends Node {
 	public String getIdentifier() {
 		return "NOT";
 	}
-	
+
 	/**
 	 * Returns this function node's return type for the given child input types.
 	 * If there is one child with a return type of Boolean, then the return type
-	 * of this function will also be Boolean. In all other cases this method 
+	 * of this function will also be Boolean. In all other cases this method
 	 * will return <code>null</code> to indicate that the inputs are invalid.
 	 * 
 	 * @return The Boolean class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (inputTypes.length == 1 && TypeUtils.allEqual(inputTypes, Boolean.class)) {
+	public Class<?> getReturnType(final Class<?> ... inputTypes) {
+		if ((inputTypes.length == 1) && TypeUtils.allEqual(inputTypes, Boolean.class)) {
 			return Boolean.class;
 		} else {
 			return null;

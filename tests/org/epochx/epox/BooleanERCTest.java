@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2010 Tom Castle & Lawrence Beadle
  * Licensed under GNU General Public License
  * 
@@ -24,8 +24,7 @@ package org.epochx.epox;
 import static org.junit.Assert.*;
 
 import org.epochx.tools.random.*;
-import org.junit.*;
-
+import org.junit.Test;
 
 /**
  * Unit tests for {@link org.epochx.epox.BooleanERC}
@@ -33,8 +32,8 @@ import org.junit.*;
 public class BooleanERCTest extends LiteralTest {
 
 	private BooleanERC erc;
-	private RandomNumberGenerator rng;	
-	
+	private RandomNumberGenerator rng;
+
 	/**
 	 * Sets up the test environment.
 	 */
@@ -42,40 +41,40 @@ public class BooleanERCTest extends LiteralTest {
 	public void setUp() throws Exception {
 		rng = new MersenneTwisterFast();
 		erc = new BooleanERC(rng);
-		
+
 		super.setUp();
 	}
 
 	/**
-	 * Tests that {@link org.epochx.epox.BooleanERC#newInstance()} correctly 
+	 * Tests that {@link org.epochx.epox.BooleanERC#newInstance()} correctly
 	 * constructs new instances.
 	 */
 	@Test
 	public void testNewInstanceBooleanERC() {
-		BooleanERC newInstance = erc.newInstance();
-		
+		final BooleanERC newInstance = erc.newInstance();
+
 		assertSame("rng does not refer to the same instance", rng, newInstance.getRNG());
 		assertNotSame("the value of new instance refers to the same object", erc.getValue(), newInstance.getValue());
 	}
 
 	/**
-	 * Tests that {@link org.epochx.epox.BooleanERC#generateValue()} correctly 
+	 * Tests that {@link org.epochx.epox.BooleanERC#generateValue()} correctly
 	 * generates new values.
 	 */
 	@Test
 	public void testGenerateValue() {
-		MockRandom rng = new MockRandom();
+		final MockRandom rng = new MockRandom();
 		erc.setRNG(rng);
-		
+
 		rng.setNextBoolean(true);
 		boolean generatedValue = erc.generateValue();
 		assertSame("generated value unexpected", true, generatedValue);
-		
+
 		rng.setNextBoolean(false);
 		generatedValue = erc.generateValue();
 		assertSame("generated value unexpected", false, generatedValue);
 	}
-	
+
 	/**
 	 * Tests that {@link org.epochx.epox.BooleanERC#generateValue()} throws an
 	 * exception if rng is null.
@@ -86,19 +85,19 @@ public class BooleanERCTest extends LiteralTest {
 		try {
 			erc.generateValue();
 			fail("exception not thrown for null RNG");
-		} catch (IllegalStateException expected) {
+		} catch (final IllegalStateException expected) {
 			assertTrue(true);
 		}
 	}
 
 	/**
-	 * Tests that {@link org.epochx.epox.Literal#clone()} correctly clones 
+	 * Tests that {@link org.epochx.epox.Literal#clone()} correctly clones
 	 * instances.
 	 */
 	@Test
 	public void testCloneBooleanERC() {
-		BooleanERC clone = (BooleanERC) erc.clone();
-		
+		final BooleanERC clone = (BooleanERC) erc.clone();
+
 		assertNotSame("ERC has not been cloned", erc, clone);
 		assertSame("rng does not refer to the same instance", rng, clone.getRNG());
 		assertSame("value does not refer to the same instance", erc.getValue(), clone.getValue());

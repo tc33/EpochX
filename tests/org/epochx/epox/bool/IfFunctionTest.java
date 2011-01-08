@@ -21,13 +21,12 @@
  */
 package org.epochx.epox.bool;
 
+import static org.junit.Assert.*;
+
 import org.epochx.epox.*;
 import org.epochx.epox.lang.IfFunction;
 import org.epochx.gp.representation.AbstractBooleanNodeTestCase;
-import org.junit.*;
-
-import static org.junit.Assert.*;
-
+import org.junit.Test;
 
 /**
  * 
@@ -46,8 +45,7 @@ public class IfFunctionTest extends AbstractBooleanNodeTestCase {
 		super.setUp();
 
 		ifFunction = (IfFunction) getNode();
-		final Node[] children = new Node[]{null, new Literal(true),
-				new Literal(false)};
+		final Node[] children = new Node[]{null, new Literal(true), new Literal(false)};
 		ifFunction.setChildren(children);
 	}
 

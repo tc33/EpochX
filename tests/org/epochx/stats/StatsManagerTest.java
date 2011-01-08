@@ -48,8 +48,7 @@ public class StatsManagerTest {
 	@Test
 	public void testRunStatNotFound() {
 		final Stat field = new AbstractStat(ExpiryEvent.RUN) {};
-		assertNull("null not returned for missing run stat",
-				stats.getStat(field));
+		assertNull("null not returned for missing run stat", stats.getStat(field));
 	}
 
 	/**
@@ -61,7 +60,6 @@ public class StatsManagerTest {
 		final Stat field = new AbstractStat(ExpiryEvent.RUN) {};
 		final String value = "value";
 		stats.addData(field, value);
-		assertSame("stats manager not storing run stats", value,
-				stats.getStat(field));
+		assertSame("stats manager not storing run stats", value, stats.getStat(field));
 	}
 }

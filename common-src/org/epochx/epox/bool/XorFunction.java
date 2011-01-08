@@ -21,7 +21,7 @@
  */
 package org.epochx.epox.bool;
 
-import org.epochx.epox.*;
+import org.epochx.epox.Node;
 import org.epochx.tools.util.TypeUtils;
 
 /**
@@ -48,9 +48,9 @@ public class XorFunction extends Node {
 	}
 
 	/**
-	 * Evaluates this function. Both child nodes are evaluated, the result of 
-	 * both must be a <code>Boolean</code> instance. The result of this 
-	 * function will be true if either (but not both) children evaluate to 
+	 * Evaluates this function. Both child nodes are evaluated, the result of
+	 * both must be a <code>Boolean</code> instance. The result of this
+	 * function will be true if either (but not both) children evaluate to
 	 * true, otherwise the result will be false.
 	 */
 	@Override
@@ -68,19 +68,19 @@ public class XorFunction extends Node {
 	public String getIdentifier() {
 		return "XOR";
 	}
-	
+
 	/**
 	 * Returns this function node's return type for the given child input types.
-	 * If there are two children, both of which have a return type of Boolean, 
-	 * then the return type of this function will also be Boolean. In all other 
-	 * cases this method will return <code>null</code> to indicate that the 
+	 * If there are two children, both of which have a return type of Boolean,
+	 * then the return type of this function will also be Boolean. In all other
+	 * cases this method will return <code>null</code> to indicate that the
 	 * inputs are invalid.
 	 * 
 	 * @return The Boolean class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(Class<?> ... inputTypes) {
-		if (inputTypes.length == 2 && TypeUtils.allEqual(inputTypes, Boolean.class)) {
+	public Class<?> getReturnType(final Class<?> ... inputTypes) {
+		if ((inputTypes.length == 2) && TypeUtils.allEqual(inputTypes, Boolean.class)) {
 			return Boolean.class;
 		} else {
 			return null;

@@ -28,7 +28,8 @@ import org.epochx.core.InitialisationManager;
  * events. See the {@link InitialisationManager}'s class documentation for
  * details of when each initialisation event will be fired. To listen for
  * initialisation events during execution of a model, instances of
- * <code>InitialisationListener</code> must be added to the <code>Life</code> instance 
+ * <code>InitialisationListener</code> must be added to the <code>Life</code>
+ * instance
  * which is retrievable through a call to the static <code>get()</code> method.
  * 
  * <p>

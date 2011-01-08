@@ -47,7 +47,6 @@ public interface GECrossover extends Crossover {
 	 *         an exchange of genetic material between the two parents.
 	 */
 	@Override
-	public GECandidateProgram[] crossover(CandidateProgram parent1,
-			CandidateProgram parent2);
+	public GECandidateProgram[] crossover(CandidateProgram parent1, CandidateProgram parent2);
 
 }

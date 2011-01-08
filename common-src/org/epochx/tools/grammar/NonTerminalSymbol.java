@@ -65,8 +65,7 @@ public class NonTerminalSymbol implements Symbol {
 	 *        the grammar
 	 *        rule.
 	 */
-	public NonTerminalSymbol(final GrammarRule grammarRule,
-			final List<Symbol> children) {
+	public NonTerminalSymbol(final GrammarRule grammarRule, final List<Symbol> children) {
 		this.grammarRule = grammarRule;
 		this.children = children;
 	}
@@ -165,8 +164,7 @@ public class NonTerminalSymbol implements Symbol {
 		// Count all the non-terminals below each child.
 		for (final Symbol child: children) {
 			if (child instanceof NonTerminalSymbol) {
-				noNonTerminals += ((NonTerminalSymbol) child)
-						.getNoNonTerminalSymbols();
+				noNonTerminals += ((NonTerminalSymbol) child).getNoNonTerminalSymbols();
 			}
 		}
 
@@ -196,15 +194,14 @@ public class NonTerminalSymbol implements Symbol {
 		int noNonTerminals = 0;
 
 		// Start by adding self.
-		if (this.getGrammarRule().equals(rule)) {
+		if (getGrammarRule().equals(rule)) {
 			noNonTerminals++;
 		}
 
 		// Count all the non-terminals below each child.
 		for (final Symbol child: children) {
 			if (child instanceof NonTerminalSymbol) {
-				noNonTerminals += ((NonTerminalSymbol) child)
-						.getNoNonTerminalSymbols(rule);
+				noNonTerminals += ((NonTerminalSymbol) child).getNoNonTerminalSymbols(rule);
 			}
 		}
 
@@ -228,8 +225,7 @@ public class NonTerminalSymbol implements Symbol {
 			if (child instanceof TerminalSymbol) {
 				noTerminals++;
 			} else if (child instanceof NonTerminalSymbol) {
-				noTerminals += ((NonTerminalSymbol) child)
-						.getNoTerminalSymbols();
+				noTerminals += ((NonTerminalSymbol) child).getNoTerminalSymbols();
 			}
 		}
 
@@ -293,8 +289,7 @@ public class NonTerminalSymbol implements Symbol {
 	/*
 	 * Recursive helper method for the removeNthNonTerminal method.
 	 */
-	private NonTerminalSymbol removeNthNonTerminal(final int n, int current,
-			final GrammarRule rule) {
+	private NonTerminalSymbol removeNthNonTerminal(final int n, int current, final GrammarRule rule) {
 		for (int i = 0; i < children.size(); i++) {
 			final Symbol child = children.get(i);
 
@@ -310,8 +305,7 @@ public class NonTerminalSymbol implements Symbol {
 					// It is this child.
 					return (NonTerminalSymbol) removeChild(i);
 				} else {
-					final NonTerminalSymbol nth = nt.removeNthNonTerminal(n,
-							(valid ? current + 1 : current), rule);
+					final NonTerminalSymbol nth = nt.removeNthNonTerminal(n, (valid ? current + 1 : current), rule);
 
 					if (nth != null) {
 						return nth;
@@ -343,8 +337,7 @@ public class NonTerminalSymbol implements Symbol {
 	 * @return the <code>NonTerminalSymbol</code> that was removed, or
 	 *         <code>null</code> if none were removed.
 	 */
-	public NonTerminalSymbol removeNthNonTerminal(final int n,
-			final GrammarRule grammarRule) {
+	public NonTerminalSymbol removeNthNonTerminal(final int n, final GrammarRule grammarRule) {
 		return removeNthNonTerminal(n, 0, grammarRule);
 	}
 
@@ -374,8 +367,7 @@ public class NonTerminalSymbol implements Symbol {
 			if (child instanceof NonTerminalSymbol) {
 				final NonTerminalSymbol nt = (NonTerminalSymbol) child;
 
-				final NonTerminalSymbol nth = nt.getNthNonTerminal(n,
-						current + 1);
+				final NonTerminalSymbol nth = nt.getNthNonTerminal(n, current + 1);
 
 				if (nth != null) {
 					return nth;
@@ -387,11 +379,11 @@ public class NonTerminalSymbol implements Symbol {
 
 		return null;
 	}
-	
+
 	/**
 	 * Returns the nth terminal from the parse tree rooted at this
-	 * <code>NonTerminalSymbol</code>. Indexing starts at zero and proceeds 
-	 * according to the order that terminals are met while performing a 
+	 * <code>NonTerminalSymbol</code>. Indexing starts at zero and proceeds
+	 * according to the order that terminals are met while performing a
 	 * pre-order traversal of the tree from this symbol.
 	 * 
 	 * @param n the index of the terminal to return.
@@ -399,8 +391,8 @@ public class NonTerminalSymbol implements Symbol {
 	 *         tree.
 	 */
 	public TerminalSymbol getNthTerminal(final int n) {
-		List<TerminalSymbol> terminals = getTerminalSymbols();
-		
+		final List<TerminalSymbol> terminals = getTerminalSymbols();
+
 		return terminals.get(n);
 	}
 
@@ -476,8 +468,7 @@ public class NonTerminalSymbol implements Symbol {
 			}
 
 			if (children.get(i) instanceof NonTerminalSymbol) {
-				final NonTerminalSymbol child = (NonTerminalSymbol) children
-						.get(i);
+				final NonTerminalSymbol child = (NonTerminalSymbol) children.get(i);
 				final int noChildSymbols = child.getNoSymbols();
 
 				// Only look at the subtree if it contains the right range of
@@ -510,8 +501,7 @@ public class NonTerminalSymbol implements Symbol {
 		// Add all the non-terminals below each child.
 		for (final Symbol child: children) {
 			if (child instanceof NonTerminalSymbol) {
-				nonTerminals.addAll(((NonTerminalSymbol) child)
-						.getNonTerminalSymbols());
+				nonTerminals.addAll(((NonTerminalSymbol) child).getNonTerminalSymbols());
 			}
 		}
 
@@ -569,8 +559,7 @@ public class NonTerminalSymbol implements Symbol {
 			if (child instanceof TerminalSymbol) {
 				terminals.add((TerminalSymbol) child);
 			} else if (child instanceof NonTerminalSymbol) {
-				terminals.addAll(((NonTerminalSymbol) child)
-						.getTerminalSymbols());
+				terminals.addAll(((NonTerminalSymbol) child).getTerminalSymbols());
 			}
 		}
 
@@ -675,7 +664,7 @@ public class NonTerminalSymbol implements Symbol {
 		// Copy cloned child symbols.
 		clone.children = new ArrayList<Symbol>();
 		for (final Symbol c: children) {
-			clone.children.add((Symbol) c.clone());
+			clone.children.add(c.clone());
 		}
 
 		// Shallow copy the grammar rules.
@@ -703,10 +692,10 @@ public class NonTerminalSymbol implements Symbol {
 		if ((obj != null) && (obj instanceof NonTerminalSymbol)) {
 			final NonTerminalSymbol otherSymbol = (NonTerminalSymbol) obj;
 
-			if (this.getGrammarRule() == otherSymbol.getGrammarRule()) {
+			if (getGrammarRule() == otherSymbol.getGrammarRule()) {
 				for (int i = 0; i < children.size(); i++) {
 					final Symbol thatChild = otherSymbol.getChild(i);
-					final Symbol thisChild = this.getChild(i);
+					final Symbol thisChild = getChild(i);
 
 					if (!ObjectUtils.equals(thisChild, thatChild)) {
 						equal = false;

@@ -67,8 +67,7 @@ import java.io.*;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-public class MersenneTwisterFast implements Serializable, Cloneable,
-		RandomNumberGenerator {
+public class MersenneTwisterFast implements Serializable, Cloneable, RandomNumberGenerator {
 
 	/**
 	 * 
@@ -247,8 +246,7 @@ public class MersenneTwisterFast implements Serializable, Cloneable,
 
 	synchronized public void setSeed(final int[] array) {
 		if (array.length == 0) {
-			throw new IllegalArgumentException(
-					"Array length must be greater than zero");
+			throw new IllegalArgumentException("Array length must be greater than zero");
 		}
 		int i, j, k;
 		setSeed(19650218);
@@ -256,8 +254,10 @@ public class MersenneTwisterFast implements Serializable, Cloneable,
 		j = 0;
 		k = (N > array.length ? N : array.length);
 		for (; k != 0; k--) {
-			mt[i] = (mt[i] ^ ((mt[i - 1] ^ (mt[i - 1] >>> 30)) * 1664525))
-					+ array[j] + j; /* non linear */
+			mt[i] = (mt[i] ^ ((mt[i - 1] ^ (mt[i - 1] >>> 30)) * 1664525)) + array[j] + j; /*
+																							 * non
+																							 * linear
+																							 */
 			mt[i] &= 0xffffffff; /* for WORDSIZE > 32 machines */
 			i++;
 			j++;
@@ -270,8 +270,10 @@ public class MersenneTwisterFast implements Serializable, Cloneable,
 			}
 		}
 		for (k = N - 1; k != 0; k--) {
-			mt[i] = (mt[i] ^ ((mt[i - 1] ^ (mt[i - 1] >>> 30)) * 1566083941))
-					- i; /* non linear */
+			mt[i] = (mt[i] ^ ((mt[i - 1] ^ (mt[i - 1] >>> 30)) * 1566083941)) - i; /*
+																					 * non
+																					 * linear
+																					 */
 			mt[i] &= 0xffffffff; /* for WORDSIZE > 32 machines */
 			i++;
 			if (i >= N) {
@@ -427,8 +429,7 @@ public class MersenneTwisterFast implements Serializable, Cloneable,
 		int y;
 
 		if ((probability < 0.0f) || (probability > 1.0f)) {
-			throw new IllegalArgumentException(
-					"probability must be between 0.0 and 1.0 inclusive.");
+			throw new IllegalArgumentException("probability must be between 0.0 and 1.0 inclusive.");
 		}
 		if (probability == 0.0f) {
 			return false; // fix half-open issues
@@ -474,8 +475,7 @@ public class MersenneTwisterFast implements Serializable, Cloneable,
 		int z;
 
 		if ((probability < 0.0) || (probability > 1.0)) {
-			throw new IllegalArgumentException(
-					"probability must be between 0.0 and 1.0 inclusive.");
+			throw new IllegalArgumentException("probability must be between 0.0 and 1.0 inclusive.");
 		}
 		if (probability == 0.0) {
 			return false; // fix half-open issues
@@ -932,8 +932,7 @@ public class MersenneTwisterFast implements Serializable, Cloneable,
 				v2 = 2 * (((((long) (a >>> 6)) << 27) + (b >>> 5)) / (double) (1L << 53)) - 1;
 				s = v1 * v1 + v2 * v2;
 			} while ((s >= 1) || (s == 0));
-			final double multiplier = /* Strict */Math.sqrt(-2
-					* /* Strict */Math.log(s) / s);
+			final double multiplier = /* Strict */Math.sqrt(-2 * /* Strict */Math.log(s) / s);
 			__nextNextGaussian = v2 * multiplier;
 			__haveNextNextGaussian = true;
 			return v1 * multiplier;

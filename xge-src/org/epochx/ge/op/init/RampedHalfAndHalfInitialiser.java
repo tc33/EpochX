@@ -80,13 +80,13 @@ import org.epochx.tools.random.RandomNumberGenerator;
 public class RampedHalfAndHalfInitialiser extends ConfigOperator<GEModel> implements GEInitialiser {
 
 	/**
-	 * Requests an <code>boolean[]</code> which has one element per program 
-	 * initialised by this RH+H initialiser. A value of <code>true</code> 
+	 * Requests an <code>boolean[]</code> which has one element per program
+	 * initialised by this RH+H initialiser. A value of <code>true</code>
 	 * indicates the program was initialised with grow, and <code>false</code>
 	 * indicates full initialisation was used.
 	 */
 	public static final Stat INIT_GROWN = new AbstractStat(ExpiryEvent.INITIALISATION) {};
-	
+
 	// The grow and full instances for doing their share of the work.
 	private final GrowInitialiser grow;
 	private final FullInitialiser full;
@@ -108,21 +108,19 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GEModel> implem
 	 * Constructs a <code>RampedHalfAndHalfInitialiser</code> with all the
 	 * necessary parameters given.
 	 */
-	public RampedHalfAndHalfInitialiser(final RandomNumberGenerator rng,
-			final Grammar grammar, final int popSize, final int startMaxDepth,
-			final int endMaxDepth, final int maxCodonValue,
-			final boolean acceptDuplicates) {
+	public RampedHalfAndHalfInitialiser(final RandomNumberGenerator rng, final Grammar grammar, final int popSize,
+			final int startMaxDepth, final int endMaxDepth, final int maxCodonValue, final boolean acceptDuplicates) {
 		this(null, acceptDuplicates);
-		
+
 		this.endMaxDepth = endMaxDepth;
 		this.startMaxDepth = startMaxDepth;
 		this.grammar = grammar;
 		this.popSize = popSize;
-		
+
 		grow.setRNG(rng);
 		grow.setGrammar(grammar);
 		grow.setMaxCodonValue(maxCodonValue);
-		
+
 		full.setRNG(rng);
 		full.setGrammar(grammar);
 		full.setMaxCodonValue(maxCodonValue);
@@ -151,11 +149,10 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GEModel> implem
 	 * @param acceptDuplicates whether duplicates should be allowed in the
 	 *        populations that are generated.
 	 */
-	public RampedHalfAndHalfInitialiser(final GEModel model,
-			final boolean acceptDuplicates) {
+	public RampedHalfAndHalfInitialiser(final GEModel model, final boolean acceptDuplicates) {
 		this(model, -1, acceptDuplicates);
 	}
-	
+
 	/**
 	 * Construct a RampedHalfAndHalfInitialiser with the necessary
 	 * parameters loaded from the given model. The parameters are reloaded on
@@ -167,11 +164,10 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GEModel> implem
 	 *        generated
 	 *        to.
 	 */
-	public RampedHalfAndHalfInitialiser(final GEModel model,
-			final int startMaxDepth) {
+	public RampedHalfAndHalfInitialiser(final GEModel model, final int startMaxDepth) {
 		this(model, startMaxDepth, true);
 	}
-	
+
 	/**
 	 * Constructs a <code>RampedHalfAndHalfInitialiser</code> with the necessary
 	 * parameters loaded from the given model. The parameters are reloaded on
@@ -185,10 +181,9 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GEModel> implem
 	 * @param acceptDuplicates whether duplicates should be allowed in the
 	 *        populations that are generated.
 	 */
-	public RampedHalfAndHalfInitialiser(final GEModel model,
-			final int startMaxDepth, final boolean acceptDuplicates) {
+	public RampedHalfAndHalfInitialiser(final GEModel model, final int startMaxDepth, final boolean acceptDuplicates) {
 		super(model);
-		
+
 		this.startMaxDepth = startMaxDepth;
 		this.acceptDuplicates = acceptDuplicates;
 
@@ -217,15 +212,13 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GEModel> implem
 	@Override
 	public List<CandidateProgram> getInitialPopulation() {
 		if (popSize < 1) {
-			throw new IllegalStateException(
-					"Population size must be 1 or greater");
+			throw new IllegalStateException("Population size must be 1 or greater");
 		} else if (grammar == null) {
 			throw new IllegalStateException("No grammar has been set");
 		}
 
 		// Create population list to populate.
-		final List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(
-				popSize);
+		final List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
 
 		int startDepth = startMaxDepth;
 		final int minDepthPossible = grammar.getMinimumDepth();
@@ -236,22 +229,19 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GEModel> implem
 		}
 
 		if (endMaxDepth < startDepth) {
-			throw new IllegalStateException(
-					"End maximum depth must be greater than the minimum possible depth.");
+			throw new IllegalStateException("End maximum depth must be greater than the minimum possible depth.");
 		}
 
 		// Number of programs each depth SHOULD have. But won't unless remainder
 		// is 0.
-		final double programsPerDepth = (double) popSize
-				/ (endMaxDepth - startDepth + 1);
+		final double programsPerDepth = (double) popSize / (endMaxDepth - startDepth + 1);
 
 		// Whether each program was grown or not (full).
-		boolean[] grown = new boolean[popSize];
-		
+		final boolean[] grown = new boolean[popSize];
+
 		for (int i = 0; i < popSize; i++) {
 			// Calculate depth
-			final int depth = (int) Math
-					.floor((firstGen.size() / programsPerDepth) + startDepth);
+			final int depth = (int) Math.floor((firstGen.size() / programsPerDepth) + startDepth);
 
 			// Grow on even numbers, full on odd.
 			GECandidateProgram program;
@@ -269,7 +259,7 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GEModel> implem
 
 			firstGen.add(program);
 		}
-		
+
 		// Add the grown or full nature of all the programs.
 		Stats.get().addData(INIT_GROWN, grown);
 
@@ -419,7 +409,7 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GEModel> implem
 	 * @param maxCodonValue the maximum integer value that codons selected by
 	 *        this initialiser should take.
 	 */
-	public void setMaxCodonValue(int maxCodonValue) {
+	public void setMaxCodonValue(final int maxCodonValue) {
 		grow.setMaxCodonValue(maxCodonValue);
 		full.setMaxCodonValue(maxCodonValue);
 	}

@@ -199,8 +199,7 @@ public class InitialisationManager implements ConfigListener {
 		// Store the stats data from the initialisation.
 		Stats.get().addData(INIT_REVERSIONS, reversions);
 		Stats.get().addData(GEN_POP, pop);
-		Stats.get().addData(GEN_TIME,
-				(System.nanoTime() - startTime));
+		Stats.get().addData(GEN_TIME, (System.nanoTime() - startTime));
 
 		// Trigger life cycle events for end of initialisation and generation 0.
 		Life.get().fireInitialisationEndEvent();

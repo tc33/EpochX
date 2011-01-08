@@ -44,8 +44,8 @@ public class RubyInterpreter extends ScriptingInterpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object eval(final String expression, final String[] argNames,
-			final Object[] argValues) throws MalformedProgramException {
+	public Object eval(final String expression, final String[] argNames, final Object[] argValues)
+			throws MalformedProgramException {
 		final String code = getEvalCode(expression, argNames);
 
 		Object result = null;
@@ -67,8 +67,8 @@ public class RubyInterpreter extends ScriptingInterpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object[] eval(final String expression, final String[] argNames,
-			final Object[][] argValues) throws MalformedProgramException {
+	public Object[] eval(final String expression, final String[] argNames, final Object[][] argValues)
+			throws MalformedProgramException {
 		final Object[] results = new Object[argValues.length];
 
 		final String code = getEvalCode(expression, argNames);
@@ -79,8 +79,7 @@ public class RubyInterpreter extends ScriptingInterpreter {
 
 			// Evaluate each argument set.
 			for (int i = 0; i < results.length; i++) {
-				results[i] = invocableEngine.invokeFunction("expr",
-						argValues[i]);
+				results[i] = invocableEngine.invokeFunction("expr", argValues[i]);
 			}
 		} catch (final ScriptException ex) {
 			throw new MalformedProgramException();
@@ -95,8 +94,8 @@ public class RubyInterpreter extends ScriptingInterpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void exec(final String program, final String[] argNames,
-			final Object[] argValues) throws MalformedProgramException {
+	public void exec(final String program, final String[] argNames, final Object[] argValues)
+			throws MalformedProgramException {
 		final String code = getExecCode(program, argNames);
 
 		final Invocable invocableEngine = (Invocable) getEngine();
@@ -114,8 +113,8 @@ public class RubyInterpreter extends ScriptingInterpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void exec(final String program, final String[] argNames,
-			final Object[][] argValues) throws MalformedProgramException {
+	public void exec(final String program, final String[] argNames, final Object[][] argValues)
+			throws MalformedProgramException {
 		final String code = getExecCode(program, argNames);
 
 		final Invocable invocableEngine = (Invocable) getEngine();

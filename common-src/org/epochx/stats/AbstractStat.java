@@ -3,10 +3,12 @@ package org.epochx.stats;
 import org.epochx.stats.Stats.ExpiryEvent;
 
 /**
- * This class is an abstract implementation of Stat that allows a slightly 
+ * This class is an abstract implementation of Stat that allows a slightly
  * simpler inline syntax for implementing new Stats anonymously.
  * 
- * <p>For example:</p>
+ * <p>
+ * For example:
+ * </p>
  * 
  * <blockquote><code>
  * Stat s = new AbstractStat(RUN) {};
@@ -15,19 +17,19 @@ import org.epochx.stats.Stats.ExpiryEvent;
 public abstract class AbstractStat implements Stat {
 
 	// When this stat should be cleared from any caches.
-	private ExpiryEvent expiry;
-	
+	private final ExpiryEvent expiry;
+
 	/**
-	 * Constructs an <code>AbstractStat</code> to expire upon the given 
+	 * Constructs an <code>AbstractStat</code> to expire upon the given
 	 * expiry event.
 	 * 
 	 * @param expiry the event upon which the statistic should be cleared from
-	 * any caches.
+	 *        any caches.
 	 */
-	public AbstractStat(ExpiryEvent expiry) {
+	public AbstractStat(final ExpiryEvent expiry) {
 		this.expiry = expiry;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -35,7 +37,7 @@ public abstract class AbstractStat implements Stat {
 	public ExpiryEvent getExpiryEvent() {
 		return expiry;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */

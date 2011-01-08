@@ -46,8 +46,7 @@ public class GRCandidateProgram extends CandidateProgram {
 		this(null, model);
 	}
 
-	public GRCandidateProgram(final NonTerminalSymbol parseTree,
-			final GRModel model) {
+	public GRCandidateProgram(final NonTerminalSymbol parseTree, final GRModel model) {
 		this.model = model;
 		this.parseTree = parseTree;
 
@@ -118,7 +117,7 @@ public class GRCandidateProgram extends CandidateProgram {
 		if (parseTree == null) {
 			clone.parseTree = null;
 		} else {
-			clone.parseTree = (NonTerminalSymbol) parseTree.clone();
+			clone.parseTree = parseTree.clone();
 		}
 
 		// Copy the caches.
@@ -159,7 +158,7 @@ public class GRCandidateProgram extends CandidateProgram {
 		if (o instanceof GRCandidateProgram) {
 			final GRCandidateProgram prog = (GRCandidateProgram) o;
 
-			return prog.toString().equals(this.toString());
+			return prog.toString().equals(toString());
 		} else {
 			return false;
 		}

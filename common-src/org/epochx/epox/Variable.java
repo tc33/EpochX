@@ -93,7 +93,12 @@ public class Variable extends Node {
 	 * @return the data-type of this variable's value.
 	 */
 	@Override
-	public Class<?> getReturnType() {
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		// No inputs should be provided for a terminal.
+		if (inputTypes.length != 0) {
+			throw new IllegalArgumentException("variables have no input types");
+		}
+		
 		return datatype;
 	}
 
@@ -122,7 +127,13 @@ public class Variable extends Node {
 
 	/**
 	 * Variable objects cannot be cloned. Calls to this method will return a 
-	 * reference to this same instance. 
+	 * reference to this same instance. That is:
+	 * 
+	 * <pre>
+	 * x.clone() == x
+	 * <pre>
+	 * 
+	 * will be true. 
 	 * @return a reference to this variable instance.
 	 */
 	@Override

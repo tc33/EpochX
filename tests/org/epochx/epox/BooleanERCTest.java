@@ -30,7 +30,7 @@ import org.junit.*;
 /**
  * Unit tests for {@link org.epochx.epox.BooleanERC}
  */
-public class BooleanERCTest {
+public class BooleanERCTest extends LiteralTest {
 
 	private BooleanERC erc;
 	private RandomNumberGenerator rng;	
@@ -38,10 +38,12 @@ public class BooleanERCTest {
 	/**
 	 * Sets up the test environment.
 	 */
-	@Before
+	@Override
 	public void setUp() throws Exception {
 		rng = new MersenneTwisterFast();
 		erc = new BooleanERC(rng);
+		
+		super.setUp();
 	}
 
 	/**
@@ -49,7 +51,7 @@ public class BooleanERCTest {
 	 * constructs new instances.
 	 */
 	@Test
-	public void testNewInstance() {
+	public void testNewInstanceBooleanERC() {
 		BooleanERC newInstance = erc.newInstance();
 		
 		assertSame("rng does not refer to the same instance", rng, newInstance.getRNG());
@@ -94,7 +96,7 @@ public class BooleanERCTest {
 	 * instances.
 	 */
 	@Test
-	public void testClone() {
+	public void testCloneBooleanERC() {
 		BooleanERC clone = (BooleanERC) erc.clone();
 		
 		assertNotSame("ERC has not been cloned", erc, clone);

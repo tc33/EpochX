@@ -30,7 +30,7 @@ import org.junit.*;
 /**
  * Unit tests for {@link org.epochx.epox.DoubleERC}
  */
-public class DoubleERCTest {
+public class DoubleERCTest extends LiteralTest {
 
 	private DoubleERC erc;
 	private RandomNumberGenerator rng;
@@ -38,10 +38,12 @@ public class DoubleERCTest {
 	/**
 	 * Sets up the test environment.
 	 */
-	@Before
+	@Override
 	public void setUp() throws Exception {
 		rng = new MersenneTwisterFast();
 		erc = new DoubleERC(rng, 1.0, 2.0, 3);
+		
+		super.setUp();
 	}
 
 	/**
@@ -49,7 +51,7 @@ public class DoubleERCTest {
 	 * constructs new instances.
 	 */
 	@Test
-	public void testNewInstance() {
+	public void testNewInstanceDoubleERC() {
 		DoubleERC newInstance = erc.newInstance();
 		
 		assertSame("rng does not refer to the same instance", rng, newInstance.getRNG());
@@ -114,7 +116,7 @@ public class DoubleERCTest {
 	 * instances.
 	 */
 	@Test
-	public void testClone() {
+	public void testCloneDoubleERC() {
 		DoubleERC clone = (DoubleERC) erc.clone();
 		
 		assertNotSame("ERC has not been cloned", erc, clone);

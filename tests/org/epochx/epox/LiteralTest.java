@@ -29,18 +29,28 @@ import org.junit.*;
 /**
  * Unit tests for {@link org.epochx.epox.Literal}
  */
-public class LiteralTest {
+public class LiteralTest extends NodeTestCase {
 
 	private Literal literal;
 	private Object value;
 	
 	/**
+	 * Part of test fixture for superclass.
+	 */
+	@Override
+	protected Node getNode() {
+		return new Literal(new Object());
+	}
+	
+	/**
 	 * Sets up the test environment.
 	 */
-	@Before
+	@Override
 	public void setUp() throws Exception {
 		value = new Object();
 		literal = new Literal(value);
+		
+		super.setUp();
 	}
 	
 	/**
@@ -59,7 +69,7 @@ public class LiteralTest {
 	 * the class of the set value as the return type.
 	 */
 	@Test
-	public void testGetReturnType() {
+	public void testGetReturnTypeLiteral() {
 		String strValue = "";
 		literal.setValue(strValue);
 		Class<?> returnType = literal.getReturnType();
@@ -72,7 +82,7 @@ public class LiteralTest {
 	 * the class of the set value as the return type.
 	 */
 	@Test
-	public void testGetReturnTypeNull() {
+	public void testGetReturnTypeLiteralNull() {
 		literal.setValue(null);
 		Class<?> returnType = literal.getReturnType();
 		
@@ -84,7 +94,7 @@ public class LiteralTest {
 	 * instances.
 	 */
 	@Test
-	public void testClone() {
+	public void testCloneLiteral() {
 		Literal clone = literal.clone();
 		
 		assertNotSame("literal has not been cloned", literal, clone);
@@ -96,7 +106,7 @@ public class LiteralTest {
 	 * constructs new instances.
 	 */
 	@Test
-	public void testNewInstance() {
+	public void testNewInstanceLiteral() {
 		Literal newInstance = literal.newInstance();
 		
 		assertNotSame("literal has not been cloned", literal, newInstance);
@@ -108,7 +118,7 @@ public class LiteralTest {
 	 * string representation of the literal's value.
 	 */
 	@Test
-	public void testToString() {
+	public void testToStringLiteral() {
 		Object str = literal.toString();
 		
 		assertEquals("toString should be the values string representation", value.toString(), str);
@@ -131,7 +141,7 @@ public class LiteralTest {
 	 * <code>true</code> value if the two literals' values are equal.
 	 */
 	@Test
-	public void testEquals() {
+	public void testEqualsLiteral() {
 		String strValue = "test";
 		String strValueCopy = new String(strValue);
 		literal.setValue(strValue);
@@ -147,7 +157,7 @@ public class LiteralTest {
 	 * <code>false</code> value if the two literals' values are not equal.
 	 */
 	@Test
-	public void testEqualsFalse() {
+	public void testEqualsLiteralFalse() {
 		String strValue = "test";
 		literal.setValue(strValue);
 		

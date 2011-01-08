@@ -54,10 +54,19 @@ public class Literal extends Node {
 	 * is the type of its value. If no value has been set then <code>null</code>
 	 * will be returned.
 	 * 
+	 * @param inputTypes the data-types of the nodes inputs. Literal takes no 
+	 * inputs.
 	 * @return the data-type of this node.
+	 * @throws IllegalArgumentException if inputTypes parameter is anything 
+	 * other than empty.
 	 */
 	@Override
-	public Class<?> getReturnType() {
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		// No inputs should be provided for a terminal.
+		if (inputTypes.length != 0) {
+			throw new IllegalArgumentException("literals have no input types");
+		}
+		
 		if (value != null) {
 			return value.getClass();
 		} else {

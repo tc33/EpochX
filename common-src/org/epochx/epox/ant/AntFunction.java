@@ -57,22 +57,6 @@ public abstract class AntFunction extends Node {
 	}
 	
 	/**
-	 * 
-	 */
-	@Override
-	public Class<?> getReturnType() {
-		/*
-		 * TODO It may be possible to remove the need to override this in terminals,
-		 * see comment in notebook. In which case this will need removing.
-		 */
-		if (getArity() > 0) {
-			return super.getReturnType();
-		} else {
-			return Void.class;
-		}
-	}
-	
-	/**
 	 * Creates a new AntFunction instance which is a copy of this instance. 
 	 * Any child nodes will also be cloned, in order to create a new subtree.
 	 * If this node contains an internal Ant reference, then the new node will 

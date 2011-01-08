@@ -30,7 +30,7 @@ import org.junit.*;
 /**
  * Unit tests for {@link org.epochx.epox.IntegerERC}
  */
-public class IntegerERCTest {
+public class IntegerERCTest extends LiteralTest {
 
 	private IntegerERC erc;
 	private RandomNumberGenerator rng;
@@ -38,10 +38,12 @@ public class IntegerERCTest {
 	/**
 	 * Sets up the test environment.
 	 */
-	@Before
+	@Override
 	public void setUp() throws Exception {
 		rng = new MersenneTwisterFast();
 		erc = new IntegerERC(rng, 1, 2);
+		
+		super.setUp();
 	}
 
 	/**
@@ -49,7 +51,7 @@ public class IntegerERCTest {
 	 * constructs new instances.
 	 */
 	@Test
-	public void testNewInstance() {
+	public void testNewInstanceIntegerERC() {
 		IntegerERC newInstance = erc.newInstance();
 		
 		assertSame("rng does not refer to the same instance", rng, newInstance.getRNG());
@@ -108,7 +110,7 @@ public class IntegerERCTest {
 	 * instances.
 	 */
 	@Test
-	public void testClone() {
+	public void testCloneIntegerERC() {
 		IntegerERC clone = (IntegerERC) erc.clone();
 		
 		assertNotSame("ERC has not been cloned", erc, clone);

@@ -29,7 +29,7 @@ import org.junit.*;
 /**
  * Unit tests for {@link org.epochx.epox.Variable}
  */
-public class VariableTest {
+public class VariableTest extends NodeTestCase {
 
 	// Variable that has been initialised with a value.
 	private Variable varInit;
@@ -42,9 +42,17 @@ public class VariableTest {
 	private String varDeclName;
 	
 	/**
+	 * Part of test fixture for superclass.
+	 */
+	@Override
+	protected Node getNode() {
+		return new Variable("identifier", Object.class);
+	}
+	
+	/**
 	 * Sets up the test environment.
 	 */
-	@Before
+	@Override
 	public void setUp() throws Exception {
 		varInitName = "X";
 		varInitValue = new Integer(3);
@@ -53,6 +61,8 @@ public class VariableTest {
 		varDeclName = "Y";
 		varDeclType = Number.class;
 		varDecl = new Variable(varDeclName, varDeclType);
+		
+		super.setUp();
 	}
 	
 	/**
@@ -125,7 +135,7 @@ public class VariableTest {
 	 * returns the class of the set value as the return type.
 	 */
 	@Test
-	public void testGetReturnType() {
+	public void testGetReturnTypeVariable() {
 		Class<?> returnType = varInit.getReturnType();
 		
 		assertSame("variable's return type should match the varInitValue's Class", varInitValue.getClass(), returnType);
@@ -136,7 +146,7 @@ public class VariableTest {
 	 * instances.
 	 */
 	@Test
-	public void testClone() {
+	public void testCloneVariable() {
 		Variable clone = varInit.clone();
 		
 		assertSame("cloned variable does not refer to the same instance", varInit, clone);
@@ -147,7 +157,7 @@ public class VariableTest {
 	 * constructs new instances.
 	 */
 	@Test
-	public void testNewInstance() {
+	public void testNewInstanceVariable() {
 		Variable newInstance = varDecl.newInstance();
 		
 		assertSame("new instance of variable does not refer to the same instance", varDecl, newInstance);
@@ -159,7 +169,7 @@ public class VariableTest {
 	 * instance.
 	 */
 	@Test
-	public void testEquals() {
+	public void testEqualsVariable() {
 		assertTrue("two references to the same variable instance should be equal", varDecl.equals(varDecl));
 	}
 	

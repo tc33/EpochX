@@ -43,7 +43,7 @@ public class CrossoverManagerTest {
 	private int count;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		model = new GPModelDummy();
 		crossoverManager = new CrossoverManager(model);
 	}

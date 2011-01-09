@@ -31,17 +31,19 @@ import org.epochx.tools.util.TypeUtils;
 public class AndFunction extends Node {
 
 	/**
-	 * Constructs an AndFunction with two <code>null</code> children.
+	 * Constructs an <code>AndFunction</code> with two <code>null</code> 
+	 * children.
 	 */
 	public AndFunction() {
 		this(null, null);
 	}
 
 	/**
-	 * Constructs an AndFunction with two boolean child nodes.
+	 * Constructs an <code>AndFunction</code> with two <code>Boolean</code> 
+	 * child nodes.
 	 * 
-	 * @param child1 The first child node.
-	 * @param child2 The second child node.
+	 * @param child1 the first child node.
+	 * @param child2 the second child node.
 	 */
 	public AndFunction(final Node child1, final Node child2) {
 		super(child1, child2);
@@ -76,12 +78,13 @@ public class AndFunction extends Node {
 
 	/**
 	 * Returns this function node's return type for the given child input types.
-	 * If there are two children, both of which have a return type of Boolean,
-	 * then the return type of this function will also be Boolean. In all other
-	 * cases this method will return <code>null</code> to indicate that the
-	 * inputs are invalid.
+	 * If there are two children, both of which have a return type of 
+	 * <code>Boolean</code>, then the return type of this function will also be 
+	 * <code>Boolean</code>. In all other cases this method will return 
+	 * <code>null</code> to indicate that the inputs are invalid.
 	 * 
-	 * @return The Boolean class or null if the input type is invalid.
+	 * @return The <code>Boolean</code> class or null if the input type is 
+	 * invalid.
 	 */
 	@Override
 	public Class<?> getReturnType(final Class<?> ... inputTypes) {

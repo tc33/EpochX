@@ -35,7 +35,7 @@ public class GrowInitialiserTest {
 	private GrowInitialiser initialiser;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		initialiser = new GrowInitialiser(null, null, -1, -1, false);
 
 		final String grammarStr = "<a> ::= x | y\n";

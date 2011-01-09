@@ -35,7 +35,7 @@ public class FixedLengthInitialiserTest {
 	private FixedLengthInitialiser initialiser;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		initialiser = new FixedLengthInitialiser(null, -1, -1, false);
 
 		final RandomNumberGenerator rng = new MersenneTwisterFast();

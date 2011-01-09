@@ -35,16 +35,38 @@ public class DoubleERCTest extends LiteralTest {
 	private RandomNumberGenerator rng;
 
 	/**
+	 * Part of test fixture for superclass.
+	 */
+	@Override
+	protected Node getNode() {
+		return new DoubleERC(new MockRandom(), 0.0, 1.0, 4);
+	}
+	
+	/**
 	 * Sets up the test environment.
 	 */
 	@Override
-	public void setUp() throws Exception {
+	public void setUp() {
 		rng = new MersenneTwisterFast();
 		erc = new DoubleERC(rng, 1.0, 2.0, 3);
 
 		super.setUp();
 	}
 
+	/**
+	 * Tests that {@link org.epochx.epox.DoubleERC#DoubleERC(RandomNumberGenerator, double, double, int)} 
+	 * throws an exception if rng is null.
+	 */
+	@Test
+	public void testNewInstanceDoubleERCNull() {
+		try {
+			new DoubleERC(null, 0.0, 1.0, 1);
+			fail("an exception should be thrown for a null rng");
+		} catch (IllegalArgumentException expected) {
+			assertTrue(true);
+		}
+	}
+	
 	/**
 	 * Tests that {@link org.epochx.epox.DoubleERC#newInstance()} correctly
 	 * constructs new instances.
@@ -54,6 +76,7 @@ public class DoubleERCTest extends LiteralTest {
 		final DoubleERC newInstance = erc.newInstance();
 
 		assertSame("rng does not refer to the same instance", rng, newInstance.getRNG());
+		// This test is fragile - if it fails it might be because the same number was generated - rerun (v.unlikely to fail twice).
 		assertNotSame("the value of new instance refers to the same object", erc.getValue(), newInstance.getValue());
 	}
 

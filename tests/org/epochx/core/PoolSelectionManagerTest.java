@@ -47,7 +47,7 @@ public class PoolSelectionManagerTest {
 	private int count;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		model = new GPModelDummy();
 		pop = new ArrayList<CandidateProgram>();
 		pop.add(new GPCandidateProgram(model));

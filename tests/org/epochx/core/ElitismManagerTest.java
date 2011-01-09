@@ -39,7 +39,7 @@ public class ElitismManagerTest {
 	private List<CandidateProgram> pop;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		model = new ModelDummy();
 		elitismManager = new ElitismManager(model);
 		pop = new ArrayList<CandidateProgram>();

@@ -17,7 +17,7 @@ public class TournamentSelectorTest {
 	private List<CandidateProgram> pop;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		model = new GPModelDummy();
 		selector = new TournamentSelector(model, 3);
 		Life.get().fireConfigureEvent();

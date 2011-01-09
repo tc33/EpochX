@@ -52,7 +52,7 @@ public class VariableTest extends NodeTestCase {
 	 * Sets up the test environment.
 	 */
 	@Override
-	public void setUp() throws Exception {
+	public void setUp() {
 		varInitName = "X";
 		varInitValue = new Integer(3);
 		varInit = new Variable(varInitName, varInitValue);

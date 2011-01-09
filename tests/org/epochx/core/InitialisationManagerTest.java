@@ -42,7 +42,7 @@ public class InitialisationManagerTest {
 	private int count;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		model = new GPModelDummy();
 
 		// Need to give the model a valid syntax so we can perform

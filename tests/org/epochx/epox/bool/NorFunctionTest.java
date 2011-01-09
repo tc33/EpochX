@@ -24,57 +24,77 @@ package org.epochx.epox.bool;
 import static org.junit.Assert.*;
 
 import org.epochx.epox.*;
-import org.epochx.gp.representation.AbstractBooleanNodeTestCase;
 import org.junit.Test;
 
 /**
- * 
+ * Unit tests for {@link org.epochx.epox.bool.NorFunction}
  */
-public class NorFunctionTest extends AbstractBooleanNodeTestCase {
+public class NorFunctionTest extends NodeTestCase {
 
+	private NorFunction node;
+	private MockNode child1;
+	private MockNode child2;
+	
+	/**
+	 * Part of test fixture for superclass.
+	 */
 	@Override
 	public Node getNode() {
 		return new NorFunction();
 	}
+	
+	/**
+	 * Sets up the test environment.
+	 */
+	@Override
+	public void setUp() {
+		child1 = new MockNode();
+		child2 = new MockNode();
+		child1.setGetIdentifier("child1");
+		child2.setGetIdentifier("child2");
+		
+		node = new NorFunction(child1, child2);
 
-	@Test
-	public void testEvaluateTT() {
-		final NorFunction node = (NorFunction) getNode();
-		final Node[] children = new Node[]{new Literal(true), new Literal(true)};
-		node.setChildren(children);
-		final boolean result = node.evaluate();
-
-		assertFalse("NOR of true and true is not false", result);
+		super.setUp();
 	}
-
+	
+	/**
+	 * Tests that {@link org.epochx.epox.bool.NorFunction#evaluate()} correctly
+	 * evaluates inputs.
+	 */
 	@Test
-	public void testEvaluateTF() {
-		final NorFunction node = (NorFunction) getNode();
-		final Node[] children = new Node[]{new Literal(true), new Literal(false)};
-		node.setChildren(children);
-		final boolean result = node.evaluate();
-
-		assertFalse("NOR of true and false is not false", result);
+	public void testEvaluate() {
+		child1.setEvaluate(Boolean.TRUE);
+		child2.setEvaluate(Boolean.TRUE);
+		assertFalse("NOR of true and true should be false", node.evaluate());
+		
+		child1.setEvaluate(Boolean.TRUE);
+		child2.setEvaluate(Boolean.FALSE);
+		assertFalse("NOR of true and false should be false", node.evaluate());
+		
+		child1.setEvaluate(Boolean.FALSE);
+		child2.setEvaluate(Boolean.TRUE);
+		assertFalse("NOR of false and true should be false", node.evaluate());
+		
+		child1.setEvaluate(Boolean.FALSE);
+		child2.setEvaluate(Boolean.FALSE);
+		assertTrue("NOR of false and false should be true", node.evaluate());
 	}
-
+	
+	/**
+	 * Tests that {@link org.epochx.epox.bool.NorFunction#getReturnType(Class...)}
+	 * returns a Boolean data-type for two Boolean inputs, and <code>null</code>
+	 * for non-Boolean or incorrect number.
+	 */
 	@Test
-	public void testEvaluateFT() {
-		final NorFunction node = (NorFunction) getNode();
-		final Node[] children = new Node[]{new Literal(false), new Literal(true)};
-		node.setChildren(children);
-		final boolean result = node.evaluate();
-
-		assertFalse("NOR of false and true is not false", result);
+	public void testGetReturnTypeNor() {
+		Class<?> returnType = node.getReturnType(Boolean.class, Boolean.class);
+		assertEquals("type should be boolean for 2 boolean inputs", Boolean.class, returnType);
+		
+		returnType = node.getReturnType(Integer.class, Boolean.class);
+		assertNull("non-boolean inputs should be invalid", returnType);
+		
+		returnType = node.getReturnType(Boolean.class, Boolean.class, Boolean.class);
+		assertNull("too many boolean inputs should be invalid", returnType);
 	}
-
-	@Test
-	public void testEvaluateFF() {
-		final NorFunction node = (NorFunction) getNode();
-		final Node[] children = new Node[]{new Literal(false), new Literal(false)};
-		node.setChildren(children);
-		final boolean result = node.evaluate();
-
-		assertTrue("NOR of false and false is not true", result);
-	}
-
 }

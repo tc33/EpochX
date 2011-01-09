@@ -15,7 +15,7 @@ public class MultiplexerTest extends ModelTest {
 	private GenerationListener genPrinter;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		runPrinter = new RunAdapter() {
 
 			@Override

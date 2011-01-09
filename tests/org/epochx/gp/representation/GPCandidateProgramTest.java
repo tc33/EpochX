@@ -46,7 +46,7 @@ public class GPCandidateProgramTest extends AbstractCandidateProgramTestCase {
 	}
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		program = (GPCandidateProgram) getCandidateProgram();
 		node1 = new Literal(true);
 		node2 = new Literal(true);

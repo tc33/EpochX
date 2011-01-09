@@ -32,8 +32,11 @@ import org.epochx.tools.ant.Ant;
  * arity becomes 3. Otherwise the ant must be provided at construction, and is
  * held internally, with the node's arity being 2.
  */
-public class IfFoodAheadFunction extends AntFunction {
+public class IfFoodAheadFunction extends Node {
 
+	// This may remain null, depending on the constructor used.
+	private Ant ant;
+	
 	/**
 	 * Constructs an IfFoodAheadFunction with three <code>null</code> children.
 	 */
@@ -59,12 +62,19 @@ public class IfFoodAheadFunction extends AntFunction {
 	 * of two. Note that this differs from the alternative constructors which
 	 * take three child nodes, one of which has an Ant return type.
 	 * 
-	 * @param ant
+	 * @param ant the ant instance that should be operated upon when this node
+	 * is evaluated. An exception will be thrown if this argument is null.
 	 * @param child1 The first conditionally evaluated child node.
 	 * @param child2 The second conditionally evaluated child node.
 	 */
 	public IfFoodAheadFunction(final Ant ant, final Node child1, final Node child2) {
-		super(ant, child1, child2);
+		super(child1, child2);
+		
+		if (ant == null) {
+			throw new IllegalArgumentException("ant must not be null");
+		}
+		
+		this.ant = ant;
 	}
 
 	/**
@@ -73,10 +83,11 @@ public class IfFoodAheadFunction extends AntFunction {
 	 * arity of two. Note that this differs from the alternative constructors
 	 * which take three child nodes, one of which has an Ant return type.
 	 * 
-	 * @param ant
+	 * @param ant the ant instance that should be operated upon when this node
+	 * is evaluated. An exception will be thrown if this argument is null.
 	 */
 	public IfFoodAheadFunction(final Ant ant) {
-		super(ant, null, null);
+		this(ant, null, null);
 	}
 
 	/**
@@ -88,21 +99,21 @@ public class IfFoodAheadFunction extends AntFunction {
 	 */
 	@Override
 	public Void evaluate() {
-		Ant ant;
+		Ant evalAnt;
 		Node child1;
 		Node child2;
 
 		if (getArity() == 2) {
-			ant = getAnt();
+			evalAnt = ant;
 			child1 = getChild(0);
 			child2 = getChild(1);
 		} else {
-			ant = (Ant) getChild(0).evaluate();
+			evalAnt = (Ant) getChild(0).evaluate();
 			child1 = getChild(1);
 			child2 = getChild(2);
 		}
 
-		if (ant.isFoodAhead()) {
+		if (evalAnt.isFoodAhead()) {
 			child1.evaluate();
 		} else {
 			child2.evaluate();
@@ -136,7 +147,8 @@ public class IfFoodAheadFunction extends AntFunction {
 				&& (inputTypes[0] == Void.class)
 				&& (inputTypes[1] == Void.class)) {
 			return Void.class;
-		} else if ((inputTypes.length == 3)
+		} else if ((getArity() == 3) 
+				&& (inputTypes.length == 3)
 				&& Ant.class.isAssignableFrom(inputTypes[0])
 				&& (inputTypes[1] == Void.class)
 				&& (inputTypes[2] == Void.class)) {

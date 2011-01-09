@@ -51,12 +51,19 @@ public class BooleanERC extends Literal {
 	 * generate a new value if the <code>newInstance</code> method is used.
 	 * 
 	 * @param rng the random number generator to use if randomly generating a
-	 *        boolean value.
+	 *        boolean value. An exception will be thrown if it is null.
 	 */
 	public BooleanERC(final RandomNumberGenerator rng) {
 		super(null);
+		
+		if (rng == null) {
+			throw new IllegalArgumentException("random generator must not be null");
+		}
 
 		this.rng = rng;
+		
+		// Set its value.
+		setValue(generateValue());
 	}
 
 	/**

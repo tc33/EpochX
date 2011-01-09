@@ -45,7 +45,7 @@ public class LiteralTest extends NodeTestCase {
 	 * Sets up the test environment.
 	 */
 	@Override
-	public void setUp() throws Exception {
+	public void setUp() {
 		value = new Object();
 		literal = new Literal(value);
 
@@ -126,19 +126,19 @@ public class LiteralTest extends NodeTestCase {
 	}
 
 	/**
-	 * Tests that {@link org.epochx.epox.Literal#toString()} returns a
-	 * <code>null</code> value if the literal's value is <code>null</code>.
+	 * Tests that {@link org.epochx.epox.Literal#toString()} returns an
+	 * empty string value if the literal's value is <code>null</code>.
 	 */
 	@Test
 	public void testToStringNull() {
 		literal.setValue(null);
 		final Object str = literal.toString();
 
-		assertNull("toString should be null for a null value", str);
+		assertEquals("toString should be an empty string for a null value", "", str);
 	}
 
 	/**
-	 * Tests that {@link org.epochx.epox.Literal#equals()} returns a
+	 * Tests that {@link org.epochx.epox.Literal#equals(Object)} returns a
 	 * <code>true</code> value if the two literals' values are equal.
 	 */
 	@Test
@@ -154,7 +154,7 @@ public class LiteralTest extends NodeTestCase {
 	}
 
 	/**
-	 * Tests that {@link org.epochx.epox.Literal#equals()} returns a
+	 * Tests that {@link org.epochx.epox.Literal#equals(Object)} returns a
 	 * <code>false</code> value if the two literals' values are not equal.
 	 */
 	@Test

@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox.bool;
+package org.epochx.epox.lang;
 
 import static org.junit.Assert.*;
 
@@ -41,7 +41,7 @@ public class IfFunctionTest extends AbstractBooleanNodeTestCase {
 	}
 
 	@Override
-	public void setUp() throws Exception {
+	public void setUp() {
 		super.setUp();
 
 		ifFunction = (IfFunction) getNode();

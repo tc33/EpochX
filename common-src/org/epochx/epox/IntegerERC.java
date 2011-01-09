@@ -61,10 +61,18 @@ public class IntegerERC extends Literal {
 	 */
 	public IntegerERC(final RandomNumberGenerator rng, final int lower, final int upper) {
 		super(null);
+		
+		
+		if (rng == null) {
+			throw new IllegalArgumentException("random generator must not be null");
+		}
 
 		this.rng = rng;
 		this.lower = lower;
 		this.upper = upper;
+		
+		// Set its value.
+		setValue(generateValue());
 	}
 
 	/**

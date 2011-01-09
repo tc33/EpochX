@@ -38,7 +38,7 @@ public class GrowInitialiserTest {
 	private GrowInitialiser initialiser;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		initialiser = new GrowInitialiser(null, null, null, -1, -1, false);
 
 		// Ensure setup is valid.

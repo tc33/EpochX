@@ -24,57 +24,77 @@ package org.epochx.epox.bool;
 import static org.junit.Assert.*;
 
 import org.epochx.epox.*;
-import org.epochx.gp.representation.AbstractBooleanNodeTestCase;
 import org.junit.Test;
 
 /**
- * 
+ * Unit tests for {@link org.epochx.epox.bool.IfAndOnlyIfFunction}
  */
-public class IfAndOnlyIfFunctionTest extends AbstractBooleanNodeTestCase {
+public class IfAndOnlyIfFunctionTest extends NodeTestCase {
 
+	private IfAndOnlyIfFunction node;
+	private MockNode child1;
+	private MockNode child2;
+	
+	/**
+	 * Part of test fixture for superclass.
+	 */
 	@Override
 	public Node getNode() {
 		return new IfAndOnlyIfFunction();
 	}
+	
+	/**
+	 * Sets up the test environment.
+	 */
+	@Override
+	public void setUp() {
+		child1 = new MockNode();
+		child2 = new MockNode();
+		child1.setGetIdentifier("child1");
+		child2.setGetIdentifier("child2");
+		
+		node = new IfAndOnlyIfFunction(child1, child2);
 
+		super.setUp();
+	}
+	
+	/**
+	 * Tests that {@link org.epochx.epox.bool.IfAndOnlyIfFunction#evaluate()} 
+	 * correctly evaluates inputs.
+	 */
 	@Test
-	public void testEvaluateTT() {
-		final IfAndOnlyIfFunction node = (IfAndOnlyIfFunction) getNode();
-		final Node[] children = new Node[]{new Literal(true), new Literal(true)};
-		node.setChildren(children);
-		final boolean result = node.evaluate();
-
-		assertTrue("IFF of true and true is not true", result);
+	public void testEvaluate() {
+		child1.setEvaluate(Boolean.TRUE);
+		child2.setEvaluate(Boolean.TRUE);
+		assertTrue("IFF of true and true should be true", node.evaluate());
+		
+		child1.setEvaluate(Boolean.TRUE);
+		child2.setEvaluate(Boolean.FALSE);
+		assertFalse("IFF of true and false should be false", node.evaluate());
+		
+		child1.setEvaluate(Boolean.FALSE);
+		child2.setEvaluate(Boolean.TRUE);
+		assertFalse("IFF of false and true should be false", node.evaluate());
+		
+		child1.setEvaluate(Boolean.FALSE);
+		child2.setEvaluate(Boolean.FALSE);
+		assertTrue("IFF of false and false should be true", node.evaluate());
 	}
 
+	/**
+	 * Tests that {@link org.epochx.epox.bool.IfAndOnlyIfFunction#getReturnType(Class...)}
+	 * returns a Boolean data-type for two Boolean inputs, and <code>null</code>
+	 * for non-Boolean or incorrect number.
+	 */
 	@Test
-	public void testEvaluateTF() {
-		final IfAndOnlyIfFunction node = (IfAndOnlyIfFunction) getNode();
-		final Node[] children = new Node[]{new Literal(true), new Literal(false)};
-		node.setChildren(children);
-		final boolean result = node.evaluate();
-
-		assertFalse("IFF of true and false is not false", result);
+	public void testGetReturnTypeIff() {
+		Class<?> returnType = node.getReturnType(Boolean.class, Boolean.class);
+		assertEquals("type should be boolean for 2 boolean inputs", Boolean.class, returnType);
+		
+		returnType = node.getReturnType(Integer.class, Boolean.class);
+		assertNull("non-boolean inputs should be invalid", returnType);
+		
+		returnType = node.getReturnType(Boolean.class, Boolean.class, Boolean.class);
+		assertNull("two many boolean inputs should be invalid", returnType);
 	}
-
-	@Test
-	public void testEvaluateFT() {
-		final IfAndOnlyIfFunction node = (IfAndOnlyIfFunction) getNode();
-		final Node[] children = new Node[]{new Literal(false), new Literal(true)};
-		node.setChildren(children);
-		final boolean result = node.evaluate();
-
-		assertFalse("IFF of false and true is not false", result);
-	}
-
-	@Test
-	public void testEvaluateFF() {
-		final IfAndOnlyIfFunction node = (IfAndOnlyIfFunction) getNode();
-		final Node[] children = new Node[]{new Literal(false), new Literal(false)};
-		node.setChildren(children);
-		final boolean result = node.evaluate();
-
-		assertTrue("IFF of false and false is not true", result);
-	}
-
 }

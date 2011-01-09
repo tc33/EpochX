@@ -38,8 +38,11 @@ import org.epochx.tools.ant.Ant;
  * @see AntTurnLeftFunction
  * @see AntTurnRightFunction
  */
-public class AntSkipFunction extends AntFunction {
+public class AntSkipFunction extends Node {
 
+	// This may remain null, depending on the constructor used.
+	private Ant ant;
+	
 	/**
 	 * Constructs an AntSkipFunction with one <code>null</code> child.
 	 */
@@ -63,10 +66,17 @@ public class AntSkipFunction extends AntFunction {
 	 * terminal node with arity zero. Note that this differs from the
 	 * alternative constructors which take a child node with an Ant return type.
 	 * 
-	 * @param ant
+	 * @param ant the ant instance that should be operated upon when this node
+	 * is evaluated. An exception will be thrown if this argument is null.
 	 */
 	public AntSkipFunction(final Ant ant) {
-		super(ant);
+		super();
+		
+		if (ant == null) {
+			throw new IllegalArgumentException("ant must not be null");
+		}
+		
+		this.ant = ant;
 	}
 
 	/**
@@ -77,14 +87,12 @@ public class AntSkipFunction extends AntFunction {
 	 */
 	@Override
 	public Void evaluate() {
-		Ant ant;
-		if (getArity() == 0) {
-			ant = getAnt();
-		} else {
-			ant = (Ant) getChild(0).evaluate();
+		Ant evalAnt = ant;
+		if (getArity() > 0) {
+			evalAnt = (Ant) getChild(0).evaluate();
 		}
 
-		ant.skip();
+		evalAnt.skip();
 
 		return null;
 	}
@@ -111,7 +119,9 @@ public class AntSkipFunction extends AntFunction {
 	public Class<?> getReturnType(final Class<?> ... inputTypes) {
 		if ((getArity() == 0) && (inputTypes.length == 0)) {
 			return Void.class;
-		} else if ((inputTypes.length == 1) && Ant.class.isAssignableFrom(inputTypes[0])) {
+		} else if ((getArity() == 1) 
+				&& (inputTypes.length == 1) 
+				&& Ant.class.isAssignableFrom(inputTypes[0])) {
 			return Void.class;
 		} else {
 			return null;

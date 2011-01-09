@@ -38,7 +38,7 @@ public class AntTest {
 	private AntLandscape landscape;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		landscape = new AntLandscape(new Dimension(32, 32));
 		ant = new Ant(500, landscape);
 	}

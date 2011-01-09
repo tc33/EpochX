@@ -17,7 +17,7 @@ public class FitnessProportionateSelectorTest {
 	private List<CandidateProgram> pop;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		model = new GPModelDummy();
 		selector = new FitnessProportionateSelector(model);
 		Life.get().fireConfigureEvent();

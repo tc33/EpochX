@@ -68,11 +68,18 @@ public class DoubleERC extends Literal {
 	 */
 	public DoubleERC(final RandomNumberGenerator rng, final double lower, final double upper, final int precision) {
 		super(null);
-
+		
+		if (rng == null) {
+			throw new IllegalArgumentException("random generator must not be null");
+		}
+		
 		this.rng = rng;
 		this.lower = lower;
 		this.upper = upper;
 		this.precision = precision;
+		
+		// Set its value.
+		setValue(generateValue());
 	}
 
 	/**

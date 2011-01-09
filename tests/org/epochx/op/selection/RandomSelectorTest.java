@@ -17,7 +17,7 @@ public class RandomSelectorTest {
 	private List<CandidateProgram> pop;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		model = new GPModelDummy();
 		selector = new RandomSelector(model);
 		Life.get().fireConfigureEvent();

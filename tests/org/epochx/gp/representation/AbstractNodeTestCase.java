@@ -38,7 +38,7 @@ public abstract class AbstractNodeTestCase {
 	public abstract Node getNode();
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		node = getNode();
 
 		// Ensure children are filled.

@@ -43,7 +43,7 @@ public class MutationManagerTest {
 	private int count;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		model = new GPModelDummy();
 		mutationManager = new MutationManager(model);
 	}

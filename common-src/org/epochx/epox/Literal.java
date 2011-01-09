@@ -96,8 +96,8 @@ public class Literal extends Node {
 
 	/**
 	 * Returns this node's string representation, which is the string
-	 * representation of the literal value. If no value is set then
-	 * <code>null</code> will be returned.
+	 * representation of the literal value. If no value is set then an empty 
+	 * string will be returned.
 	 * 
 	 * @return a String representation.
 	 */
@@ -106,7 +106,7 @@ public class Literal extends Node {
 		if (value != null) {
 			return value.toString();
 		} else {
-			return null;
+			return "";
 		}
 	}
 

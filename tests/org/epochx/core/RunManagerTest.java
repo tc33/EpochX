@@ -39,7 +39,7 @@ public class RunManagerTest {
 	private RunManager runManager;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		model = new Model() {
 
 			@Override

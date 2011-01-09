@@ -42,7 +42,7 @@ public class GenerationManagerTest {
 	private int count;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		model = new Model() {
 
 			@Override

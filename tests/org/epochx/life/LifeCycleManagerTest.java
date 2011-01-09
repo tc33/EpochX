@@ -34,7 +34,7 @@ import org.junit.*;
 public class LifeCycleManagerTest {
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		Life.get().clearListeners();
 		Life.get().clearHooks();
 	}

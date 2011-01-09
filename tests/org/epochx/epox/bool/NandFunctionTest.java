@@ -24,57 +24,77 @@ package org.epochx.epox.bool;
 import static org.junit.Assert.*;
 
 import org.epochx.epox.*;
-import org.epochx.gp.representation.AbstractBooleanNodeTestCase;
 import org.junit.Test;
 
 /**
- * 
+ * Unit tests for {@link org.epochx.epox.bool.NandFunction}
  */
-public class NandFunctionTest extends AbstractBooleanNodeTestCase {
+public class NandFunctionTest extends NodeTestCase {
 
+	private NandFunction node;
+	private MockNode child1;
+	private MockNode child2;
+	
+	/**
+	 * Part of test fixture for superclass.
+	 */
 	@Override
 	public Node getNode() {
 		return new NandFunction();
 	}
+	
+	/**
+	 * Sets up the test environment.
+	 */
+	@Override
+	public void setUp() {
+		child1 = new MockNode();
+		child2 = new MockNode();
+		child1.setGetIdentifier("child1");
+		child2.setGetIdentifier("child2");
+		
+		node = new NandFunction(child1, child2);
 
-	@Test
-	public void testEvaluateTT() {
-		final NandFunction node = (NandFunction) getNode();
-		final Node[] children = new Node[]{new Literal(true), new Literal(true)};
-		node.setChildren(children);
-		final boolean result = node.evaluate();
-
-		assertFalse("NAND of true and true is not false", result);
+		super.setUp();
 	}
-
+	
+	/**
+	 * Tests that {@link org.epochx.epox.bool.NandFunction#evaluate()} correctly
+	 * evaluates inputs.
+	 */
 	@Test
-	public void testEvaluateTF() {
-		final NandFunction node = (NandFunction) getNode();
-		final Node[] children = new Node[]{new Literal(true), new Literal(false)};
-		node.setChildren(children);
-		final boolean result = node.evaluate();
-
-		assertTrue("NAND of true and false is not true", result);
+	public void testEvaluate() {
+		child1.setEvaluate(Boolean.TRUE);
+		child2.setEvaluate(Boolean.TRUE);
+		assertFalse("NAND of true and true should be false", node.evaluate());
+		
+		child1.setEvaluate(Boolean.TRUE);
+		child2.setEvaluate(Boolean.FALSE);
+		assertTrue("NAND of true and false should be true", node.evaluate());
+		
+		child1.setEvaluate(Boolean.FALSE);
+		child2.setEvaluate(Boolean.TRUE);
+		assertTrue("NAND of false and true should be true", node.evaluate());
+		
+		child1.setEvaluate(Boolean.FALSE);
+		child2.setEvaluate(Boolean.FALSE);
+		assertTrue("NAND of false and false should be true", node.evaluate());
 	}
-
+	
+	/**
+	 * Tests that {@link org.epochx.epox.bool.NandFunction#getReturnType(Class...)}
+	 * returns a Boolean data-type for two Boolean inputs, and <code>null</code>
+	 * for non-Boolean or incorrect number.
+	 */
 	@Test
-	public void testEvaluateFT() {
-		final NandFunction node = (NandFunction) getNode();
-		final Node[] children = new Node[]{new Literal(false), new Literal(true)};
-		node.setChildren(children);
-		final boolean result = node.evaluate();
-
-		assertTrue("NAND of false and true is not true", result);
+	public void testGetReturnTypeNand() {
+		Class<?> returnType = node.getReturnType(Boolean.class, Boolean.class);
+		assertEquals("type should be boolean for 2 boolean inputs", Boolean.class, returnType);
+		
+		returnType = node.getReturnType(Integer.class, Boolean.class);
+		assertNull("non-boolean inputs should be invalid", returnType);
+		
+		returnType = node.getReturnType(Boolean.class, Boolean.class, Boolean.class);
+		assertNull("too many boolean inputs should be invalid", returnType);
 	}
-
-	@Test
-	public void testEvaluateFF() {
-		final NandFunction node = (NandFunction) getNode();
-		final Node[] children = new Node[]{new Literal(false), new Literal(false)};
-		node.setChildren(children);
-		final boolean result = node.evaluate();
-
-		assertTrue("NAND of false and false is not true", result);
-	}
-
 }

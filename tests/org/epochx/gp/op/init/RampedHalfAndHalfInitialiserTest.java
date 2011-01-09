@@ -38,7 +38,7 @@ public class RampedHalfAndHalfInitialiserTest {
 	private RampedHalfAndHalfInitialiser initialiser;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		initialiser = new RampedHalfAndHalfInitialiser(null, null, Boolean.class, -1, -1, -1, false);
 
 		// Ensure setup is valid.

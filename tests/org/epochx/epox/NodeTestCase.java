@@ -39,7 +39,7 @@ public abstract class NodeTestCase {
 	 * Sets up the test environment.
 	 */
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		node = getNode();
 
 		final int arity = node.getArity();
@@ -544,29 +544,13 @@ public abstract class NodeTestCase {
 	}
 
 	/**
-	 * Tests {@link org.epochx.epox.Node#getReturnType(java.lang.Class<?>[])}
+	 * Tests {@link org.epochx.epox.Node#getReturnType(Class...)}
 	 * returns a non-null type for a terminal.
 	 */
 	@Test
 	public void testGetReturnTypeArray() {
 		if (node.isTerminal()) {
 			assertNotNull("return type should not ever be null for a terminal", node.getReturnType(new Class<?>[0]));
-		}
-	}
-
-	/**
-	 * Tests {@link org.epochx.epox.Node#getReturnType(java.lang.Class<?>[])}
-	 * throws an exception if the number of inputs does not match the arity.
-	 */
-	@Test
-	public void testGetReturnTypeArrayArity() {
-		final Class<?>[] inputTypes = new Class<?>[node.getArity() + 1];
-
-		try {
-			node.getReturnType(inputTypes);
-			fail("exception should be thrown for incorrect number of input types");
-		} catch (final IllegalArgumentException expected) {
-			assertTrue(true);
 		}
 	}
 

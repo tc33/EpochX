@@ -44,7 +44,7 @@ public class ReproductionManagerTest {
 	private int count;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		model = new GPModelDummy();
 
 		reproductionManager = new ReproductionManager(model);

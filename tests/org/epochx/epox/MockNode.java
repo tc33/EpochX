@@ -26,9 +26,18 @@ package org.epochx.epox;
  */
 public class MockNode extends Node {
 
+	private int evaluateCount;
+	
 	private Object evaluate;
 	private String getIdentifier;
-
+	
+	/**
+	 * Constructs a <code>MockNode</code> with an identifier of 'mock'.
+	 */
+	public MockNode() {
+		this.getIdentifier = "mock";
+	}
+	
 	/**
 	 * Sets the <code>Object</code> that will be returned by the
 	 * <code>evaluate</code> method.
@@ -50,10 +59,13 @@ public class MockNode extends Node {
 	}
 
 	/**
-	 * Returns the mock result of evaluation.
+	 * Returns the mock result of evaluation and increments the counter of how
+	 * many times this method has been called.
 	 */
 	@Override
 	public Object evaluate() {
+		evaluateCount++;
+		
 		return evaluate;
 	}
 
@@ -65,4 +77,14 @@ public class MockNode extends Node {
 		return getIdentifier;
 	}
 
+	/**
+	 * Returns a count for how many times the <code>evaluate</code> method has 
+	 * been called.
+	 * 
+	 * @return an integer count of how many times the evaluate method has been 
+	 * called.
+	 */
+	public int getEvaluateCount() {
+		return evaluateCount;
+	}
 }

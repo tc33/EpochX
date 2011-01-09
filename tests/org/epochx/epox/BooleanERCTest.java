@@ -35,28 +35,38 @@ public class BooleanERCTest extends LiteralTest {
 	private RandomNumberGenerator rng;
 
 	/**
+	 * Part of test fixture for superclass.
+	 */
+	@Override
+	protected Node getNode() {
+		return new BooleanERC(new MockRandom());
+	}
+	
+	/**
 	 * Sets up the test environment.
 	 */
 	@Override
-	public void setUp() throws Exception {
+	public void setUp() {
 		rng = new MersenneTwisterFast();
 		erc = new BooleanERC(rng);
 
 		super.setUp();
 	}
-
+	
 	/**
-	 * Tests that {@link org.epochx.epox.BooleanERC#newInstance()} correctly
-	 * constructs new instances.
+	 * Tests that {@link org.epochx.epox.BooleanERC#BooleanERC(RandomNumberGenerator)} 
+	 * throws an exception if rng is null.
 	 */
 	@Test
-	public void testNewInstanceBooleanERC() {
-		final BooleanERC newInstance = erc.newInstance();
-
-		assertSame("rng does not refer to the same instance", rng, newInstance.getRNG());
-		assertNotSame("the value of new instance refers to the same object", erc.getValue(), newInstance.getValue());
+	public void testNewInstanceBooleanERCNull() {
+		try {
+			new BooleanERC(null);
+			fail("an exception should be thrown for a null rng");
+		} catch (IllegalArgumentException expected) {
+			assertTrue(true);
+		}
 	}
-
+	
 	/**
 	 * Tests that {@link org.epochx.epox.BooleanERC#generateValue()} correctly
 	 * generates new values.

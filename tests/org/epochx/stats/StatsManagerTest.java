@@ -37,7 +37,7 @@ public class StatsManagerTest {
 	private Model model;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		model = new GPModelDummy();
 		stats = Stats.get();
 	}

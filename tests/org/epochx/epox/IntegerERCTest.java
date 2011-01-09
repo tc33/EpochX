@@ -35,16 +35,38 @@ public class IntegerERCTest extends LiteralTest {
 	private RandomNumberGenerator rng;
 
 	/**
+	 * Part of test fixture for superclass.
+	 */
+	@Override
+	protected Node getNode() {
+		return new IntegerERC(new MockRandom(), 0,  Integer.MAX_VALUE);
+	}
+	
+	/**
 	 * Sets up the test environment.
 	 */
 	@Override
-	public void setUp() throws Exception {
+	public void setUp() {
 		rng = new MersenneTwisterFast();
-		erc = new IntegerERC(rng, 1, 2);
+		erc = new IntegerERC(rng, 0, Integer.MAX_VALUE);
 
 		super.setUp();
 	}
 
+	/**
+	 * Tests that {@link org.epochx.epox.IntegerERC#IntegerERC(RandomNumberGenerator, int, int)} 
+	 * throws an exception if rng is null.
+	 */
+	@Test
+	public void testNewInstanceIntegerERCNull() {
+		try {
+			new IntegerERC(null, 0, 1);
+			fail("an exception should be thrown for a null rng");
+		} catch (IllegalArgumentException expected) {
+			assertTrue(true);
+		}
+	}
+	
 	/**
 	 * Tests that {@link org.epochx.epox.IntegerERC#newInstance()} correctly
 	 * constructs new instances.

@@ -35,7 +35,7 @@ public class RampedHalfAndHalfInitialiserTest {
 	private RampedHalfAndHalfInitialiser initialiser;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		initialiser = new RampedHalfAndHalfInitialiser(null, null, -1, -1, -1, false);
 
 		final String grammarStr = "<a> ::= x | y\n";

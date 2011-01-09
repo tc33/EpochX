@@ -533,6 +533,13 @@ public abstract class Node implements Cloneable {
 		return length;
 	}
 
+	/**
+	 * Should be implemented to return an indentifier for this node. For 
+	 * functions, where this is effectively the function name, this would 
+	 * normally be unique within the given problem.
+	 * 
+	 * @return a <code>String</code> identifier for this node.
+	 */
 	public abstract String getIdentifier();
 
 	/**
@@ -571,14 +578,7 @@ public abstract class Node implements Cloneable {
 	 *         null if the set of input types is invalid.
 	 */
 	public Class<?> getReturnType(final Class<?> ... inputTypes) {
-		final int arity = getArity();
-
-		// Validate the number of input types given against the arity.
-		if (inputTypes.length != arity) {
-			throw new IllegalArgumentException("The number of input types should match this node's arity.");
-		}
-
-		if (arity == 0) {
+		if (getArity() == 0) {
 			// Is a terminal.
 			return Void.class;
 		} else {

@@ -24,35 +24,64 @@ package org.epochx.epox.bool;
 import static org.junit.Assert.*;
 
 import org.epochx.epox.*;
-import org.epochx.gp.representation.AbstractBooleanNodeTestCase;
 import org.junit.Test;
 
 /**
- * 
+ * Unit tests for {@link org.epochx.epox.bool.NotFunction}
  */
-public class NotFunctionTest extends AbstractBooleanNodeTestCase {
+public class NotFunctionTest extends NodeTestCase {
 
+	private NotFunction node;
+	private MockNode child;
+	
+	/**
+	 * Part of test fixture for superclass.
+	 */
 	@Override
 	public Node getNode() {
 		return new NotFunction();
 	}
+	
+	/**
+	 * Sets up the test environment.
+	 */
+	@Override
+	public void setUp() {
+		child = new MockNode();
+		child.setGetIdentifier("child");
+		
+		node = new NotFunction(child);
 
-	@Test
-	public void testEvaluateT() {
-		final NotFunction node = (NotFunction) getNode();
-		node.setChild(0, new Literal(true));
-		final boolean result = node.evaluate();
-
-		assertFalse("NOT of true is not false", result);
+		super.setUp();
 	}
 
+	/**
+	 * Tests that {@link org.epochx.epox.bool.NotFunction#evaluate()} correctly
+	 * evaluates inputs.
+	 */
 	@Test
-	public void testEvaluateF() {
-		final NotFunction node = (NotFunction) getNode();
-		node.setChild(0, new Literal(false));
-		final boolean result = node.evaluate();
-
-		assertTrue("NOT of false is not true", result);
+	public void testEvaluate() {
+		child.setEvaluate(Boolean.TRUE);
+		assertFalse("NOT of true should be false", node.evaluate());
+		
+		child.setEvaluate(Boolean.FALSE);
+		assertTrue("NOT of false should be true", node.evaluate());
 	}
-
+	
+	/**
+	 * Tests that {@link org.epochx.epox.bool.NotFunction#getReturnType(Class...)}
+	 * returns a Boolean data-type for one Boolean input, and <code>null</code>
+	 * for non-Boolean or incorrect number.
+	 */
+	@Test
+	public void testGetReturnTypeNor() {
+		Class<?> returnType = node.getReturnType(Boolean.class);
+		assertEquals("type should be boolean for 1 boolean input", Boolean.class, returnType);
+		
+		returnType = node.getReturnType(Integer.class);
+		assertNull("non-boolean inputs should be invalid", returnType);
+		
+		returnType = node.getReturnType(Boolean.class, Boolean.class);
+		assertNull("too many boolean inputs should be invalid", returnType);
+	}
 }

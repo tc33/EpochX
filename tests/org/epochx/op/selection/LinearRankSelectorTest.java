@@ -41,7 +41,7 @@ public class LinearRankSelectorTest {
 	private List<CandidateProgram> pop;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		model = new GPModelDummy();
 		selector = new LinearRankSelector(model);
 		Life.get().fireConfigureEvent();

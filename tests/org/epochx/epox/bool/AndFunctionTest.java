@@ -24,57 +24,77 @@ package org.epochx.epox.bool;
 import static org.junit.Assert.*;
 
 import org.epochx.epox.*;
-import org.epochx.gp.representation.AbstractNodeTestCase;
 import org.junit.Test;
 
 /**
- * 
+ * Unit tests for {@link org.epochx.epox.bool.AndFunction}
  */
-public class AndFunctionTest extends AbstractNodeTestCase {
+public class AndFunctionTest extends NodeTestCase {
 
+	private AndFunction node;
+	private MockNode child1;
+	private MockNode child2;
+	
+	/**
+	 * Part of test fixture for superclass.
+	 */
 	@Override
 	public Node getNode() {
 		return new AndFunction();
 	}
+	
+	/**
+	 * Sets up the test environment.
+	 */
+	@Override
+	public void setUp() {
+		child1 = new MockNode();
+		child2 = new MockNode();
+		child1.setGetIdentifier("child1");
+		child2.setGetIdentifier("child2");
+		
+		node = new AndFunction(child1, child2);
 
-	@Test
-	public void testEvaluateTT() {
-		final AndFunction node = (AndFunction) getNode();
-		final Node[] children = new Node[]{new Literal(true), new Literal(true)};
-		node.setChildren(children);
-		final boolean result = node.evaluate();
-
-		assertTrue("AND of true and true is not true", result);
+		super.setUp();
 	}
 
+	/**
+	 * Tests that {@link org.epochx.epox.bool.AndFunction#evaluate()} correctly
+	 * evaluates inputs.
+	 */
 	@Test
-	public void testEvaluateTF() {
-		final AndFunction node = (AndFunction) getNode();
-		final Node[] children = new Node[]{new Literal(true), new Literal(false)};
-		node.setChildren(children);
-		final boolean result = node.evaluate();
-
-		assertFalse("AND of true and false is not false", result);
+	public void testEvaluate() {
+		child1.setEvaluate(Boolean.TRUE);
+		child2.setEvaluate(Boolean.TRUE);
+		assertTrue("AND of true and true should be true", node.evaluate());
+		
+		child1.setEvaluate(Boolean.TRUE);
+		child2.setEvaluate(Boolean.FALSE);
+		assertFalse("AND of true and false should be false", node.evaluate());
+		
+		child1.setEvaluate(Boolean.FALSE);
+		child2.setEvaluate(Boolean.TRUE);
+		assertFalse("AND of false and true should be false", node.evaluate());
+		
+		child1.setEvaluate(Boolean.FALSE);
+		child2.setEvaluate(Boolean.FALSE);
+		assertFalse("AND of false and false should be false", node.evaluate());
 	}
-
+	
+	/**
+	 * Tests that {@link org.epochx.epox.bool.AndFunction#getReturnType(Class...)}
+	 * returns a Boolean data-type for two Boolean inputs, and <code>null</code>
+	 * for non-Boolean or incorrect number.
+	 */
 	@Test
-	public void testEvaluateFT() {
-		final AndFunction node = (AndFunction) getNode();
-		final Node[] children = new Node[]{new Literal(false), new Literal(true)};
-		node.setChildren(children);
-		final boolean result = node.evaluate();
-
-		assertFalse("AND of false and true is not false", result);
+	public void testGetReturnTypeAnd() {
+		Class<?> returnType = node.getReturnType(Boolean.class, Boolean.class);
+		assertEquals("type should be boolean for 2 boolean inputs", Boolean.class, returnType);
+		
+		returnType = node.getReturnType(Integer.class, Boolean.class);
+		assertNull("non-boolean inputs should be invalid", returnType);
+		
+		returnType = node.getReturnType(Boolean.class, Boolean.class, Boolean.class);
+		assertNull("too many boolean inputs should be invalid", returnType);
 	}
-
-	@Test
-	public void testEvaluateFF() {
-		final AndFunction node = (AndFunction) getNode();
-		final Node[] children = new Node[]{new Literal(false), new Literal(false)};
-		node.setChildren(children);
-		final boolean result = node.evaluate();
-
-		assertFalse("AND of false and false is not false", result);
-	}
-
 }

@@ -21,47 +21,92 @@
  */
 package org.epochx.epox.math;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import org.epochx.epox.*;
-import org.epochx.gp.representation.AbstractDoubleNodeTestCase;
 import org.junit.Test;
 
 /**
- * 
+ * Unit tests for {@link org.epochx.epox.math.AbsoluteFunction}
  */
-public class AbsoluteFunctionTest extends AbstractDoubleNodeTestCase {
+public class AbsoluteFunctionTest extends NodeTestCase {
 
+	private AbsoluteFunction abs;
+	private MockNode child;
+	
+	/**
+	 * Part of test fixture for superclass.
+	 */
 	@Override
 	public Node getNode() {
 		return new AbsoluteFunction();
 	}
+	
+	/**
+	 * Sets up the test environment.
+	 */
+	@Override
+	public void setUp() {
+		super.setUp();
+		
+		child = new MockNode();
+		child.setGetIdentifier("child");
+		
+		abs = new AbsoluteFunction(child);
 
-	@Test
-	public void testEvaluateZero() {
-		final AbsoluteFunction node = (AbsoluteFunction) getNode();
-		node.setChild(0, new Literal(0.0));
-		final double result = (Double) node.evaluate();
-
-		assertEquals("ABS of 0.0 is not 0.0", 0.0, result);
+		super.setUp();
 	}
 
+	/**
+	 * Tests that {@link org.epochx.epox.math.AbsoluteFunction#evaluate()} 
+	 * correctly evaluates double values.
+	 */
 	@Test
-	public void testEvaluateMinusOne() {
-		final AbsoluteFunction node = (AbsoluteFunction) getNode();
-		node.setChild(0, new Literal(-1.0));
-		final double result = (Double) node.evaluate();
-
-		assertEquals("ABS of -1.0 is not 1.0", 1.0, result);
+	public void testEvaluateDouble() {
+		child.setEvaluate(0.0);
+		assertEquals("ABS of 0.0 should be 0.0", 0.0, abs.evaluate());
+		
+		child.setEvaluate(-2.0);
+		assertEquals("ABS of -2.0 should be 2.0", 2.0, abs.evaluate());
+	
+		child.setEvaluate(3.0);
+		assertEquals("ABS of 3.0 should be 3.0", 3.0, abs.evaluate());
 	}
-
+	
+	/**
+	 * Tests that {@link org.epochx.epox.math.AbsoluteFunction#evaluate()} 
+	 * correctly evaluates integer values.
+	 */
 	@Test
-	public void testEvaluatePlusOne() {
-		final AbsoluteFunction node = (AbsoluteFunction) getNode();
-		node.setChild(0, new Literal(1.0));
-		final double result = (Double) node.evaluate();
-
-		assertEquals("ABS of 1.0 is not 1.0", 1.0, result);
+	public void testEvaluateInteger() {
+		child.setEvaluate(0);
+		assertSame("ABS of 0 should be 0", 0, abs.evaluate());
+		
+		child.setEvaluate(-2);
+		assertSame("ABS of -2 should be 2", 2, abs.evaluate());
+	
+		child.setEvaluate(3);
+		assertSame("ABS of 3 should be 3", 3, abs.evaluate());
 	}
-
+	
+	/**
+	 * Tests that {@link org.epochx.epox.math.AbsoluteFunction#getReturnType(Class...)}
+	 * returns a the same type for a numeric class and <code>null</code> otherwise.
+	 */
+	@Test
+	public void testGetReturnTypeAbs() {
+		Class<?>[] inputTypes = {Double.class, Integer.class, Float.class, Long.class};
+		
+		Class<?> returnType;
+		for (Class<?> type: inputTypes) {
+			returnType = abs.getReturnType(type);
+			assertSame("unexpected return type", type, returnType);
+		}
+		
+		returnType = abs.getReturnType(Boolean.class);
+		assertNull("non-numeric type for child should be invalid", returnType);
+		
+		returnType = abs.getReturnType(Integer.class, Integer.class);
+		assertNull("too many inputs should be invalid", returnType);
+	}
 }

@@ -163,7 +163,7 @@ public class VariableTest extends NodeTestCase {
 	}
 
 	/**
-	 * Tests that {@link org.epochx.epox.Literal#equals()} returns a
+	 * Tests that {@link org.epochx.epox.Literal#equals(Object)} returns a
 	 * <code>true</code> value if the two references refer to the same Variable
 	 * instance.
 	 */
@@ -173,7 +173,7 @@ public class VariableTest extends NodeTestCase {
 	}
 
 	/**
-	 * Tests that {@link org.epochx.epox.Variable#equals()} returns a
+	 * Tests that {@link org.epochx.epox.Variable#equals(Object)} returns a
 	 * <code>false</code> value if the two references refer to different
 	 * Variable instances, even if they have the same value.
 	 */

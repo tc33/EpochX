@@ -64,7 +64,7 @@ public class AbsoluteFunction extends Node {
 	public Object evaluate() {
 		final Object c = getChild(0).evaluate();
 
-		final Class<?> returnType = getReturnType();
+		final Class<?> returnType = TypeUtils.getNumericType(c.getClass());
 
 		if (returnType == Double.class) {
 			// Perform absolute on double.

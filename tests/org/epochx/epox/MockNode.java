@@ -25,7 +25,7 @@ package org.epochx.epox;
  * A mock node for the purpose of testing.
  */
 public class MockNode extends Node {
-
+	
 	private int evaluateCount;
 	
 	private Object evaluate;
@@ -65,7 +65,7 @@ public class MockNode extends Node {
 	@Override
 	public Object evaluate() {
 		evaluateCount++;
-		
+
 		return evaluate;
 	}
 

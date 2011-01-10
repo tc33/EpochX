@@ -25,44 +25,93 @@ import static org.junit.Assert.*;
 
 import org.epochx.epox.*;
 import org.epochx.epox.lang.IfFunction;
-import org.epochx.gp.representation.AbstractBooleanNodeTestCase;
 import org.junit.Test;
 
 /**
- * 
+ * Unit tests for {@link org.epochx.epox.lang.IfFunction}
  */
-public class IfFunctionTest extends AbstractBooleanNodeTestCase {
+public class IfFunctionTest extends NodeTestCase {
 
 	private IfFunction ifFunction;
+	private MockNode child1;
+	private MockNode child2;
+	private MockNode child3;
 
+	/**
+	 * Part of test fixture for superclass.
+	 */
 	@Override
 	public Node getNode() {
 		return new IfFunction();
 	}
 
+	/**
+	 * Sets up the test environment.
+	 */
 	@Override
 	public void setUp() {
 		super.setUp();
+		
+		child1 = new MockNode();
+		child2 = new MockNode();
+		child3 = new MockNode();
+		child1.setGetIdentifier("child1");
+		child2.setGetIdentifier("child2");
+		child3.setGetIdentifier("child3");
+		
+		ifFunction = new IfFunction(child1, child2, child3);
 
-		ifFunction = (IfFunction) getNode();
-		final Node[] children = new Node[]{null, new Literal(true), new Literal(false)};
-		ifFunction.setChildren(children);
+		super.setUp();
 	}
 
+	/**
+	 * Tests that {@link org.epochx.epox.lang.IfFunction#evaluate()} 
+	 * correctly evaluates its second child if the first child evaluates
+	 * to <code>true</code>.
+	 */
 	@Test
-	public void testEvaluateT() {
-		ifFunction.setChild(0, new Literal(true));
-		final boolean result = (Boolean) ifFunction.evaluate();
-
-		assertTrue("IF did not evaluate 2nd child when 1st was true", result);
+	public void testEvaluateTrue() {
+		assertSame("unit test broken", 0, child2.getEvaluateCount());
+		assertSame("unit test broken", 0, child3.getEvaluateCount());
+		
+		// Test where the first child evaluates to true.
+		child1.setEvaluate(Boolean.TRUE);
+		ifFunction.evaluate();
+		assertSame("unit test broken", 1, child2.getEvaluateCount());
+		assertSame("unit test broken", 0, child3.getEvaluateCount());
 	}
-
+	
+	/**
+	 * Tests that {@link org.epochx.epox.lang.IfFunction#evaluate()} 
+	 * correctly evaluates its third child if the first child evaluates
+	 * to <code>false</code>.
+	 */
 	@Test
-	public void testEvaluateF() {
-		ifFunction.setChild(0, new Literal(false));
-		final boolean result = (Boolean) ifFunction.evaluate();
-
-		assertFalse("IF did not evaluate 3rd child when 1st was false", result);
+	public void testEvaluateFalse() {
+		assertSame("unit test broken", 0, child2.getEvaluateCount());
+		assertSame("unit test broken", 0, child3.getEvaluateCount());
+		
+		// Test where the first child evaluates to false.
+		child1.setEvaluate(Boolean.FALSE);
+		ifFunction.evaluate();
+		assertSame("unit test broken", 0, child2.getEvaluateCount());
+		assertSame("unit test broken", 1, child3.getEvaluateCount());
 	}
-
+	
+	/**
+	 * Tests that {@link org.epochx.epox.lang.IfFunction#getReturnType(Class...)}
+	 * returns a non-null type for the correct inputs, and <code>null</code>
+	 * for incorrectly typed or incorrect number of inputs.
+	 */
+	@Test
+	public void testGetReturnTypeIf() {
+		Class<?> returnType = ifFunction.getReturnType(Boolean.class, Number.class, Integer.class);
+		assertSame("unexpected return type", Number.class, returnType);
+		
+		returnType = ifFunction.getReturnType(Number.class, Number.class, Integer.class);
+		assertNull("non-Boolean type for first child should be invalid", returnType);
+		
+		returnType = ifFunction.getReturnType(Boolean.class, Number.class, Integer.class, Integer.class);
+		assertNull("too many inputs should be invalid", returnType);
+	}
 }

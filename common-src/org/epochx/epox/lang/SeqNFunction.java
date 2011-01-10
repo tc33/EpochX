@@ -35,6 +35,7 @@ public class SeqNFunction extends Node {
 	/**
 	 * Constructs a SeqNFunction with the given number of <code>null</code>
 	 * children.
+	 * @param n the arity of the function.
 	 */
 	public SeqNFunction(final int n) {
 		this((Node) null);

@@ -41,7 +41,7 @@ public final class TypeUtils {
 	public static Class<?> getSuper(final boolean autobox, final Class<?> ... classes) {
 		outer:for (final Class<?> cls1: classes) {
 			for (final Class<?> cls2: classes) {
-				if (!ClassUtils.isAssignable(cls1, cls2, autobox)) {
+				if (!ClassUtils.isAssignable(cls2, cls2, autobox)) {
 					continue outer;
 				}
 			}
@@ -64,7 +64,7 @@ public final class TypeUtils {
 	public static Class<?> getSub(final boolean autobox, final Class<?> ... classes) {
 		outer:for (final Class<?> cls1: classes) {
 			for (final Class<?> cls2: classes) {
-				if (!ClassUtils.isAssignable(cls2, cls1, autobox)) {
+				if (!ClassUtils.isAssignable(cls1, cls2, autobox)) {
 					continue outer;
 				}
 			}
@@ -139,26 +139,21 @@ public final class TypeUtils {
 	 * Get a compatible numeric type for two primitive numeric
 	 * class types. Any of (byte, short, int) will resolve to int.
 	 * 
-	 * @param c1 a numeric primitive class type (int, long, float, or double)
-	 * @param c2 a numeric primitive class type (int, long, float, or double)
+	 * @param classes a numeric class types (int, long, float, or double)
 	 * @return the compatible numeric type for binary operations involving
-	 *         both types.
+	 *         both types, or null if there is no compatible numeric type.
 	 */
 	public static Class<?> getNumericType(final Class<?> ... classes) {
-		for (int i = 0; i < classes.length; i++) {
-			if (!isNumericType(classes[i])) {
-				throw new IllegalArgumentException("Input types must be number types");
-			}
-		}
-
 		if (ArrayUtils.contains(classes, Double.class)) {
 			return Double.class;
 		} else if (ArrayUtils.contains(classes, Float.class)) {
 			return Float.class;
 		} else if (ArrayUtils.contains(classes, Long.class)) {
 			return Long.class;
-		} else {
+		} else if (ArrayUtils.contains(classes, Integer.class)){
 			return Integer.class;
+		} else {
+			return null;
 		}
 	}
 

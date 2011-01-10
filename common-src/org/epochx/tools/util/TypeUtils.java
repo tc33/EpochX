@@ -41,7 +41,7 @@ public final class TypeUtils {
 	public static Class<?> getSuper(final boolean autobox, final Class<?> ... classes) {
 		outer:for (final Class<?> cls1: classes) {
 			for (final Class<?> cls2: classes) {
-				if (!ClassUtils.isAssignable(cls2, cls2, autobox)) {
+				if (!ClassUtils.isAssignable(cls2, cls1, autobox)) {
 					continue outer;
 				}
 			}
@@ -87,7 +87,7 @@ public final class TypeUtils {
 	 */
 	public static boolean containsSub(final Class<?>[] collection, final Class<?> cls) {
 		for (final Class<?> c: collection) {
-			if (ClassUtils.isAssignable(cls, c)) {
+			if (ClassUtils.isAssignable(c, cls)) {
 				return true;
 			}
 		}
@@ -97,7 +97,7 @@ public final class TypeUtils {
 
 	public static boolean containsSuper(final Class<?>[] collection, final Class<?> cls) {
 		for (final Class<?> c: collection) {
-			if (ClassUtils.isAssignable(c, cls)) {
+			if (ClassUtils.isAssignable(cls, c)) {
 				return true;
 			}
 		}
@@ -107,7 +107,7 @@ public final class TypeUtils {
 
 	public static boolean allSub(final Class<?>[] collection, final Class<?> cls) {
 		for (final Class<?> c: collection) {
-			if (!ClassUtils.isAssignable(cls, c)) {
+			if (!ClassUtils.isAssignable(c, cls)) {
 				return false;
 			}
 		}
@@ -117,7 +117,7 @@ public final class TypeUtils {
 
 	public static boolean allSuper(final Class<?>[] collection, final Class<?> cls) {
 		for (final Class<?> c: collection) {
-			if (!ClassUtils.isAssignable(c, cls)) {
+			if (!ClassUtils.isAssignable(cls, c)) {
 				return false;
 			}
 		}

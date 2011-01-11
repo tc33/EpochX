@@ -56,7 +56,7 @@ public class CotangentFunction extends Node {
 	public Double evaluate() {
 		final Object c = getChild(0).evaluate();
 
-		return 1 / Math.tan(NumericUtils.asDouble(c));
+		return MathUtils.cotan(NumericUtils.asDouble(c));
 	}
 
 	/**

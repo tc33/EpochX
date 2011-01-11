@@ -69,7 +69,7 @@ public class AddFunction extends Node {
 		final Object c1 = getChild(0).evaluate();
 		final Object c2 = getChild(1).evaluate();
 
-		final Class<?> returnType = getReturnType();
+		final Class<?> returnType = TypeUtils.getNumericType(c1.getClass(), c2.getClass());
 
 		if (returnType == Double.class) {
 			// Add as doubles.

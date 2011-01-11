@@ -144,16 +144,18 @@ public final class TypeUtils {
 	 *         both types, or null if there is no compatible numeric type.
 	 */
 	public static Class<?> getNumericType(final Class<?> ... classes) {
+		if (!isAllNumericType(classes)) {
+			return null;
+		}
+		
 		if (ArrayUtils.contains(classes, Double.class)) {
 			return Double.class;
 		} else if (ArrayUtils.contains(classes, Float.class)) {
 			return Float.class;
 		} else if (ArrayUtils.contains(classes, Long.class)) {
 			return Long.class;
-		} else if (ArrayUtils.contains(classes, Integer.class)){
-			return Integer.class;
 		} else {
-			return null;
+			return Integer.class;
 		}
 	}
 

@@ -24,14 +24,15 @@ package org.epochx.epox.math;
 import static org.junit.Assert.*;
 
 import org.epochx.epox.*;
+import org.epochx.tools.util.MathUtils;
 import org.junit.Test;
 
 /**
- * Unit tests for {@link org.epochx.epox.math.AbsoluteFunction}
+ * Unit tests for {@link org.epochx.epox.math.ArcSecantFunction}
  */
-public class AbsoluteFunctionTest extends NodeTestCase {
+public class ArcSecantFunctionTest extends NodeTestCase {
 
-	private AbsoluteFunction abs;
+	private ArcSecantFunction asec;
 	private MockNode child;
 	
 	/**
@@ -39,7 +40,7 @@ public class AbsoluteFunctionTest extends NodeTestCase {
 	 */
 	@Override
 	public Node getNode() {
-		return new AbsoluteFunction();
+		return new ArcSecantFunction();
 	}
 	
 	/**
@@ -50,61 +51,62 @@ public class AbsoluteFunctionTest extends NodeTestCase {
 		super.setUp();
 		
 		child = new MockNode();
-		abs = new AbsoluteFunction(child);
+		asec = new ArcSecantFunction(child);
 
 		super.setUp();
 	}
-
+	
 	/**
-	 * Tests that {@link org.epochx.epox.math.AbsoluteFunction#evaluate()} 
+	 * Tests that {@link org.epochx.epox.math.ArcSecantFunction#evaluate()} 
 	 * correctly evaluates double values.
 	 */
 	@Test
 	public void testEvaluateDouble() {
-		child.setEvaluate(0.0);
-		assertEquals("ABS of 0.0 should be 0.0", 0.0, abs.evaluate());
+		child.setEvaluate(MathUtils.sec(0.6));
+		assertEquals("ASEC should be the inverse of secant", 0.6, asec.evaluate(), 1);
 		
-		child.setEvaluate(-2.42);
-		assertEquals("ABS of -2.42 should be 2.42", 2.42, abs.evaluate());
+		child.setEvaluate(MathUtils.sec(-0.6));
+		//TODO Are we sure this is right? Not -0.6?
+		assertEquals("ASEC should be the inverse of secant", 0.6, asec.evaluate(), 1);
 	
-		child.setEvaluate(2.42);
-		assertEquals("ABS of 2.42 should be 2.42", 2.42, abs.evaluate());
+		child.setEvaluate(0.0);
+		assertEquals("ASEC of 0.0 should be NaN", Double.NaN, asec.evaluate(), 0);
+		
+		child.setEvaluate(Double.NaN);
+		assertEquals("ASEC of NaN should be NaN", Double.NaN, (Object) asec.evaluate());
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.AbsoluteFunction#evaluate()} 
+	 * Tests that {@link org.epochx.epox.math.ArcSecantFunction#evaluate()} 
 	 * correctly evaluates integer values.
 	 */
 	@Test
 	public void testEvaluateInteger() {
-		child.setEvaluate(0);
-		assertSame("ABS of 0 should be 0", 0, abs.evaluate());
+		child.setEvaluate(1);
+		assertSame("ASEC of an integer should return double", Double.class, asec.evaluate().getClass());
 		
-		child.setEvaluate(-2);
-		assertSame("ABS of -2 should be 2", 2, abs.evaluate());
-	
-		child.setEvaluate(3);
-		assertSame("ABS of 3 should be 3", 3, abs.evaluate());
+		child.setEvaluate(0);
+		assertEquals("ASEC of 0 should be NaN", Double.NaN, (Object) asec.evaluate());
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.AbsoluteFunction#getReturnType(Class...)}
-	 * returns the same type for a numeric class and <code>null</code> otherwise.
+	 * Tests that {@link org.epochx.epox.math.ArcSecantFunction#getReturnType(Class...)}
+	 * returns <code>Double</code> for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
-	public void testGetReturnTypeAbs() {
-		Class<?>[] inputTypes = {Double.class, Integer.class, Float.class, Long.class};
+	public void testGetReturnTypeAsec() {
+		Class<?>[] inputTypes = {Double.class, Integer.class, Float.class, Long.class, Short.class, Byte.class};
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = abs.getReturnType(type);
-			assertSame("unexpected return type", type, returnType);
+			returnType = asec.getReturnType(type);
+			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = abs.getReturnType(Boolean.class);
+		returnType = asec.getReturnType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = abs.getReturnType(Integer.class, Integer.class);
+		returnType = asec.getReturnType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 }

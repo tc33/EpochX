@@ -27,11 +27,11 @@ import org.epochx.epox.*;
 import org.junit.Test;
 
 /**
- * Unit tests for {@link org.epochx.epox.math.AbsoluteFunction}
+ * Unit tests for {@link org.epochx.epox.math.ArcSineFunction}
  */
-public class AbsoluteFunctionTest extends NodeTestCase {
+public class ArcSineFunctionTest extends NodeTestCase {
 
-	private AbsoluteFunction abs;
+	private ArcSineFunction asin;
 	private MockNode child;
 	
 	/**
@@ -39,7 +39,7 @@ public class AbsoluteFunctionTest extends NodeTestCase {
 	 */
 	@Override
 	public Node getNode() {
-		return new AbsoluteFunction();
+		return new ArcSineFunction();
 	}
 	
 	/**
@@ -50,61 +50,68 @@ public class AbsoluteFunctionTest extends NodeTestCase {
 		super.setUp();
 		
 		child = new MockNode();
-		abs = new AbsoluteFunction(child);
+		asin = new ArcSineFunction(child);
 
 		super.setUp();
 	}
-
+	
 	/**
-	 * Tests that {@link org.epochx.epox.math.AbsoluteFunction#evaluate()} 
+	 * Tests that {@link org.epochx.epox.math.ArcSineFunction#evaluate()} 
 	 * correctly evaluates double values.
 	 */
 	@Test
 	public void testEvaluateDouble() {
 		child.setEvaluate(0.0);
-		assertEquals("ABS of 0.0 should be 0.0", 0.0, abs.evaluate());
+		assertEquals("ASIN of 0.0 should be 0.0", 0.0, (Object) asin.evaluate());
 		
-		child.setEvaluate(-2.42);
-		assertEquals("ABS of -2.42 should be 2.42", 2.42, abs.evaluate());
+		child.setEvaluate(Math.sin(0.6));
+		assertEquals("ASIN should be the inverse of sine", 0.6, (Object) asin.evaluate());
 	
-		child.setEvaluate(2.42);
-		assertEquals("ABS of 2.42 should be 2.42", 2.42, abs.evaluate());
+		child.setEvaluate(Math.sin(-0.6));
+		assertEquals("ASIN should be the inverse of sine", -0.6, (Object) asin.evaluate());
+		
+		child.setEvaluate(1.1);
+		assertEquals("ASIN of 1.1 should be NaN", Double.NaN, (Object) asin.evaluate());
+		
+		child.setEvaluate(Double.NaN);
+		assertEquals("ASIN of NaN should be NaN", Double.NaN, (Object) asin.evaluate());
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.AbsoluteFunction#evaluate()} 
+	 * Tests that {@link org.epochx.epox.math.ArcSineFunction#evaluate()} 
 	 * correctly evaluates integer values.
 	 */
 	@Test
 	public void testEvaluateInteger() {
 		child.setEvaluate(0);
-		assertSame("ABS of 0 should be 0", 0, abs.evaluate());
+		assertSame("ASIN of an integer should return double", Double.class, asin.evaluate().getClass());
+		assertEquals("ASIN of 0 should be 0.0", 0.0, (Object) asin.evaluate());
 		
 		child.setEvaluate(-2);
-		assertSame("ABS of -2 should be 2", 2, abs.evaluate());
+		assertEquals("ASIN of -2 should be NaN", Double.NaN, (Object) asin.evaluate());
 	
-		child.setEvaluate(3);
-		assertSame("ABS of 3 should be 3", 3, abs.evaluate());
+		child.setEvaluate(2);
+		assertEquals("ASIN of 2 should be NaN", Double.NaN, (Object) asin.evaluate());
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.AbsoluteFunction#getReturnType(Class...)}
-	 * returns the same type for a numeric class and <code>null</code> otherwise.
+	 * Tests that {@link org.epochx.epox.math.ArcSineFunction#getReturnType(Class...)}
+	 * returns <code>Double</code> for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
-	public void testGetReturnTypeAbs() {
-		Class<?>[] inputTypes = {Double.class, Integer.class, Float.class, Long.class};
+	public void testGetReturnTypeAsin() {
+		Class<?>[] inputTypes = {Double.class, Integer.class, Float.class, Long.class, Short.class, Byte.class};
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = abs.getReturnType(type);
-			assertSame("unexpected return type", type, returnType);
+			returnType = asin.getReturnType(type);
+			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = abs.getReturnType(Boolean.class);
+		returnType = asin.getReturnType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = abs.getReturnType(Integer.class, Integer.class);
+		returnType = asin.getReturnType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 }

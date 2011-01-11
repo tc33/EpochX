@@ -56,7 +56,7 @@ public class SecantFunction extends Node {
 	public Double evaluate() {
 		final Object c = getChild(0).evaluate();
 
-		return 1 / Math.cos(NumericUtils.asDouble(c));
+		return MathUtils.sec(NumericUtils.asDouble(c));
 	}
 
 	/**

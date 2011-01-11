@@ -27,11 +27,11 @@ import org.epochx.epox.*;
 import org.junit.Test;
 
 /**
- * Unit tests for {@link org.epochx.epox.math.AbsoluteFunction}
+ * Unit tests for {@link org.epochx.epox.math.ArcTangentFunction}
  */
-public class AbsoluteFunctionTest extends NodeTestCase {
+public class ArcTangentFunctionTest extends NodeTestCase {
 
-	private AbsoluteFunction abs;
+	private ArcTangentFunction atan;
 	private MockNode child;
 	
 	/**
@@ -39,7 +39,7 @@ public class AbsoluteFunctionTest extends NodeTestCase {
 	 */
 	@Override
 	public Node getNode() {
-		return new AbsoluteFunction();
+		return new ArcTangentFunction();
 	}
 	
 	/**
@@ -50,61 +50,59 @@ public class AbsoluteFunctionTest extends NodeTestCase {
 		super.setUp();
 		
 		child = new MockNode();
-		abs = new AbsoluteFunction(child);
+		atan = new ArcTangentFunction(child);
 
 		super.setUp();
 	}
-
+	
 	/**
-	 * Tests that {@link org.epochx.epox.math.AbsoluteFunction#evaluate()} 
+	 * Tests that {@link org.epochx.epox.math.ArcTangentFunction#evaluate()} 
 	 * correctly evaluates double values.
 	 */
 	@Test
 	public void testEvaluateDouble() {
 		child.setEvaluate(0.0);
-		assertEquals("ABS of 0.0 should be 0.0", 0.0, abs.evaluate());
+		assertEquals("ATAN of 0.0 should be 0.0", 0.0, (Object) atan.evaluate());
 		
-		child.setEvaluate(-2.42);
-		assertEquals("ABS of -2.42 should be 2.42", 2.42, abs.evaluate());
+		child.setEvaluate(Math.tan(0.6));
+		assertEquals("ATAN should be the inverse of tan", 0.6, (Object) atan.evaluate());
 	
-		child.setEvaluate(2.42);
-		assertEquals("ABS of 2.42 should be 2.42", 2.42, abs.evaluate());
+		child.setEvaluate(Math.tan(-0.6));
+		assertEquals("ATAN should be the inverse of tan", -0.6, (Object) atan.evaluate());
+		
+		child.setEvaluate(Double.NaN);
+		assertEquals("ATAN of NaN should be NaN", Double.NaN, (Object) atan.evaluate());
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.AbsoluteFunction#evaluate()} 
+	 * Tests that {@link org.epochx.epox.math.ArcTangentFunction#evaluate()} 
 	 * correctly evaluates integer values.
 	 */
 	@Test
 	public void testEvaluateInteger() {
 		child.setEvaluate(0);
-		assertSame("ABS of 0 should be 0", 0, abs.evaluate());
-		
-		child.setEvaluate(-2);
-		assertSame("ABS of -2 should be 2", 2, abs.evaluate());
-	
-		child.setEvaluate(3);
-		assertSame("ABS of 3 should be 3", 3, abs.evaluate());
+		assertSame("ATAN of an integer should return double", Double.class, atan.evaluate().getClass());
+		assertEquals("ATAN of 0 should be 0.0", 0.0, (Object) atan.evaluate());
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.AbsoluteFunction#getReturnType(Class...)}
-	 * returns the same type for a numeric class and <code>null</code> otherwise.
+	 * Tests that {@link org.epochx.epox.math.ArcTangentFunction#getReturnType(Class...)}
+	 * returns <code>Double</code> for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
-	public void testGetReturnTypeAbs() {
-		Class<?>[] inputTypes = {Double.class, Integer.class, Float.class, Long.class};
+	public void testGetReturnTypeAtan() {
+		Class<?>[] inputTypes = {Double.class, Integer.class, Float.class, Long.class, Short.class, Byte.class};
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = abs.getReturnType(type);
-			assertSame("unexpected return type", type, returnType);
+			returnType = atan.getReturnType(type);
+			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = abs.getReturnType(Boolean.class);
+		returnType = atan.getReturnType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = abs.getReturnType(Integer.class, Integer.class);
+		returnType = atan.getReturnType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 }

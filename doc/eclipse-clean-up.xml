@@ -46,7 +46,7 @@
 <setting id="cleanup.use_parentheses_in_expressions" value="true"/>
 <setting id="cleanup.qualify_static_field_accesses_with_declaring_class" value="false"/>
 <setting id="cleanup.use_this_for_non_static_method_access_only_if_necessary" value="true"/>
-<setting id="cleanup.use_this_for_non_static_method_access" value="false"/>
+<setting id="cleanup.use_this_for_non_static_method_access" value="true"/>
 <setting id="cleanup.qualify_static_member_accesses_through_instances_with_declaring_class" value="true"/>
 <setting id="cleanup.add_serial_version_id" value="true"/>
 <setting id="cleanup.format_source_code_changes_only" value="false"/>

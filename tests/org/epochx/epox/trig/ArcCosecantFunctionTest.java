@@ -19,19 +19,21 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox.math;
+package org.epochx.epox.trig;
 
 import static org.junit.Assert.*;
 
 import org.epochx.epox.*;
+import org.epochx.epox.trig.ArcCosecantFunction;
+import org.epochx.tools.util.MathUtils;
 import org.junit.Test;
 
 /**
- * Unit tests for {@link org.epochx.epox.math.CosineFunction}
+ * Unit tests for {@link org.epochx.epox.trig.ArcCosecantFunction}
  */
-public class CosineFunctionTest extends NodeTestCase {
+public class ArcCosecantFunctionTest extends NodeTestCase {
 
-	private CosineFunction cos;
+	private ArcCosecantFunction arccsc;
 	private MockNode child;
 	
 	/**
@@ -39,7 +41,7 @@ public class CosineFunctionTest extends NodeTestCase {
 	 */
 	@Override
 	public Node getNode() {
-		return new CosineFunction();
+		return new ArcCosecantFunction();
 	}
 	
 	/**
@@ -50,58 +52,64 @@ public class CosineFunctionTest extends NodeTestCase {
 		super.setUp();
 		
 		child = new MockNode();
-		cos = new CosineFunction(child);
+		arccsc = new ArcCosecantFunction(child);
 
 		super.setUp();
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.CosineFunction#evaluate()} 
+	 * Tests that {@link org.epochx.epox.trig.ArcCosecantFunction#evaluate()} 
 	 * correctly evaluates double values.
 	 */
 	@Test
 	public void testEvaluateDouble() {
-		child.setEvaluate(0.0);
-		assertEquals("COS of 0.0 should be 1.0", 1.0, cos.evaluate(), 0);
+		child.setEvaluate(MathUtils.csc(0.6));
+		assertEquals("ACSC should be the inverse of csc", 0.6, arccsc.evaluate(), 0);
 		
-		child.setEvaluate(Math.acos(0.6));
-		assertEquals("COS is not calculated correctly", 0.6, cos.evaluate(), 0);
+		child.setEvaluate(MathUtils.csc(-0.6));
+		assertEquals("ACSC should be the inverse of csc", -0.6, arccsc.evaluate(), 0);
 	
-		child.setEvaluate(Math.acos(-0.6));
-		assertEquals("COS is not calculated correctly", -0.6, cos.evaluate(), 1);
+		child.setEvaluate(0.0);
+		assertEquals("ACSC of 0.0 should be NaN", Double.NaN, arccsc.evaluate(), 0);
+		
+		child.setEvaluate(0.9);
+		assertEquals("ARCSEC of 0.9 should be NaN", Double.NaN, arccsc.evaluate(), 0);
+		
+		child.setEvaluate(Double.NaN);
+		assertEquals("ACSC of NaN should be NaN", Double.NaN, (Object) arccsc.evaluate());
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.CosineFunction#evaluate()} 
+	 * Tests that {@link org.epochx.epox.trig.ArcCosecantFunction#evaluate()} 
 	 * correctly evaluates integer values.
 	 */
 	@Test
 	public void testEvaluateInteger() {
-		child.setEvaluate(0);
-		assertEquals("COS of 0 should be 1.0", 1.0, cos.evaluate(), 0);
-		
 		child.setEvaluate(1);
-		assertSame("COS of an integer should return double", Double.class, cos.evaluate().getClass());
+		assertSame("ACSC of an integer should return double", Double.class, arccsc.evaluate().getClass());
+		
+		child.setEvaluate(0);
+		assertEquals("ACSC of 0 should be NaN", Double.NaN, (Object) arccsc.evaluate());
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.CosineFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.trig.ArcCosecantFunction#getReturnType(Class...)}
 	 * returns <code>Double</code> for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
-	public void testGetReturnTypeCos() {
+	public void testGetReturnTypeArccsc() {
 		Class<?>[] inputTypes = {Double.class, Integer.class, Float.class, Long.class, Short.class, Byte.class};
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = cos.getReturnType(type);
+			returnType = arccsc.getReturnType(type);
 			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = cos.getReturnType(Boolean.class);
+		returnType = arccsc.getReturnType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = cos.getReturnType(Integer.class, Integer.class);
+		returnType = arccsc.getReturnType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 }

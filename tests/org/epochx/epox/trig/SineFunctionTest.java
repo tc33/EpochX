@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox.math;
+package org.epochx.epox.trig;
 
 import static org.junit.Assert.*;
 
@@ -27,11 +27,11 @@ import org.epochx.epox.*;
 import org.junit.Test;
 
 /**
- * Unit tests for {@link org.epochx.epox.math.ArcCosineFunction}
+ * Unit tests for {@link org.epochx.epox.trig.SineFunction}
  */
-public class ArcCosineFunctionTest extends NodeTestCase {
+public class SineFunctionTest extends NodeTestCase {
 
-	private ArcCosineFunction acos;
+	private SineFunction sin;
 	private MockNode child;
 	
 	/**
@@ -39,7 +39,7 @@ public class ArcCosineFunctionTest extends NodeTestCase {
 	 */
 	@Override
 	public Node getNode() {
-		return new ArcCosineFunction();
+		return new SineFunction();
 	}
 	
 	/**
@@ -50,68 +50,64 @@ public class ArcCosineFunctionTest extends NodeTestCase {
 		super.setUp();
 		
 		child = new MockNode();
-		acos = new ArcCosineFunction(child);
+		sin = new SineFunction(child);
 
 		super.setUp();
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.ArcCosineFunction#evaluate()} 
+	 * Tests that {@link org.epochx.epox.trig.SineFunction#evaluate()} 
 	 * correctly evaluates double values.
 	 */
 	@Test
 	public void testEvaluateDouble() {
-		child.setEvaluate(Math.cos(0.6));
-		assertEquals("ACOS should be the inverse of cos", 0.6, (Object) acos.evaluate());
+		child.setEvaluate(0.0);
+		assertEquals("SIN of 0.0 should be 0.0", 0.0, sin.evaluate(), 0);
 		
-		child.setEvaluate(Math.cos(-0.6));
-		assertEquals("ACOS should be the inverse of cos", 0.6, (Object) acos.evaluate());
+		child.setEvaluate(Math.asin(0.6));
+		assertEquals("SIN should be the inverse of asin", 0.6, sin.evaluate(), 0);
 	
-		child.setEvaluate(1.0);
-		assertEquals("ACOS of 1.0 should be 0.0", 0.0, (Object) acos.evaluate());
+		child.setEvaluate(Math.asin(-0.6));
+		assertEquals("SIN should be the inverse of asin", -0.6, sin.evaluate(), 1);
 		
-		child.setEvaluate(1.1);
-		assertEquals("ACOS of 1.1 should be NaN", Double.NaN, (Object) acos.evaluate());
+		child.setEvaluate(Double.POSITIVE_INFINITY);
+		assertEquals("SIN of infinity should be NaN", Double.NaN, sin.evaluate(), 0);
 		
 		child.setEvaluate(Double.NaN);
-		assertEquals("ACOS of NaN should be NaN", Double.NaN, (Object) acos.evaluate());
+		assertEquals("SIN of NaN should be NaN", Double.NaN, sin.evaluate(), 0);
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.ArcCosineFunction#evaluate()} 
+	 * Tests that {@link org.epochx.epox.trig.SineFunction#evaluate()} 
 	 * correctly evaluates integer values.
 	 */
 	@Test
 	public void testEvaluateInteger() {
-		child.setEvaluate(1);
-		assertSame("ACOS of an integer should return double", Double.class, acos.evaluate().getClass());
-		assertEquals("ACOS of 1 should be 0.0", 0.0, (Object) acos.evaluate());
+		child.setEvaluate(0);
+		assertEquals("SIN of 0 should be 0.0", 0.0, sin.evaluate(), 0);
 		
-		child.setEvaluate(-2);
-		assertEquals("ACOS of -2 should be NaN", Double.NaN, (Object) acos.evaluate());
-	
-		child.setEvaluate(2);
-		assertEquals("ACOS of 2 should be NaN", Double.NaN, (Object) acos.evaluate());
+		child.setEvaluate(1);
+		assertSame("SIN of an integer should return double", Double.class, sin.evaluate().getClass());
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.ArcCosineFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.trig.SineFunction#getReturnType(Class...)}
 	 * returns <code>Double</code> for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
-	public void testGetReturnTypeAcos() {
+	public void testGetReturnTypeSin() {
 		Class<?>[] inputTypes = {Double.class, Integer.class, Float.class, Long.class, Short.class, Byte.class};
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = acos.getReturnType(type);
+			returnType = sin.getReturnType(type);
 			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = acos.getReturnType(Boolean.class);
+		returnType = sin.getReturnType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = acos.getReturnType(Integer.class, Integer.class);
+		returnType = sin.getReturnType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 }

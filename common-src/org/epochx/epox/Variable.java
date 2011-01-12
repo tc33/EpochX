@@ -25,8 +25,8 @@ public class Variable extends Node {
 	 * Constructs a new variable with a <code>null</code> value. The variable's
 	 * name and data-type must be provided.
 	 * 
-	 * @param identifier
-	 * @param datatype
+	 * @param identifier the name of the variable.
+	 * @param datatype the data-type that all values will be assignable to.
 	 */
 	public Variable(final String identifier, final Class<?> datatype) {
 		this.identifier = identifier;

@@ -28,6 +28,8 @@ import java.util.*;
  */
 public final class NodeUtils {
 
+	private NodeUtils() {}
+	
 	/**
 	 * Returns those nodes from the given syntax that have an arity of 0.
 	 * 

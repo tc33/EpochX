@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox.math;
+package org.epochx.epox.trig;
 
 import static org.junit.Assert.*;
 
@@ -28,11 +28,11 @@ import org.epochx.tools.util.MathUtils;
 import org.junit.Test;
 
 /**
- * Unit tests for {@link org.epochx.epox.math.ArcCosecantFunction}
+ * Unit tests for {@link org.epochx.epox.trig.HyperbolicCosineFunction}
  */
-public class ArcCosecantFunctionTest extends NodeTestCase {
+public class HyperbolicCosineFunctionTest extends NodeTestCase {
 
-	private ArcCosecantFunction acsc;
+	private HyperbolicCosineFunction cosh;
 	private MockNode child;
 	
 	/**
@@ -40,7 +40,7 @@ public class ArcCosecantFunctionTest extends NodeTestCase {
 	 */
 	@Override
 	public Node getNode() {
-		return new ArcCosecantFunction();
+		return new HyperbolicCosineFunction();
 	}
 	
 	/**
@@ -51,61 +51,58 @@ public class ArcCosecantFunctionTest extends NodeTestCase {
 		super.setUp();
 		
 		child = new MockNode();
-		acsc = new ArcCosecantFunction(child);
+		cosh = new HyperbolicCosineFunction(child);
 
 		super.setUp();
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.ArcCosecantFunction#evaluate()} 
+	 * Tests that {@link org.epochx.epox.trig.HyperbolicCosineFunction#evaluate()} 
 	 * correctly evaluates double values.
 	 */
 	@Test
 	public void testEvaluateDouble() {
-		child.setEvaluate(MathUtils.cosec(0.6));
-		assertEquals("ACSC should be the inverse of cosec", 0.6, acsc.evaluate(), 0);
+		child.setEvaluate(MathUtils.arcosh(1.6));
+		assertEquals("COSH should be the inverse of arcosh", 1.6, cosh.evaluate(), 1);
 		
-		child.setEvaluate(MathUtils.cosec(-0.6));
-		assertEquals("ACSC should be the inverse of cosec", -0.6, acsc.evaluate(), 0);
-	
-		child.setEvaluate(0.0);
-		assertEquals("ACSC of 0.0 should be NaN", Double.NaN, acsc.evaluate(), 0);
+		child.setEvaluate(MathUtils.arcosh(1.0));
+		assertEquals("COSH should be the inverse of arcosh", 1.0, cosh.evaluate(), 0);
 		
 		child.setEvaluate(Double.NaN);
-		assertEquals("ACSC of NaN should be NaN", Double.NaN, (Object) acsc.evaluate());
+		assertEquals("COSH of NaN should be NaN", Double.NaN, (Object) cosh.evaluate());
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.ArcCosecantFunction#evaluate()} 
+	 * Tests that {@link org.epochx.epox.trig.HyperbolicCosineFunction#evaluate()} 
 	 * correctly evaluates integer values.
 	 */
 	@Test
 	public void testEvaluateInteger() {
-		child.setEvaluate(1);
-		assertSame("ACSC of an integer should return double", Double.class, acsc.evaluate().getClass());
+		child.setEvaluate(0);
+		assertSame("COSH of an integer should return double", Double.class, cosh.evaluate().getClass());
 		
 		child.setEvaluate(0);
-		assertEquals("ACSC of 0 should be NaN", Double.NaN, (Object) acsc.evaluate());
+		assertEquals("COSH of 0 should be 1.0", 1.0, (Object) cosh.evaluate());
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.ArcCosecantFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.trig.HyperbolicCosineFunction#getReturnType(Class...)}
 	 * returns <code>Double</code> for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
-	public void testGetReturnTypeAcsc() {
+	public void testGetReturnTypeCosh() {
 		Class<?>[] inputTypes = {Double.class, Integer.class, Float.class, Long.class, Short.class, Byte.class};
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = acsc.getReturnType(type);
+			returnType = cosh.getReturnType(type);
 			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = acsc.getReturnType(Boolean.class);
+		returnType = cosh.getReturnType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = acsc.getReturnType(Integer.class, Integer.class);
+		returnType = cosh.getReturnType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 }

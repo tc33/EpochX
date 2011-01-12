@@ -19,52 +19,52 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox.math;
+package org.epochx.epox.trig;
 
 import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A function node which performs the reciprocal trigonometric
- * function of secant, called SEC. Secant x is equal to 1/cos x.
+ * A function node which performs the inverse trigonometric function of
+ * arc-cotangent, called ARCCOT.
  */
-public class SecantFunction extends Node {
+public class ArcCotangentFunction extends Node {
 
 	/**
-	 * Constructs a SecantFunction with one <code>null</code> child.
+	 * Constructs an ArcCotangentFunction with one <code>null</code> child.
 	 */
-	public SecantFunction() {
+	public ArcCotangentFunction() {
 		this(null);
 	}
 
 	/**
-	 * Constructs a SecantFunction with one numerical child node.
+	 * Constructs an ArcCotangentFunction with one numerical child node.
 	 * 
 	 * @param child the child node.
 	 */
-	public SecantFunction(final Node child) {
+	public ArcCotangentFunction(final Node child) {
 		super(child);
 	}
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a numeric type (one of Double, Float, Long,
-	 * Integer). 1 is divided by the cos of this value to give the result as a
-	 * double value.
+	 * Integer). The arc-cotangent of this value becomes the result of this
+	 * method as a double value.
 	 */
 	@Override
 	public Double evaluate() {
 		final Object c = getChild(0).evaluate();
 
-		return MathUtils.sec(NumericUtils.asDouble(c));
+		return MathUtils.arccot(NumericUtils.asDouble(c));
 	}
 
 	/**
-	 * Returns the identifier of this function which is SEC.
+	 * Returns the identifier of this function which is ARCCOT.
 	 */
 	@Override
 	public String getIdentifier() {
-		return "SEC";
+		return "ARCCOT";
 	}
 
 	/**

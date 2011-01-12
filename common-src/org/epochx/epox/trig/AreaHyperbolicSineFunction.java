@@ -19,52 +19,53 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox.math;
+package org.epochx.epox.trig;
 
 import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A function node which performs the hyperbolic trigonometric
- * function of hyperbolic tangent, called TANH.
+ * A function node which performs the inverse hyperbolic trigonometric function 
+ * of area hyperbolic sine, called ARSINH.
  */
-public class HyperbolicTangentFunction extends Node {
+public class AreaHyperbolicSineFunction extends Node {
 
 	/**
-	 * Constructs a HyperbolicTangentFunction with one <code>null</code> child.
+	 * Constructs an AreaHyperbolicSineFunction with one <code>null</code> 
+	 * child.
 	 */
-	public HyperbolicTangentFunction() {
+	public AreaHyperbolicSineFunction() {
 		this(null);
 	}
 
 	/**
-	 * Constructs a HyperbolicTangentFunction with one numerical child node.
+	 * Constructs a AreaHyperbolicSineFunction with one numerical child node.
 	 * 
 	 * @param child the child node.
 	 */
-	public HyperbolicTangentFunction(final Node child) {
+	public AreaHyperbolicSineFunction(final Node child) {
 		super(child);
 	}
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a numeric type (one of Double, Float, Long,
-	 * Integer). The hyperbolic tangent of this value becomes the result of this
-	 * method as a double value.
+	 * Integer). The area hyperbolic sine of this value becomes the result of 
+	 * this method as a double value.
 	 */
 	@Override
 	public Double evaluate() {
 		final Object c = getChild(0).evaluate();
 
-		return Math.tanh(NumericUtils.asDouble(c));
+		return MathUtils.arsinh(NumericUtils.asDouble(c));
 	}
 
 	/**
-	 * Returns the identifier of this function which is TANH.
+	 * Returns the identifier of this function which is ARSINH.
 	 */
 	@Override
 	public String getIdentifier() {
-		return "TANH";
+		return "ARSINH";
 	}
 
 	/**

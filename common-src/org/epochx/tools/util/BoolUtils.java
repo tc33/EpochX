@@ -27,6 +27,8 @@ package org.epochx.tools.util;
  */
 public final class BoolUtils {
 
+	private BoolUtils() {}
+	
 	/**
 	 * Translates a <code>String</code> of zero ('0') and one ('1') characters
 	 * to an array of <code>boolean</code>. <code>0</code> characters are

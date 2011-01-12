@@ -141,7 +141,7 @@ public class DoubleERC extends Literal {
 	 * Sets the random number generator to be used for generating the double
 	 * value of new <code>DoubleERC</code> instances.
 	 * 
-	 * @param the random number generator to set
+	 * @param rng the random number generator to set
 	 */
 	public void setRNG(final RandomNumberGenerator rng) {
 		this.rng = rng;
@@ -177,7 +177,7 @@ public class DoubleERC extends Literal {
 	/**
 	 * Sets the inclusive upper bound for newly generated values.
 	 * 
-	 * @param lower the upper bound for values.
+	 * @param upper the upper bound for values.
 	 */
 	public void setUpper(final double upper) {
 		this.upper = upper;

@@ -19,52 +19,53 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox.math;
+package org.epochx.epox.trig;
 
 import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A function node which performs the reciprocal trigonometric
- * function of cosecant, called COSEC. Cosecant x is equal to 1/sin x.
+ * A function node which performs the inverse hyperbolic trigonometric function 
+ * of area hyperbolic tangent, called ARTANH.
  */
-public class CosecantFunction extends Node {
+public class AreaHyperbolicTangentFunction extends Node {
 
 	/**
-	 * Constructs a CosecantFunction with one <code>null</code> child.
+	 * Constructs an AreaHyperbolicTangentFunction with one <code>null</code> 
+	 * child.
 	 */
-	public CosecantFunction() {
+	public AreaHyperbolicTangentFunction() {
 		this(null);
 	}
 
 	/**
-	 * Constructs a CosecantFunction with one numerical child node.
+	 * Constructs a AreaHyperbolicTangentFunction with one numerical child node.
 	 * 
 	 * @param child the child node.
 	 */
-	public CosecantFunction(final Node child) {
+	public AreaHyperbolicTangentFunction(final Node child) {
 		super(child);
 	}
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a numeric type (one of Double, Float, Long,
-	 * Integer). 1 is divided by the sine of this value to give the result as a
-	 * double value.
+	 * Integer). The area hyperbolic tangent of this value becomes the result of 
+	 * this method as a double value.
 	 */
 	@Override
 	public Double evaluate() {
 		final Object c = getChild(0).evaluate();
 
-		return MathUtils.cosec(NumericUtils.asDouble(c));
+		return MathUtils.artanh(NumericUtils.asDouble(c));
 	}
 
 	/**
-	 * Returns the identifier of this function which is COSEC.
+	 * Returns the identifier of this function which is ARTANH.
 	 */
 	@Override
 	public String getIdentifier() {
-		return "COSEC";
+		return "ARTANH";
 	}
 
 	/**

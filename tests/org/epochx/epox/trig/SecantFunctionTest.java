@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox.math;
+package org.epochx.epox.trig;
 
 import static org.junit.Assert.*;
 
@@ -28,11 +28,11 @@ import org.epochx.tools.util.MathUtils;
 import org.junit.Test;
 
 /**
- * Unit tests for {@link org.epochx.epox.math.ArcCotangentFunction}
+ * Unit tests for {@link org.epochx.epox.trig.SecantFunction}
  */
-public class ArcCotangentFunctionTest extends NodeTestCase {
+public class SecantFunctionTest extends NodeTestCase {
 
-	private ArcCotangentFunction acot;
+	private SecantFunction sec;
 	private MockNode child;
 	
 	/**
@@ -40,7 +40,7 @@ public class ArcCotangentFunctionTest extends NodeTestCase {
 	 */
 	@Override
 	public Node getNode() {
-		return new ArcCotangentFunction();
+		return new SecantFunction();
 	}
 	
 	/**
@@ -51,58 +51,58 @@ public class ArcCotangentFunctionTest extends NodeTestCase {
 		super.setUp();
 		
 		child = new MockNode();
-		acot = new ArcCotangentFunction(child);
+		sec = new SecantFunction(child);
 
 		super.setUp();
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.ArcCotangentFunction#evaluate()} 
+	 * Tests that {@link org.epochx.epox.trig.SecantFunction#evaluate()} 
 	 * correctly evaluates double values.
 	 */
 	@Test
 	public void testEvaluateDouble() {
-		child.setEvaluate(MathUtils.cotan(0.6));
-		assertEquals("ACOT should be the inverse of cotan", 0.6, acot.evaluate(), 1);
-		
-		child.setEvaluate(MathUtils.cotan(-0.6));
-		assertEquals("ACOT should be the inverse of cotan", -0.6, acot.evaluate(), 1);
+		child.setEvaluate(MathUtils.arcsec(1.6));
+		assertEquals("SEC should be the inverse of arsec", 1.6, sec.evaluate(), 1);
+	
+		child.setEvaluate(0.0);
+		assertEquals("SEC of 0.0 should be 1.0", 1.0, sec.evaluate(), 0);
 		
 		child.setEvaluate(Double.NaN);
-		assertEquals("ACOT of NaN should be NaN", Double.NaN, (Object) acot.evaluate());
+		assertEquals("SEC of NaN should be NaN", Double.NaN, (Object) sec.evaluate());
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.ArcCotangentFunction#evaluate()} 
+	 * Tests that {@link org.epochx.epox.trig.SecantFunction#evaluate()} 
 	 * correctly evaluates integer values.
 	 */
 	@Test
 	public void testEvaluateInteger() {
 		child.setEvaluate(1);
-		assertSame("ACOT of an integer should return double", Double.class, acot.evaluate().getClass());
+		assertSame("SEC of an integer should return double", Double.class, sec.evaluate().getClass());
 		
-		child.setEvaluate(1);
-		assertEquals("ACOT of 0 should be NaN", MathUtils.acot(1.0), (Object) acot.evaluate());
+		child.setEvaluate(0);
+		assertEquals("SEC of 0 should be 1.0", 1.0, (Object) sec.evaluate());
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.ArcCotangentFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.trig.SecantFunction#getReturnType(Class...)}
 	 * returns <code>Double</code> for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
-	public void testGetReturnTypeAcot() {
+	public void testGetReturnTypeSec() {
 		Class<?>[] inputTypes = {Double.class, Integer.class, Float.class, Long.class, Short.class, Byte.class};
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = acot.getReturnType(type);
+			returnType = sec.getReturnType(type);
 			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = acot.getReturnType(Boolean.class);
+		returnType = sec.getReturnType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = acot.getReturnType(Integer.class, Integer.class);
+		returnType = sec.getReturnType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 }

@@ -19,52 +19,52 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox.math;
+package org.epochx.epox.trig;
 
 import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
  * A function node which performs the inverse trigonometric function of
- * arc-secant, called ASEC.
+ * arc-sine, called ARCSIN.
  */
-public class ArcSecantFunction extends Node {
+public class ArcSineFunction extends Node {
 
 	/**
-	 * Constructs an ArcSecantFunction with one <code>null</code> child.
+	 * Constructs an ArcSineFunction with one <code>null</code> child.
 	 */
-	public ArcSecantFunction() {
+	public ArcSineFunction() {
 		this(null);
 	}
 
 	/**
-	 * Constructs an ArcSecantFunction with one numerical child node.
+	 * Constructs an ArcSineFunction with one numerical child node.
 	 * 
 	 * @param child the child node.
 	 */
-	public ArcSecantFunction(final Node child) {
+	public ArcSineFunction(final Node child) {
 		super(child);
 	}
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a numeric type (one of Double, Float, Long,
-	 * Integer). The arc-cosine of this value becomes the result of this
+	 * Integer). The arc-sine of this value becomes the result of this
 	 * method as a double value.
 	 */
 	@Override
 	public Double evaluate() {
 		final Object c = getChild(0).evaluate();
 
-		return MathUtils.asec(NumericUtils.asDouble(c));
+		return Math.asin(NumericUtils.asDouble(c));
 	}
 
 	/**
-	 * Returns the identifier of this function which is ASEC.
+	 * Returns the identifier of this function which is ARCSIN.
 	 */
 	@Override
 	public String getIdentifier() {
-		return "ASEC";
+		return "ARCSIN";
 	}
 
 	/**

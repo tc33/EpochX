@@ -19,19 +19,20 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox.math;
+package org.epochx.epox.trig;
 
 import static org.junit.Assert.*;
 
 import org.epochx.epox.*;
+import org.epochx.tools.util.MathUtils;
 import org.junit.Test;
 
 /**
- * Unit tests for {@link org.epochx.epox.math.ArcSineFunction}
+ * Unit tests for {@link org.epochx.epox.trig.HyperbolicTangentFunction}
  */
-public class ArcSineFunctionTest extends NodeTestCase {
+public class HyperbolicTangentFunctionTest extends NodeTestCase {
 
-	private ArcSineFunction asin;
+	private HyperbolicTangentFunction tanh;
 	private MockNode child;
 	
 	/**
@@ -39,7 +40,7 @@ public class ArcSineFunctionTest extends NodeTestCase {
 	 */
 	@Override
 	public Node getNode() {
-		return new ArcSineFunction();
+		return new HyperbolicTangentFunction();
 	}
 	
 	/**
@@ -50,68 +51,61 @@ public class ArcSineFunctionTest extends NodeTestCase {
 		super.setUp();
 		
 		child = new MockNode();
-		asin = new ArcSineFunction(child);
+		tanh = new HyperbolicTangentFunction(child);
 
 		super.setUp();
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.ArcSineFunction#evaluate()} 
+	 * Tests that {@link org.epochx.epox.trig.HyperbolicTangentFunction#evaluate()} 
 	 * correctly evaluates double values.
 	 */
 	@Test
 	public void testEvaluateDouble() {
-		child.setEvaluate(0.0);
-		assertEquals("ASIN of 0.0 should be 0.0", 0.0, (Object) asin.evaluate());
+		child.setEvaluate(MathUtils.artanh(0.6));
+		assertEquals("TANH should be the inverse of arsinh", 0.6, tanh.evaluate(), 1);
 		
-		child.setEvaluate(Math.sin(0.6));
-		assertEquals("ASIN should be the inverse of sine", 0.6, (Object) asin.evaluate());
-	
-		child.setEvaluate(Math.sin(-0.6));
-		assertEquals("ASIN should be the inverse of sine", -0.6, (Object) asin.evaluate());
+		child.setEvaluate(MathUtils.artanh(-0.6));
+		assertEquals("TANH should be the inverse of arsinh", -0.6, tanh.evaluate(), 1);
 		
-		child.setEvaluate(1.1);
-		assertEquals("ASIN of 1.1 should be NaN", Double.NaN, (Object) asin.evaluate());
+		child.setEvaluate(MathUtils.artanh(1.0));
+		assertEquals("TANH should be the inverse of arsinh", 1.0, tanh.evaluate(), 0);
 		
 		child.setEvaluate(Double.NaN);
-		assertEquals("ASIN of NaN should be NaN", Double.NaN, (Object) asin.evaluate());
+		assertEquals("TANH of NaN should be NaN", Double.NaN, (Object) tanh.evaluate());
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.ArcSineFunction#evaluate()} 
+	 * Tests that {@link org.epochx.epox.trig.HyperbolicTangentFunction#evaluate()} 
 	 * correctly evaluates integer values.
 	 */
 	@Test
 	public void testEvaluateInteger() {
 		child.setEvaluate(0);
-		assertSame("ASIN of an integer should return double", Double.class, asin.evaluate().getClass());
-		assertEquals("ASIN of 0 should be 0.0", 0.0, (Object) asin.evaluate());
+		assertSame("TANH of an integer should return double", Double.class, tanh.evaluate().getClass());
 		
-		child.setEvaluate(-2);
-		assertEquals("ASIN of -2 should be NaN", Double.NaN, (Object) asin.evaluate());
-	
-		child.setEvaluate(2);
-		assertEquals("ASIN of 2 should be NaN", Double.NaN, (Object) asin.evaluate());
+		child.setEvaluate(0);
+		assertEquals("TANH of 0 should be 0.0", 0.0, (Object) tanh.evaluate());
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.ArcSineFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.trig.HyperbolicTangentFunction#getReturnType(Class...)}
 	 * returns <code>Double</code> for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
-	public void testGetReturnTypeAsin() {
+	public void testGetReturnTypeTanh() {
 		Class<?>[] inputTypes = {Double.class, Integer.class, Float.class, Long.class, Short.class, Byte.class};
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = asin.getReturnType(type);
+			returnType = tanh.getReturnType(type);
 			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = asin.getReturnType(Boolean.class);
+		returnType = tanh.getReturnType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = asin.getReturnType(Integer.class, Integer.class);
+		returnType = tanh.getReturnType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 }

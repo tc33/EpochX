@@ -19,52 +19,52 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox.math;
+package org.epochx.epox.trig;
 
 import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A function node which performs the inverse trigonometric function of
- * arc-cosine, called ACOS.
+ * A function node which performs the trigonometric function of cosine, called
+ * COS.
  */
-public class ArcCosineFunction extends Node {
+public class CosineFunction extends Node {
 
 	/**
-	 * Constructs an ArcCosineFunction with one <code>null</code> child.
+	 * Constructs an CosineFunction with one <code>null</code> child.
 	 */
-	public ArcCosineFunction() {
+	public CosineFunction() {
 		this(null);
 	}
 
 	/**
-	 * Constructs an ArcCosineFunction with one numerical child node.
+	 * Constructs a CosineFunction with one numerical child node.
 	 * 
 	 * @param child the child node.
 	 */
-	public ArcCosineFunction(final Node child) {
+	public CosineFunction(final Node child) {
 		super(child);
 	}
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a numeric type (one of Double, Float, Long,
-	 * Integer). The arc-cosine of this value becomes the result of this
+	 * Integer). The cosine of this value becomes the result of this
 	 * method as a double value.
 	 */
 	@Override
 	public Double evaluate() {
 		final Object c = getChild(0).evaluate();
 
-		return Math.acos(NumericUtils.asDouble(c));
+		return Math.cos(NumericUtils.asDouble(c));
 	}
 
 	/**
-	 * Returns the identifier of this function which is ACOS.
+	 * Returns the identifier of this function which is COS.
 	 */
 	@Override
 	public String getIdentifier() {
-		return "ACOS";
+		return "COS";
 	}
 
 	/**

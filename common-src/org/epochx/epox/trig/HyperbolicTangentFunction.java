@@ -19,52 +19,52 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox.math;
+package org.epochx.epox.trig;
 
 import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A function node which performs the inverse trigonometric function of
- * arc-tangent, called ATAN.
+ * A function node which performs the hyperbolic trigonometric
+ * function of hyperbolic tangent, called TANH.
  */
-public class ArcTangentFunction extends Node {
+public class HyperbolicTangentFunction extends Node {
 
 	/**
-	 * Constructs an ArcTangentFunction with one <code>null</code> child.
+	 * Constructs a HyperbolicTangentFunction with one <code>null</code> child.
 	 */
-	public ArcTangentFunction() {
+	public HyperbolicTangentFunction() {
 		this(null);
 	}
 
 	/**
-	 * Constructs an ArcTangentFunction with one numerical child node.
+	 * Constructs a HyperbolicTangentFunction with one numerical child node.
 	 * 
 	 * @param child the child node.
 	 */
-	public ArcTangentFunction(final Node child) {
+	public HyperbolicTangentFunction(final Node child) {
 		super(child);
 	}
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a numeric type (one of Double, Float, Long,
-	 * Integer). The arc-tangent of this value becomes the result of this
+	 * Integer). The hyperbolic tangent of this value becomes the result of this
 	 * method as a double value.
 	 */
 	@Override
 	public Double evaluate() {
 		final Object c = getChild(0).evaluate();
 
-		return Math.atan(NumericUtils.asDouble(c));
+		return Math.tanh(NumericUtils.asDouble(c));
 	}
 
 	/**
-	 * Returns the identifier of this function which is ATAN.
+	 * Returns the identifier of this function which is TANH.
 	 */
 	@Override
 	public String getIdentifier() {
-		return "ATAN";
+		return "TANH";
 	}
 
 	/**

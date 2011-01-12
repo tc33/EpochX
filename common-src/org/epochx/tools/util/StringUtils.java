@@ -28,6 +28,8 @@ import org.apache.commons.lang.ArrayUtils;
  */
 public final class StringUtils {
 
+	private StringUtils() {}
+	
 	/**
 	 * Tests whether the given string contains any of the chars in the array.
 	 * 

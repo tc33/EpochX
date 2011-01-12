@@ -26,6 +26,8 @@ package org.epochx.tools.util;
  */
 public class NumericUtils {
 
+	private NumericUtils() {}
+	
 	public static Double asDouble(final Object o) {
 		if (o instanceof Number) {
 			return ((Number) o).doubleValue();

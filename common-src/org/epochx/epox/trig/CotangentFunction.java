@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox.math;
+package org.epochx.epox.trig;
 
 import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
@@ -56,7 +56,7 @@ public class CotangentFunction extends Node {
 	public Double evaluate() {
 		final Object c = getChild(0).evaluate();
 
-		return MathUtils.cotan(NumericUtils.asDouble(c));
+		return MathUtils.cot(NumericUtils.asDouble(c));
 	}
 
 	/**

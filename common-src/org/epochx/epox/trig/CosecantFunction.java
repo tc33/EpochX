@@ -19,52 +19,52 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox.math;
+package org.epochx.epox.trig;
 
 import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A function node which performs the inverse trigonometric function of
- * arc-cosecant, called ACSC.
+ * A function node which performs the reciprocal trigonometric
+ * function of cosecant, called CSC. Cosecant x is equal to 1/sin x.
  */
-public class ArcCosecantFunction extends Node {
+public class CosecantFunction extends Node {
 
 	/**
-	 * Constructs an ArcCosecantFunction with one <code>null</code> child.
+	 * Constructs a CosecantFunction with one <code>null</code> child.
 	 */
-	public ArcCosecantFunction() {
+	public CosecantFunction() {
 		this(null);
 	}
 
 	/**
-	 * Constructs an ArcCosecantFunction with one numerical child node.
+	 * Constructs a CosecantFunction with one numerical child node.
 	 * 
 	 * @param child the child node.
 	 */
-	public ArcCosecantFunction(final Node child) {
+	public CosecantFunction(final Node child) {
 		super(child);
 	}
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a numeric type (one of Double, Float, Long,
-	 * Integer). The arc-cosecant of this value becomes the result of this
-	 * method as a double value.
+	 * Integer). 1 is divided by the sine of this value to give the result as a
+	 * double value.
 	 */
 	@Override
 	public Double evaluate() {
 		final Object c = getChild(0).evaluate();
 
-		return MathUtils.acsc(NumericUtils.asDouble(c));
+		return MathUtils.csc(NumericUtils.asDouble(c));
 	}
 
 	/**
-	 * Returns the identifier of this function which is ACOS.
+	 * Returns the identifier of this function which is CSC.
 	 */
 	@Override
 	public String getIdentifier() {
-		return "ACSC";
+		return "CSC";
 	}
 
 	/**

@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox.math;
+package org.epochx.epox.trig;
 
 import static org.junit.Assert.*;
 
@@ -27,11 +27,11 @@ import org.epochx.epox.*;
 import org.junit.Test;
 
 /**
- * Unit tests for {@link org.epochx.epox.math.CosecantFunction}
+ * Unit tests for {@link org.epochx.epox.trig.AreaHyperbolicTangentFunction}
  */
-public class CosecantFunctionTest extends NodeTestCase {
+public class AreaHyperbolicTangentFunctionTest extends NodeTestCase {
 
-	private CosecantFunction cosec;
+	private AreaHyperbolicTangentFunction artanh;
 	private MockNode child;
 	
 	/**
@@ -39,7 +39,7 @@ public class CosecantFunctionTest extends NodeTestCase {
 	 */
 	@Override
 	public Node getNode() {
-		return new CosecantFunction();
+		return new AreaHyperbolicTangentFunction();
 	}
 	
 	/**
@@ -50,58 +50,73 @@ public class CosecantFunctionTest extends NodeTestCase {
 		super.setUp();
 		
 		child = new MockNode();
-		cosec = new CosecantFunction(child);
+		artanh = new AreaHyperbolicTangentFunction(child);
 
 		super.setUp();
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.CosecantFunction#evaluate()} 
+	 * Tests that {@link org.epochx.epox.trig.AreaHyperbolicTangentFunction#evaluate()} 
 	 * correctly evaluates double values.
 	 */
 	@Test
 	public void testEvaluateDouble() {
-		child.setEvaluate(0.0);
-		assertEquals("COSEC of 0.0 should be infinity", Double.POSITIVE_INFINITY, (Object) cosec.evaluate());
+		child.setEvaluate(Math.tanh(1.6));
+		assertEquals("ARTANH should be the inverse of tanh", 1.6, artanh.evaluate(), 1);
 		
-		child.setEvaluate(0.6);
-		assertEquals("COSEC is not calculated correctly", Math.sin(0.6), (Object) (1/cosec.evaluate()));
-	
-		child.setEvaluate(-0.6);
-		assertEquals("COSEC is not calculated correctly", Math.sin(-0.6), (Object) (1/cosec.evaluate()));
+		child.setEvaluate(1.0);
+		assertEquals("ARTANH of 1.0 should be positive infinity", Double.POSITIVE_INFINITY, artanh.evaluate(), 0);
+		
+		child.setEvaluate(1.1);
+		assertEquals("ARTANH of 1.0 should be NaN", Double.NaN, artanh.evaluate(), 0);
+		
+		child.setEvaluate(Double.POSITIVE_INFINITY);
+		assertEquals("ARTANH of positive infinity should be NaN", Double.NaN, artanh.evaluate(), 0);
+		
+		child.setEvaluate(0.0);
+		assertEquals("ARTANH of 0.0 should be 0.0", 0.0, artanh.evaluate(), 0);
+		
+		child.setEvaluate(-1.0);
+		assertEquals("ARTANH of -1.0 should be negative infinity", Double.NEGATIVE_INFINITY, artanh.evaluate(), 0);
+		
+		child.setEvaluate(-1.1);
+		assertEquals("ARTANH of -1.1 should be NaN", Double.NaN, artanh.evaluate(), 0);
+		
+		child.setEvaluate(Double.NEGATIVE_INFINITY);
+		assertEquals("ARTANH of negative infinity should be NaN", Double.NaN, artanh.evaluate(), 0);
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.CosecantFunction#evaluate()} 
+	 * Tests that {@link org.epochx.epox.trig.AreaHyperbolicTangentFunction#evaluate()} 
 	 * correctly evaluates integer values.
 	 */
 	@Test
 	public void testEvaluateInteger() {
 		child.setEvaluate(0);
-		assertEquals("COSEC of 0 should be infinity", Double.POSITIVE_INFINITY, (Object) cosec.evaluate());
+		assertSame("ARTANH of an integer should return double", Double.class, artanh.evaluate().getClass());
 		
-		child.setEvaluate(1);
-		assertSame("COSEC of an integer should return double", Double.class, cosec.evaluate().getClass());
+		child.setEvaluate(0);
+		assertEquals("ARTANH of 0 should be 0.0", 0.0, artanh.evaluate(), 0);
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.CosecantFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.trig.AreaHyperbolicTangentFunction#getReturnType(Class...)}
 	 * returns <code>Double</code> for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
-	public void testGetReturnTypeCosec() {
+	public void testGetReturnTypeArtanh() {
 		Class<?>[] inputTypes = {Double.class, Integer.class, Float.class, Long.class, Short.class, Byte.class};
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = cosec.getReturnType(type);
+			returnType = artanh.getReturnType(type);
 			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = cosec.getReturnType(Boolean.class);
+		returnType = artanh.getReturnType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = cosec.getReturnType(Integer.class, Integer.class);
+		returnType = artanh.getReturnType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 }

@@ -19,52 +19,53 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox.math;
+package org.epochx.epox.trig;
 
 import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
- * A function node which performs the trigonometric function of tangent, called
- * TAN.
+ * A function node which performs the inverse hyperbolic trigonometric function 
+ * of area hyperbolic cosine, called ARCOSH.
  */
-public class TangentFunction extends Node {
+public class AreaHyperbolicCosineFunction extends Node {
 
 	/**
-	 * Constructs an TangentFunction with one <code>null</code> child.
+	 * Constructs an AreaHyperbolicCosineFunction with one <code>null</code> 
+	 * child.
 	 */
-	public TangentFunction() {
+	public AreaHyperbolicCosineFunction() {
 		this(null);
 	}
 
 	/**
-	 * Constructs a TangentFunction with one numerical child node.
+	 * Constructs a AreaHyperbolicCosineFunction with one numerical child node.
 	 * 
 	 * @param child the child node.
 	 */
-	public TangentFunction(final Node child) {
+	public AreaHyperbolicCosineFunction(final Node child) {
 		super(child);
 	}
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a numeric type (one of Double, Float, Long,
-	 * Integer). The tangent of this value becomes the result of this
-	 * method as a double value.
+	 * Integer). The area hyperbolic cosine of this value becomes the result of 
+	 * this method as a double value.
 	 */
 	@Override
 	public Double evaluate() {
 		final Object c = getChild(0).evaluate();
 
-		return Math.tan(NumericUtils.asDouble(c));
+		return MathUtils.arcosh(NumericUtils.asDouble(c));
 	}
 
 	/**
-	 * Returns the identifier of this function which is TAN.
+	 * Returns the identifier of this function which is ARCOSH.
 	 */
 	@Override
 	public String getIdentifier() {
-		return "TAN";
+		return "ARCOSH";
 	}
 
 	/**
@@ -78,7 +79,7 @@ public class TangentFunction extends Node {
 	@Override
 	public Class<?> getReturnType(final Class<?> ... inputTypes) {
 		if ((inputTypes.length == 1) && TypeUtils.isNumericType(inputTypes[0])) {
-			return inputTypes[0];
+			return Double.class;
 		} else {
 			return null;
 		}

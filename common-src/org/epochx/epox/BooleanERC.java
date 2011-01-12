@@ -112,7 +112,7 @@ public class BooleanERC extends Literal {
 	 * Sets the random number generator to be used for generating the boolean
 	 * value of new <code>BooleanERC</code> instances.
 	 * 
-	 * @param the random number generator to set.
+	 * @param rng the random number generator to set.
 	 */
 	public void setRNG(final RandomNumberGenerator rng) {
 		this.rng = rng;

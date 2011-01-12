@@ -28,6 +28,8 @@ import org.apache.commons.lang.*;
  */
 public final class TypeUtils {
 
+	private TypeUtils() {}
+	
 	public static Class<?> getSuper(final Class<?> ... classes) {
 		return getSuper(false, classes);
 	}

@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox.math;
+package org.epochx.epox.trig;
 
 import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
@@ -78,7 +78,7 @@ public class SineFunction extends Node {
 	@Override
 	public Class<?> getReturnType(final Class<?> ... inputTypes) {
 		if ((inputTypes.length == 1) && TypeUtils.isNumericType(inputTypes[0])) {
-			return inputTypes[0];
+			return Double.class;
 		} else {
 			return null;
 		}

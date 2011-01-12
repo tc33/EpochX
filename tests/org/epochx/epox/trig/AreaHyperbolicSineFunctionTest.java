@@ -19,20 +19,19 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox.math;
+package org.epochx.epox.trig;
 
 import static org.junit.Assert.*;
 
 import org.epochx.epox.*;
-import org.epochx.tools.util.MathUtils;
 import org.junit.Test;
 
 /**
- * Unit tests for {@link org.epochx.epox.math.ArcSecantFunction}
+ * Unit tests for {@link org.epochx.epox.trig.AreaHyperbolicSineFunction}
  */
-public class ArcSecantFunctionTest extends NodeTestCase {
+public class AreaHyperbolicSineFunctionTest extends NodeTestCase {
 
-	private ArcSecantFunction asec;
+	private AreaHyperbolicSineFunction arsinh;
 	private MockNode child;
 	
 	/**
@@ -40,7 +39,7 @@ public class ArcSecantFunctionTest extends NodeTestCase {
 	 */
 	@Override
 	public Node getNode() {
-		return new ArcSecantFunction();
+		return new AreaHyperbolicSineFunction();
 	}
 	
 	/**
@@ -51,62 +50,64 @@ public class ArcSecantFunctionTest extends NodeTestCase {
 		super.setUp();
 		
 		child = new MockNode();
-		asec = new ArcSecantFunction(child);
+		arsinh = new AreaHyperbolicSineFunction(child);
 
 		super.setUp();
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.ArcSecantFunction#evaluate()} 
+	 * Tests that {@link org.epochx.epox.trig.AreaHyperbolicSineFunction#evaluate()} 
 	 * correctly evaluates double values.
 	 */
 	@Test
 	public void testEvaluateDouble() {
-		child.setEvaluate(MathUtils.sec(0.6));
-		assertEquals("ASEC should be the inverse of secant", 0.6, asec.evaluate(), 1);
+		child.setEvaluate(Math.sinh(1.6));
+		assertEquals("ARSINH should be the inverse of sinh", 1.6, arsinh.evaluate(), 1);
 		
-		child.setEvaluate(MathUtils.sec(-0.6));
-		//TODO Are we sure this is right? Not -0.6?
-		assertEquals("ASEC should be the inverse of secant", 0.6, asec.evaluate(), 1);
-	
+		child.setEvaluate(Math.sinh(1.0));
+		assertEquals("ARSINH should be the inverse of sinh", 1.0, arsinh.evaluate(), 0);
+		
 		child.setEvaluate(0.0);
-		assertEquals("ASEC of 0.0 should be NaN", Double.NaN, asec.evaluate(), 0);
+		assertEquals("ARSINH of 0.0 should be 0.0", 0.0, arsinh.evaluate(), 0);
+		
+		child.setEvaluate(Double.POSITIVE_INFINITY);
+		assertEquals("ARSINH of positive infinity should be positive infinity", Double.POSITIVE_INFINITY, arsinh.evaluate(), 0);
 		
 		child.setEvaluate(Double.NaN);
-		assertEquals("ASEC of NaN should be NaN", Double.NaN, (Object) asec.evaluate());
+		assertEquals("ARSINH of NaN should be NaN", Double.NaN, arsinh.evaluate(), 0);
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.ArcSecantFunction#evaluate()} 
+	 * Tests that {@link org.epochx.epox.trig.AreaHyperbolicSineFunction#evaluate()} 
 	 * correctly evaluates integer values.
 	 */
 	@Test
 	public void testEvaluateInteger() {
 		child.setEvaluate(1);
-		assertSame("ASEC of an integer should return double", Double.class, asec.evaluate().getClass());
+		assertSame("ARSINH of an integer should return double", Double.class, arsinh.evaluate().getClass());
 		
 		child.setEvaluate(0);
-		assertEquals("ASEC of 0 should be NaN", Double.NaN, (Object) asec.evaluate());
+		assertEquals("ARSINH of 0 should be 0.0", 0.0, arsinh.evaluate(), 0);
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.ArcSecantFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.trig.AreaHyperbolicSineFunction#getReturnType(Class...)}
 	 * returns <code>Double</code> for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
-	public void testGetReturnTypeAsec() {
+	public void testGetReturnTypeArsinh() {
 		Class<?>[] inputTypes = {Double.class, Integer.class, Float.class, Long.class, Short.class, Byte.class};
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = asec.getReturnType(type);
+			returnType = arsinh.getReturnType(type);
 			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = asec.getReturnType(Boolean.class);
+		returnType = arsinh.getReturnType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = asec.getReturnType(Integer.class, Integer.class);
+		returnType = arsinh.getReturnType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 }

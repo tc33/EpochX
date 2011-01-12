@@ -28,6 +28,7 @@ import org.epochx.epox.ant.*;
 import org.epochx.epox.bool.*;
 import org.epochx.epox.lang.*;
 import org.epochx.epox.math.*;
+import org.epochx.epox.trig.*;
 import org.epochx.tools.eval.MalformedProgramException;
 
 /**
@@ -79,6 +80,10 @@ public class EpoxParser {
 	// + ")"
 	// + ")[pP][+-]?" + Digits + "))" + "[fFdD]?))" + "[\\x00-\\x20]*");
 
+	/**
+	 * Constructs an <code>EpoxParser</code>.
+	 * 
+	 */
 	public EpoxParser() {
 		variables = new HashMap<String, Variable>();
 		functions = new HashMap<String, Class<? extends Node>>();

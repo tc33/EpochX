@@ -19,52 +19,52 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox.math;
+package org.epochx.epox.trig;
 
 import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
  * A function node which performs the inverse trigonometric function of
- * arc-cotangent, called ACOT.
+ * arc-secant, called ARCSEC.
  */
-public class ArcCotangentFunction extends Node {
+public class ArcSecantFunction extends Node {
 
 	/**
-	 * Constructs an ArcCotangentFunction with one <code>null</code> child.
+	 * Constructs an ArcSecantFunction with one <code>null</code> child.
 	 */
-	public ArcCotangentFunction() {
+	public ArcSecantFunction() {
 		this(null);
 	}
 
 	/**
-	 * Constructs an ArcCotangentFunction with one numerical child node.
+	 * Constructs an ArcSecantFunction with one numerical child node.
 	 * 
 	 * @param child the child node.
 	 */
-	public ArcCotangentFunction(final Node child) {
+	public ArcSecantFunction(final Node child) {
 		super(child);
 	}
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a numeric type (one of Double, Float, Long,
-	 * Integer). The arc-cosine of this value becomes the result of this
+	 * Integer). The arc-secant of this value becomes the result of this
 	 * method as a double value.
 	 */
 	@Override
 	public Double evaluate() {
 		final Object c = getChild(0).evaluate();
 
-		return MathUtils.acot(NumericUtils.asDouble(c));
+		return MathUtils.arcsec(NumericUtils.asDouble(c));
 	}
 
 	/**
-	 * Returns the identifier of this function which is ACOT.
+	 * Returns the identifier of this function which is ARCSEC.
 	 */
 	@Override
 	public String getIdentifier() {
-		return "ACOT";
+		return "ARCSEC";
 	}
 
 	/**

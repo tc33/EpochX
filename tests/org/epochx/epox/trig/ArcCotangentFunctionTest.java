@@ -19,19 +19,21 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox.math;
+package org.epochx.epox.trig;
 
 import static org.junit.Assert.*;
 
 import org.epochx.epox.*;
+import org.epochx.epox.trig.ArcCotangentFunction;
+import org.epochx.tools.util.MathUtils;
 import org.junit.Test;
 
 /**
- * Unit tests for {@link org.epochx.epox.math.ArcTangentFunction}
+ * Unit tests for {@link org.epochx.epox.trig.ArcCotangentFunction}
  */
-public class ArcTangentFunctionTest extends NodeTestCase {
+public class ArcCotangentFunctionTest extends NodeTestCase {
 
-	private ArcTangentFunction atan;
+	private ArcCotangentFunction arccot;
 	private MockNode child;
 	
 	/**
@@ -39,7 +41,7 @@ public class ArcTangentFunctionTest extends NodeTestCase {
 	 */
 	@Override
 	public Node getNode() {
-		return new ArcTangentFunction();
+		return new ArcCotangentFunction();
 	}
 	
 	/**
@@ -50,59 +52,58 @@ public class ArcTangentFunctionTest extends NodeTestCase {
 		super.setUp();
 		
 		child = new MockNode();
-		atan = new ArcTangentFunction(child);
+		arccot = new ArcCotangentFunction(child);
 
 		super.setUp();
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.ArcTangentFunction#evaluate()} 
+	 * Tests that {@link org.epochx.epox.trig.ArcCotangentFunction#evaluate()} 
 	 * correctly evaluates double values.
 	 */
 	@Test
 	public void testEvaluateDouble() {
-		child.setEvaluate(0.0);
-		assertEquals("ATAN of 0.0 should be 0.0", 0.0, (Object) atan.evaluate());
+		child.setEvaluate(MathUtils.cot(0.6));
+		assertEquals("ARCCOT should be the inverse of cot", 0.6, arccot.evaluate(), 1);
 		
-		child.setEvaluate(Math.tan(0.6));
-		assertEquals("ATAN should be the inverse of tan", 0.6, (Object) atan.evaluate());
-	
-		child.setEvaluate(Math.tan(-0.6));
-		assertEquals("ATAN should be the inverse of tan", -0.6, (Object) atan.evaluate());
+		child.setEvaluate(MathUtils.cot(-0.6));
+		assertEquals("ARCCOT should be the inverse of cot", -0.6, arccot.evaluate(), 1);
 		
 		child.setEvaluate(Double.NaN);
-		assertEquals("ATAN of NaN should be NaN", Double.NaN, (Object) atan.evaluate());
+		assertEquals("ARCCOT of NaN should be NaN", Double.NaN, (Object) arccot.evaluate());
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.ArcTangentFunction#evaluate()} 
+	 * Tests that {@link org.epochx.epox.trig.ArcCotangentFunction#evaluate()} 
 	 * correctly evaluates integer values.
 	 */
 	@Test
 	public void testEvaluateInteger() {
-		child.setEvaluate(0);
-		assertSame("ATAN of an integer should return double", Double.class, atan.evaluate().getClass());
-		assertEquals("ATAN of 0 should be 0.0", 0.0, (Object) atan.evaluate());
+		child.setEvaluate(1);
+		assertSame("ARCCOT of an integer should return double", Double.class, arccot.evaluate().getClass());
+		
+		child.setEvaluate(1);
+		assertEquals("ARCCOT of 0 should be NaN", MathUtils.arccot(1.0), (Object) arccot.evaluate());
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.ArcTangentFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.trig.ArcCotangentFunction#getReturnType(Class...)}
 	 * returns <code>Double</code> for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
-	public void testGetReturnTypeAtan() {
+	public void testGetReturnTypeArccot() {
 		Class<?>[] inputTypes = {Double.class, Integer.class, Float.class, Long.class, Short.class, Byte.class};
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = atan.getReturnType(type);
+			returnType = arccot.getReturnType(type);
 			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = atan.getReturnType(Boolean.class);
+		returnType = arccot.getReturnType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = atan.getReturnType(Integer.class, Integer.class);
+		returnType = arccot.getReturnType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 }

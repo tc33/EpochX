@@ -19,52 +19,52 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox.math;
+package org.epochx.epox.trig;
 
 import org.epochx.epox.Node;
 import org.epochx.tools.util.*;
 
 /**
  * A function node which performs the inverse trigonometric function of
- * arc-sine, called ASIN.
+ * arc-tangent, called ARCTAN.
  */
-public class ArcSineFunction extends Node {
+public class ArcTangentFunction extends Node {
 
 	/**
-	 * Constructs an ArcSineFunction with one <code>null</code> child.
+	 * Constructs an ArcTangentFunction with one <code>null</code> child.
 	 */
-	public ArcSineFunction() {
+	public ArcTangentFunction() {
 		this(null);
 	}
 
 	/**
-	 * Constructs an ArcSineFunction with one numerical child node.
+	 * Constructs an ArcTangentFunction with one numerical child node.
 	 * 
 	 * @param child the child node.
 	 */
-	public ArcSineFunction(final Node child) {
+	public ArcTangentFunction(final Node child) {
 		super(child);
 	}
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a numeric type (one of Double, Float, Long,
-	 * Integer). The arc-sine of this value becomes the result of this
+	 * Integer). The arc-tangent of this value becomes the result of this
 	 * method as a double value.
 	 */
 	@Override
 	public Double evaluate() {
 		final Object c = getChild(0).evaluate();
 
-		return Math.asin(NumericUtils.asDouble(c));
+		return Math.atan(NumericUtils.asDouble(c));
 	}
 
 	/**
-	 * Returns the identifier of this function which is ASIN.
+	 * Returns the identifier of this function which is ARCTAN.
 	 */
 	@Override
 	public String getIdentifier() {
-		return "ASIN";
+		return "ARCTAN";
 	}
 
 	/**

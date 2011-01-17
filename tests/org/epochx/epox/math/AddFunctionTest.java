@@ -70,11 +70,11 @@ public class AddFunctionTest extends NodeTestCase {
 		
 		child1.setEvaluate(2.1);
 		child2.setEvaluate(3.1);
-		assertEquals("ADD of 2.2 and 3.1 should be 5.3", 5.2, add.evaluate());
+		assertEquals("ADD of 2.1 and 3.1 should be 5.3", 5.2, add.evaluate());
 	
 		child1.setEvaluate(-2.1);
 		child2.setEvaluate(3.1);
-		assertEquals("ADD of -2.2 and 3.1 should be 0.9", 1.0, add.evaluate());
+		assertEquals("ADD of -2.1 and 3.1 should be 0.9", 1.0, add.evaluate());
 		
 		child1.setEvaluate(-2.1);
 		child2.setEvaluate(-3.1);
@@ -101,7 +101,86 @@ public class AddFunctionTest extends NodeTestCase {
 		
 		child1.setEvaluate(-2);
 		child2.setEvaluate(-3);
-		assertEquals("ADD of -2 and -3 should be -5.2", -5, add.evaluate());
+		assertEquals("ADD of -2 and -3 should be -5", -5, add.evaluate());
+	}
+	
+	/**
+	 * Tests that {@link org.epochx.epox.math.AddFunction#evaluate()} 
+	 * correctly evaluates long values.
+	 */
+	@Test
+	public void testEvaluateLong() {
+		child1.setEvaluate(0L);
+		child2.setEvaluate(0L);
+		assertEquals("ADD of 0L and 0L should be 0L", 0L, add.evaluate());
+		
+		child1.setEvaluate(Long.MAX_VALUE);
+		child2.setEvaluate(-2L);
+		assertEquals("ADD of large number should be calculated correctly", Long.MAX_VALUE-2, add.evaluate());
+		
+		child1.setEvaluate(2L);
+		child2.setEvaluate(3L);
+		assertEquals("ADD of 2L and 3L should be 5L", 5L, add.evaluate());
+	
+		child1.setEvaluate(-2L);
+		child2.setEvaluate(3L);
+		assertEquals("ADD of -2L and 3L should be 1L", 1L, add.evaluate());
+		
+		child1.setEvaluate(-2L);
+		child2.setEvaluate(-3L);
+		assertEquals("ADD of -2L and -3L should be -5L", -5L, add.evaluate());
+	}
+	
+	/**
+	 * Tests that {@link org.epochx.epox.math.AddFunction#evaluate()} 
+	 * correctly evaluates float values.
+	 */
+	@Test
+	public void testEvaluateFloat() {
+		child1.setEvaluate(0.0f);
+		child2.setEvaluate(0.0f);
+		assertEquals("ADD of 0.0f and 0.0f should be 0.0f", 0.0f, add.evaluate());
+		
+		child1.setEvaluate(2.1f);
+		child2.setEvaluate(3.1f);
+		assertEquals("ADD of 2.1f and 3.1f should be 5.3f", 5.2f, add.evaluate());
+	
+		child1.setEvaluate(-2.1f);
+		child2.setEvaluate(3.1f);
+		assertEquals("ADD of -2.2f and 3.1f should be 0.9f", 1.0f, add.evaluate());
+		
+		child1.setEvaluate(-2.1f);
+		child2.setEvaluate(-3.1f);
+		assertEquals("ADD of -2.1f and -3.1f should be -5.2f", -5.2f, add.evaluate());
+	}
+	
+	/**
+	 * Tests that {@link org.epochx.epox.math.AddFunction#evaluate()} 
+	 * correctly evaluates mixed type values.
+	 */
+	@Test
+	public void testEvaluateMixed() {
+		child1.setEvaluate(1);
+		child2.setEvaluate(2.4);
+		assertEquals("ADD of 1 and 2.4 should be 3.4", 3.4, add.evaluate());
+		
+		child1.setEvaluate(2.1f);
+		child2.setEvaluate(3.1d);
+		Object result = add.evaluate();
+		assertSame("types should be widened to double", Double.class, result.getClass());
+		assertEquals("ADD of 2.1f and 3.1d should be 5.3d", 5.2d, (Double) result, 1);
+	
+		child1.setEvaluate(6L);
+		child2.setEvaluate(2);
+		assertEquals("ADD of 6L and 2 should be 8L", 8L, add.evaluate());
+		
+		child1.setEvaluate(2.1f);
+		child2.setEvaluate(3);
+		assertEquals("ADD of 2.1f and 3 should be 5.1f", 5.1f, add.evaluate());
+		
+		child1.setEvaluate(-2.1f);
+		child2.setEvaluate(3L);
+		assertEquals("ADD of -2.1f and 3L should be 5.1f", 5.1f, add.evaluate());
 	}
 	
 	/**

@@ -36,6 +36,8 @@ public class MinFunction extends Node {
 	/**
 	 * Constructs a MinFunction with the given number of <code>null</code>
 	 * children.
+	 * @param n the number of <code>null</code> children to set this function up
+	 * for.
 	 */
 	public MinFunction(final int n) {
 		this((Node) null);

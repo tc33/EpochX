@@ -44,7 +44,7 @@ import org.epochx.tools.util.*;
 public class DivisionProtectedFunction extends Node {
 
 	// The value returned in place of divide-by-zero.
-	private final Double protectionValue;
+	private Double protectionValue;
 
 	/**
 	 * Constructs a ProtectedDivisionFunction with two <code>null</code>
@@ -103,7 +103,8 @@ public class DivisionProtectedFunction extends Node {
 	public Object evaluate() {
 		final Object c1 = getChild(0).evaluate();
 		final Object c2 = getChild(1).evaluate();
-		final Class<?> returnType = getReturnType();
+		
+		final Class<?> returnType = TypeUtils.getNumericType(c1.getClass(), c2.getClass());
 
 		if (returnType == Double.class) {
 			// Divide as doubles.
@@ -156,5 +157,25 @@ public class DivisionProtectedFunction extends Node {
 			return TypeUtils.getNumericType(inputTypes);
 		}
 		return null;
+	}
+	
+	/**
+	 * Sets the protection value that should be returned in case of 
+	 * divide-by-zero.
+	 * @param protectionValue the value to be returned if divide-by-zero is 
+	 * attempted.
+	 */
+	public void setProtectionValue(Double protectionValue) {
+		this.protectionValue = protectionValue;
+	}
+	
+	/**
+	 * Returns the protection value that will be returned in the case of 
+	 * divide-by-zero.
+	 * @return the protectionValue the value that will be returned in the case
+	 * of divide-by-zero.
+	 */
+	public Double getProtectionValue() {
+		return protectionValue;
 	}
 }

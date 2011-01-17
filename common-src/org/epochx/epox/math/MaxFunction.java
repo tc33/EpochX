@@ -36,6 +36,8 @@ public class MaxFunction extends Node {
 	/**
 	 * Constructs a MaxFunction with the given number of <code>null</code>
 	 * children.
+	 * @param n the number of <code>null</code> children to set this function up
+	 * for.
 	 */
 	public MaxFunction(final int n) {
 		this((Node) null);

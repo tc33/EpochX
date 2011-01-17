@@ -41,7 +41,7 @@ public class ExponentialFunction extends Node {
 	/**
 	 * Constructs an ExponentialFunction with one numerical child node.
 	 * 
-	 * @param child the child node.
+	 * @param exponent the child node.
 	 */
 	public ExponentialFunction(final Node exponent) {
 		super(exponent);

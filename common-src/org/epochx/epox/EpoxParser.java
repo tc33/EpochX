@@ -32,61 +32,39 @@ import org.epochx.epox.trig.*;
 import org.epochx.tools.eval.MalformedProgramException;
 
 /**
- * The function parser can parse a nested function into a node tree. It can
- * only parse those functions that it knows about. It is fine for variables to
- * be name the same as functions, and it is also okay for variables to have
- * names which could be interpreted as literal values. However, a program that
- * contains a literal value with the same string representation as a known
- * variable, will be parsed as a variable so it is advisable to name variables
- * carefully.
+ * This parser is for parsing valid Epox programs into a node tree. It is only 
+ * able to parse those node types which are part of the standard language, or 
+ * which have been added to the parser through its <code>addFunction</code> 
+ * method. It is also only able to construct instances of nodes which require no
+ * arguments provided to their constructor, this excludes all nodes which can 
+ * handle multiple arities, such as the {@link SeqNFunction} function. Use the 
+ * explicit arity versions instead such as {@link Seq2Function}.
+ * 
+ * <p>Variables may be named with any String. There will be no name clash 
+ * between variables and functions. There could however be a clash between 
+ * variables and literals, so variable names that could be parsed as any valid 
+ * literal value should be avoided.
+ * 
+ * @see Node
  */
 public class EpoxParser {
 
 	// The functions the parser knows about and their identifiers.
 	private final Map<String, Class<? extends Node>> functions;
+	
+	// More functions, but held by a node instance rather than class.
+	private final Map<String, Node> functionNodes;
 
 	// Known variables, any variables that are not provided will be created.
 	private final Map<String, Variable> variables;
 
-	/*
-	 * These regexps come directly from JavaDoc for Double.valueOf(String) to
-	 * check the validity of a double without having to rely on catching number
-	 * format exceptions.
-	 */
-	// private final String Digits = "(\\p{Digit}+)";
-	// private final String HexDigits = "(\\p{XDigit}+)";
-	// private final String Exp = "[eE][+-]?" + Digits;
-	// private final String fpRegex = ("[\\x00-\\x20]*" + "[+-]?(" + "NaN|"
-	// + "Infinity|" + "((("
-	// + Digits
-	// + "(\\.)?("
-	// + Digits
-	// + "?)("
-	// + Exp
-	// + ")?)|"
-	// + "(\\.("
-	// + Digits
-	// + ")("
-	// + Exp
-	// + ")?)|"
-	// + "(("
-	// + "(0[xX]"
-	// + HexDigits
-	// + "(\\.)?)|"
-	// + "(0[xX]"
-	// + HexDigits
-	// + "?(\\.)"
-	// + HexDigits
-	// + ")"
-	// + ")[pP][+-]?" + Digits + "))" + "[fFdD]?))" + "[\\x00-\\x20]*");
-
 	/**
 	 * Constructs an <code>EpoxParser</code>.
-	 * 
 	 */
 	public EpoxParser() {
 		variables = new HashMap<String, Variable>();
 		functions = new HashMap<String, Class<? extends Node>>();
+		functionNodes = new HashMap<String, Node>();
 
 		initialiseKnownFunctions();
 	}
@@ -95,7 +73,6 @@ public class EpoxParser {
 		// Insert the Boolean functions.
 		functions.put("AND", AndFunction.class);
 		functions.put("IFF", IfAndOnlyIfFunction.class);
-		functions.put("IF", IfFunction.class);
 		functions.put("IMPLIES", ImpliesFunction.class);
 		functions.put("NAND", NandFunction.class);
 		functions.put("NOR", NorFunction.class);
@@ -103,24 +80,35 @@ public class EpoxParser {
 		functions.put("OR", OrFunction.class);
 		functions.put("XOR", XorFunction.class);
 
-		// Insert the Double functions.
-		functions.put("ABS", AbsoluteFunction.class);
-		functions.put("ADD", AddFunction.class);
-		functions.put("ACOS", ArcCosineFunction.class);
+		// Insert the Trig functions.
+		functions.put("ARCCSC", ArcCosecantFunction.class);
+		functions.put("ARCCOS", ArcCosineFunction.class);
+		functions.put("ARCCOT", ArcCotangentFunction.class);
+		functions.put("ARCSEC", ArcSecantFunction.class);
 		functions.put("ASIN", ArcSineFunction.class);
 		functions.put("ATAN", ArcTangentFunction.class);
-		functions.put("CVP", CoefficientPowerFunction.class);
+		functions.put("ARCOSH", AreaHyperbolicCosineFunction.class);
+		functions.put("ARSINH", AreaHyperbolicSineFunction.class);
+		functions.put("ARTANH", AreaHyperbolicTangentFunction.class);
 		functions.put("COSEC", CosecantFunction.class);
 		functions.put("COS", CosineFunction.class);
 		functions.put("COT", CotangentFunction.class);
+		functions.put("COSH", HyperbolicCosineFunction.class);
+		functions.put("SINH", HyperbolicSineFunction.class);
+		functions.put("TANH", HyperbolicTangentFunction.class);
+		functions.put("SEC", SecantFunction.class);
+		functions.put("SIN", SineFunction.class);
+		functions.put("TAN", TangentFunction.class);
+		
+		// Insert the Double functions.
+		functions.put("ABS", AbsoluteFunction.class);
+		functions.put("ADD", AddFunction.class);
+		functions.put("CVP", CoefficientPowerFunction.class);
 		functions.put("CUBE", CubeFunction.class);
 		functions.put("CBRT", CubeRootFunction.class);
 		functions.put("EXP", ExponentialFunction.class);
 		functions.put("FACTORIAL", FactorialFunction.class);
 		functions.put("GT", GreaterThanFunction.class);
-		functions.put("COSH", HyperbolicCosineFunction.class);
-		functions.put("SINH", HyperbolicSineFunction.class);
-		functions.put("TANH", HyperbolicTangentFunction.class);
 		functions.put("INV", InvertProtectedFunction.class);
 		functions.put("LOG-10", Log10Function.class);
 		functions.put("LN", LogFunction.class);
@@ -133,20 +121,20 @@ public class EpoxParser {
 		functions.put("MUL", MultiplyFunction.class);
 		functions.put("POW", PowerFunction.class);
 		functions.put("PDIV", DivisionProtectedFunction.class);
-		functions.put("SEC", SecantFunction.class);
 		functions.put("SGN", SignumFunction.class);
-		functions.put("SIN", SineFunction.class);
 		functions.put("SQUARE", SquareFunction.class);
 		functions.put("SQRT", SquareRootFunction.class);
 		functions.put("SUB", SubtractFunction.class);
-		functions.put("TAN", TangentFunction.class);
+		
+		// Insert the Ant functions.
 		functions.put("IF-FOOD-AHEAD", IfFoodAheadFunction.class);
 		functions.put("MOVE", AntMoveFunction.class);
 		functions.put("TURN-LEFT", AntTurnLeftFunction.class);
 		functions.put("TURN-RIGHT", AntTurnRightFunction.class);
 		functions.put("SKIP", AntSkipFunction.class);
 
-		// Insert the Action functions.
+		// Insert the Lang functions.
+		functions.put("IF", IfFunction.class);
 		functions.put("SEQ2", Seq2Function.class);
 		functions.put("SEQ3", Seq3Function.class);
 	}
@@ -208,9 +196,40 @@ public class EpoxParser {
 	 * we do it now.
 	 */
 	private Node initialiseFunction(final String name) throws MalformedProgramException {
+		// Attempt to find function in node collection first.
+		Node node = initialiseFunctionNode(name);
+
+		// If that failed, then fall back to trying the classes, and thr.
+		if (node == null) {
+			node = initialiseFunctionClass(name);
+		}
+		
+		if (node == null) {
+			// Function unknown - error.
+			throw new MalformedProgramException("Unknown function " + name + " encountered");
+		}
+
+		return node;
+	}
+	
+	private Node initialiseFunctionNode(final String name) {
 		// The function node we're going to create.
 		Node node = null;
-
+		
+		// Try to instantiate from the functionNode collection first.
+		final Node functionNode = functionNodes.get(name);
+		
+		if (functionNode != null) {
+			node = functionNode.newInstance();
+		}
+		
+		return node;
+	}
+	
+	private Node initialiseFunctionClass(final String name) throws MalformedProgramException {
+		// The function node we're hopefully going to create.
+		Node node = null;
+		
 		// Attempt to find the function in the list of simple functions.
 		final Class<?> functionClass = functions.get(name);
 
@@ -223,9 +242,6 @@ public class EpoxParser {
 			} catch (final IllegalAccessException e) {
 				assert false;
 			}
-		} else {
-			// Function unknown - error.
-			throw new MalformedProgramException("Unknown function " + name + " encountered");
 		}
 
 		return node;
@@ -306,6 +322,10 @@ public class EpoxParser {
 	public void addFunction(final String name, final Class<? extends Node> functionClass) {
 		functions.put(name, functionClass);
 	}
+	
+	public void addFunction(final String name, final Node functionNode) {
+		
+	}
 
 	public void addAvailableVariables(final List<Variable> variables) {
 		for (final Variable v: variables) {
@@ -354,18 +374,4 @@ public class EpoxParser {
 
 		return args;
 	}
-
-	// public static void main(String[] args) throws MalformedProgramException {
-	// EpoxParser parser = new EpoxParser();
-	//
-	// //System.out.println(parser.parse("IF(ADD(1,false),NOT(true),false)").toString());
-	// //Node programTree = parser.parse("XOR(D1 XOR(NOT(XOR(D0 D3)) D2))");
-	//
-	// parser.addAvailableVariable(new Variable("d0", false));
-	//
-	// Node programTree = parser.parse("XOR(OR(d0,d0),NOT(NOT(d0)))");
-	// System.out.println(programTree.toString());
-	// System.out.println(programTree.evaluate());
-	// }
-
 }

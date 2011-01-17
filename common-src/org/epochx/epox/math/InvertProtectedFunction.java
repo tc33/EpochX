@@ -32,6 +32,9 @@ import org.epochx.tools.util.*;
  */
 public class InvertProtectedFunction extends Node {
 
+	// The value returned in place of divide-by-zero.
+	private Double protectionValue;
+	
 	/**
 	 * Constructs an InvertFunction with one <code>null</code> child.
 	 */
@@ -45,7 +48,33 @@ public class InvertProtectedFunction extends Node {
 	 * @param child the child node.
 	 */
 	public InvertProtectedFunction(final Node child) {
+		this(child, 1.0);
+	}
+	
+	/**
+	 * Constructs an InvertFunction with one <code>null</code> child and the 
+	 * given protection value which will be returned if the child evaluates to 
+	 * 0.0.
+	 * @param protectionValue the value to return for a child that evaluates to 
+	 * 0.0.
+	 */
+	public InvertProtectedFunction(double protectionValue) {
+		this(null);
+	}
+
+	/**
+	 * Constructs an InvertFunction with one numerical child node and the 
+	 * given protection value which will be returned if the child evaluates to 
+	 * 0.0..
+	 * 
+	 * @param child the child node.
+	 * @param protectionValue the value to return for a child that evaluates to 
+	 * 0.0.
+	 */
+	public InvertProtectedFunction(final Node child, double protectionValue) {
 		super(child);
+		
+		this.protectionValue = protectionValue;
 	}
 
 	/**
@@ -61,7 +90,7 @@ public class InvertProtectedFunction extends Node {
 		final double c = NumericUtils.asDouble(getChild(0).evaluate());
 
 		if (c == 0) {
-			return 1.0;
+			return protectionValue;
 		} else {
 			return 1 / c;
 		}
@@ -90,5 +119,26 @@ public class InvertProtectedFunction extends Node {
 		} else {
 			return null;
 		}
+	}
+	
+	
+	/**
+	 * Sets the protection value that should be returned in case of 
+	 * divide-by-zero.
+	 * @param protectionValue the value to be returned if divide-by-zero is 
+	 * attempted.
+	 */
+	public void setProtectionValue(Double protectionValue) {
+		this.protectionValue = protectionValue;
+	}
+	
+	/**
+	 * Returns the protection value that will be returned in the case of 
+	 * divide-by-zero.
+	 * @return the protectionValue the value that will be returned in the case
+	 * of divide-by-zero.
+	 */
+	public Double getProtectionValue() {
+		return protectionValue;
 	}
 }

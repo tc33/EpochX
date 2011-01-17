@@ -65,12 +65,18 @@ public class CoefficientPowerFunction extends Node {
 	 */
 	@Override
 	public Double evaluate() {
-		if (getReturnType() == Double.class) {
-			final double c1 = NumericUtils.asDouble(getChild(0).evaluate());
-			final double c2 = NumericUtils.asDouble(getChild(1).evaluate());
-			final double c3 = NumericUtils.asDouble(getChild(2).evaluate());
+		final Object c1 = getChild(0).evaluate();
+		final Object c2 = getChild(1).evaluate();
+		final Object c3 = getChild(2).evaluate();
+		
+		final Class<?> returnType = TypeUtils.getNumericType(c1.getClass(), c2.getClass(), c3.getClass());
+		
+		if (returnType != null) {
+			final double d1 = NumericUtils.asDouble(getChild(0).evaluate());
+			final double d2 = NumericUtils.asDouble(getChild(1).evaluate());
+			final double d3 = NumericUtils.asDouble(getChild(2).evaluate());
 
-			return c1 * (Math.pow(c2, c3));
+			return d1 * (Math.pow(d2, d3));
 		}
 
 		return null;
@@ -94,7 +100,7 @@ public class CoefficientPowerFunction extends Node {
 	 */
 	@Override
 	public Class<?> getReturnType(final Class<?> ... inputTypes) {
-		if (TypeUtils.isAllNumericType(inputTypes)) {
+		if (inputTypes.length == 3 && TypeUtils.isAllNumericType(inputTypes)) {
 			return Double.class;
 		} else {
 			return null;

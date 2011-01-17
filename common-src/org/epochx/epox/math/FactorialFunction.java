@@ -51,8 +51,9 @@ public class FactorialFunction extends Node {
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
-	 * result of which must be a positive value of an integer type (one of Byte,
-	 * Short, Integer, Long). The factorial function is performed on this value
+	 * result of which must be of an integer type (one of Byte, Short, Integer,
+	 * Long). If the value is negative, then its absolute value is used to avoid
+	 * a divide by zero. The factorial function is performed on this value
 	 * and the result returned as an Integer if the input was one of Byte,
 	 * Short or Integer and returned as a Long if the input is a Long.
 	 */

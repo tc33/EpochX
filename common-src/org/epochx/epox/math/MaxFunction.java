@@ -63,33 +63,40 @@ public class MaxFunction extends Node {
 	@Override
 	public Object evaluate() {
 		final int arity = getArity();
-		final Class<?> returnType = getReturnType();
+		
+		Object[] childValues = new Object[arity];
+		Class<?>[] types = new Class<?>[arity];
+		for (int i=0; i<arity; i++) {
+			childValues[i] = getChild(i).evaluate();
+			types[i] = childValues[i].getClass();
+		}
+		final Class<?> returnType = TypeUtils.getNumericType(types);
 
 		if (returnType == Double.class) {
-			double max = Double.MIN_VALUE;
+			double max = Double.NEGATIVE_INFINITY;
 			for (int i = 0; i < arity; i++) {
-				final double value = NumericUtils.asDouble(getChild(i).evaluate());
+				final double value = NumericUtils.asDouble(childValues[i]);
 				max = Math.max(value, max);
 			}
 			return max;
 		} else if (returnType == Float.class) {
-			float max = Float.MIN_VALUE;
+			float max = Float.NEGATIVE_INFINITY;
 			for (int i = 0; i < arity; i++) {
-				final float value = NumericUtils.asFloat(getChild(i).evaluate());
+				final float value = NumericUtils.asFloat(childValues[i]);
 				max = Math.max(value, max);
 			}
 			return max;
 		} else if (returnType == Long.class) {
 			long max = Long.MIN_VALUE;
 			for (int i = 0; i < arity; i++) {
-				final long value = NumericUtils.asLong(getChild(i).evaluate());
+				final long value = NumericUtils.asLong(childValues[i]);
 				max = Math.max(value, max);
 			}
 			return max;
 		} else if (TypeUtils.isNumericType(returnType)) {
 			int max = Integer.MIN_VALUE;
 			for (int i = 0; i < arity; i++) {
-				final int value = NumericUtils.asInteger(getChild(i).evaluate());
+				final int value = NumericUtils.asInteger(childValues[i]);
 				max = Math.max(value, max);
 			}
 			return max;

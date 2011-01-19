@@ -63,7 +63,7 @@ public class ModuloProtectedFunction extends Node {
 		final Object c1 = getChild(0).evaluate();
 		final Object c2 = getChild(1).evaluate();
 
-		final Class<?> returnType = getReturnType();
+		final Class<?> returnType = TypeUtils.getNumericType(c1.getClass(), c2.getClass());
 
 		if (returnType == Double.class) {
 			final double d1 = NumericUtils.asDouble(c1);
@@ -71,8 +71,8 @@ public class ModuloProtectedFunction extends Node {
 
 			return (d2 == 0) ? d1 : (d1 % d2);
 		} else if (returnType == Float.class) {
-			final double f1 = NumericUtils.asFloat(c1);
-			final double f2 = NumericUtils.asFloat(c2);
+			final float f1 = NumericUtils.asFloat(c1);
+			final float f2 = NumericUtils.asFloat(c2);
 
 			return (f2 == 0) ? f1 : (f1 % f2);
 		} else if (returnType == Integer.class) {

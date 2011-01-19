@@ -63,33 +63,40 @@ public class MinFunction extends Node {
 	@Override
 	public Object evaluate() {
 		final int arity = getArity();
-		final Class<?> returnType = getReturnType();
+		
+		Object[] childValues = new Object[arity];
+		Class<?>[] types = new Class<?>[arity];
+		for (int i=0; i<arity; i++) {
+			childValues[i] = getChild(i).evaluate();
+			types[i] = childValues[i].getClass();
+		}
+		final Class<?> returnType = TypeUtils.getNumericType(types);
 
 		if (returnType == Double.class) {
 			double min = Double.MAX_VALUE;
 			for (int i = 0; i < arity; i++) {
-				final double value = NumericUtils.asDouble(getChild(i).evaluate());
+				final double value = NumericUtils.asDouble(childValues[i]);
 				min = Math.min(value, min);
 			}
 			return min;
 		} else if (returnType == Float.class) {
 			float min = Float.MAX_VALUE;
 			for (int i = 0; i < arity; i++) {
-				final float value = NumericUtils.asFloat(getChild(i).evaluate());
+				final float value = NumericUtils.asFloat(childValues[i]);
 				min = Math.min(value, min);
 			}
 			return min;
 		} else if (returnType == Integer.class) {
 			int min = Integer.MAX_VALUE;
 			for (int i = 0; i < arity; i++) {
-				final int value = NumericUtils.asInteger(getChild(i).evaluate());
+				final int value = NumericUtils.asInteger(childValues[i]);
 				min = Math.min(value, min);
 			}
 			return min;
 		} else if (returnType == Long.class) {
 			long min = Long.MAX_VALUE;
 			for (int i = 0; i < arity; i++) {
-				final long value = NumericUtils.asLong(getChild(i).evaluate());
+				final long value = NumericUtils.asLong(childValues[i]);
 				min = Math.min(value, min);
 			}
 			return min;

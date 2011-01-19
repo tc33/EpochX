@@ -180,7 +180,9 @@ public class AddFunctionTest extends NodeTestCase {
 		
 		child1.setEvaluate(-2.1f);
 		child2.setEvaluate(3L);
-		assertEquals("ADD of -2.1f and 3L should be 5.1f", 5.1f, add.evaluate());
+		result = add.evaluate();
+		assertSame("types should be widened to float", Float.class, result.getClass());
+		assertEquals("ADD of -2.1f and 3L should be 5.1f", 0.9f, (Float) result, 1);
 	}
 	
 	/**

@@ -256,7 +256,7 @@ public class ModuloProtectedFunctionTest extends NodeTestCase {
 	 * otherwise.
 	 */
 	@Test
-	public void testGetReturnTypePDiv() {
+	public void testGetReturnTypePMod() {
 		Class<?>[] inputTypes = {Double.class, Integer.class, Float.class, Long.class};
 		
 		Class<?> returnType;

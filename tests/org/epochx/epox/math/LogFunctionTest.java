@@ -124,7 +124,7 @@ public class LogFunctionTest extends NodeTestCase {
 	 * returns the same type for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
-	public void testGetReturnTypeLog10() {
+	public void testGetReturnTypeLog() {
 		Class<?>[] inputTypes = {Double.class, Integer.class, Float.class, Long.class};
 		
 		Class<?> returnType;

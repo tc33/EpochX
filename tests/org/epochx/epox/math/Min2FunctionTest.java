@@ -201,7 +201,7 @@ public class Min2FunctionTest extends NodeTestCase {
 	 * otherwise.
 	 */
 	@Test
-	public void testGetReturnTypeMax() {
+	public void testGetReturnTypeMin() {
 		Class<?>[] inputTypes = {Double.class, Integer.class, Float.class, Long.class};
 		
 		Class<?> returnType;

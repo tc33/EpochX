@@ -70,7 +70,7 @@ public class SubtractFunction extends Node {
 		final Object c1 = getChild(0).evaluate();
 		final Object c2 = getChild(1).evaluate();
 
-		final Class<?> returnType = getReturnType();
+		final Class<?> returnType = TypeUtils.getNumericType(c1.getClass(), c2.getClass());
 
 		if (returnType == Double.class) {
 			// Subtract as doubles.
@@ -80,8 +80,8 @@ public class SubtractFunction extends Node {
 			return d1 - d2;
 		} else if (returnType == Float.class) {
 			// Subtract as floats.
-			final double f1 = NumericUtils.asFloat(c1);
-			final double f2 = NumericUtils.asFloat(c2);
+			final float f1 = NumericUtils.asFloat(c1);
+			final float f2 = NumericUtils.asFloat(c2);
 
 			return f1 - f2;
 		} else if (returnType == Long.class) {

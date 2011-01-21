@@ -25,6 +25,7 @@ import static org.junit.Assert.*;
 
 import org.epochx.epox.*;
 import org.epochx.tools.ant.*;
+import org.epochx.tools.eval.*;
 import org.junit.*;
 
 
@@ -170,5 +171,22 @@ public class IfFoodAheadFunctionTest extends NodeTestCase {
 		
 		returnType = antIfFood.getReturnType(Ant.class, Void.class, Void.class);
 		assertNull("inputs should not valid on this version of the function", returnType);
+	}
+	
+	/**
+	 * Tests that this function can be parsed by the EpoxParser.
+	 */
+	@Test
+	public void testEpoxParser() {
+		EpoxParser parser = new EpoxParser();
+		
+		try {
+			parser.declareVariable(new Variable("ANT", Ant.class));
+			parser.declareVariable(new Variable("MOCK", Void.class));
+			Node n = parser.parse("IF-FOOD-AHEAD(ANT, MOCK, MOCK)");
+			assertSame("Parsing did not return an instance of the correct node", IfFoodAheadFunction.class, n.getClass());
+		} catch (MalformedProgramException e) {
+			fail("Malformed program exception thrown when parsing");
+		}
 	}
 }

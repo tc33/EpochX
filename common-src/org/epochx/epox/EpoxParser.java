@@ -24,6 +24,7 @@ package org.epochx.epox;
 import java.text.*;
 import java.util.*;
 
+import org.apache.commons.lang.*;
 import org.epochx.epox.ant.*;
 import org.epochx.epox.bool.*;
 import org.epochx.epox.lang.*;
@@ -34,42 +35,54 @@ import org.epochx.tools.eval.MalformedProgramException;
 /**
  * This parser is for parsing valid Epox programs into a node tree. It is only 
  * able to parse those node types which are part of the standard language, or 
- * which have been added to the parser through its <code>addFunction</code> 
- * method. It is also only able to construct instances of nodes which require no
- * arguments provided to their constructor, this excludes all nodes which can 
- * handle multiple arities, such as the {@link SeqNFunction} function. Use the 
- * explicit arity versions instead such as {@link Seq2Function}.
+ * which have been added to the parser through its <code>declareXxx</code> 
+ * methods. It is also only able to construct instances of standard nodes which 
+ * require no additional arguments provided to their constructor, this excludes 
+ * all nodes which can handle multiple arities, such as the {@link SeqNFunction}
+ * function. Instead, use the explicit arity versions such as 
+ * {@link Seq2Function}, or provide an already constructed instance of the node
+ * to the parser through the <code>declareFunction(String, Node)</code> method.
  * 
  * <p>Variables may be named with any String. There will be no name clash 
  * between variables and functions. There could however be a clash between 
  * variables and literals, so variable names that could be parsed as any valid 
  * literal value should be avoided.
  * 
+ * <p>Literals will be parsed by first matching against any user declared 
+ * literals, then by attempting to parse the value as a Java primitive.
+ * 
  * @see Node
  */
 public class EpoxParser {
 
-	// The functions the parser knows about and their identifiers.
+	// Declared functions.
 	private final Map<String, Class<? extends Node>> functions;
 	
 	// More functions, but held by a node instance rather than class.
 	private final Map<String, Node> functionNodes;
 
-	// Known variables, any variables that are not provided will be created.
+	// Declared variables.
 	private final Map<String, Variable> variables;
+	
+	// Declared literal values.
+	private final Map<String, Object> literalValues;
 
 	/**
-	 * Constructs an <code>EpoxParser</code>.
+	 * Constructs an <code>EpoxParser</code> with all standard Epox functions.
 	 */
 	public EpoxParser() {
 		variables = new HashMap<String, Variable>();
 		functions = new HashMap<String, Class<? extends Node>>();
 		functionNodes = new HashMap<String, Node>();
+		literalValues = new HashMap<String, Object>();
 
-		initialiseKnownFunctions();
+		initialiseStandardFunctions();
 	}
 
-	private void initialiseKnownFunctions() {
+	/*
+	 * Adds the standard Epox functions to the map of known functions.
+	 */
+	private void initialiseStandardFunctions() {
 		// Insert the Boolean functions.
 		functions.put("AND", AndFunction.class);
 		functions.put("IFF", IfAndOnlyIfFunction.class);
@@ -85,12 +98,12 @@ public class EpoxParser {
 		functions.put("ARCCOS", ArcCosineFunction.class);
 		functions.put("ARCCOT", ArcCotangentFunction.class);
 		functions.put("ARCSEC", ArcSecantFunction.class);
-		functions.put("ASIN", ArcSineFunction.class);
-		functions.put("ATAN", ArcTangentFunction.class);
+		functions.put("ARCSIN", ArcSineFunction.class);
+		functions.put("ARCTAN", ArcTangentFunction.class);
 		functions.put("ARCOSH", AreaHyperbolicCosineFunction.class);
 		functions.put("ARSINH", AreaHyperbolicSineFunction.class);
 		functions.put("ARTANH", AreaHyperbolicTangentFunction.class);
-		functions.put("COSEC", CosecantFunction.class);
+		functions.put("CSC", CosecantFunction.class);
 		functions.put("COS", CosineFunction.class);
 		functions.put("COT", CotangentFunction.class);
 		functions.put("COSH", HyperbolicCosineFunction.class);
@@ -139,6 +152,24 @@ public class EpoxParser {
 		functions.put("SEQ3", Seq3Function.class);
 	}
 
+	/**
+	 * Parses an Epox program string as an executable <code>Node</code> tree. 
+	 * The given <code>source</code> parameter must contain a valid Epox program
+	 * string, comprised only of functions, variables and literals that have 
+	 * been declared. The data-types of each function's inputs must correspond 
+	 * to valid data-types, otherwise a <code>MalformedProgramException</code>
+	 * will be thrown.
+	 * 
+	 * <p>If the source parameter is <code>null</code>, then <code>null</code>
+	 * will be returned.
+	 * 
+	 * @param source the program string to be parsed as an Epox program.
+	 * @return a <code>Node</code> which is the root of a tree which is 
+	 * equivalent to the provided source string. A <code>null</code> value will
+	 * be returned if the <code>source</code> parameter is <code>null</code>.
+	 * @throws MalformedProgramException if the given string does not represent
+	 * a valid Epox program.
+	 */
 	public Node parse(final String source) throws MalformedProgramException {
 		if (source == null) {
 			return null;
@@ -159,19 +190,19 @@ public class EpoxParser {
 			terminal = true;
 		} else {
 			// Get the name of the function.
-			identifier = source.substring(0, openingBracket);
+			identifier = source.substring(0, openingBracket).trim();
 
 			// Locate the closing bracket.
 			final int closingBracket = source.lastIndexOf(')');
 
-			// Get the comma separated arguments - without the surrounding
-			// brackets.
+			// Get the comma separated arguments - without brackets.
 			final String argumentStr = source.substring(openingBracket + 1, closingBracket);
 
 			// Separate the arguments.
 			args = splitArguments(argumentStr);
 		}
 
+		// Construct the node.
 		Node node;
 		if (terminal) {
 			node = parseTerminal(identifier);
@@ -183,8 +214,18 @@ public class EpoxParser {
 		if ((node == null) || (node.getArity() != args.size())) {
 			throw new MalformedProgramException();
 		} else {
+			// Recursively parse and set each child node.
 			for (int i = 0; i < args.size(); i++) {
 				node.setChild(i, parse(args.get(i)));
+			}
+			
+			// Validate the node's input data-types.
+			if (node.getReturnType() == null) {
+				if (node.isFunction()) {
+					throw new MalformedProgramException("Input data-types for " + node.getIdentifier() + " are invalid");
+				} else {
+					throw new MalformedProgramException("Data-type of terminal " + node.getIdentifier() + " is null");
+				}
 			}
 		}
 
@@ -192,14 +233,15 @@ public class EpoxParser {
 	}
 
 	/*
-	 * We do lazy initialisation, so if the object hasn't been initialised yet,
-	 * we do it now.
+	 * Constructs and returns an instance of the function which matches the 
+	 * given name. The node collection is searched for an instance first, then 
+	 * the function class collection.
 	 */
 	private Node initialiseFunction(final String name) throws MalformedProgramException {
 		// Attempt to find function in node collection first.
 		Node node = initialiseFunctionNode(name);
 
-		// If that failed, then fall back to trying the classes, and thr.
+		// If that failed, then fall back to trying the classes.
 		if (node == null) {
 			node = initialiseFunctionClass(name);
 		}
@@ -212,13 +254,17 @@ public class EpoxParser {
 		return node;
 	}
 	
+	/*
+	 * Constructs a new instance of the function node that matches the given 
+	 * name. If no function nodes match, then null is returned.
+	 */
 	private Node initialiseFunctionNode(final String name) {
-		// The function node we're going to create.
 		Node node = null;
 		
-		// Try to instantiate from the functionNode collection first.
+		// Find the function node instance.
 		final Node functionNode = functionNodes.get(name);
 		
+		// Construct a new instance of that node.
 		if (functionNode != null) {
 			node = functionNode.newInstance();
 		}
@@ -226,38 +272,39 @@ public class EpoxParser {
 		return node;
 	}
 	
+	/*
+	 * Constructs a new instance of the function class that matches the given
+	 * name. If no function classes match, then null is returned.
+	 */
 	private Node initialiseFunctionClass(final String name) throws MalformedProgramException {
-		// The function node we're hopefully going to create.
 		Node node = null;
 		
-		// Attempt to find the function in the list of simple functions.
+		// Find the function class.
 		final Class<?> functionClass = functions.get(name);
 
 		if (functionClass != null) {
-			// Instantiate the function node.
+			// Instantiate as a function node.
 			try {
 				node = (Node) functionClass.newInstance();
 			} catch (final InstantiationException e) {
 				assert false;
+				throw new MalformedProgramException("Attempting to use invalid function " + name);
 			} catch (final IllegalAccessException e) {
 				assert false;
+				throw new MalformedProgramException("Attempting to use invalid function " + name);
 			}
 		}
 
 		return node;
 	}
 
-	/**
-	 * Parses the given string as a terminal. It will be treated as either a
-	 * variable or a literal value depending upon its contents. If it is a
-	 * parseable numeric value then it will be considered to be a terminal with
-	 * a Double value. if it contains in any case the values "true" or "false"
-	 * then it will be treated as a terminal with a Boolean value. All other
-	 * terminals will be treated as Variables with a label equal to the
-	 * argument string.
-	 * 
-	 * @param terminalStr
-	 * @return
+	/*
+	 * Parses the given string as a terminal - either a variable or a literal. 
+	 * If the given string matches the name of a declared variable, then that 
+	 * variable instance will be returned. Otherwise an attempt will be made to
+	 * parse the string as a literal. The resulting node will be returned. If 
+	 * the string does not match either a known variable or literal, then null
+	 * will be returned.
 	 */
 	private Node parseTerminal(final String terminalStr) {
 		Node node = variables.get(terminalStr);
@@ -270,77 +317,246 @@ public class EpoxParser {
 	}
 
 	/**
-	 * Should return null if the string cannot be parsed as any type of valid
-	 * literal.
+	 * Parses the given string as the value of a literal. Any user declared 
+	 * literals are checked first, if any match, then a new Literal node is 
+	 * constructed with the provided <code>Object</code> as the value. If no 
+	 * match is made then an attempt will be made to parse the string as one of
+	 * the following types: (boolean, String, char, int, long, double, float), 
+	 * which will become the value of a newly constructed Literal, which will be 
+	 * returned. If parsing fails, then <code>null</code> will be returned. 
 	 * 
-	 * @param literalStr
-	 * @return
+	 * @param literalStr the string to be parsed as some type of 
+	 * <code>Literal</code>
+	 * @return a new <code>Literal</code> instance with a value as parsed, or 
+	 * <code>null</code> if the string was unable to be parsed.
 	 */
-	protected Literal parseLiteral(final String literalStr) {
+	protected Literal parseLiteral(String literalStr) {
 		Literal literal = null;
-		if (literalStr.equalsIgnoreCase("true") || literalStr.equalsIgnoreCase("false")) {
+		
+		// Remove excess spaces.
+		literalStr = literalStr.trim();
+		
+		if (literalValues.containsKey(literalStr)) {
+			literal = new Literal(literalValues.get(literalStr));
+		} else if (literalStr.equalsIgnoreCase("true") || literalStr.equalsIgnoreCase("false")) {
 			literal = new Literal(Boolean.valueOf(literalStr));
 		} else if (literalStr.startsWith("\"") && literalStr.endsWith("\"") && (literalStr.length() > 1)) {
-			literal = new Literal(literalStr.substring(1, literalStr.length() - 2));
-		} else if ((literalStr.length() == 3) && literalStr.startsWith("'") && literalStr.endsWith("'")) {
-			// TODO This isn't going to catch escaped characters because they
-			// will have been converted to e.g. \\x
+			literal = new Literal(literalStr.substring(1, literalStr.length() - 1));
+		} else if ((literalStr.startsWith("'") && literalStr.endsWith("'") && (literalStr.length() == 3))) {
+			// Non-escaped char.
+			literal = new Literal(literalStr.charAt(1));
+		} else if ((literalStr.startsWith("'\\") && literalStr.endsWith("'") && literalStr.length() == 4)) {
+			// Escaped char - unescape first.
+			literalStr = StringEscapeUtils.unescapeJava(literalStr);
+
 			literal = new Literal(literalStr.charAt(1));
 		} else {
-			final Number n = NumberFormat.getInstance().parse(literalStr, new ParsePosition(0));
-
-			// If possible, then use int instead of long.
-			if (n instanceof Long) {
-				final long l = (Long) n;
-				if ((l <= Integer.MAX_VALUE) && (l >= Integer.MIN_VALUE)) {
-					literal = new Literal((int) l);
-				}
-			}
-
-			if ((literal == null) && (n != null)) {
-				literal = new Literal(n);
-			}
-		}
-
-		if (literal == null) {
-			literal = parseObjectLiteral(literalStr);
+			literal = parseNumericLiteral(literalStr);
 		}
 
 		return literal;
 	}
-
+	
 	/**
-	 * Can be overridden to provide support for other literal types.
+	 * Attempts to parse the given string as a number, and wraps it in a new
+	 * <code>Literal</code> instance that is returned. If unable to parse the 
+	 * given string as a number, then this method will return <code>null</code>.
 	 * 
-	 * @param literalStr
-	 * @return
+	 * <p>The string will be parsed as follows:
+	 * 
+	 * <ul>
+	 * <li>If the string contains a numeric value (with or without decimal) 
+	 * followed by a 'd' or 'D' character, then the literal will have a Double
+	 * value.</li>
+	 * <li>If the string contains a numeric value (with or without decimal) 
+	 * followed by an 'f' or 'F' character, then the literal will have a Float
+	 * value.</li>
+	 * <li>If the string contains a numeric value followed by an 'l' or 'L' 
+	 * character, or if the value is an integer value out of range of the Java
+	 * int type, then the literal will have a Long value.</li>
+	 * <li>If the string contains an integer value in range of the Java int type
+	 * then the literal will have an Integer value.</li>
+	 * </ul>
+	 *  
+	 * @param numericStr a string containing a numeric value to be parsed as a 
+	 * <code>Literal</code>.
+	 * @return a new <code>Literal</code> with a numeric value. Or 
+	 * <code>null</code> if the given <code>numericStr</code> could not be 
+	 * parsed as a numeric value.
 	 */
-	protected Literal parseObjectLiteral(final String literalStr) {
-		return null;
+	protected Literal parseNumericLiteral(String numericStr) {
+		Literal literal = null;
+		
+		// Parse as a number - this will not throw an exception.
+		final Number n = NumberFormat.getInstance().parse(numericStr, new ParsePosition(0));
+
+		if (n instanceof Long) {
+			// If ended with 'D' or 'd', then use double instead of long.
+			if (numericStr.endsWith("D") || numericStr.endsWith("d")) {
+				literal = new Literal(n.doubleValue());
+			}
+			
+			// If ended with 'F' or 'f', then use float instead of long.
+			else if (numericStr.endsWith("F") || numericStr.endsWith("f")) {
+				literal = new Literal(n.floatValue());
+			}
+			
+			// If within range, and not ending with 'L' or 'l', use int instead of long.
+			else if (!numericStr.endsWith("L") && !numericStr.endsWith("l")) {
+				long longValue = n.longValue();
+				if ((longValue <= Integer.MAX_VALUE) && (longValue >= Integer.MIN_VALUE)) {
+					literal = new Literal(n.intValue());
+				}
+			}
+		} else if (n instanceof Double) {
+			// If ended with 'F' or 'f', then use float instead of double.
+			if (numericStr.endsWith("F") || numericStr.endsWith("f")) {
+				literal = new Literal(n.floatValue());
+			}
+		}
+
+		// For all other types - construct the new literal.
+		if ((literal == null) && (n != null)) {
+			literal = new Literal(n);
+		}
+		
+		return literal;
+	}
+	
+	/**
+	 * Declares a new literal that may be parsed as the given literal value. The
+	 * <code>literalStr</code> should not match the name of any declared 
+	 * variables. When parsing an Epox program, the given string found as a 
+	 * terminal, will be parsed as a new <code>Literal</code> instance of the 
+	 * given value. The new literal's value will be a shallow copy of the given 
+	 * <code>Object</code>. If a literal with an equal <code>literalStr</code>
+	 * has previously been declared, then it will be overwritten.
+	 * 
+	 * @param literalStr the string representation that if matched against a 
+	 * terminal in an Epox program undergoing parsing, will be constructed as a
+	 * <code>Literal</code> of the given <code>Object</code> value.
+	 * @param literalValue the <code>Object</code> value to assign a new
+	 * <code>Literal</code> that matches the given <code>literalStr</code>.
+	 */
+	public void declareLiteral(final String literalStr, final Object literalValue) {
+		literalValues.put(literalStr, literalValue);
+	}
+	
+	/**
+	 * Removes the given <code>literalStr</code> from those that can be parsed.
+	 * Any future terminals that match the given <code>literalStr</code> will
+	 * no longer be parsed as a new <code>Literal</code>.
+	 * 
+	 * @param literalStr the literal string that should no longer be parsed as
+	 * a <code>Literal</code>.
+	 * @return the previously declared literal value that was removed, or 
+	 * <code>null</code> if nothing was removed.
+	 */
+	public Object undeclareLiteral(final String literalStr) {
+		return literalValues.remove(literalStr);
 	}
 
-	public void addFunction(final String name, final Class<? extends Node> functionClass) {
+	/**
+	 * Declares a new function that can be constructed when a function of the
+	 * given name is parsed. During parsing if a function is encountered with an
+	 * identifier that matches the provided <code>name</code> parameter, then a
+	 * new instance of the given <code>Node</code> class is constructed. Note 
+	 * that any functions provided as nodes to the 
+	 * {@link EpoxParser#declareFunction(String, Node)} method, will be 
+	 * constructed in preference to those declared through a call to this 
+	 * method. Declaring a new function using this method with a name that is 
+	 * equal to any previously declared functions, will replace the existing 
+	 * function - this applies to the standard Epox functions too, which may be
+	 * replaced through this method.
+	 * 
+	 * @param name the identifier to match when parsing the provided function.
+	 * @param functionClass a <code>Class</code> from which a new node will be
+	 * constructed, upon parsing of an Epox function with the given name.
+	 */
+	public void declareFunction(final String name, final Class<? extends Node> functionClass) {
 		functions.put(name, functionClass);
 	}
 	
-	public void addFunction(final String name, final Node functionNode) {
-		
+	/**
+	 * Declares a new function that can be constructed when a function of the
+	 * given name is parsed. During parsing if a function is encountered with an
+	 * identifier that matches the provided <code>name</code> parameter, then a
+	 * new instance of the given <code>Node</code> is constructed. Note 
+	 * that functions provided through this method will be constructed in 
+	 * preference to those declared through a call to the 
+	 * {@link EpoxParser#declareFunction(String, Class)} method. Declaring a new
+	 * function using this method with a name that is equal to any previously 
+	 * declared functions, will replace the existing function. The standard Epox
+	 * functions cannot be overwritten with this method.
+	 * 
+	 * @param name the identifier to match when parsing the provided function.
+	 * @param functionNode a <code>Node</code> from which a new instance will be
+	 * constructed upon parsing of an Epox function with the given name.
+	 */
+	public void declareFunction(final String name, final Node functionNode) {
+		functionNodes.put(name, functionNode);
+	}
+	
+	/**
+	 * Removes any functions of the given name from those that can parsed. This
+	 * includes those functions declared through either of the 
+	 * <code>declareFunction</code> methods, or the standard Epox functions.
+	 * 
+	 * @param name the identifier of the function that should no longer be 
+	 * parsed.
+	 */
+	public void undeclareFunction(final String name) {
+		functions.remove(name);
+		functionNodes.remove(name);
 	}
 
-	public void addAvailableVariables(final List<Variable> variables) {
+	/**
+	 * Declares the given variables, so that any terminals that match the 
+	 * identifiers of the given variables will be parsed as such.
+	 * 
+	 * @param variables the variables that should be declared.
+	 */
+	public void declareVariables(final List<Variable> variables) {
 		for (final Variable v: variables) {
-			addAvailableVariable(v);
+			declareVariable(v);
 		}
 	}
 
-	public void addAvailableVariable(final Variable variable) {
+	/**
+	 * Declares the given variable, so that any terminals that match the given
+	 * variable's identifier will be parsed as that variable.
+	 * 
+	 * @param variable the variable that should be declared.
+	 */
+	public void declareVariable(final Variable variable) {
 		variables.put(variable.getIdentifier(), variable);
 	}
+	
+	/**
+	 * Removes the given variable from those that are parseable. The variable's
+	 * identifier will no longer be parsed as that variable.
+	 * 
+	 * @param variable the variable to be undeclared.
+	 */
+	public void undeclareVariable(final Variable variable) {
+		variables.remove(variable.getIdentifier());
+	}
 
-	public void clearAvailableVariables() {
+	/**
+	 * Removes all variables from those that are parseable. The parser will no 
+	 * longer recognise any variables.
+	 */
+	public void undeclareAllVariables() {
 		variables.clear();
 	}
 
+	/*
+	 * Splits a string that represents zero or more arguments to a function, 
+	 * separated by either commas or spaces, into the separate arguments. Each
+	 * argument may contain nested method calls, which themselves have multiple
+	 * arguments - this method splits just the top level of arguments so that 
+	 * they can themselves be parsed individually.
+	 */
 	private List<String> splitArguments(String argStr) {
 		int depth = 0;
 

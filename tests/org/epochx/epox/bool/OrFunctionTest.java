@@ -24,6 +24,7 @@ package org.epochx.epox.bool;
 import static org.junit.Assert.*;
 
 import org.epochx.epox.*;
+import org.epochx.tools.eval.*;
 import org.junit.Test;
 
 /**
@@ -96,5 +97,21 @@ public class OrFunctionTest extends NodeTestCase {
 		
 		returnType = node.getReturnType(Boolean.class, Boolean.class, Boolean.class);
 		assertNull("too many boolean inputs should be invalid", returnType);
+	}
+	
+	/**
+	 * Tests that this function can be parsed by the EpoxParser.
+	 */
+	@Test
+	public void testEpoxParser() {
+		EpoxParser parser = new EpoxParser();
+		
+		try {
+			parser.declareVariable(new Variable("X", Boolean.class));
+			Node n = parser.parse("OR(X, X)");
+			assertSame("Parsing did not return an instance of the correct node", OrFunction.class, n.getClass());
+		} catch (MalformedProgramException e) {
+			fail("Malformed program exception thrown when parsing");
+		}
 	}
 }

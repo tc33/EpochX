@@ -25,6 +25,7 @@ import static org.junit.Assert.*;
 
 import org.epochx.epox.*;
 import org.epochx.epox.trig.ArcSineFunction;
+import org.epochx.tools.eval.*;
 import org.junit.Test;
 
 /**
@@ -114,5 +115,21 @@ public class ArcSineFunctionTest extends NodeTestCase {
 		
 		returnType = arcsin.getReturnType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
+	}
+	
+	/**
+	 * Tests that this function can be parsed by the EpoxParser.
+	 */
+	@Test
+	public void testEpoxParser() {
+		EpoxParser parser = new EpoxParser();
+		
+		try {
+			parser.declareVariable(new Variable("X", Double.class));
+			Node n = parser.parse("ARCSIN(X)");
+			assertSame("Parsing did not return an instance of the correct node", ArcSineFunction.class, n.getClass());
+		} catch (MalformedProgramException e) {
+			fail("Malformed program exception thrown when parsing");
+		}
 	}
 }

@@ -89,7 +89,7 @@ public abstract class AntTrail extends GEModel {
 		parser = new EpoxParser();
 		interpreter = new EpoxInterpreter(parser);
 
-		parser.addAvailableVariable(new Variable("ANT", ant));
+		parser.declareVariable(new Variable("ANT", ant));
 	}
 
 	/**

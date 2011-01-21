@@ -25,6 +25,7 @@ package org.epochx.epox.math;
 import static org.junit.Assert.*;
 
 import org.epochx.epox.*;
+import org.epochx.tools.eval.*;
 import org.junit.Test;
 
 
@@ -132,5 +133,21 @@ public class CoefficientPowerFunctionTest extends NodeTestCase {
 		
 		returnType = cvp.getReturnType(Integer.class, Integer.class);
 		assertNull("too few inputs should be invalid", returnType);
+	}
+	
+	/**
+	 * Tests that this function can be parsed by the EpoxParser.
+	 */
+	@Test
+	public void testEpoxParser() {
+		EpoxParser parser = new EpoxParser();
+		
+		try {
+			parser.declareVariable(new Variable("X", Double.class));
+			Node n = parser.parse("CVP(X, X, X)");
+			assertSame("Parsing did not return an instance of the correct node", CoefficientPowerFunction.class, n.getClass());
+		} catch (MalformedProgramException e) {
+			fail("Malformed program exception thrown when parsing");
+		}
 	}
 }

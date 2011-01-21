@@ -31,6 +31,8 @@ public class MockNode extends Node {
 	private Object evaluate;
 	private String getIdentifier;
 	
+	private Class<?> getReturnType;
+	
 	/**
 	 * Constructs a <code>MockNode</code> with an identifier of 'mock'.
 	 */
@@ -86,5 +88,24 @@ public class MockNode extends Node {
 	 */
 	public int getEvaluateCount() {
 		return evaluateCount;
+	}
+	
+	/**
+	 * Sets the <code>Class<?></code> that will be returned by the 
+	 * <code>getReturnType</code> method.
+	 * @param getReturnType the return type to be returned by getReturnType.
+	 */
+	public void setGetReturnType(Class<?> getReturnType) {
+		this.getReturnType = getReturnType;
+	}
+	
+	/**
+	 * Returns the mock return type of this node.
+	 * 
+	 * @return the mock return type of this node.
+	 */
+	@Override
+	public Class<?> getReturnType(Class<?> ... inputTypes) {
+		return getReturnType;
 	}
 }

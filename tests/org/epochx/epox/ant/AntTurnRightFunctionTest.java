@@ -25,6 +25,7 @@ import static org.junit.Assert.*;
 
 import org.epochx.epox.*;
 import org.epochx.tools.ant.*;
+import org.epochx.tools.eval.*;
 import org.junit.*;
 
 
@@ -124,5 +125,21 @@ public class AntTurnRightFunctionTest extends NodeTestCase {
 		
 		returnType = antRight.getReturnType(Ant.class);
 		assertNull("too many ant inputs should be invalid", returnType);
+	}
+	
+	/**
+	 * Tests that this function can be parsed by the EpoxParser.
+	 */
+	@Test
+	public void testEpoxParser() {
+		EpoxParser parser = new EpoxParser();
+		
+		try {
+			parser.declareVariable(new Variable("ANT", Ant.class));
+			Node n = parser.parse("TURN-RIGHT(ANT)");
+			assertSame("Parsing did not return an instance of the correct node", AntTurnRightFunction.class, n.getClass());
+		} catch (MalformedProgramException e) {
+			fail("Malformed program exception thrown when parsing");
+		}
 	}
 }

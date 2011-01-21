@@ -72,10 +72,10 @@ public class EpoxInterpreter implements Interpreter {
 		}
 
 		// Remove any of the old variables.
-		parser.clearAvailableVariables();
+		parser.undeclareAllVariables();
 
 		for (int i = 0; i < argNames.length; i++) {
-			parser.addAvailableVariable(new Variable(argNames[i], argValues[i]));
+			parser.declareVariable(new Variable(argNames[i], argValues[i]));
 		}
 
 		final Node programTree = parser.parse(source);

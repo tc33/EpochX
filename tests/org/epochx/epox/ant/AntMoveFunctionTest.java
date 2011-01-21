@@ -135,7 +135,7 @@ public class AntMoveFunctionTest extends NodeTestCase {
 		EpoxParser parser = new EpoxParser();
 		
 		try {
-			parser.addAvailableVariable(new Variable("ANT", new MockAnt()));
+			parser.declareVariable(new Variable("ANT", Ant.class));
 			Node n = parser.parse("MOVE(ANT)");
 			assertSame("Parsing did not return an instance of the correct node", AntMoveFunction.class, n.getClass());
 		} catch (MalformedProgramException e) {

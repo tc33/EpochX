@@ -25,6 +25,7 @@ import static org.junit.Assert.*;
 
 import org.epochx.epox.*;
 import org.epochx.epox.trig.ArcCosecantFunction;
+import org.epochx.tools.eval.*;
 import org.epochx.tools.util.MathUtils;
 import org.junit.Test;
 
@@ -64,19 +65,19 @@ public class ArcCosecantFunctionTest extends NodeTestCase {
 	@Test
 	public void testEvaluateDouble() {
 		child.setEvaluate(MathUtils.csc(0.6));
-		assertEquals("ACSC should be the inverse of csc", 0.6, arccsc.evaluate(), 0);
+		assertEquals("ARCCSC should be the inverse of csc", 0.6, arccsc.evaluate(), 0);
 		
 		child.setEvaluate(MathUtils.csc(-0.6));
-		assertEquals("ACSC should be the inverse of csc", -0.6, arccsc.evaluate(), 0);
+		assertEquals("ARCCSC should be the inverse of csc", -0.6, arccsc.evaluate(), 0);
 	
 		child.setEvaluate(0.0);
-		assertEquals("ACSC of 0.0 should be NaN", Double.NaN, arccsc.evaluate(), 0);
+		assertEquals("ARCCSC of 0.0 should be NaN", Double.NaN, arccsc.evaluate(), 0);
 		
 		child.setEvaluate(0.9);
-		assertEquals("ARCSEC of 0.9 should be NaN", Double.NaN, arccsc.evaluate(), 0);
+		assertEquals("ARCCSC of 0.9 should be NaN", Double.NaN, arccsc.evaluate(), 0);
 		
 		child.setEvaluate(Double.NaN);
-		assertEquals("ACSC of NaN should be NaN", Double.NaN, (Object) arccsc.evaluate());
+		assertEquals("ARCCSC of NaN should be NaN", Double.NaN, (Object) arccsc.evaluate());
 	}
 	
 	/**
@@ -86,10 +87,10 @@ public class ArcCosecantFunctionTest extends NodeTestCase {
 	@Test
 	public void testEvaluateInteger() {
 		child.setEvaluate(1);
-		assertSame("ACSC of an integer should return double", Double.class, arccsc.evaluate().getClass());
+		assertSame("ARCCSC of an integer should return double", Double.class, arccsc.evaluate().getClass());
 		
 		child.setEvaluate(0);
-		assertEquals("ACSC of 0 should be NaN", Double.NaN, (Object) arccsc.evaluate());
+		assertEquals("ARCCSC of 0 should be NaN", Double.NaN, (Object) arccsc.evaluate());
 	}
 	
 	/**
@@ -111,5 +112,21 @@ public class ArcCosecantFunctionTest extends NodeTestCase {
 		
 		returnType = arccsc.getReturnType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
+	}
+	
+	/**
+	 * Tests that this function can be parsed by the EpoxParser.
+	 */
+	@Test
+	public void testEpoxParser() {
+		EpoxParser parser = new EpoxParser();
+		
+		try {
+			parser.declareVariable(new Variable("X", Double.class));
+			Node n = parser.parse("ARCCSC(X)");
+			assertSame("Parsing did not return an instance of the correct node", ArcCosecantFunction.class, n.getClass());
+		} catch (MalformedProgramException e) {
+			fail("Malformed program exception thrown when parsing");
+		}
 	}
 }

@@ -24,6 +24,7 @@ package org.epochx.epox.math;
 import static org.junit.Assert.*;
 
 import org.epochx.epox.*;
+import org.epochx.tools.eval.*;
 import org.junit.Test;
 
 /**
@@ -138,5 +139,21 @@ public class LogFunctionTest extends NodeTestCase {
 		
 		returnType = log.getReturnType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
+	}
+	
+	/**
+	 * Tests that this function can be parsed by the EpoxParser.
+	 */
+	@Test
+	public void testEpoxParser() {
+		EpoxParser parser = new EpoxParser();
+		
+		try {
+			parser.declareVariable(new Variable("X", Double.class));
+			Node n = parser.parse("LN(X)");
+			assertSame("Parsing did not return an instance of the correct node", LogFunction.class, n.getClass());
+		} catch (MalformedProgramException e) {
+			fail("Malformed program exception thrown when parsing");
+		}
 	}
 }

@@ -24,6 +24,7 @@ package org.epochx.epox.lang;
 import static org.junit.Assert.*;
 
 import org.epochx.epox.*;
+import org.epochx.tools.eval.*;
 import org.junit.*;
 
 
@@ -116,6 +117,22 @@ public class Seq2FunctionTest extends NodeTestCase {
 			log.append(']');
 			
 			return super.evaluate();
+		}
+	}
+	
+	/**
+	 * Tests that this function can be parsed by the EpoxParser.
+	 */
+	@Test
+	public void testEpoxParser() {
+		EpoxParser parser = new EpoxParser();
+		
+		try {
+			parser.declareVariable(new Variable("X", Void.class));
+			Node n = parser.parse("SEQ2(X, X)");
+			assertSame("Parsing did not return an instance of the correct node", Seq2Function.class, n.getClass());
+		} catch (MalformedProgramException e) {
+			fail("Malformed program exception thrown when parsing");
 		}
 	}
 }

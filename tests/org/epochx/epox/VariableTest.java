@@ -63,6 +63,76 @@ public class VariableTest extends NodeTestCase {
 
 		super.setUp();
 	}
+	
+	/**
+	 * Tests that {@link org.epochx.epox.Variable#Variable(String, Class)} 
+	 * throws an exception for a null identifier.
+	 */
+	@Test
+	public void testVariableTypeNullIdentifier() {
+		try {
+			new Variable(null, Boolean.class);
+			fail("illegal argument exception not thrown for null identifier");
+		} catch (final IllegalArgumentException expected) {
+			assertTrue(true);
+		}
+	}
+	
+	/**
+	 * Tests that {@link org.epochx.epox.Variable#Variable(String, Class)} 
+	 * throws an exception for a null data-type.
+	 */
+	@Test
+	public void testVariableTypeNullDataType() {
+		try {
+			new Variable("test", null);
+			fail("illegal argument exception not thrown for null data-type");
+		} catch (final IllegalArgumentException expected) {
+			assertTrue(true);
+		}
+	}
+	
+	/**
+	 * Tests that {@link org.epochx.epox.Variable#Variable(String, Object)} 
+	 * throws an exception for a null identifier.
+	 */
+	@Test
+	public void testVariableValueNullIdentifier() {
+		try {
+			new Variable(null, Boolean.TRUE);
+			fail("illegal argument exception not thrown for null identifier");
+		} catch (final IllegalArgumentException expected) {
+			assertTrue(true);
+		}
+	}
+	
+	/**
+	 * Tests that {@link org.epochx.epox.Variable#Variable(String, Object)} 
+	 * throws an exception for a null value.
+	 */
+	@Test
+	public void testVariableValueNullDataType() {
+		try {
+			new Variable("test", null);
+			fail("illegal argument exception not thrown for null value");
+		} catch (final IllegalArgumentException expected) {
+			assertTrue(true);
+		}
+	}
+	
+	/**
+	 * Tests that {@link org.epochx.epox.Variable#setValue(Object)} allows a 
+	 * null value to be set.
+	 */
+	@Test
+	public void testSetValueNull() {
+		try {
+			varInit.setValue(null);
+			assertNull("variables value should be set to null", varInit.getValue());
+		} catch (final IllegalArgumentException unexpected) {
+			fail("illegal argument exception incorrectly thrown when setting a null value");
+		}
+	}
 
 	/**
 	 * Tests that {@link org.epochx.epox.Variable#setValue(Object)} throws an

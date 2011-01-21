@@ -23,12 +23,17 @@ public class Variable extends Node {
 
 	/**
 	 * Constructs a new variable with a <code>null</code> value. The variable's
-	 * name and data-type must be provided.
+	 * name and data-type must be provided. The given identifier and data-type 
+	 * must be non-null.
 	 * 
 	 * @param identifier the name of the variable.
 	 * @param datatype the data-type that all values will be assignable to.
 	 */
 	public Variable(final String identifier, final Class<?> datatype) {
+		if (identifier == null || datatype == null) {
+			throw new IllegalArgumentException("identifier and data-type must be non-null");
+		}
+		
 		this.identifier = identifier;
 		this.datatype = datatype;
 	}
@@ -36,11 +41,20 @@ public class Variable extends Node {
 	/**
 	 * Constructs a new variable with the given value. The variable's name is
 	 * provided but the data-type is determined by the type of the given value.
+	 * The given identifier and value must be non-null. If the value is unknown
+	 * then use the alternative constructor and provide the data-type. If the 
+	 * value really should be null, then use the other constructor, and then 
+	 * call the <code>setValue(Object)</code> method which will allow the null
+	 * value once the data-type has been set.
 	 * 
 	 * @param identifier the name of the variable.
 	 * @param value the starting value of the variable.
 	 */
 	public Variable(final String identifier, final Object value) {
+		if (identifier == null || value == null) {
+			throw new IllegalArgumentException("identifier and value must be non-null");
+		}
+		
 		this.identifier = identifier;
 		this.value = value;
 		datatype = value.getClass();
@@ -49,12 +63,13 @@ public class Variable extends Node {
 	/**
 	 * Sets the value of the variable. The data-type of a Variable cannot be
 	 * changed after construction, and only values which are instances of
-	 * subclasses of the original data-type may be used.
+	 * subclasses of the original data-type may be used. A <code>null</code> 
+	 * value is considered valid for a variable of any data-type.
 	 * 
 	 * @param value the value to set for the variable.
 	 */
 	public void setValue(final Object value) {
-		if (!datatype.isAssignableFrom(value.getClass())) {
+		if (value != null && !datatype.isAssignableFrom(value.getClass())) {
 			throw new IllegalArgumentException("Variables may not change data-type");
 		}
 

@@ -23,6 +23,8 @@ package org.epochx.epox;
 
 import static org.junit.Assert.*;
 
+import java.util.*;
+
 import org.epochx.epox.bool.*;
 import org.epochx.epox.math.*;
 import org.epochx.tools.eval.*;
@@ -317,5 +319,380 @@ public class EpoxParserTest {
 		literal = parser.parseLiteral("'\t'");
 		assertSame("escaped char literal not parsed as Character", Character.class, literal.getReturnType());
 		assertEquals("escaped char literal not parsed correctly", '\t', literal.getValue());
+	}
+	
+	/**
+	 * Tests that {@link org.epochx.epox.EpoxParser#declareLiteral(String, Object)} 
+	 * declares a new literal which is parsed correctly.
+	 */
+	@Test
+	public void testDeclareLiteral() {
+		Object value = new Object();
+		parser.declareLiteral("MOCK", value);
+		
+		try {
+			Node n = parser.parse("MOCK");
+			
+			assertTrue("literal node was expected", (n instanceof Literal));
+			Literal literal = (Literal) n;
+			assertSame("value of literal was not as expected", value, literal.getValue());
+		} catch (MalformedProgramException e) {
+			fail("unexpected malformed program exception thrown");
+		}
+	}
+	
+	/**
+	 * Tests that {@link org.epochx.epox.EpoxParser#declareLiteral(String, Object)} 
+	 * overwrites existing literal declarations.
+	 */
+	@Test
+	public void testDeclareLiteralOverwrite() {
+		parser.declareLiteral("MOCK", new Object());
+		
+		Object value2 = new Object();
+		parser.declareLiteral("MOCK", value2);
+		
+		try {
+			Node n = parser.parse("MOCK");
+			
+			assertTrue("literal node was expected", (n instanceof Literal));
+			Literal literal = (Literal) n;
+			assertSame("value of literal was not as expected", value2, literal.getValue());
+		} catch (MalformedProgramException e) {
+			fail("unexpected malformed program exception thrown");
+		}
+	}
+	
+	/**
+	 * Tests that {@link org.epochx.epox.EpoxParser#undeclareLiteral(String)} 
+	 * removes the specified literal.
+	 */
+	@Test
+	public void testUndeclareLiteral() {
+		Object value = new Object();
+		parser.declareLiteral("MOCK", value);
+		
+		try {
+			Literal literal = (Literal) parser.parse("MOCK");
+			assertSame("value of literal was not as expected", value, literal.getValue());
+			parser.undeclareLiteral("MOCK");
+		} catch (MalformedProgramException e) {
+			fail("unexpected malformed program exception thrown");
+		}
+		
+		try {
+			parser.parse("MOCK");
+			fail("malformed program exception should have been thrown for using undeclared literal");
+		} catch (MalformedProgramException eexpected) {
+			assertTrue(true);
+		}
+	}
+	
+	/**
+	 * Tests that {@link org.epochx.epox.EpoxParser#declareFunction(String, Class)} 
+	 * declares a new useable function.
+	 */
+	@Test
+	public void testDeclareFunction() {
+		// Test the function does not already exist.
+		try {
+			parser.parse("mock()");
+			fail("malformed program exception should have been thrown for unknown function");
+		} catch (MalformedProgramException expected) {
+			assertTrue(true);
+		}
+		
+		// Declare the function.
+		parser.declareFunction("mock", MockNode.class);
+		
+		// Test that an exception is no longer thrown.
+		try {
+			parser.parse("mock()");
+		} catch (MalformedProgramException unexpected) {
+			fail("unexpected malformed program exception thrown");
+		}
+	}
+	
+	/**
+	 * Tests that {@link org.epochx.epox.EpoxParser#declareFunction(String, Class)} 
+	 * overwrites existing standard functions.
+	 */
+	@Test
+	public void testDeclareFunctionOverwrite() {
+		// Test the ADD function is parsed as an AddFunction.
+		try {
+			Node n = parser.parse("ADD(3 4)");
+			assertTrue("ADD should be parsed as an AddFunction", (n instanceof AddFunction));
+		} catch (MalformedProgramException unexpected) {
+			fail("unexpected malformed program exception thrown");
+		}
+		
+		// Overwrite the ADD function.
+		parser.declareFunction("ADD", MockNode.class);
+		
+		// Test the ADD function now parses to MockNode.
+		try {
+			Node n = parser.parse("ADD()");
+			assertTrue("ADD function should have been overwritten with a MockNode", (n instanceof MockNode));
+		} catch (MalformedProgramException unexpected) {
+			fail("unexpected malformed program exception thrown");
+		}
+	}
+	
+	/**
+	 * Tests that {@link org.epochx.epox.EpoxParser#declareFunction(String, Node)} 
+	 * declares a new useable function.
+	 */
+	@Test
+	public void testDeclareFunctionNode() {
+		// Test the function does not already exist.
+		try {
+			parser.parse("mock()");
+			fail("malformed program exception should have been thrown for unknown function");
+		} catch (MalformedProgramException expected) {
+			assertTrue(true);
+		}
+		
+		// Declare the function.
+		parser.declareFunction("mock", new MockNode());
+		
+		// Test that an exception is no longer thrown.
+		try {
+			parser.parse("mock()");
+		} catch (MalformedProgramException unexpected) {
+			fail("unexpected malformed program exception thrown");
+		}
+	}
+	
+	/**
+	 * Tests that {@link org.epochx.epox.EpoxParser#declareFunction(String, Node)} 
+	 * does not overwrite standard functions.
+	 */
+	@Test
+	public void testDeclareFunctionOverwriteStandard() {
+		// Test the ADD function is parsed as an AddFunction.
+		try {
+			Node n = parser.parse("ADD(3 4)");
+			assertTrue("ADD should be parsed as an AddFunction", (n instanceof AddFunction));
+		} catch (MalformedProgramException unexpected) {
+			fail("unexpected malformed program exception thrown");
+		}
+		
+		// Overwrite the ADD function.
+		parser.declareFunction("ADD", new MockNode());
+		
+		// Test the ADD function is still parsed as an AddFunction.
+		try {
+			Node n = parser.parse("ADD()");
+			assertTrue("ADD should have been overwritten with MockNode", (n instanceof MockNode));
+		} catch (MalformedProgramException unexpected) {
+			fail("unexpected malformed program exception thrown");
+		}
+	}
+	
+	/**
+	 * Tests that {@link org.epochx.epox.EpoxParser#undeclareFunction(String)} 
+	 * removes the specified function.
+	 */
+	@Test
+	public void testUndeclareFunction() {
+		parser.declareFunction("MOCK", MockNode.class);
+		parser.declareFunction("MOCK", new MockNode());
+		
+		// Test the MOCK function is parsed.
+		try {
+			parser.parse("MOCK()");
+		} catch (MalformedProgramException unexpected) {
+			fail("unexpected malformed program exception thrown");
+		}
+		
+		parser.undeclareFunction("MOCK");
+		
+		// Test the MOCK function is no longer parsed because both functions are removed.
+		try {
+			parser.parse("MOCK()");
+			fail("malformed program exception should have been thrown for undeclared function");
+		} catch (MalformedProgramException expected) {
+			assertTrue(true);
+		}
+	}
+	
+	/**
+	 * Tests that {@link org.epochx.epox.EpoxParser#undeclareFunction(String)} 
+	 * removes the specified standard function.
+	 */
+	@Test
+	public void testUndeclareFunctionStandard() {
+		// Test the ADD function is parsed.
+		try {
+			parser.parse("ADD(3 4)");
+		} catch (MalformedProgramException unexpected) {
+			fail("unexpected malformed program exception thrown");
+		}
+		
+		parser.undeclareFunction("ADD");
+		
+		// Test the ADD function no longer parses.
+		try {
+			parser.parse("ADD(3 4)");
+			fail("malformed program exception should have been thrown for undeclared function");
+		} catch (MalformedProgramException expected) {
+			assertTrue(true);
+		}
+	}
+	
+	/**
+	 * Tests that {@link org.epochx.epox.EpoxParser#declareVariables(java.util.List)}
+	 * declares multiple variables.
+	 */
+	@Test
+	public void testDeclareVariables() {
+		// Test the MOCK1 variable does not parse.
+		try {
+			parser.parse("MOCK1");
+			fail("malformed program exception should have been thrown for unknown variable");
+		} catch (MalformedProgramException expected) {
+			assertTrue(true);
+		}
+		
+		// Test the MOCK2 variable does not parse.
+		try {
+			parser.parse("MOCK2");
+			fail("malformed program exception should have been thrown for unknown variable");
+		} catch (MalformedProgramException expected) {
+			assertTrue(true);
+		}
+		
+		// Declare the variables.
+		List<Variable> vars = new ArrayList<Variable>();
+		Variable var1 = new Variable("MOCK1", Boolean.class);
+		Variable var2 = new Variable("MOCK2", Boolean.class);
+		vars.add(var1);
+		vars.add(var2);
+		parser.declareVariables(vars);
+		
+		// Test both MOCK1 and MOCK2 variables now parse.
+		try {
+			Node mock1 = parser.parse("MOCK1");
+			Node mock2 = parser.parse("MOCK2");
+			assertSame("Declared variables not parsing correctly", var1, mock1);
+			assertSame("Declared variables not parsing correctly", var2, mock2);
+		} catch (MalformedProgramException unexpected) {
+			fail("unexpected malformed program exception thrown");
+		}
+	}
+	
+	/**
+	 * Tests that {@link org.epochx.epox.EpoxParser#declareVariables(java.util.List)}
+	 * throws an exception for a <code>null</code> list.
+	 */
+	@Test
+	public void testDeclareVariablesNull() {
+		try {
+			parser.declareVariables(null);
+			fail("illegal argument exception should have been thrown for null list");
+		} catch (IllegalArgumentException expected) {
+			assertTrue(true);
+		}
+	}
+	
+	/**
+	 * Tests that {@link org.epochx.epox.EpoxParser#declareVariable(Variable)}
+	 * declares the given variable.
+	 */
+	@Test
+	public void testDeclareVariable() {
+		// Test the MOCK variable does not parse.
+		try {
+			parser.parse("MOCK");
+			fail("malformed program exception should have been thrown for unknown variable");
+		} catch (MalformedProgramException expected) {
+			assertTrue(true);
+		}
+		
+		// Declare the variable.
+		Variable var = new Variable("MOCK", Boolean.class);
+		parser.declareVariable(var);
+		
+		// Test MOCK variable now parses.
+		try {
+			Node mock = parser.parse("MOCK");
+			assertSame("Declared variable not parsing correctly", var, mock);
+		} catch (MalformedProgramException unexpected) {
+			fail("unexpected malformed program exception thrown");
+		}
+	}
+	
+	/**
+	 * Tests that {@link org.epochx.epox.EpoxParser#undeclareVariable(Variable)}
+	 * removes a declared variable.
+	 */
+	@Test
+	public void testUndeclareVariable() {
+		// Declare the variables.
+		Variable var = new Variable("MOCK", Boolean.class);
+		parser.declareVariable(var);
+		
+		// Test MOCK variable now parses.
+		try {
+			Node mock = parser.parse("MOCK");
+			assertSame("Declared variables not parsing correctly", var, mock);
+		} catch (MalformedProgramException expected) {
+			fail("unexpected malformed program exception thrown");
+		}
+		
+		// Undeclare variable.
+		parser.undeclareVariable(var);
+		
+		// Test that variables does not now parse.
+		try {
+			parser.parse("MOCK");
+			fail("malformed program exception should have been thrown for unknown variable");
+		} catch (MalformedProgramException expected) {
+			assertTrue(true);
+		}
+	}
+	
+	/**
+	 * Tests that {@link org.epochx.epox.EpoxParser#undeclareAllVariables()}
+	 * removes all declared variables.
+	 */
+	@Test
+	public void testUndeclareAllVariables() {
+		// Declare the variables.
+		List<Variable> vars = new ArrayList<Variable>();
+		Variable var1 = new Variable("MOCK1", Boolean.class);
+		Variable var2 = new Variable("MOCK2", Boolean.class);
+		vars.add(var1);
+		vars.add(var2);
+		parser.declareVariables(vars);
+		
+		// Test both MOCK1 and MOCK2 variables now parse.
+		try {
+			Node mock1 = parser.parse("MOCK1");
+			Node mock2 = parser.parse("MOCK2");
+			assertSame("Declared variables not parsing correctly", var1, mock1);
+			assertSame("Declared variables not parsing correctly", var2, mock2);
+		} catch (MalformedProgramException expected) {
+			fail("malformed program exception should have been thrown for unknown variable");
+		}
+		
+		// Undeclare all variables.
+		parser.undeclareAllVariables();
+		
+		// Test that neither of the variables now parse.
+		try {
+			parser.parse("MOCK1");
+			fail("malformed program exception should have been thrown for unknown variable");
+		} catch (MalformedProgramException expected) {
+			assertTrue(true);
+		}
+		
+		try {
+			parser.parse("MOCK2");
+			fail("malformed program exception should have been thrown for unknown variable");
+		} catch (MalformedProgramException expected) {
+			assertTrue(true);
+		}
 	}
 }

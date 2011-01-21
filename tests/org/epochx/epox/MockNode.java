@@ -34,10 +34,12 @@ public class MockNode extends Node {
 	private Class<?> getReturnType;
 	
 	/**
-	 * Constructs a <code>MockNode</code> with an identifier of 'mock'.
+	 * Constructs a <code>MockNode</code> with an identifier of 'mock' and a 
+	 * return type of Void.
 	 */
 	public MockNode() {
 		this.getIdentifier = "mock";
+		this.getReturnType = Void.class;
 	}
 	
 	/**

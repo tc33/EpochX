@@ -487,7 +487,8 @@ public class EpoxParser {
 	 * {@link EpoxParser#declareFunction(String, Class)} method. Declaring a new
 	 * function using this method with a name that is equal to any previously 
 	 * declared functions, will replace the existing function. The standard Epox
-	 * functions cannot be overwritten with this method.
+	 * functions will also be overridden, since functions declared through this
+	 * method are given preference.
 	 * 
 	 * @param name the identifier to match when parsing the provided function.
 	 * @param functionNode a <code>Node</code> from which a new instance will be
@@ -517,6 +518,10 @@ public class EpoxParser {
 	 * @param variables the variables that should be declared.
 	 */
 	public void declareVariables(final List<Variable> variables) {
+		if (variables == null) {
+			throw new IllegalArgumentException("variables should be non-null");
+		}
+		
 		for (final Variable v: variables) {
 			declareVariable(v);
 		}
@@ -529,7 +534,9 @@ public class EpoxParser {
 	 * @param variable the variable that should be declared.
 	 */
 	public void declareVariable(final Variable variable) {
-		variables.put(variable.getIdentifier(), variable);
+		if (variable != null) {
+			variables.put(variable.getIdentifier(), variable);
+		}
 	}
 	
 	/**
@@ -539,7 +546,9 @@ public class EpoxParser {
 	 * @param variable the variable to be undeclared.
 	 */
 	public void undeclareVariable(final Variable variable) {
-		variables.remove(variable.getIdentifier());
+		if (variable != null) {
+			variables.remove(variable.getIdentifier());
+		}
 	}
 
 	/**

@@ -93,12 +93,12 @@ public class MultiplexerTest extends ModelTest {
 	 * - Population size of 4000
 	 * - Program selector of FitnessProportionateSelector with over-selection
 	 * 
-	 * Expecting success rate between 35% and 45%.
+	 * Expecting success rate between 90% and 100%.
 	 */
 	@Test
 	public void testMultiplexer11Bit() {
-		final int LOWER_SUCCESS = 35;
-		final int UPPER_SUCCESS = 45;
+		final int LOWER_SUCCESS = 90;
+		final int UPPER_SUCCESS = 100;
 
 		final Multiplexer model = new Multiplexer(11);
 		setupModel(model);

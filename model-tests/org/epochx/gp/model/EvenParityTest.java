@@ -32,7 +32,7 @@ public class EvenParityTest extends ModelTest {
 				Stats.get().print(StatField.RUN_NUMBER, StatField.GEN_NUMBER, StatField.GEN_FITNESS_MIN, StatField.GEN_FITNESS_AVE);
 			}
 		};
-		Life.get().addGenerationListener(genPrinter);
+		//Life.get().addGenerationListener(genPrinter);
 	}
 
 	@After
@@ -90,12 +90,12 @@ public class EvenParityTest extends ModelTest {
 	 * Tests even 4 parity with standard setup.
 	 * 
 	 * Koza's success rate: 45% (p531).
-	 * Expecting success rate between 80% and 90%.
+	 * Expecting success rate between 85% and 95%.
 	 */
 	@Test
 	public void testEven4Parity() {
-		final int LOWER_SUCCESS = 82;
-		final int UPPER_SUCCESS = 92;
+		final int LOWER_SUCCESS = 85;
+		final int UPPER_SUCCESS = 95;
 
 		final EvenParity model = new EvenParity(4);
 		setupModel(model);

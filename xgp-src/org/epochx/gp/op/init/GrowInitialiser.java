@@ -170,7 +170,7 @@ public class GrowInitialiser extends ConfigOperator<GPModel> implements GPInitia
 
 		if (syntax != null) {
 			for (final Node n: syntax) {
-				if (n.getArity() == 0) {
+				if (n.isTerminal()) {
 					terminals.add(n);
 				} else {
 					functions.add(n);
@@ -186,7 +186,7 @@ public class GrowInitialiser extends ConfigOperator<GPModel> implements GPInitia
 	 * population will be equal to the population size attribute. All programs
 	 * in the population are only guarenteed to be unique (as defined by the
 	 * <code>equals</code> method on <code>GPCandidateProgram</code>) if the
-	 * <code>isDuplicatesEnabled</code> method returns <code>true</code>.
+	 * <code>isDuplicatesEnabled</code> method returns <code>false</code>.
 	 * Each program will have a node tree with a depth at most equal to the
 	 * value of the maximum depth attribute.
 	 * 

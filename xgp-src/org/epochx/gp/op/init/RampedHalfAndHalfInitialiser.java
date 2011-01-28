@@ -230,7 +230,6 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GPModel> implem
 			final int noPrograms = programsPerDepth[depth - startMaxDepth];
 
 			for (int i = 0; i < noPrograms; i++) {
-				// Grow on even numbers, full on odd.
 				GPCandidateProgram program;
 
 				do {
@@ -301,6 +300,7 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GPModel> implem
 								"Impossible to create sufficient programs inside depth parameters");
 					}
 				} else {
+					// Assume that if we can create enough programs at a depth, then we can at greater depths too.
 					break;
 				}
 			}

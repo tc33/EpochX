@@ -21,6 +21,8 @@
  */
 package org.epochx.life;
 
+import org.epochx.core.Model;
+
 /**
  * Provides the interface to be implemented by objects that wish to listen for
  * configure events. Configure events are specifically for triggering the
@@ -48,6 +50,6 @@ public interface ConfigListener extends Listener {
 	 * potentially by the model if it updates its parameters at an unorthadox
 	 * time in the life cycle.
 	 */
-	public void onConfigure();
+	public void configure(Model model);
 
 }

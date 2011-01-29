@@ -69,7 +69,9 @@ import org.epochx.stats.Stats;
 public class ElitismManager implements ConfigListener {
 
 	// The controlling model.
-	private final Model model;
+	private final Evolver evolver;
+	
+	private Stats stats;
 
 	// The number of elites to be used.
 	private int noElites;
@@ -81,18 +83,20 @@ public class ElitismManager implements ConfigListener {
 	 * @param model the Model which defines the run parameters such as number
 	 *        of elites to use.
 	 */
-	public ElitismManager(final Model model) {
-		this.model = model;
+	public ElitismManager(final Evolver evolver) {
+		this.evolver = evolver;
 
 		// Configure parameters from the model.
-		Life.get().addConfigListener(this, false);
+		evolver.getLife().addConfigListener(this, false);
 	}
 
 	/*
 	 * Configure component with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
+	public void configure(Model model) {
+		stats = evolver.getStats(model);
+		
 		// Discover how many elites we need.
 		noElites = model.getNoElites();
 		final int popSize = model.getPopulationSize();
@@ -131,7 +135,7 @@ public class ElitismManager implements ConfigListener {
 			throw new IllegalStateException("no elites is less than 0");
 		}
 
-		Life.get().fireElitismStartEvent();
+		evolver.getLife().fireElitismStartEvent();
 
 		// Record the start time.
 		final long startTime = System.nanoTime();
@@ -152,13 +156,13 @@ public class ElitismManager implements ConfigListener {
 		final long runtime = System.nanoTime() - startTime;
 
 		// Store the stats from the reproduction.
-		Stats.get().addData(ELITE_PROGRAMS, elites);
-		Stats.get().addData(ELITE_TIME, runtime);
+		stats.addData(ELITE_PROGRAMS, elites);
+		stats.addData(ELITE_TIME, runtime);
 
 		// Allow life cycle listener to confirm or modify.
-		elites = Life.get().runElitismHooks(elites);
+		elites = evolver.getLife().runElitismHooks(elites);
 
-		Life.get().fireElitismEndEvent();
+		evolver.getLife().fireElitismEndEvent();
 
 		return elites;
 	}

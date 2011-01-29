@@ -22,6 +22,7 @@
 package org.epochx.gr.model.groovy;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.epochx.core.Evolver;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.representation.CandidateProgram;
@@ -66,7 +67,9 @@ public class EvenParity extends GRModel {
 	 * @param noInputBits the number of inputs the even parity problem should be
 	 *        for
 	 */
-	public EvenParity(final int noInputBits) {
+	public EvenParity(Evolver evolver, final int noInputBits) {
+		super(evolver);
+		
 		interpreter = new GroovyInterpreter();
 
 		// Generate the input sequences.

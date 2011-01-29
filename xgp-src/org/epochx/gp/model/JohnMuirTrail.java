@@ -23,6 +23,8 @@ package org.epochx.gp.model;
 
 import java.awt.*;
 
+import org.epochx.core.Evolver;
+
 /**
  * GP model for the John Muir ant trail problem.
  */
@@ -53,7 +55,7 @@ public class JohnMuirTrail extends AntTrail {
 	 * Constructs the ant trail with the necessary food locations on an ant
 	 * landscape of dimensions 32 x 32. The ant is set to 100 allowed timesteps.
 	 */
-	public JohnMuirTrail() {
-		super(FOOD_LOCATIONS, new Dimension(32, 32), 100);
+	public JohnMuirTrail(Evolver evolver) {
+		super(evolver, FOOD_LOCATIONS, new Dimension(32, 32), 100);
 	}
 }

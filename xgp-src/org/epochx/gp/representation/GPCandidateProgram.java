@@ -26,6 +26,7 @@ import java.util.List;
 import org.apache.commons.lang.ObjectUtils;
 import org.epochx.epox.Node;
 import org.epochx.gp.model.GPModel;
+import org.epochx.gr.op.init.FitnessEvaluator;
 import org.epochx.representation.CandidateProgram;
 
 /**
@@ -46,17 +47,8 @@ public class GPCandidateProgram extends CandidateProgram {
 	// The root node of the program tree.
 	private Node rootNode;
 
-	// The controlling model.
-	private GPModel model;
-
-	// The cached program fitness.
-	private double fitness;
-
-	// The source at last evaluation for testing fitness cache is still good.
-	private String sourceCache;
-
-	public GPCandidateProgram(final GPModel model) {
-		this(null, model);
+	public GPCandidateProgram(final FitnessEvaluator fitnessEvaluator) {
+		this(null, fitnessEvaluator);
 	}
 
 	/**
@@ -69,8 +61,9 @@ public class GPCandidateProgram extends CandidateProgram {
 	 * @param model the controlling model which provides the configuration
 	 *        parameters for the run.
 	 */
-	public GPCandidateProgram(final Node rootNode, final GPModel model) {
-		this.model = model;
+	public GPCandidateProgram(final Node rootNode, final FitnessEvaluator fitnessEvaluator) {
+		super(fitnessEvaluator);
+		
 		this.rootNode = rootNode;
 	}
 
@@ -147,42 +140,6 @@ public class GPCandidateProgram extends CandidateProgram {
 		} else {
 			throw new IndexOutOfBoundsException("attempt to get nodes at negative depth");
 		}
-	}
-
-	/**
-	 * Requests the controlling model to calculate the fitness of this
-	 * <code>GPCandidateProgram</code>.
-	 * 
-	 * @return the fitness of this candidate program according to the model.
-	 */
-	@Override
-	public double getFitness() {
-		// Only get the source code if caching to avoid overhead otherwise.
-		String source = null;
-		if (model.cacheFitness()) {
-			source = rootNode.toString();
-		}
-
-		// If we're not caching or the cache is out of date.
-		if (!model.cacheFitness() || !source.equals(sourceCache)) {
-			fitness = model.getFitness(this);
-			sourceCache = source;
-		}
-
-		return fitness;
-	}
-
-	@Override
-	public boolean isValid() {
-		boolean valid = true;
-
-		final int maxProgramDepth = model.getMaxDepth();
-
-		if ((maxProgramDepth != -1) && (getProgramDepth() > maxProgramDepth)) {
-			valid = false;
-		}
-
-		return valid;
 	}
 
 	/**
@@ -320,11 +277,11 @@ public class GPCandidateProgram extends CandidateProgram {
 		}
 
 		// Copy the caches.
-		clone.sourceCache = sourceCache;
-		clone.fitness = fitness;
-
-		// Shallow copy the model.
-		clone.model = model;
+//		clone.sourceCache = sourceCache;
+//		clone.fitness = fitness;
+//
+//		// Shallow copy the model.
+//		clone.model = model;
 
 		return clone;
 	}

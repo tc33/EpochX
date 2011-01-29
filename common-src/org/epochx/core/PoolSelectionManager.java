@@ -83,7 +83,9 @@ import org.epochx.stats.Stats;
 public class PoolSelectionManager implements ConfigListener {
 
 	// The controlling model.
-	private final Model model;
+	private final Evolver evolver;
+	
+	private Stats stats;
 
 	// The pool selector to use to generate the breeding pool.
 	private PoolSelector poolSelector;
@@ -103,18 +105,19 @@ public class PoolSelectionManager implements ConfigListener {
 	 * 
 	 * @see PoolSelector
 	 */
-	public PoolSelectionManager(final Model model) {
-		this.model = model;
+	public PoolSelectionManager(final Evolver evolver) {
+		this.evolver = evolver;
 
 		// Configure parameters from the model.
-		Life.get().addConfigListener(this, false);
+		evolver.getLife().addConfigListener(this, false);
 	}
 
 	/*
 	 * Configure component with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
+	public void configure(Model model) {
+		stats = evolver.getStats(model);
 		poolSize = model.getPoolSize();
 		poolSelector = model.getPoolSelector();
 	}
@@ -141,7 +144,7 @@ public class PoolSelectionManager implements ConfigListener {
 		}
 
 		// Inform all listeners that pool selection is starting.
-		Life.get().firePoolSelectionStartEvent();
+		evolver.getLife().firePoolSelectionStartEvent();
 
 		// Record the start time.
 		final long startTime = System.nanoTime();
@@ -160,7 +163,7 @@ public class PoolSelectionManager implements ConfigListener {
 			}
 
 			// Allow life cycle listener to confirm or modify.
-			pool = Life.get().runPoolSelectionHooks(pool);
+			pool = evolver.getLife().runPoolSelectionHooks(pool);
 
 			// If reverted then increment reversion counter.
 			if (pool == null) {
@@ -171,12 +174,12 @@ public class PoolSelectionManager implements ConfigListener {
 		final long runtime = System.nanoTime() - startTime;
 
 		// Store the stats from the pool selection.
-		Stats.get().addData(POOL_REVERSIONS, reversions);
-		Stats.get().addData(POOL_PROGRAMS, pool);
-		Stats.get().addData(POOL_TIME, runtime);
+		stats.addData(POOL_REVERSIONS, reversions);
+		stats.addData(POOL_PROGRAMS, pool);
+		stats.addData(POOL_TIME, runtime);
 
 		// Inform all listeners that pool selection has ended.
-		Life.get().firePoolSelectionEndEvent();
+		evolver.getLife().firePoolSelectionEndEvent();
 
 		assert (pool != null);
 

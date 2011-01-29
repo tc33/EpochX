@@ -23,6 +23,8 @@ package org.epochx.ge.model.epox;
 
 import java.awt.*;
 
+import org.epochx.core.Evolver;
+
 /**
  * XGE model for the Santa Fe ant trail problem in the Epox language.
  */
@@ -53,8 +55,8 @@ public class SantaFeTrail extends AntTrail {
 	 * Constructs the ant trail with the necessary food locations on an ant
 	 * landscape of dimensions 32 x 32. The ant is set to 600 allowed timesteps.
 	 */
-	public SantaFeTrail() {
-		this(600);
+	public SantaFeTrail(Evolver evolver) {
+		this(evolver, 600);
 	}
 
 	/**
@@ -62,7 +64,7 @@ public class SantaFeTrail extends AntTrail {
 	 * landscape of dimensions 32 x 32. The ant is allowed the given number of
 	 * timesteps.
 	 */
-	public SantaFeTrail(final int timesteps) {
-		super(FOOD_LOCATIONS, new Dimension(32, 32), timesteps);
+	public SantaFeTrail(Evolver evolver, final int timesteps) {
+		super(evolver, FOOD_LOCATIONS, new Dimension(32, 32), timesteps);
 	}
 }

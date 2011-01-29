@@ -24,7 +24,9 @@ package org.epochx.ge.representation;
 import java.util.*;
 
 import org.apache.commons.lang.ObjectUtils;
+import org.epochx.ge.codon.CodonGenerator;
 import org.epochx.ge.model.GEModel;
+import org.epochx.gr.op.init.FitnessEvaluator;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.*;
 
@@ -50,23 +52,11 @@ import org.epochx.tools.grammar.*;
  */
 public class GECandidateProgram extends CandidateProgram {
 
-	// The controlling model.
-	private GEModel model;
-
 	// The genotype.
-	private List<Integer> codons;
-
-	// How the codons looked when we last built the phenotype.
-	private List<Integer> sourceCacheCodons;
-
-	// How the codons looked when we last evaluated the program fitness.
-	private List<Integer> fitnessCacheCodons;
+	private Chromosome codons;
 
 	// The phenotype cache.
 	private NonTerminalSymbol parseTree;
-
-	// The fitness of the phenotype cache.
-	private double fitness;
 
 	// How many of the codons are actually used during mapping.
 	private int noActiveCodons;
@@ -77,8 +67,8 @@ public class GECandidateProgram extends CandidateProgram {
 	 * @param model the controlling model which provides the configuration
 	 *        parameters for the run.
 	 */
-	public GECandidateProgram(final GEModel model) {
-		this(new ArrayList<Integer>(), model);
+	public GECandidateProgram(final CodonGenerator codonGenerator, final FitnessEvaluator fitnessEvaluator) {
+		this(new Chromosome(codonGenerator), fitnessEvaluator);
 	}
 
 	/**
@@ -89,15 +79,12 @@ public class GECandidateProgram extends CandidateProgram {
 	 * @param model the controlling model which provides the configuration
 	 *        parameters for the run.
 	 */
-	public GECandidateProgram(final List<Integer> codons, final GEModel model) {
+	public GECandidateProgram(final Chromosome codons, final FitnessEvaluator fitnessEvaluator) {
+		super(fitnessEvaluator);
+		
 		this.codons = codons;
-		this.model = model;
 
 		parseTree = null;
-		fitness = -1;
-
-		sourceCacheCodons = null;
-		fitnessCacheCodons = null;
 	}
 
 	/**
@@ -105,7 +92,7 @@ public class GECandidateProgram extends CandidateProgram {
 	 * the candidate program's chromosome. All caches will be cleared.
 	 */
 	public void appendNewCodon() {
-		appendCodon(model.getCodonGenerator().getCodon());
+		codons.appendNewCodon();
 	}
 
 	/**
@@ -129,7 +116,7 @@ public class GECandidateProgram extends CandidateProgram {
 	 * @param index index at which the new codon should be inserted.
 	 */
 	public void insertNewCodon(final int index) {
-		codons.add(index, model.getCodonGenerator().getCodon());
+		codons.insertNewCodon(index);
 	}
 
 	/**
@@ -141,7 +128,7 @@ public class GECandidateProgram extends CandidateProgram {
 	 * @return the codon that was removed from the chromosome.
 	 */
 	public int removeCodon(final int index) {
-		return codons.remove(index);
+		return codons.removeCodon(index);
 	}
 
 	/**
@@ -160,7 +147,7 @@ public class GECandidateProgram extends CandidateProgram {
 		final List<Integer> removed = new ArrayList<Integer>();
 		for (int i = from; i < to; i++) {
 			// As we remove them the list will shrink so we use from not i.
-			removed.add(codons.remove(from));
+			removed.add(removeCodon(from));
 		}
 
 		return removed;
@@ -175,7 +162,7 @@ public class GECandidateProgram extends CandidateProgram {
 	 * @param newCodon the codon to append to the chromosome.
 	 */
 	public void appendCodon(final int newCodon) {
-		codons.add(newCodon);
+		codons.appendCodon(newCodon);
 	}
 
 	/**
@@ -200,7 +187,7 @@ public class GECandidateProgram extends CandidateProgram {
 	 * @param newCodon codon to be stored at the specified position.
 	 */
 	public void setCodon(final int index, final int newCodon) {
-		codons.set(index, model.getCodonGenerator().getCodon());
+		codons.setCodon(index, newCodon);
 	}
 
 	/**
@@ -219,19 +206,7 @@ public class GECandidateProgram extends CandidateProgram {
 	 *         end of the current list of codons.
 	 */
 	public void setCodons(final int startIndex, final List<Integer> newCodons) {
-		// If more than one beyond the end of current codons.
-		if (startIndex > codons.size()) {
-			throw new ArrayIndexOutOfBoundsException(startIndex);
-		}
-
-		for (int i = 0; i < newCodons.size(); i++) {
-			final int c = newCodons.get(i);
-			if (i + startIndex < codons.size()) {
-				codons.set(i + startIndex, c);
-			} else {
-				appendCodon(c);
-			}
-		}
+		codons.setCodons(newCodons, startIndex);
 	}
 
 	/**
@@ -242,7 +217,7 @@ public class GECandidateProgram extends CandidateProgram {
 	 * @return the integer codon found at the specified index.
 	 */
 	public int getCodon(final int index) {
-		return codons.get(index);
+		return codons.getCodon(index);
 	}
 
 	/**
@@ -256,7 +231,7 @@ public class GECandidateProgram extends CandidateProgram {
 	 * @return a list of the codons between the specified indexes.
 	 */
 	public List<Integer> getCodons(final int from, final int to) {
-		return codons.subList(from, to);
+		return codons.getCodons(from, to);
 	}
 
 	/**
@@ -269,7 +244,7 @@ public class GECandidateProgram extends CandidateProgram {
 	 * @return a copy of this program's codon string.
 	 */
 	public List<Integer> getCodons() {
-		return codons;
+		return getCodons();
 	}
 
 	/**
@@ -278,7 +253,7 @@ public class GECandidateProgram extends CandidateProgram {
 	 * @return the number of codons this program has.
 	 */
 	public int getNoCodons() {
-		return codons.size();
+		return codons.getNoCodons();
 	}
 
 	public int getParseTreeDepth() {
@@ -289,26 +264,6 @@ public class GECandidateProgram extends CandidateProgram {
 		}
 
 		return depth;
-	}
-
-	/**
-	 * Returns the fitness of the candidate program. This method should be
-	 * called over calling model.getFitness(GEModel) as it may be able to
-	 * perform caching. If caching is in use then the fitness will never be
-	 * calculated twice for the same codon string.
-	 * 
-	 * @return the fitness score of this candidate program according to the
-	 *         model's getFitness method.
-	 */
-	@Override
-	public double getFitness() {
-		// If we're not caching or the cache is out of date.
-		if (!model.cacheFitness() || !codons.equals(fitnessCacheCodons)) {
-			fitness = model.getFitness(this);
-			fitnessCacheCodons = new ArrayList<Integer>(codons);
-		}
-
-		return fitness;
 	}
 
 	/**
@@ -324,19 +279,17 @@ public class GECandidateProgram extends CandidateProgram {
 	 * 
 	 * @return the source code of this candidate program.
 	 */
-	public String getSourceCode() {
-		// If we have not already done the mapping then do it now and stash it.
-		if (!model.cacheSource() || !codons.equals(sourceCacheCodons)) {
-			// May be null still after if the map was invalid.
-			parseTree = model.getMapper().map(this);
-			// Update the number of codons that were used in mapping.
-			noActiveCodons = model.getMapper().getNoMappedCodons();
-			// Store the codons as they are now.
-			sourceCacheCodons = new ArrayList<Integer>(codons);
-		}
-
-		return (parseTree == null) ? null : parseTree.toString();
-	}
+//	public String getSourceCode() {
+//		// If we have not already done the mapping then do it now and stash it.
+//		if (!model.cacheSource() || !codons.equals(sourceCacheCodons)) {
+//			// May be null still after if the map was invalid.
+//			parseTree = model.getMapper().map(this);
+//			// Update the number of codons that were used in mapping.
+//			noActiveCodons = model.getMapper().getNoMappedCodons();
+//		}
+//
+//		return (parseTree == null) ? null : parseTree.toString();
+//	}
 
 	/**
 	 * Returns the number of codons that are actually active. That is, the
@@ -350,33 +303,6 @@ public class GECandidateProgram extends CandidateProgram {
 	}
 
 	/**
-	 * Whether the current program is valid. If the chromosome hasn't been
-	 * mapped already then this method will trigger a map operation. A
-	 * GECandidateProgram is usually valid if it does not exceed any maximum
-	 * depth or length restrictions from the model, however this is controlled
-	 * by the mapper in use.
-	 * 
-	 * @return true if this program is valid, false otherwise.
-	 */
-	@Override
-	public boolean isValid() {
-		boolean valid = true;
-
-		final int maxChromosomeLength = model.getMaxChromosomeLength();
-		final int maxProgramDepth = model.getMaxDepth();
-
-		if (getSourceCode() == null) {
-			valid = false;
-		} else if ((maxChromosomeLength != -1) && (codons.size() > maxChromosomeLength)) {
-			valid = false;
-		} else if ((maxProgramDepth != -1) && (parseTree.getDepth() > maxProgramDepth)) {
-			valid = false;
-		}
-
-		return valid;
-	}
-
-	/**
 	 * Create a clone of this GECandidateProgram. The list of codons are copied
 	 * as are all caches.
 	 * 
@@ -387,7 +313,11 @@ public class GECandidateProgram extends CandidateProgram {
 		final GECandidateProgram clone = (GECandidateProgram) super.clone();
 
 		// Copy codons.
-		clone.codons = new ArrayList<Integer>(codons);
+		try {
+			clone.codons = (Chromosome) codons.clone();
+		} catch (CloneNotSupportedException e) {
+			
+		}
 
 		// If codons are the same then the source and fitness should be the
 		// same.
@@ -396,13 +326,6 @@ public class GECandidateProgram extends CandidateProgram {
 		} else {
 			clone.parseTree = parseTree.clone();
 		}
-
-		clone.fitness = fitness;
-		clone.sourceCacheCodons = new ArrayList<Integer>(sourceCacheCodons);
-		clone.fitnessCacheCodons = new ArrayList<Integer>(fitnessCacheCodons);
-
-		// Shallow copy the model.
-		clone.model = model;
 
 		return clone;
 	}
@@ -414,11 +337,7 @@ public class GECandidateProgram extends CandidateProgram {
 	 */
 	@Override
 	public String toString() {
-		if (codons.equals(sourceCacheCodons) && (parseTree != null)) {
-			return parseTree.toString();
-		} else {
-			return codons.toString();
-		}
+		return codons.toString();
 	}
 
 	/**

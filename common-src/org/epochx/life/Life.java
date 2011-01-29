@@ -23,6 +23,7 @@ package org.epochx.life;
 
 import java.util.List;
 
+import org.epochx.core.Model;
 import org.epochx.ref.ListenerList;
 import org.epochx.representation.CandidateProgram;
 
@@ -59,8 +60,6 @@ import org.epochx.representation.CandidateProgram;
  */
 public class Life {
 
-	private static Life instance;
-
 	// The life cycle listeners.
 	private final ListenerList<ConfigListener> configListeners;
 	private final ListenerList<RunListener> runListeners;
@@ -75,10 +74,10 @@ public class Life {
 	// Hooks.
 	private final ListenerList<Hook> hooks;
 
-	/*
-	 * Construct a new life cycle manager.
+	/**
+	 * Constructs a new life cycle manager.
 	 */
-	private Life() {
+	public Life() {
 		// Initialise listener lists.
 		configListeners = new ListenerList<ConfigListener>();
 		runListeners = new ListenerList<RunListener>();
@@ -91,14 +90,6 @@ public class Life {
 		generationListeners = new ListenerList<GenerationListener>();
 
 		hooks = new ListenerList<Hook>();
-	}
-
-	public static Life get() {
-		if (instance == null) {
-			instance = new Life();
-		}
-
-		return instance;
 	}
 
 	/**
@@ -161,7 +152,7 @@ public class Life {
 	 * @param listener the <code>ConfigListener</code> to be added.
 	 */
 	public void addConfigListener(final ConfigListener listener) {
-		addConfigListener(listener, true);
+		addConfigListener(listener, false);
 	}
 
 	/**
@@ -456,10 +447,10 @@ public class Life {
 	 * Notifies all listeners that have registered interest for notification on
 	 * this event type.
 	 */
-	public void fireConfigureEvent() {
+	public void fireConfigureEvent(Model model) {
 		for (final ConfigListener listener: configListeners) {
 			if (listener != null) {
-				listener.onConfigure();
+				listener.configure(model);
 			}
 		}
 	}

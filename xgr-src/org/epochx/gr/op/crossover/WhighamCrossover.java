@@ -23,16 +23,17 @@ package org.epochx.gr.op.crossover;
 
 import java.util.*;
 
+import org.epochx.core.*;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
-import org.epochx.op.ConfigOperator;
+import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
 import org.epochx.stats.Stats.ExpiryEvent;
 import org.epochx.tools.grammar.*;
 import org.epochx.tools.random.RandomNumberGenerator;
 
-public class WhighamCrossover extends ConfigOperator<GRModel> implements GRCrossover {
+public class WhighamCrossover implements GRCrossover, ConfigListener {
 
 	/**
 	 * Requests an <code>Integer</code> which is the index of the point chosen
@@ -62,6 +63,10 @@ public class WhighamCrossover extends ConfigOperator<GRModel> implements GRCross
 	 */
 	public static final Stat XO_SUBTREE2 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
 
+	private Evolver evolver;
+	
+	private Stats stats;
+	
 	// The random number generator in use.
 	private RandomNumberGenerator rng;
 
@@ -70,7 +75,7 @@ public class WhighamCrossover extends ConfigOperator<GRModel> implements GRCross
 	 * 
 	 */
 	public WhighamCrossover(final RandomNumberGenerator rng) {
-		this((GRModel) null);
+		this((Evolver) null);
 
 		this.rng = rng;
 	}
@@ -80,16 +85,19 @@ public class WhighamCrossover extends ConfigOperator<GRModel> implements GRCross
 	 * 
 	 * @param model
 	 */
-	public WhighamCrossover(final GRModel model) {
-		super(model);
+	public WhighamCrossover(final Evolver evolver) {
+		this.evolver = evolver;
 	}
 
 	/**
 	 * Configures this operator with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
-		rng = getModel().getRNG();
+	public void configure(Model model) {
+		if (model instanceof GRModel) {
+			stats = evolver.getStats(model);
+			rng = model.getRNG();
+		}
 	}
 
 	@Override
@@ -125,8 +133,8 @@ public class WhighamCrossover extends ConfigOperator<GRModel> implements GRCross
 			final NonTerminalSymbol subtree2 = matchingNonTerminals.get(point2);
 
 			// Add crossover points to the stats manager.
-			Stats.get().addData(XO_POINT1, point1);
-			Stats.get().addData(XO_POINT2, point2);
+			stats.addData(XO_POINT1, point1);
+			stats.addData(XO_POINT2, point2);
 
 			// Swap the non-terminals' children.
 			final List<Symbol> temp = subtree1.getChildren();
@@ -134,8 +142,8 @@ public class WhighamCrossover extends ConfigOperator<GRModel> implements GRCross
 			subtree2.setChildren(temp);
 
 			// Add subtrees into the stats manager.
-			Stats.get().addData(XO_SUBTREE1, subtree1);
-			Stats.get().addData(XO_SUBTREE2, subtree2);
+			stats.addData(XO_SUBTREE1, subtree1);
+			stats.addData(XO_SUBTREE2, subtree2);
 		}
 
 		return new GRCandidateProgram[]{child1, child2};

@@ -23,7 +23,8 @@ package org.epochx.op.selection;
 
 import java.util.*;
 
-import org.epochx.core.Model;
+import org.epochx.core.*;
+import org.epochx.life.ConfigListener;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
@@ -62,7 +63,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * @see RandomSelector
  * @see TournamentSelector
  */
-public class LinearRankSelector extends ConfigOperator<Model> implements ProgramSelector, PoolSelector {
+public class LinearRankSelector implements ProgramSelector, PoolSelector, ConfigListener {
 
 	// Internal program selectors used by the 2 different tasks.
 	private final ProgramLinearRankSelector programSelection;
@@ -88,9 +89,7 @@ public class LinearRankSelector extends ConfigOperator<Model> implements Program
 	 *        non-deterministic behaviour.
 	 */
 	public LinearRankSelector(final RandomNumberGenerator rng) {
-		this((Model) null);
-
-		this.rng = rng;
+		this(rng, 0.2);
 	}
 
 	/**
@@ -103,7 +102,7 @@ public class LinearRankSelector extends ConfigOperator<Model> implements Program
 	 *        at which fitnesses are assigned to ranks.
 	 */
 	public LinearRankSelector(final RandomNumberGenerator rng, final double gradient) {
-		this((Model) null, gradient);
+		this((Evolver) null, gradient);
 
 		this.rng = rng;
 	}
@@ -115,8 +114,8 @@ public class LinearRankSelector extends ConfigOperator<Model> implements Program
 	 * @param model the Model which defines the run parameters such as the
 	 *        random number generator to use.
 	 */
-	public LinearRankSelector(final Model model) {
-		this(model, 0.2);
+	public LinearRankSelector(Evolver evolver) {
+		this(evolver, 0.2);
 	}
 
 	/**
@@ -127,21 +126,24 @@ public class LinearRankSelector extends ConfigOperator<Model> implements Program
 	 * @param gradient a value between 0.0 and 1.0 which indicates the gradient
 	 *        at which fitnesses are assigned to ranks.
 	 */
-	public LinearRankSelector(final Model model, final double gradient) {
-		super(model);
+	public LinearRankSelector(Evolver evolver, final double gradient) {
 		setGradient(gradient);
 
 		// Construct the internal program selectors.
 		programSelection = new ProgramLinearRankSelector();
 		poolSelection = new ProgramLinearRankSelector();
+		
+		if (evolver != null) {
+			evolver.getLife().addConfigListener(this, false);
+		}
 	}
 
 	/**
 	 * Configures this operator with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
-		rng = getModel().getRNG();
+	public void configure(Model model) {
+		rng = model.getRNG();
 	}
 
 	/**

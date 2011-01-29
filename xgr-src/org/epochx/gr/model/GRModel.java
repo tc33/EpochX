@@ -21,10 +21,12 @@
  */
 package org.epochx.gr.model;
 
-import org.epochx.core.Model;
+import org.epochx.core.*;
 import org.epochx.gr.op.crossover.WhighamCrossover;
 import org.epochx.gr.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.gr.op.mutation.WhighamMutation;
+import org.epochx.gr.representation.GRCandidateProgram;
+import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.Grammar;
 
 /**
@@ -43,7 +45,9 @@ public abstract class GRModel extends Model {
 	 * Construct a GRModel with a set of sensible defaults. See the appropriate
 	 * accessor method for information of each default value.
 	 */
-	public GRModel() {
+	public GRModel(Evolver evolver) {
+		super(evolver);
+		
 		// Set default parameter values.
 		grammar = null;
 
@@ -51,21 +55,23 @@ public abstract class GRModel extends Model {
 		maxInitialDepth = 8;
 
 		// Operators.
-		setInitialiser(new RampedHalfAndHalfInitialiser(this));
-		setCrossover(new WhighamCrossover(this));
-		setMutation(new WhighamMutation(this));
+		setInitialiser(new RampedHalfAndHalfInitialiser(evolver));
+		setCrossover(new WhighamCrossover(evolver));
+		setMutation(new WhighamMutation(evolver));
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
+	
 	@Override
-	public void run() {
-		if (getGrammar() == null) {
-			throw new IllegalStateException("no grammar set");
+	public boolean isRunnable() {
+		return (getGrammar() != null);
+	}
+	
+	@Override
+	public boolean isValid(CandidateProgram program) {
+		if (program instanceof GRCandidateProgram) {
+			return (((GRCandidateProgram) program).getDepth() <= maxDepth);
 		}
-
-		super.run();
+		
+		return false;
 	}
 
 	/**

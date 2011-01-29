@@ -23,9 +23,10 @@ package org.epochx.ge.op.crossover;
 
 import java.util.List;
 
+import org.epochx.core.*;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.op.ConfigOperator;
+import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
 import org.epochx.stats.Stats.ExpiryEvent;
@@ -50,7 +51,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * 
  * @see OnePointCrossover
  */
-public class FixedPointCrossover extends ConfigOperator<GEModel> implements GECrossover {
+public class FixedPointCrossover implements GECrossover, ConfigListener {
 
 	/**
 	 * Requests an <code>Integer</code> which is the point in the parents'
@@ -70,8 +71,12 @@ public class FixedPointCrossover extends ConfigOperator<GEModel> implements GECr
 	 */
 	public static final Stat XO_CODONS2 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
 
+	private Evolver evolver;
+	
 	// The random number generator in use.
 	private RandomNumberGenerator rng;
+	
+	private Stats stats;
 
 	/**
 	 * Constructs an instance of <code>FixedPointCrossover</code> with the only
@@ -81,7 +86,7 @@ public class FixedPointCrossover extends ConfigOperator<GEModel> implements GECr
 	 *        non-deterministic behaviour.
 	 */
 	public FixedPointCrossover(final RandomNumberGenerator rng) {
-		this((GEModel) null);
+		this((Evolver) null);
 
 		this.rng = rng;
 	}
@@ -91,16 +96,19 @@ public class FixedPointCrossover extends ConfigOperator<GEModel> implements GECr
 	 * 
 	 * @param model the current controlling model.
 	 */
-	public FixedPointCrossover(final GEModel model) {
-		super(model);
+	public FixedPointCrossover(final Evolver evolver) {
+		this.evolver = evolver;
 	}
 
 	/**
 	 * Configures this operator with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
-		rng = getModel().getRNG();
+	public void configure(Model model) {
+		if (model instanceof GEModel) {
+			stats = evolver.getStats(model);
+			rng = model.getRNG();
+		}
 	}
 
 	/**
@@ -133,7 +141,7 @@ public class FixedPointCrossover extends ConfigOperator<GEModel> implements GECr
 		}
 
 		// Add crossover point to the stats manager.
-		Stats.get().addData(XO_POINT, crossoverPoint);
+		stats.addData(XO_POINT, crossoverPoint);
 
 		// Make copies of the parents.
 		final GECandidateProgram child1 = (GECandidateProgram) parent1.clone();
@@ -143,8 +151,8 @@ public class FixedPointCrossover extends ConfigOperator<GEModel> implements GECr
 		final List<Integer> part2 = child2.removeCodons(crossoverPoint, child2.getNoCodons());
 
 		// Add codon portions into the stats manager.
-		Stats.get().addData(XO_CODONS1, part1);
-		Stats.get().addData(XO_CODONS2, part2);
+		stats.addData(XO_CODONS1, part1);
+		stats.addData(XO_CODONS2, part2);
 
 		// Swap over the endings at the crossover points.
 		child2.appendCodons(part1);

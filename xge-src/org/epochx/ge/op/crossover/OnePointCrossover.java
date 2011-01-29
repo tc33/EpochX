@@ -23,9 +23,10 @@ package org.epochx.ge.op.crossover;
 
 import java.util.List;
 
+import org.epochx.core.*;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.op.ConfigOperator;
+import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
 import org.epochx.stats.Stats.ExpiryEvent;
@@ -40,7 +41,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * position is chosen in both parent programs and all the codons from that point
  * onwards are exchanged.
  */
-public class OnePointCrossover extends ConfigOperator<GEModel> implements GECrossover {
+public class OnePointCrossover implements GECrossover, ConfigListener {
 
 	/**
 	 * Requests an <code>Integer</code> which is the point chosen in the first
@@ -66,6 +67,10 @@ public class OnePointCrossover extends ConfigOperator<GEModel> implements GECros
 	 */
 	public static final Stat XO_CODONS2 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
 
+	private Evolver evolver;
+	
+	private Stats stats;
+	
 	// The random number generator in use.
 	private RandomNumberGenerator rng;
 
@@ -77,7 +82,7 @@ public class OnePointCrossover extends ConfigOperator<GEModel> implements GECros
 	 *        non-deterministic behaviour.
 	 */
 	public OnePointCrossover(final RandomNumberGenerator rng) {
-		this((GEModel) null);
+		this((Evolver) null);
 
 		this.rng = rng;
 	}
@@ -87,16 +92,19 @@ public class OnePointCrossover extends ConfigOperator<GEModel> implements GECros
 	 * 
 	 * @param model
 	 */
-	public OnePointCrossover(final GEModel model) {
-		super(model);
+	public OnePointCrossover(final Evolver evolver) {
+		this.evolver = evolver;
 	}
 
 	/*
 	 * Configure component with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
-		rng = getModel().getRNG();
+	public void configure(Model model) {
+		if (model instanceof GEModel) {
+			stats = evolver.getStats(model);
+			rng = model.getRNG();
+		}
 	}
 
 	/**
@@ -122,8 +130,8 @@ public class OnePointCrossover extends ConfigOperator<GEModel> implements GECros
 		final int crossoverPoint2 = rng.nextInt(parent2.getNoCodons());
 
 		// Add crossover points to the stats manager.
-		Stats.get().addData(XO_POINT1, crossoverPoint1);
-		Stats.get().addData(XO_POINT2, crossoverPoint2);
+		stats.addData(XO_POINT1, crossoverPoint1);
+		stats.addData(XO_POINT2, crossoverPoint2);
 
 		// Make copies of the parents.
 		final GECandidateProgram child1 = (GECandidateProgram) parent1.clone();
@@ -133,8 +141,8 @@ public class OnePointCrossover extends ConfigOperator<GEModel> implements GECros
 		final List<Integer> part2 = child2.removeCodons(crossoverPoint2, child2.getNoCodons());
 
 		// Add codon portions into the stats manager.
-		Stats.get().addData(XO_CODONS1, part1);
-		Stats.get().addData(XO_CODONS2, part2);
+		stats.addData(XO_CODONS1, part1);
+		stats.addData(XO_CODONS2, part2);
 
 		// Swap over the endings at the crossover points.
 		child2.appendCodons(part1);

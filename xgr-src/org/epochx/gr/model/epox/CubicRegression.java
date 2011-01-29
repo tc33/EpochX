@@ -21,6 +21,8 @@
  */
 package org.epochx.gr.model.epox;
 
+import org.epochx.core.Evolver;
+
 /**
  * XGR model for a cubic symbolic regression problem in the Epox language.
  * 
@@ -33,15 +35,15 @@ public class CubicRegression extends Regression {
 	 * Constructs an instance of the CubicRegression model with 50 input
 	 * points.
 	 */
-	public CubicRegression() {
-		super();
+	public CubicRegression(Evolver evolver) {
+		this(evolver, 50);
 	}
 
 	/**
 	 * Constructs an instance of the CubicRegression model.
 	 */
-	public CubicRegression(final int noPoints) {
-		super(noPoints);
+	public CubicRegression(Evolver evolver, final int noPoints) {
+		super(evolver, noPoints);
 	}
 
 	/**

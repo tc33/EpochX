@@ -21,6 +21,7 @@
  */
 package org.epochx.ge.model.groovy;
 
+import org.epochx.core.Evolver;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.representation.CandidateProgram;
@@ -63,14 +64,16 @@ public abstract class Regression extends GEModel {
 	 * Constructs an instance of the abstract Regression model with 50 input
 	 * points.
 	 */
-	public Regression() {
-		this(50);
+	public Regression(Evolver evolver) {
+		this(evolver, 50);
 	}
 
 	/**
 	 * Constructs an instance of the abstract Regression model.
 	 */
-	public Regression(final int noPoints) {
+	public Regression(Evolver evolver, final int noPoints) {
+		super(evolver);
+		
 		setGrammar(new Grammar(GRAMMAR_STRING));
 
 		interpreter = new GroovyInterpreter();
@@ -104,7 +107,7 @@ public abstract class Regression extends GEModel {
 		for (int i = 0; i < inputs.length; i++) {
 			Double result = null;
 			try {
-				result = (Double) interpreter.eval(program.getSourceCode(), new String[]{"X"}, new Double[]{inputs[i]});
+				result = (Double) interpreter.eval(getMapper().map(program).toString(), new String[]{"X"}, new Double[]{inputs[i]});
 			} catch (final MalformedProgramException e) {
 				// This should not ever happen unless user changes grammar.
 				assert false;

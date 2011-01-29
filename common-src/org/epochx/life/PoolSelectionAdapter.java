@@ -31,7 +31,7 @@ package org.epochx.life;
  * <blockquote>
  * 
  * <pre>
- *     Life.get().addPoolSelectionListener(new PoolSelectionAdapter(){
+ *     evolver.getLife().addPoolSelectionListener(new PoolSelectionAdapter(){
  *     		public void onPoolSelectionStart() {
  *     			... do something ...
  *     		}

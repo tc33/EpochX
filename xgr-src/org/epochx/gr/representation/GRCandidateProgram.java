@@ -22,6 +22,7 @@
 package org.epochx.gr.representation;
 
 import org.epochx.gr.model.GRModel;
+import org.epochx.gr.op.init.FitnessEvaluator;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.NonTerminalSymbol;
 
@@ -31,63 +32,21 @@ import org.epochx.tools.grammar.NonTerminalSymbol;
  */
 public class GRCandidateProgram extends CandidateProgram {
 
-	private GRModel model;
-
 	// The phenotype.
 	private NonTerminalSymbol parseTree;
 
-	// The fitness of the phenotype.
-	private double fitness;
-
-	// A stash of the source for testing if fitness cache is up to date.
-	private String sourceCache;
-
-	public GRCandidateProgram(final GRModel model) {
-		this(null, model);
+	public GRCandidateProgram(final FitnessEvaluator fitnessEvaluator) {
+		this(null, fitnessEvaluator);
 	}
 
-	public GRCandidateProgram(final NonTerminalSymbol parseTree, final GRModel model) {
-		this.model = model;
+	public GRCandidateProgram(final NonTerminalSymbol parseTree, final FitnessEvaluator fitnessEvaluator) {
+		super(fitnessEvaluator);
+		
 		this.parseTree = parseTree;
-
-		sourceCache = null;
-
-		// Initialise the fitness to -1 until we are asked to calculate it.
-		fitness = -1;
 	}
 
 	public void setParseTree(final NonTerminalSymbol parseTree) {
 		this.parseTree = parseTree;
-	}
-
-	@Override
-	public double getFitness() {
-		// Only get the source code if caching to avoid overhead otherwise.
-		String source = null;
-		if (model.cacheFitness()) {
-			source = getSourceCode();
-		}
-
-		// If we're not caching or the cache is out of date.
-		if (!model.cacheFitness() || !source.equals(sourceCache)) {
-			fitness = model.getFitness(this);
-			sourceCache = source;
-		}
-
-		return fitness;
-	}
-
-	@Override
-	public boolean isValid() {
-		boolean valid = true;
-
-		final int maxProgramDepth = model.getMaxDepth();
-
-		if ((maxProgramDepth != -1) && (getDepth() > maxProgramDepth)) {
-			valid = false;
-		}
-
-		return valid;
 	}
 
 	public String getSourceCode() {
@@ -119,13 +78,6 @@ public class GRCandidateProgram extends CandidateProgram {
 		} else {
 			clone.parseTree = parseTree.clone();
 		}
-
-		// Copy the caches.
-		clone.sourceCache = sourceCache;
-		clone.fitness = fitness;
-
-		// Shallow copy the model.
-		clone.model = model;
 
 		return clone;
 	}

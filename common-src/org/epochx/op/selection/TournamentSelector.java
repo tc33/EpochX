@@ -23,7 +23,8 @@ package org.epochx.op.selection;
 
 import java.util.*;
 
-import org.epochx.core.Model;
+import org.epochx.core.*;
+import org.epochx.life.ConfigListener;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
@@ -54,7 +55,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * @see RandomSelector
  * @see LinearRankSelector
  */
-public class TournamentSelector extends ConfigOperator<Model> implements ProgramSelector, PoolSelector {
+public class TournamentSelector implements ProgramSelector, PoolSelector, ConfigListener {
 
 	// Internal program selectors used by the 2 different tasks.
 	private final ProgramTournamentSelector poolSelection;
@@ -74,7 +75,7 @@ public class TournamentSelector extends ConfigOperator<Model> implements Program
 	 *        non-deterministic behaviour.
 	 */
 	public TournamentSelector(final RandomNumberGenerator rng, final int tournamentSize) {
-		this((Model) null, tournamentSize);
+		this((Evolver) null, tournamentSize);
 
 		this.rng = rng;
 	}
@@ -84,22 +85,24 @@ public class TournamentSelector extends ConfigOperator<Model> implements Program
 	 * 
 	 * @param tournamentSize the number of programs in each tournament.
 	 */
-	public TournamentSelector(final Model model, final int tournamentSize) {
-		super(model);
-
+	public TournamentSelector(final Evolver evolver, final int tournamentSize) {
 		this.tournamentSize = tournamentSize;
 
 		// Construct the internal program selectors.
-		poolSelection = new ProgramTournamentSelector();
-		programSelection = new ProgramTournamentSelector();
+		poolSelection = new ProgramTournamentSelector(evolver);
+		programSelection = new ProgramTournamentSelector(evolver);
+		
+		if (evolver != null) {
+			evolver.getLife().addConfigListener(this, false);
+		}
 	}
 
 	/**
 	 * Configures this operator with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
-		rng = getModel().getRNG();
+	public void configure(Model model) {
+		rng = model.getRNG();
 	}
 
 	/**
@@ -201,18 +204,6 @@ public class TournamentSelector extends ConfigOperator<Model> implements Program
 		programSelection.randomSelector.setRNG(rng);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setModel(final Model model) {
-		super.setModel(model);
-
-		// Set internal selector's models.
-		poolSelection.randomSelector.setModel(model);
-		programSelection.randomSelector.setModel(model);
-	}
-
 	/*
 	 * This is a little strange, but we use an inner class here so we can
 	 * create 2 separate instances of it internally for the 2 tasks of pool
@@ -226,12 +217,11 @@ public class TournamentSelector extends ConfigOperator<Model> implements Program
 		// We use a random selector to construct tournaments.
 		private final RandomSelector randomSelector;
 
-		public ProgramTournamentSelector() {
-			final Model model = getModel();
-			if (model == null) {
+		public ProgramTournamentSelector(Evolver evolver) {
+			if (evolver == null) {
 				randomSelector = new RandomSelector(rng);
 			} else {
-				randomSelector = new RandomSelector(model);
+				randomSelector = new RandomSelector(evolver);
 			}
 		}
 

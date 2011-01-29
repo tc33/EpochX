@@ -23,10 +23,12 @@ package org.epochx.ge.op.init;
 
 import java.util.*;
 
+import org.epochx.core.*;
 import org.epochx.ge.codon.CodonGenerator;
 import org.epochx.ge.model.GEModel;
-import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.op.ConfigOperator;
+import org.epochx.ge.representation.*;
+import org.epochx.gr.op.init.FitnessEvaluator;
+import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
 
 /**
@@ -56,8 +58,12 @@ import org.epochx.representation.CandidateProgram;
  * @see GrowInitialiser
  * @see RampedHalfAndHalfInitialiser
  */
-public class FixedLengthInitialiser extends ConfigOperator<GEModel> implements GEInitialiser {
+public class FixedLengthInitialiser implements GEInitialiser, ConfigListener {
 
+	private Evolver evolver;
+	
+	private FitnessEvaluator fitnessEvaluator;
+	
 	// The generator to provide the new codons.
 	private CodonGenerator codonGenerator;
 
@@ -93,8 +99,8 @@ public class FixedLengthInitialiser extends ConfigOperator<GEModel> implements G
 	 * @param chromosomeLength The initial length that chromosomes should be
 	 *        generated to.
 	 */
-	public FixedLengthInitialiser(final GEModel model, final int chromosomeLength) {
-		this(model, chromosomeLength, true);
+	public FixedLengthInitialiser(final Evolver evolver, final int chromosomeLength) {
+		this(evolver, chromosomeLength, true);
 	}
 
 	/**
@@ -109,8 +115,8 @@ public class FixedLengthInitialiser extends ConfigOperator<GEModel> implements G
 	 * @param acceptDuplicates whether duplicates should be allowed in the
 	 *        populations that are generated.
 	 */
-	public FixedLengthInitialiser(final GEModel model, final int chromosomeLength, final boolean acceptDuplicates) {
-		super(model);
+	public FixedLengthInitialiser(final Evolver evolver, final int chromosomeLength, final boolean acceptDuplicates) {
+		this.evolver = evolver;
 
 		this.chromosomeLength = chromosomeLength;
 		this.acceptDuplicates = acceptDuplicates;
@@ -120,9 +126,12 @@ public class FixedLengthInitialiser extends ConfigOperator<GEModel> implements G
 	 * Configures this operator with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
-		popSize = getModel().getPopulationSize();
-		codonGenerator = getModel().getCodonGenerator();
+	public void configure(Model model) {
+		if (model instanceof GEModel) {
+			fitnessEvaluator = model.getFitnessEvaluator();
+			popSize = ((GEModel) model).getPopulationSize();
+			codonGenerator = ((GEModel) model).getCodonGenerator();
+		}
 	}
 
 	/**
@@ -181,9 +190,10 @@ public class FixedLengthInitialiser extends ConfigOperator<GEModel> implements G
 		for (int i = 0; i < chromosomeLength; i++) {
 			codons.add(codonGenerator.getCodon());
 		}
+		Chromosome chromosome = new Chromosome(codonGenerator, codons);
 
 		// Construct and return the new program.
-		return new GECandidateProgram(codons, getModel());
+		return new GECandidateProgram(chromosome, fitnessEvaluator);
 	}
 
 	/**

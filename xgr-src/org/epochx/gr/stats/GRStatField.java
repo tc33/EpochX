@@ -43,12 +43,12 @@ public class GRStatField extends StatField {
 	public static final Stat GEN_DEPTHS = new AbstractStat(GENERATION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			int[] depths = null;
 
 			// Request the population from the stats manager.
 			@SuppressWarnings("unchecked")
-			final List<GRCandidateProgram> pop = (List<GRCandidateProgram>) Stats.get().getStat(GEN_POP);
+			final List<GRCandidateProgram> pop = (List<GRCandidateProgram>) stats.getStat(GEN_POP);
 
 			// Get the depths of each program.
 			if (pop != null) {
@@ -71,11 +71,11 @@ public class GRStatField extends StatField {
 	public static final Stat GEN_DEPTH_AVE = new AbstractStat(GENERATION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Double aveDepth = null;
 
 			// Request the population depths from the stats manager.
-			final int[] depths = (int[]) Stats.get().getStat(GEN_DEPTHS);
+			final int[] depths = (int[]) stats.getStat(GEN_DEPTHS);
 
 			// Calculate the average depth.
 			if (depths != null) {
@@ -94,11 +94,11 @@ public class GRStatField extends StatField {
 	public static final Stat GEN_DEPTH_STDEV = new AbstractStat(GENERATION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Double stdevDepth = null;
 
 			// Request the population depths from the stats manager.
-			final int[] depths = (int[]) Stats.get().getStat(GEN_DEPTHS);
+			final int[] depths = (int[]) stats.getStat(GEN_DEPTHS);
 
 			// Calculate the standard deviation of the depths.
 			if (depths != null) {
@@ -117,11 +117,11 @@ public class GRStatField extends StatField {
 	public static final Stat GEN_DEPTH_MAX = new AbstractStat(GENERATION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Integer maxDepth = null;
 
 			// Request the population depths from the stats manager.
-			final int[] depths = (int[]) Stats.get().getStat(GEN_DEPTHS);
+			final int[] depths = (int[]) stats.getStat(GEN_DEPTHS);
 
 			// Calculate the maximum depth.
 			if (depths != null) {
@@ -140,11 +140,11 @@ public class GRStatField extends StatField {
 	public static final Stat GEN_DEPTH_MIN = new AbstractStat(GENERATION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Integer minDepth = null;
 
 			// Request the population depths from the stats manager.
-			final int[] depths = (int[]) Stats.get().getStat(GEN_DEPTHS);
+			final int[] depths = (int[]) stats.getStat(GEN_DEPTHS);
 
 			// Calculate the minimum depth.
 			if (depths != null) {

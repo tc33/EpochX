@@ -80,7 +80,7 @@ public class InitialisationManagerTest {
 		final StringBuilder verify = new StringBuilder();
 
 		// Listen for the config events.
-		Life.get().addConfigListener(new ConfigListener() {
+		evolver.getLife().addConfigListener(new ConfigListener() {
 
 			@Override
 			public void onConfigure() {
@@ -88,7 +88,7 @@ public class InitialisationManagerTest {
 			}
 		});
 		// Listen for the generation.
-		Life.get().addGenerationListener(new GenerationListener() {
+		evolver.getLife().addGenerationListener(new GenerationListener() {
 
 			@Override
 			public void onGenerationStart() {
@@ -100,7 +100,7 @@ public class InitialisationManagerTest {
 				verify.append('7');
 			}
 		});
-		Life.get().addHook(new AbstractHook() {
+		evolver.getLife().addHook(new AbstractHook() {
 
 			@Override
 			public List<CandidateProgram> generationHook(final List<CandidateProgram> genPop) {
@@ -109,7 +109,7 @@ public class InitialisationManagerTest {
 			}
 		});
 		// Listen for the initialisation.
-		Life.get().addInitialisationListener(new InitialisationListener() {
+		evolver.getLife().addInitialisationListener(new InitialisationListener() {
 
 			@Override
 			public void onInitialisationStart() {
@@ -121,7 +121,7 @@ public class InitialisationManagerTest {
 				verify.append('6');
 			}
 		});
-		Life.get().addHook(new AbstractHook() {
+		evolver.getLife().addHook(new AbstractHook() {
 
 			@Override
 			public List<CandidateProgram> initialisationHook(final List<CandidateProgram> genPop) {
@@ -147,7 +147,7 @@ public class InitialisationManagerTest {
 		final StringBuilder verify = new StringBuilder();
 
 		// Listen for the initialisation.
-		Life.get().addHook(new AbstractHook() {
+		evolver.getLife().addHook(new AbstractHook() {
 
 			@Override
 			public List<CandidateProgram> initialisationHook(final List<CandidateProgram> genPop) {
@@ -179,7 +179,7 @@ public class InitialisationManagerTest {
 		final StringBuilder verify = new StringBuilder();
 
 		// Listen for the initialisation.
-		Life.get().addHook(new AbstractHook() {
+		evolver.getLife().addHook(new AbstractHook() {
 
 			@Override
 			public List<CandidateProgram> generationHook(final List<CandidateProgram> genPop) {

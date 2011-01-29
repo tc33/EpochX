@@ -21,10 +21,11 @@
  */
 package org.epochx.ge.mapper;
 
+import org.epochx.core.*;
 import org.epochx.ge.codon.CodonGenerator;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.op.ConfigOperator;
+import org.epochx.life.ConfigListener;
 import org.epochx.tools.grammar.*;
 
 /**
@@ -54,8 +55,10 @@ import org.epochx.tools.grammar.*;
  * compulsory parameters remain unset when a new codon is requested, then an
  * <code>IllegalStateException</code> will be thrown.
  */
-public class DepthFirstMapper extends ConfigOperator<GEModel> implements Mapper {
+public class DepthFirstMapper implements Mapper, ConfigListener {
 
+	private Evolver evolver;
+	
 	// Wrapping and extending are mutually exclusive, they cannot both be true.
 	private boolean wrapping;
 	private boolean extending;
@@ -95,9 +98,9 @@ public class DepthFirstMapper extends ConfigOperator<GEModel> implements Mapper 
 	 * @param model the controlling model providing configuration details such
 	 *        as the Grammar.
 	 */
-	public DepthFirstMapper(final GEModel model) {
-		super(model);
-
+	public DepthFirstMapper(final Evolver evolver) {
+		this.evolver = evolver;
+		
 		// Default to extending.
 		wrapping = true;
 		extending = false;
@@ -116,11 +119,13 @@ public class DepthFirstMapper extends ConfigOperator<GEModel> implements Mapper 
 	 * Configures this operator with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
-		grammar = getModel().getGrammar();
-		maxProgramDepth = getModel().getMaxDepth();
-		maxChromosomeLength = getModel().getMaxChromosomeLength();
-		codonGenerator = getModel().getCodonGenerator();
+	public void configure(Model model) {
+		if (model instanceof GEModel) {
+			grammar = ((GEModel) model).getGrammar();
+			maxProgramDepth = ((GEModel) model).getMaxDepth();
+			maxChromosomeLength = ((GEModel) model).getMaxChromosomeLength();
+			codonGenerator = ((GEModel) model).getCodonGenerator();
+		}
 	}
 
 	/**

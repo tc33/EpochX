@@ -21,6 +21,8 @@
  */
 package org.epochx.ge.model.java;
 
+import org.epochx.core.Evolver;
+
 /**
  * XGE model for a quartic symbolic regression problem in the Java language.
  * 
@@ -33,15 +35,15 @@ public class QuarticRegression extends Regression {
 	 * Constructs an instance of the QuarticRegression model with 50 input
 	 * points.
 	 */
-	public QuarticRegression() {
-		super();
+	public QuarticRegression(Evolver evolver) {
+		this(evolver, 50);
 	}
 
 	/**
 	 * Constructs an instance of the QuarticRegression model.
 	 */
-	public QuarticRegression(final int noPoints) {
-		super(noPoints);
+	public QuarticRegression(Evolver evolver, final int noPoints) {
+		super(evolver, noPoints);
 	}
 
 	/**

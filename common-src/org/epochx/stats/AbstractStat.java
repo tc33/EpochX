@@ -42,7 +42,7 @@ public abstract class AbstractStat implements Stat {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object getStatValue() {
+	public Object getStatValue(Stats stats) {
 		return null;
 	}
 

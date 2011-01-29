@@ -21,6 +21,8 @@
  */
 package org.epochx.representation;
 
+import org.epochx.gr.op.init.FitnessEvaluator;
+
 /**
  * An instance of <code>CandidateProgram</code> represents an individual
  * candidate solution to a problem. Specific subclasses represent the programs
@@ -28,6 +30,12 @@ package org.epochx.representation;
  */
 public abstract class CandidateProgram implements Cloneable, Comparable<CandidateProgram> {
 
+	private FitnessEvaluator fitnessEvaluator;
+	
+	public CandidateProgram(FitnessEvaluator fitnessEvaluator) {
+		this.fitnessEvaluator = fitnessEvaluator;
+	}
+	
 	/**
 	 * Calculates a quality score for this program. The exact calculation
 	 * implementation varies by subclass. Fitnesses are standardised
@@ -37,7 +45,9 @@ public abstract class CandidateProgram implements Cloneable, Comparable<Candidat
 	 * @return a standardised fitness score indicating the quality of this
 	 *         candidate program.
 	 */
-	public abstract double getFitness();
+	public double getFitness() {
+		return fitnessEvaluator.getFitness(this);
+	}
 
 	/**
 	 * Calculates and returns the adjusted fitness of this program. A program's
@@ -61,16 +71,6 @@ public abstract class CandidateProgram implements Cloneable, Comparable<Candidat
 
 		return adjusted;
 	}
-
-	/**
-	 * Tests whether this <code>CandidateProgram</code> is valid according to
-	 * any restrictions in the model. For example, certain implementations may
-	 * test that it does not exceed any maximum depth or length parameter.
-	 * 
-	 * @return true if this program abides by all restrictions and false
-	 *         otherwise.
-	 */
-	public abstract boolean isValid();
 
 	/**
 	 * Creates a copy of this candidate program. Subclass implementations should

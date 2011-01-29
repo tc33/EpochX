@@ -31,7 +31,7 @@ package org.epochx.life;
  * <blockquote>
  * 
  * <pre>
- *     Life.get().addMutationListener(new MutationAdapter(){
+ *     evolver.getLife().addMutationListener(new MutationAdapter(){
  *     		public void onMutationStart() {
  *     			... do something ...
  *     		}

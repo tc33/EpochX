@@ -69,7 +69,11 @@ import org.epochx.stats.Stats;
 public class MutationManager implements ConfigListener {
 
 	// The controlling model.
-	private final Model model;
+	private final Evolver evolver;
+	
+	private Model model;
+	
+	private Stats stats;
 
 	// The selector for choosing the individual to mutate.
 	private ProgramSelector programSelector;
@@ -91,18 +95,21 @@ public class MutationManager implements ConfigListener {
 	 *        an individual in the population.
 	 * @see Mutation
 	 */
-	public MutationManager(final Model model) {
-		this.model = model;
+	public MutationManager(final Evolver evolver) {
+		this.evolver = evolver;
 
 		// Configure parameters from the model.
-		Life.get().addConfigListener(this, false);
+		evolver.getLife().addConfigListener(this, false);
 	}
 
 	/*
 	 * Configure component with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
+	public void configure(Model model) {
+		this.model = model;
+		
+		stats = evolver.getStats(model);
 		programSelector = model.getProgramSelector();
 		mutator = model.getMutation();
 	}
@@ -137,7 +144,7 @@ public class MutationManager implements ConfigListener {
 		}
 
 		// Inform everyone we're about to start crossover.
-		Life.get().fireMutationStartEvent();
+		evolver.getLife().fireMutationStartEvent();
 
 		// Record the start time.
 		final long mutationStartTime = System.nanoTime();
@@ -157,13 +164,13 @@ public class MutationManager implements ConfigListener {
 			child = mutator.mutate(child);
 
 			// Start the loop again if the program is not valid.
-			if ((child == null) || !child.isValid()) {
+			if ((child == null) || !model.isValid(child)) {
 				child = null;
 				continue;
 			}
 
 			// Allow the life cycle listener to confirm or modify.
-			child = Life.get().runMutationHooks(parent, child);
+			child = evolver.getLife().runMutationHooks(parent, child);
 
 			if (child == null) {
 				reversions++;
@@ -173,12 +180,12 @@ public class MutationManager implements ConfigListener {
 		final long runtime = System.nanoTime() - mutationStartTime;
 
 		// Store the stats from the mutation.
-		Stats.get().addData(MUT_PARENT, parent);
-		Stats.get().addData(MUT_CHILD, child);
-		Stats.get().addData(MUT_TIME, runtime);
-		Stats.get().addData(MUT_REVERSIONS, reversions);
+		stats.addData(MUT_PARENT, parent);
+		stats.addData(MUT_CHILD, child);
+		stats.addData(MUT_TIME, runtime);
+		stats.addData(MUT_REVERSIONS, reversions);
 
-		Life.get().fireMutationEndEvent();
+		evolver.getLife().fireMutationEndEvent();
 
 		assert (child != null);
 

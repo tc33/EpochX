@@ -31,7 +31,7 @@ package org.epochx.life;
  * <blockquote>
  * 
  * <pre>
- *     Life.get().addCrossoverListener(new CrossoverAdapter(){
+ *     evolver.getLife().addCrossoverListener(new CrossoverAdapter(){
  *     		public void onCrossoverStart() {
  *     			... do something ...
  *     		}

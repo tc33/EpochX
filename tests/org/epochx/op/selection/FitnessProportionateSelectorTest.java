@@ -20,7 +20,7 @@ public class FitnessProportionateSelectorTest {
 	public void setUp() {
 		model = new GPModelDummy();
 		selector = new FitnessProportionateSelector(model);
-		Life.get().fireConfigureEvent();
+		evolver.getLife().fireConfigureEvent();
 
 		pop = new ArrayList<CandidateProgram>();
 		pop.add(new GPCandidateProgram(model));
@@ -120,7 +120,7 @@ public class FitnessProportionateSelectorTest {
 		model.setRNG(null);
 		model.setFitness(1.0);
 		model.setCacheFitness(false);
-		Life.get().fireConfigureEvent();
+		evolver.getLife().fireConfigureEvent();
 		selector.setSelectionPool(pop);
 		try {
 			selector.getProgram();

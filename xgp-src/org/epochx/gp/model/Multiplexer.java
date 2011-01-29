@@ -23,6 +23,7 @@ package org.epochx.gp.model;
 
 import java.util.*;
 
+import org.epochx.core.Evolver;
 import org.epochx.epox.*;
 import org.epochx.epox.bool.*;
 import org.epochx.epox.lang.IfFunction;
@@ -57,7 +58,9 @@ public class Multiplexer extends GPModel {
 	 * @param noInputBits the number of inputs the multiplexer problem should be
 	 *        for
 	 */
-	public Multiplexer(final int noInputBits) {
+	public Multiplexer(Evolver evolver, final int noInputBits) {
+		super(evolver);
+		
 		// Generate the input sequences.
 		inputValues = BoolUtils.generateBoolSequences(noInputBits);
 

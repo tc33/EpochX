@@ -22,6 +22,7 @@
 package org.epochx.ge.model.ruby;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.epochx.core.Evolver;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.representation.CandidateProgram;
@@ -65,7 +66,8 @@ public class EvenParity extends GEModel {
 	 * @param noInputBits the number of inputs the even parity problem should be
 	 *        for
 	 */
-	public EvenParity(final int noInputBits) {
+	public EvenParity(Evolver evolver, final int noInputBits) {
+		super(evolver);
 		interpreter = new RubyInterpreter();
 
 		// Generate the input sequences.
@@ -107,7 +109,7 @@ public class EvenParity extends GEModel {
 
 			Boolean result = null;
 			try {
-				result = (Boolean) interpreter.eval(program.getSourceCode(), argNames, objVars);
+				result = (Boolean) interpreter.eval(getMapper().map(program).toString(), argNames, objVars);
 			} catch (final MalformedProgramException e) {
 				// Assign worst possible fitness and stop evaluating.
 				score = 0;

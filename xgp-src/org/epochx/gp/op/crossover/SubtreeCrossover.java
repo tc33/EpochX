@@ -23,10 +23,11 @@ package org.epochx.gp.op.crossover;
 
 import java.util.*;
 
+import org.epochx.core.*;
 import org.epochx.epox.Node;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.GPCandidateProgram;
-import org.epochx.op.ConfigOperator;
+import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
 import org.epochx.stats.Stats.ExpiryEvent;
@@ -55,7 +56,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * @see KozaCrossover
  * @see OnePointCrossover
  */
-public class SubtreeCrossover extends ConfigOperator<GPModel> implements GPCrossover {
+public class SubtreeCrossover implements GPCrossover, ConfigListener {
 
 	/**
 	 * Requests an <code>Integer</code> which is the point chosen in the first
@@ -81,6 +82,10 @@ public class SubtreeCrossover extends ConfigOperator<GPModel> implements GPCross
 	 */
 	public static final Stat XO_SUBTREE2 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
 
+	private Evolver evolver;
+	
+	private Stats stats;
+	
 	// The random number generator for controlling random behaviour.
 	private RandomNumberGenerator rng;
 
@@ -95,7 +100,7 @@ public class SubtreeCrossover extends ConfigOperator<GPModel> implements GPCross
 	 *        non-deterministic behaviour.
 	 */
 	public SubtreeCrossover(final RandomNumberGenerator rng) {
-		this((GPModel) null);
+		this((Evolver) null);
 
 		this.rng = rng;
 	}
@@ -108,7 +113,7 @@ public class SubtreeCrossover extends ConfigOperator<GPModel> implements GPCross
 	 *        choosing a function node as the swap point.
 	 */
 	public SubtreeCrossover(final RandomNumberGenerator rng, final double functionSwapProbability) {
-		this((GPModel) null, functionSwapProbability);
+		this((Evolver) null, functionSwapProbability);
 
 		this.rng = rng;
 	}
@@ -118,8 +123,8 @@ public class SubtreeCrossover extends ConfigOperator<GPModel> implements GPCross
 	 * 
 	 * @param model the current controlling model.
 	 */
-	public SubtreeCrossover(final GPModel model) {
-		this(model, -1.0);
+	public SubtreeCrossover(final Evolver evolver) {
+		this(evolver, -1.0);
 	}
 
 	/**
@@ -128,9 +133,8 @@ public class SubtreeCrossover extends ConfigOperator<GPModel> implements GPCross
 	 * @param functionSwapProbability The probability of crossover operations
 	 *        choosing a function node as the swap point.
 	 */
-	public SubtreeCrossover(final GPModel model, final double functionSwapProbability) {
-		super(model);
-
+	public SubtreeCrossover(final Evolver evolver, final double functionSwapProbability) {
+		this.evolver = evolver;
 		this.functionSwapProbability = functionSwapProbability;
 	}
 
@@ -138,8 +142,11 @@ public class SubtreeCrossover extends ConfigOperator<GPModel> implements GPCross
 	 * Configures this operator with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
-		rng = getModel().getRNG();
+	public void configure(Model model) {
+		if (model instanceof GPModel) {
+			stats = evolver.getStats(model);
+			rng = ((GPModel) model).getRNG();
+		}
 	}
 
 	/**
@@ -175,10 +182,10 @@ public class SubtreeCrossover extends ConfigOperator<GPModel> implements GPCross
 			final int swapPoint2 = matchingIndexes.get(index);
 
 			// Add data into the stats manager.
-			Stats.get().addData(XO_POINT1, swapPoint1);
-			Stats.get().addData(XO_POINT2, swapPoint2);
-			Stats.get().addData(XO_SUBTREE1, subtree1);
-			Stats.get().addData(XO_SUBTREE2, subtree2);
+			stats.addData(XO_POINT1, swapPoint1);
+			stats.addData(XO_POINT2, swapPoint2);
+			stats.addData(XO_SUBTREE1, subtree1);
+			stats.addData(XO_SUBTREE2, subtree2);
 
 			// Perform swap.
 			program1.setNthNode(swapPoint1, subtree2);

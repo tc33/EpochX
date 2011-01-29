@@ -21,6 +21,7 @@
  */
 package org.epochx.core;
 
+import org.epochx.gr.op.init.FitnessEvaluator;
 import org.epochx.life.Life;
 import org.epochx.op.*;
 import org.epochx.op.selection.TournamentSelector;
@@ -72,9 +73,11 @@ public abstract class Model {
 	private Initialiser initialiser;
 	private Crossover crossover;
 	private Mutation mutation;
+	
+	private FitnessEvaluator fitnessEvaluator;
 
 	// Control parameters.
-	private RandomNumberGenerator randomNumberGenerator;
+	private RandomNumberGenerator rng;
 
 	private int noRuns;
 	private int noGenerations;
@@ -93,7 +96,7 @@ public abstract class Model {
 	/**
 	 * Construct the model with defaults.
 	 */
-	public Model() {
+	public Model(Evolver evolver) {
 		// Control parameters.
 		noRuns = 1;
 		noGenerations = 50;
@@ -106,47 +109,40 @@ public abstract class Model {
 		reproductionProbability = 0.0;
 
 		// Operators.
-		programSelector = new TournamentSelector(this, 7);
+		rng = new MersenneTwisterFast();
+		programSelector = new TournamentSelector(evolver, 7);
 		poolSelector = null;
-		randomNumberGenerator = new MersenneTwisterFast();
+		
+		fitnessEvaluator = null;
 
 		// Caching.
 		cacheFitness = true;
 	}
-
-	/**
-	 * Executes this model to perform a series of evolutionary runs.
-	 * 
-	 * <p>
-	 * Calling this method directly will run this model sequentially, or it can
-	 * be passed into a new thread object whose start() method is then called to
-	 * run this model in a new thread.
-	 * 
-	 * A checks is performed after running the configure event that the model is
-	 * in a runnable state. A model is in a runnable state if all compulsory
-	 * control parameters and operators have been set. If it is not in a
-	 * runnable state then an <code>IllegalStateException</code> is thrown.
-	 */
-	public void run() {
-		run = new RunManager(this);
-
-		// Fire config event.
-		Life.get().fireConfigureEvent();
-
+	
+	public boolean isRunnable() {
+		boolean valid = true;
+		
 		// Validate that the model is in a runnable state.
 		if (initialiser == null) {
-			throw new IllegalStateException("no initialiser set");
+			valid = false;
 		} else if ((crossover == null) && (crossoverProbability != 0.0)) {
-			throw new IllegalStateException("no crossover set");
+			valid = false;
 		} else if ((mutation == null) && (mutationProbability != 0.0)) {
-			throw new IllegalStateException("no mutation set");
+			valid = false;
+		} else if (fitnessEvaluator == null) {
+			valid = false;
 		}
-
-		// Execute all the runs.
-		for (int i = 0; i < getNoRuns(); i++) {
-			run.run(i);
-		}
+		
+		return valid;
 	}
+	
+	/**
+	 * Implementations should test whether the given program is valid according
+	 * to any restrictions imposed by that model.
+	 * @param program
+	 * @return
+	 */
+	public abstract boolean isValid(CandidateProgram program);
 
 	/**
 	 * Retrieves this model's run manager that will perform the task of
@@ -168,6 +164,14 @@ public abstract class Model {
 	 * @return a fitness score for the program given as a parameter.
 	 */
 	public abstract double getFitness(CandidateProgram program);
+	
+	public FitnessEvaluator getFitnessEvaluator() {
+		return fitnessEvaluator;
+	}
+	
+	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator) {
+		this.fitnessEvaluator = fitnessEvaluator;
+	}
 
 	/**
 	 * Retrieves the operator that is currently set to perform the operation of
@@ -602,7 +606,7 @@ public abstract class Model {
 	 * @return the random number generator to be provide the random numbers.
 	 */
 	public RandomNumberGenerator getRNG() {
-		return randomNumberGenerator;
+		return rng;
 	}
 
 	/**
@@ -614,11 +618,11 @@ public abstract class Model {
 	 */
 	public void setRNG(final RandomNumberGenerator rng) {
 		if (rng != null) {
-			randomNumberGenerator = rng;
+			this.rng = rng;
 		} else {
 			throw new IllegalArgumentException("random number generator must not be null");
 		}
 
-		assert (randomNumberGenerator != null);
+		assert (rng != null);
 	}
 }

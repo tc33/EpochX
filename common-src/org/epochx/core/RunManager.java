@@ -79,8 +79,10 @@ import org.epochx.stats.*;
  */
 public class RunManager implements ConfigListener {
 
-	// The controlling model.
-	private final Model model;
+	// The controlling evolver.
+	private final Evolver evolver;
+	
+	private Stats stats;
 
 	// Core components.
 	private final GenerationManager generation;
@@ -103,22 +105,23 @@ public class RunManager implements ConfigListener {
 	 * @param model the model which will control the run with the parameters
 	 *        and fitness function to use.
 	 */
-	public RunManager(final Model model) {
-		this.model = model;
+	public RunManager(final Evolver evolver) {
+		this.evolver = evolver;
 
 		// Setup core components.
-		generation = new GenerationManager(model);
-		initialisation = new InitialisationManager(model);
+		generation = new GenerationManager(evolver);
+		initialisation = new InitialisationManager(evolver);
 
 		// Configure parameters from the model.
-		Life.get().addConfigListener(this, false);
+		evolver.getLife().addConfigListener(this, false);
 	}
 
 	/*
 	 * Configure component with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
+	public void configure(Model model) {
+		stats = evolver.getStats(model);
 		noGenerations = model.getNoGenerations();
 		terminationFitness = model.getTerminationFitness();
 	}
@@ -142,16 +145,13 @@ public class RunManager implements ConfigListener {
 	 *        set of runs being performed.
 	 */
 	public void run(final int runNo) {
-		// Give final opportunity to configure before starting the run.
-		Life.get().fireConfigureEvent();
-
 		// Validate that the model is in a runnable state.
 		if (noGenerations < -1) {
 			throw new IllegalStateException("number of generations must be -1 or greater: " + noGenerations);
 		}
 
 		// Inform everyone we're starting a run.
-		Life.get().fireRunStartEvent();
+		evolver.getLife().fireRunStartEvent();
 
 		// Setup the run manager for a new run.
 		bestProgram = null;
@@ -159,7 +159,7 @@ public class RunManager implements ConfigListener {
 		final long startTime = System.nanoTime();
 
 		// Add the run number to the available stats data.
-		Stats.get().addData(RUN_NUMBER, runNo);
+		stats.addData(RUN_NUMBER, runNo);
 
 		// Perform initialisation.
 		List<CandidateProgram> pop = initialisation.initialise();
@@ -178,7 +178,7 @@ public class RunManager implements ConfigListener {
 
 			// We might be finished?
 			if (bestFitness <= terminationFitness) {
-				Life.get().fireSuccessEvent();
+				evolver.getLife().fireSuccessEvent();
 				break;
 			}
 
@@ -189,10 +189,10 @@ public class RunManager implements ConfigListener {
 		final long runtime = System.nanoTime() - startTime;
 
 		// Add run time to stats data.
-		Stats.get().addData(RUN_TIME, runtime);
+		stats.addData(RUN_TIME, runtime);
 
 		// Inform everyone the run has ended.
-		Life.get().fireRunEndEvent();
+		evolver.getLife().fireRunEndEvent();
 	}
 
 	/*
@@ -208,8 +208,8 @@ public class RunManager implements ConfigListener {
 				bestProgram = program;
 
 				// Update the stats.
-				Stats.get().addData(RUN_FITNESS_MIN, bestFitness);
-				Stats.get().addData(RUN_FITTEST_PROGRAM, bestProgram);
+				stats.addData(RUN_FITNESS_MIN, bestFitness);
+				stats.addData(RUN_FITTEST_PROGRAM, bestProgram);
 			}
 		}
 

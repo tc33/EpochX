@@ -24,10 +24,12 @@ package org.epochx.gp.op.init;
 import java.math.BigInteger;
 import java.util.*;
 
+import org.epochx.core.*;
 import org.epochx.epox.Node;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.GPCandidateProgram;
-import org.epochx.op.ConfigOperator;
+import org.epochx.gr.op.init.FitnessEvaluator;
+import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
 
@@ -57,8 +59,12 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * @see FullInitialiser
  * @see RampedHalfAndHalfInitialiser
  */
-public class GrowInitialiser extends ConfigOperator<GPModel> implements GPInitialiser {
+public class GrowInitialiser implements GPInitialiser, ConfigListener {
 
+	private Evolver evolver;
+	
+	private FitnessEvaluator fitnessEvaluator;
+	
 	private RandomNumberGenerator rng;
 
 	// The language to construct the trees from.
@@ -107,8 +113,8 @@ public class GrowInitialiser extends ConfigOperator<GPModel> implements GPInitia
 	 * @param model the <code>GPModel</code> instance from which the necessary
 	 *        parameters should be loaded.
 	 */
-	public GrowInitialiser(final GPModel model) {
-		this(model, true);
+	public GrowInitialiser(final Evolver evolver) {
+		this(evolver, true);
 	}
 
 	/**
@@ -121,8 +127,8 @@ public class GrowInitialiser extends ConfigOperator<GPModel> implements GPInitia
 	 * @param acceptDuplicates whether duplicates should be allowed in the
 	 *        populations that are generated.
 	 */
-	public GrowInitialiser(final GPModel model, final boolean acceptDuplicates) {
-		super(model);
+	public GrowInitialiser(final Evolver evolver, final boolean acceptDuplicates) {
+		this.evolver = evolver;
 
 		terminals = new ArrayList<Node>();
 		functions = new ArrayList<Node>();
@@ -134,30 +140,33 @@ public class GrowInitialiser extends ConfigOperator<GPModel> implements GPInitia
 	 * Configures this operator with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
-		rng = getModel().getRNG();
-		popSize = getModel().getPopulationSize();
-		maxDepth = getModel().getMaxInitialDepth();
-
-		// Only update the syntax if it has changed.
-		final List<Node> newSyntax = getModel().getSyntax();
-		if (!newSyntax.equals(syntax)) {
-			syntax = newSyntax;
-
-			// Update the terminal and function sets.
-			updateSyntax();
-
-			// Types possibilities table needs updating.
-			validDepthTypes = null;
-		}
-
-		// Update return type.
-		final Class<?> newReturnType = getModel().getReturnType();
-		if (newReturnType != returnType) {
-			returnType = newReturnType;
-
-			// Types possibilities table needs updating.
-			validDepthTypes = null;
+	public void configure(Model model) {
+		if (model instanceof GPModel) {
+			fitnessEvaluator = model.getFitnessEvaluator();
+			rng = model.getRNG();
+			popSize = ((GPModel) model).getPopulationSize();
+			maxDepth = ((GPModel) model).getMaxInitialDepth();
+	
+			// Only update the syntax if it has changed.
+			final List<Node> newSyntax = ((GPModel) model).getSyntax();
+			if (!newSyntax.equals(syntax)) {
+				syntax = newSyntax;
+	
+				// Update the terminal and function sets.
+				updateSyntax();
+	
+				// Types possibilities table needs updating.
+				validDepthTypes = null;
+			}
+	
+			// Update return type.
+			final Class<?> newReturnType =((GPModel) model).getReturnType();
+			if (newReturnType != returnType) {
+				returnType = newReturnType;
+	
+				// Types possibilities table needs updating.
+				validDepthTypes = null;
+			}
 		}
 	}
 
@@ -228,7 +237,7 @@ public class GrowInitialiser extends ConfigOperator<GPModel> implements GPInitia
 	public GPCandidateProgram getInitialProgram() {
 		final Node root = getGrownNodeTree(maxDepth);
 
-		return new GPCandidateProgram(root, getModel());
+		return new GPCandidateProgram(root, fitnessEvaluator);
 	}
 
 	/**

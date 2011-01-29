@@ -24,10 +24,11 @@ package org.epochx.gp.op.init;
 import java.math.BigInteger;
 import java.util.*;
 
+import org.epochx.core.*;
 import org.epochx.epox.Node;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.GPCandidateProgram;
-import org.epochx.op.ConfigOperator;
+import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
 import org.epochx.stats.Stats.ExpiryEvent;
@@ -74,7 +75,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * @see FullInitialiser
  * @see GrowInitialiser
  */
-public class RampedHalfAndHalfInitialiser extends ConfigOperator<GPModel> implements GPInitialiser {
+public class RampedHalfAndHalfInitialiser implements GPInitialiser, ConfigListener {
 
 	/**
 	 * Requests an <code>boolean[]</code> which has one element per program
@@ -84,6 +85,10 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GPModel> implem
 	 */
 	public static final Stat INIT_GROWN = new AbstractStat(ExpiryEvent.INITIALISATION) {};
 
+	private Evolver evolver;
+	
+	private Stats stats;
+	
 	// The grow and full instances for doing their share of the work - do not
 	// allow access.
 	private final GrowInitialiser grow;
@@ -138,8 +143,8 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GPModel> implem
 	 * @param model the <code>GPModel</code> instance from which the necessary
 	 *        parameters should be loaded.
 	 */
-	public RampedHalfAndHalfInitialiser(final GPModel model) {
-		this(model, 1);
+	public RampedHalfAndHalfInitialiser(final Evolver evolver) {
+		this(evolver, 1);
 	}
 
 	/**
@@ -154,8 +159,8 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GPModel> implem
 	 *        generated
 	 *        to.
 	 */
-	public RampedHalfAndHalfInitialiser(final GPModel model, final int startMaxDepth) {
-		this(model, startMaxDepth, true);
+	public RampedHalfAndHalfInitialiser(final Evolver evolver, final int startMaxDepth) {
+		this(evolver, startMaxDepth, true);
 	}
 
 	/**
@@ -171,26 +176,29 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GPModel> implem
 	 * @param acceptDuplicates whether duplicates should be allowed in the
 	 *        populations that are generated.
 	 */
-	public RampedHalfAndHalfInitialiser(final GPModel model, final int startMaxDepth, final boolean acceptDuplicates) {
-		super(model);
+	public RampedHalfAndHalfInitialiser(final Evolver evolver, final int startMaxDepth, final boolean acceptDuplicates) {
+		this.evolver = evolver;
 
 		this.startMaxDepth = startMaxDepth;
 		this.acceptDuplicates = acceptDuplicates;
 
 		// Set up the grow and full parts.
-		grow = new GrowInitialiser(model);
-		full = new FullInitialiser(model);
+		grow = new GrowInitialiser(evolver);
+		full = new FullInitialiser(evolver);
 	}
 
 	/**
 	 * Configures this operator with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
-		popSize = getModel().getPopulationSize();
-		endMaxDepth = getModel().getMaxInitialDepth();
-		syntax = getModel().getSyntax();
-		returnType = getModel().getReturnType();
+	public void configure(Model model) {
+		if (model instanceof GPModel) {
+			stats = evolver.getStats(model);
+			popSize = model.getPopulationSize();
+			endMaxDepth = ((GPModel) model).getMaxInitialDepth();
+			syntax = ((GPModel) model).getSyntax();
+			returnType = ((GPModel) model).getReturnType();
+		}
 	}
 
 	/**
@@ -253,7 +261,7 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GPModel> implem
 		}
 
 		// Add the grown or full nature of all the programs.
-		Stats.get().addData(INIT_GROWN, grown);
+		stats.addData(INIT_GROWN, grown);
 
 		return firstGen;
 	}
@@ -330,17 +338,6 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GPModel> implem
 	 */
 	public void setDuplicatesEnabled(final boolean acceptDuplicates) {
 		this.acceptDuplicates = acceptDuplicates;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setModel(final GPModel model) {
-		super.setModel(model);
-
-		grow.setModel(model);
-		full.setModel(model);
 	}
 
 	/**

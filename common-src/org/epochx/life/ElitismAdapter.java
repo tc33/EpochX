@@ -31,7 +31,7 @@ package org.epochx.life;
  * <blockquote>
  * 
  * <pre>
- *     Life.get().addElitismListener(new ElitismAdapter(){
+ *     evolver.getLife().addElitismListener(new ElitismAdapter(){
  *     		public void onElitismStart() {
  *     			... do something ...
  *     		}

@@ -22,6 +22,7 @@
 package org.epochx.gr.model.java;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.epochx.core.Evolver;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.representation.CandidateProgram;
@@ -70,7 +71,9 @@ public class Multiplexer extends GRModel {
 	 * @param noInputBits the number of inputs the multiplexer problem should be
 	 *        for
 	 */
-	public Multiplexer(final int noInputBits) {
+	public Multiplexer(Evolver evolver, final int noInputBits) {
+		super(evolver);
+		
 		interpreter = new JavaInterpreter();
 
 		// Generate the input sequences.

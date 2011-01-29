@@ -23,17 +23,18 @@ package org.epochx.gr.op.mutation;
 
 import java.util.List;
 
+import org.epochx.core.*;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.op.init.GrowInitialiser;
 import org.epochx.gr.representation.GRCandidateProgram;
-import org.epochx.op.ConfigOperator;
+import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
 import org.epochx.stats.Stats.ExpiryEvent;
 import org.epochx.tools.grammar.*;
 import org.epochx.tools.random.RandomNumberGenerator;
 
-public class WhighamMutation extends ConfigOperator<GRModel> implements GRMutation {
+public class WhighamMutation implements GRMutation, ConfigListener {
 
 	/**
 	 * Requests an <code>Integer</code> which is the index of the non-terminal
@@ -47,6 +48,10 @@ public class WhighamMutation extends ConfigOperator<GRModel> implements GRMutati
 	 */
 	public static final Stat MUT_SUBTREE = new AbstractStat(ExpiryEvent.MUTATION) {};
 
+	private Evolver evolver;
+	
+	private Stats stats;
+	
 	private RandomNumberGenerator rng;
 
 	private final GrowInitialiser grower;
@@ -56,7 +61,7 @@ public class WhighamMutation extends ConfigOperator<GRModel> implements GRMutati
 	 * 
 	 */
 	public WhighamMutation(final RandomNumberGenerator rng) {
-		this((GRModel) null);
+		this((Evolver) null);
 
 		this.rng = rng;
 
@@ -68,18 +73,21 @@ public class WhighamMutation extends ConfigOperator<GRModel> implements GRMutati
 	 * 
 	 * @param model
 	 */
-	public WhighamMutation(final GRModel model) {
-		super(model);
-
-		grower = new GrowInitialiser(model);
+	public WhighamMutation(final Evolver evolver) {
+		this.evolver = evolver;
+		
+		grower = new GrowInitialiser(evolver);
 	}
 
 	/*
 	 * Configure component with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
-		rng = getModel().getRNG();
+	public void configure(Model model) {
+		if (model instanceof GRModel) {
+			stats = evolver.getStats(model);
+			rng = model.getRNG();
+		}
 	}
 
 	@Override
@@ -98,14 +106,14 @@ public class WhighamMutation extends ConfigOperator<GRModel> implements GRMutati
 		final int originalDepth = original.getDepth();
 
 		// Add subtree into the stats manager.
-		Stats.get().addData(MUT_POINT, point);
+		stats.addData(MUT_POINT, point);
 
 		// Construct a new subtree from that node's grammar rule.
 		final GrammarRule rule = original.getGrammarRule();
 		final NonTerminalSymbol subtree = grower.getGrownParseTree(originalDepth, rule);
 
 		// Add subtree into the stats manager.
-		Stats.get().addData(MUT_SUBTREE, subtree);
+		stats.addData(MUT_SUBTREE, subtree);
 
 		// Replace node.
 		if (point == 0) {

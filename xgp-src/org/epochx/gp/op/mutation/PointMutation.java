@@ -23,10 +23,11 @@ package org.epochx.gp.op.mutation;
 
 import java.util.*;
 
+import org.epochx.core.*;
 import org.epochx.epox.Node;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.GPCandidateProgram;
-import org.epochx.op.ConfigOperator;
+import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
 import org.epochx.stats.Stats.ExpiryEvent;
@@ -61,7 +62,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * 
  * @see SubtreeMutation
  */
-public class PointMutation extends ConfigOperator<GPModel> implements GPMutation {
+public class PointMutation implements GPMutation, ConfigListener {
 
 	/**
 	 * Requests a <code>List&lt;Integer&gt;</code> which is a list of the points
@@ -69,6 +70,10 @@ public class PointMutation extends ConfigOperator<GPModel> implements GPMutation
 	 */
 	public static final Stat MUT_POINTS = new AbstractStat(ExpiryEvent.MUTATION) {};
 
+	private Evolver evolver;
+	
+	private Stats stats;
+	
 	private List<Node> syntax;
 
 	private RandomNumberGenerator rng;
@@ -97,8 +102,8 @@ public class PointMutation extends ConfigOperator<GPModel> implements GPMutation
 	 * @param model The current controlling model. Parameters such as full
 	 *        syntax will be obtained from this.
 	 */
-	public PointMutation(final GPModel model) {
-		this(model, 0.01);
+	public PointMutation(final Evolver evolver) {
+		this(evolver, 0.01);
 	}
 
 	/**
@@ -109,9 +114,8 @@ public class PointMutation extends ConfigOperator<GPModel> implements GPMutation
 	 *        changed, and 0.0 would mean no nodes were changed. A typical value
 	 *        would be 0.01.
 	 */
-	public PointMutation(final GPModel model, final double pointProbability) {
-		super(model);
-
+	public PointMutation(final Evolver evolver, final double pointProbability) {
+		this.evolver = evolver;
 		this.pointProbability = pointProbability;
 	}
 
@@ -119,9 +123,12 @@ public class PointMutation extends ConfigOperator<GPModel> implements GPMutation
 	 * Configures this operator with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
-		syntax = getModel().getSyntax();
-		rng = getModel().getRNG();
+	public void configure(Model model) {
+		if (model instanceof GPModel) {
+			stats = evolver.getStats(model);
+			syntax = ((GPModel) model).getSyntax();
+			rng = ((GPModel) model).getRNG();
+		}
 	}
 
 	/**
@@ -174,7 +181,7 @@ public class PointMutation extends ConfigOperator<GPModel> implements GPMutation
 		}
 
 		// Add mutation points into the stats manager.
-		Stats.get().addData(MUT_POINTS, points);
+		stats.addData(MUT_POINTS, points);
 
 		return program;
 	}

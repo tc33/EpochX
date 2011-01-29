@@ -25,6 +25,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+import org.epochx.core.Evolver;
 import org.epochx.epox.*;
 import org.epochx.epox.ant.*;
 import org.epochx.epox.lang.SeqNFunction;
@@ -61,7 +62,9 @@ public abstract class AntTrail extends GPModel {
 	 * @param allowedTimeSteps the number of moves and turns the ant will be
 	 *        allowed to collect the food before timing out.
 	 */
-	public AntTrail(final Point[] foodLocations, final Dimension landscapeSize, final int allowedTimeSteps) {
+	public AntTrail(Evolver evolver, final Point[] foodLocations, final Dimension landscapeSize, final int allowedTimeSteps) {
+		super(evolver);
+		
 		this.foodLocations = Arrays.asList(foodLocations);
 		this.allowedTimeSteps = allowedTimeSteps;
 

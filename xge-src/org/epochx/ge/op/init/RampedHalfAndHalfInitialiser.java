@@ -23,9 +23,10 @@ package org.epochx.ge.op.init;
 
 import java.util.*;
 
+import org.epochx.core.*;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.op.ConfigOperator;
+import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
 import org.epochx.stats.Stats.ExpiryEvent;
@@ -77,7 +78,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * @see FullInitialiser
  * @see GrowInitialiser
  */
-public class RampedHalfAndHalfInitialiser extends ConfigOperator<GEModel> implements GEInitialiser {
+public class RampedHalfAndHalfInitialiser implements GEInitialiser, ConfigListener {
 
 	/**
 	 * Requests an <code>boolean[]</code> which has one element per program
@@ -87,6 +88,10 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GEModel> implem
 	 */
 	public static final Stat INIT_GROWN = new AbstractStat(ExpiryEvent.INITIALISATION) {};
 
+	private Evolver evolver;
+	
+	private Stats stats;
+	
 	// The grow and full instances for doing their share of the work.
 	private final GrowInitialiser grow;
 	private final FullInitialiser full;
@@ -135,8 +140,8 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GEModel> implem
 	 * @param model the <code>GEModel</code> instance from which the necessary
 	 *        parameters should be loaded.
 	 */
-	public RampedHalfAndHalfInitialiser(final GEModel model) {
-		this(model, true);
+	public RampedHalfAndHalfInitialiser(final Evolver evolver) {
+		this(evolver, true);
 	}
 
 	/**
@@ -149,8 +154,8 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GEModel> implem
 	 * @param acceptDuplicates whether duplicates should be allowed in the
 	 *        populations that are generated.
 	 */
-	public RampedHalfAndHalfInitialiser(final GEModel model, final boolean acceptDuplicates) {
-		this(model, -1, acceptDuplicates);
+	public RampedHalfAndHalfInitialiser(final Evolver evolver, final boolean acceptDuplicates) {
+		this(evolver, -1, acceptDuplicates);
 	}
 
 	/**
@@ -164,8 +169,8 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GEModel> implem
 	 *        generated
 	 *        to.
 	 */
-	public RampedHalfAndHalfInitialiser(final GEModel model, final int startMaxDepth) {
-		this(model, startMaxDepth, true);
+	public RampedHalfAndHalfInitialiser(final Evolver evolver, final int startMaxDepth) {
+		this(evolver, startMaxDepth, true);
 	}
 
 	/**
@@ -181,25 +186,26 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GEModel> implem
 	 * @param acceptDuplicates whether duplicates should be allowed in the
 	 *        populations that are generated.
 	 */
-	public RampedHalfAndHalfInitialiser(final GEModel model, final int startMaxDepth, final boolean acceptDuplicates) {
-		super(model);
-
+	public RampedHalfAndHalfInitialiser(final Evolver evolver, final int startMaxDepth, final boolean acceptDuplicates) {
+		this.evolver = evolver;
 		this.startMaxDepth = startMaxDepth;
 		this.acceptDuplicates = acceptDuplicates;
 
 		// set up the grow and full parts
-		grow = new GrowInitialiser(model);
-		full = new FullInitialiser(model);
+		grow = new GrowInitialiser(evolver);
+		full = new FullInitialiser(evolver);
 	}
 
 	/*
 	 * Configure component with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
-		grammar = getModel().getGrammar();
-		popSize = getModel().getPopulationSize();
-		endMaxDepth = getModel().getMaxInitialDepth();
+	public void configure(Model model) {
+		if (model instanceof GEModel) {
+			grammar = ((GEModel) model).getGrammar();
+			popSize = ((GEModel) model).getPopulationSize();
+			endMaxDepth = ((GEModel) model).getMaxInitialDepth();
+		}
 	}
 
 	/**
@@ -261,7 +267,7 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GEModel> implem
 		}
 
 		// Add the grown or full nature of all the programs.
-		Stats.get().addData(INIT_GROWN, grown);
+		stats.addData(INIT_GROWN, grown);
 
 		return firstGen;
 	}
@@ -287,17 +293,6 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GEModel> implem
 	 */
 	public void setDuplicatesEnabled(final boolean acceptDuplicates) {
 		this.acceptDuplicates = acceptDuplicates;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setModel(final GEModel model) {
-		super.setModel(model);
-
-		grow.setModel(model);
-		full.setModel(model);
 	}
 
 	/**

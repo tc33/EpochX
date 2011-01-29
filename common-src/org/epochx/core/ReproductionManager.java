@@ -67,7 +67,9 @@ import org.epochx.stats.Stats;
 public class ReproductionManager implements ConfigListener {
 
 	// The controlling model.
-	private final Model model;
+	private final Evolver evolver;
+	
+	private Stats stats;
 
 	// The selector to use to choose the program to reproduce.
 	private ProgramSelector programSelector;
@@ -84,18 +86,19 @@ public class ReproductionManager implements ConfigListener {
 	 * @param model the model which defines the ProgramSelector to use to
 	 *        select the program to be reproduced.
 	 */
-	public ReproductionManager(final Model model) {
-		this.model = model;
+	public ReproductionManager(final Evolver evolver) {
+		this.evolver = evolver;
 
 		// Configure parameters from the model.
-		Life.get().addConfigListener(this, false);
+		evolver.getLife().addConfigListener(this, false);
 	}
 
 	/*
 	 * Configure component with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
+	public void configure(Model model) {
+		stats = evolver.getStats(model);
 		programSelector = model.getProgramSelector();
 	}
 
@@ -112,7 +115,7 @@ public class ReproductionManager implements ConfigListener {
 		}
 
 		// Inform all listeners we're about to start.
-		Life.get().fireReproductionStartEvent();
+		evolver.getLife().fireReproductionStartEvent();
 
 		// Record the start time.
 		final long startTime = System.nanoTime();
@@ -125,7 +128,7 @@ public class ReproductionManager implements ConfigListener {
 			parent = programSelector.getProgram();
 
 			// Allow the life cycle listener to confirm or modify.
-			parent = Life.get().runReproductionHooks(parent);
+			parent = evolver.getLife().runReproductionHooks(parent);
 
 			if (parent == null) {
 				reversions++;
@@ -135,11 +138,11 @@ public class ReproductionManager implements ConfigListener {
 		final long runtime = System.nanoTime() - startTime;
 
 		// Store the stats from the reproduction.
-		Stats.get().addData(REP_REVERSIONS, reversions);
-		Stats.get().addData(REP_TIME, runtime);
+		stats.addData(REP_REVERSIONS, reversions);
+		stats.addData(REP_TIME, runtime);
 
 		// Inform all listeners reproduction has ended.
-		Life.get().fireReproductionEndEvent();
+		evolver.getLife().fireReproductionEndEvent();
 
 		assert (parent != null);
 

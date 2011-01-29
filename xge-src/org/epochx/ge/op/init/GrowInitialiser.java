@@ -23,9 +23,12 @@ package org.epochx.ge.op.init;
 
 import java.util.*;
 
+import org.epochx.core.*;
+import org.epochx.ge.codon.CodonGenerator;
 import org.epochx.ge.model.GEModel;
-import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.op.ConfigOperator;
+import org.epochx.ge.representation.*;
+import org.epochx.gr.op.init.FitnessEvaluator;
+import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.*;
 import org.epochx.tools.random.RandomNumberGenerator;
@@ -63,12 +66,18 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * @see FullInitialiser
  * @see RampedHalfAndHalfInitialiser
  */
-public class GrowInitialiser extends ConfigOperator<GEModel> implements GEInitialiser {
+public class GrowInitialiser implements GEInitialiser, ConfigListener {
 
+	private Evolver evolver;
+	
+	private FitnessEvaluator fitnessEvaluator;
+	
 	private RandomNumberGenerator rng;
 
 	// The grammar each program's parse tree must satisfy.
 	private Grammar grammar;
+	
+	private CodonGenerator codonGenerator;
 
 	// The size of the populations to construct.
 	private int popSize;
@@ -86,12 +95,13 @@ public class GrowInitialiser extends ConfigOperator<GEModel> implements GEInitia
 	 * Constructs a <code>GrowInitialiser</code> with all the necessary
 	 * parameters given.
 	 */
-	public GrowInitialiser(final RandomNumberGenerator rng, final Grammar grammar, final int popSize,
+	public GrowInitialiser(final RandomNumberGenerator rng, final Grammar grammar, final CodonGenerator codonGenerator, final int popSize,
 			final int maxDepth, final int maxCodonValue, final boolean acceptDuplicates) {
 		this(null, acceptDuplicates);
 
 		this.rng = rng;
 		this.grammar = grammar;
+		this.codonGenerator = codonGenerator;
 		this.popSize = popSize;
 		this.maxDepth = maxDepth;
 		this.maxCodonValue = maxCodonValue;
@@ -106,8 +116,8 @@ public class GrowInitialiser extends ConfigOperator<GEModel> implements GEInitia
 	 * @param model the <code>GEModel</code> instance from which the necessary
 	 *        parameters should be loaded.
 	 */
-	public GrowInitialiser(final GEModel model) {
-		this(model, true);
+	public GrowInitialiser(final Evolver evolver) {
+		this(evolver, true);
 	}
 
 	/**
@@ -120,9 +130,8 @@ public class GrowInitialiser extends ConfigOperator<GEModel> implements GEInitia
 	 * @param acceptDuplicates whether duplicates should be allowed in the
 	 *        populations that are generated.
 	 */
-	public GrowInitialiser(final GEModel model, final boolean acceptDuplicates) {
-		super(model);
-
+	public GrowInitialiser(final Evolver evolver, final boolean acceptDuplicates) {
+		this.evolver = evolver;
 		this.acceptDuplicates = acceptDuplicates;
 	}
 
@@ -130,12 +139,16 @@ public class GrowInitialiser extends ConfigOperator<GEModel> implements GEInitia
 	 * Configure component with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
-		rng = getModel().getRNG();
-		grammar = getModel().getGrammar();
-		popSize = getModel().getPopulationSize();
-		maxDepth = getModel().getMaxInitialDepth();
-		maxCodonValue = getModel().getMaxCodonSize();
+	public void configure(Model model) {
+		if (model instanceof GEModel) {
+			fitnessEvaluator = model.getFitnessEvaluator();
+			rng = ((GEModel) model).getRNG();
+			grammar = ((GEModel) model).getGrammar();
+			popSize = ((GEModel) model).getPopulationSize();
+			maxDepth = ((GEModel) model).getMaxInitialDepth();
+			maxCodonValue = ((GEModel) model).getMaxCodonSize();
+			codonGenerator = ((GEModel) model).getCodonGenerator();
+		}
 	}
 
 	/**
@@ -202,8 +215,10 @@ public class GrowInitialiser extends ConfigOperator<GEModel> implements GEInitia
 
 		// Fill in the list of codons with reference to the grammar.
 		fillCodons(codons, start, 0, maxDepth);
+		
+		Chromosome chromosome = new Chromosome(codonGenerator, codons);
 
-		return new GECandidateProgram(codons, getModel());
+		return new GECandidateProgram(chromosome, fitnessEvaluator);
 	}
 
 	/*

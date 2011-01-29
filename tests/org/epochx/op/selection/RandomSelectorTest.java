@@ -20,7 +20,7 @@ public class RandomSelectorTest {
 	public void setUp() {
 		model = new GPModelDummy();
 		selector = new RandomSelector(model);
-		Life.get().fireConfigureEvent();
+		evolver.getLife().fireConfigureEvent();
 
 		pop = new ArrayList<CandidateProgram>();
 		pop.add(new GPCandidateProgram(null));
@@ -120,7 +120,7 @@ public class RandomSelectorTest {
 	@Test
 	public void testGetProgramRNGNull() {
 		model.setRNG(null);
-		Life.get().fireConfigureEvent();
+		evolver.getLife().fireConfigureEvent();
 		selector.setSelectionPool(pop);
 		try {
 			selector.getProgram();

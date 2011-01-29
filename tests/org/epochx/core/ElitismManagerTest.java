@@ -54,7 +54,7 @@ public class ElitismManagerTest {
 		final StringBuilder verify = new StringBuilder();
 
 		// Listen for the events.
-		Life.get().addElitismListener(new ElitismListener() {
+		evolver.getLife().addElitismListener(new ElitismListener() {
 
 			@Override
 			public void onElitismStart() {
@@ -67,7 +67,7 @@ public class ElitismManagerTest {
 			}
 		});
 
-		Life.get().addHook(new AbstractHook() {
+		evolver.getLife().addHook(new AbstractHook() {
 
 			@Override
 			public List<CandidateProgram> elitismHook(final List<CandidateProgram> elites) {
@@ -101,7 +101,7 @@ public class ElitismManagerTest {
 	@Test
 	public void testNoElitesNegative() {
 		model.setNoElites(-1);
-		Life.get().fireConfigureEvent();
+		evolver.getLife().fireConfigureEvent();
 
 		try {
 			elitismManager.elitism(pop);

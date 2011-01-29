@@ -78,7 +78,9 @@ import org.epochx.tools.random.RandomNumberGenerator;
 public class GenerationManager implements ConfigListener {
 
 	// The controlling model.
-	private final Model model;
+	private final Evolver evolver;
+	
+	private Stats stats;
 
 	// Components.
 	private final ElitismManager elitism;
@@ -109,27 +111,29 @@ public class GenerationManager implements ConfigListener {
 	 * @param model a model which will provide the control parameters and
 	 *        operators for the generation.
 	 */
-	public GenerationManager(final Model model) {
-		this.model = model;
+	public GenerationManager(final Evolver evolver) {
+		this.evolver = evolver;
 
 		// Components.
-		elitism = new ElitismManager(model);
-		poolSelection = new PoolSelectionManager(model);
-		crossover = new CrossoverManager(model);
-		mutation = new MutationManager(model);
-		reproduction = new ReproductionManager(model);
+		elitism = new ElitismManager(evolver);
+		poolSelection = new PoolSelectionManager(evolver);
+		crossover = new CrossoverManager(evolver);
+		mutation = new MutationManager(evolver);
+		reproduction = new ReproductionManager(evolver);
 
 		reversions = 0;
 
 		// Configure parameters from the model.
-		Life.get().addConfigListener(this, false);
+		evolver.getLife().addConfigListener(this, false);
 	}
 
 	/*
 	 * Configure component with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
+	public void configure(Model model) {
+		stats = evolver.getStats(model);
+		
 		rng = model.getRNG();
 		programSelector = model.getProgramSelector();
 		popSize = model.getPopulationSize();
@@ -190,14 +194,14 @@ public class GenerationManager implements ConfigListener {
 		}
 
 		// Inform all listeners that a generation is starting.
-		Life.get().fireGenerationStartEvent();
+		evolver.getLife().fireGenerationStartEvent();
 
 		// Setup the generation manager for a new generation.
 		reversions = 0;
 		final long startTime = System.nanoTime();
 
 		// Record the generation number in the stats data.
-		Stats.get().addData(GEN_NUMBER, generationNo);
+		stats.addData(GEN_NUMBER, generationNo);
 
 		List<CandidateProgram> pop;
 
@@ -237,7 +241,7 @@ public class GenerationManager implements ConfigListener {
 			}
 
 			// Request confirmation of generation.
-			pop = Life.get().runGenerationHooks(pop);
+			pop = evolver.getLife().runGenerationHooks(pop);
 
 			// If reverted, increment reversions count.
 			if (pop == null) {
@@ -246,12 +250,12 @@ public class GenerationManager implements ConfigListener {
 		} while (pop == null);
 
 		// Store the stats data from the generation.
-		Stats.get().addData(GEN_REVERSIONS, reversions);
-		Stats.get().addData(GEN_POP, pop);
-		Stats.get().addData(GEN_TIME, (System.nanoTime() - startTime));
+		stats.addData(GEN_REVERSIONS, reversions);
+		stats.addData(GEN_POP, pop);
+		stats.addData(GEN_TIME, (System.nanoTime() - startTime));
 
 		// Tell everyone the generation has ended.
-		Life.get().fireGenerationEndEvent();
+		evolver.getLife().fireGenerationEndEvent();
 
 		assert (pop != null);
 

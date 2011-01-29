@@ -23,6 +23,7 @@ package org.epochx.gp.model;
 
 import java.util.*;
 
+import org.epochx.core.Evolver;
 import org.epochx.epox.*;
 import org.epochx.epox.bool.*;
 import org.epochx.gp.representation.GPCandidateProgram;
@@ -54,7 +55,9 @@ public class EvenParity extends GPModel {
 	 * @param noInputBits the number of inputs the even parity problem should be
 	 *        for
 	 */
-	public EvenParity(final int noInputBits) {
+	public EvenParity(Evolver evolver, final int noInputBits) {
+		super(evolver);
+		
 		// Generate the input sequences.
 		inputValues = BoolUtils.generateBoolSequences(noInputBits);
 

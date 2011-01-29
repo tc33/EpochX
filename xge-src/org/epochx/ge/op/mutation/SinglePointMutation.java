@@ -21,10 +21,11 @@
  */
 package org.epochx.ge.op.mutation;
 
+import org.epochx.core.*;
 import org.epochx.ge.codon.CodonGenerator;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.op.ConfigOperator;
+import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
 import org.epochx.stats.Stats.ExpiryEvent;
@@ -42,7 +43,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * mutation then a replacement codon is generated using the CodonGenerator
  * specified in the model.
  */
-public class SinglePointMutation extends ConfigOperator<GEModel> implements GEMutation {
+public class SinglePointMutation implements GEMutation, ConfigListener {
 
 	/**
 	 * Requests an <code>Integer</code> which is the point which was modified as
@@ -50,6 +51,10 @@ public class SinglePointMutation extends ConfigOperator<GEModel> implements GEMu
 	 */
 	public static final Stat MUT_POINT = new AbstractStat(ExpiryEvent.MUTATION) {};
 
+	private Evolver evolver;
+	
+	private Stats stats;
+	
 	private RandomNumberGenerator rng;
 	private CodonGenerator codonGenerator;
 
@@ -70,17 +75,20 @@ public class SinglePointMutation extends ConfigOperator<GEModel> implements GEMu
 	 * @param model The current controlling model. Parameters such as the codon
 	 *        generator to use will come from here.
 	 */
-	public SinglePointMutation(final GEModel model) {
-		super(model);
+	public SinglePointMutation(final Evolver evolver) {
+		this.evolver = evolver;
 	}
 
 	/*
 	 * Configure component with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
-		rng = getModel().getRNG();
-		codonGenerator = getModel().getCodonGenerator();
+	public void configure(Model model) {
+		if (model instanceof GEModel) {
+			stats = evolver.getStats(model);
+			rng = ((GEModel) model).getRNG();
+			codonGenerator = ((GEModel) model).getCodonGenerator();
+		}
 	}
 
 	/**
@@ -103,7 +111,7 @@ public class SinglePointMutation extends ConfigOperator<GEModel> implements GEMu
 		program.setCodon(point, codon);
 
 		// Add mutation point into the stats manager.
-		Stats.get().addData(MUT_POINT, point);
+		stats.addData(MUT_POINT, point);
 
 		return program;
 	}

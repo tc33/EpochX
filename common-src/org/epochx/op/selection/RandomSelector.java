@@ -23,7 +23,8 @@ package org.epochx.op.selection;
 
 import java.util.*;
 
-import org.epochx.core.Model;
+import org.epochx.core.*;
+import org.epochx.life.ConfigListener;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
@@ -51,7 +52,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * @see FitnessProportionateSelector
  * @see TournamentSelector
  */
-public class RandomSelector extends ConfigOperator<Model> implements ProgramSelector, PoolSelector {
+public class RandomSelector implements ProgramSelector, PoolSelector, ConfigListener {
 
 	// Random number generator.
 	private RandomNumberGenerator rng;
@@ -67,7 +68,7 @@ public class RandomSelector extends ConfigOperator<Model> implements ProgramSele
 	 *        non-deterministic behaviour.
 	 */
 	public RandomSelector(final RandomNumberGenerator rng) {
-		this((Model) null);
+		this((Evolver) null);
 
 		this.rng = rng;
 	}
@@ -78,16 +79,18 @@ public class RandomSelector extends ConfigOperator<Model> implements ProgramSele
 	 * @param model the Model which defines the run parameters such as the
 	 *        random number generator to use.
 	 */
-	public RandomSelector(final Model model) {
-		super(model);
+	public RandomSelector(final Evolver evolver) {
+		if (evolver != null) {
+			evolver.getLife().addConfigListener(this, false);
+		}
 	}
 
 	/**
 	 * Configures the operator with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
-		rng = getModel().getRNG();
+	public void configure(Model model) {
+		rng = model.getRNG();
 	}
 
 	/**

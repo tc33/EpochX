@@ -31,7 +31,7 @@ package org.epochx.life;
  * <blockquote>
  * 
  * <pre>
- *     Life.get().addInitialisationListener(new RunAdapter(){
+ *     evolver.getLife().addInitialisationListener(new RunAdapter(){
  *     		public void onInitialisationStart() {
  *     			... do something ...
  *     		}

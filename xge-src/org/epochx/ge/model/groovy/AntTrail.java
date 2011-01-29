@@ -25,6 +25,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+import org.epochx.core.Evolver;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.representation.CandidateProgram;
@@ -73,7 +74,9 @@ public abstract class AntTrail extends GEModel {
 	 * @param allowedTimeSteps the number of moves and turns the ant will be
 	 *        allowed to collect the food before timing out.
 	 */
-	public AntTrail(final Point[] foodLocations, final Dimension landscapeSize, final int allowedTimeSteps) {
+	public AntTrail(Evolver evolver, final Point[] foodLocations, final Dimension landscapeSize, final int allowedTimeSteps) {
+		super(evolver);
+		
 		this.foodLocations = new ArrayList<Point>(Arrays.asList(foodLocations));
 		this.allowedTimeSteps = allowedTimeSteps;
 
@@ -108,9 +111,9 @@ public abstract class AntTrail extends GEModel {
 		final Object[] argValues = {ant};
 
 		// Evaluate multiple times until all time moves used.
-		while (program.isValid() && (ant.getTimesteps() < ant.getMaxMoves())) {
+		while (isValid(program) && (ant.getTimesteps() < ant.getMaxMoves())) {
 			try {
-				interpreter.eval(program.getSourceCode(), argNames, argValues);
+				interpreter.eval(getMapper().map(program).toString(), argNames, argValues);
 			} catch (final MalformedProgramException e) {
 				// Stop evaluation and give a bad score.
 				break;

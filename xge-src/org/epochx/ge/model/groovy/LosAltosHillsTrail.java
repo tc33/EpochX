@@ -23,6 +23,8 @@ package org.epochx.ge.model.groovy;
 
 import java.awt.*;
 
+import org.epochx.core.Evolver;
+
 /**
  * XGE model for the Los Altos Hills ant trail problem in the Groovy language.
  */
@@ -68,7 +70,7 @@ public class LosAltosHillsTrail extends AntTrail {
 	 * landscape of dimensions 100 x 100. The ant is set to 3000 allowed
 	 * timesteps.
 	 */
-	public LosAltosHillsTrail() {
-		super(FOOD_LOCATIONS, new Dimension(100, 100), 3000);
+	public LosAltosHillsTrail(Evolver evolver) {
+		super(evolver, FOOD_LOCATIONS, new Dimension(100, 100), 3000);
 	}
 }

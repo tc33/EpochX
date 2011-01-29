@@ -23,6 +23,7 @@ package org.epochx.ge.model;
 
 import java.io.*;
 
+import org.epochx.core.Evolver;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.Grammar;
@@ -33,7 +34,8 @@ import org.epochx.tools.grammar.Grammar;
  */
 public class StringMatch extends GEModel {
 
-	public StringMatch() {
+	public StringMatch(Evolver evolver) {
+		super(evolver);
 		try {
 			setGrammar(new Grammar(new File("example-grammars/StringMatch.bnf")));
 		} catch (final IOException e) {
@@ -46,7 +48,7 @@ public class StringMatch extends GEModel {
 		final GECandidateProgram program = (GECandidateProgram) p;
 
 		final String match = "hello_world";
-		final String src = program.getSourceCode();
+		final String src = getMapper().map(program).toString();
 
 		if (src == null) {
 			return Integer.MAX_VALUE;

@@ -23,11 +23,12 @@ package org.epochx.gp.op.mutation;
 
 import java.util.List;
 
+import org.epochx.core.*;
 import org.epochx.epox.Node;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.op.init.GrowInitialiser;
 import org.epochx.gp.representation.GPCandidateProgram;
-import org.epochx.op.ConfigOperator;
+import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
 import org.epochx.stats.Stats.ExpiryEvent;
@@ -57,7 +58,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * compulsory parameters remain unset when the mutation is performed then an
  * <code>IllegalStateException</code> will be thrown.
  */
-public class SubtreeMutation extends ConfigOperator<GPModel> implements GPMutation {
+public class SubtreeMutation implements GPMutation, ConfigListener {
 
 	/**
 	 * Requests an <code>Integer</code> which is the point which was modified as
@@ -71,6 +72,10 @@ public class SubtreeMutation extends ConfigOperator<GPModel> implements GPMutati
 	 */
 	public static final Stat MUT_SUBTREE = new AbstractStat(ExpiryEvent.MUTATION) {};
 
+	private Evolver evolver;
+	
+	private Stats stats;
+	
 	// Grow initialiser to build our replacement subtrees.
 	private final GrowInitialiser grower;
 
@@ -80,7 +85,7 @@ public class SubtreeMutation extends ConfigOperator<GPModel> implements GPMutati
 	private int maxSubtreeDepth;
 
 	public SubtreeMutation(final RandomNumberGenerator rng, final List<Node> syntax, final int maxSubtreeDepth) {
-		this((GPModel) null, maxSubtreeDepth);
+		this((Evolver) null, maxSubtreeDepth);
 
 		this.rng = rng;
 
@@ -95,9 +100,9 @@ public class SubtreeMutation extends ConfigOperator<GPModel> implements GPMutati
 	 * @param model The controlling model which provides any configuration
 	 *        parameters for the run.
 	 */
-	public SubtreeMutation(final GPModel model) {
+	public SubtreeMutation(final Evolver evolver) {
 		// 4 is a slightly arbitrary choice but we had to choose something.
-		this(model, 4);
+		this(evolver, 4);
 	}
 
 	/**
@@ -108,9 +113,8 @@ public class SubtreeMutation extends ConfigOperator<GPModel> implements GPMutati
 	 *        parameters for the run.
 	 * @param maxSubtreeDepth The maximum depth of the inserted subtree.
 	 */
-	public SubtreeMutation(final GPModel model, final int maxSubtreeDepth) {
-		super(model);
-
+	public SubtreeMutation(final Evolver evolver, final int maxSubtreeDepth) {
+		this.evolver = evolver;
 		this.maxSubtreeDepth = maxSubtreeDepth;
 
 		// Don't let this configure itself because it will use the wrong depth.
@@ -121,11 +125,13 @@ public class SubtreeMutation extends ConfigOperator<GPModel> implements GPMutati
 	 * Configure component with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
-		rng = getModel().getRNG();
-
-		grower.setRNG(rng);
-		grower.setSyntax(getModel().getSyntax());
+	public void configure(Model model) {
+		if (model instanceof GPModel) {
+			rng = model.getRNG();
+	
+			grower.setRNG(rng);
+			grower.setSyntax(((GPModel) model).getSyntax());
+		}
 	}
 
 	/**
@@ -149,7 +155,7 @@ public class SubtreeMutation extends ConfigOperator<GPModel> implements GPMutati
 		final int mutationPoint = rng.nextInt(length);
 
 		// Add mutation point into the stats manager.
-		Stats.get().addData(MUT_POINT, mutationPoint);
+		stats.addData(MUT_POINT, mutationPoint);
 
 		// Update grower to use the right data-type.
 		final Node originalSubtree = program.getNthNode(mutationPoint);
@@ -159,7 +165,7 @@ public class SubtreeMutation extends ConfigOperator<GPModel> implements GPMutati
 		final Node subtree = grower.getGrownNodeTree(maxSubtreeDepth);
 
 		// Add subtree into the stats manager.
-		Stats.get().addData(MUT_SUBTREE, subtree);
+		stats.addData(MUT_SUBTREE, subtree);
 
 		// Set the new subtree.
 		program.setNthNode(mutationPoint, subtree);

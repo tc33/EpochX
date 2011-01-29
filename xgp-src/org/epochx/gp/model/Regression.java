@@ -23,6 +23,7 @@ package org.epochx.gp.model;
 
 import java.util.*;
 
+import org.epochx.core.Evolver;
 import org.epochx.epox.*;
 import org.epochx.epox.math.*;
 import org.epochx.gp.representation.GPCandidateProgram;
@@ -47,14 +48,16 @@ public abstract class Regression extends GPModel {
 	 * Constructs an instance of the abstract Regression model with 50 input
 	 * points.
 	 */
-	public Regression() {
-		this(50);
+	public Regression(Evolver evolver) {
+		this(evolver, 50);
 	}
 
 	/**
 	 * Constructs an instance of the abstract Regression model.
 	 */
-	public Regression(final int noPoints) {
+	public Regression(Evolver evolver, final int noPoints) {
+		super(evolver);
+		
 		// Create variables.
 		x = new Variable("X", Double.class);
 

@@ -23,7 +23,8 @@ package org.epochx.op.selection;
 
 import java.util.*;
 
-import org.epochx.core.Model;
+import org.epochx.core.*;
+import org.epochx.life.ConfigListener;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
@@ -51,7 +52,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * @see RandomSelector
  * @see TournamentSelector
  */
-public class FitnessProportionateSelector extends ConfigOperator<Model> implements ProgramSelector, PoolSelector {
+public class FitnessProportionateSelector implements ProgramSelector, PoolSelector, ConfigListener {
 
 	// Internal program selectors used by the 2 different tasks.
 	private final ProgramFitnessProportionateSelector programSelection;
@@ -71,7 +72,7 @@ public class FitnessProportionateSelector extends ConfigOperator<Model> implemen
 	 *        non-deterministic behaviour.
 	 */
 	public FitnessProportionateSelector(final RandomNumberGenerator rng) {
-		this((Model) null, false);
+		this(rng, false);
 	}
 
 	/**
@@ -84,7 +85,9 @@ public class FitnessProportionateSelector extends ConfigOperator<Model> implemen
 	 *        false otherwise.
 	 */
 	public FitnessProportionateSelector(final RandomNumberGenerator rng, final boolean overSelection) {
-		this((Model) null, overSelection);
+		this((Evolver) null, overSelection);
+		
+		this.rng = rng;
 	}
 
 	/**
@@ -94,8 +97,8 @@ public class FitnessProportionateSelector extends ConfigOperator<Model> implemen
 	 * @param model the Model which defines the run parameters such as the
 	 *        random number generator to use.
 	 */
-	public FitnessProportionateSelector(final Model model) {
-		this(model, false);
+	public FitnessProportionateSelector(Evolver evolver) {
+		this(evolver, false);
 	}
 
 	/**
@@ -107,22 +110,24 @@ public class FitnessProportionateSelector extends ConfigOperator<Model> implemen
 	 * @param overSelection true if greedy over-selection should be used and
 	 *        false otherwise.
 	 */
-	public FitnessProportionateSelector(final Model model, final boolean overSelection) {
-		super(model);
-
+	public FitnessProportionateSelector(Evolver evolver, final boolean overSelection) {
 		this.overSelection = overSelection;
 
 		// Construct the internal program selectors.
 		programSelection = new ProgramFitnessProportionateSelector();
 		poolSelection = new ProgramFitnessProportionateSelector();
+		
+		if (evolver != null) {
+			evolver.getLife().addConfigListener(this, false);
+		}
 	}
 
 	/**
 	 * Configures this operator with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
-		rng = getModel().getRNG();
+	public void configure(Model model) {
+		rng = model.getRNG();
 	}
 
 	/**

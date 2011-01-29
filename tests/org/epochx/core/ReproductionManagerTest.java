@@ -79,7 +79,7 @@ public class ReproductionManagerTest {
 		model.getProgramSelector().setSelectionPool(pop);
 
 		// Listen for the crossver.
-		Life.get().addReproductionListener(new ReproductionListener() {
+		evolver.getLife().addReproductionListener(new ReproductionListener() {
 
 			@Override
 			public void onReproductionStart() {
@@ -91,7 +91,7 @@ public class ReproductionManagerTest {
 				verify.append('3');
 			}
 		});
-		Life.get().addHook(new AbstractHook() {
+		evolver.getLife().addHook(new AbstractHook() {
 
 			@Override
 			public CandidateProgram reproductionHook(final CandidateProgram program) {
@@ -100,7 +100,7 @@ public class ReproductionManagerTest {
 			}
 		});
 
-		Life.get().fireConfigureEvent();
+		evolver.getLife().fireConfigureEvent();
 		reproductionManager.reproduce();
 
 		assertEquals("reproduction events were not called in the correct order", "123", verify.toString());
@@ -122,7 +122,7 @@ public class ReproductionManagerTest {
 		count = 0;
 
 		// Listen for the generation.
-		Life.get().addHook(new AbstractHook() {
+		evolver.getLife().addHook(new AbstractHook() {
 
 			@Override
 			public CandidateProgram reproductionHook(final CandidateProgram program) {
@@ -137,7 +137,7 @@ public class ReproductionManagerTest {
 			}
 		});
 
-		Life.get().fireConfigureEvent();
+		evolver.getLife().fireConfigureEvent();
 		reproductionManager.reproduce();
 
 		assertEquals("reproduction operation was not correctly reverted", "2222", verify.toString());

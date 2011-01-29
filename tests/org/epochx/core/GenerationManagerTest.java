@@ -69,7 +69,7 @@ public class GenerationManagerTest {
 			}
 		});
 
-		Life.get().fireConfigureEvent();
+		evolver.getLife().fireConfigureEvent();
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class GenerationManagerTest {
 		final StringBuilder verify = new StringBuilder();
 
 		// Listen for the generation.
-		Life.get().addGenerationListener(new GenerationListener() {
+		evolver.getLife().addGenerationListener(new GenerationListener() {
 
 			@Override
 			public void onGenerationStart() {
@@ -122,7 +122,7 @@ public class GenerationManagerTest {
 				verify.append('3');
 			}
 		});
-		Life.get().addHook(new AbstractHook() {
+		evolver.getLife().addHook(new AbstractHook() {
 
 			@Override
 			public List<CandidateProgram> generationHook(final List<CandidateProgram> genPop) {
@@ -148,7 +148,7 @@ public class GenerationManagerTest {
 		final StringBuilder verify = new StringBuilder();
 
 		// Listen for the generation.
-		Life.get().addHook(new AbstractHook() {
+		evolver.getLife().addHook(new AbstractHook() {
 
 			@Override
 			public List<CandidateProgram> generationHook(final List<CandidateProgram> elites) {

@@ -20,7 +20,7 @@ public class TournamentSelectorTest {
 	public void setUp() {
 		model = new GPModelDummy();
 		selector = new TournamentSelector(model, 3);
-		Life.get().fireConfigureEvent();
+		evolver.getLife().fireConfigureEvent();
 
 		pop = new ArrayList<CandidateProgram>();
 		pop.add(new GPCandidateProgram(null));
@@ -120,7 +120,7 @@ public class TournamentSelectorTest {
 	@Test
 	public void testGetProgramRNGNull() {
 		model.setRNG(null);
-		Life.get().fireConfigureEvent();
+		evolver.getLife().fireConfigureEvent();
 		selector.setSelectionPool(pop);
 		try {
 			selector.getProgram();

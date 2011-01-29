@@ -21,12 +21,15 @@
  */
 package org.epochx.ge.model;
 
-import org.epochx.core.Model;
+import org.epochx.core.*;
 import org.epochx.ge.codon.*;
 import org.epochx.ge.mapper.*;
 import org.epochx.ge.op.crossover.OnePointCrossover;
 import org.epochx.ge.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.ge.op.mutation.PointMutation;
+import org.epochx.ge.representation.GECandidateProgram;
+import org.epochx.gr.representation.GRCandidateProgram;
+import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.Grammar;
 
 /**
@@ -50,10 +53,12 @@ public abstract class GEModel extends Model {
 	 * Construct a GEModel with a set of sensible defaults. See the appropriate
 	 * accessor method for information of each default value.
 	 */
-	public GEModel() {
+	public GEModel(Evolver evolver) {
+		super(evolver);
+		
 		// Set default parameter values.
-		mapper = new DepthFirstMapper(this);
-		codonGenerator = new StandardGenerator(this);
+		mapper = new DepthFirstMapper(evolver);
+		codonGenerator = new StandardGenerator(evolver);
 		grammar = null;
 
 		maxDepth = 14;
@@ -65,21 +70,24 @@ public abstract class GEModel extends Model {
 		cacheSource = true;
 
 		// Operators.
-		setInitialiser(new RampedHalfAndHalfInitialiser(this));
-		setCrossover(new OnePointCrossover(this));
-		setMutation(new PointMutation(this));
+		setInitialiser(new RampedHalfAndHalfInitialiser(evolver));
+		setCrossover(new OnePointCrossover(evolver));
+		setMutation(new PointMutation(evolver));
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
+	
 	@Override
-	public void run() {
-		if (getGrammar() == null) {
-			throw new IllegalStateException("no grammar set");
+	public boolean isRunnable() {
+		return (getGrammar() != null);
+	}
+	
+	@Override
+	public boolean isValid(CandidateProgram program) {
+		//TODO This needs to implement checks.
+		if (program instanceof GECandidateProgram) {
+			return true;
 		}
-
-		super.run();
+		
+		return false;
 	}
 
 	/**

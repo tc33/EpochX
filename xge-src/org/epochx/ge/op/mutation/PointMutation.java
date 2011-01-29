@@ -23,10 +23,11 @@ package org.epochx.ge.op.mutation;
 
 import java.util.*;
 
+import org.epochx.core.*;
 import org.epochx.ge.codon.CodonGenerator;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.op.ConfigOperator;
+import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
 import org.epochx.stats.Stats.ExpiryEvent;
@@ -43,7 +44,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * replacement codon is generated using the CodonGenerator specified in the
  * model.
  */
-public class PointMutation extends ConfigOperator<GEModel> implements GEMutation {
+public class PointMutation implements GEMutation, ConfigListener {
 
 	/**
 	 * Requests a <code>List&lt;Integer&gt;</code> which is a list of the points
@@ -51,6 +52,10 @@ public class PointMutation extends ConfigOperator<GEModel> implements GEMutation
 	 */
 	public static final Stat MUT_POINTS = new AbstractStat(ExpiryEvent.MUTATION) {};
 
+	private Evolver evolver;
+	
+	private Stats stats;
+	
 	// The probability each codon has of being mutated in a selected program.
 	private double pointProbability;
 
@@ -77,8 +82,8 @@ public class PointMutation extends ConfigOperator<GEModel> implements GEMutation
 	 * @param model The current controlling model. Parameters such as the codon
 	 *        generator to use will come from here.
 	 */
-	public PointMutation(final GEModel model) {
-		this(model, 0.01);
+	public PointMutation(final Evolver evolver) {
+		this(evolver, 0.01);
 	}
 
 	/**
@@ -91,9 +96,8 @@ public class PointMutation extends ConfigOperator<GEModel> implements GEMutation
 	 *        being changed, and 0.0 would mean no codons were changed. A
 	 *        typical value would be 0.01.
 	 */
-	public PointMutation(final GEModel model, final double pointProbability) {
-		super(model);
-
+	public PointMutation(final Evolver evolver, final double pointProbability) {
+		this.evolver = evolver;
 		this.pointProbability = pointProbability;
 	}
 
@@ -101,9 +105,12 @@ public class PointMutation extends ConfigOperator<GEModel> implements GEMutation
 	 * Configures this operator with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
-		rng = getModel().getRNG();
-		codonGenerator = getModel().getCodonGenerator();
+	public void configure(Model model) {
+		if (model instanceof GEModel) {
+			stats = evolver.getStats(model);
+			rng = ((GEModel) model).getRNG();
+			codonGenerator = ((GEModel) model).getCodonGenerator();
+		}
 	}
 
 	/**
@@ -137,7 +144,7 @@ public class PointMutation extends ConfigOperator<GEModel> implements GEMutation
 		}
 
 		// Add mutation points into the stats manager.
-		Stats.get().addData(MUT_POINTS, points);
+		stats.addData(MUT_POINTS, points);
 
 		return program;
 	}

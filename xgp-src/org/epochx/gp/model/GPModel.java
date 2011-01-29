@@ -23,11 +23,14 @@ package org.epochx.gp.model;
 
 import java.util.List;
 
-import org.epochx.core.Model;
+import org.epochx.core.*;
 import org.epochx.epox.Node;
+import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.gp.op.crossover.SubtreeCrossover;
 import org.epochx.gp.op.init.FullInitialiser;
 import org.epochx.gp.op.mutation.SubtreeMutation;
+import org.epochx.gp.representation.GPCandidateProgram;
+import org.epochx.representation.CandidateProgram;
 
 /**
  * Model implementation for performing tree-based genetic programming
@@ -45,27 +48,32 @@ public abstract class GPModel extends Model {
 	 * Constructs a <code>GPModel</code> with a set of sensible defaults. See
 	 * the appropriate accessor method for information of each default value.
 	 */
-	public GPModel() {
+	public GPModel(Evolver evolver) {
+		super(evolver);
+		
 		// Set default parameter values.
 		maxInitialDepth = 6;
 		maxProgramDepth = 17;
 
 		// Operators.
-		setInitialiser(new FullInitialiser(this));
-		setCrossover(new SubtreeCrossover(this));
-		setMutation(new SubtreeMutation(this));
+		setInitialiser(new FullInitialiser(evolver));
+		setCrossover(new SubtreeCrossover(evolver));
+		setMutation(new SubtreeMutation(evolver));
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
+	
 	@Override
-	public void run() {
-		if ((syntax == null) || syntax.isEmpty()) {
-			throw new IllegalStateException("no syntax set");
+	public boolean isRunnable() {
+		return ((syntax != null) && !syntax.isEmpty());
+	}
+	
+	@Override
+	public boolean isValid(CandidateProgram program) {
+		//TODO This needs to implement checks.
+		if (program instanceof GPCandidateProgram) {
+			return true;
 		}
-
-		super.run();
+		
+		return false;
 	}
 
 	/**

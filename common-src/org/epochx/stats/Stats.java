@@ -24,6 +24,7 @@ package org.epochx.stats;
 import java.io.*;
 import java.util.*;
 
+import org.epochx.core.Model;
 import org.epochx.life.*;
 
 /**
@@ -41,11 +42,14 @@ import org.epochx.life.*;
  */
 public class Stats {
 
-	// Singleton instance.
-	private static Stats instance;
-
 	// Map of all stats data, by event at which they should be cleared.
 	private final Map<ExpiryEvent, Map<Stat, Object>> data;
+	
+	// The life cycle to enroll upon to clear data maps.
+	private final Life life;
+	
+	// The model that these stats are about.
+	private final Model model;
 
 	/**
 	 * Possible events at which statistics fields can be considered expired.
@@ -62,7 +66,10 @@ public class Stats {
 	 * so this constructor is private. An instance can be obtained using the
 	 * get() method.
 	 */
-	private Stats() {
+	public Stats(Model model, Life life) {
+		this.model = model;
+		this.life = life;
+		
 		// Setup the stats manager.
 		data = new HashMap<ExpiryEvent, Map<Stat, Object>>();
 
@@ -75,18 +82,6 @@ public class Stats {
 
 		// Setup listeners to clear stats at appropriate times.
 		setupListeners();
-	}
-
-	/**
-	 * Returns the singleton instance of Stats.
-	 * 
-	 * @return the only Stats instance.
-	 */
-	public static Stats get() {
-		if (instance == null) {
-			instance = new Stats();
-		}
-		return instance;
 	}
 
 	/**
@@ -125,7 +120,7 @@ public class Stats {
 
 		// If stat not stored then ask the stat if it can generate the value.
 		if (value == null) {
-			value = field.getStatValue();
+			value = field.getStatValue(this);
 
 			if (value != null) {
 				addData(field, value);
@@ -245,8 +240,9 @@ public class Stats {
 	 * old data out of the data maps.
 	 */
 	private void setupListeners() {
+		//TODO Need to check the model that is generating the event before clearing.
 		// Clear the run data.
-		Life.get().addRunListener(new RunAdapter() {
+		life.addRunListener(new RunAdapter() {
 
 			@Override
 			public void onRunStart() {
@@ -255,7 +251,7 @@ public class Stats {
 		});
 
 		// Clear the generation data.
-		Life.get().addGenerationListener(new GenerationAdapter() {
+		life.addGenerationListener(new GenerationAdapter() {
 
 			@Override
 			public void onGenerationStart() {
@@ -264,7 +260,7 @@ public class Stats {
 		});
 
 		// Clear the initialisation data.
-		Life.get().addInitialisationListener(new InitialisationAdapter() {
+		life.addInitialisationListener(new InitialisationAdapter() {
 
 			@Override
 			public void onInitialisationStart() {
@@ -273,7 +269,7 @@ public class Stats {
 		});
 
 		// Clear the elitism data.
-		Life.get().addElitismListener(new ElitismAdapter() {
+		life.addElitismListener(new ElitismAdapter() {
 
 			@Override
 			public void onElitismStart() {
@@ -282,7 +278,7 @@ public class Stats {
 		});
 
 		// Clear the elitism data.
-		Life.get().addElitismListener(new ElitismAdapter() {
+		life.addElitismListener(new ElitismAdapter() {
 
 			@Override
 			public void onElitismStart() {
@@ -291,7 +287,7 @@ public class Stats {
 		});
 
 		// Clear the pool selection data.
-		Life.get().addPoolSelectionListener(new PoolSelectionAdapter() {
+		life.addPoolSelectionListener(new PoolSelectionAdapter() {
 
 			@Override
 			public void onPoolSelectionStart() {
@@ -300,7 +296,7 @@ public class Stats {
 		});
 
 		// Clear the crossover data.
-		Life.get().addCrossoverListener(new CrossoverAdapter() {
+		life.addCrossoverListener(new CrossoverAdapter() {
 
 			@Override
 			public void onCrossoverStart() {
@@ -309,7 +305,7 @@ public class Stats {
 		});
 
 		// Clear the mutation data.
-		Life.get().addMutationListener(new MutationAdapter() {
+		life.addMutationListener(new MutationAdapter() {
 
 			@Override
 			public void onMutationStart() {

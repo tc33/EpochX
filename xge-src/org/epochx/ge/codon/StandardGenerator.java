@@ -21,8 +21,9 @@
  */
 package org.epochx.ge.codon;
 
+import org.epochx.core.*;
 import org.epochx.ge.model.GEModel;
-import org.epochx.op.ConfigOperator;
+import org.epochx.life.ConfigListener;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
@@ -45,8 +46,10 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * compulsory parameters remain unset when a new codon is requested, then an
  * <code>IllegalStateException</code> will be thrown.
  */
-public class StandardGenerator extends ConfigOperator<GEModel> implements CodonGenerator {
+public class StandardGenerator implements CodonGenerator, ConfigListener {
 
+	private Evolver evolver;
+	
 	// Random number generator.
 	private RandomNumberGenerator rng;
 
@@ -72,17 +75,19 @@ public class StandardGenerator extends ConfigOperator<GEModel> implements CodonG
 	 * @param model the model that controls the run, providing the maximum
 	 *        codon size.
 	 */
-	public StandardGenerator(final GEModel model) {
-		super(model);
+	public StandardGenerator(final Evolver evolver) {
+		this.evolver = evolver;
 	}
 
 	/**
 	 * Configures this operator with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
-		rng = getModel().getRNG();
-		maxCodonSize = getModel().getMaxCodonSize();
+	public void configure(Model model) {
+		if (model instanceof GEModel) {
+			rng = ((GEModel) model).getRNG();
+			maxCodonSize = ((GEModel) model).getMaxCodonSize();
+		}
 	}
 
 	/**

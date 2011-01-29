@@ -23,9 +23,10 @@ package org.epochx.gr.op.init;
 
 import java.util.*;
 
+import org.epochx.core.*;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
-import org.epochx.op.ConfigOperator;
+import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.Grammar;
 import org.epochx.tools.random.RandomNumberGenerator;
@@ -71,8 +72,10 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * @see FullInitialiser
  * @see GrowInitialiser
  */
-public class RampedHalfAndHalfInitialiser extends ConfigOperator<GRModel> implements GRInitialiser {
+public class RampedHalfAndHalfInitialiser implements GRInitialiser, ConfigListener {
 
+	private Evolver evolver;
+	
 	// The grammar all new programs must be valid against.
 	private Grammar grammar;
 
@@ -119,8 +122,8 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GRModel> implem
 	 * @param model the <code>GRModel</code> instance from which the necessary
 	 *        parameters should be loaded.
 	 */
-	public RampedHalfAndHalfInitialiser(final GRModel model) {
-		this(model, -1);
+	public RampedHalfAndHalfInitialiser(final Evolver evolver) {
+		this(evolver, -1);
 	}
 
 	/**
@@ -135,8 +138,8 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GRModel> implem
 	 *        generated
 	 *        to.
 	 */
-	public RampedHalfAndHalfInitialiser(final GRModel model, final int startMaxDepth) {
-		this(model, startMaxDepth, true);
+	public RampedHalfAndHalfInitialiser(final Evolver evolver, final int startMaxDepth) {
+		this(evolver, startMaxDepth, true);
 	}
 
 	/**
@@ -152,25 +155,26 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GRModel> implem
 	 * @param acceptDuplicates whether duplicates should be allowed in the
 	 *        populations that are generated.
 	 */
-	public RampedHalfAndHalfInitialiser(final GRModel model, final int startMaxDepth, final boolean acceptDuplicates) {
-		super(model);
-
+	public RampedHalfAndHalfInitialiser(final Evolver evolver, final int startMaxDepth, final boolean acceptDuplicates) {
+		this.evolver = evolver;
 		this.startMaxDepth = startMaxDepth;
 		this.acceptDuplicates = acceptDuplicates;
 
 		// set up the grow and full parts
-		grow = new GrowInitialiser(model);
-		full = new FullInitialiser(model);
+		grow = new GrowInitialiser(evolver);
+		full = new FullInitialiser(evolver);
 	}
 
 	/*
 	 * Configure component with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
-		grammar = getModel().getGrammar();
-		popSize = getModel().getPopulationSize();
-		endMaxDepth = getModel().getMaxInitialDepth();
+	public void configure(Model model) {
+		if (model instanceof GRModel) {
+			grammar = ((GRModel) model).getGrammar();
+			popSize = model.getPopulationSize();
+			endMaxDepth = ((GRModel) model).getMaxInitialDepth();
+		}
 	}
 
 	/**
@@ -259,17 +263,6 @@ public class RampedHalfAndHalfInitialiser extends ConfigOperator<GRModel> implem
 	 */
 	public void setDuplicatesEnabled(final boolean acceptDuplicates) {
 		this.acceptDuplicates = acceptDuplicates;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setModel(final GRModel model) {
-		super.setModel(model);
-
-		grow.setModel(model);
-		full.setModel(model);
 	}
 
 	/**

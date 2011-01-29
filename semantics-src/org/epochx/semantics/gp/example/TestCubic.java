@@ -45,7 +45,7 @@ public class TestCubic {
 		reg.setTerminationFitness(-1);
 		
 		// set up stats
-		Life.get().addGenerationListener(new GenerationAdapter() {
+		evolver.getLife().addGenerationListener(new GenerationAdapter() {
 			public void onGenerationEnd() {
 				Stats.get().print(StatField.GEN_NUMBER, StatField.GEN_FITNESS_MAX, StatField.GEN_FITNESS_MIN, StatField.GEN_FITTEST_PROGRAM);
 			}

@@ -69,7 +69,12 @@ import org.epochx.stats.Stats;
 public class CrossoverManager implements ConfigListener {
 
 	// The controlling model.
-	private final Model model;
+	private final Evolver evolver;
+	
+	// Stats for the model configured to.
+	private Stats stats;
+	
+	private Model model;
 
 	// The selector for choosing parents.
 	private ProgramSelector programSelector;
@@ -88,18 +93,21 @@ public class CrossoverManager implements ConfigListener {
 	 * 
 	 * @see Crossover
 	 */
-	public CrossoverManager(final Model model) {
-		this.model = model;
+	public CrossoverManager(final Evolver evolver) {
+		this.evolver = evolver;
 
 		// Configure parameters from the model.
-		Life.get().addConfigListener(this, false);
+		evolver.getLife().addConfigListener(this, false);
 	}
 
 	/*
 	 * Configure component with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
+	public void configure(Model model) {
+		this.model = model;
+		
+		stats = evolver.getStats(model);
 		programSelector = model.getProgramSelector();
 		crossover = model.getCrossover();
 	}
@@ -135,7 +143,7 @@ public class CrossoverManager implements ConfigListener {
 		}
 
 		// Inform everyone we're about to start crossover.
-		Life.get().fireCrossoverStartEvent();
+		evolver.getLife().fireCrossoverStartEvent();
 
 		// Record the start time.
 		final long crossoverStartTime = System.nanoTime();
@@ -169,7 +177,7 @@ public class CrossoverManager implements ConfigListener {
 			}
 
 			// Ask life cycle listener to confirm the crossover.
-			children = Life.get().runCrossoverHooks(parents, children);
+			children = evolver.getLife().runCrossoverHooks(parents, children);
 
 			// If reverted then increment reversion counter.
 			if (children == null) {
@@ -179,12 +187,12 @@ public class CrossoverManager implements ConfigListener {
 
 		final long runtime = System.nanoTime() - crossoverStartTime;
 
-		Stats.get().addData(XO_PARENTS, parents);
-		Stats.get().addData(XO_CHILDREN, children);
-		Stats.get().addData(XO_REVERSIONS, reversions);
-		Stats.get().addData(XO_TIME, runtime);
+		stats.addData(XO_PARENTS, parents);
+		stats.addData(XO_CHILDREN, children);
+		stats.addData(XO_REVERSIONS, reversions);
+		stats.addData(XO_TIME, runtime);
 
-		Life.get().fireCrossoverEndEvent();
+		evolver.getLife().fireCrossoverEndEvent();
 
 		assert (children != null);
 
@@ -200,7 +208,7 @@ public class CrossoverManager implements ConfigListener {
 
 		boolean valid = true;
 		for (final CandidateProgram p: programs) {
-			if (!p.isValid()) {
+			if (!model.isValid(p)) {
 				valid = false;
 				break;
 			}

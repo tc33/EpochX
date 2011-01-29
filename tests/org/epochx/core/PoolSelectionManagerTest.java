@@ -64,7 +64,7 @@ public class PoolSelectionManagerTest {
 		model.setPoolSize(0);
 		model.setPoolSelector(new RandomSelector(model));
 
-		Life.get().fireConfigureEvent();
+		evolver.getLife().fireConfigureEvent();
 		try {
 			poolManager.getPool(pop);
 			fail("illegal state exception not thrown for pool selection with a pool size of zero");
@@ -84,7 +84,7 @@ public class PoolSelectionManagerTest {
 		model.setPoolSize(-2);
 		model.setPoolSelector(new RandomSelector(model));
 
-		Life.get().fireConfigureEvent();
+		evolver.getLife().fireConfigureEvent();
 		try {
 			poolManager.getPool(pop);
 			fail("illegal state exception not thrown for pool selection with a pool size of -2");
@@ -102,7 +102,7 @@ public class PoolSelectionManagerTest {
 		model.setPoolSize(-1);
 		model.setPoolSelector(new RandomSelector(model));
 
-		Life.get().fireConfigureEvent();
+		evolver.getLife().fireConfigureEvent();
 		try {
 			final List<CandidateProgram> pool = poolManager.getPool(pop);
 			assertSame("returned pool is not same as pop when pool size is -1", pop, pool);
@@ -122,7 +122,7 @@ public class PoolSelectionManagerTest {
 		model.setPoolSize(5);
 		model.setPoolSelector(null);
 
-		Life.get().fireConfigureEvent();
+		evolver.getLife().fireConfigureEvent();
 		try {
 			final List<CandidateProgram> pool = poolManager.getPool(pop);
 			assertSame("returned pool is not same as pop when pool selector is null", pop, pool);
@@ -141,7 +141,7 @@ public class PoolSelectionManagerTest {
 		model.setPoolSize(1);
 		model.setPoolSelector(new RandomSelector(model));
 
-		Life.get().fireConfigureEvent();
+		evolver.getLife().fireConfigureEvent();
 		try {
 			poolManager.getPool(pop);
 		} catch (final Exception e) {
@@ -165,7 +165,7 @@ public class PoolSelectionManagerTest {
 		model.getProgramSelector().setSelectionPool(pop);
 
 		// Listen for the crossver.
-		Life.get().addPoolSelectionListener(new PoolSelectionListener() {
+		evolver.getLife().addPoolSelectionListener(new PoolSelectionListener() {
 
 			@Override
 			public void onPoolSelectionStart() {
@@ -177,7 +177,7 @@ public class PoolSelectionManagerTest {
 				verify.append('3');
 			}
 		});
-		Life.get().addHook(new AbstractHook() {
+		evolver.getLife().addHook(new AbstractHook() {
 
 			@Override
 			public List<CandidateProgram> poolSelectionHook(final List<CandidateProgram> pool) {
@@ -185,7 +185,7 @@ public class PoolSelectionManagerTest {
 				return pool;
 			}
 		});
-		Life.get().fireConfigureEvent();
+		evolver.getLife().fireConfigureEvent();
 		poolManager.getPool(pop);
 
 		assertEquals("pool selection events were not called in the correct order", "123", verify.toString());
@@ -208,7 +208,7 @@ public class PoolSelectionManagerTest {
 		count = 0;
 
 		// Listen for the generation.
-		Life.get().addHook(new AbstractHook() {
+		evolver.getLife().addHook(new AbstractHook() {
 
 			@Override
 			public List<CandidateProgram> poolSelectionHook(final List<CandidateProgram> pool) {
@@ -223,7 +223,7 @@ public class PoolSelectionManagerTest {
 			}
 		});
 
-		Life.get().fireConfigureEvent();
+		evolver.getLife().fireConfigureEvent();
 		poolManager.getPool(pop);
 
 		assertEquals("pool selection operation was not correctly reverted", "2222", verify.toString());

@@ -57,7 +57,7 @@ public class MutationManagerTest {
 		model.setMutation(null);
 		model.setMutationProbability(0.1);
 
-		Life.get().fireConfigureEvent();
+		evolver.getLife().fireConfigureEvent();
 
 		try {
 			mutationManager.mutate();
@@ -75,7 +75,7 @@ public class MutationManagerTest {
 		// Create a model with a null program selector.
 		model.setProgramSelector(null);
 
-		Life.get().fireConfigureEvent();
+		evolver.getLife().fireConfigureEvent();
 
 		try {
 			mutationManager.mutate();
@@ -99,7 +99,7 @@ public class MutationManagerTest {
 		model.getSyntax().add(new Literal(false));
 
 		// Listen for the crossver.
-		Life.get().addMutationListener(new MutationListener() {
+		evolver.getLife().addMutationListener(new MutationListener() {
 
 			@Override
 			public void onMutationStart() {
@@ -111,7 +111,7 @@ public class MutationManagerTest {
 				verify.append('3');
 			}
 		});
-		Life.get().addHook(new AbstractHook() {
+		evolver.getLife().addHook(new AbstractHook() {
 
 			@Override
 			public CandidateProgram mutationHook(final CandidateProgram parent, final CandidateProgram child) {
@@ -120,7 +120,7 @@ public class MutationManagerTest {
 			}
 		});
 
-		Life.get().fireConfigureEvent();
+		evolver.getLife().fireConfigureEvent();
 		mutationManager.mutate();
 
 		assertEquals("mutation events were not called in the correct order", "123", verify.toString());
@@ -144,7 +144,7 @@ public class MutationManagerTest {
 		count = 0;
 
 		// Listen for the generation.
-		Life.get().addHook(new AbstractHook() {
+		evolver.getLife().addHook(new AbstractHook() {
 
 			@Override
 			public CandidateProgram mutationHook(final CandidateProgram parent, final CandidateProgram child) {
@@ -159,7 +159,7 @@ public class MutationManagerTest {
 			}
 		});
 
-		Life.get().fireConfigureEvent();
+		evolver.getLife().fireConfigureEvent();
 		mutationManager.mutate();
 
 		assertEquals("mutation operation was not correctly reverted", "2222", verify.toString());

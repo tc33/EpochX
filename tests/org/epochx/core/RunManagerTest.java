@@ -85,7 +85,7 @@ public class RunManagerTest {
 		final StringBuilder verify = new StringBuilder();
 
 		// Listen for the config events.
-		Life.get().addConfigListener(new ConfigListener() {
+		evolver.getLife().addConfigListener(new ConfigListener() {
 
 			@Override
 			public void onConfigure() {
@@ -93,7 +93,7 @@ public class RunManagerTest {
 			}
 		});
 		// Listen for the generation.
-		Life.get().addRunListener(new RunAdapter() {
+		evolver.getLife().addRunListener(new RunAdapter() {
 
 			@Override
 			public void onRunStart() {

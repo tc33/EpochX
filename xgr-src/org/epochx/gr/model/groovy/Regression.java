@@ -21,6 +21,7 @@
  */
 package org.epochx.gr.model.groovy;
 
+import org.epochx.core.Evolver;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.representation.CandidateProgram;
@@ -63,14 +64,16 @@ public abstract class Regression extends GRModel {
 	 * Constructs an instance of the abstract Regression model with 50 input
 	 * points.
 	 */
-	public Regression() {
-		this(50);
+	public Regression(Evolver evolver) {
+		this(evolver, 50);
 	}
 
 	/**
 	 * Constructs an instance of the abstract Regression model.
 	 */
-	public Regression(final int noPoints) {
+	public Regression(Evolver evolver, final int noPoints) {
+		super(evolver);
+		
 		setGrammar(new Grammar(GRAMMAR_STRING));
 
 		interpreter = new GroovyInterpreter();

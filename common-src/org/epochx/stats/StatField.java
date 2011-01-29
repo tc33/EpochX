@@ -55,11 +55,11 @@ public class StatField {
 	public static final Stat RUN_TIME_MS = new AbstractStat(RUN) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Long ms = null;
 
 			// Request the time in nanoseconds.
-			final Long ns = (Long) Stats.get().getStat(RUN_TIME);
+			final Long ns = (Long) stats.getStat(RUN_TIME);
 
 			if (ns != null) {
 				// Convert to milliseconds.
@@ -77,11 +77,11 @@ public class StatField {
 	public static final Stat RUN_TIME_S = new AbstractStat(RUN) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Long s = null;
 
 			// Request the time in nanoseconds.
-			final Long ns = (Long) Stats.get().getStat(RUN_TIME);
+			final Long ns = (Long) stats.getStat(RUN_TIME);
 
 			if (ns != null) {
 				// Convert to seconds.
@@ -99,11 +99,11 @@ public class StatField {
 	public static final Stat RUN_TIME_M = new AbstractStat(RUN) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Long m = null;
 
 			// Request the time in nanoseconds.
-			final Long ns = (Long) Stats.get().getStat(RUN_TIME);
+			final Long ns = (Long) stats.getStat(RUN_TIME);
 
 			if (ns != null) {
 				// Convert to minutes.
@@ -121,11 +121,11 @@ public class StatField {
 	public static final Stat RUN_TIME_H = new AbstractStat(RUN) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Long h = null;
 
 			// Request the time in nanoseconds.
-			final Long ns = (Long) Stats.get().getStat(RUN_TIME);
+			final Long ns = (Long) stats.getStat(RUN_TIME);
 
 			if (ns != null) {
 				// Convert to hours.
@@ -172,12 +172,12 @@ public class StatField {
 	public static final Stat GEN_FITNESSES = new AbstractStat(GENERATION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			double[] fitnesses = null;
 
 			// Request the population from the stats manager.
 			@SuppressWarnings("unchecked")
-			final List<CandidateProgram> pop = (List<CandidateProgram>) Stats.get().getStat(GEN_POP);
+			final List<CandidateProgram> pop = (List<CandidateProgram>) stats.getStat(GEN_POP);
 
 			// Get the fitnesses of each program.
 			if (pop != null) {
@@ -201,11 +201,11 @@ public class StatField {
 	public static final Stat GEN_FITNESS_MIN = new AbstractStat(GENERATION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Double minFitness = null;
 
 			// Request the population fitnesses from the stats manager.
-			final double[] fitnesses = (double[]) Stats.get().getStat(GEN_FITNESSES);
+			final double[] fitnesses = (double[]) stats.getStat(GEN_FITNESSES);
 
 			// Calculate the minimum fitness value.
 			if (fitnesses != null) {
@@ -225,11 +225,11 @@ public class StatField {
 	public static final Stat GEN_FITNESS_MAX = new AbstractStat(GENERATION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Double maxFitness = null;
 
 			// Request the population fitnesses from the stats manager.
-			final double[] fitnesses = (double[]) Stats.get().getStat(GEN_FITNESSES);
+			final double[] fitnesses = (double[]) stats.getStat(GEN_FITNESSES);
 
 			// Calculate the maximum fitness value.
 			if (fitnesses != null) {
@@ -248,11 +248,11 @@ public class StatField {
 	public static final Stat GEN_FITNESS_AVE = new AbstractStat(GENERATION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Double aveFitness = null;
 
 			// Request the population fitnesses from the stats manager.
-			final double[] fitnesses = (double[]) Stats.get().getStat(GEN_FITNESSES);
+			final double[] fitnesses = (double[]) stats.getStat(GEN_FITNESSES);
 
 			// Calculate the average fitness value.
 			if (fitnesses != null) {
@@ -271,12 +271,12 @@ public class StatField {
 	public static final Stat GEN_FITNESS_STDEV = new AbstractStat(GENERATION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Double stdevFitness = null;
 
 			// Request the population fitnesses from the stats manager.
-			final double[] fitnesses = (double[]) Stats.get().getStat(GEN_FITNESSES);
-			final double averageFitness = (Double) Stats.get().getStat(GEN_FITNESS_AVE);
+			final double[] fitnesses = (double[]) stats.getStat(GEN_FITNESSES);
+			final double averageFitness = (Double) stats.getStat(GEN_FITNESS_AVE);
 
 			// Calculate the standard deviation of the fitness values.
 			if (fitnesses != null) {
@@ -295,11 +295,11 @@ public class StatField {
 	public static final Stat GEN_FITNESS_MEDIAN = new AbstractStat(GENERATION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Double medianFitness = null;
 
 			// Request the population fitnesses from the stats manager.
-			final double[] fitnesses = (double[]) Stats.get().getStat(GEN_FITNESSES);
+			final double[] fitnesses = (double[]) stats.getStat(GEN_FITNESSES);
 
 			// Calculate the median of the fitness values.
 			if (fitnesses != null) {
@@ -318,12 +318,12 @@ public class StatField {
 	public static final Stat GEN_FITNESS_CI95 = new AbstractStat(GENERATION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Double ci95Fitness = null;
 
 			// Request the population fitnesses from the stats manager.
-			final double[] fitnesses = (double[]) Stats.get().getStat(GEN_FITNESSES);
-			final double stdev = (Double) Stats.get().getStat(GEN_FITNESS_STDEV);
+			final double[] fitnesses = (double[]) stats.getStat(GEN_FITNESSES);
+			final double stdev = (Double) stats.getStat(GEN_FITNESS_STDEV);
 
 			// Calculate the 95% confidence interval from the mean of the
 			// fitness
@@ -346,13 +346,13 @@ public class StatField {
 	public static final Stat GEN_FITTEST_PROGRAM = new AbstractStat(GENERATION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			CandidateProgram bestProgram = null;
 
 			// Request the population fitnesses from the stats manager.
-			final double[] fitnesses = (double[]) Stats.get().getStat(GEN_FITNESSES);
+			final double[] fitnesses = (double[]) stats.getStat(GEN_FITNESSES);
 			@SuppressWarnings("unchecked")
-			final List<CandidateProgram> pop = (List<CandidateProgram>) Stats.get().getStat(GEN_POP);
+			final List<CandidateProgram> pop = (List<CandidateProgram>) stats.getStat(GEN_POP);
 
 			// Retrieve the program with the minimum fitness value.
 			if (fitnesses != null) {
@@ -374,14 +374,14 @@ public class StatField {
 	public static final Stat GEN_FITTEST_PROGRAMS = new AbstractStat(GENERATION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			final List<CandidateProgram> bestPrograms = new ArrayList<CandidateProgram>();
 
 			// Request the population fitnesses from the stats manager.
-			final Double minFitness = (Double) Stats.get().getStat(GEN_FITNESS_MIN);
-			final double[] fitnesses = (double[]) Stats.get().getStat(GEN_FITNESSES);
+			final Double minFitness = (Double) stats.getStat(GEN_FITNESS_MIN);
+			final double[] fitnesses = (double[]) stats.getStat(GEN_FITNESSES);
 			@SuppressWarnings("unchecked")
-			final List<CandidateProgram> pop = (List<CandidateProgram>) Stats.get().getStat(GEN_POP);
+			final List<CandidateProgram> pop = (List<CandidateProgram>) stats.getStat(GEN_POP);
 
 			// Retrieve all the programs with the minimum fitness value.
 			if ((minFitness != null) && (fitnesses != null)) {
@@ -419,12 +419,12 @@ public class StatField {
 	public static final Stat GEN_POP_SORTED = new AbstractStat(GENERATION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			List<CandidateProgram> sortedPop = null;
 
 			// Request the population from the stats manager.
 			@SuppressWarnings("unchecked")
-			final List<CandidateProgram> pop = (List<CandidateProgram>) Stats.get().getStat(GEN_POP);
+			final List<CandidateProgram> pop = (List<CandidateProgram>) stats.getStat(GEN_POP);
 
 			if (pop != null) {
 				// Create a copy of the population to be sorted.
@@ -447,12 +447,12 @@ public class StatField {
 	public static final Stat GEN_POP_SORTED_DESC = new AbstractStat(GENERATION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			List<CandidateProgram> sortedPop = null;
 
 			// Request the population from the stats manager.
 			@SuppressWarnings("unchecked")
-			final List<CandidateProgram> pop = (List<CandidateProgram>) Stats.get().getStat(GEN_POP);
+			final List<CandidateProgram> pop = (List<CandidateProgram>) stats.getStat(GEN_POP);
 
 			if (pop != null) {
 				// Create a copy of the population to be sorted.
@@ -477,11 +477,11 @@ public class StatField {
 	public static final Stat GEN_FITNESSES_SORTED = new AbstractStat(GENERATION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			double[] sortedFitnesses = null;
 
 			// Request the population fitnesses from the stats manager.
-			final double[] fitnesses = (double[]) Stats.get().getStat(GEN_FITNESSES);
+			final double[] fitnesses = (double[]) stats.getStat(GEN_FITNESSES);
 
 			if (fitnesses != null) {
 				// Create a copy of the fitnesses.
@@ -506,11 +506,11 @@ public class StatField {
 	public static final Stat GEN_FITNESSES_SORTED_DESC = new AbstractStat(GENERATION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			double[] sortedFitnessesDesc = null;
 
 			// Request the ascending sorted fitnesses from the stats manager.
-			final double[] sortedFitnesses = (double[]) Stats.get().getStat(GEN_FITNESSES_SORTED);
+			final double[] sortedFitnesses = (double[]) stats.getStat(GEN_FITNESSES_SORTED);
 
 			if (sortedFitnesses != null) {
 				// Create a copy of the sorted fitnesses.
@@ -537,11 +537,11 @@ public class StatField {
 	public static final Stat GEN_TIME_MS = new AbstractStat(GENERATION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Long ms = null;
 
 			// Request the time in nanoseconds.
-			final Long ns = (Long) Stats.get().getStat(GEN_TIME);
+			final Long ns = (Long) stats.getStat(GEN_TIME);
 
 			if (ns != null) {
 				// Convert to milliseconds.
@@ -559,11 +559,11 @@ public class StatField {
 	public static final Stat GEN_TIME_S = new AbstractStat(GENERATION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Long s = null;
 
 			// Request the time in nanoseconds.
-			final Long ns = (Long) Stats.get().getStat(GEN_TIME);
+			final Long ns = (Long) stats.getStat(GEN_TIME);
 
 			if (ns != null) {
 				// Convert to seconds.
@@ -581,11 +581,11 @@ public class StatField {
 	public static final Stat GEN_TIME_M = new AbstractStat(GENERATION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Long m = null;
 
 			// Request the time in nanoseconds.
-			final Long ns = (Long) Stats.get().getStat(GEN_TIME);
+			final Long ns = (Long) stats.getStat(GEN_TIME);
 
 			if (ns != null) {
 				// Convert to minutes.
@@ -603,11 +603,11 @@ public class StatField {
 	public static final Stat GEN_TIME_H = new AbstractStat(GENERATION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Long h = null;
 
 			// Request the time in nanoseconds.
-			final Long ns = (Long) Stats.get().getStat(GEN_TIME);
+			final Long ns = (Long) stats.getStat(GEN_TIME);
 
 			if (ns != null) {
 				// Convert to hours.
@@ -644,11 +644,11 @@ public class StatField {
 	public static final Stat MUT_TIME_MS = new AbstractStat(MUTATION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Long ms = null;
 
 			// Request the time in nanoseconds.
-			final Long ns = (Long) Stats.get().getStat(MUT_TIME);
+			final Long ns = (Long) stats.getStat(MUT_TIME);
 
 			if (ns != null) {
 				// Convert to milliseconds.
@@ -666,11 +666,11 @@ public class StatField {
 	public static final Stat MUT_TIME_S = new AbstractStat(MUTATION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Long s = null;
 
 			// Request the time in nanoseconds.
-			final Long ns = (Long) Stats.get().getStat(MUT_TIME);
+			final Long ns = (Long) stats.getStat(MUT_TIME);
 
 			if (ns != null) {
 				// Convert to seconds.
@@ -694,11 +694,11 @@ public class StatField {
 	public static final Stat MUT_PARENT_FITNESS = new AbstractStat(MUTATION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Double fitness = null;
 
 			// Request the parent from the stats manager.
-			final CandidateProgram parent = (CandidateProgram) Stats.get().getStat(MUT_PARENT);
+			final CandidateProgram parent = (CandidateProgram) stats.getStat(MUT_PARENT);
 
 			if (parent != null) {
 				// Get the program's fitness.
@@ -716,11 +716,11 @@ public class StatField {
 	public static final Stat MUT_CHILD_FITNESS = new AbstractStat(MUTATION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Double fitness = null;
 
 			// Request the child from the stats manager.
-			final CandidateProgram child = (CandidateProgram) Stats.get().getStat(MUT_CHILD);
+			final CandidateProgram child = (CandidateProgram) stats.getStat(MUT_CHILD);
 
 			if (child != null) {
 				// Get the program's fitness.
@@ -741,12 +741,12 @@ public class StatField {
 	public static final Stat MUT_FITNESS_CHANGE = new AbstractStat(MUTATION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Double fitnessChange = null;
 
 			// Request the fitnesses from the stats manager.
-			final Double fitnessBefore = (Double) Stats.get().getStat(MUT_PARENT_FITNESS);
-			final Double fitnessAfter = (Double) Stats.get().getStat(MUT_CHILD_FITNESS);
+			final Double fitnessBefore = (Double) stats.getStat(MUT_PARENT_FITNESS);
+			final Double fitnessAfter = (Double) stats.getStat(MUT_CHILD_FITNESS);
 
 			if ((fitnessBefore != null) && (fitnessAfter != null)) {
 				// Calculate the fitness change.
@@ -783,11 +783,11 @@ public class StatField {
 	public static final Stat XO_TIME_MS = new AbstractStat(CROSSOVER) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Long ms = null;
 
 			// Request the time in nanoseconds.
-			final Long ns = (Long) Stats.get().getStat(XO_TIME);
+			final Long ns = (Long) stats.getStat(XO_TIME);
 
 			if (ns != null) {
 				// Convert to milliseconds.
@@ -805,11 +805,11 @@ public class StatField {
 	public static final Stat XO_TIME_S = new AbstractStat(CROSSOVER) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Long s = null;
 
 			// Request the time in nanoseconds.
-			final Long ns = (Long) Stats.get().getStat(XO_TIME);
+			final Long ns = (Long) stats.getStat(XO_TIME);
 
 			if (ns != null) {
 				// Convert to seconds.
@@ -836,11 +836,11 @@ public class StatField {
 	public static final Stat XO_PARENT_FITNESSES = new AbstractStat(CROSSOVER) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			double[] fitnesses = null;
 
 			// Request the parents from the stats manager.
-			final CandidateProgram[] parents = (CandidateProgram[]) Stats.get().getStat(XO_PARENTS);
+			final CandidateProgram[] parents = (CandidateProgram[]) stats.getStat(XO_PARENTS);
 
 			if (parents != null) {
 				fitnesses = new double[parents.length];
@@ -865,11 +865,11 @@ public class StatField {
 	public static final Stat XO_CHILD_FITNESSES = new AbstractStat(CROSSOVER) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			double[] fitnesses = null;
 
 			// Request the children from the stats manager.
-			final CandidateProgram[] children = (CandidateProgram[]) Stats.get().getStat(XO_CHILDREN);
+			final CandidateProgram[] children = (CandidateProgram[]) stats.getStat(XO_CHILDREN);
 
 			if (children != null) {
 				fitnesses = new double[children.length];
@@ -892,11 +892,11 @@ public class StatField {
 	public static final Stat XO_PARENTS_FITNESS_AVE = new AbstractStat(CROSSOVER) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Double aveFitness = null;
 
 			// Request the population fitnesses from the stats manager.
-			final double[] fitnesses = (double[]) Stats.get().getStat(XO_PARENT_FITNESSES);
+			final double[] fitnesses = (double[]) stats.getStat(XO_PARENT_FITNESSES);
 
 			// Calculate the average fitness value.
 			if (fitnesses != null) {
@@ -915,11 +915,11 @@ public class StatField {
 	public static final Stat XO_CHILDREN_FITNESS_AVE = new AbstractStat(CROSSOVER) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Double aveFitness = null;
 
 			// Request the population fitnesses from the stats manager.
-			final double[] fitnesses = (double[]) Stats.get().getStat(XO_CHILD_FITNESSES);
+			final double[] fitnesses = (double[]) stats.getStat(XO_CHILD_FITNESSES);
 
 			// Calculate the average fitness value.
 			if (fitnesses != null) {
@@ -940,12 +940,12 @@ public class StatField {
 	public static final Stat XO_FITNESS_AVE_CHANGE = new AbstractStat(CROSSOVER) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Double fitnessChange = null;
 
 			// Request the parent from the stats manager.
-			final Double aveFitnessBefore = (Double) Stats.get().getStat(XO_PARENTS_FITNESS_AVE);
-			final Double aveFitnessAfter = (Double) Stats.get().getStat(XO_CHILDREN_FITNESS_AVE);
+			final Double aveFitnessBefore = (Double) stats.getStat(XO_PARENTS_FITNESS_AVE);
+			final Double aveFitnessAfter = (Double) stats.getStat(XO_CHILDREN_FITNESS_AVE);
 
 			if ((aveFitnessBefore != null) && (aveFitnessAfter != null)) {
 				// Calculate the fitness change.
@@ -972,12 +972,12 @@ public class StatField {
 	public static final Stat POOL_FITNESSES = new AbstractStat(POOL_SELECTION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			double[] fitnesses = null;
 
 			// Request the pool from the stats manager.
 			@SuppressWarnings("unchecked")
-			final List<CandidateProgram> pop = (List<CandidateProgram>) Stats.get().getStat(POOL_PROGRAMS);
+			final List<CandidateProgram> pop = (List<CandidateProgram>) stats.getStat(POOL_PROGRAMS);
 
 			// Get the fitnesses of each program.
 			if (pop != null) {
@@ -1001,11 +1001,11 @@ public class StatField {
 	public static final Stat POOL_FITNESS_MIN = new AbstractStat(POOL_SELECTION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Double minFitness = null;
 
 			// Request the pool fitnesses from the stats manager.
-			final double[] fitnesses = (double[]) Stats.get().getStat(POOL_FITNESSES);
+			final double[] fitnesses = (double[]) stats.getStat(POOL_FITNESSES);
 
 			// Calculate the minimum fitness value.
 			if (fitnesses != null) {
@@ -1025,11 +1025,11 @@ public class StatField {
 	public static final Stat POOL_FITNESS_MAX = new AbstractStat(POOL_SELECTION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Double maxFitness = null;
 
 			// Request the pool fitnesses from the stats manager.
-			final double[] fitnesses = (double[]) Stats.get().getStat(POOL_FITNESSES);
+			final double[] fitnesses = (double[]) stats.getStat(POOL_FITNESSES);
 
 			// Calculate the maximum fitness value.
 			if (fitnesses != null) {
@@ -1048,11 +1048,11 @@ public class StatField {
 	public static final Stat POOL_FITNESS_AVE = new AbstractStat(POOL_SELECTION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Double aveFitness = null;
 
 			// Request the pool fitnesses from the stats manager.
-			final double[] fitnesses = (double[]) Stats.get().getStat(POOL_FITNESSES);
+			final double[] fitnesses = (double[]) stats.getStat(POOL_FITNESSES);
 
 			// Calculate the average fitness value.
 			if (fitnesses != null) {
@@ -1071,12 +1071,12 @@ public class StatField {
 	public static final Stat POOL_FITNESS_STDEV = new AbstractStat(POOL_SELECTION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Double stdevFitness = null;
 
 			// Request the pool fitnesses from the stats manager.
-			final double[] fitnesses = (double[]) Stats.get().getStat(POOL_FITNESSES);
-			final double averageFitness = (Double) Stats.get().getStat(POOL_FITNESS_AVE);
+			final double[] fitnesses = (double[]) stats.getStat(POOL_FITNESSES);
+			final double averageFitness = (Double) stats.getStat(POOL_FITNESS_AVE);
 
 			// Calculate the standard deviation of the fitness values.
 			if (fitnesses != null) {
@@ -1095,11 +1095,11 @@ public class StatField {
 	public static final Stat POOL_FITNESS_MEDIAN = new AbstractStat(POOL_SELECTION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Double medianFitness = null;
 
 			// Request the pool fitnesses from the stats manager.
-			final double[] fitnesses = (double[]) Stats.get().getStat(POOL_FITNESSES);
+			final double[] fitnesses = (double[]) stats.getStat(POOL_FITNESSES);
 
 			// Calculate the median of the fitness values.
 			if (fitnesses != null) {
@@ -1118,12 +1118,12 @@ public class StatField {
 	public static final Stat POOL_FITNESS_CI95 = new AbstractStat(POOL_SELECTION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Double ci95Fitness = null;
 
 			// Request the pool fitnesses from the stats manager.
-			final double[] fitnesses = (double[]) Stats.get().getStat(POOL_FITNESSES);
-			final double stdev = (Double) Stats.get().getStat(POOL_FITNESS_STDEV);
+			final double[] fitnesses = (double[]) stats.getStat(POOL_FITNESSES);
+			final double stdev = (Double) stats.getStat(POOL_FITNESS_STDEV);
 
 			// Calculate the 95% confidence interval from the mean of the
 			// fitness
@@ -1146,13 +1146,13 @@ public class StatField {
 	public static final Stat POOL_FITTEST_PROGRAM = new AbstractStat(POOL_SELECTION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			CandidateProgram bestProgram = null;
 
 			// Request the pool fitnesses from the stats manager.
-			final double[] fitnesses = (double[]) Stats.get().getStat(POOL_FITNESSES);
+			final double[] fitnesses = (double[]) stats.getStat(POOL_FITNESSES);
 			@SuppressWarnings("unchecked")
-			final List<CandidateProgram> pool = (List<CandidateProgram>) Stats.get().getStat(POOL_PROGRAMS);
+			final List<CandidateProgram> pool = (List<CandidateProgram>) stats.getStat(POOL_PROGRAMS);
 
 			// Retrieve the program with the minimum fitness value.
 			if (fitnesses != null) {
@@ -1174,14 +1174,14 @@ public class StatField {
 	public static final Stat POOL_FITTEST_PROGRAMS = new AbstractStat(POOL_SELECTION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			final List<CandidateProgram> bestPrograms = new ArrayList<CandidateProgram>();
 
 			// Request the pool fitnesses from the stats manager.
-			final Double minFitness = (Double) Stats.get().getStat(POOL_FITNESS_MIN);
-			final double[] fitnesses = (double[]) Stats.get().getStat(POOL_FITNESSES);
+			final Double minFitness = (Double) stats.getStat(POOL_FITNESS_MIN);
+			final double[] fitnesses = (double[]) stats.getStat(POOL_FITNESSES);
 			@SuppressWarnings("unchecked")
-			final List<CandidateProgram> pool = (List<CandidateProgram>) Stats.get().getStat(POOL_PROGRAMS);
+			final List<CandidateProgram> pool = (List<CandidateProgram>) stats.getStat(POOL_PROGRAMS);
 
 			// Retrieve all the programs with the minimum fitness value.
 			if ((minFitness != null) && (fitnesses != null)) {
@@ -1210,12 +1210,12 @@ public class StatField {
 	public static final Stat POOL_SIZE = new AbstractStat(POOL_SELECTION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Integer poolSize = null;
 
 			// Request the pool from the stats manager.
 			@SuppressWarnings("unchecked")
-			final List<CandidateProgram> pool = (List<CandidateProgram>) Stats.get().getStat(XO_PARENTS_FITNESS_AVE);
+			final List<CandidateProgram> pool = (List<CandidateProgram>) stats.getStat(XO_PARENTS_FITNESS_AVE);
 
 			if (pool != null) {
 				// Calculate the fitness change.
@@ -1239,11 +1239,11 @@ public class StatField {
 	public static final Stat POOL_TIME_MS = new AbstractStat(POOL_SELECTION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Long ms = null;
 
 			// Request the time in nanoseconds.
-			final Long ns = (Long) Stats.get().getStat(POOL_TIME);
+			final Long ns = (Long) stats.getStat(POOL_TIME);
 
 			if (ns != null) {
 				// Convert to milliseconds.
@@ -1261,11 +1261,11 @@ public class StatField {
 	public static final Stat POOL_TIME_S = new AbstractStat(POOL_SELECTION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Long s = null;
 
 			// Request the time in nanoseconds.
-			final Long ns = (Long) Stats.get().getStat(POOL_TIME);
+			final Long ns = (Long) stats.getStat(POOL_TIME);
 
 			if (ns != null) {
 				// Convert to seconds.
@@ -1283,11 +1283,11 @@ public class StatField {
 	public static final Stat POOL_TIME_M = new AbstractStat(POOL_SELECTION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Long s = null;
 
 			// Request the time in nanoseconds.
-			final Long ns = (Long) Stats.get().getStat(POOL_TIME);
+			final Long ns = (Long) stats.getStat(POOL_TIME);
 
 			if (ns != null) {
 				// Convert to minutes.
@@ -1305,11 +1305,11 @@ public class StatField {
 	public static final Stat POOL_TIME_H = new AbstractStat(POOL_SELECTION) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Long s = null;
 
 			// Request the time in nanoseconds.
-			final Long ns = (Long) Stats.get().getStat(POOL_TIME);
+			final Long ns = (Long) stats.getStat(POOL_TIME);
 
 			if (ns != null) {
 				// Convert to hours.
@@ -1345,12 +1345,12 @@ public class StatField {
 	public static final Stat ELITE_SIZE = new AbstractStat(ELITISM) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Integer eliteSize = null;
 
 			// Request the pool from the stats manager.
 			@SuppressWarnings("unchecked")
-			final List<CandidateProgram> elites = (List<CandidateProgram>) Stats.get().getStat(ELITE_PROGRAMS);
+			final List<CandidateProgram> elites = (List<CandidateProgram>) stats.getStat(ELITE_PROGRAMS);
 
 			if (elites != null) {
 				// Calculate the fitness change.
@@ -1370,12 +1370,12 @@ public class StatField {
 	public static final Stat ELITE_FITNESSES = new AbstractStat(ELITISM) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			double[] fitnesses = null;
 
 			// Request the elites from the stats manager.
 			@SuppressWarnings("unchecked")
-			final List<CandidateProgram> elites = (List<CandidateProgram>) Stats.get().getStat(ELITE_PROGRAMS);
+			final List<CandidateProgram> elites = (List<CandidateProgram>) stats.getStat(ELITE_PROGRAMS);
 
 			// Get the fitnesses of each program.
 			if (elites != null) {
@@ -1399,11 +1399,11 @@ public class StatField {
 	public static final Stat ELITE_FITNESS_MIN = new AbstractStat(ELITISM) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Double minFitness = null;
 
 			// Request the elite fitnesses from the stats manager.
-			final double[] fitnesses = (double[]) Stats.get().getStat(ELITE_FITNESSES);
+			final double[] fitnesses = (double[]) stats.getStat(ELITE_FITNESSES);
 
 			// Calculate the minimum fitness value.
 			if (fitnesses != null) {
@@ -1421,11 +1421,11 @@ public class StatField {
 	public static final Stat ELITE_FITNESS_MAX = new AbstractStat(ELITISM) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Double maxFitness = null;
 
 			// Request the elite fitnesses from the stats manager.
-			final double[] fitnesses = (double[]) Stats.get().getStat(ELITE_FITNESSES);
+			final double[] fitnesses = (double[]) stats.getStat(ELITE_FITNESSES);
 
 			// Calculate the maximum fitness value.
 			if (fitnesses != null) {
@@ -1443,11 +1443,11 @@ public class StatField {
 	public static final Stat ELITE_FITNESS_AVE = new AbstractStat(ELITISM) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Double aveFitness = null;
 
 			// Request the elite fitnesses from the stats manager.
-			final double[] fitnesses = (double[]) Stats.get().getStat(ELITE_FITNESSES);
+			final double[] fitnesses = (double[]) stats.getStat(ELITE_FITNESSES);
 
 			// Calculate the average fitness value.
 			if (fitnesses != null) {
@@ -1465,12 +1465,12 @@ public class StatField {
 	public static final Stat ELITE_FITNESS_STDEV = new AbstractStat(ELITISM) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Double stdevFitness = null;
 
 			// Request the elite fitnesses from the stats manager.
-			final double[] fitnesses = (double[]) Stats.get().getStat(ELITE_FITNESSES);
-			final double averageFitness = (Double) Stats.get().getStat(ELITE_FITNESS_AVE);
+			final double[] fitnesses = (double[]) stats.getStat(ELITE_FITNESSES);
+			final double averageFitness = (Double) stats.getStat(ELITE_FITNESS_AVE);
 
 			// Calculate the standard deviation of the fitness values.
 			if (fitnesses != null) {
@@ -1488,11 +1488,11 @@ public class StatField {
 	public static final Stat ELITE_FITNESS_MEDIAN = new AbstractStat(ELITISM) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Double medianFitness = null;
 
 			// Request the elite fitnesses from the stats manager.
-			final double[] fitnesses = (double[]) Stats.get().getStat(ELITE_FITNESSES);
+			final double[] fitnesses = (double[]) stats.getStat(ELITE_FITNESSES);
 
 			// Calculate the median of the fitness values.
 			if (fitnesses != null) {
@@ -1510,12 +1510,12 @@ public class StatField {
 	public static final Stat ELITE_FITNESS_CI95 = new AbstractStat(ELITISM) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Double ci95Fitness = null;
 
 			// Request the elite fitnesses from the stats manager.
-			final double[] fitnesses = (double[]) Stats.get().getStat(ELITE_FITNESSES);
-			final double stdev = (Double) Stats.get().getStat(ELITE_FITNESS_STDEV);
+			final double[] fitnesses = (double[]) stats.getStat(ELITE_FITNESSES);
+			final double stdev = (Double) stats.getStat(ELITE_FITNESS_STDEV);
 
 			// Calculate the 95% confidence interval from the mean of the
 			// fitness
@@ -1541,11 +1541,11 @@ public class StatField {
 	public static final Stat ELITE_TIME_MS = new AbstractStat(ELITISM) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Long ms = null;
 
 			// Request the time in nanoseconds.
-			final Long ns = (Long) Stats.get().getStat(ELITE_TIME);
+			final Long ns = (Long) stats.getStat(ELITE_TIME);
 
 			if (ns != null) {
 				// Convert to milliseconds.
@@ -1563,11 +1563,11 @@ public class StatField {
 	public static final Stat ELITE_TIME_S = new AbstractStat(ELITISM) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Long s = null;
 
 			// Request the time in nanoseconds.
-			final Long ns = (Long) Stats.get().getStat(ELITE_TIME);
+			final Long ns = (Long) stats.getStat(ELITE_TIME);
 
 			if (ns != null) {
 				// Convert to seconds.
@@ -1585,11 +1585,11 @@ public class StatField {
 	public static final Stat ELITE_TIME_M = new AbstractStat(ELITISM) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Long s = null;
 
 			// Request the time in nanoseconds.
-			final Long ns = (Long) Stats.get().getStat(ELITE_TIME);
+			final Long ns = (Long) stats.getStat(ELITE_TIME);
 
 			if (ns != null) {
 				// Convert to minutes.
@@ -1607,11 +1607,11 @@ public class StatField {
 	public static final Stat ELITE_TIME_H = new AbstractStat(ELITISM) {
 
 		@Override
-		public Object getStatValue() {
+		public Object getStatValue(Stats stats) {
 			Long s = null;
 
 			// Request the time in nanoseconds.
-			final Long ns = (Long) Stats.get().getStat(ELITE_TIME);
+			final Long ns = (Long) stats.getStat(ELITE_TIME);
 
 			if (ns != null) {
 				// Convert to hours.

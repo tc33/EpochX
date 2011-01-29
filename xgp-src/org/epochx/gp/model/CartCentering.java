@@ -23,6 +23,7 @@ package org.epochx.gp.model;
 
 import java.util.*;
 
+import org.epochx.core.Evolver;
 import org.epochx.epox.*;
 import org.epochx.epox.math.*;
 import org.epochx.gp.representation.GPCandidateProgram;
@@ -51,7 +52,9 @@ public class CartCentering extends GPModel {
 	private final double[] testPositions;
 	private final double[] testVelocities;
 
-	public CartCentering() {
+	public CartCentering(Evolver evolver) {
+		super(evolver);
+		
 		a = F / m;
 
 		testPositions = new double[20];

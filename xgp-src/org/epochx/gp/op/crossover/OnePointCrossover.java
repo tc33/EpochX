@@ -23,10 +23,11 @@ package org.epochx.gp.op.crossover;
 
 import java.util.*;
 
+import org.epochx.core.*;
 import org.epochx.epox.Node;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.GPCandidateProgram;
-import org.epochx.op.ConfigOperator;
+import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
 import org.epochx.stats.Stats.ExpiryEvent;
@@ -57,7 +58,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * @see KozaCrossover
  * @see SubtreeCrossover
  */
-public class OnePointCrossover extends ConfigOperator<GPModel> implements GPCrossover {
+public class OnePointCrossover implements GPCrossover, ConfigListener {
 
 	/**
 	 * Requests an <code>Integer</code> which is the point chosen in the first
@@ -83,6 +84,10 @@ public class OnePointCrossover extends ConfigOperator<GPModel> implements GPCros
 	 */
 	public static final Stat XO_SUBTREE2 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
 
+	private Evolver evolver;
+	
+	private Stats stats;
+	
 	// The random number generator for controlling random behaviour.
 	private RandomNumberGenerator rng;
 
@@ -111,7 +116,7 @@ public class OnePointCrossover extends ConfigOperator<GPModel> implements GPCros
 	 *        only must the arity of nodes match, but the node types.
 	 */
 	public OnePointCrossover(final RandomNumberGenerator rng, final boolean strict) {
-		this((GPModel) null, strict);
+		this((Evolver) null, strict);
 
 		this.rng = rng;
 	}
@@ -122,8 +127,8 @@ public class OnePointCrossover extends ConfigOperator<GPModel> implements GPCros
 	 * 
 	 * @param model the current controlling model.
 	 */
-	public OnePointCrossover(final GPModel model) {
-		this(model, false);
+	public OnePointCrossover(final Evolver evolver) {
+		this(evolver, false);
 	}
 
 	/**
@@ -133,9 +138,8 @@ public class OnePointCrossover extends ConfigOperator<GPModel> implements GPCros
 	 * @param strict whether strict one-point crossover should be used where not
 	 *        only must the arity of nodes match, but the node types.
 	 */
-	public OnePointCrossover(final GPModel model, final boolean strict) {
-		super(model);
-
+	public OnePointCrossover(final Evolver evolver, final boolean strict) {
+		this.evolver = evolver;
 		this.strict = strict;
 	}
 
@@ -143,8 +147,11 @@ public class OnePointCrossover extends ConfigOperator<GPModel> implements GPCros
 	 * Configures this operator with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
-		rng = getModel().getRNG();
+	public void configure(Model model) {
+		if (model instanceof GPModel) {
+			stats = evolver.getStats(model);
+			rng = ((GPModel) model).getRNG();
+		}
 	}
 
 	/**
@@ -174,16 +181,16 @@ public class OnePointCrossover extends ConfigOperator<GPModel> implements GPCros
 		final int swapPoint2 = points2.get(randomIndex);
 
 		// Add crossover points to the stats manager.
-		Stats.get().addData(XO_POINT1, swapPoint1);
-		Stats.get().addData(XO_POINT2, swapPoint2);
+		stats.addData(XO_POINT1, swapPoint1);
+		stats.addData(XO_POINT2, swapPoint2);
 
 		// Get copies of subtrees to swap.
 		final Node subtree1 = program1.getNthNode(swapPoint1);// .clone();
 		final Node subtree2 = program2.getNthNode(swapPoint2);// .clone();
 
 		// Add subtrees into the stats manager.
-		Stats.get().addData(XO_SUBTREE1, subtree1);
-		Stats.get().addData(XO_SUBTREE2, subtree2);
+		stats.addData(XO_SUBTREE1, subtree1);
+		stats.addData(XO_SUBTREE2, subtree2);
 
 		// Perform swap.
 		program1.setNthNode(swapPoint1, subtree2);

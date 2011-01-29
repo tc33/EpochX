@@ -23,6 +23,7 @@ package org.epochx.gp.model;
 
 import java.util.*;
 
+import org.epochx.core.Evolver;
 import org.epochx.epox.*;
 import org.epochx.epox.bool.*;
 import org.epochx.epox.lang.IfFunction;
@@ -53,7 +54,9 @@ public class Majority extends GPModel {
 	 * @param noInputBits the number of inputs the majority problem should be
 	 *        for
 	 */
-	public Majority(final int noInputBits) {
+	public Majority(Evolver evolver, final int noInputBits) {
+		super(evolver);
+		
 		// Generate the input sequences.
 		inputValues = BoolUtils.generateBoolSequences(noInputBits);
 

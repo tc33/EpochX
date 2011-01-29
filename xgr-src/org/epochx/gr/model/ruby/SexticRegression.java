@@ -21,6 +21,8 @@
  */
 package org.epochx.gr.model.ruby;
 
+import org.epochx.core.Evolver;
+
 /**
  * XGR model for a sextic symbolic regression problem in the Ruby language.
  * 
@@ -33,15 +35,15 @@ public class SexticRegression extends Regression {
 	 * Constructs an instance of the SexticRegression model with 50 input
 	 * points.
 	 */
-	public SexticRegression() {
-		super();
+	public SexticRegression(Evolver evolver) {
+		this(evolver, 50);
 	}
 
 	/**
 	 * Constructs an instance of the SexticRegression model.
 	 */
-	public SexticRegression(final int noPoints) {
-		super(noPoints);
+	public SexticRegression(Evolver evolver, final int noPoints) {
+		super(evolver, noPoints);
 	}
 
 	/**

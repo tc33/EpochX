@@ -31,5 +31,5 @@ public interface Stat {
 	 * @return an Object value for this stat. The actual type of the value
 	 *         returned will be dependent upon the stat that it represents.
 	 */
-	public Object getStatValue();
+	public Object getStatValue(Stats stats);
 }

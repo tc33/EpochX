@@ -23,9 +23,10 @@ package org.epochx.gr.op.init;
 
 import java.util.*;
 
+import org.epochx.core.*;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
-import org.epochx.op.ConfigOperator;
+import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.*;
 import org.epochx.tools.random.RandomNumberGenerator;
@@ -56,8 +57,12 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * @see FullInitialiser
  * @see RampedHalfAndHalfInitialiser
  */
-public class GrowInitialiser extends ConfigOperator<GRModel> implements GRInitialiser {
+public class GrowInitialiser implements GRInitialiser, ConfigListener {
 
+	private Evolver evolver;
+	
+	private FitnessEvaluator fitnessEvaluator;
+	
 	private RandomNumberGenerator rng;
 
 	// The grammar all new programs must be valid against.
@@ -95,8 +100,8 @@ public class GrowInitialiser extends ConfigOperator<GRModel> implements GRInitia
 	 * @param model the <code>GRModel</code> instance from which the necessary
 	 *        parameters should be loaded.
 	 */
-	public GrowInitialiser(final GRModel model) {
-		this(model, true);
+	public GrowInitialiser(final Evolver evolver) {
+		this(evolver, true);
 	}
 
 	/**
@@ -109,9 +114,8 @@ public class GrowInitialiser extends ConfigOperator<GRModel> implements GRInitia
 	 * @param acceptDuplicates whether duplicates should be allowed in the
 	 *        populations that are generated.
 	 */
-	public GrowInitialiser(final GRModel model, final boolean acceptDuplicates) {
-		super(model);
-
+	public GrowInitialiser(final Evolver evolver, final boolean acceptDuplicates) {
+		this.evolver = evolver;
 		this.acceptDuplicates = acceptDuplicates;
 	}
 
@@ -119,11 +123,14 @@ public class GrowInitialiser extends ConfigOperator<GRModel> implements GRInitia
 	 * Configure component with parameters from the model.
 	 */
 	@Override
-	public void onConfigure() {
-		rng = getModel().getRNG();
-		grammar = getModel().getGrammar();
-		popSize = getModel().getPopulationSize();
-		maxDepth = getModel().getMaxInitialDepth();
+	public void configure(Model model) {
+		if (model instanceof GRModel) {
+			fitnessEvaluator = model.getFitnessEvaluator();
+			rng = model.getRNG();
+			grammar = ((GRModel) model).getGrammar();
+			popSize = model.getPopulationSize();
+			maxDepth = ((GRModel) model).getMaxInitialDepth();
+		}
 	}
 
 	/**
@@ -181,7 +188,7 @@ public class GrowInitialiser extends ConfigOperator<GRModel> implements GRInitia
 			throw new IllegalStateException("No possible programs within given max depth parameter for this grammar.");
 		}
 
-		return new GRCandidateProgram(getGrownParseTree(maxDepth, startRule), getModel());
+		return new GRCandidateProgram(getGrownParseTree(maxDepth, startRule), fitnessEvaluator);
 	}
 
 	/**

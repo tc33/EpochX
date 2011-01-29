@@ -31,7 +31,7 @@ package org.epochx.life;
  * <blockquote>
  * 
  * <pre>
- *     Life.get().addGenerationListener(new GenerationAdapter(){
+ *     evolver.getLife().addGenerationListener(new GenerationAdapter(){
  *     		public void onGenerationStart() {
  *     			... do something ...
  *     		}

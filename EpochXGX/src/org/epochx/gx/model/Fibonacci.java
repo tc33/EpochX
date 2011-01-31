@@ -1,6 +1,8 @@
 package org.epochx.gx.model;
 
-import org.epochx.gx.representation.*;
+import org.epochx.gp.representation.*;
+import org.epochx.gx.node.*;
+import org.epochx.gx.node.Variable;
 import org.epochx.representation.*;
 
 public class Fibonacci extends GXModel {
@@ -9,40 +11,40 @@ public class Fibonacci extends GXModel {
 
 	private int[] sequence;
 	
+	private Variable n0;
+	private Variable n1;
+	private Variable n;
+	
 	public Fibonacci() {
-		setMethodName("getNthFibonacci");
-		setReturnType(DataType.INT);
-		
 		// Construct parameters.
-		Variable n0 = new Variable(DataType.INT, "n0", 1);
-		Variable n1 = new Variable(DataType.INT, "n1", 1);
-		Variable n = new Variable(DataType.INT, "n");
-		
-		getVariableHandler().setParameters(n0, n1, n);
+		n0 = new Variable("n0", 1);
+		n1 = new Variable("n1", 1);
+		n = new Variable("n", Integer.class);
 		
 		// Generate the correct fibonnaci sequence up to the NO_INPUTS.
 		sequence = new int[NO_INPUTS];
 		for (int i=0; i<NO_INPUTS; i++) {
 			sequence[i] = getNthFibonnaci(i);
 		}
+		
+		addParameter(n0);
+		addParameter(n1);
+		addParameter(n);
 	}
 
 	@Override
 	public double getFitness(CandidateProgram p) {
-		final GXCandidateProgram program = (GXCandidateProgram) p;
-		final Method method = program.getMethod();
-		
-		final VariableHandler vars = getVariableHandler();
+		final GPCandidateProgram program = (GPCandidateProgram) p;
+		final Subroutine method = (Subroutine) program.getRootNode();
 		
 		double score = 0;
 		
         for (int i=0; i<NO_INPUTS; i++) {        	
-        	vars.reset();
-        	vars.setParameterValue("n", i);
-        	vars.setParameterValue("n0", 1);
-        	vars.setParameterValue("n1", 1);
+        	n.setValue(i);
+        	n0.setValue(1);
+        	n1.setValue(1);
         	
-        	Integer result = (Integer) method.evaluate(vars);
+        	Integer result = (Integer) method.evaluate();
         	
         	// Sum the errors.
             score += Math.abs(result - sequence[i]);
@@ -60,6 +62,11 @@ public class Fibonacci extends GXModel {
         }
         
         return score;
+	}
+	
+	@Override
+	public Class<?> getReturnType() {
+		return Integer.class;
 	}
 	
 	public static int getNthFibonnaci(int n0, int n1, int n) {

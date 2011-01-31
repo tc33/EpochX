@@ -1,143 +1,139 @@
-/* 
- * Copyright 2007-2010 Tom Castle & Lawrence Beadle
- * Licensed under GNU General Public License
- * 
- * This file is part of EpochX: genetic programming software for research
- * 
- * EpochX is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * EpochX is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with EpochX. If not, see <http://www.gnu.org/licenses/>.
- * 
- * The latest version is available from: http:/www.epochx.org
- */
 package org.epochx.gx.model;
 
-import org.epochx.core.*;
+import java.util.*;
+
+import org.epochx.gp.model.*;
+import org.epochx.gx.node.*;
 import org.epochx.gx.op.init.*;
-import org.epochx.gx.representation.*;
+import org.epochx.gx.op.mutation.*;
 
-/**
- * Model implementation for the experimental nano-java system.
- */
-public abstract class GXModel extends Model {
-	
-	// Control parameters.
-	private int maxNoStatements;
+public abstract class GXModel extends GPModel {
+
 	private int minNoStatements;
+	private int maxNoStatements;
+	private int maxLoopDepth;
+	private int maxExpressionDepth;
 	
-	private VariableHandler variableHandler;
+	private List<Variable> parameters;
+	private Set<Literal> literals;
 	
-	private String methodName;
-	
-	private DataType returnType;
-	
-	/**
-	 * Construct a GXModel with a set of sensible defaults. See the appropriate
-	 * accessor method for information of each default value.
-	 */
 	public GXModel() {
-		// Set default parameter values.
+		maxLoopDepth = 1;
 		maxNoStatements = 10;
-		minNoStatements = 3;
+		minNoStatements = 1;
+		maxExpressionDepth = 5;
 		
-		methodName = "getResult";
+		literals = new HashSet<Literal>();
+		literals.add(new BooleanERC(getRNG()));
+		literals.add(new DoubleERC(getRNG(), 0.0, 1.0, 3));
+		literals.add(new IntegerERC(getRNG(), 0, 10));
 		
-		variableHandler = new VariableHandler(this);
+		setParameters(new ArrayList<Variable>());
 		
-		// Operators.
-		setInitialiser(new ExperimentalInitialiser(this));
+		// Default operators.
+		setInitialiser(new ImperativeInitialiser(this));
 		setCrossover(null);
-		setMutation(null);
+		setMutation(new ImperativeMutation(this, 1.0, 0.0, 0.0, 0.2));
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public void run() {
-		if (getReturnType() == null) {
-			throw new IllegalStateException("no return type set");
+	protected boolean isModelRunnable() {
+		boolean valid = true;
+		
+		if (minNoStatements < 0) {
+			valid = false;
+		} else if (maxNoStatements < minNoStatements) {
+			valid = false;
+		} else if (maxLoopDepth < 0) {
+			valid = false;
+		} else if (maxExpressionDepth < 0) {
+			valid = false;
+		} else if (literals.isEmpty() && parameters.isEmpty()) {
+			// Means there are no terminals available.
+			valid = false;
 		}
 		
-		super.run();
+		return valid;
 	}
 	
-	public VariableHandler getVariableHandler() {
-		return variableHandler;
-	}
-	
-	public void setVariableHandler(VariableHandler variableHandler) {
-		this.variableHandler = variableHandler;
+	/**
+	 * @return the maxExpressionDepth
+	 */
+	public int getMaxExpressionDepth() {
+		return maxExpressionDepth;
 	}
 
 	/**
-	 * 
+	 * @param maxExpressionDepth the maxExpressionDepth to set
 	 */
-	public int getMaxNoStatements() {
-		return maxNoStatements;
+	public void setMaxExpressionDepth(int maxExpressionDepth) {
+		this.maxExpressionDepth = maxExpressionDepth;
 	}
 
 	/**
-	 * 
-	 */
-	public void setMaxNoStatements(final int maxNoStatements) {
-		if (maxNoStatements >= 1 || maxNoStatements == -1) {
-			this.maxNoStatements = maxNoStatements;
-		} else {
-			throw new IllegalArgumentException("maximum number of statements must either be -1 or greater than 0");
-		}
-		
-		assert (this.maxNoStatements >= 1 || this.maxNoStatements == -1);
-	}
-	
-	/**
-	 * 
+	 * @return the minNoStatements
 	 */
 	public int getMinNoStatements() {
 		return minNoStatements;
 	}
-
 	/**
-	 * 
+	 * @param minNoStatements the minNoStatements to set
 	 */
-	public void setMinNoStatements(final int minNoStatements) {
+	public void setMinNoStatements(int minNoStatements) {
 		this.minNoStatements = minNoStatements;
 	}
-
 	/**
-	 * @return the methodName
+	 * @return the maxNoStatements
 	 */
-	public String getMethodName() {
-		return methodName;
+	public int getMaxNoStatements() {
+		return maxNoStatements;
+	}
+	/**
+	 * @param maxNoStatements the maxNoStatements to set
+	 */
+	public void setMaxNoStatements(int maxNoStatements) {
+		this.maxNoStatements = maxNoStatements;
+	}
+	/**
+	 * @param maxLoopDepth the maxLoopDepth to set
+	 */
+	public void setMaxLoopDepth(int maxLoopDepth) {
+		this.maxLoopDepth = maxLoopDepth;
+	}
+	/**
+	 * @return the maxLoopDepth
+	 */
+	public int getMaxLoopDepth() {
+		return maxLoopDepth;
 	}
 
 	/**
-	 * @param methodName the methodName to set
+	 * @param parameters the parameters to set
 	 */
-	public void setMethodName(String methodName) {
-		this.methodName = methodName;
+	public void setParameters(List<Variable> parameters) {
+		this.parameters = parameters;
 	}
 
 	/**
-	 * @return the returnType
+	 * @return the parameters
 	 */
-	public DataType getReturnType() {
-		return returnType;
+	public List<Variable> getParameters() {
+		return parameters;
 	}
-
-	/**
-	 * @param returnType the returnType to set
-	 */
-	public void setReturnType(DataType returnType) {
-		this.returnType = returnType;
+	
+	public void addParameter(Variable parameter) {
+		parameters.add(parameter);
+	}
+	
+	public void removeParameter(Variable parameter) {
+		parameters.remove(parameter);
+	}
+	
+	public Set<Literal> getLiterals() {
+		return literals;
+	}
+	
+	public void setLiterals(Set<Literal> literals) {
+		this.literals = literals;
 	}
 }

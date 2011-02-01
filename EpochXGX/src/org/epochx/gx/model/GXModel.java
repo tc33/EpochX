@@ -2,6 +2,7 @@ package org.epochx.gx.model;
 
 import java.util.*;
 
+import org.epochx.epox.Node;
 import org.epochx.gp.model.*;
 import org.epochx.gx.node.*;
 import org.epochx.gx.op.init.*;
@@ -23,6 +24,8 @@ public abstract class GXModel extends GPModel {
 		minNoStatements = 1;
 		maxExpressionDepth = 5;
 		
+		setSyntax(new ArrayList<Node>());
+		
 		literals = new HashSet<Literal>();
 		literals.add(new BooleanERC(getRNG()));
 		literals.add(new DoubleERC(getRNG(), 0.0, 1.0, 3));
@@ -33,7 +36,7 @@ public abstract class GXModel extends GPModel {
 		// Default operators.
 		setInitialiser(new ImperativeInitialiser(this));
 		setCrossover(null);
-		setMutation(new ImperativeMutation(this, 1.0, 0.0, 0.0, 0.2));
+		setMutation(new ImperativeMutation(this, 0.0, 1.0, 0.0, 0.2));
 	}
 	
 	@Override

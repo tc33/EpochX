@@ -257,24 +257,99 @@ public class ImperativeMutation implements GPMutation {
 		node.setChildren(newChildren);
 	}
 	
+	private void insertChild(ASTNode parent, ASTNode child, int index) {
+		Node[] children = parent.getChildren();
+		int noChildren = children.length+1;
+		
+		Node[] newChildren = new Node[noChildren];
+		
+		// Replace all the old ones.
+		for (int i=0; i<noChildren; i++) {
+			if (i == index) {
+				newChildren[index] = child;
+			} else if (i < index) {
+				newChildren[i] = children[i];
+			} else {
+				newChildren[i] = children[i-1];
+			}
+		}
+		
+		parent.setChildren(newChildren);
+	}
+	
 	private void insertStatement(Subroutine subroutine) {
 		// How many insert points?
-		int noInsertPoints = 0;
+		int noInsertPoints = getNoInsertPoints(subroutine);
 		
 		// Randomly choose an insertion location.
 		int insertPoint = rng.nextInt(noInsertPoints);
 		
 		// Ensure the initialiser has its active variables initialised to that point.
-		init.setActiveVariables(subroutine, insertPoint);
+		//TODO init.setActiveVariables(subroutine, insertPoint);
+		
+		//TODO We really shouldn't be having to do this again, just pass it through.
+		int noStatements = subroutine.getTotalNoStatements();
+		
+		// Determine the number of statements the new statement may contain.
+		int statementSpaces = maxNoStatements-noStatements;
 		
 		// Generate a replacement statement.
-		Statement newStatement = init.getStatement(maxNestedStatements);
+		Statement newStatement = init.getStatement(statementSpaces-1);
 		
 		// Insert the statement at the right location.
-		insertStatement(subroutine, newStatement, insertPoint);
+		insertStatement(subroutine, newStatement, insertPoint, 0);
 	}
 	
-	private void insertStatement(ASTNode program, Statement s, int insertPoint) {
+	/*
+	 * An insert point by definition, is a position between two statements in a
+	 * block, or a position at the beginning or end of a block. This method 
+	 * returns a sum of those positions.
+	 */
+	private int getNoInsertPoints(ASTNode root) {
+		int noInsertPoints = 0;
 		
+		int arity = root.getArity();
+		
+		if (root instanceof Block) {
+			// Add the number of insert points within this block.
+			noInsertPoints += (arity + 1);
+		}
+		
+		// Add the insert points below each of this node's children.
+		for (int i=0; i<arity; i++) {
+			ASTNode child = (ASTNode) root.getChild(i);
+			noInsertPoints += getNoInsertPoints(child);
+		}
+		
+		return noInsertPoints;
+	}
+	
+	private void insertStatement(ASTNode root, Statement s, int insertPoint, int currentPoint) {
+		int arity = root.getArity();
+		
+		// Include the position beyond the arity at end of block.
+		for (int i=0; i<arity+1; i++) {
+			if (root instanceof Block) {
+				if (currentPoint == insertPoint) {
+					// Insert here at ith child.
+					insertChild(root, s, i);
+				}
+				currentPoint++;
+			}
+			
+			// We don't want to include the empty position at the end of the block.
+			if (i < arity) {
+				ASTNode child = (ASTNode) root.getChild(i);
+				int noChildInsertPoints = getNoInsertPoints(child);
+				if (insertPoint < (noChildInsertPoints + currentPoint)) {
+					insertStatement(child, s, insertPoint, currentPoint);
+					
+					// It will have been inserted by here, so lets end.
+					break;
+				} else {
+					currentPoint += noChildInsertPoints;
+				}
+			}
+		}
 	}
 }

@@ -42,7 +42,7 @@ public class ReturnStatement extends Statement {
 
 	@Override
 	public Class<? extends ASTNode>[] getChildTypes() {
-		return (Class<ASTNode>[]) new Class<?>[]{Expression.class};
+		return (Class<ASTNode>[]) new Class<?>[]{Variable.class};
 	}
 	
 	@Override

@@ -5,27 +5,24 @@ public class ForLoop extends Statement {
 
 	private static int maxInterations = 100;
 	
-	private Variable indexVar;
-	
 	public ForLoop() {
-		this(null, null);
+		this(null, null, null);
 	}
 
-	public ForLoop(final Expression child1, final Block child2) {
-		super(child1, child2);
+	public ForLoop(final Variable indexVar, final Expression child1, final Block child2) {
+		super(indexVar, child1, child2);
 		
 		maxInterations = 100;
-		indexVar = new Variable("i", Integer.class);
 	}
 
 	@Override
 	public Void evaluate() {
-		//TODO Needs to add an index variable to list of in-scope variables.
-		int upperBound = (Integer) getChild(0).evaluate();
-		Block block = (Block) getChild(1);
+		Variable indexVar = (Variable) getChild(0);
+		int upperBound = (Integer) getChild(1).evaluate();
+		Block block = (Block) getChild(2);
 
 		for (int i=0; (i<upperBound && i<maxInterations); i++) {
-			//TODO indexVar needs to be made immutable.
+			// indexVar is immutable, but thats to protect from the body.
 			indexVar.setValue(i);
 			
 			// Evaluate the block.
@@ -64,16 +61,18 @@ public class ForLoop extends Statement {
 
 	@Override
 	public Class<? extends ASTNode>[] getChildTypes() {
-		return (Class<ASTNode>[]) new Class<?>[]{Expression.class, Block.class};
+		return (Class<ASTNode>[]) new Class<?>[]{Variable.class, Expression.class, Block.class};
 	}
 	
 	@Override
 	public String toJava() {
 		StringBuilder buffer = new StringBuilder();
-		buffer.append("for (int i=0; i<");
+		buffer.append("for (int ");
 		buffer.append(((ASTNode) getChild(0)).toJava());
-		buffer.append("; i++)");
+		buffer.append("=0; i<");
 		buffer.append(((ASTNode) getChild(1)).toJava());
+		buffer.append("; i++)");
+		buffer.append(((ASTNode) getChild(2)).toJava());
 		
 		return buffer.toString();
 	}

@@ -28,6 +28,8 @@ public class ImperativeInitialiser implements Initialiser {
 	private int maxLoopDepth;
 	private int maxExpressionDepth;
 	
+	private String subroutineName;
+	
 	private int popSize;
 
 	private boolean acceptDuplicates;
@@ -74,12 +76,13 @@ public class ImperativeInitialiser implements Initialiser {
 		maxExpressionDepth = model.getMaxExpressionDepth();
 		returnType = model.getReturnType();
 		parameters = model.getParameters();
-		literals = model.getLiterals();		
+		literals = model.getLiterals();
+		subroutineName = model.getSubroutineName();
 		
 		resetVariables();
 	}
 	
-	private void resetVariables() {
+	public void resetVariables() {
 		allVariables.clear();
 		activeVariables.clear();
 		
@@ -135,17 +138,30 @@ public class ImperativeInitialiser implements Initialiser {
 			throw new IllegalStateException("Maximum number of statements must be at least as great as the minimum number");
 		}
 		
-		return new Subroutine(getBlock(minNoStatements, maxNoStatements), getReturnStatement());
+		Block body = getBlock(minNoStatements, maxNoStatements);
+		
+		Subroutine sub = null;
+		if (returnType == Void.class) {
+			sub = new Subroutine(body);
+		} else {
+			sub = new Subroutine(body, getReturnStatement());
+		}
+		
+		sub.setName(subroutineName);
+		sub.setParameters(parameters);
+		
+		return sub;
 	}
 	
 	public ReturnStatement getReturnStatement() {
-		Expression expr = getExpression(returnType, maxExpressionDepth);
+		//Expression expr = getExpression(returnType, maxExpressionDepth);
+		Variable var = getVariable(returnType);
 		
-		if (expr == null) {
+		if (var == null) {
 			throw new IllegalStateException("Unable to generate program with specified return type");
 		}
 		
-		return new ReturnStatement(expr);
+		return new ReturnStatement(var);
 	}
 
 	public Block getBlock(int minNestedStatements, int maxNestedStatements) {
@@ -220,9 +236,17 @@ public class ImperativeInitialiser implements Initialiser {
 		if (maxNestedStatements > minBlockStatements) {
 			Expression upperBoundExpr = getExpression(Integer.class, maxExpressionDepth);
 		
+			Variable indexVar = new Variable("i", Integer.class);
+			indexVar.setMutable(false);
+			
+			activeVariables.add(indexVar);
+			allVariables.add(indexVar);
+			
 			Block body = getBlock(minBlockStatements, maxNestedStatements);
 			
-			loop = new ForLoop(upperBoundExpr, body);
+			loop = new ForLoop(indexVar, upperBoundExpr, body);
+			
+			activeVariables.remove(indexVar);
 		}
 		
 		return loop;
@@ -246,8 +270,8 @@ public class ImperativeInitialiser implements Initialiser {
 		//TODO If unable to create an expr of same type as var, should try a different var.
 		Assignment assignment = null;
 		
-		// Randomly choose variable from those in scope.
-		Variable var = getVariable(null);
+		// Randomly choose mutable variable from those in scope.
+		Variable var = getVariable(null, true);
 		
 		if (var != null) {
 			// What type does the expression need to be?
@@ -686,7 +710,7 @@ public class ImperativeInitialiser implements Initialiser {
 		datatype = (datatype==null) ? Number.class : datatype;
 		
 		if (TypeUtils.isNumericType(datatype)) {
-			Variable var = getVariable(datatype);
+			Variable var = getVariable(datatype, true);
 			
 			if (var != null) {
 				expr = new PostIncrementExpression(var);
@@ -708,7 +732,7 @@ public class ImperativeInitialiser implements Initialiser {
 		datatype = (datatype==null) ? Number.class : datatype;
 		
 		if (TypeUtils.isNumericType(datatype)) {
-			Variable var = getVariable(datatype);
+			Variable var = getVariable(datatype, true);
 			
 			if (var != null) {
 				expr = new PreIncrementExpression(var);
@@ -730,7 +754,7 @@ public class ImperativeInitialiser implements Initialiser {
 		datatype = (datatype==null) ? Number.class : datatype;
 		
 		if (TypeUtils.isNumericType(datatype)) {
-			Variable var = getVariable(datatype);
+			Variable var = getVariable(datatype, true);
 			
 			if (var != null) {
 				expr = new PostDecrementExpression(var);
@@ -752,7 +776,7 @@ public class ImperativeInitialiser implements Initialiser {
 		datatype = (datatype==null) ? Number.class : datatype;
 		
 		if (TypeUtils.isNumericType(datatype)) {
-			Variable var = getVariable(datatype);
+			Variable var = getVariable(datatype, true);
 			
 			if (var != null) {
 				expr = new PreDecrementExpression(var);
@@ -779,14 +803,26 @@ public class ImperativeInitialiser implements Initialiser {
 		
 		return (Literal) selectedLiteral.newInstance();
 	}
-
+	
 	public Variable getVariable(Class<?> datatype) {
+		return getVariable(datatype, false);
+	}
+
+	/**
+	 * 
+	 * @param datatype
+	 * @param mutableRequired indicates whether the variable must be mutable.
+	 * @return
+	 */
+	public Variable getVariable(Class<?> datatype, boolean mutableRequired) {
 		// Randomly select and return a variable from those in-scope.
 		List<Variable> options = new ArrayList<Variable>();
 		
 		for (Variable var: activeVariables) {
 			if (datatype == null || datatype.isAssignableFrom(var.getReturnType())) {
-				options.add(var);
+				if (var.isMutable() || !mutableRequired) {
+					options.add(var);
+				}
 			}
 		}
 		
@@ -797,5 +833,17 @@ public class ImperativeInitialiser implements Initialiser {
 		}
 		
 		return selectedVar;
+	}
+	
+	public void addActiveVariable(Variable var) {
+		activeVariables.add(var);
+	}
+	
+	public void setActiveVariables(Set<Variable> activeVariables) {
+		this.activeVariables = activeVariables;
+	}
+	
+	public Set<Variable> getActiveVariables() {
+		return activeVariables;
 	}
 }

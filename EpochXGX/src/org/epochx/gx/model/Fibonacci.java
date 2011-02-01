@@ -16,6 +16,8 @@ public class Fibonacci extends GXModel {
 	private Variable n;
 	
 	public Fibonacci() {
+		setSubroutineName("getNthFibonacci");
+		
 		// Construct parameters.
 		n0 = new Variable("n0", 1);
 		n1 = new Variable("n1", 1);

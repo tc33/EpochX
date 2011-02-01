@@ -9,15 +9,23 @@ public class Variable extends Expression {
 
 	private Class<?> datatype;
 	
+	// Flag to indicate whether it is available for modification. The variable 
+	// can still be changed if set false, but shouldn't be in most cases.
+	private boolean mutable;
+	
 	public Variable(final String identifier, Class<?> datatype) {
 		this.identifier = identifier;
 		this.datatype = datatype;
+		
+		mutable = true;
 	}
 
 	public Variable(final String identifier, final Object value) {	
 		this.identifier = identifier;
 		this.value = value;
 		this.datatype = value.getClass();
+		
+		mutable = true;
 	}
 
 	/**
@@ -26,15 +34,23 @@ public class Variable extends Expression {
 	 * @param value
 	 */
 	public void setValue(final Object value) {
-		if (!datatype.isAssignableFrom(value.getClass())) {
+		if (value != null && !datatype.isAssignableFrom(value.getClass())) {
 			throw new IllegalArgumentException("Variables may not change data-type");
-		}		
+		}
 		
 		this.value = value;
 	}
 	
 	public Object getValue() {
 		return value;
+	}
+	
+	public boolean isMutable() {
+		return mutable;
+	}
+	
+	public void setMutable(boolean mutable) {
+		this.mutable = mutable;
 	}
 
 	@Override

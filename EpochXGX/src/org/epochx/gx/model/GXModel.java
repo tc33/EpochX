@@ -18,6 +18,22 @@ public abstract class GXModel extends GPModel {
 	private List<Variable> parameters;
 	private Set<Literal> literals;
 	
+	private String subroutineName;
+	
+	/**
+	 * @return the subroutineName
+	 */
+	public String getSubroutineName() {
+		return subroutineName;
+	}
+
+	/**
+	 * @param subroutineName the subroutineName to set
+	 */
+	public void setSubroutineName(String subroutineName) {
+		this.subroutineName = subroutineName;
+	}
+
 	public GXModel() {
 		maxLoopDepth = 1;
 		maxNoStatements = 10;
@@ -36,7 +52,7 @@ public abstract class GXModel extends GPModel {
 		// Default operators.
 		setInitialiser(new ImperativeInitialiser(this));
 		setCrossover(null);
-		setMutation(new ImperativeMutation(this, 0.0, 1.0, 0.0, 0.2));
+		setMutation(new ImperativeMutation(this, 0.1, 0.1, 0.8, 0.2));
 	}
 	
 	@Override
@@ -53,6 +69,8 @@ public abstract class GXModel extends GPModel {
 			valid = false;
 		} else if (literals.isEmpty() && parameters.isEmpty()) {
 			// Means there are no terminals available.
+			valid = false;
+		} else if (subroutineName == null) {
 			valid = false;
 		}
 		

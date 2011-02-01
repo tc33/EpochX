@@ -9,9 +9,9 @@ import org.epochx.gx.model.*;
 import org.epochx.gx.node.*;
 import org.epochx.gx.node.Variable;
 import org.epochx.gx.op.init.*;
+import org.epochx.gx.util.*;
 import org.epochx.life.*;
 import org.epochx.representation.*;
-import org.epochx.tools.eval.*;
 import org.epochx.tools.random.*;
 
 public class ImperativeMutation implements GPMutation {
@@ -89,23 +89,30 @@ public class ImperativeMutation implements GPMutation {
 			insertProb = 0.0;
 		}
 		
+		// Ensure the initialiser's active variables are reset.
+		init.resetVariables();
+		
 		if (random < probModifyExpression) {
 			// Modify expression.
 			modifyExpressions(subroutine, 0);
 		} else if (random < probModifyExpression+deleteProb) {
 			// Delete statement.
-			deleteStatement(subroutine);
+			deleteStatement(subroutine, noStatements);
 		} else {
 			// Insert statement.
-			insertStatement(subroutine);
+			insertStatement(subroutine, noStatements);
 		}
 		
 		return program;
 	}
 
 	private void modifyExpressions(ASTNode root, int exprDepth) {
-		// We assume that any expression can be changed for any other expression of the same return type.
+		Set<Variable> varsBlockStart = null;
+		if (root instanceof Block) {
+			varsBlockStart = new HashSet<Variable>(init.getActiveVariables());
+		}
 		
+		// We assume that any expression can be changed for any other expression of the same return type.
 		int arity = root.getArity();
 		for (int i=0; i<arity; i++) {
 			Class<? extends ASTNode>[] childTypes = root.getChildTypes();
@@ -137,11 +144,22 @@ public class ImperativeMutation implements GPMutation {
 				// Consider modification of any expressions below non-expression child.
 				modifyExpressions(child, exprDepth);
 			}
+			
+			// If it was a declaration, then add its variable to active.
+			if (child instanceof Declaration) {
+				Declaration decl = (Declaration) child;
+				init.addActiveVariable(decl.getVariable());
+			}
+		}
+		
+		// If this is the end of a block, then remove any new variables.
+		if (root instanceof Block) {
+			init.setActiveVariables(varsBlockStart);
 		}
 	}
 	
-	private void deleteStatement(Subroutine subroutine) {
-		int noStatements = subroutine.getTotalNoStatements();
+	private void deleteStatement(Subroutine subroutine, int noStatements) {
+		//int noStatements = subroutine.getTotalNoStatements();
 		
 		// Create list of possible statement numbers to choose.
 		List<Integer> indexes = new ArrayList<Integer>(noStatements);
@@ -185,7 +203,7 @@ public class ImperativeMutation implements GPMutation {
 				if (statementIndex == current) {
 					// Is the statement valid for deletion?
 					if (isDeletable(block, s)) {
-						removeChild(root, i);
+						Utils.removeChild(root, i);
 						return s;
 					} else {
 						return null;
@@ -240,44 +258,7 @@ public class ImperativeMutation implements GPMutation {
 		return count;
 	}
 	
-	private void removeChild(ASTNode node, int index) {
-		Node[] children = node.getChildren();
-		int noChildren = children.length-1;
-		
-		Node[] newChildren = new Node[noChildren];
-		
-		for (int i=0; i<noChildren; i++) {
-			if (i < index) {
-				newChildren[i] = children[i];
-			} else {
-				newChildren[i] = children[i+1];
-			}
-		}
-		
-		node.setChildren(newChildren);
-	}
-	
-	private void insertChild(ASTNode parent, ASTNode child, int index) {
-		Node[] children = parent.getChildren();
-		int noChildren = children.length+1;
-		
-		Node[] newChildren = new Node[noChildren];
-		
-		// Replace all the old ones.
-		for (int i=0; i<noChildren; i++) {
-			if (i == index) {
-				newChildren[index] = child;
-			} else if (i < index) {
-				newChildren[i] = children[i];
-			} else {
-				newChildren[i] = children[i-1];
-			}
-		}
-		
-		parent.setChildren(newChildren);
-	}
-	
-	private void insertStatement(Subroutine subroutine) {
+	private void insertStatement(Subroutine subroutine, int noStatements) {
 		// How many insert points?
 		int noInsertPoints = getNoInsertPoints(subroutine);
 		
@@ -285,10 +266,10 @@ public class ImperativeMutation implements GPMutation {
 		int insertPoint = rng.nextInt(noInsertPoints);
 		
 		// Ensure the initialiser has its active variables initialised to that point.
-		//TODO init.setActiveVariables(subroutine, insertPoint);
+		setupActiveVariables(subroutine, insertPoint, 0);
 		
 		//TODO We really shouldn't be having to do this again, just pass it through.
-		int noStatements = subroutine.getTotalNoStatements();
+		//int noStatements = subroutine.getTotalNoStatements();
 		
 		// Determine the number of statements the new statement may contain.
 		int statementSpaces = maxNoStatements-noStatements;
@@ -298,6 +279,38 @@ public class ImperativeMutation implements GPMutation {
 		
 		// Insert the statement at the right location.
 		insertStatement(subroutine, newStatement, insertPoint, 0);
+	}
+	
+	private int setupActiveVariables(ASTNode root, int insertPoint, int currentPoint) {
+		Set<Variable> varsBlockStart = null;
+		if (root instanceof Block) {
+			varsBlockStart = new HashSet<Variable>(init.getActiveVariables());
+		} else if (root instanceof Declaration) {
+			init.addActiveVariable(((Declaration) root).getVariable());
+		}
+		
+		int arity = root.getArity();
+		for (int i=0; i<arity+1; i++) {
+			if (root instanceof Block) {
+				if (currentPoint == insertPoint) {
+					// Found the point, terminate.
+					return currentPoint;
+				}
+				currentPoint++;
+			}
+			
+			// All except last insert point, are child indexes.
+			if (i < arity) {
+				ASTNode child = (ASTNode) root.getChild(i);
+				currentPoint = setupActiveVariables(child, insertPoint, currentPoint);
+			}
+		}
+		
+		if (root instanceof Block) {
+			init.setActiveVariables(varsBlockStart);
+		}
+		
+		return currentPoint;
 	}
 	
 	/*
@@ -332,7 +345,7 @@ public class ImperativeMutation implements GPMutation {
 			if (root instanceof Block) {
 				if (currentPoint == insertPoint) {
 					// Insert here at ith child.
-					insertChild(root, s, i);
+					Utils.insertChild(root, s, i);
 				}
 				currentPoint++;
 			}

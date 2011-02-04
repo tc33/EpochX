@@ -9,20 +9,19 @@ import org.epochx.gx.op.init.*;
 import org.epochx.gx.op.mutation.*;
 import org.epochx.gx.stats.*;
 import org.epochx.life.*;
-import org.epochx.representation.*;
 import org.epochx.stats.*;
 
-public class FactorialTest {
+public class OverSelectionProportionTest {
     public static void main(String[] args) {
     	final double crossoverProbability = 0.0;//Double.valueOf(args[0]);
     	final double mutationProbability = 1.0 - crossoverProbability;
     	
     	final String outputPath = (args.length > 1) ? args[1] : "results/";
     	
-		final GXModel model = new Factorial();
+		final GXModel model = new OverSelectionProportion();
 		model.setNoRuns(100);
-		model.setNoGenerations(5000);
-		model.setPopulationSize(10000);
+		model.setNoGenerations(1000);
+		model.setPopulationSize(1000);
 		model.setInitialiser(new ImperativeInitialiser(model));
 		model.setMutation(new ImperativeMutation(model, 0.25, 0.25, 0.5, 0.2));
 		model.setCrossover(null);
@@ -30,10 +29,10 @@ public class FactorialTest {
 		model.setCrossoverProbability(crossoverProbability);
 		model.setMutationProbability(mutationProbability);
 		model.setTerminationFitness(0.0);
-		model.setMaxNoStatements(5);
+		model.setMaxNoStatements(6);
 		model.setMinNoStatements(3);
 		model.setMaxLoopDepth(1);
-		model.setMaxExpressionDepth(2);
+		model.setMaxExpressionDepth(4);
 		
 		Life.get().addGenerationListener(new GenerationAdapter() {
 			@Override
@@ -52,7 +51,7 @@ public class FactorialTest {
 		});
 		
 		try {
-			final FileOutputStream fileout = new FileOutputStream(new File(outputPath+"/factorial-x"+crossoverProbability+".txt"));
+			final FileOutputStream fileout = new FileOutputStream(new File(outputPath+"/varswap-x"+crossoverProbability+".txt"));
 			
 			Life.get().addRunListener(new RunAdapter() {
 				@Override

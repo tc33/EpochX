@@ -25,12 +25,12 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-import org.epochx.core.Evolver;
+import org.epochx.core.*;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
+import org.epochx.interpret.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.ant.*;
-import org.epochx.tools.eval.*;
 import org.epochx.tools.grammar.Grammar;
 
 /**

@@ -24,6 +24,7 @@ package org.epochx.op.selection;
 import java.util.*;
 
 import org.epochx.core.*;
+import org.epochx.fitness.*;
 import org.epochx.life.ConfigListener;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
@@ -63,6 +64,8 @@ public class FitnessProportionateSelector implements ProgramSelector, PoolSelect
 
 	// Whether over-selection should be used or not.
 	private boolean overSelection;
+	
+	private FitnessEvaluator fitnessEvaluator;
 
 	/**
 	 * Constructs an instance of <code>FitnessProportionateSelector</code> with
@@ -128,6 +131,11 @@ public class FitnessProportionateSelector implements ProgramSelector, PoolSelect
 	@Override
 	public void configure(Model model) {
 		rng = model.getRNG();
+		fitnessEvaluator = model.getFitnessEvaluator();
+		
+		if (!(fitnessEvaluator instanceof AdjustedFitnessEvaluator)) {
+			fitnessEvaluator = new AdjustedFitnessEvaluator(fitnessEvaluator);
+		}
 	}
 
 	/**
@@ -288,7 +296,7 @@ public class FitnessProportionateSelector implements ProgramSelector, PoolSelect
 			final double[] adjusted = new double[pool.size()];
 			double adjustedSum = 0.0;
 			for (int i = 0; i < adjusted.length; i++) {
-				final double adjustedFitness = pool.get(i).getAdjustedFitness();
+				final double adjustedFitness = fitnessEvaluator.getFitness(pool.get(i));
 				adjusted[i] = adjustedFitness;
 				adjustedSum += adjustedFitness;
 			}

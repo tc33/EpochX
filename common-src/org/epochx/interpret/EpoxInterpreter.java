@@ -19,9 +19,10 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.tools.eval;
+package org.epochx.interpret;
 
 import org.epochx.epox.*;
+import org.epochx.representation.CandidateProgram;
 
 /**
  * An <code>EpoxInterpreter</code> provides the facility to evaluate individual
@@ -65,38 +66,30 @@ public class EpoxInterpreter implements Interpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object eval(final String source, final String[] argNames, final Object[] argValues)
-			throws MalformedProgramException {
-		if (source == null) {
-			return null;
+	public Object[] eval(CandidateProgram program, Parameters params) throws MalformedProgramException {		
+		int noParamSets = params.getNoParameterSets();
+		int noParams = params.getNoParameters();
+		
+		String expressionStr = program.toString();
+		
+		Object[] results = new Object[noParamSets];
+		for (int i=0; i<noParamSets; i++) {
+			// Remove any of the old variables.
+			parser.undeclareAllVariables();
+			
+			Object[] paramSet = params.getParameterSet(i);
+			
+			// Set the values of this round of variables.
+			for (int j=0; j<noParams; j++) {
+				parser.declareVariable(new Variable(params.getIdentifier(j), paramSet[j]));
+			}
+			
+			final Node programTree = parser.parse(expressionStr);
+			
+			// Evaluate the program tree.
+			results[i] = programTree.evaluate();
 		}
-
-		// Remove any of the old variables.
-		parser.undeclareAllVariables();
-
-		for (int i = 0; i < argNames.length; i++) {
-			parser.declareVariable(new Variable(argNames[i], argValues[i]));
-		}
-
-		final Node programTree = parser.parse(source);
-
-		return programTree.evaluate();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Object[] eval(final String source, final String[] argNames, final Object[][] argValues)
-			throws MalformedProgramException {
-
-		final Object[] results = new Object[argValues.length];
-
-		// Call the other eval method for each set of inputs.
-		for (int i = 0; i < argValues.length; i++) {
-			results[i] = eval(source, argNames, argValues[i]);
-		}
-
+		
 		return results;
 	}
 
@@ -105,16 +98,7 @@ public class EpoxInterpreter implements Interpreter {
 	 * <code>IllegalStateException</code>.
 	 */
 	@Override
-	public void exec(final String program, final String[] argNames, final Object[] argValues) {
-		throw new IllegalStateException("method not supported");
-	}
-
-	/**
-	 * Not supported by <code>EpoxInterpreter</code>. Calling will throw an
-	 * <code>IllegalStateException</code>.
-	 */
-	@Override
-	public void exec(final String program, final String[] argNames, final Object[][] argValues) {
+	public void exec(CandidateProgram program, Parameters params) {
 		throw new IllegalStateException("method not supported");
 	}
 

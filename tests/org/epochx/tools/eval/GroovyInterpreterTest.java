@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.awt.Point;
 
+import org.epochx.interpret.*;
 import org.junit.Test;
 
 public class GroovyInterpreterTest {

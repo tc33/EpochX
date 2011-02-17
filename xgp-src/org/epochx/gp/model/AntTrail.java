@@ -25,11 +25,13 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-import org.epochx.core.Evolver;
+import org.epochx.core.*;
 import org.epochx.epox.*;
 import org.epochx.epox.ant.*;
 import org.epochx.epox.lang.SeqNFunction;
+import org.epochx.fitness.AntEvaluator;
 import org.epochx.gp.representation.GPCandidateProgram;
+import org.epochx.interpret.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.ant.*;
 
@@ -43,7 +45,6 @@ public abstract class AntTrail extends GPModel {
 	// Ant components.
 	private final AntLandscape landscape;
 	private final Ant ant;
-	private final Variable antVariable;
 
 	// Trail settings.
 	private final List<Point> foodLocations;
@@ -70,7 +71,6 @@ public abstract class AntTrail extends GPModel {
 
 		landscape = new AntLandscape(landscapeSize, null);
 		ant = new Ant(allowedTimeSteps, landscape);
-		antVariable = new Variable("ANT", ant);
 
 		// Define functions.
 		final List<Node> syntax = new ArrayList<Node>();
@@ -80,35 +80,14 @@ public abstract class AntTrail extends GPModel {
 		syntax.add(new AntMoveFunction(ant));
 		syntax.add(new AntTurnLeftFunction(ant));
 		syntax.add(new AntTurnRightFunction(ant));
-		// syntax.add(antVariable);
+		syntax.add(new Variable("ANT", ant));
 
 		setSyntax(syntax);
-	}
-
-	/**
-	 * Calculates and returns the fitness of the given program. The fitness of a
-	 * program is calculated as the number of food pieces that the ant did not
-	 * manage to reach. That is, a fitness of 0.0 means the ant found every food
-	 * item.
-	 * 
-	 * @param p {@inheritDoc}
-	 * @return the calculated fitness for the given program.
-	 */
-	@Override
-	public double getFitness(final CandidateProgram p) {
-		final GPCandidateProgram program = (GPCandidateProgram) p;
-
-		landscape.setFoodLocations(new ArrayList<Point>(foodLocations));
-		ant.reset(allowedTimeSteps, landscape);
-
-		// Run the ant.
-		while (ant.getTimesteps() < ant.getMaxMoves()) {
-			// System.out.println(landscape.toString());
-			program.evaluate();
-		}
-
-		// Calculate score.
-		return (foodLocations.size() - ant.getFoodEaten());
+		setReturnType(Void.class);
+		
+		Parameters params = new Parameters(new String[]{"ANT"}, new Object[]{ant});
+		
+		setFitnessEvaluator(new AntEvaluator(new GPInterpreter(evolver), params, landscape, ant, this.foodLocations, allowedTimeSteps));
 	}
 
 	public Ant getAnt() {
@@ -117,10 +96,5 @@ public abstract class AntTrail extends GPModel {
 
 	public AntLandscape getAntLandScape() {
 		return landscape;
-	}
-
-	@Override
-	public Class<?> getReturnType() {
-		return Void.class;
 	}
 }

@@ -19,7 +19,9 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.tools.eval;
+package org.epochx.interpret;
+
+import org.epochx.representation.CandidateProgram;
 
 import bsh.EvalError;
 
@@ -60,82 +62,40 @@ public class JavaInterpreter implements Interpreter {
 	 *         according to the language's syntax rules.
 	 */
 	@Override
-	public Object eval(final String expression, final String[] argNames, final Object[] argValues)
-			throws MalformedProgramException {
-		Object result = null;
+	public Object[] eval(final CandidateProgram expression, Parameters params) throws MalformedProgramException {
+		int noParamSets = params.getNoParameterSets();
+		int noParams = params.getNoParameters();
+		
+		Object result[] = new Object[noParamSets];
 
 		if (expression != null) {
+			String expressionStr = expression.toString();
+			
 			try {
-				// Declare all the variables.
-				for (int i = 0; i < argNames.length; i++) {
-					beanShell.set(argNames[i], argValues[i]);
+				for (int i = 0; i < noParamSets; i++) {
+					Object[] paramSet = params.getParameterSet(i);
+					
+					// Declare all the variables.
+					for (int j = 0; j < noParams; j++) {
+						beanShell.set(params.getIdentifier(j), paramSet[j]);
+					}
+	
+					result[i] = beanShell.eval(expressionStr);
 				}
-
-				result = beanShell.eval(expression);
 			} catch (final EvalError e) {
 				throw new MalformedProgramException();
 			}
 		}
+		
 		return result;
 	}
 
 	/**
-	 * Evaluates any valid Java expression which may optionally contain the use
-	 * of any argument named in the <code>argNames</code> array which will be
-	 * provided with the associated value from the <code>argValues</code> array.
-	 * The result of evaluating the expression will be returned from this
-	 * method. The runtime <code>Object</code> return type will match the type
-	 * returned by the expression.
-	 * 
-	 * <p>
-	 * This version of the eval method executes the expression multiple times.
-	 * The variable names remain the same for each evaluation but for each
-	 * evaluation the variable values will come from the next array in the
-	 * argValues argument. Java variables with the specified names and values
-	 * are automatically declared and initialised before the generated code is
-	 * run. The argument names link up with the argument value in the same array
-	 * index, so both arguments must have the same length.
-	 * 
-	 * @param expression a valid Java expression that is to be evaluated.
-	 * @param argNames {@inheritDoc}
-	 * @param argValues {@inheritDoc}
-	 * @return the return values from evaluating the expression. The runtime
-	 *         type of the returned Objects may vary from program to program. If
-	 *         the
-	 *         program does not return a value then this method will return an
-	 *         array of
-	 *         nulls.
-	 * @throws MalformedProgramException if the given expression is not valid
-	 *         according to the language's syntax rules.
-	 */
-	@Override
-	public Object[] eval(final String expression, final String[] argNames, final Object[][] argValues)
-			throws MalformedProgramException {
-		final Object[] results = new Object[argValues.length];
-
-		for (int i = 0; i < argValues.length; i++) {
-			results[i] = eval(expression, argNames, argValues[i]);
-		}
-
-		return results;
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void exec(final String program, final String[] argNames, final Object[] argValues)
+	public void exec(final CandidateProgram program, Parameters params)
 			throws MalformedProgramException {
-		eval(program, argNames, argValues);
+		eval(program, params);
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void exec(final String program, final String[] argNames, final Object[][] argValues)
-			throws MalformedProgramException {
-		eval(program, argNames, argValues);
-	}
-
 }

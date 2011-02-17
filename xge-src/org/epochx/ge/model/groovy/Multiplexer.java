@@ -22,11 +22,11 @@
 package org.epochx.ge.model.groovy;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.epochx.core.Evolver;
+import org.epochx.core.*;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
+import org.epochx.interpret.*;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.eval.*;
 import org.epochx.tools.grammar.Grammar;
 import org.epochx.tools.util.BoolUtils;
 

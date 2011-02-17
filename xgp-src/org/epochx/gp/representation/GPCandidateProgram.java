@@ -24,10 +24,8 @@ package org.epochx.gp.representation;
 import java.util.List;
 
 import org.apache.commons.lang.ObjectUtils;
-import org.epochx.epox.Node;
-import org.epochx.gp.model.GPModel;
-import org.epochx.gr.op.init.FitnessEvaluator;
-import org.epochx.representation.CandidateProgram;
+import org.epochx.epox.*;
+import org.epochx.representation.*;
 
 /**
  * A <code>GPCandidateProgram</code> encapsulates an individual program within a
@@ -47,8 +45,8 @@ public class GPCandidateProgram extends CandidateProgram {
 	// The root node of the program tree.
 	private Node rootNode;
 
-	public GPCandidateProgram(final FitnessEvaluator fitnessEvaluator) {
-		this(null, fitnessEvaluator);
+	public GPCandidateProgram() {
+		this(null);
 	}
 
 	/**
@@ -61,9 +59,7 @@ public class GPCandidateProgram extends CandidateProgram {
 	 * @param model the controlling model which provides the configuration
 	 *        parameters for the run.
 	 */
-	public GPCandidateProgram(final Node rootNode, final FitnessEvaluator fitnessEvaluator) {
-		super(fitnessEvaluator);
-		
+	public GPCandidateProgram(final Node rootNode) {
 		this.rootNode = rootNode;
 	}
 
@@ -188,39 +184,7 @@ public class GPCandidateProgram extends CandidateProgram {
 	public int getProgramDepth() {
 		return getRootNode().getDepth();
 	}
-
-	/*
-	 * ALTERNATIVE IMPLEMENTATION
-	 * Determines the maximum depth of a program.
-	 * 
-	 * @param program
-	 * 
-	 * @return
-	 */
-	/*
-	 * public static int getProgramDepth(GPCandidateProgram program) {
-	 * // Flatten the tree.
-	 * String flatProg = program.toString();
-	 * 
-	 * int count = 0;
-	 * int maxDepth = 0;
-	 * // count by brackets
-	 * for(int i=0; i<flatProg.length(); i++) {
-	 * char c = flatProg.charAt(i);
-	 * if(c == '(') {
-	 * count++;
-	 * if(count>maxDepth) {
-	 * maxDepth = count;
-	 * }
-	 * }
-	 * if(c == ')') {
-	 * count--;
-	 * }
-	 * }
-	 * return maxDepth;
-	 * }
-	 */
-
+	
 	/**
 	 * Returns the number of nodes in the program tree.
 	 * 
@@ -229,24 +193,6 @@ public class GPCandidateProgram extends CandidateProgram {
 	public int getProgramLength() {
 		return getRootNode().getLength();
 	}
-
-	/*
-	 * ALTERNATIVE IMPLEMENTATION
-	 * Calculates the length - that is the number of nodes - of the program.
-	 * 
-	 * @param prog The program to be measured
-	 * 
-	 * @return The length of the program
-	 */
-	/*
-	 * public static int getProgramLength(Node rootNode) {
-	 * // Flatten tree and split at spaces or brackets.
-	 * String[] flatTree = rootNode.toString().split("(\\s|\\(|\\))+");
-	 * 
-	 * // Count how many tokens there are.
-	 * return flatTree.length;
-	 * }
-	 */
 
 	/**
 	 * Returns the type of output this program will produce.

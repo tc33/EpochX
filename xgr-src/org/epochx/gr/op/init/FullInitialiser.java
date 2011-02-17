@@ -24,6 +24,7 @@ package org.epochx.gr.op.init;
 import java.util.*;
 
 import org.epochx.core.*;
+import org.epochx.fitness.FitnessEvaluator;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.life.ConfigListener;
@@ -200,7 +201,7 @@ public class FullInitialiser implements GRInitialiser, ConfigListener {
 		buildDerivationTree(parseTree, startRule, 0, depth);
 
 		// Construct and return the program.
-		return new GRCandidateProgram(parseTree, fitnessEvaluator);
+		return new GRCandidateProgram(parseTree);
 	}
 
 	/*

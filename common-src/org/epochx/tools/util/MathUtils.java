@@ -196,4 +196,20 @@ public final class MathUtils {
 	public static double coth(double x) {
 		return 1.0/Math.tanh(x);
 	}
+	
+	public static double max(double ... inputs) {
+		double max = Double.NEGATIVE_INFINITY;
+		for (double in: inputs) {
+			max = Math.max(in, max);
+		}
+		return max;
+	}
+	
+	public static double max(int ... inputs) {
+		int max = Integer.MIN_VALUE;
+		for (int in: inputs) {
+			max = Math.max(in, max);
+		}
+		return max;
+	}
 }

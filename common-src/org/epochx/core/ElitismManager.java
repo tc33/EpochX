@@ -25,6 +25,7 @@ import static org.epochx.stats.StatField.*;
 
 import java.util.*;
 
+import org.epochx.fitness.FitnessComparator;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.Stats;
@@ -75,6 +76,8 @@ public class ElitismManager implements ConfigListener {
 
 	// The number of elites to be used.
 	private int noElites;
+	
+	private Comparator<CandidateProgram> fitnessComparator;
 
 	/**
 	 * Constructs an instance of <code>Elitism</code> which will perform the
@@ -96,6 +99,8 @@ public class ElitismManager implements ConfigListener {
 	@Override
 	public void configure(Model model) {
 		stats = evolver.getStats(model);
+		
+		fitnessComparator = new FitnessComparator(model.getFitnessEvaluator());
 		
 		// Discover how many elites we need.
 		noElites = model.getNoElites();
@@ -145,7 +150,7 @@ public class ElitismManager implements ConfigListener {
 
 		if (noElites > 0) {
 			// Sort the population and scoop off the best noElites.
-			Collections.sort(pop);
+			Collections.sort(pop, fitnessComparator);
 			elites = new ArrayList<CandidateProgram>(pop.subList(pop.size() - noElites, pop.size()));
 		} else {
 			elites = new ArrayList<CandidateProgram>();

@@ -22,6 +22,8 @@
 package org.epochx.gp.model;
 
 import org.epochx.core.Evolver;
+import org.epochx.fitness.HitsCountEvaluator;
+import org.epochx.interpret.*;
 
 /**
  * GP model for a quartic symbolic regression problem.

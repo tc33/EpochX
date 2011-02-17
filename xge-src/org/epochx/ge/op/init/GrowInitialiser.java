@@ -24,10 +24,10 @@ package org.epochx.ge.op.init;
 import java.util.*;
 
 import org.epochx.core.*;
+import org.epochx.fitness.FitnessEvaluator;
 import org.epochx.ge.codon.CodonGenerator;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.*;
-import org.epochx.gr.op.init.FitnessEvaluator;
 import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.*;
@@ -218,7 +218,7 @@ public class GrowInitialiser implements GEInitialiser, ConfigListener {
 		
 		Chromosome chromosome = new Chromosome(codonGenerator, codons);
 
-		return new GECandidateProgram(chromosome, fitnessEvaluator);
+		return new GECandidateProgram(chromosome);
 	}
 
 	/*

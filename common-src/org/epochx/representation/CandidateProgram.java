@@ -21,57 +21,13 @@
  */
 package org.epochx.representation;
 
-import org.epochx.gr.op.init.FitnessEvaluator;
-
 /**
  * An instance of <code>CandidateProgram</code> represents an individual
  * candidate solution to a problem. Specific subclasses represent the programs
  * in different ways.
  */
-public abstract class CandidateProgram implements Cloneable, Comparable<CandidateProgram> {
-
-	private FitnessEvaluator fitnessEvaluator;
+public abstract class CandidateProgram implements Cloneable {
 	
-	public CandidateProgram(FitnessEvaluator fitnessEvaluator) {
-		this.fitnessEvaluator = fitnessEvaluator;
-	}
-	
-	/**
-	 * Calculates a quality score for this program. The exact calculation
-	 * implementation varies by subclass. Fitnesses are standardised
-	 * so implementations should return lower values for better programs. There
-	 * is however no obligation for fitness values to be positive.
-	 * 
-	 * @return a standardised fitness score indicating the quality of this
-	 *         candidate program.
-	 */
-	public double getFitness() {
-		return fitnessEvaluator.getFitness(this);
-	}
-
-	/**
-	 * Calculates and returns the adjusted fitness of this program. A program's
-	 * adjusted fitness lies between 0 and 1, with a larger value for better
-	 * individuals. The fitness value returned from the <code>getFitness</code>
-	 * method is used as the standardised fitness in the calculation, so it is
-	 * assumed that the lowest possible value returned from that method is 0.0.
-	 * 
-	 * <p>
-	 * The adjusted fitness is calculated using the formula:
-	 * 
-	 * <code><blockquote>
-	 * adjusted-fitness = 1 / (1 + standardised-fitness)
-	 * </blockquote></code>
-	 * 
-	 * @return
-	 */
-	public double getAdjustedFitness() {
-		final double standardised = getFitness();
-		final double adjusted = 1.0 / (1.0 + standardised);
-
-		return adjusted;
-	}
-
 	/**
 	 * Creates a copy of this candidate program. Subclass implementations should
 	 * override this method to copy their internal program structure. It should
@@ -91,34 +47,5 @@ public abstract class CandidateProgram implements Cloneable, Comparable<Candidat
 		}
 
 		return clone;
-	}
-
-	/**
-	 * Compares this program to another based upon fitness. Returns a negative
-	 * integer if this program has a worse (larger) fitness value, zero if they
-	 * have equal fitnesses and a positive integer if this program has a
-	 * better (smaller) fitness value.
-	 * 
-	 * @param o the <code>CandidateProgram</code> instance to compare against.
-	 * @return a negative integer, zero, or a positive integer if this program
-	 *         has a worse, equal or better fitness than <code>o</code>
-	 *         respectively.
-	 */
-	@Override
-	public int compareTo(final CandidateProgram o) {
-		if (o == null) {
-			throw new NullPointerException("cannot compare to null");
-		}
-
-		final double thisFitness = getFitness();
-		final double objFitness = o.getFitness();
-
-		if (thisFitness > objFitness) {
-			return -1;
-		} else if (thisFitness == objFitness) {
-			return 0;
-		} else {
-			return 1;
-		}
 	}
 }

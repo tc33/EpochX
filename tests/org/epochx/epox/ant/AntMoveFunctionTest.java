@@ -24,8 +24,8 @@ package org.epochx.epox.ant;
 import static org.junit.Assert.*;
 
 import org.epochx.epox.*;
+import org.epochx.interpret.MalformedProgramException;
 import org.epochx.tools.ant.*;
-import org.epochx.tools.eval.MalformedProgramException;
 import org.junit.*;
 
 

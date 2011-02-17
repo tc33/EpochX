@@ -23,6 +23,7 @@ package org.epochx.tools.eval;
 
 import static org.junit.Assert.assertEquals;
 
+import org.epochx.interpret.*;
 import org.junit.Test;
 
 /**

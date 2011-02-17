@@ -23,12 +23,12 @@ package org.epochx.gp.model;
 
 import java.util.*;
 
-import org.epochx.core.Evolver;
+import org.epochx.core.*;
 import org.epochx.epox.*;
 import org.epochx.epox.bool.*;
 import org.epochx.epox.lang.IfFunction;
-import org.epochx.gp.representation.GPCandidateProgram;
-import org.epochx.representation.CandidateProgram;
+import org.epochx.fitness.HitsCountEvaluator;
+import org.epochx.interpret.*;
 import org.epochx.tools.util.BoolUtils;
 
 /**
@@ -42,11 +42,9 @@ import org.epochx.tools.util.BoolUtils;
  */
 public class Multiplexer extends GPModel {
 
-	// The names of the inputValues used in the grammar.
-	private final Variable[] variables;
-
 	// The boolean input sequences.
-	private final boolean[][] inputValues;
+	private final Boolean[][] inputValues;
+	private Boolean[] expectedResults;
 
 	// No input bits.
 	private int noAddressBits;
@@ -63,7 +61,8 @@ public class Multiplexer extends GPModel {
 		
 		// Generate the input sequences.
 		inputValues = BoolUtils.generateBoolSequences(noInputBits);
-
+		expectedResults = new Boolean[inputValues.length];
+		
 		// Calculate number of address/data bits.
 		setBitSizes(noInputBits);
 
@@ -75,54 +74,21 @@ public class Multiplexer extends GPModel {
 		syntax.add(new NotFunction());
 
 		// Define terminal variables.
-		variables = new Variable[noInputBits];
-		// Add address inputs.
-		for (int i = 0; i < noAddressBits; i++) {
-			variables[i] = new Variable("a" + i, Boolean.class);
-			syntax.add(variables[i]);
+		String[] varNames = getArgNames(noInputBits);
+		
+		Parameters params = new Parameters(varNames);
+		
+		for (int i=0; i<noInputBits; i++) {
+			syntax.add(new Variable(varNames[i], Boolean.class));
+			params.addParameterSet(inputValues[i]);
+			
+			expectedResults[i] = multiplex(inputValues[i]);
 		}
-		// Add data inputs.
-		for (int i = noAddressBits; i < noInputBits; i++) {
-			variables[i] = new Variable("d" + i, Boolean.class);
-			syntax.add(variables[i]);
-		}
-
+		
 		setSyntax(syntax);
-	}
+		setReturnType(Boolean.class);
 
-	/**
-	 * Calculates the fitness score for the given program. The fitness of a
-	 * program for the majority problem is calculated by evaluating it
-	 * using each of the possible sets of input values. There are
-	 * <code>2^noInputBits</code> possible sets of inputs. The fitness of the
-	 * program is the quantity of those input sequences that the program
-	 * returned an incorrect response for. That is, a fitness value of
-	 * <code>0.0</code> indicates the program responded correctly for every
-	 * possible set of input values.
-	 * 
-	 * @param p {@inheritDoc}
-	 * @return the calculated fitness for the given program.
-	 */
-	@Override
-	public double getFitness(final CandidateProgram p) {
-		final GPCandidateProgram program = (GPCandidateProgram) p;
-
-		double score = 0;
-
-		// Execute on all possible inputs.
-		for (final boolean[] in: inputValues) {
-
-			// Set the variables.
-			for (int i = 0; i < in.length; i++) {
-				variables[i].setValue(in[i]);
-			}
-
-			if ((Boolean) program.evaluate() == multiplex(in)) {
-				score++;
-			}
-		}
-
-		return inputValues.length - score;
+		setFitnessEvaluator(new HitsCountEvaluator(new GPInterpreter(evolver), params, expectedResults));
 	}
 
 	/*
@@ -140,11 +106,28 @@ public class Multiplexer extends GPModel {
 			noAddressBits++;
 		}
 	}
+	
+	/*
+	 * Set the argument names for the inputs.
+	 */
+	private String[] getArgNames(final int noInputBits) {
+		String[] argNames = new String[noInputBits];
+		// Add address inputs.
+		for (int i = 0; i < noAddressBits; i++) {
+			argNames[i] = "a" + i;
+		}
+		// Add data inputs.
+		for (int i = noAddressBits; i < noInputBits; i++) {
+			argNames[i] = "d" + i;
+		}
+		
+		return argNames;
+	}
 
 	/*
 	 * Calculate what the correct response should be for the given inputs.
 	 */
-	private Boolean multiplex(final boolean[] vars) {
+	private Boolean multiplex(final Boolean[] vars) {
 		// Calculate which data position to use.
 		int dataPosition = 0;
 		for (int i = 0; i < noAddressBits; i++) {
@@ -154,10 +137,5 @@ public class Multiplexer extends GPModel {
 		}
 
 		return vars[noAddressBits + dataPosition];
-	}
-
-	@Override
-	public Class<?> getReturnType() {
-		return Boolean.class;
 	}
 }

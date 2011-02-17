@@ -22,11 +22,13 @@
 package org.epochx.gr.model.epox;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.epochx.core.Evolver;
+import org.epochx.core.*;
+import org.epochx.epox.Variable;
+import org.epochx.fitness.HitsCountEvaluator;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
+import org.epochx.interpret.*;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.eval.*;
 import org.epochx.tools.grammar.Grammar;
 import org.epochx.tools.util.BoolUtils;
 
@@ -50,18 +52,15 @@ public class Multiplexer extends GRModel {
 			+ "| IF( <node> , <node> , <node> )\n"
 			+ "<terminal> ::= ";
 
-	// Epox interpreter for performing evaluation.
-	private final EpoxInterpreter interpreter;
-
 	// The boolean input sequences.
-	private final boolean[][] inputValues;
-
-	// The names of the inputValues used in the grammar.
-	private String[] argNames;
+	private final Boolean[][] inputValues;
+	private Boolean[] expectedResults;
 
 	// No input bits.
 	private int noAddressBits;
 	private int noDataBits;
+	
+	private String[] argNames;
 
 	/**
 	 * Constructs a Multiplexer model for the given number of inputs.
@@ -72,8 +71,6 @@ public class Multiplexer extends GRModel {
 	public Multiplexer(Evolver evolver, final int noInputBits) {
 		super(evolver);
 		
-		interpreter = new EpoxInterpreter();
-
 		// Generate the input sequences.
 		inputValues = BoolUtils.generateBoolSequences(noInputBits);
 
@@ -81,51 +78,20 @@ public class Multiplexer extends GRModel {
 		setBitSizes(noInputBits);
 
 		// Determine the input argument names.
-		setArgNames(noInputBits);
+		argNames = getArgNames(noInputBits);
 
 		// Complete the grammar string and construct grammar instance.
 		setGrammar(new Grammar(getGrammarString()));
-	}
-
-	/**
-	 * Calculates the fitness score for the given program. The fitness of a
-	 * program for the majority problem is calculated by evaluating it
-	 * using each of the possible sets of input values. There are
-	 * <code>2^noInputBits</code> possible sets of inputs. The fitness of the
-	 * program is the quantity of those input sequences that the program
-	 * returned an incorrect response for. That is, a fitness value of
-	 * <code>0.0</code> indicates the program responded correctly for every
-	 * possible set of input values.
-	 * 
-	 * @param p {@inheritDoc}
-	 * @return the calculated fitness for the given program.
-	 */
-	@Override
-	public double getFitness(final CandidateProgram p) {
-		final GRCandidateProgram program = (GRCandidateProgram) p;
-
-		double score = 0;
-
-		// Evaluate all possible inputValues.
-		for (final boolean[] vars: inputValues) {
-			// Convert to object array.
-			final Boolean[] objVars = ArrayUtils.toObject(vars);
-
-			Boolean result = null;
-			try {
-				result = (Boolean) interpreter.eval(program.getSourceCode(), argNames, objVars);
-			} catch (final MalformedProgramException e) {
-				// Assign worst possible fitness and stop evaluating.
-				score = 0;
-				break;
-			}
-
-			if ((result != null) && (result == multiplex(vars))) {
-				score++;
-			}
+		
+		Parameters params = new Parameters(argNames);
+		
+		for (int i=0; i<noInputBits; i++) {
+			params.addParameterSet(inputValues[i]);
+			
+			expectedResults[i] = multiplex(inputValues[i]);
 		}
-
-		return inputValues.length - score;
+		
+		setFitnessEvaluator(new HitsCountEvaluator(new EpoxInterpreter(), params, expectedResults));
 	}
 
 	/**
@@ -167,8 +133,8 @@ public class Multiplexer extends GRModel {
 	/*
 	 * Set the argument names for the inputs.
 	 */
-	private void setArgNames(final int noInputBits) {
-		argNames = new String[noInputBits];
+	private String[] getArgNames(final int noInputBits) {
+		String[] argNames = new String[noInputBits];
 		// Add address inputs.
 		for (int i = 0; i < noAddressBits; i++) {
 			argNames[i] = "a" + i;
@@ -177,12 +143,14 @@ public class Multiplexer extends GRModel {
 		for (int i = noAddressBits; i < noInputBits; i++) {
 			argNames[i] = "d" + i;
 		}
+		
+		return argNames;
 	}
 
 	/*
 	 * Calculate what the correct response should be for the given inputs.
 	 */
-	private Boolean multiplex(final boolean[] vars) {
+	private Boolean multiplex(final Boolean[] vars) {
 		// Calculate which data position to use.
 		int dataPosition = 0;
 		for (int i = 0; i < noAddressBits; i++) {

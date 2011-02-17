@@ -19,9 +19,11 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.tools.eval;
+package org.epochx.interpret;
 
 import javax.script.*;
+
+import org.epochx.representation.CandidateProgram;
 
 /**
  * The ScriptingInterpreter provides a generic interpreter for any language
@@ -84,58 +86,39 @@ public class ScriptingInterpreter implements Interpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object eval(final String expression, final String[] argNames, final Object[] argValues)
-			throws MalformedProgramException {
-		Object result = null;
+	public Object[] eval(final CandidateProgram expression, Parameters params) throws MalformedProgramException {
+		int noParamSets = params.getNoParameterSets();
+		int noParams = params.getNoParameters();
+		
+		final Object[] results = new Object[noParamSets];
 
-		// Evaluate.
-		try {
-			for (int i = 0; i < argNames.length; i++) {
-				engine.put(argNames[i], argValues[i]);
-			}
-			result = engine.eval(expression);
-		} catch (final ScriptException e) {
-			throw new MalformedProgramException();
-		}
-
-		return result;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Object[] eval(final String expression, final String[] argNames, final Object[][] argValues)
-			throws MalformedProgramException {
-		final Object[] results = new Object[argValues.length];
-
+		String expressionStr = expression.toString();
+		
 		// Evaluate each argument set.
-		for (int i = 0; i < results.length; i++) {
-			results[i] = eval(expression, argNames, argValues[i]);
+		for (int i = 0; i < noParamSets; i++) {
+			
+			Object[] paramSet = params.getParameterSet(i);
+			
+			try {
+				for (int j = 0; j < noParams; i++) {
+					engine.put(params.getIdentifier(j), paramSet[j]);
+				}
+				results[i] = engine.eval(expressionStr);
+			} catch (final ScriptException e) {
+				throw new MalformedProgramException();
+			}
 		}
 
 		return results;
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void exec(final String program, final String[] argNames, final Object[] argValues)
+	public void exec(final CandidateProgram program, Parameters params)
 			throws MalformedProgramException {
-		eval(program, argNames, argValues);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void exec(final String program, final String[] argNames, final Object[][] argValues)
-			throws MalformedProgramException {
-		// Execute each argument set.
-		for (int i = 0; i < argValues.length; i++) {
-			exec(program, argNames, argValues[i]);
-		}
+		eval(program, params);
 	}
 
 	/**

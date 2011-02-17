@@ -1,5 +1,6 @@
 package org.epochx.representation;
 
+
 public class DummyCandidateProgram extends CandidateProgram {
 
 	private double fitness;

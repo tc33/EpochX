@@ -19,7 +19,9 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.tools.eval;
+package org.epochx.interpret;
+
+import org.epochx.representation.CandidateProgram;
 
 /**
  * Interpreters provide a mechanism for executing program source code that is
@@ -43,29 +45,6 @@ package org.epochx.tools.eval;
  * these methods so the programs are expected to have other side effects.
  */
 public interface Interpreter {
-
-	/**
-	 * Evaluates an expression which may contain the use of any argument named
-	 * in the <code>argNames</code> array which will be provided with the
-	 * associated value from the <code>argValues</code> array. The result of
-	 * evaluating the expression will be returned from this method. The
-	 * <code>Object</code> type of the returned value will be dependent upon
-	 * the implementation.
-	 * 
-	 * @param expression the expression string that is to be evaluated.
-	 * @param argNames an array of arguments that the argValues should be
-	 *        assigned to. The array should have equal length to the
-	 *        argValues array.
-	 * @param argValues an array of argument values to be assigned to the
-	 *        specified argument names. The array should have equal
-	 *        length to the argNames array.
-	 * @return the return value from evaluating the expression. The runtime type
-	 *         of the returned Object will be depend upon the specific
-	 *         implementation.
-	 * @throws MalformedProgramException if the given expression is not valid
-	 *         according to the language's syntax rules.
-	 */
-	public Object eval(String expression, String[] argNames, Object[] argValues) throws MalformedProgramException;
 
 	/**
 	 * Evaluates an expression multiple times with each set of argument values
@@ -101,26 +80,7 @@ public interface Interpreter {
 	 * @throws MalformedProgramException if the given expression is not valid
 	 *         according to the language's syntax rules.
 	 */
-	public Object[] eval(String expression, String[] argNames, Object[][] argValues) throws MalformedProgramException;
-
-	/**
-	 * Executes a program which may consist of multiple program statements. The
-	 * program may contain the use of any argument named in the <code>argNames
-	 * </code> array which will be provided with the associated value from the
-	 * <code>argValues</code> array. The program is expected to have
-	 * side-effects and no value will be returned.
-	 * 
-	 * @param program the program source code that is to be executed.
-	 * @param argNames an array of arguments that the argValues should be
-	 *        assigned to. The array should have equal length to the
-	 *        argValues array.
-	 * @param argValues an array of argument values to be assigned to the
-	 *        specified argument names. The array should have equal
-	 *        length to the argNames array.
-	 * @throws MalformedProgramException if the given program is not valid
-	 *         according to the language's syntax rules.
-	 */
-	public void exec(String program, String[] argNames, Object[] argValues) throws MalformedProgramException;
+	public Object[] eval(CandidateProgram expression, Parameters params) throws MalformedProgramException;
 
 	/**
 	 * Executes a program which may consist of multiple program statements,
@@ -148,5 +108,5 @@ public interface Interpreter {
 	 * @throws MalformedProgramException if the given program is not valid
 	 *         according to the language's syntax rules.
 	 */
-	public void exec(String program, String[] argNames, Object[][] argValues) throws MalformedProgramException;
+	public void exec(CandidateProgram program, Parameters params) throws MalformedProgramException;
 }

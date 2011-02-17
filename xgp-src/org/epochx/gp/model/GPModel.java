@@ -30,20 +30,28 @@ import org.epochx.gp.op.crossover.SubtreeCrossover;
 import org.epochx.gp.op.init.FullInitialiser;
 import org.epochx.gp.op.mutation.SubtreeMutation;
 import org.epochx.gp.representation.GPCandidateProgram;
+import org.epochx.interpret.GPInterpreter;
 import org.epochx.representation.CandidateProgram;
 
 /**
  * Model implementation for performing tree-based genetic programming
  * evolutionary runs.
  */
-public abstract class GPModel extends Model {
+public class GPModel extends Model {
 
 	// Control parameters.
 	private List<Node> syntax;
 
 	private int maxInitialDepth;
 	private int maxProgramDepth;
+	
+	private Class<?> returnType;
 
+	// Experimental.
+	public GPModel() {
+		super(null);
+	}
+	
 	/**
 	 * Constructs a <code>GPModel</code> with a set of sensible defaults. See
 	 * the appropriate accessor method for information of each default value.
@@ -169,6 +177,12 @@ public abstract class GPModel extends Model {
 
 		assert (this.syntax != null);
 	}
+	
+	public void setReturnType(Class<?> returnType) {
+		this.returnType = returnType;
+	}
 
-	public abstract Class<?> getReturnType();
+	public Class<?> getReturnType() {
+		return returnType;
+	}
 }

@@ -19,9 +19,11 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.tools.eval;
+package org.epochx.interpret;
 
 import javax.script.*;
+
+import org.epochx.representation.CandidateProgram;
 
 /**
  * A GroovyInterpreter provides the facility to evaluate individual Groovy
@@ -71,18 +73,19 @@ public class GroovyInterpreter extends ScriptingInterpreter {
 	 *         nulls.
 	 */
 	@Override
-	public Object[] eval(final String expression, final String[] argNames, final Object[][] argValues) {
-		final Object[] results = new Object[argValues.length];
-
-		final String code = getEvalCode(expression, argNames);
+	public Object[] eval(final CandidateProgram expression, Parameters params) {
+		int noParamSets = params.getNoParameterSets();
+		
+		final Object[] results = new Object[noParamSets];
+		final String code = getEvalCode(expression.toString(), params);
 
 		final Invocable invocableEngine = (Invocable) getEngine();
 		try {
 			getEngine().eval(code);
 
 			// Evaluate each argument set.
-			for (int i = 0; i < results.length; i++) {
-				results[i] = invocableEngine.invokeFunction("expr", argValues[i]);
+			for (int i = 0; i < noParamSets; i++) {
+				results[i] = invocableEngine.invokeFunction("expr", params.getParameterSet(i));
 			}
 		} catch (final ScriptException ex) {
 			ex.printStackTrace();
@@ -97,16 +100,17 @@ public class GroovyInterpreter extends ScriptingInterpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void exec(final String program, final String[] argNames, final Object[][] argValues) {
-		final String code = getExecCode(program, argNames);
+	public void exec(final CandidateProgram program, Parameters params) {
+		int noParamSets = params.getNoParameterSets();
+		final String code = getExecCode(program.toString(), params);
 
 		final Invocable invocableEngine = (Invocable) getEngine();
 		try {
 			getEngine().eval(code);
 
 			// Evaluate each argument set.
-			for (int i = 0; i < argValues.length; i++) {
-				invocableEngine.invokeFunction("expr", argValues[i]);
+			for (int i = 0; i < noParamSets; i++) {
+				invocableEngine.invokeFunction("expr", params.getParameterSet(i));
 			}
 		} catch (final ScriptException ex) {
 			ex.printStackTrace();
@@ -122,16 +126,16 @@ public class GroovyInterpreter extends ScriptingInterpreter {
 	 * containing a return statement that returns the result of evaluating
 	 * the given expression.
 	 */
-	private String getEvalCode(final String expression, final String[] argNames) {
+	private String getEvalCode(final String expression, Parameters params) {
 		final StringBuilder code = new StringBuilder();
 
 		code.append("public Object expr(");
-		for (int i = 0; i < argNames.length; i++) {
+		for (int i = 0; i < params.getNoParameters(); i++) {
 			if (i > 0) {
 				code.append(',');
 			}
 			code.append("Object ");
-			code.append(argNames[i]);
+			code.append(params.getIdentifier(i));
 		}
 		code.append(") {");
 
@@ -150,16 +154,16 @@ public class GroovyInterpreter extends ScriptingInterpreter {
 	 * Constructs a string representing source code of a Groovy method
 	 * containing the given program.
 	 */
-	private String getExecCode(final String program, final String[] argNames) {
+	private String getExecCode(final String program, final Parameters params) {
 		final StringBuffer code = new StringBuffer();
 
 		code.append("public Object expr(");
-		for (int i = 0; i < argNames.length; i++) {
+		for (int i = 0; i < params.getNoParameters(); i++) {
 			if (i > 0) {
 				code.append(',');
 			}
 			code.append("Object ");
-			code.append(argNames[i]);
+			code.append(params.getIdentifier(i));
 		}
 		code.append(") {");
 

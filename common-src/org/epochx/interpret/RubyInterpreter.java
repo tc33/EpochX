@@ -19,9 +19,11 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.tools.eval;
+package org.epochx.interpret;
 
 import javax.script.*;
+
+import org.epochx.representation.CandidateProgram;
 
 /**
  * A <code>RubyInterpreter</code> provides the facility to evaluate individual
@@ -44,16 +46,21 @@ public class RubyInterpreter extends ScriptingInterpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object eval(final String expression, final String[] argNames, final Object[] argValues)
+	public Object[] eval(final CandidateProgram expression, final Parameters params)
 			throws MalformedProgramException {
-		final String code = getEvalCode(expression, argNames);
-
-		Object result = null;
+		int noParamSets = params.getNoParameterSets();
+		
+		final String code = getEvalCode(expression.toString(), params);
+		
+		Object[] result = new Object[noParamSets];
 
 		final Invocable invocableEngine = (Invocable) getEngine();
 		try {
 			getEngine().eval(code);
-			result = invocableEngine.invokeFunction("expr", argValues);
+			
+			for (int i=0; i<noParamSets; i++) {
+				result[i] = invocableEngine.invokeFunction("expr", params.getParameterSet(i));
+			}
 		} catch (final ScriptException ex) {
 			throw new MalformedProgramException();
 		} catch (final NoSuchMethodException ex) {
@@ -67,63 +74,18 @@ public class RubyInterpreter extends ScriptingInterpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object[] eval(final String expression, final String[] argNames, final Object[][] argValues)
+	public void exec(final CandidateProgram program, final Parameters params)
 			throws MalformedProgramException {
-		final Object[] results = new Object[argValues.length];
-
-		final String code = getEvalCode(expression, argNames);
-
+		int noParamSets = params.getNoParameterSets();
+		
+		final String code = getExecCode(program.toString(), params);
+		
 		final Invocable invocableEngine = (Invocable) getEngine();
 		try {
 			getEngine().eval(code);
-
-			// Evaluate each argument set.
-			for (int i = 0; i < results.length; i++) {
-				results[i] = invocableEngine.invokeFunction("expr", argValues[i]);
-			}
-		} catch (final ScriptException ex) {
-			throw new MalformedProgramException();
-		} catch (final NoSuchMethodException ex) {
-			throw new MalformedProgramException();
-		}
-
-		return results;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void exec(final String program, final String[] argNames, final Object[] argValues)
-			throws MalformedProgramException {
-		final String code = getExecCode(program, argNames);
-
-		final Invocable invocableEngine = (Invocable) getEngine();
-		try {
-			getEngine().eval(code);
-			invocableEngine.invokeFunction("expr", argValues);
-		} catch (final ScriptException ex) {
-			throw new MalformedProgramException();
-		} catch (final NoSuchMethodException ex) {
-			throw new MalformedProgramException();
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void exec(final String program, final String[] argNames, final Object[][] argValues)
-			throws MalformedProgramException {
-		final String code = getExecCode(program, argNames);
-
-		final Invocable invocableEngine = (Invocable) getEngine();
-		try {
-			getEngine().eval(code);
-
-			// Evaluate each argument set.
-			for (int i = 0; i < argValues.length; i++) {
-				invocableEngine.invokeFunction("expr", argValues[i]);
+			
+			for (int i=0; i<noParamSets; i++) {
+				invocableEngine.invokeFunction("expr", params.getParameterSet(i));
 			}
 		} catch (final ScriptException ex) {
 			throw new MalformedProgramException();
@@ -139,15 +101,15 @@ public class RubyInterpreter extends ScriptingInterpreter {
 	 * containing a return statement that returns the result of evaluating
 	 * the given expression.
 	 */
-	private String getEvalCode(final String expression, final String[] argNames) {
+	private String getEvalCode(final String expression, final Parameters params) {
 		final StringBuffer code = new StringBuffer();
 
 		code.append("def expr(");
-		for (int i = 0; i < argNames.length; i++) {
+		for (int i = 0; i < params.getNoParameters(); i++) {
 			if (i > 0) {
 				code.append(',');
 			}
-			code.append(argNames[i]);
+			code.append(params.getIdentifier(i));
 		}
 		code.append(")\n");
 
@@ -165,16 +127,16 @@ public class RubyInterpreter extends ScriptingInterpreter {
 	 * Constructs a string representing source code of a Ruby method
 	 * containing the given program.
 	 */
-	private String getExecCode(final String program, final String[] argNames) {
+	private String getExecCode(final String program, final Parameters params) {
 		final StringBuffer code = new StringBuffer();
 
 		// code.append("class Evaluation\n");
 		code.append("def expr(");
-		for (int i = 0; i < argNames.length; i++) {
+		for (int i = 0; i < params.getNoParameters(); i++) {
 			if (i > 0) {
 				code.append(',');
 			}
-			code.append(argNames[i]);
+			code.append(params.getIdentifier(i));
 		}
 		code.append(")\n");
 

@@ -25,6 +25,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.awt.Point;
 
+import org.epochx.interpret.*;
 import org.junit.Test;
 
 /**

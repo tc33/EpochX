@@ -23,7 +23,7 @@ package org.epochx.life;
 
 import java.util.List;
 
-import org.epochx.core.Model;
+import org.epochx.core.*;
 import org.epochx.ref.ListenerList;
 import org.epochx.representation.CandidateProgram;
 

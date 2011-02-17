@@ -19,9 +19,11 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.tools.eval;
+package org.epochx.interpret;
 
 import java.util.Arrays;
+
+import org.epochx.representation.CandidateProgram;
 
 /**
  * A BrainfuckInterpreter provides the facility to execute programs in the
@@ -119,16 +121,7 @@ public class BrainfuckInterpreter implements Interpreter {
 	 * IllegalStateException.
 	 */
 	@Override
-	public Object eval(final String program, final String[] argNames, final Object[] argValues) {
-		throw new IllegalStateException("method not supported");
-	}
-
-	/**
-	 * Not currently supported by BrainfuckInterpreter. Calling will throw an
-	 * IllegalStateException.
-	 */
-	@Override
-	public Object[] eval(final String program, final String[] argNames, final Object[][] argValues) {
+	public Object[] eval(CandidateProgram program, Parameters params) {
 		throw new IllegalStateException("method not supported");
 	}
 
@@ -147,38 +140,22 @@ public class BrainfuckInterpreter implements Interpreter {
 	 *        sequence before execution starts.
 	 */
 	@Override
-	public void exec(final String program, final String[] argNames, final Object[] argValues) {
-		// Reset the environment.
-		reset();
-
-		// Set inputs as first x memory cells.
-		for (int i = 0; i < argValues.length; i++) {
-			memory[i] = (Byte) argValues[i];
-		}
-
-		// Execute the program.
-		execute(program);
-	}
-
-	/**
-	 * Executes the given Brainfuck program multiple times with each of the
-	 * given arrays of values. Each time the program is executed the memory
-	 * will setup with the next set of variable values as given by the
-	 * 2-dimensional <code>argValues</code> array.
-	 * 
-	 * @param program a valid Brainfuck program that is to be executed multiple
-	 *        times
-	 * @param argNames not used in this implementation
-	 * @param argValues an array of value arrays, which can be considered the
-	 *        inputs to the program on each call. They will populate the first
-	 *        elements
-	 *        of the memory array in sequence each time before execution starts.
-	 */
-	@Override
-	public void exec(final String program, final String[] argNames, final Object[][] argValues) {
-		// Execute each argument set.
-		for (int i = 0; i < argValues.length; i++) {
-			exec(program, argNames, argValues[i]);
+	public void exec(CandidateProgram program, Parameters params) {
+		int noParamSets = params.getNoParameterSets();
+		
+		for (int i=0; i<noParamSets; i++) {
+			Object[] paramSet = params.getParameterSet(i);
+			
+			// Reset the environment.
+			reset();
+	
+			// Set inputs as first x memory cells.
+			for (int j = 0; j < paramSet.length; j++) {
+				memory[i] = (Byte) paramSet[j];
+			}
+	
+			// Execute the program.
+			execute(program.toString());
 		}
 	}
 

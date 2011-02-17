@@ -25,13 +25,14 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-import org.epochx.core.Evolver;
+import org.epochx.core.*;
 import org.epochx.epox.*;
+import org.epochx.fitness.AntEvaluator;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
+import org.epochx.interpret.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.ant.*;
-import org.epochx.tools.eval.*;
 import org.epochx.tools.grammar.Grammar;
 
 /**
@@ -53,17 +54,9 @@ public abstract class AntTrail extends GRModel {
 			+ "| TURN-RIGHT( <var> )\n"
 			+ "<var> ::= ANT";
 
-	// Epox interpreter for performing evaluation.
-	private final EpoxParser parser;
-	private final EpoxInterpreter interpreter;
-
 	// Ant components.
 	private final AntLandscape landscape;
 	private final Ant ant;
-
-	// Trail settings.
-	private final List<Point> foodLocations;
-	private final int allowedTimeSteps;
 
 	/**
 	 * Constructs a new AntTrail with the given <code>FOOD_LOCATIONS</code>
@@ -81,50 +74,15 @@ public abstract class AntTrail extends GRModel {
 	public AntTrail(Evolver evolver, final Point[] foodLocations, final Dimension landscapeSize, final int allowedTimeSteps) {
 		super(evolver);
 		
-		this.foodLocations = Arrays.asList(foodLocations);
-		this.allowedTimeSteps = allowedTimeSteps;
-
+		List<Point> foodLocationsList = Arrays.asList(foodLocations);
+		
 		landscape = new AntLandscape(landscapeSize, null);
 		ant = new Ant(allowedTimeSteps, landscape);
 
 		setGrammar(new Grammar(GRAMMAR_STRING));
 
-		parser = new EpoxParser();
-		interpreter = new EpoxInterpreter(parser);
-
-		parser.declareVariable(new Variable("ANT", ant));
+		Parameters params = new Parameters(new String[]{"ANT"}, new Object[]{ant});
+		
+		setFitnessEvaluator(new AntEvaluator(new EpoxInterpreter(), params, landscape, ant, foodLocationsList, allowedTimeSteps));
 	}
-
-	/**
-	 * Calculates and returns the fitness of the given program. The fitness of a
-	 * program is calculated as the number of food pieces that the ant did not
-	 * manage to reach. That is, a fitness of 0.0 means the ant found every food
-	 * item.
-	 * 
-	 * @param p {@inheritDoc}
-	 * @return the calculated fitness for the given program.
-	 */
-	@Override
-	public double getFitness(final CandidateProgram p) {
-		final GRCandidateProgram program = (GRCandidateProgram) p;
-
-		// Reset the ant.
-		landscape.setFoodLocations(new ArrayList<Point>(foodLocations));
-		ant.reset(allowedTimeSteps, landscape);
-
-		// Evaluate multiple times until all time moves used.
-		while (ant.getTimesteps() < ant.getMaxMoves()) {
-			try {
-				// The ant variable still has the same value, so no need to set.
-				interpreter.eval(program.getSourceCode(), new String[]{"ANT"}, new Object[]{ant});
-			} catch (final MalformedProgramException e) {
-				// Stop evaluation and give a bad score.
-				break;
-			}
-		}
-
-		// Calculate score.
-		return (foodLocations.size() - ant.getFoodEaten());
-	}
-
 }

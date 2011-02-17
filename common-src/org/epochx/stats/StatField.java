@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.epochx.fitness.*;
 import org.epochx.representation.CandidateProgram;
 
 /**
@@ -173,6 +174,7 @@ public class StatField {
 
 		@Override
 		public Object getStatValue(Stats stats) {
+			FitnessEvaluator eval = stats.getModel().getFitnessEvaluator();
 			double[] fitnesses = null;
 
 			// Request the population from the stats manager.
@@ -184,7 +186,7 @@ public class StatField {
 				fitnesses = new double[pop.size()];
 
 				for (int i = 0; i < fitnesses.length; i++) {
-					fitnesses[i] = pop.get(i).getFitness();
+					fitnesses[i] = eval.getFitness(pop.get(i));
 				}
 			}
 
@@ -420,6 +422,7 @@ public class StatField {
 
 		@Override
 		public Object getStatValue(Stats stats) {
+			FitnessEvaluator eval = stats.getModel().getFitnessEvaluator();
 			List<CandidateProgram> sortedPop = null;
 
 			// Request the population from the stats manager.
@@ -431,7 +434,7 @@ public class StatField {
 				sortedPop = new ArrayList<CandidateProgram>(pop);
 
 				// Sort the population.
-				Collections.sort(sortedPop);
+				Collections.sort(sortedPop, new FitnessComparator(eval));
 			}
 
 			return sortedPop;
@@ -695,6 +698,7 @@ public class StatField {
 
 		@Override
 		public Object getStatValue(Stats stats) {
+			FitnessEvaluator eval = stats.getModel().getFitnessEvaluator();
 			Double fitness = null;
 
 			// Request the parent from the stats manager.
@@ -702,7 +706,7 @@ public class StatField {
 
 			if (parent != null) {
 				// Get the program's fitness.
-				fitness = parent.getFitness();
+				fitness = eval.getFitness(parent);
 			}
 
 			return fitness;
@@ -717,6 +721,7 @@ public class StatField {
 
 		@Override
 		public Object getStatValue(Stats stats) {
+			FitnessEvaluator eval = stats.getModel().getFitnessEvaluator();
 			Double fitness = null;
 
 			// Request the child from the stats manager.
@@ -724,7 +729,7 @@ public class StatField {
 
 			if (child != null) {
 				// Get the program's fitness.
-				fitness = child.getFitness();
+				fitness = eval.getFitness(child);
 			}
 
 			return fitness;
@@ -837,6 +842,7 @@ public class StatField {
 
 		@Override
 		public Object getStatValue(Stats stats) {
+			FitnessEvaluator eval = stats.getModel().getFitnessEvaluator();
 			double[] fitnesses = null;
 
 			// Request the parents from the stats manager.
@@ -847,7 +853,7 @@ public class StatField {
 
 				for (int i = 0; i < parents.length; i++) {
 					// Calculate the fitness change.
-					fitnesses[i] = parents[i].getFitness();
+					fitnesses[i] = eval.getFitness(parents[i]);
 				}
 			}
 
@@ -866,6 +872,7 @@ public class StatField {
 
 		@Override
 		public Object getStatValue(Stats stats) {
+			FitnessEvaluator eval = stats.getModel().getFitnessEvaluator();
 			double[] fitnesses = null;
 
 			// Request the children from the stats manager.
@@ -876,7 +883,7 @@ public class StatField {
 
 				for (int i = 0; i < children.length; i++) {
 					// Calculate the fitness change.
-					fitnesses[i] = children[i].getFitness();
+					fitnesses[i] = eval.getFitness(children[i]);
 				}
 			}
 
@@ -973,6 +980,7 @@ public class StatField {
 
 		@Override
 		public Object getStatValue(Stats stats) {
+			FitnessEvaluator eval = stats.getModel().getFitnessEvaluator();
 			double[] fitnesses = null;
 
 			// Request the pool from the stats manager.
@@ -984,7 +992,7 @@ public class StatField {
 				fitnesses = new double[pop.size()];
 
 				for (int i = 0; i < fitnesses.length; i++) {
-					fitnesses[i] = pop.get(i).getFitness();
+					fitnesses[i] = eval.getFitness(pop.get(i));
 				}
 			}
 
@@ -1371,6 +1379,7 @@ public class StatField {
 
 		@Override
 		public Object getStatValue(Stats stats) {
+			FitnessEvaluator eval = stats.getModel().getFitnessEvaluator();
 			double[] fitnesses = null;
 
 			// Request the elites from the stats manager.
@@ -1382,7 +1391,7 @@ public class StatField {
 				fitnesses = new double[elites.size()];
 
 				for (int i = 0; i < fitnesses.length; i++) {
-					fitnesses[i] = elites.get(i).getFitness();
+					fitnesses[i] = eval.getFitness(elites.get(i));
 				}
 			}
 

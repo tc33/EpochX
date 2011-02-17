@@ -25,9 +25,9 @@ import java.util.*;
 
 import org.epochx.core.*;
 import org.epochx.epox.Node;
+import org.epochx.fitness.FitnessEvaluator;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.GPCandidateProgram;
-import org.epochx.gr.op.init.FitnessEvaluator;
 import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
@@ -63,8 +63,6 @@ import org.epochx.tools.util.TypeUtils;
 public class FullInitialiser implements GPInitialiser, ConfigListener {
 
 	private Evolver evolver;
-	
-	private FitnessEvaluator fitnessEvaluator;
 	
 	private RandomNumberGenerator rng;
 
@@ -135,6 +133,9 @@ public class FullInitialiser implements GPInitialiser, ConfigListener {
 		functions = new ArrayList<Node>();
 
 		this.acceptDuplicates = acceptDuplicates;
+		
+		// Configure parameters from the model.
+		evolver.getLife().addConfigListener(this, false);
 	}
 
 	/**
@@ -143,7 +144,6 @@ public class FullInitialiser implements GPInitialiser, ConfigListener {
 	@Override
 	public void configure(Model model) {
 		if (model instanceof GPModel) {
-			fitnessEvaluator = model.getFitnessEvaluator();
 			rng = ((GPModel) model).getRNG();
 			depth = ((GPModel) model).getMaxInitialDepth();
 			popSize = ((GPModel) model).getPopulationSize();
@@ -237,7 +237,7 @@ public class FullInitialiser implements GPInitialiser, ConfigListener {
 	public GPCandidateProgram getInitialProgram() {
 		final Node root = getFullNodeTree();
 
-		return new GPCandidateProgram(root, fitnessEvaluator);
+		return new GPCandidateProgram(root);
 	}
 
 	/**

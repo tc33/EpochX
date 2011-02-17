@@ -21,9 +21,7 @@
  */
 package org.epochx.gr.representation;
 
-import org.epochx.gr.model.GRModel;
-import org.epochx.gr.op.init.FitnessEvaluator;
-import org.epochx.representation.CandidateProgram;
+import org.epochx.representation.*;
 import org.epochx.tools.grammar.NonTerminalSymbol;
 
 /**
@@ -34,17 +32,11 @@ public class GRCandidateProgram extends CandidateProgram {
 
 	// The phenotype.
 	private NonTerminalSymbol parseTree;
-
-	public GRCandidateProgram(final FitnessEvaluator fitnessEvaluator) {
-		this(null, fitnessEvaluator);
-	}
-
-	public GRCandidateProgram(final NonTerminalSymbol parseTree, final FitnessEvaluator fitnessEvaluator) {
-		super(fitnessEvaluator);
-		
+	
+	public GRCandidateProgram(NonTerminalSymbol parseTree) {
 		this.parseTree = parseTree;
 	}
-
+	
 	public void setParseTree(final NonTerminalSymbol parseTree) {
 		this.parseTree = parseTree;
 	}
@@ -106,7 +98,6 @@ public class GRCandidateProgram extends CandidateProgram {
 	 */
 	@Override
 	public boolean equals(final Object o) {
-
 		if (o instanceof GRCandidateProgram) {
 			final GRCandidateProgram prog = (GRCandidateProgram) o;
 

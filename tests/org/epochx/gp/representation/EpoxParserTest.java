@@ -24,7 +24,7 @@ package org.epochx.gp.representation;
 import static org.junit.Assert.fail;
 
 import org.epochx.epox.EpoxParser;
-import org.epochx.tools.eval.MalformedProgramException;
+import org.epochx.interpret.MalformedProgramException;
 import org.junit.*;
 
 /**

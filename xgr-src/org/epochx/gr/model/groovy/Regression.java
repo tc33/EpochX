@@ -21,11 +21,11 @@
  */
 package org.epochx.gr.model.groovy;
 
-import org.epochx.core.Evolver;
+import org.epochx.core.*;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
+import org.epochx.interpret.*;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.eval.*;
 import org.epochx.tools.grammar.Grammar;
 
 /**

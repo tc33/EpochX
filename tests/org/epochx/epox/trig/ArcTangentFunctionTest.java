@@ -25,7 +25,7 @@ import static org.junit.Assert.*;
 
 import org.epochx.epox.*;
 import org.epochx.epox.trig.ArcTangentFunction;
-import org.epochx.tools.eval.*;
+import org.epochx.interpret.*;
 import org.junit.Test;
 
 /**

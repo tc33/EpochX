@@ -25,9 +25,11 @@ import static org.epochx.stats.StatField.*;
 
 import java.util.List;
 
+import org.epochx.fitness.FitnessEvaluator;
 import org.epochx.life.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
+import org.epochx.tools.util.MathUtils;
 
 /**
  * Instances of this class are responsible for executing single evolutionary
@@ -96,6 +98,8 @@ public class RunManager implements ConfigListener {
 
 	// The fitness of the best program found so far during the run.
 	private double bestFitness;
+	
+	private FitnessEvaluator fitnessEvaluator;
 
 	/**
 	 * Constructs an instance of RunManager to be controlled by parameters
@@ -124,6 +128,7 @@ public class RunManager implements ConfigListener {
 		stats = evolver.getStats(model);
 		noGenerations = model.getNoGenerations();
 		terminationFitness = model.getTerminationFitness();
+		fitnessEvaluator = model.getFitnessEvaluator();
 	}
 
 	/**
@@ -201,16 +206,15 @@ public class RunManager implements ConfigListener {
 	 * not have done if using TournamentSelection.
 	 */
 	private void updateBestProgram(final List<CandidateProgram> pop) {
-		for (final CandidateProgram program: pop) {
-			final double fitness = program.getFitness();
-			if (fitness < bestFitness) {
-				bestFitness = fitness;
-				bestProgram = program;
-
-				// Update the stats.
-				stats.addData(RUN_FITNESS_MIN, bestFitness);
-				stats.addData(RUN_FITTEST_PROGRAM, bestProgram);
-			}
+		double genBestFitness = (Double) stats.getStat(GEN_FITNESS_MIN);
+		
+		if (genBestFitness < bestFitness) {
+			bestFitness = genBestFitness;
+			bestProgram = (CandidateProgram) stats.getStat(GEN_FITTEST_PROGRAM);
+			
+			// Update the runstats.
+			stats.addData(RUN_FITNESS_MIN, bestFitness);
+			stats.addData(RUN_FITTEST_PROGRAM, bestProgram);
 		}
 
 		assert (bestProgram != null);

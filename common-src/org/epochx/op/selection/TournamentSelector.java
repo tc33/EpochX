@@ -24,6 +24,7 @@ package org.epochx.op.selection;
 import java.util.*;
 
 import org.epochx.core.*;
+import org.epochx.fitness.FitnessEvaluator;
 import org.epochx.life.ConfigListener;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
@@ -66,6 +67,8 @@ public class TournamentSelector implements ProgramSelector, PoolSelector, Config
 
 	// Random number generator.
 	private RandomNumberGenerator rng;
+	
+	private FitnessEvaluator fitnessEvaluator;
 
 	/**
 	 * Constructs an instance of <code>LinearRankSelector</code> with all the
@@ -103,6 +106,7 @@ public class TournamentSelector implements ProgramSelector, PoolSelector, Config
 	@Override
 	public void configure(Model model) {
 		rng = model.getRNG();
+		fitnessEvaluator = model.getFitnessEvaluator();
 	}
 
 	/**
@@ -239,7 +243,7 @@ public class TournamentSelector implements ProgramSelector, PoolSelector, Config
 			// Choose and compare randomly selected programs.
 			for (int i = 0; i < tournamentSize; i++) {
 				final CandidateProgram p = randomSelector.getProgram();
-				final double fitness = p.getFitness();
+				final double fitness = fitnessEvaluator.getFitness(p);
 				if (fitness < bestFitness) {
 					bestFitness = fitness;
 					bestProgram = p;

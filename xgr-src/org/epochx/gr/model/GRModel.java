@@ -26,6 +26,7 @@ import org.epochx.gr.op.crossover.WhighamCrossover;
 import org.epochx.gr.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.gr.op.mutation.WhighamMutation;
 import org.epochx.gr.representation.GRCandidateProgram;
+import org.epochx.interpret.Interpreter;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.Grammar;
 
@@ -40,6 +41,8 @@ public abstract class GRModel extends Model {
 
 	private int maxDepth;
 	private int maxInitialDepth;
+	
+	private Interpreter interpreter;
 
 	/**
 	 * Construct a GRModel with a set of sensible defaults. See the appropriate

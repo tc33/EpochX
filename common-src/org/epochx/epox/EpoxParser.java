@@ -30,7 +30,7 @@ import org.epochx.epox.bool.*;
 import org.epochx.epox.lang.*;
 import org.epochx.epox.math.*;
 import org.epochx.epox.trig.*;
-import org.epochx.tools.eval.MalformedProgramException;
+import org.epochx.interpret.MalformedProgramException;
 
 /**
  * This parser is for parsing valid Epox programs into a node tree. It is only 

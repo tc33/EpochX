@@ -24,9 +24,9 @@ package org.epochx.ge.representation;
 import java.util.*;
 
 import org.apache.commons.lang.ObjectUtils;
+import org.epochx.fitness.FitnessEvaluator;
 import org.epochx.ge.codon.CodonGenerator;
 import org.epochx.ge.model.GEModel;
-import org.epochx.gr.op.init.FitnessEvaluator;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.*;
 
@@ -67,8 +67,8 @@ public class GECandidateProgram extends CandidateProgram {
 	 * @param model the controlling model which provides the configuration
 	 *        parameters for the run.
 	 */
-	public GECandidateProgram(final CodonGenerator codonGenerator, final FitnessEvaluator fitnessEvaluator) {
-		this(new Chromosome(codonGenerator), fitnessEvaluator);
+	public GECandidateProgram(final CodonGenerator codonGenerator) {
+		this(new Chromosome(codonGenerator));
 	}
 
 	/**
@@ -79,9 +79,7 @@ public class GECandidateProgram extends CandidateProgram {
 	 * @param model the controlling model which provides the configuration
 	 *        parameters for the run.
 	 */
-	public GECandidateProgram(final Chromosome codons, final FitnessEvaluator fitnessEvaluator) {
-		super(fitnessEvaluator);
-		
+	public GECandidateProgram(final Chromosome codons) {
 		this.codons = codons;
 
 		parseTree = null;

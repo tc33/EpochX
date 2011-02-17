@@ -234,6 +234,10 @@ public class Stats {
 		out.println();
 		out.flush();
 	}
+	
+	public Model getModel() {
+		return model;
+	}
 
 	/*
 	 * Listen for life cycle events and if they happen then clear appropriate

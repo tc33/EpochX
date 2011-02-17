@@ -24,7 +24,7 @@ package org.epochx.epox.trig;
 import static org.junit.Assert.*;
 
 import org.epochx.epox.*;
-import org.epochx.tools.eval.*;
+import org.epochx.interpret.*;
 import org.epochx.tools.util.MathUtils;
 import org.junit.Test;
 

@@ -24,6 +24,7 @@ package org.epochx.gr.op.init;
 import java.util.*;
 
 import org.epochx.core.*;
+import org.epochx.fitness.FitnessEvaluator;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.life.ConfigListener;
@@ -188,7 +189,7 @@ public class GrowInitialiser implements GRInitialiser, ConfigListener {
 			throw new IllegalStateException("No possible programs within given max depth parameter for this grammar.");
 		}
 
-		return new GRCandidateProgram(getGrownParseTree(maxDepth, startRule), fitnessEvaluator);
+		return new GRCandidateProgram(getGrownParseTree(maxDepth, startRule));
 	}
 
 	/**

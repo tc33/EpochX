@@ -23,7 +23,7 @@ package org.epochx.ge.model;
 
 import java.io.*;
 
-import org.epochx.core.Evolver;
+import org.epochx.core.*;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.Grammar;

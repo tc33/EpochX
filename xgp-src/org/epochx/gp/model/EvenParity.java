@@ -23,10 +23,13 @@ package org.epochx.gp.model;
 
 import java.util.*;
 
-import org.epochx.core.Evolver;
+import org.epochx.core.*;
 import org.epochx.epox.*;
 import org.epochx.epox.bool.*;
+import org.epochx.epox.lang.IfFunction;
+import org.epochx.fitness.HitsCountEvaluator;
 import org.epochx.gp.representation.GPCandidateProgram;
+import org.epochx.interpret.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.util.BoolUtils;
 
@@ -43,11 +46,10 @@ import org.epochx.tools.util.BoolUtils;
  */
 public class EvenParity extends GPModel {
 
-	// The names of the inputValues used in the grammar.
-	private final Variable[] variables;
-
 	// The boolean input sequences.
-	private final boolean[][] inputValues;
+	private final Boolean[][] inputValues;
+	
+	private Boolean[] expectedResults;
 
 	/**
 	 * Constructs an EvenParity model for the given number of inputs.
@@ -58,65 +60,45 @@ public class EvenParity extends GPModel {
 	public EvenParity(Evolver evolver, final int noInputBits) {
 		super(evolver);
 		
+		
 		// Generate the input sequences.
 		inputValues = BoolUtils.generateBoolSequences(noInputBits);
+		expectedResults = new Boolean[inputValues.length];
 
 		// Define functions.
 		final List<Node> syntax = new ArrayList<Node>();
-		syntax.add(new NandFunction());
+		syntax.add(new IfFunction());
 		syntax.add(new AndFunction());
 		syntax.add(new OrFunction());
 		syntax.add(new NotFunction());
 
 		// Define terminal variables.
-		variables = new Variable[noInputBits];
-		for (int i = 0; i < noInputBits; i++) {
-			variables[i] = new Variable("d" + i, Boolean.class);
-			syntax.add(variables[i]);
-		}
+		String[] varNames = new String[noInputBits];
 
+		// Add data inputs.
+		for (int i = noInputBits; i < noInputBits; i++) {
+			varNames[i] = "d" + i;
+		}
+		
+		Parameters params = new Parameters(varNames);
+		
+		for (int i=0; i<noInputBits; i++) {
+			syntax.add(new Variable(varNames[i], Boolean.class));
+			params.addParameterSet(inputValues[i]);
+			
+			expectedResults[i] = isEvenNoTrue(inputValues[i]);
+		}
+		
 		setSyntax(syntax);
-	}
+		setReturnType(Boolean.class);
 
-	/**
-	 * Calculates the fitness score for the given program. The fitness of a
-	 * program for the even-parity problem is calculated by evaluating it
-	 * using each of the possible sets of input values. There are
-	 * <code>2^noInputBits</code> possible sets of inputs. The fitness of the
-	 * program is the quantity of those input sequences that the program
-	 * returned an incorrect response for. That is, a fitness value of
-	 * <code>0.0</code> indicates the program responded correctly for every
-	 * possible set of input values.
-	 * 
-	 * @param p {@inheritDoc}
-	 * @return the calculated fitness for the given program.
-	 */
-	@Override
-	public double getFitness(final CandidateProgram p) {
-		final GPCandidateProgram program = (GPCandidateProgram) p;
-
-		double score = 0;
-
-		// Execute on all possible inputs.
-		for (final boolean[] in: inputValues) {
-
-			// Set the variables.
-			for (int i = 0; i < in.length; i++) {
-				variables[i].setValue(in[i]);
-			}
-
-			if ((Boolean) program.evaluate() == isEvenNoTrue(in)) {
-				score++;
-			}
-		}
-
-		return inputValues.length - score;
+		setFitnessEvaluator(new HitsCountEvaluator(new GPInterpreter(evolver), params, expectedResults));
 	}
 
 	/*
 	 * Calculate what the correct response should be for the given inputs.
 	 */
-	private boolean isEvenNoTrue(final boolean[] input) {
+	private boolean isEvenNoTrue(final Boolean[] input) {
 		int noTrues = 0;
 
 		for (final boolean b: input) {
@@ -126,11 +108,6 @@ public class EvenParity extends GPModel {
 		}
 
 		return ((noTrues % 2) == 0);
-	}
-
-	@Override
-	public Class<?> getReturnType() {
-		return Boolean.class;
 	}
 
 }

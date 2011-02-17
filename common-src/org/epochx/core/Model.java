@@ -21,7 +21,8 @@
  */
 package org.epochx.core;
 
-import org.epochx.gr.op.init.FitnessEvaluator;
+import org.epochx.fitness.FitnessEvaluator;
+import org.epochx.interpret.Interpreter;
 import org.epochx.life.Life;
 import org.epochx.op.*;
 import org.epochx.op.selection.TournamentSelector;
@@ -63,9 +64,6 @@ import org.epochx.tools.random.*;
  */
 public abstract class Model {
 
-	// Components.
-	private RunManager run;
-
 	// Operators.
 	private PoolSelector poolSelector;
 	private ProgramSelector programSelector;
@@ -75,7 +73,7 @@ public abstract class Model {
 	private Mutation mutation;
 	
 	private FitnessEvaluator fitnessEvaluator;
-
+	
 	// Control parameters.
 	private RandomNumberGenerator rng;
 
@@ -143,27 +141,6 @@ public abstract class Model {
 	 * @return
 	 */
 	public abstract boolean isValid(CandidateProgram program);
-
-	/**
-	 * Retrieves this model's run manager that will perform the task of
-	 * executing single evolutionary runs according to this model.
-	 * 
-	 * @return the run manager that will handle execution of evolutionary runs.
-	 */
-	public RunManager getRunManager() {
-		return run;
-	}
-
-	/**
-	 * Calculates a fitness score of a program. In EpochX fitness is
-	 * standardised so a fitness score of 0.1 is better than 0.2. It is
-	 * essential that this method is implemented to provide a measure of how
-	 * good the given program solution is.
-	 * 
-	 * @param program the candidate program to be evaluated.
-	 * @return a fitness score for the program given as a parameter.
-	 */
-	public abstract double getFitness(CandidateProgram program);
 	
 	public FitnessEvaluator getFitnessEvaluator() {
 		return fitnessEvaluator;
@@ -625,4 +602,5 @@ public abstract class Model {
 
 		assert (rng != null);
 	}
+	
 }

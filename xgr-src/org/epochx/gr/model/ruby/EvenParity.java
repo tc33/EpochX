@@ -23,6 +23,7 @@ package org.epochx.gr.model.ruby;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.epochx.core.*;
+import org.epochx.fitness.HitsCountEvaluator;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.interpret.*;
@@ -51,14 +52,13 @@ public class EvenParity extends GRModel {
 			+ "<op> ::= \"||\" | && | !=\n"
 			+ "<var> ::= ";
 
-	// Ruby interpreter for performing evaluation.
-	private final RubyInterpreter interpreter;
-
 	// The names of the inputValues used in the grammar.
 	private final String[] argNames;
 
 	// The boolean input sequences.
-	private final boolean[][] inputValues;
+	private final Boolean[][] inputValues;
+	
+	private Boolean[] expectedResults;
 
 	/**
 	 * Constructs an EvenParity model for the given number of inputs.
@@ -69,8 +69,6 @@ public class EvenParity extends GRModel {
 	public EvenParity(Evolver evolver, final int noInputBits) {
 		super(evolver);
 		
-		interpreter = new RubyInterpreter();
-
 		// Generate the input sequences.
 		inputValues = BoolUtils.generateBoolSequences(noInputBits);
 
@@ -82,48 +80,16 @@ public class EvenParity extends GRModel {
 
 		// Complete the grammar string and construct grammar instance.
 		setGrammar(new Grammar(getGrammarString()));
-	}
-
-	/**
-	 * Calculates the fitness score for the given program. The fitness of a
-	 * program for the even-parity problem is calculated by evaluating it
-	 * using each of the possible sets of input values. There are
-	 * <code>2^noInputBits</code> possible sets of inputs. The fitness of the
-	 * program is the quantity of those input sequences that the program
-	 * returned an incorrect response for. That is, a fitness value of
-	 * <code>0.0</code> indicates the program responded correctly for every
-	 * possible set of input values.
-	 * 
-	 * @param p {@inheritDoc}
-	 * @return the calculated fitness for the given program.
-	 */
-	@Override
-	public double getFitness(final CandidateProgram p) {
-		final GRCandidateProgram program = (GRCandidateProgram) p;
-
-		double score = 0;
-
-		// Evaluate all possible inputValues.
-		for (final boolean[] vars: inputValues) {
-			// Convert to object array.
-			final Boolean[] objVars = ArrayUtils.toObject(vars);
-
-			Boolean result = null;
-			try {
-				result = (Boolean) interpreter.eval(program.getSourceCode(), argNames, objVars);
-			} catch (final MalformedProgramException e) {
-				// Assign worst possible fitness and stop evaluating.
-				score = 0;
-				break;
-			}
-
-			// Increment score for a correct response.
-			if ((result != null) && (result == isEvenNoTrue(vars))) {
-				score++;
-			}
+		
+		Parameters params = new Parameters(argNames);
+		
+		for (int i=0; i<noInputBits; i++) {
+			params.addParameterSet(inputValues[i]);
+			
+			expectedResults[i] = isEvenNoTrue(inputValues[i]);
 		}
-
-		return inputValues.length - score;
+		
+		setFitnessEvaluator(new HitsCountEvaluator(new RubyInterpreter(), params, expectedResults));
 	}
 
 	/**
@@ -149,7 +115,7 @@ public class EvenParity extends GRModel {
 	/*
 	 * Calculate what the correct response should be for the given inputs.
 	 */
-	private boolean isEvenNoTrue(final boolean[] input) {
+	private Boolean isEvenNoTrue(final Boolean[] input) {
 		int noTrues = 0;
 
 		for (final boolean b: input) {

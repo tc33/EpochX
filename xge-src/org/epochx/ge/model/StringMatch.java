@@ -24,6 +24,7 @@ package org.epochx.ge.model;
 import java.io.*;
 
 import org.epochx.core.*;
+import org.epochx.fitness.SourceMatchEvaluator;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.Grammar;
@@ -33,42 +34,17 @@ import org.epochx.tools.grammar.Grammar;
  * at present.
  */
 public class StringMatch extends GEModel {
-
-	public StringMatch(Evolver evolver) {
+	//TODO Need to insert the grammar.
+	
+	public StringMatch(Evolver evolver, String expectedString) {
 		super(evolver);
 		try {
 			setGrammar(new Grammar(new File("example-grammars/StringMatch.bnf")));
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public double getFitness(final CandidateProgram p) {
-		final GECandidateProgram program = (GECandidateProgram) p;
-
-		final String match = "hello_world";
-		final String src = getMapper().map(program).toString();
-
-		if (src == null) {
-			return Integer.MAX_VALUE;
-		}
-
-		final int srcLength = src.length();
-		final int matchLength = match.length();
-		int score = 0;
-
-		for (int i = 0; i < matchLength; i++) {
-			if ((i < srcLength) && (match.charAt(i) != src.charAt(i))) {
-				score++;
-			}
-		}
-
-		if (srcLength != matchLength) {
-			score += Math.abs(matchLength - srcLength);
-		}
-
-		return score;
+		
+		setFitnessEvaluator(new SourceMatchEvaluator(expectedString));
 	}
 
 	/*

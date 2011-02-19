@@ -27,10 +27,50 @@ import org.epochx.representation.CandidateProgram;
 /**
  * 
  */
-public interface FitnessEvaluator {
+public class SourceMatchEvaluator extends AbstractFitnessEvaluator {
 
-	public double[] getFitness(CandidateProgram[] pop);
+	private String expectedSource;
 	
-	public double getFitness(CandidateProgram program);
+	public SourceMatchEvaluator(String expectedSource) {
+		this.expectedSource = expectedSource;
+	}
 	
+	@Override
+	public double getFitness(CandidateProgram program) {
+		final String src = program.toString();
+
+		if (src == null) {
+			return Integer.MAX_VALUE;
+		}
+
+		final int srcLength = src.length();
+		final int matchLength = expectedSource.length();
+		int score = 0;
+
+		for (int i = 0; i < matchLength; i++) {
+			if ((i < srcLength) && (expectedSource.charAt(i) != src.charAt(i))) {
+				score++;
+			}
+		}
+
+		if (srcLength != matchLength) {
+			score += Math.abs(matchLength - srcLength);
+		}
+
+		return score;
+	}
+
+	/**
+	 * @return the expectedSource
+	 */
+	public String getExpectedSource() {
+		return expectedSource;
+	}
+	
+	/**
+	 * @param expectedSource the expectedSource to set
+	 */
+	public void setExpectedSource(String expectedSource) {
+		this.expectedSource = expectedSource;
+	}
 }

@@ -23,6 +23,7 @@ package org.epochx.ge.model.java;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.epochx.core.*;
+import org.epochx.fitness.HitsCountEvaluator;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.interpret.*;
@@ -52,11 +53,9 @@ public class Multiplexer extends GEModel {
 			+ "<op> ::= \"||\" | &&\n"
 			+ "<var> ::= ";
 
-	// Java interpreter for performing evaluation.
-	private final JavaInterpreter interpreter;
-
 	// The boolean input sequences.
-	private final boolean[][] inputValues;
+	private final Boolean[][] inputValues;
+	private Boolean[] expectedResults;
 
 	// The names of the inputValues used in the grammar.
 	private String[] argNames;
@@ -74,8 +73,6 @@ public class Multiplexer extends GEModel {
 	public Multiplexer(Evolver evolver, final int noInputBits) {
 		super(evolver);
 		
-		interpreter = new JavaInterpreter();
-
 		// Generate the input sequences.
 		inputValues = BoolUtils.generateBoolSequences(noInputBits);
 
@@ -87,47 +84,16 @@ public class Multiplexer extends GEModel {
 
 		// Complete the grammar string and construct grammar instance.
 		setGrammar(new Grammar(getGrammarString()));
-	}
-
-	/**
-	 * Calculates the fitness score for the given program. The fitness of a
-	 * program for the majority problem is calculated by evaluating it
-	 * using each of the possible sets of input values. There are
-	 * <code>2^noInputBits</code> possible sets of inputs. The fitness of the
-	 * program is the quantity of those input sequences that the program
-	 * returned an incorrect response for. That is, a fitness value of
-	 * <code>0.0</code> indicates the program responded correctly for every
-	 * possible set of input values.
-	 * 
-	 * @param p {@inheritDoc}
-	 * @return the calculated fitness for the given program.
-	 */
-	@Override
-	public double getFitness(final CandidateProgram p) {
-		final GECandidateProgram program = (GECandidateProgram) p;
-
-		double score = 0;
-
-		// Evaluate all possible inputValues.
-		for (final boolean[] vars: inputValues) {
-			// Convert to object array.
-			final Boolean[] objVars = ArrayUtils.toObject(vars);
-
-			Boolean result = null;
-			try {
-				result = (Boolean) interpreter.eval(getMapper().map(program).toString(), argNames, objVars);
-			} catch (final MalformedProgramException e) {
-				// Assign worst possible fitness and stop evaluating.
-				score = 0;
-				break;
-			}
-
-			if ((result != null) && (result == multiplex(vars))) {
-				score++;
-			}
+		
+		Parameters params = new Parameters(argNames);
+		
+		for (int i=0; i<noInputBits; i++) {
+			params.addParameterSet(inputValues[i]);
+			
+			expectedResults[i] = multiplex(inputValues[i]);
 		}
-
-		return inputValues.length - score;
+		
+		setFitnessEvaluator(new HitsCountEvaluator(new JavaInterpreter(), params, expectedResults));
 	}
 
 	/**
@@ -184,7 +150,7 @@ public class Multiplexer extends GEModel {
 	/*
 	 * Calculate what the correct response should be for the given inputs.
 	 */
-	private Boolean multiplex(final boolean[] vars) {
+	private Boolean multiplex(final Boolean[] vars) {
 		// Calculate which data position to use.
 		int dataPosition = 0;
 		for (int i = 0; i < noAddressBits; i++) {

@@ -37,10 +37,8 @@ import org.epochx.representation.CandidateProgram;
  * <code><blockquote>
  * adjusted-fitness = 1 / (1 + standardised-fitness)
  * </blockquote></code>
- * 
- * @return
  */
-public class AdjustedFitnessEvaluator extends FitnessEvaluator {
+public class AdjustedFitnessEvaluator implements FitnessEvaluator {
 
 	private FitnessEvaluator delegate;
 	

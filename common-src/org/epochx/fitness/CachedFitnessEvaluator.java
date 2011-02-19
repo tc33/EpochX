@@ -27,7 +27,7 @@ import org.epochx.representation.CandidateProgram;
 /**
  * 
  */
-public class CachedFitnessEvaluator extends FitnessEvaluator {
+public class CachedFitnessEvaluator extends AbstractFitnessEvaluator {
 
 	private FitnessEvaluator delegate;
 	

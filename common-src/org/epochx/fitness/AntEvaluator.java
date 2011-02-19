@@ -32,7 +32,7 @@ import org.epochx.tools.ant.*;
 /**
  * 
  */
-public class AntEvaluator extends FitnessEvaluator {
+public class AntEvaluator extends AbstractFitnessEvaluator {
 
 	private AntLandscape landscape;
 	private Ant ant;

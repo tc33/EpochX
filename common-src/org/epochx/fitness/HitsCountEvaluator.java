@@ -28,7 +28,7 @@ import org.epochx.representation.CandidateProgram;
 /**
  * 
  */
-public class HitsCountEvaluator extends FitnessEvaluator {
+public class HitsCountEvaluator extends AbstractFitnessEvaluator {
 
 	// The error each point must be within.
 	private double pointError;

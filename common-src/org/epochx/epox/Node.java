@@ -41,7 +41,7 @@ import org.epochx.tools.util.TypeUtils;
  * heavily used, so implementations should ensure they are sufficient.
  */
 public abstract class Node implements Cloneable {
-
+//TODO Consider renaming to EpoxNode.
 	// For a terminal node this will be empty.
 	private Node[] children;
 

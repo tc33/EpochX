@@ -21,16 +21,14 @@
  */
 package org.epochx.fitness;
 
-import org.epochx.core.*;
 import org.epochx.interpret.*;
-import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
 
 
 /**
  * 
  */
-public class SumOfErrorEvaluator extends FitnessEvaluator {
+public class SumOfErrorEvaluator extends AbstractFitnessEvaluator {
 
 	private Interpreter interpreter;
 	

@@ -27,10 +27,17 @@ import org.epochx.representation.CandidateProgram;
 /**
  * 
  */
-public interface FitnessEvaluator {
+public abstract class AbstractFitnessEvaluator implements FitnessEvaluator {
 
-	public double[] getFitness(CandidateProgram[] pop);
+	public double[] getFitness(CandidateProgram[] pop) {
+		double[] fitnesses = new double[pop.length];
+		for (int i=0; i<fitnesses.length; i++) {
+			fitnesses[i] = getFitness(pop[i]);
+		}
+		
+		return fitnesses;
+	}
 	
-	public double getFitness(CandidateProgram program);
+	public abstract double getFitness(CandidateProgram program);
 	
 }

@@ -26,6 +26,7 @@ import java.util.*;
 import java.util.List;
 
 import org.epochx.core.*;
+import org.epochx.fitness.AntEvaluator;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.interpret.*;
@@ -50,16 +51,9 @@ public abstract class AntTrail extends GEModel {
 			+ "<condition> ::= \"if ant.isFoodAhead()\" \\n <op> \\n else \\n <op> \\n end \n"
 			+ "<op> ::= ant.turnLeft(); | ant.turnRight(); | ant.move();";
 
-	// Ruby interpreter for performing evaluation.
-	private final RubyInterpreter interpreter;
-
 	// Ant components.
 	private final AntLandscape landscape;
 	private final Ant ant;
-
-	// Trail settings.
-	private final List<Point> foodLocations;
-	private final int allowedTimeSteps;
 
 	/**
 	 * Constructs a new AntTrail with the given <code>FOOD_LOCATIONS</code>
@@ -77,51 +71,16 @@ public abstract class AntTrail extends GEModel {
 	public AntTrail(Evolver evolver, final Point[] foodLocations, final Dimension landscapeSize, final int allowedTimeSteps) {
 		super(evolver);
 		
-		this.foodLocations = new ArrayList<Point>(Arrays.asList(foodLocations));
-		this.allowedTimeSteps = allowedTimeSteps;
+		List<Point> foodLocationsList = Arrays.asList(foodLocations);
 
 		landscape = new AntLandscape(landscapeSize, null);
 		ant = new Ant(allowedTimeSteps, landscape);
 
 		setGrammar(new Grammar(GRAMMAR_STRING));
 
-		interpreter = new RubyInterpreter();
-	}
-
-	/**
-	 * Calculates and returns the fitness of the given program. The fitness of a
-	 * program is calculated as the number of food pieces that the ant did not
-	 * manage to reach. That is, a fitness of 0.0 means the ant found every food
-	 * item.
-	 * 
-	 * @param p {@inheritDoc}
-	 * @return the calculated fitness for the given program.
-	 */
-
-	@Override
-	public double getFitness(final CandidateProgram p) {
-		final GECandidateProgram program = (GECandidateProgram) p;
-
-		// Reset the ant.
-		landscape.setFoodLocations(foodLocations);
-		ant.reset(allowedTimeSteps, landscape);
-
-		// Construct argument arrays.
-		final String[] argNames = {"ant"};
-		final Object[] argValues = {ant};
-
-		// Evaluate multiple times until all time moves used.
-		while (isValid(program) && (ant.getTimesteps() < ant.getMaxMoves())) {
-			try {
-				interpreter.exec(getMapper().map(program).toString(), argNames, argValues);
-			} catch (final MalformedProgramException e) {
-				// Stop evaluation and give a bad score.
-				break;
-			}
-		}
-
-		// Calculate score.
-		return (foodLocations.size() - ant.getFoodEaten());
+		Parameters params = new Parameters(new String[]{"ANT"}, new Object[]{ant});
+		
+		setFitnessEvaluator(new AntEvaluator(new RubyInterpreter(), params, landscape, ant, foodLocationsList, allowedTimeSteps));
 	}
 
 }

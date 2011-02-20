@@ -70,6 +70,7 @@ public class Evolver {
 	 */
 	public void enqueue(Model model) {
 		models.add(model);
+		stats.put(model, new Stats(model, life));
 	}
 	
 	/**
@@ -105,7 +106,7 @@ public class Evolver {
 	 * models undergoing evolution.
 	 */
 	public Life getLife() {
-		return null;
+		return life;
 	}
 	
 	/**

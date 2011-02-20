@@ -60,7 +60,6 @@ public class EvenParity extends GPModel {
 	public EvenParity(Evolver evolver, final int noInputBits) {
 		super(evolver);
 		
-		
 		// Generate the input sequences.
 		inputValues = BoolUtils.generateBoolSequences(noInputBits);
 		expectedResults = new Boolean[inputValues.length];
@@ -76,23 +75,21 @@ public class EvenParity extends GPModel {
 		String[] varNames = new String[noInputBits];
 
 		// Add data inputs.
-		for (int i = noInputBits; i < noInputBits; i++) {
+		for (int i = 0; i < noInputBits; i++) {
 			varNames[i] = "d" + i;
+			syntax.add(new Variable(varNames[i], Boolean.class));
 		}
 		
 		Parameters params = new Parameters(varNames);
-		
-		for (int i=0; i<noInputBits; i++) {
-			syntax.add(new Variable(varNames[i], Boolean.class));
+		for (int i=0; i<inputValues.length; i++) {
 			params.addParameterSet(inputValues[i]);
-			
 			expectedResults[i] = isEvenNoTrue(inputValues[i]);
 		}
 		
 		setSyntax(syntax);
 		setReturnType(Boolean.class);
 
-		setFitnessEvaluator(new HitsCountEvaluator(new GPInterpreter(evolver), params, expectedResults));
+		setFitnessEvaluator(new HitsCountEvaluator<GPCandidateProgram>(new GPInterpreter(evolver), params, expectedResults));
 	}
 
 	/*

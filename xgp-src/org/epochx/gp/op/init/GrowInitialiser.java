@@ -133,8 +133,10 @@ public class GrowInitialiser implements GPInitialiser, ConfigListener {
 
 		this.acceptDuplicates = acceptDuplicates;
 		
-		// Configure parameters from the model.
-		evolver.getLife().addConfigListener(this, false);
+		if (evolver != null) {
+			// Configure parameters from the model.
+			evolver.getLife().addConfigListener(this, false);
+		}
 	}
 
 	/**

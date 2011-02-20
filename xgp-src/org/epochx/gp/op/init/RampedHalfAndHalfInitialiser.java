@@ -185,6 +185,11 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser, ConfigListen
 		// Set up the grow and full parts.
 		grow = new GrowInitialiser(evolver);
 		full = new FullInitialiser(evolver);
+		
+		if (evolver != null) {
+			// Configure parameters from the model.
+			evolver.getLife().addConfigListener(this, false);
+		}
 	}
 
 	/**

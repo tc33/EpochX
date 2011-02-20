@@ -29,12 +29,14 @@ public class EvenParityTest extends ModelTest {
 		model.setInitialiser(new RampedHalfAndHalfInitialiser(evolver, 1, false));
 		model.setPoolSelector(null);
 		model.setProgramSelector(new FitnessProportionateSelector(evolver, true));
-		model.setNoElites(0);
+		model.setNoElites(1);
 
 		model.setTerminationFitness(0.0);
-		
-		//setupRunPrinting(evolver.getStats(model));
-		//setupGenPrinting(evolver.getStats(model));
+	}
+	
+	@Override
+	public void setUp() {
+		super.setUp();
 	}
 
 	/**
@@ -51,7 +53,7 @@ public class EvenParityTest extends ModelTest {
 		final EvenParity model = new EvenParity(getEvolver(), 3);
 		setupModel(model);
 
-		final int noSuccess = getNoSuccesses(model);
+		final int noSuccess = getNoSuccesses(model, false, true);
 		assertBetween("Unexpected success rate for Even 3 Parity", LOWER_SUCCESS, UPPER_SUCCESS, noSuccess);
 	}
 
@@ -69,7 +71,7 @@ public class EvenParityTest extends ModelTest {
 		final EvenParity model = new EvenParity(getEvolver(), 4);
 		setupModel(model);
 
-		final int noSuccess = getNoSuccesses(model);
+		final int noSuccess = getNoSuccesses(model, false, true);
 		assertBetween("Unexpected success rate for Even 4 Parity", LOWER_SUCCESS, UPPER_SUCCESS, noSuccess);
 	}
 
@@ -86,7 +88,7 @@ public class EvenParityTest extends ModelTest {
 		final EvenParity model = new EvenParity(getEvolver(), 5);
 		setupModel(model);
 
-		final int noSuccess = getNoSuccesses(model);
+		final int noSuccess = getNoSuccesses(model, false, false);
 		assertBetween("Unexpected success rate for Even 5 Parity", LOWER_SUCCESS, UPPER_SUCCESS, noSuccess);
 	}
 
@@ -110,7 +112,7 @@ public class EvenParityTest extends ModelTest {
 		model.setReproductionProbability(0.0);
 		model.setMutation(new SubtreeMutation(evolver));
 
-		final int noSuccess = getNoSuccesses(model);
+		final int noSuccess = getNoSuccesses(model, false, false);
 		assertBetween("Unexpected success rate for Even 4 Parity with subtree mutation", LOWER_SUCCESS, UPPER_SUCCESS, noSuccess);
 	}
 
@@ -134,7 +136,7 @@ public class EvenParityTest extends ModelTest {
 		model.setReproductionProbability(0.0);
 		model.setMutation(new PointMutation(evolver));
 
-		final int noSuccess = getNoSuccesses(model);
+		final int noSuccess = getNoSuccesses(model, false, false);
 		assertBetween("Unexpected success rate for Even 4 Parity with point mutation", LOWER_SUCCESS, UPPER_SUCCESS, noSuccess);
 	}
 
@@ -154,7 +156,7 @@ public class EvenParityTest extends ModelTest {
 		setupModel(model);
 		model.setCrossover(new SubtreeCrossover(evolver));
 
-		final int noSuccess = getNoSuccesses(model);
+		final int noSuccess = getNoSuccesses(model, false, false);
 		assertBetween("Unexpected success rate for Even 4 Parity with subtree crossover", LOWER_SUCCESS, UPPER_SUCCESS, noSuccess);
 	}
 
@@ -185,7 +187,7 @@ public class EvenParityTest extends ModelTest {
 		model.setReproductionProbability(0.0);
 		model.setCrossoverProbability(0.7);
 
-		final int noSuccess = getNoSuccesses(model);
+		final int noSuccess = getNoSuccesses(model, false, false);
 		assertBetween("Unexpected success rate for Even 4 Parity with one-point crossover", LOWER_SUCCESS, UPPER_SUCCESS, noSuccess);
 	}
 
@@ -205,7 +207,7 @@ public class EvenParityTest extends ModelTest {
 		setupModel(model);
 		model.setProgramSelector(new LinearRankSelector(evolver));
 
-		final int noSuccess = getNoSuccesses(model);
+		final int noSuccess = getNoSuccesses(model, false, false);
 		assertBetween("Unexpected success rate for Even 4 Parity with linear rank selector", LOWER_SUCCESS, UPPER_SUCCESS, noSuccess);
 	}
 
@@ -225,7 +227,7 @@ public class EvenParityTest extends ModelTest {
 		setupModel(model);
 		model.setProgramSelector(new TournamentSelector(evolver, 7));
 
-		final int noSuccess = getNoSuccesses(model);
+		final int noSuccess = getNoSuccesses(model, false, false);
 		assertBetween("Unexpected success rate for Even 4 Parity with tournament selector", LOWER_SUCCESS, UPPER_SUCCESS, noSuccess);
 	}
 }

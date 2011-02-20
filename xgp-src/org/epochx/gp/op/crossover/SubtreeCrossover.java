@@ -136,6 +136,10 @@ public class SubtreeCrossover implements GPCrossover, ConfigListener {
 	public SubtreeCrossover(final Evolver evolver, final double functionSwapProbability) {
 		this.evolver = evolver;
 		this.functionSwapProbability = functionSwapProbability;
+		
+		if (evolver != null) {
+			evolver.getLife().addConfigListener(this, false);
+		}
 	}
 
 	/**

@@ -43,11 +43,20 @@ public class ModelTest {
 		return evolver;
 	}
 	
-	protected int getNoSuccesses(Model model) {
+	protected int getNoSuccesses(Model model, boolean printGenStats, boolean printRunStats) {
 		final SuccessCounter counter = new SuccessCounter();
 
 		evolver.getLife().addRunListener(counter);
 
+		evolver.enqueue(model);
+		
+		if (printGenStats) {
+			setupGenPrinting(evolver.getStats(model));
+		}
+		if (printRunStats) {
+			setupRunPrinting(evolver.getStats(model));
+		}
+		
 		evolver.run();
 
 		evolver.getLife().removeRunListener(counter);

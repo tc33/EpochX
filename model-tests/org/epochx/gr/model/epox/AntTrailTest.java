@@ -76,7 +76,7 @@ public class AntTrailTest extends ModelTest {
 		final AntTrail model = new SantaFeTrail(getEvolver(), 600);
 		setupModel(model);
 
-		final int noSuccess = getNoSuccesses(model);
+		final int noSuccess = getNoSuccesses(model, false, false);
 		assertBetween("Unexpected success rate for Santa Fe trail", LOWER_SUCCESS, UPPER_SUCCESS, noSuccess);
 	}
 

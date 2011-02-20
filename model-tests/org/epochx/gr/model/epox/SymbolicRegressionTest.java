@@ -51,7 +51,7 @@ public class SymbolicRegressionTest extends ModelTest {
 		final QuarticRegression model = new QuarticRegression(getEvolver(), 20);
 		setupModel(model);
 
-		final int noSuccess = getNoSuccesses(model);
+		final int noSuccess = getNoSuccesses(model, false, false);
 		assertBetween("Unexpected success rate for quartic symbolic regression", LOWER_SUCCESS, UPPER_SUCCESS, noSuccess);
 	}
 }

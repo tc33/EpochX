@@ -288,7 +288,7 @@ public class FitnessProportionateSelector implements ProgramSelector, PoolSelect
 
 			// If using over-selection then ensure the pool is sorted first.
 			if (overSelection) {
-				Collections.sort(pool, Collections.reverseOrder());
+				Collections.sort(pool, new FitnessComparator(fitnessEvaluator, false));
 			}
 			overSelectionProportion = getOverSelectionProportion(pool.size());
 

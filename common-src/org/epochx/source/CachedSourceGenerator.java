@@ -19,9 +19,7 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.fitness;
-
-import java.util.Comparator;
+package org.epochx.source;
 
 import org.epochx.representation.CandidateProgram;
 
@@ -29,32 +27,17 @@ import org.epochx.representation.CandidateProgram;
 /**
  * 
  */
-public class FitnessComparator<T extends CandidateProgram> implements Comparator<T> {
+public class CachedSourceGenerator<T extends CandidateProgram> implements SourceGenerator<T> {
 
-	private FitnessEvaluator<T> evaluator;
+	private SourceGenerator delegate;
 	
-	private boolean reverse;
-	
-	public FitnessComparator(FitnessEvaluator<T> evaluator) {
-		this(evaluator, false);
+	public CachedSourceGenerator(SourceGenerator delegate) {
+		this.delegate = delegate;
 	}
 	
-	public FitnessComparator(FitnessEvaluator<T> evaluator, boolean reverse) {
-		this.evaluator = evaluator;
-		this.reverse = reverse;
-	}
-
 	@Override
-	public int compare(T o1, T o2) {
-		double fitness1 = evaluator.getFitness(o1);
-		double fitness2 = evaluator.getFitness(o2);
-		
-		if (fitness1 > fitness2) {
-			return reverse ? 1 : -1;
-		} else if (fitness1 == fitness2) {
-			return 0;
-		} else {
-			return reverse ? -1 : 1;
-		}
+	public String getSource(T program) {
+		return delegate.getSource(program);
 	}
+
 }

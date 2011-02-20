@@ -52,7 +52,7 @@ public class MultiplexerTest extends ModelTest {
 		final Multiplexer model = new Multiplexer(getEvolver(), 6);
 		setupModel(model);
 
-		final int noSuccess = getNoSuccesses(model);
+		final int noSuccess = getNoSuccesses(model, false, false);
 		assertBetween("Unexpected success rate for Multiplexer 6-bit", LOWER_SUCCESS, UPPER_SUCCESS, noSuccess);
 	}
 
@@ -74,7 +74,7 @@ public class MultiplexerTest extends ModelTest {
 		model.setPopulationSize(4000);
 		model.setProgramSelector(new FitnessProportionateSelector(evolver, true));
 
-		final int noSuccess = getNoSuccesses(model);
+		final int noSuccess = getNoSuccesses(model, false, false);
 		assertBetween("Unexpected success rate for Multiplexer 11-bit", LOWER_SUCCESS, UPPER_SUCCESS, noSuccess);
 	}
 }

@@ -28,13 +28,12 @@ import org.epochx.epox.*;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.life.ConfigListener;
-import org.epochx.representation.CandidateProgram;
 
 
 /**
  * 
  */
-public class GPInterpreter implements Interpreter, ConfigListener {
+public class GPInterpreter implements Interpreter<GPCandidateProgram>, ConfigListener {
 
 	private Evolver evolver;
 	
@@ -83,9 +82,7 @@ public class GPInterpreter implements Interpreter, ConfigListener {
 	}
 	
 	@Override
-	public Object[] eval(CandidateProgram p, Parameters params) {
-		final GPCandidateProgram program = (GPCandidateProgram) p;
-		
+	public Object[] eval(GPCandidateProgram program, Parameters params) {
 		int noParamSets = params.getNoParameterSets();
 		int noParams = params.getNoParameters();
 		
@@ -110,7 +107,7 @@ public class GPInterpreter implements Interpreter, ConfigListener {
 	}
 	
 	@Override
-	public void exec(CandidateProgram program, Parameters params) {
+	public void exec(GPCandidateProgram program, Parameters params) {
 		eval(program, params);
 	}
 

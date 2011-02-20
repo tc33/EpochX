@@ -44,7 +44,7 @@ import org.epochx.representation.CandidateProgram;
  * represent one or more full program statements. No value will be returned by
  * these methods so the programs are expected to have other side effects.
  */
-public interface Interpreter {
+public interface Interpreter<T extends CandidateProgram> {
 
 	/**
 	 * Evaluates an expression multiple times with each set of argument values
@@ -80,7 +80,7 @@ public interface Interpreter {
 	 * @throws MalformedProgramException if the given expression is not valid
 	 *         according to the language's syntax rules.
 	 */
-	public Object[] eval(CandidateProgram expression, Parameters params) throws MalformedProgramException;
+	public Object[] eval(T expression, Parameters params) throws MalformedProgramException;
 
 	/**
 	 * Executes a program which may consist of multiple program statements,
@@ -108,5 +108,5 @@ public interface Interpreter {
 	 * @throws MalformedProgramException if the given program is not valid
 	 *         according to the language's syntax rules.
 	 */
-	public void exec(CandidateProgram program, Parameters params) throws MalformedProgramException;
+	public void exec(T program, Parameters params) throws MalformedProgramException;
 }

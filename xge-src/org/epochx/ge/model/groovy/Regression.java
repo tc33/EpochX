@@ -23,6 +23,7 @@ package org.epochx.ge.model.groovy;
 
 import org.epochx.core.*;
 import org.epochx.fitness.HitsCountEvaluator;
+import org.epochx.ge.mapper.DepthFirstMapper;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.interpret.*;
@@ -81,7 +82,7 @@ public abstract class Regression extends GEModel {
 			outputs[i] = getCorrectResult(inputs[i]);
 		}
 		
-		setFitnessEvaluator(new HitsCountEvaluator(new GroovyInterpreter(), params, outputs, POINT_ERROR));
+		setFitnessEvaluator(new HitsCountEvaluator<GECandidateProgram>(new GroovyInterpreter<GECandidateProgram>(new DepthFirstMapper(evolver)), params, outputs, POINT_ERROR));
 	}
 
 	/*

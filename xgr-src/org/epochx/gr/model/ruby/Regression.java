@@ -24,6 +24,8 @@ package org.epochx.gr.model.ruby;
 import org.epochx.core.*;
 import org.epochx.fitness.HitsCountEvaluator;
 import org.epochx.gr.model.GRModel;
+import org.epochx.gr.representation.GRCandidateProgram;
+import org.epochx.gr.source.GRSourceGenerator;
 import org.epochx.interpret.*;
 import org.epochx.tools.grammar.Grammar;
 
@@ -78,7 +80,7 @@ public abstract class Regression extends GRModel {
 			outputs[i] = getCorrectResult(inputs[i]);
 		}
 		
-		setFitnessEvaluator(new HitsCountEvaluator(new RubyInterpreter(), params, outputs, POINT_ERROR));
+		setFitnessEvaluator(new HitsCountEvaluator<GRCandidateProgram>(new RubyInterpreter<GRCandidateProgram>(new GRSourceGenerator()), params, outputs, POINT_ERROR));
 	}
 
 	/*

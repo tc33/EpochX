@@ -24,6 +24,7 @@ package org.epochx.ge.model.java;
 import org.apache.commons.lang.ArrayUtils;
 import org.epochx.core.*;
 import org.epochx.fitness.HitsCountEvaluator;
+import org.epochx.ge.mapper.DepthFirstMapper;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.interpret.*;
@@ -93,7 +94,7 @@ public class Multiplexer extends GEModel {
 			expectedResults[i] = multiplex(inputValues[i]);
 		}
 		
-		setFitnessEvaluator(new HitsCountEvaluator(new JavaInterpreter(), params, expectedResults));
+		setFitnessEvaluator(new HitsCountEvaluator<GECandidateProgram>(new JavaInterpreter<GECandidateProgram>(new DepthFirstMapper(evolver)), params, expectedResults));
 	}
 
 	/**

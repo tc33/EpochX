@@ -28,6 +28,8 @@ import java.util.List;
 import org.epochx.core.*;
 import org.epochx.fitness.AntEvaluator;
 import org.epochx.gr.model.GRModel;
+import org.epochx.gr.representation.GRCandidateProgram;
+import org.epochx.gr.source.GRSourceGenerator;
 import org.epochx.interpret.*;
 import org.epochx.tools.ant.*;
 import org.epochx.tools.grammar.Grammar;
@@ -78,7 +80,7 @@ public abstract class AntTrail extends GRModel {
 
 		Parameters params = new Parameters(new String[]{"ANT"}, new Object[]{ant});
 		
-		setFitnessEvaluator(new AntEvaluator(new GroovyInterpreter(), params, landscape, ant, foodLocationsList, allowedTimeSteps));
+		setFitnessEvaluator(new AntEvaluator<GRCandidateProgram>(new GroovyInterpreter<GRCandidateProgram>(new GRSourceGenerator()), params, landscape, ant, foodLocationsList, allowedTimeSteps));
 	}
 
 }

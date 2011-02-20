@@ -32,7 +32,7 @@ import org.epochx.tools.ant.*;
 /**
  * 
  */
-public class AntEvaluator extends AbstractFitnessEvaluator {
+public class AntEvaluator<T extends CandidateProgram> extends AbstractFitnessEvaluator<T> {
 
 	private AntLandscape landscape;
 	private Ant ant;
@@ -40,13 +40,13 @@ public class AntEvaluator extends AbstractFitnessEvaluator {
 	
 	private int timesteps;
 	
-	private Interpreter interpreter;
+	private Interpreter<T> interpreter;
 	
 	private double malformedPenalty;
 	
 	private Parameters params;
 	
-	public AntEvaluator(Interpreter interpreter, Parameters params, AntLandscape landscape, Ant ant, List<Point> foodLocations, int timesteps) {
+	public AntEvaluator(Interpreter<T> interpreter, Parameters params, AntLandscape landscape, Ant ant, List<Point> foodLocations, int timesteps) {
 		this.interpreter = interpreter;
 		this.landscape = landscape;
 		this.ant = ant;
@@ -58,7 +58,7 @@ public class AntEvaluator extends AbstractFitnessEvaluator {
 	}
 	
 	@Override
-	public double getFitness(CandidateProgram program) {
+	public double getFitness(T program) {
 		landscape.setFoodLocations(new ArrayList<Point>(foodLocations));
 		ant.reset(timesteps, landscape);
 

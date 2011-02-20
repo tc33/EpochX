@@ -26,6 +26,8 @@ import org.epochx.ge.codon.CodonGenerator;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.life.ConfigListener;
+import org.epochx.representation.CandidateProgram;
+import org.epochx.source.SourceGenerator;
 import org.epochx.tools.grammar.*;
 
 /**
@@ -55,7 +57,7 @@ import org.epochx.tools.grammar.*;
  * compulsory parameters remain unset when a new codon is requested, then an
  * <code>IllegalStateException</code> will be thrown.
  */
-public class DepthFirstMapper implements Mapper, ConfigListener {
+public class DepthFirstMapper implements Mapper, SourceGenerator<GECandidateProgram>, ConfigListener {
 
 	private Evolver evolver;
 	
@@ -391,5 +393,16 @@ public class DepthFirstMapper implements Mapper, ConfigListener {
 
 	public void setMaxChromosomeLength(final int maxChromosomeLength) {
 		this.maxChromosomeLength = maxChromosomeLength;
+	}
+
+	@Override
+	public String getSource(GECandidateProgram program) {
+		NonTerminalSymbol parseTree = map(program);
+		
+		if (parseTree != null) {
+			return parseTree.toString();
+		} else {
+			return null;
+		}
 	}
 }

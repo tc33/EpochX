@@ -27,10 +27,10 @@ import org.epochx.representation.CandidateProgram;
 /**
  * 
  */
-public interface FitnessEvaluator {
+public interface FitnessEvaluator<T extends CandidateProgram> {
 
-	public double[] getFitness(CandidateProgram[] pop);
+	public double[] getFitness(T[] pop);
 	
-	public double getFitness(CandidateProgram program);
+	public double getFitness(T program);
 	
 }

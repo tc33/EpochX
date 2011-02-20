@@ -22,6 +22,7 @@
 package org.epochx.interpret;
 
 import org.epochx.representation.CandidateProgram;
+import org.epochx.source.SourceGenerator;
 
 import bsh.EvalError;
 
@@ -34,15 +35,19 @@ import bsh.EvalError;
  * There is no publically visible constructor. A singleton instance is
  * maintained which is accessible through the <code>getInstance()</code> method.
  */
-public class JavaInterpreter implements Interpreter {
+public class JavaInterpreter<T extends CandidateProgram> implements Interpreter<T> {
 
+	private SourceGenerator<T> generator;
+	
 	// The bean shell beanShell.
 	private final bsh.Interpreter beanShell;
 
 	/**
 	 * Constructs a JavaInterpreter.
 	 */
-	public JavaInterpreter() {
+	public JavaInterpreter(SourceGenerator<T> generator) {
+		this.generator = generator;
+		
 		beanShell = new bsh.Interpreter();
 	}
 
@@ -54,7 +59,7 @@ public class JavaInterpreter implements Interpreter {
 	 * method. The runtime <code>Object</code> return type will match the type
 	 * returned by the expression.
 	 * 
-	 * @param expression a valid Java expression that is to be evaluated.
+	 * @param program a valid Java expression that is to be evaluated.
 	 * @param argNames {@inheritDoc}
 	 * @param argValues {@inheritDoc}
 	 * @return the return value from evaluating the expression.
@@ -62,14 +67,14 @@ public class JavaInterpreter implements Interpreter {
 	 *         according to the language's syntax rules.
 	 */
 	@Override
-	public Object[] eval(final CandidateProgram expression, Parameters params) throws MalformedProgramException {
+	public Object[] eval(final T program, Parameters params) throws MalformedProgramException {
 		int noParamSets = params.getNoParameterSets();
 		int noParams = params.getNoParameters();
 		
 		Object result[] = new Object[noParamSets];
 
-		if (expression != null) {
-			String expressionStr = expression.toString();
+		if (program != null) {
+			String expression = generator.getSource(program);
 			
 			try {
 				for (int i = 0; i < noParamSets; i++) {
@@ -80,7 +85,7 @@ public class JavaInterpreter implements Interpreter {
 						beanShell.set(params.getIdentifier(j), paramSet[j]);
 					}
 	
-					result[i] = beanShell.eval(expressionStr);
+					result[i] = beanShell.eval(expression);
 				}
 			} catch (final EvalError e) {
 				throw new MalformedProgramException();
@@ -94,7 +99,7 @@ public class JavaInterpreter implements Interpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void exec(final CandidateProgram program, Parameters params)
+	public void exec(final T program, Parameters params)
 			throws MalformedProgramException {
 		eval(program, params);
 	}

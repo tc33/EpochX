@@ -19,35 +19,23 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.fitness;
+package org.epochx.gp.source;
 
-import java.util.Comparator;
-
-import org.epochx.representation.CandidateProgram;
+import org.epochx.epox.Node;
+import org.epochx.gp.representation.GPCandidateProgram;
+import org.epochx.source.SourceGenerator;
 
 
 /**
  * 
  */
-public class FitnessComparator<T extends CandidateProgram> implements Comparator<T> {
-
-	private FitnessEvaluator<T> evaluator;
-	
-	public FitnessComparator(FitnessEvaluator<T> evaluator) {
-		this.evaluator = evaluator;
-	}
+public class GPSourceGenerator implements SourceGenerator<GPCandidateProgram> {
 
 	@Override
-	public int compare(T o1, T o2) {
-		double fitness1 = evaluator.getFitness(o1);
-		double fitness2 = evaluator.getFitness(o2);
+	public String getSource(GPCandidateProgram program) {
+		Node root = program.getRootNode();
 		
-		if (fitness1 > fitness2) {
-			return -1;
-		} else if (fitness1 == fitness2) {
-			return 0;
-		} else {
-			return 1;
-		}
+		return root.toString();
 	}
+
 }

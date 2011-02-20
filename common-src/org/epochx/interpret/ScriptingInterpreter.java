@@ -24,6 +24,7 @@ package org.epochx.interpret;
 import javax.script.*;
 
 import org.epochx.representation.CandidateProgram;
+import org.epochx.source.SourceGenerator;
 
 /**
  * The ScriptingInterpreter provides a generic interpreter for any language
@@ -47,10 +48,12 @@ import org.epochx.representation.CandidateProgram;
  * @see RubyInterpreter
  * @see GroovyInterpreter
  */
-public class ScriptingInterpreter implements Interpreter {
+public class ScriptingInterpreter<T extends CandidateProgram> implements Interpreter<T> {
 
 	// The language specific scripting engine.
 	private final ScriptEngine engine;
+	
+	private SourceGenerator<T> generator;	
 
 	/**
 	 * Constructs a ScriptingInterpreter for a named scripting engine. A list
@@ -65,7 +68,8 @@ public class ScriptingInterpreter implements Interpreter {
 	 * }
 	 * </code></blockquote>
 	 */
-	public ScriptingInterpreter(final String engineName) {
+	public ScriptingInterpreter(SourceGenerator<T> generator, final String engineName) {
+		this.generator = generator;
 		final ScriptEngineManager manager = new ScriptEngineManager();
 
 		engine = manager.getEngineByName(engineName);
@@ -78,7 +82,8 @@ public class ScriptingInterpreter implements Interpreter {
 	/**
 	 * Constructs a ScriptingInterpreter for the given ScriptEngine.
 	 */
-	public ScriptingInterpreter(final ScriptEngine engine) {
+	public ScriptingInterpreter(SourceGenerator<T> generator, final ScriptEngine engine) {
+		this.generator = generator;
 		this.engine = engine;
 	}
 
@@ -86,13 +91,13 @@ public class ScriptingInterpreter implements Interpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object[] eval(final CandidateProgram expression, Parameters params) throws MalformedProgramException {
+	public Object[] eval(final T program, Parameters params) throws MalformedProgramException {
 		int noParamSets = params.getNoParameterSets();
 		int noParams = params.getNoParameters();
 		
 		final Object[] results = new Object[noParamSets];
 
-		String expressionStr = expression.toString();
+		String expression = generator.getSource(program);
 		
 		// Evaluate each argument set.
 		for (int i = 0; i < noParamSets; i++) {
@@ -103,7 +108,7 @@ public class ScriptingInterpreter implements Interpreter {
 				for (int j = 0; j < noParams; i++) {
 					engine.put(params.getIdentifier(j), paramSet[j]);
 				}
-				results[i] = engine.eval(expressionStr);
+				results[i] = engine.eval(expression);
 			} catch (final ScriptException e) {
 				throw new MalformedProgramException();
 			}
@@ -116,7 +121,7 @@ public class ScriptingInterpreter implements Interpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void exec(final CandidateProgram program, Parameters params)
+	public void exec(final T program, Parameters params)
 			throws MalformedProgramException {
 		eval(program, params);
 	}
@@ -128,5 +133,12 @@ public class ScriptingInterpreter implements Interpreter {
 	 */
 	public ScriptEngine getEngine() {
 		return engine;
+	}
+	
+	/**
+	 * 
+	 */
+	public SourceGenerator<T> getSourceGenerator() {
+		return generator;
 	}
 }

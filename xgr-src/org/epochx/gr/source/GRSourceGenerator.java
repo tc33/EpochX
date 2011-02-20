@@ -19,35 +19,23 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.fitness;
+package org.epochx.gr.source;
 
-import java.util.Comparator;
-
-import org.epochx.representation.CandidateProgram;
+import org.epochx.gr.representation.GRCandidateProgram;
+import org.epochx.source.SourceGenerator;
+import org.epochx.tools.grammar.NonTerminalSymbol;
 
 
 /**
  * 
  */
-public class FitnessComparator<T extends CandidateProgram> implements Comparator<T> {
-
-	private FitnessEvaluator<T> evaluator;
-	
-	public FitnessComparator(FitnessEvaluator<T> evaluator) {
-		this.evaluator = evaluator;
-	}
+public class GRSourceGenerator implements SourceGenerator<GRCandidateProgram> {
 
 	@Override
-	public int compare(T o1, T o2) {
-		double fitness1 = evaluator.getFitness(o1);
-		double fitness2 = evaluator.getFitness(o2);
+	public String getSource(GRCandidateProgram program) {
+		NonTerminalSymbol parseTree = program.getParseTree();
 		
-		if (fitness1 > fitness2) {
-			return -1;
-		} else if (fitness1 == fitness2) {
-			return 0;
-		} else {
-			return 1;
-		}
+		return parseTree.toString();
 	}
+
 }

@@ -28,21 +28,21 @@ import org.epochx.representation.CandidateProgram;
 /**
  * 
  */
-public class SumOfErrorEvaluator extends AbstractFitnessEvaluator {
+public class SumOfErrorEvaluator<T extends CandidateProgram> extends AbstractFitnessEvaluator<T> {
 
-	private Interpreter interpreter;
+	private Interpreter<T> interpreter;
 	
 	private Parameters params;
 	private double[] outputs;
 	
-	public SumOfErrorEvaluator(Interpreter interpreter, Parameters params, double[] expectedOutputs) {
+	public SumOfErrorEvaluator(Interpreter<T> interpreter, Parameters params, double[] expectedOutputs) {
 		this.interpreter = interpreter;
 		this.params = params;
 		this.outputs = expectedOutputs;
 	}
 	
 	@Override
-	public double getFitness(CandidateProgram program) {
+	public double getFitness(T program) {
 		double errorSum = 0.0;
 		
 		//TODO Could optionally throw an exception or have settable penalty?

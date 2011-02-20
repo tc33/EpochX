@@ -25,6 +25,7 @@ import java.io.*;
 
 import org.epochx.core.*;
 import org.epochx.fitness.SourceMatchEvaluator;
+import org.epochx.ge.mapper.DepthFirstMapper;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.Grammar;
@@ -44,7 +45,7 @@ public class StringMatch extends GEModel {
 			e.printStackTrace();
 		}
 		
-		setFitnessEvaluator(new SourceMatchEvaluator(expectedString));
+		setFitnessEvaluator(new SourceMatchEvaluator<GECandidateProgram>(new DepthFirstMapper(evolver), expectedString));
 	}
 
 	/*

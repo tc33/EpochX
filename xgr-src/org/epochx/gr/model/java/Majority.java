@@ -26,6 +26,7 @@ import org.epochx.core.*;
 import org.epochx.fitness.HitsCountEvaluator;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
+import org.epochx.gr.source.GRSourceGenerator;
 import org.epochx.interpret.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.Grammar;
@@ -90,7 +91,7 @@ public class Majority extends GRModel {
 			expectedResults[i] = majorityTrue(inputValues[i]);
 		}
 		
-		setFitnessEvaluator(new HitsCountEvaluator(new JavaInterpreter(), params, expectedResults));
+		setFitnessEvaluator(new HitsCountEvaluator<GRCandidateProgram>(new JavaInterpreter<GRCandidateProgram>(new GRSourceGenerator()), params, expectedResults));
 	}
 
 	/**

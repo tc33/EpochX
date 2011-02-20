@@ -30,6 +30,7 @@ import org.epochx.epox.*;
 import org.epochx.fitness.AntEvaluator;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
+import org.epochx.gr.source.GRSourceGenerator;
 import org.epochx.interpret.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.ant.*;
@@ -83,6 +84,6 @@ public abstract class AntTrail extends GRModel {
 
 		Parameters params = new Parameters(new String[]{"ANT"}, new Object[]{ant});
 		
-		setFitnessEvaluator(new AntEvaluator(new EpoxInterpreter(), params, landscape, ant, foodLocationsList, allowedTimeSteps));
+		setFitnessEvaluator(new AntEvaluator<GRCandidateProgram>(new EpoxInterpreter<GRCandidateProgram>(new GRSourceGenerator()), params, landscape, ant, foodLocationsList, allowedTimeSteps));
 	}
 }

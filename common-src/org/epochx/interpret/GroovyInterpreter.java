@@ -24,6 +24,7 @@ package org.epochx.interpret;
 import javax.script.*;
 
 import org.epochx.representation.CandidateProgram;
+import org.epochx.source.SourceGenerator;
 
 /**
  * A GroovyInterpreter provides the facility to evaluate individual Groovy
@@ -35,13 +36,13 @@ import org.epochx.representation.CandidateProgram;
  * </code>, adding Groovy specific enhancements, including optimized
  * performance.
  */
-public class GroovyInterpreter extends ScriptingInterpreter {
+public class GroovyInterpreter<T extends CandidateProgram> extends ScriptingInterpreter<T> {
 
 	/**
 	 * Constructs a GroovyInterpreter.
 	 */
-	public GroovyInterpreter() {
-		super("groovy");
+	public GroovyInterpreter(SourceGenerator<T> generator) {
+		super(generator, "groovy");
 	}
 
 	/**
@@ -73,11 +74,12 @@ public class GroovyInterpreter extends ScriptingInterpreter {
 	 *         nulls.
 	 */
 	@Override
-	public Object[] eval(final CandidateProgram expression, Parameters params) {
+	public Object[] eval(final T expression, Parameters params) {
 		int noParamSets = params.getNoParameterSets();
 		
 		final Object[] results = new Object[noParamSets];
-		final String code = getEvalCode(expression.toString(), params);
+		String expressionSource = getSourceGenerator().getSource(expression);
+		final String code = getEvalCode(expressionSource, params);
 
 		final Invocable invocableEngine = (Invocable) getEngine();
 		try {
@@ -100,9 +102,10 @@ public class GroovyInterpreter extends ScriptingInterpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void exec(final CandidateProgram program, Parameters params) {
+	public void exec(final T program, Parameters params) {
 		int noParamSets = params.getNoParameterSets();
-		final String code = getExecCode(program.toString(), params);
+		String source = getSourceGenerator().getSource(program);
+		final String code = getExecCode(source, params);
 
 		final Invocable invocableEngine = (Invocable) getEngine();
 		try {

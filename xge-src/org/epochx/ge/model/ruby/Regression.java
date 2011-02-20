@@ -23,6 +23,7 @@ package org.epochx.ge.model.ruby;
 
 import org.epochx.core.*;
 import org.epochx.fitness.HitsCountEvaluator;
+import org.epochx.ge.mapper.DepthFirstMapper;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.interpret.*;
@@ -80,7 +81,7 @@ public abstract class Regression extends GEModel {
 			outputs[i] = getCorrectResult(inputs[i]);
 		}
 		
-		setFitnessEvaluator(new HitsCountEvaluator(new RubyInterpreter(), params, outputs, POINT_ERROR));
+		setFitnessEvaluator(new HitsCountEvaluator<GECandidateProgram>(new RubyInterpreter<GECandidateProgram>(new DepthFirstMapper(evolver)), params, outputs, POINT_ERROR));
 	}
 
 	/*

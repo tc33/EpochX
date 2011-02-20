@@ -23,6 +23,7 @@ package org.epochx.interpret;
 
 import org.epochx.epox.*;
 import org.epochx.representation.CandidateProgram;
+import org.epochx.source.SourceGenerator;
 
 /**
  * An <code>EpoxInterpreter</code> provides the facility to evaluate individual
@@ -39,16 +40,18 @@ import org.epochx.representation.CandidateProgram;
  * 
  * @see EpoxParser
  */
-public class EpoxInterpreter implements Interpreter {
+public class EpoxInterpreter<T extends CandidateProgram> implements Interpreter<T> {
 
 	// The Epox language parser.
 	private final EpoxParser parser;
+	
+	private SourceGenerator<T> generator;
 
 	/**
 	 * Constructs a new <code>EpoxInterpreter</code> with a new
 	 * <code>EpoxParser</code>.
 	 */
-	public EpoxInterpreter() {
+	public EpoxInterpreter(SourceGenerator<T> generator) {
 		parser = new EpoxParser();
 	}
 
@@ -58,7 +61,7 @@ public class EpoxInterpreter implements Interpreter {
 	 * 
 	 * @param parser the Epox language parser.
 	 */
-	public EpoxInterpreter(final EpoxParser parser) {
+	public EpoxInterpreter(SourceGenerator<T> generator, final EpoxParser parser) {
 		this.parser = parser;
 	}
 
@@ -66,11 +69,12 @@ public class EpoxInterpreter implements Interpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object[] eval(CandidateProgram program, Parameters params) throws MalformedProgramException {		
+	public Object[] eval(T program, Parameters params) throws MalformedProgramException {		
 		int noParamSets = params.getNoParameterSets();
 		int noParams = params.getNoParameters();
 		
-		String expressionStr = program.toString();
+		// Get program source.		
+		String expression = generator.getSource(program);
 		
 		Object[] results = new Object[noParamSets];
 		for (int i=0; i<noParamSets; i++) {
@@ -84,7 +88,7 @@ public class EpoxInterpreter implements Interpreter {
 				parser.declareVariable(new Variable(params.getIdentifier(j), paramSet[j]));
 			}
 			
-			final Node programTree = parser.parse(expressionStr);
+			final Node programTree = parser.parse(expression);
 			
 			// Evaluate the program tree.
 			results[i] = programTree.evaluate();
@@ -98,7 +102,7 @@ public class EpoxInterpreter implements Interpreter {
 	 * <code>IllegalStateException</code>.
 	 */
 	@Override
-	public void exec(CandidateProgram program, Parameters params) {
+	public void exec(T program, Parameters params) {
 		throw new IllegalStateException("method not supported");
 	}
 

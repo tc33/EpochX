@@ -24,6 +24,8 @@ package org.epochx.gr.model.groovy;
 import org.epochx.core.*;
 import org.epochx.fitness.HitsCountEvaluator;
 import org.epochx.gr.model.GRModel;
+import org.epochx.gr.representation.GRCandidateProgram;
+import org.epochx.gr.source.GRSourceGenerator;
 import org.epochx.interpret.*;
 import org.epochx.tools.grammar.Grammar;
 import org.epochx.tools.util.BoolUtils;
@@ -87,7 +89,7 @@ public class EvenParity extends GRModel {
 			expectedResults[i] = isEvenNoTrue(inputValues[i]);
 		}
 		
-		setFitnessEvaluator(new HitsCountEvaluator(new GroovyInterpreter(), params, expectedResults));
+		setFitnessEvaluator(new HitsCountEvaluator<GRCandidateProgram>(new GroovyInterpreter(new GRSourceGenerator()), params, expectedResults));
 	}
 
 	/**

@@ -222,13 +222,6 @@ public class GPCandidateProgram extends CandidateProgram {
 			clone.rootNode = rootNode.clone();
 		}
 
-		// Copy the caches.
-//		clone.sourceCache = sourceCache;
-//		clone.fitness = fitness;
-//
-//		// Shallow copy the model.
-//		clone.model = model;
-
 		return clone;
 	}
 

@@ -24,6 +24,7 @@ package org.epochx.interpret;
 import java.util.Arrays;
 
 import org.epochx.representation.CandidateProgram;
+import org.epochx.source.SourceGenerator;
 
 /**
  * A BrainfuckInterpreter provides the facility to execute programs in the
@@ -82,27 +83,29 @@ import org.epochx.representation.CandidateProgram;
  * </tr>
  * </table>
  */
-public class BrainfuckInterpreter implements Interpreter {
+public class BrainfuckInterpreter<T extends CandidateProgram> implements Interpreter<T> {
 
 	// The indexable memory available to programs.
 	private final byte[] memory;
 
 	// Pointer to current memory address.
 	private int pointer;
+	
+	private SourceGenerator<T> generator;
 
 	/**
 	 * Constructs a BrainfuckInterpreter with a 30,000 element byte array for
 	 * memory.
 	 */
-	public BrainfuckInterpreter() {
-		this(30000);
+	public BrainfuckInterpreter(SourceGenerator<T> generator) {
+		this(generator, 30000);
 	}
 
 	/**
 	 * Constructs a BrainfuckInterpreter with a byte array for memory with the
 	 * given capacity.
 	 */
-	public BrainfuckInterpreter(final int memorySize) {
+	public BrainfuckInterpreter(SourceGenerator<T> generator, final int memorySize) {
 		memory = new byte[memorySize];
 		pointer = 0;
 	}
@@ -121,7 +124,7 @@ public class BrainfuckInterpreter implements Interpreter {
 	 * IllegalStateException.
 	 */
 	@Override
-	public Object[] eval(CandidateProgram program, Parameters params) {
+	public Object[] eval(T program, Parameters params) {
 		throw new IllegalStateException("method not supported");
 	}
 
@@ -140,7 +143,7 @@ public class BrainfuckInterpreter implements Interpreter {
 	 *        sequence before execution starts.
 	 */
 	@Override
-	public void exec(CandidateProgram program, Parameters params) {
+	public void exec(T program, Parameters params) {
 		int noParamSets = params.getNoParameterSets();
 		
 		for (int i=0; i<noParamSets; i++) {
@@ -154,8 +157,11 @@ public class BrainfuckInterpreter implements Interpreter {
 				memory[i] = (Byte) paramSet[j];
 			}
 	
-			// Execute the program.
-			execute(program.toString());
+			// Get the program source code.
+			String source = generator.getSource(program);
+			
+			// Execute the source.
+			execute(source);
 		}
 	}
 

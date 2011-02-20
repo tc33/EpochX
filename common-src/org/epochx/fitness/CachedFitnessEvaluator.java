@@ -27,16 +27,16 @@ import org.epochx.representation.CandidateProgram;
 /**
  * 
  */
-public class CachedFitnessEvaluator extends AbstractFitnessEvaluator {
+public class CachedFitnessEvaluator<T extends CandidateProgram> extends AbstractFitnessEvaluator<T> {
 
-	private FitnessEvaluator delegate;
+	private FitnessEvaluator<T> delegate;
 	
-	public CachedFitnessEvaluator(FitnessEvaluator delegate) {
+	public CachedFitnessEvaluator(FitnessEvaluator<T> delegate) {
 		this.delegate = delegate;
 	}
 	
 	@Override
-	public double getFitness(CandidateProgram program) {
+	public double getFitness(T program) {
 		return delegate.getFitness(program);
 	}
 

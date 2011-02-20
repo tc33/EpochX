@@ -27,7 +27,9 @@ import java.util.List;
 
 import org.epochx.core.*;
 import org.epochx.fitness.AntEvaluator;
+import org.epochx.ge.mapper.DepthFirstMapper;
 import org.epochx.ge.model.GEModel;
+import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.interpret.*;
 import org.epochx.tools.ant.*;
 import org.epochx.tools.grammar.Grammar;
@@ -78,6 +80,6 @@ public abstract class AntTrail extends GEModel {
 
 		Parameters params = new Parameters(new String[]{"ANT"}, new Object[]{ant});
 		
-		setFitnessEvaluator(new AntEvaluator(new GroovyInterpreter(), params, landscape, ant, foodLocationsList, allowedTimeSteps));
+		setFitnessEvaluator(new AntEvaluator<GECandidateProgram>(new GroovyInterpreter<GECandidateProgram>(new DepthFirstMapper(evolver)), params, landscape, ant, foodLocationsList, allowedTimeSteps));
 	}
 }

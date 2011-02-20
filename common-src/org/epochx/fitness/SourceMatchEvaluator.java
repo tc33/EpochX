@@ -22,22 +22,25 @@
 package org.epochx.fitness;
 
 import org.epochx.representation.CandidateProgram;
+import org.epochx.source.SourceGenerator;
 
 
 /**
  * 
  */
-public class SourceMatchEvaluator extends AbstractFitnessEvaluator {
+public class SourceMatchEvaluator<T extends CandidateProgram> extends AbstractFitnessEvaluator<T> {
 
+	private SourceGenerator<T> generator;
 	private String expectedSource;
 	
-	public SourceMatchEvaluator(String expectedSource) {
+	public SourceMatchEvaluator(SourceGenerator<T> generator, String expectedSource) {
+		this.generator = generator;
 		this.expectedSource = expectedSource;
 	}
 	
 	@Override
-	public double getFitness(CandidateProgram program) {
-		final String src = program.toString();
+	public double getFitness(T program) {
+		final String src = generator.getSource(program);
 
 		if (src == null) {
 			return Integer.MAX_VALUE;

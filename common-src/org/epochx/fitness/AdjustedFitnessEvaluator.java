@@ -38,16 +38,16 @@ import org.epochx.representation.CandidateProgram;
  * adjusted-fitness = 1 / (1 + standardised-fitness)
  * </blockquote></code>
  */
-public class AdjustedFitnessEvaluator implements FitnessEvaluator {
+public class AdjustedFitnessEvaluator<T extends CandidateProgram> implements FitnessEvaluator<T> {
 
-	private FitnessEvaluator delegate;
+	private FitnessEvaluator<T> delegate;
 	
-	public AdjustedFitnessEvaluator(FitnessEvaluator delegate) {
+	public AdjustedFitnessEvaluator(FitnessEvaluator<T> delegate) {
 		this.delegate = delegate;
 	}
 	
 	@Override
-	public double[] getFitness(CandidateProgram[] pop) {
+	public double[] getFitness(T[] pop) {
 		final double[] standardised = delegate.getFitness(pop);
 		final double[] adjusted = new double[pop.length];
 		
@@ -59,7 +59,7 @@ public class AdjustedFitnessEvaluator implements FitnessEvaluator {
 	}
 	
 	@Override
-	public double getFitness(CandidateProgram program) {
+	public double getFitness(T program) {
 		final double standardised = delegate.getFitness(program);
 
 		return getAdjustedFitness(standardised);

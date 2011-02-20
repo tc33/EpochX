@@ -24,6 +24,7 @@ package org.epochx.ge.model.epox;
 import org.apache.commons.lang.ArrayUtils;
 import org.epochx.core.*;
 import org.epochx.fitness.HitsCountEvaluator;
+import org.epochx.ge.mapper.DepthFirstMapper;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.interpret.*;
@@ -88,7 +89,7 @@ public class Majority extends GEModel {
 			expectedResults[i] = majorityTrue(inputValues[i]);
 		}
 		
-		setFitnessEvaluator(new HitsCountEvaluator(new EpoxInterpreter(), params, expectedResults));
+		setFitnessEvaluator(new HitsCountEvaluator<GECandidateProgram>(new EpoxInterpreter<GECandidateProgram>(new DepthFirstMapper(evolver)), params, expectedResults));
 	}
 
 	/**

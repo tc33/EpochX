@@ -27,9 +27,9 @@ import org.epochx.representation.CandidateProgram;
 /**
  * 
  */
-public abstract class AbstractFitnessEvaluator implements FitnessEvaluator {
+public abstract class AbstractFitnessEvaluator<T extends CandidateProgram> implements FitnessEvaluator<T> {
 
-	public double[] getFitness(CandidateProgram[] pop) {
+	public double[] getFitness(T[] pop) {
 		double[] fitnesses = new double[pop.length];
 		for (int i=0; i<fitnesses.length; i++) {
 			fitnesses[i] = getFitness(pop[i]);
@@ -38,6 +38,6 @@ public abstract class AbstractFitnessEvaluator implements FitnessEvaluator {
 		return fitnesses;
 	}
 	
-	public abstract double getFitness(CandidateProgram program);
+	public abstract double getFitness(T program);
 	
 }

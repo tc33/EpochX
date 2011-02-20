@@ -24,6 +24,7 @@ package org.epochx.interpret;
 import javax.script.*;
 
 import org.epochx.representation.CandidateProgram;
+import org.epochx.source.SourceGenerator;
 
 /**
  * A <code>RubyInterpreter</code> provides the facility to evaluate individual
@@ -33,24 +34,25 @@ import org.epochx.representation.CandidateProgram;
  * <code>RubyInterpreter</code> extends from the <code>ScriptingInterpreter
  * </code>, adding ruby specific enhancements, including optimized performance.
  */
-public class RubyInterpreter extends ScriptingInterpreter {
+public class RubyInterpreter<T extends CandidateProgram> extends ScriptingInterpreter<T> {
 
 	/**
 	 * Constructs a RubyInterpreter.
 	 */
-	public RubyInterpreter() {
-		super("ruby");
+	public RubyInterpreter(SourceGenerator<T> generator) {
+		super(generator, "ruby");
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object[] eval(final CandidateProgram expression, final Parameters params)
+	public Object[] eval(final T program, final Parameters params)
 			throws MalformedProgramException {
 		int noParamSets = params.getNoParameterSets();
 		
-		final String code = getEvalCode(expression.toString(), params);
+		String expression = getSourceGenerator().getSource(program);
+		final String code = getEvalCode(expression, params);
 		
 		Object[] result = new Object[noParamSets];
 
@@ -74,11 +76,12 @@ public class RubyInterpreter extends ScriptingInterpreter {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void exec(final CandidateProgram program, final Parameters params)
+	public void exec(final T program, final Parameters params)
 			throws MalformedProgramException {
 		int noParamSets = params.getNoParameterSets();
 		
-		final String code = getExecCode(program.toString(), params);
+		String source = getSourceGenerator().getSource(program);
+		final String code = getExecCode(source, params);
 		
 		final Invocable invocableEngine = (Invocable) getEngine();
 		try {

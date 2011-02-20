@@ -28,19 +28,19 @@ import org.epochx.representation.CandidateProgram;
 /**
  * 
  */
-public class HitsCountEvaluator extends AbstractFitnessEvaluator {
+public class HitsCountEvaluator<T extends CandidateProgram> extends AbstractFitnessEvaluator<T> {
 
 	// The error each point must be within.
 	private double pointError;
 	
-	private Interpreter interpreter;
+	private Interpreter<T> interpreter;
 	
 	private Parameters params;
 	private Object[] expectedOutputs;
 	
 	private double malformedPenalty;
 	
-	public HitsCountEvaluator(Interpreter interpreter, Parameters params, Object[] expectedOutputs) {
+	public HitsCountEvaluator(Interpreter<T> interpreter, Parameters params, Object[] expectedOutputs) {
 		this.interpreter = interpreter;
 		this.params = params;
 		this.expectedOutputs = expectedOutputs;
@@ -48,14 +48,14 @@ public class HitsCountEvaluator extends AbstractFitnessEvaluator {
 		malformedPenalty = expectedOutputs.length;
 	}
 	
-	public HitsCountEvaluator(Interpreter interpreter, Parameters params, Double[] expectedOutputs, double error) {
+	public HitsCountEvaluator(Interpreter<T> interpreter, Parameters params, Double[] expectedOutputs, double error) {
 		this(interpreter, params, expectedOutputs);
 		
 		this.pointError = error;
 	}
 	
 	@Override
-	public double getFitness(CandidateProgram program) {
+	public double getFitness(T program) {
 		double noWrong = 0.0;
 		
 		Object[] results;

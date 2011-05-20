@@ -23,6 +23,7 @@ public class GenerationalStrategy
     		add(component);
     	}
     	
+    	setup();
     	EventManager.getInstance().add(ConfigEvent.class, this);
     }
 

@@ -6,7 +6,6 @@ import org.epochx.*;
 
 public class RandomSelector extends AbstractSelector {
 
-	@Override
 	public Individual select() {
 		return population.get(Config.getInstance().get(RANDOM_SEQUENCE).nextInt(population.size()));
 	}

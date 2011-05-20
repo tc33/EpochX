@@ -10,13 +10,11 @@ public class MaximumGenerations implements TerminationCriteria,
 	public static final ConfigKey<Integer> MAXIMUM_GENERATIONS = new ConfigKey<Integer>();
 	
 	private int generation = 0;
-	
-	@Override
+
 	public boolean terminate() {
 		return generation >= Config.getInstance().get(MAXIMUM_GENERATIONS);
 	}
 
-	@Override
 	public void onEvent(EndGeneration event) {
 		generation = event.getGeneration();
 	}

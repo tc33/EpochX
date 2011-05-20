@@ -8,7 +8,6 @@ public class RouletteSelector extends AbstractSelector {
 
 	private double[] roulette;
 	
-	@Override
 	public void setup(Population population) {
 		Fitness best = population.get(0).getFitness();
 		Fitness worst = best;
@@ -56,7 +55,6 @@ public class RouletteSelector extends AbstractSelector {
 		super.setup(population);
 	}
 	
-	@Override
 	public Individual select() {
 		double random = Config.getInstance().get(RANDOM_SEQUENCE).nextDouble();
 		

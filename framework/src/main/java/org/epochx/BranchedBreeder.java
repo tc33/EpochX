@@ -27,7 +27,6 @@ public class BranchedBreeder
     	EventManager.getInstance().add(ConfigEvent.class, this);
     }
     
-    @Override
     public Population process(Population population)
     {
         selector.setup(population);
@@ -78,7 +77,6 @@ public class BranchedBreeder
     	random = Config.getInstance().get(RANDOM_SEQUENCE);
 	}
 
-	@Override
 	public void onEvent(ConfigEvent event) {
 		if (event.getKey() == OPERATORS 
 				|| event.getKey() == SELECTOR

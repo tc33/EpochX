@@ -17,8 +17,7 @@ public class Pipeline implements Component
     public Pipeline() {
     	pipeline = new ArrayList<Component>();
     }
-    
-    @Override
+
     public Population process(Population population)
     {
         for (Component component : pipeline)

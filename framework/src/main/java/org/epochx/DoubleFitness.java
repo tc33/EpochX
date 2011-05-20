@@ -5,14 +5,12 @@ import java.util.*;
 public abstract class DoubleFitness implements Fitness {
 
 	private static final Comparator<Double> MAXIMISE = new Comparator<Double>() {
-		@Override
 		public int compare(Double d1, Double d2) {
 			return Double.compare(d1, d2);
 		}
 	};
 	
 	private static final Comparator<Double> MINIMISE = new Comparator<Double>() {
-		@Override
 		public int compare(Double d1, Double d2) {
 			return Double.compare(d2, d1);
 		}
@@ -27,8 +25,7 @@ public abstract class DoubleFitness implements Fitness {
 	public double getValue() {
 		return fitness;
 	}
-	
-	@Override
+
 	public int compareTo(Fitness o) {
 		if (this.getClass().isAssignableFrom(o.getClass())) {
 			return comparator().compare(fitness, ((DoubleFitness) o).fitness);

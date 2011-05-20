@@ -72,7 +72,6 @@ public class JavaRandom implements RandomSequence {
 	 *         generator.
 	 * @see Random
 	 */
-	@Override
 	public boolean nextBoolean() {
 		return rand.nextBoolean();
 	}
@@ -87,7 +86,6 @@ public class JavaRandom implements RandomSequence {
 	 *         random number generator.
 	 * @see Random
 	 */
-	@Override
 	public double nextDouble() {
 		return rand.nextDouble();
 	}
@@ -104,7 +102,6 @@ public class JavaRandom implements RandomSequence {
 	 *         the Java random number generator.
 	 * @see Random
 	 */
-	@Override
 	public int nextInt(final int n) {
 		return rand.nextInt(n);
 	}
@@ -118,7 +115,6 @@ public class JavaRandom implements RandomSequence {
 	 *         Java random number generator.
 	 * @see Random
 	 */
-	@Override
 	public int nextInt() {
 		return rand.nextInt();
 	}
@@ -128,7 +124,6 @@ public class JavaRandom implements RandomSequence {
 	 * 
 	 * @param seed the initial seed.
 	 */
-	@Override
 	public void setSeed(final long seed) {
 		rand.setSeed(seed);
 	}

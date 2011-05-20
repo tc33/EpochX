@@ -214,8 +214,6 @@ public class MersenneTwisterFast implements Serializable, Cloneable, RandomSeque
 	 * pass in a long that's bigger than an int (Mersenne Twister
 	 * only uses the first 32 bits for its seed).
 	 */
-
-	@Override
 	synchronized public void setSeed(final long seed) {
 		// Due to a bug in java.util.Random clear up to 1.2, we're
 		// doing our own Gaussian variable.
@@ -245,7 +243,6 @@ public class MersenneTwisterFast implements Serializable, Cloneable, RandomSeque
 	 * in the array are used; if the array is shorter than this then
 	 * integers are repeatedly used in a wrap-around fashion.
 	 */
-
 	synchronized public void setSeed(final int[] array) {
 		if (array.length == 0) {
 			throw new IllegalArgumentException("Array length must be greater than zero");
@@ -286,7 +283,6 @@ public class MersenneTwisterFast implements Serializable, Cloneable, RandomSeque
 		mt[0] = 0x80000000; /* MSB is 1; assuring non-zero initial array */
 	}
 
-	@Override
 	public final int nextInt() {
 		int y;
 
@@ -383,7 +379,6 @@ public class MersenneTwisterFast implements Serializable, Cloneable, RandomSeque
 		return (char) (y >>> 16);
 	}
 
-	@Override
 	public final boolean nextBoolean() {
 		int y;
 
@@ -745,7 +740,6 @@ public class MersenneTwisterFast implements Serializable, Cloneable, RandomSeque
 	 * is a valid
 	 * result but 1.0 is not.
 	 */
-	@Override
 	public final double nextDouble() {
 		int y;
 		int z;
@@ -984,7 +978,6 @@ public class MersenneTwisterFast implements Serializable, Cloneable, RandomSeque
 	 * Returns an integer drawn uniformly from 0 to n-1. Suffice it to say,
 	 * n must be > 0, or an IllegalArgumentException is raised.
 	 */
-	@Override
 	public final int nextInt(final int n) {
 		if (n <= 0) {
 			throw new IllegalArgumentException("n must be positive");

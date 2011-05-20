@@ -55,7 +55,6 @@ public class GenerationalStrategy
     	criteria = Config.getInstance().get(EvolutionaryStrategy.TERMINATION_CRITERIA);
 	}
 
-	@Override
 	public void onEvent(ConfigEvent event) {
 		if (event.getKey() == EvolutionaryStrategy.TERMINATION_CRITERIA) {
 			setup();

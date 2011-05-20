@@ -14,13 +14,11 @@ public class TournamentSelector implements IndividualSelector {
 		randomSelector = new RandomSelector();
 	}
 	
-	@Override
 	public void setup(Population population) {
 		randomSelector.setup(population);
 		size = Config.getInstance().get(TOURNAMENT_SIZE);
 	}
 	
-	@Override
 	public Individual select() {
 		Individual best = null;
 

@@ -10,7 +10,7 @@ package org.epochx;
  */
 public interface Operator
 {
-    public int count();
+    public int inputSize();
 
     public Individual[] apply(Individual...individuals);
     

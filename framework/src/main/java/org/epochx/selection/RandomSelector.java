@@ -1,6 +1,6 @@
 package org.epochx.selection;
 
-import static org.epochx.RandomSequence.*;
+import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
 
 import org.epochx.*;
 

@@ -1,6 +1,6 @@
 package org.epochx.event.stat;
 
-import org.epochx.event.GenerationEvent.*;
+import org.epochx.event.GenerationEvent.EndGeneration;
 
 public class GenerationAverageFitness extends AbstractStat<EndGeneration> {
 
@@ -9,6 +9,6 @@ public class GenerationAverageFitness extends AbstractStat<EndGeneration> {
 	}
 
 	public void onEvent(EndGeneration event) {
-		
+
 	}
 }

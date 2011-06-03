@@ -1,12 +1,10 @@
 package org.epochx;
 
 import org.epochx.Config.ConfigKey;
-import org.epochx.event.EventManager;
+import org.epochx.event.*;
 import org.epochx.event.GenerationEvent.EndGeneration;
-import org.epochx.event.Listener;
 
-public class MaximumGenerations implements TerminationCriteria,
-		Listener<EndGeneration> {
+public class MaximumGenerations implements TerminationCriteria, Listener<EndGeneration> {
 
 	public static final ConfigKey<Integer> MAXIMUM_GENERATIONS = new ConfigKey<Integer>();
 

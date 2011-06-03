@@ -4,8 +4,7 @@
 
 package org.epochx;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import org.epochx.Config.ConfigKey;
 
@@ -16,9 +15,10 @@ import org.epochx.Config.ConfigKey;
  * @version $Revision: 615 $ $Date:: 2011-04-14 12:27:06#$
  */
 public class Population {
+
 	public static final ConfigKey<Integer> SIZE = new ConfigKey<Integer>();
 
-	private List<Individual> individuals;
+	private final List<Individual> individuals;
 
 	public Population() {
 		individuals = new ArrayList<Individual>(Config.getInstance().get(SIZE));
@@ -39,9 +39,8 @@ public class Population {
 	public Individual fittest() {
 		Individual fittest = null;
 
-		for (Individual individual : individuals) {
-			if (fittest == null
-					|| individual.getFitness().compareTo(fittest.getFitness()) > 0) {
+		for (Individual individual: individuals) {
+			if ((fittest == null) || (individual.getFitness().compareTo(fittest.getFitness()) > 0)) {
 				fittest = individual;
 			}
 		}

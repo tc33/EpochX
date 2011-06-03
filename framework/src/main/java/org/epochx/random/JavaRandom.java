@@ -23,7 +23,7 @@ package org.epochx.random;
 
 import java.util.Random;
 
-import org.epochx.*;
+import org.epochx.RandomSequence;
 
 /**
  * Provides a mechanism for using Java's random number generation through

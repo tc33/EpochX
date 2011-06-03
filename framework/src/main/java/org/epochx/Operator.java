@@ -8,12 +8,12 @@ package org.epochx;
  * @author Fernando Esteban Barril Otero
  * @version $Revision: 614 $ $Date:: 2011-04-12 12:58:53#$
  */
-public interface Operator
-{
-    public int inputSize();
+public interface Operator {
 
-    public Individual[] apply(Individual...individuals);
-    
-    public double probability();
-    
+	public int inputSize();
+
+	public Individual[] apply(Individual ... individuals);
+
+	public double probability();
+
 }

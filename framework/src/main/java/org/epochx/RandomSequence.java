@@ -21,7 +21,7 @@
  */
 package org.epochx;
 
-import org.epochx.Config.*;
+import org.epochx.Config.ConfigKey;
 
 /**
  * An implementation of this interface is used to generate a stream of numbers
@@ -30,7 +30,7 @@ import org.epochx.Config.*;
 public interface RandomSequence {
 
 	public static final ConfigKey<RandomSequence> RANDOM_SEQUENCE = new ConfigKey<RandomSequence>();
-	
+
 	/**
 	 * Get the next <code>int</code> between <code>0</code> (inclusive) and
 	 * <code>n</code> (exclusive).

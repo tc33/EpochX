@@ -26,14 +26,11 @@ import java.util.*;
 
 import org.epochx.Config.ConfigKey;
 
-/**
- * TODO: make it iterable
- * 
- * @author Fernando Esteban Barril Otero
- * @version $Revision: 615 $ $Date:: 2011-04-14 12:27:06#$
- */
 public class Population {
-
+	/*
+	 * TODO: make it iterable
+	 */
+	
 	public static final ConfigKey<Integer> SIZE = new ConfigKey<Integer>();
 
 	private final List<Individual> individuals;

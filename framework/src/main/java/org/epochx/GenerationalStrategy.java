@@ -28,10 +28,6 @@ import org.epochx.event.*;
 import org.epochx.event.GenerationEvent.EndGeneration;
 import org.epochx.event.GenerationEvent.StartGeneration;
 
-/**
- * @author Fernando Esteban Barril Otero
- * @version $Revision: 609 $ $Date:: 2011-04-07 11:21:50#$
- */
 public class GenerationalStrategy extends Pipeline implements EvolutionaryStrategy, Listener<ConfigEvent> {
 
 	private List<TerminationCriteria> criteria;

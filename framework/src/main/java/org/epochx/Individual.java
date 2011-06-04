@@ -22,10 +22,6 @@
  */
 package org.epochx;
 
-/**
- * @author Fernando Esteban Barril Otero
- * @version $Revision: 615 $ $Date:: 2011-04-14 12:27:06#$
- */
 public interface Individual {
 
 	public Fitness getFitness();

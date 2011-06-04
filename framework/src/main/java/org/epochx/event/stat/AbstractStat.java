@@ -47,8 +47,6 @@ public abstract class AbstractStat<T extends Event> implements Listener<T> {
 
 	/**
 	 * Returns the Class of the generic type T.
-	 * 
-	 * @return
 	 */
 	@SuppressWarnings("unchecked")
 	public Class<T> getEvent() {

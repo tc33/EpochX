@@ -24,10 +24,6 @@ package org.epochx;
 
 import java.util.*;
 
-/**
- * @author Fernando Esteban Barril Otero
- * @version $Revision: 609 $ $Date:: 2011-04-07 11:21:50#$
- */
 public class Pipeline implements Component {
 
 	private final List<Component> pipeline;

@@ -26,7 +26,6 @@ import java.util.*;
 
 /**
  * Not thread-safe.
- * 
  */
 public class EventManager {
 

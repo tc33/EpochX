@@ -26,10 +26,6 @@ import java.util.HashMap;
 
 import org.epochx.event.*;
 
-/**
- * @author Fernando Esteban Barril Otero
- * @version $Revision: 609 $ $Date:: 2011-04-07 11:21:50#$
- */
 public class Config {
 
 	private static final Config singleton = new Config();

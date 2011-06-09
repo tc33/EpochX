@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2011
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -23,9 +23,14 @@
 
 package org.epochx;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-import org.epochx.event.*;
+import org.epochx.event.ConfigEvent;
+import org.epochx.event.EventManager;
+import org.epochx.random.MersenneTwisterFast;
+import org.epochx.selection.TournamentSelector;
 
 public class Config {
 
@@ -38,6 +43,20 @@ public class Config {
 
 	public static Config getInstance() {
 		return singleton;
+	}
+
+	public void defaults() {
+		singleton.set(Population.SIZE, 500);
+		singleton.set(MaximumGenerations.MAXIMUM_GENERATIONS, 50);
+
+		List<TerminationCriteria> criteria = new ArrayList<TerminationCriteria>();
+		criteria.add(new MaximumGenerations());
+		singleton.set(GenerationalStrategy.TERMINATION_CRITERIA, criteria);
+
+		singleton.set(TournamentSelector.TOURNAMENT_SIZE, 5);
+		singleton.set(BranchedBreeder.SELECTOR, new TournamentSelector());
+		singleton.set(Evolver.STRATEGY, new GenerationalStrategy(new BranchedBreeder()));
+		singleton.set(RandomSequence.RANDOM_SEQUENCE, new MersenneTwisterFast());
 	}
 
 	public <T> void set(ConfigKey<T> key, T value) {

@@ -23,29 +23,38 @@
 
 package org.epochx.event;
 
+import org.epochx.Population;
+
 public abstract class GenerationEvent implements Event {
 
 	private final int generation;
+	
+	private final Population population;
 
-	public GenerationEvent(int generation) {
+	public GenerationEvent(int generation, Population population) {
 		this.generation = generation;
+		this.population = population;
 	}
 
 	public int getGeneration() {
 		return generation;
 	}
+	
+	public Population getPopulation() {
+		return population;
+	}
 
 	public static class StartGeneration extends GenerationEvent {
 
-		public StartGeneration(int generation) {
-			super(generation);
+		public StartGeneration(int generation, Population population) {
+			super(generation, population);
 		}
 	}
 
 	public static class EndGeneration extends GenerationEvent {
 
-		public EndGeneration(int generation) {
-			super(generation);
+		public EndGeneration(int generation, Population population) {
+			super(generation, population);
 		}
 	}
 }

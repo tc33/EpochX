@@ -47,11 +47,11 @@ public class GenerationalStrategy extends Pipeline implements EvolutionaryStrate
 
 		int generation = 1;
 		while (!terminate()) {
-			EventManager.getInstance().fire(StartGeneration.class, new StartGeneration(generation));
+			EventManager.getInstance().fire(StartGeneration.class, new StartGeneration(generation, population));
 
 			population = super.process(population);
 
-			EventManager.getInstance().fire(EndGeneration.class, new EndGeneration(generation));
+			EventManager.getInstance().fire(EndGeneration.class, new EndGeneration(generation, population));
 			generation++;
 		}
 

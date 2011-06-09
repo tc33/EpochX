@@ -29,7 +29,7 @@ import org.epochx.Config.ConfigKey;
 
 public class Population {
 	/*
-	 * TODO: make it iterable
+	 * TODO: make it iterable, serializable
 	 */
 	
 	public static final ConfigKey<Integer> SIZE = new ConfigKey<Integer>();

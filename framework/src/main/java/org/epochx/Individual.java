@@ -23,7 +23,9 @@
 
 package org.epochx;
 
-public interface Individual {
+import java.io.Serializable;
+
+public interface Individual extends Serializable {
 
 	public Fitness getFitness();
 

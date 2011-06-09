@@ -85,6 +85,13 @@ public class EventManager {
 		return listeners.containsKey(listenerType);
 	}
 
+	/**
+	 * Returns the listener instance of the specified type.
+	 * 
+	 * @param type the class type of the listener.
+	 * 
+	 * @return the listener instance of the specified type.
+	 */
 	public <T extends Listener<?>> T get(Class<T> type) {
 		return type.cast(listeners.get(type));
 	}

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2011
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -23,6 +23,10 @@
 
 package org.epochx;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import org.epochx.Config.ConfigKey;
 
 public class Evolver {
@@ -33,21 +37,46 @@ public class Evolver {
 
 	public static final ConfigKey<EvolutionaryStrategy> STRATEGY = new ConfigKey<EvolutionaryStrategy>();
 
-	private final Pipeline pipeline;
+	private HashMap<Placeholder, List<Component>> additional;
 
 	public Evolver() {
-		pipeline = new Pipeline();
+		additional = new HashMap<Evolver.Placeholder, List<Component>>();
+
+		for (Placeholder position: Placeholder.values()) {
+			additional.put(position, new ArrayList<Component>(1));
+		}
 	}
 
 	public Population run() {
-		setupPipeline();
+		Pipeline pipeline = new Pipeline();
+		setupPipeline(pipeline);
 
 		return pipeline.process(new Population());
 	}
 
-	protected void setupPipeline() {
+	protected void setupPipeline(Pipeline pipeline) {
+		pipeline.addAll(additional.get(Placeholder.START));
 		pipeline.add(Config.getInstance().get(INITIALISER));
+		pipeline.addAll(additional.get(Placeholder.AFTER_INITIALISATION));
 		pipeline.add(Config.getInstance().get(EVALUATOR));
+		pipeline.addAll(additional.get(Placeholder.AFTER_EVALUATION));
 		pipeline.add(Config.getInstance().get(STRATEGY));
+		pipeline.addAll(additional.get(Placeholder.END));
+	}
+
+	public void add(Placeholder position, Component component) {
+		additional.get(position).add(component);
+	}
+
+	public void remove(Placeholder position, Component component) {
+		additional.get(position).remove(component);
+	}
+
+	public void clear(Placeholder position) {
+		additional.get(position).clear();
+	}
+
+	public enum Placeholder {
+		START, END, AFTER_INITIALISATION, AFTER_EVALUATION
 	}
 }

@@ -44,6 +44,10 @@ public class Pipeline implements Component {
 	public void add(Component component) {
 		pipeline.add(component);
 	}
+	
+	public void addAll(List<Component> components) {
+		pipeline.addAll(components);
+	}
 
 	public void add(int index, Component component) {
 		pipeline.add(index, component);

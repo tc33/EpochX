@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2011
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -27,31 +27,66 @@ import java.util.*;
 
 import org.epochx.Config.ConfigKey;
 
+/**
+ * A <code>Population</code> is an ordered collection of {@link Individual}s.
+ */
 public class Population {
-	/*
-	 * TODO: make it iterable, serializable
+
+	// TODO: make it iterable, serializable
+
+	/**
+	 * The key for setting and retrieving the population size configuration
+	 * parameter.
 	 */
-	
 	public static final ConfigKey<Integer> SIZE = new ConfigKey<Integer>();
 
 	private final List<Individual> individuals;
 
+	/**
+	 * Constructs an empty <code>Population</code>.
+	 */
 	public Population() {
 		individuals = new ArrayList<Individual>(Config.getInstance().get(SIZE));
 	}
 
+	/**
+	 * Returns the number of individuals within this population.
+	 * 
+	 * @return the number of individuals in this population
+	 */
 	public int size() {
 		return individuals.size();
 	}
 
+	/**
+	 * Appends the specified individual to the end of this population.
+	 * 
+	 * @param individual the individual to add to this population
+	 */
 	public void add(Individual individual) {
 		individuals.add(individual);
 	}
 
+	/**
+	 * Returns the individual at the specified index in this population.
+	 * 
+	 * @param index the index of the individual to be returned
+	 * @return the individual at the specified index position
+	 * @throws IndexOutOfBoundsException if the index is out of range
+	 *         <code>(index < 0 || index > size())</code>
+	 */
 	public Individual get(int index) {
 		return individuals.get(index);
 	}
 
+	/**
+	 * Returns the individual in this population with the best fitness. If
+	 * multiple individuals have equal fitnesses then the individual with the
+	 * lowest index will be returned.
+	 * 
+	 * @return an <code>Individual</code> with the best fitness in this
+	 *         population.
+	 */
 	public Individual fittest() {
 		Individual fittest = null;
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2011
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -29,6 +29,14 @@ import java.util.List;
 
 import org.epochx.event.*;
 
+/**
+ * A <code>BranchedBreeder</code> produces a new <code>Population</code> by
+ * applying a single genetic operator per individual. The operator that is
+ * applied at each step is selected at random. The designated
+ * <code>IndividualSelector</code> is used to choose the individuals that
+ * undergo the selected operator. The result is that each individual in the new
+ * population that is produced is the product of just one genetic operator.
+ */
 public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
 
 	private List<Operator> operators;
@@ -37,11 +45,33 @@ public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
 
 	private RandomSequence random;
 
+	/**
+	 * Constructs a <code>BranchedBreeder</code> that configures itself upon
+	 * construction and firing of appropriate <code>ConfigEvents</code>.
+	 */
 	public BranchedBreeder() {
 		setup();
 		EventManager.getInstance().add(ConfigEvent.class, this);
 	}
 
+	/**
+	 * Applies genetic operators to produce a new population. The available 
+	 * operators are repeatedly selected from at random and applied to produce 
+	 * new individuals that are added to the next population. The configured
+	 * <code>IndividualSelector</code> is used to select individuals from 
+	 * the existing population to supply as inputs to the operator. The number 
+	 * of individuals required by the operator is determined by its 
+	 * <code>inputSize</code> method. The individuals returned by an operator 
+	 * are inserted into the next population. This process is repeated until the
+	 * next population has been filled. If the new population has insufficient 
+	 * space for all the new individuals then only those that there
+	 * is space for will be added and all others will be discarded.
+	 * 
+	 * @param population the current population of individuals that a new 
+	 * population will be produced from
+	 * @return a newly constructed population filled with individuals produced
+	 * by the application of genetic operators
+	 */
 	public Population process(Population population) {
 		selector.setup(population);
 
@@ -81,12 +111,28 @@ public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
 		return newPopulation;
 	}
 
+	/**
+	 * Sets up this breeder with the appropriate configuration settings.
+	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
+	 * change in any of the following configuration parameters:
+	 * <ul>
+	 * <li><code>Breeder.OPERATORS</code>
+	 * <li><code>Breeder.SELECTOR</code>
+	 * <li><code>RandomSequence.RANDOM_SEQUENCE</code>
+	 * </ul>
+	 */
 	protected void setup() {
 		operators = Config.getInstance().get(OPERATORS);
 		selector = Config.getInstance().get(SELECTOR);
 		random = Config.getInstance().get(RANDOM_SEQUENCE);
 	}
 
+	/**
+	 * Receives configuration events and triggers this breeder to configure its
+	 * parameters if the <code>ConfigEvent</code> is for one of its required 
+	 * parameters.
+	 * @param event {@inheritDoc}
+	 */
 	public void onEvent(ConfigEvent event) {
 		if ((event.getKey() == OPERATORS) || (event.getKey() == SELECTOR) || (event.getKey() == RANDOM_SEQUENCE)) {
 			setup();

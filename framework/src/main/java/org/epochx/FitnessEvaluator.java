@@ -23,6 +23,12 @@
 
 package org.epochx;
 
+/**
+ * Implementations of <code>FitnessEvaluator</code> are components that are 
+ * responsible for assigning fitnesses to individuals in a population. Typically
+ * this will be performed by evaluating the quality of each individual against
+ * problem specific requirements.
+ */
 public interface FitnessEvaluator extends Component {
 
 }

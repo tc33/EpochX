@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2011
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -31,47 +31,50 @@ import org.epochx.Config.ConfigKey;
  */
 public interface RandomSequence {
 
+	/**
+	 * The key for setting and retrieving the random number generator.
+	 */
 	public static final ConfigKey<RandomSequence> RANDOM_SEQUENCE = new ConfigKey<RandomSequence>();
 
 	/**
-	 * Get the next <code>int</code> between <code>0</code> (inclusive) and
+	 * Gets the next <code>int</code> between <code>0</code> (inclusive) and
 	 * <code>n</code> (exclusive).
 	 * 
-	 * @param n the upper limit of the generation.
-	 * @return the next <code>int</code> in the pseudo random sequence.
+	 * @param n the upper limit of the generation
+	 * @return the next <code>int</code> in the pseudo random sequence
 	 */
 	public int nextInt(int n);
 
 	/**
-	 * Get the next <code>int</code> with the only limits being the bounds of
-	 * Java's <code>int</code> data type.
+	 * Gets the next <code>int</code> between <code>Integer.MIN_VALUE</code>
+	 * (inclusive) and <code>Integer.MAX_VALUE</code> (inclusive).
 	 * 
-	 * @return the next <code>int</code> in the pseudo random sequence.
+	 * @return the next <code>int</code> in the pseudo random sequence
 	 */
 	public int nextInt();
 
 	/**
-	 * Get the next <code>double</code> in the range <code>0.0</code>
+	 * Gets the next <code>double</code> in the range <code>0.0</code>
 	 * (inclusive) and <code>1.0</code> (exclusive).
 	 * 
-	 * @return the next <code>double</code> in the pseudo random sequence.
+	 * @return the next <code>double</code> in the pseudo random sequence
 	 */
 	public double nextDouble();
 
 	/**
-	 * Get the next <code>boolean</code> value.
+	 * Gets the next <code>boolean</code> value.
 	 * 
 	 * @return the next <code>true</code> or <code>false</code> value in the
-	 *         pseudo random sequence.
+	 *         pseudo random sequence
 	 */
 	public boolean nextBoolean();
 
 	/**
-	 * Set the initial seed of the random number generation. Two instances of
-	 * the same implementation of <code>RandomNumberGenerator</code> given the
+	 * Sets the initial seed of the random number generation. Two instances of
+	 * the same implementation of <code>RandomSequence</code> given the
 	 * same seed, should produce the same sequence of numbers.
 	 * 
-	 * @param seed the initial seed.
+	 * @param seed the initial seed
 	 */
 	public void setSeed(long seed);
 

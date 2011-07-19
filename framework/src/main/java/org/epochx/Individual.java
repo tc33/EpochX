@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2011
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -25,8 +25,21 @@ package org.epochx;
 
 import java.io.Serializable;
 
+/**
+ * An instance of <code>Individual</code> represents one candidate solution to
+ * a specific problem. The only responsibility of an individual is to provide
+ * a fitness that is an indicator of the solution's quality. A typical
+ * implementation would allow a fitness to be set by a {@link FitnessEvaluator}
+ * during an evolutionary run.
+ */
 public interface Individual extends Serializable {
 
+	/**
+	 * Returns a fitness which is an indicator of this individual's quality or
+	 * ability to solve a specific problem.
+	 * 
+	 * @return the fitness of this individual
+	 */
 	public Fitness getFitness();
 
 }

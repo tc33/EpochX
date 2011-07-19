@@ -23,6 +23,12 @@
 
 package org.epochx;
 
+/**
+ * An implementation of the <code>Fitness</code> interface provides a measure of
+ * individual quality. Implementations may represent the fitness score in any
+ * form, explicit or otherwise. The only requirement is that a natural ordering 
+ * exists, defined by the implementation's <code>compareTo</code> method.
+ */
 public interface Fitness extends Comparable<Fitness> {
 
 }

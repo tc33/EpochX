@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2011
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -23,7 +23,20 @@
 
 package org.epochx;
 
+/**
+ * A <code>Component</code> defines an object which performs a population wide
+ * process.
+ */
 public interface Component {
 
+	/**
+	 * Processes the provided <code>Population</code> and returns the resultant
+	 * population.
+	 * 
+	 * @param population a <code>Population</code> to be processed
+	 * @return a <code>Population</code> which is the result of some form of
+	 *         processing of the provided population
+	 */
 	public Population process(Population population);
+
 }

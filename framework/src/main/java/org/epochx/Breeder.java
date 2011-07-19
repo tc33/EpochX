@@ -27,10 +27,26 @@ import java.util.List;
 
 import org.epochx.Config.ConfigKey;
 
+/**
+ * A <code>Breeder</code> is a component that is responsible for applying 
+ * genetic operators to a population. The operators that are applied should be 
+ * chosen from those provided by the <code>OPERATORS</code> configuration
+ * parameter. The individuals that undergo the operations should be selected 
+ * from the received population using the individual selector set with the 
+ * <code>SELECTOR</code> configuration parameter. The method for selecting
+ * between the operators and their order of application are implementation 
+ * specific details.
+ */
 public interface Breeder extends Component {
 
+	/**
+	 * The key for setting and retrieving the genetic operators.
+	 */
 	public static final ConfigKey<List<Operator>> OPERATORS = new ConfigKey<List<Operator>>();
 
+	/**
+	 * The key for setting and retrieving the <code>IndividualSelector</code>.
+	 */
 	public static final ConfigKey<IndividualSelector> SELECTOR = new ConfigKey<IndividualSelector>();
 
 }

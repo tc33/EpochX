@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2011
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -27,8 +27,21 @@ import java.util.List;
 
 import org.epochx.Config.ConfigKey;
 
+/**
+ * An <code>EvolutionaryStrategy</code> is a component that is responsible for
+ * evolving an existing population. Implementations may perform the evolution in
+ * any number of ways, including using a generational or steady-state approach.
+ * When used with an Evolver, in a typical setup, the evolutionary strategy will
+ * receive a full population of individuals that have already been evaluated.
+ * The strategy must progress the population, normally with the use of genetic
+ * operators, and provide a stopping condition if appropriate.
+ */
 public interface EvolutionaryStrategy extends Component {
 
+	/**
+	 * The key for setting and retrieving a list of
+	 * <code>TerminationCriteria</code>.
+	 */
 	public static final ConfigKey<List<TerminationCriteria>> TERMINATION_CRITERIA = new ConfigKey<List<TerminationCriteria>>();
 
 }

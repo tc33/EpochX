@@ -29,10 +29,22 @@ import org.epochx.event.*;
 import org.epochx.event.GenerationEvent.EndGeneration;
 import org.epochx.event.GenerationEvent.StartGeneration;
 
+/**
+ * A <code>GenerationalStrategy</code> is an evolutionary strategy with clearly
+ * defined generations. 
+ * 
+ * @see Breeder
+ */
 public class GenerationalStrategy extends Pipeline implements EvolutionaryStrategy, Listener<ConfigEvent> {
 
 	private List<TerminationCriteria> criteria;
 
+	/**
+	 * Constructs a <code>GenerationalStrategy</code> with the provided 
+	 * components. One of those components would typically be a {@link Breeder}.
+	 * 
+	 * @param components
+	 */
 	public GenerationalStrategy(Component ... components) {
 		for (Component component: components) {
 			add(component);

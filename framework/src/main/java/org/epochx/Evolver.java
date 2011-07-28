@@ -24,8 +24,8 @@
 package org.epochx;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 
 import org.epochx.Config.ConfigKey;
 
@@ -71,13 +71,16 @@ public class Evolver {
 	 */
 	public static final ConfigKey<EvolutionaryStrategy> STRATEGY = new ConfigKey<EvolutionaryStrategy>();
 
-	private HashMap<Placeholder, List<Component>> additional;
+	/**
+	 * The mapping of placeholder components.
+	 */
+	private HashMap<Placeholder, ArrayList<Component>> additional;
 
 	/**
 	 * Constructs an <code>Evolver</code>.
 	 */
 	public Evolver() {
-		additional = new HashMap<Evolver.Placeholder, List<Component>>();
+		additional = new HashMap<Evolver.Placeholder, ArrayList<Component>>();
 
 		for (Placeholder position: Placeholder.values()) {
 			additional.put(position, new ArrayList<Component>(1));
@@ -176,6 +179,21 @@ public class Evolver {
 	 */
 	public void clear(Placeholder position) {
 		additional.get(position).clear();
+	}
+
+	/**
+	 * Returns all components at the specified <code>Placeholder</code> position
+	 * within the evolutionary pipeline.
+	 * 
+	 * @param position the <code>Placeholder</code> from which all components
+	 *        should be returned.
+	 * 
+	 * @return all components at the specified <code>Placeholder</code>
+	 *         position.
+	 */
+	@SuppressWarnings("unchecked")
+	public Collection<Component> get(Placeholder position) {
+		return (ArrayList<Component>) additional.get(position).clone();
 	}
 
 	/**

@@ -25,6 +25,7 @@ package org.epochx;
 import junit.framework.TestCase;
 
 import org.epochx.Config.ConfigKey;
+import org.epochx.selection.TournamentSelector;
 
 /**
  * The <code>ConfigTest</code> class provides unit tests for methods of the
@@ -35,24 +36,40 @@ import org.epochx.Config.ConfigKey;
 public class ConfigTest extends TestCase {
 
 	/**
-	 * Test for the <code>get</code> method.
+	 * Test for the {@link Config#get(ConfigKey)} method.
 	 */
 	public void testGet() {
-		Config.getInstance().defaults();
-		assertNotNull(Config.getInstance().get(Population.SIZE));
-		assertNull(Config.getInstance().get(null));
+		ConfigKey<Double> key = new ConfigKey<Double>();
+		assertNull(Config.getInstance().get(key));
+		Config.getInstance().set(key, 1.0);
+		assertNotNull(Config.getInstance().get(key));
 	}
 
 	/**
-	 * Test for the <code>set</code> method.
+	 * Test for the {@link Config#set(ConfigKey, Object)} method.
 	 */
 	public void testSet() {
 		ConfigKey<Double> key = new ConfigKey<Double>();
 		Config.getInstance().set(key, 0.2);
 		assertEquals(0.2, Config.getInstance().get(key));
-		
+
 		Config.getInstance().set(key, 0.4);
 		assertEquals(0.4, Config.getInstance().get(key));
+	}
+
+	/**
+	 * Test for the {@link Config#defaults()} method.
+	 */
+	public void testDefaults() {
+		Config config = Config.getInstance();
+		config.defaults();
+
+		assertNotNull(config.get(Population.SIZE));
+		assertNotNull(config.get(GenerationalStrategy.TERMINATION_CRITERIA));
+		assertNotNull(config.get(TournamentSelector.TOURNAMENT_SIZE));
+		assertNotNull(config.get(BranchedBreeder.SELECTOR));
+		assertNotNull(config.get(Evolver.STRATEGY));
+		assertNotNull(config.get(RandomSequence.RANDOM_SEQUENCE));
 	}
 
 }

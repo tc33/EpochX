@@ -44,10 +44,20 @@ import org.epochx.selection.TournamentSelector;
  */
 public class Config {
 
+	/**
+	 * The singleton instance.
+	 */
 	private static final Config singleton = new Config();
 
+	/**
+	 * The key -&gt; value mapping.
+	 */
 	private final HashMap<ConfigKey<?>, Object> mapping = new HashMap<ConfigKey<?>, Object>();
 
+	/**
+	 * No instance are allowed, appart from the singleton.
+	 * 
+	 */
 	private Config() {
 	}
 
@@ -124,6 +134,23 @@ public class Config {
 	}
 
 	/**
+	 * Retrieves the value of the configuration parameter associated with the
+	 * specified key.
+	 * 
+	 * @param key the <code>ConfigKey</code> for the configuration parameter
+	 *        to retrieve
+	 * @param defaultValue the default value to be returned if the parameter
+	 *        has not been set
+	 * @return the value of the specified configuration parameter, or
+	 *         <code>null</code> if it has not been set. The object type is
+	 *         defined by the generic type of the key.
+	 */
+	public <T> T get(ConfigKey<T> key, T defaultValue) {
+		T value = get(key);
+		return (value == null) ? defaultValue : value;
+	}
+
+	/**
 	 * Instances of <code>ConfigKey</code> are used to uniquely identify
 	 * configuration parameters. The generic type <code>T</code> defines a
 	 * constraint upon the object type of the parameter's value.
@@ -131,4 +158,5 @@ public class Config {
 	 * @param <T> the required object type of values for this parameter
 	 */
 	public static class ConfigKey<T> {}
+
 }

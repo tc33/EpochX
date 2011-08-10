@@ -23,7 +23,8 @@
 
 package org.epochx;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A <code>Pipeline</code> provides an ordered collection of
@@ -32,6 +33,9 @@ import java.util.*;
  */
 public class Pipeline implements Component {
 
+	/**
+	 * The list of components in this pipeline.
+	 */
 	private final List<Component> pipeline;
 
 	/**
@@ -123,4 +127,5 @@ public class Pipeline implements Component {
 	public Component remove(int index) {
 		return pipeline.remove(index);
 	}
+
 }

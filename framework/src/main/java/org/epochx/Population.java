@@ -23,7 +23,8 @@
 
 package org.epochx;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.epochx.Config.ConfigKey;
 
@@ -40,6 +41,9 @@ public class Population {
 	 */
 	public static final ConfigKey<Integer> SIZE = new ConfigKey<Integer>();
 
+	/**
+	 * The list of individuals of this propulation.
+	 */
 	private final List<Individual> individuals;
 
 	/**
@@ -98,4 +102,5 @@ public class Population {
 
 		return fittest;
 	}
+
 }

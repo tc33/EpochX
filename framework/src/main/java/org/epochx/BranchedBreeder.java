@@ -27,7 +27,9 @@ import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
 
 import java.util.List;
 
-import org.epochx.event.*;
+import org.epochx.event.ConfigEvent;
+import org.epochx.event.EventManager;
+import org.epochx.event.Listener;
 
 /**
  * A <code>BranchedBreeder</code> produces a new <code>Population</code> by
@@ -39,10 +41,20 @@ import org.epochx.event.*;
  */
 public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
 
+	/**
+	 * The list of operators to be used to generate new individuals.
+	 */
 	private List<Operator> operators;
 
+	/**
+	 * The selection strategy used to select the individual that will survive
+	 * a generation.
+	 */
 	private IndividualSelector selector;
 
+	/**
+	 * The random number generator.
+	 */
 	private RandomSequence random;
 
 	/**
@@ -55,22 +67,22 @@ public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
 	}
 
 	/**
-	 * Applies genetic operators to produce a new population. The available 
-	 * operators are repeatedly selected from at random and applied to produce 
+	 * Applies genetic operators to produce a new population. The available
+	 * operators are repeatedly selected from at random and applied to produce
 	 * new individuals that are added to the next population. The configured
-	 * <code>IndividualSelector</code> is used to select individuals from 
-	 * the existing population to supply as inputs to the operator. The number 
-	 * of individuals required by the operator is determined by its 
-	 * <code>inputSize</code> method. The individuals returned by an operator 
+	 * <code>IndividualSelector</code> is used to select individuals from
+	 * the existing population to supply as inputs to the operator. The number
+	 * of individuals required by the operator is determined by its
+	 * <code>inputSize</code> method. The individuals returned by an operator
 	 * are inserted into the next population. This process is repeated until the
-	 * next population has been filled. If the new population has insufficient 
+	 * next population has been filled. If the new population has insufficient
 	 * space for all the new individuals then only those that there
 	 * is space for will be added and all others will be discarded.
 	 * 
-	 * @param population the current population of individuals that a new 
-	 * population will be produced from
+	 * @param population the current population of individuals that a new
+	 *        population will be produced from
 	 * @return a newly constructed population filled with individuals produced
-	 * by the application of genetic operators
+	 *         by the application of genetic operators
 	 */
 	public Population process(Population population) {
 		selector.setup(population);
@@ -102,9 +114,14 @@ public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
 
 			parents = operator.apply(parents);
 
-			for (int i = 0; (i < parents.length) && (size > 0); i++) {
-				newPopulation.add(parents[i]);
-				size--;
+			// TODO what should we do when the operator fails? At the moment, it
+			// will try another one (assuming that a null return means that the
+			// operator failed)
+			if (parents != null) {
+				for (int i = 0; (i < parents.length) && (size > 0); i++) {
+					newPopulation.add(parents[i]);
+					size--;
+				}
 			}
 		}
 
@@ -129,8 +146,9 @@ public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
 
 	/**
 	 * Receives configuration events and triggers this breeder to configure its
-	 * parameters if the <code>ConfigEvent</code> is for one of its required 
+	 * parameters if the <code>ConfigEvent</code> is for one of its required
 	 * parameters.
+	 * 
 	 * @param event {@inheritDoc}
 	 */
 	public void onEvent(ConfigEvent event) {
@@ -138,4 +156,5 @@ public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
 			setup();
 		}
 	}
+
 }

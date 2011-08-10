@@ -23,12 +23,39 @@
 
 package org.epochx;
 
+/**
+ * An instance of <code>Operator</code> represents a genetic operator used to
+ * generate new individuals. In general, a genetic operator takes <it>n</it>
+ * individuals as input and performs random modifications to generate new
+ * individuals.
+ */
 public interface Operator {
 
+	/**
+	 * Returns the number of individuals expected by the operator.
+	 * 
+	 * @return the number of individuals expected by the operator.
+	 */
 	public int inputSize();
 
+	/**
+	 * Performs the operator on the specified individuals. If the operator is
+	 * not successful, the specified individuals will not be changed and
+	 * <code>null</code> is returned.
+	 * 
+	 * @param individuals the individuals undergoing the operator.
+	 * 
+	 * @return the modified individuals; <code>null</code> when the operator
+	 *         could not be applied.
+	 */
 	public Individual[] apply(Individual ... individuals);
 
+	/**
+	 * Returns the probability of the operator (the higher the value, the more
+	 * frequent the operator is used).
+	 * 
+	 * @return the probability of the operator.
+	 */
 	public double probability();
 
 }

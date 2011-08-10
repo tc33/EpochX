@@ -35,6 +35,10 @@ import java.util.Comparator;
  */
 public abstract class DoubleFitness implements Fitness {
 
+	/**
+	 * The comparator used by the {@link Maximise} double fitness
+	 * implementation.
+	 */
 	private static final Comparator<Double> MAXIMISE = new Comparator<Double>() {
 
 		public int compare(Double d1, Double d2) {
@@ -42,6 +46,10 @@ public abstract class DoubleFitness implements Fitness {
 		}
 	};
 
+	/**
+	 * The comparator used by the {@link Minimise} double fitness
+	 * implementation.
+	 */
 	private static final Comparator<Double> MINIMISE = new Comparator<Double>() {
 
 		public int compare(Double d1, Double d2) {
@@ -49,6 +57,9 @@ public abstract class DoubleFitness implements Fitness {
 		}
 	};
 
+	/**
+	 * The actual double fitness value.
+	 */
 	private final double fitness;
 
 	/**
@@ -165,4 +176,5 @@ public abstract class DoubleFitness implements Fitness {
 			return MINIMISE;
 		}
 	}
+
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2011
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -23,9 +23,26 @@
 
 package org.epochx;
 
+/**
+ * An instance of <code>IndividualSelector</code> represents the selection
+ * strategy used during an evolutionary run to generate a new population.
+ * The selection is usually guided by the fitness of the individuals.
+ */
 public interface IndividualSelector {
 
+	/**
+	 * Prepares the selector. This method is called before an individual is
+	 * selected.
+	 * 
+	 * @param population the current population.
+	 */
 	public void setup(Population population);
 
+	/**
+	 * Returns an individual.
+	 * 
+	 * @return an individual.
+	 */
 	public Individual select();
+
 }

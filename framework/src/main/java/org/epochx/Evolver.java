@@ -129,11 +129,11 @@ public class Evolver {
 	 */
 	protected void setupPipeline(Pipeline pipeline) {
 		pipeline.addAll(additional.get(Placeholder.START));
-		pipeline.add(Config.getInstance().get(INITIALISER));
+		pipeline.add(Config.getInstance().get(INITIALISER));		
 		pipeline.addAll(additional.get(Placeholder.AFTER_INITIALISATION));
 		pipeline.add(Config.getInstance().get(EVALUATOR));
 		pipeline.addAll(additional.get(Placeholder.AFTER_EVALUATION));
-		pipeline.add(Config.getInstance().get(STRATEGY));
+		pipeline.add(Config.getInstance().get(STRATEGY));		
 		pipeline.addAll(additional.get(Placeholder.END));
 	}
 
@@ -225,4 +225,5 @@ public class Evolver {
 		 */
 		END
 	}
+
 }

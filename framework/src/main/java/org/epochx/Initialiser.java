@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2011
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -23,8 +23,17 @@
 
 package org.epochx;
 
+/**
+ * An instance of <code>Initialiser</code> is reponsible for creating the
+ * indivuduals.
+ */
 public interface Initialiser extends Component {
 
+	/**
+	 * Returns a newly created individual.
+	 * 
+	 * @return a newly created individual.
+	 */
 	public Individual create();
 
 }

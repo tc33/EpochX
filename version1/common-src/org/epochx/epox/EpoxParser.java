@@ -25,6 +25,7 @@ import java.text.*;
 import java.util.*;
 
 import org.apache.commons.lang.*;
+import org.epochx.epox.Literal;
 import org.epochx.epox.ant.*;
 import org.epochx.epox.bool.*;
 import org.epochx.epox.lang.*;
@@ -391,14 +392,14 @@ public class EpoxParser {
 		final Number n = NumberFormat.getInstance().parse(numericStr, new ParsePosition(0));
 
 		if (n instanceof Long) {
-			// If ended with 'D' or 'd', then use double instead of long.
-			if (numericStr.endsWith("D") || numericStr.endsWith("d")) {
-				literal = new Literal(n.doubleValue());
+			// If ended with 'F' or 'f', then use float instead of long.
+			if (numericStr.endsWith("F") || numericStr.endsWith("f")) {
+				literal = new Literal(n.floatValue());
 			}
 			
-			// If ended with 'F' or 'f', then use float instead of long.
-			else if (numericStr.endsWith("F") || numericStr.endsWith("f")) {
-				literal = new Literal(n.floatValue());
+			// If ended with 'D' or 'd', or contains a dp, then use double instead of long.
+			else if (numericStr.endsWith("D") || numericStr.endsWith("d") || numericStr.contains(".")) {
+				literal = new Literal(n.doubleValue());
 			}
 			
 			// If within range, and not ending with 'L' or 'l', use int instead of long.

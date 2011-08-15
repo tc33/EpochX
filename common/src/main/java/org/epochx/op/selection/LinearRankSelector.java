@@ -23,11 +23,9 @@ package org.epochx.op.selection;
 
 import java.util.*;
 
-import org.epochx.core.*;
-import org.epochx.life.ConfigListener;
+import org.epochx.RandomSequence;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
  * Linear rank selection chooses programs by fitness rank. All the programs in
@@ -70,7 +68,7 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector, Config
 	private final ProgramLinearRankSelector poolSelection;
 
 	// Random number generator.
-	private RandomNumberGenerator rng;
+	private RandomSequence rng;
 
 	// The gradient of the probabilities.
 	private double gradient;
@@ -88,7 +86,7 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector, Config
 	 * @param rng a <code>RandomNumberGenerator</code> used to lead
 	 *        non-deterministic behaviour.
 	 */
-	public LinearRankSelector(final RandomNumberGenerator rng) {
+	public LinearRankSelector(final RandomSequence rng) {
 		this(rng, 0.2);
 	}
 
@@ -101,7 +99,7 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector, Config
 	 * @param gradient a value between 0.0 and 1.0 which indicates the gradient
 	 *        at which fitnesses are assigned to ranks.
 	 */
-	public LinearRankSelector(final RandomNumberGenerator rng, final double gradient) {
+	public LinearRankSelector(final RandomSequence rng, final double gradient) {
 		this((Evolver) null, gradient);
 
 		this.rng = rng;
@@ -265,7 +263,7 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector, Config
 	 * 
 	 * @return the rng the currently set random number generator.
 	 */
-	public RandomNumberGenerator getRNG() {
+	public RandomSequence getRNG() {
 		return rng;
 	}
 
@@ -276,7 +274,7 @@ public class LinearRankSelector implements ProgramSelector, PoolSelector, Config
 	 * 
 	 * @param rng the random number generator to set.
 	 */
-	public void setRNG(final RandomNumberGenerator rng) {
+	public void setRNG(final RandomSequence rng) {
 		this.rng = rng;
 	}
 

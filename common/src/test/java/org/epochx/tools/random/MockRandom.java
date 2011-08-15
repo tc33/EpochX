@@ -21,10 +21,12 @@
  */
 package org.epochx.tools.random;
 
+import org.epochx.RandomSequence;
+
 /**
  * A mock random number generator for the purpose of testing.
  */
-public class MockRandom implements RandomNumberGenerator {
+public class MockRandom implements RandomSequence {
 
 	// The values that will be returned as the 'random' values.
 	private int nextInt;

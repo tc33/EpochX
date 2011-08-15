@@ -21,7 +21,8 @@
  */
 package org.epochx.epox;
 
-import org.epochx.tools.random.RandomNumberGenerator;
+import org.epochx.RandomSequence;
+
 
 /**
  * Defines an integer ephemeral random constant (ERC). An ERC is a literal with
@@ -43,7 +44,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class IntegerERC extends Literal {
 
-	private RandomNumberGenerator rng;
+	private RandomSequence rng;
 
 	// The inclusive bounds.
 	private int upper;
@@ -59,7 +60,7 @@ public class IntegerERC extends Literal {
 	 * @param lower the inclusive lower bound of values that are generated.
 	 * @param upper the inclusive upper bound of values that are generated.
 	 */
-	public IntegerERC(final RandomNumberGenerator rng, final int lower, final int upper) {
+	public IntegerERC(final RandomSequence rng, final int lower, final int upper) {
 		super(null);
 		
 		
@@ -117,7 +118,7 @@ public class IntegerERC extends Literal {
 	 * 
 	 * @return the random number generator
 	 */
-	public RandomNumberGenerator getRNG() {
+	public RandomSequence getRNG() {
 		return rng;
 	}
 
@@ -127,7 +128,7 @@ public class IntegerERC extends Literal {
 	 * 
 	 * @param rng the random number generator to set
 	 */
-	public void setRNG(final RandomNumberGenerator rng) {
+	public void setRNG(final RandomSequence rng) {
 		this.rng = rng;
 	}
 

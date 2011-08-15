@@ -23,11 +23,9 @@ package org.epochx.op.selection;
 
 import java.util.*;
 
-import org.epochx.core.*;
-import org.epochx.life.ConfigListener;
+import org.epochx.RandomSequence;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
  * A random selector is a program and pool selector which provides no selection
@@ -55,7 +53,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
 public class RandomSelector implements ProgramSelector, PoolSelector, ConfigListener {
 
 	// Random number generator.
-	private RandomNumberGenerator rng;
+	private RandomSequence rng;
 
 	// The current pool from which programs should be chosen.
 	private List<CandidateProgram> pool;
@@ -67,7 +65,7 @@ public class RandomSelector implements ProgramSelector, PoolSelector, ConfigList
 	 * @param rng a <code>RandomNumberGenerator</code> used to lead
 	 *        non-deterministic behaviour.
 	 */
-	public RandomSelector(final RandomNumberGenerator rng) {
+	public RandomSelector(final RandomSequence rng) {
 		this((Evolver) null);
 
 		this.rng = rng;
@@ -159,7 +157,7 @@ public class RandomSelector implements ProgramSelector, PoolSelector, ConfigList
 	 * 
 	 * @return the rng the currently set random number generator.
 	 */
-	public RandomNumberGenerator getRNG() {
+	public RandomSequence getRNG() {
 		return rng;
 	}
 
@@ -170,7 +168,7 @@ public class RandomSelector implements ProgramSelector, PoolSelector, ConfigList
 	 * 
 	 * @param rng the random number generator to set.
 	 */
-	public void setRNG(final RandomNumberGenerator rng) {
+	public void setRNG(final RandomSequence rng) {
 		this.rng = rng;
 	}
 }

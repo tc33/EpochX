@@ -23,12 +23,10 @@ package org.epochx.op.selection;
 
 import java.util.*;
 
-import org.epochx.core.*;
+import org.epochx.RandomSequence;
 import org.epochx.fitness.*;
-import org.epochx.life.ConfigListener;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
  * Fitness proportionate selection chooses programs with a probability
@@ -60,7 +58,7 @@ public class FitnessProportionateSelector implements ProgramSelector, PoolSelect
 	private final ProgramFitnessProportionateSelector poolSelection;
 
 	// Random number generator.
-	private RandomNumberGenerator rng;
+	private RandomSequence rng;
 
 	// Whether over-selection should be used or not.
 	private boolean overSelection;
@@ -74,7 +72,7 @@ public class FitnessProportionateSelector implements ProgramSelector, PoolSelect
 	 * @param rng a <code>RandomNumberGenerator</code> used to lead
 	 *        non-deterministic behaviour.
 	 */
-	public FitnessProportionateSelector(final RandomNumberGenerator rng) {
+	public FitnessProportionateSelector(final RandomSequence rng) {
 		this(rng, false);
 	}
 
@@ -87,7 +85,7 @@ public class FitnessProportionateSelector implements ProgramSelector, PoolSelect
 	 * @param overSelection true if greedy over-selection should be used and
 	 *        false otherwise.
 	 */
-	public FitnessProportionateSelector(final RandomNumberGenerator rng, final boolean overSelection) {
+	public FitnessProportionateSelector(final RandomSequence rng, final boolean overSelection) {
 		this((Evolver) null, overSelection);
 		
 		this.rng = rng;
@@ -201,7 +199,7 @@ public class FitnessProportionateSelector implements ProgramSelector, PoolSelect
 	 * 
 	 * @return the rng the currently set random number generator.
 	 */
-	public RandomNumberGenerator getRNG() {
+	public RandomSequence getRNG() {
 		return rng;
 	}
 
@@ -212,7 +210,7 @@ public class FitnessProportionateSelector implements ProgramSelector, PoolSelect
 	 * 
 	 * @param rng the random number generator to set.
 	 */
-	public void setRNG(final RandomNumberGenerator rng) {
+	public void setRNG(final RandomSequence rng) {
 		this.rng = rng;
 	}
 

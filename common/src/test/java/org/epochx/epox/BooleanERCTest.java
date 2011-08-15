@@ -23,6 +23,8 @@ package org.epochx.epox;
 
 import static org.junit.Assert.*;
 
+import org.epochx.RandomSequence;
+import org.epochx.random.MersenneTwisterFast;
 import org.epochx.tools.random.*;
 import org.junit.Test;
 
@@ -32,7 +34,7 @@ import org.junit.Test;
 public class BooleanERCTest extends LiteralTest {
 
 	private BooleanERC erc;
-	private RandomNumberGenerator rng;
+	private RandomSequence rng;
 
 	/**
 	 * Part of test fixture for superclass.

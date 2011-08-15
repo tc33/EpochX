@@ -23,12 +23,10 @@ package org.epochx.op.selection;
 
 import java.util.*;
 
-import org.epochx.core.*;
+import org.epochx.RandomSequence;
 import org.epochx.fitness.FitnessEvaluator;
-import org.epochx.life.ConfigListener;
 import org.epochx.op.*;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
  * Tournament selection chooses programs through a tournament performed on a
@@ -66,7 +64,7 @@ public class TournamentSelector implements ProgramSelector, PoolSelector, Config
 	private int tournamentSize;
 
 	// Random number generator.
-	private RandomNumberGenerator rng;
+	private RandomSequence rng;
 	
 	private FitnessEvaluator fitnessEvaluator;
 
@@ -77,7 +75,7 @@ public class TournamentSelector implements ProgramSelector, PoolSelector, Config
 	 * @param rng a <code>RandomNumberGenerator</code> used to lead
 	 *        non-deterministic behaviour.
 	 */
-	public TournamentSelector(final RandomNumberGenerator rng, final int tournamentSize) {
+	public TournamentSelector(final RandomSequence rng, final int tournamentSize) {
 		this((Evolver) null, tournamentSize);
 
 		this.rng = rng;
@@ -189,7 +187,7 @@ public class TournamentSelector implements ProgramSelector, PoolSelector, Config
 	 * 
 	 * @return the rng the currently set random number generator.
 	 */
-	public RandomNumberGenerator getRNG() {
+	public RandomSequence getRNG() {
 		return rng;
 	}
 
@@ -200,7 +198,7 @@ public class TournamentSelector implements ProgramSelector, PoolSelector, Config
 	 * 
 	 * @param rng the random number generator to set.
 	 */
-	public void setRNG(final RandomNumberGenerator rng) {
+	public void setRNG(final RandomSequence rng) {
 		this.rng = rng;
 
 		// Set internal selector's rng.

@@ -23,7 +23,8 @@ package org.epochx.epox;
 
 import java.math.*;
 
-import org.epochx.tools.random.RandomNumberGenerator;
+import org.epochx.RandomSequence;
+
 
 /**
  * Defines a double ephemeral random constant (ERC). An ERC is a literal with
@@ -46,7 +47,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class DoubleERC extends Literal {
 
-	private RandomNumberGenerator rng;
+	private RandomSequence rng;
 
 	// The inclusive bounds.
 	private double lower;
@@ -66,7 +67,7 @@ public class DoubleERC extends Literal {
 	 * @param upper the inclusive upper bound of values that are generated.
 	 * @param precision the non-negative <code>int</code> precision.
 	 */
-	public DoubleERC(final RandomNumberGenerator rng, final double lower, final double upper, final int precision) {
+	public DoubleERC(final RandomSequence rng, final double lower, final double upper, final int precision) {
 		super(null);
 		
 		if (rng == null) {
@@ -133,7 +134,7 @@ public class DoubleERC extends Literal {
 	 * 
 	 * @return the random number generator
 	 */
-	public RandomNumberGenerator getRNG() {
+	public RandomSequence getRNG() {
 		return rng;
 	}
 
@@ -143,7 +144,7 @@ public class DoubleERC extends Literal {
 	 * 
 	 * @param rng the random number generator to set
 	 */
-	public void setRNG(final RandomNumberGenerator rng) {
+	public void setRNG(final RandomSequence rng) {
 		this.rng = rng;
 	}
 

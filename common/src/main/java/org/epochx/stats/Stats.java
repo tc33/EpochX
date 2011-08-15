@@ -24,9 +24,6 @@ package org.epochx.stats;
 import java.io.*;
 import java.util.*;
 
-import org.epochx.core.Model;
-import org.epochx.life.*;
-
 /**
  * Gathers data and statistics about events that occur during execution of the
  * given <code>Model</code> and makes them available for use. Any component may

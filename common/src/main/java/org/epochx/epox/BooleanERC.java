@@ -21,7 +21,7 @@
  */
 package org.epochx.epox;
 
-import org.epochx.tools.random.RandomNumberGenerator;
+import org.epochx.RandomSequence;
 
 /**
  * Defines a boolean ephemeral random constant (ERC). An ERC is a literal with
@@ -43,7 +43,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  */
 public class BooleanERC extends Literal {
 
-	private RandomNumberGenerator rng;
+	private RandomSequence rng;
 
 	/**
 	 * Constructs a new <code>BooleanERC</code> with a value of
@@ -53,7 +53,7 @@ public class BooleanERC extends Literal {
 	 * @param rng the random number generator to use if randomly generating a
 	 *        boolean value. An exception will be thrown if it is null.
 	 */
-	public BooleanERC(final RandomNumberGenerator rng) {
+	public BooleanERC(final RandomSequence rng) {
 		super(null);
 		
 		if (rng == null) {
@@ -104,7 +104,7 @@ public class BooleanERC extends Literal {
 	 * 
 	 * @return the random number generator
 	 */
-	public RandomNumberGenerator getRNG() {
+	public RandomSequence getRNG() {
 		return rng;
 	}
 
@@ -114,7 +114,7 @@ public class BooleanERC extends Literal {
 	 * 
 	 * @param rng the random number generator to set.
 	 */
-	public void setRNG(final RandomNumberGenerator rng) {
+	public void setRNG(final RandomSequence rng) {
 		this.rng = rng;
 	}
 }

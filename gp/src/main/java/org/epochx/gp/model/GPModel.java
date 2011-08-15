@@ -25,7 +25,6 @@ import java.util.List;
 
 import org.epochx.core.*;
 import org.epochx.epox.Node;
-import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.gp.op.crossover.SubtreeCrossover;
 import org.epochx.gp.op.init.FullInitialiser;
 import org.epochx.gp.op.mutation.SubtreeMutation;

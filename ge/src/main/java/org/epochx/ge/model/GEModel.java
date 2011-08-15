@@ -28,7 +28,6 @@ import org.epochx.ge.op.crossover.OnePointCrossover;
 import org.epochx.ge.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.ge.op.mutation.PointMutation;
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.grammar.Grammar;
 

@@ -28,6 +28,7 @@ import org.epochx.epox.*;
 import org.epochx.epox.bool.*;
 import org.epochx.epox.lang.IfFunction;
 import org.epochx.fitness.HitsCountEvaluator;
+import org.epochx.gp.source.GPInterpreter;
 import org.epochx.interpret.*;
 import org.epochx.tools.util.BoolUtils;
 

@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.interpret;
+package org.epochx.gp.source;
 
 import java.util.*;
 
@@ -27,6 +27,7 @@ import org.epochx.core.*;
 import org.epochx.epox.*;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.representation.GPCandidateProgram;
+import org.epochx.interpret.*;
 import org.epochx.life.ConfigListener;
 
 

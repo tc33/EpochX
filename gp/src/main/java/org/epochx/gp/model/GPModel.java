@@ -30,7 +30,7 @@ import org.epochx.gp.op.crossover.SubtreeCrossover;
 import org.epochx.gp.op.init.FullInitialiser;
 import org.epochx.gp.op.mutation.SubtreeMutation;
 import org.epochx.gp.representation.GPCandidateProgram;
-import org.epochx.interpret.GPInterpreter;
+import org.epochx.gp.source.GPInterpreter;
 import org.epochx.representation.CandidateProgram;
 
 /**

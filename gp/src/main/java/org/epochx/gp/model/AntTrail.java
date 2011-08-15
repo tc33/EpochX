@@ -31,6 +31,7 @@ import org.epochx.epox.ant.*;
 import org.epochx.epox.lang.SeqNFunction;
 import org.epochx.fitness.AntEvaluator;
 import org.epochx.gp.representation.GPCandidateProgram;
+import org.epochx.gp.source.GPInterpreter;
 import org.epochx.interpret.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.ant.*;

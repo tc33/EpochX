@@ -27,7 +27,7 @@ import org.epochx.core.*;
 import org.epochx.epox.Node;
 import org.epochx.gp.model.GPModel;
 import org.epochx.gp.op.init.GrowInitialiser;
-import org.epochx.gp.representation.GPCandidateProgram;
+import org.epochx.gp.representation.GPIndividual;
 import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
@@ -35,7 +35,7 @@ import org.epochx.stats.Stats.ExpiryEvent;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
- * This class performs a subtree mutation on a <code>GPCandidateProgram</code>.
+ * This class performs a subtree mutation on a <code>GPIndividual</code>.
  * 
  * <p>
  * A mutation point is randomly selected anywhere in the program tree. Then the
@@ -135,20 +135,20 @@ public class SubtreeMutation implements GPMutation, ConfigListener {
 	}
 
 	/**
-	 * Perform subtree mutation on the given GPCandidateProgram. A mutation
+	 * Perform subtree mutation on the given GPIndividual. A mutation
 	 * point
 	 * is randomly selected anywhere in the program tree. Then the node at that
 	 * point is replaced with a newly generated program tree, which is created
 	 * using a grow strategy.
 	 * 
-	 * @param p The GPCandidateProgram selected to undergo this mutation
+	 * @param p The GPIndividual selected to undergo this mutation
 	 *        operation.
-	 * @return A GPCandidateProgram that was the result of a point mutation on
-	 *         the provided GPCandidateProgram.
+	 * @return A GPIndividual that was the result of a point mutation on
+	 *         the provided GPIndividual.
 	 */
 	@Override
-	public GPCandidateProgram mutate(final CandidateProgram p) {
-		final GPCandidateProgram program = (GPCandidateProgram) p;
+	public GPIndividual mutate(final CandidateProgram p) {
+		final GPIndividual program = (GPIndividual) p;
 
 		// Randomly choose a mutation point.
 		final int length = program.getProgramLength();

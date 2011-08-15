@@ -23,14 +23,10 @@ package org.epochx.gp.op.init;
 
 import java.util.*;
 
-import org.epochx.core.*;
 import org.epochx.epox.Node;
 import org.epochx.fitness.FitnessEvaluator;
 import org.epochx.gp.model.GPModel;
-import org.epochx.gp.representation.GPCandidateProgram;
-import org.epochx.life.ConfigListener;
-import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.random.RandomNumberGenerator;
+import org.epochx.gp.representation.GPIndividual;
 import org.epochx.tools.util.TypeUtils;
 
 /**
@@ -194,13 +190,13 @@ public class FullInitialiser implements GPInitialiser, ConfigListener {
 	 * from the <code>Nodes</code> in the syntax attribute. The size of the
 	 * population will be equal to the population size attribute. All programs
 	 * in the population are only guarenteed to be unique (as defined by the
-	 * <code>equals</code> method on <code>GPCandidateProgram</code>) if the
+	 * <code>equals</code> method on <code>GPIndividual</code>) if the
 	 * <code>isDuplicatesEnabled</code> method returns <code>true</code>. Each
 	 * program will have a full node tree with a depth equal to the
 	 * depth attribute.
 	 * 
 	 * @return A <code>List</code> of newly generated
-	 *         <code>GPCandidateProgram</code> instances with full node trees.
+	 *         <code>GPIndividual</code> instances with full node trees.
 	 */
 	@Override
 	public List<CandidateProgram> getInitialPopulation() {
@@ -213,7 +209,7 @@ public class FullInitialiser implements GPInitialiser, ConfigListener {
 
 		// Create and add new programs to the population.
 		for (int i = 0; i < popSize; i++) {
-			GPCandidateProgram candidate;
+			GPIndividual candidate;
 
 			do {
 				// Build a new full node tree.
@@ -229,15 +225,15 @@ public class FullInitialiser implements GPInitialiser, ConfigListener {
 
 	/**
 	 * Constructs a new full node tree and returns it within a
-	 * <code>GPCandidateProgram</code>. The nodes that form the tree will be
+	 * <code>GPIndividual</code>. The nodes that form the tree will be
 	 * randomly selected from the nodes provided as the syntax attribute.
 	 * 
-	 * @return a new <code>GPCandidateProgram</code> instance.
+	 * @return a new <code>GPIndividual</code> instance.
 	 */
-	public GPCandidateProgram getInitialProgram() {
+	public GPIndividual getInitialProgram() {
 		final Node root = getFullNodeTree();
 
-		return new GPCandidateProgram(root);
+		return new GPIndividual(root);
 	}
 
 	/**

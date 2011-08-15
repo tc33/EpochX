@@ -21,7 +21,7 @@
  */
 package org.epochx.gp.op.crossover;
 
-import org.epochx.gp.representation.GPCandidateProgram;
+import org.epochx.gp.representation.GPIndividual;
 import org.epochx.op.Crossover;
 import org.epochx.representation.CandidateProgram;
 
@@ -39,14 +39,14 @@ public interface GPCrossover extends Crossover {
 	 * Implementations should perform some form of exchange of material between
 	 * the two children, returning the resultant children.
 	 * 
-	 * @param parent1 The first GPCandidateProgram selected to undergo this
+	 * @param parent1 The first GPIndividual selected to undergo this
 	 *        crossover operation.
-	 * @param parent2 The second GPCandidateProgram selected to undergo this
+	 * @param parent2 The second GPIndividual selected to undergo this
 	 *        crossover operation.
 	 * @return An array of the child CandidatePrograms that were the result of
 	 *         an exchange of genetic material between the two parents.
 	 */
 	@Override
-	public GPCandidateProgram[] crossover(CandidateProgram parent1, CandidateProgram parent2);
+	public GPIndividual[] crossover(CandidateProgram parent1, CandidateProgram parent2);
 
 }

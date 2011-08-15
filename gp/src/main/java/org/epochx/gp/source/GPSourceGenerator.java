@@ -22,17 +22,17 @@
 package org.epochx.gp.source;
 
 import org.epochx.epox.Node;
-import org.epochx.gp.representation.GPCandidateProgram;
+import org.epochx.gp.representation.GPIndividual;
 import org.epochx.source.SourceGenerator;
 
 
 /**
  * 
  */
-public class GPSourceGenerator implements SourceGenerator<GPCandidateProgram> {
+public class GPSourceGenerator implements SourceGenerator<GPIndividual> {
 
 	@Override
-	public String getSource(GPCandidateProgram program) {
+	public String getSource(GPIndividual program) {
 		Node root = program.getRootNode();
 		
 		return root.toString();

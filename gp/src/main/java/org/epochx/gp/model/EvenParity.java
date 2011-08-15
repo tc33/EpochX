@@ -28,7 +28,7 @@ import org.epochx.epox.*;
 import org.epochx.epox.bool.*;
 import org.epochx.epox.lang.IfFunction;
 import org.epochx.fitness.HitsCountEvaluator;
-import org.epochx.gp.representation.GPCandidateProgram;
+import org.epochx.gp.representation.GPIndividual;
 import org.epochx.gp.source.GPInterpreter;
 import org.epochx.interpret.*;
 import org.epochx.representation.CandidateProgram;
@@ -90,7 +90,7 @@ public class EvenParity extends GPModel {
 		setSyntax(syntax);
 		setReturnType(Boolean.class);
 
-		setFitnessEvaluator(new HitsCountEvaluator<GPCandidateProgram>(new GPInterpreter(evolver), params, expectedResults));
+		setFitnessEvaluator(new HitsCountEvaluator<GPIndividual>(new GPInterpreter(evolver), params, expectedResults));
 	}
 
 	/*

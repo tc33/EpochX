@@ -21,10 +21,9 @@
  */
 package org.epochx.gp.op.init;
 
-import java.util.List;
+import org.epochx.Initialiser;
+import org.epochx.gp.representation.GPIndividual;
 
-import org.epochx.op.Initialiser;
-import org.epochx.representation.CandidateProgram;
 
 /**
  * Implementations of this interface should be capable of generating an initial
@@ -36,11 +35,11 @@ public interface GPInitialiser extends Initialiser {
 
 	/**
 	 * Constructs and returns an initial population of
-	 * <code>GPCandidateProgram</code> instances.
+	 * <code>GPIndividual</code> instances.
 	 * 
 	 * @return A List of newly generated GPCandidatePrograms.
 	 */
 	@Override
-	public List<CandidateProgram> getInitialPopulation();
+	public GPIndividual create();
 
 }

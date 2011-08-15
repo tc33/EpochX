@@ -26,7 +26,7 @@ import static org.epochx.stats.Stats.ExpiryEvent.GENERATION;
 import java.util.List;
 
 import org.apache.commons.lang.math.NumberUtils;
-import org.epochx.gp.representation.GPCandidateProgram;
+import org.epochx.gp.representation.GPIndividual;
 import org.epochx.stats.*;
 
 /**
@@ -48,7 +48,7 @@ public class GPStatField extends StatField {
 
 			// Request the population from the stats manager.
 			@SuppressWarnings("unchecked")
-			final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) stats.getStat(GEN_POP);
+			final List<GPIndividual> pop = (List<GPIndividual>) stats.getStat(GEN_POP);
 
 			// Get the depths of each program.
 			if (pop != null) {
@@ -171,7 +171,7 @@ public class GPStatField extends StatField {
 			final int[] depths = (int[]) stats.getStat(GEN_DEPTHS);
 			final int maxDepth = (Integer) stats.getStat(GEN_DEPTH_MAX);
 			@SuppressWarnings("unchecked")
-			final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) stats.getStat(GEN_POP);
+			final List<GPIndividual> pop = (List<GPIndividual>) stats.getStat(GEN_POP);
 
 			if (depths != null) {
 				// Array to fill with average number of nodes at each depth.
@@ -205,7 +205,7 @@ public class GPStatField extends StatField {
 
 			// Request the population from the stats manager.
 			@SuppressWarnings("unchecked")
-			final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) stats.getStat(GEN_POP);
+			final List<GPIndividual> pop = (List<GPIndividual>) stats.getStat(GEN_POP);
 
 			// Get the lengths of each program.
 			if (pop != null) {
@@ -325,7 +325,7 @@ public class GPStatField extends StatField {
 
 			// Request the population from the stats manager.
 			@SuppressWarnings("unchecked")
-			final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) stats.getStat(GEN_POP);
+			final List<GPIndividual> pop = (List<GPIndividual>) stats.getStat(GEN_POP);
 
 			// Get the number of terminals of each program.
 			if (pop != null) {
@@ -449,7 +449,7 @@ public class GPStatField extends StatField {
 
 			// Request the population from the stats manager.
 			@SuppressWarnings("unchecked")
-			final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) stats.getStat(GEN_POP);
+			final List<GPIndividual> pop = (List<GPIndividual>) stats.getStat(GEN_POP);
 
 			// Get the number of unique terminals of each program.
 			if (pop != null) {
@@ -578,7 +578,7 @@ public class GPStatField extends StatField {
 
 			// Request the population from the stats manager.
 			@SuppressWarnings("unchecked")
-			final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) stats.getStat(GEN_POP);
+			final List<GPIndividual> pop = (List<GPIndividual>) stats.getStat(GEN_POP);
 
 			// Get the number of functions of each program.
 			if (pop != null) {
@@ -702,7 +702,7 @@ public class GPStatField extends StatField {
 
 			// Request the population from the stats manager.
 			@SuppressWarnings("unchecked")
-			final List<GPCandidateProgram> pop = (List<GPCandidateProgram>) stats.getStat(GEN_POP);
+			final List<GPIndividual> pop = (List<GPIndividual>) stats.getStat(GEN_POP);
 
 			// Get the number of unique functions of each program.
 			if (pop != null) {

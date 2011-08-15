@@ -28,7 +28,7 @@ import org.epochx.epox.Node;
 import org.epochx.gp.op.crossover.SubtreeCrossover;
 import org.epochx.gp.op.init.FullInitialiser;
 import org.epochx.gp.op.mutation.SubtreeMutation;
-import org.epochx.gp.representation.GPCandidateProgram;
+import org.epochx.gp.representation.GPIndividual;
 import org.epochx.gp.source.GPInterpreter;
 import org.epochx.representation.CandidateProgram;
 
@@ -76,7 +76,7 @@ public class GPModel extends Model {
 	@Override
 	public boolean isValid(CandidateProgram program) {
 		//TODO This needs to implement checks.
-		if (program instanceof GPCandidateProgram) {
+		if (program instanceof GPIndividual) {
 			return true;
 		}
 		

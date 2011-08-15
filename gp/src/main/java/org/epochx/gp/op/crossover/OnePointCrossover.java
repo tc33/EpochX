@@ -26,7 +26,7 @@ import java.util.*;
 import org.epochx.core.*;
 import org.epochx.epox.Node;
 import org.epochx.gp.model.GPModel;
-import org.epochx.gp.representation.GPCandidateProgram;
+import org.epochx.gp.representation.GPIndividual;
 import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
@@ -158,17 +158,17 @@ public class OnePointCrossover implements GPCrossover, ConfigListener {
 	 * Crosses over the two <code>CandidatePrograms</code> provided as arguments
 	 * using uniform swap points. Random crossover points are chosen at random
 	 * in both programs, the genetic material at the points are then exchanged.
-	 * The resulting programs are returned as new GPCandidateProgram objects.
+	 * The resulting programs are returned as new GPIndividual objects.
 	 * 
-	 * @param p1 The first GPCandidateProgram selected to undergo one
+	 * @param p1 The first GPIndividual selected to undergo one
 	 *        point crossover.
-	 * @param p2 The second GPCandidateProgram selected to undergo one
+	 * @param p2 The second GPIndividual selected to undergo one
 	 *        point crossover.
 	 */
 	@Override
-	public GPCandidateProgram[] crossover(final CandidateProgram p1, final CandidateProgram p2) {
-		final GPCandidateProgram program1 = (GPCandidateProgram) p1;
-		final GPCandidateProgram program2 = (GPCandidateProgram) p2;
+	public GPIndividual[] crossover(final CandidateProgram p1, final CandidateProgram p2) {
+		final GPIndividual program1 = (GPIndividual) p1;
+		final GPIndividual program2 = (GPIndividual) p2;
 
 		final List<Integer> points1 = new ArrayList<Integer>();
 		final List<Integer> points2 = new ArrayList<Integer>();
@@ -196,7 +196,7 @@ public class OnePointCrossover implements GPCrossover, ConfigListener {
 		program1.setNthNode(swapPoint1, subtree2);
 		program2.setNthNode(swapPoint2, subtree1);
 
-		return new GPCandidateProgram[]{program1, program2};
+		return new GPIndividual[]{program1, program2};
 	}
 
 	/*

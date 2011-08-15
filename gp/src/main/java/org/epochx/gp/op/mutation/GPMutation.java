@@ -21,14 +21,14 @@
  */
 package org.epochx.gp.op.mutation;
 
-import org.epochx.gp.representation.GPCandidateProgram;
+import org.epochx.gp.representation.GPIndividual;
 import org.epochx.op.Mutation;
 import org.epochx.representation.CandidateProgram;
 
 /**
  * This interface defines the structure which specific mutation operators can
  * implement to provide different methods of mutating a
- * <code>GPCandidateProgram</code>.
+ * <code>GPIndividual</code>.
  * GPMutation instances are used by the core GPMutation class to perform a
  * single
  * mutation operation.
@@ -39,15 +39,15 @@ public interface GPMutation extends Mutation {
 
 	/**
 	 * Implementations should perform some form of alteration to the genetic
-	 * material of the given GPCandidateProgram, returning the resultant
+	 * material of the given GPIndividual, returning the resultant
 	 * program.
 	 * 
-	 * @param program The GPCandidateProgram selected to undergo this mutation
+	 * @param program The GPIndividual selected to undergo this mutation
 	 *        operation.
-	 * @return A GPCandidateProgram that was the result of altering the provided
-	 *         GPCandidateProgram.
+	 * @return A GPIndividual that was the result of altering the provided
+	 *         GPIndividual.
 	 */
 	@Override
-	public GPCandidateProgram mutate(CandidateProgram program);
+	public GPIndividual mutate(CandidateProgram program);
 
 }

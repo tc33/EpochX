@@ -21,17 +21,17 @@
  */
 package org.epochx.source;
 
-import org.epochx.representation.CandidateProgram;
+import org.epochx.Individual;
 
 
 /**
  * 
  */
-public class CachedSourceGenerator<T extends CandidateProgram> implements SourceGenerator<T> {
+public class CachedSourceGenerator<T extends Individual> implements SourceGenerator<T> {
 
-	private SourceGenerator delegate;
+	private SourceGenerator<T> delegate;
 	
-	public CachedSourceGenerator(SourceGenerator delegate) {
+	public CachedSourceGenerator(SourceGenerator<T> delegate) {
 		this.delegate = delegate;
 	}
 	

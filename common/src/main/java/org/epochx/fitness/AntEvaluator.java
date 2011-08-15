@@ -24,15 +24,15 @@ package org.epochx.fitness;
 import java.awt.Point;
 import java.util.*;
 
+import org.epochx.Individual;
 import org.epochx.interpret.*;
-import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.ant.*;
 
 
 /**
  * 
  */
-public class AntEvaluator<T extends CandidateProgram> extends AbstractFitnessEvaluator<T> {
+public class AntEvaluator<T extends Individual> extends AbstractFitnessEvaluator<T> {
 
 	private AntLandscape landscape;
 	private Ant ant;

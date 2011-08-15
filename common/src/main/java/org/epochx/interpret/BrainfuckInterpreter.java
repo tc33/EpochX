@@ -23,7 +23,7 @@ package org.epochx.interpret;
 
 import java.util.Arrays;
 
-import org.epochx.representation.CandidateProgram;
+import org.epochx.Individual;
 import org.epochx.source.SourceGenerator;
 
 /**
@@ -83,7 +83,7 @@ import org.epochx.source.SourceGenerator;
  * </tr>
  * </table>
  */
-public class BrainfuckInterpreter<T extends CandidateProgram> implements Interpreter<T> {
+public class BrainfuckInterpreter<T extends Individual> implements Interpreter<T> {
 
 	// The indexable memory available to programs.
 	private final byte[] memory;

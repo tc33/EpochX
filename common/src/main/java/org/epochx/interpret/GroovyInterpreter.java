@@ -23,7 +23,7 @@ package org.epochx.interpret;
 
 import javax.script.*;
 
-import org.epochx.representation.CandidateProgram;
+import org.epochx.Individual;
 import org.epochx.source.SourceGenerator;
 
 /**
@@ -36,7 +36,7 @@ import org.epochx.source.SourceGenerator;
  * </code>, adding Groovy specific enhancements, including optimized
  * performance.
  */
-public class GroovyInterpreter<T extends CandidateProgram> extends ScriptingInterpreter<T> {
+public class GroovyInterpreter<T extends Individual> extends ScriptingInterpreter<T> {
 
 	/**
 	 * Constructs a GroovyInterpreter.

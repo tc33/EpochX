@@ -21,7 +21,7 @@
  */
 package org.epochx.fitness;
 
-import org.epochx.representation.CandidateProgram;
+import org.epochx.Individual;
 
 
 /**
@@ -38,7 +38,7 @@ import org.epochx.representation.CandidateProgram;
  * adjusted-fitness = 1 / (1 + standardised-fitness)
  * </blockquote></code>
  */
-public class AdjustedFitnessEvaluator<T extends CandidateProgram> implements FitnessEvaluator<T> {
+public class AdjustedFitnessEvaluator<T extends Individual> implements FitnessEvaluator<T> {
 
 	private FitnessEvaluator<T> delegate;
 	

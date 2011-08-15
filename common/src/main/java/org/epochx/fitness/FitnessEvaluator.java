@@ -21,13 +21,14 @@
  */
 package org.epochx.fitness;
 
-import org.epochx.representation.CandidateProgram;
+import org.epochx.Individual;
+
 
 
 /**
  * 
  */
-public interface FitnessEvaluator<T extends CandidateProgram> {
+public interface FitnessEvaluator<T extends Individual> {
 
 	public double[] getFitness(T[] pop);
 	

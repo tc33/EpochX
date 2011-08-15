@@ -21,7 +21,7 @@
  */
 package org.epochx.interpret;
 
-import org.epochx.representation.CandidateProgram;
+import org.epochx.Individual;
 import org.epochx.source.SourceGenerator;
 
 import bsh.EvalError;
@@ -35,7 +35,7 @@ import bsh.EvalError;
  * There is no publically visible constructor. A singleton instance is
  * maintained which is accessible through the <code>getInstance()</code> method.
  */
-public class JavaInterpreter<T extends CandidateProgram> implements Interpreter<T> {
+public class JavaInterpreter<T extends Individual> implements Interpreter<T> {
 
 	private SourceGenerator<T> generator;
 	

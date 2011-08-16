@@ -24,16 +24,18 @@
 package org.epochx;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 
 import org.epochx.Config.ConfigKey;
 
 /**
  * A <code>Population</code> is an ordered collection of {@link Individual}s.
  */
-public class Population {
+public class Population implements Iterable<Individual> {
 
-	// TODO: make it iterable, serializable
+	// TODO: make it serializable
 
 	/**
 	 * The key for setting and retrieving the population size configuration
@@ -44,7 +46,7 @@ public class Population {
 	/**
 	 * The list of individuals of this propulation.
 	 */
-	private final List<Individual> individuals;
+	private final ArrayList<Individual> individuals;
 
 	/**
 	 * Constructs an empty <code>Population</code>.
@@ -101,6 +103,41 @@ public class Population {
 		}
 
 		return fittest;
+	}
+
+	/**
+	 * Returns the group of best individuals of the population.
+	 * 
+	 * @param size the number of individuals of the group (elite).
+	 * 
+	 * @return the group of best individuals of the population.
+	 */
+	public Individual[] elite(int size) {
+		@SuppressWarnings("unchecked")
+		ArrayList<Individual> copy = (ArrayList<Individual>) individuals.clone();
+		Collections.sort(copy, new Comparator<Individual>() {
+
+			public int compare(Individual o1, Individual o2) {
+				return o1.getFitness().compareTo(o2.getFitness());
+			}
+		});
+
+		Individual[] fittest = new Individual[size];
+
+		for (int i = 0; i < size; i++) {
+			fittest[i] = copy.get(i);
+		}
+
+		return fittest;
+	}
+
+	/**
+	 * Returns an iterator over the individuals in this population.
+	 * 
+	 * @return an iterator over the individuals in this population.
+	 */
+	public Iterator<Individual> iterator() {
+		return individuals.iterator();
 	}
 
 }

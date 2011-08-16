@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2011
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -35,5 +35,15 @@ public class ConfigEvent implements Event {
 
 	public ConfigKey<?> getKey() {
 		return key;
+	}
+
+	public boolean isKindOf(ConfigKey<?> ... keys) {
+		for (ConfigKey<?> k: keys) {
+			if (k == key) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

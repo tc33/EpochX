@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2011
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -23,7 +23,9 @@
 
 package org.epochx.event;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Not thread-safe.
@@ -34,8 +36,6 @@ public class EventManager {
 
 	private final HashMap<Class<?>, List<Listener<?>>> mapping = new HashMap<Class<?>, List<Listener<?>>>();
 
-	private final HashMap<Class<?>, Object> listeners = new HashMap<Class<?>, Object>();
-
 	private EventManager() {
 	}
 
@@ -43,16 +43,18 @@ public class EventManager {
 		return singleton;
 	}
 
+	/**
+	 * 
+	 * @param <T>
+	 * @param key the class of the event
+	 * @param listener
+	 */
 	public <T extends Event> void add(Class<? extends T> key, Listener<T> listener) {
-		if (listeners.containsKey(listener.getClass())) {
-			throw new IllegalArgumentException("Duplicated listener: " + listener.getClass());
-		}
 
 		if (!mapping.containsKey(key)) {
 			mapping.put(key, new ArrayList<Listener<?>>());
 		}
 
-		listeners.put(listener.getClass(), listener);
 		mapping.get(key).add(listener);
 	}
 
@@ -81,18 +83,4 @@ public class EventManager {
 		}
 	}
 
-	public boolean contains(Class<? extends Listener<?>> listenerType) {
-		return listeners.containsKey(listenerType);
-	}
-
-	/**
-	 * Returns the listener instance of the specified type.
-	 * 
-	 * @param type the class type of the listener.
-	 * 
-	 * @return the listener instance of the specified type.
-	 */
-	public <T extends Listener<?>> T get(Class<T> type) {
-		return type.cast(listeners.get(type));
-	}
 }

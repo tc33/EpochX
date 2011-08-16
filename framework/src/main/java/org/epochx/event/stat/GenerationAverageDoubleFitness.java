@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2011
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -23,15 +23,36 @@
 
 package org.epochx.event.stat;
 
+import org.epochx.DoubleFitness;
+import org.epochx.Fitness;
 import org.epochx.event.GenerationEvent.EndGeneration;
 
-public class GenerationAverageFitness extends AbstractStat<EndGeneration> {
+public class GenerationAverageDoubleFitness extends AbstractStat<EndGeneration> {
 
-	public GenerationAverageFitness() {
+	private double average;
+
+	public GenerationAverageDoubleFitness() {
 		super(NO_DEPENDENCIES);
 	}
 
+	@Override
 	public void onEvent(EndGeneration event) {
+		Fitness[] fitnesses = AbstractStat.get(GenerationFitnesses.class).getFitnesses();
+		average = 0;
 
+		for (Fitness fitness: fitnesses) {
+			average += ((DoubleFitness) fitness).getValue();
+		}
+
+		average /= fitnesses.length;
+	}
+
+	public double getAverage() {
+		return average;
+	}
+
+	@Override
+	public String toString() {
+		return Double.toString(average);
 	}
 }

@@ -27,6 +27,7 @@ import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
 
 import java.util.List;
 
+import org.epochx.Config.ConfigKey;
 import org.epochx.event.ConfigEvent;
 import org.epochx.event.EventManager;
 import org.epochx.event.Listener;
@@ -40,6 +41,11 @@ import org.epochx.event.Listener;
  * population that is produced is the product of just one genetic operator.
  */
 public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
+
+	/**
+	 * The key for setting and retrieving the size of the elite.
+	 */
+	public static final ConfigKey<Integer> ELITISM = new ConfigKey<Integer>();
 
 	/**
 	 * The list of operators to be used to generate new individuals.
@@ -56,6 +62,11 @@ public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
 	 * The random number generator.
 	 */
 	private RandomSequence random;
+
+	/**
+	 * The number of individuals to copy to the next generation by elitism.
+	 */
+	private int elitism;
 
 	/**
 	 * Constructs a <code>BranchedBreeder</code> that configures itself upon
@@ -97,6 +108,15 @@ public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
 			probabilities[i] = cumulative;
 		}
 
+		if (elitism > 0) {
+			Individual[] elite = population.elite(elitism);
+
+			for (Individual individual: elite) {
+				newPopulation.add(individual);
+				size--;
+			}
+		}
+
 		while (size > 0) {
 			double r = random.nextDouble() * cumulative;
 			Operator operator = null;
@@ -109,7 +129,7 @@ public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
 			Individual[] parents = new Individual[operator.inputSize()];
 
 			for (int i = 0; i < parents.length; i++) {
-				parents[i] = selector.select();
+				parents[i] = selector.select().clone();
 			}
 
 			parents = operator.apply(parents);
@@ -142,6 +162,7 @@ public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
 		operators = Config.getInstance().get(OPERATORS);
 		selector = Config.getInstance().get(SELECTOR);
 		random = Config.getInstance().get(RANDOM_SEQUENCE);
+		elitism = Config.getInstance().get(ELITISM, 0);
 	}
 
 	/**
@@ -152,7 +173,7 @@ public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
 	 * @param event {@inheritDoc}
 	 */
 	public void onEvent(ConfigEvent event) {
-		if ((event.getKey() == OPERATORS) || (event.getKey() == SELECTOR) || (event.getKey() == RANDOM_SEQUENCE)) {
+		if (event.isKindOf(OPERATORS, SELECTOR, RANDOM_SEQUENCE, ELITISM)) {
 			setup();
 		}
 	}

@@ -49,6 +49,17 @@ public abstract class AbstractStat<T extends Event> {
 	private static final HashMap<Class<?>, Object> REPOSITORY = new HashMap<Class<?>, Object>();
 
 	/**
+	 * This stat listener. When the stat is registered, its listener is added to
+	 * the {@link EventManager}.
+	 */
+	private Listener<T> listener = new Listener<T>() {
+
+		public void onEvent(T event) {
+			AbstractStat.this.onEvent(event);
+		}
+	};
+
+	/**
 	 * Constructs an <code>AbstractStat</code>.
 	 * 
 	 * @param dependency the dependency of this stat.
@@ -79,20 +90,6 @@ public abstract class AbstractStat<T extends Event> {
 	}
 
 	/**
-	 * Returns the <code>ProxyListener</code> for this stat.
-	 * 
-	 * @return the <code>ProxyListener</code> for this stat.
-	 */
-	private Listener<T> getListener() {
-		return new Listener<T>() {
-
-			public void onEvent(T event) {
-				AbstractStat.this.onEvent(event);
-			}
-		};
-	}
-
-	/**
 	 * Gathers the information about the event.
 	 * 
 	 * @param event the event
@@ -113,10 +110,22 @@ public abstract class AbstractStat<T extends Event> {
 			try {
 				AbstractStat<E> stat = type.newInstance();
 				REPOSITORY.put(type, stat);
-				EventManager.getInstance().add(stat.getEvent(), stat.getListener());
+				EventManager.getInstance().add(stat.getEvent(), stat.listener);
 			} catch (Exception e) {
 				throw new RuntimeException("Could not create an instance of " + type, e);
 			}
+		}
+	}
+
+	/**
+	 * Removes the specified <code>AbstractStat</code> from the repository.
+	 * 
+	 * @param type the class of <code>AbstractStat</code> to be removed.
+	 */
+	public static <E extends Event, V extends AbstractStat<E>> void remove(Class<V> type) {
+		if (REPOSITORY.containsKey(type)) {
+			AbstractStat<E> stat = type.cast(REPOSITORY.remove(type));
+			EventManager.getInstance().remove(stat.getEvent(), stat.listener);
 		}
 	}
 

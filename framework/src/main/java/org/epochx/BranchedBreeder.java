@@ -112,7 +112,7 @@ public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
 			Individual[] elite = population.elite(elitism);
 
 			for (Individual individual: elite) {
-				newPopulation.add(individual);
+				newPopulation.add(individual.clone());
 				size--;
 			}
 		}
@@ -121,8 +121,9 @@ public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
 			double r = random.nextDouble() * cumulative;
 			Operator operator = null;
 			for (int i = 0; i < probabilities.length; i++) {
-				if (r < probabilities[i]) {
+				if (r <= probabilities[i]) {
 					operator = operators.get(i);
+					break;
 				}
 			}
 

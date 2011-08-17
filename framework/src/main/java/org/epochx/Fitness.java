@@ -29,6 +29,8 @@ package org.epochx;
  * form, explicit or otherwise. The only requirement is that a natural ordering 
  * exists, defined by the implementation's <code>compareTo</code> method.
  */
-public interface Fitness extends Comparable<Fitness> {
+public interface Fitness extends Cloneable, Comparable<Fitness> {
 
+	public Fitness clone();
+	
 }

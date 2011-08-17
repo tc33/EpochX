@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2011
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -23,12 +23,24 @@
 
 package org.epochx.selection;
 
-import org.epochx.*;
+import org.epochx.IndividualSelector;
+import org.epochx.Population;
 
+/**
+ * This class provides a base class for {@link IndividualSelector}.
+ */
 public abstract class AbstractSelector implements IndividualSelector {
 
+	/**
+	 * The current population.
+	 */
 	protected Population population;
 
+	/**
+	 * Updates the reference of the current population.
+	 * 
+	 * @param population the current population.
+	 */
 	public void setup(Population population) {
 		this.population = population;
 	}

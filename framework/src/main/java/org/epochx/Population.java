@@ -118,7 +118,7 @@ public class Population implements Iterable<Individual> {
 		Collections.sort(copy, new Comparator<Individual>() {
 
 			public int compare(Individual o1, Individual o2) {
-				return o1.getFitness().compareTo(o2.getFitness());
+				return o2.compareTo(o1);
 			}
 		});
 

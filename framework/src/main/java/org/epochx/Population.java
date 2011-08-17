@@ -97,7 +97,7 @@ public class Population implements Iterable<Individual> {
 		Individual fittest = null;
 
 		for (Individual individual: individuals) {
-			if ((fittest == null) || (individual.getFitness().compareTo(fittest.getFitness()) > 0)) {
+			if ((fittest == null) || (individual.compareTo(fittest) > 0)) {
 				fittest = individual;
 			}
 		}

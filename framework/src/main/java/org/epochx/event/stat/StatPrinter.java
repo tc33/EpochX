@@ -25,6 +25,8 @@ package org.epochx.event.stat;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.epochx.event.Event;
 import org.epochx.event.EventManager;
@@ -44,6 +46,11 @@ public class StatPrinter {
 	 * The list of <code>AbstractStat</code> to be printed.
 	 */
 	private ArrayList<AbstractStat<?>> fields = new ArrayList<AbstractStat<?>>();
+
+	/**
+	 * The mapping of listerners registered by this <code>StatPrinter</code>.
+	 */
+	private Map<Class<?>, Listener<?>> listeners = new HashMap<Class<?>, Listener<?>>();
 
 	/**
 	 * The current separator.
@@ -116,12 +123,18 @@ public class StatPrinter {
 	}
 
 	public <E extends Event> void printOnEvent(Class<E> type) {
-		EventManager.getInstance().add(type, new Listener<E>() {
+		// only creates a new listener if we do not have one already
+		if (!listeners.containsKey(type)) {
+			Listener<E> listener = new Listener<E>() {
 
-			public void onEvent(E event) {
-				StatPrinter.this.print();
-			}
-		});
+				public void onEvent(E event) {
+					StatPrinter.this.print();
+				}
+			};
+
+			EventManager.getInstance().add(type, listener);
+			listeners.put(type, listener);
+		}
 	}
 
 }

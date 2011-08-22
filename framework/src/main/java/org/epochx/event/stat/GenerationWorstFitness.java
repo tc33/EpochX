@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2011
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -18,19 +18,47 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with EpochX. If not, see <http://www.gnu.org/licenses/>.
  * 
- * The latest version is available from: http://www.epochx.org
+ * The latest version is available from: http:/www.epochx.org
  */
 
-package org.epochx;
+package org.epochx.event.stat;
+
+import org.epochx.Fitness;
+import org.epochx.event.GenerationEvent.EndGeneration;
 
 /**
- * An implementation of the <code>Fitness</code> interface provides a measure of
- * individual quality. Implementations may represent the fitness score in any
- * form, explicit or otherwise. The only requirement is that a natural ordering 
- * exists, defined by the implementation's <code>compareTo</code> method.
+ * 
  */
-public interface Fitness extends Cloneable, Comparable<Fitness> {
+public class GenerationWorstFitness extends AbstractStat<EndGeneration> {
 
-	public Fitness clone();
-	
+	private Fitness worst;
+
+	/**
+	 * Constructs a <code>GenerationWorstFitness</code>.
+	 */
+	public GenerationWorstFitness() {
+		super(GenerationFitnesses.class);
+	}
+
+	@Override
+	public void onEvent(EndGeneration event) {
+		Fitness[] fitnesses = AbstractStat.get(GenerationFitnesses.class).getFitnesses();
+		worst = null;
+
+		for (Fitness fitness: fitnesses) {
+			if (worst == null || fitness.compareTo(worst) < 0) {
+				worst = fitness;
+			}
+		}
+	}
+
+	public Fitness getWorst() {
+		return worst;
+	}
+
+	@Override
+	public String toString() {
+		return worst.toString();
+	}
+
 }

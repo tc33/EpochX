@@ -32,7 +32,7 @@ import java.io.Serializable;
  * implementation would allow a fitness to be set by a {@link FitnessEvaluator}
  * during an evolutionary run.
  */
-public interface Individual extends Serializable {
+public interface Individual extends Serializable, Cloneable, Comparable<Individual> {
 
 	/**
 	 * Returns a fitness which is an indicator of this individual's quality or
@@ -41,5 +41,12 @@ public interface Individual extends Serializable {
 	 * @return the fitness of this individual
 	 */
 	public Fitness getFitness();
+
+	/**
+	 * Returns a copy of this individual.
+	 * 
+	 * @return a copy of this individual.
+	 */
+	public Individual clone();
 
 }

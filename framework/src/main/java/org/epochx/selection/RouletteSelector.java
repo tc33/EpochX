@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2011
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -25,12 +25,30 @@ package org.epochx.selection;
 
 import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
 
-import org.epochx.*;
+import org.epochx.Config;
+import org.epochx.DoubleFitness;
+import org.epochx.Fitness;
+import org.epochx.Individual;
+import org.epochx.IndividualSelector;
+import org.epochx.Population;
 
+/**
+ * This class represents an {@link IndividualSelector} that selects individuals
+ * with a probability proportional to their fitness. In order to calculate a
+ * probability, individuals must have a {@link DoubleFitness} value.
+ */
 public class RouletteSelector extends AbstractSelector {
 
+	/**
+	 * The individuals' selection probabilities.
+	 */
 	private double[] roulette;
 
+	/**
+	 * Compute the individuals' selection probabilities.
+	 * 
+	 * @param population the current population.
+	 */
 	@Override
 	public void setup(Population population) {
 		Fitness best = population.get(0).getFitness();
@@ -58,7 +76,7 @@ public class RouletteSelector extends AbstractSelector {
 		double bestValue = ((DoubleFitness) best).getValue();
 		double worstValue = ((DoubleFitness) worst).getValue();
 
-		// Invert if minimising - using adjusted fitness.
+		// invert if minimising - using adjusted fitness.
 		if (bestValue < worstValue) {
 			total = 0.0;
 			double delta = (bestValue < 0) ? Math.abs(bestValue) : 0.0;
@@ -68,7 +86,7 @@ public class RouletteSelector extends AbstractSelector {
 			}
 		}
 
-		// Normalise roulette values and accumulate.
+		// normalise roulette values and accumulate.
 		double cumulative = 0.0;
 		for (int i = 0; i < population.size(); i++) {
 			roulette[i] = cumulative + (roulette[i] / total);
@@ -79,6 +97,11 @@ public class RouletteSelector extends AbstractSelector {
 		super.setup(population);
 	}
 
+	/**
+	 * Returns an individual using the fitness proportionate selection strategy.
+	 * 
+	 * @return an individual using the fitness proportionate selection strategy.
+	 */
 	public Individual select() {
 		double random = Config.getInstance().get(RANDOM_SEQUENCE).nextDouble();
 

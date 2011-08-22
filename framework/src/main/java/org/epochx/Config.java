@@ -97,7 +97,7 @@ public class Config {
 
 		singleton.set(TournamentSelector.TOURNAMENT_SIZE, 5);
 		singleton.set(BranchedBreeder.SELECTOR, new TournamentSelector());
-		singleton.set(Evolver.STRATEGY, new GenerationalStrategy(new BranchedBreeder()));
+		singleton.set(Evolver.STRATEGY, new GenerationalStrategy(new BranchedBreeder(), new FitnessEvaluator()));
 		singleton.set(RandomSequence.RANDOM_SEQUENCE, new MersenneTwisterFast());
 	}
 

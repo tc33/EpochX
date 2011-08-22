@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2011
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -24,33 +24,122 @@
 package org.epochx.event.stat;
 
 import java.lang.reflect.ParameterizedType;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
-import org.epochx.event.*;
+import org.epochx.event.Event;
+import org.epochx.event.EventManager;
+import org.epochx.event.Listener;
 
-public abstract class AbstractStat<T extends Event> implements Listener<T> {
+/**
+ * Gathers data and statistics about events.
+ */
+public abstract class AbstractStat<T extends Event> {
 
-	public static final List<Class<? extends AbstractStat<Event>>> NO_DEPENDENCIES = new ArrayList<Class<? extends AbstractStat<Event>>>(
-			0);
+	/**
+	 * An empty list of dependencies.
+	 */
+	public static final List<Class<AbstractStat<Event>>> NO_DEPENDENCIES = new ArrayList<Class<AbstractStat<Event>>>(0);
 
-	public <V extends Event> AbstractStat(List<Class<? extends AbstractStat<V>>> dependencies) {
-		for (Class<? extends AbstractStat<V>> dependency: dependencies) {
-			if (!EventManager.getInstance().contains(dependency)) {
-				try {
-					AbstractStat<V> stat = dependency.newInstance();
-					EventManager.getInstance().add(stat.getEvent(), stat);
-				} catch (Exception e) {
-					throw new RuntimeException("Could not create dependency " + dependency, e);
-				}
+	/**
+	 * The central repository of <code>AbstractStat</code> objects.
+	 */
+	private static final HashMap<Class<?>, Object> REPOSITORY = new HashMap<Class<?>, Object>();
+
+	/**
+	 * This stat listener. When the stat is registered, its listener is added to
+	 * the {@link EventManager}.
+	 */
+	private Listener<T> listener = new Listener<T>() {
+
+		public void onEvent(T event) {
+			AbstractStat.this.onEvent(event);
+		}
+	};
+
+	/**
+	 * Constructs an <code>AbstractStat</code>.
+	 * 
+	 * @param dependency the dependency of this stat.
+	 */
+	@SuppressWarnings("unchecked")
+	public <V extends Event, S extends AbstractStat<V>> AbstractStat(Class<S> dependency) {
+		this(Arrays.asList(dependency));
+	}
+
+	/**
+	 * Constructs an <code>AbstractStat</code>. The list of dependencies can be
+	 * empty, in case this stat has no dependencies.
+	 * 
+	 * @param dependencies the list of dependencies of this stat.
+	 */
+	public <V extends Event, S extends AbstractStat<V>> AbstractStat(List<Class<S>> dependencies) {
+		for (Class<S> dependency: dependencies) {
+			AbstractStat.register(dependency);
+		}
+	}
+
+	/**
+	 * Returns the class of the generic type T.
+	 */
+	@SuppressWarnings("unchecked")
+	private Class<T> getEvent() {
+		return (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+	}
+
+	/**
+	 * Gathers the information about the event.
+	 * 
+	 * @param event the event
+	 */
+	public abstract void onEvent(T event);
+
+	/**
+	 * Registers the specified <code>AbstractStat</code> in the reposiroty, if
+	 * it is not already registered.
+	 * 
+	 * @param type the class of <code>AbstractStat</code> to be registered.
+	 */
+	public static <E extends Event, V extends AbstractStat<E>> void register(Class<V> type) {
+		// if the repository already contains an instance of the specified stat,
+		// we do not create a new one; otherwise, we create a new instance and
+		// register its listener in the EventManager
+		if (!REPOSITORY.containsKey(type)) {
+			try {
+				AbstractStat<E> stat = type.newInstance();
+				REPOSITORY.put(type, stat);
+				EventManager.getInstance().add(stat.getEvent(), stat.listener);
+			} catch (Exception e) {
+				throw new RuntimeException("Could not create an instance of " + type, e);
 			}
 		}
 	}
 
 	/**
-	 * Returns the Class of the generic type T.
+	 * Removes the specified <code>AbstractStat</code> from the repository.
+	 * 
+	 * @param type the class of <code>AbstractStat</code> to be removed.
 	 */
-	@SuppressWarnings("unchecked")
-	public Class<T> getEvent() {
-		return (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+	public static <E extends Event, V extends AbstractStat<E>> void remove(Class<V> type) {
+		if (REPOSITORY.containsKey(type)) {
+			AbstractStat<E> stat = type.cast(REPOSITORY.remove(type));
+			EventManager.getInstance().remove(stat.getEvent(), stat.listener);
+		}
 	}
+
+	/**
+	 * Returns the <code>AbstractStat</code> object of the specified class. If
+	 * the <code>AbstractStat</code> has been registered, it returns
+	 * <code>null</code>.
+	 * 
+	 * @return the <code>AbstractStat</code> object of the specified class;
+	 *         <code>null</code> if the <code>AbstractStat</code> has not been
+	 *         registered.
+	 */
+	public static <V extends AbstractStat<?>> V get(Class<V> type) {
+		return type.cast(REPOSITORY.get(type));
+	}
+
 }

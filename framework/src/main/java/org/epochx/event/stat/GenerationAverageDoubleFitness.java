@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2011
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -21,16 +21,38 @@
  * The latest version is available from: http://www.epochx.org
  */
 
-package org.epochx;
+package org.epochx.event.stat;
 
-/**
- * An implementation of the <code>Fitness</code> interface provides a measure of
- * individual quality. Implementations may represent the fitness score in any
- * form, explicit or otherwise. The only requirement is that a natural ordering 
- * exists, defined by the implementation's <code>compareTo</code> method.
- */
-public interface Fitness extends Cloneable, Comparable<Fitness> {
+import org.epochx.DoubleFitness;
+import org.epochx.Fitness;
+import org.epochx.event.GenerationEvent.EndGeneration;
 
-	public Fitness clone();
-	
+public class GenerationAverageDoubleFitness extends AbstractStat<EndGeneration> {
+
+	private double average;
+
+	public GenerationAverageDoubleFitness() {
+		super(NO_DEPENDENCIES);
+	}
+
+	@Override
+	public void onEvent(EndGeneration event) {
+		Fitness[] fitnesses = AbstractStat.get(GenerationFitnesses.class).getFitnesses();
+		average = 0;
+
+		for (Fitness fitness: fitnesses) {
+			average += ((DoubleFitness) fitness).getValue();
+		}
+
+		average /= fitnesses.length;
+	}
+
+	public double getAverage() {
+		return average;
+	}
+
+	@Override
+	public String toString() {
+		return Double.toString(average);
+	}
 }

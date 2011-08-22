@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2011
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -23,16 +23,40 @@
 
 package org.epochx.selection;
 
-import org.epochx.*;
+import org.epochx.Config;
 import org.epochx.Config.ConfigKey;
+import org.epochx.Individual;
+import org.epochx.IndividualSelector;
+import org.epochx.Population;
 
+/**
+ * This class represents an {@link IndividualSelector} that selects individuals
+ * through a tournament performed on a subset of the population. In tournament
+ * selection, <code>n</code> individuals are randomly selected and the
+ * individual with the highest fitness is considered the winner of the
+ * tournament and becomes the selected individual.
+ */
 public class TournamentSelector implements IndividualSelector {
 
+	/**
+	 * The key for setting and retrieving the tournament size.
+	 */
 	public static final ConfigKey<Integer> TOURNAMENT_SIZE = new ConfigKey<Integer>();
 
+	/**
+	 * The random selector used to select the individuals participating in the
+	 * tournament.
+	 */
 	private final RandomSelector randomSelector;
+
+	/**
+	 * The tournament size.
+	 */
 	private int size;
 
+	/**
+	 * Constructs a <code>TournamentSelector</code>.
+	 */
 	public TournamentSelector() {
 		randomSelector = new RandomSelector();
 	}
@@ -42,13 +66,18 @@ public class TournamentSelector implements IndividualSelector {
 		size = Config.getInstance().get(TOURNAMENT_SIZE);
 	}
 
+	/**
+	 * Returns the selected individual using a tournament.
+	 * 
+	 * @return the selected individual using a tournament.
+	 */
 	public Individual select() {
 		Individual best = null;
 
-		// Choose and compare randomly selected programs.
+		// choose and compare randomly selected programs.
 		for (int i = 0; i < size; i++) {
 			Individual individual = randomSelector.select();
-			if ((best == null) || (individual.getFitness().compareTo(best.getFitness()) > 0)) {
+			if ((best == null) || (individual.compareTo(best) > 0)) {
 				best = individual;
 			}
 		}

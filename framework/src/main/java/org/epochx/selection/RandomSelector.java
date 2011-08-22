@@ -27,10 +27,20 @@ import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
 
 import org.epochx.*;
 
+/**
+ * This class represents an {@link IndividualSelector} that selects individuals
+ * at random.
+ */
 public class RandomSelector extends AbstractSelector {
 
+	/**
+	 * Returns a random individual from the current population.
+	 * 
+	 * @return a random individual from the current population.
+	 */
 	public Individual select() {
-		return population.get(Config.getInstance().get(RANDOM_SEQUENCE).nextInt(population.size()));
+		int index = Config.getInstance().get(RANDOM_SEQUENCE).nextInt(population.size());
+		return population.get(index);
 	}
 
 }

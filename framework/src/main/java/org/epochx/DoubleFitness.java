@@ -102,6 +102,15 @@ public abstract class DoubleFitness implements Fitness {
 		}
 	}
 
+	@Override
+	public DoubleFitness clone() {
+		try {
+			return (DoubleFitness) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new InternalError();
+		}
+	}
+
 	/**
 	 * Returns a String representation of this fitness' <code>double</code>
 	 * value.

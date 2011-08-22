@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2011
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -23,12 +23,40 @@
 
 package org.epochx;
 
+import org.epochx.Config.ConfigKey;
+
 /**
- * Implementations of <code>FitnessEvaluator</code> are components that are 
+ * Implementations of <code>FitnessEvaluator</code> are components that are
  * responsible for assigning fitnesses to individuals in a population. Typically
  * this will be performed by evaluating the quality of each individual against
  * problem specific requirements.
  */
-public interface FitnessEvaluator extends Component {
+public class FitnessEvaluator extends ProxyComponent<FitnessFunction> {
+
+	/**
+	 * The key for setting and retrieving the <code>FitnessFunction</code> used
+	 * by this component.
+	 */
+	public static final ConfigKey<FitnessFunction> FUNCTION = new ConfigKey<FitnessFunction>();
+
+	/**
+	 * Constructs a <code>FitnessEvaluator</code>.
+	 */
+	public FitnessEvaluator() {
+		super(FUNCTION);
+	}
+
+	/**
+	 * Delegates the evaluation of the population to the
+	 * <code>FitnessFunction</code> object.
+	 */
+	public Population process(Population population) {
+		if (handler == null) {
+			throw new IllegalStateException("The fitness function has not been set.");
+		}
+
+		handler.evaluate(population);
+		return population;
+	}
 
 }

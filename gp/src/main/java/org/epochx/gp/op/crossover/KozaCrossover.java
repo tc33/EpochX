@@ -21,9 +21,11 @@
  */
 package org.epochx.gp.op.crossover;
 
+import org.epochx.RandomSequence;
+
 /**
  * This class implements a Koza style crossover operation on two
- * <code>CandidatePrograms</code>.
+ * <code>Individuals</code>.
  * 
  * <p>
  * Koza crossover performs a one point exchange with the choice of a swap point
@@ -31,21 +33,6 @@ package org.epochx.gp.op.crossover;
  * class provides a constructor for specifying a probability of selecting a
  * function swap point. The default constructor uses the typical rates of 90%
  * function node swap point and 10% terminal node swap points.
- * 
- * <p>
- * If a model is provided then the following parameters are loaded upon every
- * configure event:
- * 
- * <ul>
- * <li>random number generator</li>
- * </ul>
- * 
- * <p>
- * If the <code>getModel</code> method returns <code>null</code> then no model
- * is set and whatever static parameters have been set as parameters to the
- * constructor or using the standard accessor methods will be used. If any
- * compulsory parameters remain unset when the crossover is performed then an
- * <code>IllegalStateException</code> will be thrown.
  * 
  * @see SubtreeCrossover
  * @see OnePointCrossover
@@ -56,29 +43,29 @@ public class KozaCrossover extends SubtreeCrossover {
 	 * Constructs a <code>KozaCrossover</code>. The probability of a
 	 * function node being selected as the swap point will default to 90%.
 	 * 
-	 * @param rng
+	 * @param random
 	 */
-	public KozaCrossover(final RandomNumberGenerator rng) {
-		this(rng, 0.9);
+	public KozaCrossover(int probability, RandomSequence random) {
+		this(probability, random, 0.9);
 	}
 
 	/**
 	 * Constructs a <code>KozaCrossover</code>.
 	 * 
-	 * @param rng a random number generator.
+	 * @param random a random number generator.
 	 * @param functionSwapProbability The probability of crossover operations
 	 *        choosing a function node as the swap point.
 	 */
-	public KozaCrossover(final RandomNumberGenerator rng, final double functionSwapProbability) {
-		super(rng, functionSwapProbability);
+	public KozaCrossover(int probability, RandomSequence random, double functionSwapProbability) {
+		super(probability, random, functionSwapProbability);
 	}
 
 	/**
 	 * Default constructor for Koza standard crossover. The probability of a
 	 * function node being selected as the swap point will default to 90%.
 	 */
-	public KozaCrossover(final Evolver evolver) {
-		this(evolver, 0.9);
+	public KozaCrossover(int probability) {
+		this(probability, 0.9);
 	}
 
 	/**
@@ -87,7 +74,7 @@ public class KozaCrossover extends SubtreeCrossover {
 	 * @param functionSwapProbability The probability of crossover operations
 	 *        choosing a function node as the swap point.
 	 */
-	public KozaCrossover(final Evolver evolver, final double functionSwapProbability) {
-		super(evolver, functionSwapProbability);
+	public KozaCrossover(int probability, double functionSwapProbability) {
+		super(functionSwapProbability);
 	}
 }

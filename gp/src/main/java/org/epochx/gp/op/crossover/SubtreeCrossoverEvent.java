@@ -20,17 +20,40 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.gp.op.init;
+package org.epochx.gp.op.crossover;
 
-import org.epochx.Initialiser;
-import org.epochx.Config.ConfigKey;
+import org.epochx.Individual;
+import org.epochx.epox.Node;
+import org.epochx.event.OperatorEvent;
 
 
 /**
  * 
  */
-public interface GPInitialiser extends Initialiser {
-
-	public static final ConfigKey<Integer> MAXIMUM_INITIAL_DEPTH = new ConfigKey<Integer>();
+public class SubtreeCrossoverEvent extends OperatorEvent.EndOperator {
 	
+	private int[] points;
+	private Node[] subtrees;
+	
+	public SubtreeCrossoverEvent(Individual[] parents, Individual[] children, int[] points, Node[] subtrees) {
+		super(parents, children);
+		
+		this.points = points;
+		this.subtrees = subtrees;
+	}
+	
+	/**
+	 * @return the point1
+	 */
+	public int[] getCrossoverPoints() {
+		return points;
+	}
+	
+	/**
+	 * @return the point2
+	 */
+	public Node[] getSubtrees() {
+		return subtrees;
+	}
+
 }

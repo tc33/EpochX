@@ -21,51 +21,34 @@
  */
 package org.epochx.gp.op.init;
 
+import static org.epochx.Population.SIZE;
+import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
+import static org.epochx.gp.GPIndividual.*;
+import static org.epochx.gp.op.init.GPInitialiser.MAXIMUM_INITIAL_DEPTH;
+
 import java.util.*;
 
+import org.epochx.*;
 import org.epochx.epox.Node;
-import org.epochx.fitness.FitnessEvaluator;
+import org.epochx.event.*;
 import org.epochx.gp.GPIndividual;
-import org.epochx.gp.model.GPModel;
 import org.epochx.tools.util.TypeUtils;
 
 /**
  * Initialisation implementation which produces full program trees down to a
  * specified depth.
  * 
- * <p>
- * If a model is provided then the following parameters are loaded upon every
- * configure event:
- * 
- * <ul>
- * <li>population size</li>
- * <li>maximum initial program depth</li>
- * <li>syntax</li>
- * <li>program return type</li>
- * <li>random number generator</li>
- * </ul>
- * 
- * <p>
- * If the <code>getModel</code> method returns <code>null</code> then no model
- * is set and whatever static parameters have been set as parameters to the
- * constructor or using the standard accessor methods will be used. If any
- * compulsory parameters remain unset when the initialiser is requested to
- * generate new programs, then an <code>IllegalStateException</code> will be
- * thrown.
- * 
  * @see GrowInitialiser
  * @see RampedHalfAndHalfInitialiser
  */
-public class FullInitialiser implements GPInitialiser, ConfigListener {
+public class FullInitialiser implements Initialiser, Listener<ConfigEvent> {
 
-	private Evolver evolver;
-	
-	private RandomNumberGenerator rng;
+	private RandomSequence random;
 
 	// The language to construct the trees from.
 	private final List<Node> terminals;
 	private final List<Node> functions;
-	private List<Node> syntax;
+	private Node[] syntax;
 
 	// Each generated program's return type.
 	private Class<?> returnType;
@@ -86,11 +69,11 @@ public class FullInitialiser implements GPInitialiser, ConfigListener {
 	 * Constructs a <code>FullInitialiser</code> with all the necessary
 	 * parameters given.
 	 */
-	public FullInitialiser(final RandomNumberGenerator rng, final List<Node> syntax, final Class<?> returnType,
-			final int popSize, final int depth, final boolean acceptDuplicates) {
-		this(null, acceptDuplicates);
+	public FullInitialiser(RandomSequence random, Node[] syntax, Class<?> returnType,
+			int popSize, int depth, boolean acceptDuplicates) {
+		this(acceptDuplicates);
 
-		this.rng = rng;
+		this.random = random;
 		this.syntax = syntax;
 		this.returnType = returnType;
 		this.popSize = popSize;
@@ -108,8 +91,8 @@ public class FullInitialiser implements GPInitialiser, ConfigListener {
 	 * @param model the <code>GPModel</code> instance from which the necessary
 	 *        parameters should be loaded.
 	 */
-	public FullInitialiser(final Evolver evolver) {
-		this(evolver, true);
+	public FullInitialiser() {
+		this(true);
 	}
 
 	/**
@@ -122,67 +105,14 @@ public class FullInitialiser implements GPInitialiser, ConfigListener {
 	 * @param acceptDuplicates whether duplicates should be allowed in the
 	 *        populations that are generated.
 	 */
-	public FullInitialiser(final Evolver evolver, final boolean acceptDuplicates) {
-		this.evolver = evolver;
-
+	public FullInitialiser(boolean acceptDuplicates) {
 		terminals = new ArrayList<Node>();
 		functions = new ArrayList<Node>();
 
 		this.acceptDuplicates = acceptDuplicates;
 		
-		// Configure parameters from the model.
-		evolver.getLife().addConfigListener(this, false);
-	}
-
-	/**
-	 * Configures this operator with parameters from the model.
-	 */
-	@Override
-	public void configure(Model model) {
-		if (model instanceof GPModel) {
-			rng = ((GPModel) model).getRNG();
-			depth = ((GPModel) model).getMaxInitialDepth();
-			popSize = ((GPModel) model).getPopulationSize();
-	
-			// Only update the syntax if it has changed.
-			final List<Node> newSyntax = ((GPModel) model).getSyntax();
-			if (!newSyntax.equals(syntax)) {
-				syntax = newSyntax;
-	
-				// Update the terminal and function sets.
-				updateSyntax();
-	
-				// Types possibilities table needs updating.
-				validDepthTypes = null;
-			}
-	
-			// Update return type.
-			final Class<?> newReturnType = ((GPModel) model).getReturnType();
-			if (newReturnType != returnType) {
-				returnType = newReturnType;
-	
-				// Types possibilities table needs updating.
-				validDepthTypes = null;
-			}
-		}
-	}
-
-	/*
-	 * Updates the terminals and functions lists from the syntax.
-	 */
-	private void updateSyntax() {
-		terminals.clear();
-		functions.clear();
-
-		if (syntax != null) {
-			for (final Node n: syntax) {
-				if (n.getArity() == 0) {
-					terminals.add(n);
-				} else {
-					functions.add(n);
-				}
-			}
-		}
+		setup();
+		EventManager.getInstance().add(ConfigEvent.class, this);
 	}
 
 	/**
@@ -199,13 +129,9 @@ public class FullInitialiser implements GPInitialiser, ConfigListener {
 	 *         <code>GPIndividual</code> instances with full node trees.
 	 */
 	@Override
-	public List<CandidateProgram> getInitialPopulation() {
-		if (popSize < 1) {
-			throw new IllegalStateException("Population size must be 1 or greater");
-		}
-
+	public Population process(Population population) {
 		// Create population list to be populated.
-		final List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
+		Population firstGen = new Population();
 
 		// Create and add new programs to the population.
 		for (int i = 0; i < popSize; i++) {
@@ -213,7 +139,7 @@ public class FullInitialiser implements GPInitialiser, ConfigListener {
 
 			do {
 				// Build a new full node tree.
-				candidate = getInitialProgram();
+				candidate = create();
 			} while (!acceptDuplicates && firstGen.contains(candidate));
 
 			// Must be unique - add to the new population.
@@ -230,7 +156,8 @@ public class FullInitialiser implements GPInitialiser, ConfigListener {
 	 * 
 	 * @return a new <code>GPIndividual</code> instance.
 	 */
-	public GPIndividual getInitialProgram() {
+	@Override
+	public GPIndividual create() {
 		final Node root = getFullNodeTree();
 
 		return new GPIndividual(root);
@@ -246,7 +173,7 @@ public class FullInitialiser implements GPInitialiser, ConfigListener {
 	 *         requested depth.
 	 */
 	public Node getFullNodeTree() {
-		if (rng == null) {
+		if (random == null) {
 			throw new IllegalStateException("No random number generator has been set");
 		} else if (returnType == null) {
 			throw new IllegalStateException("No return type has been set");
@@ -264,7 +191,7 @@ public class FullInitialiser implements GPInitialiser, ConfigListener {
 		}
 
 		if (!TypeUtils.containsSub(validDepthTypes[depth], returnType)) {
-			throw new IllegalStateException("Syntax is not able to produce full trees with the given return type.");
+			throw new IllegalStateException("Syntax is not able to produce full trees with the given return type");
 		}
 
 		return getNodeTree(returnType, 0);
@@ -282,7 +209,7 @@ public class FullInitialiser implements GPInitialiser, ConfigListener {
 		if (validNodes.isEmpty()) {
 			throw new IllegalStateException("Syntax is unable to create full node trees of given depth.");
 		}
-		final int randomIndex = rng.nextInt(validNodes.size());
+		final int randomIndex = random.nextInt(validNodes.size());
 		final Node root = validNodes.get(randomIndex).newInstance();
 		final int arity = root.getArity();
 
@@ -304,7 +231,7 @@ public class FullInitialiser implements GPInitialiser, ConfigListener {
 			if (validArgTypeSets.isEmpty()) {
 				throw new IllegalStateException("Syntax is unable to create full node trees of given depth.");
 			}
-			final Class<?>[] argTypes = validArgTypeSets.get(rng.nextInt(validArgTypeSets.size()));
+			final Class<?>[] argTypes = validArgTypeSets.get(random.nextInt(validArgTypeSets.size()));
 
 			for (int i = 0; i < arity; i++) {
 				root.setChild(i, getNodeTree(argTypes[i], currentDepth + 1));
@@ -415,27 +342,6 @@ public class FullInitialiser implements GPInitialiser, ConfigListener {
 	}
 
 	/**
-	 * Returns the random number generator that this initialiser is using or
-	 * <code>null</code> if none has been set.
-	 * 
-	 * @return the rng the currently set random number generator.
-	 */
-	public RandomNumberGenerator getRNG() {
-		return rng;
-	}
-
-	/**
-	 * Sets the random number generator to use. If a model has been set then
-	 * this parameter will be overwritten with the random number generator from
-	 * that model on the next configure event.
-	 * 
-	 * @param rng the random number generator to set.
-	 */
-	public void setRNG(final RandomNumberGenerator rng) {
-		this.rng = rng;
-	}
-
-	/**
 	 * Returns a <code>List</code> of the <code>Nodes</code> that form the
 	 * syntax of new program generated with this initialiser, or
 	 * an empty list if none have been set.
@@ -443,7 +349,7 @@ public class FullInitialiser implements GPInitialiser, ConfigListener {
 	 * @return the types of <code>Node</code> that should be used in
 	 *         constructing new programs.
 	 */
-	public List<Node> getSyntax() {
+	public Node[] getSyntax() {
 		return syntax;
 	}
 
@@ -455,13 +361,10 @@ public class FullInitialiser implements GPInitialiser, ConfigListener {
 	 * @param syntax a <code>List</code> of the types of <code>Node</code> that
 	 *        should be used in constructing new programs.
 	 */
-	public void setSyntax(final List<Node> syntax) {
+	public void setSyntax(Node[] syntax) {
 		this.syntax = syntax;
 
 		updateSyntax();
-
-		// Types possibilities table needs updating.
-		validDepthTypes = null;
 	}
 
 	/**
@@ -535,5 +438,94 @@ public class FullInitialiser implements GPInitialiser, ConfigListener {
 		}
 
 		this.depth = depth;
+	}
+	
+	/**
+	 * Sets up this operator with the appropriate configuration settings.
+	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
+	 * change in any of the following configuration parameters:
+	 * <ul>
+	 * <li><code>RandomSequence.RANDOM_SEQUENCE</code>
+	 * </ul>
+	 */
+	protected void setup() {
+		random = Config.getInstance().get(RANDOM_SEQUENCE);
+		popSize = Config.getInstance().get(SIZE);
+		syntax = Config.getInstance().get(SYNTAX);
+		returnType = Config.getInstance().get(RETURN_TYPE);
+		
+		int maxDepth = Config.getInstance().get(MAXIMUM_DEPTH);
+		int maxInitialDepth = Config.getInstance().get(MAXIMUM_INITIAL_DEPTH);
+		
+		if (maxInitialDepth < maxDepth || maxDepth == -1) {
+			depth = maxInitialDepth;
+		} else {
+			depth = maxDepth;
+		}
+	}
+	
+	/*
+	 * Updates the terminals and functions lists from the syntax.
+	 */
+	private void updateSyntax() {
+		terminals.clear();
+		functions.clear();
+
+		if (syntax != null) {
+			for (final Node n: syntax) {
+				if (n.getArity() == 0) {
+					terminals.add(n);
+				} else {
+					functions.add(n);
+				}
+			}
+		}
+		
+		// Types possibilities table needs updating.
+		validDepthTypes = null;
+	}
+
+	/**
+	 * Receives configuration events and triggers this operator to configure its
+	 * parameters if the <code>ConfigEvent</code> is for one of its required
+	 * parameters.
+	 * 
+	 * @param event {@inheritDoc}
+	 */
+	@Override
+	public void onEvent(ConfigEvent event) {
+		if (event.isKindOf(RANDOM_SEQUENCE, SIZE, SYNTAX, RETURN_TYPE, MAXIMUM_INITIAL_DEPTH)) {
+			setup();
+		}
+		if (event.isKindOf(SYNTAX)) {
+			// This is a little expensive, so only do it when needed.
+			updateSyntax();
+		}
+		if (event.isKindOf(RETURN_TYPE)) {
+			// This will be expensive too.
+			validDepthTypes = null;
+		}
+	}
+
+	/**
+	 * Returns the random number generator that this crossover is using or
+	 * <code>null</code> if none has been set.
+	 * 
+	 * @return the currently set random sequence
+	 */
+	public RandomSequence getRandomSequence() {
+		return random;
+	}
+
+	/**
+	 * Sets the random sequence to use. If this object was initially constructed
+	 * using one of the constructors that does not require a RandomSequence then
+	 * the value set here will be overwritten with the random sequence from
+	 * the config the next time it is updated.
+	 * 
+	 * @param random the random number generator to set
+	 */
+	public void setRandomSequence(final RandomSequence random) {
+		this.random = random;
 	}
 }

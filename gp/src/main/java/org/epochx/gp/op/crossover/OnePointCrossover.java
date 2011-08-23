@@ -92,7 +92,8 @@ public class OnePointCrossover implements Operator, Listener<ConfigEvent> {
 	}
 
 	/**
-	 * Constructs a <code>OnePointCrossover</code>.
+	 * Constructs a <code>OnePointCrossover</code>. A RandomSequence is required
+	 * from the Config.
 	 * 
 	 * @param probability the probability with which this operator should be
 	 *        selected over some alternative
@@ -152,8 +153,8 @@ public class OnePointCrossover implements Operator, Listener<ConfigEvent> {
 		GPIndividual[] children = new GPIndividual[]{child1, child2};
 
 		// Fire end event.
-		OnePointCrossoverEvent event = new OnePointCrossoverEvent(parents, children, new int[]{swapPoint1, swapPoint2},
-				new Node[]{subtree1, subtree2});
+		Event event = new OnePointCrossoverEvent(parents, children, new int[]{swapPoint1, swapPoint2}, new Node[]{
+				subtree1, subtree2});
 		EventManager.getInstance().fire(OnePointCrossoverEvent.class, event);
 
 		return children;
@@ -279,7 +280,7 @@ public class OnePointCrossover implements Operator, Listener<ConfigEvent> {
 	}
 
 	/**
-	 * Sets the random sequence to use. If this object was initially constructed 
+	 * Sets the random sequence to use. If this object was initially constructed
 	 * using one of the constructors that does not require a RandomSequence then
 	 * the value set here will be overwritten with the random sequence from
 	 * the config the next time it is updated.

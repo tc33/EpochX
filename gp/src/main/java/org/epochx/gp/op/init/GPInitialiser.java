@@ -22,7 +22,7 @@
 package org.epochx.gp.op.init;
 
 import org.epochx.Initialiser;
-import org.epochx.gp.representation.GPIndividual;
+import org.epochx.gp.GPIndividual;
 
 
 /**

@@ -26,7 +26,7 @@ import static org.epochx.stats.Stats.ExpiryEvent.GENERATION;
 import java.util.List;
 
 import org.apache.commons.lang.math.NumberUtils;
-import org.epochx.gp.representation.GPIndividual;
+import org.epochx.gp.GPIndividual;
 import org.epochx.stats.*;
 
 /**

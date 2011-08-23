@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.gp.representation;
+package org.epochx.gp;
 
 import java.util.List;
 

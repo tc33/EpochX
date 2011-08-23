@@ -30,7 +30,7 @@ import org.epochx.epox.*;
 import org.epochx.epox.ant.*;
 import org.epochx.epox.lang.SeqNFunction;
 import org.epochx.fitness.AntEvaluator;
-import org.epochx.gp.representation.GPIndividual;
+import org.epochx.gp.GPIndividual;
 import org.epochx.gp.source.GPInterpreter;
 import org.epochx.interpret.*;
 import org.epochx.representation.CandidateProgram;

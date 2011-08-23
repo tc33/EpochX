@@ -26,8 +26,8 @@ import java.util.*;
 
 import org.epochx.core.*;
 import org.epochx.epox.Node;
+import org.epochx.gp.GPIndividual;
 import org.epochx.gp.model.GPModel;
-import org.epochx.gp.representation.GPIndividual;
 import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;

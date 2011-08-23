@@ -21,9 +21,6 @@
  */
 package org.epochx.gp.op.crossover;
 
-import org.epochx.core.Evolver;
-import org.epochx.tools.random.RandomNumberGenerator;
-
 /**
  * This class implements a Koza style crossover operation on two
  * <code>CandidatePrograms</code>.

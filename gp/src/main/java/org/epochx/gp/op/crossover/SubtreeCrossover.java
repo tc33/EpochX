@@ -23,10 +23,12 @@ package org.epochx.gp.op.crossover;
 
 import java.util.*;
 
+import org.epochx.Operator;
 import org.epochx.core.*;
 import org.epochx.epox.Node;
+import org.epochx.event.*;
+import org.epochx.gp.GPIndividual;
 import org.epochx.gp.model.GPModel;
-import org.epochx.gp.representation.GPIndividual;
 import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
@@ -56,7 +58,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * @see KozaCrossover
  * @see OnePointCrossover
  */
-public class SubtreeCrossover implements GPCrossover, ConfigListener {
+public class SubtreeCrossover implements Operator, Listener<ConfigEvent> {
 
 	/**
 	 * Requests an <code>Integer</code> which is the point chosen in the first

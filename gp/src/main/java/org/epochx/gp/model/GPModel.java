@@ -25,10 +25,10 @@ import java.util.List;
 
 import org.epochx.core.*;
 import org.epochx.epox.Node;
+import org.epochx.gp.GPIndividual;
 import org.epochx.gp.op.crossover.SubtreeCrossover;
 import org.epochx.gp.op.init.FullInitialiser;
 import org.epochx.gp.op.mutation.SubtreeMutation;
-import org.epochx.gp.representation.GPIndividual;
 import org.epochx.gp.source.GPInterpreter;
 import org.epochx.representation.CandidateProgram;
 

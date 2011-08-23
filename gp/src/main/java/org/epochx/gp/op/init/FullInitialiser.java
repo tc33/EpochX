@@ -25,8 +25,8 @@ import java.util.*;
 
 import org.epochx.epox.Node;
 import org.epochx.fitness.FitnessEvaluator;
+import org.epochx.gp.GPIndividual;
 import org.epochx.gp.model.GPModel;
-import org.epochx.gp.representation.GPIndividual;
 import org.epochx.tools.util.TypeUtils;
 
 /**

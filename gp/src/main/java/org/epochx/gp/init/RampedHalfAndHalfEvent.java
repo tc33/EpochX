@@ -20,11 +20,11 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.gp.op.init;
+package org.epochx.gp.init;
 
 import org.epochx.Population;
 import org.epochx.event.InitialisationEvent;
-import org.epochx.gp.op.init.RampedHalfAndHalfInitialiser.Method;
+import org.epochx.gp.init.RampedHalfAndHalfInitialiser.Method;
 
 
 /**

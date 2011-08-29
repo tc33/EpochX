@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.gp.op.mutation;
+package org.epochx.gp.operator;
 
 import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
 import static org.epochx.gp.GPIndividual.*;

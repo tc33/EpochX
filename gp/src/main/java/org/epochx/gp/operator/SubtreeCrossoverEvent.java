@@ -20,7 +20,7 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.gp.op.crossover;
+package org.epochx.gp.operator;
 
 import org.epochx.Individual;
 import org.epochx.epox.Node;
@@ -30,12 +30,12 @@ import org.epochx.event.OperatorEvent;
 /**
  * 
  */
-public class OnePointCrossoverEvent extends OperatorEvent.EndOperator {
+public class SubtreeCrossoverEvent extends OperatorEvent.EndOperator {
 	
 	private int[] points;
 	private Node[] subtrees;
 	
-	public OnePointCrossoverEvent(Individual[] parents, Individual[] children, int[] points, Node[] subtrees) {
+	public SubtreeCrossoverEvent(Individual[] parents, Individual[] children, int[] points, Node[] subtrees) {
 		super(parents, children);
 		
 		this.points = points;

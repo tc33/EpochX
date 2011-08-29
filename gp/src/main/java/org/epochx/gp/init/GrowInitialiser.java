@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.gp.op.init;
+package org.epochx.gp.init;
 
 import static org.epochx.Population.SIZE;
 import static org.epochx.RandomSequence.RANDOM_SEQUENCE;

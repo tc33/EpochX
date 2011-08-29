@@ -20,7 +20,7 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.gp.op.mutation;
+package org.epochx.gp.operator;
 
 import java.util.List;
 

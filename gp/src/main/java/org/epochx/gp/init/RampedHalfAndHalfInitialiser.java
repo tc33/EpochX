@@ -19,12 +19,12 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.gp.op.init;
+package org.epochx.gp.init;
 
 import static org.epochx.Population.SIZE;
 import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
 import static org.epochx.gp.GPIndividual.*;
-import static org.epochx.gp.op.init.RampedHalfAndHalfInitialiser.Method.*;
+import static org.epochx.gp.init.RampedHalfAndHalfInitialiser.Method.*;
 
 import java.math.BigInteger;
 import java.util.*;

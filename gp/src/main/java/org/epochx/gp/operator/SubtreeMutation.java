@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.gp.op.mutation;
+package org.epochx.gp.operator;
 
 import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
 import static org.epochx.gp.GPIndividual.SYNTAX;
@@ -28,7 +28,7 @@ import org.epochx.*;
 import org.epochx.epox.Node;
 import org.epochx.event.*;
 import org.epochx.gp.GPIndividual;
-import org.epochx.gp.op.init.GrowInitialiser;
+import org.epochx.gp.init.GrowInitialiser;
 
 /**
  * This class performs a subtree mutation on a <code>GPIndividual</code>.

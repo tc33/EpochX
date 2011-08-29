@@ -115,7 +115,7 @@ public class OnePointCrossover implements Operator, Listener<ConfigEvent> {
 	 * The resulting programs are returned as new GPIndividual objects.
 	 * <p>
 	 * An {@link OperatorEvent.StartOperator} event is fired before the
-	 * operation is performed, and a {@link OnePointCrossoverEvent} event is
+	 * operation is performed, and a {@link PointMutationEvent} event is
 	 * fired after it is completed.
 	 * 
 	 * @param parents an array with two non-null elements which are the

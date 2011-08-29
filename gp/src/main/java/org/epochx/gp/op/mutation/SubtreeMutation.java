@@ -21,18 +21,14 @@
  */
 package org.epochx.gp.op.mutation;
 
-import java.util.List;
+import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
+import static org.epochx.gp.GPIndividual.SYNTAX;
 
-import org.epochx.core.*;
+import org.epochx.*;
 import org.epochx.epox.Node;
+import org.epochx.event.*;
 import org.epochx.gp.GPIndividual;
-import org.epochx.gp.model.GPModel;
 import org.epochx.gp.op.init.GrowInitialiser;
-import org.epochx.life.ConfigListener;
-import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.*;
-import org.epochx.stats.Stats.ExpiryEvent;
-import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
  * This class performs a subtree mutation on a <code>GPIndividual</code>.
@@ -58,38 +54,26 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * compulsory parameters remain unset when the mutation is performed then an
  * <code>IllegalStateException</code> will be thrown.
  */
-public class SubtreeMutation implements GPMutation, ConfigListener {
+public class SubtreeMutation implements Operator, Listener<ConfigEvent> {
 
-	/**
-	 * Requests an <code>Integer</code> which is the point which was modified as
-	 * a result of the subtree mutation operation.
-	 */
-	public static final Stat MUT_POINT = new AbstractStat(ExpiryEvent.MUTATION) {};
-
-	/**
-	 * Requests a <code>Node</code> which is the subtree that was inserted in
-	 * the program undergoing subtree mutation.
-	 */
-	public static final Stat MUT_SUBTREE = new AbstractStat(ExpiryEvent.MUTATION) {};
-
-	private Evolver evolver;
-	
-	private Stats stats;
-	
 	// Grow initialiser to build our replacement subtrees.
 	private final GrowInitialiser grower;
 
-	private RandomNumberGenerator rng;
+	private RandomSequence random;
 
 	// The maximum depth of the new subtree.
 	private int maxSubtreeDepth;
 
-	public SubtreeMutation(final RandomNumberGenerator rng, final List<Node> syntax, final int maxSubtreeDepth) {
-		this((Evolver) null, maxSubtreeDepth);
+	private double probability;
 
-		this.rng = rng;
+	public SubtreeMutation(RandomSequence random, Node[] syntax, int maxSubtreeDepth) {
+		this.random = random;
+		this.maxSubtreeDepth = maxSubtreeDepth;
 
-		grower.setRNG(rng);
+		// Don't let this configure itself because it will use the wrong depth.
+		grower = new GrowInitialiser(null, null, null, -1, maxSubtreeDepth, false);
+
+		grower.setRandomSequence(random);
 		grower.setSyntax(syntax);
 	}
 
@@ -100,9 +84,9 @@ public class SubtreeMutation implements GPMutation, ConfigListener {
 	 * @param model The controlling model which provides any configuration
 	 *        parameters for the run.
 	 */
-	public SubtreeMutation(final Evolver evolver) {
+	public SubtreeMutation() {
 		// 4 is a slightly arbitrary choice but we had to choose something.
-		this(evolver, 4);
+		this(4);
 	}
 
 	/**
@@ -113,24 +97,42 @@ public class SubtreeMutation implements GPMutation, ConfigListener {
 	 *        parameters for the run.
 	 * @param maxSubtreeDepth The maximum depth of the inserted subtree.
 	 */
-	public SubtreeMutation(final Evolver evolver, final int maxSubtreeDepth) {
-		this.evolver = evolver;
+	public SubtreeMutation(int maxSubtreeDepth) {
 		this.maxSubtreeDepth = maxSubtreeDepth;
 
 		// Don't let this configure itself because it will use the wrong depth.
 		grower = new GrowInitialiser(null, null, null, -1, maxSubtreeDepth, false);
+
+		setup();
+		EventManager.getInstance().add(ConfigEvent.class, this);
 	}
 
-	/*
-	 * Configure component with parameters from the model.
+	/**
+	 * Sets up this operator with the appropriate configuration settings.
+	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
+	 * change in any of the following configuration parameters:
+	 * <ul>
+	 * <li><code>RandomSequence.RANDOM_SEQUENCE</code>
+	 * </ul>
+	 */
+	protected void setup() {
+		random = Config.getInstance().get(RANDOM_SEQUENCE);
+
+		grower.setRandomSequence(random);
+		grower.setSyntax(Config.getInstance().get(SYNTAX));
+	}
+
+	/**
+	 * Receives configuration events and triggers this operator to configure its
+	 * parameters if the <code>ConfigEvent</code> is for one of its required
+	 * parameters.
+	 * 
+	 * @param event {@inheritDoc}
 	 */
 	@Override
-	public void configure(Model model) {
-		if (model instanceof GPModel) {
-			rng = model.getRNG();
-	
-			grower.setRNG(rng);
-			grower.setSyntax(((GPModel) model).getSyntax());
+	public void onEvent(ConfigEvent event) {
+		if (event.isKindOf(RANDOM_SEQUENCE, SYNTAX)) {
+			setup();
 		}
 	}
 
@@ -147,15 +149,15 @@ public class SubtreeMutation implements GPMutation, ConfigListener {
 	 *         the provided GPIndividual.
 	 */
 	@Override
-	public GPIndividual mutate(final CandidateProgram p) {
-		final GPIndividual program = (GPIndividual) p;
+	public GPIndividual[] apply(Individual ... parents) {
+		EventManager.getInstance().fire(OperatorEvent.StartOperator.class, new OperatorEvent.StartOperator(parents));
+
+		GPIndividual program = (GPIndividual) parents[0];
+		GPIndividual child = program.clone();
 
 		// Randomly choose a mutation point.
-		final int length = program.getProgramLength();
-		final int mutationPoint = rng.nextInt(length);
-
-		// Add mutation point into the stats manager.
-		stats.addData(MUT_POINT, mutationPoint);
+		int length = program.getProgramLength();
+		int mutationPoint = random.nextInt(length);
 
 		// Update grower to use the right data-type.
 		final Node originalSubtree = program.getNthNode(mutationPoint);
@@ -164,23 +166,52 @@ public class SubtreeMutation implements GPMutation, ConfigListener {
 		// Grow a new subtree using the GrowInitialiser.
 		final Node subtree = grower.getGrownNodeTree(maxSubtreeDepth);
 
-		// Add subtree into the stats manager.
-		stats.addData(MUT_SUBTREE, subtree);
-
 		// Set the new subtree.
-		program.setNthNode(mutationPoint, subtree);
+		child.setNthNode(mutationPoint, subtree);
 
-		return program;
+		EventManager.getInstance().fire(SubtreeMutationEvent.class, new SubtreeMutationEvent(program, child,
+				mutationPoint, subtree));
+
+		return new GPIndividual[]{child};
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * This operator requires an input size of 2.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public int inputSize() {
+		return 1;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public double probability() {
+		return probability;
+	}
+
+	/**
+	 * Overwrites the probability of this operator being selected.
+	 * 
+	 * @param probability the new probability to set
+	 */
+	public void setProbability(double probability) {
+		this.probability = probability;
 	}
 
 	/**
 	 * Returns the random number generator that this mutation is using or
 	 * <code>null</code> if none has been set.
 	 * 
-	 * @return the rng the currently set random number generator.
+	 * @return the random the currently set random number generator.
 	 */
-	public RandomNumberGenerator getRNG() {
-		return rng;
+	public RandomSequence getRandomSequence() {
+		return random;
 	}
 
 	/**
@@ -188,12 +219,12 @@ public class SubtreeMutation implements GPMutation, ConfigListener {
 	 * this parameter will be overwritten with the random number generator from
 	 * that model on the next configure event.
 	 * 
-	 * @param rng the random number generator to set.
+	 * @param random the random number generator to set.
 	 */
-	public void setRNG(final RandomNumberGenerator rng) {
-		this.rng = rng;
+	public void setRandomSequence(RandomSequence random) {
+		this.random = random;
 
-		grower.setRNG(rng);
+		grower.setRandomSequence(random);
 	}
 
 	/**

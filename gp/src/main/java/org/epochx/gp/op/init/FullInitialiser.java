@@ -46,8 +46,8 @@ public class FullInitialiser implements Initialiser, Listener<ConfigEvent> {
 	private RandomSequence random;
 
 	// The language to construct the trees from.
-	private final List<Node> terminals;
-	private final List<Node> functions;
+	private List<Node> terminals;
+	private List<Node> functions;
 	private Node[] syntax;
 
 	// Each generated program's return type.
@@ -69,10 +69,9 @@ public class FullInitialiser implements Initialiser, Listener<ConfigEvent> {
 	 * Constructs a <code>FullInitialiser</code> with all the necessary
 	 * parameters given.
 	 */
-	public FullInitialiser(RandomSequence random, Node[] syntax, Class<?> returnType,
-			int popSize, int depth, boolean acceptDuplicates) {
-		this(acceptDuplicates);
-
+	public FullInitialiser(RandomSequence random, Node[] syntax, Class<?> returnType, int popSize, int depth,
+			boolean acceptDuplicates) {
+		this.acceptDuplicates = acceptDuplicates;
 		this.random = random;
 		this.syntax = syntax;
 		this.returnType = returnType;
@@ -106,17 +105,14 @@ public class FullInitialiser implements Initialiser, Listener<ConfigEvent> {
 	 *        populations that are generated.
 	 */
 	public FullInitialiser(boolean acceptDuplicates) {
-		terminals = new ArrayList<Node>();
-		functions = new ArrayList<Node>();
-
 		this.acceptDuplicates = acceptDuplicates;
-		
+
 		setup();
 		EventManager.getInstance().add(ConfigEvent.class, this);
 	}
 
 	/**
-	 * Generates a population of new <code>CandidatePrograms</code> constructed
+	 * Generates a population of new <code>GPIndividuals</code> constructed
 	 * from the <code>Nodes</code> in the syntax attribute. The size of the
 	 * population will be equal to the population size attribute. All programs
 	 * in the population are only guarenteed to be unique (as defined by the
@@ -125,13 +121,13 @@ public class FullInitialiser implements Initialiser, Listener<ConfigEvent> {
 	 * program will have a full node tree with a depth equal to the
 	 * depth attribute.
 	 * 
-	 * @return A <code>List</code> of newly generated
-	 *         <code>GPIndividual</code> instances with full node trees.
+	 * @return A <code>List</code> of newly generated <code>GPIndividual</code>
+	 *         instances with full node trees.
 	 */
 	@Override
 	public Population process(Population population) {
-		// Create population list to be populated.
-		Population firstGen = new Population();
+		EventManager.getInstance().fire(InitialisationEvent.StartInitialisation.class, new InitialisationEvent.StartInitialisation(
+				population));
 
 		// Create and add new programs to the population.
 		for (int i = 0; i < popSize; i++) {
@@ -140,13 +136,16 @@ public class FullInitialiser implements Initialiser, Listener<ConfigEvent> {
 			do {
 				// Build a new full node tree.
 				candidate = create();
-			} while (!acceptDuplicates && firstGen.contains(candidate));
+			} while (!acceptDuplicates && population.contains(candidate));
 
 			// Must be unique - add to the new population.
-			firstGen.add(candidate);
+			population.add(candidate);
 		}
 
-		return firstGen;
+		EventManager.getInstance().fire(InitialisationEvent.EndInitialisation.class, new InitialisationEvent.EndInitialisation(
+				population));
+
+		return population;
 	}
 
 	/**
@@ -439,7 +438,7 @@ public class FullInitialiser implements Initialiser, Listener<ConfigEvent> {
 
 		this.depth = depth;
 	}
-	
+
 	/**
 	 * Sets up this operator with the appropriate configuration settings.
 	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
@@ -453,23 +452,23 @@ public class FullInitialiser implements Initialiser, Listener<ConfigEvent> {
 		popSize = Config.getInstance().get(SIZE);
 		syntax = Config.getInstance().get(SYNTAX);
 		returnType = Config.getInstance().get(RETURN_TYPE);
-		
+
 		int maxDepth = Config.getInstance().get(MAXIMUM_DEPTH);
 		int maxInitialDepth = Config.getInstance().get(MAXIMUM_INITIAL_DEPTH);
-		
+
 		if (maxInitialDepth < maxDepth || maxDepth == -1) {
 			depth = maxInitialDepth;
 		} else {
 			depth = maxDepth;
 		}
 	}
-	
+
 	/*
 	 * Updates the terminals and functions lists from the syntax.
 	 */
 	private void updateSyntax() {
-		terminals.clear();
-		functions.clear();
+		terminals = new ArrayList<Node>();
+		functions = new ArrayList<Node>();
 
 		if (syntax != null) {
 			for (final Node n: syntax) {
@@ -480,7 +479,7 @@ public class FullInitialiser implements Initialiser, Listener<ConfigEvent> {
 				}
 			}
 		}
-		
+
 		// Types possibilities table needs updating.
 		validDepthTypes = null;
 	}
@@ -494,7 +493,7 @@ public class FullInitialiser implements Initialiser, Listener<ConfigEvent> {
 	 */
 	@Override
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(RANDOM_SEQUENCE, SIZE, SYNTAX, RETURN_TYPE, MAXIMUM_INITIAL_DEPTH)) {
+		if (event.isKindOf(RANDOM_SEQUENCE, SIZE, SYNTAX, RETURN_TYPE, MAXIMUM_INITIAL_DEPTH, MAXIMUM_DEPTH)) {
 			setup();
 		}
 		if (event.isKindOf(SYNTAX)) {

@@ -71,7 +71,8 @@ public abstract class AbstractStat<T extends Event> {
 	}
 
 	/**
-	 * Constructs an <code>AbstractStat</code>.
+	 * Constructs an <code>AbstractStat</code>. The array of dependencies can be
+	 * empty, in case this stat has no dependencies.
 	 * 
 	 * @param dependencies the array of dependencies of this stat.
 	 */

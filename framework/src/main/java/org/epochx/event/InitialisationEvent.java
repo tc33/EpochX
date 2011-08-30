@@ -28,7 +28,7 @@ import org.epochx.Population;
 /**
  * 
  */
-public class InitialisationEvent implements Event {
+public abstract class InitialisationEvent implements Event {
 
 	private Population population;
 	

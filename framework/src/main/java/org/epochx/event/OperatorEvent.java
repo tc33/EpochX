@@ -28,7 +28,7 @@ import org.epochx.*;
 /**
  * 
  */
-public class OperatorEvent implements Event {
+public abstract class OperatorEvent implements Event {
 
 	private Individual[] parents;
 	

@@ -21,153 +21,107 @@
  */
 package org.epochx.gp.op.crossover;
 
+import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
+
 import java.util.*;
 
-import org.epochx.core.*;
+import org.epochx.*;
 import org.epochx.epox.Node;
-import org.epochx.gp.model.GPModel;
-import org.epochx.gp.representation.GPCandidateProgram;
-import org.epochx.life.ConfigListener;
-import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.*;
-import org.epochx.stats.Stats.ExpiryEvent;
-import org.epochx.tools.random.RandomNumberGenerator;
+import org.epochx.event.*;
+import org.epochx.gp.GPIndividual;
 
 /**
  * This class implements standard crossover with uniform swap points. Subtree
  * crossover works by randomly selecting a crossover point in both parent
  * programs and then swapping the subtrees at those points.
  * 
- * <p>
- * If a model is provided then the following parameters are loaded upon every
- * configure event:
- * 
- * <ul>
- * <li>random number generator</li>
- * </ul>
- * 
- * <p>
- * If the <code>getModel</code> method returns <code>null</code> then no model
- * is set and whatever static parameters have been set as parameters to the
- * constructor or using the standard accessor methods will be used. If any
- * compulsory parameters remain unset when the crossover is performed then an
- * <code>IllegalStateException</code> will be thrown.
- * 
  * @see KozaCrossover
  * @see OnePointCrossover
  */
-public class SubtreeCrossover implements GPCrossover, ConfigListener {
+public class SubtreeCrossover implements Operator, Listener<ConfigEvent> {
 
-	/**
-	 * Requests an <code>Integer</code> which is the point chosen in the first
-	 * parent for the uniform point crossover operation.
-	 */
-	public static final Stat XO_POINT1 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
-
-	/**
-	 * Requests an <code>Integer</code> which is the point chosen in the second
-	 * parent for the uniform point crossover operation.
-	 */
-	public static final Stat XO_POINT2 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
-
-	/**
-	 * Requests a <code>Node</code> which is the subtree from the
-	 * first parent program which is being exchanged into the second parent.
-	 */
-	public static final Stat XO_SUBTREE1 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
-
-	/**
-	 * Requests a <code>Node</code> which is the subtree from the
-	 * second parent program which is being exchanged into the first parent.
-	 */
-	public static final Stat XO_SUBTREE2 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
-
-	private Evolver evolver;
-	
-	private Stats stats;
-	
 	// The random number generator for controlling random behaviour.
-	private RandomNumberGenerator rng;
+	private RandomSequence random;
 
 	// The probability of choosing a function node as the swap point.
 	private final double functionSwapProbability;
 
-	/**
-	 * Constructs a <code>SubtreeCrossover</code> with the only necessary
-	 * parameter provided.
-	 * 
-	 * @param rng a <code>RandomNumberGenerator</code> used to lead
-	 *        non-deterministic behaviour.
-	 */
-	public SubtreeCrossover(final RandomNumberGenerator rng) {
-		this((Evolver) null);
+	private double probability;
 
-		this.rng = rng;
+	/**
+	 * Constructs a <code>SubtreeCrossover</code> using a function swap 
+	 * probability of -1.0 which results in all nodes being selected from with
+	 * equal probability.
+	 * 
+	 * @param probability the probability with which this operator should be
+	 *        selected over some alternative
+	 * @param random a <code>RandomSequence</code> used to lead
+	 *        non-deterministic behaviour
+	 */
+	public SubtreeCrossover(double probability, RandomSequence random) {
+		this(probability, random, -1.0);
 	}
 
 	/**
 	 * Constructs a <code>SubtreeCrossover</code>.
 	 * 
-	 * @param rng a random number generator.
+	 * @param probability the probability with which this operator should be
+	 *        selected over some alternative
+	 * @param random a <code>RandomSequence</code> used to lead
+	 *        non-deterministic behaviour
 	 * @param functionSwapProbability The probability of crossover operations
 	 *        choosing a function node as the swap point.
 	 */
-	public SubtreeCrossover(final RandomNumberGenerator rng, final double functionSwapProbability) {
-		this((Evolver) null, functionSwapProbability);
-
-		this.rng = rng;
-	}
-
-	/**
-	 * Constructs a <code>SubtreeCrossover</code>.
-	 * 
-	 * @param model the current controlling model.
-	 */
-	public SubtreeCrossover(final Evolver evolver) {
-		this(evolver, -1.0);
-	}
-
-	/**
-	 * Construct an instance of Koza crossover.
-	 * 
-	 * @param functionSwapProbability The probability of crossover operations
-	 *        choosing a function node as the swap point.
-	 */
-	public SubtreeCrossover(final Evolver evolver, final double functionSwapProbability) {
-		this.evolver = evolver;
+	public SubtreeCrossover(double probability, RandomSequence random, double functionSwapProbability) {
+		this.probability = probability;
+		this.random = random;
 		this.functionSwapProbability = functionSwapProbability;
-		
-		if (evolver != null) {
-			evolver.getLife().addConfigListener(this, false);
-		}
 	}
 
 	/**
-	 * Configures this operator with parameters from the model.
+	 * Constructs a <code>SubtreeCrossover</code> using a function swap 
+	 * probability of -1.0 which results in all nodes being selected from with
+	 * equal probability. A RandomSequence is required from the Config.
+	 * 
+	 * @param probability the probability with which this operator should be
+	 *        selected over some alternative
 	 */
-	@Override
-	public void configure(Model model) {
-		if (model instanceof GPModel) {
-			stats = evolver.getStats(model);
-			rng = ((GPModel) model).getRNG();
-		}
+	public SubtreeCrossover(double probability) {
+		this(probability, -1.0);
 	}
 
 	/**
-	 * Crosses over the two <code>CandidatePrograms</code> provided as arguments
+	 * Constructs a <code>SubtreeCrossover</code>. A RandomSequence is required
+	 * from the Config.
+	 * 
+	 * @param probability the probability with which this operator should be
+	 *        selected over some alternative
+	 * @param functionSwapProbability The probability of crossover operations
+	 *        choosing a function node as the swap point.
+	 */
+	public SubtreeCrossover(double probability, double functionSwapProbability) {
+		this.probability = probability;
+		this.functionSwapProbability = functionSwapProbability;
+
+		setup();
+		EventManager.getInstance().add(ConfigEvent.class, this);
+	}
+
+	/**
+	 * Crosses over the two <code>Individuals</code> provided as arguments
 	 * using uniform swap points. Random crossover points are chosen at random
 	 * in both programs, the genetic material at the points are then exchanged.
-	 * The resulting programs are returned as new GPCandidateProgram objects.
+	 * The resulting programs are returned as new GPIndividual objects.
 	 * 
-	 * @param p1 The first GPCandidateProgram selected to undergo subtree
-	 *        crossover.
-	 * @param p2 The second GPCandidateProgram selected to undergo subtree
+	 * @param parents the first Individual selected to undergo subtree
 	 *        crossover.
 	 */
 	@Override
-	public GPCandidateProgram[] crossover(final CandidateProgram p1, final CandidateProgram p2) {
-		final GPCandidateProgram program1 = (GPCandidateProgram) p1;
-		final GPCandidateProgram program2 = (GPCandidateProgram) p2;
+	public GPIndividual[] apply(Individual ... parents) {
+		EventManager.getInstance().fire(OperatorEvent.StartOperator.class, new OperatorEvent.StartOperator(parents));
+
+		final GPIndividual program1 = (GPIndividual) parents[0];
+		final GPIndividual program2 = (GPIndividual) parents[1];
 
 		// Select first swap point.
 		final int swapPoint1 = getCrossoverPoint(program1);
@@ -179,26 +133,30 @@ public class SubtreeCrossover implements GPCrossover, ConfigListener {
 		final List<Integer> matchingIndexes = new ArrayList<Integer>();
 		getMatchingNodes(program2.getRootNode(), subtree1Type, 0, matchingNodes, matchingIndexes);
 
+		GPIndividual[] children = new GPIndividual[0];
+		int[] swapPoints = new int[0];
+		Node[] subtrees = new Node[0];
+
 		if (matchingNodes.size() > 0) {
 			// Select second swap point with the same data-type.
-			final int index = getSelectedMatch(matchingNodes);
-			final Node subtree2 = matchingNodes.get(index);
-			final int swapPoint2 = matchingIndexes.get(index);
-
-			// Add data into the stats manager.
-			stats.addData(XO_POINT1, swapPoint1);
-			stats.addData(XO_POINT2, swapPoint2);
-			stats.addData(XO_SUBTREE1, subtree1);
-			stats.addData(XO_SUBTREE2, subtree2);
+			int index = getSelectedMatch(matchingNodes);
+			Node subtree2 = matchingNodes.get(index);
+			int swapPoint2 = matchingIndexes.get(index);
 
 			// Perform swap.
 			program1.setNthNode(swapPoint1, subtree2);
 			program2.setNthNode(swapPoint2, subtree1);
 
-			return new GPCandidateProgram[]{program1, program2};
+			children = new GPIndividual[]{program1, program2};
+			swapPoints = new int[]{swapPoint1, swapPoint2};
+			subtrees = new Node[]{subtree1, subtree2};
 		}
 
-		return new GPCandidateProgram[0];
+		// Fire end event.
+		Event event = new SubtreeCrossoverEvent(parents, children, swapPoints, subtrees);
+		EventManager.getInstance().fire(SubtreeCrossoverEvent.class, event);
+
+		return children;
 	}
 
 	private int getMatchingNodes(final Node root, final Class<?> type, int current, final List<Node> matching,
@@ -216,10 +174,10 @@ public class SubtreeCrossover implements GPCrossover, ConfigListener {
 	}
 
 	/*
-	 * Choose the crossover point for the given GPCandidateProgram with respect
+	 * Choose the crossover point for the given GPIndividual with respect
 	 * to the probabilities assigned for function and terminal node points.
 	 */
-	private int getCrossoverPoint(final GPCandidateProgram program) {
+	private int getCrossoverPoint(final GPIndividual program) {
 		// Calculate numbers of terminal and function nodes.
 		final int length = program.getProgramLength();
 		final int noTerminals = program.getNoTerminals();
@@ -228,29 +186,29 @@ public class SubtreeCrossover implements GPCrossover, ConfigListener {
 		// Randomly decide whether to use a function or terminal node point.
 		if (functionSwapProbability == -1) {
 			// Randomly select a node from the program.
-			return rng.nextInt(length);
-		} else if ((noFunctions > 0) && (rng.nextDouble() < functionSwapProbability)) {
+			return random.nextInt(length);
+		} else if ((noFunctions > 0) && (random.nextDouble() < functionSwapProbability)) {
 			// Randomly select a function node from the function set.
-			final int f = rng.nextInt(noFunctions);
+			final int f = random.nextInt(noFunctions);
 
 			return program.getRootNode().getNthFunctionNodeIndex(f);
 		} else {
 			// Randomly select a terminal node from the terminal set.
-			final int t = rng.nextInt(noTerminals);
+			final int t = random.nextInt(noTerminals);
 
 			return program.getRootNode().getNthTerminalNodeIndex(t);
 		}
 	}
 
 	/*
-	 * Choose the crossover point for the given GPCandidateProgram with respect
+	 * Choose the crossover point for the given GPIndividual with respect
 	 * to the probabilities assigned for function and terminal node points.
 	 */
 	private int getSelectedMatch(final List<Node> nodes) {
 		// Randomly decide whether to use a function or terminal node point.
 		if (functionSwapProbability == -1) {
 			// Randomly select a node from the program.
-			return rng.nextInt(nodes.size());
+			return random.nextInt(nodes.size());
 		} else {
 			final List<Integer> terminalIndexes = new ArrayList<Integer>();
 			final List<Integer> functionIndexes = new ArrayList<Integer>();
@@ -263,34 +221,90 @@ public class SubtreeCrossover implements GPCrossover, ConfigListener {
 				}
 			}
 
-			if ((functionIndexes.size() > 0) && (rng.nextDouble() < functionSwapProbability)) {
+			if ((functionIndexes.size() > 0) && (random.nextDouble() < functionSwapProbability)) {
 				// Randomly select a function node from the function set.
-				return functionIndexes.get(rng.nextInt(functionIndexes.size()));
+				return functionIndexes.get(random.nextInt(functionIndexes.size()));
 			} else {
 				// Randomly select a terminal node from the terminal set.
-				return terminalIndexes.get(rng.nextInt(terminalIndexes.size()));
+				return terminalIndexes.get(random.nextInt(terminalIndexes.size()));
 			}
 		}
+	}
+
+	/**
+	 * Sets up this operator with the appropriate configuration settings.
+	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
+	 * change in any of the following configuration parameters:
+	 * <ul>
+	 * <li><code>RandomSequence.RANDOM_SEQUENCE</code>
+	 * </ul>
+	 */
+	protected void setup() {
+		random = Config.getInstance().get(RANDOM_SEQUENCE);
+	}
+
+	/**
+	 * Receives configuration events and triggers this operator to configure its
+	 * parameters if the <code>ConfigEvent</code> is for one of its required
+	 * parameters.
+	 * 
+	 * @param event {@inheritDoc}
+	 */
+	@Override
+	public void onEvent(ConfigEvent event) {
+		if (event.isKindOf(RANDOM_SEQUENCE)) {
+			setup();
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * This operator requires an input size of 2.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public int inputSize() {
+		return 2;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public double probability() {
+		return probability;
+	}
+
+	/**
+	 * Overwrites the probability of this operator being selected.
+	 * 
+	 * @param probability the new probability to set
+	 */
+	public void setProbability(double probability) {
+		this.probability = probability;
 	}
 
 	/**
 	 * Returns the random number generator that this crossover is using or
 	 * <code>null</code> if none has been set.
 	 * 
-	 * @return the rng the currently set random number generator.
+	 * @return the currently set random sequence
 	 */
-	public RandomNumberGenerator getRNG() {
-		return rng;
+	public RandomSequence getRandomSequence() {
+		return random;
 	}
 
 	/**
-	 * Sets the random number generator to use. If a model has been set then
-	 * this parameter will be overwritten with the random number generator from
-	 * that model on the next configure event.
+	 * Sets the random sequence to use. If this object was initially constructed
+	 * using one of the constructors that does not require a RandomSequence then
+	 * the value set here will be overwritten with the random sequence from
+	 * the config the next time it is updated.
 	 * 
-	 * @param rng the random number generator to set.
+	 * @param random the random number generator to set
 	 */
-	public void setRNG(final RandomNumberGenerator rng) {
-		this.rng = rng;
+	public void setRandomSequence(final RandomSequence random) {
+		this.random = random;
 	}
 }

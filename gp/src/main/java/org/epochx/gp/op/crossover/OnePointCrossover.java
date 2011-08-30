@@ -21,17 +21,14 @@
  */
 package org.epochx.gp.op.crossover;
 
+import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
+
 import java.util.*;
 
-import org.epochx.core.*;
+import org.epochx.*;
 import org.epochx.epox.Node;
-import org.epochx.gp.model.GPModel;
-import org.epochx.gp.representation.GPCandidateProgram;
-import org.epochx.life.ConfigListener;
-import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.*;
-import org.epochx.stats.Stats.ExpiryEvent;
-import org.epochx.tools.random.RandomNumberGenerator;
+import org.epochx.event.*;
+import org.epochx.gp.GPIndividual;
 
 /**
  * This class implements one point crossover as described by Poli and Langdon
@@ -40,163 +37,127 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * use 30%) is used in combination with one-point crossover since it encourages
  * rapid convergence.
  * 
- * <p>
- * If a model is provided then the following parameters are loaded upon every
- * configure event:
- * 
- * <ul>
- * <li>random number generator</li>
- * </ul>
- * 
- * <p>
- * If the <code>getModel</code> method returns <code>null</code> then no model
- * is set and whatever static parameters have been set as parameters to the
- * constructor or using the standard accessor methods will be used. If any
- * compulsory parameters remain unset when the crossover is performed then an
- * <code>IllegalStateException</code> will be thrown.
- * 
  * @see KozaCrossover
  * @see SubtreeCrossover
  */
-public class OnePointCrossover implements GPCrossover, ConfigListener {
+public class OnePointCrossover implements Operator, Listener<ConfigEvent> {
 
-	/**
-	 * Requests an <code>Integer</code> which is the point chosen in the first
-	 * parent for the uniform point crossover operation.
-	 */
-	public static final Stat XO_POINT1 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
-
-	/**
-	 * Requests an <code>Integer</code> which is the point chosen in the second
-	 * parent for the uniform point crossover operation.
-	 */
-	public static final Stat XO_POINT2 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
-
-	/**
-	 * Requests a <code>Node</code> which is the subtree from the
-	 * first parent program which is being exchanged into the second parent.
-	 */
-	public static final Stat XO_SUBTREE1 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
-
-	/**
-	 * Requests a <code>Node</code> which is the subtree from the
-	 * second parent program which is being exchanged into the first parent.
-	 */
-	public static final Stat XO_SUBTREE2 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
-
-	private Evolver evolver;
-	
-	private Stats stats;
-	
-	// The random number generator for controlling random behaviour.
-	private RandomNumberGenerator rng;
+	private RandomSequence random;
 
 	// Whether to use the strict version of one-point crossover or not.
 	private boolean strict;
 
+	private double probability;
+
 	/**
-	 * Constructs a <code>OnePointCrossover</code> with the only necessary
-	 * parameter provided. Defaults to using a non-strict implementation of
-	 * one-point crossover.
+	 * Constructs a <code>OnePointCrossover</code> using a non-strict
+	 * implementation of one-point crossover.
 	 * 
-	 * @param rng a <code>RandomNumberGenerator</code> used to lead
-	 *        non-deterministic behaviour.
+	 * @param probability the probability with which this operator should be
+	 *        selected over some alternative
+	 * @param random a <code>RandomSequence</code> used to lead
+	 *        non-deterministic behaviour
 	 */
-	public OnePointCrossover(final RandomNumberGenerator rng) {
-		this(rng, false);
+	public OnePointCrossover(double probability, RandomSequence random) {
+		this(probability, random, false);
 	}
 
 	/**
 	 * Constructs a <code>OnePointCrossover</code> with the necessary
 	 * parameters provided.
 	 * 
-	 * @param rng a <code>RandomNumberGenerator</code> used to lead
-	 *        non-deterministic behaviour.
+	 * @param probability the probability with which this operator should be
+	 *        selected over some alternative
+	 * @param random a <code>RandomSequence</code> used to lead
+	 *        non-deterministic behaviour
 	 * @param strict whether strict one-point crossover should be used where not
-	 *        only must the arity of nodes match, but the node types.
+	 *        only must the arity of nodes match, but also the node types
 	 */
-	public OnePointCrossover(final RandomNumberGenerator rng, final boolean strict) {
-		this((Evolver) null, strict);
-
-		this.rng = rng;
-	}
-
-	/**
-	 * Constructs a <code>OnePointCrossover</code>. Defaults to using a
-	 * non-strict implementation of one-point crossover.
-	 * 
-	 * @param model the current controlling model.
-	 */
-	public OnePointCrossover(final Evolver evolver) {
-		this(evolver, false);
-	}
-
-	/**
-	 * Constructs a <code>OnePointCrossover</code>.
-	 * 
-	 * @param model the current controlling model.
-	 * @param strict whether strict one-point crossover should be used where not
-	 *        only must the arity of nodes match, but the node types.
-	 */
-	public OnePointCrossover(final Evolver evolver, final boolean strict) {
-		this.evolver = evolver;
+	public OnePointCrossover(double probability, RandomSequence random, boolean strict) {
+		this.probability = probability;
+		this.random = random;
 		this.strict = strict;
 	}
 
 	/**
-	 * Configures this operator with parameters from the model.
+	 * Constructs a <code>OnePointCrossover</code> using a non-strict
+	 * implementation of one-point crossover. A RandomSequence is required from
+	 * the Config.
+	 * 
+	 * @param probability the probability with which this operator should be
+	 *        selected over some alternative
 	 */
-	@Override
-	public void configure(Model model) {
-		if (model instanceof GPModel) {
-			stats = evolver.getStats(model);
-			rng = ((GPModel) model).getRNG();
-		}
+	public OnePointCrossover(double probability) {
+		this(probability, false);
 	}
 
 	/**
-	 * Crosses over the two <code>CandidatePrograms</code> provided as arguments
-	 * using uniform swap points. Random crossover points are chosen at random
-	 * in both programs, the genetic material at the points are then exchanged.
-	 * The resulting programs are returned as new GPCandidateProgram objects.
+	 * Constructs a <code>OnePointCrossover</code>. A RandomSequence is required
+	 * from the Config.
 	 * 
-	 * @param p1 The first GPCandidateProgram selected to undergo one
-	 *        point crossover.
-	 * @param p2 The second GPCandidateProgram selected to undergo one
-	 *        point crossover.
+	 * @param probability the probability with which this operator should be
+	 *        selected over some alternative
+	 * @param strict whether strict one-point crossover should be used where not
+	 *        only must the arity of nodes match, but also the node types
+	 */
+	public OnePointCrossover(double probability, boolean strict) {
+		this.probability = probability;
+		this.strict = strict;
+
+		setup();
+		EventManager.getInstance().add(ConfigEvent.class, this);
+	}
+
+	/**
+	 * Crosses over two <code>Individuals</code> provided as arguments
+	 * using uniform swap points. Random crossover points are chosen in both
+	 * programs, the genetic material at the points are then exchanged.
+	 * The resulting programs are returned as new GPIndividual objects.
+	 * <p>
+	 * An {@link OperatorEvent.StartOperator} event is fired before the
+	 * operation is performed, and a {@link OnePointCrossoverEvent} event is
+	 * fired after it is completed.
+	 * 
+	 * @param parents an array with two non-null elements which are the
+	 *        GPIndividuals to undergo one point crossover.
 	 */
 	@Override
-	public GPCandidateProgram[] crossover(final CandidateProgram p1, final CandidateProgram p2) {
-		final GPCandidateProgram program1 = (GPCandidateProgram) p1;
-		final GPCandidateProgram program2 = (GPCandidateProgram) p2;
+	public GPIndividual[] apply(Individual ... parents) {
+		EventManager.getInstance().fire(OperatorEvent.StartOperator.class, new OperatorEvent.StartOperator(parents));
 
-		final List<Integer> points1 = new ArrayList<Integer>();
-		final List<Integer> points2 = new ArrayList<Integer>();
+		GPIndividual program1 = (GPIndividual) parents[0];
+		GPIndividual program2 = (GPIndividual) parents[1];
+
+		List<Integer> points1 = new ArrayList<Integer>();
+		List<Integer> points2 = new ArrayList<Integer>();
 
 		traverse(program1.getRootNode(), program2.getRootNode(), points1, points2, 0, 0);
 
 		// Select swap points.
-		final int randomIndex = rng.nextInt(points1.size());
-		final int swapPoint1 = points1.get(randomIndex);
-		final int swapPoint2 = points2.get(randomIndex);
-
-		// Add crossover points to the stats manager.
-		stats.addData(XO_POINT1, swapPoint1);
-		stats.addData(XO_POINT2, swapPoint2);
+		int randomIndex = random.nextInt(points1.size());
+		int swapPoint1 = points1.get(randomIndex);
+		int swapPoint2 = points2.get(randomIndex);
 
 		// Get copies of subtrees to swap.
-		final Node subtree1 = program1.getNthNode(swapPoint1);// .clone();
-		final Node subtree2 = program2.getNthNode(swapPoint2);// .clone();
+		Node subtree1 = program1.getNthNode(swapPoint1);
+		Node subtree2 = program2.getNthNode(swapPoint2);
 
-		// Add subtrees into the stats manager.
-		stats.addData(XO_SUBTREE1, subtree1);
-		stats.addData(XO_SUBTREE2, subtree2);
+		// Swap on clones so parents and children remain distinct in event.
+		GPIndividual child1 = program1.clone();
+		GPIndividual child2 = program2.clone();
 
 		// Perform swap.
-		program1.setNthNode(swapPoint1, subtree2);
-		program2.setNthNode(swapPoint2, subtree1);
+		child1.setNthNode(swapPoint1, subtree2);
+		child2.setNthNode(swapPoint2, subtree1);
 
-		return new GPCandidateProgram[]{program1, program2};
+		GPIndividual[] children = new GPIndividual[]{child1, child2};
+
+		// Fire end event.
+		Event event = new OnePointCrossoverEvent(parents, children, new int[]{swapPoint1, swapPoint2}, new Node[]{
+				subtree1, subtree2});
+		EventManager.getInstance().fire(OnePointCrossoverEvent.class, event);
+
+		return children;
 	}
 
 	/*
@@ -205,8 +166,8 @@ public class OnePointCrossover implements GPCrossover, ConfigListener {
 	 * connected to a part of the tree that aligns. Supports strict or
 	 * non-strict.
 	 */
-	private void traverse(final Node root1, final Node root2, final List<Integer> points1, final List<Integer> points2,
-			int current1, int current2) {
+	private void traverse(Node root1, Node root2, List<Integer> points1, List<Integer> points2, int current1,
+			int current2) {
 		points1.add(current1);
 		points2.add(current2);
 
@@ -219,8 +180,8 @@ public class OnePointCrossover implements GPCrossover, ConfigListener {
 
 		if (valid) {
 			for (int i = 0; i < root1.getArity(); i++) {
-				final Node child1 = root1.getChild(i);
-				final Node child2 = root2.getChild(i);
+				Node child1 = root1.getChild(i);
+				Node child2 = root2.getChild(i);
 				traverse(child1, child2, points1, points2, current1 + 1, current2 + 1);
 
 				current1 += child1.getLength();
@@ -230,12 +191,67 @@ public class OnePointCrossover implements GPCrossover, ConfigListener {
 	}
 
 	/**
+	 * Sets up this operator with the appropriate configuration settings.
+	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
+	 * change in any of the following configuration parameters:
+	 * <ul>
+	 * <li><code>RandomSequence.RANDOM_SEQUENCE</code>
+	 * </ul>
+	 */
+	protected void setup() {
+		random = Config.getInstance().get(RANDOM_SEQUENCE);
+	}
+
+	/**
+	 * Receives configuration events and triggers this operator to configure its
+	 * parameters if the <code>ConfigEvent</code> is for one of its required
+	 * parameters.
+	 * 
+	 * @param event {@inheritDoc}
+	 */
+	@Override
+	public void onEvent(ConfigEvent event) {
+		if (event.isKindOf(RANDOM_SEQUENCE)) {
+			setup();
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * This operator requires an input size of 2.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public int inputSize() {
+		return 2;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public double probability() {
+		return probability;
+	}
+
+	/**
+	 * Overwrites the probability of this operator being selected.
+	 * 
+	 * @param probability the new probability to set
+	 */
+	public void setProbability(double probability) {
+		this.probability = probability;
+	}
+
+	/**
 	 * Returns whether strict one-point crossover is being used, or not. If set
 	 * to <code>true</code> then alignment of the parent programs takes into
 	 * account not only the arity of the nodes, but also the node type.
 	 * 
 	 * @return true if strict one-point crossover is in use, and false
-	 *         otherwise.
+	 *         otherwise
 	 */
 	public boolean isStrict() {
 		return strict;
@@ -247,7 +263,7 @@ public class OnePointCrossover implements GPCrossover, ConfigListener {
 	 * account not only the arity of the nodes, but also the node type.
 	 * 
 	 * @param strict true if strict one-point crossover should be used, and
-	 *        false otherwise.
+	 *        false otherwise
 	 */
 	public void setStrict(final boolean strict) {
 		this.strict = strict;
@@ -257,20 +273,21 @@ public class OnePointCrossover implements GPCrossover, ConfigListener {
 	 * Returns the random number generator that this crossover is using or
 	 * <code>null</code> if none has been set.
 	 * 
-	 * @return the rng the currently set random number generator.
+	 * @return the currently set random sequence
 	 */
-	public RandomNumberGenerator getRNG() {
-		return rng;
+	public RandomSequence getRandomSequence() {
+		return random;
 	}
 
 	/**
-	 * Sets the random number generator to use. If a model has been set then
-	 * this parameter will be overwritten with the random number generator from
-	 * that model on the next configure event.
+	 * Sets the random sequence to use. If this object was initially constructed
+	 * using one of the constructors that does not require a RandomSequence then
+	 * the value set here will be overwritten with the random sequence from
+	 * the config the next time it is updated.
 	 * 
-	 * @param rng the random number generator to set.
+	 * @param random the random number generator to set
 	 */
-	public void setRNG(final RandomNumberGenerator rng) {
-		this.rng = rng;
+	public void setRandomSequence(final RandomSequence random) {
+		this.random = random;
 	}
 }

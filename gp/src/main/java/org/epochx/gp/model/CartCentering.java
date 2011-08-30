@@ -26,7 +26,7 @@ import java.util.*;
 import org.epochx.core.*;
 import org.epochx.epox.*;
 import org.epochx.epox.math.*;
-import org.epochx.gp.representation.GPCandidateProgram;
+import org.epochx.gp.GPIndividual;
 import org.epochx.representation.CandidateProgram;
 
 /**
@@ -94,7 +94,7 @@ public class CartCentering extends GPModel {
 
 	@Override
 	public double getFitness(final CandidateProgram p) {
-		final GPCandidateProgram program = (GPCandidateProgram) p;
+		final GPIndividual program = (GPIndividual) p;
 
 		// Total time taken for all fitness cases in ms.
 		int totalTime = 0;

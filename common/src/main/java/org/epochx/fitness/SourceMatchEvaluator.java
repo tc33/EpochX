@@ -21,14 +21,14 @@
  */
 package org.epochx.fitness;
 
-import org.epochx.representation.CandidateProgram;
+import org.epochx.Individual;
 import org.epochx.source.SourceGenerator;
 
 
 /**
  * 
  */
-public class SourceMatchEvaluator<T extends CandidateProgram> extends AbstractFitnessEvaluator<T> {
+public class SourceMatchEvaluator<T extends Individual> extends AbstractFitnessEvaluator<T> {
 
 	private SourceGenerator<T> generator;
 	private String expectedSource;

@@ -21,7 +21,7 @@
  */
 package org.epochx.interpret;
 
-import org.epochx.representation.CandidateProgram;
+import org.epochx.Individual;
 
 /**
  * Interpreters provide a mechanism for executing program source code that is
@@ -44,7 +44,7 @@ import org.epochx.representation.CandidateProgram;
  * represent one or more full program statements. No value will be returned by
  * these methods so the programs are expected to have other side effects.
  */
-public interface Interpreter<T extends CandidateProgram> {
+public interface Interpreter<T extends Individual> {
 
 	/**
 	 * Evaluates an expression multiple times with each set of argument values

@@ -27,8 +27,8 @@ import java.util.*;
 import org.epochx.core.*;
 import org.epochx.epox.Node;
 import org.epochx.fitness.FitnessEvaluator;
+import org.epochx.gp.GPIndividual;
 import org.epochx.gp.model.GPModel;
-import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.tools.random.RandomNumberGenerator;
@@ -196,7 +196,7 @@ public class GrowInitialiser implements GPInitialiser, ConfigListener {
 	 * from the <code>Nodes</code> in the syntax attribute. The size of the
 	 * population will be equal to the population size attribute. All programs
 	 * in the population are only guarenteed to be unique (as defined by the
-	 * <code>equals</code> method on <code>GPCandidateProgram</code>) if the
+	 * <code>equals</code> method on <code>GPIndividual</code>) if the
 	 * <code>isDuplicatesEnabled</code> method returns <code>false</code>.
 	 * Each program will have a node tree with a depth at most equal to the
 	 * value of the maximum depth attribute.
@@ -215,7 +215,7 @@ public class GrowInitialiser implements GPInitialiser, ConfigListener {
 
 		// Create and add new programs to the population.
 		for (int i = 0; i < popSize; i++) {
-			GPCandidateProgram candidate;
+			GPIndividual candidate;
 
 			do {
 				// Grow a new node tree.
@@ -231,15 +231,15 @@ public class GrowInitialiser implements GPInitialiser, ConfigListener {
 
 	/**
 	 * Grows a new node tree and returns it within a
-	 * <code>GPCandidateProgram</code>. The nodes that form the tree will be
+	 * <code>GPIndividual</code>. The nodes that form the tree will be
 	 * randomly selected from the nodes provided as the syntax attribute.
 	 * 
-	 * @return a new <code>GPCandidateProgram</code> instance.
+	 * @return a new <code>GPIndividual</code> instance.
 	 */
-	public GPCandidateProgram getInitialProgram() {
+	public GPIndividual getInitialProgram() {
 		final Node root = getGrownNodeTree(maxDepth);
 
-		return new GPCandidateProgram(root);
+		return new GPIndividual(root);
 	}
 
 	/**

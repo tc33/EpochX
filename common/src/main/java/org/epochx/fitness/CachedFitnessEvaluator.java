@@ -21,13 +21,13 @@
  */
 package org.epochx.fitness;
 
-import org.epochx.representation.CandidateProgram;
+import org.epochx.Individual;
 
 
 /**
  * 
  */
-public class CachedFitnessEvaluator<T extends CandidateProgram> extends AbstractFitnessEvaluator<T> {
+public class CachedFitnessEvaluator<T extends Individual> extends AbstractFitnessEvaluator<T> {
 
 	private FitnessEvaluator<T> delegate;
 	

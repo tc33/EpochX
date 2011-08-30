@@ -21,14 +21,15 @@
  */
 package org.epochx.fitness;
 
-import org.epochx.representation.CandidateProgram;
+import org.epochx.Individual;
 
 
 /**
  * 
  */
-public abstract class AbstractFitnessEvaluator<T extends CandidateProgram> implements FitnessEvaluator<T> {
+public abstract class AbstractFitnessEvaluator<T extends Individual> implements FitnessEvaluator<T> {
 
+	@Override
 	public double[] getFitness(T[] pop) {
 		double[] fitnesses = new double[pop.length];
 		for (int i=0; i<fitnesses.length; i++) {
@@ -38,6 +39,7 @@ public abstract class AbstractFitnessEvaluator<T extends CandidateProgram> imple
 		return fitnesses;
 	}
 	
+	@Override
 	public abstract double getFitness(T program);
 	
 }

@@ -21,8 +21,8 @@
  */
 package org.epochx.interpret;
 
+import org.epochx.Individual;
 import org.epochx.epox.*;
-import org.epochx.representation.CandidateProgram;
 import org.epochx.source.SourceGenerator;
 
 /**
@@ -40,7 +40,7 @@ import org.epochx.source.SourceGenerator;
  * 
  * @see EpoxParser
  */
-public class EpoxInterpreter<T extends CandidateProgram> implements Interpreter<T> {
+public class EpoxInterpreter<T extends Individual> implements Interpreter<T> {
 
 	// The Epox language parser.
 	private final EpoxParser parser;

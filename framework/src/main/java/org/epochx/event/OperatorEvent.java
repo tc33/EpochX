@@ -1,8 +1,9 @@
 /* 
- * Copyright 2007-2011 Tom Castle & Lawrence Beadle
+ * Copyright 2007-2011
+ * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
  * 
- * This file is part of EpochX: genetic programming software for research
+ * This file is part of EpochX
  * 
  * EpochX is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,25 +20,46 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.source;
+package org.epochx.event;
 
-import org.epochx.Individual;
+import org.epochx.*;
 
 
 /**
  * 
  */
-public class CachedSourceGenerator<T extends Individual> implements SourceGenerator<T> {
+public class OperatorEvent implements Event {
 
-	private SourceGenerator<T> delegate;
+	private Individual[] parents;
 	
-	public CachedSourceGenerator(SourceGenerator<T> delegate) {
-		this.delegate = delegate;
-	}
-	
-	@Override
-	public String getSource(T program) {
-		return delegate.getSource(program);
+	public OperatorEvent(Individual[] parents) {
+		this.parents = parents;
 	}
 
+	public Individual[] getParents() {
+		return parents;
+	}
+	
+	public static class StartOperator extends OperatorEvent {
+
+		public StartOperator(Individual[] parents) {
+			super(parents);
+		}
+	}
+
+	public static class EndOperator extends OperatorEvent {
+
+		private Individual[] children;
+		
+		public EndOperator(Individual[] parents, Individual[] children) {
+			super(parents);
+			
+			this.children = children;
+		}
+		
+		public Individual[] getChildren() {
+			return children;
+		}
+	}
+	
 }

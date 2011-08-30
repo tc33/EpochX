@@ -21,13 +21,13 @@
  */
 package org.epochx.source;
 
-import org.epochx.representation.CandidateProgram;
+import org.epochx.Individual;
 
 
 /**
  * Source generators take a candidate program and produce source code from it.
  */
-public interface SourceGenerator<T extends CandidateProgram> {
+public interface SourceGenerator<T extends Individual> {
 
 	public String getSource(T program);
 	

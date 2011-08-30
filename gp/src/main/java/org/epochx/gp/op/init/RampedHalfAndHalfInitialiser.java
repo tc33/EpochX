@@ -26,8 +26,8 @@ import java.util.*;
 
 import org.epochx.core.*;
 import org.epochx.epox.Node;
+import org.epochx.gp.GPIndividual;
 import org.epochx.gp.model.GPModel;
-import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
@@ -211,7 +211,7 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser, ConfigListen
 	 * from the <code>Nodes</code> in the syntax attribute. The size of the
 	 * population will be equal to the population size attribute. All programs
 	 * in the population are only guarenteed to be unique (as defined by the
-	 * <code>equals</code> method on <code>GPCandidateProgram</code>) if the
+	 * <code>equals</code> method on <code>GPIndividual</code>) if the
 	 * <code>isDuplicatesEnabled</code> method returns <code>true</code>.
 	 * Each program will alternately be generated with the
 	 * {@link FullInitialiser} and {@link GrowInitialiser}. If the population
@@ -243,7 +243,7 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser, ConfigListen
 			final int noPrograms = programsPerDepth[depth - startMaxDepth];
 
 			for (int i = 0; i < noPrograms; i++) {
-				GPCandidateProgram program;
+				GPIndividual program;
 
 				do {
 					grown[popIndex] = growNext;

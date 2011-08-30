@@ -21,14 +21,14 @@
  */
 package org.epochx.fitness;
 
+import org.epochx.Individual;
 import org.epochx.interpret.*;
-import org.epochx.representation.CandidateProgram;
 
 
 /**
  * 
  */
-public class HitsCountEvaluator<T extends CandidateProgram> extends AbstractFitnessEvaluator<T> {
+public class HitsCountEvaluator<T extends Individual> extends AbstractFitnessEvaluator<T> {
 
 	// The error each point must be within.
 	private double pointError;

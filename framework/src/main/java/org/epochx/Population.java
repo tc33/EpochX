@@ -139,5 +139,14 @@ public class Population implements Iterable<Individual> {
 	public Iterator<Individual> iterator() {
 		return individuals.iterator();
 	}
-
+	
+	/**
+	 * Returns true if this population contains the specified individual.
+	 * 
+	 * @return true if this population contains the individual and false 
+	 * otherwise
+	 */
+	public boolean contains(Individual individual) {
+		return individuals.contains(individual);
+	}
 }

@@ -19,33 +19,42 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.gp.representation;
+package org.epochx.gp;
 
 import java.util.List;
 
 import org.apache.commons.lang.ObjectUtils;
+import org.epochx.*;
+import org.epochx.Config.ConfigKey;
 import org.epochx.epox.*;
-import org.epochx.representation.*;
 
 /**
- * A <code>GPCandidateProgram</code> encapsulates an individual program within a
+ * A <code>GPIndividual</code> encapsulates an individual program within a
  * generation of a GP run.
  * 
  * <p>
- * Instances of GPCandidateProgram can be requested to evaluate themselves,
+ * Instances of GPIndividual can be requested to evaluate themselves,
  * which will trigger an evaluation of each <code>Node</code> and their child
  * nodes recursively down the tree. As well as the program tree itself, each
- * GPCandidateProgram allows the retrieval of meta-data about the program.
+ * GPIndividual allows the retrieval of meta-data about the program.
  * 
  * <p>
  * Note: this class has a natural ordering that is inconsistent with equals.
  */
-public class GPCandidateProgram extends CandidateProgram {
+public class GPIndividual implements Individual {
 
+	public static final ConfigKey<Node[]> SYNTAX = new ConfigKey<Node[]>();
+	
+	public static final ConfigKey<Class<?>> RETURN_TYPE = new ConfigKey<Class<?>>();
+	
+	public static final ConfigKey<Integer> MAXIMUM_DEPTH = new ConfigKey<Integer>();
+	
 	// The root node of the program tree.
 	private Node rootNode;
+	
+	private Fitness fitness;
 
-	public GPCandidateProgram() {
+	public GPIndividual() {
 		this(null);
 	}
 
@@ -54,12 +63,11 @@ public class GPCandidateProgram extends CandidateProgram {
 	 * top most node in the program, and which may have 0 or more child nodes.
 	 * 
 	 * @param rootNode the Node of the program tree which is the parent to
-	 *        all other nodes. It may be either a FunctionNode or a
-	 *        TerminalNode
+	 *        all other nodes.
 	 * @param model the controlling model which provides the configuration
 	 *        parameters for the run.
 	 */
-	public GPCandidateProgram(final Node rootNode) {
+	public GPIndividual(final Node rootNode) {
 		this.rootNode = rootNode;
 	}
 
@@ -87,7 +95,7 @@ public class GPCandidateProgram extends CandidateProgram {
 	}
 
 	/**
-	 * Returns the nth node in the <code>GPCandidateProgram</code>. The program
+	 * Returns the nth node in the <code>GPIndividual</code>. The program
 	 * tree is traversed in pre-order (depth-first), indexed from 0 so that the
 	 * root node is at node 0.
 	 * 
@@ -103,7 +111,7 @@ public class GPCandidateProgram extends CandidateProgram {
 	}
 
 	/**
-	 * Replaces the node at the specified position in the GPCandidateProgram
+	 * Replaces the node at the specified position in the GPIndividual
 	 * with
 	 * the specified node.
 	 * 
@@ -209,11 +217,16 @@ public class GPCandidateProgram extends CandidateProgram {
 	 * copy of all the program nodes, so after calling this method none of the
 	 * clones nodes will refer to the same instance.
 	 * 
-	 * @return a clone of this GPCandidateProgram instance.
+	 * @return a clone of this GPIndividual instance.
 	 */
 	@Override
-	public GPCandidateProgram clone() {
-		final GPCandidateProgram clone = (GPCandidateProgram) super.clone();
+	public GPIndividual clone() {
+		GPIndividual clone = null;
+		try {
+			clone = (GPIndividual) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
 
 		// Deep copy node tree.
 		if (rootNode == null) {
@@ -240,20 +253,20 @@ public class GPCandidateProgram extends CandidateProgram {
 	}
 
 	/**
-	 * This equals method compares the given object to this GPCandidateProgram
+	 * This equals method compares the given object to this GPIndividual
 	 * to determine if they are equal. Equivalence is defined by their both
-	 * being instances of GPCandidateProgram and them having equal program node
+	 * being instances of GPIndividual and them having equal program node
 	 * trees according to the equals methods of the root node.
 	 * 
 	 * @param obj an object to be compared for equivalence.
-	 * @return true if this GPCandidateProgram is the same as the obj argument;
+	 * @return true if this GPIndividual is the same as the obj argument;
 	 *         false otherwise.
 	 */
 	@Override
 	public boolean equals(final Object obj) {
 		boolean equal = false;
-		if ((obj != null) && (obj instanceof GPCandidateProgram)) {
-			final GPCandidateProgram p = (GPCandidateProgram) obj;
+		if ((obj != null) && (obj instanceof GPIndividual)) {
+			final GPIndividual p = (GPIndividual) obj;
 			if (ObjectUtils.equals(rootNode, p.rootNode)) {
 				equal = true;
 			}
@@ -262,4 +275,12 @@ public class GPCandidateProgram extends CandidateProgram {
 		return equal;
 	}
 
+	@Override
+	public Fitness getFitness() {
+		return fitness;
+	}
+
+	public void setFitness(Fitness fitness) {
+		this.fitness = fitness;
+	}
 }

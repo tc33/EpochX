@@ -23,7 +23,7 @@ package org.epochx.interpret;
 
 import javax.script.*;
 
-import org.epochx.representation.CandidateProgram;
+import org.epochx.Individual;
 import org.epochx.source.SourceGenerator;
 
 /**
@@ -48,7 +48,7 @@ import org.epochx.source.SourceGenerator;
  * @see RubyInterpreter
  * @see GroovyInterpreter
  */
-public class ScriptingInterpreter<T extends CandidateProgram> implements Interpreter<T> {
+public class ScriptingInterpreter<T extends Individual> implements Interpreter<T> {
 
 	// The language specific scripting engine.
 	private final ScriptEngine engine;

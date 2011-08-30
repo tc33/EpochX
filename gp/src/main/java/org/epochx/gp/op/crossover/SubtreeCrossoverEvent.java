@@ -1,8 +1,9 @@
 /* 
- * Copyright 2007-2011 Tom Castle & Lawrence Beadle
+ * Copyright 2007-2011
+ * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
  * 
- * This file is part of EpochX: genetic programming software for research
+ * This file is part of EpochX
  * 
  * EpochX is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,23 +20,40 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.gp.source;
+package org.epochx.gp.op.crossover;
 
+import org.epochx.Individual;
 import org.epochx.epox.Node;
-import org.epochx.gp.representation.GPCandidateProgram;
-import org.epochx.source.SourceGenerator;
+import org.epochx.event.OperatorEvent;
 
 
 /**
  * 
  */
-public class GPSourceGenerator implements SourceGenerator<GPCandidateProgram> {
-
-	@Override
-	public String getSource(GPCandidateProgram program) {
-		Node root = program.getRootNode();
+public class SubtreeCrossoverEvent extends OperatorEvent.EndOperator {
+	
+	private int[] points;
+	private Node[] subtrees;
+	
+	public SubtreeCrossoverEvent(Individual[] parents, Individual[] children, int[] points, Node[] subtrees) {
+		super(parents, children);
 		
-		return root.toString();
+		this.points = points;
+		this.subtrees = subtrees;
+	}
+	
+	/**
+	 * @return the point1
+	 */
+	public int[] getCrossoverPoints() {
+		return points;
+	}
+	
+	/**
+	 * @return the point2
+	 */
+	public Node[] getSubtrees() {
+		return subtrees;
 	}
 
 }

@@ -23,13 +23,13 @@ package org.epochx.fitness;
 
 import java.util.Comparator;
 
-import org.epochx.representation.CandidateProgram;
+import org.epochx.Individual;
 
 
 /**
  * 
  */
-public class FitnessComparator<T extends CandidateProgram> implements Comparator<T> {
+public class FitnessComparator<T extends Individual> implements Comparator<T> {
 
 	private FitnessEvaluator<T> evaluator;
 	

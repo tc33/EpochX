@@ -25,8 +25,8 @@ import java.util.*;
 
 import org.epochx.core.*;
 import org.epochx.epox.Node;
+import org.epochx.gp.GPIndividual;
 import org.epochx.gp.model.GPModel;
-import org.epochx.gp.representation.GPCandidateProgram;
 import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
@@ -35,7 +35,7 @@ import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
  * This class performs a simple point mutation on a
- * <code>GPCandidateProgram</code>.
+ * <code>GPIndividual</code>.
  * 
  * <p>
  * Each node in the program tree is considered for mutation, with the
@@ -132,20 +132,20 @@ public class PointMutation implements GPMutation, ConfigListener {
 	}
 
 	/**
-	 * Perform point mutation on the given GPCandidateProgram. Each node in the
+	 * Perform point mutation on the given GPIndividual. Each node in the
 	 * program tree is considered in turn, with each having the given
 	 * probability of actually being exchanged. Given that a node is chosen
 	 * then a new function or terminal node of the same arity is used to
 	 * replace it.
 	 * 
-	 * @param p The GPCandidateProgram selected to undergo this mutation
+	 * @param p The GPIndividual selected to undergo this mutation
 	 *        operation.
-	 * @return A GPCandidateProgram that was the result of a point mutation on
-	 *         the provided GPCandidateProgram.
+	 * @return A GPIndividual that was the result of a point mutation on
+	 *         the provided GPIndividual.
 	 */
 	@Override
-	public GPCandidateProgram mutate(final CandidateProgram p) {
-		final GPCandidateProgram program = (GPCandidateProgram) p;
+	public GPIndividual mutate(final CandidateProgram p) {
+		final GPIndividual program = (GPIndividual) p;
 
 		final List<Integer> points = new ArrayList<Integer>();
 

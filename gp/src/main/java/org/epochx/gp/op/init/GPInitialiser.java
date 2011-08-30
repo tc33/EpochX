@@ -1,8 +1,9 @@
-/*
- * Copyright 2007-2011 Tom Castle & Lawrence Beadle
+/* 
+ * Copyright 2007-2011
+ * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
  * 
- * This file is part of EpochX: genetic programming software for research
+ * This file is part of EpochX
  * 
  * EpochX is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,30 +18,19 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with EpochX. If not, see <http://www.gnu.org/licenses/>.
  * 
- * The latest version is available from: http://www.epochx.org
+ * The latest version is available from: http:/www.epochx.org
  */
 package org.epochx.gp.op.init;
 
-import java.util.List;
+import org.epochx.Initialiser;
+import org.epochx.Config.ConfigKey;
 
-import org.epochx.op.Initialiser;
-import org.epochx.representation.CandidateProgram;
 
 /**
- * Implementations of this interface should be capable of generating an initial
- * population of <code>GPCandidatePrograms</code>. The getInitialPopulation()
- * method is called towards the start of execution of a run to get the first
- * population which will then be evolved.
+ * 
  */
 public interface GPInitialiser extends Initialiser {
 
-	/**
-	 * Constructs and returns an initial population of
-	 * <code>GPCandidateProgram</code> instances.
-	 * 
-	 * @return A List of newly generated GPCandidatePrograms.
-	 */
-	@Override
-	public List<CandidateProgram> getInitialPopulation();
-
+	public static final ConfigKey<Integer> MAXIMUM_INITIAL_DEPTH = new ConfigKey<Integer>();
+	
 }

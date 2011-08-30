@@ -21,14 +21,14 @@
  */
 package org.epochx.fitness;
 
+import org.epochx.Individual;
 import org.epochx.interpret.*;
-import org.epochx.representation.CandidateProgram;
 
 
 /**
  * 
  */
-public class SumOfErrorEvaluator<T extends CandidateProgram> extends AbstractFitnessEvaluator<T> {
+public class SumOfErrorEvaluator<T extends Individual> extends AbstractFitnessEvaluator<T> {
 
 	private Interpreter<T> interpreter;
 	

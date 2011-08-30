@@ -41,7 +41,8 @@ public abstract class AbstractStat<T extends Event> {
 	/**
 	 * An empty list of dependencies.
 	 */
-	public static final List<Class<AbstractStat<Event>>> NO_DEPENDENCIES = new ArrayList<Class<AbstractStat<Event>>>(0);
+	public static final List<Class<? extends AbstractStat<?>>> NO_DEPENDENCIES = new ArrayList<Class<? extends AbstractStat<?>>>(
+			0);
 
 	/**
 	 * The central repository of <code>AbstractStat</code> objects.
@@ -65,8 +66,18 @@ public abstract class AbstractStat<T extends Event> {
 	 * @param dependency the dependency of this stat.
 	 */
 	@SuppressWarnings("unchecked")
-	public <V extends Event, S extends AbstractStat<V>> AbstractStat(Class<S> dependency) {
-		this(Arrays.asList(dependency));
+	public AbstractStat(Class<? extends AbstractStat<?>> dependency) {
+		this(Arrays.<Class<? extends AbstractStat<?>>> asList(dependency));
+	}
+
+	/**
+	 * Constructs an <code>AbstractStat</code>. The array of dependencies can be
+	 * empty, in case this stat has no dependencies.
+	 * 
+	 * @param dependencies the array of dependencies of this stat.
+	 */
+	public AbstractStat(Class<? extends AbstractStat<?>> ... dependencies) {
+		this(Arrays.asList(dependencies));
 	}
 
 	/**
@@ -75,8 +86,8 @@ public abstract class AbstractStat<T extends Event> {
 	 * 
 	 * @param dependencies the list of dependencies of this stat.
 	 */
-	public <V extends Event, S extends AbstractStat<V>> AbstractStat(List<Class<S>> dependencies) {
-		for (Class<S> dependency: dependencies) {
+	public AbstractStat(List<Class<? extends AbstractStat<?>>> dependencies) {
+		for (Class<? extends AbstractStat<?>> dependency: dependencies) {
 			AbstractStat.register(dependency);
 		}
 	}

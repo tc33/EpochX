@@ -129,20 +129,19 @@ public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
 
 			Individual[] parents = new Individual[operator.inputSize()];
 
-			for (int i = 0; i < parents.length; i++) {
-				parents[i] = selector.select().clone();
-			}
-
-			parents = operator.apply(parents);
-
-			// TODO what should we do when the operator fails? At the moment, it
-			// will try another one (assuming that a null return means that the
-			// operator failed)
-			if (parents != null) {
-				for (int i = 0; (i < parents.length) && (size > 0); i++) {
-					newPopulation.add(parents[i]);
-					size--;
+			// TODO perhaps hava an exception to signal that the operator
+			// failed
+			do {
+				for (int i = 0; i < parents.length; i++) {
+					parents[i] = selector.select().clone();
 				}
+
+				parents = operator.apply(parents);
+			} while (parents == null);
+
+			for (int i = 0; (i < parents.length) && (size > 0); i++) {
+				newPopulation.add(parents[i]);
+				size--;
 			}
 		}
 

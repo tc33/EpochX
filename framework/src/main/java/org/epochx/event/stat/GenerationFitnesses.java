@@ -61,4 +61,12 @@ public class GenerationFitnesses extends AbstractStat<EndGeneration> {
 		return Arrays.toString(fitnesses);
 	}
 
+	public class Sorted extends GenerationFitnesses {
+		@Override
+		public void onEvent(EndGeneration event) {
+			super.onEvent(event);
+			
+			Arrays.sort(fitnesses);
+		}
+	}
 }

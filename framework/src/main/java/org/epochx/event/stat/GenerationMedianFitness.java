@@ -23,36 +23,35 @@
 
 package org.epochx.event.stat;
 
-import org.epochx.DoubleFitness;
 import org.epochx.Fitness;
 import org.epochx.event.GenerationEvent.EndGeneration;
 
-public class GenerationAverageDoubleFitness extends AbstractStat<EndGeneration> {
+/**
+ * If there are an even number of programs in the population then there are two
+ * median values, the first will be returned.
+ */
+public class GenerationMedianFitness extends AbstractStat<EndGeneration> {
 
-	private double average;
+	private Fitness median;
 
-	public GenerationAverageDoubleFitness() {
-		super(GenerationFitnesses.class);
+	public GenerationMedianFitness() {
+		super(GenerationFitnesses.Sorted.class);
 	}
 
 	@Override
 	public void onEvent(EndGeneration event) {
-		Fitness[] fitnesses = AbstractStat.get(GenerationFitnesses.class).getFitnesses();
-		average = 0;
-
-		for (Fitness fitness: fitnesses) {
-			average += ((DoubleFitness) fitness).getValue();
-		}
-
-		average /= fitnesses.length;
+		Fitness[] fitnesses = AbstractStat.get(GenerationFitnesses.Sorted.class).getFitnesses();
+		
+		int medianIndex = (int) Math.floor(fitnesses.length / 2);
+		median = fitnesses[medianIndex - 1];
 	}
 
-	public double getAverage() {
-		return average;
+	public Fitness getMedian() {
+		return median;
 	}
 
 	@Override
 	public String toString() {
-		return Double.toString(average);
+		return median.toString();
 	}
 }

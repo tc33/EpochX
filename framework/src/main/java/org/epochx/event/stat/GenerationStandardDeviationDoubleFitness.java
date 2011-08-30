@@ -23,36 +23,39 @@
 
 package org.epochx.event.stat;
 
-import org.epochx.DoubleFitness;
-import org.epochx.Fitness;
+import org.epochx.*;
 import org.epochx.event.GenerationEvent.EndGeneration;
 
-public class GenerationAverageDoubleFitness extends AbstractStat<EndGeneration> {
+public class GenerationStandardDeviationDoubleFitness extends AbstractStat<EndGeneration> {
 
-	private double average;
+	private double stdev;
 
-	public GenerationAverageDoubleFitness() {
-		super(GenerationFitnesses.class);
+	@SuppressWarnings("unchecked")
+	public GenerationStandardDeviationDoubleFitness() {
+		super(GenerationFitnesses.class, GenerationAverageDoubleFitness.class);
 	}
 
 	@Override
 	public void onEvent(EndGeneration event) {
 		Fitness[] fitnesses = AbstractStat.get(GenerationFitnesses.class).getFitnesses();
-		average = 0;
-
-		for (Fitness fitness: fitnesses) {
-			average += ((DoubleFitness) fitness).getValue();
+		double average = AbstractStat.get(GenerationAverageDoubleFitness.class).getAverage();
+		
+		// Sum the squared differences.
+		double sqDiff = 0;
+		for (int i = 0; i < fitnesses.length; i++) {
+			sqDiff += Math.pow(((DoubleFitness) fitnesses[i]).getValue() - average, 2);
 		}
 
-		average /= fitnesses.length;
+		// Take the square root of the average.
+		stdev = Math.sqrt(sqDiff / fitnesses.length);
 	}
 
-	public double getAverage() {
-		return average;
+	public double getStandardDeviation() {
+		return stdev;
 	}
 
 	@Override
 	public String toString() {
-		return Double.toString(average);
+		return Double.toString(stdev);
 	}
 }

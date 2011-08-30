@@ -18,41 +18,35 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with EpochX. If not, see <http://www.gnu.org/licenses/>.
  * 
- * The latest version is available from: http://www.epochx.org
+ * The latest version is available from: http:/www.epochx.org
  */
 
 package org.epochx.event.stat;
 
-import org.epochx.DoubleFitness;
-import org.epochx.Fitness;
-import org.epochx.event.GenerationEvent.EndGeneration;
+import org.epochx.event.RunEvent.StartRun;
 
-public class GenerationAverageDoubleFitness extends AbstractStat<EndGeneration> {
+/**
+ * 
+ */
+public class RunStartTime extends AbstractStat<StartRun> {
 
-	private double average;
+	private long time;
 
-	public GenerationAverageDoubleFitness() {
-		super(GenerationFitnesses.class);
+	public RunStartTime() {
+		super(NO_DEPENDENCIES);
 	}
 
 	@Override
-	public void onEvent(EndGeneration event) {
-		Fitness[] fitnesses = AbstractStat.get(GenerationFitnesses.class).getFitnesses();
-		average = 0;
-
-		for (Fitness fitness: fitnesses) {
-			average += ((DoubleFitness) fitness).getValue();
-		}
-
-		average /= fitnesses.length;
+	public void onEvent(StartRun event) {
+		time = System.nanoTime();
 	}
 
-	public double getAverage() {
-		return average;
+	public long getTime() {
+		return time;
 	}
 
 	@Override
 	public String toString() {
-		return Double.toString(average);
+		return Long.toString(getTime());
 	}
 }

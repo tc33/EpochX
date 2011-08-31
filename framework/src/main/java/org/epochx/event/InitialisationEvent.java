@@ -20,40 +20,38 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.gp.op.crossover;
+package org.epochx.event;
 
-import org.epochx.Individual;
-import org.epochx.epox.Node;
-import org.epochx.event.OperatorEvent;
+import org.epochx.Population;
 
 
 /**
  * 
  */
-public class OnePointCrossoverEvent extends OperatorEvent.EndOperator {
+public abstract class InitialisationEvent implements Event {
+
+	private Population population;
 	
-	private int[] points;
-	private Node[] subtrees;
-	
-	public OnePointCrossoverEvent(Individual[] parents, Individual[] children, int[] points, Node[] subtrees) {
-		super(parents, children);
-		
-		this.points = points;
-		this.subtrees = subtrees;
-	}
-	
-	/**
-	 * @return the point1
-	 */
-	public int[] getCrossoverPoints() {
-		return points;
-	}
-	
-	/**
-	 * @return the point2
-	 */
-	public Node[] getSubtrees() {
-		return subtrees;
+	public InitialisationEvent(Population population) {
+		this.population = population;
 	}
 
+	public Population getPopulation() {
+		return population;
+	}
+	
+	public static class StartInitialisation extends InitialisationEvent {
+
+		public StartInitialisation(Population population) {
+			super(population);
+		}
+	}
+
+	public static class EndInitialisation extends InitialisationEvent {
+
+		public EndInitialisation(Population population) {
+			super(population);
+		}
+	}
+	
 }

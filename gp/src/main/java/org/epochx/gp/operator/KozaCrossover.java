@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.gp.op.crossover;
+package org.epochx.gp.operator;
 
 import org.epochx.RandomSequence;
 

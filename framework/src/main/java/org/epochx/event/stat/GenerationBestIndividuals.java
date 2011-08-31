@@ -18,41 +18,62 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with EpochX. If not, see <http://www.gnu.org/licenses/>.
  * 
- * The latest version is available from: http://www.epochx.org
+ * The latest version is available from: http:/www.epochx.org
  */
 
 package org.epochx.event.stat;
 
-import org.epochx.DoubleFitness;
-import org.epochx.Fitness;
+import java.util.*;
+
+import org.epochx.*;
 import org.epochx.event.GenerationEvent.EndGeneration;
 
-public class GenerationAverageDoubleFitness extends AbstractStat<EndGeneration> {
+/**
+ * 
+ */
+public class GenerationBestIndividuals extends AbstractStat<EndGeneration> {
 
-	private double average;
+	private List<Individual> best;
 
-	public GenerationAverageDoubleFitness() {
-		super(GenerationFitnesses.class);
+	public GenerationBestIndividuals() {
+		super(NO_DEPENDENCIES);
 	}
 
 	@Override
 	public void onEvent(EndGeneration event) {
-		Fitness[] fitnesses = AbstractStat.get(GenerationFitnesses.class).getFitnesses();
-		average = 0;
-
-		for (Fitness fitness: fitnesses) {
-			average += ((DoubleFitness) fitness).getValue();
+		Population pop = event.getPopulation();
+		
+		best = new ArrayList<Individual>();
+		
+		for (Individual individual: pop) {
+			int comparison = individual.compareTo(best.get(0));
+			
+			if (comparison > 0) {
+				best.clear();
+			}
+			if (best.isEmpty() || comparison >= 0) {
+				best.add(individual);
+			}
 		}
-
-		average /= fitnesses.length;
 	}
 
-	public double getAverage() {
-		return average;
+	public Individual[] getAllBest() {
+		return best.toArray(new Individual[best.size()]);
+	}
+	
+	/**
+	 * Returns an arbitrary best individual.
+	 */
+	public Individual getBest() {
+		return (best == null || best.isEmpty()) ? null : best.get(0);
 	}
 
+	/**
+	 * Returns the string representation of an arbitrary best individual.
+	 */
 	@Override
 	public String toString() {
-		return Double.toString(average);
+		return getBest().toString();
 	}
+
 }

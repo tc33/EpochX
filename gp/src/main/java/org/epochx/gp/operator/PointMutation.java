@@ -19,19 +19,17 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.gp.op.mutation;
+package org.epochx.gp.operator;
+
+import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
+import static org.epochx.gp.GPIndividual.*;
 
 import java.util.*;
 
-import org.epochx.core.*;
+import org.epochx.*;
 import org.epochx.epox.Node;
+import org.epochx.event.*;
 import org.epochx.gp.GPIndividual;
-import org.epochx.gp.model.GPModel;
-import org.epochx.life.ConfigListener;
-import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.*;
-import org.epochx.stats.Stats.ExpiryEvent;
-import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
  * This class performs a simple point mutation on a
@@ -44,54 +42,30 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * replacement node is selected from the full syntax (function and terminal
  * sets), at random.
  * 
- * <p>
- * If a model is provided then the following parameters are loaded upon every
- * configure event:
- * 
- * <ul>
- * <li>random number generator</li>
- * <li>syntax</li>
- * </ul>
- * 
- * <p>
- * If the <code>getModel</code> method returns <code>null</code> then no model
- * is set and whatever static parameters have been set as parameters to the
- * constructor or using the standard accessor methods will be used. If any
- * compulsory parameters remain unset when the mutation is performed then an
- * <code>IllegalStateException</code> will be thrown.
- * 
  * @see SubtreeMutation
  */
-public class PointMutation implements GPMutation, ConfigListener {
+public class PointMutation implements Operator, Listener<ConfigEvent> {
 
-	/**
-	 * Requests a <code>List&lt;Integer&gt;</code> which is a list of the points
-	 * modified as a result of the point mutation operation.
-	 */
-	public static final Stat MUT_POINTS = new AbstractStat(ExpiryEvent.MUTATION) {};
+	private Node[] syntax;
 
-	private Evolver evolver;
-	
-	private Stats stats;
-	
-	private List<Node> syntax;
-
-	private RandomNumberGenerator rng;
+	private RandomSequence random;
 
 	// The probability that each node has of being mutated.
-	private final double pointProbability;
+	private double pointProbability;
+	
+	private double probability;
 
 	/**
 	 * Constructs a <code>PointMutation</code>.
 	 * 
-	 * @param rng
+	 * @param random
 	 * @param syntax
 	 */
-	public PointMutation(final RandomNumberGenerator rng, final List<Node> syntax, final double pointProbability) {
-		this(null, pointProbability);
-
-		this.rng = rng;
+	public PointMutation(double probability, RandomSequence random, Node[] syntax, double pointProbability) {
+		this.probability = probability;
+		this.random = random;
 		this.syntax = syntax;
+		this.pointProbability = pointProbability;
 	}
 
 	/**
@@ -102,8 +76,8 @@ public class PointMutation implements GPMutation, ConfigListener {
 	 * @param model The current controlling model. Parameters such as full
 	 *        syntax will be obtained from this.
 	 */
-	public PointMutation(final Evolver evolver) {
-		this(evolver, 0.01);
+	public PointMutation(double probability) {
+		this(probability, 0.01);
 	}
 
 	/**
@@ -114,20 +88,38 @@ public class PointMutation implements GPMutation, ConfigListener {
 	 *        changed, and 0.0 would mean no nodes were changed. A typical value
 	 *        would be 0.01.
 	 */
-	public PointMutation(final Evolver evolver, final double pointProbability) {
-		this.evolver = evolver;
+	public PointMutation(double probability, double pointProbability) {
+		this.probability = probability;
 		this.pointProbability = pointProbability;
+		
+		setup();
+		EventManager.getInstance().add(ConfigEvent.class, this);
 	}
-
+	
 	/**
-	 * Configures this operator with parameters from the model.
+	 * Sets up this operator with the appropriate configuration settings.
+	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
+	 * change in any of the following configuration parameters:
+	 * <ul>
+	 * <li><code>RandomSequence.RANDOM_SEQUENCE</code>
+	 * </ul>
+	 */
+	protected void setup() {
+		random = Config.getInstance().get(RANDOM_SEQUENCE);
+		syntax = Config.getInstance().get(SYNTAX);
+	}
+	
+	/**
+	 * Receives configuration events and triggers this operator to configure its
+	 * parameters if the <code>ConfigEvent</code> is for one of its required
+	 * parameters.
+	 * 
+	 * @param event {@inheritDoc}
 	 */
 	@Override
-	public void configure(Model model) {
-		if (model instanceof GPModel) {
-			stats = evolver.getStats(model);
-			syntax = ((GPModel) model).getSyntax();
-			rng = ((GPModel) model).getRNG();
+	public void onEvent(ConfigEvent event) {
+		if (event.isKindOf(RANDOM_SEQUENCE, SYNTAX)) {
+			setup();
 		}
 	}
 
@@ -144,25 +136,28 @@ public class PointMutation implements GPMutation, ConfigListener {
 	 *         the provided GPIndividual.
 	 */
 	@Override
-	public GPIndividual mutate(final CandidateProgram p) {
-		final GPIndividual program = (GPIndividual) p;
+	public GPIndividual[] apply(Individual ... parents) {
+		EventManager.getInstance().fire(OperatorEvent.StartOperator.class, new OperatorEvent.StartOperator(parents));
+		
+		GPIndividual program = (GPIndividual) parents[0];
+		GPIndividual child = program.clone();
 
-		final List<Integer> points = new ArrayList<Integer>();
+		List<Integer> points = new ArrayList<Integer>();
 
 		// Iterate over each node in the program tree.
-		final int length = program.getProgramLength();
+		int length = program.getProgramLength();
 		for (int i = 0; i < length; i++) {
 			// Only change pointProbability of the time.
-			if (rng.nextDouble() < pointProbability) {
+			if (random.nextDouble() < pointProbability) {
 				// Get the arity of the ith node of the program.
-				final Node node = program.getNthNode(i);
-				final int arity = node.getArity();
+				Node node = program.getNthNode(i);
+				int arity = node.getArity();
 
 				// Find compatible replacements.
-				final List<Node> replacements = getReplacements(node);
+				List<Node> replacements = getReplacements(node);
 				if (!replacements.isEmpty()) {
 					// Randomly choose a replacement.
-					Node replacement = replacements.get(rng.nextInt(replacements.size()));
+					Node replacement = replacements.get(random.nextInt(replacements.size()));
 					replacement = replacement.newInstance();
 
 					// Attach the old node's children.
@@ -170,7 +165,7 @@ public class PointMutation implements GPMutation, ConfigListener {
 						replacement.setChild(k, node.getChild(k));
 					}
 					// Then set the new node back into the program.
-					program.setNthNode(i, replacement);
+					child.setNthNode(i, replacement);
 
 					// Record the index of the node that we changed.
 					points.add(i);
@@ -180,10 +175,9 @@ public class PointMutation implements GPMutation, ConfigListener {
 			}
 		}
 
-		// Add mutation points into the stats manager.
-		stats.addData(MUT_POINTS, points);
+		EventManager.getInstance().fire(PointMutationEvent.class, new PointMutationEvent(program, child, points));
 
-		return program;
+		return new GPIndividual[]{child};
 	}
 
 	private List<Node> getReplacements(final Node n) {
@@ -234,15 +228,44 @@ public class PointMutation implements GPMutation, ConfigListener {
 
 		return equal;
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * This operator requires an input size of 2.
+	 * 
+	 * @return {@inheritDoc}
+	 */
+	@Override
+	public int inputSize() {
+		return 1;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public double probability() {
+		return probability;
+	}
+
+	/**
+	 * Overwrites the probability of this operator being selected.
+	 * 
+	 * @param probability the new probability to set
+	 */
+	public void setProbability(double probability) {
+		this.probability = probability;
+	}
 
 	/**
 	 * Returns the random number generator that this mutation is using or
 	 * <code>null</code> if none has been set.
 	 * 
-	 * @return the rng the currently set random number generator.
+	 * @return the random the currently set random number generator.
 	 */
-	public RandomNumberGenerator getRNG() {
-		return rng;
+	public RandomSequence getRandomSequence() {
+		return random;
 	}
 
 	/**
@@ -250,10 +273,10 @@ public class PointMutation implements GPMutation, ConfigListener {
 	 * this parameter will be overwritten with the random number generator from
 	 * that model on the next configure event.
 	 * 
-	 * @param rng the random number generator to set.
+	 * @param random the random number generator to set.
 	 */
-	public void setRNG(final RandomNumberGenerator rng) {
-		this.rng = rng;
+	public void setRandomSequence(final RandomSequence random) {
+		this.random = random;
 	}
 
 	/**
@@ -264,7 +287,7 @@ public class PointMutation implements GPMutation, ConfigListener {
 	 * @return the types of <code>Node</code> that should be used in
 	 *         constructing new programs.
 	 */
-	public List<Node> getSyntax() {
+	public Node[] getSyntax() {
 		return syntax;
 	}
 
@@ -276,7 +299,7 @@ public class PointMutation implements GPMutation, ConfigListener {
 	 * @param syntax a <code>List</code> of the types of <code>Node</code> that
 	 *        should be used in constructing new programs.
 	 */
-	public void setSyntax(final List<Node> syntax) {
+	public void setSyntax(Node[] syntax) {
 		this.syntax = syntax;
 	}
 }

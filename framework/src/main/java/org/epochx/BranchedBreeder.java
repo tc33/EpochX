@@ -109,7 +109,7 @@ public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
 		}
 
 		if (elitism > 0) {
-			Individual[] elite = population.elite(elitism);
+			Individual[] elite = population.elites(elitism);
 
 			for (Individual individual: elite) {
 				newPopulation.add(individual.clone());

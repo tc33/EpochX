@@ -18,41 +18,57 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with EpochX. If not, see <http://www.gnu.org/licenses/>.
  * 
- * The latest version is available from: http://www.epochx.org
+ * The latest version is available from: http:/www.epochx.org
  */
 
 package org.epochx.event.stat;
 
-import org.epochx.DoubleFitness;
 import org.epochx.Fitness;
 import org.epochx.event.GenerationEvent.EndGeneration;
+import org.epochx.event.RunEvent.StartRun;
 
-public class GenerationAverageDoubleFitness extends AbstractStat<EndGeneration> {
+/**
+ * 
+ */
+public class RunBestFitness extends AbstractStat<StartRun> {
 
-	private double average;
+	private Fitness best;
 
-	public GenerationAverageDoubleFitness() {
-		super(GenerationFitnesses.class);
+	public RunBestFitness() {
+		super(RunBestFitnessGeneration.class);
 	}
 
 	@Override
-	public void onEvent(EndGeneration event) {
-		Fitness[] fitnesses = AbstractStat.get(GenerationFitnesses.class).getFitnesses();
-		average = 0;
-
-		for (Fitness fitness: fitnesses) {
-			average += ((DoubleFitness) fitness).getValue();
+	public void onEvent(StartRun event) {
+		best = null;
+	}
+	
+	private void addGeneration(Fitness generationBest) {
+		if (best == null || generationBest.compareTo(best) > 0) {
+			best = generationBest;
 		}
-
-		average /= fitnesses.length;
 	}
 
-	public double getAverage() {
-		return average;
+	public Fitness getBest() {
+		return best;
 	}
 
 	@Override
 	public String toString() {
-		return Double.toString(average);
+		return best.toString();
 	}
+
+	private class RunBestFitnessGeneration extends AbstractStat<EndGeneration> {
+
+		public RunBestFitnessGeneration() {
+			super(GenerationBestFitness.class);
+		}
+		
+		@Override
+		public void onEvent(EndGeneration event) {
+			addGeneration(AbstractStat.get(GenerationBestFitness.class).getBest());
+		}
+		
+	}
+	
 }

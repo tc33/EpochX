@@ -20,46 +20,38 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.event;
+package org.epochx.gp.operator;
 
-import org.epochx.*;
+import org.epochx.Individual;
+import org.epochx.epox.Node;
+import org.epochx.event.OperatorEvent;
+import org.epochx.gp.GPIndividual;
 
 
 /**
  * 
  */
-public abstract class OperatorEvent implements Event {
-
-	private Individual[] parents;
+public class SubtreeMutationEvent extends OperatorEvent.EndOperator {
 	
-	public OperatorEvent(Individual[] parents) {
-		this.parents = parents;
-	}
-
-	public Individual[] getParents() {
-		return parents;
-	}
+	private int point;
 	
-	public static class StartOperator extends OperatorEvent {
-
-		public StartOperator(Individual[] parents) {
-			super(parents);
-		}
-	}
-
-	public static class EndOperator extends OperatorEvent {
-
-		private Individual[] children;
+	private Node subtree;
+	
+	public SubtreeMutationEvent(GPIndividual parent, GPIndividual child, int point, Node subtree) {
+		super(new Individual[]{parent}, new Individual[]{child});
 		
-		public EndOperator(Individual[] parents, Individual[] children) {
-			super(parents);
-			
-			this.children = children;
-		}
-		
-		public Individual[] getChildren() {
-			return children;
-		}
+		this.point = point;
+		this.subtree = subtree;
 	}
 	
+	/**
+	 * @return the point1
+	 */
+	public int getMutationPoint() {
+		return point;
+	}
+	
+	public Node getSubtree() {
+		return subtree;
+	}
 }

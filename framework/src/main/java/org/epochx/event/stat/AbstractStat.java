@@ -108,7 +108,7 @@ public abstract class AbstractStat<T extends Event> {
 	public abstract void onEvent(T event);
 
 	/**
-	 * Registers the specified <code>AbstractStat</code> in the reposiroty, if
+	 * Registers the specified <code>AbstractStat</code> in the repository, if
 	 * it is not already registered.
 	 * 
 	 * @param type the class of <code>AbstractStat</code> to be registered.

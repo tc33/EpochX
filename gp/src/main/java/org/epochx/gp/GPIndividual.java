@@ -33,9 +33,9 @@ import org.epochx.epox.*;
  * generation of a GP run.
  * 
  * <p>
- * Instances of GPIndividual can be requested to evaluate themselves,
- * which will trigger an evaluation of each <code>Node</code> and their child
- * nodes recursively down the tree. As well as the program tree itself, each
+ * Instances of GPIndividual can be requested to evaluate themselves, which will
+ * trigger an evaluation of each <code>Node</code> and their child nodes
+ * recursively down the tree. As well as the program tree itself, each
  * GPIndividual allows the retrieval of meta-data about the program.
  * 
  * <p>
@@ -43,15 +43,20 @@ import org.epochx.epox.*;
  */
 public class GPIndividual implements Individual {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1428100428151029601L;
+
 	public static final ConfigKey<Node[]> SYNTAX = new ConfigKey<Node[]>();
-	
+
 	public static final ConfigKey<Class<?>> RETURN_TYPE = new ConfigKey<Class<?>>();
-	
+
 	public static final ConfigKey<Integer> MAXIMUM_DEPTH = new ConfigKey<Integer>();
-	
+
 	// The root node of the program tree.
 	private Node rootNode;
-	
+
 	private Fitness fitness;
 
 	public GPIndividual() {
@@ -192,7 +197,7 @@ public class GPIndividual implements Individual {
 	public int getProgramDepth() {
 		return getRootNode().getDepth();
 	}
-	
+
 	/**
 	 * Returns the number of nodes in the program tree.
 	 * 
@@ -282,5 +287,14 @@ public class GPIndividual implements Individual {
 
 	public void setFitness(Fitness fitness) {
 		this.fitness = fitness;
+	}
+
+	@Override
+	public int compareTo(Individual other) {
+		// We don't care if other is a GPIndividual as long as the fitnesses are
+		// comparable.
+		Fitness otherFitness = other.getFitness();
+
+		return fitness.compareTo(otherFitness);
 	}
 }

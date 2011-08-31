@@ -33,7 +33,7 @@ import org.epochx.Config.ConfigKey;
 /**
  * A <code>Population</code> is an ordered collection of {@link Individual}s.
  */
-public class Population implements Iterable<Individual> {
+public class Population implements Iterable<Individual>, Cloneable {
 
 	// TODO: make it serializable
 
@@ -46,7 +46,7 @@ public class Population implements Iterable<Individual> {
 	/**
 	 * The list of individuals of this propulation.
 	 */
-	private final ArrayList<Individual> individuals;
+	private ArrayList<Individual> individuals;
 
 	/**
 	 * Constructs an empty <code>Population</code>.
@@ -112,16 +112,10 @@ public class Population implements Iterable<Individual> {
 	 * 
 	 * @return the group of best individuals of the population.
 	 */
-	public Individual[] elite(int size) {
-		@SuppressWarnings("unchecked")
-		ArrayList<Individual> copy = (ArrayList<Individual>) individuals.clone();
-		Collections.sort(copy, new Comparator<Individual>() {
-
-			public int compare(Individual o1, Individual o2) {
-				return o2.compareTo(o1);
-			}
-		});
-
+	public Individual[] elites(int size) {
+		Population copy = this.clone();
+		copy.sort();
+		
 		Individual[] fittest = new Individual[size];
 
 		for (int i = 0; i < size; i++) {
@@ -129,6 +123,19 @@ public class Population implements Iterable<Individual> {
 		}
 
 		return fittest;
+	}
+	
+	/**
+	 * Sorts this population according to the natural ordering provided by its
+	 * individuals' fitness from best to worst.
+	 */
+	public void sort() {
+		Collections.sort(individuals, new Comparator<Individual>() {
+
+			public int compare(Individual o1, Individual o2) {
+				return o2.compareTo(o1);
+			}
+		});
 	}
 
 	/**
@@ -148,5 +155,19 @@ public class Population implements Iterable<Individual> {
 	 */
 	public boolean contains(Individual individual) {
 		return individuals.contains(individual);
+	}
+	
+	@Override
+	public Population clone() {
+		try {
+			Population clone = (Population) super.clone();
+			
+			clone.individuals = new ArrayList<Individual>(individuals);
+			
+			return clone;
+		} catch (CloneNotSupportedException e) {
+			// This shouldn't happen, since we are Cloneable.
+		    throw new InternalError();
+		}
 	}
 }

@@ -19,20 +19,20 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.gp.op.init;
+package org.epochx.gp.init;
+
+import static org.epochx.Population.SIZE;
+import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
+import static org.epochx.gp.GPIndividual.*;
+import static org.epochx.gp.init.RampedHalfAndHalfInitialiser.Method.*;
 
 import java.math.BigInteger;
 import java.util.*;
 
-import org.epochx.core.*;
+import org.epochx.*;
 import org.epochx.epox.Node;
+import org.epochx.event.*;
 import org.epochx.gp.GPIndividual;
-import org.epochx.gp.model.GPModel;
-import org.epochx.life.ConfigListener;
-import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.*;
-import org.epochx.stats.Stats.ExpiryEvent;
-import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
  * Initialisation implementation which uses a combination of full and grow
@@ -53,41 +53,15 @@ import org.epochx.tools.random.RandomNumberGenerator;
  * not occur at all in order to ensure as wide a spread of depths up to the
  * maximum as possible.
  * 
- * <p>
- * If a model is provided then the following parameters are loaded upon every
- * configure event:
- * 
- * <ul>
- * <li>population size</li>
- * <li>maximum initial program initialDepth</li>
- * <li>syntax</li>
- * <li>random number generator</li>
- * </ul>
- * 
- * <p>
- * If the <code>getModel</code> method returns <code>null</code> then no model
- * is set and whatever static parameters have been set as parameters to the
- * constructor or using the standard accessor methods will be used. If any
- * compulsory parameters remain unset when the initialiser is requested to
- * generate new programs, then an <code>IllegalStateException</code> will be
- * thrown.
- * 
  * @see FullInitialiser
  * @see GrowInitialiser
  */
-public class RampedHalfAndHalfInitialiser implements GPInitialiser, ConfigListener {
+public class RampedHalfAndHalfInitialiser implements GPInitialiser, Listener<ConfigEvent> {
 
-	/**
-	 * Requests an <code>boolean[]</code> which has one element per program
-	 * initialised by this RH+H initialiser. A value of <code>true</code>
-	 * indicates the program was initialised with grow, and <code>false</code>
-	 * indicates full initialisation was used.
-	 */
-	public static final Stat INIT_GROWN = new AbstractStat(ExpiryEvent.INITIALISATION) {};
-
-	private Evolver evolver;
-	
-	private Stats stats;
+	public enum Method {
+		GROW,
+		FULL;
+	}
 	
 	// The grow and full instances for doing their share of the work - do not
 	// allow access.
@@ -95,7 +69,7 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser, ConfigListen
 	private final FullInitialiser full;
 
 	// Nodes the programs will be constructed from.
-	private List<Node> syntax;
+	private Node[] syntax;
 
 	// Each generated program's return type.
 	private Class<?> returnType;
@@ -109,16 +83,18 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser, ConfigListen
 
 	// Whether programs must be unique in generated populations.
 	private boolean acceptDuplicates;
+	
+	private RandomSequence random;
 
 	/**
 	 * Constructs a <code>FullInitialiser</code> with all the necessary
 	 * parameters given.
 	 */
-	public RampedHalfAndHalfInitialiser(final RandomNumberGenerator rng, final List<Node> syntax,
-			final Class<?> returnType, final int popSize, final int startMaxDepth, final int endMaxDepth,
-			final boolean acceptDuplicates) {
-		this(null, startMaxDepth, acceptDuplicates);
-
+	public RampedHalfAndHalfInitialiser(RandomSequence random, Node[] syntax,
+			Class<?> returnType, int popSize, int startMaxDepth, int endMaxDepth,
+			boolean acceptDuplicates) {
+		this.random = random;
+		this.acceptDuplicates = acceptDuplicates;
 		this.endMaxDepth = endMaxDepth;
 		this.startMaxDepth = startMaxDepth;
 		this.popSize = popSize;
@@ -126,10 +102,13 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser, ConfigListen
 		this.returnType = returnType;
 
 		// Set up the grow and full parts.
-		grow.setRNG(rng);
+		grow = new GrowInitialiser();
+		full = new FullInitialiser();
+		
+		grow.setRandomSequence(random);
 		grow.setSyntax(syntax);
 		grow.setReturnType(returnType);
-		full.setRNG(rng);
+		full.setRandomSequence(random);
 		full.setSyntax(syntax);
 		full.setReturnType(returnType);
 	}
@@ -143,8 +122,8 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser, ConfigListen
 	 * @param model the <code>GPModel</code> instance from which the necessary
 	 *        parameters should be loaded.
 	 */
-	public RampedHalfAndHalfInitialiser(final Evolver evolver) {
-		this(evolver, 1);
+	public RampedHalfAndHalfInitialiser() {
+		this(1);
 	}
 
 	/**
@@ -159,8 +138,8 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser, ConfigListen
 	 *        generated
 	 *        to.
 	 */
-	public RampedHalfAndHalfInitialiser(final Evolver evolver, final int startMaxDepth) {
-		this(evolver, startMaxDepth, true);
+	public RampedHalfAndHalfInitialiser(int startMaxDepth) {
+		this(startMaxDepth, true);
 	}
 
 	/**
@@ -176,33 +155,37 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser, ConfigListen
 	 * @param acceptDuplicates whether duplicates should be allowed in the
 	 *        populations that are generated.
 	 */
-	public RampedHalfAndHalfInitialiser(final Evolver evolver, final int startMaxDepth, final boolean acceptDuplicates) {
-		this.evolver = evolver;
-
+	public RampedHalfAndHalfInitialiser(int startMaxDepth, boolean acceptDuplicates) {
 		this.startMaxDepth = startMaxDepth;
 		this.acceptDuplicates = acceptDuplicates;
 
 		// Set up the grow and full parts.
-		grow = new GrowInitialiser(evolver);
-		full = new FullInitialiser(evolver);
+		grow = new GrowInitialiser();
+		full = new FullInitialiser();
 		
-		if (evolver != null) {
-			// Configure parameters from the model.
-			evolver.getLife().addConfigListener(this, false);
-		}
+		setup();
+		EventManager.getInstance().add(ConfigEvent.class, this);
 	}
-
+	
 	/**
-	 * Configures this operator with parameters from the model.
+	 * Sets up this operator with the appropriate configuration settings.
+	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
+	 * change in any of the following configuration parameters:
+	 * <ul>
+	 * <li><code>RandomSequence.RANDOM_SEQUENCE</code>
+	 * </ul>
 	 */
-	@Override
-	public void configure(Model model) {
-		if (model instanceof GPModel) {
-			stats = evolver.getStats(model);
-			popSize = model.getPopulationSize();
-			endMaxDepth = ((GPModel) model).getMaxInitialDepth();
-			syntax = ((GPModel) model).getSyntax();
-			returnType = ((GPModel) model).getReturnType();
+	protected void setup() {
+		random = Config.getInstance().get(RANDOM_SEQUENCE);
+		popSize = Config.getInstance().get(SIZE);
+		syntax = Config.getInstance().get(SYNTAX);
+		returnType = Config.getInstance().get(RETURN_TYPE);
+		
+		endMaxDepth = Config.getInstance().get(MAXIMUM_DEPTH);
+		int maxInitialDepth = Config.getInstance().get(MAXIMUM_INITIAL_DEPTH);
+		
+		if (maxInitialDepth < endMaxDepth || endMaxDepth == -1) {
+			endMaxDepth = maxInitialDepth;
 		}
 	}
 
@@ -221,21 +204,20 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser, ConfigListen
 	 *         <code>CandidatePrograms</code>.
 	 */
 	@Override
-	public List<CandidateProgram> getInitialPopulation() {
+	public Population process(Population population) {
+		EventManager.getInstance().fire(InitialisationEvent.StartInitialisation.class, new InitialisationEvent.StartInitialisation(population));
+		
 		if (popSize < 1) {
 			throw new IllegalStateException("Population size must be 1 or greater");
 		} else if (endMaxDepth < startMaxDepth) {
 			throw new IllegalStateException("End maximum depth must be greater than the start maximum depth.");
 		}
 
-		// Create population list to populate.
-		final List<CandidateProgram> firstGen = new ArrayList<CandidateProgram>(popSize);
-
 		// Number of programs to create at each depth.
-		final int[] programsPerDepth = getProgramsPerDepth();
+		int[] programsPerDepth = getProgramsPerDepth();
 
 		// Whether each program was grown or not (full).
-		final boolean[] grown = new boolean[popSize];
+		Method[] method = new Method[popSize];
 
 		int popIndex = 0;
 		boolean growNext = true;
@@ -246,31 +228,30 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser, ConfigListen
 				GPIndividual program;
 
 				do {
-					grown[popIndex] = growNext;
+					method[popIndex] = growNext ? GROW : FULL;
 					if (growNext) {
 						grow.setMaxDepth(depth);
-						program = grow.getInitialProgram();
+						program = grow.create();
 					} else {
 						full.setDepth(depth);
-						program = full.getInitialProgram();
+						program = full.create();
 					}
 					// The effect is that if is a duplicate then will use other
 					// approach next - this is deliberate because full may have
 					// less possible programs for a given depth.
 					growNext = !growNext;
-				} while (!acceptDuplicates && firstGen.contains(program));
+				} while (!acceptDuplicates && population.contains(program));
 
-				firstGen.add(program);
+				population.add(program);
 				popIndex++;
 			}
 		}
 
-		// Add the grown or full nature of all the programs.
-		stats.addData(INIT_GROWN, grown);
+		EventManager.getInstance().fire(RampedHalfAndHalfEvent.class, new RampedHalfAndHalfEvent(population, method));
 
-		return firstGen;
+		return population;
 	}
-
+	
 	private int[] getProgramsPerDepth() {
 		final int noDepths = endMaxDepth - startMaxDepth + 1;
 		final int[] noPrograms = new int[noDepths];
@@ -350,11 +331,11 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser, ConfigListen
 	 * this parameter will be overwritten with the random number generator from
 	 * that model on the next configure event.
 	 * 
-	 * @param rng the random number generator to set.
+	 * @param random the random number generator to set.
 	 */
-	public void setRNG(final RandomNumberGenerator rng) {
-		grow.setRNG(rng);
-		full.setRNG(rng);
+	public void setRandomSequence(RandomSequence random) {
+		grow.setRandomSequence(random);
+		full.setRandomSequence(random);
 	}
 
 	/**
@@ -365,7 +346,7 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser, ConfigListen
 	 * @return the types of <code>Node</code> that should be used in
 	 *         constructing new programs.
 	 */
-	public List<Node> getSyntax() {
+	public Node[] getSyntax() {
 		return syntax;
 	}
 
@@ -377,7 +358,7 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser, ConfigListen
 	 * @param syntax a <code>List</code> of the types of <code>Node</code> that
 	 *        should be used in constructing new programs.
 	 */
-	public void setSyntax(final List<Node> syntax) {
+	public void setSyntax(Node[] syntax) {
 		this.syntax = syntax;
 
 		grow.setSyntax(syntax);
@@ -474,5 +455,28 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser, ConfigListen
 	 */
 	public void setStartMaxDepth(final int startMaxDepth) {
 		this.startMaxDepth = startMaxDepth;
+	}
+
+	@Override
+	public Individual create() {
+		if (random.nextBoolean()) {
+			return grow.create();
+		} else {
+			return full.create();
+		}
+	}
+
+	/**
+	 * Receives configuration events and triggers this operator to configure its
+	 * parameters if the <code>ConfigEvent</code> is for one of its required
+	 * parameters.
+	 * 
+	 * @param event {@inheritDoc}
+	 */
+	@Override
+	public void onEvent(ConfigEvent event) {
+		if (event.isKindOf(RANDOM_SEQUENCE, SIZE, SYNTAX, RETURN_TYPE, MAXIMUM_INITIAL_DEPTH, MAXIMUM_DEPTH)) {
+			setup();
+		}
 	}
 }

@@ -20,46 +20,36 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.event;
-
-import org.epochx.*;
+package org.epochx;
 
 
 /**
  * 
  */
-public abstract class OperatorEvent implements Event {
+public class Reproduction implements Operator {
 
-	private Individual[] parents;
+	private double probability;
 	
-	public OperatorEvent(Individual[] parents) {
-		this.parents = parents;
-	}
-
-	public Individual[] getParents() {
-		return parents;
+	public Reproduction(double probability) {
+		this.probability = probability;
 	}
 	
-	public static class StartOperator extends OperatorEvent {
-
-		public StartOperator(Individual[] parents) {
-			super(parents);
-		}
+	public int inputSize() {
+		return 1;
 	}
 
-	public static class EndOperator extends OperatorEvent {
-
-		private Individual[] children;
-		
-		public EndOperator(Individual[] parents, Individual[] children) {
-			super(parents);
-			
-			this.children = children;
-		}
-		
-		public Individual[] getChildren() {
-			return children;
-		}
+	public Individual[] apply(Individual ... individuals) {
+		return individuals;
 	}
-	
+
+	public double probability() {
+		return probability;
+	}
+
+	/**
+	 * @param probability the probability to set
+	 */
+	public void setProbability(double probability) {
+		this.probability = probability;
+	}
 }

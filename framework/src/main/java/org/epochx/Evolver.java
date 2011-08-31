@@ -28,6 +28,9 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import org.epochx.Config.ConfigKey;
+import org.epochx.event.*;
+import org.epochx.event.RunEvent.EndRun;
+import org.epochx.event.RunEvent.StartRun;
 
 /**
  * The <code>Evolver</code> class is responsible for performing an evolutionary
@@ -91,7 +94,13 @@ public class Evolver {
 		Pipeline pipeline = new Pipeline();
 		setupPipeline(pipeline);
 
-		return pipeline.process(new Population());
+		EventManager.getInstance().fire(StartRun.class, new StartRun(0));
+		
+		Population population = pipeline.process(new Population());
+		
+		EventManager.getInstance().fire(EndRun.class, new EndRun(0, population));
+		
+		return population;
 	}
 
 	/**

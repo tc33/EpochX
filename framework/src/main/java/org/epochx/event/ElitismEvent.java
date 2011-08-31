@@ -20,17 +20,46 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.gp.op.init;
+package org.epochx.event;
 
-import org.epochx.Initialiser;
-import org.epochx.Config.ConfigKey;
+import org.epochx.*;
 
 
 /**
  * 
  */
-public interface GPInitialiser extends Initialiser {
+public abstract class ElitismEvent implements Event {
 
-	public static final ConfigKey<Integer> MAXIMUM_INITIAL_DEPTH = new ConfigKey<Integer>();
+	private Population population;
+	
+	public ElitismEvent(Population population) {
+		this.population = population;
+	}
+
+	public Population getPopulation() {
+		return population;
+	}
+	
+	public static class StartElitism extends ElitismEvent {
+
+		public StartElitism(Population population) {
+			super(population);
+		}
+	}
+
+	public static class EndElitism extends ElitismEvent {
+
+		private Individual[] elites;
+		
+		public EndElitism(Population population, Individual[] elites) {
+			super(population);
+			
+			this.elites = elites;
+		}
+		
+		public Individual[] getElites() {
+			return elites;
+		}
+	}
 	
 }

@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2007-2011
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -21,38 +21,41 @@
  * The latest version is available from: http://www.epochx.org
  */
 
-package org.epochx.event.stat;
+package org.epochx.event;
 
-import org.epochx.DoubleFitness;
-import org.epochx.Fitness;
-import org.epochx.event.GenerationEvent.EndGeneration;
+import org.epochx.Population;
 
-public class GenerationAverageDoubleFitness extends AbstractStat<EndGeneration> {
+public abstract class RunEvent implements Event {
 
-	private double average;
-
-	public GenerationAverageDoubleFitness() {
-		super(GenerationFitnesses.class);
+	private final int run;
+	
+	public RunEvent(int generation) {
+		this.run = generation;
 	}
 
-	@Override
-	public void onEvent(EndGeneration event) {
-		Fitness[] fitnesses = AbstractStat.get(GenerationFitnesses.class).getFitnesses();
-		average = 0;
+	public int getRun() {
+		return run;
+	}
+	
+	public static class StartRun extends RunEvent {
 
-		for (Fitness fitness: fitnesses) {
-			average += ((DoubleFitness) fitness).getValue();
+		public StartRun(int run) {
+			super(run);
 		}
-
-		average /= fitnesses.length;
 	}
 
-	public double getAverage() {
-		return average;
-	}
+	public static class EndRun extends RunEvent {
 
-	@Override
-	public String toString() {
-		return Double.toString(average);
+		private final Population population;
+		
+		public EndRun(int run, Population population) {
+			super(run);
+			
+			this.population = population;
+		}
+		
+		public Population getPopulation() {
+			return population;
+		}
 	}
 }

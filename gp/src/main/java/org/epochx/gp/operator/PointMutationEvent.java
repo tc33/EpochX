@@ -20,46 +20,33 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.event;
+package org.epochx.gp.operator;
 
-import org.epochx.*;
+import java.util.List;
+
+import org.epochx.Individual;
+import org.epochx.event.OperatorEvent;
+import org.epochx.gp.GPIndividual;
 
 
 /**
  * 
  */
-public abstract class OperatorEvent implements Event {
-
-	private Individual[] parents;
+public class PointMutationEvent extends OperatorEvent.EndOperator {
 	
-	public OperatorEvent(Individual[] parents) {
-		this.parents = parents;
-	}
-
-	public Individual[] getParents() {
-		return parents;
+	private List<Integer> points;
+	
+	public PointMutationEvent(GPIndividual parent, GPIndividual child, List<Integer> points) {
+		super(new Individual[]{parent}, new Individual[]{child});
+		
+		this.points = points;
 	}
 	
-	public static class StartOperator extends OperatorEvent {
-
-		public StartOperator(Individual[] parents) {
-			super(parents);
-		}
-	}
-
-	public static class EndOperator extends OperatorEvent {
-
-		private Individual[] children;
-		
-		public EndOperator(Individual[] parents, Individual[] children) {
-			super(parents);
-			
-			this.children = children;
-		}
-		
-		public Individual[] getChildren() {
-			return children;
-		}
+	/**
+	 * @return the point1
+	 */
+	public List<Integer> getMutationPoints() {
+		return points;
 	}
 	
 }

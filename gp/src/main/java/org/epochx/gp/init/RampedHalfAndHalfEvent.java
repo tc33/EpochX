@@ -20,46 +20,28 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.event;
+package org.epochx.gp.init;
 
-import org.epochx.*;
+import org.epochx.Population;
+import org.epochx.event.InitialisationEvent;
+import org.epochx.gp.init.RampedHalfAndHalfInitialiser.Method;
 
 
 /**
  * 
  */
-public abstract class OperatorEvent implements Event {
+public class RampedHalfAndHalfEvent extends InitialisationEvent.EndInitialisation {
 
-	private Individual[] parents;
+	private Method[] method;
 	
-	public OperatorEvent(Individual[] parents) {
-		this.parents = parents;
-	}
-
-	public Individual[] getParents() {
-		return parents;
+	public RampedHalfAndHalfEvent(Population population, Method[] method) {
+		super(population);
+	
+		this.method = method;
 	}
 	
-	public static class StartOperator extends OperatorEvent {
-
-		public StartOperator(Individual[] parents) {
-			super(parents);
-		}
-	}
-
-	public static class EndOperator extends OperatorEvent {
-
-		private Individual[] children;
-		
-		public EndOperator(Individual[] parents, Individual[] children) {
-			super(parents);
-			
-			this.children = children;
-		}
-		
-		public Individual[] getChildren() {
-			return children;
-		}
+	public Method[] getMethod() {
+		return method;
 	}
 	
 }

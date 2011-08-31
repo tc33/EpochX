@@ -127,11 +127,13 @@ public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
 				}
 			}
 
-			Individual[] parents = new Individual[operator.inputSize()];
+			Individual[] parents = null;
 
 			// TODO perhaps hava an exception to signal that the operator
 			// failed
 			do {
+				parents = new Individual[operator.inputSize()];
+
 				for (int i = 0; i < parents.length; i++) {
 					parents[i] = selector.select().clone();
 				}

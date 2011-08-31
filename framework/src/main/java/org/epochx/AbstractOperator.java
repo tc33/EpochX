@@ -57,13 +57,13 @@ public abstract class AbstractOperator implements Operator {
 		EventManager.getInstance().fire(start.getClass(), start);
 
 		EndOperator end = getEndEvent(individuals);
-		Individual[] offspring = perform(end, parents);
+		parents = perform(end, parents);
 
 		// fires the end event
-		end.setChildren(clone(offspring));
+		end.setChildren(clone(parents));
 		EventManager.getInstance().fire(end.getClass(), end);
 
-		return offspring;
+		return parents;
 	}
 
 	/**

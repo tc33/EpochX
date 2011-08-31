@@ -39,12 +39,12 @@ import org.epochx.Config.ConfigKey;
  * <li>{@link EvolutionaryStrategy}
  * </ol>
  * 
- * The specific implementation of {@link Initialiser} and
- * {@link EvolutionaryStrategy} components used are obtained from the
- * {@link Config}, using the appropriate <code>ConfigKey</code>. This default
- * behaviour can be extended by inserting additional <code>Component</code>s
- * between those specified here, by using the <code>add</code> method. The
- * position of new components is specified with a <code>Placeholder</code>.
+ * The specific implementation of the {@link EvolutionaryStrategy} component
+ * used is obtained from the {@link Config}, using the appropriate
+ * <code>ConfigKey</code>. This default behaviour can be extended by
+ * inserting additional <code>Component</code>s between those specified here,
+ * by using the <code>add</code> method. The position of new components is
+ * specified with a <code>Placeholder</code>.
  * 
  * <p>
  * The default set up of components can be replaced by overriding the
@@ -53,12 +53,6 @@ import org.epochx.Config.ConfigKey;
  * an alternative ordering.
  */
 public class Evolver {
-
-	/**
-	 * The key for setting and retrieving the <code>Initialiser</code>
-	 * component.
-	 */
-	public static final ConfigKey<Initialiser> INITIALISER = new ConfigKey<Initialiser>();
 
 	/**
 	 * The key for setting and retrieving the <code>EvolutionaryStrategy</code>
@@ -124,7 +118,7 @@ public class Evolver {
 	 */
 	protected void setupPipeline(Pipeline pipeline) {
 		pipeline.addAll(additional.get(Placeholder.START));
-		pipeline.add(Config.getInstance().get(INITIALISER));
+		pipeline.add(new Initialiser());
 		pipeline.addAll(additional.get(Placeholder.AFTER_INITIALISATION));
 		pipeline.add(new FitnessEvaluator());
 		pipeline.addAll(additional.get(Placeholder.AFTER_EVALUATION));

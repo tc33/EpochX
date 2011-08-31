@@ -23,17 +23,38 @@
 
 package org.epochx;
 
+import org.epochx.Config.ConfigKey;
+
 /**
- * An instance of <code>Initialiser</code> is reponsible for creating the
- * indivuduals.
+ * <code>Initialiser</code> components are reponsible for creating individuals,
+ * delegating the creation to an {@link InitialisationMethod} instance.
  */
-public interface Initialiser extends Component {
+public class Initialiser extends ProxyComponent<InitialisationMethod> {
 
 	/**
-	 * Returns a newly created individual.
-	 * 
-	 * @return a newly created individual.
+	 * The key for setting and retrieving the <code>InitialisationMethod</code>
+	 * used
+	 * by this component.
 	 */
-	public Individual create();
+	public static final ConfigKey<InitialisationMethod> METHOD = new ConfigKey<InitialisationMethod>();
+
+	/**
+	 * Constructs a <code>Initialiser</code>.
+	 */
+	public Initialiser() {
+		super(METHOD);
+	}
+
+	/**
+	 * Delegates the initialisation of the population to the
+	 * <code>InitialisationMethod</code> object.
+	 */
+	public Population process(Population population) {
+		if (handler == null) {
+			throw new IllegalStateException("The initialisation method has not been set.");
+		}
+
+		return handler.createPopulation();
+	}
 
 }

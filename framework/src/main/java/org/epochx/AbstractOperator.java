@@ -32,6 +32,16 @@ import org.epochx.event.OperatorEvent.StartOperator;
 /**
  * A skeletal implementation of the {@link Operator} interface than fires
  * events at the start (before) and end (after) the operator is performed.
+ * Typically, subclasses will override one of the following methods:
+ * 
+ * <ul>
+ * 
+ * <li>{@link #perform(Individual...)}: when no custom end event is needed;
+ * 
+ * <li>{@link #perform(EndOperator, Individual...)}: when a custom end event is
+ * used, this method should be overridden to set the additional information.
+ * 
+ * </ul>
  * 
  * @see Event
  * @see EventManager
@@ -40,29 +50,60 @@ import org.epochx.event.OperatorEvent.StartOperator;
 public abstract class AbstractOperator implements Operator {
 
 	public final Individual[] apply(Individual ... individuals) {
+		Individual[] parents = clone(individuals);
+
 		// fires the start event
 		StartOperator start = getStartEvent(individuals);
 		EventManager.getInstance().fire(start.getClass(), start);
 
 		EndOperator end = getEndEvent(individuals);
-		Individual[] offspring = perform(end, individuals);
+		Individual[] offspring = perform(end, parents);
 
 		// fires the end event
-		end.setOffspring(clone(offspring));
+		end.setChildren(clone(offspring));
 		EventManager.getInstance().fire(end.getClass(), end);
 
 		return offspring;
 	}
 
 	/**
-	 * Performs the operator on the specified individiduals.
+	 * Performs the operator on the specified individiduals. If the operator is
+	 * not successful, the specified individuals will not be changed and
+	 * <code>null</code> is returned. The default implementation calls the
+	 * {@link #perform(Individual...)} method.
+	 * <p>
+	 * When overriding this method, the specified <code>EndOperator</code> event
+	 * can be used to provide more information about the operator. In order to
+	 * do so, the {@link #getEndEvent(Individual...)} method must return a
+	 * custom event instance, enabling this method to set its properties.
+	 * </p>
 	 * 
-	 * @param event the end event object to be fired.
+	 * @param event the end event object to be fired after this operator is
+	 *        performed.
 	 * @param individuals the individuals undergoing the operator.
 	 * 
 	 * @return the indivuals produced by this operator.
+	 * 
+	 * @see #getEndEvent(Individual...)
 	 */
-	public abstract Individual[] perform(EndOperator event, Individual ... individuals);
+	public Individual[] perform(EndOperator event, Individual ... individuals) {
+		return perform(individuals);
+	}
+
+	/**
+	 * Performs the operator on the specified individiduals. If the operator is
+	 * not successful, the specified individuals will not be changed and
+	 * <code>null</code> is returned. The default implementation just returns
+	 * the same individudals.
+	 * 
+	 * @param individuals the individuals undergoing the operator.
+	 * 
+	 * @return the indivuals produced by this operator; <code>null</code> when
+	 *         the operator could not be applied.
+	 */
+	public Individual[] perform(Individual ... individuals) {
+		return individuals;
+	}
 
 	/**
 	 * Returns the operator's start event. The default implementation returns

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2011
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -22,44 +22,108 @@
  */
 package org.epochx.event;
 
-import org.epochx.*;
-
+import org.epochx.Individual;
+import org.epochx.Operator;
 
 /**
- * 
+ * The root class for operator events.
  */
 public abstract class OperatorEvent implements Event {
 
+	/**
+	 * The <code>Operator</code> that fired the event.
+	 */
+	private Operator operator;
+
+	/**
+	 * The array of individuals undergoing the operator.
+	 */
 	private Individual[] parents;
-	
-	public OperatorEvent(Individual[] parents) {
+
+	/**
+	 * Constructs a <code>OperatorEvent</code>.
+	 * 
+	 * @param operator the operator that fired the event.
+	 * @param parents the array of individuals undergoing the operator.
+	 */
+	public OperatorEvent(Operator operator, Individual[] parents) {
+		this.operator = operator;
 		this.parents = parents;
 	}
 
+	/**
+	 * Returns the operator that fired the event.
+	 * 
+	 * @return the operator that fired the event.
+	 */
+	public Operator getOperator() {
+		return operator;
+	}
+
+	/**
+	 * Returns the array of individuals undergoing the operator.
+	 * 
+	 * @return the array of individuals undergoing the operator.
+	 */
 	public Individual[] getParents() {
 		return parents;
 	}
-	
+
+	/**
+	 * Default event to signal the start of an operator.
+	 */
 	public static class StartOperator extends OperatorEvent {
 
-		public StartOperator(Individual[] parents) {
-			super(parents);
+		/**
+		 * Constructs a <code>StartOperator</code>.
+		 * 
+		 * @param operator the operator that fired the event.
+		 * @param parents the array of individuals undergoing the operator.
+		 */
+		public StartOperator(Operator operator, Individual[] parents) {
+			super(operator, parents);
 		}
+
 	}
 
+	/**
+	 * Default event to signal the end of an operator.
+	 */
 	public static class EndOperator extends OperatorEvent {
 
-		private Individual[] children;
-		
-		public EndOperator(Individual[] parents, Individual[] children) {
-			super(parents);
-			
-			this.children = children;
+		/**
+		 * The array of individuals produced by the operator.
+		 */
+		private Individual[] offspring;
+
+		/**
+		 * Constructs a <code>EndOperator</code>.
+		 * 
+		 * @param operator the operator that fired the event.
+		 * @param parents the array of individuals undergoing the operator.
+		 */
+		public EndOperator(Operator operator, Individual[] parents) {
+			super(operator, parents);
 		}
-		
-		public Individual[] getChildren() {
-			return children;
+
+		/**
+		 * Returns the array of individuals produced by the operator.
+		 * 
+		 * @return the array of individuals produced by the operator.
+		 */
+		public Individual[] getOffspring() {
+			return offspring;
 		}
+
+		/**
+		 * Sets the array of individuals produced by the operator.
+		 * 
+		 * @param offspring the array of individuals produced by the operator.
+		 */
+		public void setOffspring(Individual[] offspring) {
+			this.offspring = offspring;
+		}
+
 	}
-	
+
 }

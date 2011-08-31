@@ -94,7 +94,7 @@ public abstract class OperatorEvent implements Event {
 		/**
 		 * The array of individuals produced by the operator.
 		 */
-		private Individual[] offspring;
+		private Individual[] children;
 
 		/**
 		 * Constructs a <code>EndOperator</code>.
@@ -111,17 +111,17 @@ public abstract class OperatorEvent implements Event {
 		 * 
 		 * @return the array of individuals produced by the operator.
 		 */
-		public Individual[] getOffspring() {
-			return offspring;
+		public Individual[] getChildren() {
+			return children;
 		}
 
 		/**
 		 * Sets the array of individuals produced by the operator.
 		 * 
-		 * @param offspring the array of individuals produced by the operator.
+		 * @param children the array of individuals produced by the operator.
 		 */
-		public void setOffspring(Individual[] offspring) {
-			this.offspring = offspring;
+		public void setChildren(Individual[] children) {
+			this.children = children;
 		}
 
 	}

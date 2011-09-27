@@ -34,7 +34,11 @@ import org.epochx.event.EventManager;
 import org.epochx.event.Listener;
 
 /**
- * Gathers data and statistics about events.
+ * The <code>AbstractStat</code> represent the base class for classes that
+ * gathers data and statistics about events. It also works as a central
+ * repository for registering, removing and retrieving stat objects.
+ * 
+ * @see Event
  */
 public abstract class AbstractStat<T extends Event> {
 
@@ -151,6 +155,19 @@ public abstract class AbstractStat<T extends Event> {
 	 */
 	public static <V extends AbstractStat<?>> V get(Class<V> type) {
 		return type.cast(REPOSITORY.get(type));
+	}
+
+	/**
+	 * Removes all registered <code>AbstractStat</code> objects from the
+	 * repository.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <E extends Event, V extends AbstractStat<E>> void reset() {
+		List<Class<?>> registered = new ArrayList<Class<?>>(REPOSITORY.keySet());
+
+		for (Class<?> type: registered) {
+			AbstractStat.remove((Class<V>) type);
+		}
 	}
 
 }

@@ -28,6 +28,8 @@ package org.epochx;
  * responsible for assigning fitnesses to individuals in a population. Typically
  * this will be performed by evaluating the quality of each individual against
  * problem specific requirements.
+ * 
+ * @see Fitness
  */
 public interface FitnessFunction {
 

@@ -72,4 +72,14 @@ public class ConfigTest extends TestCase {
 		assertNotNull(config.get(RandomSequence.RANDOM_SEQUENCE));
 	}
 
+	public void testReset() {
+		Config config = Config.getInstance();
+
+		config.defaults();
+		assertNotNull(config.get(Population.SIZE));
+
+		config.reset();
+		assertNull(config.get(Population.SIZE));
+	}
+
 }

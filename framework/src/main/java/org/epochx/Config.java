@@ -149,6 +149,14 @@ public class Config {
 		T value = get(key);
 		return (value == null) ? defaultValue : value;
 	}
+	
+	/**
+	 * Removes all configuration parameter mapping. The configuration will be
+	 * empty this call returns.
+	 */
+	public void reset() {
+		mapping.clear();
+	}
 
 	/**
 	 * Instances of <code>ConfigKey</code> are used to uniquely identify

@@ -42,7 +42,7 @@ public class RunBestFitness extends AbstractStat<StartRun> {
 	public void onEvent(StartRun event) {
 		best = null;
 	}
-	
+
 	private void addGeneration(Fitness generationBest) {
 		if (best == null || generationBest.compareTo(best) > 0) {
 			best = generationBest;
@@ -58,17 +58,18 @@ public class RunBestFitness extends AbstractStat<StartRun> {
 		return best.toString();
 	}
 
-	private class RunBestFitnessGeneration extends AbstractStat<EndGeneration> {
+	private static class RunBestFitnessGeneration extends AbstractStat<EndGeneration> {
 
 		public RunBestFitnessGeneration() {
 			super(GenerationBestFitness.class);
 		}
-		
+
 		@Override
 		public void onEvent(EndGeneration event) {
-			addGeneration(AbstractStat.get(GenerationBestFitness.class).getBest());
+			RunBestFitness parent = AbstractStat.get(RunBestFitness.class);
+			parent.addGeneration(AbstractStat.get(GenerationBestFitness.class).getBest());
 		}
-		
+
 	}
-	
+
 }

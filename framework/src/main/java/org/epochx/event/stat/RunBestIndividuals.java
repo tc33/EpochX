@@ -77,6 +77,7 @@ public class RunBestIndividuals extends AbstractStat<StartRun> {
 
 	private class RunBestIndividualsGeneration extends AbstractStat<EndGeneration> {
 
+		@SuppressWarnings("unused")
 		public RunBestIndividualsGeneration() {
 			super(GenerationBestIndividuals.class);
 		}

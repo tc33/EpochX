@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2011
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -20,28 +20,26 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
+
 package org.epochx;
 
 import org.epochx.Config.ConfigKey;
 
-
 /**
- * 
+ * This class implements the reproduction (copy) operator.
  */
 public class Reproduction implements Operator {
 
+	/**
+	 * The property key under which the reproduction probability is stored.
+	 */
 	public static final ConfigKey<Double> PROBABILITY = new ConfigKey<Double>();
 
-	private double probability;
-	
-	public Reproduction() {
-		this(Config.getInstance().get(PROBABILITY));
-	}
+	/**
+	 * The default reproduction probability.
+	 */
+	public static final double DEFAULT_PROBABILITY = 0.90;
 
-	public Reproduction(double probability) {
-		this.probability = probability;
-	}
-	
 	public int inputSize() {
 		return 1;
 	}
@@ -51,13 +49,7 @@ public class Reproduction implements Operator {
 	}
 
 	public double probability() {
-		return probability;
+		return Config.getInstance().get(PROBABILITY, DEFAULT_PROBABILITY);
 	}
 
-	/**
-	 * @param probability the probability to set
-	 */
-	public void setProbability(double probability) {
-		this.probability = probability;
-	}
 }

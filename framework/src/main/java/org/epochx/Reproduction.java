@@ -22,14 +22,22 @@
  */
 package org.epochx;
 
+import org.epochx.Config.ConfigKey;
+
 
 /**
  * 
  */
 public class Reproduction implements Operator {
 
+	public static final ConfigKey<Double> PROBABILITY = new ConfigKey<Double>();
+
 	private double probability;
 	
+	public Reproduction() {
+		this(Config.getInstance().get(PROBABILITY));
+	}
+
 	public Reproduction(double probability) {
 		this.probability = probability;
 	}

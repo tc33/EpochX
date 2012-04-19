@@ -94,11 +94,11 @@ public class Evolver {
 		Pipeline pipeline = new Pipeline();
 		setupPipeline(pipeline);
 
-		EventManager.getInstance().fire(StartRun.class, new StartRun(0));
+		EventManager.getInstance().fire(new StartRun(0));
 		
 		Population population = pipeline.process(new Population());
 		
-		EventManager.getInstance().fire(EndRun.class, new EndRun(0, population));
+		EventManager.getInstance().fire(new EndRun(0, population));
 		
 		return population;
 	}

@@ -114,7 +114,8 @@ public class Config {
 	 */
 	public <T> void set(ConfigKey<T> key, T value) {
 		mapping.put(key, value);
-		EventManager.getInstance().fire(ConfigEvent.class, new ConfigEvent(key));
+		//EventManager.getInstance().fire(ConfigEvent.class, new ConfigEvent(key));
+		EventManager.getInstance().fire(new ConfigEvent(key));
 	}
 
 	/**
@@ -148,6 +149,14 @@ public class Config {
 	public <T> T get(ConfigKey<T> key, T defaultValue) {
 		T value = get(key);
 		return (value == null) ? defaultValue : value;
+	}
+	
+	/**
+	 * Removes all configuration parameter mapping. The configuration will be
+	 * empty this call returns.
+	 */
+	public void reset() {
+		mapping.clear();
 	}
 
 	/**

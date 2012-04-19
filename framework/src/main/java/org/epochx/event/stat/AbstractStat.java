@@ -34,7 +34,11 @@ import org.epochx.event.EventManager;
 import org.epochx.event.Listener;
 
 /**
- * Gathers data and statistics about events.
+ * The <code>AbstractStat</code> represent the base class for classes that
+ * gathers data and statistics about events. It also works as a central
+ * repository for registering, removing and retrieving stat objects.
+ * 
+ * @see Event
  */
 public abstract class AbstractStat<T extends Event> {
 
@@ -50,7 +54,7 @@ public abstract class AbstractStat<T extends Event> {
 	private static final HashMap<Class<?>, Object> REPOSITORY = new HashMap<Class<?>, Object>();
 
 	/**
-	 * This stat listener. When the stat is registered, its listener is added to
+	 * This is the stat listener. When the stat is registered, its listener is added to
 	 * the {@link EventManager}.
 	 */
 	private Listener<T> listener = new Listener<T>() {
@@ -59,6 +63,24 @@ public abstract class AbstractStat<T extends Event> {
 			AbstractStat.this.onEvent(event);
 		}
 	};
+
+	/**
+	 * The event that trigger the stat to clear its values.
+	 */
+	private Class<Event> clearOnEvent;
+
+	/**
+	 * This is the clear listener. This is only created if the event to trigger the
+	 * {@link #clear()} method is specified.
+	 */
+	private Listener<Event> clearOnListener;
+
+	/**
+	 * Constructs an <code>AbstractStat</code>.
+	 */
+	public AbstractStat() {
+		this(NO_DEPENDENCIES);
+	}
 
 	/**
 	 * Constructs an <code>AbstractStat</code>.
@@ -93,6 +115,51 @@ public abstract class AbstractStat<T extends Event> {
 	}
 
 	/**
+	 * Constructs an <code>AbstractStat</code>.
+	 * 
+	 * @param dependency the dependency of this stat.
+	 */
+	@SuppressWarnings("unchecked")
+	public <E extends Event> AbstractStat(Class<E> clearOn, Class<? extends AbstractStat<?>> dependency) {
+		this(clearOn, Arrays.<Class<? extends AbstractStat<?>>> asList(dependency));
+	}
+
+	/**
+	 * Constructs an <code>AbstractStat</code>. The array of dependencies can be
+	 * empty, in case this stat has no dependencies.
+	 * 
+	 * @param dependencies the array of dependencies of this stat.
+	 */
+	public <E extends Event> AbstractStat(Class<E> clearOn, Class<? extends AbstractStat<?>> ... dependencies) {
+		this(clearOn, Arrays.asList(dependencies));
+	}
+
+	/**
+	 * Constructs an <code>AbstractStat</code>. The list of dependencies can be
+	 * empty, in case this stat has no dependencies.
+	 * 
+	 * @param dependencies the list of dependencies of this stat.
+	 */
+	@SuppressWarnings("unchecked")
+	public <E extends Event> AbstractStat(Class<E> clearOn, List<Class<? extends AbstractStat<?>>> dependencies) {
+		for (Class<? extends AbstractStat<?>> dependency: dependencies) {
+			AbstractStat.register(dependency);
+		}
+
+		Listener<E> trigger = new Listener<E>() {
+
+			public void onEvent(E event) {
+				AbstractStat.this.clear();
+			};
+		};
+
+		EventManager.getInstance().add(clearOn, trigger);
+
+		clearOnEvent = (Class<Event>) clearOn;
+		clearOnListener = (Listener<Event>) trigger;
+	}
+
+	/**
 	 * Returns the class of the generic type T.
 	 */
 	@SuppressWarnings("unchecked")
@@ -106,6 +173,12 @@ public abstract class AbstractStat<T extends Event> {
 	 * @param event the event
 	 */
 	public abstract void onEvent(T event);
+
+	/**
+	 * Clears the cached values. This method is automatically called when a clear on event is specified.
+	 */
+	public void clear() {
+	}
 
 	/**
 	 * Registers the specified <code>AbstractStat</code> in the repository, if
@@ -137,6 +210,7 @@ public abstract class AbstractStat<T extends Event> {
 		if (REPOSITORY.containsKey(type)) {
 			AbstractStat<E> stat = type.cast(REPOSITORY.remove(type));
 			EventManager.getInstance().remove(stat.getEvent(), stat.listener);
+			EventManager.getInstance().remove(stat.clearOnEvent, stat.clearOnListener);
 		}
 	}
 
@@ -153,4 +227,16 @@ public abstract class AbstractStat<T extends Event> {
 		return type.cast(REPOSITORY.get(type));
 	}
 
+	/**
+	 * Removes all registered <code>AbstractStat</code> objects from the
+	 * repository.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <E extends Event, V extends AbstractStat<E>> void reset() {
+		List<Class<?>> registered = new ArrayList<Class<?>>(REPOSITORY.keySet());
+
+		for (Class<?> type: registered) {
+			AbstractStat.remove((Class<V>) type);
+		}
+	}
 }

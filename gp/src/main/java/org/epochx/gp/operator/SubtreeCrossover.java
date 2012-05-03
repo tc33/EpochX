@@ -118,7 +118,7 @@ public class SubtreeCrossover implements Operator, Listener<ConfigEvent> {
 	 */
 	@Override
 	public GPIndividual[] apply(Individual ... parents) {
-		EventManager.getInstance().fire(OperatorEvent.StartOperator.class, new OperatorEvent.StartOperator(parents));
+		EventManager.getInstance().fire(new OperatorEvent.StartOperator(this, parents));
 
 		final GPIndividual program1 = (GPIndividual) parents[0];
 		final GPIndividual program2 = (GPIndividual) parents[1];
@@ -153,8 +153,8 @@ public class SubtreeCrossover implements Operator, Listener<ConfigEvent> {
 		}
 
 		// Fire end event.
-		Event event = new SubtreeCrossoverEvent(parents, children, swapPoints, subtrees);
-		EventManager.getInstance().fire(SubtreeCrossoverEvent.class, event);
+		Event event = new SubtreeCrossoverEvent(this, parents, children, swapPoints, subtrees);
+		EventManager.getInstance().fire(event);
 
 		return children;
 	}

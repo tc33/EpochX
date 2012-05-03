@@ -150,7 +150,7 @@ public class SubtreeMutation implements Operator, Listener<ConfigEvent> {
 	 */
 	@Override
 	public GPIndividual[] apply(Individual ... parents) {
-		EventManager.getInstance().fire(OperatorEvent.StartOperator.class, new OperatorEvent.StartOperator(parents));
+		EventManager.getInstance().fire(new OperatorEvent.StartOperator(this, parents));
 
 		GPIndividual program = (GPIndividual) parents[0];
 		GPIndividual child = program.clone();
@@ -169,7 +169,7 @@ public class SubtreeMutation implements Operator, Listener<ConfigEvent> {
 		// Set the new subtree.
 		child.setNthNode(mutationPoint, subtree);
 
-		EventManager.getInstance().fire(SubtreeMutationEvent.class, new SubtreeMutationEvent(program, child,
+		EventManager.getInstance().fire(new SubtreeMutationEvent(this, program, child,
 				mutationPoint, subtree));
 
 		return new GPIndividual[]{child};

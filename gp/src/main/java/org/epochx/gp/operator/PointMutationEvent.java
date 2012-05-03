@@ -36,8 +36,8 @@ public class PointMutationEvent extends OperatorEvent.EndOperator {
 	
 	private List<Integer> points;
 	
-	public PointMutationEvent(GPIndividual parent, GPIndividual child, List<Integer> points) {
-		super(new Individual[]{parent}, new Individual[]{child});
+	public PointMutationEvent(PointMutation operator, GPIndividual parent, GPIndividual child, List<Integer> points) {
+		super(operator, new Individual[]{parent}, new Individual[]{child});
 		
 		this.points = points;
 	}

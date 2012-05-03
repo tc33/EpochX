@@ -137,7 +137,7 @@ public class PointMutation implements Operator, Listener<ConfigEvent> {
 	 */
 	@Override
 	public GPIndividual[] apply(Individual ... parents) {
-		EventManager.getInstance().fire(OperatorEvent.StartOperator.class, new OperatorEvent.StartOperator(parents));
+		EventManager.getInstance().fire(new OperatorEvent.StartOperator(this, parents));
 		
 		GPIndividual program = (GPIndividual) parents[0];
 		GPIndividual child = program.clone();
@@ -175,7 +175,7 @@ public class PointMutation implements Operator, Listener<ConfigEvent> {
 			}
 		}
 
-		EventManager.getInstance().fire(PointMutationEvent.class, new PointMutationEvent(program, child, points));
+		EventManager.getInstance().fire(new PointMutationEvent(this, program, child, points));
 
 		return new GPIndividual[]{child};
 	}

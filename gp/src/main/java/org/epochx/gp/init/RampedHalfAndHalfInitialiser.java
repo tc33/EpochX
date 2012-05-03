@@ -56,7 +56,7 @@ import org.epochx.gp.GPIndividual;
  * @see FullInitialiser
  * @see GrowInitialiser
  */
-public class RampedHalfAndHalfInitialiser implements GPInitialiser, Listener<ConfigEvent> {
+public class RampedHalfAndHalfInitialiser extends GPInitialiser implements Listener<ConfigEvent> {
 
 	public enum Method {
 		GROW,
@@ -205,7 +205,7 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser, Listener<Con
 	 */
 	@Override
 	public Population process(Population population) {
-		EventManager.getInstance().fire(InitialisationEvent.StartInitialisation.class, new InitialisationEvent.StartInitialisation(population));
+		EventManager.getInstance().fire(new InitialisationEvent.StartInitialisation(population));
 		
 		if (popSize < 1) {
 			throw new IllegalStateException("Population size must be 1 or greater");
@@ -247,7 +247,7 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser, Listener<Con
 			}
 		}
 
-		EventManager.getInstance().fire(RampedHalfAndHalfEvent.class, new RampedHalfAndHalfEvent(population, method));
+		EventManager.getInstance().fire(new RampedHalfAndHalfEvent(population, method));
 
 		return population;
 	}
@@ -457,8 +457,7 @@ public class RampedHalfAndHalfInitialiser implements GPInitialiser, Listener<Con
 		this.startMaxDepth = startMaxDepth;
 	}
 
-	@Override
-	public Individual create() {
+	public GPIndividual create() {
 		if (random.nextBoolean()) {
 			return grow.create();
 		} else {

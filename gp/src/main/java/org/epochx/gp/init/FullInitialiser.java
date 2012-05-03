@@ -41,7 +41,7 @@ import org.epochx.tools.util.TypeUtils;
  * @see GrowInitialiser
  * @see RampedHalfAndHalfInitialiser
  */
-public class FullInitialiser implements Initialiser, Listener<ConfigEvent> {
+public class FullInitialiser extends GPInitialiser implements Listener<ConfigEvent> {
 
 	private RandomSequence random;
 
@@ -126,7 +126,7 @@ public class FullInitialiser implements Initialiser, Listener<ConfigEvent> {
 	 */
 	@Override
 	public Population process(Population population) {
-		EventManager.getInstance().fire(InitialisationEvent.StartInitialisation.class, new InitialisationEvent.StartInitialisation(
+		EventManager.getInstance().fire(new InitialisationEvent.StartInitialisation(
 				population));
 
 		// Create and add new programs to the population.
@@ -142,7 +142,7 @@ public class FullInitialiser implements Initialiser, Listener<ConfigEvent> {
 			population.add(candidate);
 		}
 
-		EventManager.getInstance().fire(InitialisationEvent.EndInitialisation.class, new InitialisationEvent.EndInitialisation(
+		EventManager.getInstance().fire(new InitialisationEvent.EndInitialisation(
 				population));
 
 		return population;
@@ -155,7 +155,6 @@ public class FullInitialiser implements Initialiser, Listener<ConfigEvent> {
 	 * 
 	 * @return a new <code>GPIndividual</code> instance.
 	 */
-	@Override
 	public GPIndividual create() {
 		final Node root = getFullNodeTree();
 

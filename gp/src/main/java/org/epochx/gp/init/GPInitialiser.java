@@ -29,7 +29,7 @@ import org.epochx.Config.ConfigKey;
 /**
  * 
  */
-public interface GPInitialiser extends Initialiser {
+public class GPInitialiser extends Initialiser {
 
 	public static final ConfigKey<Integer> MAXIMUM_INITIAL_DEPTH = new ConfigKey<Integer>();
 	

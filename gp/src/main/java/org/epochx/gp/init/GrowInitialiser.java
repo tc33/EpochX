@@ -39,7 +39,7 @@ import org.epochx.gp.GPIndividual;
  * @see FullInitialiser
  * @see RampedHalfAndHalfInitialiser
  */
-public class GrowInitialiser implements GPInitialiser, Listener<ConfigEvent> {
+public class GrowInitialiser extends GPInitialiser implements Listener<ConfigEvent> {
 
 	private RandomSequence random;
 
@@ -118,6 +118,7 @@ public class GrowInitialiser implements GPInitialiser, Listener<ConfigEvent> {
 	 * </ul>
 	 */
 	protected void setup() {
+		super.setup();
 		random = Config.getInstance().get(RANDOM_SEQUENCE);
 		popSize = Config.getInstance().get(SIZE);
 		syntax = Config.getInstance().get(SYNTAX);
@@ -168,7 +169,7 @@ public class GrowInitialiser implements GPInitialiser, Listener<ConfigEvent> {
 	 */
 	@Override
 	public Population process(Population population) {
-		EventManager.getInstance().fire(InitialisationEvent.StartInitialisation.class, new InitialisationEvent.StartInitialisation(
+		EventManager.getInstance().fire(new InitialisationEvent.StartInitialisation(
 				population));
 		
 		// Create and add new programs to the population.
@@ -184,7 +185,7 @@ public class GrowInitialiser implements GPInitialiser, Listener<ConfigEvent> {
 			population.add(candidate);
 		}
 		
-		EventManager.getInstance().fire(InitialisationEvent.EndInitialisation.class, new InitialisationEvent.EndInitialisation(
+		EventManager.getInstance().fire(new InitialisationEvent.EndInitialisation(
 				population));
 
 		return population;
@@ -197,7 +198,6 @@ public class GrowInitialiser implements GPInitialiser, Listener<ConfigEvent> {
 	 * 
 	 * @return a new <code>GPIndividual</code> instance.
 	 */
-	@Override
 	public GPIndividual create() {
 		final Node root = getGrownNodeTree(maxDepth);
 

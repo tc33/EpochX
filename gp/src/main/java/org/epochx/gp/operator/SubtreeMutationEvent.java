@@ -37,8 +37,8 @@ public class SubtreeMutationEvent extends OperatorEvent.EndOperator {
 	
 	private Node subtree;
 	
-	public SubtreeMutationEvent(GPIndividual parent, GPIndividual child, int point, Node subtree) {
-		super(new Individual[]{parent}, new Individual[]{child});
+	public SubtreeMutationEvent(SubtreeMutation operator, GPIndividual parent, GPIndividual child, int point, Node subtree) {
+		super(operator, new Individual[]{parent}, new Individual[]{child});
 		
 		this.point = point;
 		this.subtree = subtree;

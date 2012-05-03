@@ -123,7 +123,7 @@ public class OnePointCrossover implements Operator, Listener<ConfigEvent> {
 	 */
 	@Override
 	public GPIndividual[] apply(Individual ... parents) {
-		EventManager.getInstance().fire(OperatorEvent.StartOperator.class, new OperatorEvent.StartOperator(parents));
+		EventManager.getInstance().fire(new OperatorEvent.StartOperator(this, parents));
 
 		GPIndividual program1 = (GPIndividual) parents[0];
 		GPIndividual program2 = (GPIndividual) parents[1];
@@ -153,9 +153,9 @@ public class OnePointCrossover implements Operator, Listener<ConfigEvent> {
 		GPIndividual[] children = new GPIndividual[]{child1, child2};
 
 		// Fire end event.
-		Event event = new OnePointCrossoverEvent(parents, children, new int[]{swapPoint1, swapPoint2}, new Node[]{
+		Event event = new OnePointCrossoverEvent(this, parents, children, new int[]{swapPoint1, swapPoint2}, new Node[]{
 				subtree1, subtree2});
-		EventManager.getInstance().fire(OnePointCrossoverEvent.class, event);
+		EventManager.getInstance().fire(event);
 
 		return children;
 	}

@@ -35,8 +35,8 @@ public class OnePointCrossoverEvent extends OperatorEvent.EndOperator {
 	private int[] points;
 	private Node[] subtrees;
 	
-	public OnePointCrossoverEvent(Individual[] parents, Individual[] children, int[] points, Node[] subtrees) {
-		super(parents, children);
+	public OnePointCrossoverEvent(OnePointCrossover operator, Individual[] parents, Individual[] children, int[] points, Node[] subtrees) {
+		super(operator, parents, children);
 		
 		this.points = points;
 		this.subtrees = subtrees;

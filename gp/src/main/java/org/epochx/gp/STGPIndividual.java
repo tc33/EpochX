@@ -44,19 +44,19 @@ public class STGPIndividual implements Individual {
 
 	/**
 	 * The key for setting and retrieving the set of nodes that individuals are
-	 * constructed from.
+	 * constructed from
 	 */
 	public static final ConfigKey<Node[]> SYNTAX = new ConfigKey<Node[]>();
 
 	/**
 	 * The key for setting and retrieving the required data-type for the root
-	 * node.
+	 * node
 	 */
 	public static final ConfigKey<Class<?>> RETURN_TYPE = new ConfigKey<Class<?>>();
 
 	/**
 	 * The key for setting and retrieving the maximum depth setting for program
-	 * trees.
+	 * trees
 	 */
 	public static final ConfigKey<Integer> MAXIMUM_DEPTH = new ConfigKey<Integer>();
 
@@ -65,7 +65,7 @@ public class STGPIndividual implements Individual {
 
 	/**
 	 * Constructs an individual represented by a strongly typed tree, with
-	 * a <tt>null</tt> root node.
+	 * a <tt>null</tt> root node
 	 */
 	public STGPIndividual() {
 		this(null);
@@ -73,7 +73,7 @@ public class STGPIndividual implements Individual {
 
 	/**
 	 * Constructs an individual represented by a strongly typed tree, where
-	 * <tt>root</tt> is the root node of the tree.
+	 * <tt>root</tt> is the root node of the tree
 	 * 
 	 * @param root the <tt>Node</tt> to set as the root
 	 */

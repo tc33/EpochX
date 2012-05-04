@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2011
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -24,24 +24,40 @@ package org.epochx.gp.init;
 
 import org.epochx.Population;
 import org.epochx.event.InitialisationEvent;
-import org.epochx.gp.init.RampedHalfAndHalfInitialiser.Method;
-
+import org.epochx.gp.init.RampedHalfAndHalfInitialisation.Method;
 
 /**
+ * An event fired at the end of a ramped half-and-half population initialisation
  * 
+ * @see RampedHalfAndHalfInitialisation
  */
-public class RampedHalfAndHalfEvent extends InitialisationEvent.EndInitialisation {
+public class RampedHalfAndHalfEndEvent extends InitialisationEvent.EndInitialisation {
 
 	private Method[] method;
-	
-	public RampedHalfAndHalfEvent(Population population, Method[] method) {
+
+	/**
+	 * Constructs an event with the population that was constructed by the 
+	 * ramped half-and-half initialisation procedure and a listing of the 
+	 * initialisation method used for each individual in that population
+	 * 
+	 * @param population the population of individuals created by the
+	 *        initialisation procedure
+	 * @param method an array listing the initialisation methods used
+	 */
+	public RampedHalfAndHalfEndEvent(Population population, Method[] method) {
 		super(population);
-	
+
 		this.method = method;
 	}
-	
+
+	/**
+	 * Returns an array listing the initialisation method used for each
+	 * individual in the population
+	 * 
+	 * @return an array listing the initialisation methods used
+	 */
 	public Method[] getMethod() {
 		return method;
 	}
-	
+
 }

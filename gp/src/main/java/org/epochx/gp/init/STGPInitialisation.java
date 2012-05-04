@@ -22,15 +22,28 @@
  */
 package org.epochx.gp.init;
 
-import org.epochx.Initialiser;
+import org.epochx.*;
 import org.epochx.Config.ConfigKey;
+import org.epochx.gp.STGPIndividual;
 
 
 /**
+ * Initialisation method for <tt>STGPIndividual</tt>s. It does not define any 
+ * methods, but initialisation methods that generate <tt>STGPIndividual</tt> 
+ * objects should implement this interface. 
  * 
+ * <p>
+ * Where appropriate, implementations should use the 
+ * <tt>MAXIMUM_INITIAL_DEPTH</tt> configuration parameter defined in this 
+ * interface to specify the maximum depth of the program trees they generate. 
+ * The {@link STGPIndividual#MAXIMUM_DEPTH} parameter should also be enforced.
  */
-public class GPInitialiser extends Initialiser {
+public interface STGPInitialisation extends InitialisationMethod {
 
+	/**
+	 * The key for setting and retrieving the maximum initial depth setting for 
+	 * program trees
+	 */
 	public static final ConfigKey<Integer> MAXIMUM_INITIAL_DEPTH = new ConfigKey<Integer>();
 	
 }

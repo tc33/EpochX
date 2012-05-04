@@ -122,7 +122,7 @@ public abstract class Node implements Cloneable {
 
 		Node node = null;
 		for (final Node child: children) {
-			final int childLength = child.getLength();
+			final int childLength = child.length();
 
 			// Only look at the subtree if it contains the right range of nodes.
 			if (n <= childLength + current) {
@@ -154,9 +154,9 @@ public abstract class Node implements Cloneable {
 	 * @param newNode the node to be stored at the specified position.
 	 * @throws IndexOutOfBoundsException if n is out of range.
 	 */
-	public void setNthNode(final int n, final Node newNode) {
+	public Node setNode(final int n, final Node newNode) {
 		if (n > 0) {
-			setNthNode(n, newNode, 0);
+			return setNthNode(n, newNode, 0);
 		} else if (n == 0) {
 			throw new IndexOutOfBoundsException("attempt to set node at index 0, cannot replace self");
 		} else {
@@ -167,21 +167,21 @@ public abstract class Node implements Cloneable {
 	/*
 	 * Recursive helper for the public setNthNode(int, Node).
 	 */
-	private void setNthNode(final int n, final Node newNode, int current) {
+	private Node setNthNode(final int n, final Node newNode, int current) {
 		final int arity = getArity();
 		for (int i = 0; i < arity; i++) {
 			if (current + 1 == n) {
+				Node old = getChild(i);
 				setChild(i, newNode);
-				return;
+				return old;
 			}
 
 			final Node child = getChild(i);
-			final int childLength = child.getLength();
+			final int childLength = child.length();
 
 			// Only look at the subtree if it contains the right range of nodes.
 			if (n <= childLength + current) {
-				child.setNthNode(n, newNode, current + 1);
-				return;
+				return child.setNthNode(n, newNode, current + 1);
 			}
 
 			current += childLength;
@@ -224,7 +224,7 @@ public abstract class Node implements Cloneable {
 
 		final int result = -1;
 		for (final Node child: current.children) {
-			final int noNodes = child.getLength();
+			final int noNodes = child.length();
 			final int noFunctions = child.getNoFunctions();
 
 			// Only look at the subtree if it contains the right range of nodes.
@@ -277,7 +277,7 @@ public abstract class Node implements Cloneable {
 
 		final int result = -1;
 		for (final Node child: current.getChildren()) {
-			final int noNodes = child.getLength();
+			final int noNodes = child.length();
 			final int noTerminals = child.getNoTerminals();
 
 			// Only look at the subtree if it contains the right range of nodes.
@@ -482,7 +482,7 @@ public abstract class Node implements Cloneable {
 	 * 
 	 * @return the depth of the deepest node in the node tree.
 	 */
-	public int getDepth() {
+	public int depth() {
 		return countDepth(this, 0, 0);
 	}
 
@@ -511,7 +511,7 @@ public abstract class Node implements Cloneable {
 	 * 
 	 * @return the number of nodes in the node tree.
 	 */
-	public int getLength() {
+	public int length() {
 		return countLength(this, 0);
 	}
 
@@ -551,17 +551,17 @@ public abstract class Node implements Cloneable {
 	 * @return the return type of this node or null if any of its children
 	 *         remain unset or are of an invalid data-type.
 	 */
-	public final Class<?> getReturnType() {
+	public final Class<?> dataType() {
 		final Class<?>[] argTypes = new Class<?>[getArity()];
 		for (int i = 0; i < getArity(); i++) {
 			final Node child = getChild(i);
 			if (child != null) {
-				argTypes[i] = child.getReturnType();
+				argTypes[i] = child.dataType();
 			} else {
 				return null;
 			}
 		}
-		return getReturnType(argTypes);
+		return dataType(argTypes);
 	}
 
 	/**
@@ -577,7 +577,7 @@ public abstract class Node implements Cloneable {
 	 * @return the return type of this node given the provided input types, or
 	 *         null if the set of input types is invalid.
 	 */
-	public Class<?> getReturnType(final Class<?> ... inputTypes) {
+	public Class<?> dataType(final Class<?> ... inputTypes) {
 		if (getArity() == 0) {
 			// Is a terminal.
 			return Void.class;

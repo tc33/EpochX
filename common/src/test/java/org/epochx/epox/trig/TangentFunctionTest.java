@@ -92,7 +92,7 @@ public class TangentFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.trig.TangentFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.trig.TangentFunction#dataType(Class...)}
 	 * returns <code>Double</code> for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
@@ -101,14 +101,14 @@ public class TangentFunctionTest extends NodeTestCase {
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = tan.getReturnType(type);
+			returnType = tan.dataType(type);
 			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = tan.getReturnType(Boolean.class);
+		returnType = tan.dataType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = tan.getReturnType(Integer.class, Integer.class);
+		returnType = tan.dataType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 	

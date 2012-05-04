@@ -100,7 +100,7 @@ public class ArcCosineFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.trig.ArcCosineFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.trig.ArcCosineFunction#dataType(Class...)}
 	 * returns <code>Double</code> for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
@@ -109,14 +109,14 @@ public class ArcCosineFunctionTest extends NodeTestCase {
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = arccos.getReturnType(type);
+			returnType = arccos.dataType(type);
 			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = arccos.getReturnType(Boolean.class);
+		returnType = arccos.dataType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = arccos.getReturnType(Integer.class, Integer.class);
+		returnType = arccos.dataType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 	

@@ -141,7 +141,7 @@ public class IfFoodAheadFunction extends Node {
 	 * @return The Void class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(final Class<?> ... inputTypes) {
+	public Class<?> dataType(final Class<?> ... inputTypes) {
 		if ((getArity() == 2)
 				&& (inputTypes.length == 2)
 				&& (inputTypes[0] == Void.class)

@@ -29,7 +29,7 @@ import org.epochx.Individual;
 import org.epochx.Population;
 import org.epochx.event.GenerationEvent.EndGeneration;
 import org.epochx.event.stat.AbstractStat;
-import org.epochx.gp.GPIndividual;
+import org.epochx.gp.STGPIndividual;
 
 /**
  * 
@@ -49,8 +49,8 @@ public class GenerationTerminals extends AbstractStat<EndGeneration> {
 		int index = 0;
 
 		for (Individual individual: population) {
-			if (individual instanceof GPIndividual) {
-				terminals[index++] = ((GPIndividual) individual).getNoTerminals();
+			if (individual instanceof STGPIndividual) {
+				terminals[index++] = ((STGPIndividual) individual).getRoot().getNoTerminals();
 			}
 		}
 	}

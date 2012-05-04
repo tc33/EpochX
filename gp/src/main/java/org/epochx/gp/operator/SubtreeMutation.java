@@ -22,16 +22,16 @@
 package org.epochx.gp.operator;
 
 import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
-import static org.epochx.gp.GPIndividual.SYNTAX;
+import static org.epochx.gp.STGPIndividual.SYNTAX;
 
 import org.epochx.*;
 import org.epochx.epox.Node;
 import org.epochx.event.*;
-import org.epochx.gp.GPIndividual;
+import org.epochx.gp.STGPIndividual;
 import org.epochx.gp.init.GrowInitialiser;
 
 /**
- * This class performs a subtree mutation on a <code>GPIndividual</code>.
+ * This class performs a subtree mutation on a <code>STGPIndividual</code>.
  * 
  * <p>
  * A mutation point is randomly selected anywhere in the program tree. Then the
@@ -137,42 +137,42 @@ public class SubtreeMutation implements Operator, Listener<ConfigEvent> {
 	}
 
 	/**
-	 * Perform subtree mutation on the given GPIndividual. A mutation
+	 * Perform subtree mutation on the given STGPIndividual. A mutation
 	 * point
 	 * is randomly selected anywhere in the program tree. Then the node at that
 	 * point is replaced with a newly generated program tree, which is created
 	 * using a grow strategy.
 	 * 
-	 * @param p The GPIndividual selected to undergo this mutation
+	 * @param p The STGPIndividual selected to undergo this mutation
 	 *        operation.
-	 * @return A GPIndividual that was the result of a point mutation on
-	 *         the provided GPIndividual.
+	 * @return A STGPIndividual that was the result of a point mutation on
+	 *         the provided STGPIndividual.
 	 */
 	@Override
-	public GPIndividual[] apply(Individual ... parents) {
+	public STGPIndividual[] apply(Individual ... parents) {
 		EventManager.getInstance().fire(new OperatorEvent.StartOperator(this, parents));
 
-		GPIndividual program = (GPIndividual) parents[0];
-		GPIndividual child = program.clone();
+		STGPIndividual program = (STGPIndividual) parents[0];
+		STGPIndividual child = program.clone();
 
 		// Randomly choose a mutation point.
-		int length = program.getProgramLength();
+		int length = program.length();
 		int mutationPoint = random.nextInt(length);
 
 		// Update grower to use the right data-type.
-		final Node originalSubtree = program.getNthNode(mutationPoint);
-		grower.setReturnType(originalSubtree.getReturnType());
+		final Node originalSubtree = program.getNode(mutationPoint);
+		grower.setReturnType(originalSubtree.dataType());
 
 		// Grow a new subtree using the GrowInitialiser.
 		final Node subtree = grower.getGrownNodeTree(maxSubtreeDepth);
 
 		// Set the new subtree.
-		child.setNthNode(mutationPoint, subtree);
+		child.setNode(mutationPoint, subtree);
 
 		EventManager.getInstance().fire(new SubtreeMutationEvent(this, program, child,
 				mutationPoint, subtree));
 
-		return new GPIndividual[]{child};
+		return new STGPIndividual[]{child};
 	}
 
 	/**

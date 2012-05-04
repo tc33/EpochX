@@ -28,7 +28,7 @@ import java.util.*;
 import org.epochx.*;
 import org.epochx.epox.Node;
 import org.epochx.event.*;
-import org.epochx.gp.GPIndividual;
+import org.epochx.gp.STGPIndividual;
 
 /**
  * This class implements standard crossover with uniform swap points. Subtree
@@ -111,29 +111,29 @@ public class SubtreeCrossover implements Operator, Listener<ConfigEvent> {
 	 * Crosses over the two <code>Individuals</code> provided as arguments
 	 * using uniform swap points. Random crossover points are chosen at random
 	 * in both programs, the genetic material at the points are then exchanged.
-	 * The resulting programs are returned as new GPIndividual objects.
+	 * The resulting programs are returned as new STGPIndividual objects.
 	 * 
 	 * @param parents the first Individual selected to undergo subtree
 	 *        crossover.
 	 */
 	@Override
-	public GPIndividual[] apply(Individual ... parents) {
+	public STGPIndividual[] apply(Individual ... parents) {
 		EventManager.getInstance().fire(new OperatorEvent.StartOperator(this, parents));
 
-		final GPIndividual program1 = (GPIndividual) parents[0];
-		final GPIndividual program2 = (GPIndividual) parents[1];
+		final STGPIndividual program1 = (STGPIndividual) parents[0];
+		final STGPIndividual program2 = (STGPIndividual) parents[1];
 
 		// Select first swap point.
 		final int swapPoint1 = getCrossoverPoint(program1);
-		final Node subtree1 = program1.getNthNode(swapPoint1);// .clone();
+		final Node subtree1 = program1.getNode(swapPoint1);// .clone();
 
 		// Find which nodes in program2 have a matching return type to subtree1.
-		final Class<?> subtree1Type = subtree1.getReturnType();
+		final Class<?> subtree1Type = subtree1.dataType();
 		final List<Node> matchingNodes = new ArrayList<Node>();
 		final List<Integer> matchingIndexes = new ArrayList<Integer>();
-		getMatchingNodes(program2.getRootNode(), subtree1Type, 0, matchingNodes, matchingIndexes);
+		getMatchingNodes(program2.getRoot(), subtree1Type, 0, matchingNodes, matchingIndexes);
 
-		GPIndividual[] children = new GPIndividual[0];
+		STGPIndividual[] children = new STGPIndividual[0];
 		int[] swapPoints = new int[0];
 		Node[] subtrees = new Node[0];
 
@@ -144,10 +144,10 @@ public class SubtreeCrossover implements Operator, Listener<ConfigEvent> {
 			int swapPoint2 = matchingIndexes.get(index);
 
 			// Perform swap.
-			program1.setNthNode(swapPoint1, subtree2);
-			program2.setNthNode(swapPoint2, subtree1);
+			program1.setNode(swapPoint1, subtree2);
+			program2.setNode(swapPoint2, subtree1);
 
-			children = new GPIndividual[]{program1, program2};
+			children = new STGPIndividual[]{program1, program2};
 			swapPoints = new int[]{swapPoint1, swapPoint2};
 			subtrees = new Node[]{subtree1, subtree2};
 		}
@@ -161,7 +161,7 @@ public class SubtreeCrossover implements Operator, Listener<ConfigEvent> {
 
 	private int getMatchingNodes(final Node root, final Class<?> type, int current, final List<Node> matching,
 			final List<Integer> indexes) {
-		if (root.getReturnType() == type) {
+		if (root.dataType() == type) {
 			matching.add(root);
 			indexes.add(current);
 		}
@@ -174,13 +174,13 @@ public class SubtreeCrossover implements Operator, Listener<ConfigEvent> {
 	}
 
 	/*
-	 * Choose the crossover point for the given GPIndividual with respect
+	 * Choose the crossover point for the given STGPIndividual with respect
 	 * to the probabilities assigned for function and terminal node points.
 	 */
-	private int getCrossoverPoint(final GPIndividual program) {
+	private int getCrossoverPoint(final STGPIndividual program) {
 		// Calculate numbers of terminal and function nodes.
-		final int length = program.getProgramLength();
-		final int noTerminals = program.getNoTerminals();
+		final int length = program.length();
+		final int noTerminals = program.getRoot().getNoTerminals();
 		final int noFunctions = length - noTerminals;
 
 		// Randomly decide whether to use a function or terminal node point.
@@ -191,17 +191,17 @@ public class SubtreeCrossover implements Operator, Listener<ConfigEvent> {
 			// Randomly select a function node from the function set.
 			final int f = random.nextInt(noFunctions);
 
-			return program.getRootNode().getNthFunctionNodeIndex(f);
+			return program.getRoot().getNthFunctionNodeIndex(f);
 		} else {
 			// Randomly select a terminal node from the terminal set.
 			final int t = random.nextInt(noTerminals);
 
-			return program.getRootNode().getNthTerminalNodeIndex(t);
+			return program.getRoot().getNthTerminalNodeIndex(t);
 		}
 	}
 
 	/*
-	 * Choose the crossover point for the given GPIndividual with respect
+	 * Choose the crossover point for the given STGPIndividual with respect
 	 * to the probabilities assigned for function and terminal node points.
 	 */
 	private int getSelectedMatch(final List<Node> nodes) {

@@ -25,7 +25,7 @@ package org.epochx.gp.operator;
 import org.epochx.Individual;
 import org.epochx.epox.Node;
 import org.epochx.event.OperatorEvent;
-import org.epochx.gp.GPIndividual;
+import org.epochx.gp.STGPIndividual;
 
 
 /**
@@ -37,7 +37,7 @@ public class SubtreeMutationEvent extends OperatorEvent.EndOperator {
 	
 	private Node subtree;
 	
-	public SubtreeMutationEvent(SubtreeMutation operator, GPIndividual parent, GPIndividual child, int point, Node subtree) {
+	public SubtreeMutationEvent(SubtreeMutation operator, STGPIndividual parent, STGPIndividual child, int point, Node subtree) {
 		super(operator, new Individual[]{parent}, new Individual[]{child});
 		
 		this.point = point;

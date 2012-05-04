@@ -170,7 +170,7 @@ public class VariableTest extends NodeTestCase {
 	@Test
 	public void testSetValueType() {
 		varDecl.setValue(new Double(3.4));
-		final Class<?> returnType = varDecl.getReturnType();
+		final Class<?> returnType = varDecl.dataType();
 
 		assertSame("variable's return type should not change once set", Number.class, returnType);
 	}
@@ -200,12 +200,12 @@ public class VariableTest extends NodeTestCase {
 	}
 
 	/**
-	 * Tests that {@link org.epochx.epox.Variable#getReturnType()} correctly
+	 * Tests that {@link org.epochx.epox.Variable#dataType()} correctly
 	 * returns the class of the set value as the return type.
 	 */
 	@Test
 	public void testGetReturnTypeVariable() {
-		final Class<?> returnType = varInit.getReturnType();
+		final Class<?> returnType = varInit.dataType();
 
 		assertSame("variable's return type should match the varInitValue's Class", varInitValue.getClass(), returnType);
 	}

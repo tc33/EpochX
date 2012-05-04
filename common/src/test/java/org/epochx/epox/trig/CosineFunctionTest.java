@@ -93,7 +93,7 @@ public class CosineFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.trig.CosineFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.trig.CosineFunction#dataType(Class...)}
 	 * returns <code>Double</code> for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
@@ -102,14 +102,14 @@ public class CosineFunctionTest extends NodeTestCase {
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = cos.getReturnType(type);
+			returnType = cos.dataType(type);
 			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = cos.getReturnType(Boolean.class);
+		returnType = cos.dataType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = cos.getReturnType(Integer.class, Integer.class);
+		returnType = cos.dataType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 	

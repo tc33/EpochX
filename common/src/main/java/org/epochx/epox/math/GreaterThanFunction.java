@@ -84,7 +84,7 @@ public class GreaterThanFunction extends Node {
 	 * @return the Boolean class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(final Class<?> ... inputTypes) {
+	public Class<?> dataType(final Class<?> ... inputTypes) {
 		if ((inputTypes.length == 2) && TypeUtils.isAllNumericType(inputTypes)) {
 			return Boolean.class;
 		}

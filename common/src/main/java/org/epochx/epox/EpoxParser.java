@@ -221,7 +221,7 @@ public class EpoxParser {
 			}
 			
 			// Validate the node's input data-types.
-			if (node.getReturnType() == null) {
+			if (node.dataType() == null) {
 				if (node.isFunction()) {
 					throw new MalformedProgramException("Input data-types for " + node.getIdentifier() + " are invalid");
 				} else {

@@ -217,7 +217,7 @@ public class DivisionProtectedFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.DivisionProtectedFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.math.DivisionProtectedFunction#dataType(Class...)}
 	 * returns the correct type for numeric input types and <code>null</code> 
 	 * otherwise.
 	 */
@@ -227,23 +227,23 @@ public class DivisionProtectedFunctionTest extends NodeTestCase {
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = pdiv.getReturnType(type, type);
+			returnType = pdiv.dataType(type, type);
 			assertSame("unexpected return type", type, returnType);
 		}
 		
-		returnType = pdiv.getReturnType(Short.class, Double.class);
+		returnType = pdiv.dataType(Short.class, Double.class);
 		assertSame("unexpected return type", Double.class, returnType);
 		
-		returnType = pdiv.getReturnType(Long.class, Integer.class);
+		returnType = pdiv.dataType(Long.class, Integer.class);
 		assertSame("unexpected return type", Long.class, returnType);
 		
-		returnType = pdiv.getReturnType(Byte.class, Float.class);
+		returnType = pdiv.dataType(Byte.class, Float.class);
 		assertSame("unexpected return type", Float.class, returnType);
 		
-		returnType = pdiv.getReturnType(Boolean.class, Integer.class);
+		returnType = pdiv.dataType(Boolean.class, Integer.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = pdiv.getReturnType(Integer.class, Integer.class, Integer.class);
+		returnType = pdiv.dataType(Integer.class, Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 	

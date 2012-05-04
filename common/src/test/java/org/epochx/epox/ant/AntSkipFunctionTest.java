@@ -103,27 +103,27 @@ public class AntSkipFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.ant.AntSkipFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.ant.AntSkipFunction#dataType(Class...)}
 	 * returns a Void data-type for the correct inputs, and <code>null</code>
 	 * for incorrectly typed or incorrect number of inputs.
 	 */
 	@Test
 	public void testGetReturnTypeSkip() {
 		// Test the ant child version.
-		Class<?> returnType = antSkipChild.getReturnType(Ant.class);
+		Class<?> returnType = antSkipChild.dataType(Ant.class);
 		assertEquals("type should be Void for an ant input", Void.class, returnType);
 		
-		returnType = antSkipChild.getReturnType(Integer.class);
+		returnType = antSkipChild.dataType(Integer.class);
 		assertNull("non-ant input should be invalid", returnType);
 		
-		returnType = antSkipChild.getReturnType(Ant.class, Ant.class);
+		returnType = antSkipChild.dataType(Ant.class, Ant.class);
 		assertNull("too many ant inputs should be invalid", returnType);
 		
 		// Test the non-child version.
-		returnType = antSkip.getReturnType();
+		returnType = antSkip.dataType();
 		assertEquals("type should be Void for no inputs", Void.class, returnType);
 		
-		returnType = antSkip.getReturnType(Ant.class);
+		returnType = antSkip.dataType(Ant.class);
 		assertNull("too many ant inputs should be invalid", returnType);
 	}
 	

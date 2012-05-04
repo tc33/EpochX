@@ -87,7 +87,7 @@ public class HyperbolicCosineFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.trig.HyperbolicCosineFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.trig.HyperbolicCosineFunction#dataType(Class...)}
 	 * returns <code>Double</code> for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
@@ -96,14 +96,14 @@ public class HyperbolicCosineFunctionTest extends NodeTestCase {
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = cosh.getReturnType(type);
+			returnType = cosh.dataType(type);
 			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = cosh.getReturnType(Boolean.class);
+		returnType = cosh.dataType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = cosh.getReturnType(Integer.class, Integer.class);
+		returnType = cosh.dataType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 	

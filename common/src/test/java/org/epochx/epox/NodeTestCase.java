@@ -114,7 +114,7 @@ public abstract class NodeTestCase {
 	 */
 	@Test
 	public void testGetNthNodeLast() {
-		final int length = node.getLength();
+		final int length = node.length();
 
 		Node expected = node;
 		if (node.isFunction()) {
@@ -147,7 +147,7 @@ public abstract class NodeTestCase {
 		}
 
 		try {
-			final int length = node.getLength();
+			final int length = node.length();
 			node.getNthNode(length);
 			fail("exception not thrown for node index of length");
 		} catch (final IndexOutOfBoundsException expected) {
@@ -156,40 +156,40 @@ public abstract class NodeTestCase {
 	}
 
 	/**
-	 * Tests {@link org.epochx.epox.Node#setNthNode(int, Node)} correctly sets
+	 * Tests {@link org.epochx.epox.Node#setNode(int, Node)} correctly sets
 	 * the node at n = index-1.
 	 */
 	@Test
 	public void testSetNthNodeLast() {
-		final int length = node.getLength();
+		final int length = node.length();
 
 		// Only perform test if there are nodes other than self to set.
 		if (length > 1) {
 			final Node mockNode = new MockNode();
 
-			node.setNthNode(length - 1, mockNode);
+			node.setNode(length - 1, mockNode);
 
 			assertSame("node not set correctly at nth position", mockNode, node.getNthNode(length - 1));
 		}
 	}
 
 	/**
-	 * Tests {@link org.epochx.epox.Node#setNthNode(int, Node)} throws an index
+	 * Tests {@link org.epochx.epox.Node#setNode(int, Node)} throws an index
 	 * out of bounds exception for a value of n out of the valid
 	 * range: 0 < n < length
 	 */
 	@Test
 	public void testSetNthNodeBounds() {
 		try {
-			node.setNthNode(0, node);
+			node.setNode(0, node);
 			fail("exception not thrown for node index of 0");
 		} catch (final IndexOutOfBoundsException expected) {
 			assertTrue(true);
 		}
 
 		try {
-			final int length = node.getLength();
-			node.setNthNode(length, node);
+			final int length = node.length();
+			node.setNode(length, node);
 			fail("exception not thrown for node index of length");
 		} catch (final IndexOutOfBoundsException expected) {
 			assertTrue(true);
@@ -219,7 +219,7 @@ public abstract class NodeTestCase {
 	 * us having to ask each child what it should be.
 	 */
 	private int getLastFunctionNodeIndex() {
-		final int length = node.getLength();
+		final int length = node.length();
 
 		// Work backwards through the nodes.
 		for (int i = length - 1; i >= 0; i--) {
@@ -292,7 +292,7 @@ public abstract class NodeTestCase {
 	 * us having to ask each child what it should be.
 	 */
 	private int getFirstTerminalNodeIndex() {
-		final int length = node.getLength();
+		final int length = node.length();
 
 		// Work backwards through the nodes.
 		for (int i = 0; i < length; i++) {
@@ -374,7 +374,7 @@ public abstract class NodeTestCase {
 
 		// Test depth+1
 		try {
-			node.getNodesAtDepth(node.getDepth() + 1);
+			node.getNodesAtDepth(node.depth() + 1);
 			fail("exception not thrown for nodes at depth depth+1");
 		} catch (final IndexOutOfBoundsException expected) {
 			assertTrue(true);
@@ -494,41 +494,41 @@ public abstract class NodeTestCase {
 	}
 
 	/**
-	 * Tests {@link org.epochx.epox.Node#getDepth()} returns the correct tree
+	 * Tests {@link org.epochx.epox.Node#depth()} returns the correct tree
 	 * depth.
 	 */
 	@Test
 	public void testGetDepth() {
 		if (node.isTerminal()) {
-			assertSame("incorrect tree depth", 0, node.getDepth());
+			assertSame("incorrect tree depth", 0, node.depth());
 		} else {
-			assertSame("incorrect tree depth", 1, node.getDepth());
+			assertSame("incorrect tree depth", 1, node.depth());
 
 			// Change node to a depth 2.
 			setupTreeDepthTwo();
 
-			assertSame("incorrect tree depth", 2, node.getDepth());
+			assertSame("incorrect tree depth", 2, node.depth());
 		}
 	}
 
 	/**
-	 * Tests {@link org.epochx.epox.Node#getLength()} returns the correct count
+	 * Tests {@link org.epochx.epox.Node#length()} returns the correct count
 	 * of the number of nodes in the tree.
 	 */
 	@Test
 	public void testGetLength() {
 		int expected = 1 + node.getArity();
-		assertSame("incorrect tree length", expected, node.getLength());
+		assertSame("incorrect tree length", expected, node.length());
 
 		// Change node to a depth 2.
 		setupTreeDepthTwo();
 
 		expected = expected + (node.getArity() * 2);
-		assertSame("incorrect tree length", expected, node.getLength());
+		assertSame("incorrect tree length", expected, node.length());
 	}
 
 	/**
-	 * Tests {@link org.epochx.epox.Node#getReturnType()} returns
+	 * Tests {@link org.epochx.epox.Node#dataType()} returns
 	 * <code>null</code> for null children if the node is a function and tests
 	 * that it returns non-null if it is a terminal.
 	 */
@@ -537,20 +537,20 @@ public abstract class NodeTestCase {
 		if (node.isFunction()) {
 			node.setChild(0, null);
 
-			assertNull("return type should be null if any children unset", node.getReturnType());
+			assertNull("return type should be null if any children unset", node.dataType());
 		} else {
-			assertNotNull("return type should not ever be null for a terminal", node.getReturnType());
+			assertNotNull("return type should not ever be null for a terminal", node.dataType());
 		}
 	}
 
 	/**
-	 * Tests {@link org.epochx.epox.Node#getReturnType(Class...)}
+	 * Tests {@link org.epochx.epox.Node#dataType(Class...)}
 	 * returns a non-null type for a terminal.
 	 */
 	@Test
 	public void testGetReturnTypeArray() {
 		if (node.isTerminal()) {
-			assertNotNull("return type should not ever be null for a terminal", node.getReturnType(new Class<?>[0]));
+			assertNotNull("return type should not ever be null for a terminal", node.dataType(new Class<?>[0]));
 		}
 	}
 

@@ -252,7 +252,7 @@ public class ModuloProtectedFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.ModuloProtectedFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.math.ModuloProtectedFunction#dataType(Class...)}
 	 * returns the correct type for numeric input types and <code>null</code> 
 	 * otherwise.
 	 */
@@ -262,23 +262,23 @@ public class ModuloProtectedFunctionTest extends NodeTestCase {
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = pmod.getReturnType(type, type);
+			returnType = pmod.dataType(type, type);
 			assertSame("unexpected return type", type, returnType);
 		}
 		
-		returnType = pmod.getReturnType(Short.class, Double.class);
+		returnType = pmod.dataType(Short.class, Double.class);
 		assertSame("unexpected return type", Double.class, returnType);
 		
-		returnType = pmod.getReturnType(Long.class, Integer.class);
+		returnType = pmod.dataType(Long.class, Integer.class);
 		assertSame("unexpected return type", Long.class, returnType);
 		
-		returnType = pmod.getReturnType(Byte.class, Float.class);
+		returnType = pmod.dataType(Byte.class, Float.class);
 		assertSame("unexpected return type", Float.class, returnType);
 		
-		returnType = pmod.getReturnType(Boolean.class, Integer.class);
+		returnType = pmod.dataType(Boolean.class, Integer.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = pmod.getReturnType(Integer.class, Integer.class, Integer.class);
+		returnType = pmod.dataType(Integer.class, Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 	

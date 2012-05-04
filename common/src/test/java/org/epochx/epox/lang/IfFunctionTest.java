@@ -100,19 +100,19 @@ public class IfFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.lang.IfFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.lang.IfFunction#dataType(Class...)}
 	 * returns a non-null type for the correct inputs, and <code>null</code>
 	 * for incorrectly typed or incorrect number of inputs.
 	 */
 	@Test
 	public void testGetReturnTypeIf() {
-		Class<?> returnType = ifFunction.getReturnType(Boolean.class, Number.class, Integer.class);
+		Class<?> returnType = ifFunction.dataType(Boolean.class, Number.class, Integer.class);
 		assertSame("unexpected return type", Number.class, returnType);
 		
-		returnType = ifFunction.getReturnType(Number.class, Number.class, Integer.class);
+		returnType = ifFunction.dataType(Number.class, Number.class, Integer.class);
 		assertNull("non-Boolean type for first child should be invalid", returnType);
 		
-		returnType = ifFunction.getReturnType(Boolean.class, Number.class, Integer.class, Integer.class);
+		returnType = ifFunction.dataType(Boolean.class, Number.class, Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 	

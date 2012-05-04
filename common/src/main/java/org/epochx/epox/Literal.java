@@ -62,7 +62,7 @@ public class Literal extends Node {
 	 *         other than empty.
 	 */
 	@Override
-	public Class<?> getReturnType(final Class<?> ... inputTypes) {
+	public Class<?> dataType(final Class<?> ... inputTypes) {
 		// No inputs should be provided for a terminal.
 		if (inputTypes.length != 0) {
 			throw new IllegalArgumentException("literals have no input types");

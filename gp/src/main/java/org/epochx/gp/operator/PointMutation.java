@@ -22,18 +22,18 @@
 package org.epochx.gp.operator;
 
 import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
-import static org.epochx.gp.GPIndividual.*;
+import static org.epochx.gp.STGPIndividual.*;
 
 import java.util.*;
 
 import org.epochx.*;
 import org.epochx.epox.Node;
 import org.epochx.event.*;
-import org.epochx.gp.GPIndividual;
+import org.epochx.gp.STGPIndividual;
 
 /**
  * This class performs a simple point mutation on a
- * <code>GPIndividual</code>.
+ * <code>STGPIndividual</code>.
  * 
  * <p>
  * Each node in the program tree is considered for mutation, with the
@@ -124,33 +124,33 @@ public class PointMutation implements Operator, Listener<ConfigEvent> {
 	}
 
 	/**
-	 * Perform point mutation on the given GPIndividual. Each node in the
+	 * Perform point mutation on the given STGPIndividual. Each node in the
 	 * program tree is considered in turn, with each having the given
 	 * probability of actually being exchanged. Given that a node is chosen
 	 * then a new function or terminal node of the same arity is used to
 	 * replace it.
 	 * 
-	 * @param p The GPIndividual selected to undergo this mutation
+	 * @param p The STGPIndividual selected to undergo this mutation
 	 *        operation.
-	 * @return A GPIndividual that was the result of a point mutation on
-	 *         the provided GPIndividual.
+	 * @return A STGPIndividual that was the result of a point mutation on
+	 *         the provided STGPIndividual.
 	 */
 	@Override
-	public GPIndividual[] apply(Individual ... parents) {
+	public STGPIndividual[] apply(Individual ... parents) {
 		EventManager.getInstance().fire(new OperatorEvent.StartOperator(this, parents));
 		
-		GPIndividual program = (GPIndividual) parents[0];
-		GPIndividual child = program.clone();
+		STGPIndividual program = (STGPIndividual) parents[0];
+		STGPIndividual child = program.clone();
 
 		List<Integer> points = new ArrayList<Integer>();
 
 		// Iterate over each node in the program tree.
-		int length = program.getProgramLength();
+		int length = program.length();
 		for (int i = 0; i < length; i++) {
 			// Only change pointProbability of the time.
 			if (random.nextDouble() < pointProbability) {
 				// Get the arity of the ith node of the program.
-				Node node = program.getNthNode(i);
+				Node node = program.getNode(i);
 				int arity = node.getArity();
 
 				// Find compatible replacements.
@@ -165,7 +165,7 @@ public class PointMutation implements Operator, Listener<ConfigEvent> {
 						replacement.setChild(k, node.getChild(k));
 					}
 					// Then set the new node back into the program.
-					child.setNthNode(i, replacement);
+					child.setNode(i, replacement);
 
 					// Record the index of the node that we changed.
 					points.add(i);
@@ -177,7 +177,7 @@ public class PointMutation implements Operator, Listener<ConfigEvent> {
 
 		EventManager.getInstance().fire(new PointMutationEvent(this, program, child, points));
 
-		return new GPIndividual[]{child};
+		return new STGPIndividual[]{child};
 	}
 
 	private List<Node> getReplacements(final Node n) {
@@ -186,7 +186,7 @@ public class PointMutation implements Operator, Listener<ConfigEvent> {
 		// Get the return type.
 		// TODO Ideally this would be the parent's required argument type
 		// instead.
-		final Class<?> returnType = n.getReturnType();
+		final Class<?> returnType = n.dataType();
 
 		// Get the data-type of children.
 		final Class<?>[] argTypes = new Class<?>[arity];
@@ -198,7 +198,7 @@ public class PointMutation implements Operator, Listener<ConfigEvent> {
 		final List<Node> replacements = new ArrayList<Node>();
 		for (final Node replacement: syntax) {
 			if ((replacement.getArity() == arity) && !nodesEqual(replacement, n)) {
-				final Class<?> replacementReturn = replacement.getReturnType(argTypes);
+				final Class<?> replacementReturn = replacement.dataType(argTypes);
 				if ((replacementReturn != null) && returnType.isAssignableFrom(replacementReturn)) {
 					replacements.add(replacement);
 				}

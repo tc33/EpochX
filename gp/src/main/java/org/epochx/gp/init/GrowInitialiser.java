@@ -23,14 +23,14 @@ package org.epochx.gp.init;
 
 import static org.epochx.Population.SIZE;
 import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
-import static org.epochx.gp.GPIndividual.*;
+import static org.epochx.gp.STGPIndividual.*;
 import java.math.BigInteger;
 import java.util.*;
 
 import org.epochx.*;
 import org.epochx.epox.Node;
 import org.epochx.event.*;
-import org.epochx.gp.GPIndividual;
+import org.epochx.gp.STGPIndividual;
 
 /**
  * Initialisation implementation which randomly grows program trees down to a
@@ -159,7 +159,7 @@ public class GrowInitialiser extends GPInitialiser implements Listener<ConfigEve
 	 * from the <code>Nodes</code> in the syntax attribute. The size of the
 	 * population will be equal to the population size attribute. All programs
 	 * in the population are only guarenteed to be unique (as defined by the
-	 * <code>equals</code> method on <code>GPIndividual</code>) if the
+	 * <code>equals</code> method on <code>STGPIndividual</code>) if the
 	 * <code>isDuplicatesEnabled</code> method returns <code>false</code>.
 	 * Each program will have a node tree with a depth at most equal to the
 	 * value of the maximum depth attribute.
@@ -174,7 +174,7 @@ public class GrowInitialiser extends GPInitialiser implements Listener<ConfigEve
 		
 		// Create and add new programs to the population.
 		for (int i = 0; i < popSize; i++) {
-			GPIndividual candidate;
+			STGPIndividual candidate;
 
 			do {
 				// Grow a new node tree.
@@ -193,15 +193,15 @@ public class GrowInitialiser extends GPInitialiser implements Listener<ConfigEve
 
 	/**
 	 * Grows a new node tree and returns it within a
-	 * <code>GPIndividual</code>. The nodes that form the tree will be
+	 * <code>STGPIndividual</code>. The nodes that form the tree will be
 	 * randomly selected from the nodes provided as the syntax attribute.
 	 * 
-	 * @return a new <code>GPIndividual</code> instance.
+	 * @return a new <code>STGPIndividual</code> instance.
 	 */
-	public GPIndividual create() {
+	public STGPIndividual create() {
 		final Node root = getGrownNodeTree(maxDepth);
 
-		return new GPIndividual(root);
+		return new STGPIndividual(root);
 	}
 
 	/**
@@ -253,7 +253,7 @@ public class GrowInitialiser extends GPInitialiser implements Listener<ConfigEve
 			final Class<?>[][] argTypeSets = getPossibleArgTypes(arity, validDepthTypes[maxDepth - currentDepth]);
 			final List<Class<?>[]> validArgTypeSets = new ArrayList<Class<?>[]>();
 			for (final Class<?>[] argTypes: argTypeSets) {
-				final Class<?> type = root.getReturnType(argTypes);
+				final Class<?> type = root.dataType(argTypes);
 				if ((type != null) && requiredType.isAssignableFrom(type)) {
 					validArgTypeSets.add(argTypes);
 				}
@@ -277,7 +277,7 @@ public class GrowInitialiser extends GPInitialiser implements Listener<ConfigEve
 	private List<Node> getValidNodes(final int remainingDepth, final Class<?> requiredType) {
 		final List<Node> validNodes = new ArrayList<Node>();
 		for (final Node n: terminals) {
-			if (n.getReturnType().isAssignableFrom(requiredType)) {
+			if (n.dataType().isAssignableFrom(requiredType)) {
 				validNodes.add(n);
 			}
 		}
@@ -287,7 +287,7 @@ public class GrowInitialiser extends GPInitialiser implements Listener<ConfigEve
 				final Class<?>[][] argTypeSets = getPossibleArgTypes(n.getArity(), validDepthTypes[remainingDepth - 1]);
 
 				for (final Class<?>[] argTypes: argTypeSets) {
-					final Class<?> type = n.getReturnType(argTypes);
+					final Class<?> type = n.dataType(argTypes);
 					if ((type != null) && requiredType.isAssignableFrom(type)) {
 						validNodes.add(n);
 						break;
@@ -308,7 +308,7 @@ public class GrowInitialiser extends GPInitialiser implements Listener<ConfigEve
 		for (int i = 0; i <= maxDepth; i++) {
 			final Set<Class<?>> types = new HashSet<Class<?>>();
 			for (final Node n: terminals) {
-				types.add(n.getReturnType());
+				types.add(n.dataType());
 			}
 
 			if (i > 0) {
@@ -318,7 +318,7 @@ public class GrowInitialiser extends GPInitialiser implements Listener<ConfigEve
 
 					// Test each possible set of arguments.
 					for (final Class<?>[] argTypes: argTypeSets) {
-						final Class<?> returnType = n.getReturnType(argTypes);
+						final Class<?> returnType = n.dataType(argTypes);
 						if (returnType != null) {
 							types.add(returnType);
 						}
@@ -375,7 +375,7 @@ public class GrowInitialiser extends GPInitialiser implements Listener<ConfigEve
 		BigInteger varieties = BigInteger.ZERO;
 		for (final Node n: terminals) {
 			for (final Class<?> returnType: returnTypes) {
-				if (returnType.isAssignableFrom(n.getReturnType())) {
+				if (returnType.isAssignableFrom(n.dataType())) {
 					varieties = varieties.add(BigInteger.ONE);
 					break;
 				}
@@ -392,7 +392,7 @@ public class GrowInitialiser extends GPInitialiser implements Listener<ConfigEve
 
 				// Test each possible set of arguments.
 				for (final Class<?>[] argTypes: argTypeSets) {
-					final Class<?> type = n.getReturnType(argTypes);
+					final Class<?> type = n.dataType(argTypes);
 
 					if (type != null) {
 						// If the return type is a subtype of one that is
@@ -463,7 +463,7 @@ public class GrowInitialiser extends GPInitialiser implements Listener<ConfigEve
 		BigInteger varieties = BigInteger.ZERO;
 		for (final Node n: terminals) {
 			for (final Class<?> returnType: returnTypes) {
-				if (returnType.isAssignableFrom(n.getReturnType())) {
+				if (returnType.isAssignableFrom(n.dataType())) {
 					varieties = varieties.add(BigInteger.ONE);
 					break;
 				}
@@ -484,7 +484,7 @@ public class GrowInitialiser extends GPInitialiser implements Listener<ConfigEve
 
 				// Test each possible set of arguments.
 				for (final Class<?>[] argTypes: argTypeSets) {
-					final Class<?> type = n.getReturnType(argTypes);
+					final Class<?> type = n.dataType(argTypes);
 
 					if (type != null) {
 						// If the return type is a subtype of one that is

@@ -203,7 +203,7 @@ public class LessThanFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.LessThanFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.math.LessThanFunction#dataType(Class...)}
 	 * returns the Boolean type for numeric input types and <code>null</code> 
 	 * otherwise.
 	 */
@@ -214,15 +214,15 @@ public class LessThanFunctionTest extends NodeTestCase {
 		Class<?> returnType;
 		for (Class<?> type1: inputTypes) {
 			for (Class<?> type2: inputTypes) {
-				returnType = lt.getReturnType(type1, type2);
+				returnType = lt.dataType(type1, type2);
 				assertSame("unexpected return type", Boolean.class, returnType);
 			}
 		}
 		
-		returnType = lt.getReturnType(Boolean.class, Integer.class);
+		returnType = lt.dataType(Boolean.class, Integer.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = lt.getReturnType(Integer.class, Integer.class, Integer.class);
+		returnType = lt.dataType(Integer.class, Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 	

@@ -97,7 +97,7 @@ public class ArcSineFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.trig.ArcSineFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.trig.ArcSineFunction#dataType(Class...)}
 	 * returns <code>Double</code> for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
@@ -106,14 +106,14 @@ public class ArcSineFunctionTest extends NodeTestCase {
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = arcsin.getReturnType(type);
+			returnType = arcsin.dataType(type);
 			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = arcsin.getReturnType(Boolean.class);
+		returnType = arcsin.dataType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = arcsin.getReturnType(Integer.class, Integer.class);
+		returnType = arcsin.dataType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 	

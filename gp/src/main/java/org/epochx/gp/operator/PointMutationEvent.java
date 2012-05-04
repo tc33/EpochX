@@ -26,7 +26,7 @@ import java.util.List;
 
 import org.epochx.Individual;
 import org.epochx.event.OperatorEvent;
-import org.epochx.gp.GPIndividual;
+import org.epochx.gp.STGPIndividual;
 
 
 /**
@@ -36,7 +36,7 @@ public class PointMutationEvent extends OperatorEvent.EndOperator {
 	
 	private List<Integer> points;
 	
-	public PointMutationEvent(PointMutation operator, GPIndividual parent, GPIndividual child, List<Integer> points) {
+	public PointMutationEvent(PointMutation operator, STGPIndividual parent, STGPIndividual child, List<Integer> points) {
 		super(operator, new Individual[]{parent}, new Individual[]{child});
 		
 		this.points = points;

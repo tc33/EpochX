@@ -90,7 +90,7 @@ public class IfFunction extends Node {
 	 *         type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(final Class<?> ... inputTypes) {
+	public Class<?> dataType(final Class<?> ... inputTypes) {
 		if ((inputTypes.length == 3) && (inputTypes[0] == Boolean.class)) {
 			return TypeUtils.getSuper(inputTypes[1], inputTypes[2]);
 		} else {

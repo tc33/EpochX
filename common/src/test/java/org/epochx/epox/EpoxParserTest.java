@@ -192,12 +192,12 @@ public class EpoxParserTest {
 	public void testParseLiteralBoolean() {
 		// True value.
 		Literal literal = parser.parseLiteral(" true ");
-		assertSame("boolean true literal not parsed as Boolean", Boolean.class, literal.getReturnType());
+		assertSame("boolean true literal not parsed as Boolean", Boolean.class, literal.dataType());
 		assertEquals("boolean true literal not parsed correctly", Boolean.TRUE, literal.getValue());
 		
 		// False value.
 		literal = parser.parseLiteral("false");
-		assertSame("boolean false literal not parsed as Boolean", Boolean.class, literal.getReturnType());
+		assertSame("boolean false literal not parsed as Boolean", Boolean.class, literal.dataType());
 		assertEquals("boolean false literal not parsed correctly", Boolean.FALSE, literal.getValue());
 	}
 	
@@ -208,12 +208,12 @@ public class EpoxParserTest {
 	@Test
 	public void testParseLiteralString() {
 		Literal literal = parser.parseLiteral("\"str test\"");
-		assertSame("string literal not parsed as String", String.class, literal.getReturnType());
+		assertSame("string literal not parsed as String", String.class, literal.dataType());
 		assertEquals("string literal not parsed correctly", "str test", literal.getValue());
 		
 		// Empty string value.
 		literal = parser.parseLiteral("\"\"");
-		assertSame("empty string literal not parsed as String", String.class, literal.getReturnType());
+		assertSame("empty string literal not parsed as String", String.class, literal.dataType());
 		assertEquals("empty string literal not parsed correctly", "", literal.getValue());
 	}
 	
@@ -225,17 +225,17 @@ public class EpoxParserTest {
 	public void testParseLiteralInt() {
 		// Positive ints.
 		Literal literal = parser.parseLiteral("3");
-		assertSame("positive int literal not parsed as Integer", Integer.class, literal.getReturnType());
+		assertSame("positive int literal not parsed as Integer", Integer.class, literal.dataType());
 		assertEquals("positive int literal not parsed correctly", 3, literal.getValue());
 		
 		// Negative ints.
 		literal = parser.parseLiteral("-3");
-		assertSame("negative int literal not parsed as Integer", Integer.class, literal.getReturnType());
+		assertSame("negative int literal not parsed as Integer", Integer.class, literal.dataType());
 		assertEquals("negative int literal not parsed correctly", -3, literal.getValue());
 		
 		// Zero ints.
 		literal = parser.parseLiteral("0");
-		assertSame("zero int literal not parsed as Integer", Integer.class, literal.getReturnType());
+		assertSame("zero int literal not parsed as Integer", Integer.class, literal.dataType());
 		assertEquals("zero int literal not parsed correctly", 0, literal.getValue());
 	}
 	
@@ -247,17 +247,17 @@ public class EpoxParserTest {
 	public void testParseLiteralLong() {
 		// Long with capital L.
 		Literal literal = parser.parseLiteral("3L");
-		assertSame("long literal not parsed as Long", Long.class, literal.getReturnType());
+		assertSame("long literal not parsed as Long", Long.class, literal.dataType());
 		assertEquals("long literal not parsed correctly", 3L, literal.getValue());
 		
 		// Long with lower l.
 		literal = parser.parseLiteral("-3l");
-		assertSame("long literal not parsed as Long", Long.class, literal.getReturnType());
+		assertSame("long literal not parsed as Long", Long.class, literal.dataType());
 		assertEquals("long literal not parsed correctly", -3L, literal.getValue());
 		
 		// Long out of range of int.
 		literal = parser.parseLiteral("" + (Integer.MAX_VALUE + 1L));
-		assertSame("large long literal not parsed as Long", Long.class, literal.getReturnType());
+		assertSame("large long literal not parsed as Long", Long.class, literal.dataType());
 		assertEquals("large long literal not parsed correctly", 2147483648L, literal.getValue());
 	}
 	
@@ -269,17 +269,17 @@ public class EpoxParserTest {
 	public void testParseLiteralDouble() {
 		// Double with capital D.
 		Literal literal = parser.parseLiteral("3D");
-		assertSame("double literal not parsed as Double", Double.class, literal.getReturnType());
+		assertSame("double literal not parsed as Double", Double.class, literal.dataType());
 		assertEquals("double literal not parsed correctly", 3.0d, literal.getValue());
 		
 		// Double with lower d.
 		literal = parser.parseLiteral("-3d");
-		assertSame("double literal not parsed as Double", Double.class, literal.getReturnType());
+		assertSame("double literal not parsed as Double", Double.class, literal.dataType());
 		assertEquals("double literal not parsed correctly", -3.0d, literal.getValue());
 		
 		// Double with decimal.
 		literal = parser.parseLiteral("2.3");
-		assertSame("double literal not parsed as Double", Double.class, literal.getReturnType());
+		assertSame("double literal not parsed as Double", Double.class, literal.dataType());
 		assertEquals("double literal not parsed correctly", 2.3d, literal.getValue());
 	}
 	
@@ -291,17 +291,17 @@ public class EpoxParserTest {
 	public void testParseLiteralFloat() {
 		// Float with capital F.
 		Literal literal = parser.parseLiteral("3F");
-		assertSame("float literal not parsed as Float", Float.class, literal.getReturnType());
+		assertSame("float literal not parsed as Float", Float.class, literal.dataType());
 		assertEquals("float literal not parsed correctly", 3.0f, literal.getValue());
 		
 		// Float with lower f.
 		literal = parser.parseLiteral("-3f");
-		assertSame("float literal not parsed as Float", Float.class, literal.getReturnType());
+		assertSame("float literal not parsed as Float", Float.class, literal.dataType());
 		assertEquals("float literal not parsed correctly", -3.0f, literal.getValue());
 		
 		// Float with decimal.
 		literal = parser.parseLiteral("2.3f");
-		assertSame("float literal not parsed as Float", Float.class, literal.getReturnType());
+		assertSame("float literal not parsed as Float", Float.class, literal.dataType());
 		assertEquals("float literal not parsed correctly", 2.3f, literal.getValue());
 	}
 	
@@ -312,12 +312,12 @@ public class EpoxParserTest {
 	@Test
 	public void testParseLiteralChar() {
 		Literal literal = parser.parseLiteral("'s'");
-		assertSame("char literal not parsed as Character", Character.class, literal.getReturnType());
+		assertSame("char literal not parsed as Character", Character.class, literal.dataType());
 		assertEquals("char literal not parsed correctly", 's', literal.getValue());
 		
 		// Escaped char value.
 		literal = parser.parseLiteral("'\t'");
-		assertSame("escaped char literal not parsed as Character", Character.class, literal.getReturnType());
+		assertSame("escaped char literal not parsed as Character", Character.class, literal.dataType());
 		assertEquals("escaped char literal not parsed correctly", '\t', literal.getValue());
 	}
 	

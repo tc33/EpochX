@@ -23,7 +23,7 @@ package org.epochx.gp.init;
 
 import static org.epochx.Population.SIZE;
 import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
-import static org.epochx.gp.GPIndividual.*;
+import static org.epochx.gp.STGPIndividual.*;
 import static org.epochx.gp.init.RampedHalfAndHalfInitialiser.Method.*;
 
 import java.math.BigInteger;
@@ -32,7 +32,7 @@ import java.util.*;
 import org.epochx.*;
 import org.epochx.epox.Node;
 import org.epochx.event.*;
-import org.epochx.gp.GPIndividual;
+import org.epochx.gp.STGPIndividual;
 
 /**
  * Initialisation implementation which uses a combination of full and grow
@@ -194,7 +194,7 @@ public class RampedHalfAndHalfInitialiser extends GPInitialiser implements Liste
 	 * from the <code>Nodes</code> in the syntax attribute. The size of the
 	 * population will be equal to the population size attribute. All programs
 	 * in the population are only guarenteed to be unique (as defined by the
-	 * <code>equals</code> method on <code>GPIndividual</code>) if the
+	 * <code>equals</code> method on <code>STGPIndividual</code>) if the
 	 * <code>isDuplicatesEnabled</code> method returns <code>true</code>.
 	 * Each program will alternately be generated with the
 	 * {@link FullInitialiser} and {@link GrowInitialiser}. If the population
@@ -225,7 +225,7 @@ public class RampedHalfAndHalfInitialiser extends GPInitialiser implements Liste
 			final int noPrograms = programsPerDepth[depth - startMaxDepth];
 
 			for (int i = 0; i < noPrograms; i++) {
-				GPIndividual program;
+				STGPIndividual program;
 
 				do {
 					method[popIndex] = growNext ? GROW : FULL;
@@ -457,7 +457,7 @@ public class RampedHalfAndHalfInitialiser extends GPInitialiser implements Liste
 		this.startMaxDepth = startMaxDepth;
 	}
 
-	public GPIndividual create() {
+	public STGPIndividual create() {
 		if (random.nextBoolean()) {
 			return grow.create();
 		} else {

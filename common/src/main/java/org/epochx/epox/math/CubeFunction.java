@@ -89,7 +89,7 @@ public class CubeFunction extends Node {
 	 * @return a numeric class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(final Class<?> ... inputTypes) {
+	public Class<?> dataType(final Class<?> ... inputTypes) {
 		if ((inputTypes.length == 1) && TypeUtils.isNumericType(inputTypes[0])) {
 			return inputTypes[0];
 		} else {

@@ -137,7 +137,7 @@ public class InvertProtectedFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.InvertProtectedFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.math.InvertProtectedFunction#dataType(Class...)}
 	 * returns the same type for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
@@ -146,14 +146,14 @@ public class InvertProtectedFunctionTest extends NodeTestCase {
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = inv.getReturnType(type);
+			returnType = inv.dataType(type);
 			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = inv.getReturnType(Boolean.class);
+		returnType = inv.dataType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = inv.getReturnType(Integer.class, Integer.class);
+		returnType = inv.dataType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 	

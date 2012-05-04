@@ -97,7 +97,7 @@ public class FactorialFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.FactorialFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.math.FactorialFunction#dataType(Class...)}
 	 * returns Double type for numeric input type and <code>null</code> 
 	 * otherwise.
 	 */
@@ -107,23 +107,23 @@ public class FactorialFunctionTest extends NodeTestCase {
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = factorial.getReturnType(type);
+			returnType = factorial.dataType(type);
 			assertSame("unexpected return type", Integer.class, returnType);
 		}
 		
-		returnType = factorial.getReturnType(Long.class);
+		returnType = factorial.dataType(Long.class);
 		assertSame("unexpected return type", Long.class, returnType);
 		
-		returnType = factorial.getReturnType(Float.class);
+		returnType = factorial.dataType(Float.class);
 		assertNull("float type for child should be invalid", returnType);
 		
-		returnType = factorial.getReturnType(Double.class);
+		returnType = factorial.dataType(Double.class);
 		assertNull("float type for child should be invalid", returnType);
 		
-		returnType = factorial.getReturnType(Boolean.class);
+		returnType = factorial.dataType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = factorial.getReturnType(Integer.class, Integer.class);
+		returnType = factorial.dataType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 	

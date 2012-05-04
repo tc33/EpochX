@@ -103,27 +103,27 @@ public class AntTurnRightFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.ant.AntTurnRightFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.ant.AntTurnRightFunction#dataType(Class...)}
 	 * returns a Void data-type for the correct inputs, and <code>null</code>
 	 * for incorrectly typed or incorrect number of inputs.
 	 */
 	@Test
 	public void testGetReturnTypeRight() {
 		// Test the ant child version.
-		Class<?> returnType = antRightChild.getReturnType(Ant.class);
+		Class<?> returnType = antRightChild.dataType(Ant.class);
 		assertEquals("type should be Void for an ant input", Void.class, returnType);
 		
-		returnType = antRightChild.getReturnType(Integer.class);
+		returnType = antRightChild.dataType(Integer.class);
 		assertNull("non-ant input should be invalid", returnType);
 		
-		returnType = antRightChild.getReturnType(Ant.class, Ant.class);
+		returnType = antRightChild.dataType(Ant.class, Ant.class);
 		assertNull("too many ant inputs should be invalid", returnType);
 		
 		// Test the non-child version.
-		returnType = antRight.getReturnType();
+		returnType = antRight.dataType();
 		assertEquals("type should be Void for no inputs", Void.class, returnType);
 		
-		returnType = antRight.getReturnType(Ant.class);
+		returnType = antRight.dataType(Ant.class);
 		assertNull("too many ant inputs should be invalid", returnType);
 	}
 	

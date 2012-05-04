@@ -175,7 +175,7 @@ public class SignumFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.SignumFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.math.SignumFunction#dataType(Class...)}
 	 * returns the same type for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
@@ -184,14 +184,14 @@ public class SignumFunctionTest extends NodeTestCase {
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = sgn.getReturnType(type);
+			returnType = sgn.dataType(type);
 			assertSame("unexpected return type", type, returnType);
 		}
 		
-		returnType = sgn.getReturnType(Boolean.class);
+		returnType = sgn.dataType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = sgn.getReturnType(Integer.class, Integer.class);
+		returnType = sgn.dataType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 	

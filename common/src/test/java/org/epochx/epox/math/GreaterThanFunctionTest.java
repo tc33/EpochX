@@ -203,7 +203,7 @@ public class GreaterThanFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.GreaterThanFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.math.GreaterThanFunction#dataType(Class...)}
 	 * returns the Boolean type for numeric input types and <code>null</code> 
 	 * otherwise.
 	 */
@@ -214,15 +214,15 @@ public class GreaterThanFunctionTest extends NodeTestCase {
 		Class<?> returnType;
 		for (Class<?> type1: inputTypes) {
 			for (Class<?> type2: inputTypes) {
-				returnType = gt.getReturnType(type1, type2);
+				returnType = gt.dataType(type1, type2);
 				assertSame("unexpected return type", Boolean.class, returnType);
 			}
 		}
 		
-		returnType = gt.getReturnType(Boolean.class, Integer.class);
+		returnType = gt.dataType(Boolean.class, Integer.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = gt.getReturnType(Integer.class, Integer.class, Integer.class);
+		returnType = gt.dataType(Integer.class, Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 	

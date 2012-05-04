@@ -28,7 +28,7 @@ import java.util.Arrays;
 import org.epochx.*;
 import org.epochx.event.GenerationEvent.EndGeneration;
 import org.epochx.event.stat.AbstractStat;
-import org.epochx.gp.GPIndividual;
+import org.epochx.gp.STGPIndividual;
 
 /**
  * 
@@ -53,8 +53,8 @@ public class GenerationAverageNodesPerDepth extends AbstractStat<EndGeneration> 
 			// Get number of nodes for each program.
 			int noNodes = 0;
 			for (Individual individual: population) {
-				if (individual instanceof GPIndividual) {
-					noNodes += ((GPIndividual) individual).getNodesAtDepth(d).size();
+				if (individual instanceof STGPIndividual) {
+					noNodes += ((STGPIndividual) individual).getRoot().getNodesAtDepth(d).size();
 				}
 			}
 			averages[d] = noNodes / (double) population.size();

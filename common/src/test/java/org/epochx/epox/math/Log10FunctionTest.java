@@ -121,7 +121,7 @@ public class Log10FunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.Log10Function#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.math.Log10Function#dataType(Class...)}
 	 * returns the same type for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
@@ -130,14 +130,14 @@ public class Log10FunctionTest extends NodeTestCase {
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = log.getReturnType(type);
+			returnType = log.dataType(type);
 			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = log.getReturnType(Boolean.class);
+		returnType = log.dataType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = log.getReturnType(Integer.class, Integer.class);
+		returnType = log.dataType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 	

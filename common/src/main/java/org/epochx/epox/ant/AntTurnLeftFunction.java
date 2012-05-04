@@ -116,7 +116,7 @@ public class AntTurnLeftFunction extends Node {
 	 * @return The Void class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(final Class<?> ... inputTypes) {
+	public Class<?> dataType(final Class<?> ... inputTypes) {
 		if ((getArity() == 0) && (inputTypes.length == 0)) {
 			return Void.class;
 		} else if ((getArity() == 1) 

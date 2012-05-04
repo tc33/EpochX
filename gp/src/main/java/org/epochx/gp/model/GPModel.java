@@ -25,7 +25,7 @@ import java.util.List;
 
 import org.epochx.core.*;
 import org.epochx.epox.Node;
-import org.epochx.gp.GPIndividual;
+import org.epochx.gp.STGPIndividual;
 import org.epochx.gp.init.FullInitialiser;
 import org.epochx.gp.operator.*;
 import org.epochx.gp.source.GPInterpreter;
@@ -75,7 +75,7 @@ public class GPModel extends Model {
 	@Override
 	public boolean isValid(CandidateProgram program) {
 		//TODO This needs to implement checks.
-		if (program instanceof GPIndividual) {
+		if (program instanceof STGPIndividual) {
 			return true;
 		}
 		

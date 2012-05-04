@@ -94,7 +94,7 @@ public class ArcCosecantFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.trig.ArcCosecantFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.trig.ArcCosecantFunction#dataType(Class...)}
 	 * returns <code>Double</code> for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
@@ -103,14 +103,14 @@ public class ArcCosecantFunctionTest extends NodeTestCase {
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = arccsc.getReturnType(type);
+			returnType = arccsc.dataType(type);
 			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = arccsc.getReturnType(Boolean.class);
+		returnType = arccsc.dataType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = arccsc.getReturnType(Integer.class, Integer.class);
+		returnType = arccsc.dataType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 	

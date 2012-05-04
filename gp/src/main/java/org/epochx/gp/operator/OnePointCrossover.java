@@ -28,7 +28,7 @@ import java.util.*;
 import org.epochx.*;
 import org.epochx.epox.Node;
 import org.epochx.event.*;
-import org.epochx.gp.GPIndividual;
+import org.epochx.gp.STGPIndividual;
 
 /**
  * This class implements one point crossover as described by Poli and Langdon
@@ -112,7 +112,7 @@ public class OnePointCrossover implements Operator, Listener<ConfigEvent> {
 	 * Crosses over two <code>Individuals</code> provided as arguments
 	 * using uniform swap points. Random crossover points are chosen in both
 	 * programs, the genetic material at the points are then exchanged.
-	 * The resulting programs are returned as new GPIndividual objects.
+	 * The resulting programs are returned as new STGPIndividual objects.
 	 * <p>
 	 * An {@link OperatorEvent.StartOperator} event is fired before the
 	 * operation is performed, and a {@link PointMutationEvent} event is
@@ -122,16 +122,16 @@ public class OnePointCrossover implements Operator, Listener<ConfigEvent> {
 	 *        GPIndividuals to undergo one point crossover.
 	 */
 	@Override
-	public GPIndividual[] apply(Individual ... parents) {
+	public STGPIndividual[] apply(Individual ... parents) {
 		EventManager.getInstance().fire(new OperatorEvent.StartOperator(this, parents));
 
-		GPIndividual program1 = (GPIndividual) parents[0];
-		GPIndividual program2 = (GPIndividual) parents[1];
+		STGPIndividual program1 = (STGPIndividual) parents[0];
+		STGPIndividual program2 = (STGPIndividual) parents[1];
 
 		List<Integer> points1 = new ArrayList<Integer>();
 		List<Integer> points2 = new ArrayList<Integer>();
 
-		traverse(program1.getRootNode(), program2.getRootNode(), points1, points2, 0, 0);
+		traverse(program1.getRoot(), program2.getRoot(), points1, points2, 0, 0);
 
 		// Select swap points.
 		int randomIndex = random.nextInt(points1.size());
@@ -139,18 +139,18 @@ public class OnePointCrossover implements Operator, Listener<ConfigEvent> {
 		int swapPoint2 = points2.get(randomIndex);
 
 		// Get copies of subtrees to swap.
-		Node subtree1 = program1.getNthNode(swapPoint1);
-		Node subtree2 = program2.getNthNode(swapPoint2);
+		Node subtree1 = program1.getNode(swapPoint1);
+		Node subtree2 = program2.getNode(swapPoint2);
 
 		// Swap on clones so parents and children remain distinct in event.
-		GPIndividual child1 = program1.clone();
-		GPIndividual child2 = program2.clone();
+		STGPIndividual child1 = program1.clone();
+		STGPIndividual child2 = program2.clone();
 
 		// Perform swap.
-		child1.setNthNode(swapPoint1, subtree2);
-		child2.setNthNode(swapPoint2, subtree1);
+		child1.setNode(swapPoint1, subtree2);
+		child2.setNode(swapPoint2, subtree1);
 
-		GPIndividual[] children = new GPIndividual[]{child1, child2};
+		STGPIndividual[] children = new STGPIndividual[]{child1, child2};
 
 		// Fire end event.
 		Event event = new OnePointCrossoverEvent(this, parents, children, new int[]{swapPoint1, swapPoint2}, new Node[]{
@@ -173,7 +173,7 @@ public class OnePointCrossover implements Operator, Listener<ConfigEvent> {
 
 		boolean valid = false;
 		if (!strict) {
-			valid = (root1.getArity() == root2.getArity()) && (root1.getReturnType() == root2.getReturnType());
+			valid = (root1.getArity() == root2.getArity()) && (root1.dataType() == root2.dataType());
 		} else {
 			valid = root1.getClass().equals(root2.getClass());
 		}
@@ -184,8 +184,8 @@ public class OnePointCrossover implements Operator, Listener<ConfigEvent> {
 				Node child2 = root2.getChild(i);
 				traverse(child1, child2, points1, points2, current1 + 1, current2 + 1);
 
-				current1 += child1.getLength();
-				current2 += child2.getLength();
+				current1 += child1.length();
+				current2 += child2.length();
 			}
 		}
 	}

@@ -57,7 +57,7 @@ public class MockLiteral extends Literal {
 	 * @return the mock return type of this literal.
 	 */
 	@Override
-	public Class<?> getReturnType(Class<?> ... inputTypes) {
+	public Class<?> dataType(Class<?> ... inputTypes) {
 		return getReturnType;
 	}
 	

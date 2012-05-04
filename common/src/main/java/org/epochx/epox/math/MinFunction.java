@@ -122,7 +122,7 @@ public class MinFunction extends Node {
 	 * @return the widest numeric type or null if the input types are invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(final Class<?> ... inputTypes) {
+	public Class<?> dataType(final Class<?> ... inputTypes) {
 		if (inputTypes.length == getArity()) {
 			return TypeUtils.getNumericType(inputTypes);
 		}

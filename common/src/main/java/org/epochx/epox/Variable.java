@@ -112,7 +112,7 @@ public class Variable extends Node {
 	 * @return the data-type of this variable's value.
 	 */
 	@Override
-	public Class<?> getReturnType(final Class<?> ... inputTypes) {
+	public Class<?> dataType(final Class<?> ... inputTypes) {
 		// No inputs should be provided for a terminal.
 		if (inputTypes.length != 0) {
 			throw new IllegalArgumentException("variables have no input types");

@@ -361,7 +361,7 @@ public class NodeUtilsTest {
 		assertSame("wrong number of variables returned", 3, vars.size());
 		for (int i=0; i<3; i++) {
 			assertEquals("unexpected variable names", varNames[i], vars.get(i).getIdentifier());
-			assertSame("unexpected variable names", datatype, vars.get(i).getReturnType());
+			assertSame("unexpected variable names", datatype, vars.get(i).dataType());
 		}
 	}
 }

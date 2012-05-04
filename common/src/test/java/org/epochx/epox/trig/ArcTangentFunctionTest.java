@@ -88,7 +88,7 @@ public class ArcTangentFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.trig.ArcTangentFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.trig.ArcTangentFunction#dataType(Class...)}
 	 * returns <code>Double</code> for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
@@ -97,14 +97,14 @@ public class ArcTangentFunctionTest extends NodeTestCase {
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = arctan.getReturnType(type);
+			returnType = arctan.dataType(type);
 			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = arctan.getReturnType(Boolean.class);
+		returnType = arctan.dataType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = arctan.getReturnType(Integer.class, Integer.class);
+		returnType = arctan.dataType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 	

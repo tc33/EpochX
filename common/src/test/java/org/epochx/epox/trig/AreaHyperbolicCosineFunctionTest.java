@@ -101,7 +101,7 @@ public class AreaHyperbolicCosineFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.trig.AreaHyperbolicCosineFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.trig.AreaHyperbolicCosineFunction#dataType(Class...)}
 	 * returns <code>Double</code> for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
@@ -110,14 +110,14 @@ public class AreaHyperbolicCosineFunctionTest extends NodeTestCase {
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = arcosh.getReturnType(type);
+			returnType = arcosh.dataType(type);
 			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = arcosh.getReturnType(Boolean.class);
+		returnType = arcosh.dataType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = arcosh.getReturnType(Integer.class, Integer.class);
+		returnType = arcosh.dataType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 	

@@ -23,7 +23,7 @@ package org.epochx.gp.init;
 
 import static org.epochx.Population.SIZE;
 import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
-import static org.epochx.gp.GPIndividual.*;
+import static org.epochx.gp.STGPIndividual.*;
 import static org.epochx.gp.init.GPInitialiser.MAXIMUM_INITIAL_DEPTH;
 
 import java.util.*;
@@ -31,7 +31,7 @@ import java.util.*;
 import org.epochx.*;
 import org.epochx.epox.Node;
 import org.epochx.event.*;
-import org.epochx.gp.GPIndividual;
+import org.epochx.gp.STGPIndividual;
 import org.epochx.tools.util.TypeUtils;
 
 /**
@@ -116,12 +116,12 @@ public class FullInitialiser extends GPInitialiser implements Listener<ConfigEve
 	 * from the <code>Nodes</code> in the syntax attribute. The size of the
 	 * population will be equal to the population size attribute. All programs
 	 * in the population are only guarenteed to be unique (as defined by the
-	 * <code>equals</code> method on <code>GPIndividual</code>) if the
+	 * <code>equals</code> method on <code>STGPIndividual</code>) if the
 	 * <code>isDuplicatesEnabled</code> method returns <code>true</code>. Each
 	 * program will have a full node tree with a depth equal to the
 	 * depth attribute.
 	 * 
-	 * @return A <code>List</code> of newly generated <code>GPIndividual</code>
+	 * @return A <code>List</code> of newly generated <code>STGPIndividual</code>
 	 *         instances with full node trees.
 	 */
 	@Override
@@ -131,7 +131,7 @@ public class FullInitialiser extends GPInitialiser implements Listener<ConfigEve
 
 		// Create and add new programs to the population.
 		for (int i = 0; i < popSize; i++) {
-			GPIndividual candidate;
+			STGPIndividual candidate;
 
 			do {
 				// Build a new full node tree.
@@ -150,15 +150,15 @@ public class FullInitialiser extends GPInitialiser implements Listener<ConfigEve
 
 	/**
 	 * Constructs a new full node tree and returns it within a
-	 * <code>GPIndividual</code>. The nodes that form the tree will be
+	 * <code>STGPIndividual</code>. The nodes that form the tree will be
 	 * randomly selected from the nodes provided as the syntax attribute.
 	 * 
-	 * @return a new <code>GPIndividual</code> instance.
+	 * @return a new <code>STGPIndividual</code> instance.
 	 */
-	public GPIndividual create() {
+	public STGPIndividual create() {
 		final Node root = getFullNodeTree();
 
-		return new GPIndividual(root);
+		return new STGPIndividual(root);
 	}
 
 	/**
@@ -219,7 +219,7 @@ public class FullInitialiser extends GPInitialiser implements Listener<ConfigEve
 			final Class<?>[][] argTypeSets = getPossibleArgTypes(arity, validDepthTypes[depth - currentDepth - 1]);
 			final List<Class<?>[]> validArgTypeSets = new ArrayList<Class<?>[]>();
 			for (final Class<?>[] argTypes: argTypeSets) {
-				final Class<?> type = root.getReturnType(argTypes);
+				final Class<?> type = root.dataType(argTypes);
 				if ((type != null) && requiredType.isAssignableFrom(type)) {
 					validArgTypeSets.add(argTypes);
 				}
@@ -243,7 +243,7 @@ public class FullInitialiser extends GPInitialiser implements Listener<ConfigEve
 		final List<Node> validNodes = new ArrayList<Node>();
 		if (remainingDepth == 0) {
 			for (final Node n: terminals) {
-				if (n.getReturnType().isAssignableFrom(requiredType)) {
+				if (n.dataType().isAssignableFrom(requiredType)) {
 					validNodes.add(n);
 				}
 			}
@@ -252,7 +252,7 @@ public class FullInitialiser extends GPInitialiser implements Listener<ConfigEve
 				final Class<?>[][] argTypeSets = getPossibleArgTypes(n.getArity(), validDepthTypes[remainingDepth - 1]);
 
 				for (final Class<?>[] argTypes: argTypeSets) {
-					final Class<?> type = n.getReturnType(argTypes);
+					final Class<?> type = n.dataType(argTypes);
 					if ((type != null) && requiredType.isAssignableFrom(type)) {
 						validNodes.add(n);
 						break;
@@ -273,7 +273,7 @@ public class FullInitialiser extends GPInitialiser implements Listener<ConfigEve
 		// Trees of depth 0 must be single terminal element.
 		Set<Class<?>> types = new HashSet<Class<?>>();
 		for (final Node n: terminals) {
-			types.add(n.getReturnType());
+			types.add(n.dataType());
 		}
 		validDepthTypes[0] = types.toArray(new Class<?>[types.size()]);
 
@@ -285,7 +285,7 @@ public class FullInitialiser extends GPInitialiser implements Listener<ConfigEve
 
 				// Test each possible set of arguments.
 				for (final Class<?>[] argTypes: argTypeSets) {
-					final Class<?> returnType = n.getReturnType(argTypes);
+					final Class<?> returnType = n.dataType(argTypes);
 					if (returnType != null) {
 						types.add(returnType);
 					}

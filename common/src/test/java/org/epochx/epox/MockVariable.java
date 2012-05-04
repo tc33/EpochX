@@ -58,7 +58,7 @@ public class MockVariable extends Variable {
 	 * @return the mock return type of this variable.
 	 */
 	@Override
-	public Class<?> getReturnType(Class<?> ... inputTypes) {
+	public Class<?> dataType(Class<?> ... inputTypes) {
 		return getReturnType;
 	}
 	

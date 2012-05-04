@@ -107,7 +107,7 @@ public class ModuloProtectedFunction extends Node {
 	 * @return A numeric class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(final Class<?> ... inputTypes) {
+	public Class<?> dataType(final Class<?> ... inputTypes) {
 		if (inputTypes.length == 2) {
 			return TypeUtils.getNumericType(inputTypes);
 		}

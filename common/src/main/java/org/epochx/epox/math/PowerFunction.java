@@ -92,7 +92,7 @@ public class PowerFunction extends Node {
 	 * @return the Double class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(final Class<?> ... inputTypes) {
+	public Class<?> dataType(final Class<?> ... inputTypes) {
 		if ((inputTypes.length == 2) && TypeUtils.isAllNumericType(inputTypes)) {
 			return Double.class;
 		} else {

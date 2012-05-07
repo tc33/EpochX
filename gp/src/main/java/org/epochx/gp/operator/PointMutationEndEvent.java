@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2011
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -28,25 +28,38 @@ import org.epochx.Individual;
 import org.epochx.event.OperatorEvent;
 import org.epochx.gp.STGPIndividual;
 
-
 /**
+ * An event fired at the end of a point mutation
  * 
+ * @see PointMutation
  */
-public class PointMutationEvent extends OperatorEvent.EndOperator {
-	
+public class PointMutationEndEvent extends OperatorEvent.EndOperator {
+
 	private List<Integer> points;
-	
-	public PointMutationEvent(PointMutation operator, STGPIndividual parent, STGPIndividual child, List<Integer> points) {
+
+	/**
+	 * Constructs a <tt>SubtreeMutationEndEvent</tt> with the details of the
+	 * event
+	 * 
+	 * @param operator the operator that performed the mutation
+	 * @param parent the individual that the operator was performed on
+	 * @param child the result of performing the mutation
+	 * @param points a <tt>List</tt> of the mutation points
+	 */
+	public PointMutationEndEvent(PointMutation operator, STGPIndividual parent, STGPIndividual child,
+			List<Integer> points) {
 		super(operator, new Individual[]{parent}, new Individual[]{child});
-		
+
 		this.points = points;
 	}
-	
+
 	/**
-	 * @return the point1
+	 * Returns a list of the mutation points in the parent program tree
+	 * 
+	 * @return a list of indices of the mutation points
 	 */
 	public List<Integer> getMutationPoints() {
 		return points;
 	}
-	
+
 }

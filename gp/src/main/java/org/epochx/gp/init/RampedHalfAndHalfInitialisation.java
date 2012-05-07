@@ -42,6 +42,10 @@ import org.epochx.gp.STGPIndividual;
  * syntax, with each node's data-type constraints enforced. The depth setting 
  * used is gradually ramped up to the maximum depth parameter setting.
  * 
+ * <p>
+ * See the {@link #setup()} method documentation for a list of configuration
+ * parameters used to control this operator.
+ * 
  * @see FullInitialisation
  * @see GrowInitialisation
  */

@@ -22,101 +22,74 @@
 package org.epochx.gp.operator;
 
 import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
-import static org.epochx.gp.STGPIndividual.SYNTAX;
+import static org.epochx.gp.STGPIndividual.*;
 
 import org.epochx.*;
 import org.epochx.epox.Node;
 import org.epochx.event.*;
 import org.epochx.gp.STGPIndividual;
-import org.epochx.gp.init.GrowInitialiser;
+import org.epochx.gp.init.GrowInitialisation;
 
 /**
- * This class performs a subtree mutation on a <code>STGPIndividual</code>.
+ * A mutation operator for <tt>STGPIndividual</tt>s that replaces a subtree with
+ * a new randomly generated subtree.
  * 
  * <p>
- * A mutation point is randomly selected anywhere in the program tree. Then the
- * node at that point is replaced with a newly generated program tree, which is
- * created using a grow strategy.
+ * See the {@link #setup()} method documentation for a list of configuration
+ * parameters used to control this operator.
  * 
- * <p>
- * If a model is provided then the following parameters are loaded upon every
- * configure event:
- * 
- * <ul>
- * <li>random number generator</li>
- * <li>syntax</li>
- * </ul>
- * 
- * <p>
- * If the <code>getModel</code> method returns <code>null</code> then no model
- * is set and whatever static parameters have been set as parameters to the
- * constructor or using the standard accessor methods will be used. If any
- * compulsory parameters remain unset when the mutation is performed then an
- * <code>IllegalStateException</code> will be thrown.
+ * @see PointMutation
  */
 public class SubtreeMutation implements Operator, Listener<ConfigEvent> {
 
-	// Grow initialiser to build our replacement subtrees.
-	private final GrowInitialiser grower;
+	private final GrowInitialisation grower;
 
+	// Configuration settings
 	private RandomSequence random;
-
-	// The maximum depth of the new subtree.
-	private int maxSubtreeDepth;
+	private int maxDepth;
 
 	private double probability;
 
-	public SubtreeMutation(RandomSequence random, Node[] syntax, int maxSubtreeDepth) {
-		this.random = random;
-		this.maxSubtreeDepth = maxSubtreeDepth;
-
-		// Don't let this configure itself because it will use the wrong depth.
-		grower = new GrowInitialiser(null, null, null, -1, maxSubtreeDepth, false);
-
-		grower.setRandomSequence(random);
-		grower.setSyntax(syntax);
-	}
-
 	/**
-	 * Simple constructor for subtree mutation using a default maximum depth
-	 * of 4 for new subtrees.
-	 * 
-	 * @param model The controlling model which provides any configuration
-	 *        parameters for the run.
+	 * Constructs a <tt>SubtreeMutation</tt> with control parameters
+	 * automatically loaded from the config
 	 */
 	public SubtreeMutation() {
-		// 4 is a slightly arbitrary choice but we had to choose something.
-		this(4);
+		this(true);
 	}
 
 	/**
-	 * Subtree mutation constructor with control for the maximum depth of new
-	 * subtrees.
+	 * Constructs a <tt>SubtreeMutation</tt> with control parameters initially
+	 * loaded from the config. If the <tt>autoConfig</tt> argument is set to
+	 * <tt>true</tt> then the configuration will be automatically updated when
+	 * the config is modified.
 	 * 
-	 * @param model The controlling model which provides any configuration
-	 *        parameters for the run.
-	 * @param maxSubtreeDepth The maximum depth of the inserted subtree.
+	 * @param autoConfig whether this operator should automatically update its
+	 *        configuration settings from the config
 	 */
-	public SubtreeMutation(int maxSubtreeDepth) {
-		this.maxSubtreeDepth = maxSubtreeDepth;
-
-		// Don't let this configure itself because it will use the wrong depth.
-		grower = new GrowInitialiser(null, null, null, -1, maxSubtreeDepth, false);
+	public SubtreeMutation(boolean autoConfig) {
+		grower = new GrowInitialisation(false);
 
 		setup();
-		EventManager.getInstance().add(ConfigEvent.class, this);
+
+		if (autoConfig) {
+			EventManager.getInstance().add(ConfigEvent.class, this);
+		}
 	}
 
 	/**
 	 * Sets up this operator with the appropriate configuration settings.
-	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
+	 * This method is called whenever a <tt>ConfigEvent</tt> occurs for a
 	 * change in any of the following configuration parameters:
 	 * <ul>
-	 * <li><code>RandomSequence.RANDOM_SEQUENCE</code>
+	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
+	 * <li>{@link STGPIndividual#SYNTAX}
+	 * <li>{@link STGPIndividual#MAXIMUM_DEPTH}
 	 * </ul>
 	 */
 	protected void setup() {
 		random = Config.getInstance().get(RANDOM_SEQUENCE);
+		maxDepth = Config.getInstance().get(MAXIMUM_DEPTH);
 
 		grower.setRandomSequence(random);
 		grower.setSyntax(Config.getInstance().get(SYNTAX));
@@ -124,29 +97,28 @@ public class SubtreeMutation implements Operator, Listener<ConfigEvent> {
 
 	/**
 	 * Receives configuration events and triggers this operator to configure its
-	 * parameters if the <code>ConfigEvent</code> is for one of its required
+	 * parameters if the <tt>ConfigEvent</tt> is for one of its required
 	 * parameters.
 	 * 
 	 * @param event {@inheritDoc}
 	 */
 	@Override
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(RANDOM_SEQUENCE, SYNTAX)) {
+		if (event.isKindOf(RANDOM_SEQUENCE, SYNTAX, MAXIMUM_DEPTH)) {
 			setup();
 		}
 	}
 
 	/**
-	 * Perform subtree mutation on the given STGPIndividual. A mutation
-	 * point
-	 * is randomly selected anywhere in the program tree. Then the node at that
-	 * point is replaced with a newly generated program tree, which is created
-	 * using a grow strategy.
+	 * Performs a subtree mutation on the given individual. A mutation
+	 * point is randomly selected in the program tree. Then the subtree rooted
+	 * at that point is replaced with a randomly generated subtree. The
+	 * replacement subtree is generated using a grow initialisation method.
 	 * 
-	 * @param p The STGPIndividual selected to undergo this mutation
-	 *        operation.
-	 * @return A STGPIndividual that was the result of a point mutation on
-	 *         the provided STGPIndividual.
+	 * @param parents an array of just one individual to undergo subtree
+	 *        mutation. It must be an instance of <tt>STGPIndividual</tt>.
+	 * @return an array containing one <tt>STGPIndividual</tt> that was the
+	 *         result of mutating the parent individual
 	 */
 	@Override
 	public STGPIndividual[] apply(Individual ... parents) {
@@ -155,30 +127,55 @@ public class SubtreeMutation implements Operator, Listener<ConfigEvent> {
 		STGPIndividual program = (STGPIndividual) parents[0];
 		STGPIndividual child = program.clone();
 
-		// Randomly choose a mutation point.
+		// Randomly choose a mutation point
 		int length = program.length();
 		int mutationPoint = random.nextInt(length);
 
-		// Update grower to use the right data-type.
-		final Node originalSubtree = program.getNode(mutationPoint);
+		// Calculate available depth
+		int mutationPointDepth = nodeDepth(program.getRoot(), 0, mutationPoint, 0);
+		int maxSubtreeDepth = maxDepth - mutationPointDepth;
+
+		// Grow a new subtree using the GrowInitialisation
+		Node originalSubtree = program.getNode(mutationPoint);
+		// TODO This should be using the parent's required type not the subtree's type
 		grower.setReturnType(originalSubtree.dataType());
+		grower.setMaximumDepth(maxSubtreeDepth);
+		Node subtree = grower.createTree();
 
-		// Grow a new subtree using the GrowInitialiser.
-		final Node subtree = grower.getGrownNodeTree(maxSubtreeDepth);
-
-		// Set the new subtree.
 		child.setNode(mutationPoint, subtree);
 
-		EventManager.getInstance().fire(new SubtreeMutationEvent(this, program, child,
-				mutationPoint, subtree));
+		EventManager.getInstance().fire(new SubtreeMutationEndEvent(this, program, child, mutationPoint, subtree));
 
 		return new STGPIndividual[]{child};
 	}
 
+	/*
+	 * Finds what depth a node with a given index is at. Returns -1 if the index
+	 * is not found.
+	 */
+	private int nodeDepth(Node root, int currentIndex, int targetIndex, int currentDepth) {
+		// TODO This should be in a utilities class
+		if (currentIndex == targetIndex) {
+			return currentDepth;
+		}
+
+		for (int i = 0; i < root.getArity(); i++) {
+			Node subtree = root.getChild(i);
+			int subtreeLength = subtree.length();
+			if (targetIndex < subtreeLength) {
+				// Target is in this subtree
+				return nodeDepth(subtree, currentIndex + 1, targetIndex, currentDepth + 1);
+			}
+			currentIndex += subtreeLength;
+		}
+		return -1;
+	}
+
 	/**
 	 * {@inheritDoc}
+	 * 
 	 * <p>
-	 * This operator requires an input size of 2.
+	 * Subtree mutation operates on 1 individual.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -196,7 +193,7 @@ public class SubtreeMutation implements Operator, Listener<ConfigEvent> {
 	}
 
 	/**
-	 * Overwrites the probability of this operator being selected.
+	 * Sets the probability of this operator being selected
 	 * 
 	 * @param probability the new probability to set
 	 */
@@ -205,47 +202,47 @@ public class SubtreeMutation implements Operator, Listener<ConfigEvent> {
 	}
 
 	/**
-	 * Returns the random number generator that this mutation is using or
-	 * <code>null</code> if none has been set.
+	 * Returns the random number sequence in use
 	 * 
-	 * @return the random the currently set random number generator.
+	 * @return the currently set random sequence
 	 */
 	public RandomSequence getRandomSequence() {
 		return random;
 	}
 
 	/**
-	 * Sets the random number generator to use. If a model has been set then
-	 * this parameter will be overwritten with the random number generator from
-	 * that model on the next configure event.
+	 * Sets the random number sequence to use. If automatic configuration is
+	 * enabled then any value set here will be overwritten by the
+	 * {@link RandomSequence#RANDOM_SEQUENCE} configuration setting on the next
+	 * config event.
 	 * 
-	 * @param random the random number generator to set.
+	 * @param random the random number generator to set
 	 */
 	public void setRandomSequence(RandomSequence random) {
 		this.random = random;
-
+		
 		grower.setRandomSequence(random);
 	}
-
+	
 	/**
-	 * Returns the maximum depth that the new subtrees being inserted into the
-	 * program may be.
+	 * Returns the array of nodes in the available syntax. Replacement subtrees 
+	 * are generated using the nodes in this array.
 	 * 
-	 * @return an int which is the maximum subtree depth that will be generated.
+	 * @return an array of the nodes in the syntax
 	 */
-	public int getMaxSubtreeDepth() {
-		return maxSubtreeDepth;
+	public Node[] getSyntax() {
+		return grower.getSyntax();
 	}
 
 	/**
-	 * Sets the maximum depth to use for new subtrees being inserted into
-	 * programs by this mutation.
+	 * Sets the array of nodes to generate replacement subtrees from. If 
+	 * automatic configuration is enabled then any value set here will be 
+	 * overwritten by the {@link STGPIndividual#SYNTAX} configuration setting on
+	 * the next config event.
 	 * 
-	 * @param maxSubtreeDepth the maximum subtree depth to use for new subtrees.
+	 * @param syntax an array of nodes to generate new program trees from
 	 */
-	public void setMaxSubtreeDepth(final int maxSubtreeDepth) {
-		this.maxSubtreeDepth = maxSubtreeDepth;
-
-		grower.setMaxDepth(maxSubtreeDepth);
+	public void setSyntax(Node[] syntax) {
+		grower.setSyntax(syntax);
 	}
 }

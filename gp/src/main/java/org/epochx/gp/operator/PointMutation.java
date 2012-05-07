@@ -27,91 +27,83 @@ import static org.epochx.gp.STGPIndividual.*;
 import java.util.*;
 
 import org.epochx.*;
+import org.epochx.Config.ConfigKey;
 import org.epochx.epox.Node;
 import org.epochx.event.*;
 import org.epochx.gp.STGPIndividual;
 
 /**
- * This class performs a simple point mutation on a
- * <code>STGPIndividual</code>.
+ * A mutation operator for <tt>STGPIndividual</tt>s that replaces nodes at 
+ * random throughout a program tree. Each node in the program tree is replaced 
+ * according to a set point probability. When a node is selected to be replaced,
+ * a node of the same arity and data-type requirements is randomly chosen to 
+ * replace it. Multiple nodes may be mutated in the same program tree.
  * 
  * <p>
- * Each node in the program tree is considered for mutation, with the
- * probability of that node being mutated given as an argument to the
- * PointMutation constructor. If the node does undergo mutation then a
- * replacement node is selected from the full syntax (function and terminal
- * sets), at random.
+ * See the {@link #setup()} method documentation for a list of configuration
+ * parameters used to control this operator.
  * 
  * @see SubtreeMutation
  */
 public class PointMutation implements Operator, Listener<ConfigEvent> {
 
+	/**
+	 * The key for setting and retrieving the probability of each node being 
+	 * mutated
+	 */
+	public static final ConfigKey<Double> POINT_PROBABILITY = new ConfigKey<Double>();
+	
+	// Configuration settings
 	private Node[] syntax;
-
 	private RandomSequence random;
-
-	// The probability that each node has of being mutated.
 	private double pointProbability;
 	
 	private double probability;
 
 	/**
-	 * Constructs a <code>PointMutation</code>.
-	 * 
-	 * @param random
-	 * @param syntax
+	 * Constructs a <tt>PointMutation</tt> with control parameters
+	 * automatically loaded from the config
 	 */
-	public PointMutation(double probability, RandomSequence random, Node[] syntax, double pointProbability) {
-		this.probability = probability;
-		this.random = random;
-		this.syntax = syntax;
-		this.pointProbability = pointProbability;
+	public PointMutation() {
+		this(true);
 	}
 
 	/**
-	 * Construct a point mutation with a default point probability of 0.01. It
-	 * is generally recommended that the PointMutation(GPModel, double)
-	 * constructor is used instead.
+	 * Constructs a <tt>PointMutation</tt> with control parameters initially
+	 * loaded from the config. If the <tt>autoConfig</tt> argument is set to
+	 * <tt>true</tt> then the configuration will be automatically updated when
+	 * the config is modified.
 	 * 
-	 * @param model The current controlling model. Parameters such as full
-	 *        syntax will be obtained from this.
+	 * @param autoConfig whether this operator should automatically update its
+	 *        configuration settings from the config
 	 */
-	public PointMutation(double probability) {
-		this(probability, 0.01);
-	}
-
-	/**
-	 * Construct a point mutation with user specified point probability.
-	 * 
-	 * @param pointProbability The probability each node in a selected program
-	 *        has of undergoing a mutation. 1.0 would result in all nodes being
-	 *        changed, and 0.0 would mean no nodes were changed. A typical value
-	 *        would be 0.01.
-	 */
-	public PointMutation(double probability, double pointProbability) {
-		this.probability = probability;
-		this.pointProbability = pointProbability;
-		
+	public PointMutation(boolean autoConfig) {
 		setup();
-		EventManager.getInstance().add(ConfigEvent.class, this);
+		
+		if (autoConfig) {
+			EventManager.getInstance().add(ConfigEvent.class, this);
+		}
 	}
 	
 	/**
 	 * Sets up this operator with the appropriate configuration settings.
-	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
+	 * This method is called whenever a <tt>ConfigEvent</tt> occurs for a
 	 * change in any of the following configuration parameters:
 	 * <ul>
-	 * <li><code>RandomSequence.RANDOM_SEQUENCE</code>
+	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
+	 * <li>{@link STGPIndividual#SYNTAX}
+	 * <li>{@link #POINT_PROBABILITY} (defaults to <tt>0.01</tt>).
 	 * </ul>
 	 */
 	protected void setup() {
 		random = Config.getInstance().get(RANDOM_SEQUENCE);
 		syntax = Config.getInstance().get(SYNTAX);
+		pointProbability = Config.getInstance().get(POINT_PROBABILITY, 0.01);
 	}
 	
 	/**
 	 * Receives configuration events and triggers this operator to configure its
-	 * parameters if the <code>ConfigEvent</code> is for one of its required
+	 * parameters if the <tt>ConfigEvent</tt> is for one of its required
 	 * parameters.
 	 * 
 	 * @param event {@inheritDoc}
@@ -124,16 +116,17 @@ public class PointMutation implements Operator, Listener<ConfigEvent> {
 	}
 
 	/**
-	 * Perform point mutation on the given STGPIndividual. Each node in the
-	 * program tree is considered in turn, with each having the given
-	 * probability of actually being exchanged. Given that a node is chosen
-	 * then a new function or terminal node of the same arity is used to
-	 * replace it.
+	 * Performs point mutation on the given individual. Each node in the
+	 * program tree is considered for mutation and is selected with probability
+	 * set by the point probability. Once selected, a new node of the same arity
+	 * and data-type requirements is randomly chosen and replaces the node at 
+	 * that mutation point. The mutation continues until all nodes in the tree
+	 * have been considered.
 	 * 
-	 * @param p The STGPIndividual selected to undergo this mutation
-	 *        operation.
-	 * @return A STGPIndividual that was the result of a point mutation on
-	 *         the provided STGPIndividual.
+	 * @param parents an array of just one individual to undergo subtree
+	 *        mutation. It must be an instance of <tt>STGPIndividual</tt>.
+	 * @return an array containing one <tt>STGPIndividual</tt> that was the
+	 *         result of mutating the parent individual
 	 */
 	@Override
 	public STGPIndividual[] apply(Individual ... parents) {
@@ -144,17 +137,14 @@ public class PointMutation implements Operator, Listener<ConfigEvent> {
 
 		List<Integer> points = new ArrayList<Integer>();
 
-		// Iterate over each node in the program tree.
+		//TODO It would be more efficient to traverse the tree than use getNode
 		int length = program.length();
 		for (int i = 0; i < length; i++) {
-			// Only change pointProbability of the time.
 			if (random.nextDouble() < pointProbability) {
-				// Get the arity of the ith node of the program.
 				Node node = program.getNode(i);
 				int arity = node.getArity();
 
-				// Find compatible replacements.
-				List<Node> replacements = getReplacements(node);
+				List<Node> replacements = validReplacements(node);
 				if (!replacements.isEmpty()) {
 					// Randomly choose a replacement.
 					Node replacement = replacements.get(random.nextInt(replacements.size()));
@@ -164,42 +154,44 @@ public class PointMutation implements Operator, Listener<ConfigEvent> {
 					for (int k = 0; k < arity; k++) {
 						replacement.setChild(k, node.getChild(k));
 					}
-					// Then set the new node back into the program.
-					child.setNode(i, replacement);
 
-					// Record the index of the node that we changed.
+					child.setNode(i, replacement);
 					points.add(i);
 				}
-				// If no replacements then we fall out the bottom and consider
-				// the next node.
 			}
 		}
 
-		EventManager.getInstance().fire(new PointMutationEvent(this, program, child, points));
+		EventManager.getInstance().fire(new PointMutationEndEvent(this, program, child, points));
 
 		return new STGPIndividual[]{child};
 	}
 
-	private List<Node> getReplacements(final Node n) {
-		final int arity = n.getArity();
+	/**
+	 * Lists the nodes in the syntax that are valid replacements for the given
+	 * node <tt>n</tt>. A node is a valid replacement if it has the same arity 
+	 * and a compatible data-type if given the children of <tt>n</tt>. 
+	 * 
+	 * @param n the node to be replaced
+	 * @return a list of the nodes that are valid replacements for <tt>n</tt>
+	 */
+	protected List<Node> validReplacements(Node n) {
+		int arity = n.getArity();
 
-		// Get the return type.
-		// TODO Ideally this would be the parent's required argument type
-		// instead.
-		final Class<?> returnType = n.dataType();
+		// TODO This should be the parent's required argument type
+		Class<?> requiredType = n.dataType();
 
-		// Get the data-type of children.
-		final Class<?>[] argTypes = new Class<?>[arity];
+		// Get the data-type of children
+		Class<?>[] argTypes = new Class<?>[arity];
 		for (int i = 0; i < arity; i++) {
 			argTypes[i] = n.getChild(i).getClass();
 		}
 
-		// Filter the syntax down to compatible replacements.
-		final List<Node> replacements = new ArrayList<Node>();
-		for (final Node replacement: syntax) {
+		// Filter the syntax down to valid replacements
+		List<Node> replacements = new ArrayList<Node>();
+		for (Node replacement: syntax) {
 			if ((replacement.getArity() == arity) && !nodesEqual(replacement, n)) {
-				final Class<?> replacementReturn = replacement.dataType(argTypes);
-				if ((replacementReturn != null) && returnType.isAssignableFrom(replacementReturn)) {
+				Class<?> replacementReturn = replacement.dataType(argTypes);
+				if ((replacementReturn != null) && requiredType.isAssignableFrom(replacementReturn)) {
 					replacements.add(replacement);
 				}
 			}
@@ -211,15 +203,12 @@ public class PointMutation implements Operator, Listener<ConfigEvent> {
 	/*
 	 * Helper function to check node equivalence. We cannot just use Node's
 	 * equals() method because we don't want to compare children if it's a
-	 * function node.
+	 * non-terminal node.
 	 */
 	private boolean nodesEqual(final Node nodeA, final Node nodeB) {
 		boolean equal = false;
-
-		// Check they're the same type first.
 		if (nodeA.getClass().equals(nodeB.getClass())) {
 			if (nodeA.getArity() > 0) {
-				// They're both the same function type.
 				equal = true;
 			} else {
 				equal = nodeA.equals(nodeB);
@@ -231,8 +220,9 @@ public class PointMutation implements Operator, Listener<ConfigEvent> {
 	
 	/**
 	 * {@inheritDoc}
+	 * 
 	 * <p>
-	 * This operator requires an input size of 2.
+	 * Point mutation operates on 1 individual.
 	 * 
 	 * @return {@inheritDoc}
 	 */
@@ -250,7 +240,7 @@ public class PointMutation implements Operator, Listener<ConfigEvent> {
 	}
 
 	/**
-	 * Overwrites the probability of this operator being selected.
+	 * Sets the probability of this operator being selected
 	 * 
 	 * @param probability the new probability to set
 	 */
@@ -259,45 +249,43 @@ public class PointMutation implements Operator, Listener<ConfigEvent> {
 	}
 
 	/**
-	 * Returns the random number generator that this mutation is using or
-	 * <code>null</code> if none has been set.
+	 * Returns the random number sequence in use
 	 * 
-	 * @return the random the currently set random number generator.
+	 * @return the currently set random sequence
 	 */
 	public RandomSequence getRandomSequence() {
 		return random;
 	}
 
 	/**
-	 * Sets the random number generator to use. If a model has been set then
-	 * this parameter will be overwritten with the random number generator from
-	 * that model on the next configure event.
+	 * Sets the random number sequence to use. If automatic configuration is
+	 * enabled then any value set here will be overwritten by the
+	 * {@link RandomSequence#RANDOM_SEQUENCE} configuration setting on the next
+	 * config event.
 	 * 
-	 * @param random the random number generator to set.
+	 * @param random the random number generator to set
 	 */
 	public void setRandomSequence(final RandomSequence random) {
 		this.random = random;
 	}
 
 	/**
-	 * Returns a <code>List</code> of the <code>Nodes</code> that form the
-	 * syntax of new program generated with this mutation, or
-	 * an empty list if none have been set.
+	 * Returns the array of nodes in the available syntax. Replacement nodes 
+	 * are selected from the nodes in this array.
 	 * 
-	 * @return the types of <code>Node</code> that should be used in
-	 *         constructing new programs.
+	 * @return an array of the nodes in the syntax
 	 */
 	public Node[] getSyntax() {
 		return syntax;
 	}
 
 	/**
-	 * Sets the <code>Nodes</code> that should be used to construct new
-	 * programs. If a model has been set then this parameter will be overwritten
-	 * with the syntax from that model on the next configure event.
+	 * Sets the array of nodes to generate replacement subtrees from. If 
+	 * automatic configuration is enabled then any value set here will be 
+	 * overwritten by the {@link STGPIndividual#SYNTAX} configuration setting on
+	 * the next config event.
 	 * 
-	 * @param syntax a <code>List</code> of the types of <code>Node</code> that
-	 *        should be used in constructing new programs.
+	 * @param syntax an array of nodes to generate new program trees from
 	 */
 	public void setSyntax(Node[] syntax) {
 		this.syntax = syntax;

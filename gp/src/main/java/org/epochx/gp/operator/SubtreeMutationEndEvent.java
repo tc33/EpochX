@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2011
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -27,30 +27,49 @@ import org.epochx.epox.Node;
 import org.epochx.event.OperatorEvent;
 import org.epochx.gp.STGPIndividual;
 
-
 /**
+ * An event fired at the end of a subtree mutation
  * 
+ * @see SubtreeMutation
  */
-public class SubtreeMutationEvent extends OperatorEvent.EndOperator {
-	
-	private int point;
-	
+public class SubtreeMutationEndEvent extends OperatorEvent.EndOperator {
+
 	private Node subtree;
-	
-	public SubtreeMutationEvent(SubtreeMutation operator, STGPIndividual parent, STGPIndividual child, int point, Node subtree) {
+	private int point;
+
+	/**
+	 * Constructs a <tt>SubtreeMutationEndEvent</tt> with the details of the 
+	 * event
+	 * 
+	 * @param operator the operator that performed the mutation
+	 * @param parent the individual that the operator was performed on
+	 * @param child the result of performing the mutation
+	 * @param point the index of the mutation point in the parent program tree
+	 * @param subtree the replacement subtree. This should be equivalent to the
+	 * subtree found at the mutation point in the child
+	 */
+	public SubtreeMutationEndEvent(SubtreeMutation operator, STGPIndividual parent, 
+			STGPIndividual child, int point, Node subtree) {
 		super(operator, new Individual[]{parent}, new Individual[]{child});
-		
+
 		this.point = point;
 		this.subtree = subtree;
 	}
-	
+
 	/**
-	 * @return the point1
+	 * Returns the index of the mutation point in the parent program tree
+	 * 
+	 * @return the mutation point
 	 */
 	public int getMutationPoint() {
 		return point;
 	}
-	
+
+	/**
+	 * Returns the root node of the replacement subtree
+	 * 
+	 * @return the replacement subtree
+	 */
 	public Node getSubtree() {
 		return subtree;
 	}

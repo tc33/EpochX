@@ -43,17 +43,9 @@ public class OnePointCrossoverEndEvent extends OperatorEvent.EndOperator {
 	 * @param operator the operator that performed the crossover
 	 * @param parents an array of two individuals that the operator was
 	 *        performed on
-	 * @param children an array of two individuals that are the result of
-	 *        performing the crossover
-	 * @param points an array of the two crossover points in the parents
-	 * @param subtrees the two subtrees that were exchanged
 	 */
-	public OnePointCrossoverEndEvent(OnePointCrossover operator, Individual[] parents, Individual[] children,
-			int[] points, Node[] subtrees) {
-		super(operator, parents, children);
-
-		this.points = points;
-		this.subtrees = subtrees;
+	public OnePointCrossoverEndEvent(OnePointCrossover operator, Individual[] parents) {
+		super(operator, parents);
 	}
 
 	/**
@@ -63,6 +55,15 @@ public class OnePointCrossoverEndEvent extends OperatorEvent.EndOperator {
 	 */
 	public int[] getCrossoverPoints() {
 		return points;
+	}
+	
+	/**
+	 * Sets an array of the crossover points in the two parent programs
+	 * 
+	 * @param points an array of the two crossover points in the parents
+	 */
+	public void setCrossoverPoints(int[] points) {
+		this.points = points;
 	}
 
 	/**
@@ -76,4 +77,12 @@ public class OnePointCrossoverEndEvent extends OperatorEvent.EndOperator {
 		return subtrees;
 	}
 
+	/**
+	 * Sets an array containing the subtrees that were exchanged
+	 * 
+	 * @param subtrees the two subtrees that were exchanged
+	 */
+	public void setSubtrees(Node[] subtrees) {
+		this.subtrees = subtrees;
+	}
 }

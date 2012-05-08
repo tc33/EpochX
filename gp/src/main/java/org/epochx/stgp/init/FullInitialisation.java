@@ -82,6 +82,7 @@ public class FullInitialisation implements STGPInitialisation, Listener<ConfigEv
 	 */
 	public FullInitialisation(boolean autoConfig) {
 		setup();
+		updateSyntax();
 
 		if (autoConfig) {
 			EventManager.getInstance().add(ConfigEvent.class, this);
@@ -99,7 +100,7 @@ public class FullInitialisation implements STGPInitialisation, Listener<ConfigEv
 	 * <li>{@link STGPIndividual#RETURN_TYPE}
 	 * <li>{@link STGPIndividual#MAXIMUM_DEPTH}
 	 * <li>{@link STGPInitialisation#MAXIMUM_INITIAL_DEPTH}
-	 * <li>{@link InitialisationMethod#ALLOW_DUPLICATES}
+	 * <li>{@link InitialisationMethod#ALLOW_DUPLICATES} (default: <tt>true</tt>)
 	 * </ul>
 	 */
 	protected void setup() {
@@ -107,7 +108,7 @@ public class FullInitialisation implements STGPInitialisation, Listener<ConfigEv
 		populationSize = Config.getInstance().get(SIZE);
 		syntax = Config.getInstance().get(SYNTAX);
 		returnType = Config.getInstance().get(RETURN_TYPE);
-		allowDuplicates = Config.getInstance().get(ALLOW_DUPLICATES);
+		allowDuplicates = Config.getInstance().get(ALLOW_DUPLICATES, true);
 
 		Integer maxDepth = Config.getInstance().get(MAXIMUM_DEPTH);
 		Integer maxInitialDepth = Config.getInstance().get(MAXIMUM_INITIAL_DEPTH);
@@ -116,7 +117,7 @@ public class FullInitialisation implements STGPInitialisation, Listener<ConfigEv
 		if (maxInitialDepth != null && (maxDepth == null || maxInitialDepth < maxDepth)) {
 			depth = maxInitialDepth;
 		} else {
-			depth = maxDepth;
+			depth = (maxDepth == null) ? -1 : maxDepth;
 		}
 	}
 
@@ -409,8 +410,8 @@ public class FullInitialisation implements STGPInitialisation, Listener<ConfigEv
 
 	/**
 	 * Sets the array of nodes to generate program trees from. If automatic
-	 * configuration is enabled then any value set here will be overwritten by 
-	 * the {@link STGPIndividual#SYNTAX} configuration setting on the next 
+	 * configuration is enabled then any value set here will be overwritten by
+	 * the {@link STGPIndividual#SYNTAX} configuration setting on the next
 	 * config event.
 	 * 
 	 * @param syntax an array of nodes to generate new program trees from
@@ -433,8 +434,8 @@ public class FullInitialisation implements STGPInitialisation, Listener<ConfigEv
 
 	/**
 	 * Sets the required data-type of the program trees generated. If automatic
-	 * configuration is enabled then any value set here will be overwritten by 
-	 * the {@link STGPIndividual#RETURN_TYPE} configuration setting on the next 
+	 * configuration is enabled then any value set here will be overwritten by
+	 * the {@link STGPIndividual#RETURN_TYPE} configuration setting on the next
 	 * config event.
 	 * 
 	 * @param returnType the data-type of the generated programs
@@ -458,8 +459,8 @@ public class FullInitialisation implements STGPInitialisation, Listener<ConfigEv
 
 	/**
 	 * Sets the number of individuals to be generated in a population created
-	 * by the <tt>createPopulation</tt> method. If automatic configuration is 
-	 * enabled thenAny value set here will be overwritten by the 
+	 * by the <tt>createPopulation</tt> method. If automatic configuration is
+	 * enabled thenAny value set here will be overwritten by the
 	 * {@link Population#SIZE} configuration setting on the next config event.
 	 * 
 	 * @param size the size of the populations generated
@@ -480,16 +481,16 @@ public class FullInitialisation implements STGPInitialisation, Listener<ConfigEv
 
 	/**
 	 * Sets the depth of the program trees created by the
-	 * <tt>createIndividual</tt> method. If automatic configuration is enabled 
-	 * then any value set here will be overwritten by the 
+	 * <tt>createIndividual</tt> method. If automatic configuration is enabled
+	 * then any value set here will be overwritten by the
 	 * {@link STGPInitialisation#MAXIMUM_INITIAL_DEPTH} configuration setting on
-	 * the next config event, or the {@link STGPIndividual#MAXIMUM_DEPTH} 
+	 * the next config event, or the {@link STGPIndividual#MAXIMUM_DEPTH}
 	 * setting if no initial maximum depth is set.
 	 * 
 	 * @param depth the depth of all program trees generated
 	 */
 	public void setDepth(int depth) {
-		if (depth > dataTypesTable.length) {
+		if (dataTypesTable != null && depth > dataTypesTable.length) {
 			// Types possibilities table needs extending
 			// TODO No need to regenerate the whole table, just extend it
 			dataTypesTable = null;
@@ -508,9 +509,9 @@ public class FullInitialisation implements STGPInitialisation, Listener<ConfigEv
 	}
 
 	/**
-	 * Sets the random number sequence to use. If automatic configuration is 
-	 * enabled thenAny value set here will be overwritten by the 
-	 * {@link RandomSequence#RANDOM_SEQUENCE} configuration setting on the next 
+	 * Sets the random number sequence to use. If automatic configuration is
+	 * enabled thenAny value set here will be overwritten by the
+	 * {@link RandomSequence#RANDOM_SEQUENCE} configuration setting on the next
 	 * config event.
 	 * 
 	 * @param random the random number generator to set

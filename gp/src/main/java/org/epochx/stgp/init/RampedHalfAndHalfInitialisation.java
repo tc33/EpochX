@@ -37,9 +37,9 @@ import org.epochx.stgp.STGPIndividual;
 
 /**
  * Initialisation method which produces <tt>STGPIndividual</tt>s with program
- * trees constructed using a combination of grow and full initialisation 
- * procedures. Program trees are constructed randomly from the nodes in the 
- * syntax, with each node's data-type constraints enforced. The depth setting 
+ * trees constructed using a combination of grow and full initialisation
+ * procedures. Program trees are constructed randomly from the nodes in the
+ * syntax, with each node's data-type constraints enforced. The depth setting
  * used is gradually ramped up to the maximum depth parameter setting.
  * 
  * <p>
@@ -52,18 +52,18 @@ import org.epochx.stgp.STGPIndividual;
 public class RampedHalfAndHalfInitialisation implements STGPInitialisation, Listener<ConfigEvent> {
 
 	/**
-	 * The key for setting and retrieving the smallest maximum depth setting 
+	 * The key for setting and retrieving the smallest maximum depth setting
 	 * from which the ramping will begin
 	 */
 	public static final ConfigKey<Integer> RAMPING_START_DEPTH = new ConfigKey<Integer>();
-	
+
 	// Configuration settings
-	private Node[] syntax; //TODO We don't really need to store this
+	private Node[] syntax; // TODO We don't really need to store this
 	private RandomSequence random;
 	private Class<?> returnType;
 	private int populationSize;
 	private boolean allowDuplicates;
-	
+
 	// The two halves
 	private final GrowInitialisation grow;
 	private final FullInitialisation full;
@@ -71,17 +71,16 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 	// The depth limits of each program tree to generate.
 	private int endDepth;
 	private int startDepth;
-	
+
 	/**
 	 * Initialisation method labels
 	 */
 	public enum Method {
-		GROW,
-		FULL;
+		GROW, FULL;
 	}
 
 	/**
-	 * Constructs a <tt>RampedHalfAndHalfInitialisation</tt> with control 
+	 * Constructs a <tt>RampedHalfAndHalfInitialisation</tt> with control
 	 * parameters automatically loaded from the config
 	 */
 	public RampedHalfAndHalfInitialisation() {
@@ -89,20 +88,20 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 	}
 
 	/**
-	 * Constructs a <tt>RampedHalfAndHalfInitialisation</tt> with control 
-	 * parameters initially loaded from the config. If the <tt>autoConfig</tt> 
-	 * argument is set to <tt>true</tt> then the configuration will be 
+	 * Constructs a <tt>RampedHalfAndHalfInitialisation</tt> with control
+	 * parameters initially loaded from the config. If the <tt>autoConfig</tt>
+	 * argument is set to <tt>true</tt> then the configuration will be
 	 * automatically updated when the config is modified.
 	 * 
 	 * @param autoConfig whether this operator should automatically update its
-	 * configuration settings from the config
+	 *        configuration settings from the config
 	 */
 	public RampedHalfAndHalfInitialisation(boolean autoConfig) {
 		grow = new GrowInitialisation(false);
 		full = new FullInitialisation(false);
-		
+
 		setup();
-		
+
 		if (autoConfig) {
 			EventManager.getInstance().add(ConfigEvent.class, this);
 		}
@@ -119,7 +118,7 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 	 * <li>{@link STGPIndividual#RETURN_TYPE}
 	 * <li>{@link STGPIndividual#MAXIMUM_DEPTH}
 	 * <li>{@link STGPInitialisation#MAXIMUM_INITIAL_DEPTH}
-	 * <li>{@link InitialisationMethod#ALLOW_DUPLICATES}
+	 * <li>{@link InitialisationMethod#ALLOW_DUPLICATES} (default: <tt>true</tt>)
 	 * <li>{@link #RAMPING_START_DEPTH}
 	 * </ul>
 	 */
@@ -128,15 +127,15 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 		populationSize = Config.getInstance().get(SIZE);
 		syntax = Config.getInstance().get(SYNTAX);
 		returnType = Config.getInstance().get(RETURN_TYPE);
-		allowDuplicates = Config.getInstance().get(ALLOW_DUPLICATES);
-		
+		allowDuplicates = Config.getInstance().get(ALLOW_DUPLICATES, true);
+
 		grow.setRandomSequence(random);
 		full.setRandomSequence(random);
-		
+
 		Integer maxDepth = Config.getInstance().get(MAXIMUM_DEPTH);
 		Integer maxInitialDepth = Config.getInstance().get(MAXIMUM_INITIAL_DEPTH);
 		Integer startDepth = Config.getInstance().get(RAMPING_START_DEPTH);
-		
+
 		if (maxInitialDepth != null && (maxDepth == null || maxInitialDepth < maxDepth)) {
 			endDepth = maxInitialDepth;
 		}
@@ -146,7 +145,7 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 			this.startDepth = 0;
 		}
 	}
-	
+
 	/**
 	 * Receives configuration events and triggers this operator to configure its
 	 * parameters if the <tt>ConfigEvent</tt> is for one of its required
@@ -156,11 +155,10 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 	 */
 	@Override
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(RANDOM_SEQUENCE, SIZE, SYNTAX, RETURN_TYPE, MAXIMUM_INITIAL_DEPTH, 
-				MAXIMUM_DEPTH, ALLOW_DUPLICATES, RAMPING_START_DEPTH)) {
+		if (event.isKindOf(RANDOM_SEQUENCE, SIZE, SYNTAX, RETURN_TYPE, MAXIMUM_INITIAL_DEPTH, MAXIMUM_DEPTH, ALLOW_DUPLICATES, RAMPING_START_DEPTH)) {
 			setup();
 		}
-		
+
 		// These could be expensive so only do them when we really have to
 		if (event.isKindOf(RETURN_TYPE)) {
 			grow.setReturnType(returnType);
@@ -175,8 +173,8 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 	/**
 	 * Creates a population of new <tt>STGPIndividuals</tt> from the
 	 * <tt>Node</tt>s provided by the {@link STGPIndividual#SYNTAX} config
-	 * parameter. Each individual is created with either a grow or a full 
-	 * initialisation method, which is alternated. The size of the population 
+	 * parameter. Each individual is created with either a grow or a full
+	 * initialisation method, which is alternated. The size of the population
 	 * will be equal to the {@link Population#SIZE} config parameter. If the
 	 * {@link InitialisationMethod#ALLOW_DUPLICATES} config parameter is set to
 	 * <tt>false</tt> then the individuals in the population will be unique
@@ -185,8 +183,8 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 	 * 
 	 * <p>
 	 * The use of grow and full initialisation procedures are alternated, but
-	 * the population may not be made up of programs that alternate between 
-	 * being full and grown. If duplicates are disabled, then any duplicates 
+	 * the population may not be made up of programs that alternate between
+	 * being full and grown. If duplicates are disabled, then any duplicates
 	 * that occur will be discarded but the use of grow/full will continue to
 	 * alternate regardless of the programs discarded.
 	 * 
@@ -195,14 +193,14 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 	@Override
 	public Population createPopulation() {
 		EventManager.getInstance().fire(new InitialisationEvent.StartInitialisation());
-		
+
 		if (endDepth < startDepth) {
 			throw new IllegalStateException("End depth must be greater than the start depth.");
 		}
-		
+
 		Population population = new Population();
 
-		Method[] method = new Method[populationSize];		
+		Method[] method = new Method[populationSize];
 		int[] programsPerDepth = programsPerDepth();
 
 		int popIndex = 0;
@@ -222,9 +220,11 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 						full.setDepth(depth);
 						program = full.createIndividual();
 					}
-					/* The effect is that if its a duplicate then will use other
-					   method next - this is deliberate because full may have
-					   less possible programs for a given depth. */
+					/*
+					 * The effect is that if its a duplicate then will use other
+					 * method next - this is deliberate because full may have
+					 * less possible programs for a given depth.
+					 */
 					growNext = !growNext;
 				} while (!allowDuplicates && population.contains(program));
 
@@ -237,25 +237,26 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 
 		return population;
 	}
-	
+
 	/**
 	 * Calculates the number of programs that should be generated at each depth
 	 * level. Each depth level between start depth and end depth is (inclusive),
 	 * is allocated an equal number of the total population size of programs. If
-	 * the population size does not divide evenly then all remainders are 
-	 * allocated to the end depth level. If insufficient trees are possible at 
+	 * the population size does not divide evenly then all remainders are
+	 * allocated to the end depth level. If insufficient trees are possible at
 	 * one depth level, then that depth's remaining allocation is granted to the
 	 * next deepest level.
 	 * 
 	 * <p>
-	 * The sum of the resultant array's elements is guarenteed to equal 
-	 * the population size, unless duplicates are disabled and it is impossible 
-	 * to create sufficient programs between the start and end depth settings. 
-	 * In this case an <tt>IllegalStateException</tt> will be thrown.
+	 * The sum of the resultant array's elements is guarenteed to equal the
+	 * population size, unless duplicates are disabled and it is impossible to
+	 * create sufficient programs between the start and end depth settings. In
+	 * this case an <tt>IllegalStateException</tt> will be thrown.
 	 * 
-	 * @return an array of the number of individuals at each depth, where the 
-	 * element at index 0 refers to programs with the start depth and the 
-	 * element at index length-1 refers to programs with the end depth
+	 * @return an array of the number of individuals at each depth, where the
+	 *         element at index 0 refers to programs with the start depth and
+	 *         the
+	 *         element at index length-1 refers to programs with the end depth
 	 */
 	protected int[] programsPerDepth() {
 		int noDepths = endDepth - startDepth + 1;
@@ -291,10 +292,12 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 						noPrograms[i + 1 - startDepth] += shortfall;
 						noPrograms[i - startDepth] -= shortfall;
 					} else {
-						throw new IllegalStateException("Impossible to create sufficient programs inside depth parameters");
+						throw new IllegalStateException(
+								"Impossible to create sufficient programs inside depth parameters");
 					}
 				} else {
-					// Assume that if we can create enough programs at a depth, then we can at greater depths too.
+					// Assume that if we can create enough programs at a depth,
+					// then we can at greater depths too.
 					break;
 				}
 			}
@@ -302,10 +305,10 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 
 		return noPrograms;
 	}
-	
+
 	/**
-	 * Constructs a new <tt>STGPIndividual</tt> instance with a program tree 
-	 * composed of nodes provided by the {@link STGPIndividual#SYNTAX} config 
+	 * Constructs a new <tt>STGPIndividual</tt> instance with a program tree
+	 * composed of nodes provided by the {@link STGPIndividual#SYNTAX} config
 	 * parameter. A grow or a full initialisation method is used, select at
 	 * random
 	 * 
@@ -344,7 +347,7 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 	public void setDuplicatesEnabled(boolean allowDuplicates) {
 		this.allowDuplicates = allowDuplicates;
 	}
-	
+
 	/**
 	 * Returns the random number sequence in use
 	 * 
@@ -353,10 +356,10 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 	public RandomSequence getRandomSequence() {
 		return random;
 	}
-	
+
 	/**
-	 * Sets the random number sequence to use. If automatic configuration is 
-	 * enabled then any value set here will be overwritten by the 
+	 * Sets the random number sequence to use. If automatic configuration is
+	 * enabled then any value set here will be overwritten by the
 	 * {@link RandomSequence#RANDOM_SEQUENCE} configuration setting on the next
 	 * config event.
 	 * 
@@ -364,7 +367,7 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 	 */
 	public void setRandomSequence(RandomSequence random) {
 		this.random = random;
-		
+
 		grow.setRandomSequence(random);
 		full.setRandomSequence(random);
 	}
@@ -380,9 +383,9 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 	}
 
 	/**
-	 * Sets the array of nodes to generate program trees from. If automatic 
-	 * configuration is enabled then any value set here will be overwritten by 
-	 * the {@link STGPIndividual#SYNTAX} configuration setting on the next 
+	 * Sets the array of nodes to generate program trees from. If automatic
+	 * configuration is enabled then any value set here will be overwritten by
+	 * the {@link STGPIndividual#SYNTAX} configuration setting on the next
 	 * config event.
 	 * 
 	 * @param syntax an array of nodes to generate new program trees from
@@ -405,9 +408,9 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 	}
 
 	/**
-	 * Sets the required data-type of the program trees generated. If 
-	 * automatic configuration is enabled then any value set here will be 
-	 * overwritten by the {@link STGPIndividual#RETURN_TYPE} configuration 
+	 * Sets the required data-type of the program trees generated. If
+	 * automatic configuration is enabled then any value set here will be
+	 * overwritten by the {@link STGPIndividual#RETURN_TYPE} configuration
 	 * setting on the next config event.
 	 * 
 	 * @param returnType the data-type of the generated programs
@@ -431,8 +434,8 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 
 	/**
 	 * Sets the number of individuals to be generated in a population created
-	 * by the <tt>createPopulation</tt> method. If automatic configuration is 
-	 * enabled then any value set here will be overwritten by the 
+	 * by the <tt>createPopulation</tt> method. If automatic configuration is
+	 * enabled then any value set here will be overwritten by the
 	 * {@link Population#SIZE} configuration setting on the next config event.
 	 * 
 	 * @param size the size of the populations generated
@@ -451,12 +454,12 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 	}
 
 	/**
-	 * Sets the depth that the maximum depth will be ramped up to when a 
-	 * population is created with the <tt>createPopulation</tt> method. If 
-	 * automatic configuration is enabled, then any 
-	 * value set here will be overwritten by the 
+	 * Sets the depth that the maximum depth will be ramped up to when a
+	 * population is created with the <tt>createPopulation</tt> method. If
+	 * automatic configuration is enabled, then any
+	 * value set here will be overwritten by the
 	 * {@link STGPInitialisation#MAXIMUM_INITIAL_DEPTH} configuration setting on
-	 * the next config event, or the {@link STGPIndividual#MAXIMUM_DEPTH} 
+	 * the next config event, or the {@link STGPIndividual#MAXIMUM_DEPTH}
 	 * setting if no initial maximum depth is set.
 	 * 
 	 * @param endDepth the maximum setting to ramp the depth to
@@ -475,11 +478,11 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 	}
 
 	/**
-	 * Sets the depth that the maximum depth will be ramped up from when a 
-	 * population is created with the <tt>createPopulation</tt> method. If 
-	 * automatic configuration is enabled, then any 
-	 * value set here will be overwritten by the 
-	 * {@link RampedHalfAndHalfInitialisation#RAMPING_START_DEPTH} configuration 
+	 * Sets the depth that the maximum depth will be ramped up from when a
+	 * population is created with the <tt>createPopulation</tt> method. If
+	 * automatic configuration is enabled, then any
+	 * value set here will be overwritten by the
+	 * {@link RampedHalfAndHalfInitialisation#RAMPING_START_DEPTH} configuration
 	 * setting on the next config event.
 	 * 
 	 * @param startDepth the initial maximum depth setting before being ramped

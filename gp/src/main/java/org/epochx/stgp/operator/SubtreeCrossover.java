@@ -29,6 +29,7 @@ import org.epochx.*;
 import org.epochx.Config.ConfigKey;
 import org.epochx.epox.Node;
 import org.epochx.event.*;
+import org.epochx.event.OperatorEvent.EndOperator;
 import org.epochx.stgp.STGPIndividual;
 
 /**
@@ -43,7 +44,7 @@ import org.epochx.stgp.STGPIndividual;
  * @see KozaCrossover
  * @see OnePointCrossover
  */
-public class SubtreeCrossover implements Operator, Listener<ConfigEvent> {
+public class SubtreeCrossover extends AbstractOperator implements Listener<ConfigEvent> {
 
 	/**
 	 * The key for setting and retrieving the probability with which a terminal
@@ -88,12 +89,12 @@ public class SubtreeCrossover implements Operator, Listener<ConfigEvent> {
 	 * change in any of the following configuration parameters:
 	 * <ul>
 	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
-	 * <li>{@link #TERMINAL_PROBABILITY}
+	 * <li>{@link #TERMINAL_PROBABILITY} (default: <tt>-1.0</tt>)
 	 * </ul>
 	 */
 	protected void setup() {
 		random = Config.getInstance().get(RANDOM_SEQUENCE);
-		terminalProbability = Config.getInstance().get(TERMINAL_PROBABILITY);
+		terminalProbability = Config.getInstance().get(TERMINAL_PROBABILITY, -1.0);
 	}
 
 	/**
@@ -121,9 +122,7 @@ public class SubtreeCrossover implements Operator, Listener<ConfigEvent> {
 	 *         result of the crossover
 	 */
 	@Override
-	public STGPIndividual[] apply(Individual ... parents) {
-		EventManager.getInstance().fire(new OperatorEvent.StartOperator(this, parents));
-
+	public STGPIndividual[] perform(EndOperator event, Individual ... parents) {
 		STGPIndividual program1 = (STGPIndividual) parents[0];
 		STGPIndividual program2 = (STGPIndividual) parents[1];
 
@@ -155,12 +154,21 @@ public class SubtreeCrossover implements Operator, Listener<ConfigEvent> {
 			subtrees = new Node[]{subtree1, subtree2};
 		}
 
-		Event event = new SubtreeCrossoverEndEvent(this, parents, children, swapPoints, subtrees);
-		EventManager.getInstance().fire(event);
+		((SubtreeCrossoverEndEvent) event).setCrossoverPoints(swapPoints);
+		((SubtreeCrossoverEndEvent) event).setSubtrees(subtrees);
 
 		return children;
 	}
 
+	/**
+	 * Returns a <tt>SubtreeCrossoverEndEvent</tt> with the operator and 
+	 * parents set
+	 */
+	@Override
+	protected SubtreeCrossoverEndEvent getEndEvent(Individual ... parents) {
+		return new SubtreeCrossoverEndEvent(this, parents);
+	}
+	
 	/*
 	 * Fills the 'matching' list argument with all the nodes in the tree rooted
 	 * at 'root' that have a data-type that equals the 'type' argument. The

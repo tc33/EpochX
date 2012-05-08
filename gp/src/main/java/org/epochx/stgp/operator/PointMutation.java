@@ -30,6 +30,7 @@ import org.epochx.*;
 import org.epochx.Config.ConfigKey;
 import org.epochx.epox.Node;
 import org.epochx.event.*;
+import org.epochx.event.OperatorEvent.EndOperator;
 import org.epochx.stgp.STGPIndividual;
 
 /**
@@ -45,7 +46,7 @@ import org.epochx.stgp.STGPIndividual;
  * 
  * @see SubtreeMutation
  */
-public class PointMutation implements Operator, Listener<ConfigEvent> {
+public class PointMutation extends AbstractOperator implements Listener<ConfigEvent> {
 
 	/**
 	 * The key for setting and retrieving the probability of each node being 
@@ -129,9 +130,7 @@ public class PointMutation implements Operator, Listener<ConfigEvent> {
 	 *         result of mutating the parent individual
 	 */
 	@Override
-	public STGPIndividual[] apply(Individual ... parents) {
-		EventManager.getInstance().fire(new OperatorEvent.StartOperator(this, parents));
-		
+	public STGPIndividual[] perform(EndOperator event, Individual ... parents) {
 		STGPIndividual program = (STGPIndividual) parents[0];
 		STGPIndividual child = program.clone();
 
@@ -161,9 +160,18 @@ public class PointMutation implements Operator, Listener<ConfigEvent> {
 			}
 		}
 
-		EventManager.getInstance().fire(new PointMutationEndEvent(this, program, child, points));
+		((PointMutationEndEvent) event).setMutationPoints(points);
 
 		return new STGPIndividual[]{child};
+	}
+	
+	/**
+	 * Returns a <tt>PointMutationEndEvent</tt> with the operator and 
+	 * parents set
+	 */
+	@Override
+	protected PointMutationEndEvent getEndEvent(Individual ... parents) {
+		return new PointMutationEndEvent(this, parents);
 	}
 
 	/**

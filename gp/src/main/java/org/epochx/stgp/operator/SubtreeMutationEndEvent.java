@@ -25,7 +25,6 @@ package org.epochx.stgp.operator;
 import org.epochx.Individual;
 import org.epochx.epox.Node;
 import org.epochx.event.OperatorEvent;
-import org.epochx.stgp.STGPIndividual;
 
 /**
  * An event fired at the end of a subtree mutation
@@ -48,12 +47,8 @@ public class SubtreeMutationEndEvent extends OperatorEvent.EndOperator {
 	 * @param subtree the replacement subtree. This should be equivalent to the
 	 * subtree found at the mutation point in the child
 	 */
-	public SubtreeMutationEndEvent(SubtreeMutation operator, STGPIndividual parent, 
-			STGPIndividual child, int point, Node subtree) {
-		super(operator, new Individual[]{parent}, new Individual[]{child});
-
-		this.point = point;
-		this.subtree = subtree;
+	public SubtreeMutationEndEvent(SubtreeMutation operator, Individual ... parents) {
+		super(operator, parents);
 	}
 
 	/**
@@ -72,5 +67,24 @@ public class SubtreeMutationEndEvent extends OperatorEvent.EndOperator {
 	 */
 	public Node getSubtree() {
 		return subtree;
+	}
+	
+	/**
+	 * Sets the index of the mutation point in the parent program tree
+	 * 
+	 * @param points the mutation point
+	 */
+	public void setMutationPoint(int point) {
+		this.point = point;
+	}
+
+	/**
+	 * Sets the replacement subtree that was used in the mutation
+	 * 
+	 * @param subtree the subtree that was inserted in to the parent program 
+	 * tree in the mutation
+	 */
+	public void setSubtree(Node subtree) {
+		this.subtree = subtree;
 	}
 }

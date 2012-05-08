@@ -27,6 +27,7 @@ import static org.epochx.stgp.STGPIndividual.*;
 import org.epochx.*;
 import org.epochx.epox.Node;
 import org.epochx.event.*;
+import org.epochx.event.OperatorEvent.EndOperator;
 import org.epochx.stgp.STGPIndividual;
 import org.epochx.stgp.init.GrowInitialisation;
 
@@ -40,7 +41,7 @@ import org.epochx.stgp.init.GrowInitialisation;
  * 
  * @see PointMutation
  */
-public class SubtreeMutation implements Operator, Listener<ConfigEvent> {
+public class SubtreeMutation extends AbstractOperator implements Listener<ConfigEvent> {
 
 	private final GrowInitialisation grower;
 
@@ -121,9 +122,7 @@ public class SubtreeMutation implements Operator, Listener<ConfigEvent> {
 	 *         result of mutating the parent individual
 	 */
 	@Override
-	public STGPIndividual[] apply(Individual ... parents) {
-		EventManager.getInstance().fire(new OperatorEvent.StartOperator(this, parents));
-
+	public STGPIndividual[] perform(EndOperator event, Individual ... parents) {
 		STGPIndividual program = (STGPIndividual) parents[0];
 		STGPIndividual child = program.clone();
 
@@ -144,11 +143,21 @@ public class SubtreeMutation implements Operator, Listener<ConfigEvent> {
 
 		child.setNode(mutationPoint, subtree);
 
-		EventManager.getInstance().fire(new SubtreeMutationEndEvent(this, program, child, mutationPoint, subtree));
+		((SubtreeMutationEndEvent) event).setMutationPoint(mutationPoint);
+		((SubtreeMutationEndEvent) event).setSubtree(subtree);
 
 		return new STGPIndividual[]{child};
 	}
 
+	/**
+	 * Returns a <tt>SubtreeMutationEndEvent</tt> with the operator and 
+	 * parents set
+	 */
+	@Override
+	protected EndOperator getEndEvent(Individual ... parents) {
+		return new SubtreeMutationEndEvent(this, parents);
+	}
+	
 	/*
 	 * Finds what depth a node with a given index is at. Returns -1 if the index
 	 * is not found.
@@ -162,7 +171,7 @@ public class SubtreeMutation implements Operator, Listener<ConfigEvent> {
 		for (int i = 0; i < root.getArity(); i++) {
 			Node subtree = root.getChild(i);
 			int subtreeLength = subtree.length();
-			if (targetIndex < subtreeLength) {
+			if (targetIndex <= currentIndex + subtreeLength) {
 				// Target is in this subtree
 				return nodeDepth(subtree, currentIndex + 1, targetIndex, currentDepth + 1);
 			}

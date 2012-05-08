@@ -82,6 +82,7 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 	 */
 	public GrowInitialisation(boolean autoConfig) {
 		setup();
+		updateSyntax();
 		
 		if (autoConfig) {
 			EventManager.getInstance().add(ConfigEvent.class, this);
@@ -99,7 +100,7 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 	 * <li>{@link STGPIndividual#RETURN_TYPE}
 	 * <li>{@link STGPIndividual#MAXIMUM_DEPTH}
 	 * <li>{@link STGPInitialisation#MAXIMUM_INITIAL_DEPTH}
-	 * <li>{@link InitialisationMethod#ALLOW_DUPLICATES}
+	 * <li>{@link InitialisationMethod#ALLOW_DUPLICATES} (default: <tt>true</tt>)
 	 * </ul>
 	 */
 	protected void setup() {
@@ -107,7 +108,7 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 		populationSize = Config.getInstance().get(SIZE);
 		syntax = Config.getInstance().get(SYNTAX);
 		returnType = Config.getInstance().get(RETURN_TYPE);
-		allowDuplicates = Config.getInstance().get(ALLOW_DUPLICATES);
+		allowDuplicates = Config.getInstance().get(ALLOW_DUPLICATES, true);
 		
 		Integer maxDepth = Config.getInstance().get(MAXIMUM_DEPTH);
 		Integer maxInitialDepth = Config.getInstance().get(MAXIMUM_INITIAL_DEPTH);
@@ -115,7 +116,7 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 		if (maxInitialDepth != null && (maxDepth == null || maxInitialDepth < maxDepth)) {
 			this.maxDepth = maxInitialDepth;
 		} else {
-			this.maxDepth = maxDepth;
+			this.maxDepth = (maxDepth==null) ? -1 : maxDepth;
 		}
 	}
 
@@ -667,7 +668,7 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 	 * @param maxDepth the maximum depth of all program trees generated
 	 */
 	public void setMaximumDepth(int maxDepth) {
-		if (maxDepth > dataTypesTable.length) {
+		if (dataTypesTable != null && maxDepth > dataTypesTable.length) {
 			// Types possibilities table needs extending
 			// TODO No need to regenerate the whole table, just extend it
 			dataTypesTable = null;

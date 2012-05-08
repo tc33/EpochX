@@ -29,28 +29,30 @@ import org.epochx.*;
 import org.epochx.Config.ConfigKey;
 import org.epochx.epox.Node;
 import org.epochx.event.*;
+import org.epochx.event.OperatorEvent.EndOperator;
 import org.epochx.stgp.STGPIndividual;
 
 /**
- * A crossover operator for <tt>STGPIndividual</tt>s that exchanges subtrees 
+ * A crossover operator for <tt>STGPIndividual</tt>s that exchanges subtrees
  * in two individuals. Random crossover points are chosen in both program trees
  * from those points which align in the two programs. Alignment is determined by
- * nodes in the same position having the same arity and data-type, or for the 
- * strict form of the operator the nodes must be the same. The crossover points 
- * are located in the same position in both program trees and the two subtrees 
- * at these points are exchanged. It is recommended that a significant mutation 
+ * nodes in the same position having the same arity and data-type, or for the
+ * strict form of the operator the nodes must be the same. The crossover points
+ * are located in the same position in both program trees and the two subtrees
+ * at these points are exchanged. It is recommended that a significant mutation
  * rate (Poli & Langdon use 30%) is used in combination with one-point crossover
  * since it encourages rapid convergence.
  * 
  * For more information about the one-point crossover operator see:<br />
  * R.Poli and W.B.Langdon, Genetic Programming with One-Point Crossover<br />
- * Soft Computing in Engineering Design and Manufacturing, pp. 180-189, Springer-Verlag<br />
+ * Soft Computing in Engineering Design and Manufacturing, pp. 180-189,
+ * Springer-Verlag<br />
  * London, 23-27 June 1997.
  * 
  * @see KozaCrossover
  * @see SubtreeCrossover
  */
-public class OnePointCrossover implements Operator, Listener<ConfigEvent> {
+public class OnePointCrossover extends AbstractOperator implements Listener<ConfigEvent> {
 
 	/**
 	 * The key for setting and retrieving whether the strict form of one-point
@@ -121,11 +123,13 @@ public class OnePointCrossover implements Operator, Listener<ConfigEvent> {
 	 * points are chosen in both program trees from those points which align in
 	 * the two programs. Alignment is determined by nodes in the same position
 	 * having the same arity and data-type, or for the strict form of the
-	 * operator the nodes must be the same. The crossover points are located in 
-	 * the same position in both program trees and the two subtrees at these 
-	 * points are exchanged. See the paper referenced in the class documation 
+	 * operator the nodes must be the same. The crossover points are located in
+	 * the same position in both program trees and the two subtrees at these
+	 * points are exchanged. See the paper referenced in the class documation
 	 * for more details of the operation of one-point crossover.
 	 * 
+	 * @param event the <tt>EndOperator</tt> event to be filled with information
+	 *        about this operation
 	 * @param parents an array of two individuals to undergo one-point
 	 *        crossover. Both individuals must be instances of
 	 *        <tt>STGPIndividual</tt>.
@@ -133,9 +137,7 @@ public class OnePointCrossover implements Operator, Listener<ConfigEvent> {
 	 *         result of the crossover
 	 */
 	@Override
-	public STGPIndividual[] apply(Individual ... parents) {
-		EventManager.getInstance().fire(new OperatorEvent.StartOperator(this, parents));
-
+	public STGPIndividual[] perform(EndOperator event, Individual ... parents) {
 		STGPIndividual program1 = (STGPIndividual) parents[0];
 		STGPIndividual program2 = (STGPIndividual) parents[1];
 
@@ -158,13 +160,19 @@ public class OnePointCrossover implements Operator, Listener<ConfigEvent> {
 		child1.setNode(swapPoint1, subtree2);
 		child2.setNode(swapPoint2, subtree1);
 
-		STGPIndividual[] children = new STGPIndividual[]{child1, child2};
+		((OnePointCrossoverEndEvent) event).setSubtrees(new Node[]{subtree1, subtree2});
+		((OnePointCrossoverEndEvent) event).setCrossoverPoints(new int[]{swapPoint1, swapPoint2});
 
-		Event event = new OnePointCrossoverEndEvent(this, parents, children, new int[]{swapPoint1, swapPoint2},
-				new Node[]{subtree1, subtree2});
-		EventManager.getInstance().fire(event);
+		return new STGPIndividual[]{child1, child2};
+	}
 
-		return children;
+	/**
+	 * Returns a <tt>OnePointCrossoverEndEvent</tt> with the operator and 
+	 * parents set
+	 */
+	@Override
+	protected OnePointCrossoverEndEvent getEndEvent(Individual ... parents) {
+		return new OnePointCrossoverEndEvent(this, parents);
 	}
 
 	/*
@@ -240,15 +248,15 @@ public class OnePointCrossover implements Operator, Listener<ConfigEvent> {
 	}
 
 	/**
-	 * Sets whether strict one-point crossover should be used or not. Strict 
+	 * Sets whether strict one-point crossover should be used or not. Strict
 	 * one-point crossover causes alignment of the parent programs takes into
-	 * account not only the arity of the nodes, but also the node type. If 
-	 * automatic configuration is enabled then any value set here will be 
-	 * overwritten by the {@link #STRICT} configuration setting on the next 
+	 * account not only the arity of the nodes, but also the node type. If
+	 * automatic configuration is enabled then any value set here will be
+	 * overwritten by the {@link #STRICT} configuration setting on the next
 	 * config event.
 	 * 
 	 * @param strict <tt>true</tt> if strict one-point crossover should be used
-	 * and <tt>false</tt> otherwise
+	 *        and <tt>false</tt> otherwise
 	 */
 	public void setStrict(final boolean strict) {
 		this.strict = strict;

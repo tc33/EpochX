@@ -26,7 +26,6 @@ import java.util.List;
 
 import org.epochx.Individual;
 import org.epochx.event.OperatorEvent;
-import org.epochx.stgp.STGPIndividual;
 
 /**
  * An event fired at the end of a point mutation
@@ -43,14 +42,10 @@ public class PointMutationEndEvent extends OperatorEvent.EndOperator {
 	 * 
 	 * @param operator the operator that performed the mutation
 	 * @param parent the individual that the operator was performed on
-	 * @param child the result of performing the mutation
-	 * @param points a <tt>List</tt> of the mutation points
+	 * 
 	 */
-	public PointMutationEndEvent(PointMutation operator, STGPIndividual parent, STGPIndividual child,
-			List<Integer> points) {
-		super(operator, new Individual[]{parent}, new Individual[]{child});
-
-		this.points = points;
+	public PointMutationEndEvent(PointMutation operator, Individual ... parents) {
+		super(operator, parents);
 	}
 
 	/**
@@ -62,4 +57,12 @@ public class PointMutationEndEvent extends OperatorEvent.EndOperator {
 		return points;
 	}
 
+	/**
+	 * Sets the points that were mutated in the parent program tree
+	 * 
+	 * @param points a list of indices of the mutation points
+	 */
+	public void setMutationPoints(List<Integer> points) {
+		this.points = points;
+	}
 }

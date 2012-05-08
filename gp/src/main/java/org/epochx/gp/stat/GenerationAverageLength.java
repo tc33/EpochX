@@ -27,16 +27,33 @@ import org.epochx.event.GenerationEvent.EndGeneration;
 import org.epochx.event.stat.AbstractStat;
 
 /**
+ * A stat that returns the mean length of the program trees in the population
+ * from the previous completed generation. All individuals in the population 
+ * must be instances of <tt>STGPIndividual</tt>.
  * 
+ * @see GenerationAverageLengthError
+ * @see GenerationStandardDeviationLength
  */
 public class GenerationAverageLength extends AbstractStat<EndGeneration> {
 
 	private double average;
 
+	/**
+	 * Constructs a <tt>GenerationAverageLength</tt> stat and registers its
+	 * dependencies
+	 */
 	public GenerationAverageLength() {
 		super(GenerationLengths.class);
 	}
 
+	/**
+	 * Triggers the generation of an updated value for this stat. Once this stat
+	 * has been registered, this method will be called on each
+	 * <tt>EndGeneration</tt> event.
+	 * 
+	 * @param event an object that encapsulates information about the event that
+	 *        occurred
+	 */
 	@Override
 	public void onEvent(EndGeneration event) {
 		int[] lengths = AbstractStat.get(GenerationLengths.class).getLengths();
@@ -49,10 +66,20 @@ public class GenerationAverageLength extends AbstractStat<EndGeneration> {
 		average /= lengths.length;
 	}
 	
+	/**
+	 * Returns the mean length of the program trees in the previous generation
+	 * 
+	 * @return the mean length of the program trees
+	 */
 	public double getAverage() {
 		return average;
 	}
 
+	/**
+	 * Returns a string representation of the value of this stat
+	 * 
+	 * @return a <tt>String</tt> that represents the value of this stat
+	 */
 	@Override
 	public String toString() {
 		return Double.toString(average);

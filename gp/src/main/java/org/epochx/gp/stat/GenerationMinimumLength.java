@@ -27,16 +27,32 @@ import org.epochx.event.GenerationEvent.EndGeneration;
 import org.epochx.event.stat.AbstractStat;
 
 /**
+ * A stat that returns the minimum length of all the program trees in the
+ * population from the previous completed generation. All individuals in the
+ * population must be instances of <tt>STGPIndividual</tt>.
  * 
+ * @see GenerationMaximumLength
  */
 public class GenerationMinimumLength extends AbstractStat<EndGeneration> {
 
 	private int min;
 
+	/**
+	 * Constructs a <tt>GenerationMinimumLength</tt> stat and registers its
+	 * dependencies
+	 */
 	public GenerationMinimumLength() {
 		super(GenerationLengths.class);
 	}
 
+	/**
+	 * Triggers the generation of an updated value for this stat. Once this stat
+	 * has been registered, this method will be called on each
+	 * <tt>EndGeneration</tt> event.
+	 * 
+	 * @param event an object that encapsulates information about the event that
+	 *        occurred
+	 */
 	@Override
 	public void onEvent(EndGeneration event) {
 		int[] lengths = AbstractStat.get(GenerationLengths.class).getLengths();
@@ -48,11 +64,22 @@ public class GenerationMinimumLength extends AbstractStat<EndGeneration> {
 			}
 		}
 	}
-	
+
+	/**
+	 * Returns the minimum length of the program trees in the previous
+	 * generation
+	 * 
+	 * @return the minimum length of the program trees
+	 */
 	public int getMinimum() {
 		return min;
 	}
 
+	/**
+	 * Returns a string representation of the value of this stat
+	 * 
+	 * @return a <tt>String</tt> that represents the value of this stat
+	 */
 	@Override
 	public String toString() {
 		return Integer.toString(min);

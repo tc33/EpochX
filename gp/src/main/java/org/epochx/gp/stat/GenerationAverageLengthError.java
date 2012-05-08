@@ -27,26 +27,57 @@ import org.epochx.*;
 import org.epochx.event.GenerationEvent.EndGeneration;
 import org.epochx.event.stat.AbstractStat;
 
+/**
+ * A stat that returns the standard error of the mean length, as calculated by
+ * the {@link GenerationAverageLength} stat. All individuals in the population
+ * must be instances of <tt>STGPIndividual</tt>.
+ * 
+ * @see GenerationAverageLength
+ * @see GenerationStandardDeviationLength
+ */
 public class GenerationAverageLengthError extends AbstractStat<EndGeneration> {
 
 	private double error;
 
+	/**
+	 * Constructs a <tt>GenerationAverageLengthError</tt> stat and registers its
+	 * dependencies
+	 */
 	public GenerationAverageLengthError() {
 		super(GenerationStandardDeviationLength.class);
 	}
 
+	/**
+	 * Triggers the generation of an updated value for this stat. Once this stat
+	 * has been registered, this method will be called on each
+	 * <tt>EndGeneration</tt> event.
+	 * 
+	 * @param event an object that encapsulates information about the event that
+	 *        occurred
+	 */
 	@Override
 	public void onEvent(EndGeneration event) {
 		double stdev = AbstractStat.get(GenerationStandardDeviationLength.class).getStandardDeviation();
 		Population population = event.getPopulation();
-		
+
 		error = stdev / Math.sqrt(population.size());
 	}
 
+	/**
+	 * Returns the standard error of the mean length of the program trees in the
+	 * previous generation
+	 * 
+	 * @return the error of the mean length of the program trees
+	 */
 	public double getError() {
 		return error;
 	}
 
+	/**
+	 * Returns a string representation of the value of this stat
+	 * 
+	 * @return a <tt>String</tt> that represents the value of this stat
+	 */
 	@Override
 	public String toString() {
 		return Double.toString(error);

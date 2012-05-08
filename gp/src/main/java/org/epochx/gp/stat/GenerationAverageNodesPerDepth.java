@@ -31,16 +31,30 @@ import org.epochx.event.stat.AbstractStat;
 import org.epochx.gp.STGPIndividual;
 
 /**
- * 
+ * A stat that returns the average number of nodes at each depth level of the 
+ * program trees in the population from the previous generation. All individuals
+ * in the population must be instances of <tt>STGPIndividual</tt>.
  */
 public class GenerationAverageNodesPerDepth extends AbstractStat<EndGeneration> {
 
 	private double[] averages;
 
+	/**
+	 * Constructs a <tt>GenerationAverageNodesPerDepth</tt> stat and registers 
+	 * its dependencies
+	 */
 	public GenerationAverageNodesPerDepth() {
 		super(GenerationAverageDepth.class);
 	}
 
+	/**
+	 * Triggers the generation of an updated value for this stat. Once this stat
+	 * has been registered, this method will be called on each
+	 * <tt>EndGeneration</tt> event.
+	 * 
+	 * @param event an object that encapsulates information about the event that
+	 *        occurred
+	 */
 	@Override
 	public void onEvent(EndGeneration event) {
 		int maxDepth = AbstractStat.get(GenerationMaximumDepth.class).getMaximum();
@@ -50,7 +64,7 @@ public class GenerationAverageNodesPerDepth extends AbstractStat<EndGeneration> 
 
 		// For each depth calculate an average
 		for (int d = 0; d < maxDepth; d++) {
-			// Get number of nodes for each program.
+			// Get number of nodes for each program
 			int noNodes = 0;
 			for (Individual individual: population) {
 				if (individual instanceof STGPIndividual) {
@@ -61,10 +75,21 @@ public class GenerationAverageNodesPerDepth extends AbstractStat<EndGeneration> 
 		}
 	}
 	
+	/**
+	 * Returns an array containing the average number of nodes at each depth 
+	 * level across all the programs in the previous generation
+	 * 
+	 * @return the error of the mean depth of the program trees
+	 */
 	public double[] getAverageNodesPerDepth() {
 		return averages;
 	}
 
+	/**
+	 * Returns a string representation of the value of this stat
+	 * 
+	 * @return a <tt>String</tt> that represents the value of this stat
+	 */
 	@Override
 	public String toString() {
 		return Arrays.toString(averages);

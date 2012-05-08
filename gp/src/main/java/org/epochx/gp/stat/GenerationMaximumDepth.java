@@ -27,16 +27,32 @@ import org.epochx.event.GenerationEvent.EndGeneration;
 import org.epochx.event.stat.AbstractStat;
 
 /**
+ * A stat that returns the maximum depth of all the program trees in the 
+ * population from the previous completed generation. All individuals in the 
+ * population must be instances of <tt>STGPIndividual</tt>.
  * 
+ * @see GenerationMinimumDepth
  */
 public class GenerationMaximumDepth extends AbstractStat<EndGeneration> {
 
 	private int max;
 
+	/**
+	 * Constructs a <tt>GenerationMaximumDepth</tt> stat and registers its
+	 * dependencies
+	 */
 	public GenerationMaximumDepth() {
 		super(GenerationDepths.class);
 	}
 
+	/**
+	 * Triggers the generation of an updated value for this stat. Once this stat
+	 * has been registered, this method will be called on each
+	 * <tt>EndGeneration</tt> event.
+	 * 
+	 * @param event an object that encapsulates information about the event that
+	 *        occurred
+	 */
 	@Override
 	public void onEvent(EndGeneration event) {
 		int[] depths = AbstractStat.get(GenerationDepths.class).getDepths();
@@ -49,10 +65,20 @@ public class GenerationMaximumDepth extends AbstractStat<EndGeneration> {
 		}
 	}
 	
+	/**
+	 * Returns the maximum depth of the program trees in the previous generation
+	 * 
+	 * @return the maximum depth of the program trees
+	 */
 	public int getMaximum() {
 		return max;
 	}
 
+	/**
+	 * Returns a string representation of the value of this stat
+	 * 
+	 * @return a <tt>String</tt> that represents the value of this stat
+	 */
 	@Override
 	public String toString() {
 		return Integer.toString(max);

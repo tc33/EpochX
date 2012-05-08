@@ -68,7 +68,7 @@ public class MaxFunction extends Node {
 			childValues[i] = getChild(i).evaluate();
 			types[i] = childValues[i].getClass();
 		}
-		Class<?> returnType = TypeUtils.getNumericType(types);
+		Class<?> returnType = DataTypeUtils.widestNumberType(types);
 
 		if (returnType == Double.class) {
 			double max = Double.NEGATIVE_INFINITY;
@@ -91,7 +91,7 @@ public class MaxFunction extends Node {
 				max = Math.max(value, max);
 			}
 			return max;
-		} else if (TypeUtils.isNumericType(returnType)) {
+		} else if (DataTypeUtils.isNumericType(returnType)) {
 			int max = Integer.MIN_VALUE;
 			for (int i = 0; i < arity; i++) {
 				int value = NumericUtils.asInteger(childValues[i]);
@@ -122,7 +122,7 @@ public class MaxFunction extends Node {
 	@Override
 	public Class<?> dataType(Class<?> ... inputTypes) {
 		if (inputTypes.length == getArity()) {
-			return TypeUtils.getNumericType(inputTypes);
+			return DataTypeUtils.widestNumberType(inputTypes);
 		}
 		return null;
 	}

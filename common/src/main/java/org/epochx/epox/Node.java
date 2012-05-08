@@ -24,7 +24,7 @@ package org.epochx.epox;
 import java.util.*;
 
 import org.apache.commons.lang.*;
-import org.epochx.tools.TypeUtils;
+import org.epochx.tools.DataTypeUtils;
 
 /**
  * A <tt>Node</tt> is a vertex in a tree structure which represents a program.
@@ -593,7 +593,7 @@ public abstract class Node implements Cloneable {
 			return Void.class;
 		} else {
 			// Either the widest type or null if not valid
-			return TypeUtils.getSuper(inputTypes);
+			return DataTypeUtils.getSuper(inputTypes);
 		}
 	}
 

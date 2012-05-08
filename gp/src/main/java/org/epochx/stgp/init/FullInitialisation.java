@@ -31,7 +31,7 @@ import org.epochx.*;
 import org.epochx.epox.Node;
 import org.epochx.event.*;
 import org.epochx.stgp.STGPIndividual;
-import org.epochx.tools.TypeUtils;
+import org.epochx.tools.DataTypeUtils;
 
 /**
  * Initialisation method which produces <tt>STGPIndividual</tt>s with full
@@ -237,7 +237,7 @@ public class FullInitialisation implements STGPInitialisation, Listener<ConfigEv
 			updateDataTypesTable();
 		}
 
-		if (!TypeUtils.containsSub(dataTypesTable[depth], returnType)) {
+		if (!DataTypeUtils.containsSub(dataTypesTable[depth], returnType)) {
 			throw new IllegalStateException("Syntax is not able to produce full trees with the given return type");
 		}
 

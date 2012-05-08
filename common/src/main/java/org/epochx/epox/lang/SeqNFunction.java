@@ -22,7 +22,7 @@
 package org.epochx.epox.lang;
 
 import org.epochx.epox.Node;
-import org.epochx.tools.TypeUtils;
+import org.epochx.tools.DataTypeUtils;
 
 /**
  * A node which provides the facility to sequence a specific number of
@@ -87,7 +87,7 @@ public class SeqNFunction extends Node {
 	 */
 	@Override
 	public Class<?> dataType(Class<?> ... inputTypes) {
-		if ((inputTypes.length == getArity()) && TypeUtils.allEqual(inputTypes, Void.class)) {
+		if ((inputTypes.length == getArity()) && DataTypeUtils.allEqual(inputTypes, Void.class)) {
 			return Void.class;
 		} else {
 			return null;

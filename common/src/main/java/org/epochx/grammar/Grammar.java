@@ -25,45 +25,45 @@ import java.io.*;
 import java.util.*;
 
 /**
- * A grammar object is constructed from a BNF language grammar. In the grammar
- * guided evolutionary approaches, a <code>Grammar</code> instance defines the
+ * A grammar object is constructed from a context-free language grammar. In the 
+ * grammar guided representations, a <tt>Grammar</tt> instance defines the
  * valid syntax of a program's source being evolved. As well as defining the
  * syntax of solutions, the grammar also essentially determines the function
  * and terminal sets which are explicitly defined in tree GP.
  * 
  * <p>
- * A file or string containing a BNF grammar is parsed upon construction and a
- * form of derivation tree with all possible options is created. The root of
- * this tree is determined as the first rule in the grammar string and is
- * retrievable with a call to the <code>getStartSymbol()</code> method. The
- * <code>GrammarNode</code> this method returns may be either a
- * <code>GrammarLiteral</code> or a <code>GrammarRule</code>. Terminal symbols
- * are represented as <code>GrammarLiterals</code> and simply consist of a
+ * A file or string containing a grammar in Backus Naur Form (BNF) is parsed 
+ * on construction and a form of derivation tree with all possible options is 
+ * created. The root of this tree is determined as the first rule in the grammar
+ * string and is retrievable with a call to the <tt>getStartSymbol()</tt> 
+ * method. The <tt>GrammarNode</tt> this method returns may be either a
+ * <tt>GrammarLiteral</tt> or a <tt>GrammarRule</tt>. Terminal symbols
+ * are represented as <tt>GrammarLiterals</tt> and simply consist of a
  * string value which matches the string from the BNF grammar. It is these
  * terminals that will form the source code of any program that uses it.
- * Non-literals are represented as <code>GrammarRules</code> and each have a set
- * of <code>GrammarProductions</code>. Each production describes a valid syntax
+ * Non-literals are represented as <tt>GrammarRules</tt> and each has a set
+ * of <tt>GrammarProductions</tt>. Each production describes a valid syntax
  * for that non-terminal rule.
  * 
  * <p>
  * Productions can also be provided with attributes. Attributes are simply
  * key/value pairs which are then stored in the resultant
- * <code>GrammarProduction</code> instance. They provide a basic mechanism to
+ * <tt>GrammarProduction</tt> instance. They provide a basic mechanism to
  * implement semantic constraints such as those used in attribute grammars or to
- * otherwise provide meta-data about a production, e.g. weights. The format to
- * provide attributes is to include within the production a special grammar
- * rule. The rule should begin and end with a question mark character '?'.
- * Between those question marks a series of key/values, made up of the key and
- * an equals character '=' followed by the value. Multiple key/values can be
+ * otherwise provide meta-data about a production, for example, weights. The 
+ * format to provide attributes is to include within the production a special 
+ * grammar rule. The rule should begin and end with a question mark character 
+ * '?'. Between those question marks a series of key/values, made up of the key 
+ * and an equals character '=' followed by the value. Multiple key/values can be
  * provided separated by a semi-colon ';' character.
  * 
  * <p>
  * An example rule:
  * </p>
  * 
- * <blockquote><code>
+ * <blockquote><tt>
  * &lt;example-rule&gt; ::= abc <?key1=32;key2=true?> | cde | &lt;ruleA&gt; &lt;ruleB&gt;
- * </code></blockquote>
+ * </tt></blockquote>
  * 
  * <p>
  * Most of the features known as EBNF (extended BNF) are not currently
@@ -79,15 +79,15 @@ public class Grammar {
 	private GrammarRule start;
 
 	/**
-	 * Constructs a <code>Grammar</code> with the given string as the BNF
+	 * Constructs a <tt>Grammar</tt> with the given string as the BNF
 	 * grammar to be parsed.
 	 * 
-	 * @param grammarStr a <code>String</code> containing a BNF language
+	 * @param grammarStr a <tt>String</tt> containing a BNF language
 	 *        grammar.
 	 * @throws MalformedGrammarException if the given grammar string is not in a
 	 *         valid format.
 	 */
-	public Grammar(final String grammarStr) {
+	public Grammar(String grammarStr) {
 		literals = new HashMap<String, GrammarLiteral>();
 		rules = new HashMap<String, GrammarRule>();
 
@@ -95,17 +95,17 @@ public class Grammar {
 	}
 
 	/**
-	 * Constructs a <code>Grammar</code> with the given file as a reference to a
+	 * Constructs a <tt>Grammar</tt> with the given file as a reference to a
 	 * text file containing a BNF grammar, which will be read and parsed.
 	 * 
-	 * @param grammarFile a <code>File</code> pointing to a text file containing
+	 * @param grammarFile a <tt>File</tt> pointing to a text file containing
 	 *        a BNF language grammar.
 	 * @throws IOException if there was a problem reading the file.
 	 * @throws MalformedGrammarException if the given grammar string is not in a
 	 *         valid format.
 	 */
-	public Grammar(final File grammarFile) throws IOException {
-		final String grammar = readGrammarFile(grammarFile);
+	public Grammar(File grammarFile) throws IOException {
+		String grammar = readGrammarFile(grammarFile);
 
 		literals = new HashMap<String, GrammarLiteral>();
 		rules = new HashMap<String, GrammarRule>();
@@ -115,7 +115,7 @@ public class Grammar {
 
 	/**
 	 * Returns the root of the grammar parse tree. This will always be a
-	 * <code>GrammarRule</code> for a valid BNF grammar.
+	 * <tt>GrammarRule</tt> for a valid BNF grammar.
 	 * 
 	 * @return the starting GrammarRule that is at the root of the grammar parse
 	 *         tree.
@@ -127,9 +127,9 @@ public class Grammar {
 	/*
 	 * Reads the contents of the given File and returns it as a String.
 	 */
-	private String readGrammarFile(final File grammarFile) throws IOException {
-		final BufferedReader input = new BufferedReader(new FileReader(grammarFile));
-		final StringBuilder grammarStr = new StringBuilder();
+	private String readGrammarFile(File grammarFile) throws IOException {
+		BufferedReader input = new BufferedReader(new FileReader(grammarFile));
+		StringBuilder grammarStr = new StringBuilder();
 
 		String line = null;
 		try {
@@ -253,7 +253,7 @@ public class Grammar {
 						throw new MalformedGrammarException("Misplaced newline");
 					} else if (ch == '>') {
 						// Possible end of non-terminal.
-						final String symbolName = buffer.toString();
+						String symbolName = buffer.toString();
 						if (!rules.containsKey(symbolName)) {
 							lhs = new GrammarRule(symbolName);
 							rules.put(symbolName, lhs);
@@ -313,7 +313,7 @@ public class Grammar {
 					} else if ((ch == '\n') || (ch == '|')) {
 						// End of production and possibly rule.
 						if (buffer.length() != 0) {
-							final String symbolName = buffer.toString();
+							String symbolName = buffer.toString();
 							if (terminal) {
 								GrammarLiteral newSymbol = literals.get(symbolName);
 								if (newSymbol == null) {
@@ -358,7 +358,7 @@ public class Grammar {
 						// } else if (special) {
 						if (special) {
 							// This should be the closing '?'.
-							final String specialCommand = buffer.toString().trim();
+							String specialCommand = buffer.toString().trim();
 							// Parse and process the command.
 							processSpecialRule(specialCommand, grammarProduction);
 						} else if (!terminal) {
@@ -383,7 +383,7 @@ public class Grammar {
 							buffer = new StringBuilder();
 						} else if (!terminal) {
 							// End of non-terminal.
-							final String symbolName = buffer.toString();
+							String symbolName = buffer.toString();
 							GrammarRule newSymbol = rules.get(symbolName);
 							if (newSymbol == null) {
 								newSymbol = new GrammarRule(symbolName);
@@ -401,7 +401,7 @@ public class Grammar {
 							buffer.append(ch);
 						} else if (buffer.length() != 0) {
 							// Token separator.
-							final String symbolName = buffer.toString();
+							String symbolName = buffer.toString();
 							GrammarLiteral newSymbol = literals.get(symbolName);
 							if (newSymbol == null) {
 								newSymbol = new GrammarLiteral(symbolName);
@@ -458,8 +458,8 @@ public class Grammar {
 		}
 
 		// Setup and validate each rule - done together for efficiency only.
-		final Collection<GrammarRule> ruleList = rules.values();
-		for (final GrammarRule rule: ruleList) {
+		Collection<GrammarRule> ruleList = rules.values();
+		for (GrammarRule rule: ruleList) {
 			// Calculate and set the minimum depths of all rules.
 			rule.setMinDepth(getMinDepth(new ArrayList<GrammarRule>(), rule));
 
@@ -476,7 +476,7 @@ public class Grammar {
 	}
 
 	/**
-	 * Determines whether the given <code>GrammarRule</code> is infinitely
+	 * Determines whether the given <tt>GrammarRule</tt> is infinitely
 	 * recursive. A rule is infinitely recursive if all its productions
 	 * contain either a recursive reference to the rule, or a reference to
 	 * another rule where all its productions contain such a reference to the
@@ -486,28 +486,28 @@ public class Grammar {
 	 * @return true if the given rule is infinitely recursive, and false
 	 *         otherwise.
 	 */
-	protected boolean isInfinitelyRecursive(final GrammarRule rule) {
+	protected boolean isInfinitelyRecursive(GrammarRule rule) {
 		return rule.isRecursive() && isInfinitelyRecursive(rule, rule, new ArrayList<GrammarRule>());
 	}
 
 	/*
 	 * Recursive helper method for isInfinitelyRecursive(GrammarRule).
 	 */
-	private boolean isInfinitelyRecursive(final GrammarRule rule, final GrammarRule currentRule,
-			final List<GrammarRule> path) {
+	private boolean isInfinitelyRecursive(GrammarRule rule, GrammarRule currentRule,
+			List<GrammarRule> path) {
 		path.add(currentRule);
 		boolean ref = true;
 
-		final List<GrammarProduction> productions = currentRule.getProductions();
-		outer:for (final GrammarProduction p: productions) {
-			final List<GrammarNode> nodes = p.getGrammarNodes();
+		List<GrammarProduction> productions = currentRule.getProductions();
+		outer:for (GrammarProduction p: productions) {
+			List<GrammarNode> nodes = p.getGrammarNodes();
 
 			if (nodes.contains(rule)) {
 				continue outer;
 			} else {
-				for (final GrammarNode n: nodes) {
+				for (GrammarNode n: nodes) {
 					if (n instanceof GrammarRule) {
-						final GrammarRule r = (GrammarRule) n;
+						GrammarRule r = (GrammarRule) n;
 
 						if (path.contains(r) || isInfinitelyRecursive(rule, r, path)) {
 							continue outer;
@@ -540,25 +540,25 @@ public class Grammar {
 	/*
 	 * Recursive helper for setRecursiveness().
 	 */
-	private void setRecursiveness(final List<GrammarRule> path, final GrammarRule current) {
+	private void setRecursiveness(List<GrammarRule> path, GrammarRule current) {
 		// Check for recursiveness then step down.
 		if (path.contains(current)) {
 			// Then everything in the path is recursive.
-			for (final GrammarRule s: path) {
+			for (GrammarRule s: path) {
 				s.setRecursive(true);
 			}
 		} else {
 			path.add(current);
 
 			for (int i = 0; i < current.getNoProductions(); i++) {
-				final GrammarProduction p = current.getProduction(i);
+				GrammarProduction p = current.getProduction(i);
 				for (int j = 0; j < p.getNoGrammarNodes(); j++) {
 					// We only care about non-terminal symbols here.
 					if (!(p.getGrammarNode(j) instanceof GrammarRule)) {
 						continue;
 					}
 
-					final GrammarRule nt = (GrammarRule) p.getGrammarNode(j);
+					GrammarRule nt = (GrammarRule) p.getGrammarNode(j);
 
 					setRecursiveness(new ArrayList<GrammarRule>(path), nt);
 				}
@@ -570,11 +570,11 @@ public class Grammar {
 	 * Processes a special rule. Currently the only supported special rule is
 	 * key value pairs.
 	 */
-	private void processSpecialRule(final String command, final GrammarProduction production) {
-		final String[] commands = command.split(";");
+	private void processSpecialRule(String command, GrammarProduction production) {
+		String[] commands = command.split(";");
 
-		for (final String c: commands) {
-			final String[] keyAndValue = c.split("=");
+		for (String c: commands) {
+			String[] keyAndValue = c.split("=");
 			production.setAttribute(keyAndValue[0], keyAndValue[1]);
 		}
 	}
@@ -582,12 +582,12 @@ public class Grammar {
 	/*
 	 * Recursive helper that calculates the minimum depth of the current symbol.
 	 */
-	private int getMinDepth(final List<GrammarRule> path, final GrammarNode currentSymbol) {
+	private int getMinDepth(List<GrammarRule> path, GrammarNode currentSymbol) {
 		if (!(currentSymbol instanceof GrammarRule)) {
 			return 0;
 		}
 
-		final GrammarRule current = (GrammarRule) currentSymbol;
+		GrammarRule current = (GrammarRule) currentSymbol;
 
 		// Check for recursiveness then step down.
 		if (path.contains(current)) {
@@ -601,12 +601,12 @@ public class Grammar {
 			int minDepth = Integer.MAX_VALUE;
 
 			for (int i = 0; i < current.getNoProductions(); i++) {
-				final GrammarProduction p = current.getProduction(i);
+				GrammarProduction p = current.getProduction(i);
 				int productionsMinDepth = -1;
 				for (int j = 0; j < p.getNoGrammarNodes(); j++) {
 					// The largest of production's symbols min depths, is
 					// productions min depth.
-					final int d = getMinDepth(new ArrayList<GrammarRule>(path), p.getGrammarNode(j));
+					int d = getMinDepth(new ArrayList<GrammarRule>(path), p.getGrammarNode(j));
 
 					if (d > productionsMinDepth) {
 						productionsMinDepth = d;
@@ -647,12 +647,10 @@ public class Grammar {
 	 * label of the symbol.
 	 * 
 	 * @param name the label that refers to the grammar literal to return.
-	 * @return the grammar terminal with the given name label, or
-	 *         <code>null</code> if a terminal with that name does not exist in
-	 *         the
-	 *         grammar.
+	 * @return the grammar terminal with the given name label, or <tt>null</tt>
+	 *         if a terminal with that name does not exist in the grammar.
 	 */
-	public GrammarLiteral getGrammarLiteral(final String name) {
+	public GrammarLiteral getGrammarLiteral(String name) {
 		return literals.get(name);
 	}
 
@@ -670,11 +668,11 @@ public class Grammar {
 	 * label of the rule.
 	 * 
 	 * @param name the label that refers to the grammar rule to return.
-	 * @return the <code>GrammarRule</code> with the given name label, or
-	 *         <code>null</code> if rule with that name does not exist in the
+	 * @return the <tt>GrammarRule</tt> with the given name label, or
+	 *         <tt>null</tt> if rule with that name does not exist in the
 	 *         grammar.
 	 */
-	public GrammarRule getGrammarRule(final String name) {
+	public GrammarRule getGrammarRule(String name) {
 		return rules.get(name);
 	}
 

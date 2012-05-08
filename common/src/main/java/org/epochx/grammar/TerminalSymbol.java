@@ -34,20 +34,20 @@ public class TerminalSymbol implements Symbol {
 	private GrammarLiteral literal;
 
 	/**
-	 * Constructs a <code>TerminalSymbol</code> for the given
-	 * <code>GrammarLiteral</code>.
+	 * Constructs a <tt>TerminalSymbol</tt> for the given
+	 * <tt>GrammarLiteral</tt>.
 	 * 
 	 * @param literal the grammar node that this symbol is an instantiation of.
 	 */
-	public TerminalSymbol(final GrammarLiteral literal) {
+	public TerminalSymbol(GrammarLiteral literal) {
 		this.literal = literal;
 	}
 
 	/**
-	 * Returns a <code>String</code> representation of this terminal symbol,
+	 * Returns a <tt>String</tt> representation of this terminal symbol,
 	 * which is the value of the underlying grammar literal.
 	 * 
-	 * @return a <code>String</code> representation of this terminal symbol.
+	 * @return a <tt>String</tt> representation of this terminal symbol.
 	 */
 	@Override
 	public String toString() {
@@ -58,14 +58,14 @@ public class TerminalSymbol implements Symbol {
 	 * Creates and returns a copy of this terminal symbol. The underlying
 	 * grammar rule is only shallow copied to the clone.
 	 * 
-	 * @return a <code>TerminalSymbol</code> which is a copy of this instance.
+	 * @return a <tt>TerminalSymbol</tt> which is a copy of this instance.
 	 */
 	@Override
 	public TerminalSymbol clone() {
 		TerminalSymbol clone = null;
 		try {
 			clone = (TerminalSymbol) super.clone();
-		} catch (final CloneNotSupportedException e) {
+		} catch (CloneNotSupportedException e) {
 			// This shouldn't ever happen - if it does then everything is
 			// going to blow up anyway.
 			assert false;
@@ -78,21 +78,21 @@ public class TerminalSymbol implements Symbol {
 	}
 
 	/**
-	 * Tests the given <code>Object</code> for equality with this terminal
+	 * Tests the given <tt>Object</tt> for equality with this terminal
 	 * symbol. The objects are considered to be equal if the argument is an
-	 * instance of <code>TerminalSymbol</code> and the underlying grammar
+	 * instance of <tt>TerminalSymbol</tt> and the underlying grammar
 	 * literals have matching literal values according to the
-	 * <code>String</code> <code>equals</code> method.
+	 * <tt>String</tt> <tt>equals</tt> method.
 	 * 
-	 * @param obj the <code>Object</code> to test for equality.
-	 * @return <code>true</code> if the given <code>Object</code> is
+	 * @param obj the <tt>Object</tt> to test for equality.
+	 * @return <tt>true</tt> if the given <tt>Object</tt> is
 	 *         equal to this non-terminal according to the contract outlined
-	 *         above and <code>false</code> otherwise.
+	 *         above and <tt>false</tt> otherwise.
 	 */
 	@Override
-	public boolean equals(final Object obj) {
+	public boolean equals(Object obj) {
 		if (obj instanceof TerminalSymbol) {
-			final TerminalSymbol objSymbol = (TerminalSymbol) obj;
+			TerminalSymbol objSymbol = (TerminalSymbol) obj;
 
 			return toString().equals(objSymbol.toString());
 		} else {

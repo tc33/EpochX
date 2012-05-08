@@ -22,7 +22,7 @@
 package org.epochx.epox.lang;
 
 import org.epochx.epox.Node;
-import org.epochx.tools.TypeUtils;
+import org.epochx.tools.DataTypeUtils;
 
 /**
  * A node which represents the conditional if-then-else statement
@@ -91,7 +91,7 @@ public class IfFunction extends Node {
 	@Override
 	public Class<?> dataType(Class<?> ... inputTypes) {
 		if ((inputTypes.length == 3) && (inputTypes[0] == Boolean.class)) {
-			return TypeUtils.getSuper(inputTypes[1], inputTypes[2]);
+			return DataTypeUtils.getSuper(inputTypes[1], inputTypes[2]);
 		} else {
 			return null;
 		}

@@ -69,7 +69,7 @@ public class MultiplyFunction extends Node {
 		Object c1 = getChild(0).evaluate();
 		Object c2 = getChild(1).evaluate();
 
-		Class<?> returnType = TypeUtils.getNumericType(c1.getClass(), c2.getClass());
+		Class<?> returnType = DataTypeUtils.widestNumberType(c1.getClass(), c2.getClass());
 
 		if (returnType == Double.class) {
 			// Multiply as doubles.
@@ -119,7 +119,7 @@ public class MultiplyFunction extends Node {
 	@Override
 	public Class<?> dataType(Class<?> ... inputTypes) {
 		if (inputTypes.length == 2) {
-			return TypeUtils.getNumericType(inputTypes);
+			return DataTypeUtils.widestNumberType(inputTypes);
 		}
 		return null;
 	}

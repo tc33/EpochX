@@ -70,7 +70,7 @@ public class MinFunction extends Node {
 			childValues[i] = getChild(i).evaluate();
 			types[i] = childValues[i].getClass();
 		}
-		Class<?> returnType = TypeUtils.getNumericType(types);
+		Class<?> returnType = DataTypeUtils.widestNumberType(types);
 
 		if (returnType == Double.class) {
 			double min = Double.MAX_VALUE;
@@ -124,7 +124,7 @@ public class MinFunction extends Node {
 	@Override
 	public Class<?> dataType(Class<?> ... inputTypes) {
 		if (inputTypes.length == getArity()) {
-			return TypeUtils.getNumericType(inputTypes);
+			return DataTypeUtils.widestNumberType(inputTypes);
 		}
 		return null;
 	}

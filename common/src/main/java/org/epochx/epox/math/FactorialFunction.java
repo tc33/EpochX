@@ -94,8 +94,8 @@ public class FactorialFunction extends Node {
 	 */
 	@Override
 	public Class<?> dataType(Class<?> ... inputTypes) {
-		if ((inputTypes.length == 1) && TypeUtils.isIntegerType(inputTypes[0])) {
-			return TypeUtils.getNumericType(inputTypes[0]);
+		if ((inputTypes.length == 1) && DataTypeUtils.isIntegerType(inputTypes[0])) {
+			return DataTypeUtils.widestNumberType(inputTypes[0]);
 		}
 
 		return null;

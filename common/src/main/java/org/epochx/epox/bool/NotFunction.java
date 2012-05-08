@@ -22,7 +22,7 @@
 package org.epochx.epox.bool;
 
 import org.epochx.epox.Node;
-import org.epochx.tools.TypeUtils;
+import org.epochx.tools.DataTypeUtils;
 
 /**
  * A node which performs logical negation
@@ -75,7 +75,7 @@ public class NotFunction extends Node {
 	 */
 	@Override
 	public Class<?> dataType(Class<?> ... inputTypes) {
-		if ((inputTypes.length == 1) && TypeUtils.allEqual(inputTypes, Boolean.class)) {
+		if ((inputTypes.length == 1) && DataTypeUtils.allEqual(inputTypes, Boolean.class)) {
 			return Boolean.class;
 		} else {
 			return null;

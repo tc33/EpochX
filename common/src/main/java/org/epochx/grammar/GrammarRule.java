@@ -44,45 +44,45 @@ public class GrammarRule implements GrammarNode, Cloneable {
 	private int minDepth;
 
 	/**
-	 * Constructs a <code>GrammarRule</code> with the specified name label and
+	 * Constructs a <tt>GrammarRule</tt> with the specified name label and
 	 * the production choices.
 	 * 
 	 * @param name the label that identifies this non-terminal rule.
-	 * @param productions a list of all the <code>GrammarProductions</code> that
+	 * @param productions a list of all the <tt>GrammarProductions</tt> that
 	 *        are possible mappings for this rule.
 	 */
-	public GrammarRule(final String name, final List<GrammarProduction> productions) {
+	public GrammarRule(String name, List<GrammarProduction> productions) {
 		this.name = name;
 		this.productions = productions;
 	}
 
 	/**
-	 * Constructs a <code>GrammarRule</code> with the specified name label and
-	 * an empty list of <code>GrammarProductions</code>. Productions can be
-	 * added after construction using the <code>addProduction</code> method.
+	 * Constructs a <tt>GrammarRule</tt> with the specified name label and
+	 * an empty list of <tt>GrammarProductions</tt>. Productions can be
+	 * added after construction using the <tt>addProduction</tt> method.
 	 * 
 	 * @param name the label that identifies this non-terminal rule.
 	 */
-	public GrammarRule(final String name) {
+	public GrammarRule(String name) {
 		this(name, new ArrayList<GrammarProduction>());
 	}
 
 	/**
-	 * Constructs a <code>GrammarRule</code> with no specified name and an empty
-	 * list of <code>GrammarProductions</code>.
+	 * Constructs a <tt>GrammarRule</tt> with no specified name and an empty
+	 * list of <tt>GrammarProductions</tt>.
 	 */
 	public GrammarRule() {
 		this(null);
 	}
 
 	/**
-	 * Append the given production to the list of <code>GrammarProduction</code>
+	 * Append the given production to the list of <tt>GrammarProduction</tt>
 	 * options.
 	 * 
-	 * @param production the <code>GrammarProduction</code> instance to be
+	 * @param production the <tt>GrammarProduction</tt> instance to be
 	 *        appended to this rule's list of productions.
 	 */
-	public void addProduction(final GrammarProduction production) {
+	public void addProduction(GrammarProduction production) {
 		productions.add(production);
 	}
 
@@ -93,35 +93,35 @@ public class GrammarRule implements GrammarNode, Cloneable {
 	 * 
 	 * @param index the position at which the specified production is to be
 	 *        inserted.
-	 * @param production the <code>GrammarProduction</code> instance to be
+	 * @param production the <tt>GrammarProduction</tt> instance to be
 	 *        inserted.
 	 */
-	public void addProduction(final int index, final GrammarProduction production) {
+	public void addProduction(int index, GrammarProduction production) {
 		productions.add(index, production);
 	}
 
 	/**
-	 * Replaces the <code>GrammarProduction</code> at the specified position in
+	 * Replaces the <tt>GrammarProduction</tt> at the specified position in
 	 * the list of this rule's productions.
 	 * 
-	 * @param index the position of the <code>GrammarProduction</code> to
+	 * @param index the position of the <tt>GrammarProduction</tt> to
 	 *        replace.
-	 * @param production the <code>GrammarProduction</code> instance to be
+	 * @param production the <tt>GrammarProduction</tt> instance to be
 	 *        stored at the specified position.
 	 */
-	public void setProduction(final int index, final GrammarProduction production) {
+	public void setProduction(int index, GrammarProduction production) {
 		productions.set(index, production);
 	}
 
 	/**
-	 * Returns the <code>GrammarProduction</code> at the specified position in
+	 * Returns the <tt>GrammarProduction</tt> at the specified position in
 	 * this rule's list of productions.
 	 * 
-	 * @param index the index of the <code>GrammarProduction</code> to return.
-	 * @return the <code>GrammarProduction</code> that is at the specified
+	 * @param index the index of the <tt>GrammarProduction</tt> to return.
+	 * @return the <tt>GrammarProduction</tt> that is at the specified
 	 *         index in the list of productions.
 	 */
-	public GrammarProduction getProduction(final int index) {
+	public GrammarProduction getProduction(int index) {
 		return productions.get(index);
 	}
 
@@ -179,7 +179,7 @@ public class GrammarRule implements GrammarNode, Cloneable {
 	 * 
 	 * @param recursive whether this grammar rule recursively refers to itself.
 	 */
-	public void setRecursive(final boolean recursive) {
+	public void setRecursive(boolean recursive) {
 		this.recursive = recursive;
 	}
 
@@ -198,19 +198,19 @@ public class GrammarRule implements GrammarNode, Cloneable {
 	 * 
 	 * @param minDepth the minimum depth required to get to all terminals.
 	 */
-	public void setMinDepth(final int minDepth) {
+	public void setMinDepth(int minDepth) {
 		this.minDepth = minDepth;
 	}
 
 	/**
-	 * Makes and returns a copy of this <code>GrammarRule</code> instance.
+	 * Makes and returns a copy of this <tt>GrammarRule</tt> instance.
 	 */
 	@Override
 	public GrammarRule clone() {
 		GrammarRule clone = null;
 		try {
 			clone = (GrammarRule) super.clone();
-		} catch (final CloneNotSupportedException e) {
+		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}
 
@@ -219,7 +219,7 @@ public class GrammarRule implements GrammarNode, Cloneable {
 		clone.minDepth = minDepth;
 
 		// Clone the grammar productions (but this will not clone their rules).
-		for (final GrammarProduction p: productions) {
+		for (GrammarProduction p: productions) {
 			clone.productions.add(p.clone());
 		}
 

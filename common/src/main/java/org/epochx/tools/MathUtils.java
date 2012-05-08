@@ -23,76 +23,80 @@ package org.epochx.tools;
 
 
 /**
- * Thanks to the JSci science API (http://jsci.sourceforge.net/) for some of 
- * these.
+ * This class provides static utility methods for mathematical functions.
+ * 
+ * <p>
+ * <i>Thanks to the <a href="http://jsci.sourceforge.net/">JSci science API</a>
+ * for some of these.</i>
  */
 public final class MathUtils {
 
 	private MathUtils() {}
 	
 	/**
-	 * Arc-cosecant
+	 * Returns the inverse cosecant of a <tt>double</tt> value
 	 * 
-	 * @param d
-	 * @return
+	 * @param d the number whose inverse cosecant is sought
+	 * @return the inverse cosecant of <tt>d</tt>
 	 */
 	public static double arccsc(double d) {
 		return Math.asin(1.0/d);
 	}
 	
 	/**
-	 * Arc-tangent
+	 * Returns the inverse cotangent of a <tt>double</tt> value
 	 * 
-	 * @param d
-	 * @return
+	 * @param d the number whose inverse cotangent is sought
+	 * @return the inverse cotangent of <tt>d</tt>
 	 */
 	public static double arccot(double d) {
 		return Math.atan(1.0/d);
 	}
 	
 	/**
-	 * Arc-secant
+	 * Returns the inverse secant of a <tt>double</tt> value
 	 * 
-	 * @param d
-	 * @return
+	 * @param d the number whose inverse secant is sought
+	 * @return the inverse secant of <tt>d</tt>
 	 */
 	public static double arcsec(double d) {
 		return Math.acos(1.0/d);
 	}
 	
 	/**
-	 * Cosecant
+	 * Returns the cosecant of a <tt>double</tt> value
 	 * 
-	 * @param d
-	 * @return
-	 */
+	 * @param d the number whose cosecant is sought
+	 * @return the cosecant of <tt>d</tt>
+	 */ 
 	public static double csc(double d) {
 		return 1.0 / Math.sin(d);
 	}
 	
 	/**
-	 * Secant
+	 * Returns the secant of a <tt>double</tt> value
 	 * 
-	 * @param d
-	 * @return
+	 * @param d the number whose secant is sought
+	 * @return the secant of <tt>d</tt>
 	 */
 	public static double sec(double d) {
 		return 1.0 / Math.cos(d);
 	}
 	
 	/**
-	 * Cotangent
+	 * Returns the cotangent of a <tt>double</tt> value
 	 * 
-	 * @param d
-	 * @return
+	 * @param d the number whose cotangent is sought
+	 * @return the cotangent of <tt>d</tt>
 	 */
 	public static double cot(double d) {
 		return 1 / Math.tan(d);
 	}
 	
 	/**
-	 * Returns the inverse hyperbolic cosine of a <tt>double</tt> value.
-	 * Note that <i>cosh(±acosh(x))&nbsp;=&nbsp;x</i>; this function arbitrarily returns the positive branch.
+	 * Returns the inverse hyperbolic cosine of a <tt>double</tt> value. Note 
+	 * that <i>cosh(±acosh(x))&nbsp;=&nbsp;x</i>; this function arbitrarily
+	 * returns the positive branch.
 	 * <p>The identity is:
 	 * <p><i>arcosh(x)&nbsp;=&nbsp;ln(x&nbsp;±&nbsp;sqrt(x<sup>2</sup>&nbsp;-&nbsp;1))</i>
 	 * <p>Special cases:
@@ -101,8 +105,8 @@ public final class MathUtils {
 	 * <li>If the argument is a positive infinity, then the result is (positive) infinity.
 	 * <li>If the argument is one, then the result is (positive) zero.
 	 * </ul>
-	 * @param d The number whose inverse hyperbolic cosine is sought
-	 * @return The inverse hyperbolic cosine of <tt>x</tt>
+	 * @param d the number whose inverse hyperbolic cosine is sought
+	 * @return the inverse hyperbolic cosine of <tt>d</tt>
 	 */ 
 	public static double arcosh(double d) {
 		return Math.log(d + Math.sqrt(d*d - 1.0));
@@ -118,8 +122,8 @@ public final class MathUtils {
 	 * <li>If the argument is infinite, then the result is an infinity with the same sign as the argument.
 	 * <li>If the argument is zero, then the result is a zero with the same sign as the argument.
 	 * </ul>
-	 * @param d The number whose inverse hyperbolic sine is sought
-	 * @return The inverse hyperbolic sine of <tt>d</tt>
+	 * @param d the number whose inverse hyperbolic sine is sought
+	 * @return the inverse hyperbolic sine of <tt>d</tt>
 	 */ 
 	public static double arsinh(double d) {
 		return Double.isInfinite(d) ? d : (d == 0.0) ? d : Math.log(d+Math.sqrt(d*d+1.0)); 
@@ -135,8 +139,8 @@ public final class MathUtils {
 	 * <li>If the argument is plus or minus one, then the result is infinity with the same sign as the argument.
 	 * <li>If the argument is zero, then the result is a zero with the same sign as the argument.
 	 * </ul>
-	 * @param x A double specifying the value whose inverse hyperbolic tangent is sought
-	 * @return A double specifying the inverse hyperbolic tangent of x
+	 * @param d a <tt>double</tt> specifying the value whose inverse hyperbolic tangent is sought
+	 * @return a <tt>double</tt> specifying the inverse hyperbolic tangent of <tt>d</tt>
 	 */ 
 	public static double artanh(double d) {
 		return (d != 0.0) ? (Math.log(1.0 + d) - Math.log(1.0 - d))/2.0 : d; 
@@ -152,8 +156,8 @@ public final class MathUtils {
 	 * <li>If the argument is NaN, then the result is NaN.
 	 * <li>If the argument is an infinity (positive or negative), then the result is <tt>+0.0</tt>.
 	 * </ul>
-	 * @param d The number whose hyperbolic secant is sought
-	 * @return The hyperbolic secant of <tt>d</tt>
+	 * @param d the number whose hyperbolic secant is sought
+	 * @return the hyperbolic secant of <tt>d</tt>
 	 */
 	public static double sech(double d) {
 		return 1.0/Math.cosh(d);
@@ -171,11 +175,11 @@ public final class MathUtils {
 	 * <li>If the argument is positive infinity, then the result is <tt>+0.0</tt>.
 	 * <li>If the argument is negative infinity, then the result is <tt>-0.0</tt>.
 	 * </ul>
-	 * @param x The number whose hyperbolic cosecant is sought
-	 * @return The hyperbolic cosecant of <tt>x</tt>
+	 * @param d the number whose hyperbolic cosecant is sought
+	 * @return the hyperbolic cosecant of <tt>d</tt>
 	 */
-	public static double csch(double x) {
-		return 1.0/Math.sinh(x);
+	public static double csch(double d) {
+		return 1.0/Math.sinh(d);
 	}
 	
 	/**
@@ -190,26 +194,10 @@ public final class MathUtils {
 	 * <li>If the argument is positive infinity, then the result is <tt>+1.0</tt>.
 	 * <li>If the argument is negative infinity, then the result is <tt>-1.0</tt>.
 	 * </ul>
-	 * @param x The number whose hyperbolic cotangent is sought
-	 * @return The hyperbolic cotangent of <tt>x</tt>
+	 * @param d the number whose hyperbolic cotangent is sought
+	 * @return the hyperbolic cotangent of <tt>d</tt>
 	 */
-	public static double coth(double x) {
-		return 1.0/Math.tanh(x);
-	}
-	
-	public static double max(double ... inputs) {
-		double max = Double.NEGATIVE_INFINITY;
-		for (double in: inputs) {
-			max = Math.max(in, max);
-		}
-		return max;
-	}
-	
-	public static double max(int ... inputs) {
-		int max = Integer.MIN_VALUE;
-		for (int in: inputs) {
-			max = Math.max(in, max);
-		}
-		return max;
+	public static double coth(double d) {
+		return 1.0/Math.tanh(d);
 	}
 }

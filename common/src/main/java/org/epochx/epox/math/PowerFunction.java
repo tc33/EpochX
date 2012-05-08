@@ -93,7 +93,7 @@ public class PowerFunction extends Node {
 	 */
 	@Override
 	public Class<?> dataType(Class<?> ... inputTypes) {
-		if ((inputTypes.length == 2) && TypeUtils.isAllNumericType(inputTypes)) {
+		if ((inputTypes.length == 2) && DataTypeUtils.isAllNumericType(inputTypes)) {
 			return Double.class;
 		} else {
 			return null;

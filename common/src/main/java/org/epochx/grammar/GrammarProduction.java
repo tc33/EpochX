@@ -24,10 +24,10 @@ package org.epochx.grammar;
 import java.util.*;
 
 /**
- * One of potentially multiple options that a <code>GrammarRule</code> can
- * resolve to. It contains a sequence of one or more <code>GrammarNode</code>s
+ * One of potentially multiple options that a <tt>GrammarRule</tt> can
+ * resolve to. It contains a sequence of one or more <tt>GrammarNode</tt>s
  * that together produce a valid mapping for the left-hand side of a grammar
- * rule as represented by <code>GrammarRule</code> instances.
+ * rule as represented by <tt>GrammarRule</tt> instances.
  */
 public class GrammarProduction implements Cloneable {
 
@@ -39,21 +39,21 @@ public class GrammarProduction implements Cloneable {
 
 	/**
 	 * Constructs a production around the specified sequence of
-	 * <code>GrammarNode</code>s.
+	 * <tt>GrammarNode</tt>s.
 	 * 
-	 * @param grammarNodes a <code>List</code> of <code>GrammarNode</code>s that
+	 * @param grammarNodes a <tt>List</tt> of <tt>GrammarNode</tt>s that
 	 *        provides the mapping sequence for this production.
 	 */
-	public GrammarProduction(final List<GrammarNode> grammarNodes) {
+	public GrammarProduction(List<GrammarNode> grammarNodes) {
 		this.grammarNodes = grammarNodes;
 
 		attributes = new HashMap<String, Object>();
 	}
 
 	/**
-	 * Constructs a production with no <code>GrammarNode</code>s. A valid
+	 * Constructs a production with no <tt>GrammarNode</tt>s. A valid
 	 * production should have one or more GrammarNodes so one or more should be
-	 * added to this <code>GrammarProduction</code> before use.
+	 * added to this <tt>GrammarProduction</tt> before use.
 	 * 
 	 * @see GrammarProduction#addGrammarNode(GrammarNode)
 	 */
@@ -62,13 +62,13 @@ public class GrammarProduction implements Cloneable {
 	}
 
 	/**
-	 * Appends the specified symbol to the list of <code>GrammarNodes</code> in
+	 * Appends the specified symbol to the list of <tt>GrammarNodes</tt> in
 	 * this production.
 	 * 
 	 * @param node the rule or literal to be appended to this production.
 	 * @see GrammarProduction#setGrammarNode(int, GrammarNode)
 	 */
-	public void addGrammarNode(final GrammarNode node) {
+	public void addGrammarNode(GrammarNode node) {
 		grammarNodes.add(node);
 	}
 
@@ -76,7 +76,7 @@ public class GrammarProduction implements Cloneable {
 	 * Returns a list of the rules and literals that make up this production, in
 	 * the order that they resolve to.
 	 * 
-	 * @return the sequence of <code>GrammarNode</code>s that make up this
+	 * @return the sequence of <tt>GrammarNode</tt>s that make up this
 	 *         production.
 	 */
 	public List<GrammarNode> getGrammarNodes() {
@@ -84,47 +84,47 @@ public class GrammarProduction implements Cloneable {
 	}
 
 	/**
-	 * Returns the <code>GrammarNode</code> at the specified index in the
+	 * Returns the <tt>GrammarNode</tt> at the specified index in the
 	 * sequence of rules and literals in this production.
 	 * 
-	 * @return the <code>GrammarNode</code> at the specified index in this
+	 * @return the <tt>GrammarNode</tt> at the specified index in this
 	 *         production.
 	 */
-	public GrammarNode getGrammarNode(final int index) {
+	public GrammarNode getGrammarNode(int index) {
 		return grammarNodes.get(index);
 	}
 
 	/**
-	 * Set the <code>GrammarNode</code> at the specified index, overwriting the
+	 * Set the <tt>GrammarNode</tt> at the specified index, overwriting the
 	 * current occupant.
 	 * 
-	 * @param index the index of the current <code>GrammarNode</code> to be
+	 * @param index the index of the current <tt>GrammarNode</tt> to be
 	 *        replaced.
-	 * @param node the new <code>GrammarNode</code> to place at the specified
+	 * @param node the new <tt>GrammarNode</tt> to place at the specified
 	 *        index in this production.
 	 * @see GrammarProduction#addGrammarNode(GrammarNode)
 	 */
-	public void setGrammarNode(final int index, final GrammarNode node) {
+	public void setGrammarNode(int index, GrammarNode node) {
 		grammarNodes.set(index, node);
 	}
 
 	/**
-	 * Inserts the <code>GrammarNode</code> at the specified index. Shifts the
+	 * Inserts the <tt>GrammarNode</tt> at the specified index. Shifts the
 	 * node currently at that position along one, with their indices incremented
 	 * by one.
 	 * 
-	 * @param index the index of where to insert the <code>GrammarNode</code>.
-	 * @param node the <code>GrammarNode</code> to place at the specified
+	 * @param index the index of where to insert the <tt>GrammarNode</tt>.
+	 * @param node the <tt>GrammarNode</tt> to place at the specified
 	 *        index in this production.
 	 */
-	public void addGrammarNode(final int index, final GrammarNode node) {
+	public void addGrammarNode(int index, GrammarNode node) {
 		grammarNodes.add(index, node);
 	}
 
 	/**
-	 * Returns the quantity of <code>GrammarNode</code>s in this production.
+	 * Returns the quantity of <tt>GrammarNode</tt>s in this production.
 	 * 
-	 * @return the number of <code>GrammarNode</code>s in this production.
+	 * @return the number of <tt>GrammarNode</tt>s in this production.
 	 */
 	public int getNoGrammarNodes() {
 		return grammarNodes.size();
@@ -132,18 +132,18 @@ public class GrammarProduction implements Cloneable {
 
 	/**
 	 * Retrieves the value of the attribute with the given key. If no attribute
-	 * with that key exists then <code>null</code> is returned.
+	 * with that key exists then <tt>null</tt> is returned.
 	 * 
 	 * Currently all values that were parsed from a String grammar will be
-	 * returned here as <code>String</code> objects. In future versions this may
+	 * returned here as <tt>String</tt> objects. In future versions this may
 	 * change to parse the values into more suitable Object types.
 	 * 
 	 * @param key the key that identifies the attribute value to return.
 	 * @return the Object value of the attribute with the given key, or
-	 *         <code>null</code> if no attributes with that key exist on this
-	 *         <code>GrammarProduction</code>.
+	 *         <tt>null</tt> if no attributes with that key exist on this
+	 *         <tt>GrammarProduction</tt>.
 	 */
-	public Object getAttribute(final String key) {
+	public Object getAttribute(String key) {
 		return attributes.get(key);
 	}
 
@@ -156,15 +156,15 @@ public class GrammarProduction implements Cloneable {
 	 * @param value an value of any Object type to store as an attribute under
 	 *        the given key.
 	 */
-	public void setAttribute(final String key, final Object value) {
+	public void setAttribute(String key, Object value) {
 		attributes.put(key, value);
 	}
 
 	/**
-	 * Retrieve the <code>Set</code> of attribute keys that have been set for
+	 * Retrieve the <tt>Set</tt> of attribute keys that have been set for
 	 * this production.
 	 * 
-	 * @return a <code>Set</code> of all attribute keys that have been set for
+	 * @return a <tt>Set</tt> of all attribute keys that have been set for
 	 *         this production. If no attributes have been set then an empty set
 	 *         will be
 	 *         returned.
@@ -175,16 +175,16 @@ public class GrammarProduction implements Cloneable {
 
 	/**
 	 * Calculates and returns the minimum depth required resolve this production
-	 * to all <code>GrammarLiteral</code> nodes. The minimum depth of a
+	 * to all <tt>GrammarLiteral</tt> nodes. The minimum depth of a
 	 * production is the largests of all the minimum depths of its
-	 * <code>GrammarNodes</code>.
+	 * <tt>GrammarNodes</tt>.
 	 * 
 	 * @return the minimum depth required to resolve to all
-	 *         <code>GrammarLiteral</code> nodes.
+	 *         <tt>GrammarLiteral</tt> nodes.
 	 */
 	public int getMinDepth() {
 		int max = 0;
-		for (final GrammarNode s: grammarNodes) {
+		for (GrammarNode s: grammarNodes) {
 			int d = 0;
 			if (s instanceof GrammarRule) {
 				d = ((GrammarRule) s).getMinDepth();
@@ -203,13 +203,13 @@ public class GrammarProduction implements Cloneable {
 	 * recursive if any of its nodes that are rules (rather than literals) are
 	 * recursive.
 	 * 
-	 * @return true if this production is has a <code>GrammarRule</code> that is
+	 * @return true if this production is has a <tt>GrammarRule</tt> that is
 	 *         recursive and false otherwise.
 	 */
 	public boolean isRecursive() {
 		boolean recursive = false;
 
-		for (final GrammarNode s: grammarNodes) {
+		for (GrammarNode s: grammarNodes) {
 			if (s instanceof GrammarRule) {
 				recursive = ((GrammarRule) s).isRecursive();
 			}
@@ -224,10 +224,10 @@ public class GrammarProduction implements Cloneable {
 
 	/**
 	 * Returns a copy of this production which is a new instance of
-	 * <code>GrammarProduction</code> with the same set of grammar nodes and
+	 * <tt>GrammarProduction</tt> with the same set of grammar nodes and
 	 * attributes.
 	 * 
-	 * @return a <code>GrammarProduction</code> which is a copy of this
+	 * @return a <tt>GrammarProduction</tt> which is a copy of this
 	 *         production.
 	 */
 	@Override
@@ -235,7 +235,7 @@ public class GrammarProduction implements Cloneable {
 		GrammarProduction clone = null;
 		try {
 			clone = (GrammarProduction) super.clone();
-		} catch (final CloneNotSupportedException e) {
+		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}
 
@@ -255,9 +255,9 @@ public class GrammarProduction implements Cloneable {
 	 */
 	@Override
 	public String toString() {
-		final StringBuilder buffer = new StringBuilder();
+		StringBuilder buffer = new StringBuilder();
 
-		for (final GrammarNode s: grammarNodes) {
+		for (GrammarNode s: grammarNodes) {
 			if (s instanceof GrammarLiteral) {
 				buffer.append(((GrammarLiteral) s).toString());
 			}
@@ -272,9 +272,9 @@ public class GrammarProduction implements Cloneable {
 		// Append any attributes.
 		if (attributes.size() > 0) {
 			buffer.append("<?");
-			final Set<String> keys = attributes.keySet();
+			Set<String> keys = attributes.keySet();
 			int i = 0;
-			for (final String k: keys) {
+			for (String k: keys) {
 				if (i != 0) {
 					buffer.append(';');
 				}

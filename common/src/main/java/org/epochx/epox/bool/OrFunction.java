@@ -22,7 +22,7 @@
 package org.epochx.epox.bool;
 
 import org.epochx.epox.Node;
-import org.epochx.tools.TypeUtils;
+import org.epochx.tools.DataTypeUtils;
 
 /**
  * A node which performs logical disjunction
@@ -85,7 +85,7 @@ public class OrFunction extends Node {
 	 */
 	@Override
 	public Class<?> dataType(Class<?> ... inputTypes) {
-		if ((inputTypes.length == 2) && TypeUtils.allEqual(inputTypes, Boolean.class)) {
+		if ((inputTypes.length == 2) && DataTypeUtils.allEqual(inputTypes, Boolean.class)) {
 			return Boolean.class;
 		} else {
 			return null;

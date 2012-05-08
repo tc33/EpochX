@@ -27,7 +27,7 @@ import org.epochx.tools.StringUtils;
  * Grammar literals are a type of grammar node, that represent the terminals of
  * a grammar. They are those nodes which are never found on the left-hand side
  * of grammar rules and as such contain no productions. Instead,
- * <code>GrammarLiterals</code> each have a value which is the string they
+ * <tt>GrammarLiterals</tt> each have a value which is the string they
  * represent in the grammar string. The final source of a program that is valid
  * according to a grammar will be made up solely of these terminal values.
  */
@@ -41,7 +41,7 @@ public class GrammarLiteral implements GrammarNode {
 	 * 
 	 * @param value snippet of source that this terminal represents.
 	 */
-	public GrammarLiteral(final String value) {
+	public GrammarLiteral(String value) {
 		this.value = value;
 	}
 
@@ -59,12 +59,12 @@ public class GrammarLiteral implements GrammarNode {
 	 * 
 	 * @param value the new grammar literal value to set.
 	 */
-	public void setValue(final String value) {
+	public void setValue(String value) {
 		this.value = value;
 	}
 
 	/**
-	 * Returns a <code>String</code> representation of this grammar literal.
+	 * Returns a <tt>String</tt> representation of this grammar literal.
 	 * 
 	 * @return a string representation of this grammar literal.
 	 */
@@ -79,9 +79,9 @@ public class GrammarLiteral implements GrammarNode {
 	 * returned unmodified.
 	 */
 	private String escape(String input) {
-		final char[] escapeChars = {'>', '<', '|'};
+		char[] escapeChars = {'>', '<', '|'};
 		if (StringUtils.containsAny(input, escapeChars)) {
-			final StringBuilder buffer = new StringBuilder();
+			StringBuilder buffer = new StringBuilder();
 			buffer.append('\"');
 			buffer.append(input);
 			buffer.append('\"');

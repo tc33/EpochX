@@ -78,7 +78,7 @@ public class LogFunction extends Node {
 	 */
 	@Override
 	public Class<?> dataType(Class<?> ... inputTypes) {
-		if ((inputTypes.length == 1) && TypeUtils.isAllNumericType(inputTypes)) {
+		if ((inputTypes.length == 1) && DataTypeUtils.isAllNumericType(inputTypes)) {
 			return Double.class;
 		}
 

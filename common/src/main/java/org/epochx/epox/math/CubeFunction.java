@@ -90,7 +90,7 @@ public class CubeFunction extends Node {
 	 */
 	@Override
 	public Class<?> dataType(Class<?> ... inputTypes) {
-		if ((inputTypes.length == 1) && TypeUtils.isNumericType(inputTypes[0])) {
+		if ((inputTypes.length == 1) && DataTypeUtils.isNumericType(inputTypes[0])) {
 			return inputTypes[0];
 		} else {
 			return null;

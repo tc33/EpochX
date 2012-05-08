@@ -27,10 +27,10 @@ import org.epochx.fitness.HitsCountEvaluator;
 import org.epochx.ge.mapper.DepthFirstMapper;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
+import org.epochx.grammar.Grammar;
 import org.epochx.interpret.*;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.grammar.Grammar;
-import org.epochx.tools.util.BoolUtils;
+import org.epochx.tools.BooleanUtils;
 
 /**
  * Grammar model for the multiplexer problems using a Java grammar.
@@ -75,7 +75,7 @@ public class Multiplexer extends GEModel {
 		super(evolver);
 		
 		// Generate the input sequences.
-		inputValues = BoolUtils.generateBoolSequences(noInputBits);
+		inputValues = BooleanUtils.generateBoolSequences(noInputBits);
 
 		// Calculate number of address/data bits.
 		setBitSizes(noInputBits);

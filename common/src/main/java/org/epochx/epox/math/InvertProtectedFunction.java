@@ -22,10 +22,10 @@
 package org.epochx.epox.math;
 
 import org.epochx.epox.Node;
-import org.epochx.tools.util.*;
+import org.epochx.tools.*;
 
 /**
- * A function node which performs the multiplicative inverse (or
+ * A node which performs the multiplicative inverse (or
  * reciprocal), that is the inverse of x is 1/x, called INV. This version of the
  * function is protected, so if the input is 0.0 then the result will be 1.0 to
  * protect against divide by zero.
@@ -36,7 +36,7 @@ public class InvertProtectedFunction extends Node {
 	private Double protectionValue;
 	
 	/**
-	 * Constructs an InvertFunction with one <code>null</code> child.
+	 * Constructs an InvertFunction with one <tt>null</tt> child.
 	 */
 	public InvertProtectedFunction() {
 		this(null);
@@ -47,12 +47,12 @@ public class InvertProtectedFunction extends Node {
 	 * 
 	 * @param child the child node.
 	 */
-	public InvertProtectedFunction(final Node child) {
+	public InvertProtectedFunction(Node child) {
 		this(child, 1.0);
 	}
 	
 	/**
-	 * Constructs an InvertFunction with one <code>null</code> child and the 
+	 * Constructs an InvertFunction with one <tt>null</tt> child and the 
 	 * given protection value which will be returned if the child evaluates to 
 	 * 0.0.
 	 * @param protectionValue the value to return for a child that evaluates to 
@@ -71,7 +71,7 @@ public class InvertProtectedFunction extends Node {
 	 * @param protectionValue the value to return for a child that evaluates to 
 	 * 0.0.
 	 */
-	public InvertProtectedFunction(final Node child, double protectionValue) {
+	public InvertProtectedFunction(Node child, double protectionValue) {
 		super(child);
 		
 		this.protectionValue = protectionValue;
@@ -80,14 +80,14 @@ public class InvertProtectedFunction extends Node {
 	/**
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a numeric type (one of Double, Float, Long,
-	 * Integer). The value <code>1</code> is divided by this child value to be
+	 * Integer). The value <tt>1</tt> is divided by this child value to be
 	 * the result of this function. This function is protected, so if the child
-	 * evaluates to a value of <code>0.0</code> then there is no finite
-	 * reciprocal and so the value <code>1.0</code> will be returned.
+	 * evaluates to a value of <tt>0.0</tt> then there is no finite
+	 * reciprocal and so the value <tt>1.0</tt> will be returned.
 	 */
 	@Override
 	public Double evaluate() {
-		final double c = NumericUtils.asDouble(getChild(0).evaluate());
+		double c = NumericUtils.asDouble(getChild(0).evaluate());
 
 		if (c == 0) {
 			return protectionValue;
@@ -107,13 +107,13 @@ public class InvertProtectedFunction extends Node {
 	/**
 	 * Returns this function node's return type for the given child input types.
 	 * If there is one input type of a numeric type then the return type will
-	 * be Double. In all other cases this method will return <code>null</code>
+	 * be Double. In all other cases this method will return <tt>null</tt>
 	 * to indicate that the inputs are invalid.
 	 * 
 	 * @return the Double class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> dataType(final Class<?> ... inputTypes) {
+	public Class<?> dataType(Class<?> ... inputTypes) {
 		if ((inputTypes.length == 1) && TypeUtils.isNumericType(inputTypes[0])) {
 			return Double.class;
 		} else {

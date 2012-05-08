@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.tools.util;
+package org.epochx.tools;
 
 import org.apache.commons.lang.ArrayUtils;
 

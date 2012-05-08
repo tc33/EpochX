@@ -27,8 +27,8 @@ import org.apache.commons.lang.ObjectUtils;
 import org.epochx.fitness.FitnessEvaluator;
 import org.epochx.ge.codon.CodonGenerator;
 import org.epochx.ge.model.GEModel;
+import org.epochx.grammar.*;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.grammar.*;
 
 /**
  * A <code>GECandidateProgram</code> encapsulates an individual program within a

@@ -32,7 +32,7 @@ import org.epochx.interpret.*;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stgp.STGPIndividual;
 import org.epochx.stgp.source.GPInterpreter;
-import org.epochx.tools.util.BoolUtils;
+import org.epochx.tools.BooleanUtils;
 
 /**
  * GP model for the even parity problems.
@@ -62,7 +62,7 @@ public class EvenParity extends GPModel {
 		super(evolver);
 		
 		// Generate the input sequences.
-		inputValues = BoolUtils.generateBoolSequences(noInputBits);
+		inputValues = BooleanUtils.generateBoolSequences(noInputBits);
 		expectedResults = new Boolean[inputValues.length];
 
 		// Define functions.

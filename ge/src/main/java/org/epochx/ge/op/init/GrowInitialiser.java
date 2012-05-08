@@ -28,9 +28,9 @@ import org.epochx.fitness.FitnessEvaluator;
 import org.epochx.ge.codon.CodonGenerator;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.*;
+import org.epochx.grammar.*;
 import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.grammar.*;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 /**

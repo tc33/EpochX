@@ -25,7 +25,7 @@ import java.util.*;
 
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.tools.grammar.*;
+import org.epochx.grammar.*;
 
 /**
  * <strong>WARNING: This class is not fully implemented. It should NOT currently

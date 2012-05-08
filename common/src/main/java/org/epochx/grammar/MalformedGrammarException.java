@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.tools.grammar;
+package org.epochx.grammar;
 
 /**
  * A runtime exception that is thrown to indicate that a grammar string is

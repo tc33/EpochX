@@ -121,7 +121,7 @@ public class STGPIndividual implements Individual {
 	 */
 	public Node getNode(int index) {
 		if (index >= 0) {
-			return root.getNthNode(index);
+			return root.getNode(index);
 		} else {
 			throw new IndexOutOfBoundsException("attempt to get node at negative index");
 		}

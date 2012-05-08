@@ -22,17 +22,17 @@
 package org.epochx.epox.math;
 
 import org.epochx.epox.Node;
-import org.epochx.tools.util.*;
+import org.epochx.tools.*;
 
 /**
- * A function node which performs the arithmetic function of cube,
+ * A node which performs the arithmetic function of cube,
  * that is - raising to the third power. It is equivalent to the
- * <code>PowerFunction</code> where the second child is the double literal 3.0.
+ * <tt>PowerFunction</tt> where the second child is the double literal 3.0.
  */
 public class CubeFunction extends Node {
 
 	/**
-	 * Constructs a CubeFunction with one <code>null</code> child.
+	 * Constructs a CubeFunction with one <tt>null</tt> child.
 	 */
 	public CubeFunction() {
 		this(null);
@@ -43,7 +43,7 @@ public class CubeFunction extends Node {
 	 * 
 	 * @param child the child node.
 	 */
-	public CubeFunction(final Node child) {
+	public CubeFunction(Node child) {
 		super(child);
 	}
 
@@ -55,9 +55,9 @@ public class CubeFunction extends Node {
 	 */
 	@Override
 	public Object evaluate() {
-		final Object c = getChild(0).evaluate();
+		Object c = getChild(0).evaluate();
 
-		final double result = Math.pow(NumericUtils.asDouble(c), 3);
+		double result = Math.pow(NumericUtils.asDouble(c), 3);
 
 		if (c instanceof Long) {
 			return (long) result;
@@ -84,12 +84,12 @@ public class CubeFunction extends Node {
 	 * Returns this function node's return type for the given child input types.
 	 * If there is one input type of a numeric type then the return type will
 	 * be that numeric type. In all other cases this method will return
-	 * <code>null</code> to indicate that the inputs are invalid.
+	 * <tt>null</tt> to indicate that the inputs are invalid.
 	 * 
 	 * @return a numeric class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> dataType(final Class<?> ... inputTypes) {
+	public Class<?> dataType(Class<?> ... inputTypes) {
 		if ((inputTypes.length == 1) && TypeUtils.isNumericType(inputTypes[0])) {
 			return inputTypes[0];
 		} else {

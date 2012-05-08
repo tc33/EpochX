@@ -22,8 +22,8 @@
 package org.epochx.gr.source;
 
 import org.epochx.gr.representation.GRCandidateProgram;
+import org.epochx.grammar.NonTerminalSymbol;
 import org.epochx.source.SourceGenerator;
-import org.epochx.tools.grammar.NonTerminalSymbol;
 
 
 /**

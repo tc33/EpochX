@@ -19,21 +19,23 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.epox;
+package org.epochx.epox.math;
 
 import static org.junit.Assert.*;
 
 import org.epochx.RandomSequence;
+import org.epochx.epox.*;
+import org.epochx.epox.math.IntegerERC;
 import org.epochx.random.MersenneTwisterFast;
 import org.epochx.tools.random.*;
 import org.junit.Test;
 
 /**
- * Unit tests for {@link org.epochx.epox.BooleanERC}
+ * Unit tests for {@link org.epochx.epox.math.IntegerERC}
  */
-public class BooleanERCTest extends LiteralTest {
+public class IntegerERCTest extends LiteralTest {
 
-	private BooleanERC erc;
+	private IntegerERC erc;
 	private RandomSequence rng;
 
 	/**
@@ -41,7 +43,7 @@ public class BooleanERCTest extends LiteralTest {
 	 */
 	@Override
 	protected Node getNode() {
-		return new BooleanERC(new MockRandom());
+		return new IntegerERC(new MockRandom(), 0,  Integer.MAX_VALUE);
 	}
 	
 	/**
@@ -50,19 +52,19 @@ public class BooleanERCTest extends LiteralTest {
 	@Override
 	public void setUp() {
 		rng = new MersenneTwisterFast();
-		erc = new BooleanERC(rng);
+		erc = new IntegerERC(rng, 0, Integer.MAX_VALUE);
 
 		super.setUp();
 	}
-	
+
 	/**
-	 * Tests that {@link org.epochx.epox.BooleanERC#BooleanERC(RandomNumberGenerator)} 
+	 * Tests that {@link org.epochx.epox.math.IntegerERC#IntegerERC(RandomNumberGenerator, int, int)} 
 	 * throws an exception if rng is null.
 	 */
 	@Test
-	public void testNewInstanceBooleanERCNull() {
+	public void testNewInstanceIntegerERCNull() {
 		try {
-			new BooleanERC(null);
+			new IntegerERC(null, 0, 1);
 			fail("an exception should be thrown for a null rng");
 		} catch (IllegalArgumentException expected) {
 			assertTrue(true);
@@ -70,7 +72,19 @@ public class BooleanERCTest extends LiteralTest {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.BooleanERC#generateValue()} correctly
+	 * Tests that {@link org.epochx.epox.math.IntegerERC#newInstance()} correctly
+	 * constructs new instances.
+	 */
+	@Test
+	public void testNewInstanceIntegerERC() {
+		final IntegerERC newInstance = erc.newInstance();
+
+		assertSame("rng does not refer to the same instance", rng, newInstance.getRNG());
+		assertNotSame("the value of new instance refers to the same object", erc.getValue(), newInstance.getValue());
+	}
+
+	/**
+	 * Tests that {@link org.epochx.epox.math.IntegerERC#generateValue()} correctly
 	 * generates new values.
 	 */
 	@Test
@@ -78,17 +92,31 @@ public class BooleanERCTest extends LiteralTest {
 		final MockRandom rng = new MockRandom();
 		erc.setRNG(rng);
 
-		rng.setNextBoolean(true);
-		boolean generatedValue = erc.generateValue();
-		assertSame("generated value unexpected", true, generatedValue);
+		final int lower = 2;
+		final int upper = 5;
 
-		rng.setNextBoolean(false);
+		// Set the bounds.
+		erc.setLower(lower);
+		erc.setUpper(upper);
+
+		// Tests lower value.
+		rng.setNextInt(0);
+		int generatedValue = erc.generateValue();
+		assertEquals("generated value unexpected", (Object) lower, generatedValue);
+
+		// Tests upper value.
+		rng.setNextInt(3);
 		generatedValue = erc.generateValue();
-		assertSame("generated value unexpected", false, generatedValue);
+		assertEquals("generated value unexpected", (Object) upper, generatedValue);
+
+		// Tests mid-value.
+		rng.setNextInt(1);
+		generatedValue = erc.generateValue();
+		assertEquals("generated value unexpected", (Object) 3, generatedValue);
 	}
 
 	/**
-	 * Tests that {@link org.epochx.epox.BooleanERC#generateValue()} throws an
+	 * Tests that {@link org.epochx.epox.math.IntegerERC#generateValue()} throws an
 	 * exception if rng is null.
 	 */
 	@Test
@@ -107,12 +135,11 @@ public class BooleanERCTest extends LiteralTest {
 	 * instances.
 	 */
 	@Test
-	public void testCloneBooleanERC() {
-		final BooleanERC clone = (BooleanERC) erc.clone();
+	public void testCloneIntegerERC() {
+		final IntegerERC clone = (IntegerERC) erc.clone();
 
 		assertNotSame("ERC has not been cloned", erc, clone);
 		assertSame("rng does not refer to the same instance", rng, clone.getRNG());
 		assertSame("value does not refer to the same instance", erc.getValue(), clone.getValue());
 	}
-
 }

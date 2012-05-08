@@ -22,23 +22,22 @@
 package org.epochx.epox.lang;
 
 import org.epochx.epox.Node;
-import org.epochx.tools.util.TypeUtils;
+import org.epochx.tools.TypeUtils;
 
 /**
- * A function node which represents the conditional if-then-else
- * statement.
+ * A node which represents the conditional if-then-else statement
  */
 public class IfFunction extends Node {
 
 	/**
-	 * Constructs an IfFunction with three <code>null</code> children.
+	 * Constructs an <tt>IfFunction</tt> with three <tt>null</tt> children
 	 */
 	public IfFunction() {
 		this(null, null, null);
 	}
 
 	/**
-	 * Constructs an IfFunction with three child nodes.
+	 * Constructs an <tt>IfFunction</tt> with three child nodes
 	 * 
 	 * @param condition a boolean child node which will determine which of the
 	 *        other nodes are evaluated.
@@ -47,13 +46,13 @@ public class IfFunction extends Node {
 	 * @param elseStatement the child node to be evaluated if the condition
 	 *        evaluates to false.
 	 */
-	public IfFunction(final Node condition, final Node ifStatement, final Node elseStatement) {
+	public IfFunction(Node condition, Node ifStatement, Node elseStatement) {
 		super(condition, ifStatement, elseStatement);
 	}
 
 	/**
 	 * Evaluates this function. The first child node is evaluated, the
-	 * result of which must be a <code>Boolean</code> instance. If the result
+	 * result of which must be a <tt>Boolean</tt> instance. If the result
 	 * is a true value then the second child is also evaluated, the result of
 	 * which becomes the result of this function. If the first child
 	 * evaluated to a false value then the third child is evaluated and its
@@ -61,7 +60,7 @@ public class IfFunction extends Node {
 	 */
 	@Override
 	public Object evaluate() {
-		final boolean c1 = ((Boolean) getChild(0).evaluate()).booleanValue();
+		boolean c1 = ((Boolean) getChild(0).evaluate()).booleanValue();
 
 		if (c1) {
 			return getChild(1).evaluate();
@@ -71,7 +70,7 @@ public class IfFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is IF.
+	 * Returns the identifier of this function which is <tt>IF</tt>
 	 */
 	@Override
 	public String getIdentifier() {
@@ -84,13 +83,13 @@ public class IfFunction extends Node {
 	 * Boolean, then the return type of this function will be whichever of the
 	 * second and third children is a super type the other. If neither of the
 	 * other two children are a subclass of the other, then these input types
-	 * are invalid and <code>null</code> will be returned.
+	 * are invalid and <tt>null</tt> will be returned.
 	 * 
-	 * @return The <code>Boolean</code> class or <code>null</code> if the input
+	 * @return The <tt>Boolean</tt> class or <tt>null</tt> if the input
 	 *         type is invalid.
 	 */
 	@Override
-	public Class<?> dataType(final Class<?> ... inputTypes) {
+	public Class<?> dataType(Class<?> ... inputTypes) {
 		if ((inputTypes.length == 3) && (inputTypes[0] == Boolean.class)) {
 			return TypeUtils.getSuper(inputTypes[1], inputTypes[2]);
 		} else {

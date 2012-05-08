@@ -28,6 +28,7 @@ import java.util.List;
 import org.apache.commons.lang.math.NumberUtils;
 import org.epochx.ge.representation.GECandidateProgram;
 import org.epochx.stats.*;
+import org.epochx.tools.StatsUtils;
 
 /**
  * Provides constants to be used as keys to request statistics from the

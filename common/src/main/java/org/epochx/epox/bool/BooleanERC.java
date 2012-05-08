@@ -19,23 +19,25 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox;
+package org.epochx.epox.bool;
 
 import org.epochx.RandomSequence;
+import org.epochx.epox.*;
+import org.epochx.epox.math.*;
 
 /**
  * Defines a boolean ephemeral random constant (ERC). An ERC is a literal with
- * a value which is randomly generated upon construction. This implementation
- * will generate a value of either <code>true</code> or <code>false</code>
- * randomly with equal probability. As with all nodes, instances may be
+ * a value which is randomly generated on construction. This implementation
+ * will generate a value of either <tt>true</tt> or <tt>false</tt> randomly with
+ * equal probability. As with all nodes, instances may be
  * constructed in any of 3 ways:
  * <ul>
  * <li>constructor - the new instance will be initialised with a value of
- * <code>null</code>.</li>
- * <li>clone method - will return an instance with a value equal to the cloned
- * value.</li>
- * <li>newInstance method - will return a new instance with a new, randomly
- * generated value.</li>
+ * <tt>null</tt>.</li>
+ * <li><tt>clone</tt> method - will return an instance with a value equal to the
+ * cloned value.</li>
+ * <li><tt>newInstance</tt> method - will return a new instance with a new,
+ * randomly generated value.</li>
  * </ul>
  * 
  * @see DoubleERC
@@ -43,39 +45,38 @@ import org.epochx.RandomSequence;
  */
 public class BooleanERC extends Literal {
 
-	private RandomSequence rng;
+	private RandomSequence random;
 
 	/**
-	 * Constructs a new <code>BooleanERC</code> with a value of
-	 * <code>null</code>. The given random number generator will be be used to
-	 * generate a new value if the <code>newInstance</code> method is used.
+	 * Constructs a new <tt>BooleanERC</tt> with a value of <tt>null</tt>. The
+	 * given random number generator will be used to generate a new value if the
+	 * <tt>newInstance</tt> method is used.
 	 * 
-	 * @param rng the random number generator to use if randomly generating a
-	 *        boolean value. An exception will be thrown if it is null.
+	 * @param random the random number generator to use if randomly generating a
+	 *        boolean value. An exception will be thrown if it is <tt>null</tt>.
 	 */
-	public BooleanERC(final RandomSequence rng) {
+	public BooleanERC(RandomSequence random) {
 		super(null);
-		
-		if (rng == null) {
+
+		if (random == null) {
 			throw new IllegalArgumentException("random generator must not be null");
 		}
 
-		this.rng = rng;
-		
-		// Set its value.
+		this.random = random;
+
 		setValue(generateValue());
 	}
 
 	/**
-	 * Constructs a new <code>BooleanERC</code> node with a randomly generated
+	 * Constructs a new <tt>BooleanERC</tt> node with a randomly generated
 	 * value, selected using the random number generator.
 	 * 
-	 * @return a new <code>BooleanERC</code> instance with a randomly generated
-	 *         value.
+	 * @return a new <tt>BooleanERC</tt> instance with a randomly generated
+	 *         value
 	 */
 	@Override
 	public BooleanERC newInstance() {
-		final BooleanERC erc = (BooleanERC) super.newInstance();
+		BooleanERC erc = (BooleanERC) super.newInstance();
 
 		erc.setValue(generateValue());
 
@@ -84,37 +85,38 @@ public class BooleanERC extends Literal {
 
 	/**
 	 * Generates and returns a new boolean value for use in a new
-	 * <code>BooleanERC</code> instance.
+	 * <tt>BooleanERC</tt> instance
 	 * 
-	 * @return a boolean value to be used as the value of a new BooleanERC
-	 *         instance.
-	 * @throws IllegalStateException if the random number generator is null.
+	 * @return a boolean value to be used as the value of a new
+	 *         <tt>BooleanERC</tt> instance
+	 * @throws IllegalStateException if the random number generator is
+	 *         <tt>null</tt>
 	 */
 	protected boolean generateValue() {
-		if (rng == null) {
+		if (random == null) {
 			throw new IllegalStateException("random number generator must not be null");
 		}
 
-		return rng.nextBoolean();
+		return random.nextBoolean();
 	}
 
 	/**
 	 * Returns the random number generator that is currently being used to
-	 * generate boolean values for new <code>BooleanERC</code> instances.
+	 * generate boolean values for new <tt>BooleanERC</tt> instances
 	 * 
 	 * @return the random number generator
 	 */
-	public RandomSequence getRNG() {
-		return rng;
+	public RandomSequence getRandomSequence() {
+		return random;
 	}
 
 	/**
 	 * Sets the random number generator to be used for generating the boolean
-	 * value of new <code>BooleanERC</code> instances.
+	 * value of new <tt>BooleanERC</tt> instances
 	 * 
-	 * @param rng the random number generator to set.
+	 * @param random the random number generator to set
 	 */
-	public void setRNG(final RandomSequence rng) {
-		this.rng = rng;
+	public void setRNG(RandomSequence random) {
+		this.random = random;
 	}
 }

@@ -25,10 +25,10 @@ import org.epochx.core.*;
 import org.epochx.ge.codon.CodonGenerator;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
+import org.epochx.grammar.*;
 import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.source.SourceGenerator;
-import org.epochx.tools.grammar.*;
 
 /**
  * A depth first mapper is the classic form of GE mapper. It maps a

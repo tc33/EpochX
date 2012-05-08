@@ -26,9 +26,9 @@ import org.epochx.gr.op.crossover.WhighamCrossover;
 import org.epochx.gr.op.init.RampedHalfAndHalfInitialiser;
 import org.epochx.gr.op.mutation.WhighamMutation;
 import org.epochx.gr.representation.GRCandidateProgram;
+import org.epochx.grammar.Grammar;
 import org.epochx.interpret.Interpreter;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.grammar.Grammar;
 
 /**
  * Model implementation for performing grammar-guided evolution using the

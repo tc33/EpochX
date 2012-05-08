@@ -64,7 +64,7 @@ public class GenerationTerminals extends AbstractStat<EndGeneration> {
 
 		for (Individual individual: population) {
 			if (individual instanceof STGPIndividual) {
-				terminals[index++] = ((STGPIndividual) individual).getRoot().getNoTerminals();
+				terminals[index++] = ((STGPIndividual) individual).getRoot().countTerminals();
 			}
 		}
 	}

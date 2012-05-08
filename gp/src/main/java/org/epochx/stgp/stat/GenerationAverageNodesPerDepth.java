@@ -68,7 +68,7 @@ public class GenerationAverageNodesPerDepth extends AbstractStat<EndGeneration> 
 			int noNodes = 0;
 			for (Individual individual: population) {
 				if (individual instanceof STGPIndividual) {
-					noNodes += ((STGPIndividual) individual).getRoot().getNodesAtDepth(d).size();
+					noNodes += ((STGPIndividual) individual).getRoot().nodesAtDepth(d).size();
 				}
 			}
 			averages[d] = noNodes / (double) population.size();

@@ -19,9 +19,11 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox;
+package org.epochx.epox.math;
 
 import org.epochx.RandomSequence;
+import org.epochx.epox.Literal;
+import org.epochx.epox.bool.BooleanERC;
 
 
 /**
@@ -32,7 +34,7 @@ import org.epochx.RandomSequence;
  * As with all nodes, instances may be constructed in any of 3 ways:
  * <ul>
  * <li>constructor - the new instance will be initialised with a value of
- * <code>null</code>.</li>
+ * <tt>null</tt>.</li>
  * <li>clone method - will return an instance with a value equal to the cloned
  * value.</li>
  * <li>newInstance method - will return a new instance with a new, randomly
@@ -44,31 +46,31 @@ import org.epochx.RandomSequence;
  */
 public class IntegerERC extends Literal {
 
-	private RandomSequence rng;
+	private RandomSequence random;
 
 	// The inclusive bounds.
 	private int upper;
 	private int lower;
 
 	/**
-	 * Constructs a new <code>IntegerERC</code> with a value of
-	 * <code>null</code>. The given random number generator will be be used to
-	 * generate a new value if the <code>newInstance</code> method is used.
+	 * Constructs a new <tt>IntegerERC</tt> with a value of
+	 * <tt>null</tt>. The given random number generator will be be used to
+	 * generate a new value if the <tt>newInstance</tt> method is used.
 	 * 
-	 * @param rng the random number generator to use if randomly generating an
+	 * @param random the random number generator to use if randomly generating an
 	 *        integer value.
 	 * @param lower the inclusive lower bound of values that are generated.
 	 * @param upper the inclusive upper bound of values that are generated.
 	 */
-	public IntegerERC(final RandomSequence rng, final int lower, final int upper) {
+	public IntegerERC(RandomSequence random, int lower, int upper) {
 		super(null);
 		
 		
-		if (rng == null) {
+		if (random == null) {
 			throw new IllegalArgumentException("random generator must not be null");
 		}
 
-		this.rng = rng;
+		this.random = random;
 		this.lower = lower;
 		this.upper = upper;
 		
@@ -77,17 +79,17 @@ public class IntegerERC extends Literal {
 	}
 
 	/**
-	 * Constructs a new <code>IntegerERC</code> node with a randomly generated
+	 * Constructs a new <tt>IntegerERC</tt> node with a randomly generated
 	 * value, selected using the random number generator. The value will be
 	 * randomly selected with an equal probability from the set of values
 	 * between the lower and upper bounds.
 	 * 
-	 * @return a new <code>IntegerERC</code> instance with a randomly generated
+	 * @return a new <tt>IntegerERC</tt> instance with a randomly generated
 	 *         value.
 	 */
 	@Override
 	public IntegerERC newInstance() {
-		final IntegerERC erc = (IntegerERC) super.newInstance();
+		IntegerERC erc = (IntegerERC) super.newInstance();
 
 		erc.setValue(generateValue());
 
@@ -96,7 +98,7 @@ public class IntegerERC extends Literal {
 
 	/**
 	 * Generates and returns a new integer value for use in a new
-	 * <code>IntegerERC</code> instance. This implementation will return a value
+	 * <tt>IntegerERC</tt> instance. This implementation will return a value
 	 * selected randomly from the set of values between the lower and upper
 	 * bounds, inclusively.
 	 * 
@@ -104,32 +106,32 @@ public class IntegerERC extends Literal {
 	 *         instance.
 	 */
 	protected int generateValue() {
-		if (rng == null) {
+		if (random == null) {
 			throw new IllegalStateException("random number generator must not be null");
 		}
 
-		final int range = upper - lower;
-		return (rng.nextInt(range) + lower);
+		int range = upper - lower;
+		return (random.nextInt(range) + lower);
 	}
 
 	/**
 	 * Returns the random number generator that is currently being used to
-	 * generate integer values for new <code>IntegerERC</code> instances.
+	 * generate integer values for new <tt>IntegerERC</tt> instances.
 	 * 
 	 * @return the random number generator
 	 */
-	public RandomSequence getRNG() {
-		return rng;
+	public RandomSequence getRandomSequence() {
+		return random;
 	}
 
 	/**
 	 * Sets the random number generator to be used for generating the integer
-	 * value of new <code>IntegerERC</code> instances.
+	 * value of new <tt>IntegerERC</tt> instances.
 	 * 
-	 * @param rng the random number generator to set
+	 * @param random the random number generator to set
 	 */
-	public void setRNG(final RandomSequence rng) {
-		this.rng = rng;
+	public void setRandomSequence(RandomSequence random) {
+		this.random = random;
 	}
 
 	/**
@@ -146,7 +148,7 @@ public class IntegerERC extends Literal {
 	 * 
 	 * @param lower the lower bound for values.
 	 */
-	public void setLower(final int lower) {
+	public void setLower(int lower) {
 		this.lower = lower;
 	}
 
@@ -164,7 +166,7 @@ public class IntegerERC extends Literal {
 	 * 
 	 * @param upper the upper bound for values.
 	 */
-	public void setUpper(final int upper) {
+	public void setUpper(int upper) {
 		this.upper = upper;
 	}
 }

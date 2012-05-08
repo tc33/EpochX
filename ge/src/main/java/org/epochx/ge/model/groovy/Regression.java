@@ -26,9 +26,9 @@ import org.epochx.fitness.HitsCountEvaluator;
 import org.epochx.ge.mapper.DepthFirstMapper;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
+import org.epochx.grammar.Grammar;
 import org.epochx.interpret.*;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.grammar.Grammar;
 
 /**
  * The abstract super class for regression problems in XGE in the Groovy

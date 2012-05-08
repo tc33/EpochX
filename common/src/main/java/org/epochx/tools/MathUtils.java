@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.tools.util;
+package org.epochx.tools;
 
 
 /**
@@ -91,7 +91,7 @@ public final class MathUtils {
 	}
 	
 	/**
-	 * Returns the inverse hyperbolic cosine of a <code>double</code> value.
+	 * Returns the inverse hyperbolic cosine of a <tt>double</tt> value.
 	 * Note that <i>cosh(±acosh(x))&nbsp;=&nbsp;x</i>; this function arbitrarily returns the positive branch.
 	 * <p>The identity is:
 	 * <p><i>arcosh(x)&nbsp;=&nbsp;ln(x&nbsp;±&nbsp;sqrt(x<sup>2</sup>&nbsp;-&nbsp;1))</i>
@@ -102,14 +102,14 @@ public final class MathUtils {
 	 * <li>If the argument is one, then the result is (positive) zero.
 	 * </ul>
 	 * @param d The number whose inverse hyperbolic cosine is sought
-	 * @return The inverse hyperbolic cosine of <code>x</code>
+	 * @return The inverse hyperbolic cosine of <tt>x</tt>
 	 */ 
 	public static double arcosh(double d) {
 		return Math.log(d + Math.sqrt(d*d - 1.0));
 	}
 	
 	/**
-	 * Returns the area (inverse) hyperbolic sine of a <code>double</code> value.
+	 * Returns the area (inverse) hyperbolic sine of a <tt>double</tt> value.
 	 * <p>The identity is:
 	 * <p><i>arsinh(x)&nbsp;=&nbsp;ln(x&nbsp;+&nbsp;sqrt(x<sup>2</sup>&nbsp;+&nbsp;1))</i>
 	 * <p>Special cases:
@@ -119,14 +119,14 @@ public final class MathUtils {
 	 * <li>If the argument is zero, then the result is a zero with the same sign as the argument.
 	 * </ul>
 	 * @param d The number whose inverse hyperbolic sine is sought
-	 * @return The inverse hyperbolic sine of <code>d</code>
+	 * @return The inverse hyperbolic sine of <tt>d</tt>
 	 */ 
 	public static double arsinh(double d) {
 		return Double.isInfinite(d) ? d : (d == 0.0) ? d : Math.log(d+Math.sqrt(d*d+1.0)); 
 	}
 	
 	/**
-	 * Returns the inverse hyperbolic tangent of a <code>double</code> value.
+	 * Returns the inverse hyperbolic tangent of a <tt>double</tt> value.
 	 * <p>The identity is:
 	 * <p><i>artanh(x)&nbsp;=&nbsp;(1/2)*ln((1&nbsp;+&nbsp;x)/(1&nbsp;-&nbsp;x))</i>
 	 * <p>Special cases:
@@ -143,24 +143,24 @@ public final class MathUtils {
 	}
 	
 	/**
-	 * Returns the hyperbolic secant of a <code>double</code> value.
+	 * Returns the hyperbolic secant of a <tt>double</tt> value.
 	 * <p>The identity is:
 	 * <p><i>sech(x)&nbsp;=&nbsp;(2/(e<sup>x</sup>&nbsp;+&nbsp;e<sup>-x</sup>)</i>,
 	 * in other words, 1/{@linkplain Math#cosh cosh(<i>x</i>)}.
 	 * <p>Special cases:
 	 * <ul>
 	 * <li>If the argument is NaN, then the result is NaN.
-	 * <li>If the argument is an infinity (positive or negative), then the result is <code>+0.0</code>.
+	 * <li>If the argument is an infinity (positive or negative), then the result is <tt>+0.0</tt>.
 	 * </ul>
 	 * @param d The number whose hyperbolic secant is sought
-	 * @return The hyperbolic secant of <code>d</code>
+	 * @return The hyperbolic secant of <tt>d</tt>
 	 */
 	public static double sech(double d) {
 		return 1.0/Math.cosh(d);
 	}
 	
 	/**
-	 * Returns the hyperbolic cosecant of a <code>double</code> value.
+	 * Returns the hyperbolic cosecant of a <tt>double</tt> value.
 	 * <p>The identity is:
 	 * <p><i>csch(x)&nbsp;=&nbsp;(2/(e<sup>x</sup>&nbsp;-&nbsp;e<sup>-x</sup>)</i>,
 	 * in other words, 1/{@linkplain Math#sinh sinh(<i>x</i>)}.
@@ -168,18 +168,18 @@ public final class MathUtils {
 	 * <ul>
 	 * <li>If the argument is NaN, then the result is NaN.
 	 * <li>If the argument is zero, then the result is an infinity with the same sign as the argument.
-	 * <li>If the argument is positive infinity, then the result is <code>+0.0</code>.
-	 * <li>If the argument is negative infinity, then the result is <code>-0.0</code>.
+	 * <li>If the argument is positive infinity, then the result is <tt>+0.0</tt>.
+	 * <li>If the argument is negative infinity, then the result is <tt>-0.0</tt>.
 	 * </ul>
 	 * @param x The number whose hyperbolic cosecant is sought
-	 * @return The hyperbolic cosecant of <code>x</code>
+	 * @return The hyperbolic cosecant of <tt>x</tt>
 	 */
 	public static double csch(double x) {
 		return 1.0/Math.sinh(x);
 	}
 	
 	/**
-	 * Returns the hyperbolic cotangent of a <code>double</code> value.
+	 * Returns the hyperbolic cotangent of a <tt>double</tt> value.
 	 * <p>The identity is:
 	 * <p><i>coth(x)&nbsp;=&nbsp;(e<sup>x</sup>&nbsp;+&nbsp;e<sup>-x</sup>)/(e<sup>x</sup>&nbsp;-&nbsp;e<sup>-x</sup>)</i>,	
 	 * in other words, {@linkplain Math#cosh cosh(<i>x</i>)}/{@linkplain Math#sinh sinh(<i>x</i>)}.
@@ -187,11 +187,11 @@ public final class MathUtils {
 	 * <ul>
 	 * <li>If the argument is NaN, then the result is NaN.
 	 * <li>If the argument is zero, then the result is an infinity with the same sign as the argument.
-	 * <li>If the argument is positive infinity, then the result is <code>+1.0</code>.
-	 * <li>If the argument is negative infinity, then the result is <code>-1.0</code>.
+	 * <li>If the argument is positive infinity, then the result is <tt>+1.0</tt>.
+	 * <li>If the argument is negative infinity, then the result is <tt>-1.0</tt>.
 	 * </ul>
 	 * @param x The number whose hyperbolic cotangent is sought
-	 * @return The hyperbolic cotangent of <code>x</code>
+	 * @return The hyperbolic cotangent of <tt>x</tt>
 	 */
 	public static double coth(double x) {
 		return 1.0/Math.tanh(x);

@@ -22,10 +22,10 @@
 package org.epochx.epox.math;
 
 import org.epochx.epox.Node;
-import org.epochx.tools.util.*;
+import org.epochx.tools.*;
 
 /**
- * A function node which performs the mathematical function of subtract.
+ * A node which performs the mathematical function of subtract.
  * 
  * Subtraction can be performed on inputs of the following types:
  * <ul>
@@ -41,7 +41,7 @@ import org.epochx.tools.util.*;
 public class SubtractFunction extends Node {
 
 	/**
-	 * Constructs a SubtractFunction with two <code>null</code> children.
+	 * Constructs a SubtractFunction with two <tt>null</tt> children.
 	 */
 	public SubtractFunction() {
 		this(null, null);
@@ -55,7 +55,7 @@ public class SubtractFunction extends Node {
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
 	 */
-	public SubtractFunction(final Node child1, final Node child2) {
+	public SubtractFunction(Node child1, Node child2) {
 		super(child1, child2);
 	}
 
@@ -67,33 +67,33 @@ public class SubtractFunction extends Node {
 	 */
 	@Override
 	public Object evaluate() {
-		final Object c1 = getChild(0).evaluate();
-		final Object c2 = getChild(1).evaluate();
+		Object c1 = getChild(0).evaluate();
+		Object c2 = getChild(1).evaluate();
 
-		final Class<?> returnType = TypeUtils.getNumericType(c1.getClass(), c2.getClass());
+		Class<?> returnType = TypeUtils.getNumericType(c1.getClass(), c2.getClass());
 
 		if (returnType == Double.class) {
 			// Subtract as doubles.
-			final double d1 = NumericUtils.asDouble(c1);
-			final double d2 = NumericUtils.asDouble(c2);
+			double d1 = NumericUtils.asDouble(c1);
+			double d2 = NumericUtils.asDouble(c2);
 
 			return d1 - d2;
 		} else if (returnType == Float.class) {
 			// Subtract as floats.
-			final float f1 = NumericUtils.asFloat(c1);
-			final float f2 = NumericUtils.asFloat(c2);
+			float f1 = NumericUtils.asFloat(c1);
+			float f2 = NumericUtils.asFloat(c2);
 
 			return f1 - f2;
 		} else if (returnType == Long.class) {
 			// Subtract as longs.
-			final long l1 = NumericUtils.asLong(c1);
-			final long l2 = NumericUtils.asLong(c2);
+			long l1 = NumericUtils.asLong(c1);
+			long l2 = NumericUtils.asLong(c2);
 
 			return l1 - l2;
 		} else if (returnType == Integer.class) {
 			// Subtract as integers.
-			final int i1 = NumericUtils.asInteger(c1);
-			final int i2 = NumericUtils.asInteger(c2);
+			int i1 = NumericUtils.asInteger(c1);
+			int i2 = NumericUtils.asInteger(c2);
 
 			return i1 - i2;
 		}
@@ -113,12 +113,12 @@ public class SubtractFunction extends Node {
 	 * Returns this function node's return type for the given child input types.
 	 * If there are two input types of numeric type then the return type will
 	 * be the wider of those numeric types. In all other cases this method will
-	 * return <code>null</code> to indicate that the inputs are invalid.
+	 * return <tt>null</tt> to indicate that the inputs are invalid.
 	 * 
 	 * @return A numeric class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> dataType(final Class<?> ... inputTypes) {
+	public Class<?> dataType(Class<?> ... inputTypes) {
 		if (inputTypes.length == 2) {
 			return TypeUtils.getNumericType(inputTypes);
 		}

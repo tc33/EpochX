@@ -27,8 +27,8 @@ import org.epochx.core.*;
 import org.epochx.fitness.SourceMatchEvaluator;
 import org.epochx.ge.mapper.DepthFirstMapper;
 import org.epochx.ge.representation.GECandidateProgram;
+import org.epochx.grammar.Grammar;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.grammar.Grammar;
 
 /**
  * This model needs to undergo some work and is unlikely to function correctly

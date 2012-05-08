@@ -22,16 +22,16 @@
 package org.epochx.epox.trig;
 
 import org.epochx.epox.Node;
-import org.epochx.tools.util.*;
+import org.epochx.tools.*;
 
 /**
- * A function node which performs the reciprocal trigonometric
+ * A node which performs the reciprocal trigonometric
  * function of cosecant, called CSC. Cosecant x is equal to 1/sin x.
  */
 public class CosecantFunction extends Node {
 
 	/**
-	 * Constructs a CosecantFunction with one <code>null</code> child.
+	 * Constructs a CosecantFunction with one <tt>null</tt> child.
 	 */
 	public CosecantFunction() {
 		this(null);
@@ -42,7 +42,7 @@ public class CosecantFunction extends Node {
 	 * 
 	 * @param child the child node.
 	 */
-	public CosecantFunction(final Node child) {
+	public CosecantFunction(Node child) {
 		super(child);
 	}
 
@@ -54,7 +54,7 @@ public class CosecantFunction extends Node {
 	 */
 	@Override
 	public Double evaluate() {
-		final Object c = getChild(0).evaluate();
+		Object c = getChild(0).evaluate();
 
 		return MathUtils.csc(NumericUtils.asDouble(c));
 	}
@@ -70,13 +70,13 @@ public class CosecantFunction extends Node {
 	/**
 	 * Returns this function node's return type for the given child input types.
 	 * If there is one input type of a numeric type then the return type will
-	 * be Double. In all other cases this method will return <code>null</code>
+	 * be Double. In all other cases this method will return <tt>null</tt>
 	 * to indicate that the inputs are invalid.
 	 * 
 	 * @return the Double class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> dataType(final Class<?> ... inputTypes) {
+	public Class<?> dataType(Class<?> ... inputTypes) {
 		if ((inputTypes.length == 1) && TypeUtils.isNumericType(inputTypes[0])) {
 			return Double.class;
 		} else {

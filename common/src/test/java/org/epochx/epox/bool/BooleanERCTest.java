@@ -19,21 +19,23 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.epox;
+package org.epochx.epox.bool;
 
 import static org.junit.Assert.*;
 
 import org.epochx.RandomSequence;
+import org.epochx.epox.*;
+import org.epochx.epox.bool.BooleanERC;
 import org.epochx.random.MersenneTwisterFast;
 import org.epochx.tools.random.*;
 import org.junit.Test;
 
 /**
- * Unit tests for {@link org.epochx.epox.DoubleERC}
+ * Unit tests for {@link org.epochx.epox.bool.BooleanERC}
  */
-public class DoubleERCTest extends LiteralTest {
+public class BooleanERCTest extends LiteralTest {
 
-	private DoubleERC erc;
+	private BooleanERC erc;
 	private RandomSequence rng;
 
 	/**
@@ -41,7 +43,7 @@ public class DoubleERCTest extends LiteralTest {
 	 */
 	@Override
 	protected Node getNode() {
-		return new DoubleERC(new MockRandom(), 0.0, 1.0, 4);
+		return new BooleanERC(new MockRandom());
 	}
 	
 	/**
@@ -50,19 +52,19 @@ public class DoubleERCTest extends LiteralTest {
 	@Override
 	public void setUp() {
 		rng = new MersenneTwisterFast();
-		erc = new DoubleERC(rng, 1.0, 2.0, 3);
+		erc = new BooleanERC(rng);
 
 		super.setUp();
 	}
-
+	
 	/**
-	 * Tests that {@link org.epochx.epox.DoubleERC#DoubleERC(RandomNumberGenerator, double, double, int)} 
+	 * Tests that {@link org.epochx.epox.bool.BooleanERC#BooleanERC(RandomNumberGenerator)} 
 	 * throws an exception if rng is null.
 	 */
 	@Test
-	public void testNewInstanceDoubleERCNull() {
+	public void testNewInstanceBooleanERCNull() {
 		try {
-			new DoubleERC(null, 0.0, 1.0, 1);
+			new BooleanERC(null);
 			fail("an exception should be thrown for a null rng");
 		} catch (IllegalArgumentException expected) {
 			assertTrue(true);
@@ -70,20 +72,7 @@ public class DoubleERCTest extends LiteralTest {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.DoubleERC#newInstance()} correctly
-	 * constructs new instances.
-	 */
-	@Test
-	public void testNewInstanceDoubleERC() {
-		final DoubleERC newInstance = erc.newInstance();
-
-		assertSame("rng does not refer to the same instance", rng, newInstance.getRNG());
-		// This test is fragile - if it fails it might be because the same number was generated - rerun (v.unlikely to fail twice).
-		assertNotSame("the value of new instance refers to the same object", erc.getValue(), newInstance.getValue());
-	}
-
-	/**
-	 * Tests that {@link org.epochx.epox.DoubleERC#generateValue()} correctly
+	 * Tests that {@link org.epochx.epox.bool.BooleanERC#generateValue()} correctly
 	 * generates new values.
 	 */
 	@Test
@@ -91,37 +80,17 @@ public class DoubleERCTest extends LiteralTest {
 		final MockRandom rng = new MockRandom();
 		erc.setRNG(rng);
 
-		final double lower = 2.0;
-		final double upper = 5.0;
+		rng.setNextBoolean(true);
+		boolean generatedValue = erc.generateValue();
+		assertSame("generated value unexpected", true, generatedValue);
 
-		// Set the bounds.
-		erc.setLower(lower);
-		erc.setUpper(upper);
-		erc.setPrecision(4);
-
-		// Tests lower value.
-		rng.setNextDouble(0.0);
-		double generatedValue = erc.generateValue();
-		assertEquals("generated value unexpected", (Object) lower, generatedValue);
-
-		// Tests upper value.
-		rng.setNextDouble(1.0);
+		rng.setNextBoolean(false);
 		generatedValue = erc.generateValue();
-		assertEquals("generated value unexpected", (Object) upper, generatedValue);
-
-		// Tests mid-value with precision.
-		rng.setNextDouble(0.5155);
-		generatedValue = erc.generateValue();
-		assertEquals("generated value unexpected", (Object) 3.546, generatedValue);
-
-		// Test reduced precision gets rounded up.
-		erc.setPrecision(3);
-		generatedValue = erc.generateValue();
-		assertEquals("generated value unexpected", (Object) 3.55, generatedValue);
+		assertSame("generated value unexpected", false, generatedValue);
 	}
 
 	/**
-	 * Tests that {@link org.epochx.epox.DoubleERC#generateValue()} throws an
+	 * Tests that {@link org.epochx.epox.bool.BooleanERC#generateValue()} throws an
 	 * exception if rng is null.
 	 */
 	@Test
@@ -140,11 +109,12 @@ public class DoubleERCTest extends LiteralTest {
 	 * instances.
 	 */
 	@Test
-	public void testCloneDoubleERC() {
-		final DoubleERC clone = (DoubleERC) erc.clone();
+	public void testCloneBooleanERC() {
+		final BooleanERC clone = (BooleanERC) erc.clone();
 
 		assertNotSame("ERC has not been cloned", erc, clone);
-		assertSame("rng does not refer to the same instance", rng, clone.getRNG());
+		assertSame("rng does not refer to the same instance", rng, clone.getRandomSequence());
 		assertSame("value does not refer to the same instance", erc.getValue(), clone.getValue());
 	}
+
 }

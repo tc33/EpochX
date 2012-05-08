@@ -22,16 +22,16 @@
 package org.epochx.epox.math;
 
 import org.epochx.epox.Node;
-import org.epochx.tools.util.*;
+import org.epochx.tools.*;
 
 /**
- * A function node which performs the mathematical sign function
+ * A node which performs the mathematical sign function
  * that extracts the sign of a number.
  */
 public class SignumFunction extends Node {
 
 	/**
-	 * Constructs a SignumFunction with one <code>null</code> child.
+	 * Constructs a SignumFunction with one <tt>null</tt> child.
 	 */
 	public SignumFunction() {
 		this(null);
@@ -42,7 +42,7 @@ public class SignumFunction extends Node {
 	 * 
 	 * @param child the child node.
 	 */
-	public SignumFunction(final Node child) {
+	public SignumFunction(Node child) {
 		super(child);
 	}
 
@@ -55,9 +55,9 @@ public class SignumFunction extends Node {
 	 */
 	@Override
 	public Object evaluate() {
-		final Object c = getChild(0).evaluate();
+		Object c = getChild(0).evaluate();
 
-		final double result = Math.signum(NumericUtils.asDouble(c));
+		double result = Math.signum(NumericUtils.asDouble(c));
 
 		if (c instanceof Double) {
 			return result;
@@ -84,12 +84,12 @@ public class SignumFunction extends Node {
 	 * Returns this function node's return type for the given child input types.
 	 * If there is one input type of a numeric type then the return type will
 	 * be that same numeric type. In all other cases this method will return
-	 * <code>null</code> to indicate that the inputs are invalid.
+	 * <tt>null</tt> to indicate that the inputs are invalid.
 	 * 
 	 * @return A numeric class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> dataType(final Class<?> ... inputTypes) {
+	public Class<?> dataType(Class<?> ... inputTypes) {
 		if ((inputTypes.length == 1) && TypeUtils.isNumericType(inputTypes[0])) {
 			return inputTypes[0];
 		} else {

@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.tools.grammar;
+package org.epochx.grammar;
 
 /**
  * A node of a parse tree that was constructed to satisfy a grammar. It is the

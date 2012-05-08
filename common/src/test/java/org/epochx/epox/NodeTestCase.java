@@ -109,7 +109,7 @@ public abstract class NodeTestCase {
 	}
 
 	/**
-	 * Tests {@link org.epochx.epox.Node#getNthNode(int)} returns the correct
+	 * Tests {@link org.epochx.epox.Node#getNode(int)} returns the correct
 	 * nth node for n = index-1.
 	 */
 	@Test
@@ -117,30 +117,30 @@ public abstract class NodeTestCase {
 		final int length = node.length();
 
 		Node expected = node;
-		if (node.isFunction()) {
+		if (node.isNonTerminal()) {
 			expected = children[children.length - 1];
 		}
 
-		assertSame("nth node does not match expected last", expected, node.getNthNode(length - 1));
+		assertSame("nth node does not match expected last", expected, node.getNode(length - 1));
 	}
 
 	/**
-	 * Tests {@link org.epochx.epox.Node#getNthNode(int)} returns the node
+	 * Tests {@link org.epochx.epox.Node#getNode(int)} returns the node
 	 * itself for n = 0.
 	 */
 	@Test
 	public void testGetNthNodeZero() {
-		assertSame("nth node does not match expected at n=0", node, node.getNthNode(0));
+		assertSame("nth node does not match expected at n=0", node, node.getNode(0));
 	}
 
 	/**
-	 * Tests {@link org.epochx.epox.Node#getNthNode(int)} throws an index out of
+	 * Tests {@link org.epochx.epox.Node#getNode(int)} throws an index out of
 	 * bounds exception for a value of n out of the valid range: 0 <= n < length
 	 */
 	@Test
 	public void testGetNthNodeBounds() {
 		try {
-			node.getNthNode(-1);
+			node.getNode(-1);
 			fail("exception not thrown for node index of -1");
 		} catch (final IndexOutOfBoundsException expected) {
 			assertTrue(true);
@@ -148,7 +148,7 @@ public abstract class NodeTestCase {
 
 		try {
 			final int length = node.length();
-			node.getNthNode(length);
+			node.getNode(length);
 			fail("exception not thrown for node index of length");
 		} catch (final IndexOutOfBoundsException expected) {
 			assertTrue(true);
@@ -169,7 +169,7 @@ public abstract class NodeTestCase {
 
 			node.setNode(length - 1, mockNode);
 
-			assertSame("node not set correctly at nth position", mockNode, node.getNthNode(length - 1));
+			assertSame("node not set correctly at nth position", mockNode, node.getNode(length - 1));
 		}
 	}
 
@@ -197,18 +197,18 @@ public abstract class NodeTestCase {
 	}
 
 	/**
-	 * Tests {@link org.epochx.epox.Node#getNthFunctionNodeIndex(int)} returns
+	 * Tests {@link org.epochx.epox.Node#nthNonTerminalIndex(int)} returns
 	 * the correct index of the last function node.
 	 */
 	@Test
 	public void testGetNthFunctionNodeIndexLast() {
 		// Only applies to function node roots. Terminals should cause an
 		// exception.
-		if (node.isFunction()) {
-			final int lastFunction = node.getNoFunctions() - 1;
+		if (node.isNonTerminal()) {
+			final int lastFunction = node.countNonTerminals() - 1;
 			final int expectedLastIndex = getLastFunctionNodeIndex();
 
-			final int lastIndex = node.getNthFunctionNodeIndex(lastFunction);
+			final int lastIndex = node.nthNonTerminalIndex(lastFunction);
 
 			assertSame("last function node's index is not as expected", expectedLastIndex, lastIndex);
 		}
@@ -223,9 +223,9 @@ public abstract class NodeTestCase {
 
 		// Work backwards through the nodes.
 		for (int i = length - 1; i >= 0; i--) {
-			final Node n = node.getNthNode(i);
+			final Node n = node.getNode(i);
 
-			if (n.isFunction()) {
+			if (n.isNonTerminal()) {
 				return i;
 			}
 		}
@@ -233,7 +233,7 @@ public abstract class NodeTestCase {
 	}
 
 	/**
-	 * Tests {@link org.epochx.epox.Node#getNthFunctionNodeIndex(int)} returns
+	 * Tests {@link org.epochx.epox.Node#nthNonTerminalIndex(int)} returns
 	 * the correct index of the first function node, which should always be at
 	 * index zero for a non-terminal root.
 	 */
@@ -241,22 +241,22 @@ public abstract class NodeTestCase {
 	public void testGetNthFunctionNodeIndexFirst() {
 		// Only applies to function node roots. Terminals should cause an
 		// exception.
-		if (node.isFunction()) {
-			final int lastIndex = node.getNthFunctionNodeIndex(0);
+		if (node.isNonTerminal()) {
+			final int lastIndex = node.nthNonTerminalIndex(0);
 
 			assertSame("first function node's index is not as expected", 0, lastIndex);
 		}
 	}
 
 	/**
-	 * Tests {@link org.epochx.epox.Node#getNthFunctionNodeIndex(int)} throws an
+	 * Tests {@link org.epochx.epox.Node#nthNonTerminalIndex(int)} throws an
 	 * exception for function indexes out of bounds.
 	 */
 	@Test
 	public void testGetNthFunctionNodeIndexBounds() {
 		// Test index -1.
 		try {
-			node.getNthFunctionNodeIndex(-1);
+			node.nthNonTerminalIndex(-1);
 			fail("exception not thrown for function node at index -1");
 		} catch (final IndexOutOfBoundsException expected) {
 			assertTrue(true);
@@ -265,7 +265,7 @@ public abstract class NodeTestCase {
 		// Test index noFunctions. This will also test terminals with index of
 		// 0.
 		try {
-			node.getNthFunctionNodeIndex(node.getNoFunctions());
+			node.nthNonTerminalIndex(node.countNonTerminals());
 			fail("exception not thrown for function node at index length");
 		} catch (final IndexOutOfBoundsException expected) {
 			assertTrue(true);
@@ -273,16 +273,16 @@ public abstract class NodeTestCase {
 	}
 
 	/**
-	 * Tests {@link org.epochx.epox.Node#getNthTerminalNodeIndex(int)} returns
+	 * Tests {@link org.epochx.epox.Node#nthTerminalIndex(int)} returns
 	 * zero for a the 0th terminal when called upon a terminal.
 	 */
 	@Test
 	public void testGetNthTerminalNodeIndexFirst() {
 		int expectedFirstIndex = 0;
-		if (node.isFunction()) {
+		if (node.isNonTerminal()) {
 			expectedFirstIndex = getFirstTerminalNodeIndex();
 		}
-		final int firstIndex = node.getNthTerminalNodeIndex(0);
+		final int firstIndex = node.nthTerminalIndex(0);
 
 		assertSame("first terminal node's index is not as expected", expectedFirstIndex, firstIndex);
 	}
@@ -296,7 +296,7 @@ public abstract class NodeTestCase {
 
 		// Work backwards through the nodes.
 		for (int i = 0; i < length; i++) {
-			final Node n = node.getNthNode(i);
+			final Node n = node.getNode(i);
 
 			if (n.isTerminal()) {
 				return i;
@@ -306,14 +306,14 @@ public abstract class NodeTestCase {
 	}
 
 	/**
-	 * Tests {@link org.epochx.epox.Node#getNthTerminalNodeIndex(int)} throws an
+	 * Tests {@link org.epochx.epox.Node#nthTerminalIndex(int)} throws an
 	 * exception for terminal indexes out of bounds.
 	 */
 	@Test
 	public void testGetNthTerminalNodeIndexBounds() {
 		// Test index -1.
 		try {
-			node.getNthTerminalNodeIndex(-1);
+			node.nthTerminalIndex(-1);
 			fail("exception not thrown for terminal node at index -1");
 		} catch (final IndexOutOfBoundsException expected) {
 			assertTrue(true);
@@ -321,7 +321,7 @@ public abstract class NodeTestCase {
 
 		// Test index noTerminals.
 		try {
-			node.getNthTerminalNodeIndex(node.getNoTerminals());
+			node.nthTerminalIndex(node.countTerminals());
 			fail("exception not thrown for terminal node at index length");
 		} catch (final IndexOutOfBoundsException expected) {
 			assertTrue(true);
@@ -329,44 +329,44 @@ public abstract class NodeTestCase {
 	}
 
 	/**
-	 * Tests {@link org.epochx.epox.Node#getNodesAtDepth(int)} with a depth
+	 * Tests {@link org.epochx.epox.Node#nodesAtDepth(int)} with a depth
 	 * parameter of zero returns a list containing only one element which is the
 	 * test node itself.
 	 */
 	@Test
 	public void testGetNodesAtDepthZero() {
-		final List<Node> nodes = node.getNodesAtDepth(0);
+		final List<Node> nodes = node.nodesAtDepth(0);
 
 		assertSame("only one node expected at depth zero", 1, nodes.size());
 		assertSame("only node at depth zero should be the root node", node, nodes.get(0));
 	}
 
 	/**
-	 * Tests {@link org.epochx.epox.Node#getNodesAtDepth(int)} with a depth
+	 * Tests {@link org.epochx.epox.Node#nodesAtDepth(int)} with a depth
 	 * parameter of two returns a list containing only those children at depth
 	 * two.
 	 */
 	@Test
 	public void testGetNodesAtDepthTwo() {
 		// Is only applicable to function nodes.
-		if (node.isFunction()) {
+		if (node.isNonTerminal()) {
 			// Set the nodes to create a tree of depth 2.
 			final List<Node> expectedNodes = setupTreeDepthTwo();
-			final List<Node> nodes = node.getNodesAtDepth(2);
+			final List<Node> nodes = node.nodesAtDepth(2);
 
 			assertEquals("unexpected nodes found at depth two", expectedNodes, nodes);
 		}
 	}
 
 	/**
-	 * Tests {@link org.epochx.epox.Node#getNodesAtDepth(int)} throws an
+	 * Tests {@link org.epochx.epox.Node#nodesAtDepth(int)} throws an
 	 * exception for depths out of bounds.
 	 */
 	@Test
-	public void testGetNodesAtDepthBounds() {
+	public void nodesAtDepth() {
 		// Test depth -1.
 		try {
-			node.getNodesAtDepth(-1);
+			node.nodesAtDepth(-1);
 			fail("exception not thrown for nodes at depth -1");
 		} catch (final IndexOutOfBoundsException expected) {
 			assertTrue(true);
@@ -374,7 +374,7 @@ public abstract class NodeTestCase {
 
 		// Test depth+1
 		try {
-			node.getNodesAtDepth(node.depth() + 1);
+			node.nodesAtDepth(node.depth() + 1);
 			fail("exception not thrown for nodes at depth depth+1");
 		} catch (final IndexOutOfBoundsException expected) {
 			assertTrue(true);
@@ -387,7 +387,7 @@ public abstract class NodeTestCase {
 	 */
 	@Test
 	public void testSetChild() {
-		if (node.isFunction()) {
+		if (node.isNonTerminal()) {
 			final Node newNode = new MockNode();
 			final int index = node.getArity() - 1;
 			node.setChild(index, newNode);
@@ -397,48 +397,48 @@ public abstract class NodeTestCase {
 	}
 
 	/**
-	 * Tests {@link org.epochx.epox.Node#getNoTerminals()} returns the correct
+	 * Tests {@link org.epochx.epox.Node#countTerminals()} returns the correct
 	 * number of terminals, which for the test node should be equal to the
 	 * arity if it is a function, or 1 otherwise.
 	 */
 	@Test
 	public void testGetNoTerminals() {
-		if (node.isFunction()) {
-			assertSame("incorrect number of terminals", node.getArity(), node.getNoTerminals());
+		if (node.isNonTerminal()) {
+			assertSame("incorrect number of terminals", node.getArity(), node.countTerminals());
 		} else {
-			assertSame("incorrect number of terminals", 1, node.getNoTerminals());
+			assertSame("incorrect number of terminals", 1, node.countTerminals());
 		}
 	}
 
 	/**
-	 * Tests {@link org.epochx.epox.Node#getNoDistinctTerminals()} returns the
+	 * Tests {@link org.epochx.epox.Node#countDistinctTerminals()} returns the
 	 * correct number of terminals, which for the test node should always be
 	 * one.
 	 */
 	@Test
 	public void testGetNoDistinctTerminals() {
-		assertSame("incorrect count of distinct terminals", 1, node.getNoDistinctTerminals());
+		assertSame("incorrect count of distinct terminals", 1, node.countDistinctTerminals());
 
-		if (node.isFunction()) {
+		if (node.isNonTerminal()) {
 			// Update the identifiers so they're different, and count again.
 			for (int i = 0; i < node.getArity(); i++) {
 				final MockNode mockChild = (MockNode) node.getChild(i);
 				mockChild.setGetIdentifier("ID" + i);
 			}
 
-			assertSame("incorrect count of distinct terminals", node.getArity(), node.getNoDistinctTerminals());
+			assertSame("incorrect count of distinct terminals", node.getArity(), node.countDistinctTerminals());
 		}
 	}
 
 	/**
-	 * Tests {@link org.epochx.epox.Node#getTerminalNodes()} returns only
+	 * Tests {@link org.epochx.epox.Node#listTerminals()} returns only
 	 * terminal nodes, and all the terminal nodes.
 	 */
 	@Test
 	public void testGetTerminalNodes() {
 		// Change node to a depth 2.
 		final List<Node> expectedTerminalNodes = setupTreeDepthTwo();
-		final List<Node> terminalNodes = node.getTerminalNodes();
+		final List<Node> terminalNodes = node.listTerminals();
 
 		if (node.isTerminal()) {
 			assertSame("incorrect number of terminal nodes returned", 1, terminalNodes.size());
@@ -449,39 +449,39 @@ public abstract class NodeTestCase {
 	}
 
 	/**
-	 * Tests {@link org.epochx.epox.Node#getNoFunctions()} returns the correct
+	 * Tests {@link org.epochx.epox.Node#countNonTerminals()} returns the correct
 	 * number of functions.
 	 */
 	@Test
 	public void testGetNoFunctions() {
 		if (node.isTerminal()) {
-			assertSame("incorrect number of function nodes in a terminal", 0, node.getNoFunctions());
+			assertSame("incorrect number of function nodes in a terminal", 0, node.countNonTerminals());
 		} else {
 			// Change node to a depth 2.
 			setupTreeDepthTwo();
 
 			final int expected = 1 + node.getArity();
-			assertSame("incorrect number of function nodes", expected, node.getNoFunctions());
+			assertSame("incorrect number of function nodes", expected, node.countNonTerminals());
 		}
 
 	}
 
 	/**
-	 * Tests {@link org.epochx.epox.Node#getNoDistinctFunctions()} returns the
+	 * Tests {@link org.epochx.epox.Node#countDistinctNonTerminals()} returns the
 	 * correct number of functions.
 	 */
 	@Test
 	public void testGetNoDistinctFunctions() {
 		if (node.isTerminal()) {
-			assertSame("incorrect count of distinct functions", 0, node.getNoDistinctFunctions());
+			assertSame("incorrect count of distinct functions", 0, node.countDistinctNonTerminals());
 		} else {
-			assertSame("incorrect count of distinct functions", 1, node.getNoDistinctFunctions());
+			assertSame("incorrect count of distinct functions", 1, node.countDistinctNonTerminals());
 
 			// Change node to a depth 2.
 			setupTreeDepthTwo();
 
 			// Root plus the mock nodes.
-			assertSame("incorrect count of distinct functions", 2, node.getNoDistinctFunctions());
+			assertSame("incorrect count of distinct functions", 2, node.countDistinctNonTerminals());
 
 			// Update the identifiers so they're different, and count again.
 			for (int i = 0; i < node.getArity(); i++) {
@@ -489,7 +489,7 @@ public abstract class NodeTestCase {
 				mockChild.setGetIdentifier("ID" + i);
 			}
 			final int expected = 1 + node.getArity();
-			assertSame("incorrect count of distinct functions", expected, node.getNoDistinctFunctions());
+			assertSame("incorrect count of distinct functions", expected, node.countDistinctNonTerminals());
 		}
 	}
 
@@ -534,7 +534,7 @@ public abstract class NodeTestCase {
 	 */
 	@Test
 	public void testGetReturnType() {
-		if (node.isFunction()) {
+		if (node.isNonTerminal()) {
 			node.setChild(0, null);
 
 			assertNull("return type should be null if any children unset", node.dataType());
@@ -612,7 +612,7 @@ public abstract class NodeTestCase {
 		assertNotSame("unit test broken", node, comparison);
 
 		// No need to test this for a terminal, we assume arity does not change.
-		if (node.isFunction()) {
+		if (node.isNonTerminal()) {
 			comparison.setChildren(new Node[node.getArity() + 1]);
 
 			assertFalse("nodes not equal if have different arities", node.equals(comparison));

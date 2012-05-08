@@ -25,14 +25,14 @@ import org.epochx.epox.Node;
 import org.epochx.tools.ant.Ant;
 
 /**
- * This class defines a function which causes an Ant instance to move on one
- * time-step without moving its position in its landscape. Although named as a
- * function, this node may operate as
- * either a function or a terminal depending on how the ant is provided. It may
- * optionally be provided at construction, in which case it becomes a terminal
- * which operates on its internal ant. Alternatively, it can require one child
- * node with a data-type of Ant. In this case, when evaluated it will first
- * evaluate its child to obtain its ant.
+ * This class defines a function which causes an <tt>Ant</tt> instance to move
+ * on one time-step without moving its position in its landscape. Although named
+ * as a function, this node may operate as either a function or a terminal
+ * depending on how the ant is provided. It may optionally be provided at
+ * construction, in which case it becomes a terminal which operates on its
+ * internal ant. Alternatively, it can require one child node with a data-type
+ * of <tt>Ant</tt>. In this case, when evaluated it will first evaluate its
+ * child to obtain its ant.
  * 
  * @see AntMoveFunction
  * @see AntTurnLeftFunction
@@ -42,48 +42,53 @@ public class AntSkipFunction extends Node {
 
 	// This may remain null, depending on the constructor used.
 	private Ant ant;
-	
+
 	/**
-	 * Constructs an AntSkipFunction with one <code>null</code> child.
+	 * Constructs an <tt>AntSkipFunction</tt> with one <tt>null</tt> child
 	 */
 	public AntSkipFunction() {
 		this((Node) null);
 	}
 
 	/**
-	 * Constructs an AntSkipFunction with one child node. The given child
-	 * must have a return-type of Ant.
+	 * Constructs an <tt>AntSkipFunction</tt> with one child node. The given
+	 * child must have a return-type of <tt>Ant</tt>.
 	 * 
-	 * @param child this node's only child.
+	 * @param child this node's only child
 	 */
-	public AntSkipFunction(final Node child) {
+	public AntSkipFunction(Node child) {
 		super(child);
 	}
 
 	/**
-	 * Constructs an <code>AntSkipFunction</code> with no child nodes, but the
+	 * Constructs an <tt>AntSkipFunction</tt> with no child nodes, but the
 	 * given ant which will be held internally. This makes the function a
 	 * terminal node with arity zero. Note that this differs from the
-	 * alternative constructors which take a child node with an Ant return type.
+	 * other constructors which take a child node with an <tt>Ant</tt> return
+	 * type.
 	 * 
-	 * @param ant the ant instance that should be operated upon when this node
-	 * is evaluated. An exception will be thrown if this argument is null.
+	 * @param ant the <tt>Ant</tt> instance that should be operated on when this
+	 *        node is evaluated. An exception will be thrown if this argument is
+	 *        <tt>null</tt>.
 	 */
-	public AntSkipFunction(final Ant ant) {
+	public AntSkipFunction(Ant ant) {
 		super();
-		
+
 		if (ant == null) {
 			throw new IllegalArgumentException("ant must not be null");
 		}
-		
+
 		this.ant = ant;
 	}
 
 	/**
-	 * Evaluates this function. The Ant is made to skip one time step without
-	 * moving its position within the landscape. The return type of this
-	 * function node is Void, and so the value returned from this method is
-	 * undefined.
+	 * Evaluates this function. The ant is made to skip one time step
+	 * without moving its position within the landscape. The return type of this
+	 * function node is <tt>Void</tt>, and so the value returned from this
+	 * method is undefined.
+	 * 
+	 * @return the return type of this function node is <tt>Void</tt> and so
+	 *         the value returned from this method is undefined
 	 */
 	@Override
 	public Void evaluate() {
@@ -98,7 +103,7 @@ public class AntSkipFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is SKIP.
+	 * Returns the identifier of this function which is <tt>SKIP</tt>
 	 */
 	@Override
 	public String getIdentifier() {
@@ -107,21 +112,21 @@ public class AntSkipFunction extends Node {
 
 	/**
 	 * Returns this function node's return type for the given child input types.
-	 * If the arity of this node is zero, and the inputTypes array is empty then
-	 * the return type of this node will be Void. If the arity is one, and there
-	 * is only one input type which is a sub-type of Ant then the
-	 * return type of this function will be Void. In all other cases this method
-	 * will return <code>null</code> to indicate that the inputs are invalid.
+	 * If the arity of this node is 0, and the <tt>inputTypes</tt> array is
+	 * empty then the return type of this node will be <tt>Void</tt>. If the
+	 * arity is 1 and there is only one input type which is of an <tt>Ant</tt>
+	 * type, then the return type of this function will be <tt>Void</tt>. In all
+	 * other cases this method will return <tt>null</tt> to indicate that
+	 * the inputs are invalid.
 	 * 
-	 * @return The Void class or null if the input type is invalid.
+	 * @return <tt>Void</tt> or otherwise <tt>null</tt> if the input type is
+	 *         invalid
 	 */
 	@Override
-	public Class<?> dataType(final Class<?> ... inputTypes) {
+	public Class<?> dataType(Class<?> ... inputTypes) {
 		if ((getArity() == 0) && (inputTypes.length == 0)) {
 			return Void.class;
-		} else if ((getArity() == 1) 
-				&& (inputTypes.length == 1) 
-				&& Ant.class.isAssignableFrom(inputTypes[0])) {
+		} else if ((getArity() == 1) && (inputTypes.length == 1) && Ant.class.isAssignableFrom(inputTypes[0])) {
 			return Void.class;
 		} else {
 			return null;

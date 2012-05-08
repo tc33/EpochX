@@ -22,37 +22,37 @@
 package org.epochx.epox.bool;
 
 import org.epochx.epox.Node;
-import org.epochx.tools.util.TypeUtils;
+import org.epochx.tools.TypeUtils;
 
 /**
- * A function node which performs the logical operation of NOR
- * that is equivalent to the negation of logical OR or NOT OR.
+ * A node which performs the logical operation of <tt>NOR</tt> which is
+ * equivalent to the negation of logical OR, <tt>NOT OR</tt>.
  */
 public class NorFunction extends Node {
 
 	/**
-	 * Constructs a NorFunction with two <code>null</code> children.
+	 * Constructs a <tt>NorFunction</tt> with two <tt>null</tt> children
 	 */
 	public NorFunction() {
 		this(null, null);
 	}
 
 	/**
-	 * Constructs a NorFunction with two boolean child nodes.
+	 * Constructs a <tt>NorFunction</tt> with two boolean child nodes
 	 * 
-	 * @param child1 The first child node.
-	 * @param child2 The second child node.
+	 * @param child1 the first child node
+	 * @param child2 the second child node
 	 */
-	public NorFunction(final Node child1, final Node child2) {
+	public NorFunction(Node child1, Node child2) {
 		super(child1, child2);
 	}
 
 	/**
 	 * Evaluates this function lazily. The first child node is evaluated, the
-	 * result of which must be a <code>Boolean</code> instance. If the result
-	 * is a false value then the second child is also evaluated. The result of
-	 * this function will be true if both children evaluate to false, otherwise
-	 * the result will be false.
+	 * result of which must be a <tt>Boolean</tt> instance. If the result
+	 * is a <tt>false</tt> value then the second child is also evaluated. The
+	 * result of this function will be <tt>true</tt> if both children evaluate
+	 * to <tt>false</tt>, otherwise the result will be <tt>false</tt>.
 	 */
 	@Override
 	public Boolean evaluate() {
@@ -75,15 +75,16 @@ public class NorFunction extends Node {
 
 	/**
 	 * Returns this function node's return type for the given child input types.
-	 * If there are two children, both of which have a return type of Boolean,
-	 * then the return type of this function will also be Boolean. In all other
-	 * cases this method will return <code>null</code> to indicate that the
-	 * inputs are invalid.
+	 * If there are two children, both of which have a return type of
+	 * <tt>Boolean</tt>, then the return type of this function will also be
+	 * <tt>Boolean</tt>. In all other cases this method will return
+	 * <tt>null</tt> to indicate that the inputs are invalid.
 	 * 
-	 * @return The Boolean class or null if the input type is invalid.
+	 * @return the <tt>Boolean</tt> class or <tt>null</tt> if the input type is
+	 *         invalid
 	 */
 	@Override
-	public Class<?> dataType(final Class<?> ... inputTypes) {
+	public Class<?> dataType(Class<?> ... inputTypes) {
 		if ((inputTypes.length == 2) && TypeUtils.allEqual(inputTypes, Boolean.class)) {
 			return Boolean.class;
 		} else {

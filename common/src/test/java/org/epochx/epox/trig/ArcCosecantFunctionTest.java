@@ -26,7 +26,7 @@ import static org.junit.Assert.*;
 import org.epochx.epox.*;
 import org.epochx.epox.trig.ArcCosecantFunction;
 import org.epochx.interpret.*;
-import org.epochx.tools.util.MathUtils;
+import org.epochx.tools.MathUtils;
 import org.junit.Test;
 
 /**

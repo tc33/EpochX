@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.stats;
+package org.epochx.tools;
 
 import java.util.Arrays;
 

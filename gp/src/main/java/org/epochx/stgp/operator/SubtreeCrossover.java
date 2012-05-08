@@ -205,15 +205,15 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 			return random.nextInt(length);
 		}
 
-		int noTerminals = individual.getRoot().getNoTerminals();
+		int noTerminals = individual.getRoot().countTerminals();
 		int noNonTerminals = length - noTerminals;
 
 		if ((noNonTerminals > 0) && (random.nextDouble() >= terminalProbability)) {
 			int f = random.nextInt(noNonTerminals);
-			return individual.getRoot().getNthFunctionNodeIndex(f);
+			return individual.getRoot().nthNonTerminalIndex(f);
 		} else {
 			int t = random.nextInt(noTerminals);
-			return individual.getRoot().getNthTerminalNodeIndex(t);
+			return individual.getRoot().nthTerminalIndex(t);
 		}
 	}
 

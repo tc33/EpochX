@@ -24,13 +24,13 @@ package org.epochx.epox.math;
 import org.epochx.epox.Node;
 
 /**
- * A function node which performs a comparison of two numeric inputs and returns
+ * A node which performs a comparison of two numeric inputs and returns
  * the greater of the two.
  */
 public class Max2Function extends MaxFunction {
 
 	/**
-	 * Constructs a Max2Function with two <code>null</code> children.
+	 * Constructs a Max2Function with two <tt>null</tt> children.
 	 */
 	public Max2Function() {
 		this(null, null);
@@ -42,7 +42,7 @@ public class Max2Function extends MaxFunction {
 	 * @param child1 The first child node.
 	 * @param child2 The second child node
 	 */
-	public Max2Function(final Node child1, final Node child2) {
+	public Max2Function(Node child1, Node child2) {
 		super(child1, child2);
 	}
 

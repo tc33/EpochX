@@ -26,9 +26,9 @@ import org.epochx.fitness.HitsCountEvaluator;
 import org.epochx.ge.mapper.DepthFirstMapper;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
+import org.epochx.grammar.Grammar;
 import org.epochx.interpret.*;
-import org.epochx.tools.grammar.Grammar;
-import org.epochx.tools.util.BoolUtils;
+import org.epochx.tools.BooleanUtils;
 
 /**
  * Grammar model for the even parity problems using a Groovy grammar.
@@ -70,7 +70,7 @@ public class EvenParity extends GEModel {
 		super(evolver);
 		
 		// Generate the input sequences.
-		inputValues = BoolUtils.generateBoolSequences(noInputBits);
+		inputValues = BooleanUtils.generateBoolSequences(noInputBits);
 
 		// Determine the input argument names.
 		argNames = new String[noInputBits];

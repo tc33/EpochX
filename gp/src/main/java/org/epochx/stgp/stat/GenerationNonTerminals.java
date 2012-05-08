@@ -64,7 +64,7 @@ public class GenerationNonTerminals extends AbstractStat<EndGeneration> {
 
 		for (Individual individual: population) {
 			if (individual instanceof STGPIndividual) {
-				nonTerminals[index++] = ((STGPIndividual) individual).getRoot().getNoFunctions();
+				nonTerminals[index++] = ((STGPIndividual) individual).getRoot().countNonTerminals();
 			}
 		}
 	}

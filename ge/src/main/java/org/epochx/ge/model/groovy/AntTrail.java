@@ -30,9 +30,9 @@ import org.epochx.fitness.AntEvaluator;
 import org.epochx.ge.mapper.DepthFirstMapper;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
+import org.epochx.grammar.Grammar;
 import org.epochx.interpret.*;
 import org.epochx.tools.ant.*;
-import org.epochx.tools.grammar.Grammar;
 
 /**
  * Abstract XGE model for ant trail problems in the Groovy language. This class

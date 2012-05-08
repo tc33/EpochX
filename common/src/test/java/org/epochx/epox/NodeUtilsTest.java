@@ -41,7 +41,7 @@ public class NodeUtilsTest {
 	}
 
 	/**
-	 * Tests that {@link org.epochx.epox.NodeUtils#getTerminals(java.util.List)}
+	 * Tests that {@link org.epochx.epox.NodeUtils#terminals(java.util.List)}
 	 * throws an exception for a null syntax.
 	 */
 	@Test
@@ -57,31 +57,31 @@ public class NodeUtilsTest {
 		syntax.add(child2);
 		syntax.add(child3);
 		
-		List<Node> terminals = NodeUtils.getTerminals(syntax);
+		List<Node> terminals = NodeUtils.terminals(syntax);
 		assertSame("unexpected number of terminals returned", 2, terminals.size());
 		assertTrue("terminal missing from list of terminals", terminals.contains(child2));
 		assertTrue("terminal missing from list of terminals", terminals.contains(child3));
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.NodeUtils#getTerminals(java.util.List)}
+	 * Tests that {@link org.epochx.epox.NodeUtils#terminals(java.util.List)}
 	 * returns an empty list for an empty syntax.
 	 */
 	@Test
 	public void testGetTerminalsEmpty() {
-		List<Node> terminals = NodeUtils.getTerminals(new ArrayList<Node>());
+		List<Node> terminals = NodeUtils.terminals(new ArrayList<Node>());
 		assertNotNull("An empty list should be returned for an empty syntax", terminals);	
 		assertTrue("An empty list should be returned for an empty syntax", terminals.isEmpty());
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.NodeUtils#getTerminals(java.util.List)}
+	 * Tests that {@link org.epochx.epox.NodeUtils#terminals(java.util.List)}
 	 * throws an exception for a null syntax.
 	 */
 	@Test
 	public void testGetTerminalsNull() {
 		try {
-			NodeUtils.getTerminals(null);
+			NodeUtils.terminals(null);
 			fail("An exception should be thrown for a null syntax");
 		} catch (IllegalArgumentException e) {
 			assertTrue(true);
@@ -89,7 +89,7 @@ public class NodeUtilsTest {
 	}
 
 	/**
-	 * Tests that {@link org.epochx.epox.NodeUtils#getFunctions(java.util.List)}
+	 * Tests that {@link org.epochx.epox.NodeUtils#nonTerminals(java.util.List)}
 	 * throws an exception for a null syntax.
 	 */
 	@Test
@@ -103,30 +103,30 @@ public class NodeUtilsTest {
 		syntax.add(new MockNode());
 		syntax.add(new MockNode());
 		
-		List<Node> functions = NodeUtils.getFunctions(syntax);
+		List<Node> functions = NodeUtils.nonTerminals(syntax);
 		assertSame("unexpected number of functions returned", 1, functions.size());
 		assertTrue("function missing from list of functions", functions.contains(child1));
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.NodeUtils#getFunctions(java.util.List)}
+	 * Tests that {@link org.epochx.epox.NodeUtils#nonTerminals(java.util.List)}
 	 * returns an empty list for an empty syntax.
 	 */
 	@Test
 	public void testGetFunctionsEmpty() {
-		List<Node> functions = NodeUtils.getFunctions(new ArrayList<Node>());
+		List<Node> functions = NodeUtils.nonTerminals(new ArrayList<Node>());
 		assertNotNull("An empty list should be returned for an empty syntax", functions);	
 		assertTrue("An empty list should be returned for an empty syntax", functions.isEmpty());
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.NodeUtils#getFunctions(java.util.List)}
+	 * Tests that {@link org.epochx.epox.NodeUtils#nonTerminals(java.util.List)}
 	 * throws an exception for a null syntax.
 	 */
 	@Test
 	public void testGetFunctionsNull() {
 		try {
-			NodeUtils.getFunctions(null);
+			NodeUtils.nonTerminals(null);
 			fail("An exception should be thrown for a null syntax");
 		} catch (IllegalArgumentException e) {
 			assertTrue(true);

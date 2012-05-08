@@ -22,16 +22,16 @@
 package org.epochx.epox.trig;
 
 import org.epochx.epox.Node;
-import org.epochx.tools.util.*;
+import org.epochx.tools.*;
 
 /**
- * A function node which performs the trigonometric function of tangent, called
+ * A node which performs the trigonometric function of tangent, called
  * TAN.
  */
 public class TangentFunction extends Node {
 
 	/**
-	 * Constructs an TangentFunction with one <code>null</code> child.
+	 * Constructs an TangentFunction with one <tt>null</tt> child.
 	 */
 	public TangentFunction() {
 		this(null);
@@ -42,7 +42,7 @@ public class TangentFunction extends Node {
 	 * 
 	 * @param child the child node.
 	 */
-	public TangentFunction(final Node child) {
+	public TangentFunction(Node child) {
 		super(child);
 	}
 
@@ -54,7 +54,7 @@ public class TangentFunction extends Node {
 	 */
 	@Override
 	public Double evaluate() {
-		final Object c = getChild(0).evaluate();
+		Object c = getChild(0).evaluate();
 
 		return Math.tan(NumericUtils.asDouble(c));
 	}
@@ -70,13 +70,13 @@ public class TangentFunction extends Node {
 	/**
 	 * Returns this function node's return type for the given child input types.
 	 * If there is one input type of a numeric type then the return type will
-	 * be Double. In all other cases this method will return <code>null</code>
+	 * be Double. In all other cases this method will return <tt>null</tt>
 	 * to indicate that the inputs are invalid.
 	 * 
 	 * @return the Double class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> dataType(final Class<?> ... inputTypes) {
+	public Class<?> dataType(Class<?> ... inputTypes) {
 		if ((inputTypes.length == 1) && TypeUtils.isNumericType(inputTypes[0])) {
 			return Double.class;
 		} else {

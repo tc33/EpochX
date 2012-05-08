@@ -19,21 +19,23 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.epox;
+package org.epochx.epox.math;
 
 import static org.junit.Assert.*;
 
 import org.epochx.RandomSequence;
+import org.epochx.epox.*;
+import org.epochx.epox.math.DoubleERC;
 import org.epochx.random.MersenneTwisterFast;
 import org.epochx.tools.random.*;
 import org.junit.Test;
 
 /**
- * Unit tests for {@link org.epochx.epox.IntegerERC}
+ * Unit tests for {@link org.epochx.epox.math.DoubleERC}
  */
-public class IntegerERCTest extends LiteralTest {
+public class DoubleERCTest extends LiteralTest {
 
-	private IntegerERC erc;
+	private DoubleERC erc;
 	private RandomSequence rng;
 
 	/**
@@ -41,7 +43,7 @@ public class IntegerERCTest extends LiteralTest {
 	 */
 	@Override
 	protected Node getNode() {
-		return new IntegerERC(new MockRandom(), 0,  Integer.MAX_VALUE);
+		return new DoubleERC(new MockRandom(), 0.0, 1.0, 4);
 	}
 	
 	/**
@@ -50,19 +52,19 @@ public class IntegerERCTest extends LiteralTest {
 	@Override
 	public void setUp() {
 		rng = new MersenneTwisterFast();
-		erc = new IntegerERC(rng, 0, Integer.MAX_VALUE);
+		erc = new DoubleERC(rng, 1.0, 2.0, 3);
 
 		super.setUp();
 	}
 
 	/**
-	 * Tests that {@link org.epochx.epox.IntegerERC#IntegerERC(RandomNumberGenerator, int, int)} 
+	 * Tests that {@link org.epochx.epox.math.DoubleERC#DoubleERC(RandomNumberGenerator, double, double, int)} 
 	 * throws an exception if rng is null.
 	 */
 	@Test
-	public void testNewInstanceIntegerERCNull() {
+	public void testNewInstanceDoubleERCNull() {
 		try {
-			new IntegerERC(null, 0, 1);
+			new DoubleERC(null, 0.0, 1.0, 1);
 			fail("an exception should be thrown for a null rng");
 		} catch (IllegalArgumentException expected) {
 			assertTrue(true);
@@ -70,19 +72,20 @@ public class IntegerERCTest extends LiteralTest {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.IntegerERC#newInstance()} correctly
+	 * Tests that {@link org.epochx.epox.math.DoubleERC#newInstance()} correctly
 	 * constructs new instances.
 	 */
 	@Test
-	public void testNewInstanceIntegerERC() {
-		final IntegerERC newInstance = erc.newInstance();
+	public void testNewInstanceDoubleERC() {
+		final DoubleERC newInstance = erc.newInstance();
 
 		assertSame("rng does not refer to the same instance", rng, newInstance.getRNG());
+		// This test is fragile - if it fails it might be because the same number was generated - rerun (v.unlikely to fail twice).
 		assertNotSame("the value of new instance refers to the same object", erc.getValue(), newInstance.getValue());
 	}
 
 	/**
-	 * Tests that {@link org.epochx.epox.IntegerERC#generateValue()} correctly
+	 * Tests that {@link org.epochx.epox.math.DoubleERC#generateValue()} correctly
 	 * generates new values.
 	 */
 	@Test
@@ -90,31 +93,37 @@ public class IntegerERCTest extends LiteralTest {
 		final MockRandom rng = new MockRandom();
 		erc.setRNG(rng);
 
-		final int lower = 2;
-		final int upper = 5;
+		final double lower = 2.0;
+		final double upper = 5.0;
 
 		// Set the bounds.
 		erc.setLower(lower);
 		erc.setUpper(upper);
+		erc.setPrecision(4);
 
 		// Tests lower value.
-		rng.setNextInt(0);
-		int generatedValue = erc.generateValue();
+		rng.setNextDouble(0.0);
+		double generatedValue = erc.generateValue();
 		assertEquals("generated value unexpected", (Object) lower, generatedValue);
 
 		// Tests upper value.
-		rng.setNextInt(3);
+		rng.setNextDouble(1.0);
 		generatedValue = erc.generateValue();
 		assertEquals("generated value unexpected", (Object) upper, generatedValue);
 
-		// Tests mid-value.
-		rng.setNextInt(1);
+		// Tests mid-value with precision.
+		rng.setNextDouble(0.5155);
 		generatedValue = erc.generateValue();
-		assertEquals("generated value unexpected", (Object) 3, generatedValue);
+		assertEquals("generated value unexpected", (Object) 3.546, generatedValue);
+
+		// Test reduced precision gets rounded up.
+		erc.setPrecision(3);
+		generatedValue = erc.generateValue();
+		assertEquals("generated value unexpected", (Object) 3.55, generatedValue);
 	}
 
 	/**
-	 * Tests that {@link org.epochx.epox.IntegerERC#generateValue()} throws an
+	 * Tests that {@link org.epochx.epox.math.DoubleERC#generateValue()} throws an
 	 * exception if rng is null.
 	 */
 	@Test
@@ -133,8 +142,8 @@ public class IntegerERCTest extends LiteralTest {
 	 * instances.
 	 */
 	@Test
-	public void testCloneIntegerERC() {
-		final IntegerERC clone = (IntegerERC) erc.clone();
+	public void testCloneDoubleERC() {
+		final DoubleERC clone = (DoubleERC) erc.clone();
 
 		assertNotSame("ERC has not been cloned", erc, clone);
 		assertSame("rng does not refer to the same instance", rng, clone.getRNG());

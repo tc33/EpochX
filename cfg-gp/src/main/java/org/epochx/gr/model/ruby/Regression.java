@@ -26,8 +26,8 @@ import org.epochx.fitness.HitsCountEvaluator;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.gr.source.GRSourceGenerator;
+import org.epochx.grammar.Grammar;
 import org.epochx.interpret.*;
-import org.epochx.tools.grammar.Grammar;
 
 /**
  * The abstract super class for regression problems in XGR in the Ruby language.

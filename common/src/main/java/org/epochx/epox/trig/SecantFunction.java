@@ -22,16 +22,16 @@
 package org.epochx.epox.trig;
 
 import org.epochx.epox.Node;
-import org.epochx.tools.util.*;
+import org.epochx.tools.*;
 
 /**
- * A function node which performs the reciprocal trigonometric
+ * A node which performs the reciprocal trigonometric
  * function of secant, called SEC. Secant x is equal to 1/cos x.
  */
 public class SecantFunction extends Node {
 
 	/**
-	 * Constructs a SecantFunction with one <code>null</code> child.
+	 * Constructs a SecantFunction with one <tt>null</tt> child.
 	 */
 	public SecantFunction() {
 		this(null);
@@ -42,7 +42,7 @@ public class SecantFunction extends Node {
 	 * 
 	 * @param child the child node.
 	 */
-	public SecantFunction(final Node child) {
+	public SecantFunction(Node child) {
 		super(child);
 	}
 
@@ -54,7 +54,7 @@ public class SecantFunction extends Node {
 	 */
 	@Override
 	public Double evaluate() {
-		final Object c = getChild(0).evaluate();
+		Object c = getChild(0).evaluate();
 
 		return MathUtils.sec(NumericUtils.asDouble(c));
 	}
@@ -70,13 +70,13 @@ public class SecantFunction extends Node {
 	/**
 	 * Returns this function node's return type for the given child input types.
 	 * If there is one input type of a numeric type then the return type will
-	 * be Double. In all other cases this method will return <code>null</code>
+	 * be Double. In all other cases this method will return <tt>null</tt>
 	 * to indicate that the inputs are invalid.
 	 * 
 	 * @return the Double class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> dataType(final Class<?> ... inputTypes) {
+	public Class<?> dataType(Class<?> ... inputTypes) {
 		if ((inputTypes.length == 1) && TypeUtils.isNumericType(inputTypes[0])) {
 			return Double.class;
 		} else {

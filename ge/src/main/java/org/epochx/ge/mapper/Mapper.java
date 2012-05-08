@@ -22,7 +22,7 @@
 package org.epochx.ge.mapper;
 
 import org.epochx.ge.representation.GECandidateProgram;
-import org.epochx.tools.grammar.NonTerminalSymbol;
+import org.epochx.grammar.NonTerminalSymbol;
 
 /**
  * A mapper's job is to convert a GECandidateProgram into a String sequence.

@@ -19,11 +19,13 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox;
+package org.epochx.epox.math;
 
 import java.math.*;
 
 import org.epochx.RandomSequence;
+import org.epochx.epox.Literal;
+import org.epochx.epox.bool.BooleanERC;
 
 
 /**
@@ -35,7 +37,7 @@ import org.epochx.RandomSequence;
  * constructed in any of 3 ways:
  * <ul>
  * <li>constructor - the new instance will be initialised with a value of
- * <code>null</code>.</li>
+ * <tt>null</tt>.</li>
  * <li>clone method - will return an instance with a value equal to the cloned
  * value.</li>
  * <li>newInstance method - will return a new instance with a new, randomly
@@ -47,7 +49,7 @@ import org.epochx.RandomSequence;
  */
 public class DoubleERC extends Literal {
 
-	private RandomSequence rng;
+	private RandomSequence random;
 
 	// The inclusive bounds.
 	private double lower;
@@ -57,24 +59,24 @@ public class DoubleERC extends Literal {
 	private int precision;
 
 	/**
-	 * Constructs a new <code>DoubleERC</code> with a value of <code>null</code>
+	 * Constructs a new <tt>DoubleERC</tt> with a value of <tt>null</tt>
 	 * . The given random number generator will be be used to
-	 * generate a new value if the <code>newInstance</code> method is used.
+	 * generate a new value if the <tt>newInstance</tt> method is used.
 	 * 
-	 * @param rng the random number generator to use if randomly generating a
+	 * @param random the random number generator to use if randomly generating a
 	 *        double value.
 	 * @param lower the inclusive lower bound of values that are generated.
 	 * @param upper the inclusive upper bound of values that are generated.
-	 * @param precision the non-negative <code>int</code> precision.
+	 * @param precision the non-negative <tt>int</tt> precision.
 	 */
-	public DoubleERC(final RandomSequence rng, final double lower, final double upper, final int precision) {
+	public DoubleERC(RandomSequence random, double lower, double upper, int precision) {
 		super(null);
 		
-		if (rng == null) {
+		if (random == null) {
 			throw new IllegalArgumentException("random generator must not be null");
 		}
 		
-		this.rng = rng;
+		this.random = random;
 		this.lower = lower;
 		this.upper = upper;
 		this.precision = precision;
@@ -84,17 +86,17 @@ public class DoubleERC extends Literal {
 	}
 
 	/**
-	 * Constructs a new <code>DoubleERC</code> node with a randomly generated
+	 * Constructs a new <tt>DoubleERC</tt> node with a randomly generated
 	 * value, selected using the random number generator. The value will be
 	 * randomly selected with an equal probability from the set of values
 	 * between the lower and upper bounds and of the specified precision.
 	 * 
-	 * @return a new <code>DoubleERC</code> instance with a randomly generated
+	 * @return a new <tt>DoubleERC</tt> instance with a randomly generated
 	 *         value.
 	 */
 	@Override
 	public DoubleERC newInstance() {
-		final DoubleERC erc = (DoubleERC) super.newInstance();
+		DoubleERC erc = (DoubleERC) super.newInstance();
 
 		erc.setValue(generateValue());
 
@@ -103,7 +105,7 @@ public class DoubleERC extends Literal {
 
 	/**
 	 * Generates and returns a new double value for use in a new
-	 * <code>DoubleERC</code> instance. This implementation will return a value
+	 * <tt>DoubleERC</tt> instance. This implementation will return a value
 	 * selected randomly from the set of values between the lower and upper
 	 * bounds, inclusively. The value will be returned with the specified
 	 * precision.
@@ -113,13 +115,13 @@ public class DoubleERC extends Literal {
 	 * @throws IllegalStateException if the random number generator is null.
 	 */
 	protected double generateValue() {
-		if (rng == null) {
+		if (random == null) {
 			throw new IllegalStateException("random number generator must not be null");
 		}
 
 		// Position random within range.
-		final double range = upper - lower;
-		final double d = (rng.nextDouble() * range) + lower;
+		double range = upper - lower;
+		double d = (random.nextDouble() * range) + lower;
 
 		// Round to the correct precision.
 		BigDecimal big = new BigDecimal(d);
@@ -130,22 +132,22 @@ public class DoubleERC extends Literal {
 
 	/**
 	 * Returns the random number generator that is currently being used to
-	 * generate double values for new <code>DoubleERC</code> instances.
+	 * generate double values for new <tt>DoubleERC</tt> instances.
 	 * 
 	 * @return the random number generator
 	 */
-	public RandomSequence getRNG() {
-		return rng;
+	public RandomSequence getRandomSequence() {
+		return random;
 	}
 
 	/**
 	 * Sets the random number generator to be used for generating the double
-	 * value of new <code>DoubleERC</code> instances.
+	 * value of new <tt>DoubleERC</tt> instances.
 	 * 
-	 * @param rng the random number generator to set
+	 * @param random the random number generator to set
 	 */
-	public void setRNG(final RandomSequence rng) {
-		this.rng = rng;
+	public void setRandomSequence(RandomSequence random) {
+		this.random = random;
 	}
 
 	/**
@@ -162,7 +164,7 @@ public class DoubleERC extends Literal {
 	 * 
 	 * @param lower the lower bound for values.
 	 */
-	public void setLower(final double lower) {
+	public void setLower(double lower) {
 		this.lower = lower;
 	}
 
@@ -180,7 +182,7 @@ public class DoubleERC extends Literal {
 	 * 
 	 * @param upper the upper bound for values.
 	 */
-	public void setUpper(final double upper) {
+	public void setUpper(double upper) {
 		this.upper = upper;
 	}
 
@@ -198,7 +200,7 @@ public class DoubleERC extends Literal {
 	 * 
 	 * @param precision a non-negative precision for generated values
 	 */
-	public void setPrecision(final int precision) {
+	public void setPrecision(int precision) {
 		this.precision = precision;
 	}
 }

@@ -24,13 +24,13 @@ package org.epochx.epox.math;
 import org.epochx.epox.Node;
 
 /**
- * A function node which performs a comparison of two numeric inputs and returns
+ * A node which performs a comparison of two numeric inputs and returns
  * the smaller of the two.
  */
 public class Min2Function extends MinFunction {
 
 	/**
-	 * Constructs a Min2Function with two <code>null</code> children.
+	 * Constructs a Min2Function with two <tt>null</tt> children.
 	 */
 	public Min2Function() {
 		this(null, null);
@@ -42,7 +42,7 @@ public class Min2Function extends MinFunction {
 	 * @param child1 The first child node.
 	 * @param child2 The second child node
 	 */
-	public Min2Function(final Node child1, final Node child2) {
+	public Min2Function(Node child1, Node child2) {
 		super(child1, child2);
 	}
 

@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.tools.grammar;
+package org.epochx.grammar;
 
 import java.io.*;
 import java.util.*;

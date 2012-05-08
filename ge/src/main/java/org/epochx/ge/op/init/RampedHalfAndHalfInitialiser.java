@@ -26,11 +26,11 @@ import java.util.*;
 import org.epochx.core.*;
 import org.epochx.ge.model.GEModel;
 import org.epochx.ge.representation.GECandidateProgram;
+import org.epochx.grammar.Grammar;
 import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
 import org.epochx.stats.*;
 import org.epochx.stats.Stats.ExpiryEvent;
-import org.epochx.tools.grammar.Grammar;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 /**

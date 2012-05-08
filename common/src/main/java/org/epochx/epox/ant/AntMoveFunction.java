@@ -43,32 +43,34 @@ public class AntMoveFunction extends Node {
 	private Ant ant;
 	
 	/**
-	 * Constructs an AntMoveFunction with one <code>null</code> child.
+	 * Constructs an <tt>AntMoveFunction</tt> with one <tt>null</tt> child
 	 */
 	public AntMoveFunction() {
 		this((Node) null);
 	}
 
 	/**
-	 * Constructs an AntMoveFunction with one child node. The given child
-	 * must have a return-type of Ant.
+	 * Constructs an <tt>AntMoveFunction</tt> with one child node. The given
+	 * child must have a return-type of Ant.
 	 * 
-	 * @param child this node's only child.
+	 * @param child this node's only child
 	 */
-	public AntMoveFunction(final Node child) {
+	public AntMoveFunction(Node child) {
 		super(child);
 	}
 
 	/**
-	 * Constructs an <code>AntMoveFunction</code> with no child nodes, but the
+	 * Constructs an <tt>AntMoveFunction</tt> with no child nodes, but the
 	 * given ant which will be held internally. This makes the function a
 	 * terminal node with arity zero. Note that this differs from the
-	 * alternative constructors which take a child node with an Ant return type.
+	 * other constructors which take a child node with an <tt>Ant</tt> return 
+	 * type.
 	 * 
-	 * @param ant the ant instance that should be operated upon when this node
-	 * is evaluated. An exception will be thrown if this argument is null.
+	 * @param ant the ant instance that should be operated on when this node
+	 * is evaluated. An exception will be thrown if this argument is 
+	 * <tt>null</tt>.
 	 */
-	public AntMoveFunction(final Ant ant) {
+	public AntMoveFunction(Ant ant) {
 		super();
 		
 		if (ant == null) {
@@ -80,8 +82,11 @@ public class AntMoveFunction extends Node {
 
 	/**
 	 * Evaluates this function. The Ant is moved one position in the direction
-	 * it is currently facing. The return type of this function node is Void,
+	 * it is currently facing. The return type of this node is <tt>Void</tt>,
 	 * and so the value returned from this method is undefined.
+	 * 
+	 * @return the return type of this function node is <tt>Void</tt>, and so
+	 *         the value returned from this method is undefined
 	 */
 	@Override
 	public Void evaluate() {
@@ -96,7 +101,7 @@ public class AntMoveFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is MOVE.
+	 * Returns the identifier of this function which is <tt>MOVE</tt>.
 	 */
 	@Override
 	public String getIdentifier() {
@@ -104,17 +109,18 @@ public class AntMoveFunction extends Node {
 	}
 
 	/**
-	 * Returns this function node's return type for the given child input types.
-	 * If the arity of this node is zero, and the inputTypes array is empty then
-	 * the return type of this node will be Void. If the arity is one, and there
-	 * is only one input type which is a sub-type of Ant then the
-	 * return type of this function will be Void. In all other cases this method
-	 * will return <code>null</code> to indicate that the inputs are invalid.
+	 * Returns this node's return type for the given child input types.
+	 * If the arity of this node is zero, and the <tt>inputTypes</tt> array is 
+	 * empty then the return type of this node will be <tt>Void</tt>. If the 
+	 * arity is one, and there is only one input type which is of an 
+	 * <tt>Ant</tt> type, then the return type of this function will be 
+	 * <tt>Void</tt>. In all other cases this method will return <tt>null</tt> 
+	 * to indicate that the inputs are invalid.
 	 * 
-	 * @return The Void class or null if the input type is invalid.
+	 * @return <tt>Void</tt> or <tt>null</tt> if the input type is invalid
 	 */
 	@Override
-	public Class<?> dataType(final Class<?> ... inputTypes) {
+	public Class<?> dataType(Class<?> ... inputTypes) {
 		if ((getArity() == 0) && (inputTypes.length == 0)) {
 			return Void.class;
 		} else if ((getArity() == 1) 

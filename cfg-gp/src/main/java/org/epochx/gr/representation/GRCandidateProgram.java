@@ -21,8 +21,8 @@
  */
 package org.epochx.gr.representation;
 
+import org.epochx.grammar.NonTerminalSymbol;
 import org.epochx.representation.*;
-import org.epochx.tools.grammar.NonTerminalSymbol;
 
 /**
  * <p>

@@ -22,10 +22,10 @@
 package org.epochx.epox.math;
 
 import org.epochx.epox.Node;
-import org.epochx.tools.util.*;
+import org.epochx.tools.*;
 
 /**
- * A function node which performs the mathematical absolute function, called
+ * A node which performs the mathematical absolute function, called
  * ABS.
  * 
  * The absolute function can be performed on inputs of the following types:
@@ -39,7 +39,7 @@ import org.epochx.tools.util.*;
 public class AbsoluteFunction extends Node {
 
 	/**
-	 * Constructs an AbsoluteFunction with one <code>null</code> child.
+	 * Constructs an AbsoluteFunction with one <tt>null</tt> child.
 	 */
 	public AbsoluteFunction() {
 		this(null);
@@ -50,7 +50,7 @@ public class AbsoluteFunction extends Node {
 	 * 
 	 * @param child the child node.
 	 */
-	public AbsoluteFunction(final Node child) {
+	public AbsoluteFunction(Node child) {
 		super(child);
 	}
 
@@ -62,9 +62,9 @@ public class AbsoluteFunction extends Node {
 	 */
 	@Override
 	public Object evaluate() {
-		final Object c = getChild(0).evaluate();
+		Object c = getChild(0).evaluate();
 
-		final Class<?> returnType = TypeUtils.getNumericType(c.getClass());
+		Class<?> returnType = TypeUtils.getNumericType(c.getClass());
 
 		if (returnType == Double.class) {
 			// Perform absolute on double.
@@ -95,12 +95,12 @@ public class AbsoluteFunction extends Node {
 	 * Returns this function node's return type for the given child input types.
 	 * If there is one input type of a numeric type then the return type will
 	 * be that same numeric type. In all other cases this method will return
-	 * <code>null</code> to indicate that the inputs are invalid.
+	 * <tt>null</tt> to indicate that the inputs are invalid.
 	 * 
 	 * @return A numeric class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> dataType(final Class<?> ... inputTypes) {
+	public Class<?> dataType(Class<?> ... inputTypes) {
 		if (inputTypes.length == 1) {
 			return TypeUtils.getNumericType(inputTypes);
 		}

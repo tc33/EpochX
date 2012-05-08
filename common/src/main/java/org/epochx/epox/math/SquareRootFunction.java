@@ -22,16 +22,16 @@
 package org.epochx.epox.math;
 
 import org.epochx.epox.Node;
-import org.epochx.tools.util.*;
+import org.epochx.tools.*;
 
 /**
- * A function node which performs the mathematical function of square root,
+ * A node which performs the mathematical function of square root,
  * called SQRT.
  */
 public class SquareRootFunction extends Node {
 
 	/**
-	 * Constructs a SquareRootFunction with one <code>null</code> child.
+	 * Constructs a SquareRootFunction with one <tt>null</tt> child.
 	 */
 	public SquareRootFunction() {
 		this(null);
@@ -42,7 +42,7 @@ public class SquareRootFunction extends Node {
 	 * 
 	 * @param child the child node.
 	 */
-	public SquareRootFunction(final Node child) {
+	public SquareRootFunction(Node child) {
 		super(child);
 	}
 
@@ -54,7 +54,7 @@ public class SquareRootFunction extends Node {
 	 */
 	@Override
 	public Double evaluate() {
-		final Object c = getChild(0).evaluate();
+		Object c = getChild(0).evaluate();
 
 		return Math.sqrt(NumericUtils.asDouble(c));
 	}
@@ -70,13 +70,13 @@ public class SquareRootFunction extends Node {
 	/**
 	 * Returns this function node's return type for the given child input types.
 	 * If there is one input type of a numeric type then the return type will
-	 * be Double. In all other cases this method will return <code>null</code>
+	 * be Double. In all other cases this method will return <tt>null</tt>
 	 * to indicate that the inputs are invalid.
 	 * 
 	 * @return the Double class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> dataType(final Class<?> ... inputTypes) {
+	public Class<?> dataType(Class<?> ... inputTypes) {
 		if ((inputTypes.length == 1) && TypeUtils.isNumericType(inputTypes[0])) {
 			return Double.class;
 		} else {

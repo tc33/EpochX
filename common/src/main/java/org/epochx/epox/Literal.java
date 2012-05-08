@@ -3,36 +3,38 @@ package org.epochx.epox;
 import org.apache.commons.lang.ObjectUtils;
 
 /**
- * Literal values are nodes with a specific value. Generally, the value of a
- * literal should not change. The difference between a <code>Literal</code> node
- * and a <code>Variable</code> node is subtle. <code>Variable</code> instances
- * cannot be copied, instead, all references to the same variable should refer
- * to the same <code>Variable</code> instance. In contrast, <code>Literal</code>
- * instances may be cloned and behave like most other node types.
+ * Literal values are nodes with a specific value. Normally, the value of a
+ * literal would not change. The difference between a <tt>Literal</tt> node
+ * and a <tt>Variable</tt> node is subtle, but important. The same
+ * <tt>Variable</tt> instance is likely to appear multiple times in a program
+ * tree, so changing the value of one occurence changes all occurences of that
+ * variable. But, like most other nodes, each literal instance should be
+ * independent of the others and appear only once within a program tree. To
+ * support these differences, literals and variables handle cloning and creating
+ * new instances differently.
  * 
  * @see Variable
  */
 public class Literal extends Node {
 
-	// The value of this literal.
 	private Object value;
 
 	/**
-	 * Constructs a new <code>Literal</code> node with the given value.
-	 * Evaluation of this literal will return the value set here. The data type
-	 * of this node will be determined by the type of the object specified here.
+	 * Constructs a new <tt>Literal</tt> node with the given value. Evaluation
+	 * of this literal will return the value set here. The data-type of this
+	 * node will be determined by the type of the object specified here.
 	 * 
-	 * @param value the value of this literal.
+	 * @param value the value of this literal
 	 */
-	public Literal(final Object value) {
+	public Literal(Object value) {
 		this.value = value;
 	}
 
 	/**
 	 * Returns the value of this literal. Has the same functionality as calling
-	 * <code>getValue</code>.
+	 * <tt>getValue</tt>.
 	 * 
-	 * @return this literal's value
+	 * @return the value of this literal
 	 */
 	@Override
 	public Object evaluate() {
@@ -41,9 +43,9 @@ public class Literal extends Node {
 
 	/**
 	 * Returns this node's string representation, which is the string
-	 * representation of the literal value.
+	 * representation of the literal value
 	 * 
-	 * @return a String representation.
+	 * @return a <tt>String</tt> representation
 	 */
 	@Override
 	public String getIdentifier() {
@@ -52,18 +54,17 @@ public class Literal extends Node {
 
 	/**
 	 * Returns the data-type of this node. The data-type of a literal node
-	 * is the type of its value. If no value has been set then <code>null</code>
-	 * will be returned.
+	 * is the data-type of its value. If no value has been set then
+	 * <tt>null</tt> will be returned.
 	 * 
-	 * @param inputTypes the data-types of the nodes inputs. Literal takes no
-	 *        inputs.
-	 * @return the data-type of this node.
-	 * @throws IllegalArgumentException if inputTypes parameter is anything
-	 *         other than empty.
+	 * @param inputTypes the data-types of the node's inputs. Literals
+	 *        take no inputs so this should be an empty array.
+	 * @return the data-type of this node
+	 * @throws IllegalArgumentException if <tt>argumentDataTypes</tt> is
+	 *         anything other than an empty array
 	 */
 	@Override
-	public Class<?> dataType(final Class<?> ... inputTypes) {
-		// No inputs should be provided for a terminal.
+	public Class<?> dataType(Class<?> ... inputTypes) {
 		if (inputTypes.length != 0) {
 			throw new IllegalArgumentException("literals have no input types");
 		}
@@ -76,19 +77,19 @@ public class Literal extends Node {
 	}
 
 	/**
-	 * Sets the value of this literal value. Implementations of this class may
+	 * Sets the value of this literal. Implementations of this class may
 	 * wish to use this method to delay the setting of a literal's value.
 	 * 
-	 * @param value the value to set for this literal.
+	 * @param value the value to set for this literal
 	 */
-	protected void setValue(final Object value) {
+	protected void setValue(Object value) {
 		this.value = value;
 	}
 
 	/**
-	 * Returns the value of this literal.
+	 * Returns the current value of this literal
 	 * 
-	 * @return the value of this literal.
+	 * @return the value of this literal
 	 */
 	public Object getValue() {
 		return value;
@@ -96,10 +97,10 @@ public class Literal extends Node {
 
 	/**
 	 * Returns this node's string representation, which is the string
-	 * representation of the literal value. If no value is set then an empty 
+	 * representation of the literal value. If no value is set then an empty
 	 * string will be returned.
 	 * 
-	 * @return a String representation.
+	 * @return a <tt>String</tt> representation.
 	 */
 	@Override
 	public String toString() {
@@ -111,31 +112,32 @@ public class Literal extends Node {
 	}
 
 	/**
-	 * An object is equal to this literal if it is an instance of Literal and
-	 * its value is equal to this literal's value.
+	 * An object is equal to this literal if it is an instance of
+	 * <tt>Literal</tt> and its value is equal to this literal's value.
 	 * 
-	 * @return true if the two objects are equal, false otherwise.
+	 * @return <tt>true</tt> if the two objects are equal, <tt>false</tt>
+	 *         otherwise.
 	 */
 	@Override
-	public boolean equals(final Object obj) {
+	public boolean equals(Object obj) {
 		if (!(obj instanceof Literal)) {
 			return false;
 		}
 
-		final Object objVal = ((Literal) obj).value;
-		final Object thisVal = value;
+		Object objVal = ((Literal) obj).value;
+		Object thisVal = value;
 
 		return ObjectUtils.equals(objVal, thisVal);
 	}
 
 	/**
-	 * Creates a new Literal instance which is a copy of this instance. The
-	 * clone will contain a value which is a reference to the same object as
+	 * Creates a new <tt>Literal</tt> instance which is a copy of this instance.
+	 * The clone will contain a value which is a reference to the same object as
 	 * this literal's value. For mutable object values, users should consider
 	 * extending this class to provide a clone method which can provide an
 	 * appropriate deep clone.
 	 * 
-	 * @return a new Literal instance which is a clone of this one.
+	 * @return a new <tt>Literal</tt> instance which is a clone of this object
 	 */
 	@Override
 	public Literal clone() {
@@ -147,10 +149,10 @@ public class Literal extends Node {
 	}
 
 	/**
-	 * Constructs a new instance of this literal. This implementation simply
-	 * returns a clone of this instance.
+	 * Constructs a new instance of this literal. This implementation is 
+	 * equivalent to calling <tt>clone()</tt>.
 	 * 
-	 * @return a new Literal instance which is a clone of this one.
+	 * @return a new <tt>Literal</tt> instance which is a clone of this object
 	 */
 	@Override
 	public Literal newInstance() {

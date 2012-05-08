@@ -19,9 +19,9 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.tools.grammar;
+package org.epochx.grammar;
 
-import org.epochx.tools.util.StringUtils;
+import org.epochx.tools.StringUtils;
 
 /**
  * Grammar literals are a type of grammar node, that represent the terminals of

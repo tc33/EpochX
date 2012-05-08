@@ -22,10 +22,10 @@
 package org.epochx.epox.math;
 
 import org.epochx.epox.*;
-import org.epochx.tools.util.*;
+import org.epochx.tools.*;
 
 /**
- * A function node which performs the simple comparison function of determining
+ * A node which performs the simple comparison function of determining
  * which of a set of numbers is smaller, as per the boolean less-than
  * function. This function can have a flexible number of children and as such
  * cannot be parsed by the {@link EpoxParser}, look at using
@@ -34,12 +34,12 @@ import org.epochx.tools.util.*;
 public class MinFunction extends Node {
 
 	/**
-	 * Constructs a MinFunction with the given number of <code>null</code>
+	 * Constructs a MinFunction with the given number of <tt>null</tt>
 	 * children.
-	 * @param n the number of <code>null</code> children to set this function up
+	 * @param n the number of <tt>null</tt> children to set this function up
 	 * for.
 	 */
-	public MinFunction(final int n) {
+	public MinFunction(int n) {
 		this((Node) null);
 
 		setChildren(new Node[n]);
@@ -50,7 +50,7 @@ public class MinFunction extends Node {
 	 * 
 	 * @param children the numeric child nodes.
 	 */
-	public MinFunction(final Node ... children) {
+	public MinFunction(Node ... children) {
 		super(children);
 	}
 
@@ -62,7 +62,7 @@ public class MinFunction extends Node {
 	 */
 	@Override
 	public Object evaluate() {
-		final int arity = getArity();
+		int arity = getArity();
 		
 		Object[] childValues = new Object[arity];
 		Class<?>[] types = new Class<?>[arity];
@@ -70,33 +70,33 @@ public class MinFunction extends Node {
 			childValues[i] = getChild(i).evaluate();
 			types[i] = childValues[i].getClass();
 		}
-		final Class<?> returnType = TypeUtils.getNumericType(types);
+		Class<?> returnType = TypeUtils.getNumericType(types);
 
 		if (returnType == Double.class) {
 			double min = Double.MAX_VALUE;
 			for (int i = 0; i < arity; i++) {
-				final double value = NumericUtils.asDouble(childValues[i]);
+				double value = NumericUtils.asDouble(childValues[i]);
 				min = Math.min(value, min);
 			}
 			return min;
 		} else if (returnType == Float.class) {
 			float min = Float.MAX_VALUE;
 			for (int i = 0; i < arity; i++) {
-				final float value = NumericUtils.asFloat(childValues[i]);
+				float value = NumericUtils.asFloat(childValues[i]);
 				min = Math.min(value, min);
 			}
 			return min;
 		} else if (returnType == Integer.class) {
 			int min = Integer.MAX_VALUE;
 			for (int i = 0; i < arity; i++) {
-				final int value = NumericUtils.asInteger(childValues[i]);
+				int value = NumericUtils.asInteger(childValues[i]);
 				min = Math.min(value, min);
 			}
 			return min;
 		} else if (returnType == Long.class) {
 			long min = Long.MAX_VALUE;
 			for (int i = 0; i < arity; i++) {
-				final long value = NumericUtils.asLong(childValues[i]);
+				long value = NumericUtils.asLong(childValues[i]);
 				min = Math.min(value, min);
 			}
 			return min;
@@ -117,12 +117,12 @@ public class MinFunction extends Node {
 	 * Returns this function node's return type for the given child input types.
 	 * If there is the correct number of numeric input types then the return
 	 * type will be the widest of those types. In all other cases this method
-	 * will return <code>null</code> to indicate that the inputs are invalid.
+	 * will return <tt>null</tt> to indicate that the inputs are invalid.
 	 * 
 	 * @return the widest numeric type or null if the input types are invalid.
 	 */
 	@Override
-	public Class<?> dataType(final Class<?> ... inputTypes) {
+	public Class<?> dataType(Class<?> ... inputTypes) {
 		if (inputTypes.length == getArity()) {
 			return TypeUtils.getNumericType(inputTypes);
 		}

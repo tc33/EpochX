@@ -31,7 +31,7 @@ import org.epochx.*;
 import org.epochx.epox.Node;
 import org.epochx.event.*;
 import org.epochx.stgp.STGPIndividual;
-import org.epochx.tools.util.TypeUtils;
+import org.epochx.tools.TypeUtils;
 
 /**
  * Initialisation method which produces <tt>STGPIndividual</tt>s with full

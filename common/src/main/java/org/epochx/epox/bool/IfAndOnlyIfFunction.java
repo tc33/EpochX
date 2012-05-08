@@ -22,48 +22,50 @@
 package org.epochx.epox.bool;
 
 import org.epochx.epox.Node;
-import org.epochx.tools.util.TypeUtils;
+import org.epochx.tools.TypeUtils;
 
 /**
- * A function node which performs the bi-conditional logical connective of IFF
- * (if and only if).
+ * A node which performs the bi-conditional logical connective of <tt>IFF</tt> 
+ * (if and only if)
  */
 public class IfAndOnlyIfFunction extends Node {
 
 	/**
-	 * Constructs an IfAndOnlyIfFunction with two <code>null</code> children.
+	 * Constructs an <tt>IfAndOnlyIfFunction</tt> with two <tt>null</tt> 
+	 * children
 	 */
 	public IfAndOnlyIfFunction() {
 		this(null, null);
 	}
 
 	/**
-	 * Constructs an IfAndOnlyIfFunction with two boolean child nodes.
+	 * Constructs an <tt>IfAndOnlyIfFunction</tt> with two boolean child nodes
 	 * 
-	 * @param child1 The first child node.
-	 * @param child2 The second child node.
+	 * @param child1 the first child node
+	 * @param child2 the second child node
 	 */
-	public IfAndOnlyIfFunction(final Node child1, final Node child2) {
+	public IfAndOnlyIfFunction(Node child1, Node child2) {
 		super(child1, child2);
 	}
 
 	/**
 	 * Evaluates this function. Both child nodes are evaluated, the results of
-	 * which must be <code>Boolean</code> instances. The two boolean values
-	 * determine the result of this evaluation. If both inputs are true or both
-	 * are false, then the result will be true. All other combinations of the
-	 * inputs will result in the return of a value of false.
+	 * which must be <tt>Boolean</tt> instances. The two boolean values
+	 * determine the result of this evaluation. If both inputs are <tt>true</tt>
+	 * or both are <tt>false</tt>, then the result will be <tt>true. All other 
+	 * combinations of the inputs will result in the return of a value of 
+	 * <tt>false</tt>.
 	 */
 	@Override
 	public Boolean evaluate() {
-		final boolean c1 = ((Boolean) getChild(0).evaluate()).booleanValue();
-		final boolean c2 = ((Boolean) getChild(1).evaluate()).booleanValue();
+		boolean c1 = ((Boolean) getChild(0).evaluate()).booleanValue();
+		boolean c2 = ((Boolean) getChild(1).evaluate()).booleanValue();
 
 		return (c1 && c2) || (!c1 && !c2);
 	}
 
 	/**
-	 * Returns the identifier of this function which is IFF.
+	 * Returns the identifier of this function which is <tt>IFF</tt>
 	 */
 	@Override
 	public String getIdentifier() {
@@ -72,15 +74,16 @@ public class IfAndOnlyIfFunction extends Node {
 
 	/**
 	 * Returns this function node's return type for the given child input types.
-	 * If there are two children, both of which have a return type of Boolean,
-	 * then the return type of this function will also be Boolean. In all other
-	 * cases this method will return <code>null</code> to indicate that the
-	 * inputs are invalid.
+	 * If there are two children, both of which have a return type of 
+	 * <tt>Boolean</tt>, then the return type of this function will also be 
+	 * <tt>Boolean</tt>. In all other cases this method will return 
+	 * <tt>null</tt> to indicate that the inputs are invalid.
 	 * 
-	 * @return The Boolean class or null if the input type is invalid.
+	 * @return The <tt>Boolean</tt> class or <tt>null</tt> if the input type is 
+	 * invalid
 	 */
 	@Override
-	public Class<?> dataType(final Class<?> ... inputTypes) {
+	public Class<?> dataType(Class<?> ... inputTypes) {
 		if ((inputTypes.length == 2) && TypeUtils.allEqual(inputTypes, Boolean.class)) {
 			return Boolean.class;
 		} else {

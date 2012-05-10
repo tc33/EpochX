@@ -52,6 +52,23 @@ public interface RandomSequence {
 	 * @return the next <code>int</code> in the pseudo random sequence
 	 */
 	public int nextInt();
+	
+	/**
+	 * Gets the next <code>long</code> between <code>0</code> (inclusive) and
+	 * <code>n</code> (exclusive).
+	 * 
+	 * @param n the upper limit of the generation
+	 * @return the next <code>long</code> in the pseudo random sequence
+	 */
+	public long nextLong(long n);
+
+	/**
+	 * Gets the next <code>long</code> between <code>Long.MIN_VALUE</code>
+	 * (inclusive) and <code>Long.MAX_VALUE</code> (inclusive).
+	 * 
+	 * @return the next <code>long</code> in the pseudo random sequence
+	 */
+	public long nextLong();
 
 	/**
 	 * Gets the next <code>double</code> in the range <code>0.0</code>

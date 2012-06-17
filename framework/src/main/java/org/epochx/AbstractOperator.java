@@ -96,7 +96,7 @@ public abstract class AbstractOperator implements Operator {
 	 * Performs the operator on the specified individiduals. If the operator is
 	 * not successful, the specified individuals will not be changed and
 	 * <code>null</code> is returned. The default implementation just returns
-	 * the same individudals.
+	 * the same individuals.
 	 * 
 	 * @param individuals the individuals undergoing the operator.
 	 * 

@@ -103,7 +103,7 @@ public class CubeRootFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.CubeRootFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.math.CubeRootFunction#dataType(Class...)}
 	 * returns the same type for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
@@ -112,14 +112,14 @@ public class CubeRootFunctionTest extends NodeTestCase {
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = cbrt.getReturnType(type);
+			returnType = cbrt.dataType(type);
 			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = cbrt.getReturnType(Boolean.class);
+		returnType = cbrt.dataType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = cbrt.getReturnType(Integer.class, Integer.class);
+		returnType = cbrt.dataType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 	

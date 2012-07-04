@@ -22,40 +22,38 @@
 package org.epochx.epox.bool;
 
 import org.epochx.epox.Node;
-import org.epochx.tools.util.TypeUtils;
+import org.epochx.tools.DataTypeUtils;
 
 /**
- * A function node which performs logical conjunction or the boolean function
- * of AND.
+ * A node which performs logical conjunction or the boolean function of
+ * <tt>AND</tt>
  */
 public class AndFunction extends Node {
 
 	/**
-	 * Constructs an <code>AndFunction</code> with two <code>null</code> 
-	 * children.
+	 * Constructs an <tt>AndFunction</tt> with two <tt>null</tt> children
 	 */
 	public AndFunction() {
 		this(null, null);
 	}
 
 	/**
-	 * Constructs an <code>AndFunction</code> with two <code>Boolean</code> 
-	 * child nodes.
+	 * Constructs an <tt>AndFunction</tt> with two <tt>Boolean</tt> child nodes
 	 * 
-	 * @param child1 the first child node.
-	 * @param child2 the second child node.
+	 * @param child1 the first child node
+	 * @param child2 the second child node
 	 */
-	public AndFunction(final Node child1, final Node child2) {
+	public AndFunction(Node child1, Node child2) {
 		super(child1, child2);
 	}
 
 	/**
 	 * Evaluates this function lazily. The first child node is evaluated, the
-	 * result of which must be a <code>Boolean</code> instance. If the result
-	 * is a true value then the second child is also evaluated, the result of
-	 * which becomes the result of this AND function. If the first child
-	 * evaluated to a false value then the second child is not evaluated at all,
-	 * and a false value is returned.
+	 * result of which must be a <tt>Boolean</tt> instance. If the result
+	 * is a <tt>true</tt> value then the second child is also evaluated, the
+	 * result of which becomes the result of this <tt>AND</tt> function. If the
+	 * first child evaluated to a <tt>false</tt> value then the second child is
+	 * not evaluated at all and a <tt>false</tt> value is returned.
 	 */
 	@Override
 	public Boolean evaluate() {
@@ -69,7 +67,7 @@ public class AndFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is AND.
+	 * Returns the identifier of this function which is <tt>AND</tt>
 	 */
 	@Override
 	public String getIdentifier() {
@@ -78,17 +76,17 @@ public class AndFunction extends Node {
 
 	/**
 	 * Returns this function node's return type for the given child input types.
-	 * If there are two children, both of which have a return type of 
-	 * <code>Boolean</code>, then the return type of this function will also be 
-	 * <code>Boolean</code>. In all other cases this method will return 
-	 * <code>null</code> to indicate that the inputs are invalid.
+	 * If there are two children, both of which have a return type of
+	 * <tt>Boolean</tt>, then the return type of this function will also be
+	 * <tt>Boolean</tt>. In all other cases this method will return
+	 * <tt>null</tt> to indicate that the inputs are invalid.
 	 * 
-	 * @return The <code>Boolean</code> class or null if the input type is 
-	 * invalid.
+	 * @return the <tt>Boolean</tt> class or <tt>null</tt> if the input type is
+	 *         invalid
 	 */
 	@Override
-	public Class<?> getReturnType(final Class<?> ... inputTypes) {
-		if ((inputTypes.length == 2) && TypeUtils.allEqual(inputTypes, Boolean.class)) {
+	public Class<?> dataType(Class<?> ... inputTypes) {
+		if ((inputTypes.length == 2) && DataTypeUtils.allEqual(inputTypes, Boolean.class)) {
 			return Boolean.class;
 		} else {
 			return null;

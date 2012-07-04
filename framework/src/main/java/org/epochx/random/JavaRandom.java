@@ -29,7 +29,7 @@ import org.epochx.RandomSequence;
 
 /**
  * Provides a mechanism for using Java's random number generation through
- * EpochX's supported <code>RandomNumberGenerator</code> interface.
+ * EpochX's supported <tt>RandomSequence</tt> interface.
  * 
  * @see Random
  */
@@ -39,39 +39,39 @@ public class JavaRandom implements RandomSequence {
 	private final Random rand;
 
 	/**
-	 * Constructs a <code>JavaRandom</code> random number generator.
+	 * Constructs a <tt>JavaRandom</tt> random number generator.
 	 */
 	public JavaRandom() {
 		rand = new Random();
 	}
 
 	/**
-	 * Constructs a <code>JavaRandom</code> random number generator with the
+	 * Constructs a <tt>JavaRandom</tt> random number generator with the
 	 * specified seed.
 	 * 
 	 * @param seed the initial seed.
 	 */
-	public JavaRandom(final long seed) {
+	public JavaRandom(long seed) {
 		rand = new Random(seed);
 	}
 
 	/**
-	 * Constructs a <code>JavaRandom</code> continuing the sequence from the
-	 * given <code>Random</code> instance's pseudorandom number generation.
+	 * Constructs a <tt>JavaRandom</tt> continuing the sequence from the
+	 * given <tt>Random</tt> instance's pseudorandom number generation.
 	 * 
-	 * @param rand the <code>Random</code> instance to use for random number
+	 * @param rand the <tt>Random</tt> instance to use for random number
 	 *        generation.
 	 */
-	public JavaRandom(final Random rand) {
+	public JavaRandom(Random rand) {
 		this.rand = rand;
 	}
 
 	/**
-	 * Returns the next randomly generated <code>boolean</code> value, as
+	 * Returns the next randomly generated <tt>boolean</tt> value, as
 	 * returned by the underlying Java pseudorandom number generation.
 	 * 
-	 * @return true or false, as randomly selected by the Java random number
-	 *         generator.
+	 * @return <tt>true</tt> or <tt>false</tt>, as randomly selected by the 
+	 * Java random number generator
 	 * @see Random
 	 */
 	public boolean nextBoolean() {
@@ -79,13 +79,13 @@ public class JavaRandom implements RandomSequence {
 	}
 
 	/**
-	 * Returns the next randomly generated <code>double</code> value, as
-	 * returned by the underlying Java pseudorandom number generation.
+	 * Returns the next randomly generated <tt>double</tt> value, as
+	 * returned by the underlying Java pseudorandom number generation
 	 * 
-	 * @return a randomly selected double value in the range <code>0.0</code>
-	 *         (inclusive) to <code>1.0</code> (exclusive) as selected by the
+	 * @return a randomly selected double value in the range <tt>0.0</tt>
+	 *         (inclusive) to <tt>1.0</tt> (exclusive) as selected by the
 	 *         Java
-	 *         random number generator.
+	 *         random number generator
 	 * @see Random
 	 */
 	public double nextDouble() {
@@ -93,28 +93,28 @@ public class JavaRandom implements RandomSequence {
 	}
 
 	/**
-	 * Returns the next randomly generated <code>int</code> value between
-	 * <code>0</code>(inclusive) and <code>n</code> (exclusive), as returned by
+	 * Returns the next randomly generated <tt>int</tt> value between
+	 * <tt>0</tt>(inclusive) and <tt>n</tt> (exclusive), as returned by
 	 * the underlying Java pseudorandom number generation.
 	 * 
-	 * @param n the upper limit of the generation.
-	 * @return a randomly selected <code>int</code> value in the range
-	 *         <code>0</code> (inclusive) to <code>n</code> (exclusive) as
+	 * @param n the upper limit of the generation
+	 * @return a randomly selected <tt>int</tt> value in the range
+	 *         <tt>0</tt> (inclusive) to <tt>n</tt> (exclusive) as
 	 *         selected by
-	 *         the Java random number generator.
+	 *         the Java random number generator
 	 * @see Random
 	 */
-	public int nextInt(final int n) {
+	public int nextInt(int n) {
 		return rand.nextInt(n);
 	}
 
 	/**
-	 * Returns the next randomly generated <code>int</code> value, as returned
+	 * Returns the next randomly generated <tt>int</tt> value, as returned
 	 * by the underlying Java pseudorandom number generation. All 2<sup>32</sup>
-	 * possible <code>int</code> values may be returned.
+	 * possible <tt>int</tt> values may be returned.
 	 * 
-	 * @return a randomly selected <code>int</code> value as selected by the
-	 *         Java random number generator.
+	 * @return a randomly selected <tt>int</tt> value as selected by the
+	 *         Java random number generator
 	 * @see Random
 	 */
 	public int nextInt() {
@@ -122,11 +122,44 @@ public class JavaRandom implements RandomSequence {
 	}
 
 	/**
-	 * Sets the seed of the underlying Java random number generator.
+	 * Returns the next randomly generated <tt>long</tt> value between
+	 * <tt>0</tt>(inclusive) and <tt>n</tt> (exclusive), as returned by
+	 * the underlying Java pseudorandom number generation
 	 * 
-	 * @param seed the initial seed.
+	 * @param n the upper limit of the generation
+	 * @return a randomly selected <tt>long</tt> value in the range
+	 *         <tt>0</tt> (inclusive) to <tt>n</tt> (exclusive) as
+	 *         selected by the Java random number generator
+	 * @see Random
 	 */
-	public void setSeed(final long seed) {
+	public long nextLong(long n) {
+		long bits, val;
+		do {
+			bits = (nextLong() << 1) >>> 1;
+			val = bits % n;
+		} while (bits - val + (n - 1) < 0L);
+		return val;
+	}
+
+	/**
+	 * Returns the next randomly generated <tt>long</tt> value, as returned
+	 * by the underlying Java pseudorandom number generation. All 2<sup>32</sup>
+	 * possible <tt>long</tt> values may be returned.
+	 * 
+	 * @return a randomly selected <tt>long</tt> value as selected by the
+	 *         Java random number generator
+	 * @see Random
+	 */
+	public long nextLong() {
+		return rand.nextLong();
+	}
+
+	/**
+	 * Sets the seed of the underlying Java random number generator
+	 * 
+	 * @param seed the initial seed
+	 */
+	public void setSeed(long seed) {
 		rand.setSeed(seed);
 	}
 }

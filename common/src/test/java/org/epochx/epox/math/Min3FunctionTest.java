@@ -230,7 +230,7 @@ public class Min3FunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.Min3Function#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.math.Min3Function#dataType(Class...)}
 	 * returns the correct type for numeric input types and <code>null</code> 
 	 * otherwise.
 	 */
@@ -240,26 +240,26 @@ public class Min3FunctionTest extends NodeTestCase {
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = min.getReturnType(type, type, type);
+			returnType = min.dataType(type, type, type);
 			assertSame("unexpected return type", type, returnType);
 		}
 		
-		returnType = min.getReturnType(Short.class, Double.class, Integer.class);
+		returnType = min.dataType(Short.class, Double.class, Integer.class);
 		assertSame("unexpected return type", Double.class, returnType);
 		
-		returnType = min.getReturnType(Long.class, Integer.class, Short.class);
+		returnType = min.dataType(Long.class, Integer.class, Short.class);
 		assertSame("unexpected return type", Long.class, returnType);
 		
-		returnType = min.getReturnType(Byte.class, Float.class, Long.class);
+		returnType = min.dataType(Byte.class, Float.class, Long.class);
 		assertSame("unexpected return type", Float.class, returnType);
 		
-		returnType = min.getReturnType(Boolean.class, Integer.class, Integer.class);
+		returnType = min.dataType(Boolean.class, Integer.class, Integer.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = min.getReturnType(Integer.class, Integer.class, Integer.class, Integer.class);
+		returnType = min.dataType(Integer.class, Integer.class, Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 		
-		returnType = min.getReturnType(Integer.class, Integer.class);
+		returnType = min.dataType(Integer.class, Integer.class);
 		assertNull("too few inputs should be invalid", returnType);
 	}
 	

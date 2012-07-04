@@ -138,7 +138,7 @@ public class SquareRootFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.SquareRootFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.math.SquareRootFunction#dataType(Class...)}
 	 * returns the same type for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
@@ -147,14 +147,14 @@ public class SquareRootFunctionTest extends NodeTestCase {
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = sqrt.getReturnType(type);
+			returnType = sqrt.dataType(type);
 			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = sqrt.getReturnType(Boolean.class);
+		returnType = sqrt.dataType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = sqrt.getReturnType(Integer.class, Integer.class);
+		returnType = sqrt.dataType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 	

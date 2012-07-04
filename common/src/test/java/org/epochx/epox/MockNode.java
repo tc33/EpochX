@@ -107,7 +107,7 @@ public class MockNode extends Node {
 	 * @return the mock return type of this node.
 	 */
 	@Override
-	public Class<?> getReturnType(Class<?> ... inputTypes) {
+	public Class<?> dataType(Class<?> ... inputTypes) {
 		return getReturnType;
 	}
 }

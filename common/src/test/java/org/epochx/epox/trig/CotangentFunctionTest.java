@@ -26,7 +26,7 @@ import static org.junit.Assert.*;
 import org.epochx.epox.*;
 import org.epochx.epox.trig.CotangentFunction;
 import org.epochx.interpret.*;
-import org.epochx.tools.util.MathUtils;
+import org.epochx.tools.MathUtils;
 import org.junit.Test;
 
 /**
@@ -88,7 +88,7 @@ public class CotangentFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.trig.CotangentFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.trig.CotangentFunction#dataType(Class...)}
 	 * returns <code>Double</code> for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
@@ -97,14 +97,14 @@ public class CotangentFunctionTest extends NodeTestCase {
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = cot.getReturnType(type);
+			returnType = cot.dataType(type);
 			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = cot.getReturnType(Boolean.class);
+		returnType = cot.dataType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = cot.getReturnType(Integer.class, Integer.class);
+		returnType = cot.dataType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 	

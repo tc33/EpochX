@@ -146,30 +146,30 @@ public class IfFoodAheadFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.ant.IfFoodAheadFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.ant.IfFoodAheadFunction#dataType(Class...)}
 	 * returns a Void data-type for the correct inputs, and <code>null</code>
 	 * for incorrectly typed or incorrect number of inputs.
 	 */
 	@Test
 	public void testGetReturnTypeIfFood() {
 		// Test the ant child version.
-		Class<?> returnType = antIfFoodChild.getReturnType(Ant.class, Void.class, Void.class);
+		Class<?> returnType = antIfFoodChild.dataType(Ant.class, Void.class, Void.class);
 		assertEquals("type should be Void for an Ant and two Void inputs", Void.class, returnType);
 		
-		returnType = antIfFoodChild.getReturnType(Void.class, Void.class, Void.class);
+		returnType = antIfFoodChild.dataType(Void.class, Void.class, Void.class);
 		assertNull("non-Ant input for first child should be invalid", returnType);
 		
-		returnType = antIfFoodChild.getReturnType(Ant.class, Void.class, Void.class, Void.class);
+		returnType = antIfFoodChild.dataType(Ant.class, Void.class, Void.class, Void.class);
 		assertNull("too many inputs should be invalid", returnType);
 		
 		// Test the non-child version.
-		returnType = antIfFood.getReturnType(Void.class, Void.class);
+		returnType = antIfFood.dataType(Void.class, Void.class);
 		assertEquals("type should be Void for two Void inputs inputs", Void.class, returnType);
 		
-		returnType = antIfFood.getReturnType(Void.class, Void.class, Void.class);
+		returnType = antIfFood.dataType(Void.class, Void.class, Void.class);
 		assertNull("too many Void inputs should be invalid", returnType);
 		
-		returnType = antIfFood.getReturnType(Ant.class, Void.class, Void.class);
+		returnType = antIfFood.dataType(Ant.class, Void.class, Void.class);
 		assertNull("inputs should not valid on this version of the function", returnType);
 	}
 	

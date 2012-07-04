@@ -22,17 +22,17 @@
 package org.epochx.epox.math;
 
 import org.epochx.epox.Node;
-import org.epochx.tools.util.*;
+import org.epochx.tools.*;
 
 /**
- * A function node which performs the mathematical exponential
- * function <code>e^x</code> where <code>e</code> is the constant known as
+ * A node which performs the mathematical exponential
+ * function <tt>e^x</tt> where <tt>e</tt> is the constant known as
  * Euler's number.
  */
 public class ExponentialFunction extends Node {
 
 	/**
-	 * Constructs an ExponentialFunction with one <code>null</code> child.
+	 * Constructs an ExponentialFunction with one <tt>null</tt> child.
 	 */
 	public ExponentialFunction() {
 		this(null);
@@ -43,19 +43,19 @@ public class ExponentialFunction extends Node {
 	 * 
 	 * @param exponent the child node.
 	 */
-	public ExponentialFunction(final Node exponent) {
+	public ExponentialFunction(Node exponent) {
 		super(exponent);
 	}
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a numeric type (one of Double, Float, Long,
-	 * Integer). The mathematical constant <code>e</code> is raised to the power
+	 * Integer). The mathematical constant <tt>e</tt> is raised to the power
 	 * of this value.
 	 */
 	@Override
 	public Double evaluate() {
-		final Object c = getChild(0).evaluate();
+		Object c = getChild(0).evaluate();
 
 		return Math.exp(NumericUtils.asDouble(c));
 	}
@@ -71,14 +71,14 @@ public class ExponentialFunction extends Node {
 	/**
 	 * Returns this function node's return type for the given child input types.
 	 * If there is one input type of a numeric type then the return type will
-	 * be Double. In all other cases this method will return <code>null</code>
+	 * be Double. In all other cases this method will return <tt>null</tt>
 	 * to indicate that the inputs are invalid.
 	 * 
 	 * @return the Double class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(final Class<?> ... inputTypes) {
-		if ((inputTypes.length == 1) && TypeUtils.isNumericType(inputTypes[0])) {
+	public Class<?> dataType(Class<?> ... inputTypes) {
+		if ((inputTypes.length == 1) && DataTypeUtils.isNumericType(inputTypes[0])) {
 			return Double.class;
 		} else {
 			return null;

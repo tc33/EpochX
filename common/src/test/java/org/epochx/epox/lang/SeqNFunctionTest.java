@@ -92,22 +92,22 @@ public class SeqNFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.lang.SeqNFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.lang.SeqNFunction#dataType(Class...)}
 	 * returns a Void type for the correct inputs, and <code>null</code>
 	 * for incorrectly typed or incorrect number of inputs.
 	 */
 	@Test
 	public void testGetReturnTypeSeqN() {
-		Class<?> returnType = seqn.getReturnType(Void.class, Void.class, Void.class);
+		Class<?> returnType = seqn.dataType(Void.class, Void.class, Void.class);
 		assertSame("unexpected return type", Void.class, returnType);
 		
-		returnType = seqn.getReturnType(Void.class, Number.class, Void.class);
+		returnType = seqn.dataType(Void.class, Number.class, Void.class);
 		assertNull("all children should be of Void type", returnType);
 		
-		returnType = seqn.getReturnType(Void.class, Void.class);
+		returnType = seqn.dataType(Void.class, Void.class);
 		assertNull("too few inputs should be invalid", returnType);
 		
-		returnType = seqn.getReturnType(Void.class, Void.class, Void.class, Void.class);
+		returnType = seqn.dataType(Void.class, Void.class, Void.class, Void.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 

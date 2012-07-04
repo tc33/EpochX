@@ -22,40 +22,41 @@
 package org.epochx.epox.lang;
 
 import org.epochx.epox.Node;
-import org.epochx.tools.util.TypeUtils;
+import org.epochx.tools.DataTypeUtils;
 
 /**
- * A function node which provides the facility to sequence a specific number of
+ * A node which provides the facility to sequence a specific number of
  * instructions, specified at construction. Each of the instructions may be any
- * other function or terminal node with a Void return type. This is the same
- * function that Koza calls progN in his work.
+ * other function or terminal node with a <tt>Void</tt> return type. This is the
+ * same function that Koza calls <tt>progN</tt> in his work.
  */
 public class SeqNFunction extends Node {
 
 	/**
-	 * Constructs a SeqNFunction with the given number of <code>null</code>
+	 * Constructs a <tt>SeqNFunction</tt> with the given number of <tt>null</tt>
 	 * children.
-	 * @param n the arity of the function.
+	 * 
+	 * @param n the arity of the function
 	 */
-	public SeqNFunction(final int n) {
+	public SeqNFunction(int n) {
 		this((Node) null);
 
 		setChildren(new Node[n]);
 	}
 
 	/**
-	 * Constructs a SeqNFunction with the given children. When evaluated, each
-	 * child will be evaluated in sequence.
+	 * Constructs a <tt>SeqNFunction</tt> with the given children. When 
+	 * evaluated, each child will be evaluated in sequence.
 	 * 
-	 * @param children The child nodes to be executed in sequence.
+	 * @param children the child nodes to be executed in sequence
 	 */
-	public SeqNFunction(final Node ... children) {
+	public SeqNFunction(Node ... children) {
 		super(children);
 	}
 
 	/**
 	 * Evaluates this function. Each of the children is evaluated in sequence.
-	 * After evaluating its children, this method will return null.
+	 * After evaluating its children, this method will return <tt>null</tt>.
 	 */
 	@Override
 	public Void evaluate() {
@@ -68,7 +69,7 @@ public class SeqNFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is SEQN.
+	 * Returns the identifier of this function which is <tt>SEQN</tt>
 	 */
 	@Override
 	public String getIdentifier() {
@@ -79,13 +80,14 @@ public class SeqNFunction extends Node {
 	 * Returns this function node's return type for the given child input types.
 	 * If there is the correct number of inputs of Void type, then the
 	 * return type of this function is Void. Otherwise this method will return
-	 * <code>null</code> to indicate that the inputs are invalid.
+	 * <tt>null</tt> to indicate that the inputs are invalid.
 	 * 
-	 * @return The Void class or null if the input type is invalid.
+	 * @return <tt>Void</tt> or otherwise <tt>null</tt> if the input type is 
+	 * invalid
 	 */
 	@Override
-	public Class<?> getReturnType(final Class<?> ... inputTypes) {
-		if ((inputTypes.length == getArity()) && TypeUtils.allEqual(inputTypes, Void.class)) {
+	public Class<?> dataType(Class<?> ... inputTypes) {
+		if ((inputTypes.length == getArity()) && DataTypeUtils.allEqual(inputTypes, Void.class)) {
 			return Void.class;
 		} else {
 			return null;

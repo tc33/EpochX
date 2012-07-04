@@ -26,7 +26,7 @@ import static org.junit.Assert.*;
 import org.epochx.epox.*;
 import org.epochx.epox.trig.ArcCotangentFunction;
 import org.epochx.interpret.*;
-import org.epochx.tools.util.MathUtils;
+import org.epochx.tools.MathUtils;
 import org.junit.Test;
 
 /**
@@ -88,7 +88,7 @@ public class ArcCotangentFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.trig.ArcCotangentFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.trig.ArcCotangentFunction#dataType(Class...)}
 	 * returns <code>Double</code> for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
@@ -97,14 +97,14 @@ public class ArcCotangentFunctionTest extends NodeTestCase {
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = arccot.getReturnType(type);
+			returnType = arccot.dataType(type);
 			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = arccot.getReturnType(Boolean.class);
+		returnType = arccot.dataType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = arccot.getReturnType(Integer.class, Integer.class);
+		returnType = arccot.dataType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 	

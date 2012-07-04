@@ -26,9 +26,9 @@ import java.util.*;
 import org.epochx.core.*;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
+import org.epochx.grammar.Grammar;
 import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
-import org.epochx.tools.grammar.Grammar;
 import org.epochx.tools.random.RandomNumberGenerator;
 
 /**

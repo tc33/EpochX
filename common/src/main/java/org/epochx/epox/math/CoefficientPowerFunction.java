@@ -22,11 +22,11 @@
 package org.epochx.epox.math;
 
 import org.epochx.epox.Node;
-import org.epochx.tools.util.*;
+import org.epochx.tools.*;
 
 /**
- * The CoefficientPowerFunction is equivalent to a <code>PowerFunction</code>
- * combined with a <code>MultiplyFunction</code>. It allows a succinct way of
+ * The CoefficientPowerFunction is equivalent to a <tt>PowerFunction</tt>
+ * combined with a <tt>MultiplyFunction</tt>. It allows a succinct way of
  * representing a variable with an exponent and a coefficient.
  * 
  * An example:
@@ -36,7 +36,7 @@ import org.epochx.tools.util.*;
 public class CoefficientPowerFunction extends Node {
 
 	/**
-	 * Constructs a CoefficientPowerFunction with three <code>null</code>
+	 * Constructs a CoefficientPowerFunction with three <tt>null</tt>
 	 * children.
 	 */
 	public CoefficientPowerFunction() {
@@ -52,7 +52,7 @@ public class CoefficientPowerFunction extends Node {
 	 *        the coefficient.
 	 * @param exponent the power the term will be raised to.
 	 */
-	public CoefficientPowerFunction(final Node coefficient, final Node term, final Node exponent) {
+	public CoefficientPowerFunction(Node coefficient, Node term, Node exponent) {
 		super(coefficient, term, exponent);
 	}
 
@@ -65,16 +65,16 @@ public class CoefficientPowerFunction extends Node {
 	 */
 	@Override
 	public Double evaluate() {
-		final Object c1 = getChild(0).evaluate();
-		final Object c2 = getChild(1).evaluate();
-		final Object c3 = getChild(2).evaluate();
+		Object c1 = getChild(0).evaluate();
+		Object c2 = getChild(1).evaluate();
+		Object c3 = getChild(2).evaluate();
 		
-		final Class<?> returnType = TypeUtils.getNumericType(c1.getClass(), c2.getClass(), c3.getClass());
+		Class<?> returnType = DataTypeUtils.widestNumberType(c1.getClass(), c2.getClass(), c3.getClass());
 		
 		if (returnType != null) {
-			final double d1 = NumericUtils.asDouble(getChild(0).evaluate());
-			final double d2 = NumericUtils.asDouble(getChild(1).evaluate());
-			final double d3 = NumericUtils.asDouble(getChild(2).evaluate());
+			double d1 = NumericUtils.asDouble(getChild(0).evaluate());
+			double d2 = NumericUtils.asDouble(getChild(1).evaluate());
+			double d3 = NumericUtils.asDouble(getChild(2).evaluate());
 
 			return d1 * (Math.pow(d2, d3));
 		}
@@ -94,13 +94,13 @@ public class CoefficientPowerFunction extends Node {
 	 * Returns this function node's return type for the given child input types.
 	 * If there are three input types that are all numeric then the return type
 	 * will be Double. In all other cases this method will return
-	 * <code>null</code> to indicate that the inputs are invalid.
+	 * <tt>null</tt> to indicate that the inputs are invalid.
 	 * 
 	 * @return the Double class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(final Class<?> ... inputTypes) {
-		if (inputTypes.length == 3 && TypeUtils.isAllNumericType(inputTypes)) {
+	public Class<?> dataType(Class<?> ... inputTypes) {
+		if (inputTypes.length == 3 && DataTypeUtils.isAllNumericType(inputTypes)) {
 			return Double.class;
 		} else {
 			return null;

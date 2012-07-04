@@ -108,7 +108,7 @@ public class CoefficientPowerFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.CoefficientPowerFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.math.CoefficientPowerFunction#dataType(Class...)}
 	 * returns the correct type for numeric input types and <code>null</code> 
 	 * otherwise.
 	 */
@@ -118,20 +118,20 @@ public class CoefficientPowerFunctionTest extends NodeTestCase {
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = cvp.getReturnType(type, type, type);
+			returnType = cvp.dataType(type, type, type);
 			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = cvp.getReturnType(Short.class, Double.class, Integer.class);
+		returnType = cvp.dataType(Short.class, Double.class, Integer.class);
 		assertSame("mixed numeric input types should be Double return type", Double.class, returnType);
 		
-		returnType = cvp.getReturnType(Double.class, Double.class, Boolean.class);
+		returnType = cvp.dataType(Double.class, Double.class, Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = cvp.getReturnType(Integer.class, Integer.class, Integer.class, Integer.class);
+		returnType = cvp.dataType(Integer.class, Integer.class, Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 		
-		returnType = cvp.getReturnType(Integer.class, Integer.class);
+		returnType = cvp.dataType(Integer.class, Integer.class);
 		assertNull("too few inputs should be invalid", returnType);
 	}
 	

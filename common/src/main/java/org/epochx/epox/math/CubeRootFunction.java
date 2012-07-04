@@ -22,16 +22,16 @@
 package org.epochx.epox.math;
 
 import org.epochx.epox.Node;
-import org.epochx.tools.util.*;
+import org.epochx.tools.*;
 
 /**
- * A function node which performs the mathematical function of cube root, called
+ * A node which performs the mathematical function of cube root, called
  * CBRT.
  */
 public class CubeRootFunction extends Node {
 
 	/**
-	 * Constructs a CubeRootFunction with one <code>null</code> child.
+	 * Constructs a CubeRootFunction with one <tt>null</tt> child.
 	 */
 	public CubeRootFunction() {
 		this(null);
@@ -42,7 +42,7 @@ public class CubeRootFunction extends Node {
 	 * 
 	 * @param child the child node.
 	 */
-	public CubeRootFunction(final Node child) {
+	public CubeRootFunction(Node child) {
 		super(child);
 	}
 
@@ -54,7 +54,7 @@ public class CubeRootFunction extends Node {
 	 */
 	@Override
 	public Double evaluate() {
-		final Object c = getChild(0).evaluate();
+		Object c = getChild(0).evaluate();
 
 		return Math.cbrt(NumericUtils.asDouble(c));
 	}
@@ -70,14 +70,14 @@ public class CubeRootFunction extends Node {
 	/**
 	 * Returns this function node's return type for the given child input types.
 	 * If there is one input type of a numeric type then the return type will
-	 * be Double. In all other cases this method will return <code>null</code>
+	 * be Double. In all other cases this method will return <tt>null</tt>
 	 * to indicate that the inputs are invalid.
 	 * 
 	 * @return the Double class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(final Class<?> ... inputTypes) {
-		if ((inputTypes.length == 1) && TypeUtils.isNumericType(inputTypes[0])) {
+	public Class<?> dataType(Class<?> ... inputTypes) {
+		if ((inputTypes.length == 1) && DataTypeUtils.isNumericType(inputTypes[0])) {
 			return Double.class;
 		} else {
 			return null;

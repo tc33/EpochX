@@ -83,19 +83,19 @@ public class XorFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.bool.XorFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.bool.XorFunction#dataType(Class...)}
 	 * returns a Boolean data-type for two Boolean inputs, and <code>null</code>
 	 * for non-Boolean or incorrect number.
 	 */
 	@Test
 	public void testGetReturnTypeNor() {
-		Class<?> returnType = node.getReturnType(Boolean.class, Boolean.class);
+		Class<?> returnType = node.dataType(Boolean.class, Boolean.class);
 		assertEquals("type should be boolean for 2 boolean inputs", Boolean.class, returnType);
 		
-		returnType = node.getReturnType(Integer.class, Boolean.class);
+		returnType = node.dataType(Integer.class, Boolean.class);
 		assertNull("non-boolean inputs should be invalid", returnType);
 		
-		returnType = node.getReturnType(Boolean.class, Boolean.class, Boolean.class);
+		returnType = node.dataType(Boolean.class, Boolean.class, Boolean.class);
 		assertNull("too many boolean inputs should be invalid", returnType);
 	}
 	

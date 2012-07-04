@@ -22,17 +22,17 @@
 package org.epochx.epox.math;
 
 import org.epochx.epox.Node;
-import org.epochx.tools.util.*;
+import org.epochx.tools.*;
 
 /**
- * A function node which performs the common (base 10) logarithm, called LOG-10.
+ * A node which performs the common (base 10) logarithm, called LOG-10.
  * 
  * @see LogFunction
  */
 public class Log10Function extends Node {
 
 	/**
-	 * Constructs a Log10Function with one <code>null</code> child.
+	 * Constructs a Log10Function with one <tt>null</tt> child.
 	 */
 	public Log10Function() {
 		this(null);
@@ -43,7 +43,7 @@ public class Log10Function extends Node {
 	 * 
 	 * @param child The child of which the base 10 logarithm will be calculated.
 	 */
-	public Log10Function(final Node child) {
+	public Log10Function(Node child) {
 		super(child);
 	}
 
@@ -55,7 +55,7 @@ public class Log10Function extends Node {
 	 */
 	@Override
 	public Double evaluate() {
-		final double c = NumericUtils.asDouble(getChild(0).evaluate());
+		double c = NumericUtils.asDouble(getChild(0).evaluate());
 
 		return Math.log10(c);
 	}
@@ -71,14 +71,14 @@ public class Log10Function extends Node {
 	/**
 	 * Returns this function node's return type for the given child input types.
 	 * If there is one input type of a numeric type then the return type will
-	 * be Double. In all other cases this method will return <code>null</code>
+	 * be Double. In all other cases this method will return <tt>null</tt>
 	 * to indicate that the inputs are invalid.
 	 * 
 	 * @return the Double class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(final Class<?> ... inputTypes) {
-		if ((inputTypes.length == 1) && TypeUtils.isAllNumericType(inputTypes)) {
+	public Class<?> dataType(Class<?> ... inputTypes) {
+		if ((inputTypes.length == 1) && DataTypeUtils.isAllNumericType(inputTypes)) {
 			return Double.class;
 		}
 

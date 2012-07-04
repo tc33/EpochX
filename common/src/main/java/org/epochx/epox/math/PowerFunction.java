@@ -22,15 +22,15 @@
 package org.epochx.epox.math;
 
 import org.epochx.epox.Node;
-import org.epochx.tools.util.*;
+import org.epochx.tools.*;
 
 /**
- * A function node which performs the mathematical operation of exponentiation.
+ * A node which performs the mathematical operation of exponentiation.
  */
 public class PowerFunction extends Node {
 
 	/**
-	 * Constructs a PowerFunction with two <code>null</code> children.
+	 * Constructs a PowerFunction with two <tt>null</tt> children.
 	 */
 	public PowerFunction() {
 		this(null, null);
@@ -44,16 +44,16 @@ public class PowerFunction extends Node {
 	 * @param base The first child node - the base.
 	 * @param exponent The second child node - the exponent.
 	 */
-	public PowerFunction(final Node base, final Node exponent) {
+	public PowerFunction(Node base, Node exponent) {
 		super(base, exponent);
 	}
 
 	/**
-	 * Evaluating a <code>PowerFunction</code> involves raising the first child
+	 * Evaluating a <tt>PowerFunction</tt> involves raising the first child
 	 * to the power of the second, after both children are evaluated. For
 	 * performance, this function is evaluated lazily. The second child is
-	 * evaluated first, if it evaluates to <code>0.0</code> then the result will
-	 * always be <code>1.0</code> and the first child will not be evaluated at
+	 * evaluated first, if it evaluates to <tt>0.0</tt> then the result will
+	 * always be <tt>1.0</tt> and the first child will not be evaluated at
 	 * all.
 	 */
 	/**
@@ -64,12 +64,12 @@ public class PowerFunction extends Node {
 	 */
 	@Override
 	public Double evaluate() {
-		final double c2 = NumericUtils.asDouble(getChild(1).evaluate());
+		double c2 = NumericUtils.asDouble(getChild(1).evaluate());
 
 		if (c2 == 0.0) {
 			return 1.0;
 		} else {
-			final double c1 = NumericUtils.asDouble(getChild(0).evaluate());
+			double c1 = NumericUtils.asDouble(getChild(0).evaluate());
 
 			return Math.pow(c1, c2);
 		}
@@ -86,14 +86,14 @@ public class PowerFunction extends Node {
 	/**
 	 * Returns this function node's return type for the given child input types.
 	 * If there are two input types of a numeric type then the return type will
-	 * be Double. In all other cases this method will return <code>null</code>
+	 * be Double. In all other cases this method will return <tt>null</tt>
 	 * to indicate that the inputs are invalid.
 	 * 
 	 * @return the Double class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(final Class<?> ... inputTypes) {
-		if ((inputTypes.length == 2) && TypeUtils.isAllNumericType(inputTypes)) {
+	public Class<?> dataType(Class<?> ... inputTypes) {
+		if ((inputTypes.length == 2) && DataTypeUtils.isAllNumericType(inputTypes)) {
 			return Double.class;
 		} else {
 			return null;

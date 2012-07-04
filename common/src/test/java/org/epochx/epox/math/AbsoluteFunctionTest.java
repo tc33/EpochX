@@ -89,7 +89,7 @@ public class AbsoluteFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.AbsoluteFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.math.AbsoluteFunction#dataType(Class...)}
 	 * returns the same type for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
@@ -98,14 +98,14 @@ public class AbsoluteFunctionTest extends NodeTestCase {
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = abs.getReturnType(type);
+			returnType = abs.dataType(type);
 			assertSame("unexpected return type", type, returnType);
 		}
 		
-		returnType = abs.getReturnType(Boolean.class);
+		returnType = abs.dataType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = abs.getReturnType(Integer.class, Integer.class);
+		returnType = abs.dataType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 	

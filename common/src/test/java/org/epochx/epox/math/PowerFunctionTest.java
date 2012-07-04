@@ -181,7 +181,7 @@ public class PowerFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.PowerFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.math.PowerFunction#dataType(Class...)}
 	 * returns the correct type for numeric input types and <code>null</code> 
 	 * otherwise.
 	 */
@@ -191,20 +191,20 @@ public class PowerFunctionTest extends NodeTestCase {
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = pow.getReturnType(type, type);
+			returnType = pow.dataType(type, type);
 			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = pow.getReturnType(Short.class, Double.class);
+		returnType = pow.dataType(Short.class, Double.class);
 		assertSame("mixed numeric input types should be Double return type", Double.class, returnType);
 		
-		returnType = pow.getReturnType(Double.class, Boolean.class);
+		returnType = pow.dataType(Double.class, Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = pow.getReturnType(Integer.class, Integer.class, Integer.class);
+		returnType = pow.dataType(Integer.class, Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 		
-		returnType = pow.getReturnType(Integer.class);
+		returnType = pow.dataType(Integer.class);
 		assertNull("too few inputs should be invalid", returnType);
 	}
 	

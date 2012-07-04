@@ -3,30 +3,30 @@ package org.epochx.epox.lang;
 import org.epochx.epox.Node;
 
 /**
- * A function node which chains three nodes together in sequence, called SEQ3.
+ * A node which chains three nodes together in sequence, called <tt>SEQ3</tt>
  */
 public class Seq3Function extends SeqNFunction {
 
 	/**
-	 * Constructs a Seq3Function with three <code>null</code> children.
+	 * Constructs a Seq3Function with three <tt>null</tt> children.
 	 */
 	public Seq3Function() {
 		this(null, null, null);
 	}
 
 	/**
-	 * Constructs a Seq3Function with three child nodes.
+	 * Constructs a <tt>Seq3Function</tt> with three child nodes
 	 * 
-	 * @param child1 The first child node.
-	 * @param child2 The second child node.
-	 * @param child3 The third child node.
+	 * @param child1 the first child node
+	 * @param child2 the second child node
+	 * @param child3 the third child node
 	 */
-	public Seq3Function(final Node child1, final Node child2, final Node child3) {
+	public Seq3Function(Node child1, Node child2, Node child3) {
 		super(child1, child2, child3);
 	}
 
 	/**
-	 * Returns the identifier of this function which is SEQ3.
+	 * Returns the identifier of this function which is <tt>SEQ3</tt>
 	 */
 	@Override
 	public String getIdentifier() {

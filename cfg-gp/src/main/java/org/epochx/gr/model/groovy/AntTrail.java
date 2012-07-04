@@ -30,9 +30,9 @@ import org.epochx.fitness.AntEvaluator;
 import org.epochx.gr.model.GRModel;
 import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.gr.source.GRSourceGenerator;
+import org.epochx.grammar.Grammar;
 import org.epochx.interpret.*;
 import org.epochx.tools.ant.*;
-import org.epochx.tools.grammar.Grammar;
 
 /**
  * Abstract XGR model for ant trail problems in the Groovy language. This class

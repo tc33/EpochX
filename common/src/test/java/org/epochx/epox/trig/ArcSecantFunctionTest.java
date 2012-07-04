@@ -26,7 +26,7 @@ import static org.junit.Assert.*;
 import org.epochx.epox.*;
 import org.epochx.epox.trig.ArcSecantFunction;
 import org.epochx.interpret.*;
-import org.epochx.tools.util.MathUtils;
+import org.epochx.tools.MathUtils;
 import org.junit.Test;
 
 /**
@@ -95,7 +95,7 @@ public class ArcSecantFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.trig.ArcSecantFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.trig.ArcSecantFunction#dataType(Class...)}
 	 * returns <code>Double</code> for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
@@ -104,14 +104,14 @@ public class ArcSecantFunctionTest extends NodeTestCase {
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = arcsec.getReturnType(type);
+			returnType = arcsec.dataType(type);
 			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = arcsec.getReturnType(Boolean.class);
+		returnType = arcsec.dataType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = arcsec.getReturnType(Integer.class, Integer.class);
+		returnType = arcsec.dataType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 	

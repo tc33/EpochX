@@ -114,7 +114,7 @@ public class ExponentialFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.ExponentialFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.math.ExponentialFunction#dataType(Class...)}
 	 * returns Double type for numeric input type and <code>null</code> 
 	 * otherwise.
 	 */
@@ -124,14 +124,14 @@ public class ExponentialFunctionTest extends NodeTestCase {
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = exp.getReturnType(type);
+			returnType = exp.dataType(type);
 			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = exp.getReturnType(Boolean.class);
+		returnType = exp.dataType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = exp.getReturnType(Integer.class, Integer.class);
+		returnType = exp.dataType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 	

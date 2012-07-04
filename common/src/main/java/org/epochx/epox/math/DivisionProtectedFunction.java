@@ -22,10 +22,10 @@
 package org.epochx.epox.math;
 
 import org.epochx.epox.Node;
-import org.epochx.tools.util.*;
+import org.epochx.tools.*;
 
 /**
- * A function node which performs the mathematical function of division.
+ * A node which performs the mathematical function of division.
  * 
  * Division can be performed on inputs of the following types:
  * <ul>
@@ -47,7 +47,7 @@ public class DivisionProtectedFunction extends Node {
 	private Double protectionValue;
 
 	/**
-	 * Constructs a ProtectedDivisionFunction with two <code>null</code>
+	 * Constructs a ProtectedDivisionFunction with two <tt>null</tt>
 	 * children. By default a protection value of 0.0 is used.
 	 */
 	public DivisionProtectedFunction() {
@@ -55,13 +55,13 @@ public class DivisionProtectedFunction extends Node {
 	}
 
 	/**
-	 * Constructs a ProtectedDivisionFunction with two <code>null</code>
+	 * Constructs a ProtectedDivisionFunction with two <tt>null</tt>
 	 * children.
 	 * 
 	 * @param protectionValue a double value to return in the case of
 	 *        divide-by-zeros.
 	 */
-	public DivisionProtectedFunction(final double protectionValue) {
+	public DivisionProtectedFunction(double protectionValue) {
 		this(null, null, protectionValue);
 	}
 
@@ -73,7 +73,7 @@ public class DivisionProtectedFunction extends Node {
 	 * @param dividend The first child node - the dividend.
 	 * @param divisor The second child node - the divisor.
 	 */
-	public DivisionProtectedFunction(final Node dividend, final Node divisor) {
+	public DivisionProtectedFunction(Node dividend, Node divisor) {
 		this(dividend, divisor, 0.0);
 	}
 
@@ -85,7 +85,7 @@ public class DivisionProtectedFunction extends Node {
 	 * @param protectionValue a double value to return in the case of
 	 *        divide-by-zeros.
 	 */
-	public DivisionProtectedFunction(final Node dividend, final Node divisor, final double protectionValue) {
+	public DivisionProtectedFunction(Node dividend, Node divisor, double protectionValue) {
 		super(dividend, divisor);
 
 		this.protectionValue = protectionValue;
@@ -101,33 +101,33 @@ public class DivisionProtectedFunction extends Node {
 	 */
 	@Override
 	public Object evaluate() {
-		final Object c1 = getChild(0).evaluate();
-		final Object c2 = getChild(1).evaluate();
+		Object c1 = getChild(0).evaluate();
+		Object c2 = getChild(1).evaluate();
 		
-		final Class<?> returnType = TypeUtils.getNumericType(c1.getClass(), c2.getClass());
+		Class<?> returnType = DataTypeUtils.widestNumberType(c1.getClass(), c2.getClass());
 
 		if (returnType == Double.class) {
 			// Divide as doubles.
-			final double d1 = NumericUtils.asDouble(c1);
-			final double d2 = NumericUtils.asDouble(c2);
+			double d1 = NumericUtils.asDouble(c1);
+			double d2 = NumericUtils.asDouble(c2);
 
 			return (d2 == 0) ? NumericUtils.asDouble(protectionValue) : (d1 / d2);
 		} else if (returnType == Float.class) {
 			// Divide as floats.
-			final float f1 = NumericUtils.asFloat(c1);
-			final float f2 = NumericUtils.asFloat(c2);
+			float f1 = NumericUtils.asFloat(c1);
+			float f2 = NumericUtils.asFloat(c2);
 
 			return (f2 == 0) ? NumericUtils.asFloat(protectionValue) : (f1 / f2);
 		} else if (returnType == Long.class) {
 			// Divide as longs.
-			final long l1 = NumericUtils.asLong(c1);
-			final long l2 = NumericUtils.asLong(c2);
+			long l1 = NumericUtils.asLong(c1);
+			long l2 = NumericUtils.asLong(c2);
 
 			return (l2 == 0) ? NumericUtils.asLong(protectionValue) : (l1 / l2);
 		} else if (returnType == Integer.class) {
 			// Divide as integers.
-			final int i1 = NumericUtils.asInteger(c1);
-			final int i2 = NumericUtils.asInteger(c2);
+			int i1 = NumericUtils.asInteger(c1);
+			int i2 = NumericUtils.asInteger(c2);
 
 			return (i2 == 0) ? NumericUtils.asInteger(protectionValue) : (i1 / i2);
 		}
@@ -147,14 +147,14 @@ public class DivisionProtectedFunction extends Node {
 	 * Returns this function node's return type for the given child input types.
 	 * If there are two input types of numeric type then the return type will
 	 * be the wider of those numeric types. In all other cases this method will
-	 * return <code>null</code> to indicate that the inputs are invalid.
+	 * return <tt>null</tt> to indicate that the inputs are invalid.
 	 * 
 	 * @return A numeric class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(final Class<?> ... inputTypes) {
+	public Class<?> dataType(Class<?> ... inputTypes) {
 		if (inputTypes.length == 2) {
-			return TypeUtils.getNumericType(inputTypes);
+			return DataTypeUtils.widestNumberType(inputTypes);
 		}
 		return null;
 	}

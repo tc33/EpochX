@@ -22,47 +22,46 @@
 package org.epochx.epox.bool;
 
 import org.epochx.epox.Node;
-import org.epochx.tools.util.TypeUtils;
+import org.epochx.tools.DataTypeUtils;
 
 /**
- * A function node which performs exclusive disjunction, also known
- * as exclusive OR.
+ * A node which performs exclusive disjunction, also known as exclusive OR
  */
 public class XorFunction extends Node {
 
 	/**
-	 * Constructs an XorFunction with two <code>null</code> children.
+	 * Constructs an <tt>XorFunction</tt> with two <tt>null</tt> children
 	 */
 	public XorFunction() {
 		this(null, null);
 	}
 
 	/**
-	 * Constructs an XorFunction with two boolean child nodes.
+	 * Constructs an <tt>XorFunction</tt> with two boolean child nodes
 	 * 
-	 * @param child1 The first child node.
-	 * @param child2 The second child node.
+	 * @param child1 the first child node
+	 * @param child2 the second child node
 	 */
-	public XorFunction(final Node child1, final Node child2) {
+	public XorFunction(Node child1, Node child2) {
 		super(child1, child2);
 	}
 
 	/**
 	 * Evaluates this function. Both child nodes are evaluated, the result of
-	 * both must be a <code>Boolean</code> instance. The result of this
-	 * function will be true if either (but not both) children evaluate to
-	 * true, otherwise the result will be false.
+	 * both must be a <tt>Boolean</tt> instance. The result of this
+	 * function will be <tt>true</tt> if either (but not both) children evaluate
+	 * to <tt>true</tt>, otherwise the result will be <tt>false</tt>.
 	 */
 	@Override
 	public Boolean evaluate() {
-		final boolean c1 = ((Boolean) getChild(0).evaluate()).booleanValue();
-		final boolean c2 = ((Boolean) getChild(1).evaluate()).booleanValue();
+		boolean c1 = ((Boolean) getChild(0).evaluate()).booleanValue();
+		boolean c2 = ((Boolean) getChild(1).evaluate()).booleanValue();
 
 		return c1 != c2;
 	}
 
 	/**
-	 * Returns the identifier of this function which is XOR.
+	 * Returns the identifier of this function which is <tt>XOR</tt>
 	 */
 	@Override
 	public String getIdentifier() {
@@ -71,16 +70,16 @@ public class XorFunction extends Node {
 
 	/**
 	 * Returns this function node's return type for the given child input types.
-	 * If there are two children, both of which have a return type of Boolean,
-	 * then the return type of this function will also be Boolean. In all other
-	 * cases this method will return <code>null</code> to indicate that the
-	 * inputs are invalid.
+	 * If there are two children, both of which have a return type of 
+	 * <tt>Boolean</tt>, then the return type of this function will also be 
+	 * <tt>Boolean</tt>. In all other cases this method will return 
+	 * <tt>null</tt> to indicate that the inputs are invalid.
 	 * 
 	 * @return The Boolean class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(final Class<?> ... inputTypes) {
-		if ((inputTypes.length == 2) && TypeUtils.allEqual(inputTypes, Boolean.class)) {
+	public Class<?> dataType(Class<?> ... inputTypes) {
+		if ((inputTypes.length == 2) && DataTypeUtils.allEqual(inputTypes, Boolean.class)) {
 			return Boolean.class;
 		} else {
 			return null;

@@ -22,10 +22,10 @@
 package org.epochx.epox.math;
 
 import org.epochx.epox.Node;
-import org.epochx.tools.util.*;
+import org.epochx.tools.*;
 
 /**
- * A function node which performs the mathematical function of
+ * A node which performs the mathematical function of
  * factorial, which is normally expressed with an exclamation mark !
  * 
  * For example:
@@ -34,7 +34,7 @@ import org.epochx.tools.util.*;
 public class FactorialFunction extends Node {
 
 	/**
-	 * Constructs a FactorialFunction with one <code>null</code> child.
+	 * Constructs a FactorialFunction with one <tt>null</tt> child.
 	 */
 	public FactorialFunction() {
 		this(null);
@@ -45,7 +45,7 @@ public class FactorialFunction extends Node {
 	 * 
 	 * @param child the child node.
 	 */
-	public FactorialFunction(final Node child) {
+	public FactorialFunction(Node child) {
 		super(child);
 	}
 
@@ -59,9 +59,9 @@ public class FactorialFunction extends Node {
 	 */
 	@Override
 	public Object evaluate() {
-		final Object c = getChild(0).evaluate();
+		Object c = getChild(0).evaluate();
 
-		final long cint = Math.abs(NumericUtils.asLong(c));
+		long cint = Math.abs(NumericUtils.asLong(c));
 
 		long factorial = 1;
 		for (long i = 1; i <= cint; i++) {
@@ -87,15 +87,15 @@ public class FactorialFunction extends Node {
 	 * Returns this function node's return type for the given child input types.
 	 * If there is one input type of Byte, Short or Integer then the return type
 	 * will be Integer, if it is Long then the return type will also be Long. In
-	 * all other cases this method will return <code>null</code> to indicate
+	 * all other cases this method will return <tt>null</tt> to indicate
 	 * that the inputs are invalid.
 	 * 
 	 * @return the Integer or Long class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(final Class<?> ... inputTypes) {
-		if ((inputTypes.length == 1) && TypeUtils.isIntegerType(inputTypes[0])) {
-			return TypeUtils.getNumericType(inputTypes[0]);
+	public Class<?> dataType(Class<?> ... inputTypes) {
+		if ((inputTypes.length == 1) && DataTypeUtils.isIntegerType(inputTypes[0])) {
+			return DataTypeUtils.widestNumberType(inputTypes[0]);
 		}
 
 		return null;

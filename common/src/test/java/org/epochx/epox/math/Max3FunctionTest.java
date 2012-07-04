@@ -230,7 +230,7 @@ public class Max3FunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.Max3Function#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.math.Max3Function#dataType(Class...)}
 	 * returns the correct type for numeric input types and <code>null</code> 
 	 * otherwise.
 	 */
@@ -240,26 +240,26 @@ public class Max3FunctionTest extends NodeTestCase {
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = max.getReturnType(type, type, type);
+			returnType = max.dataType(type, type, type);
 			assertSame("unexpected return type", type, returnType);
 		}
 		
-		returnType = max.getReturnType(Short.class, Double.class, Integer.class);
+		returnType = max.dataType(Short.class, Double.class, Integer.class);
 		assertSame("unexpected return type", Double.class, returnType);
 		
-		returnType = max.getReturnType(Long.class, Integer.class, Short.class);
+		returnType = max.dataType(Long.class, Integer.class, Short.class);
 		assertSame("unexpected return type", Long.class, returnType);
 		
-		returnType = max.getReturnType(Byte.class, Float.class, Long.class);
+		returnType = max.dataType(Byte.class, Float.class, Long.class);
 		assertSame("unexpected return type", Float.class, returnType);
 		
-		returnType = max.getReturnType(Boolean.class, Integer.class, Integer.class);
+		returnType = max.dataType(Boolean.class, Integer.class, Integer.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = max.getReturnType(Integer.class, Integer.class, Integer.class, Integer.class);
+		returnType = max.dataType(Integer.class, Integer.class, Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 		
-		returnType = max.getReturnType(Integer.class, Integer.class);
+		returnType = max.dataType(Integer.class, Integer.class);
 		assertNull("too few inputs should be invalid", returnType);
 	}
 	

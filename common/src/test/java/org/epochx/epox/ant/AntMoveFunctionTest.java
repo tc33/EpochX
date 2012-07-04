@@ -103,27 +103,27 @@ public class AntMoveFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.ant.AntMoveFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.ant.AntMoveFunction#dataType(Class...)}
 	 * returns a Void data-type for the correct inputs, and <code>null</code>
 	 * for incorrectly typed or incorrect number of inputs.
 	 */
 	@Test
 	public void testGetReturnTypeMove() {
 		// Test the ant child version.
-		Class<?> returnType = antMoveChild.getReturnType(Ant.class);
+		Class<?> returnType = antMoveChild.dataType(Ant.class);
 		assertEquals("type should be Void for an ant input", Void.class, returnType);
 		
-		returnType = antMoveChild.getReturnType(Integer.class);
+		returnType = antMoveChild.dataType(Integer.class);
 		assertNull("non-ant input should be invalid", returnType);
 		
-		returnType = antMoveChild.getReturnType(Ant.class, Ant.class);
+		returnType = antMoveChild.dataType(Ant.class, Ant.class);
 		assertNull("too many ant inputs should be invalid", returnType);
 		
 		// Test the non-child version.
-		returnType = antMove.getReturnType();
+		returnType = antMove.dataType();
 		assertEquals("type should be Void for no inputs", Void.class, returnType);
 		
-		returnType = antMove.getReturnType(Ant.class);
+		returnType = antMove.dataType(Ant.class);
 		assertNull("too many ant inputs should be invalid", returnType);
 	}
 	

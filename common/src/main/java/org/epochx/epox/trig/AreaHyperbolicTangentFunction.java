@@ -22,16 +22,16 @@
 package org.epochx.epox.trig;
 
 import org.epochx.epox.Node;
-import org.epochx.tools.util.*;
+import org.epochx.tools.*;
 
 /**
- * A function node which performs the inverse hyperbolic trigonometric function 
+ * A node which performs the inverse hyperbolic trigonometric function 
  * of area hyperbolic tangent, called ARTANH.
  */
 public class AreaHyperbolicTangentFunction extends Node {
 
 	/**
-	 * Constructs an AreaHyperbolicTangentFunction with one <code>null</code> 
+	 * Constructs an AreaHyperbolicTangentFunction with one <tt>null</tt> 
 	 * child.
 	 */
 	public AreaHyperbolicTangentFunction() {
@@ -43,7 +43,7 @@ public class AreaHyperbolicTangentFunction extends Node {
 	 * 
 	 * @param child the child node.
 	 */
-	public AreaHyperbolicTangentFunction(final Node child) {
+	public AreaHyperbolicTangentFunction(Node child) {
 		super(child);
 	}
 
@@ -55,7 +55,7 @@ public class AreaHyperbolicTangentFunction extends Node {
 	 */
 	@Override
 	public Double evaluate() {
-		final Object c = getChild(0).evaluate();
+		Object c = getChild(0).evaluate();
 
 		return MathUtils.artanh(NumericUtils.asDouble(c));
 	}
@@ -71,14 +71,14 @@ public class AreaHyperbolicTangentFunction extends Node {
 	/**
 	 * Returns this function node's return type for the given child input types.
 	 * If there is one input type of a numeric type then the return type will
-	 * be Double. In all other cases this method will return <code>null</code>
+	 * be Double. In all other cases this method will return <tt>null</tt>
 	 * to indicate that the inputs are invalid.
 	 * 
 	 * @return the Double class or null if the input type is invalid.
 	 */
 	@Override
-	public Class<?> getReturnType(final Class<?> ... inputTypes) {
-		if ((inputTypes.length == 1) && TypeUtils.isNumericType(inputTypes[0])) {
+	public Class<?> dataType(Class<?> ... inputTypes) {
+		if ((inputTypes.length == 1) && DataTypeUtils.isNumericType(inputTypes[0])) {
 			return Double.class;
 		} else {
 			return null;

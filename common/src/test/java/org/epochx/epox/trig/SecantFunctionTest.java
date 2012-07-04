@@ -25,7 +25,7 @@ import static org.junit.Assert.*;
 
 import org.epochx.epox.*;
 import org.epochx.interpret.*;
-import org.epochx.tools.util.MathUtils;
+import org.epochx.tools.MathUtils;
 import org.junit.Test;
 
 /**
@@ -87,7 +87,7 @@ public class SecantFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.trig.SecantFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.trig.SecantFunction#dataType(Class...)}
 	 * returns <code>Double</code> for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
@@ -96,14 +96,14 @@ public class SecantFunctionTest extends NodeTestCase {
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = sec.getReturnType(type);
+			returnType = sec.dataType(type);
 			assertSame("unexpected return type", Double.class, returnType);
 		}
 		
-		returnType = sec.getReturnType(Boolean.class);
+		returnType = sec.dataType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = sec.getReturnType(Integer.class, Integer.class);
+		returnType = sec.dataType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 	

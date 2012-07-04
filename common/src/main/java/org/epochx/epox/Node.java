@@ -23,75 +23,101 @@ package org.epochx.epox;
 
 import java.util.*;
 
-import org.apache.commons.lang.ObjectUtils;
-import org.epochx.tools.util.TypeUtils;
+import org.apache.commons.lang.*;
+import org.epochx.tools.DataTypeUtils;
 
 /**
- * A Node is a vertex in a tree structure which represents a program. A Node
- * can be thought of as an expression in a computer programming language.
- * Evaluating a Node will involve evaluating any children and optionally
+ * A <tt>Node</tt> is a vertex in a tree structure which represents a program.
+ * A node can be thought of as an expression in a computer programming language.
+ * Evaluating a node will involve evaluating any children and optionally
  * returning a value.
  * 
- * Subclasses of <code>Node</code> should ensure they call the superclass
- * constructor with all child Nodes so information such as the arity of the
- * node can be maintained. Concrete subclasses must also implement evaluate().
- * Nodes which support mixed type args, or terminal nodes with no-args must also
- * override the getReturnType(Class&lt;?&gt;) method to indicate their return
- * type. The <code>clone</code> and <code>newInstance</code> methods are also
- * heavily used, so implementations should ensure they are sufficient.
+ * Subclasses of <tt>Node</tt> should ensure they call the superclass
+ * constructor with all child nodes so information such as the arity of the
+ * node can be maintained. Concrete subclasses must also implement
+ * <tt>evaluate()</tt> to evaluate the expression represented by the tree.
+ * Nodes which support mixed type arguments, or terminal nodes with no arguments
+ * must also override the <tt>getReturnType(Class&lt;?&gt;)</tt> method to
+ * indicate their return type. The <tt>clone</tt> and <tt>newInstance</tt>
+ * methods are also heavily used, so implementations should ensure they are
+ * sufficient.
  */
 public abstract class Node implements Cloneable {
-//TODO Consider renaming to EpoxNode.
-	// For a terminal node this will be empty.
+
+	// TODO Consider renaming to EpoxNode
+
 	private Node[] children;
+	
+	private Node parent;
 
 	/**
-	 * Constructs a new Node with the given child nodes. The arity of the node
-	 * will be the number of child nodes provided. If unknown, then the child
-	 * nodes may be null, but evaluation is unlikely to be possible until they
-	 * have been set. Terminal nodes are simply nodes with no children.
+	 * Constructs a new <tt>Node</tt> with the given child nodes. The arity of 
+	 * the node will be the number of child nodes provided. The child nodes may 
+	 * be initially set here as <tt>null</tt> and replaced before evaluation. 
+	 * Terminal nodes are simply nodes with no children.
 	 * 
-	 * @param children child nodes to this node.
+	 * @param children child nodes to this node
 	 */
-	public Node(final Node ... children) {
-		this.children = children;
+	public Node(Node ... children) {
+		setChildren(children);
 	}
 
 	/**
 	 * Subclasses should implement this method to perform some operation with
-	 * respect to its children and optionally return a result.
+	 * respect to its children and return a result. If there is no result 
+	 * (for example, because this node has a <tt>Void</tt> data-type), then 
+	 * <tt>null</tt> should be returned.
 	 * 
-	 * @return the result of evaluating the node tree rooted at this node.
+	 * @return the result of evaluating the node tree rooted at this node
 	 */
 	public abstract Object evaluate();
 
 	/**
-	 * Returns an array of this node's children.
-	 * 
-	 * @return the children of this node.
-	 */
-	public Node[] getChildren() {
-		return children;
-	}
-
-	/**
-	 * Sets this node's children.
-	 * 
-	 * @param children the new children to be set.
-	 */
-	public void setChildren(final Node[] children) {
-		this.children = children;
-	}
-
-	/**
-	 * Returns a specific child by index.
+	 * Returns a specific child by index
 	 * 
 	 * @param index the index of the child to be returned, valid indexes run
-	 *        from zero to arity-1.
-	 * @return the child node at the specified index.
+	 *        from <tt>0</tt> to <tt>getArity()-1</tt>
+	 * @return the child node at the specified index
 	 */
-	public Node getChild(final int index) {
+	public Node getChild(int index) {
 		return children[index];
+	}
+	
+	/**
+	 * Returns the parent of this node or <tt>null</tt> if it is the root node
+	 * 
+	 * @return the node that this node is a child of
+	 */
+	public Node getParent() {
+		return parent;
+	}
+	
+	/**
+	 * Returns an array of this node's children. Modifying this array will not
+	 * change the set of children, but modifying the nodes will alter the nodes
+	 * of the tree.
+	 * 
+	 * @return an array of this node's children
+	 */
+	public Node[] getChildren() {
+		return (Node[]) ArrayUtils.clone(children);
+	}
+	
+	/**
+	 * Sets the child nodes of this node. Modifications to this array after 
+	 * being set will not modify the set of child nodes. The number of children
+	 * set here does not need to match the current arity.
+	 * 
+	 * @param children the nodes to set as children in order
+	 */
+	public void setChildren(Node ... children) {
+		// Must be careful to maintain the integrity of parent
+		this.children = new Node[children.length];
+		
+		int index = 0;
+		for (Node child: children) {
+			setChild(index++, child);
+		}
 	}
 
 	/**
@@ -99,34 +125,33 @@ public abstract class Node implements Cloneable {
 	 * this node is considered to be the root - that is the 0th node. The tree
 	 * is traversed in pre-order (depth first).
 	 * 
-	 * @param n the index of the node to be returned.
-	 * @return the node at the specified position in this node tree.
-	 * @throws IndexOutOfBoundsException if n is out of range.
+	 * @param n the index of the node to be returned
+	 * @return the node at the specified position in this node tree
+	 * @throws IndexOutOfBoundsException if <tt>n</tt> is out of range
 	 */
-	public Node getNthNode(final int n) {
+	public Node getNode(int n) {
 		if (n >= 0) {
-			return getNthNode(n, 0);
+			return getNode(n, 0);
 		} else {
 			throw new IndexOutOfBoundsException("attempt to get node at negative index");
 		}
 	}
 
 	/*
-	 * Recursive helper for the public getNthNode(int).
+	 * Recursive helper for the public getNode(int)
 	 */
-	private Node getNthNode(final int n, int current) {
-		// Is this the nth node?
+	private Node getNode(int n, int current) {
 		if (n == current) {
 			return this;
 		}
 
 		Node node = null;
-		for (final Node child: children) {
-			final int childLength = child.getLength();
+		for (Node child: children) {
+			int childLength = child.length();
 
 			// Only look at the subtree if it contains the right range of nodes.
 			if (n <= childLength + current) {
-				node = child.getNthNode(n, current + 1);
+				node = child.getNode(n, current + 1);
 				if (node != null) {
 					break;
 				}
@@ -150,13 +175,13 @@ public abstract class Node implements Cloneable {
 	 * set the 0th node, since it does not make sense for an object to be able
 	 * to replace itself.
 	 * 
-	 * @param n the index of the node to replace.
-	 * @param newNode the node to be stored at the specified position.
-	 * @throws IndexOutOfBoundsException if n is out of range.
+	 * @param n the index of the node to replace
+	 * @param newNode the node to be stored at the specified position
+	 * @throws IndexOutOfBoundsException if <tt>n</tt> is out of range
 	 */
-	public void setNthNode(final int n, final Node newNode) {
+	public Node setNode(int n, Node newNode) {
 		if (n > 0) {
-			setNthNode(n, newNode, 0);
+			return setNode(n, newNode, 0);
 		} else if (n == 0) {
 			throw new IndexOutOfBoundsException("attempt to set node at index 0, cannot replace self");
 		} else {
@@ -165,47 +190,46 @@ public abstract class Node implements Cloneable {
 	}
 
 	/*
-	 * Recursive helper for the public setNthNode(int, Node).
+	 * Recursive helper for the public setNode(int, Node)
 	 */
-	private void setNthNode(final int n, final Node newNode, int current) {
-		final int arity = getArity();
+	private Node setNode(int n, Node newNode, int current) {
+		int arity = getArity();
 		for (int i = 0; i < arity; i++) {
 			if (current + 1 == n) {
+				Node old = getChild(i);
 				setChild(i, newNode);
-				return;
+				return old;
 			}
 
-			final Node child = getChild(i);
-			final int childLength = child.getLength();
+			Node child = getChild(i);
+			int childLength = child.length();
 
-			// Only look at the subtree if it contains the right range of nodes.
+			// Only look at the subtree if it contains the right range of nodes
 			if (n <= childLength + current) {
-				child.setNthNode(n, newNode, current + 1);
-				return;
+				return child.setNode(n, newNode, current + 1);
 			}
 
 			current += childLength;
 		}
 
-		// If we get to here then the index was larger than was available.
 		throw new IndexOutOfBoundsException("attempt to set node at index >= length");
 	}
 
 	/**
-	 * Returns the index of the nth function node, where this node is considered
-	 * to be the root - that is the 0th node. The tree's nodes are counted in
-	 * pre-order (depth first) to locate the nth function, and return its index
-	 * within all nodes. Will throw an exception if the index is out of bounds,
-	 * which will be the case for all indexes when called upon a terminal node.
+	 * Returns the index of the nth non-terminal node, where this node is 
+	 * considered to be the root - that is the 0th node. The tree's nodes are 
+	 * counted in pre-order (depth first) to locate the nth function, and return
+	 * its index within all nodes. Will throw an exception if the index is out 
+	 * of bounds, which will be the case for all indexes when called on a 
+	 * terminal node.
 	 * 
-	 * @param n the function to find the index of.
-	 * @return the index of the nth function node.
-	 * @throws IndexOutOfBoundsException if n is out of range.
+	 * @param n the non-terminal to find the index of
+	 * @return the index of the nth non-terminal node
+	 * @throws IndexOutOfBoundsException if <tt>n</tt> is out of range
 	 */
-	public int getNthFunctionNodeIndex(final int n) {
-		final int index = getNthFunctionNodeIndex(n, 0, 0, this);
+	public int nthNonTerminalIndex(int n) {
+		int index = nthNonTerminalIndex(n, 0, 0, this);
 
-		// Test if it was found, if not, then index was out of bounds.
 		if (index < 0) {
 			throw new IndexOutOfBoundsException("attempt to get function node index at index out of range");
 		}
@@ -214,28 +238,27 @@ public abstract class Node implements Cloneable {
 	}
 
 	/*
-	 * Recursive helper function for getNthFunctionNodeIndex.
+	 * Recursive helper function for nthNonTerminalIndex
 	 */
-	private int getNthFunctionNodeIndex(final int n, int functionCount, int nodeCount, final Node current) {
-		// Found the nth function node.
-		if ((current.getArity() > 0) && (n == functionCount)) {
+	private int nthNonTerminalIndex(int n, int functionCount, int nodeCount, Node current) {
+		if (current.isNonTerminal() && (n == functionCount)) {
 			return nodeCount;
 		}
 
-		final int result = -1;
-		for (final Node child: current.children) {
-			final int noNodes = child.getLength();
-			final int noFunctions = child.getNoFunctions();
+		int result = -1;
+		for (Node child: current.children) {
+			int noNodes = child.length();
+			int noFunctions = child.countNonTerminals();
 
-			// Only look at the subtree if it contains the right range of nodes.
+			// Only look at the subtree if it contains the right range of nodes
 			if (n <= noFunctions + functionCount) {
-				final int childResult = getNthFunctionNodeIndex(n, functionCount + 1, nodeCount + 1, child);
+				int childResult = nthNonTerminalIndex(n, functionCount + 1, nodeCount + 1, child);
 				if (childResult != -1) {
 					return childResult;
 				}
 			}
 
-			// Skip the correct number of nodes from the subtree.
+			// Skip the correct number of nodes from the subtree
 			functionCount += noFunctions;
 			nodeCount += noNodes;
 		}
@@ -249,14 +272,13 @@ public abstract class Node implements Cloneable {
 	 * pre-order (depth first) to locate the nth terminal, and return its index
 	 * within all nodes.
 	 * 
-	 * @param n the terminal to find the index of.
-	 * @return the index of the nth terminal node.
-	 * @throws IllegalArgumentException if n is out of bounds.
+	 * @param n the terminal to find the index of
+	 * @return the index of the nth terminal node
+	 * @throws IllegalArgumentException if <tt>n</tt> is out of bounds
 	 */
-	public int getNthTerminalNodeIndex(final int n) {
-		final int index = getNthTerminalNodeIndex(n, 0, 0, this);
+	public int nthTerminalIndex(int n) {
+		int index = nthTerminalIndex(n, 0, 0, this);
 
-		// Test if it was found, if not, then index was out of bounds.
 		if (index < 0) {
 			throw new IndexOutOfBoundsException("attempt to get terminal node index at index out of range");
 		}
@@ -265,30 +287,29 @@ public abstract class Node implements Cloneable {
 	}
 
 	/*
-	 * Recursive helper function for getNthTerminalNodeIndex.
+	 * Recursive helper function for nthTerminalIndex
 	 */
-	private int getNthTerminalNodeIndex(final int n, int terminalCount, int nodeCount, final Node current) {
-		// Found the nth terminal node.
+	private int nthTerminalIndex(int n, int terminalCount, int nodeCount, Node current) {
 		if (current.getArity() == 0) {
 			if (n == terminalCount++) {
 				return nodeCount;
 			}
 		}
 
-		final int result = -1;
-		for (final Node child: current.getChildren()) {
-			final int noNodes = child.getLength();
-			final int noTerminals = child.getNoTerminals();
+		int result = -1;
+		for (Node child: children) {
+			int noNodes = child.length();
+			int noTerminals = child.countTerminals();
 
-			// Only look at the subtree if it contains the right range of nodes.
+			// Only look at the subtree if it contains the right range of nodes
 			if (n <= noTerminals + terminalCount) {
-				final int childResult = getNthTerminalNodeIndex(n, terminalCount, nodeCount + 1, child);
+				int childResult = nthTerminalIndex(n, terminalCount, nodeCount + 1, child);
 				if (childResult != -1) {
 					return childResult;
 				}
 			}
 
-			// Skip the correct number of nodes from the subtree.
+			// Skip the correct number of nodes from the subtree
 			terminalCount += noTerminals;
 			nodeCount += noNodes;
 		}
@@ -300,13 +321,13 @@ public abstract class Node implements Cloneable {
 	 * Retrieves all the nodes in the node tree at a specified depth from this
 	 * current node. This node is considered to be at depth zero.
 	 * 
-	 * @param depth the specified depth of the nodes.
-	 * @return a List of all the nodes at the specified depth.
+	 * @param depth the specified depth of the nodes to return
+	 * @return a <tt>List</tt> of all the nodes at the specified depth
 	 */
-	public List<Node> getNodesAtDepth(final int depth) {
-		final List<Node> nodes = new ArrayList<Node>((depth + 1) * 3);
+	public List<Node> nodesAtDepth(int depth) {
+		List<Node> nodes = new ArrayList<Node>((depth + 1) * 3);
 		if (depth >= 0) {
-			getNodesAtDepth(nodes, depth, 0);
+			nodesAtDepth(nodes, depth, 0);
 		} else {
 			throw new IndexOutOfBoundsException("attempt to get nodes at negative depth");
 		}
@@ -319,223 +340,212 @@ public abstract class Node implements Cloneable {
 	}
 
 	/*
-	 * A helper function for getNodesAtDepth(int), to recurse down the node
+	 * A helper function for nodesAtDepth(int), to recurse down the node
 	 * tree and populate the nodes array when at the correct depth.
 	 */
-	private void getNodesAtDepth(final List<Node> nodes, final int d, final int current) {
+	private void nodesAtDepth(List<Node> nodes, int d, int current) {
 		if (d == current) {
 			nodes.add(this);
 		} else {
-			for (final Node child: children) {
-				// Get the nodes at the right depth down each branch.
-				child.getNodesAtDepth(nodes, d, current + 1);
+			for (Node child: children) {
+				// Get the nodes at the right depth down each branch
+				child.nodesAtDepth(nodes, d, current + 1);
 			}
 		}
 	}
 
 	/**
-	 * Replaces the child node at the specified index with the given node.
+	 * Replaces the child node at the specified index with the given node
 	 * 
-	 * @param index the index of the child to replace, from 0 to arity-1.
-	 * @param child the child node to be stored at the specified position.
+	 * @param index the index of the child to replace, from <tt>0</tt> to
+	 *        <tt>getArity()-1</tt>
+	 * @param child the child node to be stored at the specified position
 	 */
-	public void setChild(final int index, final Node child) {
+	public void setChild(int index, Node child) {
 		children[index] = child;
+		
+		if (child != null) {
+			child.parent = this;
+		}
 	}
 
 	/**
-	 * Returns the number of immediate children this <code>Node</code> has. This
+	 * Returns the number of immediate children this <tt>Node</tt> has. This
 	 * is effectively the number of inputs the node has. A node with arity
 	 * zero, is considered to be a terminal node.
 	 * 
-	 * @return the number of child <code>Node</code>s to this <code>Node</code>.
+	 * @return the number of children required by this node
 	 */
 	public int getArity() {
 		return children.length;
 	}
 
 	/**
-	 * Returns a count of how many terminal nodes are in the node tree below
-	 * this node.
+	 * Returns a count of the terminal nodes in this node tree
 	 * 
-	 * @return the number of terminal nodes in this node tree.
+	 * @return the number of terminal nodes in this node tree
 	 */
-	public int getNoTerminals() {
-		final int arity = getArity();
-		if (arity == 0) {
+	public int countTerminals() {
+		if (isTerminal()) {
 			return 1;
 		} else {
 			int result = 0;
-			for (int i = 0; i < arity; i++) {
-				result += getChild(i).getNoTerminals();
+			for (int i = 0; i < getArity(); i++) {
+				result += getChild(i).countTerminals();
 			}
 			return result;
 		}
 	}
 
 	/**
-	 * Returns a count of how many unique terminal nodes are in the node tree
-	 * below this node. This depends upon each terminal node's equals method
-	 * being implemented correctly, so care should be taken when overriding
-	 * equals.
+	 * Returns a count of the unique terminal nodes in the node tree below this
+	 * node
 	 * 
-	 * @return the number of unique terminal nodes in this node tree.
+	 * @return the number of unique terminal nodes in this node tree
 	 */
-	public int getNoDistinctTerminals() {
-		// Get a list of terminals.
-		final List<Node> terminals = getTerminalNodes();
+	public int countDistinctTerminals() {
+		List<Node> terminals = listTerminals();
 
 		// Remove duplicates.
-		final Set<Node> terminalHash = new HashSet<Node>(terminals);
+		Set<Node> terminalHash = new HashSet<Node>(terminals);
 
-		// The number left is how many distinct terminals.
 		return terminalHash.size();
 	}
 
 	/**
-	 * Returns a list of all the terminal nodes in this node tree.
+	 * Returns a list of all the terminal nodes in this node tree
 	 * 
-	 * @return a <code>List</code> of all the terminal nodes in this node tree.
+	 * @return a <tt>List</tt> of all the terminal nodes in this node tree
 	 */
-	public List<Node> getTerminalNodes() {
-		final List<Node> terminals = new ArrayList<Node>();
+	public List<Node> listTerminals() {
+		List<Node> terminals = new ArrayList<Node>();
 
-		final int arity = getArity();
-		if (arity == 0) {
+		int arity = getArity();
+		if (isTerminal()) {
 			terminals.add(this);
 		} else {
 			for (int i = 0; i < arity; i++) {
-				terminals.addAll(getChild(i).getTerminalNodes());
+				terminals.addAll(getChild(i).listTerminals());
 			}
 		}
 		return terminals;
 	}
 
 	/**
-	 * Returns a count of how many function nodes are in this node tree.
+	 * Returns a count of the non-terminal nodes in this node tree
 	 * 
-	 * @return the number of function nodes in this node tree.
+	 * @return the number of non-terminal nodes in this node tree
 	 */
-	public int getNoFunctions() {
-		final int arity = getArity();
-		if (arity == 0) {
+	public int countNonTerminals() {
+		if (isTerminal()) {
 			return 0;
 		} else {
 			int result = 1;
-			for (int i = 0; i < arity; i++) {
-				result += getChild(i).getNoFunctions();
+			for (int i = 0; i < getArity(); i++) {
+				result += getChild(i).countNonTerminals();
 			}
 			return result;
 		}
 	}
 
 	/**
-	 * Returns a count of how many unique function nodes are in this node tree.
+	 * Returns a count of the unique non-terminal nodes in this node tree
 	 * 
-	 * @return the number of unique function nodes in this node tree.
+	 * @return the number of unique non-terminal nodes in this node tree
 	 */
-	public int getNoDistinctFunctions() {
-		// Get a list of functions.
-		final List<Node> functions = getFunctionNodes();
+	public int countDistinctNonTerminals() {
+		List<Node> nonTerminals = listNonTerminals();
 
-		// Remove duplicates - where a duplicate is a function of the same type.
-		// We cannot use the FunctionNode's equals function because that will
-		// compare children too.
-		final List<String> functionNames = new ArrayList<String>();
-		for (final Node f: functions) {
-			final String name = f.getIdentifier();
-			if (!functionNames.contains(name)) {
-				functionNames.add(name);
+		// Remove duplicates. Cannot use equals because that compares children
+		List<String> identifiers = new ArrayList<String>();
+		for (Node f: nonTerminals) {
+			String name = f.getIdentifier();
+			if (!identifiers.contains(name)) {
+				identifiers.add(name);
 			}
 		}
 
-		// The number left is how many distinct functions.
-		return functionNames.size();
+		return identifiers.size();
 	}
 
 	/**
-	 * Returns a list of all the function nodes in this node tree.
+	 * Returns a list of all the non-terminal nodes in this node tree
 	 * 
-	 * @return a List of all the function nodes in this node tree.
+	 * @return a <tt>List</tt> of all the non-terminal nodes in this node tree
 	 */
-	public List<Node> getFunctionNodes() {
-		// Alternatively we could use an array, which is quicker/more efficient
-		// in this situation?
-		final List<Node> functions = new ArrayList<Node>();
+	public List<Node> listNonTerminals() {
+		List<Node> nonTerminals = new ArrayList<Node>();
 
-		final int arity = getArity();
-		if (arity > 0) {
+		if (isNonTerminal()) {
 			// Add this node as a function and search its child nodes.
-			functions.add(this);
+			nonTerminals.add(this);
 
-			for (int i = 0; i < arity; i++) {
-				functions.addAll(getChild(i).getFunctionNodes());
+			for (int i = 0; i < getArity(); i++) {
+				nonTerminals.addAll(getChild(i).listNonTerminals());
 			}
 		}
 
-		return functions;
+		return nonTerminals;
 	}
 
 	/**
 	 * Returns the depth of deepest node in the node tree, given that this node
-	 * is at depth zero.
+	 * is at depth zero
 	 * 
-	 * @return the depth of the deepest node in the node tree.
+	 * @return the depth of the deepest node in the node tree
 	 */
-	public int getDepth() {
-		return countDepth(this, 0, 0);
+	public int depth() {
+		return depth(this, 0, 0);
 	}
 
 	/*
-	 * A private helper function for getDepth() which recurses down the node
-	 * tree to determine the deepest node's depth.
+	 * A private helper function for depth() which recurses down the node
+	 * tree to determine the deepest node's depth
 	 */
-	private int countDepth(final Node rootNode, final int currentDepth, int depth) {
-		// set current depth to maximum if need be
+	private int depth(Node rootNode, int currentDepth, int depth) {
 		if (currentDepth > depth) {
 			depth = currentDepth;
 		}
-		// get children and recurse
-		final int arity = rootNode.getArity();
+
+		int arity = rootNode.getArity();
 		if (arity > 0) {
 			for (int i = 0; i < arity; i++) {
-				final Node childNode = rootNode.getChild(i);
-				depth = countDepth(childNode, (currentDepth + 1), depth);
+				Node childNode = rootNode.getChild(i);
+				depth = depth(childNode, (currentDepth + 1), depth);
 			}
 		}
 		return depth;
 	}
 
 	/**
-	 * Returns the number of nodes in the node tree.
+	 * Returns the number of nodes in the node tree
 	 * 
-	 * @return the number of nodes in the node tree.
+	 * @return the number of nodes in the node tree
 	 */
-	public int getLength() {
-		return countLength(this, 0);
+	public int length() {
+		return length(this, 0);
 	}
 
 	/*
-	 * A private recursive helper function for getLength() which traverses the
-	 * the node tree counting the number of nodes.
+	 * A private recursive helper function for length() which traverses the
+	 * the node tree counting the number of nodes
 	 */
-	private int countLength(final Node rootNode, int length) {
-		// increment length and count through children
+	private int length(Node rootNode, int length) {
 		length++;
-		// get children and recurse
-		final int arity = rootNode.getArity();
+
+		int arity = rootNode.getArity();
 		if (arity > 0) {
 			for (int i = 0; i < arity; i++) {
-				final Node childNode = rootNode.getChild(i);
-				length = countLength(childNode, length);
+				Node childNode = rootNode.getChild(i);
+				length = length(childNode, length);
 			}
 		}
 		return length;
 	}
 
 	/**
-	 * Should be implemented to return an indentifier for this node. For 
-	 * functions, where this is effectively the function name, this would 
+	 * Should be implemented to return an indentifier for this node. For
+	 * functions, where this is effectively the function name, this would
 	 * normally be unique within the given problem.
 	 * 
 	 * @return a <code>String</code> identifier for this node.
@@ -543,63 +553,66 @@ public abstract class Node implements Cloneable {
 	public abstract String getIdentifier();
 
 	/**
-	 * Returns the data-type of this node based upon the child nodes that are
-	 * currently set. If any of the child nodes are currently <code>null</code>
-	 * or their data-types invalid then the return type will also be
-	 * <code>null</code>.
+	 * Returns the data-type of this node based on the child nodes that are
+	 * currently set. If any of this node's child nodes are currently
+	 * <tt>null</tt>, or their data-types are invalid, then the return type will
+	 * also be <tt>null</tt>.
 	 * 
-	 * @return the return type of this node or null if any of its children
-	 *         remain unset or are of an invalid data-type.
+	 * @return the return type of this node or <tt>null</tt> if any of its
+	 *         children remain unset or are of an invalid data-type
 	 */
-	public final Class<?> getReturnType() {
-		final Class<?>[] argTypes = new Class<?>[getArity()];
+	public final Class<?> dataType() {
+		Class<?>[] argTypes = new Class<?>[getArity()];
 		for (int i = 0; i < getArity(); i++) {
-			final Node child = getChild(i);
+			Node child = getChild(i);
 			if (child != null) {
-				argTypes[i] = child.getReturnType();
+				argTypes[i] = child.dataType();
 			} else {
 				return null;
 			}
 		}
-		return getReturnType(argTypes);
+		return dataType(argTypes);
 	}
 
 	/**
-	 * Returns this function node's return type for the given child input types.
-	 * Default implementation for a function is that the node will enforce the
-	 * closure requirement, and its return type will be the same as its input
-	 * types. The default return value for a terminal is Void. Mixed type
-	 * function nodes and most terminal nodes should override this method. If
-	 * the input types are invalid then <code>null</code> should be returned.
+	 * Returns this node's return type given the provided input data-types.
+	 * The default implementation for a non-terminal is that the node will
+	 * support the closure requirement - the return type will be the widest of
+	 * the input types, or <tt>null</tt> if they are not compatible. The default
+	 * return value for a terminal is <tt>Void</tt>. Mixed type non-terminal
+	 * nodes and most terminal nodes should override this method. If the input
+	 * types are invalid then <tt>null</tt> should be returned.
 	 * 
 	 * @param inputTypes the set of input data-types for which to get the return
 	 *        type.
 	 * @return the return type of this node given the provided input types, or
 	 *         null if the set of input types is invalid.
 	 */
-	public Class<?> getReturnType(final Class<?> ... inputTypes) {
-		if (getArity() == 0) {
-			// Is a terminal.
+	public Class<?> dataType(Class<?> ... inputTypes) {
+		if (isTerminal()) {
 			return Void.class;
 		} else {
-			// Either the widest type or null if not valid.
-			return TypeUtils.getSuper(inputTypes);
+			// Either the widest type or null if not valid
+			return DataTypeUtils.getSuper(inputTypes);
 		}
 	}
 
 	/**
-	 * Returns true if this node has an arity of greater than 0.
+	 * Returns <tt>true</tt> if this node has an arity of greater than
+	 * <tt>0</tt>.
 	 * 
-	 * @return true if this node is a function, and false otherwise.
+	 * @return <tt>true</tt> if this node is a non-terminal, and <tt>false</tt>
+	 *         otherwise.
 	 */
-	public boolean isFunction() {
+	public boolean isNonTerminal() {
 		return (getArity() > 0);
 	}
 
 	/**
-	 * Returns true if this node has an arity of 0.
+	 * Returns <tt>true</tt> if this node has an arity of <tt>0</tt>
 	 * 
-	 * @return true if this node is a terminal, and false otherwise.
+	 * @return <tt>true</tt> if this node is a terminal, and <tt>false</tt>
+	 *         otherwise
 	 */
 	public boolean isTerminal() {
 		return (getArity() == 0);
@@ -620,16 +633,16 @@ public abstract class Node implements Cloneable {
 	}
 
 	/**
-	 * Create a deep copy of this node tree. Each child node will be cloned. Use
-	 * this method for copying a node tree. Some implementations of this class
-	 * may need to override this method.
+	 * Creates a deep copy of this node and its node tree. Each child node will
+	 * be cloned. Use this method for copying a whole node tree. Some
+	 * implementations of this class may need to override this method.
 	 * 
-	 * @return a copy of this <code>Node</code>.
+	 * @return a copy of this <tt>Node</tt> and its children
 	 */
 	@Override
 	public Node clone() {
 		try {
-			final Node clone = (Node) super.clone();
+			Node clone = (Node) super.clone();
 
 			clone.children = children.clone();
 			for (int i = 0; i < children.length; i++) {
@@ -650,19 +663,19 @@ public abstract class Node implements Cloneable {
 	}
 
 	/**
-	 * This method should be used instead of clone when creating a new instance
-	 * of this node type. Rather than copying the node tree, the node is copied
-	 * without children. In the case of many terminal nodes the bahaviour of
-	 * this method will be the same as the clone method. By default this method
-	 * will simply return a new instance of the same type in the same manner as
-	 * clone, but with all children removed. Note that there is no requirement
-	 * that implementations must not return the same instance.
+	 * Constructs a new instance of this node-type. Rather than copying the node
+	 * tree, this node is copied without children. In the case of many terminal
+	 * nodes the bahaviour of this method will be the same as the clone method.
+	 * By default this method will simply return a new instance of the same type
+	 * in the same manner as clone, but with all children removed. Note that
+	 * there is no requirement for an implementation to return a different
+	 * instance.
 	 * 
-	 * @return a copy of this <code>Node</code> with all children removed.
+	 * @return a copy of this <tt>Node</tt> with all children removed
 	 */
 	public Node newInstance() {
 		try {
-			final Node n = (Node) super.clone();
+			Node n = (Node) super.clone();
 			n.children = new Node[children.length];
 			return n;
 		} catch (final CloneNotSupportedException e) {
@@ -673,20 +686,20 @@ public abstract class Node implements Cloneable {
 	}
 
 	/**
-	 * Compare an object for equality. Two nodes may be considered equal if
-	 * they have equal arity, equal identifiers, and their children are also
-	 * equal (and in the same order). Some nodes may wish to enforce a stricter
-	 * contract.
+	 * Compares an this node to another object for equality. Two nodes may be
+	 * considered equal if they have equal arity, equal identifiers, and their
+	 * children are also equal (and in the same order). Some nodes may wish to
+	 * enforce a stricter contract.
 	 * 
 	 * @param obj {@inheritDoc}
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public boolean equals(final Object obj) {
+	public boolean equals(Object obj) {
 		boolean equal = true;
 
 		if (obj instanceof Node) {
-			final Node n = (Node) obj;
+			Node n = (Node) obj;
 
 			if (n.getArity() != getArity()) {
 				equal = false;
@@ -694,8 +707,8 @@ public abstract class Node implements Cloneable {
 				equal = false;
 			} else {
 				for (int i = 0; (i < n.getArity()) && equal; i++) {
-					final Node thatChild = n.getChild(i);
-					final Node thisChild = getChild(i);
+					Node thatChild = n.getChild(i);
+					Node thisChild = getChild(i);
 
 					equal = ObjectUtils.equals(thisChild, thatChild);
 				}
@@ -714,18 +727,18 @@ public abstract class Node implements Cloneable {
 	 * identifier(children)
 	 * </pre>
 	 * 
-	 * where <code>identifier</code> is the nodes identifier as returned by
-	 * <code>getIdentifier</code>, and <code>children</code> is a space
-	 * separated list of child nodes, according to their <code>toString</code>
-	 * representation.
+	 * where <tt>identifier</tt> is the node's identifier as returned by
+	 * <tt>getIdentifier</tt>, and <tt>children</tt> is a space separated list
+	 * of child nodes, according to their <tt>toString</tt> representation.
+	 * 
+	 * @return a string representation of this node and its children
 	 */
 	@Override
 	public String toString() {
-		final StringBuilder builder = new StringBuilder(getIdentifier());
+		StringBuilder builder = new StringBuilder(getIdentifier());
 		builder.append('(');
-		final Node[] children = getChildren();
 		for (int i = 0, n = children.length; i < n; i++) {
-			final Node c = children[i];
+			Node c = children[i];
 			if (i != 0) {
 				builder.append(' ');
 			}

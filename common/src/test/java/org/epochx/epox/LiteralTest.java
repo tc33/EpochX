@@ -64,7 +64,7 @@ public class LiteralTest extends NodeTestCase {
 	}
 
 	/**
-	 * Tests that {@link org.epochx.epox.Literal#getReturnType()} correctly
+	 * Tests that {@link org.epochx.epox.Literal#dataType()} correctly
 	 * returns
 	 * the class of the set value as the return type.
 	 */
@@ -72,20 +72,20 @@ public class LiteralTest extends NodeTestCase {
 	public void testGetReturnTypeLiteral() {
 		final String strValue = "";
 		literal.setValue(strValue);
-		final Class<?> returnType = literal.getReturnType();
+		final Class<?> returnType = literal.dataType();
 
 		assertSame("literal's return type should match the value's Class", String.class, returnType);
 	}
 
 	/**
-	 * Tests that {@link org.epochx.epox.Literal#getReturnType()} correctly
+	 * Tests that {@link org.epochx.epox.Literal#dataType()} correctly
 	 * returns
 	 * the class of the set value as the return type.
 	 */
 	@Test
 	public void testGetReturnTypeLiteralNull() {
 		literal.setValue(null);
-		final Class<?> returnType = literal.getReturnType();
+		final Class<?> returnType = literal.dataType();
 
 		assertNull("getReturnType should be null for a null value", returnType);
 	}

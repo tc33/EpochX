@@ -103,7 +103,7 @@ public class CubeFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.math.CubeFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.math.CubeFunction#dataType(Class...)}
 	 * returns the same type for a numeric class and <code>null</code> otherwise.
 	 */
 	@Test
@@ -112,14 +112,14 @@ public class CubeFunctionTest extends NodeTestCase {
 		
 		Class<?> returnType;
 		for (Class<?> type: inputTypes) {
-			returnType = cube.getReturnType(type);
+			returnType = cube.dataType(type);
 			assertSame("unexpected return type", type, returnType);
 		}
 		
-		returnType = cube.getReturnType(Boolean.class);
+		returnType = cube.dataType(Boolean.class);
 		assertNull("non-numeric type for child should be invalid", returnType);
 		
-		returnType = cube.getReturnType(Integer.class, Integer.class);
+		returnType = cube.dataType(Integer.class, Integer.class);
 		assertNull("too many inputs should be invalid", returnType);
 	}
 	

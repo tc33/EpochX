@@ -70,19 +70,19 @@ public class NotFunctionTest extends NodeTestCase {
 	}
 	
 	/**
-	 * Tests that {@link org.epochx.epox.bool.NotFunction#getReturnType(Class...)}
+	 * Tests that {@link org.epochx.epox.bool.NotFunction#dataType(Class...)}
 	 * returns a Boolean data-type for one Boolean input, and <code>null</code>
 	 * for non-Boolean or incorrect number.
 	 */
 	@Test
 	public void testGetReturnTypeNor() {
-		Class<?> returnType = node.getReturnType(Boolean.class);
+		Class<?> returnType = node.dataType(Boolean.class);
 		assertEquals("type should be boolean for 1 boolean input", Boolean.class, returnType);
 		
-		returnType = node.getReturnType(Integer.class);
+		returnType = node.dataType(Integer.class);
 		assertNull("non-boolean inputs should be invalid", returnType);
 		
-		returnType = node.getReturnType(Boolean.class, Boolean.class);
+		returnType = node.dataType(Boolean.class, Boolean.class);
 		assertNull("too many boolean inputs should be invalid", returnType);
 	}
 	

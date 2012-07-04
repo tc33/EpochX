@@ -27,7 +27,7 @@ import java.awt.Point;
 
 /**
  * An Ant represents an artificial ant which exists within and can move about
- * and perform other actions on an <code>AntLandscape</code>.
+ * and perform other actions on an <tt>AntLandscape</tt>.
  */
 public class Ant {
 
@@ -64,7 +64,7 @@ public class Ant {
 
 	/**
 	 * Resets this ant, setting it up with a new number of time steps allocated
-	 * and a new <code>AntLandscape</code>.
+	 * and a new <tt>AntLandscape</tt>.
 	 * 
 	 * @param maxTimeSteps the maximum number of time steps the ant is allowed
 	 *        to
@@ -105,7 +105,7 @@ public class Ant {
 
 	/**
 	 * Resets this ant using the same number of time steps and on the same
-	 * <code>AntLandscape</code>.
+	 * <tt>AntLandscape</tt>.
 	 */
 	public void reset() {
 		orientation = EAST;
@@ -229,7 +229,7 @@ public class Ant {
 	 * Returns the current location of Ant as a point in the x/y-coordinate
 	 * system that represents the landscape.
 	 * 
-	 * @return the current location of the ant as a <code>Point</code>.
+	 * @return the current location of the ant as a <tt>Point</tt>.
 	 */
 	public Point getLocation() {
 		return new Point(xLocation, yLocation);

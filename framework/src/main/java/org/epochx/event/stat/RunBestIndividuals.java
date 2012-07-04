@@ -41,7 +41,7 @@ public class RunBestIndividuals extends AbstractStat<StartRun> {
 	}
 
 	@Override
-	public void onEvent(StartRun event) {
+	public void refresh(StartRun event) {
 		best = new ArrayList<Individual>();
 	}
 	
@@ -83,7 +83,7 @@ public class RunBestIndividuals extends AbstractStat<StartRun> {
 		}
 		
 		@Override
-		public void onEvent(EndGeneration event) {
+		public void refresh(EndGeneration event) {
 			addGeneration(AbstractStat.get(GenerationBestIndividuals.class).getAllBest());
 		}
 	}

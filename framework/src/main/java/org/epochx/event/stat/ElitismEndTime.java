@@ -37,7 +37,7 @@ public class ElitismEndTime extends AbstractStat<EndElitism> {
 	}
 
 	@Override
-	public void onEvent(EndElitism event) {
+	public void refresh(EndElitism event) {
 		time = System.nanoTime();
 	}
 

@@ -25,6 +25,7 @@ package org.epochx;
 import junit.framework.TestCase;
 
 import org.epochx.Config.ConfigKey;
+import org.epochx.Config.Template;
 import org.epochx.selection.TournamentSelector;
 
 /**
@@ -62,22 +63,21 @@ public class ConfigTest extends TestCase {
 	 */
 	public void testDefaults() {
 		Config config = Config.getInstance();
-		config.defaults();
+		config.set(Template.KEY, new GenerationalTemplate());
 
 		assertNotNull(config.get(Population.SIZE));
 		assertNotNull(config.get(GenerationalStrategy.TERMINATION_CRITERIA));
 		assertNotNull(config.get(TournamentSelector.TOURNAMENT_SIZE));
 		assertNotNull(config.get(BranchedBreeder.SELECTOR));
-		assertNotNull(config.get(Evolver.STRATEGY));
+		assertNotNull(config.get(Evolver.COMPONENTS));
 		assertNotNull(config.get(RandomSequence.RANDOM_SEQUENCE));
 	}
 
 	public void testReset() {
 		Config config = Config.getInstance();
+		config.set(Template.KEY, new GenerationalTemplate());
 
-		config.defaults();
 		assertNotNull(config.get(Population.SIZE));
-
 		config.reset();
 		assertNull(config.get(Population.SIZE));
 	}

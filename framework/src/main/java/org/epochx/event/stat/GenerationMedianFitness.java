@@ -39,7 +39,7 @@ public class GenerationMedianFitness extends AbstractStat<EndGeneration> {
 	}
 
 	@Override
-	public void onEvent(EndGeneration event) {
+	public void refresh(EndGeneration event) {
 		Fitness[] fitnesses = AbstractStat.get(GenerationFitnesses.Sorted.class).getFitnesses();
 		
 		int medianIndex = (int) Math.floor(fitnesses.length / 2);

@@ -36,7 +36,7 @@ public class GenerationStandardDeviationDoubleFitness extends AbstractStat<EndGe
 	}
 
 	@Override
-	public void onEvent(EndGeneration event) {
+	public void refresh(EndGeneration event) {
 		Fitness[] fitnesses = AbstractStat.get(GenerationFitnesses.class).getFitnesses();
 		double average = AbstractStat.get(GenerationAverageDoubleFitness.class).getAverage();
 		

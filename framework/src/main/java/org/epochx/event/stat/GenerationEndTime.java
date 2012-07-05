@@ -37,7 +37,7 @@ public class GenerationEndTime extends AbstractStat<EndGeneration> {
 	}
 
 	@Override
-	public void onEvent(EndGeneration event) {
+	public void refresh(EndGeneration event) {
 		time = System.nanoTime();
 	}
 

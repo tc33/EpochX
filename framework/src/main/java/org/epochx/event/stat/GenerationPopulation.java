@@ -38,7 +38,7 @@ public class GenerationPopulation extends AbstractStat<EndGeneration> {
 	}
 
 	@Override
-	public void onEvent(EndGeneration event) {
+	public void refresh(EndGeneration event) {
 		population = event.getPopulation();
 	}
 
@@ -54,8 +54,8 @@ public class GenerationPopulation extends AbstractStat<EndGeneration> {
 	public class Sorted extends GenerationFitnesses {
 
 		@Override
-		public void onEvent(EndGeneration event) {
-			super.onEvent(event);
+		public void refresh(EndGeneration event) {
+			super.refresh(event);
 
 			// This will sort the population itself so may influence further
 			// execution.

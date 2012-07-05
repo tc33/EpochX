@@ -37,7 +37,7 @@ public class RunEndTime extends AbstractStat<EndRun> {
 	}
 
 	@Override
-	public void onEvent(EndRun event) {
+	public void refresh(EndRun event) {
 		time = System.nanoTime();
 	}
 

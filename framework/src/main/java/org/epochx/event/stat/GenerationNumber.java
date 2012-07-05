@@ -37,7 +37,7 @@ public class GenerationNumber extends AbstractStat<StartGeneration> {
 	}
 
 	@Override
-	public void onEvent(StartGeneration event) {
+	public void refresh(StartGeneration event) {
 		current = event.getGeneration();
 	}
 

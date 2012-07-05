@@ -60,7 +60,7 @@ public abstract class AbstractStat<T extends Event> {
 	private Listener<T> listener = new Listener<T>() {
 
 		public void onEvent(T event) {
-			AbstractStat.this.onEvent(event);
+			AbstractStat.this.refresh(event);
 		}
 	};
 
@@ -172,7 +172,7 @@ public abstract class AbstractStat<T extends Event> {
 	 * 
 	 * @param event the event
 	 */
-	public abstract void onEvent(T event);
+	public abstract void refresh(T event);
 
 	/**
 	 * Clears the cached values. This method is automatically called when a clear on event is specified.

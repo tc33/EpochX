@@ -23,14 +23,11 @@
 
 package org.epochx;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 import org.epochx.event.ConfigEvent;
 import org.epochx.event.EventManager;
-import org.epochx.random.MersenneTwisterFast;
-import org.epochx.selection.TournamentSelector;
 
 /**
  * The <code>Config</code> class provides a centralised store for configuration
@@ -71,37 +68,6 @@ public class Config {
 	}
 
 	/**
-	 * Initialises this config with reasonable defaults. If called after any of
-	 * these parameters have already been set, this method will overwrite those
-	 * values. Typical usage of this method is to call it, then set the
-	 * application specific parameter values to overwrite these as necessary.
-	 * <p>
-	 * The default parameter values:
-	 * <ul>
-	 * <li>{@link Population#SIZE}: <code>500</code>
-	 * <li>{@link MaximumGenerations#MAXIMUM_GENERATIONS}: <code>50</code>
-	 * <li>{@link GenerationalStrategy#TERMINATION_CRITERIA}: MaximumGenerations
-	 * <li>{@link TournamentSelector#TOURNAMENT_SIZE}: <code>5</code>
-	 * <li>{@link BranchedBreeder#SELECTOR}: TournamentSelector
-	 * <li>{@link Evolver#STRATEGY}: GenerationalStrategy(BranchedBreeder)
-	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}: MersenneTwisterFast
-	 * </ul>
-	 */
-	public void defaults() {
-		singleton.set(Population.SIZE, 500);
-		singleton.set(MaximumGenerations.MAXIMUM_GENERATIONS, 50);
-
-		List<TerminationCriteria> criteria = new ArrayList<TerminationCriteria>();
-		criteria.add(new MaximumGenerations());
-		singleton.set(GenerationalStrategy.TERMINATION_CRITERIA, criteria);
-
-		singleton.set(TournamentSelector.TOURNAMENT_SIZE, 5);
-		singleton.set(BranchedBreeder.SELECTOR, new TournamentSelector());
-		singleton.set(Evolver.STRATEGY, new GenerationalStrategy(new BranchedBreeder(), new FitnessEvaluator()));
-		singleton.set(RandomSequence.RANDOM_SEQUENCE, new MersenneTwisterFast());
-	}
-
-	/**
 	 * Sets the value of the specified configuration key. If the given key
 	 * already has a value associated with it, then it will be overwritten. The
 	 * value is constrained to be of the correct object type as defined by the
@@ -114,7 +80,6 @@ public class Config {
 	 */
 	public <T> void set(ConfigKey<T> key, T value) {
 		mapping.put(key, value);
-		//EventManager.getInstance().fire(ConfigEvent.class, new ConfigEvent(key));
 		EventManager.getInstance().fire(new ConfigEvent(key));
 	}
 
@@ -129,14 +94,14 @@ public class Config {
 	 *         <code>null</code> if it has not been set. The object type is
 	 *         defined by the generic type of the key.
 	 */
-	@SuppressWarnings("unchecked")
 	public <T> T get(ConfigKey<T> key) {
-		return (T) mapping.get(key);
+		return get(key, null);
 	}
 
 	/**
 	 * Retrieves the value of the configuration parameter associated with the
-	 * specified key.
+	 * specified key. If the parameter has not been set, the value will be
+	 * retrived from the <code>Template</code> object.
 	 * 
 	 * @param key the <code>ConfigKey</code> for the configuration parameter
 	 *        to retrieve
@@ -146,11 +111,28 @@ public class Config {
 	 *         <code>null</code> if it has not been set. The object type is
 	 *         defined by the generic type of the key.
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> T get(ConfigKey<T> key, T defaultValue) {
-		T value = get(key);
-		return (value == null) ? defaultValue : value;
+		T value = (T) mapping.get(key);
+
+		if (value == null) {
+			Template template = (Template) mapping.get(Template.KEY);
+			return (template == null) ? defaultValue : template.get(key, defaultValue);
+		}
+
+		return value;
 	}
 	
+	/**
+	 * This method was originally designed to initialize the default values. The preferred
+	 * method is to specify a {@link Template} object using the {@link #set(ConfigKey, Object)}.
+	 * Calls to this method will initialize the configuration with the {@link GenerationalTemplate}. 
+	 */
+	@Deprecated
+	public void defaults() {
+		set(Template.KEY, new GenerationalTemplate());
+	}
+
 	/**
 	 * Removes all configuration parameter mapping. The configuration will be
 	 * empty this call returns.
@@ -168,4 +150,52 @@ public class Config {
 	 */
 	public static class ConfigKey<T> {}
 
+	/**
+	 * The <code>Template</code> class provides a mechanism for setting default
+	 * configuration parameter values.
+	 */
+	public abstract static class Template {
+
+		/**
+		 * The key for setting <code>Template</code> parameter.
+		 */
+		public final static ConfigKey<Template> KEY = new ConfigKey<Template>();
+
+		/**
+		 * The key -&gt; value mapping.
+		 */
+		private final HashMap<ConfigKey<?>, Object> template = new HashMap<ConfigKey<?>, Object>(1);
+
+		/**
+		 * Constructs a new <code>Template</code>.
+		 */
+		public Template() {
+			fill(template);
+		}
+
+		/**
+		 * Sets the default configuration parameters.
+		 * 
+		 * @param template the default configuration parameters mapping.
+		 */
+		protected abstract void fill(Map<ConfigKey<?>, Object> template);
+
+		/**
+		 * Retrieves the value of the configuration parameter associated with the
+		 * specified key.
+		 * 
+		 * @param key the <code>ConfigKey</code> for the configuration parameter
+		 *        to retrieve
+		 * @param defaultValue the default value to be returned if the parameter
+		 *        has not been set
+		 * @return the value of the specified configuration parameter, or
+		 *         <code>null</code> if it has not been set. The object type is
+		 *         defined by the generic type of the key.
+		 */
+		@SuppressWarnings("unchecked")
+		private <T> T get(ConfigKey<T> key, T defaultValue) {
+			T value = (T) template.get(key);
+			return (value == null) ? defaultValue : value;
+		}
+	}
 }

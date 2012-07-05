@@ -39,7 +39,7 @@ public class RunBestFitness extends AbstractStat<StartRun> {
 	}
 
 	@Override
-	public void onEvent(StartRun event) {
+	public void refresh(StartRun event) {
 		best = null;
 	}
 
@@ -66,7 +66,7 @@ public class RunBestFitness extends AbstractStat<StartRun> {
 		}
 
 		@Override
-		public void onEvent(EndGeneration event) {
+		public void refresh(EndGeneration event) {
 			RunBestFitness parent = AbstractStat.get(RunBestFitness.class);
 			parent.addGeneration(AbstractStat.get(GenerationBestFitness.class).getBest());
 		}

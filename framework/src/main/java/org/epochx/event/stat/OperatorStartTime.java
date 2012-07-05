@@ -37,7 +37,7 @@ public class OperatorStartTime extends AbstractStat<StartOperator> {
 	}
 
 	@Override
-	public void onEvent(StartOperator event) {
+	public void refresh(StartOperator event) {
 		time = System.nanoTime();
 	}
 

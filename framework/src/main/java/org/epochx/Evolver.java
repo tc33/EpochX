@@ -24,17 +24,15 @@
 package org.epochx;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 
 import org.epochx.Config.ConfigKey;
-import org.epochx.event.*;
+import org.epochx.event.EventManager;
 import org.epochx.event.RunEvent.EndRun;
 import org.epochx.event.RunEvent.StartRun;
 
 /**
  * The <code>Evolver</code> class is responsible for performing an evolutionary
- * simulation. By default, an evolutionary simulation consists of three
+ * simulation. A typical evolutionary simulation consists of three
  * {@link Component}s that are executed in sequence:
  * <ol>
  * <li>{@link Initialiser}
@@ -42,41 +40,20 @@ import org.epochx.event.RunEvent.StartRun;
  * <li>{@link EvolutionaryStrategy}
  * </ol>
  * 
- * The specific implementation of the {@link EvolutionaryStrategy} component
- * used is obtained from the {@link Config}, using the appropriate
- * <code>ConfigKey</code>. This default behaviour can be extended by
- * inserting additional <code>Component</code>s between those specified here,
- * by using the <code>add</code> method. The position of new components is
- * specified with a <code>Placeholder</code>.
- * 
- * <p>
- * The default set up of components can be replaced by overriding the
- * <code>setupPipeline(Pipeline)</code> method to initialise the provided
- * <code>Pipeline</code> with an alternative set of <code>Component</code>s or
- * an alternative ordering.
+ * The specific list of components used is obtained from the {@link Config},
+ * using the appropriate <code>ConfigKey</code> {@link Evolver.COMPONENTS}.
  */
 public class Evolver {
 
 	/**
-	 * The key for setting and retrieving the <code>EvolutionaryStrategy</code>
-	 * component.
+	 * The key for setting and retrieving the list of components.
 	 */
-	public static final ConfigKey<EvolutionaryStrategy> STRATEGY = new ConfigKey<EvolutionaryStrategy>();
-
-	/**
-	 * The mapping of placeholder components.
-	 */
-	private HashMap<Placeholder, ArrayList<Component>> additional;
+	public static final ConfigKey<ArrayList<Component>> COMPONENTS = new ConfigKey<ArrayList<Component>>();
 
 	/**
 	 * Constructs an <code>Evolver</code>.
 	 */
 	public Evolver() {
-		additional = new HashMap<Evolver.Placeholder, ArrayList<Component>>();
-
-		for (Placeholder position: Placeholder.values()) {
-			additional.put(position, new ArrayList<Component>(1));
-		}
 	}
 
 	/**
@@ -95,11 +72,11 @@ public class Evolver {
 		setupPipeline(pipeline);
 
 		EventManager.getInstance().fire(new StartRun(0));
-		
+
 		Population population = pipeline.process(new Population());
-		
+
 		EventManager.getInstance().fire(new EndRun(0, population));
-		
+
 		return population;
 	}
 
@@ -126,102 +103,9 @@ public class Evolver {
 	 *        a sequence of components that comprise an evolutionary run
 	 */
 	protected void setupPipeline(Pipeline pipeline) {
-		pipeline.addAll(additional.get(Placeholder.START));
-		pipeline.add(new Initialiser());
-		pipeline.addAll(additional.get(Placeholder.AFTER_INITIALISATION));
-		pipeline.add(new FitnessEvaluator());
-		pipeline.addAll(additional.get(Placeholder.AFTER_EVALUATION));
-		pipeline.add(Config.getInstance().get(STRATEGY));
-		pipeline.addAll(additional.get(Placeholder.END));
-	}
-
-	/**
-	 * Adds a component within the evolutionary pipeline at the specified
-	 * <code>Placeholder</code> position. The placeholder position determines
-	 * the provided component's position relative to the default components.
-	 * Multiple components may be added using the same placeholder, with their
-	 * order of execution matching the order in which they are added.
-	 * 
-	 * @param position a <code>Placeholder</code> that specifies the position
-	 *        that the supplied component should be added to the evolutionary
-	 *        pipeline
-	 * @param component the <code>Component</code> that should be inserted into
-	 *        the evolutionary pipeline at the specified position
-	 */
-	public void add(Placeholder position, Component component) {
-		additional.get(position).add(component);
-	}
-
-	/**
-	 * Removes the first occurrence of the specified component from the
-	 * evolutionary pipeline if it exists at the given <code>Placeholder</code>
-	 * position.
-	 * 
-	 * @param position a <code>Placeholder</code> that specifies the position
-	 *        within the evolutionary pipeline from which the given component
-	 *        should be removed
-	 * @param component the <code>Component</code> that should be removed from
-	 *        the evolutionary pipeline if it exists at the given
-	 *        <code>Placeholder</code>
-	 */
-	public void remove(Placeholder position, Component component) {
-		additional.get(position).remove(component);
-	}
-
-	/**
-	 * Clears all components at the specified <code>Placeholder</code> position
-	 * within the evolutionary pipeline.
-	 * 
-	 * @param position the <code>Placeholder</code> from which all components
-	 *        should be removed
-	 */
-	public void clear(Placeholder position) {
-		additional.get(position).clear();
-	}
-
-	/**
-	 * Returns all components at the specified <code>Placeholder</code> position
-	 * within the evolutionary pipeline.
-	 * 
-	 * @param position the <code>Placeholder</code> from which all components
-	 *        should be returned.
-	 * 
-	 * @return all components at the specified <code>Placeholder</code>
-	 *         position.
-	 */
-	@SuppressWarnings("unchecked")
-	public Collection<Component> get(Placeholder position) {
-		return (ArrayList<Component>) additional.get(position).clone();
-	}
-
-	/**
-	 * A <code>Placeholder</code> specifies a valid position for components to
-	 * be inserted within the default sequence.
-	 */
-	public enum Placeholder {
-		/**
-		 * Defines a position within an evolutionary pipeline that is before any
-		 * of the default components.
-		 */
-		START,
-
-		/**
-		 * Defines a position within an evolutionary pipeline that is
-		 * immediately after the <code>Initialiser</code> component.
-		 */
-		AFTER_INITIALISATION,
-
-		/**
-		 * Defines a position within an evolutionary pipeline that is
-		 * immediately after the <code>FitnessEvaluator</code> component.
-		 */
-		AFTER_EVALUATION,
-
-		/**
-		 * Defines a position within an evolutionary pipeline that is
-		 * after all other default components.
-		 */
-		END
+		for (Component component: Config.getInstance().get(COMPONENTS)) {
+			pipeline.add(component);
+		}
 	}
 
 }

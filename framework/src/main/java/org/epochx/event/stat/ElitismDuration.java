@@ -40,7 +40,7 @@ public abstract class ElitismDuration extends AbstractStat<EndElitism> {
 	}
 
 	@Override
-	public void onEvent(EndElitism event) {
+	public void refresh(EndElitism event) {
 		long start = AbstractStat.get(ElitismStartTime.class).getTime();
 		long end = AbstractStat.get(ElitismEndTime.class).getTime();
 		

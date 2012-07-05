@@ -42,7 +42,7 @@ public class GenerationFitnesses extends AbstractStat<EndGeneration> {
 	}
 
 	@Override
-	public void onEvent(EndGeneration event) {
+	public void refresh(EndGeneration event) {
 		Population population = event.getPopulation();
 		fitnesses = new Fitness[population.size()];
 		int index = 0;
@@ -63,8 +63,8 @@ public class GenerationFitnesses extends AbstractStat<EndGeneration> {
 
 	public class Sorted extends GenerationFitnesses {
 		@Override
-		public void onEvent(EndGeneration event) {
-			super.onEvent(event);
+		public void refresh(EndGeneration event) {
+			super.refresh(event);
 			
 			Arrays.sort(fitnesses);
 		}

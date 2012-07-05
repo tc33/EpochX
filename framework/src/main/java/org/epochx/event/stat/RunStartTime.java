@@ -37,7 +37,7 @@ public class RunStartTime extends AbstractStat<StartRun> {
 	}
 
 	@Override
-	public void onEvent(StartRun event) {
+	public void refresh(StartRun event) {
 		time = System.nanoTime();
 	}
 

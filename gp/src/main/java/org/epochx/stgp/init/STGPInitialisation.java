@@ -29,7 +29,7 @@ import org.epochx.stgp.STGPIndividual;
 
 /**
  * Initialisation method for <tt>STGPIndividual</tt>s. It does not define any 
- * methods, but initialisation methods that generate <tt>STGPIndividual</tt> 
+ * methods, but initialisation procedures that generate <tt>STGPIndividual</tt> 
  * objects should implement this interface. 
  * 
  * <p>

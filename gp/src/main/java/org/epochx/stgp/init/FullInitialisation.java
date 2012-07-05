@@ -174,7 +174,7 @@ public class FullInitialisation implements STGPInitialisation, Listener<ConfigEv
 	 * according to their <tt>equals</tt> methods. By default, duplicates are
 	 * allowed.
 	 * 
-	 * @return a population of <code>STGPIndividual</code> objects
+	 * @return a population of <tt>STGPIndividual</tt> objects
 	 */
 	@Override
 	public Population createPopulation() {
@@ -327,7 +327,7 @@ public class FullInitialisation implements STGPInitialisation, Listener<ConfigEv
 
 		// Trees of depth 0 must be single terminal element
 		Set<Class<?>> types = new HashSet<Class<?>>();
-		for (final Node n: terminals) {
+		for (Node n: terminals) {
 			types.add(n.dataType());
 		}
 		dataTypesTable[0] = types.toArray(new Class<?>[types.size()]);
@@ -335,12 +335,12 @@ public class FullInitialisation implements STGPInitialisation, Listener<ConfigEv
 		// Handle depths above 1
 		for (int i = 1; i <= depth; i++) {
 			types = new HashSet<Class<?>>();
-			for (final Node n: nonTerminals) {
-				final Class<?>[][] argTypeSets = dataTypeCombinations(n.getArity(), dataTypesTable[i - 1]);
+			for (Node n: nonTerminals) {
+				Class<?>[][] argTypeSets = dataTypeCombinations(n.getArity(), dataTypesTable[i - 1]);
 
 				// Test each possible set of arguments
-				for (final Class<?>[] argTypes: argTypeSets) {
-					final Class<?> returnType = n.dataType(argTypes);
+				for (Class<?>[] argTypes: argTypeSets) {
+					Class<?> returnType = n.dataType(argTypes);
 					if (returnType != null) {
 						types.add(returnType);
 					}
@@ -460,7 +460,7 @@ public class FullInitialisation implements STGPInitialisation, Listener<ConfigEv
 	/**
 	 * Sets the number of individuals to be generated in a population created
 	 * by the <tt>createPopulation</tt> method. If automatic configuration is
-	 * enabled thenAny value set here will be overwritten by the
+	 * enabled then any value set here will be overwritten by the
 	 * {@link Population#SIZE} configuration setting on the next config event.
 	 * 
 	 * @param size the size of the populations generated
@@ -473,7 +473,7 @@ public class FullInitialisation implements STGPInitialisation, Listener<ConfigEv
 	 * Returns the depth of the program trees generated with this initialisation
 	 * method
 	 * 
-	 * @return the depth of the program trees constructed.
+	 * @return the depth of the program trees constructed
 	 */
 	public int getDepth() {
 		return depth;
@@ -510,7 +510,7 @@ public class FullInitialisation implements STGPInitialisation, Listener<ConfigEv
 
 	/**
 	 * Sets the random number sequence to use. If automatic configuration is
-	 * enabled thenAny value set here will be overwritten by the
+	 * enabled then any value set here will be overwritten by the
 	 * {@link RandomSequence#RANDOM_SEQUENCE} configuration setting on the next
 	 * config event.
 	 * 

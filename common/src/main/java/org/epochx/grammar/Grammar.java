@@ -24,6 +24,8 @@ package org.epochx.grammar;
 import java.io.*;
 import java.util.*;
 
+import org.epochx.Config.ConfigKey;
+
 /**
  * A grammar object is constructed from a context-free language grammar. In the 
  * grammar guided representations, a <tt>Grammar</tt> instance defines the
@@ -70,6 +72,11 @@ import java.util.*;
  * supported.
  */
 public class Grammar {
+	
+	/**
+	 * The key for setting and retrieving a language grammar
+	 */
+	public static final ConfigKey<Grammar> GRAMMAR = new ConfigKey<Grammar>();
 
 	// Index into the rulesets.
 	private final Map<String, GrammarLiteral> literals;

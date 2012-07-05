@@ -26,7 +26,7 @@ import static org.epochx.grammar.Grammar.GRAMMAR;
 
 import java.util.*;
 
-import org.epochx.Config;
+import org.epochx.*;
 import org.epochx.event.*;
 import org.epochx.ge.*;
 import org.epochx.grammar.*;
@@ -80,8 +80,15 @@ public class BreadthFirstMapper implements Mapper, Listener<ConfigEvent> {
 	}
 
 	@Override
-	public NonTerminalSymbol map(final GEIndividual program) {
-		return null;
+	public Population process(Population population) {
+		for (Individual individual: population) {
+			if (individual instanceof GEIndividual) {
+				GEIndividual geIndividual = (GEIndividual) individual;
+				geIndividual.setParseTree(map(geIndividual));
+			}
+		}
+		
+		return population;
 	}
 	
 	/**

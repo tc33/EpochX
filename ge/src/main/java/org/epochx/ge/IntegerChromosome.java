@@ -21,65 +21,15 @@
  */
 package org.epochx.ge;
 
-import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
-import static org.epochx.ge.BinaryCodon.BITS;
-import static org.epochx.ge.IntegerCodon.*;
-
-import org.epochx.*;
 import org.epochx.event.*;
 
 /**
  * 
  */
 public class IntegerChromosome extends Chromosome implements Listener<ConfigEvent> {
-
-	private RandomSequence random;
-	private long maxCodon;
-	private long minCodon;
-	private long codonRange;
-	
-	public IntegerChromosome() {
-		setup();
-
-		EventManager.getInstance().add(ConfigEvent.class, this);
-	}
-	
-	/**
-	 * Sets up this operator with the appropriate configuration settings.
-	 * This method is called whenever a <tt>ConfigEvent</tt> occurs for a
-	 * change in any of the following configuration parameters:
-	 * <ul>
-	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
-	 * <li>{@link IntegerCodon#MAXIMUM_VALUE} (default: <tt>Long.MAX_VALUE</tt>)
-	 * <li>{@link IntegerCodon#MINIMUM_VALUE} (default: <tt>0L</tt>)
-	 * </ul>
-	 */
-	protected void setup() {
-		random = Config.getInstance().get(RANDOM_SEQUENCE);
-		maxCodon = Config.getInstance().get(MAXIMUM_VALUE, Long.MAX_VALUE);
-		minCodon = Config.getInstance().get(MINIMUM_VALUE, 0L);
-		
-		codonRange = maxCodon - minCodon;
-	}
-	
-	/**
-	 * Receives configuration events and triggers this operator to configure its
-	 * parameters if the <tt>ConfigEvent</tt> is for one of its required
-	 * parameters.
-	 * 
-	 * @param event {@inheritDoc}
-	 */
-	@Override
-	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(RANDOM_SEQUENCE, BITS)) {
-			setup();
-		}
-	}
 	
 	@Override
-	protected Codon generateCodon() {
-		long value = minCodon + random.nextLong(codonRange);
-		
+	public IntegerCodon generateCodon(long value) {
 		return new IntegerCodon(value);
 	}
 

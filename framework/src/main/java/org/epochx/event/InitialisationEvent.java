@@ -30,27 +30,18 @@ import org.epochx.Population;
  */
 public abstract class InitialisationEvent implements Event {
 
-	private Population population;
-	
-	public InitialisationEvent(Population population) {
-		this.population = population;
-	}
-
-	public Population getPopulation() {
-		return population;
-	}
-	
-	public static class StartInitialisation extends InitialisationEvent {
-
-		public StartInitialisation(Population population) {
-			super(population);
-		}
-	}
+	public static class StartInitialisation extends InitialisationEvent {}
 
 	public static class EndInitialisation extends InitialisationEvent {
 
+		private Population population;
+		
 		public EndInitialisation(Population population) {
-			super(population);
+			this.population = population;
+		}
+		
+		public Population getPopulation() {
+			return population;
 		}
 	}
 	

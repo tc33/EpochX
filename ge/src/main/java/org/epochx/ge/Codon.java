@@ -21,10 +21,24 @@
  */
 package org.epochx.ge;
 
+import org.epochx.Config.ConfigKey;
+
 /**
  * 
  */
 public interface Codon extends Cloneable {
+	
+	/**
+	 * The key for setting and retrieving the maximum value for an integer
+	 * codon
+	 */
+	public static final ConfigKey<Long> MAXIMUM_VALUE = new ConfigKey<Long>();
+	
+	/**
+	 * The key for setting and retrieving the minimum value for an integer
+	 * codon
+	 */
+	public static final ConfigKey<Long> MINIMUM_VALUE = new ConfigKey<Long>();
 
 	public long value();
 	

@@ -50,6 +50,7 @@ import org.epochx.event.OperatorEvent.StartOperator;
 public abstract class AbstractOperator implements Operator {
 
 	public final Individual[] apply(Individual ... individuals) {
+		//TODO There seems to be too much cloning going on here?
 		Individual[] parents = clone(individuals);
 
 		// fires the start event
@@ -93,14 +94,14 @@ public abstract class AbstractOperator implements Operator {
 	}
 
 	/**
-	 * Performs the operator on the specified individiduals. If the operator is
+	 * Performs the operator on the specified individuals. If the operator is
 	 * not successful, the specified individuals will not be changed and
 	 * <code>null</code> is returned. The default implementation just returns
-	 * the same individudals.
+	 * the same individuals.
 	 * 
 	 * @param individuals the individuals undergoing the operator.
 	 * 
-	 * @return the indivuals produced by this operator; <code>null</code> when
+	 * @return the indivduals produced by this operator; <code>null</code> when
 	 *         the operator could not be applied.
 	 */
 	public Individual[] perform(Individual ... individuals) {

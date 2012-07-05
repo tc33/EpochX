@@ -37,8 +37,8 @@ import org.epochx.ge.*;
  * parameters used to control this operator.
  * 
  * @see FullInitialisation
- * @see GrowInitialiser
- * @see RampedHalfAndHalfInitialiser
+ * @see GrowInitialisation
+ * @see RampedHalfAndHalfInitialisation
  */
 public class FixedLengthInitialisation implements GEInitialisation, Listener<ConfigEvent> {
 
@@ -146,6 +146,7 @@ public class FixedLengthInitialisation implements GEInitialisation, Listener<Con
 			throw new IllegalStateException("chromosome length must be 1 or greater");
 		}
 
+		// TODO Need to make the chromosome type settable
 		Chromosome chromosome = new IntegerChromosome();
 		for (int i = 0; i < chromosomeLength; i++) {
 			chromosome.extend();

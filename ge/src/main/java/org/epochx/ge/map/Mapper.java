@@ -21,6 +21,7 @@
  */
 package org.epochx.ge.map;
 
+import org.epochx.*;
 import org.epochx.ge.GEIndividual;
 import org.epochx.grammar.*;
 
@@ -29,7 +30,7 @@ import org.epochx.grammar.*;
  * Typically a mapping process uses the chromosome of the GEIndividual to guide
  * production choices in a grammar.
  */
-public interface Mapper {
+public interface Mapper extends Component {
 
 	/**
 	 * Map the given <tt>GEIndividual</tt> to a parse tree

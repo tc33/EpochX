@@ -1,8 +1,9 @@
 /*
- * Copyright 2007-2011 Tom Castle & Lawrence Beadle
+ * Copyright 2007-2011
+ * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
  * 
- * This file is part of EpochX: genetic programming software for research
+ * This file is part of EpochX
  * 
  * EpochX is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,28 +20,34 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.ge;
 
-import org.epochx.RandomSequence;
+package org.epochx.event.stat;
 
-/**
- * 
- */
-public class BinaryChromosome extends Chromosome {
+import org.epochx.*;
+import org.epochx.event.GenerationEvent.EndGeneration;
 
-	private RandomSequence random;
-	
-	private int noBits;
-	
-	@Override
-	public BinaryCodon generateCodon(long value) {
-		boolean[] bits = new boolean[noBits];
-		
-		for (int i=0; i<noBits; i++) {
-			bits[i] = random.nextBoolean();
-		}
-		
-		return new BinaryCodon(bits);
+public class GenerationAverageDoubleFitnessError extends AbstractStat<EndGeneration> {
+
+	private double error;
+
+	public GenerationAverageDoubleFitnessError() {
+		super(GenerationStandardDeviationDoubleFitness.class);
 	}
 
+	@Override
+	public void onEvent(EndGeneration event) {
+		double stdev = AbstractStat.get(GenerationStandardDeviationDoubleFitness.class).getStandardDeviation();
+		Population population = event.getPopulation();
+		
+		error = stdev / Math.sqrt(population.size());
+	}
+
+	public double getError() {
+		return error;
+	}
+
+	@Override
+	public String toString() {
+		return Double.toString(error);
+	}
 }

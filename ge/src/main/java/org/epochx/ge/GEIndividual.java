@@ -86,6 +86,14 @@ public class GEIndividual implements Individual {
 
 		return depth;
 	}
+	
+	public NonTerminalSymbol getParseTree() {
+		return parseTree;
+	}
+	
+	public void setParseTree(NonTerminalSymbol parseTree) {
+		this.parseTree = parseTree;
+	}
 
 	/**
 	 * Returns a source code string that is the phenotype to this candidate
@@ -202,7 +210,6 @@ public class GEIndividual implements Individual {
 	public void setFitness(Fitness fitness) {
 		this.fitness = fitness;
 	}
-
 	
 	/**
 	 * Compares this individual to another based on their fitness. It returns a

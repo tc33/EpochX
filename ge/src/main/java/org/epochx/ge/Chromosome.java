@@ -21,14 +21,19 @@
  */
 package org.epochx.ge;
 
+import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
+import static org.epochx.ge.Codon.*;
+
 import java.util.*;
 
 import org.epochx.Config.ConfigKey;
+import org.epochx.*;
+import org.epochx.event.*;
 
 /**
  * 
  */
-public abstract class Chromosome implements Iterable<Codon>, Cloneable {
+public abstract class Chromosome implements Iterable<Codon>, Cloneable, Listener<ConfigEvent> {
 
 	/**
 	 * The key for setting and retrieving the maximum length setting for 
@@ -47,6 +52,12 @@ public abstract class Chromosome implements Iterable<Codon>, Cloneable {
 	// These are mutually exclusive - one or the other or neither.
 	private boolean wrapping;
 	private boolean extending;
+	
+	private RandomSequence random;
+	
+	private long minCodon;
+	private long maxCodon;
+	private long codonRange;
 
 	public Chromosome() {
 		this(new ArrayList<Codon>());
@@ -57,12 +68,50 @@ public abstract class Chromosome implements Iterable<Codon>, Cloneable {
 
 		wrapping = false;
 		extending = true;
+		
+		setup();
+
+		EventManager.getInstance().add(ConfigEvent.class, this);
 	}
 	
-	protected abstract Codon generateCodon();
+	/**
+	 * Sets up this operator with the appropriate configuration settings.
+	 * This method is called whenever a <tt>ConfigEvent</tt> occurs for a
+	 * change in any of the following configuration parameters:
+	 * <ul>
+	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
+	 * <li>{@link IntegerCodon#MAXIMUM_VALUE} (default: <tt>Long.MAX_VALUE</tt>)
+	 * <li>{@link IntegerCodon#MINIMUM_VALUE} (default: <tt>0L</tt>)
+	 * </ul>
+	 */
+	protected void setup() {
+		random = Config.getInstance().get(RANDOM_SEQUENCE);
+		maxCodon = Config.getInstance().get(MAXIMUM_VALUE, Long.MAX_VALUE);
+		minCodon = Config.getInstance().get(MINIMUM_VALUE, 0L);
+		
+		codonRange = maxCodon - minCodon;
+	}
+	
+	/**
+	 * Receives configuration events and triggers this operator to configure its
+	 * parameters if the <tt>ConfigEvent</tt> is for one of its required
+	 * parameters.
+	 * 
+	 * @param event {@inheritDoc}
+	 */
+	@Override
+	public void onEvent(ConfigEvent event) {
+		if (event.isKindOf(RANDOM_SEQUENCE, MAXIMUM_VALUE, MINIMUM_VALUE)) {
+			setup();
+		}
+	}
+	
+	public abstract Codon generateCodon(long value);
 	
 	public void extend() {
-		appendCodon(generateCodon());
+		long value = minCodon + random.nextLong(codonRange);
+		
+		appendCodon(generateCodon(value));
 	}
 	
 	public Codon getCodon(int index) {

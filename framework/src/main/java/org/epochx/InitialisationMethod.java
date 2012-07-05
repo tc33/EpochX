@@ -23,11 +23,19 @@
 
 package org.epochx;
 
+import org.epochx.Config.ConfigKey;
+
 /**
  * An instance of <code>Initialiser</code> is reponsible for creating the
  * indivuduals.
  */
 public interface InitialisationMethod {
+	
+	/**
+	 * The key for setting and retrieving whether the initialisation method 
+	 * should allow duplicate individuals or not
+	 */
+	public static final ConfigKey<Boolean> ALLOW_DUPLICATES = new ConfigKey<Boolean>();
 
 	/**
 	 * Returns a newly created individual.

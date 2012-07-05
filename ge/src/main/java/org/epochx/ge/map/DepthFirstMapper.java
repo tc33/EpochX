@@ -77,6 +77,18 @@ public class DepthFirstMapper implements Mapper, Listener<ConfigEvent> {
 			setup();
 		}
 	}
+	
+	@Override
+	public Population process(Population population) {
+		for (Individual individual: population) {
+			if (individual instanceof GEIndividual) {
+				GEIndividual geIndividual = (GEIndividual) individual;
+				geIndividual.setParseTree(map(geIndividual));
+			}
+		}
+		
+		return population;
+	}
 
 	/**
 	 * Perform the mapping operation. Mapping starts at the starting symbol of

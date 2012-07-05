@@ -35,39 +35,39 @@ import org.epochx.grammar.*;
 
 /**
  * Initialisation method which produces <tt>GEIndividual</tt>s with chromosomes
- * that map to full parse trees of a specified depth. Since the initialisation
- * is tied to the parse tree, an internal mapping is used which is equivalent
- * to a depth-first mapping.
+ * that map to parse trees within a specified maximum depth. Since the
+ * initialisation is tied to the parse tree, an internal mapping is used which
+ * is equivalent to a depth-first mapping.
  * 
  * <p>
  * See the {@link #setup()} method documentation for a list of configuration
  * parameters used to control this operator.
  * 
  * @see FixedLengthInitialisation
- * @see GrowInitialisation
+ * @see FullInitialisation
  * @see RampedHalfAndHalfInitialisation
  */
-public class FullInitialisation implements GEInitialisation, Listener<ConfigEvent> {
+public class GrowInitialisation implements GEInitialisation, Listener<ConfigEvent> {
 
 	// Configuration settings
 	private RandomSequence random;
 	private Grammar grammar;
-	private int populationSize;
-	private int depth;
 	private long maxCodonValue;
 	private long minCodonValue;
+	private int populationSize;
+	private int maxDepth;
 	private boolean allowDuplicates;
 
 	/**
-	 * Constructs a <tt>FullInitialisation</tt> with control parameters
+	 * Constructs a <tt>GrowInitialisation</tt> with control parameters
 	 * automatically loaded from the config
 	 */
-	public FullInitialisation() {
+	public GrowInitialisation() {
 		this(true);
 	}
 
 	/**
-	 * Constructs a <tt>FullInitialisation</tt> with control parameters
+	 * Constructs a <tt>GrowInitialisation</tt> with control parameters
 	 * initially loaded from the config. If the <tt>autoConfig</tt> argument is
 	 * set to <tt>true</tt> then the configuration will be automatically updated
 	 * when the config is modified.
@@ -75,7 +75,7 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 	 * @param autoConfig whether this operator should automatically update its
 	 *        configuration settings from the config
 	 */
-	public FullInitialisation(boolean autoConfig) {
+	public GrowInitialisation(boolean autoConfig) {
 		setup();
 
 		if (autoConfig) {
@@ -91,8 +91,8 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 	 * <li>{@link Population#SIZE}
 	 * <li>{@link InitialisationMethod#ALLOW_DUPLICATES} (default: <tt>true</tt>)
 	 * <li>{@link Grammar#GRAMMAR}
-	 * <li>{@link Codon#MAXIMUM_VALUE} (default: <tt>Long.MAXIMUM_VALUE</tt>)
-	 * <li>{@link Codon#MINIMUM_VALUE} (default: <tt>0</tt>)
+	 * <li>{@link Codon#MAXIMUM_VALUE} (default: <tt>Long.MAX_VALUE</tt>)
+	 * <li>{@link Codon#MINIMUM_VALUE} (default: <tt>0L</tt>)
 	 * <li>{@link GEIndividual#MAXIMUM_DEPTH}
 	 * </ul>
 	 */
@@ -102,7 +102,7 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 		grammar = Config.getInstance().get(GRAMMAR);
 		maxCodonValue = Config.getInstance().get(MAXIMUM_VALUE, Long.MAX_VALUE);
 		minCodonValue = Config.getInstance().get(MINIMUM_VALUE, 0L);
-		depth = Config.getInstance().get(MAXIMUM_DEPTH);
+		maxDepth = Config.getInstance().get(MAXIMUM_DEPTH);
 	}
 
 	/**
@@ -150,30 +150,33 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 	}
 
 	/**
-	 * Constructs a new <tt>GEIndividual</tt> with a sequence of
-	 * codons that map to a full derivation tree on the currently set grammar
+	 * Constructs a new <tt>GEIndividual</tt> with a sequence of codons that map
+	 * to a derivation tree using the currently set grammar which has a depth at
+	 * most equal to the max depth property
 	 * 
 	 * @return a new <tt>GEIndividual</tt> instance
 	 */
 	@Override
 	public GEIndividual createIndividual() {
-		if (grammar == null) {
+		if (random == null) {
+			throw new IllegalStateException("no random number generator has been set");
+		} else if (grammar == null) {
 			throw new IllegalStateException("no grammar has been set");
 		}
 
 		GrammarRule start = grammar.getStartRule();
 
-		// Determine the minimum depth possible for a valid program
+		// Determine the minimum depth possible for a valid program.
 		int minDepth = start.getMinDepth();
-		if (minDepth > depth) {
-			throw new IllegalStateException("no possible programs within given max depth parameter for this grammar");
+		if (minDepth > maxDepth) {
+			throw new IllegalStateException("no possible programs within given max depth parameter for this grammar.");
 		}
 
 		// TODO Need to make the chromosome type settable
 		Chromosome codons = new IntegerChromosome();
 
-		// Fill in the list of codons with reference to the grammar
-		fillCodons(codons, start, 0, depth);
+		// Fill in the list of codons with reference to the grammar.
+		fillCodons(codons, start, 0, maxDepth);
 
 		return new GEIndividual(codons);
 	}
@@ -183,58 +186,52 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 	 * and then filling in a randomly selected codon that matches the production
 	 * choice.
 	 */
-	private void fillCodons(Chromosome codons, GrammarNode rule, int currentDepth, int maxDepth) {
+	private void fillCodons(Chromosome codons, GrammarNode rule, int depth, int maxDepth) {
 		if (rule instanceof GrammarRule) {
 			GrammarRule nt = (GrammarRule) rule;
 
-			// Check that there is more than one production
+			// Check if theres more than one production.
 			int productionIndex = 0;
 			int noProductions = nt.getNoProductions();
 			if (noProductions > 1) {
-				List<Integer> validProductions = validProductions(nt.getProductions(), maxDepth - currentDepth - 1);
+				List<Integer> validProductions = validProductions(nt.getProductions(), maxDepth - depth - 1);
 
-				// Choose a production randomly
+				// Choose a production randomly.
 				int chosenProduction = random.nextInt(validProductions.size());
 				productionIndex = validProductions.get(chosenProduction);
 
-				// Scale the production index up to get our new codon
+				// Scale the production index up to get our new codon.
 				long codonValue = scaleUp(productionIndex, noProductions);
 
 				codons.appendCodon(codons.generateCodon(codonValue));
 			}
 
-			// Drop down the tree at this production
+			// Drop down the tree at this production.
 			GrammarProduction p = nt.getProduction(productionIndex);
 
 			List<GrammarNode> symbols = p.getGrammarNodes();
 			for (GrammarNode s: symbols) {
-				fillCodons(codons, s, currentDepth + 1, maxDepth);
+				fillCodons(codons, s, depth + 1, maxDepth);
 			}
 		}
 	}
 
 	/*
-	 * Helper method for fillCodons that determines which of a set of
-	 * productions are valid choices to meet the depth constraints. It returns
-	 * a list of indices for the valid productions.
+	 * Helper method for fillCodons which determines which of a set of
+	 * productions are valid choices to meet the depth constraints.
 	 */
 	private List<Integer> validProductions(List<GrammarProduction> grammarProductions, int maxDepth) {
-		List<Integer> validRecursive = new ArrayList<Integer>();
-		List<Integer> validAll = new ArrayList<Integer>();
+		List<Integer> valid = new ArrayList<Integer>();
 
 		for (int i = 0; i < grammarProductions.size(); i++) {
 			GrammarProduction p = grammarProductions.get(i);
 
 			if (p.getMinDepth() <= maxDepth) {
-				validAll.add(i);
-
-				if (p.isRecursive()) {
-					validRecursive.add(i);
-				}
+				valid.add(i);
 			}
 		}
 
-		return validRecursive.isEmpty() ? validAll : validRecursive;
+		return valid;
 	}
 
 	/*
@@ -242,7 +239,8 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 	 * limits, while maintaining the modulo of the number
 	 */
 	private long scaleUp(int productionIndex, int noProductions) {
-		//TODO This is the same as the one used in GrowInitialisation - should be moved to utilities class
+		// TODO This is the same as the one used in FullInitialisation - should
+		// be moved to utilities class
 		long range = maxCodonValue - minCodonValue;
 		long value = random.nextLong(range - noProductions);
 		value += minCodonValue;
@@ -255,49 +253,6 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 		}
 
 		return value;
-	}
-
-	/**
-	 * Returns the random number sequence in use
-	 * 
-	 * @return the currently set random sequence
-	 */
-	public RandomSequence getRandomSequence() {
-		return random;
-	}
-
-	/**
-	 * Sets the random number sequence to use. If automatic configuration is
-	 * enabled then any value set here will be overwritten by the
-	 * {@link RandomSequence#RANDOM_SEQUENCE} configuration setting on the next
-	 * config event.
-	 * 
-	 * @param random the random number generator to set
-	 */
-	public void setRandomSequence(RandomSequence random) {
-		this.random = random;
-	}
-
-	/**
-	 * Returns the grammar that the <tt>GEIndividual</tt>s will satisfy with
-	 * full program trees
-	 * 
-	 * @return the currently set grammar
-	 */
-	public Grammar getGrammar() {
-		return grammar;
-	}
-
-	/**
-	 * Sets the grammar to be satisfied by the full parse trees of the new
-	 * <tt>GEIndividual</tt>s. If automatic configuration is enabled then any
-	 * value set here will be overwritten by the {@link Grammar#GRAMMAR}
-	 * configuration setting on the next config event.
-	 * 
-	 * @param grammar the grammar to set
-	 */
-	public void setGrammar(Grammar grammar) {
-		this.grammar = grammar;
 	}
 
 	/**
@@ -324,6 +279,28 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 	public void setDuplicatesEnabled(boolean allowDuplicates) {
 		this.allowDuplicates = allowDuplicates;
 	}
+	
+	/**
+	 * Returns the grammar that the <tt>GEIndividual</tt>s will satisfy with
+	 * full parse trees
+	 * 
+	 * @return the currently set grammar
+	 */
+	public Grammar getGrammar() {
+		return grammar;
+	}
+
+	/**
+	 * Sets the grammar to be satisfied by the full parse trees of the new
+	 * <tt>GEIndividual</tt>s. If automatic configuration is enabled then any
+	 * value set here will be overwritten by the {@link Grammar#GRAMMAR}
+	 * configuration setting on the next config event.
+	 * 
+	 * @param grammar the grammar to set
+	 */
+	public void setGrammar(Grammar grammar) {
+		this.grammar = grammar;
+	}
 
 	/**
 	 * Returns the number of individuals to be generated in a population created
@@ -348,26 +325,26 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 	}
 
 	/**
-	 * Returns the depth of the parse trees generated with this initialisation
-	 * method
+	 * Returns the maximum depth of the parse trees generated with this
+	 * initialisation method
 	 * 
-	 * @return the depth of the parse trees constructed
+	 * @return the maximum depth of the parse trees constructed
 	 */
-	public int getDepth() {
-		return depth;
+	public int getMaximumDepth() {
+		return maxDepth;
 	}
 
 	/**
-	 * Sets the depth of the parse trees created by the
+	 * Sets the maximum depth of the parse trees created by the
 	 * <tt>createIndividual</tt> method. If automatic configuration is enabled
 	 * then any value set here will be overwritten by the
 	 * {@link GEIndividual#MAXIMUM_DEPTH} configuration setting on
 	 * the next config event.
 	 * 
-	 * @param depth the depth of all parse trees generated
+	 * @param maxDepth the maximum depth of all parse trees generated
 	 */
-	public void setDepth(int depth) {
-		this.depth = depth;
+	public void setMaximumDepth(int maxDepth) {
+		this.maxDepth = maxDepth;
 	}
 
 	/**
@@ -393,7 +370,7 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 	public void setMaximumCodonValue(long maxCodonValue) {
 		this.maxCodonValue = maxCodonValue;
 	}
-	
+
 	/**
 	 * Returns the maximum value that codons chosen by this initialiser are
 	 * allowed to have

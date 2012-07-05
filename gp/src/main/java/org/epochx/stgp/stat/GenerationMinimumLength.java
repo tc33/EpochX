@@ -54,7 +54,7 @@ public class GenerationMinimumLength extends AbstractStat<EndGeneration> {
 	 *        occurred
 	 */
 	@Override
-	public void onEvent(EndGeneration event) {
+	public void refresh(EndGeneration event) {
 		int[] lengths = AbstractStat.get(GenerationLengths.class).getLengths();
 		min = Integer.MAX_VALUE;
 

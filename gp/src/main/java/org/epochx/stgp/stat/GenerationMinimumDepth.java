@@ -54,7 +54,7 @@ public class GenerationMinimumDepth extends AbstractStat<EndGeneration> {
 	 *        occurred
 	 */
 	@Override
-	public void onEvent(EndGeneration event) {
+	public void refresh(EndGeneration event) {
 		int[] depths = AbstractStat.get(GenerationDepths.class).getDepths();
 		min = Integer.MAX_VALUE;
 

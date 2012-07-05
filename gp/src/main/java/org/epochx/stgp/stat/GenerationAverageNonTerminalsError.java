@@ -56,7 +56,7 @@ public class GenerationAverageNonTerminalsError extends AbstractStat<EndGenerati
 	 *        occurred
 	 */
 	@Override
-	public void onEvent(EndGeneration event) {
+	public void refresh(EndGeneration event) {
 		double stdev = AbstractStat.get(GenerationStandardDeviationNonTerminals.class).getStandardDeviation();
 		Population population = event.getPopulation();
 		

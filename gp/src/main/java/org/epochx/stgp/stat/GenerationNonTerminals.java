@@ -57,7 +57,7 @@ public class GenerationNonTerminals extends AbstractStat<EndGeneration> {
 	 *        occurred
 	 */
 	@Override
-	public void onEvent(EndGeneration event) {
+	public void refresh(EndGeneration event) {
 		Population population = event.getPopulation();
 		nonTerminals = new int[population.size()];
 		int index = 0;

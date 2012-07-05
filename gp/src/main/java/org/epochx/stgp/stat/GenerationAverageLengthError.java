@@ -56,7 +56,7 @@ public class GenerationAverageLengthError extends AbstractStat<EndGeneration> {
 	 *        occurred
 	 */
 	@Override
-	public void onEvent(EndGeneration event) {
+	public void refresh(EndGeneration event) {
 		double stdev = AbstractStat.get(GenerationStandardDeviationLength.class).getStandardDeviation();
 		Population population = event.getPopulation();
 

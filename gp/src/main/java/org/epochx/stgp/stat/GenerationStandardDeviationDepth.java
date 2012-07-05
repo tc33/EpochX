@@ -56,7 +56,7 @@ public class GenerationStandardDeviationDepth extends AbstractStat<EndGeneration
 	 *        occurred
 	 */
 	@Override
-	public void onEvent(EndGeneration event) {
+	public void refresh(EndGeneration event) {
 		int[] depths = AbstractStat.get(GenerationDepths.class).getDepths();
 		double average = AbstractStat.get(GenerationAverageDepth.class).getAverage();
 		

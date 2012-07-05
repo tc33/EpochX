@@ -56,7 +56,7 @@ public class GenerationAverageNodesPerDepth extends AbstractStat<EndGeneration> 
 	 *        occurred
 	 */
 	@Override
-	public void onEvent(EndGeneration event) {
+	public void refresh(EndGeneration event) {
 		int maxDepth = AbstractStat.get(GenerationMaximumDepth.class).getMaximum();
 		Population population = event.getPopulation();
 		

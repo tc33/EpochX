@@ -55,7 +55,7 @@ public class GenerationMinimumTerminals extends AbstractStat<EndGeneration> {
 	 *        occurred
 	 */
 	@Override
-	public void onEvent(EndGeneration event) {
+	public void refresh(EndGeneration event) {
 		int[] terminals = AbstractStat.get(GenerationTerminals.class).getTerminals();
 		min = Integer.MAX_VALUE;
 

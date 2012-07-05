@@ -35,7 +35,7 @@ public class GenerationAverageDoubleFitnessError extends AbstractStat<EndGenerat
 	}
 
 	@Override
-	public void onEvent(EndGeneration event) {
+	public void refresh(EndGeneration event) {
 		double stdev = AbstractStat.get(GenerationStandardDeviationDoubleFitness.class).getStandardDeviation();
 		Population population = event.getPopulation();
 		

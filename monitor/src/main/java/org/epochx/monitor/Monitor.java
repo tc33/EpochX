@@ -88,7 +88,7 @@ import org.epochx.monitor.menu.MenuBar;
 public class Monitor extends JFrame implements Runnable {
 
 	/**
-	 * 
+	 * Generated serial UID. 
 	 */
 	private static final long serialVersionUID = 2070510483585647925L;
 

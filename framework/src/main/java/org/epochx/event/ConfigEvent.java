@@ -25,18 +25,45 @@ package org.epochx.event;
 
 import org.epochx.Config.ConfigKey;
 
+/**
+ * An event which indicates that the configuration has changed. The event has the
+ * <code>ConfigKey</code> object that  has changed.
+ * 
+ * @see Config
+ */
 public class ConfigEvent implements Event {
 
+	/**
+	 * The <code>ConfigKey</code> associated with the event. 
+	 */
 	private final ConfigKey<?> key;
 
+	/**
+	 * Constructs a <code>ConfigEvent</code>.
+	 * 
+	 * @param key the <code>ConfigKey</code> associated with the event. 
+	 */
 	public ConfigEvent(ConfigKey<?> key) {
 		this.key = key;
 	}
 
+	/**
+	 * Returns the <code>ConfigKey</code>.
+	 * 
+	 * @return the <code>ConfigKey</code>.
+	 */
 	public ConfigKey<?> getKey() {
 		return key;
 	}
 
+	/**
+	 * Determines if this <code>ConfigEvent</code>'s key is one of the specified keys.
+	 * 
+	 * @param keys the keys to check against.
+	 * 
+	 * @return <code>true</code> if this <code>ConfigEvent</code>'s key is one of the
+	 *         specified keys; <code>false</code> otherwise.
+	 */
 	public boolean isKindOf(ConfigKey<?> ... keys) {
 		for (ConfigKey<?> k: keys) {
 			if (k == key) {

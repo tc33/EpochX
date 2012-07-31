@@ -23,36 +23,82 @@
 
 package org.epochx.event;
 
+import org.epochx.GenerationalStrategy;
 import org.epochx.Population;
 
+/**
+ * Base class for generation related events.
+ * 
+ * @see GenerationalStrategy
+ */
 public abstract class GenerationEvent implements Event {
 
+	/**
+	 * The current generation number.
+	 */
 	private final int generation;
 	
+	/**
+	 * The current population.
+	 */
 	private final Population population;
 
+	/**
+	 * Constructs a <code>GenerationEvent</code>.
+	 * 
+	 * @param generation the current generation number.
+	 * @param population the current population.
+	 */
 	public GenerationEvent(int generation, Population population) {
 		this.generation = generation;
 		this.population = population;
 	}
 
+	/**
+	 * Returns the generation of this event.
+	 * 
+	 * @return the generation of this event.
+	 */
 	public int getGeneration() {
 		return generation;
 	}
 	
+	/**
+	 * Returns the population of this event.
+	 * 
+	 * @return the population of this event.
+	 */
 	public Population getPopulation() {
 		return population;
 	}
 
+	/**
+	 * An event that indicates the start of a generation.
+	 */
 	public static class StartGeneration extends GenerationEvent {
 
+		/**
+		 * Constructs a <code>StartGeneration</code>.
+		 * 
+		 * @param generation the current generation number.
+		 * @param population the current population.
+		 */
 		public StartGeneration(int generation, Population population) {
 			super(generation, population);
 		}
 	}
 
+	/**
+	 * An event that indicates the end of a generation.
+	 */
 	public static class EndGeneration extends GenerationEvent {
 
+		/**
+		 * Constructs an <code>EndGeneration</code>.
+		 * 
+		 * @param generation the current generation number.
+		 * @param population the current population.
+		 */
 		public EndGeneration(int generation, Population population) {
 			super(generation, population);
 		}

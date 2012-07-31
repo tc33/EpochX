@@ -25,37 +25,80 @@ package org.epochx.event;
 
 import org.epochx.Population;
 
+/**
+ * Base class for run related events.
+ */
 public abstract class RunEvent implements Event {
 
+	/**
+	 * The run number.
+	 */
 	private final int run;
 	
-	public RunEvent(int generation) {
-		this.run = generation;
+	/**
+	 * Constructs a <code>RunEvent</code>.
+	 * 
+	 * @param run the run number.
+	 */
+	public RunEvent(int run) {
+		this.run = run;
 	}
 
+	/**
+	 * Returns the run number.
+	 * 
+	 * @return the run number.
+	 */
 	public int getRun() {
 		return run;
 	}
 	
+	/**
+	 * An event that indicates the start of a run.
+	 */
 	public static class StartRun extends RunEvent {
 
+		/**
+		 * Constructs a <code>StartRun</code>.
+		 * 
+		 * @param run the run number.
+		 */
 		public StartRun(int run) {
 			super(run);
 		}
 	}
 
+	/**
+	 * An event that indicates the end of a run.
+	 */
 	public static class EndRun extends RunEvent {
 
+		/**
+		 * The population at the end of the run.
+		 */
 		private final Population population;
 		
+		/**
+		 * Constructs a <code>EndRun</code>.
+		 * 
+		 * @param run the run number.
+		 * @param population the population at the end of the run.
+		 */
 		public EndRun(int run, Population population) {
 			super(run);
 			
 			this.population = population;
 		}
-		
+
+		/**
+		 * Returns the population at the end of the run.
+		 * 
+		 * @return the population at the end of the run.
+		 */
 		public Population getPopulation() {
 			return population;
 		}
+
 	}
+
 }

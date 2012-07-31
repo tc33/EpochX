@@ -20,26 +20,48 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
+
 package org.epochx.event;
 
+import org.epochx.Initialiser;
 import org.epochx.Population;
 
-
 /**
+ * Base class for initialisation related events.
  * 
+ * @see Initialiser
  */
 public abstract class InitialisationEvent implements Event {
 
+	/**
+	 * An event that indicates the start of the initialisation.
+	 */
 	public static class StartInitialisation extends InitialisationEvent {}
 
+	/**
+	 * An event that indicates the end of the initialisation.
+	 */
 	public static class EndInitialisation extends InitialisationEvent {
 
+		/**
+		 * The population at the end of the initialisation.
+		 */
 		private Population population;
 		
+		/**
+		 * Constructs a <code>EndInitialisation</code>.
+		 * 
+		 * @param population the population at the end of the initialisation.
+		 */
 		public EndInitialisation(Population population) {
 			this.population = population;
 		}
 		
+		/**
+		 * Returns the population at the end of the initialisation.
+		 * 
+		 * @return the population at the end of the initialisation.
+		 */
 		public Population getPopulation() {
 			return population;
 		}

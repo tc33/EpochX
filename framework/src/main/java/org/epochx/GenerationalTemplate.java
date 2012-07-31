@@ -33,7 +33,10 @@ import org.epochx.random.MersenneTwisterFast;
 import org.epochx.selection.TournamentSelector;
 
 /**
+ * Default configuration template for generational executions.
  * 
+ * @see Config
+ * @see Template
  */
 public class GenerationalTemplate extends Template {
 

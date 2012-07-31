@@ -82,22 +82,9 @@ public class Evolver {
 
 	/**
 	 * Initialises the supplied <code>Pipeline</code> with the components that
-	 * an evolutionary run is composed of. The sequence of components is:
-	 * <p>
-	 * <ol>
-	 * <li>[<code>START</code> placeholder]
-	 * <li>{@link Initialiser}
-	 * <li>[<code>AFTER_INITIALISATION</code> placeholder]
-	 * <li>{@link FitnessEvaluator}
-	 * <li>[<code>AFTER_EVALUATION</code> placeholder]
-	 * <li>{@link EvolutionaryStrategy}
-	 * <li>[<code>END</code> placeholder]
-	 * </ol>
-	 * <p>
-	 * Where each placeholder consists of zero or more components supplied by
-	 * calls to the {@link Evolver#add(Placeholder, Component)} method. The
-	 * <code>setupPipeline</code> method can also be overridden to modify the
-	 * components and sequence further.
+	 * an evolutionary run is composed of. The specific list of components used
+	 * is obtained from the {@link Config}, using the appropriate <code>ConfigKey</code>
+	 * {@link Evolver.COMPONENTS}.
 	 * 
 	 * @param pipeline the <code>Pipeline</code> that should be initialised with
 	 *        a sequence of components that comprise an evolutionary run

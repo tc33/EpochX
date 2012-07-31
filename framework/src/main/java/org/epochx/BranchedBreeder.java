@@ -129,8 +129,6 @@ public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
 
 			Individual[] parents = null;
 
-			// TODO perhaps hava an exception to signal that the operator
-			// failed
 			do {
 				parents = new Individual[operator.inputSize()];
 
@@ -158,6 +156,7 @@ public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
 	 * <li><code>Breeder.OPERATORS</code>
 	 * <li><code>Breeder.SELECTOR</code>
 	 * <li><code>RandomSequence.RANDOM_SEQUENCE</code>
+	 * <li><code>BranchedBreeder.ELITISM</code>
 	 * </ul>
 	 */
 	protected void setup() {

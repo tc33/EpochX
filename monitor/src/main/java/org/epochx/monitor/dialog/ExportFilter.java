@@ -30,7 +30,7 @@ import org.epochx.monitor.Utilities;
 
 
 /**
- * A customized filter.
+ * An <code>ExportFilter</code> extends a <code>FileFilter</code> to provides customized filter.
  */
 public class ExportFilter extends FileFilter {
 

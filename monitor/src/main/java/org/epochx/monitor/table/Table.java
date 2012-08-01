@@ -1,5 +1,4 @@
 /*
- * Copyright 2007-2012
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
  * 
@@ -28,6 +27,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.File;
 import java.util.Enumeration;
+import java.util.Timer;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -44,57 +44,124 @@ import org.epochx.event.RunEvent.EndRun;
 import org.epochx.event.stat.AbstractStat;
 
 /**
- * A <code>Table</code> is a table which display several stats at several
- * events.
+ * A <code>Table</code> is a <code>Monitor</code> component which displays
+ * <code>Stats</code> on specific <code>Events</code>.
+ * 
+ * <p>
+ * This class extends <code>JTabbedPane</code> to be displayed in the
+ * <code>Monitor</code>.
+ * </p>
+ * 
+ * <p>
+ * <h3>Timer use & Refreshing rates</h3>
+ * Each table has its own a {@link Timer} sheduling at fixed rate a
+ * {@link TableModel#task task} which refreshs the tabular data model,
+ * only if the <code>Table</code> is visible on the <code>Monitor</code>.<br>
+ * <i> (Note that as we use a timer for each instance, each table refresh in a
+ * separated thread.) </i>.<br>
+ * </p>
+ * 
+ * <p>
+ * <h3>Construction & Settings</h3>
+ * The <i>table name</i> and the <i>refresh rate</i> can be specified on the
+ * constructor as optional arguments. If not, they are initialized by default
+ * (the default rate is <i>100ms</i>)<br>
+ * <br>
+ * 
+ * Then, <code>Stats</code> are added to the stat {@link TableModel#stats list}
+ * by using the {@link #addStat(Class, String)} method. The <code>String</code>
+ * argument is the name to display on the header, and it is optional (the simple
+ * name of the class is assigned by default).<br>
+ * 
+ * <pre>
+ * Table myTable = new Table(&quot;Table_name&quot;, 1000L);
+ * myTable.addStat(GenerationNumber.class);
+ * myTable.addStat(GenerationFitnessDiversity.class);
+ * myTable.addListener(EndGeneration.class);
+ * </pre>
+ * 
+ * </p>
+ * 
+ * <p>
+ * <h3>Concurrency</h3>
+ * This component is a <b>split-data model</b>, as the main fields are
+ * registered in a {@link TableModel}. However, for greater convenience, the
+ * <code>Table</code> handles the interface with its model in an opaque way.<br>
+ * <br>
+ * Because the {@link TableModel} registers all the critical fields (table date,
+ * buffer list), please refer to its documentation to known how concurrency is
+ * managed.
+ * </p>
+ * 
+ * <p>
+ * <h3>Export</h3>
+ * A <code>Table</code> can be exported in Excel format or in Comma-separated
+ * Values format (<i>*.csv</i>) by using the {@link #export(File, String)
+ * export} method. <br>
+ * <br>
+ * <b>Note that we do not guarantee that this method is thread-safe.</b>
+ * Especially, if you try to export the <code>Table</code> during the evolution
+ * process as the <i>EDT</i> might refresh the <code>Table</code> during the
+ * exportation. However, no conflict issues seem have occurred in our tests.
+ * </p>
+ * 
+ * 
+ * @see TableModel
  */
-@SuppressWarnings("serial")
 public class Table extends JScrollPane {
 
 	/**
-	 * The Excel 2000 format constant.
+	 * Generated serial UID.
+	 */
+	private static final long serialVersionUID = -5683300751753421273L;
+
+	/**
+	 * The Excel 2000 format (<i>*.xls</i>) constant.
 	 */
 	public static final String FORMAT_XLS = "xls";
 
 	/**
-	 * The Comma-separated Values format constant.
+	 * The Comma-separated Values format (<i>*.csv, *.txt</i>) constant.
 	 */
 	public static final String FORMAT_CSV = "csv";
-	
+
 	/**
 	 * The default refresh rate constant.
 	 */
 	private final static long DEFAULT_LATENCY = 100;
 
 	/**
-	 * The Number of created Instances.
+	 * The number of created instances.
 	 */
 	private static int noInstances = 0;
 
 	/**
-	 * The parent table.
+	 * The <code>JTable</code>.
 	 */
 	private final JTable table;
 
 	/**
-	 * The table model.
+	 * The <code>TableModel</code>.
 	 */
 	private final TableModel model;
 
 	/**
-	 * The default cell renderer.
+	 * The <code>TableCellRenderer</code>.
 	 */
 	private final TableCellRenderer tableCellRenderer;
 
 	/**
 	 * Constructs a <code>Table</code> with a default name.
+	 * <p>
 	 * Default name : <code>"table"+noInstances</code>.
+	 * </p>
 	 */
 	public Table() {
 		this("table" + noInstances, DEFAULT_LATENCY);
 	}
 
 	/**
-	 * Constructs a <code>Table</code>.
+	 * Constructs a <code>Table</code> with a specified name.
 	 * 
 	 * @param name the Name given to the main component.
 	 */
@@ -103,7 +170,7 @@ public class Table extends JScrollPane {
 	}
 
 	/**
-	 * Constructs a <code>Table</code>.
+	 * Constructs a <code>Table</code> with a specified latency.
 	 * 
 	 * @param latency the latency rate.
 	 */
@@ -136,53 +203,13 @@ public class Table extends JScrollPane {
 		setViewportView(table);
 		setPreferredSize(new Dimension(20, 400));
 
-		// Add a columnAdded Listener.
-		table.getColumnModel().addColumnModelListener(new TableColumnModelListener() {
+		// Add a ColumnAddedListener.
+		table.getColumnModel().addColumnModelListener(new ColumnAddedListener());
 
-			public void columnAdded(TableColumnModelEvent e) {
-				// Gets index of columns added.
-				int fromIndex = e.getFromIndex();
-				int toIndex = e.getToIndex();
+		// Add a RowAddedListener.
+		table.addComponentListener(new RowAddedListener());
 
-				for (int i = fromIndex; i <= toIndex; i++) {
-					TableColumn col = table.getColumnModel().getColumn(i);
-					// Sets the default renderer.
-					col.setCellRenderer(tableCellRenderer); 
-
-					// Calculs & sets the preferred width.
-					int colPreferredWidth = table.getTableHeader().getFontMetrics(table.getTableHeader().getFont()).stringWidth(col.getHeaderValue().toString()) + 10;
-					col.setPreferredWidth(colPreferredWidth);
-				}
-
-				adjustPreferredSize();
-			}
-
-			public void columnRemoved(TableColumnModelEvent e) {
-				Table.this.adjustPreferredSize();
-			}
-
-			public void columnMarginChanged(ChangeEvent arg0) {
-			}
-
-			public void columnMoved(TableColumnModelEvent arg0) {
-			}
-
-			public void columnSelectionChanged(ListSelectionEvent arg0) {
-			}
-		});
-
-		// Add the a ComponentListener, when a row is added, the scroll bar
-		// automatically go to the last row.
-		table.addComponentListener(new ComponentAdapter() {
-
-			public void componentResized(ComponentEvent e) {
-				if (!Table.this.getVerticalScrollBar().getValueIsAdjusting())
-					table.scrollRectToVisible(new Rectangle(Table.this.getHorizontalScrollBar().getValue(),
-							table.getHeight(), 1, 1));
-			}
-		});
-
-		// Add the EndRun event listener.
+		// Adjusts the preferred size on the EndRun event.
 		Listener<EndRun> endRunListener = new Listener<EndRun>() {
 
 			public void onEvent(EndRun event) {
@@ -193,7 +220,7 @@ public class Table extends JScrollPane {
 	}
 
 	/**
-	 * Adds a stat to the fields list with a default name give by the simple
+	 * Adds a stat to the model with a default name given by the simple
 	 * name of the class.
 	 * 
 	 * @param stat the stat added to the field list.
@@ -203,7 +230,7 @@ public class Table extends JScrollPane {
 	}
 
 	/**
-	 * Adds a stat to the fields list of the model.
+	 * Adds a stat to the model.
 	 * 
 	 * @param stat the stat added to the field list.
 	 * @param statName the name of the stat for the column header.
@@ -213,7 +240,7 @@ public class Table extends JScrollPane {
 	}
 
 	/**
-	 * Adds an event to the listeners list of the model.
+	 * Adds an event to the model.
 	 * 
 	 * @param type the even added to the listeners list.
 	 */
@@ -222,12 +249,30 @@ public class Table extends JScrollPane {
 	}
 
 	/**
-	 * Adjust the preferred size.
+	 * Exports a <code>Table</code>.
+	 * 
+	 * @param file the file in which the <code>Table</code> is exported.
+	 * @param format the format among FORMAT_XLS, FORMAT_CSV.
+	 * 
+	 * @throws IllegalArgumentException if the format is unknown.
+	 * 
+	 * @see Table#FORMAT_XLS
+	 * @see Table#FORMAT_CSV
+	 */
+	public void export(File file, String format) throws IllegalArgumentException {
+		model.export(file, format);
+	}
+
+	/**
+	 * Adjust the preferred size of the <code>Table</code>.
 	 */
 	private void adjustPreferredSize() {
+		// Refresh the model
 		model.refresh();
+
 		int preferredWidth = 20;
 		TableColumn col = null;
+
 		for (Enumeration<TableColumn> e = table.getColumnModel().getColumns(); e.hasMoreElements();) {
 			col = e.nextElement();
 
@@ -245,31 +290,89 @@ public class Table extends JScrollPane {
 			// Increments the table preferred width.
 			preferredWidth += colPreferredWidth;
 		}
-
+		// Set the preferred size.
 		setPreferredSize(new Dimension(preferredWidth, (int) getPreferredSize().getHeight()));
-	}
-
-	/**
-	 * Export the table in the specified file and the specified format.
-	 * 
-	 * @param file
-	 * @param format the format among FORMAT_XLS, FORMAT_CSV.
-	 * @return true if the table export succeed.
-	 * @throws IllegalArgumentException if the format is unknown.
-	 * 
-	 * @see #FORMAT_XLS, #FORMAT_CSV
-	 */
-	public void export(File file, String format) throws IllegalArgumentException {
-		if (format == FORMAT_XLS)
-			model.exportToXLS(file);
-		else if (format == FORMAT_CSV)
-			model.exportToCSV(file);
-		else
-			throw new IllegalArgumentException("Unknown format.");
 	}
 
 	@Override
 	public String toString() {
 		return getName();
+	}
+
+	/**
+	 * A <code>ColumnAddedListener</code> is a
+	 * <code>TableColumnModelListener</code> which resets the preferred size of
+	 * each column and the table, zhen a column is added.
+	 */
+	private class ColumnAddedListener implements TableColumnModelListener {
+
+		/**
+		 * Constructs a <code>ColumnAddedListener</code>.
+		 */
+		private ColumnAddedListener() {
+
+		}
+
+		/**
+		 * <code>TableColumnModelListener</code> inherited method.
+		 */
+		public void columnAdded(TableColumnModelEvent e) {
+			// Gets index of columns added.
+			int fromIndex = e.getFromIndex();
+			int toIndex = e.getToIndex();
+
+			for (int i = fromIndex; i <= toIndex; i++) {
+				TableColumn col = table.getColumnModel().getColumn(i);
+				// Sets the default renderer.
+				col.setCellRenderer(tableCellRenderer);
+
+				// Calculs & sets the preferred width.
+				int colPreferredWidth = table.getTableHeader().getFontMetrics(table.getTableHeader().getFont()).stringWidth(col.getHeaderValue().toString()) + 10;
+				col.setPreferredWidth(colPreferredWidth);
+			}
+
+			adjustPreferredSize();
+		}
+
+		/**
+		 * <code>TableColumnModelListener</code> inherited.
+		 */
+		public void columnRemoved(TableColumnModelEvent arg0) {
+			Table.this.adjustPreferredSize();
+		}
+
+		/**
+		 * <code>TableColumnModelListener</code> inherited.
+		 */
+		public void columnMarginChanged(ChangeEvent arg0) {
+		}
+
+		/**
+		 * <code>TableColumnModelListener</code> inherited.
+		 */
+		public void columnMoved(TableColumnModelEvent arg0) {
+		}
+
+		/**
+		 * <code>TableColumnModelListener</code> inherited.
+		 */
+		public void columnSelectionChanged(ListSelectionEvent arg0) {
+		}
+
+	}
+
+	/**
+	 * A <code>RowAddedListener</code> is a <code>ComponentListener</code> which
+	 * puts the vertical <code>ScrollBar</code> to the bottum, when a row is
+	 * added.
+	 */
+	private class RowAddedListener extends ComponentAdapter {
+
+		@Override
+		public void componentResized(ComponentEvent arg0) {
+			if (!Table.this.getVerticalScrollBar().getValueIsAdjusting())
+				table.scrollRectToVisible(new Rectangle(Table.this.getHorizontalScrollBar().getValue(),
+						table.getHeight(), 1, 1));
+		}
 	}
 }

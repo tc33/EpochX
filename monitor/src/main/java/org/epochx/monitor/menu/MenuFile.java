@@ -38,14 +38,23 @@ import org.epochx.monitor.dialog.DialogExportTable;
 import org.epochx.monitor.table.Table;
 
 /**
- * 
+ * The file menu.
  */
-@SuppressWarnings("serial")
 public class MenuFile extends Menu {
 
+	/**
+	 * Generated serial UID.
+	 */
+	private static final long serialVersionUID = -3955239338855297196L;
+	
 	private final JMenu exportMenu;
 	private final JMenuItem exit, close;
 
+	/**
+	 * Constructs a <code>MenuFile</code>.
+	 * 
+	 * @param m the owner <code>Monitor</code>.
+	 */
 	MenuFile(Monitor m) {
 		super(m);
 		setName("File Menu");

@@ -34,10 +34,14 @@ import org.epochx.monitor.Monitor;
 
 
 /**
- * 
+ * The view menu.
  */
-@SuppressWarnings("serial")
 public class MenuView extends Menu {
+
+	/**
+	 * Generated serial UID.
+	 */
+	private static final long serialVersionUID = 1430021550373815161L;
 	
 	private final JMenuItem centre;
 	private final JMenuItem autoResize;

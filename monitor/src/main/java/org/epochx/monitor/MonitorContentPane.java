@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2012
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -27,23 +27,27 @@ import java.awt.GridLayout;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-
 /**
- * The content panel of the <code>Monitor</code> frame.
+ * A <code>MonitorContentPane</code> defines the content pane of a
+ * <code>Monitor</code> frame.
  */
-@SuppressWarnings("serial")
-public class MonitorContentPane extends JPanel{
-	
+public class MonitorContentPane extends JPanel {
+
+	/**
+	 * Generated serial UID.
+	 */
+	private static final long serialVersionUID = 5738368515703552671L;
+
 	/*
 	 * The border & gap widths constants.
 	 */
 	private final static int BORDERWIDTH = 10, GAPWIDTH = 5;
-	
+
 	/**
 	 * The <code>GridLayout</code>.
 	 */
 	private final GridLayout gridLayout;
-	
+
 	/**
 	 * 
 	 * Constructs a <code>MonitorContentPane</code>.
@@ -51,7 +55,7 @@ public class MonitorContentPane extends JPanel{
 	 * @param rows the number of rows in the <code>GridLayout</code>.
 	 * @param cols the number of cols in the <code>GridLayout</code>.
 	 */
-	protected MonitorContentPane(int rows, int cols){
+	protected MonitorContentPane(int rows, int cols) {
 		super();
 		this.gridLayout = new GridLayout(rows, cols, GAPWIDTH, GAPWIDTH);
 		this.setLayout(gridLayout);

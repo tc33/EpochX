@@ -20,6 +20,7 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
+
 package org.epochx;
 
 import org.epochx.Config.ConfigKey;

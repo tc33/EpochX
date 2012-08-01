@@ -50,7 +50,6 @@ import org.epochx.event.OperatorEvent.StartOperator;
 public abstract class AbstractOperator implements Operator {
 
 	public final Individual[] apply(Individual ... individuals) {
-		//TODO There seems to be too much cloning going on here?
 		Individual[] parents = clone(individuals);
 
 		// fires the start event

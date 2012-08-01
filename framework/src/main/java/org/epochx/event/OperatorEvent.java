@@ -20,6 +20,7 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
+
 package org.epochx.event;
 
 import org.epochx.Individual;

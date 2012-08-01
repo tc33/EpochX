@@ -29,10 +29,8 @@ import org.epochx.event.Listener;
 
 /**
  * This class represents a termination criteria based on a desired fitness
- * value. Given a
- * threshold fitness value, the run is terminated when the current fitness is
- * equal to or
- * greater than the threshold fitness.
+ * value. Given a threshold fitness value, the run is terminated when the
+ * current fitness is equal to or greater than the threshold fitness.
  */
 public class TerminationFitness implements TerminationCriteria, Listener<EndGeneration> {
 

@@ -23,8 +23,23 @@
 
 package org.epochx.event;
 
+/**
+ * The <code>Listener</code> interface implemented by any class whose instances
+ * are intended to receive notification about events generated during the execution
+ * of a run. 
+ * 
+ * @param <T> the type of events that this object will listen to
+ * 
+ * @see Event
+ * @see EventManager
+ */
 public interface Listener<T extends Event> {
 
+	/**
+	 * This method is called every time an event of type <code>T</code> is fired.
+	 * 
+	 * @param event the fired event object.
+	 */
 	public void onEvent(T event);
 
 }

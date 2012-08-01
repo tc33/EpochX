@@ -23,4 +23,9 @@
 
 package org.epochx.event;
 
+/**
+ * Interface for events fired during the execution of a run.
+ * 
+ * @see EventManager
+ */
 public interface Event {}

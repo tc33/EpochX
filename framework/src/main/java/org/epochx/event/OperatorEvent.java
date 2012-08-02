@@ -42,7 +42,7 @@ public abstract class OperatorEvent implements Event {
 	private Individual[] parents;
 
 	/**
-	 * Constructs a <code>OperatorEvent</code>.
+	 * Constructs an <code>OperatorEvent</code>.
 	 * 
 	 * @param operator the operator that fired the event.
 	 * @param parents the array of individuals undergoing the operator.

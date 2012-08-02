@@ -29,17 +29,27 @@ import org.epochx.Fitness;
 import org.epochx.event.GenerationEvent.EndGeneration;
 
 /**
- * Stats representing the number of different fitness values in the
- * generation.
+ * Stats representing the number of different fitness values in a generation.
  */
 public class GenerationFitnessDiversity extends AbstractStat<EndGeneration> {
 
+	/**
+	 * The number of different fitness values.
+	 */
 	private int diversity = 0;
 
+	/**
+	 * Constructs a <code>GenerationFitnessDiversity</code>.
+	 */
 	public GenerationFitnessDiversity() {
 		super(GenerationFitnesses.class);
 	}
 
+	/**
+	 * Computes the number of different fitness values.
+	 * 
+	 * @param event the <code>EndGeneration</code> event object.
+	 */
 	@Override
 	public void refresh(EndGeneration event) {
 		Fitness[] fitnesses = AbstractStat.get(GenerationFitnesses.class).getFitnesses();
@@ -52,6 +62,11 @@ public class GenerationFitnessDiversity extends AbstractStat<EndGeneration> {
 		diversity = unique.size();
 	}
 
+	/**
+	 * Returns a string representation of the number of different fitness vaues.
+	 * 
+	 * @return a string representation of the number of different fitness vaues.
+	 */
 	@Override
 	public String toString() {
 		return Integer.toString(diversity);

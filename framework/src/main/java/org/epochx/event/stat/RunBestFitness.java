@@ -25,52 +25,54 @@ package org.epochx.event.stat;
 
 import org.epochx.Fitness;
 import org.epochx.event.GenerationEvent.EndGeneration;
-import org.epochx.event.RunEvent.StartRun;
 
 /**
- * 
+ * Stat that provides the information of the best fitness of a run.
  */
-public class RunBestFitness extends AbstractStat<StartRun> {
+public class RunBestFitness extends AbstractStat<EndGeneration> {
 
+	/**
+	 * The best fitness value of a run.
+	 */
 	private Fitness best;
 
+	/**
+	 * Constructs a <code>RunBestFitness</code>.
+	 */
 	public RunBestFitness() {
-		super(RunBestFitnessGeneration.class);
+		super(GenerationBestFitness.class);
 	}
 
+	/**
+	 * Determines the best fitness value of a run.
+	 * 
+	 * @param event the <code>EndGeneration</code> event object.
+	 */
 	@Override
-	public void refresh(StartRun event) {
-		best = null;
-	}
+	public void refresh(EndGeneration event) {
+		Fitness generationBest = AbstractStat.get(GenerationBestFitness.class).getBest();
 
-	private void addGeneration(Fitness generationBest) {
 		if (best == null || generationBest.compareTo(best) > 0) {
 			best = generationBest;
 		}
 	}
 
+	/**
+	 * Returns the best fitness value.
+	 * 
+	 * @return the best fitness value.
+	 */
 	public Fitness getBest() {
 		return best;
 	}
 
+	/**
+	 * Returns a string representation of the best fitness value.
+	 * 
+	 * @return a string representation of the best fitness value.
+	 */
 	@Override
 	public String toString() {
 		return best.toString();
 	}
-
-	private static class RunBestFitnessGeneration extends AbstractStat<EndGeneration> {
-
-		@SuppressWarnings("unused")
-		public RunBestFitnessGeneration() {
-			super(GenerationBestFitness.class);
-		}
-
-		@Override
-		public void refresh(EndGeneration event) {
-			RunBestFitness parent = AbstractStat.get(RunBestFitness.class);
-			parent.addGeneration(AbstractStat.get(GenerationBestFitness.class).getBest());
-		}
-
-	}
-
 }

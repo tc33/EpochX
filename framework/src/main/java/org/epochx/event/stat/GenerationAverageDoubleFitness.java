@@ -27,14 +27,31 @@ import org.epochx.DoubleFitness;
 import org.epochx.Fitness;
 import org.epochx.event.GenerationEvent.EndGeneration;
 
+/**
+ * Stat that provides the average fitness value of the population at the end of a
+ * generation. This stat can only be used with <code>DoubleFitness</code>.
+ * 
+ * @see DoubleFitness
+ */
 public class GenerationAverageDoubleFitness extends AbstractStat<EndGeneration> {
 
+	/**
+	 * The average fitness value.
+	 */
 	private double average;
 
+	/**
+	 * Constructs a <code>GenerationAverageDoubleFitness</code>.
+	 */
 	public GenerationAverageDoubleFitness() {
 		super(GenerationFitnesses.class);
 	}
 
+	/**
+	 * Computes the average fitness value of the population.
+	 * 
+	 * @param event the <code>EndGeneration</code> event object.
+	 */
 	@Override
 	public void refresh(EndGeneration event) {
 		Fitness[] fitnesses = AbstractStat.get(GenerationFitnesses.class).getFitnesses();
@@ -47,10 +64,20 @@ public class GenerationAverageDoubleFitness extends AbstractStat<EndGeneration> 
 		average /= fitnesses.length;
 	}
 
+	/**
+	 * Returns the average fitness value.
+	 * 
+	 * @return the average fitness value.
+	 */
 	public double getAverage() {
 		return average;
 	}
 
+	/**
+	 * Returns a string representation of the average fitness value.
+	 * 
+	 * @return a string representation of the average fitness value.
+	 */
 	@Override
 	public String toString() {
 		return Double.toString(average);

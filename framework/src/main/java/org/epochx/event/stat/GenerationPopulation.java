@@ -27,38 +27,62 @@ import org.epochx.Population;
 import org.epochx.event.GenerationEvent.EndGeneration;
 
 /**
- * 
+ * Stat that provides the population of the current generation.
  */
 public class GenerationPopulation extends AbstractStat<EndGeneration> {
 
+	/**
+	 * The current population.
+	 */
 	private Population population;
 
+	/**
+	 * Constructs a <code>GenerationPopulation</code>.
+	 */
 	public GenerationPopulation() {
 		super(NO_DEPENDENCIES);
 	}
 
+	/**
+	 * Stores the population of the current generation.
+	 * 
+	 * @param event the <code>EndGeneration</code> event object.
+	 */
 	@Override
 	public void refresh(EndGeneration event) {
 		population = event.getPopulation();
 	}
 
+	/**
+	 * Returns the population.
+	 * 
+	 * @return the population.
+	 */
 	public Population getPopulation() {
 		return population;
 	}
 
+	/**
+	 * Returns a string representation of the generation population.
+	 * 
+	 * @return a string representation of the generation population.
+	 */
 	@Override
 	public String toString() {
 		return population.toString();
 	}
 
+	/**
+	 * Stat that provides the population (sorted into ascending order) of the
+	 * current generation.
+	 */
 	public class Sorted extends GenerationFitnesses {
 
 		@Override
 		public void refresh(EndGeneration event) {
 			super.refresh(event);
 
-			// This will sort the population itself so may influence further
-			// execution.
+			population = population.clone();
 			population.sort();
 		}
 	}

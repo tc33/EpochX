@@ -26,25 +26,46 @@ package org.epochx.event.stat;
 import org.epochx.event.ElitismEvent.EndElitism;
 
 /**
- * 
+ * Stat that provides the information about the end time of the elitism process.
  */
 public class ElitismEndTime extends AbstractStat<EndElitism> {
 
+	/**
+	 * The end time of the elitism process.
+	 */
 	private long time;
 
+	/** 
+	 * Constructs a <code>ElitismEndTime</code>.
+	 */
 	public ElitismEndTime() {
 		super(NO_DEPENDENCIES);
 	}
 
+	/**
+	 * Determines the end time for the elitism process.
+	 * 
+	 * @param event the <code>EndElitism</code> event object.
+	 */
 	@Override
 	public void refresh(EndElitism event) {
 		time = System.nanoTime();
 	}
 
+	/**
+	 * Returns the end time of the elitism process.
+	 * 
+	 * @return the end time of the elitism process.
+	 */
 	public long getTime() {
 		return time;
 	}
 
+	/**
+	 * Returns a string representation of the end time of the elitism process.
+	 * 
+	 * @return a string representation of the end time of the elitism process.
+	 */
 	@Override
 	public String toString() {
 		return Long.toString(getTime());

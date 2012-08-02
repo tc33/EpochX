@@ -61,7 +61,7 @@ public abstract class ProxyComponent<T> implements Component, Listener<ConfigEve
 	 * <code>ConfigEvent</code> is for the parameter specivied by the
 	 * <code>key</code> object.
 	 * 
-	 * @param {@inheritDoc}
+	 * @param event the fired event object.
 	 */
 	public void onEvent(ConfigEvent event) {
 		if ((event.getKey() == key)) {

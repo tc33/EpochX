@@ -20,6 +20,7 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
+
 package org.epochx;
 
 import junit.framework.TestCase;
@@ -73,6 +74,9 @@ public class ConfigTest extends TestCase {
 		assertNotNull(config.get(RandomSequence.RANDOM_SEQUENCE));
 	}
 
+	/**
+	 * Test for the {@link Config#reset()} method.
+	 */
 	public void testReset() {
 		Config config = Config.getInstance();
 		config.set(Template.KEY, new GenerationalTemplate());
@@ -81,5 +85,4 @@ public class ConfigTest extends TestCase {
 		config.reset();
 		assertNull(config.get(Population.SIZE));
 	}
-
 }

@@ -27,16 +27,27 @@ import org.epochx.Fitness;
 import org.epochx.event.GenerationEvent.EndGeneration;
 
 /**
- * 
+ * Stat that provides the information of the best fitness of a generation.
  */
 public class GenerationBestFitness extends AbstractStat<EndGeneration> {
 
+	/**
+	 * The best fitness value of a generation.
+	 */
 	private Fitness best;
 
+	/**
+	 * Constructs a <code>GenerationBestFitness</code>.
+	 */
 	public GenerationBestFitness() {
 		super(GenerationFitnesses.class);
 	}
 
+	/**
+	 * Determines the best fitness value of a generation.
+	 * 
+	 * @param event the <code>EndGeneration</code> event object.
+	 */
 	@Override
 	public void refresh(EndGeneration event) {
 		Fitness[] fitnesses = AbstractStat.get(GenerationFitnesses.class).getFitnesses();
@@ -49,10 +60,20 @@ public class GenerationBestFitness extends AbstractStat<EndGeneration> {
 		}
 	}
 
+	/**
+	 * Returns the best fitness value.
+	 * 
+	 * @return the best fitness value.
+	 */
 	public Fitness getBest() {
 		return best;
 	}
 
+	/**
+	 * Returns a string representation of the best fitness value.
+	 * 
+	 * @return a string representation of the best fitness value.
+	 */
 	@Override
 	public String toString() {
 		return best.toString();

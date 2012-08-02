@@ -23,43 +23,58 @@
 
 package org.epochx.event.stat;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-import org.epochx.*;
+import org.epochx.Individual;
 import org.epochx.event.GenerationEvent.EndGeneration;
-import org.epochx.event.RunEvent.StartRun;
 
 /**
- * 
+ * Stat that provides best individuals of a run.
  */
-public class RunBestIndividuals extends AbstractStat<StartRun> {
+public class RunBestIndividuals extends AbstractStat<EndGeneration> {
 
+	/**
+	 * The list of best individuals.
+	 */
 	private List<Individual> best;
 
+	/**
+	 * Constructs a <code>RunBestIndividuals</code>.
+	 */
 	public RunBestIndividuals() {
-		super(RunBestIndividualsGeneration.class);
-	}
-
-	@Override
-	public void refresh(StartRun event) {
+		super(GenerationBestIndividuals.class);
 		best = new ArrayList<Individual>();
 	}
-	
-	private void addGeneration(Individual[] generationBest) {
+
+	/**
+	 * Determines the best individuals of a run.
+	 * 
+	 * @param event the <code>EndGeneration</code> event object.
+	 */
+	@Override
+	public void refresh(EndGeneration event) {
+		Individual[] generationBest = AbstractStat.get(GenerationBestIndividuals.class).getBestIndividuals();
 		int comparison = generationBest[0].compareTo(best.get(0));
-		
+
 		if (comparison > 0) {
 			best.clear();
-		}		
+		}
 		if (best.isEmpty() || comparison >= 0) {
 			best.addAll(Arrays.asList(generationBest));
 		}
 	}
 
-	public Individual[] getAllBest() {
+	/**
+	 * Returns the best individuals of a run.
+	 * 
+	 * @return the best individuals of a run.
+	 */
+	public Individual[] getBestIndividuals() {
 		return best.toArray(new Individual[best.size()]);
 	}
-	
+
 	/**
 	 * Returns an arbitrary best individual.
 	 */
@@ -69,22 +84,11 @@ public class RunBestIndividuals extends AbstractStat<StartRun> {
 
 	/**
 	 * Returns the string representation of an arbitrary best individual.
+	 * 
+	 * @return the string representation of an arbitrary best individual.
 	 */
 	@Override
 	public String toString() {
 		return getBest().toString();
-	}
-
-	private class RunBestIndividualsGeneration extends AbstractStat<EndGeneration> {
-
-		@SuppressWarnings("unused")
-		public RunBestIndividualsGeneration() {
-			super(GenerationBestIndividuals.class);
-		}
-		
-		@Override
-		public void refresh(EndGeneration event) {
-			addGeneration(AbstractStat.get(GenerationBestIndividuals.class).getAllBest());
-		}
 	}
 }

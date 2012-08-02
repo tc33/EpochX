@@ -26,25 +26,46 @@ package org.epochx.event.stat;
 import org.epochx.event.GenerationEvent.StartGeneration;
 
 /**
- * 
+ * Stat that provides the generation current number.
  */
 public class GenerationNumber extends AbstractStat<StartGeneration> {
 
+	/**
+	 * The current generation number.
+	 */
 	private int current;
 
+	/**
+	 * Constructs a <code>GenerationNumber</code>.
+	 */
 	public GenerationNumber() {
 		super(NO_DEPENDENCIES);
 	}
 
+	/**
+	 * Determines the current generation number.
+	 * 
+	 * @param event the <code>StartGeneration</code> event object.
+	 */
 	@Override
 	public void refresh(StartGeneration event) {
 		current = event.getGeneration();
 	}
 
+	/**
+	 * Returns the current generation number.
+	 * 
+	 * @return the current generation number.
+	 */
 	public int getCurrent() {
 		return current;
 	}
 
+	/**
+	 * Returns a string representation of the generation number.
+	 * 
+	 * @return a string representation of the generation number.
+	 */
 	@Override
 	public String toString() {
 		return Integer.toString(current);

@@ -26,10 +26,16 @@ package org.epochx.event.stat;
 import junit.framework.TestCase;
 
 /**
+ * The <code>AbstractStatTest</code> class provides unit tests for methods of the
+ * {@link AbstractStat} class.
  * 
+ * @see AbstractStat
  */
 public class AbstractStatTest extends TestCase {
 
+	/**
+	 * Test for the {@link AbstractStat#reset()} method.
+	 */
 	public void testReset() {
 		assertNull(AbstractStat.get(RunBestFitness.class));
 		AbstractStat.register(RunBestFitness.class);
@@ -38,5 +44,4 @@ public class AbstractStatTest extends TestCase {
 		AbstractStat.reset();
 		assertNull(AbstractStat.get(RunBestFitness.class));
 	}
-
 }

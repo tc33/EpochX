@@ -26,25 +26,47 @@ package org.epochx.event.stat;
 import org.epochx.event.RunEvent.EndRun;
 
 /**
- * 
+ * Stat that provides the end time of a run.
  */
 public class RunEndTime extends AbstractStat<EndRun> {
 
+	/**
+	 * The end time of the run.
+	 */
 	private long time;
 
+	/**
+	 * Constructs a <code>RunEndTime</code>.
+	 */
 	public RunEndTime() {
 		super(NO_DEPENDENCIES);
 	}
 
+	/**
+	 * Determines the run end time.
+	 * 
+	 * @param event the <code>EndRun</code> event object.
+	 */
 	@Override
 	public void refresh(EndRun event) {
 		time = System.nanoTime();
 	}
 
+	/**
+	 * Returns the run end time.
+	 * 
+	 * @return the run end time.
+	 */
+
 	public long getTime() {
 		return time;
 	}
 
+	/**
+	 * Returns a string representation of the end time of the run.
+	 * 
+	 * @return a string representation of the end time of the run.
+	 */
 	@Override
 	public String toString() {
 		return Long.toString(getTime());

@@ -81,7 +81,7 @@ public class GenerationalStrategy extends Pipeline implements EvolutionaryStrate
 	 * {@link StartGeneration} event is fired at the start of the generation
 	 * and an {@link EndGeneration} event at the end of the generation.
 	 * 
-	 * @param the population to be evolved
+	 * @param population the population to be evolved
 	 * 
 	 * @return the evolved population.
 	 */

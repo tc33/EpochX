@@ -26,25 +26,46 @@ package org.epochx.event.stat;
 import org.epochx.event.OperatorEvent.StartOperator;
 
 /**
- * 
+ * Stat that provides the start time of a genetic operator.
  */
 public class OperatorStartTime extends AbstractStat<StartOperator> {
 
+	/**
+	 * The start time of the genetic operator.
+	 */
 	private long time;
 
+	/**
+	 * Constructs a <code>OperatorStartTime</code>.
+	 */
 	public OperatorStartTime() {
 		super(NO_DEPENDENCIES);
 	}
 
+	/**
+	 * Determines the genetic operator start time.
+	 * 
+	 * @param event the <code>StartOperator</code> event object.
+	 */
 	@Override
 	public void refresh(StartOperator event) {
 		time = System.nanoTime();
 	}
 
+	/**
+	 * Returns the genetic operator start time.
+	 * 
+	 * @return the genetic operator start time.
+	 */
 	public long getTime() {
 		return time;
 	}
 
+	/**
+	 * Returns a string representation of the genetic operator start time.
+	 * 
+	 * @return a string representation of the genetic operator start time.
+	 */
 	@Override
 	public String toString() {
 		return Long.toString(getTime());

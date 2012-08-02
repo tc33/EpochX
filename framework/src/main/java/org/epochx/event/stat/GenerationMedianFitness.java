@@ -27,17 +27,28 @@ import org.epochx.Fitness;
 import org.epochx.event.GenerationEvent.EndGeneration;
 
 /**
- * If there are an even number of programs in the population then there are two
- * median values, the first will be returned.
+ * Stat that provides the median fitness. If there are an even number of programs in
+ * the population then there are two median values, the first will be returned.
  */
 public class GenerationMedianFitness extends AbstractStat<EndGeneration> {
 
+	/**
+	 * The median fitness value.
+	 */
 	private Fitness median;
 
+	/**
+	 * Constructs a <code>GenerationMedianFitness</code>.
+	 */
 	public GenerationMedianFitness() {
 		super(GenerationFitnesses.Sorted.class);
 	}
 
+	/**
+	 * Determines the median fitness value.
+	 * 
+	 * @param event the <code>EndGeneration</code> event object.
+	 */
 	@Override
 	public void refresh(EndGeneration event) {
 		Fitness[] fitnesses = AbstractStat.get(GenerationFitnesses.Sorted.class).getFitnesses();
@@ -46,10 +57,20 @@ public class GenerationMedianFitness extends AbstractStat<EndGeneration> {
 		median = fitnesses[medianIndex - 1];
 	}
 
+	/**
+	 * Returns the median fitness value.
+	 * 
+	 * @return the median fitness value.
+	 */
 	public Fitness getMedian() {
 		return median;
 	}
 
+	/**
+	 * Returns a string representation of the median fitness value.
+	 * 
+	 * @return a string representation of the median fitness value.
+	 */
 	@Override
 	public String toString() {
 		return median.toString();

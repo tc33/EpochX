@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<BODY>
+
+<P>EpochX has been designed with a modular structure, comprised of a core evolutionary
+framework and separate packages to support specific representations. The core framework
+of EpochX includes the components of the evolutionary algorithm itself and provides an
+infrastructure for modifying most aspects of this algorithm.</P>
+
+<P>An evolutionary run is performed by creating an {@link Evolver} object and calling
+its {@link Evolver.run()} method:
+
+<PRE>
+Evolver evolver = new Evolver();
+evolver.run();
+</PRE>
+</P>
+
+<P>The {@link Evolver} class is composed of a pipeline of components, which are
+executed sequentially when the evolver's {@link Evolver.run()} method is called. Each
+component is passed a population of individuals as input and after performing some
+processing, returns a population of individuals which the pipeline will pass on to the
+next component. By default, the evolver's pipeline is composed of three components: 
+
+<PRE>
+1. {@link Initialiser}
+2. {@link FitnessEvaluator}
+3. {@link EvolutionaryStrategy}
+</PRE>
+</P>
+
+<P>An empty population is passed to the first component, which would typically generate
+an initial population. The {@link FitnessEvaluator} component will then use a fitness
+function provided by the user to assign a {@link Fitness} to each individual in the
+population. Then, this initial population will be passed to the {@link EvolutionaryStrategy},
+which is responsible for evolving the population. Different implementations of each of these
+components are possible, and the pipeline may be modified to use a different set of components
+entirely.</P>
+
+</BODY>
+</HTML>

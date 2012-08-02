@@ -26,25 +26,46 @@ package org.epochx.event.stat;
 import org.epochx.event.GenerationEvent.StartGeneration;
 
 /**
- * 
+ * Stat that provides the start time of a generation.
  */
 public class GenerationStartTime extends AbstractStat<StartGeneration> {
 
+	/**
+	 * The start time of the generation.
+	 */
 	private long time;
 
+	/**
+	 * Constructs a <code>GenerationStartTime</code>.
+	 */
 	public GenerationStartTime() {
 		super(NO_DEPENDENCIES);
 	}
 
+	/**
+	 * Determines the generation start time.
+	 * 
+	 * @param event the <code>StartGeneration</code> event object.
+	 */
 	@Override
 	public void refresh(StartGeneration event) {
 		time = System.nanoTime();
 	}
 
+	/**
+	 * Returns the generation start time.
+	 * 
+	 * @return the generation start time.
+	 */
 	public long getTime() {
 		return time;
 	}
 
+	/**
+	 * Returns a string representation of the start time of the generation.
+	 * 
+	 * @return a string representation of the start time of the generation.
+	 */
 	@Override
 	public String toString() {
 		return Long.toString(getTime());

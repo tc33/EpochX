@@ -23,18 +23,36 @@
 
 package org.epochx.event.stat;
 
-import org.epochx.*;
+import org.epochx.DoubleFitness;
+import org.epochx.Fitness;
 import org.epochx.event.GenerationEvent.EndGeneration;
 
+/**
+ * Stat that provides the standard deviation fitness value of the population at the end of
+ * a generation. This stat can only be used with <code>DoubleFitness</code>.
+ * 
+ * @see DoubleFitness
+ */
 public class GenerationStandardDeviationDoubleFitness extends AbstractStat<EndGeneration> {
 
+	/**
+	 * The standard deviation fitness value.
+	 */
 	private double stdev;
 
+	/**
+	 * Constructs a <code>GenerationStandardDeviationDoubleFitness</code>.
+	 */
 	@SuppressWarnings("unchecked")
 	public GenerationStandardDeviationDoubleFitness() {
 		super(GenerationFitnesses.class, GenerationAverageDoubleFitness.class);
 	}
 
+	/**
+	 * Computes the standard deviation fitness value.
+	 * 
+	 * @param event the <code>EndGeneration</code> event object.
+	 */
 	@Override
 	public void refresh(EndGeneration event) {
 		Fitness[] fitnesses = AbstractStat.get(GenerationFitnesses.class).getFitnesses();
@@ -50,10 +68,20 @@ public class GenerationStandardDeviationDoubleFitness extends AbstractStat<EndGe
 		stdev = Math.sqrt(sqDiff / fitnesses.length);
 	}
 
+	/**
+	 * Returns the standard deviation fitness value.
+	 * 
+	 * @return the standard deviation fitness value.
+	 */
 	public double getStandardDeviation() {
 		return stdev;
 	}
 
+	/**
+	 * Returns a string representation of the standard deviation fitness value.
+	 * 
+	 * @return a string representation of the standard deviation fitness value.
+	 */
 	@Override
 	public String toString() {
 		return Double.toString(stdev);

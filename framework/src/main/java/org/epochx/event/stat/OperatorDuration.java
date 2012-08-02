@@ -28,16 +28,27 @@ import java.util.concurrent.TimeUnit;
 import org.epochx.event.OperatorEvent.EndOperator;
 
 /**
- * 
+ * Stat that provides the duration of a genetic operator.
  */
 public abstract class OperatorDuration extends AbstractStat<EndOperator> {
 
+	/**
+	 * The operator duration.
+	 */
 	private long duration;
 
+	/**
+	 * Constructs a <code>OperatorDuration</code>.
+	 */
 	public OperatorDuration() {
 		super(OperatorEndTime.class);
 	}
 
+	/**
+	 * Computes the duration of a genetic operator.
+	 * 
+	 * @param event the <code>EndOperator</code> event object.
+	 */
 	@Override
 	public void refresh(EndOperator event) {
 		long start = AbstractStat.get(OperatorStartTime.class).getTime();
@@ -46,20 +57,36 @@ public abstract class OperatorDuration extends AbstractStat<EndOperator> {
 		duration = end - start;
 	}
 
+	/**
+	 * Returns the duration of a genetic operator.
+	 * 
+	 * @return the duration of a genetic operator.
+	 */
 	public abstract long getDuration();
 
+	/**
+	 * Returns a string representation of the duration.
+	 * 
+	 * @return a string representation of the duration.
+	 */
 	@Override
 	public String toString() {
 		return Long.toString(getDuration());
 	}
 
+	/**
+	 * Stat that provides the generation duration time in nano seconds.
+	 */
 	public class NanoSeconds extends OperatorDuration {
 		@Override
 		public long getDuration() {
 			return duration;
 		}
 	}
-	
+
+	/**
+	 * Stat that provides the generation duration time in millis seconds.
+	 */
 	public class MilliSeconds extends OperatorDuration {
 		@Override
 		public long getDuration() {
@@ -67,6 +94,9 @@ public abstract class OperatorDuration extends AbstractStat<EndOperator> {
 		}
 	}
 	
+	/**
+	 * Stat that provides the generation duration time in seconds.
+	 */
 	public class Seconds extends OperatorDuration {
 		@Override
 		public long getDuration() {
@@ -74,6 +104,9 @@ public abstract class OperatorDuration extends AbstractStat<EndOperator> {
 		}
 	}
 	
+	/**
+	 * Stat that provides the generation duration time in minutes.
+	 */
 	public class Minutes extends OperatorDuration {
 		@Override
 		public long getDuration() {
@@ -81,6 +114,9 @@ public abstract class OperatorDuration extends AbstractStat<EndOperator> {
 		}
 	}
 	
+	/**
+	 * Stat that provides the generation duration time in hours.
+	 */
 	public class Hours extends OperatorDuration {
 		@Override
 		public long getDuration() {

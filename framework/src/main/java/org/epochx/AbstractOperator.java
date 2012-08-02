@@ -38,7 +38,7 @@ import org.epochx.event.OperatorEvent.StartOperator;
  * 
  * <li>{@link #perform(Individual...)}: when no custom end event is needed;
  * 
- * <li>{@link #perform(EndOperator, Individual...)}: when a custom end event is
+ * <li>{@link #perform(OperatorEvent.EndOperator, Individual...)}: when a custom end event is
  * used, this method should be overridden to set the additional information.
  * 
  * </ul>

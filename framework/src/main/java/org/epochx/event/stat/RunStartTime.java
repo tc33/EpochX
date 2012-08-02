@@ -26,25 +26,46 @@ package org.epochx.event.stat;
 import org.epochx.event.RunEvent.StartRun;
 
 /**
- * 
+ * Stat that provides the start time of a run.
  */
 public class RunStartTime extends AbstractStat<StartRun> {
 
+	/**
+	 * The start time of the run.
+	 */
 	private long time;
 
+	/**
+	 * Constructs a <code>RunStartTime</code>.
+	 */
 	public RunStartTime() {
 		super(NO_DEPENDENCIES);
 	}
 
+	/**
+	 * Determines the run start time.
+	 * 
+	 * @param event the <code>StartRun</code> event object.
+	 */
 	@Override
 	public void refresh(StartRun event) {
 		time = System.nanoTime();
 	}
 
+	/**
+	 * Returns the generation start time.
+	 * 
+	 * @return the generation start time.
+	 */
 	public long getTime() {
 		return time;
 	}
 
+	/**
+	 * Returns a string representation of the start time of the run.
+	 * 
+	 * @return a string representation of the start time of the run.
+	 */
 	@Override
 	public String toString() {
 		return Long.toString(getTime());

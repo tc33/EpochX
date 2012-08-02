@@ -23,17 +23,35 @@
 
 package org.epochx.event.stat;
 
-import org.epochx.*;
+import org.epochx.DoubleFitness;
+import org.epochx.Population;
 import org.epochx.event.GenerationEvent.EndGeneration;
 
+/**
+ * Stat that provides the average fitness error of the population at the end of a
+ * generation. This stat can only be used with <code>DoubleFitness</code>.
+ * 
+ * @see DoubleFitness
+ */
 public class GenerationAverageDoubleFitnessError extends AbstractStat<EndGeneration> {
 
+	/**
+	 * The average fitness error.
+	 */
 	private double error;
 
+	/**
+	 * Constructs a <code>GenerationAverageDoubleFitnessError</code>.
+	 */
 	public GenerationAverageDoubleFitnessError() {
 		super(GenerationStandardDeviationDoubleFitness.class);
 	}
 
+	/**
+	 * Computes the average fitness error of the population.
+	 * 
+	 * @param event the <code>EndGeneration</code> event object.
+	 */
 	@Override
 	public void refresh(EndGeneration event) {
 		double stdev = AbstractStat.get(GenerationStandardDeviationDoubleFitness.class).getStandardDeviation();
@@ -42,10 +60,20 @@ public class GenerationAverageDoubleFitnessError extends AbstractStat<EndGenerat
 		error = stdev / Math.sqrt(population.size());
 	}
 
+	/**
+	 * Returns the average fitness error.
+	 * 
+	 * @return the average fitness error.
+	 */
 	public double getError() {
 		return error;
 	}
 
+	/**
+	 * Returns a string representation of the average fitness error.
+	 * 
+	 * @return a string representation of the average fitness error.
+	 */
 	@Override
 	public String toString() {
 		return Double.toString(error);

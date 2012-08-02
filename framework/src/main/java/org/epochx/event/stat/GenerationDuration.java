@@ -28,17 +28,28 @@ import java.util.concurrent.TimeUnit;
 import org.epochx.event.GenerationEvent.EndGeneration;
 
 /**
- * 
+ * Stat that provides the duration of a generation.
  */
 public abstract class GenerationDuration extends AbstractStat<EndGeneration> {
 
+	/**
+	 * The generation duration.
+	 */
 	private long duration;
 
+	/**
+	 * Constructs a <code>GenerationDuration</code>.
+	 */
 	@SuppressWarnings("unchecked")
 	public GenerationDuration() {
 		super(GenerationStartTime.class, GenerationEndTime.class);
 	}
 
+	/**
+	 * Computes the duration of a generation.
+	 * 
+	 * @param event the <code>EndGeneration</code> event object.
+	 */
 	@Override
 	public void refresh(EndGeneration event) {
 		long start = AbstractStat.get(GenerationStartTime.class).getTime();
@@ -47,20 +58,35 @@ public abstract class GenerationDuration extends AbstractStat<EndGeneration> {
 		duration = end - start;
 	}
 
+	/**
+	 * Returns the duration of a generation.
+	 * 
+	 * @return the duration of a generation.
+	 */
 	public abstract long getDuration();
 
+	/**
+	 * Returns a string representation of the duration.
+	 * 
+	 * @return a string representation of the duration.
+	 */
 	@Override
 	public String toString() {
 		return Long.toString(getDuration());
 	}
 
+	/**
+	 * Stat that provides the generation duration time in nano seconds.
+	 */
 	public class NanoSeconds extends GenerationDuration {
 		@Override
 		public long getDuration() {
 			return duration;
 		}
 	}
-	
+	/**
+	 * Stat that provides the generation duration time in milli seconds.
+	 */	
 	public class MilliSeconds extends GenerationDuration {
 		@Override
 		public long getDuration() {
@@ -68,6 +94,9 @@ public abstract class GenerationDuration extends AbstractStat<EndGeneration> {
 		}
 	}
 	
+	/**
+	 * Stat that provides the generation duration time in seconds.
+	 */
 	public class Seconds extends GenerationDuration {
 		@Override
 		public long getDuration() {
@@ -75,6 +104,9 @@ public abstract class GenerationDuration extends AbstractStat<EndGeneration> {
 		}
 	}
 	
+	/**
+	 * Stat that provides the generation duration time in minutes.
+	 */
 	public class Minutes extends GenerationDuration {
 		@Override
 		public long getDuration() {
@@ -82,6 +114,9 @@ public abstract class GenerationDuration extends AbstractStat<EndGeneration> {
 		}
 	}
 	
+	/**
+	 * Stat that provides the generation duration time in hours.
+	 */
 	public class Hours extends GenerationDuration {
 		@Override
 		public long getDuration() {

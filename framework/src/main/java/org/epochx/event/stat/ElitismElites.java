@@ -29,25 +29,46 @@ import org.epochx.Individual;
 import org.epochx.event.ElitismEvent.EndElitism;
 
 /**
- * 
+ * Stat that provides the information about the elitist individuals.
  */
 public class ElitismElites extends AbstractStat<EndElitism> {
 
+	/**
+	 * The elitist individuals.
+	 */
 	private Individual[] elites;
 
+	/** 
+	 * Constructs a <code>ElitismElites</code>.
+	 */
 	public ElitismElites() {
 		super(NO_DEPENDENCIES);
 	}
 
+	/**
+	 * Updates the elitist individuals.
+	 * 
+	 * @param event the <code>EndElitism</code> event object.
+	 */
 	@Override
 	public void refresh(EndElitism event) {
 		elites = event.getElites();
 	}
 
+	/**
+	 * Returns the elitist individuals.
+	 * 
+	 * @return the elitist individuals.
+	 */
 	public Individual[] getElites() {
 		return elites;
 	}
 
+	/**
+	 * Returns a string representation of the elitist individuals.
+	 * 
+	 * @return a string representation of the elitist individuals.
+	 */
 	@Override
 	public String toString() {
 		return Arrays.toString(elites);

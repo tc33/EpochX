@@ -33,7 +33,29 @@ import org.epochx.event.EventManager;
 import org.epochx.event.Listener;
 
 /**
+ * Utility class to output information of stat objects. The basic idea is simple: create a
+ * new <code>StatPrinter</code> object, register the stats and inform which event will
+ * trigger the output of the information.
  * 
+ * <p>
+ * An example that outputs the generation number and the best generation fitness is:
+ * <pre>
+ * StatPrinter printer = new StatPrinter();
+ * printer.add(GenerationNumber.class);
+ * printer.add(GenerationBestFitness.class);
+ * printer.printOnEvent(EndGeneration.class);
+ * </pre>
+ * </p>
+ * <p>
+ * The above example will generate the following output:
+ * <pre>
+ * 1   12.0
+ * 2   12.0
+ * 3   11.0
+ * 4   10.0
+ * 5    9.0
+ * </pre>
+ * </p>
  */
 public class StatPrinter {
 
@@ -91,7 +113,7 @@ public class StatPrinter {
 	 * Constructs a <code>StatPrinter</code>.
 	 * 
 	 * @param out the output stream.
-	 * @param delimiter the delimiter string.
+	 * @param separator the separator string.
 	 */
 	public StatPrinter(PrintStream out, String separator) {
 		this.out = out;
@@ -99,15 +121,26 @@ public class StatPrinter {
 
 	}
 
+	/**
+	 * Adds a new stat field to the printer.
+	 * 
+	 * @param type the stat class to be added.
+	 */
 	public <E extends Event> void add(Class<? extends AbstractStat<E>> type) {
 		AbstractStat.register(type);
 		fields.add(AbstractStat.get(type));
 	}
 
+	/**
+	 * Removes all fields from the printer.
+	 */
 	public void clear() {
 		fields.clear();
 	}
 
+	/**
+	 * Prints the fields to the printer's output stream.
+	 */
 	public void print() {
 		if (!fields.isEmpty()) {
 			StringBuffer buffer = new StringBuffer();
@@ -122,6 +155,11 @@ public class StatPrinter {
 		}
 	}
 
+	/**
+	 * Sets the event that triggers the output of the printer's fields.
+	 * 
+	 * @param type the event class.
+	 */
 	public <E extends Event> void printOnEvent(Class<E> type) {
 		// only creates a new listener if we do not have one already
 		if (!listeners.containsKey(type)) {

@@ -31,16 +31,27 @@ import org.epochx.Population;
 import org.epochx.event.GenerationEvent.EndGeneration;
 
 /**
- * 
+ * Stat that provides the fitness values of a generation.
  */
 public class GenerationFitnesses extends AbstractStat<EndGeneration> {
 
+	/**
+	 * The fitness values.
+	 */
 	private Fitness[] fitnesses;
 
+	/**
+	 * Constructs a <code>GenerationFitnesses</code>.
+	 */
 	public GenerationFitnesses() {
 		super(NO_DEPENDENCIES);
 	}
 
+	/**
+	 * Determines the fitness values of the generation.
+	 * 
+	 * @param event the <code>EndGeneration</code> event object.
+	 */
 	@Override
 	public void refresh(EndGeneration event) {
 		Population population = event.getPopulation();
@@ -51,21 +62,34 @@ public class GenerationFitnesses extends AbstractStat<EndGeneration> {
 			fitnesses[index++] = individual.getFitness();
 		}
 	}
-	
+
+	/**
+	 * Returns the fitness values.
+	 * 
+	 * @return the fitness values.
+	 */
 	public Fitness[] getFitnesses() {
 		return fitnesses;
 	}
 
+	/**
+	 * Returns a string representation of the fitness values of a generation.
+	 * 
+	 * @return a string representation of the fitness values of a generation.
+	 */
 	@Override
 	public String toString() {
 		return Arrays.toString(fitnesses);
 	}
 
+	/**
+	 * Stat that provides the sorted (ascending order) fitness values of a generation.
+	 */
 	public class Sorted extends GenerationFitnesses {
+
 		@Override
 		public void refresh(EndGeneration event) {
 			super.refresh(event);
-			
 			Arrays.sort(fitnesses);
 		}
 	}

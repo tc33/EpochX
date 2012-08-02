@@ -28,17 +28,28 @@ import java.util.concurrent.TimeUnit;
 import org.epochx.event.RunEvent.EndRun;
 
 /**
- * 
+ * Abstract class that provices the duration of the run.
  */
 public abstract class RunDuration extends AbstractStat<EndRun> {
 
+	/**
+	 * The duration of the run.
+	 */
 	private long duration;
 
+	/**
+	 * Constructs a <code>RunDuration</code>.
+	 */
 	@SuppressWarnings("unchecked")
 	public RunDuration() {
 		super(RunStartTime.class, RunEndTime.class);
 	}
 
+	/**
+	 * Computes the duration of the run.
+	 * 
+	 * @param event the <code>EndRun</code> event object.
+	 */
 	@Override
 	public void refresh(EndRun event) {
 		long start = AbstractStat.get(RunStartTime.class).getTime();
@@ -47,20 +58,36 @@ public abstract class RunDuration extends AbstractStat<EndRun> {
 		duration = end - start;
 	}
 
+	/**
+	 * Returns the duration of the run.
+	 * 
+	 * @return the duration of the run.
+	 */
 	public abstract long getDuration();
 
+	/**
+	 * Returns a string representation of the duration.
+	 * 
+	 * @return a string representation of the duration.
+	 */
 	@Override
 	public String toString() {
 		return Long.toString(getDuration());
 	}
 
+	/**
+	 * Stat that provides the run duration time in nano seconds.
+	 */
 	public class NanoSeconds extends RunDuration {
 		@Override
 		public long getDuration() {
 			return duration;
 		}
 	}
-	
+
+	/**
+	 * Stat that provides the run duration time in milli seconds.
+	 */
 	public class MilliSeconds extends RunDuration {
 		@Override
 		public long getDuration() {
@@ -68,6 +95,9 @@ public abstract class RunDuration extends AbstractStat<EndRun> {
 		}
 	}
 	
+	/**
+	 * Stat that provides the run duration time in seconds.
+	 */
 	public class Seconds extends RunDuration {
 		@Override
 		public long getDuration() {
@@ -75,6 +105,9 @@ public abstract class RunDuration extends AbstractStat<EndRun> {
 		}
 	}
 	
+	/**
+	 * Stat that provides the run duration time in minutes.
+	 */
 	public class Minutes extends RunDuration {
 		@Override
 		public long getDuration() {
@@ -82,6 +115,9 @@ public abstract class RunDuration extends AbstractStat<EndRun> {
 		}
 	}
 	
+	/**
+	 * Stat that provides the run duration time in hours.
+	 */
 	public class Hours extends RunDuration {
 		@Override
 		public long getDuration() {

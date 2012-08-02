@@ -48,7 +48,6 @@ public class GenerationalTemplate extends Template {
 	 * <li>{@link GenerationalStrategy#TERMINATION_CRITERIA}: MaximumGenerations
 	 * <li>{@link TournamentSelector#TOURNAMENT_SIZE}: <code>5</code>
 	 * <li>{@link BranchedBreeder#SELECTOR}: TournamentSelector
-	 * <li>{@link Evolver#STRATEGY}: GenerationalStrategy(BranchedBreeder)
 	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}: MersenneTwisterFast
 	 */
 	@Override

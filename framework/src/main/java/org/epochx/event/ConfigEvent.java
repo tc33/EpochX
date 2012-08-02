@@ -23,6 +23,7 @@
 
 package org.epochx.event;
 
+import org.epochx.Config;
 import org.epochx.Config.ConfigKey;
 
 /**

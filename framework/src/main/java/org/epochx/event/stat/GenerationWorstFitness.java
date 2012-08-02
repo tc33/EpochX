@@ -27,10 +27,13 @@ import org.epochx.Fitness;
 import org.epochx.event.GenerationEvent.EndGeneration;
 
 /**
- * 
+ * Stat that provides the information of the worst fitness of a generation.
  */
 public class GenerationWorstFitness extends AbstractStat<EndGeneration> {
 
+	/**
+	 * The worst fitness value of a generation.
+	 */
 	private Fitness worst;
 
 	/**
@@ -40,6 +43,11 @@ public class GenerationWorstFitness extends AbstractStat<EndGeneration> {
 		super(GenerationFitnesses.class);
 	}
 
+	/**
+	 * Determines the worst fitness value of a generation.
+	 * 
+	 * @param event the <code>EndGeneration</code> event object.
+	 */
 	@Override
 	public void refresh(EndGeneration event) {
 		Fitness[] fitnesses = AbstractStat.get(GenerationFitnesses.class).getFitnesses();
@@ -52,10 +60,20 @@ public class GenerationWorstFitness extends AbstractStat<EndGeneration> {
 		}
 	}
 
+	/**
+	 * Returns the worst fitness value.
+	 * 
+	 * @return the worst fitness value.
+	 */
 	public Fitness getWorst() {
 		return worst;
 	}
 
+	/**
+	 * Returns a string representation of the worst fitness value.
+	 * 
+	 * @return a string representation of the worst fitness value.
+	 */
 	@Override
 	public String toString() {
 		return worst.toString();

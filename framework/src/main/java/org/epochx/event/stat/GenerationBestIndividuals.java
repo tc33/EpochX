@@ -23,46 +23,67 @@
 
 package org.epochx.event.stat;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.epochx.*;
+import org.epochx.Individual;
+import org.epochx.Population;
 import org.epochx.event.GenerationEvent.EndGeneration;
 
 /**
- * 
+ * Stat that provides the best individuals of a generation.
  */
 public class GenerationBestIndividuals extends AbstractStat<EndGeneration> {
 
+	/**
+	 * The list of best individuals.
+	 */
 	private List<Individual> best;
 
+	/**
+	 * Constructs a <code>GenerationBestIndividuals</code>.
+	 */
 	public GenerationBestIndividuals() {
 		super(NO_DEPENDENCIES);
 	}
 
+	/**
+	 * Determines the best individuals of a generation.
+	 * 
+	 * @param event the <code>EndGeneration</code> event object.
+	 */
 	@Override
 	public void refresh(EndGeneration event) {
-		Population pop = event.getPopulation();
-		
+		Population population = event.getPopulation();
+
 		best = new ArrayList<Individual>();
-		
-		for (Individual individual: pop) {
+
+		for (Individual individual: population) {
 			int comparison = individual.compareTo(best.get(0));
-			
+
 			if (comparison > 0) {
 				best.clear();
 			}
+
 			if (best.isEmpty() || comparison >= 0) {
 				best.add(individual);
 			}
 		}
 	}
 
-	public Individual[] getAllBest() {
+	/**
+	 * Returns the best individuals.
+	 *  
+	 * @return the best individuals.
+	 */
+	public Individual[] getBestIndividuals() {
 		return best.toArray(new Individual[best.size()]);
 	}
-	
+
 	/**
 	 * Returns an arbitrary best individual.
+	 * 
+	 * @return an arbitrary best individual.
 	 */
 	public Individual getBest() {
 		return (best == null || best.isEmpty()) ? null : best.get(0);
@@ -70,10 +91,13 @@ public class GenerationBestIndividuals extends AbstractStat<EndGeneration> {
 
 	/**
 	 * Returns the string representation of an arbitrary best individual.
+	 * 
+	 * @return the string representation of an arbitrary best individual.
 	 */
 	@Override
 	public String toString() {
-		return getBest().toString();
+		Individual individual = getBest();
+		return (individual == null) ? "" : individual.toString();
 	}
 
 }

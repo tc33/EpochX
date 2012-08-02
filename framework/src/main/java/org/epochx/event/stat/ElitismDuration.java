@@ -28,17 +28,28 @@ import java.util.concurrent.TimeUnit;
 import org.epochx.event.ElitismEvent.EndElitism;
 
 /**
- * 
+ * Abstract class that provices the duration of the elitism process.
  */
 public abstract class ElitismDuration extends AbstractStat<EndElitism> {
 
+	/**
+	 * The duration of the elitism process.
+	 */
 	private long duration;
 
+	/**
+	 * Constructs an <code>ElitismDuration</code>.
+	 */
 	@SuppressWarnings("unchecked")
 	public ElitismDuration() {
 		super(ElitismStartTime.class, ElitismEndTime.class);
 	}
 
+	/**
+	 * Computes the duration of the elitism process.
+	 * 
+	 * @param event the <code>EndElitism</code> event object.
+	 */
 	@Override
 	public void refresh(EndElitism event) {
 		long start = AbstractStat.get(ElitismStartTime.class).getTime();
@@ -47,13 +58,26 @@ public abstract class ElitismDuration extends AbstractStat<EndElitism> {
 		duration = end - start;
 	}
 
+	/**
+	 * Returns the duration of the elitism process.
+	 * 
+	 * @return the duration of the elitism process.
+	 */
 	public abstract long getDuration();
 
+	/**
+	 * Returns a string representation of the duration.
+	 * 
+	 * @return a string representation of the duration.
+	 */
 	@Override
 	public String toString() {
 		return Long.toString(getDuration());
 	}
 
+	/**
+	 * Stat that provides the elitism duration time in nano seconds.
+	 */
 	public class NanoSeconds extends ElitismDuration {
 		@Override
 		public long getDuration() {
@@ -61,6 +85,9 @@ public abstract class ElitismDuration extends AbstractStat<EndElitism> {
 		}
 	}
 	
+	/**
+	 * Stat that provides the elitism duration time in milli seconds.
+	 */
 	public class MilliSeconds extends ElitismDuration {
 		@Override
 		public long getDuration() {
@@ -68,6 +95,9 @@ public abstract class ElitismDuration extends AbstractStat<EndElitism> {
 		}
 	}
 	
+	/**
+	 * Stat that provides the elitism duration time in seconds.
+	 */
 	public class Seconds extends ElitismDuration {
 		@Override
 		public long getDuration() {
@@ -75,6 +105,9 @@ public abstract class ElitismDuration extends AbstractStat<EndElitism> {
 		}
 	}
 	
+	/**
+	 * Stat that provides the elitism duration time in minutes.
+	 */
 	public class Minutes extends ElitismDuration {
 		@Override
 		public long getDuration() {
@@ -82,6 +115,9 @@ public abstract class ElitismDuration extends AbstractStat<EndElitism> {
 		}
 	}
 	
+	/**
+	 * Stat that provides the elitism duration time in hours.
+	 */
 	public class Hours extends ElitismDuration {
 		@Override
 		public long getDuration() {

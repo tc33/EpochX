@@ -99,7 +99,6 @@ public class EventManager {
 	/**
 	 * Fires the specified event by notifying all registered listeners.
 	 * 
-	 * @param type the class of the event.
 	 * @param event the event object.
 	 */
 	@SuppressWarnings("unchecked")

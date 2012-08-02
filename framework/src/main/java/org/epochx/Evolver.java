@@ -41,7 +41,7 @@ import org.epochx.event.RunEvent.StartRun;
  * </ol>
  * 
  * The specific list of components used is obtained from the {@link Config},
- * using the appropriate <code>ConfigKey</code> {@link Evolver.COMPONENTS}.
+ * using the appropriate <code>ConfigKey</code> {@link #COMPONENTS}.
  */
 public class Evolver {
 
@@ -84,7 +84,7 @@ public class Evolver {
 	 * Initialises the supplied <code>Pipeline</code> with the components that
 	 * an evolutionary run is composed of. The specific list of components used
 	 * is obtained from the {@link Config}, using the appropriate <code>ConfigKey</code>
-	 * {@link Evolver.COMPONENTS}.
+	 * {@link #COMPONENTS}.
 	 * 
 	 * @param pipeline the <code>Pipeline</code> that should be initialised with
 	 *        a sequence of components that comprise an evolutionary run

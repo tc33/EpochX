@@ -26,10 +26,16 @@ package org.epochx.event;
 import junit.framework.TestCase;
 
 /**
+ * The <code>EventManagerTest</code> class provides unit tests for methods of the
+ * {@link EventManager} class.
  * 
+ * @see EventManager
  */
 public class EventManagerTest extends TestCase {
 
+	/**
+	 * Test for the {@link EventManager#reset()} method.
+	 */
 	public void testReset() {
 		EventManager manager = EventManager.getInstance();
 		Listener<RunEvent> listener = new Listener<RunEvent>() {
@@ -37,10 +43,10 @@ public class EventManagerTest extends TestCase {
 			public void onEvent(RunEvent event) {
 			}
 		};
-		
+
 		manager.add(RunEvent.class, listener);
 		assertTrue(manager.remove(RunEvent.class, listener));
-		
+
 		manager.add(RunEvent.class, listener);
 		manager.reset();
 		assertFalse(manager.remove(RunEvent.class, listener));

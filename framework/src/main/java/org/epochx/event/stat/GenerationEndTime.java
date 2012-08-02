@@ -26,25 +26,46 @@ package org.epochx.event.stat;
 import org.epochx.event.GenerationEvent.EndGeneration;
 
 /**
- * 
+ * Stat that provides the end time of a generation.
  */
 public class GenerationEndTime extends AbstractStat<EndGeneration> {
 
+	/**
+	 * The end time of the generation.
+	 */
 	private long time;
 
+	/**
+	 * Constructs a <code>GenerationEndTime</code>.
+	 */
 	public GenerationEndTime() {
 		super(NO_DEPENDENCIES);
 	}
 
+	/**
+	 * Determines the generation end time.
+	 * 
+	 * @param event the <code>EndGeneration</code> event object.
+	 */
 	@Override
 	public void refresh(EndGeneration event) {
 		time = System.nanoTime();
 	}
 
+	/**
+	 * Returns the generation end time.
+	 * 
+	 * @return the generation end time.
+	 */
 	public long getTime() {
 		return time;
 	}
 
+	/**
+	 * Returns a string representation of the end time of the generation.
+	 * 
+	 * @return a string representation of the end time of the generation.
+	 */
 	@Override
 	public String toString() {
 		return Long.toString(getTime());

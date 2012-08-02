@@ -26,25 +26,46 @@ package org.epochx.event.stat;
 import org.epochx.event.OperatorEvent.EndOperator;
 
 /**
- * 
+ * Stat that provides the end time of a genetic operator.
  */
 public class OperatorEndTime extends AbstractStat<EndOperator> {
 
+	/**
+	 * The end time of the genetic operator.
+	 */
 	private long time;
 
+	/**
+	 * Constructs a <code>OperatorEndTime</code>.
+	 */
 	public OperatorEndTime() {
 		super(NO_DEPENDENCIES);
 	}
 
+	/**
+	 * Determines the genetic operator end time.
+	 * 
+	 * @param event the <code>EndOperator</code> event object.
+	 */
 	@Override
 	public void refresh(EndOperator event) {
 		time = System.nanoTime();
 	}
 
+	/**
+	 * Returns the genetic operator end time.
+	 * 
+	 * @return the genetic operator end time.
+	 */
 	public long getTime() {
 		return time;
 	}
 
+	/**
+	 * Returns a string representation of the genetic operator end time.
+	 * 
+	 * @return a string representation of the genetic operator end time.
+	 */
 	@Override
 	public String toString() {
 		return Long.toString(getTime());

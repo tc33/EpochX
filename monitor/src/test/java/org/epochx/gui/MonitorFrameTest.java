@@ -61,11 +61,11 @@ public class MonitorFrameTest {
 
 		// some parameters
 
-		config.set(Population.SIZE, 1000);
+		config.set(Population.SIZE, 10);
 		// config.set(Crossover.PROBABILITY, 0.9);
 		// config.set(Reproduction.PROBABILITY, 0.1);
 		config.set(BranchedBreeder.ELITISM, 0);
-		config.set(MaximumGenerations.MAXIMUM_GENERATIONS,1000);
+		config.set(MaximumGenerations.MAXIMUM_GENERATIONS,100000);
 		config.set(TreeFactory.MAX_DEPTH, 17);
 		config.set(TreeFactory.INITIAL_DEPTH, 6);
 		config.set(TournamentSelector.TOURNAMENT_SIZE, 4);
@@ -122,44 +122,43 @@ public class MonitorFrameTest {
 
 		monitor.add(table3, 1, 1);
 		
-		Chart monitorGraph1 = new Chart("Fitnesses Chart");
+		Chart chart1 = new Chart("Fitnesses Chart");
 		
-		ChartTrace monitorGraphTrace1 = new ChartTrace(monitorGraph1);
-		monitorGraphTrace1.setXStat(GenerationNumber.class);
-		monitorGraphTrace1.setYStat(GenerationBestFitness.class);
+		ChartTrace trace1 = new ChartTrace(chart1);
+		trace1.setXStat(GenerationNumber.class);
+		trace1.setYStat(GenerationBestFitness.class);
 		
-		ChartTrace monitorGraphTrace2 = new ChartTrace(monitorGraph1);
-		monitorGraphTrace2.setXStat(GenerationNumber.class);
-		monitorGraphTrace2.setYStat(GenerationWorstFitness.class);
+		ChartTrace trace2 = new ChartTrace(chart1);
+		trace2.setXStat(GenerationNumber.class);
+		trace2.setYStat(GenerationWorstFitness.class);
 		
-		ChartTrace monitorGraphTrace3 = new ChartTrace(monitorGraph1);
-		monitorGraphTrace3.setXStat(GenerationNumber.class);
-		monitorGraphTrace3.setYStat(GenerationAverageDoubleFitness.class);
+		ChartTrace trace3 = new ChartTrace(chart1);
+		trace3.setXStat(GenerationNumber.class);
+		trace3.setYStat(GenerationAverageDoubleFitness.class);
 	
 		/*
-		ChartTrace monitorGraphTraceTab[] = new ChartTrace[1000];
+		ChartTrace traceTab[] = new ChartTrace[1000];
 		
 		for(int i = 0; i<1000; i++) {
-			monitorGraphTraceTab[i] = new ChartTrace();
-			monitorGraphTraceTab[i].setXStat(GenerationNumber.class);
-			monitorGraphTraceTab[i].setYStat(GenerationFitnessDiversity.class);
-			monitorGraph1.addTrace(monitorGraphTraceTab[i]);
+			traceTab[i] = new ChartTrace(chart1);
+			traceTab[i].setXStat(GenerationNumber.class);
+			traceTab[i].setYStat(GenerationFitnessDiversity.class);
 		}
 		//*/
 				
-		monitorGraph1.addListener(EndGeneration.class);
+		chart1.addListener(EndGeneration.class);
 		
-		monitor.add(monitorGraph1, 1, 2);
+		monitor.add(chart1, 1, 2);
 		
-		Chart monitorGraph2 = new Chart("Fitness Diversity Chart");
+		Chart chart2 = new Chart("Fitness Diversity Chart");
 		
-		ChartTrace monitorGraphTrace5 = new ChartTrace(monitorGraph2);
-		monitorGraphTrace5.setXStat(GenerationNumber.class);
-		monitorGraphTrace5.setYStat(GenerationFitnessDiversity.class);
+		ChartTrace trace4 = new ChartTrace(chart2);
+		trace4.setXStat(GenerationNumber.class);
+		trace4.setYStat(GenerationFitnessDiversity.class);
 		
-		monitorGraph2.addListener(EndGeneration.class);
+		chart2.addListener(EndGeneration.class);
 		
-		monitor.add(monitorGraph2, 1, 2);
+		monitor.add(chart2, 1, 2);
 
 		// we are ready to go!
 

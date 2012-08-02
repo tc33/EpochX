@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2012
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -23,25 +23,40 @@
 package org.epochx.monitor.menu;
 
 import javax.swing.JMenu;
+import javax.swing.SwingUtilities;
 
 import org.epochx.monitor.Monitor;
 
-
-
 /**
- * Abstract Monitor Menu.
+ * An abstract <code>Monitor</code> menu.
+ * <p>
+ * Some Menu inherited objects have to be refresh after their initialization .
+ * For those, override the {@link #run()} method, and invoke the refresh in the
+ * EDT by using {@link SwingUtilities#invokeLater(Runnable)} method.
+ * </p>
  */
-@SuppressWarnings("serial")
-public abstract class Menu extends JMenu implements Runnable{
-	
+public abstract class Menu extends JMenu implements Runnable {
+
+	/**
+	 * Generated serial UID.
+	 */
+	private static final long serialVersionUID = 364992162121875988L;
+
+	/**
+	 * The owner <code>Monitor</code>.
+	 */
 	protected final Monitor monitor;
-	
+
 	protected Menu(Monitor monitor) {
 		this.monitor = monitor;
 	}
-	
+
+	/**
+	 * The <code>Runnable</code> inherited method to override if the Menu have
+	 * to be refreshed.
+	 */
 	public void run() {
-		
+
 	}
 
 }

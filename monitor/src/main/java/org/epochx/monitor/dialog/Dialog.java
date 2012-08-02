@@ -26,32 +26,53 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JDialog;
+import javax.swing.SwingUtilities;
 
 import org.epochx.monitor.Monitor;
 
 /**
- * The <code>Dialog</code> abstract class defining a monitor dialog.
+ * A <code>Dialog</code> is abstract class which defines a monitor dialog.
  * <p>
  * This class extend <code>JDialog</code>, implements <code>ActionLister</code>
  * to be added as a listener of a <code>JComponent</code> and
- * <code>Runnable</code>.
+ * <code>Runnable</code> interface.
  * </p>
  * There are three way of implementing the
- * <code>actionPerformed(ActionEvent e)</code> method :
+ * <code>actionPerformed(ActionEvent e)</code> method :<br>
+ * <br>
  * <ul>
  * <li>Call the <code>run()</code> method in the current thread (by default) :
- * <pre>this.run();</pre>
- * <i>Note that almost always, the current thread will be the EDT.</i>
- * <li>Start the <code>run()</code> method by using a separate thread :
- * <pre>new Thread(this).start();</pre>
+ * 
+ * <pre>
+ * this.run();
+ * </pre>
+ * 
+ * <i>Note that almost always, the current thread will be the EDT.</i><br>
+ * <br>
+ * <li>Invoked the <code>run()</code> method by using a separate thread :
+ * 
+ * <pre>
+ * new Thread(this).start();
+ * </pre>
+ * 
  * <li>Invoked the <code>run()</code> method in the EDT by invoking
- * <code>javax.swing.SwingUtilities.invokeLater(Runnable doRun)</code> method :
- * <pre>javax.swing.SwingUtilities.invokeLater(this);</pre>
+ * {@link SwingUtilities#invokeLater(Runnable)} method :
+ * 
+ * <pre>
+ * SwingUtilities.invokeLater(this);
+ * </pre>
+ * 
  * </ul>
+ * 
+ * <b>In any case, the implementation of a <code>Dialog</code> inherited class have
+ * to take care of concurrency issues.</b>
  */
-@SuppressWarnings("serial")
 public abstract class Dialog extends JDialog implements ActionListener, Runnable {
-	
+
+	/**
+	 * Generated serial UID.
+	 */
+	private static final long serialVersionUID = 1941994409050918497L;
 	/**
 	 * The owner <code>Monitor</code>.
 	 */
@@ -70,7 +91,7 @@ public abstract class Dialog extends JDialog implements ActionListener, Runnable
 	 * Constructs a <code>Dialog</code>.
 	 * 
 	 * @param monitor the owner <code>Monitor</code>.
-	 * @param name the name of the Dialog windows.
+	 * @param name the name of the <code>Dialog</code> frame.
 	 */
 	Dialog(Monitor monitor, String name) {
 		super(monitor, name);
@@ -80,10 +101,11 @@ public abstract class Dialog extends JDialog implements ActionListener, Runnable
 
 	/**
 	 * The <b>ActionListener</b> inherited method.
+	 * <p>
 	 * Be carrefull : by default the run method is almost launch in the Event
 	 * Dispatch Thread, that could result freeze if the <code>run()</code>
 	 * method is long to compute.
-	 * 
+	 * </p>
 	 */
 	public void actionPerformed(ActionEvent e) {
 		// To run in the current thread.

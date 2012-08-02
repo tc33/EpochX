@@ -30,16 +30,25 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
- * 
+ * A <code>TableCellRenderer</code> provides the default cell renderer for a
+ * <code>Table</code>.
  */
-@SuppressWarnings("serial")
 public class TableCellRenderer extends DefaultTableCellRenderer {
 
+	/**
+	 * Generated serial UID.
+	 */
+	private static final long serialVersionUID = 7403603819246025918L;
+
+	/**
+	 * Constructs a <code>TableCellRenderer</code>.
+	 */
 	TableCellRenderer() {
 		super();
 		setHorizontalAlignment(JLabel.LEFT);
 	}
 
+	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
 

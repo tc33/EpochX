@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2012
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -31,19 +31,47 @@ import javax.swing.JFileChooser;
 import org.epochx.monitor.Monitor;
 import org.epochx.monitor.table.Table;
 
-
 /**
+ * A <code>DialogExportTable</code> extends a <code>Dialog</code> to export a
+ * <code>Table</code> to a <code>File</code> selected by a
+ * <code>JFileChooser</code>.
  * 
+ * @see Dialog
  */
-@SuppressWarnings("serial")
 public class DialogExportTable extends Dialog {
 
+	/**
+	 * Generated serial UID.
+	 */
+	private static final long serialVersionUID = 5327777476469091991L;
+
+	/**
+	 * The <code>Table</code> to export.
+	 */
 	private final Table table;
+
+	/**
+	 * The <code>JFileChooser</code> to choose the file in which the
+	 * <code>Table</code> must be exported.
+	 */
 	protected final JFileChooser fileChooser;
 
+	/**
+	 * An <code>ExportFilter</code> for excel format.
+	 */
 	private final ExportFilter xlsFilter = new ExportFilter("Excel 2000 format", "xls");
+	
+	/**
+	 * An <code>ExportFilter</code> for csv format.
+	 */
 	private final ExportFilter csvFilter = new ExportFilter("Comma-separated Values", "csv", "txt");
 
+	/**
+	 * Constructs a <code>DialogExportTable</code>.
+	 * 
+	 * @param monitor the parent <code>Monitor</code>.
+	 * @param t the <code>Table</code> to export.
+	 */
 	public DialogExportTable(Monitor monitor, Table t) {
 		super(monitor);
 		this.table = t;
@@ -68,7 +96,7 @@ public class DialogExportTable extends Dialog {
 					fileChooser.setSelectedFile(new File(table.getName() + ".csv"));
 			}
 		});
-		
+
 		if (fileChooser.showSaveDialog(monitor) == JFileChooser.APPROVE_OPTION) {
 			if (fileChooser.getFileFilter() == xlsFilter)
 				table.export(fileChooser.getSelectedFile(), Table.FORMAT_XLS);

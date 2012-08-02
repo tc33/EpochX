@@ -42,23 +42,92 @@ import org.epochx.event.Event;
 import org.epochx.monitor.Utilities;
 
 /**
- * A <code>Chart</code> display several stats at several events.
+ * A <code>Chart</code> is a <code>Monitor</code> component which displays one
+ * or more <code>ChartTrace</code>.
+ * <p>
+ * This class extends <code>Chart2D</code> from the <a
+ * href="http://jchart2d.sourceforge.net/">JChart2D</a> library.
+ * </p>
+ * 
+ * <p>
+ * <h3>Construction</h3>
+ * The chart name cans be specified in the constructor. If not, a default name
+ * is given.<br>
+ * A <code>Chart</code> is composed by one or more {@link ChartTrace} instances.
+ * <br>
+ * Each trace is automatically added to the {@link #traces} list, as the chart
+ * is given in parameter of the constructor {@link ChartTrace#ChartTrace(Chart)}
+ * . <br>
+ * <br>
+ * Here, there is a sample code which creates a <code>Chart</code>, adds a
+ * trace, and adds a listener for all traces :
+ * 
+ * <pre>
+ * Chart myGraph = new Chart(&quot;Chart_Name&quot;);
+ * ChartTrace aTrace = new ChartTrace(myChart);
+ * // .. Chart Trace Setting ..
+ * myGraph.addListener(EndGeneration.class); // optional
+ * </pre>
+ * 
+ * To know how to create and set a trace please, see {@link ChartTrace}.
+ * </p>
+ * 
+ * <p>
+ * <h3>Timer use & Refreshing rate</h3>
+ * Each <code>Chart</code> instance has its own {@link Timer} which shedules the
+ * refreshing {@link ChartTrace#task task} of each trace which could have
+ * different refresh rates (<i>100ms</i> by default).<br>
+ * The refresh task is not performed if the chart is not visible on the
+ * <code>Monitor</code>.<br>
+ * <i> (Note that as we use a timer for each instance, each chart refresh in a
+ * separated thread.) </i>.
+ * </p>
+ * 
+ * <p>
+ * <h3>Concurrency</h3>
+ * All the fields are <b>immutables</b>, except the private trace list.<br>
+ * Some methods (
+ * <code>addTrace(ChartTrace), clear(), getTraceCount(), ...</code>), which
+ * access to the list, might also appear unsafe for a multiple-threads use.<br>
+ * Even if this case does not seem intended, those methods are
+ * <b>synchronized</b> by intrinsic <i>lock</i>.
+ * </p>
+ * 
+ * <p>
+ * <h3>Export</h3>
+ * A <code>Chart</code> can be exported with a choosable size, in raster formats
+ * or in vectorial formats, by using the {@link #export(File, String, Dimension)
+ * export} method.<br>
+ * <br>
+ * <b>Note that we do not guarantee that this method is thread-safe.</b>
+ * Especially, if you try to export the <code>Chart</code> during the evolution
+ * process as the <i>EDT</i> might refresh the <code>Chart</code> during the
+ * exportation. However, no conflict issues seem have occurred in our tests.
+ * </p>
+ * 
+ * 
+ * @see ChartTrace
+ * @see Timer
  */
-@SuppressWarnings("serial")
 public class Chart extends Chart2D {
 
 	/**
-	 * The Excel 2000 format constant.
+	 * Generated serial UID.
 	 */
-	public static final String FORMAT_IMAGE = "img";
+	private static final long serialVersionUID = -6969229302568666457L;
 
 	/**
-	 * The Comma-separated Values format constant.
+	 * The raster format (<i>*.png, *.jpg, *.gif, *.bmp</i>) constant.
 	 */
-	public static final String FORMAT_VECTOR = "vect";
+	public static final String FORMAT_RASTER = "raster";
 
 	/**
-	 * The Number of created Instances.
+	 * The vector format (<i>*.ps, *.eps</i>) constant.
+	 */
+	public static final String FORMAT_VECTOR = "vector";
+
+	/**
+	 * The number of created instances.
 	 */
 	private static int noInstances = 0;
 
@@ -74,7 +143,7 @@ public class Chart extends Chart2D {
 	private final Timer timer;
 
 	/**
-	 * The list of <code>ChartTrace</code> `contained in the chart.
+	 * The list of <code>ChartTrace</code> contained in the chart.
 	 */
 	private final ArrayList<ChartTrace> traces = new ArrayList<ChartTrace>();
 
@@ -114,20 +183,26 @@ public class Chart extends Chart2D {
 	}
 
 	/**
-	 * @return the timer
+	 * Returns the <code>Timer</code>.
+	 * 
+	 * @return the <code>Timer</code>.
 	 */
 	protected Timer getTimer() {
 		return timer;
 	}
 
 	/**
-	 * @return a color in the table "colors".
+	 * Returns a <code>Color</code> among the table of colors.
+	 * 
+	 * @return a <code>Color</code> among the table of colors.
 	 */
 	protected Color getColor() {
 		return colors[getTraceCount() % colors.length];
 	}
 
 	/**
+	 * Returns the number of traces.
+	 * 
 	 * @return the number of traces.
 	 */
 	protected synchronized int getTraceCount() {
@@ -156,25 +231,26 @@ public class Chart extends Chart2D {
 	 * 
 	 * @param type the even added.
 	 */
-	public <E extends Event> void addListener(Class<E> type) {
+	public synchronized <E extends Event> void addListener(Class<E> type) {
 		if (!traces.isEmpty())
 			for (ChartTrace trace: traces)
 				trace.addListener(type);
 	}
 
 	/**
-	 * Exports in a file in a format specified by the extension.
+	 * Exports a <code>Chart</code>.
 	 * 
-	 * @param file the file in which the chart is exported.
-	 * @param format the format among FORMAT_IMAGE, FORMAT_VECTOR.
-	 * @param siwe the size in which the graph should be printed.
+	 * @param file the file in which the <code>Chart</code> is exported.
+	 * @param format the format among FORMAT_RASTER, FORMAT_VECTOR.
+	 * @param size the size in which the graph should be printed.
 	 * @throws IllegalArgumentException if the format is unknown.
 	 * 
-	 * @see #FORMAT_IMAGE, #FORMAT_VECTOR
+	 * @see #FORMAT_RASTER
+	 * @see #FORMAT_VECTOR
 	 */
 	public synchronized void export(File file, String format, Dimension size) throws IllegalArgumentException {
 		String extension = Utilities.getExtension(file);
-		if (format == FORMAT_IMAGE) {
+		if (format == FORMAT_RASTER) {
 			if (extension == null)
 				extension = "png";
 			try {

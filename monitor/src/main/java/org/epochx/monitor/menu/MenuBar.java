@@ -23,15 +23,25 @@
 package org.epochx.monitor.menu;
 
 import javax.swing.JMenuBar;
+import javax.swing.SwingUtilities;
 
 import org.epochx.monitor.Monitor;
 
 /**
- * The MenuBar of the MonitorFrame.
+ * The menu bar.
  */
-@SuppressWarnings("serial")
-public class MenuBar extends JMenuBar implements Runnable{
+public class MenuBar extends JMenuBar implements Runnable {
 
+	/**
+	 * Generated serial UID.
+	 */
+	private static final long serialVersionUID = -6577329669637640329L;
+
+	/**
+	 * Constructs a <code>MenuBar</code>.
+	 * 
+	 * @param monitor the owner <code>Monitor</code>.
+	 */
 	public MenuBar(Monitor monitor) {
 
 		add(new MenuFile(monitor));
@@ -41,11 +51,16 @@ public class MenuBar extends JMenuBar implements Runnable{
 
 	}
 
+	/**
+	 * The <code>Runnable</code> inherited method, invoked in the EDT by the
+	 * {@link SwingUtilities#invokeLater(Runnable)} method, when menus have to
+	 * be refreshed.
+	 */
 	public void run() {
-		
+
 		for (int i = 0; i < getMenuCount(); i++) {
-			((Menu)getMenu(i)).run();
+			((Menu) getMenu(i)).run();
 		}
-		
+
 	}
 }

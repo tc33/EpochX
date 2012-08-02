@@ -33,14 +33,24 @@ import org.epochx.monitor.dialog.Dialog;
 import org.epochx.monitor.dialog.DialogComponentAdder;
 
 /**
- * 
+ * The edit menu.
  */
-@SuppressWarnings("serial")
 public class MenuEdit extends Menu {
 
+	/**
+	 * Generated serial UID.
+	 */
+	private static final long serialVersionUID = -7644685940734428304L;
+	
 	private final JMenuItem addComponent = new JMenuItem("Add a Componant");
 
-	MenuEdit(final Monitor m) {
+	/**
+	 * 
+	 * Constructs a <code>MenuEdit</code>.
+	 * 
+	 * @param m the owner <code>Monitor</code>.
+	 */
+	MenuEdit(Monitor m) {
 		super(m);
 		setName("Edit Menu");
 		setText("Edit");

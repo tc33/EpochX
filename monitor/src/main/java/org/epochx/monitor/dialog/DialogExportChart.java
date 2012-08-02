@@ -43,17 +43,46 @@ import org.epochx.monitor.Utilities;
 import org.epochx.monitor.chart.Chart;
 
 /**
+ * A <code>DialogExportChart</code> extends a <code>Dialog</code> to export a
+ * <code>Chart</code> in a choosable size to a <code>File</code> selected by a
+ * <code>JFileChooser</code>.
  * 
+ * @see Dialog
  */
-@SuppressWarnings("serial")
 public class DialogExportChart extends Dialog {
 
+	/**
+	 * Generated serial UID.
+	 */
+	private static final long serialVersionUID = 2539570526477026677L;
+
+	/**
+	 * The <code>Chart</code> to export.
+	 */
 	private final Chart chart;
+
+	/**
+	 * The <code>JFileChooser</code> to choose the file in which the
+	 * <code>Chart</code> must be exported.
+	 */
 	protected final JFileChooser fileChooser;
 
+	/**
+	 * An <code>ExportFilter</code> for raster format.
+	 */
 	private final ExportFilter imgFilter = new ExportFilter("Classic image format", "bmp", "gif", "jpg", "png");
+
+	/**
+	 * An <code>ExportFilter</code> for vectorial format.
+	 */
 	private final ExportFilter vectorFilter = new ExportFilter("Vectorial format", "eps", "ps");
 
+	/**
+	 * Constructs a <code>DialogExportChart</code>.
+	 * 
+	 * @param monitor the parent <code>Monitor</code>.
+	 * @param c the <code>Chart</code> to export.
+	 */
 	public DialogExportChart(Monitor monitor, Chart c) {
 		super(monitor, "Select Size");
 		this.chart = c;
@@ -97,7 +126,7 @@ public class DialogExportChart extends Dialog {
 						throw new NumberFormatException();
 
 					size.setSize(width, height);
-					
+
 					fileChooser.setAcceptAllFileFilterUsed(false);
 					fileChooser.addChoosableFileFilter(imgFilter);
 					fileChooser.setFileFilter(imgFilter);
@@ -116,15 +145,14 @@ public class DialogExportChart extends Dialog {
 					});
 
 					if (fileChooser.showSaveDialog(monitor) == JFileChooser.APPROVE_OPTION) {
-						if(fileChooser.getFileFilter() == imgFilter) {
-							chart.export(fileChooser.getSelectedFile(), Chart.FORMAT_IMAGE, size);
+						if (fileChooser.getFileFilter() == imgFilter) {
+							chart.export(fileChooser.getSelectedFile(), Chart.FORMAT_RASTER, size);
 						} else if (fileChooser.getFileFilter() == vectorFilter) {
 							chart.export(fileChooser.getSelectedFile(), Chart.FORMAT_VECTOR, size);
 						}
-						
+
 					}
-					
-					
+
 				} catch (NumberFormatException e) {
 					setVisible(false);
 					JOptionPane.showMessageDialog(monitor, "Please enter a correct size.", "Wrong size error", JOptionPane.ERROR_MESSAGE);
@@ -133,7 +161,7 @@ public class DialogExportChart extends Dialog {
 				setVisible(false);
 			}
 		});
-		
+
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(new ActionListener() {
 
@@ -141,7 +169,7 @@ public class DialogExportChart extends Dialog {
 				setVisible(false);
 			}
 		});
-		
+
 		JPanel buttonPane = new JPanel();
 		buttonPane.add(okButton);
 		buttonPane.add(cancelButton);

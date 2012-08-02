@@ -39,33 +39,43 @@ import org.epochx.monitor.Monitor;
 import org.epochx.monitor.Utilities;
 
 /**
- * Creates and shows a <code>Dialog</code> to add a componnent in the Monitor.
- * Component 
+ * A <code>DialogTextFilePrinter</code> extends a <code>Dialog</code> to add a
+ * componnent in the Monitor.
+ * 
+ * @see Dialog
  */
-@SuppressWarnings("serial")
 public class DialogComponentAdder extends Dialog {
 
 	/**
-	 * The row and column indicating where the component should be added.
+	 * Generated serial UID.
 	 */
-	private final int row, col;
+	private static final long serialVersionUID = 7473612490133574777L;
+	
+	/**
+	 * The row where the component must be added.
+	 */
+	private final int row;
+	
+	/**
+	 * The column where the component must be added.
+	 */
+	private final int col;
 
 	/**
 	 * Constructs a <code>DialogComponentAdder</code>.
 	 * 
-	 * @param monitor the owner monitor.
+	 * @param monitor the owner <code>Monitor</code>.
 	 */
 	public DialogComponentAdder(Monitor monitor) {
 		this(monitor, 0, 0);
 	}
 
 	/**
-	 * 
 	 * Constructs a <code>DialogComponentAdder</code>.
 	 * 
-	 * @param monitor the owner monitor.
-	 * @param r the row where the component should be added.
-	 * @param c the col where the component should be added.
+	 * @param monitor the owner <code>Monitor</code>.
+	 * @param r the row where the component must be added.
+	 * @param c the col where the component must be added.
 	 */
 	public DialogComponentAdder(Monitor monitor, int r, int c) {
 		super(monitor, "Component Selection");
@@ -85,7 +95,7 @@ public class DialogComponentAdder extends Dialog {
 		JLabel componentLabel = new JLabel("Component :");
 
 		final JComboBox componantComboBox = new JComboBox();
-		synchronized(monitor){
+		synchronized (monitor) {
 			for (JComponent componant: monitor.getComponentList())
 				componantComboBox.addItem(componant);
 		}

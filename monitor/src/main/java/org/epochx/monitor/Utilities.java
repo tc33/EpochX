@@ -32,8 +32,8 @@ import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
 
 /**
- * A collection of utilities.
- * Cannot be instancied.
+ * A collection of utility methods.
+ * <i>Cannot be instancied.</i>
  */
 public final class Utilities {
 

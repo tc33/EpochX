@@ -41,10 +41,17 @@ import javax.swing.border.EmptyBorder;
 import org.epochx.monitor.Monitor;
 
 /**
- * A dialog which print a text file.
+ * A <code>DialogTextFilePrinter</code> extends <code>Dialog</code> to display a
+ * text file.
+ * 
+ * @see Dialog
  */
-@SuppressWarnings("serial")
 public class DialogTextFilePrinter extends Dialog {
+
+	/**
+	 * Generated serial UID.
+	 */
+	private static final long serialVersionUID = 1207750960774788045L;
 
 	/**
 	 * The name of the file to display on the dialog.
@@ -54,8 +61,8 @@ public class DialogTextFilePrinter extends Dialog {
 	/**
 	 * Constructs a <code>MonitorDialogFileText</code>.
 	 * 
-	 * @param monitor The owner monitor.
-	 * @param fileName The name of the file to be displayed.
+	 * @param monitor the owner <code>Monitor</code>.
+	 * @param fileName the name of the file to be displayed.
 	 */
 	public DialogTextFilePrinter(Monitor monitor, String fileName) {
 		this(monitor, fileName, fileName);
@@ -64,9 +71,9 @@ public class DialogTextFilePrinter extends Dialog {
 	/**
 	 * Constructs a <code>MonitorDialogFileText</code>.
 	 * 
-	 * @param monitor The owner monitor.
-	 * @param fileName The name of the file to be displayed.
-	 * @param frameName The name of the dialog frame.
+	 * @param monitor the owner <code>Monitor</code>.
+	 * @param fileName the name of the <code>File</code> to be displayed.
+	 * @param frameName the name of the <code>Dialog</code> frame.
 	 */
 	public DialogTextFilePrinter(Monitor monitor, String fileName, String frameName) {
 		super(monitor, frameName);
@@ -102,7 +109,7 @@ public class DialogTextFilePrinter extends Dialog {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		textPane.setText(buffer.toString());
 		textPane.setEditable(false);
 		textPane.setCaretPosition(0); // Make the scrollbar return to the top.

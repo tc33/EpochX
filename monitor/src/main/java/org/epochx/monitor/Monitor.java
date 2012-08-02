@@ -43,21 +43,22 @@ import javax.swing.plaf.basic.BasicButtonUI;
 
 import org.epochx.monitor.dialog.DialogComponentAdder;
 import org.epochx.monitor.menu.MenuBar;
+import org.epochx.monitor.table.Table;
 
 /**
  * A <code>Monitor</code> instance cans display several visualization components
  * such as
  * tables and charts.
  * 
- * <h3>Construction</h3>
  * <p>
- * The frame name can be be specified in the constructor as well as the number
- * of rows and columns of visualization panes.
+ * <h3>Construction</h3>
+ * The frame name cans be specified in the constructor as well as the number of
+ * rows and columns of visualization panes.
  * </p>
  * 
  * 
  * <p>
- * <h3>Component Management</h3>
+ * <h3>Component Layout</h3>
  * To add a component to a particular monitor pane, use the
  * {@link #add(JComponent, int, int)} method by specifying the row and column in
  * parameters. <br>
@@ -65,45 +66,58 @@ import org.epochx.monitor.menu.MenuBar;
  * display it, by using the {@link #add(JComponent)} method. <br>
  * <i> (Note that if the Monitor contains only one pane, the component is
  * automatically add to this one.) </i><br>
- * During the execution, the GUI provide several way to add and remove component
- * from the panel (edit menu, add-button, close-button).<br>
- *  
- * </p>
- * <h3>Thread-Safety</h3>
- * <p>
- * This class have been design to avoid concurrency issues, beetween <i>Initial
- * threads</i>, the <i>Event Dispached Thread</i> from <code>Swing</code>
- * library.<br>
- * The <code>Runnable</code> interface is implemented in order to schedule the
- * GUI creation task in the <i>EDT</i> by invoking
- * <code>javax.swing.SwingUtilities.invokeLater(this)</code> method. <br>
+ * During the execution, the GUI provides several ways to add and remove
+ * components from panes (edit menu, add-button, close-button).<br>
  * <br>
- * However, some critical fields (as the component list {@link #componentList})
- * are accessibles from outside of this class by the getter methods.<br>
- * <b> You have to acces those fields very carefully, and always synchronize
- * data concurrency acces by using the monitor instance as the lock</b>.
+ * Here, there is a sample code which creates a Monitor with <i>one</i> row and
+ * <i>two</i> columns and adds a monitoring table to the column <i>one</i> :
+ * 
+ * <pre>
+ * Monitor aMonitor = new Monitor(&quot;Frame_Name&quot;, 1, 2);
+ * Table aTable = new Table(&quot;Table_Name&quot;);
+ * // .. Table Setting ..
+ * monitor.add(aTable, 1, 1);
+ * </pre>
+ * 
+ * To know how to create and set a <code>Table</code> please, see {@link Table}.
  * </p>
  * 
+ * <p>
+ * <h3>Concurrency</h3>
+ * This class is <b>thread-safe</b>, as it has been designed to avoid
+ * concurrency issues, between the <i>main thread</i>, the <i>Event Dispached
+ * Thread</i> from <code>Swing</code> library, and all the other threads which
+ * could access to the shared fields. <br>
+ * <br>
+ * The <code>Runnable</code> interface is implemented in order to schedule the
+ * GUI creation task in the <i>EDT</i> by invoking
+ * {@link SwingUtilities#invokeLater(Runnable)} method. <br>
+ * <br>
+ * However, critical fields (as {@link #componentList}) are accessibles from
+ * outside of this class by getter methods. Those fields have to be used <b>very
+ * carefully</b>, and always by using the monitor instance as the
+ * synchronization <i>lock</i></b>.
+ * </p>
  */
 public class Monitor extends JFrame implements Runnable {
 
 	/**
-	 * Generated serial UID. 
+	 * Generated serial UID.
 	 */
 	private static final long serialVersionUID = 2070510483585647925L;
 
 	/**
-	 * The Number of created Instances.
+	 * The number of created instances.
 	 */
 	private static int noInstances = 0;
 
-	/*
-	 * The menu bar.
+	/**
+	 * The <code>MenuBar</code> of the <code>Monitor</code>.
 	 */
 	private MenuBar menuBar;
 
 	/**
-	 * The contentPane.
+	 * The <code>MonitorContentPane</code> of the <code>Monitor</code>.
 	 */
 	private final MonitorContentPane contentPane;
 
@@ -118,7 +132,7 @@ public class Monitor extends JFrame implements Runnable {
 	private final ArrayList<JComponent> componentList = new ArrayList<JComponent>();
 
 	/**
-	 * The table of <code>JComponent</code>.
+	 * The grid of <code>JTabbedPane</code>.
 	 */
 	private final JTabbedPane[][] componentTab;
 
@@ -130,7 +144,7 @@ public class Monitor extends JFrame implements Runnable {
 	}
 
 	/**
-	 * Constructs a <code>MonitorFrame</code>.
+	 * Constructs a <code>Monitor</code>.
 	 * 
 	 * @param name the name of the frame.
 	 */
@@ -172,9 +186,8 @@ public class Monitor extends JFrame implements Runnable {
 	}
 
 	/**
-	 * Run method invoked in the EDT by the
-	 * <code>javax.swing.SwingUtilities.invokeLater(Runnable doRun)</code>
-	 * method.
+	 * The <code>Runnable</code> inherited method which is invoked in the EDT by
+	 * the {@link SwingUtilities#invokeLater(Runnable)} method.
 	 */
 	public void run() {
 		// Add the Menu Bar and the Content Pane.
@@ -205,13 +218,17 @@ public class Monitor extends JFrame implements Runnable {
 	}
 
 	/**
-	 * @return the componentList
+	 * Returns the <code>componentList</code>.
+	 * 
+	 * @return the <code>componentList</code>.
 	 */
 	public synchronized ArrayList<JComponent> getComponentList() {
 		return componentList;
 	}
 
 	/**
+	 * Returns the number of rows.
+	 * 
 	 * @return the number of rows.
 	 */
 	public int getRowCount() {
@@ -219,6 +236,8 @@ public class Monitor extends JFrame implements Runnable {
 	}
 
 	/**
+	 * Returns the number of columns.
+	 * 
 	 * @return the number of columns.
 	 */
 	public int getColCount() {
@@ -226,9 +245,11 @@ public class Monitor extends JFrame implements Runnable {
 	}
 
 	/**
-	 * Adds a JComponent on the component list.
+	 * Adds a <code>JComponent</code> on the component list.
+	 * <p>
 	 * This Component will not be add to the monitor at the start, unless if the
-	 * monitor have only one cell.
+	 * monitor have only one pane.
+	 * </p>
 	 * 
 	 * @param component the JComponent added
 	 */
@@ -243,7 +264,7 @@ public class Monitor extends JFrame implements Runnable {
 	}
 
 	/**
-	 * Adds a JComponent on the specified position.
+	 * Adds a <code>JComponent</code> on the specified position.
 	 * 
 	 * @param component the JComponent added
 	 * @param row the row position
@@ -286,21 +307,45 @@ public class Monitor extends JFrame implements Runnable {
 	}
 
 	/**
-	 * Runnable class which add a component to a <code>JTabbedPane</code>.
+	 * An <code>Adder</code> is a <code>Runnable</code> implementation which
+	 * adds
+	 * a component to a specific pane.
+	 * <p>
 	 * Must be run in the EDT and invoked by
-	 * <code>javax.swing.SwingUtilities.invokeLater(Runnable doRun)</code>
-	 * method.
+	 * {@link SwingUtilities#invokeLater(Runnable)} method.
+	 * </p>
 	 */
 	private class Adder implements Runnable {
 
-		JComponent component;
-		JTabbedPane tabbedPane;
+		/**
+		 * The <code>JComponent</code> to add to the <code>JTabbedPane</code>.
+		 */
+		private final JComponent component;
 
+		/**
+		 * The <code>JTabbedPane</code> in which the <code>JComponent</code>
+		 * must
+		 * be added.
+		 */
+		private final JTabbedPane tabbedPane;
+
+		/**
+		 * Constructs an <code>Adder</code>.
+		 * 
+		 * @param component the <code>JComponent</code> to add to the
+		 *        <code>JTabbedPane</code>.
+		 * @param tabbedPane the <code>JTabbedPane</code> in which the
+		 *        <code>JComponent</code> must be added.
+		 */
 		Adder(JComponent component, JTabbedPane tabbedPane) {
 			this.component = component;
 			this.tabbedPane = tabbedPane;
 		}
 
+		/**
+		 * The <code>Runnable</code> inherited method which adds the
+		 * <code>JComponent</code> to the <code>JTabbedPane</code>.
+		 */
 		public void run() {
 			synchronized (Monitor.this) {
 				// If the component is already here, select it and return.
@@ -317,7 +362,7 @@ public class Monitor extends JFrame implements Runnable {
 				final JPanel buttonTab = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
 				buttonTab.setOpaque(false);
 				buttonTab.add(new JLabel(component.getName()));
-				buttonTab.add(new CloseButton(tabbedPane, component));
+				buttonTab.add(new CloseButton(component, tabbedPane));
 
 				// Add the tab panel and select it.
 				tabbedPane.setTabComponentAt(index, buttonTab);
@@ -330,16 +375,20 @@ public class Monitor extends JFrame implements Runnable {
 	}
 
 	/**
-	 * A <code>JButton</code> which prints a cross, and opens a
+	 * An <code>AddButton</code> paints a cross, and opens a
 	 * <code>JDialog</code> to add a component,
 	 * when pressed.
 	 */
 	private class AddButton extends JButton {
 
 		/**
-		 * 
+		 * Generated serial UID.
 		 */
 		private static final long serialVersionUID = 1780280560761515592L;
+
+		/**
+		 * The button size.
+		 */
 		private final int size = 16;
 
 		private AddButton(int row, int col) {
@@ -357,10 +406,12 @@ public class Monitor extends JFrame implements Runnable {
 		}
 
 		// We don't want to update UI for this button.
+		@Override
 		public void updateUI() {
 		}
 
 		// Paint the cross.
+		@Override
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			Graphics2D g2 = (Graphics2D) g.create();
@@ -380,20 +431,42 @@ public class Monitor extends JFrame implements Runnable {
 	}
 
 	/**
-	 * A <code>JButton</code> which prints the cross to close a tab.
+	 * A <code>CloseButton</code> paints a cross to close a tab pane.
 	 */
 	private class CloseButton extends JButton implements ActionListener {
 
-		
 		/**
-		 * 
+		 * Generated serial UID.
 		 */
 		private static final long serialVersionUID = -1127235253842674405L;
-		private final JTabbedPane tabbedPane;
+
+		/**
+		 * The <code>JComponent</code> to remove from the
+		 * <code>JTabbedPane</code> .
+		 */
 		private final JComponent component;
+
+		/**
+		 * The <code>JTabbedPane</code> whose the <code>JComponent</code> must
+		 * be
+		 * removed.
+		 */
+		private final JTabbedPane tabbedPane;
+
+		/**
+		 * The button size.
+		 */
 		private final int size = 16;
 
-		private CloseButton(JTabbedPane tabbedPane, JComponent component) {
+		/**
+		 * Constructs a <code>CloseButton</code>.
+		 * 
+		 * @param component the <code>JComponent</code> to remove from the
+		 *        <code>JTabbedPane</code>.
+		 * @param tabbedPane the <code>JTabbedPane</code> whose the
+		 *        <code>JComponent</code> must be removed.
+		 */
+		private CloseButton(JComponent component, JTabbedPane tabbedPane) {
 			this.tabbedPane = tabbedPane;
 			this.component = component;
 			setPreferredSize(new Dimension(size, size));
@@ -409,6 +482,11 @@ public class Monitor extends JFrame implements Runnable {
 			addActionListener(this);
 		}
 
+		/**
+		 * Remove the <code>JComponent</code> from the <code>JTabbedPane</code>.
+		 * 
+		 * @param e the <code>ActionEvent</code>, not used.
+		 */
 		public void actionPerformed(ActionEvent e) {
 			synchronized (Monitor.this) {
 				tabbedPane.remove(tabbedPane.indexOfComponent(component));
@@ -416,9 +494,11 @@ public class Monitor extends JFrame implements Runnable {
 		}
 
 		// We don't want to update UI for this button.
+		@Override
 		public void updateUI() {
 		}
 
+		@Override
 		// Paint the cross.
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);

@@ -33,10 +33,14 @@ import org.epochx.monitor.dialog.DialogTextFilePrinter;
 
 
 /**
- * 
+ * The help menu.
  */
-@SuppressWarnings("serial")
 public class MenuHelp extends Menu {
+
+	/**
+	 * Generated serial UID.
+	 */
+	private static final long serialVersionUID = -4502791710861781919L;
 	
 	private final JMenuItem license;
 	private final JMenuItem about;

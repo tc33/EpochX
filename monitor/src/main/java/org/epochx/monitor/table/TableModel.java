@@ -46,23 +46,66 @@ import org.epochx.event.stat.AbstractStat;
 import org.epochx.monitor.Utilities;
 
 /**
- * The table model for the <code>Table</code> component.
+ * A <code>TableModel</code> provides both a tabular data model and a fields
+ * storage for a <code>Table</code> component.
  * 
- * @author loic
+ * <p>
+ * This class extends <code>AbstractTableModel</code> which provides some
+ * conveniences for generating <code>TableModelEvents</code> and dispatching
+ * them to the listeners.<br>
+ * <br>
+ * Because <code>TableModel</code> implements <code>Listener</code>, a
+ * <code>TableModel</code> can be submitted to the {@link EventManager} for
+ * execution.<br>
+ * <br>
+ * In fact, the {@link #onEvent(Event)} method adds a new row to the
+ * {@link #rowsBuffer buffer} list corresponding to the state of each
+ * <code>Stat</code> in the stats list at the <code>Event</code>.
+ * </p>
  * 
+ * <p>
+ * <h3>Concurrency</h3>
+ * For greater convenience, the <code>TableModel</code> class registers the
+ * {@link Timer} and the {@link #task} which refreshs
+ * the tabular data model at a fixed rate specified in the constructor.<br>
+ * <br>
+ * Because a <code>TableModel</code> store all the critical fields (the tabular
+ * data, and the buffer list) which could be accessed from both the <i>timer
+ * thread</i> and the <i>main thread</i>, its implementation has to take care of
+ * concurrency issues to ensure the safety of the <code>Table</code> component.<br>
+ * <br>
+ * Methods listed below are <b>synchronized</b> by using a intrinsic <i>lock</i>
+ * to avoid concurrent access (by the <i>timer thread</i> and the <i>main
+ * thread</i>) to the buffer list.
+ * <ul>
+ * <li><code>onEvent(Event)</code>
+ * <li><code>refresh()</code>
+ * <li><code>export(File, String)</code>
+ * </ul>
+ * 
+ * </p>
+ * 
+ * 
+ * @see Table
+ * @see AbstractStat
+ * @see EventManager
  */
-@SuppressWarnings("serial")
-public class TableModel extends AbstractTableModel {
+public class TableModel extends AbstractTableModel implements Listener<Event> {
 
 	/**
-	 * The list of <code>AbstractStat</code> to be printed.
+	 * Generated serial UID.
+	 */
+	private static final long serialVersionUID = -2599888443084646185L;
+
+	/**
+	 * The list of column names.
 	 */
 	private final ArrayList<String> columnNames = new ArrayList<String>();
 
 	/**
-	 * The list of rows to be printed.
+	 * The rowsData list of the data model.
 	 */
-	private final ArrayList<String[]> rows = new ArrayList<String[]>();
+	private final ArrayList<String[]> rowsData = new ArrayList<String[]>();
 
 	/**
 	 * The list of buffered rows.
@@ -70,9 +113,9 @@ public class TableModel extends AbstractTableModel {
 	private final ArrayList<String[]> rowsBuffer = new ArrayList<String[]>();
 
 	/**
-	 * The list of <code>AbstractStat</code> to be printed.
+	 * The list of <code>Stats</code> to be printed.
 	 */
-	private final ArrayList<AbstractStat<?>> fields = new ArrayList<AbstractStat<?>>();
+	private final ArrayList<AbstractStat<?>> stats = new ArrayList<AbstractStat<?>>();
 
 	/**
 	 * The mapping of listerners registered by this <code>Table</code>.
@@ -80,133 +123,66 @@ public class TableModel extends AbstractTableModel {
 	private final Map<Class<?>, Listener<?>> listeners = new HashMap<Class<?>, Listener<?>>();
 
 	/**
-	 * The parent table. Serves as the main lock for concurrency.
+	 * The parent <code>Table</code>.
 	 */
 	private final Table table;
 
 	/**
-	 * The timer, schedule the timer task on a specified rate.
+	 * The <code>Timer</code> schedules the timer task on a specified rate.
 	 */
 	private final Timer timer;
 
 	/**
-	 * The timer task.
-	 * If the buffer is not empty and the table is visible on the monitor, then
-	 * empty the buffer list in the rows list and fire a TableRowsInserted.
+	 * The <code>TimerTask</code> which is scheduled in the timer to calls the
+	 * {@link #refresh()} method a fixed rate only if the <code>Table</code> is
+	 * visible on the <code>Monitor</code>.
 	 */
 	private final TimerTask task;
 
 	/**
-	 * The buffering listener which buffer a new row in the buffer list when an
-	 * event is fire.
-	 */
-	private final Listener<Event> listener;
-
-	/**
-	 * Constructor.
+	 * Constructs a <code>TableModel</code>.
 	 * 
-	 * @param table the parent table.
+	 * @param parentTable the parent table.
+	 * @param latency the refresh rate.
 	 */
 	public TableModel(Table parentTable, long latency) {
 		this.table = parentTable;
-
-		// Listener initialization.
-		listener = new Listener<Event>() {
-
-			/*
-			 * On event, add a row to the buffer list.
-			 */
-			public void onEvent(Event event) {
-				synchronized (table) {
-					if (!fields.isEmpty()) {
-						String[] newRow = new String[fields.size()];
-						int i = 0;
-						for (AbstractStat<?> stat: fields)
-							newRow[i++] = stat.toString();
-						rowsBuffer.add(newRow);
-					}
-				}
-			}
-		};
 
 		// Timer and timer task initialization.
 		timer = new Timer("MONITOR-TableTimer (" + table.getName() + ")");
 		task = new TimerTask() {
 
-			/*
-			 * If the buffer is not empty and the table is visible on the
-			 * monitor, then empty the buffer list in the rows list and fire a
-			 * TableRowsInserted event.
-			 */
-			@Override
-			public synchronized void run() {
-				synchronized (table) {
-
-					if (!rowsBuffer.isEmpty() && Utilities.isVisible(TableModel.this.table)) {
-						int rowsListSize = rows.size();
-						rows.addAll(rowsBuffer);
-						rowsBuffer.clear();
-						fireTableRowsInserted(rowsListSize, rows.size() - 1);
-					}
-				}
+			public void run() {
+				if (Utilities.isVisible(TableModel.this.table))
+					TableModel.this.refresh();
 			}
-
 		};
 		// Every 20 milliseconds a new value is collected.
 		timer.scheduleAtFixedRate(task, 1000, latency);
 	}
 
-	/**
-	 * @return the Number of Columns.
-	 */
 	public int getColumnCount() {
 		return columnNames.size();
 	}
 
-	/**
-	 * @return the Number of Rows.
-	 */
 	public int getRowCount() {
-		return rows.size();
+		return rowsData.size();
 	}
 
-	/**
-	 * @return the Name of the Columns col.
-	 */
 	public String getColumnName(int col) {
 		return columnNames.get(col);
 	}
 
-	/**
-	 * @return the Value at [row][col].
-	 */
-	public Object getValueAt(int row, int col) {
-		return col < this.rows.get(row).length ? this.rows.get(row)[col] : "";
+	public Object getValueAt(int rowIndex, int columnIndex) {
+		return columnIndex < this.rowsData.get(rowIndex).length ? this.rowsData.get(rowIndex)[columnIndex] : "";
 	}
 
-	/**
-	 * @return false.
-	 */
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
 		return false;
 	}
 
 	/**
-	 * Refresh the model, by emptying the buffer in the rows list.
-	 */
-	protected void refresh() {
-		synchronized (table) {
-			if (!rowsBuffer.isEmpty()) {
-				int rowsListSize = rows.size();
-				rows.addAll(rowsBuffer);
-				rowsBuffer.clear();
-				fireTableRowsInserted(rowsListSize, rows.size() - 1);
-			}
-		}
-	}
-
-	/**
-	 * Adds a stat to the fields list.
+	 * Adds a stat to the stats list.
 	 * 
 	 * @param stat the stat added to the field list.
 	 * @param statName the name of the stat for the column header.
@@ -214,7 +190,7 @@ public class TableModel extends AbstractTableModel {
 	protected <E extends Event> void addStat(Class<? extends AbstractStat<E>> stat, String statName) {
 		AbstractStat.register(stat);
 		AbstractStat<E> statRegistered = AbstractStat.get(stat);
-		fields.add(statRegistered);
+		stats.add(statRegistered);
 
 		if (statName == null)
 			statName = statRegistered.getClass().getSimpleName();
@@ -230,24 +206,69 @@ public class TableModel extends AbstractTableModel {
 	protected <E extends Event> void addListener(Class<E> type) {
 		// only creates a new listener if we do not have one already
 		if (!listeners.containsKey(type)) {
-			EventManager.getInstance().add(type, listener);
-			listeners.put(type, listener);
+			EventManager.getInstance().add(type, this);
+			listeners.put(type, this);
 		}
 	}
 
 	/**
-	 * Export the table in Excel 2000 format using JExel library.
+	 * The method inherited from <code>Listener</code> interface, which adds a
+	 * new row to the {@link #rowsBuffer buffer} list corresponding to the state
+	 * of each <code>Stat</code> in the stats list at the <code>Event</code>.
 	 * 
-	 * @param file the File object to write to.
+	 * <p>
+	 * <b>Synchronized</b> to avoid concurent access to the
+	 * <code>rowsBuffer</code> field.
+	 * </p>
+	 * 
+	 * @param event the <code>Event</code> which trigger this action. Not used
+	 *        here.
 	 */
-	protected void exportToXLS(File file) {
+	public synchronized void onEvent(Event event) {
+		if (!stats.isEmpty()) {
+			String[] newRow = new String[stats.size()];
+			int i = 0;
+			for (AbstractStat<?> stat: stats)
+				newRow[i++] = stat.toString();
+			rowsBuffer.add(newRow);
+		}
+	}
 
-		try {
+	/**
+	 * Refreshs the table data by adding the buffered rows in the data list, and
+	 * firing a <code>TableRowsInserted</code> event.
+	 * 
+	 * <p>
+	 * <b>Synchronized</b> to avoid concurent access to the
+	 * <code>rowsBuffer</code> field.
+	 * </p>
+	 * 
+	 */
+	public synchronized void refresh() {
+		if (!rowsBuffer.isEmpty()) {
+			int rowsListSize = rowsData.size();
+			rowsData.addAll(rowsBuffer);
+			rowsBuffer.clear();
+			fireTableRowsInserted(rowsListSize, rowsData.size() - 1);
+		}
+	}
 
-			WritableWorkbook workbook = Workbook.createWorkbook(file);
-			WritableSheet sheet = workbook.createSheet("First Sheet", 0);
-
-			synchronized (table) {
+	/**
+	 * Exports a <code>Table</code>.
+	 * 
+	 * @param file the file in which the <code>Table</code> is exported.
+	 * @param format the format among FORMAT_XLS, FORMAT_CSV.
+	 * 
+	 * @throws IllegalArgumentException if the format is unknown.
+	 * 
+	 * @see Table#FORMAT_XLS
+	 * @see Table#FORMAT_CSV
+	 */
+	protected synchronized void export(File file, String format) {
+		if (format == Table.FORMAT_XLS) {
+			try {
+				WritableWorkbook workbook = Workbook.createWorkbook(file);
+				WritableSheet sheet = workbook.createSheet("First Sheet", 0);
 				int rowCount = getRowCount();
 				int columnCount = getColumnCount();
 				for (int i = 0; i < rowCount; i++) {
@@ -260,25 +281,15 @@ public class TableModel extends AbstractTableModel {
 						sheet.addCell(row);
 					}
 				}
+				workbook.write();
+				workbook.close();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			workbook.write();
-			workbook.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+		} else if (format == Table.FORMAT_CSV) {
+			try {
 
-	/**
-	 * Export the table in Comma-separated Values format using JExel library.
-	 * 
-	 * @param file the File object to write to.
-	 */
-	protected void exportToCSV(File file) {
-
-		try {
-
-			BufferedWriter bufferWriter = new BufferedWriter(new FileWriter(file));
-			synchronized (table) {
+				BufferedWriter bufferWriter = new BufferedWriter(new FileWriter(file));
 				int rowCount = getRowCount();
 				int columnCount = getColumnCount();
 				for (int i = 0; i < rowCount; i++) {
@@ -290,13 +301,13 @@ public class TableModel extends AbstractTableModel {
 					bufferWriter.append(buffer.toString());
 					bufferWriter.newLine();
 				}
+				bufferWriter.flush();
+				bufferWriter.close();
+
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-			bufferWriter.flush();
-			bufferWriter.close();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		} else
+			throw new IllegalArgumentException("Unknown format.");
 	}
-
 }

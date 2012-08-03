@@ -59,14 +59,20 @@ public class GenerationBestIndividuals extends AbstractStat<EndGeneration> {
 		best = new ArrayList<Individual>();
 
 		for (Individual individual: population) {
-			int comparison = individual.compareTo(best.get(0));
 
-			if (comparison > 0) {
-				best.clear();
-			}
-
-			if (best.isEmpty() || comparison >= 0) {
+			if (best.isEmpty()) {
 				best.add(individual);
+			} else {
+
+				int comparison = individual.compareTo(best.get(0));
+
+				if (comparison > 0) {
+					best.clear();
+				}
+
+				if (comparison >= 0) {
+					best.add(individual);
+				}
 			}
 		}
 	}

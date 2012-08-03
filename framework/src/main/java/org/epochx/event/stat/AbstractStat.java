@@ -117,6 +117,7 @@ public abstract class AbstractStat<T extends Event> {
 	/**
 	 * Constructs an <code>AbstractStat</code>.
 	 * 
+	 * @param clearOn the event that trigger the stat to clear its values.
 	 * @param dependency the dependency of this stat.
 	 */
 	@SuppressWarnings("unchecked")
@@ -128,6 +129,7 @@ public abstract class AbstractStat<T extends Event> {
 	 * Constructs an <code>AbstractStat</code>. The array of dependencies can be
 	 * empty, in case this stat has no dependencies.
 	 * 
+	 * @param clearOn the event that trigger the stat to clear its values.
 	 * @param dependencies the array of dependencies of this stat.
 	 */
 	public <E extends Event> AbstractStat(Class<E> clearOn, Class<? extends AbstractStat<?>> ... dependencies) {
@@ -138,6 +140,7 @@ public abstract class AbstractStat<T extends Event> {
 	 * Constructs an <code>AbstractStat</code>. The list of dependencies can be
 	 * empty, in case this stat has no dependencies.
 	 * 
+	 * @param clearOn the event that trigger the stat to clear its values.
 	 * @param dependencies the list of dependencies of this stat.
 	 */
 	@SuppressWarnings("unchecked")

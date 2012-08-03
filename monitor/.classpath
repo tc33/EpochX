@@ -5,8 +5,6 @@
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry kind="src" path="/Framework"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Refactoring"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/jchart2d-3.2.2.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

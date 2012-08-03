@@ -1,25 +1,37 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.epochx</groupId>
-  <artifactId>gui</artifactId>
-  <version>1.0.0</version>
-  <name>EpochX GUI</name>
-  <repositories>
-	<repository>
-		<id>jchart2d</id>
-		<url>http://tanesha.net/maven2/</url>
-	</repository>
-  </repositories>
-  <dependencies>
-  	<dependency>
-  		<groupId>jexcelapi</groupId>
-  		<artifactId>jxl</artifactId>
-  		<version>2.6</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.apache.xmlgraphics</groupId>
-  		<artifactId>xmlgraphics-commons</artifactId>
-  		<version>1.3.1</version>
-  	</dependency>
-  </dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.epochx</groupId>
+	<artifactId>gui</artifactId>
+	<version>1.0.0</version>
+	<name>EpochX GUI</name>
+	<repositories>
+		<repository>
+			<id>jchart2d</id>
+			<url>http://www.epochx.org/maven/</url>
+		</repository>
+	</repositories>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.2</version>
+		</dependency>
+		<dependency>
+			<groupId>jexcelapi</groupId>
+			<artifactId>jxl</artifactId>
+			<version>2.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.xmlgraphics</groupId>
+			<artifactId>xmlgraphics-commons</artifactId>
+			<version>1.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>jchart2d</groupId>
+			<artifactId>jchart2d</artifactId>
+			<version>3.2.2</version>
+		</dependency>
+
+	</dependencies>
 </project>

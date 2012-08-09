@@ -233,7 +233,7 @@ public class ChartTrace extends Trace2DSimple implements Listener<Event> {
 		task = new TimerTask() {
 
 			public void run() {
-				if (Utilities.isVisible(ChartTrace.this.chart))
+				if (Utilities.isVisible(ChartTrace.this.chart));
 					ChartTrace.this.refresh();
 			}
 		};
@@ -264,7 +264,7 @@ public class ChartTrace extends Trace2DSimple implements Listener<Event> {
 		AbstractStat.register(y);
 		this.yStat = AbstractStat.get(y);
 		setName(getName() + " - Y axis : " + yStat.getClass().getSimpleName());
-		setName("");
+		//setName("");
 	}
 
 	/**

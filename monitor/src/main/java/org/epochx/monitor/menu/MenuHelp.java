@@ -66,7 +66,7 @@ public class MenuHelp extends Menu {
 
 			public void actionPerformed(ActionEvent arg0) {
 				JOptionPane.showMessageDialog(monitor, "Copyright 2007-2012\n"
-						+ "Lawrence Beadle, Tom Castle and Fernando Otero\n"
+						+ "Lawrence Beadle, Tom Castle, Fernando Otero and Loïc Vaseux\n"
 						+ "Licensed under GNU Lesser General Public License");
 			}
 		});

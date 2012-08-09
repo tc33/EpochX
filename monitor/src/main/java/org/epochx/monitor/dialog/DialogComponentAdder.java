@@ -33,6 +33,8 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
 
 import org.epochx.monitor.Monitor;
@@ -106,23 +108,19 @@ public class DialogComponentAdder extends Dialog {
 
 		// Row & Col selection Pane.
 		JLabel rowLabel = new JLabel("Row :");
-		final JComboBox rowComboBox = new JComboBox();
-		for (int i = 1; i <= monitor.getRowCount(); i++)
-			rowComboBox.addItem(new Integer(i));
-
 		JLabel colLabel = new JLabel("Column :");
-		final JComboBox colComboBox = new JComboBox();
-		for (int i = 1; i <= monitor.getColCount(); i++)
-			colComboBox.addItem(new Integer(i));
+		
+		final JSpinner rowSpinner = new JSpinner(new SpinnerNumberModel(1, 1, monitor.getRowCount(), 1));
+		final JSpinner colSpinner = new JSpinner(new SpinnerNumberModel(1, 1, monitor.getColCount(), 1));
 
 		if (row == 0 && col == 0) {
 			componentPane.add(rowLabel);
-			componentPane.add(rowComboBox);
+			componentPane.add(rowSpinner);
 			componentPane.add(colLabel);
-			componentPane.add(colComboBox);
+			componentPane.add(colSpinner);
 		} else {
-			rowComboBox.setSelectedItem(new Integer(row));
-			colComboBox.setSelectedItem(new Integer(col));
+			rowSpinner.getModel().setValue(new Integer(row));
+			colSpinner.getModel().setValue(new Integer(col));
 		}
 
 		// Button Pane.
@@ -132,7 +130,7 @@ public class DialogComponentAdder extends Dialog {
 		okButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
-				monitor.add((JComponent) componantComboBox.getSelectedItem(), ((Integer) rowComboBox.getSelectedItem()).intValue(), ((Integer) colComboBox.getSelectedItem()).intValue());
+				monitor.add((JComponent) componantComboBox.getSelectedItem(), ((Integer)rowSpinner.getValue()).intValue(), ((Integer)colSpinner.getValue()).intValue());
 				setVisible(false);
 			}
 		});

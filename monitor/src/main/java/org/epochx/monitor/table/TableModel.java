@@ -66,8 +66,8 @@ import org.epochx.monitor.Utilities;
  * <p>
  * <h3>Concurrency</h3>
  * For greater convenience, the <code>TableModel</code> class registers the
- * {@link Timer} and the {@link #task} which refreshs
- * the tabular data model at a fixed rate specified in the constructor.<br>
+ * {@link Timer} and the {@link #task} which refreshs the tabular data model at
+ * a fixed rate specified in the constructor.<br>
  * <br>
  * Because a <code>TableModel</code> store all the critical fields (the tabular
  * data, and the buffer list) which could be accessed from both the <i>timer
@@ -264,21 +264,25 @@ public class TableModel extends AbstractTableModel implements Listener<Event> {
 	 * @see Table#FORMAT_XLS
 	 * @see Table#FORMAT_CSV
 	 */
-	protected synchronized void export(File file, String format) {
+	protected void export(File file, String format) throws IllegalArgumentException {
+		refresh();
 		if (format == Table.FORMAT_XLS) {
 			try {
 				WritableWorkbook workbook = Workbook.createWorkbook(file);
 				WritableSheet sheet = workbook.createSheet("First Sheet", 0);
-				int rowCount = getRowCount();
-				int columnCount = getColumnCount();
-				for (int i = 0; i < rowCount; i++) {
-					Label column = new Label(i, 0, getColumnName(i));
-					sheet.addCell(column);
-				}
-				for (int i = 0; i < rowCount; i++) {
-					for (int j = 0; j < columnCount; j++) {
-						Label row = new Label(j, i + 1, getValueAt(i, j).toString());
-						sheet.addCell(row);
+				synchronized (this) {
+					int rowCount = getRowCount();
+					int columnCount = getColumnCount();
+					System.out.println(rowCount + " " + columnCount);
+					for (int i = 0; i < columnCount; i++) {
+						Label column = new Label(i, 0, getColumnName(i));
+						sheet.addCell(column);
+					}
+					for (int i = 0; i < rowCount; i++) {
+						for (int j = 0; j < columnCount; j++) {
+							Label row = new Label(j, i + 1, getValueAt(i, j).toString());
+							sheet.addCell(row);
+						}
 					}
 				}
 				workbook.write();
@@ -290,16 +294,18 @@ public class TableModel extends AbstractTableModel implements Listener<Event> {
 			try {
 
 				BufferedWriter bufferWriter = new BufferedWriter(new FileWriter(file));
-				int rowCount = getRowCount();
-				int columnCount = getColumnCount();
-				for (int i = 0; i < rowCount; i++) {
-					StringBuffer buffer = new StringBuffer();
-					for (int j = 0; j < columnCount; j++) {
-						buffer.append(",\t" + getValueAt(i, j).toString());
+				synchronized (this) {
+					int rowCount = getRowCount();
+					int columnCount = getColumnCount();
+					for (int i = 0; i < rowCount; i++) {
+						StringBuffer buffer = new StringBuffer();
+						for (int j = 0; j < columnCount; j++) {
+							buffer.append(",\t" + getValueAt(i, j).toString());
+						}
+						buffer.delete(0, 1);
+						bufferWriter.append(buffer.toString());
+						bufferWriter.newLine();
 					}
-					buffer.delete(0, 1);
-					bufferWriter.append(buffer.toString());
-					bufferWriter.newLine();
 				}
 				bufferWriter.flush();
 				bufferWriter.close();

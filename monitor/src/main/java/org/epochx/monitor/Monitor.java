@@ -30,6 +30,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -182,7 +183,15 @@ public class Monitor extends JFrame implements Runnable {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// Create and show the frame in the EDT, for thread safety.
-		SwingUtilities.invokeLater(this);
+		try {
+			SwingUtilities.invokeAndWait(this);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -276,7 +285,6 @@ public class Monitor extends JFrame implements Runnable {
 	 */
 	public synchronized void add(JComponent component, int row, int col) throws NullPointerException,
 			IllegalArgumentException {
-
 		// Throw NullPointerException if component is null.
 		if (component == null) {
 			throw new NullPointerException("JComponent is null.");
@@ -369,7 +377,7 @@ public class Monitor extends JFrame implements Runnable {
 				tabbedPane.setSelectedComponent(component);
 
 				// Repack the monitor.
-				Monitor.this.pack();
+				Monitor.this.pack();Monitor.this.setLocationRelativeTo(null);
 			}
 		}
 	}

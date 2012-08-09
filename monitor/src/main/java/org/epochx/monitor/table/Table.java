@@ -254,12 +254,10 @@ public class Table extends JScrollPane {
 	 * @param file the file in which the <code>Table</code> is exported.
 	 * @param format the format among FORMAT_XLS, FORMAT_CSV.
 	 * 
-	 * @throws IllegalArgumentException if the format is unknown.
-	 * 
 	 * @see Table#FORMAT_XLS
 	 * @see Table#FORMAT_CSV
 	 */
-	public void export(File file, String format) throws IllegalArgumentException {
+	public void export(File file, String format) {
 		model.export(file, format);
 	}
 
@@ -306,16 +304,9 @@ public class Table extends JScrollPane {
 	 */
 	private class ColumnAddedListener implements TableColumnModelListener {
 
-		/**
-		 * Constructs a <code>ColumnAddedListener</code>.
-		 */
 		private ColumnAddedListener() {
-
 		}
 
-		/**
-		 * <code>TableColumnModelListener</code> inherited method.
-		 */
 		public void columnAdded(TableColumnModelEvent e) {
 			// Gets index of columns added.
 			int fromIndex = e.getFromIndex();
@@ -334,28 +325,16 @@ public class Table extends JScrollPane {
 			adjustPreferredSize();
 		}
 
-		/**
-		 * <code>TableColumnModelListener</code> inherited.
-		 */
 		public void columnRemoved(TableColumnModelEvent arg0) {
 			Table.this.adjustPreferredSize();
 		}
 
-		/**
-		 * <code>TableColumnModelListener</code> inherited.
-		 */
 		public void columnMarginChanged(ChangeEvent arg0) {
 		}
 
-		/**
-		 * <code>TableColumnModelListener</code> inherited.
-		 */
 		public void columnMoved(TableColumnModelEvent arg0) {
 		}
 
-		/**
-		 * <code>TableColumnModelListener</code> inherited.
-		 */
 		public void columnSelectionChanged(ListSelectionEvent arg0) {
 		}
 

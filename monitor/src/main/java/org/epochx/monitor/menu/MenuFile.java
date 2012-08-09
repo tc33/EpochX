@@ -102,6 +102,7 @@ public class MenuFile extends Menu {
 		synchronized (monitor) {
 			// Reset the export menu.
 			exportMenu.removeAll();
+			exportMenu.setEnabled(false);
 			for (JComponent component: monitor.getComponentList())
 
 				if (component instanceof Chart) {
@@ -111,7 +112,8 @@ public class MenuFile extends Menu {
 					exportMenu.add(item);
 				}
 			
-			exportMenu.addSeparator();
+			if(exportMenu.getItemCount()>0)
+				exportMenu.addSeparator();
 			
 			for (JComponent component: monitor.getComponentList())
 
@@ -122,6 +124,8 @@ public class MenuFile extends Menu {
 					item.addActionListener(new DialogExportTable(monitor, table));
 					exportMenu.add(item);
 				}
+			if(exportMenu.getItemCount()>0)
+				exportMenu.setEnabled(true);
 		}
 	}
 }

@@ -138,8 +138,8 @@ public class PnlInfo extends JPanel {
 			txtrValue.setText(node.getIndividual().toString());
 			txtrValue.scrollRectToVisible(new Rectangle(0, 0, 100, 1000));
 			txtrValue.setCaretPosition(0);
-			updateUI();
 		}
+		updateUI();
 	}
 
 }

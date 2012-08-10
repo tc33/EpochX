@@ -40,14 +40,31 @@ public class Graph extends JPanel {
 	 * The number of created instances.
 	 */
 	private static int noInstances = 0;
-	
-	private final static int DEFAULT_DIAMETER = 15;
-	
-	private final static int DEFAULT_HGAP = 0;
-	
-	private final static int DEFAULT_VGAP = 10;
-	
-	private final PnlInfo pnlInfo = new PnlInfo();
+
+	/**
+	 * The default diameter of nodes.
+	 */
+	private final static int DEFAULT_DIAMETER = 10;
+
+	/**
+	 * The default horizontal gap between two nodes.
+	 */
+	private final static int DEFAULT_HGAP = 1;
+
+	/**
+	 * The default vertical gap between two nodes.
+	 */
+	private final static int DEFAULT_VGAP = 30;
+
+	/**
+	 * The <code>Pnlgraph</code>.
+	 */
+	private final PnlGraph pnlGraph;
+
+	/**
+	 * The <code>PnlInfo</code>.
+	 */
+	private final PnlInfo pnlInfo;
 	
 	/**
 	 * Constructs a <code>Graph</code> with a default name.
@@ -56,9 +73,8 @@ public class Graph extends JPanel {
 	 * </p>
 	 */
 	public Graph() {
-		this("graph" + noInstances, DEFAULT_DIAMETER, DEFAULT_HGAP, DEFAULT_VGAP);
+		this("Graph " + noInstances, DEFAULT_DIAMETER, DEFAULT_HGAP, DEFAULT_VGAP);
 	}
-	
 
 	/**
 	 * Constructs a <code>Graph</code> with a specified name.
@@ -70,39 +86,44 @@ public class Graph extends JPanel {
 	}
 
 	/**
-	 * Constructs a <code>Graph</code> with a specified name.
+	 * Constructs a <code>Graph</code> with specified arguments.
 	 * 
 	 * @param name the Name given to the main component.
+	 * @param diameter the node diameter.
+	 * @param hgap the horizontal gap between two column of node.
+	 * @param vgap the vertical gap between two row of node.
 	 */
 	public Graph(String name, int diameter, int hgap, int vgap) {
-		
-		// Component Settings
+
 		super(new BorderLayout());
+		this.pnlGraph = new PnlGraph(this, diameter, hgap, vgap);
+		this.pnlInfo = new PnlInfo();
+
 		setName(name);
 		
-		add(new PnlGraph(diameter, hgap, vgap), BorderLayout.CENTER);
+		add(pnlGraph, BorderLayout.CENTER);
 		add(pnlInfo, BorderLayout.SOUTH);
-		
-		GraphNode.setPnlInfo(pnlInfo);
-
 	}
-	
-	/*public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		Graphics2D g2 = (Graphics2D)g;
-		g2.setBackground(Color.white);
-		//g2.clearRect(0, 0, getWidth(), getHeight());
-		
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2.setStroke(BASIC_STROKE);
-		g2.setFont(DEFAULT_FONT);
-//		synchronized(this){
-//		for(GraphNode node : nodes)
-//			node.paintComponent(g2);
-//		}
 
-	}*/
+	/**
+	 * Returns the <code>PnlGraph</code>.
+	 * 
+	 * @return the <code>PnlGraph</code>.
+	 */
+	public PnlGraph getPnlGraph() {
+		return pnlGraph;
+	}
+
+	/**
+	 * Returns the <code>PnlInfo</code>.
+	 * 
+	 * @return the <code>PnlInfo</code>.
+	 */
+	public PnlInfo getPnlInfo() {
+		return pnlInfo;
+	}	
 	
+	@Override
 	public String toString() {
 		return getName();
 	}

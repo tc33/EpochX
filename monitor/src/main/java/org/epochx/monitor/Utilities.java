@@ -37,9 +37,6 @@ import javax.swing.JTabbedPane;
  */
 public final class Utilities {
 
-	private Utilities() {
-	}
-
 	/**
 	 * Returns <code>true</code> if the <code>JComponent</code> is visible
 	 * on the monitor (e.g. his parent tab is selected).

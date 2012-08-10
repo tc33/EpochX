@@ -58,7 +58,7 @@ public class MonitorGraphTest {
 		// config.set(Crossover.PROBABILITY, 0.9);
 		// config.set(Reproduction.PROBABILITY, 0.1);
 		config.set(BranchedBreeder.ELITISM, 0);
-		config.set(MaximumGenerations.MAXIMUM_GENERATIONS,50);
+		config.set(MaximumGenerations.MAXIMUM_GENERATIONS,100);
 		config.set(TreeFactory.MAX_DEPTH, 17);
 		config.set(TreeFactory.INITIAL_DEPTH, 6);
 		config.set(TournamentSelector.TOURNAMENT_SIZE, 4);

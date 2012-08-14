@@ -222,6 +222,7 @@ public class Monitor extends JFrame implements Runnable {
 
 		// Show the frame.
 		pack();
+		setSize(1400, 800);
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
@@ -316,8 +317,7 @@ public class Monitor extends JFrame implements Runnable {
 
 	/**
 	 * An <code>Adder</code> is a <code>Runnable</code> implementation which
-	 * adds
-	 * a component to a specific pane.
+	 * adds a component to a specific pane.
 	 * <p>
 	 * Must be run in the EDT and invoked by
 	 * {@link SwingUtilities#invokeLater(Runnable)} method.
@@ -377,15 +377,14 @@ public class Monitor extends JFrame implements Runnable {
 				tabbedPane.setSelectedComponent(component);
 
 				// Repack the monitor.
-				Monitor.this.pack();Monitor.this.setLocationRelativeTo(null);
+				Monitor.this.pack();
 			}
 		}
 	}
 
 	/**
 	 * An <code>AddButton</code> paints a cross, and opens a
-	 * <code>JDialog</code> to add a component,
-	 * when pressed.
+	 * <code>JDialog</code> to add a component, when pressed.
 	 */
 	private class AddButton extends JButton {
 

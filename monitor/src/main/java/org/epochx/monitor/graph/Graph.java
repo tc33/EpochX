@@ -44,7 +44,7 @@ public class Graph extends JPanel {
 	/**
 	 * The default diameter of nodes.
 	 */
-	private final static int DEFAULT_DIAMETER = 10;
+	private final static int DEFAULT_DIAMETER = 15;
 
 	/**
 	 * The default horizontal gap between two nodes.
@@ -54,7 +54,7 @@ public class Graph extends JPanel {
 	/**
 	 * The default vertical gap between two nodes.
 	 */
-	private final static int DEFAULT_VGAP = 30;
+	private final static int DEFAULT_VGAP = 50;
 
 	/**
 	 * The <code>Pnlgraph</code>.

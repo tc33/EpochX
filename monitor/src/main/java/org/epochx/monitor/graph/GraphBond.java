@@ -26,6 +26,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.geom.CubicCurve2D;
@@ -34,7 +35,9 @@ import java.util.ArrayList;
 
 import javax.swing.JComponent;
 
+import org.epochx.Config;
 import org.epochx.Operator;
+import org.epochx.Population;
 
 /**
  * 
@@ -82,28 +85,35 @@ public class GraphBond extends JComponent {
 	 *        <code>GraphBond</code> is the representation.
 	 * @param bounds the bounds.
 	 */
-	public GraphBond(PnlGraph pnlGraph, Operator operator, Rectangle bounds) {
+	public GraphBond(PnlGraph pnlGraph, Operator operator, Point p, GraphNode offspring, GraphNode ... parents) {
 		super();
 		this.pnlGraph = pnlGraph;
 		this.operator = operator;
-		setBounds(bounds);
-		//setBorder(BorderFactory.createEtchedBorder());
-
+		
+		children.add(offspring);
+		offspring.setParentBond(this);
+		
+		for (GraphNode node: parents) {
+			node.addChildBond(this);
+			this.parents.add(node);
+		}
+		
+		int popSize = Config.getInstance().get(Population.SIZE);
+		
+		int x = (int)( p.getX() );
+		int y = (int)( p.getY()+getDiameter()/2 );
+		int width = (int)( popSize*(getDiameter()*1.5+getHgap()) );
+		int height = (int)( getDiameter()+getVgap() );
+		setBounds(new Rectangle(x, y, width, height));
+		
+		//setBorder(BorderFactory.createLineBorder(Color.black));
+		validate();
 	}
 
 	public void setParents(GraphNode ... parents) {
 		for (GraphNode node: parents) {
 			node.addChildBond(this);
 			this.parents.add(node);
-		}
-
-		repaint();
-	}
-
-	public void setChildren(GraphNode ... children) {
-		for (GraphNode node: children) {
-			node.addParentBonds(this);
-			this.children.add(node);
 		}
 		repaint();
 	}
@@ -120,61 +130,51 @@ public class GraphBond extends JComponent {
 	}
 	
 	/**
+	 * Returns the operator.
 	 * @return the operator
 	 */
 	public Operator getOperator() {
 		return operator;
 	}
 
+	/**
+	 * Returns the diameter.
+	 * @return the diameter
+	 */
 	private int getDiameter() {
 		return pnlGraph.getDiameter();
 	}
-
-	private Point2D getParentCrossPoint() {
-		Point2D res = null;
-		if (parents.size() == 1) {
-			
-			res = parents.get(0).getBottom();
-			
-		} else if (parents.size() > 1) {
-			
-			double x = 0;
-			for (GraphNode parent: parents) {
-				x += parent.getCentre().getX();
-			}
-			x /= parents.size();
-
-			Double P = 0.4;
-			res = new Point2D.Double(x, (1 - P) * parents.get(0).getCentre().getY() + P
-					* children.get(0).getCentre().getY());
-			
-		}
-		return res;
+	
+	/**
+	 * Returns the horizontal gap.
+	 * @return the horizontal gap
+	 */
+	public int getHgap() {
+		return pnlGraph.getHgap();
+	}
+	
+	/**
+	 * Returns the vertical gap.
+	 * @return the vertical gap
+	 */
+	public int getVgap() {
+		return pnlGraph.getVgap();
 	}
 
-	private Point2D getChildrenCrossPoint() {
-		Point2D res = null;
-		if (children.size() == 1) {
-
-			res = children.get(0).getTop();
-					
-		} else if (children.size() > 1) {
-
-			double x = 0;
-			for (GraphNode child: children) {
-				x += child.getCentre().getX();
-			}
-			x /= children.size();
-
-			Double P = 0.4;
-
-			res = new Point2D.Double(x, P * parents.get(0).getCentre().getY() + (1 - P)
-					* children.get(0).getCentre().getY());
-			
+	/**
+	 * Return the parent mean X location.
+	 * @return the parent mean X location
+	 */
+	private int getParentMeanX() {
+		double mean = 0;
+		for (GraphNode parent: parents) {
+			int x = (int) (getHgap() + getDiameter() / 2.0 + parent.getIndex() * (getDiameter() + getHgap()));
+			mean += x;
 		}
-		return res;
+		mean /= parents.size();
+		return (int) mean;
 	}
-
+	
 	@Override
 	public void paintComponent(Graphics g) {
 		// if parents or children list is empty, do nothing.
@@ -191,29 +191,31 @@ public class GraphBond extends JComponent {
 
 		if (selected) {
 			color = Color.GREEN;
-			STROKE_WIDTH = 2;
+			STROKE_WIDTH = 3;
 		} else {
-			color = Color.DARK_GRAY;
+			color = Color.GRAY;
 			STROKE_WIDTH = 1;
 		}
 		g2.setStroke(new BasicStroke(STROKE_WIDTH));
 		g2.setColor(color);
 
 		// Draws parents bonds.
-		Point2D parentCross = getParentCrossPoint();
 		for (GraphNode parent: parents) {
-			g2.draw(createCurve(parent.getBottom(), parentCross, DElTA));
-			// g2.draw(new Line2D.Double(pX, pY, pcX, pcY));
-		}
-
-		// Draws children bonds.
-		Point2D childCross = getChildrenCrossPoint();
-		for (GraphNode child: children) {
-			g2.draw(createCurve(childCross, child.getTop(), DElTA));
+			
+			double x1 = getHgap() + 1.0*getDiameter() / 2.0 + parent.getIndex() * (getDiameter() + getHgap());
+			double y1 = getDiameter()/2.0 + 1.0;
+			double x2 = getParentMeanX();
+			double y2 = getBounds().getHeight()/3.0;
+			
+			g2.draw(createCurve(x1, y1, x2, y2, DElTA));
 		}
 
 		// Draws middle bonds.
-		g2.draw(createCurve(parentCross, childCross, 0.2));
+		double x1 = getParentMeanX();
+		double y1 = getBounds().getHeight()/3.0;
+		double x2 = (int) (getHgap() + getDiameter() / 2.0 + children.get(0).getIndex() * (1.0*getDiameter() + getHgap()));
+		double y2 = getBounds().getHeight() - getDiameter()/2.0 - 1.0;
+		g2.draw(createCurve(x1, y1, x2, y2, DElTA));
 
 		g2.setStroke(new BasicStroke(STROKE_WIDTH));
 		g2.setColor(color);
@@ -221,6 +223,7 @@ public class GraphBond extends JComponent {
 	
 	/**
 	 * Creates a <code>CubicCurve2D</code>.
+	 * 
 	 * @param p1 the start point of the cubic curve segment.
 	 * @param p2 the end point of the cubic curve segment.
 	 * @param delta the delta.
@@ -237,6 +240,7 @@ public class GraphBond extends JComponent {
 
 	/**
 	 * Creates a <code>CubicCurve2D</code>.
+	 * 
 	 * @param x1 the X coordinate of the start point.
 	 * @param y1 the Y coordinate of the start point.
 	 * @param x2 the X coordinate of the end point.

@@ -23,13 +23,16 @@
 package org.epochx.monitor.graph;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import javax.swing.AbstractButton;
@@ -43,7 +46,7 @@ import org.epochx.Individual;
 /**
  * 
  */
-public class GraphNode extends AbstractButton implements ChangeListener, MouseListener {
+public class GraphNode extends AbstractButton implements Comparable<Object>, ChangeListener, MouseListener {
 
 	/**
 	 * Generated serial UID.
@@ -51,9 +54,9 @@ public class GraphNode extends AbstractButton implements ChangeListener, MouseLi
 	private static final long serialVersionUID = 5961230393742298632L;
 
 	/**
-	 * The parent <code>PnlGraph</code>.
+	 * The parent <code>GraphGen</code>.
 	 */
-	private final PnlGraph pnlGraph;
+	private final GraphGen graphGen;
 
 	/**
 	 * The <code>Individual</code> whose this <code>GraphNode</code> is the
@@ -62,149 +65,139 @@ public class GraphNode extends AbstractButton implements ChangeListener, MouseLi
 	private Individual ind;
 
 	/**
-	 * The generation number of this node.
+	 * The <code>GridBagConstraints</code>.
 	 */
-	private final int genNo;
+	private final GridBagConstraints gbc;
 
 	/**
-	 * The centre point of this node.
+	 * The parent <code>GraphBond</code>.
 	 */
-	private final Point2D centre;
+	private GraphBond parentBond = null;
 
-	private final ArrayList<GraphNode> parents;
-
-	private final ArrayList<GraphNode> children;
-
+	/**
+	 * The list of child <code>GraphBond</code>.
+	 */
 	private final ArrayList<GraphBond> childBonds;
-
-	private final ArrayList<GraphBond> parentBonds;
 
 	/**
 	 * Constructs a <code>GraphNode</code>.
 	 * 
-	 * @param pnlGraph the parent <code>PnlGraph</code>.
+	 * @param graphGen the parent <code>GraphGen</code>
 	 * @param ind the <code>Individual</code> whose this <code>GraphNode</code>
-	 *        is the representation.
-	 * @param genNo the generation number.
-	 * @param x the X location of the centre in the pane.
-	 * @param y the Y location of the centre in the pane.
+	 *        is the representation
+	 * @param genNo the generation number
+	 * @param x the X location of the centre in the pane
+	 * @param y the Y location of the centre in the pane
 	 */
-	public GraphNode(PnlGraph pnlGraph, Individual ind, int genNo, int x, int y) {
+	public GraphNode(GraphGen graphGen, Individual ind) {
 		super();
-		this.pnlGraph = pnlGraph;
+		this.graphGen = graphGen;
 		this.ind = ind;
-		this.centre = new Point2D.Double(x, y);
-		this.genNo = genNo;
 
-		parents = new ArrayList<GraphNode>();
-		children = new ArrayList<GraphNode>();
-		parentBonds = new ArrayList<GraphBond>();
 		childBonds = new ArrayList<GraphBond>();
 
-		pnlGraph.addFitness(ind.getFitness());
+		setModel(new GraphNodeModel());
+		setToolTipText(ind.getFitness().toString());
+
+		gbc = new GridBagConstraints();
+
+		gbc.gridx = GridBagConstraints.RELATIVE;
+		gbc.gridy = 0;
+
+		gbc.gridwidth = 1;
+		gbc.gridheight = 1;
+
+		gbc.weightx = 0;
+		gbc.weighty = 0;
+
+		gbc.insets = new Insets(0, 0, 0, 0);
+		gbc.ipadx = 0;
+		gbc.ipady = 0;
+
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.fill = GridBagConstraints.NONE;
+
+		graphGen.addFitness(ind.getFitness());
 
 		addMouseListener(this);
 		addChangeListener(this);
-		setModel(new GraphNodeModel());
-		setToolTipText(ind.getFitness().toString());
-		// setBorder(BorderFactory.createEtchedBorder());
 
-		setBounds(x - getDiameter() / 2, y - getDiameter() / 2, getDiameter(), getDiameter());
+		setPreferredSize(new Dimension(getDiameter(), getDiameter()));
+
+		repaint();
 		validate();
 
 	}
 
 	/**
-	 * @return the <code>Individual</code>.
+	 * Return the <code>Individual</code>.
+	 * 
+	 * @return the <code>Individual</code>
 	 */
 	public Individual getIndividual() {
 		return ind;
 	}
 
 	/**
-	 * @return the parents list.
-	 */
-	public ArrayList<GraphNode> getParents() {
-		return parents;
-	}
-
-	/**
-	 * @return the children list.
-	 */
-	public ArrayList<GraphNode> getChildren() {
-		return children;
-	}
-
-	/**
-	 * Returns the centre point of this node.
+	 * Returns the <code>Fitness</code> of the node's <code>Individual</code>.
 	 * 
-	 * @return the centre point of this node.
+	 * @return the <code>Fitness</code> of the node's <code>Individual</code>
 	 */
-	public Point2D getCentre() {
-		return centre;
+	public Fitness getFitness() {
+		return ind.getFitness();
 	}
 
 	/**
-	 * Returns the top point of this node.
+	 * Returns the generation number.
 	 * 
-	 * @return the top point of this node.
+	 * @return the generation number
 	 */
-	public Point2D getTop() {
-		return new Point2D.Double(centre.getX(), centre.getY() - getDiameter() / 2.0);
+	public int getGenerationNo() {
+		return graphGen.getGenenratioNo();
 	}
 
 	/**
-	 * Returns the bottom point of this node.
+	 * Returns the index of this <code>GraphNode</code> in the parent
+	 * <code>GraphGen</code>'s set.
 	 * 
-	 * @return the bottom point of this node.
+	 * @return the index of this <code>GraphNode</code> in the parent
+	 *         <code>GraphGen</code>'s set
 	 */
-	public Point2D getBottom() {
-		return new Point2D.Double(centre.getX(), centre.getY() + getDiameter() / 2.0);
+	public int getIndex() {
+		return graphGen.indexOf(this);
 	}
 
-	/**
-	 * Returns the right point of this node.
-	 * 
-	 * @return the right point of this node.
-	 */
-	public Point2D getRight() {
-		return new Point2D.Double(centre.getX() + getDiameter() / 2.0, centre.getY());
+	protected GridBagConstraints getGBC() {
+		return gbc;
 	}
 
-	/**
-	 * Returns the left point of this node.
-	 * 
-	 * @return the left point of this node.
-	 */
-	public Point2D getLeft() {
-		return new Point2D.Double(centre.getX() - getDiameter() / 2.0, centre.getY());
+	protected void setGridX(int x) {
+		gbc.gridx = x;
 	}
 
 	/**
 	 * Returns the diameter.
 	 * 
-	 * @return the diameter.
+	 * @return the diameter
 	 */
 	public int getDiameter() {
-		int diameter;
-		if (getModel().isRollover()) {
-			diameter = (int) (pnlGraph.getDiameter() * 1.3);
-		} else {
-			diameter = pnlGraph.getDiameter();
-		}
-		return diameter;
+		return graphGen.getDiameter();
 	}
 
 	/**
-	 * Adds a parent <code>GraphBond</code> the {@link #parentBonds} list.
-	 * <p>
-	 * <b>Synchronized</b> by intrinsic <i>lock</i>.
-	 * </p>
+	 * Returns the parent <code>GraphBond</code>.
 	 * 
-	 * @param bond the <code>GraphBond</code> to add.
+	 * @return the parent <code>GraphBond</code>
 	 */
-	public synchronized void addParentBonds(GraphBond bond) {
-		parentBonds.add(bond);
+	public GraphBond getParentBond() {
+		return parentBond;
+	}
+
+	/**
+	 * @param parentBond the parentBond to set
+	 */
+	public void setParentBond(GraphBond parentBond) {
+		this.parentBond = parentBond;
 	}
 
 	/**
@@ -219,79 +212,93 @@ public class GraphNode extends AbstractButton implements ChangeListener, MouseLi
 		childBonds.add(bond);
 	}
 
-	/**
-	 * Returns the <code>Fitness</code> of the node Individual.
-	 * 
-	 * @return the <code>Fitness</code> of the node Individual.
-	 */
-	public Fitness getFitness() {
-		return ind.getFitness();
-	}
-
-	/**
-	 * Returns the generation number.
-	 * 
-	 * @return the generation number.
-	 */
-	public int getGenNo() {
-		return genNo;
-	}
-
 	// We don't want to update UI for this button.
 	@Override
 	public void updateUI() {
 	}
 
 	/**
-	 * Overrides the <code>equals</code> method to return true if this node have
-	 * the same <code>Individual</code> as the node argumument; false otherwise.
+	 * Compares the given object with this <code>GraphNode</code>'s
+	 * <code>Fitness</code>.
 	 * 
-	 * @param obj the reference object with which to compare.
+	 * <p>
+	 * The given object can be an instance of <code>GraphNode</code> or
+	 * <code>Individual</code>. Throws a <code>ClassCastException</code>
+	 * otherwise.
+	 * </p>
+	 * 
+	 * @param obj the reference object with which to compare
+	 * @return the value 0 if the argument's <code>Fitness</code> is equal to
+	 *         this <code>GraphNode</code>'s <code>Fitness</code>; a value less
+	 *         than 0 if the argument's <code>Fitness</code> is than this
+	 *         <code>GraphNode</code>'s <code>Fitness</code>; and a value
+	 *         greater than 0 if the argument's <code>Fitness</code> is less
+	 *         than this <code>GraphNode</code>'s <code>Fitness</code>.
+	 */
+	public int compareTo(Object obj) {
+		if (obj instanceof GraphNode) {
+			return getFitness().compareTo(((GraphNode) obj).getFitness());
+		} else if (obj instanceof Individual) {
+			return getFitness().compareTo(((Individual) obj).getFitness());
+		} else {
+			throw new ClassCastException(obj.getClass().getSimpleName());
+		}
+	}
+
+	/**
+	 * Overrides the <code>equals</code> method to compare the
+	 * <code>Individual</code> equality.
+	 * 
+	 * <p>
+	 * The given object can be an instance of <code>GraphNode</code> or
+	 * <code>Individual</code>; Returns false otherwise.
+	 * </p>
+	 * 
+	 * @param obj the reference object with which to compare equality
 	 * @return <code>true</code> if this node have the same
 	 *         <code>Individual</code> as the object argumument; false
-	 *         otherwise.
+	 *         otherwise
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof GraphNode)
+		if (obj instanceof GraphNode) {
 			return ind.equals(((GraphNode) obj).ind);
-		return false;
-
+		} else if (obj instanceof Individual) {
+			return ind.equals((Individual) obj);
+		} else {
+			return false;
+		}
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
-		
+
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g.create();
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		// final int BORDER_WIDTH = 1;
-		int diameter = getDiameter();
-
-
-		Color fillColor = pnlGraph.getFitnessColor(getFitness());
+		if (getModel().isRollover()) {
+			Rectangle2D rectangle = new Rectangle2D.Double(0, 0, getDiameter(), getDiameter());
+			g2.setPaint(Color.GREEN);
+			g2.fill(rectangle);
+		}
+		Color fillColor = graphGen.getFitnessColor(getFitness());
 		g2.setPaint(fillColor);
-		
-		setBounds((int) centre.getX() - diameter / 2, (int) centre.getY() - diameter / 2, diameter, diameter);
-		Ellipse2D ellipse = new Ellipse2D.Double(0, 0, getBounds().getWidth(), getBounds().getHeight());
+
+		Ellipse2D ellipse = new Ellipse2D.Double(0, 0, getDiameter(), getDiameter());
 		g2.fill(ellipse);
 	}
 
 	/**
 	 * The <code>StateListener</code> inherited method.
 	 * 
-	 * @param e the <code>ChangeEvent</code>.
+	 * @param e the <code>ChangeEvent</code>
 	 */
 	public void stateChanged(ChangeEvent e) {
 		repaint();
 	}
 
-	/**
-	 * A <code>MouseListener</code> inherited method.
-	 * 
-	 * @param e the <code>MouseEvent</code>.
-	 */
 	public void mouseClicked(MouseEvent e) {
 		/*
 		 * if ((e.getButton() == 1) && ellipse.contains(e.getX(), e.getY()) ) {
@@ -301,41 +308,23 @@ public class GraphNode extends AbstractButton implements ChangeListener, MouseLi
 		 * }
 		 */
 		// fillColor = Color.green;
-		pnlGraph.getGraph().getPnlInfo().setNode(this);
+		graphGen.getPnlGraph().getGraph().getPnlInfo().setNode(this);
+		// System.out.println(graphGen.getXPosition(this));
 	}
 
-	/**
-	 * A <code>MouseListener</code> inherited method.
-	 * 
-	 * @param e the <code>MouseEvent</code>.
-	 */
 	public void mouseEntered(MouseEvent e) {
 		getModel().setRollover(true);
+		// graphGen.getPnlGraph().getGraph().getPnlInfo().setNode(this);
 	}
 
-	/**
-	 * A <code>MouseListener</code> inherited method.
-	 * 
-	 * @param e the <code>MouseEvent</code>.
-	 */
 	public void mouseExited(MouseEvent e) {
 		getModel().setRollover(false);
 	}
 
-	/**
-	 * A <code>MouseListener</code> inherited method.
-	 * 
-	 * @param e the <code>MouseEvent</code>.
-	 */
 	public void mousePressed(MouseEvent e) {
 
 	}
 
-	/**
-	 * A <code>MouseListener</code> inherited method.
-	 * 
-	 * @param e the <code>MouseEvent</code>.
-	 */
 	public void mouseReleased(MouseEvent e) {
 
 	}
@@ -354,16 +343,19 @@ public class GraphNode extends AbstractButton implements ChangeListener, MouseLi
 		/**
 		 * Sets or clears the button's rollover state.
 		 * 
-		 * @param b true to turn on rollover.
+		 * @param b true to turn on rollover
 		 */
 		public void setRollover(boolean b) {
 			super.setRollover(b);
-			for (GraphNode node: parents) {
-				node.getModel().setRollover(b);
+			if (parentBond != null) {
+				parentBond.setSelected(b);
 			}
-			for (GraphBond bond: parentBonds) {
+
+			for (GraphBond bond: childBonds) {
 				bond.setSelected(b);
+				bond.repaint();
 			}
 		}
 	}
+
 }

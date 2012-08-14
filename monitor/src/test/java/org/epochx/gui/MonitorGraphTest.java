@@ -25,6 +25,7 @@ import org.epochx.refactoring.PopulationNeutrality;
 import org.epochx.refactoring.Problem;
 import org.epochx.refactoring.initialisation.RampedHalfAndHalf;
 import org.epochx.refactoring.initialisation.TreeFactory;
+import org.epochx.refactoring.operator.Crossover;
 import org.epochx.refactoring.operator.Mutation;
 import org.epochx.refactoring.operator.NeutralAwareMutation;
 import org.epochx.refactoring.problem.EvenParity;
@@ -55,7 +56,7 @@ public class MonitorGraphTest {
 		// some parameters
 
 		config.set(Population.SIZE, 50);
-		// config.set(Crossover.PROBABILITY, 0.9);
+		//config.set(Crossover.PROBABILITY, 0.9);
 		// config.set(Reproduction.PROBABILITY, 0.1);
 		config.set(BranchedBreeder.ELITISM, 0);
 		config.set(MaximumGenerations.MAXIMUM_GENERATIONS,100);
@@ -72,6 +73,7 @@ public class MonitorGraphTest {
 		List<Operator> operators = new ArrayList<Operator>();
 		operators.add(new Reproduction());
 		operators.add(new Mutation());
+		operators.add(new Crossover());
 
 		// operators.add(new StrictInflateMutation());
 		// operators.add(new StrictDeflateMutation());
@@ -93,7 +95,7 @@ public class MonitorGraphTest {
 
 		Monitor monitor = new Monitor("Frame Graph Test");
 		
-		Graph g = new Graph();
+		Graph g = new Graph("Visualization Graph");
 		monitor.add(g);
 
 		// we are ready to go!

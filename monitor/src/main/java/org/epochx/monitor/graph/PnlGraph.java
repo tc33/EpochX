@@ -24,33 +24,36 @@ package org.epochx.monitor.graph;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Rectangle;
-import java.util.ArrayList;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Iterator;
 import java.util.TreeSet;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.Timer;
 
+import org.epochx.Config;
 import org.epochx.Fitness;
-import org.epochx.Individual;
 import org.epochx.Population;
 import org.epochx.event.Event;
 import org.epochx.event.EventManager;
-import org.epochx.event.GenerationEvent.EndGeneration;
+import org.epochx.event.GenerationEvent.StartGeneration;
 import org.epochx.event.Listener;
-import org.epochx.event.OperatorEvent.EndOperator;
+import org.epochx.event.ParentIndividualEvent;
+import org.epochx.event.RunEvent.EndRun;
+import org.epochx.monitor.Utilities;
 
 /**
  * 
  */
-public class PnlGraph extends JScrollPane implements Listener<Event> {
+public class PnlGraph extends JScrollPane implements Listener<Event>, ActionListener {
 
 	/**
 	 * Generated serial UID.
 	 */
 	private static final long serialVersionUID = 4849953816024039299L;
-	
+
 	/**
 	 * The parent <code>Graph</code>.
 	 */
@@ -78,59 +81,77 @@ public class PnlGraph extends JScrollPane implements Listener<Event> {
 
 	/**
 	 * The <code>FitnessSet</code>.
+	 * <p>
+	 * All accesses must be <b>synchronized</b> because of concurrency with tje
+	 * EDT.
+	 * </p>
 	 */
-	private final FitnessSet fitnesses;
+	private final TreeSet<Fitness> fitnesses;
 
 	/**
-	 * The buffer of <code>EndOperator</code> event.
+	 * The last <code>GraphGen</code>.
 	 */
-	private final ArrayList<EndOperator> buffer = new ArrayList<EndOperator>();
-
-	private ArrayList<GraphNode> children = new ArrayList<GraphNode>();
-
-	private ArrayList<GraphNode> parents = new ArrayList<GraphNode>();
+	private GraphGen lastGen;
+	
+	/**
+	 * The current <code>GraphGen</code>.
+	 */
+	private GraphGen currentGen;
 
 	public PnlGraph(Graph graph, int diameter, int hgap, int vgap) {
 		this.graph = graph;
 		this.diameter = diameter;
 		this.hgap = hgap;
 		this.vgap = vgap;
-		this.fitnesses = new FitnessSet();
+		this.fitnesses = new TreeSet<Fitness>();
 		this.pnl = new JPanel(null, true);
-		
+
 		pnl.setBackground(Color.white);
 
 		setViewportView(pnl);
 		setPreferredSize(new Dimension(800, 600));
-		getVerticalScrollBar().setUnitIncrement(diameter+vgap);
+		getVerticalScrollBar().setUnitIncrement(diameter + vgap);
 
-		EventManager.getInstance().add(EndGeneration.class, this);
-		EventManager.getInstance().add(EndOperator.class, this);
+		currentGen = new GraphGen(this, 0);
+
+		Timer timer = new Timer(1000, this);
+		timer.start(); 
+
+		EventManager.getInstance().add(StartGeneration.class, this);
+		EventManager.getInstance().add(EndRun.class, this);
+		EventManager.getInstance().add(ParentIndividualEvent.class, this);
 	}
-	
+
 	/**
-	 * @return the graph
+	 * Returns parent <code>Graph</code>.
+	 * @return the parent <code>Graph</code>
 	 */
 	public Graph getGraph() {
 		return graph;
 	}
 
 	/**
-	 * @return the diameter
+	 * Returns the diameter of nodes.
+	 * @return the diameter of nodes
 	 */
 	public int getDiameter() {
 		return diameter;
 	}
 
 	/**
-	 * Adds a <code>Fitness</code> in the <code>FitnessSet</code>.
-	 * 
-	 * @param fitness the <code>Fitness</code> to be added.
+	 * Returns the horizontal gap.
+	 * @return the horizontal gap
 	 */
-	public void addFitness(Fitness fitness) {
-		synchronized (fitnesses) {
-			fitnesses.add(fitness);
-		}
+	public int getHgap() {
+		return hgap;
+	}
+	
+	/**
+	 * Returns the vertical gap.
+	 * @return the vertical gap
+	 */
+	public int getVgap() {
+		return vgap;
 	}
 
 	/**
@@ -145,148 +166,96 @@ public class PnlGraph extends JScrollPane implements Listener<Event> {
 		float i;
 		float n;
 		synchronized (fitnesses) {
-			i = fitnesses.indexOf(fitness) * 1.f;
+			i = indexOfFitness(fitness) * 1.f;
 			n = fitnesses.size() * 1.f - 1.f;
 		}
 		return new Color(i / n, 0, (n - i) / n);
 	}
-	
+
 	/**
-	 * The <code>Listener</code> inherited method.
-	 * @param event the {@link Event}.
+	 * Adds a <code>Fitness</code> in the <code>FitnessSet</code>.
+	 * 
+	 * @param fitness the <code>Fitness</code> to be added.
 	 */
-	public void onEvent(Event event) {
-		if (event instanceof EndOperator) {
-			System.out.print(2);
-			buffer.add((EndOperator) event);
-		} else if (event instanceof EndGeneration) {
-			refresh((EndGeneration) event);
+	public void addFitness(Fitness fitness) {
+		synchronized (fitnesses) {
+			fitnesses.add(fitness);
 		}
 	}
-
-	/**
-	 * Refreshs the graph on an <code>EndGeneration</code> event.
-	 * @param eg the <code>EndGeneration</code> event.
-	 */
-	@SuppressWarnings("unchecked")
-	public void refresh(EndGeneration eg) {
-		Population p = eg.getPopulation();
-		p.sort();
-		int genNo = eg.getGeneration();
-
-		children = new ArrayList<GraphNode>();
-
-		int xPos = hgap + diameter;
-		for (int i = 0; i < p.size(); i++) {
-			GraphNode node = new GraphNode(this, p.get(i), genNo, xPos, genNo * (diameter + vgap));
-			pnl.add(node);
-			children.add(node);
-			xPos += diameter + hgap;
-		}
-		
-
-		Rectangle bounds = new Rectangle(xPos, (genNo + 1) * (diameter + vgap));
-		//pnl.setBounds(bounds);
-		pnl.setPreferredSize(bounds.getSize());
-
-		// System.out.print(buffer.size());
-		if (!parents.isEmpty()) {
-
-			GraphBond arrow1 = new GraphBond(this, null, bounds);
-			arrow1.setParents(parents.get(0), parents.get(10));
-			arrow1.setChildren(children.get(2), children.get(5));
-			pnl.add(arrow1);
-			
-			GraphBond arrow2 = new GraphBond(this, null, bounds);
-			arrow2.setParents(parents.get(15));
-			arrow2.setChildren(children.get(20));
-			pnl.add(arrow2);
-
-			GraphBond arrow3 = new GraphBond(this, null, bounds);
-			arrow3.setParents(parents.get(10));
-			arrow3.setParents(parents.get(15));
-			arrow3.setChildren(children.get(10));
-			pnl.add(arrow3);
-
-			for (EndOperator eo: buffer) {
-
-				for (Individual father: eo.getParents()) {
-					System.out.print(parents.contains(father));
-				}
-
-			}
-
-		}
-
-		parents = (ArrayList<GraphNode>) children.clone();
-		buffer.clear();
-
-		pnl.repaint();
-		// setPreferredSize(bound.getSize());
-		revalidate();
-	}
-}
-
-
-
-/**
- * A <code>FitnessSet</code> extends a <code>TreeSet</code> of
- * <code>Fitnesses</code> to overrides {@link #contains(Object)} method and
- * provides {@link #indexOf(Fitness)} method.
- * <p>
- * <b>NOT THREAD-SAFE</b>
- */
-class FitnessSet extends TreeSet<Fitness> {
-
-	/**
-	 * Generated serial UID.
-	 */
-	private static final long serialVersionUID = -8387398262292214425L;
 
 	/**
 	 * Returns the index of the first occurrence with the same
 	 * <code>String</code> value than the given argument ; returns -1 if not
 	 * found.
 	 * 
-	 * @param fitness the <code>Fitness</code> whose index in this set is to be
-	 *        found.
+	 * @param fitness the <code>Fitness</code> whose index in the fitness set is
+	 *        to be found.
 	 * @return the index of the first occurrence with the same
 	 *         <code>String</code> value than the given argument ; returns -1 if
 	 *         not found.
 	 */
-	public int indexOf(Fitness fitness) {
+	public int indexOfFitness(Fitness fitness) {
 		Fitness f;
 		int i = 0;
-		Iterator<Fitness> iterator = super.iterator();
-		while (iterator.hasNext()) {
-			f = iterator.next();
-			if (f.toString().equals(fitness.toString()))
-				return i;
-			else
-				i++;
+		synchronized (fitnesses) {
+			Iterator<Fitness> iterator = fitnesses.iterator();
+			while (iterator.hasNext()) {
+				f = iterator.next();
+				if (f.toString().equals(fitness.toString()))
+					return i;
+				else
+					i++;
+			}
 		}
 		return -1;
 	}
 
 	/**
-	 * Overrides the superclass method.
+	 * The <code>Listener</code> inherited method.
 	 * 
-	 * @return true if the set contains a <code>Fitness</code> with the same
-	 *         <code>String</code> value.
+	 * @param event the {@link Event}.
 	 */
-	@Override
-	public boolean contains(Object o) {
-		if (!(o instanceof Fitness))
-			return false;
+	public void onEvent(Event event) {
+		if (event instanceof ParentIndividualEvent) {
+			ParentIndividualEvent e = (ParentIndividualEvent) event;
 
-		Fitness fitness = (Fitness) o;
+			GraphNode newNode = currentGen.addIndividual(e.getChild());
 
-		Fitness f;
-		for (Iterator<Fitness> iterator = super.iterator(); iterator.hasNext();) {
-			f = iterator.next();
-			if (f.toString().equals(fitness.toString()))
-				return true;
+			GraphBond bond = new GraphBond(this, e.getOperator(), lastGen.getOrigin(), newNode,
+					lastGen.getGraphNode(e.getParents()));
+
+			pnl.add(bond);
+
+		} else if (event instanceof StartGeneration) {
+			StartGeneration e = (StartGeneration) event;
+
+			Population p = e.getPopulation();
+			p.sort();
+			currentGen.addPopulation(p);
+			pnl.add(currentGen);
+			lastGen = currentGen;
+			currentGen = new GraphGen(this, e.getGeneration());
+		} else if (event instanceof EndRun) {
+			currentGen.addPopulation(((EndRun) event).getPopulation());
+			lastGen = currentGen;
+			pnl.add(currentGen);
 		}
-		return false;
+	}
+
+	/**
+	 * The ActionListener inherited method to receive the timer's action events.
+	 * Refreshs the panel.
+	 * 
+	 * @param arg0 the <code>ActionEvent</code>
+	 */
+	public void actionPerformed(ActionEvent arg0) {
+		if (Utilities.isVisible(graph)) {
+			int popSize = Config.getInstance().get(Population.SIZE);
+			int width = (int) (popSize * (getDiameter() + getHgap()) + 30);
+			int height = (int) (getDiameter() + getVgap()) * (currentGen.getGenenratioNo() + 1);
+			pnl.setPreferredSize(new Dimension(width, height));
+			pnl.revalidate();
+			pnl.repaint();
+		}
 	}
 }

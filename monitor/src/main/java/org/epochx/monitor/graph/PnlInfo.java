@@ -91,7 +91,7 @@ public class PnlInfo extends JPanel {
 		pnlMisc.add(lblGenNo);
 
 		txtrGenNo = new JTextArea();
-		txtrGenNo.setText(String.valueOf(node.getGenNo()));
+		txtrGenNo.setText(String.valueOf(node.getGenerationNo()));
 		pnlMisc.add(txtrGenNo);
 
 		pnlMisc.add(Box.createHorizontalStrut(10));
@@ -133,7 +133,7 @@ public class PnlInfo extends JPanel {
 			createAndShowPanel();
 		} else synchronized (this) {
 			this.node = node;
-			txtrGenNo.setText(String.valueOf(node.getGenNo()));
+			txtrGenNo.setText(String.valueOf(node.getGenerationNo()));
 			txtrFitness.setText(node.getFitness().toString());
 			txtrValue.setText(node.getIndividual().toString());
 			txtrValue.scrollRectToVisible(new Rectangle(0, 0, 100, 1000));

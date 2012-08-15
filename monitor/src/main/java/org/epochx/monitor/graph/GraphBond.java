@@ -26,7 +26,6 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.geom.CubicCurve2D;
@@ -35,9 +34,7 @@ import java.util.ArrayList;
 
 import javax.swing.JComponent;
 
-import org.epochx.Config;
 import org.epochx.Operator;
-import org.epochx.Population;
 
 /**
  * 
@@ -57,19 +54,19 @@ public class GraphBond extends JComponent {
 	/**
 	 * The <code>Color</code> of the <code>GraphBond</code>.
 	 */
-	private Boolean selected = false;
+	private Boolean selected;
 
 	/**
 	 * The <code>GraphNode</code> parents bounded by this <code>GraphBond</code>
 	 * .
 	 */
-	private final ArrayList<GraphNode> parents = new ArrayList<GraphNode>();
+	private final ArrayList<GraphNode> parents;
 
 	/**
 	 * The <code>GraphNode</code> children bounded by this
 	 * <code>GraphBond</code>.
 	 */
-	private final ArrayList<GraphNode> children = new ArrayList<GraphNode>();
+	private final ArrayList<GraphNode> children;
 
 	/**
 	 * The <code>Operator</code> whose this <code>GraphBond</code> is the
@@ -80,15 +77,20 @@ public class GraphBond extends JComponent {
 	/**
 	 * Constructs a <code>GraphBond</code>.
 	 * 
-	 * @param pnlGraph the parent <code>PnlGraph</code>.
+	 * @param pnlGraph the parent <code>PnlGraph</code>
 	 * @param operator the <code>Operator</code> whose this
-	 *        <code>GraphBond</code> is the representation.
-	 * @param bounds the bounds.
+	 *        <code>GraphBond</code> is the representation
+	 * @param bounds the bounds
+	 * @param offspring the offspring <code>GraphNode</code>
+	 * @param parents the parents <code>GraphNode</code>
 	 */
-	public GraphBond(PnlGraph pnlGraph, Operator operator, Point p, GraphNode offspring, GraphNode ... parents) {
+	public GraphBond(PnlGraph pnlGraph, Operator operator, Rectangle bounds, GraphNode offspring, GraphNode ... parents) {
 		super();
 		this.pnlGraph = pnlGraph;
 		this.operator = operator;
+		this.selected = false;
+		this.parents = new ArrayList<GraphNode>();
+		this.children = new ArrayList<GraphNode>();
 		
 		children.add(offspring);
 		offspring.setParentBond(this);
@@ -98,19 +100,13 @@ public class GraphBond extends JComponent {
 			this.parents.add(node);
 		}
 		
-		int popSize = Config.getInstance().get(Population.SIZE);
-		
-		int x = (int)( p.getX() );
-		int y = (int)( p.getY()+getDiameter()/2 );
-		int width = (int)( popSize*(getDiameter()*1.5+getHgap()) );
-		int height = (int)( getDiameter()+getVgap() );
-		setBounds(new Rectangle(x, y, width, height));
+		setBounds(bounds);
 		
 		//setBorder(BorderFactory.createLineBorder(Color.black));
-		validate();
 	}
 
 	public void setParents(GraphNode ... parents) {
+		this.parents.clear();
 		for (GraphNode node: parents) {
 			node.addChildBond(this);
 			this.parents.add(node);
@@ -121,12 +117,20 @@ public class GraphBond extends JComponent {
 	/**
 	 * @param b the selected to set
 	 */
-	public synchronized void setSelected(Boolean b) {
+	public synchronized void setSelected(Boolean b, int recursion) {
 		this.selected = b;
-		/*for (GraphNode node: parents) {
-			node.getModel().setRollover(b);
-		}*/
+		if (b) {
+			pnlGraph.moveToFront(this);
+		} else {
+			pnlGraph.moveToBack(this);
+		}
+
 		repaint();
+		if(recursion > 0) {
+			for (GraphNode node: parents) {
+				node.setRollover(b, recursion-1);
+			}
+		}
 	}
 	
 	/**
@@ -160,19 +164,32 @@ public class GraphBond extends JComponent {
 	public int getVgap() {
 		return pnlGraph.getVgap();
 	}
+	
+	/**
+	 * Return the parent mean index.
+	 * @return the parent mean index
+	 */
+	public int getParentMeanIndex() {
+		int index = 0;
+		for (GraphNode parent: parents) {
+			index += parent.getIndex();
+		}
+		index /= parents.size();
+		return index;
+	}
 
 	/**
 	 * Return the parent mean X location.
 	 * @return the parent mean X location
 	 */
-	private int getParentMeanX() {
+	public double getParentMeanX() {
 		double mean = 0;
 		for (GraphNode parent: parents) {
-			int x = (int) (getHgap() + getDiameter() / 2.0 + parent.getIndex() * (getDiameter() + getHgap()));
+			double x = parent.getXPosition();
 			mean += x;
 		}
 		mean /= parents.size();
-		return (int) mean;
+		return mean;
 	}
 	
 	@Override
@@ -188,12 +205,14 @@ public class GraphBond extends JComponent {
 		Color color;
 		int STROKE_WIDTH;
 		double DElTA = 0.5;
+		double RATIO = 0.4;
 
 		if (selected) {
-			color = Color.GREEN;
-			STROKE_WIDTH = 3;
+			color = PnlGraph.HIGHLIGHT_COLOR;
+			STROKE_WIDTH = 2;
 		} else {
-			color = Color.GRAY;
+			int c = 210;
+			color = new Color(c, c, c);
 			STROKE_WIDTH = 1;
 		}
 		g2.setStroke(new BasicStroke(STROKE_WIDTH));
@@ -203,18 +222,18 @@ public class GraphBond extends JComponent {
 		for (GraphNode parent: parents) {
 			
 			double x1 = getHgap() + 1.0*getDiameter() / 2.0 + parent.getIndex() * (getDiameter() + getHgap());
-			double y1 = getDiameter()/2.0 + 1.0;
+			double y1 = getDiameter()/2.0;
 			double x2 = getParentMeanX();
-			double y2 = getBounds().getHeight()/3.0;
+			double y2 = getBounds().getHeight()*RATIO;
 			
 			g2.draw(createCurve(x1, y1, x2, y2, DElTA));
 		}
 
 		// Draws middle bonds.
 		double x1 = getParentMeanX();
-		double y1 = getBounds().getHeight()/3.0;
+		double y1 = getBounds().getHeight()*RATIO;
 		double x2 = (int) (getHgap() + getDiameter() / 2.0 + children.get(0).getIndex() * (1.0*getDiameter() + getHgap()));
-		double y2 = getBounds().getHeight() - getDiameter()/2.0 - 1.0;
+		double y2 = getBounds().getHeight() - getDiameter()/2.0;
 		g2.draw(createCurve(x1, y1, x2, y2, DElTA));
 
 		g2.setStroke(new BasicStroke(STROKE_WIDTH));

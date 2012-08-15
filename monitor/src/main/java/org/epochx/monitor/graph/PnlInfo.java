@@ -61,6 +61,12 @@ public class PnlInfo extends JPanel {
 	private JTextArea txtrFitness;
 
 	/**
+	 * The <code>JTextArea</code> which shows the <code>Operator</code> of the
+	 * node.
+	 */
+	private JTextArea txtrOperator;
+
+	/**
 	 * The <code>JTextArea</code> which shows the <code>String</code> value of
 	 * the node.
 	 */
@@ -84,14 +90,14 @@ public class PnlInfo extends JPanel {
 		removeAll();
 
 		JPanel pnlMisc = new JPanel(new FlowLayout(FlowLayout.LEADING));
-		pnlMisc.setPreferredSize(new Dimension(300, 25));
+		pnlMisc.setPreferredSize(new Dimension(400, 25));
 		add(pnlMisc);
 
 		JLabel lblGenNo = new JLabel("Generation :");
 		pnlMisc.add(lblGenNo);
 
 		txtrGenNo = new JTextArea();
-		txtrGenNo.setText(String.valueOf(node.getGenerationNo()));
+		txtrGenNo.setEditable(false);
 		pnlMisc.add(txtrGenNo);
 
 		pnlMisc.add(Box.createHorizontalStrut(10));
@@ -100,8 +106,17 @@ public class PnlInfo extends JPanel {
 		pnlMisc.add(lblFitness);
 
 		txtrFitness = new JTextArea();
-		txtrFitness.setText(node.getFitness().toString());
+		txtrFitness.setEditable(false);
 		pnlMisc.add(txtrFitness);
+
+		pnlMisc.add(Box.createHorizontalStrut(10));
+		
+		JLabel lblOperator = new JLabel("Operator :");
+		pnlMisc.add(lblOperator);
+
+		txtrOperator = new JTextArea();
+		txtrOperator.setEditable(false);
+		pnlMisc.add(txtrOperator);
 
 		pnlMisc.add(Box.createHorizontalStrut(10));
 
@@ -110,7 +125,6 @@ public class PnlInfo extends JPanel {
 
 		txtrValue = new JTextArea();
 		txtrValue.setEditable(false);
-		txtrValue.setText(node.getIndividual().toString());
 
 		JScrollPane scrollPane = new JScrollPane(txtrValue);
 		scrollPane.setBorder(new CompoundBorder(new EmptyBorder(0, 10, 0, 10), UIManager.getBorder("ScrollPane.border")));
@@ -131,13 +145,15 @@ public class PnlInfo extends JPanel {
 		if (this.node == null) {
 			this.node = node;
 			createAndShowPanel();
-		} else synchronized (this) {
-			this.node = node;
-			txtrGenNo.setText(String.valueOf(node.getGenerationNo()));
-			txtrFitness.setText(node.getFitness().toString());
-			txtrValue.setText(node.getIndividual().toString());
-			txtrValue.scrollRectToVisible(new Rectangle(0, 0, 100, 1000));
-			txtrValue.setCaretPosition(0);
+		}
+		synchronized (this) {
+				this.node = node;
+				txtrGenNo.setText(String.valueOf(node.getGenerationNo()));
+				txtrFitness.setText(node.getFitness().toString());
+				txtrOperator.setText(node.getParentOperator()==null ? "new" : node.getParentOperator().getClass().getSimpleName());
+				txtrValue.setText(node.getIndividual().toString());
+				txtrValue.scrollRectToVisible(new Rectangle(0, 0, 100, 1000));
+				txtrValue.setCaretPosition(0);
 		}
 		updateUI();
 	}

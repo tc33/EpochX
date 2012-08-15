@@ -26,8 +26,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -42,6 +40,7 @@ import javax.swing.event.ChangeListener;
 
 import org.epochx.Fitness;
 import org.epochx.Individual;
+import org.epochx.Operator;
 
 /**
  * 
@@ -53,6 +52,8 @@ public class GraphNode extends AbstractButton implements Comparable<Object>, Cha
 	 */
 	private static final long serialVersionUID = 5961230393742298632L;
 
+	private static final int RECURSION = 5;
+
 	/**
 	 * The parent <code>GraphGen</code>.
 	 */
@@ -63,11 +64,6 @@ public class GraphNode extends AbstractButton implements Comparable<Object>, Cha
 	 * representation.
 	 */
 	private Individual ind;
-
-	/**
-	 * The <code>GridBagConstraints</code>.
-	 */
-	private final GridBagConstraints gbc;
 
 	/**
 	 * The parent <code>GraphBond</code>.
@@ -85,9 +81,6 @@ public class GraphNode extends AbstractButton implements Comparable<Object>, Cha
 	 * @param graphGen the parent <code>GraphGen</code>
 	 * @param ind the <code>Individual</code> whose this <code>GraphNode</code>
 	 *        is the representation
-	 * @param genNo the generation number
-	 * @param x the X location of the centre in the pane
-	 * @param y the Y location of the centre in the pane
 	 */
 	public GraphNode(GraphGen graphGen, Individual ind) {
 		super();
@@ -96,26 +89,7 @@ public class GraphNode extends AbstractButton implements Comparable<Object>, Cha
 
 		childBonds = new ArrayList<GraphBond>();
 
-		setModel(new GraphNodeModel());
-		setToolTipText(ind.getFitness().toString());
-
-		gbc = new GridBagConstraints();
-
-		gbc.gridx = GridBagConstraints.RELATIVE;
-		gbc.gridy = 0;
-
-		gbc.gridwidth = 1;
-		gbc.gridheight = 1;
-
-		gbc.weightx = 0;
-		gbc.weighty = 0;
-
-		gbc.insets = new Insets(0, 0, 0, 0);
-		gbc.ipadx = 0;
-		gbc.ipady = 0;
-
-		gbc.anchor = GridBagConstraints.WEST;
-		gbc.fill = GridBagConstraints.NONE;
+		setModel(new DefaultButtonModel());
 
 		graphGen.addFitness(ind.getFitness());
 
@@ -167,12 +141,15 @@ public class GraphNode extends AbstractButton implements Comparable<Object>, Cha
 		return graphGen.indexOf(this);
 	}
 
-	protected GridBagConstraints getGBC() {
-		return gbc;
-	}
-
-	protected void setGridX(int x) {
-		gbc.gridx = x;
+	/**
+	 * Returns the position of this node, on the X axis, according to the bounds
+	 * of the parent <code>GraphGen</code>.
+	 * 
+	 * @return the position of this node, on the X axis, according to the
+	 *         bounds of the parent <code>GraphGen</code>.
+	 */
+	public double getXPosition() {
+		return graphGen.getXPosition(this);
 	}
 
 	/**
@@ -194,10 +171,34 @@ public class GraphNode extends AbstractButton implements Comparable<Object>, Cha
 	}
 
 	/**
-	 * @param parentBond the parentBond to set
+	 * Sets the parent <code>GraphBond</code>.
+	 * 
+	 * @param parentBond the <code>GraphBond</code> to set
 	 */
 	public void setParentBond(GraphBond parentBond) {
 		this.parentBond = parentBond;
+	}
+
+	/**
+	 * @return the mean of X position of this node's parents.
+	 */
+	public double getParentMeanX() {
+		if (parentBond == null)
+			return -1;
+		else
+			return parentBond.getParentMeanX();
+	}
+
+	/**
+	 * Returns the Operator which gave this node's individual. Can be null.
+	 * 
+	 * @return the Operator which gave this node's individual
+	 */
+	public Operator getParentOperator() {
+		if (parentBond == null)
+			return null;
+		else
+			return parentBond.getOperator();
 	}
 
 	/**
@@ -212,9 +213,23 @@ public class GraphNode extends AbstractButton implements Comparable<Object>, Cha
 		childBonds.add(bond);
 	}
 
-	// We don't want to update UI for this button.
-	@Override
-	public void updateUI() {
+	/**
+	 * Sets or clears the button's rollover state.
+	 * 
+	 * @param b true to turn on rollover
+	 */
+	public void setRollover(boolean b, int recursion) {
+		getModel().setRollover(b);
+		if (recursion > 0 && parentBond != null) {
+			parentBond.setSelected(b, recursion);
+		}
+
+		if (recursion == RECURSION) {
+			for (GraphBond bond: childBonds) {
+				bond.setSelected(b, 0);
+				bond.repaint();
+			}
+		}
 	}
 
 	/**
@@ -270,6 +285,11 @@ public class GraphNode extends AbstractButton implements Comparable<Object>, Cha
 		}
 	}
 
+	// We don't want to update UI for this button.
+	@Override
+	public void updateUI() {
+	}
+
 	@Override
 	public void paintComponent(Graphics g) {
 
@@ -280,7 +300,7 @@ public class GraphNode extends AbstractButton implements Comparable<Object>, Cha
 		// final int BORDER_WIDTH = 1;
 		if (getModel().isRollover()) {
 			Rectangle2D rectangle = new Rectangle2D.Double(0, 0, getDiameter(), getDiameter());
-			g2.setPaint(Color.GREEN);
+			g2.setPaint(PnlGraph.HIGHLIGHT_COLOR);
 			g2.fill(rectangle);
 		}
 		Color fillColor = graphGen.getFitnessColor(getFitness());
@@ -300,25 +320,18 @@ public class GraphNode extends AbstractButton implements Comparable<Object>, Cha
 	}
 
 	public void mouseClicked(MouseEvent e) {
-		/*
-		 * if ((e.getButton() == 1) && ellipse.contains(e.getX(), e.getY()) ) {
-		 * //g2.translate(1, 1);
-		 * System.out.println("Click in "+ind.getFitness());
-		 * // JOptionPane.showMessageDialog(null,e.getX()+ "\n" + e.getY());
-		 * }
-		 */
-		// fillColor = Color.green;
 		graphGen.getPnlGraph().getGraph().getPnlInfo().setNode(this);
-		// System.out.println(graphGen.getXPosition(this));
+		// setRollover(!getModel().isRollover(), RECURSION);
 	}
 
 	public void mouseEntered(MouseEvent e) {
-		getModel().setRollover(true);
+		setRollover(true, RECURSION);
+		setToolTipText(ind.getFitness().toString());
 		// graphGen.getPnlGraph().getGraph().getPnlInfo().setNode(this);
 	}
 
 	public void mouseExited(MouseEvent e) {
-		getModel().setRollover(false);
+		setRollover(false, RECURSION);
 	}
 
 	public void mousePressed(MouseEvent e) {
@@ -327,35 +340,6 @@ public class GraphNode extends AbstractButton implements Comparable<Object>, Cha
 
 	public void mouseReleased(MouseEvent e) {
 
-	}
-
-	/**
-	 * A <code>GraphNodeModel</code> is a customed <code>ButtonModel</code> for
-	 * a <code>GraphNode</code>.
-	 */
-	private class GraphNodeModel extends DefaultButtonModel {
-
-		/**
-		 * Generated serial UID.
-		 */
-		private static final long serialVersionUID = 7388327302535855629L;
-
-		/**
-		 * Sets or clears the button's rollover state.
-		 * 
-		 * @param b true to turn on rollover
-		 */
-		public void setRollover(boolean b) {
-			super.setRollover(b);
-			if (parentBond != null) {
-				parentBond.setSelected(b);
-			}
-
-			for (GraphBond bond: childBonds) {
-				bond.setSelected(b);
-				bond.repaint();
-			}
-		}
 	}
 
 }

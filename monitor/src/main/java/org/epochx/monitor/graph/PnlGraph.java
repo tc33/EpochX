@@ -24,13 +24,13 @@ package org.epochx.monitor.graph;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Iterator;
 import java.util.TreeSet;
 
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.JLayeredPane;
 import javax.swing.Timer;
 
 import org.epochx.Config;
@@ -47,7 +47,7 @@ import org.epochx.monitor.Utilities;
 /**
  * 
  */
-public class PnlGraph extends JScrollPane implements Listener<Event>, ActionListener {
+public class PnlGraph extends JLayeredPane implements Listener<Event>, ActionListener {
 
 	/**
 	 * Generated serial UID.
@@ -55,14 +55,24 @@ public class PnlGraph extends JScrollPane implements Listener<Event>, ActionList
 	private static final long serialVersionUID = 4849953816024039299L;
 
 	/**
+	 * Convenience object defining the Highlight color.
+	 */
+	public static final Color HIGHLIGHT_COLOR = Color.GREEN;
+	
+	/**
+	 * Convenience object defining the Bond layer.
+	 */
+	private static final Integer BOND_LAYER = new Integer(-10);
+	
+	/**
+	 * Convenience object defining the DEFAULT layer.
+	 */
+	private static final Integer DEFAULT_LAYER = new Integer(0);
+	
+	/**
 	 * The parent <code>Graph</code>.
 	 */
 	private final Graph graph;
-
-	/**
-	 * The view panel.
-	 */
-	private final JPanel pnl;
 
 	/**
 	 * The diameter of nodes.
@@ -82,7 +92,7 @@ public class PnlGraph extends JScrollPane implements Listener<Event>, ActionList
 	/**
 	 * The <code>FitnessSet</code>.
 	 * <p>
-	 * All accesses must be <b>synchronized</b> because of concurrency with tje
+	 * All accesses must be <b>synchronized</b> because of concurrency with the
 	 * EDT.
 	 * </p>
 	 */
@@ -98,24 +108,29 @@ public class PnlGraph extends JScrollPane implements Listener<Event>, ActionList
 	 */
 	private GraphGen currentGen;
 
+	
+	/**
+	 * Constructs a <code>PnlGraph</code>.
+	 * 
+	 * 
+	 * @param graph the parent <code>Graph</code>.
+	 * @param diameter the node diameter.
+	 * @param hgap the horizontal gap between two column of node.
+	 * @param vgap the vertical gap between two row of node.
+	 */
 	public PnlGraph(Graph graph, int diameter, int hgap, int vgap) {
+		super();
 		this.graph = graph;
 		this.diameter = diameter;
 		this.hgap = hgap;
 		this.vgap = vgap;
 		this.fitnesses = new TreeSet<Fitness>();
-		this.pnl = new JPanel(null, true);
 
-		pnl.setBackground(Color.white);
-
-		setViewportView(pnl);
-		setPreferredSize(new Dimension(800, 600));
-		getVerticalScrollBar().setUnitIncrement(diameter + vgap);
-
+		setBackground(Color.white);
 		currentGen = new GraphGen(this, 0);
 
 		Timer timer = new Timer(1000, this);
-		timer.start(); 
+		timer.start();
 
 		EventManager.getInstance().add(StartGeneration.class, this);
 		EventManager.getInstance().add(EndRun.class, this);
@@ -123,8 +138,8 @@ public class PnlGraph extends JScrollPane implements Listener<Event>, ActionList
 	}
 
 	/**
-	 * Returns parent <code>Graph</code>.
-	 * @return the parent <code>Graph</code>
+	 * Returns the parent <code>Graph</code>.
+	 * @return the parent <code>Graph</code>.
 	 */
 	public Graph getGraph() {
 		return graph;
@@ -132,7 +147,7 @@ public class PnlGraph extends JScrollPane implements Listener<Event>, ActionList
 
 	/**
 	 * Returns the diameter of nodes.
-	 * @return the diameter of nodes
+	 * @return the diameter of nodes.
 	 */
 	public int getDiameter() {
 		return diameter;
@@ -140,7 +155,7 @@ public class PnlGraph extends JScrollPane implements Listener<Event>, ActionList
 
 	/**
 	 * Returns the horizontal gap.
-	 * @return the horizontal gap
+	 * @return the horizontal gap.
 	 */
 	public int getHgap() {
 		return hgap;
@@ -148,12 +163,12 @@ public class PnlGraph extends JScrollPane implements Listener<Event>, ActionList
 	
 	/**
 	 * Returns the vertical gap.
-	 * @return the vertical gap
+	 * @return the vertical gap.
 	 */
 	public int getVgap() {
 		return vgap;
 	}
-
+	
 	/**
 	 * Computes and returns the <code>Color</code> corresponding to the rank of
 	 * the specified <code>Fitness</code> in the <code>FitnessSet</code>.
@@ -220,11 +235,16 @@ public class PnlGraph extends JScrollPane implements Listener<Event>, ActionList
 			ParentIndividualEvent e = (ParentIndividualEvent) event;
 
 			GraphNode newNode = currentGen.addIndividual(e.getChild());
+			int x = (int)( lastGen.getX() );
+			int y = (int)( lastGen.getY()+getDiameter()/2 );
+			int width = (int)( lastGen.getWidth() );
+			int height = (int)( currentGen.getY()-lastGen.getY() );
+			Rectangle bounds = new Rectangle(x, y, width, height);
 
-			GraphBond bond = new GraphBond(this, e.getOperator(), lastGen.getOrigin(), newNode,
-					lastGen.getGraphNode(e.getParents()));
+			GraphBond bond = new GraphBond(this, e.getOperator(), bounds, newNode,
+					lastGen.getGraphNodes(e.getParents()));
 
-			pnl.add(bond);
+			add(bond, BOND_LAYER, -1);
 
 		} else if (event instanceof StartGeneration) {
 			StartGeneration e = (StartGeneration) event;
@@ -232,30 +252,30 @@ public class PnlGraph extends JScrollPane implements Listener<Event>, ActionList
 			Population p = e.getPopulation();
 			p.sort();
 			currentGen.addPopulation(p);
-			pnl.add(currentGen);
+			add(currentGen, DEFAULT_LAYER);
 			lastGen = currentGen;
 			currentGen = new GraphGen(this, e.getGeneration());
 		} else if (event instanceof EndRun) {
 			currentGen.addPopulation(((EndRun) event).getPopulation());
 			lastGen = currentGen;
-			pnl.add(currentGen);
+			add(currentGen, DEFAULT_LAYER);
 		}
 	}
 
 	/**
-	 * The ActionListener inherited method to receive the timer's action events.
-	 * Refreshs the panel.
+	 * The ActionListener inherited method to receive the timer's action events;
+	 * Refreshs the panel, only if visible.
 	 * 
-	 * @param arg0 the <code>ActionEvent</code>
+	 * @param arg0 the <code>ActionEvent</code>.
 	 */
 	public void actionPerformed(ActionEvent arg0) {
 		if (Utilities.isVisible(graph)) {
 			int popSize = Config.getInstance().get(Population.SIZE);
 			int width = (int) (popSize * (getDiameter() + getHgap()) + 30);
-			int height = (int) (getDiameter() + getVgap()) * (currentGen.getGenenratioNo() + 1);
-			pnl.setPreferredSize(new Dimension(width, height));
-			pnl.revalidate();
-			pnl.repaint();
+			int height = (int) ((getDiameter() + getVgap()) * (currentGen.getGenenratioNo() + 1));
+			setPreferredSize(new Dimension(width, height));
+			revalidate();
+			repaint();
 		}
 	}
 }

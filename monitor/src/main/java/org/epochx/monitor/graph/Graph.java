@@ -23,8 +23,11 @@
 package org.epochx.monitor.graph;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.util.Comparator;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 /**
  * 
@@ -40,6 +43,21 @@ public class Graph extends JPanel {
 	 * The number of created instances.
 	 */
 	private static int noInstances = 0;
+	
+	/**
+	 * Convenience object defining a <code>FitnessComparator</code>.
+	 */
+	public static final Comparator<GraphNode> FITNESS_COMPARATOR = new FitnessComparator();
+	
+	/**
+	 * Convenience object defining a <code>ParentComparator</code>.
+	 */
+	public static final Comparator<GraphNode> PARENT_COMPARATOR = new ParentComparator();
+	
+	/**
+	 * Convenience object defining an <code>OperatorComparator</code>.
+	 */
+	public static final Comparator<GraphNode> OPERATOR_COMPARATOR = new OperatorComparator();
 
 	/**
 	 * The default diameter of nodes.
@@ -101,7 +119,12 @@ public class Graph extends JPanel {
 
 		setName(name);
 		
-		add(pnlGraph, BorderLayout.CENTER);
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setViewportView(pnlGraph);
+		scrollPane.setPreferredSize(new Dimension(900, 600));
+		scrollPane.getVerticalScrollBar().setUnitIncrement(diameter + vgap);
+		
+		add(scrollPane, BorderLayout.CENTER);
 		add(pnlInfo, BorderLayout.SOUTH);
 	}
 

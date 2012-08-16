@@ -45,5 +45,10 @@ public class FitnessComparator implements Comparator<GraphNode> {
 		
 		return o1.getFitness().compareTo(o2.getFitness());
 	}
+	
+	@Override
+	public String toString() {
+		return "fitness";
+	}
 
 }

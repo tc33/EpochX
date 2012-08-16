@@ -52,9 +52,9 @@ public class GraphBond extends JComponent {
 	private final PnlGraph pnlGraph;
 
 	/**
-	 * The <code>Color</code> of the <code>GraphBond</code>.
+	 * The boolean which defines is this bond is highlighted.
 	 */
-	private Boolean selected;
+	private boolean highlighted;
 
 	/**
 	 * The <code>GraphNode</code> parents bounded by this <code>GraphBond</code>
@@ -88,7 +88,7 @@ public class GraphBond extends JComponent {
 		super();
 		this.pnlGraph = pnlGraph;
 		this.operator = operator;
-		this.selected = false;
+		this.highlighted = false;
 		this.parents = new ArrayList<GraphNode>();
 		this.children = new ArrayList<GraphNode>();
 		
@@ -101,6 +101,7 @@ public class GraphBond extends JComponent {
 		}
 		
 		setBounds(bounds);
+		setOpaque(false);
 		
 		//setBorder(BorderFactory.createLineBorder(Color.black));
 	}
@@ -117,18 +118,17 @@ public class GraphBond extends JComponent {
 	/**
 	 * @param b the selected to set
 	 */
-	public synchronized void setSelected(Boolean b, int recursion) {
-		this.selected = b;
+	public synchronized void setHighlighted(Boolean b, int depth) {
+		this.highlighted = b;
 		if (b) {
 			pnlGraph.moveToFront(this);
 		} else {
 			pnlGraph.moveToBack(this);
 		}
-
 		repaint();
-		if(recursion > 0) {
+		if(depth > 0) {
 			for (GraphNode node: parents) {
-				node.setRollover(b, recursion-1);
+				node.setHighlighted(b, depth-1);
 			}
 		}
 	}
@@ -207,7 +207,7 @@ public class GraphBond extends JComponent {
 		double DElTA = 0.5;
 		double RATIO = 0.4;
 
-		if (selected) {
+		if (highlighted) {
 			color = PnlGraph.HIGHLIGHT_COLOR;
 			STROKE_WIDTH = 2;
 		} else {

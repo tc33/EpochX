@@ -55,4 +55,9 @@ public class OperatorComparator implements Comparator<GraphNode> {
 			return operator1.compareToIgnoreCase(operator2);
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return "operator";
+	}
 }

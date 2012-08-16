@@ -52,7 +52,10 @@ public class GraphNode extends AbstractButton implements Comparable<Object>, Cha
 	 */
 	private static final long serialVersionUID = 5961230393742298632L;
 
-	private static final int RECURSION = 5;
+	/**
+	 * The recursion depth of hightlight when a node is rollover.
+	 */
+	private static final int HIGHTLIGHT_DEPTH = 5;
 
 	/**
 	 * The parent <code>GraphGen</code>.
@@ -95,6 +98,7 @@ public class GraphNode extends AbstractButton implements Comparable<Object>, Cha
 
 		addMouseListener(this);
 		addChangeListener(this);
+		addMouseMotionListener(graphGen);
 
 		setPreferredSize(new Dimension(getDiameter(), getDiameter()));
 
@@ -214,19 +218,19 @@ public class GraphNode extends AbstractButton implements Comparable<Object>, Cha
 	}
 
 	/**
-	 * Sets or clears the button's rollover state.
+	 * Sets or clears the button's hightlight state.
 	 * 
-	 * @param b true to turn on rollover
+	 * @param b true to turn on hightlight.
 	 */
-	public void setRollover(boolean b, int recursion) {
+	public void setHighlighted(boolean b, int depth) {
 		getModel().setRollover(b);
-		if (recursion > 0 && parentBond != null) {
-			parentBond.setSelected(b, recursion);
+		if (depth > 0 && parentBond != null) {
+			parentBond.setHighlighted(b, depth);
 		}
 
-		if (recursion == RECURSION) {
+		if (depth == HIGHTLIGHT_DEPTH) {
 			for (GraphBond bond: childBonds) {
-				bond.setSelected(b, 0);
+				bond.setHighlighted(b, 0);
 				bond.repaint();
 			}
 		}
@@ -321,17 +325,17 @@ public class GraphNode extends AbstractButton implements Comparable<Object>, Cha
 
 	public void mouseClicked(MouseEvent e) {
 		graphGen.getPnlGraph().getGraph().getPnlInfo().setNode(this);
-		// setRollover(!getModel().isRollover(), RECURSION);
+		// setRollover(!getModel().isRollover(), HIGHTLIGHT_DEPTH);
 	}
 
 	public void mouseEntered(MouseEvent e) {
-		setRollover(true, RECURSION);
+		setHighlighted(true, HIGHTLIGHT_DEPTH);
 		setToolTipText(ind.getFitness().toString());
 		// graphGen.getPnlGraph().getGraph().getPnlInfo().setNode(this);
 	}
 
 	public void mouseExited(MouseEvent e) {
-		setRollover(false, RECURSION);
+		setHighlighted(false, HIGHTLIGHT_DEPTH);
 	}
 
 	public void mousePressed(MouseEvent e) {

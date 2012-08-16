@@ -50,5 +50,10 @@ public class ParentComparator implements Comparator<GraphNode> {
 			return 0;
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return "parents";
+	}
 
 }

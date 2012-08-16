@@ -26,10 +26,8 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -45,7 +43,7 @@ import org.epochx.Population;
 /**
  * 
  */
-public class GraphGen extends JPanel implements MouseListener, Runnable {
+public class GraphGen extends JPanel implements MouseMotionListener, Runnable {
 
 	/**
 	 * Generated serial UID.
@@ -73,11 +71,6 @@ public class GraphGen extends JPanel implements MouseListener, Runnable {
 	private DefaultConstraints[] constraints;
 
 	/**
-	 * The origin point of this <code>GraphGen</code>.
-	 */
-	private final Point origin;
-
-	/**
 	 * Constructs a <code>GraphGen</code>.
 	 * 
 	 * @param pnlGraph the parent <code>PnlGraph</code>.
@@ -88,24 +81,27 @@ public class GraphGen extends JPanel implements MouseListener, Runnable {
 		this.pnlGraph = pnlGraph;
 		this.genenratioNo = genNo;
 		this.nodes = new LinkedList<GraphNode>();
-		this.origin = new Point(getDiameter(), genNo * (getDiameter() + getVgap()));
 
 		int popSize = Config.getInstance().get(Population.SIZE);
 		this.constraints = new DefaultConstraints[popSize];
 		for (int i = 0; i < constraints.length; i++) {
 			constraints[i] = new DefaultConstraints(i);
 		}
-
-		int x = (int) origin.getX();
-		int y = (int) origin.getY();
+		
+		int x = getDiameter();
+		int y = genNo * (getDiameter() + getVgap());
+		setLocation(x, y);
+		
 		int width = (int) (popSize * (getDiameter() + getHgap()));
 		int height = getDiameter();
-		setBounds(new Rectangle(x, y, width, height));
+		setSize(width, height);
+		
+		setOpaque(true);
 
 		// setBorder(BorderFactory.createLineBorder(Color.black));
 		// setBackground(Color.BLACK);
 
-		addMouseListener(this);
+		addMouseMotionListener(this);
 
 		validate();
 		repaint();
@@ -127,15 +123,6 @@ public class GraphGen extends JPanel implements MouseListener, Runnable {
 	 */
 	public int getGenenratioNo() {
 		return genenratioNo;
-	}
-
-	/**
-	 * Returns the origin point.
-	 * 
-	 * @return the origin point.
-	 */
-	public Point getOrigin() {
-		return origin;
 	}
 
 	/**
@@ -259,7 +246,7 @@ public class GraphGen extends JPanel implements MouseListener, Runnable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		reorderGrid(Graph.PARENT_COMPARATOR);
+		reorderGrid(Graph.FITNESS_COMPARATOR);
 	}
 
 	/**
@@ -364,7 +351,7 @@ public class GraphGen extends JPanel implements MouseListener, Runnable {
 			}
 		}
 		revalidate();
-		repaint();
+		//repaint();
 	}
 
 	public void mouseClicked(MouseEvent arg0) {
@@ -380,6 +367,17 @@ public class GraphGen extends JPanel implements MouseListener, Runnable {
 	}
 
 	public void mouseReleased(MouseEvent arg0) {
+	}
+	
+
+	public void mouseDragged(MouseEvent arg0) {
+		System.out.println(arg0.getSource());
+		
+	}
+
+	public void mouseMoved(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	/**
@@ -418,4 +416,5 @@ public class GraphGen extends JPanel implements MouseListener, Runnable {
 		}
 
 	}
+
 }

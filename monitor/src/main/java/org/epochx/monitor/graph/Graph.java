@@ -73,9 +73,14 @@ public class Graph extends JPanel {
 	 * The default vertical gap between two nodes.
 	 */
 	private final static int DEFAULT_VGAP = 50;
+	
+	/**
+	 * The <code>PnlHeader</code>.
+	 */
+	private final PnlHeader pnlHeader;
 
 	/**
-	 * The <code>Pnlgraph</code>.
+	 * The <code>PnlGraph</code>.
 	 */
 	private final PnlGraph pnlGraph;
 
@@ -114,6 +119,7 @@ public class Graph extends JPanel {
 	public Graph(String name, int diameter, int hgap, int vgap) {
 
 		super(new BorderLayout());
+		this.pnlHeader = new PnlHeader(this);
 		this.pnlGraph = new PnlGraph(this, diameter, hgap, vgap);
 		this.pnlInfo = new PnlInfo();
 
@@ -124,8 +130,18 @@ public class Graph extends JPanel {
 		scrollPane.setPreferredSize(new Dimension(900, 600));
 		scrollPane.getVerticalScrollBar().setUnitIncrement(diameter + vgap);
 		
+		add(pnlHeader, BorderLayout.NORTH);
 		add(scrollPane, BorderLayout.CENTER);
 		add(pnlInfo, BorderLayout.SOUTH);
+	}
+	
+	/**
+	 * Returns the <code>PnlHeader</code>.
+	 * 
+	 * @return the <code>PnlHeader</code>.
+	 */
+	public PnlHeader getPnlHeader() {
+		return pnlHeader;
 	}
 
 	/**

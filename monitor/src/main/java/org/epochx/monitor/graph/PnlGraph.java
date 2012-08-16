@@ -27,6 +27,7 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.TreeSet;
 
@@ -35,6 +36,7 @@ import javax.swing.Timer;
 
 import org.epochx.Config;
 import org.epochx.Fitness;
+import org.epochx.MaximumGenerations;
 import org.epochx.Population;
 import org.epochx.event.Event;
 import org.epochx.event.EventManager;
@@ -77,7 +79,7 @@ public class PnlGraph extends JLayeredPane implements Listener<Event>, ActionLis
 	/**
 	 * The diameter of nodes.
 	 */
-	private final int diameter;
+	private int diameter;
 
 	/**
 	 * The the horizontal gap between two column of node.
@@ -101,14 +103,13 @@ public class PnlGraph extends JLayeredPane implements Listener<Event>, ActionLis
 	/**
 	 * The last <code>GraphGen</code>.
 	 */
-	private GraphGen lastGen;
+	private final GraphGen[] generations;
 	
 	/**
-	 * The current <code>GraphGen</code>.
+	 * The current generation number.
 	 */
-	private GraphGen currentGen;
+	private int generationNo;
 
-	
 	/**
 	 * Constructs a <code>PnlGraph</code>.
 	 * 
@@ -124,11 +125,14 @@ public class PnlGraph extends JLayeredPane implements Listener<Event>, ActionLis
 		this.diameter = diameter;
 		this.hgap = hgap;
 		this.vgap = vgap;
-		this.fitnesses = new TreeSet<Fitness>();
+		this.fitnesses = new TreeSet<Fitness>();		
+		this.generations = new GraphGen[Config.getInstance().get(MaximumGenerations.MAXIMUM_GENERATIONS)+1];		
+		this.generationNo = 0;
+		
+		generations[0] = new GraphGen(this, 0);
 
 		setBackground(Color.white);
-		currentGen = new GraphGen(this, 0);
-
+		
 		Timer timer = new Timer(1000, this);
 		timer.start();
 
@@ -167,6 +171,45 @@ public class PnlGraph extends JLayeredPane implements Listener<Event>, ActionLis
 	 */
 	public int getVgap() {
 		return vgap;
+	}
+	
+	/**
+	 * Returns the current <code>GraphGen</code>.
+	 * @return the current <code>GraphGen</code>.
+	 */
+	public GraphGen getCurrentGen() {
+		return generations[generationNo];
+	}
+	
+	/**
+	 * Returns the last <code>GraphGen</code>.
+	 * @return the last <code>GraphGen</code>.
+	 */
+	public GraphGen getLastGen() {
+		return generations[generationNo-1];
+	}
+	
+	/**
+	 * Returns the diameter of nodes.
+	 * @return the diameter of nodes.
+	 */
+	public void setDiameter(int d) {
+		diameter = d;
+		int popSize = Config.getInstance().get(Population.SIZE);
+		int width = (int) (popSize * (getDiameter() + getHgap()));
+		int height = getDiameter();
+		
+		for(int i = 0 ; i < generationNo; i++) {
+			generations[i].setSize(width, height);
+		}
+		revalidate();
+		repaint();
+	}
+	
+	public void reorder(Comparator<GraphNode> comparator) {
+		for(int i = 0 ; i < generationNo; i++) {
+			generations[i].reorderGrid(comparator);
+		}
 	}
 	
 	/**
@@ -234,15 +277,15 @@ public class PnlGraph extends JLayeredPane implements Listener<Event>, ActionLis
 		if (event instanceof ParentIndividualEvent) {
 			ParentIndividualEvent e = (ParentIndividualEvent) event;
 
-			GraphNode newNode = currentGen.addIndividual(e.getChild());
-			int x = (int)( lastGen.getX() );
-			int y = (int)( lastGen.getY()+getDiameter()/2 );
-			int width = (int)( lastGen.getWidth() );
-			int height = (int)( currentGen.getY()-lastGen.getY() );
+			GraphNode newNode = getCurrentGen().addIndividual(e.getChild());
+			int x = (int)( getLastGen().getX() );
+			int y = (int)( getLastGen().getY()+getDiameter()/2 );
+			int width = (int)( getLastGen().getWidth() );
+			int height = (int)( getCurrentGen().getY()-getLastGen().getY() );
 			Rectangle bounds = new Rectangle(x, y, width, height);
 
 			GraphBond bond = new GraphBond(this, e.getOperator(), bounds, newNode,
-					lastGen.getGraphNodes(e.getParents()));
+					getLastGen().getGraphNodes(e.getParents()));
 
 			add(bond, BOND_LAYER, -1);
 
@@ -251,14 +294,14 @@ public class PnlGraph extends JLayeredPane implements Listener<Event>, ActionLis
 
 			Population p = e.getPopulation();
 			p.sort();
-			currentGen.addPopulation(p);
-			add(currentGen, DEFAULT_LAYER);
-			lastGen = currentGen;
-			currentGen = new GraphGen(this, e.getGeneration());
+			getCurrentGen().addPopulation(p);
+			add(getCurrentGen(), DEFAULT_LAYER);
+			generationNo++;
+			generations[generationNo] = new GraphGen(this, generationNo);
 		} else if (event instanceof EndRun) {
-			currentGen.addPopulation(((EndRun) event).getPopulation());
-			lastGen = currentGen;
-			add(currentGen, DEFAULT_LAYER);
+			getCurrentGen().addPopulation(((EndRun) event).getPopulation());
+			add(getCurrentGen(), DEFAULT_LAYER);
+			generationNo++;
 		}
 	}
 
@@ -272,7 +315,7 @@ public class PnlGraph extends JLayeredPane implements Listener<Event>, ActionLis
 		if (Utilities.isVisible(graph)) {
 			int popSize = Config.getInstance().get(Population.SIZE);
 			int width = (int) (popSize * (getDiameter() + getHgap()) + 30);
-			int height = (int) ((getDiameter() + getVgap()) * (currentGen.getGenenratioNo() + 1));
+			int height = (int) ((getDiameter() + getVgap()) * (generationNo + 1));
 			setPreferredSize(new Dimension(width, height));
 			revalidate();
 			repaint();

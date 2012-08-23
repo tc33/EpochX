@@ -18,7 +18,6 @@ import org.epochx.Reproduction;
 import org.epochx.TerminationCriteria;
 import org.epochx.TerminationFitness;
 import org.epochx.event.GenerationEvent.EndGeneration;
-import org.epochx.event.GenerationEvent.StartGeneration;
 import org.epochx.event.stat.AbstractStat;
 import org.epochx.event.stat.GenerationAverageDoubleFitness;
 import org.epochx.event.stat.GenerationBestFitness;
@@ -105,7 +104,7 @@ public class MonitorFrameTest {
 		table1.addStat(GenerationBestFitness.class);
 		table1.addStat(GenerationWorstFitness.class);
 		table1.addStat(GenerationAverageDoubleFitness.class);
-		table1.addListener(StartGeneration.class);
+		table1.addListener(EndGeneration.class);
 
 		monitor.add(table1, 1, 1);
 		

@@ -26,25 +26,25 @@ import java.util.Comparator;
 
 
 /**
- * A <code>ParentComparator</code> compares two <code>GraphNode</code> regarding
+ * A <code>ParentComparator</code> compares two <code>GraphVertex</code> regarding
  * their parent's position.
  */
-public class ParentComparator implements Comparator<GraphNode> {
+public class ParentComparator implements Comparator<GraphVertex> {
 
 	/**
 	 * Compares its two arguments for order. Returns a negative integer, zero,
-	 * or a positive integer as the first <code>GraphNode</code> is less than,
+	 * or a positive integer as the first <code>GraphVertex</code> is less than,
 	 * equal to, or greater than the second regarding their parent's position.
 	 * 
-	 * @param o1 the first <code>GraphNode</code> to be compared.
-	 * @param o2 the second <code>GraphNode</code> to be compared.
+	 * @param o1 the first <code>GraphVertex</code> to be compared.
+	 * @param o2 the second <code>GraphVertex</code> to be compared.
 	 * @return a negative integer, zero, or a positive integer as the first
 	 *         argument is less than, equal to, or greater than the second.
 	 */
-	public int compare(GraphNode o1, GraphNode o2) {
-		if(o1.getParentMeanX() > o2.getParentMeanX()){
+	public int compare(GraphVertex o1, GraphVertex o2) {
+		if(o1.getParentMeanIndex() > o2.getParentMeanIndex()){
 			return +1;
-		} else if (o1.getParentMeanX() < o2.getParentMeanX()) {
+		} else if (o1.getParentMeanIndex() < o2.getParentMeanIndex()) {
 			return -1;
 		} else {
 			return 0;

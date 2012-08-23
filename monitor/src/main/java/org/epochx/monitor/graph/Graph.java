@@ -24,15 +24,22 @@ package org.epochx.monitor.graph;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Comparator;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
+
+import org.epochx.monitor.Utilities;
+
 
 /**
- * 
+ * A <code>Graph</code> draw a visualization graph to monitor the evolution process.
  */
-public class Graph extends JPanel {
+public class Graph extends JPanel implements Runnable, ActionListener {
 
 	/**
 	 * Generated serial UID.
@@ -43,128 +50,319 @@ public class Graph extends JPanel {
 	 * The number of created instances.
 	 */
 	private static int noInstances = 0;
+
 	
 	/**
-	 * Convenience object defining a <code>FitnessComparator</code>.
+	 * The <code>GraphViewModel</code>.
 	 */
-	public static final Comparator<GraphNode> FITNESS_COMPARATOR = new FitnessComparator();
+	private GraphViewModel viewModel;
+
+	/**
+	 * The <code>GraphModel</code>.
+	 */
+	private GraphModel model;
+
+	/**
+	 * The <code>GraphHeader</code>.
+	 */
+	private GraphHeader graphHeader;
+
+	/**
+	 * The <code>GraphView</code>.
+	 */
+	private GraphView graphView;
 	
 	/**
-	 * Convenience object defining a <code>ParentComparator</code>.
+	 * The <code>GraphRowHeader</code>.
 	 */
-	public static final Comparator<GraphNode> PARENT_COMPARATOR = new ParentComparator();
+	private GraphRowHeader graphRowHeader;
 	
 	/**
-	 * Convenience object defining an <code>OperatorComparator</code>.
+	 * The <code>JScrollPane</code>.
 	 */
-	public static final Comparator<GraphNode> OPERATOR_COMPARATOR = new OperatorComparator();
+	private JScrollPane scrollPane;
 
 	/**
-	 * The default diameter of nodes.
+	 * The <code>GraphFooter</code>.
 	 */
-	private final static int DEFAULT_DIAMETER = 15;
+	private GraphFooter graphFooter;
 
 	/**
-	 * The default horizontal gap between two nodes.
-	 */
-	private final static int DEFAULT_HGAP = 1;
-
-	/**
-	 * The default vertical gap between two nodes.
-	 */
-	private final static int DEFAULT_VGAP = 50;
-	
-	/**
-	 * The <code>PnlHeader</code>.
-	 */
-	private final PnlHeader pnlHeader;
-
-	/**
-	 * The <code>PnlGraph</code>.
-	 */
-	private final PnlGraph pnlGraph;
-
-	/**
-	 * The <code>PnlInfo</code>.
-	 */
-	private final PnlInfo pnlInfo;
-	
-	/**
-	 * Constructs a <code>Graph</code> with a default name.
+	 * Constructs a <code>Graph</code> with a default properties.
 	 * <p>
-	 * Default name : <code>"graph"+noInstances</code>.
+	 * Default view properties :
+	 * <ul>
+	 * <li>name : <code>"Graph"+noInstances</code>
+	 * <li>comparator : null
+	 * <li>diameter : {@link GraphViewModel#DEFAULT_DIAMETER}
+	 * <li>gaps : proportionate to the diameter
+	 * </ul>
 	 * </p>
 	 */
 	public Graph() {
-		this("Graph " + noInstances, DEFAULT_DIAMETER, DEFAULT_HGAP, DEFAULT_VGAP);
+		this("Graph " + noInstances, null, GraphViewModel.DEFAULT_DIAMETER);
 	}
 
 	/**
 	 * Constructs a <code>Graph</code> with a specified name.
+	 * <p>
+	 * Default view properties :
+	 * <ul>
+	 * <li>comparator : null
+	 * <li>diameter : {@link GraphViewModel#DEFAULT_DIAMETER}
+	 * <li>gaps : proportionate to the diameter
+	 * </ul>
+	 * </p>
 	 * 
-	 * @param name the Name given to the main component.
+	 * @param name the name of this graph.
 	 */
 	public Graph(String name) {
-		this(name, DEFAULT_DIAMETER, DEFAULT_HGAP, DEFAULT_VGAP);
+		this(name, null, GraphViewModel.DEFAULT_DIAMETER);
 	}
 
 	/**
-	 * Constructs a <code>Graph</code> with specified arguments.
+	 * Constructs a <code>Graph</code> with a specified comparator.
+	 * <p>
+	 * Default view properties :
+	 * <ul>
+	 * <li>name : <code>"Graph"+noInstances</code>
+	 * <li>diameter : {@link GraphViewModel#DEFAULT_DIAMETER}
+	 * <li>gaps : proportionate to the diameter
+	 * </ul>
+	 * </p>
 	 * 
-	 * @param name the Name given to the main component.
-	 * @param diameter the node diameter.
-	 * @param hgap the horizontal gap between two column of node.
-	 * @param vgap the vertical gap between two row of node.
+	 * @param comparator to sort vertices, among :
+	 *        <ul>
+	 *        <li>{@link FitnessComparator}
+	 *        <li>{@link OperatorComparator}
+	 *        <li>{@link ParentComparator}
+	 *        <li>or any other implementation of
+	 *        <code>Comparator<GraphVertex></code>.
 	 */
-	public Graph(String name, int diameter, int hgap, int vgap) {
+	public Graph(Comparator<GraphVertex> comparator) {
+		this("Graph " + noInstances, null, GraphViewModel.DEFAULT_DIAMETER);
+	}
 
+	/**
+	 * 
+	 * Constructs a <code>Graph</code> with a specified diameter.
+	 * <p>
+	 * Default view properties :
+	 * <ul>
+	 * <li>name : <code>"Graph"+noInstances</code>
+	 * <li>comparator : null
+	 * <li>gaps : proportionate to the diameter
+	 * </ul>
+	 * </p>
+	 * 
+	 * @param diameter the diameter of the vertices. Must be an <b>even</b>
+	 *        number !
+	 */
+	public Graph(int diameter) {
+		this("Graph " + noInstances, null, diameter);
+	}
+
+	/**
+	 * 
+	 * Constructs a <code>Graph</code> with a specified name, comparator and
+	 * diameter. Gaps are proportionate to the diameter.
+	 * 
+	 * @param name the name of this graph.
+	 * @param comparator to sort vertices, among :
+	 *        <ul>
+	 *        <li>{@link FitnessComparator}
+	 *        <li>{@link OperatorComparator}
+	 *        <li>{@link ParentComparator}
+	 *        <li>or any other implementation of
+	 *        <code>Comparator<GraphVertex></code>.
+	 * @param diameter the diameter of the vertices. Must be an <b>even</b>
+	 *        number !
+	 */
+	public Graph(String name, Comparator<GraphVertex> comparator, int diameter) {
+		this(name, comparator, diameter, diameter * 0.1, diameter * 3);
+	}
+
+	/**
+	 * Constructs a <code>Graph</code>.
+	 * 
+	 * @param name the name of this graph.
+	 * @param comparator to sort vertices, among :
+	 *        <ul>
+	 *        <li>{@link FitnessComparator}
+	 *        <li>{@link OperatorComparator}
+	 *        <li>{@link ParentComparator}
+	 *        <li>or any other implementation of
+	 *        <code>Comparator<GraphVertex></code>.
+	 * @param diameter the diameter of the vertices. Must be an <b>even</b>
+	 *        number !
+	 * @param hgap the horizontal gap.
+	 * @param vgap the vertical gap.
+	 */
+	public Graph(String name, Comparator<GraphVertex> comparator, double diameter, double hgap, double vgap) {
 		super(new BorderLayout());
-		this.pnlHeader = new PnlHeader(this);
-		this.pnlGraph = new PnlGraph(this, diameter, hgap, vgap);
-		this.pnlInfo = new PnlInfo();
 
+		this.viewModel = new GraphViewModel(comparator, (int) diameter, (int) hgap, (int) vgap);
+		this.model = new GraphModel();
+		this.graphHeader = new GraphHeader(viewModel);
+		this.graphView = new GraphView(model, viewModel);
+		this.graphRowHeader = new GraphRowHeader(viewModel);
+		this.graphFooter = new GraphFooter();
+		this.scrollPane = new JScrollPane();
+		
 		setName(name);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setViewportView(pnlGraph);
-		scrollPane.setPreferredSize(new Dimension(900, 600));
-		scrollPane.getVerticalScrollBar().setUnitIncrement(diameter + vgap);
+		viewModel.addGraphViewListener(graphFooter);
+		viewModel.addGraphViewListener(graphRowHeader);
 		
-		add(pnlHeader, BorderLayout.NORTH);
+		SwingUtilities.invokeLater(this);
+		
+		Timer timer = new Timer(1000, this);
+		timer.setInitialDelay(1000);
+		timer.start();
+	}
+	
+	/**
+	 * The run method to be invoked in the EDT.
+	 */
+	public void run() {
+		removeAll();
+		
+		scrollPane.setViewportView(graphView);
+		scrollPane.setRowHeaderView(graphRowHeader);
+		scrollPane.setPreferredSize(new Dimension(900, 600));
+		
+		add(graphHeader, BorderLayout.NORTH);
 		add(scrollPane, BorderLayout.CENTER);
-		add(pnlInfo, BorderLayout.SOUTH);
+		add(graphFooter, BorderLayout.SOUTH);
+	}
+	
+
+	/**
+	 * The ActionListener inherited method to receive the timer's action events;
+	 * Refreshs the panel, only if visible.
+	 * 
+	 * @param e the <code>ActionEvent</code>.
+	 */
+	public void actionPerformed(ActionEvent e) {
+		if (Utilities.isVisible(this)) {
+			graphView.resize();
+		}
+	}
+
+	
+	/**
+	 * Returns the <code>GraphViewModel</code>.
+	 * @return the <code>GraphViewModel</code>.
+	 */
+	public GraphViewModel getViewModel() {
+		return viewModel;
+	}
+
+	
+	/**
+	 * Sets the <code>GraphViewModel</code>.
+	 * @param viewModel the <code>GraphViewModel</code> to set.
+	 */
+	public void setViewModel(GraphViewModel viewModel) {
+		this.viewModel = viewModel;
+		SwingUtilities.invokeLater(this);
+	}
+
+	
+	/**
+	 * Returns the <code>GraphModel</code>.
+	 * @return the <code>GraphModel</code>.
+	 */
+	public GraphModel getModel() {
+		return model;
+	}
+
+	
+	/**
+	 * Sets the <code>GraphModel</code>.
+	 * @param model the <code>GraphModel</code> to set.
+	 */
+	public void setModel(GraphModel model) {
+		this.model = model;
+		SwingUtilities.invokeLater(this);
+	}
+
+	
+	/**
+	 * Returns the <code>GraphHeader</code>.
+	 * @return the <code>GraphHeader</code>.
+	 */
+	public GraphHeader getGraphHeader() {
+		return graphHeader;
+	}
+
+	
+	/**
+	 * Sets the <code>GraphHeader</code>.
+	 * @param graphHeader the <code>GraphHeader</code> to set.
+	 */
+	public void setGraphHeader(GraphHeader graphHeader) {
+		this.graphHeader = graphHeader;
+		SwingUtilities.invokeLater(this);
+	}
+
+	
+	/**
+	 * Returns the <code>GraphView</code>.
+	 * @return the <code>GraphView</code>.
+	 */
+	public GraphView getGraphView() {
+		return graphView;
+	}
+
+	
+	/**
+	 * Sets the <code>GraphView</code>.
+	 * @param graphView the <code>GraphView</code> to set.
+	 */
+	public void setGraphView(GraphView graphView) {
+		this.graphView = graphView;
+		SwingUtilities.invokeLater(this);
 	}
 	
 	/**
-	 * Returns the <code>PnlHeader</code>.
-	 * 
-	 * @return the <code>PnlHeader</code>.
+	 * Returns the <code>GraphRowHeader</code>.
+	 * @return the <code>GraphRowHeader</code>.
 	 */
-	public PnlHeader getPnlHeader() {
-		return pnlHeader;
+	public GraphRowHeader getGraphRowHeader() {
+		return graphRowHeader;
 	}
 
 	/**
-	 * Returns the <code>PnlGraph</code>.
-	 * 
-	 * @return the <code>PnlGraph</code>.
+	 * Sets the <code>GraphRowHeader</code>.
+	 * @param graphRowHeader the <code>GraphRowHeader</code> to set.
 	 */
-	public PnlGraph getPnlGraph() {
-		return pnlGraph;
+	public void setGraphRowHeader(GraphRowHeader graphRowHeader) {
+		this.graphRowHeader = graphRowHeader;
+		SwingUtilities.invokeLater(this);
 	}
 
 	/**
-	 * Returns the <code>PnlInfo</code>.
-	 * 
-	 * @return the <code>PnlInfo</code>.
+	 * Returns the <code>GraphFooter</code>.
+	 * @return the <code>GraphFooter</code>.
 	 */
-	public PnlInfo getPnlInfo() {
-		return pnlInfo;
-	}	
-	
+	public GraphFooter getGraphFooter() {
+		return graphFooter;
+	}
+
+	/**
+	 * Sets the <code>GraphFooter</code>.
+	 * @param graphFooter the <code>GraphFooter</code> to set.
+	 */
+	public void setGraphFooter(GraphFooter graphFooter) {
+		this.graphFooter = graphFooter;
+		SwingUtilities.invokeLater(this);
+	}
+
 	@Override
 	public String toString() {
 		return getName();
 	}
+
 
 }

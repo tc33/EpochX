@@ -1,4 +1,4 @@
-package org.epochx.monitor.graph;
+package org.epochx.monitor.graph0;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;

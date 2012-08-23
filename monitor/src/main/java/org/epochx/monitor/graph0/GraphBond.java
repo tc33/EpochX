@@ -20,7 +20,7 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.monitor.graph;
+package org.epochx.monitor.graph0;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -235,9 +235,6 @@ public class GraphBond extends JComponent {
 		double x2 = (int) (getHgap() + getDiameter() / 2.0 + children.get(0).getIndex() * (1.0*getDiameter() + getHgap()));
 		double y2 = getBounds().getHeight() - getDiameter()/2.0;
 		g2.draw(createCurve(x1, y1, x2, y2, DElTA));
-
-		g2.setStroke(new BasicStroke(STROKE_WIDTH));
-		g2.setColor(color);
 	}
 	
 	/**

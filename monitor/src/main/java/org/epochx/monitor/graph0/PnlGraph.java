@@ -20,7 +20,7 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.monitor.graph;
+package org.epochx.monitor.graph0;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -317,8 +317,8 @@ public class PnlGraph extends JLayeredPane implements Listener<Event>, ActionLis
 			int width = (int) (popSize * (getDiameter() + getHgap()) + 30);
 			int height = (int) ((getDiameter() + getVgap()) * (generationNo + 1));
 			setPreferredSize(new Dimension(width, height));
-			revalidate();
-			repaint();
+			//revalidate();
+			//repaint();
 		}
 	}
 }

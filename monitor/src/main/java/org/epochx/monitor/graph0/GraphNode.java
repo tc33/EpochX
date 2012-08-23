@@ -20,7 +20,7 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.monitor.graph;
+package org.epochx.monitor.graph0;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -100,11 +100,15 @@ public class GraphNode extends AbstractButton implements Comparable<Object>, Cha
 		addChangeListener(this);
 		addMouseMotionListener(graphGen);
 
-		setPreferredSize(new Dimension(getDiameter(), getDiameter()));
+		//setPreferredSize(new Dimension(getDiameter(), getDiameter()));
 
 		repaint();
 		validate();
 
+	}
+	
+	public Dimension getPreferredSize() {
+		return new Dimension(getDiameter(), getDiameter());
 	}
 
 	/**
@@ -293,6 +297,10 @@ public class GraphNode extends AbstractButton implements Comparable<Object>, Cha
 	@Override
 	public void updateUI() {
 	}
+	
+	public void repaint(){}
+	
+	public void update(){}
 
 	@Override
 	public void paintComponent(Graphics g) {

@@ -17,10 +17,15 @@ import org.epochx.Population;
 import org.epochx.Reproduction;
 import org.epochx.TerminationCriteria;
 import org.epochx.TerminationFitness;
+import org.epochx.event.GenerationEvent.EndGeneration;
 import org.epochx.event.stat.AbstractStat;
+import org.epochx.event.stat.GenerationAverageDoubleFitness;
+import org.epochx.event.stat.GenerationBestFitness;
 import org.epochx.event.stat.GenerationNumber;
+import org.epochx.event.stat.GenerationWorstFitness;
 import org.epochx.monitor.Monitor;
 import org.epochx.monitor.graph.Graph;
+import org.epochx.monitor.table.Table;
 import org.epochx.refactoring.PopulationNeutrality;
 import org.epochx.refactoring.Problem;
 import org.epochx.refactoring.initialisation.RampedHalfAndHalf;
@@ -59,7 +64,7 @@ public class MonitorGraphTest {
 		//config.set(Crossover.PROBABILITY, 0.9);
 		// config.set(Reproduction.PROBABILITY, 0.1);
 		config.set(BranchedBreeder.ELITISM, 0);
-		config.set(MaximumGenerations.MAXIMUM_GENERATIONS,50);
+		config.set(MaximumGenerations.MAXIMUM_GENERATIONS,100);
 		config.set(TreeFactory.MAX_DEPTH, 17);
 		config.set(TreeFactory.INITIAL_DEPTH, 6);
 		config.set(TournamentSelector.TOURNAMENT_SIZE, 4);
@@ -94,15 +99,28 @@ public class MonitorGraphTest {
 		// our stats monitor
 
 		Monitor monitor = new Monitor("Frame Graph Test");
+	
+		Table table1 = new Table("Fitnesses Table");
+		table1.addStat(GenerationNumber.class);
+		table1.addStat(GenerationBestFitness.class);
+		table1.addStat(GenerationWorstFitness.class);
+		table1.addStat(GenerationAverageDoubleFitness.class);
+		table1.addListener(EndGeneration.class);
+
+		monitor.add(table1, 1, 1);
 		
 		Graph g = new Graph("Visualization Graph");
 		monitor.add(g);
+	
+		
+		//new GraphView(new GraphViewModel());
 
 		// we are ready to go!
-
+		long start = System.currentTimeMillis();
 		Evolver evolver = new Evolver();
 		@SuppressWarnings("unused")
 		Population population = evolver.run();
+		System.out.println("EVOLVER ENDED : "+(System.currentTimeMillis() - start) );
 	}
 
 }

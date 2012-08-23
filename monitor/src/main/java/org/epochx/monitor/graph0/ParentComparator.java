@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2012
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -20,35 +20,40 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.monitor.graph;
+package org.epochx.monitor.graph0;
 
 import java.util.Comparator;
 
 
 /**
- * A <code>FitnessComparator</code> compares two <code>GraphVertex</code> regarding
- * their <code>Fitness</code>.
+ * A <code>ParentComparator</code> compares two <code>GraphNode</code> regarding
+ * their parent's position.
  */
-public class FitnessComparator implements Comparator<GraphVertex> {
+public class ParentComparator implements Comparator<GraphNode> {
 
 	/**
 	 * Compares its two arguments for order. Returns a negative integer, zero,
-	 * or a positive integer as the first <code>GraphVertex</code> is less than,
-	 * equal to, or greater than the second regarding their <code>Fitness</code>.
+	 * or a positive integer as the first <code>GraphNode</code> is less than,
+	 * equal to, or greater than the second regarding their parent's position.
 	 * 
-	 * @param o1 the first <code>GraphVertex</code> to be compared.
-	 * @param o2 the second <code>GraphVertex</code> to be compared.
+	 * @param o1 the first <code>GraphNode</code> to be compared.
+	 * @param o2 the second <code>GraphNode</code> to be compared.
 	 * @return a negative integer, zero, or a positive integer as the first
 	 *         argument is less than, equal to, or greater than the second.
 	 */
-	public int compare(GraphVertex o1, GraphVertex o2) {
-		
-		return o1.getFitness().compareTo(o2.getFitness());
+	public int compare(GraphNode o1, GraphNode o2) {
+		if(o1.getParentMeanX() > o2.getParentMeanX()){
+			return +1;
+		} else if (o1.getParentMeanX() < o2.getParentMeanX()) {
+			return -1;
+		} else {
+			return 0;
+		}
 	}
 	
 	@Override
 	public String toString() {
-		return "fitness";
+		return "parents";
 	}
 
 }

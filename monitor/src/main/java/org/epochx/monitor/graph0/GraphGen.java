@@ -20,7 +20,7 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.monitor.graph;
+package org.epochx.monitor.graph0;
 
 import java.awt.Color;
 import java.awt.GridBagConstraints;
@@ -412,7 +412,7 @@ public class GraphGen extends JPanel implements MouseMotionListener, Runnable {
 			ipady = 0;
 
 			anchor = GridBagConstraints.WEST;
-			fill = GridBagConstraints.NONE;
+			fill = GridBagConstraints.BOTH;
 		}
 
 	}

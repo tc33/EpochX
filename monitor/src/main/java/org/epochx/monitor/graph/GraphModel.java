@@ -216,13 +216,11 @@ public class GraphModel implements Listener<Event> {
 	 * Sorts all generations according to the order induced by the specified
 	 * comparator.
 	 * 
-	 * @param comparator the comparator to determine the order.
-	 * @throws NullPointerException if the comparator is null.
+	 * @param comparator the comparator to determine the order of the list. A
+	 *        null value indicates that the vertices' natural ordering should be
+	 *        used.
 	 */
-	public void sortAllBy(Comparator<GraphVertex> comparator) throws NullPointerException {
-		if (comparator == null) {
-			throw new NullPointerException("The comparator cannot be null");
-		}
+	public void sortAllBy(Comparator<GraphVertex> comparator) {
 		for (int i = 0; i < generationCount; i++) {
 			generations[i].sortBy(comparator);
 		}
@@ -233,24 +231,21 @@ public class GraphModel implements Listener<Event> {
 	 * specified comparator.
 	 * 
 	 * @param generation the generation to sort.
-	 * @param comparator the comparator to determine the order.
+	 * @param comparator the comparator to determine the order of the list. A
+	 *        null value indicates that the vertices' natural ordering should be
+	 *        used.
 	 * @throws ArrayIndexOutOfBoundsException if generation is out of bound.
-	 * @throws NullPointerException if the comparator is null.
 	 */
-	public void sortBy(int generation, Comparator<GraphVertex> comparator) throws ArrayIndexOutOfBoundsException,
-			NullPointerException {
+	public void sortBy(int generation, Comparator<GraphVertex> comparator) throws ArrayIndexOutOfBoundsException {
 		if (generation < 0 || generation > getGenerationCount()) {
 			throw new ArrayIndexOutOfBoundsException(generation + "\t" + getGenerationCount());
 		}
-		if (comparator == null) {
-			throw new NullPointerException("The comparator cannot be null");
-		}
 		generations[generation].sortBy(comparator);
 	}
-	
-// 
-// Listeners management
-//
+
+	//
+	// Listeners management
+	//
 	/**
 	 * Adds a <code>GraphModelListener</code> to the listener list.
 	 * 
@@ -261,7 +256,8 @@ public class GraphModel implements Listener<Event> {
 	}
 
 	/**
-	 * Removes a <code>GraphModelListener</code> to the listener list.
+	 * Removev the specified <code>GraphModelListener</code> to the listener
+	 * list.
 	 * 
 	 * @param l the listener to remove.
 	 */

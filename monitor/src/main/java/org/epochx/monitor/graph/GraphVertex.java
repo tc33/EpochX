@@ -224,9 +224,9 @@ public class GraphVertex implements Comparable<Object> {
 	}
 
 	/**
-	 * Returns the mean of indexes of this vertex's parents.
+	 * Returns the mean of indices of this vertex's parents.
 	 * 
-	 * @return the mean of indexes of this vertex's parents.
+	 * @return the mean of indices of this vertex's parents.
 	 */
 	public double getParentMeanIndex() {
 		double mean = 0;

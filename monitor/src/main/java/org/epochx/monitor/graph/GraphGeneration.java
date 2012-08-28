@@ -75,7 +75,7 @@ public class GraphGeneration {
 			return vertices.size();
 		}
 	}
-	
+
 	/**
 	 * Returns the array of this generation's vertices.
 	 * 
@@ -113,8 +113,8 @@ public class GraphGeneration {
 	 * @param ind the <code>Individual</code> whose node is to be returned.
 	 * @return the <code>GraphVertex</code> corresponding to the specified
 	 *         <code>Individual</code> in the vertices list..
-	 * @throws <code>NoSuchElementException</code> if the <code>Individual</code>
-	 *        is not in the list.
+	 * @throws <code>NoSuchElementException</code> if the
+	 *         <code>Individual</code> is not in the list.
 	 */
 	public GraphVertex getGraphVertex(Individual ind) throws NoSuchElementException {
 		int i = indexOf(ind);
@@ -136,7 +136,7 @@ public class GraphGeneration {
 	 *        be returned.
 	 * @return the <code>GraphVertex</code> array.
 	 * @throws <code>NoSuchElementException</code> if one of the
-	 *        <code>Individuals</code> is not in the list.
+	 *         <code>Individuals</code> is not in the list.
 	 */
 	public GraphVertex[] getGraphVertices(Individual[] individuals) throws NoSuchElementException {
 		GraphVertex[] graphVertices = new GraphVertex[individuals.length];
@@ -237,22 +237,18 @@ public class GraphGeneration {
 	}
 
 	/**
-	 * Sorts the vertices list according the specified comparator.
+	 * Sorts the vertices list according to the order induced by the specified
+	 * comparator.
 	 * 
-	 * @param comparator the comparator used to sort the list ; can be null.
-	 * 
-	 * @return true if the sort have been done (i.e. the comparator is not
-	 *         null).
+	 * @param comparator the comparator to determine the order of the list. A
+	 *        null value indicates that the vertices' natural ordering should be
+	 *        used.
 	 */
-	public boolean sortBy(Comparator<GraphVertex> comparator) {
-		boolean b = false;
-		if (comparator != null) {
-			synchronized (vertices) {
-				Collections.sort(vertices, comparator);
-			}
-			b = true;
+	public void sortBy(Comparator<GraphVertex> comparator) {
+		synchronized (vertices) {
+			Collections.sort(vertices, comparator);
 		}
-		return b;
+
 	}
 
 }

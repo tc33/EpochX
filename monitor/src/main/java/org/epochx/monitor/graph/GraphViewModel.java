@@ -24,9 +24,7 @@ package org.epochx.monitor.graph;
 
 import java.awt.Color;
 import java.awt.Insets;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.Point;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -40,7 +38,7 @@ import org.epochx.monitor.graph.GraphViewEvent.Property;
 /**
  * 
  */
-public class GraphViewModel implements MouseListener, MouseMotionListener {
+public class GraphViewModel {
 
 	/**
 	 * The <code>EventListenerList</code>.
@@ -96,13 +94,16 @@ public class GraphViewModel implements MouseListener, MouseMotionListener {
 	 * The vertical gap between two row of node.
 	 */
 	private int vgap;
-	
+
+	/**
+	 * The margins.
+	 */
 	private Insets margins;
 
 	/**
-	 * The bound color.
+	 * The bond color.
 	 */
-	private Color boundColor;
+	private Color bondColor;
 
 	/**
 	 * The highlight color.
@@ -113,7 +114,7 @@ public class GraphViewModel implements MouseListener, MouseMotionListener {
 	 * The highlight depth.
 	 */
 	private int highlightDepth;
-	
+
 	/**
 	 * The selected vertex.
 	 */
@@ -125,7 +126,7 @@ public class GraphViewModel implements MouseListener, MouseMotionListener {
 	private GraphVertex highlightedGraphVertex;
 
 	/**
-	 * The map of <code>GraphVertex</code> mapped with their <code>GraphVertexModel</code>.
+	 * The vertices mapped with their <code>GraphVertexModel</code>.
 	 * <p>
 	 * All accesses must be <b>synchronized</b> because of concurrency with the
 	 * EDT.
@@ -140,30 +141,51 @@ public class GraphViewModel implements MouseListener, MouseMotionListener {
 	 * EDT.
 	 * </p>
 	 */
-	
 	private final TreeSet<Fitness> fitnesses;
 
-
 	/**
-	 * Constructs a <code>GraphViewModel</code>.
-	 * 
+	 * Constructs a <code>GraphViewModel</code> with default properties.
+	 * <p>
+	 * Default view properties :
+	 * <ul>
+	 * <li>comparator : null
+	 * <li>diameter : {@link GraphViewModel#DEFAULT_DIAMETER}
+	 * <li>gaps : {@link GraphViewModel#DEFAULT_HGAP} &
+	 * {@link GraphViewModel#DEFAULT_VGAP}
+	 * <li>margins : equal to the diameter.
+	 * </ul>
+	 * </p>
 	 */
 	public GraphViewModel() {
-		this(FITNESS_COMPARATOR, DEFAULT_DIAMETER, DEFAULT_HGAP, DEFAULT_VGAP);
+		this(DEFAULT_DIAMETER, DEFAULT_HGAP, DEFAULT_VGAP);
 	}
 
 	/**
-	 * Constructs a <code>GraphViewModel</code>.
+	 * Constructs a <code>GraphViewModel</code> with specified diameter and
+	 * proportionate gaps.
 	 * 
-	 * @param comparator
-	 * @param diameter
-	 * @param hgap
-	 * @param vgap
+	 * @param diameter the diameter of the vertices. Must be an <b>even</b>
+	 *        number !
+	 * 
+	 * @throws IllegalArgumentException if the diameter is not an even number.
+	 */
+	public GraphViewModel(int diameter) {
+		this(diameter, 3 * diameter, diameter / 8);
+	}
+
+	/**
+	 * Constructs a <code>GraphViewModel</code> with specified diameter and
+	 * gaps.
+	 * 
+	 * @param diameter the diameter of the vertices. Must be an <b>even</b>
+	 *        number !
+	 * @param hgap the horizontal gap.
+	 * @param vgap the vertical gap.
 	 * 
 	 * @throws IllegalArgumentException if an argument is non-suitable.
 	 */
-	public GraphViewModel(Comparator<GraphVertex> comparator, int diameter, int hgap, int vgap) {
-		
+	public GraphViewModel(int diameter, int hgap, int vgap) {
+
 		if (diameter % 2 != 0) {
 			throw new IllegalArgumentException("The diameter must be an even number.");
 		}
@@ -173,15 +195,14 @@ public class GraphViewModel implements MouseListener, MouseMotionListener {
 		if (vgap < 0) {
 			throw new IllegalArgumentException("The vertical gap must be positive.");
 		}
-		
-		
+
 		this.listenerList = new EventListenerList();
-		this.comparator = comparator;
+		this.comparator = null;
 		this.diameter = diameter;
 		this.hgap = hgap;
 		this.vgap = vgap;
-		this.setMargins(new Insets(diameter, diameter, diameter, diameter));
-		this.boundColor = new Color(210, 210, 210);
+		this.margins = new Insets(diameter, diameter, diameter, diameter);
+		this.bondColor = new Color(210, 210, 210);
 		this.highlightColor = Color.GREEN;
 		this.highlightDepth = 5;
 		this.fitnesses = new TreeSet<Fitness>();
@@ -189,39 +210,47 @@ public class GraphViewModel implements MouseListener, MouseMotionListener {
 	}
 
 	/**
-	 * @return the comparator
+	 * Returns the comparator who determine the order of the vertices.
+	 * 
+	 * @return the comparator who determine the order of the vertices.
 	 */
 	public Comparator<GraphVertex> getComparator() {
 		return comparator;
 	}
 
 	/**
-	 * @param comparator the comparator to set
+	 * Sets the comparator who determine the order of the vertices.
+	 * 
+	 * @param comparator the comparator who determine the order of the vertices.
 	 */
 	public void setComparator(Comparator<GraphVertex> comparator) {
 		Comparator<GraphVertex> old = this.comparator;
 		this.comparator = comparator;
-		fireGraphViewEvent(new GraphViewEvent(this, Property.COMPARATOR, old, comparator));	
+		fireGraphViewEvent(new GraphViewEvent(this, Property.COMPARATOR, old, comparator));
 	}
 
 	/**
-	 * @return the diameter
+	 * Returns the vertex diameter.
+	 * 
+	 * @return the vertex diameter.
 	 */
 	public int getDiameter() {
 		return diameter;
 	}
 
 	/**
-	 * @param diameter the diameter to set
+	 * Sets the vertex diameter.
+	 * 
+	 * @param diameter the vertex diameter to set.
 	 */
 	public void setDiameter(int diameter) {
 		if (this.diameter != diameter) {
 			int old = this.diameter;
 			this.diameter = diameter;
 			synchronized (map) {
-				for ( GraphVertexModel vertexModel : map.values() ) {
+				for (GraphVertexModel vertexModel: map.values()) {
 					vertexModel.setDiameter(diameter);
-					vertexModel.setDefaultPosition();
+					vertexModel.resetDefaultPosition();
 				}
 			}
 			fireGraphViewEvent(new GraphViewEvent(this, Property.DIAMETER, new Integer(old), new Integer(diameter)));
@@ -229,14 +258,18 @@ public class GraphViewModel implements MouseListener, MouseMotionListener {
 	}
 
 	/**
-	 * @return the hgap
+	 * Returns the horizontal gap between two vertices.
+	 * 
+	 * @return the horizontal hgap.
 	 */
 	public int getHgap() {
 		return hgap;
 	}
 
 	/**
-	 * @param hgap the hgap to set
+	 * Sets the horizontal gap between two vertices.
+	 * 
+	 * @param hgap the horizontal gap to set.
 	 */
 	public void setHgap(int hgap) {
 		if (this.hgap != hgap) {
@@ -247,14 +280,18 @@ public class GraphViewModel implements MouseListener, MouseMotionListener {
 	}
 
 	/**
-	 * @return the vgap
+	 * Returns the vertical gap between two vertices.
+	 * 
+	 * @return the vertical gap.
 	 */
 	public int getVgap() {
 		return vgap;
 	}
 
 	/**
-	 * @param vgap the vgap to set
+	 * Sets the vertical gap between two vertices.
+	 * 
+	 * @param vgap the vertical gap to set.
 	 */
 	public void setVgap(int vgap) {
 		if (this.vgap != vgap) {
@@ -265,87 +302,108 @@ public class GraphViewModel implements MouseListener, MouseMotionListener {
 	}
 
 	/**
-	 * @return the margins
+	 * Returns the margins which surround the view.
+	 * 
+	 * @return the margins.
 	 */
 	public Insets getMargins() {
 		return margins;
 	}
 
 	/**
-	 * @param m the margins to set
+	 * Sets the margins which surround the view.
+	 * 
+	 * @param margins the margins to set.
 	 */
 	public void setMargins(Insets m) {
-		if (this.margins != m) {
-			Insets old = this.margins;
-			this.margins = m;
+		if (margins != m) {
+			Insets old = margins;
+			margins = m;
 			fireGraphViewEvent(new GraphViewEvent(this, Property.MARGINS, old, m));
 		}
 	}
 
 	/**
-	 * @return the boundColor
+	 * Returns the bondColor.
+	 * 
+	 * @return the bondColor.
 	 */
-	public Color getBoundColor() {
-		return boundColor;
+	public Color getBondColor() {
+		return bondColor;
 	}
 
 	/**
-	 * @param boundColor the boundColor to set
+	 * Sets the bond color.
+	 * 
+	 * @param color the bond color to set.
 	 */
-	public void setBoundColor(Color boundColor) {
-		if (this.boundColor != boundColor) {
-			Color old = this.boundColor;
-			this.boundColor = boundColor;
-			fireGraphViewEvent(new GraphViewEvent(this, Property.BOUND_COLOR, old, boundColor));
+	public void setBondColor(Color color) {
+		if (bondColor != color) {
+			Color old = bondColor;
+			bondColor = color;
+			fireGraphViewEvent(new GraphViewEvent(this, Property.BOUND_COLOR, old, color));
 		}
 	}
 
 	/**
-	 * @return the highlightColor
+	 * Returns the highlight color.
+	 * 
+	 * @return the highlight color.
 	 */
 	public Color getHighlightColor() {
 		return highlightColor;
 	}
 
 	/**
-	 * @param highlightColor the highlightColor to set
+	 * Sets the highlight color.
+	 * 
+	 * @param color the highlight color to set.
 	 */
-	public void setHighlightColor(Color highlightColor) {
-		if (this.highlightColor != highlightColor) {
-			Color old = this.highlightColor;
-			this.highlightColor = highlightColor;
-			fireGraphViewEvent(new GraphViewEvent(this, Property.HIGHLIGHT_COLOR, old, highlightColor));
+	public void setHighlightColor(Color color) {
+		if (highlightColor != color) {
+			Color old = highlightColor;
+			highlightColor = color;
+			fireGraphViewEvent(new GraphViewEvent(this, Property.HIGHLIGHT_COLOR, old, color));
 		}
 	}
 
 	/**
-	 * @return the highlightDepth
+	 * Returns the highlight depth which indicate how many ancestor generation
+	 * are highlighted when a vertix is rollover.
+	 * 
+	 * @return the highlight depth.
 	 */
 	public int getHighlightDepth() {
 		return highlightDepth;
 	}
 
 	/**
-	 * @param highlightDepth the highlightDepth to set
+	 * Sets the highlight depth which indicate how many ancestor generation are
+	 * highlighted when a vertix is rollover.
+	 * 
+	 * @param depth the highlight depth to set.
 	 */
-	public void setHighlightDepth(int highlightDepth) {
-		if (this.highlightDepth != highlightDepth) {
-			int old = this.highlightDepth;
-			this.highlightDepth = highlightDepth;
-			fireGraphViewEvent(new GraphViewEvent(this, Property.HIGHLIGHT_DEPTH, new Integer(old), new Integer(
-					highlightDepth)));
+	public void setHighlightDepth(int depth) {
+		if (highlightDepth != depth) {
+			int old = highlightDepth;
+			highlightDepth = depth;
+			fireGraphViewEvent(new GraphViewEvent(this, Property.HIGHLIGHT_DEPTH, new Integer(old), new Integer(depth)));
 		}
 	}
 
 	/**
-	 * @return the selectedGraphVertex
+	 * Returns the selected <code>GraphVertex</code>.
+	 * 
+	 * @return the selected <code>GraphVertex</code>.
 	 */
 	public GraphVertex getSelectedGraphVertex() {
 		return selectedGraphVertex;
 	}
 
 	/**
-	 * @param vertex the selectedGraphVertex to set
+	 * Sets the selected <code>GraphVertex</code>.
+	 * 
+	 * @param vertex the selected <code>GraphVertex</code> to set.
 	 */
 	public void setSelectedGraphVertex(GraphVertex vertex) {
 		if (selectedGraphVertex != vertex) {
@@ -356,14 +414,18 @@ public class GraphViewModel implements MouseListener, MouseMotionListener {
 	}
 
 	/**
-	 * @return the highlightedGraphVertex
+	 * Returns the highlighted <code>GraphVertex</code>.
+	 * 
+	 * @return the highlighted <code>GraphVertex</code>.
 	 */
 	public GraphVertex getHighlightedGraphVertex() {
 		return highlightedGraphVertex;
 	}
 
 	/**
-	 * @param vertex the highlightedGraphVertex to set
+	 * Sets the highlighted <code>GraphVertex</code>.
+	 * 
+	 * @param vertex the highlighted <code>GraphVertex</code> to set.
 	 */
 	public void setHighlightedGraphVertex(GraphVertex vertex) {
 		if (highlightedGraphVertex != vertex) {
@@ -372,25 +434,48 @@ public class GraphViewModel implements MouseListener, MouseMotionListener {
 			fireGraphViewEvent(new GraphViewEvent(this, Property.HIGHLIGHTED_VERTEX, old, vertex));
 		}
 	}
-	
 
-	public void setHighlighted(GraphVertex vertex, int depth) {
+	/**
+	 * Highlight a <code>GraphVertex</code> and its ancestors according to the
+	 * specified recursion depth.
+	 * 
+	 * @param vertex the vertex to highlight.
+	 * @param depth the depth.
+	 */
+	public void highlight(GraphVertex vertex, int depth) {
 		GraphVertexModel vertexModel = getVertexModel(vertex);
 		vertexModel.setHighlighted(true);
 		if (depth != 0) {
 			for (GraphVertex parent: vertex.getParents()) {
-				setHighlighted(parent, depth - 1);
+				highlight(parent, depth - 1);
 			}
 		}
 	}
-	
+
+	/**
+	 * Returns the set of fitnesses.
+	 * 
+	 * @return the set of fitnesses.
+	 */
+	public TreeSet<Fitness> getFitnesses() {
+		return fitnesses;
+	}
+
+	/**
+	 * Returns the <code>GraphVertexModel</code> to which the specified
+	 * <code>GraphVertex</code> is mapped, if it is contained. Creates, adds and
+	 * returns a new model otherwise.
+	 * 
+	 * @param vertex the vertex whose model is to be found.
+	 * @return the <code>GraphVertexModel</code> mapped with the specified
+	 *         <code>GraphVertex</code>.
+	 */
 	public GraphVertexModel getVertexModel(GraphVertex vertex) {
 		GraphVertexModel vertexModel;
 		synchronized (map) {
 			if (map.containsKey(vertex)) {
 				vertexModel = map.get(vertex);
-			}
-			else {
+			} else {
 				vertexModel = new GraphVertexModel(vertex, this);
 				map.put(vertex, vertexModel);
 			}
@@ -398,15 +483,20 @@ public class GraphViewModel implements MouseListener, MouseMotionListener {
 		return vertexModel;
 	}
 
-	public boolean addVertexModel(GraphVertex vertex, GraphVertexModel vertexModel) {
-		boolean b = false;
+	/**
+	 * Associates the specified <code>GraphVertexModel</code> with the specified
+	 * <code>GraphVertex</code> in this map. If the map previously contained a
+	 * mapping for the vertex, the old model is replaced.
+	 * 
+	 * @param vertex the vertex key.
+	 * @param vertexModel the vertex model to mapped with the vertex key.
+	 * @return the previous value associated with key, or null if there was no
+	 *         mapping for key.
+	 */
+	public GraphVertexModel addVertexModel(GraphVertex vertex, GraphVertexModel vertexModel) {
 		synchronized (map) {
-			if (!map.containsKey(vertex)) {
-				map.put(vertex, vertexModel);
-				b = true;
-			}
+			return map.put(vertex, vertexModel);
 		}
-		return b;
 	}
 
 	/**
@@ -424,7 +514,9 @@ public class GraphViewModel implements MouseListener, MouseMotionListener {
 			i = indexOfFitness(fitness) * 1.f;
 			n = fitnesses.size() * 1.f - 1.f;
 		}
-		return new Color(i / n, 0, (n - i) / n);
+		float r = i / n;
+		float b = 1 - r;
+		return new Color(r, 0, b);
 	}
 
 	/**
@@ -468,17 +560,123 @@ public class GraphViewModel implements MouseListener, MouseMotionListener {
 		}
 		return -1;
 	}
-
 	
+	/**
+	 * Resets the index of all the <code>GraphVertexModel</code> according to
+	 * the index of their associated vertex in their generation.
+	 * 
+	 * @see GraphVertexModel#resetDefaultIndex()
+	 */
+	public void resetIndices() {
+		synchronized (map) {
+			for (GraphVertexModel vertexModel: map.values()) {
+				vertexModel.resetDefaultIndex();
+			}
+		}
+	}
 
+	/**
+	 * Resets the position of all the <code>GraphVertexModel</code> according to
+	 * the position of their associated vertex in their generation.
+	 * 
+	 * @see GraphVertexModel#resetDefaultPosition()
+	 */
+	public void resetPostions() {
+		synchronized (map) {
+			for (GraphVertexModel vertexModel: map.values()) {
+				vertexModel.resetDefaultPosition();
+			}
+		}
+	}
+
+	/**
+	 * Select the vertex at the specified point (only if it points on a
+	 * vertex), all the other vertices will be non selected.
+	 * <p>
+	 * A <code>GraphViewEvent</code> might be fire if the selected vertex is
+	 * different than the previous one.
+	 * </p>
+	 * 
+	 * @param point the point.
+	 */
+	public void select(Point point) {
+		GraphVertex selectedVertex = null;
+		synchronized (map) {
+			for (GraphVertexModel vertexModel: map.values()) {
+
+				if (vertexModel.contains(point)) {
+					selectedVertex = vertexModel.getVertex();
+				} else if (vertexModel.isHighlighted()) {
+					vertexModel.setHighlighted(false);
+				}
+			}
+		}
+
+		if (selectedVertex != null) {
+
+		}
+		setSelectedGraphVertex(selectedVertex);
+	}
+
+	/**
+	 * Highlight the vertex at the specified point (only if it points on a
+	 * vertex), all the other vertices will be non highlighted.
+	 * <p>
+	 * A <code>GraphViewEvent</code> might be fire if the highlighted vertex is
+	 * different than the previous one.
+	 * </p>
+	 * 
+	 * @param point the point.
+	 */
+	public void highlight(Point point) {
+		GraphVertex selectedVertex = null;
+		synchronized (map) {
+			for (GraphVertexModel vertexModel: map.values()) {
+
+				if (vertexModel.contains(point)) {
+					selectedVertex = vertexModel.getVertex();
+				} else if (vertexModel.isHighlighted()) {
+					vertexModel.setHighlighted(false);
+				}
+			}
+		}
+
+		if (selectedVertex != null) {
+			highlight(selectedVertex, highlightDepth);
+		}
+		setHighlightedGraphVertex(selectedVertex);
+	}
+
+	//
+	// Listeners management //
+	//
+
+	/**
+	 * Adds a <code>GraphViewListener</code> to the listener list.
+	 * 
+	 * @param l the listener to add.
+	 */
 	public void addGraphViewListener(GraphViewListener l) {
 		listenerList.add(GraphViewListener.class, l);
 	}
 
+	/**
+	 * Removes the specified <code>GraphViewListener</code> from the listener
+	 * list.
+	 * 
+	 * @param l the listener to remove.
+	 */
 	public void removeGraphViewListener(GraphViewListener l) {
 		listenerList.remove(GraphViewListener.class, l);
 	}
 
+	/**
+	 * Forwards the given notification event to all
+	 * <code>GraphViewListener</code> that registered themselves as listeners
+	 * for this graph model.
+	 * 
+	 * @param e the event to be forwarded
+	 */
 	public void fireGraphViewEvent(GraphViewEvent e) {
 
 		GraphViewListener[] listeners = listenerList.getListeners(GraphViewListener.class);
@@ -487,76 +685,5 @@ public class GraphViewModel implements MouseListener, MouseMotionListener {
 			listeners[i].viewChanged(e);
 		}
 	}
-	
-	public void resetPostions() {
-		synchronized (map) {
-			for ( GraphVertexModel vertexModel : map.values() ) {
-				vertexModel.setDefaultPosition();
-			}
-		}
-	}
-
-//
-// Mouse listener methods
-//
-	public void mouseClicked(MouseEvent e) {
-		GraphVertex selectedVertex = null;
-		synchronized (map) {
-			for (GraphVertexModel vertexModel: map.values()) {
-
-				if (vertexModel.contains(e.getPoint())) {
-					selectedVertex = vertexModel.getVertex();
-				} else if (vertexModel.isHighlighted()) {
-					vertexModel.setHighlighted(false);
-				}
-			}
-		}
-
-		if (selectedVertex != null) {
-			
-		}
-		setSelectedGraphVertex(selectedVertex);
-	}
-
-	public void mouseEntered(MouseEvent e) {
-
-	}
-
-	public void mouseExited(MouseEvent e) {
-
-	}
-
-	public void mousePressed(MouseEvent e) {
-	}
-
-	public void mouseReleased(MouseEvent e) {
-
-	}
-
-	public void mouseDragged(MouseEvent e) {
-		System.out.println(e);
-
-	}
-
-	public void mouseMoved(MouseEvent e) {
-
-		GraphVertex selectedVertex = null;
-		synchronized (map) {
-			for (GraphVertexModel vertexModel: map.values()) {
-
-				if (vertexModel.contains(e.getPoint())) {
-					selectedVertex = vertexModel.getVertex();
-				} else if (vertexModel.isHighlighted()) {
-					vertexModel.setHighlighted(false);
-				}
-			}
-		}
-
-		if (selectedVertex != null) {
-			setHighlighted(selectedVertex, highlightDepth);
-		}
-		setHighlightedGraphVertex(selectedVertex);
-	}
-
 
 }

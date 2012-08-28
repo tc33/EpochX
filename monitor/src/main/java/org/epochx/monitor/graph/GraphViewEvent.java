@@ -25,7 +25,8 @@ package org.epochx.monitor.graph;
 import java.util.EventObject;
 
 /**
- * 
+ * A <code>GraphViewEvent</code> is used to notify listeners that a view model
+ * has changed.
  */
 public class GraphViewEvent extends EventObject {
 
@@ -34,21 +35,46 @@ public class GraphViewEvent extends EventObject {
 	 */
 	private static final long serialVersionUID = -3419694219416332329L;
 
+	/**
+	 * A <code>Property</code> identifies the property that changed among the
+	 * view model's fields.
+	 */
 	public enum Property {
 		COMPARATOR, DIAMETER, HGAP, VGAP, MARGINS, SELECTED_VERTEX, HIGHLIGHTED_VERTEX, BOUND_COLOR, HIGHLIGHT_COLOR,
 		HIGHLIGHT_DEPTH, FITNESS
 	}
 
+	/**
+	 * The property which identifies the view model's field that changed.
+	 */
 	private final Property property;
 
+	/**
+	 * The old value for the property.
+	 */
 	private final Object oldValue;
 
+	/**
+	 * The new value for the property.
+	 */
 	private final Object newValue;
 
 	/**
-	 * Constructs a <code>GraphViewEvent</code>.
+	 * Constructs a <code>GraphViewEvent</code> with a null property and null
+	 * values.
 	 * 
-	 * @param source
+	 * @param source the object that fired the event.
+	 */
+	public GraphViewEvent(Object source) {
+		this(source, null, null, null);
+	}
+
+	/**
+	 * Constructs a <code>GraphViewEvent</code> with a specified property.
+	 * 
+	 * @param source the object that fired the event.
+	 * @param property the property which identifies the view model's field that
+	 *        changed.
 	 */
 	public GraphViewEvent(Object source, Property property) {
 		this(source, property, null, null);
@@ -57,10 +83,11 @@ public class GraphViewEvent extends EventObject {
 	/**
 	 * Constructs a <code>GraphViewEvent</code>.
 	 * 
-	 * @param source
-	 * @param property
-	 * @param oldValue
-	 * @param newValue
+	 * @param source the object that fired the event.
+	 * @param property the property which identifies the view model's field that
+	 *        changed.
+	 * @param oldValue the old value of the property.
+	 * @param newValue the new value of the property.
 	 */
 	public GraphViewEvent(Object source, Property property, Object oldValue, Object newValue) {
 		super(source);
@@ -70,21 +97,31 @@ public class GraphViewEvent extends EventObject {
 	}
 
 	/**
-	 * @return the property
+	 * Gets the <code>Property</code> that was changed. Among this
+	 * {@link Property enumeration}.
+	 * 
+	 * @return the <code>Property</code> that was changed. May be null if
+	 *         multiple properties have changed.
 	 */
 	public Property getProperty() {
 		return property;
 	}
 
 	/**
-	 * @return the oldValue
+	 * Gets the old value for the property, expressed as an Object.
+	 * 
+	 * @return the old value for the property, expressed as an Object. May be
+	 *         null if multiple properties have changed.
 	 */
 	public Object getOldValue() {
 		return oldValue;
 	}
 
 	/**
-	 * @return the newValue
+	 * Gets the new value for the property, expressed as an Object.
+	 * 
+	 * @return the new value for the property, expressed as an Object. May be
+	 *         null if multiple properties have changed.
 	 */
 	public Object getNewValue() {
 		return newValue;

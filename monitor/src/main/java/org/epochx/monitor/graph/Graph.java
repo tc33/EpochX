@@ -39,7 +39,7 @@ import org.epochx.monitor.Utilities;
 /**
  * A <code>Graph</code> draw a visualization graph to monitor the evolution process.
  */
-public class Graph extends JPanel implements Runnable, ActionListener {
+public class Graph extends JPanel implements Runnable {
 
 	/**
 	 * Generated serial UID.
@@ -51,7 +51,6 @@ public class Graph extends JPanel implements Runnable, ActionListener {
 	 */
 	private static int noInstances = 0;
 
-	
 	/**
 	 * The <code>GraphViewModel</code>.
 	 */
@@ -61,6 +60,11 @@ public class Graph extends JPanel implements Runnable, ActionListener {
 	 * The <code>GraphModel</code>.
 	 */
 	private GraphModel model;
+	
+	/**
+	 * The <code>GraphMouseListener</code>.
+	 */
+	private GraphMouseListener mouseListener;
 
 	/**
 	 * The <code>GraphHeader</code>.
@@ -76,16 +80,17 @@ public class Graph extends JPanel implements Runnable, ActionListener {
 	 * The <code>GraphRowHeader</code>.
 	 */
 	private GraphRowHeader graphRowHeader;
-	
-	/**
-	 * The <code>JScrollPane</code>.
-	 */
-	private JScrollPane scrollPane;
 
 	/**
 	 * The <code>GraphFooter</code>.
 	 */
 	private GraphFooter graphFooter;
+	
+	
+	/**
+	 * The <code>JScrollPane</code>.
+	 */
+	private JScrollPane scrollPane;
 
 	/**
 	 * Constructs a <code>Graph</code> with a default properties.
@@ -179,7 +184,7 @@ public class Graph extends JPanel implements Runnable, ActionListener {
 	 *        number !
 	 */
 	public Graph(String name, Comparator<GraphVertex> comparator, int diameter) {
-		this(name, comparator, diameter, diameter * 0.1, diameter * 3);
+		this(name, diameter, diameter * 0.1, diameter * 3);
 	}
 
 	/**
@@ -198,13 +203,14 @@ public class Graph extends JPanel implements Runnable, ActionListener {
 	 * @param hgap the horizontal gap.
 	 * @param vgap the vertical gap.
 	 */
-	public Graph(String name, Comparator<GraphVertex> comparator, double diameter, double hgap, double vgap) {
+	public Graph(String name, double diameter, double hgap, double vgap) {
 		super(new BorderLayout());
 
-		this.viewModel = new GraphViewModel(comparator, (int) diameter, (int) hgap, (int) vgap);
+		this.viewModel = new GraphViewModel((int) diameter, (int) hgap, (int) vgap);
 		this.model = new GraphModel();
+		this.mouseListener = new GraphMouseListener();
 		this.graphHeader = new GraphHeader(viewModel);
-		this.graphView = new GraphView(model, viewModel);
+		this.graphView = new GraphView(viewModel, model);
 		this.graphRowHeader = new GraphRowHeader(viewModel);
 		this.graphFooter = new GraphFooter();
 		this.scrollPane = new JScrollPane();
@@ -214,11 +220,11 @@ public class Graph extends JPanel implements Runnable, ActionListener {
 		viewModel.addGraphViewListener(graphFooter);
 		viewModel.addGraphViewListener(graphRowHeader);
 		
-		SwingUtilities.invokeLater(this);
+		graphView.addMouseListener(mouseListener);
+		graphView.addMouseMotionListener(mouseListener);
 		
-		Timer timer = new Timer(1000, this);
-		timer.setInitialDelay(1000);
-		timer.start();
+		// Create and show the graph.
+		SwingUtilities.invokeLater(this);
 	}
 	
 	/**
@@ -230,23 +236,14 @@ public class Graph extends JPanel implements Runnable, ActionListener {
 		scrollPane.setViewportView(graphView);
 		scrollPane.setRowHeaderView(graphRowHeader);
 		scrollPane.setPreferredSize(new Dimension(900, 600));
+		scrollPane.revalidate();
 		
 		add(graphHeader, BorderLayout.NORTH);
 		add(scrollPane, BorderLayout.CENTER);
 		add(graphFooter, BorderLayout.SOUTH);
-	}
-	
-
-	/**
-	 * The ActionListener inherited method to receive the timer's action events;
-	 * Refreshs the panel, only if visible.
-	 * 
-	 * @param e the <code>ActionEvent</code>.
-	 */
-	public void actionPerformed(ActionEvent e) {
-		if (Utilities.isVisible(this)) {
-			graphView.resize();
-		}
+		
+		validate();
+		repaint();
 	}
 
 	
@@ -288,6 +285,22 @@ public class Graph extends JPanel implements Runnable, ActionListener {
 	}
 
 	
+	/**
+	 * Returns the <code>GraphMouseListener</code>.
+	 * @return the <code>GraphMouseListener</code>.
+	 */
+	public GraphMouseListener getMouseListener() {
+		return mouseListener;
+	}
+
+	/**
+	 * Sets the <code>GraphMouseListener</code>.
+	 * @param mouseListener the <code>GraphMouseListener</code> to set.
+	 */
+	public void setMouseListener(GraphMouseListener mouseListener) {
+		this.mouseListener = mouseListener;
+	}
+
 	/**
 	 * Returns the <code>GraphHeader</code>.
 	 * @return the <code>GraphHeader</code>.

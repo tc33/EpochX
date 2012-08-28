@@ -90,15 +90,15 @@ public class GraphHeader extends JPanel implements Runnable, Listener<Event>, Ch
 		comparatorBox.addItem(GraphViewModel.FITNESS_COMPARATOR);
 		comparatorBox.addItem(GraphViewModel.PARENT_COMPARATOR);
 		comparatorBox.addItem(GraphViewModel.OPERATOR_COMPARATOR);
-		comparatorBox.addItemListener(this);
 		comparatorBox.setSelectedIndex(-1);
+		comparatorBox.addItemListener(this);
 		comparatorBox.setPreferredSize(new Dimension(100, 20));
 		add(comparatorBox);
 		
 		JLabel lblDiameter = new JLabel("Zoom :");
 		add(lblDiameter);
 		
-		diameterSlider = new JSlider(5, 50, viewModel.getDiameter());
+		diameterSlider = new JSlider(1, 25, viewModel.getDiameter()/2);
 		diameterSlider.setBackground(UIManager.getColor("TabbedPane.contentAreaColor"));
 		diameterSlider.addChangeListener(this);
 		diameterSlider.setPreferredSize(new Dimension(70, 16));
@@ -107,7 +107,7 @@ public class GraphHeader extends JPanel implements Runnable, Listener<Event>, Ch
 		JLabel lblBond = new JLabel("Bonds :");
 		add(lblBond);
 		
-		bondSlider = new JSlider(0, 100, 254-viewModel.getBoundColor().getBlue());
+		bondSlider = new JSlider(0, 100, 254-viewModel.getBondColor().getBlue());
 		bondSlider.setBackground(UIManager.getColor("TabbedPane.contentAreaColor"));
 		bondSlider.addChangeListener(this);
 		bondSlider.setPreferredSize(new Dimension(70, 16));
@@ -172,12 +172,12 @@ public class GraphHeader extends JPanel implements Runnable, Listener<Event>, Ch
 	public void stateChanged(ChangeEvent e) {
 		
 		if ( e.getSource() == diameterSlider ) {
-			viewModel.setDiameter(diameterSlider.getValue());
+			viewModel.setDiameter(diameterSlider.getValue()*2);
 		}
 		
 		if ( e.getSource() == bondSlider ) {
 			int c = 254-bondSlider.getValue();
-			viewModel.setBoundColor(new Color(c, c, c));
+			viewModel.setBondColor(new Color(c, c, c));
 		}
 		
 		

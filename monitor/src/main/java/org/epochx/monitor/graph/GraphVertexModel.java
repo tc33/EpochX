@@ -45,6 +45,10 @@ public class GraphVertexModel {
 	
 	private int diameter;
 	
+	private int index;
+	
+	private final int generation;
+	
 	private boolean highlighted;
 	
 	GraphVertexModel(GraphVertex vertex, GraphViewModel viewModel) {
@@ -53,10 +57,13 @@ public class GraphVertexModel {
 		this.highlighted = false;
 		this.viewModel = viewModel;
 		this.diameter = viewModel.getDiameter();
+		this.index = vertex.getIndex();
+		this.generation = vertex.getGenerationNo();
+		
 		
 		viewModel.addFitness(vertex.getFitness());
 		
-		setDefaultPosition();
+		resetDefaultPosition();
 	}
 
 	/**
@@ -108,12 +115,36 @@ public class GraphVertexModel {
 	}
 
 	/**
-	 * @return the fillColor
+	 * @return the fill <code>Color</code>.
 	 */
-	public Color getFillColor() {
+	public Color getColor() {
 		return viewModel.getFitnessColor(vertex.getFitness());
 	}
 	
+	/**
+	 * Returns the index.
+	 * @return the index.
+	 */
+	public int getIndex() {
+		return index;
+	}
+
+	/**
+	 * Sets the index.
+	 * @param index the index to set.
+	 */
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
+	/**
+	 * Returns the generation.
+	 * @return the generation.
+	 */
+	public int getGeneration() {
+		return generation;
+	}
+
 	/**
 	 * @return the highlighted
 	 */
@@ -169,10 +200,14 @@ public class GraphVertexModel {
 		Rectangle bounds = getBounds();
 		return bounds.contains(p);
 	}
+	
+	public void resetDefaultIndex() {
+		index = vertex.getIndex();
+	}
 
-	public void setDefaultPosition() {
-		int x = viewModel.getMargins().left+vertex.getIndex() * (viewModel.getDiameter() + viewModel.getHgap());
-		int y = viewModel.getMargins().top+vertex.getGenerationNo() * (viewModel.getDiameter() + viewModel.getVgap());
+	public void resetDefaultPosition() {
+		int x = viewModel.getMargins().left+index * (viewModel.getDiameter() + viewModel.getHgap());
+		int y = viewModel.getMargins().top+generation * (viewModel.getDiameter() + viewModel.getVgap());
 		centre = new Point(x, y);
 	}
 }

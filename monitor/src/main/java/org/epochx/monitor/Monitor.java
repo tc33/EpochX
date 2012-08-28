@@ -186,10 +186,8 @@ public class Monitor extends JFrame implements Runnable {
 		try {
 			SwingUtilities.invokeAndWait(this);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

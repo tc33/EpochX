@@ -29,19 +29,17 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 
-import org.epochx.Config;
-import org.epochx.MaximumGenerations;
-import org.epochx.monitor.graph.GraphViewEvent.Property;
-
 /**
- * A <code>GraphRowHeader</code>.
+ * A <code>GraphRowHeader</code> display the generation's numbers.
  */
-public class GraphRowHeader extends JComponent implements GraphViewListener {
+public class GraphRowHeader extends JComponent implements ComponentListener {
 
 	/**
 	 * Generated serial UID.
@@ -49,56 +47,68 @@ public class GraphRowHeader extends JComponent implements GraphViewListener {
 	private static final long serialVersionUID = -5122768373913634322L;
 
 	/**
-	 * The <code>GraphViewModel</code>/viewModel.
+	 * The <code>GraphViewModel</code>.
 	 */
 	private GraphViewModel viewModel;
 
-	private int maxGenerationNumber;
-	
-	private int margin;
-
-	private int textWidth;
+	/**
+	 * Constructs a <code>GraphRowHeader</code>.
+	 */
+	public GraphRowHeader() {
+		super();
+		
+		setBorder(BorderFactory.createEtchedBorder());
+	}
 
 	/**
 	 * Constructs a <code>GraphRowHeader</code>.
 	 * 
-	 * @param viewModel
+	 * @param viewModel the <code>GraphViewModel</code>.
+	 * @param model the <code>GraphModel</code>.
+	 * 
+	 * @throws IllegalArgumentException if null argument.
 	 */
-	public GraphRowHeader(GraphViewModel viewModel) {
-		super();
-		this.viewModel = viewModel;
-		this.margin = 3;
-		this.maxGenerationNumber = Config.getInstance().get(MaximumGenerations.MAXIMUM_GENERATIONS) + 1;
-		this.textWidth = String.valueOf(maxGenerationNumber).length() * 10;
-		
-		setBorder(BorderFactory.createEtchedBorder());
-		
-		
-		resize();
+	public GraphRowHeader(GraphViewModel viewModel, GraphModel model) {
+		this();
+
+		if (viewModel == null || model == null) {
+			throw new IllegalArgumentException("Arguments cannot be null.");
+		}
+
+		setViewModel(viewModel);
 	}
 
 	/**
+	 * Returns the <code>GraphViewModel</code>.
 	 * 
+	 * @return the <code>GraphViewModel</code>.
 	 */
-	public void viewChanged(GraphViewEvent e) {
-		Property property = e.getProperty();
-
-		switch (property) {
-
-			case DIAMETER:
-			case VGAP:
-			case HGAP:
-				resize();
-				repaint();
-				break;
-			default:
-				// do nothing
-		}
+	public GraphViewModel getViewModel() {
+		return viewModel;
 	}
 
+	/**
+	 * Sets the <code>GraphViewModel</code>.
+	 * 
+	 * @param viewModel the <code>GraphViewModel</code> to set.
+	 */
+	public void setViewModel(GraphViewModel viewModel) {
+		this.viewModel = viewModel;
+	}
+
+	/**
+	 * Paints the header.
+	 * 
+	 * @param g the graphics context to use for painting.
+	 */
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+
+		if (viewModel == null) {
+			return;
+		}
+
 		Graphics2D g2 = (Graphics2D) g.create();
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -106,54 +116,70 @@ public class GraphRowHeader extends JComponent implements GraphViewListener {
 
 		int ymin = (int) r.getY();
 		int ymax = (int) (r.getY() + r.getHeight());
-
+		int h = (int) getPreferredSize().getHeight();
+		
+		ymax = ymax < h ? ymax : h;
 		int firstGeneration = getGenerationAt(ymin);
 		int lastGeneration = getGenerationAt(ymax);
+		
+		boolean resizeNeeded = false;
+		int margin = 3;
+		int width = getSize().width;
 
-		/*
-		 * System.out.println("from : "+firstGeneration+" to : "+lastGeneration);
-		 * int c = (int) System.currentTimeMillis()%250;
-		 * Color fillColor = new Color(c, 0, c);
-		 * g2.setPaint(fillColor);
-		 * g2.fill(g2.getClip());
-		 * //
-		 */
+//		System.out.println("from : " + firstGeneration + " to : " + lastGeneration);
+//		int c = (int) System.currentTimeMillis() % 250;
+//		Color fillColor = new Color(c, 0, c);
+//		g2.setPaint(fillColor);
+//		g2.fill(g2.getClip());
+//		g2.fillRect(0, 0, width, h);
 
 		for (int i = firstGeneration; i <= lastGeneration; i++) {
 
 			String generation = String.valueOf(i);
 			FontMetrics metrics = g2.getFontMetrics();
+			int textWidth = metrics.stringWidth(generation) + 4;
 			int textHeight = metrics.getAscent();
 
-			int x = margin;
+			if (2 * margin + textWidth + 2 > width) {
+				width = 2 * margin + textWidth + 2;
+				resizeNeeded = true;
+			}
+
 			int y = (int) (viewModel.getMargins().top + i * (viewModel.getDiameter() + viewModel.getVgap()) - viewModel.getDiameter() / 2.0);
 			int height = viewModel.getDiameter() > textHeight ? viewModel.getDiameter() : textHeight;
 			height += 2;
 
-			Rectangle2D rectangle = new Rectangle2D.Double(x, y, textWidth, height);
+			Rectangle2D rectangle = new Rectangle2D.Double(0, y, width, height);
 			g2.setPaint(Color.GRAY);
 			g2.fill(rectangle);
 			g2.setColor(Color.black);
 
 			g2.drawString(generation, margin + 2, y + height - (int) ((height - textHeight) / 2.0));
 
+			if (resizeNeeded) {
+				Dimension d = new Dimension(width, getPreferredSize().height);
+				setPreferredSize(d);
+				setSize(d);
+			}
+
 		}
 
 	}
-	
+
 	/**
 	 * Returns the generation number corresponding to the specified coordinate.
 	 * 
 	 * @param y the Y axis coordonate.
 	 * @return the generation number corresponding to the y coordinate.
 	 */
-	public int getGenerationAt(int y) {
+	private int getGenerationAt(int y) {
 		int top = viewModel.getMargins().top;
 		int width = viewModel.getDiameter() + viewModel.getVgap();
 		int res;
-		if (y >= top + viewModel.getDiameter() / 2.0) {
+		
+		if (y >= top + width) {
 
-			y = (int) (y - top + viewModel.getDiameter() / 2.0);
+			y = (int) (y - (top + width));
 
 			res = y / width + 1;
 		} else {
@@ -163,33 +189,27 @@ public class GraphRowHeader extends JComponent implements GraphViewListener {
 		return res;
 	}
 
-	/**
-	 * Computes and sets the size of this view.
-	 * 
-	 * @return the preferred size computed.
-	 */
-	public Dimension adjustPreferredSize() {
-		
-		int width = 2*margin + textWidth;
-		int height = viewModel.getMargins().top + viewModel.getMargins().bottom + maxGenerationNumber
-				* (viewModel.getDiameter() + viewModel.getVgap());
 
-		Dimension d = new Dimension(width, height);
-
-		setPreferredSize(d);
-
-		return d;
+	public void componentHidden(ComponentEvent e) {
 	}
 
-	/**
-	 * Computes the preferred size, sets it at the real size and returns it.
-	 * 
-	 * @return the size.
-	 */
-	public Dimension resize() {
-		Dimension d = adjustPreferredSize();
-		setSize(d);
-		return d;
+	public void componentMoved(ComponentEvent e) {
+		repaint();
+	}
+
+	public void componentResized(ComponentEvent e) {
+		
+		if(e.getSource() instanceof GraphView) {
+			GraphView view = (GraphView) e.getSource();
+			Dimension d = new Dimension(getSize().width, view.getHeight());
+			setPreferredSize(d);
+			setSize(d);
+		}
+		
+	}
+
+	public void componentShown(ComponentEvent e) {
+		repaint();
 	}
 
 }

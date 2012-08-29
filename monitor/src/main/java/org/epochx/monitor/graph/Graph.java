@@ -24,20 +24,20 @@ package org.epochx.monitor.graph;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Comparator;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
-import javax.swing.Timer;
-
-import org.epochx.monitor.Utilities;
-
 
 /**
- * A <code>Graph</code> draw a visualization graph to monitor the evolution process.
+ * A <code>Graph</code> draw a visualization graph to monitor the evolution
+ * process.
  */
 public class Graph extends JPanel implements Runnable {
 
@@ -60,7 +60,7 @@ public class Graph extends JPanel implements Runnable {
 	 * The <code>GraphModel</code>.
 	 */
 	private GraphModel model;
-	
+
 	/**
 	 * The <code>GraphMouseListener</code>.
 	 */
@@ -75,7 +75,7 @@ public class Graph extends JPanel implements Runnable {
 	 * The <code>GraphView</code>.
 	 */
 	private GraphView graphView;
-	
+
 	/**
 	 * The <code>GraphRowHeader</code>.
 	 */
@@ -85,8 +85,7 @@ public class Graph extends JPanel implements Runnable {
 	 * The <code>GraphFooter</code>.
 	 */
 	private GraphFooter graphFooter;
-	
-	
+
 	/**
 	 * The <code>JScrollPane</code>.
 	 */
@@ -98,14 +97,14 @@ public class Graph extends JPanel implements Runnable {
 	 * Default view properties :
 	 * <ul>
 	 * <li>name : <code>"Graph"+noInstances</code>
-	 * <li>comparator : null
 	 * <li>diameter : {@link GraphViewModel#DEFAULT_DIAMETER}
 	 * <li>gaps : proportionate to the diameter
 	 * </ul>
 	 * </p>
 	 */
 	public Graph() {
-		this("Graph " + noInstances, null, GraphViewModel.DEFAULT_DIAMETER);
+		
+		this("Graph " + noInstances, GraphViewModel.DEFAULT_DIAMETER);
 	}
 
 	/**
@@ -113,7 +112,6 @@ public class Graph extends JPanel implements Runnable {
 	 * <p>
 	 * Default view properties :
 	 * <ul>
-	 * <li>comparator : null
 	 * <li>diameter : {@link GraphViewModel#DEFAULT_DIAMETER}
 	 * <li>gaps : proportionate to the diameter
 	 * </ul>
@@ -122,30 +120,7 @@ public class Graph extends JPanel implements Runnable {
 	 * @param name the name of this graph.
 	 */
 	public Graph(String name) {
-		this(name, null, GraphViewModel.DEFAULT_DIAMETER);
-	}
-
-	/**
-	 * Constructs a <code>Graph</code> with a specified comparator.
-	 * <p>
-	 * Default view properties :
-	 * <ul>
-	 * <li>name : <code>"Graph"+noInstances</code>
-	 * <li>diameter : {@link GraphViewModel#DEFAULT_DIAMETER}
-	 * <li>gaps : proportionate to the diameter
-	 * </ul>
-	 * </p>
-	 * 
-	 * @param comparator to sort vertices, among :
-	 *        <ul>
-	 *        <li>{@link FitnessComparator}
-	 *        <li>{@link OperatorComparator}
-	 *        <li>{@link ParentComparator}
-	 *        <li>or any other implementation of
-	 *        <code>Comparator<GraphVertex></code>.
-	 */
-	public Graph(Comparator<GraphVertex> comparator) {
-		this("Graph " + noInstances, null, GraphViewModel.DEFAULT_DIAMETER);
+		this(name, GraphViewModel.DEFAULT_DIAMETER);
 	}
 
 	/**
@@ -164,7 +139,7 @@ public class Graph extends JPanel implements Runnable {
 	 *        number !
 	 */
 	public Graph(int diameter) {
-		this("Graph " + noInstances, null, diameter);
+		this("Graph " + noInstances, diameter);
 	}
 
 	/**
@@ -173,18 +148,33 @@ public class Graph extends JPanel implements Runnable {
 	 * diameter. Gaps are proportionate to the diameter.
 	 * 
 	 * @param name the name of this graph.
-	 * @param comparator to sort vertices, among :
-	 *        <ul>
-	 *        <li>{@link FitnessComparator}
-	 *        <li>{@link OperatorComparator}
-	 *        <li>{@link ParentComparator}
-	 *        <li>or any other implementation of
-	 *        <code>Comparator<GraphVertex></code>.
 	 * @param diameter the diameter of the vertices. Must be an <b>even</b>
 	 *        number !
 	 */
-	public Graph(String name, Comparator<GraphVertex> comparator, int diameter) {
+	public Graph(String name, int diameter) {
 		this(name, diameter, diameter * 0.1, diameter * 3);
+	}
+
+	/**
+	 * Constructs a <code>Graph</code> with a specified diameter size, and
+	 * specified gaps.
+	 * 
+	 * @param name the name of this graph.
+	 * @param diameter the diameter of the vertices. Must be an <b>even</b>
+	 *        number !
+	 * @param hgap the horizontal gap.
+	 * @param vgap the vertical gap.
+	 */
+	public Graph(String name, double diameter, double hgap, double vgap) {
+		this(name, new GraphModel(), new GraphViewModel((int) diameter, (int) hgap, (int) vgap));
+	}
+
+	/**
+	 * Constructs a <code>Graph</code>.
+	 * 
+	 */
+	public Graph(String name, GraphModel model) {
+		this(name, model, new GraphViewModel());
 	}
 
 	/**
@@ -203,61 +193,61 @@ public class Graph extends JPanel implements Runnable {
 	 * @param hgap the horizontal gap.
 	 * @param vgap the vertical gap.
 	 */
-	public Graph(String name, double diameter, double hgap, double vgap) {
+	public Graph(String name, GraphModel model, GraphViewModel viewModel) {
 		super(new BorderLayout());
 
-		this.viewModel = new GraphViewModel((int) diameter, (int) hgap, (int) vgap);
-		this.model = new GraphModel();
+		setName(name);
+
+		this.viewModel = viewModel;
+		this.model = model;
 		this.mouseListener = new GraphMouseListener();
 		this.graphHeader = new GraphHeader(viewModel);
 		this.graphView = new GraphView(viewModel, model);
-		this.graphRowHeader = new GraphRowHeader(viewModel);
+		this.graphRowHeader = new GraphRowHeader(viewModel, model);
 		this.graphFooter = new GraphFooter();
 		this.scrollPane = new JScrollPane();
-		
-		setName(name);
-		
-		viewModel.addGraphViewListener(graphFooter);
-		viewModel.addGraphViewListener(graphRowHeader);
-		
-		graphView.addMouseListener(mouseListener);
-		graphView.addMouseMotionListener(mouseListener);
-		
+
+		this.viewModel.addGraphViewListener(graphFooter);
+
+		this.graphView.addMouseListener(mouseListener);
+		this.graphView.addMouseMotionListener(mouseListener);
+		this.graphView.addComponentListener(graphRowHeader);
+
 		// Create and show the graph.
 		SwingUtilities.invokeLater(this);
 	}
-	
+
 	/**
 	 * The run method to be invoked in the EDT.
 	 */
 	public void run() {
 		removeAll();
-		
+
 		scrollPane.setViewportView(graphView);
 		scrollPane.setRowHeaderView(graphRowHeader);
 		scrollPane.setPreferredSize(new Dimension(900, 600));
 		scrollPane.revalidate();
-		
+
 		add(graphHeader, BorderLayout.NORTH);
 		add(scrollPane, BorderLayout.CENTER);
 		add(graphFooter, BorderLayout.SOUTH);
-		
-		validate();
+
+		revalidate();
 		repaint();
 	}
 
-	
 	/**
 	 * Returns the <code>GraphViewModel</code>.
+	 * 
 	 * @return the <code>GraphViewModel</code>.
 	 */
 	public GraphViewModel getViewModel() {
 		return viewModel;
 	}
 
-	
 	/**
 	 * Sets the <code>GraphViewModel</code>.
+	 * 
 	 * @param viewModel the <code>GraphViewModel</code> to set.
 	 */
 	public void setViewModel(GraphViewModel viewModel) {
@@ -265,18 +255,18 @@ public class Graph extends JPanel implements Runnable {
 		SwingUtilities.invokeLater(this);
 	}
 
-	
 	/**
 	 * Returns the <code>GraphModel</code>.
+	 * 
 	 * @return the <code>GraphModel</code>.
 	 */
 	public GraphModel getModel() {
 		return model;
 	}
 
-	
 	/**
 	 * Sets the <code>GraphModel</code>.
+	 * 
 	 * @param model the <code>GraphModel</code> to set.
 	 */
 	public void setModel(GraphModel model) {
@@ -284,9 +274,9 @@ public class Graph extends JPanel implements Runnable {
 		SwingUtilities.invokeLater(this);
 	}
 
-	
 	/**
 	 * Returns the <code>GraphMouseListener</code>.
+	 * 
 	 * @return the <code>GraphMouseListener</code>.
 	 */
 	public GraphMouseListener getMouseListener() {
@@ -295,6 +285,7 @@ public class Graph extends JPanel implements Runnable {
 
 	/**
 	 * Sets the <code>GraphMouseListener</code>.
+	 * 
 	 * @param mouseListener the <code>GraphMouseListener</code> to set.
 	 */
 	public void setMouseListener(GraphMouseListener mouseListener) {
@@ -303,15 +294,16 @@ public class Graph extends JPanel implements Runnable {
 
 	/**
 	 * Returns the <code>GraphHeader</code>.
+	 * 
 	 * @return the <code>GraphHeader</code>.
 	 */
 	public GraphHeader getGraphHeader() {
 		return graphHeader;
 	}
 
-	
 	/**
 	 * Sets the <code>GraphHeader</code>.
+	 * 
 	 * @param graphHeader the <code>GraphHeader</code> to set.
 	 */
 	public void setGraphHeader(GraphHeader graphHeader) {
@@ -319,27 +311,28 @@ public class Graph extends JPanel implements Runnable {
 		SwingUtilities.invokeLater(this);
 	}
 
-	
 	/**
 	 * Returns the <code>GraphView</code>.
+	 * 
 	 * @return the <code>GraphView</code>.
 	 */
 	public GraphView getGraphView() {
 		return graphView;
 	}
 
-	
 	/**
 	 * Sets the <code>GraphView</code>.
+	 * 
 	 * @param graphView the <code>GraphView</code> to set.
 	 */
 	public void setGraphView(GraphView graphView) {
 		this.graphView = graphView;
 		SwingUtilities.invokeLater(this);
 	}
-	
+
 	/**
 	 * Returns the <code>GraphRowHeader</code>.
+	 * 
 	 * @return the <code>GraphRowHeader</code>.
 	 */
 	public GraphRowHeader getGraphRowHeader() {
@@ -348,6 +341,7 @@ public class Graph extends JPanel implements Runnable {
 
 	/**
 	 * Sets the <code>GraphRowHeader</code>.
+	 * 
 	 * @param graphRowHeader the <code>GraphRowHeader</code> to set.
 	 */
 	public void setGraphRowHeader(GraphRowHeader graphRowHeader) {
@@ -357,6 +351,7 @@ public class Graph extends JPanel implements Runnable {
 
 	/**
 	 * Returns the <code>GraphFooter</code>.
+	 * 
 	 * @return the <code>GraphFooter</code>.
 	 */
 	public GraphFooter getGraphFooter() {
@@ -365,6 +360,7 @@ public class Graph extends JPanel implements Runnable {
 
 	/**
 	 * Sets the <code>GraphFooter</code>.
+	 * 
 	 * @param graphFooter the <code>GraphFooter</code> to set.
 	 */
 	public void setGraphFooter(GraphFooter graphFooter) {
@@ -377,5 +373,33 @@ public class Graph extends JPanel implements Runnable {
 		return getName();
 	}
 
+	/**
+	 * Utility method. Returns the <code>GraphModel</code> stored in the
+	 * specified file.
+	 * 
+	 * @param file the file in which themodel is to be extracted.
+	 * @return the model from the specified file.
+	 */
+	public static GraphModel loadInputModel(String file) {
+		GraphModel model = null;
+		try {
+
+			// On récupère maintenant les données !
+			ObjectInputStream stream = new ObjectInputStream(new BufferedInputStream(
+					new FileInputStream(new File(file))));
+
+			model = (GraphModel) stream.readObject();
+
+			stream.close();
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return model;
+	}
 
 }

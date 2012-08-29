@@ -33,6 +33,7 @@ import java.awt.event.ActionListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -204,7 +205,7 @@ public class Monitor extends JFrame implements Runnable {
 
 		// componentTab initialization.
 		getContentPane().removeAll();
-		for (int i = 0; i < componentTab.length; i++)
+		for (int i = 0; i < componentTab.length; i++) {
 			for (int j = 0; j < componentTab[i].length; j++) {
 				componentTab[i][j] = new JTabbedPane();
 				// Add an emptyButton.
@@ -217,7 +218,8 @@ public class Monitor extends JFrame implements Runnable {
 				componentTab[i][j].setTabComponentAt(0, new AddButton(i + 1, j + 1));
 				getContentPane().add(componentTab[i][j]);
 			}
-
+		}
+		
 		// Show the frame.
 		pack();
 		setSize(1400, 800);
@@ -365,12 +367,14 @@ public class Monitor extends JFrame implements Runnable {
 				tabbedPane.add(component, index);
 
 				// Create the tab Panel.
-				final JPanel buttonTab = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+				final JPanel buttonTab = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
 				buttonTab.setOpaque(false);
 				buttonTab.add(new JLabel(component.getName()));
+				buttonTab.add(Box.createHorizontalStrut(10));
 				buttonTab.add(new CloseButton(component, tabbedPane));
 
 				// Add the tab panel and select it.
+				tabbedPane.setTitleAt(index, "");
 				tabbedPane.setTabComponentAt(index, buttonTab);
 				tabbedPane.setSelectedComponent(component);
 
@@ -461,7 +465,7 @@ public class Monitor extends JFrame implements Runnable {
 		/**
 		 * The button size.
 		 */
-		private final int size = 16;
+		private final int size = 6;
 
 		/**
 		 * Constructs a <code>CloseButton</code>.
@@ -517,8 +521,8 @@ public class Monitor extends JFrame implements Runnable {
 			if (getModel().isRollover()) {
 				g2.setColor(Color.GRAY);
 			}
-			g2.drawLine(10, 5, size - 1, size - 6);
-			g2.drawLine(size - 1, 5, 10, size - 6);
+			g2.drawLine(1, 1, size, size);
+			g2.drawLine(0, size, size, 0);
 			g2.dispose();
 		}
 	}

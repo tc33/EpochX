@@ -22,6 +22,7 @@
  */
 package org.epochx.monitor.graph;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 import javax.swing.event.EventListenerList;
@@ -44,12 +45,17 @@ import org.epochx.event.RunEvent.EndRun;
  * generates <code>GraphModelEvents</code>.
  * </p>
  */
-public class GraphModel implements Listener<Event> {
+public class GraphModel implements Listener<Event>, Serializable {
+
+	/**
+	 * Generated serial UID.
+	 */
+	private static final long serialVersionUID = -5418307840342708950L;
 
 	/**
 	 * The <code>EventListenerList</code>.
 	 */
-	private EventListenerList listenerList;
+	private transient EventListenerList listenerList;
 
 	/**
 	 * The table of generations
@@ -60,30 +66,45 @@ public class GraphModel implements Listener<Event> {
 	 * The current generation number.
 	 */
 	private int generationCount;
+	
+	/**
+	 * The max generation number according to the config instance.
+	 */
+	private int maxGenerationNumber;
 
 	/**
 	 * The number of individual by generation.
 	 */
-	private int verticesCount;
+	private int populationSize;
 
 	/**
+	 * 
 	 * Constructs a <code>GraphModel</code>.
+	 * 
+	 * @throws NullPointerException if the <code>Config</code> instance has not been set.
+	 * 
+	 * @see Config
 	 */
-	public GraphModel() {
+	public GraphModel() throws NullPointerException {
 		this.listenerList = new EventListenerList();
+		
+		
+		try{
+			this.maxGenerationNumber = Config.getInstance().get(MaximumGenerations.MAXIMUM_GENERATIONS) + 1;
+			this.populationSize = Config.getInstance().get(Population.SIZE);
+		} catch (NullPointerException e) {
+			throw new NullPointerException("The Config seems not set.");
+		}
+		
 
-		int n = Config.getInstance().get(MaximumGenerations.MAXIMUM_GENERATIONS) + 1;
-
-		this.generations = new GraphGeneration[n];
+		this.generations = new GraphGeneration[maxGenerationNumber];
 		this.generationCount = 0;
-		this.verticesCount = Config.getInstance().get(Population.SIZE);
 
 		generations[0] = new GraphGeneration(0);
 
 		EventManager.getInstance().add(StartGeneration.class, this);
 		EventManager.getInstance().add(EndRun.class, this);
 		EventManager.getInstance().add(ParentIndividualEvent.class, this);
-
 	}
 
 	/**
@@ -96,12 +117,20 @@ public class GraphModel implements Listener<Event> {
 	}
 
 	/**
+	 * Returns the max generation number according to the config instance.
+	 * @return the max generation number according to the config instance.
+	 */
+	public int getMaxGenerationNumber() {
+		return maxGenerationNumber;
+	}
+
+	/**
 	 * Returns the maximum number of vertices by generation.
 	 * 
 	 * @return the maximum number of vertices by generation.
 	 */
-	public int getVerticesCount() {
-		return verticesCount;
+	public int getPopulationSize() {
+		return populationSize;
 	}
 
 	/**
@@ -221,7 +250,7 @@ public class GraphModel implements Listener<Event> {
 	 *        used.
 	 */
 	public void sortAllBy(Comparator<GraphVertex> comparator) {
-		for (int i = 0; i < generationCount; i++) {
+		for (int i = 0; i <= generationCount; i++) {
 			generations[i].sortBy(comparator);
 		}
 	}
@@ -252,6 +281,9 @@ public class GraphModel implements Listener<Event> {
 	 * @param l the listener to add.
 	 */
 	public void addGraphModelListener(GraphModelListener l) {
+		if (listenerList == null) {
+			this.listenerList = new EventListenerList();
+		}
 		listenerList.add(GraphModelListener.class, l);
 	}
 

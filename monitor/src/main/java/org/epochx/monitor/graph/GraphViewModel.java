@@ -63,7 +63,7 @@ public class GraphViewModel {
 	/**
 	 * The default diameter of nodes.
 	 */
-	public final static int DEFAULT_DIAMETER = 16;
+	public final static int DEFAULT_DIAMETER = 12;
 
 	/**
 	 * The default horizontal gap between two nodes.
@@ -73,7 +73,7 @@ public class GraphViewModel {
 	/**
 	 * The default vertical gap between two nodes.
 	 */
-	public final static int DEFAULT_VGAP = 50;
+	public final static int DEFAULT_VGAP = 36;
 
 	/**
 	 * The comparator.
@@ -99,6 +99,11 @@ public class GraphViewModel {
 	 * The margins.
 	 */
 	private Insets margins;
+
+	/**
+	 * True if bonds are to be print.
+	 */
+	private boolean bondEnable;
 
 	/**
 	 * The bond color.
@@ -135,7 +140,7 @@ public class GraphViewModel {
 	private final HashMap<GraphVertex, GraphVertexModel> map;
 
 	/**
-	 * The <code>FitnessSet</code>.
+	 * The set of fitnesses.
 	 * <p>
 	 * All accesses must be <b>synchronized</b> because of concurrency with the
 	 * EDT.
@@ -201,7 +206,8 @@ public class GraphViewModel {
 		this.diameter = diameter;
 		this.hgap = hgap;
 		this.vgap = vgap;
-		this.margins = new Insets(diameter, diameter, diameter, diameter);
+		this.margins = new Insets(25, 25, 25, 25);
+		this.bondEnable = false;
 		this.bondColor = new Color(210, 210, 210);
 		this.highlightColor = Color.GREEN;
 		this.highlightDepth = 5;
@@ -213,6 +219,10 @@ public class GraphViewModel {
 	 * Returns the comparator who determine the order of the vertices.
 	 * 
 	 * @return the comparator who determine the order of the vertices.
+	 * 
+	 * @see FitnessComparator
+	 * @see ParentComparator
+	 * @see OperatorComparator
 	 */
 	public Comparator<GraphVertex> getComparator() {
 		return comparator;
@@ -247,6 +257,7 @@ public class GraphViewModel {
 		if (this.diameter != diameter) {
 			int old = this.diameter;
 			this.diameter = diameter;
+
 			synchronized (map) {
 				for (GraphVertexModel vertexModel: map.values()) {
 					vertexModel.setDiameter(diameter);
@@ -324,9 +335,31 @@ public class GraphViewModel {
 	}
 
 	/**
-	 * Returns the bondColor.
+	 * Returns true if the bonds have to be print.
 	 * 
-	 * @return the bondColor.
+	 * @return true if the bonds have to be print.
+	 */
+	public boolean isBondEnable() {
+		return bondEnable;
+	}
+
+	/**
+	 * Sets if the bond have to be printed.
+	 * 
+	 * @param b true if the bond have to be printed, otherwise false.
+	 */
+	public void setBondEnable(boolean b) {
+		if (bondEnable != b) {
+			boolean old = bondEnable;
+			bondEnable = b;
+			fireGraphViewEvent(new GraphViewEvent(this, Property.BOUND_ENABLE, new Boolean(old), new Boolean(b)));
+		}
+	}
+
+	/**
+	 * Returns the bond color.
+	 * 
+	 * @return the bond color.
 	 */
 	public Color getBondColor() {
 		return bondColor;
@@ -445,7 +478,7 @@ public class GraphViewModel {
 	public void highlight(GraphVertex vertex, int depth) {
 		GraphVertexModel vertexModel = getVertexModel(vertex);
 		vertexModel.setHighlighted(true);
-		if (depth != 0) {
+		if (depth != 0 && vertex.getParents() != null) {
 			for (GraphVertex parent: vertex.getParents()) {
 				highlight(parent, depth - 1);
 			}
@@ -530,6 +563,7 @@ public class GraphViewModel {
 			added = fitnesses.add(fitness);
 		}
 		if (added) {
+			resetColors();
 			fireGraphViewEvent(new GraphViewEvent(this, Property.FITNESS));
 		}
 	}
@@ -560,7 +594,21 @@ public class GraphViewModel {
 		}
 		return -1;
 	}
-	
+
+	/**
+	 * Resets the index of all the <code>GraphVertexModel</code> according to
+	 * the index of their associated vertex in their generation.
+	 * 
+	 * @see GraphVertexModel#resetDefaultIndex()
+	 */
+	public void resetColors() {
+		synchronized (map) {
+			for (GraphVertexModel vertexModel: map.values()) {
+				vertexModel.setColor(getFitnessColor(vertexModel.getVertex().getFitness()));
+			}
+		}
+	}
+
 	/**
 	 * Resets the index of all the <code>GraphVertexModel</code> according to
 	 * the index of their associated vertex in their generation.

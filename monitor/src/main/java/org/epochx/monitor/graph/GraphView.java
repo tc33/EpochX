@@ -43,7 +43,10 @@ import javax.swing.Timer;
 
 import org.epochx.monitor.graph.GraphViewEvent.Property;
 
-public class GraphView extends Component implements ActionListener, GraphModelListener, GraphViewListener, Scrollable {
+/**
+ * A <code>GraphView</code>.
+ */
+public class GraphView extends Component implements GraphModelListener, GraphViewListener, Scrollable {
 
 	/**
 	 * Generated serial UID.
@@ -61,6 +64,11 @@ public class GraphView extends Component implements ActionListener, GraphModelLi
 	private GraphModel model;
 
 	/**
+	 * The timer to refresh the view.
+	 */
+	private Timer timer;
+
+	/**
 	 * Constructs a <code>GraphView</code> with a null
 	 * <code>GraphViewModel</code> and a null <code>GraphModel</code>.
 	 * <p>
@@ -72,10 +80,11 @@ public class GraphView extends Component implements ActionListener, GraphModelLi
 		super();
 		this.viewModel = null;
 		this.model = null;
-		
-		setSize(100, 50);
-
-		Timer timer = new Timer(1000, this);
+		this.timer = new Timer(1000, new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				resize();
+			}
+		});
 		timer.setInitialDelay(1000);
 		timer.start();
 	}
@@ -102,7 +111,6 @@ public class GraphView extends Component implements ActionListener, GraphModelLi
 
 		model.addGraphModelListener(this);
 		viewModel.addGraphViewListener(this);
-
 	}
 
 	/**
@@ -153,16 +161,7 @@ public class GraphView extends Component implements ActionListener, GraphModelLi
 		this.model = model;
 	}
 
-	/**
-	 * The <code>ActionListener</code> implemented method ; Receives the timer's
-	 * action events;
-	 * Refreshs the view, only if visible.
-	 * 
-	 * @param e the <code>ActionEvent</code>.
-	 */
-	public void actionPerformed(ActionEvent e) {
-		// resize();
-	}
+
 
 	/**
 	 * The <code>GraphModelListener</code> implemented method ; Recieves a
@@ -177,14 +176,15 @@ public class GraphView extends Component implements ActionListener, GraphModelLi
 			Comparator<GraphVertex> comparator = viewModel.getComparator();
 
 			if (comparator != null) {
-				System.out.println(3);
 				for (int i = from; i <= to; i++) {
 					model.sortBy(i, comparator);
 				}
 			}
 
 			adjustPreferredSize();
+			repaintGenerations(from, to);
 		} else if (e.getType() == GraphModelEvent.REFRESH) {
+			adjustPreferredSize();
 			repaint();
 		}
 	}
@@ -203,13 +203,13 @@ public class GraphView extends Component implements ActionListener, GraphModelLi
 				GraphVertex oldVertex = (GraphVertex) e.getOldValue();
 				if (oldVertex != null) {
 					int genNo = oldVertex.getGenerationNo();
-					repaintGenerations(genNo - viewModel.getHighlightDepth() - 1, genNo + 1);
+					repaintGenerations(genNo - viewModel.getHighlightDepth(), genNo + 1);
 				}
 
 				GraphVertex newVertex = (GraphVertex) e.getNewValue();
 				if (newVertex != null) {
 					int genNo = newVertex.getGenerationNo();
-					repaintGenerations(genNo - viewModel.getHighlightDepth() - 1, genNo + 1);
+					repaintGenerations(genNo - viewModel.getHighlightDepth(), genNo + 1);
 				}
 
 				break;
@@ -219,12 +219,17 @@ public class GraphView extends Component implements ActionListener, GraphModelLi
 			case VGAP:
 			case MARGINS:
 				resize();
+				break;
 			case COMPARATOR:
 				model.sortAllBy((Comparator<GraphVertex>) e.getNewValue());
 				viewModel.resetIndices();
 				viewModel.resetPostions();
+				repaint();
+				break;
+			case BOUND_ENABLE:
 			case BOUND_COLOR:
 			case HIGHLIGHT_COLOR:
+			case FITNESS:
 				repaint();
 				break;
 
@@ -279,13 +284,18 @@ public class GraphView extends Component implements ActionListener, GraphModelLi
 	 * @return the preferred size computed.
 	 */
 	public Dimension adjustPreferredSize() {
-		int width = viewModel.getMargins().left + viewModel.getMargins().right;
-		width += model.getVerticesCount() * (viewModel.getDiameter() + viewModel.getHgap());
+		Dimension d = null;
 
-		int height = viewModel.getMargins().top + viewModel.getMargins().bottom;
-		height += model.getGenerationCount() * (viewModel.getDiameter() + viewModel.getVgap());
+		if (viewModel != null && model != null) {
 
-		Dimension d = new Dimension(width, height);
+			int width = viewModel.getMargins().left + viewModel.getMargins().right;
+			width += model.getPopulationSize() * (viewModel.getDiameter() + viewModel.getHgap());
+
+			int height = viewModel.getMargins().top + viewModel.getMargins().bottom;
+			height += model.getGenerationCount() * (viewModel.getDiameter() + viewModel.getVgap());
+
+			d = new Dimension(width, height);
+		}
 
 		setPreferredSize(d);
 
@@ -298,8 +308,11 @@ public class GraphView extends Component implements ActionListener, GraphModelLi
 	 * @return the size.
 	 */
 	public Dimension resize() {
+
 		Dimension d = adjustPreferredSize();
-		setSize(d);
+		if (d != null && !d.equals(getSize())) {
+			setSize(d);
+		}
 		return d;
 	}
 
@@ -331,6 +344,11 @@ public class GraphView extends Component implements ActionListener, GraphModelLi
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
+		
+		if (viewModel == null || model == null) {
+			return;
+		}
+		
 		Graphics2D g2 = (Graphics2D) g.create();
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -350,9 +368,11 @@ public class GraphView extends Component implements ActionListener, GraphModelLi
 		int firstVertex = getVertexAt(xmin);
 		int lastVertex = getVertexAt(xmax);
 
+		// To see the generations to paint.
 //		 System.out.println("Gen : " + firstGeneration + " to : " +
-//		 lastGeneration + "\tVert : " + firstVertex + " to : " + lastVertex);
-//		 int c = (int) System.currentTimeMillis()%250;
+//		 lastGeneration + "\tVert : " + firstVertex
+//		 + " to : " + lastVertex);
+//		 int c = (int) System.currentTimeMillis() % 250;
 //		 Color fillColor = new Color(c, 0, c);
 //		 g2.setPaint(fillColor);
 //		 g2.fill(g2.getClip());
@@ -363,7 +383,6 @@ public class GraphView extends Component implements ActionListener, GraphModelLi
 		for (int i = firstGeneration; i <= lastGeneration; i++) {
 
 			for (int j = firstVertex; j < lastVertex && j < model.getGenerationSize(i); j++) {
-				System.out.println(1);
 				GraphVertex vertex = model.getVertex(i, j);
 				GraphVertexModel vertexModel = getVertexModel(vertex);
 
@@ -371,9 +390,10 @@ public class GraphView extends Component implements ActionListener, GraphModelLi
 				if (vertexModel.isHighlighted()) {
 					buffer.add(vertex);
 				} else {
-					
-					//paintBonds(g2, vertex);
-					//paintVertex(g2, vertex);
+					if (viewModel.isBondEnable()) {
+						paintBonds(g2, vertex);
+					}
+					paintVertex(g2, vertex);
 				}
 			}
 		}
@@ -417,7 +437,7 @@ public class GraphView extends Component implements ActionListener, GraphModelLi
 	private void paintBonds(Graphics2D g, GraphVertex vertex) {
 
 		// If the vertex have no parents, do nothing.
-		if (vertex.getParents().length == 0) {
+		if (vertex.getParents() == null || vertex.getParents().length == 0) {
 			return;
 		}
 

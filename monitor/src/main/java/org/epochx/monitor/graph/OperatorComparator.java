@@ -55,7 +55,7 @@ public class OperatorComparator implements Comparator<GraphVertex> {
 			return operator1.compareToIgnoreCase(operator2);
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		return "operator";

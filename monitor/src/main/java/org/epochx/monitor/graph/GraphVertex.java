@@ -22,6 +22,7 @@
  */
 package org.epochx.monitor.graph;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.epochx.Fitness;
@@ -38,10 +39,15 @@ import org.epochx.Operator;
  * <li>The parent <code>GraphGeneration</code>.
  * <li>The <code>Operator</code> responsible for this individual.
  * <li>A list of parent <code>GraphVertex</code>.
- * <li>a list of children <code>GraphVertex</code>.
+ * <li>A list of children <code>GraphVertex</code>.
  * <p>
  */
-public class GraphVertex implements Comparable<Object> {
+public class GraphVertex implements Comparable<Object>, Serializable {
+
+	/**
+	 * Generated serial UID.
+	 */
+	private static final long serialVersionUID = 654188368821480724L;
 
 	/**
 	 * The parent <code>GraphGeneration</code>.
@@ -66,7 +72,7 @@ public class GraphVertex implements Comparable<Object> {
 	/**
 	 * The list of children.
 	 */
-	ArrayList<GraphVertex> children;
+	transient ArrayList<GraphVertex> children;
 
 	/**
 	 * Constructs a <code>GraphVertex</code>.
@@ -128,11 +134,14 @@ public class GraphVertex implements Comparable<Object> {
 	 * @return the array of this vertex's parents.
 	 */
 	public GraphVertex[] getParents() {
-		synchronized (parents) {
-			GraphVertex[] vertices = new GraphVertex[parents.size()];
-			parents.toArray(vertices);
-			return vertices;
+		GraphVertex[] vertices = null;
+		if (parents != null) {
+			synchronized (parents) {
+				vertices = new GraphVertex[parents.size()];
+				parents.toArray(vertices);
+			}
 		}
+		return vertices;
 	}
 
 	/**
@@ -141,6 +150,9 @@ public class GraphVertex implements Comparable<Object> {
 	 * @param parentVertices vertices to add.
 	 */
 	public void addParents(GraphVertex ... parentVertices) {
+		if (parents == null) {
+			parents = new ArrayList<GraphVertex>();
+		}
 		synchronized (parents) {
 			for (GraphVertex parentVertex: parentVertices) {
 				parents.add(parentVertex);
@@ -154,8 +166,12 @@ public class GraphVertex implements Comparable<Object> {
 	 * Clears the parent list.
 	 */
 	public void clearParents() {
-		synchronized (parents) {
-			this.parents.clear();
+		if (parents != null) {
+			synchronized (parents) {
+				this.parents.clear();
+			}
+		} else {
+			parents = new ArrayList<GraphVertex>();
 		}
 	}
 
@@ -165,11 +181,14 @@ public class GraphVertex implements Comparable<Object> {
 	 * @return the array of this vertex's children.
 	 */
 	public GraphVertex[] getChildren() {
-		synchronized (children) {
-			GraphVertex[] vertices = new GraphVertex[children.size()];
-			children.toArray(vertices);
-			return vertices;
+		GraphVertex[] vertices = null;
+		if (children != null) {
+			synchronized (children) {
+				vertices = new GraphVertex[children.size()];
+				children.toArray(vertices);
+			}
 		}
+		return vertices;
 	}
 
 	/**
@@ -178,6 +197,9 @@ public class GraphVertex implements Comparable<Object> {
 	 * @param childrenVertices vertices to add.
 	 */
 	public void addChildren(GraphVertex ... childrenVertices) {
+		if (children == null) {
+			children = new ArrayList<GraphVertex>();
+		}
 		synchronized (children) {
 			for (GraphVertex childVertex: childrenVertices) {
 				children.add(childVertex);
@@ -189,8 +211,12 @@ public class GraphVertex implements Comparable<Object> {
 	 * Clears the children list.
 	 */
 	public void clearChildren() {
-		synchronized (children) {
-			this.children.clear();
+		if (children != null) {
+			synchronized (children) {
+				this.children.clear();
+			}
+		} else {
+			children = new ArrayList<GraphVertex>();
 		}
 	}
 
@@ -254,8 +280,11 @@ public class GraphVertex implements Comparable<Object> {
 	 *         <code>GraphVertex</code>'s <code>Fitness</code>; and a value
 	 *         greater than 0 if the argument's <code>Fitness</code> is less
 	 *         than this <code>GraphVertex</code>'s <code>Fitness</code>.
+	 * 
+	 * @throws ClassCastException if the given object is not an instance of
+	 *         <code>GraphVertex</code> or <code>Individual</code>.
 	 */
-	public int compareTo(Object obj) {
+	public int compareTo(Object obj) throws ClassCastException {
 
 		if (obj instanceof GraphVertex) {
 
@@ -288,15 +317,19 @@ public class GraphVertex implements Comparable<Object> {
 	 */
 	@Override
 	public boolean equals(Object obj) {
+		
+		boolean res = false;
 
-		if (obj instanceof GraphVertex) {
-			return individual.equals(((GraphVertex) obj).getIndividual());
+		if (obj instanceof GraphVertex) {		
+			
+			res = ( System.identityHashCode(individual) == System.identityHashCode(((GraphVertex) obj).getIndividual()) );
+				
 		} else if (obj instanceof Individual) {
-			return individual.equals((Individual) obj);
-		} else {
-			return false;
-		}
-
+			
+			res = ( System.identityHashCode(individual) == System.identityHashCode((Individual) obj) );
+		} 
+		
+		return res;
 	}
 
 	@Override

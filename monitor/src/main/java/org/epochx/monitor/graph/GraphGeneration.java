@@ -22,9 +22,10 @@
  */
 package org.epochx.monitor.graph;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
 import org.epochx.Individual;
@@ -34,7 +35,12 @@ import org.epochx.Population;
  * A <code>GraphGeneration</code> stores a collection of
  * <code>GraphVertex</code> which belong to a same generation.
  */
-public class GraphGeneration {
+public class GraphGeneration implements Serializable {
+
+	/**
+	 * Generated serial UID.
+	 */
+	private static final long serialVersionUID = -735357460834534539L;
 
 	/**
 	 * The generation number.
@@ -44,7 +50,7 @@ public class GraphGeneration {
 	/**
 	 * The list of vertex.
 	 */
-	private final LinkedList<GraphVertex> vertices;
+	private final ArrayList<GraphVertex> vertices;
 
 	/**
 	 * Constructs a <code>GraphGeneration</code>.
@@ -53,7 +59,7 @@ public class GraphGeneration {
 	 */
 	public GraphGeneration(int generation) {
 		this.generation = generation;
-		this.vertices = new LinkedList<GraphVertex>();
+		this.vertices = new ArrayList<GraphVertex>();
 	}
 
 	/**

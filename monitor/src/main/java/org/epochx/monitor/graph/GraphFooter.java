@@ -160,8 +160,9 @@ public class GraphFooter extends JPanel implements GraphViewListener {
 		updateUI();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.epochx.monitor.graph.GraphViewListener#viewChanged(org.epochx.monitor.graph.GraphViewEvent)
+	/**
+	 * The <code>GraphViewListener</code> implemented method ; Recieves a
+	 * <code>GraphViewEvent</code>.
 	 */
 	public void viewChanged(GraphViewEvent e) {
 		

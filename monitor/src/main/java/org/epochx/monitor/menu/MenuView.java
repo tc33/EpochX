@@ -28,7 +28,11 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 import org.epochx.monitor.Monitor;
 
@@ -52,6 +56,14 @@ public class MenuView extends Menu {
 		setName("View Menu");
 		setText("View");
 		setMnemonic('V');
+		
+//		ButtonGroup lnfGroup = new ButtonGroup();
+//		LookAndFeelInfo[] lnfis =  UIManager.getInstalledLookAndFeels();
+//		for(LookAndFeelInfo lnfi : lnfis) {
+//			LnFButton item = new LnFButton(lnfi);
+//			lnfGroup.add(item);
+//			add(item);
+//		}
 
 		// centre Item.
 		centre = new JMenuItem("Centre");
@@ -92,5 +104,32 @@ public class MenuView extends Menu {
 		add(maximize);
 	}
 	
+	
+	@SuppressWarnings("unused")
+	private class LnFButton extends JRadioButtonMenuItem implements ActionListener {
+		
+		/**
+		 * The serialVersionUID.
+		 */
+		private static final long serialVersionUID = -8701018985049174064L;
+		private LookAndFeelInfo lnfi;
+		
+		LnFButton (LookAndFeelInfo lnfi) {
+			super(lnfi.getName());
+			this.lnfi = lnfi;
+			addActionListener(this);
+		}
+		
+		public void actionPerformed(ActionEvent e) {
+			try {
+				UIManager.setLookAndFeel(lnfi.getClassName());
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+			SwingUtilities.updateComponentTreeUI(monitor);
+			monitor.pack();
+			
+		}
+	}
 	
 }

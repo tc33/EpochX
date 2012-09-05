@@ -20,35 +20,40 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.monitor.graph0;
-
-import java.util.Comparator;
+package org.epochx.monitor.tree;
 
 
 /**
- * A <code>FitnessComparator</code> compares two <code>GraphNode</code> regarding
- * their <code>Fitness</code>.
+ * A <code>NoYetAngleException</code>.
  */
-public class FitnessComparator implements Comparator<GraphNode> {
+public class NoYetAngleException extends IllegalStateException {
 
 	/**
-	 * Compares its two arguments for order. Returns a negative integer, zero,
-	 * or a positive integer as the first <code>GraphNode</code> is less than,
-	 * equal to, or greater than the second regarding their <code>Fitness</code>.
-	 * 
-	 * @param o1 the first <code>GraphNode</code> to be compared.
-	 * @param o2 the second <code>GraphNode</code> to be compared.
-	 * @return a negative integer, zero, or a positive integer as the first
-	 *         argument is less than, equal to, or greater than the second.
+	 * The <code>long</code>/serialVersionUID.
 	 */
-	public int compare(GraphNode o1, GraphNode o2) {
-		
-		return o1.getFitness().compareTo(o2.getFitness());
+	private static final long serialVersionUID = -3780723411515251488L;
+	
+	public NoYetAngleException() {
+		super();
+	}
+
+
+	public NoYetAngleException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+
+	public NoYetAngleException(String s) {
+		super(s);
+	}
+
+
+	public NoYetAngleException(Throwable cause) {
+		super(cause);
 	}
 	
-	@Override
-	public String toString() {
-		return "fitness";
+	public NoYetAngleException(TreeNode node) {
+		super("Node : "+node.getName()+" at level : "+node.level());
 	}
 
 }

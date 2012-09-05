@@ -34,6 +34,7 @@ import org.epochx.event.Event;
 import org.epochx.event.EventManager;
 import org.epochx.event.GenerationEvent.StartGeneration;
 import org.epochx.event.Listener;
+import org.epochx.event.OperatorEvent.EndOperator;
 import org.epochx.event.ParentIndividualEvent;
 import org.epochx.event.RunEvent.EndRun;
 
@@ -63,10 +64,10 @@ public class GraphModel implements Listener<Event>, Serializable {
 	GraphGeneration[] generations;
 
 	/**
-	 * The current generation number.
+	 * The currentEOE generation number.
 	 */
 	private int generationCount;
-	
+
 	/**
 	 * The max generation number according to the config instance.
 	 */
@@ -78,30 +79,36 @@ public class GraphModel implements Listener<Event>, Serializable {
 	private int populationSize;
 
 	/**
+	 * The latest EndOperator event received.
+	 */
+	private EndOperator currentEOE;
+
+	/**
 	 * 
 	 * Constructs a <code>GraphModel</code>.
 	 * 
-	 * @throws NullPointerException if the <code>Config</code> instance has not been set.
+	 * @throws NullPointerException if the <code>Config</code> instance has not
+	 *         been set.
 	 * 
 	 * @see Config
 	 */
 	public GraphModel() throws NullPointerException {
 		this.listenerList = new EventListenerList();
-		
-		
-		try{
+
+		try {
 			this.maxGenerationNumber = Config.getInstance().get(MaximumGenerations.MAXIMUM_GENERATIONS) + 1;
 			this.populationSize = Config.getInstance().get(Population.SIZE);
 		} catch (NullPointerException e) {
 			throw new NullPointerException("The Config seems not set.");
 		}
-		
 
 		this.generations = new GraphGeneration[maxGenerationNumber];
 		this.generationCount = 0;
+		this.currentEOE = null;
 
 		generations[0] = new GraphGeneration(0);
 
+		EventManager.getInstance().add(EndOperator.class, this);
 		EventManager.getInstance().add(StartGeneration.class, this);
 		EventManager.getInstance().add(EndRun.class, this);
 		EventManager.getInstance().add(ParentIndividualEvent.class, this);
@@ -118,6 +125,7 @@ public class GraphModel implements Listener<Event>, Serializable {
 
 	/**
 	 * Returns the max generation number according to the config instance.
+	 * 
 	 * @return the max generation number according to the config instance.
 	 */
 	public int getMaxGenerationNumber() {
@@ -134,10 +142,10 @@ public class GraphModel implements Listener<Event>, Serializable {
 	}
 
 	/**
-	 * Returns the current size of the specified generation.
+	 * Returns the currentEOE size of the specified generation.
 	 * 
 	 * @param generation the generation whose size is to return.
-	 * @return the current size of the specified generation.
+	 * @return the currentEOE size of the specified generation.
 	 * @throws ArrayIndexOutOfBoundsException if if generation is out of bound.
 	 */
 	public int getGenerationSize(int generation) throws ArrayIndexOutOfBoundsException {
@@ -185,9 +193,9 @@ public class GraphModel implements Listener<Event>, Serializable {
 	}
 
 	/**
-	 * Returns the current generation.
+	 * Returns the currentEOE generation.
 	 * 
-	 * @return the current generation.
+	 * @return the currentEOE generation.
 	 */
 	public GraphGeneration currentGeneration() {
 		return generations[generationCount];
@@ -210,8 +218,13 @@ public class GraphModel implements Listener<Event>, Serializable {
 	 * @see org.epochx.event.Listener#onEvent(org.epochx.event.Event)
 	 */
 	public void onEvent(Event event) {
-		if (event instanceof ParentIndividualEvent) {
-
+		
+		if (event instanceof EndOperator) {
+						
+			currentEOE = (EndOperator) event;
+			
+		} else if (event instanceof ParentIndividualEvent) {
+			
 			ParentIndividualEvent e = (ParentIndividualEvent) event;
 
 			GraphVertex newVertex = currentGeneration().addIndividual(e.getChild());
@@ -220,6 +233,10 @@ public class GraphModel implements Listener<Event>, Serializable {
 
 			newVertex.addParents(parentVertices);
 			newVertex.setOperator(e.getOperator());
+			
+			if (currentEOE != null && currentEOE.getOperator() ==  e.getOperator()) {
+				newVertex.setOperatorEvent(currentEOE);				
+			}
 
 		} else if (event instanceof StartGeneration) {
 

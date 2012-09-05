@@ -57,7 +57,7 @@ public class GraphMouseListener implements MouseListener, MouseMotionListener {
 	}
 
 	public void mouseDragged(MouseEvent e) {
-		System.out.println(e);
+		//System.out.println(e);
 	}
 
 	public void mouseMoved(MouseEvent e) {

@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.TreeSet;
 
+import javax.swing.SwingUtilities;
 import javax.swing.event.EventListenerList;
 
 import org.epochx.Fitness;
@@ -439,11 +440,9 @@ public class GraphViewModel {
 	 * @param vertex the selected <code>GraphVertex</code> to set.
 	 */
 	public void setSelectedGraphVertex(GraphVertex vertex) {
-		if (selectedGraphVertex != vertex) {
-			GraphVertex old = selectedGraphVertex;
-			selectedGraphVertex = vertex;
-			fireGraphViewEvent(new GraphViewEvent(this, Property.SELECTED_VERTEX, old, selectedGraphVertex));
-		}
+		GraphVertex old = selectedGraphVertex;
+		selectedGraphVertex = vertex;
+		fireGraphViewEvent(new GraphViewEvent(this, Property.SELECTED_VERTEX, old, selectedGraphVertex));
 	}
 
 	/**
@@ -461,11 +460,9 @@ public class GraphViewModel {
 	 * @param vertex the highlighted <code>GraphVertex</code> to set.
 	 */
 	public void setHighlightedGraphVertex(GraphVertex vertex) {
-		if (highlightedGraphVertex != vertex) {
-			GraphVertex old = highlightedGraphVertex;
-			highlightedGraphVertex = vertex;
-			fireGraphViewEvent(new GraphViewEvent(this, Property.HIGHLIGHTED_VERTEX, old, vertex));
-		}
+		GraphVertex old = highlightedGraphVertex;
+		highlightedGraphVertex = vertex;
+		fireGraphViewEvent(new GraphViewEvent(this, Property.HIGHLIGHTED_VERTEX, old, vertex));
 	}
 
 	/**
@@ -660,8 +657,8 @@ public class GraphViewModel {
 			}
 		}
 
-		if (selectedVertex != null) {
-
+		if (selectedVertex == selectedGraphVertex) {
+			
 		}
 		setSelectedGraphVertex(selectedVertex);
 	}

@@ -26,8 +26,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import org.epochx.Config;
 import org.epochx.Individual;
 import org.epochx.Population;
 
@@ -35,7 +37,7 @@ import org.epochx.Population;
  * A <code>GraphGeneration</code> stores a collection of
  * <code>GraphVertex</code> which belong to a same generation.
  */
-public class GraphGeneration implements Serializable {
+public class GraphGeneration implements Serializable, Iterable<GraphVertex> {
 
 	/**
 	 * Generated serial UID.
@@ -59,7 +61,12 @@ public class GraphGeneration implements Serializable {
 	 */
 	public GraphGeneration(int generation) {
 		this.generation = generation;
-		this.vertices = new ArrayList<GraphVertex>();
+
+		try {
+			this.vertices = new ArrayList<GraphVertex>(Config.getInstance().get(Population.SIZE));
+		} catch (NullPointerException e) {
+			throw new NullPointerException("The Config seems not set.");
+		}
 	}
 
 	/**
@@ -93,6 +100,16 @@ public class GraphGeneration implements Serializable {
 			vertices.toArray(res);
 			return res;
 		}
+	}
+
+	/**
+	 * The <code>Iterable</code> implemented method ; Returns an
+	 * <code>Iterator</code> of this generation's vertices.
+	 * 
+	 * @return the iterator of this generation's vertices.
+	 */
+	public Iterator<GraphVertex> iterator() {
+		return vertices.iterator();
 	}
 
 	/**
@@ -182,8 +199,8 @@ public class GraphGeneration implements Serializable {
 	 * @return A new the <code>GraphVertex</code> if the specified
 	 *         <code>Individual</code> is not already represented in
 	 *         the vertices list ; Otherwise the <code>GraphVertex</code> of the
-	 *         vertices
-	 *         list corresponding to the specified <code>Individual</code>.
+	 *         vertices list corresponding to the specified
+	 *         <code>Individual</code>.
 	 */
 	public GraphVertex addIndividual(Individual ind) {
 		GraphVertex vertex;
@@ -223,7 +240,7 @@ public class GraphGeneration implements Serializable {
 	 * @throws ClassCastException if the given object is not a
 	 *         <code>GraphVertex</code> or an <code>Individual</code>.
 	 */
-	public int indexOf(Object obj) {
+	public int indexOf(Object obj) throws ClassCastException {
 		Individual individual;
 		if (obj instanceof GraphVertex) {
 			individual = ((GraphVertex) obj).getIndividual();
@@ -232,14 +249,53 @@ public class GraphGeneration implements Serializable {
 		} else {
 			throw new ClassCastException(obj.getClass().getSimpleName());
 		}
-
+		int i = 0;
 		synchronized (vertices) {
-			for (int i = 0; i < vertices.size(); i++) {
-				if (System.identityHashCode(vertices.get(i).getIndividual()) == System.identityHashCode(individual))
+			for (GraphVertex vertex: vertices) {
+				if (System.identityHashCode(vertex.getIndividual()) == System.identityHashCode(individual)) {
 					return i;
+				} else {
+					i++;
+				}
+
 			}
+			/*
+			 * GraphVertex verticesTab[] = new GraphVertex[vertices.size()];
+			 * vertices.toArray(verticesTab);
+			 * 
+			 * for (int i = 0; i < verticesTab.length; i++) {
+			 * if (System.identityHashCode(verticesTab[i].getIndividual()) ==
+			 * System.identityHashCode(individual))
+			 * return i;
+			 * }
+			 */
+
 		}
 		return -1;
+	}
+
+	/**
+	 * Returns an array containing the siblings of the specified vertex.
+	 * 
+	 * @return an array containing the siblings of the specified vertex, can be
+	 *         an empty array.
+	 */
+	public GraphVertex[] getSiblings(GraphVertex vertex) {
+
+		int initialCapacity = vertex.getOperator().inputSize();
+		ArrayList<GraphVertex> list = new ArrayList<GraphVertex>(initialCapacity);
+
+		synchronized (vertices) {
+			for (GraphVertex v: vertices) {
+				if (v != vertex && v.getOperatorEvent() == vertex.getOperatorEvent()) {
+					list.add(v);
+				}
+			}
+		}
+
+		GraphVertex[] res = new GraphVertex[list.size()];
+		list.toArray(res);
+		return res;
 	}
 
 	/**
@@ -255,6 +311,17 @@ public class GraphGeneration implements Serializable {
 			Collections.sort(vertices, comparator);
 		}
 
+	}
+	
+	@Override
+	public String toString() {
+		String res = getClass().getSimpleName();
+		res+="@"+String.valueOf(System.identityHashCode(this));
+		res+="["+generation;
+		res+=","+getVerticesCount();
+		res+="]";
+		
+		return res;
 	}
 
 }

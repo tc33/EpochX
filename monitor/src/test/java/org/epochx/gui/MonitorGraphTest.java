@@ -17,9 +17,7 @@ import org.epochx.Population;
 import org.epochx.Reproduction;
 import org.epochx.TerminationCriteria;
 import org.epochx.TerminationFitness;
-import org.epochx.event.EventManager;
 import org.epochx.event.GenerationEvent.EndGeneration;
-import org.epochx.event.RunEvent.EndRun;
 import org.epochx.event.stat.AbstractStat;
 import org.epochx.event.stat.GenerationAverageDoubleFitness;
 import org.epochx.event.stat.GenerationBestFitness;
@@ -27,7 +25,6 @@ import org.epochx.event.stat.GenerationNumber;
 import org.epochx.event.stat.GenerationWorstFitness;
 import org.epochx.monitor.Monitor;
 import org.epochx.monitor.graph.Graph;
-import org.epochx.monitor.graph.GraphModelWriter;
 import org.epochx.monitor.table.Table;
 import org.epochx.refactoring.PopulationNeutrality;
 import org.epochx.refactoring.Problem;
@@ -62,13 +59,14 @@ public class MonitorGraphTest {
 
 		// some parameters
 
-		config.set(Population.SIZE, 1000);
-		config.set(Crossover.PROBABILITY, 0.9);
-		config.set(Reproduction.PROBABILITY, 0.1);
+		config.set(Population.SIZE, 10);
+		config.set(Crossover.PROBABILITY, 1.0);
+		config.set(Reproduction.PROBABILITY, 0.0);
+		config.set(Mutation.PROBABILITY, 0.0);
 		config.set(BranchedBreeder.ELITISM, 0);
-		config.set(MaximumGenerations.MAXIMUM_GENERATIONS, 50);
-		config.set(TreeFactory.MAX_DEPTH, 17);
-		config.set(TreeFactory.INITIAL_DEPTH, 6);
+		config.set(MaximumGenerations.MAXIMUM_GENERATIONS, 5);
+		config.set(TreeFactory.MAX_DEPTH, 5);
+		config.set(TreeFactory.INITIAL_DEPTH, 2);
 		config.set(TournamentSelector.TOURNAMENT_SIZE, 4);
 		config.set(NeutralAwareMutation.NEUTRAL_MOVES_ENABLED, true);
 
@@ -114,7 +112,7 @@ public class MonitorGraphTest {
 		Graph g = new Graph("Visualization Graph");
 		monitor.add(g);
 
-		EventManager.getInstance().add(EndRun.class, new GraphModelWriter(g.getModel(), "backup.ser"));
+		//EventManager.getInstance().add(EndRun.class, new GraphModelWriter(g.getModel(), "backup.ser"));
 		// we are ready to go!
 		long start = System.currentTimeMillis();
 		Evolver evolver = new Evolver();

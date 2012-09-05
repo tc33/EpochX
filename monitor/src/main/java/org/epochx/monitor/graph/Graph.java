@@ -103,8 +103,7 @@ public class Graph extends JPanel implements Runnable {
 	 * </p>
 	 */
 	public Graph() {
-		
-		this("Graph " + noInstances, GraphViewModel.DEFAULT_DIAMETER);
+		this("Graph " + noInstances, GraphViewModel.DEFAULT_DIAMETER, GraphViewModel.DEFAULT_HGAP, GraphViewModel.DEFAULT_VGAP);
 	}
 
 	/**
@@ -120,7 +119,7 @@ public class Graph extends JPanel implements Runnable {
 	 * @param name the name of this graph.
 	 */
 	public Graph(String name) {
-		this(name, GraphViewModel.DEFAULT_DIAMETER);
+		this(name,  GraphViewModel.DEFAULT_DIAMETER, GraphViewModel.DEFAULT_HGAP, GraphViewModel.DEFAULT_VGAP);
 	}
 
 	/**
@@ -203,7 +202,7 @@ public class Graph extends JPanel implements Runnable {
 		this.mouseListener = new GraphMouseListener();
 		this.graphHeader = new GraphHeader(viewModel);
 		this.graphView = new GraphView(viewModel, model);
-		this.graphRowHeader = new GraphRowHeader(viewModel, model);
+		this.graphRowHeader = new GraphRowHeader(viewModel);
 		this.graphFooter = new GraphFooter();
 		this.scrollPane = new JScrollPane();
 
@@ -215,6 +214,8 @@ public class Graph extends JPanel implements Runnable {
 
 		// Create and show the graph.
 		SwingUtilities.invokeLater(this);
+		
+		noInstances++;
 	}
 
 	/**

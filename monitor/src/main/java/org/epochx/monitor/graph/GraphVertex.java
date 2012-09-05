@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import org.epochx.Fitness;
 import org.epochx.Individual;
 import org.epochx.Operator;
+import org.epochx.event.OperatorEvent.EndOperator;
 
 /**
  * A <code>GraphVertex</code> encloses an <code>Individual</code> to be
@@ -52,27 +53,32 @@ public class GraphVertex implements Comparable<Object>, Serializable {
 	/**
 	 * The parent <code>GraphGeneration</code>.
 	 */
-	GraphGeneration graphGeneration;
+	private GraphGeneration graphGeneration;
 
 	/**
 	 * The <code>Individual</code>.
 	 */
-	Individual individual;
+	private Individual individual;
 
 	/**
 	 * The <code>Operator</code>.
 	 */
-	Operator operator;
+	private Operator operator;
+	
+	/**
+	 * The Operator event.
+	 */
+	private EndOperator operatorEvent;
 
 	/**
 	 * The list of parents.
 	 */
-	ArrayList<GraphVertex> parents;
+	private ArrayList<GraphVertex> parents;
 
 	/**
 	 * The list of children.
 	 */
-	transient ArrayList<GraphVertex> children;
+	private transient ArrayList<GraphVertex> children;
 
 	/**
 	 * Constructs a <code>GraphVertex</code>.
@@ -88,8 +94,11 @@ public class GraphVertex implements Comparable<Object>, Serializable {
 
 		this.individual = individual;
 		this.graphGeneration = graphGeneration;
-		parents = new ArrayList<GraphVertex>();
-		children = new ArrayList<GraphVertex>();
+		this.operator = null;
+		this.operatorEvent = null;
+		this.parents = new ArrayList<GraphVertex>();
+		this.children = new ArrayList<GraphVertex>();
+		
 	}
 
 	/**
@@ -127,6 +136,25 @@ public class GraphVertex implements Comparable<Object>, Serializable {
 	public void setOperator(Operator operator) {
 		this.operator = operator;
 	}
+
+	
+	/**
+	 * Returns the operatorEvent.
+	 * @return the operatorEvent.
+	 */
+	public EndOperator getOperatorEvent() {
+		return operatorEvent;
+	}
+
+	
+	/**
+	 * Sets the operatorEvent.
+	 * @param operatorEvent the operatorEvent to set.
+	 */
+	public void setOperatorEvent(EndOperator operatorEvent) {
+		this.operatorEvent = operatorEvent;
+	}
+
 
 	/**
 	 * Returns the array of this vertex's parents.
@@ -173,6 +201,14 @@ public class GraphVertex implements Comparable<Object>, Serializable {
 		} else {
 			parents = new ArrayList<GraphVertex>();
 		}
+	}
+	
+	/**
+	 * Returns the siblings of this vertex among is parent generation.
+	 * @return
+	 */
+	public GraphVertex[] getSiblings() {
+		return graphGeneration.getSiblings(this);
 	}
 
 	/**
@@ -344,7 +380,37 @@ public class GraphVertex implements Comparable<Object>, Serializable {
 
 	@Override
 	public String toString() {
-		return String.valueOf(System.identityHashCode(individual));
+		
+		String res = getClass().getSimpleName();
+		
+		res+="[";
+		
+		res+="Generation#"+graphGeneration.getGeneration();
+		res+="@"+String.valueOf(System.identityHashCode(graphGeneration));
+		
+		res+=",";
+		res+="Individual@"+String.valueOf(System.identityHashCode(individual));
+		res+=":"+individual.toString().substring(0, Math.min(10, individual.toString().length()))+"...";
+		
+		res+=",";
+		res+="Operator@"+String.valueOf(System.identityHashCode(operator));
+		res+=":"+operator.getClass().getSimpleName();
+		
+		res+=",";
+		res+="Event@"+String.valueOf(System.identityHashCode(operatorEvent));
+		
+		if(operatorEvent!=null){
+			res+=",";
+			res+="Points:";
+			for(int i : operatorEvent.getPoints()){
+				res+=i;
+				res+=" ";
+			}
+		}
+		
+		res+="]";
+		
+		return res;
 	}
 
 }

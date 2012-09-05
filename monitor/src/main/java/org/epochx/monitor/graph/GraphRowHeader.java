@@ -64,15 +64,14 @@ public class GraphRowHeader extends JComponent implements ComponentListener {
 	 * Constructs a <code>GraphRowHeader</code>.
 	 * 
 	 * @param viewModel the <code>GraphViewModel</code>.
-	 * @param model the <code>GraphModel</code>.
 	 * 
 	 * @throws IllegalArgumentException if null argument.
 	 */
-	public GraphRowHeader(GraphViewModel viewModel, GraphModel model) {
+	public GraphRowHeader(GraphViewModel viewModel) {
 		this();
 
-		if (viewModel == null || model == null) {
-			throw new IllegalArgumentException("Arguments cannot be null.");
+		if (viewModel == null) {
+			throw new IllegalArgumentException("The view model cannot be null.");
 		}
 
 		setViewModel(viewModel);

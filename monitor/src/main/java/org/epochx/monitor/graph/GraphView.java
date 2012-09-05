@@ -33,7 +33,6 @@ import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.CubicCurve2D;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -421,9 +420,8 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 		int y = (int) vertexModel.getLocation().getY();
 		int diameter = vertexModel.getDiameter();
 
-		Ellipse2D ellipse = new Ellipse2D.Double(x, y, diameter, diameter);
 		g.setPaint(vertexModel.getColor());
-		g.fill(ellipse);
+		g.fillOval(x, y, diameter, diameter);
 	}
 
 	/**

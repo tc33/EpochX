@@ -281,20 +281,28 @@ public class GraphGeneration implements Serializable, Iterable<GraphVertex> {
 	 *         an empty array.
 	 */
 	public GraphVertex[] getSiblings(GraphVertex vertex) {
+		GraphVertex[] res;
+		if(vertex.getOperator() == null || vertex.getOperatorEvent() == null) {
+			res = new GraphVertex[1];
+			res[0] = vertex;
+		}
+		else {
 
 		int initialCapacity = vertex.getOperator().inputSize();
 		ArrayList<GraphVertex> list = new ArrayList<GraphVertex>(initialCapacity);
 
 		synchronized (vertices) {
 			for (GraphVertex v: vertices) {
-				if (v != vertex && v.getOperatorEvent() == vertex.getOperatorEvent()) {
+				if (v.getOperatorEvent() == vertex.getOperatorEvent() || v == vertex) {
 					list.add(v);
 				}
 			}
 		}
 
-		GraphVertex[] res = new GraphVertex[list.size()];
+		res = new GraphVertex[list.size()];
 		list.toArray(res);
+		}
+		
 		return res;
 	}
 

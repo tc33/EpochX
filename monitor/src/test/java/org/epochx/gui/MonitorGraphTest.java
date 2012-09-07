@@ -26,6 +26,7 @@ import org.epochx.event.stat.GenerationWorstFitness;
 import org.epochx.monitor.Monitor;
 import org.epochx.monitor.graph.Graph;
 import org.epochx.monitor.table.Table;
+import org.epochx.monitor.visualization.OperationPanel;
 import org.epochx.refactoring.PopulationNeutrality;
 import org.epochx.refactoring.Problem;
 import org.epochx.refactoring.initialisation.RampedHalfAndHalf;
@@ -59,14 +60,14 @@ public class MonitorGraphTest {
 
 		// some parameters
 
-		config.set(Population.SIZE, 10);
+		config.set(Population.SIZE, 50);
 		config.set(Crossover.PROBABILITY, 1.0);
 		config.set(Reproduction.PROBABILITY, 0.0);
 		config.set(Mutation.PROBABILITY, 0.0);
 		config.set(BranchedBreeder.ELITISM, 0);
-		config.set(MaximumGenerations.MAXIMUM_GENERATIONS, 5);
-		config.set(TreeFactory.MAX_DEPTH, 5);
-		config.set(TreeFactory.INITIAL_DEPTH, 2);
+		config.set(MaximumGenerations.MAXIMUM_GENERATIONS, 20);
+		config.set(TreeFactory.MAX_DEPTH, 7);
+		config.set(TreeFactory.INITIAL_DEPTH, 3);
 		config.set(TournamentSelector.TOURNAMENT_SIZE, 4);
 		config.set(NeutralAwareMutation.NEUTRAL_MOVES_ENABLED, true);
 
@@ -98,7 +99,7 @@ public class MonitorGraphTest {
 
 		// our stats monitor
 
-		Monitor monitor = new Monitor("Frame Graph Test");
+		Monitor monitor = new Monitor("Frame Graph Test", 1, 2);
 
 		Table table1 = new Table("Fitnesses Table");
 		table1.addStat(GenerationNumber.class);
@@ -110,7 +111,11 @@ public class MonitorGraphTest {
 		monitor.add(table1, 1, 1);
 
 		Graph g = new Graph("Visualization Graph");
-		monitor.add(g);
+		monitor.add(g, 1, 1);
+		
+		OperationPanel opPane = new OperationPanel();
+		g.getViewModel().addGraphViewListener(opPane);
+		monitor.add(opPane, 1, 2);
 
 		//EventManager.getInstance().add(EndRun.class, new GraphModelWriter(g.getModel(), "backup.ser"));
 		// we are ready to go!

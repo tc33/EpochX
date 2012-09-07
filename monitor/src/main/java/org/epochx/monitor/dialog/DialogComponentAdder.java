@@ -38,7 +38,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
 
 import org.epochx.monitor.Monitor;
-import org.epochx.monitor.Utilities;
+import org.epochx.monitor.MonitorUtilities;
 
 /**
  * A <code>DialogTextFilePrinter</code> extends a <code>Dialog</code> to add a
@@ -88,7 +88,7 @@ public class DialogComponentAdder extends Dialog {
 	@Override
 	public void run() {
 		// If no component in the list, display a message dialog.
-		if (monitor.getComponentList().isEmpty()) {
+		if (monitor.getComponents().length == 0) {
 			JOptionPane.showMessageDialog(monitor, "No Components to add in the list.");
 			return;
 		}
@@ -98,7 +98,7 @@ public class DialogComponentAdder extends Dialog {
 
 		final JComboBox componantComboBox = new JComboBox();
 		synchronized (monitor) {
-			for (JComponent componant: monitor.getComponentList())
+			for (JComponent componant: monitor.getComponents())
 				componantComboBox.addItem(componant);
 		}
 		componantComboBox.setPreferredSize(new Dimension(200, 20));
@@ -159,7 +159,7 @@ public class DialogComponentAdder extends Dialog {
 		setContentPane(contentPane);
 		setPreferredSize(contentPane.getPreferredSize());
 		pack();
-		Utilities.centreRelativeToParent(this);
+		MonitorUtilities.centreRelativeToParent(this);
 		setVisible(true);
 
 	}

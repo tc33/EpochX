@@ -39,7 +39,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import org.epochx.monitor.Monitor;
-import org.epochx.monitor.Utilities;
+import org.epochx.monitor.MonitorUtilities;
 import org.epochx.monitor.chart.Chart;
 
 /**
@@ -189,7 +189,7 @@ public class DialogExportChart extends Dialog {
 		setContentPane(contentPane);
 		setPreferredSize(contentPane.getPreferredSize());
 		pack();
-		Utilities.centreRelativeToParent(this);
+		MonitorUtilities.centreRelativeToParent(this);
 		setVisible(true);
 	}
 }

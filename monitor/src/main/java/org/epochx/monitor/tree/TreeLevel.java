@@ -197,9 +197,9 @@ public class TreeLevel implements Iterable<TreeNode> {
 	 * 
 	 * @throws NoYetAngleException if a node has no angle yet.
 	 */
-	public void computePositions() throws NoYetAngleException {
+	public void resetPositions() throws NoYetAngleException {
 
-		int d = tree.getD() * level;
+		double d = tree.getD() * level * tree.getZoom();
 		int origin = tree.getOrigin();
 
 		synchronized (nodes) {

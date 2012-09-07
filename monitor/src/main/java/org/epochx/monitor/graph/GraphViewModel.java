@@ -30,11 +30,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.TreeSet;
 
-import javax.swing.SwingUtilities;
 import javax.swing.event.EventListenerList;
 
 import org.epochx.Fitness;
-import org.epochx.monitor.graph.GraphViewEvent.Property;
+import org.epochx.monitor.graph.GraphViewEvent.GraphViewProperty;
 
 /**
  * 
@@ -148,6 +147,10 @@ public class GraphViewModel {
 	 * </p>
 	 */
 	private final TreeSet<Fitness> fitnesses;
+	
+	////////////////////////////////////////////////////////////////////////////
+	//                    C O N S T R U C T O R S                             //
+	////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Constructs a <code>GraphViewModel</code> with default properties.
@@ -211,10 +214,14 @@ public class GraphViewModel {
 		this.bondEnable = false;
 		this.bondColor = new Color(210, 210, 210);
 		this.highlightColor = Color.GREEN;
-		this.highlightDepth = 5;
+		this.highlightDepth = 10;
 		this.fitnesses = new TreeSet<Fitness>();
 		this.map = new HashMap<GraphVertex, GraphVertexModel>();
 	}
+	
+	////////////////////////////////////////////////////////////////////////////
+	//            L I S T E N E R   M A N A G E M E N T                       //
+	////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Returns the comparator who determine the order of the vertices.
@@ -237,7 +244,7 @@ public class GraphViewModel {
 	public void setComparator(Comparator<GraphVertex> comparator) {
 		Comparator<GraphVertex> old = this.comparator;
 		this.comparator = comparator;
-		fireGraphViewEvent(new GraphViewEvent(this, Property.COMPARATOR, old, comparator));
+		fireGraphViewEvent(new GraphViewEvent(this, GraphViewProperty.COMPARATOR, old, comparator));
 	}
 
 	/**
@@ -265,7 +272,7 @@ public class GraphViewModel {
 					vertexModel.resetDefaultPosition();
 				}
 			}
-			fireGraphViewEvent(new GraphViewEvent(this, Property.DIAMETER, new Integer(old), new Integer(diameter)));
+			fireGraphViewEvent(new GraphViewEvent(this, GraphViewProperty.DIAMETER, new Integer(old), new Integer(diameter)));
 		}
 	}
 
@@ -287,7 +294,7 @@ public class GraphViewModel {
 		if (this.hgap != hgap) {
 			int old = this.hgap;
 			this.hgap = hgap;
-			fireGraphViewEvent(new GraphViewEvent(this, Property.HGAP, new Integer(old), new Integer(hgap)));
+			fireGraphViewEvent(new GraphViewEvent(this, GraphViewProperty.HGAP, new Integer(old), new Integer(hgap)));
 		}
 	}
 
@@ -309,7 +316,7 @@ public class GraphViewModel {
 		if (this.vgap != vgap) {
 			int old = this.vgap;
 			this.vgap = vgap;
-			fireGraphViewEvent(new GraphViewEvent(this, Property.VGAP, new Integer(old), new Integer(vgap)));
+			fireGraphViewEvent(new GraphViewEvent(this, GraphViewProperty.VGAP, new Integer(old), new Integer(vgap)));
 		}
 	}
 
@@ -331,7 +338,7 @@ public class GraphViewModel {
 		if (margins != m) {
 			Insets old = margins;
 			margins = m;
-			fireGraphViewEvent(new GraphViewEvent(this, Property.MARGINS, old, m));
+			fireGraphViewEvent(new GraphViewEvent(this, GraphViewProperty.MARGINS, old, m));
 		}
 	}
 
@@ -353,7 +360,7 @@ public class GraphViewModel {
 		if (bondEnable != b) {
 			boolean old = bondEnable;
 			bondEnable = b;
-			fireGraphViewEvent(new GraphViewEvent(this, Property.BOUND_ENABLE, new Boolean(old), new Boolean(b)));
+			fireGraphViewEvent(new GraphViewEvent(this, GraphViewProperty.BOUND_ENABLE, new Boolean(old), new Boolean(b)));
 		}
 	}
 
@@ -375,7 +382,7 @@ public class GraphViewModel {
 		if (bondColor != color) {
 			Color old = bondColor;
 			bondColor = color;
-			fireGraphViewEvent(new GraphViewEvent(this, Property.BOUND_COLOR, old, color));
+			fireGraphViewEvent(new GraphViewEvent(this, GraphViewProperty.BOUND_COLOR, old, color));
 		}
 	}
 
@@ -397,7 +404,7 @@ public class GraphViewModel {
 		if (highlightColor != color) {
 			Color old = highlightColor;
 			highlightColor = color;
-			fireGraphViewEvent(new GraphViewEvent(this, Property.HIGHLIGHT_COLOR, old, color));
+			fireGraphViewEvent(new GraphViewEvent(this, GraphViewProperty.HIGHLIGHT_COLOR, old, color));
 		}
 	}
 
@@ -421,7 +428,7 @@ public class GraphViewModel {
 		if (highlightDepth != depth) {
 			int old = highlightDepth;
 			highlightDepth = depth;
-			fireGraphViewEvent(new GraphViewEvent(this, Property.HIGHLIGHT_DEPTH, new Integer(old), new Integer(depth)));
+			fireGraphViewEvent(new GraphViewEvent(this, GraphViewProperty.HIGHLIGHT_DEPTH, new Integer(old), new Integer(depth)));
 		}
 	}
 
@@ -442,7 +449,7 @@ public class GraphViewModel {
 	public void setSelectedGraphVertex(GraphVertex vertex) {
 		GraphVertex old = selectedGraphVertex;
 		selectedGraphVertex = vertex;
-		fireGraphViewEvent(new GraphViewEvent(this, Property.SELECTED_VERTEX, old, selectedGraphVertex));
+		fireGraphViewEvent(new GraphViewEvent(this, GraphViewProperty.SELECTED_VERTEX, old, selectedGraphVertex));
 	}
 
 	/**
@@ -462,7 +469,7 @@ public class GraphViewModel {
 	public void setHighlightedGraphVertex(GraphVertex vertex) {
 		GraphVertex old = highlightedGraphVertex;
 		highlightedGraphVertex = vertex;
-		fireGraphViewEvent(new GraphViewEvent(this, Property.HIGHLIGHTED_VERTEX, old, vertex));
+		fireGraphViewEvent(new GraphViewEvent(this, GraphViewProperty.HIGHLIGHTED_VERTEX, old, vertex));
 	}
 
 	/**
@@ -480,15 +487,6 @@ public class GraphViewModel {
 				highlight(parent, depth - 1);
 			}
 		}
-	}
-
-	/**
-	 * Returns the set of fitnesses.
-	 * 
-	 * @return the set of fitnesses.
-	 */
-	public TreeSet<Fitness> getFitnesses() {
-		return fitnesses;
 	}
 
 	/**
@@ -528,7 +526,20 @@ public class GraphViewModel {
 			return map.put(vertex, vertexModel);
 		}
 	}
+	
+	////////////////////////////////////////////////////////////////////////////
+	//              F I T N E S S   M A N A G E M E N T                       //
+	////////////////////////////////////////////////////////////////////////////
 
+	/**
+	 * Returns the set of fitnesses.
+	 * 
+	 * @return the set of fitnesses.
+	 */
+	public TreeSet<Fitness> getFitnesses() {
+		return fitnesses;
+	}
+	
 	/**
 	 * Computes and returns the <code>Color</code> corresponding to the rank of
 	 * the specified <code>Fitness</code> in the <code>FitnessSet</code>.
@@ -561,7 +572,7 @@ public class GraphViewModel {
 		}
 		if (added) {
 			resetColors();
-			fireGraphViewEvent(new GraphViewEvent(this, Property.FITNESS));
+			fireGraphViewEvent(new GraphViewEvent(this, GraphViewProperty.FITNESS));
 		}
 	}
 
@@ -692,9 +703,9 @@ public class GraphViewModel {
 		setHighlightedGraphVertex(selectedVertex);
 	}
 
-	//
-	// Listeners management //
-	//
+	////////////////////////////////////////////////////////////////////////////
+	//            L I S T E N E R   M A N A G E M E N T                       //
+	////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Adds a <code>GraphViewListener</code> to the listener list.

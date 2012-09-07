@@ -35,7 +35,7 @@ import org.epochx.event.Event;
 import org.epochx.event.EventManager;
 import org.epochx.event.Listener;
 import org.epochx.event.stat.AbstractStat;
-import org.epochx.monitor.Utilities;
+import org.epochx.monitor.MonitorUtilities;
 
 /**
  * A <code>ChartTrace</code> traces a curve according to an X-axis and a Y-axis
@@ -233,7 +233,7 @@ public class ChartTrace extends Trace2DSimple implements Listener<Event> {
 		task = new TimerTask() {
 
 			public void run() {
-				if (Utilities.isVisible(ChartTrace.this.chart));
+				if (MonitorUtilities.isVisible(ChartTrace.this.chart));
 					ChartTrace.this.refresh();
 			}
 		};

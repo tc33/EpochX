@@ -43,7 +43,7 @@ public class FitnessComparator implements Comparator<GraphVertex> {
 	 */
 	public int compare(GraphVertex o1, GraphVertex o2) {
 		
-		return o1.getFitness().compareTo(o2.getFitness());
+		return o2.getFitness().compareTo(o1.getFitness());
 	}
 	
 	@Override

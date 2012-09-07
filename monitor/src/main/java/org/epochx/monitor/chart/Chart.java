@@ -39,7 +39,7 @@ import org.apache.xmlgraphics.java2d.ps.AbstractPSDocumentGraphics2D;
 import org.apache.xmlgraphics.java2d.ps.EPSDocumentGraphics2D;
 import org.apache.xmlgraphics.java2d.ps.PSDocumentGraphics2D;
 import org.epochx.event.Event;
-import org.epochx.monitor.Utilities;
+import org.epochx.monitor.MonitorUtilities;
 
 /**
  * A <code>Chart</code> is a <code>Monitor</code> component which displays one
@@ -249,7 +249,7 @@ public class Chart extends Chart2D {
 	 * @see #FORMAT_VECTOR
 	 */
 	public synchronized void export(File file, String format, Dimension size) throws IllegalArgumentException {
-		String extension = Utilities.getExtension(file);
+		String extension = MonitorUtilities.getExtension(file);
 		if (format == FORMAT_RASTER) {
 			if (extension == null)
 				extension = "png";

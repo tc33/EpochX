@@ -43,7 +43,7 @@ import org.epochx.event.Event;
 import org.epochx.event.EventManager;
 import org.epochx.event.Listener;
 import org.epochx.event.stat.AbstractStat;
-import org.epochx.monitor.Utilities;
+import org.epochx.monitor.MonitorUtilities;
 
 /**
  * A <code>TableModel</code> provides both a tabular data model and a fields
@@ -153,7 +153,7 @@ public class TableModel extends AbstractTableModel implements Listener<Event> {
 		task = new TimerTask() {
 
 			public void run() {
-				if (Utilities.isVisible(TableModel.this.table))
+				if (MonitorUtilities.isVisible(TableModel.this.table))
 					TableModel.this.refresh();
 			}
 		};

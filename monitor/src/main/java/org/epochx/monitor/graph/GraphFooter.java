@@ -22,29 +22,22 @@
  */
 package org.epochx.monitor.graph;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Frame;
 import java.awt.Rectangle;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
-import org.epochx.monitor.graph.GraphViewEvent.Property;
-import org.epochx.monitor.tree.Tree;
-import org.epochx.monitor.tree.TreeNode;
-import org.epochx.refactoring.representation.TreeAble;
+import org.epochx.monitor.graph.GraphViewEvent.GraphViewProperty;
 
 public class GraphFooter extends JPanel implements GraphViewListener {
 
@@ -86,6 +79,8 @@ public class GraphFooter extends JPanel implements GraphViewListener {
 	 * Constructs a <code>GraphFooter</code>.
 	 */
 	public GraphFooter() {
+		super();
+		
 		setBorder(new TitledBorder(null, "Individual Informations", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
 		setPreferredSize(new Dimension(350, 90));
@@ -151,7 +146,7 @@ public class GraphFooter extends JPanel implements GraphViewListener {
 	 * 
 	 * @param vertex the <code>GraphVertex</code> to set.
 	 */
-	public void setNode(GraphVertex vertex) {
+	public void setVertex(GraphVertex vertex) {
 		if (this.vertex == null) {
 			this.vertex = vertex;
 			createAndShowPanel();
@@ -173,68 +168,11 @@ public class GraphFooter extends JPanel implements GraphViewListener {
 	 * <code>GraphViewEvent</code>.
 	 */
 	public void viewChanged(GraphViewEvent e) {
-
-		if (e.getNewValue() instanceof GraphVertex && e.getProperty() == Property.SELECTED_VERTEX) {
+		
+		if (e.getNewValue() instanceof GraphVertex && e.getProperty() == GraphViewProperty.SELECTED_VERTEX) {
 
 			GraphVertex vertex = (GraphVertex) e.getNewValue();
-			setNode(vertex);
-			JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this));
-			JPanel contentPane = new JPanel();
-			contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.PAGE_AXIS));
-
-			JPanel parentPane = new JPanel();
-			parentPane.setLayout(new BoxLayout(parentPane, BoxLayout.LINE_AXIS));
-			contentPane.add(parentPane);
-
-			JPanel childrenPane = new JPanel();
-			childrenPane.setLayout(new BoxLayout(childrenPane, BoxLayout.LINE_AXIS));
-			contentPane.add(childrenPane);
-
-			if (e.getNewValue() == e.getOldValue()) {
-
-				try {
-					Tree tree = new Tree((TreeAble) vertex.getIndividual());
-					Color[] colors = {Color.BLUE, Color.RED, Color.GREEN, Color.ORANGE, Color.CYAN, Color.MAGENTA,
-							Color.GRAY, Color.PINK};
-					if (vertex.getOperatorEvent() != null) {
-						int[] points = vertex.getOperatorEvent().getPoints();
-						GraphVertex[] parents = vertex.getParents();
-
-						int n = points.length;
-						for (int i = 0; i < points.length; i++) {
-							Tree parentTree = new Tree((TreeAble) parents[i].getIndividual());
-							try{
-								TreeNode pointNode = parentTree.get(points[i]);
-								pointNode.setSubTreeColor(colors[i]);
-							} catch(IndexOutOfBoundsException iobe){
-								System.err.println(iobe.getMessage());
-							}
-							
-							parentPane.add(parentTree);
-
-						}
-
-						childrenPane.add(tree);
-						GraphVertex[] siblings = vertex.getSiblings();
-						for (GraphVertex sibling: siblings) {
-							Tree siblingTree = new Tree((TreeAble) sibling.getIndividual());
-							childrenPane.add(siblingTree);
-						}
-					}
-
-					dialog.setContentPane(contentPane);
-					dialog.setPreferredSize(tree.getPreferredSize());
-					dialog.setName(tree.getName());
-
-					dialog.setModal(false);
-					dialog.validate();
-					dialog.pack();
-					dialog.validate();
-					dialog.setVisible(true);
-				} catch (ClassCastException cce) {
-					cce.printStackTrace();
-				}
-			}
+			setVertex(vertex);
 
 		}
 

@@ -27,7 +27,9 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.ListIterator;
 
 import org.epochx.monitor.graph.GraphVertex;
 import org.epochx.refactoring.representation.TreeAble;
@@ -36,7 +38,7 @@ import org.epochx.refactoring.representation.TreeNodeAble;
 /**
  * A <code>TreeNodeAble</code>.
  */
-public class TreeNode {
+public class TreeNode implements Iterable<TreeNode>, Rootable, TreeNodeAble {
 
 	//
 
@@ -48,7 +50,7 @@ public class TreeNode {
 
 	private TreeNodeAble node;
 
-	//
+	// Vizualization Attributs //
 
 	private double angle;
 
@@ -177,7 +179,7 @@ public class TreeNode {
 	public void setChildren(TreeNode[] children) {
 		this.children = children;
 	}
-	
+
 	/**
 	 * Creates the children of this node with the <code>TreeNodeAble</code>
 	 * nodes given by the {@link TreeNodeAble#getChildren()} method.
@@ -205,16 +207,49 @@ public class TreeNode {
 	}
 
 	/**
+	 * Returns the root of this node.
+	 * 
+	 * @return the root of this node.
+	 */
+	public TreeNode getRoot() {
+		if (parent == null) {
+			return this;
+		} else {
+			return parent.getRoot();
+		}
+	}
+	
+	/**
+	 * Returns an <code>ArrayList</code> of this node's ancestors.
+	 * 
+	 * @return the list of this node's ancestors from this node to the root.
+	 */
+	public TreeNode[] ancestors() {
+
+		TreeNode[] res = new TreeNode[level()];
+
+		TreeNode n = getParent();
+		
+		int i = 0;
+		while(n!=null) {
+			res[i++]=n;
+			n = n.getParent();
+		}
+
+		return res;
+	}
+
+	/**
 	 * Returns an <code>ArrayList</code> of this node's progenies in in
-	 * {@link Tree#ITERATION_PRE_ORDER preorder}.
+	 * {@link Tree#PRE_ORDER preorder}.
 	 * 
 	 * @return the list of this node's progenies.
 	 * 
 	 * @see #getNodes(int);
-	 * @see Tree#ITERATION_PRE_ORDER
+	 * @see Tree#PRE_ORDER
 	 */
-	public ArrayList<TreeNode> getNodes() {
-		return getNodes(Tree.ITERATION_PRE_ORDER);
+	public ArrayList<TreeNode> descendants() {
+		return descendants(Tree.PRE_ORDER);
 	}
 
 	/**
@@ -225,26 +260,26 @@ public class TreeNode {
 	 *         order.
 	 * @throw IllegalArgumentException if the specified order is not among :
 	 *        <ul>
-	 *        <li>{@link Tree#ITERATION_POST_ORDER}
-	 *        <li>{@link Tree#ITERATION_PRE_ORDER}
+	 *        <li>{@link Tree#POST_ORDER}
+	 *        <li>{@link Tree#PRE_ORDER}
 	 *        <ul>
 	 */
-	public ArrayList<TreeNode> getNodes(int iteration) throws IllegalArgumentException {
+	public ArrayList<TreeNode> descendants(int iteration) throws IllegalArgumentException {
 
 		ArrayList<TreeNode> nodes = new ArrayList<TreeNode>(size());
 
 		switch (iteration) {
 
-			case Tree.ITERATION_POST_ORDER:
+			case Tree.POST_ORDER:
 				nodes.add(this);
 				for (TreeNode child: children) {
-					nodes.addAll(child.getNodes(Tree.ITERATION_POST_ORDER));
+					nodes.addAll(child.descendants(Tree.POST_ORDER));
 				}
 				break;
 
-			case Tree.ITERATION_PRE_ORDER:
+			case Tree.PRE_ORDER:
 				for (TreeNode child: children) {
-					nodes.addAll(child.getNodes(Tree.ITERATION_PRE_ORDER));
+					nodes.addAll(child.descendants(Tree.PRE_ORDER));
 				}
 				nodes.add(this);
 				break;
@@ -254,6 +289,19 @@ public class TreeNode {
 		}
 
 		return nodes;
+	}
+	
+
+	/**
+	 * The <code>Iterable</code> implemented method ; Returns an
+	 * <code>Iterator</code> visiting the tree's nodes in
+	 * {@link Tree#PRE_ORDER preorder}.
+	 * 
+	 * @return the iterator of this tree's nodes.
+	 * @see #getNodes()
+	 */
+	public Iterator<TreeNode> iterator() {
+		return descendants().iterator();
 	}
 
 	/**
@@ -345,7 +393,7 @@ public class TreeNode {
 
 			current++;
 		}
-		throw new IndexOutOfBoundsException("Index: "+index+", Size: "+size());
+		throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size());
 	}
 
 	/**
@@ -359,24 +407,136 @@ public class TreeNode {
 	 * @see #equals(TreeNode)
 	 */
 	public int indexOf(Object o) {
-		return getNodes().indexOf(o);
+		return descendants().indexOf(o);
 	}
 	
-	public boolean similar(Object o) {
-		//TODO 
+	public TreeNode[] find(Object o) {
+		
 		if (o instanceof TreeNode) {
 			TreeNode n = (TreeNode) o;
+			ArrayList<TreeNode> list = new ArrayList<TreeNode>();
+			
+			for(TreeNode node : descendants()){
+				if (node.subsumes(n)) {
+					list.add(node);
+				}
+			}
+			TreeNode[] res = new TreeNode[list.size()];
+			list.toArray(res);
+			return res;
+			
+		}
+		else if (o instanceof TreeNodeAble) {
+			return find(new TreeNode((TreeNodeAble) o, null));
 		}
 		else if (o instanceof TreeAble) {
-			return similar(((TreeAble) o).getTree());
+			return find(((TreeAble) o).getTree());
 		}
 		else if (o instanceof GraphVertex) {
-			return similar(((GraphVertex) o).getIndividual());
+			return find(((GraphVertex) o).getIndividual());
 		}
-	
+
+		return new TreeNode[0];
+	}
+
+	public boolean subsumes(Object o) {
+				
+		if (o instanceof TreeNode) {
+			TreeNode n = (TreeNode) o;
+			
+			if (n.getName() != getName()) {
+				return false;
+			}
+			else {
+				LinkedList<TreeNode> thisChildren = new LinkedList<TreeNode>(Arrays.asList(this.children));
+				
+				for(TreeNode child : n.getChildren()){
+					
+					boolean found = !child.isSelected();
+					ListIterator<TreeNode> iterator = thisChildren.listIterator();
+					
+					while (iterator.hasNext() && found==false) {
+						TreeNode thisChild = iterator.next();
+						if(thisChild.subsumes(child)){
+							iterator.remove();
+							found = true;
+						}
+					}
+					if(!found){
+						return false;
+					}
+				}
+				return true;
+			}
+			
+		}
+		else if (o instanceof TreeNodeAble) {
+			return subsumes(new TreeNode((TreeNodeAble) o, null));
+		}
+		else if (o instanceof TreeAble) {
+			return subsumes(((TreeAble) o).getTree());
+		}
+		else if (o instanceof GraphVertex) {
+			return subsumes(((GraphVertex) o).getIndividual());
+		}
+
 		return false;
 	}
 	
+	public boolean isAncestor(TreeNode node) {
+		TreeNode n = node;
+		
+		while(n != null) {
+			if (n == this) {
+				return true;
+			} else {
+				n = n.getParent();
+			}
+		}
+		return false;
+	}
+	
+	public boolean isDescendant(TreeNode node) {
+		TreeNode n = this;
+		
+		while(n != null) {
+			if (n == node) {
+				return true;
+			} else {
+				n = n.getParent();
+			}
+		}
+		return false;
+	}
+	
+	public static TreeNode commonAncestor(TreeNode node1, TreeNode node2) {
+		if(node1 == null || node2 == null){
+			return null;
+		}
+		else if(node1 == node2) {
+			return node1;
+		}
+		else if(node1.isAncestor(node2)) {
+			return node1;
+		}
+		else if (node2.isDescendant(node1)) {
+			return node2;
+		}
+		else if (node1.getRoot() == node2.getRoot()) {
+			
+			if(node1.level()>node2.level()) {
+				return commonAncestor(node1.getParent(), node2);
+			}
+			else {
+				return commonAncestor(node1, node2.getParent());
+			}
+			
+		}
+		else {
+			return null;
+		}
+	}
+
 	public boolean equals(Object o) {
 
 		if (o instanceof TreeNode) {
@@ -400,20 +560,19 @@ public class TreeNode {
 				}
 			}
 			return true;
-		}
-		else if (o instanceof TreeAble) {
+		} else if (o instanceof TreeAble) {
 			return equals(((TreeAble) o).getTree());
-		}
-		else if (o instanceof GraphVertex) {
+		} else if (o instanceof GraphVertex) {
 			return equals(((GraphVertex) o).getIndividual());
-		}
-		else {
+		} else {
 			return System.identityHashCode(o) == System.identityHashCode(node);
 		}
 
 	}
 
-	// Vizualization Methods //
+    ////////////////////////////////////////////////////////////////////////////
+    //              V I S U A L I Z A T I O N   M E T H O D S                 //
+    ////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Returns the angle.
@@ -481,10 +640,22 @@ public class TreeNode {
 	/**
 	 * Sets the selected.
 	 * 
-	 * @param selected the selected to set.
+	 * @param b the selected to set.
 	 */
-	public void setSelected(boolean selected) {
-		this.selected = selected;
+	public void setSelected(boolean b) {
+		this.selected = b;
+	}
+	
+	/**
+	 * Sets the selected.
+	 * 
+	 * @param b the selected to set.
+	 */
+	public void setSubTreeSelected(boolean b) {
+		setSelected(b);
+		for (TreeNode child: children) {
+			child.setSubTreeSelected(b);
+		}
 	}
 
 	/**
@@ -499,10 +670,22 @@ public class TreeNode {
 	/**
 	 * Sets the highlighted.
 	 * 
-	 * @param highlighted the highlighted to set.
+	 * @param b the highlighted to set.
 	 */
-	public void setHighlighted(boolean highlighted) {
-		this.highlighted = highlighted;
+	public void setHighlighted(boolean b) {
+		this.highlighted = b;
+	}
+	
+	/**
+	 * Sets the highlighted.
+	 * 
+	 * @param b the highlighted to set.
+	 */
+	public void setSubTreeHighlighted(boolean b) {
+		setHighlighted(b);
+		for (TreeNode child: children) {
+			child.setSubTreeHighlighted(b);
+		}
 	}
 
 	/**
@@ -631,10 +814,28 @@ public class TreeNode {
 	}
 
 	@Override
+	public TreeNode clone() {
+		try {
+			TreeNode clone = (TreeNode) super.clone();
+			clone.children = new TreeNode[children.length];
+			clone.parent = null;
+
+			for (int i = 0; i < children.length; i++) {
+				clone.children[i] = children[i].clone();
+			}
+
+			return clone;
+		} catch (CloneNotSupportedException e) {
+			throw new InternalError(e.getMessage());
+		}
+	}
+
+	@Override
 	public String toString() {
 		String res = getClass().getSimpleName();
 		res += "@" + String.valueOf(System.identityHashCode(this));
 		res += "(" + getName() + ")";
 		return res;
 	}
+
 }

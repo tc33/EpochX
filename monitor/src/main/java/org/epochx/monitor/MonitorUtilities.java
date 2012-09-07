@@ -22,6 +22,7 @@
  */
 package org.epochx.monitor;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -35,7 +36,59 @@ import javax.swing.JTabbedPane;
  * A collection of utility methods.
  * <i>Cannot be instancied.</i>
  */
-public final class Utilities {
+public abstract class MonitorUtilities {
+
+	/**
+	 * A table of common colors.
+	 */
+	public static final Color[] COLORS = {Color.BLUE, Color.RED, Color.GREEN, Color.ORANGE, Color.CYAN, Color.MAGENTA,
+			Color.GRAY, Color.PINK};
+
+	/**
+	 * Returns the first <code>Monitor</code> ancestor of c, or null if c is not
+	 * contained inside a <code>Monitor</code>.
+	 * 
+	 * @param c the <code>Component</code> to get <code>Monitor</code> ancestor
+	 *        of.
+	 * 
+	 * @return the first <code>Monitor</code> ancestor of c, or null if c is not
+	 *         contained inside a <code>Monitor</code>.
+	 */
+	public static Monitor getMonitorAncestor(Component c) {
+		Component res = c;
+		while (res != null && !(res instanceof Monitor)) {
+			res = res.getParent();
+		}
+		return (Monitor) res;
+	}
+
+	/**
+	 * Adds the specified <code>JComponent</code> on the first
+	 * <code>Monitor</code> ancestor of the specified <code>Component</code>.
+	 * 
+	 * @param c the <code>Component</code> whose parent <code>Monitor</code> is
+	 *        to be found to add the <code>JComponent</code>.
+	 * @paren toAdd the <code>JComponent</code> to add.
+	 * 
+	 * @return true if the parent <code>Monitor</code> is found and the
+	 *         <code>JComponent</code> is added.
+	 * 
+	 * @throws IllegalArgumentException if one of the arguments is null.
+	 */
+	public static boolean addToTheParentMonitor(Component c, JComponent toAdd) throws IllegalArgumentException {
+
+		if (c == null || toAdd == null) {
+			throw new IllegalArgumentException("Null argument non permit.");
+		}
+
+		Monitor monitor = getMonitorAncestor(c);
+		if (monitor != null) {
+			monitor.add(toAdd);
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	/**
 	 * Returns <code>true</code> if the <code>JComponent</code> is visible
@@ -58,7 +111,7 @@ public final class Utilities {
 	}
 
 	/**
-	 * Places the <code>Component</code>  at the center of the screen.
+	 * Places the <code>Component</code> at the center of the screen.
 	 * 
 	 * @param comp the <code>Component</code> to centre.
 	 */
@@ -71,9 +124,9 @@ public final class Utilities {
 	}
 
 	/**
-	 * Places the <code>Component</code>  at the center of if parent.
+	 * Places the <code>Component</code> at the center of if parent.
 	 * 
-	 * @param comp the <code>Component</code>  to centre.
+	 * @param comp the <code>Component</code> to centre.
 	 * @throws IllegalArgumentException if the component has no parent.
 	 */
 	public static void centreRelativeToParent(Component comp) throws IllegalArgumentException {
@@ -107,9 +160,12 @@ public final class Utilities {
 	}
 
 	/**
-	 * Returns true if  <i>str</i> is contained in <i>tab</i>.
-	 * @param str the <code>String</code> whose presence in the <i>tab</i> is to be tested..
+	 * Returns true if <i>str</i> is contained in <i>tab</i>.
+	 * 
+	 * @param str the <code>String</code> whose presence in the <i>tab</i> is to
+	 *        be tested..
 	 * @param tab the <code>String</code> table.
+	 * 
 	 * @return true if <i>str</i> in contained in the <i>tab</i>.
 	 */
 	public static boolean isContained(String str, String ... tab) {

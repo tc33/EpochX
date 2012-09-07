@@ -40,7 +40,7 @@ import java.util.Comparator;
 import javax.swing.Scrollable;
 import javax.swing.Timer;
 
-import org.epochx.monitor.graph.GraphViewEvent.Property;
+import org.epochx.monitor.graph.GraphViewEvent.GraphViewProperty;
 
 /**
  * A <code>GraphView</code>.
@@ -194,9 +194,9 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 	 */
 	@SuppressWarnings("unchecked")
 	public void viewChanged(GraphViewEvent e) {
-		Property property = e.getProperty();
+		GraphViewProperty viewProperty = e.getProperty();
 
-		switch (property) {
+		switch (viewProperty) {
 
 			case HIGHLIGHTED_VERTEX:
 				GraphVertex oldVertex = (GraphVertex) e.getOldValue();

@@ -219,7 +219,7 @@ public class Monitor extends JFrame implements Runnable {
 				getContentPane().add(componentTab[i][j]);
 			}
 		}
-		
+
 		// Show the frame.
 		pack();
 		setSize(1400, 800);
@@ -228,12 +228,17 @@ public class Monitor extends JFrame implements Runnable {
 	}
 
 	/**
-	 * Returns the <code>componentList</code>.
+	 * Returns an array of this monitor's components.
 	 * 
-	 * @return the <code>componentList</code>.
+	 * @return an array of this monitor's components.
 	 */
-	public synchronized ArrayList<JComponent> getComponentList() {
-		return componentList;
+	public JComponent[] getComponents() {
+		JComponent[] components;
+		synchronized(componentList) {
+			components = new JComponent[componentList.size()];
+			componentList.toArray(components);
+		}
+		return components;
 	}
 
 	/**
@@ -256,21 +261,15 @@ public class Monitor extends JFrame implements Runnable {
 
 	/**
 	 * Adds a <code>JComponent</code> on the component list.
-	 * <p>
-	 * This Component will not be add to the monitor at the start, unless if the
-	 * monitor have only one pane.
-	 * </p>
 	 * 
 	 * @param component the JComponent added
 	 */
-	public synchronized void add(JComponent component) {
-		componentList.add(0, component);
-		// if the monitor have only one cell, add directly.
-		if (getRowCount() == 1 && getColCount() == 1)
-			add(component, 1, 1);
-		// else refresh the menu bar in the EDT.
-		else
-			SwingUtilities.invokeLater(menuBar);
+	public void add(JComponent component) {
+		synchronized (componentList) {
+			componentList.add(0, component);
+		}
+
+		SwingUtilities.invokeLater(menuBar);
 	}
 
 	/**
@@ -299,14 +298,15 @@ public class Monitor extends JFrame implements Runnable {
 			throw new IllegalArgumentException("Wrong row index.");
 		if (col >= componentTab[0].length || col < 0)
 			throw new IllegalArgumentException("Wrong column index.");
-
-		// If the componentList does not contain the component, add it.
-		if (!componentList.contains(component))
-			componentList.add(component);
-		// Else move the component to the end of the list.
-		else {
-			componentList.remove(component);
-			componentList.add(component);
+		synchronized (componentList) {
+			// If the componentList does not contain the component, add it.
+			if (!componentList.contains(component))
+				componentList.add(component);
+			// Else move the component to the end of the list.
+			else {
+				componentList.remove(component);
+				componentList.add(component);
+			}
 		}
 
 		// Add the component to the tabbed pane and refresh the menu bar in the

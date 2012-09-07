@@ -26,7 +26,7 @@ import java.io.File;
 
 import javax.swing.filechooser.FileFilter;
 
-import org.epochx.monitor.Utilities;
+import org.epochx.monitor.MonitorUtilities;
 
 
 /**
@@ -66,7 +66,7 @@ public class ExportFilter extends FileFilter {
 			return true;
 		}
 
-		return Utilities.isContained(Utilities.getExtension(file), extensions);
+		return MonitorUtilities.isContained(MonitorUtilities.getExtension(file), extensions);
 	}
 
 	@Override

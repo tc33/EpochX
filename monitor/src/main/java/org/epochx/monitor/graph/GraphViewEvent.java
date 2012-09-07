@@ -36,18 +36,18 @@ public class GraphViewEvent extends EventObject {
 	private static final long serialVersionUID = -3419694219416332329L;
 
 	/**
-	 * A <code>Property</code> identifies the property that changed among the
+	 * A <code>ViewProperty</code> identifies the property that changed among the
 	 * view model's fields.
 	 */
-	public enum Property {
+	public enum GraphViewProperty {
 		COMPARATOR, DIAMETER, HGAP, VGAP, MARGINS, SELECTED_VERTEX, HIGHLIGHTED_VERTEX, BOUND_ENABLE, BOUND_COLOR, HIGHLIGHT_COLOR,
 		HIGHLIGHT_DEPTH, FITNESS
 	}
 
 	/**
-	 * The property which identifies the view model's field that changed.
+	 * The view property which identifies the view model's field that changed.
 	 */
-	private final Property property;
+	private final GraphViewProperty property;
 
 	/**
 	 * The old value for the property.
@@ -76,7 +76,7 @@ public class GraphViewEvent extends EventObject {
 	 * @param property the property which identifies the view model's field that
 	 *        changed.
 	 */
-	public GraphViewEvent(Object source, Property property) {
+	public GraphViewEvent(Object source, GraphViewProperty property) {
 		this(source, property, null, null);
 	}
 
@@ -89,7 +89,7 @@ public class GraphViewEvent extends EventObject {
 	 * @param oldValue the old value of the property.
 	 * @param newValue the new value of the property.
 	 */
-	public GraphViewEvent(Object source, Property property, Object oldValue, Object newValue) {
+	public GraphViewEvent(Object source, GraphViewProperty property, Object oldValue, Object newValue) {
 		super(source);
 		this.property = property;
 		this.oldValue = oldValue;
@@ -97,13 +97,13 @@ public class GraphViewEvent extends EventObject {
 	}
 
 	/**
-	 * Gets the <code>Property</code> that was changed. Among this
-	 * {@link Property enumeration}.
+	 * Gets the <code>GraphViewProperty</code> that was changed. Among this
+	 * {@link ViewProperty enumeration}.
 	 * 
-	 * @return the <code>Property</code> that was changed. May be null if
+	 * @return the <code>GraphViewProperty</code> that was changed. May be null if
 	 *         multiple properties have changed.
 	 */
-	public Property getProperty() {
+	public GraphViewProperty getProperty() {
 		return property;
 	}
 

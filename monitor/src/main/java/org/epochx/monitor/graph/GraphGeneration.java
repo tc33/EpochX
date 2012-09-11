@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
 import org.epochx.Config;
@@ -288,13 +289,12 @@ public class GraphGeneration implements Serializable, Iterable<GraphVertex> {
 		}
 		else {
 
-		int initialCapacity = vertex.getOperator().inputSize();
-		ArrayList<GraphVertex> list = new ArrayList<GraphVertex>(initialCapacity);
+		LinkedList<GraphVertex> list = new LinkedList<GraphVertex>();
 
 		synchronized (vertices) {
 			for (GraphVertex v: vertices) {
 				if (v.getOperatorEvent() == vertex.getOperatorEvent() || v == vertex) {
-					list.add(v);
+					list.add(v.getRank(), v);
 				}
 			}
 		}

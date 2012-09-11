@@ -46,6 +46,8 @@ public class GraphVertexModel {
 
 	private final int generation;
 
+	private boolean selected;
+	
 	private boolean highlighted;
 
 	GraphVertexModel(GraphVertex vertex, GraphViewModel viewModel) {
@@ -94,11 +96,15 @@ public class GraphVertexModel {
 	 * @return the diameter
 	 */
 	public int getDiameter() {
-		int res;
-		if (!highlighted) {
+		int res=0;
+		if (!highlighted && !selected) {
 			res = diameter;
-		} else {
+		}
+		else if (highlighted) {
 			res = (int) (diameter * 1.2);
+		}
+		else if (selected) {
+			res = (int) (diameter * 1.5);
 		}
 		return res;
 	}
@@ -151,6 +157,22 @@ public class GraphVertexModel {
 	 */
 	public int getGeneration() {
 		return generation;
+	}
+
+	/**
+	 * Returns the selected.
+	 * @return the selected.
+	 */
+	public boolean isSelected() {
+		return selected;
+	}
+
+	/**
+	 * Sets the selected.
+	 * @param selected the selected to set.
+	 */
+	public void setSelected(boolean selected) {
+		this.selected = selected;
 	}
 
 	/**

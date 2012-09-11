@@ -29,6 +29,8 @@ import org.epochx.Fitness;
 import org.epochx.Individual;
 import org.epochx.Operator;
 import org.epochx.event.OperatorEvent.EndOperator;
+import org.epochx.refactoring.representation.TreeAble;
+import org.epochx.refactoring.representation.TreeNodeAble;
 
 /**
  * A <code>GraphVertex</code> encloses an <code>Individual</code> to be
@@ -43,7 +45,7 @@ import org.epochx.event.OperatorEvent.EndOperator;
  * <li>A list of children <code>GraphVertex</code>.
  * <p>
  */
-public class GraphVertex implements Comparable<Object>, Serializable {
+public class GraphVertex implements Comparable<Object>, Serializable, TreeAble {
 
 	/**
 	 * Generated serial UID.
@@ -64,11 +66,16 @@ public class GraphVertex implements Comparable<Object>, Serializable {
 	 * The <code>Operator</code>.
 	 */
 	private Operator operator;
-	
+
 	/**
 	 * The Operator event.
 	 */
 	private EndOperator operatorEvent;
+	
+	/**
+	 * The rank among the siblings.
+	 */
+	private int rank;
 
 	/**
 	 * The list of parents.
@@ -96,9 +103,10 @@ public class GraphVertex implements Comparable<Object>, Serializable {
 		this.graphGeneration = graphGeneration;
 		this.operator = null;
 		this.operatorEvent = null;
+		this.rank = 0;
 		this.parents = new ArrayList<GraphVertex>();
 		this.children = new ArrayList<GraphVertex>();
-		
+
 	}
 
 	/**
@@ -137,24 +145,39 @@ public class GraphVertex implements Comparable<Object>, Serializable {
 		this.operator = operator;
 	}
 
-	
 	/**
 	 * Returns the operatorEvent.
+	 * 
 	 * @return the operatorEvent.
 	 */
 	public EndOperator getOperatorEvent() {
 		return operatorEvent;
 	}
 
-	
 	/**
 	 * Sets the operatorEvent.
+	 * 
 	 * @param operatorEvent the operatorEvent to set.
 	 */
 	public void setOperatorEvent(EndOperator operatorEvent) {
 		this.operatorEvent = operatorEvent;
 	}
 
+	/**
+	 * Returns the rank.
+	 * @return the rank.
+	 */
+	public int getRank() {
+		return rank;
+	}
+
+	/**
+	 * Sets the rank.
+	 * @param rank the rank to set.
+	 */
+	public void setRank(int rank) {
+		this.rank = rank;
+	}
 
 	/**
 	 * Returns the array of this vertex's parents.
@@ -202,9 +225,10 @@ public class GraphVertex implements Comparable<Object>, Serializable {
 			parents = new ArrayList<GraphVertex>();
 		}
 	}
-	
+
 	/**
 	 * Returns the siblings of this vertex among is parent generation.
+	 * 
 	 * @return
 	 */
 	public GraphVertex[] getSiblings() {
@@ -353,20 +377,46 @@ public class GraphVertex implements Comparable<Object>, Serializable {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		
+
 		boolean res = false;
 
-		if (obj instanceof GraphVertex) {		
-			
-			res = ( System.identityHashCode(individual) == System.identityHashCode(((GraphVertex) obj).getIndividual()) );
-				
+		if (obj instanceof GraphVertex) {
+
+			res = (System.identityHashCode(individual) == System.identityHashCode(((GraphVertex) obj).getIndividual()));
+
 		} else if (obj instanceof Individual) {
-			
-			res = ( System.identityHashCode(individual) == System.identityHashCode((Individual) obj) );
-		} 
-		
+
+			res = (System.identityHashCode(individual) == System.identityHashCode((Individual) obj));
+		}
+
 		return res;
 	}
+
+	/**
+	 * The <code>TreeAble</code> implemented method.
+	 * <p>
+	 * If this vertex's <code>Individual</code> is an instance of
+	 * <code>TreeAble</code>, returns its tree ; throws a
+	 * <code>ClassCastException</code> otherwise.
+	 * </p>
+	 * 
+	 * @return the indivudual's tree.
+	 * 
+	 * @throws ClassCastException if the individual represented by this vertex
+	 *         is not an instance of <code>TreeAble</code>.
+	 */
+	public TreeNodeAble getTree() throws ClassCastException {
+		return ((TreeAble) individual).getTree();
+	}
+	
+	public int getCriticalPoint() {
+		int res = -1;
+		if(operatorEvent != null && operatorEvent.getPoints().length > rank) {
+			res = operatorEvent.getPoints()[rank];
+		}
+		return res;
+	}
+	
 
 	@Override
 	public GraphVertex clone() {
@@ -380,36 +430,36 @@ public class GraphVertex implements Comparable<Object>, Serializable {
 
 	@Override
 	public String toString() {
-		
+
 		String res = getClass().getSimpleName();
-		
-		res+="[";
-		
-		res+="Generation#"+graphGeneration.getGeneration();
-		res+="@"+String.valueOf(System.identityHashCode(graphGeneration));
-		
-		res+=",";
-		res+="Individual@"+String.valueOf(System.identityHashCode(individual));
-		res+=":"+individual.toString().substring(0, Math.min(10, individual.toString().length()))+"...";
-		
-		res+=",";
-		res+="Operator@"+String.valueOf(System.identityHashCode(operator));
-		res+=":"+operator.getClass().getSimpleName();
-		
-		res+=",";
-		res+="Event@"+String.valueOf(System.identityHashCode(operatorEvent));
-		
-		if(operatorEvent!=null){
-			res+=",";
-			res+="Points:";
-			for(int i : operatorEvent.getPoints()){
-				res+=i;
-				res+=" ";
+
+		res += "[";
+
+		res += "Generation#" + graphGeneration.getGeneration();
+		res += "@" + String.valueOf(System.identityHashCode(graphGeneration));
+
+		res += ",";
+		res += "Individual@" + String.valueOf(System.identityHashCode(individual));
+		res += ":" + individual.toString().substring(0, Math.min(10, individual.toString().length())) + "...";
+
+		res += ",";
+		res += "Operator@" + String.valueOf(System.identityHashCode(operator));
+		res += ":" + operator.getClass().getSimpleName();
+
+		res += ",";
+		res += "Event@" + String.valueOf(System.identityHashCode(operatorEvent));
+
+		if (operatorEvent != null) {
+			res += ",";
+			res += "Points:";
+			for (int i: operatorEvent.getPoints()) {
+				res += i;
+				res += " ";
 			}
 		}
-		
-		res+="]";
-		
+
+		res += "]";
+
 		return res;
 	}
 

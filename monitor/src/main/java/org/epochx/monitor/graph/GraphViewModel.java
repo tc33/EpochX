@@ -149,7 +149,7 @@ public class GraphViewModel {
 	private final TreeSet<Fitness> fitnesses;
 	
 	////////////////////////////////////////////////////////////////////////////
-	//                    C O N S T R U C T O R S                             //
+	//             C O N S T R U C T O R S                                    //
 	////////////////////////////////////////////////////////////////////////////
 
 	/**
@@ -220,7 +220,7 @@ public class GraphViewModel {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////
-	//            L I S T E N E R   M A N A G E M E N T                       //
+	//             G E T T E R S  &  S E T T E R S                            //
 	////////////////////////////////////////////////////////////////////////////
 
 	/**
@@ -385,7 +385,11 @@ public class GraphViewModel {
 			fireGraphViewEvent(new GraphViewEvent(this, GraphViewProperty.BOUND_COLOR, old, color));
 		}
 	}
-
+	
+	////////////////////////////////////////////////////////////////////////////
+	//             H I G H L I G H T I N G   M A N A G E M E N T              //
+	////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * Returns the highlight color.
 	 * 
@@ -431,27 +435,7 @@ public class GraphViewModel {
 			fireGraphViewEvent(new GraphViewEvent(this, GraphViewProperty.HIGHLIGHT_DEPTH, new Integer(old), new Integer(depth)));
 		}
 	}
-
-	/**
-	 * Returns the selected <code>GraphVertex</code>.
-	 * 
-	 * @return the selected <code>GraphVertex</code>.
-	 */
-	public GraphVertex getSelectedGraphVertex() {
-		return selectedGraphVertex;
-	}
-
-	/**
-	 * Sets the selected <code>GraphVertex</code>.
-	 * 
-	 * @param vertex the selected <code>GraphVertex</code> to set.
-	 */
-	public void setSelectedGraphVertex(GraphVertex vertex) {
-		GraphVertex old = selectedGraphVertex;
-		selectedGraphVertex = vertex;
-		fireGraphViewEvent(new GraphViewEvent(this, GraphViewProperty.SELECTED_VERTEX, old, selectedGraphVertex));
-	}
-
+	
 	/**
 	 * Returns the highlighted <code>GraphVertex</code>.
 	 * 
@@ -488,6 +472,106 @@ public class GraphViewModel {
 			}
 		}
 	}
+	
+	/**
+	 * Highlight the vertex at the specified point (only if it points on a
+	 * vertex), all the other vertices will be non highlighted.
+	 * <p>
+	 * A <code>GraphViewEvent</code> might be fire if the highlighted vertex is
+	 * different than the previous one.
+	 * </p>
+	 * 
+	 * @param point the point.
+	 */
+	public void highlight(Point point) {
+		GraphVertex selectedVertex = null;
+		synchronized (map) {
+			for (GraphVertexModel vertexModel: map.values()) {
+
+				if (vertexModel.contains(point)) {
+					selectedVertex = vertexModel.getVertex();
+				} else if (vertexModel.isHighlighted()) {
+					vertexModel.setHighlighted(false);
+				}
+			}
+		}
+
+		if (selectedVertex != null) {
+			highlight(selectedVertex, highlightDepth);
+		}
+		setHighlightedGraphVertex(selectedVertex);
+	}
+	
+	
+	////////////////////////////////////////////////////////////////////////////
+	//             S E L E C T I N G   M A N A G E M E N T                    //
+	////////////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Returns the selected <code>GraphVertex</code>.
+	 * 
+	 * @return the selected <code>GraphVertex</code>.
+	 */
+	public GraphVertex getSelectedGraphVertex() {
+		return selectedGraphVertex;
+	}
+
+	/**
+	 * Sets the selected <code>GraphVertex</code>.
+	 * 
+	 * @param vertex the selected <code>GraphVertex</code> to set.
+	 */
+	public void setSelectedGraphVertex(GraphVertex vertex) {
+		GraphVertex old = selectedGraphVertex;
+		selectedGraphVertex = vertex;
+		fireGraphViewEvent(new GraphViewEvent(this, GraphViewProperty.SELECTED_VERTEX, old, selectedGraphVertex));
+	}
+	
+	/**
+	 * Deselects all vertices.
+	 */
+	public void deselectedAll() {
+		for(GraphVertexModel model : map.values()) {
+			model.setSelected(false);
+		}
+		fireGraphViewEvent(new GraphViewEvent(this, GraphViewProperty.REFRESH));
+	}
+
+
+	/**
+	 * Select the vertex at the specified point (only if it points on a
+	 * vertex), all the other vertices will be non selected.
+	 * <p>
+	 * A <code>GraphViewEvent</code> might be fire if the selected vertex is
+	 * different than the previous one.
+	 * </p>
+	 * 
+	 * @param point the point.
+	 */
+	public void select(Point point) {
+		GraphVertex selectedVertex = null;
+		synchronized (map) {
+			for (GraphVertexModel vertexModel: map.values()) {
+
+				if (vertexModel.contains(point)) {
+					vertexModel.setSelected(true);
+					selectedVertex = vertexModel.getVertex();
+				}
+				else {
+					vertexModel.setSelected(false);
+				}
+			}
+		}
+
+		if (selectedVertex == selectedGraphVertex) {
+			
+		}
+		setSelectedGraphVertex(selectedVertex);
+	}
+
+	////////////////////////////////////////////////////////////////////////////
+	//             V E R T E X  &  M O D E L   M A P P I N G                  //
+	////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Returns the <code>GraphVertexModel</code> to which the specified
@@ -528,7 +612,7 @@ public class GraphViewModel {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////
-	//              F I T N E S S   M A N A G E M E N T                       //
+	//             F I T N E S S   M A N A G E M E N T                        //
 	////////////////////////////////////////////////////////////////////////////
 
 	/**
@@ -602,6 +686,10 @@ public class GraphViewModel {
 		}
 		return -1;
 	}
+	
+	////////////////////////////////////////////////////////////////////////////
+	//             R E - S E T T E R S                                        //
+	////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Resets the index of all the <code>GraphVertexModel</code> according to
@@ -643,64 +731,6 @@ public class GraphViewModel {
 				vertexModel.resetDefaultPosition();
 			}
 		}
-	}
-
-	/**
-	 * Select the vertex at the specified point (only if it points on a
-	 * vertex), all the other vertices will be non selected.
-	 * <p>
-	 * A <code>GraphViewEvent</code> might be fire if the selected vertex is
-	 * different than the previous one.
-	 * </p>
-	 * 
-	 * @param point the point.
-	 */
-	public void select(Point point) {
-		GraphVertex selectedVertex = null;
-		synchronized (map) {
-			for (GraphVertexModel vertexModel: map.values()) {
-
-				if (vertexModel.contains(point)) {
-					selectedVertex = vertexModel.getVertex();
-				} else if (vertexModel.isHighlighted()) {
-					vertexModel.setHighlighted(false);
-				}
-			}
-		}
-
-		if (selectedVertex == selectedGraphVertex) {
-			
-		}
-		setSelectedGraphVertex(selectedVertex);
-	}
-
-	/**
-	 * Highlight the vertex at the specified point (only if it points on a
-	 * vertex), all the other vertices will be non highlighted.
-	 * <p>
-	 * A <code>GraphViewEvent</code> might be fire if the highlighted vertex is
-	 * different than the previous one.
-	 * </p>
-	 * 
-	 * @param point the point.
-	 */
-	public void highlight(Point point) {
-		GraphVertex selectedVertex = null;
-		synchronized (map) {
-			for (GraphVertexModel vertexModel: map.values()) {
-
-				if (vertexModel.contains(point)) {
-					selectedVertex = vertexModel.getVertex();
-				} else if (vertexModel.isHighlighted()) {
-					vertexModel.setHighlighted(false);
-				}
-			}
-		}
-
-		if (selectedVertex != null) {
-			highlight(selectedVertex, highlightDepth);
-		}
-		setHighlightedGraphVertex(selectedVertex);
 	}
 
 	////////////////////////////////////////////////////////////////////////////

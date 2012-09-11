@@ -24,9 +24,9 @@ package org.epochx.monitor.tree;
 
 
 /**
- * A <code>Rootable</code>.
+ * A <code>RootAble</code>.
  */
-public interface Rootable {
+public interface RootAble {
 	
 	public TreeNode getRoot();
 

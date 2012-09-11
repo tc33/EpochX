@@ -38,44 +38,52 @@ import org.epochx.refactoring.representation.TreeNodeAble;
 /**
  * A <code>TreeNodeAble</code>.
  */
-public class TreeNode implements Iterable<TreeNode>, Rootable, TreeNodeAble {
+public class TreeNode implements TreeNodeAble, RootAble, Iterable<TreeNode> {
 
-	//
-
+	////////////////////////////////////////////////////////////////////////////
+	//                D A T A   F I E L D S                                   //
+	////////////////////////////////////////////////////////////////////////////
+	
 	private String name;
 
 	private TreeNode parent;
 
 	private TreeNode[] children;
 
-	private TreeNodeAble node;
+	private TreeNodeAble nodeAbleInstance;
 
-	// Vizualization Attributs //
+	////////////////////////////////////////////////////////////////////////////
+	//            V I S U A L I Z I T I O N   F I E L D S                     //
+	////////////////////////////////////////////////////////////////////////////
 
-	private double angle;
+	private transient double angle;
 
-	private double rightLimit;
+	private transient double rightLimit;
 
-	private double leftLimit;
+	private transient double leftLimit;
 
-	private boolean selected;
+	private transient boolean selected;
 
-	private boolean highlighted;
+	private transient boolean highlighted;
 
-	private Color color;
+	private transient Color color;
 
-	private int diameter;
+	private transient int diameter;
 
-	private int x;
+	private transient int x;
 
-	private int y;
+	private transient int y;
+
+	////////////////////////////////////////////////////////////////////////////
+	//                    C O N S T R U C T O R S                             //
+	////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Constructs a <code>TreeNode</code>.
 	 */
 	public TreeNode() {
 		this.name = "";
-		this.node = null;
+		this.nodeAbleInstance = null;
 		this.parent = null;
 		this.children = new TreeNode[0];
 
@@ -92,21 +100,42 @@ public class TreeNode implements Iterable<TreeNode>, Rootable, TreeNodeAble {
 	}
 
 	/**
-	 * Constructs a <code>TreeNode</code>.
+	 * Constructs a <code>TreeNode</code> with a specified name.
 	 * 
-	 * @param tree
-	 * @param node
-	 * @param parent
+	 * @param nodeAble the object to set as the nodeAbleInstance. Must be
+	 *        "nodeable".
+	 * 
+	 * @throw ClassCastException if the given object is not "nodeable".
+	 * 
+	 * @see #setNodeAbleInstance(Object)
 	 */
-	public TreeNode(TreeNodeAble node, TreeNode parent) {
+	public TreeNode(Object nodeAble) throws ClassCastException {
 		this();
-		this.parent = parent;
-		this.node = node;
-		if (node != null) {
-			this.name = node.getName();
+		setNodeAbleInstance(nodeAble);
+		if (this.nodeAbleInstance != null) {
+			this.name = this.nodeAbleInstance.getName();
 			this.children = createChildren();
 		}
 	}
+
+	/**
+	 * Constructs a <code>TreeNode</code> with a specified name.
+	 * 
+	 * @param root the object to set as the root. Must be "node-able".
+	 * @parem parent the parent of the nodeAbleInstance.
+	 * 
+	 * @throw ClassCastException if the given object is not "node-able".
+	 * 
+	 * @see #setNodeAbleInstance(Object)
+	 */
+	public TreeNode(Object nodeAble, TreeNode parent) throws ClassCastException {
+		this(nodeAble);
+		this.parent = parent;
+	}
+
+	////////////////////////////////////////////////////////////////////////////
+	//                 G E T T E R S  &  S E T T E R S                        //
+	////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Returns the name.
@@ -127,21 +156,31 @@ public class TreeNode implements Iterable<TreeNode>, Rootable, TreeNodeAble {
 	}
 
 	/**
-	 * Returns the node.
+	 * Returns the nodeAbleInstance.
 	 * 
-	 * @return the node.
+	 * @return the nodeAbleInstance.
 	 */
-	public TreeNodeAble getNode() {
-		return node;
+	public TreeNodeAble getNodeAbleInstance() {
+		return nodeAbleInstance;
 	}
 
 	/**
-	 * Sets the node.
+	 * Sets the <code>TreeNodeAble</code> instance of this node according to the
+	 * specified object which must be "nodeable" ; otherwise a
+	 * <code>ClassCastException</code> is thrown.
 	 * 
-	 * @param node the node to set.
+	 * @param o the "nodeable" object to set as the <code>TreeNodeAble</code>
+	 *        instance of this nodeAbleInstance.
+	 * @throws ClassCastException if the given object is not rootable.
 	 */
-	public void setNode(TreeNodeAble node) {
-		this.node = node;
+	public void setNodeAbleInstance(Object o) throws ClassCastException {
+		if (o instanceof TreeNodeAble) {
+			this.nodeAbleInstance = (TreeNodeAble) o;
+		} else if (o instanceof TreeAble) {
+			setNodeAbleInstance(((TreeAble) o).getTree());
+		} else {
+			throw new ClassCastException("This object is not an instance of TreeNodeAble :" + o.toString());
+		}
 	}
 
 	/**
@@ -160,6 +199,19 @@ public class TreeNode implements Iterable<TreeNode>, Rootable, TreeNodeAble {
 	 */
 	public void setParent(TreeNode parent) {
 		this.parent = parent;
+	}
+
+	/**
+	 * Returns the root of this node.
+	 * 
+	 * @return the root of this node.
+	 */
+	public TreeNode getRoot() {
+		if (parent == null) {
+			return this;
+		} else {
+			return parent.getRoot();
+		}
 	}
 
 	/**
@@ -185,16 +237,16 @@ public class TreeNode implements Iterable<TreeNode>, Rootable, TreeNodeAble {
 	 * nodes given by the {@link TreeNodeAble#getChildren()} method.
 	 * 
 	 * @return the <code>TreeNode</code> created.
-	 * @throws NullPointerException if the <code>TreeNodeAble</code> node is
+	 * @throws NullPointerException if the <code>TreeNodeAble</code> instance is
 	 *         null.
 	 */
 	public TreeNode[] createChildren() throws NullPointerException {
 
-		if (node == null) {
+		if (nodeAbleInstance == null) {
 			throw new NullPointerException("The TreeNodeAble instance is null.");
 		}
 
-		TreeNodeAble[] childrenNodeAble = node.getChildren();
+		TreeNodeAble[] childrenNodeAble = nodeAbleInstance.getChildren();
 
 		children = new TreeNode[childrenNodeAble.length];
 
@@ -207,32 +259,20 @@ public class TreeNode implements Iterable<TreeNode>, Rootable, TreeNodeAble {
 	}
 
 	/**
-	 * Returns the root of this node.
-	 * 
-	 * @return the root of this node.
-	 */
-	public TreeNode getRoot() {
-		if (parent == null) {
-			return this;
-		} else {
-			return parent.getRoot();
-		}
-	}
-	
-	/**
 	 * Returns an <code>ArrayList</code> of this node's ancestors.
 	 * 
-	 * @return the list of this node's ancestors from this node to the root.
+	 * @return the list of this node's ancestors from this
+	 *         node to the root.
 	 */
 	public TreeNode[] ancestors() {
 
 		TreeNode[] res = new TreeNode[level()];
 
 		TreeNode n = getParent();
-		
+
 		int i = 0;
-		while(n!=null) {
-			res[i++]=n;
+		while (n != null) {
+			res[i++] = n;
 			n = n.getParent();
 		}
 
@@ -240,8 +280,8 @@ public class TreeNode implements Iterable<TreeNode>, Rootable, TreeNodeAble {
 	}
 
 	/**
-	 * Returns an <code>ArrayList</code> of this node's progenies in in
-	 * {@link Tree#PRE_ORDER preorder}.
+	 * Returns an <code>ArrayList</code> of this node's progenies in
+	 * in {@link Tree#PRE_ORDER preorder}.
 	 * 
 	 * @return the list of this node's progenies.
 	 * 
@@ -253,10 +293,11 @@ public class TreeNode implements Iterable<TreeNode>, Rootable, TreeNodeAble {
 	}
 
 	/**
-	 * Returns an <code>ArrayList</code> of this node's progenies according to
-	 * the specified order.
+	 * Returns an <code>ArrayList</code> of this node's progenies
+	 * according to the specified order.
 	 * 
-	 * @return the list of this node's progenies according to the specified
+	 * @return the list of this node's progenies according to the
+	 *         specified
 	 *         order.
 	 * @throw IllegalArgumentException if the specified order is not among :
 	 *        <ul>
@@ -290,15 +331,14 @@ public class TreeNode implements Iterable<TreeNode>, Rootable, TreeNodeAble {
 
 		return nodes;
 	}
-	
 
 	/**
 	 * The <code>Iterable</code> implemented method ; Returns an
-	 * <code>Iterator</code> visiting the tree's nodes in
-	 * {@link Tree#PRE_ORDER preorder}.
+	 * <code>Iterator</code> visiting the subtree's nodes in
+	 * {@link Tree#POST_ORDER post-order}.
 	 * 
 	 * @return the iterator of this tree's nodes.
-	 * @see #getNodes()
+	 * @see #descendants()
 	 */
 	public Iterator<TreeNode> iterator() {
 		return descendants().iterator();
@@ -307,8 +347,8 @@ public class TreeNode implements Iterable<TreeNode>, Rootable, TreeNodeAble {
 	/**
 	 * Returns <code>true</code> is this node has no child nodes.
 	 * 
-	 * @return <code>true</code> is this node has no child nodes; otherwise
-	 *         <code>false</code>.
+	 * @return <code>true</code> is this node has no child nodes;
+	 *         otherwise <code>false</code>.
 	 */
 	public boolean isLeaf() {
 		return children.length == 0;
@@ -336,7 +376,8 @@ public class TreeNode implements Iterable<TreeNode>, Rootable, TreeNodeAble {
 	/**
 	 * Returns the level of this node.
 	 * 
-	 * @return the level of this node (in relation to the derivation tree).
+	 * @return the level of this node (in relation to the derivation
+	 *         tree).
 	 */
 	public int level() {
 		TreeNode root = parent;
@@ -368,13 +409,15 @@ public class TreeNode implements Iterable<TreeNode>, Rootable, TreeNodeAble {
 	}
 
 	/**
-	 * Returns the specified node in the (sub-)tree represented by this
-	 * node. Nodes are indexed from left to right in a top-down fashion.
+	 * Returns the specified node in the (sub-)tree represented by
+	 * this
+	 * node. Nodes are indexed from left to right in a top-down
+	 * fashion.
 	 * 
 	 * @param index the index of the node to be found.
 	 * 
-	 * @return the specified node in the (sub-)tree represented by this
-	 *         node.
+	 * @return the specified node in the (sub-)tree represented by
+	 *         this node.
 	 * @throws IndexOutOfBoundsException if the index is out of range.
 	 */
 	public TreeNode get(int index) throws IndexOutOfBoundsException {
@@ -397,26 +440,26 @@ public class TreeNode implements Iterable<TreeNode>, Rootable, TreeNodeAble {
 	}
 
 	/**
-	 * Searches for the first occurence of the given node, testing for
-	 * equality using the equals method.
+	 * Searches for the first occurence of the given object, testing
+	 * for equality using the equals method.
 	 * 
-	 * @param node the node whose index in this (sub-)tree is to be found.
+	 * @param o the object whose index in this (sub-)tree is to be found.
 	 * 
 	 * @return the index of the first occurrence of the argument in this
-	 *         (sub-)tree; returns -1 if the node is not found.
-	 * @see #equals(TreeNode)
+	 *         (sub-)tree; returns -1 if the object is not found.
+	 * @see #equals(Object)
 	 */
 	public int indexOf(Object o) {
 		return descendants().indexOf(o);
 	}
-	
+
 	public TreeNode[] find(Object o) {
-		
+
 		if (o instanceof TreeNode) {
 			TreeNode n = (TreeNode) o;
 			ArrayList<TreeNode> list = new ArrayList<TreeNode>();
-			
-			for(TreeNode node : descendants()){
+
+			for (TreeNode node: descendants()) {
 				if (node.subsumes(n)) {
 					list.add(node);
 				}
@@ -424,69 +467,48 @@ public class TreeNode implements Iterable<TreeNode>, Rootable, TreeNodeAble {
 			TreeNode[] res = new TreeNode[list.size()];
 			list.toArray(res);
 			return res;
-			
-		}
-		else if (o instanceof TreeNodeAble) {
+
+		} else if (o instanceof TreeNodeAble) {
 			return find(new TreeNode((TreeNodeAble) o, null));
-		}
-		else if (o instanceof TreeAble) {
+		} else if (o instanceof TreeAble) {
 			return find(((TreeAble) o).getTree());
-		}
-		else if (o instanceof GraphVertex) {
-			return find(((GraphVertex) o).getIndividual());
 		}
 
 		return new TreeNode[0];
 	}
 
-	public boolean subsumes(Object o) {
-				
-		if (o instanceof TreeNode) {
-			TreeNode n = (TreeNode) o;
-			
-			if (n.getName() != getName()) {
-				return false;
-			}
-			else {
-				LinkedList<TreeNode> thisChildren = new LinkedList<TreeNode>(Arrays.asList(this.children));
-				
-				for(TreeNode child : n.getChildren()){
-					
-					boolean found = !child.isSelected();
-					ListIterator<TreeNode> iterator = thisChildren.listIterator();
-					
-					while (iterator.hasNext() && found==false) {
-						TreeNode thisChild = iterator.next();
-						if(thisChild.subsumes(child)){
-							iterator.remove();
-							found = true;
-						}
-					}
-					if(!found){
-						return false;
+	public boolean subsumes(TreeNode n) {
+
+		if (n.getName() != getName()) {
+			return false;
+		} else {
+			LinkedList<TreeNode> thisChildren = new LinkedList<TreeNode>(Arrays.asList(this.children));
+
+			for (TreeNode child: n.getChildren()) {
+
+				boolean found = !child.isSelected();
+				ListIterator<TreeNode> iterator = thisChildren.listIterator();
+
+				while (iterator.hasNext() && found == false) {
+					TreeNode thisChild = iterator.next();
+					if (thisChild.subsumes(child)) {
+						iterator.remove();
+						found = true;
 					}
 				}
-				return true;
+				if (!found) {
+					return false;
+				}
 			}
-			
-		}
-		else if (o instanceof TreeNodeAble) {
-			return subsumes(new TreeNode((TreeNodeAble) o, null));
-		}
-		else if (o instanceof TreeAble) {
-			return subsumes(((TreeAble) o).getTree());
-		}
-		else if (o instanceof GraphVertex) {
-			return subsumes(((GraphVertex) o).getIndividual());
+			return true;
 		}
 
-		return false;
 	}
-	
+
 	public boolean isAncestor(TreeNode node) {
 		TreeNode n = node;
-		
-		while(n != null) {
+
+		while (n != null) {
 			if (n == this) {
 				return true;
 			} else {
@@ -495,11 +517,11 @@ public class TreeNode implements Iterable<TreeNode>, Rootable, TreeNodeAble {
 		}
 		return false;
 	}
-	
+
 	public boolean isDescendant(TreeNode node) {
 		TreeNode n = this;
-		
-		while(n != null) {
+
+		while (n != null) {
 			if (n == node) {
 				return true;
 			} else {
@@ -508,31 +530,25 @@ public class TreeNode implements Iterable<TreeNode>, Rootable, TreeNodeAble {
 		}
 		return false;
 	}
-	
+
 	public static TreeNode commonAncestor(TreeNode node1, TreeNode node2) {
-		if(node1 == null || node2 == null){
+		if (node1 == null || node2 == null) {
 			return null;
-		}
-		else if(node1 == node2) {
+		} else if (node1 == node2) {
 			return node1;
-		}
-		else if(node1.isAncestor(node2)) {
+		} else if (node1.isAncestor(node2)) {
 			return node1;
-		}
-		else if (node2.isDescendant(node1)) {
+		} else if (node2.isDescendant(node1)) {
 			return node2;
-		}
-		else if (node1.getRoot() == node2.getRoot()) {
-			
-			if(node1.level()>node2.level()) {
+		} else if (node1.getRoot() == node2.getRoot()) {
+
+			if (node1.level() > node2.level()) {
 				return commonAncestor(node1.getParent(), node2);
-			}
-			else {
+			} else {
 				return commonAncestor(node1, node2.getParent());
 			}
-			
-		}
-		else {
+
+		} else {
 			return null;
 		}
 	}
@@ -545,12 +561,12 @@ public class TreeNode implements Iterable<TreeNode>, Rootable, TreeNodeAble {
 			if (!getName().equals(n.getName())) {
 				return false;
 			}/*
-			 * if( parent != null && n.getParent()!=null) {
-			 * if( parent.getName().equals(n.getParent().getName()) {
-			 * return false;
-			 * }
-			 * }
-			 */
+				* if( parent != null && n.getParent()!=null) {
+				* if( parent.getName().equals(n.getParent().getName()) {
+				* return false;
+				* }
+				* }
+				*/
 			if (children.length != n.getChildren().length) {
 				return false;
 			}
@@ -565,14 +581,14 @@ public class TreeNode implements Iterable<TreeNode>, Rootable, TreeNodeAble {
 		} else if (o instanceof GraphVertex) {
 			return equals(((GraphVertex) o).getIndividual());
 		} else {
-			return System.identityHashCode(o) == System.identityHashCode(node);
+			return System.identityHashCode(o) == System.identityHashCode(nodeAbleInstance);
 		}
 
 	}
 
-    ////////////////////////////////////////////////////////////////////////////
-    //              V I S U A L I Z A T I O N   M E T H O D S                 //
-    ////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
+	//              V I S U A L I Z A T I O N   M E T H O D S                 //
+	////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Returns the angle.
@@ -645,7 +661,7 @@ public class TreeNode implements Iterable<TreeNode>, Rootable, TreeNodeAble {
 	public void setSelected(boolean b) {
 		this.selected = b;
 	}
-	
+
 	/**
 	 * Sets the selected.
 	 * 
@@ -675,7 +691,7 @@ public class TreeNode implements Iterable<TreeNode>, Rootable, TreeNodeAble {
 	public void setHighlighted(boolean b) {
 		this.highlighted = b;
 	}
-	
+
 	/**
 	 * Sets the highlighted.
 	 * 
@@ -817,8 +833,10 @@ public class TreeNode implements Iterable<TreeNode>, Rootable, TreeNodeAble {
 	public TreeNode clone() {
 		try {
 			TreeNode clone = (TreeNode) super.clone();
+			clone.name = name;
 			clone.children = new TreeNode[children.length];
 			clone.parent = null;
+			clone.nodeAbleInstance = null;
 
 			for (int i = 0; i < children.length; i++) {
 				clone.children[i] = children[i].clone();

@@ -26,7 +26,9 @@ import org.epochx.event.stat.GenerationWorstFitness;
 import org.epochx.monitor.Monitor;
 import org.epochx.monitor.graph.Graph;
 import org.epochx.monitor.table.Table;
+import org.epochx.monitor.visualization.AncestryFinder;
 import org.epochx.monitor.visualization.OperationPanel;
+import org.epochx.monitor.visualization.TreeVertexPanel;
 import org.epochx.refactoring.PopulationNeutrality;
 import org.epochx.refactoring.Problem;
 import org.epochx.refactoring.initialisation.RampedHalfAndHalf;
@@ -116,6 +118,17 @@ public class MonitorGraphTest {
 		OperationPanel opPane = new OperationPanel();
 		g.getViewModel().addGraphViewListener(opPane);
 		monitor.add(opPane, 1, 2);
+		/*
+		TreeVertexPanel tvPane = new TreeVertexPanel();
+		g.getViewModel().addGraphViewListener(tvPane);
+		monitor.add(tvPane, 1, 2);*/
+		
+		AncestryFinder af = new AncestryFinder(g.getViewModel());
+		g.getViewModel().addGraphViewListener(af);
+		monitor.add(af, 1, 2);
+		
+		
+		
 
 		//EventManager.getInstance().add(EndRun.class, new GraphModelWriter(g.getModel(), "backup.ser"));
 		// we are ready to go!

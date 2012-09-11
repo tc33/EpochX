@@ -82,6 +82,11 @@ public class GraphModel implements Listener<Event>, Serializable {
 	 * The latest EndOperator event received.
 	 */
 	private EndOperator currentEOE;
+	
+	/**
+	 * The current rank for the next sibling.
+	 */
+	private int rank;
 
 	/**
 	 * 
@@ -105,6 +110,7 @@ public class GraphModel implements Listener<Event>, Serializable {
 		this.generations = new GraphGeneration[maxGenerationNumber];
 		this.generationCount = 0;
 		this.currentEOE = null;
+		this.rank=-1;
 
 		generations[0] = new GraphGeneration(0);
 
@@ -222,6 +228,7 @@ public class GraphModel implements Listener<Event>, Serializable {
 		if (event instanceof EndOperator) {
 						
 			currentEOE = (EndOperator) event;
+			rank=0;
 			
 		} else if (event instanceof ParentIndividualEvent) {
 			
@@ -236,6 +243,10 @@ public class GraphModel implements Listener<Event>, Serializable {
 			
 			if (currentEOE != null && currentEOE.getOperator() ==  e.getOperator()) {
 				newVertex.setOperatorEvent(currentEOE);				
+			}
+			if(rank >= 0 ) {
+				newVertex.setRank(rank);
+				rank++;
 			}
 
 		} else if (event instanceof StartGeneration) {

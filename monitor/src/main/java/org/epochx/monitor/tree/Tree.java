@@ -44,7 +44,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.EventListenerList;
 import javax.swing.event.MouseInputAdapter;
 
-import org.epochx.monitor.graph.GraphVertex;
 import org.epochx.monitor.tree.TreeEvent.TreeProperty;
 import org.epochx.refactoring.representation.TreeAble;
 import org.epochx.refactoring.representation.TreeNodeAble;
@@ -52,7 +51,7 @@ import org.epochx.refactoring.representation.TreeNodeAble;
 /**
  * A <code>Tree</code>.
  */
-public class Tree extends JScrollPane implements Rootable, Runnable, Iterable<TreeNode> {
+public class Tree extends JScrollPane implements TreeAble, RootAble, Runnable, Iterable<TreeNode> {
 
 	/**
 	 * The <code>long</code>/serialVersionUID.
@@ -117,23 +116,23 @@ public class Tree extends JScrollPane implements Rootable, Runnable, Iterable<Tr
 	/**
 	 * The depth of the tree, computed according to the depth of the root.
 	 */
-	int depth;
+	private int depth;
 
 	/**
 	 * The distance between two levels.
 	 */
-	int d;
+	private int d;
 
 	/**
 	 * The diameter of nodes.
 	 */
-	int diameter;
+	private int diameter;
 
 	/**
 	 * The zoom ratio.
 	 */
-	private double zoom = 1.0;
-	
+	private double zoom;
+
 	////////////////////////////////////////////////////////////////////////////
 	//                    C O N S T R U C T O R S                             //
 	////////////////////////////////////////////////////////////////////////////
@@ -145,11 +144,14 @@ public class Tree extends JScrollPane implements Rootable, Runnable, Iterable<Tr
 		super();
 
 		this.listenerList = new EventListenerList();
-		this.d = 40;
-		this.diameter = 20;
+		
 		this.depth = -1;
 		this.root = null;
 		this.levels = new TreeLevel[0];
+		
+		this.d = 40;
+		this.diameter = 20;
+		this.zoom = 1.0;
 
 		this.view = new TreeView();
 
@@ -168,7 +170,7 @@ public class Tree extends JScrollPane implements Rootable, Runnable, Iterable<Tr
 
 		setName("Tree " + noInstances);
 		noInstances++;
-
+		
 	}
 
 	/**
@@ -182,13 +184,11 @@ public class Tree extends JScrollPane implements Rootable, Runnable, Iterable<Tr
 	}
 
 	/**
-	 * Constructs a <code>Tree</code> according to the specified
-	 * <code>TreeNodeAble</code> instance as the root.
+	 * Constructs a <code>Tree</code> witch the specified object as the root.
 	 * 
-	 * @param rootNodeAble the <code>TreeNodeAble</code> instance.
+	 * @param root the object to set as the root. Must be "rootable".
 	 * 
-	 * @throw ClassCastException if the vertex's individual is not an
-	 *        instance of TreeAble.
+	 * @throw ClassCastException if the given object is not "rootable".
 	 * 
 	 * @see #setRoot(Object)
 	 */
@@ -201,17 +201,18 @@ public class Tree extends JScrollPane implements Rootable, Runnable, Iterable<Tr
 	 * Constructs a <code>Tree</code> with a specified name.
 	 * 
 	 * @param name the name of the tree.
-	 * @param rootNodeAble the <code>TreeNodeAble</code> instance.
+	 * @param root the object to set as the root. Must be "rootable".
 	 * 
-	 * @throw ClassCastException if the vertex's individual is not an
-	 *        instance of TreeAble.
+	 * @throw ClassCastException if the given object is not "rootable".
+	 * 
+	 * @see #setRoot(Object)
 	 */
 	public Tree(String name, Object root) throws ClassCastException {
 		this();
 		setName(name);
 		setRoot(root);
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////
 	//                   R U N N A B L E   M E T H O D                        //
 	////////////////////////////////////////////////////////////////////////////
@@ -222,11 +223,15 @@ public class Tree extends JScrollPane implements Rootable, Runnable, Iterable<Tr
 	 * 
 	 * @throws IllegalStateException if the root node is null.
 	 */
-	public void run() throws IllegalStateException {
+	public synchronized void run() throws IllegalStateException {
 
 		if (root == null) {
 			throw new IllegalStateException("The root node is null.");
 		}
+		
+		this.d = 40;
+		this.diameter = 20;
+		this.zoom = 1.0;
 
 		this.depth = root.depth();
 		levels = new TreeLevel[depth + 1];
@@ -277,15 +282,15 @@ public class Tree extends JScrollPane implements Rootable, Runnable, Iterable<Tr
 		SwingUtilities.invokeLater(new Runnable() {
 
 			public void run() {
-				viewPort.doLayout();
-				viewPort.setPreferredSize(getPreferredSize());
+				view.repaint();
+				view.invalidate();
 			}
 		});
 
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////
-	//                 G E T T E R S  &  S E T T E R S                        //
+	//             G E T T E R S  &  S E T T E R S                            //
 	////////////////////////////////////////////////////////////////////////////
 
 	/**
@@ -336,30 +341,32 @@ public class Tree extends JScrollPane implements Rootable, Runnable, Iterable<Tr
 	/**
 	 * Sets the root according to the specified object which must be "rootable"
 	 * ; otherwise a <code>ClassCastException</code> is thrown.
+	 * <p>
+	 * Automatically computes the positions if the setted root is not null.
+	 * </p>
 	 * 
-	 * @param o the rootable object to set as the root of this tree.
+	 * @param root the rootable object to set as the root of this tree.
+	 * 
 	 * @throws ClassCastException if the given object is not rootable.
 	 */
-	public void setRoot(Object o) throws ClassCastException {
-		if (o instanceof TreeNode) {
-			TreeNode root = (TreeNode) o;
-			if (this.root != root) {
-				this.root = root;
+	public void setRoot(Object root) throws ClassCastException {
+		if (root instanceof TreeNode) {
+			TreeNode n = (TreeNode) root;
+			if (this.root != n) {
+				this.root = n;
+
 				if (this.root != null) {
 					new Thread(this, "MONITOR-Tree (" + getName() + ")").start();
 				}
-
 			}
-		} else if (o instanceof Tree) {
-			setRoot(((Tree) o).getRoot());
-		} else if (o instanceof TreeNodeAble) {
-			setRoot(new TreeNode((TreeNodeAble) o, null));
-		} else if (o instanceof TreeAble) {
-			setRoot(((TreeAble) o).getTree());
-		} else if (o instanceof GraphVertex) {
-			setRoot(((GraphVertex) o).getIndividual());
+		} else if (root instanceof RootAble) {
+			setRoot(((RootAble) root).getRoot());
+		} else if (root instanceof TreeNodeAble) {
+			setRoot(new TreeNode((TreeNodeAble) root, null));
+		} else if (root instanceof TreeAble) {
+			setRoot(((TreeAble) root).getTree());
 		} else {
-			throw new ClassCastException("This object is not rootable :" + o.toString());
+			throw new ClassCastException("This object is not rootable :" + root.toString());
 		}
 	}
 
@@ -389,7 +396,7 @@ public class Tree extends JScrollPane implements Rootable, Runnable, Iterable<Tr
 	 * @see #getNodes(int)
 	 */
 	public ArrayList<TreeNode> getNodes() {
-		return root.descendants(POST_ORDER);
+		return getNodes(POST_ORDER);
 	}
 
 	/**
@@ -446,8 +453,19 @@ public class Tree extends JScrollPane implements Rootable, Runnable, Iterable<Tr
 	 * 
 	 * @param selectedNode the selectedNode to set.
 	 */
-	public void setSelectedNode(TreeNode selectedNode) {
-		this.selectedNode = selectedNode;
+	public void setSelectedNode(TreeNode node) {
+		TreeNode old = selectedNode;
+		this.selectedNode = node;
+		fireTreeEvent(new TreeEvent(Tree.this, TreeProperty.SELECTED_NODE, old, selectedNode));
+	}
+
+	/**
+	 * The <code>TreeAble</code> implemented method. Returns the root.
+	 * 
+	 * @return the root of this tree.
+	 */
+	public TreeNodeAble getTree() {
+		return root;
 	}
 
 	/**
@@ -548,6 +566,11 @@ public class Tree extends JScrollPane implements Rootable, Runnable, Iterable<Tr
 		}
 		view.repaint();
 		validate();
+	}
+	
+	@Override
+	public Dimension getPreferredSize() {
+		return view.getPreferredSize();
 	}
 
 	////////////////////////////////////////////////////////////////////////////
@@ -669,11 +692,17 @@ public class Tree extends JScrollPane implements Rootable, Runnable, Iterable<Tr
 			Font font = new Font("Arial", Font.BOLD, fontSize);
 			g.setFont(font);
 
-			FontMetrics metrics = g.getFontMetrics();
-			int textWidth = metrics.stringWidth(name);
-			int textHeight = metrics.getAscent();
-			g.setColor(Color.black);
-			g.drawString(name, x - textWidth / 2, y + textHeight / 2);
+			try{
+				FontMetrics metrics = g.getFontMetrics();
+				int textWidth = metrics.stringWidth(name);
+				int textHeight = metrics.getAscent();
+				g.setColor(Color.black);
+				g.drawString(name, x - textWidth / 2, y + textHeight / 2);
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+			
+			
 
 		}
 
@@ -715,52 +744,61 @@ public class Tree extends JScrollPane implements Rootable, Runnable, Iterable<Tr
 			Point vp = viewPort.getViewPosition();
 			p.translate(vp.x, vp.y);
 
-			TreeNode select = null;
-			for (TreeNode node: Tree.this) {
-				if (node.contains(p)) {
-					select = node;
+			TreeNode node = null;
+			for (TreeNode n: Tree.this.getNodes()) {
+				if (n.contains(p)) {
+					node = n;
 
-				} else {
-					if (!e.isControlDown()) {
-						node.setSelected(false);
-						node.setColor(Color.LIGHT_GRAY);
-					}
+				}
+				else if (!e.isControlDown()) {
+					n.setSelected(false);
+					n.setColor(Color.LIGHT_GRAY);
 				}
 			}
-			if (select != null) {
+			if (node != null) {
 
-				if (!select.isSelected()) {
+				if (!node.isSelected()) {
 					if (e.isControlDown() && e.isShiftDown()) {
+						
 						if (selectedNode != null) {
-							select = TreeNode.commonAncestor(selectedNode, select);
-							select.setSubTreeColor(Color.GREEN);
-							select.setSubTreeSelected(true);
-						} else {
-							select.setSubTreeColor(Color.GREEN);
-							select.setSubTreeSelected(true);
+							node = TreeNode.commonAncestor(selectedNode, node);
 						}
+						node.setSubTreeColor(Color.GREEN);
+						node.setSubTreeSelected(true);
+						
 					} else {
-						select.setColor(Color.GREEN);
-						select.setSelected(true);
+						node.setColor(Color.GREEN);
+						node.setSelected(true);
 					}
-				} else {
+					setSelectedNode(node);
+				}
+				else {
+					
 					if (e.isControlDown() && e.isShiftDown()) {
 
-						select.setSubTreeColor(Color.LIGHT_GRAY);
-						select.setSubTreeSelected(false);
+						node.setSubTreeColor(Color.LIGHT_GRAY);
+						node.setSubTreeSelected(false);
+						
+						if(selectedNode!=null && selectedNode.isDescendant(node)) {
+							setSelectedNode(null);
+						}
+						else {
+							setSelectedNode(selectedNode);
+						}
 
 					} else {
-						select.setColor(Color.LIGHT_GRAY);
-						select.setSelected(false);
-					}
-					if (select == selectedNode) {
-						select = null;
+						
+						node.setColor(Color.LIGHT_GRAY);
+						node.setSelected(false);
+						
+						setSelectedNode(null);
+						
 					}
 				}
 
+			} else {
+				setSelectedNode(null);
 			}
-			fireTreeEvent(new TreeEvent(Tree.this, TreeProperty.SELECTED_NODE, selectedNode, select));
-			setSelectedNode(select);
 
 			view.repaint();
 		}
@@ -789,7 +827,7 @@ public class Tree extends JScrollPane implements Rootable, Runnable, Iterable<Tr
 				Point mp = e.getPoint();
 				Point vp = (Point) viewPort.getViewPosition().clone();
 
-				double z = .1 * e.getWheelRotation();
+				double z = -.1 * e.getWheelRotation();
 				double currentZoom = getZoom();
 				double newZoom = currentZoom + z;
 
@@ -820,7 +858,7 @@ public class Tree extends JScrollPane implements Rootable, Runnable, Iterable<Tr
 
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		return getName();

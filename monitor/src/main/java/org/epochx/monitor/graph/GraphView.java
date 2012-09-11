@@ -30,6 +30,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.CubicCurve2D;
@@ -229,6 +230,7 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 			case BOUND_COLOR:
 			case HIGHLIGHT_COLOR:
 			case FITNESS:
+			case REFRESH:
 				repaint();
 				break;
 
@@ -376,7 +378,7 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 //		 g2.setPaint(fillColor);
 //		 g2.fill(g2.getClip());
 
-		// Buffer highlighted vertex to paint them after.
+		// Buffer highlighted or selected vertex to paint them after.
 		ArrayList<GraphVertex> buffer = new ArrayList<GraphVertex>();
 
 		for (int i = firstGeneration; i <= lastGeneration; i++) {
@@ -385,14 +387,14 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 				GraphVertex vertex = model.getVertex(i, j);
 				GraphVertexModel vertexModel = getVertexModel(vertex);
 
-				// Buffers the vertex if it is highlighted, to paint it after.
-				if (vertexModel.isHighlighted()) {
+				// Buffers the vertex if it is highlighted or selected, to paint it after.
+				if (vertexModel.isHighlighted() || vertexModel.isSelected()) {
 					buffer.add(vertex);
 				} else {
 					if (viewModel.isBondEnable()) {
 						paintBonds(g2, vertex);
 					}
-					paintVertex(g2, vertex);
+					paintVertex(g2, vertexModel);
 				}
 			}
 		}
@@ -400,7 +402,7 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 		// Paints highlighted vertex.
 		for (GraphVertex vertex: buffer) {
 			paintBonds(g2, vertex);
-			paintVertex(g2, vertex);
+			paintVertex(g2, getVertexModel(vertex));
 		}
 	}
 
@@ -413,8 +415,7 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 	 * 
 	 * @see GraphVertexModel
 	 */
-	private void paintVertex(Graphics2D g, GraphVertex vertex) {
-		GraphVertexModel vertexModel = getVertexModel(vertex);
+	private void paintVertex(Graphics2D g, GraphVertexModel vertexModel) {
 
 		int x = (int) vertexModel.getLocation().getX();
 		int y = (int) vertexModel.getLocation().getY();
@@ -422,6 +423,11 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 
 		g.setPaint(vertexModel.getColor());
 		g.fillOval(x, y, diameter, diameter);
+		if(vertexModel.isSelected()) {
+			g.setStroke(new BasicStroke(1));
+			g.setColor(viewModel.getHighlightColor());
+			g.drawOval(x, y, diameter, diameter);
+		}
 	}
 
 	/**

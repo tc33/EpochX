@@ -42,11 +42,15 @@ public class GraphMouseListener implements MouseListener, MouseMotionListener {
 	}
 
 	public void mouseEntered(MouseEvent e) {
-
+		
 	}
 
 	public void mouseExited(MouseEvent e) {
-
+		if (e.getSource() instanceof GraphView) {
+			GraphView view = (GraphView) e.getSource();
+			GraphViewModel viewModel = view.getViewModel();
+			viewModel.
+		}
 	}
 
 	public void mousePressed(MouseEvent e) {

@@ -31,9 +31,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
+
+import org.epochx.monitor.visualization.InformationPanel;
 
 /**
  * A <code>Graph</code> draw a visualization graph to monitor the evolution
@@ -82,9 +85,9 @@ public class Graph extends JPanel implements Runnable {
 	private GraphRowHeader graphRowHeader;
 
 	/**
-	 * The <code>GraphFooter</code>.
+	 * The <code>InformationPanel</code>.
 	 */
-	private GraphFooter graphFooter;
+	private InformationPanel informationPanel;
 
 	/**
 	 * The <code>JScrollPane</code>.
@@ -203,10 +206,10 @@ public class Graph extends JPanel implements Runnable {
 		this.graphHeader = new GraphHeader(viewModel);
 		this.graphView = new GraphView(viewModel, model);
 		this.graphRowHeader = new GraphRowHeader(viewModel);
-		this.graphFooter = new GraphFooter();
+		this.informationPanel = new InformationPanel();
 		this.scrollPane = new JScrollPane();
 
-		this.viewModel.addGraphViewListener(graphFooter);
+		this.viewModel.addGraphViewListener(informationPanel);
 
 		this.graphView.addMouseListener(mouseListener);
 		this.graphView.addMouseMotionListener(mouseListener);
@@ -228,10 +231,12 @@ public class Graph extends JPanel implements Runnable {
 		scrollPane.setRowHeaderView(graphRowHeader);
 		scrollPane.setPreferredSize(new Dimension(900, 600));
 		scrollPane.revalidate();
+		
+		informationPanel.add(new JLabel("Click on a vertex to show informations"));
 
 		add(graphHeader, BorderLayout.NORTH);
 		add(scrollPane, BorderLayout.CENTER);
-		add(graphFooter, BorderLayout.SOUTH);
+		add(informationPanel, BorderLayout.SOUTH);
 
 		revalidate();
 		repaint();
@@ -351,21 +356,21 @@ public class Graph extends JPanel implements Runnable {
 	}
 
 	/**
-	 * Returns the <code>GraphFooter</code>.
+	 * Returns the <code>InformationPanel</code>.
 	 * 
-	 * @return the <code>GraphFooter</code>.
+	 * @return the <code>InformationPanel</code>.
 	 */
-	public GraphFooter getGraphFooter() {
-		return graphFooter;
+	public InformationPanel getInformationPanel() {
+		return informationPanel;
 	}
 
 	/**
-	 * Sets the <code>GraphFooter</code>.
+	 * Sets the <code>InformationPanel</code>.
 	 * 
-	 * @param graphFooter the <code>GraphFooter</code> to set.
+	 * @param informationPanel the <code>InformationPanel</code> to set.
 	 */
-	public void setGraphFooter(GraphFooter graphFooter) {
-		this.graphFooter = graphFooter;
+	public void setInformationPanel(InformationPanel informationPanel) {
+		this.informationPanel = informationPanel;
 		SwingUtilities.invokeLater(this);
 	}
 

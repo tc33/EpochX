@@ -91,6 +91,23 @@ public abstract class MonitorUtilities {
 	}
 
 	/**
+	 * Sets the background color of the given <code>JComponent</code> and all of
+	 * its descedents with the specified color.
+	 * 
+	 * @param component the <code>JComponent</code> whose background is to be
+	 *        set.
+	 * @param color the specified color.
+	 */
+	public static void setBackground(JComponent component, Color color) {
+		component.setBackground(color);
+		for (Component c: component.getComponents()) {
+			if (c instanceof JComponent) {
+				setBackground((JComponent) c, color);
+			}
+		}
+	}
+
+	/**
 	 * Returns <code>true</code> if the <code>JComponent</code> is visible
 	 * on the monitor (e.g. his parent tab is selected).
 	 * 

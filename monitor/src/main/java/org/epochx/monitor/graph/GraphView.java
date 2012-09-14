@@ -30,7 +30,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.CubicCurve2D;
@@ -68,12 +67,16 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 	 */
 	private Timer timer;
 
+	////////////////////////////////////////////////////////////////////////////
+	//             C O N S T R U C T O R S                                    //
+	////////////////////////////////////////////////////////////////////////////
+
 	/**
 	 * Constructs a <code>GraphView</code> with a null
 	 * <code>GraphViewModel</code> and a null <code>GraphModel</code>.
 	 * <p>
 	 * Note that those models have to be set before the start of the simulation,
-	 * otherwise, NullPointerException will be thrown.
+	 * otherwise, NullPointerException could be thrown.
 	 * </p>
 	 */
 	public GraphView() {
@@ -81,6 +84,7 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 		this.viewModel = null;
 		this.model = null;
 		this.timer = new Timer(1000, new ActionListener() {
+
 			public void actionPerformed(ActionEvent e) {
 				resize();
 			}
@@ -90,28 +94,22 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 	}
 
 	/**
-	 * 
-	 * 
 	 * Constructs a <code>GraphView</code> with a specified view model and data
 	 * model.
 	 * 
 	 * @param viewModel the <code>GraphViewModel</code>.
 	 * @param model the <code>GraphModel</code>.
-	 * 
-	 * @throws IllegalArgumentException if null argument.
 	 */
-	public GraphView(GraphViewModel viewModel, GraphModel model) throws IllegalArgumentException {
+	public GraphView(GraphViewModel viewModel, GraphModel model) {
 		this();
-		if (viewModel == null || model == null) {
-			throw new IllegalArgumentException("Arguments cannot be null.");
-		}
 
-		this.viewModel = viewModel;
-		this.model = model;
-
-		model.addGraphModelListener(this);
-		viewModel.addGraphViewListener(this);
+		setViewModel(viewModel);
+		setModel(model);
 	}
+
+	////////////////////////////////////////////////////////////////////////////
+	//             G E T T E R S  &  S E T T E R S                            //
+	////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Returns the <code>GraphViewModel</code>.
@@ -123,9 +121,9 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 	}
 
 	/**
-	 * Sets the <code>GraphViewModel</code>.
+	 * Sets the view model. Manages the update of the listener.
 	 * 
-	 * @param viewModel the <code>GraphViewModel</code> to set.
+	 * @param viewModel the view model to set
 	 */
 	public void setViewModel(GraphViewModel viewModel) {
 
@@ -133,7 +131,10 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 			this.viewModel.removeGraphViewListener(this);
 		}
 
-		viewModel.addGraphViewListener(this);
+		if (viewModel != null) {
+			viewModel.addGraphViewListener(this);
+		}
+
 		this.viewModel = viewModel;
 	}
 
@@ -147,9 +148,9 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 	}
 
 	/**
-	 * Sets the <code>GraphModel</code>.
+	 * Sets the data model. Manages the update of the listener.
 	 * 
-	 * @param model the <code>GraphModel</code> to set.
+	 * @param model the data model to set.
 	 */
 	public void setModel(GraphModel model) {
 
@@ -157,11 +158,16 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 			this.model.removeGraphModelListener(this);
 		}
 
-		model.addGraphModelListener(this);
+		if (model != null) {
+			model.addGraphModelListener(this);
+		}
+
 		this.model = model;
 	}
 
-
+	////////////////////////////////////////////////////////////////////////////
+	//            M O D E L  &  V I E W   M O D E L   L I S T E N E R S       //
+	////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * The <code>GraphModelListener</code> implemented method ; Recieves a
@@ -173,18 +179,14 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 			int from = e.getFirstGeneration();
 			int to = e.getLastGeneration();
 
-			Comparator<GraphVertex> comparator = viewModel.getComparator();
-
-			if (comparator != null) {
+			if (viewModel != null && viewModel.getComparator() != null) {
 				for (int i = from; i <= to; i++) {
-					model.sortBy(i, comparator);
+					model.sortBy(i, viewModel.getComparator());
 				}
 			}
 
-			adjustPreferredSize();
 			repaintGenerations(from, to);
 		} else if (e.getType() == GraphModelEvent.REFRESH) {
-			adjustPreferredSize();
 			repaint();
 		}
 	}
@@ -213,6 +215,11 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 				}
 
 				break;
+				
+			case SELECTED_VERTEX:
+				
+				repaint();
+				break;
 
 			case DIAMETER:
 			case HGAP:
@@ -221,10 +228,12 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 				resize();
 				break;
 			case COMPARATOR:
-				model.sortAllBy((Comparator<GraphVertex>) e.getNewValue());
-				viewModel.resetIndices();
-				viewModel.resetPostions();
-				repaint();
+				if (model != null) {
+					model.sortAllBy((Comparator<GraphVertex>) e.getNewValue());
+					viewModel.resetIndices();
+					viewModel.resetPostions();
+					repaint();
+				}
 				break;
 			case BOUND_ENABLE:
 			case BOUND_COLOR:
@@ -247,13 +256,15 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 	 * @param generation the generation to repaint.
 	 */
 	protected void repaintGeneration(int generation) {
-		int x = 0;
-		int y = generation * (viewModel.getDiameter() + viewModel.getVgap()) - viewModel.getVgap()
-				- (int) (viewModel.getDiameter());
-		int width = (int) getPreferredSize().getWidth();
-		int height = 2 * viewModel.getDiameter() + viewModel.getVgap();
+		if (viewModel != null) {
+			int x = 0;
+			int y = generation * (viewModel.getDiameter() + viewModel.getVgap()) - viewModel.getVgap()
+					- (int) (viewModel.getDiameter());
+			int width = (int) getPreferredSize().getWidth();
+			int height = 2 * viewModel.getDiameter() + viewModel.getVgap();
 
-		repaint(x, y, width, height);
+			repaint(x, y, width, height);
+		}
 	}
 
 	/**
@@ -271,21 +282,20 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 			throw new IllegalArgumentException("from > to");
 		}
 
-		int x = 0;
-		int y = from * (viewModel.getDiameter() + viewModel.getVgap()) - viewModel.getVgap() - viewModel.getDiameter();
-		int width = (int) getPreferredSize().getWidth();
-		int height = (viewModel.getDiameter() + viewModel.getVgap()) * (to - from + 1) + viewModel.getDiameter();
+		if (viewModel != null) {
+			int x = 0;
+			int y = from * (viewModel.getDiameter() + viewModel.getVgap()) - viewModel.getVgap()
+					- viewModel.getDiameter();
+			int width = (int) getPreferredSize().getWidth();
+			int height = (viewModel.getDiameter() + viewModel.getVgap()) * (to - from + 1) + viewModel.getDiameter();
 
-		repaint(x, y, width, height);
+			repaint(x, y, width, height);
+		}
 	}
 
-	/**
-	 * Computes and sets the size of this view.
-	 * 
-	 * @return the preferred size computed.
-	 */
-	public Dimension adjustPreferredSize() {
-		Dimension d = null;
+	@Override
+	public Dimension getPreferredSize() {
+		Dimension preferredSize = new Dimension(0,0);
 
 		if (viewModel != null && model != null) {
 
@@ -295,27 +305,30 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 			int height = viewModel.getMargins().top + viewModel.getMargins().bottom;
 			height += model.getGenerationCount() * (viewModel.getDiameter() + viewModel.getVgap());
 
-			d = new Dimension(width, height);
+			preferredSize = new Dimension(width, height);
 		}
 
-		setPreferredSize(d);
-
-		return d;
+		return preferredSize;
 	}
 
 	/**
-	 * Computes the preferred size, sets it at the real size and returns it.
+	 * If the preferred size is non-null and different from the actual size,
+	 * sets it.
 	 * 
-	 * @return the size.
+	 * @return the preferred size.
 	 */
 	public Dimension resize() {
 
-		Dimension d = adjustPreferredSize();
+		Dimension d = getPreferredSize();
 		if (d != null && !d.equals(getSize())) {
 			setSize(d);
 		}
 		return d;
 	}
+
+	////////////////////////////////////////////////////////////////////////////
+	//            D E L E G A T E   M E T H O D S   F O R   M A P P I N G     //
+	////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Delegate method from the view model.
@@ -335,6 +348,10 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 		return viewModel.addVertexModel(vertex, vertexModel);
 	}
 
+	////////////////////////////////////////////////////////////////////////////
+	//            P A I N T I N G   M E T H O D S                             //
+	////////////////////////////////////////////////////////////////////////////
+
 	/**
 	 * Paints the graph. Automatically computes the generations and the vertices
 	 * to paint according to the clipping region of the specified graphics
@@ -345,11 +362,11 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-		
+
 		if (viewModel == null || model == null) {
 			return;
 		}
-		
+
 		Graphics2D g2 = (Graphics2D) g.create();
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -370,13 +387,13 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 		int lastVertex = getVertexAt(xmax);
 
 		// To see the generations to paint.
-//		 System.out.println("Gen : " + firstGeneration + " to : " +
-//		 lastGeneration + "\tVert : " + firstVertex
-//		 + " to : " + lastVertex);
-//		 int c = (int) System.currentTimeMillis() % 250;
-//		 Color fillColor = new Color(c, 0, c);
-//		 g2.setPaint(fillColor);
-//		 g2.fill(g2.getClip());
+		//		 System.out.println("Gen : " + firstGeneration + " to : " +
+		//		 lastGeneration + "\tVert : " + firstVertex
+		//		 + " to : " + lastVertex);
+		//		 int c = (int) System.currentTimeMillis() % 250;
+		//		 Color fillColor = new Color(c, 0, c);
+		//		 g2.setPaint(fillColor);
+		//		 g2.fill(g2.getClip());
 
 		// Buffer highlighted or selected vertex to paint them after.
 		ArrayList<GraphVertex> buffer = new ArrayList<GraphVertex>();
@@ -416,17 +433,22 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 	 * @see GraphVertexModel
 	 */
 	private void paintVertex(Graphics2D g, GraphVertexModel vertexModel) {
-
-		int x = (int) vertexModel.getLocation().getX();
-		int y = (int) vertexModel.getLocation().getY();
+		
 		int diameter = vertexModel.getDiameter();
+		
+		if(vertexModel.isSelected()) {
+			diameter = (int) (diameter * 1.8);
+		} else if(vertexModel.isHighlighted()) {
+			diameter = (int) (diameter * 1.3);
+		}
+		
+		int x = (int) (vertexModel.getX() - diameter/2.0) ;
+		int y = (int) (vertexModel.getY() - diameter/2.0) ;
 
 		g.setPaint(vertexModel.getColor());
 		g.fillOval(x, y, diameter, diameter);
-		if(vertexModel.isSelected()) {
-			g.setStroke(new BasicStroke(1));
-			g.setColor(viewModel.getHighlightColor());
-			g.drawOval(x, y, diameter, diameter);
+		if (vertexModel.isSelected()) {
+			g.fillOval(x, y, diameter, diameter);
 		}
 	}
 
@@ -454,7 +476,7 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 		GraphVertexModel vertexModel = getVertexModel(vertex);
 		if (vertexModel.isHighlighted()) {
 			boundColor = viewModel.getHighlightColor();
-			STROKE_WIDTH = 2;
+			STROKE_WIDTH = 1;
 		} else {
 			boundColor = viewModel.getBondColor();
 			STROKE_WIDTH = 1;
@@ -462,36 +484,52 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 		g.setStroke(new BasicStroke(STROKE_WIDTH));
 		g.setColor(boundColor);
 
-		// Computes the cross point.
+		// Computes the cross point and buffer the parent location.
+		GraphVertex[] parents = vertex.getParents();
+		Point2D.Double[] points = new Point2D.Double[parents.length];
 		double x2 = 0;
 		double y2 = 0;
-		for (GraphVertex parent: vertex.getParents()) {
+		
+		for (int i = 0 ; i<parents.length; i++) {
 
-			GraphVertexModel parentVertexModel = getVertexModel(parent);
+			GraphVertexModel parentVertexModel = getVertexModel(parents[i]);
+			double diameter = parentVertexModel.getDiameter();
+			if(parentVertexModel.isSelected()) {
+				diameter *= 1.8;
+			} else if(parentVertexModel.isHighlighted()) {
+				diameter *= 1.3;
+			}
+			
+			double x = parentVertexModel.getX();
+			double y = parentVertexModel.getY() + diameter / 2.0;
+			points[i] = new Point2D.Double(x, y);
 
-			x2 += parentVertexModel.getX();
-			y2 += parentVertexModel.getY();
+			x2 += x;
+			y2 += y;
 		}
 		x2 /= vertex.getParents().length;
 		y2 /= vertex.getParents().length;
 		y2 = RATIO * y2 + (1 - RATIO) * vertexModel.getY();
+		
+		Point2D.Double crossPoint = new Point2D.Double(x2, y2);
 
 		// Draws parents bonds.
-		for (GraphVertex parent: vertex.getParents()) {
-
-			GraphVertexModel parentVertexModel = getVertexModel(parent);
-
-			double x1 = parentVertexModel.getX();
-			double y1 = parentVertexModel.getY() + parentVertexModel.getDiameter() / 2.0;
-
-			g.draw(createCurve(x1, y1, x2, y2, DElTA));
+		for (Point2D.Double point : points) {
+			g.draw(createCurve(point, crossPoint, DElTA));
 		}
 
 		// Draws child bond.
 		vertexModel = getVertexModel(vertex);
 
+		double diameter = vertexModel.getDiameter();
+		if(vertexModel.isSelected()) {
+			diameter *= 1.8;
+		} else if(vertexModel.isHighlighted()) {
+			diameter *= 1.3;
+		}
+		
 		double x1 = vertexModel.getX();
-		double y1 = vertexModel.getY() - vertexModel.getDiameter() / 2.0;
+		double y1 = vertexModel.getY() - diameter / 2.0;
 
 		g.draw(createCurve(x2, y2, x1, y1, DElTA));
 
@@ -500,7 +538,7 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 	/**
 	 * Returns the generation number corresponding to the specified coordinate.
 	 * 
-	 * @param y the Y axis coordonate.
+	 * @param y the Y axis coordinate.
 	 * @return the generation number corresponding to the y coordinate.
 	 */
 	private int getGenerationAt(int y) {
@@ -527,7 +565,7 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 	/**
 	 * Returns the vertex index corresponding to the specified coordinate.
 	 * 
-	 * @param x the X axis coordonate.
+	 * @param x the X axis coordinate.
 	 * @return the vertex index corresponding to the X coordinate.
 	 */
 	private int getVertexAt(int x) {
@@ -548,9 +586,9 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 		return res;
 	}
 
-	//
-	// Scrollable implementation
-	//
+	////////////////////////////////////////////////////////////////////////////
+	//             S C R O L L A B L E   I M P L E M E N T A T I O N          //
+	////////////////////////////////////////////////////////////////////////////
 	/**
 	 * 
 	 */
@@ -586,9 +624,9 @@ public class GraphView extends Component implements GraphModelListener, GraphVie
 		return viewModel.getDiameter() + viewModel.getVgap();
 	}
 
-	//
-	// Curve drawing utility methods.
-	//
+	////////////////////////////////////////////////////////////////////////////
+	//            C U R V E   D R A W I N G	                                  //
+	////////////////////////////////////////////////////////////////////////////
 	/**
 	 * Creates a <code>CubicCurve2D</code>.
 	 * 

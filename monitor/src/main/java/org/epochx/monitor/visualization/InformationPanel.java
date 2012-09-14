@@ -208,7 +208,7 @@ public class InformationPanel extends JPanel implements GraphViewListener, Runna
 	 */
 	public void viewChanged(GraphViewEvent e) {
 
-		if (e.getNewValue() instanceof GraphVertex && e.getProperty() == GraphViewProperty.SELECTED_VERTEX) {
+		if (e.getNewValue() instanceof GraphVertex && e.getProperty() == GraphViewProperty.HIGHLIGHTED_VERTEX) {
 
 			GraphVertex vertex = (GraphVertex) e.getNewValue();
 			setVertex(vertex);

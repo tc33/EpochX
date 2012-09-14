@@ -31,12 +31,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
-
-import org.epochx.monitor.visualization.InformationPanel;
 
 /**
  * A <code>Graph</code> draw a visualization graph to monitor the evolution
@@ -50,11 +47,6 @@ public class Graph extends JPanel implements Runnable {
 	private static final long serialVersionUID = 522739825029020356L;
 
 	/**
-	 * The number of created instances.
-	 */
-	private static int noInstances = 0;
-
-	/**
 	 * The <code>GraphViewModel</code>.
 	 */
 	private GraphViewModel viewModel;
@@ -65,11 +57,6 @@ public class Graph extends JPanel implements Runnable {
 	private GraphModel model;
 
 	/**
-	 * The <code>GraphMouseListener</code>.
-	 */
-	private GraphMouseListener mouseListener;
-
-	/**
 	 * The <code>GraphHeader</code>.
 	 */
 	private GraphHeader graphHeader;
@@ -77,7 +64,7 @@ public class Graph extends JPanel implements Runnable {
 	/**
 	 * The <code>GraphView</code>.
 	 */
-	private GraphView graphView;
+	private GraphView view;
 
 	/**
 	 * The <code>GraphRowHeader</code>.
@@ -85,90 +72,53 @@ public class Graph extends JPanel implements Runnable {
 	private GraphRowHeader graphRowHeader;
 
 	/**
-	 * The <code>InformationPanel</code>.
-	 */
-	private InformationPanel informationPanel;
-
-	/**
 	 * The <code>JScrollPane</code>.
 	 */
 	private JScrollPane scrollPane;
+
+	////////////////////////////////////////////////////////////////////////////
+	//                    C O N S T R U C T O R S                             //
+	////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Constructs a <code>Graph</code> with a default properties.
 	 * <p>
 	 * Default view properties :
 	 * <ul>
-	 * <li>name : <code>"Graph"+noInstances</code>
+	 * <li>name : <code>"Graph"</code>
 	 * <li>diameter : {@link GraphViewModel#DEFAULT_DIAMETER}
 	 * <li>gaps : proportionate to the diameter
 	 * </ul>
 	 * </p>
 	 */
 	public Graph() {
-		this("Graph " + noInstances, GraphViewModel.DEFAULT_DIAMETER, GraphViewModel.DEFAULT_HGAP, GraphViewModel.DEFAULT_VGAP);
+		super(new BorderLayout());
+
+		setName("Visualization Graph");
+
+		this.viewModel = new GraphViewModel();
+		this.model = new GraphModel();
+		this.graphHeader = new GraphHeader(viewModel);
+		this.view = new GraphView(viewModel, model);
+		this.graphRowHeader = new GraphRowHeader(viewModel);
+		this.scrollPane = new JScrollPane();
+
+		this.view.addMouseListener(viewModel);
+		this.view.addMouseMotionListener(viewModel);
+		this.view.addComponentListener(graphRowHeader);
+
+		// Creates and show the graph.
+		SwingUtilities.invokeLater(this);
 	}
 
 	/**
 	 * Constructs a <code>Graph</code> with a specified name.
-	 * <p>
-	 * Default view properties :
-	 * <ul>
-	 * <li>diameter : {@link GraphViewModel#DEFAULT_DIAMETER}
-	 * <li>gaps : proportionate to the diameter
-	 * </ul>
-	 * </p>
 	 * 
 	 * @param name the name of this graph.
 	 */
 	public Graph(String name) {
-		this(name,  GraphViewModel.DEFAULT_DIAMETER, GraphViewModel.DEFAULT_HGAP, GraphViewModel.DEFAULT_VGAP);
-	}
-
-	/**
-	 * 
-	 * Constructs a <code>Graph</code> with a specified diameter.
-	 * <p>
-	 * Default view properties :
-	 * <ul>
-	 * <li>name : <code>"Graph"+noInstances</code>
-	 * <li>comparator : null
-	 * <li>gaps : proportionate to the diameter
-	 * </ul>
-	 * </p>
-	 * 
-	 * @param diameter the diameter of the vertices. Must be an <b>even</b>
-	 *        number !
-	 */
-	public Graph(int diameter) {
-		this("Graph " + noInstances, diameter);
-	}
-
-	/**
-	 * 
-	 * Constructs a <code>Graph</code> with a specified name, comparator and
-	 * diameter. Gaps are proportionate to the diameter.
-	 * 
-	 * @param name the name of this graph.
-	 * @param diameter the diameter of the vertices. Must be an <b>even</b>
-	 *        number !
-	 */
-	public Graph(String name, int diameter) {
-		this(name, diameter, diameter * 0.1, diameter * 3);
-	}
-
-	/**
-	 * Constructs a <code>Graph</code> with a specified diameter size, and
-	 * specified gaps.
-	 * 
-	 * @param name the name of this graph.
-	 * @param diameter the diameter of the vertices. Must be an <b>even</b>
-	 *        number !
-	 * @param hgap the horizontal gap.
-	 * @param vgap the vertical gap.
-	 */
-	public Graph(String name, double diameter, double hgap, double vgap) {
-		this(name, new GraphModel(), new GraphViewModel((int) diameter, (int) hgap, (int) vgap));
+		this();
+		setName(name);
 	}
 
 	/**
@@ -176,71 +126,55 @@ public class Graph extends JPanel implements Runnable {
 	 * 
 	 */
 	public Graph(String name, GraphModel model) {
-		this(name, model, new GraphViewModel());
+		this();
+		setName(name);
+		setModel(model);
 	}
 
 	/**
-	 * Constructs a <code>Graph</code>.
+	 * Constructs a <code>Graph</code> with specified name, model and view
+	 * model.
 	 * 
-	 * @param name the name of this graph.
-	 * @param comparator to sort vertices, among :
-	 *        <ul>
-	 *        <li>{@link FitnessComparator}
-	 *        <li>{@link OperatorComparator}
-	 *        <li>{@link ParentComparator}
-	 *        <li>or any other implementation of
-	 *        <code>Comparator<GraphVertex></code>.
-	 * @param diameter the diameter of the vertices. Must be an <b>even</b>
-	 *        number !
-	 * @param hgap the horizontal gap.
-	 * @param vgap the vertical gap.
+	 * @param name the name.
+	 * @param model the model.
+	 * @param viewModel the view model.
 	 */
 	public Graph(String name, GraphModel model, GraphViewModel viewModel) {
-		super(new BorderLayout());
+		this();
 
 		setName(name);
-
-		this.viewModel = viewModel;
-		this.model = model;
-		this.mouseListener = new GraphMouseListener();
-		this.graphHeader = new GraphHeader(viewModel);
-		this.graphView = new GraphView(viewModel, model);
-		this.graphRowHeader = new GraphRowHeader(viewModel);
-		this.informationPanel = new InformationPanel();
-		this.scrollPane = new JScrollPane();
-
-		this.viewModel.addGraphViewListener(informationPanel);
-
-		this.graphView.addMouseListener(mouseListener);
-		this.graphView.addMouseMotionListener(mouseListener);
-		this.graphView.addComponentListener(graphRowHeader);
-
-		// Create and show the graph.
-		SwingUtilities.invokeLater(this);
-		
-		noInstances++;
+		setModel(model);
+		setViewModel(viewModel);
 	}
 
+	////////////////////////////////////////////////////////////////////////////
+	//             R U N N A B L E   M E T H O D                              //
+	////////////////////////////////////////////////////////////////////////////
+
 	/**
-	 * The run method to be invoked in the EDT.
+	 * The <code>Runnable</code> implemented method. Creates and shows the
+	 * panel.
 	 */
 	public void run() {
 		removeAll();
 
-		scrollPane.setViewportView(graphView);
+		scrollPane.setViewportView(view);
 		scrollPane.setRowHeaderView(graphRowHeader);
 		scrollPane.setPreferredSize(new Dimension(900, 600));
 		scrollPane.revalidate();
-		
-		informationPanel.add(new JLabel("Click on a vertex to show informations"));
 
-		add(graphHeader, BorderLayout.NORTH);
+		if (graphHeader != null) {
+			add(graphHeader, BorderLayout.NORTH);
+		}
 		add(scrollPane, BorderLayout.CENTER);
-		add(informationPanel, BorderLayout.SOUTH);
 
 		revalidate();
 		repaint();
 	}
+
+	////////////////////////////////////////////////////////////////////////////
+	//             G E T T E R S  &  S E T T E R S                            //
+	////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Returns the <code>GraphViewModel</code>.
@@ -252,13 +186,25 @@ public class Graph extends JPanel implements Runnable {
 	}
 
 	/**
-	 * Sets the <code>GraphViewModel</code>.
+	 * Sets the <code>GraphViewModel</code> and updates compoments (header,
+	 * view, row header).
 	 * 
 	 * @param viewModel the <code>GraphViewModel</code> to set.
 	 */
 	public void setViewModel(GraphViewModel viewModel) {
+
+		if (graphHeader != null) {
+			graphHeader.setViewModel(viewModel);
+		}
+		if (view != null) {
+			view.setViewModel(viewModel);
+		}
+		if (graphRowHeader != null) {
+			graphRowHeader.setViewModel(viewModel);
+		}
+
 		this.viewModel = viewModel;
-		SwingUtilities.invokeLater(this);
+		revalidate();
 	}
 
 	/**
@@ -271,31 +217,17 @@ public class Graph extends JPanel implements Runnable {
 	}
 
 	/**
-	 * Sets the <code>GraphModel</code>.
+	 * Sets the <code>GraphModel</code> and update the view with the new model.
 	 * 
 	 * @param model the <code>GraphModel</code> to set.
 	 */
 	public void setModel(GraphModel model) {
+
+		if (view != null) {
+			view.setModel(model);
+		}
+
 		this.model = model;
-		SwingUtilities.invokeLater(this);
-	}
-
-	/**
-	 * Returns the <code>GraphMouseListener</code>.
-	 * 
-	 * @return the <code>GraphMouseListener</code>.
-	 */
-	public GraphMouseListener getMouseListener() {
-		return mouseListener;
-	}
-
-	/**
-	 * Sets the <code>GraphMouseListener</code>.
-	 * 
-	 * @param mouseListener the <code>GraphMouseListener</code> to set.
-	 */
-	public void setMouseListener(GraphMouseListener mouseListener) {
-		this.mouseListener = mouseListener;
 	}
 
 	/**
@@ -322,17 +254,35 @@ public class Graph extends JPanel implements Runnable {
 	 * 
 	 * @return the <code>GraphView</code>.
 	 */
-	public GraphView getGraphView() {
-		return graphView;
+	public GraphView getView() {
+		return view;
 	}
 
 	/**
-	 * Sets the <code>GraphView</code>.
+	 * Sets the <code>GraphView</code>. Manages the listeners update.
 	 * 
-	 * @param graphView the <code>GraphView</code> to set.
+	 * @param view the <code>GraphView</code> to set.
 	 */
-	public void setGraphView(GraphView graphView) {
-		this.graphView = graphView;
+	public void setView(GraphView graphView) {
+
+		if (this.view != null) {
+			this.view.removeMouseListener(viewModel);
+			this.view.removeMouseMotionListener(viewModel);
+			if (graphRowHeader != null) {
+				this.view.removeComponentListener(graphRowHeader);
+			}
+		}
+
+		if (graphView != null) {
+			graphView.addMouseListener(viewModel);
+			graphView.addMouseMotionListener(viewModel);
+			if (graphRowHeader != null) {
+				graphView.addComponentListener(graphRowHeader);
+			}
+		}
+
+		this.view = graphView;
+
 		SwingUtilities.invokeLater(this);
 	}
 
@@ -355,29 +305,14 @@ public class Graph extends JPanel implements Runnable {
 		SwingUtilities.invokeLater(this);
 	}
 
-	/**
-	 * Returns the <code>InformationPanel</code>.
-	 * 
-	 * @return the <code>InformationPanel</code>.
-	 */
-	public InformationPanel getInformationPanel() {
-		return informationPanel;
-	}
-
-	/**
-	 * Sets the <code>InformationPanel</code>.
-	 * 
-	 * @param informationPanel the <code>InformationPanel</code> to set.
-	 */
-	public void setInformationPanel(InformationPanel informationPanel) {
-		this.informationPanel = informationPanel;
-		SwingUtilities.invokeLater(this);
-	}
-
 	@Override
 	public String toString() {
 		return getName();
 	}
+
+	////////////////////////////////////////////////////////////////////////////
+	//             U T I L I T I E S   M E T H O D S                          //
+	////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Utility method. Returns the <code>GraphModel</code> stored in the

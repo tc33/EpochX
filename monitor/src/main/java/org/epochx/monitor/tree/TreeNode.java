@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.ListIterator;
 
 import org.epochx.monitor.graph.GraphVertex;
 import org.epochx.refactoring.representation.TreeAble;
@@ -43,7 +42,7 @@ public class TreeNode implements TreeNodeAble, RootAble, Iterable<TreeNode> {
 	////////////////////////////////////////////////////////////////////////////
 	//                D A T A   F I E L D S                                   //
 	////////////////////////////////////////////////////////////////////////////
-	
+
 	private String name;
 
 	private TreeNode parent;
@@ -134,7 +133,7 @@ public class TreeNode implements TreeNodeAble, RootAble, Iterable<TreeNode> {
 	}
 
 	////////////////////////////////////////////////////////////////////////////
-	//                 G E T T E R S  &  S E T T E R S                        //
+	//                 D A T A   R E L A T E D   M E T H O D S                //
 	////////////////////////////////////////////////////////////////////////////
 
 	/**
@@ -178,7 +177,9 @@ public class TreeNode implements TreeNodeAble, RootAble, Iterable<TreeNode> {
 			this.nodeAbleInstance = (TreeNodeAble) o;
 		} else if (o instanceof TreeAble) {
 			setNodeAbleInstance(((TreeAble) o).getTree());
-		} else {
+		} else if (o instanceof GraphVertex) {
+			setNodeAbleInstance(((GraphVertex) o).getIndividual());
+		} else if (o != null) {
 			throw new ClassCastException("This object is not an instance of TreeNodeAble :" + o.toString());
 		}
 	}
@@ -453,59 +454,126 @@ public class TreeNode implements TreeNodeAble, RootAble, Iterable<TreeNode> {
 		return descendants().indexOf(o);
 	}
 
-	public TreeNode[] find(Object o) {
+	/**
+	 * Checks the subsumption of the specified argument in this node according
+	 * to the nodes' names.
+	 * <p>
+	 * Note : This relation is <b>non- symmetric</b>.
+	 * </p>
+	 * 
+	 * @param n the node whose subsumption is to be check.
+	 * @param onlySelected if true, check the subsumption only for selected
+	 *        children.
+	 * @return true if the given is subsumed by this node ; false, otherwise.
+	 */
+	public boolean subsumes(TreeNode n, boolean onlySelected) {
 
-		if (o instanceof TreeNode) {
-			TreeNode n = (TreeNode) o;
-			ArrayList<TreeNode> list = new ArrayList<TreeNode>();
-
-			for (TreeNode node: descendants()) {
-				if (node.subsumes(n)) {
-					list.add(node);
-				}
-			}
-			TreeNode[] res = new TreeNode[list.size()];
-			list.toArray(res);
-			return res;
-
-		} else if (o instanceof TreeNodeAble) {
-			return find(new TreeNode((TreeNodeAble) o, null));
-		} else if (o instanceof TreeAble) {
-			return find(((TreeAble) o).getTree());
-		}
-
-		return new TreeNode[0];
-	}
-
-	public boolean subsumes(TreeNode n) {
-
-		if (n.getName() != getName()) {
+		if (n == null) {
 			return false;
-		} else {
-			LinkedList<TreeNode> thisChildren = new LinkedList<TreeNode>(Arrays.asList(this.children));
+		}
 
-			for (TreeNode child: n.getChildren()) {
+		if ((!onlySelected || n.isSelected()) && n.getName() != this.getName()) {
+			return false;
+		}
 
-				boolean found = !child.isSelected();
-				ListIterator<TreeNode> iterator = thisChildren.listIterator();
+		ArrayList<TreeNode> thisChildren = new ArrayList<TreeNode>(Arrays.asList(this.children));
 
-				while (iterator.hasNext() && found == false) {
-					TreeNode thisChild = iterator.next();
-					if (thisChild.subsumes(child)) {
-						iterator.remove();
-						found = true;
-					}
-				}
-				if (!found) {
-					return false;
+		for (TreeNode child: n.getChildren()) {
+
+			boolean found = onlySelected && !child.isSelected();
+			
+			int i = 0;
+			while (!found && i < thisChildren.size()) {
+				TreeNode thisChild = thisChildren.get(i);
+				
+				if (thisChild.subsumes(child, onlySelected)) {
+					thisChildren.remove(i);
+					found = true;
+				} else {
+					i++;
 				}
 			}
-			return true;
+			if (!found) {
+				return false;
+			}
 		}
+		return true;
 
 	}
 
-	public boolean isAncestor(TreeNode node) {
+	/**
+	 * Returns an array of nodes in this node's descendance which subsume the
+	 * given node.
+	 * <p>
+	 * All the nodes <code>node</code> in this node's descendance such that
+	 * <code>node.subsumes(n, onlySelected) == true</code>
+	 * </p>
+	 * 
+	 * @param n the node whose subsumers is to be found.
+	 * @param onlySelected if true, check the subsumption only for selected
+	 *        children.
+	 *        
+	 * @return an array of nodes in this node's descedance which subsume the
+	 *         given node. The array can be empty.
+	 * 
+	 * @see #subsumes(TreeNode, boolean)
+	 */
+	public TreeNode[] findSubsumers(TreeNode n, boolean onlySelected) {
+
+		ArrayList<TreeNode> list = new ArrayList<TreeNode>();
+
+		for (TreeNode node: descendants()) {
+			if (node.subsumes(n, onlySelected)) {
+				list.add(node);
+			}
+		}
+		TreeNode[] res = new TreeNode[list.size()];
+		list.toArray(res);
+		return res;
+	}
+
+	/**
+	 * Sets this node'descendance selected as the given node.
+	 * 
+	 * @param n the node to select as.
+	 * 
+	 * @throws IllegalArgumentException if the given node is not subsumed by
+	 *         this node.
+	 *         
+	 * @see #subsumes(TreeNode, boolean)
+	 */
+	public void setSelectedAs(TreeNode n) throws IllegalArgumentException {
+		if (!subsumes(n, true)) {
+			throw new IllegalArgumentException("The given node is not subsumed.");
+		}
+		if (n.isSelected()) {
+			this.setSelected(true, false);
+		}
+
+		ArrayList<TreeNode> thisChildren = new ArrayList<TreeNode>(Arrays.asList(this.children));
+
+		for (TreeNode child: n.getChildren()) {
+
+			for (int i = 0; i < thisChildren.size(); i++) {
+
+				TreeNode thisChild = thisChildren.get(i);
+				if (thisChild.subsumes(child, true)) {
+					thisChild.setSelectedAs(child);
+					thisChildren.remove(i);
+				}
+
+			}
+		}
+	}
+
+	/**
+	 * Checks if this node is an ancestor of the given node.
+	 * 
+	 * @param node the node whose ancestry is to be checked.
+	 * @return true if this node is an ancestor of the given node, false
+	 *         otherwise.
+	 */
+	public boolean isAncestorOf(TreeNode node) {
 		TreeNode n = node;
 
 		while (n != null) {
@@ -518,7 +586,14 @@ public class TreeNode implements TreeNodeAble, RootAble, Iterable<TreeNode> {
 		return false;
 	}
 
-	public boolean isDescendant(TreeNode node) {
+	/**
+	 * Checks if this node is a descendant of the given node.
+	 * 
+	 * @param node the node whose descendance is to be checked.
+	 * @return true if this node is a descendant of the given node, false
+	 *         otherwise.
+	 */
+	public boolean isDescendantOf(TreeNode node) {
 		TreeNode n = this;
 
 		while (n != null) {
@@ -531,28 +606,35 @@ public class TreeNode implements TreeNodeAble, RootAble, Iterable<TreeNode> {
 		return false;
 	}
 
+	/**
+	 * Returns the common ancestor of the given nodes.
+	 * 
+	 * @param node1 the node 1.
+	 * @param node2 the node 2.
+	 * @return the common ancestor of the given nodes, if they have, null
+	 *         otherwise.
+	 */
 	public static TreeNode commonAncestor(TreeNode node1, TreeNode node2) {
 		if (node1 == null || node2 == null) {
 			return null;
 		} else if (node1 == node2) {
 			return node1;
-		} else if (node1.isAncestor(node2)) {
+		} else if (node1.isAncestorOf(node2)) {
 			return node1;
-		} else if (node2.isDescendant(node1)) {
+		} else if (node2.isAncestorOf(node1)) {
 			return node2;
 		} else if (node1.getRoot() == node2.getRoot()) {
-
 			if (node1.level() > node2.level()) {
 				return commonAncestor(node1.getParent(), node2);
 			} else {
 				return commonAncestor(node1, node2.getParent());
 			}
-
 		} else {
-			return null;
+			throw new IllegalArgumentException("Not the same tree.");
 		}
 	}
 
+	@Override
 	public boolean equals(Object o) {
 
 		if (o instanceof TreeNode) {
@@ -560,13 +642,13 @@ public class TreeNode implements TreeNodeAble, RootAble, Iterable<TreeNode> {
 
 			if (!getName().equals(n.getName())) {
 				return false;
-			}/*
-				* if( parent != null && n.getParent()!=null) {
-				* if( parent.getName().equals(n.getParent().getName()) {
-				* return false;
-				* }
-				* }
-				*/
+			}
+			if (parent != null && n.getParent() != null) {
+				if (!parent.getName().equals(n.getParent().getName())) {
+					return false;
+				}
+			}
+
 			if (children.length != n.getChildren().length) {
 				return false;
 			}
@@ -578,8 +660,6 @@ public class TreeNode implements TreeNodeAble, RootAble, Iterable<TreeNode> {
 			return true;
 		} else if (o instanceof TreeAble) {
 			return equals(((TreeAble) o).getTree());
-		} else if (o instanceof GraphVertex) {
-			return equals(((GraphVertex) o).getIndividual());
 		} else {
 			return System.identityHashCode(o) == System.identityHashCode(nodeAbleInstance);
 		}
@@ -658,19 +738,12 @@ public class TreeNode implements TreeNodeAble, RootAble, Iterable<TreeNode> {
 	 * 
 	 * @param b the selected to set.
 	 */
-	public void setSelected(boolean b) {
+	public void setSelected(boolean b, boolean recursively) {
 		this.selected = b;
-	}
-
-	/**
-	 * Sets the selected.
-	 * 
-	 * @param b the selected to set.
-	 */
-	public void setSubTreeSelected(boolean b) {
-		setSelected(b);
-		for (TreeNode child: children) {
-			child.setSubTreeSelected(b);
+		if (recursively) {
+			for (TreeNode child: children) {
+				child.setSelected(b, recursively);
+			}
 		}
 	}
 
@@ -688,19 +761,12 @@ public class TreeNode implements TreeNodeAble, RootAble, Iterable<TreeNode> {
 	 * 
 	 * @param b the highlighted to set.
 	 */
-	public void setHighlighted(boolean b) {
+	public void setHighlighted(boolean b, boolean recursively) {
 		this.highlighted = b;
-	}
-
-	/**
-	 * Sets the highlighted.
-	 * 
-	 * @param b the highlighted to set.
-	 */
-	public void setSubTreeHighlighted(boolean b) {
-		setHighlighted(b);
-		for (TreeNode child: children) {
-			child.setSubTreeHighlighted(b);
+		if (recursively) {
+			for (TreeNode child: children) {
+				child.setHighlighted(b, recursively);
+			}
 		}
 	}
 
@@ -718,19 +784,12 @@ public class TreeNode implements TreeNodeAble, RootAble, Iterable<TreeNode> {
 	 * 
 	 * @param color the color to set.
 	 */
-	public void setColor(Color color) {
+	public void setColor(Color color, boolean recursively) {
 		this.color = color;
-	}
-
-	/**
-	 * Sets the color for all the sub-tree.
-	 * 
-	 * @param color the color to set.
-	 */
-	public void setSubTreeColor(Color color) {
-		setColor(color);
-		for (TreeNode child: children) {
-			child.setSubTreeColor(color);
+		if (recursively) {
+			for (TreeNode child: children) {
+				child.setColor(color, recursively);
+			}
 		}
 	}
 
@@ -748,41 +807,50 @@ public class TreeNode implements TreeNodeAble, RootAble, Iterable<TreeNode> {
 	 * 
 	 * @param diameter the diameter to set.
 	 */
-	public void setDiameter(int diameter) {
+	public void setDiameter(int diameter, boolean recursively) {
 		this.diameter = diameter;
+		if (recursively) {
+			for (TreeNode child: children) {
+				child.setDiameter(diameter, recursively);
+			}
+		}
 	}
 
+	////////////////////////////////////////////////////////////////////////////
+	//             L O C A T I O N   R E L A T E D   M E T H O D S            //
+	////////////////////////////////////////////////////////////////////////////
+
 	/**
-	 * Returns the x.
+	 * Returns the X coordinate.
 	 * 
-	 * @return the x.
+	 * @return the X coordinate.
 	 */
 	public int getX() {
 		return x;
 	}
 
 	/**
-	 * Sets the x.
+	 * Sets the X coordinate.
 	 * 
-	 * @param x the x to set.
+	 * @param x the X coordinate to set.
 	 */
 	public void setX(int x) {
 		this.x = x;
 	}
 
 	/**
-	 * Returns the y.
+	 * Returns the Y coordinate.
 	 * 
-	 * @return the y.
+	 * @return the Y coordinate.
 	 */
 	public int getY() {
 		return y;
 	}
 
 	/**
-	 * Sets the y.
+	 * Sets the Y coordinate.
 	 * 
-	 * @param y the y to set.
+	 * @param y the Y coordinate to set.
 	 */
 	public void setY(int y) {
 		this.y = y;
@@ -828,6 +896,10 @@ public class TreeNode implements TreeNodeAble, RootAble, Iterable<TreeNode> {
 		Rectangle bounds = getBounds();
 		return bounds.contains(p);
 	}
+
+	////////////////////////////////////////////////////////////////////////////
+	//             O V E R R I D I N G   M E T H O D S                        //
+	////////////////////////////////////////////////////////////////////////////
 
 	@Override
 	public TreeNode clone() {

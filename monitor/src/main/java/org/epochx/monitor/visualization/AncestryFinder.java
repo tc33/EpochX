@@ -23,13 +23,17 @@
 package org.epochx.monitor.visualization;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.Cursor;
+import java.awt.Dimension;
 
+import javax.swing.BoxLayout;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.SwingWorker;
 import javax.swing.UIManager;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import org.epochx.monitor.graph.GraphVertex;
 import org.epochx.monitor.graph.GraphViewEvent;
@@ -40,50 +44,97 @@ import org.epochx.monitor.tree.TreeEvent;
 import org.epochx.monitor.tree.TreeEvent.TreeProperty;
 import org.epochx.monitor.tree.TreeListener;
 import org.epochx.monitor.tree.TreeNode;
+import org.epochx.monitor.tree.TreeVertex;
 
 /**
  * A <code>AncestryFinder</code>.
  */
-public class AncestryFinder extends JPanel implements GraphViewListener, TreeListener, KeyListener {
+public class AncestryFinder extends JPanel implements GraphViewListener, TreeListener, ListSelectionListener {
 
 	/**
 	 * The serialVersionUID.
 	 */
 	private static final long serialVersionUID = 8966503575608003402L;
 
+	private FinderTask ft;
+	
 	private GraphViewModel viewModel;
 
-	private TreeVertexPanel individual;
+	private TreeVertex individual;
 
-	private TreeVertexPanel ancestor;
+	private JPanel ancestorPane;
 	
-	private JSplitPane splitPane;
-	
-	private boolean CTRL_PRESSED;
+	private VerticesTable table;
 
-	public AncestryFinder(GraphViewModel viewModel) {
+	private JSplitPane horizontalSplitPane;
+	
+	private JSplitPane verticalSplitPane;
+
+	
+
+	public AncestryFinder() {
 		super();
-		this.viewModel = viewModel;
-		this.individual = new TreeVertexPanel();
-		this.ancestor = new TreeVertexPanel();
+		this.ft = new FinderTask();
+		this.viewModel = null;
+		this.individual = new TreeVertex();
+		this.ancestorPane = new JPanel();
+		ancestorPane.setLayout(new BoxLayout(ancestorPane, BoxLayout.LINE_AXIS));
 		
-		this.splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, ancestor, individual);
-		splitPane.setBackground(UIManager.getColor("TabbedPane.contentAreaColor"));
+		JScrollPane scrollPane = new JScrollPane(ancestorPane);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 		
-		this.CTRL_PRESSED = false;
+		this.table = new VerticesTable();
+		
+		table.setPreferredSize(new Dimension(300, 100));
+		table.addListSelectionListener(this);
+		
+		this.horizontalSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, table, scrollPane);
+		horizontalSplitPane.setOneTouchExpandable(true);
+
+		this.verticalSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, horizontalSplitPane, individual);
+		verticalSplitPane.setBackground(UIManager.getColor("TabbedPane.contentAreaColor"));
+		verticalSplitPane.setOneTouchExpandable(true);
 
 		setName("Ancestry Finder");
 		setLayout(new BorderLayout());
 		setBackground(UIManager.getColor("TabbedPane.contentAreaColor"));
 
-		individual.getTree().addTreeListener(this);
+		individual.addTreeListener(this);
 
-		addKeyListener(this);
-		add(splitPane, BorderLayout.CENTER);
+		add(verticalSplitPane, BorderLayout.CENTER);
 		doLayout();
+		horizontalSplitPane.setDividerLocation(0.7);
 	}
 
+	public AncestryFinder(GraphViewModel viewModel) {
+		this();
+		setViewModel(viewModel);
+	}
 
+	/**
+	 * Returns the view model.
+	 * 
+	 * @return the view model.
+	 */
+	public GraphViewModel getViewModel() {
+		return viewModel;
+	}
+
+	/**
+	 * Sets the view model.
+	 * 
+	 * @param model the view model to set.
+	 */
+	public void setViewModel(GraphViewModel model) {
+		if (viewModel != null) {
+			viewModel.removeGraphViewListener(this);
+		}
+		if (model != null) {
+			model.addGraphViewListener(this);
+		}
+		this.viewModel = model;
+
+	}
 
 	/**
 	 * The <code>GraphViewListener</code> implemented method ; Recieves a
@@ -93,21 +144,36 @@ public class AncestryFinder extends JPanel implements GraphViewListener, TreeLis
 		if (e.getNewValue() instanceof GraphVertex && e.getProperty() == GraphViewProperty.SELECTED_VERTEX) {
 
 			GraphVertex vertex = (GraphVertex) e.getNewValue();
+
+			individual.setVertex(vertex);
+			individual.colorMutatedSubTree();
 			
-			if(individual.getTree() == null || individual.getTree().getSelectedNode() == null) {
-				
-				individual.setVertex(vertex);
-				individual.run();
-				individual.colorCriticalPoint();
-				
-			}
-			else {
-				ancestor.setVertex(vertex);
-				ancestor.run();
-			}
-			splitPane.setDividerLocation(0.5);
+			ancestorPane.removeAll();
+			table.clear();
+
+			verticalSplitPane.setDividerLocation(0.3);
+			horizontalSplitPane.resetToPreferredSizes();
 
 		}
+	}
+	
+
+	/**
+	 * The <code>ListSelectionListener</code> implemented method ; Recieves a
+	 * <code>ListSelectionEvent</code> from <code>VerticeTable</code>.
+	 */
+	public void valueChanged(ListSelectionEvent e) {
+		if(table.table.getRowSelectionAllowed()) {
+			//System.out.println(e);
+			ancestorPane.removeAll();
+			for(TreeVertex tv : table.getSelectedVertex()) {
+				ancestorPane.add(tv);
+			}
+			ancestorPane.doLayout();
+			verticalSplitPane.validate();
+			
+		}
+
 	}
 
 	/**
@@ -116,61 +182,24 @@ public class AncestryFinder extends JPanel implements GraphViewListener, TreeLis
 	 */
 	public void treeChanged(TreeEvent e) {
 
-		if (e.getNewValue() instanceof TreeNode && e.getProperty() == TreeProperty.SELECTED_NODE) {
+		if (e.getProperty() == TreeProperty.SELECTED_NODE) {
 
-			TreeNode select = (TreeNode) e.getNewValue();
-			
-			selectAncestor(select);
-
-		} else if (e.getNewValue() == null && e.getProperty() == TreeProperty.SELECTED_NODE) {
-			
-			individual.colorCriticalPoint();
-			
-		}
-
-	}
-
-	public void selectAncestor(TreeNode subtree) {
-
-		viewModel.deselectedAll();
-		
-		boolean b = true;
-		GraphVertex vertex = individual.getVertex();
-		viewModel.getVertexModel(vertex).setSelected(true);
-
-		while (b) {
-
-			if (vertex.getOperator() == null || vertex.getOperatorEvent() == null) {
-				b = false;
-			} else {
-
-				TreeNode tree = new TreeNode(vertex);
-				int rank = vertex.getRank();
-				int point = vertex.getOperatorEvent().getPoints()[rank];
-				int parentCount = vertex.getOperator().inputSize();
-
-				TreeNode criticalNode = tree.get(point);
-
-				if (criticalNode.isAncestor(subtree)) {
-					viewModel.getVertexModel(vertex).setSelected(true);
-					vertex = vertex.getParents()[parentCount - 1 - rank];
-
-				} else {
-					TreeNode[] finds = tree.find(subtree);
-					b = false;
-					for (TreeNode node: finds) {
-						if (!node.isDescendant(criticalNode)) {
-							b = true;
-						}
-					}
-					if (b) {
-						viewModel.getVertexModel(vertex).setSelected(true);
-						vertex = vertex.getParents()[rank];
-					}
-				}
+			if (viewModel != null) {
+				viewModel.deselectedAll();
+				viewModel.fireGraphViewEvent(new GraphViewEvent(viewModel, GraphViewProperty.REFRESH));
 			}
+			ft.cancel(true);
+			table.clear();
+
+			if (e.getNewValue() instanceof TreeNode) {
+				TreeNode select = (TreeNode) e.getNewValue();
+				
+				ft = new FinderTask(individual, select);
+				ft.execute();
+
+			}
+
 		}
-		viewModel.fireGraphViewEvent(new GraphViewEvent(viewModel, GraphViewProperty.REFRESH));
 
 	}
 
@@ -178,21 +207,98 @@ public class AncestryFinder extends JPanel implements GraphViewListener, TreeLis
 	public String toString() {
 		return getName();
 	}
+	
+	class FinderTask extends SwingWorker<Integer, TreeVertex> {
 
-
-	public void keyPressed(KeyEvent arg0) {
-		CTRL_PRESSED = true;
-		System.out.println(arg0);
+		private TreeVertex tv;
 		
-	}
-
-	public void keyReleased(KeyEvent arg0) {
-		CTRL_PRESSED = false;
+		private TreeNode n;
 		
-	}
-
-	public void keyTyped(KeyEvent arg0) {
+		/**
+		 * Constructs a <code>FinderTask</code>.
+		 * 
+		 */
+		public FinderTask() {
+			super();
+		}
 		
+		public FinderTask(TreeVertex vertex, TreeNode subTree) {
+			super();
+			tv = vertex;
+			n = subTree;
+		}
+		
+		@Override
+		protected Integer doInBackground() throws IllegalStateException {
+			
+			if(tv == null || n == null) {
+				throw new IllegalStateException("Null fields.");
+			}
+			
+			table.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+			table.table.setRowSelectionAllowed(false);
+			table.table.setFocusable(false);
+			selectAncestor(tv, n);
+			return null;
+		}
+		
+		private void selectAncestor(TreeVertex tv, TreeNode n) {
+			
+			if(isCancelled()) {
+				return;
+			}
+			
+			viewModel.getVertexModel(tv.getVertex()).setSelected(true);
+
+			if (tv.isFromGenitor(n)) {
+
+				TreeVertex parent = new TreeVertex(tv.genitor());
+				TreeNode criticalPoint = null;
+				try {
+					criticalPoint = parent.get(tv.genitorPoint());
+				} catch (IndexOutOfBoundsException e) {
+					System.out.print(e.getMessage());
+				}
+				
+				TreeNode[] finds = parent.findSubsumers(n, true);
+				for(TreeNode find : finds) {
+					if (!find.isDescendantOf(criticalPoint)) {
+						find.setSelectedAs(n);
+						table.addVertex(parent, true);
+						selectAncestor(parent, find);	
+					}
+				}
+			} else if (tv.isFromProvider(n)) {
+
+				TreeVertex parent = new TreeVertex(tv.provider());
+				TreeNode criticalPoint = null;
+				try {
+					criticalPoint = parent.get(tv.providerPoint());
+				} catch (IndexOutOfBoundsException e) {
+					System.out.print(e.getMessage());
+				}
+				
+				TreeNode[] finds = parent.findSubsumers(n, true);
+				for(TreeNode find : finds) {
+					if (find.isDescendantOf(criticalPoint)) {
+						find.setSelectedAs(n);
+						table.addVertex(parent, false);
+						selectAncestor(parent, find);
+					}
+				}
+			}
+		}
+		
+		protected void done() {
+			table.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+			table.table.setRowSelectionAllowed(true);
+			table.table.setFocusable(true);
+			if (viewModel != null) {
+				viewModel.fireGraphViewEvent(new GraphViewEvent(viewModel, GraphViewProperty.REFRESH));
+			}
+			
+		}
+
 	}
 
 }

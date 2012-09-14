@@ -22,10 +22,9 @@
  */
 package org.epochx.monitor.visualization;
 
-import java.awt.Color;
-
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -36,7 +35,9 @@ import org.epochx.monitor.graph.GraphVertex;
 import org.epochx.monitor.graph.GraphViewEvent;
 import org.epochx.monitor.graph.GraphViewEvent.GraphViewProperty;
 import org.epochx.monitor.graph.GraphViewListener;
+import org.epochx.monitor.tree.Tree;
 import org.epochx.monitor.tree.TreeEvent;
+import org.epochx.monitor.tree.TreeVertex;
 import org.epochx.monitor.tree.TreeEvent.TreeProperty;
 import org.epochx.monitor.tree.TreeListener;
 import org.epochx.monitor.tree.TreeNode;
@@ -55,30 +56,45 @@ public class OperationPanel extends JPanel implements Runnable, GraphViewListene
 	private GraphVertex vertex;
 
 	private JPanel parentPane;
+	
+	private JScrollPane parentScrollPane;
 
 	private JPanel childrenPane;
 	
+	private JScrollPane childrenScrollPane;
+
 	private JSplitPane splitPane;
 
-	private TreeVertexPanel parents[];
+	private TreeVertex parents[];
 
-	private TreeVertexPanel children[];
+	private TreeVertex children[];
 
+	/**
+	 * Constructs an <code>OperationPanel</code>.
+	 * 
+	 */
 	public OperationPanel() {
 		super();
 		this.vertex = null;
+
 		this.parentPane = new JPanel();
-		this.childrenPane = new JPanel();
+		parentPane.setLayout(new BoxLayout(parentPane, BoxLayout.LINE_AXIS));
 		
-		this.splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, parentPane, childrenPane);
+		this.parentScrollPane = new JScrollPane(parentPane);
+		parentScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+
+		this.childrenPane = new JPanel();
+		childrenPane.setLayout(new BoxLayout(childrenPane, BoxLayout.LINE_AXIS));
+		
+		this.childrenScrollPane = new JScrollPane(childrenPane);
+		childrenScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+
+		this.splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, parentScrollPane, childrenScrollPane);
+		splitPane.setOneTouchExpandable(true);
 		splitPane.setBackground(UIManager.getColor("TabbedPane.contentAreaColor"));
 
-		
-		parentPane.setLayout(new BoxLayout(parentPane, BoxLayout.LINE_AXIS));
-		childrenPane.setLayout(new BoxLayout(childrenPane, BoxLayout.LINE_AXIS));
-
-		parents = new TreeVertexPanel[0];
-		children = new TreeVertexPanel[0];
+		this.parents = new TreeVertex[0];
+		this.children = new TreeVertex[0];
 
 		setName("Operation Panel");
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -86,18 +102,39 @@ public class OperationPanel extends JPanel implements Runnable, GraphViewListene
 
 		add(splitPane);
 	}
+	
+	/**
+	 * Constructs an <code>OperationPanel</code> with a specified
+	 * <code>GraphVertex</code>.
+	 * 
+	 * @param vertex the specified <code>GraphVertex</code>.
+	 */
+	public OperationPanel(GraphVertex vertex) {
+		this();
+		setVertex(vertex);
+	}
 
-	public void run() {
+	/**
+	 * Creates the levels and computes the nodes' positions.
+	 * <code>Runnable</code> implemented method.
+	 * 
+	 * @throws IllegalStateException if the vertex is null.
+	 */
+	public final synchronized void run() throws IllegalStateException {
+
+		if (vertex == null) {
+			throw new IllegalStateException("The root node is null.");
+		}
 
 		parentPane.removeAll();
 		childrenPane.removeAll();
 
 		GraphVertex[] parentVertices = vertex.getParents();
-		parents = new TreeVertexPanel[parentVertices.length];
+		parents = new TreeVertex[parentVertices.length];
 
 		for (int i = 0; i < parentVertices.length; i++) {
 
-			parents[i] = new TreeVertexPanel(parentVertices[i]);
+			parents[i] = new TreeVertex(parentVertices[i]);
 			parents[i].setBorder(new TitledBorder(null, "Parent " + (i + 1), TitledBorder.LEADING, TitledBorder.TOP,
 					null, null));
 
@@ -105,39 +142,18 @@ public class OperationPanel extends JPanel implements Runnable, GraphViewListene
 		}
 
 		GraphVertex[] siblingVertices = vertex.getSiblings();
-		children = new TreeVertexPanel[siblingVertices.length];
+		children = new TreeVertex[siblingVertices.length];
 		for (int i = 0; i < siblingVertices.length; i++) {
 
-			children[i] = new TreeVertexPanel(siblingVertices[i]);
+			children[i] = new TreeVertex(siblingVertices[i]);
 			children[i].setBorder(new TitledBorder(null, "Sibling " + (i + 1), TitledBorder.LEADING, TitledBorder.TOP,
 					null, null));
-			children[i].getTree().addTreeListener(this);
+			children[i].addTreeListener(this);
 
 			childrenPane.add(children[i]);
 		}
 		colorPoints();
 		splitPane.setDividerLocation(0.5);
-	}
-
-	public void colorPoints() {
-
-		if (vertex.getOperatorEvent() != null) {
-			int[] points = vertex.getOperatorEvent().getPoints();
-			int n = points.length;
-
-			for (int i = 0; i < parents.length && i < n; i++) {
-				parents[i].getTree().getRoot().setSubTreeColor(Color.LIGHT_GRAY);
-				TreeNode pointNode = parents[i].getTree().getRoot().get(points[i]);
-				pointNode.setSubTreeColor(MonitorUtilities.COLORS[i]);
-			}
-
-			for (int i = 0; i < children.length && i < n; i++) {
-				children[i].getTree().getRoot().setSubTreeColor(Color.LIGHT_GRAY);
-				int r = children[i].getVertex().getRank();
-				TreeNode pointNode = children[i].getTree().getRoot().get(points[r]);
-				pointNode.setSubTreeColor(MonitorUtilities.COLORS[n - 1 - r]);
-			}
-		}
 	}
 
 	/**
@@ -160,9 +176,54 @@ public class OperationPanel extends JPanel implements Runnable, GraphViewListene
 	public void setVertex(GraphVertex vertex) throws IllegalArgumentException {
 		if (vertex.getIndividual() instanceof TreeAble) {
 			this.vertex = vertex;
+			if (this.vertex != null) {
+				SwingUtilities.invokeLater(this);
+			}
 		} else {
 			throw new IllegalArgumentException("This vertex's individual is not an instance of TreeAble.");
 		}
+	}
+
+	/**
+	 * Colors the trees according to the criticals points of the vertex.
+	 */
+	public void colorPoints() {
+
+		if (vertex.getOperatorEvent() != null) {
+			int[] points = vertex.getOperatorEvent().getPoints();
+			int n = points.length;
+
+			// Colors the parents.
+			for (int i = 0; i < parents.length && i < n; i++) {
+				parents[i].color(1, Tree.DEFAULT_COLOR, true);
+				parents[i].color(points[i], MonitorUtilities.COLORS[i], true);
+			}
+
+			// Colors the siblings.
+			for (int i = 0; i < children.length && i < n; i++) {
+				children[i].color(1, Tree.DEFAULT_COLOR, true);
+				int r = children[i].getRank();
+				children[i].color(points[i], MonitorUtilities.COLORS[n - 1 - r], true);
+			}
+		}
+	}
+
+	/**
+	 * Returns the <code>TreeVertex</code> correponding to the given
+	 * <code>GraphVertex</code> in the parent array.
+	 * 
+	 * @param vertex the vertex whose <code>TreeVertex</code> is to be found.
+	 * @return the <code>TreeVertex</code> correponding to the given
+	 *         <code>GraphVertex</code> if it is present in the parent array;
+	 *         Returns null otherwise.
+	 */
+	public TreeVertex getTreeVertex(GraphVertex vertex) {
+		for (TreeVertex tv: parents) {
+			if (tv.getVertex() == vertex) {
+				return tv;
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -174,7 +235,6 @@ public class OperationPanel extends JPanel implements Runnable, GraphViewListene
 
 			GraphVertex vertex = (GraphVertex) e.getNewValue();
 			setVertex(vertex);
-			SwingUtilities.invokeLater(this);
 
 		}
 	}
@@ -185,25 +245,37 @@ public class OperationPanel extends JPanel implements Runnable, GraphViewListene
 	 */
 	public void treeChanged(TreeEvent e) {
 
-		if (e.getNewValue() instanceof TreeNode && e.getProperty() == TreeProperty.SELECTED_NODE) {
+		if (e.getSource() instanceof TreeVertex) {
 
-			TreeNode select = (TreeNode) e.getNewValue();
-			if (select != null) {
-				for (TreeVertexPanel parent: parents) {
-					parent.getTree().getRoot().setSubTreeColor(Color.LIGHT_GRAY);
-					for (TreeNode node: parent.getTree().getRoot().find(select)) {
-						node.setSubTreeColor(Color.GREEN);
-					}
-					parent.getTree().getView().repaint();
-				}
+			TreeVertex source = (TreeVertex) e.getSource();
+
+			for (TreeVertex parent: parents) {
+				parent.setSelected(false);
+				parent.getView().repaint();
 			}
 
-		} else if (e.getNewValue() == null && e.getProperty() == TreeProperty.SELECTED_NODE) {
+			if (e.getProperty() == TreeProperty.SELECTED_NODE && e.getNewValue() instanceof TreeNode) {
 
-			colorPoints();
+				TreeNode selectedNode = (TreeNode) e.getNewValue();
 
+				TreeVertex parent = null;
+
+				if (source.isFromGenitor(selectedNode)) {
+					parent = getTreeVertex(source.genitor());
+
+				} else if (source.isFromProvider(selectedNode)) {
+					parent = getTreeVertex(source.provider());
+				}
+
+				if (parent != null) {
+					TreeNode[] finds = parent.findSubsumers(selectedNode, true);
+					for(TreeNode find : finds) {
+						find.setSelectedAs(selectedNode);
+					}
+					parent.getView().repaint();
+				}
+			}
 		}
-
 	}
 
 	@Override

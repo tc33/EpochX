@@ -23,223 +23,292 @@
 package org.epochx.monitor.graph;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 
 /**
- * 
+ * A <code>GraphVertexModel</code> provides the visualization model for a
+ * specific <code>GraphVertex</code> instance.
+ * <p>
+ * It registers all the fields related with the displaying, such as the
+ * location, the color, the status (selected/highlighted).
+ * </p>
  */
 public class GraphVertexModel {
 
+	/**
+	 * The <code>GraphVertex</code> represented by this model.
+	 */
 	private GraphVertex vertex;
 
-	private GraphViewModel viewModel;
-
-	private Point centre;
-
-	private Color color;
-
-	private int diameter;
-
+	/**
+	 * The index of the vertex in its generation.
+	 */
 	private int index;
 
+	/**
+	 * The generation number of the vertex.
+	 */
 	private final int generation;
 
+	/**
+	 * The boolean variable which states if the vertex is selected.
+	 */
 	private boolean selected;
-	
+
+	/**
+	 * The boolean variable which states if the vertex is highlighted.
+	 */
 	private boolean highlighted;
 
-	GraphVertexModel(GraphVertex vertex, GraphViewModel viewModel) {
+	/**
+	 * The centre point of the vertex.
+	 */
+	private int x;
+
+	/**
+	 * The centre point of the vertex.
+	 */
+	private int y;
+
+	/**
+	 * The color of the vertex.
+	 */
+	private Color color;
+
+	/**
+	 * The diameter of the vertex.
+	 */
+	private int diameter;
+
+	////////////////////////////////////////////////////////////////////////////
+	//             C O N S T R U C T O R                                      //
+	////////////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Constructs a <code>GraphVertexModel</code>.
+	 * 
+	 * @param vertex the vertex to match with this model.
+	 * 
+	 * @throws IllegalArgumentException if the given vertex is null.
+	 */
+	public GraphVertexModel(GraphVertex vertex) throws IllegalArgumentException {
+
+		if (vertex == null) {
+			throw new IllegalArgumentException("The vertex cannot be null.");
+		}
+
 		this.setVertex(vertex);
-		this.viewModel = viewModel;
-		this.diameter = viewModel.getDiameter();
+		this.diameter = 0;
 		this.highlighted = false;
 		this.index = vertex.getIndex();
 		this.generation = vertex.getGenerationNo();
-
-		viewModel.addFitness(vertex.getFitness());
-		this.color = viewModel.getFitnessColor(vertex.getFitness());
-
-		resetDefaultPosition();
+		this.color = Color.WHITE;
+		this.x = 0;
+		this.y = 0;
 	}
 
+	////////////////////////////////////////////////////////////////////////////
+	//             G E T T E R S  &  S E T T E R S                            //
+	////////////////////////////////////////////////////////////////////////////
+	
 	/**
-	 * @return the vertex
+	 * Returns the vertex whose this model represents
+	 * 
+	 * @return the vertex whose this model represents.
 	 */
 	public GraphVertex getVertex() {
 		return vertex;
 	}
 
+	
 	/**
-	 * @param vertex the vertex to set
+	 * Sets the vertex whose this model represents.
+	 * @param vertex the vertex to set.
 	 */
 	public void setVertex(GraphVertex vertex) {
 		this.vertex = vertex;
 	}
 
+	
 	/**
-	 * @return the viewModel
-	 */
-	public GraphViewModel getViewModel() {
-		return viewModel;
-	}
-
-	/**
-	 * @param viewModel the viewModel to set
-	 */
-	public void setViewModel(GraphViewModel viewModel) {
-		this.viewModel = viewModel;
-	}
-
-	/**
-	 * @return the diameter
-	 */
-	public int getDiameter() {
-		int res=0;
-		if (!highlighted && !selected) {
-			res = diameter;
-		}
-		else if (highlighted) {
-			res = (int) (diameter * 1.2);
-		}
-		else if (selected) {
-			res = (int) (diameter * 1.5);
-		}
-		return res;
-	}
-
-	/**
-	 * @param diameter the diameter to set
-	 */
-	public void setDiameter(int diameter) {
-		this.diameter = diameter;
-	}
-
-	/**
-	 * @return the fill <code>Color</code>.
-	 */
-	public Color getColor() {
-		return color;
-	}
-
-	/**
-	 * Sets the color.
-	 * 
-	 * @param color the color to set.
-	 */
-	public void setColor(Color color) {
-		this.color = color;
-	}
-
-	/**
-	 * Returns the index.
-	 * 
-	 * @return the index.
+	 * Returns the index of the vertex among its generation.
+	 * @return the index of the vertex among its generation.
 	 */
 	public int getIndex() {
 		return index;
 	}
 
+	
 	/**
-	 * Sets the index.
-	 * 
+	 * Sets the index of the vertex among its generation.
 	 * @param index the index to set.
 	 */
 	public void setIndex(int index) {
 		this.index = index;
 	}
 
+	
 	/**
-	 * Returns the generation.
-	 * 
-	 * @return the generation.
-	 */
-	public int getGeneration() {
-		return generation;
-	}
-
-	/**
-	 * Returns the selected.
-	 * @return the selected.
+	 * Returns the selected state.
+	 * @return true if this vertex is selected; false otherwise.
 	 */
 	public boolean isSelected() {
 		return selected;
 	}
 
+	
 	/**
-	 * Sets the selected.
-	 * @param selected the selected to set.
+	 * Sets the selected state.
+	 * @param selected the selected state to set.
 	 */
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 	}
 
+	
 	/**
-	 * @return the highlighted
+	 * Returns the highlighted state.
+	 * @return true if this vertex is highlighted; false otherwise.
 	 */
 	public boolean isHighlighted() {
 		return highlighted;
 	}
 
+	
 	/**
-	 * @param b
+	 * Sets the highlighted state.
+	 * @param highlighted the highlighted state to set.
 	 */
-	public void setHighlighted(boolean b) {
-		this.highlighted = b;
+	public void setHighlighted(boolean highlighted) {
+		this.highlighted = highlighted;
 	}
 
+	
 	/**
+	 * Returns the color of this vertex.
+	 * @return the color of this vertex.
+	 */
+	public Color getColor() {
+		return color;
+	}
+
+	
+	/**
+	 * Sets the color of this vertex.
+	 * @param color the color to set.
+	 */
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
+	
+	/**
+	 * Returns the diameter of this vertex.
+	 * @return the diameter of this vertex.
+	 */
+	public int getDiameter() {
+		return diameter;
+	}
+
+	
+	/**
+	 * Sets the diameter of this vertex.
+	 * @param diameter the diameter to set.
+	 */
+	public void setDiameter(int diameter) {
+		this.diameter = diameter;
+	}
+
+	
+	/**
+	 * Returns the generation of this vertex.
+	 * @return the generation of this vertex.
+	 */
+	public int getGeneration() {
+		return generation;
+	}
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//             L O C A T I O N   R E L A T E D   M E T H O D S            //
+	////////////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Returns the X coordinate.
 	 * 
-	 * @return the centre point.
+	 * @return the X coordinate.
 	 */
-	public Point getCenter() {
-		return centre;
-	}
-
-	public void setCentre(Point p) {
-		this.centre = p;
-	}
-
-	public double getX() {
-		return centre.getX();
-	}
-
-	public double getY() {
-		return centre.getY();
+	public int getX() {
+		return x;
 	}
 
 	/**
+	 * Sets the X coordinate.
 	 * 
-	 * @return the location point.
+	 * @param x the X coordinate to set.
 	 */
-	public Point getLocation() {
-		int x = (int) (centre.getX() - getDiameter() / 2.0);
-		int y = (int) (centre.getY() - getDiameter() / 2.0);
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	/**
+	 * Returns the Y coordinate.
+	 * 
+	 * @return the Y coordinate.
+	 */
+	public int getY() {
+		return y;
+	}
+
+	/**
+	 * Sets the Y coordinate.
+	 * 
+	 * @param y the Y coordinate to set.
+	 */
+	public void setY(int y) {
+		this.y = y;
+	}
+
+	/**
+	 * Returns the centre location of this node.
+	 * 
+	 * @return the centre location of this node.
+	 */
+	public Point getCentre() {
 		return new Point(x, y);
 	}
 
-	public Rectangle getBounds() {
-		return new Rectangle(getLocation(), new Dimension(diameter, diameter));
+	/**
+	 * Sets the centre location of this node.
+	 * 
+	 * @param x the X coordinate.
+	 * @param y the Y coordinate.
+	 */
+	public void setCentre(int x, int y) {
+		this.x = x;
+		this.y = y;
 	}
 
+	/**
+	 * Returns the bounds of this node.
+	 * 
+	 * @return the bounds of this node.
+	 */
+	public Rectangle getBounds() {
+		return new Rectangle(x - diameter / 2, y - diameter / 2, diameter, diameter);
+	}
+
+	/**
+	 * Checks if the specified point is inside this node's bounds.
+	 * 
+	 * @param p the specicied point whose location is to be check.
+	 * @return true if the specified point is inside this node's bounds; false
+	 *         otherwise.
+	 */
 	public boolean contains(Point p) {
 		Rectangle bounds = getBounds();
 		return bounds.contains(p);
-	}
-
-	public void setFitnessColor() {
-		color = viewModel.getFitnessColor(vertex.getFitness());
-	}
-
-	public void resetDefaultIndex() {
-		index = vertex.getIndex();
-	}
-
-	public void resetDefaultPosition() {
-		int x = viewModel.getMargins().left + index * (viewModel.getDiameter() + viewModel.getHgap());
-		int y = viewModel.getMargins().top + generation * (viewModel.getDiameter() + viewModel.getVgap());
-		centre = new Point(x, y);
 	}
 
 }

@@ -22,6 +22,7 @@
  */
 package org.epochx.monitor.tree;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -31,6 +32,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
@@ -38,8 +41,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 import javax.swing.event.EventListenerList;
 import javax.swing.event.MouseInputAdapter;
@@ -51,17 +54,12 @@ import org.epochx.refactoring.representation.TreeNodeAble;
 /**
  * A <code>Tree</code>.
  */
-public class Tree extends JScrollPane implements TreeAble, RootAble, Runnable, Iterable<TreeNode> {
+public class Tree extends JPanel implements TreeAble, RootAble, Runnable, Iterable<TreeNode> {
 
 	/**
 	 * The <code>long</code>/serialVersionUID.
 	 */
 	private static final long serialVersionUID = -6378399736278409064L;
-
-	/**
-	 * Constant representing an angle which has not been yet computed.
-	 */
-	public static final double NO_ANGLE = 666E66;
 
 	/**
 	 * Constant representing the post-order iteration.
@@ -79,9 +77,24 @@ public class Tree extends JScrollPane implements TreeAble, RootAble, Runnable, I
 	public static final int LEVEL_ORDER = 3;
 
 	/**
-	 * The number of created instances.
+	 * Constant representing an angle which has not been yet computed.
 	 */
-	private static int noInstances = 0;
+	public static final double NO_ANGLE = 666E66;
+
+	/**
+	 * Constant representing the default color.
+	 */
+	public static final Color DEFAULT_COLOR = Color.LIGHT_GRAY;
+
+	/**
+	 * Constant representing the color for selected nodes.
+	 */
+	public static final Color SELECTED_COLOR = Color.green;
+
+	/**
+	 * Constant representing the color for highlighted nodes.
+	 */
+	public static final Color HIGHLIGHTED_COLOR = Color.ORANGE;
 
 	/**
 	 * The <code>EventListenerList</code>.
@@ -91,12 +104,12 @@ public class Tree extends JScrollPane implements TreeAble, RootAble, Runnable, I
 	/**
 	 * The <code>TreeView</code>.
 	 */
-	private TreeView view;
+	protected final TreeView view;
 
 	/**
-	 * The <code>JViewport</code>.
+	 * The <code>JScrollPane</code>.
 	 */
-	private JViewport viewPort;
+	protected final JScrollPane scrollPane;
 
 	/**
 	 * The root <code>TreeNode</code>.
@@ -141,36 +154,40 @@ public class Tree extends JScrollPane implements TreeAble, RootAble, Runnable, I
 	 * Constructs a <code>Tree</code>.
 	 */
 	public Tree() {
-		super();
+		super(new BorderLayout());
+		setName("Tree");
 
 		this.listenerList = new EventListenerList();
-		
+
 		this.depth = -1;
 		this.root = null;
 		this.levels = new TreeLevel[0];
-		
+
 		this.d = 40;
 		this.diameter = 20;
 		this.zoom = 1.0;
 
 		this.view = new TreeView();
+		this.scrollPane = new JScrollPane();
 
-		this.viewPort = new JViewport();
-		viewPort.setView(view);
-		viewPort.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		scrollPane.setViewportView(view);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+		add(scrollPane, BorderLayout.CENTER);
+
+		TreeComponentListener componentListener = new TreeComponentListener();
+		addComponentListener(componentListener);
+		scrollPane.addComponentListener(componentListener);
 
 		TreeMouseListener mouseListener = new TreeMouseListener();
-		viewPort.addMouseMotionListener(mouseListener);
-		viewPort.addMouseListener(mouseListener);
-		viewPort.addMouseWheelListener(mouseListener);
+		scrollPane.addMouseMotionListener(mouseListener);
+		scrollPane.addMouseListener(mouseListener);
+		scrollPane.addMouseWheelListener(mouseListener);
 
-		setViewport(viewPort);
-		setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-		setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-		setName("Tree " + noInstances);
-		noInstances++;
-		
+		setPreferredSize(new Dimension(600, 600));
+		validate();
 	}
 
 	/**
@@ -214,7 +231,7 @@ public class Tree extends JScrollPane implements TreeAble, RootAble, Runnable, I
 	}
 
 	////////////////////////////////////////////////////////////////////////////
-	//                   R U N N A B L E   M E T H O D                        //
+	//             R U N N A B L E   M E T H O D                              //
 	////////////////////////////////////////////////////////////////////////////
 
 	/**
@@ -223,21 +240,20 @@ public class Tree extends JScrollPane implements TreeAble, RootAble, Runnable, I
 	 * 
 	 * @throws IllegalStateException if the root node is null.
 	 */
-	public synchronized void run() throws IllegalStateException {
+	public final synchronized void run() throws IllegalStateException {
 
 		if (root == null) {
 			throw new IllegalStateException("The root node is null.");
 		}
-		
-		this.d = 40;
-		this.diameter = 20;
+
 		this.zoom = 1.0;
+		this.selectedNode = null;
 
 		this.depth = root.depth();
 		levels = new TreeLevel[depth + 1];
 
 		// Root initialization
-		root.setDiameter(getDiameter());
+		root.setDiameter(getDiameter(), false);
 		root.setAngle(0);
 		root.setLeftLimit(0);
 		root.setRightLimit(2 * Math.PI);
@@ -259,7 +275,7 @@ public class Tree extends JScrollPane implements TreeAble, RootAble, Runnable, I
 			for (int i = 0; i < children.length; i++) {
 				double angle = i / n * 2 * Math.PI;
 				children[i].setAngle(angle);
-				children[i].setDiameter(maxDiameter);
+				children[i].setDiameter(maxDiameter, false);
 				children[i].setX((int) (d * (Math.cos(angle)) + origin));
 				children[i].setY((int) (d * (Math.sin(angle)) + origin));
 			}
@@ -284,6 +300,7 @@ public class Tree extends JScrollPane implements TreeAble, RootAble, Runnable, I
 			public void run() {
 				view.repaint();
 				view.invalidate();
+				scrollPane.validate();
 			}
 		});
 
@@ -291,7 +308,7 @@ public class Tree extends JScrollPane implements TreeAble, RootAble, Runnable, I
 
 	////////////////////////////////////////////////////////////////////////////
 	//             G E T T E R S  &  S E T T E R S                            //
-	////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////	
 
 	/**
 	 * Returns the view.
@@ -300,33 +317,6 @@ public class Tree extends JScrollPane implements TreeAble, RootAble, Runnable, I
 	 */
 	public TreeView getView() {
 		return view;
-	}
-
-	/**
-	 * Sets the view.
-	 * 
-	 * @param view the view to set.
-	 */
-	public void setView(TreeView view) {
-		this.view = view;
-	}
-
-	/**
-	 * Returns the viewPort.
-	 * 
-	 * @return the viewPort.
-	 */
-	public JViewport getViewPort() {
-		return viewPort;
-	}
-
-	/**
-	 * Sets the viewPort.
-	 * 
-	 * @param viewPort the viewPort to set.
-	 */
-	public void setViewPort(JViewport viewPort) {
-		this.viewPort = viewPort;
 	}
 
 	/**
@@ -440,6 +430,18 @@ public class Tree extends JScrollPane implements TreeAble, RootAble, Runnable, I
 	}
 
 	/**
+	 * The <code>Iterable</code> implemented method ; Returns an
+	 * <code>Iterator</code> visiting the tree's nodes in
+	 * {@link Tree#POST_ORDER post-order}.
+	 * 
+	 * @return the iterator of this tree's nodes.
+	 * @see #getNodes()
+	 */
+	public Iterator<TreeNode> iterator() {
+		return getNodes().iterator();
+	}
+
+	/**
 	 * Returns the selectedNode.
 	 * 
 	 * @return the selectedNode.
@@ -456,6 +458,7 @@ public class Tree extends JScrollPane implements TreeAble, RootAble, Runnable, I
 	public void setSelectedNode(TreeNode node) {
 		TreeNode old = selectedNode;
 		this.selectedNode = node;
+		view.repaint();
 		fireTreeEvent(new TreeEvent(Tree.this, TreeProperty.SELECTED_NODE, old, selectedNode));
 	}
 
@@ -468,16 +471,56 @@ public class Tree extends JScrollPane implements TreeAble, RootAble, Runnable, I
 		return root;
 	}
 
+	////////////////////////////////////////////////////////////////////////////
+	//              R O O T   D E L E G A T E   M E T H O D S                 //
+	////////////////////////////////////////////////////////////////////////////
+
 	/**
-	 * The <code>Iterable</code> implemented method ; Returns an
-	 * <code>Iterator</code> visiting the tree's nodes in
-	 * {@link Tree#POST_ORDER post-order}.
+	 * Delegate method.
 	 * 
-	 * @return the iterator of this tree's nodes.
-	 * @see #getNodes()
+	 * @see org.epochx.monitor.tree.TreeNode#get(int)
 	 */
-	public Iterator<TreeNode> iterator() {
-		return getNodes().iterator();
+	public TreeNode get(int index) throws IndexOutOfBoundsException {
+		if (root != null) {
+			return root.get(index);
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * Delegate method.
+	 * 
+	 * @see org.epochx.monitor.tree.TreeNode#find(org.epochx.monitor.tree.TreeNode)
+	 */
+	public TreeNode[] findSubsumers(TreeNode n, boolean onlySelected) {
+		if (root != null) {
+			return root.findSubsumers(n, onlySelected);
+		} else {
+			return new TreeNode[0];
+		}
+	}
+
+	/**
+	 * Delegate method.
+	 * 
+	 * @see org.epochx.monitor.tree.TreeNode#setSelected(boolean, boolean)
+	 */
+	public void setSelected(boolean b) {
+		if (root != null) {
+			root.setSelected(b, true);
+		}
+	}
+
+	/**
+	 * Delegate method.
+	 * 
+	 * @see org.epochx.monitor.tree.TreeNode#setHighlighted(boolean, boolean)
+	 */
+	public void setHighlighted(boolean b) {
+		if (root != null) {
+			root.setHighlighted(b, true);
+		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////
@@ -556,6 +599,19 @@ public class Tree extends JScrollPane implements TreeAble, RootAble, Runnable, I
 	}
 
 	/**
+	 * Colors the node at the specified index by the given <code>Color</code>.
+	 * 
+	 * @param index the index of the node to color.
+	 * @param color the color.
+	 * @param recursively if true the sub-tree will be colored.
+	 * @throws IndexOutOfBoundsException if the given index is out of
+	 *         bounds.
+	 */
+	public void color(int index, Color color, boolean recursively) throws IndexOutOfBoundsException {
+		get(index).setColor(color, recursively);
+	}
+
+	/**
 	 * Computes the position of each node, according to its angle.
 	 * 
 	 * @throws NoYetAngleException if a node has no angle yet.
@@ -565,16 +621,15 @@ public class Tree extends JScrollPane implements TreeAble, RootAble, Runnable, I
 			level.resetPositions();
 		}
 		view.repaint();
-		validate();
 	}
-	
+
 	@Override
 	public Dimension getPreferredSize() {
 		return view.getPreferredSize();
 	}
 
 	////////////////////////////////////////////////////////////////////////////
-	//            L I S T E N E R   M A N A G E M E N T                       //
+	//            L I S T E N E R S   M A N A G E M E N T                     //
 	////////////////////////////////////////////////////////////////////////////
 
 	/**
@@ -643,8 +698,7 @@ public class Tree extends JScrollPane implements TreeAble, RootAble, Runnable, I
 
 			} else {
 
-				//				g2.fillRect(0, 0, getPreferredSize().width,
-				//				getPreferredSize().height);
+				//g2.fillRect(0, 0, getPreferredSize().width, getPreferredSize().height);
 
 				for (TreeLevel level: levels) {
 					paintLevel(g2, level);
@@ -673,7 +727,6 @@ public class Tree extends JScrollPane implements TreeAble, RootAble, Runnable, I
 			// Get graphic attributes
 			int x = node.getX();
 			int y = node.getY();
-			int diameter = (int) (node.getDiameter() * zoom);
 
 			// Paint children's links.
 			for (TreeNode child: node.getChildren()) {
@@ -683,26 +736,32 @@ public class Tree extends JScrollPane implements TreeAble, RootAble, Runnable, I
 				g.drawLine(x, y, x2, y2);
 			}
 
-			g.setPaint(node.getColor());
+			// Paint the node.
+			int diameter = (int) (node.getDiameter() * zoom);
+			Color color;
+			if (node.isSelected()) {
+				color = Tree.SELECTED_COLOR;
+			} else if (node.isSelected()) {
+				color = Tree.HIGHLIGHTED_COLOR;
+			} else {
+				color = node.getColor();
+			}
+
+			g.setPaint(color);
 			g.fillOval(x - diameter / 2, y - diameter / 2, diameter, diameter);
 
+			// Paint the name.
 			String name = node.getName();
 
 			int fontSize = diameter / name.length();
 			Font font = new Font("Arial", Font.BOLD, fontSize);
 			g.setFont(font);
 
-			try{
-				FontMetrics metrics = g.getFontMetrics();
-				int textWidth = metrics.stringWidth(name);
-				int textHeight = metrics.getAscent();
-				g.setColor(Color.black);
-				g.drawString(name, x - textWidth / 2, y + textHeight / 2);
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-			
-			
+			FontMetrics metrics = g.getFontMetrics();
+			int textWidth = metrics.stringWidth(name);
+			int textHeight = metrics.getAscent();
+			g.setColor(Color.black);
+			g.drawString(name, x - textWidth / 2, y + textHeight / 2);
 
 		}
 
@@ -725,13 +784,28 @@ public class Tree extends JScrollPane implements TreeAble, RootAble, Runnable, I
 	}
 
 	////////////////////////////////////////////////////////////////////////////
-	//               M O U S E       L I S T E N E R S                        //
+	//             C O M P O N E N T   L I S T E N E R                        //
 	////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * The <code>TreeMouseListener</code>.
 	 */
-	class TreeMouseListener extends MouseInputAdapter {
+	private class TreeComponentListener extends ComponentAdapter {
+
+		public void componentResized(ComponentEvent e) {
+			scrollPane.setPreferredSize(getSize());
+			scrollPane.getViewport().setPreferredSize(getSize());
+		}
+	}
+
+	////////////////////////////////////////////////////////////////////////////
+	//             M O U S E   L I S T E N E R S                              //
+	////////////////////////////////////////////////////////////////////////////
+
+	/**
+	 * The <code>TreeMouseListener</code>.
+	 */
+	private class TreeMouseListener extends MouseInputAdapter {
 
 		private final Point pp = new Point();
 
@@ -741,71 +815,64 @@ public class Tree extends JScrollPane implements TreeAble, RootAble, Runnable, I
 		public void mouseClicked(MouseEvent e) {
 
 			Point p = e.getPoint();
-			Point vp = viewPort.getViewPosition();
+			Point vp = scrollPane.getViewport().getViewPosition();
 			p.translate(vp.x, vp.y);
 
 			TreeNode node = null;
 			for (TreeNode n: Tree.this.getNodes()) {
 				if (n.contains(p)) {
 					node = n;
-
-				}
-				else if (!e.isControlDown()) {
-					n.setSelected(false);
-					n.setColor(Color.LIGHT_GRAY);
 				}
 			}
-			if (node != null) {
 
-				if (!node.isSelected()) {
-					if (e.isControlDown() && e.isShiftDown()) {
-						
-						if (selectedNode != null) {
-							node = TreeNode.commonAncestor(selectedNode, node);
-						}
-						node.setSubTreeColor(Color.GREEN);
-						node.setSubTreeSelected(true);
-						
-					} else {
-						node.setColor(Color.GREEN);
-						node.setSelected(true);
-					}
-					setSelectedNode(node);
-				}
-				else {
-					
-					if (e.isControlDown() && e.isShiftDown()) {
-
-						node.setSubTreeColor(Color.LIGHT_GRAY);
-						node.setSubTreeSelected(false);
-						
-						if(selectedNode!=null && selectedNode.isDescendant(node)) {
-							setSelectedNode(null);
-						}
-						else {
-							setSelectedNode(selectedNode);
-						}
-
-					} else {
-						
-						node.setColor(Color.LIGHT_GRAY);
-						node.setSelected(false);
-						
-						setSelectedNode(null);
-						
-					}
-				}
-
-			} else {
+			if (!e.isControlDown()) {
+				setSelected(false);
 				setSelectedNode(null);
 			}
 
-			view.repaint();
+			if (node != null) {
+
+				if (!node.isSelected()) {
+					node.setSelected(true, e.isShiftDown());
+					if (selectedNode != null) {
+						try {
+							TreeNode commonAncestor = TreeNode.commonAncestor(selectedNode, node);
+
+							while (node != commonAncestor) {
+								node.setSelected(true, false);
+								node = node.getParent();
+							}
+							while (selectedNode != commonAncestor) {
+								selectedNode.setSelected(true, false);
+								selectedNode = selectedNode.getParent();
+							}
+							commonAncestor.setSelected(true, false);
+
+							setSelectedNode(commonAncestor);
+						} catch (IllegalArgumentException ex) {
+							System.err.println(ex.getMessage());
+							System.out.println(selectedNode);
+							System.out.println(node);
+						}
+
+					}
+
+					setSelectedNode(node);
+
+				} else {
+					node.setSelected(false, true);
+					if (node == selectedNode) {
+						setSelectedNode(null);
+					} else {
+						setSelectedNode(selectedNode);
+					}
+				}
+			}
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			viewPort.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+			scrollPane.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
 			pp.setLocation(e.getPoint());
 
 			moussePressed = true;
@@ -813,7 +880,7 @@ public class Tree extends JScrollPane implements TreeAble, RootAble, Runnable, I
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			viewPort.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			scrollPane.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			view.repaint();
 
 			moussePressed = false;
@@ -825,20 +892,23 @@ public class Tree extends JScrollPane implements TreeAble, RootAble, Runnable, I
 			if (moussePressed) {
 
 				Point mp = e.getPoint();
-				Point vp = (Point) viewPort.getViewPosition().clone();
+				Point vp = (Point) scrollPane.getViewport().getViewPosition().clone();
 
 				double z = -.1 * e.getWheelRotation();
 				double currentZoom = getZoom();
 				double newZoom = currentZoom + z;
 
 				setZoom(newZoom);
+
+				z = newZoom - currentZoom;
+
 				resetPositions();
-				viewPort.setViewSize(view.getPreferredSize());
+				scrollPane.getViewport().setViewSize(view.getPreferredSize());
 
 				vp.x = (int) (vp.x + z * mp.x);
 				vp.y = (int) (vp.y + z * mp.x);
 
-				viewPort.setViewPosition(vp);
+				scrollPane.getViewport().setViewPosition(vp);
 			}
 		}
 
@@ -846,10 +916,10 @@ public class Tree extends JScrollPane implements TreeAble, RootAble, Runnable, I
 		public void mouseDragged(MouseEvent e) {
 			Point cp = e.getPoint();
 
-			Point vp = viewPort.getViewPosition();
+			Point vp = scrollPane.getViewport().getViewPosition();
 			vp.translate(pp.x - cp.x, pp.y - cp.y);
 
-			viewPort.setViewPosition(vp);
+			scrollPane.getViewport().setViewPosition(vp);
 			pp.setLocation(cp);
 		}
 

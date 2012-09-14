@@ -260,7 +260,7 @@ public class TreeLevel implements Iterable<TreeNode> {
 			for (int i = 0; i < children.length; i++) {
 				double angle = leftLimit + (i + 1) / n * interval;
 				children[i].setAngle(angle);
-				children[i].setDiameter(maxDiameter);
+				children[i].setDiameter(maxDiameter, false);
 				children[i].setX((int) (d * (Math.cos(angle)) + origin));
 				children[i].setY((int) (d * (Math.sin(angle)) + origin));
 			}

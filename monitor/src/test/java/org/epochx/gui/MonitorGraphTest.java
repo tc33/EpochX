@@ -1,5 +1,6 @@
 package org.epochx.gui;
 
+import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,9 +27,10 @@ import org.epochx.event.stat.GenerationWorstFitness;
 import org.epochx.monitor.Monitor;
 import org.epochx.monitor.graph.Graph;
 import org.epochx.monitor.table.Table;
+import org.epochx.monitor.tree.TreeVertex;
 import org.epochx.monitor.visualization.AncestryFinder;
+import org.epochx.monitor.visualization.InformationPanel;
 import org.epochx.monitor.visualization.OperationPanel;
-import org.epochx.monitor.visualization.TreeVertexPanel;
 import org.epochx.refactoring.PopulationNeutrality;
 import org.epochx.refactoring.Problem;
 import org.epochx.refactoring.initialisation.RampedHalfAndHalf;
@@ -67,9 +69,9 @@ public class MonitorGraphTest {
 		config.set(Reproduction.PROBABILITY, 0.0);
 		config.set(Mutation.PROBABILITY, 0.0);
 		config.set(BranchedBreeder.ELITISM, 0);
-		config.set(MaximumGenerations.MAXIMUM_GENERATIONS, 20);
+		config.set(MaximumGenerations.MAXIMUM_GENERATIONS, 50);
 		config.set(TreeFactory.MAX_DEPTH, 7);
-		config.set(TreeFactory.INITIAL_DEPTH, 3);
+		config.set(TreeFactory.INITIAL_DEPTH, 4);
 		config.set(TournamentSelector.TOURNAMENT_SIZE, 4);
 		config.set(NeutralAwareMutation.NEUTRAL_MOVES_ENABLED, true);
 
@@ -112,21 +114,24 @@ public class MonitorGraphTest {
 
 		monitor.add(table1, 1, 1);
 
-		Graph g = new Graph("Visualization Graph");
+		Graph g = new Graph();
 		monitor.add(g, 1, 1);
+		
+		InformationPanel ip = new InformationPanel();
+		g.getViewModel().addGraphViewListener(ip);
+		g.add(ip, BorderLayout.SOUTH);
+		
+		TreeVertex tvPane = new TreeVertex();
+		g.getViewModel().addGraphViewListener(tvPane);
+		monitor.add(tvPane, 1, 2);
 		
 		OperationPanel opPane = new OperationPanel();
 		g.getViewModel().addGraphViewListener(opPane);
 		monitor.add(opPane, 1, 2);
-		/*
-		TreeVertexPanel tvPane = new TreeVertexPanel();
-		g.getViewModel().addGraphViewListener(tvPane);
-		monitor.add(tvPane, 1, 2);*/
 		
 		AncestryFinder af = new AncestryFinder(g.getViewModel());
 		g.getViewModel().addGraphViewListener(af);
 		monitor.add(af, 1, 2);
-		
 		
 		
 

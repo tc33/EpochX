@@ -56,7 +56,7 @@ public class GraphRowHeader extends JComponent implements ComponentListener {
 	 */
 	public GraphRowHeader() {
 		super();
-		
+
 		setBorder(BorderFactory.createEtchedBorder());
 	}
 
@@ -69,11 +69,6 @@ public class GraphRowHeader extends JComponent implements ComponentListener {
 	 */
 	public GraphRowHeader(GraphViewModel viewModel) {
 		this();
-
-		if (viewModel == null) {
-			throw new IllegalArgumentException("The view model cannot be null.");
-		}
-
 		setViewModel(viewModel);
 	}
 
@@ -116,21 +111,21 @@ public class GraphRowHeader extends JComponent implements ComponentListener {
 		int ymin = (int) r.getY();
 		int ymax = (int) (r.getY() + r.getHeight());
 		int h = (int) getPreferredSize().getHeight();
-		
+
 		ymax = ymax < h ? ymax : h;
 		int firstGeneration = getGenerationAt(ymin);
 		int lastGeneration = getGenerationAt(ymax);
-		
+
 		boolean resizeNeeded = false;
 		int margin = 3;
 		int width = getSize().width;
 
-//		System.out.println("from : " + firstGeneration + " to : " + lastGeneration);
-//		int c = (int) System.currentTimeMillis() % 250;
-//		Color fillColor = new Color(c, 0, c);
-//		g2.setPaint(fillColor);
-//		g2.fill(g2.getClip());
-//		g2.fillRect(0, 0, width, h);
+		//		System.out.println("from : " + firstGeneration + " to : " + lastGeneration);
+		//		int c = (int) System.currentTimeMillis() % 250;
+		//		Color fillColor = new Color(c, 0, c);
+		//		g2.setPaint(fillColor);
+		//		g2.fill(g2.getClip());
+		//		g2.fillRect(0, 0, width, h);
 
 		for (int i = firstGeneration; i <= lastGeneration; i++) {
 
@@ -172,22 +167,28 @@ public class GraphRowHeader extends JComponent implements ComponentListener {
 	 * @return the generation number corresponding to the y coordinate.
 	 */
 	private int getGenerationAt(int y) {
-		int top = viewModel.getMargins().top;
-		int width = viewModel.getDiameter() + viewModel.getVgap();
-		int res;
 		
-		if (y >= top + width) {
+		int res = -1;
+		
+		if (viewModel != null) {
+			int top = viewModel.getMargins().top;
+			int width = viewModel.getDiameter() + viewModel.getVgap();
 
-			y = (int) (y - (top + width));
+			if (y >= top + width) {
 
-			res = y / width + 1;
-		} else {
-			res = 0;
+				y = (int) (y - (top + width));
+
+				res = y / width + 1;
+			} else {
+				res = 0;
+			}
 		}
-
 		return res;
 	}
 
+	////////////////////////////////////////////////////////////////////////////
+	//             C O M P O N E N T   L I S T E N E R   M E T H O D S        //
+	////////////////////////////////////////////////////////////////////////////
 
 	public void componentHidden(ComponentEvent e) {
 	}
@@ -197,14 +198,14 @@ public class GraphRowHeader extends JComponent implements ComponentListener {
 	}
 
 	public void componentResized(ComponentEvent e) {
-		
-		if(e.getSource() instanceof GraphView) {
+
+		if (e.getSource() instanceof GraphView) {
 			GraphView view = (GraphView) e.getSource();
 			Dimension d = new Dimension(getSize().width, view.getHeight());
 			setPreferredSize(d);
 			setSize(d);
 		}
-		
+
 	}
 
 	public void componentShown(ComponentEvent e) {

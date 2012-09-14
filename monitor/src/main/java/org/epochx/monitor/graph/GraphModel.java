@@ -300,9 +300,10 @@ public class GraphModel implements Listener<Event>, Serializable {
 		generations[generation].sortBy(comparator);
 	}
 
-	//
-	// Listeners management
-	//
+	////////////////////////////////////////////////////////////////////////////
+	//            L I S T E N E R S   M A N A G E M E N T                     //
+	////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * Adds a <code>GraphModelListener</code> to the listener list.
 	 * 

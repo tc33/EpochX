@@ -41,6 +41,8 @@ import org.epochx.refactoring.representation.TreeNodeAble;
  * <ul>
  * <li>The parent <code>GraphGeneration</code>.
  * <li>The <code>Operator</code> responsible for this individual.
+ * <li>The <code>EndOperator</code> event responsible for this individual.
+ * <li>The rank of this individual among its siblings.
  * <li>A list of parent <code>GraphVertex</code>.
  * <li>A list of children <code>GraphVertex</code>.
  * <p>
@@ -71,9 +73,9 @@ public class GraphVertex implements Comparable<Object>, Serializable, TreeAble {
 	 * The Operator event.
 	 */
 	private EndOperator operatorEvent;
-	
+
 	/**
-	 * The rank among the siblings.
+	 * The rank of this individual among the siblings.
 	 */
 	private int rank;
 
@@ -103,7 +105,7 @@ public class GraphVertex implements Comparable<Object>, Serializable, TreeAble {
 		this.graphGeneration = graphGeneration;
 		this.operator = null;
 		this.operatorEvent = null;
-		this.rank = 0;
+		this.rank = -1;
 		this.parents = new ArrayList<GraphVertex>();
 		this.children = new ArrayList<GraphVertex>();
 
@@ -128,9 +130,45 @@ public class GraphVertex implements Comparable<Object>, Serializable, TreeAble {
 	}
 
 	/**
-	 * Returns the parent <code>Operator</code> Can be null.
+	 * Delegate method ; Returns the individual's <code>Fitness</code>.
 	 * 
-	 * @return the parent <code>Operator</code>.
+	 * @return the individual's <code>Fitness</code>.
+	 */
+	public Fitness getFitness() {
+		return individual.getFitness();
+	}
+
+	/**
+	 * Returns the graphGeneration.
+	 * 
+	 * @return the graphGeneration.
+	 */
+	public GraphGeneration getGraphGeneration() {
+		return graphGeneration;
+	}
+
+	/**
+	 * Sets the graphGeneration.
+	 * 
+	 * @param graphGeneration the graphGeneration to set.
+	 */
+	public void setGraphGeneration(GraphGeneration graphGeneration) {
+		this.graphGeneration = graphGeneration;
+	}
+
+	/**
+	 * Delegate method ; Returns the generation number.
+	 * 
+	 * @return the generation number.
+	 */
+	public int getGenerationNo() {
+		return graphGeneration.getGeneration();
+	}
+
+	/**
+	 * Returns the parent <code>Operator</code>.
+	 * 
+	 * @return the parent <code>Operator</code>; Can be null.
 	 */
 	public Operator getOperator() {
 		return operator;
@@ -139,40 +177,42 @@ public class GraphVertex implements Comparable<Object>, Serializable, TreeAble {
 	/**
 	 * Sets the parent <code>Operator</code>.
 	 * 
-	 * @param operator the operator to set
+	 * @param operator the operator to set.
 	 */
 	public void setOperator(Operator operator) {
 		this.operator = operator;
 	}
 
 	/**
-	 * Returns the operatorEvent.
+	 * Returns the parent <code>EndOperator</code> event.
 	 * 
-	 * @return the operatorEvent.
+	 * @return the parent <code>EndOperator</code> event; Can be null.
 	 */
 	public EndOperator getOperatorEvent() {
 		return operatorEvent;
 	}
 
 	/**
-	 * Sets the operatorEvent.
+	 * Sets the parent <code>EndOperator</code> event.
 	 * 
-	 * @param operatorEvent the operatorEvent to set.
+	 * @param operatorEvent the parent <code>EndOperator</code> event to set.
 	 */
 	public void setOperatorEvent(EndOperator operatorEvent) {
 		this.operatorEvent = operatorEvent;
 	}
 
 	/**
-	 * Returns the rank.
-	 * @return the rank.
+	 * Returns the rank of this individual among the siblings.
+	 * 
+	 * @return the rank of this individual among the siblings.
 	 */
 	public int getRank() {
 		return rank;
 	}
 
 	/**
-	 * Sets the rank.
+	 * Sets the rank of this individual among the siblings.
+	 * 
 	 * @param rank the rank to set.
 	 */
 	public void setRank(int rank) {
@@ -227,15 +267,6 @@ public class GraphVertex implements Comparable<Object>, Serializable, TreeAble {
 	}
 
 	/**
-	 * Returns the siblings of this vertex among is parent generation.
-	 * 
-	 * @return
-	 */
-	public GraphVertex[] getSiblings() {
-		return graphGeneration.getSiblings(this);
-	}
-
-	/**
 	 * Returns the array of this vertex's children.
 	 * 
 	 * @return the array of this vertex's children.
@@ -281,21 +312,12 @@ public class GraphVertex implements Comparable<Object>, Serializable, TreeAble {
 	}
 
 	/**
-	 * Delegate method ; Returns the individual's <code>Fitness</code>.
+	 * Returns the siblings of this vertex among its parent generation.
 	 * 
-	 * @return the individual's <code>Fitness</code>.
+	 * @return the siblings of this vertex among its parent generation.
 	 */
-	public Fitness getFitness() {
-		return individual.getFitness();
-	}
-
-	/**
-	 * Delegate method ; Returns the generation number.
-	 * 
-	 * @return the generation number.
-	 */
-	public int getGenerationNo() {
-		return graphGeneration.getGeneration();
+	public GraphVertex[] getSiblings() {
+		return graphGeneration.getSiblings(this);
 	}
 
 	/**
@@ -321,6 +343,87 @@ public class GraphVertex implements Comparable<Object>, Serializable, TreeAble {
 		}
 		mean /= parents.size();
 		return mean;
+	}
+
+	/**
+	 * Returns the genitor's vertex. The genitor is the individual from which
+	 * this individual has been cloned before being modified.
+	 * 
+	 * @return the genitor of this vertex if it can be determined; null,
+	 *         otherwise.
+	 */
+	public GraphVertex genitor() {
+		GraphVertex res = null;
+
+		if (operatorEvent != null && operator != null) {
+
+			// Case 1 : only one parent.
+			if (operator.inputSize() == 1 && parents.size() > 0) {
+				res = parents.get(0);
+			}
+
+			// Case 2 : two parents.
+			if (operator.inputSize() == 2 && 0 <= rank && rank < getParents().length) {
+				res = parents.get(rank);
+			}
+		}
+		return res;
+	}
+
+	/**
+	 * Returns the index of the point from the genitor which has been
+	 * mutated.The point among the points array of the <code>EndOperator</code>
+	 * event corresponding to the rank of this vertex.
+	 * 
+	 * @return the index of the point from the genitor which has been
+	 *         mutated if the <code>EndOperator</code> event has been defined;
+	 *         returns -1, otherwise.
+	 */
+	public int genitorPoint() {
+		int res = -1;
+		if (operatorEvent != null && 0 <= rank && rank < operatorEvent.getPoints().length) {
+			res = operatorEvent.getPoints()[rank];
+		}
+		return res;
+	}
+
+	/**
+	 * Returns the provider's vertex. The provider is the individual which has
+	 * supplied genes to create this individual.
+	 * <p>
+	 * For example, during a <i>Crossover</i> operation, the provider is the
+	 * second parent; For a <i>Mutation</i>, there is no provider as the mutated
+	 * part has been newly created.
+	 * </p>
+	 * 
+	 * @return the provider of this vertex if it exists; null, otherwise.
+	 */
+	public GraphVertex provider() {
+		GraphVertex res = null;
+
+		if (operator != null) {
+
+			// Case 2 : two parents.
+			if (operator.inputSize() == 2 && 0 <= rank && rank < getParents().length) {
+				res = parents.get(1 - rank);
+			}
+		}
+		return res;
+	}
+
+	/**
+	 * Returns the index of the point. The point among the points array of the
+	 * <code>EndOperator</code> event corresponding to the rank of this vertex.
+	 * 
+	 * @return the operation point if the <code>EndOperator</code> event has
+	 *         been defined; returns -1, otherwise.
+	 */
+	public int providerPoint() {
+		int res = -1;
+		if (operatorEvent != null && 0 <= rank && rank < operatorEvent.getPoints().length) {
+			res = operatorEvent.getPoints()[operatorEvent.getPoints().length - 1 - rank];
+		}
+		return res;
 	}
 
 	/**
@@ -362,6 +465,23 @@ public class GraphVertex implements Comparable<Object>, Serializable, TreeAble {
 	}
 
 	/**
+	 * The <code>TreeAble</code> implemented method.
+	 * <p>
+	 * If this vertex's <code>Individual</code> is an instance of
+	 * <code>TreeAble</code>, returns its tree; Throws a
+	 * <code>ClassCastException</code> otherwise.
+	 * </p>
+	 * 
+	 * @return the indivudual's tree.
+	 * 
+	 * @throws ClassCastException if the individual represented by this vertex
+	 *         is not an instance of <code>TreeAble</code>.
+	 */
+	public TreeNodeAble getTree() throws ClassCastException {
+		return ((TreeAble) individual).getTree();
+	}
+
+	/**
 	 * Overrides the <code>equals</code> method to compare the
 	 * <code>Individual</code> equality.
 	 * 
@@ -392,32 +512,6 @@ public class GraphVertex implements Comparable<Object>, Serializable, TreeAble {
 		return res;
 	}
 
-	/**
-	 * The <code>TreeAble</code> implemented method.
-	 * <p>
-	 * If this vertex's <code>Individual</code> is an instance of
-	 * <code>TreeAble</code>, returns its tree ; throws a
-	 * <code>ClassCastException</code> otherwise.
-	 * </p>
-	 * 
-	 * @return the indivudual's tree.
-	 * 
-	 * @throws ClassCastException if the individual represented by this vertex
-	 *         is not an instance of <code>TreeAble</code>.
-	 */
-	public TreeNodeAble getTree() throws ClassCastException {
-		return ((TreeAble) individual).getTree();
-	}
-	
-	public int getCriticalPoint() {
-		int res = -1;
-		if(operatorEvent != null && operatorEvent.getPoints().length > rank) {
-			res = operatorEvent.getPoints()[rank];
-		}
-		return res;
-	}
-	
-
 	@Override
 	public GraphVertex clone() {
 		try {
@@ -439,15 +533,16 @@ public class GraphVertex implements Comparable<Object>, Serializable, TreeAble {
 		res += "@" + String.valueOf(System.identityHashCode(graphGeneration));
 
 		res += ",";
-		res += "Individual@" + String.valueOf(System.identityHashCode(individual));
-		res += ":" + individual.toString().substring(0, Math.min(10, individual.toString().length())) + "...";
+		res += "Individual@";
+		res +=  individual != null ? String.valueOf(System.identityHashCode(individual)) + ":" + individual.toString().substring(0, Math.min(10, individual.toString().length())) + "..." : "NULL";
 
 		res += ",";
-		res += "Operator@" + String.valueOf(System.identityHashCode(operator));
-		res += ":" + operator.getClass().getSimpleName();
+		res += "Operator@";
+		res += operator != null ? String.valueOf(System.identityHashCode(operator))+":" + operator.getClass().getSimpleName() : "NULL";
 
 		res += ",";
-		res += "Event@" + String.valueOf(System.identityHashCode(operatorEvent));
+		res += "Event@";
+		res += operatorEvent != null ?  String.valueOf(System.identityHashCode(operatorEvent)) : "NULL";
 
 		if (operatorEvent != null) {
 			res += ",";
@@ -462,5 +557,4 @@ public class GraphVertex implements Comparable<Object>, Serializable, TreeAble {
 
 		return res;
 	}
-
 }

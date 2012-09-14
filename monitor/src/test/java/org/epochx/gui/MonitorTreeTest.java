@@ -99,14 +99,12 @@ public class MonitorTreeTest implements TreeNodeAble {
 		root.children[3].children[2].children[0] =  new MonitorTreeTest("c4.3.1");
 		root.children[3].children[2].children[1] =  new MonitorTreeTest("c4.3.2");
 		
-		Tree t = new Tree(root);
-		
-		JScrollPane pane = new JScrollPane();
-		pane.setViewportView(t);
-		
+		Tree t = new Tree();
+		//t.setRoot(root);
+				
 		Monitor m = new Monitor("Monitor Tree Test");
 		
-		m.add(pane);
+		m.add(t, 1, 1);
 		
 	}
 

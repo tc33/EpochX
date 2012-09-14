@@ -300,7 +300,7 @@ public class Table extends JScrollPane {
 	/**
 	 * A <code>ColumnAddedListener</code> is a
 	 * <code>TableColumnModelListener</code> which resets the preferred size of
-	 * each column and the table, zhen a column is added.
+	 * each column and the table, when a column is added.
 	 */
 	private class ColumnAddedListener implements TableColumnModelListener {
 

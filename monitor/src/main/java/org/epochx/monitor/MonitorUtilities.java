@@ -41,8 +41,8 @@ public abstract class MonitorUtilities {
 	/**
 	 * A table of common colors.
 	 */
-	public static final Color[] COLORS = {Color.BLUE, Color.RED, Color.GREEN, Color.ORANGE, Color.CYAN, Color.MAGENTA,
-			Color.GRAY, Color.PINK};
+	public static final Color[] COLORS = {Color.CYAN, Color.MAGENTA, Color.PINK, Color.ORANGE, Color.GREEN, Color.BLUE, Color.RED,
+			Color.YELLOW};
 
 	/**
 	 * Returns the first <code>Monitor</code> ancestor of c, or null if c is not

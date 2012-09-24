@@ -49,8 +49,7 @@ import org.epochx.monitor.table.Table;
 
 /**
  * A <code>Monitor</code> instance cans display several visualization components
- * such as
- * tables and charts.
+ * such as tables and charts.
  * 
  * <p>
  * <h3>Construction</h3>
@@ -66,8 +65,6 @@ import org.epochx.monitor.table.Table;
  * parameters. <br>
  * It is also possible to register a component in the component list without
  * display it, by using the {@link #add(JComponent)} method. <br>
- * <i> (Note that if the Monitor contains only one pane, the component is
- * automatically add to this one.) </i><br>
  * During the execution, the GUI provides several ways to add and remove
  * components from panes (edit menu, add-button, close-button).<br>
  * <br>
@@ -87,7 +84,7 @@ import org.epochx.monitor.table.Table;
  * <p>
  * <h3>Concurrency</h3>
  * This class is <b>thread-safe</b>, as it has been designed to avoid
- * concurrency issues, between the <i>main thread</i>, the <i>Event Dispached
+ * concurrency issues, between the <i>main thread</i>, the <i>Event Dispatched
  * Thread</i> from <code>Swing</code> library, and all the other threads which
  * could access to the shared fields. <br>
  * <br>
@@ -95,7 +92,7 @@ import org.epochx.monitor.table.Table;
  * GUI creation task in the <i>EDT</i> by invoking
  * {@link SwingUtilities#invokeLater(Runnable)} method. <br>
  * <br>
- * However, critical fields (as {@link #componentList}) are accessibles from
+ * However, critical fields (as {@link #componentList}) are accessible from
  * outside of this class by getter methods. Those fields have to be used <b>very
  * carefully</b>, and always by using the monitor instance as the
  * synchronization <i>lock</i></b>.

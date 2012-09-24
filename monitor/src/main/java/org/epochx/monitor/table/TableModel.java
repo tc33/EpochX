@@ -169,6 +169,7 @@ public class TableModel extends AbstractTableModel implements Listener<Event> {
 		return rowsData.size();
 	}
 
+	@Override
 	public String getColumnName(int col) {
 		return columnNames.get(col);
 	}

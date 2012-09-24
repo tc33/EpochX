@@ -246,53 +246,55 @@ public class Tree extends JPanel implements TreeAble, RootAble, Runnable, Iterab
 			throw new IllegalStateException("The root node is null.");
 		}
 
-		this.zoom = 1.0;
-		this.selectedNode = null;
+		synchronized (levels) {
+			this.zoom = 1.0;
+			this.selectedNode = null;
 
-		this.depth = root.depth();
-		levels = new TreeLevel[depth + 1];
+			this.depth = root.depth();
+			levels = new TreeLevel[depth + 1];
 
-		// Root initialization
-		root.setDiameter(getDiameter(), false);
-		root.setAngle(0);
-		root.setLeftLimit(0);
-		root.setRightLimit(2 * Math.PI);
-		root.setX(getOrigin());
-		root.setY(getOrigin());
-		levels[0] = new TreeLevel(this, 0);
-		levels[0].addNodes(root);
+			// Root initialization
+			root.setDiameter(getDiameter(), false);
+			root.setAngle(0);
+			root.setLeftLimit(0);
+			root.setRightLimit(2 * Math.PI);
+			root.setX(getOrigin());
+			root.setY(getOrigin());
+			levels[0] = new TreeLevel(this, 0);
+			levels[0].addNodes(root);
 
-		// First level initialization
-		if (depth > 0) {
-			levels[1] = new TreeLevel(this, 1);
+			// First level initialization
+			if (depth > 0) {
+				levels[1] = new TreeLevel(this, 1);
 
-			TreeNode[] children = root.getChildren();
-			levels[1].addNodes(children);
+				TreeNode[] children = root.getChildren();
+				levels[1].addNodes(children);
 
-			double n = children.length;
-			int maxDiameter = Math.min(getDiameter(), (int) (getD() * 2 * Math.PI / n));
-			int origin = getOrigin();
-			for (int i = 0; i < children.length; i++) {
-				double angle = i / n * 2 * Math.PI;
-				children[i].setAngle(angle);
-				children[i].setDiameter(maxDiameter, false);
-				children[i].setX((int) (d * (Math.cos(angle)) + origin));
-				children[i].setY((int) (d * (Math.sin(angle)) + origin));
-			}
-			levels[1].computeLimits();
-			levels[1].computeChildrenAttributes();
-		}
-
-		// Others levels initialization
-		for (int i = 2; i < levels.length; i++) {
-
-			levels[i] = new TreeLevel(this, i);
-			for (TreeNode node: levels[i - 1].getNodes()) {
-				levels[i].addNodes(node.getChildren());
+				double n = children.length;
+				int maxDiameter = Math.min(getDiameter(), (int) (getD() * 2 * Math.PI / n));
+				int origin = getOrigin();
+				for (int i = 0; i < children.length; i++) {
+					double angle = i / n * 2 * Math.PI;
+					children[i].setAngle(angle);
+					children[i].setDiameter(maxDiameter, false);
+					children[i].setX((int) (d * (Math.cos(angle)) + origin));
+					children[i].setY((int) (d * (Math.sin(angle)) + origin));
+				}
+				levels[1].computeLimits();
+				levels[1].computeChildrenAttributes();
 			}
 
-			levels[i].computeLimits();
-			levels[i].computeChildrenAttributes();
+			// Others levels initialization
+			for (int i = 2; i < levels.length; i++) {
+
+				levels[i] = new TreeLevel(this, i);
+				for (TreeNode node: levels[i - 1].getNodes()) {
+					levels[i].addNodes(node.getChildren());
+				}
+
+				levels[i].computeLimits();
+				levels[i].computeChildrenAttributes();
+			}
 		}
 
 		SwingUtilities.invokeLater(new Runnable() {
@@ -416,8 +418,10 @@ public class Tree extends JPanel implements TreeAble, RootAble, Runnable, Iterab
 
 				case LEVEL_ORDER:
 					nodes.add(root);
-					for (TreeLevel level: levels) {
-						nodes.addAll(Arrays.asList(level.getNodes()));
+					synchronized (levels) {
+						for (TreeLevel level: levels) {
+							nodes.addAll(Arrays.asList(level.getNodes()));
+						}
 					}
 					break;
 
@@ -699,9 +703,10 @@ public class Tree extends JPanel implements TreeAble, RootAble, Runnable, Iterab
 			} else {
 
 				//g2.fillRect(0, 0, getPreferredSize().width, getPreferredSize().height);
-
-				for (TreeLevel level: levels) {
-					paintLevel(g2, level);
+				synchronized (levels) {
+					for (TreeLevel level: levels) {
+						paintLevel(g2, level);
+					}
 				}
 			}
 

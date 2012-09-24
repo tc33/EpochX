@@ -168,6 +168,8 @@ public class AncestryFinder extends JPanel implements GraphViewListener, TreeLis
 			ancestorPane.removeAll();
 			for(TreeVertex tv : table.getSelectedVertex()) {
 				ancestorPane.add(tv);
+				tv.colorMutatedSubTree();
+				tv.repaint();
 			}
 			ancestorPane.doLayout();
 			verticalSplitPane.validate();
@@ -271,6 +273,7 @@ public class AncestryFinder extends JPanel implements GraphViewListener, TreeLis
 			} else if (tv.isFromProvider(n)) {
 
 				TreeVertex parent = new TreeVertex(tv.provider());
+				
 				TreeNode criticalPoint = null;
 				try {
 					criticalPoint = parent.get(tv.providerPoint());
@@ -282,7 +285,9 @@ public class AncestryFinder extends JPanel implements GraphViewListener, TreeLis
 				for(TreeNode find : finds) {
 					if (find.isDescendantOf(criticalPoint)) {
 						find.setSelectedAs(n);
+						
 						table.addVertex(parent, false);
+						System.out.println(find);
 						selectAncestor(parent, find);
 					}
 				}

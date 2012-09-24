@@ -153,7 +153,7 @@ public class ChartTrace extends Trace2DSimple implements Listener<Event> {
 	private final ArrayList<TracePoint2D> bufferList = new ArrayList<TracePoint2D>();
 
 	/**
-	 * The mapping of listerners registered by this <code>Table</code>.
+	 * The mapping of listeners registered by this <code>Table</code>.
 	 */
 	private final Map<Class<?>, Listener<?>> listeners = new HashMap<Class<?>, Listener<?>>();
 
@@ -217,7 +217,7 @@ public class ChartTrace extends Trace2DSimple implements Listener<Event> {
 		if (color == null)
 			color = parentChart.getColor();
 
-		// Configs the trace.
+		// Sets the trace.
 		setColor(color);
 
 		// Set the parent chart and add the trace to it.
@@ -284,7 +284,7 @@ public class ChartTrace extends Trace2DSimple implements Listener<Event> {
 	 * The <code>Listener</code> inherited method which buffers a new point in
 	 * the list when an event is fire.<br>
 	 * <p>
-	 * <b>Synchronized</b> to avoid concurent access to the
+	 * <b>Synchronized</b> to avoid concurrent access to the
 	 * <code>bufferList</code> field.
 	 * </p>
 	 * 
@@ -308,9 +308,9 @@ public class ChartTrace extends Trace2DSimple implements Listener<Event> {
 	}
 
 	/**
-	 * Refreshs the trace by adding the buffered points in the chart.<br>
+	 * Refreshes the trace by adding the buffered points in the chart.<br>
 	 * <p>
-	 * <b>Synchronized</b> to avoid concurent access to the
+	 * <b>Synchronized</b> to avoid concurrent access to the
 	 * <code>bufferList</code> field.
 	 * </p>
 	 */

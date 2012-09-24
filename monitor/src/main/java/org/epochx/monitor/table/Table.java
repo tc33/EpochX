@@ -72,6 +72,9 @@ import org.epochx.event.stat.AbstractStat;
  * by using the {@link #addStat(Class, String)} method. The <code>String</code>
  * argument is the name to display on the header, and it is optional (the simple
  * name of the class is assigned by default).<br>
+ * <br>
+ * 
+ * A sample code to create and set a <code>Table</code> :
  * 
  * <pre>
  * Table myTable = new Table(&quot;Table_name&quot;, 1000L);

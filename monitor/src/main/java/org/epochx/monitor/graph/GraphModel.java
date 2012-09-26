@@ -115,9 +115,10 @@ public class GraphModel implements Listener<Event>, Serializable {
 		generations[0] = new GraphGeneration(0);
 
 		EventManager.getInstance().add(EndOperator.class, this);
+		EventManager.getInstance().add(ParentIndividualEvent.class, this);
 		EventManager.getInstance().add(StartGeneration.class, this);
 		EventManager.getInstance().add(EndRun.class, this);
-		EventManager.getInstance().add(ParentIndividualEvent.class, this);
+
 	}
 
 	/**
@@ -212,7 +213,7 @@ public class GraphModel implements Listener<Event>, Serializable {
 	 * 
 	 * @return the last generation.
 	 */
-	public GraphGeneration lastGeneration() {
+	public GraphGeneration previousGeneration() {
 		return generations[generationCount - 1];
 	}
 
@@ -236,7 +237,7 @@ public class GraphModel implements Listener<Event>, Serializable {
 
 			GraphVertex newVertex = currentGeneration().addIndividual(e.getChild());
 
-			GraphVertex[] parentVertices = lastGeneration().getGraphVertices(e.getParents());
+			GraphVertex[] parentVertices = previousGeneration().getGraphVertices(e.getParents());
 
 			newVertex.addParents(parentVertices);
 			newVertex.setOperator(e.getOperator());
@@ -314,6 +315,7 @@ public class GraphModel implements Listener<Event>, Serializable {
 			this.listenerList = new EventListenerList();
 		}
 		listenerList.add(GraphModelListener.class, l);
+		l.graphChanged(new GraphModelEvent(this, generationCount, GraphModelEvent.REFRESH));
 	}
 
 	/**

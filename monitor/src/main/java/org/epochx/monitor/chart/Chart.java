@@ -55,18 +55,16 @@ import org.epochx.monitor.MonitorUtilities;
  * is given.<br>
  * A <code>Chart</code> is composed by one or more {@link ChartTrace} instances.
  * <br>
- * Each trace is automatically added to the {@link #traces} list, as the chart
- * is given in parameter of the constructor {@link ChartTrace#ChartTrace(Chart)}
- * . <br>
  * <br>
  * Here, there is a sample code which creates a <code>Chart</code>, adds a
  * trace, and adds a listener for all traces :
  * 
  * <pre>
- * Chart myGraph = new Chart(&quot;Chart_Name&quot;);
- * ChartTrace aTrace = new ChartTrace(myChart);
+ * Chart myChart = new Chart(&quot;Chart_Name&quot;);
+ * ChartTrace aTrace = new ChartTrace();
  * // .. Chart Trace Setting ..
- * myGraph.addListener(EndGeneration.class); // optional
+ * myChart.addTrace(aTrace);
+ * myChart.addListener(EndGeneration.class); // optional
  * </pre>
  * 
  * To know how to create and set a trace please, see {@link ChartTrace}.
@@ -214,7 +212,8 @@ public class Chart extends Chart2D {
 	 * 
 	 * @param graphTrace the trace added to the trace list.
 	 */
-	protected synchronized <E extends Event> void addTrace(ChartTrace graphTrace) {
+	public synchronized <E extends Event> void addTrace(ChartTrace graphTrace) {
+		graphTrace.setChart(this);
 		traces.add(graphTrace);
 		super.addTrace(graphTrace);
 	}

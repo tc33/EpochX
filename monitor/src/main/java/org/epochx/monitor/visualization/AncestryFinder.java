@@ -70,8 +70,6 @@ public class AncestryFinder extends JPanel implements GraphViewListener, TreeLis
 	
 	private JSplitPane verticalSplitPane;
 
-	
-
 	public AncestryFinder() {
 		super();
 		this.ft = new FinderTask();
@@ -103,7 +101,6 @@ public class AncestryFinder extends JPanel implements GraphViewListener, TreeLis
 
 		add(verticalSplitPane, BorderLayout.CENTER);
 		doLayout();
-		horizontalSplitPane.setDividerLocation(0.7);
 	}
 
 	public AncestryFinder(GraphViewModel viewModel) {
@@ -247,19 +244,19 @@ public class AncestryFinder extends JPanel implements GraphViewListener, TreeLis
 		private void selectAncestor(TreeVertex tv, TreeNode n) {
 			
 			if(isCancelled()) {
+				table.clear();
 				return;
 			}
+			if (viewModel != null) {
+				viewModel.getVertexModel(tv.getVertex()).setSelected(true);
+			}
 			
-			viewModel.getVertexModel(tv.getVertex()).setSelected(true);
-
 			if (tv.isFromGenitor(n)) {
-
 				TreeVertex parent = new TreeVertex(tv.genitor());
 				TreeNode criticalPoint = null;
 				try {
 					criticalPoint = parent.get(tv.genitorPoint());
 				} catch (IndexOutOfBoundsException e) {
-					System.out.print(e.getMessage());
 				}
 				
 				TreeNode[] finds = parent.findSubsumers(n, true);
@@ -271,23 +268,19 @@ public class AncestryFinder extends JPanel implements GraphViewListener, TreeLis
 					}
 				}
 			} else if (tv.isFromProvider(n)) {
-
 				TreeVertex parent = new TreeVertex(tv.provider());
 				
 				TreeNode criticalPoint = null;
 				try {
 					criticalPoint = parent.get(tv.providerPoint());
 				} catch (IndexOutOfBoundsException e) {
-					System.out.print(e.getMessage());
 				}
 				
 				TreeNode[] finds = parent.findSubsumers(n, true);
 				for(TreeNode find : finds) {
 					if (find.isDescendantOf(criticalPoint)) {
 						find.setSelectedAs(n);
-						
 						table.addVertex(parent, false);
-						System.out.println(find);
 						selectAncestor(parent, find);
 					}
 				}

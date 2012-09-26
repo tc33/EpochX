@@ -64,14 +64,14 @@ public class MonitorGraphTest {
 
 		// some parameters
 
-		config.set(Population.SIZE, 50);
+		config.set(Population.SIZE, 100);
 		config.set(Crossover.PROBABILITY, 1.0);
 		config.set(Reproduction.PROBABILITY, 0.0);
 		config.set(Mutation.PROBABILITY, 0.0);
 		config.set(BranchedBreeder.ELITISM, 0);
-		config.set(MaximumGenerations.MAXIMUM_GENERATIONS, 50);
-		config.set(TreeFactory.MAX_DEPTH, 7);
-		config.set(TreeFactory.INITIAL_DEPTH, 4);
+		config.set(MaximumGenerations.MAXIMUM_GENERATIONS, 100);
+		config.set(TreeFactory.MAX_DEPTH, 8);
+		config.set(TreeFactory.INITIAL_DEPTH, 5);
 		config.set(TournamentSelector.TOURNAMENT_SIZE, 4);
 		config.set(NeutralAwareMutation.NEUTRAL_MOVES_ENABLED, true);
 

@@ -97,7 +97,7 @@ public class MonitorFrameTest {
 
 		// our stats monitor
 
-		Monitor monitor = new Monitor("Frame Test", 1, 2);
+		Monitor monitor = new Monitor("Frame Test", 2, 2);
 		
 		Table table1 = new Table("Fitnesses Table");
 		table1.addStat(GenerationNumber.class);
@@ -113,28 +113,31 @@ public class MonitorFrameTest {
 		table2.addStat(GenerationFitnessDiversity.class);
 		table2.addListener(EndGeneration.class);
 
-		monitor.add(table2, 1, 1);
+		monitor.add(table2, 1, 2);
 		
 		Table table3 = new Table("Best Individual Table");
 		table3.addStat(GenerationNumber.class);
 		table3.addStat(GenerationBestIndividuals.class);
 		table3.addListener(EndGeneration.class);
 
-		monitor.add(table3, 1, 1);
+		monitor.add(table3, 2, 1);
 		
 		Chart chart1 = new Chart("Fitnesses Chart");
 		
-		ChartTrace trace1 = new ChartTrace(chart1);
+		ChartTrace trace1 = new ChartTrace();
 		trace1.setXStat(GenerationNumber.class);
 		trace1.setYStat(GenerationBestFitness.class);
+		chart1.addTrace(trace1);
 		
-		ChartTrace trace2 = new ChartTrace(chart1);
+		ChartTrace trace2 = new ChartTrace();
 		trace2.setXStat(GenerationNumber.class);
 		trace2.setYStat(GenerationWorstFitness.class);
+		chart1.addTrace(trace2);
 		
-		ChartTrace trace3 = new ChartTrace(chart1);
+		ChartTrace trace3 = new ChartTrace();
 		trace3.setXStat(GenerationNumber.class);
 		trace3.setYStat(GenerationAverageDoubleFitness.class);
+		chart1.addTrace(trace3);
 	
 		/*
 		ChartTrace traceTab[] = new ChartTrace[1000];
@@ -152,13 +155,14 @@ public class MonitorFrameTest {
 		
 		Chart chart2 = new Chart("Fitness Diversity Chart");
 		
-		ChartTrace trace4 = new ChartTrace(chart2);
+		ChartTrace trace4 = new ChartTrace();
 		trace4.setXStat(GenerationNumber.class);
 		trace4.setYStat(GenerationFitnessDiversity.class);
+		chart2.addTrace(trace4);
 		
 		chart2.addListener(EndGeneration.class);
 		
-		monitor.add(chart2, 1, 2);
+		monitor.add(chart2, 2, 2);
 		
 		// we are ready to go!
 

@@ -714,60 +714,65 @@ public class Tree extends JPanel implements TreeAble, RootAble, Runnable, Iterab
 
 		private void paintLevel(Graphics2D g, TreeLevel level) {
 
-			// Paint the circle first.
-			int diam = (int) (getD() * 2 * level.getLevel() * zoom);
-			g.setColor(Color.LIGHT_GRAY);
-			g.drawOval(getOrigin() - diam / 2, getOrigin() - diam / 2, diam, diam);
+			if(level != null) {
+				// Paint the circle first.
+				int diam = (int) (getD() * 2 * level.getLevel() * zoom);
+				g.setColor(Color.LIGHT_GRAY);
+				g.drawOval(getOrigin() - diam / 2, getOrigin() - diam / 2, diam, diam);
 
-			// Paint each nodes.
-			for (TreeNode node: level.getNodes()) {
-				paintNode(g, node);
+				// Paint each nodes.
+				for (TreeNode node: level.getNodes()) {
+					paintNode(g, node);
+				}
 			}
+			
 		}
 
 		private void paintNode(Graphics2D g, TreeNode node) {
 
-			// paintLimits(g, node);
+			if(node != null) {
 
-			// Get graphic attributes
-			int x = node.getX();
-			int y = node.getY();
+				// paintLimits(g, node);
 
-			// Paint children's links.
-			for (TreeNode child: node.getChildren()) {
-				int x2 = child.getX();
-				int y2 = child.getY();
-				g.setPaint(Color.gray);
-				g.drawLine(x, y, x2, y2);
+				// Get graphic attributes
+				int x = node.getX();
+				int y = node.getY();
+
+				// Paint children's links.
+				for (TreeNode child: node.getChildren()) {
+					int x2 = child.getX();
+					int y2 = child.getY();
+					g.setPaint(Color.gray);
+					g.drawLine(x, y, x2, y2);
+				}
+
+				// Paint the node.
+				int diameter = (int) (node.getDiameter() * zoom);
+				Color color;
+				if (node.isSelected()) {
+					color = Tree.SELECTED_COLOR;
+				} else if (node.isSelected()) {
+					color = Tree.HIGHLIGHTED_COLOR;
+				} else {
+					color = node.getColor();
+				}
+
+				g.setPaint(color);
+				g.fillOval(x - diameter / 2, y - diameter / 2, diameter, diameter);
+
+				// Paint the name.
+				String name = node.getName();
+
+				int fontSize = diameter / name.length();
+				Font font = new Font("Arial", Font.BOLD, fontSize);
+				g.setFont(font);
+
+				FontMetrics metrics = g.getFontMetrics();
+				int textWidth = metrics.stringWidth(name);
+				int textHeight = metrics.getAscent();
+				g.setColor(Color.black);
+				g.drawString(name, x - textWidth / 2, y + textHeight / 2);
 			}
-
-			// Paint the node.
-			int diameter = (int) (node.getDiameter() * zoom);
-			Color color;
-			if (node.isSelected()) {
-				color = Tree.SELECTED_COLOR;
-			} else if (node.isSelected()) {
-				color = Tree.HIGHLIGHTED_COLOR;
-			} else {
-				color = node.getColor();
-			}
-
-			g.setPaint(color);
-			g.fillOval(x - diameter / 2, y - diameter / 2, diameter, diameter);
-
-			// Paint the name.
-			String name = node.getName();
-
-			int fontSize = diameter / name.length();
-			Font font = new Font("Arial", Font.BOLD, fontSize);
-			g.setFont(font);
-
-			FontMetrics metrics = g.getFontMetrics();
-			int textWidth = metrics.stringWidth(name);
-			int textHeight = metrics.getAscent();
-			g.setColor(Color.black);
-			g.drawString(name, x - textWidth / 2, y + textHeight / 2);
-
 		}
 
 		@SuppressWarnings("unused")
@@ -838,7 +843,7 @@ public class Tree extends JPanel implements TreeAble, RootAble, Runnable, Iterab
 			if (node != null) {
 
 				if (!node.isSelected()) {
-					node.setSelected(true, e.isShiftDown());
+					node.setSelected(true, !e.isShiftDown());
 					if (selectedNode != null) {
 						try {
 							TreeNode commonAncestor = TreeNode.commonAncestor(selectedNode, node);

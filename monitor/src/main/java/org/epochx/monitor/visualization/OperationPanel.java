@@ -189,23 +189,28 @@ public class OperationPanel extends JPanel implements Runnable, GraphViewListene
 	 */
 	public void colorPoints() {
 
-		if (vertex.getOperatorEvent() != null) {
-			int[] points = vertex.getOperatorEvent().getPoints();
-			int n = points.length;
+		try {
+			if (vertex.getOperatorEvent() != null) {
+				int[] points = vertex.getOperatorEvent().getPoints();
+				int n = points.length;
 
-			// Colors the parents.
-			for (int i = 0; i < parents.length && i < n; i++) {
-				parents[i].color(1, Tree.DEFAULT_COLOR, true);
-				parents[i].color(points[i], MonitorUtilities.COLORS[i], true);
-			}
+				// Colors the parents.
+				for (int i = 0; i < parents.length && i < n; i++) {
+					parents[i].color(1, Tree.DEFAULT_COLOR, true);
+					parents[i].color(points[i], MonitorUtilities.COLORS[i], true);
+				}
 
-			// Colors the siblings.
-			for (int i = 0; i < children.length && i < n; i++) {
-				children[i].color(1, Tree.DEFAULT_COLOR, true);
-				int r = children[i].getRank();
-				children[i].color(points[i], MonitorUtilities.COLORS[n - 1 - r], true);
+				// Colors the siblings.
+				for (int i = 0; i < children.length && i < n; i++) {
+					children[i].color(1, Tree.DEFAULT_COLOR, true);
+					int r = children[i].getRank();
+					children[i].color(points[i], MonitorUtilities.COLORS[n - 1 - r], true);
+				}
 			}
+		} catch (IndexOutOfBoundsException e) {
+			
 		}
+		
 	}
 
 	/**

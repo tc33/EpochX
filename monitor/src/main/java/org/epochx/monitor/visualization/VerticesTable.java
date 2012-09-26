@@ -91,15 +91,16 @@ public class VerticesTable extends JScrollPane {
 		synchronized(vertices) {
 			if(!vertices.contains(tv)){
 				vertices.add(tv);
+				booleans.add(fromGenitor);
 			}
 		}
-		booleans.add(fromGenitor);
 		model.fireTableDataChanged();
 	}
 	
 	public void clear() {
 		synchronized(vertices) {
 			vertices.clear();
+			booleans.clear();
 		}
 		model.fireTableDataChanged();
 	}
@@ -143,9 +144,8 @@ public class VerticesTable extends JScrollPane {
 							return "";
 							
 					}
-				}catch(NullPointerException e) {
+				}catch(Exception e) {
 					return "";
-						
 				}
 				
 			}

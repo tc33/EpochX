@@ -183,12 +183,12 @@ public class GraphViewModel implements MouseListener, MouseMotionListener {
 	/**
 	 * The selected vertex.
 	 */
-	private GraphVertex selectedGraphVertex;
+	private GraphVertex selectedVertex;
 
 	/**
 	 * The highlighted vertex.
 	 */
-	private GraphVertex highlightedGraphVertex;
+	private GraphVertex highlightedVertex;
 
 	/**
 	 * The vertices mapped with their <code>GraphVertexModel</code>.
@@ -489,8 +489,8 @@ public class GraphViewModel implements MouseListener, MouseMotionListener {
 	 * 
 	 * @return the highlighted <code>GraphVertex</code>.
 	 */
-	public GraphVertex getHighlightedGraphVertex() {
-		return highlightedGraphVertex;
+	public GraphVertex getHighlightedVertex() {
+		return highlightedVertex;
 	}
 
 	/**
@@ -498,10 +498,10 @@ public class GraphViewModel implements MouseListener, MouseMotionListener {
 	 * 
 	 * @param vertex the highlighted <code>GraphVertex</code> to set.
 	 */
-	public void setHighlightedGraphVertex(GraphVertex vertex) {
-		GraphVertex old = highlightedGraphVertex;
-		highlightedGraphVertex = vertex;
-		fireGraphViewEvent(new GraphViewEvent(this, GraphViewProperty.HIGHLIGHTED_VERTEX, old, vertex));
+	public void setHighlightedVertex(GraphVertex vertex) {
+		GraphVertex old = highlightedVertex;
+		highlightedVertex = vertex;
+		fireGraphViewEvent(new GraphViewEvent(this, GraphViewProperty.HIGHLIGHTED_VERTEX, old, highlightedVertex));
 	}
 
 	/**
@@ -530,7 +530,7 @@ public class GraphViewModel implements MouseListener, MouseMotionListener {
 		for (GraphVertexModel model: map.values()) {
 			model.setHighlighted(false);
 		}
-		setHighlightedGraphVertex(null);
+		setHighlightedVertex(null);
 	}
 
 	////////////////////////////////////////////////////////////////////////////
@@ -542,8 +542,8 @@ public class GraphViewModel implements MouseListener, MouseMotionListener {
 	 * 
 	 * @return the selected <code>GraphVertex</code>.
 	 */
-	public GraphVertex getSelectedGraphVertex() {
-		return selectedGraphVertex;
+	public GraphVertex getSelectedVertex() {
+		return selectedVertex;
 	}
 
 	/**
@@ -551,10 +551,10 @@ public class GraphViewModel implements MouseListener, MouseMotionListener {
 	 * 
 	 * @param vertex the selected <code>GraphVertex</code> to set.
 	 */
-	public void setSelectedGraphVertex(GraphVertex vertex) {
-		GraphVertex old = selectedGraphVertex;
-		selectedGraphVertex = vertex;
-		fireGraphViewEvent(new GraphViewEvent(this, GraphViewProperty.SELECTED_VERTEX, old, selectedGraphVertex));
+	public void setSelectedVertex(GraphVertex vertex) {
+		GraphVertex old = selectedVertex;
+		selectedVertex = vertex;
+		fireGraphViewEvent(new GraphViewEvent(this, GraphViewProperty.SELECTED_VERTEX, old, selectedVertex));
 	}
 
 	/**
@@ -564,7 +564,7 @@ public class GraphViewModel implements MouseListener, MouseMotionListener {
 		for (GraphVertexModel model: map.values()) {
 			model.setSelected(false);
 		}
-		setSelectedGraphVertex(null);
+		setSelectedVertex(null);
 	}
 
 	////////////////////////////////////////////////////////////////////////////
@@ -672,7 +672,7 @@ public class GraphViewModel implements MouseListener, MouseMotionListener {
 	 *         <code>String</code> value than the given argument ; returns -1 if
 	 *         not found.
 	 */
-	public int indexOfFitness(Fitness fitness) {
+	protected int indexOfFitness(Fitness fitness) {
 		Fitness f;
 		int i = 0;
 		synchronized (fitnesses) {
@@ -775,23 +775,20 @@ public class GraphViewModel implements MouseListener, MouseMotionListener {
 
 	public void mouseClicked(MouseEvent e) {
 
-		GraphVertex selectedVertex = null;
+		GraphVertex vertex = null;
 		synchronized (map) {
 			for (GraphVertexModel vertexModel: map.values()) {
 
 				if (vertexModel.contains(e.getPoint())) {
 					vertexModel.setSelected(true);
-					selectedVertex = vertexModel.getVertex();
+					vertex = vertexModel.getVertex();
 				} else {
 					vertexModel.setSelected(false);
 				}
 			}
 		}
 
-		if (selectedVertex == selectedGraphVertex) {
-
-		}
-		setSelectedGraphVertex(selectedVertex);
+		setSelectedVertex(vertex);
 
 	}
 
@@ -801,22 +798,22 @@ public class GraphViewModel implements MouseListener, MouseMotionListener {
 
 	public void mouseMoved(MouseEvent e) {
 
-		GraphVertex selectedVertex = null;
+		GraphVertex vertex = null;
 		synchronized (map) {
 			for (GraphVertexModel vertexModel: map.values()) {
 
 				if (vertexModel.contains(e.getPoint())) {
-					selectedVertex = vertexModel.getVertex();
+					vertex = vertexModel.getVertex();
 				} else if (vertexModel.isHighlighted()) {
 					vertexModel.setHighlighted(false);
 				}
 			}
 		}
 
-		if (selectedVertex != null) {
-			highlight(selectedVertex, highlightDepth);
+		if (vertex != null) {
+			highlight(vertex, highlightDepth);
 		}
-		setHighlightedGraphVertex(selectedVertex);
+		setHighlightedVertex(vertex);
 
 	}
 

@@ -64,8 +64,7 @@ import org.epochx.monitor.MonitorUtilities;
  * 
  * <p>
  * <h3>Construction & Settings</h3>
- * The parent Chart <i>must</i> be specified on the constructor. The others
- * optional arguments are :
+ * Those optional arguments can be specified :
  * <ul>
  * <li>A name used for the legend.
  * <li>A color (by default choosen in {@link Chart#colors}).
@@ -124,6 +123,16 @@ public class ChartTrace extends Trace2DSimple implements Listener<Event> {
 	 * The default refresh rate constant.
 	 */
 	private final static long DEFAULT_LATENCY = 100;
+	
+	/**
+	 * The number of created instances.
+	 */
+	private static int noInstances = 0;
+	
+	/**
+	 * The refresch rate.
+	 */
+	private long latency;
 
 	/**
 	 * The <code>TimerTask</code> which is scheduled in the timer to calls the
@@ -135,7 +144,7 @@ public class ChartTrace extends Trace2DSimple implements Listener<Event> {
 	/**
 	 * The parent <code>Chart</code>.
 	 */
-	private final Chart chart;
+	private Chart chart;
 
 	/**
 	 * The X axis stat.
@@ -160,74 +169,60 @@ public class ChartTrace extends Trace2DSimple implements Listener<Event> {
 	/**
 	 * Constructs a <code>ChartTrace</code>.
 	 * 
-	 * @param parentChart the parent chart.
 	 */
-	public ChartTrace(Chart parentChart) {
-		this(parentChart, null, null, DEFAULT_LATENCY);
+	public ChartTrace() {
+		this(null, null, DEFAULT_LATENCY);
 	}
 
 	/**
 	 * Constructs a <code>ChartTrace</code>.
 	 * 
-	 * @param parentChart the parent chart.
 	 * @param name the name of the trace.
 	 */
-	public ChartTrace(Chart parentChart, String name) {
-		this(parentChart, name, null, DEFAULT_LATENCY);
+	public ChartTrace(String name) {
+		this(name, null, DEFAULT_LATENCY);
 	}
 
 	/**
 	 * Constructs a <code>ChartTrace</code>.
 	 * 
-	 * @param parentChart the parent chart.
 	 * @param color the color of the trace.
 	 */
-	public ChartTrace(Chart parentChart, Color color) {
-		this(parentChart, null, color, DEFAULT_LATENCY);
+	public ChartTrace(Color color) {
+		this(null, color, DEFAULT_LATENCY);
 	}
 
 	/**
 	 * Constructs a <code>ChartTrace</code>.
 	 * 
-	 * @param parentChart the parent chart.
 	 * @param latency the latency rate.
 	 */
-	public ChartTrace(Chart parentChart, long latency) {
-		this(parentChart, null, null, latency);
+	public ChartTrace(long latency) {
+		this(null, null, latency);
 	}
 
 	/**
 	 * Constructs a <code>ChartTrace</code>.
 	 * 
-	 * @param parentChart the parent chart.
 	 * @param name the name of the trace.
 	 * @param color the color of the trace.
 	 * 
 	 * @throws NullPointerException if the parent chart is null.
 	 * @throws IllegalArgumentException if the latency is negative.
 	 */
-	public ChartTrace(Chart parentChart, String name, Color color, long latency) throws NullPointerException,
+	public ChartTrace(String name, Color color, long latency) throws NullPointerException,
 			IllegalArgumentException {
 
-		if (parentChart == null)
-			throw new NullPointerException();
 		if (latency <= 0)
 			throw new IllegalArgumentException("Latency must be positive.");
 
-		if (color == null)
-			color = parentChart.getColor();
-
-		// Sets the trace.
-		setColor(color);
-
-		// Set the parent chart and add the trace to it.
-		chart = parentChart;
-		chart.addTrace(this);
-
 		// Set the name.
 		if (name == null)
-			name = "Trace #" + chart.getTraceCount();
+			name = "Trace #" + noInstances;
 		setName(name);
+		
+		// Sets the trace.
+		setColor(color!=null ? color : Color.WHITE);
 
 		// Task initialization.
 		task = new TimerTask() {
@@ -237,9 +232,47 @@ public class ChartTrace extends Trace2DSimple implements Listener<Event> {
 					ChartTrace.this.refresh();
 			}
 		};
+		
+		this.latency = latency;
+		
+		noInstances++;
+	}
+	
+	/**
+	 * Returns the parent chart.
+	 * @return the parent chart.
+	 */
+	public Chart getChart() {
+		return chart;
+	}
 
-		// Schedule the task.
+	/**
+	 * Sets the parent chart.
+	 * @param c the parent chart to set.
+	 */
+	public void setChart(Chart c) {
+		this.chart = c;
 		chart.getTimer().scheduleAtFixedRate(task, 1000, latency);
+		if (getColor() == Color.WHITE) {
+			setColor(chart.getColor());
+		}	
+	}
+
+	/**
+	 * Returns the latency.
+	 * @return the latency.
+	 */
+	public long getLatency() {
+		return latency;
+	}
+
+	
+	/**
+	 * Sets the latency.
+	 * @param latency the latency to set.
+	 */
+	public void setLatency(int latency) {
+		this.latency = latency;
 	}
 
 	/**

@@ -99,7 +99,7 @@ public class TreeNode implements TreeNodeAble, RootAble, Iterable<TreeNode> {
 	}
 
 	/**
-	 * Constructs a <code>TreeNode</code> with a specified name.
+	 * Constructs a <code>TreeNode</code>.
 	 * 
 	 * @param nodeAble the object to set as the nodeAbleInstance. Must be
 	 *        "nodeable".
@@ -118,7 +118,7 @@ public class TreeNode implements TreeNodeAble, RootAble, Iterable<TreeNode> {
 	}
 
 	/**
-	 * Constructs a <code>TreeNode</code> with a specified name.
+	 * Constructs a <code>TreeNode</code>.
 	 * 
 	 * @param root the object to set as the root. Must be "node-able".
 	 * @parem parent the parent of the nodeAbleInstance.

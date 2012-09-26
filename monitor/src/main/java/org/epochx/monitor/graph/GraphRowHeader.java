@@ -36,6 +36,8 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 
+import org.epochx.monitor.graph.Graph.GraphView;
+
 /**
  * A <code>GraphRowHeader</code> display the generation's numbers.
  */

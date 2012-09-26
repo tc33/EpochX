@@ -29,8 +29,6 @@ import org.epochx.Fitness;
 import org.epochx.Individual;
 import org.epochx.Operator;
 import org.epochx.event.OperatorEvent.EndOperator;
-import org.epochx.refactoring.representation.TreeAble;
-import org.epochx.refactoring.representation.TreeNodeAble;
 
 /**
  * A <code>GraphVertex</code> encloses an <code>Individual</code> to be
@@ -47,7 +45,7 @@ import org.epochx.refactoring.representation.TreeNodeAble;
  * <li>A list of children <code>GraphVertex</code>.
  * <p>
  */
-public class GraphVertex implements Comparable<Object>, Serializable, TreeAble {
+public class GraphVertex implements Comparable<Object>, Serializable {
 
 	/**
 	 * Generated serial UID.
@@ -464,22 +462,6 @@ public class GraphVertex implements Comparable<Object>, Serializable, TreeAble {
 		}
 	}
 
-	/**
-	 * The <code>TreeAble</code> implemented method.
-	 * <p>
-	 * If this vertex's <code>Individual</code> is an instance of
-	 * <code>TreeAble</code>, returns its tree; Throws a
-	 * <code>ClassCastException</code> otherwise.
-	 * </p>
-	 * 
-	 * @return the indivudual's tree.
-	 * 
-	 * @throws ClassCastException if the individual represented by this vertex
-	 *         is not an instance of <code>TreeAble</code>.
-	 */
-	public TreeNodeAble getTree() throws ClassCastException {
-		return ((TreeAble) individual).getTree();
-	}
 
 	/**
 	 * Overrides the <code>equals</code> method to compare the

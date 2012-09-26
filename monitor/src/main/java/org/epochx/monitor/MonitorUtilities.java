@@ -116,15 +116,20 @@ public abstract class MonitorUtilities {
 	 *         monitor (e.g. his tab is selected).
 	 */
 	public static boolean isVisible(JComponent comp) {
-		Container parent = comp.getParent();
-		if (parent == null || !(parent instanceof JTabbedPane))
+		if(comp == null) {
 			return false;
+		}
+		Container parent = comp.getParent();
+		if (parent == null || !(parent instanceof JTabbedPane)){
+			return true;
+		}
 
 		JTabbedPane tabbedPane = (JTabbedPane) parent;
-		if (tabbedPane.getSelectedComponent() == comp)
+		if (tabbedPane.getSelectedComponent() == comp){
 			return true;
-		else
+		}else{
 			return false;
+		}
 	}
 
 	/**

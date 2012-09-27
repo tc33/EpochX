@@ -70,8 +70,8 @@ public class MonitorGraphTest {
 		config.set(Mutation.PROBABILITY, 0.0);
 		config.set(BranchedBreeder.ELITISM, 0);
 		config.set(MaximumGenerations.MAXIMUM_GENERATIONS, 100);
-		config.set(TreeFactory.MAX_DEPTH, 8);
-		config.set(TreeFactory.INITIAL_DEPTH, 5);
+		config.set(TreeFactory.MAX_DEPTH, 5);
+		config.set(TreeFactory.INITIAL_DEPTH, 3);
 		config.set(TournamentSelector.TOURNAMENT_SIZE, 4);
 		config.set(NeutralAwareMutation.NEUTRAL_MOVES_ENABLED, true);
 

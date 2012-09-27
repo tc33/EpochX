@@ -1,12 +1,34 @@
+/*
+ * Copyright 2007-2012
+ * Lawrence Beadle, Tom Castle and Fernando Otero
+ * Licensed under GNU Lesser General Public License
+ * 
+ * This file is part of EpochX
+ * 
+ * EpochX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * EpochX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with EpochX. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * The latest version is available from: http:/www.epochx.org
+ */
 package org.epochx.gui;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JTextArea;
+
 import org.epochx.BranchedBreeder;
 import org.epochx.Config;
-import org.epochx.Config.Template;
 import org.epochx.Evolver;
 import org.epochx.FitnessEvaluator;
 import org.epochx.GenerationalStrategy;
@@ -18,21 +40,14 @@ import org.epochx.Population;
 import org.epochx.Reproduction;
 import org.epochx.TerminationCriteria;
 import org.epochx.TerminationFitness;
+import org.epochx.Config.Template;
+import org.epochx.event.Event;
 import org.epochx.event.EventManager;
 import org.epochx.event.GenerationEvent.EndGeneration;
 import org.epochx.event.Listener;
-import org.epochx.event.RunEvent.EndRun;
 import org.epochx.event.stat.AbstractStat;
-import org.epochx.event.stat.GenerationAverageDoubleFitness;
-import org.epochx.event.stat.GenerationBestFitness;
-import org.epochx.event.stat.GenerationBestIndividuals;
-import org.epochx.event.stat.GenerationFitnessDiversity;
 import org.epochx.event.stat.GenerationNumber;
-import org.epochx.event.stat.GenerationWorstFitness;
 import org.epochx.monitor.Monitor;
-import org.epochx.monitor.chart.Chart;
-import org.epochx.monitor.chart.ChartTrace;
-import org.epochx.monitor.table.Table;
 import org.epochx.refactoring.PopulationNeutrality;
 import org.epochx.refactoring.Problem;
 import org.epochx.refactoring.initialisation.RampedHalfAndHalf;
@@ -43,12 +58,27 @@ import org.epochx.refactoring.problem.EvenParity;
 import org.epochx.refactoring.representation.CoverageFitness;
 import org.epochx.selection.TournamentSelector;
 
-public class MonitorFrameTest {
+/**
+ * A <code>StatText</code>.
+ */
+public class StatText extends JTextArea implements Listener<Event> {
 
-	/**
-	 * @param args
-	 */
+	private Class<? extends AbstractStat<?>> klass;
+
+	public StatText(Class<? extends AbstractStat<?>> klass) {
+			super();
+			AbstractStat.register(klass);
+			this.klass = klass;
+	}
+
+	public void onEvent(Event event) {
+		
+		setText(AbstractStat.get(klass).toString());
+
+	}
+	
 	public static void main(String[] args) {
+		
 		
 		Config config = Config.getInstance();
 		config.set(Template.KEY, new GenerationalTemplate());
@@ -98,80 +128,18 @@ public class MonitorFrameTest {
 		config.set(GenerationalStrategy.TERMINATION_CRITERIA, criteria);
 
 		AbstractStat.register(PopulationNeutrality.class);
-
-		// our stats monitor
-
-		Monitor monitor = new Monitor("Monitor Frame", 1, 2);
 		
-		final Table table1 = new Table("Fitnesses Table");
-		table1.addStat(GenerationNumber.class);
-		table1.addStat(GenerationBestFitness.class);
-		table1.addStat(GenerationWorstFitness.class);
-		table1.addStat(GenerationAverageDoubleFitness.class);
-		table1.addListener(EndGeneration.class);
-
-		monitor.add(table1, 1, 1);
-		
-		Table table2 = new Table("Fitness Diversity Table");
-		table2.addStat(GenerationNumber.class);
-		table2.addStat(GenerationFitnessDiversity.class);
-		table2.addListener(EndGeneration.class);
-
-		monitor.add(table2, 1, 2);
-		
-		Table table3 = new Table("Best Individual Table");
-		table3.addStat(GenerationNumber.class);
-		table3.addStat(GenerationBestIndividuals.class);
-		table3.addListener(EndGeneration.class);
-
-		monitor.add(table3, 1, 1);
-		
-		Chart chart1 = new Chart("Fitnesses Chart");
-		
-		ChartTrace trace1 = new ChartTrace();
-		trace1.setXStat(GenerationNumber.class);
-		trace1.setYStat(GenerationBestFitness.class);
-		chart1.addTrace(trace1);
-		
-		ChartTrace trace2 = new ChartTrace();
-		trace2.setXStat(GenerationNumber.class);
-		trace2.setYStat(GenerationWorstFitness.class);
-		chart1.addTrace(trace2);
-		
-		ChartTrace trace3 = new ChartTrace();
-		trace3.setXStat(GenerationNumber.class);
-		trace3.setYStat(GenerationAverageDoubleFitness.class);
-		chart1.addTrace(trace3);
+		StatText myText = 
+	               new StatText(GenerationNumber.class);
+		EventManager.getInstance()
+	                .add(EndGeneration.class, myText);
 	
-		/*
-		ChartTrace traceTab[] = new ChartTrace[1000];
+		Monitor m = new Monitor();
+		m.add(myText);
 		
-		for(int i = 0; i<1000; i++) {
-			traceTab[i] = new ChartTrace(chart1);
-			traceTab[i].setXStat(GenerationNumber.class);
-			traceTab[i].setYStat(GenerationFitnessDiversity.class);
-		}
-		//*/
-				
-		chart1.addListener(EndGeneration.class);
-		
-		monitor.add(chart1, 1, 2);
-		
-		Chart chart2 = new Chart("Fitness Diversity Chart");
-		
-		ChartTrace trace4 = new ChartTrace();
-		trace4.setXStat(GenerationNumber.class);
-		trace4.setYStat(GenerationFitnessDiversity.class);
-		chart2.addTrace(trace4);
-		
-		chart2.addListener(EndGeneration.class);
-		
-		monitor.add(chart2, 1, 2);
-		
-		// we are ready to go!
-
 		Evolver evolver = new Evolver();
 		@SuppressWarnings("unused")
 		Population population = evolver.run();
 	}
+
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2012
  * Lawrence Beadle, Tom Castle and Fernando Otero
  * Licensed under GNU Lesser General Public License
@@ -22,9 +22,9 @@
  */
 package org.epochx.monitor.tree;
 
-
 /**
- * A <code>NoYetAngleException</code>.
+ * A <code>NoYetAngleException</code> signals that the node's angle hasn't been
+ * setted.
  */
 public class NoYetAngleException extends IllegalStateException {
 
@@ -32,28 +32,25 @@ public class NoYetAngleException extends IllegalStateException {
 	 * The <code>long</code>/serialVersionUID.
 	 */
 	private static final long serialVersionUID = -3780723411515251488L;
-	
+
 	public NoYetAngleException() {
 		super();
 	}
-
 
 	public NoYetAngleException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-
 	public NoYetAngleException(String s) {
 		super(s);
 	}
 
-
 	public NoYetAngleException(Throwable cause) {
 		super(cause);
 	}
-	
+
 	public NoYetAngleException(TreeNode node) {
-		super("Node : "+node.getName()+" at level : "+node.level());
+		super("Node : " + node.getName() + " at level : " + node.level());
 	}
 
 }

@@ -410,10 +410,10 @@ public class GraphVertex implements Comparable<Object>, Serializable {
 	}
 
 	/**
-	 * Returns the index of the point. The point among the points array of the
-	 * <code>EndOperator</code> event corresponding to the rank of this vertex.
+	 * Returns the index of the sub-tree which is the supplied gene to create
+	 * this individual among the provider tree.
 	 * 
-	 * @return the operation point if the <code>EndOperator</code> event has
+	 * @return the provider point if the <code>EndOperator</code> event has
 	 *         been defined; returns -1, otherwise.
 	 */
 	public int providerPoint() {
@@ -461,7 +461,6 @@ public class GraphVertex implements Comparable<Object>, Serializable {
 
 		}
 	}
-
 
 	/**
 	 * Overrides the <code>equals</code> method to compare the
@@ -516,15 +515,17 @@ public class GraphVertex implements Comparable<Object>, Serializable {
 
 		res += ",";
 		res += "Individual@";
-		res +=  individual != null ? String.valueOf(System.identityHashCode(individual)) + ":" + individual.toString().substring(0, Math.min(10, individual.toString().length())) + "..." : "NULL";
+		res += individual != null ? String.valueOf(System.identityHashCode(individual)) + ":"
+				+ individual.toString().substring(0, Math.min(10, individual.toString().length())) + "..." : "NULL";
 
 		res += ",";
 		res += "Operator@";
-		res += operator != null ? String.valueOf(System.identityHashCode(operator))+":" + operator.getClass().getSimpleName() : "NULL";
+		res += operator != null ? String.valueOf(System.identityHashCode(operator)) + ":"
+				+ operator.getClass().getSimpleName() : "NULL";
 
 		res += ",";
 		res += "Event@";
-		res += operatorEvent != null ?  String.valueOf(System.identityHashCode(operatorEvent)) : "NULL";
+		res += operatorEvent != null ? String.valueOf(System.identityHashCode(operatorEvent)) : "NULL";
 
 		if (operatorEvent != null) {
 			res += ",";

@@ -505,7 +505,7 @@ public class TreeNode implements TreeNodeAble, RootAble, Iterable<TreeNode> {
 	 * Returns an array of nodes in this node's descendance which subsume the
 	 * given node.
 	 * <p>
-	 * All the nodes <code>node</code> in this node's descendance such that
+	 * All the nodes <code>node</code> in this node's descendants such that
 	 * <code>node.subsumes(n, onlySelected) == true</code>
 	 * </p>
 	 * 

@@ -138,19 +138,24 @@ public class AncestryFinder extends JPanel implements GraphViewListener, TreeLis
 	 * <code>GraphViewEvent</code>.
 	 */
 	public void viewChanged(GraphViewEvent e) {
-		if (e.getNewValue() instanceof GraphVertex && e.getProperty() == GraphViewProperty.SELECTED_VERTEX) {
-
-			GraphVertex vertex = (GraphVertex) e.getNewValue();
-
-			individual.setVertex(vertex);
-			individual.colorMutatedSubTree();
+		
+		if(e.getSource() instanceof GraphViewModel && e.getSource() != viewModel) {
+			setViewModel((GraphViewModel) e.getSource());
 			
-			ancestorPane.removeAll();
-			table.clear();
+			if (e.getNewValue() instanceof GraphVertex && e.getProperty() == GraphViewProperty.SELECTED_VERTEX) {
 
-			verticalSplitPane.setDividerLocation(0.3);
-			horizontalSplitPane.resetToPreferredSizes();
+				GraphVertex vertex = (GraphVertex) e.getNewValue();
 
+				individual.setVertex(vertex);
+				individual.colorMutatedSubTree();
+				
+				ancestorPane.removeAll();
+				table.clear();
+
+				verticalSplitPane.setDividerLocation(0.3);
+				horizontalSplitPane.resetToPreferredSizes();
+
+			}
 		}
 	}
 	

@@ -73,19 +73,25 @@ public class EpoxInterpreter<T extends Individual> implements Interpreter<T> {
 		int noParamSets = params.getNoParameterSets();
 		int noParams = params.getNoParameters();
 		
+		// Keep a record of the variable nodes that get declared
+		VariableNode[] declaredVariables = new VariableNode[noParams];
+		
 		// Get program source.		
 		String expression = generator.getSource(program);
 		
 		Object[] results = new Object[noParamSets];
 		for (int i=0; i<noParamSets; i++) {
 			// Remove any of the old variables.
-			parser.undeclareAllVariables();
+			for (int j=0; j<noParams; j++) {
+				parser.undeclare(declaredVariables[j]);
+			}
 			
 			Object[] paramSet = params.getParameterSet(i);
 			
 			// Set the values of this round of variables.
 			for (int j=0; j<noParams; j++) {
-				parser.declareVariable(new Variable(params.getIdentifier(j), paramSet[j]));
+				declaredVariables[j] = new VariableNode(new Variable(params.getIdentifier(j), paramSet[j]));
+				parser.declare(declaredVariables[j]);
 			}
 			
 			final Node programTree = parser.parse(expression);

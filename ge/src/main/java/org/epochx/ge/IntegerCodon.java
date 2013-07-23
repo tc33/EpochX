@@ -38,4 +38,8 @@ public class IntegerCodon implements Codon {
 		return value;
 	}
 	
+	@Override
+	public String toString() {
+		return Long.toString(value);
+	}
 }

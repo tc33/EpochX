@@ -21,12 +21,22 @@
  */
 package org.epochx.ge;
 
+import java.util.List;
+
 import org.epochx.event.*;
 
 /**
  * 
  */
-public class IntegerChromosome extends Chromosome implements Listener<ConfigEvent> {
+public class IntegerChromosome extends Chromosome<IntegerCodon> implements Listener<ConfigEvent> {
+	
+	public IntegerChromosome() {
+		super();
+	}
+	
+	public IntegerChromosome(List<IntegerCodon> codons) {
+		super(codons);
+	}
 	
 	@Override
 	public IntegerCodon generateCodon(long value) {

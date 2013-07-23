@@ -33,7 +33,7 @@ import org.epochx.event.*;
 /**
  * 
  */
-public abstract class Chromosome implements Iterable<Codon>, Cloneable, Listener<ConfigEvent> {
+public abstract class Chromosome<T extends Codon> implements Iterable<T>, Cloneable, Listener<ConfigEvent> {
 
 	/**
 	 * The key for setting and retrieving the maximum length setting for 
@@ -47,27 +47,30 @@ public abstract class Chromosome implements Iterable<Codon>, Cloneable, Listener
 	 */
 	public static final ConfigKey<Integer> MAXIMUM_WRAPS = new ConfigKey<Integer>();
 	
-	private List<Codon> codons;
-
-	// These are mutually exclusive - one or the other or neither.
-	private boolean wrapping;
-	private boolean extending;
+	/**
+	 * The key for setting and retrieving whether chromosomes should be allowed to 
+	 * themselves extend up to the maximum length setting if there are insufficient
+	 * codons
+	 */
+	public static final ConfigKey<Boolean> ALLOW_EXTENSION = new ConfigKey<Boolean>();
+	
+	private List<T> codons;
 	
 	private RandomSequence random;
 	
 	private long minCodon;
 	private long maxCodon;
 	private long codonRange;
+	private int maxWraps;
+	private int maxLength;
+	private boolean extending;
 
 	public Chromosome() {
-		this(new ArrayList<Codon>());
+		this(new ArrayList<T>());
 	}
 	
-	public Chromosome(List<Codon> codons) {
+	public Chromosome(List<T> codons) {
 		this.codons = codons;
-
-		wrapping = false;
-		extending = true;
 		
 		setup();
 
@@ -80,14 +83,20 @@ public abstract class Chromosome implements Iterable<Codon>, Cloneable, Listener
 	 * change in any of the following configuration parameters:
 	 * <ul>
 	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
-	 * <li>{@link IntegerCodon#MAXIMUM_VALUE} (default: <tt>Long.MAX_VALUE</tt>)
-	 * <li>{@link IntegerCodon#MINIMUM_VALUE} (default: <tt>0L</tt>)
+	 * <li>{@link Codon#MAXIMUM_VALUE} (default: <tt>Long.MAX_VALUE</tt>)
+	 * <li>{@link Codon#MINIMUM_VALUE} (default: <tt>0L</tt>)
+	 * <li>{@link Chromosome#MAXIMUM_WRAPS} (default: <tt>Integer.MAX_VALUE</tt>)
+	 * <li>{@link Chromosome#MAXIMUM_LENGTH} (default: <tt>Integer.MAX_VALUE</tt>)
+	 * <li>{@link Chromosome#ALLOW_EXTENSION} (default: <tt>False</tt>)
 	 * </ul>
 	 */
 	protected void setup() {
 		random = Config.getInstance().get(RANDOM_SEQUENCE);
 		maxCodon = Config.getInstance().get(MAXIMUM_VALUE, Long.MAX_VALUE);
 		minCodon = Config.getInstance().get(MINIMUM_VALUE, 0L);
+		maxWraps = Config.getInstance().get(MAXIMUM_WRAPS, Integer.MAX_VALUE);
+		maxLength = Config.getInstance().get(MAXIMUM_LENGTH, Integer.MAX_VALUE);
+		extending = Config.getInstance().get(ALLOW_EXTENSION, Boolean.FALSE);
 		
 		codonRange = maxCodon - minCodon;
 	}
@@ -101,12 +110,12 @@ public abstract class Chromosome implements Iterable<Codon>, Cloneable, Listener
 	 */
 	@Override
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(RANDOM_SEQUENCE, MAXIMUM_VALUE, MINIMUM_VALUE)) {
+		if (event.isKindOf(RANDOM_SEQUENCE, MAXIMUM_VALUE, MINIMUM_VALUE, MAXIMUM_WRAPS, MAXIMUM_LENGTH, ALLOW_EXTENSION)) {
 			setup();
 		}
 	}
 	
-	public abstract Codon generateCodon(long value);
+	public abstract T generateCodon(long value);
 	
 	public void extend() {
 		long value = minCodon + random.nextLong(codonRange);
@@ -114,17 +123,33 @@ public abstract class Chromosome implements Iterable<Codon>, Cloneable, Listener
 		appendCodon(generateCodon(value));
 	}
 	
-	public Codon getCodon(int index) {
-		if (wrapping) {
-			index = index % codons.size();
-		} else if (index >= codons.size()) {
+	public T getCodon(long index) {
+		// If within chromosome size just return the codon
+		if (index < codons.size()) {
+			return codons.get((int) index);		
+		}
+		
+		// Otherwise need to do some combination of wrapping and extending
+		if (extending) {
+			while (codons.size() <= index && codons.size() < maxLength) {
+				extend();
+			}
+		}
+		
+		int wraps = (int) Math.floor(index / codons.size());
+		if (wraps > maxWraps) {
+			return null;
+		}
+		
+		index = index % codons.size();
+		if (index >= codons.size()) {
 			return null;
 		}
 
-		return codons.get(index);
+		return codons.get((int) index);
 	}
 
-	public void setCodon(int index, Codon codon) {
+	public void setCodon(int index, T codon) {
 		codons.set(index, codon);
 	}
 
@@ -146,20 +171,16 @@ public abstract class Chromosome implements Iterable<Codon>, Cloneable, Listener
 		return removed;
 	}
 
-	public void appendCodon(Codon codon) {
+	public void appendCodon(T codon) {
 		codons.add(codon);
 	}
 
-	public boolean isWrapping() {
-		return wrapping;
+	public int getMaxWraps() {
+		return maxWraps;
 	}
 
-	public void setWrapping(boolean wrap) {
-		wrapping = wrap;
-
-		if (wrapping) {
-			extending = false;
-		}
+	public void setMaxWraps(int maxWraps) {
+		this.maxWraps = maxWraps;
 	}
 
 	public boolean isAutoExtending() {
@@ -168,19 +189,15 @@ public abstract class Chromosome implements Iterable<Codon>, Cloneable, Listener
 
 	public void setAutoExtending(boolean extending) {
 		this.extending = extending;
-
-		if (extending) {
-			wrapping = false;
-		}
 	}
 
 	@Override
-	public Chromosome clone() {
-		Chromosome clone = null;
+	public Chromosome<T> clone() {
+		Chromosome<T> clone = null;
 		try {
 			clone = (Chromosome) super.clone();
 			// This assumes codons are immutable
-			clone.codons = new ArrayList<Codon>(codons);
+			clone.codons = new ArrayList<T>(codons);
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}
@@ -198,7 +215,7 @@ public abstract class Chromosome implements Iterable<Codon>, Cloneable, Listener
 		if (obj instanceof Chromosome) {
 			Chromosome c = (Chromosome) obj;
 
-			if ((c.extending == extending) && (c.wrapping == wrapping)) {
+			if ((c.extending == extending) && (c.maxWraps == maxWraps) && (c.maxLength == maxLength)) {
 				return codons.equals(c.codons);
 			}
 		}
@@ -212,8 +229,60 @@ public abstract class Chromosome implements Iterable<Codon>, Cloneable, Listener
 	 * @return an iterator over the codons in this chromosome
 	 */
 	@Override
-	public Iterator<Codon> iterator() {
-		//TODO This isn't right - it should wrap if wrapping is enabled
-		return codons.iterator();
+	public Iterator<T> iterator() {
+		//return codons.iterator();
+		return new ChromosomeIterator();
+	}
+	
+	private class ChromosomeIterator implements Iterator<T> {
+
+		private Codon previous;
+		private long nextPosition;
+		
+		public ChromosomeIterator() {
+			nextPosition = 0;
+			previous = null;
+		}
+
+		/**
+		 * Note that if extending and wrapping are used, hasNext will be inconsistent
+		 * with the length of the underlying chromosome
+		 */
+		@Override
+		public boolean hasNext() {			
+			long lastPosition = codons.size()-1;
+			
+			if (extending) {
+				lastPosition = maxLength-1;
+			}
+			
+			if (maxWraps > 0) {
+				lastPosition++;
+				lastPosition *= (maxWraps+1);
+				lastPosition--;
+			}
+			
+			return (nextPosition <= lastPosition);
+		}
+
+		@Override
+		public T next() {
+			if (hasNext()) {
+				T previous = getCodon(nextPosition++);
+				return previous;
+			} else {
+				throw new NoSuchElementException("There is no next codon");
+			}
+		}
+
+		@Override
+		public void remove() {
+			if (previous == null) {
+				codons.remove(nextPosition-1);
+				previous = null;
+			} else {
+				throw new IllegalStateException("No previous codon to remove");
+			}
+		}
 	}
 }

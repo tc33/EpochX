@@ -21,16 +21,26 @@
  */
 package org.epochx.ge;
 
+import java.util.List;
+
 import org.epochx.RandomSequence;
 
 /**
  * 
  */
-public class BinaryChromosome extends Chromosome {
+public class BinaryChromosome extends Chromosome<BinaryCodon> {
 
 	private RandomSequence random;
 	
 	private int noBits;
+	
+	public BinaryChromosome() {
+		super();
+	}
+	
+	public BinaryChromosome(List<BinaryCodon> codons) {
+		super(codons);
+	}
 	
 	@Override
 	public BinaryCodon generateCodon(long value) {

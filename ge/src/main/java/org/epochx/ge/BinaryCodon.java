@@ -21,6 +21,8 @@
  */
 package org.epochx.ge;
 
+import java.util.Arrays;
+
 
 /**
  * 
@@ -52,6 +54,11 @@ public class BinaryCodon implements Codon {
 	    }
 
 	    return result;
+	}
+	
+	@Override
+	public String toString() {
+		return Arrays.toString(bits);
 	}
 	
 }

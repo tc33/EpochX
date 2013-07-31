@@ -56,6 +56,10 @@ public class BinaryCodon implements Codon {
 	    return result;
 	}
 	
+	public boolean[] getBits() {
+		return bits;
+	}
+	
 	@Override
 	public String toString() {
 		return Arrays.toString(bits);

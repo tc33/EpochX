@@ -40,6 +40,6 @@ public interface Mapper extends Component {
 	 *         or <tt>null</tt> if no valid parse tree could be created from the
 	 *         individual
 	 */
-	public Symbol map(GEIndividual individual);
+	public NonTerminalSymbol map(GEIndividual individual);
 
 }

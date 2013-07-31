@@ -21,15 +21,22 @@
  */
 package org.epochx.ge;
 
-import java.util.List;
+import java.util.*;
 
 import org.epochx.RandomSequence;
+import org.epochx.Config.ConfigKey;
 
 /**
  * 
  */
 public class BinaryChromosome extends Chromosome<BinaryCodon> {
 
+	/**
+	 * The key for setting and retrieving the number of bits that constitute a
+	 * codon
+	 */
+	public static final ConfigKey<Boolean> NO_CODON_BITS = new ConfigKey<Boolean>();
+	
 	private RandomSequence random;
 	
 	private int noBits;
@@ -52,5 +59,29 @@ public class BinaryChromosome extends Chromosome<BinaryCodon> {
 		
 		return new BinaryCodon(bits);
 	}
+	
+	public boolean[] bits() {
+		List<Boolean> bits = new ArrayList<Boolean>(noBits * length());
+		List<BinaryCodon> codons = getCodons();
+		
+		for (BinaryCodon codon: codons) {
+			boolean[] codonBits = codon.getBits();
+			for (boolean bit: codonBits) {
+				bits.add(bit);
+			}
+		}
+		
+		return toPrimitiveArray(bits);
+	}
 
+	private boolean[] toPrimitiveArray(List<Boolean> booleanList) {
+	    boolean[] primitives = new boolean[booleanList.size()];
+	    
+	    int index = 0;
+	    for (Boolean object : booleanList) {
+	        primitives[index++] = object;
+	    }
+	    
+	    return primitives;
+	}
 }

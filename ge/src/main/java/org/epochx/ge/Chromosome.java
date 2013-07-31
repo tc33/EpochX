@@ -123,6 +123,11 @@ public abstract class Chromosome<T extends Codon> implements Iterable<T>, Clonea
 		appendCodon(generateCodon(value));
 	}
 	
+	protected List<T> getCodons() {
+		//TODO Is it a good idea to give access to the underlying list? If not, also need to make a copy from the original list given
+		return codons;
+	}
+	
 	public T getCodon(long index) {
 		// If within chromosome size just return the codon
 		if (index < codons.size()) {

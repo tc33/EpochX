@@ -25,11 +25,9 @@ package org.epochx.ge.stats;
 
 import java.util.Arrays;
 
-import org.epochx.Individual;
-import org.epochx.Population;
+import org.epochx.*;
 import org.epochx.event.GenerationEvent.EndGeneration;
 import org.epochx.event.stat.AbstractStat;
-import org.epochx.stgp.STGPIndividual;
 
 /**
  * A stat that returns the depth of all program trees in the population from

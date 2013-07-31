@@ -69,7 +69,7 @@ public abstract class AbstractOperator implements Operator {
 	}
 
 	/**
-	 * Performs the operator on the specified individiduals. If the operator is
+	 * Performs the operator on the specified individuals. If the operator is
 	 * not successful, the specified individuals will not be changed and
 	 * <code>null</code> is returned. The default implementation calls the
 	 * {@link #perform(Individual...)} method.

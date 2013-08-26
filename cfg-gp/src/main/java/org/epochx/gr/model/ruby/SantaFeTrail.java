@@ -1,5 +1,5 @@
 /*
- * Copyright 2007-2011 Tom Castle & Lawrence Beadle
+ * Copyright 2007-2013
  * Licensed under GNU Lesser General Public License
  * 
  * This file is part of EpochX: genetic programming software for research

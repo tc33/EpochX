@@ -1,6 +1,5 @@
 /* 
- * Copyright 2007-2012
- * Lawrence Beadle, Tom Castle and Fernando Otero
+ * Copyright 2007-2013
  * Licensed under GNU Lesser General Public License
  * 
  * This file is part of EpochX
@@ -18,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with EpochX. If not, see <http://www.gnu.org/licenses/>.
  * 
- * The latest version is available from: http:/www.epochx.org
+ * The latest version is available from: http://www.epochx.org
  */
 package org.epochx.monitor.menu;
 
@@ -65,7 +64,7 @@ public class MenuHelp extends Menu {
 		about.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(monitor, "Copyright 2007-2012\n"
+				JOptionPane.showMessageDialog(monitor, "Copyright 2007-2013\n"
 						+ "Lawrence Beadle, Tom Castle, Fernando Otero and Loïc Vaseux\n"
 						+ "Licensed under GNU Lesser General Public License");
 			}

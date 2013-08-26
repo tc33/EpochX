@@ -1,5 +1,5 @@
 /* 
- * Copyright 2007-2011 Tom Castle & Lawrence Beadle
+ * Copyright 2007-2013
  * Licensed under GNU Lesser General Public License
  * 
  * This file is part of EpochX: genetic programming software for research
@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with EpochX. If not, see <http://www.gnu.org/licenses/>.
  * 
- * The latest version is available from: http:/www.epochx.org
+ * The latest version is available from: http://www.epochx.org
  */
 package org.epochx.interpret;
 

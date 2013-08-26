@@ -1,6 +1,5 @@
 /* 
- * Copyright 2007-2011
- * Lawrence Beadle, Tom Castle and Fernando Otero
+ * Copyright 2007-2013
  * Licensed under GNU Lesser General Public License
  * 
  * This file is part of EpochX

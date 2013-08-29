@@ -19,9 +19,14 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.fitness;
+package org.epochx.stgp.fitness;
 
+import org.epochx.AbstractFitnessFunction;
 import org.epochx.Individual;
+import org.epochx.Config.ConfigKey;
+import org.epochx.epox.Variable;
+import org.epochx.event.ConfigEvent;
+import org.epochx.event.Listener;
 
 
 /**
@@ -38,11 +43,17 @@ import org.epochx.Individual;
  * adjusted-fitness = 1 / (1 + standardised-fitness)
  * </blockquote></code>
  */
-public class AdjustedFitnessEvaluator<T extends Individual> implements FitnessEvaluator<T> {
+public class AdjustedFitness extends AbstractFitnessFunction implements Listener<ConfigEvent> {
 
-	private FitnessEvaluator<T> delegate;
+	/**
+	 * The key for setting the minimum fitness score possible, used when calculating
+	 * the adjusted fitness score.
+	 */
+	public static final ConfigKey<Double> MIN_FITNESS_SCORE = new ConfigKey<Double>();
 	
-	public AdjustedFitnessEvaluator(FitnessEvaluator<T> delegate) {
+	private AbstractFitnessFunction delegate;
+	
+	public AdjustedFitness(AbstractFitnessFunction delegate) {
 		this.delegate = delegate;
 	}
 	

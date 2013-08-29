@@ -2,7 +2,7 @@
  * Copyright 2007-2013
  * Licensed under GNU Lesser General Public License
  * 
- * This file is part of EpochX: genetic programming software for research
+ * This file is part of EpochX
  * 
  * EpochX is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,29 +17,27 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with EpochX. If not, see <http://www.gnu.org/licenses/>.
  * 
- * The latest version is available from: http://www.epochx.org
+ * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.fitness;
+package org.epochx.stgp.fitness;
 
-import org.epochx.Individual;
-
+import org.epochx.AbstractFitnessFunction;
+import org.epochx.Config.ConfigKey;
+import org.epochx.epox.Variable;
 
 /**
  * 
  */
-public abstract class AbstractFitnessEvaluator<T extends Individual> implements FitnessEvaluator<T> {
+public abstract class STGPFitnessFunction extends AbstractFitnessFunction {
 
-	@Override
-	public double[] getFitness(T[] pop) {
-		double[] fitnesses = new double[pop.length];
-		for (int i=0; i<fitnesses.length; i++) {
-			fitnesses[i] = getFitness(pop[i]);
-		}
-		
-		return fitnesses;
-	}
+	/**
+	 * The key for setting the program's input variables
+	 */
+	public static final ConfigKey<Variable[]> INPUT_VARIABLES = new ConfigKey<Variable[]>();
 	
-	@Override
-	public abstract double getFitness(T program);
-	
+	/**
+	 * The key for setting the sets of values to use as inputs
+	 */
+	public static final ConfigKey<Object[][]> INPUT_VALUE_SETS = new ConfigKey<Object[][]>();
+
 }

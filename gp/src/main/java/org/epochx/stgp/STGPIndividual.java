@@ -240,6 +240,14 @@ public class STGPIndividual implements Individual {
 
 		return equal;
 	}
+	
+	@Override
+	public int hashCode() {
+		int hash = 1;
+        hash = hash * 13 + (root == null ? 0 : root.hashCode());
+        
+        return hash;
+	}
 
 	/**
 	 * {@inheritDoc}

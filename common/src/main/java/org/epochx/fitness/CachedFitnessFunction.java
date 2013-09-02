@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx;
+package org.epochx.fitness;
 
 import java.util.HashMap;
 import java.util.Map;

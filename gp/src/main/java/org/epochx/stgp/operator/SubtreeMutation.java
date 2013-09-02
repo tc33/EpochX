@@ -25,6 +25,8 @@ import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
 import static org.epochx.stgp.STGPIndividual.*;
 
 import org.epochx.*;
+import org.epochx.Config.ConfigKey;
+import org.epochx.Config.Template;
 import org.epochx.epox.Node;
 import org.epochx.event.*;
 import org.epochx.event.OperatorEvent.EndOperator;
@@ -43,13 +45,17 @@ import org.epochx.stgp.init.GrowInitialisation;
  */
 public class SubtreeMutation extends AbstractOperator implements Listener<ConfigEvent> {
 
+	/**
+	 * The key for setting and retrieving the probability of this operator being applied
+	 */
+	public static final ConfigKey<Double> PROBABILITY = new ConfigKey<Double>();
+	
 	private final GrowInitialisation grower;
 
 	// Configuration settings
 	private RandomSequence random;
-	private int maxDepth;
-
-	private double probability;
+	private Integer maxDepth;
+	private Double probability;
 
 	/**
 	 * Constructs a <tt>SubtreeMutation</tt> with control parameters
@@ -86,11 +92,13 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
 	 * <li>{@link STGPIndividual#SYNTAX}
 	 * <li>{@link STGPIndividual#MAXIMUM_DEPTH}
+	 * <li>{@link #PROBABILITY}
 	 * </ul>
 	 */
 	protected void setup() {
 		random = Config.getInstance().get(RANDOM_SEQUENCE);
 		maxDepth = Config.getInstance().get(MAXIMUM_DEPTH);
+		probability = Config.getInstance().get(PROBABILITY);
 
 		grower.setRandomSequence(random);
 		grower.setSyntax(Config.getInstance().get(SYNTAX));
@@ -105,7 +113,7 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 	 */
 	@Override
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(RANDOM_SEQUENCE, SYNTAX, MAXIMUM_DEPTH)) {
+		if (event.isKindOf(Template.TEMPLATE, RANDOM_SEQUENCE, SYNTAX, MAXIMUM_DEPTH, PROBABILITY)) {
 			setup();
 		}
 	}

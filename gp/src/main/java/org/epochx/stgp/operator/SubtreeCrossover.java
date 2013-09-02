@@ -22,11 +22,13 @@
 package org.epochx.stgp.operator;
 
 import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
+import static org.epochx.stgp.STGPIndividual.MAXIMUM_DEPTH;
 
 import java.util.*;
 
 import org.epochx.*;
 import org.epochx.Config.ConfigKey;
+import org.epochx.Config.Template;
 import org.epochx.epox.Node;
 import org.epochx.event.*;
 import org.epochx.event.OperatorEvent.EndOperator;
@@ -52,11 +54,16 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 	 */
 	public static final ConfigKey<Double> TERMINAL_PROBABILITY = new ConfigKey<Double>();
 
+	/**
+	 * The key for setting and retrieving the probability of this operator being applied
+	 */
+	public static final ConfigKey<Double> PROBABILITY = new ConfigKey<Double>();
+	
 	// Configuration settings
 	private RandomSequence random;
-	private double terminalProbability;
-
-	private double probability;
+	private Double terminalProbability;
+	private Double probability;
+	private Integer maxDepth;
 
 	/**
 	 * Constructs a <tt>SubtreeCrossover</tt> with control parameters
@@ -90,11 +97,14 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 	 * <ul>
 	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
 	 * <li>{@link #TERMINAL_PROBABILITY} (default: <tt>-1.0</tt>)
+	 * <li>{@link #PROBABILITY}
 	 * </ul>
 	 */
 	protected void setup() {
 		random = Config.getInstance().get(RANDOM_SEQUENCE);
 		terminalProbability = Config.getInstance().get(TERMINAL_PROBABILITY, -1.0);
+		probability = Config.getInstance().get(PROBABILITY);
+		maxDepth = Config.getInstance().get(MAXIMUM_DEPTH);
 	}
 
 	/**
@@ -106,7 +116,7 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 	 */
 	@Override
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(RANDOM_SEQUENCE, TERMINAL_PROBABILITY)) {
+		if (event.isKindOf(Template.TEMPLATE, RANDOM_SEQUENCE, TERMINAL_PROBABILITY, PROBABILITY, MAXIMUM_DEPTH)) {
 			setup();
 		}
 	}
@@ -148,8 +158,23 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 
 			program1.setNode(swapPoint1, subtree2);
 			program2.setNode(swapPoint2, subtree1);
+			
+			// Check the depths are valid
+			int depth1 = program1.depth();
+			int depth2 = program2.depth();
 
-			children = new STGPIndividual[]{program1, program2};
+			children = new STGPIndividual[2];
+			
+			if (depth1 <= maxDepth && depth2 <= maxDepth) {
+				children = new STGPIndividual[]{program1, program2};
+			} else if (depth1 <= maxDepth) {
+				children = new STGPIndividual[]{program1};
+			} else if (depth2 <= maxDepth) {
+				children = new STGPIndividual[]{program2};
+			} else {
+				children = new STGPIndividual[0];
+			}
+			
 			swapPoints = new int[]{swapPoint1, swapPoint2};
 			subtrees = new Node[]{subtree1, subtree2};
 		}

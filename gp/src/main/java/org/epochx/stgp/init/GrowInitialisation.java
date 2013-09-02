@@ -29,6 +29,7 @@ import java.math.BigInteger;
 import java.util.*;
 
 import org.epochx.*;
+import org.epochx.Config.Template;
 import org.epochx.epox.Node;
 import org.epochx.event.*;
 import org.epochx.stgp.STGPIndividual;
@@ -52,9 +53,9 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 	private Node[] syntax; //TODO We don't really need to store this
 	private RandomSequence random;
 	private Class<?> returnType;
-	private int populationSize;
-	private int maxDepth;
-	private boolean allowDuplicates;
+	private Integer populationSize;
+	private Integer maxDepth;
+	private Boolean allowDuplicates;
 	
 	// The contents of the syntax split
 	private List<Node> terminals;
@@ -150,16 +151,16 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 	 */
 	@Override
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(RANDOM_SEQUENCE, SIZE, SYNTAX, RETURN_TYPE, 
+		if (event.isKindOf(Template.TEMPLATE, RANDOM_SEQUENCE, SIZE, SYNTAX, RETURN_TYPE, 
 				MAXIMUM_INITIAL_DEPTH, MAXIMUM_DEPTH, ALLOW_DUPLICATES)) {
 			setup();
 		}
 
 		// These will be expensive so only do them when we really have to
-		if (event.isKindOf(RETURN_TYPE)) {
+		if (event.isKindOf(Template.TEMPLATE, RETURN_TYPE)) {
 			dataTypesTable = null;
 		}
-		if (event.isKindOf(SYNTAX)) {
+		if (event.isKindOf(Template.TEMPLATE, SYNTAX)) {
 			updateSyntax();
 		}
 	}
@@ -190,7 +191,7 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 			do {
 				individual = createIndividual();
 			} while (!allowDuplicates && population.contains(individual));
-
+			
 			population.add(individual);
 		}
 		
@@ -216,7 +217,7 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 	}
 
 	/**
-	 * Creates a program tree within the maximum depth as specifed by the 
+	 * Creates a program tree within the maximum depth as specified by the 
 	 * <tt>getMaximumDepth</tt> method. The nodes in the tree are randomly 
 	 * chosen from those nodes in the syntax with a data-type that matches the 
 	 * requirements of their parent (or the problem for the root node).
@@ -668,7 +669,7 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 	 * @param maxDepth the maximum depth of all program trees generated
 	 */
 	public void setMaximumDepth(int maxDepth) {
-		if (dataTypesTable != null && maxDepth > dataTypesTable.length) {
+		if (dataTypesTable != null && maxDepth >= dataTypesTable.length) {
 			// Types possibilities table needs extending
 			// TODO No need to regenerate the whole table, just extend it
 			dataTypesTable = null;

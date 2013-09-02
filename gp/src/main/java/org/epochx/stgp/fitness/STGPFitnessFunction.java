@@ -21,9 +21,9 @@
  */
 package org.epochx.stgp.fitness;
 
-import org.epochx.AbstractFitnessFunction;
 import org.epochx.Config.ConfigKey;
 import org.epochx.epox.Variable;
+import org.epochx.fitness.AbstractFitnessFunction;
 
 /**
  * 

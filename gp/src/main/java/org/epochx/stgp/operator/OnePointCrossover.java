@@ -21,14 +21,21 @@
  */
 package org.epochx.stgp.operator;
 
+import static org.epochx.Config.Template.TEMPLATE;
 import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.epochx.*;
+import org.epochx.AbstractOperator;
+import org.epochx.Config;
 import org.epochx.Config.ConfigKey;
+import org.epochx.Individual;
+import org.epochx.RandomSequence;
 import org.epochx.epox.Node;
-import org.epochx.event.*;
+import org.epochx.event.ConfigEvent;
+import org.epochx.event.EventManager;
+import org.epochx.event.Listener;
 import org.epochx.event.OperatorEvent.EndOperator;
 import org.epochx.stgp.STGPIndividual;
 
@@ -58,13 +65,17 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
 	 * The key for setting and retrieving whether the strict form of one-point
 	 * crossover should be used
 	 */
-	public static final ConfigKey<Double> STRICT = new ConfigKey<Double>();
+	public static final ConfigKey<Boolean> STRICT = new ConfigKey<Boolean>();
+	
+	/**
+	 * The key for setting and retrieving the probability of this operator being applied
+	 */
+	public static final ConfigKey<Double> PROBABILITY = new ConfigKey<Double>();
 
 	// Configuration settings
 	private RandomSequence random;
-	private boolean strict;
-
-	private double probability;
+	private Boolean strict;
+	private Double probability;
 
 	/**
 	 * Constructs a <tt>OnePointCrossover</tt> with control parameters
@@ -85,6 +96,8 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
 	 */
 	public OnePointCrossover(boolean autoConfig) {
 		setup();
+		
+		strict = false;
 
 		if (autoConfig) {
 			EventManager.getInstance().add(ConfigEvent.class, this);
@@ -97,11 +110,14 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
 	 * change in any of the following configuration parameters:
 	 * <ul>
 	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
+	 * <li>{@link #PROBABILITY}
 	 * <li>{@link #STRICT}
 	 * </ul>
 	 */
 	protected void setup() {
 		random = Config.getInstance().get(RANDOM_SEQUENCE);
+		probability = Config.getInstance().get(PROBABILITY);
+		strict = Config.getInstance().get(STRICT, strict);
 	}
 
 	/**
@@ -113,7 +129,7 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
 	 */
 	@Override
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(RANDOM_SEQUENCE)) {
+		if (event.isKindOf(TEMPLATE, RANDOM_SEQUENCE, PROBABILITY, STRICT)) {
 			setup();
 		}
 	}
@@ -227,7 +243,9 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
 	}
 
 	/**
-	 * Sets the probability of this operator being selected
+	 * Sets the probability of this operator being selected. If automatic configuration is
+	 * enabled then any value set here will be overwritten by the {@link #PROBABILITY} 
+	 * configuration setting on the next config event.
 	 * 
 	 * @param probability the new probability to set
 	 */

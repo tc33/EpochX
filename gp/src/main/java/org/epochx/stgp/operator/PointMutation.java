@@ -21,15 +21,22 @@
  */
 package org.epochx.stgp.operator;
 
+import static org.epochx.Config.Template.TEMPLATE;
 import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
-import static org.epochx.stgp.STGPIndividual.*;
+import static org.epochx.stgp.STGPIndividual.SYNTAX;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.epochx.*;
+import org.epochx.AbstractOperator;
+import org.epochx.Config;
 import org.epochx.Config.ConfigKey;
+import org.epochx.Individual;
+import org.epochx.RandomSequence;
 import org.epochx.epox.Node;
-import org.epochx.event.*;
+import org.epochx.event.ConfigEvent;
+import org.epochx.event.EventManager;
+import org.epochx.event.Listener;
 import org.epochx.event.OperatorEvent.EndOperator;
 import org.epochx.stgp.STGPIndividual;
 
@@ -54,12 +61,16 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	 */
 	public static final ConfigKey<Double> POINT_PROBABILITY = new ConfigKey<Double>();
 	
+	/**
+	 * The key for setting and retrieving the probability of this operator being applied
+	 */
+	public static final ConfigKey<Double> PROBABILITY = new ConfigKey<Double>();
+	
 	// Configuration settings
 	private Node[] syntax;
 	private RandomSequence random;
-	private double pointProbability;
-	
-	private double probability;
+	private Double pointProbability;
+	private Double probability;
 
 	/**
 	 * Constructs a <tt>PointMutation</tt> with control parameters
@@ -94,12 +105,14 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
 	 * <li>{@link STGPIndividual#SYNTAX}
 	 * <li>{@link #POINT_PROBABILITY} (defaults to <tt>0.01</tt>).
+	 * <li>{@link #PROBABILITY}
 	 * </ul>
 	 */
 	protected void setup() {
 		random = Config.getInstance().get(RANDOM_SEQUENCE);
 		syntax = Config.getInstance().get(SYNTAX);
 		pointProbability = Config.getInstance().get(POINT_PROBABILITY, 0.01);
+		probability = Config.getInstance().get(PROBABILITY);
 	}
 	
 	/**
@@ -111,7 +124,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	 */
 	@Override
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(RANDOM_SEQUENCE, SYNTAX)) {
+		if (event.isKindOf(TEMPLATE, RANDOM_SEQUENCE, SYNTAX, POINT_PROBABILITY, PROBABILITY)) {
 			setup();
 		}
 	}

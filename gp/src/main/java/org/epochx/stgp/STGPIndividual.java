@@ -37,8 +37,10 @@ import org.epochx.epox.*;
  * <p>
  * Note: this class has a natural ordering that may be inconsistent with
  * <tt>equals</tt>.
+ * 
+ * @since 2.0
  */
-public class STGPIndividual implements Individual {
+public class STGPIndividual extends AbstractIndividual {
 
 	private static final long serialVersionUID = -1428100428151029601L;
 
@@ -59,8 +61,8 @@ public class STGPIndividual implements Individual {
 	 * trees
 	 */
 	public static final ConfigKey<Integer> MAXIMUM_DEPTH = new ConfigKey<Integer>();
-
-	private Fitness fitness;
+	
+	// The root node of the program tree
 	private Node root;
 
 	/**
@@ -83,7 +85,8 @@ public class STGPIndividual implements Individual {
 
 	/**
 	 * Evaluates the strongly typed program tree this individual represents and
-	 * returns the value returned from the root
+	 * returns the value returned from the root. If no root node has been set then 
+	 * an exception will be thrown.
 	 * 
 	 * @return the result of evaluating the program tree
 	 */
@@ -182,18 +185,14 @@ public class STGPIndividual implements Individual {
 
 	/**
 	 * Creates and returns a copy of this program. The copied individual has a
-	 * deep clone of the program tree.
+	 * deep clone of the program tree. The clone is not assigned this individual's
+	 * fitness.
 	 * 
 	 * @return a clone of this <tt>STGPIndividual</tt> instance
 	 */
 	@Override
 	public STGPIndividual clone() {
-		STGPIndividual clone = null;
-		try {
-			clone = (STGPIndividual) super.clone();
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-		}
+		STGPIndividual clone = (STGPIndividual) super.clone();
 
 		// Deep copy node tree
 		if (root == null) {
@@ -206,7 +205,8 @@ public class STGPIndividual implements Individual {
 	}
 
 	/**
-	 * Returns a string representation of this individual
+	 * Returns a string representation of this individual. The string representation is the
+	 * Epox source code of the program tree.
 	 * 
 	 * @return a string representation of this individual
 	 */
@@ -222,7 +222,8 @@ public class STGPIndividual implements Individual {
 	/**
 	 * Compares the given object to this instance for equality. Equivalence is
 	 * defined as them both being instances of <tt>STGPIndividual</tt> and
-	 * having equal program trees according to <tt>getRoot().equals(obj)</tt>.
+	 * having equal program trees according to <tt>getRoot().equals(obj)</tt>
+	 * (or if both root nodes are <tt>null</tt>).
 	 * 
 	 * @param obj an object to be compared for equivalence.
 	 * @return true if this individual is equivalent to the specified object and
@@ -241,6 +242,11 @@ public class STGPIndividual implements Individual {
 		return equal;
 	}
 	
+	/**
+	 * Returns a hash code value for the object.
+	 * 
+	 * @return a hash code value for this object
+	 */
 	@Override
 	public int hashCode() {
 		int hash = 1;
@@ -250,30 +256,11 @@ public class STGPIndividual implements Individual {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Fitness getFitness() {
-		return fitness;
-	}
-
-	/**
-	 * Sets the fitness of this individual. The fitness is used as the basis of
-	 * comparison between individuals.
-	 * 
-	 * @param fitness the fitness value to set
-	 * @see #compareTo(Individual)
-	 */
-	public void setFitness(Fitness fitness) {
-		this.fitness = fitness;
-	}
-
-	/**
 	 * Compares this individual to another based on their fitness. It returns a
 	 * negative integer, zero, or a positive integer as this instance represents
 	 * the quality of an individual that is less fit, equally fit, or more fit
 	 * than the specified object. The individuals do not need to be of the same
-	 * object type, but must have comparable <tt>Fitness</tt> instances.
+	 * object type, but must have non-null, comparable <tt>Fitness</tt> instances.
 	 * 
 	 * @param other an individual to compare against
 	 * @return a negative integer, zero, or a positive integer as this object is
@@ -281,7 +268,7 @@ public class STGPIndividual implements Individual {
 	 *         object
 	 */
 	@Override
-	public int compareTo(Individual other) {
-		return fitness.compareTo(other.getFitness());
+	public int compareTo(Individual other) {	
+		return getFitness().compareTo(other.getFitness());
 	}
 }

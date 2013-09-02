@@ -28,6 +28,7 @@ import static org.epochx.stgp.STGPIndividual.*;
 import java.util.*;
 
 import org.epochx.*;
+import org.epochx.Config.Template;
 import org.epochx.epox.Node;
 import org.epochx.event.*;
 import org.epochx.stgp.STGPIndividual;
@@ -52,9 +53,9 @@ public class FullInitialisation implements STGPInitialisation, Listener<ConfigEv
 	private Node[] syntax; // TODO We don't really need to store this
 	private RandomSequence random;
 	private Class<?> returnType;
-	private int populationSize;
-	private int depth;
-	private boolean allowDuplicates;
+	private Integer populationSize;
+	private Integer depth;
+	private Boolean allowDuplicates;
 
 	// The contents of the syntax split
 	private List<Node> terminals;
@@ -83,6 +84,9 @@ public class FullInitialisation implements STGPInitialisation, Listener<ConfigEv
 	public FullInitialisation(boolean autoConfig) {
 		setup();
 		updateSyntax();
+		
+		// Default config values
+		allowDuplicates = true;
 
 		if (autoConfig) {
 			EventManager.getInstance().add(ConfigEvent.class, this);
@@ -108,12 +112,12 @@ public class FullInitialisation implements STGPInitialisation, Listener<ConfigEv
 		populationSize = Config.getInstance().get(SIZE);
 		syntax = Config.getInstance().get(SYNTAX);
 		returnType = Config.getInstance().get(RETURN_TYPE);
-		allowDuplicates = Config.getInstance().get(ALLOW_DUPLICATES, true);
+		allowDuplicates = Config.getInstance().get(ALLOW_DUPLICATES, allowDuplicates);
 
 		Integer maxDepth = Config.getInstance().get(MAXIMUM_DEPTH);
 		Integer maxInitialDepth = Config.getInstance().get(MAXIMUM_INITIAL_DEPTH);
 
-		// Use max initial depth if possible, unless it's greater than max depth
+		// Use max initial depth if possible, unless it is greater than max depth
 		if (maxInitialDepth != null && (maxDepth == null || maxInitialDepth < maxDepth)) {
 			depth = maxInitialDepth;
 		} else {
@@ -143,22 +147,23 @@ public class FullInitialisation implements STGPInitialisation, Listener<ConfigEv
 	}
 
 	/**
-	 * Receives configuration events and triggers this operator to reconfigure
-	 * if the <tt>ConfigEvent</tt> is for one of its required parameters
+	 * Receives configuration events and triggers this fitness function to 
+	 * configure its parameters if the <tt>ConfigEvent</tt> is for one of 
+	 * its required parameters.
 	 * 
 	 * @param event {@inheritDoc}
 	 */
 	@Override
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(RANDOM_SEQUENCE, SIZE, SYNTAX, RETURN_TYPE, MAXIMUM_INITIAL_DEPTH, MAXIMUM_DEPTH, ALLOW_DUPLICATES)) {
+		if (event.isKindOf(Template.TEMPLATE, RANDOM_SEQUENCE, SIZE, SYNTAX, RETURN_TYPE, MAXIMUM_INITIAL_DEPTH, MAXIMUM_DEPTH, ALLOW_DUPLICATES)) {
 			setup();
 		}
 
 		// These will be expensive so only do them when we really have to
-		if (event.isKindOf(RETURN_TYPE)) {
+		if (event.isKindOf(Template.TEMPLATE, RETURN_TYPE)) {
 			dataTypesTable = null;
 		}
-		if (event.isKindOf(SYNTAX)) {
+		if (event.isKindOf(Template.TEMPLATE, SYNTAX)) {
 			updateSyntax();
 		}
 	}
@@ -213,12 +218,14 @@ public class FullInitialisation implements STGPInitialisation, Listener<ConfigEv
 	}
 
 	/**
-	 * Creates a full program tree to the maximum depth as specifed by the
+	 * Creates a full program tree to the maximum depth as specified by the
 	 * <tt>getDepth</tt> method. The nodes in the tree are randomly chosen from
 	 * those nodes in the syntax with a data-type that matches the requirements
 	 * of their parent (or the problem for the root node).
 	 * 
 	 * @return the root node of the generated program tree
+	 * @throws IllegalStateException if the method is unable to create valid program 
+	 * trees from the settings supplied
 	 */
 	public Node createTree() {
 		if (random == null) {
@@ -490,7 +497,7 @@ public class FullInitialisation implements STGPInitialisation, Listener<ConfigEv
 	 * @param depth the depth of all program trees generated
 	 */
 	public void setDepth(int depth) {
-		if (dataTypesTable != null && depth > dataTypesTable.length) {
+		if (dataTypesTable != null && depth >= dataTypesTable.length) {
 			// Types possibilities table needs extending
 			// TODO No need to regenerate the whole table, just extend it
 			dataTypesTable = null;

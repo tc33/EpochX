@@ -21,18 +21,28 @@
  */
 package org.epochx.stgp.init;
 
+import static org.epochx.Config.Template.TEMPLATE;
 import static org.epochx.Population.SIZE;
 import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
-import static org.epochx.stgp.STGPIndividual.*;
-import static org.epochx.stgp.init.RampedHalfAndHalfInitialisation.Method.*;
+import static org.epochx.stgp.STGPIndividual.MAXIMUM_DEPTH;
+import static org.epochx.stgp.STGPIndividual.RETURN_TYPE;
+import static org.epochx.stgp.STGPIndividual.SYNTAX;
+import static org.epochx.stgp.init.RampedHalfAndHalfInitialisation.Method.FULL;
+import static org.epochx.stgp.init.RampedHalfAndHalfInitialisation.Method.GROW;
 
 import java.math.BigInteger;
-import java.util.*;
+import java.util.Arrays;
 
-import org.epochx.*;
+import org.epochx.Config;
 import org.epochx.Config.ConfigKey;
+import org.epochx.InitialisationMethod;
+import org.epochx.Population;
+import org.epochx.RandomSequence;
 import org.epochx.epox.Node;
-import org.epochx.event.*;
+import org.epochx.event.ConfigEvent;
+import org.epochx.event.EventManager;
+import org.epochx.event.InitialisationEvent;
+import org.epochx.event.Listener;
 import org.epochx.stgp.STGPIndividual;
 
 /**
@@ -61,8 +71,8 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 	private Node[] syntax; // TODO We don't really need to store this
 	private RandomSequence random;
 	private Class<?> returnType;
-	private int populationSize;
-	private boolean allowDuplicates;
+	private Integer populationSize;
+	private Boolean allowDuplicates;
 
 	// The two halves
 	private final GrowInitialisation grow;
@@ -137,8 +147,11 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 		Integer startDepth = Config.getInstance().get(RAMPING_START_DEPTH);
 
 		if (maxInitialDepth != null && (maxDepth == null || maxInitialDepth < maxDepth)) {
-			endDepth = maxInitialDepth;
+			this.endDepth = maxInitialDepth;
+		} else {
+			this.endDepth = (maxDepth==null) ? -1 : maxDepth;
 		}
+		
 		if (startDepth != null) {
 			this.startDepth = startDepth;
 		} else {
@@ -155,16 +168,16 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 	 */
 	@Override
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(RANDOM_SEQUENCE, SIZE, SYNTAX, RETURN_TYPE, MAXIMUM_INITIAL_DEPTH, MAXIMUM_DEPTH, ALLOW_DUPLICATES, RAMPING_START_DEPTH)) {
+		if (event.isKindOf(TEMPLATE, RANDOM_SEQUENCE, SIZE, SYNTAX, RETURN_TYPE, MAXIMUM_INITIAL_DEPTH, MAXIMUM_DEPTH, ALLOW_DUPLICATES, RAMPING_START_DEPTH)) {
 			setup();
 		}
 
 		// These could be expensive so only do them when we really have to
-		if (event.isKindOf(RETURN_TYPE)) {
+		if (event.isKindOf(TEMPLATE, RETURN_TYPE)) {
 			grow.setReturnType(returnType);
 			full.setReturnType(returnType);
 		}
-		if (event.isKindOf(SYNTAX)) {
+		if (event.isKindOf(TEMPLATE, SYNTAX)) {
 			grow.setSyntax(syntax);
 			full.setSyntax(syntax);
 		}
@@ -206,18 +219,18 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 		int popIndex = 0;
 		boolean growNext = true;
 		for (int depth = startDepth; depth <= endDepth; depth++) {
+			grow.setMaximumDepth(depth);
+			full.setDepth(depth);
 			int noPrograms = programsPerDepth[depth - startDepth];
-
+			
 			for (int i = 0; i < noPrograms; i++) {
 				STGPIndividual program;
 
 				do {
 					method[popIndex] = growNext ? GROW : FULL;
 					if (growNext) {
-						grow.setMaximumDepth(depth);
 						program = grow.createIndividual();
 					} else {
-						full.setDepth(depth);
 						program = full.createIndividual();
 					}
 					/*

@@ -21,6 +21,8 @@
  */
 package org.epochx.stgp.fitness;
 
+import static org.epochx.Config.Template.TEMPLATE;
+
 import org.epochx.Config;
 import org.epochx.Config.ConfigKey;
 import org.epochx.DoubleFitness;
@@ -42,7 +44,7 @@ import org.epochx.stgp.STGPIndividual;
  * and {@link #EXPECTED_OUTPUTS} config options must be set, or the same values set using the 
  * mutator methods provided. The length of the INPUT_VALUE_SETS array should match the length 
  * of the EXPECTED_OUTPUTS array and the number of values in each set should match the length 
- * of the INPUT_VARIABLES array. 
+ * of the INPUT_VARIABLES array.
  * 
  * If the program returns NaN for any of the input sets then a fitness
  * score of NaN is assigned by default.
@@ -122,7 +124,7 @@ public class SumOfError extends STGPFitnessFunction implements Listener<ConfigEv
 	 */
 	@Override
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(INPUT_VARIABLES, INPUT_VALUE_SETS, EXPECTED_OUTPUTS)) {
+		if (event.isKindOf(TEMPLATE, INPUT_VARIABLES, INPUT_VALUE_SETS, EXPECTED_OUTPUTS)) {
 			setup();
 		}
 	}

@@ -21,10 +21,12 @@
  */
 package org.epochx.stgp.fitness;
 
+import static org.epochx.Config.Template.TEMPLATE;
+
 import org.epochx.Config;
+import org.epochx.Config.ConfigKey;
 import org.epochx.DoubleFitness;
 import org.epochx.Individual;
-import org.epochx.Config.ConfigKey;
 import org.epochx.epox.Variable;
 import org.epochx.event.ConfigEvent;
 import org.epochx.event.EventManager;
@@ -64,7 +66,7 @@ public class HitsCount extends STGPFitnessFunction implements Listener<ConfigEve
 	private Object[] expectedOutputs;
 	private Variable[] inputVariables;
 	private Object[][] inputValueSets;
-	private double pointError;
+	private Double pointError;
 	
 	/**
 	 * Constructs a <tt>HitsCount</tt> fitness function with control parameters
@@ -117,7 +119,7 @@ public class HitsCount extends STGPFitnessFunction implements Listener<ConfigEve
 	 */
 	@Override
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(INPUT_VARIABLES, INPUT_VALUE_SETS, EXPECTED_OUTPUTS, POINT_ERROR)) {
+		if (event.isKindOf(TEMPLATE, INPUT_VARIABLES, INPUT_VALUE_SETS, EXPECTED_OUTPUTS, POINT_ERROR)) {
 			setup();
 		}
 	}

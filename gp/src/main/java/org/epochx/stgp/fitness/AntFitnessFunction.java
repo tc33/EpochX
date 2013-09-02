@@ -21,18 +21,22 @@
  */
 package org.epochx.stgp.fitness;
 
+import static org.epochx.Config.Template.TEMPLATE;
+
 import java.awt.Point;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.epochx.Config;
+import org.epochx.Config.ConfigKey;
 import org.epochx.DoubleFitness;
 import org.epochx.Individual;
-import org.epochx.Config.ConfigKey;
 import org.epochx.event.ConfigEvent;
 import org.epochx.event.EventManager;
 import org.epochx.event.Listener;
 import org.epochx.stgp.STGPIndividual;
-import org.epochx.tools.ant.*;
+import org.epochx.tools.ant.Ant;
+import org.epochx.tools.ant.AntLandscape;
 
 
 /**
@@ -59,19 +63,23 @@ public class AntFitnessFunction extends STGPFitnessFunction implements Listener<
 	 */
 	public static final ConfigKey<Integer> MAXIMUM_TIMESTEPS = new ConfigKey<Integer>();
 	
+	// The ant environment
 	private AntLandscape landscape;
 	private Ant ant;
 	
 	// Configuration settings
 	private List<Point> foodLocations;
-	private int timesteps;
+	private Integer timesteps;
 	
 	/**
 	 * Constructs a <tt>AntFitnessFunction</tt> fitness function with control parameters
 	 * automatically loaded from the config.
+	 * 
+	 * @param ant the ant that is being controlled
+	 * @param landscape the ant landscape that the ant is navigating
 	 */
 	public AntFitnessFunction(Ant ant, AntLandscape landscape) {
-		this(true, ant, landscape);
+		this(ant, landscape, true);
 	}
 	
 	/**
@@ -79,10 +87,12 @@ public class AntFitnessFunction extends STGPFitnessFunction implements Listener<
 	 * loaded from the config. If the <tt>autoConfig</tt> argument is set to <tt>true</tt> 
 	 * then the configuration will be automatically updated when the config is modified.
 	 * 
+	 * @param ant the ant that is being controlled
+	 * @param landscape the ant landscape that the ant is navigating
 	 * @param autoConfig whether this operator should automatically update its
 	 *        configuration settings from the config
 	 */
-	public AntFitnessFunction(boolean autoConfig, Ant ant, AntLandscape landscape) {
+	public AntFitnessFunction(Ant ant, AntLandscape landscape, boolean autoConfig) {
 		setup();
 		
 		this.ant = ant;
@@ -116,7 +126,7 @@ public class AntFitnessFunction extends STGPFitnessFunction implements Listener<
 	 */
 	@Override
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(FOOD_LOCATIONS, MAXIMUM_TIMESTEPS)) {
+		if (event.isKindOf(TEMPLATE, FOOD_LOCATIONS, MAXIMUM_TIMESTEPS)) {
 			setup();
 		}
 	}

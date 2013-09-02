@@ -19,8 +19,9 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx;
+package org.epochx.fitness;
 
+import org.epochx.AbstractIndividual;
 import org.epochx.Fitness;
 import org.epochx.FitnessFunction;
 import org.epochx.Individual;

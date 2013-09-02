@@ -27,6 +27,7 @@ import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
 import java.util.List;
 
 import org.epochx.Config.ConfigKey;
+import org.epochx.Config.Template;
 import org.epochx.event.ConfigEvent;
 import org.epochx.event.EventManager;
 import org.epochx.event.Listener;
@@ -173,7 +174,7 @@ public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
 	 * @param event {@inheritDoc}
 	 */
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(OPERATORS, SELECTOR, RANDOM_SEQUENCE, ELITISM)) {
+		if (event.isKindOf(Template.TEMPLATE, OPERATORS, SELECTOR, RANDOM_SEQUENCE, ELITISM)) {
 			setup();
 		}
 	}

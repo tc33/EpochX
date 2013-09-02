@@ -33,7 +33,7 @@ public interface Fitness extends Cloneable, Comparable<Fitness> {
 	/**
 	 * Creates an returns a copy of this fitness object.
 	 * 
-	 * @return a clone of this fitnesss object.
+	 * @return a clone of this fitness object.
 	 */
 	public Fitness clone();
 

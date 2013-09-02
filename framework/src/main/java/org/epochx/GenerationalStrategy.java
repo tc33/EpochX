@@ -24,6 +24,7 @@ package org.epochx;
 
 import java.util.List;
 
+import org.epochx.Config.Template;
 import org.epochx.event.ConfigEvent;
 import org.epochx.event.EventManager;
 import org.epochx.event.GenerationEvent.EndGeneration;
@@ -129,7 +130,7 @@ public class GenerationalStrategy extends Pipeline implements EvolutionaryStrate
 	 * @param event the fired event.
 	 */
 	public void onEvent(ConfigEvent event) {
-		if (event.getKey() == EvolutionaryStrategy.TERMINATION_CRITERIA) {
+		if (event.isKindOf(Template.TEMPLATE, EvolutionaryStrategy.TERMINATION_CRITERIA)) {
 			setup();
 		}
 	}

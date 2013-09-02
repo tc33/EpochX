@@ -115,7 +115,7 @@ public class Config {
 		T value = (T) mapping.get(key);
 
 		if (value == null) {
-			Template template = (Template) mapping.get(Template.KEY);
+			Template template = (Template) mapping.get(Template.TEMPLATE);
 			return (template == null) ? defaultValue : template.get(key, defaultValue);
 		}
 
@@ -129,7 +129,7 @@ public class Config {
 	 */
 	@Deprecated
 	public void defaults() {
-		set(Template.KEY, new GenerationalTemplate());
+		set(Template.TEMPLATE, new GenerationalTemplate());
 	}
 
 	/**
@@ -158,7 +158,7 @@ public class Config {
 		/**
 		 * The key for setting <code>Template</code> parameter.
 		 */
-		public final static ConfigKey<Template> KEY = new ConfigKey<Template>();
+		public final static ConfigKey<Template> TEMPLATE = new ConfigKey<Template>();
 
 		/**
 		 * The key -&gt; value mapping.

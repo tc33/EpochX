@@ -143,7 +143,9 @@ public abstract class AbstractOperator implements Operator {
 		Individual[] clone = new Individual[individuals.length];
 
 		for (int i = 0; i < clone.length; i++) {
-			clone[i] = individuals[i].clone();
+			if (individuals[i] != null) {
+				clone[i] = individuals[i].clone();
+			}
 		}
 
 		return clone;

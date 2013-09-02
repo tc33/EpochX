@@ -23,6 +23,7 @@
 package org.epochx;
 
 import org.epochx.Config.ConfigKey;
+import org.epochx.Config.Template;
 import org.epochx.event.ConfigEvent;
 import org.epochx.event.EventManager;
 import org.epochx.event.Listener;
@@ -57,13 +58,13 @@ public abstract class ProxyComponent<T> implements Component, Listener<ConfigEve
 
 	/**
 	 * Receives configuration events and refresh its configuration if the
-	 * <code>ConfigEvent</code> is for the parameter specivied by the
+	 * <code>ConfigEvent</code> is for the parameter specified by the
 	 * <code>key</code> object.
 	 * 
 	 * @param event the fired event object.
 	 */
 	public void onEvent(ConfigEvent event) {
-		if ((event.getKey() == key)) {
+		if (event.isKindOf(Template.TEMPLATE, key)) {
 			setup();
 		}
 	}

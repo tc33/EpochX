@@ -28,47 +28,67 @@ import org.epochx.event.OperatorEvent;
 import org.epochx.ge.Codon;
 
 /**
- * An event fired at the end of a fixed-point crossover
+ * An event fired at the end of a one-point crossover
  * 
- * @see FixedPointCrossover
+ * @see OnePointCrossover
  * 
  * @since 2.0
  */
-public class FixedPointCrossoverEndEvent extends OperatorEvent.EndOperator {
+public class OnePointCrossoverEndEvent extends OperatorEvent.EndOperator {
 
 	private List<Codon> exchangedCodons1;
 	private List<Codon> exchangedCodons2;
-	private int point;
+	private int point1;
+	private int point2;
 
 	/**
-	 * Constructs a <tt>FixedPointCrossoverEndEvent</tt> with the details of the
+	 * Constructs a <tt>OnePointCrossoverEndEvent</tt> with the details of the
 	 * event
 	 * 
 	 * @param operator the operator that performed the crossover
 	 * @param parents an array of two individuals that the operator was
 	 *        performed on
 	 */
-	public FixedPointCrossoverEndEvent(FixedPointCrossover operator, Individual[] parents) {
+	public OnePointCrossoverEndEvent(OnePointCrossover operator, Individual[] parents) {
 		super(operator, parents);
 	}
 
 	/**
-	 * Returns an integer which is the position within the codons that the crossover
-	 * was performed
+	 * Returns an integer which is the position within the first parent's codons that the 
+	 * crossover was performed
 	 * 
-	 * @return an integer which is the index of the crossover point
+	 * @return an integer which is the index of the crossover point in the first parent
 	 */
-	public int getCrossoverPoint() {
-		return point;
+	public int getCrossoverPoint1() {
+		return point1;
 	}
 	
 	/**
-	 * Sets the crossover point
+	 * Sets the crossover point within the first parent
 	 * 
-	 * @param point index used as the crossover point in both individuals
+	 * @param point index used as the crossover point in the first parent
 	 */
-	public void setCrossoverPoint(int point) {
-		this.point = point;
+	public void setCrossoverPoint1(int point1) {
+		this.point1 = point1;
+	}
+	
+	/**
+	 * Returns an integer which is the position within the second parent's codons that the 
+	 * crossover was performed
+	 * 
+	 * @return an integer which is the index of the crossover point in the second parent
+	 */
+	public int getCrossoverPoint2() {
+		return point2;
+	}
+	
+	/**
+	 * Sets the crossover point within the second parent
+	 * 
+	 * @param point index used as the crossover point in the second parent
+	 */
+	public void setCrossoverPoint2(int point2) {
+		this.point2 = point2;
 	}
 
 	/**

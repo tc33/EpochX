@@ -21,6 +21,7 @@
  */
 package org.epochx.ge.operator;
 
+import static org.epochx.Config.Template.TEMPLATE;
 import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
 
 import java.util.List;
@@ -29,43 +30,45 @@ import org.epochx.AbstractOperator;
 import org.epochx.Config;
 import org.epochx.Individual;
 import org.epochx.RandomSequence;
+import org.epochx.Config.ConfigKey;
 import org.epochx.event.ConfigEvent;
 import org.epochx.event.EventManager;
 import org.epochx.event.Listener;
 import org.epochx.event.OperatorEvent.EndOperator;
+import org.epochx.ge.Chromosome;
 import org.epochx.ge.Codon;
 import org.epochx.ge.GEIndividual;
 
 /**
- * This class implements a fixed point crossover on two
- * <code>CandidatePrograms</code>.
+ * This class implements a fixed point crossover on two <tt>GEIndividual</tt>s.
  * 
  * <p>
  * The operation is performed on the programs' chromosomes in a similar manner
- * to OnePointCrossover. One random codon position is chosen which is within the
+ * to <tt>OnePointCrossover</tt>. One random codon position is chosen which is within the
  * length bounds of both parent programs. Then all codons from that point
  * onwards in both programs are exchanged.
  * 
  * <p>
- * Fixed point crossover results in two child programs with chromosomes of equal
+ * Fixed point crossover results in two child individuals with chromosomes of equal
  * size to the two parents passed in, thus fixed point crossover prevents
  * chromosome length expanding over a run. However, chromosome length may still
  * change as a result of other operations in the algorithm such as the extension
  * property if used during mapping.
  * 
  * @see OnePointCrossover
+ * 
+ * @since 2.0
  */
 public class FixedPointCrossover extends AbstractOperator implements Listener<ConfigEvent> {
 	
+	/**
+	 * The key for setting and retrieving the probability of this operator being applied
+	 */
+	public static final ConfigKey<Double> PROBABILITY = new ConfigKey<Double>();
+	
 	// Configuration settings
 	private RandomSequence random;
-	
 	private double probability;
-	
-	// Data from last crossover
-	private int crossoverPoint;
-	private List<Codon> codonsExchanged1;
-	private List<Codon> codonsExchanged2;
 
 	/**
 	 * Constructs a <tt>FixedPointCrossover</tt> with control parameters
@@ -98,10 +101,12 @@ public class FixedPointCrossover extends AbstractOperator implements Listener<Co
 	 * change in any of the following configuration parameters:
 	 * <ul>
 	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
+	 * <li>{@link #PROBABILITY}
 	 * </ul>
 	 */
 	protected void setup() {
 		random = Config.getInstance().get(RANDOM_SEQUENCE);
+		probability = Config.getInstance().get(PROBABILITY);
 	}
 
 	/**
@@ -113,63 +118,70 @@ public class FixedPointCrossover extends AbstractOperator implements Listener<Co
 	 */
 	@Override
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(RANDOM_SEQUENCE)) {
+		if (event.isKindOf(TEMPLATE, RANDOM_SEQUENCE, PROBABILITY)) {
 			setup();
 		}
 	}
 	
 	/**
-	 * Performs a fixed point crossover operation on the specified parent
-	 * programs.
+	 * Performs a fixed-point crossover operation on the specified parent individuals.
 	 * 
 	 * <p>
-	 * The operation is performed on the programs' chromosomes in a similar
+	 * The operation is performed on the individuals' chromosomes in a similar
 	 * manner to OnePointCrossover. One random codon position is chosen which is
 	 * within the length bounds of both parent programs. Then all codons from
 	 * that point onwards in both programs are exchanged.
 	 * 
-	 * @param p1 {@inheritDoc}
-	 * @param p2 {@inheritDoc}
-	 * @return {@inheritDoc}
+	 * @param event the <tt>EndOperator</tt> event to be filled with information
+	 *        about this operation
+	 * @param parents an array of two individuals to undergo fixed-point
+	 *        crossover. Both individuals must be instances of <tt>GEIndividual</tt>.
+	 * @return an array containing two <tt>GEIndividual</tt>s that are the
+	 *         result of the crossover
 	 */
 	@Override
 	public GEIndividual[] perform(EndOperator event, Individual ... parents) {
-		final GEIndividual parent1 = (GEIndividual) parents[0];
-		final GEIndividual parent2 = (GEIndividual) parents[1];
-
+		GEIndividual parent1 = (GEIndividual) parents[0];
+		GEIndividual parent2 = (GEIndividual) parents[1];
+		
+		Chromosome parent1Codons = parent1.getChromosome();
+		Chromosome parent2Codons = parent2.getChromosome();
+		
 		// Pick a point in the shortest parent chromosome.
-		crossoverPoint = 0;
-		final int parent1Codons = parent1.getChromosome().length();
-		final int parent2Codons = parent2.getChromosome().length();
-		if (parent1Codons < parent2Codons) {
-			crossoverPoint = random.nextInt(parent1Codons);
+		int crossoverPoint = 0;
+		int parent1Length = parent1Codons.length();
+		int parent2Length = parent2Codons.length();
+		if (parent1Length < parent2Length) {
+			crossoverPoint = random.nextInt(parent1Length);
 		} else {
-			crossoverPoint = random.nextInt(parent2Codons);
+			crossoverPoint = random.nextInt(parent2Length);
 		}
+		
+		((FixedPointCrossoverEndEvent) event).setCrossoverPoint(crossoverPoint);
 
-		// Make copies of the parents.
-		final GEIndividual child1 = (GEIndividual) parent1.clone();
-		final GEIndividual child2 = (GEIndividual) parent2.clone();
-
-		final List<Integer> part1 = child1.removeCodons(crossoverPoint, child1.getNoCodons());
-		final List<Integer> part2 = child2.removeCodons(crossoverPoint, child2.getNoCodons());
-
+		// Make copies of the parents' chromosomes.
+		Chromosome child1Codons = parent1Codons.clone();
+		Chromosome child2Codons = parent2Codons.clone();
+		
+		List<Codon> codonsExchanged1 = child1Codons.removeCodons(crossoverPoint, parent1Length);
+		List<Codon> codonsExchanged2 = child2Codons.removeCodons(crossoverPoint, parent2Length);
+		
+		((FixedPointCrossoverEndEvent) event).setExchangedCodons1(codonsExchanged1);
+		((FixedPointCrossoverEndEvent) event).setExchangedCodons2(codonsExchanged2);
+		
 		// Swap over the endings at the crossover points.
-		child2.appendCodons(part1);
-		child1.appendCodons(part2);
+		child1Codons.appendCodons(codonsExchanged2);
+		child2Codons.appendCodons(codonsExchanged1);
 
-		return new GEIndividual[]{child1, child2};
+		return new GEIndividual[]{new GEIndividual(child1Codons), new GEIndividual(child2Codons)};
 	}
 	
 	/**
-	 * Returns a <tt>OnePointCrossoverEndEvent</tt> with the operator and 
-	 * parents set
+	 * Returns a <tt>FixedPointCrossoverEndEvent</tt> with the operator and parents set
 	 */
 	@Override
 	protected FixedPointCrossoverEndEvent getEndEvent(Individual ... parents) {
-		FixedPointCrossoverEndEvent event = new FixedPointCrossoverEndEvent(this, parents);
-		event.setCrossoverPoint(point);
-		return event;
+		return new FixedPointCrossoverEndEvent(this, parents);
 	}
 	
 	/**
@@ -194,7 +206,9 @@ public class FixedPointCrossover extends AbstractOperator implements Listener<Co
 	}
 
 	/**
-	 * Sets the probability of this operator being selected
+	 * Sets the probability of this operator being selected. If automatic configuration is
+	 * enabled then any value set here will be overwritten by the {@link #PROBABILITY} 
+	 * configuration setting on the next config event.
 	 * 
 	 * @param probability the new probability to set
 	 */

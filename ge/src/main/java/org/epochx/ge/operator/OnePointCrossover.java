@@ -21,154 +21,210 @@
  */
 package org.epochx.ge.operator;
 
+import static org.epochx.Config.Template.TEMPLATE;
+import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
+
 import java.util.List;
 
-import org.epochx.core.*;
+import org.epochx.AbstractOperator;
+import org.epochx.Config;
+import org.epochx.Individual;
+import org.epochx.RandomSequence;
+import org.epochx.Config.ConfigKey;
+import org.epochx.event.ConfigEvent;
+import org.epochx.event.EventManager;
+import org.epochx.event.Listener;
+import org.epochx.event.OperatorEvent.EndOperator;
+import org.epochx.ge.Chromosome;
+import org.epochx.ge.Codon;
 import org.epochx.ge.GEIndividual;
-import org.epochx.ge.model.GEModel;
-import org.epochx.life.ConfigListener;
-import org.epochx.representation.CandidateProgram;
-import org.epochx.stats.*;
-import org.epochx.stats.Stats.ExpiryEvent;
-import org.epochx.tools.random.RandomNumberGenerator;
 
 /**
- * This class implements a one point crossover on two
- * <code>CandidatePrograms</code>.
+ * This class implements a one-point crossover on two <tt>GEIndividual</tt>s.
  * 
  * <p>
- * The operation is performed on the programs' chromosomes. A random codon
- * position is chosen in both parent programs and all the codons from that point
+ * The operation is performed on the individual's chromosomes. A random codon
+ * position is chosen in both parents' chromosomes and all the codons from that point
  * onwards are exchanged.
+ * 
+ * @see FixedPointCrossover
+ * 
+ * @since 2.0
  */
-public class OnePointCrossover implements GECrossover, ConfigListener {
+public class OnePointCrossover extends AbstractOperator implements Listener<ConfigEvent> {
 
 	/**
-	 * Requests an <code>Integer</code> which is the point chosen in the first
-	 * parent's chromosomes for the one point crossover operation.
+	 * The key for setting and retrieving the probability of this operator being applied
 	 */
-	public static final Stat XO_POINT1 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
-
-	/**
-	 * Requests an <code>Integer</code> which is the point chosen in the second
-	 * parent's chromosomes for the one point crossover operation.
-	 */
-	public static final Stat XO_POINT2 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
-
-	/**
-	 * Requests a <code>List&lt;Integer&gt;</code> which is the portion of the
-	 * first parent program which is being exchanged into the second parent.
-	 */
-	public static final Stat XO_CODONS1 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
-
-	/**
-	 * Requests a <code>List&lt;Integer&gt;</code> which is the portion of the
-	 * second parent program which is being exchanged into the first parent.
-	 */
-	public static final Stat XO_CODONS2 = new AbstractStat(ExpiryEvent.CROSSOVER) {};
-
-	private Evolver evolver;
+	public static final ConfigKey<Double> PROBABILITY = new ConfigKey<Double>();
 	
-	private Stats stats;
-	
-	// The random number generator in use.
-	private RandomNumberGenerator rng;
+	// Configuration settings
+	private RandomSequence random;
+	private double probability;
 
 	/**
-	 * Constructs an instance of <code>FixedPointCrossover</code> with the only
-	 * necessary parameter given.
-	 * 
-	 * @param rng a <code>RandomNumberGenerator</code> used to lead
-	 *        non-deterministic behaviour.
+	 * Constructs a <tt>OnePointCrossover</tt> with control parameters
+	 * automatically loaded from the config
 	 */
-	public OnePointCrossover(final RandomNumberGenerator rng) {
-		this((Evolver) null);
-
-		this.rng = rng;
+	public OnePointCrossover() {
+		this(true);
 	}
 
 	/**
-	 * Constructs a <code>OnePointCrossover</code>.
+	 * Constructs a <tt>OnePointCrossover</tt> with control parameters initially
+	 * loaded from the config. If the <tt>autoConfig</tt> argument is set to
+	 * <tt>true</tt> then the configuration will be automatically updated when
+	 * the config is modified.
 	 * 
-	 * @param model
+	 * @param autoConfig whether this operator should automatically update its
+	 *        configuration settings from the config
 	 */
-	public OnePointCrossover(final Evolver evolver) {
-		this.evolver = evolver;
+	public OnePointCrossover(boolean autoConfig) {
+		setup();
+
+		if (autoConfig) {
+			EventManager.getInstance().add(ConfigEvent.class, this);
+		}
+	}
+	
+	/**
+	 * Sets up this operator with the appropriate configuration settings.
+	 * This method is called whenever a <tt>ConfigEvent</tt> occurs for a
+	 * change in any of the following configuration parameters:
+	 * <ul>
+	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
+	 * <li>{@link #PROBABILITY}
+	 * </ul>
+	 */
+	protected void setup() {
+		random = Config.getInstance().get(RANDOM_SEQUENCE);
+		probability = Config.getInstance().get(PROBABILITY);
 	}
 
-	/*
-	 * Configure component with parameters from the model.
+	/**
+	 * Receives configuration events and triggers this operator to configure its
+	 * parameters if the <tt>ConfigEvent</tt> is for one of its required
+	 * parameters.
+	 * 
+	 * @param event {@inheritDoc}
 	 */
 	@Override
-	public void configure(Model model) {
-		if (model instanceof GEModel) {
-			stats = evolver.getStats(model);
-			rng = model.getRNG();
+	public void onEvent(ConfigEvent event) {
+		if (event.isKindOf(TEMPLATE, RANDOM_SEQUENCE, PROBABILITY)) {
+			setup();
 		}
 	}
 
 	/**
-	 * Performs a one point crossover operation on the specified parent
-	 * programs.
+	 * Performs a one-point crossover operation on the specified parent individuals.
 	 * 
 	 * <p>
 	 * The operation is performed on the programs' chromosomes. A random codon
-	 * position is chosen in <b>both</b> parent programs and all the codons from
-	 * that point onwards are exchanged.
+	 * position is chosen in each of the parent individual's chromosomes and all the 
+	 * codons from those points onwards are exchanged.
 	 * 
-	 * @param p1 {@inheritDoc}
-	 * @param p2 {@inheritDoc}
+	 * @param event the <tt>EndOperator</tt> event to be filled with information
+	 *        about this operation
+	 * @param parents an array of two individuals to undergo one-point
+	 *        crossover. Both individuals must be instances of <tt>GEIndividual</tt>.
+	 * @return an array containing two <tt>GEIndividual</tt>s that are the
+	 *         result of the crossover
+	 */
+	@Override
+	public GEIndividual[] perform(EndOperator event, Individual ... parents) {
+		GEIndividual parent1 = (GEIndividual) parents[0];
+		GEIndividual parent2 = (GEIndividual) parents[1];
+
+		Chromosome parent1Codons = parent1.getChromosome();
+		Chromosome parent2Codons = parent2.getChromosome();
+		int parent1Length = parent1Codons.length();
+		int parent2Length = parent2Codons.length();
+		
+		// Choose crossover points
+		int crossoverPoint1 = random.nextInt(parent1Length);
+		int crossoverPoint2 = random.nextInt(parent2Length);
+
+		// Add crossover points to the event
+		((OnePointCrossoverEndEvent) event).setCrossoverPoint1(crossoverPoint1);
+		((OnePointCrossoverEndEvent) event).setCrossoverPoint2(crossoverPoint2);
+
+		// Make copies of the parents' chromosomes.
+		Chromosome child1Codons = parent1Codons.clone();
+		Chromosome child2Codons = parent2Codons.clone();
+
+		List<Codon> codonsExchanged1 = child1Codons.removeCodons(crossoverPoint1, parent1Length);
+		List<Codon> codonsExchanged2 = child2Codons.removeCodons(crossoverPoint2, parent2Length);
+
+		// Add codon portions into the event
+		((OnePointCrossoverEndEvent) event).setExchangedCodons1(codonsExchanged1);
+		((OnePointCrossoverEndEvent) event).setExchangedCodons2(codonsExchanged2);
+
+		// Swap over the endings at the crossover points.
+		child1Codons.appendCodons(codonsExchanged2);
+		child2Codons.appendCodons(codonsExchanged1);
+
+		return new GEIndividual[]{new GEIndividual(child1Codons), new GEIndividual(child2Codons)};
+	}
+	
+	/**
+	 * Returns a <tt>OnePointCrossoverEndEvent</tt> with the operator and 
+	 * parents set
+	 */
+	@Override
+	protected OnePointCrossoverEndEvent getEndEvent(Individual ... parents) {
+		return new OnePointCrossoverEndEvent(this, parents);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>
+	 * One-point crossover operates on 2 individuals.
+	 * 
 	 * @return {@inheritDoc}
 	 */
 	@Override
-	public GEIndividual[] crossover(final CandidateProgram p1, final CandidateProgram p2) {
-		final GEIndividual parent1 = (GEIndividual) p1;
-		final GEIndividual parent2 = (GEIndividual) p2;
-
-		// Choose crossover points.
-		final int crossoverPoint1 = rng.nextInt(parent1.getNoCodons());
-		final int crossoverPoint2 = rng.nextInt(parent2.getNoCodons());
-
-		// Add crossover points to the stats manager.
-		stats.addData(XO_POINT1, crossoverPoint1);
-		stats.addData(XO_POINT2, crossoverPoint2);
-
-		// Make copies of the parents.
-		final GEIndividual child1 = (GEIndividual) parent1.clone();
-		final GEIndividual child2 = (GEIndividual) parent2.clone();
-
-		final List<Integer> part1 = child1.removeCodons(crossoverPoint1, child1.getNoCodons());
-		final List<Integer> part2 = child2.removeCodons(crossoverPoint2, child2.getNoCodons());
-
-		// Add codon portions into the stats manager.
-		stats.addData(XO_CODONS1, part1);
-		stats.addData(XO_CODONS2, part2);
-
-		// Swap over the endings at the crossover points.
-		child2.appendCodons(part1);
-		child1.appendCodons(part2);
-
-		return new GEIndividual[]{child1, child2};
+	public int inputSize() {
+		return 2;
 	}
 
 	/**
-	 * Returns the random number generator that this crossover is using or
-	 * <code>null</code> if none has been set.
-	 * 
-	 * @return the rng the currently set random number generator.
+	 * {@inheritDoc}
 	 */
-	public RandomNumberGenerator getRNG() {
-		return rng;
+	@Override
+	public double probability() {
+		return probability;
 	}
 
 	/**
-	 * Sets the random number generator to use. If a model has been set then
-	 * this parameter will be overwritten with the random number generator from
-	 * that model on the next configure event.
+	 * Sets the probability of this operator being selected. If automatic configuration is
+	 * enabled then any value set here will be overwritten by the {@link #PROBABILITY} 
+	 * configuration setting on the next config event.
 	 * 
-	 * @param rng the random number generator to set.
+	 * @param probability the new probability to set
 	 */
-	public void setRNG(final RandomNumberGenerator rng) {
-		this.rng = rng;
+	public void setProbability(double probability) {
+		this.probability = probability;
+	}
+	
+	/**
+	 * Returns the random number sequence in use
+	 * 
+	 * @return the currently set random sequence
+	 */
+	public RandomSequence getRandomSequence() {
+		return random;
+	}
+
+	/**
+	 * Sets the random number sequence to use. If automatic configuration is
+	 * enabled then any value set here will be overwritten by the
+	 * {@link RandomSequence#RANDOM_SEQUENCE} configuration setting on the next
+	 * config event.
+	 * 
+	 * @param random the random number generator to set
+	 */
+	public void setRandomSequence(final RandomSequence random) {
+		this.random = random;
 	}
 }

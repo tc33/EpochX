@@ -126,10 +126,10 @@ public class HitsCount extends STGPFitnessFunction implements Listener<ConfigEve
 	
 	/**
 	 * Calculates the fitness of the given individual. This fitness function only operates
-	 * on STGPIndividuals. The fitness returned will be an instance of DoubleFitness.Minimise. 
-	 * The fitness score is a count of the number of sets of inputs that produce a correct 
-	 * result (or 'hit'). For double types a hit can have an error range, specified by the 
-	 * {@link HitsCount#POINT_ERROR} config key.
+	 * on <tt>STGPIndividual</tt>s. The fitness returned will be an instance of 
+	 * <tt>DoubleFitness.Minimise</tt>. The fitness score is a count of the number of sets 
+	 * of inputs that produce a correct result (or 'hit'). For double types a hit can have an 
+	 * error range, specified by the {@link HitsCount#POINT_ERROR} config key.
 	 *  
 	 * @param individual the program to evaluate
 	 * @return the fitness of the given individual

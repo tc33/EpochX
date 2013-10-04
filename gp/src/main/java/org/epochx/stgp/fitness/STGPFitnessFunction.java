@@ -26,7 +26,9 @@ import org.epochx.epox.Variable;
 import org.epochx.fitness.AbstractFitnessFunction;
 
 /**
+ * A fitness function for evaluating STGP individuals.
  * 
+ * @since 2.0
  */
 public abstract class STGPFitnessFunction extends AbstractFitnessFunction {
 

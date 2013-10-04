@@ -23,6 +23,11 @@ package org.epochx.ge.init;
 
 import org.epochx.InitialisationMethod;
 
+/**
+ * Initialisation method for <tt>GEIndividual</tt>s. It does not define any 
+ * methods, but initialisation procedures that generate <tt>GEIndividual</tt> 
+ * objects should implement this interface. 
+ */
 public interface GEInitialisation extends InitialisationMethod {
 
 }

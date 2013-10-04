@@ -21,6 +21,7 @@
  */
 package org.epochx.ge.init;
 
+import static org.epochx.Config.Template.TEMPLATE;
 import static org.epochx.Population.SIZE;
 import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
 import static org.epochx.ge.Codon.*;
@@ -56,27 +57,14 @@ import org.epochx.grammar.Grammar;
  * maximum as possible.
  * 
  * <p>
- * If a model is provided then the following parameters are loaded upon every
- * configure event:
- * 
- * <ul>
- * <li>population size</li>
- * <li>maximum initial program initialDepth</li>
- * <li>syntax</li>
- * <li>random number generator</li>
- * </ul>
- * 
- * <p>
- * If the <code>getModel</code> method returns <code>null</code> then no model
- * is set and whatever static parameters have been set as parameters to the
- * constructor or using the standard accessor methods will be used. If any
- * compulsory parameters remain unset when the initialiser is requested to
- * generate new programs, then an <code>IllegalStateException</code> will be
- * thrown.
+ * See the {@link #setup()} method documentation for a list of configuration
+ * parameters used to control this operator.
  * 
  * @see FixedLengthInitialisation
  * @see FullInitialisation
  * @see GrowInitialisation
+ * 
+ * @since 2.0
  */
 public class RampedHalfAndHalfInitialisation implements GEInitialisation, Listener<ConfigEvent> {
 
@@ -118,11 +106,15 @@ public class RampedHalfAndHalfInitialisation implements GEInitialisation, Listen
 	 *        configuration settings from the config
 	 */
 	public RampedHalfAndHalfInitialisation(boolean autoConfig) {
+		// Default config values
+		maxCodonValue = Long.MAX_VALUE;
+		minCodonValue = 0L;
+		
 		grow = new GrowInitialisation(false);
 		full = new FullInitialisation(false);
 		
 		setup();
-
+		
 		if (autoConfig) {
 			EventManager.getInstance().add(ConfigEvent.class, this);
 		}
@@ -146,8 +138,8 @@ public class RampedHalfAndHalfInitialisation implements GEInitialisation, Listen
 		allowDuplicates = Config.getInstance().get(ALLOW_DUPLICATES, true);
 		grammar = Config.getInstance().get(GRAMMAR);
 		random = Config.getInstance().get(RANDOM_SEQUENCE);
-		maxCodonValue = Config.getInstance().get(MAXIMUM_VALUE, Long.MAX_VALUE);
-		minCodonValue = Config.getInstance().get(MINIMUM_VALUE, 0L);
+		maxCodonValue = Config.getInstance().get(MAXIMUM_VALUE, maxCodonValue);
+		minCodonValue = Config.getInstance().get(MINIMUM_VALUE, minCodonValue);
 		endDepth = Config.getInstance().get(MAXIMUM_DEPTH);
 		startDepth = Config.getInstance().get(RAMPING_START_DEPTH);
 	}
@@ -160,7 +152,7 @@ public class RampedHalfAndHalfInitialisation implements GEInitialisation, Listen
 	 */
 	@Override
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(SIZE, ALLOW_DUPLICATES, RANDOM_SEQUENCE, GRAMMAR, MAXIMUM_VALUE, MINIMUM_VALUE, MAXIMUM_DEPTH, RAMPING_START_DEPTH)) {
+		if (event.isKindOf(TEMPLATE, SIZE, ALLOW_DUPLICATES, RANDOM_SEQUENCE, GRAMMAR, MAXIMUM_VALUE, MINIMUM_VALUE, MAXIMUM_DEPTH, RAMPING_START_DEPTH)) {
 			setup();
 		}
 	}

@@ -21,8 +21,10 @@
  */
 package org.epochx.ge.init;
 
+import static org.epochx.Config.Template.TEMPLATE;
 import static org.epochx.Population.SIZE;
 import static org.epochx.ge.Codon.*;
+import static org.epochx.ge.CodonFactory.CODON_FACTORY;
 import static org.epochx.ge.GEIndividual.MAXIMUM_DEPTH;
 import static org.epochx.grammar.Grammar.GRAMMAR;
 
@@ -46,6 +48,8 @@ import org.epochx.grammar.*;
  * @see FixedLengthInitialisation
  * @see FullInitialisation
  * @see RampedHalfAndHalfInitialisation
+ * 
+ * @since 2.0
  */
 public class GrowInitialisation implements GEInitialisation, Listener<ConfigEvent> {
 
@@ -57,6 +61,7 @@ public class GrowInitialisation implements GEInitialisation, Listener<ConfigEven
 	private int populationSize;
 	private int maxDepth;
 	private boolean allowDuplicates;
+	private CodonFactory codonFactory;
 
 	/**
 	 * Constructs a <tt>GrowInitialisation</tt> with control parameters
@@ -76,6 +81,10 @@ public class GrowInitialisation implements GEInitialisation, Listener<ConfigEven
 	 *        configuration settings from the config
 	 */
 	public GrowInitialisation(boolean autoConfig) {
+		// Default config values
+		maxCodonValue = Long.MAX_VALUE;
+		minCodonValue = 0L;
+		
 		setup();
 
 		if (autoConfig) {
@@ -94,15 +103,17 @@ public class GrowInitialisation implements GEInitialisation, Listener<ConfigEven
 	 * <li>{@link Codon#MAXIMUM_VALUE} (default: <tt>Long.MAX_VALUE</tt>)
 	 * <li>{@link Codon#MINIMUM_VALUE} (default: <tt>0L</tt>)
 	 * <li>{@link GEIndividual#MAXIMUM_DEPTH}
+	 * <li>{@link CodonFactory#CODON_FACTORY}
 	 * </ul>
 	 */
 	protected void setup() {
 		populationSize = Config.getInstance().get(SIZE);
 		allowDuplicates = Config.getInstance().get(ALLOW_DUPLICATES, true);
 		grammar = Config.getInstance().get(GRAMMAR);
-		maxCodonValue = Config.getInstance().get(MAXIMUM_VALUE, Long.MAX_VALUE);
-		minCodonValue = Config.getInstance().get(MINIMUM_VALUE, 0L);
+		maxCodonValue = Config.getInstance().get(MAXIMUM_VALUE, maxCodonValue);
+		minCodonValue = Config.getInstance().get(MINIMUM_VALUE, minCodonValue);
 		maxDepth = Config.getInstance().get(MAXIMUM_DEPTH);
+		codonFactory = Config.getInstance().get(CODON_FACTORY);
 	}
 
 	/**
@@ -113,7 +124,7 @@ public class GrowInitialisation implements GEInitialisation, Listener<ConfigEven
 	 */
 	@Override
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(SIZE, ALLOW_DUPLICATES, GRAMMAR, MAXIMUM_VALUE, MINIMUM_VALUE, MAXIMUM_DEPTH)) {
+		if (event.isKindOf(TEMPLATE, SIZE, ALLOW_DUPLICATES, GRAMMAR, MAXIMUM_VALUE, MINIMUM_VALUE, MAXIMUM_DEPTH, CODON_FACTORY)) {
 			setup();
 		}
 	}
@@ -172,8 +183,7 @@ public class GrowInitialisation implements GEInitialisation, Listener<ConfigEven
 			throw new IllegalStateException("no possible programs within given max depth parameter for this grammar.");
 		}
 
-		// TODO Need to make the chromosome type settable
-		Chromosome codons = new IntegerChromosome();
+		Chromosome codons = new Chromosome();
 
 		// Fill in the list of codons with reference to the grammar.
 		fillCodons(codons, start, 0, maxDepth);
@@ -203,7 +213,7 @@ public class GrowInitialisation implements GEInitialisation, Listener<ConfigEven
 				// Scale the production index up to get our new codon.
 				long codonValue = scaleUp(productionIndex, noProductions);
 
-				codons.appendCodon(codons.generateCodon(codonValue));
+				codons.appendCodon(codonFactory.codon(codonValue));
 			}
 
 			// Drop down the tree at this production.
@@ -393,5 +403,27 @@ public class GrowInitialisation implements GEInitialisation, Listener<ConfigEven
 	 */
 	public void setMinimumCodonValue(long minCodonValue) {
 		this.minCodonValue = minCodonValue;
+	}
+	
+	/**
+	 * Returns the <tt>CodonFactory</tt> currently in use
+	 * 
+	 * @return the codon factory being used to generate new codons
+	 */
+	public CodonFactory getCodonFactory() {
+		return codonFactory;
+	}
+
+	/**
+	 * Sets the <tt>CodonFactory</tt> this initialiser should use to generate
+	 * new codon instances. If automatic configuration is enabled
+	 * then any value set here will be overwritten by the
+	 * {@link CodonFactory#CODON_FACTORY} configuration setting on the next config
+	 * event.
+	 * 
+	 * @param codonFactory the codon factory to use to generate new codons
+	 */
+	public void setCodonFactory(CodonFactory codonFactory) {
+		this.codonFactory = codonFactory;
 	}
 }

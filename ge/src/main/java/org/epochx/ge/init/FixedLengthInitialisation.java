@@ -21,6 +21,7 @@
  */
 package org.epochx.ge.init;
 
+import static org.epochx.Config.Template.TEMPLATE;
 import static org.epochx.Population.SIZE;
 import static org.epochx.ge.Chromosome.MAXIMUM_LENGTH;
 
@@ -39,6 +40,8 @@ import org.epochx.ge.*;
  * @see FullInitialisation
  * @see GrowInitialisation
  * @see RampedHalfAndHalfInitialisation
+ * 
+ * @since 2.0
  */
 public class FixedLengthInitialisation implements GEInitialisation, Listener<ConfigEvent> {
 
@@ -65,6 +68,9 @@ public class FixedLengthInitialisation implements GEInitialisation, Listener<Con
 	 *        configuration settings from the config
 	 */
 	public FixedLengthInitialisation(boolean autoConfig) {
+		// Default config values
+		allowDuplicates = true;
+		
 		setup();
 
 		if (autoConfig) {
@@ -78,13 +84,13 @@ public class FixedLengthInitialisation implements GEInitialisation, Listener<Con
 	 * change in any of the following configuration parameters:
 	 * <ul>
 	 * <li>{@link Population#SIZE}
-	 * <li>{@link STGPIndividual#MAXIMUM_LENGTH}
+	 * <li>{@link GenericChromosome#MAXIMUM_LENGTH}
 	 * <li>{@link InitialisationMethod#ALLOW_DUPLICATES} (default: <tt>true</tt>)
 	 * </ul>
 	 */
 	protected void setup() {
 		populationSize = Config.getInstance().get(SIZE);
-		allowDuplicates = Config.getInstance().get(ALLOW_DUPLICATES, true);
+		allowDuplicates = Config.getInstance().get(ALLOW_DUPLICATES, allowDuplicates);
 		chromosomeLength = Config.getInstance().get(MAXIMUM_LENGTH);
 	}
 
@@ -96,7 +102,7 @@ public class FixedLengthInitialisation implements GEInitialisation, Listener<Con
 	 */
 	@Override
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(SIZE, ALLOW_DUPLICATES, MAXIMUM_LENGTH)) {
+		if (event.isKindOf(TEMPLATE, SIZE, ALLOW_DUPLICATES, MAXIMUM_LENGTH)) {
 			setup();
 		}
 	}
@@ -135,7 +141,7 @@ public class FixedLengthInitialisation implements GEInitialisation, Listener<Con
 
 	/**
 	 * Constructs a new <tt>GEIndividual</tt> instance with a fixed length 
-	 * chromosome, as determined by the {@link Chromosome#MAXIMUM_LENGTH}
+	 * chromosome, as determined by the {@link GenericChromosome#MAXIMUM_LENGTH}
 	 * config parameter.
 	 * 
 	 * @return a new individual with a fixed length chromosome
@@ -146,8 +152,7 @@ public class FixedLengthInitialisation implements GEInitialisation, Listener<Con
 			throw new IllegalStateException("chromosome length must be 1 or greater");
 		}
 
-		// TODO Need to make the chromosome type settable
-		Chromosome chromosome = new IntegerChromosome();
+		Chromosome chromosome = new Chromosome();
 		for (int i = 0; i < chromosomeLength; i++) {
 			chromosome.extend();
 		}
@@ -167,7 +172,7 @@ public class FixedLengthInitialisation implements GEInitialisation, Listener<Con
 	/**
 	 * Sets the length of chromosomes for individuals. If automatic 
 	 * configuration is enabled then any value set here will be overwritten by 
-	 * the {@link Chromosome#MAXIMUM_LENGTH} configuration setting on the next 
+	 * the {@link GenericChromosome#MAXIMUM_LENGTH} configuration setting on the next 
 	 * config event.
 	 * 
 	 * @param chromosomeLength the fixed length to use for chromosomes

@@ -22,27 +22,28 @@
 
 package org.epochx.ge.stats;
 
-import java.util.Arrays;
-
-import org.epochx.*;
 import org.epochx.event.GenerationEvent.EndGeneration;
-import org.epochx.event.stat.AbstractStat;
+import org.epochx.event.stat.*;
 
 /**
- * A stat that returns the depth of all program trees in the population from
- * the previous generation. All individuals in the population must be instances 
- * of <tt>STGPIndividual</tt>.
+ * A stat that returns the standard deviation of the mean depth of the parse 
+ * trees in the population from the previous completed generation. All 
+ * individuals in the population must be instances of <tt>GEIndividual</tt>.
+ * 
+ * @see GenerationAverageDepthError
+ * @see GenerationAverageDepth
  */
-public class MapCodons extends AbstractStat<EndGeneration> {
+public class GenerationStandardDeviationDepth extends AbstractStat<EndGeneration> {
 
-	private int[] depths;
+	private double stdev;
 
 	/**
-	 * Constructs a <tt>MapWraps</tt> stat and registers 
+	 * Constructs a <tt>GenerationStandardDeviationDepth</tt> stat and registers
 	 * its dependencies
 	 */
-	public MapCodons() {
-		super(NO_DEPENDENCIES);
+	@SuppressWarnings("unchecked")
+	public GenerationStandardDeviationDepth() {
+		super(GenerationDepths.class, GenerationAverageDepth.class);
 	}
 
 	/**
@@ -55,25 +56,27 @@ public class MapCodons extends AbstractStat<EndGeneration> {
 	 */
 	@Override
 	public void refresh(EndGeneration event) {
-		Population population = event.getPopulation();
-		depths = new int[population.size()];
-		int index = 0;
-
-		for (Individual individual: population) {
-			if (individual instanceof STGPIndividual) {
-				depths[index++] = ((STGPIndividual) individual).depth();
-			}
+		int[] depths = AbstractStat.get(GenerationDepths.class).getDepths();
+		double average = AbstractStat.get(GenerationAverageDepth.class).getAverage();
+		
+		// Sum the squared differences
+		double sqDiff = 0.0;
+		for (int depth: depths) {
+			sqDiff += Math.pow(depth - average, 2);
 		}
+
+		// Take the square root of the average
+		stdev = Math.sqrt(sqDiff / depths.length);
 	}
 	
 	/**
-	 * Returns an array of the depths of each program tree in the population 
-	 * from the previous generation
+	 * Returns the standard deviation of the mean depth of the parse trees in
+	 * the previous generation
 	 * 
-	 * @return the depths of each program tree in the previous generation
+	 * @return the standard deviation of the mean depth of the parse trees
 	 */
-	public int[] getDepths() {
-		return depths;
+	public double getStandardDeviation() {
+		return stdev;
 	}
 
 	/**
@@ -83,6 +86,6 @@ public class MapCodons extends AbstractStat<EndGeneration> {
 	 */
 	@Override
 	public String toString() {
-		return Arrays.toString(depths);
+		return Double.toString(stdev);
 	}
 }

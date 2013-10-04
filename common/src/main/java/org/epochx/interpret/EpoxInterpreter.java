@@ -39,6 +39,8 @@ import org.epochx.source.SourceGenerator;
  * to the <code>EpoxParser</code> that is used here.
  * 
  * @see EpoxParser
+ * 
+ * @since 2.0
  */
 public class EpoxInterpreter<T extends Individual> implements Interpreter<T> {
 
@@ -61,12 +63,32 @@ public class EpoxInterpreter<T extends Individual> implements Interpreter<T> {
 	 * 
 	 * @param parser the Epox language parser.
 	 */
-	public EpoxInterpreter(SourceGenerator<T> generator, final EpoxParser parser) {
+	public EpoxInterpreter(SourceGenerator<T> generator, EpoxParser parser) {
 		this.parser = parser;
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Evaluates any valid Epox expression which may optionally contain the
+	 * use of any argument named in the <tt>argNames</tt> array which will
+	 * be pre-declared and assigned to the associated value taken from the
+	 * <tt>argValues</tt> array. 
+	 * 
+	 * The expression will be evaluated once for each set of <tt>argValues</tt>. 
+	 * The object array returned will contain the result of each of these 
+	 * evaluations in order.
+	 * 
+	 * Any functions or terminals (except the input variables) which are not 
+	 * part of the built-in language, must be declared in the EpoxParser before
+	 * being used here.
+	 * 
+	 * @param expression an individual representing a valid Epox expression that 
+	 * is to be evaluated.
+	 * @param argNames {@inheritDoc}
+	 * @param argValues {@inheritDoc}
+	 * @return the return values from evaluating the expression. The runtime
+	 *         type of the returned Objects may vary from program to program. If
+	 *         the program does not return a value then this method will return an
+	 *         array of nulls.
 	 */
 	@Override
 	public Object[] eval(T program, String[] argNames, Object[][] argValues) throws MalformedProgramException {		
@@ -120,5 +142,23 @@ public class EpoxInterpreter<T extends Individual> implements Interpreter<T> {
 	 */
 	public EpoxParser getParser() {
 		return parser;
+	}
+	
+	/**
+	 * Returns the source generator being used to convert individuals to source code.
+	 * 
+	 * @return the current source generator
+	 */
+	public SourceGenerator<T> getSourceGenerator() {
+		return generator;
+	}
+	
+	/**
+	 * Sets the source generator to use to convert individuals to source code
+	 * 
+	 * @param the source generator to set
+	 */
+	public void setSourceGenerator(SourceGenerator<T> generator) {
+		this.generator = generator;
 	}
 }

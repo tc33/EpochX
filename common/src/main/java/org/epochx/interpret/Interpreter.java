@@ -43,6 +43,8 @@ import org.epochx.Individual;
  * The <code>exec</code> methods are for executing program strings that
  * represent one or more full program statements. No value will be returned by
  * these methods so the programs are expected to have other side effects.
+ * 
+ * @since 2.0
  */
 public interface Interpreter<T extends Individual> {
 	
@@ -51,17 +53,10 @@ public interface Interpreter<T extends Individual> {
 	 * given. The expressions may contain the use of any argument named in the
 	 * <code>argNames</code> array which will be provided with the
 	 * associated value from the <code>argValues</code> array. The returned
-	 * array will
-	 * be the return values from the candidate program for each of the sets of
-	 * argument values in order. The number of evaluations that take place
+	 * array will be the return values from the candidate program for each of the 
+	 * sets of argument values in order. The number of evaluations that take place
 	 * should be equal to the size of the argNames/argValues arrays and also
 	 * equal to the size of the returned Object array.
-	 * 
-	 * <p>
-	 * Some <code>Interpreters</code> may choose to simply implement this method
-	 * by calling the single use <code>eval</code> method, but for certain other
-	 * interpreters it may be possible to get large performance gains with an
-	 * interpreter by performing all evaluations in one.
 	 * 
 	 * @param expression the expression string that is to be evaluated multple
 	 *        times.
@@ -88,12 +83,6 @@ public interface Interpreter<T extends Individual> {
 	 * with a different set of variable values as given by the 2-dimensional
 	 * <code>argValues</code> array. The program is expected to have
 	 * side-effects and no values will be returned.
-	 * 
-	 * <p>
-	 * Some <code>Interpreters</code> may choose to simply implement this method
-	 * by calling the single use <code>exec</code> method, but for certain other
-	 * interpreters it may be possible to get large performance gains with an
-	 * interpreter by performing all executions in one.
 	 * 
 	 * @param program the program source code that is to be executed.
 	 * @param argNames an array of arguments that each of the sets of argValues

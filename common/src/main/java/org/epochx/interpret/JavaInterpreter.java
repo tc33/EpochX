@@ -57,13 +57,14 @@ public class JavaInterpreter<T extends Individual> implements Interpreter<T> {
 
 	/**
 	 * Evaluates any valid Java expression which may optionally contain the use
-	 * of any argument named in the <code>argNames</code> array which will be
-	 * provided with the associated value from the <code>argValues</code> array.
+	 * of any argument named in the <tt>argNames</tt> array which will be
+	 * provided with the associated value from the <tt>argValues</tt> array.
 	 * The result of evaluating the expression will be returned from this
-	 * method. The runtime <code>Object</code> return type will match the type
+	 * method. The runtime <tt>Object</tt> return type will match the type
 	 * returned by the expression.
 	 * 
-	 * @param individual a valid Java expression that is to be evaluated.
+	 * @param individual an individual representing a valid Java expression that is 
+	 * to be evaluated.
 	 * @param argNames {@inheritDoc}
 	 * @param argValues {@inheritDoc}
 	 * @return the return value from evaluating the expression.
@@ -106,5 +107,23 @@ public class JavaInterpreter<T extends Individual> implements Interpreter<T> {
 	public void exec(T individual, String[] argNames, Object[][] argValues)
 			throws MalformedProgramException {
 		eval(individual, argNames, argValues);
+	}
+	
+	/**
+	 * Returns the source generator being used to convert individuals to source code.
+	 * 
+	 * @return the current source generator
+	 */
+	public SourceGenerator<T> getSourceGenerator() {
+		return generator;
+	}
+	
+	/**
+	 * Sets the source generator to use to convert individuals to source code
+	 * 
+	 * @param the source generator to set
+	 */
+	public void setSourceGenerator(SourceGenerator<T> generator) {
+		this.generator = generator;
 	}
 }

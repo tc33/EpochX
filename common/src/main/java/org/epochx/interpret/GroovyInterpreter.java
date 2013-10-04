@@ -32,14 +32,19 @@ import org.epochx.source.SourceGenerator;
  * features up to and including version 1.6 are supported.
  * 
  * <p>
- * <code>GroovyInterpreter</code> extends from the <code>ScriptingInterpreter
- * </code>, adding Groovy specific enhancements, including optimized
+ * <tt>GroovyInterpreter</tt> extends from the <tt>ScriptingInterpreter
+ * </tt>, adding Groovy specific enhancements, including optimized
  * performance.
+ * 
+ * @since 2.0
  */
 public class GroovyInterpreter<T extends Individual> extends ScriptingInterpreter<T> {
 
 	/**
-	 * Constructs a GroovyInterpreter.
+	 * Constructs a <tt>GroovyInterpreter</tt> with a source generator
+	 * 
+	 * @param generator the SourceGenerator to use to convert individuals to Groovy 
+	 * source code
 	 */
 	public GroovyInterpreter(SourceGenerator<T> generator) {
 		super(generator, "groovy");
@@ -47,47 +52,38 @@ public class GroovyInterpreter<T extends Individual> extends ScriptingInterprete
 
 	/**
 	 * Evaluates any valid Groovy expression which may optionally contain the
-	 * use of any argument named in the <code>argNames</code> array which will
+	 * use of any argument named in the <tt>argNames</tt> array which will
 	 * be pre-declared and assigned to the associated value taken from the
-	 * <code>argValues</code> array. The result of evaluating the expression
-	 * will be returned from this method. The runtime <code>Object</code> return
-	 * type will match the type returned by the expression.
+	 * <tt>argValues</tt> array. 
 	 * 
-	 * <p>
-	 * This version of the <code>eval</code> method evaluates the expression
-	 * multiple times. The variable names remain the same for each evaluation
-	 * but for each evaluation the variable values will come from the next array
-	 * in the <code>argValues</code> argument. Groovy variables with the
-	 * specified names and values are automatically declared and initialised
-	 * before the generated code is run. The argument names link up with the
-	 * argument value in the same array index, so both arguments must have the
-	 * same length.
+	 * The expression will be evaluated once for each set of <tt>argValues</tt>. 
+	 * The object array returned will contain the result of each of these 
+	 * evaluations in order.
 	 * 
-	 * @param expression a valid Groovy expression that is to be evaluated.
+	 * @param expression an individual representing a valid Groovy expression that 
+	 * is to be evaluated.
 	 * @param argNames {@inheritDoc}
 	 * @param argValues {@inheritDoc}
 	 * @return the return values from evaluating the expression. The runtime
 	 *         type of the returned Objects may vary from program to program. If
-	 *         the
-	 *         program does not return a value then this method will return an
-	 *         array of
-	 *         nulls.
+	 *         the program does not return a value then this method will return an
+	 *         array of nulls.
 	 */
 	@Override
-	public Object[] eval(final T expression, Parameters params) {
-		int noParamSets = params.getNoParameterSets();
+	public Object[] eval(T expression, String[] argNames, Object[][] argValues) {
+		int noParamSets = argValues.length;
 		
-		final Object[] results = new Object[noParamSets];
+		Object[] results = new Object[noParamSets];
 		String expressionSource = getSourceGenerator().getSource(expression);
-		final String code = getEvalCode(expressionSource, params);
+		String code = getEvalCode(expressionSource, argNames);
 
-		final Invocable invocableEngine = (Invocable) getEngine();
+		Invocable invocableEngine = (Invocable) getEngine();
 		try {
 			getEngine().eval(code);
 
 			// Evaluate each argument set.
 			for (int i = 0; i < noParamSets; i++) {
-				results[i] = invocableEngine.invokeFunction("expr", params.getParameterSet(i));
+				results[i] = invocableEngine.invokeFunction("expr", argValues[i]);
 			}
 		} catch (final ScriptException ex) {
 			ex.printStackTrace();
@@ -99,46 +95,52 @@ public class GroovyInterpreter<T extends Individual> extends ScriptingInterprete
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Executes any valid Groovy program which may optionally contain the
+	 * use of any argument named in the <tt>argNames</tt> array which will
+	 * be pre-declared and assigned to the associated value taken from the
+	 * <tt>argValues</tt> array. The program will be executed once for each 
+	 * set of <tt>argValues</tt>.
+	 * 
+	 * @param program an individual representing a valid Groovy program.
+	 * @param argNames {@inheritDoc}
+	 * @param argValues {@inheritDoc}
 	 */
 	@Override
-	public void exec(final T program, Parameters params) {
-		int noParamSets = params.getNoParameterSets();
+	public void exec(T program, String[] argNames, Object[][] argValues) {
+		int noParamSets = argValues.length;
 		String source = getSourceGenerator().getSource(program);
-		final String code = getExecCode(source, params);
+		String code = getExecCode(source, argNames);
 
-		final Invocable invocableEngine = (Invocable) getEngine();
+		Invocable invocableEngine = (Invocable) getEngine();
 		try {
 			getEngine().eval(code);
 
 			// Evaluate each argument set.
 			for (int i = 0; i < noParamSets; i++) {
-				invocableEngine.invokeFunction("expr", params.getParameterSet(i));
+				invocableEngine.invokeFunction("expr", argValues[i]);
 			}
-		} catch (final ScriptException ex) {
+		} catch (ScriptException ex) {
 			ex.printStackTrace();
-		} catch (final NoSuchMethodException ex) {
+		} catch (NoSuchMethodException ex) {
 			ex.printStackTrace();
 		}
 	}
 
 	/*
-	 * Helper method to the multiple eval.
-	 * 
-	 * Constructs a string representing source code of a Groovy method
-	 * containing a return statement that returns the result of evaluating
+	 * Helper method to eval. Constructs a string representing source code of a Groovy 
+	 * method containing a return statement that returns the result of evaluating
 	 * the given expression.
 	 */
-	private String getEvalCode(final String expression, Parameters params) {
-		final StringBuilder code = new StringBuilder();
+	private String getEvalCode(String expression, String[] argNames) {
+		StringBuilder code = new StringBuilder();
 
 		code.append("public Object expr(");
-		for (int i = 0; i < params.getNoParameters(); i++) {
+		for (int i = 0; i < argNames.length; i++) {
 			if (i > 0) {
 				code.append(',');
 			}
 			code.append("Object ");
-			code.append(params.getIdentifier(i));
+			code.append(argNames[i]);
 		}
 		code.append(") {");
 
@@ -152,21 +154,19 @@ public class GroovyInterpreter<T extends Individual> extends ScriptingInterprete
 	}
 
 	/*
-	 * Helper method to the multiple exec.
-	 * 
-	 * Constructs a string representing source code of a Groovy method
-	 * containing the given program.
+	 * Helper method to exec. Constructs a string representing source code of a Groovy 
+	 * method containing the given program.
 	 */
-	private String getExecCode(final String program, final Parameters params) {
+	private String getExecCode(String program, String[] argNames) {
 		final StringBuffer code = new StringBuffer();
 
 		code.append("public Object expr(");
-		for (int i = 0; i < params.getNoParameters(); i++) {
+		for (int i = 0; i < argNames.length; i++) {
 			if (i > 0) {
 				code.append(',');
 			}
 			code.append("Object ");
-			code.append(params.getIdentifier(i));
+			code.append(argNames[i]);
 		}
 		code.append(") {");
 

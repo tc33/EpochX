@@ -47,16 +47,18 @@ import org.epochx.source.SourceGenerator;
  * 
  * @see RubyInterpreter
  * @see GroovyInterpreter
+ * 
+ * @since 2.0
  */
 public class ScriptingInterpreter<T extends Individual> implements Interpreter<T> {
 
 	// The language specific scripting engine.
-	private final ScriptEngine engine;
+	private ScriptEngine engine;
 	
 	private SourceGenerator<T> generator;	
 
 	/**
-	 * Constructs a ScriptingInterpreter for a named scripting engine. A list
+	 * Constructs a <tt>ScriptingInterpreter</tt> for a named scripting engine. A list
 	 * of installed ScriptEngine names can be obtained with the following code:
 	 * 
 	 * <blockquote><code>
@@ -67,10 +69,13 @@ public class ScriptingInterpreter<T extends Individual> implements Interpreter<T
 	 *     engineNames.addAll(factory.getNames());
 	 * }
 	 * </code></blockquote>
+	 * 
+	 * @param generator the SourceGenerator to use to convert individuals to source code
+	 * @param engineName the name of the scripting engine to use
 	 */
-	public ScriptingInterpreter(SourceGenerator<T> generator, final String engineName) {
+	public ScriptingInterpreter(SourceGenerator<T> generator, String engineName) {
 		this.generator = generator;
-		final ScriptEngineManager manager = new ScriptEngineManager();
+		ScriptEngineManager manager = new ScriptEngineManager();
 
 		engine = manager.getEngineByName(engineName);
 
@@ -80,9 +85,12 @@ public class ScriptingInterpreter<T extends Individual> implements Interpreter<T
 	}
 
 	/**
-	 * Constructs a ScriptingInterpreter for the given ScriptEngine.
+	 * Constructs a <tt>ScriptingInterpreter</tt> for the given <tt>ScriptEngine</tt>.
+	 * 
+	 * @param generator the SourceGenerator to use to convert individuals to source code
+	 * @param engine the scripting engine to use
 	 */
-	public ScriptingInterpreter(SourceGenerator<T> generator, final ScriptEngine engine) {
+	public ScriptingInterpreter(SourceGenerator<T> generator, ScriptEngine engine) {
 		this.generator = generator;
 		this.engine = engine;
 	}
@@ -91,9 +99,9 @@ public class ScriptingInterpreter<T extends Individual> implements Interpreter<T
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object[] eval(final T program, Parameters params) throws MalformedProgramException {
-		int noParamSets = params.getNoParameterSets();
-		int noParams = params.getNoParameters();
+	public Object[] eval(T program, String[] argNames, Object[][] argValues) throws MalformedProgramException {
+		int noParamSets = argValues.length;
+		int noParams = argNames.length;
 		
 		final Object[] results = new Object[noParamSets];
 
@@ -102,11 +110,11 @@ public class ScriptingInterpreter<T extends Individual> implements Interpreter<T
 		// Evaluate each argument set.
 		for (int i = 0; i < noParamSets; i++) {
 			
-			Object[] paramSet = params.getParameterSet(i);
+			Object[] paramSet = argValues[i];
 			
 			try {
 				for (int j = 0; j < noParams; i++) {
-					engine.put(params.getIdentifier(j), paramSet[j]);
+					engine.put(argNames[j], paramSet[j]);
 				}
 				results[i] = engine.eval(expression);
 			} catch (final ScriptException e) {
@@ -121,9 +129,9 @@ public class ScriptingInterpreter<T extends Individual> implements Interpreter<T
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void exec(final T program, Parameters params)
+	public void exec(T program, String[] argNames, Object[][] argValues)
 			throws MalformedProgramException {
-		eval(program, params);
+		eval(program, argNames, argValues);
 	}
 
 	/**
@@ -136,9 +144,20 @@ public class ScriptingInterpreter<T extends Individual> implements Interpreter<T
 	}
 	
 	/**
+	 * Returns the source generator being used to convert individuals to source code.
 	 * 
+	 * @return the current source generator
 	 */
 	public SourceGenerator<T> getSourceGenerator() {
 		return generator;
+	}
+	
+	/**
+	 * Sets the source generator to use to convert individuals to source code
+	 * 
+	 * @param the source generator to set
+	 */
+	public void setSourceGenerator(SourceGenerator<T> generator) {
+		this.generator = generator;
 	}
 }

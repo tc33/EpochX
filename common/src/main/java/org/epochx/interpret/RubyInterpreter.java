@@ -27,32 +27,53 @@ import org.epochx.Individual;
 import org.epochx.source.SourceGenerator;
 
 /**
- * A <code>RubyInterpreter</code> provides the facility to evaluate individual
+ * A <tt>RubyInterpreter</tt> provides the facility to evaluate individual
  * Ruby expressions and execute multi-line Ruby statements.
  * 
  * <p>
- * <code>RubyInterpreter</code> extends from the <code>ScriptingInterpreter
- * </code>, adding ruby specific enhancements, including optimized performance.
+ * <tt>RubyInterpreter</tt> extends from the <tt>ScriptingInterpreter</tt>, adding ruby 
+ * specific enhancements, including optimized performance.
+ * 
+ * @since 2.0
  */
 public class RubyInterpreter<T extends Individual> extends ScriptingInterpreter<T> {
 
 	/**
-	 * Constructs a RubyInterpreter.
+	 * Constructs a <tt>RubyInterpreter</tt> with a source generator
+	 * 
+	 * @param generator the SourceGenerator to use to convert individuals to Ruby 
+	 * source code
 	 */
 	public RubyInterpreter(SourceGenerator<T> generator) {
 		super(generator, "ruby");
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Evaluates any valid Ruby expression which may optionally contain the
+	 * use of any argument named in the <tt>argNames</tt> array which will
+	 * be pre-declared and assigned to the associated value taken from the
+	 * <tt>argValues</tt> array. 
+	 * 
+	 * The expression will be evaluated once for each set of <tt>argValues</tt>. 
+	 * The object array returned will contain the result of each of these 
+	 * evaluations in order.
+	 * 
+	 * @param expression an individual representing a valid Ruby expression that 
+	 * is to be evaluated.
+	 * @param argNames {@inheritDoc}
+	 * @param argValues {@inheritDoc}
+	 * @return the return values from evaluating the expression. The runtime
+	 *         type of the returned Objects may vary from program to program. If
+	 *         the program does not return a value then this method will return an
+	 *         array of nulls.
 	 */
 	@Override
-	public Object[] eval(final T program, final Parameters params)
+	public Object[] eval(T program, String[] argNames, Object[][] argValues)
 			throws MalformedProgramException {
-		int noParamSets = params.getNoParameterSets();
+		int noParamSets = argNames.length;
 		
 		String expression = getSourceGenerator().getSource(program);
-		final String code = getEvalCode(expression, params);
+		String code = getEvalCode(expression, argNames);
 		
 		Object[] result = new Object[noParamSets];
 
@@ -61,7 +82,7 @@ public class RubyInterpreter<T extends Individual> extends ScriptingInterpreter<
 			getEngine().eval(code);
 			
 			for (int i=0; i<noParamSets; i++) {
-				result[i] = invocableEngine.invokeFunction("expr", params.getParameterSet(i));
+				result[i] = invocableEngine.invokeFunction("expr", argValues[i]);
 			}
 		} catch (final ScriptException ex) {
 			throw new MalformedProgramException();
@@ -73,46 +94,52 @@ public class RubyInterpreter<T extends Individual> extends ScriptingInterpreter<
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Executes any valid Ruby program which may optionally contain the
+	 * use of any argument named in the <tt>argNames</tt> array which will
+	 * be pre-declared and assigned to the associated value taken from the
+	 * <tt>argValues</tt> array. The program will be executed once for each 
+	 * set of <tt>argValues</tt>.
+	 * 
+	 * @param program an individual representing a valid Ruby program.
+	 * @param argNames {@inheritDoc}
+	 * @param argValues {@inheritDoc}
 	 */
 	@Override
-	public void exec(final T program, final Parameters params)
+	public void exec(T program, String[] argNames, Object[][] argValues)
 			throws MalformedProgramException {
-		int noParamSets = params.getNoParameterSets();
+		int noParamSets = argValues.length;
 		
 		String source = getSourceGenerator().getSource(program);
-		final String code = getExecCode(source, params);
+		String code = getExecCode(source, argNames);
 		
-		final Invocable invocableEngine = (Invocable) getEngine();
+		Invocable invocableEngine = (Invocable) getEngine();
 		try {
 			getEngine().eval(code);
 			
 			for (int i=0; i<noParamSets; i++) {
-				invocableEngine.invokeFunction("expr", params.getParameterSet(i));
+				invocableEngine.invokeFunction("expr", argValues[i]);
 			}
-		} catch (final ScriptException ex) {
+		} catch (ScriptException ex) {
 			throw new MalformedProgramException();
-		} catch (final NoSuchMethodException ex) {
+		} catch (NoSuchMethodException ex) {
 			throw new MalformedProgramException();
 		}
 	}
 
 	/*
-	 * Helper method to the multiple eval.
-	 * 
-	 * Constructs a string representing source code of a Ruby method
-	 * containing a return statement that returns the result of evaluating
+	 * Helper method to eval. Constructs a string representing source code of a Ruby 
+	 * method containing a return statement that returns the result of evaluating
 	 * the given expression.
 	 */
-	private String getEvalCode(final String expression, final Parameters params) {
-		final StringBuffer code = new StringBuffer();
+	private String getEvalCode(String expression, String[] argNames) {
+		StringBuffer code = new StringBuffer();
 
 		code.append("def expr(");
-		for (int i = 0; i < params.getNoParameters(); i++) {
+		for (int i = 0; i < argNames.length; i++) {
 			if (i > 0) {
 				code.append(',');
 			}
-			code.append(params.getIdentifier(i));
+			code.append(argNames[i]);
 		}
 		code.append(")\n");
 
@@ -125,21 +152,19 @@ public class RubyInterpreter<T extends Individual> extends ScriptingInterpreter<
 	}
 
 	/*
-	 * Helper method to the multiple exec.
-	 * 
-	 * Constructs a string representing source code of a Ruby method
-	 * containing the given program.
+	 * Helper method to exec. Constructs a string representing source code of a Ruby 
+	 * method containing the given program.
 	 */
-	private String getExecCode(final String program, final Parameters params) {
+	private String getExecCode(String program, String[] argNames) {
 		final StringBuffer code = new StringBuffer();
 
 		// code.append("class Evaluation\n");
 		code.append("def expr(");
-		for (int i = 0; i < params.getNoParameters(); i++) {
+		for (int i = 0; i < argNames.length; i++) {
 			if (i > 0) {
 				code.append(',');
 			}
-			code.append(params.getIdentifier(i));
+			code.append(argNames[i]);
 		}
 		code.append(")\n");
 

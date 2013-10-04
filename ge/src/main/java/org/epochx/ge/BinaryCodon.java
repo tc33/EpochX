@@ -23,6 +23,8 @@ package org.epochx.ge;
 
 import java.util.Arrays;
 
+import org.epochx.Config.ConfigKey;
+
 
 /**
  * 
@@ -33,7 +35,7 @@ public class BinaryCodon implements Codon {
 	 * The key for setting and retrieving the number of binary bits to use for
 	 * one binary codon
 	 */
-	//public static final ConfigKey<Integer> BITS = new ConfigKey<Integer>();
+	public static final ConfigKey<Integer> NO_BITS = new ConfigKey<Integer>();
 	
 	private boolean[] bits;
 	

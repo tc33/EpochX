@@ -46,7 +46,7 @@ public class GEIndividual extends AbstractIndividual {
 	public static final ConfigKey<Integer> MAXIMUM_DEPTH = new ConfigKey<Integer>();
 	
 	// The individual's genotype
-	private Chromosome<?> chromosome;
+	private Chromosome chromosome;
 	
 	// The individual's phenotype
 	private NonTerminalSymbol parseTree;
@@ -63,7 +63,7 @@ public class GEIndividual extends AbstractIndividual {
 	 * 
 	 * @param chromosome the initial set of codons
 	 */
-	public GEIndividual(Chromosome<?> chromosome) {
+	public GEIndividual(Chromosome chromosome) {
 		this.chromosome = chromosome;
 	}
 
@@ -72,7 +72,7 @@ public class GEIndividual extends AbstractIndividual {
 	 * 
 	 * @return this individual's chromosome
 	 */
-	public Chromosome<?> getChromosome() {
+	public Chromosome getChromosome() {
 		return chromosome;
 	}
 	

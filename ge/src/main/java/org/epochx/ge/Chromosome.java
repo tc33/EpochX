@@ -21,8 +21,10 @@
  */
 package org.epochx.ge;
 
+import static org.epochx.Config.Template.TEMPLATE;
 import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
 import static org.epochx.ge.Codon.*;
+import static org.epochx.ge.CodonFactory.CODON_FACTORY;
 
 import java.util.*;
 
@@ -33,7 +35,7 @@ import org.epochx.event.*;
 /**
  * 
  */
-public abstract class Chromosome<T extends Codon> implements Iterable<T>, Cloneable, Listener<ConfigEvent> {
+public class Chromosome implements Iterable<Codon>, Cloneable, Listener<ConfigEvent> {
 
 	/**
 	 * The key for setting and retrieving the maximum length setting for 
@@ -54,7 +56,7 @@ public abstract class Chromosome<T extends Codon> implements Iterable<T>, Clonea
 	 */
 	public static final ConfigKey<Boolean> ALLOW_EXTENSION = new ConfigKey<Boolean>();
 	
-	private List<T> codons;
+	private List<Codon> codons;
 	
 	private RandomSequence random;
 	
@@ -64,12 +66,13 @@ public abstract class Chromosome<T extends Codon> implements Iterable<T>, Clonea
 	private int maxWraps;
 	private int maxLength;
 	private boolean extending;
+	private CodonFactory codonFactory;
 
 	public Chromosome() {
-		this(new ArrayList<T>());
+		this(new ArrayList<Codon>());
 	}
 	
-	public Chromosome(List<T> codons) {
+	public Chromosome(List<Codon> codons) {
 		this.codons = codons;
 		
 		setup();
@@ -88,6 +91,7 @@ public abstract class Chromosome<T extends Codon> implements Iterable<T>, Clonea
 	 * <li>{@link Chromosome#MAXIMUM_WRAPS} (default: <tt>Integer.MAX_VALUE</tt>)
 	 * <li>{@link Chromosome#MAXIMUM_LENGTH} (default: <tt>Integer.MAX_VALUE</tt>)
 	 * <li>{@link Chromosome#ALLOW_EXTENSION} (default: <tt>False</tt>)
+	 * <li>{@link CodonFactory#CODON_FACTORY}
 	 * </ul>
 	 */
 	protected void setup() {
@@ -97,6 +101,7 @@ public abstract class Chromosome<T extends Codon> implements Iterable<T>, Clonea
 		maxWraps = Config.getInstance().get(MAXIMUM_WRAPS, Integer.MAX_VALUE);
 		maxLength = Config.getInstance().get(MAXIMUM_LENGTH, Integer.MAX_VALUE);
 		extending = Config.getInstance().get(ALLOW_EXTENSION, Boolean.FALSE);
+		codonFactory = Config.getInstance().get(CODON_FACTORY);
 		
 		codonRange = maxCodon - minCodon;
 	}
@@ -110,25 +115,23 @@ public abstract class Chromosome<T extends Codon> implements Iterable<T>, Clonea
 	 */
 	@Override
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(RANDOM_SEQUENCE, MAXIMUM_VALUE, MINIMUM_VALUE, MAXIMUM_WRAPS, MAXIMUM_LENGTH, ALLOW_EXTENSION)) {
+		if (event.isKindOf(TEMPLATE, RANDOM_SEQUENCE, MAXIMUM_VALUE, MINIMUM_VALUE, MAXIMUM_WRAPS, MAXIMUM_LENGTH, ALLOW_EXTENSION, CODON_FACTORY)) {
 			setup();
 		}
 	}
 	
-	public abstract T generateCodon(long value);
-	
 	public void extend() {
 		long value = minCodon + random.nextLong(codonRange);
 		
-		appendCodon(generateCodon(value));
+		appendCodon(codonFactory.codon(value));
 	}
 	
-	protected List<T> getCodons() {
+	protected List<Codon> getCodons() {
 		//TODO Is it a good idea to give access to the underlying list? If not, also need to make a copy from the original list given
 		return codons;
 	}
 	
-	public T getCodon(long index) {
+	public Codon getCodon(long index) {
 		// If within chromosome size just return the codon
 		if (index < codons.size()) {
 			return codons.get((int) index);		
@@ -154,7 +157,7 @@ public abstract class Chromosome<T extends Codon> implements Iterable<T>, Clonea
 		return codons.get((int) index);
 	}
 
-	public void setCodon(int index, T codon) {
+	public void setCodon(int index, Codon codon) {
 		codons.set(index, codon);
 	}
 
@@ -176,9 +179,14 @@ public abstract class Chromosome<T extends Codon> implements Iterable<T>, Clonea
 		return removed;
 	}
 
-	public void appendCodon(T codon) {
+	public void appendCodon(Codon codon) {
 		codons.add(codon);
 	}
+	
+	public void appendCodons(List<Codon> codons) {
+		codons.addAll(codons);
+	}
+
 
 	public int getMaxWraps() {
 		return maxWraps;
@@ -197,12 +205,12 @@ public abstract class Chromosome<T extends Codon> implements Iterable<T>, Clonea
 	}
 
 	@Override
-	public Chromosome<T> clone() {
-		Chromosome<T> clone = null;
+	public Chromosome clone() {
+		Chromosome clone = null;
 		try {
 			clone = (Chromosome) super.clone();
 			// This assumes codons are immutable
-			clone.codons = new ArrayList<T>(codons);
+			clone.codons = new ArrayList<Codon>(codons);
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}
@@ -234,12 +242,12 @@ public abstract class Chromosome<T extends Codon> implements Iterable<T>, Clonea
 	 * @return an iterator over the codons in this chromosome
 	 */
 	@Override
-	public Iterator<T> iterator() {
+	public Iterator<Codon> iterator() {
 		//return codons.iterator();
 		return new ChromosomeIterator();
 	}
 	
-	private class ChromosomeIterator implements Iterator<T> {
+	private class ChromosomeIterator implements Iterator<Codon> {
 
 		private Codon previous;
 		private long nextPosition;
@@ -271,9 +279,9 @@ public abstract class Chromosome<T extends Codon> implements Iterable<T>, Clonea
 		}
 
 		@Override
-		public T next() {
+		public Codon next() {
 			if (hasNext()) {
-				T previous = getCodon(nextPosition++);
+				Codon previous = getCodon(nextPosition++);
 				return previous;
 			} else {
 				throw new NoSuchElementException("There is no next codon");

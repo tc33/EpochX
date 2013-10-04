@@ -25,6 +25,8 @@ package org.epochx.interpret;
  * Checked exception that indicates that a program being evaluated, executed or
  * otherwise processed has been found to be incorrectly formed according to the
  * appropriate syntax rules.
+ * 
+ * @since 2.0
  */
 public class MalformedProgramException extends Exception {
 

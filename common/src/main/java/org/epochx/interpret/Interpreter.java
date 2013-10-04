@@ -45,7 +45,7 @@ import org.epochx.Individual;
  * these methods so the programs are expected to have other side effects.
  */
 public interface Interpreter<T extends Individual> {
-
+	
 	/**
 	 * Evaluates an expression multiple times with each set of argument values
 	 * given. The expressions may contain the use of any argument named in the
@@ -80,7 +80,7 @@ public interface Interpreter<T extends Individual> {
 	 * @throws MalformedProgramException if the given expression is not valid
 	 *         according to the language's syntax rules.
 	 */
-	public Object[] eval(T expression, Parameters params) throws MalformedProgramException;
+	public Object[] eval(T expression, String[] argNames, Object[][] argValues) throws MalformedProgramException;
 
 	/**
 	 * Executes a program which may consist of multiple program statements,
@@ -108,5 +108,5 @@ public interface Interpreter<T extends Individual> {
 	 * @throws MalformedProgramException if the given program is not valid
 	 *         according to the language's syntax rules.
 	 */
-	public void exec(T program, Parameters params) throws MalformedProgramException;
+	public void exec(T program, String[] argNames, Object[][] argValues) throws MalformedProgramException;
 }

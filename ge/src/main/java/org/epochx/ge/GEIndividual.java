@@ -31,9 +31,12 @@ import org.epochx.grammar.*;
  * list of {@link Codon}s. 
  * 
  * <p>
- * Note: this class has a natural ordering that is inconsistent with equals.
+ * Note: this class has a natural ordering that may be inconsistent with
+ * <tt>equals</tt>.
+ * 
+ * @since 2.0
  */
-public class GEIndividual implements Individual {
+public class GEIndividual extends AbstractIndividual {
 
 	private static final long serialVersionUID = -6028225391868926598L;
 	
@@ -42,20 +45,21 @@ public class GEIndividual implements Individual {
 	 */
 	public static final ConfigKey<Integer> MAXIMUM_DEPTH = new ConfigKey<Integer>();
 	
-	
-	private Fitness fitness;
+	// The individual's genotype
 	private Chromosome<?> chromosome;
+	
+	// The individual's phenotype
 	private NonTerminalSymbol parseTree;
 
 	/**
-	 * Constructs an GEIdividual with an initial chromosome of <tt>null</tt>
+	 * Constructs a GE individual with an initial chromosome of <tt>null</tt>
 	 */
 	public GEIndividual() {
 		this(null);
 	}
 	
 	/**
-	 * Constructs an individual represented by the given chromosome.
+	 * Constructs a GE individual represented by the given chromosome.
 	 * 
 	 * @param chromosome the initial set of codons
 	 */
@@ -85,8 +89,8 @@ public class GEIndividual implements Individual {
 	
 	/**
 	 * Sets the <tt>NonTerminalSymbol</tt> that is the root node of the parse
-	 * tree that is the result of performing a mapping using this individual's 
-	 * chromosome.
+	 * tree that represents this individual. Typically this would be derived 
+	 * from the chromosome.
 	 * 
 	 * @param parseTree the root of the parse tree that represents this 
 	 * individual
@@ -96,20 +100,15 @@ public class GEIndividual implements Individual {
 	}
 
 	/**
-	 * Create a clone of this GEIndividual. The chromosome is copied as is the
-	 * parse tree and fitness.
+	 * Creates and returns a clone of this individual. The chromosome is copied as 
+	 * is the parse tree and fitness.
 	 * 
 	 * @return a copy of this GEIndividual instance.
 	 */
 	@Override
 	public GEIndividual clone() {
-		GEIndividual clone = null;
-		try {
-			clone = (GEIndividual) super.clone();
-			clone.chromosome = chromosome.clone();
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-		}
+		GEIndividual clone = (GEIndividual) super.clone();
+		clone.chromosome = chromosome.clone();
 
 		// If codons are the same then the source and fitness should be the
 		// same.
@@ -123,19 +122,25 @@ public class GEIndividual implements Individual {
 	}
 
 	/**
-	 * Returns a string representation of this program. This will be either the
-	 * genotype or the phenotype, depending on whether the program has
-	 * undergone mapping or not.
+	 * Returns a string representation of this program. This will be a string
+	 * representation of the parse tree if it has been set, otherwise it will be
+	 * a string representation of the chromosome.
 	 */
 	@Override
 	public String toString() {
+		if (parseTree != null) {
+			return parseTree.toString();
+		}
+		
 		return chromosome.toString();
 	}
 
 	/**
-	 * Compares the given argument for equivalence to this GEIndividual.
-	 * Two candidate programs are equal if they have equal genotypes, or if
-	 * they have equal (but non-null) phenotypes.
+	 * Compares the given object to this instance for equality. Equivalence is
+	 * defined as them both being instances of <tt>GEIndividual</tt> and
+	 * having equal parse trees, according to <tt>getParseTree().equals(obj)</tt>.
+	 * If either individual's parse tree is <tt>null</tt>, then the chromosomes
+	 * must be equal for the individuals to be considered equal.
 	 * 
 	 * @return true if the object is an equivalent candidate program, false
 	 *         otherwise.
@@ -147,7 +152,7 @@ public class GEIndividual implements Individual {
 		Symbol thisParseTree = parseTree;
 		Symbol progParseTree = prog.parseTree;
 
-		if ((thisParseTree == null) && (progParseTree == null)) {
+		if ((thisParseTree == null) || (progParseTree == null)) {
 			// Compare genotypes.
 			return chromosome.equals(prog.chromosome);
 		} else {
@@ -157,30 +162,11 @@ public class GEIndividual implements Individual {
 	}
 	
 	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Fitness getFitness() {
-		return fitness;
-	}
-
-	/**
-	 * Sets the fitness of this individual. The fitness is used as the basis of
-	 * comparison between individuals.
-	 * 
-	 * @param fitness the fitness value to set
-	 * @see #compareTo(Individual)
-	 */
-	public void setFitness(Fitness fitness) {
-		this.fitness = fitness;
-	}
-	
-	/**
 	 * Compares this individual to another based on their fitness. It returns a
 	 * negative integer, zero, or a positive integer as this instance represents
 	 * the quality of an individual that is less fit, equally fit, or more fit
 	 * than the specified object. The individuals do not need to be of the same
-	 * object type, but must have comparable <tt>Fitness</tt> instances.
+	 * object type, but must have non-null, comparable <tt>Fitness</tt> instances.
 	 * 
 	 * @param other an individual to compare against
 	 * @return a negative integer, zero, or a positive integer as this object is
@@ -189,6 +175,6 @@ public class GEIndividual implements Individual {
 	 */
 	@Override
 	public int compareTo(Individual other) {
-		return fitness.compareTo(other.getFitness());
+		return getFitness().compareTo(other.getFitness());
 	}
 }

@@ -27,13 +27,15 @@ import org.epochx.source.SourceGenerator;
 import bsh.EvalError;
 
 /**
- * A JavaInterpreter provides the facility to evaluate individual Java
- * expressions and execute multi-line Java statements. Java language features
- * up to and including version 1.5 are supported.
+ * A <tt>JavaInterpreter</tt> provides the facility to evaluate individuals that represent
+ * Java expressions and execute multi-line Java statements. Java language features
+ * up to and including version 1.5 are supported. Individuals are converted into source code
+ * using a <tt>SourceGenerator</tt> whose responsibility it is that valid Java source is 
+ * produced from the individual.
  * 
- * <p>
- * There is no publically visible constructor. A singleton instance is
- * maintained which is accessible through the <code>getInstance()</code> method.
+ * @see SourceGenerator
+ * 
+ * @since 2.0
  */
 public class JavaInterpreter<T extends Individual> implements Interpreter<T> {
 
@@ -41,9 +43,11 @@ public class JavaInterpreter<T extends Individual> implements Interpreter<T> {
 	
 	// The bean shell beanShell.
 	private final bsh.Interpreter beanShell;
-
+	
 	/**
-	 * Constructs a JavaInterpreter.
+	 * Constructs a <tt>JavaInterpreter</tt> with a source generator
+	 * 
+	 * @param generator the SourceGenerator to use to convert individuals to Java source code
 	 */
 	public JavaInterpreter(SourceGenerator<T> generator) {
 		this.generator = generator;
@@ -59,7 +63,7 @@ public class JavaInterpreter<T extends Individual> implements Interpreter<T> {
 	 * method. The runtime <code>Object</code> return type will match the type
 	 * returned by the expression.
 	 * 
-	 * @param program a valid Java expression that is to be evaluated.
+	 * @param individual a valid Java expression that is to be evaluated.
 	 * @param argNames {@inheritDoc}
 	 * @param argValues {@inheritDoc}
 	 * @return the return value from evaluating the expression.
@@ -67,27 +71,27 @@ public class JavaInterpreter<T extends Individual> implements Interpreter<T> {
 	 *         according to the language's syntax rules.
 	 */
 	@Override
-	public Object[] eval(final T program, Parameters params) throws MalformedProgramException {
-		int noParamSets = params.getNoParameterSets();
-		int noParams = params.getNoParameters();
+	public Object[] eval(T individual, String[] argNames, Object[][] argValues) throws MalformedProgramException {
+		int noParamSets = argValues.length;
+		int noParams = argNames.length;
 		
 		Object result[] = new Object[noParamSets];
 
-		if (program != null) {
-			String expression = generator.getSource(program);
+		if (individual != null) {
+			String expression = generator.getSource(individual);
 			
 			try {
 				for (int i = 0; i < noParamSets; i++) {
-					Object[] paramSet = params.getParameterSet(i);
+					Object[] paramSet = argValues[i];
 					
 					// Declare all the variables.
 					for (int j = 0; j < noParams; j++) {
-						beanShell.set(params.getIdentifier(j), paramSet[j]);
+						beanShell.set(argNames[j], paramSet[j]);
 					}
 	
 					result[i] = beanShell.eval(expression);
 				}
-			} catch (final EvalError e) {
+			} catch (EvalError e) {
 				throw new MalformedProgramException();
 			}
 		}
@@ -99,8 +103,8 @@ public class JavaInterpreter<T extends Individual> implements Interpreter<T> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void exec(final T program, Parameters params)
+	public void exec(T individual, String[] argNames, Object[][] argValues)
 			throws MalformedProgramException {
-		eval(program, params);
+		eval(individual, argNames, argValues);
 	}
 }

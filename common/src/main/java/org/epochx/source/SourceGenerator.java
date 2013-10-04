@@ -22,13 +22,19 @@
 package org.epochx.source;
 
 import org.epochx.Individual;
+import org.epochx.Config.ConfigKey;
 
 
 /**
  * Source generators take a candidate program and produce source code from it.
  */
 public interface SourceGenerator<T extends Individual> {
+	
+	/**
+	 * The key for setting the source generator
+	 */
+	public static final ConfigKey<SourceGenerator<?>> SOURCE_GENERATOR = new ConfigKey<SourceGenerator<?>>();
 
-	public String getSource(T program);
+	public String getSource(T individual);
 	
 }

@@ -43,7 +43,7 @@ import org.epochx.source.SourceGenerator;
 public class EpoxInterpreter<T extends Individual> implements Interpreter<T> {
 
 	// The Epox language parser.
-	private final EpoxParser parser;
+	private EpoxParser parser;
 	
 	private SourceGenerator<T> generator;
 
@@ -69,9 +69,9 @@ public class EpoxInterpreter<T extends Individual> implements Interpreter<T> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object[] eval(T program, Parameters params) throws MalformedProgramException {		
-		int noParamSets = params.getNoParameterSets();
-		int noParams = params.getNoParameters();
+	public Object[] eval(T program, String[] argNames, Object[][] argValues) throws MalformedProgramException {		
+		int noParamSets = argValues.length;
+		int noParams = argNames.length;
 		
 		// Keep a record of the variable nodes that get declared
 		VariableNode[] declaredVariables = new VariableNode[noParams];
@@ -86,15 +86,15 @@ public class EpoxInterpreter<T extends Individual> implements Interpreter<T> {
 				parser.undeclare(declaredVariables[j]);
 			}
 			
-			Object[] paramSet = params.getParameterSet(i);
+			Object[] paramSet = argValues[i];
 			
 			// Set the values of this round of variables.
 			for (int j=0; j<noParams; j++) {
-				declaredVariables[j] = new VariableNode(new Variable(params.getIdentifier(j), paramSet[j]));
+				declaredVariables[j] = new VariableNode(new Variable(argNames[j], paramSet[j]));
 				parser.declare(declaredVariables[j]);
 			}
 			
-			final Node programTree = parser.parse(expression);
+			Node programTree = parser.parse(expression);
 			
 			// Evaluate the program tree.
 			results[i] = programTree.evaluate();
@@ -106,10 +106,11 @@ public class EpoxInterpreter<T extends Individual> implements Interpreter<T> {
 	/**
 	 * Not supported by <code>EpoxInterpreter</code>. Calling will throw an
 	 * <code>IllegalStateException</code>.
+	 * @throws MalformedProgramException 
 	 */
 	@Override
-	public void exec(T program, Parameters params) {
-		throw new IllegalStateException("method not supported");
+	public void exec(T program, String[] argNames, Object[][] argValues) throws MalformedProgramException {
+		eval(program, argNames, argValues);
 	}
 
 	/**

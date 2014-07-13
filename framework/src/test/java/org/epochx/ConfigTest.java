@@ -22,10 +22,10 @@
 
 package org.epochx;
 
+import static org.epochx.Config.Template.TEMPLATE;
 import junit.framework.TestCase;
 
 import org.epochx.Config.ConfigKey;
-import org.epochx.Config.Template;
 import org.epochx.selection.TournamentSelector;
 
 /**
@@ -63,7 +63,7 @@ public class ConfigTest extends TestCase {
 	 */
 	public void testDefaults() {
 		Config config = Config.getInstance();
-		config.set(Template.KEY, new GenerationalTemplate());
+		config.set(TEMPLATE, new GenerationalTemplate());
 
 		assertNotNull(config.get(Population.SIZE));
 		assertNotNull(config.get(GenerationalStrategy.TERMINATION_CRITERIA));
@@ -78,7 +78,7 @@ public class ConfigTest extends TestCase {
 	 */
 	public void testReset() {
 		Config config = Config.getInstance();
-		config.set(Template.KEY, new GenerationalTemplate());
+		config.set(TEMPLATE, new GenerationalTemplate());
 
 		assertNotNull(config.get(Population.SIZE));
 		config.reset();

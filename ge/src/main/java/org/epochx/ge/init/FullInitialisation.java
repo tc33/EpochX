@@ -366,7 +366,7 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 	/**
 	 * Sets the number of individuals to be generated in a population created
 	 * by the <tt>createPopulation</tt> method. If automatic configuration is
-	 * enabled thenAny value set here will be overwritten by the
+	 * enabled then any value set here will be overwritten by the
 	 * {@link Population#SIZE} configuration setting on the next config event.
 	 * 
 	 * @param size the size of the populations generated

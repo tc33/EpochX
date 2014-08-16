@@ -327,7 +327,7 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 	/**
 	 * Constructs a new <tt>STGPIndividual</tt> instance with a program tree
 	 * composed of nodes provided by the {@link STGPIndividual#SYNTAX} config
-	 * parameter. A grow or a full initialisation method is used, select at
+	 * parameter. A grow or a full initialisation method is used, selected at
 	 * random
 	 * 
 	 * @return a new individual

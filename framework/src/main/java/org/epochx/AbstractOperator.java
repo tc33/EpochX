@@ -122,7 +122,7 @@ public abstract class AbstractOperator implements Operator {
 	 * Returns the operator's end event. The default implementation returns
 	 * a <code>EndOperator</code> instance. The end event is passed to the
 	 * {@link #perform(Individual...)} method to allow the operator to add
-	 * addition information.
+	 * additional information.
 	 * 
 	 * @param parents the individuals undergoing the operator.
 	 * 

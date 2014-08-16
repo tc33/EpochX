@@ -87,10 +87,10 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	 *        configuration settings from the config
 	 */
 	public PointMutation(boolean autoConfig) {
-		setup();
-		
 		// Default config values
 		pointProbability = 0.01;
+		
+		setup();
 
 		if (autoConfig) {
 			EventManager.getInstance().add(ConfigEvent.class, this);
@@ -168,6 +168,9 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	/**
 	 * Returns a <tt>PointMutationEndEvent</tt> with the operator and 
 	 * parent set
+	 * 
+	 * @param parent the individual that was operated on
+	 * @return operator end event
 	 */
 	@Override
 	protected PointMutationEndEvent getEndEvent(Individual ... parent) {
@@ -190,7 +193,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	/**
 	 * Returns the currently set probability of each codon undergoing mutation.
 	 * 
-	 * @return a value between <code>0.0</code> and <code>1.0</code> inclusive
+	 * @return a value between <tt>0.0</tt> and <tt>1.0</tt> inclusive
 	 *         which is the probability that a codon will undergo mutation.
 	 */
 	public double getPointProbability() {
@@ -201,8 +204,8 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	 * Sets the probability that each codon considered undergoes mutation.
 	 * 
 	 * @param pointProbability the probability each codon has of undergoing a mutation. 
-	 * 		  1.0 would result in all codons being changed, and 0.0 would mean no codons 
-	 * 		  were changed.
+	 * 		  <tt>1.0</tt> would result in all codons being changed, and <tt>0.0</tt> 
+	 * 	      would mean no codons were changed.
 	 */
 	public void setPointProbability(double pointProbability) {
 		this.pointProbability = pointProbability;

@@ -43,7 +43,7 @@ import org.epochx.ge.GEIndividual;
  * This class implements a one-point crossover on two <tt>GEIndividual</tt>s.
  * 
  * <p>
- * The operation is performed on the individual's chromosomes. A random codon
+ * The operation is performed on the individuals' chromosomes. A random codon
  * position is chosen in both parents' chromosomes and all the codons from that point
  * onwards are exchanged.
  * 
@@ -169,6 +169,9 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
 	/**
 	 * Returns a <tt>OnePointCrossoverEndEvent</tt> with the operator and 
 	 * parents set
+	 * 
+	 * @param parents the parents that were operated on
+	 * @return operator end event
 	 */
 	@Override
 	protected OnePointCrossoverEndEvent getEndEvent(Individual ... parents) {

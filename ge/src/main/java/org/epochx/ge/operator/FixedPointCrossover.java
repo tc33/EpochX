@@ -128,8 +128,8 @@ public class FixedPointCrossover extends AbstractOperator implements Listener<Co
 	 * 
 	 * <p>
 	 * The operation is performed on the individuals' chromosomes in a similar
-	 * manner to OnePointCrossover. One random codon position is chosen which is
-	 * within the length bounds of both parent programs. Then all codons from
+	 * manner to <tt>OnePointCrossover</tt>. One random codon position is chosen which 
+	 * is within the length bounds of both parent programs. Then all codons from
 	 * that point onwards in both programs are exchanged.
 	 * 
 	 * @param event the <tt>EndOperator</tt> event to be filled with information
@@ -178,6 +178,9 @@ public class FixedPointCrossover extends AbstractOperator implements Listener<Co
 	
 	/**
 	 * Returns a <tt>FixedPointCrossoverEndEvent</tt> with the operator and parents set
+	 * 
+	 * @param parents the parents that were operated on
+	 * @return operator end event
 	 */
 	@Override
 	protected FixedPointCrossoverEndEvent getEndEvent(Individual ... parents) {

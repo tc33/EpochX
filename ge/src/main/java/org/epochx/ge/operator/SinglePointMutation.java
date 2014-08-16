@@ -147,6 +147,9 @@ public class SinglePointMutation extends AbstractOperator implements Listener<Co
 	/**
 	 * Returns a <tt>SinglePointMutationEndEvent</tt> with the operator and 
 	 * parent set
+	 * 
+	 * @param parents the parents that were operated on
+	 * @return operator end event
 	 */
 	@Override
 	protected SinglePointMutationEndEvent getEndEvent(Individual ... parent) {

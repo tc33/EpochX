@@ -22,24 +22,14 @@
 package org.epochx.ge.map;
 
 import org.epochx.*;
-import org.epochx.ge.GEIndividual;
-import org.epochx.grammar.*;
 
 /**
  * A mapper's job is to convert a <tt>GEIndividual</tt> into a parse tree.
  * Typically a mapping process uses the chromosome of the GEIndividual to guide
  * production choices in a grammar.
  */
-public interface Mapper extends Component {
+public interface Mapper {
 
-	/**
-	 * Map the given <tt>GEIndividual</tt> to a parse tree
-	 * 
-	 * @param individual the individual to be converted to a parse tree
-	 * @return a <tt>Symbol</tt> which is the root node of a valid parse tree,
-	 *         or <tt>null</tt> if no valid parse tree could be created from the
-	 *         individual
-	 */
-	public NonTerminalSymbol map(GEIndividual individual);
+	public void map(Population population);
 
 }

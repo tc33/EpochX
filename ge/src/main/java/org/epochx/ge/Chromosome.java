@@ -142,6 +142,8 @@ public class Chromosome implements Iterable<Codon>, Cloneable, Listener<ConfigEv
 			while (codons.size() <= index && codons.size() < maxLength) {
 				extend();
 			}
+		} else if (codons.size() == 0) {
+			throw new IndexOutOfBoundsException("Index " + index + " outside bounds of chromosome of length " + codons.size());
 		}
 		
 		int wraps = (int) Math.floor(index / codons.size());

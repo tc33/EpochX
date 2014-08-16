@@ -46,9 +46,9 @@ import org.epochx.ge.*;
 public class FixedLengthInitialisation implements GEInitialisation, Listener<ConfigEvent> {
 
 	// Configuration settings
-	private int populationSize;
-	private int chromosomeLength;
-	private boolean allowDuplicates;
+	private Integer populationSize;
+	private Integer chromosomeLength;
+	private Boolean allowDuplicates;
 
 	/**
 	 * Constructs a <tt>FixedLengthInitialisation</tt> with control parameters

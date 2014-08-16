@@ -90,6 +90,7 @@ public class HitsCount extends GEFitnessFunction implements Listener<ConfigEvent
 	public HitsCount(boolean autoConfig) {
 		setup();
 		
+		// Default config values
 		malformedPenalty = Double.MAX_VALUE;
 
 		if (autoConfig) {

@@ -77,12 +77,12 @@ public class RampedHalfAndHalfInitialisation implements GEInitialisation, Listen
 	// Configuration settings
 	private Grammar grammar;
 	private RandomSequence random;
-	private long minCodonValue;
-	private long maxCodonValue;
-	private int populationSize;
-	private int endDepth;
-	private int startDepth;
-	private boolean allowDuplicates;
+	private Long minCodonValue;
+	private Long maxCodonValue;
+	private Integer populationSize;
+	private Integer endDepth;
+	private Integer startDepth;
+	private Boolean allowDuplicates;
 	
 	// The two halves
 	private final GrowInitialisation grow;

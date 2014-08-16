@@ -60,7 +60,7 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
 	
 	// Configuration settings
 	private RandomSequence random;
-	private double probability;
+	private Double probability;
 
 	/**
 	 * Constructs a <tt>OnePointCrossover</tt> with control parameters

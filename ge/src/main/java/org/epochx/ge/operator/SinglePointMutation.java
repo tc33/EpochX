@@ -60,7 +60,7 @@ public class SinglePointMutation extends AbstractOperator implements Listener<Co
 	// Configuration settings
 	private RandomSequence random;
 	private CodonFactory codonFactory;
-	private double probability;
+	private Double probability;
 
 	/**
 	 * Constructs a <tt>SinglePointMutation</tt> with control parameters

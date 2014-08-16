@@ -54,7 +54,7 @@ public class EpoxInterpreter<T extends Individual> implements Interpreter<T> {
 	 * <code>EpoxParser</code>.
 	 */
 	public EpoxInterpreter(SourceGenerator<T> generator) {
-		parser = new EpoxParser();
+		this(generator, new EpoxParser());
 	}
 
 	/**
@@ -64,6 +64,7 @@ public class EpoxInterpreter<T extends Individual> implements Interpreter<T> {
 	 * @param parser the Epox language parser.
 	 */
 	public EpoxInterpreter(SourceGenerator<T> generator, EpoxParser parser) {
+		this.generator = generator;
 		this.parser = parser;
 	}
 
@@ -102,24 +103,29 @@ public class EpoxInterpreter<T extends Individual> implements Interpreter<T> {
 		String expression = generator.getSource(program);
 		
 		Object[] results = new Object[noParamSets];
-		for (int i=0; i<noParamSets; i++) {
-			// Remove any of the old variables.
-			for (int j=0; j<noParams; j++) {
-				parser.undeclare(declaredVariables[j]);
-			}
-			
+		
+		if (expression == null) {
+			throw new MalformedProgramException("Source generator returned a null program source");
+		}
+		
+		for (int i=0; i<noParamSets; i++) {			
 			Object[] paramSet = argValues[i];
 			
-			// Set the values of this round of variables.
+			// Declare and initialise the variables
 			for (int j=0; j<noParams; j++) {
 				declaredVariables[j] = new VariableNode(new Variable(argNames[j], paramSet[j]));
 				parser.declare(declaredVariables[j]);
 			}
 			
-			Node programTree = parser.parse(expression);
+			Node parseTree = parser.parse(expression);
 			
 			// Evaluate the program tree.
-			results[i] = programTree.evaluate();
+			results[i] = parseTree.evaluate();
+			
+			// Undeclare all the variables
+			for (int j=0; j<noParams; j++) {
+				parser.undeclare(declaredVariables[j]);
+			}
 		}
 		
 		return results;

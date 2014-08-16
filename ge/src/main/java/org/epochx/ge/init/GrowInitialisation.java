@@ -23,6 +23,7 @@ package org.epochx.ge.init;
 
 import static org.epochx.Config.Template.TEMPLATE;
 import static org.epochx.Population.SIZE;
+import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
 import static org.epochx.ge.Codon.*;
 import static org.epochx.ge.CodonFactory.CODON_FACTORY;
 import static org.epochx.ge.GEIndividual.MAXIMUM_DEPTH;
@@ -56,11 +57,11 @@ public class GrowInitialisation implements GEInitialisation, Listener<ConfigEven
 	// Configuration settings
 	private RandomSequence random;
 	private Grammar grammar;
-	private long maxCodonValue;
-	private long minCodonValue;
-	private int populationSize;
-	private int maxDepth;
-	private boolean allowDuplicates;
+	private Long maxCodonValue;
+	private Long minCodonValue;
+	private Integer populationSize;
+	private Integer maxDepth;
+	private Boolean allowDuplicates;
 	private CodonFactory codonFactory;
 
 	/**
@@ -97,6 +98,7 @@ public class GrowInitialisation implements GEInitialisation, Listener<ConfigEven
 	 * This method is called whenever a <tt>ConfigEvent</tt> occurs for a
 	 * change in any of the following configuration parameters:
 	 * <ul>
+	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
 	 * <li>{@link Population#SIZE}
 	 * <li>{@link InitialisationMethod#ALLOW_DUPLICATES} (default: <tt>true</tt>)
 	 * <li>{@link Grammar#GRAMMAR}
@@ -107,6 +109,7 @@ public class GrowInitialisation implements GEInitialisation, Listener<ConfigEven
 	 * </ul>
 	 */
 	protected void setup() {
+		random = Config.getInstance().get(RANDOM_SEQUENCE);
 		populationSize = Config.getInstance().get(SIZE);
 		allowDuplicates = Config.getInstance().get(ALLOW_DUPLICATES, true);
 		grammar = Config.getInstance().get(GRAMMAR);
@@ -124,7 +127,7 @@ public class GrowInitialisation implements GEInitialisation, Listener<ConfigEven
 	 */
 	@Override
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(TEMPLATE, SIZE, ALLOW_DUPLICATES, GRAMMAR, MAXIMUM_VALUE, MINIMUM_VALUE, MAXIMUM_DEPTH, CODON_FACTORY)) {
+		if (event.isKindOf(TEMPLATE, RANDOM_SEQUENCE, SIZE, ALLOW_DUPLICATES, GRAMMAR, MAXIMUM_VALUE, MINIMUM_VALUE, MAXIMUM_DEPTH, CODON_FACTORY)) {
 			setup();
 		}
 	}

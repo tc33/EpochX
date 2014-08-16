@@ -66,8 +66,8 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	// Configuration settings
 	private CodonFactory codonFactory;
 	private RandomSequence random;
-	private double probability;
-	private double pointProbability;
+	private Double probability;
+	private Double pointProbability;
 
 	/**
 	 * Constructs a <tt>PointMutation</tt> with control parameters

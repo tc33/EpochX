@@ -68,7 +68,7 @@ public class FixedPointCrossover extends AbstractOperator implements Listener<Co
 	
 	// Configuration settings
 	private RandomSequence random;
-	private double probability;
+	private Double probability;
 
 	/**
 	 * Constructs a <tt>FixedPointCrossover</tt> with control parameters

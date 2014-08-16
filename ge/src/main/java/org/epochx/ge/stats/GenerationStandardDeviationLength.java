@@ -56,17 +56,17 @@ public class GenerationStandardDeviationLength extends AbstractStat<EndGeneratio
 	 */
 	@Override
 	public void refresh(EndGeneration event) {
-		int[] depths = AbstractStat.get(GenerationLengths.class).getLengths();
+		int[] lengths = AbstractStat.get(GenerationLengths.class).getLengths();
 		double average = AbstractStat.get(GenerationAverageLength.class).getAverage();
 		
 		// Sum the squared differences
 		double sqDiff = 0.0;
-		for (int depth: depths) {
-			sqDiff += Math.pow(depth - average, 2);
+		for (int length: lengths) {
+			sqDiff += Math.pow(length - average, 2);
 		}
 
 		// Take the square root of the average
-		stdev = Math.sqrt(sqDiff / depths.length);
+		stdev = Math.sqrt(sqDiff / lengths.length);
 	}
 	
 	/**

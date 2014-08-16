@@ -21,6 +21,7 @@
  */
 package org.epochx.ge.map;
 
+import static org.epochx.Config.Template.TEMPLATE;
 import static org.epochx.ge.GEIndividual.MAXIMUM_DEPTH;
 import static org.epochx.grammar.Grammar.GRAMMAR;
 
@@ -34,10 +35,10 @@ import org.epochx.grammar.*;
  * 
  * @see BreadthFirstMapper
  */
-public class DepthFirstMapper implements Mapper, Listener<ConfigEvent> {
+public class DepthFirstMapper extends AbstractMapper implements Listener<ConfigEvent> {
 
 	private Grammar grammar;
-	private int maxDepth;
+	private Integer maxDepth;
 
 	public DepthFirstMapper() {
 		this(true);
@@ -73,21 +74,9 @@ public class DepthFirstMapper implements Mapper, Listener<ConfigEvent> {
 	 */
 	@Override
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(GRAMMAR, MAXIMUM_DEPTH)) {
+		if (event.isKindOf(TEMPLATE, GRAMMAR, MAXIMUM_DEPTH)) {
 			setup();
 		}
-	}
-	
-	@Override
-	public Population process(Population population) {
-		for (Individual individual: population) {
-			if (individual instanceof GEIndividual) {
-				GEIndividual geIndividual = (GEIndividual) individual;
-				geIndividual.setParseTree(map(geIndividual));
-			}
-		}
-		
-		return population;
 	}
 
 	/**
@@ -150,7 +139,7 @@ public class DepthFirstMapper implements Mapper, Listener<ConfigEvent> {
 				return -1;
 			}
 			
-			int productionChoice = (int) (codon.value() % noProductions);
+			int productionChoice = (int) Math.abs(codon.value() % noProductions);
 			production = grammarRule.getProduction(productionChoice);
 		}
 

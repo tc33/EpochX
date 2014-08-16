@@ -107,6 +107,7 @@ public class RampedHalfAndHalfInitialisation implements GEInitialisation, Listen
 	 */
 	public RampedHalfAndHalfInitialisation(boolean autoConfig) {
 		// Default config values
+		allowDuplicates = true;
 		maxCodonValue = Long.MAX_VALUE;
 		minCodonValue = 0L;
 		
@@ -128,14 +129,16 @@ public class RampedHalfAndHalfInitialisation implements GEInitialisation, Listen
 	 * <li>{@link Population#SIZE}
 	 * <li>{@link InitialisationMethod#ALLOW_DUPLICATES} (default: <tt>true</tt>)
 	 * <li>{@link Grammar#GRAMMAR}
+	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
 	 * <li>{@link Codon#MAXIMUM_VALUE} (default: <tt>Long.MAXIMUM_VALUE</tt>)
 	 * <li>{@link Codon#MINIMUM_VALUE} (default: <tt>0</tt>)
 	 * <li>{@link GEIndividual#MAXIMUM_DEPTH}
+	 * <li>{@link #RAMPING_START_DEPTH}
 	 * </ul>
 	 */
 	protected void setup() {
 		populationSize = Config.getInstance().get(SIZE);
-		allowDuplicates = Config.getInstance().get(ALLOW_DUPLICATES, true);
+		allowDuplicates = Config.getInstance().get(ALLOW_DUPLICATES, allowDuplicates);
 		grammar = Config.getInstance().get(GRAMMAR);
 		random = Config.getInstance().get(RANDOM_SEQUENCE);
 		maxCodonValue = Config.getInstance().get(MAXIMUM_VALUE, maxCodonValue);
@@ -159,10 +162,8 @@ public class RampedHalfAndHalfInitialisation implements GEInitialisation, Listen
 
 	/**
 	 * Will use grow initialisation on half the population and full on the other
-	 * half. If
-	 * the population size is an odd number then the extra individual will be
-	 * initialised with
-	 * grow.
+	 * half. If the population size is an odd number then the extra individual will be
+	 * initialised with grow.
 	 */
 	@Override
 	public Population createPopulation() {
@@ -176,8 +177,7 @@ public class RampedHalfAndHalfInitialisation implements GEInitialisation, Listen
 		int currentDepth = startDepth;
 		int minDepthPossible = grammar.getMinimumDepth();
 		if (currentDepth < minDepthPossible) {
-			// Our start depth can only be as small as the grammars minimum
-			// depth.
+			// Our start depth can only be as small as the grammars minimum depth
 			currentDepth = minDepthPossible;
 		}
 
@@ -185,11 +185,10 @@ public class RampedHalfAndHalfInitialisation implements GEInitialisation, Listen
 			throw new IllegalStateException("End maximum depth must be greater than the minimum possible depth.");
 		}
 
-		// Number of programs each depth SHOULD have. But won't unless remainder
-		// is 0.
+		// Number of programs each depth SHOULD have. But won't exactly unless the remainder is 0.
 		double programsPerDepth = (double) populationSize / (endDepth - startDepth + 1);
 
-		// Whether each program was grown or not (full).
+		// Whether each program was grown or not (full)
 		boolean[] grown = new boolean[populationSize];
 
 		for (int i = 0; i < populationSize; i++) {
@@ -217,10 +216,8 @@ public class RampedHalfAndHalfInitialisation implements GEInitialisation, Listen
 	}
 	
 	/**
-	 * Constructs a new <tt>STGPIndividual</tt> instance with a program tree
-	 * composed of nodes provided by the {@link STGPIndividual#SYNTAX} config
-	 * parameter. A grow or a full initialisation method is used, select at
-	 * random
+	 * Constructs a new <tt>GEIndividual</tt> instance using either a full or grow 
+	 * initialisation procedure, selected at random.
 	 * 
 	 * @return a new individual
 	 */
@@ -341,11 +338,8 @@ public class RampedHalfAndHalfInitialisation implements GEInitialisation, Listen
 	/**
 	 * Sets the depth that the maximum depth will be ramped up to when a
 	 * population is created with the <tt>createPopulation</tt> method. If
-	 * automatic configuration is enabled, then any
-	 * value set here will be overwritten by the
-	 * {@link STGPInitialisation#MAXIMUM_INITIAL_DEPTH} configuration setting on
-	 * the next config event, or the {@link STGPIndividual#MAXIMUM_DEPTH}
-	 * setting if no initial maximum depth is set.
+	 * automatic configuration is enabled, then any value set here will be 
+	 * overwritten by the {@link GEIndividual#MAXIMUM_DEPTH} setting.
 	 * 
 	 * @param endDepth the maximum setting to ramp the depth to
 	 */
@@ -382,7 +376,7 @@ public class RampedHalfAndHalfInitialisation implements GEInitialisation, Listen
 	 * 
 	 * @return the maximum value of codons selected by this initialiser
 	 */
-	public long getMaximimCodonValue() {
+	public long getMaximumCodonValue() {
 		return maxCodonValue;
 	}
 

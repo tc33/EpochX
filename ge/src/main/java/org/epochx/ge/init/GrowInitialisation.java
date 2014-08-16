@@ -83,6 +83,7 @@ public class GrowInitialisation implements GEInitialisation, Listener<ConfigEven
 	 */
 	public GrowInitialisation(boolean autoConfig) {
 		// Default config values
+		allowDuplicates = true;
 		maxCodonValue = Long.MAX_VALUE;
 		minCodonValue = 0L;
 		
@@ -111,7 +112,7 @@ public class GrowInitialisation implements GEInitialisation, Listener<ConfigEven
 	protected void setup() {
 		random = Config.getInstance().get(RANDOM_SEQUENCE);
 		populationSize = Config.getInstance().get(SIZE);
-		allowDuplicates = Config.getInstance().get(ALLOW_DUPLICATES, true);
+		allowDuplicates = Config.getInstance().get(ALLOW_DUPLICATES, allowDuplicates);
 		grammar = Config.getInstance().get(GRAMMAR);
 		maxCodonValue = Config.getInstance().get(MAXIMUM_VALUE, maxCodonValue);
 		minCodonValue = Config.getInstance().get(MINIMUM_VALUE, minCodonValue);
@@ -180,7 +181,7 @@ public class GrowInitialisation implements GEInitialisation, Listener<ConfigEven
 
 		GrammarRule start = grammar.getStartRule();
 
-		// Determine the minimum depth possible for a valid program.
+		// Determine the minimum depth possible for a valid program
 		int minDepth = start.getMinDepth();
 		if (minDepth > maxDepth) {
 			throw new IllegalStateException("no possible programs within given max depth parameter for this grammar.");
@@ -188,14 +189,14 @@ public class GrowInitialisation implements GEInitialisation, Listener<ConfigEven
 
 		Chromosome codons = new Chromosome();
 
-		// Fill in the list of codons with reference to the grammar.
+		// Fill in the list of codons with reference to the grammar
 		fillCodons(codons, start, 0, maxDepth);
 
 		return new GEIndividual(codons);
 	}
 
 	/*
-	 * Constructs a full parse tree by making appropriate production choices
+	 * Constructs a parse tree by making appropriate production choices
 	 * and then filling in a randomly selected codon that matches the production
 	 * choice.
 	 */
@@ -203,17 +204,17 @@ public class GrowInitialisation implements GEInitialisation, Listener<ConfigEven
 		if (rule instanceof GrammarRule) {
 			GrammarRule nt = (GrammarRule) rule;
 
-			// Check if theres more than one production.
+			// Check if theres more than one production
 			int productionIndex = 0;
 			int noProductions = nt.getNoProductions();
 			if (noProductions > 1) {
 				List<Integer> validProductions = validProductions(nt.getProductions(), maxDepth - depth - 1);
 
-				// Choose a production randomly.
+				// Choose a production randomly
 				int chosenProduction = random.nextInt(validProductions.size());
 				productionIndex = validProductions.get(chosenProduction);
 
-				// Scale the production index up to get our new codon.
+				// Scale the production index up to get our new codon
 				long codonValue = scaleUp(productionIndex, noProductions);
 
 				codons.appendCodon(codonFactory.codon(codonValue));
@@ -266,6 +267,27 @@ public class GrowInitialisation implements GEInitialisation, Listener<ConfigEven
 		}
 
 		return value;
+	}
+	
+	/**
+	 * Returns the random number sequence in use
+	 * 
+	 * @return the currently set random sequence
+	 */
+	public RandomSequence getRandomSequence() {
+		return random;
+	}
+
+	/**
+	 * Sets the random number sequence to use. If automatic configuration is
+	 * enabled then any value set here will be overwritten by the
+	 * {@link RandomSequence#RANDOM_SEQUENCE} configuration setting on the next
+	 * config event.
+	 * 
+	 * @param random the random number generator to set
+	 */
+	public void setRandomSequence(RandomSequence random) {
+		this.random = random;
 	}
 
 	/**

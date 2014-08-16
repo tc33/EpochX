@@ -141,7 +141,7 @@ public class FixedLengthInitialisation implements GEInitialisation, Listener<Con
 
 	/**
 	 * Constructs a new <tt>GEIndividual</tt> instance with a fixed length 
-	 * chromosome, as determined by the {@link GenericChromosome#MAXIMUM_LENGTH}
+	 * chromosome, as determined by the {@link Chromosome#MAXIMUM_LENGTH}
 	 * config parameter.
 	 * 
 	 * @return a new individual with a fixed length chromosome

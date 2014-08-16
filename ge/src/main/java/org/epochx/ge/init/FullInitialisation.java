@@ -28,6 +28,7 @@ import static org.epochx.ge.Codon.MAXIMUM_VALUE;
 import static org.epochx.ge.Codon.MINIMUM_VALUE;
 import static org.epochx.ge.GEIndividual.MAXIMUM_DEPTH;
 import static org.epochx.grammar.Grammar.GRAMMAR;
+import static org.epochx.ge.CodonFactory.CODON_FACTORY;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,6 +97,7 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 	 */
 	public FullInitialisation(boolean autoConfig) {
 		// Default config values
+		allowDuplicates = true;
 		maxCodonValue = Long.MAX_VALUE;
 		minCodonValue = 0L;
 		
@@ -124,7 +126,7 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 	protected void setup() {
 		random = Config.getInstance().get(RANDOM_SEQUENCE);
 		populationSize = Config.getInstance().get(SIZE);
-		allowDuplicates = Config.getInstance().get(ALLOW_DUPLICATES, true);
+		allowDuplicates = Config.getInstance().get(ALLOW_DUPLICATES, allowDuplicates);
 		grammar = Config.getInstance().get(GRAMMAR);
 		maxCodonValue = Config.getInstance().get(MAXIMUM_VALUE, maxCodonValue);
 		minCodonValue = Config.getInstance().get(MINIMUM_VALUE, minCodonValue);
@@ -140,7 +142,7 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 	 */
 	@Override
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(TEMPLATE, RANDOM_SEQUENCE, SIZE, ALLOW_DUPLICATES, GRAMMAR, MAXIMUM_VALUE, MINIMUM_VALUE, MAXIMUM_DEPTH)) {
+		if (event.isKindOf(TEMPLATE, RANDOM_SEQUENCE, SIZE, ALLOW_DUPLICATES, GRAMMAR, MAXIMUM_VALUE, MINIMUM_VALUE, MAXIMUM_DEPTH, CODON_FACTORY)) {
 			setup();
 		}
 	}
@@ -264,7 +266,7 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 	}
 
 	/*
-	 * Scales up a production choice up to a random number inside the codon size
+	 * Scales a production choice up to a random number inside the codon size
 	 * limits, while maintaining the modulo of the number
 	 */
 	private long scaleUp(int productionIndex, int noProductions) {
@@ -454,7 +456,7 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 	}
 
 	/**
-	 * Sets the <tt>CodonFactory</tt> this initialiser should use to generate
+	 * Sets the <tt>CodonFactory</tt> this initialiser will use to generate
 	 * new codon instances. If automatic configuration is enabled
 	 * then any value set here will be overwritten by the
 	 * {@link CodonFactory#CODON_FACTORY} configuration setting on the next config

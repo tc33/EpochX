@@ -32,6 +32,8 @@ import org.epochx.event.stat.AbstractStat;
  * 
  * @see GenerationMaximumTerminals
  * @see GenerationMinimumNonTerminals
+ * 
+ * @since 2.0
  */
 public class GenerationMinimumTerminals extends AbstractStat<EndGeneration> {
 

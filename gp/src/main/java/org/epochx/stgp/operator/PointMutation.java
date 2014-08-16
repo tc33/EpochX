@@ -52,6 +52,8 @@ import org.epochx.stgp.STGPIndividual;
  * parameters used to control this operator.
  * 
  * @see SubtreeMutation
+ * 
+ * @since 2.0
  */
 public class PointMutation extends AbstractOperator implements Listener<ConfigEvent> {
 

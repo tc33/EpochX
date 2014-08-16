@@ -36,6 +36,8 @@ import org.epochx.stgp.STGPIndividual;
  * <tt>MAXIMUM_INITIAL_DEPTH</tt> configuration parameter defined in this 
  * interface to specify the maximum depth of the program trees they generate. 
  * The {@link STGPIndividual#MAXIMUM_DEPTH} parameter should also be enforced.
+ * 
+ * @since 2.0
  */
 public interface STGPInitialisation extends InitialisationMethod {
 

@@ -29,6 +29,8 @@ import org.epochx.event.OperatorEvent;
  * An event fired at the end of a subtree mutation
  * 
  * @see SubtreeMutation
+ * 
+ * @since 2.0
  */
 public class SubtreeMutationEndEvent extends OperatorEvent.EndOperator {
 
@@ -40,11 +42,7 @@ public class SubtreeMutationEndEvent extends OperatorEvent.EndOperator {
 	 * event
 	 * 
 	 * @param operator the operator that performed the mutation
-	 * @param parent the individual that the operator was performed on
-	 * @param child the result of performing the mutation
-	 * @param point the index of the mutation point in the parent program tree
-	 * @param subtree the replacement subtree. This should be equivalent to the
-	 * subtree found at the mutation point in the child
+	 * @param parents the individual that the operator was performed on
 	 */
 	public SubtreeMutationEndEvent(SubtreeMutation operator, Individual ... parents) {
 		super(operator, parents);

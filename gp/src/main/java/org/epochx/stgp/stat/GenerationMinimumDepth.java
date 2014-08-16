@@ -31,6 +31,8 @@ import org.epochx.event.stat.AbstractStat;
  * population must be instances of <tt>STGPIndividual</tt>.
  * 
  * @see GenerationMaximumDepth
+ * 
+ * @since 2.0
  */
 public class GenerationMinimumDepth extends AbstractStat<EndGeneration> {
 

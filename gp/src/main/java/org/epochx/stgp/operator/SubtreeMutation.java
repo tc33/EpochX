@@ -42,6 +42,8 @@ import org.epochx.stgp.init.GrowInitialisation;
  * parameters used to control this operator.
  * 
  * @see PointMutation
+ * 
+ * @since 2.0
  */
 public class SubtreeMutation extends AbstractOperator implements Listener<ConfigEvent> {
 

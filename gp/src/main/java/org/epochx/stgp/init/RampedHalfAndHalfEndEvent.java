@@ -29,6 +29,8 @@ import org.epochx.stgp.init.RampedHalfAndHalfInitialisation.Method;
  * An event fired at the end of a ramped half-and-half population initialisation
  * 
  * @see RampedHalfAndHalfInitialisation
+ * 
+ * @since 2.0
  */
 public class RampedHalfAndHalfEndEvent extends InitialisationEvent.EndInitialisation {
 

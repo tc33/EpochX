@@ -30,6 +30,8 @@ import org.epochx.event.OperatorEvent;
  * An event fired at the end of a point mutation
  * 
  * @see PointMutation
+ * 
+ * @since 2.0
  */
 public class PointMutationEndEvent extends OperatorEvent.EndOperator {
 

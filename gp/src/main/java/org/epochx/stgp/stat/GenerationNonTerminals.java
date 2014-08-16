@@ -34,6 +34,8 @@ import org.epochx.stgp.STGPIndividual;
  * A stat that returns the number of non-terminals in all program trees in the 
  * population from the previous generation. All individuals in the population 
  * must be instances of <tt>STGPIndividual</tt>.
+ * 
+ * @since 2.0
  */
 public class GenerationNonTerminals extends AbstractStat<EndGeneration> {
 

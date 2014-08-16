@@ -29,6 +29,8 @@ import org.epochx.event.OperatorEvent;
  * An event fired at the end of a subtree crossover
  * 
  * @see SubtreeCrossover
+ * 
+ * @since 2.0
  */
 public class SubtreeCrossoverEndEvent extends OperatorEvent.EndOperator {
 

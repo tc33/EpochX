@@ -32,6 +32,8 @@ import org.epochx.event.stat.AbstractStat;
  * 
  * @see GenerationAverageTerminalsError
  * @see GenerationStandardDeviationTerminals
+ * 
+ * @since 2.0
  */
 public class GenerationAverageTerminals extends AbstractStat<EndGeneration> {
 

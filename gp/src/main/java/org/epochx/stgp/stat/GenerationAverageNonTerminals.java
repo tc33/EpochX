@@ -32,6 +32,8 @@ import org.epochx.event.stat.AbstractStat;
  * 
  * @see GenerationAverageNonTerminalsError
  * @see GenerationStandardDeviationNonTerminals
+ * 
+ * @since 2.0
  */
 public class GenerationAverageNonTerminals extends AbstractStat<EndGeneration> {
 

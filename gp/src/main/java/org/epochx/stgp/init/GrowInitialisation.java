@@ -46,6 +46,8 @@ import org.epochx.stgp.STGPIndividual;
  * 
  * @see FullInitialisation
  * @see RampedHalfAndHalfInitialisation
+ * 
+ * @since 2.0
  */
 public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEvent> {
 
@@ -82,6 +84,9 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 	 * configuration settings from the config
 	 */
 	public GrowInitialisation(boolean autoConfig) {
+		// Default config values
+		allowDuplicates = true;
+		
 		setup();
 		updateSyntax();
 		
@@ -109,7 +114,7 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 		populationSize = Config.getInstance().get(SIZE);
 		syntax = Config.getInstance().get(SYNTAX);
 		returnType = Config.getInstance().get(RETURN_TYPE);
-		allowDuplicates = Config.getInstance().get(ALLOW_DUPLICATES, true);
+		allowDuplicates = Config.getInstance().get(ALLOW_DUPLICATES, allowDuplicates);
 		
 		Integer maxDepth = Config.getInstance().get(MAXIMUM_DEPTH);
 		Integer maxInitialDepth = Config.getInstance().get(MAXIMUM_INITIAL_DEPTH);
@@ -117,7 +122,7 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 		if (maxInitialDepth != null && (maxDepth == null || maxInitialDepth < maxDepth)) {
 			this.maxDepth = maxInitialDepth;
 		} else {
-			this.maxDepth = (maxDepth==null) ? -1 : maxDepth;
+			this.maxDepth = (maxDepth == null) ? -1 : maxDepth;
 		}
 	}
 
@@ -151,8 +156,7 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 	 */
 	@Override
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(Template.TEMPLATE, RANDOM_SEQUENCE, SIZE, SYNTAX, RETURN_TYPE, 
-				MAXIMUM_INITIAL_DEPTH, MAXIMUM_DEPTH, ALLOW_DUPLICATES)) {
+		if (event.isKindOf(Template.TEMPLATE, RANDOM_SEQUENCE, SIZE, SYNTAX, RETURN_TYPE, MAXIMUM_INITIAL_DEPTH, MAXIMUM_DEPTH, ALLOW_DUPLICATES)) {
 			setup();
 		}
 
@@ -195,8 +199,7 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 			population.add(individual);
 		}
 		
-		EventManager.getInstance().fire(new InitialisationEvent.EndInitialisation(
-				population));
+		EventManager.getInstance().fire(new InitialisationEvent.EndInitialisation(population));
 
 		return population;
 	}

@@ -58,6 +58,8 @@ import org.epochx.stgp.STGPIndividual;
  * 
  * @see FullInitialisation
  * @see GrowInitialisation
+ * 
+ * @since 2.0
  */
 public class RampedHalfAndHalfInitialisation implements STGPInitialisation, Listener<ConfigEvent> {
 
@@ -107,6 +109,9 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 	 *        configuration settings from the config
 	 */
 	public RampedHalfAndHalfInitialisation(boolean autoConfig) {
+		// Default config values
+		allowDuplicates = true;
+		
 		grow = new GrowInitialisation(false);
 		full = new FullInitialisation(false);
 
@@ -137,7 +142,7 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 		populationSize = Config.getInstance().get(SIZE);
 		syntax = Config.getInstance().get(SYNTAX);
 		returnType = Config.getInstance().get(RETURN_TYPE);
-		allowDuplicates = Config.getInstance().get(ALLOW_DUPLICATES, true);
+		allowDuplicates = Config.getInstance().get(ALLOW_DUPLICATES, allowDuplicates);
 
 		grow.setRandomSequence(random);
 		full.setRandomSequence(random);
@@ -234,7 +239,7 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 						program = full.createIndividual();
 					}
 					/*
-					 * The effect is that if its a duplicate then will use other
+					 * The effect is that if it's a duplicate then will use other
 					 * method next - this is deliberate because full may have
 					 * less possible programs for a given depth.
 					 */
@@ -261,7 +266,7 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 	 * next deepest level.
 	 * 
 	 * <p>
-	 * The sum of the resultant array's elements is guarenteed to equal the
+	 * The sum of the resultant array's elements is guaranteed to equal the
 	 * population size, unless duplicates are disabled and it is impossible to
 	 * create sufficient programs between the start and end depth settings. In
 	 * this case an <tt>IllegalStateException</tt> will be thrown.

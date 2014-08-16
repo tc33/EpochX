@@ -29,6 +29,8 @@ import org.epochx.event.OperatorEvent;
  * An event fired at the end of a one-point crossover
  * 
  * @see OnePointCrossover
+ * 
+ * @since 2.0
  */
 public class OnePointCrossoverEndEvent extends OperatorEvent.EndOperator {
 

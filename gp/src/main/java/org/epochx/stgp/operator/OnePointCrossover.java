@@ -58,6 +58,8 @@ import org.epochx.stgp.STGPIndividual;
  * 
  * @see KozaCrossover
  * @see SubtreeCrossover
+ * 
+ * @since 2.0
  */
 public class OnePointCrossover extends AbstractOperator implements Listener<ConfigEvent> {
 

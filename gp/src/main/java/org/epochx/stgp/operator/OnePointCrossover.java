@@ -277,7 +277,7 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
 	 * @param strict <tt>true</tt> if strict one-point crossover should be used
 	 *        and <tt>false</tt> otherwise
 	 */
-	public void setStrict(final boolean strict) {
+	public void setStrict(boolean strict) {
 		this.strict = strict;
 	}
 
@@ -298,7 +298,7 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
 	 * 
 	 * @param random the random number generator to set
 	 */
-	public void setRandomSequence(final RandomSequence random) {
+	public void setRandomSequence(RandomSequence random) {
 		this.random = random;
 	}
 }

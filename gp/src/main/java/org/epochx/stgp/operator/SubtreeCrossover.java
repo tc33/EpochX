@@ -83,6 +83,9 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 	 *        configuration settings from the config
 	 */
 	public SubtreeCrossover(boolean autoConfig) {
+		// Default config values
+		terminalProbability = -1.0;
+		
 		setup();
 
 		if (autoConfig) {
@@ -98,11 +101,12 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
 	 * <li>{@link #TERMINAL_PROBABILITY} (default: <tt>-1.0</tt>)
 	 * <li>{@link #PROBABILITY}
+	 * <li>{@link STGPIndividual#MAXIMUM_DEPTH}
 	 * </ul>
 	 */
 	protected void setup() {
 		random = Config.getInstance().get(RANDOM_SEQUENCE);
-		terminalProbability = Config.getInstance().get(TERMINAL_PROBABILITY, -1.0);
+		terminalProbability = Config.getInstance().get(TERMINAL_PROBABILITY, terminalProbability);
 		probability = Config.getInstance().get(PROBABILITY);
 		maxDepth = Config.getInstance().get(MAXIMUM_DEPTH);
 	}
@@ -324,7 +328,7 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 	 * 
 	 * @param random the random number generator to set
 	 */
-	public void setRandomSequence(final RandomSequence random) {
+	public void setRandomSequence(RandomSequence random) {
 		this.random = random;
 	}
 
@@ -352,5 +356,27 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 	 */
 	public void setTerminalProbability(double terminalProbability) {
 		this.terminalProbability = terminalProbability;
+	}
+	
+	/**
+	 * Returns the maximum depth for program trees that are returned from this
+	 * operator
+	 * 
+	 * @return the maximum depth for program trees
+	 */
+	public int getMaximumDepth() {
+		return maxDepth;
+	}
+
+	/**
+	 * Sets the maximum depth for program trees returned from this operator. If 
+	 * automatic configuration is enabled then any value set here will be overwritten 
+	 * by the {@link STGPIndividual#MAXIMUM_DEPTH} configuration setting on the next 
+	 * config event.
+	 * 
+	 * @param maxDepth the maximum depth for program trees
+	 */
+	public void setMaximumDepth(int maxDepth) {
+		this.maxDepth = maxDepth;
 	}
 }

@@ -262,4 +262,26 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 	public void setSyntax(Node[] syntax) {
 		grower.setSyntax(syntax);
 	}
+	
+	/**
+	 * Returns the maximum depth for program trees that are returned from this
+	 * operator
+	 * 
+	 * @return the maximum depth for program trees
+	 */
+	public int getMaximumDepth() {
+		return maxDepth;
+	}
+
+	/**
+	 * Sets the maximum depth for program trees returned from this operator. If 
+	 * automatic configuration is enabled then any value set here will be overwritten 
+	 * by the {@link STGPIndividual#MAXIMUM_DEPTH} configuration setting on the next 
+	 * config event.
+	 * 
+	 * @param maxDepth the maximum depth for program trees
+	 */
+	public void setMaximumDepth(int maxDepth) {
+		this.maxDepth = maxDepth;
+	}
 }

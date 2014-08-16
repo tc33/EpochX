@@ -90,6 +90,9 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	 *        configuration settings from the config
 	 */
 	public PointMutation(boolean autoConfig) {
+		// Default config values
+		pointProbability = 0.01;
+				
 		setup();
 		
 		if (autoConfig) {
@@ -111,7 +114,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	protected void setup() {
 		random = Config.getInstance().get(RANDOM_SEQUENCE);
 		syntax = Config.getInstance().get(SYNTAX);
-		pointProbability = Config.getInstance().get(POINT_PROBABILITY, 0.01);
+		pointProbability = Config.getInstance().get(POINT_PROBABILITY, pointProbability);
 		probability = Config.getInstance().get(PROBABILITY);
 	}
 	
@@ -286,7 +289,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	 * 
 	 * @param random the random number generator to set
 	 */
-	public void setRandomSequence(final RandomSequence random) {
+	public void setRandomSequence(RandomSequence random) {
 		this.random = random;
 	}
 
@@ -310,5 +313,26 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	 */
 	public void setSyntax(Node[] syntax) {
 		this.syntax = syntax;
+	}
+	
+	/**
+	 * Returns the probability that any given node will be replaced
+	 * 
+	 * @return the probability that a node will be replaced
+	 */
+	public double getPointProbability() {
+		return pointProbability;
+	}
+
+	/**
+	 * Sets the probability any given node will be replaced. If automatic 
+	 * configuration is enabled then any value set here will be overwritten by the
+	 * {@link PointMutation#POINT_PROBABILITY} configuration setting on the next
+	 * config event.
+	 * 
+	 * @param pointProbability the probability that a node will be replaced
+	 */
+	public void setPointProbability(double pointProbability) {
+		this.pointProbability = pointProbability;
 	}
 }

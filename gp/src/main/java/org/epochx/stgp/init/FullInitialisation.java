@@ -46,6 +46,8 @@ import org.epochx.tools.DataTypeUtils;
  * 
  * @see GrowInitialisation
  * @see RampedHalfAndHalfInitialisation
+ * 
+ * @since 2.0
  */
 public class FullInitialisation implements STGPInitialisation, Listener<ConfigEvent> {
 
@@ -82,11 +84,11 @@ public class FullInitialisation implements STGPInitialisation, Listener<ConfigEv
 	 *        configuration settings from the config
 	 */
 	public FullInitialisation(boolean autoConfig) {
-		setup();
-		updateSyntax();
-		
 		// Default config values
 		allowDuplicates = true;
+		
+		setup();
+		updateSyntax();
 
 		if (autoConfig) {
 			EventManager.getInstance().add(ConfigEvent.class, this);

@@ -95,9 +95,10 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
 	 *        configuration settings from the config
 	 */
 	public OnePointCrossover(boolean autoConfig) {
-		setup();
-		
+		// Default config values
 		strict = false;
+		
+		setup();
 
 		if (autoConfig) {
 			EventManager.getInstance().add(ConfigEvent.class, this);

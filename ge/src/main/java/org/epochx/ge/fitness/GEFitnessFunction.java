@@ -28,8 +28,6 @@ import org.epochx.interpret.Interpreter;
 
 /**
  * A fitness function for evaluating STGP individuals.
- * 
- * @since 2.0
  */
 public abstract class GEFitnessFunction extends AbstractFitnessFunction {
 

@@ -27,33 +27,35 @@ import org.epochx.Population;
 import org.epochx.ProxyComponent;
 
 /**
- * Implementations of <code>FitnessEvaluator</code> are components that are
- * responsible for assigning fitnesses to individuals in a population. Typically
- * this will be performed by evaluating the quality of each individual against
- * problem specific requirements.
+ * Instances of <tt>MappingComponent</tt> are components that are responsible for 
+ * assigning parse trees to individuals in a population. Typically this involves
+ * converting a <tt>GEIndividual</tt>'s chromosome into a parse tree with reference
+ * to grammar rules.
+ * 
+ * @since 2.0
  */
 public class MappingComponent extends ProxyComponent<Mapper> {
 
 	/**
-	 * The key for setting and retrieving the <code>FitnessFunction</code> used
-	 * by this component.
+	 * The key for setting and retrieving the <tt>Mapper</tt> used by this component
 	 */
 	public static final ConfigKey<Mapper> MAPPER = new ConfigKey<Mapper>();
 
 	/**
-	 * Constructs a <code>FitnessEvaluator</code>.
+	 * Constructs a <tt>MappingComponent</tt>.
 	 */
 	public MappingComponent() {
 		super(MAPPER);
 	}
 
 	/**
-	 * Delegates the evaluation of the population to the
-	 * <code>FitnessFunction</code> object.
+	 * Delegates the mapping of the population to the <tt>Mapper</tt> object
+	 * 
+	 * @param population the population of individuals to process
 	 */
 	public Population process(Population population) {
 		if (handler == null) {
-			throw new IllegalStateException("The fitness function has not been set.");
+			throw new IllegalStateException("The mapper has not been set.");
 		}
 
 		handler.map(population);

@@ -25,11 +25,18 @@ import org.epochx.*;
 
 /**
  * A mapper's job is to convert a <tt>GEIndividual</tt> into a parse tree.
- * Typically a mapping process uses the chromosome of the GEIndividual to guide
+ * Typically the mapping process uses the chromosome of the GEIndividual to guide
  * production choices in a grammar.
+ * 
+ * @since 2.0
  */
 public interface Mapper {
 
+	/**
+	 * Map all individuals in the population
+	 * 
+	 * @param population the population of individuals to process 
+	 */
 	public void map(Population population);
 
 }

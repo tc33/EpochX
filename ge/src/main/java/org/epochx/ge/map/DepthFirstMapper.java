@@ -28,22 +28,43 @@ import static org.epochx.grammar.Grammar.GRAMMAR;
 import org.epochx.*;
 import org.epochx.event.*;
 import org.epochx.ge.*;
+import org.epochx.ge.map.MappingEvent.EndMapping;
 import org.epochx.grammar.*;
 
 /**
+ * Mapper which converts the chromosome of a <tt>GEIndividual</tt> into a parse tree 
+ * which is assigned to the individual. The parse tree is created by traversing the 
+ * grammar in a depth-first order and using codons to choose between productions. The
+ * codons are used in sequence, with the value of the codon, modulo the number of 
+ * productions, determining the index of the production to use. 
  * 
+ * This mapping process is described in detail in Grammatical Evolution publications.
  * 
- * @see BreadthFirstMapper
+ * @since 2.0
  */
 public class DepthFirstMapper extends AbstractMapper implements Listener<ConfigEvent> {
 
+	// Configuration settings
 	private Grammar grammar;
 	private Integer maxDepth;
 
+	/**
+	 * Constructs a <tt>DepthFirstMapper</tt> with control parameters automatically 
+	 * loaded from the config
+	 */
 	public DepthFirstMapper() {
 		this(true);
 	}
 
+	/**
+	 * Constructs a <tt>DepthFirstMapper</tt> with control parameters
+	 * initially loaded from the config. If the <tt>autoConfig</tt> argument is
+	 * set to <tt>true</tt> then the configuration will be automatically updated
+	 * when the config is modified.
+	 * 
+	 * @param autoConfig whether this operator should automatically update its
+	 *        configuration settings from the config
+	 */
 	public DepthFirstMapper(boolean autoConfig) {
 		setup();
 
@@ -67,8 +88,9 @@ public class DepthFirstMapper extends AbstractMapper implements Listener<ConfigE
 	}
 	
 	/**
-	 * Receives configuration events and triggers this operator to reconfigure
-	 * if the <tt>ConfigEvent</tt> is for one of its required parameters
+	 * Receives configuration events and triggers this fitness function to 
+	 * configure its parameters if the <tt>ConfigEvent</tt> is for one of 
+	 * its required parameters.
 	 * 
 	 * @param event {@inheritDoc}
 	 */
@@ -80,22 +102,21 @@ public class DepthFirstMapper extends AbstractMapper implements Listener<ConfigE
 	}
 
 	/**
-	 * Perform the mapping operation. Mapping starts at the starting symbol of
-	 * the grammar and gradually constructs a program source by stepping down
+	 * Performs the mapping operation. Mapping starts at the starting symbol of
+	 * the grammar and gradually constructs a parse tree by stepping down
 	 * the grammar's tree and each time there are multiple productions to
-	 * choose from, the next codon from the <code>GEIndividual's</code>
+	 * choose from, the next codon from the <tt>GEIndividual</tt>'s
 	 * chromosome is used. The codon simply undergoes modulo by the number of
 	 * production choices, the result is the index of the production to be
 	 * used.
 	 * 
-	 * @param individual the GEIndividual to be mapped to its source.
-	 * @return a source string equivalent to the specified GEIndividual's
-	 *         chromosome after mapping using the model's grammar. Null is
-	 *         returned if
-	 *         a valid string could not be generated.
+	 * @param individual the <tt>GEIndividual</tt> to be mapped to its source
+	 * @return a parse tree equivalent to the specified <tt>GEIndividual</tt>'s
+	 *         chromosome after mapping using the model's grammar. <tt>Null</tt> 
+	 *         is returned if a valid parse tree could not be generated.
 	 */
 	@Override
-	public NonTerminalSymbol map(GEIndividual individual) {
+	public NonTerminalSymbol map(EndMapping event, GEIndividual individual) {
 		if (grammar == null) {
 			throw new IllegalStateException("grammar not set");
 		}
@@ -110,6 +131,8 @@ public class DepthFirstMapper extends AbstractMapper implements Listener<ConfigE
 		if (codonsUsed == -1) {
 			return null;
 		}
+		
+		event.setNoActiveCodons(codonsUsed);
 
 		return root;
 	}
@@ -162,18 +185,42 @@ public class DepthFirstMapper extends AbstractMapper implements Listener<ConfigE
 		return currentCodon;
 	}
 
+	/**
+	 * Returns the language grammar which defines the valid parse trees. 
+	 * 
+	 * @return the currently set random sequence
+	 */
 	public Grammar getGrammar() {
 		return grammar;
 	}
 
+	/**
+	 * Sets the language grammar which defines the valid parse trees. If automatic 
+	 * configuration is enabled then any value set here will be overwritten by the
+	 * {@link Grammar#GRAMMAR} configuration setting on the next config event.
+	 * 
+	 * @param grammar the language grammar to set
+	 */
 	public void setGrammar(Grammar grammar) {
 		this.grammar = grammar;
 	}
 
+	/**
+	 * Returns the maximum depth of the parse trees produced by this mapper
+	 * 
+	 * @return maximum depth of parse trees
+	 */
 	public int getMaximumDepth() {
 		return maxDepth;
 	}
 
+	/**
+	 * Sets the maximum depth of the parse trees this mapper produces. If automatic 
+	 * configuration is enabled then any value set here will be overwritten by the
+	 * {@link GEIndividual#MAXIMUM_DEPTH} configuration setting on the next config event.
+	 * 
+	 * @param maxDepth maximum depth to allow for parse trees
+	 */
 	public void setMaximumDepth(int maxDepth) {
 		this.maxDepth = maxDepth;
 	}

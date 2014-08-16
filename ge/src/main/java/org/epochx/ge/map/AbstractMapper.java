@@ -23,30 +23,80 @@ package org.epochx.ge.map;
 
 import org.epochx.Individual;
 import org.epochx.Population;
+import org.epochx.event.EventManager;
 import org.epochx.ge.GEIndividual;
+import org.epochx.ge.map.MappingEvent.EndMapping;
+import org.epochx.ge.map.MappingEvent.StartMapping;
 import org.epochx.grammar.NonTerminalSymbol;
 
 /**
+ * This class provides an abstract implementation of a <tt>Mapper</tt>. Sub-classes 
+ * must provide an implementation of the <tt>map(GEIndividual)</tt> method, which converts 
+ * one individual into a parse tree. This method will be called for each individual in
+ * the population being mapped, with the result set as the individual's parse tree.
  * 
+ * @since 2.0
  */
 public abstract class AbstractMapper implements Mapper {
 
+	/**
+	 * Maps all individuals in the population by calling <tt>map(GEIndividual)</tt>,
+	 * then assigns the resultant parse tree to the individual
+	 * 
+	 * @param population the population of individuals to process 
+	 */
 	@Override
 	public void map(Population population) {
-		for (Individual individual: population) {			
-			NonTerminalSymbol parseTree = map((GEIndividual) individual);
-			((GEIndividual) individual).setParseTree(parseTree);
+		for (Individual individual: population) {
+			// Fires the start event
+			StartMapping start = getStartEvent((GEIndividual) individual);
+			EventManager.getInstance().fire(start);
+
+			EndMapping end = getEndEvent((GEIndividual) individual);
+			
+			NonTerminalSymbol parseTree = map(end, (GEIndividual) individual);
+			
+			// Fires the end event only if the operator was successful
+			if (parseTree != null) {
+				((GEIndividual) individual).setParseTree(parseTree);
+				EventManager.getInstance().fire(end);
+			}
 		}
 	}
 
 	/**
-	 * Map the given <tt>GEIndividual</tt> to a parse tree
+	 * Maps the given <tt>GEIndividual</tt> to a parse tree
 	 * 
 	 * @param individual the individual to be converted to a parse tree
 	 * @return a <tt>Symbol</tt> which is the root node of a valid parse tree,
 	 *         or <tt>null</tt> if no valid parse tree could be created from the
 	 *         individual
 	 */
-	public abstract NonTerminalSymbol map(GEIndividual individual);
+	public abstract NonTerminalSymbol map(EndMapping event, GEIndividual individual);
 
+	/**
+	 * Returns the mapper's start event. The default implementation returns
+	 * a <tt>StartMapping</tt> instance.
+	 * 
+	 * @param individual the individual being mapped
+	 * 
+	 * @return the mapper's start event
+	 */
+	protected StartMapping getStartEvent(GEIndividual individual) {
+		return new StartMapping(this, individual);
+	}
+
+	/**
+	 * Returns the mapper's end event. The default implementation returns
+	 * an <code>EndMapping</code> instance. The end event is passed to the
+	 * {@link #map(Individual)} method to allow the mapper to add
+	 * additional information.
+	 * 
+	 * @param individual the individual that was mapped
+	 * 
+	 * @return the mapper's end event
+	 */
+	protected EndMapping getEndEvent(GEIndividual individual) {
+		return new EndMapping(this, individual);
+	}	
 }

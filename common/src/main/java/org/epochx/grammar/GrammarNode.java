@@ -22,8 +22,8 @@
 package org.epochx.grammar;
 
 /**
- * Instances of <tt>GrammarNode</tt> implementations are the elements that
- * represent the set of rules that make up a <tt>Grammar</tt>.
+ * Instances of <code>GrammarNode</code> implementations are the elements that
+ * represent the set of rules that make up a <code>Grammar</code>.
  * 
  * @see GrammarProduction
  */

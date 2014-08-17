@@ -34,8 +34,8 @@ public class TerminalSymbol implements Symbol {
 	private GrammarLiteral literal;
 
 	/**
-	 * Constructs a <tt>TerminalSymbol</tt> for the given
-	 * <tt>GrammarLiteral</tt>.
+	 * Constructs a <code>TerminalSymbol</code> for the given
+	 * <code>GrammarLiteral</code>.
 	 * 
 	 * @param literal the grammar node that this symbol is an instantiation of.
 	 */
@@ -44,10 +44,10 @@ public class TerminalSymbol implements Symbol {
 	}
 
 	/**
-	 * Returns a <tt>String</tt> representation of this terminal symbol,
+	 * Returns a <code>String</code> representation of this terminal symbol,
 	 * which is the value of the underlying grammar literal.
 	 * 
-	 * @return a <tt>String</tt> representation of this terminal symbol.
+	 * @return a <code>String</code> representation of this terminal symbol.
 	 */
 	@Override
 	public String toString() {
@@ -58,7 +58,7 @@ public class TerminalSymbol implements Symbol {
 	 * Creates and returns a copy of this terminal symbol. The underlying
 	 * grammar rule is only shallow copied to the clone.
 	 * 
-	 * @return a <tt>TerminalSymbol</tt> which is a copy of this instance.
+	 * @return a <code>TerminalSymbol</code> which is a copy of this instance.
 	 */
 	@Override
 	public TerminalSymbol clone() {
@@ -78,16 +78,16 @@ public class TerminalSymbol implements Symbol {
 	}
 
 	/**
-	 * Tests the given <tt>Object</tt> for equality with this terminal
+	 * Tests the given <code>Object</code> for equality with this terminal
 	 * symbol. The objects are considered to be equal if the argument is an
-	 * instance of <tt>TerminalSymbol</tt> and the underlying grammar
+	 * instance of <code>TerminalSymbol</code> and the underlying grammar
 	 * literals have matching literal values according to the
-	 * <tt>String</tt> <tt>equals</tt> method.
+	 * <code>String</code> <code>equals</code> method.
 	 * 
-	 * @param obj the <tt>Object</tt> to test for equality.
-	 * @return <tt>true</tt> if the given <tt>Object</tt> is
+	 * @param obj the <code>Object</code> to test for equality.
+	 * @return <code>true</code> if the given <code>Object</code> is
 	 *         equal to this non-terminal according to the contract outlined
-	 *         above and <tt>false</tt> otherwise.
+	 *         above and <code>false</code> otherwise.
 	 */
 	@Override
 	public boolean equals(Object obj) {

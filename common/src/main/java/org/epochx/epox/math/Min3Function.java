@@ -30,7 +30,7 @@ import org.epochx.epox.Node;
 public class Min3Function extends MinFunction {
 
 	/**
-	 * Constructs a Min3Function with three <tt>null</tt> children.
+	 * Constructs a Min3Function with three <code>null</code> children.
 	 */
 	public Min3Function() {
 		this(null, null, null);

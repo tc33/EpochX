@@ -27,18 +27,18 @@ import org.apache.commons.lang.*;
 import org.epochx.tools.DataTypeUtils;
 
 /**
- * A <tt>Node</tt> is a vertex in a tree structure which represents a program.
+ * A <code>Node</code> is a vertex in a tree structure which represents a program.
  * A node can be thought of as an expression in a computer programming language.
  * Evaluating a node will involve evaluating any children and optionally
  * returning a value.
  * 
- * Subclasses of <tt>Node</tt> should ensure they call the superclass
+ * Subclasses of <code>Node</code> should ensure they call the superclass
  * constructor with all child nodes so information such as the arity of the
  * node can be maintained. Concrete subclasses must also implement
- * <tt>evaluate()</tt> to evaluate the expression represented by the tree.
+ * <code>evaluate()</code> to evaluate the expression represented by the tree.
  * Nodes which support mixed type arguments, or terminal nodes with no arguments
- * must also override the <tt>getReturnType(Class&lt;?&gt;)</tt> method to
- * indicate their return type. The <tt>clone</tt> and <tt>newInstance</tt>
+ * must also override the <code>getReturnType(Class&lt;?&gt;)</code> method to
+ * indicate their return type. The <code>clone</code> and <code>newInstance</code>
  * methods are also heavily used, so implementations should ensure they are
  * sufficient.
  */
@@ -51,9 +51,9 @@ public abstract class Node implements Cloneable {
 	private Node parent;
 
 	/**
-	 * Constructs a new <tt>Node</tt> with the given child nodes. The arity of 
+	 * Constructs a new <code>Node</code> with the given child nodes. The arity of 
 	 * the node will be the number of child nodes provided. The child nodes may 
-	 * be initially set here as <tt>null</tt> and replaced before evaluation. 
+	 * be initially set here as <code>null</code> and replaced before evaluation. 
 	 * Terminal nodes are simply nodes with no children.
 	 * 
 	 * @param children child nodes to this node
@@ -65,8 +65,8 @@ public abstract class Node implements Cloneable {
 	/**
 	 * Subclasses should implement this method to perform some operation with
 	 * respect to its children and return a result. If there is no result 
-	 * (for example, because this node has a <tt>Void</tt> data-type), then 
-	 * <tt>null</tt> should be returned.
+	 * (for example, because this node has a <code>Void</code> data-type), then 
+	 * <code>null</code> should be returned.
 	 * 
 	 * @return the result of evaluating the node tree rooted at this node
 	 */
@@ -76,7 +76,7 @@ public abstract class Node implements Cloneable {
 	 * Returns a specific child by index
 	 * 
 	 * @param index the index of the child to be returned, valid indexes run
-	 *        from <tt>0</tt> to <tt>getArity()-1</tt>
+	 *        from <code>0</code> to <code>getArity()-1</code>
 	 * @return the child node at the specified index
 	 */
 	public Node getChild(int index) {
@@ -84,7 +84,7 @@ public abstract class Node implements Cloneable {
 	}
 	
 	/**
-	 * Returns the parent of this node or <tt>null</tt> if it is the root node
+	 * Returns the parent of this node or <code>null</code> if it is the root node
 	 * 
 	 * @return the node that this node is a child of
 	 */
@@ -127,7 +127,7 @@ public abstract class Node implements Cloneable {
 	 * 
 	 * @param n the index of the node to be returned
 	 * @return the node at the specified position in this node tree
-	 * @throws IndexOutOfBoundsException if <tt>n</tt> is out of range
+	 * @throws IndexOutOfBoundsException if <code>n</code> is out of range
 	 */
 	public Node getNode(int n) {
 		if (n >= 0) {
@@ -177,7 +177,7 @@ public abstract class Node implements Cloneable {
 	 * 
 	 * @param n the index of the node to replace
 	 * @param newNode the node to be stored at the specified position
-	 * @throws IndexOutOfBoundsException if <tt>n</tt> is out of range
+	 * @throws IndexOutOfBoundsException if <code>n</code> is out of range
 	 */
 	public Node setNode(int n, Node newNode) {
 		if (n > 0) {
@@ -225,7 +225,7 @@ public abstract class Node implements Cloneable {
 	 * 
 	 * @param n the non-terminal to find the index of
 	 * @return the index of the nth non-terminal node
-	 * @throws IndexOutOfBoundsException if <tt>n</tt> is out of range
+	 * @throws IndexOutOfBoundsException if <code>n</code> is out of range
 	 */
 	public int nthNonTerminalIndex(int n) {
 		int index = nthNonTerminalIndex(n, 0, 0, this);
@@ -274,7 +274,7 @@ public abstract class Node implements Cloneable {
 	 * 
 	 * @param n the terminal to find the index of
 	 * @return the index of the nth terminal node
-	 * @throws IllegalArgumentException if <tt>n</tt> is out of bounds
+	 * @throws IllegalArgumentException if <code>n</code> is out of bounds
 	 */
 	public int nthTerminalIndex(int n) {
 		int index = nthTerminalIndex(n, 0, 0, this);
@@ -322,7 +322,7 @@ public abstract class Node implements Cloneable {
 	 * current node. This node is considered to be at depth zero.
 	 * 
 	 * @param depth the specified depth of the nodes to return
-	 * @return a <tt>List</tt> of all the nodes at the specified depth
+	 * @return a <code>List</code> of all the nodes at the specified depth
 	 */
 	public List<Node> nodesAtDepth(int depth) {
 		List<Node> nodes = new ArrayList<Node>((depth + 1) * 3);
@@ -357,8 +357,8 @@ public abstract class Node implements Cloneable {
 	/**
 	 * Replaces the child node at the specified index with the given node
 	 * 
-	 * @param index the index of the child to replace, from <tt>0</tt> to
-	 *        <tt>getArity()-1</tt>
+	 * @param index the index of the child to replace, from <code>0</code> to
+	 *        <code>getArity()-1</code>
 	 * @param child the child node to be stored at the specified position
 	 */
 	public void setChild(int index, Node child) {
@@ -370,7 +370,7 @@ public abstract class Node implements Cloneable {
 	}
 
 	/**
-	 * Returns the number of immediate children this <tt>Node</tt> has. This
+	 * Returns the number of immediate children this <code>Node</code> has. This
 	 * is effectively the number of inputs the node has. A node with arity
 	 * zero, is considered to be a terminal node.
 	 * 
@@ -415,7 +415,7 @@ public abstract class Node implements Cloneable {
 	/**
 	 * Returns a list of all the terminal nodes in this node tree
 	 * 
-	 * @return a <tt>List</tt> of all the terminal nodes in this node tree
+	 * @return a <code>List</code> of all the terminal nodes in this node tree
 	 */
 	public List<Node> listTerminals() {
 		List<Node> terminals = new ArrayList<Node>();
@@ -471,7 +471,7 @@ public abstract class Node implements Cloneable {
 	/**
 	 * Returns a list of all the non-terminal nodes in this node tree
 	 * 
-	 * @return a <tt>List</tt> of all the non-terminal nodes in this node tree
+	 * @return a <code>List</code> of all the non-terminal nodes in this node tree
 	 */
 	public List<Node> listNonTerminals() {
 		List<Node> nonTerminals = new ArrayList<Node>();
@@ -555,10 +555,10 @@ public abstract class Node implements Cloneable {
 	/**
 	 * Returns the data-type of this node based on the child nodes that are
 	 * currently set. If any of this node's child nodes are currently
-	 * <tt>null</tt>, or their data-types are invalid, then the return type will
-	 * also be <tt>null</tt>.
+	 * <code>null</code>, or their data-types are invalid, then the return type will
+	 * also be <code>null</code>.
 	 * 
-	 * @return the return type of this node or <tt>null</tt> if any of its
+	 * @return the return type of this node or <code>null</code> if any of its
 	 *         children remain unset or are of an invalid data-type
 	 */
 	public final Class<?> dataType() {
@@ -578,10 +578,10 @@ public abstract class Node implements Cloneable {
 	 * Returns this node's return type given the provided input data-types.
 	 * The default implementation for a non-terminal is that the node will
 	 * support the closure requirement - the return type will be the widest of
-	 * the input types, or <tt>null</tt> if they are not compatible. The default
-	 * return value for a terminal is <tt>Void</tt>. Mixed type non-terminal
+	 * the input types, or <code>null</code> if they are not compatible. The default
+	 * return value for a terminal is <code>Void</code>. Mixed type non-terminal
 	 * nodes and most terminal nodes should override this method. If the input
-	 * types are invalid then <tt>null</tt> should be returned.
+	 * types are invalid then <code>null</code> should be returned.
 	 * 
 	 * @param inputTypes the set of input data-types for which to get the return
 	 *        type.
@@ -598,10 +598,10 @@ public abstract class Node implements Cloneable {
 	}
 
 	/**
-	 * Returns <tt>true</tt> if this node has an arity of greater than
-	 * <tt>0</tt>.
+	 * Returns <code>true</code> if this node has an arity of greater than
+	 * <code>0</code>.
 	 * 
-	 * @return <tt>true</tt> if this node is a non-terminal, and <tt>false</tt>
+	 * @return <code>true</code> if this node is a non-terminal, and <code>false</code>
 	 *         otherwise.
 	 */
 	public boolean isNonTerminal() {
@@ -609,9 +609,9 @@ public abstract class Node implements Cloneable {
 	}
 
 	/**
-	 * Returns <tt>true</tt> if this node has an arity of <tt>0</tt>
+	 * Returns <code>true</code> if this node has an arity of <code>0</code>
 	 * 
-	 * @return <tt>true</tt> if this node is a terminal, and <tt>false</tt>
+	 * @return <code>true</code> if this node is a terminal, and <code>false</code>
 	 *         otherwise
 	 */
 	public boolean isTerminal() {
@@ -637,7 +637,7 @@ public abstract class Node implements Cloneable {
 	 * be cloned. Use this method for copying a whole node tree. Some
 	 * implementations of this class may need to override this method.
 	 * 
-	 * @return a copy of this <tt>Node</tt> and its children
+	 * @return a copy of this <code>Node</code> and its children
 	 */
 	@Override
 	public Node clone() {
@@ -671,7 +671,7 @@ public abstract class Node implements Cloneable {
 	 * there is no requirement for an implementation to return a different
 	 * instance.
 	 * 
-	 * @return a copy of this <tt>Node</tt> with all children removed
+	 * @return a copy of this <code>Node</code> with all children removed
 	 */
 	public Node newInstance() {
 		try {
@@ -727,9 +727,9 @@ public abstract class Node implements Cloneable {
 	 * identifier(children)
 	 * </pre>
 	 * 
-	 * where <tt>identifier</tt> is the node's identifier as returned by
-	 * <tt>getIdentifier</tt>, and <tt>children</tt> is a space separated list
-	 * of child nodes, according to their <tt>toString</tt> representation.
+	 * where <code>identifier</code> is the node's identifier as returned by
+	 * <code>getIdentifier</code>, and <code>children</code> is a space separated list
+	 * of child nodes, according to their <code>toString</code> representation.
 	 * 
 	 * @return a string representation of this node and its children
 	 */

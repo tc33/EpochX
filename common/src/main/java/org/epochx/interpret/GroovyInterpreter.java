@@ -32,8 +32,8 @@ import org.epochx.source.SourceGenerator;
  * features up to and including version 1.6 are supported.
  * 
  * <p>
- * <tt>GroovyInterpreter</tt> extends from the <tt>ScriptingInterpreter
- * </tt>, adding Groovy specific enhancements, including optimized
+ * <code>GroovyInterpreter</code> extends from the <code>ScriptingInterpreter
+ * </code>, adding Groovy specific enhancements, including optimized
  * performance.
  * 
  * @since 2.0
@@ -41,7 +41,7 @@ import org.epochx.source.SourceGenerator;
 public class GroovyInterpreter<T extends Individual> extends ScriptingInterpreter<T> {
 
 	/**
-	 * Constructs a <tt>GroovyInterpreter</tt> with a source generator
+	 * Constructs a <code>GroovyInterpreter</code> with a source generator
 	 * 
 	 * @param generator the SourceGenerator to use to convert individuals to Groovy 
 	 * source code
@@ -52,11 +52,11 @@ public class GroovyInterpreter<T extends Individual> extends ScriptingInterprete
 
 	/**
 	 * Evaluates any valid Groovy expression which may optionally contain the
-	 * use of any argument named in the <tt>argNames</tt> array which will
+	 * use of any argument named in the <code>argNames</code> array which will
 	 * be pre-declared and assigned to the associated value taken from the
-	 * <tt>argValues</tt> array. 
+	 * <code>argValues</code> array. 
 	 * 
-	 * The expression will be evaluated once for each set of <tt>argValues</tt>. 
+	 * The expression will be evaluated once for each set of <code>argValues</code>. 
 	 * The object array returned will contain the result of each of these 
 	 * evaluations in order.
 	 * 
@@ -96,10 +96,10 @@ public class GroovyInterpreter<T extends Individual> extends ScriptingInterprete
 
 	/**
 	 * Executes any valid Groovy program which may optionally contain the
-	 * use of any argument named in the <tt>argNames</tt> array which will
+	 * use of any argument named in the <code>argNames</code> array which will
 	 * be pre-declared and assigned to the associated value taken from the
-	 * <tt>argValues</tt> array. The program will be executed once for each 
-	 * set of <tt>argValues</tt>.
+	 * <code>argValues</code> array. The program will be executed once for each 
+	 * set of <code>argValues</code>.
 	 * 
 	 * @param program an individual representing a valid Groovy program.
 	 * @param argNames {@inheritDoc}

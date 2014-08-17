@@ -24,20 +24,20 @@ package org.epochx.tools;
 import org.apache.commons.lang.ArrayUtils;
 
 /**
- * This class provides static utility methods for working with <tt>Strings</tt>.
+ * This class provides static utility methods for working with <code>Strings</code>.
  */
 public final class StringUtils {
 
 	private StringUtils() {}
 
 	/**
-	 * Tests whether the given string contains any of the <tt>char</tt>s in the
+	 * Tests whether the given string contains any of the <code>char</code>s in the
 	 * provided array.
 	 * 
-	 * @param str an input string to test for specific <tt>char</tt>s
-	 * @param chrs an array of characters to look for in <tt>str</tt>
-	 * @return <tt>true</tt> if <tt>str</tt> contains one or more characters
-	 *         from the <tt>chrs</tt> array, and <tt>false</tt> if it contains
+	 * @param str an input string to test for specific <code>char</code>s
+	 * @param chrs an array of characters to look for in <code>str</code>
+	 * @return <code>true</code> if <code>str</code> contains one or more characters
+	 *         from the <code>chrs</code> array, and <code>false</code> if it contains
 	 *         none
 	 */
 	public static boolean containsAny(String str, char[] chrs) {

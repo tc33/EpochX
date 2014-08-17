@@ -24,19 +24,19 @@ package org.epochx.epox.lang;
 import org.epochx.epox.Node;
 
 /**
- * A node which chains two nodes together in sequence, called <tt>SEQ2</tt>
+ * A node which chains two nodes together in sequence, called <code>SEQ2</code>
  */
 public class Seq2Function extends SeqNFunction {
 
 	/**
-	 * Constructs a <tt>Seq2Function</tt> with two <tt>null</tt> children
+	 * Constructs a <code>Seq2Function</code> with two <code>null</code> children
 	 */
 	public Seq2Function() {
 		this(null, null);
 	}
 
 	/**
-	 * Constructs a <tt>Seq2Function</tt> with two child nodes
+	 * Constructs a <code>Seq2Function</code> with two child nodes
 	 * 
 	 * @param child1 the first child node
 	 * @param child2 the second child node
@@ -46,7 +46,7 @@ public class Seq2Function extends SeqNFunction {
 	}
 
 	/**
-	 * Returns the identifier of this function which is <tt>SEQ2</tt>
+	 * Returns the identifier of this function which is <code>SEQ2</code>
 	 */
 	@Override
 	public String getIdentifier() {

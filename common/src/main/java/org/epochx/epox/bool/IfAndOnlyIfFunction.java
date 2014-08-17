@@ -25,13 +25,13 @@ import org.epochx.epox.Node;
 import org.epochx.tools.DataTypeUtils;
 
 /**
- * A node which performs the bi-conditional logical connective of <tt>IFF</tt> 
+ * A node which performs the bi-conditional logical connective of <code>IFF</code> 
  * (if and only if)
  */
 public class IfAndOnlyIfFunction extends Node {
 
 	/**
-	 * Constructs an <tt>IfAndOnlyIfFunction</tt> with two <tt>null</tt> 
+	 * Constructs an <code>IfAndOnlyIfFunction</code> with two <code>null</code> 
 	 * children
 	 */
 	public IfAndOnlyIfFunction() {
@@ -39,7 +39,7 @@ public class IfAndOnlyIfFunction extends Node {
 	}
 
 	/**
-	 * Constructs an <tt>IfAndOnlyIfFunction</tt> with two boolean child nodes
+	 * Constructs an <code>IfAndOnlyIfFunction</code> with two boolean child nodes
 	 * 
 	 * @param child1 the first child node
 	 * @param child2 the second child node
@@ -50,11 +50,11 @@ public class IfAndOnlyIfFunction extends Node {
 
 	/**
 	 * Evaluates this function. Both child nodes are evaluated, the results of
-	 * which must be <tt>Boolean</tt> instances. The two boolean values
-	 * determine the result of this evaluation. If both inputs are <tt>true</tt>
-	 * or both are <tt>false</tt>, then the result will be <tt>true. All other 
+	 * which must be <code>Boolean</code> instances. The two boolean values
+	 * determine the result of this evaluation. If both inputs are <code>true</code>
+	 * or both are <code>false</code>, then the result will be <code>true. All other 
 	 * combinations of the inputs will result in the return of a value of 
-	 * <tt>false</tt>.
+	 * <code>false</code>.
 	 */
 	@Override
 	public Boolean evaluate() {
@@ -65,7 +65,7 @@ public class IfAndOnlyIfFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is <tt>IFF</tt>
+	 * Returns the identifier of this function which is <code>IFF</code>
 	 */
 	@Override
 	public String getIdentifier() {
@@ -75,11 +75,11 @@ public class IfAndOnlyIfFunction extends Node {
 	/**
 	 * Returns this function node's return type for the given child input types.
 	 * If there are two children, both of which have a return type of 
-	 * <tt>Boolean</tt>, then the return type of this function will also be 
-	 * <tt>Boolean</tt>. In all other cases this method will return 
-	 * <tt>null</tt> to indicate that the inputs are invalid.
+	 * <code>Boolean</code>, then the return type of this function will also be 
+	 * <code>Boolean</code>. In all other cases this method will return 
+	 * <code>null</code> to indicate that the inputs are invalid.
 	 * 
-	 * @return The <tt>Boolean</tt> class or <tt>null</tt> if the input type is 
+	 * @return The <code>Boolean</code> class or <code>null</code> if the input type is 
 	 * invalid
 	 */
 	@Override

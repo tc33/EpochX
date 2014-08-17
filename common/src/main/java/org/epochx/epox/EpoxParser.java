@@ -28,7 +28,7 @@ import org.epochx.interpret.MalformedProgramException;
 /**
  * This parser is for parsing valid Epox programs into a node tree. It is only
  * able to parse those node types which have been declared through the parser's
- * <tt>declare</tt> methods.
+ * <code>declare</code> methods.
  * 
  * @see Node
  */
@@ -44,17 +44,17 @@ public class EpoxParser {
 	}
 
 	/**
-	 * Parses an Epox program string as an executable <tt>Node</tt> tree.
-	 * The given <tt>source</tt> parameter must contain a valid Epox program
+	 * Parses an Epox program string as an executable <code>Node</code> tree.
+	 * The given <code>source</code> parameter must contain a valid Epox program
 	 * string, comprised only of nodes that have been declared. The data-types 
 	 * of each function's inputs must correspond to valid data-types, otherwise 
-	 * a <tt>MalformedProgramException</tt> will be thrown.
+	 * a <code>MalformedProgramException</code> will be thrown.
 	 * 
 	 * @param source the program string to be parsed as an Epox program.
-	 * @return a <tt>Node</tt> which is the root of a tree which is
-	 *         equivalent to the provided source string. A <tt>null</tt>
-	 *         value will be returned if the <tt>source</tt> parameter is
-	 *         <tt>null</tt>.
+	 * @return a <code>Node</code> which is the root of a tree which is
+	 *         equivalent to the provided source string. A <code>null</code>
+	 *         value will be returned if the <code>source</code> parameter is
+	 *         <code>null</code>.
 	 * @throws MalformedProgramException if the given string does not represent
 	 *         a valid Epox program.
 	 */

@@ -58,7 +58,7 @@ public class ScriptingInterpreter<T extends Individual> implements Interpreter<T
 	private SourceGenerator<T> generator;	
 
 	/**
-	 * Constructs a <tt>ScriptingInterpreter</tt> for a named scripting engine. A list
+	 * Constructs a <code>ScriptingInterpreter</code> for a named scripting engine. A list
 	 * of installed ScriptEngine names can be obtained with the following code:
 	 * 
 	 * <blockquote><code>
@@ -85,7 +85,7 @@ public class ScriptingInterpreter<T extends Individual> implements Interpreter<T
 	}
 
 	/**
-	 * Constructs a <tt>ScriptingInterpreter</tt> for the given <tt>ScriptEngine</tt>.
+	 * Constructs a <code>ScriptingInterpreter</code> for the given <code>ScriptEngine</code>.
 	 * 
 	 * @param generator the SourceGenerator to use to convert individuals to source code
 	 * @param engine the scripting engine to use

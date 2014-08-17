@@ -26,7 +26,7 @@ import java.util.*;
 import java.util.List;
 
 /**
- * An <tt>AntLandscape</tt> provides the environment an artificial ant
+ * An <code>AntLandscape</code> provides the environment an artificial ant
  * operates in. The landscape is essentially a torus with a given width/height,
  * over which the positions wrap back around. The landscape also incorporates a
  * set of food locations which define the location of food pellets within
@@ -79,7 +79,7 @@ public class AntLandscape {
 
 	/**
 	 * Removes a food location from the ant landscape. If there are multiple
-	 * food pellets at the same <tt>Point</tt> location then only one will
+	 * food pellets at the same <code>Point</code> location then only one will
 	 * be removed. If no food pellet exists at the given location then this
 	 * method will do nothing.
 	 * 

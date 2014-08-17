@@ -30,7 +30,7 @@ import org.epochx.epox.Node;
 public class Max2Function extends MaxFunction {
 
 	/**
-	 * Constructs a Max2Function with two <tt>null</tt> children.
+	 * Constructs a Max2Function with two <code>null</code> children.
 	 */
 	public Max2Function() {
 		this(null, null);

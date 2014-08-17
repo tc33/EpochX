@@ -31,7 +31,7 @@ import org.epochx.tools.*;
 public class ArcCosineFunction extends Node {
 
 	/**
-	 * Constructs an ArcCosineFunction with one <tt>null</tt> child.
+	 * Constructs an ArcCosineFunction with one <code>null</code> child.
 	 */
 	public ArcCosineFunction() {
 		this(null);
@@ -70,7 +70,7 @@ public class ArcCosineFunction extends Node {
 	/**
 	 * Returns this function node's return type for the given child input types.
 	 * If there is one input type of a numeric type then the return type will
-	 * be Double. In all other cases this method will return <tt>null</tt>
+	 * be Double. In all other cases this method will return <code>null</code>
 	 * to indicate that the inputs are invalid.
 	 * 
 	 * @return the Double class or null if the input type is invalid.

@@ -30,12 +30,12 @@ public final class BenchmarkSolutions {
 	
 	/**
 	 * Calculates and returns the correct result of the target function used in the 
-	 * cubic regression benchmark problem, for the given value of <tt>x</tt>.
+	 * cubic regression benchmark problem, for the given value of <code>x</code>.
 	 * 
 	 * The target function of the cubic regression function is: x + x^2 + x^3
 	 * 
 	 * @param x the input value
-	 * @return the result of applying the function to the given value of <tt>x</tt>
+	 * @return the result of applying the function to the given value of <code>x</code>
 	 */
 	public static Double cubicRegression(Double x) {
 		return x + x * x + x * x * x;
@@ -43,12 +43,12 @@ public final class BenchmarkSolutions {
 	
 	/**
 	 * Calculates and returns the correct result of the target function used in the 
-	 * quartic regression benchmark problem, for the given value of <tt>x</tt>.
+	 * quartic regression benchmark problem, for the given value of <code>x</code>.
 	 * 
 	 * The target function of the quartic regression function is: x + x^2 + x^3 + x^4
 	 * 
 	 * @param x the input value
-	 * @return the result of applying the function to the given value of <tt>x</tt>
+	 * @return the result of applying the function to the given value of <code>x</code>
 	 */
 	public static Double quarticRegression(Double x) {
 		return cubicRegression(x) + x * x * x * x;
@@ -56,12 +56,12 @@ public final class BenchmarkSolutions {
 	
 	/**
 	 * Calculates and returns the correct result of the target function used in the 
-	 * sextic regression benchmark problem, for the given value of <tt>x</tt>.
+	 * sextic regression benchmark problem, for the given value of <code>x</code>.
 	 * 
 	 * The target function of the sextic regression function is: x^6 - (2 * x^4) + x^2
 	 * 
 	 * @param x the input value
-	 * @return the result of applying the function to the given value of <tt>x</tt>
+	 * @return the result of applying the function to the given value of <code>x</code>
 	 */
 	public static Double sexticRegression(Double x) {
 		return Math.pow(x, 6) - (2 * Math.pow(x, 4)) + Math.pow(x, 2);
@@ -71,10 +71,10 @@ public final class BenchmarkSolutions {
 	 * Calculates and returns the correct result of the multiplexer benchmark problem
 	 * for the given input values.
 	 * 
-	 * The first <tt>n</tt> elements of the input array are the address bits and the 
-	 * remaining <tt>m</tt> bits are the data bits. The following must be true:
+	 * The first <code>n</code> elements of the input array are the address bits and the 
+	 * remaining <code>m</code> bits are the data bits. The following must be true:
 	 * 
-	 * <tt>m = 2^m</tt>
+	 * <code>m = 2^m</code>
 	 * 
 	 * If this will be called multiple times, it is more efficient to obtain the number
 	 * of address bits using {@link #multiplexerAddressBits(int)} and pass them to the 
@@ -93,10 +93,10 @@ public final class BenchmarkSolutions {
 	 * Calculates and returns the correct result of the multiplexer benchmark problem
 	 * for the given input values and the number of address bits.
 	 * 
-	 * The first <tt>n</tt> elements of the input array are the address bits and the 
-	 * remaining <tt>m</tt> bits are the data bits. The following must be true:
+	 * The first <code>n</code> elements of the input array are the address bits and the 
+	 * remaining <code>m</code> bits are the data bits. The following must be true:
 	 * 
-	 * <tt>m = 2^m</tt>
+	 * <code>m = 2^m</code>
 	 * 
 	 * @param inputs an array of boolean inputs
 	 * @param noAddressBits the number of address bits to expect in the inputs array

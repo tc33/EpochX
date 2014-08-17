@@ -31,7 +31,7 @@ import org.epochx.tools.*;
 public class SignumFunction extends Node {
 
 	/**
-	 * Constructs a SignumFunction with one <tt>null</tt> child.
+	 * Constructs a SignumFunction with one <code>null</code> child.
 	 */
 	public SignumFunction() {
 		this(null);
@@ -84,7 +84,7 @@ public class SignumFunction extends Node {
 	 * Returns this function node's return type for the given child input types.
 	 * If there is one input type of a numeric type then the return type will
 	 * be that same numeric type. In all other cases this method will return
-	 * <tt>null</tt> to indicate that the inputs are invalid.
+	 * <code>null</code> to indicate that the inputs are invalid.
 	 * 
 	 * @return A numeric class or null if the input type is invalid.
 	 */

@@ -30,14 +30,14 @@ import org.epochx.tools.DataTypeUtils;
 public class NotFunction extends Node {
 
 	/**
-	 * Constructs a <tt>NotFunction</tt> with one <tt>null</tt> child
+	 * Constructs a <code>NotFunction</code> with one <code>null</code> child
 	 */
 	public NotFunction() {
 		this(null);
 	}
 
 	/**
-	 * Constructs a <tt>NotFunction</tt> with one boolean child node
+	 * Constructs a <code>NotFunction</code> with one boolean child node
 	 * 
 	 * @param child the first child node
 	 */
@@ -47,7 +47,7 @@ public class NotFunction extends Node {
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the result of which
-	 * must be a <tt>Boolean</tt> instance. The result is negated and returned 
+	 * must be a <code>Boolean</code> instance. The result is negated and returned 
 	 * as the result.
 	 */
 	@Override
@@ -56,7 +56,7 @@ public class NotFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is <tt>NOT</tt>
+	 * Returns the identifier of this function which is <code>NOT</code>
 	 */
 	@Override
 	public String getIdentifier() {
@@ -65,12 +65,12 @@ public class NotFunction extends Node {
 
 	/**
 	 * Returns this function node's return type for the given child input types.
-	 * If there is one child with a return type of <tt>Boolean</tt>, then the 
-	 * return type of this function will also be <tt>Boolean</tt>. In all other 
-	 * cases this method will return <tt>null</tt> to indicate that the inputs 
+	 * If there is one child with a return type of <code>Boolean</code>, then the 
+	 * return type of this function will also be <code>Boolean</code>. In all other 
+	 * cases this method will return <code>null</code> to indicate that the inputs 
 	 * are invalid.
 	 * 
-	 * @return the <tt>Boolean</tt> class or <tt>null</tt> if the input type is 
+	 * @return the <code>Boolean</code> class or <code>null</code> if the input type is 
 	 * invalid
 	 */
 	@Override

@@ -37,7 +37,7 @@ import org.epochx.epox.bool.BooleanERC;
  * constructed in any of 3 ways:
  * <ul>
  * <li>constructor - the new instance will be initialised with a value of
- * <tt>null</tt>.</li>
+ * <code>null</code>.</li>
  * <li>clone method - will return an instance with a value equal to the cloned
  * value.</li>
  * <li>newInstance method - will return a new instance with a new, randomly
@@ -59,15 +59,15 @@ public class DoubleERC extends Literal {
 	private int precision;
 
 	/**
-	 * Constructs a new <tt>DoubleERC</tt> with a value of <tt>null</tt>
+	 * Constructs a new <code>DoubleERC</code> with a value of <code>null</code>
 	 * . The given random number generator will be be used to
-	 * generate a new value if the <tt>newInstance</tt> method is used.
+	 * generate a new value if the <code>newInstance</code> method is used.
 	 * 
 	 * @param random the random number generator to use if randomly generating a
 	 *        double value.
 	 * @param lower the inclusive lower bound of values that are generated.
 	 * @param upper the inclusive upper bound of values that are generated.
-	 * @param precision the non-negative <tt>int</tt> precision.
+	 * @param precision the non-negative <code>int</code> precision.
 	 */
 	public DoubleERC(RandomSequence random, double lower, double upper, int precision) {
 		super(null);
@@ -86,12 +86,12 @@ public class DoubleERC extends Literal {
 	}
 
 	/**
-	 * Constructs a new <tt>DoubleERC</tt> node with a randomly generated
+	 * Constructs a new <code>DoubleERC</code> node with a randomly generated
 	 * value, selected using the random number generator. The value will be
 	 * randomly selected with an equal probability from the set of values
 	 * between the lower and upper bounds and of the specified precision.
 	 * 
-	 * @return a new <tt>DoubleERC</tt> instance with a randomly generated
+	 * @return a new <code>DoubleERC</code> instance with a randomly generated
 	 *         value.
 	 */
 	@Override
@@ -105,7 +105,7 @@ public class DoubleERC extends Literal {
 
 	/**
 	 * Generates and returns a new double value for use in a new
-	 * <tt>DoubleERC</tt> instance. This implementation will return a value
+	 * <code>DoubleERC</code> instance. This implementation will return a value
 	 * selected randomly from the set of values between the lower and upper
 	 * bounds, inclusively. The value will be returned with the specified
 	 * precision.
@@ -132,7 +132,7 @@ public class DoubleERC extends Literal {
 
 	/**
 	 * Returns the random number generator that is currently being used to
-	 * generate double values for new <tt>DoubleERC</tt> instances.
+	 * generate double values for new <code>DoubleERC</code> instances.
 	 * 
 	 * @return the random number generator
 	 */
@@ -142,7 +142,7 @@ public class DoubleERC extends Literal {
 
 	/**
 	 * Sets the random number generator to be used for generating the double
-	 * value of new <tt>DoubleERC</tt> instances.
+	 * value of new <code>DoubleERC</code> instances.
 	 * 
 	 * @param random the random number generator to set
 	 */

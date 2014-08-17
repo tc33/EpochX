@@ -27,11 +27,11 @@ import org.epochx.Individual;
 import org.epochx.source.SourceGenerator;
 
 /**
- * A <tt>RubyInterpreter</tt> provides the facility to evaluate individual
+ * A <code>RubyInterpreter</code> provides the facility to evaluate individual
  * Ruby expressions and execute multi-line Ruby statements.
  * 
  * <p>
- * <tt>RubyInterpreter</tt> extends from the <tt>ScriptingInterpreter</tt>, adding ruby 
+ * <code>RubyInterpreter</code> extends from the <code>ScriptingInterpreter</code>, adding ruby 
  * specific enhancements, including optimized performance.
  * 
  * @since 2.0
@@ -39,7 +39,7 @@ import org.epochx.source.SourceGenerator;
 public class RubyInterpreter<T extends Individual> extends ScriptingInterpreter<T> {
 
 	/**
-	 * Constructs a <tt>RubyInterpreter</tt> with a source generator
+	 * Constructs a <code>RubyInterpreter</code> with a source generator
 	 * 
 	 * @param generator the SourceGenerator to use to convert individuals to Ruby 
 	 * source code
@@ -50,11 +50,11 @@ public class RubyInterpreter<T extends Individual> extends ScriptingInterpreter<
 
 	/**
 	 * Evaluates any valid Ruby expression which may optionally contain the
-	 * use of any argument named in the <tt>argNames</tt> array which will
+	 * use of any argument named in the <code>argNames</code> array which will
 	 * be pre-declared and assigned to the associated value taken from the
-	 * <tt>argValues</tt> array. 
+	 * <code>argValues</code> array. 
 	 * 
-	 * The expression will be evaluated once for each set of <tt>argValues</tt>. 
+	 * The expression will be evaluated once for each set of <code>argValues</code>. 
 	 * The object array returned will contain the result of each of these 
 	 * evaluations in order.
 	 * 
@@ -95,10 +95,10 @@ public class RubyInterpreter<T extends Individual> extends ScriptingInterpreter<
 
 	/**
 	 * Executes any valid Ruby program which may optionally contain the
-	 * use of any argument named in the <tt>argNames</tt> array which will
+	 * use of any argument named in the <code>argNames</code> array which will
 	 * be pre-declared and assigned to the associated value taken from the
-	 * <tt>argValues</tt> array. The program will be executed once for each 
-	 * set of <tt>argValues</tt>.
+	 * <code>argValues</code> array. The program will be executed once for each 
+	 * set of <code>argValues</code>.
 	 * 
 	 * @param program an individual representing a valid Ruby program.
 	 * @param argNames {@inheritDoc}

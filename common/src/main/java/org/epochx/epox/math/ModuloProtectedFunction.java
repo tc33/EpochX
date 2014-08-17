@@ -33,14 +33,14 @@ import org.epochx.tools.*;
 public class ModuloProtectedFunction extends Node {
 
 	/**
-	 * Constructs a ModuloProtectedFunction with two <tt>null</tt> children.
+	 * Constructs a ModuloProtectedFunction with two <code>null</code> children.
 	 */
 	public ModuloProtectedFunction() {
 		this(null, null);
 	}
 
 	/**
-	 * Constructs a ModuloProtectedFunction with two numeric <tt>null</tt>
+	 * Constructs a ModuloProtectedFunction with two numeric <code>null</code>
 	 * children.
 	 * 
 	 * @param child1 The first child node - the dividend.
@@ -102,7 +102,7 @@ public class ModuloProtectedFunction extends Node {
 	 * Returns this function node's return type for the given child input types.
 	 * If there are two input types of numeric type then the return type will
 	 * be the wider of those numeric types. In all other cases this method will
-	 * return <tt>null</tt> to indicate that the inputs are invalid.
+	 * return <code>null</code> to indicate that the inputs are invalid.
 	 * 
 	 * @return A numeric class or null if the input type is invalid.
 	 */

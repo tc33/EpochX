@@ -30,7 +30,7 @@ import org.epochx.epox.Node;
 public class Max3Function extends MaxFunction {
 
 	/**
-	 * Constructs a Max3Function with three <tt>null</tt> children.
+	 * Constructs a Max3Function with three <code>null</code> children.
 	 */
 	public Max3Function() {
 		this(null, null, null);

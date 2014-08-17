@@ -70,11 +70,11 @@ public class EpoxInterpreter<T extends Individual> implements Interpreter<T> {
 
 	/**
 	 * Evaluates any valid Epox expression which may optionally contain the
-	 * use of any argument named in the <tt>argNames</tt> array which will
+	 * use of any argument named in the <code>argNames</code> array which will
 	 * be pre-declared and assigned to the associated value taken from the
-	 * <tt>argValues</tt> array. 
+	 * <code>argValues</code> array. 
 	 * 
-	 * The expression will be evaluated once for each set of <tt>argValues</tt>. 
+	 * The expression will be evaluated once for each set of <code>argValues</code>. 
 	 * The object array returned will contain the result of each of these 
 	 * evaluations in order.
 	 * 

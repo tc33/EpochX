@@ -24,19 +24,19 @@ package org.epochx.epox.lang;
 import org.epochx.epox.Node;
 
 /**
- * A node which chains three nodes together in sequence, called <tt>SEQ3</tt>
+ * A node which chains three nodes together in sequence, called <code>SEQ3</code>
  */
 public class Seq3Function extends SeqNFunction {
 
 	/**
-	 * Constructs a Seq3Function with three <tt>null</tt> children.
+	 * Constructs a Seq3Function with three <code>null</code> children.
 	 */
 	public Seq3Function() {
 		this(null, null, null);
 	}
 
 	/**
-	 * Constructs a <tt>Seq3Function</tt> with three child nodes
+	 * Constructs a <code>Seq3Function</code> with three child nodes
 	 * 
 	 * @param child1 the first child node
 	 * @param child2 the second child node
@@ -47,7 +47,7 @@ public class Seq3Function extends SeqNFunction {
 	}
 
 	/**
-	 * Returns the identifier of this function which is <tt>SEQ3</tt>
+	 * Returns the identifier of this function which is <code>SEQ3</code>
 	 */
 	@Override
 	public String getIdentifier() {

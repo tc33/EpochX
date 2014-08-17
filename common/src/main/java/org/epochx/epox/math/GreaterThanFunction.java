@@ -31,7 +31,7 @@ import org.epochx.tools.*;
 public class GreaterThanFunction extends Node {
 
 	/**
-	 * Constructs a GreaterThanFunction with two <tt>null</tt> children.
+	 * Constructs a GreaterThanFunction with two <code>null</code> children.
 	 */
 	public GreaterThanFunction() {
 		this(null, null);
@@ -53,8 +53,8 @@ public class GreaterThanFunction extends Node {
 	 * Evaluates this function. The child nodes are evaluated, the
 	 * results of which must be numerically type (any of Double, Float, Long,
 	 * Integer). If the result of the first child is larger than the result of
-	 * the second child, then a boolean value of <tt>true</tt> will be
-	 * returned, otherwise a <tt>false</tt> value will be returned.
+	 * the second child, then a boolean value of <code>true</code> will be
+	 * returned, otherwise a <code>false</code> value will be returned.
 	 */
 	@Override
 	public Boolean evaluate() {
@@ -78,7 +78,7 @@ public class GreaterThanFunction extends Node {
 	/**
 	 * Returns this function node's return type for the given child input types.
 	 * If there is two numeric input types then the return type will be Boolean.
-	 * In all other cases this method will return <tt>null</tt> to indicate
+	 * In all other cases this method will return <code>null</code> to indicate
 	 * that the inputs are invalid.
 	 * 
 	 * @return the Boolean class or null if the input type is invalid.

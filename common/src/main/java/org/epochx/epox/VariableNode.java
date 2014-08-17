@@ -22,10 +22,10 @@
 package org.epochx.epox;
 
 /**
- * The <tt>VariableNode</tt> class provides a wrapper for <tt>Variable</tt>
- * objects. Each <tt>Node</tt> must only appear in one place in a tree, so to
+ * The <code>VariableNode</code> class provides a wrapper for <code>Variable</code>
+ * objects. Each <code>Node</code> must only appear in one place in a tree, so to
  * allow the same variable instance to be reused in multiple places, variables
- * are not themselves nodes. Instead, a <tt>VariableNode</tt> wrapper is used,
+ * are not themselves nodes. Instead, a <code>VariableNode</code> wrapper is used,
  * where multiple instances of this wrapper may wrap the same variable object.
  * 
  * @see Variable
@@ -35,9 +35,9 @@ public class VariableNode extends Node {
 	private Variable variable;
 
 	/**
-	 * Constructs a new <tt>VariableNode</tt> wrapper for the given variable
+	 * Constructs a new <code>VariableNode</code> wrapper for the given variable
 	 * 
-	 * @param variable the <tt>Variable</tt> object to wrap
+	 * @param variable the <code>Variable</code> object to wrap
 	 */
 	public VariableNode(Variable variable) {
 		if (variable == null) {
@@ -48,7 +48,7 @@ public class VariableNode extends Node {
 	}
 
 	/**
-	 * Returns the <tt>Variable</tt> object that this node is a wrapper for
+	 * Returns the <code>Variable</code> object that this node is a wrapper for
 	 * 
 	 * @return the variable
 	 */
@@ -101,12 +101,12 @@ public class VariableNode extends Node {
 	}
 
 	/**
-	 * Compares this <tt>VariableNode</tt> to the given object for equality. Two
-	 * <tt>VariableNode</tt> objects are only considered to be equal if they
+	 * Compares this <code>VariableNode</code> to the given object for equality. Two
+	 * <code>VariableNode</code> objects are only considered to be equal if they
 	 * refer to the same variable instance.
 	 * 
-	 * @return <tt>true</tt> if the given object refers to the same variable
-	 *         instance as this node and <tt>false</tt> otherwise
+	 * @return <code>true</code> if the given object refers to the same variable
+	 *         instance as this node and <code>false</code> otherwise
 	 */
 	@Override
 	public boolean equals(Object obj) {

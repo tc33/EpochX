@@ -36,7 +36,7 @@ public class InvertProtectedFunction extends Node {
 	private Double protectionValue;
 	
 	/**
-	 * Constructs an InvertFunction with one <tt>null</tt> child.
+	 * Constructs an InvertFunction with one <code>null</code> child.
 	 */
 	public InvertProtectedFunction() {
 		this(null);
@@ -52,7 +52,7 @@ public class InvertProtectedFunction extends Node {
 	}
 	
 	/**
-	 * Constructs an InvertFunction with one <tt>null</tt> child and the 
+	 * Constructs an InvertFunction with one <code>null</code> child and the 
 	 * given protection value which will be returned if the child evaluates to 
 	 * 0.0.
 	 * @param protectionValue the value to return for a child that evaluates to 
@@ -80,10 +80,10 @@ public class InvertProtectedFunction extends Node {
 	/**
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a numeric type (one of Double, Float, Long,
-	 * Integer). The value <tt>1</tt> is divided by this child value to be
+	 * Integer). The value <code>1</code> is divided by this child value to be
 	 * the result of this function. This function is protected, so if the child
-	 * evaluates to a value of <tt>0.0</tt> then there is no finite
-	 * reciprocal and so the value <tt>1.0</tt> will be returned.
+	 * evaluates to a value of <code>0.0</code> then there is no finite
+	 * reciprocal and so the value <code>1.0</code> will be returned.
 	 */
 	@Override
 	public Double evaluate() {
@@ -107,7 +107,7 @@ public class InvertProtectedFunction extends Node {
 	/**
 	 * Returns this function node's return type for the given child input types.
 	 * If there is one input type of a numeric type then the return type will
-	 * be Double. In all other cases this method will return <tt>null</tt>
+	 * be Double. In all other cases this method will return <code>null</code>
 	 * to indicate that the inputs are invalid.
 	 * 
 	 * @return the Double class or null if the input type is invalid.

@@ -44,11 +44,11 @@ public class GrammarRule implements GrammarNode, Cloneable {
 	private int minDepth;
 
 	/**
-	 * Constructs a <tt>GrammarRule</tt> with the specified name label and
+	 * Constructs a <code>GrammarRule</code> with the specified name label and
 	 * the production choices.
 	 * 
 	 * @param name the label that identifies this non-terminal rule.
-	 * @param productions a list of all the <tt>GrammarProductions</tt> that
+	 * @param productions a list of all the <code>GrammarProductions</code> that
 	 *        are possible mappings for this rule.
 	 */
 	public GrammarRule(String name, List<GrammarProduction> productions) {
@@ -57,9 +57,9 @@ public class GrammarRule implements GrammarNode, Cloneable {
 	}
 
 	/**
-	 * Constructs a <tt>GrammarRule</tt> with the specified name label and
-	 * an empty list of <tt>GrammarProductions</tt>. Productions can be
-	 * added after construction using the <tt>addProduction</tt> method.
+	 * Constructs a <code>GrammarRule</code> with the specified name label and
+	 * an empty list of <code>GrammarProductions</code>. Productions can be
+	 * added after construction using the <code>addProduction</code> method.
 	 * 
 	 * @param name the label that identifies this non-terminal rule.
 	 */
@@ -68,18 +68,18 @@ public class GrammarRule implements GrammarNode, Cloneable {
 	}
 
 	/**
-	 * Constructs a <tt>GrammarRule</tt> with no specified name and an empty
-	 * list of <tt>GrammarProductions</tt>.
+	 * Constructs a <code>GrammarRule</code> with no specified name and an empty
+	 * list of <code>GrammarProductions</code>.
 	 */
 	public GrammarRule() {
 		this(null);
 	}
 
 	/**
-	 * Append the given production to the list of <tt>GrammarProduction</tt>
+	 * Append the given production to the list of <code>GrammarProduction</code>
 	 * options.
 	 * 
-	 * @param production the <tt>GrammarProduction</tt> instance to be
+	 * @param production the <code>GrammarProduction</code> instance to be
 	 *        appended to this rule's list of productions.
 	 */
 	public void addProduction(GrammarProduction production) {
@@ -93,7 +93,7 @@ public class GrammarRule implements GrammarNode, Cloneable {
 	 * 
 	 * @param index the position at which the specified production is to be
 	 *        inserted.
-	 * @param production the <tt>GrammarProduction</tt> instance to be
+	 * @param production the <code>GrammarProduction</code> instance to be
 	 *        inserted.
 	 */
 	public void addProduction(int index, GrammarProduction production) {
@@ -101,12 +101,12 @@ public class GrammarRule implements GrammarNode, Cloneable {
 	}
 
 	/**
-	 * Replaces the <tt>GrammarProduction</tt> at the specified position in
+	 * Replaces the <code>GrammarProduction</code> at the specified position in
 	 * the list of this rule's productions.
 	 * 
-	 * @param index the position of the <tt>GrammarProduction</tt> to
+	 * @param index the position of the <code>GrammarProduction</code> to
 	 *        replace.
-	 * @param production the <tt>GrammarProduction</tt> instance to be
+	 * @param production the <code>GrammarProduction</code> instance to be
 	 *        stored at the specified position.
 	 */
 	public void setProduction(int index, GrammarProduction production) {
@@ -114,11 +114,11 @@ public class GrammarRule implements GrammarNode, Cloneable {
 	}
 
 	/**
-	 * Returns the <tt>GrammarProduction</tt> at the specified position in
+	 * Returns the <code>GrammarProduction</code> at the specified position in
 	 * this rule's list of productions.
 	 * 
-	 * @param index the index of the <tt>GrammarProduction</tt> to return.
-	 * @return the <tt>GrammarProduction</tt> that is at the specified
+	 * @param index the index of the <code>GrammarProduction</code> to return.
+	 * @return the <code>GrammarProduction</code> that is at the specified
 	 *         index in the list of productions.
 	 */
 	public GrammarProduction getProduction(int index) {
@@ -203,7 +203,7 @@ public class GrammarRule implements GrammarNode, Cloneable {
 	}
 
 	/**
-	 * Makes and returns a copy of this <tt>GrammarRule</tt> instance.
+	 * Makes and returns a copy of this <code>GrammarRule</code> instance.
 	 */
 	@Override
 	public GrammarRule clone() {

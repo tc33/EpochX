@@ -27,10 +27,10 @@ import org.epochx.source.SourceGenerator;
 import bsh.EvalError;
 
 /**
- * A <tt>JavaInterpreter</tt> provides the facility to evaluate individuals that represent
+ * A <code>JavaInterpreter</code> provides the facility to evaluate individuals that represent
  * Java expressions and execute multi-line Java statements. Java language features
  * up to and including version 1.5 are supported. Individuals are converted into source code
- * using a <tt>SourceGenerator</tt> whose responsibility it is that valid Java source is 
+ * using a <code>SourceGenerator</code> whose responsibility it is that valid Java source is 
  * produced from the individual.
  * 
  * @see SourceGenerator
@@ -45,7 +45,7 @@ public class JavaInterpreter<T extends Individual> implements Interpreter<T> {
 	private final bsh.Interpreter beanShell;
 	
 	/**
-	 * Constructs a <tt>JavaInterpreter</tt> with a source generator
+	 * Constructs a <code>JavaInterpreter</code> with a source generator
 	 * 
 	 * @param generator the SourceGenerator to use to convert individuals to Java source code
 	 */
@@ -57,10 +57,10 @@ public class JavaInterpreter<T extends Individual> implements Interpreter<T> {
 
 	/**
 	 * Evaluates any valid Java expression which may optionally contain the use
-	 * of any argument named in the <tt>argNames</tt> array which will be
-	 * provided with the associated value from the <tt>argValues</tt> array.
+	 * of any argument named in the <code>argNames</code> array which will be
+	 * provided with the associated value from the <code>argValues</code> array.
 	 * The result of evaluating the expression will be returned from this
-	 * method. The runtime <tt>Object</tt> return type will match the type
+	 * method. The runtime <code>Object</code> return type will match the type
 	 * returned by the expression.
 	 * 
 	 * @param individual an individual representing a valid Java expression that is 

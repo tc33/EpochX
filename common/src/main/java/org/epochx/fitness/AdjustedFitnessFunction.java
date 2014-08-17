@@ -36,7 +36,7 @@ import org.epochx.event.Listener;
 /**
  * A fitness function for that calculates and assigns adjusted fitness scores. The fitness scores 
  * are calculated by passing evaluation to a delegate fitness function, which must return an 
- * instance of <tt>DoubleFitness.Minimise</tt>. This value is then converted to standardised 
+ * instance of <code>DoubleFitness.Minimise</code>. This value is then converted to standardised 
  * fitness by removing any offset of the values (so the minimum possible score is 0.0) and then
  * converted to adjusted fitness using the following formula:
  * 
@@ -71,7 +71,7 @@ public class AdjustedFitnessFunction extends AbstractFitnessFunction implements 
 	private double minFitnessScore;
 	
 	/**
-	 * Constructs a <tt>AdjustedFitnessFunction</tt> fitness function with control parameters
+	 * Constructs a <code>AdjustedFitnessFunction</code> fitness function with control parameters
 	 * automatically loaded from the config.
 	 */
 	public AdjustedFitnessFunction(AbstractFitnessFunction delegate) {
@@ -79,8 +79,8 @@ public class AdjustedFitnessFunction extends AbstractFitnessFunction implements 
 	}
 	
 	/**
-	 * Constructs a <tt>AdjustedFitnessFunction</tt> fitness function with control parameters initially
-	 * loaded from the config. If the <tt>autoConfig</tt> argument is set to <tt>true</tt> 
+	 * Constructs a <code>AdjustedFitnessFunction</code> fitness function with control parameters initially
+	 * loaded from the config. If the <code>autoConfig</code> argument is set to <code>true</code> 
 	 * then the configuration will be automatically updated when the config is modified.
 	 * 
 	 * @param autoConfig whether this operator should automatically update its
@@ -98,7 +98,7 @@ public class AdjustedFitnessFunction extends AbstractFitnessFunction implements 
 	
 	/**
 	 * Sets up this operator with the appropriate configuration settings.
-	 * This method is called whenever a <tt>ConfigEvent</tt> occurs for a
+	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
 	 * change in any of the following configuration parameters:
 	 * <ul>
 	 * <li>{@link #MINIMUM_FITNESS_SCORE}
@@ -110,7 +110,7 @@ public class AdjustedFitnessFunction extends AbstractFitnessFunction implements 
 	
 	/**
 	 * Receives configuration events and triggers this fitness function to 
-	 * configure its parameters if the <tt>ConfigEvent</tt> is for one of 
+	 * configure its parameters if the <code>ConfigEvent</code> is for one of 
 	 * its required parameters.
 	 * 
 	 * @param event {@inheritDoc}
@@ -125,7 +125,7 @@ public class AdjustedFitnessFunction extends AbstractFitnessFunction implements 
 	/**
 	 * Calculates the adjusted fitness of the given individual. The adjusted fitness is a double
 	 * value between 0.0 and 1.0, where 1.0 is a correct solution. The evaluation of individuals is
-	 * delegated to the <tt>AbstractFitnessFunction</tt> supplied to the constructor as the 
+	 * delegated to the <code>AbstractFitnessFunction</code> supplied to the constructor as the 
 	 * delegate. The values returned by the delegate are converted to adjusted fitness before being
 	 * returned. The fitness returned will be an instance of DoubleFitness.Maximise.
 	 *  
@@ -152,7 +152,7 @@ public class AdjustedFitnessFunction extends AbstractFitnessFunction implements 
 	
 	/**
 	 * Converts the given standardised fitness score to an adjusted fitness score, between 0.0 and 1.0.
-	 * This is calculated as <tt>1.0 / (1.0 + standardised)</tt> as defined by Koza in Genetic Programming.
+	 * This is calculated as <code>1.0 / (1.0 + standardised)</code> as defined by Koza in Genetic Programming.
 	 * 
 	 * @param standardised the standardised fitness score - this must be 0.0 or greater
 	 * @return a double which is the adjusted fitness score between 0.0 and 1.0, where 1.0 is more fit 

@@ -25,20 +25,20 @@ import org.epochx.epox.Node;
 import org.epochx.tools.DataTypeUtils;
 
 /**
- * A node which performs the logical operation of <tt>NAND</tt>, which is 
- * equivalent to the negation of the conjunction, <tt>NOT AND</tt>
+ * A node which performs the logical operation of <code>NAND</code>, which is 
+ * equivalent to the negation of the conjunction, <code>NOT AND</code>
  */
 public class NandFunction extends Node {
 
 	/**
-	 * Constructs a <tt>NandFunction</tt> with two <tt>null</tt> children
+	 * Constructs a <code>NandFunction</code> with two <code>null</code> children
 	 */
 	public NandFunction() {
 		this(null, null);
 	}
 
 	/**
-	 * Constructs a <tt>NandFunction</tt> with two boolean child nodes
+	 * Constructs a <code>NandFunction</code> with two boolean child nodes
 	 * 
 	 * @param child1 the first child node
 	 * @param child2 the second child node
@@ -49,10 +49,10 @@ public class NandFunction extends Node {
 
 	/**
 	 * Evaluates this function lazily. The first child node is evaluated, the
-	 * result of which must be a <tt>Boolean</tt> instance. The second child
-	 * is only evaluated if the first had a <tt>true</tt> value. The result of 
-	 * this method will be <tt>true</tt> if both children evaluate to 
-	 * <tt>false</tt>, otherwise it will return <tt>false</tt>.
+	 * result of which must be a <code>Boolean</code> instance. The second child
+	 * is only evaluated if the first had a <code>true</code> value. The result of 
+	 * this method will be <code>true</code> if both children evaluate to 
+	 * <code>false</code>, otherwise it will return <code>false</code>.
 	 */
 	@Override
 	public Boolean evaluate() {
@@ -66,7 +66,7 @@ public class NandFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is <tt>NAND</tt>
+	 * Returns the identifier of this function which is <code>NAND</code>
 	 */
 	@Override
 	public String getIdentifier() {
@@ -76,9 +76,9 @@ public class NandFunction extends Node {
 	/**
 	 * Returns this function node's return type for the given child input types.
 	 * If there are two children, both of which have a return type of 
-	 * <tt>Boolean</tt>, then the return type of this function will also be 
-	 * <tt>Boolean</tt>. In all other cases this method will return 
-	 * <tt>null</tt> to indicate that the inputs are invalid.
+	 * <code>Boolean</code>, then the return type of this function will also be 
+	 * <code>Boolean</code>. In all other cases this method will return 
+	 * <code>null</code> to indicate that the inputs are invalid.
 	 * 
 	 * @return The Boolean class or null if the input type is invalid.
 	 */

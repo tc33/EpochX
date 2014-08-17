@@ -28,7 +28,7 @@ import org.epochx.Config.ConfigKey;
 
 /**
  * A grammar object is constructed from a context-free language grammar. In the 
- * grammar guided representations, a <tt>Grammar</tt> instance defines the
+ * grammar guided representations, a <code>Grammar</code> instance defines the
  * valid syntax of a program's source being evolved. As well as defining the
  * syntax of solutions, the grammar also essentially determines the function
  * and terminal sets which are explicitly defined in tree GP.
@@ -37,20 +37,20 @@ import org.epochx.Config.ConfigKey;
  * A file or string containing a grammar in Backus Naur Form (BNF) is parsed 
  * on construction and a form of derivation tree with all possible options is 
  * created. The root of this tree is determined as the first rule in the grammar
- * string and is retrievable with a call to the <tt>getStartSymbol()</tt> 
- * method. The <tt>GrammarNode</tt> this method returns may be either a
- * <tt>GrammarLiteral</tt> or a <tt>GrammarRule</tt>. Terminal symbols
- * are represented as <tt>GrammarLiterals</tt> and simply consist of a
+ * string and is retrievable with a call to the <code>getStartSymbol()</code> 
+ * method. The <code>GrammarNode</code> this method returns may be either a
+ * <code>GrammarLiteral</code> or a <code>GrammarRule</code>. Terminal symbols
+ * are represented as <code>GrammarLiterals</code> and simply consist of a
  * string value which matches the string from the BNF grammar. It is these
  * terminals that will form the source code of any program that uses it.
- * Non-literals are represented as <tt>GrammarRules</tt> and each has a set
- * of <tt>GrammarProductions</tt>. Each production describes a valid syntax
+ * Non-literals are represented as <code>GrammarRules</code> and each has a set
+ * of <code>GrammarProductions</code>. Each production describes a valid syntax
  * for that non-terminal rule.
  * 
  * <p>
  * Productions can also be provided with attributes. Attributes are simply
  * key/value pairs which are then stored in the resultant
- * <tt>GrammarProduction</tt> instance. They provide a basic mechanism to
+ * <code>GrammarProduction</code> instance. They provide a basic mechanism to
  * implement semantic constraints such as those used in attribute grammars or to
  * otherwise provide meta-data about a production, for example, weights. The 
  * format to provide attributes is to include within the production a special 
@@ -63,9 +63,9 @@ import org.epochx.Config.ConfigKey;
  * An example rule:
  * </p>
  * 
- * <blockquote><tt>
+ * <blockquote><code>
  * &lt;example-rule&gt; ::= abc <?key1=32;key2=true?> | cde | &lt;ruleA&gt; &lt;ruleB&gt;
- * </tt></blockquote>
+ * </code></blockquote>
  * 
  * <p>
  * Most of the features known as EBNF (extended BNF) are not currently
@@ -86,10 +86,10 @@ public class Grammar {
 	private GrammarRule start;
 
 	/**
-	 * Constructs a <tt>Grammar</tt> with the given string as the BNF
+	 * Constructs a <code>Grammar</code> with the given string as the BNF
 	 * grammar to be parsed.
 	 * 
-	 * @param grammarStr a <tt>String</tt> containing a BNF language
+	 * @param grammarStr a <code>String</code> containing a BNF language
 	 *        grammar.
 	 * @throws MalformedGrammarException if the given grammar string is not in a
 	 *         valid format.
@@ -102,10 +102,10 @@ public class Grammar {
 	}
 
 	/**
-	 * Constructs a <tt>Grammar</tt> with the given file as a reference to a
+	 * Constructs a <code>Grammar</code> with the given file as a reference to a
 	 * text file containing a BNF grammar, which will be read and parsed.
 	 * 
-	 * @param grammarFile a <tt>File</tt> pointing to a text file containing
+	 * @param grammarFile a <code>File</code> pointing to a text file containing
 	 *        a BNF language grammar.
 	 * @throws IOException if there was a problem reading the file.
 	 * @throws MalformedGrammarException if the given grammar string is not in a
@@ -122,7 +122,7 @@ public class Grammar {
 
 	/**
 	 * Returns the root of the grammar parse tree. This will always be a
-	 * <tt>GrammarRule</tt> for a valid BNF grammar.
+	 * <code>GrammarRule</code> for a valid BNF grammar.
 	 * 
 	 * @return the starting GrammarRule that is at the root of the grammar parse
 	 *         tree.
@@ -483,7 +483,7 @@ public class Grammar {
 	}
 
 	/**
-	 * Determines whether the given <tt>GrammarRule</tt> is infinitely
+	 * Determines whether the given <code>GrammarRule</code> is infinitely
 	 * recursive. A rule is infinitely recursive if all its productions
 	 * contain either a recursive reference to the rule, or a reference to
 	 * another rule where all its productions contain such a reference to the
@@ -654,7 +654,7 @@ public class Grammar {
 	 * label of the symbol.
 	 * 
 	 * @param name the label that refers to the grammar literal to return.
-	 * @return the grammar terminal with the given name label, or <tt>null</tt>
+	 * @return the grammar terminal with the given name label, or <code>null</code>
 	 *         if a terminal with that name does not exist in the grammar.
 	 */
 	public GrammarLiteral getGrammarLiteral(String name) {
@@ -675,8 +675,8 @@ public class Grammar {
 	 * label of the rule.
 	 * 
 	 * @param name the label that refers to the grammar rule to return.
-	 * @return the <tt>GrammarRule</tt> with the given name label, or
-	 *         <tt>null</tt> if rule with that name does not exist in the
+	 * @return the <code>GrammarRule</code> with the given name label, or
+	 *         <code>null</code> if rule with that name does not exist in the
 	 *         grammar.
 	 */
 	public GrammarRule getGrammarRule(String name) {

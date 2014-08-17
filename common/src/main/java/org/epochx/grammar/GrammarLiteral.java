@@ -27,7 +27,7 @@ import org.epochx.tools.StringUtils;
  * Grammar literals are a type of grammar node, that represent the terminals of
  * a grammar. They are those nodes which are never found on the left-hand side
  * of grammar rules and as such contain no productions. Instead,
- * <tt>GrammarLiterals</tt> each have a value which is the string they
+ * <code>GrammarLiterals</code> each have a value which is the string they
  * represent in the grammar string. The final source of a program that is valid
  * according to a grammar will be made up solely of these terminal values.
  */
@@ -64,7 +64,7 @@ public class GrammarLiteral implements GrammarNode {
 	}
 
 	/**
-	 * Returns a <tt>String</tt> representation of this grammar literal.
+	 * Returns a <code>String</code> representation of this grammar literal.
 	 * 
 	 * @return a string representation of this grammar literal.
 	 */

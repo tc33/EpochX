@@ -25,8 +25,8 @@ import org.epochx.epox.Node;
 import org.epochx.tools.*;
 
 /**
- * The CoefficientPowerFunction is equivalent to a <tt>PowerFunction</tt>
- * combined with a <tt>MultiplyFunction</tt>. It allows a succinct way of
+ * The CoefficientPowerFunction is equivalent to a <code>PowerFunction</code>
+ * combined with a <code>MultiplyFunction</code>. It allows a succinct way of
  * representing a variable with an exponent and a coefficient.
  * 
  * An example:
@@ -36,7 +36,7 @@ import org.epochx.tools.*;
 public class CoefficientPowerFunction extends Node {
 
 	/**
-	 * Constructs a CoefficientPowerFunction with three <tt>null</tt>
+	 * Constructs a CoefficientPowerFunction with three <code>null</code>
 	 * children.
 	 */
 	public CoefficientPowerFunction() {
@@ -94,7 +94,7 @@ public class CoefficientPowerFunction extends Node {
 	 * Returns this function node's return type for the given child input types.
 	 * If there are three input types that are all numeric then the return type
 	 * will be Double. In all other cases this method will return
-	 * <tt>null</tt> to indicate that the inputs are invalid.
+	 * <code>null</code> to indicate that the inputs are invalid.
 	 * 
 	 * @return the Double class or null if the input type is invalid.
 	 */

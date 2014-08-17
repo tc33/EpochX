@@ -44,7 +44,7 @@ public class CachedFitnessFunction extends AbstractFitnessFunction {
 	private AbstractFitnessFunction delegate;
 	
 	/**
-	 * Constructs a <tt>CachedFitnessFunction</tt> fitness function. Fitness calculations
+	 * Constructs a <code>CachedFitnessFunction</code> fitness function. Fitness calculations
 	 * are performed by the given delegate, unless the individual's fitness has been 
 	 * cached.
 	 * 

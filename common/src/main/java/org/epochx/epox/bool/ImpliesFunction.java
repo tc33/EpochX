@@ -30,14 +30,14 @@ import org.epochx.tools.DataTypeUtils;
 public class ImpliesFunction extends Node {
 
 	/**
-	 * Constructs an <tt>ImpliesFunction</tt> with two <tt>null</tt> children
+	 * Constructs an <code>ImpliesFunction</code> with two <code>null</code> children
 	 */
 	public ImpliesFunction() {
 		this(null, null);
 	}
 
 	/**
-	 * Constructs an <tt>ImpliesFunction</tt> with two boolean child nodes
+	 * Constructs an <code>ImpliesFunction</code> with two boolean child nodes
 	 * 
 	 * @param child1 the first child node
 	 * @param child2 the second child node
@@ -48,9 +48,9 @@ public class ImpliesFunction extends Node {
 
 	/**
 	 * Evaluates this function lazily. The first child node is evaluated, the
-	 * result of which must be a <tt>Boolean</tt> instance. If the result
-	 * is a <tt>false</tt> value then <tt>true</tt> is returned from this 
-	 * method. If the first child evaluates to <tt>true</tt>, then the second 
+	 * result of which must be a <code>Boolean</code> instance. If the result
+	 * is a <code>false</code> value then <code>true</code> is returned from this 
+	 * method. If the first child evaluates to <code>true</code>, then the second 
 	 * child is also evaluated which provides the result of this function.
 	 */
 	@Override
@@ -65,7 +65,7 @@ public class ImpliesFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is <tt>IMPLIES</tt>
+	 * Returns the identifier of this function which is <code>IMPLIES</code>
 	 */
 	@Override
 	public String getIdentifier() {
@@ -75,11 +75,11 @@ public class ImpliesFunction extends Node {
 	/**
 	 * Returns this function node's return type for the given child input types.
 	 * If there are two children, both of which have a return type of 
-	 * <tt>Boolean</tt>, then the return type of this function will also be 
-	 * <tt>Boolean</tt>. In all other cases this method will return 
-	 * <tt>null</tt> to indicate that the inputs are invalid.
+	 * <code>Boolean</code>, then the return type of this function will also be 
+	 * <code>Boolean</code>. In all other cases this method will return 
+	 * <code>null</code> to indicate that the inputs are invalid.
 	 * 
-	 * @return the <tt>Boolean</tt> class or <tt>null</tt> if the input type is 
+	 * @return the <code>Boolean</code> class or <code>null</code> if the input type is 
 	 * invalid
 	 */
 	@Override

@@ -28,15 +28,15 @@ import org.epochx.epox.math.*;
 /**
  * Defines a boolean ephemeral random constant (ERC). An ERC is a literal with
  * a value which is randomly generated on construction. This implementation
- * will generate a value of either <tt>true</tt> or <tt>false</tt> randomly with
+ * will generate a value of either <code>true</code> or <code>false</code> randomly with
  * equal probability. As with all nodes, instances may be
  * constructed in any of 3 ways:
  * <ul>
  * <li>constructor - the new instance will be initialised with a value of
- * <tt>null</tt>.</li>
- * <li><tt>clone</tt> method - will return an instance with a value equal to the
+ * <code>null</code>.</li>
+ * <li><code>clone</code> method - will return an instance with a value equal to the
  * cloned value.</li>
- * <li><tt>newInstance</tt> method - will return a new instance with a new,
+ * <li><code>newInstance</code> method - will return a new instance with a new,
  * randomly generated value.</li>
  * </ul>
  * 
@@ -48,12 +48,12 @@ public class BooleanERC extends Literal {
 	private RandomSequence random;
 
 	/**
-	 * Constructs a new <tt>BooleanERC</tt> with a value of <tt>null</tt>. The
+	 * Constructs a new <code>BooleanERC</code> with a value of <code>null</code>. The
 	 * given random number generator will be used to generate a new value if the
-	 * <tt>newInstance</tt> method is used.
+	 * <code>newInstance</code> method is used.
 	 * 
 	 * @param random the random number generator to use if randomly generating a
-	 *        boolean value. An exception will be thrown if it is <tt>null</tt>.
+	 *        boolean value. An exception will be thrown if it is <code>null</code>.
 	 */
 	public BooleanERC(RandomSequence random) {
 		super(null);
@@ -68,10 +68,10 @@ public class BooleanERC extends Literal {
 	}
 
 	/**
-	 * Constructs a new <tt>BooleanERC</tt> node with a randomly generated
+	 * Constructs a new <code>BooleanERC</code> node with a randomly generated
 	 * value, selected using the random number generator.
 	 * 
-	 * @return a new <tt>BooleanERC</tt> instance with a randomly generated
+	 * @return a new <code>BooleanERC</code> instance with a randomly generated
 	 *         value
 	 */
 	@Override
@@ -85,12 +85,12 @@ public class BooleanERC extends Literal {
 
 	/**
 	 * Generates and returns a new boolean value for use in a new
-	 * <tt>BooleanERC</tt> instance
+	 * <code>BooleanERC</code> instance
 	 * 
 	 * @return a boolean value to be used as the value of a new
-	 *         <tt>BooleanERC</tt> instance
+	 *         <code>BooleanERC</code> instance
 	 * @throws IllegalStateException if the random number generator is
-	 *         <tt>null</tt>
+	 *         <code>null</code>
 	 */
 	protected boolean generateValue() {
 		if (random == null) {
@@ -102,7 +102,7 @@ public class BooleanERC extends Literal {
 
 	/**
 	 * Returns the random number generator that is currently being used to
-	 * generate boolean values for new <tt>BooleanERC</tt> instances
+	 * generate boolean values for new <code>BooleanERC</code> instances
 	 * 
 	 * @return the random number generator
 	 */
@@ -112,7 +112,7 @@ public class BooleanERC extends Literal {
 
 	/**
 	 * Sets the random number generator to be used for generating the boolean
-	 * value of new <tt>BooleanERC</tt> instances
+	 * value of new <code>BooleanERC</code> instances
 	 * 
 	 * @param random the random number generator to set
 	 */

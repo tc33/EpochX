@@ -30,14 +30,14 @@ import org.epochx.tools.DataTypeUtils;
 public class XorFunction extends Node {
 
 	/**
-	 * Constructs an <tt>XorFunction</tt> with two <tt>null</tt> children
+	 * Constructs an <code>XorFunction</code> with two <code>null</code> children
 	 */
 	public XorFunction() {
 		this(null, null);
 	}
 
 	/**
-	 * Constructs an <tt>XorFunction</tt> with two boolean child nodes
+	 * Constructs an <code>XorFunction</code> with two boolean child nodes
 	 * 
 	 * @param child1 the first child node
 	 * @param child2 the second child node
@@ -48,9 +48,9 @@ public class XorFunction extends Node {
 
 	/**
 	 * Evaluates this function. Both child nodes are evaluated, the result of
-	 * both must be a <tt>Boolean</tt> instance. The result of this
-	 * function will be <tt>true</tt> if either (but not both) children evaluate
-	 * to <tt>true</tt>, otherwise the result will be <tt>false</tt>.
+	 * both must be a <code>Boolean</code> instance. The result of this
+	 * function will be <code>true</code> if either (but not both) children evaluate
+	 * to <code>true</code>, otherwise the result will be <code>false</code>.
 	 */
 	@Override
 	public Boolean evaluate() {
@@ -61,7 +61,7 @@ public class XorFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is <tt>XOR</tt>
+	 * Returns the identifier of this function which is <code>XOR</code>
 	 */
 	@Override
 	public String getIdentifier() {
@@ -71,9 +71,9 @@ public class XorFunction extends Node {
 	/**
 	 * Returns this function node's return type for the given child input types.
 	 * If there are two children, both of which have a return type of 
-	 * <tt>Boolean</tt>, then the return type of this function will also be 
-	 * <tt>Boolean</tt>. In all other cases this method will return 
-	 * <tt>null</tt> to indicate that the inputs are invalid.
+	 * <code>Boolean</code>, then the return type of this function will also be 
+	 * <code>Boolean</code>. In all other cases this method will return 
+	 * <code>null</code> to indicate that the inputs are invalid.
 	 * 
 	 * @return The Boolean class or null if the input type is invalid.
 	 */

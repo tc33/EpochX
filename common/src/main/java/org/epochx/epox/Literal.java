@@ -25,9 +25,9 @@ import org.apache.commons.lang.ObjectUtils;
 
 /**
  * Literal values are nodes with a specific value. Normally, the value of a
- * literal would not change. The difference between a <tt>Literal</tt> node
- * and a <tt>Variable</tt> node is subtle, but important. The same
- * <tt>Variable</tt> instance is likely to appear multiple times in a program
+ * literal would not change. The difference between a <code>Literal</code> node
+ * and a <code>Variable</code> node is subtle, but important. The same
+ * <code>Variable</code> instance is likely to appear multiple times in a program
  * tree, so changing the value of one occurence changes all occurences of that
  * variable. But, like most other nodes, each literal instance should be
  * independent of the others and appear only once within a program tree. To
@@ -41,7 +41,7 @@ public class Literal extends Node {
 	private Object value;
 
 	/**
-	 * Constructs a new <tt>Literal</tt> node with the given value. Evaluation
+	 * Constructs a new <code>Literal</code> node with the given value. Evaluation
 	 * of this literal will return the value set here. The data-type of this
 	 * node will be determined by the type of the object specified here.
 	 * 
@@ -53,7 +53,7 @@ public class Literal extends Node {
 
 	/**
 	 * Returns the value of this literal. Has the same functionality as calling
-	 * <tt>getValue</tt>.
+	 * <code>getValue</code>.
 	 * 
 	 * @return the value of this literal
 	 */
@@ -66,7 +66,7 @@ public class Literal extends Node {
 	 * Returns this node's string representation, which is the string
 	 * representation of the literal value
 	 * 
-	 * @return a <tt>String</tt> representation
+	 * @return a <code>String</code> representation
 	 */
 	@Override
 	public String getIdentifier() {
@@ -76,12 +76,12 @@ public class Literal extends Node {
 	/**
 	 * Returns the data-type of this node. The data-type of a literal node
 	 * is the data-type of its value. If no value has been set then
-	 * <tt>null</tt> will be returned.
+	 * <code>null</code> will be returned.
 	 * 
 	 * @param inputTypes the data-types of the node's inputs. Literals
 	 *        take no inputs so this should be an empty array.
 	 * @return the data-type of this node
-	 * @throws IllegalArgumentException if <tt>argumentDataTypes</tt> is
+	 * @throws IllegalArgumentException if <code>argumentDataTypes</code> is
 	 *         anything other than an empty array
 	 */
 	@Override
@@ -121,7 +121,7 @@ public class Literal extends Node {
 	 * representation of the literal value. If no value is set then an empty
 	 * string will be returned.
 	 * 
-	 * @return a <tt>String</tt> representation.
+	 * @return a <code>String</code> representation.
 	 */
 	@Override
 	public String toString() {
@@ -134,9 +134,9 @@ public class Literal extends Node {
 
 	/**
 	 * An object is equal to this literal if it is an instance of
-	 * <tt>Literal</tt> and its value is equal to this literal's value.
+	 * <code>Literal</code> and its value is equal to this literal's value.
 	 * 
-	 * @return <tt>true</tt> if the two objects are equal, <tt>false</tt>
+	 * @return <code>true</code> if the two objects are equal, <code>false</code>
 	 *         otherwise.
 	 */
 	@Override
@@ -152,13 +152,13 @@ public class Literal extends Node {
 	}
 
 	/**
-	 * Creates a new <tt>Literal</tt> instance which is a copy of this instance.
+	 * Creates a new <code>Literal</code> instance which is a copy of this instance.
 	 * The clone will contain a value which is a reference to the same object as
 	 * this literal's value. For mutable object values, users should consider
 	 * extending this class to provide a clone method which can provide an
 	 * appropriate deep clone.
 	 * 
-	 * @return a new <tt>Literal</tt> instance which is a clone of this object
+	 * @return a new <code>Literal</code> instance which is a clone of this object
 	 */
 	@Override
 	public Literal clone() {
@@ -171,9 +171,9 @@ public class Literal extends Node {
 
 	/**
 	 * Constructs a new instance of this literal. This implementation is 
-	 * equivalent to calling <tt>clone()</tt>.
+	 * equivalent to calling <code>clone()</code>.
 	 * 
-	 * @return a new <tt>Literal</tt> instance which is a clone of this object
+	 * @return a new <code>Literal</code> instance which is a clone of this object
 	 */
 	@Override
 	public Literal newInstance() {

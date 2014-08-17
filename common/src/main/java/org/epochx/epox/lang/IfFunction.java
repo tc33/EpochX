@@ -30,14 +30,14 @@ import org.epochx.tools.DataTypeUtils;
 public class IfFunction extends Node {
 
 	/**
-	 * Constructs an <tt>IfFunction</tt> with three <tt>null</tt> children
+	 * Constructs an <code>IfFunction</code> with three <code>null</code> children
 	 */
 	public IfFunction() {
 		this(null, null, null);
 	}
 
 	/**
-	 * Constructs an <tt>IfFunction</tt> with three child nodes
+	 * Constructs an <code>IfFunction</code> with three child nodes
 	 * 
 	 * @param condition a boolean child node which will determine which of the
 	 *        other nodes are evaluated.
@@ -52,7 +52,7 @@ public class IfFunction extends Node {
 
 	/**
 	 * Evaluates this function. The first child node is evaluated, the
-	 * result of which must be a <tt>Boolean</tt> instance. If the result
+	 * result of which must be a <code>Boolean</code> instance. If the result
 	 * is a true value then the second child is also evaluated, the result of
 	 * which becomes the result of this function. If the first child
 	 * evaluated to a false value then the third child is evaluated and its
@@ -70,7 +70,7 @@ public class IfFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is <tt>IF</tt>
+	 * Returns the identifier of this function which is <code>IF</code>
 	 */
 	@Override
 	public String getIdentifier() {
@@ -83,9 +83,9 @@ public class IfFunction extends Node {
 	 * Boolean, then the return type of this function will be whichever of the
 	 * second and third children is a super type the other. If neither of the
 	 * other two children are a subclass of the other, then these input types
-	 * are invalid and <tt>null</tt> will be returned.
+	 * are invalid and <code>null</code> will be returned.
 	 * 
-	 * @return The <tt>Boolean</tt> class or <tt>null</tt> if the input
+	 * @return The <code>Boolean</code> class or <code>null</code> if the input
 	 *         type is invalid.
 	 */
 	@Override

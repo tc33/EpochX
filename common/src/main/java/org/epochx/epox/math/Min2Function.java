@@ -30,7 +30,7 @@ import org.epochx.epox.Node;
 public class Min2Function extends MinFunction {
 
 	/**
-	 * Constructs a Min2Function with two <tt>null</tt> children.
+	 * Constructs a Min2Function with two <code>null</code> children.
 	 */
 	public Min2Function() {
 		this(null, null);

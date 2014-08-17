@@ -27,13 +27,13 @@ import org.epochx.tools.*;
 /**
  * A node which performs the arithmetic function of squaring,
  * that is - raising to the second power. It is equivalent to the
- * <tt>PowerFunction</tt> where the second child is the literal
- * <tt>2</tt>.
+ * <code>PowerFunction</code> where the second child is the literal
+ * <code>2</code>.
  */
 public class SquareFunction extends Node {
 
 	/**
-	 * Constructs a SquareFunction with one <tt>null</tt> child.
+	 * Constructs a SquareFunction with one <code>null</code> child.
 	 */
 	public SquareFunction() {
 		this(null);
@@ -85,7 +85,7 @@ public class SquareFunction extends Node {
 	 * Returns this function node's return type for the given child input types.
 	 * If there is one input type of a numeric type then the return type will
 	 * be that numeric type. In all other cases this method will return
-	 * <tt>null</tt> to indicate that the inputs are invalid.
+	 * <code>null</code> to indicate that the inputs are invalid.
 	 * 
 	 * @return a numeric class or null if the input type is invalid.
 	 */

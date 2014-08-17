@@ -25,12 +25,12 @@ import org.epochx.epox.Node;
 import org.epochx.tools.ant.Ant;
 
 /**
- * This class defines a function which causes an <tt>Ant</tt> instance to turn
+ * This class defines a function which causes an <code>Ant</code> instance to turn
  * right from its current orientation in its landscape. Although named as a
  * function, this node may operate as either a function or a terminal depending
  * on how the ant is provided. It may optionally be provided at construction, in
  * which case it becomes a terminal which operates on its internal ant.
- * Alternatively, it can require one child node with a data-type of <tt>Ant</tt>
+ * Alternatively, it can require one child node with a data-type of <code>Ant</code>
  * . In this case, when evaluated it will first evaluate its child
  * to obtain its ant.
  * 
@@ -44,15 +44,15 @@ public class AntTurnRightFunction extends Node {
 	private Ant ant;
 
 	/**
-	 * Constructs an <tt>AntTurnRightFunction</tt> with one <tt>null</tt> child
+	 * Constructs an <code>AntTurnRightFunction</code> with one <code>null</code> child
 	 */
 	public AntTurnRightFunction() {
 		this((Node) null);
 	}
 
 	/**
-	 * Constructs an <tt>AntTurnRightFunction</tt> with one child node. The
-	 * given child must have a return-type of <tt>Ant</tt>.
+	 * Constructs an <code>AntTurnRightFunction</code> with one child node. The
+	 * given child must have a return-type of <code>Ant</code>.
 	 * 
 	 * @param child this node's only child
 	 */
@@ -61,14 +61,14 @@ public class AntTurnRightFunction extends Node {
 	}
 
 	/**
-	 * Constructs an <tt>AntTurnRightFunction</tt> with no child nodes, but
+	 * Constructs an <code>AntTurnRightFunction</code> with no child nodes, but
 	 * the given ant which will be held internally. This makes the function a
 	 * terminal node with arity 0. Note that this differs from the other
-	 * constructors which take a child node with an <tt>Ant</tt> return type.
+	 * constructors which take a child node with an <code>Ant</code> return type.
 	 * 
 	 * @param ant the ant that should be operated on when this node is
 	 *        evaluated. An exception will be thrown if this argument is
-	 *        <tt>null</tt>.
+	 *        <code>null</code>.
 	 */
 	public AntTurnRightFunction(Ant ant) {
 		super();
@@ -83,7 +83,7 @@ public class AntTurnRightFunction extends Node {
 	/**
 	 * Evaluates this function. The ant is made to turn left from its current
 	 * orientation in its landscape. The return type of this function node is 
-	 * <tt>Void</tt>, and so the value returned from this method is
+	 * <code>Void</code>, and so the value returned from this method is
 	 * undefined.
 	 */
 	@Override
@@ -99,7 +99,7 @@ public class AntTurnRightFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is <tt>TURN-RIGHT</tt>
+	 * Returns the identifier of this function which is <code>TURN-RIGHT</code>
 	 */
 	@Override
 	public String getIdentifier() {
@@ -108,14 +108,14 @@ public class AntTurnRightFunction extends Node {
 
 	/**
 	 * Returns this function node's return type for the given child input types.
-	 * If the arity of this node is 0, and the <tt>inputTypes</tt> array is 
-	 * empty then the return type of this node will be <tt>Void</tt>. If the 
-	 * arity is 1, and there is only one input type which is of an <tt>Ant</tt>
-	 * type, then the return type of this function will be <tt>Void</tt>. In all
-	 * other cases this method will return <tt>null</tt> to indicate that the 
+	 * If the arity of this node is 0, and the <code>inputTypes</code> array is 
+	 * empty then the return type of this node will be <code>Void</code>. If the 
+	 * arity is 1, and there is only one input type which is of an <code>Ant</code>
+	 * type, then the return type of this function will be <code>Void</code>. In all
+	 * other cases this method will return <code>null</code> to indicate that the 
 	 * inputs are invalid.
 	 * 
-	 * @return <tt>Void</tt> or otherwise <tt>null</tt> if the input type is 
+	 * @return <code>Void</code> or otherwise <code>null</code> if the input type is 
 	 * invalid
 	 */
 	@Override

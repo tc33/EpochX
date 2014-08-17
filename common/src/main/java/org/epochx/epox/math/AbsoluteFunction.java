@@ -39,7 +39,7 @@ import org.epochx.tools.*;
 public class AbsoluteFunction extends Node {
 
 	/**
-	 * Constructs an AbsoluteFunction with one <tt>null</tt> child.
+	 * Constructs an AbsoluteFunction with one <code>null</code> child.
 	 */
 	public AbsoluteFunction() {
 		this(null);
@@ -95,7 +95,7 @@ public class AbsoluteFunction extends Node {
 	 * Returns this function node's return type for the given child input types.
 	 * If there is one input type of a numeric type then the return type will
 	 * be that same numeric type. In all other cases this method will return
-	 * <tt>null</tt> to indicate that the inputs are invalid.
+	 * <code>null</code> to indicate that the inputs are invalid.
 	 * 
 	 * @return A numeric class or null if the input type is invalid.
 	 */

@@ -27,13 +27,13 @@ import org.epochx.tools.DataTypeUtils;
 /**
  * A node which provides the facility to sequence a specific number of
  * instructions, specified at construction. Each of the instructions may be any
- * other function or terminal node with a <tt>Void</tt> return type. This is the
- * same function that Koza calls <tt>progN</tt> in his work.
+ * other function or terminal node with a <code>Void</code> return type. This is the
+ * same function that Koza calls <code>progN</code> in his work.
  */
 public class SeqNFunction extends Node {
 
 	/**
-	 * Constructs a <tt>SeqNFunction</tt> with the given number of <tt>null</tt>
+	 * Constructs a <code>SeqNFunction</code> with the given number of <code>null</code>
 	 * children.
 	 * 
 	 * @param n the arity of the function
@@ -45,7 +45,7 @@ public class SeqNFunction extends Node {
 	}
 
 	/**
-	 * Constructs a <tt>SeqNFunction</tt> with the given children. When 
+	 * Constructs a <code>SeqNFunction</code> with the given children. When 
 	 * evaluated, each child will be evaluated in sequence.
 	 * 
 	 * @param children the child nodes to be executed in sequence
@@ -56,7 +56,7 @@ public class SeqNFunction extends Node {
 
 	/**
 	 * Evaluates this function. Each of the children is evaluated in sequence.
-	 * After evaluating its children, this method will return <tt>null</tt>.
+	 * After evaluating its children, this method will return <code>null</code>.
 	 */
 	@Override
 	public Void evaluate() {
@@ -69,7 +69,7 @@ public class SeqNFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is <tt>SEQN</tt>
+	 * Returns the identifier of this function which is <code>SEQN</code>
 	 */
 	@Override
 	public String getIdentifier() {
@@ -80,9 +80,9 @@ public class SeqNFunction extends Node {
 	 * Returns this function node's return type for the given child input types.
 	 * If there is the correct number of inputs of Void type, then the
 	 * return type of this function is Void. Otherwise this method will return
-	 * <tt>null</tt> to indicate that the inputs are invalid.
+	 * <code>null</code> to indicate that the inputs are invalid.
 	 * 
-	 * @return <tt>Void</tt> or otherwise <tt>null</tt> if the input type is 
+	 * @return <code>Void</code> or otherwise <code>null</code> if the input type is 
 	 * invalid
 	 */
 	@Override

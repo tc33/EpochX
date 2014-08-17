@@ -36,12 +36,12 @@ public final class NodeUtils {
 
 	/**
 	 * Returns those nodes from the given syntax that have an arity of 0. The
-	 * given <tt>List</tt> is not modified at all
+	 * given <code>List</code> is not modified at all
 	 * 
-	 * @param syntax a <tt>List</tt> of <tt>Node</tt> objects. The syntax must
-	 *        not be <tt>null</tt>
-	 * @return a <tt>List</tt> of <tt>Node</tt> objects from the <tt>syntax</tt>
-	 *         with arity of <tt>0</tt>
+	 * @param syntax a <code>List</code> of <code>Node</code> objects. The syntax must
+	 *        not be <code>null</code>
+	 * @return a <code>List</code> of <code>Node</code> objects from the <code>syntax</code>
+	 *         with arity of <code>0</code>
 	 */
 	public static List<Node> terminals(List<Node> syntax) {
 		if (syntax == null) {
@@ -60,12 +60,12 @@ public final class NodeUtils {
 
 	/**
 	 * Returns those nodes from the given syntax that have an arity of greater
-	 * than <tt>0</tt>. The given <tt>List</tt> is not modified at all.
+	 * than <code>0</code>. The given <code>List</code> is not modified at all.
 	 * 
-	 * @param syntax a <tt>List</tt> of <tt>Node</tt> objects. The syntax must
-	 *        not be <tt>null</tt>
-	 * @return a <tt>List</tt> of <tt>Node</tt> objects from the <tt>syntax</tt>
-	 *         with arity <tt>&gt;0</tt>
+	 * @param syntax a <code>List</code> of <code>Node</code> objects. The syntax must
+	 *        not be <code>null</code>
+	 * @return a <code>List</code> of <code>Node</code> objects from the <code>syntax</code>
+	 *         with arity <code>&gt;0</code>
 	 */
 	public static List<Node> nonTerminals(List<Node> syntax) {
 		if (syntax == null) {
@@ -83,18 +83,18 @@ public final class NodeUtils {
 	}
 
 	/**
-	 * Creates a <tt>List</tt> of <tt>Literal</tt> objects with a range
-	 * of values. Given a <tt>start</tt> parameter of <tt>2</tt>, a
-	 * <tt>quantity</tt> of <tt>4</tt> and an <tt>interval</tt> of <tt>3</tt>,
-	 * the returned <tt>List</tt> will contain 4 literals
-	 * with the values: <tt>2, 5, 8, 11</tt>.
+	 * Creates a <code>List</code> of <code>Literal</code> objects with a range
+	 * of values. Given a <code>start</code> parameter of <code>2</code>, a
+	 * <code>quantity</code> of <code>4</code> and an <code>interval</code> of <code>3</code>,
+	 * the returned <code>List</code> will contain 4 literals
+	 * with the values: <code>2, 5, 8, 11</code>.
 	 * 
-	 * @param start the value that should be used for the first <tt>Literal</tt>
+	 * @param start the value that should be used for the first <code>Literal</code>
 	 *        in the range
 	 * @param interval the interval between each element of the range
 	 * @param quantity the number of elements in the range. Must be zero or
 	 *        greater
-	 * @return a <tt>List</tt> of <tt>Literals</tt> with the range of
+	 * @return a <code>List</code> of <code>Literals</code> with the range of
 	 *         values given
 	 */
 	public static List<Literal> intRange(int start, int interval, int quantity) {
@@ -114,17 +114,17 @@ public final class NodeUtils {
 	}
 
 	/**
-	 * Creates a <tt>List</tt> of <tt>Literal</tt> objects with a range
-	 * of values. Given a <tt>start</tt> parameter of <tt>2L</tt>, a
-	 * <tt>quantity</tt> of <tt>4</tt> and an <tt>interval</tt> of <tt>3L</tt>,
-	 * the returned <tt>List</tt> will contain 4 literals
-	 * with the values: <tt>2L, 5L, 8L, 11L</tt>.
+	 * Creates a <code>List</code> of <code>Literal</code> objects with a range
+	 * of values. Given a <code>start</code> parameter of <code>2L</code>, a
+	 * <code>quantity</code> of <code>4</code> and an <code>interval</code> of <code>3L</code>,
+	 * the returned <code>List</code> will contain 4 literals
+	 * with the values: <code>2L, 5L, 8L, 11L</code>.
 	 * 
-	 * @param start the value that should be used for the first <tt>Literal</tt>
+	 * @param start the value that should be used for the first <code>Literal</code>
 	 *        in the range
 	 * @param interval the interval between each element of the range
 	 * @param quantity the number of elements in the range
-	 * @return a <tt>List</tt> of <tt>Literals</tt> with the range of
+	 * @return a <code>List</code> of <code>Literals</code> with the range of
 	 *         values given
 	 */
 	public static List<Literal> longRange(long start, long interval, int quantity) {
@@ -144,17 +144,17 @@ public final class NodeUtils {
 	}
 
 	/**
-	 * Creates a <tt>List</tt> of <tt>Literal</tt> objects with a range
-	 * of values. Given a <tt>start</tt> parameter of <tt>2.2</tt>, a
-	 * <tt>quantity</tt> of <tt>4</tt> and an <tt>interval</tt> of <tt>3.2</tt>,
-	 * the returned <tt>List</tt> will contain 4 literals
-	 * with the values: <tt>2.2, 5.4, 8.6, 11.8</tt>.
+	 * Creates a <code>List</code> of <code>Literal</code> objects with a range
+	 * of values. Given a <code>start</code> parameter of <code>2.2</code>, a
+	 * <code>quantity</code> of <code>4</code> and an <code>interval</code> of <code>3.2</code>,
+	 * the returned <code>List</code> will contain 4 literals
+	 * with the values: <code>2.2, 5.4, 8.6, 11.8</code>.
 	 * 
-	 * @param start the value that should be used for the first <tt>Literal</tt>
+	 * @param start the value that should be used for the first <code>Literal</code>
 	 *        in the range
 	 * @param interval the interval between each element of the range
 	 * @param quantity the number of elements in the range
-	 * @return a <tt>List</tt> of <tt>Literals</tt> with the range of
+	 * @return a <code>List</code> of <code>Literals</code> with the range of
 	 *         values given
 	 */
 	public static List<Literal> doubleRange(double start, double interval, int quantity) {
@@ -174,17 +174,17 @@ public final class NodeUtils {
 	}
 
 	/**
-	 * Creates a <tt>List</tt> of <tt>Literal</tt> objects with a range
-	 * of values. Given a <tt>start</tt> parameter of <tt>2.2f</tt>, a
-	 * <tt>quantity</tt> of <tt>4</tt> and an <tt>interval</tt> of <tt>3.2f</tt>
-	 * , the returned <tt>List</tt> will contain 4 literals
-	 * with the values: <tt>2.2f, 5.4f, 8.6f, 11.8f</tt>
+	 * Creates a <code>List</code> of <code>Literal</code> objects with a range
+	 * of values. Given a <code>start</code> parameter of <code>2.2f</code>, a
+	 * <code>quantity</code> of <code>4</code> and an <code>interval</code> of <code>3.2f</code>
+	 * , the returned <code>List</code> will contain 4 literals
+	 * with the values: <code>2.2f, 5.4f, 8.6f, 11.8f</code>
 	 * 
-	 * @param start the value that should be used for the first <tt>Literal</tt>
+	 * @param start the value that should be used for the first <code>Literal</code>
 	 *        in the range.
 	 * @param interval the interval between each element of the range.
 	 * @param quantity the number of elements in the range.
-	 * @return a <tt>List</tt> of <tt>Literals</tt> with the range of
+	 * @return a <code>List</code> of <code>Literals</code> with the range of
 	 *         values given.
 	 */
 	public static List<Literal> floatRange(float start, float interval, int quantity) {
@@ -204,14 +204,14 @@ public final class NodeUtils {
 	}
 
 	/**
-	 * Creates a <tt>List</tt> of <tt>Variable</tt> objects of the given
+	 * Creates a <code>List</code> of <code>Variable</code> objects of the given
 	 * data type. The number of variables created will match the number of
-	 * variable names provided. The variables will all have a <tt>null</tt>
+	 * variable names provided. The variables will all have a <code>null</code>
 	 * value.
 	 * 
 	 * @param datatype the data-type for all the variables to be created
 	 * @param variableNames the names to assign to each of the variables
-	 * @return a <tt>List</tt> of <tt>Variable</tt>s with the given names
+	 * @return a <code>List</code> of <code>Variable</code>s with the given names
 	 */
 	public static List<Variable> createVariables(Class<?> datatype, String ... variableNames) {
 		if (variableNames == null) {

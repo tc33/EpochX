@@ -34,9 +34,9 @@ import org.epochx.tools.*;
 public class MinFunction extends Node {
 
 	/**
-	 * Constructs a MinFunction with the given number of <tt>null</tt>
+	 * Constructs a MinFunction with the given number of <code>null</code>
 	 * children.
-	 * @param n the number of <tt>null</tt> children to set this function up
+	 * @param n the number of <code>null</code> children to set this function up
 	 * for.
 	 */
 	public MinFunction(int n) {
@@ -117,7 +117,7 @@ public class MinFunction extends Node {
 	 * Returns this function node's return type for the given child input types.
 	 * If there is the correct number of numeric input types then the return
 	 * type will be the widest of those types. In all other cases this method
-	 * will return <tt>null</tt> to indicate that the inputs are invalid.
+	 * will return <code>null</code> to indicate that the inputs are invalid.
 	 * 
 	 * @return the widest numeric type or null if the input types are invalid.
 	 */

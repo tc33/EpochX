@@ -27,12 +27,12 @@ import org.epochx.tools.*;
 /**
  * A node which performs the arithmetic function of cube,
  * that is - raising to the third power. It is equivalent to the
- * <tt>PowerFunction</tt> where the second child is the double literal 3.0.
+ * <code>PowerFunction</code> where the second child is the double literal 3.0.
  */
 public class CubeFunction extends Node {
 
 	/**
-	 * Constructs a CubeFunction with one <tt>null</tt> child.
+	 * Constructs a CubeFunction with one <code>null</code> child.
 	 */
 	public CubeFunction() {
 		this(null);
@@ -84,7 +84,7 @@ public class CubeFunction extends Node {
 	 * Returns this function node's return type for the given child input types.
 	 * If there is one input type of a numeric type then the return type will
 	 * be that numeric type. In all other cases this method will return
-	 * <tt>null</tt> to indicate that the inputs are invalid.
+	 * <code>null</code> to indicate that the inputs are invalid.
 	 * 
 	 * @return a numeric class or null if the input type is invalid.
 	 */

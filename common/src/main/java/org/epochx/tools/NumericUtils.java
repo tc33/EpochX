@@ -30,12 +30,12 @@ public class NumericUtils {
 	private NumericUtils() {}
 
 	/**
-	 * Converts the given object to a <tt>Double</tt>
+	 * Converts the given object to a <code>Double</code>
 	 * 
-	 * @param o an object of some <tt>Number</tt> type
-	 * @return a <tt>Double</tt> that is equivalent to the given object or
-	 *         <tt>null</tt> if the object is not an instance of
-	 *         <tt>Number</tt>
+	 * @param o an object of some <code>Number</code> type
+	 * @return a <code>Double</code> that is equivalent to the given object or
+	 *         <code>null</code> if the object is not an instance of
+	 *         <code>Number</code>
 	 */
 	public static Double asDouble(Object o) {
 		if (o instanceof Number) {
@@ -46,12 +46,12 @@ public class NumericUtils {
 	}
 
 	/**
-	 * Converts the given object to a <tt>Float</tt>
+	 * Converts the given object to a <code>Float</code>
 	 * 
-	 * @param o an object of some <tt>Number</tt> type
-	 * @return a <tt>Float</tt> that is equivalent to the given object or
-	 *         <tt>null</tt> if the object is not an instance of
-	 *         <tt>Number</tt>
+	 * @param o an object of some <code>Number</code> type
+	 * @return a <code>Float</code> that is equivalent to the given object or
+	 *         <code>null</code> if the object is not an instance of
+	 *         <code>Number</code>
 	 */
 	public static Float asFloat(Object o) {
 		if (o instanceof Number) {
@@ -62,12 +62,12 @@ public class NumericUtils {
 	}
 
 	/**
-	 * Converts the given object to an <tt>Integer</tt>
+	 * Converts the given object to an <code>Integer</code>
 	 * 
-	 * @param o an object of some <tt>Number</tt> type
-	 * @return an <tt>Integer</tt> that is equivalent to the given object or
-	 *         <tt>null</tt> if the object is not an instance of
-	 *         <tt>Number</tt>
+	 * @param o an object of some <code>Number</code> type
+	 * @return an <code>Integer</code> that is equivalent to the given object or
+	 *         <code>null</code> if the object is not an instance of
+	 *         <code>Number</code>
 	 */
 	public static Integer asInteger(Object o) {
 		if (o instanceof Number) {
@@ -78,12 +78,12 @@ public class NumericUtils {
 	}
 
 	/**
-	 * Converts the given object to a <tt>Long</tt>
+	 * Converts the given object to a <code>Long</code>
 	 * 
-	 * @param o an object of some <tt>Number</tt> type
-	 * @return a <tt>Long</tt> that is equivalent to the given object or
-	 *         <tt>null</tt> if the object is not an instance of
-	 *         <tt>Number</tt>
+	 * @param o an object of some <code>Number</code> type
+	 * @return a <code>Long</code> that is equivalent to the given object or
+	 *         <code>null</code> if the object is not an instance of
+	 *         <code>Number</code>
 	 */
 	public static Long asLong(Object o) {
 		if (o instanceof Number) {
@@ -94,12 +94,12 @@ public class NumericUtils {
 	}
 
 	/**
-	 * Converts the given object to a <tt>Short</tt>
+	 * Converts the given object to a <code>Short</code>
 	 * 
-	 * @param o an object of some <tt>Number</tt> type
-	 * @return a <tt>Short</tt> that is equivalent to the given object or
-	 *         <tt>null</tt> if the object is not an instance of
-	 *         <tt>Number</tt>
+	 * @param o an object of some <code>Number</code> type
+	 * @return a <code>Short</code> that is equivalent to the given object or
+	 *         <code>null</code> if the object is not an instance of
+	 *         <code>Number</code>
 	 */
 	public static Short asShort(Object o) {
 		if (o instanceof Number) {
@@ -110,12 +110,12 @@ public class NumericUtils {
 	}
 
 	/**
-	 * Converts the given object to a <tt>Byte</tt>
+	 * Converts the given object to a <code>Byte</code>
 	 * 
-	 * @param o an object of some <tt>Number</tt> type
-	 * @return a <tt>Byte</tt> that is equivalent to the given object or
-	 *         <tt>null</tt> if the object is not an instance of
-	 *         <tt>Number</tt>
+	 * @param o an object of some <code>Number</code> type
+	 * @return a <code>Byte</code> that is equivalent to the given object or
+	 *         <code>null</code> if the object is not an instance of
+	 *         <code>Number</code>
 	 */
 	public static Byte asByte(Object o) {
 		if (o instanceof Number) {

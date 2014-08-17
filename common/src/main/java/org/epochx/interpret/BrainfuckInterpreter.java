@@ -30,12 +30,12 @@ import org.epochx.source.SourceGenerator;
  * A BrainfuckInterpreter provides the facility to execute programs in the
  * esoteric Brainfuck programming language. Memory is provided in the form of
  * a 30,000 element byte array which the programs manipulate. The
- * <tt>eval</tt> interpreter functions are not supported since Brainfuck
- * provides no expressions that can be evaluated. The <tt>exec</tt> methods
+ * <code>eval</code> interpreter functions are not supported since Brainfuck
+ * provides no expressions that can be evaluated. The <code>exec</code> methods
  * should be used, with the memory retrievable after execution. The
- * <tt>argValues</tt> given to the <tt>exec</tt> methods will be used to
+ * <code>argValues</code> given to the <code>exec</code> methods will be used to
  * populate the first elements of the memory array in sequence. The
- * <tt>argNames</tt> array is not used.
+ * <code>argNames</code> array is not used.
  * 
  * <h4>Supported language syntax</h4>
  * 
@@ -139,10 +139,10 @@ public class BrainfuckInterpreter<T extends Individual> implements Interpreter<T
 
 	/**
 	 * Executes the given Brainfuck program upon the memory byte array. The
-	 * given <tt>argValues</tt> will be used to populate the first elements
+	 * given <code>argValues</code> will be used to populate the first elements
 	 * of the memory array in sequence. All other elements of the memory array
 	 * will be set to 0 byte and the pointer will also be reset to address 0
-	 * before execution. The <tt>argNames</tt> argument is not used.
+	 * before execution. The <code>argNames</code> argument is not used.
 	 * 
 	 * @param program a valid Brainfuck program that is to be executed
 	 * @param argNames not used in this implementation

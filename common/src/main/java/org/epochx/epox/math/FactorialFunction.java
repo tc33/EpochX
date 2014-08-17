@@ -34,7 +34,7 @@ import org.epochx.tools.*;
 public class FactorialFunction extends Node {
 
 	/**
-	 * Constructs a FactorialFunction with one <tt>null</tt> child.
+	 * Constructs a FactorialFunction with one <code>null</code> child.
 	 */
 	public FactorialFunction() {
 		this(null);
@@ -87,7 +87,7 @@ public class FactorialFunction extends Node {
 	 * Returns this function node's return type for the given child input types.
 	 * If there is one input type of Byte, Short or Integer then the return type
 	 * will be Integer, if it is Long then the return type will also be Long. In
-	 * all other cases this method will return <tt>null</tt> to indicate
+	 * all other cases this method will return <code>null</code> to indicate
 	 * that the inputs are invalid.
 	 * 
 	 * @return the Integer or Long class or null if the input type is invalid.

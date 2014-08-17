@@ -30,7 +30,7 @@ import org.epochx.tools.*;
 public class PowerFunction extends Node {
 
 	/**
-	 * Constructs a PowerFunction with two <tt>null</tt> children.
+	 * Constructs a PowerFunction with two <code>null</code> children.
 	 */
 	public PowerFunction() {
 		this(null, null);
@@ -49,11 +49,11 @@ public class PowerFunction extends Node {
 	}
 
 	/**
-	 * Evaluating a <tt>PowerFunction</tt> involves raising the first child
+	 * Evaluating a <code>PowerFunction</code> involves raising the first child
 	 * to the power of the second, after both children are evaluated. For
 	 * performance, this function is evaluated lazily. The second child is
-	 * evaluated first, if it evaluates to <tt>0.0</tt> then the result will
-	 * always be <tt>1.0</tt> and the first child will not be evaluated at
+	 * evaluated first, if it evaluates to <code>0.0</code> then the result will
+	 * always be <code>1.0</code> and the first child will not be evaluated at
 	 * all.
 	 */
 	/**
@@ -86,7 +86,7 @@ public class PowerFunction extends Node {
 	/**
 	 * Returns this function node's return type for the given child input types.
 	 * If there are two input types of a numeric type then the return type will
-	 * be Double. In all other cases this method will return <tt>null</tt>
+	 * be Double. In all other cases this method will return <code>null</code>
 	 * to indicate that the inputs are invalid.
 	 * 
 	 * @return the Double class or null if the input type is invalid.

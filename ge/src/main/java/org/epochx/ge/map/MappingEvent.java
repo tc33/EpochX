@@ -27,34 +27,60 @@ import org.epochx.event.Event;
 import org.epochx.ge.GEIndividual;
 
 /**
- * Base class for mapping related events.
+ * The root class for mapping events.
  * 
  * @see Mapper
+ * 
+ * @since 2.0
  */
 public abstract class MappingEvent implements Event {
 
+	// The Mapper that fired the event
 	private Mapper mapper;
 	
+	// The individual undergoing mapping
 	private GEIndividual individual;
 	
+	/**
+	 * Constructs a <code>MappingEvent</code>.
+	 * 
+	 * @param mapper the mapper that fired the event
+	 * @param individual the individual undergoing mapping
+	 */
 	public MappingEvent(Mapper mapper, GEIndividual individual) {
 		this.individual = individual;
 		this.mapper = mapper;
 	}
 	
+	/**
+	 * Returns the individual undergoing mapping
+	 * 
+	 * @return the individual undergoing mapping
+	 */
 	public GEIndividual getIndividual() {
 		return individual;
 	}
 	
+	/**
+	 * Returns the mapper that fired the event
+	 * 
+	 * @return the mapper that fired the event
+	 */
 	public Mapper getMapper() {
 		return mapper;
 	}
 	
 	/**
-	 * An event that indicates the start of a mapping.
+	 * Default event that indicates the start of a mapping
 	 */
 	public static class StartMapping extends MappingEvent {
 		
+		/**
+		 * Constructs a <code>StartMapping</code> mapping event
+		 * 
+		 * @param mapper the mapper that fired the event
+		 * @param individual the individual undergoing mapping
+		 */
 		public StartMapping(Mapper mapper, GEIndividual individual) {
 			super(mapper, individual);
 		}
@@ -62,24 +88,37 @@ public abstract class MappingEvent implements Event {
 	}
 
 	/**
-	 * An event that indicates the end of a mapping.
+	 * Default event that indicates the end of a mapping
 	 */
 	public static class EndMapping extends MappingEvent {
 		
+		// The number of codons that were used in the mapping
 		private int noActiveCodons;
 		
+		/**
+		 * Constructs an <code>EndMapping</code> mapping event
+		 * 
+		 * @param mapper the mapper that fired the event
+		 * @param individual the individual undergoing mapping
+		 */
 		public EndMapping(Mapper mapper, GEIndividual individual) {
 			super(mapper, individual);
 		}
 		
+		/**
+		 * Sets the number of codons that were used in the mapping
+		 * 
+		 * @param noActiveCodons the number of codons used in the mapping
+		 */
 		public void setNoActiveCodons(int noActiveCodons) {
 			this.noActiveCodons = noActiveCodons;
 		}
 		
 		/**
-		 * This may not be supported by all mappers.
+		 * Returns the number of codons that were used in the mapping. This information 
+		 * may not be provided by all mappers.
 		 * 
-		 * @return
+		 * @return the number of codons used in the mapping
 		 */
 		public int getNoActiveCodons() {
 			return noActiveCodons;

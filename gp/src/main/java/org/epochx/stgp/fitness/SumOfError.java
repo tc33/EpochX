@@ -34,8 +34,8 @@ import org.epochx.event.Listener;
 import org.epochx.stgp.STGPIndividual;
 
 /**
- * A fitness function for <tt>STGPIndividual</tt>s that calculates and assigns 
- * <tt>DoubleFitness.Minimise</tt> scores. The fitness scores are calculated by executing
+ * A fitness function for <code>STGPIndividual</code>s that calculates and assigns 
+ * <code>DoubleFitness.Minimise</code> scores. The fitness scores are calculated by executing
  * the program for each of the provided sets of inputs. The difference between the value 
  * returned by the program and the expected outputs supplied is summed to give the fitness
  * value. 
@@ -76,7 +76,7 @@ public class SumOfError extends STGPFitnessFunction implements Listener<ConfigEv
 	private Double[] expectedOutputs;
 	
 	/**
-	 * Constructs a <tt>SumOfError</tt> fitness function with control parameters
+	 * Constructs a <code>SumOfError</code> fitness function with control parameters
 	 * automatically loaded from the config.
 	 */
 	public SumOfError() {
@@ -84,8 +84,8 @@ public class SumOfError extends STGPFitnessFunction implements Listener<ConfigEv
 	}
 	
 	/**
-	 * Constructs a <tt>SumOfError</tt> fitness function with control parameters initially
-	 * loaded from the config. If the <tt>autoConfig</tt> argument is set to <tt>true</tt> 
+	 * Constructs a <code>SumOfError</code> fitness function with control parameters initially
+	 * loaded from the config. If the <code>autoConfig</code> argument is set to <code>true</code> 
 	 * then the configuration will be automatically updated when the config is modified.
 	 * 
 	 * @param autoConfig whether this operator should automatically update its
@@ -101,7 +101,7 @@ public class SumOfError extends STGPFitnessFunction implements Listener<ConfigEv
 	
 	/**
 	 * Sets up this operator with the appropriate configuration settings.
-	 * This method is called whenever a <tt>ConfigEvent</tt> occurs for a
+	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
 	 * change in any of the following configuration parameters:
 	 * <ul>
 	 * <li>{@link #INPUT_VARIABLES}
@@ -117,7 +117,7 @@ public class SumOfError extends STGPFitnessFunction implements Listener<ConfigEv
 	
 	/**
 	 * Receives configuration events and triggers this fitness function to 
-	 * configure its parameters if the <tt>ConfigEvent</tt> is for one of 
+	 * configure its parameters if the <code>ConfigEvent</code> is for one of 
 	 * its required parameters.
 	 * 
 	 * @param event {@inheritDoc}
@@ -188,7 +188,7 @@ public class SumOfError extends STGPFitnessFunction implements Listener<ConfigEv
 	
 	/**
 	 * Returns the value to be used when an individual returns a NaN value. The default value
-	 * is <tt>Double.NaN</tt>.
+	 * is <code>Double.NaN</code>.
 	 * 
 	 * @return the value to return when an individual returns a NaN value
 	 */

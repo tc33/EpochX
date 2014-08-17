@@ -34,7 +34,7 @@ import org.epochx.stgp.STGPIndividual;
 import org.epochx.stgp.init.GrowInitialisation;
 
 /**
- * A mutation operator for <tt>STGPIndividual</tt>s that replaces a subtree with
+ * A mutation operator for <code>STGPIndividual</code>s that replaces a subtree with
  * a new randomly generated subtree.
  * 
  * <p>
@@ -60,7 +60,7 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 	private Double probability;
 
 	/**
-	 * Constructs a <tt>SubtreeMutation</tt> with control parameters
+	 * Constructs a <code>SubtreeMutation</code> with control parameters
 	 * automatically loaded from the config
 	 */
 	public SubtreeMutation() {
@@ -68,9 +68,9 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 	}
 
 	/**
-	 * Constructs a <tt>SubtreeMutation</tt> with control parameters initially
-	 * loaded from the config. If the <tt>autoConfig</tt> argument is set to
-	 * <tt>true</tt> then the configuration will be automatically updated when
+	 * Constructs a <code>SubtreeMutation</code> with control parameters initially
+	 * loaded from the config. If the <code>autoConfig</code> argument is set to
+	 * <code>true</code> then the configuration will be automatically updated when
 	 * the config is modified.
 	 * 
 	 * @param autoConfig whether this operator should automatically update its
@@ -88,7 +88,7 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 
 	/**
 	 * Sets up this operator with the appropriate configuration settings.
-	 * This method is called whenever a <tt>ConfigEvent</tt> occurs for a
+	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
 	 * change in any of the following configuration parameters:
 	 * <ul>
 	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
@@ -108,7 +108,7 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 
 	/**
 	 * Receives configuration events and triggers this operator to configure its
-	 * parameters if the <tt>ConfigEvent</tt> is for one of its required
+	 * parameters if the <code>ConfigEvent</code> is for one of its required
 	 * parameters.
 	 * 
 	 * @param event {@inheritDoc}
@@ -127,8 +127,8 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 	 * replacement subtree is generated using a grow initialisation method.
 	 * 
 	 * @param parents an array of just one individual to undergo subtree
-	 *        mutation. It must be an instance of <tt>STGPIndividual</tt>.
-	 * @return an array containing one <tt>STGPIndividual</tt> that was the
+	 *        mutation. It must be an instance of <code>STGPIndividual</code>.
+	 * @return an array containing one <code>STGPIndividual</code> that was the
 	 *         result of mutating the parent individual
 	 */
 	@Override
@@ -160,7 +160,7 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 	}
 
 	/**
-	 * Returns a <tt>SubtreeMutationEndEvent</tt> with the operator and 
+	 * Returns a <code>SubtreeMutationEndEvent</code> with the operator and 
 	 * parents set
 	 */
 	@Override

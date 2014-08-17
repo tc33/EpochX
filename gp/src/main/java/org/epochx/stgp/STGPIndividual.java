@@ -27,7 +27,7 @@ import org.epochx.Config.ConfigKey;
 import org.epochx.epox.*;
 
 /**
- * An <tt>STGPIndividual</tt> is a candidate solution which uses a strongly
+ * An <code>STGPIndividual</code> is a candidate solution which uses a strongly
  * typed tree representation to represent a computer program. This class
  * provides several convenient methods for obtaining information about the
  * program tree (such as {@link #length()} and {@link #depth()}), but more
@@ -36,7 +36,7 @@ import org.epochx.epox.*;
  * 
  * <p>
  * Note: this class has a natural ordering that may be inconsistent with
- * <tt>equals</tt>.
+ * <code>equals</code>.
  * 
  * @since 2.0
  */
@@ -67,7 +67,7 @@ public class STGPIndividual extends AbstractIndividual {
 
 	/**
 	 * Constructs an individual represented by a strongly typed tree, with
-	 * a <tt>null</tt> root node
+	 * a <code>null</code> root node
 	 */
 	public STGPIndividual() {
 		this(null);
@@ -75,9 +75,9 @@ public class STGPIndividual extends AbstractIndividual {
 
 	/**
 	 * Constructs an individual represented by a strongly typed tree, where
-	 * <tt>root</tt> is the root node of the tree
+	 * <code>root</code> is the root node of the tree
 	 * 
-	 * @param root the <tt>Node</tt> to set as the root
+	 * @param root the <code>Node</code> to set as the root
 	 */
 	public STGPIndividual(Node root) {
 		this.root = root;
@@ -95,7 +95,7 @@ public class STGPIndividual extends AbstractIndividual {
 	}
 
 	/**
-	 * Returns the <tt>Node</tt> that is set as the root of the program tree
+	 * Returns the <code>Node</code> that is set as the root of the program tree
 	 * 
 	 * @return the root node of the program tree.
 	 */
@@ -104,9 +104,9 @@ public class STGPIndividual extends AbstractIndividual {
 	}
 
 	/**
-	 * Replaces the <tt>Node</tt> that is set as the root of the program tree
+	 * Replaces the <code>Node</code> that is set as the root of the program tree
 	 * 
-	 * @param root the <tt>Node</tt> to set as the root
+	 * @param root the <code>Node</code> to set as the root
 	 */
 	public void setRoot(Node root) {
 		this.root = root;
@@ -177,7 +177,7 @@ public class STGPIndividual extends AbstractIndividual {
 	/**
 	 * Returns the data-type of the values returned by the program tree
 	 * 
-	 * @return the object <tt>Class</tt> of the values returned
+	 * @return the object <code>Class</code> of the values returned
 	 */
 	public Class<?> dataType() {
 		return getRoot().dataType();
@@ -188,7 +188,7 @@ public class STGPIndividual extends AbstractIndividual {
 	 * deep clone of the program tree. The clone is not assigned this individual's
 	 * fitness.
 	 * 
-	 * @return a clone of this <tt>STGPIndividual</tt> instance
+	 * @return a clone of this <code>STGPIndividual</code> instance
 	 */
 	@Override
 	public STGPIndividual clone() {
@@ -221,9 +221,9 @@ public class STGPIndividual extends AbstractIndividual {
 
 	/**
 	 * Compares the given object to this instance for equality. Equivalence is
-	 * defined as them both being instances of <tt>STGPIndividual</tt> and
-	 * having equal program trees according to <tt>getRoot().equals(obj)</tt>
-	 * (or if both root nodes are <tt>null</tt>).
+	 * defined as them both being instances of <code>STGPIndividual</code> and
+	 * having equal program trees according to <code>getRoot().equals(obj)</code>
+	 * (or if both root nodes are <code>null</code>).
 	 * 
 	 * @param obj an object to be compared for equivalence.
 	 * @return true if this individual is equivalent to the specified object and
@@ -260,7 +260,7 @@ public class STGPIndividual extends AbstractIndividual {
 	 * negative integer, zero, or a positive integer as this instance represents
 	 * the quality of an individual that is less fit, equally fit, or more fit
 	 * than the specified object. The individuals do not need to be of the same
-	 * object type, but must have non-null, comparable <tt>Fitness</tt> instances.
+	 * object type, but must have non-null, comparable <code>Fitness</code> instances.
 	 * 
 	 * @param other an individual to compare against
 	 * @return a negative integer, zero, or a positive integer as this object is

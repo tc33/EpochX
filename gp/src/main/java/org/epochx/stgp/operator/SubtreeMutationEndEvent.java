@@ -38,7 +38,7 @@ public class SubtreeMutationEndEvent extends OperatorEvent.EndOperator {
 	private int point;
 
 	/**
-	 * Constructs a <tt>SubtreeMutationEndEvent</tt> with the details of the 
+	 * Constructs a <code>SubtreeMutationEndEvent</code> with the details of the 
 	 * event
 	 * 
 	 * @param operator the operator that performed the mutation

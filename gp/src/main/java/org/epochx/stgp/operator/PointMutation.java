@@ -41,7 +41,7 @@ import org.epochx.event.OperatorEvent.EndOperator;
 import org.epochx.stgp.STGPIndividual;
 
 /**
- * A mutation operator for <tt>STGPIndividual</tt>s that replaces nodes at 
+ * A mutation operator for <code>STGPIndividual</code>s that replaces nodes at 
  * random throughout a program tree. Each node in the program tree is replaced 
  * according to a set point probability. When a node is selected to be replaced,
  * a node of the same arity and data-type requirements is randomly chosen to 
@@ -75,7 +75,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	private Double probability;
 
 	/**
-	 * Constructs a <tt>PointMutation</tt> with control parameters
+	 * Constructs a <code>PointMutation</code> with control parameters
 	 * automatically loaded from the config
 	 */
 	public PointMutation() {
@@ -83,9 +83,9 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	}
 
 	/**
-	 * Constructs a <tt>PointMutation</tt> with control parameters initially
-	 * loaded from the config. If the <tt>autoConfig</tt> argument is set to
-	 * <tt>true</tt> then the configuration will be automatically updated when
+	 * Constructs a <code>PointMutation</code> with control parameters initially
+	 * loaded from the config. If the <code>autoConfig</code> argument is set to
+	 * <code>true</code> then the configuration will be automatically updated when
 	 * the config is modified.
 	 * 
 	 * @param autoConfig whether this operator should automatically update its
@@ -104,12 +104,12 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	
 	/**
 	 * Sets up this operator with the appropriate configuration settings.
-	 * This method is called whenever a <tt>ConfigEvent</tt> occurs for a
+	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
 	 * change in any of the following configuration parameters:
 	 * <ul>
 	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
 	 * <li>{@link STGPIndividual#SYNTAX}
-	 * <li>{@link #POINT_PROBABILITY} (defaults to <tt>0.01</tt>).
+	 * <li>{@link #POINT_PROBABILITY} (defaults to <code>0.01</code>).
 	 * <li>{@link #PROBABILITY}
 	 * </ul>
 	 */
@@ -122,7 +122,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	
 	/**
 	 * Receives configuration events and triggers this operator to configure its
-	 * parameters if the <tt>ConfigEvent</tt> is for one of its required
+	 * parameters if the <code>ConfigEvent</code> is for one of its required
 	 * parameters.
 	 * 
 	 * @param event {@inheritDoc}
@@ -143,8 +143,8 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	 * have been considered.
 	 * 
 	 * @param parents an array of just one individual to undergo subtree
-	 *        mutation. It must be an instance of <tt>STGPIndividual</tt>.
-	 * @return an array containing one <tt>STGPIndividual</tt> that was the
+	 *        mutation. It must be an instance of <code>STGPIndividual</code>.
+	 * @return an array containing one <code>STGPIndividual</code> that was the
 	 *         result of mutating the parent individual
 	 */
 	@Override
@@ -184,7 +184,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	}
 	
 	/**
-	 * Returns a <tt>PointMutationEndEvent</tt> with the operator and 
+	 * Returns a <code>PointMutationEndEvent</code> with the operator and 
 	 * parents set
 	 */
 	@Override
@@ -194,11 +194,11 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 
 	/**
 	 * Lists the nodes in the syntax that are valid replacements for the given
-	 * node <tt>n</tt>. A node is a valid replacement if it has the same arity 
-	 * and a compatible data-type if given the children of <tt>n</tt>. 
+	 * node <code>n</code>. A node is a valid replacement if it has the same arity 
+	 * and a compatible data-type if given the children of <code>n</code>. 
 	 * 
 	 * @param n the node to be replaced
-	 * @return a list of the nodes that are valid replacements for <tt>n</tt>
+	 * @return a list of the nodes that are valid replacements for <code>n</code>
 	 */
 	protected List<Node> validReplacements(Node n) {
 		int arity = n.getArity();

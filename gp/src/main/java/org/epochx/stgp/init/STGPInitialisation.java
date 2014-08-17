@@ -27,13 +27,13 @@ import org.epochx.stgp.STGPIndividual;
 
 
 /**
- * Initialisation method for <tt>STGPIndividual</tt>s. It does not define any 
- * methods, but initialisation procedures that generate <tt>STGPIndividual</tt> 
+ * Initialisation method for <code>STGPIndividual</code>s. It does not define any 
+ * methods, but initialisation procedures that generate <code>STGPIndividual</code> 
  * objects should implement this interface. 
  * 
  * <p>
  * Where appropriate, implementations should use the 
- * <tt>MAXIMUM_INITIAL_DEPTH</tt> configuration parameter defined in this 
+ * <code>MAXIMUM_INITIAL_DEPTH</code> configuration parameter defined in this 
  * interface to specify the maximum depth of the program trees they generate. 
  * The {@link STGPIndividual#MAXIMUM_DEPTH} parameter should also be enforced.
  * 

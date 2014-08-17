@@ -38,7 +38,7 @@ public class OnePointCrossoverEndEvent extends OperatorEvent.EndOperator {
 	private int[] points;
 
 	/**
-	 * Constructs a <tt>OnePointCrossoverEndEvent</tt> with the details of the
+	 * Constructs a <code>OnePointCrossoverEndEvent</code> with the details of the
 	 * event
 	 * 
 	 * @param operator the operator that performed the crossover

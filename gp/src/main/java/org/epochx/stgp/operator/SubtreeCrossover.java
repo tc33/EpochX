@@ -35,7 +35,7 @@ import org.epochx.event.OperatorEvent.EndOperator;
 import org.epochx.stgp.STGPIndividual;
 
 /**
- * A crossover operator for <tt>STGPIndividual</tt>s that exchanges subtrees 
+ * A crossover operator for <code>STGPIndividual</code>s that exchanges subtrees 
  * in two individuals. A bias can optionally be set to influence the probability
  * that a terminal or a non-terminal is selected as the crossover points.
  * 
@@ -68,7 +68,7 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 	private Integer maxDepth;
 
 	/**
-	 * Constructs a <tt>SubtreeCrossover</tt> with control parameters
+	 * Constructs a <code>SubtreeCrossover</code> with control parameters
 	 * automatically loaded from the config
 	 */
 	public SubtreeCrossover() {
@@ -76,9 +76,9 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 	}
 
 	/**
-	 * Constructs a <tt>SubtreeCrossover</tt> with control parameters initially
-	 * loaded from the config. If the <tt>autoConfig</tt> argument is set to
-	 * <tt>true</tt> then the configuration will be automatically updated when
+	 * Constructs a <code>SubtreeCrossover</code> with control parameters initially
+	 * loaded from the config. If the <code>autoConfig</code> argument is set to
+	 * <code>true</code> then the configuration will be automatically updated when
 	 * the config is modified.
 	 * 
 	 * @param autoConfig whether this operator should automatically update its
@@ -97,11 +97,11 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 
 	/**
 	 * Sets up this operator with the appropriate configuration settings.
-	 * This method is called whenever a <tt>ConfigEvent</tt> occurs for a
+	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
 	 * change in any of the following configuration parameters:
 	 * <ul>
 	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
-	 * <li>{@link #TERMINAL_PROBABILITY} (default: <tt>-1.0</tt>)
+	 * <li>{@link #TERMINAL_PROBABILITY} (default: <code>-1.0</code>)
 	 * <li>{@link #PROBABILITY}
 	 * <li>{@link STGPIndividual#MAXIMUM_DEPTH}
 	 * </ul>
@@ -115,7 +115,7 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 
 	/**
 	 * Receives configuration events and triggers this operator to configure its
-	 * parameters if the <tt>ConfigEvent</tt> is for one of its required
+	 * parameters if the <code>ConfigEvent</code> is for one of its required
 	 * parameters.
 	 * 
 	 * @param event {@inheritDoc}
@@ -133,8 +133,8 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 	 * exchanged.
 	 * 
 	 * @param parents an array of two individuals to undergo subtree crossover.
-	 *        Both individuals must be instances of <tt>STGPIndividual</tt>.
-	 * @return an array containing two <tt>STGPIndividual</tt>s that are the
+	 *        Both individuals must be instances of <code>STGPIndividual</code>.
+	 * @return an array containing two <code>STGPIndividual</code>s that are the
 	 *         result of the crossover
 	 */
 	@Override
@@ -192,7 +192,7 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 	}
 
 	/**
-	 * Returns a <tt>SubtreeCrossoverEndEvent</tt> with the operator and 
+	 * Returns a <code>SubtreeCrossoverEndEvent</code> with the operator and 
 	 * parents set
 	 */
 	@Override
@@ -221,7 +221,7 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 	/**
 	 * Chooses a crossover point at random in the program tree of the given
 	 * individual. The probability that a terminal is selected is equal to the
-	 * result of the <tt>getTerminalProbability()</tt> method. If the terminal
+	 * result of the <code>getTerminalProbability()</code> method. If the terminal
 	 * probability is -1.0 then all nodes will be selected from at random.
 	 * 
 	 * @param individual the individual to choose a crossover point in
@@ -252,7 +252,7 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 	 * Selects a node in the list of nodes given and returns the index. The node
 	 * is selected at random from the list, but the probability that a terminal
 	 * will be selected is equal to the result of the
-	 * <tt>getTerminalProbability()</tt> method. If the terminal probability is
+	 * <code>getTerminalProbability()</code> method. If the terminal probability is
 	 * set to -1.0 then all nodes are selected from with equal probability.
 	 * 
 	 * @param nodes the list of nodes to select from

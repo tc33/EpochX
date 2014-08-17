@@ -29,7 +29,7 @@ import org.epochx.event.stat.*;
  * A stat that returns the standard deviation of the mean number of 
  * non-terminals in the program trees in the population from the previous 
  * completed generation. All individuals in the population must be instances of
- * <tt>STGPIndividual</tt>.
+ * <code>STGPIndividual</code>.
  * 
  * @see GenerationAverageNonTerminalsError
  * @see GenerationAverageNonTerminals
@@ -41,7 +41,7 @@ public class GenerationStandardDeviationNonTerminals extends AbstractStat<EndGen
 	private double stdev;
 
 	/**
-	 * Constructs a <tt>GenerationStandardDeviationNonTerminals</tt> stat and 
+	 * Constructs a <code>GenerationStandardDeviationNonTerminals</code> stat and 
 	 * registers its dependencies
 	 */
 	@SuppressWarnings("unchecked")
@@ -52,7 +52,7 @@ public class GenerationStandardDeviationNonTerminals extends AbstractStat<EndGen
 	/**
 	 * Triggers the generation of an updated value for this stat. Once this stat
 	 * has been registered, this method will be called on each
-	 * <tt>EndGeneration</tt> event.
+	 * <code>EndGeneration</code> event.
 	 * 
 	 * @param event an object that encapsulates information about the event that
 	 *        occurred
@@ -86,7 +86,7 @@ public class GenerationStandardDeviationNonTerminals extends AbstractStat<EndGen
 	/**
 	 * Returns a string representation of the value of this stat
 	 * 
-	 * @return a <tt>String</tt> that represents the value of this stat
+	 * @return a <code>String</code> that represents the value of this stat
 	 */
 	@Override
 	public String toString() {

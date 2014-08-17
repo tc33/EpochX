@@ -40,7 +40,7 @@ import org.epochx.event.OperatorEvent.EndOperator;
 import org.epochx.stgp.STGPIndividual;
 
 /**
- * A crossover operator for <tt>STGPIndividual</tt>s that exchanges subtrees
+ * A crossover operator for <code>STGPIndividual</code>s that exchanges subtrees
  * in two individuals. Random crossover points are chosen in both program trees
  * from those points which align in the two programs. Alignment is determined by
  * nodes in the same position having the same arity and data-type, or for the
@@ -80,7 +80,7 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
 	private Double probability;
 
 	/**
-	 * Constructs a <tt>OnePointCrossover</tt> with control parameters
+	 * Constructs a <code>OnePointCrossover</code> with control parameters
 	 * automatically loaded from the config
 	 */
 	public OnePointCrossover() {
@@ -88,9 +88,9 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
 	}
 
 	/**
-	 * Constructs a <tt>OnePointCrossover</tt> with control parameters initially
-	 * loaded from the config. If the <tt>autoConfig</tt> argument is set to
-	 * <tt>true</tt> then the configuration will be automatically updated when
+	 * Constructs a <code>OnePointCrossover</code> with control parameters initially
+	 * loaded from the config. If the <code>autoConfig</code> argument is set to
+	 * <code>true</code> then the configuration will be automatically updated when
 	 * the config is modified.
 	 * 
 	 * @param autoConfig whether this operator should automatically update its
@@ -109,7 +109,7 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
 
 	/**
 	 * Sets up this operator with the appropriate configuration settings.
-	 * This method is called whenever a <tt>ConfigEvent</tt> occurs for a
+	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
 	 * change in any of the following configuration parameters:
 	 * <ul>
 	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
@@ -125,7 +125,7 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
 
 	/**
 	 * Receives configuration events and triggers this operator to configure its
-	 * parameters if the <tt>ConfigEvent</tt> is for one of its required
+	 * parameters if the <code>ConfigEvent</code> is for one of its required
 	 * parameters.
 	 * 
 	 * @param event {@inheritDoc}
@@ -147,12 +147,12 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
 	 * points are exchanged. See the paper referenced in the class documation
 	 * for more details of the operation of one-point crossover.
 	 * 
-	 * @param event the <tt>EndOperator</tt> event to be filled with information
+	 * @param event the <code>EndOperator</code> event to be filled with information
 	 *        about this operation
 	 * @param parents an array of two individuals to undergo one-point
 	 *        crossover. Both individuals must be instances of
-	 *        <tt>STGPIndividual</tt>.
-	 * @return an array containing two <tt>STGPIndividual</tt>s that are the
+	 *        <code>STGPIndividual</code>.
+	 * @return an array containing two <code>STGPIndividual</code>s that are the
 	 *         result of the crossover
 	 */
 	@Override
@@ -186,7 +186,7 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
 	}
 
 	/**
-	 * Returns a <tt>OnePointCrossoverEndEvent</tt> with the operator and 
+	 * Returns a <code>OnePointCrossoverEndEvent</code> with the operator and 
 	 * parents set
 	 */
 	@Override
@@ -258,11 +258,11 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
 
 	/**
 	 * Returns whether strict one-point crossover is being used or not. If set
-	 * to <tt>true</tt> then alignment of the parent programs takes into
+	 * to <code>true</code> then alignment of the parent programs takes into
 	 * account not only the arity of the nodes, but also the node type.
 	 * 
-	 * @return <tt>true</tt> if strict one-point crossover is in use, and
-	 *         <tt>false</tt> otherwise
+	 * @return <code>true</code> if strict one-point crossover is in use, and
+	 *         <code>false</code> otherwise
 	 */
 	public boolean isStrict() {
 		return strict;
@@ -276,8 +276,8 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
 	 * overwritten by the {@link #STRICT} configuration setting on the next
 	 * config event.
 	 * 
-	 * @param strict <tt>true</tt> if strict one-point crossover should be used
-	 *        and <tt>false</tt> otherwise
+	 * @param strict <code>true</code> if strict one-point crossover should be used
+	 *        and <code>false</code> otherwise
 	 */
 	public void setStrict(boolean strict) {
 		this.strict = strict;

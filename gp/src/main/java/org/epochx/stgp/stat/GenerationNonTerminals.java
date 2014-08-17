@@ -33,7 +33,7 @@ import org.epochx.stgp.STGPIndividual;
 /**
  * A stat that returns the number of non-terminals in all program trees in the 
  * population from the previous generation. All individuals in the population 
- * must be instances of <tt>STGPIndividual</tt>.
+ * must be instances of <code>STGPIndividual</code>.
  * 
  * @since 2.0
  */
@@ -42,7 +42,7 @@ public class GenerationNonTerminals extends AbstractStat<EndGeneration> {
 	private int[] nonTerminals;
 
 	/**
-	 * Constructs a <tt>GenerationNonTerminals</tt> stat and registers
+	 * Constructs a <code>GenerationNonTerminals</code> stat and registers
 	 * its dependencies
 	 */
 	public GenerationNonTerminals() {
@@ -52,7 +52,7 @@ public class GenerationNonTerminals extends AbstractStat<EndGeneration> {
 	/**
 	 * Triggers the generation of an updated value for this stat. Once this stat
 	 * has been registered, this method will be called on each
-	 * <tt>EndGeneration</tt> event.
+	 * <code>EndGeneration</code> event.
 	 * 
 	 * @param event an object that encapsulates information about the event that
 	 *        occurred
@@ -84,7 +84,7 @@ public class GenerationNonTerminals extends AbstractStat<EndGeneration> {
 	/**
 	 * Returns a string representation of the value of this stat
 	 * 
-	 * @return a <tt>String</tt> that represents the value of this stat
+	 * @return a <code>String</code> that represents the value of this stat
 	 */
 	@Override
 	public String toString() {

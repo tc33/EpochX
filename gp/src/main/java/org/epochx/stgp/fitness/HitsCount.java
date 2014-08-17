@@ -35,8 +35,8 @@ import org.epochx.stgp.STGPIndividual;
 
 
 /**
- * A fitness function for <tt>STGPIndividual</tt>s that calculates and assigns 
- * <tt>DoubleFitness.Minimise</tt> scores. The fitness scores are calculated by executing
+ * A fitness function for <code>STGPIndividual</code>s that calculates and assigns 
+ * <code>DoubleFitness.Minimise</code> scores. The fitness scores are calculated by executing
  * the program for each of the provided sets of inputs. The results are compared to the 
  * expected outputs and a count of the number of correct results is given as the fitness 
  * value. Can work with doubles or other object types. If doubles are used then the point 
@@ -69,7 +69,7 @@ public class HitsCount extends STGPFitnessFunction implements Listener<ConfigEve
 	private Double pointError;
 	
 	/**
-	 * Constructs a <tt>HitsCount</tt> fitness function with control parameters
+	 * Constructs a <code>HitsCount</code> fitness function with control parameters
 	 * automatically loaded from the config.
 	 */
 	public HitsCount() {
@@ -77,8 +77,8 @@ public class HitsCount extends STGPFitnessFunction implements Listener<ConfigEve
 	}
 	
 	/**
-	 * Constructs a <tt>HitsCount</tt> fitness function with control parameters initially
-	 * loaded from the config. If the <tt>autoConfig</tt> argument is set to <tt>true</tt> 
+	 * Constructs a <code>HitsCount</code> fitness function with control parameters initially
+	 * loaded from the config. If the <code>autoConfig</code> argument is set to <code>true</code> 
 	 * then the configuration will be automatically updated when the config is modified.
 	 * 
 	 * @param autoConfig whether this operator should automatically update its
@@ -94,7 +94,7 @@ public class HitsCount extends STGPFitnessFunction implements Listener<ConfigEve
 	
 	/**
 	 * Sets up this operator with the appropriate configuration settings.
-	 * This method is called whenever a <tt>ConfigEvent</tt> occurs for a
+	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
 	 * change in any of the following configuration parameters:
 	 * <ul>
 	 * <li>{@link #INPUT_VARIABLES}
@@ -112,7 +112,7 @@ public class HitsCount extends STGPFitnessFunction implements Listener<ConfigEve
 	
 	/**
 	 * Receives configuration events and triggers this fitness function to 
-	 * configure its parameters if the <tt>ConfigEvent</tt> is for one of 
+	 * configure its parameters if the <code>ConfigEvent</code> is for one of 
 	 * its required parameters.
 	 * 
 	 * @param event {@inheritDoc}
@@ -126,8 +126,8 @@ public class HitsCount extends STGPFitnessFunction implements Listener<ConfigEve
 	
 	/**
 	 * Calculates the fitness of the given individual. This fitness function only operates
-	 * on <tt>STGPIndividual</tt>s. The fitness returned will be an instance of 
-	 * <tt>DoubleFitness.Minimise</tt>. The fitness score is a count of the number of sets 
+	 * on <code>STGPIndividual</code>s. The fitness returned will be an instance of 
+	 * <code>DoubleFitness.Minimise</code>. The fitness score is a count of the number of sets 
 	 * of inputs that produce a correct result (or 'hit'). For double types a hit can have an 
 	 * error range, specified by the {@link HitsCount#POINT_ERROR} config key.
 	 *  

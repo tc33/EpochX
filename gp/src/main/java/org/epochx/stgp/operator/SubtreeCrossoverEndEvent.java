@@ -38,7 +38,7 @@ public class SubtreeCrossoverEndEvent extends OperatorEvent.EndOperator {
 	private int[] points;
 
 	/**
-	 * Constructs a <tt>SubtreeCrossoverEndEvent</tt> with the details of the
+	 * Constructs a <code>SubtreeCrossoverEndEvent</code> with the details of the
 	 * event
 	 * 
 	 * @param operator the operator that performed the crossover

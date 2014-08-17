@@ -35,7 +35,7 @@ import org.epochx.event.*;
 import org.epochx.stgp.STGPIndividual;
 
 /**
- * Initialisation method which produces <tt>STGPIndividual</tt>s with program 
+ * Initialisation method which produces <code>STGPIndividual</code>s with program 
  * trees within a specified maximum depth. Program trees are constructed 
  * randomly from the nodes in the syntax, with each node's data-type constraints 
  * enforced.
@@ -67,7 +67,7 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 	private Class<?>[][] dataTypesTable;
 
 	/**
-	 * Constructs a <tt>GrowInitialisation</tt> with control parameters 
+	 * Constructs a <code>GrowInitialisation</code> with control parameters 
 	 * automatically loaded from the config
 	 */
 	public GrowInitialisation() {
@@ -75,9 +75,9 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 	}
 	
 	/**
-	 * Constructs a <tt>GrowInitialisation</tt> with control parameters 
-	 * initially loaded from the config. If the <tt>autoConfig</tt> argument is 
-	 * set to <tt>true</tt> then the configuration will be automatically updated
+	 * Constructs a <code>GrowInitialisation</code> with control parameters 
+	 * initially loaded from the config. If the <code>autoConfig</code> argument is 
+	 * set to <code>true</code> then the configuration will be automatically updated
 	 * when the config is modified.
 	 * 
 	 * @param autoConfig whether this operator should automatically update its
@@ -97,7 +97,7 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 
 	/**
 	 * Sets up this operator with the appropriate configuration settings.
-	 * This method is called whenever a <tt>ConfigEvent</tt> occurs for a
+	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
 	 * change in any of the following configuration parameters:
 	 * <ul>
 	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
@@ -106,7 +106,7 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 	 * <li>{@link STGPIndividual#RETURN_TYPE}
 	 * <li>{@link STGPIndividual#MAXIMUM_DEPTH}
 	 * <li>{@link STGPInitialisation#MAXIMUM_INITIAL_DEPTH}
-	 * <li>{@link InitialisationMethod#ALLOW_DUPLICATES} (default: <tt>true</tt>)
+	 * <li>{@link InitialisationMethod#ALLOW_DUPLICATES} (default: <code>true</code>)
 	 * </ul>
 	 */
 	protected void setup() {
@@ -149,7 +149,7 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 	
 	/**
 	 * Receives configuration events and triggers this operator to configure its
-	 * parameters if the <tt>ConfigEvent</tt> is for one of its required
+	 * parameters if the <code>ConfigEvent</code> is for one of its required
 	 * parameters.
 	 * 
 	 * @param event {@inheritDoc}
@@ -171,14 +171,14 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 
 
 	/**
-	 * Creates a population of new <tt>STGPIndividuals</tt> from the
-	 * <tt>Node</tt>s provided by the {@link STGPIndividual#SYNTAX} config
+	 * Creates a population of new <code>STGPIndividuals</code> from the
+	 * <code>Node</code>s provided by the {@link STGPIndividual#SYNTAX} config
 	 * parameter. Each individual is created by a call to the
-	 * <tt>createIndividual</tt> method. The size of the population will be
+	 * <code>createIndividual</code> method. The size of the population will be
 	 * equal to the {@link Population#SIZE} config parameter. If the
 	 * {@link InitialisationMethod#ALLOW_DUPLICATES} config parameter is set to
-	 * <tt>false</tt> then the individuals in the population will be unique
-	 * according to their <tt>equals</tt> methods. By default, duplicates are
+	 * <code>false</code> then the individuals in the population will be unique
+	 * according to their <code>equals</code> methods. By default, duplicates are
 	 * allowed.
 	 * 
 	 * @return a population of <code>STGPIndividual</code> objects
@@ -205,7 +205,7 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 	}
 
 	/**
-	 * Constructs a new <tt>STGPIndividual</tt> instance with a grown program
+	 * Constructs a new <code>STGPIndividual</code> instance with a grown program
 	 * tree composed of nodes provided by the {@link STGPIndividual#SYNTAX}
 	 * config parameter. Each node in the tree is randomly chosen from those
 	 * nodes with a valid data-type. If the maximum depth has not been reached
@@ -221,7 +221,7 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 
 	/**
 	 * Creates a program tree within the maximum depth as specified by the 
-	 * <tt>getMaximumDepth</tt> method. The nodes in the tree are randomly 
+	 * <code>getMaximumDepth</code> method. The nodes in the tree are randomly 
 	 * chosen from those nodes in the syntax with a data-type that matches the 
 	 * requirements of their parent (or the problem for the root node).
 	 * 
@@ -381,7 +381,7 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 	 * @param remainingDepth the available depth in which the varieties are
 	 * constrained
 	 * @param returnType the required return type of the varieties
-	 * @return a <tt>BigInteger</tt> which is a count of the number of varieties
+	 * @return a <code>BigInteger</code> which is a count of the number of varieties
 	 */
 	public BigInteger varieties(int remainingDepth, Class<?> returnType) {
 		//TODO This method should probably be in a utilities class
@@ -457,7 +457,7 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 
 	/**
 	 * Tests whether the number of different node trees that are possible
-	 * according to the <tt>varieties</tt> method is greater than or equal to
+	 * according to the <code>varieties</code> method is greater than or equal to
 	 * a specified target. This method is more efficient than getting the 
 	 * total number of varieties and doing a comparison, because it may return
 	 * a result without completing the count. 
@@ -466,8 +466,8 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 	 * constrained
 	 * @param returnType the required return type of the varieties
 	 * @param target the number of varieties that is considered sufficient
-	 * @return <tt>true</tt> if the number of varieties is equal to or greater
-	 * than <tt>target</tt> and <tt>false</tt> otherwise.
+	 * @return <code>true</code> if the number of varieties is equal to or greater
+	 * than <code>target</code> and <code>false</code> otherwise.
 	 */
 	public boolean sufficientVarieties(int remainingDepth, Class<?> returnType, BigInteger target) {
 		//TODO This method should probably be in a utilities class
@@ -559,9 +559,9 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 	 * Returns whether or not duplicates are currently allowed in generated
 	 * populations
 	 * 
-	 * @return <tt>true</tt> if duplicates are currently allowed in populations
-	 *         generated by the <tt>createPopulation</tt> method and
-	 *         <tt>false</tt> otherwise
+	 * @return <code>true</code> if duplicates are currently allowed in populations
+	 *         generated by the <code>createPopulation</code> method and
+	 *         <code>false</code> otherwise
 	 */
 	public boolean isDuplicatesEnabled() {
 		return allowDuplicates;
@@ -631,7 +631,7 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 
 	/**
 	 * Returns the number of individuals to be generated in a population created
-	 * by the <tt>createPopulation</tt> method
+	 * by the <code>createPopulation</code> method
 	 * 
 	 * @return the size of the populations generated
 	 */
@@ -641,7 +641,7 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 
 	/**
 	 * Sets the number of individuals to be generated in a population created
-	 * by the <tt>createPopulation</tt> method. If automatic configuration is 
+	 * by the <code>createPopulation</code> method. If automatic configuration is 
 	 * enabled thenAny value set here will be overwritten by the 
 	 * {@link Population#SIZE} configuration setting on the next config event.
 	 * 
@@ -663,7 +663,7 @@ public class GrowInitialisation implements STGPInitialisation, Listener<ConfigEv
 
 	/**
 	 * Sets the maximum depth of the program trees created by the
-	 * <tt>createIndividual</tt> method. If automatic configuration is enabled 
+	 * <code>createIndividual</code> method. If automatic configuration is enabled 
 	 * then any value set here will be overwritten by the 
 	 * {@link STGPInitialisation#MAXIMUM_INITIAL_DEPTH} configuration setting on
 	 * the next config event, or the {@link STGPIndividual#MAXIMUM_DEPTH} 

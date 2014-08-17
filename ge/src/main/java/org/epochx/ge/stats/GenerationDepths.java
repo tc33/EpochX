@@ -35,6 +35,8 @@ import org.epochx.grammar.NonTerminalSymbol;
  * A stat that returns the depth of all parse trees in the population from
  * the previous generation. All individuals in the population must be instances 
  * of <code>GEIndividual</code>.
+ * 
+ * @since 2.0
  */
 public class GenerationDepths extends AbstractStat<EndGeneration> {
 

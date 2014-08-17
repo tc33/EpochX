@@ -28,7 +28,9 @@ import org.epochx.ge.map.MappingEvent.EndMapping;
 
 /**
  * A stat that returns the number of codons that were used in the previous 
- * GE mapping 
+ * GE mapping.
+ * 
+ * @since 2.0
  */
 public class NoActiveCodons extends AbstractStat<EndMapping> {
 

@@ -32,6 +32,8 @@ import org.epochx.event.stat.*;
  * 
  * @see GenerationAverageLengthError
  * @see GenerationAverageLength
+ * 
+ * @since 2.0
  */
 public class GenerationStandardDeviationLength extends AbstractStat<EndGeneration> {
 

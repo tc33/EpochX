@@ -31,6 +31,8 @@ import org.epochx.ge.operator.FixedPointCrossoverEndEvent;
  * 
  * @see FixedPointCrossover
  * @see FixedPointCrossoverEndEvent
+ * 
+ * @since 2.0
  */
 public class FixedPointCrossoverPoint extends AbstractStat<FixedPointCrossoverEndEvent> {
 

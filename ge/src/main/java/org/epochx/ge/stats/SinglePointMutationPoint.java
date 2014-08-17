@@ -31,13 +31,15 @@ import org.epochx.ge.operator.SinglePointMutationEndEvent;
  * 
  * @see SinglePointMutation
  * @see SinglePointMutationEndEvent
+ * 
+ * @since 2.0
  */
 public class SinglePointMutationPoint extends AbstractStat<SinglePointMutationEndEvent> {
 
 	private int mutationPoint;
 
 	/**
-	 * Constructs a <code>SinglePointCrossoverPoint</code> stat and registers its
+	 * Constructs a <code>SinglePointMutationPoint</code> stat and registers its
 	 * dependencies
 	 */
 	public SinglePointMutationPoint() {
@@ -58,7 +60,7 @@ public class SinglePointMutationPoint extends AbstractStat<SinglePointMutationEn
 	}
 
 	/**
-	 * Returns the mutation point from the previous single-point mutation that occurred.
+	 * Returns the mutation point from the previous single-point mutation that occurred
 	 * 
 	 * @return an integer which was the mutation point in the individual
 	 */

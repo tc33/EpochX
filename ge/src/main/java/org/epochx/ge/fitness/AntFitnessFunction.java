@@ -43,13 +43,15 @@ import org.epochx.tools.ant.AntLandscape;
 
 /**
  * A fitness function for <code>GEIndividual</code>s that calculates and assigns 
- * <code>DoubleFitness.Minimise</code> scores. The program is executed using an interpreter until 
- * the maximum number of timesteps are used. The fitness score returned is the number of food 
- * items that are <b>not</b> consumed by the controlled ant.
+ * <code>DoubleFitness.Minimise</code> scores. The program is executed using an interpreter 
+ * until the maximum number of timesteps are used. The fitness score returned is the number 
+ * of food items that are <b>not</b> consumed by the controlled ant.
  * 
  * When using this fitness function the {@link #FOOD_LOCATIONS} and 
  * {@link #MAXIMUM_TIMESTEPS} config options must be set, or the same values set using the 
  * mutator methods provided.
+ * 
+ * @since 2.0
  */
 public class AntFitnessFunction extends GEFitnessFunction implements Listener<ConfigEvent> {
 
@@ -85,21 +87,24 @@ public class AntFitnessFunction extends GEFitnessFunction implements Listener<Co
 	}
 	
 	/**
-	 * Constructs a <code>AntFitnessFunction</code> fitness function with control parameters initially
-	 * loaded from the config. If the <code>autoConfig</code> argument is set to <code>true</code> 
-	 * then the configuration will be automatically updated when the config is modified.
+	 * Constructs a <code>AntFitnessFunction</code> fitness function with control parameters 
+	 * initially loaded from the config. If the <code>autoConfig</code> argument is set to 
+	 * <code>true</code> then the configuration will be automatically updated when the config 
+	 * is modified.
 	 * 
 	 * @param ant the ant that is being controlled
 	 * @param landscape the ant landscape that the ant is navigating
-	 * @param autoConfig whether this operator should automatically update its
+	 * @param autoConfig whether this fitness function should automatically update its
 	 *        configuration settings from the config
 	 */
 	public AntFitnessFunction(Ant ant, AntLandscape landscape, boolean autoConfig) {
-		setup();
-		
 		this.ant = ant;
 		this.landscape = landscape;
+		
+		// Default config values
 		malformedPenalty = Double.MAX_VALUE;
+		
+		setup();
 
 		if (autoConfig) {
 			EventManager.getInstance().add(ConfigEvent.class, this);
@@ -113,8 +118,8 @@ public class AntFitnessFunction extends GEFitnessFunction implements Listener<Co
 	 * <ul>
 	 * <li>{@link #FOOD_LOCATIONS}
 	 * <li>{@link #MAXIMUM_TIMESTEPS}
-	 * <li>{@link GEFitnessFunction#MALFORMED_PENALTY}
 	 * <li>{@link GEFitnessFunction#INTERPRETER}
+	 * <li>{@link GEFitnessFunction#MALFORMED_PENALTY}
 	 * </ul>
 	 */
 	protected void setup() {
@@ -140,14 +145,14 @@ public class AntFitnessFunction extends GEFitnessFunction implements Listener<Co
 	
 	/**
 	 * Calculates the fitness of the given individual. This fitness function only operates
-	 * on STGPIndividuals. The fitness returned will be an instance of DoubleFitness.Minimise. 
-	 * The fitness score is a count of the number of food items left in the landscape after
-	 * the given individual is executed for the number of timesteps specified by the 
-	 * {@link #MAXIMUM_TIMESTEPS} config key.
+	 * on <code>GEIndividual</code>s. The fitness returned will be an instance of 
+	 * <code>DoubleFitness.Minimise</code>. The fitness score is a count of the number of 
+	 * food items left in the landscape after the given individual is executed for the number 
+	 * of timesteps specified by the {@link #MAXIMUM_TIMESTEPS} config key.
 	 * 
 	 * @param individual the program to evaluate
 	 * @return the fitness of the given individual
-	 * @throws IllegalArgumentException if the individual is not an STGPIndividual
+	 * @throws IllegalArgumentException if the individual is not a GEIndividual
 	 */
 	@Override
 	public DoubleFitness.Minimise evaluate(Individual individual) {
@@ -232,7 +237,7 @@ public class AntFitnessFunction extends GEFitnessFunction implements Listener<Co
 	 * overwritten by the {@link #MALFORMED_PENALTY} configuration setting on the 
 	 * next config event.
 	 * 
-	 * @param malformedPenalty
+	 * @param malformedPenalty the penalty to be assigned to malformed individuals
 	 */
 	public void setMalformedProgramPenalty(Double malformedPenalty) {
 		this.malformedPenalty = malformedPenalty;

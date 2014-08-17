@@ -83,13 +83,14 @@ public class AntFitnessFunction extends STGPFitnessFunction implements Listener<
 	}
 	
 	/**
-	 * Constructs a <code>AntFitnessFunction</code> fitness function with control parameters initially
-	 * loaded from the config. If the <code>autoConfig</code> argument is set to <code>true</code> 
-	 * then the configuration will be automatically updated when the config is modified.
+	 * Constructs a <code>AntFitnessFunction</code> fitness function with control parameters 
+	 * initially loaded from the config. If the <code>autoConfig</code> argument is set to 
+	 * <code>true</code> then the configuration will be automatically updated when the config 
+	 * is modified.
 	 * 
 	 * @param ant the ant that is being controlled
 	 * @param landscape the ant landscape that the ant is navigating
-	 * @param autoConfig whether this operator should automatically update its
+	 * @param autoConfig whether this fitness function should automatically update its
 	 *        configuration settings from the config
 	 */
 	public AntFitnessFunction(Ant ant, AntLandscape landscape, boolean autoConfig) {

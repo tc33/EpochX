@@ -33,7 +33,7 @@ import org.epochx.*;
 import org.epochx.event.*;
 
 /**
- * 
+ * A chromosome is a sequential list of Codons. 
  */
 public class Chromosome implements Iterable<Codon>, Cloneable, Listener<ConfigEvent> {
 

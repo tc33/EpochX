@@ -59,7 +59,7 @@ public class GEIndividual extends AbstractIndividual {
 	}
 	
 	/**
-	 * Constructs a GE individual represented by the given chromosome.
+	 * Constructs a GE individual represented by the given chromosome
 	 * 
 	 * @param chromosome the initial set of codons
 	 */
@@ -125,6 +125,8 @@ public class GEIndividual extends AbstractIndividual {
 	 * Returns a string representation of this program. This will be a string
 	 * representation of the parse tree if it has been set, otherwise it will be
 	 * a string representation of the chromosome.
+	 * 
+	 * @return a string representation of this individual
 	 */
 	@Override
 	public String toString() {
@@ -142,8 +144,7 @@ public class GEIndividual extends AbstractIndividual {
 	 * If either individual's parse tree is <code>null</code>, then the chromosomes
 	 * must be equal for the individuals to be considered equal.
 	 * 
-	 * @return true if the object is an equivalent candidate program, false
-	 *         otherwise.
+	 * @return true if the object is an equivalent individual, false otherwise
 	 */
 	@Override
 	public boolean equals(Object o) {
@@ -153,10 +154,10 @@ public class GEIndividual extends AbstractIndividual {
 		Symbol progParseTree = prog.parseTree;
 
 		if ((thisParseTree == null) || (progParseTree == null)) {
-			// Compare genotypes.
+			// Compare genotypes
 			return chromosome.equals(prog.chromosome);
 		} else {
-			// Compare phenotypes.
+			// Compare phenotypes
 			return ObjectUtils.equals(thisParseTree, progParseTree);
 		}
 	}

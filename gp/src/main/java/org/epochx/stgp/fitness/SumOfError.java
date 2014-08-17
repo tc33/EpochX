@@ -42,12 +42,13 @@ import org.epochx.stgp.STGPIndividual;
  * 
  * When using this fitness function the {@link #INPUT_VARIABLES}, {@link #INPUT_VALUE_SETS} 
  * and {@link #EXPECTED_OUTPUTS} config options must be set, or the same values set using the 
- * mutator methods provided. The length of the INPUT_VALUE_SETS array should match the length 
- * of the EXPECTED_OUTPUTS array and the number of values in each set should match the length 
- * of the INPUT_VARIABLES array.
+ * mutator methods provided. The length of the <code>INPUT_VALUE_SETS</code> array should match 
+ * the length of the <code>EXPECTED_OUTPUTS</code> array and the number of values in each set 
+ * should match the length of the <code>INPUT_VARIABLES</code> array.
  * 
- * If the program returns NaN for any of the input sets then a fitness
- * score of NaN is assigned by default.
+ * If the program returns <code>NaN</code> for any of the input sets then a fitness score of 
+ * <code>NaN</code> is assigned by default, although this can be changed by overriding the 
+ * <code>nanFitnessScore</code> method.
  * 
  * @since 2.0
  */

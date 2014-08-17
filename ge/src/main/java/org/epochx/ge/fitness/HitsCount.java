@@ -48,7 +48,7 @@ import org.epochx.interpret.MalformedProgramException;
  * options must be set, or the same values set using the mutator methods provided. The length 
  * of the <code>INPUT_VALUE_SETS</code> array should match the length of the 
  * <code>EXPECTED_OUTPUTS</code> array and the number of values in each set should match the 
- * length of the <code>INPUT_VARIABLES</code> array.
+ * length of the <code>INPUT_IDENTIFIERS</code> array.
  * 
  * @since 2.0
  */
@@ -91,6 +91,7 @@ public class HitsCount extends GEFitnessFunction implements Listener<ConfigEvent
 	public HitsCount(boolean autoConfig) {
 		// Default config values
 		malformedPenalty = Double.MAX_VALUE;
+		pointError = 0.0;
 		
 		setup();
 
@@ -108,7 +109,7 @@ public class HitsCount extends GEFitnessFunction implements Listener<ConfigEvent
 	 * <li>{@link #INPUT_VALUE_SETS}
 	 * <li>{@link #EXPECTED_OUTPUTS}
 	 * <li>{@link #POINT_ERROR}
-	 * <li>{@link Interpreter#INTERPRETER}
+	 * <li>{@link GEFitnessFunction#INTERPRETER}
 	 * <li>{@link #MALFORMED_PENALTY}
 	 * </ul>
 	 */

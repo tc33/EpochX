@@ -50,8 +50,6 @@ import org.epochx.tools.ant.AntLandscape;
  * When using this fitness function the {@link #FOOD_LOCATIONS} and 
  * {@link #MAXIMUM_TIMESTEPS} config options must be set, or the same values set using the 
  * mutator methods provided.
- * 
- * @since 2.0
  */
 public class AntFitnessFunction extends GEFitnessFunction implements Listener<ConfigEvent> {
 

@@ -27,7 +27,6 @@ import org.epochx.Config;
 import org.epochx.Config.ConfigKey;
 import org.epochx.DoubleFitness;
 import org.epochx.Individual;
-import org.epochx.epox.Variable;
 import org.epochx.event.ConfigEvent;
 import org.epochx.event.EventManager;
 import org.epochx.event.Listener;
@@ -36,34 +35,25 @@ import org.epochx.interpret.Interpreter;
 import org.epochx.interpret.MalformedProgramException;
 
 /**
- * A fitness function for <code>STGPIndividual</code>s that calculates and assigns 
+ * A fitness function for <code>GEIndividual</code>s that calculates and assigns 
  * <code>DoubleFitness.Minimise</code> scores. The fitness scores are calculated by executing
  * the program for each of the provided sets of inputs. The difference between the value 
  * returned by the program and the expected outputs supplied is summed to give the fitness
- * value. 
+ * value.
  * 
  * When using this fitness function the {@link #INPUT_VARIABLES}, {@link #INPUT_VALUE_SETS} 
  * and {@link #EXPECTED_OUTPUTS} config options must be set, or the same values set using the 
- * mutator methods provided. The length of the INPUT_VALUE_SETS array should match the length 
- * of the EXPECTED_OUTPUTS array and the number of values in each set should match the length 
- * of the INPUT_VARIABLES array.
+ * mutator methods provided. The length of the <code>INPUT_VALUE_SETS</code> array should match 
+ * the length of the <code>EXPECTED_OUTPUTS</code> array and the number of values in each set 
+ * should match the length of the <code>INPUT_IDENTIFIERS</code> array.
  * 
- * If the program returns NaN for any of the input sets then a fitness
- * score of NaN is assigned by default.
+ * If the program returns <code>NaN</code> for any of the input sets then a fitness score of 
+ * <code>NaN</code> is assigned by default, although this can be changed by overriding the 
+ * <code>nanFitnessScore</code> method.
+ * 
+ * @since 2.0
  */
 public class SumOfError extends GEFitnessFunction implements Listener<ConfigEvent> {
-	
-	/**
-	 * The key for setting the program's input variables
-	 */
-	public static final ConfigKey<Variable[]> INPUT_VARIABLES = new ConfigKey<Variable[]>();
-	
-	/**
-	 * The key for setting the sets of values to use as inputs. The length of the array should 
-	 * match the length of the EXPECTED_OUTPUTS array and the number of values in each set 
-	 * should match the length of the INPUT_VARIABLES array.
-	 */
-	public static final ConfigKey<Object[][]> INPUT_VALUE_SETS = new ConfigKey<Object[][]>();
 	
 	/**
 	 * The key for setting the expected output values from the programs being evaluated
@@ -94,9 +84,10 @@ public class SumOfError extends GEFitnessFunction implements Listener<ConfigEven
 	 *        configuration settings from the config
 	 */
 	public SumOfError(boolean autoConfig) {
-		setup();
-		
+		// Default config values
 		malformedPenalty = Double.MAX_VALUE;
+		
+		setup();
 
 		if (autoConfig) {
 			EventManager.getInstance().add(ConfigEvent.class, this);
@@ -108,11 +99,11 @@ public class SumOfError extends GEFitnessFunction implements Listener<ConfigEven
 	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
 	 * change in any of the following configuration parameters:
 	 * <ul>
-	 * <li>{@link #INPUT_VARIABLES}
+	 * <li>{@link #INPUT_IDENTIFIERS}
 	 * <li>{@link #INPUT_VALUE_SETS}
 	 * <li>{@link #EXPECTED_OUTPUTS}
-	 * <li>{@link #MALFORMED_PENALTY}
 	 * <li>{@link #INTERPRETER}
+	 * <li>{@link #MALFORMED_PENALTY}
 	 * </ul>
 	 */
 	protected void setup() {
@@ -139,13 +130,15 @@ public class SumOfError extends GEFitnessFunction implements Listener<ConfigEven
 	
 	/**
 	 * Calculates the fitness of the given individual. This fitness function only operates
-	 * on GEIndividuals with a Double data-type. The fitness returned will be an instance 
-	 * of DoubleFitness.Minimise. The fitness score is calculated as the sum of the difference 
-	 * between the expected outputs and the actual outputs, for each set of inputs.
+	 * on <code>GEIndividual</code>s with a <code>Double</code> return type. The fitness 
+	 * returned will be an instance of <code>DoubleFitness.Minimise</code>. The fitness 
+	 * score is calculated as the sum of the difference between the expected outputs and 
+	 * the actual 
+	 * outputs, for each set of inputs.
 	 * 
 	 * @param individual the individual to evaluate the fitness of
 	 * @return the fitness of the given individual
-	 * @throws IllegalArgumentException if the individual is not an STGPIndividual or the 
+	 * @throws IllegalArgumentException if the individual is not a GEIndividual or the 
 	 * individual's data-type is not Double.
 	 */
 	@Override
@@ -170,18 +163,28 @@ public class SumOfError extends GEFitnessFunction implements Listener<ConfigEven
 			
 			if (result instanceof Double) {
 				double d = (Double) result;
-				double error = Math.abs(d - expectedOutputs[i]);
 
-				if (Double.isNaN(d)) {
+				if (!Double.isNaN(d)) {
+					double error = Math.abs(d - expectedOutputs[i]);
 					errorSum += error;
 				} else {
-					errorSum = malformedPenalty;
+					errorSum = nanFitnessScore();
 					break;
 				}
 			}
 		}
 		
 		return new DoubleFitness.Minimise(errorSum);
+	}
+	
+	/**
+	 * Returns the value to be used when an individual returns a NaN value. The default value
+	 * is <code>Double.NaN</code>.
+	 * 
+	 * @return the value to return when an individual returns a NaN value
+	 */
+	protected Double nanFitnessScore() {
+		return Double.NaN;
 	}
 	
 	/**

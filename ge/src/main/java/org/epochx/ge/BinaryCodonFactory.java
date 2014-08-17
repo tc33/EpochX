@@ -56,7 +56,7 @@ public class BinaryCodonFactory implements CodonFactory, Listener<ConfigEvent> {
 	
 	/**
 	 * Sets up this operator with the appropriate configuration settings.
-	 * This method is called whenever a <tt>ConfigEvent</tt> occurs for a
+	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
 	 * change in any of the following configuration parameters:
 	 * <ul>
 	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
@@ -69,7 +69,7 @@ public class BinaryCodonFactory implements CodonFactory, Listener<ConfigEvent> {
 
 	/**
 	 * Receives configuration events and triggers this operator to configure its
-	 * parameters if the <tt>ConfigEvent</tt> is for one of its required
+	 * parameters if the <code>ConfigEvent</code> is for one of its required
 	 * parameters.
 	 * 
 	 * @param event {@inheritDoc}
@@ -118,12 +118,12 @@ public class BinaryCodonFactory implements CodonFactory, Listener<ConfigEvent> {
 	/**
 	 * Converts the given chromosome to a boolean array of bits, where each codon in the 
 	 * chromosome is represented by NO_BITS. This method only works on chromosomes which 
-	 * contain only <tt>BinaryCodon</tt>s.
+	 * contain only <code>BinaryCodon</code>s.
 	 * 
 	 * @param chromosome the chromosome to convert to bits
 	 * @return a boolean array representing the bits of the chromosome
 	 * @throws IllegalArgumentException if any of the codons in the chromosome are not an
-	 * instance of <tt>BinaryBinary</tt>
+	 * instance of <code>BinaryBinary</code>
 	 */
 	public static boolean[] chromosomeToBits(Chromosome chromosome) {
 		List<Boolean> bits = new ArrayList<Boolean>();

@@ -27,12 +27,12 @@ import org.epochx.Config.ConfigKey;
 import org.epochx.grammar.*;
 
 /**
- * A <tt>GEIndividual</tt> is a candidate solution which is represented by a
+ * A <code>GEIndividual</code> is a candidate solution which is represented by a
  * list of {@link Codon}s. 
  * 
  * <p>
  * Note: this class has a natural ordering that may be inconsistent with
- * <tt>equals</tt>.
+ * <code>equals</code>.
  * 
  * @since 2.0
  */
@@ -52,7 +52,7 @@ public class GEIndividual extends AbstractIndividual {
 	private NonTerminalSymbol parseTree;
 
 	/**
-	 * Constructs a GE individual with an initial chromosome of <tt>null</tt>
+	 * Constructs a GE individual with an initial chromosome of <code>null</code>
 	 */
 	public GEIndividual() {
 		this(null);
@@ -68,7 +68,7 @@ public class GEIndividual extends AbstractIndividual {
 	}
 
 	/**
-	 * Returns the <tt>Chromosome</tt> that defines this individual
+	 * Returns the <code>Chromosome</code> that defines this individual
 	 * 
 	 * @return this individual's chromosome
 	 */
@@ -77,10 +77,10 @@ public class GEIndividual extends AbstractIndividual {
 	}
 	
 	/**
-	 * Returns the root <tt>NonTerminalSymbol</tt> of the parse tree, if it has 
-	 * been set. Otherwise <tt>null</tt> is returned.
+	 * Returns the root <code>NonTerminalSymbol</code> of the parse tree, if it has 
+	 * been set. Otherwise <code>null</code> is returned.
 	 * 
-	 * @return the root of the parse tree, or <tt>null</tt> if it has not been
+	 * @return the root of the parse tree, or <code>null</code> if it has not been
 	 * set
 	 */
 	public NonTerminalSymbol getParseTree() {
@@ -88,7 +88,7 @@ public class GEIndividual extends AbstractIndividual {
 	}
 	
 	/**
-	 * Sets the <tt>NonTerminalSymbol</tt> that is the root node of the parse
+	 * Sets the <code>NonTerminalSymbol</code> that is the root node of the parse
 	 * tree that represents this individual. Typically this would be derived 
 	 * from the chromosome.
 	 * 
@@ -137,9 +137,9 @@ public class GEIndividual extends AbstractIndividual {
 
 	/**
 	 * Compares the given object to this instance for equality. Equivalence is
-	 * defined as them both being instances of <tt>GEIndividual</tt> and
-	 * having equal parse trees, according to <tt>getParseTree().equals(obj)</tt>.
-	 * If either individual's parse tree is <tt>null</tt>, then the chromosomes
+	 * defined as them both being instances of <code>GEIndividual</code> and
+	 * having equal parse trees, according to <code>getParseTree().equals(obj)</code>.
+	 * If either individual's parse tree is <code>null</code>, then the chromosomes
 	 * must be equal for the individuals to be considered equal.
 	 * 
 	 * @return true if the object is an equivalent candidate program, false
@@ -166,7 +166,7 @@ public class GEIndividual extends AbstractIndividual {
 	 * negative integer, zero, or a positive integer as this instance represents
 	 * the quality of an individual that is less fit, equally fit, or more fit
 	 * than the specified object. The individuals do not need to be of the same
-	 * object type, but must have non-null, comparable <tt>Fitness</tt> instances.
+	 * object type, but must have non-null, comparable <code>Fitness</code> instances.
 	 * 
 	 * @param other an individual to compare against
 	 * @return a negative integer, zero, or a positive integer as this object is

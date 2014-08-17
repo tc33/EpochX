@@ -40,11 +40,11 @@ import org.epochx.ge.Codon;
 import org.epochx.ge.GEIndividual;
 
 /**
- * This class implements a fixed point crossover on two <tt>GEIndividual</tt>s.
+ * This class implements a fixed point crossover on two <code>GEIndividual</code>s.
  * 
  * <p>
  * The operation is performed on the programs' chromosomes in a similar manner
- * to <tt>OnePointCrossover</tt>. One random codon position is chosen which is within the
+ * to <code>OnePointCrossover</code>. One random codon position is chosen which is within the
  * length bounds of both parent programs. Then all codons from that point
  * onwards in both programs are exchanged.
  * 
@@ -71,7 +71,7 @@ public class FixedPointCrossover extends AbstractOperator implements Listener<Co
 	private Double probability;
 
 	/**
-	 * Constructs a <tt>FixedPointCrossover</tt> with control parameters
+	 * Constructs a <code>FixedPointCrossover</code> with control parameters
 	 * automatically loaded from the config
 	 */
 	public FixedPointCrossover() {
@@ -79,9 +79,9 @@ public class FixedPointCrossover extends AbstractOperator implements Listener<Co
 	}
 
 	/**
-	 * Constructs a <tt>FixedPointCrossover</tt> with control parameters initially
-	 * loaded from the config. If the <tt>autoConfig</tt> argument is set to
-	 * <tt>true</tt> then the configuration will be automatically updated when
+	 * Constructs a <code>FixedPointCrossover</code> with control parameters initially
+	 * loaded from the config. If the <code>autoConfig</code> argument is set to
+	 * <code>true</code> then the configuration will be automatically updated when
 	 * the config is modified.
 	 * 
 	 * @param autoConfig whether this operator should automatically update its
@@ -97,7 +97,7 @@ public class FixedPointCrossover extends AbstractOperator implements Listener<Co
 	
 	/**
 	 * Sets up this operator with the appropriate configuration settings.
-	 * This method is called whenever a <tt>ConfigEvent</tt> occurs for a
+	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
 	 * change in any of the following configuration parameters:
 	 * <ul>
 	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
@@ -111,7 +111,7 @@ public class FixedPointCrossover extends AbstractOperator implements Listener<Co
 
 	/**
 	 * Receives configuration events and triggers this operator to configure its
-	 * parameters if the <tt>ConfigEvent</tt> is for one of its required
+	 * parameters if the <code>ConfigEvent</code> is for one of its required
 	 * parameters.
 	 * 
 	 * @param event {@inheritDoc}
@@ -128,15 +128,15 @@ public class FixedPointCrossover extends AbstractOperator implements Listener<Co
 	 * 
 	 * <p>
 	 * The operation is performed on the individuals' chromosomes in a similar
-	 * manner to <tt>OnePointCrossover</tt>. One random codon position is chosen which 
+	 * manner to <code>OnePointCrossover</code>. One random codon position is chosen which 
 	 * is within the length bounds of both parent programs. Then all codons from
 	 * that point onwards in both programs are exchanged.
 	 * 
-	 * @param event the <tt>EndOperator</tt> event to be filled with information
+	 * @param event the <code>EndOperator</code> event to be filled with information
 	 *        about this operation
 	 * @param parents an array of two individuals to undergo fixed-point
-	 *        crossover. Both individuals must be instances of <tt>GEIndividual</tt>.
-	 * @return an array containing two <tt>GEIndividual</tt>s that are the
+	 *        crossover. Both individuals must be instances of <code>GEIndividual</code>.
+	 * @return an array containing two <code>GEIndividual</code>s that are the
 	 *         result of the crossover
 	 */
 	@Override
@@ -177,7 +177,7 @@ public class FixedPointCrossover extends AbstractOperator implements Listener<Co
 	}
 	
 	/**
-	 * Returns a <tt>FixedPointCrossoverEndEvent</tt> with the operator and parents set
+	 * Returns a <code>FixedPointCrossoverEndEvent</code> with the operator and parents set
 	 * 
 	 * @param parents the parents that were operated on
 	 * @return operator end event

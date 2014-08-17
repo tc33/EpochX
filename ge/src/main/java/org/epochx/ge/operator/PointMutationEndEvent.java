@@ -38,7 +38,7 @@ public class PointMutationEndEvent extends OperatorEvent.EndOperator {
 	private List<Integer> mutationPoints;
 
 	/**
-	 * Constructs a <tt>PointMutationEndEvent</tt> with the details of the
+	 * Constructs a <code>PointMutationEndEvent</code> with the details of the
 	 * event
 	 * 
 	 * @param operator the operator that performed the mutation

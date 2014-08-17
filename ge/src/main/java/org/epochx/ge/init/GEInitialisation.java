@@ -24,8 +24,8 @@ package org.epochx.ge.init;
 import org.epochx.InitialisationMethod;
 
 /**
- * Initialisation method for <tt>GEIndividual</tt>s. It does not define any 
- * methods, but initialisation procedures that generate <tt>GEIndividual</tt> 
+ * Initialisation method for <code>GEIndividual</code>s. It does not define any 
+ * methods, but initialisation procedures that generate <code>GEIndividual</code> 
  * objects should implement this interface.
  * 
  * @since 2.0

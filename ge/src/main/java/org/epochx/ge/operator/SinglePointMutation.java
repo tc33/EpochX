@@ -42,11 +42,11 @@ import org.epochx.ge.GEIndividual;
  * This class performs a single point mutation on a <code>GEIndividual</code>.
  * 
  * <p>
- * Whereas a standard <tt>PointMutation</tt> will consider each codon in the selected
+ * Whereas a standard <code>PointMutation</code> will consider each codon in the selected
  * program for mutation, and could potentially mutate any number of codons from
- * 0 to the number of codons, <tt>SinglePointMutation</tt> will always mutate exactly one
+ * 0 to the number of codons, <code>SinglePointMutation</code> will always mutate exactly one
  * codon of an individual that it is asked to mutate. If the codon does undergo
- * mutation then a replacement codon is generated using the <tt>CodonFactory</tt>.
+ * mutation then a replacement codon is generated using the <code>CodonFactory</code>.
  * 
  * @since 2.0
  */
@@ -63,7 +63,7 @@ public class SinglePointMutation extends AbstractOperator implements Listener<Co
 	private Double probability;
 
 	/**
-	 * Constructs a <tt>SinglePointMutation</tt> with control parameters
+	 * Constructs a <code>SinglePointMutation</code> with control parameters
 	 * automatically loaded from the config
 	 */
 	public SinglePointMutation() {
@@ -71,9 +71,9 @@ public class SinglePointMutation extends AbstractOperator implements Listener<Co
 	}
 
 	/**
-	 * Constructs a <tt>SinglePointMutation</tt> with control parameters initially
-	 * loaded from the config. If the <tt>autoConfig</tt> argument is set to
-	 * <tt>true</tt> then the configuration will be automatically updated when
+	 * Constructs a <code>SinglePointMutation</code> with control parameters initially
+	 * loaded from the config. If the <code>autoConfig</code> argument is set to
+	 * <code>true</code> then the configuration will be automatically updated when
 	 * the config is modified.
 	 * 
 	 * @param autoConfig whether this operator should automatically update its
@@ -89,7 +89,7 @@ public class SinglePointMutation extends AbstractOperator implements Listener<Co
 	
 	/**
 	 * Sets up this operator with the appropriate configuration settings.
-	 * This method is called whenever a <tt>ConfigEvent</tt> occurs for a
+	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
 	 * change in any of the following configuration parameters:
 	 * <ul>
 	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
@@ -105,7 +105,7 @@ public class SinglePointMutation extends AbstractOperator implements Listener<Co
 
 	/**
 	 * Receives configuration events and triggers this operator to configure its
-	 * parameters if the <tt>ConfigEvent</tt> is for one of its required
+	 * parameters if the <code>ConfigEvent</code> is for one of its required
 	 * parameters.
 	 * 
 	 * @param event {@inheritDoc}
@@ -118,15 +118,15 @@ public class SinglePointMutation extends AbstractOperator implements Listener<Co
 	}
 
 	/**
-	 * Performs single point mutation on the given <tt>GEIndividual</tt>. A codon position
+	 * Performs single point mutation on the given <code>GEIndividual</code>. A codon position
 	 * will be randomly chosen from the length of codons in the program and that codon will 
 	 * be replaced with a new codon generated using the codon factory.
 	 * 
-	 * @param event the <tt>EndOperator</tt> event to be filled with information
+	 * @param event the <code>EndOperator</code> event to be filled with information
 	 *        about this operation
 	 * @param parent an array of one individual to undergo point mutation. The individual
-	 * 		  must be an instance of <tt>GEIndividual</tt>.
-	 * @return an array containing one <tt>GEIndividual</tt> that is the
+	 * 		  must be an instance of <code>GEIndividual</code>.
+	 * @return an array containing one <code>GEIndividual</code> that is the
 	 *         result of the mutation
 	 */
 	@Override
@@ -145,7 +145,7 @@ public class SinglePointMutation extends AbstractOperator implements Listener<Co
 	}
 	
 	/**
-	 * Returns a <tt>SinglePointMutationEndEvent</tt> with the operator and 
+	 * Returns a <code>SinglePointMutationEndEvent</code> with the operator and 
 	 * parent set
 	 * 
 	 * @param parents the parents that were operated on
@@ -210,7 +210,7 @@ public class SinglePointMutation extends AbstractOperator implements Listener<Co
 	}
 	
 	/**
-	 * Returns the <tt>CodonFactory</tt> currently in use
+	 * Returns the <code>CodonFactory</code> currently in use
 	 * 
 	 * @return the codon factory being used to generate new codons
 	 */
@@ -219,7 +219,7 @@ public class SinglePointMutation extends AbstractOperator implements Listener<Co
 	}
 
 	/**
-	 * Sets the <tt>CodonFactory</tt> this initialiser should use to generate
+	 * Sets the <code>CodonFactory</code> this initialiser should use to generate
 	 * new codon instances. If automatic configuration is enabled
 	 * then any value set here will be overwritten by the
 	 * {@link CodonFactory#CODON_FACTORY} configuration setting on the next config

@@ -27,9 +27,9 @@ import org.epochx.Population;
 import org.epochx.ProxyComponent;
 
 /**
- * Instances of <tt>MappingComponent</tt> are components that are responsible for 
+ * Instances of <code>MappingComponent</code> are components that are responsible for 
  * assigning parse trees to individuals in a population. Typically this involves
- * converting a <tt>GEIndividual</tt>'s chromosome into a parse tree with reference
+ * converting a <code>GEIndividual</code>'s chromosome into a parse tree with reference
  * to grammar rules.
  * 
  * @since 2.0
@@ -37,19 +37,19 @@ import org.epochx.ProxyComponent;
 public class MappingComponent extends ProxyComponent<Mapper> {
 
 	/**
-	 * The key for setting and retrieving the <tt>Mapper</tt> used by this component
+	 * The key for setting and retrieving the <code>Mapper</code> used by this component
 	 */
 	public static final ConfigKey<Mapper> MAPPER = new ConfigKey<Mapper>();
 
 	/**
-	 * Constructs a <tt>MappingComponent</tt>.
+	 * Constructs a <code>MappingComponent</code>.
 	 */
 	public MappingComponent() {
 		super(MAPPER);
 	}
 
 	/**
-	 * Delegates the mapping of the population to the <tt>Mapper</tt> object
+	 * Delegates the mapping of the population to the <code>Mapper</code> object
 	 * 
 	 * @param population the population of individuals to process
 	 */

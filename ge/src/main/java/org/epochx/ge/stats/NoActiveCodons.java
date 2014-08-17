@@ -35,7 +35,7 @@ public class NoActiveCodons extends AbstractStat<EndMapping> {
 	private int noActiveCodons;
 	
 	/**
-	 * Constructs a <tt>NoActiveCodons</tt> stat and registers its dependencies
+	 * Constructs a <code>NoActiveCodons</code> stat and registers its dependencies
 	 */
 	public NoActiveCodons() {
 		super(NO_DEPENDENCIES);
@@ -44,7 +44,7 @@ public class NoActiveCodons extends AbstractStat<EndMapping> {
 	/**
 	 * Triggers the generation of an updated value for this stat. Once this stat
 	 * has been registered, this method will be called on each
-	 * <tt>EndMapping</tt> event.
+	 * <code>EndMapping</code> event.
 	 * 
 	 * @param event an object that encapsulates information about the event that
 	 *        occurred
@@ -66,7 +66,7 @@ public class NoActiveCodons extends AbstractStat<EndMapping> {
 	/**
 	 * Returns a string representation of the value of this stat
 	 * 
-	 * @return a <tt>String</tt> that represents the value of this stat
+	 * @return a <code>String</code> that represents the value of this stat
 	 */
 	@Override
 	public String toString() {

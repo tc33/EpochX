@@ -41,13 +41,13 @@ import org.epochx.ge.CodonFactory;
 import org.epochx.ge.GEIndividual;
 
 /**
- * This class performs a simple point mutation on a <tt>GEIndividual</tt>.
+ * This class performs a simple point mutation on a <code>GEIndividual</code>.
  * 
  * <p>
  * Each codon in the program's chromosome is considered for mutation, with the
  * probability of that codon being mutated given by the {@link #POINT_PROBABILITY}
  * config key. If the codon does undergo mutation then a replacement codon is 
- * generated using the <tt>CodonFactory</tt>.
+ * generated using the <code>CodonFactory</code>.
  * 
  * @since 2.0
  */
@@ -70,7 +70,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	private Double pointProbability;
 
 	/**
-	 * Constructs a <tt>PointMutation</tt> with control parameters
+	 * Constructs a <code>PointMutation</code> with control parameters
 	 * automatically loaded from the config
 	 */
 	public PointMutation() {
@@ -78,9 +78,9 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	}
 
 	/**
-	 * Constructs a <tt>PointMutation</tt> with control parameters initially
-	 * loaded from the config. If the <tt>autoConfig</tt> argument is set to
-	 * <tt>true</tt> then the configuration will be automatically updated when
+	 * Constructs a <code>PointMutation</code> with control parameters initially
+	 * loaded from the config. If the <code>autoConfig</code> argument is set to
+	 * <code>true</code> then the configuration will be automatically updated when
 	 * the config is modified.
 	 * 
 	 * @param autoConfig whether this operator should automatically update its
@@ -99,7 +99,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	
 	/**
 	 * Sets up this operator with the appropriate configuration settings.
-	 * This method is called whenever a <tt>ConfigEvent</tt> occurs for a
+	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
 	 * change in any of the following configuration parameters:
 	 * <ul>
 	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
@@ -117,7 +117,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 
 	/**
 	 * Receives configuration events and triggers this operator to configure its
-	 * parameters if the <tt>ConfigEvent</tt> is for one of its required
+	 * parameters if the <code>ConfigEvent</code> is for one of its required
 	 * parameters.
 	 * 
 	 * @param event {@inheritDoc}
@@ -130,16 +130,16 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	}
 
 	/**
-	 * Performs point mutation on the given <tt>GEIndividual</tt>. Each codon in the
+	 * Performs point mutation on the given <code>GEIndividual</code>. Each codon in the
 	 * individual's chromosome is considered in turn and is modified with some probability
 	 * as specified by the point probability. Given that a codon is chosen then a new 
 	 * codon is generated using the codon factory to replace it.
 	 * 
-	 * @param event the <tt>EndOperator</tt> event to be filled with information
+	 * @param event the <code>EndOperator</code> event to be filled with information
 	 *        about this operation
 	 * @param parent an array of one individual to undergo point mutation. The individual 
-	 * 		  must be an instance of <tt>GEIndividual</tt>.
-	 * @return an array containing one <tt>GEIndividual</tt> that is the
+	 * 		  must be an instance of <code>GEIndividual</code>.
+	 * @return an array containing one <code>GEIndividual</code> that is the
 	 *         result of the mutation
 	 */
 	@Override
@@ -166,7 +166,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	}
 	
 	/**
-	 * Returns a <tt>PointMutationEndEvent</tt> with the operator and 
+	 * Returns a <code>PointMutationEndEvent</code> with the operator and 
 	 * parent set
 	 * 
 	 * @param parent the individual that was operated on
@@ -193,7 +193,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	/**
 	 * Returns the currently set probability of each codon undergoing mutation.
 	 * 
-	 * @return a value between <tt>0.0</tt> and <tt>1.0</tt> inclusive
+	 * @return a value between <code>0.0</code> and <code>1.0</code> inclusive
 	 *         which is the probability that a codon will undergo mutation.
 	 */
 	public double getPointProbability() {
@@ -204,7 +204,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	 * Sets the probability that each codon considered undergoes mutation.
 	 * 
 	 * @param pointProbability the probability each codon has of undergoing a mutation. 
-	 * 		  <tt>1.0</tt> would result in all codons being changed, and <tt>0.0</tt> 
+	 * 		  <code>1.0</code> would result in all codons being changed, and <code>0.0</code> 
 	 * 	      would mean no codons were changed.
 	 */
 	public void setPointProbability(double pointProbability) {
@@ -252,7 +252,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	}
 	
 	/**
-	 * Returns the <tt>CodonFactory</tt> currently in use
+	 * Returns the <code>CodonFactory</code> currently in use
 	 * 
 	 * @return the codon factory being used to generate new codons
 	 */
@@ -261,7 +261,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	}
 
 	/**
-	 * Sets the <tt>CodonFactory</tt> this initialiser should use to generate
+	 * Sets the <code>CodonFactory</code> this initialiser should use to generate
 	 * new codon instances. If automatic configuration is enabled
 	 * then any value set here will be overwritten by the
 	 * {@link CodonFactory#CODON_FACTORY} configuration setting on the next config

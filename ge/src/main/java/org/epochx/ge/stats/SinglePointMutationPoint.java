@@ -27,7 +27,7 @@ import org.epochx.ge.operator.SinglePointMutationEndEvent;
 
 /**
  * A stat that returns the mutation point from a single-point mutation between two 
- * <tt>GEIndividuals</tt>.
+ * <code>GEIndividuals</code>.
  * 
  * @see SinglePointMutation
  * @see SinglePointMutationEndEvent
@@ -37,7 +37,7 @@ public class SinglePointMutationPoint extends AbstractStat<SinglePointMutationEn
 	private int mutationPoint;
 
 	/**
-	 * Constructs a <tt>SinglePointCrossoverPoint</tt> stat and registers its
+	 * Constructs a <code>SinglePointCrossoverPoint</code> stat and registers its
 	 * dependencies
 	 */
 	public SinglePointMutationPoint() {
@@ -47,7 +47,7 @@ public class SinglePointMutationPoint extends AbstractStat<SinglePointMutationEn
 	/**
 	 * Triggers the generation of an updated value for this stat. Once this stat
 	 * has been registered, this method will be called on each
-	 * <tt>SinglePointMutationEndEvent</tt> event.
+	 * <code>SinglePointMutationEndEvent</code> event.
 	 * 
 	 * @param event an object that encapsulates information about the event that
 	 *        occurred
@@ -69,7 +69,7 @@ public class SinglePointMutationPoint extends AbstractStat<SinglePointMutationEn
 	/**
 	 * Returns a string representation of the value of this stat
 	 * 
-	 * @return a <tt>String</tt> that represents the value of this stat
+	 * @return a <code>String</code> that represents the value of this stat
 	 */
 	@Override
 	public String toString() {

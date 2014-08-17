@@ -42,8 +42,8 @@ import org.epochx.tools.ant.AntLandscape;
 
 
 /**
- * A fitness function for <tt>GEIndividual</tt>s that calculates and assigns 
- * <tt>DoubleFitness.Minimise</tt> scores. The program is executed using an interpreter until 
+ * A fitness function for <code>GEIndividual</code>s that calculates and assigns 
+ * <code>DoubleFitness.Minimise</code> scores. The program is executed using an interpreter until 
  * the maximum number of timesteps are used. The fitness score returned is the number of food 
  * items that are <b>not</b> consumed by the controlled ant.
  * 
@@ -76,7 +76,7 @@ public class AntFitnessFunction extends GEFitnessFunction implements Listener<Co
 	private Double malformedPenalty;
 	
 	/**
-	 * Constructs a <tt>AntFitnessFunction</tt> fitness function with control parameters
+	 * Constructs a <code>AntFitnessFunction</code> fitness function with control parameters
 	 * automatically loaded from the config.
 	 * 
 	 * @param ant the ant that is being controlled
@@ -87,8 +87,8 @@ public class AntFitnessFunction extends GEFitnessFunction implements Listener<Co
 	}
 	
 	/**
-	 * Constructs a <tt>AntFitnessFunction</tt> fitness function with control parameters initially
-	 * loaded from the config. If the <tt>autoConfig</tt> argument is set to <tt>true</tt> 
+	 * Constructs a <code>AntFitnessFunction</code> fitness function with control parameters initially
+	 * loaded from the config. If the <code>autoConfig</code> argument is set to <code>true</code> 
 	 * then the configuration will be automatically updated when the config is modified.
 	 * 
 	 * @param ant the ant that is being controlled
@@ -110,7 +110,7 @@ public class AntFitnessFunction extends GEFitnessFunction implements Listener<Co
 	
 	/**
 	 * Sets up this operator with the appropriate configuration settings.
-	 * This method is called whenever a <tt>ConfigEvent</tt> occurs for a
+	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
 	 * change in any of the following configuration parameters:
 	 * <ul>
 	 * <li>{@link #FOOD_LOCATIONS}
@@ -128,7 +128,7 @@ public class AntFitnessFunction extends GEFitnessFunction implements Listener<Co
 	
 	/**
 	 * Receives configuration events and triggers this fitness function to 
-	 * configure its parameters if the <tt>ConfigEvent</tt> is for one of 
+	 * configure its parameters if the <code>ConfigEvent</code> is for one of 
 	 * its required parameters.
 	 * 
 	 * @param event {@inheritDoc}

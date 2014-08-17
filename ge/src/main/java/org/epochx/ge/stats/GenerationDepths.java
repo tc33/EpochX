@@ -34,14 +34,14 @@ import org.epochx.grammar.NonTerminalSymbol;
 /**
  * A stat that returns the depth of all parse trees in the population from
  * the previous generation. All individuals in the population must be instances 
- * of <tt>GEIndividual</tt>.
+ * of <code>GEIndividual</code>.
  */
 public class GenerationDepths extends AbstractStat<EndGeneration> {
 
 	private int[] depths;
 
 	/**
-	 * Constructs a <tt>GenerationDepths</tt> stat and registers 
+	 * Constructs a <code>GenerationDepths</code> stat and registers 
 	 * its dependencies
 	 */
 	public GenerationDepths() {
@@ -51,7 +51,7 @@ public class GenerationDepths extends AbstractStat<EndGeneration> {
 	/**
 	 * Triggers the generation of an updated value for this stat. Once this stat
 	 * has been registered, this method will be called on each
-	 * <tt>EndGeneration</tt> event.
+	 * <code>EndGeneration</code> event.
 	 * 
 	 * @param event an object that encapsulates information about the event that
 	 *        occurred
@@ -88,7 +88,7 @@ public class GenerationDepths extends AbstractStat<EndGeneration> {
 	/**
 	 * Returns a string representation of the value of this stat
 	 * 
-	 * @return a <tt>String</tt> that represents the value of this stat
+	 * @return a <code>String</code> that represents the value of this stat
 	 */
 	@Override
 	public String toString() {

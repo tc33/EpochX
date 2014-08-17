@@ -28,7 +28,7 @@ import org.epochx.event.stat.AbstractStat;
 /**
  * A stat that returns the minimum length of all the chromosomes in the 
  * population from the previous completed generation. All individuals in the 
- * population must be instances of <tt>GEIndividual</tt>.
+ * population must be instances of <code>GEIndividual</code>.
  * 
  * @see GenerationMaximumLength
  */
@@ -37,7 +37,7 @@ public class GenerationMinimumLength extends AbstractStat<EndGeneration> {
 	private int min;
 
 	/**
-	 * Constructs a <tt>GenerationMinimumLength</tt> stat and registers its
+	 * Constructs a <code>GenerationMinimumLength</code> stat and registers its
 	 * dependencies
 	 */
 	public GenerationMinimumLength() {
@@ -47,7 +47,7 @@ public class GenerationMinimumLength extends AbstractStat<EndGeneration> {
 	/**
 	 * Triggers the generation of an updated value for this stat. Once this stat
 	 * has been registered, this method will be called on each
-	 * <tt>EndGeneration</tt> event.
+	 * <code>EndGeneration</code> event.
 	 * 
 	 * @param event an object that encapsulates information about the event that
 	 *        occurred
@@ -76,7 +76,7 @@ public class GenerationMinimumLength extends AbstractStat<EndGeneration> {
 	/**
 	 * Returns a string representation of the value of this stat
 	 * 
-	 * @return a <tt>String</tt> that represents the value of this stat
+	 * @return a <code>String</code> that represents the value of this stat
 	 */
 	@Override
 	public String toString() {

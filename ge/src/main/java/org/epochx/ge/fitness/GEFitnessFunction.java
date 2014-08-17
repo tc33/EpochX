@@ -27,12 +27,14 @@ import org.epochx.ge.GEIndividual;
 import org.epochx.interpret.Interpreter;
 
 /**
- * A fitness function for evaluating STGP individuals.
+ * A fitness function for evaluating GE individuals
+ * 
+ * @since 2.0
  */
 public abstract class GEFitnessFunction extends AbstractFitnessFunction {
 
 	/**
-	 * The key for setting the acceptable error for each point to count as a hit
+	 * The key for setting the interpreter to use to execute individuals
 	 */
 	public static final ConfigKey<Interpreter<GEIndividual>> INTERPRETER = new ConfigKey<Interpreter<GEIndividual>>();
 	

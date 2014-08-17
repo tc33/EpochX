@@ -82,15 +82,15 @@ public class Chromosome implements Iterable<Codon>, Cloneable, Listener<ConfigEv
 	
 	/**
 	 * Sets up this operator with the appropriate configuration settings.
-	 * This method is called whenever a <tt>ConfigEvent</tt> occurs for a
+	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
 	 * change in any of the following configuration parameters:
 	 * <ul>
 	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
-	 * <li>{@link Codon#MAXIMUM_VALUE} (default: <tt>Long.MAX_VALUE</tt>)
-	 * <li>{@link Codon#MINIMUM_VALUE} (default: <tt>0L</tt>)
-	 * <li>{@link Chromosome#MAXIMUM_WRAPS} (default: <tt>Integer.MAX_VALUE</tt>)
-	 * <li>{@link Chromosome#MAXIMUM_LENGTH} (default: <tt>Integer.MAX_VALUE</tt>)
-	 * <li>{@link Chromosome#ALLOW_EXTENSION} (default: <tt>False</tt>)
+	 * <li>{@link Codon#MAXIMUM_VALUE} (default: <code>Long.MAX_VALUE</code>)
+	 * <li>{@link Codon#MINIMUM_VALUE} (default: <code>0L</code>)
+	 * <li>{@link Chromosome#MAXIMUM_WRAPS} (default: <code>Integer.MAX_VALUE</code>)
+	 * <li>{@link Chromosome#MAXIMUM_LENGTH} (default: <code>Integer.MAX_VALUE</code>)
+	 * <li>{@link Chromosome#ALLOW_EXTENSION} (default: <code>False</code>)
 	 * <li>{@link CodonFactory#CODON_FACTORY}
 	 * </ul>
 	 */
@@ -108,7 +108,7 @@ public class Chromosome implements Iterable<Codon>, Cloneable, Listener<ConfigEv
 	
 	/**
 	 * Receives configuration events and triggers this operator to configure its
-	 * parameters if the <tt>ConfigEvent</tt> is for one of its required
+	 * parameters if the <code>ConfigEvent</code> is for one of its required
 	 * parameters.
 	 * 
 	 * @param event {@inheritDoc}

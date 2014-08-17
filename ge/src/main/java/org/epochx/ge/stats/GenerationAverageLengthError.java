@@ -29,7 +29,7 @@ import org.epochx.event.stat.AbstractStat;
 /**
  * A stat that returns the standard error of the mean length, as calculated by 
  * the {@link GenerationAverageLength} stat. All individuals in the population 
- * must be instances of <tt>GEIndividual</tt>.
+ * must be instances of <code>GEIndividual</code>.
  * 
  * @see GenerationAverageLength
  * @see GenerationStandardDeviationLength
@@ -39,7 +39,7 @@ public class GenerationAverageLengthError extends AbstractStat<EndGeneration> {
 	private double error;
 
 	/**
-	 * Constructs a <tt>GenerationAverageLengthError</tt> stat and registers its 
+	 * Constructs a <code>GenerationAverageLengthError</code> stat and registers its 
 	 * dependencies
 	 */
 	public GenerationAverageLengthError() {
@@ -49,7 +49,7 @@ public class GenerationAverageLengthError extends AbstractStat<EndGeneration> {
 	/**
 	 * Triggers the generation of an updated value for this stat. Once this stat
 	 * has been registered, this method will be called on each
-	 * <tt>EndGeneration</tt> event.
+	 * <code>EndGeneration</code> event.
 	 * 
 	 * @param event an object that encapsulates information about the event that
 	 *        occurred
@@ -75,7 +75,7 @@ public class GenerationAverageLengthError extends AbstractStat<EndGeneration> {
 	/**
 	 * Returns a string representation of the value of this stat
 	 * 
-	 * @return a <tt>String</tt> that represents the value of this stat
+	 * @return a <code>String</code> that represents the value of this stat
 	 */
 	@Override
 	public String toString() {

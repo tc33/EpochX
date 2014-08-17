@@ -24,7 +24,7 @@ package org.epochx.ge.map;
 import org.epochx.*;
 
 /**
- * A mapper's job is to convert a <tt>GEIndividual</tt> into a parse tree.
+ * A mapper's job is to convert a <code>GEIndividual</code> into a parse tree.
  * Typically the mapping process uses the chromosome of the GEIndividual to guide
  * production choices in a grammar.
  * 

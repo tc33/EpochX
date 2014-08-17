@@ -32,7 +32,7 @@ import org.epochx.ge.map.MappingEvent.EndMapping;
 import org.epochx.grammar.*;
 
 /**
- * Mapper which converts the chromosome of a <tt>GEIndividual</tt> into a parse tree 
+ * Mapper which converts the chromosome of a <code>GEIndividual</code> into a parse tree 
  * which is assigned to the individual. The parse tree is created by traversing the 
  * grammar in a depth-first order and using codons to choose between productions. The
  * codons are used in sequence, with the value of the codon, modulo the number of 
@@ -49,7 +49,7 @@ public class DepthFirstMapper extends AbstractMapper implements Listener<ConfigE
 	private Integer maxDepth;
 
 	/**
-	 * Constructs a <tt>DepthFirstMapper</tt> with control parameters automatically 
+	 * Constructs a <code>DepthFirstMapper</code> with control parameters automatically 
 	 * loaded from the config
 	 */
 	public DepthFirstMapper() {
@@ -57,9 +57,9 @@ public class DepthFirstMapper extends AbstractMapper implements Listener<ConfigE
 	}
 
 	/**
-	 * Constructs a <tt>DepthFirstMapper</tt> with control parameters
-	 * initially loaded from the config. If the <tt>autoConfig</tt> argument is
-	 * set to <tt>true</tt> then the configuration will be automatically updated
+	 * Constructs a <code>DepthFirstMapper</code> with control parameters
+	 * initially loaded from the config. If the <code>autoConfig</code> argument is
+	 * set to <code>true</code> then the configuration will be automatically updated
 	 * when the config is modified.
 	 * 
 	 * @param autoConfig whether this operator should automatically update its
@@ -75,7 +75,7 @@ public class DepthFirstMapper extends AbstractMapper implements Listener<ConfigE
 
 	/**
 	 * Sets up this operator with the appropriate configuration settings.
-	 * This method is called whenever a <tt>ConfigEvent</tt> occurs for a
+	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
 	 * change in any of the following configuration parameters:
 	 * <ul>
 	 * <li>{@link Grammar#GRAMMAR}
@@ -89,7 +89,7 @@ public class DepthFirstMapper extends AbstractMapper implements Listener<ConfigE
 	
 	/**
 	 * Receives configuration events and triggers this fitness function to 
-	 * configure its parameters if the <tt>ConfigEvent</tt> is for one of 
+	 * configure its parameters if the <code>ConfigEvent</code> is for one of 
 	 * its required parameters.
 	 * 
 	 * @param event {@inheritDoc}
@@ -105,14 +105,14 @@ public class DepthFirstMapper extends AbstractMapper implements Listener<ConfigE
 	 * Performs the mapping operation. Mapping starts at the starting symbol of
 	 * the grammar and gradually constructs a parse tree by stepping down
 	 * the grammar's tree and each time there are multiple productions to
-	 * choose from, the next codon from the <tt>GEIndividual</tt>'s
+	 * choose from, the next codon from the <code>GEIndividual</code>'s
 	 * chromosome is used. The codon simply undergoes modulo by the number of
 	 * production choices, the result is the index of the production to be
 	 * used.
 	 * 
-	 * @param individual the <tt>GEIndividual</tt> to be mapped to its source
-	 * @return a parse tree equivalent to the specified <tt>GEIndividual</tt>'s
-	 *         chromosome after mapping using the model's grammar. <tt>Null</tt> 
+	 * @param individual the <code>GEIndividual</code> to be mapped to its source
+	 * @return a parse tree equivalent to the specified <code>GEIndividual</code>'s
+	 *         chromosome after mapping using the model's grammar. <code>Null</code> 
 	 *         is returned if a valid parse tree could not be generated.
 	 */
 	@Override

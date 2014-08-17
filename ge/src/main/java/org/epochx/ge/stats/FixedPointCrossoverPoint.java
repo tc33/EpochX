@@ -27,7 +27,7 @@ import org.epochx.ge.operator.FixedPointCrossoverEndEvent;
 
 /**
  * A stat that returns the crossover point from a fixed-point crossover between two 
- * <tt>GEIndividuals</tt>.
+ * <code>GEIndividuals</code>.
  * 
  * @see FixedPointCrossover
  * @see FixedPointCrossoverEndEvent
@@ -37,7 +37,7 @@ public class FixedPointCrossoverPoint extends AbstractStat<FixedPointCrossoverEn
 	private int crossoverPoint;
 
 	/**
-	 * Constructs a <tt>FixedPointCrossoverPoint</tt> stat and registers its
+	 * Constructs a <code>FixedPointCrossoverPoint</code> stat and registers its
 	 * dependencies
 	 */
 	public FixedPointCrossoverPoint() {
@@ -47,7 +47,7 @@ public class FixedPointCrossoverPoint extends AbstractStat<FixedPointCrossoverEn
 	/**
 	 * Triggers the generation of an updated value for this stat. Once this stat
 	 * has been registered, this method will be called on each
-	 * <tt>FixedPointCrossoverEndEvent</tt> event.
+	 * <code>FixedPointCrossoverEndEvent</code> event.
 	 * 
 	 * @param event an object that encapsulates information about the event that
 	 *        occurred
@@ -69,7 +69,7 @@ public class FixedPointCrossoverPoint extends AbstractStat<FixedPointCrossoverEn
 	/**
 	 * Returns a string representation of the value of this stat
 	 * 
-	 * @return a <tt>String</tt> that represents the value of this stat
+	 * @return a <code>String</code> that represents the value of this stat
 	 */
 	@Override
 	public String toString() {

@@ -36,7 +36,7 @@ public class SinglePointMutationEndEvent extends OperatorEvent.EndOperator {
 	private int mutationPoint;
 
 	/**
-	 * Constructs a <tt>SinglePointMutationEndEvent</tt> with the details of the
+	 * Constructs a <code>SinglePointMutationEndEvent</code> with the details of the
 	 * event
 	 * 
 	 * @param operator the operator that performed the mutation

@@ -35,19 +35,20 @@ import org.epochx.interpret.Interpreter;
 import org.epochx.interpret.MalformedProgramException;
 
 /**
- * A fitness function for <tt>GEIndividual</tt>s that calculates and assigns 
- * <tt>DoubleFitness.Minimise</tt> scores. The fitness scores are calculated by executing
+ * A fitness function for <code>GEIndividual</code>s that calculates and assigns 
+ * <code>DoubleFitness.Minimise</code> scores. The fitness scores are calculated by executing
  * the program with an interpreter for each of the provided sets of inputs. The results 
  * are compared to the expected outputs and a count of the number of correct results is 
- * given as the fitness value. Can work with doubles or other object types. If doubles are 
+ * given as the fitness value. It can work with doubles or other object types. If doubles are 
  * used then the point error option is used, otherwise the objects are just compared for 
  * equality.
  * 
  * When using this fitness function the {@link GEFitnessFunction#INTERPRETER}, 
  * {@link #INPUT_IDENTIFIERS}, {@link #INPUT_VALUE_SETS} and {@link #EXPECTED_OUTPUTS} config 
  * options must be set, or the same values set using the mutator methods provided. The length 
- * of the INPUT_VALUE_SETS array should match the length of the EXPECTED_OUTPUTS array and the 
- * number of values in each set should match the length of the INPUT_VARIABLES array.
+ * of the <code>INPUT_VALUE_SETS</code> array should match the length of the 
+ * <code>EXPECTED_OUTPUTS</code> array and the number of values in each set should match the 
+ * length of the <code>INPUT_VARIABLES</code> array.
  * 
  * @since 2.0
  */
@@ -56,7 +57,7 @@ public class HitsCount extends GEFitnessFunction implements Listener<ConfigEvent
 	/**
 	 * The key for setting the expected output values from the programs being evaluated
 	 */
-	public static final ConfigKey<Double[]> EXPECTED_OUTPUTS = new ConfigKey<Double[]>();
+	public static final ConfigKey<Object[]> EXPECTED_OUTPUTS = new ConfigKey<Object[]>();
 	
 	/**
 	 * The key for setting the acceptable error for each point to count as a hit
@@ -72,7 +73,7 @@ public class HitsCount extends GEFitnessFunction implements Listener<ConfigEvent
 	private Double malformedPenalty;
 	
 	/**
-	 * Constructs a <tt>HitsCount</tt> fitness function with control parameters
+	 * Constructs a <code>HitsCount</code> fitness function with control parameters
 	 * automatically loaded from the config.
 	 */
 	public HitsCount() {
@@ -80,8 +81,8 @@ public class HitsCount extends GEFitnessFunction implements Listener<ConfigEvent
 	}
 	
 	/**
-	 * Constructs a <tt>HitsCount</tt> fitness function with control parameters initially
-	 * loaded from the config. If the <tt>autoConfig</tt> argument is set to <tt>true</tt> 
+	 * Constructs a <code>HitsCount</code> fitness function with control parameters initially
+	 * loaded from the config. If the <code>autoConfig</code> argument is set to <code>true</code> 
 	 * then the configuration will be automatically updated when the config is modified.
 	 * 
 	 * @param autoConfig whether this operator should automatically update its
@@ -100,7 +101,7 @@ public class HitsCount extends GEFitnessFunction implements Listener<ConfigEvent
 	
 	/**
 	 * Sets up this operator with the appropriate configuration settings.
-	 * This method is called whenever a <tt>ConfigEvent</tt> occurs for a
+	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
 	 * change in any of the following configuration parameters:
 	 * <ul>
 	 * <li>{@link #INPUT_IDENTIFIERS}
@@ -122,7 +123,7 @@ public class HitsCount extends GEFitnessFunction implements Listener<ConfigEvent
 	
 	/**
 	 * Receives configuration events and triggers this fitness function to 
-	 * configure its parameters if the <tt>ConfigEvent</tt> is for one of 
+	 * configure its parameters if the <code>ConfigEvent</code> is for one of 
 	 * its required parameters.
 	 * 
 	 * @param event {@inheritDoc}
@@ -136,8 +137,8 @@ public class HitsCount extends GEFitnessFunction implements Listener<ConfigEvent
 	
 	/**
 	 * Calculates the fitness of the given individual. This fitness function only operates
-	 * on <tt>GEIndividual</tt>s. The fitness returned will be an instance of 
-	 * <tt>DoubleFitness.Minimise</tt>. The fitness score is a count of the number of sets 
+	 * on <code>GEIndividual</code>s. The fitness returned will be an instance of 
+	 * <code>DoubleFitness.Minimise</code>. The fitness score is a count of the number of sets 
 	 * of inputs that produce a correct result (or 'hit'). For double types a hit can have an 
 	 * error range, specified by the {@link HitsCount#POINT_ERROR} config key.
 	 *  

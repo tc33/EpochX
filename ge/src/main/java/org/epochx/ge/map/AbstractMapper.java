@@ -30,8 +30,8 @@ import org.epochx.ge.map.MappingEvent.StartMapping;
 import org.epochx.grammar.NonTerminalSymbol;
 
 /**
- * This class provides an abstract implementation of a <tt>Mapper</tt>. Sub-classes 
- * must provide an implementation of the <tt>map(GEIndividual)</tt> method, which converts 
+ * This class provides an abstract implementation of a <code>Mapper</code>. Sub-classes 
+ * must provide an implementation of the <code>map(GEIndividual)</code> method, which converts 
  * one individual into a parse tree. This method will be called for each individual in
  * the population being mapped, with the result set as the individual's parse tree.
  * 
@@ -40,7 +40,7 @@ import org.epochx.grammar.NonTerminalSymbol;
 public abstract class AbstractMapper implements Mapper {
 
 	/**
-	 * Maps all individuals in the population by calling <tt>map(GEIndividual)</tt>,
+	 * Maps all individuals in the population by calling <code>map(GEIndividual)</code>,
 	 * then assigns the resultant parse tree to the individual
 	 * 
 	 * @param population the population of individuals to process 
@@ -65,18 +65,18 @@ public abstract class AbstractMapper implements Mapper {
 	}
 
 	/**
-	 * Maps the given <tt>GEIndividual</tt> to a parse tree
+	 * Maps the given <code>GEIndividual</code> to a parse tree
 	 * 
 	 * @param individual the individual to be converted to a parse tree
-	 * @return a <tt>Symbol</tt> which is the root node of a valid parse tree,
-	 *         or <tt>null</tt> if no valid parse tree could be created from the
+	 * @return a <code>Symbol</code> which is the root node of a valid parse tree,
+	 *         or <code>null</code> if no valid parse tree could be created from the
 	 *         individual
 	 */
 	public abstract NonTerminalSymbol map(EndMapping event, GEIndividual individual);
 
 	/**
 	 * Returns the mapper's start event. The default implementation returns
-	 * a <tt>StartMapping</tt> instance.
+	 * a <code>StartMapping</code> instance.
 	 * 
 	 * @param individual the individual being mapped
 	 * 

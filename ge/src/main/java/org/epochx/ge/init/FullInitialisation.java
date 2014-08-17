@@ -51,7 +51,7 @@ import org.epochx.grammar.GrammarProduction;
 import org.epochx.grammar.GrammarRule;
 
 /**
- * Initialisation method which produces <tt>GEIndividual</tt>s with chromosomes
+ * Initialisation method which produces <code>GEIndividual</code>s with chromosomes
  * that map to full parse trees of a specified depth. Since the initialisation
  * is tied to the parse tree, an internal mapping is used which is equivalent
  * to a depth-first mapping.
@@ -79,7 +79,7 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 	private CodonFactory codonFactory;
 
 	/**
-	 * Constructs a <tt>FullInitialisation</tt> with control parameters
+	 * Constructs a <code>FullInitialisation</code> with control parameters
 	 * automatically loaded from the config
 	 */
 	public FullInitialisation() {
@@ -87,9 +87,9 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 	}
 
 	/**
-	 * Constructs a <tt>FullInitialisation</tt> with control parameters
-	 * initially loaded from the config. If the <tt>autoConfig</tt> argument is
-	 * set to <tt>true</tt> then the configuration will be automatically updated
+	 * Constructs a <code>FullInitialisation</code> with control parameters
+	 * initially loaded from the config. If the <code>autoConfig</code> argument is
+	 * set to <code>true</code> then the configuration will be automatically updated
 	 * when the config is modified.
 	 * 
 	 * @param autoConfig whether this operator should automatically update its
@@ -110,15 +110,15 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 
 	/**
 	 * Sets up this operator with the appropriate configuration settings.
-	 * This method is called whenever a <tt>ConfigEvent</tt> occurs for a
+	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
 	 * change in any of the following configuration parameters:
 	 * <ul>
 	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
 	 * <li>{@link Population#SIZE}
-	 * <li>{@link InitialisationMethod#ALLOW_DUPLICATES} (default: <tt>true</tt>)
+	 * <li>{@link InitialisationMethod#ALLOW_DUPLICATES} (default: <code>true</code>)
 	 * <li>{@link Grammar#GRAMMAR}
-	 * <li>{@link Codon#MAXIMUM_VALUE} (default: <tt>Long.MAXIMUM_VALUE</tt>)
-	 * <li>{@link Codon#MINIMUM_VALUE} (default: <tt>0</tt>)
+	 * <li>{@link Codon#MAXIMUM_VALUE} (default: <code>Long.MAXIMUM_VALUE</code>)
+	 * <li>{@link Codon#MINIMUM_VALUE} (default: <code>0</code>)
 	 * <li>{@link GEIndividual#MAXIMUM_DEPTH}
 	 * <li>{@link CodonFactory#CODON_FACTORY}
 	 * </ul>
@@ -136,7 +136,7 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 
 	/**
 	 * Receives configuration events and triggers this operator to reconfigure
-	 * if the <tt>ConfigEvent</tt> is for one of its required parameters
+	 * if the <code>ConfigEvent</code> is for one of its required parameters
 	 * 
 	 * @param event {@inheritDoc}
 	 */
@@ -148,15 +148,15 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 	}
 
 	/**
-	 * Creates a population of new <tt>GEIndividuals</tt>. Each individual is
-	 * created by a call to the<tt>createIndividual</tt> method. The size of the
+	 * Creates a population of new <code>GEIndividuals</code>. Each individual is
+	 * created by a call to the<code>createIndividual</code> method. The size of the
 	 * population will be equal to the {@link Population#SIZE} config parameter.
 	 * If the {@link InitialisationMethod#ALLOW_DUPLICATES} config parameter is
-	 * set to <tt>false</tt> then the individuals in the population will be
-	 * unique according to their <tt>equals</tt> methods. By default, duplicates
+	 * set to <code>false</code> then the individuals in the population will be
+	 * unique according to their <code>equals</code> methods. By default, duplicates
 	 * are allowed.
 	 * 
-	 * @return a population of <tt>GEIndividual</tt> objects
+	 * @return a population of <code>GEIndividual</code> objects
 	 */
 	@Override
 	public Population createPopulation() {
@@ -179,10 +179,10 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 	}
 
 	/**
-	 * Constructs a new <tt>GEIndividual</tt> with a sequence of
+	 * Constructs a new <code>GEIndividual</code> with a sequence of
 	 * codons that map to a full derivation tree on the currently set grammar
 	 * 
-	 * @return a new <tt>GEIndividual</tt> instance
+	 * @return a new <code>GEIndividual</code> instance
 	 */
 	@Override
 	public GEIndividual createIndividual() {
@@ -307,7 +307,7 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 	}
 
 	/**
-	 * Returns the grammar that the <tt>GEIndividual</tt>s will satisfy with
+	 * Returns the grammar that the <code>GEIndividual</code>s will satisfy with
 	 * full program trees
 	 * 
 	 * @return the currently set grammar
@@ -318,7 +318,7 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 
 	/**
 	 * Sets the grammar to be satisfied by the full parse trees of the new
-	 * <tt>GEIndividual</tt>s. If automatic configuration is enabled then any
+	 * <code>GEIndividual</code>s. If automatic configuration is enabled then any
 	 * value set here will be overwritten by the {@link Grammar#GRAMMAR}
 	 * configuration setting on the next config event.
 	 * 
@@ -332,9 +332,9 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 	 * Returns whether or not duplicates are currently allowed in generated
 	 * populations
 	 * 
-	 * @return <tt>true</tt> if duplicates are currently allowed in populations
-	 *         generated by the <tt>createPopulation</tt> method and
-	 *         <tt>false</tt> otherwise
+	 * @return <code>true</code> if duplicates are currently allowed in populations
+	 *         generated by the <code>createPopulation</code> method and
+	 *         <code>false</code> otherwise
 	 */
 	public boolean isDuplicatesEnabled() {
 		return allowDuplicates;
@@ -355,7 +355,7 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 
 	/**
 	 * Returns the number of individuals to be generated in a population created
-	 * by the <tt>createPopulation</tt> method
+	 * by the <code>createPopulation</code> method
 	 * 
 	 * @return the size of the populations generated
 	 */
@@ -365,7 +365,7 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 
 	/**
 	 * Sets the number of individuals to be generated in a population created
-	 * by the <tt>createPopulation</tt> method. If automatic configuration is
+	 * by the <code>createPopulation</code> method. If automatic configuration is
 	 * enabled then any value set here will be overwritten by the
 	 * {@link Population#SIZE} configuration setting on the next config event.
 	 * 
@@ -387,7 +387,7 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 
 	/**
 	 * Sets the depth of the parse trees created by the
-	 * <tt>createIndividual</tt> method. If automatic configuration is enabled
+	 * <code>createIndividual</code> method. If automatic configuration is enabled
 	 * then any value set here will be overwritten by the
 	 * {@link GEIndividual#MAXIMUM_DEPTH} configuration setting on
 	 * the next config event.
@@ -447,7 +447,7 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 	}
 	
 	/**
-	 * Returns the <tt>CodonFactory</tt> currently in use
+	 * Returns the <code>CodonFactory</code> currently in use
 	 * 
 	 * @return the codon factory being used to generate new codons
 	 */
@@ -456,7 +456,7 @@ public class FullInitialisation implements GEInitialisation, Listener<ConfigEven
 	}
 
 	/**
-	 * Sets the <tt>CodonFactory</tt> this initialiser will use to generate
+	 * Sets the <code>CodonFactory</code> this initialiser will use to generate
 	 * new codon instances. If automatic configuration is enabled
 	 * then any value set here will be overwritten by the
 	 * {@link CodonFactory#CODON_FACTORY} configuration setting on the next config

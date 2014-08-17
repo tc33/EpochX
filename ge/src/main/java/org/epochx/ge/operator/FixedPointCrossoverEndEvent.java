@@ -41,7 +41,7 @@ public class FixedPointCrossoverEndEvent extends OperatorEvent.EndOperator {
 	private int point;
 
 	/**
-	 * Constructs a <tt>FixedPointCrossoverEndEvent</tt> with the details of the
+	 * Constructs a <code>FixedPointCrossoverEndEvent</code> with the details of the
 	 * event
 	 * 
 	 * @param operator the operator that performed the crossover

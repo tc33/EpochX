@@ -413,8 +413,8 @@ public class MersenneTwisterFast implements Serializable, Cloneable, RandomSeque
 	}
 
 	/**
-	 * This generates a coin flip with a probability <tt>probability</tt> of
-	 * returning true, else returning false. <tt>probability</tt> must
+	 * This generates a coin flip with a probability <code>probability</code> of
+	 * returning true, else returning false. <code>probability</code> must
 	 * be between 0.0 and 1.0, inclusive. Not as precise a random real
 	 * event as nextBoolean(double), but twice as fast. To explicitly
 	 * use this, remember you may need to cast to float first.
@@ -464,8 +464,8 @@ public class MersenneTwisterFast implements Serializable, Cloneable, RandomSeque
 	}
 
 	/**
-	 * This generates a coin flip with a probability <tt>probability</tt> of
-	 * returning true, else returning false. <tt>probability</tt> must
+	 * This generates a coin flip with a probability <code>probability</code> of
+	 * returning true, else returning false. <code>probability</code> must
 	 * be between 0.0 and 1.0, inclusive.
 	 */
 	public final boolean nextBoolean(final double probability) {

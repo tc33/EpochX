@@ -25,10 +25,23 @@ import org.epochx.grammar.NonTerminalSymbol;
 import org.epochx.source.SourceGenerator;
 
 /**
+ * Converts <code>GEIndividual</code>s into source code
  * 
+ * @since 2.0
  */
 public class GESourceGenerator implements SourceGenerator<GEIndividual> {
 
+	/**
+	 * Returns the source code that the given individual represents. The source of a 
+	 * <code>GEIndividual</code> is the string representation of its parse tree, which
+	 * typically consists of the terminal nodes output in sequence following a depth-first
+	 * traversal. If the given individual has no parse tree set then <code>null</code> 
+	 * will be returned.
+	 * 
+	 * @param individual the individual to return the source code for
+	 * @return the source code of the given individual's parse tree or <code>null</code>
+	 * if the parse tree is not set 
+	 */
 	@Override
 	public String getSource(GEIndividual individual) {
 		NonTerminalSymbol parseTree = individual.getParseTree();

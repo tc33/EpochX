@@ -33,19 +33,17 @@ import org.epochx.*;
 import org.epochx.event.*;
 
 /**
- * A chromosome is a sequential list of Codons. 
+ * A chromosome is a sequential, iterable list of Codons. 
  */
 public class Chromosome implements Iterable<Codon>, Cloneable, Listener<ConfigEvent> {
 
 	/**
-	 * The key for setting and retrieving the maximum length setting for 
-	 * chromosomes
+	 * The key for setting and retrieving the maximum length setting for chromosomes
 	 */
 	public static final ConfigKey<Integer> MAXIMUM_LENGTH = new ConfigKey<Integer>();
 	
 	/**
-	 * The key for setting and retrieving the maximum number of times the 
-	 * codons may be wrapped
+	 * The key for setting and retrieving the maximum number of times the codons may be wrapped
 	 */
 	public static final ConfigKey<Integer> MAXIMUM_WRAPS = new ConfigKey<Integer>();
 	
@@ -56,24 +54,56 @@ public class Chromosome implements Iterable<Codon>, Cloneable, Listener<ConfigEv
 	 */
 	public static final ConfigKey<Boolean> ALLOW_EXTENSION = new ConfigKey<Boolean>();
 	
+	// The chromosome's codons
 	private List<Codon> codons;
 	
+	// Configuration settings
 	private RandomSequence random;
-	
-	private long minCodon;
-	private long maxCodon;
-	private long codonRange;
-	private int maxWraps;
-	private int maxLength;
-	private boolean extending;
+	private Long minCodon;
+	private Long maxCodon;
+	private Long codonRange;
+	private Integer maxWraps;
+	private Integer maxLength;
+	private Boolean extending;
 	private CodonFactory codonFactory;
 
+	/**
+	 * Constructs a <code>Chromosome</code> with an empty list of codons and control parameters
+	 * automatically loaded from the config
+	 */
 	public Chromosome() {
 		this(new ArrayList<Codon>());
 	}
 	
+	/**
+	 * Constructs a <code>Chromosome</code> with the given list of codons and control parameters
+	 * automatically loaded from the config
+	 * 
+	 * @param codons the initial list of codons to represent this chromosome
+	 */
 	public Chromosome(List<Codon> codons) {
+		this(codons, true);
+	}
+	
+	/**
+	 * Constructs a <code>Chromosome</code> with the given list of codons and control parameters 
+	 * initially loaded from the config. If the <code>autoConfig</code> argument is set to
+	 * <code>true</code> then the configuration will be automatically updated when the config is 
+	 * modified.
+	 * 
+	 * @param codons the initial list of codons to represent this chromosome
+	 * @param autoConfig whether this operator should automatically update its
+	 *        configuration settings from the config
+	 */
+	public Chromosome(List<Codon> codons, boolean autoConfig) {
 		this.codons = codons;
+		
+		// Default config values
+		maxCodon = Long.MAX_VALUE;
+		minCodon = 0L;
+		maxWraps = Integer.MAX_VALUE;
+		maxLength = Integer.MAX_VALUE;
+		extending = Boolean.FALSE;
 		
 		setup();
 
@@ -96,11 +126,11 @@ public class Chromosome implements Iterable<Codon>, Cloneable, Listener<ConfigEv
 	 */
 	protected void setup() {
 		random = Config.getInstance().get(RANDOM_SEQUENCE);
-		maxCodon = Config.getInstance().get(MAXIMUM_VALUE, Long.MAX_VALUE);
-		minCodon = Config.getInstance().get(MINIMUM_VALUE, 0L);
-		maxWraps = Config.getInstance().get(MAXIMUM_WRAPS, Integer.MAX_VALUE);
-		maxLength = Config.getInstance().get(MAXIMUM_LENGTH, Integer.MAX_VALUE);
-		extending = Config.getInstance().get(ALLOW_EXTENSION, Boolean.FALSE);
+		maxCodon = Config.getInstance().get(MAXIMUM_VALUE, maxCodon);
+		minCodon = Config.getInstance().get(MINIMUM_VALUE, minCodon);
+		maxWraps = Config.getInstance().get(MAXIMUM_WRAPS, maxWraps);
+		maxLength = Config.getInstance().get(MAXIMUM_LENGTH, maxLength);
+		extending = Config.getInstance().get(ALLOW_EXTENSION, extending);
 		codonFactory = Config.getInstance().get(CODON_FACTORY);
 		
 		codonRange = maxCodon - minCodon;
@@ -120,16 +150,27 @@ public class Chromosome implements Iterable<Codon>, Cloneable, Listener<ConfigEv
 		}
 	}
 	
+	/**
+	 * Appends a codon with a random value to the chromosome. The codon is generated using the
+	 * currently set codon factory.
+	 */
 	public void extend() {
 		long value = minCodon + random.nextLong(codonRange);
 		
 		appendCodon(codonFactory.codon(value));
 	}
 	
+	/**
+	 * Returns a list of the chromosome's codons. Modifying the returned list will not effect the chromosome's internal
+	 * list, although modifications to the codons themselves may be reflected in the chromosome's codons.
+	 * 
+	 * @return a list of this chromosome's codons
+	 */
 	protected List<Codon> getCodons() {
-		//TODO Is it a good idea to give access to the underlying list? If not, also need to make a copy from the original list given
-		return codons;
+		//TODO Would it be safe to just give access to the underlying list? Does it matter that it's not a deep clone?
+		return new ArrayList<Codon>(codons);
 	}
+	
 	
 	public Codon getCodon(long index) {
 		// If within chromosome size just return the codon

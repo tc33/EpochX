@@ -24,22 +24,31 @@ package org.epochx.ge;
 import org.epochx.Config.ConfigKey;
 
 /**
+ * Codons are used to make production choices when performing a mapping operation. 
+ * Implementations can use any representation for the codon value, so that it can 
+ * be manipulated by genetic operators. <code>CodonFactory</code>s are used to create
+ * new codons, so when implementing a new codon type, a new <code>CodonFactory</code>
+ * type should also be implemented.
  * 
+ * @since 2.0
  */
 public interface Codon extends Cloneable {
 	
 	/**
-	 * The key for setting and retrieving the maximum value for an integer
-	 * codon
+	 * The key for setting and retrieving the maximum value for an integer codon
 	 */
 	public static final ConfigKey<Long> MAXIMUM_VALUE = new ConfigKey<Long>();
 	
 	/**
-	 * The key for setting and retrieving the minimum value for an integer
-	 * codon
+	 * The key for setting and retrieving the minimum value for an integer codon
 	 */
 	public static final ConfigKey<Long> MINIMUM_VALUE = new ConfigKey<Long>();
 
+	/**
+	 * Returns the value of the codon
+	 * 
+	 * @return the codon's value
+	 */
 	public long value();
 	
 }

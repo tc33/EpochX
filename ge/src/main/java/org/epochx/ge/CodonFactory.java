@@ -24,15 +24,14 @@ package org.epochx.ge;
 import org.epochx.Config.ConfigKey;
 
 /**
- * Codon factories are responsible for generating new codons.
+ * Codon factories are responsible for generating new codons
  * 
  * @since 2.0
  */
 public interface CodonFactory {
 
 	/**
-	 * The key for setting and retrieving the number of bits that constitute a
-	 * codon
+	 * The key for setting and retrieving the codon factory to generate new codons
 	 */
 	public static final ConfigKey<CodonFactory> CODON_FACTORY = new ConfigKey<CodonFactory>();
 	

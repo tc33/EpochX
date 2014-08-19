@@ -23,21 +23,40 @@ package org.epochx.ge;
 
 
 /**
+ * A codon which stores its value as an integer
  * 
+ * @see IntegerCodonFactory
+ * 
+ * @since 2.0
  */
 public class IntegerCodon implements Codon {
 	
 	private long value;
 	
+	/**
+	 * Constructs an <code>IntegerCodon</code> with the given value
+	 * 
+	 * @param value the value to assign to this codon
+	 */
 	public IntegerCodon(long value) {
 		this.value = value;
 	}
 	
+	/**
+	 * Returns the value of this codon
+	 * 
+	 * @return the value of this codon
+	 */
 	@Override
 	public long value() {
 		return value;
 	}
 	
+	/**
+	 * Returns a string representation of this codon
+	 * 
+	 * @return a string representation of this codon
+	 */
 	@Override
 	public String toString() {
 		return Long.toString(value);

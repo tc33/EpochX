@@ -27,7 +27,11 @@ import org.epochx.Config.ConfigKey;
 
 
 /**
+ * A codon which stores its value as a sequence of bits
  * 
+ * @see BinaryCodonFactory
+ * 
+ * @since 2.0
  */
 public class BinaryCodon implements Codon {
 
@@ -39,15 +43,28 @@ public class BinaryCodon implements Codon {
 	
 	private boolean[] bits;
 	
+	/**
+	 * Constructs a <code>BinaryCodon</code> with the given bits used as the value
+	 * 
+	 * @param bits the bit sequence to assign to this codon
+	 */
 	public BinaryCodon(boolean[] bits) {
 		this.bits = bits;
 	}
 	
+	/**
+	 * Returns the value of this codon
+	 * 
+	 * @return the value of this codon
+	 */
 	@Override
 	public long value() {
 		return toLong(bits);
 	}
 	
+	/*
+	 * Converts the given sequence of bits to a long
+	 */
 	private long toLong(boolean[] a) {
 	    long result = 0;
 	    for (int i = 0; i < a.length; i++) {
@@ -58,10 +75,20 @@ public class BinaryCodon implements Codon {
 	    return result;
 	}
 	
+	/**
+	 * Returns the bit string representation of this codon's value
+	 * 
+	 * @return this codon's bit string
+	 */
 	public boolean[] getBits() {
 		return bits;
 	}
 	
+	/**
+	 * Returns a string representation of this codon
+	 * 
+	 * @return a string representation of this codon
+	 */
 	@Override
 	public String toString() {
 		return Arrays.toString(bits);

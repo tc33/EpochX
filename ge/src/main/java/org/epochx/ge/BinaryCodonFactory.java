@@ -35,6 +35,8 @@ import org.epochx.event.EventManager;
 import org.epochx.event.Listener;
 
 /**
+ * Binary codon factories are responsible for generating new binary codons
+ * 
  * 
  */
 public class BinaryCodonFactory implements CodonFactory, Listener<ConfigEvent> {
@@ -42,10 +44,24 @@ public class BinaryCodonFactory implements CodonFactory, Listener<ConfigEvent> {
 	private RandomSequence random;
 	private int noBits;
 	
+	/**
+	 * Constructs a <code>BinaryCodonFactory</code> with control parameters automatically 
+	 * loaded from the config
+	 *
+	 */
 	public BinaryCodonFactory() {
 		this(true);
 	}
 	
+	/**
+	 * Constructs a <code>BinaryCodonFactory</code> with control parameters
+	 * initially loaded from the config. If the <code>autoConfig</code> argument is
+	 * set to <code>true</code> then the configuration will be automatically updated
+	 * when the config is modified.
+	 * 
+	 * @param autoConfig whether this operator should automatically update its
+	 *        configuration settings from the config
+	 */
 	public BinaryCodonFactory(boolean autoConfig) {
 		setup();
 
@@ -60,6 +76,7 @@ public class BinaryCodonFactory implements CodonFactory, Listener<ConfigEvent> {
 	 * change in any of the following configuration parameters:
 	 * <ul>
 	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
+	 * <li>{@link BinaryCodon#NO_BITS}
 	 * </ul>
 	 */
 	protected void setup() {
@@ -83,9 +100,10 @@ public class BinaryCodonFactory implements CodonFactory, Listener<ConfigEvent> {
 	
 	
 	/**
-	 * Generates a random BinaryCodon
+	 * Generates and returns a new <code>BinaryCodon</code> instance with a random value using
+	 * the number of bits defined by the <code>NO_BITS</code> setting
 	 * 
-	 * @return a new random binary codon
+	 * @return a new random binary codon with a random value
 	 */
 	@Override
 	public Codon codon() {

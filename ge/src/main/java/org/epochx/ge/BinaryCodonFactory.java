@@ -24,6 +24,8 @@ package org.epochx.ge;
 import static org.epochx.Config.Template.TEMPLATE;
 import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
 import static org.epochx.ge.BinaryCodon.NO_BITS;
+import static org.epochx.ge.Codon.MAXIMUM_VALUE;
+import static org.epochx.ge.Codon.MINIMUM_VALUE;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,26 +37,28 @@ import org.epochx.event.EventManager;
 import org.epochx.event.Listener;
 
 /**
- * Binary codon factories are responsible for generating new binary codons
+ * A codon factory responsible for creating binary codons
  * 
- * 
+ * @since 2.0
  */
 public class BinaryCodonFactory implements CodonFactory, Listener<ConfigEvent> {
 	
+	// Configuration settings
 	private RandomSequence random;
-	private int noBits;
+	private Integer noBits;
+	
+	private long codonRange;
 	
 	/**
-	 * Constructs a <code>BinaryCodonFactory</code> with control parameters automatically 
-	 * loaded from the config
-	 *
+	 * Constructs an <code>IntegerCodonFactory</code> with control parameters
+	 * automatically loaded from the config
 	 */
 	public BinaryCodonFactory() {
 		this(true);
 	}
 	
 	/**
-	 * Constructs a <code>BinaryCodonFactory</code> with control parameters
+	 * Constructs an <code>IntegerCodonFactory</code> with control parameters
 	 * initially loaded from the config. If the <code>autoConfig</code> argument is
 	 * set to <code>true</code> then the configuration will be automatically updated
 	 * when the config is modified.
@@ -63,6 +67,9 @@ public class BinaryCodonFactory implements CodonFactory, Listener<ConfigEvent> {
 	 *        configuration settings from the config
 	 */
 	public BinaryCodonFactory(boolean autoConfig) {
+		// Default config values
+		noBits = 8;
+		
 		setup();
 
 		if (autoConfig) {
@@ -76,12 +83,14 @@ public class BinaryCodonFactory implements CodonFactory, Listener<ConfigEvent> {
 	 * change in any of the following configuration parameters:
 	 * <ul>
 	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
+	 * <li>{@link Codon#MAXIMUM_VALUE}
+	 * <li>{@link Codon#MINIMUM_VALUE}
 	 * <li>{@link BinaryCodon#NO_BITS}
 	 * </ul>
 	 */
 	protected void setup() {
 		random = Config.getInstance().get(RANDOM_SEQUENCE);
-		noBits = Config.getInstance().get(NO_BITS);
+		noBits = Config.getInstance().get(NO_BITS, noBits);
 	}
 
 	/**
@@ -93,20 +102,20 @@ public class BinaryCodonFactory implements CodonFactory, Listener<ConfigEvent> {
 	 */
 	@Override
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(TEMPLATE, RANDOM_SEQUENCE, NO_BITS)) {
+		if (event.isKindOf(TEMPLATE, RANDOM_SEQUENCE, MAXIMUM_VALUE, MINIMUM_VALUE, NO_BITS)) {
 			setup();
 		}
 	}
-	
-	
+
 	/**
-	 * Generates and returns a new <code>BinaryCodon</code> instance with a random value using
-	 * the number of bits defined by the <code>NO_BITS</code> setting
+	 * Constructs a new <code>BinaryCodon</code> with a random value using the number of bits 
+	 * defined by the <code>NO_BITS</code> setting
 	 * 
 	 * @return a new random binary codon with a random value
 	 */
 	@Override
 	public Codon codon() {
+		//TODO This should probably enforce the max and min codon value settings
 		boolean[] bits = new boolean[noBits];
 		
 		for (int i=0; i<noBits; i++) {
@@ -117,10 +126,10 @@ public class BinaryCodonFactory implements CodonFactory, Listener<ConfigEvent> {
 	}
 	
 	/**
-	 * Generates a new BinaryCodon with the given value
+	 * Constructs a new <code>BinaryCodon</code> with the given value
 	 * 
 	 * @param value the value to assign to the new codon
-	 * @return a new codon instance
+	 * @return a new <code>BinaryCodon</code> with the given value
 	 */
 	@Override
 	public Codon codon(long value) {
@@ -135,13 +144,13 @@ public class BinaryCodonFactory implements CodonFactory, Listener<ConfigEvent> {
 	
 	/**
 	 * Converts the given chromosome to a boolean array of bits, where each codon in the 
-	 * chromosome is represented by NO_BITS. This method only works on chromosomes which 
-	 * contain only <code>BinaryCodon</code>s.
+	 * chromosome is represented by <code>NO_BITS</code>. This method only works on 
+	 * chromosomes which contain only <code>BinaryCodon</code>s.
 	 * 
 	 * @param chromosome the chromosome to convert to bits
 	 * @return a boolean array representing the bits of the chromosome
 	 * @throws IllegalArgumentException if any of the codons in the chromosome are not an
-	 * instance of <code>BinaryBinary</code>
+	 * instance of <code>BinaryCodon</code>
 	 */
 	public static boolean[] chromosomeToBits(Chromosome chromosome) {
 		List<Boolean> bits = new ArrayList<Boolean>();

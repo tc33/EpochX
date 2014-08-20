@@ -348,6 +348,8 @@ public class Chromosome implements Iterable<Codon>, Cloneable, Listener<ConfigEv
 	 */
 	public void setMinCodon(Long minCodon) {
 		this.minCodon = minCodon;
+		
+		codonRange = maxCodon - minCodon;
 	}
 
 	/**
@@ -362,6 +364,8 @@ public class Chromosome implements Iterable<Codon>, Cloneable, Listener<ConfigEv
 	 */
 	public void setMaxCodon(Long maxCodon) {
 		this.maxCodon = maxCodon;
+		
+		codonRange = maxCodon - minCodon;
 	}
 
 	/**

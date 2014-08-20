@@ -23,6 +23,8 @@ package org.epochx.ge;
 
 import static org.epochx.Config.Template.TEMPLATE;
 import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
+import static org.epochx.ge.Codon.MAXIMUM_VALUE;
+import static org.epochx.ge.Codon.MINIMUM_VALUE;
 
 import org.epochx.Config;
 import org.epochx.RandomSequence;
@@ -31,17 +33,41 @@ import org.epochx.event.EventManager;
 import org.epochx.event.Listener;
 
 /**
+ * A codon factory responsible for creating integer codons
  * 
+ * @since 2.0
  */
 public class IntegerCodonFactory implements CodonFactory, Listener<ConfigEvent> {
 	
+	// Configuration settings
 	private RandomSequence random;
+	private Long maxCodon;
+	private Long minCodon;
 	
+	private long codonRange;
+	
+	/**
+	 * Constructs an <code>IntegerCodonFactory</code> with control parameters
+	 * automatically loaded from the config
+	 */
 	public IntegerCodonFactory() {
 		this(true);
 	}
 	
+	/**
+	 * Constructs an <code>IntegerCodonFactory</code> with control parameters
+	 * initially loaded from the config. If the <code>autoConfig</code> argument is
+	 * set to <code>true</code> then the configuration will be automatically updated
+	 * when the config is modified.
+	 * 
+	 * @param autoConfig whether this operator should automatically update its
+	 *        configuration settings from the config
+	 */
 	public IntegerCodonFactory(boolean autoConfig) {
+		// Default config values
+		maxCodon = Long.MAX_VALUE;
+		minCodon = Long.MIN_VALUE;
+		
 		setup();
 
 		if (autoConfig) {
@@ -55,10 +81,16 @@ public class IntegerCodonFactory implements CodonFactory, Listener<ConfigEvent> 
 	 * change in any of the following configuration parameters:
 	 * <ul>
 	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
+	 * <li>{@link Codon#MAXIMUM_VALUE}
+	 * <li>{@link Codon#MINIMUM_VALUE}
 	 * </ul>
 	 */
 	protected void setup() {
 		random = Config.getInstance().get(RANDOM_SEQUENCE);
+		maxCodon = Config.getInstance().get(MAXIMUM_VALUE, maxCodon);
+		minCodon = Config.getInstance().get(MINIMUM_VALUE, minCodon);
+		
+		codonRange = maxCodon - minCodon;
 	}
 
 	/**
@@ -70,28 +102,30 @@ public class IntegerCodonFactory implements CodonFactory, Listener<ConfigEvent> 
 	 */
 	@Override
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(TEMPLATE, RANDOM_SEQUENCE)) {
+		if (event.isKindOf(TEMPLATE, RANDOM_SEQUENCE, MAXIMUM_VALUE, MINIMUM_VALUE)) {
 			setup();
 		}
 	}
 	
 	
 	/**
-	 * Generates a random IntegerCodon
+	 * Constructs a new <code>IntegerCodon</code> with a random value between the
+	 * minimum and maximum codon values
 	 * 
-	 * @return a new random integer codon
+	 * @return a new <code>IntegerCodon</code> with a random value
 	 */
 	@Override
 	public Codon codon() {
-		//TODO Need to make sure the random number is between max and min values allowed
-		return new IntegerCodon(random.nextLong());
+		long value = minCodon + random.nextLong(codonRange);
+		
+		return new IntegerCodon(value);
 	}
 	
 	/**
-	 * Generates a new IntegerCodon with the given value
+	 * Constructs a new <code>IntegerCodon</code> with the given value
 	 * 
 	 * @param value the value to assign to the new codon
-	 * @return a new codon instance
+	 * @return a new <code>IntegerCodon</code> with the given value
 	 */
 	@Override
 	public Codon codon(long value) {

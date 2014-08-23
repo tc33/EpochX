@@ -99,6 +99,8 @@ import org.epochx.tools.BooleanUtils;
  * 		| IF( <node> , <node>, <node> )
  * <terminal> ::= D0 | D1 | D2
  * }
+ * 
+ * @since 2.0
  */
 public class GEMajority3 extends GenerationalTemplate {
 	

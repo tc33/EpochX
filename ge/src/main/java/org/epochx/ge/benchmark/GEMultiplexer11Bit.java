@@ -113,6 +113,8 @@ import org.epochx.tools.BooleanUtils;
  * 		| IF( <node> , <node>, <node> )
  * <terminal> ::= A0 | A1 | A2 | D3 | D4 | D5 | D6 | D7 | D8 | D9 | D10
  * }
+ * 
+ * @since 2.0
  */
 public class GEMultiplexer11Bit extends GenerationalTemplate {
 	

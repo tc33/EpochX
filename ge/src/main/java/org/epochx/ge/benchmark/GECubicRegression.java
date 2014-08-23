@@ -96,6 +96,8 @@ import org.epochx.tools.BenchmarkSolutions;
  * 		| MUL( <node> , <node> )
  * 		| PDIV( <node> , <node> )
  * <terminal> ::= X
+ * 
+ * @since 2.0
  * }
  */
 public class GECubicRegression extends GEGenerationalTemplate {

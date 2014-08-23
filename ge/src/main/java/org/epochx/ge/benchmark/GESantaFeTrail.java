@@ -98,6 +98,8 @@ import org.epochx.tools.ant.AntLandscape;
  * 		| TURN-RIGHT( <var> )
  * <var> ::= ANT
  * }
+ * 
+ * @since 2.0
  */
 public class GESantaFeTrail extends GenerationalTemplate {
 

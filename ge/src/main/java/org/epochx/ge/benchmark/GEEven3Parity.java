@@ -100,6 +100,8 @@ import org.epochx.tools.BooleanUtils;
  * 		| XOR( <node> , <node> )
  * <terminal> ::= D0 | D1 | D2
  * }
+ * 
+ * @since 2.0
  */
 public class GEEven3Parity extends GenerationalTemplate {
 	

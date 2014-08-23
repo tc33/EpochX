@@ -97,6 +97,8 @@ import org.epochx.tools.BenchmarkSolutions;
  * 		| PDIV( <node> , <node> )
  * <terminal> ::= X
  * }
+ * 
+ * @since 2.0
  */
 public class GEQuarticRegression extends GenerationalTemplate {
 

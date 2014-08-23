@@ -27,9 +27,11 @@ import java.util.Map;
 
 import org.epochx.Breeder;
 import org.epochx.Config.ConfigKey;
+import org.epochx.BranchedBreeder;
 import org.epochx.DoubleFitness;
 import org.epochx.EvolutionaryStrategy;
 import org.epochx.FitnessEvaluator;
+import org.epochx.GenerationalStrategy;
 import org.epochx.GenerationalTemplate;
 import org.epochx.Initialiser;
 import org.epochx.MaximumGenerations;
@@ -38,13 +40,6 @@ import org.epochx.Population;
 import org.epochx.RandomSequence;
 import org.epochx.TerminationCriteria;
 import org.epochx.TerminationFitness;
-import org.epochx.epox.Node;
-import org.epochx.epox.Variable;
-import org.epochx.epox.VariableNode;
-import org.epochx.epox.bool.AndFunction;
-import org.epochx.epox.bool.NandFunction;
-import org.epochx.epox.bool.NorFunction;
-import org.epochx.epox.bool.OrFunction;
 import org.epochx.ge.CodonFactory;
 import org.epochx.ge.GEIndividual;
 import org.epochx.ge.GESourceGenerator;
@@ -65,7 +60,7 @@ import org.epochx.tools.BooleanUtils;
 
 /**
  * This template sets up EpochX to run the even-3-parity benchmark with the 
- * STGP representation. The even-3-parity problem involves evolving a program
+ * GE representation. The even-3-parity problem involves evolving a program
  * which receives an array of 3 boolean values. A program that solves the 
  * even-n-parity problem will return true in all circumstances where an even 
  * number of the inputValues are true (or 1), and return false whenever there 
@@ -73,13 +68,48 @@ import org.epochx.tools.BooleanUtils;
  *  
  * The following configuration is used:
  * 
- * <li>Population.SIZE: 100
- * <li>MaximumGenerations.MAXIMUM_GENERATIONS: 50
+ * <ul>
+ * <li>{@link Population#SIZE}: <code>100</code>
+ * <li>{@link GenerationalStrategy#TERMINATION_CRITERIA}: <code>MaximumGenerations</code>, <code>TerminationFitness(0.0)</code>
+ * <li>{@link MaximumGenerations#MAXIMUM_GENERATIONS}: <code>50</code>
+ * <li>{@link GEIndividual#MAXIMUM_DEPTH}: <code>17</code>
+ * <li>{@link BranchedBreeder#SELECTOR}: <code>TournamentSelector</code>
+ * <li>{@link TournamentSelector#TOURNAMENT_SIZE}: <code>7</code>
+ * <li>{@link Breeder#OPERATORS}: <code>OnePointCrossover</code>, <code>PointMutation</code>
+ * <li>{@link OnePointCrossover#PROBABILITY}: <code>0.0</code>
+ * <li>{@link PointMutation#PROBABILITY}: <code>1.0</code>
+ * <li>{@link Initialiser#METHOD}: <code>GrowInitialiser</code>
+ * <li>{@link RandomSequence#RANDOM_SEQUENCE}: <code>MersenneTwisterFast</code>
+ * <li>{@link Grammar#GRAMMER}: [Listed below]
+ * <li>{@link CodonFactory#CODON_FACTORY}: <code>IntegerCodonFactory</code>
+ * <li>{@link GEFitnessFunction#INTERPRETER}: <code>EpoxInterpreter(GESourceGenerator)</code>
+ * <li>{@link MappingComponent#MAPPER}: <code>DepthFirstMapper</code>
+ * <li>{@link FitnessEvaluator#FUNCTION}: <code>HitsCount</code>
+ * <li>{@link HitsCount#INPUT_IDENTIFIERS}: <code>new String[]{"D0", "D1", "D2"}</code>
+ * <li>{@link HitsCount#INPUT_VALUE_SETS}: [all possible binary input combinations]
+ * <li>{@link HitsCount#EXPECTED_OUTPUTS}: [correct output for input value sets]
+ * 
+ * <h3>Grammar</h3>
+ * 
+ * {@code
+ * <prog> ::= <node>
+ * <node> ::= <function> | <terminal>
+ * <function> ::= NOT( <node> )
+ * 		| OR( <node> , <node> )
+ * 		| AND( <node> , <node> )
+ * 		| XOR( <node> , <node> )
+ * <terminal> ::= D0 | D1 | D2
+ * }
  */
 public class GEEven3Parity extends GenerationalTemplate {
 	
 	private static final int NO_BITS = 3;
 	
+	/**
+	 * Sets up the given template with the benchmark config settings
+	 * 
+	 * @param template a map to be filled with the template config
+	 */
 	@Override
 	protected void fill(Map<ConfigKey<?>, Object> template) {
 		super.fill(template);
@@ -104,25 +134,7 @@ public class GEEven3Parity extends GenerationalTemplate {
         
         RandomSequence randomSequence = new MersenneTwisterFast();
         template.put(RandomSequence.RANDOM_SEQUENCE, randomSequence);
-        
-        // Setup syntax
-		List<Node> syntaxList = new ArrayList<Node>();
-		syntaxList.add(new AndFunction());
-		syntaxList.add(new OrFunction());
-		syntaxList.add(new NandFunction());
-		syntaxList.add(new NorFunction());
-
-		Variable[] variables = new Variable[NO_BITS];
-		for (int i=0; i < NO_BITS; i++) {
-			variables[i] = new Variable("D"+i, Boolean.class);
-			syntaxList.add(new VariableNode(variables[i]));
-		}
 		
-        Node[] syntax = syntaxList.toArray(new Node[syntaxList.size()]);
-
-        template.put(STGPIndividual.SYNTAX, syntax);
-        template.put(STGPIndividual.RETURN_TYPE, Boolean.class);
-        
         // Setup grammar
         String grammarStr = "<prog> ::= <node>\n"
     			+ "<node> ::= <function> | <terminal>\n"
@@ -130,9 +142,20 @@ public class GEEven3Parity extends GenerationalTemplate {
     			+ "| OR( <node> , <node> ) "
     			+ "| AND( <node> , <node> ) "
     			+ "| XOR( <node> , <node> )\n"
-    			+ "<terminal> ::= D0 | D1 | D2\n";
-        Grammar grammar = new Grammar(grammarStr);
-        template.put(Grammar.GRAMMAR, grammar);
+    			+ "<terminal> ::= ";
+        
+        // Append inputs to grammar
+		String[] inputIdentifiers = new String[NO_BITS];
+		for (int i=0; i < NO_BITS; i++) {
+			if (i > 0) {
+				grammarStr += " | ";
+			}
+			inputIdentifiers[i] = "D" + i;
+			grammarStr += inputIdentifiers[i];
+		}
+		grammarStr += '\n';
+
+        template.put(Grammar.GRAMMAR, new Grammar(grammarStr));
         template.put(CodonFactory.CODON_FACTORY, new IntegerCodonFactory());
         template.put(GEFitnessFunction.INTERPRETER, new EpoxInterpreter<GEIndividual>(new GESourceGenerator()));
         template.put(MappingComponent.MAPPER, new DepthFirstMapper());
@@ -146,7 +169,7 @@ public class GEEven3Parity extends GenerationalTemplate {
         
         // Setup fitness function
         template.put(FitnessEvaluator.FUNCTION, new HitsCount());
-        template.put(HitsCount.INPUT_VARIABLES, variables);
+        template.put(HitsCount.INPUT_IDENTIFIERS, inputIdentifiers);
         template.put(HitsCount.INPUT_VALUE_SETS, inputValues);
         template.put(HitsCount.EXPECTED_OUTPUTS, expectedOutputs);
 	}

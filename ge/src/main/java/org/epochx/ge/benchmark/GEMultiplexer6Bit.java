@@ -27,9 +27,11 @@ import java.util.Map;
 
 import org.epochx.Breeder;
 import org.epochx.Config.ConfigKey;
+import org.epochx.BranchedBreeder;
 import org.epochx.DoubleFitness;
 import org.epochx.EvolutionaryStrategy;
 import org.epochx.FitnessEvaluator;
+import org.epochx.GenerationalStrategy;
 import org.epochx.GenerationalTemplate;
 import org.epochx.Initialiser;
 import org.epochx.MaximumGenerations;
@@ -38,26 +40,27 @@ import org.epochx.Population;
 import org.epochx.RandomSequence;
 import org.epochx.TerminationCriteria;
 import org.epochx.TerminationFitness;
-import org.epochx.epox.Node;
-import org.epochx.epox.Variable;
-import org.epochx.epox.VariableNode;
-import org.epochx.epox.bool.AndFunction;
-import org.epochx.epox.bool.NotFunction;
-import org.epochx.epox.bool.OrFunction;
-import org.epochx.epox.lang.IfFunction;
+import org.epochx.ge.CodonFactory;
+import org.epochx.ge.GEIndividual;
+import org.epochx.ge.GESourceGenerator;
+import org.epochx.ge.IntegerCodonFactory;
+import org.epochx.ge.fitness.GEFitnessFunction;
+import org.epochx.ge.fitness.HitsCount;
+import org.epochx.ge.init.GrowInitialisation;
+import org.epochx.ge.map.DepthFirstMapper;
+import org.epochx.ge.map.MappingComponent;
+import org.epochx.ge.operator.OnePointCrossover;
+import org.epochx.ge.operator.PointMutation;
+import org.epochx.grammar.Grammar;
+import org.epochx.interpret.EpoxInterpreter;
 import org.epochx.random.MersenneTwisterFast;
 import org.epochx.selection.TournamentSelector;
-import org.epochx.stgp.STGPIndividual;
-import org.epochx.stgp.fitness.HitsCount;
-import org.epochx.stgp.init.FullInitialisation;
-import org.epochx.stgp.operator.SubtreeCrossover;
-import org.epochx.stgp.operator.SubtreeMutation;
 import org.epochx.tools.BenchmarkSolutions;
 import org.epochx.tools.BooleanUtils;
 
 /**
  * This template sets up EpochX to run the 6-bit multiplexer benchmark with the 
- * STGP representation. The 6-bit multiplexer problem involves evolving a program
+ * GE representation. The 6-bit multiplexer problem involves evolving a program
  * which receives an array of 6 boolean values. The first 2 values are address bits, 
  * which the program should convert into an index for which of the remaining data
  * registers to return. {a0, a1, d0, d1, d2, d3}.
@@ -74,19 +77,53 @@ import org.epochx.tools.BooleanUtils;
  *  
  * The following configuration is used:
  * 
- * <li>Population.SIZE: 100
- * <li>MaximumGenerations.MAXIMUM_GENERATIONS: 50
+ * <ul>
+ * <li>{@link Population#SIZE}: <code>100</code>
+ * <li>{@link GenerationalStrategy#TERMINATION_CRITERIA}: <code>MaximumGenerations</code>, <code>TerminationFitness(0.0)</code>
+ * <li>{@link MaximumGenerations#MAXIMUM_GENERATIONS}: <code>50</code>
+ * <li>{@link GEIndividual#MAXIMUM_DEPTH}: <code>17</code>
+ * <li>{@link BranchedBreeder#SELECTOR}: <code>TournamentSelector</code>
+ * <li>{@link TournamentSelector#TOURNAMENT_SIZE}: <code>7</code>
+ * <li>{@link Breeder#OPERATORS}: <code>OnePointCrossover</code>, <code>PointMutation</code>
+ * <li>{@link OnePointCrossover#PROBABILITY}: <code>0.0</code>
+ * <li>{@link PointMutation#PROBABILITY}: <code>1.0</code>
+ * <li>{@link Initialiser#METHOD}: <code>GrowInitialiser</code>
+ * <li>{@link RandomSequence#RANDOM_SEQUENCE}: <code>MersenneTwisterFast</code>
+ * <li>{@link Grammar#GRAMMER}: [Listed below]
+ * <li>{@link CodonFactory#CODON_FACTORY}: <code>IntegerCodonFactory</code>
+ * <li>{@link GEFitnessFunction#INTERPRETER}: <code>EpoxInterpreter(GESourceGenerator)</code>
+ * <li>{@link MappingComponent#MAPPER}: <code>DepthFirstMapper</code>
+ * <li>{@link FitnessEvaluator#FUNCTION}: <code>HitsCount</code>
+ * <li>{@link HitsCount#INPUT_IDENTIFIERS}: <code>new String[]{"A0", "A1", "D2", "D3", "D4", "D5"}</code>
+ * <li>{@link HitsCount#INPUT_VALUE_SETS}: [all possible binary input combinations]
+ * <li>{@link HitsCount#EXPECTED_OUTPUTS}: [correct output for input value sets]
+ * 
+ * <h3>Grammar</h3>
+ * 
+ * {@code
+ * <prog> ::= <node>
+ * <node> ::= <function> | <terminal>
+ * <function> ::= NOT( <node> )
+ * 		| OR( <node> , <node> )
+ * 		| AND( <node> , <node> )
+ * 		| IF( <node> , <node>, <node> )
+ * <terminal> ::= A0 | A1 | D2 | D3 | D4 | D5
+ * }
  */
 public class GEMultiplexer6Bit extends GenerationalTemplate {
 	
 	private static final int NO_BITS = 6;
 	
+	/**
+	 * Sets up the given template with the benchmark config settings
+	 * 
+	 * @param template a map to be filled with the template config
+	 */
 	@Override
 	protected void fill(Map<ConfigKey<?>, Object> template) {
 		super.fill(template);
 		
 		int noAddressBits = BenchmarkSolutions.multiplexerAddressBits(NO_BITS);
-		int noDataBits = NO_BITS - noAddressBits;
 		
         template.put(Population.SIZE, 100);
         List<TerminationCriteria> criteria = new ArrayList<TerminationCriteria>();
@@ -94,43 +131,50 @@ public class GEMultiplexer6Bit extends GenerationalTemplate {
         criteria.add(new MaximumGenerations());
         template.put(EvolutionaryStrategy.TERMINATION_CRITERIA, criteria);
         template.put(MaximumGenerations.MAXIMUM_GENERATIONS, 50);
-        template.put(STGPIndividual.MAXIMUM_DEPTH, 6);
+        template.put(GEIndividual.MAXIMUM_DEPTH, 17);
         
         template.put(Breeder.SELECTOR, new TournamentSelector());
         template.put(TournamentSelector.TOURNAMENT_SIZE, 7);        
         List<Operator> operators = new ArrayList<Operator>();
-        operators.add(new SubtreeCrossover());
-        operators.add(new SubtreeMutation());
+        operators.add(new OnePointCrossover());
+        operators.add(new PointMutation());
         template.put(Breeder.OPERATORS, operators);
-        template.put(SubtreeCrossover.PROBABILITY, 1.0);
-        template.put(SubtreeMutation.PROBABILITY, 0.0);
-        template.put(Initialiser.METHOD, new FullInitialisation());
+        template.put(OnePointCrossover.PROBABILITY, 0.0);
+        template.put(PointMutation.PROBABILITY, 1.0);
+        template.put(Initialiser.METHOD, new GrowInitialisation());
         
         RandomSequence randomSequence = new MersenneTwisterFast();
         template.put(RandomSequence.RANDOM_SEQUENCE, randomSequence);
+		
+        // Setup grammar
+        String grammarStr = "<prog> ::= <node>\n"
+    			+ "<node> ::= <function> | <terminal>\n"
+    			+ "<function> ::= NOT( <node> ) "
+    			+ "| OR( <node> , <node> ) "
+    			+ "| AND( <node> , <node> ) "
+    			+ "| IF( <node> , <node> , <node> )\n"
+    			+ "<terminal> ::= ";
         
-        // Setup syntax
-		List<Node> syntaxList = new ArrayList<Node>();
-		syntaxList.add(new AndFunction());
-		syntaxList.add(new OrFunction());
-		syntaxList.add(new NotFunction());
-		syntaxList.add(new IfFunction());
-
-		Variable[] variables = new Variable[noAddressBits + noDataBits];
-		
+        // Append inputs to grammar
+		String[] inputIdentifiers = new String[NO_BITS];
 		for (int i=0; i < noAddressBits; i++) {
-			variables[i] = new Variable("A"+i, Boolean.class);
-			syntaxList.add(new VariableNode(variables[i]));
+			if (i > 0) {
+				grammarStr += " | ";
+			}
+			inputIdentifiers[i] = "A" + i;
+			grammarStr += inputIdentifiers[i];
 		}
-		for (int i=noAddressBits; i < (noAddressBits+noDataBits); i++) {
-			variables[i] = new Variable("D"+i, Boolean.class);
-			syntaxList.add(new VariableNode(variables[i]));
+		for (int i = noAddressBits; i < NO_BITS; i++) {
+			grammarStr += " | ";
+			inputIdentifiers[i] = "D" + i;
+			grammarStr += inputIdentifiers[i];
 		}
-		
-        Node[] syntax = syntaxList.toArray(new Node[syntaxList.size()]);
+		grammarStr += '\n';
 
-        template.put(STGPIndividual.SYNTAX, syntax);
-        template.put(STGPIndividual.RETURN_TYPE, Boolean.class);
+        template.put(Grammar.GRAMMAR, new Grammar(grammarStr));
+        template.put(CodonFactory.CODON_FACTORY, new IntegerCodonFactory());
+        template.put(GEFitnessFunction.INTERPRETER, new EpoxInterpreter<GEIndividual>(new GESourceGenerator()));
+        template.put(MappingComponent.MAPPER, new DepthFirstMapper());
         
         // Generate inputs and expected outputs
         Boolean[][] inputValues = BooleanUtils.generateBoolSequences(NO_BITS);
@@ -141,7 +185,7 @@ public class GEMultiplexer6Bit extends GenerationalTemplate {
         
         // Setup fitness function
         template.put(FitnessEvaluator.FUNCTION, new HitsCount());
-        template.put(HitsCount.INPUT_VARIABLES, variables);
+        template.put(HitsCount.INPUT_IDENTIFIERS, inputIdentifiers);
         template.put(HitsCount.INPUT_VALUE_SETS, inputValues);
         template.put(HitsCount.EXPECTED_OUTPUTS, expectedOutputs);
 	}

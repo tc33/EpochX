@@ -27,9 +27,11 @@ import java.util.Map;
 
 import org.epochx.Breeder;
 import org.epochx.Config.ConfigKey;
+import org.epochx.BranchedBreeder;
 import org.epochx.DoubleFitness;
 import org.epochx.EvolutionaryStrategy;
 import org.epochx.FitnessEvaluator;
+import org.epochx.GenerationalStrategy;
 import org.epochx.GenerationalTemplate;
 import org.epochx.Initialiser;
 import org.epochx.MaximumGenerations;
@@ -38,34 +40,71 @@ import org.epochx.Population;
 import org.epochx.RandomSequence;
 import org.epochx.TerminationCriteria;
 import org.epochx.TerminationFitness;
-import org.epochx.epox.Node;
-import org.epochx.epox.Variable;
-import org.epochx.epox.VariableNode;
-import org.epochx.epox.math.AddFunction;
-import org.epochx.epox.math.DivisionProtectedFunction;
-import org.epochx.epox.math.MultiplyFunction;
-import org.epochx.epox.math.SubtractFunction;
+import org.epochx.ge.CodonFactory;
+import org.epochx.ge.GEIndividual;
+import org.epochx.ge.GESourceGenerator;
+import org.epochx.ge.IntegerCodonFactory;
+import org.epochx.ge.fitness.GEFitnessFunction;
+import org.epochx.ge.fitness.HitsCount;
+import org.epochx.ge.init.GrowInitialisation;
+import org.epochx.ge.map.DepthFirstMapper;
+import org.epochx.ge.map.MappingComponent;
+import org.epochx.ge.operator.OnePointCrossover;
+import org.epochx.ge.operator.PointMutation;
+import org.epochx.grammar.Grammar;
+import org.epochx.interpret.EpoxInterpreter;
 import org.epochx.random.MersenneTwisterFast;
 import org.epochx.selection.TournamentSelector;
-import org.epochx.stgp.STGPIndividual;
-import org.epochx.stgp.fitness.HitsCount;
-import org.epochx.stgp.init.FullInitialisation;
-import org.epochx.stgp.operator.SubtreeCrossover;
-import org.epochx.stgp.operator.SubtreeMutation;
 import org.epochx.tools.BenchmarkSolutions;
 
 /**
  * This template sets up EpochX to run the sextic regression benchmark with
- * the STGP representation. Sextic regression involves evolving an equivalent
+ * the GE representation. Sextic regression involves evolving an equivalent
  * function to the formula: x^6 - (2 * x^4) + x^2
  * 
  * The following configuration is used:
  * 
- * <li>Population.SIZE: 100
- * <li>MaximumGenerations.MAXIMUM_GENERATIONS: 50
+ * <ul>
+ * <li>{@link Population#SIZE}: <code>100</code>
+ * <li>{@link GenerationalStrategy#TERMINATION_CRITERIA}: <code>MaximumGenerations</code>, <code>TerminationFitness(0.0)</code>
+ * <li>{@link MaximumGenerations#MAXIMUM_GENERATIONS}: <code>50</code>
+ * <li>{@link GEIndividual#MAXIMUM_DEPTH}: <code>17</code>
+ * <li>{@link BranchedBreeder#SELECTOR}: <code>TournamentSelector</code>
+ * <li>{@link TournamentSelector#TOURNAMENT_SIZE}: <code>7</code>
+ * <li>{@link Breeder#OPERATORS}: <code>OnePointCrossover</code>, <code>PointMutation</code>
+ * <li>{@link OnePointCrossover#PROBABILITY}: <code>0.0</code>
+ * <li>{@link PointMutation#PROBABILITY}: <code>1.0</code>
+ * <li>{@link Initialiser#METHOD}: <code>GrowInitialiser</code>
+ * <li>{@link RandomSequence#RANDOM_SEQUENCE}: <code>MersenneTwisterFast</code>
+ * <li>{@link Grammar#GRAMMER}: [Listed below]
+ * <li>{@link CodonFactory#CODON_FACTORY}: <code>IntegerCodonFactory</code>
+ * <li>{@link GEFitnessFunction#INTERPRETER}: <code>EpoxInterpreter(GESourceGenerator)</code>
+ * <li>{@link MappingComponent#MAPPER}: <code>DepthFirstMapper</code>
+ * <li>{@link FitnessEvaluator#FUNCTION}: <code>HitsCount</code>
+ * <li>{@link HitsCount#POINT_ERROR}: <code>0.01</code>
+ * <li>{@link HitsCount#INPUT_IDENTIFIERS}: <code>new String[]{"X"}</code>
+ * <li>{@link HitsCount#INPUT_VALUE_SETS}: [20 random values between -1.0 and +1.0]
+ * <li>{@link HitsCount#EXPECTED_OUTPUTS}: [correct output for input value sets]
+ * 
+ * <h3>Grammar</h3>
+ * 
+ * {@code
+ * <prog> ::= <node>
+ * <node> ::= <function> | <terminal>
+ * <function> ::= ADD( <node> , <node> )
+ * 		| SUB( <node> , <node> )
+ * 		| MUL( <node> , <node> )
+ * 		| PDIV( <node> , <node> )
+ * <terminal> ::= X
+ * }
  */
 public class GESexticRegression extends GenerationalTemplate {
 
+	/**
+	 * Sets up the given template with the benchmark config settings
+	 * 
+	 * @param template a map to be filled with the template config
+	 */
 	@Override
 	protected void fill(Map<ConfigKey<?>, Object> template) {
 		super.fill(template);
@@ -76,32 +115,34 @@ public class GESexticRegression extends GenerationalTemplate {
         criteria.add(new MaximumGenerations());
         template.put(EvolutionaryStrategy.TERMINATION_CRITERIA, criteria);
         template.put(MaximumGenerations.MAXIMUM_GENERATIONS, 50);
-        template.put(STGPIndividual.MAXIMUM_DEPTH, 6);
+        template.put(GEIndividual.MAXIMUM_DEPTH, 17);
         
         template.put(Breeder.SELECTOR, new TournamentSelector());
         template.put(TournamentSelector.TOURNAMENT_SIZE, 7);        
         List<Operator> operators = new ArrayList<Operator>();
-        operators.add(new SubtreeCrossover());
-        operators.add(new SubtreeMutation());
+        operators.add(new OnePointCrossover());
+        operators.add(new PointMutation());
         template.put(Breeder.OPERATORS, operators);
-        template.put(SubtreeCrossover.PROBABILITY, 1.0);
-        template.put(SubtreeMutation.PROBABILITY, 0.0);
-        template.put(Initialiser.METHOD, new FullInitialisation());
+        template.put(OnePointCrossover.PROBABILITY, 0.0);
+        template.put(PointMutation.PROBABILITY, 1.0);
+        template.put(Initialiser.METHOD, new GrowInitialisation());
         
         RandomSequence randomSequence = new MersenneTwisterFast();
         template.put(RandomSequence.RANDOM_SEQUENCE, randomSequence);
         
-        // Setup syntax
-        Variable varX = new Variable("X", Double.class);
-		Node[] syntax = new Node[]{
-			new AddFunction(),
-			new SubtractFunction(),
-			new MultiplyFunction(),
-			new DivisionProtectedFunction(),
-			new VariableNode(varX)
-		};
-        template.put(STGPIndividual.SYNTAX, syntax);
-        template.put(STGPIndividual.RETURN_TYPE, Double.class);
+        // Setup grammar
+        String grammarStr = "<prog> ::= <node>\n"
+    			+ "<node> ::= <function> | <terminal>\n"
+    			+ "<function> ::= ADD( <node> , <node> ) "
+    			+ "| SUB( <node> , <node> ) "
+    			+ "| MUL( <node> , <node> ) "
+    			+ "| PDIV( <node> , <node> )\n"
+    			+ "<terminal> ::= X\n";
+        Grammar grammar = new Grammar(grammarStr);
+        template.put(Grammar.GRAMMAR, grammar);
+        template.put(CodonFactory.CODON_FACTORY, new IntegerCodonFactory());
+        template.put(GEFitnessFunction.INTERPRETER, new EpoxInterpreter<GEIndividual>(new GESourceGenerator()));
+        template.put(MappingComponent.MAPPER, new DepthFirstMapper());
         
         // Generate inputs and expected outputs
         int noPoints = 20;
@@ -116,7 +157,7 @@ public class GESexticRegression extends GenerationalTemplate {
         // Setup fitness function
         template.put(FitnessEvaluator.FUNCTION, new HitsCount());
         template.put(HitsCount.POINT_ERROR, 0.01);
-        template.put(HitsCount.INPUT_VARIABLES, new Variable[]{varX});
+        template.put(HitsCount.INPUT_IDENTIFIERS, new String[]{"X"});
         template.put(HitsCount.INPUT_VALUE_SETS, inputs);
         template.put(HitsCount.EXPECTED_OUTPUTS, expectedOutputs);
 	}

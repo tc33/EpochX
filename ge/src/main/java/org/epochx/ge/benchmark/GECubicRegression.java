@@ -69,11 +69,13 @@ import org.epochx.tools.BenchmarkSolutions;
  * <li>{@link GenerationalStrategy#TERMINATION_CRITERIA}: <code>MaximumGenerations</code>, <code>TerminationFitness(0.0)</code>
  * <li>{@link MaximumGenerations#MAXIMUM_GENERATIONS}: <code>50</code>
  * <li>{@link GEIndividual#MAXIMUM_DEPTH}: <code>17</code>
- * <li>{@link TournamentSelector#TOURNAMENT_SIZE}: <code>7</code>
  * <li>{@link BranchedBreeder#SELECTOR}: <code>TournamentSelector</code>
+ * <li>{@link TournamentSelector#TOURNAMENT_SIZE}: <code>7</code>
  * <li>{@link Breeder#OPERATORS}: <code>OnePointCrossover</code>, <code>PointMutation</code>
  * <li>{@link OnePointCrossover#PROBABILITY}: <code>0.0</code>
  * <li>{@link PointMutation#PROBABILITY}: <code>1.0</code>
+ * <li>{@link Initialiser#METHOD}: <code>GrowInitialiser</code>
+ * <li>{@link RandomSequence#RANDOM_SEQUENCE}: <code>MersenneTwisterFast</code>
  * <li>{@link Grammar#GRAMMER}: [Listed below]
  * <li>{@link CodonFactory#CODON_FACTORY}: <code>IntegerCodonFactory</code>
  * <li>{@link GEFitnessFunction#INTERPRETER}: <code>EpoxInterpreter(GESourceGenerator)</code>

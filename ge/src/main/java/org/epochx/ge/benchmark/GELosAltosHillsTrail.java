@@ -30,9 +30,11 @@ import java.util.Map;
 
 import org.epochx.Breeder;
 import org.epochx.Config.ConfigKey;
+import org.epochx.BranchedBreeder;
 import org.epochx.DoubleFitness;
 import org.epochx.EvolutionaryStrategy;
 import org.epochx.FitnessEvaluator;
+import org.epochx.GenerationalStrategy;
 import org.epochx.GenerationalTemplate;
 import org.epochx.Initialiser;
 import org.epochx.MaximumGenerations;
@@ -41,32 +43,61 @@ import org.epochx.Population;
 import org.epochx.RandomSequence;
 import org.epochx.TerminationCriteria;
 import org.epochx.TerminationFitness;
-import org.epochx.epox.Node;
-import org.epochx.epox.ant.AntMoveFunction;
-import org.epochx.epox.ant.AntTurnLeftFunction;
-import org.epochx.epox.ant.AntTurnRightFunction;
-import org.epochx.epox.ant.IfFoodAheadFunction;
-import org.epochx.epox.lang.Seq2Function;
-import org.epochx.epox.lang.Seq3Function;
+import org.epochx.ge.CodonFactory;
+import org.epochx.ge.GEIndividual;
+import org.epochx.ge.GESourceGenerator;
+import org.epochx.ge.IntegerCodonFactory;
+import org.epochx.ge.fitness.AntFitnessFunction;
+import org.epochx.ge.fitness.GEFitnessFunction;
+import org.epochx.ge.init.GrowInitialisation;
+import org.epochx.ge.map.DepthFirstMapper;
+import org.epochx.ge.map.MappingComponent;
+import org.epochx.ge.operator.OnePointCrossover;
+import org.epochx.ge.operator.PointMutation;
+import org.epochx.grammar.Grammar;
+import org.epochx.interpret.EpoxInterpreter;
 import org.epochx.random.MersenneTwisterFast;
 import org.epochx.selection.TournamentSelector;
-import org.epochx.stgp.STGPIndividual;
-import org.epochx.stgp.fitness.AntFitnessFunction;
-import org.epochx.stgp.init.FullInitialisation;
-import org.epochx.stgp.operator.SubtreeCrossover;
-import org.epochx.stgp.operator.SubtreeMutation;
 import org.epochx.tools.ant.Ant;
 import org.epochx.tools.ant.AntLandscape;
 
 /**
- * This template sets up EpochX to run the cubic regression benchmark with
- * the STGP representation. Cubic regression involves evolving an equivalent
- * function to the formula: x + x^2 + x^3
+ * This template sets up EpochX to run the Los Altos Hills ant trail benchmark with
+ * the GE representation. 
  * 
  * The following configuration is used:
  * 
- * <li>Population.SIZE: 100
- * <li>MaximumGenerations.MAXIMUM_GENERATIONS: 50
+ * <ul>
+ * <li>{@link Population#SIZE}: <code>100</code>
+ * <li>{@link GenerationalStrategy#TERMINATION_CRITERIA}: <code>MaximumGenerations</code>, <code>TerminationFitness(0.0)</code>
+ * <li>{@link MaximumGenerations#MAXIMUM_GENERATIONS}: <code>50</code>
+ * <li>{@link GEIndividual#MAXIMUM_DEPTH}: <code>17</code>
+ * <li>{@link BranchedBreeder#SELECTOR}: <code>TournamentSelector</code>
+ * <li>{@link TournamentSelector#TOURNAMENT_SIZE}: <code>7</code>
+ * <li>{@link Breeder#OPERATORS}: <code>OnePointCrossover</code>, <code>PointMutation</code>
+ * <li>{@link OnePointCrossover#PROBABILITY}: <code>0.0</code>
+ * <li>{@link PointMutation#PROBABILITY}: <code>1.0</code>
+ * <li>{@link Initialiser#METHOD}: <code>GrowInitialiser</code>
+ * <li>{@link RandomSequence#RANDOM_SEQUENCE}: <code>MersenneTwisterFast</code>
+ * <li>{@link Grammar#GRAMMER}: [Listed below]
+ * <li>{@link CodonFactory#CODON_FACTORY}: <code>IntegerCodonFactory</code>
+ * <li>{@link GEFitnessFunction#INTERPRETER}: <code>EpoxInterpreter(GESourceGenerator)</code>
+ * <li>{@link MappingComponent#MAPPER}: <code>DepthFirstMapper</code>
+ * <li>{@link FitnessEvaluator#FUNCTION}: <code>AntFitnessFunction</code>
+ * <li>{@link AntFitnessFunction#FOOD_LOCATIONS}: <code>GELosAltosHillsTrail.FOOD_LOCATIONS</code>
+ * <li>{@link AntFitnessFunction#MAXIMUM_TIMESTEPS}: 3000
+ * 
+ * <h3>Grammar</h3>
+ * 
+ * {@code
+ * <function> ::= IF-FOOD-AHEAD( <var> , <function> , <function> ) 
+ * 		| SEQ2( <function> , <function> )
+ * 		| SEQ3( <function> , <function> , <function> )
+ * 		| MOVE( <var> )
+ * 		| TURN-LEFT( <var> )
+ * 		| TURN-RIGHT( <var> )
+ * <var> ::= ANT
+ * }
  */
 public class GELosAltosHillsTrail extends GenerationalTemplate {
 
@@ -109,6 +140,11 @@ public class GELosAltosHillsTrail extends GenerationalTemplate {
 	
 	private static final int MAXIMUM_TIMESTEPS = 3000;
 	
+	/**
+	 * Sets up the given template with the benchmark config settings
+	 * 
+	 * @param template a map to be filled with the template config
+	 */
 	@Override
 	protected void fill(Map<ConfigKey<?>, Object> template) {
 		super.fill(template);
@@ -119,34 +155,38 @@ public class GELosAltosHillsTrail extends GenerationalTemplate {
         criteria.add(new MaximumGenerations());
         template.put(EvolutionaryStrategy.TERMINATION_CRITERIA, criteria);
         template.put(MaximumGenerations.MAXIMUM_GENERATIONS, 50);
-        template.put(STGPIndividual.MAXIMUM_DEPTH, 6);
+        template.put(GEIndividual.MAXIMUM_DEPTH, 17);
         
         template.put(Breeder.SELECTOR, new TournamentSelector());
         template.put(TournamentSelector.TOURNAMENT_SIZE, 7);        
         List<Operator> operators = new ArrayList<Operator>();
-        operators.add(new SubtreeCrossover());
-        operators.add(new SubtreeMutation());
+        operators.add(new OnePointCrossover());
+        operators.add(new PointMutation());
         template.put(Breeder.OPERATORS, operators);
-        template.put(SubtreeCrossover.PROBABILITY, 1.0);
-        template.put(SubtreeMutation.PROBABILITY, 0.0);
-        template.put(Initialiser.METHOD, new FullInitialisation());
+        template.put(OnePointCrossover.PROBABILITY, 0.0);
+        template.put(PointMutation.PROBABILITY, 1.0);
+        template.put(Initialiser.METHOD, new GrowInitialisation());
         
         RandomSequence randomSequence = new MersenneTwisterFast();
         template.put(RandomSequence.RANDOM_SEQUENCE, randomSequence);
         
+        // Setup grammar
+        String grammarStr = "<function> ::= IF-FOOD-AHEAD( <var> , <function> , <function> ) "
+			+ "| SEQ2( <function> , <function> ) "
+			+ "| SEQ3( <function> , <function> , <function> ) "
+			+ "| MOVE( <var> ) "
+			+ "| TURN-LEFT( <var> ) "
+			+ "| TURN-RIGHT( <var> )\n"
+			+ "<var> ::= ANT";
+        
         // Setup syntax
         AntLandscape landscape = new AntLandscape(LANDSCAPE_SIZE, null);
         Ant ant = new Ant(MAXIMUM_TIMESTEPS, landscape);
-		Node[] syntax = new Node[]{
-			new IfFoodAheadFunction(),
-			new Seq2Function(),
-			new Seq3Function(),
-			new AntMoveFunction(ant),
-			new AntTurnLeftFunction(ant),
-			new AntTurnRightFunction(ant)
-		};
-        template.put(STGPIndividual.SYNTAX, syntax);
-        template.put(STGPIndividual.RETURN_TYPE, Void.class);
+		
+        template.put(Grammar.GRAMMAR, new Grammar(grammarStr));
+        template.put(CodonFactory.CODON_FACTORY, new IntegerCodonFactory());
+        template.put(GEFitnessFunction.INTERPRETER, new EpoxInterpreter<GEIndividual>(new GESourceGenerator()));
+        template.put(MappingComponent.MAPPER, new DepthFirstMapper());
         
         // Setup fitness function
         template.put(FitnessEvaluator.FUNCTION, new AntFitnessFunction(ant, landscape));

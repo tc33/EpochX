@@ -27,9 +27,11 @@ import java.util.Map;
 
 import org.epochx.Breeder;
 import org.epochx.Config.ConfigKey;
+import org.epochx.BranchedBreeder;
 import org.epochx.DoubleFitness;
 import org.epochx.EvolutionaryStrategy;
 import org.epochx.FitnessEvaluator;
+import org.epochx.GenerationalStrategy;
 import org.epochx.GenerationalTemplate;
 import org.epochx.Initialiser;
 import org.epochx.MaximumGenerations;
@@ -78,19 +80,45 @@ import org.epochx.tools.BooleanUtils;
  *  
  * The following configuration is used:
  * 
- * <li>Population.SIZE: 100
- * <li>MaximumGenerations.MAXIMUM_GENERATIONS: 50
+ * <li>{@link Population#SIZE}: <code>100</code>
+ * <li>{@link GenerationalStrategy#TERMINATION_CRITERIA}: <code>MaximumGenerations</code>, <code>TerminationFitness(0.0)</code>
+ * <li>{@link MaximumGenerations#MAXIMUM_GENERATIONS}: <code>50</code>
+ * <li>{@link STGPIndividual#MAXIMUM_DEPTH}: <code>6</code>
+ * <li>{@link BranchedBreeder#SELECTOR}: <code>TournamentSelector</code>
+ * <li>{@link TournamentSelector#TOURNAMENT_SIZE}: <code>7</code>
+ * <li>{@link Breeder#OPERATORS}: <code>SubtreeCrossover</code>, <code>SubtreeMutation</code>
+ * <li>{@link SubtreeMutation#PROBABILITY}: <code>0.0</code>
+ * <li>{@link SubtreeCrossover#PROBABILITY}: <code>1.0</code>
+ * <li>{@link Initialiser#METHOD}: <code>FullInitialisation</code>
+ * <li>{@link RandomSequence#RANDOM_SEQUENCE}: <code>MersenneTwisterFast</code>
+ * <li>{@link STGPIndividual#SYNTAX}: <code>AndFunction</code>, <code>OrFunction</code>, <code>NotFunction<code>, 
+ * <code>IfFunction<code>, <code>VariableNode("A0", Boolean)<code>, <code>VariableNode("A1", Boolean)<code>, 
+ * <code>VariableNode("A2", Boolean)<code>, <code>VariableNode("D3", Boolean)<code>, <code>VariableNode("D4", Boolean)<code>, 
+ * <code>VariableNode("D5", Boolean)<code>, <code>VariableNode("D6", Boolean)<code>, <code>VariableNode("D7", Boolean)<code>, 
+ * <code>VariableNode("D8", Boolean)<code>, <code>VariableNode("D9", Boolean)<code>, <code>VariableNode("D10", Boolean)<code>
+ * <li>{@link STGPIndividual#RETURN_TYPE}: <code>Boolean</code>
+ * <li>{@link FitnessEvaluator#FUNCTION}: <code>HitsCount</code>
+ * <li>{@link HitsCount#INPUT_VARIABLES}: <code>A0</code>, <code>A1</code>, <code>A2</code>, <code>D3</code>, <code>D4</code>, 
+ * <code>D5</code>, <code>D6</code>, <code>D7</code>, <code>D8</code>, <code>D9</code>, <code>D10</code>
+ * <li>{@link HitsCount#INPUT_VALUE_SETS}: [all possible binary input combinations]
+ * <li>{@link HitsCount#EXPECTED_OUTPUTS}: [correct output for input value sets]
+ * 
+ * @since 2.0
  */
 public class STGPMultiplexer11Bit extends GenerationalTemplate {
 	
 	private static final int NO_BITS = 11;
 	
+	/**
+	 * Sets up the given template with the benchmark config settings
+	 * 
+	 * @param template a map to be filled with the template config
+	 */
 	@Override
 	protected void fill(Map<ConfigKey<?>, Object> template) {
 		super.fill(template);
 		
 		int noAddressBits = BenchmarkSolutions.multiplexerAddressBits(NO_BITS);
-		int noDataBits = NO_BITS - noAddressBits;
 		
         template.put(Population.SIZE, 100);
         List<TerminationCriteria> criteria = new ArrayList<TerminationCriteria>();
@@ -120,13 +148,13 @@ public class STGPMultiplexer11Bit extends GenerationalTemplate {
 		syntaxList.add(new NotFunction());
 		syntaxList.add(new IfFunction());
 
-		Variable[] variables = new Variable[noAddressBits + noDataBits];
+		Variable[] variables = new Variable[NO_BITS];
 		
 		for (int i=0; i < noAddressBits; i++) {
 			variables[i] = new Variable("A"+i, Boolean.class);
 			syntaxList.add(new VariableNode(variables[i]));
 		}
-		for (int i=noAddressBits; i < (noAddressBits+noDataBits); i++) {
+		for (int i=noAddressBits; i < NO_BITS; i++) {
 			variables[i] = new Variable("D"+i, Boolean.class);
 			syntaxList.add(new VariableNode(variables[i]));
 		}

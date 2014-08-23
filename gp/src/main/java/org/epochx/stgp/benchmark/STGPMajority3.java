@@ -27,9 +27,11 @@ import java.util.Map;
 
 import org.epochx.Breeder;
 import org.epochx.Config.ConfigKey;
+import org.epochx.BranchedBreeder;
 import org.epochx.DoubleFitness;
 import org.epochx.EvolutionaryStrategy;
 import org.epochx.FitnessEvaluator;
+import org.epochx.GenerationalStrategy;
 import org.epochx.GenerationalTemplate;
 import org.epochx.Initialiser;
 import org.epochx.MaximumGenerations;
@@ -63,13 +65,36 @@ import org.epochx.tools.BooleanUtils;
  *  
  * The following configuration is used:
  * 
- * <li>Population.SIZE: 100
- * <li>MaximumGenerations.MAXIMUM_GENERATIONS: 50
+ * <li>{@link Population#SIZE}: <code>100</code>
+ * <li>{@link GenerationalStrategy#TERMINATION_CRITERIA}: <code>MaximumGenerations</code>, <code>TerminationFitness(0.0)</code>
+ * <li>{@link MaximumGenerations#MAXIMUM_GENERATIONS}: <code>50</code>
+ * <li>{@link STGPIndividual#MAXIMUM_DEPTH}: <code>6</code>
+ * <li>{@link BranchedBreeder#SELECTOR}: <code>TournamentSelector</code>
+ * <li>{@link TournamentSelector#TOURNAMENT_SIZE}: <code>7</code>
+ * <li>{@link Breeder#OPERATORS}: <code>SubtreeCrossover</code>, <code>SubtreeMutation</code>
+ * <li>{@link SubtreeMutation#PROBABILITY}: <code>0.0</code>
+ * <li>{@link SubtreeCrossover#PROBABILITY}: <code>1.0</code>
+ * <li>{@link Initialiser#METHOD}: <code>FullInitialisation</code>
+ * <li>{@link RandomSequence#RANDOM_SEQUENCE}: <code>MersenneTwisterFast</code>
+ * <li>{@link STGPIndividual#SYNTAX}: <code>AndFunction</code>, <code>OrFunction</code>, <code>NorFunction<code>, 
+ * <code>VariableNode("D0", Boolean)<code>, <code>VariableNode("D1", Boolean)<code>, <code>VariableNode("D2", Boolean)<code>
+ * <li>{@link STGPIndividual#RETURN_TYPE}: <code>Boolean</code>
+ * <li>{@link FitnessEvaluator#FUNCTION}: <code>HitsCount</code>
+ * <li>{@link HitsCount#INPUT_VARIABLES}: <code>D0</code>, <code>D1</code>, <code>D2</code>
+ * <li>{@link HitsCount#INPUT_VALUE_SETS}: [all possible binary input combinations]
+ * <li>{@link HitsCount#EXPECTED_OUTPUTS}: [correct output for input value sets]
+ * 
+ * @since 2.0
  */
 public class STGPMajority3 extends GenerationalTemplate {
 	
 	private static final int NO_BITS = 3;
 	
+	/**
+	 * Sets up the given template with the benchmark config settings
+	 * 
+	 * @param template a map to be filled with the template config
+	 */
 	@Override
 	protected void fill(Map<ConfigKey<?>, Object> template) {
 		super.fill(template);

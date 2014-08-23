@@ -85,7 +85,7 @@ import org.epochx.tools.ant.AntLandscape;
  * <li>{@link MappingComponent#MAPPER}: <code>DepthFirstMapper</code>
  * <li>{@link FitnessEvaluator#FUNCTION}: <code>AntFitnessFunction</code>
  * <li>{@link AntFitnessFunction#FOOD_LOCATIONS}: <code>GESantaFeTrail.FOOD_LOCATIONS</code>
- * <li>{@link AntFitnessFunction#MAXIMUM_TIMESTEPS}: 3000
+ * <li>{@link AntFitnessFunction#MAXIMUM_TIMESTEPS}: 600
  * 
  * <h3>Grammar</h3>
  * 

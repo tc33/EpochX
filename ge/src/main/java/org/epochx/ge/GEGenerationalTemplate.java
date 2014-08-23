@@ -35,6 +35,7 @@ import org.epochx.FitnessEvaluator;
 import org.epochx.GenerationalStrategy;
 import org.epochx.Initialiser;
 import org.epochx.MaximumGenerations;
+import org.epochx.Population;
 import org.epochx.RandomSequence;
 import org.epochx.TerminationCriteria;
 import org.epochx.ge.map.MappingComponent;
@@ -42,10 +43,12 @@ import org.epochx.random.MersenneTwisterFast;
 import org.epochx.selection.TournamentSelector;
 
 /**
- * Default configuration template for generational executions.
+ * Default configuration template for generational evolution in GE
  * 
  * @see Config
  * @see Template
+ * 
+ * @since 2.0
  */
 public class GEGenerationalTemplate extends Template {
 
@@ -53,23 +56,24 @@ public class GEGenerationalTemplate extends Template {
 	 * The default parameter values:
 	 * <ul>
 	 * <li>{@link Population#SIZE}: <code>500</code>
+	 * <li>{@link GenerationalStrategy#TERMINATION_CRITERIA}: <code>MaximumGenerations</code>
 	 * <li>{@link MaximumGenerations#MAXIMUM_GENERATIONS}: <code>50</code>
-	 * <li>{@link GenerationalStrategy#TERMINATION_CRITERIA}: MaximumGenerations
 	 * <li>{@link TournamentSelector#TOURNAMENT_SIZE}: <code>5</code>
-	 * <li>{@link BranchedBreeder#SELECTOR}: TournamentSelector
-	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}: MersenneTwisterFast
+	 * <li>{@link BranchedBreeder#SELECTOR}: <code>TournamentSelector</code>
+	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}: <code>MersenneTwisterFast</code>
+	 * <li>{@link Evolver#COMPONENTS}: <code>Initialiser</code>, <code>FitnessEvaluator</code>, <code>GenerationalStrategy(BranchedBreeder, MappingComponent, FitnessEvaluator)</code>
 	 */
 	@Override
 	protected void fill(Map<ConfigKey<?>, Object> template) {
-		//template.put(Population.SIZE, 500);
+		template.put(Population.SIZE, 500);
 
 		List<TerminationCriteria> criteria = new ArrayList<TerminationCriteria>();
 		criteria.add(new MaximumGenerations());
 		template.put(GenerationalStrategy.TERMINATION_CRITERIA, criteria);
 		template.put(MaximumGenerations.MAXIMUM_GENERATIONS, 50);
 
-		//template.put(TournamentSelector.TOURNAMENT_SIZE, 5);
-		//template.put(BranchedBreeder.SELECTOR, new TournamentSelector());
+		template.put(TournamentSelector.TOURNAMENT_SIZE, 5);
+		template.put(BranchedBreeder.SELECTOR, new TournamentSelector());
 		template.put(RandomSequence.RANDOM_SEQUENCE, new MersenneTwisterFast());
 
 		ArrayList<Component> components = new ArrayList<Component>();

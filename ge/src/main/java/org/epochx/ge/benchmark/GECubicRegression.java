@@ -27,9 +27,11 @@ import java.util.Map;
 
 import org.epochx.Breeder;
 import org.epochx.Config.ConfigKey;
+import org.epochx.BranchedBreeder;
 import org.epochx.DoubleFitness;
 import org.epochx.EvolutionaryStrategy;
 import org.epochx.FitnessEvaluator;
+import org.epochx.GenerationalStrategy;
 import org.epochx.Initialiser;
 import org.epochx.MaximumGenerations;
 import org.epochx.Operator;
@@ -62,11 +64,45 @@ import org.epochx.tools.BenchmarkSolutions;
  * 
  * The following configuration is used:
  * 
- * <li>Population.SIZE: 100
- * <li>MaximumGenerations.MAXIMUM_GENERATIONS: 50
+ * <ul>
+ * <li>{@link Population#SIZE}: <code>100</code>
+ * <li>{@link GenerationalStrategy#TERMINATION_CRITERIA}: <code>MaximumGenerations</code>, <code>TerminationFitness(0.0)</code>
+ * <li>{@link MaximumGenerations#MAXIMUM_GENERATIONS}: <code>50</code>
+ * <li>{@link GEIndividual#MAXIMUM_DEPTH}: <code>17</code>
+ * <li>{@link TournamentSelector#TOURNAMENT_SIZE}: <code>7</code>
+ * <li>{@link BranchedBreeder#SELECTOR}: <code>TournamentSelector</code>
+ * <li>{@link Breeder#OPERATORS}: <code>OnePointCrossover</code>, <code>PointMutation</code>
+ * <li>{@link OnePointCrossover#PROBABILITY}: <code>0.0</code>
+ * <li>{@link PointMutation#PROBABILITY}: <code>1.0</code>
+ * <li>{@link Grammar#GRAMMER}: [Listed below]
+ * <li>{@link CodonFactory#CODON_FACTORY}: <code>IntegerCodonFactory</code>
+ * <li>{@link GEFitnessFunction#INTERPRETER}: <code>EpoxInterpreter(GESourceGenerator)</code>
+ * <li>{@link MappingComponent#MAPPER}: <code>DepthFirstMapper</code>
+ * <li>{@link FitnessEvaluator#FUNCTION}: <code>HitsCount</code>
+ * <li>{@link HitsCount#POINT_ERROR}: <code>0.01</code>
+ * <li>{@link HitsCount#INPUT_IDENTIFIERS}: <code>new String[]{"X"}</code>
+ * <li>{@link HitsCount#INPUT_VALUE_SETS}: [20 random values between -1.0 and +1.0]
+ * <li>{@link HitsCount#EXPECTED_OUTPUTS}: [correct output for input value sets]
+ * 
+ * <h3>Grammar</h3>
+ * 
+ * {@code
+ * <prog> ::= <node>
+ * <node> ::= <function> | <terminal>
+ * <function> ::= ADD( <node> , <node> )
+ * 		| SUB( <node> , <node> )
+ * 		| MUL( <node> , <node> )
+ * 		| PDIV( <node> , <node> )
+ * <terminal> ::= X
+ * }
  */
 public class GECubicRegression extends GEGenerationalTemplate {
 
+	/**
+	 * Sets up the given template with the benchmark config settings
+	 * 
+	 * @param template a map to be filled with the template config
+	 */
 	@Override
 	protected void fill(Map<ConfigKey<?>, Object> template) {
 		super.fill(template);

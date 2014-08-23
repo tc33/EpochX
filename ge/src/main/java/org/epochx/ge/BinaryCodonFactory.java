@@ -47,8 +47,6 @@ public class BinaryCodonFactory implements CodonFactory, Listener<ConfigEvent> {
 	private RandomSequence random;
 	private Integer noBits;
 	
-	private long codonRange;
-	
 	/**
 	 * Constructs an <code>IntegerCodonFactory</code> with control parameters
 	 * automatically loaded from the config

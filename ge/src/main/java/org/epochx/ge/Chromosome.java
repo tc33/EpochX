@@ -39,6 +39,8 @@ import org.epochx.grammar.Grammar;
  * may be represented in any format, for example, as an integer or a binary string. In the standard
  * Grammatical Evolution algorithm, an individual's chromosome is used by a {@link Mapper} to 
  * generate a parse tree with reference to a problem specific {@link Grammar}.
+ * 
+ * @since 2.0
  */
 public class Chromosome implements Iterable<Codon>, Cloneable, Listener<ConfigEvent> {
 

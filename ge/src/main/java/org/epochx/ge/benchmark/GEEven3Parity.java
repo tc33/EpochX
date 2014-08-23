@@ -45,13 +45,21 @@ import org.epochx.epox.bool.AndFunction;
 import org.epochx.epox.bool.NandFunction;
 import org.epochx.epox.bool.NorFunction;
 import org.epochx.epox.bool.OrFunction;
+import org.epochx.ge.CodonFactory;
+import org.epochx.ge.GEIndividual;
+import org.epochx.ge.GESourceGenerator;
+import org.epochx.ge.IntegerCodonFactory;
+import org.epochx.ge.fitness.GEFitnessFunction;
+import org.epochx.ge.fitness.HitsCount;
+import org.epochx.ge.init.GrowInitialisation;
+import org.epochx.ge.map.DepthFirstMapper;
+import org.epochx.ge.map.MappingComponent;
+import org.epochx.ge.operator.OnePointCrossover;
+import org.epochx.ge.operator.PointMutation;
+import org.epochx.grammar.Grammar;
+import org.epochx.interpret.EpoxInterpreter;
 import org.epochx.random.MersenneTwisterFast;
 import org.epochx.selection.TournamentSelector;
-import org.epochx.stgp.STGPIndividual;
-import org.epochx.stgp.fitness.HitsCount;
-import org.epochx.stgp.init.FullInitialisation;
-import org.epochx.stgp.operator.SubtreeCrossover;
-import org.epochx.stgp.operator.SubtreeMutation;
 import org.epochx.tools.BenchmarkSolutions;
 import org.epochx.tools.BooleanUtils;
 
@@ -82,17 +90,17 @@ public class GEEven3Parity extends GenerationalTemplate {
         criteria.add(new MaximumGenerations());
         template.put(EvolutionaryStrategy.TERMINATION_CRITERIA, criteria);
         template.put(MaximumGenerations.MAXIMUM_GENERATIONS, 50);
-        template.put(STGPIndividual.MAXIMUM_DEPTH, 6);
+        template.put(GEIndividual.MAXIMUM_DEPTH, 17);
         
         template.put(Breeder.SELECTOR, new TournamentSelector());
         template.put(TournamentSelector.TOURNAMENT_SIZE, 7);        
         List<Operator> operators = new ArrayList<Operator>();
-        operators.add(new SubtreeCrossover());
-        operators.add(new SubtreeMutation());
+        operators.add(new OnePointCrossover());
+        operators.add(new PointMutation());
         template.put(Breeder.OPERATORS, operators);
-        template.put(SubtreeCrossover.PROBABILITY, 1.0);
-        template.put(SubtreeMutation.PROBABILITY, 0.0);
-        template.put(Initialiser.METHOD, new FullInitialisation());
+        template.put(OnePointCrossover.PROBABILITY, 0.0);
+        template.put(PointMutation.PROBABILITY, 1.0);
+        template.put(Initialiser.METHOD, new GrowInitialisation());
         
         RandomSequence randomSequence = new MersenneTwisterFast();
         template.put(RandomSequence.RANDOM_SEQUENCE, randomSequence);
@@ -114,6 +122,20 @@ public class GEEven3Parity extends GenerationalTemplate {
 
         template.put(STGPIndividual.SYNTAX, syntax);
         template.put(STGPIndividual.RETURN_TYPE, Boolean.class);
+        
+        // Setup grammar
+        String grammarStr = "<prog> ::= <node>\n"
+    			+ "<node> ::= <function> | <terminal>\n"
+    			+ "<function> ::= NOT( <node> ) "
+    			+ "| OR( <node> , <node> ) "
+    			+ "| AND( <node> , <node> ) "
+    			+ "| XOR( <node> , <node> )\n"
+    			+ "<terminal> ::= D0 | D1 | D2\n";
+        Grammar grammar = new Grammar(grammarStr);
+        template.put(Grammar.GRAMMAR, grammar);
+        template.put(CodonFactory.CODON_FACTORY, new IntegerCodonFactory());
+        template.put(GEFitnessFunction.INTERPRETER, new EpoxInterpreter<GEIndividual>(new GESourceGenerator()));
+        template.put(MappingComponent.MAPPER, new DepthFirstMapper());
         
         // Generate inputs and expected outputs
         Boolean[][] inputValues = BooleanUtils.generateBoolSequences(NO_BITS);

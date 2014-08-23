@@ -19,9 +19,8 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.ge.operator;
+package org.epochx.gr.operator;
 
-import static org.epochx.Config.Template.TEMPLATE;
 import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
 
 import java.util.List;
@@ -31,55 +30,49 @@ import org.epochx.Config;
 import org.epochx.Individual;
 import org.epochx.RandomSequence;
 import org.epochx.Config.ConfigKey;
+import org.epochx.Config.Template;
 import org.epochx.event.ConfigEvent;
 import org.epochx.event.EventManager;
 import org.epochx.event.Listener;
 import org.epochx.event.OperatorEvent.EndOperator;
-import org.epochx.ge.Chromosome;
-import org.epochx.ge.Codon;
-import org.epochx.ge.GEIndividual;
+import org.epochx.gr.GRIndividual;
+import org.epochx.gr.init.GrowInitialiser;
+import org.epochx.grammar.*;
 
 /**
- * This class implements a fixed point crossover on two <code>GEIndividual</code>s.
+ * This class performs a subtree mutation on a <code>GRIndividual</code>, as described
+ * by Whigham in his paper "Grammatically-based genetic programming".
  * 
  * <p>
- * The operation is performed on the programs' chromosomes in a similar manner
- * to <code>OnePointCrossover</code>. One random codon position is chosen which is within the
- * length bounds of both parent programs. Then all codons from that point
- * onwards in both programs are exchanged.
- * 
- * <p>
- * Fixed point crossover results in two child individuals with chromosomes of equal
- * size to the two parents passed in, thus fixed point crossover prevents
- * chromosome length expanding over a run. However, chromosome length may still
- * change as a result of other operations in the algorithm such as the extension
- * property if used during mapping.
- * 
- * @see OnePointCrossover
+ * A <code>NonTerminalSymbol</code> is randomly selected as the crossover point
+ * in each individual's parse tree and the two subtrees rooted at those nodes are
+ * exchanged.
  * 
  * @since 2.0
  */
-public class FixedPointCrossover extends AbstractOperator implements Listener<ConfigEvent> {
-	
+public class SubtreeMutation extends AbstractOperator implements Listener<ConfigEvent> {
+
 	/**
 	 * The key for setting and retrieving the probability of this operator being applied
 	 */
 	public static final ConfigKey<Double> PROBABILITY = new ConfigKey<Double>();
+	
+	private final GrowInitialiser grower;
 	
 	// Configuration settings
 	private RandomSequence random;
 	private Double probability;
 
 	/**
-	 * Constructs a <code>FixedPointCrossover</code> with control parameters
+	 * Constructs a <code>SubtreeMutation</code> with control parameters
 	 * automatically loaded from the config
 	 */
-	public FixedPointCrossover() {
+	public SubtreeMutation() {
 		this(true);
 	}
 
 	/**
-	 * Constructs a <code>FixedPointCrossover</code> with control parameters initially
+	 * Constructs a <code>SubtreeMutation</code> with control parameters initially
 	 * loaded from the config. If the <code>autoConfig</code> argument is set to
 	 * <code>true</code> then the configuration will be automatically updated when
 	 * the config is modified.
@@ -87,14 +80,16 @@ public class FixedPointCrossover extends AbstractOperator implements Listener<Co
 	 * @param autoConfig whether this operator should automatically update its
 	 *        configuration settings from the config
 	 */
-	public FixedPointCrossover(boolean autoConfig) {
+	public SubtreeMutation(boolean autoConfig) {
+		grower = new GrowInitialiser(null);
+		
 		setup();
 
 		if (autoConfig) {
 			EventManager.getInstance().add(ConfigEvent.class, this);
 		}
 	}
-	
+
 	/**
 	 * Sets up this operator with the appropriate configuration settings.
 	 * This method is called whenever a <code>ConfigEvent</code> occurs for a
@@ -107,6 +102,8 @@ public class FixedPointCrossover extends AbstractOperator implements Listener<Co
 	protected void setup() {
 		random = Config.getInstance().get(RANDOM_SEQUENCE);
 		probability = Config.getInstance().get(PROBABILITY);
+
+		grower.setRandomSequence(random);
 	}
 
 	/**
@@ -118,88 +115,86 @@ public class FixedPointCrossover extends AbstractOperator implements Listener<Co
 	 */
 	@Override
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(TEMPLATE, RANDOM_SEQUENCE, PROBABILITY)) {
+		if (event.isKindOf(Template.TEMPLATE, RANDOM_SEQUENCE, PROBABILITY)) {
 			setup();
 		}
 	}
-	
+
 	/**
-	 * Performs a fixed-point crossover operation on the specified parent individuals.
+	 * Performs a subtree mutation operation on the specified parent individual.
 	 * 
 	 * <p>
-	 * The operation is performed on the individuals' chromosomes in a similar
-	 * manner to <code>OnePointCrossover</code>. One random codon position is chosen which 
-	 * is within the length bounds of both parent programs. Then all codons from
-	 * that point onwards in both programs are exchanged.
+	 * A <code>NonTerminalSymbol</code> is randomly selected as the mutation point
+	 * in the individual's parse tree and the subtree rooted at that point is exchanged
+	 * with a new randomly generated subtree.
 	 * 
 	 * @param event the <code>EndOperator</code> event to be filled with information
 	 *        about this operation
-	 * @param parents an array of two individuals to undergo fixed-point
-	 *        crossover. Both individuals must be instances of <code>GEIndividual</code>.
-	 * @return an array containing two <code>GEIndividual</code>s that are the
-	 *         result of the crossover
+	 * @param parents an array containing one individual to undergo mutation. The 
+	 * 		  individual must be an instance of <code>GRIndividual</code>.
+	 * @return an array containing one <code>GRIndividual</code>s that is the
+	 *         result of the mutation
 	 */
 	@Override
-	public GEIndividual[] perform(EndOperator event, Individual ... parents) {
-		GEIndividual parent1 = (GEIndividual) parents[0];
-		GEIndividual parent2 = (GEIndividual) parents[1];
-		
-		Chromosome parent1Codons = parent1.getChromosome();
-		Chromosome parent2Codons = parent2.getChromosome();
-		
-		// Pick a point in the shortest parent chromosome.
-		int crossoverPoint = 0;
-		int parent1Length = parent1Codons.length();
-		int parent2Length = parent2Codons.length();
-		if (parent1Length < parent2Length) {
-			crossoverPoint = random.nextInt(parent1Length);
+	public GRIndividual[] perform(EndOperator event, Individual ... parents) {
+		GRIndividual mutatedProgram = (GRIndividual) program.clone();
+
+		NonTerminalSymbol parseTree = mutatedProgram.getParseTree();
+
+		// This is v.inefficient because we have to fly up and down the tree lots of times.
+		List<Integer> nonTerminals = parseTree.getNonTerminalIndexes();
+
+		// Choose a node to change.
+		int point = nonTerminals.get(rng.nextInt(nonTerminals.size()));
+		NonTerminalSymbol original = (NonTerminalSymbol) parseTree.getNthSymbol(point);
+		int originalDepth = original.getDepth();
+
+		// Add mutation into the end event
+		((SubtreeMutationEndEvent) event).setMutationPoint(point);
+
+		// Construct a new subtree from that node's grammar rule.
+		//TODO We should allow any depth down to the maximum rather than just the original subtrees depth
+		GrammarRule rule = original.getGrammarRule();
+		NonTerminalSymbol subtree = grower.getGrownParseTree(originalDepth, rule);
+
+		// Add subtree into the end event
+		stats.addData(MUT_SUBTREE, subtree);
+
+		// Replace node.
+		if (point == 0) {
+			mutatedProgram.setParseTree(subtree);
 		} else {
-			crossoverPoint = random.nextInt(parent2Length);
+			parseTree.setNthSymbol(point, subtree);
 		}
-		
-		((FixedPointCrossoverEndEvent) event).setCrossoverPoint(crossoverPoint);
 
-		// Make copies of the parents' chromosomes.
-		Chromosome child1Codons = parent1Codons.clone();
-		Chromosome child2Codons = parent2Codons.clone();
-		
-		List<Codon> codonsExchanged1 = child1Codons.removeCodons(crossoverPoint, parent1Length);
-		List<Codon> codonsExchanged2 = child2Codons.removeCodons(crossoverPoint, parent2Length);
-		
-		((FixedPointCrossoverEndEvent) event).setExchangedCodons1(codonsExchanged1);
-		((FixedPointCrossoverEndEvent) event).setExchangedCodons2(codonsExchanged2);
-		
-		// Swap over the endings at the crossover points.
-		child1Codons.appendCodons(codonsExchanged2);
-		child2Codons.appendCodons(codonsExchanged1);
-
-		return new GEIndividual[]{new GEIndividual(child1Codons), new GEIndividual(child2Codons)};
+		return mutatedProgram;
 	}
-	
+
 	/**
-	 * Returns a <code>FixedPointCrossoverEndEvent</code> with the operator and parents set
+	 * Returns a <code>SubtreeMutationEndEvent</code> with the operator and 
+	 * parent set
 	 * 
-	 * @param parents the parents that were operated on
+	 * @param parent the individual that was operated on
 	 * @return operator end event
 	 */
 	@Override
-	protected FixedPointCrossoverEndEvent getEndEvent(Individual ... parents) {
-		return new FixedPointCrossoverEndEvent(this, parents);
+	protected SubtreeMutationEndEvent getEndEvent(Individual ... parent) {
+		return new SubtreeMutationEndEvent(this, parent);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * 
 	 * <p>
-	 * Fixed-point crossover operates on 2 individuals.
+	 * Subtree mutation operates on one individual.
 	 * 
 	 * @return {@inheritDoc}
 	 */
 	@Override
 	public int inputSize() {
-		return 2;
+		return 1;
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -238,5 +233,7 @@ public class FixedPointCrossover extends AbstractOperator implements Listener<Co
 	 */
 	public void setRandomSequence(RandomSequence random) {
 		this.random = random;
+		
+		grower.setRandomSequence(random);
 	}
 }

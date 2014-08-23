@@ -19,38 +19,28 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.gr.model.epox;
+package org.epochx.gr.init;
 
-import org.epochx.core.Evolver;
+import java.util.List;
+
+import org.epochx.op.Initialiser;
+import org.epochx.representation.CandidateProgram;
 
 /**
- * XGR model for a sextic symbolic regression problem in the Epox language.
- * 
- * <p>
- * The target program is the function: x^6 - (2 * x^4) + x^2
+ * Implementations of this interface should be capable of generating an initial
+ * population of <code>GRCandidatePrograms</code>. The getInitialPopulation()
+ * method is called towards the start of execution of a run to get the first
+ * population which will then be evolved.
  */
-public class SexticRegression extends Regression {
+public interface GRInitialiser extends Initialiser {
 
 	/**
-	 * Constructs an instance of the SexticRegression model with 50 input
-	 * points.
-	 */
-	public SexticRegression(Evolver evolver) {
-		this(evolver, 50);
-	}
-
-	/**
-	 * Constructs an instance of the SexticRegression model.
-	 */
-	public SexticRegression(Evolver evolver, final int noPoints) {
-		super(evolver, noPoints);
-	}
-
-	/**
-	 * The actual function we are trying to evolve.
+	 * Constructs and returns an initial population of
+	 * <code>GRCandidateProgram</code> instances.
+	 * 
+	 * @return A List of newly generated GRCandidatePrograms.
 	 */
 	@Override
-	public double getCorrectResult(final double x) {
-		return Math.pow(x, 6) - (2 * Math.pow(x, 4)) + Math.pow(x, 2);
-	}
+	public List<CandidateProgram> getInitialPopulation();
+
 }

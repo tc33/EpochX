@@ -19,14 +19,15 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.gr.op.init;
+package org.epochx.gr.init;
 
 import java.util.*;
 
+import org.epochx.RandomSequence;
 import org.epochx.core.*;
 import org.epochx.fitness.FitnessEvaluator;
+import org.epochx.gr.GRIndividual;
 import org.epochx.gr.model.GRModel;
-import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.grammar.*;
 import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
@@ -64,7 +65,7 @@ public class GrowInitialiser implements GRInitialiser, ConfigListener {
 	
 	private FitnessEvaluator fitnessEvaluator;
 	
-	private RandomNumberGenerator rng;
+	private RandomSequence random;
 
 	// The grammar all new programs must be valid against.
 	private Grammar grammar;
@@ -86,7 +87,7 @@ public class GrowInitialiser implements GRInitialiser, ConfigListener {
 			final int maxDepth, final boolean acceptDuplicates) {
 		this(null, acceptDuplicates);
 
-		this.rng = rng;
+		this.random = rng;
 		this.grammar = grammar;
 		this.popSize = popSize;
 		this.maxDepth = maxDepth;
@@ -127,7 +128,7 @@ public class GrowInitialiser implements GRInitialiser, ConfigListener {
 	public void configure(Model model) {
 		if (model instanceof GRModel) {
 			fitnessEvaluator = model.getFitnessEvaluator();
-			rng = model.getRNG();
+			random = model.getRNG();
 			grammar = ((GRModel) model).getGrammar();
 			popSize = model.getPopulationSize();
 			maxDepth = ((GRModel) model).getMaxInitialDepth();
@@ -157,7 +158,7 @@ public class GrowInitialiser implements GRInitialiser, ConfigListener {
 
 		// Create and add new programs to the population.
 		for (int i = 0; i < popSize; i++) {
-			GRCandidateProgram candidate;
+			GRIndividual candidate;
 
 			do {
 				// Create a new program down to the models initial max maxDepth.
@@ -177,7 +178,7 @@ public class GrowInitialiser implements GRInitialiser, ConfigListener {
 	 * 
 	 * @return A new <code>GRCandidateProgram</code> with a grown parse tree.
 	 */
-	public GRCandidateProgram getInitialProgram() {
+	public GRIndividual getInitialProgram() {
 		if (grammar == null) {
 			throw new IllegalStateException("No grammar has been set");
 		}
@@ -189,7 +190,7 @@ public class GrowInitialiser implements GRInitialiser, ConfigListener {
 			throw new IllegalStateException("No possible programs within given max depth parameter for this grammar.");
 		}
 
-		return new GRCandidateProgram(getGrownParseTree(maxDepth, startRule));
+		return new GRIndividual(getGrownParseTree(maxDepth, startRule));
 	}
 
 	/**
@@ -203,7 +204,7 @@ public class GrowInitialiser implements GRInitialiser, ConfigListener {
 	 *         requested maxDepth.
 	 */
 	public NonTerminalSymbol getGrownParseTree(final int maxDepth, final GrammarRule startRule) {
-		if (rng == null) {
+		if (random == null) {
 			throw new IllegalStateException("No random number generator has been set");
 		} else if (maxDepth < 0) {
 			throw new IllegalStateException("Maximum depth must be 0 or greater");
@@ -230,7 +231,7 @@ public class GrowInitialiser implements GRInitialiser, ConfigListener {
 					- 1);
 
 			// Choose a production randomly.
-			final int chosenProduction = rng.nextInt(validProductions.size());
+			final int chosenProduction = random.nextInt(validProductions.size());
 			productionIndex = validProductions.get(chosenProduction);
 		}
 
@@ -303,8 +304,8 @@ public class GrowInitialiser implements GRInitialiser, ConfigListener {
 	 * 
 	 * @return the rng the currently set random number generator.
 	 */
-	public RandomNumberGenerator getRNG() {
-		return rng;
+	public RandomSequence getRNG() {
+		return random;
 	}
 
 	/**
@@ -314,8 +315,8 @@ public class GrowInitialiser implements GRInitialiser, ConfigListener {
 	 * 
 	 * @param rng the random number generator to set.
 	 */
-	public void setRNG(final RandomNumberGenerator rng) {
-		this.rng = rng;
+	public void setRandomSequence(RandomSequence rng) {
+		this.random = rng;
 	}
 
 	/**

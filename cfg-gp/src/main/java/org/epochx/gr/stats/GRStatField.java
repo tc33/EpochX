@@ -26,7 +26,7 @@ import static org.epochx.stats.Stats.ExpiryEvent.GENERATION;
 import java.util.List;
 
 import org.apache.commons.lang.math.NumberUtils;
-import org.epochx.gr.representation.GRCandidateProgram;
+import org.epochx.gr.GRIndividual;
 import org.epochx.stats.*;
 import org.epochx.tools.StatsUtils;
 
@@ -49,7 +49,7 @@ public class GRStatField extends StatField {
 
 			// Request the population from the stats manager.
 			@SuppressWarnings("unchecked")
-			final List<GRCandidateProgram> pop = (List<GRCandidateProgram>) stats.getStat(GEN_POP);
+			final List<GRIndividual> pop = (List<GRIndividual>) stats.getStat(GEN_POP);
 
 			// Get the depths of each program.
 			if (pop != null) {

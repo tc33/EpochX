@@ -19,14 +19,14 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.gr.op.init;
+package org.epochx.gr.init;
 
 import java.util.*;
 
 import org.epochx.core.*;
 import org.epochx.fitness.FitnessEvaluator;
+import org.epochx.gr.GRIndividual;
 import org.epochx.gr.model.GRModel;
-import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.grammar.*;
 import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
@@ -158,7 +158,7 @@ public class FullInitialiser implements GRInitialiser, ConfigListener {
 
 		// Create and add new programs to the population.
 		for (int i = 0; i < popSize; i++) {
-			GRCandidateProgram candidate;
+			GRIndividual candidate;
 			do {
 				// Create a new program at the models initial max depth.
 				candidate = getInitialProgram();
@@ -178,7 +178,7 @@ public class FullInitialiser implements GRInitialiser, ConfigListener {
 	 * @return The root node of a randomly generated full parse tree of the
 	 *         requested depth.
 	 */
-	public GRCandidateProgram getInitialProgram() {
+	public GRIndividual getInitialProgram() {
 		if (rng == null) {
 			throw new IllegalStateException("No random number generator has been set");
 		} else if (grammar == null) {
@@ -201,7 +201,7 @@ public class FullInitialiser implements GRInitialiser, ConfigListener {
 		buildDerivationTree(parseTree, startRule, 0, depth);
 
 		// Construct and return the program.
-		return new GRCandidateProgram(parseTree);
+		return new GRIndividual(parseTree);
 	}
 
 	/*
@@ -308,7 +308,7 @@ public class FullInitialiser implements GRInitialiser, ConfigListener {
 	 * 
 	 * @param rng the random number generator to set.
 	 */
-	public void setRNG(final RandomNumberGenerator rng) {
+	public void setRandomSequence(final RandomNumberGenerator rng) {
 		this.rng = rng;
 	}
 

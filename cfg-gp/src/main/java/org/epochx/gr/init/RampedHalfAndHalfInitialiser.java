@@ -19,13 +19,13 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.gr.op.init;
+package org.epochx.gr.init;
 
 import java.util.*;
 
 import org.epochx.core.*;
+import org.epochx.gr.GRIndividual;
 import org.epochx.gr.model.GRModel;
-import org.epochx.gr.representation.GRCandidateProgram;
 import org.epochx.grammar.Grammar;
 import org.epochx.life.ConfigListener;
 import org.epochx.representation.CandidateProgram;
@@ -108,9 +108,9 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser, ConfigListen
 
 		// Set up the grow and full parts.
 		grow.setGrammar(grammar);
-		grow.setRNG(rng);
+		grow.setRandomSequence(rng);
 		full.setGrammar(grammar);
-		full.setRNG(rng);
+		full.setRandomSequence(rng);
 	}
 
 	/**
@@ -224,7 +224,7 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser, ConfigListen
 			final int depth = (int) Math.floor((i / programsPerDepth) + startDepth);
 
 			// Grow on even numbers, full on odd.
-			GRCandidateProgram program;
+			GRIndividual program;
 
 			do {
 				if ((i % 2) == 0) {
@@ -272,9 +272,9 @@ public class RampedHalfAndHalfInitialiser implements GRInitialiser, ConfigListen
 	 * 
 	 * @param rng the random number generator to set.
 	 */
-	public void setRNG(final RandomNumberGenerator rng) {
-		grow.setRNG(rng);
-		full.setRNG(rng);
+	public void setRandomSequence(final RandomNumberGenerator rng) {
+		grow.setRandomSequence(rng);
+		full.setRandomSequence(rng);
 	}
 
 	/**

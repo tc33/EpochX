@@ -21,7 +21,7 @@
  */
 package org.epochx.gr.source;
 
-import org.epochx.gr.representation.GRCandidateProgram;
+import org.epochx.gr.GRIndividual;
 import org.epochx.grammar.NonTerminalSymbol;
 import org.epochx.source.SourceGenerator;
 
@@ -29,10 +29,10 @@ import org.epochx.source.SourceGenerator;
 /**
  * 
  */
-public class GRSourceGenerator implements SourceGenerator<GRCandidateProgram> {
+public class GRSourceGenerator implements SourceGenerator<GRIndividual> {
 
 	@Override
-	public String getSource(GRCandidateProgram program) {
+	public String getSource(GRIndividual program) {
 		NonTerminalSymbol parseTree = program.getParseTree();
 		
 		return parseTree.toString();

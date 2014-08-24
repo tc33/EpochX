@@ -22,6 +22,7 @@
 package org.epochx.gr.operator;
 
 import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
+import static org.epochx.grammar.Grammar.GRAMMAR;
 
 import java.util.List;
 
@@ -36,7 +37,7 @@ import org.epochx.event.EventManager;
 import org.epochx.event.Listener;
 import org.epochx.event.OperatorEvent.EndOperator;
 import org.epochx.gr.GRIndividual;
-import org.epochx.gr.init.GrowInitialiser;
+import org.epochx.gr.init.GrowInitialisation;
 import org.epochx.grammar.*;
 
 /**
@@ -57,11 +58,12 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 	 */
 	public static final ConfigKey<Double> PROBABILITY = new ConfigKey<Double>();
 	
-	private final GrowInitialiser grower;
+	private final GrowInitialisation grower;
 	
 	// Configuration settings
 	private RandomSequence random;
 	private Double probability;
+	private Grammar grammar;
 
 	/**
 	 * Constructs a <code>SubtreeMutation</code> with control parameters
@@ -81,7 +83,7 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 	 *        configuration settings from the config
 	 */
 	public SubtreeMutation(boolean autoConfig) {
-		grower = new GrowInitialiser(null);
+		grower = new GrowInitialisation(false);
 		
 		setup();
 
@@ -97,6 +99,7 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 	 * <ul>
 	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
 	 * <li>{@link #PROBABILITY}
+	 * <li>{@link Grammar#GRAMMAR}
 	 * </ul>
 	 */
 	protected void setup() {
@@ -104,6 +107,7 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 		probability = Config.getInstance().get(PROBABILITY);
 
 		grower.setRandomSequence(random);
+		grower.setGrammar(grammar);
 	}
 
 	/**
@@ -115,7 +119,7 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 	 */
 	@Override
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(Template.TEMPLATE, RANDOM_SEQUENCE, PROBABILITY)) {
+		if (event.isKindOf(Template.TEMPLATE, RANDOM_SEQUENCE, PROBABILITY, GRAMMAR)) {
 			setup();
 		}
 	}
@@ -137,37 +141,38 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 	 */
 	@Override
 	public GRIndividual[] perform(EndOperator event, Individual ... parents) {
-		GRIndividual mutatedProgram = (GRIndividual) program.clone();
+		GRIndividual child = (GRIndividual) parents[0];
 
-		NonTerminalSymbol parseTree = mutatedProgram.getParseTree();
+		NonTerminalSymbol parseTree = child.getParseTree();
 
 		// This is v.inefficient because we have to fly up and down the tree lots of times.
 		List<Integer> nonTerminals = parseTree.getNonTerminalIndexes();
 
 		// Choose a node to change.
-		int point = nonTerminals.get(rng.nextInt(nonTerminals.size()));
+		int point = nonTerminals.get(random.nextInt(nonTerminals.size()));
 		NonTerminalSymbol original = (NonTerminalSymbol) parseTree.getNthSymbol(point);
+		
 		int originalDepth = original.getDepth();
 
 		// Add mutation into the end event
 		((SubtreeMutationEndEvent) event).setMutationPoint(point);
 
-		// Construct a new subtree from that node's grammar rule.
-		//TODO We should allow any depth down to the maximum rather than just the original subtrees depth
+		// Construct a new subtree from that node's grammar rule
+		//TODO Should allow any depth down to the maximum rather than the original subtrees depth
 		GrammarRule rule = original.getGrammarRule();
-		NonTerminalSymbol subtree = grower.getGrownParseTree(originalDepth, rule);
+		NonTerminalSymbol subtree = grower.growParseTree(originalDepth, rule);
 
 		// Add subtree into the end event
-		stats.addData(MUT_SUBTREE, subtree);
+		((SubtreeMutationEndEvent) event).setSubtree(subtree);
 
-		// Replace node.
+		// Replace subtree
 		if (point == 0) {
-			mutatedProgram.setParseTree(subtree);
+			child.setParseTree(subtree);
 		} else {
 			parseTree.setNthSymbol(point, subtree);
 		}
 
-		return mutatedProgram;
+		return new GRIndividual[]{child};
 	}
 
 	/**
@@ -235,5 +240,28 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 		this.random = random;
 		
 		grower.setRandomSequence(random);
+	}
+	
+	/**
+	 * Returns the grammar that any mutated <code>GRIndividual</code>s will satisfy with
+	 * full parse trees
+	 * 
+	 * @return the currently set grammar
+	 */
+	public Grammar getGrammar() {
+		return grammar;
+	}
+
+	/**
+	 * Sets the grammar to be satisfied by the parse trees of the mutated <code>GRIndividual</code>s. 
+	 * If automatic configuration is enabled then any value set here will be overwritten by the 
+	 * {@link Grammar#GRAMMAR} configuration setting on the next config event.
+	 * 
+	 * @param grammar the grammar to set
+	 */
+	public void setGrammar(Grammar grammar) {
+		this.grammar = grammar;
+		
+		grower.setGrammar(grammar);
 	}
 }

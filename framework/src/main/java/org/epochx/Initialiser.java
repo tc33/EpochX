@@ -25,7 +25,7 @@ package org.epochx;
 import org.epochx.Config.ConfigKey;
 
 /**
- * <code>Initialiser</code> components are reponsible for creating individuals,
+ * <code>Initialiser</code> components are responsible for creating individuals,
  * delegating the creation to an {@link InitialisationMethod} instance.
  */
 public class Initialiser extends ProxyComponent<InitialisationMethod> {

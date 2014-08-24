@@ -26,6 +26,8 @@ import static org.epochx.Population.SIZE;
 import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
 import static org.epochx.ge.Codon.*;
 import static org.epochx.ge.GEIndividual.MAXIMUM_DEPTH;
+import static org.epochx.ge.init.RampedHalfAndHalfInitialisation.Method.FULL;
+import static org.epochx.ge.init.RampedHalfAndHalfInitialisation.Method.GROW;
 import static org.epochx.grammar.Grammar.GRAMMAR;
 
 import org.epochx.*;
@@ -74,6 +76,10 @@ public class RampedHalfAndHalfInitialisation implements GEInitialisation, Listen
 	 */
 	public static final ConfigKey<Integer> RAMPING_START_DEPTH = new ConfigKey<Integer>();
 	
+	// The two initialisation methods to ramp
+	private final GrowInitialisation grow;
+	private final FullInitialisation full;
+	
 	// Configuration settings
 	private Grammar grammar;
 	private RandomSequence random;
@@ -83,10 +89,6 @@ public class RampedHalfAndHalfInitialisation implements GEInitialisation, Listen
 	private Integer endDepth;
 	private Integer startDepth;
 	private Boolean allowDuplicates;
-	
-	// The two halves
-	private final GrowInitialisation grow;
-	private final FullInitialisation full;
 	
 	/**
 	 * Initialisation method labels
@@ -176,12 +178,14 @@ public class RampedHalfAndHalfInitialisation implements GEInitialisation, Listen
 	 */
 	@Override
 	public Population createPopulation() {
+		EventManager.getInstance().fire(new InitialisationEvent.StartInitialisation());
+		
 		if (endDepth < startDepth) {
 			throw new IllegalStateException("End depth must be greater than the start depth.");
 		}
 
 		// Create population list to populate
-		Population firstGen = new Population();
+		Population population = new Population();
 
 		int currentDepth = startDepth;
 		int minDepthPossible = grammar.getMinimumDepth();
@@ -198,30 +202,33 @@ public class RampedHalfAndHalfInitialisation implements GEInitialisation, Listen
 		double individualsPerDepth = (double) populationSize / (endDepth - startDepth + 1);
 
 		// Whether each program was grown or not (full)
-		boolean[] grown = new boolean[populationSize];
+		Method[] method = new Method[populationSize];
 
 		for (int i = 0; i < populationSize; i++) {
 			// Calculate depth
-			int depth = (int) Math.floor((firstGen.size() / individualsPerDepth) + currentDepth);
+			int depth = (int) Math.floor((population.size() / individualsPerDepth) + currentDepth);
 
 			// Grow on even numbers, full on odd
 			GEIndividual individual;
 
 			do {
 				if ((i % 2) == 0) {
-					grown[i] = true;
+					method[i] = GROW;
 					grow.setMaximumDepth(depth);
 					individual = grow.createIndividual();
 				} else {
+					method[i] = FULL;
 					full.setDepth(depth);
 					individual = full.createIndividual();
 				}
-			} while (!allowDuplicates && firstGen.contains(individual));
+			} while (!allowDuplicates && population.contains(individual));
 
-			firstGen.add(individual);
+			population.add(individual);
 		}
+		
+		EventManager.getInstance().fire(new RampedHalfAndHalfEndEvent(population, method));
 
-		return firstGen;
+		return population;
 	}
 	
 	/**

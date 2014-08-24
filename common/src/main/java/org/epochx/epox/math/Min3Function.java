@@ -25,7 +25,9 @@ import org.epochx.epox.Node;
 
 /**
  * A node which performs a comparison of three numeric inputs and
- * returns the smallest of the three.
+ * returns the smallest of the three
+ * 
+ * @since 2.0
  */
 public class Min3Function extends MinFunction {
 
@@ -48,7 +50,9 @@ public class Min3Function extends MinFunction {
 	}
 
 	/**
-	 * Returns the identifier of this function which is MIN3.
+	 * Returns the identifier of this function which is MIN3
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

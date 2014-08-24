@@ -29,6 +29,8 @@ import org.epochx.tools.*;
  * it finds the remainder of division. This version of the function is
  * protected, so if the divisor input is 0.0 then the result will be value of
  * the dividend.
+ * 
+ * @since 2.0
  */
 public class ModuloProtectedFunction extends Node {
 
@@ -57,6 +59,9 @@ public class ModuloProtectedFunction extends Node {
 	 * used as the result of this function. The return value will be of the
 	 * wider input data type. If the divisor resolves to zero then the result
 	 * returned will be the first (dividend) child.
+	 * 
+	 * @return the remainder after dividing the result of evaluating the first 
+	 * 			child by the result of evaluating the second child
 	 */
 	@Override
 	public Object evaluate() {
@@ -91,7 +96,9 @@ public class ModuloProtectedFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is MOD.
+	 * Returns the identifier of this function which is MOD
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

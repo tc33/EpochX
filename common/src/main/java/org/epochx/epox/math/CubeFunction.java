@@ -28,6 +28,8 @@ import org.epochx.tools.*;
  * A node which performs the arithmetic function of cube,
  * that is - raising to the third power. It is equivalent to the
  * <code>PowerFunction</code> where the second child is the double literal 3.0.
+ * 
+ * @since 2.0
  */
 public class CubeFunction extends Node {
 
@@ -52,6 +54,8 @@ public class CubeFunction extends Node {
 	 * result of which must be a numeric type (one of Double, Float, Long,
 	 * Integer). The result is raised to the power of 3 and returned as the
 	 * same type as the input.
+	 * 
+	 * @return the result of evaluating the child raised to the power of 3
 	 */
 	@Override
 	public Object evaluate() {
@@ -73,7 +77,9 @@ public class CubeFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is CUBE.
+	 * Returns the identifier of this function which is CUBE
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

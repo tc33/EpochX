@@ -30,6 +30,8 @@ package org.epochx.epox;
  * program tree while keeping the nodes unique.
  * 
  * @see Variable
+ * 
+ * @since 2.0
  */
 public class VariableNode extends Node {
 

@@ -32,6 +32,8 @@ import org.epochx.tools.*;
  * An example:
  * 3x^2, which is equivalent to 3*(x^2)
  * CVP 3 x 2, which is equivalent to MUL(POW x 2)
+ * 
+ * @since 2.0
  */
 public class CoefficientPowerFunction extends Node {
 
@@ -62,6 +64,9 @@ public class CoefficientPowerFunction extends Node {
 	 * Integer). The result becomes the second child's value raised to the
 	 * power of the third, then multiplied by the first. The result is returned
 	 * as a double.
+	 * 
+	 * @return the result of performing the coefficient power function on its
+	 * 			children's values
 	 */
 	@Override
 	public Double evaluate() {
@@ -83,7 +88,9 @@ public class CoefficientPowerFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is CVP.
+	 * Returns the identifier of this function which is CVP
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

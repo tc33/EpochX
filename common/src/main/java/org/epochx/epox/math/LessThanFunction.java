@@ -26,7 +26,9 @@ import org.epochx.tools.*;
 
 /**
  * A node which performs the numerical less than comparison of two
- * numeric inputs, called LT.
+ * numeric inputs, called LT
+ * 
+ * @since 2.0
  */
 public class LessThanFunction extends Node {
 
@@ -55,6 +57,10 @@ public class LessThanFunction extends Node {
 	 * Integer). If the result of the first child is smaller than the result of
 	 * the second child, then a boolean value of <code>true</code> will be
 	 * returned, otherwise a <code>false</code> value will be returned.
+	 * 
+	 * @return <code>true</code> if the value returned from the first child is 
+	 * 			less than the value returned from the second child, otherwise
+	 * 			<code>false</code>
 	 */
 	@Override
 	public Boolean evaluate() {
@@ -68,7 +74,9 @@ public class LessThanFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is LT.
+	 * Returns the identifier of this function which is LT
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

@@ -26,6 +26,8 @@ import org.epochx.tools.DataTypeUtils;
 
 /**
  * A node which performs exclusive disjunction, also known as exclusive OR
+ * 
+ * @since 2.0
  */
 public class XorFunction extends Node {
 
@@ -49,8 +51,11 @@ public class XorFunction extends Node {
 	/**
 	 * Evaluates this function. Both child nodes are evaluated, the result of
 	 * both must be a <code>Boolean</code> instance. The result of this
-	 * function will be <code>true</code> if either (but not both) children evaluate
+	 * function will be <code>true</code> if either child (but not both) evaluate
 	 * to <code>true</code>, otherwise the result will be <code>false</code>.
+	 * 
+	 * @return <code>true</code> if either child (but not both) evaluate to 
+	 * 			<code>true</code>, otherwise the result with be <code>false</code>
 	 */
 	@Override
 	public Boolean evaluate() {
@@ -62,6 +67,8 @@ public class XorFunction extends Node {
 
 	/**
 	 * Returns the identifier of this function which is <code>XOR</code>
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

@@ -26,7 +26,9 @@ import org.epochx.tools.*;
 
 /**
  * A node which performs the inverse hyperbolic trigonometric function 
- * of area hyperbolic sine, called ARSINH.
+ * of area hyperbolic sine, called ARSINH
+ * 
+ * @since 2.0
  */
 public class AreaHyperbolicSineFunction extends Node {
 
@@ -52,6 +54,8 @@ public class AreaHyperbolicSineFunction extends Node {
 	 * result of which must be a numeric type (one of Double, Float, Long,
 	 * Integer). The area hyperbolic sine of this value becomes the result of 
 	 * this method as a double value.
+	 * 
+	 * @return area hyperbolic sine of the value returned by the child
 	 */
 	@Override
 	public Double evaluate() {
@@ -62,6 +66,8 @@ public class AreaHyperbolicSineFunction extends Node {
 
 	/**
 	 * Returns the identifier of this function which is ARSINH.
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

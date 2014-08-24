@@ -91,7 +91,7 @@ public class DoubleERCTest extends LiteralTest {
 	@Test
 	public void testGenerateValue() {
 		final MockRandom rng = new MockRandom();
-		erc.setRNG(rng);
+		erc.setRandomSequence(rng);
 
 		final double lower = 2.0;
 		final double upper = 5.0;
@@ -128,7 +128,7 @@ public class DoubleERCTest extends LiteralTest {
 	 */
 	@Test
 	public void testGenerateValueNull() {
-		erc.setRNG(null);
+		erc.setRandomSequence(null);
 		try {
 			erc.generateValue();
 			fail("exception not thrown for null RNG");

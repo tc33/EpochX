@@ -29,6 +29,8 @@ import org.epochx.tools.*;
  * reciprocal), that is the inverse of x is 1/x, called INV. This version of the
  * function is protected, so if the input is 0.0 then the result will be 1.0 to
  * protect against divide by zero.
+ * 
+ * @since 2.0
  */
 public class InvertProtectedFunction extends Node {
 
@@ -65,7 +67,7 @@ public class InvertProtectedFunction extends Node {
 	/**
 	 * Constructs an InvertFunction with one numerical child node and the 
 	 * given protection value which will be returned if the child evaluates to 
-	 * 0.0..
+	 * 0.0.
 	 * 
 	 * @param child the child node.
 	 * @param protectionValue the value to return for a child that evaluates to 
@@ -84,6 +86,8 @@ public class InvertProtectedFunction extends Node {
 	 * the result of this function. This function is protected, so if the child
 	 * evaluates to a value of <code>0.0</code> then there is no finite
 	 * reciprocal and so the value <code>1.0</code> will be returned.
+	 * 
+	 * @return the result of evaluating the first child inverted
 	 */
 	@Override
 	public Double evaluate() {
@@ -97,7 +101,9 @@ public class InvertProtectedFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is INV.
+	 * Returns the identifier of this function which is INV
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

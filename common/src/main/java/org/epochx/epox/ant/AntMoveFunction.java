@@ -25,9 +25,9 @@ import org.epochx.epox.Node;
 import org.epochx.tools.ant.Ant;
 
 /**
- * This class defines a function which moves an Ant instance forward one space
- * in its landscape. Although named as a function, this node may operate as
- * either a function or a terminal depending on how the ant is provided. It may
+ * This class defines a function which moves an <code>Ant</code> instance forward 
+ * one space in its landscape. Although named as a function, this node may operate 
+ * as either a terminal or a non-terminal depending on how the ant is provided. It may
  * optionally be provided at construction, in which case it becomes a terminal
  * which operates on its internal ant. Alternatively, it can require one child
  * node with a data-type of Ant. In this case, when evaluated it will first
@@ -36,6 +36,8 @@ import org.epochx.tools.ant.Ant;
  * @see AntSkipFunction
  * @see AntTurnLeftFunction
  * @see AntTurnRightFunction
+ * 
+ * @since 2.0
  */
 public class AntMoveFunction extends Node {
 
@@ -102,6 +104,8 @@ public class AntMoveFunction extends Node {
 
 	/**
 	 * Returns the identifier of this function which is <code>MOVE</code>.
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

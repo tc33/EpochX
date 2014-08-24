@@ -27,6 +27,8 @@ import org.epochx.tools.*;
 /**
  * A node which performs the reciprocal trigonometric
  * function of cotangent, called COT. Cotangent x is equal to 1/tan x.
+ * 
+ * @since 2.0
  */
 public class CotangentFunction extends Node {
 
@@ -51,6 +53,8 @@ public class CotangentFunction extends Node {
 	 * result of which must be a numeric type (one of Double, Float, Long,
 	 * Integer). 1 is divided by the tan of this value to give the result as a
 	 * double value.
+	 * 
+	 * @return cotangent of the value returned by the child
 	 */
 	@Override
 	public Double evaluate() {
@@ -60,7 +64,9 @@ public class CotangentFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is COT.
+	 * Returns the identifier of this function which is COT
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

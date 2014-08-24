@@ -26,7 +26,9 @@ import org.epochx.tools.*;
 
 /**
  * A node which performs the trigonometric function of cosine, called
- * COS.
+ * COS
+ * 
+ * @since 2.0
  */
 public class CosineFunction extends Node {
 
@@ -51,6 +53,8 @@ public class CosineFunction extends Node {
 	 * result of which must be a numeric type (one of Double, Float, Long,
 	 * Integer). The cosine of this value becomes the result of this
 	 * method as a double value.
+	 * 
+	 * @return cosine of the value returned by the child
 	 */
 	@Override
 	public Double evaluate() {
@@ -60,7 +64,9 @@ public class CosineFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is COS.
+	 * Returns the identifier of this function which is COS
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

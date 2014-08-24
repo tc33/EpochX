@@ -26,6 +26,8 @@ import org.epochx.tools.DataTypeUtils;
 
 /**
  * A node which performs logical negation
+ * 
+ * @since 2.0
  */
 public class NotFunction extends Node {
 
@@ -49,6 +51,9 @@ public class NotFunction extends Node {
 	 * Evaluates this function. The child node is evaluated, the result of which
 	 * must be a <code>Boolean</code> instance. The result is negated and returned 
 	 * as the result.
+	 * 
+	 * @return <code>true</code> if the child evaluates to <code>false</code>, 
+	 * 			otherwise <code>false</code>
 	 */
 	@Override
 	public Boolean evaluate() {
@@ -57,6 +62,8 @@ public class NotFunction extends Node {
 
 	/**
 	 * Returns the identifier of this function which is <code>NOT</code>
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

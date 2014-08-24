@@ -29,6 +29,8 @@ import org.epochx.tools.DataTypeUtils;
  * instructions, specified at construction. Each of the instructions may be any
  * other function or terminal node with a <code>Void</code> return type. This is the
  * same function that Koza calls <code>progN</code> in his work.
+ * 
+ * @since 2.0
  */
 public class SeqNFunction extends Node {
 
@@ -57,6 +59,9 @@ public class SeqNFunction extends Node {
 	/**
 	 * Evaluates this function. Each of the children is evaluated in sequence.
 	 * After evaluating its children, this method will return <code>null</code>.
+	 * 
+	 * @return the return type of this function node is <code>Void</code> and so
+	 *         the value returned from this method is undefined
 	 */
 	@Override
 	public Void evaluate() {
@@ -70,6 +75,8 @@ public class SeqNFunction extends Node {
 
 	/**
 	 * Returns the identifier of this function which is <code>SEQN</code>
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

@@ -43,6 +43,8 @@ import org.epochx.epox.bool.BooleanERC;
  * 
  * @see BooleanERC
  * @see DoubleERC
+ * 
+ * @since 2.0
  */
 public class IntegerERC extends Literal {
 

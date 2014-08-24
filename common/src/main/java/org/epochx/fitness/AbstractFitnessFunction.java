@@ -33,7 +33,10 @@ import org.epochx.Population;
 public abstract class AbstractFitnessFunction implements FitnessFunction {
 
 	/** 
-	 * 
+	 * Evaluates all individuals in the given population by calling the 
+	 * <code>evaluate(Individual)</code> method and if the individual 
+	 * is an instance of <code>AbstractIndividual</code> the fitness is 
+	 * assigned to it.
 	 */
 	@Override
 	public void evaluate(Population population) {
@@ -43,6 +46,12 @@ public abstract class AbstractFitnessFunction implements FitnessFunction {
 		}
 	}
 	
+	/**
+	 * Implementations should
+	 * 
+	 * @param individual
+	 * @return the fitness of the given individual
+	 */
 	public abstract Fitness evaluate(Individual individual);
 	
 	/**

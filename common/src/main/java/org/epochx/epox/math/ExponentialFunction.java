@@ -28,6 +28,8 @@ import org.epochx.tools.*;
  * A node which performs the mathematical exponential
  * function <code>e^x</code> where <code>e</code> is the constant known as
  * Euler's number.
+ * 
+ * @since 2.0
  */
 public class ExponentialFunction extends Node {
 
@@ -52,6 +54,9 @@ public class ExponentialFunction extends Node {
 	 * result of which must be a numeric type (one of Double, Float, Long,
 	 * Integer). The mathematical constant <code>e</code> is raised to the power
 	 * of this value.
+	 * 
+	 * @return <code>e</code> raised to the power of the value returned by the
+	 * 			child
 	 */
 	@Override
 	public Double evaluate() {
@@ -61,7 +66,9 @@ public class ExponentialFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is EXP.
+	 * Returns the identifier of this function which is EXP
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

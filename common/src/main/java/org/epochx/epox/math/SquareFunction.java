@@ -29,6 +29,8 @@ import org.epochx.tools.*;
  * that is - raising to the second power. It is equivalent to the
  * <code>PowerFunction</code> where the second child is the literal
  * <code>2</code>.
+ * 
+ * @since 2.0
  */
 public class SquareFunction extends Node {
 
@@ -53,6 +55,8 @@ public class SquareFunction extends Node {
 	 * result of which must be a numeric type (one of Double, Float, Long,
 	 * Integer). The result is raised to the power of 2 and returned as the
 	 * same type as the input.
+	 * 
+	 * @return the result of evaluating the child squared
 	 */
 	@Override
 	public Object evaluate() {
@@ -74,7 +78,9 @@ public class SquareFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is SQUARE.
+	 * Returns the identifier of this function which is SQUARE
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

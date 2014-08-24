@@ -25,8 +25,10 @@ import org.epochx.epox.Node;
 import org.epochx.tools.*;
 
 /**
- * A node which performs the reciprocal trigonometric
- * function of cosecant, called CSC. Cosecant x is equal to 1/sin x.
+ * A node which performs the reciprocal trigonometric function of cosecant, 
+ * called CSC. Cosecant x is equal to 1/sin x.
+ * 
+ * @since 2.0
  */
 public class CosecantFunction extends Node {
 
@@ -51,6 +53,8 @@ public class CosecantFunction extends Node {
 	 * result of which must be a numeric type (one of Double, Float, Long,
 	 * Integer). 1 is divided by the sine of this value to give the result as a
 	 * double value.
+	 * 
+	 * @return cosecant of the value returned by the child
 	 */
 	@Override
 	public Double evaluate() {
@@ -60,7 +64,9 @@ public class CosecantFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is CSC.
+	 * Returns the identifier of this function which is CSC
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

@@ -22,12 +22,14 @@
 package org.epochx.epox;
 
 /**
- * Instances of <code>Variable</code> model named values for use in a program tree.
+ * Instances of <code>Variable</code> are named values for use in a program tree.
  * Variables are <b>not</b> nodes, so they must be wrapped in a
  * <code>VariableNode</code> to be used in a program. The data-type of a variable is
  * determined at construction and must not then be changed.
  * 
  * @see VariableNode
+ * 
+ * @since 2.0
  */
 public class Variable {
 
@@ -76,7 +78,7 @@ public class Variable {
 
 	/**
 	 * Sets the value of this variable. The data-type of a variable cannot be
-	 * changed after construction, and only values which are instances of
+	 * changed after construction, and only values which are instances of the class or
 	 * subclasses of the original data-type may be used. A <code>null</code> value
 	 * is considered valid for a variable of any data-type.
 	 * 
@@ -90,6 +92,11 @@ public class Variable {
 		this.value = value;
 	}
 
+	/**
+	 * Returns the data-type of this variable
+	 * 
+	 * @return this variable's data-type
+	 */
 	public Class<?> getDataType() {
 		return datatype;
 	}

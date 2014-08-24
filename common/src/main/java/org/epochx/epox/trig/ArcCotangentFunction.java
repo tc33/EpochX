@@ -26,7 +26,9 @@ import org.epochx.tools.*;
 
 /**
  * A node which performs the inverse trigonometric function of
- * arc-cotangent, called ARCCOT.
+ * arc-cotangent, called ARCCOT
+ * 
+ * @since 2.0
  */
 public class ArcCotangentFunction extends Node {
 
@@ -51,6 +53,8 @@ public class ArcCotangentFunction extends Node {
 	 * result of which must be a numeric type (one of Double, Float, Long,
 	 * Integer). The arc-cotangent of this value becomes the result of this
 	 * method as a double value.
+	 * 
+	 * @return arc-cotangent of the value returned by the child
 	 */
 	@Override
 	public Double evaluate() {
@@ -60,7 +64,9 @@ public class ArcCotangentFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is ARCCOT.
+	 * Returns the identifier of this function which is ARCCOT
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

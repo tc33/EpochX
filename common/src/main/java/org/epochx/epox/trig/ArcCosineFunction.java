@@ -26,7 +26,9 @@ import org.epochx.tools.*;
 
 /**
  * A node which performs the inverse trigonometric function of
- * arc-cosine, called ARCCOS.
+ * arc-cosine, called ARCCOS
+ * 
+ * @since 2.0
  */
 public class ArcCosineFunction extends Node {
 
@@ -51,6 +53,8 @@ public class ArcCosineFunction extends Node {
 	 * result of which must be a numeric type (one of Double, Float, Long,
 	 * Integer). The arc-cosine of this value becomes the result of this
 	 * method as a double value.
+	 * 
+	 * @return arc-cosine of the value returned by the child
 	 */
 	@Override
 	public Double evaluate() {
@@ -60,7 +64,9 @@ public class ArcCosineFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is ARCCOS.
+	 * Returns the identifier of this function which is ARCCOS
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

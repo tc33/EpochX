@@ -26,7 +26,9 @@ import org.epochx.tools.*;
 
 /**
  * A node which performs the inverse hyperbolic trigonometric function 
- * of area hyperbolic tangent, called ARTANH.
+ * of area hyperbolic tangent, called ARTANH
+ * 
+ * @since 2.0
  */
 public class AreaHyperbolicTangentFunction extends Node {
 
@@ -52,6 +54,8 @@ public class AreaHyperbolicTangentFunction extends Node {
 	 * result of which must be a numeric type (one of Double, Float, Long,
 	 * Integer). The area hyperbolic tangent of this value becomes the result of 
 	 * this method as a double value.
+	 * 
+	 * @return area hyperbolic tangent of the value returned by the child
 	 */
 	@Override
 	public Double evaluate() {
@@ -61,7 +65,9 @@ public class AreaHyperbolicTangentFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is ARTANH.
+	 * Returns the identifier of this function which is ARTANH
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

@@ -46,6 +46,8 @@ import org.epochx.epox.bool.BooleanERC;
  * 
  * @see BooleanERC
  * @see IntegerERC
+ * 
+ * @since 2.0
  */
 public class DoubleERC extends Literal {
 
@@ -59,9 +61,9 @@ public class DoubleERC extends Literal {
 	private int precision;
 
 	/**
-	 * Constructs a new <code>DoubleERC</code> with a value of <code>null</code>
-	 * . The given random number generator will be be used to
-	 * generate a new value if the <code>newInstance</code> method is used.
+	 * Constructs a new <code>DoubleERC</code> with a value of <code>null</code>. The 
+	 * given random number generator will be be used to generate a new value if the
+	 * <code>newInstance</code> method is used.
 	 * 
 	 * @param random the random number generator to use if randomly generating a
 	 *        double value.

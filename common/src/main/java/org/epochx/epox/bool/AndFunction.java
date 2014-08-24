@@ -27,6 +27,8 @@ import org.epochx.tools.DataTypeUtils;
 /**
  * A node which performs logical conjunction or the boolean function of
  * <code>AND</code>
+ * 
+ * @since 2.0
  */
 public class AndFunction extends Node {
 
@@ -54,6 +56,9 @@ public class AndFunction extends Node {
 	 * result of which becomes the result of this <code>AND</code> function. If the
 	 * first child evaluated to a <code>false</code> value then the second child is
 	 * not evaluated at all and a <code>false</code> value is returned.
+	 * 
+	 * @return <code>true</code> if both children evaluate to <code>true</code> and
+	 * 			<code>false</code> otherwise
 	 */
 	@Override
 	public Boolean evaluate() {
@@ -68,6 +73,8 @@ public class AndFunction extends Node {
 
 	/**
 	 * Returns the identifier of this function which is <code>AND</code>
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

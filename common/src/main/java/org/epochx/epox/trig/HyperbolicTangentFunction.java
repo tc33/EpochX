@@ -26,7 +26,9 @@ import org.epochx.tools.*;
 
 /**
  * A node which performs the hyperbolic trigonometric
- * function of hyperbolic tangent, called TANH.
+ * function of hyperbolic tangent, called TANH
+ * 
+ * @since 2.0
  */
 public class HyperbolicTangentFunction extends Node {
 
@@ -51,6 +53,8 @@ public class HyperbolicTangentFunction extends Node {
 	 * result of which must be a numeric type (one of Double, Float, Long,
 	 * Integer). The hyperbolic tangent of this value becomes the result of this
 	 * method as a double value.
+	 * 
+	 * @return hyperbolic tangent of the value returned by the child
 	 */
 	@Override
 	public Double evaluate() {
@@ -60,7 +64,9 @@ public class HyperbolicTangentFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is TANH.
+	 * Returns the identifier of this function which is TANH
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

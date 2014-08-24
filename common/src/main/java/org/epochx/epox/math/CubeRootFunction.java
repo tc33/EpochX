@@ -26,7 +26,9 @@ import org.epochx.tools.*;
 
 /**
  * A node which performs the mathematical function of cube root, called
- * CBRT.
+ * CBRT
+ * 
+ * @since 2.0
  */
 public class CubeRootFunction extends Node {
 
@@ -51,6 +53,8 @@ public class CubeRootFunction extends Node {
 	 * result of which must be a numeric type (one of Double, Float, Long,
 	 * Integer). The cube root of this value becomes the result of this
 	 * method as a double value.
+	 * 
+	 * @return the cube root of the result of evaluating the child
 	 */
 	@Override
 	public Double evaluate() {
@@ -60,7 +64,9 @@ public class CubeRootFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is CBRT.
+	 * Returns the identifier of this function which is CBRT
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

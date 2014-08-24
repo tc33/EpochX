@@ -25,6 +25,8 @@ import org.epochx.epox.Node;
 
 /**
  * A node which chains two nodes together in sequence, called <code>SEQ2</code>
+ * 
+ * @since 2.0
  */
 public class Seq2Function extends SeqNFunction {
 
@@ -47,6 +49,8 @@ public class Seq2Function extends SeqNFunction {
 
 	/**
 	 * Returns the identifier of this function which is <code>SEQ2</code>
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

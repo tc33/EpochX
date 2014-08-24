@@ -26,7 +26,9 @@ import org.epochx.tools.*;
 
 /**
  * A node which performs the inverse trigonometric function of
- * arc-sine, called ARCSIN.
+ * arc-sine, called ARCSIN
+ * 
+ * @since 2.0
  */
 public class ArcSineFunction extends Node {
 
@@ -51,6 +53,8 @@ public class ArcSineFunction extends Node {
 	 * result of which must be a numeric type (one of Double, Float, Long,
 	 * Integer). The arc-sine of this value becomes the result of this
 	 * method as a double value.
+	 * 
+	 * @return arc-sine of the value returned by the child
 	 */
 	@Override
 	public Double evaluate() {
@@ -60,7 +64,9 @@ public class ArcSineFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is ARCSIN.
+	 * Returns the identifier of this function which is ARCSIN
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

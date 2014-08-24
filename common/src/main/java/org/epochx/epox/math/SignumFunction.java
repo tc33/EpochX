@@ -25,8 +25,10 @@ import org.epochx.epox.Node;
 import org.epochx.tools.*;
 
 /**
- * A node which performs the mathematical sign function
- * that extracts the sign of a number.
+ * A node which performs the mathematical sign function that extracts the sign 
+ * of a number
+ * 
+ * @since 2.0
  */
 public class SignumFunction extends Node {
 
@@ -52,6 +54,9 @@ public class SignumFunction extends Node {
 	 * Integer). Then the result will be -1, if the value is negative, +1, if
 	 * the value is positive and 0 if the value is zero. The type of the value
 	 * returned will be the same as the input type.
+	 * 
+	 * @return zero if the result of evaluating the child is zero, one if the
+	 * 			result is positive and minus one if it is negative
 	 */
 	@Override
 	public Object evaluate() {
@@ -73,7 +78,9 @@ public class SignumFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is SGN.
+	 * Returns the identifier of this function which is SGN
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

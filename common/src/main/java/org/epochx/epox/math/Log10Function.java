@@ -25,9 +25,11 @@ import org.epochx.epox.Node;
 import org.epochx.tools.*;
 
 /**
- * A node which performs the common (base 10) logarithm, called LOG-10.
+ * A node which performs the common (base 10) logarithm, called LOG-10
  * 
  * @see LogFunction
+ * 
+ * @since 2.0
  */
 public class Log10Function extends Node {
 
@@ -52,6 +54,9 @@ public class Log10Function extends Node {
 	 * result of which must be of a numeric type (one of Byte,
 	 * Short, Integer, Long). The base 10 logarithm is performed on this value
 	 * and the result returned as a Double.
+	 * 
+	 * @return the base 10 logarithm performed on the value returned from the
+	 * 			child
 	 */
 	@Override
 	public Double evaluate() {
@@ -61,7 +66,9 @@ public class Log10Function extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is LOG-10.
+	 * Returns the identifier of this function which is LOG-10
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

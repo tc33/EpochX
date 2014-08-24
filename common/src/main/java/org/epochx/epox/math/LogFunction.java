@@ -28,6 +28,8 @@ import org.epochx.tools.*;
  * A node which performs the natural (base e) logarithm.
  * 
  * @see Log10Function
+ * 
+ * @since 2.0
  */
 public class LogFunction extends Node {
 
@@ -52,6 +54,9 @@ public class LogFunction extends Node {
 	 * result of which must be of a numeric type (one of Byte,
 	 * Short, Integer, Long). The base e logarithm is performed on this value
 	 * and the result returned as a Double.
+	 * 
+	 * @return the base e logarithm performed on the the value returned from 
+	 * 			the child
 	 */
 	@Override
 	public Double evaluate() {
@@ -61,7 +66,9 @@ public class LogFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is LN.
+	 * Returns the identifier of this function which is LN
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

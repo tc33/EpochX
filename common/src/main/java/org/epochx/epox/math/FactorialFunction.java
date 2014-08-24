@@ -30,6 +30,8 @@ import org.epochx.tools.*;
  * 
  * For example:
  * 5! = 5 x 4 x 3 x 2 x 1 = FACTORIAL 5
+ * 
+ * @since 2.0
  */
 public class FactorialFunction extends Node {
 
@@ -56,6 +58,8 @@ public class FactorialFunction extends Node {
 	 * a divide by zero. The factorial function is performed on this value
 	 * and the result returned as an Integer if the input was one of Byte,
 	 * Short or Integer and returned as a Long if the input is a Long.
+	 * 
+	 * @return factorial of the value returned from the child
 	 */
 	@Override
 	public Object evaluate() {
@@ -76,7 +80,9 @@ public class FactorialFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is FACTORIAL.
+	 * Returns the identifier of this function which is FACTORIAL
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

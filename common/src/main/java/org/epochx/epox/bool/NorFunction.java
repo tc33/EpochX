@@ -27,6 +27,8 @@ import org.epochx.tools.DataTypeUtils;
 /**
  * A node which performs the logical operation of <code>NOR</code> which is
  * equivalent to the negation of logical OR, <code>NOT OR</code>.
+ * 
+ * @since 2.0
  */
 public class NorFunction extends Node {
 
@@ -53,6 +55,9 @@ public class NorFunction extends Node {
 	 * is a <code>false</code> value then the second child is also evaluated. The
 	 * result of this function will be <code>true</code> if both children evaluate
 	 * to <code>false</code>, otherwise the result will be <code>false</code>.
+	 * 
+	 * @return <code>true</code> if both children evaluate to <code>false</code>, 
+	 * 			otherwise the result will be <code>false</code>
 	 */
 	@Override
 	public Boolean evaluate() {
@@ -66,7 +71,9 @@ public class NorFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is NOR.
+	 * Returns the identifier of this function which is NOR
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

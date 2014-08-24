@@ -42,6 +42,8 @@ import org.epochx.epox.math.*;
  * 
  * @see DoubleERC
  * @see IntegerERC
+ * 
+ * @since 2.0
  */
 public class BooleanERC extends Literal {
 
@@ -116,7 +118,7 @@ public class BooleanERC extends Literal {
 	 * 
 	 * @param random the random number generator to set
 	 */
-	public void setRNG(RandomSequence random) {
+	public void setRandomSequence(RandomSequence random) {
 		this.random = random;
 	}
 }

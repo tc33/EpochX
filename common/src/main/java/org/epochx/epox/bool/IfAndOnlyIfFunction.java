@@ -27,6 +27,8 @@ import org.epochx.tools.DataTypeUtils;
 /**
  * A node which performs the bi-conditional logical connective of <code>IFF</code> 
  * (if and only if)
+ * 
+ * @since 2.0
  */
 public class IfAndOnlyIfFunction extends Node {
 
@@ -55,6 +57,9 @@ public class IfAndOnlyIfFunction extends Node {
 	 * or both are <code>false</code>, then the result will be <code>true. All other 
 	 * combinations of the inputs will result in the return of a value of 
 	 * <code>false</code>.
+	 * 
+	 * @return <code>true</code> if both children evaluate to the same boolean value
+	 * 			and <code>false</code> otherwise
 	 */
 	@Override
 	public Boolean evaluate() {
@@ -66,6 +71,8 @@ public class IfAndOnlyIfFunction extends Node {
 
 	/**
 	 * Returns the identifier of this function which is <code>IFF</code>
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

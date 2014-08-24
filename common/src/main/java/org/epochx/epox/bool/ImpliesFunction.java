@@ -26,6 +26,8 @@ import org.epochx.tools.DataTypeUtils;
 
 /**
  * A node which performs logical implication
+ * 
+ * @since 2.0
  */
 public class ImpliesFunction extends Node {
 
@@ -52,6 +54,10 @@ public class ImpliesFunction extends Node {
 	 * is a <code>false</code> value then <code>true</code> is returned from this 
 	 * method. If the first child evaluates to <code>true</code>, then the second 
 	 * child is also evaluated which provides the result of this function.
+	 * 
+	 * @return <code>true</code> if the first child evaluates to <code>false</code>
+	 * 			or if both children evaluate to <code>true</code>, otherwise it 
+	 * 			returns <code>false</code>
 	 */
 	@Override
 	public Boolean evaluate() {
@@ -66,6 +72,8 @@ public class ImpliesFunction extends Node {
 
 	/**
 	 * Returns the identifier of this function which is <code>IMPLIES</code>
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

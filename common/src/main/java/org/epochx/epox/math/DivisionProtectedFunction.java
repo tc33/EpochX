@@ -40,6 +40,8 @@ import org.epochx.tools.*;
  * the function is protected, so if the divisor input is 0.0 then the result
  * will be the protected value, which by default is 0.0 to protect against
  * divide by zero.
+ * 
+ * @since 2.0
  */
 public class DivisionProtectedFunction extends Node {
 
@@ -98,6 +100,10 @@ public class DivisionProtectedFunction extends Node {
 	 * will be of that wider type. If the divisor resolves to zero
 	 * then the result returned will be the protection value to avoid the divide
 	 * by zero issue.
+	 * 
+	 * @return the result of dividing the value returned from the first child by
+	 * 			the value from the second child, or the protected value if the 
+	 * 			divisor is zero
 	 */
 	@Override
 	public Object evaluate() {
@@ -136,7 +142,9 @@ public class DivisionProtectedFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is PDIV.
+	 * Returns the identifier of this function which is PDIV
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

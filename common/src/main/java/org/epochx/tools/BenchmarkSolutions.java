@@ -22,7 +22,10 @@
 package org.epochx.tools;
 
 /**
- * This class
+ * This class provides correct solutions to various benchmark problems that can be
+ * used within fitness functions
+ * 
+ * @since 2.0
  */
 public final class BenchmarkSolutions {
 

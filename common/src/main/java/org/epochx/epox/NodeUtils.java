@@ -24,7 +24,9 @@ package org.epochx.epox;
 import java.util.*;
 
 /**
- * This class provides static utility methods for working with Epox nodes.
+ * This class provides static utility methods for working with Epox nodes
+ * 
+ * @since 2.0
  */
 public final class NodeUtils {
 

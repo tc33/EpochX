@@ -37,6 +37,8 @@ import org.epochx.tools.*;
  * 
  * Subtraction can be performed between mixed types, with a widening operation
  * performed and the result being of the wider of the two types.
+ * 
+ * @since 2.0
  */
 public class SubtractFunction extends Node {
 
@@ -64,6 +66,9 @@ public class SubtractFunction extends Node {
 	 * both must be of numeric type. If necessary, the inputs are widened to
 	 * both be of the same type, then subtraction is performed and the return
 	 * value will be of that wider type.
+	 * 
+	 * @return the result returned from the second child subtracted from the 
+	 * 			value returned by the first child
 	 */
 	@Override
 	public Object evaluate() {
@@ -102,7 +107,9 @@ public class SubtractFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is SUB.
+	 * Returns the identifier of this function which is SUB
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

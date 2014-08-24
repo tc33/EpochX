@@ -26,6 +26,8 @@ import org.epochx.tools.DataTypeUtils;
 
 /**
  * A node which performs logical disjunction
+ * 
+ * @since 2.0
  */
 public class OrFunction extends Node {
 
@@ -53,6 +55,9 @@ public class OrFunction extends Node {
 	 * result of this function will be <code>true</code> if either (or both)
 	 * children evaluate to <code>true</code>, otherwise the result will be
 	 * <code>false</code>.
+	 * 
+	 * @return <code>true</code> if either child evaluates to <code>true</code>
+	 * 			otherwise <code>false</code>
 	 */
 	@Override
 	public Boolean evaluate() {
@@ -67,6 +72,8 @@ public class OrFunction extends Node {
 
 	/**
 	 * Returns the identifier of this function which is <code>OR</code>
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

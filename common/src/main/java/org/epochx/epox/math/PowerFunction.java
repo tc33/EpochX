@@ -25,7 +25,9 @@ import org.epochx.epox.Node;
 import org.epochx.tools.*;
 
 /**
- * A node which performs the mathematical operation of exponentiation.
+ * A node which performs the mathematical operation of exponentiation
+ * 
+ * @since 2.0
  */
 public class PowerFunction extends Node {
 
@@ -61,6 +63,9 @@ public class PowerFunction extends Node {
 	 * value is 0.0 then 1.0 will be returned without evaluating the first child
 	 * at all. Otherwise the value of the first child will be raised to the
 	 * power of the second child. The result is returned as a double value.
+	 * 
+	 * @return the result of raising the value from the first child to the power
+	 * 			of the value returned from the second child
 	 */
 	@Override
 	public Double evaluate() {
@@ -76,7 +81,9 @@ public class PowerFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is POW.
+	 * Returns the identifier of this function which is POW
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

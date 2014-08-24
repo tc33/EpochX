@@ -26,7 +26,9 @@ import org.epochx.tools.*;
 
 /**
  * A node which performs the inverse trigonometric function of
- * arc-tangent, called ARCTAN.
+ * arc-tangent, called ARCTAN
+ * 
+ * @since 2.0
  */
 public class ArcTangentFunction extends Node {
 
@@ -51,6 +53,8 @@ public class ArcTangentFunction extends Node {
 	 * result of which must be a numeric type (one of Double, Float, Long,
 	 * Integer). The arc-tangent of this value becomes the result of this
 	 * method as a double value.
+	 * 
+	 * @return arc-tangent of the value returned by the child
 	 */
 	@Override
 	public Double evaluate() {
@@ -60,7 +64,9 @@ public class ArcTangentFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is ARCTAN.
+	 * Returns the identifier of this function which is ARCTAN
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

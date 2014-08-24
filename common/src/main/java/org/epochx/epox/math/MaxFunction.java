@@ -28,12 +28,15 @@ import org.epochx.tools.*;
  * A node which performs the simple comparison function of determining
  * which of a set of numbers is larger, as per the boolean greater-than
  * function.
+ * 
+ * @since 2.0
  */
 public class MaxFunction extends Node {
 
 	/**
 	 * Constructs a MaxFunction with the given number of <code>null</code>
 	 * children.
+	 * 
 	 * @param n the number of <code>null</code> children to set this function up
 	 * for.
 	 */
@@ -57,6 +60,8 @@ public class MaxFunction extends Node {
 	 * results of which must be numerically typed (any of Double, Float, Long,
 	 * Integer). The largest of the child values will be returned as the result
 	 * as the widest of the numeric types.
+	 * 
+	 * @return the largest of the values returned by its child nodes
 	 */
 	@Override
 	public Object evaluate() {
@@ -104,7 +109,9 @@ public class MaxFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is MAX.
+	 * Returns the identifier of this function which is MAX
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

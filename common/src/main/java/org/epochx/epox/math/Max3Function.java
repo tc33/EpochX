@@ -25,7 +25,9 @@ import org.epochx.epox.Node;
 
 /**
  * A node which performs a comparison of three numeric inputs and
- * returns the greater of the three.
+ * returns the greater of the three
+ * 
+ * @since 2.0
  */
 public class Max3Function extends MaxFunction {
 
@@ -48,7 +50,9 @@ public class Max3Function extends MaxFunction {
 	}
 
 	/**
-	 * Returns the identifier of this function which is MAX3.
+	 * Returns the identifier of this function which is MAX3
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

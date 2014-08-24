@@ -27,16 +27,17 @@ import org.epochx.tools.ant.Ant;
 /**
  * This class defines a function which causes an <code>Ant</code> instance to turn
  * right from its current orientation in its landscape. Although named as a
- * function, this node may operate as either a function or a terminal depending
+ * function, this node may operate as either a terminal or non-terminal depending
  * on how the ant is provided. It may optionally be provided at construction, in
  * which case it becomes a terminal which operates on its internal ant.
- * Alternatively, it can require one child node with a data-type of <code>Ant</code>
- * . In this case, when evaluated it will first evaluate its child
- * to obtain its ant.
+ * Alternatively, it can require one child node with a data-type of <code>Ant</code>.
+ * In this case, when evaluated it will first evaluate its child to obtain its ant.
  * 
  * @see AntSkipFunction
  * @see AntMoveFunction
  * @see AntTurnLeftFunction
+ * 
+ * @since 2.0
  */
 public class AntTurnRightFunction extends Node {
 
@@ -85,6 +86,9 @@ public class AntTurnRightFunction extends Node {
 	 * orientation in its landscape. The return type of this function node is 
 	 * <code>Void</code>, and so the value returned from this method is
 	 * undefined.
+	 * 
+	 * @return the return type of this function node is <code>Void</code>, and so
+	 *         the value returned from this method is undefined
 	 */
 	@Override
 	public Void evaluate() {
@@ -100,6 +104,8 @@ public class AntTurnRightFunction extends Node {
 
 	/**
 	 * Returns the identifier of this function which is <code>TURN-RIGHT</code>
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

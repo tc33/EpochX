@@ -25,7 +25,9 @@ import org.epochx.epox.Node;
 
 /**
  * A node which performs a comparison of two numeric inputs and returns
- * the greater of the two.
+ * the greater of the two
+ * 
+ * @since 2.0
  */
 public class Max2Function extends MaxFunction {
 
@@ -47,7 +49,9 @@ public class Max2Function extends MaxFunction {
 	}
 
 	/**
-	 * Returns the identifier of this function which is MAX.
+	 * Returns the identifier of this function which is MAX
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

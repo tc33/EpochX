@@ -27,6 +27,8 @@ import org.epochx.tools.DataTypeUtils;
 /**
  * A node which performs the logical operation of <code>NAND</code>, which is 
  * equivalent to the negation of the conjunction, <code>NOT AND</code>
+ * 
+ * @since 2.0
  */
 public class NandFunction extends Node {
 
@@ -53,6 +55,9 @@ public class NandFunction extends Node {
 	 * is only evaluated if the first had a <code>true</code> value. The result of 
 	 * this method will be <code>true</code> if both children evaluate to 
 	 * <code>false</code>, otherwise it will return <code>false</code>.
+	 * 
+	 * @return <code>true</code> if both children evaluate to <code>false</code> 
+	 * 			otherwise <code>false</code> is returned
 	 */
 	@Override
 	public Boolean evaluate() {
@@ -67,6 +72,8 @@ public class NandFunction extends Node {
 
 	/**
 	 * Returns the identifier of this function which is <code>NAND</code>
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

@@ -31,6 +31,8 @@ import org.epochx.tools.ant.Ant;
  * used. The ant may be provided as a child node, in which case this function's
  * arity becomes 3. Otherwise, the ant must be provided at construction, and is
  * held internally, with the node's arity being 2.
+ * 
+ * @since 2.0
  */
 public class IfFoodAheadFunction extends Node {
 
@@ -100,6 +102,9 @@ public class IfFoodAheadFunction extends Node {
 	 * (non-ant) child node is evaluated. The return type of this function node
 	 * is <code>Void</code>, and so the value returned from this method is
 	 * undefined.
+	 * 
+	 * @return the return type of this function node is <code>Void</code>, and so
+	 *         the value returned from this method is undefined
 	 */
 	@Override
 	public Void evaluate() {
@@ -128,6 +133,8 @@ public class IfFoodAheadFunction extends Node {
 
 	/**
 	 * Returns the identifier of this function which is <code>IF-FOOD-AHEAD</code>
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

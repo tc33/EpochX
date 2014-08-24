@@ -37,6 +37,8 @@ import org.epochx.tools.*;
  * 
  * Addition can be performed between mixed types, with a widening operation
  * performed and the result being of the wider of the two types.
+ * 
+ * @since 2.0
  */
 public class AddFunction extends Node {
 
@@ -63,6 +65,8 @@ public class AddFunction extends Node {
 	 * both must be of numeric type. If necessary, the inputs are widened to
 	 * both be of the same type, then addition is performed and the return value
 	 * will be of that wider type.
+	 * 
+	 * @return the sum of the inputs after evaluating the two children
 	 */
 	@Override
 	public Object evaluate() {
@@ -101,7 +105,9 @@ public class AddFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is ADD.
+	 * Returns the identifier of this function which is ADD
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

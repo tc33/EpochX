@@ -25,9 +25,10 @@ import org.epochx.epox.Node;
 import org.epochx.tools.*;
 
 /**
- * A node which performs the trigonometric function of sine.
+ * A node which performs the trigonometric function of sine
+ * 
+ * @since 2.0
  */
-
 public class SineFunction extends Node {
 
 	/**
@@ -51,6 +52,8 @@ public class SineFunction extends Node {
 	 * result of which must be a numeric type (one of Double, Float, Long,
 	 * Integer). The Sine of this value becomes the result of this
 	 * method as a double value.
+	 * 
+	 * @return sine of the value returned by the child
 	 */
 	@Override
 	public Double evaluate() {
@@ -60,7 +63,9 @@ public class SineFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is SIN.
+	 * Returns the identifier of this function which is SIN
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

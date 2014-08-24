@@ -27,6 +27,8 @@ import org.epochx.tools.*;
 /**
  * A node which performs the reciprocal trigonometric
  * function of secant, called SEC. Secant x is equal to 1/cos x.
+ * 
+ * @since 2.0
  */
 public class SecantFunction extends Node {
 
@@ -51,6 +53,8 @@ public class SecantFunction extends Node {
 	 * result of which must be a numeric type (one of Double, Float, Long,
 	 * Integer). 1 is divided by the cos of this value to give the result as a
 	 * double value.
+	 * 
+	 * @return secant of the value returned by the child
 	 */
 	@Override
 	public Double evaluate() {
@@ -61,6 +65,8 @@ public class SecantFunction extends Node {
 
 	/**
 	 * Returns the identifier of this function which is SEC.
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

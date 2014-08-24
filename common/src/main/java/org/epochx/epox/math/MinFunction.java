@@ -30,12 +30,15 @@ import org.epochx.tools.*;
  * function. This function can have a flexible number of children and as such
  * cannot be parsed by the {@link EpoxParser}, look at using
  * {@link Min2Function} or {@link Min3Function} instead.
+ * 
+ * @since 2.0
  */
 public class MinFunction extends Node {
 
 	/**
 	 * Constructs a MinFunction with the given number of <code>null</code>
 	 * children.
+	 * 
 	 * @param n the number of <code>null</code> children to set this function up
 	 * for.
 	 */
@@ -59,6 +62,8 @@ public class MinFunction extends Node {
 	 * results of which must be numerically typed (any of Double, Float, Long,
 	 * Integer). The smallest of the child values will be returned as the result
 	 * as the widest of the numeric types.
+	 * 
+	 * @return the smallest of the values returned by its child nodes
 	 */
 	@Override
 	public Object evaluate() {
@@ -106,7 +111,9 @@ public class MinFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is MIN.
+	 * Returns the identifier of this function which is MIN
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

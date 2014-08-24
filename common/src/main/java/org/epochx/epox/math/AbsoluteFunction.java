@@ -35,6 +35,8 @@ import org.epochx.tools.*;
  * <li>Float</li>
  * <li>Double</li>
  * </ul>
+ * 
+ * @since 2.0
  */
 public class AbsoluteFunction extends Node {
 
@@ -59,6 +61,8 @@ public class AbsoluteFunction extends Node {
 	 * result of which must be a numeric type (one of Double, Float, Long,
 	 * Integer). The result will be a positive value of equal magnitude to the
 	 * child value. The return type will also be the same as the input type.
+	 * 
+	 * @return a positive value of equal magnitude to its child's value
 	 */
 	@Override
 	public Object evaluate() {
@@ -84,7 +88,9 @@ public class AbsoluteFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is ABS.
+	 * Returns the identifier of this function which is ABS
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

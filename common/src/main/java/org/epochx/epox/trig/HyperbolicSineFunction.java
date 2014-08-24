@@ -26,7 +26,9 @@ import org.epochx.tools.*;
 
 /**
  * A node which performs the hyperbolic trigonometric
- * function of hyperbolic sine, called SINH.
+ * function of hyperbolic sine, called SINH
+ * 
+ * @since 2.0
  */
 public class HyperbolicSineFunction extends Node {
 
@@ -51,6 +53,8 @@ public class HyperbolicSineFunction extends Node {
 	 * result of which must be a numeric type (one of Double, Float, Long,
 	 * Integer). The hyperbolic sine of this value becomes the result of this
 	 * method as a double value.
+	 * 
+	 * @return hyperbolic sine of the value returned by the child
 	 */
 	@Override
 	public Double evaluate() {
@@ -60,7 +64,9 @@ public class HyperbolicSineFunction extends Node {
 	}
 
 	/**
-	 * Returns the identifier of this function which is SINH.
+	 * Returns the identifier of this function which is SINH
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

@@ -26,6 +26,8 @@ import org.epochx.tools.DataTypeUtils;
 
 /**
  * A node which represents the conditional if-then-else statement
+ * 
+ * @since 2.0
  */
 public class IfFunction extends Node {
 
@@ -57,6 +59,9 @@ public class IfFunction extends Node {
 	 * which becomes the result of this function. If the first child
 	 * evaluated to a false value then the third child is evaluated and its
 	 * result returned.
+	 * 
+	 * @return the result of evaluating either the second or third child 
+	 * 			depending on the value that the first child evaluates to
 	 */
 	@Override
 	public Object evaluate() {
@@ -71,6 +76,8 @@ public class IfFunction extends Node {
 
 	/**
 	 * Returns the identifier of this function which is <code>IF</code>
+	 * 
+	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {

@@ -20,30 +20,32 @@
  * The latest version is available from: http://www.epochx.org
  */
 
-package org.epochx.gr.stats;
+package org.epochx.cfg.stats;
 
 import org.epochx.event.GenerationEvent.EndGeneration;
-import org.epochx.event.stat.AbstractStat;
+import org.epochx.event.stat.*;
 
 /**
- * A stat that returns the maximum depth of all the parse trees in the 
- * population from the previous completed generation. All individuals in the 
- * population must be instances of <code>GRIndividual</code>.
+ * A stat that returns the standard deviation of the mean depth of the parse 
+ * trees in the population from the previous completed generation. All 
+ * individuals in the population must be instances of <code>CFGIndividual</code>.
  * 
- * @see GenerationMinimumDepth
+ * @see GenerationAverageDepthError
+ * @see GenerationAverageDepth
  * 
  * @since 2.0
  */
-public class GenerationMaximumDepth extends AbstractStat<EndGeneration> {
+public class GenerationStandardDeviationDepth extends AbstractStat<EndGeneration> {
 
-	private int max;
+	private double stdev;
 
 	/**
-	 * Constructs a <code>GenerationMaximumDepth</code> stat and registers its
-	 * dependencies
+	 * Constructs a <code>GenerationStandardDeviationDepth</code> stat and registers
+	 * its dependencies
 	 */
-	public GenerationMaximumDepth() {
-		super(GenerationDepths.class);
+	@SuppressWarnings("unchecked")
+	public GenerationStandardDeviationDepth() {
+		super(GenerationDepths.class, GenerationAverageDepth.class);
 	}
 
 	/**
@@ -57,22 +59,26 @@ public class GenerationMaximumDepth extends AbstractStat<EndGeneration> {
 	@Override
 	public void refresh(EndGeneration event) {
 		int[] depths = AbstractStat.get(GenerationDepths.class).getDepths();
-		max = -1;
-
+		double average = AbstractStat.get(GenerationAverageDepth.class).getAverage();
+		
+		// Sum the squared differences
+		double sqDiff = 0.0;
 		for (int depth: depths) {
-			if (depth > max) {
-				max = depth;
-			}
+			sqDiff += Math.pow(depth - average, 2);
 		}
+
+		// Take the square root of the average
+		stdev = Math.sqrt(sqDiff / depths.length);
 	}
 	
 	/**
-	 * Returns the maximum depth of the parse trees in the previous generation
+	 * Returns the standard deviation of the mean depth of the parse trees in
+	 * the previous generation
 	 * 
-	 * @return the maximum depth of the parse trees
+	 * @return the standard deviation of the mean depth of the parse trees
 	 */
-	public int getMaximum() {
-		return max;
+	public double getStandardDeviation() {
+		return stdev;
 	}
 
 	/**
@@ -82,6 +88,6 @@ public class GenerationMaximumDepth extends AbstractStat<EndGeneration> {
 	 */
 	@Override
 	public String toString() {
-		return Integer.toString(max);
+		return Double.toString(stdev);
 	}
 }

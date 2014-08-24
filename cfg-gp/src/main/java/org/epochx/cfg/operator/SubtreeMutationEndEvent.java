@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.gr.operator;
+package org.epochx.cfg.operator;
 
 import org.epochx.Individual;
 import org.epochx.event.OperatorEvent;

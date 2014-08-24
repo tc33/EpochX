@@ -20,31 +20,32 @@
  * The latest version is available from: http://www.epochx.org
  */
 
-package org.epochx.gr.stats;
+package org.epochx.cfg.stats;
 
+import org.epochx.*;
 import org.epochx.event.GenerationEvent.EndGeneration;
 import org.epochx.event.stat.AbstractStat;
 
 /**
- * A stat that returns the mean depth of the parse trees in the population
- * from the previous completed generation. All individuals in the population 
- * must be instances of <code>GRIndividual</code>.
+ * A stat that returns the standard error of the mean depth, as calculated by 
+ * the {@link GenerationAverageDepth} stat. All individuals in the population 
+ * must be instances of <code>CFGIndividual</code>.
  * 
- * @see GenerationAverageDepthError
+ * @see GenerationAverageDepth
  * @see GenerationStandardDeviationDepth
  * 
  * @since 2.0
  */
-public class GenerationAverageDepth extends AbstractStat<EndGeneration> {
+public class GenerationAverageDepthError extends AbstractStat<EndGeneration> {
 
-	private double average;
+	private double error;
 
 	/**
-	 * Constructs a <code>GenerationAverageDepth</code> stat and registers its
+	 * Constructs a <code>GenerationAverageDepthError</code> stat and registers its 
 	 * dependencies
 	 */
-	public GenerationAverageDepth() {
-		super(GenerationDepths.class);
+	public GenerationAverageDepthError() {
+		super(GenerationStandardDeviationDepth.class);
 	}
 
 	/**
@@ -57,23 +58,20 @@ public class GenerationAverageDepth extends AbstractStat<EndGeneration> {
 	 */
 	@Override
 	public void refresh(EndGeneration event) {
-		int[] depths = AbstractStat.get(GenerationDepths.class).getDepths();
-		average = 0;
-
-		for (int depth: depths) {
-			average += depth;
-		}
-
-		average /= depths.length;
+		double stdev = AbstractStat.get(GenerationStandardDeviationDepth.class).getStandardDeviation();
+		Population population = event.getPopulation();
+		
+		error = stdev / Math.sqrt(population.size());
 	}
 
 	/**
-	 * Returns the mean depth of the parse trees in the previous generation
+	 * Returns the standard error of the mean depth of the parse trees in the 
+	 * previous generation
 	 * 
-	 * @return the mean depth of the parse trees
+	 * @return the error of the mean depth of the parse trees
 	 */
-	public double getAverage() {
-		return average;
+	public double getError() {
+		return error;
 	}
 
 	/**
@@ -83,6 +81,6 @@ public class GenerationAverageDepth extends AbstractStat<EndGeneration> {
 	 */
 	@Override
 	public String toString() {
-		return Double.toString(average);
+		return Double.toString(error);
 	}
 }

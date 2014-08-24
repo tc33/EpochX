@@ -19,17 +19,17 @@
  * 
  * The latest version is available from: http:/www.epochx.org
  */
-package org.epochx.gr.init;
+package org.epochx.cfg.init;
 
 import org.epochx.InitialisationMethod;
 
 /**
- * Initialisation method for <code>GRIndividual</code>s. It does not define any 
- * methods, but initialisation procedures that generate <code>GRIndividual</code> 
+ * Initialisation method for <code>CFGIndividual</code>s. It does not define any 
+ * methods, but initialisation procedures that generate <code>CFGIndividual</code> 
  * objects should implement this interface.
  * 
  * @since 2.0
  */
-public interface GRInitialisation extends InitialisationMethod {
+public interface CFGInitialisation extends InitialisationMethod {
 
 }

@@ -20,34 +20,31 @@
  * The latest version is available from: http://www.epochx.org
  */
 
-package org.epochx.gr.stats;
+package org.epochx.cfg.stats;
 
-import java.util.Arrays;
-
-import org.epochx.Individual;
-import org.epochx.Population;
 import org.epochx.event.GenerationEvent.EndGeneration;
 import org.epochx.event.stat.AbstractStat;
-import org.epochx.gr.GRIndividual;
-import org.epochx.grammar.NonTerminalSymbol;
 
 /**
- * A stat that returns the depth of all parse trees in the population from
- * the previous generation. All individuals in the population must be instances 
- * of <code>GRIndividual</code>.
+ * A stat that returns the mean depth of the parse trees in the population
+ * from the previous completed generation. All individuals in the population 
+ * must be instances of <code>CFGIndividual</code>.
+ * 
+ * @see GenerationAverageDepthError
+ * @see GenerationStandardDeviationDepth
  * 
  * @since 2.0
  */
-public class GenerationDepths extends AbstractStat<EndGeneration> {
+public class GenerationAverageDepth extends AbstractStat<EndGeneration> {
 
-	private int[] depths;
+	private double average;
 
 	/**
-	 * Constructs a <code>GenerationDepths</code> stat and registers 
-	 * its dependencies
+	 * Constructs a <code>GenerationAverageDepth</code> stat and registers its
+	 * dependencies
 	 */
-	public GenerationDepths() {
-		super(NO_DEPENDENCIES);
+	public GenerationAverageDepth() {
+		super(GenerationDepths.class);
 	}
 
 	/**
@@ -60,31 +57,23 @@ public class GenerationDepths extends AbstractStat<EndGeneration> {
 	 */
 	@Override
 	public void refresh(EndGeneration event) {
-		Population population = event.getPopulation();
-		depths = new int[population.size()];
-		int index = 0;
+		int[] depths = AbstractStat.get(GenerationDepths.class).getDepths();
+		average = 0;
 
-		for (Individual individual: population) {
-			if (individual instanceof GRIndividual) {
-				NonTerminalSymbol parseTree = ((GRIndividual) individual).getParseTree();
-				int depth = -1;
-				if (parseTree != null) {
-					depth = parseTree.getDepth();
-				}
-				
-				depths[index++] = depth;
-			}
+		for (int depth: depths) {
+			average += depth;
 		}
+
+		average /= depths.length;
 	}
-	
+
 	/**
-	 * Returns an array of the depths of each parse tree in the population 
-	 * from the previous generation
+	 * Returns the mean depth of the parse trees in the previous generation
 	 * 
-	 * @return the depths of each parse tree in the previous generation
+	 * @return the mean depth of the parse trees
 	 */
-	public int[] getDepths() {
-		return depths;
+	public double getAverage() {
+		return average;
 	}
 
 	/**
@@ -94,6 +83,6 @@ public class GenerationDepths extends AbstractStat<EndGeneration> {
 	 */
 	@Override
 	public String toString() {
-		return Arrays.toString(depths);
+		return Double.toString(average);
 	}
 }

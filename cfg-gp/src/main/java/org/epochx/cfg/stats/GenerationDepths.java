@@ -20,30 +20,34 @@
  * The latest version is available from: http://www.epochx.org
  */
 
-package org.epochx.gr.stats;
+package org.epochx.cfg.stats;
 
+import java.util.Arrays;
+
+import org.epochx.Individual;
+import org.epochx.Population;
+import org.epochx.cfg.CFGIndividual;
 import org.epochx.event.GenerationEvent.EndGeneration;
 import org.epochx.event.stat.AbstractStat;
+import org.epochx.grammar.NonTerminalSymbol;
 
 /**
- * A stat that returns the minimum depth of all the parse trees in the 
- * population from the previous completed generation. All individuals in the 
- * population must be instances of <code>GRIndividual</code>.
- * 
- * @see GenerationMaximumDepth
+ * A stat that returns the depth of all parse trees in the population from
+ * the previous generation. All individuals in the population must be instances 
+ * of <code>CFGIndividual</code>.
  * 
  * @since 2.0
  */
-public class GenerationMinimumDepth extends AbstractStat<EndGeneration> {
+public class GenerationDepths extends AbstractStat<EndGeneration> {
 
-	private int min;
+	private int[] depths;
 
 	/**
-	 * Constructs a <code>GenerationMinimumDepth</code> stat and registers its
-	 * dependencies
+	 * Constructs a <code>GenerationDepths</code> stat and registers 
+	 * its dependencies
 	 */
-	public GenerationMinimumDepth() {
-		super(GenerationDepths.class);
+	public GenerationDepths() {
+		super(NO_DEPENDENCIES);
 	}
 
 	/**
@@ -56,23 +60,31 @@ public class GenerationMinimumDepth extends AbstractStat<EndGeneration> {
 	 */
 	@Override
 	public void refresh(EndGeneration event) {
-		int[] depths = AbstractStat.get(GenerationDepths.class).getDepths();
-		min = Integer.MAX_VALUE;
+		Population population = event.getPopulation();
+		depths = new int[population.size()];
+		int index = 0;
 
-		for (int depth: depths) {
-			if (depth < min) {
-				min = depth;
+		for (Individual individual: population) {
+			if (individual instanceof CFGIndividual) {
+				NonTerminalSymbol parseTree = ((CFGIndividual) individual).getParseTree();
+				int depth = -1;
+				if (parseTree != null) {
+					depth = parseTree.getDepth();
+				}
+				
+				depths[index++] = depth;
 			}
 		}
 	}
 	
 	/**
-	 * Returns the minimum depth of the parse trees in the previous generation
+	 * Returns an array of the depths of each parse tree in the population 
+	 * from the previous generation
 	 * 
-	 * @return the minimum depth of the parse trees
+	 * @return the depths of each parse tree in the previous generation
 	 */
-	public int getMinimum() {
-		return min;
+	public int[] getDepths() {
+		return depths;
 	}
 
 	/**
@@ -82,6 +94,6 @@ public class GenerationMinimumDepth extends AbstractStat<EndGeneration> {
 	 */
 	@Override
 	public String toString() {
-		return Integer.toString(min);
+		return Arrays.toString(depths);
 	}
 }

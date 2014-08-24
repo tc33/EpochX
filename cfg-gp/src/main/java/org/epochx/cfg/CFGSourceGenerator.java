@@ -19,22 +19,22 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.gr;
+package org.epochx.cfg;
 
 import org.epochx.grammar.NonTerminalSymbol;
 import org.epochx.source.SourceGenerator;
 
 
 /**
- * Converts <code>GRIndividual</code>s into source code
+ * Converts <code>CFGIndividual</code>s into source code
  * 
  * @since 2.0
  */
-public class GRSourceGenerator implements SourceGenerator<GRIndividual> {
+public class CFGSourceGenerator implements SourceGenerator<CFGIndividual> {
 
 	/**
 	 * Returns the source code that the given individual represents. The source of a 
-	 * <code>GRIndividual</code> is the string representation of its parse tree, which
+	 * <code>CFGIndividual</code> is the string representation of its parse tree, which
 	 * typically consists of the terminal nodes output in sequence following a depth-first
 	 * traversal. If the given individual has no parse tree set then <code>null</code> 
 	 * will be returned.
@@ -44,7 +44,7 @@ public class GRSourceGenerator implements SourceGenerator<GRIndividual> {
 	 * if the parse tree is not set 
 	 */
 	@Override
-	public String getSource(GRIndividual individual) {
+	public String getSource(CFGIndividual individual) {
 		NonTerminalSymbol parseTree = individual.getParseTree();
 		
 		if (parseTree == null) {

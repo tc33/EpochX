@@ -20,32 +20,30 @@
  * The latest version is available from: http://www.epochx.org
  */
 
-package org.epochx.gr.stats;
+package org.epochx.cfg.stats;
 
-import org.epochx.*;
 import org.epochx.event.GenerationEvent.EndGeneration;
 import org.epochx.event.stat.AbstractStat;
 
 /**
- * A stat that returns the standard error of the mean depth, as calculated by 
- * the {@link GenerationAverageDepth} stat. All individuals in the population 
- * must be instances of <code>GRIndividual</code>.
+ * A stat that returns the maximum depth of all the parse trees in the 
+ * population from the previous completed generation. All individuals in the 
+ * population must be instances of <code>CFGIndividual</code>.
  * 
- * @see GenerationAverageDepth
- * @see GenerationStandardDeviationDepth
+ * @see GenerationMinimumDepth
  * 
  * @since 2.0
  */
-public class GenerationAverageDepthError extends AbstractStat<EndGeneration> {
+public class GenerationMaximumDepth extends AbstractStat<EndGeneration> {
 
-	private double error;
+	private int max;
 
 	/**
-	 * Constructs a <code>GenerationAverageDepthError</code> stat and registers its 
+	 * Constructs a <code>GenerationMaximumDepth</code> stat and registers its
 	 * dependencies
 	 */
-	public GenerationAverageDepthError() {
-		super(GenerationStandardDeviationDepth.class);
+	public GenerationMaximumDepth() {
+		super(GenerationDepths.class);
 	}
 
 	/**
@@ -58,20 +56,23 @@ public class GenerationAverageDepthError extends AbstractStat<EndGeneration> {
 	 */
 	@Override
 	public void refresh(EndGeneration event) {
-		double stdev = AbstractStat.get(GenerationStandardDeviationDepth.class).getStandardDeviation();
-		Population population = event.getPopulation();
-		
-		error = stdev / Math.sqrt(population.size());
-	}
+		int[] depths = AbstractStat.get(GenerationDepths.class).getDepths();
+		max = -1;
 
+		for (int depth: depths) {
+			if (depth > max) {
+				max = depth;
+			}
+		}
+	}
+	
 	/**
-	 * Returns the standard error of the mean depth of the parse trees in the 
-	 * previous generation
+	 * Returns the maximum depth of the parse trees in the previous generation
 	 * 
-	 * @return the error of the mean depth of the parse trees
+	 * @return the maximum depth of the parse trees
 	 */
-	public double getError() {
-		return error;
+	public int getMaximum() {
+		return max;
 	}
 
 	/**
@@ -81,6 +82,6 @@ public class GenerationAverageDepthError extends AbstractStat<EndGeneration> {
 	 */
 	@Override
 	public String toString() {
-		return Double.toString(error);
+		return Integer.toString(max);
 	}
 }

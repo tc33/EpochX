@@ -19,7 +19,7 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.gr;
+package org.epochx.cfg;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.epochx.*;
@@ -27,7 +27,7 @@ import org.epochx.Config.ConfigKey;
 import org.epochx.grammar.*;
 
 /**
- * A <code>GRIndividual</code> is a candidate solution which is represented by a parse tree 
+ * A <code>CFGIndividual</code> is a candidate solution which is represented by a parse tree 
  * 
  * <p>
  * Note: this class has a natural ordering that may be inconsistent with
@@ -35,7 +35,7 @@ import org.epochx.grammar.*;
  * 
  * @since 2.0
  */
-public class GRIndividual extends AbstractIndividual {
+public class CFGIndividual extends AbstractIndividual {
 
 	private static final long serialVersionUID = -2995040590619051685L;
 
@@ -48,18 +48,18 @@ public class GRIndividual extends AbstractIndividual {
 	private NonTerminalSymbol parseTree;
 
 	/**
-	 * Constructs a GR individual with an initial parse tree of <code>null</code>
+	 * Constructs a CFG individual with an initial parse tree of <code>null</code>
 	 */
-	public GRIndividual() {
+	public CFGIndividual() {
 		this(null);
 	}
 	
 	/**
-	 * Constructs a GR individual represented by the given parse tree
+	 * Constructs a CFG individual represented by the given parse tree
 	 * 
 	 * @param parseTree the root node of a parse tree
 	 */
-	public GRIndividual(NonTerminalSymbol parseTree) {
+	public CFGIndividual(NonTerminalSymbol parseTree) {
 		this.parseTree = parseTree;
 	}
 
@@ -87,11 +87,11 @@ public class GRIndividual extends AbstractIndividual {
 	 * Creates and returns a clone of this individual. The parse tree and fitness are
 	 * copied.
 	 * 
-	 * @return a copy of this <code>GRIndividual</code> instance
+	 * @return a copy of this <code>CFGIndividual</code> instance
 	 */
 	@Override
-	public GRIndividual clone() {
-		GRIndividual clone = (GRIndividual) super.clone();
+	public CFGIndividual clone() {
+		CFGIndividual clone = (CFGIndividual) super.clone();
 
 		if (parseTree == null) {
 			clone.parseTree = null;
@@ -119,14 +119,14 @@ public class GRIndividual extends AbstractIndividual {
 
 	/**
 	 * Compares the given object to this instance for equality. Equivalence is
-	 * defined as them both being instances of <code>GRIndividual</code> and
+	 * defined as them both being instances of <code>CFGIndividual</code> and
 	 * having equal parse trees, according to <code>getParseTree().equals(obj)</code>.
 	 * 
 	 * @return true if the object is an equivalent individual, false otherwise
 	 */
 	@Override
 	public boolean equals(Object o) {
-		GRIndividual individual = (GRIndividual) o;
+		CFGIndividual individual = (CFGIndividual) o;
 
 		return ObjectUtils.equals(parseTree, individual.parseTree);
 	}

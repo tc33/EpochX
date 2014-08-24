@@ -19,29 +19,27 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.gr.operator;
+package org.epochx.cfg.operator;
 
+import static org.epochx.Config.Template.TEMPLATE;
 import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
-import static org.epochx.grammar.Grammar.GRAMMAR;
 
-import java.util.List;
+import java.util.*;
 
 import org.epochx.AbstractOperator;
 import org.epochx.Config;
 import org.epochx.Individual;
 import org.epochx.RandomSequence;
 import org.epochx.Config.ConfigKey;
-import org.epochx.Config.Template;
+import org.epochx.cfg.CFGIndividual;
 import org.epochx.event.ConfigEvent;
 import org.epochx.event.EventManager;
 import org.epochx.event.Listener;
 import org.epochx.event.OperatorEvent.EndOperator;
-import org.epochx.gr.GRIndividual;
-import org.epochx.gr.init.GrowInitialisation;
 import org.epochx.grammar.*;
 
 /**
- * This class performs a subtree mutation on a <code>GRIndividual</code>, as described
+ * This class performs a subtree crossover on a <code>CFGIndividual</code>, as described
  * by Whigham in his paper "Grammatically-based genetic programming".
  * 
  * <p>
@@ -51,30 +49,27 @@ import org.epochx.grammar.*;
  * 
  * @since 2.0
  */
-public class SubtreeMutation extends AbstractOperator implements Listener<ConfigEvent> {
+public class SubtreeCrossover extends AbstractOperator implements Listener<ConfigEvent> {
 
 	/**
 	 * The key for setting and retrieving the probability of this operator being applied
 	 */
 	public static final ConfigKey<Double> PROBABILITY = new ConfigKey<Double>();
-	
-	private final GrowInitialisation grower;
-	
+
 	// Configuration settings
 	private RandomSequence random;
 	private Double probability;
-	private Grammar grammar;
 
 	/**
-	 * Constructs a <code>SubtreeMutation</code> with control parameters
+	 * Constructs a <code>SubtreeCrossover</code> with control parameters
 	 * automatically loaded from the config
 	 */
-	public SubtreeMutation() {
+	public SubtreeCrossover() {
 		this(true);
 	}
 
 	/**
-	 * Constructs a <code>SubtreeMutation</code> with control parameters initially
+	 * Constructs a <code>SubtreeCrossover</code> with control parameters initially
 	 * loaded from the config. If the <code>autoConfig</code> argument is set to
 	 * <code>true</code> then the configuration will be automatically updated when
 	 * the config is modified.
@@ -82,9 +77,7 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 	 * @param autoConfig whether this operator should automatically update its
 	 *        configuration settings from the config
 	 */
-	public SubtreeMutation(boolean autoConfig) {
-		grower = new GrowInitialisation(false);
-		
+	public SubtreeCrossover(boolean autoConfig) {
 		setup();
 
 		if (autoConfig) {
@@ -99,15 +92,11 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 	 * <ul>
 	 * <li>{@link RandomSequence#RANDOM_SEQUENCE}
 	 * <li>{@link #PROBABILITY}
-	 * <li>{@link Grammar#GRAMMAR}
 	 * </ul>
 	 */
 	protected void setup() {
 		random = Config.getInstance().get(RANDOM_SEQUENCE);
 		probability = Config.getInstance().get(PROBABILITY);
-
-		grower.setRandomSequence(random);
-		grower.setGrammar(grammar);
 	}
 
 	/**
@@ -119,87 +108,98 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 	 */
 	@Override
 	public void onEvent(ConfigEvent event) {
-		if (event.isKindOf(Template.TEMPLATE, RANDOM_SEQUENCE, PROBABILITY, GRAMMAR)) {
+		if (event.isKindOf(TEMPLATE, RANDOM_SEQUENCE, PROBABILITY)) {
 			setup();
 		}
 	}
 
 	/**
-	 * Performs a subtree mutation operation on the specified parent individual.
+	 * Performs a subtree crossover operation on the specified parent individuals.
 	 * 
 	 * <p>
-	 * A <code>NonTerminalSymbol</code> is randomly selected as the mutation point
-	 * in the individual's parse tree and the subtree rooted at that point is exchanged
-	 * with a new randomly generated subtree.
+	 * A <code>NonTerminalSymbol</code> is randomly selected as the crossover point
+	 * in each individual's parse tree and the two subtrees rooted at those nodes are
+	 * exchanged.
 	 * 
 	 * @param event the <code>EndOperator</code> event to be filled with information
 	 *        about this operation
-	 * @param parents an array containing one individual to undergo mutation. The 
-	 * 		  individual must be an instance of <code>GRIndividual</code>.
-	 * @return an array containing one <code>GRIndividual</code>s that is the
-	 *         result of the mutation
+	 * @param parents an array of two individuals to undergo subtree crossover. Both 
+	 * 		  individuals must be instances of <code>CFGIndividual</code>.
+	 * @return an array containing two <code>CFGIndividual</code>s that are the
+	 *        result of the crossover
 	 */
 	@Override
-	public GRIndividual[] perform(EndOperator event, Individual ... parents) {
-		GRIndividual child = (GRIndividual) parents[0];
+	public CFGIndividual[] perform(EndOperator event, Individual ... parents) {
+		CFGIndividual child1 = (CFGIndividual) parents[0];
+		CFGIndividual child2 = (CFGIndividual) parents[1];
 
-		NonTerminalSymbol parseTree = child.getParseTree();
+		NonTerminalSymbol parseTree1 = child1.getParseTree();
+		NonTerminalSymbol parseTree2 = child2.getParseTree();
 
-		// This is v.inefficient because we have to fly up and down the tree lots of times.
-		List<Integer> nonTerminals = parseTree.getNonTerminalIndexes();
+		List<NonTerminalSymbol> nonTerminals1 = parseTree1.getNonTerminalSymbols();
+		List<NonTerminalSymbol> nonTerminals2 = parseTree2.getNonTerminalSymbols();
 
-		// Choose a node to change.
-		int point = nonTerminals.get(random.nextInt(nonTerminals.size()));
-		NonTerminalSymbol original = (NonTerminalSymbol) parseTree.getNthSymbol(point);
-		
-		int originalDepth = original.getDepth();
+		// Choose a non-terminal at random
+		int point1 = random.nextInt(nonTerminals1.size());
+		NonTerminalSymbol subtree1 = nonTerminals1.get(point1);
 
-		// Add mutation into the end event
-		((SubtreeMutationEndEvent) event).setMutationPoint(point);
-
-		// Construct a new subtree from that node's grammar rule
-		//TODO Should allow any depth down to the maximum rather than the original subtrees depth
-		GrammarRule rule = original.getGrammarRule();
-		NonTerminalSymbol subtree = grower.growParseTree(originalDepth, rule);
-
-		// Add subtree into the end event
-		((SubtreeMutationEndEvent) event).setSubtree(subtree);
-
-		// Replace subtree
-		if (point == 0) {
-			child.setParseTree(subtree);
-		} else {
-			parseTree.setNthSymbol(point, subtree);
+		// Generate a list of matching non-terminals from the second program.
+		List<NonTerminalSymbol> matchingNonTerminals = new ArrayList<NonTerminalSymbol>();
+		for (NonTerminalSymbol nt: nonTerminals2) {
+			if (nt.getGrammarRule().equals(subtree1.getGrammarRule())) {
+				matchingNonTerminals.add(nt);
+			}
 		}
 
-		return new GRIndividual[]{child};
+		if (matchingNonTerminals.isEmpty()) {
+			// No valid points in second program, cancel crossover.
+			return null;
+		} else {
+			// Randomly choose a second point out of the matching non-terminals.
+			int point2 = random.nextInt(matchingNonTerminals.size());
+			NonTerminalSymbol subtree2 = matchingNonTerminals.get(point2);
+
+			// Add crossover points to the end event
+			((SubtreeCrossoverEndEvent) event).setCrossoverPoint1(point1);
+			((SubtreeCrossoverEndEvent) event).setCrossoverPoint1(point2);
+
+			// Swap the non-terminals' children.
+			List<Symbol> temp = subtree1.getChildren();
+			subtree1.setChildren(subtree2.getChildren());
+			subtree2.setChildren(temp);
+
+			// Add subtrees into the end event
+			((SubtreeCrossoverEndEvent) event).setSubtree1(subtree1);
+			((SubtreeCrossoverEndEvent) event).setSubtree2(subtree2);
+		}
+
+		return new CFGIndividual[]{child1, child2};
 	}
 
 	/**
-	 * Returns a <code>SubtreeMutationEndEvent</code> with the operator and 
-	 * parent set
+	 * Returns a <code>SubtreeCrossoverEndEvent</code> with the operator and parents set
 	 * 
-	 * @param parent the individual that was operated on
+	 * @param parents the parents that were operated on
 	 * @return operator end event
 	 */
 	@Override
-	protected SubtreeMutationEndEvent getEndEvent(Individual ... parent) {
-		return new SubtreeMutationEndEvent(this, parent);
+	protected SubtreeCrossoverEndEvent getEndEvent(Individual ... parents) {
+		return new SubtreeCrossoverEndEvent(this, parents);
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 * 
 	 * <p>
-	 * Subtree mutation operates on one individual.
+	 * Subtree crossover operates on 2 individuals.
 	 * 
 	 * @return {@inheritDoc}
 	 */
 	@Override
 	public int inputSize() {
-		return 1;
+		return 2;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -238,30 +238,5 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 	 */
 	public void setRandomSequence(RandomSequence random) {
 		this.random = random;
-		
-		grower.setRandomSequence(random);
-	}
-	
-	/**
-	 * Returns the grammar that any mutated <code>GRIndividual</code>s will satisfy with
-	 * full parse trees
-	 * 
-	 * @return the currently set grammar
-	 */
-	public Grammar getGrammar() {
-		return grammar;
-	}
-
-	/**
-	 * Sets the grammar to be satisfied by the parse trees of the mutated <code>GRIndividual</code>s. 
-	 * If automatic configuration is enabled then any value set here will be overwritten by the 
-	 * {@link Grammar#GRAMMAR} configuration setting on the next config event.
-	 * 
-	 * @param grammar the grammar to set
-	 */
-	public void setGrammar(Grammar grammar) {
-		this.grammar = grammar;
-		
-		grower.setGrammar(grammar);
 	}
 }

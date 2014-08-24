@@ -19,14 +19,14 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.gr.init;
+package org.epochx.cfg.init;
 
 import static org.epochx.Config.Template.TEMPLATE;
 import static org.epochx.Population.SIZE;
 import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
-import static org.epochx.gr.GRIndividual.MAXIMUM_DEPTH;
-import static org.epochx.gr.init.RampedHalfAndHalfInitialisation.Method.FULL;
-import static org.epochx.gr.init.RampedHalfAndHalfInitialisation.Method.GROW;
+import static org.epochx.cfg.CFGIndividual.MAXIMUM_DEPTH;
+import static org.epochx.cfg.init.RampedHalfAndHalfInitialisation.Method.FULL;
+import static org.epochx.cfg.init.RampedHalfAndHalfInitialisation.Method.GROW;
 import static org.epochx.grammar.Grammar.GRAMMAR;
 
 import org.epochx.Config;
@@ -34,16 +34,16 @@ import org.epochx.Config.ConfigKey;
 import org.epochx.InitialisationMethod;
 import org.epochx.Population;
 import org.epochx.RandomSequence;
+import org.epochx.cfg.CFGIndividual;
 import org.epochx.event.ConfigEvent;
 import org.epochx.event.EventManager;
 import org.epochx.event.InitialisationEvent;
 import org.epochx.event.Listener;
-import org.epochx.gr.GRIndividual;
 import org.epochx.grammar.Grammar;
 
 /**
  * Initialisation implementation which uses a combination of full and grow
- * initialisers to create an initial population of <code>GRIndividual</code>s.
+ * initialisers to create an initial population of <code>CFGIndividual</code>s.
  * 
  * <p>
  * Depths are equally split between depths from the minimum initial depth
@@ -68,7 +68,7 @@ import org.epochx.grammar.Grammar;
  * 
  * @since 2.0
  */
-public class RampedHalfAndHalfInitialisation implements GRInitialisation, Listener<ConfigEvent> {
+public class RampedHalfAndHalfInitialisation implements CFGInitialisation, Listener<ConfigEvent> {
 
 	/**
 	 * The key for setting and retrieving the smallest maximum depth setting
@@ -137,7 +137,7 @@ public class RampedHalfAndHalfInitialisation implements GRInitialisation, Listen
 	 * <li>{@link InitialisationMethod#ALLOW_DUPLICATES} (default: <code>true</code>)
 	 * <li>{@link Grammar#GRAMMAR}
 	 * <li>{@link #RAMPING_START_DEPTH}
-	 * <li>{@link GRIndividual#MAXIMUM_DEPTH}
+	 * <li>{@link CFGIndividual#MAXIMUM_DEPTH}
 	 * </ul>
 	 */
 	protected void setup() {
@@ -163,7 +163,7 @@ public class RampedHalfAndHalfInitialisation implements GRInitialisation, Listen
 	}
 	
 	/**
-	 * Creates a new population of <code>GRIndividual</code>s. Will use grow initialisation to construct half 
+	 * Creates a new population of <code>CFGIndividual</code>s. Will use grow initialisation to construct half 
 	 * the population and full to create the other half. If the population size is an odd number then the extra 
 	 * individual will be initialised with grow.
 	 * 
@@ -202,7 +202,7 @@ public class RampedHalfAndHalfInitialisation implements GRInitialisation, Listen
 			int depth = (int) Math.floor((population.size() / individualsPerDepth) + currentDepth);
 
 			// Grow on even numbers, full on odd
-			GRIndividual individual;
+			CFGIndividual individual;
 
 			do {
 				if ((i % 2) == 0) {
@@ -225,13 +225,13 @@ public class RampedHalfAndHalfInitialisation implements GRInitialisation, Listen
 	}
 	
 	/**
-	 * Constructs a new <code>GRIndividual</code> instance using either a full or grow 
+	 * Constructs a new <code>CFGIndividual</code> instance using either a full or grow 
 	 * initialisation procedure, selected at random
 	 * 
 	 * @return a new individual
 	 */
 	@Override
-	public GRIndividual createIndividual() {
+	public CFGIndividual createIndividual() {
 		if (random.nextBoolean()) {
 			return grow.createIndividual();
 		} else {
@@ -289,7 +289,7 @@ public class RampedHalfAndHalfInitialisation implements GRInitialisation, Listen
 	}
 
 	/**
-	 * Returns the grammar that the <code>GRIndividual</code>s will satisfy with
+	 * Returns the grammar that the <code>CFGIndividual</code>s will satisfy with
 	 * their parse trees
 	 * 
 	 * @return the currently set grammar
@@ -300,7 +300,7 @@ public class RampedHalfAndHalfInitialisation implements GRInitialisation, Listen
 
 	/**
 	 * Sets the grammar to be satisfied by the full parse trees of the new
-	 * <code>GRIndividual</code>s. If automatic configuration is enabled then any
+	 * <code>CFGIndividual</code>s. If automatic configuration is enabled then any
 	 * value set here will be overwritten by the {@link Grammar#GRAMMAR}
 	 * configuration setting on the next config event.
 	 * 
@@ -348,7 +348,7 @@ public class RampedHalfAndHalfInitialisation implements GRInitialisation, Listen
 	 * Sets the depth that the maximum depth will be ramped up to when a
 	 * population is created with the <code>createPopulation</code> method. If
 	 * automatic configuration is enabled, then any value set here will be 
-	 * overwritten by the {@link GEIndividual#MAXIMUM_DEPTH} setting.
+	 * overwritten by the {@link CFGIndividual#MAXIMUM_DEPTH} setting.
 	 * 
 	 * @param endDepth the maximum setting to ramp the depth to
 	 */

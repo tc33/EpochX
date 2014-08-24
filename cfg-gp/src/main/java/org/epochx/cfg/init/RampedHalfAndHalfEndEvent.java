@@ -19,11 +19,11 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.gr.init;
+package org.epochx.cfg.init;
 
 import org.epochx.Population;
+import org.epochx.cfg.init.RampedHalfAndHalfInitialisation.Method;
 import org.epochx.event.InitialisationEvent;
-import org.epochx.gr.init.RampedHalfAndHalfInitialisation.Method;
 
 /**
  * An event fired at the end of a ramped half-and-half population initialisation

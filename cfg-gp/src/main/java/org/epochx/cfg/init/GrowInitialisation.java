@@ -19,12 +19,12 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.gr.init;
+package org.epochx.cfg.init;
 
 import static org.epochx.Config.Template.TEMPLATE;
 import static org.epochx.Population.SIZE;
 import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
-import static org.epochx.gr.GRIndividual.MAXIMUM_DEPTH;
+import static org.epochx.cfg.CFGIndividual.MAXIMUM_DEPTH;
 import static org.epochx.grammar.Grammar.GRAMMAR;
 
 import java.util.*;
@@ -33,15 +33,15 @@ import org.epochx.Config;
 import org.epochx.InitialisationMethod;
 import org.epochx.Population;
 import org.epochx.RandomSequence;
+import org.epochx.cfg.CFGIndividual;
 import org.epochx.event.ConfigEvent;
 import org.epochx.event.EventManager;
 import org.epochx.event.InitialisationEvent;
 import org.epochx.event.Listener;
-import org.epochx.gr.GRIndividual;
 import org.epochx.grammar.*;
 
 /**
- * Initialisation method which produces <code>GRIndividual</code>s with parse 
+ * Initialisation method which produces <code>CFGIndividual</code>s with parse 
  * trees within a specified maximum depth. Parse trees are constructed randomly with 
  * reference to the current grammar.
  * 
@@ -54,7 +54,7 @@ import org.epochx.grammar.*;
  * 
  * @since 2.0
  */
-public class GrowInitialisation implements GRInitialisation, Listener<ConfigEvent> {
+public class GrowInitialisation implements CFGInitialisation, Listener<ConfigEvent> {
 
 	// Configuration settings
 	private RandomSequence random;
@@ -100,7 +100,7 @@ public class GrowInitialisation implements GRInitialisation, Listener<ConfigEven
 	 * <li>{@link Population#SIZE}
 	 * <li>{@link InitialisationMethod#ALLOW_DUPLICATES} (default: <code>true</code>)
 	 * <li>{@link Grammar#GRAMMAR}
-	 * <li>{@link GRIndividual#MAXIMUM_DEPTH}
+	 * <li>{@link CFGIndividual#MAXIMUM_DEPTH}
 	 * </ul>
 	 */
 	protected void setup() {
@@ -125,7 +125,7 @@ public class GrowInitialisation implements GRInitialisation, Listener<ConfigEven
 	}
 	
 	/**
-	 * Creates a population of new <code>GRIndividuals</code>. Each individual is
+	 * Creates a population of new <code>CFGIndividuals</code>. Each individual is
 	 * created by a call to the<code>createIndividual</code> method. The size of the
 	 * population will be equal to the {@link Population#SIZE} config parameter.
 	 * If the {@link InitialisationMethod#ALLOW_DUPLICATES} config parameter is
@@ -133,7 +133,7 @@ public class GrowInitialisation implements GRInitialisation, Listener<ConfigEven
 	 * unique according to their <code>equals</code> methods. By default, duplicates
 	 * are allowed.
 	 * 
-	 * @return a population of <code>GRIndividual</code> objects
+	 * @return a population of <code>CFGIndividual</code> objects
 	 */
 	@Override
 	public Population createPopulation() {
@@ -142,7 +142,7 @@ public class GrowInitialisation implements GRInitialisation, Listener<ConfigEven
 		Population population = new Population();
 
 		for (int i = 0; i < populationSize; i++) {
-			GRIndividual individual;
+			CFGIndividual individual;
 			do {
 				individual = createIndividual();
 			} while (!allowDuplicates && population.contains(individual));
@@ -156,13 +156,13 @@ public class GrowInitialisation implements GRInitialisation, Listener<ConfigEven
 	}
 	
 	/**
-	 * Constructs a new <code>GRIndividual</code> with a derivation tree which has a depth at
+	 * Constructs a new <code>CFGIndividual</code> with a derivation tree which has a depth at
 	 * most equal to the max depth property
 	 * 
-	 * @return a new <code>GRIndividual</code> instance
+	 * @return a new <code>CFGIndividual</code> instance
 	 */
 	@Override
-	public GRIndividual createIndividual() {
+	public CFGIndividual createIndividual() {
 		if (random == null) {
 			throw new IllegalStateException("no random number generator has been set");
 		} else if (grammar == null) {
@@ -179,7 +179,7 @@ public class GrowInitialisation implements GRInitialisation, Listener<ConfigEven
 
 		NonTerminalSymbol parseTree = growParseTree(maxDepth, startRule);
 		
-		return new GRIndividual(parseTree);
+		return new CFGIndividual(parseTree);
 	}
 
 	/**
@@ -304,7 +304,7 @@ public class GrowInitialisation implements GRInitialisation, Listener<ConfigEven
 	}
 	
 	/**
-	 * Returns the grammar that the <code>GRIndividual</code>s will satisfy with
+	 * Returns the grammar that the <code>CFGIndividual</code>s will satisfy with
 	 * their parse trees
 	 * 
 	 * @return the currently set grammar
@@ -314,7 +314,7 @@ public class GrowInitialisation implements GRInitialisation, Listener<ConfigEven
 	}
 
 	/**
-	 * Sets the grammar to be satisfied by the parse trees of the new <code>GRIndividual</code>s. 
+	 * Sets the grammar to be satisfied by the parse trees of the new <code>CFGIndividual</code>s. 
 	 * If automatic configuration is enabled then any value set here will be overwritten by the 
 	 * {@link Grammar#GRAMMAR} configuration setting on the next config event.
 	 * 
@@ -360,7 +360,7 @@ public class GrowInitialisation implements GRInitialisation, Listener<ConfigEven
 	 * Sets the maximum depth of the parse trees created by the
 	 * <code>createIndividual</code> method. If automatic configuration is enabled
 	 * then any value set here will be overwritten by the
-	 * {@link GRIndividual#MAXIMUM_DEPTH} configuration setting on
+	 * {@link CFGIndividual#MAXIMUM_DEPTH} configuration setting on
 	 * the next config event.
 	 * 
 	 * @param maxDepth the maximum depth of all parse trees generated

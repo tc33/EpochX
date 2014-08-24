@@ -20,32 +20,30 @@
  * The latest version is available from: http://www.epochx.org
  */
 
-package org.epochx.gr.stats;
+package org.epochx.cfg.stats;
 
 import org.epochx.event.GenerationEvent.EndGeneration;
-import org.epochx.event.stat.*;
+import org.epochx.event.stat.AbstractStat;
 
 /**
- * A stat that returns the standard deviation of the mean depth of the parse 
- * trees in the population from the previous completed generation. All 
- * individuals in the population must be instances of <code>GRIndividual</code>.
+ * A stat that returns the minimum depth of all the parse trees in the 
+ * population from the previous completed generation. All individuals in the 
+ * population must be instances of <code>CFGIndividual</code>.
  * 
- * @see GenerationAverageDepthError
- * @see GenerationAverageDepth
+ * @see GenerationMaximumDepth
  * 
  * @since 2.0
  */
-public class GenerationStandardDeviationDepth extends AbstractStat<EndGeneration> {
+public class GenerationMinimumDepth extends AbstractStat<EndGeneration> {
 
-	private double stdev;
+	private int min;
 
 	/**
-	 * Constructs a <code>GenerationStandardDeviationDepth</code> stat and registers
-	 * its dependencies
+	 * Constructs a <code>GenerationMinimumDepth</code> stat and registers its
+	 * dependencies
 	 */
-	@SuppressWarnings("unchecked")
-	public GenerationStandardDeviationDepth() {
-		super(GenerationDepths.class, GenerationAverageDepth.class);
+	public GenerationMinimumDepth() {
+		super(GenerationDepths.class);
 	}
 
 	/**
@@ -59,26 +57,22 @@ public class GenerationStandardDeviationDepth extends AbstractStat<EndGeneration
 	@Override
 	public void refresh(EndGeneration event) {
 		int[] depths = AbstractStat.get(GenerationDepths.class).getDepths();
-		double average = AbstractStat.get(GenerationAverageDepth.class).getAverage();
-		
-		// Sum the squared differences
-		double sqDiff = 0.0;
-		for (int depth: depths) {
-			sqDiff += Math.pow(depth - average, 2);
-		}
+		min = Integer.MAX_VALUE;
 
-		// Take the square root of the average
-		stdev = Math.sqrt(sqDiff / depths.length);
+		for (int depth: depths) {
+			if (depth < min) {
+				min = depth;
+			}
+		}
 	}
 	
 	/**
-	 * Returns the standard deviation of the mean depth of the parse trees in
-	 * the previous generation
+	 * Returns the minimum depth of the parse trees in the previous generation
 	 * 
-	 * @return the standard deviation of the mean depth of the parse trees
+	 * @return the minimum depth of the parse trees
 	 */
-	public double getStandardDeviation() {
-		return stdev;
+	public int getMinimum() {
+		return min;
 	}
 
 	/**
@@ -88,6 +82,6 @@ public class GenerationStandardDeviationDepth extends AbstractStat<EndGeneration
 	 */
 	@Override
 	public String toString() {
-		return Double.toString(stdev);
+		return Integer.toString(min);
 	}
 }

@@ -26,8 +26,6 @@ import org.epochx.DoubleFitness;
 import org.epochx.Fitness;
 import org.epochx.Individual;
 import org.epochx.Config.ConfigKey;
-import org.epochx.DoubleFitness.Maximise;
-import org.epochx.DoubleFitness.Minimise;
 import org.epochx.event.ConfigEvent;
 import org.epochx.event.EventManager;
 import org.epochx.event.Listener;

@@ -31,10 +31,13 @@ import org.epochx.interpret.MalformedProgramException;
  * <code>declare</code> methods.
  * 
  * @see Node
+ * 
+ * @since 2.0
  */
 public class EpoxParser {
 
-	private final Map<String, Node> nodes;
+	// The language that the parser recognises
+	private Map<String, Node> nodes;
 
 	/**
 	 * Constructs an <code>EpoxParser</code> with no nodes declared
@@ -147,13 +150,13 @@ public class EpoxParser {
 	private List<String> splitArguments(String argStr) {
 		int depth = 0;
 
-		final List<String> args = new ArrayList<String>(5);
+		List<String> args = new ArrayList<String>(5);
 		StringBuilder buffer = new StringBuilder();
 
 		argStr = argStr.trim();
 
 		for (int i = 0; i < argStr.length(); i++) {
-			final char c = argStr.charAt(i);
+			char c = argStr.charAt(i);
 
 			if (c == '(') {
 				depth++;

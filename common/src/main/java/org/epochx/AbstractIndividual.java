@@ -22,7 +22,9 @@
 package org.epochx;
 
 /**
+ * An <code>AbstractIndividual</code> is a candidate solution with a settable fitness value.
  * 
+ * @since 2.0
  */
 public abstract class AbstractIndividual implements Individual {
 
@@ -31,24 +33,33 @@ public abstract class AbstractIndividual implements Individual {
 	private Fitness fitness;
 
 	/**
+	 * Sets this individual's fitness value
+	 * 
 	 * @param fitness the fitness to set
 	 */
 	public void setFitness(Fitness fitness) {
 		this.fitness = fitness;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.epochx.Individual#getFitness()
+	/**
+	 * Returns the fitness value assigned to this individual
+	 * 
+	 * @return a fitness value for this individual
 	 */
 	@Override
 	public Fitness getFitness() {
 		return fitness;
 	}
 
+	/**
+	 * Returns a clone of this individual with a copy of its fitness assigned
+	 * 
+	 * @return an individual which is a copy of this individual
+	 */
 	public AbstractIndividual clone() {
 		try {
 			AbstractIndividual clone = (AbstractIndividual) super.clone();
-			clone.fitness = fitness;
+			clone.fitness = fitness.clone();
 			return clone;
 		} catch (CloneNotSupportedException e) {
 			throw new InternalError();

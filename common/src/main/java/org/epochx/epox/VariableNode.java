@@ -25,8 +25,9 @@ package org.epochx.epox;
  * The <code>VariableNode</code> class provides a wrapper for <code>Variable</code>
  * objects. Each <code>Node</code> must only appear in one place in a tree, so to
  * allow the same variable instance to be reused in multiple places, variables
- * are not themselves nodes. Instead, a <code>VariableNode</code> wrapper is used,
- * where multiple instances of this wrapper may wrap the same variable object.
+ * are not themselves nodes. Instead, a <code>VariableNode</code> wrapper is used. This
+ * allows the same variable object to be used in multiple locations within the same 
+ * program tree while keeping the nodes unique.
  * 
  * @see Variable
  */

@@ -29,8 +29,8 @@ import org.epochx.tools.DataTypeUtils;
 /**
  * A <code>Node</code> is a vertex in a tree structure which represents a program.
  * A node can be thought of as an expression in a computer programming language.
- * Evaluating a node will involve evaluating any children and optionally
- * returning a value.
+ * Evaluating a node will involve evaluating any children and optionally returning a 
+ * value.
  * 
  * Subclasses of <code>Node</code> should ensure they call the superclass
  * constructor with all child nodes so information such as the arity of the
@@ -39,8 +39,10 @@ import org.epochx.tools.DataTypeUtils;
  * Nodes which support mixed type arguments, or terminal nodes with no arguments
  * must also override the <code>getReturnType(Class&lt;?&gt;)</code> method to
  * indicate their return type. The <code>clone</code> and <code>newInstance</code>
- * methods are also heavily used, so implementations should ensure they are
- * sufficient.
+ * methods are also heavily used, so implementations should ensure this classes 
+ * implementations are sufficient or override as necessary.
+ * 
+ * @since 2.0
  */
 public abstract class Node implements Cloneable {
 

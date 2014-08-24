@@ -24,17 +24,12 @@ package org.epochx.epox;
 import org.apache.commons.lang.ObjectUtils;
 
 /**
- * Literal values are nodes with a specific value. Normally, the value of a
- * literal would not change. The difference between a <code>Literal</code> node
- * and a <code>Variable</code> node is subtle, but important. The same
- * <code>Variable</code> instance is likely to appear multiple times in a program
- * tree, so changing the value of one occurence changes all occurences of that
- * variable. But, like most other nodes, each literal instance should be
- * independent of the others and appear only once within a program tree. To
- * support these differences, literals and variables handle cloning and creating
- * new instances differently.
+ * Literal values are terminal nodes with a specific value. Typically the value of a
+ * literal will not change.
  * 
  * @see Variable
+ * 
+ * @since 2.0
  */
 public class Literal extends Node {
 
@@ -81,7 +76,7 @@ public class Literal extends Node {
 	 * @param inputTypes the data-types of the node's inputs. Literals
 	 *        take no inputs so this should be an empty array.
 	 * @return the data-type of this node
-	 * @throws IllegalArgumentException if <code>argumentDataTypes</code> is
+	 * @throws IllegalArgumentException if <code>inputTypes</code> is
 	 *         anything other than an empty array
 	 */
 	@Override
@@ -133,11 +128,10 @@ public class Literal extends Node {
 	}
 
 	/**
-	 * An object is equal to this literal if it is an instance of
-	 * <code>Literal</code> and its value is equal to this literal's value.
+	 * Compares this literal to the given object for equality. An object is equal to this literal 
+	 * if it is an instance of <code>Literal</code> and its value is equal to this literal's value.
 	 * 
-	 * @return <code>true</code> if the two objects are equal, <code>false</code>
-	 *         otherwise.
+	 * @return <code>true</code> if the two objects are equal, <code>false</code> otherwise.
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -162,7 +156,7 @@ public class Literal extends Node {
 	 */
 	@Override
 	public Literal clone() {
-		final Literal clone = (Literal) super.clone();
+		Literal clone = (Literal) super.clone();
 
 		clone.value = value;
 

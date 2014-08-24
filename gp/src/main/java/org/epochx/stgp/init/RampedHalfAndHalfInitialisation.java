@@ -310,8 +310,7 @@ public class RampedHalfAndHalfInitialisation implements STGPInitialisation, List
 						noPrograms[i + 1 - startDepth] += shortfall;
 						noPrograms[i - startDepth] -= shortfall;
 					} else {
-						throw new IllegalStateException(
-								"Impossible to create sufficient programs inside depth parameters");
+						throw new IllegalStateException("Impossible to create sufficient programs inside depth parameters");
 					}
 				} else {
 					// Assume that if we can create enough programs at a depth,

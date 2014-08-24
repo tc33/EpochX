@@ -25,8 +25,8 @@ package org.epochx;
 import org.epochx.Config.ConfigKey;
 
 /**
- * An instance of <code>Initialiser</code> is reponsible for creating the
- * indivuduals.
+ * An instance of <code>Initialiser</code> is responsible for creating the
+ * individuals.
  */
 public interface InitialisationMethod {
 	

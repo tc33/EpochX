@@ -133,19 +133,18 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 	 */
 	@Override
 	public STGPIndividual[] perform(EndOperator event, Individual ... parents) {
-		STGPIndividual program = (STGPIndividual) parents[0];
-		STGPIndividual child = program.clone();
+		STGPIndividual child = (STGPIndividual) parents[0];
 
 		// Randomly choose a mutation point
-		int length = program.length();
+		int length = child.length();
 		int mutationPoint = random.nextInt(length);
 
 		// Calculate available depth
-		int mutationPointDepth = nodeDepth(program.getRoot(), 0, mutationPoint, 0);
+		int mutationPointDepth = nodeDepth(child.getRoot(), 0, mutationPoint, 0);
 		int maxSubtreeDepth = maxDepth - mutationPointDepth;
 
 		// Grow a new subtree using the GrowInitialisation
-		Node originalSubtree = program.getNode(mutationPoint);
+		Node originalSubtree = child.getNode(mutationPoint);
 		// TODO This should be using the parent's required type not the subtree's type
 		grower.setReturnType(originalSubtree.dataType());
 		grower.setMaximumDepth(maxSubtreeDepth);

@@ -317,7 +317,7 @@ public class GrowInitialisation implements GEInitialisation, Listener<ConfigEven
 	
 	/**
 	 * Returns the grammar that the <code>GEIndividual</code>s will satisfy with
-	 * full parse trees
+	 * their parse trees
 	 * 
 	 * @return the currently set grammar
 	 */
@@ -326,10 +326,9 @@ public class GrowInitialisation implements GEInitialisation, Listener<ConfigEven
 	}
 
 	/**
-	 * Sets the grammar to be satisfied by the full parse trees of the new
-	 * <code>GEIndividual</code>s. If automatic configuration is enabled then any
-	 * value set here will be overwritten by the {@link Grammar#GRAMMAR}
-	 * configuration setting on the next config event.
+	 * Sets the grammar to be satisfied by the parse trees of the new <code>GEIndividual</code>s. 
+	 * If automatic configuration is enabled then any value set here will be overwritten by the 
+	 * {@link Grammar#GRAMMAR} configuration setting on the next config event.
 	 * 
 	 * @param grammar the grammar to set
 	 */

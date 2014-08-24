@@ -174,9 +174,9 @@ public class GrammarProduction implements Cloneable {
 	}
 
 	/**
-	 * Calculates and returns the minimum depth required resolve this production
+	 * Calculates and returns the minimum depth required to resolve this production
 	 * to all <code>GrammarLiteral</code> nodes. The minimum depth of a
-	 * production is the largests of all the minimum depths of its
+	 * production is the largest of all the minimum depths of its
 	 * <code>GrammarNodes</code>.
 	 * 
 	 * @return the minimum depth required to resolve to all

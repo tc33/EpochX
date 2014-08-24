@@ -87,6 +87,13 @@ public class RampedHalfAndHalfInitialisation implements GEInitialisation, Listen
 	// The two halves
 	private final GrowInitialisation grow;
 	private final FullInitialisation full;
+	
+	/**
+	 * Initialisation method labels
+	 */
+	public enum Method {
+		GROW, FULL;
+	}
 
 	/**
 	 * Constructs a <code>RampedHalfAndHalfInitialisation</code> with control
@@ -106,13 +113,13 @@ public class RampedHalfAndHalfInitialisation implements GEInitialisation, Listen
 	 *        configuration settings from the config
 	 */
 	public RampedHalfAndHalfInitialisation(boolean autoConfig) {
+		grow = new GrowInitialisation(false);
+		full = new FullInitialisation(false);
+		
 		// Default config values
 		allowDuplicates = true;
 		maxCodonValue = Long.MAX_VALUE;
 		minCodonValue = 0L;
-		
-		grow = new GrowInitialisation(false);
-		full = new FullInitialisation(false);
 		
 		setup();
 		
@@ -161,9 +168,11 @@ public class RampedHalfAndHalfInitialisation implements GEInitialisation, Listen
 	}
 
 	/**
-	 * Will use grow initialisation on half the population and full on the other
-	 * half. If the population size is an odd number then the extra individual will be
-	 * initialised with grow.
+	 * Creates a new population of <code>GEIndividual</code>s. Will use grow initialisation to construct half 
+	 * the population and full to create the other half. If the population size is an odd number then the extra 
+	 * individual will be initialised with grow.
+	 * 
+	 * @return a new population of individuals
 	 */
 	@Override
 	public Population createPopulation() {
@@ -171,7 +180,7 @@ public class RampedHalfAndHalfInitialisation implements GEInitialisation, Listen
 			throw new IllegalStateException("End depth must be greater than the start depth.");
 		}
 
-		// Create population list to populate.
+		// Create population list to populate
 		Population firstGen = new Population();
 
 		int currentDepth = startDepth;
@@ -186,30 +195,30 @@ public class RampedHalfAndHalfInitialisation implements GEInitialisation, Listen
 		}
 
 		// Number of programs each depth SHOULD have. But won't exactly unless the remainder is 0.
-		double programsPerDepth = (double) populationSize / (endDepth - startDepth + 1);
+		double individualsPerDepth = (double) populationSize / (endDepth - startDepth + 1);
 
 		// Whether each program was grown or not (full)
 		boolean[] grown = new boolean[populationSize];
 
 		for (int i = 0; i < populationSize; i++) {
 			// Calculate depth
-			int depth = (int) Math.floor((firstGen.size() / programsPerDepth) + currentDepth);
+			int depth = (int) Math.floor((firstGen.size() / individualsPerDepth) + currentDepth);
 
-			// Grow on even numbers, full on odd.
-			GEIndividual program;
+			// Grow on even numbers, full on odd
+			GEIndividual individual;
 
 			do {
 				if ((i % 2) == 0) {
 					grown[i] = true;
 					grow.setMaximumDepth(depth);
-					program = grow.createIndividual();
+					individual = grow.createIndividual();
 				} else {
 					full.setDepth(depth);
-					program = full.createIndividual();
+					individual = full.createIndividual();
 				}
-			} while (!allowDuplicates && firstGen.contains(program));
+			} while (!allowDuplicates && firstGen.contains(individual));
 
-			firstGen.add(program);
+			firstGen.add(individual);
 		}
 
 		return firstGen;
@@ -217,7 +226,7 @@ public class RampedHalfAndHalfInitialisation implements GEInitialisation, Listen
 	
 	/**
 	 * Constructs a new <code>GEIndividual</code> instance using either a full or grow 
-	 * initialisation procedure, selected at random.
+	 * initialisation procedure, selected at random
 	 * 
 	 * @return a new individual
 	 */

@@ -25,6 +25,8 @@ import static org.epochx.Config.Template.TEMPLATE;
 import static org.epochx.Population.SIZE;
 import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
 import static org.epochx.gr.GRIndividual.MAXIMUM_DEPTH;
+import static org.epochx.gr.init.RampedHalfAndHalfInitialisation.Method.FULL;
+import static org.epochx.gr.init.RampedHalfAndHalfInitialisation.Method.GROW;
 import static org.epochx.grammar.Grammar.GRAMMAR;
 
 import org.epochx.Config;
@@ -34,14 +36,14 @@ import org.epochx.Population;
 import org.epochx.RandomSequence;
 import org.epochx.event.ConfigEvent;
 import org.epochx.event.EventManager;
+import org.epochx.event.InitialisationEvent;
 import org.epochx.event.Listener;
 import org.epochx.gr.GRIndividual;
 import org.epochx.grammar.Grammar;
 
 /**
  * Initialisation implementation which uses a combination of full and grow
- * initialisers to create an initial population of
- * <code>GRCandidatePrograms</code>.
+ * initialisers to create an initial population of <code>GRIndividual</code>s.
  * 
  * <p>
  * Depths are equally split between depths from the minimum initial depth
@@ -58,26 +60,13 @@ import org.epochx.grammar.Grammar;
  * maximum as possible.
  * 
  * <p>
- * If a model is provided then the following parameters are loaded upon every
- * configure event:
- * 
- * <ul>
- * <li>population size</li>
- * <li>maximum initial program depth</li>
- * <li>grammar</li>
- * <li>random number generator</li>
- * </ul>
- * 
- * <p>
- * If the <code>getModel</code> method returns <code>null</code> then no model
- * is set and whatever static parameters have been set as parameters to the
- * constructor or using the standard accessor methods will be used. If any
- * compulsory parameters remain unset when the initialiser is requested to
- * generate new programs, then an <code>IllegalStateException</code> will be
- * thrown.
+ * See the {@link #setup()} method documentation for a list of configuration
+ * parameters used to control this operator.
  * 
  * @see FullInitialisation
  * @see GrowInitialisation
+ * 
+ * @since 2.0
  */
 public class RampedHalfAndHalfInitialisation implements GRInitialisation, Listener<ConfigEvent> {
 
@@ -99,6 +88,14 @@ public class RampedHalfAndHalfInitialisation implements GRInitialisation, Listen
 	private Integer endDepth;
 	private Integer startDepth;
 
+	/**
+	 * Initialisation method labels
+	 */
+	public enum Method {
+		GROW, FULL;
+	}
+
+	
 	/**
 	 * Constructs a <code>RampedHalfAndHalfInitialisation</code> with control parameters
 	 * automatically loaded from the config
@@ -174,12 +171,14 @@ public class RampedHalfAndHalfInitialisation implements GRInitialisation, Listen
 	 */
 	@Override
 	public Population createPopulation() {
+		EventManager.getInstance().fire(new InitialisationEvent.StartInitialisation());
+		
 		if (endDepth < startDepth) {
 			throw new IllegalStateException("end depth must be greater than the start depth");
 		}
 
 		// Create population list to populate
-		Population firstGen = new Population();
+		Population population = new Population();
 
 		int currentDepth = startDepth;
 		int minDepthPossible = grammar.getMinimumDepth();
@@ -196,30 +195,33 @@ public class RampedHalfAndHalfInitialisation implements GRInitialisation, Listen
 		double individualsPerDepth = (double) populationSize / (endDepth - startDepth + 1);
 
 		// Whether each program was grown or not (full)
-		boolean[] grown = new boolean[populationSize];
+		Method[] method = new Method[populationSize];
 
 		for (int i = 0; i < populationSize; i++) {
 			// Calculate depth
-			int depth = (int) Math.floor((firstGen.size() / individualsPerDepth) + currentDepth);
+			int depth = (int) Math.floor((population.size() / individualsPerDepth) + currentDepth);
 
 			// Grow on even numbers, full on odd
 			GRIndividual individual;
 
 			do {
 				if ((i % 2) == 0) {
-					grown[i] = true;
+					method[i] = GROW;
 					grow.setMaximumDepth(depth);
 					individual = grow.createIndividual();
 				} else {
+					method[i] = FULL;
 					full.setDepth(depth);
 					individual = full.createIndividual();
 				}
-			} while (!allowDuplicates && firstGen.contains(individual));
+			} while (!allowDuplicates && population.contains(individual));
 
-			firstGen.add(individual);
+			population.add(individual);
 		}
+		
+		EventManager.getInstance().fire(new RampedHalfAndHalfEndEvent(population, method));
 
-		return firstGen;
+		return population;
 	}
 	
 	/**

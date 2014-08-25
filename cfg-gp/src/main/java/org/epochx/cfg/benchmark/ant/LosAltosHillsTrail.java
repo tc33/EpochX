@@ -43,16 +43,12 @@ import org.epochx.Population;
 import org.epochx.RandomSequence;
 import org.epochx.TerminationCriteria;
 import org.epochx.TerminationFitness;
-import org.epochx.ge.CodonFactory;
-import org.epochx.ge.GEIndividual;
-import org.epochx.ge.GESourceGenerator;
-import org.epochx.ge.IntegerCodonFactory;
-import org.epochx.ge.fitness.GEFitnessFunction;
-import org.epochx.ge.init.Grow;
-import org.epochx.ge.map.DepthFirstMapper;
-import org.epochx.ge.map.MappingComponent;
-import org.epochx.ge.operator.OnePointCrossover;
-import org.epochx.ge.operator.PointMutation;
+import org.epochx.cfg.CFGIndividual;
+import org.epochx.cfg.CFGSourceGenerator;
+import org.epochx.cfg.fitness.CFGFitnessFunction;
+import org.epochx.cfg.init.Grow;
+import org.epochx.cfg.operator.SubtreeCrossover;
+import org.epochx.cfg.operator.SubtreeMutation;
 import org.epochx.grammar.Grammar;
 import org.epochx.interpret.EpoxInterpreter;
 import org.epochx.random.MersenneTwisterFast;
@@ -156,16 +152,16 @@ public class LosAltosHillsTrail extends GenerationalTemplate {
         criteria.add(new MaximumGenerations());
         template.put(EvolutionaryStrategy.TERMINATION_CRITERIA, criteria);
         template.put(MaximumGenerations.MAXIMUM_GENERATIONS, 50);
-        template.put(GEIndividual.MAXIMUM_DEPTH, 17);
+        template.put(CFGIndividual.MAXIMUM_DEPTH, 17);
         
         template.put(Breeder.SELECTOR, new TournamentSelector());
         template.put(TournamentSelector.TOURNAMENT_SIZE, 7);        
         List<Operator> operators = new ArrayList<Operator>();
-        operators.add(new OnePointCrossover());
-        operators.add(new PointMutation());
+        operators.add(new SubtreeCrossover());
+        operators.add(new SubtreeMutation());
         template.put(Breeder.OPERATORS, operators);
-        template.put(OnePointCrossover.PROBABILITY, 0.0);
-        template.put(PointMutation.PROBABILITY, 1.0);
+        template.put(SubtreeCrossover.PROBABILITY, 0.0);
+        template.put(SubtreeMutation.PROBABILITY, 1.0);
         template.put(Initialiser.METHOD, new Grow());
         
         RandomSequence randomSequence = new MersenneTwisterFast();
@@ -185,9 +181,7 @@ public class LosAltosHillsTrail extends GenerationalTemplate {
         Ant ant = new Ant(MAXIMUM_TIMESTEPS, landscape);
 		
         template.put(Grammar.GRAMMAR, new Grammar(grammarStr));
-        template.put(CodonFactory.CODON_FACTORY, new IntegerCodonFactory());
-        template.put(CFGFitnessFunction.INTERPRETER, new EpoxInterpreter<GEIndividual>(new GESourceGenerator()));
-        template.put(MappingComponent.MAPPER, new DepthFirstMapper());
+        template.put(CFGFitnessFunction.INTERPRETER, new EpoxInterpreter<CFGIndividual>(new CFGSourceGenerator()));
         
         // Setup fitness function
         template.put(FitnessEvaluator.FUNCTION, new FoodLocationCount(ant, landscape));

@@ -37,6 +37,8 @@ public abstract class AbstractFitnessFunction implements FitnessFunction {
 	 * <code>evaluate(Individual)</code> method and if the individual 
 	 * is an instance of <code>AbstractIndividual</code> the fitness is 
 	 * assigned to it.
+	 * 
+	 * @param
 	 */
 	@Override
 	public void evaluate(Population population) {

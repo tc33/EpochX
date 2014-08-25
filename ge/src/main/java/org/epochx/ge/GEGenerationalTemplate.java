@@ -78,6 +78,7 @@ public class GEGenerationalTemplate extends Template {
 
 		ArrayList<Component> components = new ArrayList<Component>();
 		components.add(new Initialiser());
+		components.add(new MappingComponent());
 		components.add(new FitnessEvaluator());
 		components.add(new GenerationalStrategy(new BranchedBreeder(), new MappingComponent(), new FitnessEvaluator()));
 		template.put(Evolver.COMPONENTS, components);

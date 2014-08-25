@@ -33,10 +33,11 @@ import org.epochx.RandomSequence;
 import org.epochx.Config.ConfigKey;
 import org.epochx.Config.Template;
 import org.epochx.cfg.CFGIndividual;
-import org.epochx.cfg.init.GrowInitialisation;
+import org.epochx.cfg.init.Grow;
 import org.epochx.event.ConfigEvent;
 import org.epochx.event.EventManager;
 import org.epochx.event.Listener;
+import org.epochx.event.OperatorEvent;
 import org.epochx.event.OperatorEvent.EndOperator;
 import org.epochx.grammar.*;
 
@@ -58,7 +59,7 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 	 */
 	public static final ConfigKey<Double> PROBABILITY = new ConfigKey<Double>();
 	
-	private final GrowInitialisation grower;
+	private final Grow grower;
 	
 	// Configuration settings
 	private RandomSequence random;
@@ -83,7 +84,7 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 	 *        configuration settings from the config
 	 */
 	public SubtreeMutation(boolean autoConfig) {
-		grower = new GrowInitialisation(false);
+		grower = new Grow(false);
 		
 		setup();
 
@@ -155,7 +156,7 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 		int originalDepth = original.getDepth();
 
 		// Add mutation into the end event
-		((SubtreeMutationEndEvent) event).setMutationPoint(point);
+		((EndEvent) event).setMutationPoint(point);
 
 		// Construct a new subtree from that node's grammar rule
 		//TODO Should allow any depth down to the maximum rather than the original subtrees depth
@@ -163,7 +164,7 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 		NonTerminalSymbol subtree = grower.growParseTree(originalDepth, rule);
 
 		// Add subtree into the end event
-		((SubtreeMutationEndEvent) event).setSubtree(subtree);
+		((EndEvent) event).setSubtree(subtree);
 
 		// Replace subtree
 		if (point == 0) {
@@ -183,8 +184,8 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 	 * @return operator end event
 	 */
 	@Override
-	protected SubtreeMutationEndEvent getEndEvent(Individual ... parent) {
-		return new SubtreeMutationEndEvent(this, parent);
+	protected EndEvent getEndEvent(Individual ... parent) {
+		return new EndEvent(this, parent);
 	}
 
 	/**
@@ -263,5 +264,68 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 		this.grammar = grammar;
 		
 		grower.setGrammar(grammar);
+	}
+	
+	/**
+	 * An event fired at the end of a subtree mutation
+	 * 
+	 * @see SubtreeMutation
+	 * 
+	 * @since 2.0
+	 */
+	public class EndEvent extends OperatorEvent.EndOperator {
+
+		private NonTerminalSymbol subtree;
+		private int mutationPoint;
+
+		/**
+		 * Constructs a <code>SubtreeMutationEndEvent</code> with the details of the event
+		 * 
+		 * @param operator the operator that performed the crossover
+		 * @param parents an array containing one individual that the operator was performed on
+		 */
+		public EndEvent(SubtreeMutation operator, Individual[] parents) {
+			super(operator, parents);
+		}
+
+		/**
+		 * Returns an integer which is the index of the point chosen for the subtree mutation 
+		 * operation. The index is the position in the whole parse tree as would be returned 
+		 * by calling <code>getNthSymbol</code> on the root node.
+		 * 
+		 * @return an integer which is the index of the mutation point
+		 */
+		public int getMutationPoint() {
+			return mutationPoint;
+		}
+		
+		/**
+		 * Sets the index of the symbol in the parse tree that was mutated
+		 * 
+		 * @param mutationPoint index used as the mutation point
+		 */
+		public void setMutationPoint(int mutationPoint) {
+			this.mutationPoint = mutationPoint;
+		}
+
+		/**
+		 * Returns the new subtree that was generated as a replacement for the subtree originally
+		 * at the mutation point
+		 * 
+		 * @return the root node of the new subtree
+		 */
+		public NonTerminalSymbol getSubtree() {
+			return subtree;
+		}
+
+		/**
+		 * Sets the new subtree that was generated as a replacement for the subtree originally
+		 * at the mutation point
+		 * 
+		 * @param subtree the root node of the first subtree
+		 */
+		public void setSubtree(NonTerminalSymbol subtree) {
+			this.subtree = subtree;
+		}
 	}
 }

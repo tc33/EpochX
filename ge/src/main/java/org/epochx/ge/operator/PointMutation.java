@@ -35,6 +35,7 @@ import org.epochx.Config.ConfigKey;
 import org.epochx.event.ConfigEvent;
 import org.epochx.event.EventManager;
 import org.epochx.event.Listener;
+import org.epochx.event.OperatorEvent;
 import org.epochx.event.OperatorEvent.EndOperator;
 import org.epochx.ge.Chromosome;
 import org.epochx.ge.CodonFactory;
@@ -160,7 +161,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 		}
 
 		// Add mutation points into the event
-		((PointMutationEndEvent) event).setMutationPoints(points);
+		((EndEvent) event).setMutationPoints(points);
 
 		return new GEIndividual[]{new GEIndividual(codons)};
 	}
@@ -173,8 +174,8 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	 * @return operator end event
 	 */
 	@Override
-	protected PointMutationEndEvent getEndEvent(Individual ... parent) {
-		return new PointMutationEndEvent(this, parent);
+	protected EndEvent getEndEvent(Individual ... parent) {
+		return new EndEvent(this, parent);
 	}
 
 	/**
@@ -271,5 +272,48 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	 */
 	public void setCodonFactory(CodonFactory codonFactory) {
 		this.codonFactory = codonFactory;
+	}
+	
+	/**
+	 * An event fired at the end of a point mutation
+	 * 
+	 * @see PointMutation
+	 * 
+	 * @since 2.0
+	 */
+	public class EndEvent extends OperatorEvent.EndOperator {
+
+		private List<Integer> mutationPoints;
+
+		/**
+		 * Constructs a <code>PointMutationEndEvent</code> with the details of the
+		 * event
+		 * 
+		 * @param operator the operator that performed the mutation
+		 * @param parents an array of two individuals that the operator was
+		 *        performed on
+		 */
+		public EndEvent(PointMutation operator, Individual[] parents) {
+			super(operator, parents);
+		}
+
+		/**
+		 * Returns a list of the indexes which were mutated in the individual's 
+		 * chromosome
+		 * 
+		 * @return a list of the mutation points
+		 */
+		public List<Integer> getMutationPoints() {
+			return mutationPoints;
+		}
+		
+		/**
+		 * Sets a list of the mutation points
+		 * 
+		 * @param mutationPoints a list of the mutation points
+		 */
+		public void setMutationPoints(List<Integer> mutationPoints) {
+			this.mutationPoints = mutationPoints;
+		}
 	}
 }

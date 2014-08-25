@@ -106,26 +106,32 @@ public class EpoxInterpreter<T extends Individual> implements Interpreter<T> {
 		
 		if (expression == null) {
 			throw new MalformedProgramException("Source generator returned a null program source");
+		} else if (noParamSets > 0) {
+			throw new IllegalArgumentException("Empty argument values input");
 		}
+		
+		// Declare and initialise the variables
+		for (int j=0; j<noParams; j++) {
+			declaredVariables[j] = new VariableNode(new Variable(argNames[j], argValues[0][j]));
+			parser.declare(declaredVariables[j]);
+		}
+		
+		Node parseTree = parser.parse(expression);
 		
 		for (int i=0; i<noParamSets; i++) {			
 			Object[] paramSet = argValues[i];
 			
-			// Declare and initialise the variables
 			for (int j=0; j<noParams; j++) {
-				declaredVariables[j] = new VariableNode(new Variable(argNames[j], paramSet[j]));
-				parser.declare(declaredVariables[j]);
+				declaredVariables[j].getVariable().setValue(paramSet[j]);
 			}
-			
-			Node parseTree = parser.parse(expression);
 			
 			// Evaluate the program tree.
 			results[i] = parseTree.evaluate();
-			
-			// Undeclare all the variables
-			for (int j=0; j<noParams; j++) {
-				parser.undeclare(declaredVariables[j]);
-			}
+		}
+		
+		// Undeclare all the variables
+		for (int j=0; j<noParams; j++) {
+			parser.undeclare(declaredVariables[j]);
 		}
 		
 		return results;

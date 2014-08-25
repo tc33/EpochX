@@ -51,7 +51,7 @@ import org.epochx.random.MersenneTwisterFast;
 import org.epochx.selection.TournamentSelector;
 import org.epochx.stgp.STGPIndividual;
 import org.epochx.stgp.fitness.HitsCount;
-import org.epochx.stgp.init.FullInitialisation;
+import org.epochx.stgp.init.Full;
 import org.epochx.stgp.operator.SubtreeCrossover;
 import org.epochx.stgp.operator.SubtreeMutation;
 import org.epochx.tools.BenchmarkSolutions;
@@ -112,7 +112,7 @@ public class STGPSexticRegression extends GenerationalTemplate {
         template.put(Breeder.OPERATORS, operators);
         template.put(SubtreeCrossover.PROBABILITY, 1.0);
         template.put(SubtreeMutation.PROBABILITY, 0.0);
-        template.put(Initialiser.METHOD, new FullInitialisation());
+        template.put(Initialiser.METHOD, new Full());
         
         RandomSequence randomSequence = new MersenneTwisterFast();
         template.put(RandomSequence.RANDOM_SEQUENCE, randomSequence);

@@ -27,7 +27,7 @@ import org.epochx.Config.ConfigKey;
 /**
  * This class implements the reproduction (copy) operator.
  */
-public class Reproduction implements Operator {
+public class Reproduction extends AbstractOperator {
 
 	/**
 	 * The property key under which the reproduction probability is stored.
@@ -43,7 +43,8 @@ public class Reproduction implements Operator {
 		return 1;
 	}
 
-	public Individual[] apply(Individual ... individuals) {
+	@Override
+	public Individual[] perform(Individual ... individuals) {
 		return individuals;
 	}
 

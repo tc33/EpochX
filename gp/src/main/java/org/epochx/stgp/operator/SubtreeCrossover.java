@@ -185,8 +185,8 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 			subtrees = new Node[]{subtree1, subtree2};
 		}
 
-		((SubtreeCrossoverEndEvent) event).setCrossoverPoints(swapPoints);
-		((SubtreeCrossoverEndEvent) event).setSubtrees(subtrees);
+		((EndEvent) event).setCrossoverPoints(swapPoints);
+		((EndEvent) event).setSubtrees(subtrees);
 
 		return children;
 	}
@@ -196,8 +196,8 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 	 * parents set
 	 */
 	@Override
-	protected SubtreeCrossoverEndEvent getEndEvent(Individual ... parents) {
-		return new SubtreeCrossoverEndEvent(this, parents);
+	protected EndEvent getEndEvent(Individual ... parents) {
+		return new EndEvent(this, parents);
 	}
 	
 	/*
@@ -381,4 +381,70 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 	public void setMaximumDepth(int maxDepth) {
 		this.maxDepth = maxDepth;
 	}
+	
+	/**
+	 * An event fired at the end of a subtree crossover
+	 * 
+	 * @see SubtreeCrossover
+	 * 
+	 * @since 2.0
+	 */
+	public class EndEvent extends OperatorEvent.EndOperator {
+
+		private Node[] subtrees;
+		private int[] points;
+
+		/**
+		 * Constructs a <code>SubtreeCrossoverEndEvent</code> with the details of the
+		 * event
+		 * 
+		 * @param operator the operator that performed the crossover
+		 * @param parents an array of two individuals that the operator was
+		 *        performed on
+		 */
+		public EndEvent(SubtreeCrossover operator, Individual[] parents) {
+			super(operator, parents);
+		}
+
+		/**
+		 * Returns an array of the two crossover points in the parent program trees
+		 * 
+		 * @return an array containing two indices which are the crossover points
+		 */
+		public int[] getCrossoverPoints() {
+			return points;
+		}
+
+		/**
+		 * Returns an array of nodes which are the root nodes of the subtrees that
+		 * were exchanged. The nodes are given in the same order as the parents they
+		 * were taken from
+		 * 
+		 * @return the subtrees
+		 */
+		public Node[] getSubtrees() {
+			return subtrees;
+		}
+
+		/**
+		 * Sets the indices of the crossover points in the parent program trees
+		 * 
+		 * @param points an array of the crossover points
+		 */
+		public void setCrossoverPoints(int[] points) {
+			this.points = points;
+		}
+
+		/**
+		 * Sets the subtrees that were exchanged in the crossover. These should be
+		 * in the same order as the parents from which they were taken.
+		 * 
+		 * @param subtrees an array of nodes which are the root nodes of the
+		 *        subtrees that were exchanged
+		 */
+		public void setSubtrees(Node[] subtrees) {
+			this.subtrees = subtrees;
+		}
+	}
+
 }

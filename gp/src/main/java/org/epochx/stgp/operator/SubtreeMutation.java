@@ -31,7 +31,7 @@ import org.epochx.epox.Node;
 import org.epochx.event.*;
 import org.epochx.event.OperatorEvent.EndOperator;
 import org.epochx.stgp.STGPIndividual;
-import org.epochx.stgp.init.GrowInitialisation;
+import org.epochx.stgp.init.Grow;
 
 /**
  * A mutation operator for <code>STGPIndividual</code>s that replaces a subtree with
@@ -52,7 +52,7 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 	 */
 	public static final ConfigKey<Double> PROBABILITY = new ConfigKey<Double>();
 	
-	private final GrowInitialisation grower;
+	private final Grow grower;
 
 	// Configuration settings
 	private RandomSequence random;
@@ -77,7 +77,7 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 	 *        configuration settings from the config
 	 */
 	public SubtreeMutation(boolean autoConfig) {
-		grower = new GrowInitialisation(false);
+		grower = new Grow(false);
 
 		setup();
 
@@ -285,4 +285,66 @@ public class SubtreeMutation extends AbstractOperator implements Listener<Config
 	public void setMaximumDepth(int maxDepth) {
 		this.maxDepth = maxDepth;
 	}
+	
+	/**
+	 * An event fired at the end of a subtree mutation
+	 * 
+	 * @see SubtreeMutation
+	 * 
+	 * @since 2.0
+	 */
+	public class SubtreeMutationEndEvent extends OperatorEvent.EndOperator {
+
+		private Node subtree;
+		private int point;
+
+		/**
+		 * Constructs a <code>SubtreeMutationEndEvent</code> with the details of the 
+		 * event
+		 * 
+		 * @param operator the operator that performed the mutation
+		 * @param parents the individual that the operator was performed on
+		 */
+		public SubtreeMutationEndEvent(SubtreeMutation operator, Individual ... parents) {
+			super(operator, parents);
+		}
+
+		/**
+		 * Returns the index of the mutation point in the parent program tree
+		 * 
+		 * @return the mutation point
+		 */
+		public int getMutationPoint() {
+			return point;
+		}
+
+		/**
+		 * Returns the root node of the replacement subtree
+		 * 
+		 * @return the replacement subtree
+		 */
+		public Node getSubtree() {
+			return subtree;
+		}
+		
+		/**
+		 * Sets the index of the mutation point in the parent program tree
+		 * 
+		 * @param points the mutation point
+		 */
+		public void setMutationPoint(int point) {
+			this.point = point;
+		}
+
+		/**
+		 * Sets the replacement subtree that was used in the mutation
+		 * 
+		 * @param subtree the subtree that was inserted in to the parent program 
+		 * tree in the mutation
+		 */
+		public void setSubtree(Node subtree) {
+			this.subtree = subtree;
+		}
+	}
+
 }

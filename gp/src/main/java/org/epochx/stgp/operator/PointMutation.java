@@ -37,6 +37,7 @@ import org.epochx.epox.Node;
 import org.epochx.event.ConfigEvent;
 import org.epochx.event.EventManager;
 import org.epochx.event.Listener;
+import org.epochx.event.OperatorEvent;
 import org.epochx.event.OperatorEvent.EndOperator;
 import org.epochx.stgp.STGPIndividual;
 
@@ -178,7 +179,7 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 			}
 		}
 
-		((PointMutationEndEvent) event).setMutationPoints(points);
+		((EndEvent) event).setMutationPoints(points);
 
 		return new STGPIndividual[]{child};
 	}
@@ -188,8 +189,8 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	 * parents set
 	 */
 	@Override
-	protected PointMutationEndEvent getEndEvent(Individual ... parents) {
-		return new PointMutationEndEvent(this, parents);
+	protected EndEvent getEndEvent(Individual ... parents) {
+		return new EndEvent(this, parents);
 	}
 
 	/**
@@ -336,5 +337,47 @@ public class PointMutation extends AbstractOperator implements Listener<ConfigEv
 	 */
 	public void setPointProbability(double pointProbability) {
 		this.pointProbability = pointProbability;
+	}
+	
+	/**
+	 * An event fired at the end of a point mutation
+	 * 
+	 * @see PointMutation
+	 * 
+	 * @since 2.0
+	 */
+	public class EndEvent extends OperatorEvent.EndOperator {
+
+		private List<Integer> points;
+
+		/**
+		 * Constructs a <code>SubtreeMutationEndEvent</code> with the details of the
+		 * event
+		 * 
+		 * @param operator the operator that performed the mutation
+		 * @param parent the individual that the operator was performed on
+		 * 
+		 */
+		public EndEvent(PointMutation operator, Individual ... parents) {
+			super(operator, parents);
+		}
+
+		/**
+		 * Returns a list of the mutation points in the parent program tree
+		 * 
+		 * @return a list of indices of the mutation points
+		 */
+		public List<Integer> getMutationPoints() {
+			return points;
+		}
+
+		/**
+		 * Sets the points that were mutated in the parent program tree
+		 * 
+		 * @param points a list of indices of the mutation points
+		 */
+		public void setMutationPoints(List<Integer> points) {
+			this.points = points;
+		}
 	}
 }

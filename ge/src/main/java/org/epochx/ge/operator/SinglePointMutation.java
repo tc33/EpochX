@@ -33,6 +33,7 @@ import org.epochx.Config.ConfigKey;
 import org.epochx.event.ConfigEvent;
 import org.epochx.event.EventManager;
 import org.epochx.event.Listener;
+import org.epochx.event.OperatorEvent;
 import org.epochx.event.OperatorEvent.EndOperator;
 import org.epochx.ge.Chromosome;
 import org.epochx.ge.CodonFactory;
@@ -139,7 +140,7 @@ public class SinglePointMutation extends AbstractOperator implements Listener<Co
 		int mutationPoint = random.nextInt(noCodons);
 		codons.setCodon(mutationPoint, codonFactory.codon(mutationPoint));
 
-		((SinglePointMutationEndEvent) event).setMutationPoint(mutationPoint);
+		((EndEvent) event).setMutationPoint(mutationPoint);
 
 		return new GEIndividual[]{new GEIndividual(codons)};
 	}
@@ -152,8 +153,8 @@ public class SinglePointMutation extends AbstractOperator implements Listener<Co
 	 * @return operator end event
 	 */
 	@Override
-	protected SinglePointMutationEndEvent getEndEvent(Individual ... parent) {
-		return new SinglePointMutationEndEvent(this, parent);
+	protected EndEvent getEndEvent(Individual ... parent) {
+		return new EndEvent(this, parent);
 	}
 	
 	/**
@@ -229,5 +230,49 @@ public class SinglePointMutation extends AbstractOperator implements Listener<Co
 	 */
 	public void setCodonFactory(CodonFactory codonFactory) {
 		this.codonFactory = codonFactory;
+	}
+	
+	/**
+	 * An event fired at the end of a single point mutation
+	 * 
+	 * @see SinglePointMutation
+	 * 
+	 * @since 2.0
+	 */
+	public class EndEvent extends OperatorEvent.EndOperator {
+
+		private int mutationPoint;
+
+		/**
+		 * Constructs a <code>SinglePointMutationEndEvent</code> with the details of the
+		 * event
+		 * 
+		 * @param operator the operator that performed the mutation
+		 * @param parents an array of two individuals that the operator was
+		 *        performed on
+		 */
+		public EndEvent(SinglePointMutation operator, Individual[] parents) {
+			super(operator, parents);
+		}
+
+		/**
+		 * Returns the the point which was modified as a result of the single point 
+		 * mutation operation
+		 * 
+		 * @return the mutation point
+		 */
+		public int getMutationPoint() {
+			return mutationPoint;
+		}
+		
+		/**
+		 * Sets the mutation point which was modified as a result of the single point 
+		 * mutation operation
+		 * 
+		 * @param mutationPoint the mutation point
+		 */
+		public void setMutationPoint(int mutationPoint) {
+			this.mutationPoint = mutationPoint;
+		}
 	}
 }

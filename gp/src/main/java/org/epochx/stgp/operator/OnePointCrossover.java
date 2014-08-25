@@ -36,6 +36,7 @@ import org.epochx.epox.Node;
 import org.epochx.event.ConfigEvent;
 import org.epochx.event.EventManager;
 import org.epochx.event.Listener;
+import org.epochx.event.OperatorEvent;
 import org.epochx.event.OperatorEvent.EndOperator;
 import org.epochx.stgp.STGPIndividual;
 
@@ -179,8 +180,8 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
 		child1.setNode(swapPoint1, subtree2);
 		child2.setNode(swapPoint2, subtree1);
 
-		((OnePointCrossoverEndEvent) event).setSubtrees(new Node[]{subtree1, subtree2});
-		((OnePointCrossoverEndEvent) event).setCrossoverPoints(new int[]{swapPoint1, swapPoint2});
+		((EndEvent) event).setSubtrees(new Node[]{subtree1, subtree2});
+		((EndEvent) event).setCrossoverPoints(new int[]{swapPoint1, swapPoint2});
 
 		return new STGPIndividual[]{child1, child2};
 	}
@@ -190,8 +191,8 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
 	 * parents set
 	 */
 	@Override
-	protected OnePointCrossoverEndEvent getEndEvent(Individual ... parents) {
-		return new OnePointCrossoverEndEvent(this, parents);
+	protected EndEvent getEndEvent(Individual ... parents) {
+		return new EndEvent(this, parents);
 	}
 
 	/*
@@ -302,5 +303,68 @@ public class OnePointCrossover extends AbstractOperator implements Listener<Conf
 	 */
 	public void setRandomSequence(RandomSequence random) {
 		this.random = random;
+	}
+	
+	/**
+	 * An event fired at the end of a one-point crossover
+	 * 
+	 * @see OnePointCrossover
+	 * 
+	 * @since 2.0
+	 */
+	public class EndEvent extends OperatorEvent.EndOperator {
+
+		private Node[] subtrees;
+		private int[] points;
+
+		/**
+		 * Constructs a <code>OnePointCrossoverEndEvent</code> with the details of the
+		 * event
+		 * 
+		 * @param operator the operator that performed the crossover
+		 * @param parents an array of two individuals that the operator was
+		 *        performed on
+		 */
+		public EndEvent(OnePointCrossover operator, Individual[] parents) {
+			super(operator, parents);
+		}
+
+		/**
+		 * Returns an array of the two crossover points in the parent program trees
+		 * 
+		 * @return an array containing two indices which are the crossover points
+		 */
+		public int[] getCrossoverPoints() {
+			return points;
+		}
+		
+		/**
+		 * Sets an array of the crossover points in the two parent programs
+		 * 
+		 * @param points an array of the two crossover points in the parents
+		 */
+		public void setCrossoverPoints(int[] points) {
+			this.points = points;
+		}
+
+		/**
+		 * Returns an array of nodes which are the root nodes of the subtrees that
+		 * were exchanged. The nodes are given in the same order as the parents they
+		 * were taken from
+		 * 
+		 * @return the subtrees
+		 */
+		public Node[] getSubtrees() {
+			return subtrees;
+		}
+
+		/**
+		 * Sets an array containing the subtrees that were exchanged
+		 * 
+		 * @param subtrees the two subtrees that were exchanged
+		 */
+		public void setSubtrees(Node[] subtrees) {
+			this.subtrees = subtrees;
+		}
 	}
 }

@@ -34,6 +34,7 @@ import org.epochx.Config.ConfigKey;
 import org.epochx.event.ConfigEvent;
 import org.epochx.event.EventManager;
 import org.epochx.event.Listener;
+import org.epochx.event.OperatorEvent;
 import org.epochx.event.OperatorEvent.EndOperator;
 import org.epochx.ge.Chromosome;
 import org.epochx.ge.Codon;
@@ -157,7 +158,7 @@ public class FixedPointCrossover extends AbstractOperator implements Listener<Co
 			crossoverPoint = random.nextInt(parent2Length);
 		}
 		
-		((FixedPointCrossoverEndEvent) event).setCrossoverPoint(crossoverPoint);
+		((EndEvent) event).setCrossoverPoint(crossoverPoint);
 
 		// Make copies of the parents' chromosomes.
 		Chromosome child1Codons = parent1Codons.clone();
@@ -166,8 +167,8 @@ public class FixedPointCrossover extends AbstractOperator implements Listener<Co
 		List<Codon> codonsExchanged1 = child1Codons.removeCodons(crossoverPoint, parent1Length);
 		List<Codon> codonsExchanged2 = child2Codons.removeCodons(crossoverPoint, parent2Length);
 		
-		((FixedPointCrossoverEndEvent) event).setExchangedCodons1(codonsExchanged1);
-		((FixedPointCrossoverEndEvent) event).setExchangedCodons2(codonsExchanged2);
+		((EndEvent) event).setExchangedCodons1(codonsExchanged1);
+		((EndEvent) event).setExchangedCodons2(codonsExchanged2);
 		
 		// Swap over the endings at the crossover points.
 		child1Codons.appendCodons(codonsExchanged2);
@@ -183,8 +184,8 @@ public class FixedPointCrossover extends AbstractOperator implements Listener<Co
 	 * @return operator end event
 	 */
 	@Override
-	protected FixedPointCrossoverEndEvent getEndEvent(Individual ... parents) {
-		return new FixedPointCrossoverEndEvent(this, parents);
+	protected EndEvent getEndEvent(Individual ... parents) {
+		return new EndEvent(this, parents);
 	}
 	
 	/**
@@ -238,5 +239,94 @@ public class FixedPointCrossover extends AbstractOperator implements Listener<Co
 	 */
 	public void setRandomSequence(RandomSequence random) {
 		this.random = random;
+	}
+	
+	/**
+	 * An event fired at the end of a fixed-point crossover
+	 * 
+	 * @see FixedPointCrossover
+	 * 
+	 * @since 2.0
+	 */
+	public class EndEvent extends OperatorEvent.EndOperator {
+
+		private List<Codon> exchangedCodons1;
+		private List<Codon> exchangedCodons2;
+		private int point;
+
+		/**
+		 * Constructs a <code>FixedPointCrossoverEndEvent</code> with the details of the
+		 * event
+		 * 
+		 * @param operator the operator that performed the crossover
+		 * @param parents an array of two individuals that the operator was
+		 *        performed on
+		 */
+		public EndEvent(FixedPointCrossover operator, Individual[] parents) {
+			super(operator, parents);
+		}
+
+		/**
+		 * Returns an integer which is the position within the codons that the crossover
+		 * was performed
+		 * 
+		 * @return an integer which is the index of the crossover point
+		 */
+		public int getCrossoverPoint() {
+			return point;
+		}
+		
+		/**
+		 * Sets the crossover point
+		 * 
+		 * @param point index used as the crossover point in both individuals
+		 */
+		public void setCrossoverPoint(int point) {
+			this.point = point;
+		}
+
+		/**
+		 * Returns a list of the codons from the first parent that were exchanged
+		 * with codons from the second parent (as returned from getExchangedCodons2).
+		 * The codons returned will be from the tail of the individual's chromosome,
+		 * from the crossover point to the end of the chromosome.
+		 * 
+		 * @return a list of the codons exchanged from parent 1
+		 */
+		public List<Codon> getExchangedCodons1() {
+			return exchangedCodons1;
+		}
+
+		/**
+		 * Sets a list containing the codons from the first parent that were exchanged
+		 * with codons from the second parent.
+		 * 
+		 * @param exchangedCodons1 the codons that were exchanged from parent 1
+		 */
+		public void setExchangedCodons1(List<Codon> exchangedCodons1) {
+			this.exchangedCodons1 = exchangedCodons1;
+		}
+		
+		/**
+		 * Returns a list of the codons from the second parent that were exchanged
+		 * with codons from the first parent (as returned from getExchangedCodons1).
+		 * The codons returned will be from the tail of the individual's chromosome,
+		 * from the crossover point to the end of the chromosome.
+		 * 
+		 * @return a list of the codons exchanged from parent 2
+		 */
+		public List<Codon> getExchangedCodons2() {
+			return exchangedCodons2;
+		}
+
+		/**
+		 * Sets a list containing the codons from the second parent that were exchanged
+		 * with codons from the first parent.
+		 * 
+		 * @param exchangedCodons2 the codons that were exchanged from parent 2
+		 */
+		public void setExchangedCodons2(List<Codon> exchangedCodons2) {
+			this.exchangedCodons2 = exchangedCodons2;
+		}
 	}
 }

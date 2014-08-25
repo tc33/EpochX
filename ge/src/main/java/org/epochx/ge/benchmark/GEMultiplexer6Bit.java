@@ -46,7 +46,7 @@ import org.epochx.ge.GESourceGenerator;
 import org.epochx.ge.IntegerCodonFactory;
 import org.epochx.ge.fitness.GEFitnessFunction;
 import org.epochx.ge.fitness.HitsCount;
-import org.epochx.ge.init.GrowInitialisation;
+import org.epochx.ge.init.Grow;
 import org.epochx.ge.map.DepthFirstMapper;
 import org.epochx.ge.map.MappingComponent;
 import org.epochx.ge.operator.OnePointCrossover;
@@ -143,7 +143,7 @@ public class GEMultiplexer6Bit extends GenerationalTemplate {
         template.put(Breeder.OPERATORS, operators);
         template.put(OnePointCrossover.PROBABILITY, 0.0);
         template.put(PointMutation.PROBABILITY, 1.0);
-        template.put(Initialiser.METHOD, new GrowInitialisation());
+        template.put(Initialiser.METHOD, new Grow());
         
         RandomSequence randomSequence = new MersenneTwisterFast();
         template.put(RandomSequence.RANDOM_SEQUENCE, randomSequence);

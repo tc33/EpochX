@@ -35,6 +35,7 @@ import org.epochx.cfg.CFGIndividual;
 import org.epochx.event.ConfigEvent;
 import org.epochx.event.EventManager;
 import org.epochx.event.Listener;
+import org.epochx.event.OperatorEvent;
 import org.epochx.event.OperatorEvent.EndOperator;
 import org.epochx.grammar.*;
 
@@ -160,8 +161,8 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 			NonTerminalSymbol subtree2 = matchingNonTerminals.get(point2);
 
 			// Add crossover points to the end event
-			((SubtreeCrossoverEndEvent) event).setCrossoverPoint1(point1);
-			((SubtreeCrossoverEndEvent) event).setCrossoverPoint1(point2);
+			((EndEvent) event).setCrossoverPoint1(point1);
+			((EndEvent) event).setCrossoverPoint1(point2);
 
 			// Swap the non-terminals' children.
 			List<Symbol> temp = subtree1.getChildren();
@@ -169,8 +170,8 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 			subtree2.setChildren(temp);
 
 			// Add subtrees into the end event
-			((SubtreeCrossoverEndEvent) event).setSubtree1(subtree1);
-			((SubtreeCrossoverEndEvent) event).setSubtree2(subtree2);
+			((EndEvent) event).setSubtree1(subtree1);
+			((EndEvent) event).setSubtree2(subtree2);
 		}
 
 		return new CFGIndividual[]{child1, child2};
@@ -183,8 +184,8 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 	 * @return operator end event
 	 */
 	@Override
-	protected SubtreeCrossoverEndEvent getEndEvent(Individual ... parents) {
-		return new SubtreeCrossoverEndEvent(this, parents);
+	protected EndEvent getEndEvent(Individual ... parents) {
+		return new EndEvent(this, parents);
 	}
 	
 	/**
@@ -238,5 +239,114 @@ public class SubtreeCrossover extends AbstractOperator implements Listener<Confi
 	 */
 	public void setRandomSequence(RandomSequence random) {
 		this.random = random;
+	}
+	
+	/**
+	 * An event fired at the end of a subtree crossover
+	 * 
+	 * @see SubtreeCrossover
+	 * 
+	 * @since 2.0
+	 */
+	public class EndEvent extends OperatorEvent.EndOperator {
+
+		private NonTerminalSymbol subtree1;
+		private NonTerminalSymbol subtree2;
+		private int crossoverPoint1;
+		private int crossoverPoint2;
+
+		/**
+		 * Constructs a <code>SubtreeCrossoverEndEvent</code> with the details of the
+		 * event
+		 * 
+		 * @param operator the operator that performed the crossover
+		 * @param parents an array of two individuals that the operator was
+		 *        performed on
+		 */
+		public EndEvent(SubtreeCrossover operator, Individual[] parents) {
+			super(operator, parents);
+		}
+
+		/**
+		 * Returns an integer which is the index of the point chosen for the subtree crossover 
+		 * operation. The index is from the list of all non-terminal symbols in the parse tree 
+		 * of the second program, as would be returned by the <code>getNonTerminalSymbols</code> 
+		 * method.
+		 * 
+		 * @return an integer which is the index of the crossover point
+		 */
+		public int getCrossoverPoint1() {
+			return crossoverPoint1;
+		}
+		
+		/**
+		 * Sets the crossover position in the first parent's list of non-terminals
+		 * 
+		 * @param crossoverPoint1 index used as the crossover point in the first parent
+		 */
+		public void setCrossoverPoint1(int crossoverPoint1) {
+			this.crossoverPoint1 = crossoverPoint1;
+		}
+		
+		/**
+		 * Returns an integer which is the index of the point chosen for the subtree crossover 
+		 * operation. The index is from the list of all non-terminal symbols in the parse tree 
+		 * of the second program, as would be returned by the <code>getNonTerminalSymbols</code> 
+		 * method.
+		 * 
+		 * @return an integer which is the index of the crossover point
+		 */
+		public int getCrossoverPoint2() {
+			return crossoverPoint2;
+		}
+		
+		/**
+		 * Sets the crossover position in the second parent's list of non-terminals
+		 * 
+		 * @param crossoverPoint2 index used as the crossover point in the second parent
+		 */
+		public void setCrossoverPoint2(int crossoverPoint2) {
+			this.crossoverPoint2 = crossoverPoint2;
+		}
+
+		/**
+		 * Returns the subtree taken from the first parent that was exchanged with the
+		 * subtree from the second parent (as returned by <code>getSubtree2()</code>)
+		 * 
+		 * @return the root node of the first subtree
+		 */
+		public NonTerminalSymbol getSubtree1() {
+			return subtree1;
+		}
+
+		/**
+		 * Sets the subtree taken from the first parent that was exchanged with the subtree 
+		 * from the second parent
+		 * 
+		 * @param subtree1 the root node of the first subtree
+		 */
+		public void setSubtree1(NonTerminalSymbol subtree1) {
+			this.subtree1 = subtree1;
+		}
+		
+		/**
+		 * Returns the subtree taken from the second parent that was exchanged with the
+		 * subtree from the first parent (as returned by <code>getSubtree1()</code>)
+		 * 
+		 * @return the root node of the second subtree
+		 */
+		public NonTerminalSymbol getSubtree2() {
+			return subtree2;
+		}
+
+		/**
+		 * Sets the subtree taken from the second parent that was exchanged with the subtree 
+		 * from the first parent
+		 * 
+		 * @param subtree1 the root node of the second subtree
+		 */
+		public void setSubtree2(NonTerminalSymbol subtree2) {
+			this.subtree2 = subtree2;
+		}
 	}
 }

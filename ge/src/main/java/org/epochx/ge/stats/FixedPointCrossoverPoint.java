@@ -23,7 +23,6 @@ package org.epochx.ge.stats;
 
 import org.epochx.event.stat.AbstractStat;
 import org.epochx.ge.operator.FixedPointCrossover;
-import org.epochx.ge.operator.FixedPointCrossoverEndEvent;
 
 /**
  * A stat that returns the crossover point from a fixed-point crossover between two 
@@ -34,7 +33,7 @@ import org.epochx.ge.operator.FixedPointCrossoverEndEvent;
  * 
  * @since 2.0
  */
-public class FixedPointCrossoverPoint extends AbstractStat<FixedPointCrossoverEndEvent> {
+public class FixedPointCrossoverPoint extends AbstractStat<FixedPointCrossover.EndEvent> {
 
 	private int crossoverPoint;
 
@@ -55,7 +54,7 @@ public class FixedPointCrossoverPoint extends AbstractStat<FixedPointCrossoverEn
 	 *        occurred
 	 */
 	@Override
-	public void refresh(FixedPointCrossoverEndEvent event) {
+	public void refresh(FixedPointCrossover.EndEvent event) {
 		crossoverPoint = event.getCrossoverPoint();
 	}
 

@@ -23,7 +23,6 @@ package org.epochx.ge.stats;
 
 import org.epochx.event.stat.AbstractStat;
 import org.epochx.ge.operator.SinglePointMutation;
-import org.epochx.ge.operator.SinglePointMutationEndEvent;
 
 /**
  * A stat that returns the mutation point from a single-point mutation between two 
@@ -34,7 +33,7 @@ import org.epochx.ge.operator.SinglePointMutationEndEvent;
  * 
  * @since 2.0
  */
-public class SinglePointMutationPoint extends AbstractStat<SinglePointMutationEndEvent> {
+public class SinglePointMutationPoint extends AbstractStat<SinglePointMutation.EndEvent> {
 
 	private int mutationPoint;
 
@@ -55,7 +54,7 @@ public class SinglePointMutationPoint extends AbstractStat<SinglePointMutationEn
 	 *        occurred
 	 */
 	@Override
-	public void refresh(SinglePointMutationEndEvent event) {
+	public void refresh(SinglePointMutation.EndEvent event) {
 		mutationPoint = event.getMutationPoint();
 	}
 

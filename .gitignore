@@ -1,3 +1,5 @@
 framework/target
 common/target
 cfg-gp/target
+ge/target
+stgp/target

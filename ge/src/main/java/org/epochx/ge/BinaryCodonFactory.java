@@ -182,5 +182,46 @@ public class BinaryCodonFactory implements CodonFactory, Listener<ConfigEvent> {
 	    
 	    return primitives;
 	}
+	
+	/**
+	 * Returns the random number sequence in use
+	 * 
+	 * @return the currently set random sequence
+	 */
+	public RandomSequence getRandomSequence() {
+		return random;
+	}
+
+	/**
+	 * Sets the random number sequence to use. If automatic configuration is 
+	 * enabled thenAny value set here will be overwritten by the 
+	 * {@link RandomSequence#RANDOM_SEQUENCE} configuration setting on the next 
+	 * config event.
+	 * 
+	 * @param random the random number generator to set
+	 */
+	public void setRandomSequence(RandomSequence random) {
+		this.random = random;
+	}
+	
+	/**
+	 * Returns the number of bits that comprises a codon
+	 * 
+	 * @return the number of bits that comprises a codon
+	 */
+	public Integer getNumberOfBits() {
+		return noBits;
+	}
+
+	/**
+	 * Sets the number of bits to use for a codon. If automatic configuration is 
+	 * enabled then any value set here will be overwritten by the 
+	 * {@link BinaryCodon#NO_BITS} configuration setting on the next config event.
+	 * 
+	 * @param noBits the number of bits in a codon
+	 */
+	public void setNumberofBits(Integer noBits) {
+		this.noBits = noBits;
+	}
 
 }

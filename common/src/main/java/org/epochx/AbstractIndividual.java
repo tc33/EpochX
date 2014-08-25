@@ -59,7 +59,11 @@ public abstract class AbstractIndividual implements Individual {
 	public AbstractIndividual clone() {
 		try {
 			AbstractIndividual clone = (AbstractIndividual) super.clone();
-			clone.fitness = fitness.clone();
+			
+			if (fitness != null) {
+				clone.fitness = fitness.clone();
+			}
+			
 			return clone;
 		} catch (CloneNotSupportedException e) {
 			throw new InternalError();

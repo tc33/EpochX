@@ -91,7 +91,7 @@ public class EpoxParser {
 		}
 
 		// Construct the node
-		Node node = nodes.get(identifier).newInstance();
+		Node node = nodes.get(identifier);
 
 		// Check the arities match
 		if (node == null) {
@@ -100,6 +100,8 @@ public class EpoxParser {
 			throw new MalformedProgramException("unexpected arity for node: " + identifier + "(expected: "
 					+ node.getArity() + ", found: " + args.size() + ")");
 		} else {
+			node = node.newInstance();
+			
 			// Recursively parse and set each child node
 			for (int i = 0; i < args.size(); i++) {
 				node.setChild(i, parse(args.get(i)));

@@ -21,8 +21,8 @@
  */
 package org.epochx.ge.fitness;
 
+import org.epochx.AbstractFitnessFunction;
 import org.epochx.Config.ConfigKey;
-import org.epochx.fitness.AbstractFitnessFunction;
 import org.epochx.ge.GEIndividual;
 import org.epochx.interpret.Interpreter;
 

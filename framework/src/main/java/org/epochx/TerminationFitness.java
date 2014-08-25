@@ -60,6 +60,7 @@ public class TerminationFitness implements TerminationCriteria, Listener<EndGene
 	 * @return <code>true</code> if the current fitness is equal to or
 	 *         greater than the threshold fitness; <code>false</code> otherwise.
 	 */
+	@Override
 	public boolean terminate() {
 		return fittest != null && fittest.compareTo(threshold) >= 0;
 	}
@@ -69,6 +70,7 @@ public class TerminationFitness implements TerminationCriteria, Listener<EndGene
 	 * 
 	 * @param event the event to get the popuation from.
 	 */
+	@Override
 	public void onEvent(EndGeneration event) {
 		fittest = event.getPopulation().fittest().getFitness();
 	}

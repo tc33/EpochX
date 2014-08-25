@@ -21,8 +21,8 @@
  */
 package org.epochx.fitness;
 
+import org.epochx.AbstractFitnessFunction;
 import org.epochx.Config;
-import org.epochx.DoubleFitness;
 import org.epochx.Fitness;
 import org.epochx.Individual;
 import org.epochx.Config.ConfigKey;

@@ -26,7 +26,6 @@ import static org.epochx.Config.Template.TEMPLATE;
 import junit.framework.TestCase;
 
 import org.epochx.Config.ConfigKey;
-import org.epochx.selection.TournamentSelector;
 
 /**
  * The <code>ConfigTest</code> class provides unit tests for methods of the
@@ -56,21 +55,6 @@ public class ConfigTest extends TestCase {
 
 		Config.getInstance().set(key, 0.4);
 		assertEquals(0.4, Config.getInstance().get(key));
-	}
-
-	/**
-	 * Test for the {@link Config#defaults()} method.
-	 */
-	public void testDefaults() {
-		Config config = Config.getInstance();
-		config.set(TEMPLATE, new GenerationalTemplate());
-
-		assertNotNull(config.get(Population.SIZE));
-		assertNotNull(config.get(GenerationalStrategy.TERMINATION_CRITERIA));
-		assertNotNull(config.get(TournamentSelector.TOURNAMENT_SIZE));
-		assertNotNull(config.get(BranchedBreeder.SELECTOR));
-		assertNotNull(config.get(Evolver.COMPONENTS));
-		assertNotNull(config.get(RandomSequence.RANDOM_SEQUENCE));
 	}
 
 	/**

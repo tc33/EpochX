@@ -49,6 +49,7 @@ public class FitnessEvaluator extends ProxyComponent<FitnessFunction> {
 	 * Delegates the evaluation of the population to the
 	 * <code>FitnessFunction</code> object.
 	 */
+	@Override
 	public Population process(Population population) {
 		if (handler == null) {
 			throw new IllegalStateException("The fitness function has not been set.");

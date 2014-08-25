@@ -39,6 +39,7 @@ public class Reproduction extends AbstractOperator {
 	 */
 	public static final double DEFAULT_PROBABILITY = 0.90;
 
+	@Override
 	public int inputSize() {
 		return 1;
 	}
@@ -48,6 +49,7 @@ public class Reproduction extends AbstractOperator {
 		return individuals;
 	}
 
+	@Override
 	public double probability() {
 		return Config.getInstance().get(PROBABILITY, DEFAULT_PROBABILITY);
 	}

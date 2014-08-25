@@ -25,11 +25,11 @@ import static org.epochx.Config.Template.TEMPLATE;
 
 import org.epochx.Config;
 import org.epochx.Config.ConfigKey;
-import org.epochx.DoubleFitness;
 import org.epochx.Individual;
 import org.epochx.event.ConfigEvent;
 import org.epochx.event.EventManager;
 import org.epochx.event.Listener;
+import org.epochx.fitness.DoubleFitness;
 import org.epochx.ge.GEIndividual;
 import org.epochx.interpret.Interpreter;
 import org.epochx.interpret.MalformedProgramException;

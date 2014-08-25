@@ -48,6 +48,7 @@ public class Initialiser extends ProxyComponent<InitialisationMethod> {
 	 * Delegates the initialisation of the population to the
 	 * <code>InitialisationMethod</code> object.
 	 */
+	@Override
 	public Population process(Population population) {
 		if (handler == null) {
 			throw new IllegalStateException("The initialisation method has not been set.");

@@ -48,6 +48,7 @@ import org.epochx.event.OperatorEvent.StartOperator;
  */
 public abstract class AbstractOperator implements Operator {
 
+	@Override
 	public final Individual[] apply(Individual ... individuals) {
 		Individual[] parents = clone(individuals);
 

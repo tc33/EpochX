@@ -58,6 +58,7 @@ public abstract class AbstractStat<T extends Event> {
 	 */
 	private Listener<T> listener = new Listener<T>() {
 
+		@Override
 		public void onEvent(T event) {
 			AbstractStat.this.refresh(event);
 		}
@@ -150,6 +151,7 @@ public abstract class AbstractStat<T extends Event> {
 
 		Listener<E> trigger = new Listener<E>() {
 
+			@Override
 			public void onEvent(E event) {
 				AbstractStat.this.clear();
 			};

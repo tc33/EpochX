@@ -131,6 +131,7 @@ public class Population implements Iterable<Individual>, Cloneable {
 	public void sort() {
 		Collections.sort(individuals, new Comparator<Individual>() {
 
+			@Override
 			public int compare(Individual o1, Individual o2) {
 				return o2.compareTo(o1);
 			}
@@ -142,6 +143,7 @@ public class Population implements Iterable<Individual>, Cloneable {
 	 * 
 	 * @return an iterator over the individuals in this population.
 	 */
+	@Override
 	public Iterator<Individual> iterator() {
 		return individuals.iterator();
 	}

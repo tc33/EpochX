@@ -29,11 +29,11 @@ import java.util.List;
 
 import org.epochx.Config;
 import org.epochx.Config.ConfigKey;
-import org.epochx.DoubleFitness;
 import org.epochx.Individual;
 import org.epochx.event.ConfigEvent;
 import org.epochx.event.EventManager;
 import org.epochx.event.Listener;
+import org.epochx.fitness.DoubleFitness;
 import org.epochx.stgp.STGPIndividual;
 import org.epochx.stgp.fitness.STGPFitnessFunction;
 import org.epochx.tools.ant.Ant;

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2013
  * Licensed under GNU Lesser General Public License
  * 
@@ -22,34 +22,25 @@
 
 package org.epochx;
 
-import java.util.ArrayList;
-import java.util.Map;
-
-import org.epochx.Config.ConfigKey;
-import org.epochx.Config.Template;
 
 /**
- * Default configuration template for generational executions.
- * 
- * @see Config
- * @see Template
+ * This class provides a base class for {@link IndividualSelector}.
  */
-public class GenerationalTemplate extends Template {
+public abstract class AbstractSelector implements IndividualSelector {
 
 	/**
-	 * The default parameter values:
-	 * <ul>
-	 * <li>{@link Evolver#COMPONENTS}: configure the pipeline components to
-	 * include {@link Initialiser}, {@link FitnessEvaluator} and
-	 * {@link GenerationalStrategy}.
+	 * The current population.
+	 */
+	protected Population population;
+
+	/**
+	 * Updates the reference of the current population.
+	 * 
+	 * @param population the current population.
 	 */
 	@Override
-	protected void fill(Map<ConfigKey<?>, Object> template) {
-		ArrayList<Component> components = new ArrayList<Component>();
-		components.add(new Initialiser());
-		components.add(new FitnessEvaluator());
-		components.add(new GenerationalStrategy(new BranchedBreeder(), new FitnessEvaluator()));
-		template.put(Evolver.COMPONENTS, components);
+	public void setup(Population population) {
+		this.population = population;
 	}
 
 }

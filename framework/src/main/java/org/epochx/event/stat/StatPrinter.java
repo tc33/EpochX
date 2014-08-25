@@ -164,6 +164,7 @@ public class StatPrinter {
 		if (!listeners.containsKey(type)) {
 			Listener<E> listener = new Listener<E>() {
 
+				@Override
 				public void onEvent(E event) {
 					StatPrinter.this.print();
 				}

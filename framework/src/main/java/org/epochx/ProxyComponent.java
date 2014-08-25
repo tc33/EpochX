@@ -63,6 +63,7 @@ public abstract class ProxyComponent<T> implements Component, Listener<ConfigEve
 	 * 
 	 * @param event the fired event object.
 	 */
+	@Override
 	public void onEvent(ConfigEvent event) {
 		if (event.isKindOf(Template.TEMPLATE, key)) {
 			setup();

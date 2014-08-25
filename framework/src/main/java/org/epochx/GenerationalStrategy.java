@@ -129,6 +129,7 @@ public class GenerationalStrategy extends Pipeline implements EvolutionaryStrate
 	 * 
 	 * @param event the fired event.
 	 */
+	@Override
 	public void onEvent(ConfigEvent event) {
 		if (event.isKindOf(Template.TEMPLATE, EvolutionaryStrategy.TERMINATION_CRITERIA)) {
 			setup();

@@ -57,6 +57,7 @@ public class Pipeline implements Component {
 	 *         <code>Population</code> will be the same <code>Population</code>
 	 *         that was provided as a parameter.
 	 */
+	@Override
 	public Population process(Population population) {
 		for (Component component: pipeline) {
 			population = component.process(population);

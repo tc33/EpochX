@@ -95,6 +95,7 @@ public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
 	 * @return a newly constructed population filled with individuals produced
 	 *         by the application of genetic operators
 	 */
+	@Override
 	public Population process(Population population) {
 		selector.setup(population);
 
@@ -173,6 +174,7 @@ public class BranchedBreeder implements Breeder, Listener<ConfigEvent> {
 	 * 
 	 * @param event {@inheritDoc}
 	 */
+	@Override
 	public void onEvent(ConfigEvent event) {
 		if (event.isKindOf(Template.TEMPLATE, OPERATORS, SELECTOR, RANDOM_SEQUENCE, ELITISM)) {
 			setup();

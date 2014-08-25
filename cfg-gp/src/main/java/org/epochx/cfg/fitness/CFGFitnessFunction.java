@@ -21,9 +21,9 @@
  */
 package org.epochx.cfg.fitness;
 
+import org.epochx.AbstractFitnessFunction;
 import org.epochx.Config.ConfigKey;
 import org.epochx.cfg.CFGIndividual;
-import org.epochx.fitness.AbstractFitnessFunction;
 import org.epochx.interpret.Interpreter;
 
 /**

@@ -20,36 +20,27 @@
  * The latest version is available from: http://www.epochx.org
  */
 
-package org.epochx;
+package org.epochx.selection;
 
-import java.util.ArrayList;
-import java.util.Map;
+import static org.epochx.RandomSequence.RANDOM_SEQUENCE;
 
-import org.epochx.Config.ConfigKey;
-import org.epochx.Config.Template;
+import org.epochx.*;
 
 /**
- * Default configuration template for generational executions.
- * 
- * @see Config
- * @see Template
+ * This class represents an {@link IndividualSelector} that selects individuals
+ * at random.
  */
-public class GenerationalTemplate extends Template {
+public class RandomSelector extends AbstractSelector {
 
 	/**
-	 * The default parameter values:
-	 * <ul>
-	 * <li>{@link Evolver#COMPONENTS}: configure the pipeline components to
-	 * include {@link Initialiser}, {@link FitnessEvaluator} and
-	 * {@link GenerationalStrategy}.
+	 * Returns a random individual from the current population.
+	 * 
+	 * @return a random individual from the current population.
 	 */
 	@Override
-	protected void fill(Map<ConfigKey<?>, Object> template) {
-		ArrayList<Component> components = new ArrayList<Component>();
-		components.add(new Initialiser());
-		components.add(new FitnessEvaluator());
-		components.add(new GenerationalStrategy(new BranchedBreeder(), new FitnessEvaluator()));
-		template.put(Evolver.COMPONENTS, components);
+	public Individual select() {
+		int index = Config.getInstance().get(RANDOM_SEQUENCE).nextInt(population.size());
+		return population.get(index);
 	}
 
 }

@@ -24,6 +24,7 @@ package org.epochx.fitness;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.epochx.AbstractFitnessFunction;
 import org.epochx.Fitness;
 import org.epochx.Individual;
 

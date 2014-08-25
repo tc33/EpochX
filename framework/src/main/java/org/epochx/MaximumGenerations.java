@@ -57,6 +57,7 @@ public class MaximumGenerations implements TerminationCriteria, Listener<EndGene
 	 * @return <code>true</code> when the maximum number of generations is
 	 *         reached; <code>false</code> otherwise.
 	 */
+	@Override
 	public boolean terminate() {
 		return generation >= Config.getInstance().get(MAXIMUM_GENERATIONS);
 	}
@@ -67,6 +68,7 @@ public class MaximumGenerations implements TerminationCriteria, Listener<EndGene
 	 * 
 	 * @param event the <code>EndGeneration</code> event.
 	 */
+	@Override
 	public void onEvent(EndGeneration event) {
 		generation = event.getGeneration();
 	}

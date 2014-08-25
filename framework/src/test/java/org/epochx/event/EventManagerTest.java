@@ -39,6 +39,7 @@ public class EventManagerTest extends TestCase {
 		EventManager manager = EventManager.getInstance();
 		Listener<RunEvent> listener = new Listener<RunEvent>() {
 
+			@Override
 			public void onEvent(RunEvent event) {
 			}
 		};

@@ -29,12 +29,14 @@ import org.epochx.epox.Node;
  * 
  * @since 2.0
  */
-public class Max3Function extends MaxFunction {
+public class Max3 extends Max {
+
+    public static final String IDENTIFIER = "MAX3";
 
 	/**
 	 * Constructs a Max3Function with three <code>null</code> children.
 	 */
-	public Max3Function() {
+	public Max3() {
 		this(null, null, null);
 	}
 
@@ -45,7 +47,7 @@ public class Max3Function extends MaxFunction {
 	 * @param child2 The second child node.
 	 * @param child3 The third child node.
 	 */
-	public Max3Function(Node child1, Node child2, Node child3) {
+	public Max3(Node child1, Node child2, Node child3) {
 		super(child1, child2, child3);
 	}
 
@@ -56,7 +58,7 @@ public class Max3Function extends MaxFunction {
 	 */
 	@Override
 	public String getIdentifier() {
-		return "MAX3";
+		return IDENTIFIER;
 	}
 
 }

@@ -43,7 +43,9 @@ import org.epochx.tools.*;
  * 
  * @since 2.0
  */
-public class DivisionProtectedFunction extends Node {
+public class DivisionProtected extends Node {
+    
+    public static final String IDENTIFIER = "DIV";
 
 	// The value returned in place of divide-by-zero.
 	private Double protectionValue;
@@ -52,7 +54,7 @@ public class DivisionProtectedFunction extends Node {
 	 * Constructs a ProtectedDivisionFunction with two <code>null</code>
 	 * children. By default a protection value of 0.0 is used.
 	 */
-	public DivisionProtectedFunction() {
+	public DivisionProtected() {
 		this(null, null);
 	}
 
@@ -63,7 +65,7 @@ public class DivisionProtectedFunction extends Node {
 	 * @param protectionValue a double value to return in the case of
 	 *        divide-by-zeros.
 	 */
-	public DivisionProtectedFunction(double protectionValue) {
+	public DivisionProtected(double protectionValue) {
 		this(null, null, protectionValue);
 	}
 
@@ -75,7 +77,7 @@ public class DivisionProtectedFunction extends Node {
 	 * @param dividend The first child node - the dividend.
 	 * @param divisor The second child node - the divisor.
 	 */
-	public DivisionProtectedFunction(Node dividend, Node divisor) {
+	public DivisionProtected(Node dividend, Node divisor) {
 		this(dividend, divisor, 0.0);
 	}
 
@@ -87,7 +89,7 @@ public class DivisionProtectedFunction extends Node {
 	 * @param protectionValue a double value to return in the case of
 	 *        divide-by-zeros.
 	 */
-	public DivisionProtectedFunction(Node dividend, Node divisor, double protectionValue) {
+	public DivisionProtected(Node dividend, Node divisor, double protectionValue) {
 		super(dividend, divisor);
 
 		this.protectionValue = protectionValue;
@@ -148,7 +150,7 @@ public class DivisionProtectedFunction extends Node {
 	 */
 	@Override
 	public String getIdentifier() {
-		return "PDIV";
+		return IDENTIFIER;
 	}
 
 	/**

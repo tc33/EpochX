@@ -25,70 +25,71 @@ import org.epochx.epox.Node;
 import org.epochx.tools.DataTypeUtils;
 
 /**
- * A node which performs logical disjunction
+ * A node which performs the logical operation of <code>NAND</code>, which is 
+ * equivalent to the negation of the conjunction, <code>NOT AND</code>
  * 
  * @since 2.0
  */
-public class OrFunction extends Node {
+public class Nand extends Node {
+
+    public static final String IDENTIFIER = "NAND";
 
 	/**
-	 * Constructs an <code>OrFunction</code> with two <code>null</code> children
+	 * Constructs a <code>NandFunction</code> with two <code>null</code> children
 	 */
-	public OrFunction() {
+	public Nand() {
 		this(null, null);
 	}
 
 	/**
-	 * Constructs an <code>OrFunction</code> with two boolean child nodes
+	 * Constructs a <code>NandFunction</code> with two boolean child nodes
 	 * 
 	 * @param child1 the first child node
 	 * @param child2 the second child node
 	 */
-	public OrFunction(Node child1, Node child2) {
+	public Nand(Node child1, Node child2) {
 		super(child1, child2);
 	}
 
 	/**
 	 * Evaluates this function lazily. The first child node is evaluated, the
-	 * result of which must be a <code>Boolean</code> instance. If the result
-	 * is a <code>false</code> value then the second child is also evaluated. The
-	 * result of this function will be <code>true</code> if either (or both)
-	 * children evaluate to <code>true</code>, otherwise the result will be
-	 * <code>false</code>.
+	 * result of which must be a <code>Boolean</code> instance. The second child
+	 * is only evaluated if the first had a <code>true</code> value. The result of 
+	 * this method will be <code>true</code> if both children evaluate to 
+	 * <code>false</code>, otherwise it will return <code>false</code>.
 	 * 
-	 * @return <code>true</code> if either child evaluates to <code>true</code>
-	 * 			otherwise <code>false</code>
+	 * @return <code>true</code> if both children evaluate to <code>false</code> 
+	 * 			otherwise <code>false</code> is returned
 	 */
 	@Override
 	public Boolean evaluate() {
 		boolean result = ((Boolean) getChild(0).evaluate()).booleanValue();
 
-		if (!result) {
+		if (result) {
 			result = ((Boolean) getChild(1).evaluate()).booleanValue();
 		}
 
-		return result;
+		return !result;
 	}
 
 	/**
-	 * Returns the identifier of this function which is <code>OR</code>
+	 * Returns the identifier of this function which is <code>NAND</code>
 	 * 
 	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {
-		return "OR";
+		return IDENTIFIER;
 	}
 
 	/**
 	 * Returns this function node's return type for the given child input types.
-	 * If there are two children, both of which have a return type of
-	 * <code>Boolean</code>, then the return type of this function will also be
-	 * <code>Boolean</code>. In all other cases this method will return
+	 * If there are two children, both of which have a return type of 
+	 * <code>Boolean</code>, then the return type of this function will also be 
+	 * <code>Boolean</code>. In all other cases this method will return 
 	 * <code>null</code> to indicate that the inputs are invalid.
 	 * 
-	 * @return the <code>Boolean</code> class or <code>null</code> if the input type is
-	 *         invalid
+	 * @return The Boolean class or null if the input type is invalid.
 	 */
 	@Override
 	public Class<?> dataType(Class<?> ... inputTypes) {

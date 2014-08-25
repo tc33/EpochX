@@ -33,12 +33,14 @@ import org.epochx.tools.*;
  * 
  * @since 2.0
  */
-public class FactorialFunction extends Node {
+public class Factorial extends Node {
+    
+    public static final String IDENTIFIER = "FACTORIAL";
 
 	/**
 	 * Constructs a FactorialFunction with one <code>null</code> child.
 	 */
-	public FactorialFunction() {
+	public Factorial() {
 		this(null);
 	}
 
@@ -47,7 +49,7 @@ public class FactorialFunction extends Node {
 	 * 
 	 * @param child the child node.
 	 */
-	public FactorialFunction(Node child) {
+	public Factorial(Node child) {
 		super(child);
 	}
 
@@ -86,7 +88,7 @@ public class FactorialFunction extends Node {
 	 */
 	@Override
 	public String getIdentifier() {
-		return "FACTORIAL";
+		return IDENTIFIER;
 	}
 
 	/**

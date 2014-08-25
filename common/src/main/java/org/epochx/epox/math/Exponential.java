@@ -25,52 +25,56 @@ import org.epochx.epox.Node;
 import org.epochx.tools.*;
 
 /**
- * A node which performs the mathematical function of cube root, called
- * CBRT
+ * A node which performs the mathematical exponential
+ * function <code>e^x</code> where <code>e</code> is the constant known as
+ * Euler's number.
  * 
  * @since 2.0
  */
-public class CubeRootFunction extends Node {
+public class Exponential extends Node {
+
+    public static final String IDENTIFIER = "EXP";
 
 	/**
-	 * Constructs a CubeRootFunction with one <code>null</code> child.
+	 * Constructs an ExponentialFunction with one <code>null</code> child.
 	 */
-	public CubeRootFunction() {
+	public Exponential() {
 		this(null);
 	}
 
 	/**
-	 * Constructs a CubeRootFunction with one numerical child node.
+	 * Constructs an ExponentialFunction with one numerical child node.
 	 * 
-	 * @param child the child node.
+	 * @param exponent the child node.
 	 */
-	public CubeRootFunction(Node child) {
-		super(child);
+	public Exponential(Node exponent) {
+		super(exponent);
 	}
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a numeric type (one of Double, Float, Long,
-	 * Integer). The cube root of this value becomes the result of this
-	 * method as a double value.
+	 * Integer). The mathematical constant <code>e</code> is raised to the power
+	 * of this value.
 	 * 
-	 * @return the cube root of the result of evaluating the child
+	 * @return <code>e</code> raised to the power of the value returned by the
+	 * 			child
 	 */
 	@Override
 	public Double evaluate() {
 		Object c = getChild(0).evaluate();
 
-		return Math.cbrt(NumericUtils.asDouble(c));
+		return Math.exp(NumericUtils.asDouble(c));
 	}
 
 	/**
-	 * Returns the identifier of this function which is CBRT
+	 * Returns the identifier of this function which is EXP
 	 * 
 	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {
-		return "CBRT";
+		return IDENTIFIER;
 	}
 
 	/**

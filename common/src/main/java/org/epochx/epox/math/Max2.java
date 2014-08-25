@@ -24,39 +24,40 @@ package org.epochx.epox.math;
 import org.epochx.epox.Node;
 
 /**
- * A node which performs a comparison of three numeric inputs and
- * returns the smallest of the three
+ * A node which performs a comparison of two numeric inputs and returns
+ * the greater of the two
  * 
  * @since 2.0
  */
-public class Min3Function extends MinFunction {
+public class Max2 extends Max {
+
+    public static final String IDENTIFIER = "MAX2";
 
 	/**
-	 * Constructs a Min3Function with three <code>null</code> children.
+	 * Constructs a Max2Function with two <code>null</code> children.
 	 */
-	public Min3Function() {
-		this(null, null, null);
+	public Max2() {
+		this(null, null);
 	}
 
 	/**
-	 * Constructs a Min3Function with three numerical child nodes.
+	 * Constructs a Max2Function with two numerical child nodes.
 	 * 
 	 * @param child1 The first child node.
-	 * @param child2 The second child node.
-	 * @param child3 The third child node.
+	 * @param child2 The second child node
 	 */
-	public Min3Function(Node child1, Node child2, Node child3) {
-		super(child1, child2, child3);
+	public Max2(Node child1, Node child2) {
+		super(child1, child2);
 	}
 
 	/**
-	 * Returns the identifier of this function which is MIN3
+	 * Returns the identifier of this function which is MAX
 	 * 
 	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {
-		return "MIN3";
+		return IDENTIFIER;
 	}
 
 }

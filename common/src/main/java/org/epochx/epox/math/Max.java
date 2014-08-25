@@ -26,44 +26,44 @@ import org.epochx.tools.*;
 
 /**
  * A node which performs the simple comparison function of determining
- * which of a set of numbers is smaller, as per the boolean less-than
- * function. This function can have a flexible number of children and as such
- * cannot be parsed by the {@link EpoxParser}, look at using
- * {@link Min2Function} or {@link Min3Function} instead.
+ * which of a set of numbers is larger, as per the boolean greater-than
+ * function.
  * 
  * @since 2.0
  */
-public class MinFunction extends Node {
+public class Max extends Node {
+
+    public static final String IDENTIFIER = "MAX";
 
 	/**
-	 * Constructs a MinFunction with the given number of <code>null</code>
+	 * Constructs a MaxFunction with the given number of <code>null</code>
 	 * children.
 	 * 
 	 * @param n the number of <code>null</code> children to set this function up
 	 * for.
 	 */
-	public MinFunction(int n) {
+	public Max(int n) {
 		this((Node) null);
 
 		setChildren(new Node[n]);
 	}
 
 	/**
-	 * Constructs a MinFunction with given numerical child nodes.
+	 * Constructs a MaxFunction with given numerical child nodes.
 	 * 
 	 * @param children the numeric child nodes.
 	 */
-	public MinFunction(Node ... children) {
+	public Max(Node ... children) {
 		super(children);
 	}
 
 	/**
 	 * Evaluates this function. The child nodes are evaluated, the
 	 * results of which must be numerically typed (any of Double, Float, Long,
-	 * Integer). The smallest of the child values will be returned as the result
+	 * Integer). The largest of the child values will be returned as the result
 	 * as the widest of the numeric types.
 	 * 
-	 * @return the smallest of the values returned by its child nodes
+	 * @return the largest of the values returned by its child nodes
 	 */
 	@Override
 	public Object evaluate() {
@@ -78,46 +78,46 @@ public class MinFunction extends Node {
 		Class<?> returnType = DataTypeUtils.widestNumberType(types);
 
 		if (returnType == Double.class) {
-			double min = Double.MAX_VALUE;
+			double max = Double.NEGATIVE_INFINITY;
 			for (int i = 0; i < arity; i++) {
 				double value = NumericUtils.asDouble(childValues[i]);
-				min = Math.min(value, min);
+				max = Math.max(value, max);
 			}
-			return min;
+			return max;
 		} else if (returnType == Float.class) {
-			float min = Float.MAX_VALUE;
+			float max = Float.NEGATIVE_INFINITY;
 			for (int i = 0; i < arity; i++) {
 				float value = NumericUtils.asFloat(childValues[i]);
-				min = Math.min(value, min);
+				max = Math.max(value, max);
 			}
-			return min;
-		} else if (returnType == Integer.class) {
-			int min = Integer.MAX_VALUE;
-			for (int i = 0; i < arity; i++) {
-				int value = NumericUtils.asInteger(childValues[i]);
-				min = Math.min(value, min);
-			}
-			return min;
+			return max;
 		} else if (returnType == Long.class) {
-			long min = Long.MAX_VALUE;
+			long max = Long.MIN_VALUE;
 			for (int i = 0; i < arity; i++) {
 				long value = NumericUtils.asLong(childValues[i]);
-				min = Math.min(value, min);
+				max = Math.max(value, max);
 			}
-			return min;
+			return max;
+		} else if (DataTypeUtils.isNumericType(returnType)) {
+			int max = Integer.MIN_VALUE;
+			for (int i = 0; i < arity; i++) {
+				int value = NumericUtils.asInteger(childValues[i]);
+				max = Math.max(value, max);
+			}
+			return max;
 		} else {
 			return null;
 		}
 	}
 
 	/**
-	 * Returns the identifier of this function which is MIN
+	 * Returns the identifier of this function which is MAX
 	 * 
 	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {
-		return "MIN";
+		return IDENTIFIER;
 	}
 
 	/**

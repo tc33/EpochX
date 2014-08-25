@@ -25,64 +25,73 @@ import org.epochx.epox.Node;
 import org.epochx.tools.DataTypeUtils;
 
 /**
- * A node which performs exclusive disjunction, also known as exclusive OR
+ * A node which performs logical conjunction or the boolean function of
+ * <code>AND</code>
  * 
  * @since 2.0
  */
-public class XorFunction extends Node {
-
+public class And extends Node {
+ 
+    public static final String IDENTIFIER = "AND";
+    
 	/**
-	 * Constructs an <code>XorFunction</code> with two <code>null</code> children
+	 * Constructs an <code>AndFunction</code> with two <code>null</code> children
 	 */
-	public XorFunction() {
+	public And() {
 		this(null, null);
 	}
 
 	/**
-	 * Constructs an <code>XorFunction</code> with two boolean child nodes
+	 * Constructs an <code>AndFunction</code> with two <code>Boolean</code> child nodes
 	 * 
 	 * @param child1 the first child node
 	 * @param child2 the second child node
 	 */
-	public XorFunction(Node child1, Node child2) {
+	public And(Node child1, Node child2) {
 		super(child1, child2);
 	}
 
 	/**
-	 * Evaluates this function. Both child nodes are evaluated, the result of
-	 * both must be a <code>Boolean</code> instance. The result of this
-	 * function will be <code>true</code> if either child (but not both) evaluate
-	 * to <code>true</code>, otherwise the result will be <code>false</code>.
+	 * Evaluates this function lazily. The first child node is evaluated, the
+	 * result of which must be a <code>Boolean</code> instance. If the result
+	 * is a <code>true</code> value then the second child is also evaluated, the
+	 * result of which becomes the result of this <code>AND</code> function. If the
+	 * first child evaluated to a <code>false</code> value then the second child is
+	 * not evaluated at all and a <code>false</code> value is returned.
 	 * 
-	 * @return <code>true</code> if either child (but not both) evaluate to 
-	 * 			<code>true</code>, otherwise the result with be <code>false</code>
+	 * @return <code>true</code> if both children evaluate to <code>true</code> and
+	 * 			<code>false</code> otherwise
 	 */
 	@Override
 	public Boolean evaluate() {
-		boolean c1 = ((Boolean) getChild(0).evaluate()).booleanValue();
-		boolean c2 = ((Boolean) getChild(1).evaluate()).booleanValue();
+		boolean result = ((Boolean) getChild(0).evaluate()).booleanValue();
 
-		return c1 != c2;
+		if (result) {
+			result = ((Boolean) getChild(1).evaluate()).booleanValue();
+		}
+
+		return result;
 	}
 
 	/**
-	 * Returns the identifier of this function which is <code>XOR</code>
+	 * Returns the identifier of this function which is <code>AND</code>
 	 * 
 	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {
-		return "XOR";
+		return IDENTIFIER;
 	}
 
 	/**
 	 * Returns this function node's return type for the given child input types.
-	 * If there are two children, both of which have a return type of 
-	 * <code>Boolean</code>, then the return type of this function will also be 
-	 * <code>Boolean</code>. In all other cases this method will return 
+	 * If there are two children, both of which have a return type of
+	 * <code>Boolean</code>, then the return type of this function will also be
+	 * <code>Boolean</code>. In all other cases this method will return
 	 * <code>null</code> to indicate that the inputs are invalid.
 	 * 
-	 * @return The Boolean class or null if the input type is invalid.
+	 * @return the <code>Boolean</code> class or <code>null</code> if the input type is
+	 *         invalid
 	 */
 	@Override
 	public Class<?> dataType(Class<?> ... inputTypes) {

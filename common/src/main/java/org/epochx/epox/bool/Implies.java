@@ -29,12 +29,14 @@ import org.epochx.tools.DataTypeUtils;
  * 
  * @since 2.0
  */
-public class ImpliesFunction extends Node {
+public class Implies extends Node {
+
+    public static final String IDENTIFIER = "IMPLIES";
 
 	/**
 	 * Constructs an <code>ImpliesFunction</code> with two <code>null</code> children
 	 */
-	public ImpliesFunction() {
+	public Implies() {
 		this(null, null);
 	}
 
@@ -44,7 +46,7 @@ public class ImpliesFunction extends Node {
 	 * @param child1 the first child node
 	 * @param child2 the second child node
 	 */
-	public ImpliesFunction(Node child1, Node child2) {
+	public Implies(Node child1, Node child2) {
 		super(child1, child2);
 	}
 
@@ -77,7 +79,7 @@ public class ImpliesFunction extends Node {
 	 */
 	@Override
 	public String getIdentifier() {
-		return "IMPLIES";
+		return IDENTIFIER;
 	}
 
 	/**

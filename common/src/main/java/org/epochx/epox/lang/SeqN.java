@@ -32,7 +32,9 @@ import org.epochx.tools.DataTypeUtils;
  * 
  * @since 2.0
  */
-public class SeqNFunction extends Node {
+public class SeqN extends Node {
+
+    public static final String IDENTIFIER = "SEQN";
 
 	/**
 	 * Constructs a <code>SeqNFunction</code> with the given number of <code>null</code>
@@ -40,7 +42,7 @@ public class SeqNFunction extends Node {
 	 * 
 	 * @param n the arity of the function
 	 */
-	public SeqNFunction(int n) {
+	public SeqN(int n) {
 		this((Node) null);
 
 		setChildren(new Node[n]);
@@ -52,7 +54,7 @@ public class SeqNFunction extends Node {
 	 * 
 	 * @param children the child nodes to be executed in sequence
 	 */
-	public SeqNFunction(Node ... children) {
+	public SeqN(Node ... children) {
 		super(children);
 	}
 
@@ -80,7 +82,7 @@ public class SeqNFunction extends Node {
 	 */
 	@Override
 	public String getIdentifier() {
-		return "SEQN";
+		return IDENTIFIER;
 	}
 
 	/**

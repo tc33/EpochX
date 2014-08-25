@@ -32,7 +32,9 @@ import org.epochx.tools.*;
  * 
  * @since 2.0
  */
-public class InvertProtectedFunction extends Node {
+public class InvertProtected extends Node {
+    
+    public static final String IDENTIFIER = "INV";
 
 	// The value returned in place of divide-by-zero.
 	private Double protectionValue;
@@ -40,7 +42,7 @@ public class InvertProtectedFunction extends Node {
 	/**
 	 * Constructs an InvertFunction with one <code>null</code> child.
 	 */
-	public InvertProtectedFunction() {
+	public InvertProtected() {
 		this(null);
 	}
 
@@ -49,7 +51,7 @@ public class InvertProtectedFunction extends Node {
 	 * 
 	 * @param child the child node.
 	 */
-	public InvertProtectedFunction(Node child) {
+	public InvertProtected(Node child) {
 		this(child, 1.0);
 	}
 	
@@ -60,7 +62,7 @@ public class InvertProtectedFunction extends Node {
 	 * @param protectionValue the value to return for a child that evaluates to 
 	 * 0.0.
 	 */
-	public InvertProtectedFunction(double protectionValue) {
+	public InvertProtected(double protectionValue) {
 		this(null);
 	}
 
@@ -73,7 +75,7 @@ public class InvertProtectedFunction extends Node {
 	 * @param protectionValue the value to return for a child that evaluates to 
 	 * 0.0.
 	 */
-	public InvertProtectedFunction(Node child, double protectionValue) {
+	public InvertProtected(Node child, double protectionValue) {
 		super(child);
 		
 		this.protectionValue = protectionValue;
@@ -107,7 +109,7 @@ public class InvertProtectedFunction extends Node {
 	 */
 	@Override
 	public String getIdentifier() {
-		return "INV";
+		return IDENTIFIER;
 	}
 
 	/**

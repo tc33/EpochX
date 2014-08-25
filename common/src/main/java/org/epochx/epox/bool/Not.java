@@ -29,12 +29,14 @@ import org.epochx.tools.DataTypeUtils;
  * 
  * @since 2.0
  */
-public class NotFunction extends Node {
+public class Not extends Node {
+
+    public static final String IDENTIFIER = "NOT";
 
 	/**
 	 * Constructs a <code>NotFunction</code> with one <code>null</code> child
 	 */
-	public NotFunction() {
+	public Not() {
 		this(null);
 	}
 
@@ -43,7 +45,7 @@ public class NotFunction extends Node {
 	 * 
 	 * @param child the first child node
 	 */
-	public NotFunction(Node child) {
+	public Not(Node child) {
 		super(child);
 	}
 
@@ -67,7 +69,7 @@ public class NotFunction extends Node {
 	 */
 	@Override
 	public String getIdentifier() {
-		return "NOT";
+		return IDENTIFIER;
 	}
 
 	/**

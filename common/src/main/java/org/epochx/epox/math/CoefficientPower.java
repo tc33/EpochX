@@ -35,13 +35,15 @@ import org.epochx.tools.*;
  * 
  * @since 2.0
  */
-public class CoefficientPowerFunction extends Node {
+public class CoefficientPower extends Node {
+
+    public static final String IDENTIFIER = "CVP";
 
 	/**
 	 * Constructs a CoefficientPowerFunction with three <code>null</code>
 	 * children.
 	 */
-	public CoefficientPowerFunction() {
+	public CoefficientPower() {
 		this(null, null, null);
 	}
 
@@ -54,7 +56,7 @@ public class CoefficientPowerFunction extends Node {
 	 *        the coefficient.
 	 * @param exponent the power the term will be raised to.
 	 */
-	public CoefficientPowerFunction(Node coefficient, Node term, Node exponent) {
+	public CoefficientPower(Node coefficient, Node term, Node exponent) {
 		super(coefficient, term, exponent);
 	}
 
@@ -94,7 +96,7 @@ public class CoefficientPowerFunction extends Node {
 	 */
 	@Override
 	public String getIdentifier() {
-		return "CVP";
+		return IDENTIFIER;
 	}
 
 	/**

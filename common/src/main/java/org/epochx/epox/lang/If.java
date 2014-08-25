@@ -29,12 +29,14 @@ import org.epochx.tools.DataTypeUtils;
  * 
  * @since 2.0
  */
-public class IfFunction extends Node {
+public class If extends Node {
+
+    public static final String IDENTIFIER = "IF";
 
 	/**
 	 * Constructs an <code>IfFunction</code> with three <code>null</code> children
 	 */
-	public IfFunction() {
+	public If() {
 		this(null, null, null);
 	}
 
@@ -48,7 +50,7 @@ public class IfFunction extends Node {
 	 * @param elseStatement the child node to be evaluated if the condition
 	 *        evaluates to false.
 	 */
-	public IfFunction(Node condition, Node ifStatement, Node elseStatement) {
+	public If(Node condition, Node ifStatement, Node elseStatement) {
 		super(condition, ifStatement, elseStatement);
 	}
 
@@ -81,7 +83,7 @@ public class IfFunction extends Node {
 	 */
 	@Override
 	public String getIdentifier() {
-		return "IF";
+		return IDENTIFIER;
 	}
 
 	/**

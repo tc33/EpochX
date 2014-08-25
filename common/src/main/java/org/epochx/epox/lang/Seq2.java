@@ -19,43 +19,43 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox.math;
+package org.epochx.epox.lang;
 
 import org.epochx.epox.Node;
 
 /**
- * A node which performs a comparison of two numeric inputs and returns
- * the greater of the two
+ * A node which chains two nodes together in sequence, called <code>SEQ2</code>
  * 
  * @since 2.0
  */
-public class Max2Function extends MaxFunction {
+public class Seq2 extends SeqN {
+
+    public static final String IDENTIFIER = "SEQ2";
 
 	/**
-	 * Constructs a Max2Function with two <code>null</code> children.
+	 * Constructs a <code>Seq2Function</code> with two <code>null</code> children
 	 */
-	public Max2Function() {
+	public Seq2() {
 		this(null, null);
 	}
 
 	/**
-	 * Constructs a Max2Function with two numerical child nodes.
+	 * Constructs a <code>Seq2Function</code> with two child nodes
 	 * 
-	 * @param child1 The first child node.
-	 * @param child2 The second child node
+	 * @param child1 the first child node
+	 * @param child2 the second child node
 	 */
-	public Max2Function(Node child1, Node child2) {
+	public Seq2(Node child1, Node child2) {
 		super(child1, child2);
 	}
 
 	/**
-	 * Returns the identifier of this function which is MAX
+	 * Returns the identifier of this function which is <code>SEQ2</code>
 	 * 
 	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {
-		return "MAX";
+		return IDENTIFIER;
 	}
-
 }

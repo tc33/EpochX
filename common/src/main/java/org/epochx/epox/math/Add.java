@@ -40,12 +40,14 @@ import org.epochx.tools.*;
  * 
  * @since 2.0
  */
-public class AddFunction extends Node {
+public class Add extends Node {
+
+    public static final String IDENTIFIER = "ADD";
 
 	/**
 	 * Constructs an AddFunction with two <code>null</code> children.
 	 */
-	public AddFunction() {
+	public Add() {
 		this(null, null);
 	}
 
@@ -56,7 +58,7 @@ public class AddFunction extends Node {
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
 	 */
-	public AddFunction(Node child1, Node child2) {
+	public Add(Node child1, Node child2) {
 		super(child1, child2);
 	}
 
@@ -111,7 +113,7 @@ public class AddFunction extends Node {
 	 */
 	@Override
 	public String getIdentifier() {
-		return "ADD";
+		return IDENTIFIER;
 	}
 
 	/**

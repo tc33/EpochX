@@ -27,16 +27,18 @@ import org.epochx.tools.*;
 /**
  * A node which performs the common (base 10) logarithm, called LOG-10
  * 
- * @see LogFunction
+ * @see Log
  * 
  * @since 2.0
  */
-public class Log10Function extends Node {
+public class Log10 extends Node {
+
+    public static final String IDENTIFIER = "LOG10";
 
 	/**
 	 * Constructs a Log10Function with one <code>null</code> child.
 	 */
-	public Log10Function() {
+	public Log10() {
 		this(null);
 	}
 
@@ -45,7 +47,7 @@ public class Log10Function extends Node {
 	 * 
 	 * @param child The child of which the base 10 logarithm will be calculated.
 	 */
-	public Log10Function(Node child) {
+	public Log10(Node child) {
 		super(child);
 	}
 
@@ -72,7 +74,7 @@ public class Log10Function extends Node {
 	 */
 	@Override
 	public String getIdentifier() {
-		return "LOG-10";
+		return IDENTIFIER;
 	}
 
 	/**

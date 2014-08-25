@@ -30,12 +30,14 @@ import org.epochx.tools.*;
  * 
  * @since 2.0
  */
-public class GreaterThanFunction extends Node {
+public class GreaterThan extends Node {
+
+    public static final String IDENTIFIER = "GT";
 
 	/**
 	 * Constructs a GreaterThanFunction with two <code>null</code> children.
 	 */
-	public GreaterThanFunction() {
+	public GreaterThan() {
 		this(null, null);
 	}
 
@@ -47,7 +49,7 @@ public class GreaterThanFunction extends Node {
 	 * @param child2 The second child which the first child is being tested
 	 *        against.
 	 */
-	public GreaterThanFunction(Node child1, Node child2) {
+	public GreaterThan(Node child1, Node child2) {
 		super(child1, child2);
 	}
 
@@ -80,7 +82,7 @@ public class GreaterThanFunction extends Node {
 	 */
 	@Override
 	public String getIdentifier() {
-		return "GT";
+		return IDENTIFIER;
 	}
 
 	/**

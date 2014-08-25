@@ -19,42 +19,46 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox.lang;
+package org.epochx.epox.math;
 
 import org.epochx.epox.Node;
 
 /**
- * A node which chains three nodes together in sequence, called <code>SEQ3</code>
+ * A node which performs a comparison of three numeric inputs and
+ * returns the smallest of the three
  * 
  * @since 2.0
  */
-public class Seq3Function extends SeqNFunction {
+public class Min3 extends Min {
+
+    public static final String IDENTIFIER = "MIN3";
 
 	/**
-	 * Constructs a Seq3Function with three <code>null</code> children.
+	 * Constructs a Min3Function with three <code>null</code> children.
 	 */
-	public Seq3Function() {
+	public Min3() {
 		this(null, null, null);
 	}
 
 	/**
-	 * Constructs a <code>Seq3Function</code> with three child nodes
+	 * Constructs a Min3Function with three numerical child nodes.
 	 * 
-	 * @param child1 the first child node
-	 * @param child2 the second child node
-	 * @param child3 the third child node
+	 * @param child1 The first child node.
+	 * @param child2 The second child node.
+	 * @param child3 The third child node.
 	 */
-	public Seq3Function(Node child1, Node child2, Node child3) {
+	public Min3(Node child1, Node child2, Node child3) {
 		super(child1, child2, child3);
 	}
 
 	/**
-	 * Returns the identifier of this function which is <code>SEQ3</code>
+	 * Returns the identifier of this function which is MIN3
 	 * 
 	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {
-		return "SEQ3";
+		return IDENTIFIER;
 	}
+
 }

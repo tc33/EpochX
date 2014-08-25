@@ -27,16 +27,18 @@ import org.epochx.tools.*;
 /**
  * A node which performs the natural (base e) logarithm.
  * 
- * @see Log10Function
+ * @see Log10
  * 
  * @since 2.0
  */
-public class LogFunction extends Node {
+public class Log extends Node {
+
+    public static final String IDENTIFIER = "LN";
 
 	/**
 	 * Constructs a LogFunction with one <code>null</code> child.
 	 */
-	public LogFunction() {
+	public Log() {
 		this(null);
 	}
 
@@ -45,7 +47,7 @@ public class LogFunction extends Node {
 	 * 
 	 * @param child The child of which the base e logarithm will be calculated.
 	 */
-	public LogFunction(Node child) {
+	public Log(Node child) {
 		super(child);
 	}
 
@@ -72,7 +74,7 @@ public class LogFunction extends Node {
 	 */
 	@Override
 	public String getIdentifier() {
-		return "LN";
+		return IDENTIFIER;
 	}
 
 	/**

@@ -29,12 +29,14 @@ import org.epochx.epox.Node;
  * 
  * @since 2.0
  */
-public class Min2Function extends MinFunction {
+public class Min2 extends Min {
+
+    public static final String IDENTIFIER = "MIN2";
 
 	/**
 	 * Constructs a Min2Function with two <code>null</code> children.
 	 */
-	public Min2Function() {
+	public Min2() {
 		this(null, null);
 	}
 
@@ -44,7 +46,7 @@ public class Min2Function extends MinFunction {
 	 * @param child1 The first child node.
 	 * @param child2 The second child node
 	 */
-	public Min2Function(Node child1, Node child2) {
+	public Min2(Node child1, Node child2) {
 		super(child1, child2);
 	}
 
@@ -55,7 +57,7 @@ public class Min2Function extends MinFunction {
 	 */
 	@Override
 	public String getIdentifier() {
-		return "MIN";
+		return IDENTIFIER;
 	}
 
 }

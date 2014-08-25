@@ -30,12 +30,14 @@ import org.epochx.tools.*;
  * 
  * @since 2.0
  */
-public class LessThanFunction extends Node {
+public class LessThan extends Node {
+
+    public static final String IDENTIFIER = "LT";
 
 	/**
 	 * Constructs a LessThanFunction with two <code>null</code> children.
 	 */
-	public LessThanFunction() {
+	public LessThan() {
 		this(null, null);
 	}
 
@@ -47,7 +49,7 @@ public class LessThanFunction extends Node {
 	 * @param child2 The second child which the first child is being tested
 	 *        against.
 	 */
-	public LessThanFunction(Node child1, Node child2) {
+	public LessThan(Node child1, Node child2) {
 		super(child1, child2);
 	}
 
@@ -80,7 +82,7 @@ public class LessThanFunction extends Node {
 	 */
 	@Override
 	public String getIdentifier() {
-		return "LT";
+		return IDENTIFIER;
 	}
 
 	/**

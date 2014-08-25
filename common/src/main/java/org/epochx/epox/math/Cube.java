@@ -25,91 +25,83 @@ import org.epochx.epox.Node;
 import org.epochx.tools.*;
 
 /**
- * A node which performs the mathematical absolute function, called
- * ABS.
- * 
- * The absolute function can be performed on inputs of the following types:
- * <ul>
- * <li>Integer</li>
- * <li>Long</li>
- * <li>Float</li>
- * <li>Double</li>
- * </ul>
+ * A node which performs the arithmetic function of cube,
+ * that is - raising to the third power. It is equivalent to the
+ * <code>PowerFunction</code> where the second child is the double literal 3.0.
  * 
  * @since 2.0
  */
-public class AbsoluteFunction extends Node {
+public class Cube extends Node {
+
+    public static final String IDENTIFIER = "CUBE";
 
 	/**
-	 * Constructs an AbsoluteFunction with one <code>null</code> child.
+	 * Constructs a CubeFunction with one <code>null</code> child.
 	 */
-	public AbsoluteFunction() {
+	public Cube() {
 		this(null);
 	}
 
 	/**
-	 * Constructs an AbsoluteFunction with one numerical child node.
+	 * Constructs a CubeFunction with one numerical child node.
 	 * 
 	 * @param child the child node.
 	 */
-	public AbsoluteFunction(Node child) {
+	public Cube(Node child) {
 		super(child);
 	}
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a numeric type (one of Double, Float, Long,
-	 * Integer). The result will be a positive value of equal magnitude to the
-	 * child value. The return type will also be the same as the input type.
+	 * Integer). The result is raised to the power of 3 and returned as the
+	 * same type as the input.
 	 * 
-	 * @return a positive value of equal magnitude to its child's value
+	 * @return the result of evaluating the child raised to the power of 3
 	 */
 	@Override
 	public Object evaluate() {
 		Object c = getChild(0).evaluate();
 
-		Class<?> returnType = DataTypeUtils.widestNumberType(c.getClass());
+		double result = Math.pow(NumericUtils.asDouble(c), 3);
 
-		if (returnType == Double.class) {
-			// Perform absolute on double.
-			return Math.abs(NumericUtils.asDouble(c));
-		} else if (returnType == Float.class) {
-			// Perform absolute on float.
-			return Math.abs(NumericUtils.asFloat(c));
-		} else if (returnType == Long.class) {
-			// Perform absolute on long.
-			return Math.abs(NumericUtils.asLong(c));
-		} else if (returnType == Integer.class) {
-			// Perform absolute on integer.
-			return Math.abs(NumericUtils.asInteger(c));
+		if (c instanceof Long) {
+			return (long) result;
+		} else if (c instanceof Integer) {
+			return (int) result;
+		} else if (c instanceof Double) {
+			return result;
+		} else if (c instanceof Float) {
+			return (float) result;
+		} else {
+			return null;
 		}
-
-		return null;
 	}
 
 	/**
-	 * Returns the identifier of this function which is ABS
+	 * Returns the identifier of this function which is CUBE
 	 * 
 	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {
-		return "ABS";
+		return IDENTIFIER;
 	}
 
 	/**
 	 * Returns this function node's return type for the given child input types.
 	 * If there is one input type of a numeric type then the return type will
-	 * be that same numeric type. In all other cases this method will return
+	 * be that numeric type. In all other cases this method will return
 	 * <code>null</code> to indicate that the inputs are invalid.
 	 * 
-	 * @return A numeric class or null if the input type is invalid.
+	 * @return a numeric class or null if the input type is invalid.
 	 */
 	@Override
 	public Class<?> dataType(Class<?> ... inputTypes) {
-		if (inputTypes.length == 1) {
-			return DataTypeUtils.widestNumberType(inputTypes);
+		if ((inputTypes.length == 1) && DataTypeUtils.isNumericType(inputTypes[0])) {
+			return inputTypes[0];
+		} else {
+			return null;
 		}
-		return null;
 	}
 }

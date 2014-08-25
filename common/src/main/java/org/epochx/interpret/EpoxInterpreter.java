@@ -106,7 +106,7 @@ public class EpoxInterpreter<T extends Individual> implements Interpreter<T> {
 		
 		if (expression == null) {
 			throw new MalformedProgramException("Source generator returned a null program source");
-		} else if (noParamSets > 0) {
+		} else if (noParamSets <= 0) {
 			throw new IllegalArgumentException("Empty argument values input");
 		}
 		

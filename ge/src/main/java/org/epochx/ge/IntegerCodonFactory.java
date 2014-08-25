@@ -66,7 +66,7 @@ public class IntegerCodonFactory implements CodonFactory, Listener<ConfigEvent> 
 	public IntegerCodonFactory(boolean autoConfig) {
 		// Default config values
 		maxCodon = Long.MAX_VALUE;
-		minCodon = Long.MIN_VALUE;
+		minCodon = 0L;
 		
 		setup();
 
@@ -89,6 +89,12 @@ public class IntegerCodonFactory implements CodonFactory, Listener<ConfigEvent> 
 		random = Config.getInstance().get(RANDOM_SEQUENCE);
 		maxCodon = Config.getInstance().get(MAXIMUM_VALUE, maxCodon);
 		minCodon = Config.getInstance().get(MINIMUM_VALUE, minCodon);
+		
+		if (minCodon < 0) {
+			new IllegalStateException("the minimum codon value must be 0 or greater");			
+		} else if (maxCodon <= minCodon) {
+			new IllegalStateException("the maximum codon value must be larger than the minimum codon value");
+		}
 		
 		codonRange = maxCodon - minCodon;
 	}
@@ -130,5 +136,68 @@ public class IntegerCodonFactory implements CodonFactory, Listener<ConfigEvent> 
 	@Override
 	public Codon codon(long value) {
 	    return new IntegerCodon(value);
+	}
+	
+	/**
+	 * Returns the random number sequence in use
+	 * 
+	 * @return the currently set random sequence
+	 */
+	public RandomSequence getRandomSequence() {
+		return random;
+	}
+
+	/**
+	 * Sets the random number sequence to use. If automatic configuration is 
+	 * enabled thenAny value set here will be overwritten by the 
+	 * {@link RandomSequence#RANDOM_SEQUENCE} configuration setting on the next 
+	 * config event.
+	 * 
+	 * @param random the random number generator to set
+	 */
+	public void setRandomSequence(RandomSequence random) {
+		this.random = random;
+	}
+	
+	/**
+	 * Returns the maximum codon value setting
+	 * 
+	 * @return the maximum codon value
+	 */
+	public Long getMaximumCodonValue() {
+		return maxCodon;
+	}
+
+	/**
+	 * Sets the maximum codon value to use. If automatic configuration is 
+	 * enabled then any value set here will be overwritten by the 
+	 * {@link Codon#MAXIMUM_VALUE} configuration setting on the next 
+	 * config event.
+	 * 
+	 * @param random the random number generator to set
+	 */
+	public void setMaximumCodonValue(Long maxCodon) {
+		this.maxCodon = maxCodon;
+	}
+	
+	/**
+	 * Returns the minimum codon value setting
+	 * 
+	 * @return the minimum codon value
+	 */
+	public Long getMinimumCodonValue() {
+		return minCodon;
+	}
+
+	/**
+	 * Sets the minimum codon value to use. If automatic configuration is 
+	 * enabled then any value set here will be overwritten by the 
+	 * {@link Codon#MINIMUM_VALUE} configuration setting on the next 
+	 * config event.
+	 * 
+	 * @param random the random number generator to set
+	 */
+	public void setMinimumCodonValue(Long minCodon) {
+		this.minCodon = minCodon;
 	}
 }

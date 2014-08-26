@@ -19,58 +19,60 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox.math;
+package org.epochx.epox.trig;
 
 import org.epochx.epox.Node;
 import org.epochx.tools.*;
 
 /**
- * A node which performs the mathematical function of square root,
- * called SQRT
+ * A node which performs the hyperbolic trigonometric
+ * function of hyperbolic tangent, called TANH
  * 
  * @since 2.0
  */
-public class SquareRootFunction extends Node {
+public class HyperbolicTangent extends Node {
 
+	public static final String IDENTIFIER = "TANH";
+	
 	/**
-	 * Constructs a SquareRootFunction with one <code>null</code> child.
+	 * Constructs a HyperbolicTangentFunction with one <code>null</code> child.
 	 */
-	public SquareRootFunction() {
+	public HyperbolicTangent() {
 		this(null);
 	}
 
 	/**
-	 * Constructs a SquareRootFunction with one numerical child node.
+	 * Constructs a HyperbolicTangentFunction with one numerical child node.
 	 * 
 	 * @param child the child node.
 	 */
-	public SquareRootFunction(Node child) {
+	public HyperbolicTangent(Node child) {
 		super(child);
 	}
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a numeric type (one of Double, Float, Long,
-	 * Integer). The square root of this value becomes the result of this
+	 * Integer). The hyperbolic tangent of this value becomes the result of this
 	 * method as a double value.
 	 * 
-	 * @return the square root of the value returned from the child
+	 * @return hyperbolic tangent of the value returned by the child
 	 */
 	@Override
 	public Double evaluate() {
 		Object c = getChild(0).evaluate();
 
-		return Math.sqrt(NumericUtils.asDouble(c));
+		return Math.tanh(NumericUtils.asDouble(c));
 	}
 
 	/**
-	 * Returns the identifier of this function which is SQRT
+	 * Returns the identifier of this function which is TANH
 	 * 
 	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {
-		return "SQRT";
+		return IDENTIFIER;
 	}
 
 	/**

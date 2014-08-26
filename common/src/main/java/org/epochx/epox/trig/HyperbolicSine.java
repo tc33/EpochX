@@ -25,53 +25,54 @@ import org.epochx.epox.Node;
 import org.epochx.tools.*;
 
 /**
- * A node which performs the inverse hyperbolic trigonometric function 
- * of area hyperbolic sine, called ARSINH
+ * A node which performs the hyperbolic trigonometric
+ * function of hyperbolic sine, called SINH
  * 
  * @since 2.0
  */
-public class AreaHyperbolicSineFunction extends Node {
+public class HyperbolicSine extends Node {
 
+	public static final String IDENTIFIER = "SINH";
+	
 	/**
-	 * Constructs an AreaHyperbolicSineFunction with one <code>null</code> 
-	 * child.
+	 * Constructs a HyperbolicSineFunction with one <code>null</code> child.
 	 */
-	public AreaHyperbolicSineFunction() {
+	public HyperbolicSine() {
 		this(null);
 	}
 
 	/**
-	 * Constructs a AreaHyperbolicSineFunction with one numerical child node.
+	 * Constructs a HyperbolicSineFunction with one numerical child node.
 	 * 
 	 * @param child the child node.
 	 */
-	public AreaHyperbolicSineFunction(Node child) {
+	public HyperbolicSine(Node child) {
 		super(child);
 	}
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a numeric type (one of Double, Float, Long,
-	 * Integer). The area hyperbolic sine of this value becomes the result of 
-	 * this method as a double value.
+	 * Integer). The hyperbolic sine of this value becomes the result of this
+	 * method as a double value.
 	 * 
-	 * @return area hyperbolic sine of the value returned by the child
+	 * @return hyperbolic sine of the value returned by the child
 	 */
 	@Override
 	public Double evaluate() {
 		Object c = getChild(0).evaluate();
 
-		return MathUtils.arsinh(NumericUtils.asDouble(c));
+		return Math.sinh(NumericUtils.asDouble(c));
 	}
 
 	/**
-	 * Returns the identifier of this function which is ARSINH.
+	 * Returns the identifier of this function which is SINH
 	 * 
 	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {
-		return "ARSINH";
+		return IDENTIFIER;
 	}
 
 	/**

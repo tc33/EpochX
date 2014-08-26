@@ -42,10 +42,10 @@ import org.epochx.TerminationFitness;
 import org.epochx.epox.Node;
 import org.epochx.epox.Variable;
 import org.epochx.epox.VariableNode;
-import org.epochx.epox.math.AddFunction;
-import org.epochx.epox.math.DivisionProtectedFunction;
-import org.epochx.epox.math.MultiplyFunction;
-import org.epochx.epox.math.SubtractFunction;
+import org.epochx.epox.math.Add;
+import org.epochx.epox.math.DivisionProtected;
+import org.epochx.epox.math.Multiply;
+import org.epochx.epox.math.Subtract;
 import org.epochx.fitness.DoubleFitness;
 import org.epochx.random.MersenneTwisterFast;
 import org.epochx.selection.TournamentSelector;
@@ -120,10 +120,10 @@ public class STGPCubicRegression extends GenerationalTemplate {
         // Setup syntax
         Variable varX = new Variable("X", Double.class);
 		Node[] syntax = new Node[]{
-			new AddFunction(),
-			new SubtractFunction(),
-			new MultiplyFunction(),
-			new DivisionProtectedFunction(),
+			new Add(),
+			new Subtract(),
+			new Multiply(),
+			new DivisionProtected(),
 			new VariableNode(varX)
 		};
         template.put(STGPIndividual.SYNTAX, syntax);

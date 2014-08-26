@@ -26,51 +26,53 @@ import org.epochx.tools.*;
 
 /**
  * A node which performs the inverse trigonometric function of
- * arc-cotangent, called ARCCOT
+ * arc-sine, called ARCSIN
  * 
  * @since 2.0
  */
-public class ArcCotangentFunction extends Node {
+public class ArcSine extends Node {
+	
+	public static final String IDENTIFIER = "ARCSIN";
 
 	/**
-	 * Constructs an ArcCotangentFunction with one <code>null</code> child.
+	 * Constructs an ArcSineFunction with one <code>null</code> child.
 	 */
-	public ArcCotangentFunction() {
+	public ArcSine() {
 		this(null);
 	}
 
 	/**
-	 * Constructs an ArcCotangentFunction with one numerical child node.
+	 * Constructs an ArcSineFunction with one numerical child node.
 	 * 
 	 * @param child the child node.
 	 */
-	public ArcCotangentFunction(Node child) {
+	public ArcSine(Node child) {
 		super(child);
 	}
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a numeric type (one of Double, Float, Long,
-	 * Integer). The arc-cotangent of this value becomes the result of this
+	 * Integer). The arc-sine of this value becomes the result of this
 	 * method as a double value.
 	 * 
-	 * @return arc-cotangent of the value returned by the child
+	 * @return arc-sine of the value returned by the child
 	 */
 	@Override
 	public Double evaluate() {
 		Object c = getChild(0).evaluate();
 
-		return MathUtils.arccot(NumericUtils.asDouble(c));
+		return Math.asin(NumericUtils.asDouble(c));
 	}
 
 	/**
-	 * Returns the identifier of this function which is ARCCOT
+	 * Returns the identifier of this function which is ARCSIN
 	 * 
 	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {
-		return "ARCCOT";
+		return IDENTIFIER;
 	}
 
 	/**

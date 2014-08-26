@@ -51,10 +51,11 @@ public class EpoxInterpreter<T extends Individual> implements Interpreter<T> {
 
 	/**
 	 * Constructs a new <code>EpoxInterpreter</code> with a new
-	 * <code>EpoxParser</code>.
+	 * <code>EpoxParser</code>. The built-in Epox node types are automatically
+	 * loaded into the parser.
 	 */
 	public EpoxInterpreter(SourceGenerator<T> generator) {
-		this(generator, new EpoxParser());
+		this(generator, new EpoxParser(true));
 	}
 
 	/**

@@ -25,52 +25,54 @@ import org.epochx.epox.Node;
 import org.epochx.tools.*;
 
 /**
- * A node which performs the inverse trigonometric function of
- * arc-tangent, called ARCTAN
+ * A node which performs the reciprocal trigonometric function of cosecant, 
+ * called CSC. Cosecant x is equal to 1/sin x.
  * 
  * @since 2.0
  */
-public class ArcTangentFunction extends Node {
+public class Cosecant extends Node {
 
+	public static final String IDENTIFIER = "CSC";
+	
 	/**
-	 * Constructs an ArcTangentFunction with one <code>null</code> child.
+	 * Constructs a CosecantFunction with one <code>null</code> child.
 	 */
-	public ArcTangentFunction() {
+	public Cosecant() {
 		this(null);
 	}
 
 	/**
-	 * Constructs an ArcTangentFunction with one numerical child node.
+	 * Constructs a CosecantFunction with one numerical child node.
 	 * 
 	 * @param child the child node.
 	 */
-	public ArcTangentFunction(Node child) {
+	public Cosecant(Node child) {
 		super(child);
 	}
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a numeric type (one of Double, Float, Long,
-	 * Integer). The arc-tangent of this value becomes the result of this
-	 * method as a double value.
+	 * Integer). 1 is divided by the sine of this value to give the result as a
+	 * double value.
 	 * 
-	 * @return arc-tangent of the value returned by the child
+	 * @return cosecant of the value returned by the child
 	 */
 	@Override
 	public Double evaluate() {
 		Object c = getChild(0).evaluate();
 
-		return Math.atan(NumericUtils.asDouble(c));
+		return MathUtils.csc(NumericUtils.asDouble(c));
 	}
 
 	/**
-	 * Returns the identifier of this function which is ARCTAN
+	 * Returns the identifier of this function which is CSC
 	 * 
 	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {
-		return "ARCTAN";
+		return IDENTIFIER;
 	}
 
 	/**

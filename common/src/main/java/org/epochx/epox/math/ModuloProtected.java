@@ -32,12 +32,14 @@ import org.epochx.tools.*;
  * 
  * @since 2.0
  */
-public class ModuloProtectedFunction extends Node {
+public class ModuloProtected extends Node {
 
+	public static final String IDENTIFIER = "MOD";
+	
 	/**
 	 * Constructs a ModuloProtectedFunction with two <code>null</code> children.
 	 */
-	public ModuloProtectedFunction() {
+	public ModuloProtected() {
 		this(null, null);
 	}
 
@@ -48,7 +50,7 @@ public class ModuloProtectedFunction extends Node {
 	 * @param child1 The first child node - the dividend.
 	 * @param child2 The second child node - the divisor.
 	 */
-	public ModuloProtectedFunction(Node child1, Node child2) {
+	public ModuloProtected(Node child1, Node child2) {
 		super(child1, child2);
 	}
 
@@ -102,7 +104,7 @@ public class ModuloProtectedFunction extends Node {
 	 */
 	@Override
 	public String getIdentifier() {
-		return "MOD";
+		return IDENTIFIER;
 	}
 
 	/**

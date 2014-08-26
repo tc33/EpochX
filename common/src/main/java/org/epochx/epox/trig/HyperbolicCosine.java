@@ -25,52 +25,54 @@ import org.epochx.epox.Node;
 import org.epochx.tools.*;
 
 /**
- * A node which performs the trigonometric function of tangent, called
- * TAN
+ * A node which performs the hyperbolic trigonometric function of
+ * hyperbolic cosine, called COSH
  * 
  * @since 2.0
  */
-public class TangentFunction extends Node {
+public class HyperbolicCosine extends Node {
 
+	public static final String IDENTIFIER = "COSH";
+	
 	/**
-	 * Constructs an TangentFunction with one <code>null</code> child.
+	 * Constructs a HyperbolicCosineFunction with one <code>null</code> child.
 	 */
-	public TangentFunction() {
+	public HyperbolicCosine() {
 		this(null);
 	}
 
 	/**
-	 * Constructs a TangentFunction with one numerical child node.
+	 * Constructs a HyperbolicCosineFunction with one numerical child node.
 	 * 
 	 * @param child the child node.
 	 */
-	public TangentFunction(Node child) {
+	public HyperbolicCosine(Node child) {
 		super(child);
 	}
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a numeric type (one of Double, Float, Long,
-	 * Integer). The tangent of this value becomes the result of this
+	 * Integer). The hyperbolic cosine of this value becomes the result of this
 	 * method as a double value.
 	 * 
-	 * @return tangent of the value returned by the child
+	 * @return hyperbolic cosine of the value returned by the child
 	 */
 	@Override
 	public Double evaluate() {
 		Object c = getChild(0).evaluate();
 
-		return Math.tan(NumericUtils.asDouble(c));
+		return Math.cosh(NumericUtils.asDouble(c));
 	}
 
 	/**
-	 * Returns the identifier of this function which is TAN
+	 * Returns the identifier of this function which is COSH
 	 * 
 	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {
-		return "TAN";
+		return IDENTIFIER;
 	}
 
 	/**

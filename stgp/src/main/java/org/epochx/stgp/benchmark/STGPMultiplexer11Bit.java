@@ -42,10 +42,10 @@ import org.epochx.TerminationFitness;
 import org.epochx.epox.Node;
 import org.epochx.epox.Variable;
 import org.epochx.epox.VariableNode;
-import org.epochx.epox.bool.AndFunction;
-import org.epochx.epox.bool.NotFunction;
-import org.epochx.epox.bool.OrFunction;
-import org.epochx.epox.lang.IfFunction;
+import org.epochx.epox.bool.And;
+import org.epochx.epox.bool.Not;
+import org.epochx.epox.bool.Or;
+import org.epochx.epox.lang.If;
 import org.epochx.fitness.DoubleFitness;
 import org.epochx.random.MersenneTwisterFast;
 import org.epochx.selection.TournamentSelector;
@@ -143,10 +143,10 @@ public class STGPMultiplexer11Bit extends GenerationalTemplate {
         
         // Setup syntax
 		List<Node> syntaxList = new ArrayList<Node>();
-		syntaxList.add(new AndFunction());
-		syntaxList.add(new OrFunction());
-		syntaxList.add(new NotFunction());
-		syntaxList.add(new IfFunction());
+		syntaxList.add(new And());
+		syntaxList.add(new Or());
+		syntaxList.add(new Not());
+		syntaxList.add(new If());
 
 		Variable[] variables = new Variable[NO_BITS];
 		

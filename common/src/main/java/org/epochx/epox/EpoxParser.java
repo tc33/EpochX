@@ -23,12 +23,71 @@ package org.epochx.epox;
 
 import java.util.*;
 
+import org.epochx.epox.ant.AntMove;
+import org.epochx.epox.ant.AntSkip;
+import org.epochx.epox.ant.AntTurnLeft;
+import org.epochx.epox.ant.AntTurnRight;
+import org.epochx.epox.ant.IfFoodAhead;
+import org.epochx.epox.bool.And;
+import org.epochx.epox.bool.IfAndOnlyIf;
+import org.epochx.epox.bool.Nand;
+import org.epochx.epox.bool.Nor;
+import org.epochx.epox.bool.Not;
+import org.epochx.epox.bool.Or;
+import org.epochx.epox.bool.Xor;
+import org.epochx.epox.lang.If;
+import org.epochx.epox.lang.Seq2;
+import org.epochx.epox.lang.Seq3;
+import org.epochx.epox.math.Absolute;
+import org.epochx.epox.math.Add;
+import org.epochx.epox.math.CoefficientPower;
+import org.epochx.epox.math.Cube;
+import org.epochx.epox.math.CubeRoot;
+import org.epochx.epox.math.DivisionProtected;
+import org.epochx.epox.math.Exponential;
+import org.epochx.epox.math.Factorial;
+import org.epochx.epox.math.GreaterThan;
+import org.epochx.epox.math.InvertProtected;
+import org.epochx.epox.math.LessThan;
+import org.epochx.epox.math.Log;
+import org.epochx.epox.math.Log10;
+import org.epochx.epox.math.Max2;
+import org.epochx.epox.math.Max3;
+import org.epochx.epox.math.Min2;
+import org.epochx.epox.math.Min3;
+import org.epochx.epox.math.ModuloProtected;
+import org.epochx.epox.math.Multiply;
+import org.epochx.epox.math.Power;
+import org.epochx.epox.math.Signum;
+import org.epochx.epox.math.Square;
+import org.epochx.epox.math.SquareRoot;
+import org.epochx.epox.math.Subtract;
+import org.epochx.epox.trig.ArcCosecant;
+import org.epochx.epox.trig.ArcCosine;
+import org.epochx.epox.trig.ArcCotangent;
+import org.epochx.epox.trig.ArcSecant;
+import org.epochx.epox.trig.ArcSine;
+import org.epochx.epox.trig.ArcTangent;
+import org.epochx.epox.trig.AreaHyperbolicCosine;
+import org.epochx.epox.trig.AreaHyperbolicSine;
+import org.epochx.epox.trig.AreaHyperbolicTangent;
+import org.epochx.epox.trig.Cosecant;
+import org.epochx.epox.trig.Cosine;
+import org.epochx.epox.trig.Cotangent;
+import org.epochx.epox.trig.HyperbolicCosine;
+import org.epochx.epox.trig.HyperbolicSine;
+import org.epochx.epox.trig.HyperbolicTangent;
+import org.epochx.epox.trig.Secant;
+import org.epochx.epox.trig.Sine;
+import org.epochx.epox.trig.Tangent;
 import org.epochx.interpret.MalformedProgramException;
 
 /**
  * This parser is for parsing valid Epox programs into a node tree. It is only
  * able to parse those node types which have been declared through the parser's
- * <code>declare</code> methods.
+ * <code>declare</code> methods. If the constructor's <code>load</code> parameter
+ * is set to <code>true</code> then all the built-in Epox node types will be loaded
+ * into the parser at construction. 
  * 
  * @see Node
  * 
@@ -41,9 +100,15 @@ public class EpoxParser {
 
 	/**
 	 * Constructs an <code>EpoxParser</code> with no nodes declared
+	 * 
+	 * @param load whether to load the built-in Epox nodes or not
 	 */
-	public EpoxParser() {
+	public EpoxParser(boolean load) {
 		nodes = new HashMap<String, Node>();
+		
+		if (load) {
+			load();			
+		}
 	}
 
 	/**
@@ -181,5 +246,79 @@ public class EpoxParser {
 		}
 
 		return args;
+	}
+	
+	/**
+	 * Loads the built-in Epox node types
+	 */
+	protected void load() {
+		// Insert the Boolean functions.
+		Node[] toDeclare = new Node[]{
+			new And(),
+			new IfAndOnlyIf(),
+			new Nand(),
+			new Nor(),
+			new Not(),
+			new Or(),
+			new Xor(),
+			
+			new ArcCosecant(),
+			new ArcCosine(),
+			new ArcCotangent(),
+			new ArcSecant(),
+			new ArcSine(),
+			new ArcTangent(),
+			new AreaHyperbolicCosine(),
+			new AreaHyperbolicSine(),
+			new AreaHyperbolicTangent(),
+			new Cosecant(),
+			new Cosine(),
+			new Cotangent(),
+			new HyperbolicCosine(),
+			new HyperbolicSine(),
+			new HyperbolicTangent(),
+			new Secant(),
+			new Sine(),
+			new Tangent(),
+			
+			new Absolute(),
+			new Add(),
+			new CoefficientPower(),
+			new Cube(),
+			new CubeRoot(),
+			new Exponential(),
+			new Factorial(),
+			new GreaterThan(),
+			new InvertProtected(),
+			new Log10(),
+			new Log(),
+			new LessThan(),
+			new Max2(),
+			new Min2(),
+			new Max3(),
+			new Min3(),
+			new ModuloProtected(),
+			new Multiply(),
+			new Power(),
+			new DivisionProtected(),
+			new Signum(),
+			new Square(),
+			new SquareRoot(),
+			new Subtract(),
+			
+			new IfFoodAhead(),
+			new AntMove(),
+			new AntTurnLeft(),
+			new AntTurnRight(),
+			new AntSkip(),
+			
+			new If(),
+			new Seq2(),
+			new Seq3()
+		};
+		
+		for (Node node: toDeclare) {
+			declare(node);
+		}
 	}
 }

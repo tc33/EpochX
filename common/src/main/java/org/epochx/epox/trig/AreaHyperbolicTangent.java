@@ -30,13 +30,15 @@ import org.epochx.tools.*;
  * 
  * @since 2.0
  */
-public class AreaHyperbolicTangentFunction extends Node {
+public class AreaHyperbolicTangent extends Node {
+	
+	public static final String IDENTIFIER = "ARTANH";
 
 	/**
 	 * Constructs an AreaHyperbolicTangentFunction with one <code>null</code> 
 	 * child.
 	 */
-	public AreaHyperbolicTangentFunction() {
+	public AreaHyperbolicTangent() {
 		this(null);
 	}
 
@@ -45,7 +47,7 @@ public class AreaHyperbolicTangentFunction extends Node {
 	 * 
 	 * @param child the child node.
 	 */
-	public AreaHyperbolicTangentFunction(Node child) {
+	public AreaHyperbolicTangent(Node child) {
 		super(child);
 	}
 
@@ -71,7 +73,7 @@ public class AreaHyperbolicTangentFunction extends Node {
 	 */
 	@Override
 	public String getIdentifier() {
-		return "ARTANH";
+		return IDENTIFIER;
 	}
 
 	/**

@@ -19,86 +19,75 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox.math;
+package org.epochx.epox.trig;
 
 import org.epochx.epox.Node;
 import org.epochx.tools.*;
 
 /**
- * A node which performs the arithmetic function of squaring,
- * that is - raising to the second power. It is equivalent to the
- * <code>PowerFunction</code> where the second child is the literal
- * <code>2</code>.
+ * A node which performs the inverse hyperbolic trigonometric function 
+ * of area hyperbolic cosine, called ARCOSH
  * 
  * @since 2.0
  */
-public class SquareFunction extends Node {
+public class AreaHyperbolicCosine extends Node {
 
+	public static final String IDENTIFIER = "ARCOSH";
+	
 	/**
-	 * Constructs a SquareFunction with one <code>null</code> child.
+	 * Constructs an AreaHyperbolicCosineFunction with one <code>null</code> 
+	 * child.
 	 */
-	public SquareFunction() {
+	public AreaHyperbolicCosine() {
 		this(null);
 	}
 
 	/**
-	 * Constructs a SquareFunction with one numerical child node.
+	 * Constructs a AreaHyperbolicCosineFunction with one numerical child node.
 	 * 
 	 * @param child the child node.
 	 */
-	public SquareFunction(Node child) {
+	public AreaHyperbolicCosine(Node child) {
 		super(child);
 	}
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a numeric type (one of Double, Float, Long,
-	 * Integer). The result is raised to the power of 2 and returned as the
-	 * same type as the input.
+	 * Integer). The area hyperbolic cosine of this value becomes the result of 
+	 * this method as a double value.
 	 * 
-	 * @return the result of evaluating the child squared
+	 * @return area hyperbolic cosine of the value returned by the child
 	 */
 	@Override
-	public Object evaluate() {
+	public Double evaluate() {
 		Object c = getChild(0).evaluate();
 
-		double result = Math.pow(NumericUtils.asDouble(c), 2);
-
-		if (c instanceof Long) {
-			return (long) result;
-		} else if (c instanceof Float) {
-			return (float) result;
-		} else if (c instanceof Integer) {
-			return (int) result;
-		} else if (c instanceof Double) {
-			return result;
-		} else {
-			return null;
-		}
+		return MathUtils.arcosh(NumericUtils.asDouble(c));
 	}
 
 	/**
-	 * Returns the identifier of this function which is SQUARE
+	 * Returns the identifier of this function which is ARCOSH
 	 * 
 	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {
-		return "SQUARE";
+		return IDENTIFIER;
 	}
 
 	/**
 	 * Returns this function node's return type for the given child input types.
 	 * If there is one input type of a numeric type then the return type will
-	 * be that numeric type. In all other cases this method will return
-	 * <code>null</code> to indicate that the inputs are invalid.
+	 * be Double. In all other cases this method will return <code>null</code>
+	 * to indicate that the inputs are invalid.
 	 * 
-	 * @return a numeric class or null if the input type is invalid.
+	 * @return the Double class or null if the input type is invalid.
 	 */
 	@Override
 	public Class<?> dataType(Class<?> ... inputTypes) {
 		if ((inputTypes.length == 1) && DataTypeUtils.isNumericType(inputTypes[0])) {
-			return inputTypes[0];
+			return Double.class;
 		} else {
 			return null;
 		}

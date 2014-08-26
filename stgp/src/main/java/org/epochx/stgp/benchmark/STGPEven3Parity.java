@@ -42,10 +42,10 @@ import org.epochx.TerminationFitness;
 import org.epochx.epox.Node;
 import org.epochx.epox.Variable;
 import org.epochx.epox.VariableNode;
-import org.epochx.epox.bool.AndFunction;
-import org.epochx.epox.bool.NandFunction;
-import org.epochx.epox.bool.NorFunction;
-import org.epochx.epox.bool.OrFunction;
+import org.epochx.epox.bool.And;
+import org.epochx.epox.bool.Nand;
+import org.epochx.epox.bool.Nor;
+import org.epochx.epox.bool.Or;
 import org.epochx.fitness.DoubleFitness;
 import org.epochx.random.MersenneTwisterFast;
 import org.epochx.selection.TournamentSelector;
@@ -125,10 +125,10 @@ public class STGPEven3Parity extends GenerationalTemplate {
         
         // Setup syntax
 		List<Node> syntaxList = new ArrayList<Node>();
-		syntaxList.add(new AndFunction());
-		syntaxList.add(new OrFunction());
-		syntaxList.add(new NandFunction());
-		syntaxList.add(new NorFunction());
+		syntaxList.add(new And());
+		syntaxList.add(new Or());
+		syntaxList.add(new Nand());
+		syntaxList.add(new Nor());
 
 		Variable[] variables = new Variable[NO_BITS];
 		for (int i=0; i < NO_BITS; i++) {

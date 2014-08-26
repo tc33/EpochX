@@ -33,13 +33,13 @@ import org.epochx.tools.ant.Ant;
  * Alternatively, it can require one child node with a data-type of <code>Ant</code>.
  * In this case, when evaluated it will first evaluate its child to obtain its ant.
  * 
- * @see AntSkipFunction
- * @see AntMoveFunction
- * @see AntTurnLeftFunction
+ * @see AntSkip
+ * @see AntMove
+ * @see AntTurnLeft
  * 
  * @since 2.0
  */
-public class AntTurnRightFunction extends Node {
+public class AntTurnRight extends Node {
 
 	// This may remain null, depending on the constructor used.
 	private Ant ant;
@@ -47,7 +47,7 @@ public class AntTurnRightFunction extends Node {
 	/**
 	 * Constructs an <code>AntTurnRightFunction</code> with one <code>null</code> child
 	 */
-	public AntTurnRightFunction() {
+	public AntTurnRight() {
 		this((Node) null);
 	}
 
@@ -57,7 +57,7 @@ public class AntTurnRightFunction extends Node {
 	 * 
 	 * @param child this node's only child
 	 */
-	public AntTurnRightFunction(Node child) {
+	public AntTurnRight(Node child) {
 		super(child);
 	}
 
@@ -71,7 +71,7 @@ public class AntTurnRightFunction extends Node {
 	 *        evaluated. An exception will be thrown if this argument is
 	 *        <code>null</code>.
 	 */
-	public AntTurnRightFunction(Ant ant) {
+	public AntTurnRight(Ant ant) {
 		super();
 
 		if (ant == null) {

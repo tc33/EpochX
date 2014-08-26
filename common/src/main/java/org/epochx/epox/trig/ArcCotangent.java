@@ -25,51 +25,54 @@ import org.epochx.epox.Node;
 import org.epochx.tools.*;
 
 /**
- * A node which performs the trigonometric function of sine
+ * A node which performs the inverse trigonometric function of
+ * arc-cotangent, called ARCCOT
  * 
  * @since 2.0
  */
-public class SineFunction extends Node {
+public class ArcCotangent extends Node {
+	
+	public static final String IDENTIFIER = "ARCCOT";
 
 	/**
-	 * Constructs a SineFunction with one <code>null</code> child.
+	 * Constructs an ArcCotangentFunction with one <code>null</code> child.
 	 */
-	public SineFunction() {
+	public ArcCotangent() {
 		this(null);
 	}
 
 	/**
-	 * Constructs a SineFunction with one numerical child node.
+	 * Constructs an ArcCotangentFunction with one numerical child node.
 	 * 
 	 * @param child the child node.
 	 */
-	public SineFunction(Node child) {
+	public ArcCotangent(Node child) {
 		super(child);
 	}
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a numeric type (one of Double, Float, Long,
-	 * Integer). The Sine of this value becomes the result of this
+	 * Integer). The arc-cotangent of this value becomes the result of this
 	 * method as a double value.
 	 * 
-	 * @return sine of the value returned by the child
+	 * @return arc-cotangent of the value returned by the child
 	 */
 	@Override
 	public Double evaluate() {
 		Object c = getChild(0).evaluate();
 
-		return Math.sin(NumericUtils.asDouble(c));
+		return MathUtils.arccot(NumericUtils.asDouble(c));
 	}
 
 	/**
-	 * Returns the identifier of this function which is SIN
+	 * Returns the identifier of this function which is ARCCOT
 	 * 
 	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {
-		return "SIN";
+		return IDENTIFIER;
 	}
 
 	/**

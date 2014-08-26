@@ -25,52 +25,54 @@ import org.epochx.epox.Node;
 import org.epochx.tools.*;
 
 /**
- * A node which performs the inverse trigonometric function of
- * arc-cosecant, called ARCCSC
+ * A node which performs the reciprocal trigonometric
+ * function of secant, called SEC. Secant x is equal to 1/cos x.
  * 
  * @since 2.0
  */
-public class ArcCosecantFunction extends Node {
+public class Secant extends Node {
 
+	public static final String IDENTIFIER = "SEC";
+	
 	/**
-	 * Constructs an ArcCosecantFunction with one <code>null</code> child.
+	 * Constructs a SecantFunction with one <code>null</code> child.
 	 */
-	public ArcCosecantFunction() {
+	public Secant() {
 		this(null);
 	}
 
 	/**
-	 * Constructs an ArcCosecantFunction with one numerical child node.
+	 * Constructs a SecantFunction with one numerical child node.
 	 * 
 	 * @param child the child node.
 	 */
-	public ArcCosecantFunction(Node child) {
+	public Secant(Node child) {
 		super(child);
 	}
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a numeric type (one of Double, Float, Long,
-	 * Integer). The arc-cosecant of this value becomes the result of this
-	 * method as a double value.
+	 * Integer). 1 is divided by the cos of this value to give the result as a
+	 * double value.
 	 * 
-	 * @return arc-cosecant of the value returned by the child
+	 * @return secant of the value returned by the child
 	 */
 	@Override
 	public Double evaluate() {
 		Object c = getChild(0).evaluate();
 
-		return MathUtils.arccsc(NumericUtils.asDouble(c));
+		return MathUtils.sec(NumericUtils.asDouble(c));
 	}
 
 	/**
-	 * Returns the identifier of this function which is ARCCSC
+	 * Returns the identifier of this function which is SEC.
 	 * 
 	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {
-		return "ARCCSC";
+		return IDENTIFIER;
 	}
 
 	/**

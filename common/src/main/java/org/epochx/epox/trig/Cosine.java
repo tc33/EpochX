@@ -25,52 +25,54 @@ import org.epochx.epox.Node;
 import org.epochx.tools.*;
 
 /**
- * A node which performs the reciprocal trigonometric
- * function of secant, called SEC. Secant x is equal to 1/cos x.
+ * A node which performs the trigonometric function of cosine, called
+ * COS
  * 
  * @since 2.0
  */
-public class SecantFunction extends Node {
+public class Cosine extends Node {
 
+	public static final String IDENTIFIER = "COS";
+	
 	/**
-	 * Constructs a SecantFunction with one <code>null</code> child.
+	 * Constructs an CosineFunction with one <code>null</code> child.
 	 */
-	public SecantFunction() {
+	public Cosine() {
 		this(null);
 	}
 
 	/**
-	 * Constructs a SecantFunction with one numerical child node.
+	 * Constructs a CosineFunction with one numerical child node.
 	 * 
 	 * @param child the child node.
 	 */
-	public SecantFunction(Node child) {
+	public Cosine(Node child) {
 		super(child);
 	}
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a numeric type (one of Double, Float, Long,
-	 * Integer). 1 is divided by the cos of this value to give the result as a
-	 * double value.
+	 * Integer). The cosine of this value becomes the result of this
+	 * method as a double value.
 	 * 
-	 * @return secant of the value returned by the child
+	 * @return cosine of the value returned by the child
 	 */
 	@Override
 	public Double evaluate() {
 		Object c = getChild(0).evaluate();
 
-		return MathUtils.sec(NumericUtils.asDouble(c));
+		return Math.cos(NumericUtils.asDouble(c));
 	}
 
 	/**
-	 * Returns the identifier of this function which is SEC.
+	 * Returns the identifier of this function which is COS
 	 * 
 	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {
-		return "SEC";
+		return IDENTIFIER;
 	}
 
 	/**

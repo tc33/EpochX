@@ -34,7 +34,7 @@ import org.epochx.tools.ant.Ant;
  * 
  * @since 2.0
  */
-public class IfFoodAheadFunction extends Node {
+public class IfFoodAhead extends Node {
 
 	// This may remain null, depending on the constructor used.
 	private Ant ant;
@@ -43,7 +43,7 @@ public class IfFoodAheadFunction extends Node {
 	 * Constructs an <code>IfFoodAheadFunction</code> with three <code>null</code>
 	 * children
 	 */
-	public IfFoodAheadFunction() {
+	public IfFoodAhead() {
 		this((Node) null, null, null);
 	}
 
@@ -55,7 +55,7 @@ public class IfFoodAheadFunction extends Node {
 	 * @param child1 the first conditionally evaluated child node
 	 * @param child2 the second conditionally evaluated child node
 	 */
-	public IfFoodAheadFunction(Node ant, Node child1, Node child2) {
+	public IfFoodAhead(Node ant, Node child1, Node child2) {
 		super(ant, child1, child2);
 	}
 
@@ -71,7 +71,7 @@ public class IfFoodAheadFunction extends Node {
 	 * @param child1 the first conditionally evaluated child node
 	 * @param child2 the second conditionally evaluated child node
 	 */
-	public IfFoodAheadFunction(Ant ant, Node child1, Node child2) {
+	public IfFoodAhead(Ant ant, Node child1, Node child2) {
 		super(child1, child2);
 
 		if (ant == null) {
@@ -91,7 +91,7 @@ public class IfFoodAheadFunction extends Node {
 	 *        node is evaluated. An exception will be thrown if this argument is
 	 *        <code>null</code>.
 	 */
-	public IfFoodAheadFunction(final Ant ant) {
+	public IfFoodAhead(final Ant ant) {
 		this(ant, null, null);
 	}
 

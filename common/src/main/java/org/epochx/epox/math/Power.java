@@ -29,12 +29,14 @@ import org.epochx.tools.*;
  * 
  * @since 2.0
  */
-public class PowerFunction extends Node {
+public class Power extends Node {
+	
+	public static final String IDENTIFIER = "POW";
 
 	/**
 	 * Constructs a PowerFunction with two <code>null</code> children.
 	 */
-	public PowerFunction() {
+	public Power() {
 		this(null, null);
 	}
 
@@ -46,7 +48,7 @@ public class PowerFunction extends Node {
 	 * @param base The first child node - the base.
 	 * @param exponent The second child node - the exponent.
 	 */
-	public PowerFunction(Node base, Node exponent) {
+	public Power(Node base, Node exponent) {
 		super(base, exponent);
 	}
 
@@ -87,7 +89,7 @@ public class PowerFunction extends Node {
 	 */
 	@Override
 	public String getIdentifier() {
-		return "POW";
+		return IDENTIFIER;
 	}
 
 	/**

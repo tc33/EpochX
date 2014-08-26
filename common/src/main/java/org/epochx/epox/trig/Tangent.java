@@ -25,52 +25,54 @@ import org.epochx.epox.Node;
 import org.epochx.tools.*;
 
 /**
- * A node which performs the trigonometric function of cosine, called
- * COS
+ * A node which performs the trigonometric function of tangent, called
+ * TAN
  * 
  * @since 2.0
  */
-public class CosineFunction extends Node {
+public class Tangent extends Node {
 
+	public static final String IDENTIFIER = "TAN";
+	
 	/**
-	 * Constructs an CosineFunction with one <code>null</code> child.
+	 * Constructs an TangentFunction with one <code>null</code> child.
 	 */
-	public CosineFunction() {
+	public Tangent() {
 		this(null);
 	}
 
 	/**
-	 * Constructs a CosineFunction with one numerical child node.
+	 * Constructs a TangentFunction with one numerical child node.
 	 * 
 	 * @param child the child node.
 	 */
-	public CosineFunction(Node child) {
+	public Tangent(Node child) {
 		super(child);
 	}
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a numeric type (one of Double, Float, Long,
-	 * Integer). The cosine of this value becomes the result of this
+	 * Integer). The tangent of this value becomes the result of this
 	 * method as a double value.
 	 * 
-	 * @return cosine of the value returned by the child
+	 * @return tangent of the value returned by the child
 	 */
 	@Override
 	public Double evaluate() {
 		Object c = getChild(0).evaluate();
 
-		return Math.cos(NumericUtils.asDouble(c));
+		return Math.tan(NumericUtils.asDouble(c));
 	}
 
 	/**
-	 * Returns the identifier of this function which is COS
+	 * Returns the identifier of this function which is TAN
 	 * 
 	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {
-		return "COS";
+		return IDENTIFIER;
 	}
 
 	/**

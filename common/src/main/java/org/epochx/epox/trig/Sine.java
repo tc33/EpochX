@@ -25,52 +25,53 @@ import org.epochx.epox.Node;
 import org.epochx.tools.*;
 
 /**
- * A node which performs the inverse trigonometric function of
- * arc-cosine, called ARCCOS
+ * A node which performs the trigonometric function of sine
  * 
  * @since 2.0
  */
-public class ArcCosineFunction extends Node {
+public class Sine extends Node {
 
+	public static final String IDENTIFIER = "SIN";
+	
 	/**
-	 * Constructs an ArcCosineFunction with one <code>null</code> child.
+	 * Constructs a SineFunction with one <code>null</code> child.
 	 */
-	public ArcCosineFunction() {
+	public Sine() {
 		this(null);
 	}
 
 	/**
-	 * Constructs an ArcCosineFunction with one numerical child node.
+	 * Constructs a SineFunction with one numerical child node.
 	 * 
 	 * @param child the child node.
 	 */
-	public ArcCosineFunction(Node child) {
+	public Sine(Node child) {
 		super(child);
 	}
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a numeric type (one of Double, Float, Long,
-	 * Integer). The arc-cosine of this value becomes the result of this
+	 * Integer). The Sine of this value becomes the result of this
 	 * method as a double value.
 	 * 
-	 * @return arc-cosine of the value returned by the child
+	 * @return sine of the value returned by the child
 	 */
 	@Override
 	public Double evaluate() {
 		Object c = getChild(0).evaluate();
 
-		return Math.acos(NumericUtils.asDouble(c));
+		return Math.sin(NumericUtils.asDouble(c));
 	}
 
 	/**
-	 * Returns the identifier of this function which is ARCCOS
+	 * Returns the identifier of this function which is SIN
 	 * 
 	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {
-		return "ARCCOS";
+		return IDENTIFIER;
 	}
 
 	/**

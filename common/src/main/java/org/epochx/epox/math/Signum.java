@@ -19,72 +19,88 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox.trig;
+package org.epochx.epox.math;
 
 import org.epochx.epox.Node;
 import org.epochx.tools.*;
 
 /**
- * A node which performs the hyperbolic trigonometric
- * function of hyperbolic tangent, called TANH
+ * A node which performs the mathematical sign function that extracts the sign 
+ * of a number
  * 
  * @since 2.0
  */
-public class HyperbolicTangentFunction extends Node {
+public class Signum extends Node {
+	
+	public static final String IDENTIFIER = "SGN";
 
 	/**
-	 * Constructs a HyperbolicTangentFunction with one <code>null</code> child.
+	 * Constructs a SignumFunction with one <code>null</code> child.
 	 */
-	public HyperbolicTangentFunction() {
+	public Signum() {
 		this(null);
 	}
 
 	/**
-	 * Constructs a HyperbolicTangentFunction with one numerical child node.
+	 * Constructs a SignumFunction with one numerical child node.
 	 * 
 	 * @param child the child node.
 	 */
-	public HyperbolicTangentFunction(Node child) {
+	public Signum(Node child) {
 		super(child);
 	}
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a numeric type (one of Double, Float, Long,
-	 * Integer). The hyperbolic tangent of this value becomes the result of this
-	 * method as a double value.
+	 * Integer). Then the result will be -1, if the value is negative, +1, if
+	 * the value is positive and 0 if the value is zero. The type of the value
+	 * returned will be the same as the input type.
 	 * 
-	 * @return hyperbolic tangent of the value returned by the child
+	 * @return zero if the result of evaluating the child is zero, one if the
+	 * 			result is positive and minus one if it is negative
 	 */
 	@Override
-	public Double evaluate() {
+	public Object evaluate() {
 		Object c = getChild(0).evaluate();
 
-		return Math.tanh(NumericUtils.asDouble(c));
+		double result = Math.signum(NumericUtils.asDouble(c));
+
+		if (c instanceof Double) {
+			return result;
+		} else if (c instanceof Float) {
+			return (float) result;
+		} else if (c instanceof Integer) {
+			return (int) result;
+		} else if (c instanceof Long) {
+			return (long) result;
+		}
+
+		return null;
 	}
 
 	/**
-	 * Returns the identifier of this function which is TANH
+	 * Returns the identifier of this function which is SGN
 	 * 
 	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {
-		return "TANH";
+		return IDENTIFIER;
 	}
 
 	/**
 	 * Returns this function node's return type for the given child input types.
 	 * If there is one input type of a numeric type then the return type will
-	 * be Double. In all other cases this method will return <code>null</code>
-	 * to indicate that the inputs are invalid.
+	 * be that same numeric type. In all other cases this method will return
+	 * <code>null</code> to indicate that the inputs are invalid.
 	 * 
-	 * @return the Double class or null if the input type is invalid.
+	 * @return A numeric class or null if the input type is invalid.
 	 */
 	@Override
 	public Class<?> dataType(Class<?> ... inputTypes) {
 		if ((inputTypes.length == 1) && DataTypeUtils.isNumericType(inputTypes[0])) {
-			return Double.class;
+			return inputTypes[0];
 		} else {
 			return null;
 		}

@@ -19,86 +19,74 @@
  * 
  * The latest version is available from: http://www.epochx.org
  */
-package org.epochx.epox.math;
+package org.epochx.epox.trig;
 
 import org.epochx.epox.Node;
 import org.epochx.tools.*;
 
 /**
- * A node which performs the mathematical sign function that extracts the sign 
- * of a number
+ * A node which performs the inverse trigonometric function of
+ * arc-tangent, called ARCTAN
  * 
  * @since 2.0
  */
-public class SignumFunction extends Node {
+public class ArcTangent extends Node {
 
+	public static final String IDENTIFIER = "ARCTAN";
+	
 	/**
-	 * Constructs a SignumFunction with one <code>null</code> child.
+	 * Constructs an ArcTangentFunction with one <code>null</code> child.
 	 */
-	public SignumFunction() {
+	public ArcTangent() {
 		this(null);
 	}
 
 	/**
-	 * Constructs a SignumFunction with one numerical child node.
+	 * Constructs an ArcTangentFunction with one numerical child node.
 	 * 
 	 * @param child the child node.
 	 */
-	public SignumFunction(Node child) {
+	public ArcTangent(Node child) {
 		super(child);
 	}
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a numeric type (one of Double, Float, Long,
-	 * Integer). Then the result will be -1, if the value is negative, +1, if
-	 * the value is positive and 0 if the value is zero. The type of the value
-	 * returned will be the same as the input type.
+	 * Integer). The arc-tangent of this value becomes the result of this
+	 * method as a double value.
 	 * 
-	 * @return zero if the result of evaluating the child is zero, one if the
-	 * 			result is positive and minus one if it is negative
+	 * @return arc-tangent of the value returned by the child
 	 */
 	@Override
-	public Object evaluate() {
+	public Double evaluate() {
 		Object c = getChild(0).evaluate();
 
-		double result = Math.signum(NumericUtils.asDouble(c));
-
-		if (c instanceof Double) {
-			return result;
-		} else if (c instanceof Float) {
-			return (float) result;
-		} else if (c instanceof Integer) {
-			return (int) result;
-		} else if (c instanceof Long) {
-			return (long) result;
-		}
-
-		return null;
+		return Math.atan(NumericUtils.asDouble(c));
 	}
 
 	/**
-	 * Returns the identifier of this function which is SGN
+	 * Returns the identifier of this function which is ARCTAN
 	 * 
 	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {
-		return "SGN";
+		return IDENTIFIER;
 	}
 
 	/**
 	 * Returns this function node's return type for the given child input types.
 	 * If there is one input type of a numeric type then the return type will
-	 * be that same numeric type. In all other cases this method will return
-	 * <code>null</code> to indicate that the inputs are invalid.
+	 * be Double. In all other cases this method will return <code>null</code>
+	 * to indicate that the inputs are invalid.
 	 * 
-	 * @return A numeric class or null if the input type is invalid.
+	 * @return the Double class or null if the input type is invalid.
 	 */
 	@Override
 	public Class<?> dataType(Class<?> ... inputTypes) {
 		if ((inputTypes.length == 1) && DataTypeUtils.isNumericType(inputTypes[0])) {
-			return inputTypes[0];
+			return Double.class;
 		} else {
 			return null;
 		}

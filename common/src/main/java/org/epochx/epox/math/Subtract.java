@@ -25,9 +25,9 @@ import org.epochx.epox.Node;
 import org.epochx.tools.*;
 
 /**
- * A node which performs the mathematical function of multiplication.
+ * A node which performs the mathematical function of subtract.
  * 
- * Multiplication can be performed on inputs of the following types:
+ * Subtraction can be performed on inputs of the following types:
  * <ul>
  * <li>Integer</li>
  * <li>Long</li>
@@ -35,38 +35,42 @@ import org.epochx.tools.*;
  * <li>Double</li>
  * </ul>
  * 
- * Multiplication can be performed between mixed types, with a widening
- * operation performed and the result being of the wider of the two types.
+ * Subtraction can be performed between mixed types, with a widening operation
+ * performed and the result being of the wider of the two types.
  * 
  * @since 2.0
  */
-public class MultiplyFunction extends Node {
+public class Subtract extends Node {
 
+	public static final String IDENTIFIER = "SUB";
+	
 	/**
-	 * Constructs a MultiplyFunction with two <code>null</code> children.
+	 * Constructs a SubtractFunction with two <code>null</code> children.
 	 */
-	public MultiplyFunction() {
+	public Subtract() {
 		this(null, null);
 	}
 
 	/**
-	 * Constructs a MultiplyFunction with two numerical child nodes. When
-	 * evaluated, both children will be evaluated and multiplied together.
+	 * Constructs an SubtractFunction with two numerical child nodes. When
+	 * evaluated, both children will be evaluated with the first subtracted from
+	 * the second.
 	 * 
 	 * @param child1 The first child node.
 	 * @param child2 The second child node.
 	 */
-	public MultiplyFunction(Node child1, Node child2) {
+	public Subtract(Node child1, Node child2) {
 		super(child1, child2);
 	}
 
 	/**
 	 * Evaluates this function. Both child nodes are evaluated, the result of
 	 * both must be of numeric type. If necessary, the inputs are widened to
-	 * both be of the same type, then multiplication is performed and the return
+	 * both be of the same type, then subtraction is performed and the return
 	 * value will be of that wider type.
 	 * 
-	 * @return the result of multiplying the values returned from the two children
+	 * @return the result returned from the second child subtracted from the 
+	 * 			value returned by the first child
 	 */
 	@Override
 	public Object evaluate() {
@@ -76,42 +80,42 @@ public class MultiplyFunction extends Node {
 		Class<?> returnType = DataTypeUtils.widestNumberType(c1.getClass(), c2.getClass());
 
 		if (returnType == Double.class) {
-			// Multiply as doubles.
+			// Subtract as doubles.
 			double d1 = NumericUtils.asDouble(c1);
 			double d2 = NumericUtils.asDouble(c2);
 
-			return d1 * d2;
+			return d1 - d2;
 		} else if (returnType == Float.class) {
-			// Multiply as floats.
+			// Subtract as floats.
 			float f1 = NumericUtils.asFloat(c1);
 			float f2 = NumericUtils.asFloat(c2);
 
-			return f1 * f2;
+			return f1 - f2;
 		} else if (returnType == Long.class) {
-			// Multiply as longs.
+			// Subtract as longs.
 			long l1 = NumericUtils.asLong(c1);
 			long l2 = NumericUtils.asLong(c2);
 
-			return l1 * l2;
+			return l1 - l2;
 		} else if (returnType == Integer.class) {
-			// Multiply as integers.
+			// Subtract as integers.
 			int i1 = NumericUtils.asInteger(c1);
 			int i2 = NumericUtils.asInteger(c2);
 
-			return i1 * i2;
+			return i1 - i2;
 		}
 
 		return null;
 	}
 
 	/**
-	 * Returns the identifier of this function which is MUL
+	 * Returns the identifier of this function which is SUB
 	 * 
 	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {
-		return "MUL";
+		return IDENTIFIER;
 	}
 
 	/**

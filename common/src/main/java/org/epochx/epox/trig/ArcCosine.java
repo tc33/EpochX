@@ -25,52 +25,54 @@ import org.epochx.epox.Node;
 import org.epochx.tools.*;
 
 /**
- * A node which performs the hyperbolic trigonometric function of
- * hyperbolic cosine, called COSH
+ * A node which performs the inverse trigonometric function of
+ * arc-cosine, called ARCCOS
  * 
  * @since 2.0
  */
-public class HyperbolicCosineFunction extends Node {
+public class ArcCosine extends Node {
+	
+	public static final String IDENTIFIER = "ARCCOS";
 
 	/**
-	 * Constructs a HyperbolicCosineFunction with one <code>null</code> child.
+	 * Constructs an ArcCosineFunction with one <code>null</code> child.
 	 */
-	public HyperbolicCosineFunction() {
+	public ArcCosine() {
 		this(null);
 	}
 
 	/**
-	 * Constructs a HyperbolicCosineFunction with one numerical child node.
+	 * Constructs an ArcCosineFunction with one numerical child node.
 	 * 
 	 * @param child the child node.
 	 */
-	public HyperbolicCosineFunction(Node child) {
+	public ArcCosine(Node child) {
 		super(child);
 	}
 
 	/**
 	 * Evaluates this function. The child node is evaluated, the
 	 * result of which must be a numeric type (one of Double, Float, Long,
-	 * Integer). The hyperbolic cosine of this value becomes the result of this
+	 * Integer). The arc-cosine of this value becomes the result of this
 	 * method as a double value.
 	 * 
-	 * @return hyperbolic cosine of the value returned by the child
+	 * @return arc-cosine of the value returned by the child
 	 */
 	@Override
 	public Double evaluate() {
 		Object c = getChild(0).evaluate();
 
-		return Math.cosh(NumericUtils.asDouble(c));
+		return Math.acos(NumericUtils.asDouble(c));
 	}
 
 	/**
-	 * Returns the identifier of this function which is COSH
+	 * Returns the identifier of this function which is ARCCOS
 	 * 
 	 * @return this node's identifier
 	 */
 	@Override
 	public String getIdentifier() {
-		return "COSH";
+		return IDENTIFIER;
 	}
 
 	/**

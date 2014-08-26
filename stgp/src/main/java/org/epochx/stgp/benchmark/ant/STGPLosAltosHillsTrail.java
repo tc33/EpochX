@@ -43,12 +43,12 @@ import org.epochx.RandomSequence;
 import org.epochx.TerminationCriteria;
 import org.epochx.TerminationFitness;
 import org.epochx.epox.Node;
-import org.epochx.epox.ant.AntMoveFunction;
-import org.epochx.epox.ant.AntTurnLeftFunction;
-import org.epochx.epox.ant.AntTurnRightFunction;
-import org.epochx.epox.ant.IfFoodAheadFunction;
-import org.epochx.epox.lang.Seq2Function;
-import org.epochx.epox.lang.Seq3Function;
+import org.epochx.epox.ant.AntMove;
+import org.epochx.epox.ant.AntTurnLeft;
+import org.epochx.epox.ant.AntTurnRight;
+import org.epochx.epox.ant.IfFoodAhead;
+import org.epochx.epox.lang.Seq2;
+import org.epochx.epox.lang.Seq3;
 import org.epochx.fitness.DoubleFitness;
 import org.epochx.random.MersenneTwisterFast;
 import org.epochx.selection.TournamentSelector;
@@ -160,12 +160,12 @@ public class STGPLosAltosHillsTrail extends GenerationalTemplate {
         AntLandscape landscape = new AntLandscape(LANDSCAPE_SIZE, null);
         Ant ant = new Ant(MAXIMUM_TIMESTEPS, landscape);
 		Node[] syntax = new Node[]{
-			new IfFoodAheadFunction(),
-			new Seq2Function(),
-			new Seq3Function(),
-			new AntMoveFunction(ant),
-			new AntTurnLeftFunction(ant),
-			new AntTurnRightFunction(ant)
+			new IfFoodAhead(),
+			new Seq2(),
+			new Seq3(),
+			new AntMove(ant),
+			new AntTurnLeft(ant),
+			new AntTurnRight(ant)
 		};
         template.put(STGPIndividual.SYNTAX, syntax);
         template.put(STGPIndividual.RETURN_TYPE, Void.class);

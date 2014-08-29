@@ -22,6 +22,7 @@
 
 package org.epochx.event.stat;
 
+import org.epochx.Individual;
 import org.epochx.Population;
 import org.epochx.event.GenerationEvent.EndGeneration;
 
@@ -68,7 +69,18 @@ public class GenerationPopulation extends AbstractStat<EndGeneration> {
 	 */
 	@Override
 	public String toString() {
-		return population.toString();
+		StringBuffer buffer = new StringBuffer();
+		
+		boolean sep = false;
+		for (Individual individual: population) {
+			if (sep) {
+				buffer.append(", ");
+			}
+			buffer.append(individual);
+			sep = true;
+		}
+		
+		return buffer.toString();
 	}
 
 	/**

@@ -143,7 +143,7 @@ public class DepthFirstMapper extends AbstractMapper implements Listener<ConfigE
 	private int map(GrammarRule grammarRule, NonTerminalSymbol parseNode, int depth,
 			Chromosome chromosome, int currentCodon) {
 		// depth+1 because the current depth does not include terminals
-		if (depth + 1 > maxDepth - 1) {
+		if (depth + 1 > maxDepth) {
 			return -1;
 		}
 

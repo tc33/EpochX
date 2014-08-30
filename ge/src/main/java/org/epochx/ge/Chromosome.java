@@ -278,10 +278,10 @@ public class Chromosome implements Iterable<Codon>, Cloneable, Listener<ConfigEv
 	/**
 	 * Appends multiple codons to the end of the chromosome
 	 * 
-	 * @param codons a list of codons to append
+	 * @param newCodons a list of codons to append
 	 */
-	public void appendCodons(List<Codon> codons) {
-		codons.addAll(codons);
+	public void appendCodons(List<Codon> newCodons) {
+		codons.addAll(newCodons);
 	}
 
 	/**

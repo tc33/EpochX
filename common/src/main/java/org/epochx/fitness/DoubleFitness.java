@@ -105,6 +105,17 @@ public abstract class DoubleFitness implements Fitness {
 			throw new IllegalArgumentException("Expected " + this.getClass() + ", found " + o.getClass());
 		}
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof DoubleFitness) {
+			DoubleFitness fitnessObj = (DoubleFitness) obj;
+			
+			return fitnessObj.fitness == this.fitness;
+		}
+		
+		return false;
+	}
 
 	@Override
 	public DoubleFitness clone() {
@@ -160,6 +171,11 @@ public abstract class DoubleFitness implements Fitness {
 		public Comparator<Double> comparator() {
 			return MAXIMISE;
 		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			return (obj instanceof Maximise) && super.equals(obj);
+		}
 	}
 
 	/**
@@ -187,6 +203,11 @@ public abstract class DoubleFitness implements Fitness {
 		@Override
 		public Comparator<Double> comparator() {
 			return MINIMISE;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			return (obj instanceof Minimise) && super.equals(obj);
 		}
 	}
 

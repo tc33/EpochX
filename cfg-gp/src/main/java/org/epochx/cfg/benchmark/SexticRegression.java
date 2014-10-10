@@ -90,7 +90,7 @@ import org.epochx.tools.BenchmarkSolutions;
  * <function> ::= ADD( <node> , <node> )
  * 		| SUB( <node> , <node> )
  * 		| MUL( <node> , <node> )
- * 		| PDIV( <node> , <node> )
+ * 		| DIV( <node> , <node> )
  * <terminal> ::= X
  * }
  * 
@@ -134,7 +134,7 @@ public class SexticRegression extends GenerationalTemplate {
     			+ "<function> ::= ADD( <node> , <node> ) "
     			+ "| SUB( <node> , <node> ) "
     			+ "| MUL( <node> , <node> ) "
-    			+ "| PDIV( <node> , <node> )\n"
+    			+ "| DIV( <node> , <node> )\n"
     			+ "<terminal> ::= X\n";
         Grammar grammar = new Grammar(grammarStr);
         template.put(Grammar.GRAMMAR, grammar);

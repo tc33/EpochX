@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2013
  * Licensed under GNU Lesser General Public License
  * 
@@ -24,10 +24,12 @@ package org.epochx.epox;
 
 import junit.framework.TestCase;
 
-
 /**
  * Unit tests for {@link org.epochx.epox.EpoxParser}
  */
 public class EpoxParserTest extends TestCase {
 
+	public void testEmpty() {
+
+	}
 }

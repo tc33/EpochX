@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2014
  * Licensed under GNU Lesser General Public License
  * 
@@ -24,6 +24,9 @@ package org.epochx.cfg;
 
 import junit.framework.TestCase;
 
-public class CFGIndividualTest extends TestCase
-{
+public class CFGIndividualTest extends TestCase {
+
+	public void testEmpty() {
+
+	}
 }

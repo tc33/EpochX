@@ -22,7 +22,6 @@
 
 package org.epochx;
 
-import static org.epochx.Config.Template.TEMPLATE;
 import junit.framework.TestCase;
 
 import org.epochx.Config.ConfigKey;
@@ -62,9 +61,9 @@ public class ConfigTest extends TestCase {
 	 */
 	public void testReset() {
 		Config config = Config.getInstance();
-		config.set(TEMPLATE, new GenerationalTemplate());
-
+		config.set(Population.SIZE, 100);		
 		assertNotNull(config.get(Population.SIZE));
+
 		config.reset();
 		assertNull(config.get(Population.SIZE));
 	}

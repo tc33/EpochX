@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007-2014
  * Licensed under GNU Lesser General Public License
  * 
@@ -26,7 +26,9 @@ import junit.framework.TestCase;
 /**
  * 
  */
-public class GEIndividualTest extends TestCase
-{
+public class GEIndividualTest extends TestCase {
 
+	public void testEmpty() {
+
+	}
 }

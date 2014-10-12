@@ -190,13 +190,14 @@ public abstract class AbstractStat<T extends Event> {
 	 * 
 	 * @param type the class of <code>AbstractStat</code> to be registered.
 	 */
-	public static <E extends Event, V extends AbstractStat<E>> void register(Class<V> type) {
+	@SuppressWarnings("unchecked")
+	public static <E extends Event, V extends AbstractStat<?>> void register(Class<V> type) {
 		// if the repository already contains an instance of the specified stat,
 		// we do not create a new one; otherwise, we create a new instance and
 		// register its listener in the EventManager
 		if (!REPOSITORY.containsKey(type)) {
 			try {
-				AbstractStat<E> stat = type.newInstance();
+				AbstractStat<E> stat = (AbstractStat<E>) type.newInstance();
 				REPOSITORY.put(type, stat);
 				EventManager.getInstance().add(stat.getEvent(), stat.listener);
 			} catch (Exception e) {
@@ -210,7 +211,7 @@ public abstract class AbstractStat<T extends Event> {
 	 * 
 	 * @param type the class of <code>AbstractStat</code> to be removed.
 	 */
-	public static <E extends Event, V extends AbstractStat<E>> void remove(Class<V> type) {
+	public static <E extends Event> void remove(Class<? extends AbstractStat<E>> type) {
 		if (REPOSITORY.containsKey(type)) {
 			AbstractStat<E> stat = type.cast(REPOSITORY.remove(type));
 			EventManager.getInstance().remove(stat.getEvent(), stat.listener);
@@ -236,11 +237,11 @@ public abstract class AbstractStat<T extends Event> {
 	 * repository.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <E extends Event, V extends AbstractStat<E>> void reset() {
+	public static <E extends Event> void reset() {
 		List<Class<?>> registered = new ArrayList<Class<?>>(REPOSITORY.keySet());
 
 		for (Class<?> type: registered) {
-			AbstractStat.remove((Class<V>) type);
+			AbstractStat.remove((Class<? extends AbstractStat<E>>) type);
 		}
 	}
 }

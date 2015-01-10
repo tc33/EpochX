@@ -28,13 +28,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.epochx.BranchedBreeder;
 import org.epochx.Breeder;
 import org.epochx.Config.ConfigKey;
-import org.epochx.BranchedBreeder;
 import org.epochx.EvolutionaryStrategy;
 import org.epochx.FitnessEvaluator;
 import org.epochx.GenerationalStrategy;
-import org.epochx.GenerationalTemplate;
 import org.epochx.Initialiser;
 import org.epochx.MaximumGenerations;
 import org.epochx.Operator;
@@ -44,6 +43,7 @@ import org.epochx.TerminationCriteria;
 import org.epochx.TerminationFitness;
 import org.epochx.fitness.DoubleFitness;
 import org.epochx.ge.CodonFactory;
+import org.epochx.ge.GEGenerationalTemplate;
 import org.epochx.ge.GEIndividual;
 import org.epochx.ge.GESourceGenerator;
 import org.epochx.ge.IntegerCodonFactory;
@@ -100,7 +100,7 @@ import org.epochx.tools.ant.AntLandscape;
  * 
  * @since 2.0
  */
-public class GESantaFeTrail extends GenerationalTemplate {
+public class GESantaFeTrail extends GEGenerationalTemplate {
 
 	/**
 	 * The points in the landscape that will be occupied by food.
@@ -176,7 +176,12 @@ public class GESantaFeTrail extends GenerationalTemplate {
         template.put(MappingComponent.MAPPER, new DepthFirstMapper());
         
         // Setup fitness function
+        String[] inputIdentifiers = new String[]{"ANT"};
+        Object[][] inputValues = new Object[][]{{ant}};
+        
         template.put(FitnessEvaluator.FUNCTION, new FoodLocationCount(ant, landscape));
+        template.put(GEFitnessFunction.INPUT_IDENTIFIERS, inputIdentifiers);
+        template.put(GEFitnessFunction.INPUT_VALUE_SETS, inputValues);
         template.put(FoodLocationCount.FOOD_LOCATIONS, FOOD_LOCATIONS);
         template.put(FoodLocationCount.MAXIMUM_TIMESTEPS, MAXIMUM_TIMESTEPS);
 	}

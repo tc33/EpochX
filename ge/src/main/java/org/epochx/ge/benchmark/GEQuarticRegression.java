@@ -31,7 +31,6 @@ import org.epochx.BranchedBreeder;
 import org.epochx.EvolutionaryStrategy;
 import org.epochx.FitnessEvaluator;
 import org.epochx.GenerationalStrategy;
-import org.epochx.GenerationalTemplate;
 import org.epochx.Initialiser;
 import org.epochx.MaximumGenerations;
 import org.epochx.Operator;
@@ -41,6 +40,7 @@ import org.epochx.TerminationCriteria;
 import org.epochx.TerminationFitness;
 import org.epochx.fitness.DoubleFitness;
 import org.epochx.ge.CodonFactory;
+import org.epochx.ge.GEGenerationalTemplate;
 import org.epochx.ge.GEIndividual;
 import org.epochx.ge.GESourceGenerator;
 import org.epochx.ge.IntegerCodonFactory;
@@ -100,7 +100,7 @@ import org.epochx.tools.BenchmarkSolutions;
  * 
  * @since 2.0
  */
-public class GEQuarticRegression extends GenerationalTemplate {
+public class GEQuarticRegression extends GEGenerationalTemplate {
 
 	/**
 	 * Sets up the given template with the benchmark config settings

@@ -34,7 +34,6 @@ import org.epochx.BranchedBreeder;
 import org.epochx.EvolutionaryStrategy;
 import org.epochx.FitnessEvaluator;
 import org.epochx.GenerationalStrategy;
-import org.epochx.GenerationalTemplate;
 import org.epochx.Initialiser;
 import org.epochx.MaximumGenerations;
 import org.epochx.Operator;
@@ -44,6 +43,7 @@ import org.epochx.TerminationCriteria;
 import org.epochx.TerminationFitness;
 import org.epochx.fitness.DoubleFitness;
 import org.epochx.ge.CodonFactory;
+import org.epochx.ge.GEGenerationalTemplate;
 import org.epochx.ge.GEIndividual;
 import org.epochx.ge.GESourceGenerator;
 import org.epochx.ge.IntegerCodonFactory;
@@ -100,7 +100,7 @@ import org.epochx.tools.ant.AntLandscape;
  * 
  * @since 2.0
  */
-public class GEJohnMuirTrail extends GenerationalTemplate {
+public class GEJohnMuirTrail extends GEGenerationalTemplate {
 
 	/**
 	 * The points in the landscape that will be occupied by food

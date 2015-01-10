@@ -168,7 +168,7 @@ public class FoodLocationCount extends GEFitnessFunction implements Listener<Con
 
 		try {
 			while (ant.getTimesteps() < ant.getMaxMoves()) {
-				interpreter.exec(program, new String[]{}, new Object[][]{});
+				interpreter.exec(program, new String[]{"ANT"}, new Object[][]{{ant}});
 			}
 		} catch (MalformedProgramException e) {
 			return new DoubleFitness.Minimise(malformedPenalty);

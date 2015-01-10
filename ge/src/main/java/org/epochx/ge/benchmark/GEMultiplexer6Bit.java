@@ -31,7 +31,6 @@ import org.epochx.BranchedBreeder;
 import org.epochx.EvolutionaryStrategy;
 import org.epochx.FitnessEvaluator;
 import org.epochx.GenerationalStrategy;
-import org.epochx.GenerationalTemplate;
 import org.epochx.Initialiser;
 import org.epochx.MaximumGenerations;
 import org.epochx.Operator;
@@ -41,6 +40,7 @@ import org.epochx.TerminationCriteria;
 import org.epochx.TerminationFitness;
 import org.epochx.fitness.DoubleFitness;
 import org.epochx.ge.CodonFactory;
+import org.epochx.ge.GEGenerationalTemplate;
 import org.epochx.ge.GEIndividual;
 import org.epochx.ge.GESourceGenerator;
 import org.epochx.ge.IntegerCodonFactory;
@@ -112,7 +112,7 @@ import org.epochx.tools.BooleanUtils;
  * 
  * @since 2.0
  */
-public class GEMultiplexer6Bit extends GenerationalTemplate {
+public class GEMultiplexer6Bit extends GEGenerationalTemplate {
 	
 	private static final int NO_BITS = 6;
 	

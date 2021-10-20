@@ -91,7 +91,7 @@ If everything is running smoothly then you should see the minimum fitness value 
 
 ## Setting parameters
 
-This is just the bare minimum to run a model, and currently we are using all the default parameter values as specified by Model and GPModel classes, but now we want to provide our own. GPModel has many methods to set parameters, see the JavaDoc documentation for a full list, but we will use a couple of them now. Let's set the population size, the number of generations and the maximum program depth.
+This is just the bare minimum to run a model, and currently we are using all the default parameter values as specified by Model and GPModel classes, but now we want to provide our own. GPModel has many methods to set parameters, see the [JavaDoc documentation](http://www.epochx.org/javadoc/1.3/) for a full list, but we will use a couple of them now. Let's set the population size, the number of generations and the maximum program depth.
 
 ```java
 GPModel model = new EvenParity(4);

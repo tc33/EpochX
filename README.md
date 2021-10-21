@@ -16,7 +16,7 @@ The key to using EpochX is in the use of models. A model is simply a Java class 
 the run parameters, the fitness function and other configurable options. All models extend from the abstract Model class, which provides default values
 for many standard parameters. Typically a new model will actually extend from one of GPModel, GRModel or GEModel (for tree GP, CFG-GP and GE respectively),
 which provide further defaults for each of the representation's parameters. Models are provided pre-constructed for a number of standard problems for each 
-representation. Overriding a model�s default value for a parameter can be performed simply by calling the associated setter method.
+representation. Overriding a model's default value for a parameter can be performed simply by calling the associated setter method.
 
 Triggering execution of evolutionary runs with your model is simply a case of calling the model's run method. Where the `SantaFeTrail` class is one of the built
 in models:
